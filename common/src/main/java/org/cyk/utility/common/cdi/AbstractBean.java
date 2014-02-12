@@ -1,4 +1,4 @@
-package org.cyk.utility.cdi;
+package org.cyk.utility.common.cdi;
 
 import java.io.Serializable;
 
