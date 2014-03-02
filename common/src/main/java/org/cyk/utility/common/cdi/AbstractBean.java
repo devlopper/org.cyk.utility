@@ -10,9 +10,14 @@ public class AbstractBean implements Serializable {
 
 	@PostConstruct
 	private void postConstruct(){
+		beforeInitialisation();
 		initialisation();
+		afterInitialisation();
 	}
+	
+	protected void beforeInitialisation(){}
 	
 	protected void initialisation(){}
 
+	protected void afterInitialisation(){}
 }
