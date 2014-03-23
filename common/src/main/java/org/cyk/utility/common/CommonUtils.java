@@ -7,22 +7,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 
-import javax.inject.Singleton;
-
 import lombok.extern.java.Log;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.cyk.utility.common.cdi.AbstractBean;
 
-@Singleton @Log
-public class CommonUtils extends AbstractBean implements Serializable  {
+@Log
+public class CommonUtils implements Serializable  {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6146661020703974108L;
-
+	
 	public Collection<Field> getAllFields(Collection<Field> fields,Class<?> type) {
 		for (Field field : type.getDeclaredFields()) {
 			fields.add(field);
@@ -63,5 +57,19 @@ public class CommonUtils extends AbstractBean implements Serializable  {
 			log.log(Level.SEVERE,e.toString(),e);
 		}
 		return r;
+	}
+	
+	/**/
+	
+	
+	
+	/**/
+	
+	private CommonUtils() {}
+	
+	private static final CommonUtils INSTANCE = new CommonUtils();
+	
+	public static CommonUtils getInstance() {
+		return INSTANCE;
 	}
 }

@@ -1,5 +1,8 @@
 package org.cyk.utility.common;
 
+import java.util.Set;
+
+import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
@@ -30,7 +33,7 @@ public class CdiTestNo  {
 				.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
 	
-	/*
+	
 	@Test
 	public void inject1(){
 		Assert.assertTrue(myBean!=null);
@@ -38,14 +41,21 @@ public class CdiTestNo  {
 	
 	@Test
 	public void inject2(){
-		CDI.setCDIProvider(null);
-		System.out.println(myBean);
-		BeanManager beanManager = CDI.current().getBeanManager();
-		Bean<MyBean> bean = (Bean<MyBean>) beanManager.resolve(beanManager.getBeans(MyBean.class));
-		MyBean myBean = (MyBean) beanManager.getReference(bean, bean.getBeanClass(), beanManager.createCreationalContext(bean));
+		System.out.println(myBean = getReference(CDI.current().getBeanManager(), MyBean.class));
 		Assert.assertTrue( myBean!=null);
 	}
 	
+	protected <T> T getReference(BeanManager beanManager,Class<T> aClass){
+		Set<Bean<?>> beans = beanManager.getBeans(aClass);
+		@SuppressWarnings("unchecked")
+		Bean<T> bean = (Bean<T>) beanManager.resolve(beans);
+		CreationalContext<T> context = beanManager.createCreationalContext(bean);
+		@SuppressWarnings("unchecked")
+		T result = (T) beanManager.getReference(bean, aClass, context);
+		return result;
+	}
+	
+	/*
 	@Test
 	public void inject3(){
 		BeanManager beanManager = CDI.current().getBeanManager();
