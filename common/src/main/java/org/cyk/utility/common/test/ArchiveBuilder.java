@@ -48,7 +48,11 @@ public class ArchiveBuilder {
 			}
 		}
 		for(String className : set)
-			archive.addClass(className);
+			try {
+				archive.addClass(className);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			}
 		return this;
 	}
 	

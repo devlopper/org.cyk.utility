@@ -9,7 +9,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface FormField {
 	
-	public static enum CompositionRelationshipInputType{AUTO,COMBOBOX,AUTOCOMPLETE,FIELDS,FORM}
+	public static enum OneRelationshipInputType{AUTO,COMBOBOX,AUTOCOMPLETE,FIELDS,FORM}
+	public static enum ManyRelationshipInputType{AUTO,TABLE}
 	public static enum TextValueType{I18N_ID,I18N_VALUE,VALUE}
 	public static enum SelectOneInputType{COMBOBOX,RADIO}
 	public static enum MessageLocation{RIGHT,TOP}
@@ -31,6 +32,7 @@ public @interface FormField {
 	
 	boolean ignore() default false;
 	boolean showCreateButton() default true;
-	CompositionRelationshipInputType compositionRelationshipInputType() default CompositionRelationshipInputType.AUTO;
+	OneRelationshipInputType oneRelationshipInputType() default OneRelationshipInputType.AUTO;
+	ManyRelationshipInputType manyRelationshipInputType() default ManyRelationshipInputType.AUTO;
 	Class<?>[] groups() default {};
 }
