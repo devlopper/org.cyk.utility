@@ -18,5 +18,9 @@ public abstract class AbstractCell<VALUE> implements Serializable {
 		this.value = value;
 	}
 	
+	@Override
+	public String toString() {
+		return value==null?"":value.toString();
+	}
 	
 }

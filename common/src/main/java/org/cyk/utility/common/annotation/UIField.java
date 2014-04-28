@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface FormField {
+public @interface UIField {
 	
 	public static enum OneRelationshipInputType{AUTO,COMBOBOX,AUTOCOMPLETE,FIELDS,FORM}
 	public static enum ManyRelationshipInputType{AUTO,TABLE}
@@ -31,8 +31,13 @@ public @interface FormField {
 	int textColumnCount() default 20;
 	
 	boolean ignore() default false;
+	
 	boolean showCreateButton() default true;
 	OneRelationshipInputType oneRelationshipInputType() default OneRelationshipInputType.AUTO;
 	ManyRelationshipInputType manyRelationshipInputType() default ManyRelationshipInputType.AUTO;
 	Class<?>[] groups() default {};
+	
+	/* Table */
+	
+	boolean tableColumnIgnore() default false;
 }
