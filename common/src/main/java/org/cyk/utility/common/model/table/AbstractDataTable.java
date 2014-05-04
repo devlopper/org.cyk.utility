@@ -40,8 +40,8 @@ public abstract class AbstractDataTable<
 		return row.addCell(value);
 	}
 	
-	public CELL_VALUE value(ROW_DIMENSION row,COLUMN_DIMENSION column){
-		return rows.get(row.getIndex()).getCells().get(column.getIndex()).getValue();
+	public CELL_TYPE cell(ROW_DIMENSION row,COLUMN_DIMENSION column){
+		return rows.get(row.getIndex()).getCells().get(column.getIndex());
 	}
 	
 	protected void clear(){

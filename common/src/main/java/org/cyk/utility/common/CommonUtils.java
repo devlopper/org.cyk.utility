@@ -17,6 +17,18 @@ public class CommonUtils implements Serializable  {
 
 	private static final long serialVersionUID = -6146661020703974108L;
 	
+	public Field getField(Object source,Object value){
+		for(Field field : getAllFields(source.getClass()))
+			try {
+				if(value==FieldUtils.readField(field, source, true))
+					return field;
+			} catch (Exception e) {
+				log.log(Level.SEVERE,e.toString(),e);
+				return null;
+			}
+		return null;
+	}
+	
 	public Collection<Field> getAllFields(Collection<Field> fields,Class<?> type) {
 		for (Field field : type.getDeclaredFields()) {
 			fields.add(field);

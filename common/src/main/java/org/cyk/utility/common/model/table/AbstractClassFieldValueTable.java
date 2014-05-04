@@ -16,7 +16,7 @@ public abstract class AbstractClassFieldValueTable<CLASS,ROW extends DefaultTabl
 	protected Class<? extends COLUMN> columnClass;
 	protected Class<? extends CELL> cellClass;
 	
-	public AbstractClassFieldValueTable(Class<CLASS> rowDataClass,Class<? extends ROW> rowClass,Class<? extends COLUMN> columnClass,Class<? extends CELL> cellClass) {
+	public void build(Class<CLASS> rowDataClass,Class<? extends ROW> rowClass,Class<? extends COLUMN> columnClass,Class<? extends CELL> cellClass) {
 		this.rowClass = rowClass; 
 		this.columnClass = columnClass;
 		this.cellClass = cellClass;
