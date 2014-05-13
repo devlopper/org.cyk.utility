@@ -71,6 +71,13 @@ public class CommonUtils implements Serializable  {
 		return r;
 	}
 	
+	public <T extends Annotation> T getAnnotation(Class<?> aClass,Class<T> anAnnotationClass){
+		T annotation = aClass.getAnnotation(anAnnotationClass);
+		if(annotation==null && aClass.getSuperclass()!=null)
+			return getAnnotation(aClass.getSuperclass(), anAnnotationClass);
+		return annotation;
+	}
+	
 	/**/
 	
 	

@@ -10,7 +10,12 @@ import java.lang.annotation.Target;
 public @interface Model {
 	
 	public static enum GenderType{UNSET,MALE,FEMALE}
+	public static enum CrudStrategy{ENUMERATION,BUSINESS,INTERNAL,INHERITED}
+	public static enum CrudInheritanceStrategy{ALL,CHILDREN_ONLY}
 	
 	GenderType genderType() default GenderType.UNSET;
+	CrudStrategy crudStrategy();
+	CrudInheritanceStrategy crudInheritanceStrategy() default CrudInheritanceStrategy.ALL;
+	
 	
 }
