@@ -18,7 +18,7 @@ import javax.enterprise.inject.spi.ProcessBean;
 import lombok.Getter;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.common.annotation.Model;
+import org.cyk.utility.common.annotation.Layer;
 import org.cyk.utility.common.annotation.Startup;
 
 public class StartupBeanExtension implements Extension {
@@ -28,7 +28,7 @@ public class StartupBeanExtension implements Extension {
 	
 	public StartupBeanExtension() {
 		addAnnotation(Startup.class);
-		addAnnotation(Model.class);
+		addAnnotation(Layer.class);
 	}
 
 	<X> void processBean(@Observes ProcessBean<X> event) {
