@@ -9,11 +9,11 @@
 		<version>gp.0.0.1</version>
 	</parent>
 
-	<name>__templateId utility</name>
+	<name>database utility</name>
 	<url>http://www.cykcorp.org</url>
 
 	<groupId>org.cyk.utility</groupId>
-	<artifactId>__templateId</artifactId>
+	<artifactId>database</artifactId>
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 

@@ -7,7 +7,11 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Startup {
+/**
+ * Describe a logical application layer
+ * @author Christian Yao Komenan
+ *
+ */
+public @interface ModelLayer {
 	
-
 }

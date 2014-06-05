@@ -18,17 +18,22 @@ import javax.enterprise.inject.spi.ProcessBean;
 import lombok.Getter;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.common.annotation.Layer;
-import org.cyk.utility.common.annotation.Startup;
+import org.cyk.utility.common.annotation.BusinessLayer;
+import org.cyk.utility.common.annotation.Deployment;
 
 public class StartupBeanExtension implements Extension {
 
 	@Getter private Set<Class<?>> classes = new HashSet<>();
 	@Getter private Map<Class<? extends Annotation>, Set<Bean<?>>> annotationClasses = new HashMap<>();
+	@Getter private Map<Class<?>, Set<Bean<?>>> implementationClasses = new HashMap<>();
+	
+	private Set<Object> references;
+	
+	protected BeanManager beanManager;
 	
 	public StartupBeanExtension() {
-		addAnnotation(Startup.class);
-		addAnnotation(Layer.class);
+		addAnnotation(Deployment.class);
+		addAnnotation(BusinessLayer.class);
 	}
 
 	<X> void processBean(@Observes ProcessBean<X> event) {
@@ -37,14 +42,38 @@ public class StartupBeanExtension implements Extension {
 			if (event.getAnnotated().isAnnotationPresent(entry.getKey())) {
 				addBean(entry.getKey(),event.getBean());
 			}
+		
+		for(Entry<Class<?>, Set<Bean<?>>> entry : implementationClasses.entrySet())
+			if (entry.getKey().isInstance(event.getBean().getBeanClass())) {
+				addBeanInterface(entry.getKey(),event.getBean());
+			}
 	}
-
+	
 	void afterDeploymentValidation(@Observes AfterDeploymentValidation event,BeanManager manager) {
-		for (Bean<?> bean : annotationClasses.get(Startup.class)) {
-			// the call to toString() is a cheat to force the bean to be
-			// initialized
-			manager.getReference(bean, bean.getBeanClass(),manager.createCreationalContext(bean)).toString();
+		this.beanManager = manager;
+		/*for (Bean<?> bean : annotationClasses.get(Deployment.class)) {
+			Deployment deployment = bean.getBeanClass().getAnnotation(Deployment.class);
+			if(Deployment.InitialisationType.EAGER.equals(deployment.initialisationType())){
+				//reference(bean);
+			}
+		}*/
+	}
+		
+	public Set<Object> getReferences() {
+		if(references==null){
+			references = new HashSet<>();
+			for (Bean<?> bean : annotationClasses.get(Deployment.class)) {
+				Deployment deployment = bean.getBeanClass().getAnnotation(Deployment.class);
+				if(Deployment.InitialisationType.EAGER.equals(deployment.initialisationType())){
+					Object object = beanManager.getReference(bean, bean.getBeanClass(),beanManager.createCreationalContext(bean));
+					// the call to toString() is a cheat to force the bean to be initialized
+					object.toString();
+					references.add(object);
+				}
+			}
 		}
+			
+		return references;
 	}
 	
 	/**/
@@ -72,4 +101,10 @@ public class StartupBeanExtension implements Extension {
 	private void addBean(Class<?> anAnnotationClass,Bean<?> aBean){
 		annotationClasses.get(anAnnotationClass).add(aBean);
 	}
+	
+	private void addBeanInterface(Class<?> aClass,Bean<?> aBean){
+		implementationClasses.get(aClass).add(aBean);
+	}
+	
+	
 }

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target(value={ElementType.FIELD,ElementType.METHOD})
 public @interface UIField {
 	
 	public static enum OneRelationshipInputType{AUTO,COMBOBOX,AUTOCOMPLETE,FIELDS,FORM}
@@ -22,7 +22,7 @@ public @interface UIField {
 	TextValueType descriptionValueType() default TextValueType.I18N_ID;
 	
 	boolean applicationId() default false;
-	boolean required() default false;
+	//boolean required() default false;
 	String inputType() default "";
 	SelectOneInputType selectOneInputType() default SelectOneInputType.COMBOBOX;
 	

@@ -6,11 +6,13 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cyk.utility.common.cdi.AbstractBean;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public abstract class AbstractDatabase implements Serializable {
+public abstract class AbstractDatabase extends AbstractBean implements Serializable {
 
 	/**
 	 * 
@@ -50,13 +52,31 @@ public abstract class AbstractDatabase implements Serializable {
 			throw new RuntimeException("No Connection URL Can be obtained With this mode : \r\n"+mode);
 		return url;
 	}
+	
+	private void watchDrop(final Statement statement){
+		__watchExecute__("Deleting database "+name, new Runnable() {@Override public void run() {
+			try {
+				__drop__(statement);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}});
+	}
+	
+	private void watchCreate(final Statement statement){
+		__watchExecute__("Creating database "+name, new Runnable() {@Override public void run() {
+			try {
+				__create__(statement);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}});
+	}
 		
 	public final void drop(){
 		new Statements(mode.getDriverName(), getConnectionUrl(), username, password){
 			public void __execute__() throws SQLException {
-				System.out.print("Deleting database "+name+" : ");
-				__drop__(stmt);
-				System.out.println("OK");
+				watchDrop(stmt);
 			};
 		}.execute();
 	}
@@ -64,9 +84,7 @@ public abstract class AbstractDatabase implements Serializable {
 	public final void create(){
 		new Statements(mode.getDriverName(), getConnectionUrl(), username, password){
 			public void __execute__() throws SQLException {
-				System.out.print("Creating database "+name+" : ");
-				__create__(stmt);
-				System.out.println("OK");
+				watchCreate(stmt);
 			};
 		}.execute();
 	}
@@ -74,12 +92,8 @@ public abstract class AbstractDatabase implements Serializable {
 	public final void dropAndCreate(){
 		new Statements(mode.getDriverName(), getConnectionUrl(), username, password){
 			public void __execute__() throws SQLException {
-				System.out.print("Deleting database "+name+" : ");
-				__drop__(stmt);
-				System.out.println("OK");
-				System.out.print("Creating database "+name+" : ");
-				__create__(stmt);
-				System.out.println("OK");
+				watchDrop(stmt);
+				watchCreate(stmt);
 			};
 		}.execute();
 	}

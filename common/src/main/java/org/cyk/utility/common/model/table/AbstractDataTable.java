@@ -34,6 +34,8 @@ public abstract class AbstractDataTable<
 	
 	public abstract boolean addRow(ROW_DATA aRowData);
 	
+	public abstract void updateRow(ROW_DIMENSION row,ROW_DATA aRowData);
+	
 	public abstract boolean addRow(Collection<ROW_DATA> theRowData);
 	
 	public boolean addCell(ROW_DIMENSION row,COLUMN_DIMENSION column,CELL_TYPE value){

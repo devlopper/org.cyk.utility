@@ -8,12 +8,16 @@ import java.util.Set;
 
 import javax.enterprise.inject.spi.Bean;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
+@EqualsAndHashCode(of="id",callSuper=false)
 public abstract class AbstractLayer<META_CLASS> extends AbstractStartupBean implements Serializable {
 
 	private static final long serialVersionUID = 3493129449617672056L;
 	
-	protected String id;
-	protected Set<Class<META_CLASS>> classes = new HashSet<>();
+	@Getter protected String id ,name;
+	@Getter protected Set<Class<META_CLASS>> classes = new HashSet<>();
 	
 	public AbstractLayer() {
 		id = getClass().getName();

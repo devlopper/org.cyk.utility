@@ -78,6 +78,18 @@ public class CommonUtils implements Serializable  {
 		return annotation;
 	}
 	
+	public Throwable getThrowableInstanceOf(Throwable throwable,Class<?> aClass){
+		Throwable index = throwable;
+		while(index!=null){
+			//System.out.println(aClass.getSimpleName()+" - "+index.getClass().getSimpleName()+" - "+aClass.isAssignableFrom(index.getClass()));
+			if(aClass.isAssignableFrom(index.getClass())){
+				return index;
+			}else
+				index = index.getCause();
+		}
+		return null;
+	}
+	
 	/**/
 	
 	

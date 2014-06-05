@@ -7,15 +7,10 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-/**
- * Describe a logical application layer
- * @author Christian Yao Komenan
- *
- */
-public @interface Layer {
+public @interface Deployment {
 	
-	public static enum Type{MODEL,PERSISTENCE,BUSINESS}
+	public static enum InitialisationType{EAGER,LAZY}
 	
-	Type type();
+	InitialisationType initialisationType() default InitialisationType.LAZY;
 
 }

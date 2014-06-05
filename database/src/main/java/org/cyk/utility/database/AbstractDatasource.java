@@ -7,11 +7,14 @@ import java.util.Map.Entry;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.database.definition.MySQL;
 
 @Getter @Setter
-public abstract class AbstractDatasource {
+public abstract class AbstractDatasource extends AbstractBean {
 	
+	private static final long serialVersionUID = 4181681950416661312L;
+
 	public static MySQL MYSQL_TEST_DB = new MySQL(new ServerMode(MySQL.SERVER_DRIVER_NAME, "MySQL", MySQL.DEFAULT_PORT),"testdb","root","root");;
 	
 	protected AbstractDatabase database;
@@ -54,9 +57,7 @@ public abstract class AbstractDatasource {
 				System.err.println("No Database Mode {Embedded or Server} Specified. Please set one and retry.");
 				return;
 			}
-			System.out.println("Opening database...");
-			__open__();
-			System.out.println("Opened...");
+			__watchExecute__("Opening database", new Runnable() {@Override public void run() {__open__();}});
 			opened = true;
 			afterOpen();
 			
@@ -73,9 +74,7 @@ public abstract class AbstractDatasource {
 	
 	public void close(){
 		if(opened){
-			System.out.println("Closing database...");
-			__close__();
-			System.out.println("Closed...");
+			__watchExecute__("Closing database", new Runnable() {@Override public void run() {__close__();}});
 		}
 	}
 	

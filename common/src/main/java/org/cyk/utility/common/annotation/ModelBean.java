@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Model {
+public @interface ModelBean {
 	
 	public static enum GenderType{UNSET,MALE,FEMALE}
 	public static enum CrudStrategy{ENUMERATION,BUSINESS,INTERNAL,INHERITED}
