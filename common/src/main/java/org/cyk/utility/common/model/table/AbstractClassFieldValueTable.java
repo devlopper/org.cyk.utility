@@ -16,7 +16,7 @@ public abstract class AbstractClassFieldValueTable<CLASS,ROW extends DefaultTabl
 	private static final long serialVersionUID = -6350569403060865536L;
 	
 	protected Class<? extends ROW> rowClass;
-	protected Class<? extends CLASS> rowDataClass;
+	protected Class<CLASS> rowDataClass;
 	protected Class<? extends COLUMN> columnClass;
 	protected Class<? extends CELL> cellClass;
 	protected String nullValue;
@@ -30,16 +30,26 @@ public abstract class AbstractClassFieldValueTable<CLASS,ROW extends DefaultTabl
 		//columnClass = (Class<COLUMN>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[2];
 		
 		try {
-			Collection<Field> fields = commonUtils.getAllFields(rowDataClass);
-			for(Field field : fields)
-				if(showable(field,rowDataClass)){
-					COLUMN column = columnClass.newInstance();
+			process(commonUtils.getAllFields(rowDataClass));
+		} catch (Exception e) {
+			new RuntimeException(e);
+		}
+	}
+	
+	protected void process(Collection<Field> fields){
+		for(Field field : fields){
+			if(showable(field,rowDataClass)){
+				COLUMN column = null;
+				try {
+					column = columnClass.newInstance();
 					column.setTitle(field.getName());
 					column.setFieldName(field.getName());
 					addColumn(column);
-				}		
-		} catch (Exception e) {
-			new RuntimeException(e);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}		
 		}
 	}
 	
@@ -108,6 +118,10 @@ public abstract class AbstractClassFieldValueTable<CLASS,ROW extends DefaultTabl
 			log.warning("Cannot delete object because no row has been found. <<"+anObject+">>");
 		else
 			deleteRow(index);
+	}
+	
+	public void deleteRow(ROW aRow){
+		deleteRow(aRow.index.intValue());
 	}
 	
 	protected Boolean showable(Field field,Class<CLASS> clazz){
