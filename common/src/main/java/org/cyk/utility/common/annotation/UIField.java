@@ -14,6 +14,7 @@ public @interface UIField {
 	public static enum TextValueType{I18N_ID,I18N_VALUE,VALUE}
 	public static enum SelectOneInputType{COMBOBOX,RADIO}
 	public static enum MessageLocation{RIGHT,TOP}
+	public static enum SeparatorAfter{AUTO,TRUE,FALSE}
 	
 	String label() default "";
 	TextValueType labelValueType() default TextValueType.I18N_ID;
@@ -27,10 +28,13 @@ public @interface UIField {
 	SelectOneInputType selectOneInputType() default SelectOneInputType.COMBOBOX;
 	
 	boolean textArea() default false;
+	boolean textAreaRich() default false;
 	int textRowCount() default 1;
 	int textColumnCount() default 20;
 	
 	boolean ignore() default false;
+	
+	SeparatorAfter separatorAfter() default SeparatorAfter.AUTO;
 	
 	boolean showCreateButton() default true;
 	OneRelationshipInputType oneRelationshipInputType() default OneRelationshipInputType.AUTO;

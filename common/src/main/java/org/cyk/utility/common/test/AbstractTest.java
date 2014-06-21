@@ -2,6 +2,8 @@ package org.cyk.utility.common.test;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.AbstractMethod;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -50,6 +52,9 @@ public abstract class AbstractTest implements Serializable {
 	
 	/**/
 	
-	
+	protected void debug(Object object){
+		System.out.println("------------------------------------- Debug -----------------------------");
+		System.out.println(ToStringBuilder.reflectionToString(object, ToStringStyle.MULTI_LINE_STYLE));
+	}
 	
 }

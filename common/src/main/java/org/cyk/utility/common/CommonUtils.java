@@ -5,12 +5,20 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 
 import lombok.extern.java.Log;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 
 @Log
 public class CommonUtils implements Serializable  {
@@ -29,15 +37,16 @@ public class CommonUtils implements Serializable  {
 		return null;
 	}
 	
-	public Collection<Field> getAllFields(Collection<Field> fields,Class<?> type) {
-		for (Field field : type.getDeclaredFields()) {
-			fields.add(field);
-		}
-
+	private Collection<Field> getAllFields(Collection<Field> fields,Class<?> type) {
+		//super class fields first
 		if (type.getSuperclass() != null) {
 			fields = getAllFields(fields, type.getSuperclass());
 		}
-
+		//declared class fields second
+		for (Field field : type.getDeclaredFields()) {
+			fields.add(field);
+		}
+		
 		return fields;
 	}
 	
@@ -88,6 +97,19 @@ public class CommonUtils implements Serializable  {
 				index = index.getCause();
 		}
 		return null;
+	}
+	
+	public <T> Collection<Class<? extends T>> getPackageClasses(String aPackage,Class<T> aRootClass){
+		List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
+	    classLoadersList.add(ClasspathHelper.contextClassLoader());
+	    classLoadersList.add(ClasspathHelper.staticClassLoader());
+
+	    Reflections reflections = new Reflections(new ConfigurationBuilder()
+	        .setScanners(new SubTypesScanner(false /* don't exclude Object.class */), new ResourcesScanner())
+	        .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
+	        .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(aPackage))));
+	    
+	    return reflections.getSubTypesOf(aRootClass);
 	}
 	
 	/**/
