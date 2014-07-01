@@ -54,6 +54,8 @@ public abstract class AbstractClassFieldValueTable<CLASS,ROW extends DefaultTabl
 	}
 	
 	public boolean addRow(Collection<CLASS> datas) {
+		if(datas==null)
+			return true;
 		for(CLASS data : datas)
 			addRow(data);
 		return true;

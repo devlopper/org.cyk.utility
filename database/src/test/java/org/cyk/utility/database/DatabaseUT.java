@@ -23,19 +23,17 @@ public class DatabaseUT extends AbstractUnitTest {
 
 		@Override
 		protected void __open__() {
-			// TODO Auto-generated method stub
+			
 			
 		}
 
 		@Override
 		protected void __close__() {
-			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
 		protected void __execute__() {
-			// TODO Auto-generated method stub
 			
 		}
 		

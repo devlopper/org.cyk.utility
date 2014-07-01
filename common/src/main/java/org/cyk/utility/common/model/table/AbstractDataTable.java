@@ -43,6 +43,9 @@ public abstract class AbstractDataTable<
 	}
 	
 	public CELL_TYPE cell(ROW_DIMENSION row,COLUMN_DIMENSION column){
+		if(row==null || column==null){
+			return null;
+		}
 		return rows.get(row.getIndex()).getCells().get(column.getIndex());
 	}
 	

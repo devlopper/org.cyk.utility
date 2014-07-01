@@ -15,6 +15,7 @@ public @interface UIField {
 	public static enum SelectOneInputType{COMBOBOX,RADIO}
 	public static enum MessageLocation{RIGHT,TOP}
 	public static enum SeparatorAfter{AUTO,TRUE,FALSE}
+	public static enum BreakLineAfter{AUTO,TRUE,FALSE}
 	
 	String label() default "";
 	TextValueType labelValueType() default TextValueType.I18N_ID;
@@ -23,9 +24,11 @@ public @interface UIField {
 	TextValueType descriptionValueType() default TextValueType.I18N_ID;
 	
 	boolean applicationId() default false;
-	//boolean required() default false;
 	String inputType() default "";
 	SelectOneInputType selectOneInputType() default SelectOneInputType.COMBOBOX;
+	
+	int rowSpan() default 1;
+	int columnSpan() default 1;
 	
 	boolean textArea() default false;
 	boolean textAreaRich() default false;
@@ -34,11 +37,16 @@ public @interface UIField {
 	
 	boolean ignore() default false;
 	
+	BreakLineAfter breakLineAfter() default BreakLineAfter.AUTO;
 	SeparatorAfter separatorAfter() default SeparatorAfter.AUTO;
+	String separatorLabel() default "";
+	TextValueType separatorLabelValueType() default TextValueType.I18N_ID;
 	
 	boolean showCreateButton() default true;
 	OneRelationshipInputType oneRelationshipInputType() default OneRelationshipInputType.AUTO;
 	ManyRelationshipInputType manyRelationshipInputType() default ManyRelationshipInputType.AUTO;
+	Class<?> manyRelationshipClass() default Void.class;
+	
 	Class<?>[] groups() default {};
 	
 	/* Table */
