@@ -71,7 +71,7 @@ public abstract class AbstractClassFieldValueTable<CLASS,ROW extends DefaultTabl
 				for(COLUMN column : columns){
 					Object o = FieldUtils.readField(aRowData, column.getFieldName(),true);
 					CELL cell = cellClass.newInstance();
-					cell.setValue(o==null?nullValue:valueOf(o));
+					cell.setValue(o==null?nullValue:valueOf(cell,o));
 					addCell(row,column,cell);
 				}
 				return true;
@@ -86,12 +86,14 @@ public abstract class AbstractClassFieldValueTable<CLASS,ROW extends DefaultTabl
 	public void updateRow(ROW row,CLASS aRowData) {
 		try {
 			row.setData(aRowData);
-			if(addRow(row)){
+			//if(addRow(row)){
 				for(COLUMN column : columns){
 					Object o = FieldUtils.readField(aRowData, column.getFieldName(),true);
-					row.getCells().get(column.getIndex()).setValue(o==null?nullValue:valueOf(o));
+					@SuppressWarnings("unchecked")
+					CELL cell = (CELL) row.getCells().get(column.getIndex());
+					cell.setValue(o==null?nullValue:valueOf(cell,o));
 				}
-			}
+			//}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -137,7 +139,7 @@ public abstract class AbstractClassFieldValueTable<CLASS,ROW extends DefaultTabl
 		return field.getAnnotation(UIField.class);
 	}
 	
-	protected String valueOf(Object object){
+	protected String valueOf(CELL cell,Object object){
 		return object.toString();
 	}
 

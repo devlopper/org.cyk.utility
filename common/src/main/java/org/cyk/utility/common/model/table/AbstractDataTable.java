@@ -18,7 +18,7 @@ public abstract class AbstractDataTable<
 
 	private static final long serialVersionUID = 5164167344286124195L;
  
-	protected List<ROW_DIMENSION> rows = new ArrayList<>();
+	protected List<ROW_DIMENSION> rows = new ArrayList<ROW_DIMENSION>();
 	protected List<COLUMN_DIMENSION> columns = new ArrayList<>();
 	protected CellAddStrategy cellAddStrategy = CellAddStrategy.ROW_ONLY;
 	
@@ -43,7 +43,7 @@ public abstract class AbstractDataTable<
 	}
 	
 	public CELL_TYPE cell(ROW_DIMENSION row,COLUMN_DIMENSION column){
-		if(row==null || column==null){
+		if(row==null || column==null || row.getIndex()>=rows.size() || column.getIndex()>=columns.size()){
 			return null;
 		}
 		return rows.get(row.getIndex()).getCells().get(column.getIndex());

@@ -1,9 +1,13 @@
 package org.cyk.utility.common.cdi;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -16,11 +20,13 @@ import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessBean;
 
 import lombok.Getter;
+import lombok.extern.java.Log;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.annotation.BusinessLayer;
 import org.cyk.utility.common.annotation.Deployment;
 
+@Log
 public class StartupBeanExtension implements Extension {
 
 	@Getter private Set<Class<?>> classes = new HashSet<>();
@@ -62,15 +68,27 @@ public class StartupBeanExtension implements Extension {
 	public Set<Object> getReferences() {
 		if(references==null){
 			references = new HashSet<>();
-			for (Bean<?> bean : annotationClasses.get(Deployment.class)) {
+			log.info("Eager Deployment Starts");
+			List<Bean<?>> beans = new ArrayList<>(annotationClasses.get(Deployment.class));
+			/*Collections.sort(beans, new Comparator<Bean<?>>() {
+				@Override
+				public int compare(Bean<?> o1, Bean<?> o2) {
+					Deployment deployment1 = o1.getBeanClass().getAnnotation(Deployment.class);
+					Deployment deployment2 = o2.getBeanClass().getAnnotation(Deployment.class);
+					return new Integer(deployment1.order()).compareTo(deployment2.order());
+				}
+			});*/
+			for (Bean<?> bean : beans) {
 				Deployment deployment = bean.getBeanClass().getAnnotation(Deployment.class);
 				if(Deployment.InitialisationType.EAGER.equals(deployment.initialisationType())){
 					Object object = beanManager.getReference(bean, bean.getBeanClass(),beanManager.createCreationalContext(bean));
 					// the call to toString() is a cheat to force the bean to be initialized
 					object.toString();
+					log.info("*          ("+deployment.order()+") *"+object.getClass().getName());
 					references.add(object);
 				}
 			}
+			log.info("Eager Deployment Ends");
 		}
 			
 		return references;

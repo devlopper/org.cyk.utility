@@ -24,7 +24,7 @@ import org.reflections.util.FilterBuilder;
 public class CommonUtils implements Serializable  {
 
 	private static final long serialVersionUID = -6146661020703974108L;
-	
+		
 	public Field getField(Object source,Object value){
 		for(Field field : getAllFields(source.getClass()))
 			try {
@@ -53,6 +53,13 @@ public class CommonUtils implements Serializable  {
 	public Collection<Field> getAllFields(Class<?> type) {
 		Collection<Field> fields = new ArrayList<>();
 		return getAllFields(fields, type);
+	}
+	
+	public Field getFieldFromClass(Class<?> type,String name) {
+		for(Field field : getAllFields(type))
+			if(field.getName().equals(name))
+				return field;
+		return null;
 	}
 	
 	public Collection<Field> getAllFields(Class<?> type,Collection<Class<? extends Annotation>> annotationClasses) {

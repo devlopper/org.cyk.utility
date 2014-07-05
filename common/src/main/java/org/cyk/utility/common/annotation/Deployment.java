@@ -12,5 +12,7 @@ public @interface Deployment {
 	public static enum InitialisationType{EAGER,LAZY}
 	
 	InitialisationType initialisationType() default InitialisationType.LAZY;
+	
+	int order() default 0;
 
 }
