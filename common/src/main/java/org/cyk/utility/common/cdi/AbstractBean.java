@@ -2,6 +2,7 @@ package org.cyk.utility.common.cdi;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.regex.Matcher;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.spi.CreationalContext;
@@ -92,7 +93,29 @@ public class AbstractBean implements Serializable {
 	
 	protected void debug(Object object){
 		System.out.println("------------------------------------- Debug -----------------------------");
-		System.out.println(ToStringBuilder.reflectionToString(object, ToStringStyle.MULTI_LINE_STYLE));
+		if(object instanceof Matcher){
+			Matcher matcher = (Matcher) object;
+			for(int i=1;i<=matcher.groupCount();i++)
+				System.out.println("Group "+i+" = "+matcher.group(i));
+		}else
+			System.out.println(ToStringBuilder.reflectionToString(object, ToStringStyle.MULTI_LINE_STYLE));
+	}
+	
+	protected void logStackTrace(){
+		try {
+			throw new RuntimeException("Stack Trace");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		/*
+		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+		if(ArrayUtils.isEmpty(stackTraceElements)){
+			System.out.println("No stack trace to log.");
+			return;
+		}
+		StackTraceElement stackTraceElement = stackTraceElements[0];
+		System.out.println(stackTraceElement.getClassName()+" - "+stackTraceElement.getMethodName()+" - "+stackTraceElement.getLineNumber());
+		*/
 	}
 	
 	/**/

@@ -70,6 +70,12 @@ public class CommonUtils implements Serializable  {
 					fields.add(field);
 		return fields;
 	}
+	
+	public Collection<Field> getAllFields(Class<?> type,Class<? extends Annotation> annotationClass) {
+		Collection<Class<? extends Annotation>> collection = new ArrayList<>();
+		collection.add(annotationClass);
+		return getAllFields(type,collection);
+	}
 
 	public Boolean isNumberClass(Class<?> aClass){
 		return Number.class.isAssignableFrom(ClassUtils.primitiveToWrapper(aClass));

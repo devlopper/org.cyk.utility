@@ -17,5 +17,6 @@ public @interface ModelBean {
 	CrudStrategy crudStrategy();
 	CrudInheritanceStrategy crudInheritanceStrategy() default CrudInheritanceStrategy.ALL;
 	
+	String uiIconName() default "";
 	
 }

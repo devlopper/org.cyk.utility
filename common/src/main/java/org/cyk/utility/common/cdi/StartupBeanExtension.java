@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
 import java.util.Set;
 
 import javax.enterprise.event.Observes;
@@ -38,6 +39,7 @@ public class StartupBeanExtension implements Extension {
 	protected BeanManager beanManager;
 	
 	public StartupBeanExtension() {
+		//System.out.println("############      StartupBeanExtension.StartupBeanExtension()     ###########");
 		addAnnotation(Deployment.class);
 		addAnnotation(BusinessLayer.class);
 	}
@@ -63,32 +65,49 @@ public class StartupBeanExtension implements Extension {
 				//reference(bean);
 			}
 		}*/
+		
+		//getReferences();
 	}
 		
 	public Set<Object> getReferences() {
 		if(references==null){
 			references = new HashSet<>();
-			log.info("Eager Deployment Starts");
+		
 			List<Bean<?>> beans = new ArrayList<>(annotationClasses.get(Deployment.class));
-			/*Collections.sort(beans, new Comparator<Bean<?>>() {
+			Collections.sort(beans, new Comparator<Bean<?>>() {
 				@Override
 				public int compare(Bean<?> o1, Bean<?> o2) {
 					Deployment deployment1 = o1.getBeanClass().getAnnotation(Deployment.class);
 					Deployment deployment2 = o2.getBeanClass().getAnnotation(Deployment.class);
 					return new Integer(deployment1.order()).compareTo(deployment2.order());
 				}
-			});*/
+			});
+			
+			//log.info("The following will be eager deployed : ");
+			/*for (Bean<?> bean : beans) {
+				Deployment deployment = bean.getBeanClass().getAnnotation(Deployment.class);
+				log.info("*          ("+deployment.order()+") *"+bean.getBeanClass().getName());
+			}*/
+			
+			//log.info("Eager Deployment Starts");
 			for (Bean<?> bean : beans) {
 				Deployment deployment = bean.getBeanClass().getAnnotation(Deployment.class);
 				if(Deployment.InitialisationType.EAGER.equals(deployment.initialisationType())){
-					Object object = beanManager.getReference(bean, bean.getBeanClass(),beanManager.createCreationalContext(bean));
-					// the call to toString() is a cheat to force the bean to be initialized
-					object.toString();
-					log.info("*          ("+deployment.order()+") *"+object.getClass().getName());
-					references.add(object);
+					//String m = "\t\t("+deployment.order()+") *"+bean.getBeanClass().getName();
+					try {
+						Object object = beanManager.getReference(bean, bean.getBeanClass(),beanManager.createCreationalContext(bean));
+						// the call to toString() is a cheat to force the bean to be initialized
+						object.toString();
+						references.add(object);
+						//log.info(m+" : OK");
+					} catch (Exception e) {
+						e.printStackTrace();
+						//log.info(m+" : FAIL");
+						log.log(Level.SEVERE,e.toString(),e);
+					}
 				}
 			}
-			log.info("Eager Deployment Ends");
+			//log.info("Eager Deployment Ends");
 		}
 			
 		return references;

@@ -128,6 +128,14 @@ public abstract class AbstractClassFieldValueTable<CLASS,ROW extends DefaultTabl
 		deleteRow(aRow.index.intValue());
 	}
 	
+	public void clear(){
+		if(rows==null)
+			return;
+		int l = rows.size();
+		for(int i=0;i<l;i++)
+			deleteRow(0);
+	}
+	
 	protected Boolean showable(Field field,Class<CLASS> clazz){
 		if(Modifier.isStatic(field.getModifiers()))
 			return false;

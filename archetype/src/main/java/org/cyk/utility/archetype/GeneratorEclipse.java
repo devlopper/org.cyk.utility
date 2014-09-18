@@ -34,7 +34,7 @@ public class GeneratorEclipse implements Serializable {
 	
 	private Properties properties = new Properties();
 	private File workspaceDirectory;
-	private String identifier,systemPomFolderName="_pom",pomFileName="pom.xml",driveId;
+	private String identifier,systemPomFolderName="_pom",pomFileName="pom.xml",driveId,systemApplicationFolderName="application";
 	private Type type = Type.SYSTEM;
 	private String userDir = System.getProperty("user.dir");
 	private File commandFile;
@@ -68,7 +68,14 @@ public class GeneratorEclipse implements Serializable {
 		pomFolder.mkdir();		
 		
 		FileUtils.moveFile(new File(systemDirectory,"pom.xml"), new File(pomFolder,"pom.xml"));
-		System.out.println("Done");
+		
+		for(File file : systemDirectory.listFiles())
+			if(file.isDirectory() && !file.getName().equals(systemPomFolderName) && !file.getName().equals(systemApplicationFolderName)){
+				String name = new File(systemDirectory,systemDirectory.getName()+"-"+file.getName()).getAbsolutePath();
+				file.renameTo(new File(name));
+			}
+		
+		System.out.println("###   Done   ###");
 	}
 	
 	protected String script(){

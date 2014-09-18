@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.AbstractMethod;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,6 +49,15 @@ public abstract class AbstractTest implements Serializable {
 	protected void _execute_(){
 		/*for(AbstractTestMethod method : methods)
 			method.execute();*/
+	}
+	
+	/**/
+	
+	protected void assertEquals(String message, Object expected, Object actual){
+		Assert.assertEquals(message, expected, actual);
+	}
+	protected void assertEquals(Object expected, Object actual){
+		Assert.assertEquals(expected, actual);
 	}
 	
 	/**/

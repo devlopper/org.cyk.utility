@@ -1,6 +1,7 @@
 package org.cyk.utility.common.test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.cyk.utility.common.CommonUtils;
 import org.jboss.arquillian.junit.Arquillian;
@@ -17,10 +18,17 @@ public abstract class AbstractIntegrationTest extends AbstractTest  {
 		return builder;
 	}
 	
-	public static ArchiveBuilder _deploymentOfPackage(String aPackage){
+	public static ArchiveBuilder _deploymentOfPackages(String...thePackages){
 		ArchiveBuilder builder = new ArchiveBuilder();
 		builder.create();
-		builder.addClasses(new ArrayList<>(CommonUtils.getInstance().getPackageClasses(aPackage, Object.class)).toArray(new Class<?>[]{}));
+		Collection<Class<?>> classes = new ArrayList<>();
+		for(String aPackage : thePackages)
+			classes.addAll(CommonUtils.getInstance().getPackageClasses(aPackage, Object.class));
+		
+		//for(Class<?> c : classes)
+		//	System.out.print(c.getSimpleName()+" , ");
+		
+		builder.addClasses(classes.toArray(new Class<?>[]{}));
 		return builder;
 	}
 	

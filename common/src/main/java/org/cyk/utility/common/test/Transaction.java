@@ -5,6 +5,9 @@ import java.sql.SQLException;
 
 import javax.transaction.UserTransaction;
 
+import lombok.extern.java.Log;
+
+@Log
 public abstract class Transaction {
 	
 	private AbstractIntegrationTestJpaBased persistenceIT;
@@ -19,6 +22,10 @@ public abstract class Transaction {
 	}
 
 	public void run(){
+		if(transaction==null){
+			log.warning("Null transaction will be skipped");
+			return;
+		}
 		try {
 			transaction.begin();
 		} catch (Exception exception) {
