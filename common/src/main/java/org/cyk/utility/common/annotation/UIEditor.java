@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value={ElementType.TYPE})
+@Deprecated //TODO Use @Form instead to be deleted 
 public @interface UIEditor {
 	
 	public static enum LayoutType{AUTO,GRID}

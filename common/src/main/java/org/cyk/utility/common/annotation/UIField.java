@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value={ElementType.FIELD,ElementType.METHOD})
+@Deprecated //TODO to be deleted
 public @interface UIField {
 	
 	public static enum OneRelationshipInputType{AUTO,COMBOBOX,AUTOCOMPLETE,FIELDS,FORM}
