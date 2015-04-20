@@ -1,18 +1,31 @@
 package org.cyk.utility.common;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 
 import lombok.extern.java.Log;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -24,7 +37,24 @@ import org.reflections.util.FilterBuilder;
 public class CommonUtils implements Serializable  {
 
 	private static final long serialVersionUID = -6146661020703974108L;
-		
+	
+	private static final Map<String,Class<?>> CLASSES_MAP = new HashMap<String, Class<?>>();
+	
+	public Class<?> classFormName(String name){
+		try {
+			Class<?> clazz = CLASSES_MAP.get(name);
+			if(clazz==null){
+				clazz = Class.forName(name);
+				if(clazz!=null)
+					CLASSES_MAP.put(name, clazz);
+			}
+			return clazz;
+		} catch (ClassNotFoundException e) {
+			log.log(Level.SEVERE,e.toString(),e);
+			return null;
+		}
+	}
+	
 	public Field getField(Object source,Object value){
 		for(Field field : getAllFields(source.getClass()))
 			try {
@@ -65,9 +95,12 @@ public class CommonUtils implements Serializable  {
 	public Collection<Field> getAllFields(Class<?> type,Collection<Class<? extends Annotation>> annotationClasses) {
 		Collection<Field> fields = new ArrayList<>();
 		for(Field field : getAllFields(type))
-			for(Class<? extends Annotation> annotationClass : annotationClasses)
-				if(field.isAnnotationPresent(annotationClass))
-					fields.add(field);
+			if(annotationClasses==null || annotationClasses.isEmpty())
+				fields.add(field);
+			else
+				for(Class<? extends Annotation> annotationClass : annotationClasses)
+					if(field.isAnnotationPresent(annotationClass))
+						fields.add(field);
 		return fields;
 	}
 	
@@ -76,21 +109,65 @@ public class CommonUtils implements Serializable  {
 		collection.add(annotationClass);
 		return getAllFields(type,collection);
 	}
-
+	
 	public Boolean isNumberClass(Class<?> aClass){
 		return Number.class.isAssignableFrom(ClassUtils.primitiveToWrapper(aClass));
 	}
 	
-	public Object readField(Object object,Field field,Boolean createIfNull){
-		Object r = null;
+	public Object readField(Object object,Field field,Boolean recursive,Boolean createIfNull,Collection<Class<? extends Annotation>> annotationClasses){
+		Object r = __readField__(object,field,recursive,annotationClasses);
 		try {
-			r = FieldUtils.readField(field, object, true);
-			if(r==null && Boolean.TRUE.equals(createIfNull))
-				r = field.getType().newInstance();
+			if(r==null && Boolean.TRUE.equals(createIfNull)){
+				if(field.getType().equals(Collection.class) || field.getType().equals(List.class))
+					r = new ArrayList<>();
+				else if(field.getType().equals(Set.class))
+					r = new LinkedHashSet<>();
+				else
+					r = field.getType().newInstance();
+			}
 		} catch (Exception e) {
 			log.log(Level.SEVERE,e.toString(),e);
-		}
+		}	
 		return r;
+	}
+	
+	public Object readField(Object object,Field field,Boolean createIfNull){
+		return readField(object, field, Boolean.FALSE, createIfNull,null);
+	}
+	
+	private Object __readField__(Object object,Field field,Boolean recursive,Collection<Class<? extends Annotation>> annotationClasses){
+		Object value = null;
+		
+		if(object==null)
+			;
+		else
+			try {
+				if(Boolean.TRUE.equals(recursive)){
+					Collection<Field> fields = getAllFields(object.getClass(),annotationClasses);
+					if(fields.contains(field))
+						value = FieldUtils.readField(field, object,Boolean.TRUE);
+					else{
+						for(Field f : fields)
+							//if(!f.getType().isPrimitive() && !f.getType().getName().startsWith("java.")){
+							if(f.getType().getName().startsWith("org.cyk.")){
+								value = __readField__(FieldUtils.readField(f, object,Boolean.TRUE),field,recursive,annotationClasses);
+								if(value!=null)
+									break;
+							}
+						/*if(value==null){
+							System.out.println(field.getName()+" not in "+object.getClass().getSimpleName());
+						}else
+							System.out.println(field.getName()+"  in "+object.getClass().getSimpleName());*/
+					}
+				}else{
+					value = FieldUtils.readField(field, object, Boolean.TRUE);
+				}
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+				return null;
+			}	
+		
+		return value;
 	}
 	
 	public <T extends Annotation> T getAnnotation(Class<?> aClass,Class<T> anAnnotationClass){
@@ -98,6 +175,28 @@ public class CommonUtils implements Serializable  {
 		if(annotation==null && aClass.getSuperclass()!=null)
 			return getAnnotation(aClass.getSuperclass(), anAnnotationClass);
 		return annotation;
+	}
+	
+	public <T extends Annotation> T getFieldAnnotation(Field field,Class<?> clazz,Class<T> anAnnotationClass,Boolean includeGetter){
+		T annotation = null;
+		if(Boolean.TRUE.equals(includeGetter) && clazz!=null){
+			try {
+				annotation = MethodUtils.getAccessibleMethod(clazz, "get"+StringUtils.capitalize(field.getName())).getAnnotation(anAnnotationClass);
+			} catch (Exception e) {}
+			//System.out.println( "get"+StringUtils.capitalize(field.getName())+" : "+MethodUtils.getAccessibleMethod(field.getDeclaringClass(), "get"+StringUtils.capitalize(field.getName())) );
+		}
+		if(annotation==null)
+			annotation = field.getAnnotation(anAnnotationClass);
+			
+		return annotation;
+	}
+	
+	public <T extends Annotation> T getFieldAnnotation(Field field,Class<?> clazz,Class<T> anAnnotationClass){
+		return getFieldAnnotation(field,clazz, anAnnotationClass,Boolean.FALSE);
+	}
+	
+	public <T extends Annotation> T getFieldAnnotation(Field field,Class<T> anAnnotationClass){
+		return getFieldAnnotation(field,field.getDeclaringClass(), anAnnotationClass,Boolean.FALSE);
 	}
 	
 	public Throwable getThrowableInstanceOf(Throwable throwable,Class<?> aClass){
@@ -127,7 +226,50 @@ public class CommonUtils implements Serializable  {
 	
 	/**/
 	
+	public Date getUniversalTimeCoordinated(){
+		return new DateTime(DateTimeZone.UTC).toDate();
+	}
 	
+	@SuppressWarnings("unchecked")
+	public List<String> stringLines(String fileName,Class<?> aClass){
+		try {
+			return (List<String>) IOUtils.readLines(aClass.getResourceAsStream(fileName));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public String mime(String extension) {
+        try {
+            return Files.probeContentType(Paths.get("file."+extension));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    } 
+	
+	public Boolean canWriteSourceToDestination(Object sourceObject,Field sourceField,Object destinationObject,Field destinationField){
+		Class<?> sourceClass=sourceField.getType(),destinationClass=destinationField.getType();
+		if(Collection.class.equals(destinationClass))
+			if(Collection.class.equals(sourceClass))
+				return Boolean.TRUE;
+			else
+				return Collection.class.isAssignableFrom(sourceClass);
+		else if(List.class.equals(destinationClass))
+			if(Collection.class.equals(sourceClass)){
+				//Use value type
+				Object value = readField(sourceObject, sourceField, Boolean.FALSE);
+				return value!=null && List.class.isAssignableFrom(value.getClass());
+			}else
+				return List.class.isAssignableFrom(sourceClass);
+		else
+			return destinationClass.equals(sourceClass);
+	}
+	
+	public Integer numberOfDaysIn(Date date1,Date date2,Boolean partial){
+		return new DateTime(date2).getDayOfYear() - new DateTime(date1).getDayOfYear();
+	}
 	
 	/**/
 	

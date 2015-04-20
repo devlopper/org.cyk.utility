@@ -1,6 +1,8 @@
 package org.cyk.utility.common.cdi;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 import java.util.regex.Matcher;
 
@@ -16,12 +18,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.CommonUtils;
+import org.cyk.utility.common.RunnableListener;
 
 public class AbstractBean implements Serializable {
 
 	private static final long serialVersionUID = -2448439169984218703L;
 
 	protected CommonUtils commonUtils = CommonUtils.getInstance();
+	
+	@Getter protected Collection<BeanListener> beanListeners = new ArrayList<>();
+	
+	//private Long __timestamp__;
 	
 	@PostConstruct
 	public void postConstruct(){
@@ -54,6 +61,14 @@ public class AbstractBean implements Serializable {
 		return CDI.current().getBeanManager();
 	}
 	
+	protected <T> T newInstance(Class<T> aClass){
+		try {
+			return aClass.newInstance();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	protected void pause(long millisecond){
 		try {
 			Thread.sleep(millisecond);
@@ -70,9 +85,11 @@ public class AbstractBean implements Serializable {
 	
 	protected void __writeInfo__(String message,int lineLength,String separator){
 		if(separator==null)
-			System.out.println(__info__(message, lineLength));
+			message = __info__(message, lineLength);
 		else
-			System.out.print(__info__(message, lineLength)+separator);
+			message = __info__(message, lineLength)+separator;
+		for(BeanListener beanListener : beanListeners)
+			beanListener.info(message);
 	}
 	
 	protected void __writeInfo__(String message,int lineLength){
@@ -116,6 +133,25 @@ public class AbstractBean implements Serializable {
 		StackTraceElement stackTraceElement = stackTraceElements[0];
 		System.out.println(stackTraceElement.getClassName()+" - "+stackTraceElement.getMethodName()+" - "+stackTraceElement.getLineNumber());
 		*/
+	}
+	
+	/**/
+	
+	protected static <RUNNABLE extends Runnable> void runnableStarted(RUNNABLE aRunnable,Collection<RunnableListener<RUNNABLE>> listeners){
+		Long time = System.currentTimeMillis();
+		for(RunnableListener<RUNNABLE> listener : listeners)
+			listener.started(aRunnable,time);
+	}
+	
+	protected static <RUNNABLE extends Runnable> void runnableStopped(RUNNABLE aRunnable,Collection<RunnableListener<RUNNABLE>> listeners){
+		Long time = System.currentTimeMillis();
+		for(RunnableListener<RUNNABLE> listener : listeners)
+			listener.stopped(aRunnable,time);
+	}
+	
+	protected static <RUNNABLE extends Runnable> void runnableThrowable(RUNNABLE aRunnable,Collection<RunnableListener<RUNNABLE>> listeners,Throwable throwable){
+		for(RunnableListener<RUNNABLE> listener : listeners)
+			listener.throwable(aRunnable,throwable);
 	}
 	
 	/**/

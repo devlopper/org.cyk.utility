@@ -7,12 +7,9 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value={ElementType.FIELD})
-public @interface InputFile {
+public @interface Binding {
 	
-	FileExtensions extensions() default @FileExtensions;
+	String field() default "";
 	
-	Thumbnail thumbnail() default @Thumbnail;
-	
-	Distance size() default @Distance(from=@Number(integer=1),to=@Number(integer=1024 * 1));
-
+	Class<?> clazz() default Void.class;
 }

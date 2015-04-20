@@ -39,7 +39,7 @@ public class StartupBeanExtension implements Extension {
 	protected BeanManager beanManager;
 	
 	public StartupBeanExtension() {
-		//System.out.println("############      StartupBeanExtension.StartupBeanExtension()     ###########");
+		//log.info("############      StartupBeanExtension.StartupBeanExtension()     ###########");
 		addAnnotation(Deployment.class);
 		addAnnotation(BusinessLayer.class);
 	}
@@ -89,25 +89,25 @@ public class StartupBeanExtension implements Extension {
 				log.info("*          ("+deployment.order()+") *"+bean.getBeanClass().getName());
 			}*/
 			
-			//log.info("Eager Deployment Starts");
+			log.info("Eager Deployment Starts");
 			for (Bean<?> bean : beans) {
 				Deployment deployment = bean.getBeanClass().getAnnotation(Deployment.class);
 				if(Deployment.InitialisationType.EAGER.equals(deployment.initialisationType())){
-					//String m = "\t\t("+deployment.order()+") *"+bean.getBeanClass().getName();
+					String m = "\t\t("+deployment.order()+") *"+bean.getBeanClass().getName();
 					try {
 						Object object = beanManager.getReference(bean, bean.getBeanClass(),beanManager.createCreationalContext(bean));
 						// the call to toString() is a cheat to force the bean to be initialized
 						object.toString();
 						references.add(object);
-						//log.info(m+" : OK");
+						log.info(m+" : OK");
 					} catch (Exception e) {
 						e.printStackTrace();
-						//log.info(m+" : FAIL");
+						log.info(m+" : FAIL");
 						log.log(Level.SEVERE,e.toString(),e);
 					}
 				}
 			}
-			//log.info("Eager Deployment Ends");
+			log.info("Eager Deployment Ends");
 		}
 			
 		return references;

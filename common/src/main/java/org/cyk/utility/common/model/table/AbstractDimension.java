@@ -1,24 +1,21 @@
 package org.cyk.utility.common.model.table;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.cyk.utility.common.cdi.AbstractBean;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter @NoArgsConstructor
-public abstract class AbstractDimension<DATA,CELLTYPE extends AbstractCell<CELLVALUE>,CELLVALUE> extends AbstractBean implements Serializable {
+import org.cyk.utility.common.cdi.AbstractBean;
+
+@NoArgsConstructor
+public abstract class AbstractDimension<DATA,CELLTYPE extends AbstractCell<CELLVALUE>,CELLVALUE> extends AbstractBean implements Dimension<DATA, CELLTYPE,CELLVALUE>, Serializable {
 
 	private static final long serialVersionUID = 3307695889353490821L;
  
-	protected Byte index;
-	protected DATA data;
-	protected String title;
-	protected List<CELLTYPE> cells = new ArrayList<>();
+	@Getter @Setter protected Byte index;
+	@Getter @Setter protected DATA data;
+	@Getter @Setter protected String title;
 	
 	public AbstractDimension(DATA data,String title) {
 		super(); 
@@ -28,10 +25,6 @@ public abstract class AbstractDimension<DATA,CELLTYPE extends AbstractCell<CELLV
 	
 	public AbstractDimension(String title) {
 		this(null,title);
-	}
-
-	public boolean addCell(CELLTYPE cell) {
-		return cells.add(cell);
 	}
 	
 }

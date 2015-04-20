@@ -6,13 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(value={ElementType.FIELD})
-public @interface InputFile {
-	
-	FileExtensions extensions() default @FileExtensions;
-	
-	Thumbnail thumbnail() default @Thumbnail;
-	
-	Distance size() default @Distance(from=@Number(integer=1),to=@Number(integer=1024 * 1));
+@Target(value={ElementType.FIELD,ElementType.METHOD})
+public @interface Sequence {
 
+	public enum Direction{BEFORE,AFTER}
+
+	Direction direction();
+	
+	String field();
+	
 }

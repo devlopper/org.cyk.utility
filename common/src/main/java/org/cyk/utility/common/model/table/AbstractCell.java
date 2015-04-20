@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.Getter;
 
 @Getter @Setter @NoArgsConstructor
-public abstract class AbstractCell<VALUE> implements Serializable {
+public abstract class AbstractCell<VALUE> implements Cell<VALUE>,Serializable {
 
 	private static final long serialVersionUID = 3633221262937015949L;
 
