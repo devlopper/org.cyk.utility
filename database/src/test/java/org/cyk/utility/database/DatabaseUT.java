@@ -1,6 +1,6 @@
 package org.cyk.utility.database;
 
-import org.cyk.utility.common.test.AbstractUnitTest;
+import org.cyk.utility.test.AbstractUnitTest;
 
 public class DatabaseUT extends AbstractUnitTest {
 

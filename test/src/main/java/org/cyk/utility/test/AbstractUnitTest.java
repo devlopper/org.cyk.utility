@@ -1,4 +1,4 @@
-package org.cyk.utility.common.test;
+package org.cyk.utility.test;
 
 
 public abstract class AbstractUnitTest extends AbstractTest  {

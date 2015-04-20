@@ -1,4 +1,4 @@
-package org.cyk.utility.common.test;
+package org.cyk.utility.test;
 
 
 import java.sql.SQLException;

@@ -13,7 +13,7 @@ import lombok.Setter;
 
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
-import org.cyk.utility.common.test.AbstractUnitTest;
+import org.cyk.utility.test.AbstractUnitTest;
 import org.junit.Assert;
 
 public class CommonUtilsUTo extends AbstractUnitTest {
@@ -28,8 +28,8 @@ public class CommonUtilsUTo extends AbstractUnitTest {
 		
 		Field fieldA1 = CommonUtils.getInstance().getFieldFromClass(ClassA.class, "attributeA1");
 		Field fieldB1 = CommonUtils.getInstance().getFieldFromClass(ClassB.class, "attributeB1");
-		Field fieldC2 = CommonUtils.getInstance().getFieldFromClass(ClassC.class, "attributeC2");
-		Field fieldD3 = CommonUtils.getInstance().getFieldFromClass(ClassD.class, "attributeD3");
+		//Field fieldC2 = CommonUtils.getInstance().getFieldFromClass(ClassC.class, "attributeC2");
+		//Field fieldD3 = CommonUtils.getInstance().getFieldFromClass(ClassD.class, "attributeD3");
 		
 		Collection<Field> fieldsA = CommonUtils.getInstance().getAllFields(ClassA.class);
 		Assert.assertTrue(fieldsA.contains(fieldA1));

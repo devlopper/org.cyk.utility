@@ -4,9 +4,9 @@ import org.apache.commons.lang3.StringUtils;
 
 public class DefaultTable<DATA> extends Table<DefaultRow<DATA>, DefaultColumn, DATA, String, DefaultCell, String> {
 
-	@SuppressWarnings("unchecked")
+	//TODO DefaultRow.class throw inconvertible type at compile time
 	public DefaultTable(Class<DATA> rowDataClass) {
-		super((Class<? extends DefaultRow<DATA>>) DefaultRow.class, rowDataClass, DefaultColumn.class, DefaultCell.class);
+		super((Class<? extends DefaultRow<DATA>>) /*DefaultRow.class*/null, rowDataClass, DefaultColumn.class, DefaultCell.class);
 	}
 
 	private static final long serialVersionUID = 581883275700805955L;
