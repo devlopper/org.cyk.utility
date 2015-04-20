@@ -7,5 +7,5 @@ public interface RunnableListener<TYPE extends Runnable> {
 	void stopped(TYPE aType,Long time);
 
 	void throwable(TYPE aType, Throwable throwable);	
-	 
+	  
 }

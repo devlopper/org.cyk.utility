@@ -9,7 +9,7 @@ public abstract class AbstractMethod<RESULT,PARAMETER> implements Serializable {
 	public final RESULT execute(PARAMETER parameter){
 		return __execute__(parameter);
 	}
-	
+	 
 	public final RESULT execute(){
 		return __execute__(null);
 	}
