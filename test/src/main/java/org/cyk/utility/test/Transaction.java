@@ -9,7 +9,7 @@ import lombok.extern.java.Log;
 
 @Log
 public abstract class Transaction {
-	
+	  
 	private AbstractIntegrationTestJpaBased persistenceIT;
 	private UserTransaction transaction;
 	private Class<? extends SQLException> exceptionClassExpected;
