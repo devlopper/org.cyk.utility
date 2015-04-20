@@ -7,7 +7,7 @@
 		<groupId>org.cyk.pom</groupId>
 		<artifactId>test</artifactId>
 		<version>test.0.0.1</version>
-	</parent>
+	</parent> 
 
 	<name>test utility</name>
 	<url>http://www.cykcorp.org</url>
