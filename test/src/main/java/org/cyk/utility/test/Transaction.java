@@ -21,7 +21,7 @@ public abstract class Transaction {
 		this.exceptionClassExpected = exceptionClassExpected;
 	}
 
-	public void run(){
+	public void run(){ 
 		if(transaction==null){
 			log.warning("Null transaction will be skipped");
 			return;
