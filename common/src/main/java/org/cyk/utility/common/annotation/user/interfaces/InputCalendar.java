@@ -9,4 +9,8 @@ import java.lang.annotation.Target;
 @Target(value={ElementType.FIELD})
 public @interface InputCalendar {
 
+	public enum Format{AUTO,DATE_SHORT,DATE_LONG,TIME,DATETIME_SHORT,DATETIME_LONG}
+	
+	Format format() default Format.AUTO;
+	
 }
