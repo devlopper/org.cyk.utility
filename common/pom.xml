@@ -10,7 +10,7 @@
 	</parent>
 
 	<name>common utility</name>
-	<url>http://www.cykcorp.org</url>
+	<url>http://www.cykcorp.org</url> 
 	
 	<groupId>org.cyk.utility</groupId>
 	<artifactId>common</artifactId>

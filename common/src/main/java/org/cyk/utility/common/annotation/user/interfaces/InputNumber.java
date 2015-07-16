@@ -9,4 +9,8 @@ import java.lang.annotation.Target;
 @Target(value={ElementType.FIELD})
 public @interface InputNumber {
 
+	ValueType valueType() default ValueType.AUTO;
+	
+	public enum ValueType{AUTO,UNKNOWN,QUANTITY}
+	
 }

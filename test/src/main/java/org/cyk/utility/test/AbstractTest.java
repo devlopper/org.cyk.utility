@@ -10,10 +10,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-
 public abstract class AbstractTest implements Serializable {
 	
 	private static final long serialVersionUID = -4375668358714913342L;
+	
+	//private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTest.class);
 	
 	//protected Collection<AbstractTestMethod> methods = new ArrayList<>();
 	

@@ -15,9 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-
-import lombok.extern.java.Log;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ClassUtils;
@@ -32,12 +29,13 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Log
 public class CommonUtils implements Serializable  {
 
 	private static final long serialVersionUID = -6146661020703974108L;
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommonUtils.class);
 	private static final Map<String,Class<?>> CLASSES_MAP = new HashMap<String, Class<?>>();
 	
 	public Class<?> classFormName(String name){
@@ -50,7 +48,7 @@ public class CommonUtils implements Serializable  {
 			}
 			return clazz;
 		} catch (ClassNotFoundException e) {
-			log.log(Level.SEVERE,e.toString(),e);
+			LOGGER.error(String.format("Class named %s cannot be found",name),e);
 			return null;
 		}
 	}
@@ -61,7 +59,7 @@ public class CommonUtils implements Serializable  {
 				if(value==FieldUtils.readField(field, source, true))
 					return field;
 			} catch (Exception e) {
-				log.log(Level.SEVERE,e.toString(),e);
+				LOGGER.error(String.format("Field named %s cannot be read from object %s",field.getName(),source),e);
 				return null;
 			}
 		return null;
@@ -99,8 +97,10 @@ public class CommonUtils implements Serializable  {
 				fields.add(field);
 			else
 				for(Class<? extends Annotation> annotationClass : annotationClasses)
-					if(field.isAnnotationPresent(annotationClass))
+					if(field.isAnnotationPresent(annotationClass)){
 						fields.add(field);
+						break;
+					}
 		return fields;
 	}
 	
@@ -126,7 +126,7 @@ public class CommonUtils implements Serializable  {
 					r = field.getType().newInstance();
 			}
 		} catch (Exception e) {
-			log.log(Level.SEVERE,e.toString(),e);
+			LOGGER.error(e.toString(),e);
 		}	
 		return r;
 	}

@@ -6,6 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ArithmeticOperator {
-	EQ("="), GT(">"), GTE(">="), LT("<"), LTE("<="),IN("IN"),BETWEEN("BETWEEN");
+	EQ("="),NEQ("!="), GT(">"), GTE(">="), LT("<"), LTE("<="),IN("IN"),BETWEEN("BETWEEN");
 	private String symbol;
 }

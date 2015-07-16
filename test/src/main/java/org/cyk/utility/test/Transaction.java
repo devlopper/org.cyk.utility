@@ -5,11 +5,11 @@ import java.sql.SQLException;
 
 import javax.transaction.UserTransaction;
 
-import lombok.extern.java.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Log
 public abstract class Transaction {
-	  
+	private static final Logger LOGGER = LoggerFactory.getLogger(Transaction.class);
 	private AbstractIntegrationTestJpaBased persistenceIT;
 	private UserTransaction transaction;
 	private Class<? extends SQLException> exceptionClassExpected;
@@ -23,7 +23,7 @@ public abstract class Transaction {
 
 	public void run(){ 
 		if(transaction==null){
-			log.warning("Null transaction will be skipped");
+			LOGGER.warn("Null transaction will be skipped");
 			return;
 		}
 		try {

@@ -1,5 +1,6 @@
 package org.cyk.utility.common.generator;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -8,11 +9,9 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.java.Log;
 
 @Getter @Setter
-@Log
-public class ListGenerator<T> extends AbstractValueGenerator<Collection<T>>{
+public class ListGenerator<T> extends AbstractValueGenerator<Collection<T>> implements Serializable{
 
 	private static final long serialVersionUID = -6459148921135823612L;
 
@@ -26,25 +25,21 @@ public class ListGenerator<T> extends AbstractValueGenerator<Collection<T>>{
 		this.min = min;
 		if(!(this.allowDuplicate = allowDuplicate))
 			this.max = data.size()>max?data.size():max;
-		if(DEBUG)
-			log.info("#elements="+data.size()+" min="+min+" max="+max);
+			logDebug("#elements="+data.size()+" min="+min+" max="+max);
 	}
 
 	@Override
 	public Collection<T> generate() {
 		List<T> out = new ArrayList<T>();
 		int count = randomDataProvider.randomInt(min, max);
-		if(DEBUG)
-			log.info(count+" object(s) to generate in collection");
+		logDebug(count+" object(s) to generate in collection");
 		Collection<Integer> indexes;
 		if(allowDuplicate){
 			indexes = new LinkedList<Integer>();
-			if(DEBUG)
-				log.info("collection is list");
+			logDebug("collection is list");
 		}else{
 			indexes = new HashSet<Integer>();
-			if(DEBUG)
-				log.info("collection is set");
+			logDebug("collection is set");
 		}
 		do{
 			indexes.add(randomDataProvider.randomPositiveInt(data.size()-1));

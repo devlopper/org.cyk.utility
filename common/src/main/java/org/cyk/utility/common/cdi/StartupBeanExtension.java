@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 import java.util.Set;
 
 import javax.enterprise.event.Observes;
@@ -21,15 +20,17 @@ import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessBean;
 
 import lombok.Getter;
-import lombok.extern.java.Log;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.annotation.BusinessLayer;
 import org.cyk.utility.common.annotation.Deployment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Log
 public class StartupBeanExtension implements Extension {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(StartupBeanExtension.class);
+	
 	@Getter private Set<Class<?>> classes = new HashSet<>();
 	@Getter private Map<Class<? extends Annotation>, Set<Bean<?>>> annotationClasses = new HashMap<>();
 	@Getter private Map<Class<?>, Set<Bean<?>>> implementationClasses = new HashMap<>();
@@ -39,13 +40,11 @@ public class StartupBeanExtension implements Extension {
 	protected BeanManager beanManager;
 	
 	public StartupBeanExtension() {
-		//log.info("############      StartupBeanExtension.StartupBeanExtension()     ###########");
 		addAnnotation(Deployment.class);
 		addAnnotation(BusinessLayer.class);
 	}
 
 	<X> void processBean(@Observes ProcessBean<X> event) {
-		//classes.add(event.getBean().getBeanClass());
 		for(Entry<Class<? extends Annotation>, Set<Bean<?>>> entry : annotationClasses.entrySet())
 			if (event.getAnnotated().isAnnotationPresent(entry.getKey())) {
 				addBean(entry.getKey(),event.getBean());
@@ -59,14 +58,6 @@ public class StartupBeanExtension implements Extension {
 	
 	void afterDeploymentValidation(@Observes AfterDeploymentValidation event,BeanManager manager) {
 		this.beanManager = manager;
-		/*for (Bean<?> bean : annotationClasses.get(Deployment.class)) {
-			Deployment deployment = bean.getBeanClass().getAnnotation(Deployment.class);
-			if(Deployment.InitialisationType.EAGER.equals(deployment.initialisationType())){
-				//reference(bean);
-			}
-		}*/
-		
-		//getReferences();
 	}
 		
 	public Set<Object> getReferences() {
@@ -83,13 +74,8 @@ public class StartupBeanExtension implements Extension {
 				}
 			});
 			
-			//log.info("The following will be eager deployed : ");
-			/*for (Bean<?> bean : beans) {
-				Deployment deployment = bean.getBeanClass().getAnnotation(Deployment.class);
-				log.info("*          ("+deployment.order()+") *"+bean.getBeanClass().getName());
-			}*/
 			
-			log.info("Eager Deployment Starts");
+			LOGGER.debug("Eager Deployment of {} bean(s) Starts",beans.size());
 			for (Bean<?> bean : beans) {
 				Deployment deployment = bean.getBeanClass().getAnnotation(Deployment.class);
 				if(Deployment.InitialisationType.EAGER.equals(deployment.initialisationType())){
@@ -99,15 +85,13 @@ public class StartupBeanExtension implements Extension {
 						// the call to toString() is a cheat to force the bean to be initialized
 						object.toString();
 						references.add(object);
-						log.info(m+" : OK");
+						LOGGER.debug(m+" : OK");
 					} catch (Exception e) {
-						e.printStackTrace();
-						log.info(m+" : FAIL");
-						log.log(Level.SEVERE,e.toString(),e);
+						LOGGER.error("Cannot eager deploy "+m,e);
 					}
 				}
 			}
-			log.info("Eager Deployment Ends");
+			LOGGER.debug("Eager Deployment Ends");
 		}
 			
 		return references;
@@ -120,7 +104,6 @@ public class StartupBeanExtension implements Extension {
 		Collection<Bean<?>> beans = (Collection<Bean<?>>) (annotationClasses.get(aClass)==null?new HashSet<>():annotationClasses.get(aClass));
 		Collection<Bean<?>> r = new HashSet<>();
 		for(Bean<?> bean : beans){
-			//System.out.println(bean.getBeanClass().getName()+" - "+aPackageBaseName+" - "+bean.getBeanClass().getName().startsWith(aPackageBaseName));
 			if(StringUtils.isEmpty(aPackageBaseName) || bean.getBeanClass().getName().startsWith(aPackageBaseName))
 				r.add(bean);
 		}

@@ -3,17 +3,18 @@ package org.cyk.utility.common;
 import java.io.Serializable;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.java.Log;
 
-@Getter @Setter @Log
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Getter @Setter
 public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor implements Serializable {
 
 	private static final long serialVersionUID = -3776387708622454944L;
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(ThreadPoolExecutor.class);
 	private Boolean autoShutdown = Boolean.TRUE;
 	
 	public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize,long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue) {
@@ -30,7 +31,7 @@ public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor 
 		try {
 			awaitTermination(timeout, unit);
 		} catch (InterruptedException e) {
-			log.log(Level.SEVERE,e.toString(),e);
+			LOGGER.error("Thread pool executor fail while awaiting termination",e);
 		}
 	}
 

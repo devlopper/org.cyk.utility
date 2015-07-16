@@ -1,17 +1,23 @@
 package org.cyk.utility.common.generator;
 
+import java.io.Serializable;
 import java.util.Random;
-
-import lombok.extern.java.Log;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.cyk.utility.common.CommonUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Log
-public class PrimitiveGenerator extends AbstractValueGenerator<Object>{
+public class PrimitiveGenerator extends AbstractValueGenerator<Object> implements Serializable{
 
 	private static final long serialVersionUID = 6913469904258653785L;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(PrimitiveGenerator.class);
+	
+	protected Logger __logger__(){
+		return LOGGER;
+	}
+	
 	private static final Random RANDOM = new Random();
 	
 	private NumberGenerator numberGenerator = new NumberGenerator();
@@ -24,7 +30,8 @@ public class PrimitiveGenerator extends AbstractValueGenerator<Object>{
 	
 	@SuppressWarnings("unchecked")
 	public <T> T generate(Class<T> clazz) {
-		
+		logInfo("Starting Here");
+		logDebug("Debug Details");
 		if(CommonUtils.getInstance().isNumberClass(clazz))
 			return numberGenerator.generate(clazz);
 		else if(String.class.equals(clazz))
@@ -33,7 +40,7 @@ public class PrimitiveGenerator extends AbstractValueGenerator<Object>{
 			return (T)(Boolean)RANDOM.nextBoolean();
 		else if(Character.class.equals(clazz) || char.class.equals(clazz))
 			return (T) (Character)(char)RANDOM.nextInt(Character.MAX_VALUE+1);
-		log.warning(clazz+" is not a primitive");
+		logError("{} is not a primitive",clazz.getName());
 		return null;
 	}
 	
@@ -43,6 +50,7 @@ public class PrimitiveGenerator extends AbstractValueGenerator<Object>{
 		System.out.println(primitiveGenerator.generate(Double.class));
 		System.out.println(primitiveGenerator.generate(String.class));
 		System.out.println(primitiveGenerator.generate(Boolean.class));
+		System.out.println(primitiveGenerator.generate(PrimitiveGenerator.class));
 	}
 
 }

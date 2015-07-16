@@ -1,6 +1,7 @@
 package org.cyk.utility.common.cdi;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -19,11 +20,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.RunnableListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AbstractBean implements Serializable {
 
 	private static final long serialVersionUID = -2448439169984218703L;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBean.class);
+	
 	protected CommonUtils commonUtils = CommonUtils.getInstance();
 	
 	@Getter protected Collection<BeanListener> beanListeners = new ArrayList<>();
@@ -67,6 +72,11 @@ public class AbstractBean implements Serializable {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <TYPE> Class<TYPE> parameterizedClass(Class<TYPE> classType,Integer index){
+	    return (Class<TYPE>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[index];
 	}
 	
 	protected void pause(long millisecond){
@@ -186,4 +196,45 @@ public class AbstractBean implements Serializable {
 			this.name = name;
 		}
 	}
+	
+	protected Logger __logger__(){
+		return LOGGER;
+	}
+	
+	protected void logError(Object message,Object...arguments) {
+		if(message==null)
+			return;
+		String stringMessage = message.toString();
+		__logger__().error(stringMessage,arguments);
+	}
+
+	protected void logWarning(Object message,Object...arguments) {
+		if(message==null)
+			return;
+		String stringMessage = message.toString();
+		__logger__().warn(stringMessage,arguments);
+	}
+
+	protected void logInfo(Object message,Object...arguments) {
+		if(message==null)
+			return;
+		String stringMessage = message.toString();
+		__logger__().info(stringMessage,arguments);
+	}
+
+	protected void logTrace(Object message,Object...arguments) {
+		if(message==null)
+			return;
+		String stringMessage = message.toString();
+		__logger__().trace(stringMessage,arguments);
+	}
+
+	protected void logDebug(Object message,Object...arguments) {
+		if(message==null)
+			return;
+		String stringMessage = message.toString();
+		__logger__().debug(stringMessage,arguments);
+	}
+
+	
 }
