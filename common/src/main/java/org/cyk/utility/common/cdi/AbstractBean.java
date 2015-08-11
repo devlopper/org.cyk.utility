@@ -74,6 +74,10 @@ public class AbstractBean implements Serializable {
 		}
 	}
 	
+	protected String fieldPath(String...names){
+		return StringUtils.join(names,".");
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected <TYPE> Class<TYPE> parameterizedClass(Class<TYPE> classType,Integer index){
 	    return (Class<TYPE>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[index];
@@ -236,5 +240,7 @@ public class AbstractBean implements Serializable {
 		__logger__().debug(stringMessage,arguments);
 	}
 
-	
+	protected ClassLoader getClassLoader(){
+		return this.getClass().getClassLoader();
+	}
 }

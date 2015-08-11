@@ -59,8 +59,16 @@ public class Table<
 		__building__ = Boolean.TRUE;
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
 			listener.fields(fields);
-		for(Field field : fields)
-			addColumn(field);
+		for(Field field : fields){
+			Boolean ignored = Boolean.FALSE;
+			for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
+				Boolean v = listener.ignore(field);
+				if(v!=null)
+					ignored = v;
+			}
+			if(Boolean.FALSE.equals(ignored))
+				addColumn(field);
+		}
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
 			listener.columns(columns);
 		addRows(datas);

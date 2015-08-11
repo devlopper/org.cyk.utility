@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import javax.transaction.UserTransaction;
 
+import org.cyk.utility.test.integration.AbstractIntegrationTestJpaBased;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

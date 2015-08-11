@@ -13,6 +13,8 @@ public @interface Input {
 	
 	String setId() default "";
 	
+	boolean readOnly() default false;
+	
 	/* Texts */
 	
 	Text label() default @Text;

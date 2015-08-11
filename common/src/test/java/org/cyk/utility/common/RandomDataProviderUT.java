@@ -1,6 +1,6 @@
 package org.cyk.utility.common;
 
-import org.cyk.utility.test.AbstractUnitTest;
+import org.cyk.utility.test.unit.AbstractUnitTest;
 
 public class RandomDataProviderUT extends AbstractUnitTest {
 

@@ -1,10 +1,12 @@
-package org.cyk.utility.test;
+package org.cyk.utility.test.integration;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.cyk.utility.test.AbstractTest;
+import org.cyk.utility.test.ArchiveBuilder;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.runner.RunWith;
 import org.reflections.Reflections;

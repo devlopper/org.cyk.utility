@@ -1,10 +1,14 @@
-package org.cyk.utility.test;
+package org.cyk.utility.test.integration;
 
 import java.sql.SQLException;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.UserTransaction;
+
+import org.cyk.utility.test.AbstractMethod;
+import org.cyk.utility.test.TestMethod;
+import org.cyk.utility.test.Transaction;
 
 /**
  * Persistence integration test (IT)

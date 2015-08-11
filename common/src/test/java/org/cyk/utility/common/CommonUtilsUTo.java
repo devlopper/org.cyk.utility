@@ -13,7 +13,7 @@ import lombok.Setter;
 
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
-import org.cyk.utility.test.AbstractUnitTest;
+import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
 
 public class CommonUtilsUTo extends AbstractUnitTest {
