@@ -240,6 +240,10 @@ public class AbstractBean implements Serializable {
 		__logger__().debug(stringMessage,arguments);
 	}
 
+	protected void logThrowable(Throwable throwable){
+		logError(throwable.toString());
+	}
+	
 	protected ClassLoader getClassLoader(){
 		return this.getClass().getClassLoader();
 	}

@@ -34,7 +34,7 @@ public class GeneratorEclipse implements Serializable {
 	
 	private Properties properties = new Properties();
 	private File workspaceDirectory;
-	private String identifier,systemPomFolderName="_pom",pomFileName="pom.xml",driveId,systemApplicationFolderName="application";
+	private String identifier,systemPomFolderName="_pom",/*pomFileName="pom.xml",*/driveId,systemApplicationFolderName="application";
 	private Type type = Type.SYSTEM;
 	private String userDir = System.getProperty("user.dir");
 	private File commandFile;

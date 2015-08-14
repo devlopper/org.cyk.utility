@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ArithmeticOperator {
-	EQ("=")
+	EQ("=") 
 	,NEQ("!=")
 	,GT(">")
 	,GTE(">=")
