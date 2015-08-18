@@ -129,4 +129,9 @@ ROW_DATA,COLUMN_DATA,CELL_TYPE extends Cell<CELL_VALUE>,CELL_VALUE> implements T
 		return null;
 	}
 
+	@Override
+	public Boolean isSummary(ROW_DATA data) {
+		return null;
+	}
+
 }

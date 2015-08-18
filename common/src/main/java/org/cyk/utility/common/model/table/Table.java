@@ -217,7 +217,17 @@ public class Table<
 			if(v!=null)
 				value = v;
 		}
-		return Boolean.TRUE.equals(value==null?row.getIsSummary():value);
+		return Boolean.TRUE.equals(value==null?isSummary(row.getData()):value);
+	}
+	
+	public Boolean isSummary(ROW_DATA data) {
+		Boolean value = null;
+		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
+			Boolean v = listener.isSummary(data);
+			if(v!=null)
+				value = v;
+		}
+		return value;
 	}
 	
 	public CELL_TYPE cell(ROW_DIMENSION row,COLUMN_DIMENSION column){
