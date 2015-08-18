@@ -37,6 +37,7 @@ public class Table<
 	private Boolean __building__ = Boolean.FALSE;
 	private List<Field> fields = new ArrayList<>();
 	private List<ROW_DATA> datas = new ArrayList<>();
+	@Getter @Setter private Integer currentRowIndex = 0;
 	
 	/*
 	@SuppressWarnings("unchecked")
@@ -75,7 +76,7 @@ public class Table<
 	}
 	
 	private void addColumn(COLUMN_DIMENSION column) {
-		column.setIndex((byte) columns.size());
+		column.setIndex((long) columns.size());
 		if(columns.add(column)){
 			for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
 				listener.columnAdded(column);
@@ -118,7 +119,17 @@ public class Table<
 	}
 	
 	private Boolean addRow(ROW_DIMENSION row) {
-		row.setIndex((byte) rows.size());
+		if(Boolean.TRUE.equals(excludeFromCount(row))){
+			row.setIndex(null);
+		}else{
+			for(ROW_DIMENSION r : rows)
+				if(r.getIndex()!=null){
+					row.setIndex(r.getIndex());
+				}
+			//row.setIndex((byte) rows.size());
+			row.setIndex(row.getIndex()==null?0:row.getIndex()+1);
+		}
+		
 		if(rows.add(row)){
 			for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
 				listener.rowAdded(row);
@@ -187,14 +198,26 @@ public class Table<
 	public void deleteRowAt(Integer index){
 		rows.remove(index.intValue());	
 		for(int i=index;i<rows.size();i++)
-			rows.get(i).setIndex((byte) (rows.get(i).getIndex()-1));
+			rows.get(i).setIndex((long) (rows.get(i).getIndex()-1));
 	}
 	
 	public Integer rowIndex(ROW_DATA anObject){
-		for(int i=0;i<rows.size();i++)
-			if(equals(rows.get(i).getData(), anObject))
+		for(int i=0;i<rows.size();i++){
+			if(equals(rows.get(i).getData(), anObject)){
 				return i;
+			}
+		}
 		return null;
+	}
+	
+	public Boolean excludeFromCount(ROW_DIMENSION row){
+		Boolean value = null;
+		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
+			Boolean v = listener.excludeFromCount(row);
+			if(v!=null)
+				value = v;
+		}
+		return Boolean.TRUE.equals(value);
 	}
 	
 	public CELL_TYPE cell(ROW_DIMENSION row,COLUMN_DIMENSION column){
@@ -202,7 +225,7 @@ public class Table<
 			return null;
 		}
 		
-		return rows.get(row.getIndex()).getCells().get(column.getIndex());
+		return rows.get(row.getIndex().intValue()).getCells().get(column.getIndex().intValue());
 	}
 	
 	public void clear(){

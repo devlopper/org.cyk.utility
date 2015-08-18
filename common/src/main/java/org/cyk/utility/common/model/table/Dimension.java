@@ -4,8 +4,8 @@ import java.util.List;
 
 public interface Dimension<DATA,CELL extends Cell<VALUE>,VALUE> {
 
-	Byte getIndex();
-	void setIndex(Byte anIndex);
+	Long getIndex();
+	void setIndex(Long anIndex);
 	
 	DATA getData();
 	void setData(DATA aData);

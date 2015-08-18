@@ -124,4 +124,9 @@ ROW_DATA,COLUMN_DATA,CELL_TYPE extends Cell<CELL_VALUE>,CELL_VALUE> implements T
 		
 	}
 
+	@Override
+	public Boolean excludeFromCount(ROW_DIMENSION row) {
+		return null;
+	}
+
 }

@@ -5,8 +5,14 @@ import org.apache.commons.lang3.StringUtils;
 public class DefaultTable<DATA> extends Table<DefaultRow<DATA>, DefaultColumn, DATA, String, DefaultCell, String> {
 
 	//TODO DefaultRow.class throw inconvertible type at compile time
+	@SuppressWarnings("unchecked")
 	public DefaultTable(Class<DATA> rowDataClass) {
 		super((Class<? extends DefaultRow<DATA>>) /*DefaultRow.class*/null, rowDataClass, DefaultColumn.class, DefaultCell.class);
+		try {
+			rowClass = (Class<DefaultRow<DATA>>) Class.forName(DefaultRow.class.getName());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static final long serialVersionUID = 581883275700805955L;

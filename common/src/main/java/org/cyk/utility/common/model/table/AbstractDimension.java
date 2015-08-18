@@ -13,7 +13,7 @@ public abstract class AbstractDimension<DATA,CELLTYPE extends AbstractCell<CELLV
 
 	private static final long serialVersionUID = 3307695889353490821L;
  
-	@Getter @Setter protected Byte index;
+	@Getter @Setter protected Long index;
 	@Getter @Setter protected DATA data;
 	@Getter @Setter protected String title;
 	

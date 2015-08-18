@@ -53,5 +53,7 @@ ROW_DATA,COLUMN_DATA,CELL_TYPE extends Cell<CELL_VALUE>,CELL_VALUE> {
 	
 	void addColumnFromDataClass(Class<?> aClass,Collection<Field> fields);
 	
+	Boolean excludeFromCount(ROW_DIMENSION row);
+	
 	//Collection<Class<? extends Annotation>> annotationClasses();
 }
