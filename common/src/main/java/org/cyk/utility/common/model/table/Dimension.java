@@ -7,6 +7,9 @@ public interface Dimension<DATA,CELL extends Cell<VALUE>,VALUE> {
 	Long getIndex();
 	void setIndex(Long anIndex);
 	
+	Long getUiIndex();
+	void setUiIndex(Long anIndex);
+	
 	DATA getData();
 	void setData(DATA aData);
 	

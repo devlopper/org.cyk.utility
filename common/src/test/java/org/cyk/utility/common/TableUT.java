@@ -33,9 +33,9 @@ public class TableUT extends AbstractUnitTest {
 		
 		table.build();
 		
-		Assert.assertEquals("Row 1",table.getRows().get(0).getIndex().intValue(), 0);
-		Assert.assertEquals("Row 2",table.getRows().get(1).getIndex().intValue(), 1);
-		Assert.assertEquals("Row 3",table.getRows().get(2).getIndex().intValue(), 2);
+		Assert.assertEquals("Row 1",0,table.getRows().get(0).getUiIndex().intValue());
+		Assert.assertEquals("Row 2",1,table.getRows().get(1).getUiIndex().intValue());
+		Assert.assertEquals("Row 3",2,table.getRows().get(2).getUiIndex().intValue());
 	}
 	
 	@Test
@@ -59,13 +59,13 @@ public class TableUT extends AbstractUnitTest {
 		
 		table.build();
 		
-		Assert.assertEquals("Row 1",table.getRows().get(0).getIndex().intValue(), 0);
-		Assert.assertEquals("Row 2",table.getRows().get(1).getIndex().intValue(), 1);
-		Assert.assertNull("Row 3",table.getRows().get(2).getIndex());
-		Assert.assertEquals("Row 4",table.getRows().get(3).getIndex().intValue(), 2);
-		Assert.assertEquals("Row 5",table.getRows().get(4).getIndex().intValue(), 3);
-		Assert.assertEquals("Row 6",table.getRows().get(5).getIndex().intValue(), 4);
-		Assert.assertNull("Row 7",table.getRows().get(6).getIndex());
+		Assert.assertEquals("Row 1",0,table.getRows().get(0).getUiIndex().intValue());
+		Assert.assertEquals("Row 2",1,table.getRows().get(1).getUiIndex().intValue());
+		Assert.assertNull("Row 3",table.getRows().get(2).getUiIndex());
+		Assert.assertEquals("Row 4",2,table.getRows().get(3).getUiIndex().intValue());
+		Assert.assertEquals("Row 5",3,table.getRows().get(4).getUiIndex().intValue());
+		Assert.assertEquals("Row 6",4,table.getRows().get(5).getUiIndex().intValue());
+		Assert.assertNull("Row 7",table.getRows().get(6).getUiIndex());
 	}
 	
 	@Getter @Setter @AllArgsConstructor

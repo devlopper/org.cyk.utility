@@ -119,15 +119,16 @@ public class Table<
 	}
 	
 	private Boolean addRow(ROW_DIMENSION row) {
+		row.setIndex((long) rows.size());
 		if(Boolean.TRUE.equals(excludeFromCount(row))){
-			row.setIndex(null);
+			row.setUiIndex(null);
 		}else{
 			for(ROW_DIMENSION r : rows)
-				if(r.getIndex()!=null){
-					row.setIndex(r.getIndex());
+				if(r.getUiIndex()!=null){
+					row.setUiIndex(r.getUiIndex());
 				}
 			//row.setIndex((byte) rows.size());
-			row.setIndex(row.getIndex()==null?0:row.getIndex()+1);
+			row.setUiIndex(row.getUiIndex()==null?0:row.getUiIndex()+1);
 		}
 		
 		if(rows.add(row)){
