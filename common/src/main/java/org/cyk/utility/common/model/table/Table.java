@@ -217,7 +217,7 @@ public class Table<
 			if(v!=null)
 				value = v;
 		}
-		return Boolean.TRUE.equals(value);
+		return Boolean.TRUE.equals(value==null?row.getIsSummary():value);
 	}
 	
 	public CELL_TYPE cell(ROW_DIMENSION row,COLUMN_DIMENSION column){

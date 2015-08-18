@@ -13,6 +13,9 @@ public interface Dimension<DATA,CELL extends Cell<VALUE>,VALUE> {
 	String getTitle();
 	void setTitle(String aTitle);
 	
+	Boolean getIsSummary();
+	void setIsSummary(Boolean value);
+	
 	List<CELL> getCells();
 	
 }
