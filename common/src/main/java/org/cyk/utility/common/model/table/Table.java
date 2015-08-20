@@ -220,8 +220,8 @@ public class Table<
 				value = v;
 		}
 		DimensionType dimensionType = row.getType();
-		dimensionType = dimensionType == null ? DimensionType.DETAILS:dimensionType;
-		return value == null ? (!DimensionType.DETAILS.equals(dimensionType)) : value;
+		dimensionType = dimensionType == null ? DimensionType.DETAIL:dimensionType;
+		return value == null ? (!DimensionType.DETAIL.equals(dimensionType)) : value;
 	}
 	
 	public ROW_DIMENSION rowOf(ROW_DATA data) {

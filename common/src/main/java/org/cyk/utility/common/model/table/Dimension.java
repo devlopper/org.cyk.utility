@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface Dimension<DATA,CELL extends Cell<VALUE>,VALUE> {
 
-	public enum DimensionType{HEADER,FOOTER,SUMMARY,DETAILS}
+	public enum DimensionType{HEADER,FOOTER,SUMMARY,DETAIL}
 	
 	Long getIndex();
 	void setIndex(Long anIndex);

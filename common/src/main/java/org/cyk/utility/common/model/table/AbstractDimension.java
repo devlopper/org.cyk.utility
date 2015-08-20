@@ -29,4 +29,8 @@ public abstract class AbstractDimension<DATA,CELLTYPE extends AbstractCell<CELLV
 		this(null,title);
 	}
 	
+	public Boolean isDetail(){
+		return DimensionType.DETAIL.equals(type);
+	}
+	
 }
