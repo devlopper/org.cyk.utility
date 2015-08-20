@@ -17,7 +17,7 @@ public abstract class AbstractDimension<DATA,CELLTYPE extends AbstractCell<CELLV
 	@Getter @Setter protected DATA data;
 	@Getter @Setter protected String title;
 	//@Getter @Setter protected Boolean isSummary;
-	@Getter @Setter protected DimensionType type;
+	@Getter @Setter protected DimensionType type = DimensionType.DETAIL;
 	
 	public AbstractDimension(DATA data,String title) {
 		super(); 
@@ -29,7 +29,7 @@ public abstract class AbstractDimension<DATA,CELLTYPE extends AbstractCell<CELLV
 		this(null,title);
 	}
 	
-	public Boolean isDetail(){
+	public Boolean getIsDetail(){
 		return DimensionType.DETAIL.equals(type);
 	}
 	

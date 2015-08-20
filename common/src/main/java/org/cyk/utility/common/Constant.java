@@ -2,6 +2,7 @@ package org.cyk.utility.common;
 
 public interface Constant {
 	
+	Character CHARACTER_SPACE = new Character(' ');
 	Character CHARACTER_DOT = new Character('.');
 	Character CHARACTER_COLON = new Character(':');
 	Character CHARACTER_SEMI_COLON = new Character(';');

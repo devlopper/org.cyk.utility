@@ -39,12 +39,12 @@ public class TableUT extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void complex(){
+	public void complex1(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
 		table.getTableListeners().add(new TableAdapter<DefaultRow<RowData>, DefaultColumn, RowData, String, DefaultCell, String>(){
 			@Override
-			public Boolean excludeFromCount(DefaultRow<RowData> row) {
-				return row.getData().getValue().equals("Total");
+			public Boolean isCountable(DefaultRow<RowData> row) {
+				return !row.getData().getValue().equals("Total");
 			}
 		});
 		table.addColumnFromDataClass();
@@ -67,6 +67,33 @@ public class TableUT extends AbstractUnitTest {
 		Assert.assertEquals("Row 6",4,table.getRows().get(5).getUiIndex().intValue());
 		Assert.assertNull("Row 7",table.getRows().get(6).getUiIndex());
 	}
+	/*
+	@Test
+	public void complex2(){
+		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
+		DefaultRow<RowData> row = null;
+		table.addColumnFromDataClass();
+		
+		table.addRow(new RowData("Yao"));
+		table.addRow(new RowData("Zadi"));
+		row = table.addRow(new RowData("Total"));
+		row.setType(DimensionType.SUMMARY);
+		table.addRow(new RowData("N1"));
+		table.addRow(new RowData("N2"));
+		table.addRow(new RowData("Kodom"));
+		row = table.addRow(new RowData("Total"));
+		row.setType(DimensionType.SUMMARY);
+			
+		table.build();
+		
+		Assert.assertEquals("Row 1",0,table.getRows().get(0).getUiIndex().intValue());
+		Assert.assertEquals("Row 2",1,table.getRows().get(1).getUiIndex().intValue());
+		Assert.assertNull("Row 3",table.getRows().get(2).getUiIndex());
+		Assert.assertEquals("Row 4",2,table.getRows().get(3).getUiIndex().intValue());
+		Assert.assertEquals("Row 5",3,table.getRows().get(4).getUiIndex().intValue());
+		Assert.assertEquals("Row 6",4,table.getRows().get(5).getUiIndex().intValue());
+		Assert.assertNull("Row 7",table.getRows().get(6).getUiIndex());
+	}*/
 	
 	@Getter @Setter @AllArgsConstructor
 	private static class RowData{

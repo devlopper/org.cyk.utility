@@ -121,15 +121,15 @@ public class Table<
 	
 	private Boolean addRow(ROW_DIMENSION row) {
 		row.setIndex((long) rows.size());
-		if(Boolean.TRUE.equals(excludeFromCount(row))){
-			row.setUiIndex(null);
-		}else{
+		if(Boolean.TRUE.equals(isCountable(row))){
 			for(ROW_DIMENSION r : rows)
 				if(r.getUiIndex()!=null){
 					row.setUiIndex(r.getUiIndex());
 				}
 			//row.setIndex((byte) rows.size());
 			row.setUiIndex(row.getUiIndex()==null?0:row.getUiIndex()+1);
+		}else{
+			row.setUiIndex(null);
 		}
 		
 		if(rows.add(row)){
@@ -141,16 +141,18 @@ public class Table<
 	}
 		
 	@SuppressWarnings("unchecked")
-	public void addRow(ROW_DATA aRowData){
+	public ROW_DIMENSION addRow(ROW_DATA aRowData){
 		if(aRowData==null)
-			return;
+			return null;
 		if(!Boolean.TRUE.equals(__building__)){
 			datas.add(aRowData);
-			return;
+			return null;
 		}
 		ROW_DIMENSION row = createRow();					
 		row.setData(aRowData);
 		row.setTitle(aRowData.toString());
+		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
+			listener.rowCreated(row);
 		if(addRow(row)){
 			for(COLUMN_DIMENSION column : columns){	
 				CELL_TYPE cell = createCell();
@@ -170,6 +172,7 @@ public class Table<
 			for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
 				listener.cellsAdded(row);
 		}
+		return row;
 	}
 	
 	public void openRow(ROW_DIMENSION row) {
@@ -212,16 +215,16 @@ public class Table<
 		return null;
 	}
 	
-	public Boolean excludeFromCount(ROW_DIMENSION row){
+	public Boolean isCountable(ROW_DIMENSION row){
 		Boolean value = null;
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-			Boolean v = listener.excludeFromCount(row);
+			Boolean v = listener.isCountable(row);
 			if(v!=null)
 				value = v;
 		}
 		DimensionType dimensionType = row.getType();
 		dimensionType = dimensionType == null ? DimensionType.DETAIL:dimensionType;
-		return value == null ? (!DimensionType.DETAIL.equals(dimensionType)) : value;
+		return value == null ? row.getIsDetail() : (value==null || Boolean.TRUE.equals(value));
 	}
 	
 	public ROW_DIMENSION rowOf(ROW_DATA data) {

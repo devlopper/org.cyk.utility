@@ -125,13 +125,18 @@ ROW_DATA,COLUMN_DATA,CELL_TYPE extends Cell<CELL_VALUE>,CELL_VALUE> implements T
 	}
 
 	@Override
-	public Boolean excludeFromCount(ROW_DIMENSION row) {
+	public Boolean isCountable(ROW_DIMENSION row) {
 		return null;
 	}
 
 	@Override
 	public ROW_DIMENSION rowOf(ROW_DATA data) {
 		return null;
+	}
+
+	@Override
+	public void rowCreated(ROW_DIMENSION row) {
+		
 	}
 
 }

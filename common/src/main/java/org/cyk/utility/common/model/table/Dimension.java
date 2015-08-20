@@ -27,4 +27,5 @@ public interface Dimension<DATA,CELL extends Cell<VALUE>,VALUE> {
 	
 	List<CELL> getCells();
 	
+	Boolean getIsDetail();
 }

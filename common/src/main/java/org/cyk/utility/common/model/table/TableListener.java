@@ -23,6 +23,8 @@ ROW_DATA,COLUMN_DATA,CELL_TYPE extends Cell<CELL_VALUE>,CELL_VALUE> {
 	
 	Boolean ignore(Field field);
 	
+	void rowCreated(ROW_DIMENSION row);
+	
 	void rowAdded(ROW_DIMENSION row);
 	
 	void openRow(ROW_DIMENSION row);
@@ -53,7 +55,7 @@ ROW_DATA,COLUMN_DATA,CELL_TYPE extends Cell<CELL_VALUE>,CELL_VALUE> {
 	
 	void addColumnFromDataClass(Class<?> aClass,Collection<Field> fields);
 	
-	Boolean excludeFromCount(ROW_DIMENSION row);
+	Boolean isCountable(ROW_DIMENSION row);
 	
 	ROW_DIMENSION rowOf(ROW_DATA data);
 	
