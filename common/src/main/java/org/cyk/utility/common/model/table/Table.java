@@ -39,6 +39,7 @@ public class Table<
 	private List<Field> fields = new ArrayList<>();
 	private List<ROW_DATA> datas = new ArrayList<>();
 	@Getter @Setter private Integer currentRowIndex = 0;
+	@Setter private Integer numberOfNullUiIndex;
 	
 	/*
 	@SuppressWarnings("unchecked")
@@ -343,6 +344,17 @@ public class Table<
 			if(column.getField().getName().equals(fieldName))
 				return column;
 		return null;
+	}
+	
+	public Integer getNumberOfNullUiIndex(){
+		if(numberOfNullUiIndex==null){
+			numberOfNullUiIndex = 0;
+			for(ROW_DIMENSION row : rows)
+				if(row.getUiIndex()==null)
+					numberOfNullUiIndex++;
+				
+		}
+		return numberOfNullUiIndex;
 	}
 	
 }
