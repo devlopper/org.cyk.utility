@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface Dimension<DATA,CELL extends Cell<VALUE>,VALUE> {
 
+	public enum DimensionType{HEADER,FOOTER,SUMMARY,DETAILS}
+	
 	Long getIndex();
 	void setIndex(Long anIndex);
 	
@@ -15,9 +17,13 @@ public interface Dimension<DATA,CELL extends Cell<VALUE>,VALUE> {
 	
 	String getTitle();
 	void setTitle(String aTitle);
-	
+	/*
 	Boolean getIsSummary();
 	void setIsSummary(Boolean value);
+	*/
+	
+	DimensionType getType();
+	void setType(DimensionType type);
 	
 	List<CELL> getCells();
 	

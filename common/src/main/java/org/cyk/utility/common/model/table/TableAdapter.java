@@ -130,7 +130,7 @@ ROW_DATA,COLUMN_DATA,CELL_TYPE extends Cell<CELL_VALUE>,CELL_VALUE> implements T
 	}
 
 	@Override
-	public Boolean isSummary(ROW_DATA data) {
+	public ROW_DIMENSION rowOf(ROW_DATA data) {
 		return null;
 	}
 

@@ -55,7 +55,9 @@ ROW_DATA,COLUMN_DATA,CELL_TYPE extends Cell<CELL_VALUE>,CELL_VALUE> {
 	
 	Boolean excludeFromCount(ROW_DIMENSION row);
 	
-	Boolean isSummary(ROW_DATA data);
+	ROW_DIMENSION rowOf(ROW_DATA data);
+	
+	//Boolean isSummary(ROW_DATA data);
 	
 	//Collection<Class<? extends Annotation>> annotationClasses();
 }

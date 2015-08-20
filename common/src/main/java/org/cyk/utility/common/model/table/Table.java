@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.model.table.Dimension.DimensionType;
 
 public class Table<
 	ROW_DIMENSION extends Row<ROW_DATA, CELL_TYPE, CELL_VALUE>,
@@ -218,17 +219,18 @@ public class Table<
 			if(v!=null)
 				value = v;
 		}
-		return Boolean.TRUE.equals(value==null?isSummary(row.getData()):value);
+		DimensionType dimensionType = row.getType();
+		dimensionType = dimensionType == null ? DimensionType.DETAILS:dimensionType;
+		return value == null ? (!DimensionType.DETAILS.equals(dimensionType)) : value;
 	}
 	
-	public Boolean isSummary(ROW_DATA data) {
-		Boolean value = null;
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-			Boolean v = listener.isSummary(data);
-			if(v!=null)
-				value = v;
+	public ROW_DIMENSION rowOf(ROW_DATA data) {
+		for(int i=0;i<rows.size();i++){
+			if(equals(rows.get(i).getData(), data)){
+				return rows.get(i);
+			}
 		}
-		return value;
+		return null;
 	}
 	
 	public CELL_TYPE cell(ROW_DIMENSION row,COLUMN_DIMENSION column){

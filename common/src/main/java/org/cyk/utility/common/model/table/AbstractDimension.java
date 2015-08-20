@@ -16,7 +16,8 @@ public abstract class AbstractDimension<DATA,CELLTYPE extends AbstractCell<CELLV
 	@Getter @Setter protected Long index,uiIndex;
 	@Getter @Setter protected DATA data;
 	@Getter @Setter protected String title;
-	@Getter @Setter protected Boolean isSummary;
+	//@Getter @Setter protected Boolean isSummary;
+	@Getter @Setter protected DimensionType type;
 	
 	public AbstractDimension(DATA data,String title) {
 		super(); 
