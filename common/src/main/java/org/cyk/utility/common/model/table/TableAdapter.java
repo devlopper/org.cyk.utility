@@ -10,6 +10,11 @@ COLUMN_DIMENSION extends Column<COLUMN_DATA, CELL_TYPE, CELL_VALUE>,
 ROW_DATA,COLUMN_DATA,CELL_TYPE extends Cell<CELL_VALUE>,CELL_VALUE> implements TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> {
 
 	@Override
+	public Table<ROW_DIMENSION, COLUMN_DIMENSION, ROW_DATA, COLUMN_DATA, CELL_TYPE, CELL_VALUE> getTable() {
+		return null;
+	}
+	
+	@Override
 	public COLUMN_DIMENSION createColumn() {
 		return null;
 	}
@@ -64,15 +69,6 @@ ROW_DATA,COLUMN_DATA,CELL_TYPE extends Cell<CELL_VALUE>,CELL_VALUE> implements T
 		return null;
 	}
 
-	@Override
-	public void fields(List<Field> fields) {
-		
-	}
-
-	@Override
-	public Boolean ignore(Field field) {
-		return null;
-	}
 	
 	@Override
 	public void columns(List<COLUMN_DIMENSION> columns) {
@@ -124,10 +120,7 @@ ROW_DATA,COLUMN_DATA,CELL_TYPE extends Cell<CELL_VALUE>,CELL_VALUE> implements T
 		
 	}
 
-	@Override
-	public Boolean isCountable(ROW_DIMENSION row) {
-		return null;
-	}
+
 
 	@Override
 	public ROW_DIMENSION rowOf(ROW_DATA data) {
@@ -137,6 +130,21 @@ ROW_DATA,COLUMN_DATA,CELL_TYPE extends Cell<CELL_VALUE>,CELL_VALUE> implements T
 	@Override
 	public void rowCreated(ROW_DIMENSION row) {
 		
+	}
+
+	@Override
+	public void columnFieldsSelectedForBuild(List<Field> fields) {
+		
+	}
+
+	@Override
+	public Boolean columnFieldBuildable(Field field) {
+		return null;
+	}
+
+	@Override
+	public Boolean rowCountable(ROW_DIMENSION row) {
+		return null;
 	}
 
 }

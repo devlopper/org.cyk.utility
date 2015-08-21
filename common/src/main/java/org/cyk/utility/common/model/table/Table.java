@@ -61,15 +61,16 @@ public class Table<
 	public void build(){
 		__building__ = Boolean.TRUE;
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-			listener.fields(fields);
+			listener.columnFieldsSelectedForBuild(fields);
 		for(Field field : fields){
-			Boolean ignored = Boolean.FALSE;
+			/*
+			Boolean buildable = Boolean.FALSE;
 			for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-				Boolean v = listener.ignore(field);
+				Boolean v = listener.columnFieldBuildable(field);
 				if(v!=null)
-					ignored = v;
+					buildable = v;
 			}
-			if(Boolean.FALSE.equals(ignored))
+			if(Boolean.TRUE.equals(buildable))*/
 				addColumn(field);
 		}
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
@@ -87,15 +88,15 @@ public class Table<
 	
 	public void addColumn(Field field) {
 		if(!Boolean.TRUE.equals(__building__)){
-			Boolean ignore = null;
+			Boolean buildable = null;
 			if(Modifier.isStatic(field.getModifiers()) && ignoreStaticField!=null && Boolean.TRUE.equals(ignoreStaticField) )
 				return;
 			for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-				Boolean r = listener.ignore(field);
+				Boolean r = listener.columnFieldBuildable(field);
 				if(r!=null)
-					ignore = r;
+					buildable = r;
 			}
-			if(!Boolean.TRUE.equals(ignore))
+			if(Boolean.TRUE.equals(buildable))
 				fields.add(field);
 			return;
 		}
@@ -219,7 +220,7 @@ public class Table<
 	public Boolean isCountable(ROW_DIMENSION row){
 		Boolean value = null;
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-			Boolean v = listener.isCountable(row);
+			Boolean v = listener.rowCountable(row);
 			if(v!=null)
 				value = v;
 		}
