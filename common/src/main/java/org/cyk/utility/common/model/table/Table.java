@@ -6,13 +6,13 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.model.table.Dimension.DimensionType;
+import org.cyk.utility.common.model.table.TableListener.FetchDataOptions;
 
 public class Table<
 	ROW_DIMENSION extends Row<ROW_DATA, CELL_TYPE, CELL_VALUE>,
@@ -34,6 +34,9 @@ public class Table<
 	@Getter @Setter protected Boolean ignoreStaticField = Boolean.TRUE;
 	
 	@Getter protected Collection<TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE>> tableListeners = new ArrayList<>();
+	@Getter protected Collection<RowListener<ROW_DIMENSION, ROW_DATA, CELL_TYPE, CELL_VALUE>> rowListeners = new ArrayList<>();
+	@Getter protected Collection<ColumnListener<COLUMN_DIMENSION, COLUMN_DATA, CELL_TYPE, CELL_VALUE>> columnListeners = new ArrayList<>();
+	@Getter protected Collection<CellListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE>> cellListeners = new ArrayList<>();
 	
 	private Boolean __building__ = Boolean.FALSE;
 	private List<Field> fields = new ArrayList<>();
@@ -58,51 +61,59 @@ public class Table<
 		this.cellClass = cellClass;
 	}	
 	
+	/**
+	 * Create columns , rows cell and cell's value
+	 */
 	public void build(){
 		__building__ = Boolean.TRUE;
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-			listener.columnFieldsSelectedForBuild(fields);
-		for(Field field : fields){
-			/*
-			Boolean buildable = Boolean.FALSE;
-			for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-				Boolean v = listener.columnFieldBuildable(field);
-				if(v!=null)
-					buildable = v;
-			}
-			if(Boolean.TRUE.equals(buildable))*/
-				addColumn(field);
-		}
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-			listener.columns(columns);
+			listener.beforeBuild();
+		
+		// Build logic
+		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
+			listener.sort(fields);
+		addColumns(fields);
 		addRows(datas);
+		
+		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
+			listener.afterBuild();
 	}
 	
-	private void addColumn(COLUMN_DIMENSION column) {
+	public void addColumn(COLUMN_DIMENSION column) {
 		column.setIndex((long) columns.size());
+		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
+			listener.add(column);
 		if(columns.add(column)){
-			for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-				listener.columnAdded(column);
+			for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
+				listener.added(column);
+		}
+	}
+	
+	public void addColumns(Collection<Field> fields){
+		for(Field field : fields){
+			addColumn(field);
 		}
 	}
 	
 	public void addColumn(Field field) {
 		if(!Boolean.TRUE.equals(__building__)){
-			Boolean buildable = null;
+			Boolean isColumn = null;
 			if(Modifier.isStatic(field.getModifiers()) && ignoreStaticField!=null && Boolean.TRUE.equals(ignoreStaticField) )
 				return;
-			for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-				Boolean r = listener.columnFieldBuildable(field);
+			for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners){
+				Boolean r = listener.isColumn(field);
 				if(r!=null)
-					buildable = r;
+					isColumn = r;
 			}
-			if(Boolean.TRUE.equals(buildable))
+			if(Boolean.TRUE.equals(isColumn))
 				fields.add(field);
 			return;
 		}
 		COLUMN_DIMENSION column = createColumn();
 		column.setField(field);
 		column.setTitle(field.getName());
+		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
+			listener.created(column);
 		addColumn(column);
 		return;
 	}
@@ -112,12 +123,11 @@ public class Table<
 	}
 
 	public void addColumnFromDataClass(){
-		Collection<Field> fields = new ArrayList<>();
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-			listener.addColumnFromDataClass(rowDataClass,fields);
+		List<Field> fields = new ArrayList<>();
+		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
+			listener.populateFromDataClass(rowDataClass,fields);
 		
-		for(Field field :  fields /*commonUtils.getAllFields(rowDataClass)*/)
-			addColumn(field);
+		addColumns(fields);
 			
 	}
 	
@@ -128,15 +138,16 @@ public class Table<
 				if(r.getUiIndex()!=null){
 					row.setUiIndex(r.getUiIndex());
 				}
-			//row.setIndex((byte) rows.size());
 			row.setUiIndex(row.getUiIndex()==null?0:row.getUiIndex()+1);
 		}else{
 			row.setUiIndex(null);
 		}
 		
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners)
+			listener.add(row);
 		if(rows.add(row)){
-			for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-				listener.rowAdded(row);
+			for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners)
+				listener.added(row);
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
@@ -153,33 +164,37 @@ public class Table<
 		ROW_DIMENSION row = createRow();					
 		row.setData(aRowData);
 		row.setTitle(aRowData.toString());
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-			listener.rowCreated(row);
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners)
+			listener.created(row);
 		if(addRow(row)){
+			for(CellListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : cellListeners)
+				listener.add(row);
 			for(COLUMN_DIMENSION column : columns){	
 				CELL_TYPE cell = createCell();
 				Object o = null;
 				//o = commonUtils.readField(aRowData, column.getField(),!column.getField().getDeclaringClass().isAssignableFrom(rowDataClass),Boolean.FALSE);				
-				for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-					Object r = listener.cellValue(row, column);
+				for(CellListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : cellListeners){
+					Object r = listener.getValue(row, column);
 					if(r!=null)
 						o = r;
 				}	
 				cell.setValue((CELL_VALUE) (o==null?nullValue:valueOf(o)));
 				
+				for(CellListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : cellListeners)
+					listener.add(row, column, cell);
 				if(row.getCells().add(cell))
-					for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-						listener.cellAdded(row, column, cell);
+					for(CellListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : cellListeners)
+						listener.added(row, column, cell);
 			}
-			for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-				listener.cellsAdded(row);
+			for(CellListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : cellListeners)
+				listener.added(row);
 		}
 		return row;
 	}
 	
 	public void openRow(ROW_DIMENSION row) {
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-			listener.openRow(row);
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners)
+			listener.open(row);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -189,11 +204,9 @@ public class Table<
 			Object o = commonUtils.readField(aRowData, columns.get(i++).getField(), Boolean.FALSE);
 			cell.setValue((CELL_VALUE) (o==null?nullValue:valueOf(o)));
 		}
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-			listener.updateRow(row, aRowData);
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners)
+			listener.update(row, aRowData);
 	}
-	
-	
 	
 	public void addRows(Collection<ROW_DATA> theRowData){
 		if(theRowData==null)
@@ -219,8 +232,8 @@ public class Table<
 	
 	public Boolean isCountable(ROW_DIMENSION row){
 		Boolean value = null;
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-			Boolean v = listener.rowCountable(row);
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners){
+			Boolean v = listener.countable(row);
 			if(v!=null)
 				value = v;
 		}
@@ -255,32 +268,32 @@ public class Table<
 	}
 	
 	public void rowEditInitiated(ROW_DIMENSION row){
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-			listener.rowEditInitiated(row);
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners)
+			listener.editInitiated(row);
 	}
 	
 	public void rowEditApplied(ROW_DIMENSION row){
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-			listener.rowEditApplied(row);
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners)
+			listener.editApplied(row);
 	}
 	
 	public void rowEditCanceled(ROW_DIMENSION row){
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
-			listener.rowEditCanceled(row);
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners)
+			listener.editCanceled(row);
 	}
 	
-	public void fetchData(Integer first, Integer pageSize,String sortField, Boolean ascendingOrder,Map<String, Object> filters,String globalFilter){
+	public void fetchData(FetchDataOptions options){
 		clear();
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-			Collection<ROW_DATA> collection = listener.fetchData(first, pageSize, sortField, ascendingOrder, filters,globalFilter);
+			Collection<ROW_DATA> collection = listener.fetchData(options);
 			if(collection!=null)
 				addRows(collection);
 		}
 	}
 	
-	public Long count(String filter){
+	public Long count(FetchDataOptions options){
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-			Long count = listener.count(filter);
+			Long count = listener.count(options);
 			if(count!=null)
 				return count;
 		}
@@ -289,8 +302,8 @@ public class Table<
 	
 	protected Boolean equals(ROW_DATA data1,ROW_DATA data2){
 		Boolean eq = null;
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-			Boolean r = listener.rowDataEquals(data1, data2);
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners){
+			Boolean r = listener.equals(data1, data2);
 			if(r!=null)
 				eq = r;
 		}
@@ -306,8 +319,8 @@ public class Table<
 	
 	private COLUMN_DIMENSION createColumn(){
 		COLUMN_DIMENSION column = null;
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-			COLUMN_DIMENSION r = listener.createColumn();
+		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners){
+			COLUMN_DIMENSION r = listener.create();
 			if(r!=null)
 				column = r;
 		}
@@ -318,8 +331,8 @@ public class Table<
 	
 	private ROW_DIMENSION createRow(){
 		ROW_DIMENSION row = null;
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-			ROW_DIMENSION r = listener.createRow();
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners){
+			ROW_DIMENSION r = listener.create();
 			if(r!=null)
 				row = r;
 		}
@@ -330,8 +343,8 @@ public class Table<
 	
 	private CELL_TYPE createCell(){
 		CELL_TYPE cell = null;
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-			CELL_TYPE r = listener.createCell();
+		for(CellListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : cellListeners){
+			CELL_TYPE r = listener.create();
 			if(r!=null)
 				cell = r;
 		}

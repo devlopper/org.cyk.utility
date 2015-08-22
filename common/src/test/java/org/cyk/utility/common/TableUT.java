@@ -5,10 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.utility.common.model.table.DefaultCell;
-import org.cyk.utility.common.model.table.DefaultColumn;
 import org.cyk.utility.common.model.table.DefaultRow;
 import org.cyk.utility.common.model.table.DefaultTable;
-import org.cyk.utility.common.model.table.TableAdapter;
+import org.cyk.utility.common.model.table.RowAdapter;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,9 +20,6 @@ public class TableUT extends AbstractUnitTest {
 	@Test
 	public void simple(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
-		table.getTableListeners().add(new TableAdapter<DefaultRow<RowData>, DefaultColumn, RowData, String, DefaultCell, String>(){
-			
-		});
 		
 		table.addColumnFromDataClass();
 		
@@ -41,11 +37,12 @@ public class TableUT extends AbstractUnitTest {
 	@Test
 	public void complex1(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
-		table.getTableListeners().add(new TableAdapter<DefaultRow<RowData>, DefaultColumn, RowData, String, DefaultCell, String>(){
+		table.getRowListeners().add(new RowAdapter<DefaultRow<RowData>, RowData, DefaultCell, String>(){
 			@Override
-			public Boolean isCountable(DefaultRow<RowData> row) {
+			public Boolean countable(DefaultRow<RowData> row) {
 				return !row.getData().getValue().equals("Total");
 			}
+			
 		});
 		table.addColumnFromDataClass();
 		
