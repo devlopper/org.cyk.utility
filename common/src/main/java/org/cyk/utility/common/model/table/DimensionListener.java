@@ -1,6 +1,5 @@
 package org.cyk.utility.common.model.table;
 
-
 public interface DimensionListener<DIMENSION,DATA,CELL extends Cell<VALUE>,VALUE> {
 
 	/**
@@ -38,6 +37,6 @@ public interface DimensionListener<DIMENSION,DATA,CELL extends Cell<VALUE>,VALUE
 	
 	DIMENSION select(DATA data);
 	
-	Boolean countable(DIMENSION dimension);
+	Boolean countable(DIMENSION dimension);	
 	
 }

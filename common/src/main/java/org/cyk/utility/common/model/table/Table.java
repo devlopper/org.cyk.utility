@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.computation.DataReadConfiguration;
+import org.cyk.utility.common.model.table.Dimension.DimensionType;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.model.table.Dimension.DimensionType;
-import org.cyk.utility.common.model.table.TableListener.FetchDataOptions;
 
 public class Table<
 	ROW_DIMENSION extends Row<ROW_DATA, CELL_TYPE, CELL_VALUE>,
@@ -282,18 +282,18 @@ public class Table<
 			listener.editCanceled(row);
 	}
 	
-	public void fetchData(FetchDataOptions options){
+	public void load(DataReadConfiguration configuration){
 		clear();
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-			Collection<ROW_DATA> collection = listener.fetchData(options);
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners){
+			Collection<ROW_DATA> collection = listener.load(configuration);
 			if(collection!=null)
 				addRows(collection);
 		}
 	}
 	
-	public Long count(FetchDataOptions options){
-		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners){
-			Long count = listener.count(options);
+	public Long count(DataReadConfiguration configuration){
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners){
+			Long count = listener.count(configuration);
 			if(count!=null)
 				return count;
 		}
