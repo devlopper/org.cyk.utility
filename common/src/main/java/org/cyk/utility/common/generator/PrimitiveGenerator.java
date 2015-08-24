@@ -5,19 +5,11 @@ import java.util.Random;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.cyk.utility.common.CommonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PrimitiveGenerator extends AbstractValueGenerator<Object> implements Serializable{
 
 	private static final long serialVersionUID = 6913469904258653785L;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PrimitiveGenerator.class);
-	
-	protected Logger __logger__(){
-		return LOGGER;
-	}
-	
 	private static final Random RANDOM = new Random();
 	
 	private NumberGenerator numberGenerator = new NumberGenerator();

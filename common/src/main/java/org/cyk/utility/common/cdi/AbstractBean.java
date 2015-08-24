@@ -27,11 +27,14 @@ public class AbstractBean implements Serializable {
 
 	private static final long serialVersionUID = -2448439169984218703L;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBean.class);
+	//TODO use a map to cache created loggers. But is it necessary in the way that we use a static method to get le logger. It might cached by provider? who knows?
+	//private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBean.class);
 	
 	protected CommonUtils commonUtils = CommonUtils.getInstance();
 	
 	@Getter protected Collection<BeanListener> beanListeners = new ArrayList<>();
+	
+	private transient Logger __logger__; 
 	
 	//private Long __timestamp__;
 	
@@ -202,7 +205,10 @@ public class AbstractBean implements Serializable {
 	}
 	
 	protected Logger __logger__(){
-		return LOGGER;
+		if(__logger__==null)
+			__logger__ = LoggerFactory.getLogger(getClass());
+		//return LOGGER;
+		return __logger__;
 	}
 	
 	protected void logError(Object message,Object...arguments) {

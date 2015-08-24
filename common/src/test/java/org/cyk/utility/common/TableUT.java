@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.utility.common.annotation.user.interfaces.Input;
+import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.model.table.DefaultCell;
 import org.cyk.utility.common.model.table.DefaultRow;
 import org.cyk.utility.common.model.table.DefaultTable;
@@ -20,8 +22,6 @@ public class TableUT extends AbstractUnitTest {
 	@Test
 	public void simple(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
-		
-		table.addColumnFromDataClass();
 		
 		table.addRow(new RowData("Yao"));
 		table.addRow(new RowData("Zadi"));
@@ -44,7 +44,6 @@ public class TableUT extends AbstractUnitTest {
 			}
 			
 		});
-		table.addColumnFromDataClass();
 		
 		table.addRow(new RowData("Yao"));
 		table.addRow(new RowData("Zadi"));
@@ -94,7 +93,7 @@ public class TableUT extends AbstractUnitTest {
 	
 	@Getter @Setter @AllArgsConstructor
 	private static class RowData{
-		private String value;
+		@Input @InputText private String value;
 	}
 	
 }

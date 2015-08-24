@@ -31,7 +31,7 @@ public class Table<
 	protected Class<CELL_TYPE> cellClass;
 	
 	@Getter @Setter protected String nullValue;
-	@Getter @Setter protected Boolean ignoreStaticField = Boolean.TRUE;
+	@Getter @Setter protected Boolean ignoreStaticField = Boolean.TRUE,useRowDataClassAttributeAsColumn=Boolean.TRUE;
 	
 	@Getter protected Collection<TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE>> tableListeners = new ArrayList<>();
 	@Getter protected Collection<RowListener<ROW_DIMENSION, ROW_DATA, CELL_TYPE, CELL_VALUE>> rowListeners = new ArrayList<>();
@@ -65,18 +65,27 @@ public class Table<
 	 * Create columns , rows cell and cell's value
 	 */
 	public void build(){
+		logTrace("Table build starts RowDataClass={}",rowDataClass.getSimpleName());
 		__building__ = Boolean.TRUE;
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
 			listener.beforeBuild();
 		
 		// Build logic
+		if(Boolean.TRUE.equals(useRowDataClassAttributeAsColumn))
+			useRowDataClassAttributeAsColumn();
+		
 		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
 			listener.sort(fields);
+		
+		logTrace("Sorted attributes {}", fields);
+		
 		addColumns(fields);
 		addRows(datas);
 		
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
 			listener.afterBuild();
+		
+		logTrace("Table build ends");
 	}
 	
 	public void addColumn(COLUMN_DIMENSION column) {
@@ -87,6 +96,7 @@ public class Table<
 			for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
 				listener.added(column);
 		}
+		logTrace("Column added F={} T={}", column.getField().getName(),column.getTitle());
 	}
 	
 	public void addColumns(Collection<Field> fields){
@@ -122,13 +132,13 @@ public class Table<
 		addColumn(commonUtils.getFieldFromClass(rowDataClass, fieldName));
 	}
 
-	public void addColumnFromDataClass(){
+	private void useRowDataClassAttributeAsColumn(){
 		List<Field> fields = new ArrayList<>();
 		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
 			listener.populateFromDataClass(rowDataClass,fields);
 		
 		addColumns(fields);
-			
+		logTrace("Data class attribute as columns {}",fields);	
 	}
 	
 	private Boolean addRow(ROW_DIMENSION row) {
@@ -148,6 +158,7 @@ public class Table<
 		if(rows.add(row)){
 			for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners)
 				listener.added(row);
+			logTrace("Row added {}",row);
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
