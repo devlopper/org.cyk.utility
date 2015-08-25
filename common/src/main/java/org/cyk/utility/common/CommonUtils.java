@@ -3,6 +3,7 @@ package org.cyk.utility.common;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -31,6 +32,7 @@ import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public class CommonUtils implements Serializable  {
 
@@ -269,6 +271,69 @@ public class CommonUtils implements Serializable  {
 	
 	public Integer numberOfDaysIn(Date date1,Date date2,Boolean partial){
 		return new DateTime(date2).getDayOfYear() - new DateTime(date1).getDayOfYear();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> Constructor<T> getConstructor(Class<T> aClass,Class<?>[] parameterTypes){
+		if(Object.class.equals(aClass) || parameterTypes==null || parameterTypes.length==0)
+			return null;
+		
+		if(parameterTypes.length > 1)
+			throw new RuntimeException("Too much parameters found. One and only one parameter expected.");
+		LOGGER.trace("Find constructor in {} with parameter {}",aClass,StringUtils.join(parameterTypes));
+		for(Constructor<?> constructor : aClass.getDeclaredConstructors()){
+			if(constructor==null || parameterTypes==null || parameterTypes.length==0)
+				return null;
+			if(parameterTypes.length > 1)
+				throw new RuntimeException("Only one parameter is supported");
+			
+			Class<?>[] constructorParameterTypes = constructor.getParameterTypes();
+			if(constructorParameterTypes==null || constructorParameterTypes.length!=parameterTypes.length)
+				continue;
+			for(int i=0;i<parameterTypes.length;i++)
+				if(!constructorParameterTypes[i].isAssignableFrom(parameterTypes[i]))
+					return null;
+			if(constructor!=null){
+				LOGGER.trace("Found constructor is {}",constructor);
+				return (Constructor<T>) constructor;	
+			}
+			
+		}
+		
+		return null;
+		
+		/*
+		try {
+			LOGGER.trace("Find constructor in {} with parameter {}",aClass,parameterType);
+			return aClass.getConstructor(parameterType);
+		} catch (NoSuchMethodException | SecurityException e) {
+			if(e instanceof NoSuchMethodException){
+				if(Boolean.TRUE.equals(allowSubType))
+					return getConstructor(aClass, parameterType.getSuperclass(), allowSubType);
+				else
+					return null;
+			}else {
+				LOGGER.error(e.toString(), e);
+				return null;
+			}
+		}
+		*/
+	}
+	
+	private <T> Constructor<T> __getConstructor__(Constructor<T> constructor,Class<?>[] parameterTypes,Boolean allowSubType){
+		if(constructor==null || parameterTypes==null || parameterTypes.length==0)
+			return null;
+		if(parameterTypes.length > 1)
+			throw new RuntimeException("Only one parameter is supported");
+
+		Class<?>[] constructorParameterTypes = constructor.getParameterTypes();
+		if(constructorParameterTypes==null || constructorParameterTypes.length!=parameterTypes.length)
+			return null;
+		for(int i=0;i<parameterTypes.length;i++)
+			if(!constructorParameterTypes[i].isAssignableFrom(parameterTypes[i]))
+				return null;
+		return constructor;
+		
 	}
 	
 	/**/

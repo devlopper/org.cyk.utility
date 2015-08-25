@@ -1,5 +1,6 @@
 package org.cyk.utility.common;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,14 +10,17 @@ import java.util.List;
 import java.util.Set;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
+import org.junit.Test;
 
-public class CommonUtilsUTo extends AbstractUnitTest {
+public class CommonUtilsUT extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
  
@@ -59,6 +63,20 @@ public class CommonUtilsUTo extends AbstractUnitTest {
 		//Assert.assertEquals(CommonUtils.getInstance().readField(new ClassD(), fieldD3,Boolean.TRUE, Boolean.FALSE).toString(), "It is A");
 		//System.out.println(CommonUtils.getInstance().readField(new ClassD(), fieldC2, Boolean.TRUE));
 	}
+
+	@Test
+	public void constructor(){
+		for(Constructor<?> constructor : ClassC.class.getDeclaredConstructors()){
+			System.out.println(constructor);
+			System.out.println(StringUtils.join(constructor.getParameterTypes()));
+		}
+		
+		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(ClassC.class, new Class<?>[]{ClassA.class}));
+		Assert.assertNull(CommonUtils.getInstance().getConstructor(ClassC.class, new Class<?>[]{ClassC.class}));
+		
+		Assert.assertNull(CommonUtils.getInstance().getConstructor(ClassC.class, new Class<?>[]{String.class}));
+		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(ClassC.class, new Class<?>[]{ClassB.class}));
+	}
 	
 	/**/
 	
@@ -94,20 +112,27 @@ public class CommonUtilsUTo extends AbstractUnitTest {
 		}
 	};
 	
-	@Getter @Setter
+	@Getter @Setter @NoArgsConstructor
 	public static class ClassC{
 		
 		private String attributeC1;
 		private ClassB attributeC2 = new ClassB();
+		private ClassA attributeZ1;
 		
 		private Collection<String> attributeC3 = new ArrayList<>();
 		private List<String> attributeC4 = new ArrayList<>();
 		private Set<String> attributeC5 = new HashSet<>();
 		
+		public ClassC(ClassA attributeZ1) {
+			super();
+			this.attributeZ1 = attributeZ1;
+		}
+		
 		@Override
 		public String toString() {
 			return "It is C";
 		}
+		
 	};
 	
 	@Getter @Setter
