@@ -1,12 +1,17 @@
 package org.cyk.utility.common;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
+import org.cyk.utility.common.model.table.ColumnAdapter;
 import org.cyk.utility.common.model.table.DefaultCell;
+import org.cyk.utility.common.model.table.DefaultColumn;
 import org.cyk.utility.common.model.table.DefaultRow;
 import org.cyk.utility.common.model.table.DefaultTable;
 import org.cyk.utility.common.model.table.RowAdapter;
@@ -19,7 +24,7 @@ public class TableUT extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
-	@Test
+	//@Test
 	public void simple(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
 		
@@ -34,7 +39,7 @@ public class TableUT extends AbstractUnitTest {
 		Assert.assertEquals("Row 3",2,table.getRows().get(2).getUiIndex().intValue());
 	}
 	
-	@Test
+	//@Test
 	public void complex1(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
 		table.getRowListeners().add(new RowAdapter<DefaultRow<RowData>, RowData, DefaultCell, String>(){
@@ -63,6 +68,56 @@ public class TableUT extends AbstractUnitTest {
 		Assert.assertEquals("Row 6",4,table.getRows().get(5).getUiIndex().intValue());
 		Assert.assertNull("Row 7",table.getRows().get(6).getUiIndex());
 	}
+	
+	@Test
+	public void columnOneListener(){
+		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
+		table.getColumnListeners().add(new ColumnAdapter<DefaultColumn, String, DefaultCell, String>(){
+			@Override
+			public void populateFromDataClass(Class<?> aClass,List<Field> fields) {
+				fields.addAll(CommonUtils.getInstance().getAllFields(aClass, Input.class));
+			}
+			@Override
+			public Boolean isColumn(Field field) {
+				return Boolean.FALSE;
+			}
+			
+		});
+		table.build();
+		
+		Assert.assertNull(table.getColumn("value"));
+	}
+	
+	@Test
+	public void columnTwoListeners(){
+		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
+		table.getColumnListeners().add(new ColumnAdapter<DefaultColumn, String, DefaultCell, String>(){
+			@Override
+			public void populateFromDataClass(Class<?> aClass,List<Field> fields) {
+				fields.addAll(CommonUtils.getInstance().getAllFields(aClass, Input.class));
+			}
+			@Override
+			public Boolean isColumn(Field field) {
+				return Boolean.FALSE;
+			}
+			
+		});
+		table.getColumnListeners().add(new ColumnAdapter<DefaultColumn, String, DefaultCell, String>(){
+			@Override
+			public void populateFromDataClass(Class<?> aClass,List<Field> fields) {
+				fields.addAll(CommonUtils.getInstance().getAllFields(aClass, Input.class));
+			}
+			@Override
+			public Boolean isColumn(Field field) {
+				return Boolean.TRUE;
+			}
+			
+		});
+		table.build();
+		
+		Assert.assertNotNull(table.getColumn("value"));
+	}
+	
 	/*
 	@Test
 	public void complex2(){

@@ -5,14 +5,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.model.table.Dimension.DimensionType;
-
-import lombok.Getter;
-import lombok.Setter;
 
 public class Table<
 	ROW_DIMENSION extends Row<ROW_DATA, CELL_TYPE, CELL_VALUE>,
@@ -96,7 +98,7 @@ public class Table<
 			for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
 				listener.added(column);
 		}
-		logTrace("Column added F={} T={}", column.getField().getName(),column.getTitle());
+		logTrace("Column added Field={} Title={}", column.getField().getName(),column.getTitle());
 	}
 	
 	public void addColumns(Collection<Field> fields){
@@ -107,16 +109,17 @@ public class Table<
 	
 	public void addColumn(Field field) {
 		if(!Boolean.TRUE.equals(__building__)){
-			Boolean isColumn = null;
-			if(Modifier.isStatic(field.getModifiers()) && ignoreStaticField!=null && Boolean.TRUE.equals(ignoreStaticField) )
-				return;
-			for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners){
-				Boolean r = listener.isColumn(field);
-				if(r!=null)
-					isColumn = r;
-			}
-			if(Boolean.TRUE.equals(isColumn))
+			Boolean isColumn = isColumn(field);
+			logTrace("Plan build for field {} ? {}",field.getName(), isColumn);
+			if(Boolean.TRUE.equals(isColumn)){
 				fields.add(field);
+			}else{
+				
+			}
+			return;
+		}
+		if(!Boolean.TRUE.equals(isColumn(field))){
+			logTrace("Building column <<{}>> has been skipped",field.getName());
 			return;
 		}
 		COLUMN_DIMENSION column = createColumn();
@@ -125,20 +128,34 @@ public class Table<
 		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
 			listener.created(column);
 		addColumn(column);
-		return;
 	}
 	
 	public void addColumn(String fieldName) {
 		addColumn(commonUtils.getFieldFromClass(rowDataClass, fieldName));
 	}
 
+	public Boolean isColumn(Field field){
+		Boolean result = null;
+		if(Modifier.isStatic(field.getModifiers()) && ignoreStaticField!=null && Boolean.TRUE.equals(ignoreStaticField) )
+			return Boolean.FALSE;
+		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners){
+			Boolean r = listener.isColumn(field);
+			if(r!=null)
+				result = r;
+		}
+		return result;
+	}
+	
 	private void useRowDataClassAttributeAsColumn(){
 		List<Field> fields = new ArrayList<>();
 		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
 			listener.populateFromDataClass(rowDataClass,fields);
 		
-		addColumns(fields);
-		logTrace("Data class attribute as columns {}",fields);	
+		Set<Field> nonDuplicateFields = new LinkedHashSet<>();
+		for(Field field : fields)
+			nonDuplicateFields.add(field);
+		addColumns(nonDuplicateFields);
+		logTrace("Data class attribute as columns {}",nonDuplicateFields);	
 	}
 	
 	private Boolean addRow(ROW_DIMENSION row) {
