@@ -3,7 +3,9 @@ package org.cyk.utility.common.cdi;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -180,8 +182,12 @@ public class AbstractBean implements Serializable {
 		logDebug(StringUtils.join(messages,">"));
 	}
 	
+	protected void logStackTraceAsString(String _package){
+		logStackTraceAsString(new LinkedHashSet<>(Arrays.asList(_package)));
+	}
+	
 	protected void logStackTraceAsString(){
-		logStackTraceAsString(null);
+		logStackTraceAsString(new LinkedHashSet<String>());
 	}
 	
 	/**/
