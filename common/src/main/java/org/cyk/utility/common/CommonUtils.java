@@ -319,7 +319,7 @@ public class CommonUtils implements Serializable  {
 		}
 		*/
 	}
-	
+	/*
 	private <T> Constructor<T> __getConstructor__(Constructor<T> constructor,Class<?>[] parameterTypes,Boolean allowSubType){
 		if(constructor==null || parameterTypes==null || parameterTypes.length==0)
 			return null;
@@ -334,7 +334,7 @@ public class CommonUtils implements Serializable  {
 				return null;
 		return constructor;
 		
-	}
+	}*/
 	
 	/**/
 	
