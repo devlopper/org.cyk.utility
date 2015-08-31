@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 
@@ -15,6 +16,7 @@ import javax.enterprise.inject.spi.CDI;
 
 import lombok.Getter;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -150,6 +152,36 @@ public class AbstractBean implements Serializable {
 		StackTraceElement stackTraceElement = stackTraceElements[0];
 		System.out.println(stackTraceElement.getClassName()+" - "+stackTraceElement.getMethodName()+" - "+stackTraceElement.getLineNumber());
 		*/
+	}
+	
+	protected void logStackTraceAsString(Set<String> packages){
+		StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+		if(ArrayUtils.isEmpty(stackTraceElements)){
+			System.out.println("No stack trace to log.");
+			return;
+		}
+		List<String> messages = new ArrayList<>();
+		for(StackTraceElement stackTraceElement : stackTraceElements){
+			Boolean add = Boolean.FALSE;
+			if(packages==null || packages.isEmpty()){
+				add = Boolean.TRUE;
+			}else{
+				for(String p : packages){
+					if(StringUtils.startsWith(stackTraceElement.getClassName(), p)){
+						add = Boolean.TRUE;
+						break;
+					}
+				}
+			}
+			if(Boolean.TRUE.equals(add)){
+				messages.add(/*stackTraceElement.getClassName()+" - "+*/stackTraceElement.getMethodName()+"("+stackTraceElement.getLineNumber()+")");
+			}
+		}
+		logDebug(StringUtils.join(messages,">"));
+	}
+	
+	protected void logStackTraceAsString(){
+		logStackTraceAsString(null);
 	}
 	
 	/**/
