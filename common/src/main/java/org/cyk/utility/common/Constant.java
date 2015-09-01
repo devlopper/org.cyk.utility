@@ -5,6 +5,7 @@ public interface Constant {
 	Character CHARACTER_SPACE = new Character(' ');
 	Character CHARACTER_DOT = new Character('.');
 	Character CHARACTER_COLON = new Character(':');
+	Character CHARACTER_COMA = new Character(',');
 	Character CHARACTER_SEMI_COLON = new Character(';');
 	Character CHARACTER_BACK_SLASH = new Character('\\');
 	Character CHARACTER_SLASH = new Character('/');
