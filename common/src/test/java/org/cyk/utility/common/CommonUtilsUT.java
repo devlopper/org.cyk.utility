@@ -66,16 +66,22 @@ public class CommonUtilsUT extends AbstractUnitTest {
 
 	@Test
 	public void constructor(){
-		for(Constructor<?> constructor : ClassC.class.getDeclaredConstructors()){
+		/*for(Constructor<?> constructor : ClassC.class.getDeclaredConstructors()){
 			System.out.println(constructor);
 			System.out.println(StringUtils.join(constructor.getParameterTypes()));
-		}
+		}*/
 		
 		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(ClassC.class, new Class<?>[]{ClassA.class}));
 		Assert.assertNull(CommonUtils.getInstance().getConstructor(ClassC.class, new Class<?>[]{ClassC.class}));
 		
 		Assert.assertNull(CommonUtils.getInstance().getConstructor(ClassC.class, new Class<?>[]{String.class}));
 		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(ClassC.class, new Class<?>[]{ClassB.class}));
+		
+		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(UseMaster1.class, new Class<?>[]{Master.class}));
+		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(UseMaster2.class, new Class<?>[]{MasterChild1.class}));
+		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(UseMaster3.class, new Class<?>[]{MasterChild2.class}));
+		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(UseMaster4.class, new Class<?>[]{MasterChild1.class}));
+		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(UseMaster4.class, new Class<?>[]{MasterChild2.class}));
 	}
 	
 	/**/
@@ -149,5 +155,54 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		}
 	};
 	
+	@Getter @Setter
+	public static class Master{
+		private String attribute;
+	}
+	@Getter @Setter
+	public static class MasterChild1 extends Master{
+		private String attribute1;
+	}
+	@Getter @Setter
+	public static class MasterChild2 extends Master{
+		private String attribute2;
+	}
+	@Getter @Setter
+	public static class UseMaster1{
+		private String attribute;
+		public UseMaster1(Master master) {
+			
+		}
+		
+	}
+	
+	@Getter @Setter
+	public static class UseMaster2{
+		private String attribute;
+		public UseMaster2(MasterChild1 master) {
+			
+		}
+		
+	}
+	
+	@Getter @Setter
+	public static class UseMaster3{
+		private String attribute;
+		public UseMaster3(MasterChild2 master) {
+	
+		}
+	}
+	
+	@Getter @Setter
+	public static class UseMaster4{
+		private String attribute;
+		public UseMaster4(MasterChild2 master) {
+			
+		}
+		public UseMaster4(MasterChild1 master) {
+			
+		}
+		
+	}
 	
 }

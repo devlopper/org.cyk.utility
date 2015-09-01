@@ -282,7 +282,7 @@ public class CommonUtils implements Serializable  {
 			throw new RuntimeException("Too much parameters found. One and only one parameter expected.");
 		LOGGER.trace("Find constructor in {} with parameter {}",aClass,StringUtils.join(parameterTypes));
 		for(Constructor<?> constructor : aClass.getDeclaredConstructors()){
-			if(constructor==null || parameterTypes==null || parameterTypes.length==0)
+			if(/*constructor==null || */parameterTypes==null || parameterTypes.length==0)
 				return null;
 			if(parameterTypes.length > 1)
 				throw new RuntimeException("Only one parameter is supported");
@@ -290,14 +290,18 @@ public class CommonUtils implements Serializable  {
 			Class<?>[] constructorParameterTypes = constructor.getParameterTypes();
 			if(constructorParameterTypes==null || constructorParameterTypes.length!=parameterTypes.length)
 				continue;
+			Boolean valid = Boolean.TRUE;
 			for(int i=0;i<parameterTypes.length;i++)
-				if(!constructorParameterTypes[i].isAssignableFrom(parameterTypes[i]))
-					return null;
-			if(constructor!=null){
+				if(!constructorParameterTypes[i].isAssignableFrom(parameterTypes[i])){
+					valid = Boolean.FALSE;
+					break;
+				}
+			if(Boolean.TRUE.equals(valid)){
 				LOGGER.trace("Found constructor is {}",constructor);
-				return (Constructor<T>) constructor;	
+				return (Constructor<T>) constructor;
+			}else{
+				//keep going : check next one
 			}
-			
 		}
 		
 		return null;
