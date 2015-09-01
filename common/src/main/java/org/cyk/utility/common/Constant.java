@@ -25,4 +25,6 @@ public interface Constant {
 	String PREFIX_PACKAGE_BEAN_VALIDATION = PREFIX_PACKAGE_JAVAX+WORD_VALIDATION;
 	
 	String EMPTY_STRING = "";
+	
+	String VARIABLE_RESULT = "result";
 }
