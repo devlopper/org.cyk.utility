@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -339,6 +340,13 @@ public class CommonUtils implements Serializable  {
 		return constructor;
 		
 	}*/
+	
+	public String attributePath(String variable,String...properties){
+		List<String> l = new ArrayList<>();
+		l.addAll(Arrays.asList(properties));
+		l.add(0, variable);
+		return StringUtils.join(l,Constant.CHARACTER_DOT);
+	}
 	
 	/**/
 	
