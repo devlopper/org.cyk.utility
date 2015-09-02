@@ -2,7 +2,7 @@ package org.cyk.utility.common.cdi;
 
 import java.io.Serializable;
 
-public class BeanAdapter implements BeanListener,Serializable {
+public class BeanAdapter extends AbstractBean implements BeanListener,Serializable {
 
 	private static final long serialVersionUID = 7673343587983459174L;
 
