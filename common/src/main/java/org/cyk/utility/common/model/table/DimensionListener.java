@@ -20,14 +20,19 @@ public interface DimensionListener<DIMENSION,DATA,CELL extends Cell<VALUE>,VALUE
 	 * Open for details
 	 * @param dimension
 	 */
+	Boolean isOpenable(DIMENSION dimension);
 	void open(DIMENSION dimension);
 	void opened(DIMENSION dimension);
 	
+	Boolean isUpdatable(DIMENSION dimension);
 	void update(DIMENSION dimension,DATA data);
 	void updated(DIMENSION dimension);
 	
+	Boolean isDeletable(DIMENSION dimension);
 	void remove(DIMENSION dimension);
 	void removed(DIMENSION dimension);
+	
+	Boolean isCountable(DIMENSION dimension);
 	
 	Boolean equals(DATA data1,DATA data2);
 	

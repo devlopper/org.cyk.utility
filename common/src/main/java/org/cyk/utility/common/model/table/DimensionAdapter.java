@@ -1,8 +1,13 @@
 package org.cyk.utility.common.model.table;
 
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter @Setter
 public class DimensionAdapter<DIMENSION,DATA,CELL extends Cell<VALUE>,VALUE> implements DimensionListener<DIMENSION,DATA,CELL,VALUE> {
 
+	protected Boolean openable,updatable,deletable,countable;
+	
 	@Override
 	public DIMENSION create() {
 		return null;
@@ -57,6 +62,26 @@ public class DimensionAdapter<DIMENSION,DATA,CELL extends Cell<VALUE>,VALUE> imp
 	@Override
 	public Boolean countable(DIMENSION dimension) {
 		return null;
+	}
+
+	@Override
+	public Boolean isOpenable(DIMENSION dimension) {
+		return openable;
+	}
+
+	@Override
+	public Boolean isUpdatable(DIMENSION dimension) {
+		return updatable;
+	}
+
+	@Override
+	public Boolean isDeletable(DIMENSION dimension) {
+		return deletable;
+	}
+
+	@Override
+	public Boolean isCountable(DIMENSION dimension) {
+		return countable;
 	}
 
 }

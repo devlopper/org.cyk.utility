@@ -28,4 +28,16 @@ public interface Dimension<DATA,CELL extends Cell<VALUE>,VALUE> {
 	List<CELL> getCells();
 	
 	Boolean getIsDetail();
+	
+	Boolean getOpenable();
+	void setOpenable(Boolean value);
+	
+	Boolean getUpdatable();
+	void setUpdatable(Boolean value);
+	
+	Boolean getDeletable();
+	void setDeletable(Boolean value);
+	
+	Boolean getCountable();
+	void setCountable(Boolean value);
 }

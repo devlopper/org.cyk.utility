@@ -14,10 +14,11 @@ public abstract class AbstractDimension<DATA,CELLTYPE extends AbstractCell<CELLV
 	private static final long serialVersionUID = 3307695889353490821L;
  
 	@Getter @Setter protected Long index,uiIndex;
-	@Getter @Setter protected DATA data;
+	@Getter @Setter protected DATA data; 
 	@Getter @Setter protected String title;
 	//@Getter @Setter protected Boolean isSummary;
 	@Getter @Setter protected DimensionType type = DimensionType.DETAIL;
+	@Getter @Setter protected Boolean updatable,deletable,openable,countable;
 	
 	public AbstractDimension(DATA data,String title) {
 		super(); 

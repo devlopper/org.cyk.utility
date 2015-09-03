@@ -192,6 +192,28 @@ public class Table<
 		ROW_DIMENSION row = createRow();					
 		row.setData(aRowData);
 		row.setTitle(aRowData.toString());
+		// TODO factor that in a method
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners){
+			Boolean v = listener.isOpenable(row);
+			if(v!=null)
+				row.setOpenable(v);
+		}
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners){
+			Boolean v = listener.isUpdatable(row);
+			if(v!=null)
+				row.setUpdatable(v);
+		}
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners){
+			Boolean v = listener.isDeletable(row);
+			if(v!=null)
+				row.setDeletable(v);
+		}
+		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners){
+			Boolean v = listener.isCountable(row);
+			if(v!=null)
+				row.setCountable(v);
+		}
+		
 		for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners)
 			listener.created(row);
 		if(addRow(row)){
@@ -398,5 +420,6 @@ public class Table<
 		}
 		return numberOfNullUiIndex;
 	}
+	
 	
 }
