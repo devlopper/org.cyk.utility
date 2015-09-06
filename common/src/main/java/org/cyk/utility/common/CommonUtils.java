@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -171,6 +172,14 @@ public class CommonUtils implements Serializable  {
 			}	
 		
 		return value;
+	}
+	
+	public void writeField(Field field, Object target, Object value){
+		try {
+			FieldUtils.writeField(field, target, value,Boolean.TRUE);
+		} catch (IllegalAccessException e) {
+			LOGGER.error(e.toString(),e);
+		}
 	}
 	
 	public <T extends Annotation> T getAnnotation(Class<?> aClass,Class<T> anAnnotationClass){
@@ -346,6 +355,73 @@ public class CommonUtils implements Serializable  {
 		l.addAll(Arrays.asList(properties));
 		l.add(0, variable);
 		return StringUtils.join(l,Constant.CHARACTER_DOT);
+	}
+	
+	public <T> T sum(Class<T> aClass,Collection<T> collection,Set<String> fieldNames){
+		T result;
+		try {
+			result = aClass.newInstance();
+		} catch (Exception e) {
+			LOGGER.error(e.toString(),e);
+			return null;
+		}
+		List<Field> fields = new ArrayList<Field>(getAllFields(aClass));
+		//filter
+		if(fieldNames!=null && !fieldNames.isEmpty()){
+			for(int i=0;i<fields.size();)
+				if(fieldNames.contains(fields.get(i).getName()))
+					i++;
+				else
+					fields.remove(i);
+		}
+		//initialize result
+		for(int i=0;i<fields.size();){
+			Field field = fields.get(i);
+			if(BigDecimal.class.equals(field.getType()))	
+				writeField(field, result, BigDecimal.ZERO);
+			else if(isNumberClass(field.getType()))	
+				writeField(field, result, 0);
+			else{
+				LOGGER.error("Sum of {} not supported yet",field.getType());
+				fields.remove(i);
+				continue;
+			}
+			i++;
+		}
+		
+		for(T item : collection){
+			for(Field field : fields){
+				if(BigDecimal.class.equals(field.getType())){	
+					BigDecimal value = (BigDecimal)readField(item, field, Boolean.FALSE);
+					if(value==null)
+						value = BigDecimal.ZERO;
+					writeField(field, result,((BigDecimal)readField(result, field, Boolean.FALSE)).add(value));
+				}else if(Byte.class.equals(field.getType())){
+					Byte value = (Byte)readField(item, field, Boolean.FALSE);
+					if(value==null)
+						value = 0;
+					writeField(field, result, value+(Byte)readField(result, field, Boolean.FALSE));
+				}else if(Short.class.equals(field.getType())){
+					Short value = (Short)readField(item, field, Boolean.FALSE);
+					if(value==null)
+						value = 0;
+					writeField(field, result, value+(Short)readField(result, field, Boolean.FALSE));
+				}else if(Integer.class.equals(field.getType())){
+					Integer value = (Integer)readField(item, field, Boolean.FALSE);
+					if(value==null)
+						value = 0;
+					writeField(field, result, value+(Integer)readField(result, field, Boolean.FALSE));
+				}else if(Long.class.equals(field.getType())){
+					Long value = (Long)readField(item, field, Boolean.FALSE);
+					if(value==null)
+						value = 0l;
+					writeField(field, result, value+(Long)readField(result, field, Boolean.FALSE));
+				}
+			}
+			
+		}
+		
+		return result;
 	}
 	
 	/**/

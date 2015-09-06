@@ -2,13 +2,16 @@ package org.cyk.utility.common;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -62,6 +65,20 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		//Assert.assertEquals(CommonUtils.getInstance().readField(new ClassD(), fieldC2,Boolean.TRUE, Boolean.FALSE).toString(), "It is B");
 		//Assert.assertEquals(CommonUtils.getInstance().readField(new ClassD(), fieldD3,Boolean.TRUE, Boolean.FALSE).toString(), "It is A");
 		//System.out.println(CommonUtils.getInstance().readField(new ClassD(), fieldC2, Boolean.TRUE));
+		
+		Collection<Sumable> sumables = new ArrayList<>();
+		sumables.add(new Sumable(null, new BigDecimal("5"), 6));
+		sumables.add(new Sumable(null, null, 10));
+		sumables.add(new Sumable(null, new BigDecimal("0"), null));
+		sumables.add(new Sumable(null, new BigDecimal("7.2"), 0));
+		
+		Sumable result = CommonUtils.getInstance().sum(Sumable.class, sumables, new HashSet<>(Arrays.asList("attribute2","attribute3")));
+		Assert.assertEquals(new BigDecimal("12.2"), result.getAttribute2());
+		Assert.assertEquals(new Integer("16"), result.getAttribute3());
+		
+		result = CommonUtils.getInstance().sum(Sumable.class, sumables, null);
+		Assert.assertEquals(new BigDecimal("12.2"), result.getAttribute2());
+		Assert.assertEquals(new Integer("16"), result.getAttribute3());
 	}
 
 	@Test
@@ -202,6 +219,14 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		public UseMaster4(MasterChild1 master) {
 			
 		}
+		
+	}
+	
+	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+	public static class Sumable{
+		private String attribute1;
+		private BigDecimal attribute2;
+		private Integer attribute3;
 		
 	}
 	
