@@ -22,6 +22,8 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.joda.time.DateTime;
@@ -422,6 +424,13 @@ public class CommonUtils implements Serializable  {
 		}
 		
 		return result;
+	}
+	
+	public <T> String getFieldsValues(T object,Class<? super T> upToCass){
+		String value = ReflectionToStringBuilder.reflectionToString(object, ToStringStyle.SHORT_PREFIX_STYLE,Boolean.FALSE,upToCass);
+		value = StringUtils.remove(value, getClass().getSimpleName());
+		//value = StringUtils.replace(value, "<null>","<>");
+		return value;
 	}
 	
 	/**/
