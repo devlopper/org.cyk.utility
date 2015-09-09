@@ -71,10 +71,10 @@ public class CommonUtils implements Serializable  {
 		return null;
 	}
 	
-	private Collection<Field> getAllFields(Collection<Field> fields,Class<?> type) {
+	private Collection<Field> __getAllFields__(Collection<Field> fields,Class<?> type) {
 		//super class fields first
 		if (type.getSuperclass() != null) {
-			fields = getAllFields(fields, type.getSuperclass());
+			fields = __getAllFields__(fields, type.getSuperclass());
 		}
 		//declared class fields second
 		for (Field field : type.getDeclaredFields()) {
@@ -86,7 +86,12 @@ public class CommonUtils implements Serializable  {
 	
 	public Collection<Field> getAllFields(Class<?> type) {
 		Collection<Field> fields = new ArrayList<>();
-		return getAllFields(fields, type);
+		if(Boolean.TRUE.equals(ClassRepository.ENABLED)){
+			fields.addAll(ClassRepository.getInstance().get(type).getFields());
+		}else{
+			__getAllFields__(fields, type);
+		}
+		return fields;
 	}
 	
 	public Field getFieldFromClass(Class<?> type,String name) {
