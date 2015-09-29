@@ -9,6 +9,7 @@ public interface Constant {
 	Character CHARACTER_SEMI_COLON = new Character(';');
 	Character CHARACTER_BACK_SLASH = new Character('\\');
 	Character CHARACTER_SLASH = new Character('/');
+	Character CHARACTER_DOLLAR = new Character('$');
 	
 	Character CHARACTER_H = new Character('H');
 	
