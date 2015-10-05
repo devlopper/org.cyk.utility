@@ -1,5 +1,6 @@
 package org.cyk.utility.common.generator;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,10 +21,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.math3.random.RandomData;
 import org.apache.commons.math3.random.RandomDataImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Getter @Setter
-public class RandomDataProvider {
+public class RandomDataProvider implements Serializable {
 	
+	private static final long serialVersionUID = 3625402455172936488L;
+	private static final Logger LOGGER = LoggerFactory.getLogger(RandomDataProvider.class);
 	private static final RandomDataProvider INSTANCE = new RandomDataProvider();
 	
 	public static RandomDataProvider getInstance() {
@@ -159,6 +164,7 @@ public class RandomDataProvider {
 	@SuppressWarnings("unchecked")
 	public List<String> stringLines(String fileName){
 		try {
+			LOGGER.trace("Reading string lines from file named {}",fileName);
 			return (List<String>) IOUtils.readLines(getClass().getResourceAsStream(fileName));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -231,6 +237,7 @@ public class RandomDataProvider {
 		System.out.println(RandomDataProvider.getInstance().getMale().lastName());
 		System.out.println(RandomDataProvider.getInstance().getMale().middleAndLastName());
 		System.out.println(RandomDataProvider.getInstance().getMale().photo());
+		System.out.println(RandomDataProvider.getInstance().signatureSpecimens);
 	}
 	
 	/**/
