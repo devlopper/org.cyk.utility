@@ -61,11 +61,13 @@ public class RandomDataProvider {
 	
 	/**/
 	private List<String> companyNames,companyLogos=new ArrayList<>();
+	private List<String> signatureSpecimens=new ArrayList<>();
 	/**/
 	
 	protected RandomDataProvider() {
 		companyNames = stringLines("/META-INF/generator/name/company.txt");
-		companyLogos = images("/META-INF/generator/image/company/logo/");	
+		companyLogos = images("/META-INF/generator/image/company/logo/");
+		signatureSpecimens = images("/META-INF/generator/image/signature/specimen/");
 	}
 	
 	public int randomInt(int min,int max){
@@ -206,6 +208,15 @@ public class RandomDataProvider {
 	public byte[] companyLogo(){
 		try {
 			return IOUtils.toByteArray(getClass().getResourceAsStream((String) randomFromList(companyLogos)));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public byte[] signatureSpecimen(){
+		try {
+			return IOUtils.toByteArray(getClass().getResourceAsStream((String) randomFromList(signatureSpecimens)));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

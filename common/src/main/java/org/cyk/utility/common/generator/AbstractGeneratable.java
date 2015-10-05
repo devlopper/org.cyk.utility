@@ -15,4 +15,5 @@ public abstract class AbstractGeneratable<T> implements Serializable {
 	
 	public abstract void generate();
 	
+	
 }
