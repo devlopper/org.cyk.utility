@@ -13,6 +13,10 @@ public abstract class AbstractGeneratable<T> implements Serializable {
 		return new ByteArrayInputStream(bytes);
 	}
 	
+	protected String positiveFloatNumber(Integer left,Integer minRight,Integer maxRight){
+		return provider.randomPositiveInt(left)+"."+provider.randomInt(minRight,maxRight);
+	}
+	
 	public abstract void generate();
 	
 	
