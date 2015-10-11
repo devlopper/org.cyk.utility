@@ -125,7 +125,7 @@ public class CommonUtils implements Serializable  {
 		return Number.class.isAssignableFrom(ClassUtils.primitiveToWrapper(aClass));
 	}
 	
-	public Object readField(Object object,Field field,Boolean recursive,Boolean createIfNull,Collection<Class<? extends Annotation>> annotationClasses){
+	public Object readField(Object object,Field field,Boolean recursive,Boolean createIfNull,Boolean autoSet,Collection<Class<? extends Annotation>> annotationClasses){
 		Object r = __readField__(object,field,recursive,annotationClasses);
 		try {
 			if(r==null && Boolean.TRUE.equals(createIfNull)){
@@ -135,11 +135,21 @@ public class CommonUtils implements Serializable  {
 					r = new LinkedHashSet<>();
 				else
 					r = field.getType().newInstance();
+				if(Boolean.TRUE.equals(autoSet))
+					writeField(field, object, r);
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.toString(),e);
 		}	
 		return r;
+	}
+	
+	public Object readField(Object object,Field field,Boolean recursive,Boolean createIfNull,Collection<Class<? extends Annotation>> annotationClasses){
+		return readField(object, field,recursive, createIfNull, Boolean.FALSE,annotationClasses);
+	}
+	
+	public Object readField(Object object,Field field,Boolean createIfNull,Boolean autoSet){
+		return readField(object, field, Boolean.FALSE, createIfNull,autoSet,null);
 	}
 	
 	public Object readField(Object object,Field field,Boolean createIfNull){
