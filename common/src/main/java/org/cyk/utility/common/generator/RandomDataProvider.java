@@ -244,14 +244,14 @@ public class RandomDataProvider implements Serializable {
 	
 	@Getter @Setter
 	public class RandomPerson{
-		private List<String> firstNames,middleNames,lastNames,headOnlyPhotos;
+		private List<String> firstNames,middleNames,lastNames,surNames,headOnlyPhotos;
 		//private List<byte[]> headOnlyPhotos=new ArrayList<>();
 		
 		public RandomPerson(String type) {
 			firstNames = stringLines("/META-INF/generator/name/first.txt");
 			middleNames = stringLines("/META-INF/generator/name/first.txt");
 			lastNames = stringLines("/META-INF/generator/name/"+type+"/last.txt");
-			
+			surNames = stringLines("/META-INF/generator/name/"+type+"/last.txt");
 			headOnlyPhotos = images("/META-INF/generator/image/"+type+"/head/");
 			
 		}
@@ -266,6 +266,10 @@ public class RandomDataProvider implements Serializable {
 		
 		public String lastName(){
 			return (String) randomFromList(lastNames);
+		}
+		
+		public String surName(){
+			return (String) randomFromList(surNames);
 		}
 		
 		public String middleAndLastName(){
