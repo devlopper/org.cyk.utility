@@ -15,12 +15,14 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.math3.random.RandomData;
 import org.apache.commons.math3.random.RandomDataImpl;
+import org.cyk.utility.common.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -211,22 +213,12 @@ public class RandomDataProvider implements Serializable {
 		return (String) randomFromList(companyNames);
 	}
 	
-	public byte[] companyLogo(){
-		try {
-			return IOUtils.toByteArray(getClass().getResourceAsStream((String) randomFromList(companyLogos)));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+	public RandomFile companyLogo(){
+		return getFile((String) randomFromList(companyLogos));
 	}
 	
-	public byte[] signatureSpecimen(){
-		try {
-			return IOUtils.toByteArray(getClass().getResourceAsStream((String) randomFromList(signatureSpecimens)));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+	public RandomFile signatureSpecimen(){
+		return getFile((String) randomFromList(signatureSpecimens));
 	}
 	
 	/**/
@@ -237,7 +229,7 @@ public class RandomDataProvider implements Serializable {
 		System.out.println(RandomDataProvider.getInstance().getMale().lastName());
 		System.out.println(RandomDataProvider.getInstance().getMale().middleAndLastName());
 		System.out.println(RandomDataProvider.getInstance().getMale().photo());
-		System.out.println(RandomDataProvider.getInstance().signatureSpecimens);
+		System.out.println(RandomDataProvider.getInstance().signatureSpecimen());
 	}
 	
 	/**/
@@ -276,15 +268,26 @@ public class RandomDataProvider implements Serializable {
 			return firstName()+" "+lastName();
 		}
 		
-		public byte[] photo(){
-			try {
-				return IOUtils.toByteArray(RandomDataProvider.class.getResourceAsStream((String) randomFromList(headOnlyPhotos)));
-			} catch (IOException e) {
-				e.printStackTrace();
-				return null;
-			}
+		public RandomFile photo(){
+			return getFile((String) randomFromList(headOnlyPhotos));
 		}
 		
+	}
+	
+	@Getter @Setter
+	public class RandomFile{
+		private byte[] bytes;
+		private String extension;
+		
+		public RandomFile(byte[] bytes,String extension) {
+			this.bytes = bytes;
+			this.extension = extension;
+		}
+		
+		@Override
+		public String toString() {
+			return "Bytes["+(bytes==null?0:bytes.length)+"] , extension("+(extension==null?Constant.EMPTY_STRING:extension)+")";
+		}
 	}
 	
 	private List<String> images(String directory){
@@ -308,6 +311,15 @@ public class RandomDataProvider implements Serializable {
 			}
 		}
 		return collection;
+	}
+	
+	public RandomFile getFile(String name){
+		try {
+			return new RandomFile(IOUtils.toByteArray(RandomDataProvider.class.getResourceAsStream(name)), FilenameUtils.getExtension(name));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 }
