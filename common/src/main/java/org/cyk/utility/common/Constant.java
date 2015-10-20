@@ -10,6 +10,7 @@ public interface Constant {
 	Character CHARACTER_BACK_SLASH = new Character('\\');
 	Character CHARACTER_SLASH = new Character('/');
 	Character CHARACTER_DOLLAR = new Character('$');
+	Character CHARACTER_QUESTION_MARK = new Character('?');
 	
 	Character CHARACTER_H = new Character('H');
 	
