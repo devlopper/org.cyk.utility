@@ -67,7 +67,7 @@ public class Table<
 	 * Create columns , rows cell and cell's value
 	 */
 	public void build(){
-		logTrace("Table build starts RowDataClass={}",rowDataClass.getSimpleName());
+		logTrace("Table build starts RowDataClass={}",rowDataClass==null?null:rowDataClass.getSimpleName());
 		__building__ = Boolean.TRUE;
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
 			listener.beforeBuild();
@@ -98,7 +98,7 @@ public class Table<
 			for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
 				listener.added(column);
 		}
-		logTrace("Column added Field={} Title={}", column.getField().getName(),column.getTitle());
+		logTrace("Column added Field={} Title={}", column.getField()==null?null:column.getField().getName(),column.getTitle());
 	}
 	
 	public void addColumns(Collection<Field> fields){
@@ -133,6 +133,30 @@ public class Table<
 	public void addColumn(String fieldName) {
 		addColumn(commonUtils.getFieldFromClass(rowDataClass, fieldName));
 	}
+	
+	/*
+	public void addColumnTitled(String title) {
+		if(!Boolean.TRUE.equals(__building__)){
+			Boolean isColumn = isColumn(field);
+			logTrace("Plan build for field {} ? {}",field.getName(), isColumn);
+			if(Boolean.TRUE.equals(isColumn)){
+				fields.add(field);
+			}else{
+				
+			}
+			return;
+		}
+		if(!Boolean.TRUE.equals(isColumn(field))){
+			logTrace("Building column <<{}>> has been skipped",field.getName());
+			return;
+		}
+		COLUMN_DIMENSION column = createColumn();
+		column.setField(field);
+		column.setTitle(field.getName());
+		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
+			listener.created(column);
+		addColumn(column);
+	}*/
 
 	public Boolean isColumn(Field field){
 		Boolean result = null;

@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
+import org.cyk.utility.common.model.table.Column;
 import org.cyk.utility.common.model.table.ColumnAdapter;
 import org.cyk.utility.common.model.table.DefaultCell;
 import org.cyk.utility.common.model.table.DefaultColumn;
@@ -23,6 +24,20 @@ import org.junit.Test;
 public class TableUT extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	@Test
+	public void manual(){
+		DefaultTable<String> table = new DefaultTable<>(String.class);
+		table.build();
+		DefaultColumn column = new DefaultColumn();
+		table.addColumn(column);
+		
+		DefaultRow<String> dr = new DefaultRow<>();
+		dr.getCells().add(new DefaultCell("Yao"));
+		table.getRows().add(dr);
+		
+		Assert.assertEquals("Row 1","Yao",table.getRows().get(0).getCells().get(0).getValue());
+	}
 	
 	//@Test
 	public void simple(){
