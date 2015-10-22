@@ -29,8 +29,7 @@ public class TableUT extends AbstractUnitTest {
 	public void manual(){
 		DefaultTable<String> table = new DefaultTable<>(String.class);
 		table.build();
-		DefaultColumn column = new DefaultColumn();
-		table.addColumn(column);
+		table.addColumnTitled("C1");
 		
 		DefaultRow<String> dr = new DefaultRow<>();
 		dr.getCells().add(new DefaultCell("Yao"));

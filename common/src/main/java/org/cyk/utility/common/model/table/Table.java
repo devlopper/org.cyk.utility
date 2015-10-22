@@ -134,29 +134,13 @@ public class Table<
 		addColumn(commonUtils.getFieldFromClass(rowDataClass, fieldName));
 	}
 	
-	/*
 	public void addColumnTitled(String title) {
-		if(!Boolean.TRUE.equals(__building__)){
-			Boolean isColumn = isColumn(field);
-			logTrace("Plan build for field {} ? {}",field.getName(), isColumn);
-			if(Boolean.TRUE.equals(isColumn)){
-				fields.add(field);
-			}else{
-				
-			}
-			return;
-		}
-		if(!Boolean.TRUE.equals(isColumn(field))){
-			logTrace("Building column <<{}>> has been skipped",field.getName());
-			return;
-		}
 		COLUMN_DIMENSION column = createColumn();
-		column.setField(field);
-		column.setTitle(field.getName());
+		column.setTitle(title);
 		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
 			listener.created(column);
 		addColumn(column);
-	}*/
+	}
 
 	public Boolean isColumn(Field field){
 		Boolean result = null;
