@@ -197,17 +197,17 @@ public abstract class AbstractTest implements Serializable {
 	
 	/**/
 	
-	protected File testSourceDirectory(){
+	protected static File testSourceDirectory(){
 		File userDirectory = new File(System.getProperty("user.dir"));
     	File arquillianFile = new File(userDirectory,"/src/test/resources");
     	return arquillianFile;
 	}
 	
-	protected File testSourceFile(String filename){
+	protected static File testSourceFile(String filename){
     	return new File(testSourceDirectory(),filename);
 	}
 	
-	protected void updateXmlNode(String sourceFile,String destinationFile,Namespace namespace,String[][] valuePaths){
+	protected static void updateXmlNode(String sourceFile,String destinationFile,Namespace namespace,String[][] valuePaths){
 		File arquillianFile = testSourceFile(sourceFile);
 		SAXBuilder builder = new SAXBuilder();
 		Document document;
