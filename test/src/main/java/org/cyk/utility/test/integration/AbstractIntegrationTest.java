@@ -20,7 +20,12 @@ import org.reflections.util.FilterBuilder;
 public abstract class AbstractIntegrationTest extends AbstractTest  {
 	
 	private static final long serialVersionUID = -8873735551443449606L;
-	  
+	
+	public static final String ARQUILLIAN_FILE = "arquillian.xml";
+	public static final String CONTAINER_NODE = "container";
+	public static final String CONFIGURATION_NODE = "configuration";
+	public static final String PROPERTY_NODE = "property";
+	
 	public static ArchiveBuilder _deployment(Class<?>[] classes){
 		ArchiveBuilder builder = new ArchiveBuilder();
 		builder.create().addClasses(classes);
@@ -52,6 +57,12 @@ public abstract class AbstractIntegrationTest extends AbstractTest  {
 	        .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(aPackage))));
 	    
 	    return reflections.getSubTypesOf(aRootClass);
+	}
+
+	protected void updateArquillianResourceXml(String value){
+		updateXmlNode(ARQUILLIAN_FILE,ARQUILLIAN_FILE, ARQUILLIAN_NAMESPACE, new String[][]{
+			new String[]{CONTAINER_NODE,CONFIGURATION_NODE,PROPERTY_NODE,value}
+		});
 	}
 	
 }

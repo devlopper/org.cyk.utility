@@ -1,5 +1,7 @@
 package org.cyk.utility.test;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,6 +15,12 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -23,6 +31,8 @@ import org.junit.Test;
 public abstract class AbstractTest implements Serializable {
 	
 	private static final long serialVersionUID = -4375668358714913342L;
+	
+	public static Namespace ARQUILLIAN_NAMESPACE = Namespace.getNamespace("http://jboss.org/schema/arquillian");
 	
 	//private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTest.class);
 	
@@ -183,6 +193,42 @@ public abstract class AbstractTest implements Serializable {
 			matchers.add(Matchers.allOf(objectMatchers));
 		}
 		return matchers;
+	}
+	
+	/**/
+	
+	protected File testSourceDirectory(){
+		File userDirectory = new File(System.getProperty("user.dir"));
+    	File arquillianFile = new File(userDirectory,"/src/test/resources");
+    	return arquillianFile;
+	}
+	
+	protected File testSourceFile(String filename){
+    	return new File(testSourceDirectory(),filename);
+	}
+	
+	protected void updateXmlNode(String sourceFile,String destinationFile,Namespace namespace,String[][] valuePaths){
+		File arquillianFile = testSourceFile(sourceFile);
+		SAXBuilder builder = new SAXBuilder();
+		Document document;
+		try {
+			document = builder.build(arquillianFile);
+			Element element = null;
+			for(String[] valuePath : valuePaths){
+				element = document.getRootElement();
+				for(int i=0;i<valuePath.length-1;i++)
+					element = element.getChild(valuePath[i],namespace);
+				
+				element.setText(valuePath[valuePath.length-1]);
+			}
+			
+			XMLOutputter xmlOutput = new XMLOutputter();
+			xmlOutput.setFormat(Format.getPrettyFormat());
+			xmlOutput.output(document, new FileWriter(testSourceFile(destinationFile)));
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**/
