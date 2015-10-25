@@ -26,6 +26,10 @@ public abstract class AbstractIntegrationTest extends AbstractTest  {
 	public static final String CONFIGURATION_NODE = "configuration";
 	public static final String PROPERTY_NODE = "property";
 	
+	public static final String GLASSFISH_EMBEDDED_RESOURCE_FILE_MEMORY = "src/test/resources-glassfish-embedded/glassfish-resources-memory.xml";
+	
+	public static final String GLASSFISH_EMBEDDED_RESOURCE_FILE_LIVE = "src/test/resources-glassfish-embedded/glassfish-resources-live.xml";
+	
 	public static ArchiveBuilder _deployment(Class<?>[] classes){
 		ArchiveBuilder builder = new ArchiveBuilder();
 		builder.create().addClasses(classes);
@@ -64,5 +68,7 @@ public abstract class AbstractIntegrationTest extends AbstractTest  {
 			new String[]{CONTAINER_NODE,CONFIGURATION_NODE,PROPERTY_NODE,value}
 		});
 	}
+	
+	
 	
 }
