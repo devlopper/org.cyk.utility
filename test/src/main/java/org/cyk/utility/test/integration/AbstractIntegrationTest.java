@@ -63,10 +63,16 @@ public abstract class AbstractIntegrationTest extends AbstractTest  {
 	    return reflections.getSubTypesOf(aRootClass);
 	}
 
-	protected static void updateArquillianResourceXml(String value){
+	public static void updateArquillianResourceXml(String value){
 		updateXmlNode(ARQUILLIAN_FILE,ARQUILLIAN_FILE, ARQUILLIAN_NAMESPACE, new String[][]{
 			new String[]{CONTAINER_NODE,CONFIGURATION_NODE,PROPERTY_NODE,value}
 		});
+	}
+	
+	public static String readArquillianResourceXml(){
+		String[][] nodes = new String[][]{ new String[]{CONTAINER_NODE,CONFIGURATION_NODE,PROPERTY_NODE,null}};
+		readXmlNode(ARQUILLIAN_FILE, ARQUILLIAN_NAMESPACE, nodes);
+		return nodes[0][3];
 	}
 	
 	
