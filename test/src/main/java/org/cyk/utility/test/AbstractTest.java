@@ -231,6 +231,24 @@ public abstract class AbstractTest implements Serializable {
 		}
 	}
 	
+	protected static void readXmlNode(String file,Namespace namespace,String[][] valuePaths){
+		File arquillianFile = testSourceFile(file);
+		SAXBuilder builder = new SAXBuilder();
+		Document document;
+		try {
+			document = builder.build(arquillianFile);
+			Element element = null;
+			for(String[] valuePath : valuePaths){
+				element = document.getRootElement();
+				for(int i=0;i<valuePath.length-1;i++)
+					element = element.getChild(valuePath[i],namespace);	
+				valuePath[valuePath.length-1] = element.getText();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**/
 	protected void debug(Object object){
 		System.out.println("------------------------------------- Debug -----------------------------");
