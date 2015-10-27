@@ -23,13 +23,15 @@ public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor 
 	
 	protected void afterExecute(Runnable r, Throwable t) {
 		super.afterExecute(r, t);
+		System.out.println("ThreadPoolExecutor.afterExecute() : "+getCompletedTaskCount()+" , "+getActiveCount());
 		if(getActiveCount()==1 && Boolean.TRUE.equals(autoShutdown))
 			shutdownNow();
 	}
 	
 	public void waitTermination(long timeout,TimeUnit unit){
 		try {
-			awaitTermination(timeout, unit);
+			if(getTaskCount()>0)
+				awaitTermination(timeout, unit);
 		} catch (InterruptedException e) {
 			LOGGER.error("Thread pool executor fail while awaiting termination",e);
 		}

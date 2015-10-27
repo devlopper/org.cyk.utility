@@ -240,6 +240,10 @@ public class AbstractBean implements Serializable {
 			super();
 			this.name = name;
 		}
+		@Override
+		public String toString() {
+			return name+" , "+duration+" , "+(duration/1000)+"s , "+" , "+(duration/1000/60)+"min";
+		}
 	}
 	
 	protected Logger __logger__(){
