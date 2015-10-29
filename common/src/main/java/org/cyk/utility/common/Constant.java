@@ -11,6 +11,8 @@ public interface Constant {
 	Character CHARACTER_SLASH = new Character('/');
 	Character CHARACTER_DOLLAR = new Character('$');
 	Character CHARACTER_QUESTION_MARK = new Character('?');
+	Character CHARACTER_AMPERSTAMP = new Character('&');
+	Character CHARACTER_EQUAL = new Character('=');
 	
 	Character CHARACTER_H = new Character('H');
 	
@@ -30,4 +32,6 @@ public interface Constant {
 	String EMPTY_STRING = "";
 	
 	String VARIABLE_RESULT = "result";
+	
+	String ENCODING_UTF8 = "UTF-8";
 }
