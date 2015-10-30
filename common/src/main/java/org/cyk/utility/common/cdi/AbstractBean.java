@@ -80,6 +80,13 @@ public class AbstractBean implements Serializable {
 			throw new RuntimeException(e);
 		}
 	}
+	protected <T> T newInstance(Class<T> aClass,Class<?>[] paramClasses,Object[] paramValues){
+		try {
+			return aClass.getConstructor(paramClasses).newInstance(paramValues);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 	protected String fieldPath(String...names){
 		return StringUtils.join(names,".");
