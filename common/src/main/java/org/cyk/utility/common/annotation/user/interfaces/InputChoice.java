@@ -9,5 +9,6 @@ import java.lang.annotation.Target;
 @Target(value={ElementType.FIELD,ElementType.METHOD})
 public @interface InputChoice {
 
+	boolean load() default true;
 	
 }
