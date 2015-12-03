@@ -453,6 +453,7 @@ public class CommonUtils implements Serializable  {
 	/**/
 	
 	public String executeCommand(String command) throws IOException, InterruptedException{
+		LOGGER.trace("Executing command : {}",command);
 		Process process = Runtime.getRuntime().exec(String.format(CMD_C_FORMAT, command));
 		/*process.getOutputStream().write(new byte[]{'\r','\n'});
 		process.getOutputStream().write(new byte[]{'\r','\n'});

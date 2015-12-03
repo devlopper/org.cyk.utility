@@ -39,18 +39,21 @@ public class DatabaseUtils extends AbstractBean implements Serializable {
 	}
 	
 	public void createDatabase(CreateParameters parameters) throws IOException, InterruptedException{
+		logTrace("Creating database", parameters.getDatabaseName());
 		String command = String.format(parameters.getServer().getCreateDatabaseCommandFormat(),parameters.getUsername(), parameters.getPassword()
 				,parameters.getDatabaseName());
 		commonUtils.executeCommand(command);
 	}
 	
 	public void dropDatabase(DropParameters parameters) throws IOException, InterruptedException{
+		logTrace("Droping database", parameters.getDatabaseName());
 		String command = String.format(parameters.getServer().getDropDatabaseCommandFormat(),parameters.getUsername(), parameters.getPassword()
 				,parameters.getDatabaseName());
 		commonUtils.executeCommand(command);
 	}
 	
 	public void exportDatabase(ExportParameters parameters) throws IOException, InterruptedException{
+		logTrace("Exporting database", parameters.getDatabaseName());
 		String command = String.format(parameters.getServer().getExportDatabaseCommandFormat(),parameters.getUsername(), parameters.getPassword()
 				,parameters.getDatabaseName(),parameters.getProcessedFileName(),parameters.getFileExtension());
 		commonUtils.executeCommand(command);
