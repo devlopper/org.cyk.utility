@@ -7,13 +7,15 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.annotation.Deployment;
+import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 import org.cyk.utility.common.cdi.AbstractBean;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@Singleton
+@Singleton @Deployment(initialisationType=InitialisationType.EAGER)
 public class DatabaseUtils extends AbstractBean implements Serializable {
 
 	private static final long serialVersionUID = 9033325159439140564L;
@@ -46,6 +48,7 @@ public class DatabaseUtils extends AbstractBean implements Serializable {
 		parameters.setFileSuffix(fileSuffix);
 		exportDatabase(parameters);
 	}
+	
 	
 	@Getter @Setter
 	public static class ExportParameters extends DatabaseParameters implements Serializable {
