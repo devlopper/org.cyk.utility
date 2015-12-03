@@ -22,8 +22,8 @@ public class DatabaseUtils extends AbstractBean implements Serializable {
 
 	@Getter @AllArgsConstructor
 	public static enum Server{
-		MYSQL("create database %s;"
-				,"drop schema %s;"
+		MYSQL("mysql -u %s -p%s -e \"create database %s;\""
+				,"mysql -u %s -p%s -e \"drop schema %s;\""
 				,"mysqldump -u %s -p%s --add-drop-database  %s > %s.%s"
 				),
 		;
