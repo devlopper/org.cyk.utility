@@ -22,9 +22,13 @@ public class DatabaseUtils extends AbstractBean implements Serializable {
 
 	@Getter @AllArgsConstructor
 	public static enum Server{
-		MYSQL("mysqldump -u %s -p%s --add-drop-database  %s > %s.%s"),
-		
+		MYSQL("create database %s;"
+				,"drop schema %s;"
+				,"mysqldump -u %s -p%s --add-drop-database  %s > %s.%s"
+				),
 		;
+		private String createDatabaseCommandFormat;
+		private String dropDatabaseCommandFormat;
 		private String exportDatabaseCommandFormat;
 	}
 	
@@ -32,6 +36,18 @@ public class DatabaseUtils extends AbstractBean implements Serializable {
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public void createDatabase(CreateParameters parameters) throws IOException, InterruptedException{
+		String command = String.format(parameters.getServer().getCreateDatabaseCommandFormat(),parameters.getUsername(), parameters.getPassword()
+				,parameters.getDatabaseName());
+		commonUtils.executeCommand(command);
+	}
+	
+	public void dropDatabase(DropParameters parameters) throws IOException, InterruptedException{
+		String command = String.format(parameters.getServer().getDropDatabaseCommandFormat(),parameters.getUsername(), parameters.getPassword()
+				,parameters.getDatabaseName());
+		commonUtils.executeCommand(command);
 	}
 	
 	public void exportDatabase(ExportParameters parameters) throws IOException, InterruptedException{
@@ -49,11 +65,31 @@ public class DatabaseUtils extends AbstractBean implements Serializable {
 		exportDatabase(parameters);
 	}
 	
+	/**/
+	@Getter @Setter
+	public static class DatabaseParameters extends AbstractBean implements Serializable {
+		private static final long serialVersionUID = -509224779283619027L;
+		protected Server server=Server.MYSQL;
+		protected String databaseName,username="root",password="root";
+		protected Boolean autoTimeStampAction = Boolean.TRUE;
+	}
+	
+	@Getter @Setter
+	public static class CreateParameters extends DatabaseParameters implements Serializable {
+		private static final long serialVersionUID = -509224779283619027L;
+		
+	}
+	
+	@Getter @Setter
+	public static class DropParameters extends DatabaseParameters implements Serializable {
+		private static final long serialVersionUID = -509224779283619027L;
+		
+	}
 	
 	@Getter @Setter
 	public static class ExportParameters extends DatabaseParameters implements Serializable {
 		private static final long serialVersionUID = -509224779283619027L;
-		protected String databaseName,fileName,fileExtension="sql",fileSuffix=_EXPORT;
+		protected String fileName,fileExtension="sql",fileSuffix=_EXPORT;
 		
 		public String getProcessedFileName(){
 			return fileName + (StringUtils.isEmpty(fileSuffix)?Constant.EMPTY_STRING:fileSuffix) 
@@ -62,13 +98,7 @@ public class DatabaseUtils extends AbstractBean implements Serializable {
 	}
 	
 	/**/
-	@Getter @Setter
-	public static class DatabaseParameters extends AbstractBean implements Serializable {
-		private static final long serialVersionUID = -509224779283619027L;
-		protected Server server=Server.MYSQL;
-		protected String username="root",password="root";
-		protected Boolean autoTimeStampAction = Boolean.TRUE;
-	}
+	
 	
 	/**/
 	
