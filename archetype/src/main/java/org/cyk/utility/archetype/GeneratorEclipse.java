@@ -15,6 +15,7 @@ import lombok.Setter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.common.CommonUtils;
 
 @Getter @Setter
 public class GeneratorEclipse implements Serializable {
@@ -59,7 +60,8 @@ public class GeneratorEclipse implements Serializable {
 	
 		System.out.println("System directory : "+systemDirectory);
 		driveId = StringUtils.substringBefore(systemDirectory.toString(), ":")+":";	
-		System.out.println(executeCommand(String.format(ARCHETYPE_GENERATE_COMMAND_FORMAT,commandFile.getPath(),driveId,systemDirectory,identifier)));
+		//System.out.println(executeCommand(String.format(ARCHETYPE_GENERATE_COMMAND_FORMAT,commandFile.getPath(),driveId,systemDirectory,identifier)));
+		System.out.println(CommonUtils.getInstance().executeCommand(String.format(ARCHETYPE_GENERATE_COMMAND_FORMAT,commandFile.getPath(),driveId,systemDirectory,identifier)));
 		
 		new File(systemDirectory, "pom").renameTo(new File(systemDirectory, identifier));
 		systemDirectory = new File(systemDirectory, identifier);
@@ -82,6 +84,7 @@ public class GeneratorEclipse implements Serializable {
 		return String.format(ARCHETYPE_GENERATE_COMMAND_FORMAT, "org.cyk.archetype","system","1.0.0",type.name(),identifier);
 	}
 	
+	@Deprecated
 	protected String executeCommand(String command) throws IOException, InterruptedException{
 		Process process = Runtime.getRuntime().exec("cmd /c "+command);
 		/*process.getOutputStream().write(new byte[]{'\r','\n'});

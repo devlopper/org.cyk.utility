@@ -3,13 +3,8 @@ package org.cyk.utility.common;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
-import org.cyk.utility.common.model.table.Column;
 import org.cyk.utility.common.model.table.ColumnAdapter;
 import org.cyk.utility.common.model.table.DefaultCell;
 import org.cyk.utility.common.model.table.DefaultColumn;
@@ -19,6 +14,10 @@ import org.cyk.utility.common.model.table.RowAdapter;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
 import org.junit.Test;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 
 public class TableUT extends AbstractUnitTest {

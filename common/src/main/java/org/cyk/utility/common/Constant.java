@@ -34,4 +34,6 @@ public interface Constant {
 	String VARIABLE_RESULT = "result";
 	
 	String ENCODING_UTF8 = "UTF-8";
+	
+	String LINE_DELIMITER = "\r\n";
 }

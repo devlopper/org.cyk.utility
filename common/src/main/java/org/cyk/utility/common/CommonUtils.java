@@ -1,6 +1,8 @@
 package org.cyk.utility.common;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -450,6 +452,27 @@ public class CommonUtils implements Serializable  {
 	
 	/**/
 	
+	public String executeCommand(String command) throws IOException, InterruptedException{
+		Process process = Runtime.getRuntime().exec(String.format(CMD_C_FORMAT, command));
+		/*process.getOutputStream().write(new byte[]{'\r','\n'});
+		process.getOutputStream().write(new byte[]{'\r','\n'});
+		
+		BufferedWriter printOut = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
+		printOut.write("\r\n");printOut.write("\r\n");printOut.write("\r\n");
+		*/
+		process.waitFor();
+		BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+        String line = null;
+        StringBuilder sb = new StringBuilder();
+        while ((line = input.readLine()) != null) {
+        	sb.append(line+Constant.LINE_DELIMITER);
+        }
+        return sb.toString();
+	}
+	
+	/**/
+	
 	private CommonUtils() {}
 	
 	private static final CommonUtils INSTANCE = new CommonUtils();
@@ -457,4 +480,8 @@ public class CommonUtils implements Serializable  {
 	public static CommonUtils getInstance() {
 		return INSTANCE;
 	}
+
+	/**/
+	
+	public static final String CMD_C_FORMAT = "cmd /c %s";
 }
