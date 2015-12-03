@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 
@@ -19,7 +20,7 @@ public class DatabaseUtils extends AbstractBean implements Serializable {
 
 	@Getter @AllArgsConstructor
 	public static enum Server{
-		MYSQL("mysqldump -u %s -p%s %s > %s.%s"),
+		MYSQL("mysqldump -u %s -p%s --add-drop-database  %s > %s.%s"),
 		
 		;
 		private String exportDatabaseCommandFormat;
@@ -33,16 +34,27 @@ public class DatabaseUtils extends AbstractBean implements Serializable {
 	
 	public void exportDatabase(ExportParameters parameters) throws IOException, InterruptedException{
 		String command = String.format(parameters.getServer().getExportDatabaseCommandFormat(),parameters.getUsername(), parameters.getPassword()
-				,parameters.getDatabaseName(),parameters.getFileName(),parameters.getFileExtension());
+				,parameters.getDatabaseName(),parameters.getProcessedFileName(),parameters.getFileExtension());
 		commonUtils.executeCommand(command);
+	}
+	
+	public void exportDatabase(String databaseName,Boolean autoTimeStampAction,String fileSuffix) throws IOException, InterruptedException{
+		ExportParameters parameters = new ExportParameters();
+		parameters.setDatabaseName(databaseName);
+		parameters.setFileName(databaseName+_EXPORT);
+		parameters.setAutoTimeStampAction(autoTimeStampAction);
+		parameters.setFileSuffix(fileSuffix);
+		exportDatabase(parameters);
 	}
 	
 	@Getter @Setter
 	public static class ExportParameters extends DatabaseParameters implements Serializable {
 		private static final long serialVersionUID = -509224779283619027L;
-		protected String databaseName,fileName,fileExtension="sql";
-		public String getFileName(){
-			return fileName + ( Boolean.TRUE.equals(autoTimeStampAction) ? System.currentTimeMillis() : Constant.EMPTY_STRING);
+		protected String databaseName,fileName,fileExtension="sql",fileSuffix=_EXPORT;
+		
+		public String getProcessedFileName(){
+			return fileName + (StringUtils.isEmpty(fileSuffix)?Constant.EMPTY_STRING:fileSuffix) 
+					+ ( Boolean.TRUE.equals(autoTimeStampAction) ? System.currentTimeMillis() : Constant.EMPTY_STRING);
 		}
 	}
 	
@@ -62,5 +74,5 @@ public class DatabaseUtils extends AbstractBean implements Serializable {
 		return INSTANCE;
 	}
 	
-	
+	public static final String _EXPORT = "_export";
 }
