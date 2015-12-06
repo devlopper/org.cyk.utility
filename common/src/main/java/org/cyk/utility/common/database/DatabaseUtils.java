@@ -62,7 +62,7 @@ public class DatabaseUtils extends AbstractBean implements Serializable {
 	public void exportDatabase(String databaseName,Boolean autoTimeStampAction,String fileSuffix) throws IOException, InterruptedException{
 		ExportParameters parameters = new ExportParameters();
 		parameters.setDatabaseName(databaseName);
-		parameters.setFileName(databaseName+_EXPORT);
+		parameters.setFileName(databaseName/*+_EXPORT*/);
 		parameters.setAutoTimeStampAction(autoTimeStampAction);
 		parameters.setFileSuffix(fileSuffix);
 		exportDatabase(parameters);
