@@ -450,6 +450,13 @@ public class CommonUtils implements Serializable  {
 		return value;
 	}
 	
+	public String concatenate(String string,String[] values,String separator){
+		if(StringUtils.isNotEmpty(string) && !StringUtils.endsWith(string, separator))
+			string += separator;
+		string=string+StringUtils.join(values,separator);
+		return string;
+	}
+	
 	/**/
 	
 	public String executeCommand(String command) throws IOException, InterruptedException{
