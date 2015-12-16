@@ -34,6 +34,8 @@ public class AbstractBean implements Serializable {
 	//TODO use a map to cache created loggers. But is it necessary in the way that we use a static method to get le logger. It might cached by provider? who knows?
 	//private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBean.class);
 	
+	public static Boolean SYSTEM_OUT_LOG_TRACE = Boolean.FALSE;
+	
 	protected CommonUtils commonUtils = CommonUtils.getInstance();
 	
 	@Getter protected Collection<BeanListener> beanListeners = new ArrayList<>();
@@ -286,6 +288,7 @@ public class AbstractBean implements Serializable {
 			return;
 		String stringMessage = message.toString();
 		__logger__().trace(stringMessage,arguments);
+		systemOut(SYSTEM_OUT_LOG_TRACE,message, arguments);
 	}
 
 	protected void logDebug(Object message,Object...arguments) {
@@ -301,5 +304,10 @@ public class AbstractBean implements Serializable {
 	
 	protected ClassLoader getClassLoader(){
 		return this.getClass().getClassLoader();
+	}
+	
+	private static void systemOut(Boolean condition,Object message,Object...arguments) {
+		if(Boolean.TRUE.equals(condition))
+			System.out.println(message+" : "+StringUtils.join(arguments," , "));
 	}
 }
