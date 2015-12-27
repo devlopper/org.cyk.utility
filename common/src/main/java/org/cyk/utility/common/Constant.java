@@ -14,6 +14,8 @@ public interface Constant {
 	Character CHARACTER_AMPERSTAMP = new Character('&');
 	Character CHARACTER_EQUAL = new Character('=');
 	Character CHARACTER_AT = new Character('@');
+	Character CHARACTER_UNDESCORE = new Character('_');
+	Character CHARACTER_VERTICAL_BAR = new Character('|');
 	
 	Character CHARACTER_H = new Character('H');
 	
