@@ -10,5 +10,14 @@ import java.lang.annotation.Target;
 public @interface InputChoice {
 
 	boolean load() default true;
+
+	/**
+	 * Set of choices
+	 * @return
+	 */
+	ChoiceSet set() default ChoiceSet.AUTO;
 	
+	/**/
+	
+	public enum ChoiceSet{AUTO,YES_NO}
 }
