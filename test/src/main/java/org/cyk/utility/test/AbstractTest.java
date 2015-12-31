@@ -9,6 +9,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -253,6 +256,23 @@ public abstract class AbstractTest implements Serializable {
 	protected void debug(Object object){
 		System.out.println("------------------------------------- Debug -----------------------------");
 		System.out.println(ToStringBuilder.reflectionToString(object, ToStringStyle.MULTI_LINE_STYLE));
+	}
+	
+	/**/
+	
+	@Getter @Setter
+	public static abstract class Try implements Serializable{
+		private static final long serialVersionUID = -4483490165697187680L;
+		private String expectedMessage;
+		protected void execute(){
+			try { 
+				code();
+			} 
+			catch (Exception exception) { 
+				Assert.assertEquals(expectedMessage,exception.getMessage());  
+			}  
+		}
+		protected abstract void code();
 	}
 	
 }
