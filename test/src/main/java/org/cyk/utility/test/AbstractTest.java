@@ -264,7 +264,7 @@ public abstract class AbstractTest implements Serializable {
 	public static abstract class Try implements Serializable{
 		private static final long serialVersionUID = -4483490165697187680L;
 		private String expectedMessage;
-		protected void execute(){
+		public void execute(){
 			try { 
 				code();
 			} 
