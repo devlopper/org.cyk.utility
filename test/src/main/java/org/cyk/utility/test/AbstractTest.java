@@ -261,7 +261,7 @@ public abstract class AbstractTest implements Serializable {
 	/**/
 	
 	@Getter @Setter
-	public static abstract class Try implements Serializable{
+	public abstract class Try implements Serializable{
 		private static final long serialVersionUID = -4483490165697187680L;
 		private String expectedMessage;
 		public Try(String expectedMessage) {
@@ -273,7 +273,8 @@ public abstract class AbstractTest implements Serializable {
 				code();
 			} 
 			catch (Exception exception) { 
-				Assert.assertEquals(expectedMessage,exception.getMessage());  
+				System.out.println("AbstractTest.Try.execute() ------------ "+exception);
+				assertEquals("Throwable message",expectedMessage,exception.getMessage());  
 			}  
 		}
 		protected abstract void code();

@@ -479,6 +479,10 @@ public class CommonUtils implements Serializable  {
         return sb.toString();
 	}
 	
+	public BigDecimal getBigDecimal(String value){
+		return value ==null ? null : new BigDecimal(value);
+	}
+	
 	/**/
 	
 	private CommonUtils() {}
