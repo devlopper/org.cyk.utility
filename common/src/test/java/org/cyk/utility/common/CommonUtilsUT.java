@@ -99,6 +99,28 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(UseMaster4.class, new Class<?>[]{MasterChild2.class}));
 	}
 	
+	@Test
+	public void increment(){
+		Incrementable incrementable = new Incrementable();
+		CommonUtils.getInstance().increment(BigDecimal.class, incrementable, "bigDecimalValue", new BigDecimal("1"));
+		assertEquals("1", incrementable.getBigDecimalValue().toString());
+		CommonUtils.getInstance().increment(BigDecimal.class, incrementable, "bigDecimalValue", new BigDecimal("4"));
+		assertEquals("5", incrementable.getBigDecimalValue().toString());
+		
+		CommonUtils.getInstance().increment(Long.class, incrementable, "longValue", new Long("1"));
+		assertEquals("1", incrementable.getLongValue().toString());
+		CommonUtils.getInstance().increment(Long.class, incrementable, "longValue", new Long("-6"));
+		assertEquals("-5", incrementable.getLongValue().toString());
+		
+		CommonUtils.getInstance().increment(Integer.class, incrementable, "integerValue", new Integer("-3"));
+		assertEquals("-3", incrementable.getIntegerValue().toString());
+		CommonUtils.getInstance().increment(Integer.class, incrementable, "integerValue", new Integer("5"));
+		assertEquals("2", incrementable.getIntegerValue().toString());
+		CommonUtils.getInstance().increment(Integer.class, incrementable, "integerValue", new Integer("0"));
+		assertEquals("2", incrementable.getIntegerValue().toString());
+		
+	}
+	
 	/**/
 	
 	@ModelBean(crudStrategy=CrudStrategy.BUSINESS) @Getter @Setter
@@ -228,4 +250,10 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		
 	}
 	
+	@Getter @Setter
+	public static class Incrementable{
+		private BigDecimal bigDecimalValue = BigDecimal.ZERO;
+		private Long longValue=0l;
+		private Integer integerValue=0;
+	}
 }
