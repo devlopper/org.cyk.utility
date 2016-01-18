@@ -273,7 +273,6 @@ public abstract class AbstractTest implements Serializable {
 				code();
 			} 
 			catch (Exception exception) { 
-				System.out.println("AbstractTest.Try.execute() ------------ "+exception);
 				assertEquals("Throwable message",expectedMessage,exception.getMessage());  
 			}  
 		}
