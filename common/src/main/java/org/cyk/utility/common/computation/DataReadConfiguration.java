@@ -62,6 +62,9 @@ public class DataReadConfiguration implements Serializable {
 		maximumResultCount =  null;
 	}
 
-	
+	@Override
+	public String toString() {
+		return firstResultIndex+" , "+maximumResultCount+" , "+sortField+" , "+ascendingOrder+" , "+globalFilter+" , "+filters;
+	}
 
 }
