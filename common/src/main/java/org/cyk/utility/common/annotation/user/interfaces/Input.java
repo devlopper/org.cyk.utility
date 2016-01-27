@@ -14,6 +14,7 @@ public @interface Input {
 	String setId() default "";
 	
 	boolean readOnly() default false;
+	boolean disabled() default false;
 	
 	/* Texts */
 	
