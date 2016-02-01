@@ -429,5 +429,4 @@ public class Table<
 		return numberOfNullUiIndex;
 	}
 	
-	
 }

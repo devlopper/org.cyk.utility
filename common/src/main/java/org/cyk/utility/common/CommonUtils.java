@@ -230,6 +230,27 @@ public class CommonUtils implements Serializable  {
 		return getFieldAnnotation(field,field.getDeclaringClass(), anAnnotationClass,Boolean.FALSE);
 	}
 	
+	public Object getFieldValueContainer(Object object,Field field){
+		if(object==null)
+			return null;
+		LOGGER.trace("Class={} , Field={}",object.getClass(),field);
+		for(Field f : object.getClass().getDeclaredFields()){
+			try {
+				Object value = FieldUtils.readField(f, object, Boolean.TRUE);
+				LOGGER.trace("Field={} , Value={}",f,value);
+				if(f.equals(field)){
+					LOGGER.trace("Field found in {}",object.getClass());
+					return object;
+				}
+				if(value!=null && !value.getClass().getName().startsWith("java."))
+					return getFieldValueContainer(value, field);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
 	public Throwable getThrowableInstanceOf(Throwable throwable,Class<?> aClass){
 		Throwable index = throwable;
 		while(index!=null){

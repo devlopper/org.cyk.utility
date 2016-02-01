@@ -3,21 +3,21 @@ package org.cyk.utility.common;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
-import org.cyk.utility.common.model.table.ColumnAdapter;
+import org.cyk.utility.common.model.table.ColumnListener;
 import org.cyk.utility.common.model.table.DefaultCell;
 import org.cyk.utility.common.model.table.DefaultColumn;
 import org.cyk.utility.common.model.table.DefaultRow;
 import org.cyk.utility.common.model.table.DefaultTable;
-import org.cyk.utility.common.model.table.RowAdapter;
+import org.cyk.utility.common.model.table.RowListener;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
 import org.junit.Test;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 
 public class TableUT extends AbstractUnitTest {
@@ -55,7 +55,7 @@ public class TableUT extends AbstractUnitTest {
 	//@Test
 	public void complex1(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
-		table.getRowListeners().add(new RowAdapter<DefaultRow<RowData>, RowData, DefaultCell, String>(){
+		table.getRowListeners().add(new RowListener.Adapter<DefaultRow<RowData>, RowData, DefaultCell, String>(){
 			@Override
 			public Boolean countable(DefaultRow<RowData> row) {
 				return !row.getData().getValue().equals("Total");
@@ -85,7 +85,7 @@ public class TableUT extends AbstractUnitTest {
 	@Test
 	public void columnOneListener(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
-		table.getColumnListeners().add(new ColumnAdapter<DefaultColumn, String, DefaultCell, String>(){
+		table.getColumnListeners().add(new ColumnListener.Adapter<DefaultColumn, String, DefaultCell, String>(){
 			@Override
 			public void populateFromDataClass(Class<?> aClass,List<Field> fields) {
 				fields.addAll(CommonUtils.getInstance().getAllFields(aClass, Input.class));
@@ -104,7 +104,7 @@ public class TableUT extends AbstractUnitTest {
 	@Test
 	public void columnTwoListeners(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
-		table.getColumnListeners().add(new ColumnAdapter<DefaultColumn, String, DefaultCell, String>(){
+		table.getColumnListeners().add(new ColumnListener.Adapter<DefaultColumn, String, DefaultCell, String>(){
 			@Override
 			public void populateFromDataClass(Class<?> aClass,List<Field> fields) {
 				fields.addAll(CommonUtils.getInstance().getAllFields(aClass, Input.class));
@@ -115,7 +115,7 @@ public class TableUT extends AbstractUnitTest {
 			}
 			
 		});
-		table.getColumnListeners().add(new ColumnAdapter<DefaultColumn, String, DefaultCell, String>(){
+		table.getColumnListeners().add(new ColumnListener.Adapter<DefaultColumn, String, DefaultCell, String>(){
 			@Override
 			public void populateFromDataClass(Class<?> aClass,List<Field> fields) {
 				fields.addAll(CommonUtils.getInstance().getAllFields(aClass, Input.class));

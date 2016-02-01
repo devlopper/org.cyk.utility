@@ -64,6 +64,21 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		//Assert.assertEquals(CommonUtils.getInstance().readField(new ClassD(), fieldD3,Boolean.TRUE, Boolean.FALSE).toString(), "It is A");
 		//System.out.println(CommonUtils.getInstance().readField(new ClassD(), fieldC2, Boolean.TRUE));
 		
+		ClassD objectD = new ClassD();
+		objectD.setAttributeD1("aD1");
+		objectD.setAttributeD4(new ClassC());
+		objectD.getAttributeD3().setAttributeA1("aD1C1");
+		//objectD.getAttributeD4().setAttributeC2(new ClassB());
+		//objectD.getAttributeD4().getAttributeC2().setAttributeA1("aD1C1A1");
+		
+		Assert.assertEquals(objectD,CommonUtils.getInstance().getFieldValueContainer(objectD, 
+				CommonUtils.getInstance().getFieldFromClass(ClassD.class, "attributeD1")));
+		//Assert.assertEquals(objectD.getAttributeD4(),CommonUtils.getInstance().getFieldValueContainer(objectD, 
+		//		CommonUtils.getInstance().getFieldFromClass(ClassC.class, "attributeD4")));
+		Assert.assertEquals(objectD.getAttributeD3(),CommonUtils.getInstance().getFieldValueContainer(objectD, 
+				CommonUtils.getInstance().getFieldFromClass(ClassA.class, "attributeA1")));
+		
+		
 		Collection<Sumable> sumables = new ArrayList<>();
 		sumables.add(new Sumable(null, new BigDecimal("5"), 6));
 		sumables.add(new Sumable(null, null, 10));

@@ -9,4 +9,24 @@ public interface ColumnListener<DIMENSION extends Column<DATA, CELL, VALUE>,DATA
 	Boolean isColumn(Field field);
 	void populateFromDataClass(Class<?> aClass,List<Field> fields);
 	void sort(List<Field> fields);
+	
+	/**/
+	
+	public static class Adapter<DIMENSION extends Column<DATA, CELL, VALUE>,DATA,CELL extends Cell<VALUE>,VALUE> extends DimensionListener.Adapter<DIMENSION, DATA, CELL, VALUE> 
+	implements ColumnListener<DIMENSION,DATA,CELL,VALUE> {
+
+	@Override
+	public Boolean isColumn(Field field) {
+		return null;
+	}
+
+	@Override
+	public void populateFromDataClass(Class<?> aClass, List<Field> fields) {}
+
+	@Override
+	public void sort(List<Field> fields) {}
+
+
+}
+
 }
