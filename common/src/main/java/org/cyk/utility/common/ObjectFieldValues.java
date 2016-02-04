@@ -13,7 +13,7 @@ public class ObjectFieldValues implements Serializable {
 
 	private static final long serialVersionUID = 1284100881789191895L;
 
-	@Getter private final Map<Field, String> map = new HashMap<>();
+	@Getter private final Map<Field, String> valuesMap = new HashMap<>();
 	
 	private Class<?> clazz;
 	
@@ -27,7 +27,7 @@ public class ObjectFieldValues implements Serializable {
 	}
 	
 	public ObjectFieldValues set(Class<?> clazz,String name,String value){
-		map.put(new Field(clazz, name), value);
+		valuesMap.put(new Field(clazz, name), value);
 		return this;
 	}
 	public ObjectFieldValues set(String name,String value){
@@ -48,7 +48,7 @@ public class ObjectFieldValues implements Serializable {
 	}
 	
 	public String get(Class<?> clazz,String name){
-		return map.get(new Field(clazz, name));
+		return valuesMap.get(new Field(clazz, name));
 	}
 	
 	/**/

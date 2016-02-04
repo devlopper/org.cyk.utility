@@ -19,6 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
@@ -518,6 +519,21 @@ public class CommonUtils implements Serializable  {
 	
 	public BigDecimal getBigDecimal(String value){
 		return value ==null ? null : new BigDecimal(value);
+	}
+	
+	public <T> T instanciateOne(Class<T> aClass,ObjectFieldValues objectFieldValues){
+		try {
+			T object = aClass.newInstance();
+			for(Field field : getAllFields(aClass))
+				for(Entry<ObjectFieldValues.Field, String> entry : objectFieldValues.getValuesMap().entrySet())
+					if(field.getName().equals(entry.getKey().getName()) && field.getDeclaringClass().equals(entry.getKey().getClazz())){
+						//writeField(field, ta, value);
+					}
+			return object;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	/**/
