@@ -16,6 +16,8 @@ public interface Constant {
 	Character CHARACTER_AT = new Character('@');
 	Character CHARACTER_UNDESCORE = new Character('_');
 	Character CHARACTER_VERTICAL_BAR = new Character('|');
+	Character CHARACTER_LEFT_PARENTHESIS = new Character('(');
+	Character CHARACTER_RIGHT_PARENTHESIS = new Character(')');
 	
 	Character CHARACTER_H = new Character('H');
 	
