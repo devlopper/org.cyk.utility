@@ -8,8 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.cyk.utility.common.ClassRepository.ClassField;
 import org.cyk.utility.common.ClassRepository.Clazz;
 import org.cyk.utility.test.unit.AbstractUnitTest;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ClassRepositoryUT extends AbstractUnitTest {
@@ -43,9 +45,27 @@ public class ClassRepositoryUT extends AbstractUnitTest {
 	
 	@Test
 	public void getClazzFields(){
-		Clazz clazz = ClassRepository.getInstance().get(L0.class);
-		ClassRepository.getInstance().populate(clazz);
-		debug(clazz);
+		assertOwnedAndDependentFields(L0.class, "f0","l1","l1.f1","l1.l2","l1.l2.f2","l1.l2.l3","l1.l2.l3.f3","l1.l2.l3.l4","l1.l2.l3.l4.f4");
+		assertOwnedAndDependentFields(L1.class, "f1","l2","l2.f2","l2.l3","l2.l3.f3","l2.l3.l4","l2.l3.l4.f4");
+		assertOwnedAndDependentFields(L2.class, "f2","l3","l3.f3","l3.l4","l3.l4.f4");
+		assertOwnedAndDependentFields(L3.class, "f3","l4","l4.f4");
+		assertOwnedAndDependentFields(L4.class, "f4");
+	}
+	
+	private void assertOwnedAndDependentFields(Class<?> aClass,String...names){
+		Clazz clazz = ClassRepository.getInstance().get(aClass);
+		assertEquals("Number of owned and dependent fields", names.length, clazz.getOwnedAndDependentFields().size());
+		for(String name : names){
+			Boolean found = Boolean.FALSE;
+			for(ClassField classField : clazz.getOwnedAndDependentFields())
+				if(classField.getName().equals(name)){
+					found = Boolean.TRUE;
+					break;
+				}
+			
+			Assert.assertTrue(name,found);
+			
+		}
 	}
 	
 	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
@@ -157,22 +177,30 @@ public class ClassRepositoryUT extends AbstractUnitTest {
 		private ClassA1 c29;
 	}
 
+	@Getter @Setter
 	private static class L0{
 		private String f0;
 		private L1 l1;
 	}
+	@Getter @Setter
 	private static class L1{
 		private String f1;
 		private L2 l2;
 	}
+	
+	@Getter @Setter
 	private static class L2{
 		private String f2;
 		private L3 l3;
 	}
+	
+	@Getter @Setter
 	private static class L3{
 		private String f3;
 		private L4 l4;
 	}
+	
+	@Getter @Setter
 	private static class L4{
 		private String f4;
 	}

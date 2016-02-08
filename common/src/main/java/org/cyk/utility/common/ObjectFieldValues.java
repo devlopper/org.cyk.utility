@@ -4,87 +4,41 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cyk.utility.common.ObjectFieldValues.Field;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
+
+import org.cyk.utility.common.ClassRepository.ClassField;
+import org.cyk.utility.common.ClassRepository.Clazz;
 
 public class ObjectFieldValues implements Serializable {
 
 	private static final long serialVersionUID = 1284100881789191895L;
 
-	@Getter private final Map<Field, String> valuesMap = new HashMap<>();
+	@Getter private Clazz clazz;
+	@Getter private final Map<ClassField, Object> valuesMap = new HashMap<>();
 	
-	private Class<?> clazz;
-	
-	public ObjectFieldValues(Object...objects){
-		set(objects);
+	public ObjectFieldValues(Class<?> aClass){
+		super();
+		this.clazz = ClassRepository.getInstance().get(aClass);
 	}
 	
-	public ObjectFieldValues setClass(Class<?> clazz){
-		this.clazz = clazz;
-		return this;
-	}
-	
-	public ObjectFieldValues set(Class<?> clazz,String name,String value){
-		valuesMap.put(new Field(clazz, name), value);
-		return this;
-	}
-	public ObjectFieldValues set(String name,String value){
-		set(clazz, name, value);
+	public ObjectFieldValues set(String name,Object value){
+		valuesMap.put(clazz.getField(name), value);
 		return this;
 	}
 	
 	public ObjectFieldValues set(Object...objects){
-		for(int i=0;i<objects.length;i = i+3)
-			set((Class<?>)objects[i], (String)objects[i+1], (String)objects[i+2]);
+		for(int i=0;i<objects.length;i = i+2)
+			set((String)objects[i], objects[i+1]);
 		return this;
 	}
 	
-	public ObjectFieldValues setValues(String...strings){
-		for(int i=0;i<strings.length;i = i+2)
-			set(clazz, strings[i], strings[i+1]);
-		return this;
+	public Object get(String name){
+		return valuesMap.get(clazz.getField(name));
 	}
 	
-	public String get(Class<?> clazz,String name){
-		return valuesMap.get(new Field(clazz, name));
+	@Override
+	public String toString() {
+		return "Values of "+clazz.getValue().getSimpleName()+" - "+valuesMap;
 	}
 	
-	/**/
-	
-	@Getter @Setter @AllArgsConstructor @EqualsAndHashCode(of={"path"})
-	public static class Field implements Serializable {
-		public final String TO_STRING_FORMAT = "%s=%s";
-		private static final long serialVersionUID = 6076797357920215507L;
-		private Field parent;
-		private Class<?> clazz;
-		private String name;
-		private String path;
-		
-		public Field(Field parent, Class<?> clazz, String name) {
-			super();
-			this.parent = parent;
-			this.clazz = clazz;
-			this.name = name;
-		}
-		
-		public Field(Class<?> clazz, String name) {
-			this(null,clazz,name);
-		}
-		
-		
-		
-		@Override
-		public String toString() {
-			return String.format(TO_STRING_FORMAT, clazz.getSimpleName(),name);
-		}
-
-
-
-		
-
-	}
 }

@@ -7,8 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.cyk.utility.test.unit.AbstractUnitTest;
+import org.junit.Assert;
 import org.junit.Test;
 
 
@@ -58,28 +60,40 @@ public class ReflectionUT extends AbstractUnitTest {
 		}
 	}
 	
-	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-	private static class ClassA{
-		private String vA;
+	@Test
+	public void apacheUtilsPropertyGet(){
+		ClassB b = new ClassB();
+		b.setV(new ClassA());
+		try {
+			PropertyUtils.setProperty(b, "v.v_a", "AutoA");
+			Assert.assertEquals("AutoA", PropertyUtils.getProperty(b, "v.v_a"));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-	private static class ClassA1 extends ClassA {
+	public static class ClassA{
+		private String v_a;
+	}
+	
+	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+	public static class ClassA1 extends ClassA {
 		private String vA1;
 	}
 	
 	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-	private static class ClassA2 extends ClassA{
+	public static class ClassA2 extends ClassA{
 		private String vA2;
 	}
 	
 	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-	private static class ClassB{
+	public static class ClassB{
 		private ClassA v;
 	}
 	
 	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-	private static class ClassC{
+	public static class ClassC{
 		private ClassA1 v;
 	}
 }

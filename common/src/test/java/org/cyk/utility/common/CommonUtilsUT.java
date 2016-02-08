@@ -144,50 +144,39 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		
 	}
 	
-	//@Test
-	public void allDependentFields(){
-		Class<?> aClass = ClassA.class;
-		System.out.println(aClass);
-		for(Field field : ClassRepository.getInstance().get(aClass).getAllDependentFields())
-			System.out.println(field);
+	@Test
+	public void instanciateProperty(){
+		ClassD d = new ClassD();
+		d.setAttributeD3(null);
+		d.setAttributeD4(null);
+		CommonUtils.getInstance().instanciateProperty(d, "attributeD3");
+		Assert.assertNotNull(d.getAttributeD3());
+		d.setAttributeD3(null);
+		CommonUtils.getInstance().instanciateProperty(d, "attributeD3.attributeA1");
+		Assert.assertNotNull(d.getAttributeD3());
+		Assert.assertNotNull(d.getAttributeD3().getAttributeA1());
 		
-		System.out.println("");
-		aClass = ClassB.class;
-		System.out.println(aClass);
-		for(Field field : ClassRepository.getInstance().get(aClass).getAllDependentFields())
-			System.out.println(field);
-		
-		System.out.println("");
-		aClass = ClassC.class;
-		System.out.println(aClass);
-		for(Field field : ClassRepository.getInstance().get(aClass).getAllDependentFields())
-			System.out.println(field);
-		
-		System.out.println("");
-		aClass = ClassD.class;
-		System.out.println(aClass);
-		for(Field field : ClassRepository.getInstance().get(aClass).getAllDependentFields())
-			System.out.println(field);
+		CommonUtils.getInstance().instanciateProperty(d, "attributeD4.attributeZ1.attributeA1");
+		Assert.assertNotNull(d.getAttributeD4());
+		Assert.assertNotNull(d.getAttributeD4().getAttributeZ1());
+		Assert.assertNotNull(d.getAttributeD4().getAttributeZ1().getAttributeA1());
 	}
 	
 	@Test
 	public void instanciateOne(){
-		/*ClassA classA = CommonUtils.getInstance().instanciateOne(ClassA.class, new ObjectFieldValues().setClass(ClassA.class).setValues("attributeA1","valueA1"));
+		ClassA classA = CommonUtils.getInstance().instanciateOne(ClassA.class, new ObjectFieldValues(ClassA.class).set("attributeA1","valueA1"));
 		Assert.assertEquals("valueA1", classA.getAttributeA1());
 		
-		ClassB classB = CommonUtils.getInstance().instanciateOne(ClassB.class, new ObjectFieldValues().setClass(ClassB.class).setValues("attributeB1","valueB1"
+		ClassB classB = CommonUtils.getInstance().instanciateOne(ClassB.class, new ObjectFieldValues(ClassB.class).set("attributeB1","valueB1"
 				,"attributeA1","valueA1To"));
 		Assert.assertEquals("valueA1To", classB.getAttributeA1());
 		Assert.assertEquals("valueB1", classB.getAttributeB1());
-		*/
-		ClassC classC = CommonUtils.getInstance().instanciateOne(ClassC.class, new ObjectFieldValues()
-			.setClass(ClassA.class).setValues("attributeA1","valueA1new")
-			.setClass(ClassB.class).setValues("attributeA1","valueA1B","attributeB1","valueA1To2")
-			.setClass(ClassC.class).setValues("attributeC1","valueC1")
-			);
+		
+		ClassC classC = CommonUtils.getInstance().instanciateOne(ClassC.class, new ObjectFieldValues(ClassC.class)
+			.set("attributeC1","valueC1","attributeZ1.attributeA1","valueA1new")
+		);
 		Assert.assertEquals("valueC1", classC.getAttributeC1());
 		Assert.assertEquals("valueA1new", classC.getAttributeZ1().getAttributeA1());
-		//Assert.assertEquals("valueA1B", classC.getAttributeC2().getAttributeA1());
 	}
 	
 	/**/

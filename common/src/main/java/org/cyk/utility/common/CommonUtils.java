@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +31,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.common.ClassRepository.ClassField;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.reflections.Reflections;
@@ -522,24 +524,57 @@ public class CommonUtils implements Serializable  {
 		return value ==null ? null : new BigDecimal(value);
 	}
 	
+	public Object readProperty(Object object,String name){
+		try {
+			return PropertyUtils.getProperty(object, name);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	public void setProperty(Object object,String name,Object value){
+		instanciateProperty(object, name);
+		try {
+			PropertyUtils.setProperty(object, name, value);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public void instanciateProperty(Object object,String name){
+		String[] n = StringUtils.split(name, Constant.CHARACTER_DOT);
+		for(String p : n){
+			Object pValue = readProperty(object, p);
+			if(pValue==null){
+				Field field = ClassRepository.getInstance().getField(object.getClass(), p);
+				try {
+					FieldUtils.writeField(object, p, pValue = field.getType().newInstance(), Boolean.TRUE);
+				} catch (Exception e) {
+					new RuntimeException(e);
+				}
+				LOGGER.trace("Field {} of object {} instanciated",field,object);
+			}
+			object = pValue;
+		}
+	}
+	
 	public <T> T instanciateOne(Class<T> aClass,ObjectFieldValues objectFieldValues){
 		try {
 			T instance = aClass.newInstance();
-			for(Field field : ClassRepository.getInstance().get(aClass).getAllDependentFields()){
-				System.out.println(" ### Field to set : "+field);
-				for(Entry<ObjectFieldValues.Field, String> entry : objectFieldValues.getValuesMap().entrySet()){
-					//System.out.println(field.getName()+":"+entry.getKey().getName()+" / "+field.getName().equals(entry.getKey().getName())+" , "+field.getDeclaringClass().isAssignableFrom(entry.getKey().getClazz()));
-					if(field.getDeclaringClass().equals(instance.getClass()) && field.getName().equals(entry.getKey().getName()) && field.getDeclaringClass().isAssignableFrom((entry.getKey().getClazz()))){
-						System.out.println("Write field="+field+" , type="+field.getType()+" value="+convertString(entry.getValue(), field.getType()));
-						writeField(field, instance, convertString(entry.getValue(), field.getType()));
-					}
-				}
+			for(Entry<ClassField, Object> entry : objectFieldValues.getValuesMap().entrySet()){
+				setProperty(instance, entry.getKey().getName(), entry.getValue());
 			}
 			return instance;
 		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			throw new RuntimeException(e);
 		}
+	}
+	
+	public <T> List<T> instanciateMany(Class<T> aClass,List<ObjectFieldValues> objectFieldValues){
+		List<T> list = new ArrayList<>();
+		for(ObjectFieldValues ov : objectFieldValues)
+			list.add(instanciateOne(aClass, ov));
+		return list;
 	}
 	
 	@SuppressWarnings("unchecked")
