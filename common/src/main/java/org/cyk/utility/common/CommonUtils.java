@@ -10,6 +10,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -523,17 +524,46 @@ public class CommonUtils implements Serializable  {
 	
 	public <T> T instanciateOne(Class<T> aClass,ObjectFieldValues objectFieldValues){
 		try {
-			T object = aClass.newInstance();
-			for(Field field : getAllFields(aClass))
-				for(Entry<ObjectFieldValues.Field, String> entry : objectFieldValues.getValuesMap().entrySet())
-					if(field.getName().equals(entry.getKey().getName()) && field.getDeclaringClass().equals(entry.getKey().getClazz())){
-						//writeField(field, ta, value);
+			T instance = aClass.newInstance();
+			for(Field field : ClassRepository.getInstance().get(aClass).getAllDependentFields()){
+				System.out.println(" ### Field to set : "+field);
+				for(Entry<ObjectFieldValues.Field, String> entry : objectFieldValues.getValuesMap().entrySet()){
+					//System.out.println(field.getName()+":"+entry.getKey().getName()+" / "+field.getName().equals(entry.getKey().getName())+" , "+field.getDeclaringClass().isAssignableFrom(entry.getKey().getClazz()));
+					if(field.getDeclaringClass().equals(instance.getClass()) && field.getName().equals(entry.getKey().getName()) && field.getDeclaringClass().isAssignableFrom((entry.getKey().getClazz()))){
+						System.out.println("Write field="+field+" , type="+field.getType()+" value="+convertString(entry.getValue(), field.getType()));
+						writeField(field, instance, convertString(entry.getValue(), field.getType()));
 					}
-			return object;
+				}
+			}
+			return instance;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T convertString(String value,Class<T> type){
+		Object convertedValue = null;
+		if(String.class.equals(type))
+			convertedValue = value;
+		else if(BigDecimal.class.equals(type))
+			convertedValue = new BigDecimal(value);
+		else if(Long.class.equals(type))
+			convertedValue = new Long(value);
+		else if(Integer.class.equals(type))
+			convertedValue = new Integer(value);
+		else if(Byte.class.equals(type))
+			convertedValue = new Byte(value);
+		else if(Date.class.equals(type))
+			try {
+				convertedValue = Constant.DATE_TIME_FORMATTER.parse(value);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		else
+			LOGGER.error("Convert string to {} not yet implemented",type);
+		return (T) convertedValue;
 	}
 	
 	/**/

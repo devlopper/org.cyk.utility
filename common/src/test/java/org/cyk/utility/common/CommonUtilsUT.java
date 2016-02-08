@@ -10,16 +10,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
 import org.junit.Test;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class CommonUtilsUT extends AbstractUnitTest {
 
@@ -92,6 +92,14 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		result = CommonUtils.getInstance().sum(Sumable.class, sumables, null);
 		Assert.assertEquals(new BigDecimal("12.2"), result.getAttribute2());
 		Assert.assertEquals(new Integer("16"), result.getAttribute3());
+		
+		Assert.assertEquals(new String("yao"), CommonUtils.getInstance().convertString("yao", String.class));
+		Assert.assertEquals(new String("12"), CommonUtils.getInstance().convertString("12", String.class));
+		Assert.assertEquals(new BigDecimal("12.36"), CommonUtils.getInstance().convertString("12.36", BigDecimal.class));
+		Assert.assertEquals(new Long("159"), CommonUtils.getInstance().convertString("159", Long.class));
+		Assert.assertEquals(new Integer("951"), CommonUtils.getInstance().convertString("951", Integer.class));
+		Assert.assertEquals(new Byte("5"), CommonUtils.getInstance().convertString("5", Byte.class));
+		Assert.assertEquals(null, CommonUtils.getInstance().convertString("951", Object.class));
 	}
 
 	@Test
@@ -134,6 +142,52 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		CommonUtils.getInstance().increment(Integer.class, incrementable, "integerValue", new Integer("0"));
 		assertEquals("2", incrementable.getIntegerValue().toString());
 		
+	}
+	
+	//@Test
+	public void allDependentFields(){
+		Class<?> aClass = ClassA.class;
+		System.out.println(aClass);
+		for(Field field : ClassRepository.getInstance().get(aClass).getAllDependentFields())
+			System.out.println(field);
+		
+		System.out.println("");
+		aClass = ClassB.class;
+		System.out.println(aClass);
+		for(Field field : ClassRepository.getInstance().get(aClass).getAllDependentFields())
+			System.out.println(field);
+		
+		System.out.println("");
+		aClass = ClassC.class;
+		System.out.println(aClass);
+		for(Field field : ClassRepository.getInstance().get(aClass).getAllDependentFields())
+			System.out.println(field);
+		
+		System.out.println("");
+		aClass = ClassD.class;
+		System.out.println(aClass);
+		for(Field field : ClassRepository.getInstance().get(aClass).getAllDependentFields())
+			System.out.println(field);
+	}
+	
+	@Test
+	public void instanciateOne(){
+		/*ClassA classA = CommonUtils.getInstance().instanciateOne(ClassA.class, new ObjectFieldValues().setClass(ClassA.class).setValues("attributeA1","valueA1"));
+		Assert.assertEquals("valueA1", classA.getAttributeA1());
+		
+		ClassB classB = CommonUtils.getInstance().instanciateOne(ClassB.class, new ObjectFieldValues().setClass(ClassB.class).setValues("attributeB1","valueB1"
+				,"attributeA1","valueA1To"));
+		Assert.assertEquals("valueA1To", classB.getAttributeA1());
+		Assert.assertEquals("valueB1", classB.getAttributeB1());
+		*/
+		ClassC classC = CommonUtils.getInstance().instanciateOne(ClassC.class, new ObjectFieldValues()
+			.setClass(ClassA.class).setValues("attributeA1","valueA1new")
+			.setClass(ClassB.class).setValues("attributeA1","valueA1B","attributeB1","valueA1To2")
+			.setClass(ClassC.class).setValues("attributeC1","valueC1")
+			);
+		Assert.assertEquals("valueC1", classC.getAttributeC1());
+		Assert.assertEquals("valueA1new", classC.getAttributeZ1().getAttributeA1());
+		//Assert.assertEquals("valueA1B", classC.getAttributeC2().getAttributeA1());
 	}
 	
 	/**/

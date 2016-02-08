@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cyk.utility.common.ObjectFieldValues.Field;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -53,16 +55,36 @@ public class ObjectFieldValues implements Serializable {
 	
 	/**/
 	
-	@Getter @Setter @AllArgsConstructor @EqualsAndHashCode(of={"clazz","name"})
+	@Getter @Setter @AllArgsConstructor @EqualsAndHashCode(of={"path"})
 	public static class Field implements Serializable {
 		public final String TO_STRING_FORMAT = "%s=%s";
 		private static final long serialVersionUID = 6076797357920215507L;
+		private Field parent;
 		private Class<?> clazz;
 		private String name;
+		private String path;
+		
+		public Field(Field parent, Class<?> clazz, String name) {
+			super();
+			this.parent = parent;
+			this.clazz = clazz;
+			this.name = name;
+		}
+		
+		public Field(Class<?> clazz, String name) {
+			this(null,clazz,name);
+		}
+		
+		
 		
 		@Override
 		public String toString() {
 			return String.format(TO_STRING_FORMAT, clazz.getSimpleName(),name);
 		}
+
+
+
+		
+
 	}
 }

@@ -1,5 +1,7 @@
 package org.cyk.utility.common;
 
+import java.text.SimpleDateFormat;
+
 public interface Constant {
 	
 	Character CHARACTER_SPACE = new Character(' ');
@@ -41,4 +43,7 @@ public interface Constant {
 	String ENCODING_UTF8 = "UTF-8";
 	
 	String LINE_DELIMITER = "\r\n";
+	
+	String DATE_TIME_PATTERN = "dd/MM/yyyy HH:mm";
+	SimpleDateFormat DATE_TIME_FORMATTER = new SimpleDateFormat(DATE_TIME_PATTERN);
 }

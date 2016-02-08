@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.cyk.utility.common.ClassRepository.Clazz;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ public class ClassRepositoryUT extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
-	private int getFieldsMaxRound = 1000000;
+	private int getFieldsMaxRound = 100/*0000*/;
 	
 	public void getFields(Boolean classRepositoryEnabled){
 		ClassRepository.ENABLED = classRepositoryEnabled;
@@ -38,6 +39,13 @@ public class ClassRepositoryUT extends AbstractUnitTest {
 	@Test
 	public void getFieldsClassRepositoryNotEnabled(){
 		getFields(Boolean.FALSE);
+	}
+	
+	@Test
+	public void getClazzFields(){
+		Clazz clazz = ClassRepository.getInstance().get(L0.class);
+		ClassRepository.getInstance().populate(clazz);
+		debug(clazz);
 	}
 	
 	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
@@ -147,5 +155,25 @@ public class ClassRepositoryUT extends AbstractUnitTest {
 		private ClassA1 c27;
 		private ClassA1 c28;
 		private ClassA1 c29;
+	}
+
+	private static class L0{
+		private String f0;
+		private L1 l1;
+	}
+	private static class L1{
+		private String f1;
+		private L2 l2;
+	}
+	private static class L2{
+		private String f2;
+		private L3 l3;
+	}
+	private static class L3{
+		private String f3;
+		private L4 l4;
+	}
+	private static class L4{
+		private String f4;
 	}
 }

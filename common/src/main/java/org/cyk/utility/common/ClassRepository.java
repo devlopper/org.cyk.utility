@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import lombok.Getter;
@@ -28,7 +29,9 @@ public class ClassRepository implements Serializable {
 		if(clazz==null){
 			map.put(value, clazz = new Clazz(value));
 			populateFields(value, clazz.getFields());
+			//populate(value,null, clazz.get__fields__());
 		}
+		//populate(value,null, clazz.get__fields__());
 		return clazz;
 	}
 	
@@ -59,6 +62,47 @@ public class ClassRepository implements Serializable {
 			fields.add(field);
 	}
 	
+	private void populate(Class<?> aClass,ClassField parentClassField,Collection<ClassField> classFields) {
+		Collection<Field> fields = new HashSet<>(getFields(aClass==null ? parentClassField.getField().getType() : aClass));
+		//Collection<Field> fields = new HashSet<>(get(aClass==null ? parentClassField.getField().getType() : aClass).getFields());
+		//Collection<Field> fields = parentClassField==null ? parentClassField.get new HashSet<>(getFields(aClass));
+		for(Field field : fields){
+			ClassField childClassField = new ClassField();
+			classFields.add(childClassField);
+			childClassField.setParent(parentClassField);
+			childClassField.setField(field);
+			if(!field.getType().getName().startsWith("java.")){
+				populate(null,childClassField, classFields);
+			}
+		}
+	}
+	
+	public void populate(Clazz clazz) {
+		clazz.__fields__.clear();
+		populate(clazz.getValue(), null, clazz.__fields__);
+	}
+	
+	private void populateAllDependentFields(Field field,Collection<ClassField> fields) {
+		/*ClassField parent = null;
+		for(ClassField classField : fields)
+			if(classField.getField().getDeclaringClass().equals(type))
+				
+		
+		
+		Collection<Field> typeFields = new HashSet<>(getFields(type));
+		//for(Field field : typeFields)
+		//	fields.add(new org.cyk.utility.common.Field(parent, type, field.getName()));
+		for(Field typeField : typeFields){
+			ClassField parent = null;
+			for(ClassField classField : fields)
+				if(classField.getField().get)
+			ClassField classField = new ClassField(parent, clazz, field);
+			if(!typeField.getType().getName().startsWith("java.")){
+				populateAllDependentFields(typeField.getType(), fields);
+			}
+		}*/
+	}
+	
 	/**/
 	
 	public static ClassRepository getInstance() {
@@ -66,16 +110,23 @@ public class ClassRepository implements Serializable {
 	}
 	
 	@Getter @Setter
-	public class Clazz implements Serializable {
+	public static class Clazz implements Serializable {
 
 		private static final long serialVersionUID = -4384997700934391685L;
 
 		private final Class<?> value;
 		private final Collection<Field> fields = new ArrayList<>();
+		private final Collection<Field> allDependentFields = new HashSet<>();
+		
+		private final Collection<ClassField> __fields__ = new ArrayList<>();
 		
 		public Clazz(Class<?> value) {
 			super();
 			this.value = value;
+		}
+		
+		public void populateFields(){
+			
 		}
 	}
 	
