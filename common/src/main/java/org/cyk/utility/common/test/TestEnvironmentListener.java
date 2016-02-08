@@ -5,15 +5,18 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.cyk.utility.common.ClassRepository.ClassField;
+import org.cyk.utility.common.ObjectFieldValues;
 import org.cyk.utility.common.cdi.BeanAdapter;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-
-import lombok.Getter;
-import lombok.Setter;
 
 public interface TestEnvironmentListener {
 
@@ -30,6 +33,8 @@ public interface TestEnvironmentListener {
 	<T> void assertThat(T actual,Matcher<? super T> matcher);
 	
 	<T> void assertThat(String reason,T actual,Matcher<? super T> matcher);
+	
+	void assertEquals(Object actualValues,ObjectFieldValues expectedValues);
 	
 	void hasProperty(Object object,String name,Object value);
 	
@@ -64,6 +69,9 @@ public interface TestEnvironmentListener {
 
 		@Override
 		public <T> void assertThat(String reason, T actual, Matcher<? super T> matcher) {notImplemented();}
+		
+		@Override
+		public void assertEquals(Object actualValues,ObjectFieldValues expectedValues) {}
 
 		@Override
 		public void hasProperty(Object object, String name, Object value) {notImplemented();}
@@ -134,6 +142,21 @@ public interface TestEnvironmentListener {
 			@Override
 			public <T> void assertThat(String reason,T actual,Matcher<? super T> matcher){
 				MatcherAssert.assertThat(reason,actual, matcher);
+			}
+			
+			@Override
+			public void assertEquals(Object actualValues,ObjectFieldValues expectedValues) {
+				for(Entry<ClassField, Object> entry : expectedValues.getValuesMap().entrySet()){
+					String message = entry.getKey().toString();
+					String expectedValue = (String)entry.getValue();
+					Object actualValue = commonUtils.readProperty(actualValues, entry.getKey().getName());
+					if(String.class.equals(entry.getKey().getField().getType()))
+						assertEquals(message, expectedValue, (String)actualValue);	
+					else if(BigDecimal.class.equals(entry.getKey().getField().getType()))
+						assertBigDecimalEquals(message, new BigDecimal(expectedValue), (BigDecimal)actualValue);	
+					else
+						assertEquals(entry.getKey().getField().getType()+" not yet handled", Boolean.TRUE, Boolean.FALSE);
+				}
 			}
 			
 			@Override

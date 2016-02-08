@@ -6,6 +6,7 @@ import java.util.Map;
 
 import lombok.Getter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.ClassRepository.ClassField;
 import org.cyk.utility.common.ClassRepository.Clazz;
 
@@ -15,6 +16,8 @@ public class ObjectFieldValues implements Serializable {
 
 	@Getter private Clazz clazz;
 	@Getter private final Map<ClassField, Object> valuesMap = new HashMap<>();
+	
+	private String baseName;
 	
 	public ObjectFieldValues(Class<?> aClass){
 		super();
@@ -28,12 +31,17 @@ public class ObjectFieldValues implements Serializable {
 	
 	public ObjectFieldValues set(Object...objects){
 		for(int i=0;i<objects.length;i = i+2)
-			set((String)objects[i], objects[i+1]);
+			set( (StringUtils.isBlank(baseName) ? Constant.EMPTY_STRING : baseName+Constant.CHARACTER_DOT)+(String)objects[i], objects[i+1]);
 		return this;
 	}
 	
 	public Object get(String name){
 		return valuesMap.get(clazz.getField(name));
+	}
+	
+	public ObjectFieldValues setBaseName(String...names){
+		this.baseName = StringUtils.join(names,Constant.CHARACTER_DOT);
+		return this;
 	}
 	
 	@Override

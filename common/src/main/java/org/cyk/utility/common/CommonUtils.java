@@ -558,13 +558,20 @@ public class CommonUtils implements Serializable  {
 		}
 	}
 	
-	public <T> T instanciateOne(Class<T> aClass,ObjectFieldValues objectFieldValues){
+	public <T> T instanciateOne(Class<T> aClass,T instance,ObjectFieldValues objectFieldValues){
 		try {
-			T instance = aClass.newInstance();
 			for(Entry<ClassField, Object> entry : objectFieldValues.getValuesMap().entrySet()){
 				setProperty(instance, entry.getKey().getName(), entry.getValue());
 			}
 			return instance;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public <T> T instanciateOne(Class<T> aClass,ObjectFieldValues objectFieldValues){
+		try {
+			return instanciateOne(aClass, aClass.newInstance(), objectFieldValues);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
