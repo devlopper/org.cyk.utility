@@ -50,6 +50,10 @@ public class ClassRepositoryUT extends AbstractUnitTest {
 		assertOwnedAndDependentFields(L2.class, "f2","l3","l3.f3","l3.l4","l3.l4.f4");
 		assertOwnedAndDependentFields(L3.class, "f3","l4","l4.f4");
 		assertOwnedAndDependentFields(L4.class, "f4");
+		
+		assertOwnedAndDependentFields(AB.class, "ba","ba.ab","ba.ab.ba");
+		
+		assertOwnedAndDependentFields(AB0.class, "ab","ab.ba","ab.ba.ab","ab.ba.ab.ba");
 	}
 	
 	private void assertOwnedAndDependentFields(Class<?> aClass,String...names){
@@ -203,5 +207,20 @@ public class ClassRepositoryUT extends AbstractUnitTest {
 	@Getter @Setter
 	private static class L4{
 		private String f4;
+	}
+	
+	@Getter @Setter
+	private static class AB0{
+		private AB ab;
+	}
+	
+	@Getter @Setter
+	private static class AB{
+		private BA ba;
+	}
+	
+	@Getter @Setter
+	private static class BA{
+		private AB ab;
 	}
 }

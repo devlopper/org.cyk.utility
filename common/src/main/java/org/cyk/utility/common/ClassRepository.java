@@ -81,7 +81,11 @@ public class ClassRepository implements Serializable {
 			else
 				childClassField.setName(field.getName());
 				
-			if(!field.getType().getName().startsWith("java.")){
+			if(field.getType().getName().startsWith("java.") 
+					|| (parentClassField!=null && parentClassField.getParent()!=null && childClassField.getField().equals(parentClassField.getParent().getField()))
+					){
+				
+			}else{
 				populate(null,childClassField, classFields);
 			}
 		}
