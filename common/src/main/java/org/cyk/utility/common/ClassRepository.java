@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,8 +20,12 @@ public class ClassRepository implements Serializable {
 	private static final long serialVersionUID = 2331517379189246417L;
 
 	private static final ClassRepository INSTANCE = new ClassRepository();
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClassRepository.class);
 	public static Boolean ENABLED = Boolean.TRUE;
+	
+	static{
+		ClassRepositoryListener.COLLECTION.add(new ClassRepositoryListener.Adapter.Default());
+	}
 	
 	private Map<Class<?>, Clazz> map = new HashMap<>();
 	private Boolean addOnGet = Boolean.TRUE;
@@ -67,8 +74,10 @@ public class ClassRepository implements Serializable {
 			fields.add(field);
 	}
 	
-	private void populate(Class<?> aClass,ClassField parentClassField,Collection<ClassField> classFields) {
-		Collection<Field> fields = new HashSet<>(getFields(aClass==null ? parentClassField.getField().getType() : aClass));
+	private void populateOwnedAndDependentFields(Class<?> aClass,ClassField parentClassField,Collection<ClassField> classFields) {
+		Class<?> theClass = aClass==null ? parentClassField.getField().getType() : aClass;
+		LOGGER.trace("Looking for fields in class {} from field {}",theClass,parentClassField==null?Constant.EMPTY_STRING:parentClassField);
+		Collection<Field> fields = new HashSet<>(getFields(theClass));
 		//Collection<Field> fields = new HashSet<>(get(aClass==null ? parentClassField.getField().getType() : aClass).getFields());
 		//Collection<Field> fields = parentClassField==null ? parentClassField.get new HashSet<>(getFields(aClass));
 		for(Field field : fields){
@@ -80,14 +89,17 @@ public class ClassRepository implements Serializable {
 				childClassField.setName(parentClassField.getName()+Constant.CHARACTER_DOT+field.getName());
 			else
 				childClassField.setName(field.getName());
-				
-			if(field.getType().getName().startsWith("java.") 
-					|| (parentClassField!=null && parentClassField.getParent()!=null && childClassField.getField().equals(parentClassField.getParent().getField()))
-					){
-				
-			}else{
-				populate(null,childClassField, classFields);
+			
+			Boolean populatable = null;
+			for(ClassRepositoryListener listener : ClassRepositoryListener.COLLECTION){
+				Boolean v = listener.canGetOwnedAndDependentFields(parentClassField, field);
+				if(v!=null)
+					populatable = v;
 			}
+			
+			if(Boolean.TRUE.equals(populatable))
+				populateOwnedAndDependentFields(null,childClassField, classFields);
+			
 		}
 	}
 		
@@ -115,7 +127,7 @@ public class ClassRepository implements Serializable {
 		public Collection<ClassField> getOwnedAndDependentFields(){
 			if(ownedAndDependentFields==null){
 				ownedAndDependentFields = new HashSet<>();
-				ClassRepository.getInstance().populate(value, null, ownedAndDependentFields);
+				ClassRepository.getInstance().populateOwnedAndDependentFields(value, null, ownedAndDependentFields);
 			}
 			return ownedAndDependentFields;
 		}
