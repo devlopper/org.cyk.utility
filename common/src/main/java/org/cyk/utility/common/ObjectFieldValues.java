@@ -25,13 +25,13 @@ public class ObjectFieldValues implements Serializable {
 	}
 	
 	public ObjectFieldValues set(String name,Object value){
-		valuesMap.put(clazz.getField(name), value);
+		valuesMap.put(clazz.getField((StringUtils.isBlank(baseName) ? Constant.EMPTY_STRING : baseName+Constant.CHARACTER_DOT)+name), value);
 		return this;
 	}
 	
 	public ObjectFieldValues set(Object...objects){
 		for(int i=0;i<objects.length;i = i+2)
-			set( (StringUtils.isBlank(baseName) ? Constant.EMPTY_STRING : baseName+Constant.CHARACTER_DOT)+(String)objects[i], objects[i+1]);
+			set((String)objects[i], objects[i+1]);
 		return this;
 	}
 	
