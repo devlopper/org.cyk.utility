@@ -10,6 +10,10 @@ public interface Constant {
 	Character CHARACTER_COMA = new Character(',');
 	Character CHARACTER_SEMI_COLON = new Character(';');
 	Character CHARACTER_BACK_SLASH = new Character('\\');
+	
+	/**
+	 * \\/
+	 */
 	Character CHARACTER_SLASH = new Character('/');
 	Character CHARACTER_DOLLAR = new Character('$');
 	Character CHARACTER_QUESTION_MARK = new Character('?');
