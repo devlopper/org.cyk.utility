@@ -68,13 +68,14 @@ public class RandomDataProvider implements Serializable {
 	
 	/**/
 	private List<String> companyNames,companyLogos=new ArrayList<>();
-	private List<String> signatureSpecimens=new ArrayList<>();
+	private List<String> signatureSpecimens=new ArrayList<>(),documentHeaders=new ArrayList<>();
 	/**/
 	
 	protected RandomDataProvider() {
 		companyNames = stringLines("/META-INF/generator/name/company.txt");
 		companyLogos = images("/META-INF/generator/image/company/logo/");
 		signatureSpecimens = images("/META-INF/generator/image/signature/specimen/");
+		documentHeaders = images("/META-INF/generator/image/document/header/");
 	}
 	
 	public int randomInt(int min,int max){
@@ -219,6 +220,10 @@ public class RandomDataProvider implements Serializable {
 	
 	public RandomFile signatureSpecimen(){
 		return getFile((String) randomFromList(signatureSpecimens));
+	}
+	
+	public RandomFile documentHeader(){
+		return getFile((String) randomFromList(documentHeaders));
 	}
 	
 	/**/
