@@ -608,6 +608,14 @@ public class CommonUtils implements Serializable  {
 		return (T) convertedValue;
 	}
 	
+	public void swapColumns(Object[][] array,Integer columnIndex1,Integer columnIndex2){
+		for(Object[] row : array){
+			Object value = row[columnIndex1];
+			row[columnIndex1] = row[columnIndex2];
+			row[columnIndex2] = value;
+		}
+	}
+	
 	/**/
 	
 	/**/
