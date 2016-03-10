@@ -32,8 +32,11 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -49,6 +52,9 @@ import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 public class CommonUtils implements Serializable  {
@@ -623,11 +629,13 @@ public class CommonUtils implements Serializable  {
 		}
 	}
 	
-	public List<String[]> readExcelSheet(InputStream workBookInputStream,Integer sheetIndex,Integer rowCount,Integer columnCount) throws Exception{
-        
-		Workbook workbook = WorkbookFactory.create(workBookInputStream);
-        Sheet sheet = workbook.getSheetAt(sheetIndex);
+	public List<String[]> readExcelSheet(ReadExcelSheetArguments arguments) throws Exception{
+		Workbook workbook = WorkbookFactory.create(arguments.getWorkbookInputStream());
+        Sheet sheet = workbook.getSheetAt(arguments.getSheetIndex());
+        FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
         List<String[]> list = new ArrayList<>();
+        Integer fromRowIndex = arguments.getFromRowIndex(),fromColumnIndex = arguments.getFromColumnIndex();
+        Integer rowCount = arguments.getRowCount(),columnCount = arguments.getColumnCount();
         if(rowCount==null)
         	rowCount = sheet.getLastRowNum();
         if(columnCount==null)
@@ -635,79 +643,62 @@ public class CommonUtils implements Serializable  {
         
         for (int i=0; i<rowCount; i++) {
         	String[] array = null;
-            Row row = sheet.getRow(i);
+            Row row = sheet.getRow(i + fromRowIndex);
             if(row==null){
             	
             }else{
             	array = new String[columnCount];
             	for (int j=0; j<columnCount; j++) {
-                    Cell cell = row.getCell(j);
+                    Cell cell = row.getCell(j+fromColumnIndex);
                     if(cell==null)
                     	array[j] = Constant.EMPTY_STRING;
-                    else
-    	                switch(cell.getCellType()){
-    	                case HSSFCell.CELL_TYPE_FORMULA : 
-    	                	throw new RuntimeException("Cannot process a formula. Please change field to result of formula.");
-    	                case HSSFCell.CELL_TYPE_BLANK:
-    	                	array[j] = Constant.EMPTY_STRING;
-    	                	break;
-    	                default:
-    	                	array[j] = String.valueOf(cell);
-    	                	break;
-    	                }
+                    else{
+                    	CellValue cellValue = formulaEvaluator.evaluate(cell);
+                    	String stringValue;
+                    	if(cellValue==null)
+                    		stringValue = Constant.EMPTY_STRING;
+                    	else switch(cellValue.getCellType()){
+	    	                case Cell.CELL_TYPE_FORMULA : 
+	    	                	throw new RuntimeException("Must never happen! Cannot process a formula. Please change field to result of formula.("+i+","+j+")");
+	    	                case Cell.CELL_TYPE_BLANK: stringValue = Constant.EMPTY_STRING; break;
+	    	                case Cell.CELL_TYPE_NUMERIC: 
+	    	                	if(DateUtil.isCellDateFormatted(cell))
+	                        		stringValue = cell.getDateCellValue().toString();
+	                        	else
+	                        		stringValue = String.valueOf(cellValue.getNumberValue()); 
+	    	                	break;
+	    	                case Cell.CELL_TYPE_STRING: stringValue = cellValue.getStringValue(); break;
+	    	                default:
+	    	                	stringValue = StringUtils.trim(cellValue.getStringValue());
+	    	                	break;
+	    	                }
+                    	array[j] = String.valueOf(StringUtils.isBlank(stringValue)?Constant.EMPTY_STRING:stringValue);
+                    }
                 }
             }
             if(array==null)
             	;
-            else
-            	list.add(array);
+            else{
+            	Boolean isEmpty = Boolean.TRUE;
+            	for(int k = 0; k < array.length; k++)
+            		if(StringUtils.isNotBlank(array[k])){
+            			isEmpty = Boolean.FALSE;
+            			break;
+            		}
+            	if(!Boolean.TRUE.equals(arguments.getIgnoreEmptyRow()) || Boolean.FALSE.equals(isEmpty))
+            		list.add(array);
+            }
         }
         workbook.close();
         return list;
 	}
 	
-	/*
-	public List<String[]> readExcelSheet(FileInputStream workBookFileInputStream,Integer sheetIndex,Integer rowCount,Integer columnCount) throws IOException{
-        
-		HSSFWorkbook workbook = new HSSFWorkbook(workBookFileInputStream);
-        HSSFSheet sheet = workbook.getSheetAt(sheetIndex);
-        List<String[]> list = new ArrayList<>();
-        if(rowCount==null)
-        	rowCount = sheet.getLastRowNum();
-        if(columnCount==null)
-        	columnCount = new Integer(sheet.getRow(0).getLastCellNum());
-        for (int i=0; i<rowCount; i++) {
-        	String[] array = null;
-            HSSFRow row = sheet.getRow(i);
-            if(row==null){
-            	
-            }else{
-            	array = new String[columnCount];
-            	for (int j=0; j<columnCount; j++) {
-                    HSSFCell cell = row.getCell(j);
-                    if(cell==null)
-                    	array[j] = Constant.EMPTY_STRING;
-                    else
-    	                switch(cell.getCellType()){
-    	                case HSSFCell.CELL_TYPE_FORMULA : 
-    	                	throw new RuntimeException("Cannot process a formula. Please change field to result of formula.");
-    	                case HSSFCell.CELL_TYPE_BLANK:
-    	                	array[j] = Constant.EMPTY_STRING;
-    	                	break;
-    	                default:
-    	                	array[j] = String.valueOf(cell);
-    	                	break;
-    	                }
-                }
-            }
-            if(array==null)
-            	;
-            else
-            	list.add(array);
-        }
-        workbook.close();
-        return list;
-	}*/
+	@Getter @Setter
+	public static class ReadExcelSheetArguments{
+		private InputStream workbookInputStream;
+		private Integer sheetIndex,fromRowIndex=0,fromColumnIndex=0,rowCount,columnCount;
+		private Boolean ignoreEmptyRow = Boolean.TRUE;
+	}
 	
 	/**/
 	

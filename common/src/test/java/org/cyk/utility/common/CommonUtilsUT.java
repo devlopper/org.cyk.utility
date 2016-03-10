@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.common.CommonUtils.ReadExcelSheetArguments;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -185,12 +186,21 @@ public class CommonUtilsUT extends AbstractUnitTest {
 	@Test
 	public void readExcelSheetXls(){
 		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel");
+		ReadExcelSheetArguments arguments = new ReadExcelSheetArguments();
+		
 		try {
-			List<String[]> list = CommonUtils.getInstance().readExcelSheet(new FileInputStream(new File(directory, "1xls.xls")), 0, 5, 3);
+			arguments.setWorkbookInputStream(new FileInputStream(new File(directory, "1xls.xls")));
+			arguments.setSheetIndex(0);
+			arguments.setRowCount(5);
+			arguments.setColumnCount(3);
+			List<String[]> list = CommonUtils.getInstance().readExcelSheet(arguments);
 			for(String[] line : list)
 				System.out.println(StringUtils.join(line," ; "));
 			
-			list = CommonUtils.getInstance().readExcelSheet(new FileInputStream(new File(directory, "1xls.xls")), 0, null, null);
+			arguments = new ReadExcelSheetArguments();
+			arguments.setWorkbookInputStream(new FileInputStream(new File(directory, "1xls.xls")));
+			arguments.setSheetIndex(0);
+			list = CommonUtils.getInstance().readExcelSheet(arguments);
 			for(String[] line : list)
 				System.out.println(StringUtils.join(line," ; "));
 		} catch (Exception e) {
@@ -202,12 +212,20 @@ public class CommonUtilsUT extends AbstractUnitTest {
 	@Test
 	public void readExcelSheetXlsx(){
 		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel");
+		ReadExcelSheetArguments arguments = new ReadExcelSheetArguments();
 		try {
-			List<String[]> list = CommonUtils.getInstance().readExcelSheet(new FileInputStream(new File(directory, "1xlsx.xlsx")), 0, 5, 3);
+			arguments.setWorkbookInputStream(new FileInputStream(new File(directory, "1xlsx.xlsx")));
+			arguments.setSheetIndex(0);
+			arguments.setRowCount(5);
+			arguments.setColumnCount(3);
+			List<String[]> list = CommonUtils.getInstance().readExcelSheet(arguments);
 			for(String[] line : list)
 				System.out.println(StringUtils.join(line," ; "));
 			
-			list = CommonUtils.getInstance().readExcelSheet(new FileInputStream(new File(directory, "1xlsx.xlsx")), 0, null, null);
+			arguments = new ReadExcelSheetArguments();
+			arguments.setWorkbookInputStream(new FileInputStream(new File(directory, "1xlsx.xlsx")));
+			arguments.setSheetIndex(0);
+			list = CommonUtils.getInstance().readExcelSheet(arguments);
 			for(String[] line : list)
 				System.out.println(StringUtils.join(line," ; "));
 		} catch (Exception e) {
