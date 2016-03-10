@@ -1,5 +1,8 @@
 package org.cyk.utility.common;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -10,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -177,6 +181,23 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		);
 		Assert.assertEquals("valueC1", classC.getAttributeC1());
 		Assert.assertEquals("valueA1new", classC.getAttributeZ1().getAttributeA1());
+	}
+	
+	@Test
+	public void readExcelSheet(){
+		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel");
+		try {
+			List<String[]> list = CommonUtils.getInstance().readExcelSheet(new FileInputStream(new File(directory, "1xls.xls")), 0, 5, 3);
+			for(String[] line : list)
+				System.out.println(StringUtils.join(line," ; "));
+			
+			list = CommonUtils.getInstance().readExcelSheet(new FileInputStream(new File(directory, "1xls.xls")), 0, null, null);
+			for(String[] line : list)
+				System.out.println(StringUtils.join(line," ; "));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/**/

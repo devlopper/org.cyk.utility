@@ -17,4 +17,12 @@
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.14</version>
+		</dependency>
+	</dependencies>
+
 </project>

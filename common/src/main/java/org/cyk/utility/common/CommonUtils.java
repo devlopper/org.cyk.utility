@@ -1,6 +1,7 @@
 package org.cyk.utility.common;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
@@ -31,6 +32,10 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.cyk.utility.common.ClassRepository.ClassField;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -615,6 +620,66 @@ public class CommonUtils implements Serializable  {
 			row[columnIndex2] = value;
 		}
 	}
+	
+	public List<String[]> readExcelSheet(FileInputStream workBookFileInputStream,Integer sheetIndex,Integer rowCount,Integer columnCount) throws IOException{
+        HSSFWorkbook workbook = new HSSFWorkbook(workBookFileInputStream);
+        HSSFSheet sheet = workbook.getSheetAt(sheetIndex);
+        List<String[]> list = new ArrayList<>();
+        if(rowCount==null)
+        	rowCount = sheet.getLastRowNum();
+        if(columnCount==null)
+        	columnCount = new Integer(sheet.getRow(0).getLastCellNum());
+        for (int i=0; i<rowCount; i++) {
+        	String[] array = null;
+            HSSFRow row = sheet.getRow(i);
+            if(row==null){
+            	
+            }else{
+            	array = new String[columnCount];
+            	for (int j=0; j<columnCount; j++) {
+                    HSSFCell cell = row.getCell(j);
+                    if(cell==null)
+                    	array[j] = Constant.EMPTY_STRING;
+                    else
+    	                switch(cell.getCellType()){
+    	                case HSSFCell.CELL_TYPE_FORMULA : 
+    	                	throw new RuntimeException("Cannot process a formula. Please change field to result of formula.");
+    	                case HSSFCell.CELL_TYPE_BLANK:
+    	                	array[j] = Constant.EMPTY_STRING;
+    	                	break;
+    	                default:
+    	                	array[j] = String.valueOf(cell);
+    	                	break;
+    	                }
+                }
+            }
+            if(array==null)
+            	;
+            else
+            	list.add(array);
+        }
+        workbook.close();
+        return list;
+	}
+	
+	public String cellToString(HSSFCell cell) {
+        int type = cell.getCellType();
+        String result;
+         
+        //Formulas can't be evaluated, so throw an Exception if one is encountered
+        if (type == HSSFCell.CELL_TYPE_FORMULA) {
+            throw new RuntimeException("Cannot process a formula. Please change field to result of formula.");
+        }
+        //If blanks are ever able to be evaluated by Apache POI, set them to empty string
+        else if (type ==HSSFCell.CELL_TYPE_BLANK) {
+            result = " ";
+        }
+        //Convert cell contents to String
+        else {
+            result = String.valueOf(cell);
+        }
+        return result;
+    }
 	
 	/**/
 	
