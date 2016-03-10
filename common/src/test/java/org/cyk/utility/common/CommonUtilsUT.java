@@ -2,7 +2,6 @@ package org.cyk.utility.common;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -184,7 +183,7 @@ public class CommonUtilsUT extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void readExcelSheet(){
+	public void readExcelSheetXls(){
 		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel");
 		try {
 			List<String[]> list = CommonUtils.getInstance().readExcelSheet(new FileInputStream(new File(directory, "1xls.xls")), 0, 5, 3);
@@ -192,6 +191,23 @@ public class CommonUtilsUT extends AbstractUnitTest {
 				System.out.println(StringUtils.join(line," ; "));
 			
 			list = CommonUtils.getInstance().readExcelSheet(new FileInputStream(new File(directory, "1xls.xls")), 0, null, null);
+			for(String[] line : list)
+				System.out.println(StringUtils.join(line," ; "));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	@Test
+	public void readExcelSheetXlsx(){
+		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel");
+		try {
+			List<String[]> list = CommonUtils.getInstance().readExcelSheet(new FileInputStream(new File(directory, "1xlsx.xlsx")), 0, 5, 3);
+			for(String[] line : list)
+				System.out.println(StringUtils.join(line," ; "));
+			
+			list = CommonUtils.getInstance().readExcelSheet(new FileInputStream(new File(directory, "1xlsx.xlsx")), 0, null, null);
 			for(String[] line : list)
 				System.out.println(StringUtils.join(line," ; "));
 		} catch (Exception e) {
