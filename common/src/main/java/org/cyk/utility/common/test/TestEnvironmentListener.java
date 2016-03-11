@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -148,12 +149,14 @@ public interface TestEnvironmentListener {
 			public void assertEquals(Object actualValues,ObjectFieldValues expectedValues) {
 				for(Entry<ClassField, Object> entry : expectedValues.getValuesMap().entrySet()){
 					String message = entry.getKey().toString();
-					String expectedValue = (String)entry.getValue();
+					Object expectedValue = entry.getValue();
 					Object actualValue = commonUtils.readProperty(actualValues, entry.getKey().getName());
 					if(String.class.equals(entry.getKey().getField().getType()))
 						assertEquals(message, expectedValue, (String)actualValue);	
 					else if(BigDecimal.class.equals(entry.getKey().getField().getType()))
-						assertBigDecimalEquals(message, new BigDecimal(expectedValue), (BigDecimal)actualValue);	
+						assertBigDecimalEquals(message, new BigDecimal(expectedValue.toString()), (BigDecimal)actualValue);
+					else if(Date.class.equals(entry.getKey().getField().getType()))
+						assertEquals(message, expectedValue, actualValue);
 					else
 						assertEquals(entry.getKey().getField().getType()+" not yet handled", Boolean.TRUE, Boolean.FALSE);
 				}

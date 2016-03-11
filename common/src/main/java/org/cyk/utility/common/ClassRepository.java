@@ -8,12 +8,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
+import org.cyk.utility.common.cdi.BeanAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ClassRepository implements Serializable {
 
@@ -24,7 +25,7 @@ public class ClassRepository implements Serializable {
 	public static Boolean ENABLED = Boolean.TRUE;
 	
 	static{
-		ClassRepositoryListener.COLLECTION.add(new ClassRepositoryListener.Adapter.Default());
+		Listener.COLLECTION.add(new Listener.Adapter.Default());
 	}
 	
 	private Map<Class<?>, Clazz> map = new HashMap<>();
@@ -91,7 +92,7 @@ public class ClassRepository implements Serializable {
 				childClassField.setName(field.getName());
 			
 			Boolean populatable = null;
-			for(ClassRepositoryListener listener : ClassRepositoryListener.COLLECTION){
+			for(Listener listener : Listener.COLLECTION){
 				Boolean v = listener.canGetOwnedAndDependentFields(parentClassField, field);
 				if(v!=null)
 					populatable = v;
@@ -99,8 +100,11 @@ public class ClassRepository implements Serializable {
 			
 			if(Boolean.TRUE.equals(populatable))
 				populateOwnedAndDependentFields(null,childClassField, classFields);
-			
+			else
+				LOGGER.trace("cannot populate for field {} in class {}",childClassField.field,childClassField.field.getDeclaringClass());
 		}
+		
+		//LOGGER.trace("Looking for fields in class {} from field {} FOUND : {}",theClass,parentClassField==null?Constant.EMPTY_STRING:parentClassField,fields);
 	}
 		
 	/**/
@@ -157,6 +161,51 @@ public class ClassRepository implements Serializable {
 		public String toString() {
 			return String.format(TO_STRING_FORMAT,name,field.getType().getSimpleName());
 		}
+	}
+	
+	/**/
+	
+	public interface Listener {
+
+		Collection<Listener> COLLECTION = new ArrayList<>();
+		
+		Boolean canGetOwnedAndDependentFields(ClassField parent,Field field);
+		
+		public static class Adapter extends BeanAdapter implements Serializable,Listener {
+			private static final long serialVersionUID = -4122987497921232243L;
+			
+			@Override
+			public Boolean canGetOwnedAndDependentFields(ClassField parent,Field field) {return null;}
+			
+			/**/
+			
+			public static class Default extends Adapter implements Serializable {
+				private static final long serialVersionUID = -5446765876489940336L;
+				@Override
+				public Boolean canGetOwnedAndDependentFields(ClassField parent,Field field) {
+					ClassField previous = parent;
+					while(previous!=null && previous.getParent()!=null)
+						previous = previous.getParent();
+					//System.out
+					//		.println((previous!=null)+" - "+field.getType().isPrimitive()+" - "+field.getType().getName().startsWith("java.")+" - "
+					//				+(parent!=null && parent.getParent()!=null && field.equals(parent.getParent().getField())));
+					/*return !(previous!=null
+							|| field.getType().isPrimitive()
+							|| field.getType().getName().startsWith("java.") 
+							|| (parent!=null && parent.getParent()!=null && field.equals(parent.getParent().getField()))
+							);*/
+					return !(previous!=null
+							|| field.getType().isPrimitive()
+							|| field.getType().getName().startsWith("java.") 
+							//|| (parent!=null && parent.getParent()!=null && field.equals(parent.getParent().getField()))
+							|| (parent!=null && parent.getParent()!=null && parent.getParent().getParent()!=null 
+								&& field.equals(parent.getParent().getParent().getField()))
+							);
+				}
+			}
+			
+		}
+		
 	}
 	
 }

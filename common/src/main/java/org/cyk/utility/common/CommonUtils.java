@@ -24,6 +24,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ClassUtils;
@@ -32,7 +35,6 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -52,9 +54,6 @@ import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import lombok.Getter;
-import lombok.Setter;
 
 
 public class CommonUtils implements Serializable  {
@@ -574,6 +573,7 @@ public class CommonUtils implements Serializable  {
 	public <T> T instanciateOne(Class<T> aClass,T instance,ObjectFieldValues objectFieldValues){
 		try {
 			for(Entry<ClassField, Object> entry : objectFieldValues.getValuesMap().entrySet()){
+				LOGGER.trace("Set property to be called. classfield {} , value {}",entry.getKey(),entry.getValue());
 				setProperty(instance, entry.getKey().getName(), entry.getValue());
 			}
 			return instance;
