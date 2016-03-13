@@ -1,8 +1,8 @@
 package org.cyk.utility.common;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.IOUtils;
@@ -54,6 +51,9 @@ import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 public class CommonUtils implements Serializable  {
@@ -630,7 +630,7 @@ public class CommonUtils implements Serializable  {
 	}
 	
 	public List<String[]> readExcelSheet(ReadExcelSheetArguments arguments) throws Exception{
-		Workbook workbook = WorkbookFactory.create(arguments.getWorkbookInputStream());
+		Workbook workbook = WorkbookFactory.create(new ByteArrayInputStream(arguments.getWorkbookBytes()));
         Sheet sheet = workbook.getSheetAt(arguments.getSheetIndex());
         FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
         List<String[]> list = new ArrayList<>();
@@ -663,7 +663,7 @@ public class CommonUtils implements Serializable  {
 	    	                case Cell.CELL_TYPE_BLANK: stringValue = Constant.EMPTY_STRING; break;
 	    	                case Cell.CELL_TYPE_NUMERIC: 
 	    	                	if(DateUtil.isCellDateFormatted(cell))
-	                        		stringValue = cell.getDateCellValue().toString();
+	                        		stringValue = Constant.DATE_TIME_FORMATTER.format(cell.getDateCellValue());
 	                        	else
 	                        		stringValue = String.valueOf(cellValue.getNumberValue()); 
 	    	                	break;
@@ -695,7 +695,7 @@ public class CommonUtils implements Serializable  {
 	
 	@Getter @Setter
 	public static class ReadExcelSheetArguments{
-		private InputStream workbookInputStream;
+		private byte[] workbookBytes;
 		private Integer sheetIndex,fromRowIndex=0,fromColumnIndex=0,rowCount,columnCount;
 		private Boolean ignoreEmptyRow = Boolean.TRUE;
 	}

@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.CommonUtils.ReadExcelSheetArguments;
 import org.cyk.utility.common.annotation.ModelBean;
@@ -189,7 +190,7 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		ReadExcelSheetArguments arguments = new ReadExcelSheetArguments();
 		
 		try {
-			arguments.setWorkbookInputStream(new FileInputStream(new File(directory, "1xls.xls")));
+			arguments.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xls.xls"))));
 			arguments.setSheetIndex(0);
 			arguments.setRowCount(5);
 			arguments.setColumnCount(3);
@@ -198,7 +199,7 @@ public class CommonUtilsUT extends AbstractUnitTest {
 				System.out.println(StringUtils.join(line," ; "));
 			
 			arguments = new ReadExcelSheetArguments();
-			arguments.setWorkbookInputStream(new FileInputStream(new File(directory, "1xls.xls")));
+			arguments.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xls.xls"))));
 			arguments.setSheetIndex(0);
 			list = CommonUtils.getInstance().readExcelSheet(arguments);
 			for(String[] line : list)
@@ -214,7 +215,7 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel");
 		ReadExcelSheetArguments arguments = new ReadExcelSheetArguments();
 		try {
-			arguments.setWorkbookInputStream(new FileInputStream(new File(directory, "1xlsx.xlsx")));
+			arguments.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xlsx.xlsx"))));
 			arguments.setSheetIndex(0);
 			arguments.setRowCount(5);
 			arguments.setColumnCount(3);
@@ -223,7 +224,7 @@ public class CommonUtilsUT extends AbstractUnitTest {
 				System.out.println(StringUtils.join(line," ; "));
 			
 			arguments = new ReadExcelSheetArguments();
-			arguments.setWorkbookInputStream(new FileInputStream(new File(directory, "1xlsx.xlsx")));
+			arguments.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xlsx.xlsx"))));
 			arguments.setSheetIndex(0);
 			list = CommonUtils.getInstance().readExcelSheet(arguments);
 			for(String[] line : list)
