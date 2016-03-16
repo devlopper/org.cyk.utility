@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.cdi.BeanAdapter;
 import org.joda.time.DateTimeConstants;
 
 @Getter @Setter
@@ -34,7 +35,7 @@ public class ExecutionProgress extends AbstractBean implements Serializable {
 	 */
 	private Long numberOfMillisecondBetweenUpdates = DateTimeConstants.MILLIS_PER_MINUTE * 1l;
 
-	private Collection<ExecutionProgressListener> executionProgressListeners = new ArrayList<>();
+	private Collection<Listener> executionProgressListeners = new ArrayList<>();
 	
 	public ExecutionProgress(String name, Double totalAmountOfWork) {
 		super();
@@ -53,11 +54,37 @@ public class ExecutionProgress extends AbstractBean implements Serializable {
 	public void addWorkDoneByStep(Integer numberOfStep){
 		Object temp = this.currentAmountOfWorkDone;
 		this.currentAmountOfWorkDone += this.step * numberOfStep;
-		for(ExecutionProgressListener listener : executionProgressListeners)
+		for(Listener listener : executionProgressListeners)
 			listener.valueChanged(this, FIELD_CURRENT_AMOUNT_OF_WORK_DONE, temp);
 	}
 	
 	/**/
 	
 	public static final String FIELD_CURRENT_AMOUNT_OF_WORK_DONE = "currentAmountOfWorkDone";
+	
+	/**/
+	
+	public interface Listener {
+
+		void valueChanged(ExecutionProgress executionProgress,String fieldName,Object oldValue);
+		
+		/**/
+		
+		public static class Adapter extends BeanAdapter implements Listener,Serializable{
+
+			private static final long serialVersionUID = -2821329924279855678L;
+
+			@Override
+			public void valueChanged(ExecutionProgress executionProgress,String fieldName, Object oldValue) {}
+			
+			/**/
+			
+			public static class Default extends Adapter implements Serializable{
+				private static final long serialVersionUID = -4170929744491382130L;
+				
+			}
+			
+		}
+		
+	}
 }
