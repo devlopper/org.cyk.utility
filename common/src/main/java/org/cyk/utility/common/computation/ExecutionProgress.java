@@ -51,7 +51,7 @@ public class ExecutionProgress extends AbstractBean implements Serializable {
 	public void setTotalAmountOfWork(Double totalAmountOfWork){
 		this.totalAmountOfWork = totalAmountOfWork;
 		if(this.totalAmountOfWork!=null){
-			this.step = this.totalAmountOfWork / 100;
+			this.step = 100 / this.totalAmountOfWork;
 		}
 	}
 	
