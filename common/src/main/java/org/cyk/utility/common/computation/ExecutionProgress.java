@@ -73,12 +73,16 @@ public class ExecutionProgress extends AbstractBean implements Serializable {
 		currentExecutionStep = new ExecutionStep(message);
 	}
 	
-	public void addWorkDoneByStep(Integer numberOfStep){
+	public void addWorkDoneByStep(Integer numberOfStep,Throwable throwable){
 		Object temp = this.currentAmountOfWorkDone;
 		this.currentAmountOfWorkDone += this.step * numberOfStep;
 		for(Listener listener : executionProgressListeners)
 			listener.valueChanged(this, FIELD_CURRENT_AMOUNT_OF_WORK_DONE, temp);
+		currentExecutionStep.done(throwable == null ? "SUCCESS" : "ERROR");//TODO make it as parameters
 		addExecutionStep(currentExecutionStep);
+	}
+	public void addWorkDoneByStep(Integer numberOfStep){
+		addWorkDoneByStep(numberOfStep, null);
 	}
 	
 	public void addExecutionStep(ExecutionStep executionStep){
