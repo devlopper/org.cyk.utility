@@ -3,6 +3,7 @@ package org.cyk.utility.common.computation;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +36,12 @@ public class ExecutionProgress extends AbstractBean implements Serializable {
 	 */
 	private Long numberOfMillisecondBetweenUpdates = DateTimeConstants.MILLIS_PER_MINUTE * 1l;
 
+	private long __milliseconds__;
+	
+	private ExecutionStep currentExecutionStep;
+	
+	private List<ExecutionStep> executionSteps;
+	
 	private Collection<Listener> executionProgressListeners = new ArrayList<>();
 	
 	public ExecutionProgress(String name, Double totalAmountOfWork) {
@@ -46,6 +53,7 @@ public class ExecutionProgress extends AbstractBean implements Serializable {
 	
 	public void clear(){
 		currentAmountOfWorkDone = 0d;
+		__milliseconds__ = System.currentTimeMillis();
 	}
 	
 	public void setTotalAmountOfWork(Double totalAmountOfWork){
@@ -61,16 +69,45 @@ public class ExecutionProgress extends AbstractBean implements Serializable {
 		
 	}
 	
+	public void setCurrentExecutionStep(String message){
+		currentExecutionStep = new ExecutionStep(message);
+	}
+	
 	public void addWorkDoneByStep(Integer numberOfStep){
 		Object temp = this.currentAmountOfWorkDone;
 		this.currentAmountOfWorkDone += this.step * numberOfStep;
 		for(Listener listener : executionProgressListeners)
 			listener.valueChanged(this, FIELD_CURRENT_AMOUNT_OF_WORK_DONE, temp);
+		addExecutionStep(currentExecutionStep);
+	}
+	
+	public void addExecutionStep(ExecutionStep executionStep){
+		if(this.executionSteps == null)
+			this.executionSteps = new ArrayList<>();
+		this.executionSteps.add(executionStep);
 	}
 	
 	/**/
 	
 	public static final String FIELD_CURRENT_AMOUNT_OF_WORK_DONE = "currentAmountOfWorkDone";
+	
+	/**/
+	
+	@Getter @Setter
+	public static class ExecutionStep implements Serializable{
+		private static final long serialVersionUID = -5613429174384586480L;
+		private long t1=System.currentTimeMillis(),t2;
+		private String message,status,duration;
+		
+		public ExecutionStep(String message) {
+			this.message = message;
+		}
+		
+		public void done(String status){
+			setStatus(status);
+			setDuration(String.valueOf(( (t2 = System.currentTimeMillis()) - t1 ) / 1000)+" sec");
+		}
+	}
 	
 	/**/
 	
@@ -97,4 +134,6 @@ public class ExecutionProgress extends AbstractBean implements Serializable {
 		}
 		
 	}
+
+	/**/
 }
