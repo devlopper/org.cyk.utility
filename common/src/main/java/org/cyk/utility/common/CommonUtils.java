@@ -26,6 +26,7 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -250,6 +251,17 @@ public class CommonUtils implements Serializable  {
 		if(object==null)
 			return null;
 		LOGGER.trace("Class={} , Field={}",object.getClass(),field);
+		/*System.out.println("Declaring Class -> "+field.getDeclaringClass());
+		System.out.println("Object Class -> "+object.getClass());
+		System.out.println("Class -> "+field.getDeclaringClass().equals(object.getClass()));
+		System.out.println("Fields -> "+getAllFields(object.getClass()));
+		System.out.println("Field -> "+field);
+		System.out.println("Contains : "+ArrayUtils.contains(new ArrayList<>(getAllFields(object.getClass())).toArray(), field));
+		System.out.println("Object : "+object);
+		*/
+		if(/*field.getDeclaringClass().equals(object.getClass()) &&*/ ArrayUtils.contains(new ArrayList<>(getAllFields(object.getClass())).toArray(), field)){
+			return object;
+		}
 		for(Field f : object.getClass().getDeclaredFields()){
 			try {
 				Object value = FieldUtils.readField(f, object, Boolean.TRUE);
