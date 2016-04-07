@@ -121,6 +121,9 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(ClassC.class, new Class<?>[]{ClassB.class}));
 		
 		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(UseMaster1.class, new Class<?>[]{Master.class}));
+		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(UseMaster1.class, new Class<?>[]{MasterChild1.class}));
+		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(UseMaster1.class, new Class<?>[]{MasterChild2.class}));
+		
 		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(UseMaster2.class, new Class<?>[]{MasterChild1.class}));
 		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(UseMaster3.class, new Class<?>[]{MasterChild2.class}));
 		Assert.assertNotNull(CommonUtils.getInstance().getConstructor(UseMaster4.class, new Class<?>[]{MasterChild1.class}));
