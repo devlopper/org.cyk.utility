@@ -55,6 +55,13 @@ public class ListenerUtils {
 		RESULT execute(LISTENER listener);
 	}
 	
+	public static interface StringMethod<LISTENER> extends ResultMethod<LISTENER,String>{}
+	public static interface BigDecimalMethod<LISTENER> extends ResultMethod<LISTENER,BigDecimal>{}
+	public static interface BooleanMethod<LISTENER> extends ResultMethod<LISTENER,Boolean>{}
+	public static interface LongMethod<LISTENER> extends ResultMethod<LISTENER,Long>{}
+	public static interface IntegerMethod<LISTENER> extends ResultMethod<LISTENER,Integer>{}
+	public static interface DoubleMethod<LISTENER> extends ResultMethod<LISTENER,Double>{}
+	
 	public static interface VoidMethod<LISTENER>{
 		void execute(LISTENER listener);
 	}
