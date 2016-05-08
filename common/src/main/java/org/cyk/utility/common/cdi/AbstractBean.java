@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.CommonUtils;
+import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.RunnableListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,7 @@ public class AbstractBean implements Serializable {
 	public static Boolean SYSTEM_OUT_LOG_TRACE = Boolean.FALSE;
 	
 	protected CommonUtils commonUtils = CommonUtils.getInstance();
+	protected ListenerUtils listenerUtils = ListenerUtils.getInstance();
 	
 	@Getter protected Collection<BeanListener> beanListeners = new ArrayList<>();
 	
