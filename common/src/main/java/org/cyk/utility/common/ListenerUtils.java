@@ -15,10 +15,12 @@ public class ListenerUtils {
 		for(LISTENER listener : listeners){
 			RESULT value = method.execute(listener);
 			if(value==null)
-				result = method.getNullValue();
+				;
 			else
 				result = value;
 		}
+		if(result==null)
+			result = method.getNullValue();
 		return result;
 	}
 	
