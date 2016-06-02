@@ -44,6 +44,16 @@ public class ListenerUtils {
 		return getValue(Double.class, listeners, method);
 	}
 	
+	public <LISTENER,ELEMENT_TYPE> Collection<ELEMENT_TYPE> getCollection(Collection<LISTENER> listeners,ResultMethod<LISTENER,Collection<ELEMENT_TYPE>> method){
+		Collection<ELEMENT_TYPE> collection = null;
+		for(LISTENER listener : listeners){
+			Collection<ELEMENT_TYPE> value = method.execute(listener);
+			if(value!=null)
+				collection = value;
+		}
+		return collection;
+	}
+	
 	public <RESULT,LISTENER> void execute(Collection<LISTENER> listeners,VoidMethod<LISTENER> method){
 		for(LISTENER listener : listeners)
 			method.execute(listener);
@@ -61,6 +71,9 @@ public class ListenerUtils {
 	public static interface LongMethod<LISTENER> extends ResultMethod<LISTENER,Long>{}
 	public static interface IntegerMethod<LISTENER> extends ResultMethod<LISTENER,Integer>{}
 	public static interface DoubleMethod<LISTENER> extends ResultMethod<LISTENER,Double>{}
+	public static interface CollectionMethod<LISTENER,ELEMENT_TYPE> extends ResultMethod<LISTENER,Collection<ELEMENT_TYPE>>{
+		//Class<COLLECTION_RUNTIME_TYPE> getCollectionRuntimeType();
+	}
 	
 	public static interface VoidMethod<LISTENER>{
 		void execute(LISTENER listener);
