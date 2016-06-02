@@ -14,7 +14,9 @@ public class ListenerUtils {
 		RESULT result = null;
 		for(LISTENER listener : listeners){
 			RESULT value = method.execute(listener);
-			if(value!=null)
+			if(value==null)
+				value = method.getNullValue();
+			else
 				result = value;
 		}
 		return result;
@@ -63,15 +65,22 @@ public class ListenerUtils {
 	
 	public static interface ResultMethod<LISTENER,RESULT>{
 		RESULT execute(LISTENER listener);
+		RESULT getNullValue();
+		public static abstract class Adapter<LISTENER,RESULT> implements ResultMethod<LISTENER, RESULT> {
+			@Override
+			public RESULT getNullValue() {
+				return null;
+			}
+		}
 	}
 	
-	public static interface StringMethod<LISTENER> extends ResultMethod<LISTENER,String>{}
-	public static interface BigDecimalMethod<LISTENER> extends ResultMethod<LISTENER,BigDecimal>{}
-	public static interface BooleanMethod<LISTENER> extends ResultMethod<LISTENER,Boolean>{}
-	public static interface LongMethod<LISTENER> extends ResultMethod<LISTENER,Long>{}
-	public static interface IntegerMethod<LISTENER> extends ResultMethod<LISTENER,Integer>{}
-	public static interface DoubleMethod<LISTENER> extends ResultMethod<LISTENER,Double>{}
-	public static interface CollectionMethod<LISTENER,ELEMENT_TYPE> extends ResultMethod<LISTENER,Collection<ELEMENT_TYPE>>{
+	public static abstract class StringMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,String>{}
+	public static abstract class BigDecimalMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,BigDecimal>{}
+	public static abstract class BooleanMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,Boolean>{}
+	public static abstract class LongMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,Long>{}
+	public static abstract class IntegerMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,Integer>{}
+	public static abstract class DoubleMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,Double>{}
+	public static abstract class CollectionMethod<LISTENER,ELEMENT_TYPE> extends ResultMethod.Adapter<LISTENER,Collection<ELEMENT_TYPE>>{
 		//Class<COLLECTION_RUNTIME_TYPE> getCollectionRuntimeType();
 	}
 	
