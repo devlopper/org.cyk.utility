@@ -15,7 +15,7 @@ public class ListenerUtils {
 		for(LISTENER listener : listeners){
 			RESULT value = method.execute(listener);
 			if(value==null)
-				value = method.getNullValue();
+				result = method.getNullValue();
 			else
 				result = value;
 		}
