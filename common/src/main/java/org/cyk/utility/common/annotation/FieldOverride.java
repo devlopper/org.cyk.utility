@@ -1,4 +1,4 @@
-package org.cyk.utility.common.annotation.user.interfaces;
+package org.cyk.utility.common.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

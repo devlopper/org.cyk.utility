@@ -45,6 +45,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.cyk.utility.common.ClassRepository.ClassField;
+import org.cyk.utility.common.annotation.FieldOverride;
+import org.cyk.utility.common.annotation.FieldOverrides;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.reflections.Reflections;
@@ -245,6 +247,33 @@ public class CommonUtils implements Serializable  {
 	
 	public <T extends Annotation> T getFieldAnnotation(Field field,Class<T> anAnnotationClass){
 		return getFieldAnnotation(field,field.getDeclaringClass(), anAnnotationClass,Boolean.FALSE);
+	}
+	
+	public Class<?> getFieldType(Class<?> declaringClass, Field field) {
+		FieldOverride fieldOverride = null;
+		for(Annotation annotation : declaringClass.getAnnotations())
+			if(annotation instanceof FieldOverride && ((FieldOverride)annotation).name().equals(field.getName())){
+				fieldOverride = (FieldOverride) annotation;
+				break;
+			}
+		Class<?> clazz;
+		if(fieldOverride==null)
+			clazz = field.getType();
+		else
+			clazz = fieldOverride.type();
+		return clazz;
+	}
+	
+	public FieldOverride getFieldOverride(Class<?> aClass, String fieldName) {
+		FieldOverrides fieldOverrides = aClass.getAnnotation(FieldOverrides.class);
+		if(fieldOverrides==null)
+			return null;
+		else{
+			for(FieldOverride fieldOverride : fieldOverrides.value())
+				if( fieldName.equals(fieldOverride.name()) )
+					return fieldOverride;
+		}
+		return null;
 	}
 	
 	public Object getFieldValueContainer(Object object,Field field){
