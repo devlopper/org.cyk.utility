@@ -15,4 +15,5 @@ public @interface InputFile {
 	
 	Distance size() default @Distance(from=@Number(integer=1),to=@Number(integer=1024 * 1));
 
+	boolean showLink() default false;
 }
