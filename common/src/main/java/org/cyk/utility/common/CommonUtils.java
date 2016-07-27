@@ -250,12 +250,7 @@ public class CommonUtils implements Serializable  {
 	}
 	
 	public Class<?> getFieldType(Class<?> declaringClass, Field field) {
-		FieldOverride fieldOverride = null;
-		for(Annotation annotation : declaringClass.getAnnotations())
-			if(annotation instanceof FieldOverride && ((FieldOverride)annotation).name().equals(field.getName())){
-				fieldOverride = (FieldOverride) annotation;
-				break;
-			}
+		FieldOverride fieldOverride = getFieldOverride(declaringClass,field.getName());
 		Class<?> clazz;
 		if(fieldOverride==null)
 			clazz = field.getType();
@@ -273,6 +268,11 @@ public class CommonUtils implements Serializable  {
 				if( fieldName.equals(fieldOverride.name()) )
 					return fieldOverride;
 		}
+		
+		for(Annotation annotation : aClass.getAnnotations())
+			if(annotation instanceof FieldOverride && ((FieldOverride)annotation).name().equals(fieldName))
+				return (FieldOverride) annotation;
+
 		return null;
 	}
 	
