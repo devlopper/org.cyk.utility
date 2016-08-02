@@ -320,6 +320,15 @@ public class CommonUtils implements Serializable  {
 		return null;
 	}
 	
+	public Throwable getThrowableFirstCause(Throwable throwable){
+		Throwable cause=throwable,index = throwable;
+		while(index!=null){
+			cause = index;
+			index = index.getCause();
+		}
+		return cause;
+	}
+	
 	public <T> Collection<Class<? extends T>> getPackageClasses(String aPackage,Class<T> aRootClass){
 		List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
 	    classLoadersList.add(ClasspathHelper.contextClassLoader());
