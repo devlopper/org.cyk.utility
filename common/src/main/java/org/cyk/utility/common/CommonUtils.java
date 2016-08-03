@@ -439,6 +439,18 @@ public class CommonUtils implements Serializable  {
 		}
 		*/
 	}
+	
+	public <T> T instanciate(Class<T> aClass,Class<?>[] parameterTypes,Object[] parameterValues){
+		try {
+			Constructor<T> constructor = getConstructor(aClass, parameterTypes);
+			if(constructor==null)
+				throw new IllegalArgumentException("No constructor found for "+aClass+" with parameters "+StringUtils.join(parameterTypes,Constant.CHARACTER_COMA));
+			return constructor.newInstance(parameterValues);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	/*
 	private <T> Constructor<T> __getConstructor__(Constructor<T> constructor,Class<?>[] parameterTypes,Boolean allowSubType){
 		if(constructor==null || parameterTypes==null || parameterTypes.length==0)
