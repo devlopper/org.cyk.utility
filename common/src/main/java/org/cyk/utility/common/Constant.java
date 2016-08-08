@@ -1,6 +1,9 @@
 package org.cyk.utility.common;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.joda.time.DateTime;
 
 public interface Constant {
 	
@@ -54,4 +57,7 @@ public interface Constant {
 	
 	String DATE_TIME_PATTERN = "dd/MM/yyyy HH:mm";
 	SimpleDateFormat DATE_TIME_FORMATTER = new SimpleDateFormat(DATE_TIME_PATTERN);
+	
+	Date DATE_LOWEST_VALUE = new DateTime(0, 1, 1, 0, 0, 0, 0).toDate();
+	Date DATE_HIGHEST_VALUE = new DateTime(9999, 12, 31, 23, 59, 59, 999).toDate();
 }
