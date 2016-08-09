@@ -29,6 +29,7 @@ public interface Constant {
 	Character CHARACTER_LEFT_PARENTHESIS = new Character('(');
 	Character CHARACTER_RIGHT_PARENTHESIS = new Character(')');
 	Character CHARACTER_STAR = new Character('*');
+	Character CHARACTER_PLUS = new Character('+');
 	Character CHARACTER_PERCENT = new Character('%');
 	Character CHARACTER_HYPHEN = new Character('-');
 	
