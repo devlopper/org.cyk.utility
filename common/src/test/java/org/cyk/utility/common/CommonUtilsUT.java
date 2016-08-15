@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.enterprise.inject.spi.CDI;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.CommonUtils.ReadExcelSheetArguments;
@@ -107,6 +109,12 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		Assert.assertEquals(null, CommonUtils.getInstance().convertString("951", Object.class));
 	}
 
+	@Test
+	public void cdiLookup(){
+		System.out.println("CommonUtilsUT.cdiLookup() : "+CDI.current().select(Master.class).get());
+		assertThat("Master injected", CDI.current().select(Master.class).get()!=null);
+	}
+	
 	@Test
 	public void constructor(){
 		/*for(Constructor<?> constructor : ClassC.class.getDeclaredConstructors()){

@@ -20,8 +20,7 @@ public abstract class AbstractLayer<META_CLASS> extends AbstractStartupBean impl
 	@Getter protected Set<Class<META_CLASS>> classes = new HashSet<>();
 	
 	public AbstractLayer() {
-		id = getClass().getName();
-		
+		id = getClass().getName();	
 	}
 	
 	protected Collection<Bean<?>> layerBeans(Class<? extends Annotation> aClass){
@@ -32,5 +31,7 @@ public abstract class AbstractLayer<META_CLASS> extends AbstractStartupBean impl
 	public String toString() {
 		return id;
 	}
+	
+	
 
 }

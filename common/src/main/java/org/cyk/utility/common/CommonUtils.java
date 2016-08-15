@@ -24,8 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.enterprise.inject.spi.CDI;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.IOUtils;
@@ -58,12 +57,19 @@ import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 public class CommonUtils implements Serializable  {
 
 	private static final long serialVersionUID = -6146661020703974108L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommonUtils.class);
 	private static final Map<String,Class<?>> CLASSES_MAP = new HashMap<String, Class<?>>();
+
+	public <T> T inject(Class<T> aClass){
+		return CDI.current().select(aClass).get();
+	}
 	
 	public Class<?> classFormName(String name){
 		try {
