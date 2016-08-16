@@ -68,6 +68,8 @@ public class CommonUtils implements Serializable  {
 	private static final Map<String,Class<?>> CLASSES_MAP = new HashMap<String, Class<?>>();
 
 	public <T> T inject(Class<T> aClass){
+		if(aClass==null)
+			return null;
 		return CDI.current().select(aClass).get();
 	}
 	
