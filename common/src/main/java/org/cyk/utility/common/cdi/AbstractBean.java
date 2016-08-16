@@ -77,8 +77,8 @@ public class AbstractBean implements Serializable {
 		return CDI.current().getBeanManager();
 	}
 	
-	public <T> T inject(Class<T> aClass){
-		return commonUtils.inject(aClass);
+	public static <T> T inject(Class<T> aClass){
+		return CommonUtils.getInstance().inject(aClass);
 	}
 	
 	protected <T> T newInstance(Class<T> aClass){
