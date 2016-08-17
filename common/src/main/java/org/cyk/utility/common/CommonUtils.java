@@ -268,20 +268,26 @@ public class CommonUtils implements Serializable  {
 	}
 	
 	public FieldOverride getFieldOverride(Class<?> aClass, String fieldName) {
+		FieldOverride fieldOverride = null;
 		FieldOverrides fieldOverrides = aClass.getAnnotation(FieldOverrides.class);
-		if(fieldOverrides==null)
-			return null;
-		else{
-			for(FieldOverride fieldOverride : fieldOverrides.value())
-				if( fieldName.equals(fieldOverride.name()) )
-					return fieldOverride;
+		if(fieldOverrides==null){
+			
+		}else{
+			for(FieldOverride index : fieldOverrides.value())
+				if( fieldName.equals(index.name()) ){
+					fieldOverride = index;
+					break;
+				}
 		}
 		
-		for(Annotation annotation : aClass.getAnnotations())
-			if(annotation instanceof FieldOverride && ((FieldOverride)annotation).name().equals(fieldName))
-				return (FieldOverride) annotation;
+		if(fieldOverride==null)
+			for(Annotation annotation : aClass.getAnnotations())
+				if(annotation instanceof FieldOverride && ((FieldOverride)annotation).name().equals(fieldName)){
+					fieldOverride = (FieldOverride) annotation;
+					break;
+				}
 
-		return null;
+		return fieldOverride;
 	}
 	
 	public Object getFieldValueContainer(Object object,Field field){
