@@ -112,6 +112,23 @@ public class ClassLocator extends AbstractBean implements Serializable {
 		
 		AbstractMethod<String, Class<?>> getGetNameMethod();
 		void setGetNameMethod(AbstractMethod<String, Class<?>> method);
+		
+		/**/
+		
+		public static abstract class AbstractGetOrgCykSystem extends AbstractMethod<String, Class<?>> implements Serializable {
+			private static final long serialVersionUID = -7213562588417233353L;
+			@Override
+			protected String __execute__(Class<?> aClass) {
+				String systemIdentifier = StringUtils.substringBetween(aClass.getName(), Constant.PREFIX_PACKAGE_ORG_CYK_SYSTEM,Constant.CHARACTER_DOT.toString());
+				String module = StringUtils.substringAfter(aClass.getName(), Constant.CHARACTER_DOT+getBaseClassPackageName()+Constant.CHARACTER_DOT);
+				return Constant.PREFIX_PACKAGE_ORG_CYK_SYSTEM+systemIdentifier+Constant.CHARACTER_DOT+getModulePrefix()+Constant.CHARACTER_DOT+module+getModuleSuffix();
+			}
+			
+			protected abstract String getBaseClassPackageName();
+			protected abstract String getModulePrefix();
+			protected abstract String getModuleSuffix();
+		}
+		
 		/**/
 		
 		@Getter @Setter
@@ -140,4 +157,5 @@ public class ClassLocator extends AbstractBean implements Serializable {
 			
 		}
 	}
+
 }
