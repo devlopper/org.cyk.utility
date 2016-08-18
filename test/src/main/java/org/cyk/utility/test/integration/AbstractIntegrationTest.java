@@ -75,6 +75,4 @@ public abstract class AbstractIntegrationTest extends AbstractTest  {
 		return nodes[0][3];
 	}
 	
-	
-	
 }

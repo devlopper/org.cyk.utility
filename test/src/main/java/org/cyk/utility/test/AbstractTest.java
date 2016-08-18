@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.enterprise.inject.spi.CDI;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,6 +44,12 @@ public abstract class AbstractTest implements Serializable {
 	//protected Collection<AbstractTestMethod> methods = new ArrayList<>();
 	
 	protected static AbstractMethod<Object, Object> AFTER_CLASS_METHOD;
+	
+	public <T> T inject(Class<T> aClass){
+		if(aClass==null)
+			return null;
+		return CDI.current().select(aClass).get();
+	}
 	
 	@Before
 	public final void before() throws Exception {
