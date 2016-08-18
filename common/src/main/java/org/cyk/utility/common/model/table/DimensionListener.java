@@ -1,5 +1,10 @@
 package org.cyk.utility.common.model.table;
 
+import java.io.Serializable;
+import java.lang.reflect.Field;
+
+import org.cyk.utility.common.cdi.BeanAdapter;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -50,8 +55,9 @@ public interface DimensionListener<DIMENSION,DATA,CELL extends Cell<VALUE>,VALUE
 	/**/
 	
 	@Getter @Setter
-	public static class Adapter<DIMENSION,DATA,CELL extends Cell<VALUE>,VALUE> implements DimensionListener<DIMENSION,DATA,CELL,VALUE> {
+	public static class Adapter<DIMENSION,DATA,CELL extends Cell<VALUE>,VALUE> extends BeanAdapter implements DimensionListener<DIMENSION,DATA,CELL,VALUE>,Serializable {
 
+		private static final long serialVersionUID = 1L;
 		protected Boolean openable,updatable,deletable,countable;
 		
 		@Override
@@ -128,6 +134,14 @@ public interface DimensionListener<DIMENSION,DATA,CELL extends Cell<VALUE>,VALUE
 		@Override
 		public Boolean isCountable(DIMENSION dimension) {
 			return countable;
+		}
+		
+		protected Boolean isFieldNameIn(Field field,String...names){
+			return commonUtils.isFieldNameIn(field, names);
+		}
+		
+		protected Boolean isFieldNameNotIn(Field field,String...names){
+			return commonUtils.isFieldNameNotIn(field, names);
 		}
 
 	}

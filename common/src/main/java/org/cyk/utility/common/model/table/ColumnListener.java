@@ -13,20 +13,21 @@ public interface ColumnListener<DIMENSION extends Column<DATA, CELL, VALUE>,DATA
 	/**/
 	
 	public static class Adapter<DIMENSION extends Column<DATA, CELL, VALUE>,DATA,CELL extends Cell<VALUE>,VALUE> extends DimensionListener.Adapter<DIMENSION, DATA, CELL, VALUE> 
-	implements ColumnListener<DIMENSION,DATA,CELL,VALUE> {
+		implements ColumnListener<DIMENSION,DATA,CELL,VALUE> {
+	
+		private static final long serialVersionUID = 1L;
 
-	@Override
-	public Boolean isColumn(Field field) {
-		return null;
+		@Override
+		public Boolean isColumn(Field field) {
+			return null;
+		}
+	
+		@Override
+		public void populateFromDataClass(Class<?> aClass, List<Field> fields) {}
+	
+		@Override
+		public void sort(List<Field> fields) {}
+	
 	}
-
-	@Override
-	public void populateFromDataClass(Class<?> aClass, List<Field> fields) {}
-
-	@Override
-	public void sort(List<Field> fields) {}
-
-
-}
 
 }

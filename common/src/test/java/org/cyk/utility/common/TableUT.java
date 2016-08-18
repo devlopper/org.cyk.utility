@@ -56,6 +56,8 @@ public class TableUT extends AbstractUnitTest {
 	public void complex1(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
 		table.getRowListeners().add(new RowListener.Adapter<DefaultRow<RowData>, RowData, DefaultCell, String>(){
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Boolean countable(DefaultRow<RowData> row) {
 				return !row.getData().getValue().equals("Total");
@@ -86,6 +88,8 @@ public class TableUT extends AbstractUnitTest {
 	public void columnOneListener(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
 		table.getColumnListeners().add(new ColumnListener.Adapter<DefaultColumn, String, DefaultCell, String>(){
+
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void populateFromDataClass(Class<?> aClass,List<Field> fields) {
 				fields.addAll(CommonUtils.getInstance().getAllFields(aClass, Input.class));
@@ -105,6 +109,8 @@ public class TableUT extends AbstractUnitTest {
 	public void columnTwoListeners(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
 		table.getColumnListeners().add(new ColumnListener.Adapter<DefaultColumn, String, DefaultCell, String>(){
+
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void populateFromDataClass(Class<?> aClass,List<Field> fields) {
 				fields.addAll(CommonUtils.getInstance().getAllFields(aClass, Input.class));
@@ -116,6 +122,8 @@ public class TableUT extends AbstractUnitTest {
 			
 		});
 		table.getColumnListeners().add(new ColumnListener.Adapter<DefaultColumn, String, DefaultCell, String>(){
+
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void populateFromDataClass(Class<?> aClass,List<Field> fields) {
 				fields.addAll(CommonUtils.getInstance().getAllFields(aClass, Input.class));

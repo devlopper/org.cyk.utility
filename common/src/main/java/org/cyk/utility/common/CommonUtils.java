@@ -355,6 +355,14 @@ public class CommonUtils implements Serializable  {
 	    
 	    return reflections.getSubTypesOf(aRootClass);
 	}
+
+	public Boolean isFieldNameIn(Field field,String...names){
+		return ArrayUtils.contains(names, field.getName());
+	}
+	
+	public Boolean isFieldNameNotIn(Field field,String...names){
+		return Boolean.FALSE.equals(isFieldNameIn(field, names));
+	}
 	
 	/**/
 	
