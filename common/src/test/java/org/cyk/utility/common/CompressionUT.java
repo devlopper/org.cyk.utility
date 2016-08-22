@@ -15,7 +15,7 @@ public class CompressionUT extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
-	private static String compress(String str) {
+	public static String compress(String str) {
         if (str == null || str.length() == 0) {
             return str;
         }
