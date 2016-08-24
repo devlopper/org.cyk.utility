@@ -721,7 +721,7 @@ public class CommonUtils implements Serializable  {
         Integer fromRowIndex = arguments.getFromRowIndex(),fromColumnIndex = arguments.getFromColumnIndex();
         Integer rowCount = arguments.getRowCount(),columnCount = arguments.getColumnCount();
         if(rowCount==null)
-        	rowCount = sheet.getLastRowNum();
+        	rowCount = sheet.getPhysicalNumberOfRows();
         if(columnCount==null)
         	columnCount = new Integer(sheet.getRow(0).getLastCellNum());
         
