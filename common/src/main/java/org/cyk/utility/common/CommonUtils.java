@@ -713,6 +713,23 @@ public class CommonUtils implements Serializable  {
 		}
 	}
 	
+	public <T> T getValueAt(T[] array,Integer index,T nullValue){
+		if(array==null || index==null || index < 0 || index > array.length)
+			return nullValue;
+		return array[index];
+	}
+	public <T> T getValueAt(T[] array,Integer index){
+		return getValueAt(array, index, null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> Collection<T> castCollection(Collection<?> collection,Class<T> aClass){
+		Collection<T> result = new ArrayList<>();
+		for(Object object : collection)
+			result.add((T) object);
+		return result;
+	}
+	
 	public List<String[]> readExcelSheet(ReadExcelSheetArguments arguments) throws Exception{
 		Workbook workbook = WorkbookFactory.create(new ByteArrayInputStream(arguments.getWorkbookBytes()));
         Sheet sheet = workbook.getSheetAt(arguments.getSheetIndex());

@@ -59,6 +59,10 @@ public class AbstractBean implements Serializable {
 
 	protected void afterInitialisation(){}
 	
+	protected <T> Collection<T> castCollection(Collection<?> collection,Class<T> aClass){
+		return commonUtils.castCollection(collection, aClass);
+	}
+	
 	protected <T> T getReference(BeanManager aBeanManager,Class<T> aClass){
 		Set<Bean<?>> beans = aBeanManager.getBeans(aClass);
 		@SuppressWarnings("unchecked")
