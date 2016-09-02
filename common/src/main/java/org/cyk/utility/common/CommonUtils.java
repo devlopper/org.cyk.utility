@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -25,6 +26,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.enterprise.inject.spi.CDI;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.IOUtils;
@@ -57,9 +61,6 @@ import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lombok.Getter;
-import lombok.Setter;
-
 
 public class CommonUtils implements Serializable  {
 
@@ -86,6 +87,10 @@ public class CommonUtils implements Serializable  {
 			LOGGER.error(String.format("Class named %s cannot be found",name),e);
 			return null;
 		}
+	}
+
+	public Class<?> getClassParameterAt(Class<?> aClass,Integer index){
+		return (Class<?>) ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments()[index];
 	}
 	
 	public Field getField(Object source,Object value){
