@@ -295,8 +295,10 @@ public class RandomDataProvider implements Serializable {
 			File file = null;
 			try {
 				file = File.createTempFile(RandomStringUtils.randomAlphabetic(5), System.currentTimeMillis()+"");
-				if(file!=null && file.exists())
+				if(file!=null && file.exists()){
+					file.deleteOnExit();
 					IOUtils.write(bytes, new FileOutputStream(file));
+				}
 				else
 					System.out.println("Temporary file cannot be created.");
 			} catch (IOException e) {
