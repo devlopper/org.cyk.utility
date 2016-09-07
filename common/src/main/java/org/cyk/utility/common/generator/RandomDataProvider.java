@@ -1,4 +1,6 @@
 package org.cyk.utility.common.generator;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -287,6 +289,20 @@ public class RandomDataProvider implements Serializable {
 		public RandomFile(byte[] bytes,String extension) {
 			this.bytes = bytes;
 			this.extension = extension;
+		}
+		
+		public File createTemporaryFile(){
+			File file = null;
+			try {
+				file = File.createTempFile(RandomStringUtils.randomAlphabetic(5), System.currentTimeMillis()+"");
+				if(file!=null && file.exists())
+					IOUtils.write(bytes, new FileOutputStream(file));
+				else
+					System.out.println("Temporary file cannot be created.");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return file;
 		}
 		
 		@Override
