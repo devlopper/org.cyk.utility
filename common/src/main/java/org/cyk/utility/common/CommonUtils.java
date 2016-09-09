@@ -583,6 +583,18 @@ public class CommonUtils implements Serializable  {
 		return string;
 	}
 	
+	public String getVariableNameFromString(String prefix,String value,String suffix){
+		String idPrefix = value;
+		idPrefix = StringUtils.replaceChars(idPrefix, "àéèôùç", "aeeouc");
+		String separators = "-`' &#()[]{}|";
+		idPrefix = StringUtils.replaceChars(idPrefix, separators, StringUtils.repeat(Constant.CHARACTER_UNDESCORE.toString(), separators.length()));
+		/*StringUtils.replaceChars(StringUtils.replace(input.getLabel(),StringUtils.repeat(Constant.CHARACTER_SPACE.toString(), 2)
+				,Constant.CHARACTER_SPACE.toString()));
+		*/
+		String charactersToDeleted = "";
+		return prefix+Constant.CHARACTER_UNDESCORE+StringUtils.lowerCase(StringUtils.replaceChars(idPrefix, charactersToDeleted, null))+Constant.CHARACTER_UNDESCORE+suffix;
+	}
+	
 	public <T extends Number> void increment(Class<T> valueType,Object object,String fieldName,T increment){
 		try {
 			@SuppressWarnings("unchecked")
