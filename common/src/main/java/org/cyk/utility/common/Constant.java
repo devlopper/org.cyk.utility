@@ -12,6 +12,7 @@ public interface Constant {
 	Character CHARACTER_COLON = new Character(':');
 	Character CHARACTER_COMA = new Character(',');
 	Character CHARACTER_SEMI_COLON = new Character(';');
+	Character CHARACTER_CARET_CIRCUMFLEX = new Character('^');
 	Character CHARACTER_BACK_SLASH = new Character('\\');
 	
 	/**
@@ -44,6 +45,8 @@ public interface Constant {
 	String WORD_APP = "app";
 	String WORD_VALIDATION = "validation";
 	String WORD_MAIL = "mail";
+	
+	String JAVA_STRING_FORMAT_MARKER_S = "%s";
 	
 	String JNDI_NAMESPACE_GLOBAL = WORD_JAVA+CHARACTER_COLON+WORD_GLOBAL;
 	String JNDI_NAMESPACE_APP = WORD_JAVA+CHARACTER_COLON+WORD_APP;

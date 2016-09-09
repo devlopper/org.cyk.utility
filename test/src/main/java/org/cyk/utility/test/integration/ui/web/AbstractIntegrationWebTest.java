@@ -17,6 +17,12 @@ public abstract class AbstractIntegrationWebTest extends AbstractTest  {
 	
 	protected String propertiesFileName = "selenium",googleDriverPathPropertyName="google_driver";
 	protected String googleDriverPath;
+	private WebDriver driver;
+	protected Boolean authenticationEnabled = Boolean.FALSE,autoLogin=Boolean.TRUE,autoLogout=Boolean.TRUE;
+	protected String[][] users;
+	protected WebDriver getDriver(){
+		return driver;
+	}
 	
 	@Override
 	protected void _execute_() {
@@ -32,17 +38,30 @@ public abstract class AbstractIntegrationWebTest extends AbstractTest  {
 		}else
 			System.out.println("No cyk selenium properties file found. Test can be envionment dependent");
 		
-		for(Class<? extends WebDriver> clazz : getWebDriverClasses()){
-			System.out.println("Running using driver of type "+clazz.getName());
-			WebDriver webDriver = getWebDriver(clazz);
-			if(webDriver==null)
-				System.out.println("No driver instance can be created from type "+clazz);
-			else{
-				__execute__(webDriver);
-				webDriver.quit();
+		for(String[] user : users){
+			System.out.println("Running with user "+user[0]+" and password "+user[1]);
+			for(Class<? extends WebDriver> clazz : getWebDriverClasses()){
+				System.out.println("Running using driver of type "+clazz.getName());
+				driver = getWebDriver(clazz);
+				if(driver==null)
+					System.out.println("No driver instance can be created from type "+clazz);
+				else{
+					setDriver(driver);
+					if(Boolean.TRUE.equals(authenticationEnabled) && Boolean.TRUE.equals(autoLogin)){
+						goToLoginPage();
+						login(user[0],user[1]);
+					}
+					__execute__();
+					if(Boolean.TRUE.equals(authenticationEnabled) && Boolean.TRUE.equals(autoLogout))
+						logout(user[0]);
+					driver.quit();
+				}
 			}
 		}
 	}
+	protected void goToLoginPage(){}
+	protected void login(String username,String password){}
+	protected void logout(String username){}
 	
 	protected WebDriver getWebDriver(Class<? extends WebDriver> webDriverClass){
 		if(ChromeDriver.class.equals(webDriverClass))
@@ -56,6 +75,10 @@ public abstract class AbstractIntegrationWebTest extends AbstractTest  {
 		return collection;
 	}
 	
+	protected void setDriver(WebDriver driver){
+		this.driver = driver;
+	}
+	
 	protected ChromeDriver getChromeDriver(){
 		ChromeDriver chromeDriver = null;
 		if(StringUtils.isBlank(googleDriverPath))
@@ -67,6 +90,6 @@ public abstract class AbstractIntegrationWebTest extends AbstractTest  {
 		return chromeDriver;
 	}
 	
-	protected abstract void __execute__(WebDriver webDriver);
+	protected abstract void __execute__();
 	
 }
