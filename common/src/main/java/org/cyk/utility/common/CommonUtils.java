@@ -722,6 +722,16 @@ public class CommonUtils implements Serializable  {
 		return (T) convertedValue;
 	}
 	
+	public String addWordSeparatorToVariableName(String name,String separator){
+		StringBuilder newName = new StringBuilder();
+		for(int i=0;i<name.length();i++){
+			if(Character.isUpperCase(name.charAt(i)))
+				newName.append(separator);
+			newName.append(Character.toLowerCase(name.charAt(i)));
+		}
+		return newName.toString();
+	}
+	
 	public void swapColumns(Object[][] array,Integer columnIndex1,Integer columnIndex2){
 		for(Object[] row : array){
 			Object value = row[columnIndex1];
