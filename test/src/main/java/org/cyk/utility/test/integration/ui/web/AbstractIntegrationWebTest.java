@@ -19,6 +19,7 @@ public abstract class AbstractIntegrationWebTest extends AbstractTest  {
 	protected String googleDriverPath;
 	private WebDriver driver;
 	protected Boolean authenticationEnabled = Boolean.FALSE,autoLogin=Boolean.TRUE,autoLogout=Boolean.TRUE;
+	protected String context,scheme="http",host="localhost",port="8080";
 	protected String[][] users;
 	protected WebDriver getDriver(){
 		return driver;
@@ -32,6 +33,13 @@ public abstract class AbstractIntegrationWebTest extends AbstractTest  {
 			try {
 				properties.load(new FileInputStream(propertiesFile));
 				googleDriverPath = properties.getProperty(googleDriverPathPropertyName);
+				scheme = StringUtils.defaultString(properties.getProperty("scheme"),"http");
+				context = properties.getProperty(googleDriverPathPropertyName);
+				host = StringUtils.defaultString(properties.getProperty("host"),"localhost");
+				port = StringUtils.defaultString(properties.getProperty("port"),"8080");
+				
+				System.out.println("Properties are : ");
+				System.out.println(properties);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
