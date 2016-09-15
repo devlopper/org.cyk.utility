@@ -67,9 +67,14 @@ public abstract class AbstractIntegrationWebTest extends AbstractTest  {
 			}
 		}
 	}
+	
 	protected void goToLoginPage(){}
-	protected void login(String username,String password){}
-	protected void logout(String username){}
+	protected void login(String username,String password){
+		
+	}
+	protected void logout(String username){
+		
+	}
 	
 	protected WebDriver getWebDriver(Class<? extends WebDriver> webDriverClass){
 		if(ChromeDriver.class.equals(webDriverClass))
