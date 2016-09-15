@@ -110,11 +110,7 @@ public class AbstractBean implements Serializable {
 	}
 	
 	protected void pause(long millisecond){
-		try {
-			Thread.sleep(millisecond);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		commonUtils.pause(millisecond);
 	}
 	
 	/**/

@@ -68,6 +68,14 @@ public class CommonUtils implements Serializable  {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommonUtils.class);
 	private static final Map<String,Class<?>> CLASSES_MAP = new HashMap<String, Class<?>>();
 
+	public void pause(long millisecond){
+		try {
+			Thread.sleep(millisecond);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public <T> T inject(Class<T> aClass){
 		if(aClass==null)
 			return null;
