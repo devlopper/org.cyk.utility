@@ -68,6 +68,20 @@ public class CommonUtils implements Serializable  {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommonUtils.class);
 	private static final Map<String,Class<?>> CLASSES_MAP = new HashMap<String, Class<?>>();
 
+	@SuppressWarnings("unchecked")
+	public <NUMBER extends Number> NUMBER getBigDecimalAs(BigDecimal value,Class<NUMBER> numberClass){
+		if(value==null)
+			return null;
+		if(Long.class.equals(numberClass))
+			return (NUMBER) new Long(value.longValue());
+		if(Integer.class.equals(numberClass))
+			return (NUMBER) new Integer(value.intValue());
+		if(Double.class.equals(numberClass))
+			return (NUMBER) new Double(value.doubleValue());
+		LOGGER.error("Cannot convert bigdecimal value <<{}>> to {}",value,numberClass);
+		return null;
+	}
+	
 	public void pause(long millisecond){
 		try {
 			Thread.sleep(millisecond);
