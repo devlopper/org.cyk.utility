@@ -123,6 +123,10 @@ public abstract class AbstractFieldSorter<OBJECT> {
 		private Object object;
 		private Field field;
 		
+		@Override
+		public String toString() {
+			return field.getName();
+		}
 	}
 	
 	public static class FieldSorter extends AbstractFieldSorter<Field> {
