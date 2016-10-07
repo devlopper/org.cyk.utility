@@ -35,11 +35,12 @@ public class FieldSorterUT extends AbstractUnitTest {
 	}
 	
 	private void assertSortFields(FieldSorter fieldSorter,List<Field> fields,String...expected){
+		Integer originalSize = fields.size();
 		fieldSorter.setExpectedFieldNames(expected);
 		System.out.println("Before sort : "+getAsString(fields));
 		fieldSorter.sort();
 		System.out.println("After sort : "+getAsString(fields));
-		//assertEquals(expected.length, fields.size());
+		assertEquals(expected.length, originalSize-fieldSorter.getNotSorted().size());
 		int i = 0;
 		for(Field field : fields)
 			assertEquals(expected[i++], field.getName());

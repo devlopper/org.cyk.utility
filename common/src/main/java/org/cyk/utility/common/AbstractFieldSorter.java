@@ -10,16 +10,19 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
 import org.cyk.utility.common.annotation.user.interfaces.SequenceOverride;
 
+@Getter @Setter
 public abstract class AbstractFieldSorter<OBJECT> {
 		
 	private List<OBJECT> objects;
 	private Class<?> clazz;
 	private List<String> expectedFieldNames;
+	private List<OBJECT> notSorted;
 	
 	public AbstractFieldSorter(List<OBJECT> objects,Class<?> clazz) {
 		super();
@@ -31,6 +34,12 @@ public abstract class AbstractFieldSorter<OBJECT> {
 		if(expectedFieldNames == null)
 			expectedFieldNames = new ArrayList<>();
 		return expectedFieldNames;
+	}
+	
+	public List<OBJECT> getNotSorted(){
+		if(notSorted == null)
+			notSorted = new ArrayList<>();
+		return notSorted;
 	}
 	
 	public void setExpectedFieldNames(String...values){
@@ -70,6 +79,8 @@ public abstract class AbstractFieldSorter<OBJECT> {
 				OBJECT object = objects.remove(index.intValue());
 				reorders.add(object);
 			}
+			getNotSorted().clear();
+			getNotSorted().addAll(objects);
 			objects.clear();
 			objects.addAll(reorders);
 		}
