@@ -22,6 +22,7 @@ public abstract class AbstractFieldSorter<OBJECT> {
 	private List<OBJECT> objects;
 	private Class<?> clazz;
 	private List<String> expectedFieldNames;
+	private Boolean useExpectedFieldNames;
 	private List<OBJECT> notSorted;
 	
 	public AbstractFieldSorter(List<OBJECT> objects,Class<?> clazz) {
@@ -49,7 +50,7 @@ public abstract class AbstractFieldSorter<OBJECT> {
 	
 	public void sort(){
 		Collection<OBJECT> reorders = new ArrayList<>();
-		if(expectedFieldNames == null){
+		if( useExpectedFieldNames==null || Boolean.FALSE.equals(useExpectedFieldNames)){
 			for(int i=0;i<objects.size();){
 				if(sequence(getField(objects.get(i)))==null)
 					i++;
@@ -71,7 +72,7 @@ public abstract class AbstractFieldSorter<OBJECT> {
 						position++;
 				}
 			}
-		}else{
+		}else if( useExpectedFieldNames!=null && Boolean.TRUE.equals(useExpectedFieldNames) && expectedFieldNames != null ) {
 			for(String value : expectedFieldNames){
 				Integer index = getIndexByFieldName(value);
 				if(index==null)

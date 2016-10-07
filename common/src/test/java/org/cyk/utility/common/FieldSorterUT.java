@@ -35,6 +35,7 @@ public class FieldSorterUT extends AbstractUnitTest {
 	}
 	
 	private void assertSortFields(FieldSorter fieldSorter,List<Field> fields,String...expected){
+		fieldSorter.setUseExpectedFieldNames(Boolean.TRUE);
 		Integer originalSize = fields.size();
 		fieldSorter.setExpectedFieldNames(expected);
 		System.out.println("Before sort : "+getAsString(fields));
