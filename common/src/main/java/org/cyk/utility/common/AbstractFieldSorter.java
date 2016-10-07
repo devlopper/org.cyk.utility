@@ -65,9 +65,12 @@ public abstract class AbstractFieldSorter<OBJECT> {
 		}else{
 			for(String value : expectedFieldNames){
 				Integer index = getIndexByFieldName(value);
+				if(index==null)
+					continue;
 				OBJECT object = objects.remove(index.intValue());
 				reorders.add(object);
 			}
+			objects.clear();
 			objects.addAll(reorders);
 		}
 	}
