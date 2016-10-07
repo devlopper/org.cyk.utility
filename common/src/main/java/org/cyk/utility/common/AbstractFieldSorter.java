@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
 import org.cyk.utility.common.annotation.user.interfaces.SequenceOverride;
@@ -19,35 +19,56 @@ public abstract class AbstractFieldSorter<OBJECT> {
 		
 	private List<OBJECT> objects;
 	private Class<?> clazz;
+	private List<String> expectedFieldNames;
 	
 	public AbstractFieldSorter(List<OBJECT> objects,Class<?> clazz) {
 		super();
 		this.objects = objects;
 		this.clazz = clazz;
 	}
-
+	
+	public List<String> getExpectedFieldNames(){
+		if(expectedFieldNames == null)
+			expectedFieldNames = new ArrayList<>();
+		return expectedFieldNames;
+	}
+	
+	public void setExpectedFieldNames(String...values){
+		getExpectedFieldNames().clear();
+		getExpectedFieldNames().addAll(Arrays.asList(values));
+	}
+	
 	public void sort(){
 		Collection<OBJECT> reorders = new ArrayList<>();
-		for(int i=0;i<objects.size();){
-			if(sequence(field(objects.get(i)))==null)
-				i++;
-			else
-				reorders.add(objects.remove(i));
-		}
-		
-		for(OBJECT object : reorders){	
-			Sequence sequence = sequence(field(object));
-			for(int position=0;position<objects.size();){
-				if(sequence.field().equals(field(objects.get(position)).getName())){
-					if(Direction.BEFORE.equals(sequence.direction()))
-						objects.add(position, object);
-					else{
-						objects.add(position+1, object);
-					}
-					break;
-				}else
-					position++;
+		if(expectedFieldNames == null){
+			for(int i=0;i<objects.size();){
+				if(sequence(getField(objects.get(i)))==null)
+					i++;
+				else
+					reorders.add(objects.remove(i));
 			}
+			
+			for(OBJECT object : reorders){	
+				Sequence sequence = sequence(getField(object));
+				for(int position=0;position<objects.size();){
+					if(sequence.field().equals(getField(objects.get(position)).getName())){
+						if(Direction.BEFORE.equals(sequence.direction()))
+							objects.add(position, object);
+						else{
+							objects.add(position+1, object);
+						}
+						break;
+					}else
+						position++;
+				}
+			}
+		}else{
+			for(String value : expectedFieldNames){
+				Integer index = getIndexByFieldName(value);
+				OBJECT object = objects.remove(index.intValue());
+				reorders.add(object);
+			}
+			objects.addAll(reorders);
 		}
 	}
 	
@@ -64,7 +85,19 @@ public abstract class AbstractFieldSorter<OBJECT> {
 		return sequence;
 	}
 	
-	protected abstract Field field(OBJECT object);
+	protected abstract Field getField(OBJECT object);
+	
+	public Integer getIndexByFieldName(String fieldName){
+		Integer i = 0;
+		for(OBJECT object : objects){
+			Field field = getField(object);
+			if(field.getName().equals(fieldName))
+				return i;
+			else
+				i++;
+		}
+		return null;
+	}
 	
 	/**/
 	
@@ -84,7 +117,7 @@ public abstract class AbstractFieldSorter<OBJECT> {
 		}
 
 		@Override
-		protected Field field(Field object) {
+		protected Field getField(Field object) {
 			return object;
 		}
 		
@@ -97,8 +130,8 @@ public abstract class AbstractFieldSorter<OBJECT> {
 		}
 		
 		@Override
-		protected Field field(ObjectField object) {
-			return object.field;
+		protected Field getField(ObjectField objectField) {
+			return objectField.field;
 		}
 		
 	}
