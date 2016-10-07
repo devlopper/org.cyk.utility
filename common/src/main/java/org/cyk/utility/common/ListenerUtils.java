@@ -12,13 +12,14 @@ public class ListenerUtils {
 	
 	public <RESULT,LISTENER> RESULT getValue(Class<RESULT> valueClass,Collection<LISTENER> listeners,ResultMethod<LISTENER,RESULT> method){
 		RESULT result = null;
-		for(LISTENER listener : listeners){
-			RESULT value = method.execute(listener);
-			if(value==null)
-				;
-			else
-				result = value;
-		}
+		if(listeners!=null)
+			for(LISTENER listener : listeners){
+				RESULT value = method.execute(listener);
+				if(value==null)
+					;
+				else
+					result = value;
+			}
 		if(result==null)
 			result = method.getNullValue();
 		return result;
@@ -50,15 +51,18 @@ public class ListenerUtils {
 	
 	public <LISTENER,ELEMENT_TYPE> Collection<ELEMENT_TYPE> getCollection(Collection<LISTENER> listeners,ResultMethod<LISTENER,Collection<ELEMENT_TYPE>> method){
 		Collection<ELEMENT_TYPE> collection = null;
-		for(LISTENER listener : listeners){
-			Collection<ELEMENT_TYPE> value = method.execute(listener);
-			if(value!=null)
-				collection = value;
-		}
+		if(listeners != null)
+			for(LISTENER listener : listeners){
+				Collection<ELEMENT_TYPE> value = method.execute(listener);
+				if(value!=null)
+					collection = value;
+			}
 		return collection;
 	}
 	
 	public <RESULT,LISTENER> void execute(Collection<LISTENER> listeners,VoidMethod<LISTENER> method){
+		if(listeners==null)
+			return;
 		for(LISTENER listener : listeners)
 			method.execute(listener);
 	}
