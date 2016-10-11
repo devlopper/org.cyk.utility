@@ -621,12 +621,12 @@ public class CommonUtils implements Serializable  {
 		try {
 			@SuppressWarnings("unchecked")
 			T value = (T) FieldUtils.readField(object, fieldName, Boolean.TRUE);
-			if(BigDecimal.class.equals(value.getClass())){
-				FieldUtils.writeField(object, fieldName, ((BigDecimal)value).add((BigDecimal) increment), Boolean.TRUE);
-			}else if(Long.class.equals(value.getClass())){
-				FieldUtils.writeField(object, fieldName, ((Long)value) + (Long) increment, Boolean.TRUE);
-			}else if(Integer.class.equals(value.getClass())){
-				FieldUtils.writeField(object, fieldName, ((Integer)value) + (Integer) increment, Boolean.TRUE);
+			if(BigDecimal.class.equals(valueType)){
+				FieldUtils.writeField(object, fieldName, ( (value == null ? BigDecimal.ZERO :  (BigDecimal)value) ).add((BigDecimal) increment), Boolean.TRUE);
+			}else if(Long.class.equals(valueType)){
+				FieldUtils.writeField(object, fieldName, ( (value == null ? 0 :  (Long)value)) + (Long) increment, Boolean.TRUE);
+			}else if(Integer.class.equals(valueType)){
+				FieldUtils.writeField(object, fieldName, ( (value == null ? 0 :  (Integer)value)) + (Integer) increment, Boolean.TRUE);
 			}  
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
