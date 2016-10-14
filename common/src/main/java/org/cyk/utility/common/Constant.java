@@ -33,6 +33,7 @@ public interface Constant {
 	Character CHARACTER_PLUS = new Character('+');
 	Character CHARACTER_PERCENT = new Character('%');
 	Character CHARACTER_HYPHEN = new Character('-');
+	Character CHARACTER_MINUS = new Character('-');
 	Character CHARACTER_GREATER_THAN = new Character('>');
 	Character CHARACTER_LOWER_THAN = new Character('<');
 	Character CHARACTER_SHARP = new Character('#');
