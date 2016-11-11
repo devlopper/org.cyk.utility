@@ -300,6 +300,10 @@ public class AbstractBean implements Serializable {
 	protected void logTrace(LogMessage logMessage) {
 		logTrace(logMessage.getTemplate(), logMessage.getArgumentsArray());
 	}
+	protected void logTrace(LogMessage.Builder logMessageBuilder) {
+		LogMessage logMessage = logMessageBuilder.build();
+		logTrace(logMessage);
+	}
 
 	protected void logDebug(Object message,Object...arguments) {
 		if(message==null)

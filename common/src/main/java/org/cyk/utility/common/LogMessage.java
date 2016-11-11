@@ -41,8 +41,18 @@ public class LogMessage extends AbstractBean implements Serializable {
 		private String action,subject;
 		private List<Object> parameters;
 		
-		public Builder() {
+		public Builder(String action,String subject) {
 			super(LogMessage.class);
+			this.action = action;
+			this.subject = subject;
+		}
+		
+		public Builder(String action,Class<?> subjectClass) {
+			this(action,subjectClass.getSimpleName());
+		}
+		
+		public Builder() {
+			this(Constant.EMPTY_STRING,Constant.EMPTY_STRING);
 		}
 		
 		public Builder set(String action,String subject,Object...parameters) {
