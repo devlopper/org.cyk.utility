@@ -24,6 +24,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.ListenerUtils;
+import org.cyk.utility.common.LogMessage;
 import org.cyk.utility.common.RunnableListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -295,6 +296,9 @@ public class AbstractBean implements Serializable {
 		String stringMessage = message.toString();
 		__logger__().trace(stringMessage,arguments);
 		systemOut(SYSTEM_OUT_LOG_TRACE,message, arguments);
+	}
+	protected void logTrace(LogMessage logMessage) {
+		logTrace(logMessage.getTemplate(), logMessage.getArgumentsArray());
 	}
 
 	protected void logDebug(Object message,Object...arguments) {
