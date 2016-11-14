@@ -763,7 +763,7 @@ public class CommonUtils implements Serializable  {
 	}
 	
 	public <T> T getValueAt(T[] array,Integer index,T nullValue){
-		if(array==null || index==null || index < 0 || index > array.length)
+		if(array==null || index==null || index < 0 || index >= array.length)
 			return nullValue;
 		return array[index];
 	}

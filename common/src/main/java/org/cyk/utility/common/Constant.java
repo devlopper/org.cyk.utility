@@ -1,8 +1,10 @@
 package org.cyk.utility.common;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 public interface Constant {
@@ -70,4 +72,11 @@ public interface Constant {
 	
 	Date DATE_LOWEST_VALUE = new DateTime(0, 1, 1, 0, 0, 0, 0).toDate();
 	Date DATE_HIGHEST_VALUE = new DateTime(9999, 12, 31, 23, 59, 59, 999).toDate();
+	
+	BigDecimal NUMBER_LOWEST_NEGATIVE=new BigDecimal("-1"+StringUtils.repeat('0', 18));
+	BigDecimal NUMBER_HIGHEST_NEGATIVE_LOWER_THAN_ZERO=new BigDecimal("-0."+StringUtils.repeat('0', 18)+"1");
+	
+	BigDecimal NUMBER_LOWEST_POSITIVE_GREATER_THAN_ZERO=new BigDecimal("0."+StringUtils.repeat('0', 18)+"1");
+	BigDecimal NUMBER_HIGHEST_POSITIVE=new BigDecimal("1"+StringUtils.repeat('0', 18));
+	
 }
