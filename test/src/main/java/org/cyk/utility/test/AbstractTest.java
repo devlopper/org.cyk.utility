@@ -183,8 +183,9 @@ public abstract class AbstractTest implements Serializable {
 				}else{
 					name = (String) names[i];
 				}
-				if(type==null)
+				if(type==null){
 					type = FieldUtils.getField(aClass, name, Boolean.TRUE).getType();
+				}
 				if(value!=null && !value.getClass().equals(type)){
 					if(BigDecimal.class.equals(type))
 						if(value instanceof String)
