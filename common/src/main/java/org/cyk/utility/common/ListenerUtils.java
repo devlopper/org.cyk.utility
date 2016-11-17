@@ -60,6 +60,17 @@ public class ListenerUtils {
 		return collection;
 	}
 	
+	public <LISTENER,ELEMENT_TYPE> java.util.Set<ELEMENT_TYPE> getSet(Collection<LISTENER> listeners,ResultMethod<LISTENER,java.util.Set<ELEMENT_TYPE>> method){
+		java.util.Set<ELEMENT_TYPE> set = null;
+		if(listeners != null)
+			for(LISTENER listener : listeners){
+				java.util.Set<ELEMENT_TYPE> value = method.execute(listener);
+				if(value!=null)
+					set = value;
+			}
+		return set;
+	}
+	
 	public <RESULT,LISTENER> void execute(Collection<LISTENER> listeners,VoidMethod<LISTENER> method){
 		if(listeners==null)
 			return;
@@ -86,8 +97,15 @@ public class ListenerUtils {
 	public static abstract class LongMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,Long>{}
 	public static abstract class IntegerMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,Integer>{}
 	public static abstract class DoubleMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,Double>{}
-	public static abstract class CollectionMethod<LISTENER,ELEMENT_TYPE> extends ResultMethod.Adapter<LISTENER,Collection<ELEMENT_TYPE>>{
+	public static abstract class AbstractCollectionMethod<LISTENER,ELEMENT_TYPE,COLLECTION extends Collection<ELEMENT_TYPE>> extends ResultMethod.Adapter<LISTENER,COLLECTION>{
+		
+	}
+	public static abstract class CollectionMethod<LISTENER,ELEMENT_TYPE> extends AbstractCollectionMethod<LISTENER,ELEMENT_TYPE,Collection<ELEMENT_TYPE>>{
 		//Class<COLLECTION_RUNTIME_TYPE> getCollectionRuntimeType();
+		
+		public static abstract class Set<LISTENER,ELEMENT_TYPE> extends AbstractCollectionMethod<LISTENER,ELEMENT_TYPE,java.util.Set<ELEMENT_TYPE>>{
+			
+		}
 	}
 	
 	public static interface VoidMethod<LISTENER>{
