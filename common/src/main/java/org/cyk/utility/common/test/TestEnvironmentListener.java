@@ -27,6 +27,8 @@ public interface TestEnvironmentListener {
 	
 	void assertEquals(String message,Object expected,Object actual);
 
+	void assertCodeExists(Class<?> aClass,String code);
+	
 	void assertBigDecimalEquals(String message,BigDecimal expected,BigDecimal actual);
 	
 	void assertThat(String reason,Boolean assertion);
@@ -56,6 +58,9 @@ public interface TestEnvironmentListener {
 		@Override
 		public void assertEquals(String message, Object expected, Object actual) {notImplemented();}
 
+		@Override
+		public void assertCodeExists(Class<?> aClass, String code) {}
+		
 		@Override
 		public void assertBigDecimalEquals(String message, BigDecimal expected, BigDecimal actual) {notImplemented();}
 
