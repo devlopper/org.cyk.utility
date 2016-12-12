@@ -27,9 +27,6 @@ import java.util.Set;
 
 import javax.enterprise.inject.spi.CDI;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -50,6 +47,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.cyk.utility.common.ClassRepository.ClassField;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.cyk.utility.common.annotation.FieldOverrides;
+import org.cyk.utility.common.cdi.BeanAdapter;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.reflections.Reflections;
@@ -60,6 +58,9 @@ import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 public class CommonUtils implements Serializable  {
@@ -836,7 +837,8 @@ public class CommonUtils implements Serializable  {
             			break;
             		}
             	if(!Boolean.TRUE.equals(arguments.getIgnoreEmptyRow()) || Boolean.FALSE.equals(isEmpty))
-            		list.add(array);
+            		if(arguments.getListener()==null || Boolean.TRUE.equals(arguments.getListener().addable(array)))
+            			list.add(array);
             }
         }
         workbook.close();
@@ -848,6 +850,32 @@ public class CommonUtils implements Serializable  {
 		private byte[] workbookBytes;
 		private Integer sheetIndex,fromRowIndex=0,fromColumnIndex=0,rowCount,columnCount;
 		private Boolean ignoreEmptyRow = Boolean.TRUE;
+		private Listener listener;
+		
+		public static interface Listener {
+			
+			Boolean addable(String[] row);
+			
+			public static class Adapter extends BeanAdapter implements Listener,Serializable{
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public Boolean addable(String[] row) {
+					return null;
+				}
+				
+				public static class Default extends Listener.Adapter implements Serializable{
+					private static final long serialVersionUID = 1L;
+					
+					@Override
+					public Boolean addable(String[] row) {
+						return Boolean.TRUE;
+					}
+					
+				}
+			}
+		}
+	
 	}
 	
 	/**/
