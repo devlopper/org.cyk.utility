@@ -880,6 +880,44 @@ public class CommonUtils implements Serializable  {
 	
 	/**/
 	
+	public Execution execute(String name,Runnable aRunnable){
+		Execution execution;
+		execution = new Execution(name);
+		execution.start();
+		aRunnable.run();
+		execution.end();
+		return execution;
+	}
+	
+	@Getter
+	public static class Execution{
+		private String name;
+		private long startTimestamp;
+		private long duration;
+		private LogMessage.Builder logMessageBuilder;
+		
+		public void start(){
+			logMessageBuilder = new LogMessage.Builder("execute", name);
+			startTimestamp = System.currentTimeMillis();
+		}
+		
+		public void end(){
+			duration = System.currentTimeMillis()-startTimestamp;
+			logMessageBuilder.addParameters("millisecond",duration,"second",duration/1000,"minute",duration/1000/60);
+			LogMessage logMessage = logMessageBuilder.build();
+			LOGGER.trace(logMessage.getTemplate(),logMessage.getArguments().toArray());
+		}
+
+		public Execution(String name) {
+			super();
+			this.name = name;
+		}
+		@Override
+		public String toString() {
+			return name+" , "+duration+" , "+(duration/1000)+"s , "+" , "+(duration/1000/60)+"min";
+		}
+	}
+	
 	/**/
 	
 	private CommonUtils() {}
