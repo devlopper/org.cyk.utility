@@ -248,6 +248,7 @@ public interface TestEnvironmentListener {
 		public void execute(){
 			try { 
 				code();
+				throw new RuntimeException("None exception has been threw");
 			} 
 			catch (Exception exception) { 
 				for(TestEnvironmentListener listener : COLLECTION)
