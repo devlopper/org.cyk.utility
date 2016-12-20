@@ -3,6 +3,7 @@ package org.cyk.utility.common;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -60,6 +61,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
@@ -782,75 +784,91 @@ public class CommonUtils implements Serializable  {
 	
 	public List<String[]> readExcelSheet(ReadExcelSheetArguments arguments) throws Exception{
 		Workbook workbook = WorkbookFactory.create(new ByteArrayInputStream(arguments.getWorkbookBytes()));
-        Sheet sheet = workbook.getSheetAt(arguments.getSheetIndex());
-        FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
+        Sheet sheet = StringUtils.isBlank(arguments.getName()) ? workbook.getSheetAt(arguments.getSheetIndex()) : workbook.getSheet(arguments.getName());
         List<String[]> list = new ArrayList<>();
-        Integer fromRowIndex = arguments.getFromRowIndex(),fromColumnIndex = arguments.getFromColumnIndex();
-        Integer rowCount = arguments.getRowCount(),columnCount = arguments.getColumnCount();
-        if(rowCount==null)
-        	rowCount = sheet.getPhysicalNumberOfRows();
-        if(columnCount==null)
-        	columnCount = new Integer(sheet.getRow(0).getLastCellNum());
-        
-        for (int i=0; i<rowCount; i++) {
-        	String[] array = null;
-            Row row = sheet.getRow(i + fromRowIndex);
-            if(row==null){
-            	
-            }else{
-            	array = new String[columnCount];
-            	for (int j=0; j<columnCount; j++) {
-                    Cell cell = row.getCell(j+fromColumnIndex);
-                    if(cell==null)
-                    	array[j] = Constant.EMPTY_STRING;
-                    else{
-                    	CellValue cellValue = formulaEvaluator.evaluate(cell);
-                    	String stringValue;
-                    	if(cellValue==null)
-                    		stringValue = Constant.EMPTY_STRING;
-                    	else switch(cellValue.getCellType()){
-	    	                case Cell.CELL_TYPE_FORMULA : 
-	    	                	throw new RuntimeException("Must never happen! Cannot process a formula. Please change field to result of formula.("+i+","+j+")");
-	    	                case Cell.CELL_TYPE_BLANK: stringValue = Constant.EMPTY_STRING; break;
-	    	                case Cell.CELL_TYPE_NUMERIC: 
-	    	                	if(DateUtil.isCellDateFormatted(cell))
-	                        		stringValue = Constant.DATE_TIME_FORMATTER.format(cell.getDateCellValue());
-	                        	else
-	                        		stringValue = String.valueOf(cellValue.getNumberValue()); 
-	    	                	break;
-	    	                case Cell.CELL_TYPE_STRING: stringValue = cellValue.getStringValue(); break;
-	    	                default:
-	    	                	stringValue = StringUtils.trim(cellValue.getStringValue());
-	    	                	break;
-	    	                }
-                    	array[j] = String.valueOf(StringUtils.isBlank(stringValue)?Constant.EMPTY_STRING:stringValue);
+        if(sheet==null){
+        	System.out.println("No sheet named <<"+arguments.getName()+">> or at index <<"+arguments.getSheetIndex()+">> found");
+        }else{
+        	FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
+        	Integer fromRowIndex = arguments.getFromRowIndex(),fromColumnIndex = arguments.getFromColumnIndex();
+            Integer rowCount = arguments.getRowCount(),columnCount = arguments.getColumnCount();
+            if(rowCount==null)
+            	rowCount = sheet.getPhysicalNumberOfRows();
+            if(columnCount==null)
+            	columnCount = new Integer(sheet.getRow(0).getLastCellNum());
+            
+            for (int i=0; i<rowCount; i++) {
+            	String[] array = null;
+                Row row = sheet.getRow(i + fromRowIndex);
+                if(row==null){
+                	
+                }else{
+                	array = new String[columnCount];
+                	for (int j=0; j<columnCount; j++) {
+                        Cell cell = row.getCell(j+fromColumnIndex);
+                        if(cell==null)
+                        	array[j] = Constant.EMPTY_STRING;
+                        else{
+                        	CellValue cellValue = formulaEvaluator.evaluate(cell);
+                        	String stringValue;
+                        	if(cellValue==null)
+                        		stringValue = Constant.EMPTY_STRING;
+                        	else switch(cellValue.getCellType()){
+    	    	                case Cell.CELL_TYPE_FORMULA : 
+    	    	                	throw new RuntimeException("Must never happen! Cannot process a formula. Please change field to result of formula.("+i+","+j+")");
+    	    	                case Cell.CELL_TYPE_BLANK: stringValue = Constant.EMPTY_STRING; break;
+    	    	                case Cell.CELL_TYPE_NUMERIC: 
+    	    	                	if(DateUtil.isCellDateFormatted(cell))
+    	                        		stringValue = Constant.DATE_TIME_FORMATTER.format(cell.getDateCellValue());
+    	                        	else
+    	                        		stringValue = String.valueOf(cellValue.getNumberValue()); 
+    	    	                	break;
+    	    	                case Cell.CELL_TYPE_STRING: stringValue = cellValue.getStringValue(); break;
+    	    	                default:
+    	    	                	stringValue = StringUtils.trim(cellValue.getStringValue());
+    	    	                	break;
+    	    	                }
+                        	array[j] = String.valueOf(StringUtils.isBlank(stringValue)?Constant.EMPTY_STRING:stringValue);
+                        }
                     }
                 }
-            }
-            if(array==null)
-            	;
-            else{
-            	Boolean isEmpty = Boolean.TRUE;
-            	for(int k = 0; k < array.length; k++)
-            		if(StringUtils.isNotBlank(array[k])){
-            			isEmpty = Boolean.FALSE;
-            			break;
-            		}
-            	if(!Boolean.TRUE.equals(arguments.getIgnoreEmptyRow()) || Boolean.FALSE.equals(isEmpty))
-            		if(arguments.getListener()==null || Boolean.TRUE.equals(arguments.getListener().addable(array)))
-            			list.add(array);
-            }
+                if(array==null)
+                	;
+                else{
+                	Boolean isEmpty = Boolean.TRUE;
+                	for(int k = 0; k < array.length; k++)
+                		if(StringUtils.isNotBlank(array[k])){
+                			isEmpty = Boolean.FALSE;
+                			break;
+                		}
+                	if(!Boolean.TRUE.equals(arguments.getIgnoreEmptyRow()) || Boolean.FALSE.equals(isEmpty))
+                		if(arguments.getListener()==null || Boolean.TRUE.equals(arguments.getListener().addable(array)))
+                			list.add(array);
+                }
+            }	
         }
         workbook.close();
         return list;
 	}
 	
-	@Getter @Setter
+	@Getter @Setter @NoArgsConstructor
 	public static class ReadExcelSheetArguments{
 		private byte[] workbookBytes;
 		private Integer sheetIndex,fromRowIndex=0,fromColumnIndex=0,rowCount,columnCount;
 		private Boolean ignoreEmptyRow = Boolean.TRUE;
+		private String name;
 		private Listener listener;
+		
+		public ReadExcelSheetArguments(InputStream inputStream,Class<?> aClass) throws IOException {
+			workbookBytes = IOUtils.toByteArray(inputStream);
+			fromRowIndex = 1;//row 0 should be used for labels
+			setName(aClass);
+		}
+		
+		public ReadExcelSheetArguments setName(Class<?> aClass){
+			this.name = aClass.getSimpleName();
+			return this;
+		}
 		
 		public static interface Listener {
 			
