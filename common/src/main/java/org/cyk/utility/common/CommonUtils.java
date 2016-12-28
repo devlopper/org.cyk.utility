@@ -821,14 +821,14 @@ public class CommonUtils implements Serializable  {
     	    	                	if(DateUtil.isCellDateFormatted(cell))
     	                        		stringValue = Constant.DATE_TIME_FORMATTER.format(cell.getDateCellValue());
     	                        	else
-    	                        		stringValue = String.valueOf(cellValue.getNumberValue()); 
+    	                        		stringValue = /*cellValue.getStringValue();*/ new BigDecimal(cellValue.getNumberValue()).toString(); //cellValue.getNumberValue()); 
     	    	                	break;
     	    	                case Cell.CELL_TYPE_STRING: stringValue = cellValue.getStringValue(); break;
     	    	                default:
     	    	                	stringValue = StringUtils.trim(cellValue.getStringValue());
     	    	                	break;
     	    	                }
-                        	array[j] = String.valueOf(StringUtils.isBlank(stringValue)?Constant.EMPTY_STRING:stringValue);
+                        	array[j] = StringUtils.defaultIfBlank(stringValue,Constant.EMPTY_STRING);
                         }
                     }
                 }
