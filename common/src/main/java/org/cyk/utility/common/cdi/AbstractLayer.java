@@ -16,7 +16,7 @@ public abstract class AbstractLayer<META_CLASS> extends AbstractStartupBean impl
 
 	private static final long serialVersionUID = 3493129449617672056L;
 	
-	@Getter protected String id ,name;
+	@Getter protected String id ,name,systemIdentifier;
 	@Getter protected Set<Class<META_CLASS>> classes = new HashSet<>();
 	
 	public AbstractLayer() {
