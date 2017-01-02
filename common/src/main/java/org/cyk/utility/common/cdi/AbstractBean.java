@@ -324,4 +324,10 @@ public class AbstractBean implements Serializable {
 		if(Boolean.TRUE.equals(condition))
 			System.out.println(message+" : "+StringUtils.join(arguments," , "));
 	}
+	
+	protected void addLogMessageBuilderParameters(LogMessage.Builder logMessageBuilder,Object...parameters){
+		if(logMessageBuilder==null)
+			return;
+		logMessageBuilder.addParameters(parameters);
+	}
 }
