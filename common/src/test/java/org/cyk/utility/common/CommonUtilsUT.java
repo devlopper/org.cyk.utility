@@ -248,6 +248,17 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		
 	}
 	
+	@Test
+	public void convertToStringOneDimension(){
+		assertEquals("a,1,b,AbC", CommonUtils.getInstance().convertToString(new Object[]{"a",1,"b","AbC"}, Constant.CHARACTER_COMA));
+		assertEquals("a,1,b,AbC", CommonUtils.getInstance().convertToString(new String[]{"a","1","b","AbC"}, Constant.CHARACTER_COMA));
+	}
+	
+	@Test
+	public void convertToStringTwoDimensions(){
+		assertEquals("a,1,b,AbC|1,2", CommonUtils.getInstance().convertToString(new Object[][]{{"a",1,"b","AbC"},{1,2}}, Constant.CHARACTER_VERTICAL_BAR,Constant.CHARACTER_COMA));
+	}
+	
 	/**/
 	
 	@ModelBean(crudStrategy=CrudStrategy.BUSINESS) @Getter @Setter

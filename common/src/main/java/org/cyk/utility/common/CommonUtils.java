@@ -782,6 +782,18 @@ public class CommonUtils implements Serializable  {
 		return result;
 	}
 	
+	public String convertToString(Object[] array,Object separator){
+		return StringUtils.join(array,separator.toString());
+	}
+	
+	public String convertToString(Object[][] array,Object firstDimensionElementSeparator,Object secondDimensionElementSeparator){
+		Collection<String> collection = new ArrayList<>();
+		for(Object[] index : array)
+			collection.add(convertToString(index, secondDimensionElementSeparator.toString()));
+		return StringUtils.join(collection,firstDimensionElementSeparator.toString());
+	}
+	
+	@Deprecated
 	public List<String[]> readExcelSheet(ReadExcelSheetArguments arguments) throws Exception{
 		Workbook workbook = WorkbookFactory.create(new ByteArrayInputStream(arguments.getWorkbookBytes()));
         Sheet sheet = StringUtils.isBlank(arguments.getName()) ? workbook.getSheetAt(arguments.getSheetIndex()) : workbook.getSheet(arguments.getName());
@@ -851,6 +863,7 @@ public class CommonUtils implements Serializable  {
         return list;
 	}
 	
+	@Deprecated
 	@Getter @Setter @NoArgsConstructor
 	public static class ReadExcelSheetArguments{
 		private byte[] workbookBytes;
