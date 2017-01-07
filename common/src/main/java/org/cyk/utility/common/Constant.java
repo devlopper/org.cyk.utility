@@ -79,4 +79,6 @@ public interface Constant {
 	BigDecimal NUMBER_LOWEST_POSITIVE_GREATER_THAN_ZERO=new BigDecimal("0."+StringUtils.repeat('0', 18)+"1");
 	BigDecimal NUMBER_HIGHEST_POSITIVE=new BigDecimal("1"+StringUtils.repeat('0', 18));
 	
+	BigDecimal BIGDECIMAL_100 = new BigDecimal("100");
+	
 }

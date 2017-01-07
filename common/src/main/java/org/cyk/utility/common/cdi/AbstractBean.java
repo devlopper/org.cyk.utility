@@ -22,6 +22,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.cyk.utility.common.Action;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.LogMessage;
@@ -300,9 +301,14 @@ public class AbstractBean implements Serializable {
 	protected void logTrace(LogMessage logMessage) {
 		logTrace(logMessage.getTemplate(), logMessage.getArgumentsArray());
 	}
+	
 	protected void logTrace(LogMessage.Builder logMessageBuilder) {
 		LogMessage logMessage = logMessageBuilder.build();
 		logTrace(logMessage);
+	}
+	
+	protected void logTrace(Action<?, ?> action) {
+		logTrace(action.getLogMessageBuilder());
 	}
 
 	protected void logDebug(Object message,Object...arguments) {
