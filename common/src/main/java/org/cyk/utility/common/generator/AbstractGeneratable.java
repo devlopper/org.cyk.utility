@@ -42,8 +42,12 @@ public abstract class AbstractGeneratable<T> implements Serializable {
 				return null;
 			}
 		});
-		if(result==null)
-			return null;
+		if(result==null){
+			if(object==null)
+				return null;
+			else
+				return object.toString();
+		}
 		return result.toString();
 	}
 	
