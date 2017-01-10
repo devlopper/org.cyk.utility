@@ -16,9 +16,9 @@ import javax.enterprise.inject.spi.CDI;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.common.CommonUtils.ReadExcelSheetArguments;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
+import org.cyk.utility.common.file.ExcelSheetReader;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -198,23 +198,31 @@ public class CommonUtilsUT extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void concatenate(){
+		Assert.assertEquals("", CommonUtils.getInstance().concatenate(null, new String[]{}, " ", Boolean.TRUE));
+		Assert.assertEquals("a", CommonUtils.getInstance().concatenate(null, new String[]{"a"}, " ", Boolean.TRUE));
+		Assert.assertEquals("a 1", CommonUtils.getInstance().concatenate(null, new String[]{"a","1"}, " ", Boolean.TRUE));
+		Assert.assertEquals("a 1 b z", CommonUtils.getInstance().concatenate("a 1", new String[]{"b","1","a","z"}, " ", Boolean.TRUE));
+	}
+	
+	@Test
 	public void readExcelSheetXls(){
 		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel");
-		ReadExcelSheetArguments arguments = new ReadExcelSheetArguments();
+		ExcelSheetReader reader = new ExcelSheetReader.Adapter.Default();
 		
 		try {
-			arguments.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xls.xls"))));
-			arguments.setSheetIndex(0);
-			arguments.setRowCount(5);
-			arguments.setColumnCount(3);
-			List<String[]> list = CommonUtils.getInstance().readExcelSheet(arguments);
+			reader.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xls.xls"))));
+			reader.setIndex(0);
+			reader.setRowCount(5);
+			reader.setColumnCount(3);
+			List<String[]> list = reader.execute();
 			for(String[] line : list)
 				System.out.println(StringUtils.join(line," ; "));
 			
-			arguments = new ReadExcelSheetArguments();
-			arguments.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xls.xls"))));
-			arguments.setSheetIndex(0);
-			list = CommonUtils.getInstance().readExcelSheet(arguments);
+			reader = new ExcelSheetReader.Adapter.Default();
+			reader.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xls.xls"))));
+			reader.setIndex(0);
+			list = reader.execute();
 			for(String[] line : list)
 				System.out.println(StringUtils.join(line," ; "));
 		} catch (Exception e) {
@@ -226,20 +234,20 @@ public class CommonUtilsUT extends AbstractUnitTest {
 	@Test
 	public void readExcelSheetXlsx(){
 		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel");
-		ReadExcelSheetArguments arguments = new ReadExcelSheetArguments();
+		ExcelSheetReader reader = new ExcelSheetReader.Adapter.Default();
 		try {
-			arguments.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xlsx.xlsx"))));
-			arguments.setSheetIndex(0);
-			arguments.setRowCount(5);
-			arguments.setColumnCount(3);
-			List<String[]> list = CommonUtils.getInstance().readExcelSheet(arguments);
+			reader.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xlsx.xlsx"))));
+			reader.setIndex(0);
+			reader.setRowCount(5);
+			reader.setColumnCount(3);
+			List<String[]> list = reader.execute();
 			for(String[] line : list)
 				System.out.println(StringUtils.join(line," ; "));
 			
-			arguments = new ReadExcelSheetArguments();
-			arguments.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xlsx.xlsx"))));
-			arguments.setSheetIndex(0);
-			list = CommonUtils.getInstance().readExcelSheet(arguments);
+			reader = new ExcelSheetReader.Adapter.Default();
+			reader.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xlsx.xlsx"))));
+			reader.setIndex(0);
+			list = reader.execute();
 			for(String[] line : list)
 				System.out.println(StringUtils.join(line," ; "));
 		} catch (Exception e) {

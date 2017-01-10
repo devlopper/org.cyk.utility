@@ -601,11 +601,22 @@ public class CommonUtils implements Serializable  {
 		return value;
 	}
 	
+	public String concatenate(String string,String[] values,String separator,Boolean ignoreValueIfExists){
+		Collection<String> collection = new ArrayList<>();
+		if(StringUtils.isNotBlank(string))
+			collection.add(string);
+		
+		for(String value : values)
+			if(ignoreValueIfExists==null || Boolean.FALSE.equals(ignoreValueIfExists) || (Boolean.TRUE.equals(ignoreValueIfExists) && !StringUtils.contains(string, value))){
+				if(StringUtils.isNotBlank(value))
+					collection.add(value);
+			}
+		
+		return StringUtils.join(collection,separator);
+	}
+	
 	public String concatenate(String string,String[] values,String separator){
-		if(StringUtils.isNotEmpty(string) && !StringUtils.endsWith(string, separator))
-			string += separator;
-		string=string+StringUtils.join(values,separator);
-		return string;
+		return concatenate(string, values, separator, Boolean.FALSE);
 	}
 	
 	public String getVariableNameFromString(String prefix,String value,String suffix){
