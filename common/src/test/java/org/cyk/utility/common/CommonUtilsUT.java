@@ -14,6 +14,7 @@ import java.util.Set;
 
 import javax.enterprise.inject.spi.CDI;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.annotation.ModelBean;
@@ -265,6 +266,36 @@ public class CommonUtilsUT extends AbstractUnitTest {
 	@Test
 	public void convertToStringTwoDimensions(){
 		assertEquals("a,1,b,AbC|1,2", CommonUtils.getInstance().convertToString(new Object[][]{{"a",1,"b","AbC"},{1,2}}, Constant.CHARACTER_VERTICAL_BAR,Constant.CHARACTER_COMA));
+	}
+	
+	@Test
+	public void compress() throws Exception{
+		String m = "HélloW0rld";
+		String t1 = StringUtils.repeat(m, 10);
+		assertEquals(10 * m.length(), t1.length());
+		byte[] bytes = CommonUtils.getInstance().compress(t1);
+		System.out.println(t1.length()+" : "+bytes.length);
+		String nt1 = Base64.encodeBase64String(bytes);
+		assertThat("less", nt1.length() < t1.length());
+		nt1 = CommonUtils.getInstance().decompress(Base64.decodeBase64(nt1));
+		assertEquals(t1, nt1);
+	}
+	
+	@Test
+	public void compressString() throws Exception{
+		String m = "HélloW0rld";
+		String t1 = StringUtils.repeat(m, 10);
+		assertEquals(10 * m.length(), t1.length());
+		String nt1 = CommonUtils.getInstance().compressString(t1);
+		System.out.println(t1.length()+" : "+nt1.length());
+		assertThat("less", nt1.length() < t1.length());
+		nt1 = CommonUtils.getInstance().decompressString(nt1);
+		assertEquals(t1, nt1);
+	}
+	
+	@Test
+	public void decompress(){
+		
 	}
 	
 	/**/

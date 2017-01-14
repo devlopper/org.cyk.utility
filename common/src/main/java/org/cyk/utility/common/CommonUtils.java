@@ -2,9 +2,11 @@ package org.cyk.utility.common;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -25,10 +27,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 
 import javax.enterprise.inject.spi.CDI;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
@@ -747,6 +752,18 @@ public class CommonUtils implements Serializable  {
 			convertedValue = new Integer(value);
 		else if(Byte.class.equals(type))
 			convertedValue = new Byte(value);
+		else if(Short.class.equals(type))
+			convertedValue = new Short(value);
+		else if(Boolean.class.equals(type))
+			convertedValue = new Boolean(value);
+		else if(type.isEnum()){
+			for(Object object : type.getEnumConstants()){
+				if(object.toString().equals(value)){
+					convertedValue = object;
+					break;
+				}
+			}
+		}
 		else if(Date.class.equals(type))
 			try {
 				convertedValue = Constant.DATE_TIME_FORMATTER.parse(value);
@@ -794,7 +811,18 @@ public class CommonUtils implements Serializable  {
 	}
 	
 	public String convertToString(Object[] array,Object separator){
-		return StringUtils.join(array,separator.toString());
+		List<String> list = new ArrayList<>();
+		for(Object object : array)
+			if(object instanceof Object[])
+				list.add(convertToString((Object[])object, separator));
+			else if(object instanceof Collection<?>) {
+				Collection<String> collection = new ArrayList<>();
+				for(Object collectionItem : (Collection<?>)object)
+					collection.add(toString(collectionItem));
+				list.add(StringUtils.join(collection,Constant.CHARACTER_COMA.toString()));
+			}else
+				list.add(object.toString());
+		return StringUtils.join(list,separator.toString());
 	}
 	
 	public String convertToString(Object[][] array,Object firstDimensionElementSeparator,Object secondDimensionElementSeparator){
@@ -959,6 +987,59 @@ public class CommonUtils implements Serializable  {
 			return name+" , "+duration+" , "+(duration/1000)+"s , "+" , "+(duration/1000/60)+"min";
 		}
 	}
+	
+	public String toString(Object object){
+		if(object==null)
+			return null;
+		StringBuilder stringBuilder = new StringBuilder();
+		if(object instanceof Collection<?>){
+			Collection<String> collection = new ArrayList<>();
+			for(Object collectionItem : (Collection<?>)object)
+				collection.add(toString(collectionItem));
+			stringBuilder.append(StringUtils.join(collection,Constant.CHARACTER_VERTICAL_BAR.toString()));
+		}else if(object instanceof Object[]){
+			stringBuilder.append(convertToString((Object[])object, Constant.CHARACTER_COMA.toString()));
+		}else if(object instanceof Object[][]){
+			stringBuilder.append(convertToString((Object[][])object,Constant.CHARACTER_VERTICAL_BAR.toString(), Constant.CHARACTER_COMA.toString()));
+		}else
+			stringBuilder.append(object.toString());
+			
+		return stringBuilder.toString();
+	}
+	
+	public byte[] compress(String text) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            OutputStream out = new DeflaterOutputStream(baos);
+            out.write(text.getBytes("UTF-8"));
+            out.close();
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+        return baos.toByteArray();
+    }
+	
+	public String compressString(String text) {
+		return Base64.encodeBase64String(compress(text));
+	}
+
+    public String decompress(byte[] bytes) throws Exception {
+        InputStream in = new InflaterInputStream(new ByteArrayInputStream(bytes));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            byte[] buffer = new byte[8192];
+            int len;
+            while((len = in.read(buffer))>0)
+                baos.write(buffer, 0, len);
+            return new String(baos.toByteArray(), "UTF-8");
+        } catch (IOException e) {
+            throw e;
+        }
+    }
+    
+    public String decompressString(String string) throws Exception {
+    	return decompress(Base64.decodeBase64(string));
+    }
 	
 	/**/
 	
