@@ -52,8 +52,9 @@ public interface Interceptor extends Action<Object[], Object> {
 			@Override
 			public String getInputAsString(Object[] inputs) {
 				StringBuilder stringBuilder = new StringBuilder();
-				for(Object input : inputs)
-					stringBuilder.append(commonUtils.toString(input));
+				if(inputs!=null)
+					for(Object input : inputs)
+						stringBuilder.append(commonUtils.toString(input));
 				return stringBuilder.toString();
 			}
 			
@@ -110,8 +111,10 @@ public interface Interceptor extends Action<Object[], Object> {
 					}
 				});
 			}
-			if(finals[1]!=null)
+			if(finals[1]!=null){
+				((Throwable)finals[1]).printStackTrace();
 				throw new RuntimeException((Throwable)finals[1]);
+			}
 			return finals[0];
 		}
 		

@@ -813,7 +813,9 @@ public class CommonUtils implements Serializable  {
 	public String convertToString(Object[] array,Object separator){
 		List<String> list = new ArrayList<>();
 		for(Object object : array)
-			if(object instanceof Object[])
+			if(object==null)
+				list.add(Constant.EMPTY_STRING);
+			else if(object instanceof Object[])
 				list.add(convertToString((Object[])object, separator));
 			else if(object instanceof Collection<?>) {
 				Collection<String> collection = new ArrayList<>();
@@ -990,7 +992,7 @@ public class CommonUtils implements Serializable  {
 	
 	public String toString(Object object){
 		if(object==null)
-			return null;
+			return Constant.EMPTY_STRING;
 		StringBuilder stringBuilder = new StringBuilder();
 		if(object instanceof Collection<?>){
 			Collection<String> collection = new ArrayList<>();
