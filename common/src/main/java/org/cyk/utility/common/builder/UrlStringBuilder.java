@@ -3,6 +3,7 @@ package org.cyk.utility.common.builder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,42 +17,63 @@ import org.cyk.utility.common.ListenerUtils;
 import lombok.Getter;
 
 @Getter
-public class UrlBuilder extends AbstractBuilder<String> implements Serializable {
+public class UrlStringBuilder extends AbstractBuilder<String> implements Serializable {
 	private static final long serialVersionUID = 4504478526075696024L;
 
+	public static final String SCHEME_HOST_PORT_STRING_FORMAT = "%s://%s%s%s/";
 	public static final String PATH_STRING_FORMAT = "%s%s%s";
-	public static final String STRING_FORMAT = "%s://%s%s%s/"+PATH_STRING_FORMAT;
+	public static final String STRING_FORMAT = SCHEME_HOST_PORT_STRING_FORMAT+PATH_STRING_FORMAT;
 	
-	private String scheme,host,path;
-	private Integer port;
+	public static String SCHEME = null;
+	public static String HOST = null;
+	public static Integer PORT = null;
+	public static String CONTEXT = null;
+	public static String PATH_NOT_FOUND_IDENTIFIER = null;
+	
+	private String scheme=SCHEME,host=HOST,context=CONTEXT,path,pathIdentifier;
+	private Integer port=PORT;
 	private QueryStringBuilder queryStringBuilder;
+	private Map<String,String> pathTokenReplacementMap;
+	private Boolean relative,pretty;
 	
-	public UrlBuilder setScheme(String scheme){
+	public UrlStringBuilder setScheme(String scheme){
 		this.scheme = scheme;
 		return this;
 	}
 	
-	public UrlBuilder setHost(String host){
+	public UrlStringBuilder setHost(String host){
 		this.host = host;
 		return this;
 	}
 	
-	public UrlBuilder setPath(String path){
+	public UrlStringBuilder setPath(String path){
 		this.path = path;
 		return this;
 	}
 	
-	public UrlBuilder setPort(Integer port){
+	public UrlStringBuilder setPathIdentifier(String pathIdentifier){
+		this.pathIdentifier = pathIdentifier;
+		return this;
+	}
+	
+	public UrlStringBuilder setContext(String context){
+		this.context = context;
+		return this;
+	}
+	
+	public UrlStringBuilder setPort(Integer port){
 		this.port = port;
 		return this;
 	}
 	
-	@Override
-	public String build() {
-		String queryString = getQueryStringBuilder().build();
-		return String.format(STRING_FORMAT, scheme,host,port == null ? Constant.EMPTY_STRING : Constant.CHARACTER_COLON,port == null ? Constant.EMPTY_STRING : port
-				,StringUtils.defaultIfBlank(path, Constant.EMPTY_STRING),StringUtils.isBlank(queryString) ? Constant.EMPTY_STRING : Constant.CHARACTER_QUESTION_MARK
-						,StringUtils.defaultIfBlank(queryString, Constant.EMPTY_STRING));
+	public UrlStringBuilder setRelative(Boolean relative){
+		this.relative = relative;
+		return this;
+	}
+	
+	public UrlStringBuilder addPathTokenReplacement(String token,String replacement){
+		getPathTokenReplacementMap().put(token, replacement);
+		return this;
 	}
 	
 	public QueryStringBuilder getQueryStringBuilder(){
@@ -59,7 +81,83 @@ public class UrlBuilder extends AbstractBuilder<String> implements Serializable 
 			queryStringBuilder = new QueryStringBuilder();
 		return queryStringBuilder;
 	}
-
+	
+	public Map<String,String> getPathTokenReplacementMap(){
+		if(pathTokenReplacementMap==null)
+			pathTokenReplacementMap = new HashMap<>();
+		return pathTokenReplacementMap;
+	}
+	
+	@Override
+	public String build() {
+		if(StringUtils.isBlank(path)){
+			if(StringUtils.isBlank(pathIdentifier)){
+				
+			}else{
+				path = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+					@Override
+					public String execute(Listener listener) {
+						return listener.getPathFromIdentifier(pathIdentifier);
+					}
+				});	
+				
+				if(StringUtils.isBlank(path))
+					path = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+						@Override
+						public String execute(Listener listener) {
+							return listener.getPathFromIdentifier(PATH_NOT_FOUND_IDENTIFIER);
+						}
+						
+						@Override
+						public String getNullValue() {
+							return PATH_NOT_FOUND_IDENTIFIER;
+						}
+					});
+			}
+			
+		}
+		
+		context = StringUtils.replace(context,Constant.CHARACTER_SLASH.toString(),Constant.EMPTY_STRING);
+		path = StringUtils.replaceOnce(path,Constant.CHARACTER_SLASH.toString(),Constant.EMPTY_STRING);
+		for(Entry<String, String> entry : getPathTokenReplacementMap().entrySet())
+			path = StringUtils.replace(path, entry.getKey(), entry.getValue());
+		
+		String queryString = getQueryStringBuilder().build();
+		StringBuilder stringBuilder = new StringBuilder(String.format(PATH_STRING_FORMAT,(StringUtils.isBlank(context) ? Constant.EMPTY_STRING : context+Constant.CHARACTER_SLASH)+StringUtils.defaultIfBlank(path, Constant.EMPTY_STRING)
+				,StringUtils.isBlank(queryString) ? Constant.EMPTY_STRING : Constant.CHARACTER_QUESTION_MARK,StringUtils.defaultIfBlank(queryString, Constant.EMPTY_STRING)));
+		if(Boolean.TRUE.equals(relative)){
+			if(!Constant.CHARACTER_SLASH.equals(stringBuilder.charAt(0)))
+				stringBuilder.insert(0, Constant.CHARACTER_SLASH.toString());
+		}else
+			stringBuilder.insert(0, String.format(SCHEME_HOST_PORT_STRING_FORMAT, scheme,host
+					,port == null ? Constant.EMPTY_STRING : Constant.CHARACTER_COLON,port == null ? Constant.EMPTY_STRING : port));
+		
+		return stringBuilder.toString();
+	}
+	
+	/**/
+	
+	public static interface Listener extends AbstractBuilder.Listener<String> {
+		
+		Collection<Listener> COLLECTION = new ArrayList<>();
+		
+		String getPathFromIdentifier(String identifier);
+		
+		public static class Adapter extends AbstractBuilder.Listener.Adapter.Default<String> implements Listener,Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public String getPathFromIdentifier(String identifier) {
+				return null;
+			}
+			
+			public static class Default extends Listener.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+			
+			}
+		}
+	}
+	
 	/**/
 	
 	public static class QueryStringBuilder extends AbstractBuilder<String> implements Serializable {
@@ -68,7 +166,7 @@ public class UrlBuilder extends AbstractBuilder<String> implements Serializable 
 		public static final String NAME_VALUE_STRING_FORMAT = "%s%s%s";
 		
 		static {
-			UrlBuilder.QueryStringBuilder.Listener.COLLECTION.add(new UrlBuilder.QueryStringBuilder.Listener.Adapter.Default());
+			UrlStringBuilder.QueryStringBuilder.Listener.COLLECTION.add(new UrlStringBuilder.QueryStringBuilder.Listener.Adapter.Default());
 		}
 		
 		private Map<Object, List<Object>> parameters;
@@ -138,16 +236,29 @@ public class UrlBuilder extends AbstractBuilder<String> implements Serializable 
 			return parameters;
 		}
 		
-		public QueryStringBuilder addParameter(Object key,Object value){
-			
+		public QueryStringBuilder addParameter(final Object key,final Object value){
 			List<Object> values = getParameters().get(key);
 			if(values==null){
 				values = new ArrayList<>();
 				getParameters().put(key, values);
 			}
+			listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>() {
+				@Override
+				public void execute(Listener listener) {
+					listener.processBeforeAdd(QueryStringBuilder.this, key, value);
+				}
+			});
 			values.add(value);
+			listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>() {
+				@Override
+				public void execute(Listener listener) {
+					listener.processAfterAdded(QueryStringBuilder.this, key, value);
+				}
+			});
 			return this;
 		}
+		
+		/**/
 		
 		/**/
 		
@@ -162,11 +273,18 @@ public class UrlBuilder extends AbstractBuilder<String> implements Serializable 
 			String getParameterNameAndValueSeparator();
 			String getParameterAsString(String key,List<String> values,String nameValueSeparator,String parameterSeparator);
 			String getParametersSeparator();
-			
+			void processBeforeAdd(QueryStringBuilder queryStringBuilder,Object key,Object value);
+			void processAfterAdded(QueryStringBuilder queryStringBuilder,Object key,Object value);
 			/**/
 			
 			public static class Adapter extends AbstractBuilder.Listener.Adapter.Default<String> implements Listener,Serializable {
 				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public void processBeforeAdd(QueryStringBuilder queryStringBuilder, Object key, Object value) {}
+				
+				@Override
+				public void processAfterAdded(QueryStringBuilder queryStringBuilder, Object key, Object value) {}
 				
 				@Override
 				public String getParameterNameAndValueSeparator() {
@@ -227,7 +345,7 @@ public class UrlBuilder extends AbstractBuilder<String> implements Serializable 
 					
 					@Override
 					public String getParametersSeparator() {
-						return Constant.CHARACTER_QUESTION_MARK.toString();
+						return Constant.CHARACTER_AMPERSTAMP.toString();
 					}
 					
 					@Override
