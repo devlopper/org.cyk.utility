@@ -51,6 +51,7 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 	
 	String processAfterRowRead(Integer rowIndex,String[] values);
 	Boolean isRowAddable(Integer rowIndex,String[] values);
+	void processAfterRowAdded(Integer rowIndex,String[] values);
 	
 	@Getter
 	public static class Adapter extends TwoDimension.Adapter.Default<String> implements ExcelSheetReader,Serializable {
@@ -69,6 +70,9 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		public Boolean isRowAddable(Integer rowIndex, String[] values) {
 			return null;
 		}
+		
+		@Override
+		public void processAfterRowAdded(Integer rowIndex, String[] values) {}
 		
 		@Override
 		public ExcelSheetReader setWorkbookBytes(byte[] workbookBytes) {
@@ -193,8 +197,10 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		                if(array==null)
 		                	;
 		                else{
-		                	if(Boolean.TRUE.equals(isRowAddable(i, array)))
+		                	if(Boolean.TRUE.equals(isRowAddable(i, array))){
 		                		list.add(array);
+		                		processAfterRowAdded(i, array);
+		                	}
 		                }
 		            }	
 		        }
