@@ -132,16 +132,6 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			public Integer getFromRowIndex() {
-				return 0;
-			}
-			
-			@Override
-			public Integer getFromColumnIndex() {
-				return 0;
-			}
-			
-			@Override
 			public Boolean isRowAddable(Integer rowIndex, String[] values) {
 				Boolean isEmpty = Boolean.TRUE;
             	for(int k = 0; k < values.length; k++)
@@ -162,7 +152,11 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		        }else{
 		        	FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
 		        	Integer fromRowIndex = getFromRowIndex(),fromColumnIndex = getFromColumnIndex();
-		            Integer rowCount = getRowCount(),columnCount = getColumnCount();
+		            if(fromRowIndex==null)
+		            	fromRowIndex = 0;
+		            if(fromColumnIndex==null)
+		            	fromColumnIndex = 0;
+		        	Integer rowCount = getRowCount(),columnCount = getColumnCount();
 		            if(rowCount==null)
 		            	rowCount = sheet.getPhysicalNumberOfRows();
 		            if(columnCount==null)
