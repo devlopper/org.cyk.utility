@@ -67,7 +67,11 @@ public interface Constant {
 	
 	String LINE_DELIMITER = "\r\n";
 	
-	String DATE_TIME_PATTERN = "dd/MM/yyyy HH:mm";
+	String DATE_PATTERN = "dd/MM/yyyy";
+	String TIME_PATTERN = "HH:mm";
+	String DATE_TIME_PATTERN = DATE_PATTERN+CHARACTER_SPACE+TIME_PATTERN;
+	SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat(DATE_PATTERN);
+	SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(TIME_PATTERN);
 	SimpleDateFormat DATE_TIME_FORMATTER = new SimpleDateFormat(DATE_TIME_PATTERN);
 	
 	Date DATE_LOWEST_VALUE = new DateTime(0, 1, 1, 0, 0, 0, 0).toDate();

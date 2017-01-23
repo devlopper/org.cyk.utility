@@ -21,6 +21,7 @@ import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.common.file.ExcelSheetReader;
 import org.cyk.utility.test.unit.AbstractUnitTest;
+import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -107,6 +108,7 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		Assert.assertEquals(new Long("159"), CommonUtils.getInstance().convertString("159", Long.class));
 		Assert.assertEquals(new Integer("951"), CommonUtils.getInstance().convertString("951", Integer.class));
 		Assert.assertEquals(new Byte("5"), CommonUtils.getInstance().convertString("5", Byte.class));
+		Assert.assertEquals(new DateTime(2000, 2, 1, 0, 0).toDate(), CommonUtils.getInstance().convertString("1/2/2000", Date.class));
 		Assert.assertEquals(null, CommonUtils.getInstance().convertString("951", Object.class));
 	}
 

@@ -766,9 +766,17 @@ public class CommonUtils implements Serializable  {
 		}
 		else if(Date.class.equals(type))
 			try {
-				convertedValue = Constant.DATE_TIME_FORMATTER.parse(value);
-			} catch (ParseException e) {
-				e.printStackTrace();
+				convertedValue =  Constant.DATE_TIME_FORMATTER.parse(value);
+			} catch (ParseException dateTimeParseException) {
+				try {
+					convertedValue =  Constant.DATE_FORMATTER.parse(value);
+				} catch (ParseException dateParseException) {
+					try {
+						convertedValue =  Constant.TIME_FORMATTER.parse(value);
+					} catch (ParseException timeParseException) {
+						timeParseException.printStackTrace();
+					}
+				}
 			}
 		else
 			LOGGER.error("Convert string to {} not yet implemented",type);
