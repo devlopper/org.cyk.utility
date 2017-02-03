@@ -1050,6 +1050,8 @@ public class CommonUtils implements Serializable  {
     public String decompressString(String string) throws Exception {
     	return decompress(Base64.decodeBase64(string));
     }
+    
+    
 	
 	/**/
 	

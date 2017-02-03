@@ -1,8 +1,8 @@
 package org.cyk.utility.common;
 
 import java.io.Serializable;
+import java.util.Locale;
 
-import org.cyk.utility.common.LogMessage;
 import org.cyk.utility.common.cdi.BeanAdapter;
 
 import lombok.Getter;
@@ -26,12 +26,18 @@ public interface Action<INPUT,OUTPUT> {
 	Class<OUTPUT> getOutputClass();
 	Action<INPUT,OUTPUT> setOutputClass(Class<OUTPUT> outputClass);
 	
+	Locale getLocale();
+	Action<INPUT, OUTPUT> setLocale(Locale locale);
+	
+	java.lang.String getText(java.lang.String identifier);
+	
 	/**/
 	
 	@Getter
 	public static class Adapter<INPUT,OUTPUT> extends BeanAdapter implements Action<INPUT,OUTPUT>,Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		protected Locale locale;
 		protected String name;
 		protected Class<INPUT> inputClass;
 		protected INPUT input;
@@ -44,6 +50,12 @@ public interface Action<INPUT,OUTPUT> {
 			setInput(input);
 			setOutputClass(outputClass);
 			setLogMessageBuilder(logMessageBuilder);
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setLocale(Locale locale) {
+			this.locale = locale;
+			return this;
 		}
 		
 		@Override
@@ -78,6 +90,11 @@ public interface Action<INPUT,OUTPUT> {
 		public Action<INPUT, OUTPUT> setLogMessageBuilder(LogMessage.Builder logMessageBuilder) {
 			this.logMessageBuilder = logMessageBuilder;
 			return this;
+		}
+		
+		@Override
+		public String getText(String identifier) {
+			return null;
 		}
 		
 		/**/

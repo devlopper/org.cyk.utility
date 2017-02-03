@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.LogMessage.Builder;
+import org.cyk.utility.common.helper.StringHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,8 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 	
 	Boolean isPercentage();
 	NumberFormatter<OUTPUT> setIsPercentage(Boolean isPercentage);
+	
+	java.lang.String getNumberSuffix(Long number);
 	
 	/**/
 	
@@ -53,6 +56,11 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 		public NumberFormatter<OUTPUT> setIsPercentage(Boolean isPercentage) {
 			this.isPercentage = isPercentage;
 			return this;
+		}
+		
+		@Override
+		public java.lang.String getNumberSuffix(Long number) {
+			return null;
 		}
 		
 		/**/
@@ -90,6 +98,11 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 				}
 				
 				@Override
+				public java.lang.String getNumberSuffix(Long number) {
+					return StringHelper.getInstance().getNumberSuffix(getLocale(), number);
+				}
+				
+				@Override
 				protected java.lang.String __execute__() {
 					addLogMessageBuilderParameters(logMessageBuilder, "character set",getCharacterSet());
 					StringBuilder stringBuilder = new StringBuilder();
@@ -99,10 +112,18 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 						if(Boolean.TRUE.equals(getIsPercentage())){
 							number = new BigDecimal(number.toString()).multiply(Constant.BIGDECIMAL_100);
 						}
+						if(Boolean.TRUE.equals(getIsRank())){
+							
+						}
 						stringBuilder.append(numberFormatter.format(number));
 						if(Boolean.TRUE.equals(getIsPercentage())){
 							if(StringUtils.isNotBlank(getPercentageSymbol()))
 								stringBuilder.append(Constant.CHARACTER_SPACE+getPercentageSymbol());
+						}
+						if(Boolean.TRUE.equals(getIsRank())){
+							java.lang.String suffix = getNumberSuffix(number.longValue());
+							if(StringUtils.isNotBlank(suffix))
+								stringBuilder.append(suffix);
 						}
 						if(getWidth()!=null){
 							stringBuilder = new StringBuilder(StringUtils.leftPad(stringBuilder.toString(), getWidth(), getLeftPadding()));

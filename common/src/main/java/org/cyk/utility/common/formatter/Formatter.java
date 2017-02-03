@@ -1,7 +1,6 @@
 package org.cyk.utility.common.formatter;
 
 import java.io.Serializable;
-import java.util.Locale;
 
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
@@ -13,9 +12,6 @@ import lombok.Setter;
 public interface Formatter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT> {
 
 	public static enum CharacterSet{DIGIT,LETTER};
-	
-	Locale getLocale();
-	Formatter<INPUT, OUTPUT> setLocale(Locale locale);
 	
 	CharacterSet getCharacterSet();
 	Formatter<INPUT, OUTPUT> setCharacterSet(CharacterSet characterSet);
@@ -30,26 +26,19 @@ public interface Formatter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT> {
 	Integer getWidth();
 	Formatter<INPUT, OUTPUT> setWidth(Integer width);
 	
-	java.lang.String getText(java.lang.String identifier);
+	
 	/**/
 	
 	@Getter @Setter
 	public static class Adapter<INPUT, OUTPUT> extends Action.Adapter.Default<INPUT, OUTPUT> implements Formatter<INPUT, OUTPUT>,Serializable {
 		private static final long serialVersionUID = 1L;
 
-		protected Locale locale;
 		protected CharacterSet characterSet = CharacterSet.DIGIT;
 		protected java.lang.String percentageSymbol = Constant.CHARACTER_PERCENT.toString(),leftPadding=Constant.CHARACTER_SPACE.toString();
 		protected Integer width;
 		
 		public Adapter(Class<INPUT> inputClass, INPUT input, Class<OUTPUT> outputClass,Builder logMessageBuilder) {
 			super("Format", inputClass, input, outputClass, logMessageBuilder);
-		}
-		
-		@Override
-		public Formatter<INPUT, OUTPUT> setLocale(Locale locale) {
-			this.locale = locale;
-			return this;
 		}
 		
 		@Override
@@ -81,10 +70,7 @@ public interface Formatter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT> {
 			return this;
 		}
 		
-		@Override
-		public String getText(String identifier) {
-			return null;
-		}
+		
 		
 		/**/
 		@Getter @Setter
