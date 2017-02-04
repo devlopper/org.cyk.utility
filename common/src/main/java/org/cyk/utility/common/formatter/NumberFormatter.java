@@ -21,7 +21,11 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 	Boolean isPercentage();
 	NumberFormatter<OUTPUT> setIsPercentage(Boolean isPercentage);
 	
-	java.lang.String getNumberSuffix(Long number);
+	Boolean isAppendNumberSuffix();
+	NumberFormatter<OUTPUT> setIsAppendNumberSuffix(Boolean isAppendNumberSuffix);
+	
+	Boolean isAppendExaequo();
+	NumberFormatter<OUTPUT> setIsAppendExaequo(Boolean isAppendExaequo);
 	
 	/**/
 	
@@ -29,7 +33,7 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 	public static class Adapter<OUTPUT> extends Formatter.Adapter.Default<Number, OUTPUT> implements NumberFormatter<OUTPUT>,Serializable {
 		private static final long serialVersionUID = 1L;
 
-		protected Boolean isRank = Boolean.FALSE;
+		protected Boolean isRank = Boolean.FALSE,isAppendNumberSuffix=Boolean.FALSE,isAppendExaequo=Boolean.FALSE;
 		protected Boolean isPercentage = Boolean.FALSE;
 		
 		public Adapter(Number number, Class<OUTPUT> outputClass,Builder logMessageBuilder) {
@@ -47,6 +51,16 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 		}
 		
 		@Override
+		public Boolean isAppendNumberSuffix() {
+			return Boolean.TRUE.equals(isAppendNumberSuffix);
+		}
+		
+		@Override
+		public Boolean isAppendExaequo() {
+			return Boolean.TRUE.equals(isAppendExaequo);
+		}
+		
+		@Override
 		public NumberFormatter<OUTPUT> setIsRank(Boolean isRank) {
 			this.isRank = isRank;
 			return this;
@@ -59,8 +73,15 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 		}
 		
 		@Override
-		public java.lang.String getNumberSuffix(Long number) {
-			return null;
+		public NumberFormatter<OUTPUT> setIsAppendNumberSuffix(Boolean isAppendNumberSuffix) {
+			this.isAppendNumberSuffix = isAppendNumberSuffix;
+			return this;
+		}
+		
+		@Override
+		public NumberFormatter<OUTPUT> setIsAppendExaequo(Boolean isAppendExaequo) {
+			this.isAppendExaequo = isAppendExaequo;
+			return this;
 		}
 		
 		/**/
@@ -98,11 +119,6 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 				}
 				
 				@Override
-				public java.lang.String getNumberSuffix(Long number) {
-					return StringHelper.getInstance().getNumberSuffix(getLocale(), number);
-				}
-				
-				@Override
 				protected java.lang.String __execute__() {
 					addLogMessageBuilderParameters(logMessageBuilder, "character set",getCharacterSet());
 					StringBuilder stringBuilder = new StringBuilder();
@@ -121,20 +137,29 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 								stringBuilder.append(Constant.CHARACTER_SPACE+getPercentageSymbol());
 						}
 						if(Boolean.TRUE.equals(getIsRank())){
-							java.lang.String suffix = getNumberSuffix(number.longValue());
-							if(StringUtils.isNotBlank(suffix))
-								stringBuilder.append(suffix);
+							
 						}
-						if(getWidth()!=null){
-							stringBuilder = new StringBuilder(StringUtils.leftPad(stringBuilder.toString(), getWidth(), getLeftPadding()));
-						}
+						if(Boolean.TRUE.equals(getIsAppendNumberSuffix()))
+							stringBuilder.append(StringUtils.defaultIfBlank(StringHelper.getInstance().getOrdinalNumberSuffix(getLocale(),number),Constant.EMPTY_STRING));
+						
+						
 					}else if(CharacterSet.LETTER.equals(getCharacterSet())){
 						if(Boolean.TRUE.equals(getIsRank())){
-							return getText("rank."+number+".letter");
+							stringBuilder.append(StringHelper.getInstance().getOrdinalNumber(getLocale(), number));
+							
 						}else{
 							throw new RuntimeException("Not yet implemented");
 						}
 					}
+					
+					if(Boolean.TRUE.equals(getIsAppendExaequo()))
+						stringBuilder.append(StringUtils.defaultIfBlank(Constant.CHARACTER_SPACE+StringHelper.getInstance().getText(getLocale(),"exaequo",null),Constant.EMPTY_STRING));
+					
+					
+					if(getWidth()!=null){
+						stringBuilder = new StringBuilder(StringUtils.leftPad(stringBuilder.toString(), getWidth(), getLeftPadding()));
+					}
+					
 					return stringBuilder.toString();
 				}
 				

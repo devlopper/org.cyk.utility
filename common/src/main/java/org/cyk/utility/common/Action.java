@@ -29,8 +29,6 @@ public interface Action<INPUT,OUTPUT> {
 	Locale getLocale();
 	Action<INPUT, OUTPUT> setLocale(Locale locale);
 	
-	java.lang.String getText(java.lang.String identifier);
-	
 	/**/
 	
 	@Getter
@@ -92,10 +90,6 @@ public interface Action<INPUT,OUTPUT> {
 			return this;
 		}
 		
-		@Override
-		public String getText(String identifier) {
-			return null;
-		}
 		
 		/**/
 		

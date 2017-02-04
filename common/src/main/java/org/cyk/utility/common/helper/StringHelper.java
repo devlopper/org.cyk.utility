@@ -20,7 +20,8 @@ public class StringHelper extends AbstractBean implements Serializable {
 	public enum CaseType{NONE,FURL}
 	
 	private static final String RESOURCE_BUNDLE_NAME = "org.cyk.utility.common.i18n";
-	private static final String KEY_ORDINAL_NUMBER_SUFFIX_FORMAT = "ordinal.number.suffix.%s";
+	private static final String KEY_ORDINAL_NUMBER_FORMAT = "ordinal.number.%s";
+	private static final String KEY_ORDINAL_NUMBER_SUFFIX_FORMAT = KEY_ORDINAL_NUMBER_FORMAT+".suffix";
 			
 	public String applyCaseType(String string,CaseType caseType){
 		switch(caseType){
@@ -45,8 +46,12 @@ public class StringHelper extends AbstractBean implements Serializable {
 		return value;
     }
 	
-	public java.lang.String getNumberSuffix(Locale locale,Number number) {
+	public java.lang.String getOrdinalNumberSuffix(Locale locale,Number number) {
 		return getText(locale, String.format(KEY_ORDINAL_NUMBER_SUFFIX_FORMAT, number), null);
+	}
+	
+	public java.lang.String getOrdinalNumber(Locale locale,Number number) {
+		return getText(locale, String.format(KEY_ORDINAL_NUMBER_FORMAT, number), null);
 	}
 	
 	/**/
@@ -55,5 +60,7 @@ public class StringHelper extends AbstractBean implements Serializable {
 	public static StringHelper getInstance() {
 		return INSTANCE;
 	}
+	
+	//TODO listener has to be added
 	
 }
