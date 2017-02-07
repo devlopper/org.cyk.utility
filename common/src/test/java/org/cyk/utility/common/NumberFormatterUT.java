@@ -12,11 +12,11 @@ public class NumberFormatterUT extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 		
 	@Test
-	public void assertRankDigit(){
+	public void assertOrdinalDigit(){
 		NumberFormatter.String formatter = new NumberFormatter.String.Adapter.Default(null,null);
-		formatter.setIsRank(Boolean.TRUE);
+		formatter.setIsOrdinal(Boolean.TRUE);
 		formatter.setLocale(Locale.ENGLISH);
-		formatter.setIsAppendNumberSuffix(Boolean.TRUE);
+		formatter.setIsAppendOrdinalSuffix(Boolean.TRUE);
 		formatter.setInput(1);
 		assertEquals("1st", formatter.execute());
 		
@@ -32,12 +32,12 @@ public class NumberFormatterUT extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void assertRankLetter(){
+	public void assertOrdinalLetter(){
 		NumberFormatter.String formatter = new NumberFormatter.String.Adapter.Default(null,null);
-		formatter.setIsRank(Boolean.TRUE);
+		formatter.setIsOrdinal(Boolean.TRUE);
 		formatter.setLocale(Locale.ENGLISH);
 		formatter.setCharacterSet(CharacterSet.LETTER);
-		formatter.setIsAppendNumberSuffix(Boolean.TRUE);
+		formatter.setIsAppendOrdinalSuffix(Boolean.TRUE);
 		formatter.setInput(1);
 		assertEquals("first", formatter.execute());
 		

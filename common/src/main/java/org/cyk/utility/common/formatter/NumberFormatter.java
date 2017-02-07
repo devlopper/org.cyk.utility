@@ -15,14 +15,14 @@ import lombok.Setter;
 
 public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 	
-	Boolean isRank();
-	NumberFormatter<OUTPUT> setIsRank(Boolean isRank);
+	Boolean isOrdinal();
+	NumberFormatter<OUTPUT> setIsOrdinal(Boolean isOrdinal);
 	
 	Boolean isPercentage();
 	NumberFormatter<OUTPUT> setIsPercentage(Boolean isPercentage);
 	
-	Boolean isAppendNumberSuffix();
-	NumberFormatter<OUTPUT> setIsAppendNumberSuffix(Boolean isAppendNumberSuffix);
+	Boolean isAppendOrdinalSuffix();
+	NumberFormatter<OUTPUT> setIsAppendOrdinalSuffix(Boolean isAppendOrdinalSuffix);
 	
 	Boolean isAppendExaequo();
 	NumberFormatter<OUTPUT> setIsAppendExaequo(Boolean isAppendExaequo);
@@ -33,7 +33,7 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 	public static class Adapter<OUTPUT> extends Formatter.Adapter.Default<Number, OUTPUT> implements NumberFormatter<OUTPUT>,Serializable {
 		private static final long serialVersionUID = 1L;
 
-		protected Boolean isRank = Boolean.FALSE,isAppendNumberSuffix=Boolean.FALSE,isAppendExaequo=Boolean.FALSE;
+		protected Boolean isOrdinal = Boolean.FALSE,isAppendOrdinalSuffix=Boolean.FALSE,isAppendExaequo=Boolean.FALSE;
 		protected Boolean isPercentage = Boolean.FALSE;
 		
 		public Adapter(Number number, Class<OUTPUT> outputClass,Builder logMessageBuilder) {
@@ -46,13 +46,13 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 		}
 		
 		@Override
-		public Boolean isRank() {
-			return Boolean.TRUE.equals(isRank);
+		public Boolean isOrdinal() {
+			return Boolean.TRUE.equals(isOrdinal);
 		}
 		
 		@Override
-		public Boolean isAppendNumberSuffix() {
-			return Boolean.TRUE.equals(isAppendNumberSuffix);
+		public Boolean isAppendOrdinalSuffix() {
+			return Boolean.TRUE.equals(isAppendOrdinalSuffix);
 		}
 		
 		@Override
@@ -61,8 +61,8 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 		}
 		
 		@Override
-		public NumberFormatter<OUTPUT> setIsRank(Boolean isRank) {
-			this.isRank = isRank;
+		public NumberFormatter<OUTPUT> setIsOrdinal(Boolean isOrdinal) {
+			this.isOrdinal = isOrdinal;
 			return this;
 		}
 		
@@ -73,8 +73,8 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 		}
 		
 		@Override
-		public NumberFormatter<OUTPUT> setIsAppendNumberSuffix(Boolean isAppendNumberSuffix) {
-			this.isAppendNumberSuffix = isAppendNumberSuffix;
+		public NumberFormatter<OUTPUT> setIsAppendOrdinalSuffix(Boolean isAppendOrdinalSuffix) {
+			this.isAppendOrdinalSuffix = isAppendOrdinalSuffix;
 			return this;
 		}
 		
@@ -128,7 +128,7 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 						if(Boolean.TRUE.equals(getIsPercentage())){
 							number = new BigDecimal(number.toString()).multiply(Constant.BIGDECIMAL_100);
 						}
-						if(Boolean.TRUE.equals(getIsRank())){
+						if(Boolean.TRUE.equals(getIsOrdinal())){
 							
 						}
 						stringBuilder.append(numberFormatter.format(number));
@@ -136,15 +136,15 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 							if(StringUtils.isNotBlank(getPercentageSymbol()))
 								stringBuilder.append(Constant.CHARACTER_SPACE+getPercentageSymbol());
 						}
-						if(Boolean.TRUE.equals(getIsRank())){
+						if(Boolean.TRUE.equals(getIsOrdinal())){
 							
 						}
-						if(Boolean.TRUE.equals(getIsAppendNumberSuffix()))
+						if(Boolean.TRUE.equals(getIsAppendOrdinalSuffix()))
 							stringBuilder.append(StringUtils.defaultIfBlank(StringHelper.getInstance().getOrdinalNumberSuffix(getLocale(),number),Constant.EMPTY_STRING));
 						
 						
 					}else if(CharacterSet.LETTER.equals(getCharacterSet())){
-						if(Boolean.TRUE.equals(getIsRank())){
+						if(Boolean.TRUE.equals(getIsOrdinal())){
 							stringBuilder.append(StringHelper.getInstance().getOrdinalNumber(getLocale(), number));
 							
 						}else{

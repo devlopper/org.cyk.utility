@@ -69,13 +69,15 @@ public class RandomDataProvider implements Serializable {
 	private Boolean dateUpdateNext = Boolean.TRUE;
 	
 	/**/
-	private List<String> companyNames,companyLogos=new ArrayList<>();
+	private List<String> companyNames,companyLogos=new ArrayList<>(),documentBackgrounds=new ArrayList<>(),documentDraftBackgrounds=new ArrayList<>();
 	private List<String> signatureSpecimens=new ArrayList<>(),documentHeaders=new ArrayList<>();
 	/**/
 	
 	protected RandomDataProvider() {
 		companyNames = stringLines("/META-INF/generator/name/company.txt");
 		companyLogos = images("/META-INF/generator/image/company/logo/");
+		documentBackgrounds = images("/META-INF/generator/image/document/background/");
+		documentDraftBackgrounds = images("/META-INF/generator/image/document/background/draft/");
 		signatureSpecimens = images("/META-INF/generator/image/signature/specimen/");
 		documentHeaders = images("/META-INF/generator/image/document/header/");
 	}
@@ -218,6 +220,14 @@ public class RandomDataProvider implements Serializable {
 	
 	public RandomFile companyLogo(){
 		return getFile((String) randomFromList(companyLogos));
+	}
+	
+	public RandomFile documentBackground(){
+		return getFile((String) randomFromList(documentBackgrounds));
+	}
+	
+	public RandomFile documentDraftBackground(){
+		return getFile((String) randomFromList(documentDraftBackgrounds));
 	}
 	
 	public RandomFile signatureSpecimen(){
