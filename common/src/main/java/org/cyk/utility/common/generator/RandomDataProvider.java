@@ -247,6 +247,7 @@ public class RandomDataProvider implements Serializable {
 		System.out.println(RandomDataProvider.getInstance().getMale().middleAndLastName());
 		System.out.println(RandomDataProvider.getInstance().getMale().photo());
 		System.out.println(RandomDataProvider.getInstance().signatureSpecimen());
+		System.out.println(RandomDataProvider.getInstance().documentBackground());
 	}
 	
 	/**/
@@ -349,7 +350,8 @@ public class RandomDataProvider implements Serializable {
 	public RandomFile getFile(String name){
 		try {
 			return new RandomFile(IOUtils.toByteArray(RandomDataProvider.class.getResourceAsStream(name)), FilenameUtils.getExtension(name));
-		} catch (IOException e) {
+		} catch (Exception e) {
+			System.err.println("Execption while getting resource <<"+name+">>");
 			e.printStackTrace();
 			return null;
 		}
