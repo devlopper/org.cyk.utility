@@ -6,15 +6,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.common.ListenerUtils;
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
+import org.cyk.utility.common.formatter.NumberFormatter;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class AbstractGeneratable<T> implements Serializable {
+public abstract class AbstractGeneratable<T> extends AbstractBean implements Serializable {
 
 	private static final long serialVersionUID = 6717138845030531852L;
-
+	
+	static {
+		AbstractGeneratable.Listener.COLLECTION.add(new AbstractGeneratable.Listener.Adapter.Default());
+	}
+	
 	protected RandomDataProvider provider = RandomDataProvider.getInstance();
 	
 	@Getter @Setter protected Object source;
@@ -73,6 +79,10 @@ public abstract class AbstractGeneratable<T> implements Serializable {
 				public Object format(Object object, Object fieldValue) {
 					if(fieldValue==null)
 						return null;
+					if(fieldValue instanceof Number){
+						NumberFormatter.String numberFormatter = new NumberFormatter.String.Adapter.Default((Number) fieldValue,null);
+						return numberFormatter.execute();
+					}
 					return fieldValue.toString();
 				}
 				

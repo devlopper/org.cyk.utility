@@ -1,5 +1,6 @@
 package org.cyk.utility.common;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 
 import org.cyk.utility.common.formatter.Formatter.CharacterSet;
@@ -10,7 +11,16 @@ import org.junit.Test;
 public class NumberFormatterUT extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	@Test
+	public void assertNumber(){
+		NumberFormatter.String formatter = new NumberFormatter.String.Adapter.Default(null,null);
 		
+		assertEquals("63", formatter.setInput(new BigDecimal("63.00")).execute());
+		
+		
+	}
+	
 	@Test
 	public void assertOrdinalDigit(){
 		NumberFormatter.String formatter = new NumberFormatter.String.Adapter.Default(null,null);
