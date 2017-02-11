@@ -70,7 +70,7 @@ public class RandomDataProvider implements Serializable {
 	
 	/**/
 	private List<String> companyNames,companyLogos=new ArrayList<>(),documentBackgrounds=new ArrayList<>(),documentDraftBackgrounds=new ArrayList<>();
-	private List<String> signatureSpecimens=new ArrayList<>(),documentHeaders=new ArrayList<>();
+	private List<String> signatureSpecimens=new ArrayList<>(),documentHeaders=new ArrayList<>(),documentFooters=new ArrayList<>();
 	/**/
 	
 	protected RandomDataProvider() {
@@ -80,6 +80,7 @@ public class RandomDataProvider implements Serializable {
 		documentDraftBackgrounds = images("/META-INF/generator/image/document/background/draft/");
 		signatureSpecimens = images("/META-INF/generator/image/signature/specimen/");
 		documentHeaders = images("/META-INF/generator/image/document/header/");
+		documentFooters = images("/META-INF/generator/image/document/footer/");
 	}
 	
 	public int randomInt(int min,int max){
@@ -236,6 +237,10 @@ public class RandomDataProvider implements Serializable {
 	
 	public RandomFile documentHeader(){
 		return getFile((String) randomFromList(documentHeaders));
+	}
+	
+	public RandomFile documentFooter(){
+		return getFile((String) randomFromList(documentFooters));
 	}
 	
 	/**/
