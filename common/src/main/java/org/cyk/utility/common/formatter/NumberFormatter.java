@@ -142,12 +142,15 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 						if(Boolean.TRUE.equals(getIsAppendOrdinalSuffix()))
 							stringBuilder.append(StringUtils.defaultIfBlank(StringHelper.getInstance().getOrdinalNumberSuffix(getLocale(),number),Constant.EMPTY_STRING));
 						
-						
 					}else if(CharacterSet.LETTER.equals(getCharacterSet())){
 						if(Boolean.TRUE.equals(getIsOrdinal())){
 							stringBuilder.append(StringHelper.getInstance().getOrdinalNumber(getLocale(), number));
 							
 						}else{
+							if(Locale.ENGLISH.equals(getLocale()))
+								return EnglishNumberToWords.convert(number.longValue());
+							if(Locale.FRENCH.equals(getLocale()))
+								return FrenchNumberToWords.convert(number.longValue());
 							throw new RuntimeException("Not yet implemented");
 						}
 					}

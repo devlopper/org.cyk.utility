@@ -15,10 +15,7 @@ public class NumberFormatterUT extends AbstractUnitTest {
 	@Test
 	public void assertNumber(){
 		NumberFormatter.String formatter = new NumberFormatter.String.Adapter.Default(null,null);
-		
-		assertEquals("63", formatter.setInput(new BigDecimal("63.00")).execute());
-		
-		
+		assertEquals("63", formatter.setInput(new BigDecimal("63.00")).execute());	
 	}
 	
 	@Test
@@ -60,6 +57,21 @@ public class NumberFormatterUT extends AbstractUnitTest {
 		formatter.setInput(3);
 		formatter.setIsAppendExaequo(Boolean.TRUE);
 		assertEquals("third exaequo", formatter.execute());
+	}
+	
+	@Test
+	public void assertEnglishLetter(){
+		NumberFormatter.String formatter = new NumberFormatter.String.Adapter.Default(null,null);
+		formatter.setLocale(Locale.ENGLISH);
+		formatter.setCharacterSet(CharacterSet.LETTER);
+		assertEquals("zero", formatter.setInput(0).execute());
+		assertEquals("one", formatter.setInput(1).execute());
+		assertEquals("two", formatter.setInput(2).execute());
+		assertEquals("three", formatter.setInput(3).execute());
+		assertEquals("four", formatter.setInput(4).execute());
+		assertEquals("five", formatter.setInput(5).execute());
+		assertEquals("fifteen", formatter.setInput(15).execute());
+		assertEquals("forty nine", formatter.setInput(49).execute());
 	}
 	
 }

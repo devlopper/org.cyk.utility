@@ -1,11 +1,20 @@
 package org.cyk.utility.common;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface Constant {
 	
@@ -74,8 +83,8 @@ public interface Constant {
 	SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(TIME_PATTERN);
 	SimpleDateFormat DATE_TIME_FORMATTER = new SimpleDateFormat(DATE_TIME_PATTERN);
 	
-	Date DATE_LOWEST_VALUE = new DateTime(0, 1, 1, 0, 0, 0, 0).toDate();
-	Date DATE_HIGHEST_VALUE = new DateTime(9999, 12, 31, 23, 59, 59, 999).toDate();
+	java.util.Date DATE_LOWEST_VALUE = new DateTime(0, 1, 1, 0, 0, 0, 0).toDate();
+	java.util.Date DATE_HIGHEST_VALUE = new DateTime(9999, 12, 31, 23, 59, 59, 999).toDate();
 	
 	BigDecimal NUMBER_LOWEST_NEGATIVE=new BigDecimal("-1"+StringUtils.repeat('0', 18));
 	BigDecimal NUMBER_HIGHEST_NEGATIVE_LOWER_THAN_ZERO=new BigDecimal("-0."+StringUtils.repeat('0', 18)+"1");
@@ -84,5 +93,78 @@ public interface Constant {
 	BigDecimal NUMBER_HIGHEST_POSITIVE=new BigDecimal("1"+StringUtils.repeat('0', 18));
 	
 	BigDecimal BIGDECIMAL_100 = new BigDecimal("100");
+	
+	/**/
+	
+	@Getter
+	public static enum Date {
+		
+		/**/
+		
+		;
+		
+		private static Map<Locale, Collection<Pattern>> PATTERN_MAP = new HashMap<>();
+		static{
+			putPatterns(Locale.FRENCH, "dd/MM/yyyy","EEEE , dd MMMM yyyy", "HH:mm");
+			putPatterns(Locale.ENGLISH, "dd/MM/yyyy","EEEE , dd MMMM yyyy", "HH:mm");
+		}
+		
+		public static Pattern getPattern(Locale locale,Part part,Length length){
+			if(locale == null)
+				locale = Locale.FRENCH;
+			Collection<Pattern> patterns = PATTERN_MAP.get(locale);
+			if(patterns==null)
+				patterns = PATTERN_MAP.get(Locale.FRENCH);
+			for(Pattern pattern : patterns)
+				if(pattern.getPart().equals(part) && pattern.getLength().equals(length))
+					return pattern;
+			return Pattern.DEFAULT;
+		}
+		
+		private static void putPatterns(Locale locale,String shortDateOnlyPattern,String longDateOnlyPattern,String shortTimeOnlyPattern){
+			String longTimeOnlyPattern = shortTimeOnlyPattern;
+			Collection<Pattern> patterns = new ArrayList<>();
+			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_ONLY, Constant.Date.Length.SHORT, shortDateOnlyPattern));
+			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_ONLY, Constant.Date.Length.LONG, longDateOnlyPattern));
+			patterns.add(new Pattern(locale, Constant.Date.Part.TIME_ONLY, Constant.Date.Length.SHORT, shortTimeOnlyPattern));
+			patterns.add(new Pattern(locale, Constant.Date.Part.TIME_ONLY, Constant.Date.Length.LONG, longTimeOnlyPattern));
+			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME, Constant.Date.Length.SHORT, shortDateOnlyPattern+Constant.CHARACTER_SPACE+shortTimeOnlyPattern));
+			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME, Constant.Date.Length.LONG, longDateOnlyPattern+Constant.CHARACTER_SPACE+longTimeOnlyPattern));
+			PATTERN_MAP.put(locale, patterns);
+		}
+		
+		/**/
+		
+		@Getter @Setter @AllArgsConstructor
+		public static class Pattern implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			private static final Pattern DEFAULT = new Pattern(null, Constant.Date.Part.DATE_ONLY, Constant.Date.Length.SHORT, "dd/MM/yyyy");
+			
+			private Locale locale;
+			private Part part;
+			private Length length;
+			private String value;
+			
+		}
+		
+		@Getter
+		public static enum Part {
+			DATE_ONLY
+			,TIME_ONLY
+			,DATE_AND_TIME
+			;			
+			
+		}
+		
+		@Getter
+		public static enum Length {
+			SHORT
+			,LONG
+			;			
+			
+		}
+		
+	}
 	
 }
