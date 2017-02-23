@@ -1051,7 +1051,17 @@ public class CommonUtils implements Serializable  {
     	return decompress(Base64.decodeBase64(string));
     }
     
-    
+    @SuppressWarnings("unchecked")
+	public <T> Collection<T> getCollectionByMethodCall(Class<T> valueClass,Collection<?> collection,String methodName){
+    	Collection<T> result = new ArrayList<>();
+    	for(Object object : collection)
+			try {
+				result.add((T) MethodUtils.invokeMethod(object, methodName));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+    	return result;
+    }
 	
 	/**/
 	

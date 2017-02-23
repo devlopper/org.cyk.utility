@@ -10,8 +10,6 @@ import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import com.sun.enterprise.mgmt.ConfigConstants;
-
 import lombok.Getter;
 
 public class DateFormatterUT extends AbstractUnitTest {
@@ -20,7 +18,7 @@ public class DateFormatterUT extends AbstractUnitTest {
 	
 	@Test
 	public void assertDate(){
-		//assertDate(2,5,2016);	
+		assertDate(2,5,2016);	
 		
 		MyGeneratableClass g = new MyGeneratableClass();
 		g.generate();

@@ -1,6 +1,7 @@
 package org.cyk.utility.common.computation;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import lombok.Getter;
@@ -53,13 +54,25 @@ public class DataReadConfiguration implements Serializable {
 	}
 	
 	public void set(DataReadConfiguration configuration) {
-		firstResultIndex = configuration.firstResultIndex;
-		maximumResultCount = configuration.maximumResultCount;
+		if(configuration==null){
+			clear();
+			return;
+		}
+		this.firstResultIndex = configuration.firstResultIndex;
+		this.maximumResultCount = configuration.maximumResultCount;
+		this.sortField = configuration.sortField;
+		this.ascendingOrder = configuration.ascendingOrder;
+		this.filters = configuration.filters == null ? null : new HashMap<>(configuration.filters);
+		this.globalFilter = configuration.globalFilter;
 	}
 	
 	public void clear(){
-		firstResultIndex = null;
-		maximumResultCount =  null;
+		this.firstResultIndex = null;
+		this.maximumResultCount =  null;
+		this.sortField = null;
+		this.ascendingOrder = null;
+		this.filters = null;
+		this.globalFilter = null;
 	}
 
 	@Override

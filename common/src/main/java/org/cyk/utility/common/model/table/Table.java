@@ -5,6 +5,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +14,8 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.utility.common.ListenerUtils;
+import org.cyk.utility.common.LogMessage;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.model.table.Dimension.DimensionType;
@@ -67,27 +71,51 @@ public class Table<
 	 * Create columns , rows cell and cell's value
 	 */
 	public void build(){
-		logTrace("Table build starts RowDataClass={}",rowDataClass==null?null:rowDataClass.getSimpleName());
+		LogMessage.Builder logMessageBuilder = new LogMessage.Builder("Build", "table");
+		logMessageBuilder.addParameters("Row data class",rowDataClass==null?null:rowDataClass.getSimpleName());
 		__building__ = Boolean.TRUE;
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
 			listener.beforeBuild();
 		
 		// Build logic
-		if(Boolean.TRUE.equals(useRowDataClassAttributeAsColumn))
+		if(Boolean.TRUE.equals(useRowDataClassAttributeAsColumn)){
+			fields.clear();
 			useRowDataClassAttributeAsColumn();
+		}
+		
+		if(!Boolean.TRUE.equals(listenerUtils.getBoolean(columnListeners, new ListenerUtils.BooleanMethod<ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE>>() {
+			@Override
+			public Boolean execute(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener) {
+				return listener.getSortable();
+			}
+		}))){
+			final List<String> list = (List<String>) listenerUtils.getCollection(columnListeners, new ListenerUtils.CollectionMethod<ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE>, String>(){
+				@Override
+				public Collection<String> execute(ColumnListener<COLUMN_DIMENSION, COLUMN_DATA, CELL_TYPE, CELL_VALUE> listener) {
+					return listener.getExpectedFieldNames();
+				}
+			});
+			if(list!=null)
+				Collections.sort(fields, new Comparator<Field>() {
+					@Override
+					public int compare(Field field1, Field field2) {
+						return list.indexOf(field1.getName()) - list.indexOf(field2.getName());
+					}
+				});
+		}
 		
 		for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
 			listener.sort(fields);
 		
-		logTrace("Sorted attributes {}", fields);
+		logMessageBuilder.addParameters("Fields",commonUtils.getCollectionByMethodCall(String.class, fields, "getName"));
 		
-		addColumns(fields);
+		addColumns();
 		addRows(datas);
 		
 		for(TableListener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
 			listener.afterBuild();
 		
-		logTrace("Table build ends");
+		logTrace(logMessageBuilder);
 	}
 	
 	public void addColumn(COLUMN_DIMENSION column) {
@@ -98,7 +126,7 @@ public class Table<
 			for(ColumnListener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
 				listener.added(column);
 		}
-		logTrace("Column added Field={} Title={}", column.getField()==null?null:column.getField().getName(),column.getTitle());
+		//logTrace("Column added Field={} Title={}", column.getField()==null?null:column.getField().getName(),column.getTitle());
 	}
 	
 	public void addColumns(Collection<Field> fields){
@@ -107,19 +135,23 @@ public class Table<
 		}
 	}
 	
+	public void addColumns(){
+		addColumns(fields);
+	}
+	
 	public void addColumn(Field field) {
 		if(!Boolean.TRUE.equals(__building__)){
 			Boolean isColumn = isColumn(field);
-			logTrace("Plan build for field {} ? {}",field.getName(), isColumn);
+			//logTrace("Plan build for field {} ? {}",field.getName(), isColumn);
 			if(Boolean.TRUE.equals(isColumn)){
-				fields.add(field);
+				;//fields.add(field);
 			}else{
 				
 			}
 			return;
 		}
 		if(!Boolean.TRUE.equals(isColumn(field))){
-			logTrace("Building column <<{}>> has been skipped",field.getName());
+			//logTrace("Building column <<{}>> has been skipped",field.getName());
 			return;
 		}
 		COLUMN_DIMENSION column = createColumn();
@@ -160,10 +192,12 @@ public class Table<
 			listener.populateFromDataClass(rowDataClass,fields);
 		
 		Set<Field> nonDuplicateFields = new LinkedHashSet<>();
+		
 		for(Field field : fields)
-			nonDuplicateFields.add(field);
-		addColumns(nonDuplicateFields);
-		logTrace("Data class attribute as columns {}",nonDuplicateFields);	
+			if(isColumn(field))
+				nonDuplicateFields.add(field);
+		
+		this.fields.addAll(nonDuplicateFields);
 	}
 	
 	private Boolean addRow(ROW_DIMENSION row) {
@@ -183,7 +217,7 @@ public class Table<
 		if(rows.add(row)){
 			for(RowListener<ROW_DIMENSION,ROW_DATA,CELL_TYPE,CELL_VALUE> listener : rowListeners)
 				listener.added(row);
-			logTrace("Row added {}",row);
+			//logTrace("Row added {}",row);
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;

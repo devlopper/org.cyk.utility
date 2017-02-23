@@ -34,4 +34,9 @@ public abstract class AbstractDimension<DATA,CELLTYPE extends AbstractCell<CELLV
 		return DimensionType.DETAIL.equals(type);
 	}
 	
+	@Override
+	public String toString() {
+		return title;
+	}
+	
 }
