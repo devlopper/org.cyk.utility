@@ -31,6 +31,10 @@ public abstract class AbstractGeneratable<T> extends AbstractBean implements Ser
 	
 	@Getter @Setter protected Object source;
 	
+	public void setSourceOnly(Object source){
+		this.source = source;
+	}
+	
 	protected ByteArrayInputStream inputStream(byte[] bytes){
 		return new ByteArrayInputStream(bytes);
 	}
