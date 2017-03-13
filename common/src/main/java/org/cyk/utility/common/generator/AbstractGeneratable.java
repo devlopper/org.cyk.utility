@@ -29,7 +29,11 @@ public abstract class AbstractGeneratable<T> extends AbstractBean implements Ser
 	
 	protected RandomDataProvider provider = RandomDataProvider.getInstance();
 	
+	@Getter @Setter protected T previous;
+	@Getter @Setter protected T next;
+	
 	@Getter @Setter protected Object source;
+	@Getter @Setter protected String text;
 	
 	public void setSourceOnly(Object source){
 		this.source = source;
