@@ -103,8 +103,6 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 		public static class Adapter extends NumberFormatter.Adapter.Default<java.lang.String> implements String,Serializable {
 			private static final long serialVersionUID = 1L;
 
-			
-			
 			public Adapter(Number number,Builder logMessageBuilder) {
 				super(number, java.lang.String.class, logMessageBuilder);
 			}
@@ -120,7 +118,10 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 				
 				@Override
 				protected java.lang.String __execute__() {
-					addLogMessageBuilderParameters(logMessageBuilder, "character set",getCharacterSet());
+					addLogMessageBuilderParameters(logMessageBuilder,"locale",getLocale(), "character set",getCharacterSet(),"append exaequo",getIsAppendExaequo(),"percentage",getIsPercentage(),"ordinal",getIsOrdinal());
+					if(Boolean.TRUE.equals(getIsOrdinal())){
+						addLogMessageBuilderParameters(logMessageBuilder, "append ordinal suffix",getIsAppendOrdinalSuffix());
+					}
 					StringBuilder stringBuilder = new StringBuilder();
 					BigDecimal number = new BigDecimal(getInput().toString());
 					if(CharacterSet.DIGIT.equals(getCharacterSet())){
@@ -148,10 +149,12 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 							
 						}else{
 							if(Locale.ENGLISH.equals(getLocale()))
-								return EnglishNumberToWords.convert(number.longValue());
-							if(Locale.FRENCH.equals(getLocale()))
-								return FrenchNumberToWords.convert(number.longValue());
-							throw new RuntimeException("Not yet implemented");
+								stringBuilder.append(EnglishNumberToWords.convert(number.longValue()));
+							else if(Locale.FRENCH.equals(getLocale()))
+								stringBuilder.append(FrenchNumberToWords.convert(number.longValue()));
+							else
+								throw new RuntimeException("Number to "+getLocale()+" words not yet implemented");
+							
 						}
 					}
 					

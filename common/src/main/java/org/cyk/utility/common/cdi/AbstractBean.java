@@ -303,11 +303,15 @@ public class AbstractBean implements Serializable {
 	}
 	
 	protected void logTrace(LogMessage.Builder logMessageBuilder) {
+		if(logMessageBuilder==null)
+			return;
 		LogMessage logMessage = logMessageBuilder.build();
 		logTrace(logMessage);
 	}
 	
 	protected void logTrace(Action<?, ?> action) {
+		if(action==null)
+			return;
 		logTrace(action.getLogMessageBuilder());
 	}
 

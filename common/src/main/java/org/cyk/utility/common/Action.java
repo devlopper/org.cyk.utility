@@ -12,6 +12,9 @@ public interface Action<INPUT,OUTPUT> {
 	LogMessage.Builder getLogMessageBuilder();
 	Action<INPUT,OUTPUT> setLogMessageBuilder(LogMessage.Builder logMessageBuilder);
 	
+	Boolean getAutomaticallyLogMessage();
+	Action<INPUT,OUTPUT> setAutomaticallyLogMessage(Boolean value);
+	
 	String getName();
 	Action<INPUT,OUTPUT> setName(String name);
 	
@@ -29,6 +32,7 @@ public interface Action<INPUT,OUTPUT> {
 	Locale getLocale();
 	Action<INPUT, OUTPUT> setLocale(Locale locale);
 	
+	
 	/**/
 	
 	@Getter
@@ -41,6 +45,7 @@ public interface Action<INPUT,OUTPUT> {
 		protected INPUT input;
 		protected Class<OUTPUT> outputClass;
 		protected LogMessage.Builder logMessageBuilder;
+		protected Boolean automaticallyLogMessage = Boolean.TRUE;
 		
 		public Adapter(String name,Class<INPUT> inputClass,INPUT input,Class<OUTPUT> outputClass,LogMessage.Builder logMessageBuilder) {
 			setName(name);
@@ -48,6 +53,12 @@ public interface Action<INPUT,OUTPUT> {
 			setInput(input);
 			setOutputClass(outputClass);
 			setLogMessageBuilder(logMessageBuilder);
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setAutomaticallyLogMessage(Boolean automaticallyLogMessage) {
+			this.automaticallyLogMessage = automaticallyLogMessage;
+			return this;
 		}
 		
 		@Override
@@ -101,14 +112,17 @@ public interface Action<INPUT,OUTPUT> {
 			}
 						
 			@Override
-			public OUTPUT execute() {
+			public final OUTPUT execute() {
 				if(getInput() == null)
 					return null;
 				if(getLogMessageBuilder()==null)
 					setLogMessageBuilder(new LogMessage.Builder(name, getInput().getClass().getSimpleName()));
+				addLogMessageBuilderParameters(getLogMessageBuilder(),"input",getInput());
 				addLogMessageBuilderParameters(getLogMessageBuilder(),"output class",getOutputClass().getSimpleName());
 				OUTPUT output = __execute__();
 				addLogMessageBuilderParameters(getLogMessageBuilder(),"output",getOutputLogMessage(output));
+				if(Boolean.TRUE.equals(getAutomaticallyLogMessage()))
+					logTrace(this);
 				return output;
 			}
 			

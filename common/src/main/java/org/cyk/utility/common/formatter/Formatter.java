@@ -26,7 +26,6 @@ public interface Formatter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT> {
 	Integer getWidth();
 	Formatter<INPUT, OUTPUT> setWidth(Integer width);
 	
-	
 	/**/
 	
 	@Getter @Setter
