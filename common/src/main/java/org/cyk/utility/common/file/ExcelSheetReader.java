@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -131,15 +132,27 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		public static class Default extends ExcelSheetReader.Adapter implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
+			protected Integer notAddableCount = 0;
+			
 			@Override
 			public Boolean isRowAddable(Integer rowIndex, String[] values) {
+				Boolean isAddable = Boolean.TRUE;
 				Boolean isEmpty = Boolean.TRUE;
             	for(int k = 0; k < values.length; k++)
             		if(StringUtils.isNotBlank(values[k])){
             			isEmpty = Boolean.FALSE;
             			break;
             		}
-				return !isEmpty;
+            	isAddable = !isEmpty;
+            	if(Boolean.TRUE.equals(isAddable)){
+            		Collection<String> primaryKeys = getPrimaryKeys();
+            		Integer primaryKeyColumnIndex = getPrimaryKeyColumnIndex();
+            		if(primaryKeys!=null && primaryKeyColumnIndex!=null)
+            			isAddable = !primaryKeys.contains(values[primaryKeyColumnIndex]);
+            	}
+            	if(!Boolean.TRUE.equals(isAddable))
+            		notAddableCount ++;
+				return isAddable;
 			}
 			
 			@Override
@@ -208,6 +221,8 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		                }
 		            }	
 		        }
+		        if(notAddableCount>0)
+		        	System.out.println(notAddableCount+" not added");
 		        workbook.close();				
 				return list;
 			}
