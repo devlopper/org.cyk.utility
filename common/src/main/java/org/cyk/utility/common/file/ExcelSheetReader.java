@@ -1,12 +1,13 @@
 package org.cyk.utility.common.file;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -32,9 +33,9 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 	Integer getIndex();
 	ExcelSheetReader setIndex(Integer index);
 	
-	String getName();
-	ExcelSheetReader setName(String name);
-	ExcelSheetReader setName(Class<?> aClass);
+	String getSheetName();
+	ExcelSheetReader setSheetName(String sheetName);
+	ExcelSheetReader setSheetName(Class<?> aClass);
 	
 	Integer getFromRowIndex();
 	ExcelSheetReader setFromRowIndex(Integer fromRowIndex);
@@ -59,8 +60,12 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		private static final long serialVersionUID = 1L;
 
 		private byte[] workbookBytes;
-		private String name;
+		private String sheetName;
 		private Integer index,fromRowIndex,rowCount,fromColumnIndex,columnCount;
+		
+		public Adapter(File file) {
+			super(file);
+		}
 		
 		@Override
 		public String processAfterRowRead(Integer rowIndex, String[] values) {
@@ -111,14 +116,14 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		}
 		
 		@Override
-		public ExcelSheetReader setName(String name) {
-			this.name = name;
+		public ExcelSheetReader setSheetName(String sheetName) {
+			this.sheetName = sheetName;
 			return this;
 		}
 		
 		@Override
-		public ExcelSheetReader setName(Class<?> aClass) {
-			return setName(aClass.getSimpleName());
+		public ExcelSheetReader setSheetName(Class<?> aClass) {
+			return setSheetName(aClass.getSimpleName());
 		}
 		
 		@Override
@@ -132,7 +137,25 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		public static class Default extends ExcelSheetReader.Adapter implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			protected Integer notAddableCount = 0;
+			protected Integer numberOfNotAdded=0,numberOfExistingPrimaryKeys = 0;
+			
+			public Default(File file) {
+				super(file);
+				try {
+					if(file.exists() && file.isFile())
+						setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(file)));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public Class<List<String[]>> getOutputClass() {
+				@SuppressWarnings("rawtypes")
+				Class clazz = List.class;
+				return clazz;
+			}
 			
 			@Override
 			public Boolean isRowAddable(Integer rowIndex, String[] values) {
@@ -144,25 +167,34 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
             			break;
             		}
             	isAddable = !isEmpty;
-            	if(Boolean.TRUE.equals(isAddable)){
+            	/*if(Boolean.TRUE.equals(isAddable)){
             		Collection<String> primaryKeys = getPrimaryKeys();
             		Integer primaryKeyColumnIndex = getPrimaryKeyColumnIndex();
             		if(primaryKeys!=null && primaryKeyColumnIndex!=null)
             			isAddable = !primaryKeys.contains(values[primaryKeyColumnIndex]);
-            	}
+            	}*/
             	if(!Boolean.TRUE.equals(isAddable))
-            		notAddableCount ++;
+            		numberOfNotAdded ++;
 				return isAddable;
 			}
 			
 			@Override
-			public List<String[]> execute() throws Exception {
-				Workbook workbook = WorkbookFactory.create(new ByteArrayInputStream(getWorkbookBytes()));
-		        Sheet sheet = StringUtils.isBlank(getName()) ? workbook.getSheetAt(getIndex()) : workbook.getSheet(getName());
+			protected List<String[]> __execute__() {
+				Workbook workbook;
+				try {
+					workbook = WorkbookFactory.create(new ByteArrayInputStream(getWorkbookBytes()));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					return null;
+				}
+					
+		        Sheet sheet = StringUtils.isBlank(getSheetName()) ? workbook.getSheetAt(getIndex()) : workbook.getSheet(getSheetName());
 		        List<String[]> list = new ArrayList<>();
+		        
 		        if(sheet==null){
-		        	System.out.println("No sheet named <<"+getName()+">> or at index <<"+getIndex()+">> found");
+		        	System.out.println("No sheet named <<"+getSheetName()+">> or at index <<"+getIndex()+">> found");
 		        }else{
+		        	addLogMessageBuilderParameters(getLogMessageBuilder(),"sheet", sheet.getSheetName());
 		        	FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
 		        	Integer fromRowIndex = getFromRowIndex(),fromColumnIndex = getFromColumnIndex();
 		            if(fromRowIndex==null)
@@ -181,7 +213,9 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		                if(row==null){
 		                	
 		                }else{
-		                	array = new String[columnCount];
+		                	array = new String[columnCount+( getPrimaryKeyColumnIndex() == null ? 0 : 1 )];
+		                	if(getPrimaryKeyColumnIndex()!=null)
+		                		setPrimaryKeyExistColumnIndex(array.length-1);
 		                	for (int j=0; j<columnCount; j++) {
 		                        Cell cell = row.getCell(j+fromColumnIndex);
 		                        if(cell==null)
@@ -216,14 +250,25 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		                else{
 		                	if(Boolean.TRUE.equals(isRowAddable(i, array))){
 		                		list.add(array);
+		                		Boolean primaryKeyExist = Boolean.TRUE.equals(isPrimaryKeyExist(i, array));
+		                		if(primaryKeyExist)
+		                			numberOfExistingPrimaryKeys++;
+		                		if(getPrimaryKeyExistColumnIndex()!=null && getPrimaryKeyExistColumnIndex() < array.length){
+		                			array[getPrimaryKeyExistColumnIndex()] = String.valueOf(primaryKeyExist);
+		                		}
 		                		processAfterRowAdded(i, array);
 		                	}
 		                }
+		                //System.out.println("ExcelSheetReader : "+StringUtils.join(array,"|"));
 		            }	
 		        }
-		        if(notAddableCount>0)
-		        	System.out.println(notAddableCount+" not added");
-		        workbook.close();				
+		        
+		        addLogMessageBuilderParameters(getLogMessageBuilder(),"#count",list.size(), "#ignored",numberOfNotAdded,"#existing",numberOfExistingPrimaryKeys);
+		        try {
+					workbook.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}				
 				return list;
 			}
 			

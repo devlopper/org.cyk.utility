@@ -113,8 +113,13 @@ public interface Action<INPUT,OUTPUT> {
 						
 			@Override
 			public final OUTPUT execute() {
+				if(getInputClass() == null)
+					throw new RuntimeException("Input class required");
 				if(getInput() == null)
-					return null;
+					throw new RuntimeException("Input value required");
+				if(getOutputClass() == null)
+					throw new RuntimeException("Output class required");
+				
 				if(getLogMessageBuilder()==null)
 					setLogMessageBuilder(new LogMessage.Builder(name, getInput().getClass().getSimpleName()));
 				addLogMessageBuilderParameters(getLogMessageBuilder(),"input",getInput());

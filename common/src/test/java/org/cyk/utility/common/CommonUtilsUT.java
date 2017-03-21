@@ -1,7 +1,5 @@
 package org.cyk.utility.common;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,11 +13,9 @@ import java.util.Set;
 import javax.enterprise.inject.spi.CDI;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
-import org.cyk.utility.common.file.ExcelSheetReader;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.joda.time.DateTime;
 import org.junit.Assert;
@@ -206,57 +202,6 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		Assert.assertEquals("a", CommonUtils.getInstance().concatenate(null, new String[]{"a"}, " ", Boolean.TRUE));
 		Assert.assertEquals("a 1", CommonUtils.getInstance().concatenate(null, new String[]{"a","1"}, " ", Boolean.TRUE));
 		Assert.assertEquals("a 1 b z", CommonUtils.getInstance().concatenate("a 1", new String[]{"b","1","a","z"}, " ", Boolean.TRUE));
-	}
-	
-	@Test
-	public void readExcelSheetXls(){
-		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel");
-		ExcelSheetReader reader = new ExcelSheetReader.Adapter.Default();
-		
-		try {
-			reader.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xls.xls"))));
-			reader.setIndex(0);
-			reader.setRowCount(5);
-			reader.setColumnCount(3);
-			List<String[]> list = reader.execute();
-			for(String[] line : list)
-				System.out.println(StringUtils.join(line," ; "));
-			
-			reader = new ExcelSheetReader.Adapter.Default();
-			reader.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xls.xls"))));
-			reader.setIndex(0);
-			list = reader.execute();
-			for(String[] line : list)
-				System.out.println(StringUtils.join(line," ; "));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	@Test
-	public void readExcelSheetXlsx(){
-		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel");
-		ExcelSheetReader reader = new ExcelSheetReader.Adapter.Default();
-		try {
-			reader.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xlsx.xlsx"))));
-			reader.setIndex(0);
-			reader.setRowCount(5);
-			reader.setColumnCount(3);
-			List<String[]> list = reader.execute();
-			for(String[] line : list)
-				System.out.println(StringUtils.join(line," ; "));
-			
-			reader = new ExcelSheetReader.Adapter.Default();
-			reader.setWorkbookBytes(IOUtils.toByteArray(new FileInputStream(new File(directory, "1xlsx.xlsx"))));
-			reader.setIndex(0);
-			list = reader.execute();
-			for(String[] line : list)
-				System.out.println(StringUtils.join(line," ; "));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
 	}
 	
 	@Test
