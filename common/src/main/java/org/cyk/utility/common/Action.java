@@ -125,7 +125,8 @@ public interface Action<INPUT,OUTPUT> {
 				addLogMessageBuilderParameters(getLogMessageBuilder(),"input",getInput());
 				addLogMessageBuilderParameters(getLogMessageBuilder(),"output class",getOutputClass().getSimpleName());
 				OUTPUT output = __execute__();
-				addLogMessageBuilderParameters(getLogMessageBuilder(),"output",getOutputLogMessage(output));
+				if(Boolean.TRUE.equals(isShowOutputLogMessage(output)))
+					addLogMessageBuilderParameters(getLogMessageBuilder(),"output",getOutputLogMessage(output));
 				if(Boolean.TRUE.equals(getAutomaticallyLogMessage()))
 					logTrace(this);
 				return output;
@@ -137,6 +138,10 @@ public interface Action<INPUT,OUTPUT> {
 			
 			protected Object getOutputLogMessage(OUTPUT output){
 				return output;
+			}
+			
+			protected Boolean isShowOutputLogMessage(OUTPUT output){
+				return Boolean.TRUE;
 			}
 		}
 	}

@@ -36,6 +36,10 @@ public class NumberFormatterUT extends AbstractUnitTest {
 		formatter.setInput(3);
 		formatter.setIsAppendExaequo(Boolean.TRUE);
 		assertEquals("3rd exaequo", formatter.execute());
+		
+		formatter.setInput(22);
+		formatter.setIsAppendExaequo(Boolean.FALSE);
+		assertEquals("22nd", formatter.execute());
 	}
 	
 	@Test

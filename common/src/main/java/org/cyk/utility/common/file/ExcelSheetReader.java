@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -51,9 +52,9 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 	
 	//String processAfterCellRead(Integer rowIndex,Integer columnIndex,String value);
 	
-	String processAfterRowRead(Integer rowIndex,String[] values);
-	Boolean isRowAddable(Integer rowIndex,String[] values);
-	void processAfterRowAdded(Integer rowIndex,String[] values);
+	Boolean isRowAddable(Dimension.Row<String> row);
+	
+	//Collection<String[]> getValues();
 	
 	@Getter
 	public static class Adapter extends TwoDimension.Adapter.Default<String> implements ExcelSheetReader,Serializable {
@@ -67,18 +68,17 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 			super(file);
 		}
 		
-		@Override
-		public String processAfterRowRead(Integer rowIndex, String[] values) {
-			return null;
+		public static List<String[]> getValues(Collection<Dimension.Row<String>> rows) {
+			List<String[]> collection = new ArrayList<>();
+			for(Dimension.Row<String> row : rows)
+				collection.add(row.getValues());
+			return collection;
 		}
 		
 		@Override
-		public Boolean isRowAddable(Integer rowIndex, String[] values) {
+		public Boolean isRowAddable(Dimension.Row<String> row) {
 			return null;
 		}
-		
-		@Override
-		public void processAfterRowAdded(Integer rowIndex, String[] values) {}
 		
 		@Override
 		public ExcelSheetReader setWorkbookBytes(byte[] workbookBytes) {
@@ -137,7 +137,7 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		public static class Default extends ExcelSheetReader.Adapter implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			protected Integer numberOfNotAdded=0,numberOfExistingPrimaryKeys = 0;
+			protected Integer numberOfNotAdded=0;
 			
 			public Default(File file) {
 				super(file);
@@ -151,35 +151,27 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 			
 			@SuppressWarnings("unchecked")
 			@Override
-			public Class<List<String[]>> getOutputClass() {
+			public Class<List<Dimension.Row<String>>> getOutputClass() {
 				@SuppressWarnings("rawtypes")
 				Class clazz = List.class;
 				return clazz;
 			}
 			
 			@Override
-			public Boolean isRowAddable(Integer rowIndex, String[] values) {
-				Boolean isAddable = Boolean.TRUE;
-				Boolean isEmpty = Boolean.TRUE;
-            	for(int k = 0; k < values.length; k++)
-            		if(StringUtils.isNotBlank(values[k])){
-            			isEmpty = Boolean.FALSE;
-            			break;
-            		}
-            	isAddable = !isEmpty;
-            	/*if(Boolean.TRUE.equals(isAddable)){
-            		Collection<String> primaryKeys = getPrimaryKeys();
-            		Integer primaryKeyColumnIndex = getPrimaryKeyColumnIndex();
-            		if(primaryKeys!=null && primaryKeyColumnIndex!=null)
-            			isAddable = !primaryKeys.contains(values[primaryKeyColumnIndex]);
-            	}*/
+			public Boolean isRowAddable(Dimension.Row<String> row) {
+				Boolean isAddable = !row.isBlank();
             	if(!Boolean.TRUE.equals(isAddable))
             		numberOfNotAdded ++;
 				return isAddable;
 			}
 			
 			@Override
-			protected List<String[]> __execute__() {
+			public Dimension.Row<String> getRow(Integer index, Integer size) {
+				return getRow(index, new String[size]);
+			}
+			
+			@Override
+			protected List<Dimension.Row<String>> __execute__() {
 				Workbook workbook;
 				try {
 					workbook = WorkbookFactory.create(new ByteArrayInputStream(getWorkbookBytes()));
@@ -189,12 +181,16 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 				}
 					
 		        Sheet sheet = StringUtils.isBlank(getSheetName()) ? workbook.getSheetAt(getIndex()) : workbook.getSheet(getSheetName());
-		        List<String[]> list = new ArrayList<>();
+		        List<Dimension.Row<String>> list = new ArrayList<>();
 		        
 		        if(sheet==null){
 		        	System.out.println("No sheet named <<"+getSheetName()+">> or at index <<"+getIndex()+">> found");
 		        }else{
 		        	addLogMessageBuilderParameters(getLogMessageBuilder(),"sheet", sheet.getSheetName());
+		        	if(getPrimaryKeyColumnIndexes()!=null)
+		        		addLogMessageBuilderParameters(getLogMessageBuilder(), "primary key column indexes",getPrimaryKeyColumnIndexes());
+		        	if(getPrimaryKeys()!=null)
+		        		addLogMessageBuilderParameters(getLogMessageBuilder(), "#primary keys",getPrimaryKeys().size());
 		        	FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
 		        	Integer fromRowIndex = getFromRowIndex(),fromColumnIndex = getFromColumnIndex();
 		            if(fromRowIndex==null)
@@ -206,20 +202,18 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		            	rowCount = sheet.getPhysicalNumberOfRows();
 		            if(columnCount==null)
 		            	columnCount = new Integer(sheet.getRow(0).getLastCellNum());
-		            
+		          
 		            for (int i=0; i<rowCount; i++) {
-		            	String[] array = null;
 		            	Row row = sheet.getRow(i + fromRowIndex);
+		            	Dimension.Row<String> _row = null;
 		                if(row==null){
 		                	
 		                }else{
-		                	array = new String[columnCount+( getPrimaryKeyColumnIndex() == null ? 0 : 1 )];
-		                	if(getPrimaryKeyColumnIndex()!=null)
-		                		setPrimaryKeyExistColumnIndex(array.length-1);
+		                	_row = getRow(i, columnCount);
 		                	for (int j=0; j<columnCount; j++) {
 		                        Cell cell = row.getCell(j+fromColumnIndex);
 		                        if(cell==null)
-		                        	array[j] = Constant.EMPTY_STRING;
+		                        	_row.set(j, Constant.EMPTY_STRING);
 		                        else{
 		                        	CellValue cellValue = formulaEvaluator.evaluate(cell);
 		                        	String stringValue;
@@ -240,30 +234,30 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		    	    	                	stringValue = StringUtils.trim(cellValue.getStringValue());
 		    	    	                	break;
 		    	    	                }
-		                        	array[j] = StringUtils.defaultIfBlank(stringValue,Constant.EMPTY_STRING);
+		                        	_row.set(j,StringUtils.defaultIfBlank(stringValue,Constant.EMPTY_STRING));
 		                        }
 		                    }
-		                	processAfterRowRead(i, array);
+		                	
+		                	listenAfterRowCreated(_row);
 		                }
-		                if(array==null)
+		                if(_row==null)
 		                	;
 		                else{
-		                	if(Boolean.TRUE.equals(isRowAddable(i, array))){
-		                		list.add(array);
-		                		Boolean primaryKeyExist = Boolean.TRUE.equals(isPrimaryKeyExist(i, array));
-		                		if(primaryKeyExist)
-		                			numberOfExistingPrimaryKeys++;
-		                		if(getPrimaryKeyExistColumnIndex()!=null && getPrimaryKeyExistColumnIndex() < array.length){
-		                			array[getPrimaryKeyExistColumnIndex()] = String.valueOf(primaryKeyExist);
-		                		}
-		                		processAfterRowAdded(i, array);
+		                	if(Boolean.TRUE.equals(isRowAddable(_row))){
+		                		_row.setPrimaryKey(getPrimaryKey(i, _row.getValues()));
+		                		list.add(_row);		 
+		                		listenAfterRowAdded(_row);
 		                	}
 		                }
 		                //System.out.println("ExcelSheetReader : "+StringUtils.join(array,"|"));
 		            }	
+		            addLogMessageBuilderParameters(getLogMessageBuilder(),"#row",rowCount);   
 		        }
 		        
-		        addLogMessageBuilderParameters(getLogMessageBuilder(),"#count",list.size(), "#ignored",numberOfNotAdded,"#existing",numberOfExistingPrimaryKeys);
+		        addLogMessageBuilderParameters(getLogMessageBuilder(),"#selected",list.size(), "#ignored",numberOfNotAdded);
+		        if(Boolean.TRUE.equals(getHasPrimaryKey())) 
+		        	addLogMessageBuilderParameters(getLogMessageBuilder(),"#has primary keys",getRowsWhereHasPrimaryKey(String.class,list).size(),"#has no primary keys"
+		        			,getRowsWhereHasNotPrimaryKey(String.class,list).size());
 		        try {
 					workbook.close();
 				} catch (IOException e) {
@@ -272,6 +266,10 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 				return list;
 			}
 			
+			@Override
+			protected Boolean isShowOutputLogMessage(List<Dimension.Row<String>> output) {
+				return Boolean.FALSE;
+			}
 		}
 		
 	}
