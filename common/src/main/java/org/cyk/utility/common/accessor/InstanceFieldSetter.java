@@ -227,7 +227,9 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 				protected Collection<OUTPUT> __execute__() {
 					output = new ArrayList<>();
 					for(Object[] values : getInput()){
-						getOutput().add(getOneDimension().setInstance(null).setInput(values).execute());
+						OUTPUT output = getOneDimension().setInstance(null).setInput(values).execute();
+						if(output!=null)
+							getOutput().add(output);
 					}						
 					return getOutput();
 				}
