@@ -754,6 +754,10 @@ public class CommonUtils implements Serializable  {
 			convertedValue = new Byte(value);
 		else if(Short.class.equals(type))
 			convertedValue = new Short(value);
+		else if(Double.class.equals(type))
+			convertedValue = new Double(value);
+		else if(double.class.equals(type))
+			convertedValue = new Double(value);
 		else if(Boolean.class.equals(type))
 			convertedValue = new Boolean(value);
 		else if(type.isEnum()){

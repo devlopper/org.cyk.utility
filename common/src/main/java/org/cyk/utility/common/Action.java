@@ -26,6 +26,9 @@ public interface Action<INPUT,OUTPUT> {
 	
 	OUTPUT execute();
 	
+	OUTPUT getOutput();
+	Action<INPUT,OUTPUT> setOutput(OUTPUT output);
+	
 	Class<OUTPUT> getOutputClass();
 	Action<INPUT,OUTPUT> setOutputClass(Class<OUTPUT> outputClass);
 	
@@ -43,6 +46,7 @@ public interface Action<INPUT,OUTPUT> {
 		protected String name;
 		protected Class<INPUT> inputClass;
 		protected INPUT input;
+		protected OUTPUT output;
 		protected Class<OUTPUT> outputClass;
 		protected LogMessage.Builder logMessageBuilder;
 		protected Boolean automaticallyLogMessage = Boolean.TRUE;
@@ -90,6 +94,12 @@ public interface Action<INPUT,OUTPUT> {
 		}
 		
 		@Override
+		public Action<INPUT, OUTPUT> setOutput(OUTPUT output) {
+			this.output = output;
+			return this;
+		}
+		
+		@Override
 		public Action<INPUT, OUTPUT> setOutputClass(Class<OUTPUT> outputClass) {
 			this.outputClass = outputClass;
 			return this;
@@ -124,7 +134,7 @@ public interface Action<INPUT,OUTPUT> {
 					setLogMessageBuilder(new LogMessage.Builder(name, getInput().getClass().getSimpleName()));
 				addLogMessageBuilderParameters(getLogMessageBuilder(),"input",getInput());
 				addLogMessageBuilderParameters(getLogMessageBuilder(),"output class",getOutputClass().getSimpleName());
-				OUTPUT output = __execute__();
+				output = __execute__();
 				if(Boolean.TRUE.equals(isShowOutputLogMessage(output)))
 					addLogMessageBuilderParameters(getLogMessageBuilder(),"output",getOutputLogMessage(output));
 				if(Boolean.TRUE.equals(getAutomaticallyLogMessage()))
