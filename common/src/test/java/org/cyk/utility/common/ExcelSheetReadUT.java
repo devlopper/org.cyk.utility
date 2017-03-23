@@ -30,6 +30,9 @@ public class ExcelSheetReadUT extends AbstractUnitTest {
 			list = reader.execute();
 			for(Dimension.Row<String> line : list)
 				System.out.println(line);
+			
+			System.out.println("ExcelSheetReadUT.read()");
+			System.out.println(CommonUtils.getInstance().convertToString(reader.getValues(), "|", ","));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

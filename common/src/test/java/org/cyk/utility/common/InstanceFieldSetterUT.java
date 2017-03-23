@@ -1,8 +1,11 @@
 package org.cyk.utility.common;
 
+import java.util.Collection;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.accessor.InstanceFieldSetter.OneDimensionObjectArray;
+import org.cyk.utility.common.accessor.InstanceFieldSetter.TwoDimensionObjectArray;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -22,6 +25,8 @@ public class InstanceFieldSetterUT extends AbstractUnitTest {
 		OneDimensionObjectArray<A> setter = 
 				new OneDimensionObjectArray.Adapter.Default<A>(new Object[]{"FOne","FTwo",3.3,"true","SubF11",3333.123,"false","Sub And Sub AA FF2","Hello"},A.class){
 			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Object getValue(Class<?> fieldType, Object value) {
 				if(SubAEntity.class.equals(fieldType)){
@@ -39,6 +44,46 @@ public class InstanceFieldSetterUT extends AbstractUnitTest {
 		setter.execute();
 		
 		debug(a);
+	}
+	
+	@Test
+	public void twoDimensionObjectArray(){
+		
+		OneDimensionObjectArray<A> setter = new OneDimensionObjectArray.Adapter.Default<A>(new Object[]{},A.class){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Object getValue(Class<?> fieldType, Object value) {
+				if(SubAEntity.class.equals(fieldType)){
+					SubAEntity subAEntity = new SubAEntity();
+					subAEntity.setFf1("Found From Datasource V5.1");
+					return subAEntity;
+				}
+				return super.getValue(fieldType, value);
+			}
+			
+			@Override
+			public A getInstance(Object[] values) {
+				if(values[0].toString().startsWith("CODE")){
+					A a = new A();
+					a.setF1("GEAT oh LOORDD!!!!!!!");
+					return a;
+				}					
+				return super.getInstance(values);
+			}
+		};
+		
+		setter.addFieldName("f1", 0).addFieldName("subA.ff3",5).addFieldName("subA.subAA.ff1", 7).addFieldName("f4", 3).addFieldName("subAEntity", 8);
+		
+		TwoDimensionObjectArray<A> twoDimensionObjectArray = new TwoDimensionObjectArray.Adapter.Default<A>(new Object[][]{
+			{"FOne","FTwo",3.3,"true","SubF11",3333.123,"false","Sub And Sub AA FF2","Hello"}
+			,{"FOne","FTwo",3.3,"true","SubF11",3333.123,"false","Sub And Sub AA FF2","Hello"}
+			,{"FOne","FTwo",3.3,"true","SubF11",3333.123,"false","Sub And Sub AA FF2","Hello"}
+		},setter);
+		
+		Collection<A> as = twoDimensionObjectArray.execute();
+		System.out.println("InstanceFieldSetterUT.twoDimensionObjectArray() : "+as.size());
+		System.out.println(as);
 	}
 	
 	/**/

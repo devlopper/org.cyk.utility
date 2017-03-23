@@ -45,6 +45,8 @@ public interface ArrayReader<RESULT> extends FileReader<RESULT> {
 		//Collection<Dimension.Row<CELL>> getRowsWhereHasPrimaryKey();
 		//Collection<Dimension.Row<CELL>> getRowsWhereHasNotPrimaryKey();
 		
+		Object[][] getValues();
+		
 		Dimension.Row<CELL> getRow(Integer rowIndex,CELL[] values);
 		Dimension.Row<CELL> getRow(Integer rowIndex,Integer size);
 		
@@ -80,6 +82,11 @@ public interface ArrayReader<RESULT> extends FileReader<RESULT> {
 				this.rows = rows;
 				return this;
 			}*/
+			
+			@Override
+			public Object[][] getValues() {
+				return null;
+			}
 			
 			@Override
 			public TwoDimension<CELL> setHasPrimaryKey(Boolean hasPrimaryKey) {
@@ -137,6 +144,20 @@ public interface ArrayReader<RESULT> extends FileReader<RESULT> {
 				
 				public Default(File file) {
 					super(file);
+				}
+				
+				@Override
+				public Object[][] getValues() {
+					Object[][] values = new Object[getOutput().size()][];
+					int i = 0;
+					for(Row<CELL> row : getOutput()){
+						values[i] = new Object[row.getValues().length];
+						int j = 0;
+						for(CELL value : row.getValues())
+							values[i][j++] = value;
+						i++;
+					}
+					return values;
 				}
 				
 				@Override

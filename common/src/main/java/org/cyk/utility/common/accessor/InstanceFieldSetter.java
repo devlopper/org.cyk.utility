@@ -1,6 +1,8 @@
 package org.cyk.utility.common.accessor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -71,6 +73,8 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 		
 		OneDimensionObjectArray<OUTPUT> addFieldName(String name,Integer index);
 		
+		OUTPUT getInstance(Object[] values);
+		
 		/**/
 		
 		@Getter
@@ -104,6 +108,11 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 				return null;
 			}
 			
+			@Override
+			public OUTPUT getInstance(Object[] values) {
+				return null;
+			}
+			
 			/**/
 			
 			public static class Default<OUTPUT> extends OneDimensionObjectArray.Adapter<OUTPUT> implements Serializable {
@@ -111,6 +120,10 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 
 				public Default(Object[] input, Class<OUTPUT> outputClass) {
 					super(input, outputClass);
+				}
+				
+				public Default(Class<OUTPUT> outputClass) {
+					super(new Object[]{}, outputClass);
 				}
 				
 				@Override
@@ -131,11 +144,21 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 				}
 				
 				@Override
+				public OUTPUT getInstance(Object[] values) {
+					return newInstance(getOutputClass());
+				}
+				
+				@Override
 				protected OUTPUT __execute__() {
+					OUTPUT instance = getInstance();
+					if(instance==null){
+						instance = getInstance(getInput());
+						setInstance(instance);
+					}
 					addLogMessageBuilderParameters(getLogMessageBuilder(),"length",getInput().length);
 					for(String fieldName : getFieldNames()){
 						try{
-							Class<?> fieldType = PropertyUtils.getPropertyType(getInstance(), fieldName);
+							Class<?> fieldType = PropertyUtils.getPropertyType(instance, fieldName);
 							Integer index = getFieldNamesIndexes().get(fieldName);
 							Boolean isArrayValueAtProcessable = isArrayValueAtProcessable(index);
 							Object value = getInput()[getFieldNamesIndexes().get(fieldName)];
@@ -146,13 +169,67 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 							if(Boolean.TRUE.equals(isArrayValueAtProcessable)){
 								value = getValue(fieldType, value);
 								addLogMessageBuilderParameters(getLogMessageBuilder(),"field value",value);
-								PropertyUtils.setProperty(getInstance(), fieldName, value);
+								PropertyUtils.setProperty(instance, fieldName, value);
 							}
 						}catch(Exception exception){
 							logThrowable(exception);
 						}
 					}			
 					return getInstance();
+				}
+			}
+						
+		}
+		
+	}
+	
+	public static interface TwoDimensionObjectArray<OUTPUT> extends InstanceFieldSetter<Object[][], Collection<OUTPUT>> {
+		
+		OneDimensionObjectArray<OUTPUT> getOneDimension();
+		TwoDimensionObjectArray<OUTPUT> setOneDimension(OneDimensionObjectArray<OUTPUT> oneDimension);
+	
+		/**/
+		
+		@Getter
+		public static class Adapter<OUTPUT> extends InstanceFieldSetter.Adapter.Default<Object[][], Collection<OUTPUT>> implements TwoDimensionObjectArray<OUTPUT>,Serializable {
+			private static final long serialVersionUID = 3887225153998606760L;
+
+			protected OneDimensionObjectArray<OUTPUT> oneDimension;
+			protected Collection<OUTPUT> instances = new ArrayList<>();
+			
+			@SuppressWarnings("unchecked")
+			public Adapter(Object[][] input,OneDimensionObjectArray<OUTPUT> oneDimension) {
+				super(Object[][].class, input, null);
+				try {
+					setOutputClass((Class<Collection<OUTPUT>>) Class.forName(Collection.class.getName()));
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				setOneDimension(oneDimension);
+			}
+			
+			@Override
+			public TwoDimensionObjectArray<OUTPUT> setOneDimension(OneDimensionObjectArray<OUTPUT> oneDimension) {
+				this.oneDimension = oneDimension;
+				return this;
+			}
+			
+			/**/
+			
+			public static class Default<OUTPUT> extends TwoDimensionObjectArray.Adapter<OUTPUT> implements Serializable {
+				private static final long serialVersionUID = 3887225153998606760L;
+
+				public Default(Object[][] input,OneDimensionObjectArray<OUTPUT> oneDimension) {
+					super(input,oneDimension);
+				}
+					
+				@Override
+				protected Collection<OUTPUT> __execute__() {
+					output = new ArrayList<>();
+					for(Object[] values : getInput()){
+						getOutput().add(getOneDimension().setInstance(null).setInput(values).execute());
+					}						
+					return getOutput();
 				}
 			}
 						

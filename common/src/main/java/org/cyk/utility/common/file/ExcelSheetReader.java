@@ -181,7 +181,7 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 				}
 					
 		        Sheet sheet = StringUtils.isBlank(getSheetName()) ? workbook.getSheetAt(getIndex()) : workbook.getSheet(getSheetName());
-		        List<Dimension.Row<String>> list = new ArrayList<>();
+		        setOutput(new ArrayList<Dimension.Row<String>>());
 		        
 		        if(sheet==null){
 		        	System.out.println("No sheet named <<"+getSheetName()+">> or at index <<"+getIndex()+">> found");
@@ -245,7 +245,7 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		                else{
 		                	if(Boolean.TRUE.equals(isRowAddable(_row))){
 		                		_row.setPrimaryKey(getPrimaryKey(i, _row.getValues()));
-		                		list.add(_row);		 
+		                		getOutput().add(_row);		 
 		                		listenAfterRowAdded(_row);
 		                	}
 		                }
@@ -254,16 +254,16 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		            addLogMessageBuilderParameters(getLogMessageBuilder(),"#row",rowCount);   
 		        }
 		        
-		        addLogMessageBuilderParameters(getLogMessageBuilder(),"#selected",list.size(), "#ignored",numberOfNotAdded);
+		        addLogMessageBuilderParameters(getLogMessageBuilder(),"#selected",getOutput().size(), "#ignored",numberOfNotAdded);
 		        if(Boolean.TRUE.equals(getHasPrimaryKey())) 
-		        	addLogMessageBuilderParameters(getLogMessageBuilder(),"#has primary keys",getRowsWhereHasPrimaryKey(String.class,list).size(),"#has no primary keys"
-		        			,getRowsWhereHasNotPrimaryKey(String.class,list).size());
+		        	addLogMessageBuilderParameters(getLogMessageBuilder(),"#has primary keys",getRowsWhereHasPrimaryKey(String.class,getOutput()).size(),"#has no primary keys"
+		        			,getRowsWhereHasNotPrimaryKey(String.class,getOutput()).size());
 		        try {
 					workbook.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}				
-				return list;
+				return getOutput();
 			}
 			
 			@Override
