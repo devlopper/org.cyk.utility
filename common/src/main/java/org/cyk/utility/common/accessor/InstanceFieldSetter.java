@@ -72,6 +72,8 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 		Object getValue(Class<?> fieldType,Object value);
 		
 		OneDimensionObjectArray<OUTPUT> addFieldName(String name,Integer index);
+		OneDimensionObjectArray<OUTPUT> addFieldName(String name);
+		OneDimensionObjectArray<OUTPUT> addFieldNames(String...names);
 		
 		OUTPUT getInstance(Object[] values);
 		
@@ -113,6 +115,16 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 				return null;
 			}
 			
+			@Override
+			public OneDimensionObjectArray<OUTPUT> addFieldName(String name) {
+				return null;
+			}
+			
+			@Override
+			public OneDimensionObjectArray<OUTPUT> addFieldNames(String... names) {
+				return null;
+			}
+			
 			/**/
 			
 			public static class Default<OUTPUT> extends OneDimensionObjectArray.Adapter<OUTPUT> implements Serializable {
@@ -140,6 +152,19 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 				public OneDimensionObjectArray<OUTPUT> addFieldName(String name, Integer index) {
 					getFieldNames().add(name);
 					getFieldNamesIndexes().put(name, index);
+					return this;
+				}
+				
+				@Override
+				public OneDimensionObjectArray<OUTPUT> addFieldName(String name) {
+					addFieldName(name, getFieldNames().size());
+					return this;
+				}
+				
+				@Override
+				public OneDimensionObjectArray<OUTPUT> addFieldNames(String... names) {
+					for(String name : names)
+						addFieldName(name);
 					return this;
 				}
 				
