@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,7 @@ import java.util.Set;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
+import org.cyk.utility.common.LogMessage;
 
 import lombok.Getter;
 
@@ -32,7 +34,7 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 		protected Set<String> fieldNames = new LinkedHashSet<>();
 		
 		public Adapter(Class<INPUT> inputClass, INPUT input, Class<OUTPUT> outputClass) {
-			super("Set", inputClass, input, outputClass, null);
+			super("Set", inputClass, input, outputClass, new LogMessage.Builder());
 		}
 		
 		@Override
@@ -75,7 +77,9 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 		OneDimensionObjectArray<OUTPUT> addFieldName(String name);
 		OneDimensionObjectArray<OUTPUT> addFieldNames(String...names);
 		
-		OUTPUT getInstance(Object[] values);
+		Object getKeyType(Object[] values);
+		Integer getKeyIndex(Object[] values);
+		Object getKeyValue(Object[] values);
 		
 		/**/
 		
@@ -90,9 +94,23 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 			}
 			
 			@Override
+			public Object getKeyType(Object[] values) {
+				return null;
+			}
+			
+			@Override
+			public Integer getKeyIndex(Object[] values) {
+				return null;
+			}
+			
+			@Override
+			public Object getKeyValue(Object[] values) {
+				return null;
+			}
+			
+			@Override
 			public OneDimensionObjectArray<OUTPUT> setFieldNamesIndexes(Map<String, Integer> fieldNamesIndexes) {
-				this.fieldNamesIndexes = fieldNamesIndexes;
-				return this;
+				return null;
 			}
 			
 			@Override
@@ -107,11 +125,6 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 			
 			@Override
 			public OneDimensionObjectArray<OUTPUT> addFieldName(String name, Integer index) {
-				return null;
-			}
-			
-			@Override
-			public OUTPUT getInstance(Object[] values) {
 				return null;
 			}
 			
@@ -136,6 +149,12 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 				
 				public Default(Class<OUTPUT> outputClass) {
 					super(new Object[]{}, outputClass);
+				}
+				
+				@Override
+				public OneDimensionObjectArray<OUTPUT> setFieldNamesIndexes(Map<String, Integer> fieldNamesIndexes) {
+					this.fieldNamesIndexes = fieldNamesIndexes;
+					return this;
 				}
 				
 				@Override
@@ -169,43 +188,61 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 				}
 				
 				@Override
-				public OUTPUT getInstance(Object[] values) {
-					return newInstance(getOutputClass());
+				public Object getKeyValue(Object[] values) {
+					return commonUtils.getValueAt(values, getKeyIndex(values));
 				}
 				
 				@Override
 				protected OUTPUT __execute__() {
-					OUTPUT instance = getInstance();
-					if(instance==null){
-						instance = getInstance(getInput());
-						setInstance(instance);
-					}
-					addLogMessageBuilderParameters(getLogMessageBuilder(),"length",getInput().length);
-					for(String fieldName : getFieldNames()){
-						try{
-							Class<?> fieldType = PropertyUtils.getPropertyType(instance, fieldName);
-							Integer index = getFieldNamesIndexes().get(fieldName);
-							Boolean isArrayValueAtProcessable = isArrayValueAtProcessable(index);
-							Object value = getInput()[getFieldNamesIndexes().get(fieldName)];
-							addLogMessageBuilderParameters(getLogMessageBuilder(), "field name",fieldName);
-							addLogMessageBuilderParameters(getLogMessageBuilder(),"index",index);
-							addLogMessageBuilderParameters(getLogMessageBuilder(),"value",value);
-							addLogMessageBuilderParameters(getLogMessageBuilder(),"processable",isArrayValueAtProcessable);
-							if(Boolean.TRUE.equals(isArrayValueAtProcessable)){
-								value = getValue(fieldType, value);
-								addLogMessageBuilderParameters(getLogMessageBuilder(),"field value",value);
-								PropertyUtils.setProperty(instance, fieldName, value);
+					if(getInstance()==null){
+						addLogMessageBuilderParameters(getLogMessageBuilder(),"instance","is null");
+					}else{
+						addLogMessageBuilderParameters(getLogMessageBuilder(),"length",getInput().length);
+						for(String fieldName : getFieldNames()){
+							try{
+								Class<?> fieldType = PropertyUtils.getPropertyType(instance, fieldName);
+								Integer index = getFieldNamesIndexes().get(fieldName);
+								Boolean isArrayValueAtProcessable = isArrayValueAtProcessable(index);
+								Object value = getInput()[getFieldNamesIndexes().get(fieldName)];
+								addLogMessageBuilderParameters(getLogMessageBuilder(), "field name",fieldName);
+								addLogMessageBuilderParameters(getLogMessageBuilder(),"index",index);
+								addLogMessageBuilderParameters(getLogMessageBuilder(),"value",value);
+								addLogMessageBuilderParameters(getLogMessageBuilder(),"processable",isArrayValueAtProcessable);
+								if(Boolean.TRUE.equals(isArrayValueAtProcessable)){
+									value = getValue(fieldType, value);
+									if(Boolean.TRUE.equals(isShowFieldValueLogMessage(value)))
+										addLogMessageBuilderParameters(getLogMessageBuilder(),"field value",value);
+									PropertyUtils.setProperty(instance, fieldName, value);
+								}
+							}catch(Exception exception){
+								logThrowable(exception);
 							}
-						}catch(Exception exception){
-							logThrowable(exception);
-						}
-					}			
+						}				
+					}					
 					return getInstance();
 				}
+			}
+			
+			protected Boolean isShowFieldValueLogMessage(Object value) {
+				return Boolean.FALSE;
+			}
+			
+			@Override
+			protected Boolean isShowInputLogMessage(Object[] input) {
+				return Boolean.FALSE;
+			}
+			
+			@Override
+			protected Boolean isShowOutputLogMessage(OUTPUT output) {
+				return Boolean.FALSE;
 			}
 						
 		}
 		
+		/**/
+		
+		public static final String KEY_TYPE_LOCAL = "local";
+		public static final String KEY_TYPE_GLOBAL = "global";
 	}
 	
 	public static interface TwoDimensionObjectArray<OUTPUT> extends InstanceFieldSetter<Object[][], Collection<OUTPUT>> {
@@ -213,6 +250,17 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 		OneDimensionObjectArray<OUTPUT> getOneDimension();
 		TwoDimensionObjectArray<OUTPUT> setOneDimension(OneDimensionObjectArray<OUTPUT> oneDimension);
 	
+		Set<Object> getExistingKeys();
+		TwoDimensionObjectArray<OUTPUT> setExistingKeys(Set<Object> existingKeys);
+		
+		Boolean getIgnoreExistingKey(Object[] values,Object key,Object keyType);
+		Boolean isInstanceKeyExist(Object[] values,Object key,Object keyType);
+		OUTPUT getInstanceByKey(Object[] values,Object key,Object keyType);
+		
+		OUTPUT instanciate(Object[] values);
+		
+		OUTPUT getInstance(Object[] values);
+		
 		/**/
 		
 		@Getter
@@ -221,6 +269,7 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 
 			protected OneDimensionObjectArray<OUTPUT> oneDimension;
 			protected Collection<OUTPUT> instances = new ArrayList<>();
+			protected Set<Object> existingKeys = new HashSet<>();
 			
 			@SuppressWarnings("unchecked")
 			public Adapter(Object[][] input,OneDimensionObjectArray<OUTPUT> oneDimension) {
@@ -239,24 +288,112 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 				return this;
 			}
 			
+			@Override
+			public TwoDimensionObjectArray<OUTPUT> setExistingKeys(Set<Object> exisitingKeys) {
+				return null;
+			}
+			
+			@Override
+			public Boolean isInstanceKeyExist(Object[] values, Object key, Object keyType) {
+				return null;
+			}
+			
+			@Override
+			public Boolean getIgnoreExistingKey(Object[] values, Object key, Object keyType) {
+				return null;
+			}
+			
+			@Override
+			public OUTPUT getInstanceByKey(Object[] values, Object key, Object keyType) {
+				return null;
+			}
+			
+			@Override
+			public OUTPUT getInstance(Object[] values) {
+				return null;
+			}
+			
+			@Override
+			public OUTPUT instanciate(Object[] values) {
+				return null;
+			}
+			
 			/**/
 			
 			public static class Default<OUTPUT> extends TwoDimensionObjectArray.Adapter<OUTPUT> implements Serializable {
 				private static final long serialVersionUID = 3887225153998606760L;
 
+				protected Integer numberOfNullInstance=0,numberOfExisitingInstanceKey=0,numberOfIgnoredExistingKey=0;
+				
 				public Default(Object[][] input,OneDimensionObjectArray<OUTPUT> oneDimension) {
 					super(input,oneDimension);
+				}
+				
+				@Override
+				public Boolean getIgnoreExistingKey(Object[] values, Object key, Object keyType) {
+					return getExistingKeys().contains(key);
+				}
+				
+				@Override
+				public OUTPUT instanciate(Object[] values) {
+					return (OUTPUT) newInstance(getOneDimension().getOutputClass());
+				}
+				
+				@Override
+				public OUTPUT getInstance(Object[] values) {
+					OUTPUT instance = null;
+					Object key = getOneDimension().getKeyValue(values);
+					if(key!=null){
+						Object type = getOneDimension().getKeyType(values);
+						if(type!=null){
+							if(Boolean.TRUE.equals(isInstanceKeyExist(values, key, type))){
+								numberOfExisitingInstanceKey++;
+								if(Boolean.TRUE.equals(getIgnoreExistingKey(values, key, type))){
+									numberOfIgnoredExistingKey++;
+									return null;
+								}else
+									instance = getInstanceByKey(values,key,type);
+							}
+						}
+					}
+					if(instance == null)
+						instance = instanciate(values);
+					return instance;
 				}
 					
 				@Override
 				protected Collection<OUTPUT> __execute__() {
+					addLogMessageBuilderParameters(getLogMessageBuilder(), "existing keys",existingKeys.size());
 					output = new ArrayList<>();
 					for(Object[] values : getInput()){
-						OUTPUT output = getOneDimension().setInstance(null).setInput(values).execute();
-						if(output!=null)
-							getOutput().add(output);
-					}						
+						OUTPUT instance = getInstance(values);
+						if(instance == null){
+							
+						}else{
+							OUTPUT output = getOneDimension().setInstance(instance).setInput(values).execute();
+							if(output!=null)
+								getOutput().add(output);
+						}
+						
+					}
+					addLogMessageBuilderParameters(getLogMessageBuilder(), "numberOfExisitingInstanceKey",numberOfExisitingInstanceKey,"numberOfIgnoredExistingKey"
+							,numberOfIgnoredExistingKey,"size",getOutput().size());
 					return getOutput();
+				}
+				
+				@Override
+				protected Boolean isShowInputLogMessage(Object[][] input) {
+					return Boolean.FALSE;
+				}
+				
+				@Override
+				protected Boolean isShowOuputClassLogMessage(Class<Collection<OUTPUT>> aClass) {
+					return Boolean.FALSE;
+				}
+				
+				@Override
+				protected Boolean isShowOutputLogMessage(Collection<OUTPUT> output) {
+					return Boolean.FALSE;
 				}
 			}
 						

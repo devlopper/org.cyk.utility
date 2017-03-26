@@ -132,8 +132,10 @@ public interface Action<INPUT,OUTPUT> {
 				
 				if(getLogMessageBuilder()==null)
 					setLogMessageBuilder(new LogMessage.Builder(name, getInput().getClass().getSimpleName()));
-				addLogMessageBuilderParameters(getLogMessageBuilder(),"input",getInput());
-				addLogMessageBuilderParameters(getLogMessageBuilder(),"output class",getOutputClass().getSimpleName());
+				if(Boolean.TRUE.equals(isShowInputLogMessage(getInput())))
+					addLogMessageBuilderParameters(getLogMessageBuilder(),"input",getInputLogMessage(getInput()));
+				if(Boolean.TRUE.equals(isShowOuputClassLogMessage(getOutputClass())))
+					addLogMessageBuilderParameters(getLogMessageBuilder(),"output class",getOutputClass().getSimpleName());
 				output = __execute__();
 				if(Boolean.TRUE.equals(isShowOutputLogMessage(output)))
 					addLogMessageBuilderParameters(getLogMessageBuilder(),"output",getOutputLogMessage(output));
@@ -144,6 +146,18 @@ public interface Action<INPUT,OUTPUT> {
 			
 			protected OUTPUT __execute__(){
 				throw new RuntimeException("Action "+name+" of "+getInput().getClass()+" to "+getOutputClass()+" not yet implemented.");
+			}
+			
+			protected Boolean isShowOuputClassLogMessage(Class<OUTPUT> aClass){
+				return Boolean.FALSE;
+			}
+			
+			protected Boolean isShowInputLogMessage(INPUT input){
+				return Boolean.TRUE;
+			}
+			
+			protected Object getInputLogMessage(INPUT input){
+				return input;
 			}
 			
 			protected Object getOutputLogMessage(OUTPUT output){
