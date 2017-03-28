@@ -78,7 +78,14 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 		OneDimensionObjectArray<OUTPUT> addFieldNames(String...names);
 		
 		Object getKeyType(Object[] values);
+		
+		Object getKeyType();
+		OneDimensionObjectArray<OUTPUT> setKeyType(Object keyType);
+		
 		Integer getKeyIndex(Object[] values);
+		Integer getKeyIndex();
+		OneDimensionObjectArray<OUTPUT> setKeyIndex(Integer keyIndex);
+		
 		Object getKeyValue(Object[] values);
 		
 		/**/
@@ -88,9 +95,21 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 			private static final long serialVersionUID = 3887225153998606760L;
 
 			protected Map<String,Integer> fieldNamesIndexes = new HashMap<>();
+			protected Object keyType;
+			protected Integer keyIndex;
 			
 			public Adapter(Object[] input, Class<OUTPUT> outputClass) {
 				super(Object[].class, input, outputClass);
+			}
+			
+			@Override
+			public OneDimensionObjectArray<OUTPUT> setKeyIndex(Integer keyIndex) {
+				return null;
+			}
+			
+			@Override
+			public OneDimensionObjectArray<OUTPUT> setKeyType(Object keyType) {
+				return null;
 			}
 			
 			@Override
@@ -149,6 +168,18 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 				
 				public Default(Class<OUTPUT> outputClass) {
 					super(new Object[]{}, outputClass);
+				}
+				
+				@Override
+				public OneDimensionObjectArray<OUTPUT> setKeyIndex(Integer keyIndex) {
+					this.keyIndex = keyIndex;
+					return this;
+				}
+				
+				@Override
+				public OneDimensionObjectArray<OUTPUT> setKeyType(Object keyType) {
+					this.keyType = keyType;
+					return this;
 				}
 				
 				@Override
@@ -329,6 +360,17 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 					super(input,oneDimension);
 				}
 				
+				public Default(OneDimensionObjectArray<OUTPUT> oneDimension) {
+					this(null,oneDimension);
+				}
+				
+				@Override
+				public Boolean isInstanceKeyExist(Object[] values, Object key, Object keyType) {
+					if(key==null)
+						return getInstanceByKey(values, key, keyType) != null;
+					return getExistingKeys().contains(key);
+				}
+				
 				@Override
 				public Boolean getIgnoreExistingKey(Object[] values, Object key, Object keyType) {
 					return getExistingKeys().contains(key);
@@ -343,20 +385,15 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 				public OUTPUT getInstance(Object[] values) {
 					OUTPUT instance = null;
 					Object key = getOneDimension().getKeyValue(values);
-					if(key!=null){
-						Object type = getOneDimension().getKeyType(values);
-						if(type!=null){
-							if(Boolean.TRUE.equals(isInstanceKeyExist(values, key, type))){
-								numberOfExisitingInstanceKey++;
-								if(Boolean.TRUE.equals(getIgnoreExistingKey(values, key, type))){
-									numberOfIgnoredExistingKey++;
-									return null;
-								}else
-									instance = getInstanceByKey(values,key,type);
-							}
-						}
-					}
-					if(instance == null)
+					Object type = getOneDimension().getKeyType(values);
+					
+					if(Boolean.TRUE.equals(isInstanceKeyExist(values, key, type))){
+						numberOfExisitingInstanceKey++;
+						if(Boolean.TRUE.equals(getIgnoreExistingKey(values, key, type))){
+							numberOfIgnoredExistingKey++;
+						}else
+							instance = getInstanceByKey(values,key,type);
+					}else
 						instance = instanciate(values);
 					return instance;
 				}
