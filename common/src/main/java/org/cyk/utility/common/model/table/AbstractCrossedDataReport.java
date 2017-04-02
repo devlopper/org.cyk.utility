@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.cyk.utility.common.generator.AbstractGeneratable;
+import org.cyk.utility.common.generator.RandomDataProvider;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +15,13 @@ public abstract class AbstractCrossedDataReport<T,CELL extends AbstractCrossedDa
 
 	private static final long serialVersionUID = 1L;
 
+	protected Class<CELL> cellClass;
 	protected ArrayList<CELL> cells = new ArrayList<>();
 	
-	protected abstract Class<CELL> getCellClass();
+	@SuppressWarnings("unchecked")
+	public AbstractCrossedDataReport() {
+		cellClass = (Class<CELL>) commonUtils.getClassParameterAt(getClass(), 1);
+	}
 	
 	public AbstractCrossedDataReport<T,CELL> addCell(String row,String column,String value){
 		CELL cell = newInstance(getCellClass()); 
@@ -29,13 +34,17 @@ public abstract class AbstractCrossedDataReport<T,CELL extends AbstractCrossedDa
 	
 	@Override
 	public void generate() {
-		for(int i = 0 ; i < 4 ; i++){
-			String row = "row"+i;
-			for(int j = 0 ; j < 7 ; j++){
-				String column = "column"+j;
-				addCell(row, column, "value"+i+j);
-			}
-		}
+		for(String row : getGenerateRows())
+			for(String column : getGenerateColumns())
+				addCell(row, column, RandomDataProvider.getInstance().randomInt(1, 99)+"");
+	}
+	
+	protected String[] getGenerateRows(){
+		return new String[]{"row1","row2","row3","row4","row5"};
+	}
+	
+	protected String[] getGenerateColumns(){
+		return new String[]{"column1","column2","column3","column4","column5","column6","column7","column8"};
 	}
 	
 	/**/
@@ -68,11 +77,6 @@ public abstract class AbstractCrossedDataReport<T,CELL extends AbstractCrossedDa
 
 		private static final long serialVersionUID = 1L;
 
-		@Override
-		protected Class<Cell> getCellClass() {
-			return Cell.class;
-		}
-		
 		/**/
 		
 		@Getter @Setter
