@@ -24,7 +24,8 @@ public abstract class AbstractCrossedDataReport<T,CELL extends AbstractCrossedDa
 	}
 	
 	public AbstractCrossedDataReport<T,CELL> addCell(String row,String column,String value){
-		CELL cell = newInstance(getCellClass()); 
+		CELL cell = newInstance(getCellClass());
+		cell.setIndex(String.valueOf(cells.size()+1));
 		cell.setRow(row);
 		cell.setColumn(column);
 		cell.setValue(value);
@@ -54,7 +55,7 @@ public abstract class AbstractCrossedDataReport<T,CELL extends AbstractCrossedDa
 
 		private static final long serialVersionUID = 1L;
 		
-		protected String row,column,value;
+		protected String index,row,column,value;
 		
 		public AbstractCell(String row, String column, String value) {
 			super();
