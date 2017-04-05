@@ -1,6 +1,7 @@
 package org.cyk.utility.common;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Locale;
 
 import org.cyk.utility.common.formatter.Formatter.CharacterSet;
@@ -76,6 +77,14 @@ public class NumberFormatterUT extends AbstractUnitTest {
 		assertEquals("five", formatter.setInput(5).execute());
 		assertEquals("fifteen", formatter.setInput(15).execute());
 		assertEquals("forty nine", formatter.setInput(49).execute());
+	}
+	
+	@Test
+	public void assertPercentage(){
+		NumberFormatter.String formatter = new NumberFormatter.String.Adapter.Default(null,null);
+		formatter.setIsPercentage(Boolean.TRUE);
+		formatter.setLocale(Locale.FRENCH);
+		assertEquals("33,33 %", formatter.setInput( new BigDecimal("1").divide(new BigDecimal("3"),4,RoundingMode.HALF_DOWN)).execute());
 	}
 	
 }
