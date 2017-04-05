@@ -5,19 +5,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.cyk.utility.common.Constant;
-import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.Constant.Date.Length;
+import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
 import org.cyk.utility.common.formatter.DateFormatter;
 import org.cyk.utility.common.formatter.Formatter.CharacterSet;
 import org.cyk.utility.common.formatter.NumberFormatter;
-
-import lombok.Getter;
-import lombok.Setter;
 
 public abstract class AbstractGeneratable<T> extends AbstractBean implements Serializable {
 
@@ -36,6 +39,8 @@ public abstract class AbstractGeneratable<T> extends AbstractBean implements Ser
 	
 	@Getter @Setter protected Object source;
 	@Getter @Setter protected String text;
+	
+	@Setter protected Map<String,List<?>> fieldsRandomValues;
 	
 	public void setSourceOnly(Object source){
 		this.source = source;
@@ -115,6 +120,42 @@ public abstract class AbstractGeneratable<T> extends AbstractBean implements Ser
 				return date.toString();
 		}
 		return result.toString();
+	}
+	
+	/**/
+	
+	public Map<String,List<?>> createFieldsRandomValues(){
+		return new HashMap<>();
+	}
+	
+	public Map<String,List<?>> getFieldsRandomValues(){
+		if(fieldsRandomValues==null){
+			fieldsRandomValues = createFieldsRandomValues();
+		}
+		return fieldsRandomValues;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <VALUE_TYPE> List<VALUE_TYPE> getFieldRandomValues(Class<VALUE_TYPE> valueTypeClass,String fieldName){
+		Map<String,List<?>> map = getFieldsRandomValues();
+		if(map!=null)
+			return (List<VALUE_TYPE>) map.get(fieldName);
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <VALUE_TYPE> VALUE_TYPE getFieldRandomValue(Class<VALUE_TYPE> valueTypeClass,String fieldName){
+		List<VALUE_TYPE> list = getFieldRandomValues(valueTypeClass, fieldName);
+		if(list!=null)
+			return (VALUE_TYPE) provider.randomFromList(list);
+		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <VALUE_TYPE> void setFieldRandomValues(Class<VALUE_TYPE> valueTypeClass,String fieldName,List<VALUE_TYPE> values){
+		Map<String,List<?>> map = getFieldsRandomValues();
+		if(map!=null)
+			map.put(fieldName, (List<Object>) values);
 	}
 	
 	/**/
