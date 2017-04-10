@@ -9,12 +9,12 @@ import lombok.Setter;
 
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
-import org.cyk.utility.common.model.table.ColumnListener;
+import org.cyk.utility.common.model.table.Column;
 import org.cyk.utility.common.model.table.DefaultCell;
 import org.cyk.utility.common.model.table.DefaultColumn;
 import org.cyk.utility.common.model.table.DefaultRow;
 import org.cyk.utility.common.model.table.DefaultTable;
-import org.cyk.utility.common.model.table.RowListener;
+import org.cyk.utility.common.model.table.Row;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -55,7 +55,7 @@ public class TableUT extends AbstractUnitTest {
 	//@Test
 	public void complex1(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
-		table.getRowListeners().add(new RowListener.Adapter<DefaultRow<RowData>, RowData, DefaultCell, String>(){
+		table.getRowListeners().add(new Row.Listener.Adapter.Default<DefaultRow<RowData>, RowData, DefaultCell, String>(){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -87,7 +87,7 @@ public class TableUT extends AbstractUnitTest {
 	@Test
 	public void columnOneListener(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
-		table.getColumnListeners().add(new ColumnListener.Adapter<DefaultColumn, String, DefaultCell, String>(){
+		table.getColumnListeners().add(new Column.Listener.Adapter<DefaultColumn, String, DefaultCell, String>(){
 
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -108,7 +108,7 @@ public class TableUT extends AbstractUnitTest {
 	@Test
 	public void columnTwoListeners(){
 		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
-		table.getColumnListeners().add(new ColumnListener.Adapter<DefaultColumn, String, DefaultCell, String>(){
+		table.getColumnListeners().add(new Column.Listener.Adapter.Default<DefaultColumn, String, DefaultCell, String>(){
 
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -121,7 +121,7 @@ public class TableUT extends AbstractUnitTest {
 			}
 			
 		});
-		table.getColumnListeners().add(new ColumnListener.Adapter<DefaultColumn, String, DefaultCell, String>(){
+		table.getColumnListeners().add(new Column.Listener.Adapter.Default<DefaultColumn, String, DefaultCell, String>(){
 
 			private static final long serialVersionUID = 1L;
 			@Override

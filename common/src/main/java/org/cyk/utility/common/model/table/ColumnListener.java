@@ -8,7 +8,7 @@ import org.cyk.utility.common.AbstractFieldSorter.FieldSorter;
 import lombok.Getter;
 import lombok.Setter;
 
-
+@Deprecated
 public interface ColumnListener<DIMENSION extends Column<DATA, CELL, VALUE>,DATA,CELL extends Cell<VALUE>,VALUE> extends DimensionListener<DIMENSION,DATA,CELL,VALUE> {
 	
 	Boolean isColumn(Field field);
@@ -27,7 +27,7 @@ public interface ColumnListener<DIMENSION extends Column<DATA, CELL, VALUE>,DATA
 	
 	/**/
 	
-	@Getter @Setter
+	@Getter @Setter @Deprecated
 	public static class Adapter<DIMENSION extends Column<DATA, CELL, VALUE>,DATA,CELL extends Cell<VALUE>,VALUE> extends DimensionListener.Adapter<DIMENSION, DATA, CELL, VALUE> 
 		implements ColumnListener<DIMENSION,DATA,CELL,VALUE> {
 	
