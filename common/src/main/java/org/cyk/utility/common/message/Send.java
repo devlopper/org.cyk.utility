@@ -1,87 +1,84 @@
 package org.cyk.utility.common.message;
 
 import java.io.Serializable;
-
-import org.cyk.utility.common.Action;
-import org.cyk.utility.common.Constant;
-import org.cyk.utility.common.LogMessage.Builder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Properties;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public interface Send<INPUT, OUTPUT> extends Action<INPUT, OUTPUT> {
+import org.cyk.utility.common.Action;
+import org.cyk.utility.common.LogMessage.Builder;
 
-	public static enum CharacterSet{DIGIT,LETTER};
+public interface Send<ADDRESS> extends Action<Message, Void> {
+
+	/*
+	private Long numberOfRetry = 5l;
+	private Long numberOfMillisecondBeforeRetry = 1000l * 6;
+	private ThreadPoolExecutor.Listener threadPoolExecutorListener;
+	*/
+	/*
+	Boolean getBlockingEnabled();
+	Send<INPUT, OUTPUT> setBlockingEnabled(Boolean blockingEnabled);
 	
-	CharacterSet getCharacterSet();
-	Send<INPUT, OUTPUT> setCharacterSet(CharacterSet characterSet);
-	Send<INPUT, OUTPUT> setCharacterSet(java.lang.String characterSetName);
+	Boolean getDebugEnabled();
+	Send<INPUT, OUTPUT> setDebugEnabled(Boolean debugEnabled);
+	*/
 	
-	java.lang.String getPercentageSymbol();
-	Send<INPUT, OUTPUT> setPercentageSymbol(java.lang.String percentageSymbol);
-	
-	java.lang.String getLeftPadding();
-	Send<INPUT, OUTPUT> setLeftPadding(java.lang.String leftPadding);
-	
-	Integer getWidth();
-	Send<INPUT, OUTPUT> setWidth(Integer width);
+	void setHostAndUserProperties(String host, Integer port,Boolean secured, String username, String password);
+	void setHostAndUserProperties(String host, Integer port, String username, String password);
 	
 	/**/
 	
 	@Getter @Setter
-	public static class Adapter<INPUT, OUTPUT> extends Action.Adapter.Default<INPUT, OUTPUT> implements Send<INPUT, OUTPUT>,Serializable {
+	public static class Adapter<ADDRESS> extends Action.Adapter.Default<Message, Void> implements Send<ADDRESS>,Serializable {
 		private static final long serialVersionUID = 1L;
 
-		protected CharacterSet characterSet = CharacterSet.DIGIT;
-		protected java.lang.String percentageSymbol = Constant.CHARACTER_PERCENT.toString(),leftPadding=Constant.CHARACTER_SPACE.toString();
-		protected Integer width;
+		public Adapter(Message message,Builder logMessageBuilder) {
+			super("Send", Message.class, message, Void.class, logMessageBuilder);
+		}		
 		
-		public Adapter(Class<INPUT> inputClass, INPUT input, Class<OUTPUT> outputClass,Builder logMessageBuilder) {
-			super("Format", inputClass, input, outputClass, logMessageBuilder);
+		protected ADDRESS getAddress(String identifier) throws Exception{
+			throw new RuntimeException("get address from identifier "+identifier+" Not yet implemented");
 		}
 		
 		@Override
-		public Send<INPUT, OUTPUT> setCharacterSet(CharacterSet characterSet) {
-			this.characterSet = characterSet;
-			return this;
+		public void setHostAndUserProperties(String host, Integer port,Boolean secured, String username, String password) {
+		
 		}
 		
 		@Override
-		public Send<INPUT, OUTPUT> setCharacterSet(java.lang.String characterSetName) {
-			return setCharacterSet(CharacterSet.valueOf(characterSetName));
+		public void setHostAndUserProperties(String host, Integer port,String username, String password) {
+			setHostAndUserProperties(host, port,Boolean.TRUE, username, password);
 		}
 		
-		@Override
-		public Send<INPUT, OUTPUT> setPercentageSymbol(java.lang.String percentageSymbol) {
-			this.percentageSymbol = percentageSymbol;
-			return this;
+		protected Collection<ADDRESS> getAddresses(){
+			Collection<ADDRESS> addresses = new ArrayList<>();
+			for(String identifier : getInput().getReceiverIdentifiers())
+				try {
+					addresses.add(getAddress(identifier));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			return addresses;
 		}
-		
-		@Override
-		public Send<INPUT, OUTPUT> setLeftPadding(java.lang.String leftPadding) {
-			this.leftPadding = leftPadding;
-			return this;
-		}
-		
-		@Override
-		public Send<INPUT, OUTPUT> setWidth(Integer width) {
-			this.width = width;
-			return this;
-		}
-		
-		
 		
 		/**/
 		@Getter @Setter
-		public static class Default<INPUT, OUTPUT> extends Send.Adapter<INPUT, OUTPUT> implements Serializable {
+		public static class Default<ADDRESS> extends Send.Adapter<ADDRESS> implements Serializable {
 			private static final long serialVersionUID = 1L;
 
-			public Default(Class<INPUT> inputClass, INPUT input, Class<OUTPUT> outputClass,Builder logMessageBuilder) {
-				super(inputClass, input, outputClass, logMessageBuilder);
+			public Default(Message message,Builder logMessageBuilder) {
+				super(message, logMessageBuilder);
 			}
 			
 		}
 		
 	}
+	
+	/**/
+	
+	
 	
 }

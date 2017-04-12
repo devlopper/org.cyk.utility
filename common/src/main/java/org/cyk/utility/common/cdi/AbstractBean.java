@@ -115,6 +115,10 @@ public class AbstractBean implements Serializable {
 		commonUtils.pause(millisecond);
 	}
 	
+	public <T> T getValueIfNotNullElseDefault(Class<T> valueClass,T value,T defaultValue){
+		return commonUtils.getValueIfNotNullElseDefault(valueClass, value, defaultValue);
+	}
+	
 	/**/
 	
 	protected String __info__(String message,int lineLength){

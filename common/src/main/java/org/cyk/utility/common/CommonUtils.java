@@ -846,6 +846,10 @@ public class CommonUtils implements Serializable  {
 		return StringUtils.join(collection,firstDimensionElementSeparator.toString());
 	}
 	
+	public <T> T getValueIfNotNullElseDefault(Class<T> valueClass,T value,T defaultValue){
+		return value == null ? defaultValue : value;
+	}
+	
 	@Deprecated
 	public List<String[]> readExcelSheet(ReadExcelSheetArguments arguments) throws Exception{
 		Workbook workbook = WorkbookFactory.create(new ByteArrayInputStream(arguments.getWorkbookBytes()));

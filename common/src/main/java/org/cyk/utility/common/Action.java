@@ -2,10 +2,11 @@ package org.cyk.utility.common;
 
 import java.io.Serializable;
 import java.util.Locale;
-
-import org.cyk.utility.common.cdi.BeanAdapter;
+import java.util.Properties;
 
 import lombok.Getter;
+
+import org.cyk.utility.common.cdi.BeanAdapter;
 
 public interface Action<INPUT,OUTPUT> {
 
@@ -35,6 +36,13 @@ public interface Action<INPUT,OUTPUT> {
 	Locale getLocale();
 	Action<INPUT, OUTPUT> setLocale(Locale locale);
 	
+	/**
+	 * The following will be used to extend the attributes list 
+	 **/
+	
+	Properties getProperties();
+	Action<INPUT, OUTPUT> setProperties(Properties properties);
+	Action<INPUT, OUTPUT> setProperty(String name,Object value);
 	
 	/**/
 	
@@ -50,6 +58,7 @@ public interface Action<INPUT,OUTPUT> {
 		protected Class<OUTPUT> outputClass;
 		protected LogMessage.Builder logMessageBuilder;
 		protected Boolean automaticallyLogMessage = Boolean.TRUE;
+		protected Properties properties;
 		
 		public Adapter(String name,Class<INPUT> inputClass,INPUT input,Class<OUTPUT> outputClass,LogMessage.Builder logMessageBuilder) {
 			setName(name);
@@ -111,6 +120,17 @@ public interface Action<INPUT,OUTPUT> {
 			return this;
 		}
 		
+		@Override
+		public Action<INPUT, OUTPUT> setProperties(Properties properties) {
+			this.properties = properties;
+			return this;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setProperty(String name, Object value) {
+			getProperties().put(name, value);
+			return this;
+		}
 		
 		/**/
 		
@@ -145,7 +165,7 @@ public interface Action<INPUT,OUTPUT> {
 			}
 			
 			protected OUTPUT __execute__(){
-				throw new RuntimeException("Action "+name+" of "+getInput().getClass()+" to "+getOutputClass()+" not yet implemented.");
+				throw new RuntimeException("Action <<"+name+">> with input class "+getInput().getClass()+" and output class "+getOutputClass()+" not yet implemented.");
 			}
 			
 			protected Boolean isShowOuputClassLogMessage(Class<OUTPUT> aClass){
@@ -166,6 +186,13 @@ public interface Action<INPUT,OUTPUT> {
 			
 			protected Boolean isShowOutputLogMessage(OUTPUT output){
 				return Boolean.TRUE;
+			}
+			
+			@Override
+			public Properties getProperties() {
+				if(properties==null)
+					properties = new Properties();
+				return properties;
 			}
 		}
 	}

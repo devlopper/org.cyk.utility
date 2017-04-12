@@ -167,4 +167,34 @@ public interface Constant {
 		
 	}
 	
+	/**/
+	
+	public static class SimpleMailTransferProtocol implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		public static final String SMTP = "smtp";
+		public static final String PROPERTY_FORMAT = "mail."+SMTP+"%s.%s";
+		
+		public static String getProperty(String name,Boolean secured){
+			return String.format(PROPERTY_FORMAT, Boolean.TRUE.equals(secured) ? "s" : Constant.EMPTY_STRING,name);
+		}
+		public static String getProperty(String name){
+			return getProperty(name, Boolean.FALSE);
+		}
+		
+		public static final String HOST = "host";
+		public static final String FROM = "from";
+		public static final String USER = "user";
+		public static final String PASSWORD = "password";
+		public static final String PORT = "port";
+		public static final String AUTH = "auth";
+		public static final String STARTTLS_ENABLE = "starttls.enable";
+		public static final String SSL_ENABLE = "ssl.enable";
+		
+		public static final String PROPERTY_USERNAME = getProperty(USER);
+		public static final String PROPERTY_PASSWORD = getProperty(PASSWORD);
+		public static final String PROPERTY_FROM = getProperty(FROM);
+		
+		
+	}
 }

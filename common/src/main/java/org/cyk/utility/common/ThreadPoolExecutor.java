@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import org.cyk.utility.common.cdi.BeanAdapter;
 import org.slf4j.Logger;
@@ -287,4 +288,31 @@ public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor 
 		}
 	}
 
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class Builder extends AbstractBuilder<ThreadPoolExecutor> implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		private Integer corePoolSize,maximumPoolSize,workQueueSize;
+		private Long keepAliveTime,timeOut;
+		private TimeUnit keepAliveTimeUnit,timeOutUnit;
+		private Collection<Class<?>> throwableClasses;
+		
+		@Override
+		public ThreadPoolExecutor build() {
+			corePoolSize = getValueIfNotNullElseDefault(Integer.class, corePoolSize, 1);
+			maximumPoolSize = getValueIfNotNullElseDefault(Integer.class, maximumPoolSize, corePoolSize);
+			workQueueSize = getValueIfNotNullElseDefault(Integer.class, workQueueSize, maximumPoolSize * 2);
+			keepAliveTime = getValueIfNotNullElseDefault(Long.class, keepAliveTime, 1l);
+			keepAliveTimeUnit = getValueIfNotNullElseDefault(TimeUnit.class, keepAliveTimeUnit, TimeUnit.SECONDS);
+			timeOut = getValueIfNotNullElseDefault(Long.class, timeOut, 1l);
+			timeOutUnit = getValueIfNotNullElseDefault(TimeUnit.class, timeOutUnit, TimeUnit.SECONDS);
+			
+			ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, keepAliveTimeUnit, workQueueSize, timeOut
+					, timeOutUnit, throwableClasses);
+			return threadPoolExecutor;
+		}
+		
+	}
 }
