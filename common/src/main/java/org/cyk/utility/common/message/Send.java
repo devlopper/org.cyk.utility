@@ -57,8 +57,8 @@ public interface Send<ADDRESS> extends Action<Message, Void> {
 		@Override
 		public void ping() {
 			Message message = new Message();
-			message.setSubject("Hi!");
-			message.setContent("This is a test");
+			message.setSubject("Ping");
+			message.setContent("This is a ping!");
 			setInput(message);
 			execute();
 		}
