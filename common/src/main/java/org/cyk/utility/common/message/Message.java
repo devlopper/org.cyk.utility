@@ -1,6 +1,7 @@
 package org.cyk.utility.common.message;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -21,6 +22,25 @@ public class Message implements Serializable {
 	
 	private String senderIdentifier;
 	private Set<String> receiverIdentifiers = new LinkedHashSet<>();
+	
+	/**/
+	
+	public Message addReceiverIdentifiers(String...identifiers){
+		for(String identifier : identifiers)
+			receiverIdentifiers.add(identifier);
+		return this;
+	}
+	
+	public Message addAttachement(byte[] bytes,String mime,String name){
+		if(attachments==null)
+			attachments = new ArrayList<>();
+		Attachement attachement = new Attachement();
+		attachement.setBytes(bytes);
+		attachement.setMime(mime);
+		attachement.setName(name);
+		attachments.add(attachement);
+		return this;
+	}
 	
 	/**/
 	

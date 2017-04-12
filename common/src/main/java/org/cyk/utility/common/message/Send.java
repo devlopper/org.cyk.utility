@@ -3,7 +3,6 @@ package org.cyk.utility.common.message;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Properties;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,8 +25,10 @@ public interface Send<ADDRESS> extends Action<Message, Void> {
 	Send<INPUT, OUTPUT> setDebugEnabled(Boolean debugEnabled);
 	*/
 	
-	void setHostAndUserProperties(String host, Integer port,Boolean secured, String username, String password);
-	void setHostAndUserProperties(String host, Integer port, String username, String password);
+	Send<ADDRESS> setHostAndUserProperties(String host, Integer port,Boolean secured, String username, String password);
+	Send<ADDRESS> setHostAndUserProperties(String host, Integer port, String username, String password);
+	
+	void ping();
 	
 	/**/
 	
@@ -44,13 +45,22 @@ public interface Send<ADDRESS> extends Action<Message, Void> {
 		}
 		
 		@Override
-		public void setHostAndUserProperties(String host, Integer port,Boolean secured, String username, String password) {
-		
+		public Send<ADDRESS> setHostAndUserProperties(String host, Integer port,Boolean secured, String username, String password) {
+			return this;
 		}
 		
 		@Override
-		public void setHostAndUserProperties(String host, Integer port,String username, String password) {
-			setHostAndUserProperties(host, port,Boolean.TRUE, username, password);
+		public Send<ADDRESS> setHostAndUserProperties(String host, Integer port,String username, String password) {
+			return setHostAndUserProperties(host, port,Boolean.TRUE, username, password);
+		}
+		
+		@Override
+		public void ping() {
+			Message message = new Message();
+			message.setSubject("Hi!");
+			message.setContent("This is a test");
+			setInput(message);
+			execute();
 		}
 		
 		protected Collection<ADDRESS> getAddresses(){

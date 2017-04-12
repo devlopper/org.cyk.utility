@@ -52,6 +52,10 @@ public interface SendMail extends Send<InternetAddress> {
 		public static class Default extends SendMail.Adapter implements Serializable {
 			private static final long serialVersionUID = 1L;
 
+			public Default() {
+				this(null, null);
+			}
+			
 			public Default(Message message,Builder logMessageBuilder) {
 				super(message, logMessageBuilder);
 			}
@@ -67,9 +71,9 @@ public interface SendMail extends Send<InternetAddress> {
 					throw new RuntimeException("Subject is required");
 				if(StringUtils.isBlank(getInput().getContent()) && (getInput().getAttachments()==null || getInput().getAttachments().isEmpty()))
 					throw new RuntimeException("content and/or attachement(s) are/is required");
-				
+				String from = StringUtils.defaultIfBlank(getInput().getSenderIdentifier(),getProperties().getProperty(Constant.SimpleMailTransferProtocol.PROPERTY_USERNAME));
 				if(getInput().getReceiverIdentifiers()==null || getInput().getReceiverIdentifiers().isEmpty())
-					getInput().getReceiverIdentifiers().add(getProperties().getProperty(Constant.SimpleMailTransferProtocol.PROPERTY_USERNAME));
+					getInput().addReceiverIdentifiers(from);
 				
 				if(getInput().getReceiverIdentifiers()==null || getInput().getReceiverIdentifiers().isEmpty())
 					throw new RuntimeException("receiver identifier(s) required");
@@ -91,7 +95,7 @@ public interface SendMail extends Send<InternetAddress> {
 				InternetAddress[] addresses = getAddresses().toArray(new InternetAddress[]{});
 				MimeMessage message = new MimeMessage(getSession());
 	            try {
-					message.setFrom(getAddress(StringUtils.defaultIfBlank(getInput().getSenderIdentifier(),getProperties().getProperty(Constant.SimpleMailTransferProtocol.PROPERTY_USERNAME))));
+					message.setFrom(getAddress(from));
 					message.setRecipients(javax.mail.Message.RecipientType.TO, addresses);
 		            message.setSubject(StringUtils.defaultIfEmpty(getInput().getSubject(),"No subject"));
 		            message.setSentDate(getValueIfNotNullElseDefault(Date.class, getInput().getDate(), new Date()));
@@ -128,7 +132,7 @@ public interface SendMail extends Send<InternetAddress> {
 			}
 			
 			@Override
-			public void setHostAndUserProperties(String host, Integer port,Boolean secured, String username, String password) {
+			public SendMail setHostAndUserProperties(String host, Integer port,Boolean secured, String username, String password) {
 				super.setHostAndUserProperties(host, port, secured, username, password);
 				addProperty(Constant.SimpleMailTransferProtocol.HOST, host);
 				addProperty(Constant.SimpleMailTransferProtocol.FROM, username);
@@ -145,6 +149,7 @@ public interface SendMail extends Send<InternetAddress> {
 					addProperty(Constant.SimpleMailTransferProtocol.STARTTLS_ENABLE, secured);
 					addProperty(Constant.SimpleMailTransferProtocol.SSL_ENABLE, secured);
 				}
+				return this;
 			}
 			
 			private void addProperty(String name,Object value){
