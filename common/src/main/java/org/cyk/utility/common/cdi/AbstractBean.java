@@ -119,6 +119,10 @@ public class AbstractBean implements Serializable {
 		return commonUtils.getValueIfNotNullElseDefault(valueClass, value, defaultValue);
 	}
 	
+	public <T> Class<T> castClass(Class<?> inputClass,Class<T> outputClass){
+		return commonUtils.castClass(inputClass, outputClass);
+	}
+	
 	/**/
 	
 	protected String __info__(String message,int lineLength){

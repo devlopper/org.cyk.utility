@@ -822,6 +822,11 @@ public class CommonUtils implements Serializable  {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <T> Class<T> castClass(Class<?> inputClass,Class<T> outputClass){
+		return (Class<T>) inputClass;
+	}
+	
 	public String convertToString(Object[] array,Object separator){
 		List<String> list = new ArrayList<>();
 		for(Object object : array)
