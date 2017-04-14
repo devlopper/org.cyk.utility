@@ -7,13 +7,14 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * Set of configurations for data reading. Supports lazy 
  * @author Komenan.Christian
  *
  */
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
 public class DataReadConfiguration implements Serializable {
 
 	private static final long serialVersionUID = -8258556701704160443L;
