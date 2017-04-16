@@ -855,6 +855,22 @@ public class CommonUtils implements Serializable  {
 		return value == null ? defaultValue : value;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <T> Collection<T> getPropertyValue(Collection<?> collection,Class<T> aClass,String name,Boolean excludeNullValue){
+		Collection<T> result = new ArrayList<>();
+		for(Object object : collection){
+			T value = (T) readProperty(object, name);
+			if(value==null && Boolean.TRUE.equals(excludeNullValue))
+				continue;
+			result.add(value);
+		}
+		return result;
+	}
+	
+	public <T> Collection<T> getPropertyValue(Collection<?> collection,Class<T> aClass,String name){
+		return getPropertyValue(collection, aClass, name, Boolean.TRUE);
+	}
+	
 	@Deprecated
 	public List<String[]> readExcelSheet(ReadExcelSheetArguments arguments) throws Exception{
 		Workbook workbook = WorkbookFactory.create(new ByteArrayInputStream(arguments.getWorkbookBytes()));

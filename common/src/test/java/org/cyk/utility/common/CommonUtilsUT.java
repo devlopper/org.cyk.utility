@@ -245,6 +245,17 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		
 	}
 	
+	@Test
+	public void getPropertyValue(){
+		Collection<ClassC> cs = new ArrayList<>();
+		for(int i = 0 ; i < 3 ; i++){
+			ClassC c1 = new ClassC();
+			c1.getAttributeC2().setAttributeA1("v"+i);
+			cs.add(c1);
+		}
+		System.out.println(CommonUtils.getInstance().getPropertyValue(cs, String.class, "attributeC2.attributeA1"));
+	}
+	
 	/**/
 	
 	@ModelBean(crudStrategy=CrudStrategy.BUSINESS) @Getter @Setter
