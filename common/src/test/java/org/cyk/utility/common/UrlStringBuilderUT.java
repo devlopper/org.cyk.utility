@@ -11,7 +11,7 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 	
 	@Test
 	public void query(){
-		/*assertEquals("p1=a",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").build());
+		assertEquals("p1=a",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").build());
 		assertEquals("p1=a&p2=b",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").addParameter("p2", "b").build());
 		assertEquals("p1=a&p2=b",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").addParameter("p2", "b").build());
 		
@@ -25,11 +25,11 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 		assertEquals("p1=a&p2=b",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").addParameter("p2", "b").addParameter("p3", null).build());
 		
 		assertEquals("p1=a&p2=b&p3=v3",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").addParameter("p2", "b").addParameter("p3", "v3").build());
-		*/
+		
 		assertEquals("p1=a&p1=b&p1=v3",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").addParameter("p1", "b").addParameter("p1", "v3").build());
 	}
 	
-	//@Test
+	@Test
 	public void url(){
 		UrlStringBuilder urlStringBuilder = new UrlStringBuilder();
 		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).setPath("mypath.extension").getQueryStringBuilder().addParameter("p1", "a");

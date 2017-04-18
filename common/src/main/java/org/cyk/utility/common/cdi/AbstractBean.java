@@ -115,11 +115,11 @@ public class AbstractBean implements Serializable {
 		commonUtils.pause(millisecond);
 	}
 	
-	public <T> T getValueIfNotNullElseDefault(Class<T> valueClass,T value,T defaultValue){
+	protected <T> T getValueIfNotNullElseDefault(Class<T> valueClass,T value,T defaultValue){
 		return commonUtils.getValueIfNotNullElseDefault(valueClass, value, defaultValue);
 	}
 	
-	public <T> Class<T> castClass(Class<?> inputClass,Class<T> outputClass){
+	protected <T> Class<T> castClass(Class<?> inputClass,Class<T> outputClass){
 		return commonUtils.castClass(inputClass, outputClass);
 	}
 	
