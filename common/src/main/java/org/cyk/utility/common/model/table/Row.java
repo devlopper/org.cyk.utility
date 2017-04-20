@@ -7,14 +7,14 @@ import org.cyk.utility.common.computation.DataReadConfiguration;
 
 public interface Row<DATA,CELL extends Cell<VALUE>, VALUE> extends Dimension<DATA, CELL, VALUE> {
 
-	public interface Listener<DIMENSION extends Row<DATA, CELL, VALUE>,DATA,CELL extends Cell<VALUE>,VALUE> extends DimensionListener<DIMENSION,DATA,CELL,VALUE> {
+	public interface Listener<DIMENSION extends Row<DATA, CELL, VALUE>,DATA,CELL extends Cell<VALUE>,VALUE> extends AbstractDimension.DimensionListener<DIMENSION,DATA,CELL,VALUE> {
 
 		Collection<DATA> load(DataReadConfiguration configuration);
 		Long count(DataReadConfiguration configuration);
 		
 		/**/
 		
-		public static class Adapter<DIMENSION extends Row<DATA, CELL, VALUE>,DATA,CELL extends Cell<VALUE>,VALUE> extends DimensionListener.Adapter<DIMENSION, DATA, CELL, VALUE> 
+		public static class Adapter<DIMENSION extends Row<DATA, CELL, VALUE>,DATA,CELL extends Cell<VALUE>,VALUE> extends AbstractDimension.DimensionListener.Adapter<DIMENSION, DATA, CELL, VALUE> 
 			implements Listener<DIMENSION,DATA,CELL,VALUE> , Serializable {
 			
 			public static Boolean READABLE = null;

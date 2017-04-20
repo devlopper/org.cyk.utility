@@ -22,7 +22,7 @@ public interface Column<DATA,CELL extends Cell<VALUE>, VALUE> extends Dimension<
 	
 	/**/
 	
-	public interface Listener<DIMENSION extends Column<DATA, CELL, VALUE>,DATA,CELL extends Cell<VALUE>,VALUE> extends DimensionListener<DIMENSION,DATA,CELL,VALUE> {
+	public interface Listener<DIMENSION extends Column<DATA, CELL, VALUE>,DATA,CELL extends Cell<VALUE>,VALUE> extends AbstractDimension.DimensionListener<DIMENSION,DATA,CELL,VALUE> {
 		
 		Boolean isColumn(Field field);
 		void populateFromDataClass(Class<?> aClass,List<Field> fields);
@@ -41,7 +41,7 @@ public interface Column<DATA,CELL extends Cell<VALUE>, VALUE> extends Dimension<
 		/**/
 		
 		@Getter @Setter
-		public static class Adapter<DIMENSION extends Column<DATA, CELL, VALUE>,DATA,CELL extends Cell<VALUE>,VALUE> extends DimensionListener.Adapter<DIMENSION, DATA, CELL, VALUE> 
+		public static class Adapter<DIMENSION extends Column<DATA, CELL, VALUE>,DATA,CELL extends Cell<VALUE>,VALUE> extends AbstractDimension.DimensionListener.Adapter<DIMENSION, DATA, CELL, VALUE> 
 			implements Listener<DIMENSION,DATA,CELL,VALUE>,Serializable {
 		
 			private static final long serialVersionUID = 1L;
