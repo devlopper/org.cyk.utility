@@ -272,19 +272,19 @@ public class RandomDataProvider implements Serializable {
 		}
 		
 		public String firstName(){
-			return (String) randomFromList(firstNames);
+			return StringUtils.trim((String) randomFromList(firstNames));
 		}
 		
 		public String middleName(){
-			return (String) randomFromList(middleNames);
+			return StringUtils.trim((String) randomFromList(middleNames));
 		}
 		
 		public String lastName(){
-			return (String) randomFromList(lastNames);
+			return StringUtils.trim((String) randomFromList(lastNames));
 		}
 		
 		public String surName(){
-			return (String) randomFromList(surNames);
+			return StringUtils.trim((String) randomFromList(surNames));
 		}
 		
 		public String middleAndLastName(){
