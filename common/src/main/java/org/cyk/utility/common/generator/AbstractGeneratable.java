@@ -25,7 +25,7 @@ import org.cyk.utility.common.formatter.NumberFormatter;
 public abstract class AbstractGeneratable<T> extends AbstractBean implements Serializable {
 
 	private static final long serialVersionUID = 6717138845030531852L;
-	
+	public static Object NULL_VALUE = Constant.EMPTY_STRING;
 	static {
 		AbstractGeneratable.Listener.COLLECTION.add(new AbstractGeneratable.Listener.Adapter.Default());
 	}
@@ -204,7 +204,7 @@ public abstract class AbstractGeneratable<T> extends AbstractBean implements Ser
 				@Override
 				public Object format(Object object, Object fieldValue) {
 					if(fieldValue==null)
-						return null;
+						return NULL_VALUE;
 					if(fieldValue instanceof Number){
 						NumberFormatter.String numberFormatter = new NumberFormatter.String.Adapter.Default((Number) fieldValue,null);
 						return numberFormatter.execute();
@@ -218,7 +218,7 @@ public abstract class AbstractGeneratable<T> extends AbstractBean implements Ser
 				@Override
 				public Object formatNumberToWords(Object object, Number fieldValue) {
 					if(fieldValue==null)
-						return null;
+						return NULL_VALUE;
 					NumberFormatter.String numberFormatter = new NumberFormatter.String.Adapter.Default((Number) fieldValue,null);
 					numberFormatter.setCharacterSet(CharacterSet.LETTER);
 					numberFormatter.setLocale(getLocale());
@@ -228,7 +228,7 @@ public abstract class AbstractGeneratable<T> extends AbstractBean implements Ser
 				@Override
 				public Object formatDate(Object object, Date fieldValue,Constant.Date.Part part,Constant.Date.Length length) {
 					if(fieldValue==null)
-						return null;
+						return NULL_VALUE;
 					DateFormatter.String formatter = new DateFormatter.String.Adapter.Default(fieldValue,null);
 					formatter.setPart(part).setLength(length).setLocale(getLocale());
 					return formatter.execute();
