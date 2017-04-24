@@ -15,6 +15,8 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
+import javax.naming.Context;
+import javax.rmi.PortableRemoteObject;
 
 import lombok.Getter;
 
@@ -85,6 +87,21 @@ public class AbstractBean implements Serializable {
 	
 	public static <T> T inject(Class<T> aClass){
 		return CommonUtils.getInstance().inject(aClass);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <T> T inject(Class<T> aClass,Context context,String scope,String namespace,String interfaceName,String implementationNameSuffix){
+		try {
+			Object object = context.lookup("java:"+scope+"/"+namespace+"/"+interfaceName+implementationNameSuffix);
+			return (T) PortableRemoteObject.narrow(object, aClass);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	protected <T> T inject(Class<T> aClass,Context context,String namespace){
+		return inject(aClass, context, "global", namespace, aClass.getSimpleName(),"Impl");
 	}
 	
 	protected <T> T newInstance(Class<T> aClass){
