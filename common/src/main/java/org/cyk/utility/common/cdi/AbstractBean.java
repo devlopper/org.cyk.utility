@@ -365,4 +365,8 @@ public class AbstractBean implements Serializable {
 			return;
 		logMessageBuilder.addParameters(parameters);
 	}
+	
+	protected void throwNotYetImplemented(){
+		throw new RuntimeException("Not yet implemented");
+	}
 }
