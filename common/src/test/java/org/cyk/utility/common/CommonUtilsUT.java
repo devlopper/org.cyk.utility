@@ -256,6 +256,13 @@ public class CommonUtilsUT extends AbstractUnitTest {
 		System.out.println(CommonUtils.getInstance().getPropertyValue(cs, String.class, "attributeC2.attributeA1"));
 	}
 	
+	@Test
+	public void setProperty(){
+		ClassA a = new ClassA();
+		CommonUtils.getInstance().setProperty(a, "attributeA1", "MyValue");
+		
+	}
+	
 	/**/
 	
 	@ModelBean(crudStrategy=CrudStrategy.BUSINESS) @Getter @Setter
