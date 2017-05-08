@@ -11,6 +11,8 @@ public @interface InputChoice {
 
 	boolean load() default true;
 
+	boolean nullable() default true;
+	
 	/**
 	 * Set of choices
 	 * @return

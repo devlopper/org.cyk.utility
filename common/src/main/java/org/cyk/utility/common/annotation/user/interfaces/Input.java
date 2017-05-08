@@ -24,7 +24,7 @@ public @interface Input {
 	
 	/* Rendering */
 	
-	public enum RendererStrategy{AUTO,ALWAYS,NEVER,ADMINISTRATION,MANAGEMENT}
+	public enum RendererStrategy{AUTO,ALWAYS,NEVER,ADMINISTRATION,MANAGEMENT,MANUAL}
 	
 	DataCollectorType[] ignoreDataCollectorType() default {};
 	
