@@ -855,6 +855,10 @@ public class CommonUtils implements Serializable  {
 		return value == null ? defaultValue : value;
 	}
 	
+	public <T> T getValueIfNotNullElseDefault(T value,T defaultValue){
+		return value == null ? defaultValue : value;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <T> Collection<T> getPropertyValue(Collection<?> collection,Class<T> aClass,String name,Boolean excludeNullValue){
 		Collection<T> result = new ArrayList<>();
