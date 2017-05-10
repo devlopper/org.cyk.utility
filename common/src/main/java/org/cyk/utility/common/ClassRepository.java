@@ -12,11 +12,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ClassRepository implements Serializable {
+public class ClassRepository extends AbstractBean implements Serializable {
 
 	private static final long serialVersionUID = 2331517379189246417L;
 
@@ -61,6 +62,7 @@ public class ClassRepository implements Serializable {
 	}
 	
 	public Field getField(Class<?> aClass,String name){
+		logTrace("get from class <<{}>> field <<{}>>", aClass,name);
 		return get(aClass).getField(name).getField();
 	}
 	
