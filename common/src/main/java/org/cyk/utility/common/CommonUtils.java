@@ -357,6 +357,7 @@ public class CommonUtils implements Serializable  {
 		return null;
 	}
 	
+	@Deprecated
 	public Throwable getThrowableInstanceOf(Throwable throwable,Class<?> aClass){
 		Throwable index = throwable;
 		while(index!=null){
@@ -369,6 +370,7 @@ public class CommonUtils implements Serializable  {
 		return null;
 	}
 	
+	@Deprecated
 	public Throwable getThrowableFirstCause(Throwable throwable){
 		Throwable cause=throwable,index = throwable;
 		while(index!=null){

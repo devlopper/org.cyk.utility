@@ -128,7 +128,10 @@ public interface TestEnvironmentListener {
 			
 			@Override
 			public void throwableCaught(Throwable throwable, String expectedMessage) {
-				assertThrowableMessage(expectedMessage, getMessage(getThrowable(throwable)));
+				Throwable reason = getThrowable(throwable);
+				if(reason==null)
+					reason = throwable;
+				assertThrowableMessage(expectedMessage, getMessage(reason));
 			}
 			
 			/**/
