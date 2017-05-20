@@ -8,10 +8,9 @@ import java.util.ResourceBundle;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.common.cdi.AbstractBean;
 
 @Singleton
-public class StringHelper extends AbstractBean implements Serializable {
+public class StringHelper extends AbstractHelper implements Serializable {
 
 	private static final long serialVersionUID = 2366347884051000495L;
 
@@ -52,6 +51,10 @@ public class StringHelper extends AbstractBean implements Serializable {
 	
 	public java.lang.String getOrdinalNumber(Locale locale,Number number) {
 		return getText(locale, String.format(KEY_ORDINAL_NUMBER_FORMAT, number), null);
+	}
+	
+	public String concatenate(Object[] strings,String separator){
+		return StringUtils.join(strings, separator);
 	}
 	
 	/**/

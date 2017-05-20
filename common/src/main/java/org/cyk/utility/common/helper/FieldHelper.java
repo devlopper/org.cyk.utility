@@ -53,11 +53,31 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 		}
 	}
 	
+	/**
+	 * Set an instance field value
+	 * @param instance
+	 * @param value
+	 * @param fieldNames
+	 */
 	public void set(Object instance,Object value,String...fieldNames){
 		String path = buildPath(fieldNames);
 		set(instance, path);//we want to be sure we can reach the latest field
 		try {
 			PropertyUtils.setProperty(instance, path, value);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * Set a class static field value
+	 * @param aClass
+	 * @param fieldName
+	 * @param value
+	 */
+	public void set(Class<?> aClass,String fieldName,Object value){
+		try {
+			FieldUtils.writeStaticField(aClass, fieldName, value, Boolean.TRUE);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

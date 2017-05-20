@@ -9,8 +9,5 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
 
-
-		
-	
 	
 }

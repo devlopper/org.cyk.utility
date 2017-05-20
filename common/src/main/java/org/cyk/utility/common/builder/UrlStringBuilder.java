@@ -3,7 +3,6 @@ package org.cyk.utility.common.builder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,115 +14,46 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.ListenerUtils;
 
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-@Getter
-public class UrlStringBuilder extends AbstractBuilder<String> implements Serializable {
+@Getter @Setter @Accessors(chain=true)
+public class UrlStringBuilder extends AbstractStringBuilder implements Serializable {
 	private static final long serialVersionUID = 4504478526075696024L;
 
-	public static final String SCHEME_HOST_PORT_STRING_FORMAT = "%s://%s%s%s/";
+	public static final String SCHEME_HOST_PORT_STRING_FORMAT = "%s://%s%s%s";
 	public static final String PATH_STRING_FORMAT = "%s%s%s";
 	public static final String STRING_FORMAT = SCHEME_HOST_PORT_STRING_FORMAT+PATH_STRING_FORMAT;
 	
 	public static String SCHEME = null;
 	public static String HOST = null;
 	public static Integer PORT = null;
-	public static String CONTEXT = null;
-	public static String PATH_NOT_FOUND_IDENTIFIER = null;
 	
-	private String scheme=SCHEME,host=HOST,context=CONTEXT,path,pathIdentifier;
+	private String scheme=SCHEME,host=HOST;
 	private Integer port=PORT;
+	private PathStringBuilder pathStringBuilder;
 	private QueryStringBuilder queryStringBuilder;
-	private Map<String,String> pathTokenReplacementMap;
 	private Boolean relative,pretty;
 	
-	public UrlStringBuilder setScheme(String scheme){
-		this.scheme = scheme;
-		return this;
-	}
-	
-	public UrlStringBuilder setHost(String host){
-		this.host = host;
-		return this;
-	}
-	
-	public UrlStringBuilder setPath(String path){
-		this.path = path;
-		return this;
-	}
-	
-	public UrlStringBuilder setPathIdentifier(String pathIdentifier){
-		this.pathIdentifier = pathIdentifier;
-		return this;
-	}
-	
-	public UrlStringBuilder setContext(String context){
-		this.context = context;
-		return this;
-	}
-	
-	public UrlStringBuilder setPort(Integer port){
-		this.port = port;
-		return this;
-	}
-	
-	public UrlStringBuilder setRelative(Boolean relative){
-		this.relative = relative;
-		return this;
-	}
-	
-	public UrlStringBuilder addPathTokenReplacement(String token,String replacement){
-		getPathTokenReplacementMap().put(token, replacement);
-		return this;
+	public PathStringBuilder getPathStringBuilder(){
+		if(pathStringBuilder==null)
+			pathStringBuilder = new PathStringBuilder().setUrlStringBuilder(this);
+		return pathStringBuilder;
 	}
 	
 	public QueryStringBuilder getQueryStringBuilder(){
 		if(queryStringBuilder==null)
-			queryStringBuilder = new QueryStringBuilder();
+			queryStringBuilder = new QueryStringBuilder().setUrlStringBuilder(this);
 		return queryStringBuilder;
-	}
-	
-	public Map<String,String> getPathTokenReplacementMap(){
-		if(pathTokenReplacementMap==null)
-			pathTokenReplacementMap = new HashMap<>();
-		return pathTokenReplacementMap;
 	}
 	
 	@Override
 	public String build() {
-		if(StringUtils.isBlank(path)){
-			if(StringUtils.isBlank(pathIdentifier)){
-				
-			}else{
-				path = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
-					@Override
-					public String execute(Listener listener) {
-						return listener.getPathFromIdentifier(pathIdentifier);
-					}
-				});	
-				
-				if(StringUtils.isBlank(path))
-					path = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
-						@Override
-						public String execute(Listener listener) {
-							return listener.getPathFromIdentifier(PATH_NOT_FOUND_IDENTIFIER);
-						}
-						
-						@Override
-						public String getNullValue() {
-							return PATH_NOT_FOUND_IDENTIFIER;
-						}
-					});
-			}
-			
-		}
-		
-		context = StringUtils.replace(context,Constant.CHARACTER_SLASH.toString(),Constant.EMPTY_STRING);
-		path = StringUtils.replaceOnce(path,Constant.CHARACTER_SLASH.toString(),Constant.EMPTY_STRING);
-		for(Entry<String, String> entry : getPathTokenReplacementMap().entrySet())
-			path = StringUtils.replace(path, entry.getKey(), entry.getValue());
-		
+		//buildContext();
+		//getPathStringBuilder().setAddSeparatorAtBeginning(getRelative());
+		String pathString = getPathStringBuilder().build();
 		String queryString = getQueryStringBuilder().build();
-		StringBuilder stringBuilder = new StringBuilder(String.format(PATH_STRING_FORMAT,(StringUtils.isBlank(context) ? Constant.EMPTY_STRING : context+Constant.CHARACTER_SLASH)+StringUtils.defaultIfBlank(path, Constant.EMPTY_STRING)
+		StringBuilder stringBuilder = new StringBuilder(String.format(PATH_STRING_FORMAT,StringUtils.defaultIfBlank(pathString, Constant.EMPTY_STRING)
 				,StringUtils.isBlank(queryString) ? Constant.EMPTY_STRING : Constant.CHARACTER_QUESTION_MARK,StringUtils.defaultIfBlank(queryString, Constant.EMPTY_STRING)));
 		if(Boolean.TRUE.equals(relative)){
 			if(!Constant.CHARACTER_SLASH.equals(stringBuilder.charAt(0)))
@@ -160,7 +90,214 @@ public class UrlStringBuilder extends AbstractBuilder<String> implements Seriali
 	
 	/**/
 	
-	public static class QueryStringBuilder extends AbstractBuilder<String> implements Serializable {
+	@Getter @Setter @Accessors(chain=true)
+	public static class PathStringBuilder extends AbstractStringBuilder implements Serializable {
+		private static final long serialVersionUID = -872728112292086623L;
+		
+		public static final String TOKEN_SEPARATOR = "/";
+		
+		public static String CONTEXT = null;
+		public static String PATH_NOT_FOUND_IDENTIFIER = null;
+		
+		static {
+			UrlStringBuilder.PathStringBuilder.Listener.COLLECTION.add(new UrlStringBuilder.PathStringBuilder.Listener.Adapter.Default());
+		}
+		
+		private UrlStringBuilder urlStringBuilder;
+		private List<String> tokens;
+		private Boolean addSeparatorAtBeginning=Boolean.TRUE;
+		private String context=CONTEXT;
+		
+		@Override
+		public String build() {
+			addToken(context,0);
+			StringBuilder stringBuilder = new StringBuilder();
+			if(StringUtils.isBlank(instance)){
+				String separator = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+					@Override
+					public String execute(Listener listener) {
+						return listener.getTokenSeparator();
+					}
+					@Override
+					public String getNullValue() {
+						return TOKEN_SEPARATOR;
+					}
+				});
+				final String identifier = getIdentifier();
+				if(StringUtils.isBlank(identifier)){
+					stringBuilder.append(StringUtils.join(getTokens(),separator));	
+				}else{
+					String fromIdentifier = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+						@Override
+						public String execute(Listener listener) {
+							return listener.getIdentifierMapping(identifier);
+						}
+					});	
+					
+					if(StringUtils.isBlank(fromIdentifier)){
+						logWarning("path with identifier <<{}>> not found", identifier);
+						fromIdentifier = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+							@Override
+							public String execute(Listener listener) {
+								return listener.getIdentifierMapping(PATH_NOT_FOUND_IDENTIFIER);
+							}
+							
+							@Override
+							public String getNullValue() {
+								return PATH_NOT_FOUND_IDENTIFIER;
+							}
+						});
+				
+					}
+					
+					stringBuilder.append(StringUtils.defaultIfBlank(fromIdentifier, Constant.EMPTY_STRING));
+				}
+				
+				if(Boolean.TRUE.equals(getAddSeparatorAtBeginning()) && !StringUtils.startsWith(stringBuilder, separator))
+					stringBuilder.insert(0,separator);
+				
+				for(Entry<String, String> entry : getTokenReplacementMap().entrySet())
+					stringBuilder = new StringBuilder(StringUtils.replace(stringBuilder.toString(), entry.getKey(), entry.getValue()));
+			}else{
+				stringBuilder.append(instance);
+			}
+			
+			return stringBuilder.toString();
+		}
+		
+		public List<String> getTokens(){
+			if(tokens == null)
+				tokens = new ArrayList<>();
+			return tokens;
+		}
+		
+		public PathStringBuilder addToken(final Object token,Integer index){
+			if(Boolean.TRUE.equals(listenerUtils.getBoolean(Listener.COLLECTION, new ListenerUtils.BooleanMethod<Listener>() {
+				@Override
+				public Boolean execute(Listener listener) {
+					return listener.isToken(token);
+				}
+			}))){
+				listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>() {
+					@Override
+					public void execute(Listener listener) {
+						listener.listenBeforeAdd(PathStringBuilder.this, token);
+					}
+				});
+				String string = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+					@Override
+					public String execute(Listener listener) {
+						return listener.getTokenAsString(token);
+					}
+				});
+				if(index==null)
+					getTokens().add(string);
+				else
+					getTokens().add(index, string);
+				listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>() {
+					@Override
+					public void execute(Listener listener) {
+						listener.listenAfterAdded(PathStringBuilder.this, token);
+					}
+				});
+			}
+			
+			return this;
+		}
+		
+		public PathStringBuilder addToken(final Object token){
+			return addToken(token, null);
+		}
+		
+		public PathStringBuilder addTokens(Object...tokens){
+			for(Object token : tokens)
+				addToken(token);
+			return this;
+		}
+		
+		@Override
+		public PathStringBuilder addTokenReplacement(String token, String replacement) {
+			return (PathStringBuilder) super.addTokenReplacement(token, replacement);
+		}
+		
+		@Override
+		public PathStringBuilder setIdentifier(String identifier) {
+			return (PathStringBuilder) super.setIdentifier(identifier);
+		}
+		
+		/**/
+		
+		/**/
+		
+		public static interface Listener extends AbstractStringBuilder.Listener {
+			
+			Collection<Listener> COLLECTION = new ArrayList<>();
+			
+			Boolean isToken(Object token);
+			String getTokenAsString(Object token);
+			String getTokenSeparator();
+			void listenBeforeAdd(PathStringBuilder builder,Object token);
+			void listenAfterAdded(PathStringBuilder builder,Object token);
+			/**/
+			
+			public static class Adapter extends AbstractStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public void listenBeforeAdd(PathStringBuilder builder,Object token) {}
+				
+				@Override
+				public void listenAfterAdded(PathStringBuilder builder,Object token) {}
+								
+				@Override
+				public String getTokenAsString(Object token) {
+					return null;
+				}
+				
+				@Override
+				public String getTokenSeparator() {
+					return null;
+				}
+				
+				@Override
+				public Boolean isToken(Object token) {
+					return null;
+				}
+								
+				/**/
+				
+				public static class Default extends Listener.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					@Override
+					public Boolean isToken(Object key) {
+						return key == null 
+							? Boolean.FALSE 
+							: (key instanceof String ? StringUtils.isNotBlank((String)key) : Boolean.FALSE);
+					}
+															
+					@Override
+					public String getTokenSeparator() {
+						return Constant.CHARACTER_SLASH.toString();
+					}
+					
+					@Override
+					public String getTokenAsString(Object key) {
+						return key.toString();
+					}
+										
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class QueryStringBuilder extends AbstractStringBuilder implements Serializable {
 		private static final long serialVersionUID = -872728112292086623L;
 		
 		public static final String NAME_VALUE_STRING_FORMAT = "%s%s%s";
@@ -169,6 +306,7 @@ public class UrlStringBuilder extends AbstractBuilder<String> implements Seriali
 			UrlStringBuilder.QueryStringBuilder.Listener.COLLECTION.add(new UrlStringBuilder.QueryStringBuilder.Listener.Adapter.Default());
 		}
 		
+		private UrlStringBuilder urlStringBuilder;
 		private Map<Object, List<Object>> parameters;
 		
 		@Override
@@ -262,7 +400,7 @@ public class UrlStringBuilder extends AbstractBuilder<String> implements Seriali
 		
 		/**/
 		
-		public static interface Listener extends AbstractBuilder.Listener<String> {
+		public static interface Listener extends AbstractStringBuilder.Listener {
 			
 			Collection<Listener> COLLECTION = new ArrayList<>();
 			
@@ -277,7 +415,7 @@ public class UrlStringBuilder extends AbstractBuilder<String> implements Seriali
 			void processAfterAdded(QueryStringBuilder queryStringBuilder,Object key,Object value);
 			/**/
 			
-			public static class Adapter extends AbstractBuilder.Listener.Adapter.Default<String> implements Listener,Serializable {
+			public static class Adapter extends AbstractStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				@Override

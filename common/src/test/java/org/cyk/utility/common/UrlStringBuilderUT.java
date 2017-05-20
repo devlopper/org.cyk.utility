@@ -9,6 +9,36 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
+	static {
+		UrlStringBuilder.PathStringBuilder.PATH_NOT_FOUND_IDENTIFIER = "pathnotfound";
+		UrlStringBuilder.PathStringBuilder.Listener.COLLECTION.add(new UrlStringBuilder.PathStringBuilder.Listener.Adapter.Default(){
+			private static final long serialVersionUID = 7112717654641763443L;
+			@Override
+			public String getIdentifierMapping(String identifier) {
+				if("pathid1".equals(identifier))
+					return "path_to_id1";
+				if(UrlStringBuilder.PathStringBuilder.PATH_NOT_FOUND_IDENTIFIER.equals(identifier))
+					return "path_to_unknown";
+				return super.getIdentifierMapping(identifier);
+			}
+		});
+	}
+	
+	@Test
+	public void path(){
+		assertEquals("/",new UrlStringBuilder.PathStringBuilder().build());
+		assertEquals("",new UrlStringBuilder.PathStringBuilder().setAddSeparatorAtBeginning(Boolean.FALSE).build());
+		assertEquals("/mycontext",new UrlStringBuilder.PathStringBuilder().setContext("mycontext").build());
+		assertEquals("?this is my custom path??",new UrlStringBuilder.PathStringBuilder().setInstance("?this is my custom path??").build());
+		assertEquals("/d1",new UrlStringBuilder.PathStringBuilder().addTokens("d1").build());
+		assertEquals("/d1/d2",new UrlStringBuilder.PathStringBuilder().addTokens("d1","d2").build());
+		assertEquals("/d1/d2/page.xhtml",new UrlStringBuilder.PathStringBuilder().addTokens("d1","d2","page.xhtml").build());
+		assertEquals("/d1/d2/page.jsf",new UrlStringBuilder.PathStringBuilder().addTokens("d1","d2","page.xhtml").addTokenReplacement(".xhtml", ".jsf").build());
+		
+		assertEquals("/path_to_id1",new UrlStringBuilder.PathStringBuilder().setIdentifier("pathid1").build());
+		assertEquals("/path_to_unknown",new UrlStringBuilder.PathStringBuilder().setIdentifier("pathid596").build());
+	}
+	
 	@Test
 	public void query(){
 		assertEquals("p1=a",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").build());
@@ -32,19 +62,23 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 	@Test
 	public void url(){
 		UrlStringBuilder urlStringBuilder = new UrlStringBuilder();
-		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).setPath("mypath.extension").getQueryStringBuilder().addParameter("p1", "a");
+		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).getPathStringBuilder().addTokens("mypath.extension").getUrlStringBuilder()
+			.getQueryStringBuilder().addParameter("p1", "a");
 		assertEquals("http://localhost:8080/mypath.extension?p1=a",urlStringBuilder.build());
 		
 		urlStringBuilder = new UrlStringBuilder();
-		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).setPath("mypath.extension").getQueryStringBuilder().addParameter("p1", "a").addParameter("w", "13");
+		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).getPathStringBuilder().addTokens("mypath.extension").getUrlStringBuilder()
+			.getQueryStringBuilder().addParameter("p1", "a").addParameter("w", "13");
 		assertEquals("http://localhost:8080/mypath.extension?p1=a&w=13",urlStringBuilder.build());
 		
 		urlStringBuilder = new UrlStringBuilder();
-		urlStringBuilder.setScheme("http").setHost("localhost").setPath("mypath.extension").getQueryStringBuilder().addParameter("p1", "a");
+		urlStringBuilder.setScheme("http").setHost("localhost").getPathStringBuilder().addTokens("mypath.extension").getUrlStringBuilder()
+			.getQueryStringBuilder().addParameter("p1", "a");
 		assertEquals("http://localhost/mypath.extension?p1=a",urlStringBuilder.build());
 		
 		urlStringBuilder = new UrlStringBuilder();
-		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).setPath("mypath.extension").getQueryStringBuilder();
+		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).getPathStringBuilder().addTokens("mypath.extension").getUrlStringBuilder()
+			.getQueryStringBuilder();
 		assertEquals("http://localhost:8080/mypath.extension",urlStringBuilder.build());
 		
 		urlStringBuilder = new UrlStringBuilder();
@@ -60,21 +94,23 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 		assertEquals("http://localhost:8080/?p1=a&p1=b",urlStringBuilder.build());
 		
 		urlStringBuilder = new UrlStringBuilder();
-		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).setContext("mycontext").setPath("mp").getQueryStringBuilder().addParameter("p1", "a");
+		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).getPathStringBuilder().setContext("mycontext").addTokens("mp")
+			.getUrlStringBuilder().getQueryStringBuilder().addParameter("p1", "a");
 		assertEquals("http://localhost:8080/mycontext/mp?p1=a",urlStringBuilder.build());
 		
 		urlStringBuilder = new UrlStringBuilder();
-		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).setContext("mycontext").setPath("mp.xhtml").getQueryStringBuilder().addParameter("p1", "a");
+		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).getPathStringBuilder().setContext("mycontext").addTokens("mp.xhtml").getUrlStringBuilder()
+			.getQueryStringBuilder().addParameter("p1", "a");
 		assertEquals("http://localhost:8080/mycontext/mp.xhtml?p1=a",urlStringBuilder.build());
 		
 		urlStringBuilder = new UrlStringBuilder();
-		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).setContext("mycontext").setPath("mp.xhtml")
-			.addPathTokenReplacement(".xhtml", ".jsf").getQueryStringBuilder().addParameter("p1", "a");
+		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).getPathStringBuilder().setContext("mycontext").addTokens("mp.xhtml")
+			.addTokenReplacement(".xhtml", ".jsf").getUrlStringBuilder().getQueryStringBuilder().addParameter("p1", "a");
 		assertEquals("http://localhost:8080/mycontext/mp.jsf?p1=a",urlStringBuilder.build());
 		
 		urlStringBuilder = new UrlStringBuilder();
-		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).setContext("mycontext").setPath("mp.xhtml")
-			.addPathTokenReplacement(".xhtml", ".jsf").setRelative(Boolean.TRUE).getQueryStringBuilder().addParameter("p1", "a");
+		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).getPathStringBuilder().setContext("mycontext").addTokens("mp.xhtml")
+			.addTokenReplacement(".xhtml", ".jsf").getUrlStringBuilder().setRelative(Boolean.TRUE).getQueryStringBuilder().addParameter("p1", "a");
 		assertEquals("/mycontext/mp.jsf?p1=a",urlStringBuilder.build());
 	}
 }

@@ -7,8 +7,10 @@ import org.cyk.utility.common.cdi.BeanAdapter;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-@Getter @NoArgsConstructor
+@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 public abstract class AbstractBuilder<OBJECT> extends AbstractBean implements Serializable {
 
 	private static final long serialVersionUID = 2176086848500759488L;

@@ -8,4 +8,9 @@ public abstract class AbstractHelper extends AbstractBean implements Serializabl
 
 	private static final long serialVersionUID = 9139445069356830304L;
 
+	@Override
+	protected void initialisation() {
+		super.initialisation();
+	}
+	
 }
