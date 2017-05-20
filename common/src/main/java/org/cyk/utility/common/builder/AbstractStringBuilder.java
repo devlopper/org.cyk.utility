@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.cyk.utility.common.AbstractBuilder;
+import org.cyk.utility.common.builder.UrlStringBuilder.PathStringBuilder;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,19 +19,19 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 	private static final long serialVersionUID = 1L;
 
 	protected String identifier;
-	protected Map<String,String> tokenReplacementMap;
 	
-	public Map<String,String> getTokenReplacementMap(){
+	protected Map<String,String> getTokenReplacementMap(){
+		Map<String,String> tokenReplacementMap=null;
+		for(Listener listener : PathStringBuilder.Listener.COLLECTION){
+			Map<String, String> v = listener.getTokenReplacementMap();
+			if(v!=null)
+				tokenReplacementMap = v;
+		}
 		if(tokenReplacementMap==null)
 			tokenReplacementMap = new HashMap<>();
 		return tokenReplacementMap;
 	}
-	
-	public AbstractStringBuilder addTokenReplacement(String token,String replacement){
-		getTokenReplacementMap().put(token, replacement);
-		return this;
-	}
-	
+		
 	/**/
 	
 	public static interface Listener extends AbstractBuilder.Listener<String> {
@@ -40,12 +41,14 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 		String getIdentifierMapping(String identifier);
 		String getDefaultIdentifierMapping(String identifier);
 		String getIdentifierWhenMappingIsBlank();
+		Map<String,String> getTokenReplacementMap();
 		
 		@Getter @Setter @Accessors(chain=true)
 		public static class Adapter extends AbstractBuilder.Listener.Adapter.Default<String> implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			private String identifierWhenMappingIsBlank;
+			protected String identifierWhenMappingIsBlank;
+			protected Map<String,String> tokenReplacementMap;
 			
 			@Override
 			public String getIdentifierMapping(String identifier) {

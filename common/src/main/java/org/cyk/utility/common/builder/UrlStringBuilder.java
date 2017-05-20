@@ -71,15 +71,8 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 		
 		Collection<Listener> COLLECTION = new ArrayList<>();
 		
-		String getPathFromIdentifier(String identifier);
-		
 		public static class Adapter extends AbstractBuilder.Listener.Adapter.Default<String> implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public String getPathFromIdentifier(String identifier) {
-				return null;
-			}
 			
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
@@ -214,12 +207,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 				addToken(token);
 			return this;
 		}
-		
-		@Override
-		public PathStringBuilder addTokenReplacement(String token, String replacement) {
-			return (PathStringBuilder) super.addTokenReplacement(token, replacement);
-		}
-		
+				
 		@Override
 		public PathStringBuilder setIdentifier(String identifier) {
 			return (PathStringBuilder) super.setIdentifier(identifier);

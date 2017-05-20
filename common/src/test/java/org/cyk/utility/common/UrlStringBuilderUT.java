@@ -1,5 +1,8 @@
 package org.cyk.utility.common;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.cyk.utility.common.builder.UrlStringBuilder;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -21,6 +24,13 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 					return "path_to_unknown";
 				return super.getIdentifierMapping(identifier);
 			}
+			
+			@Override
+			public Map<String, String> getTokenReplacementMap() {
+				Map<String, String> map = new HashMap<>();
+				map.put(".xhtml", ".jsf");
+				return map;
+			}
 		});
 	}
 	
@@ -32,8 +42,7 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 		assertEquals("?this is my custom path??",new UrlStringBuilder.PathStringBuilder().setInstance("?this is my custom path??").build());
 		assertEquals("/d1",new UrlStringBuilder.PathStringBuilder().addTokens("d1").build());
 		assertEquals("/d1/d2",new UrlStringBuilder.PathStringBuilder().addTokens("d1","d2").build());
-		assertEquals("/d1/d2/page.xhtml",new UrlStringBuilder.PathStringBuilder().addTokens("d1","d2","page.xhtml").build());
-		assertEquals("/d1/d2/page.jsf",new UrlStringBuilder.PathStringBuilder().addTokens("d1","d2","page.xhtml").addTokenReplacement(".xhtml", ".jsf").build());
+		assertEquals("/d1/d2/page.jsf",new UrlStringBuilder.PathStringBuilder().addTokens("d1","d2","page.xhtml").build());
 		
 		assertEquals("/path_to_id1",new UrlStringBuilder.PathStringBuilder().setIdentifier("pathid1").build());
 		assertEquals("/path_to_unknown",new UrlStringBuilder.PathStringBuilder().setIdentifier("pathid596").build());
@@ -99,18 +108,13 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 		assertEquals("http://localhost:8080/mycontext/mp?p1=a",urlStringBuilder.build());
 		
 		urlStringBuilder = new UrlStringBuilder();
-		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).getPathStringBuilder().setContext("mycontext").addTokens("mp.xhtml").getUrlStringBuilder()
-			.getQueryStringBuilder().addParameter("p1", "a");
-		assertEquals("http://localhost:8080/mycontext/mp.xhtml?p1=a",urlStringBuilder.build());
-		
-		urlStringBuilder = new UrlStringBuilder();
 		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).getPathStringBuilder().setContext("mycontext").addTokens("mp.xhtml")
-			.addTokenReplacement(".xhtml", ".jsf").getUrlStringBuilder().getQueryStringBuilder().addParameter("p1", "a");
+			.getUrlStringBuilder().getQueryStringBuilder().addParameter("p1", "a");
 		assertEquals("http://localhost:8080/mycontext/mp.jsf?p1=a",urlStringBuilder.build());
 		
 		urlStringBuilder = new UrlStringBuilder();
 		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).getPathStringBuilder().setContext("mycontext").addTokens("mp.xhtml")
-			.addTokenReplacement(".xhtml", ".jsf").getUrlStringBuilder().setRelative(Boolean.TRUE).getQueryStringBuilder().addParameter("p1", "a");
+			.getUrlStringBuilder().setRelative(Boolean.TRUE).getQueryStringBuilder().addParameter("p1", "a");
 		assertEquals("/mycontext/mp.jsf?p1=a",urlStringBuilder.build());
 	}
 }
