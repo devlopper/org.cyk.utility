@@ -3,9 +3,8 @@ package org.cyk.utility.common.builder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +12,8 @@ import org.cyk.utility.common.AbstractBuilder;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.ListenerUtils;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -295,7 +296,8 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 		}
 		
 		private UrlStringBuilder urlStringBuilder;
-		private Map<Object, List<Object>> parameters;
+		//private Map<Object, List<Object>> parameters;
+		private Collection<Parameter> parameters;
 		
 		@Override
 		public String build() {
@@ -312,23 +314,23 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 					return listener.getParametersSeparator();
 				}
 			});
-			for(Entry<Object, List<Object>> entry : getParameters().entrySet()){
-				final Entry<Object, List<Object>> finalEntry = entry;
+			for(Parameter parameter : getParameters()){
+				final Parameter finalParameter = parameter;
 				if(Boolean.TRUE.equals(listenerUtils.getBoolean(Listener.COLLECTION, new ListenerUtils.BooleanMethod<Listener>() {
 					@Override
 					public Boolean execute(Listener listener) {
-						return listener.isParameterName(finalEntry.getKey());
+						return listener.isParameterName(finalParameter.getName());
 					}
 				}))){
 					final String name = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
 						@Override
 						public String execute(Listener listener) {
-							return listener.getParameterNameAsString(finalEntry.getKey());
+							return listener.getParameterNameAsString(finalParameter.getName());
 						}
 					});
 					
 					final List<String> values = new ArrayList<>();
-					for(Object value : finalEntry.getValue()){
+					for(Object value : finalParameter.getValues()){
 						final Object finalValue = value;
 						if(Boolean.TRUE.equals(listenerUtils.getBoolean(Listener.COLLECTION, new ListenerUtils.BooleanMethod<Listener>() {
 							@Override
@@ -355,36 +357,98 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 			}
 			return StringUtils.join(tokens,Constant.CHARACTER_AMPERSTAMP);
 		}
-		
+		/*
 		public Map<Object, List<Object>> getParameters(){
 			if(parameters == null)
 				parameters = new LinkedHashMap<>();
 			return parameters;
 		}
+		*/
+		public Collection<Parameter> getParameters(){
+			if(parameters == null)
+				parameters = new LinkedHashSet<>();
+			return parameters;
+		}
 		
-		public QueryStringBuilder addParameter(final Object key,final Object value){
-			List<Object> values = getParameters().get(key);
-			if(values==null){
-				values = new ArrayList<>();
-				getParameters().put(key, values);
-			}
+		private Parameter getParameter(Object key){
+			for(Parameter parameter : getParameters())
+				if(parameter.getName().equals(key))
+					return parameter;
+			return null;
+		}
+		
+		public QueryStringBuilder addParameter(final Parameter parameter){
 			listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>() {
 				@Override
 				public void execute(Listener listener) {
-					listener.processBeforeAdd(QueryStringBuilder.this, key, value);
+					listener.processBeforeAdd(QueryStringBuilder.this, parameter);
 				}
 			});
-			values.add(value);
+			
+			Parameter existingParameter = getParameter(parameter.getName());
+			if(existingParameter==null){
+				getParameters().add(existingParameter = parameter);
+			}else
+				existingParameter.merge(parameter);
+			
 			listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>() {
 				@Override
 				public void execute(Listener listener) {
-					listener.processAfterAdded(QueryStringBuilder.this, key, value);
+					listener.processAfterAdded(QueryStringBuilder.this, parameter);
 				}
 			});
+			
 			return this;
 		}
 		
+		public QueryStringBuilder addParameter(final Object key,final Object value){
+			Parameter parameter = new Parameter(key, value);
+			return addParameter(parameter);
+		}
+		
 		/**/
+		
+		@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(of={"name"})
+		@AllArgsConstructor
+		public static class Parameter implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			private Object name;
+			private Collection<Object> values;
+			private Boolean encoded;
+			
+			public Parameter(Object name,Object value,Boolean encoded) {
+				this(name,null,encoded);
+				getValues().add(value);
+			}
+			
+			public Parameter(Object name,Object value) {
+				this(name,value,Boolean.FALSE);
+			}
+			
+			public Parameter(Object name) {
+				this(name,null);
+			}
+			
+			public Parameter addValue(Object value){
+				getValues().add(value);
+				return this;
+			}
+			
+			public Collection<Object> getValues(){
+				if(values==null)
+					values = new ArrayList<>();
+				return values;
+			}
+			
+			public Parameter merge(Parameter parameter){
+				if(!getName().equals(parameter.getName()))
+					throw new RuntimeException("cannot merge different name");
+				getValues().addAll(parameter.getValues());
+				setEncoded(getEncoded()||parameter.getEncoded());
+				return this;
+			}
+		}
 		
 		/**/
 		
@@ -399,18 +463,18 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 			String getParameterNameAndValueSeparator();
 			String getParameterAsString(String key,List<String> values,String nameValueSeparator,String parameterSeparator);
 			String getParametersSeparator();
-			void processBeforeAdd(QueryStringBuilder queryStringBuilder,Object key,Object value);
-			void processAfterAdded(QueryStringBuilder queryStringBuilder,Object key,Object value);
+			void processBeforeAdd(QueryStringBuilder queryStringBuilder,Parameter parameter);
+			void processAfterAdded(QueryStringBuilder queryStringBuilder,Parameter parameter);
 			/**/
 			
 			public static class Adapter extends AbstractStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				@Override
-				public void processBeforeAdd(QueryStringBuilder queryStringBuilder, Object key, Object value) {}
+				public void processBeforeAdd(QueryStringBuilder queryStringBuilder, Parameter parameter) {}
 				
 				@Override
-				public void processAfterAdded(QueryStringBuilder queryStringBuilder, Object key, Object value) {}
+				public void processAfterAdded(QueryStringBuilder queryStringBuilder, Parameter parameter) {}
 				
 				@Override
 				public String getParameterNameAndValueSeparator() {
@@ -491,6 +555,129 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 							parameterTokens.add(String.format(NAME_VALUE_STRING_FORMAT, key,nameValueSeparator,value));
 						return StringUtils.join(parameterTokens,parameterSeparator);
 					}
+				}
+				
+			}
+			
+		}
+		
+		/**/
+		
+		@Getter @Setter @Accessors(chain=true)
+		public static class ParameterStringBuilder extends AbstractStringBuilder implements Serializable {
+			private static final long serialVersionUID = -872728112292086623L;
+			
+			public static final String TOKEN_SEPARATOR = "=";
+			
+			static {
+				QueryStringBuilder.ParameterStringBuilder.Listener.COLLECTION.add(new QueryStringBuilder.ParameterStringBuilder.Listener.Adapter.Default());
+			}
+			
+			private QueryStringBuilder queryStringBuilder;
+			private Object name,value;
+			
+			@Override
+			public String build() {
+				StringBuilder stringBuilder = new StringBuilder();
+				if(StringUtils.isBlank(instance)){
+					
+				}else{
+					stringBuilder.append(instance);
+				}
+				
+				return stringBuilder.toString();
+			}
+				
+			/**/
+			
+			/**/
+			
+			public static interface Listener extends AbstractStringBuilder.Listener {
+				
+				Collection<Listener> COLLECTION = new ArrayList<>();
+				
+				Boolean isName(Object key);
+				Boolean isValue(Object value);
+				String getNameAsString(Object key);
+				String getValueAsString(Object value);
+				String getNameAndValueSeparator();
+				String getAsString(String key,List<String> values,String nameValueSeparator,String parameterSeparator);
+				
+				public static class Adapter extends AbstractStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
+					private static final long serialVersionUID = 1L;
+						
+					@Override
+					public Boolean isName(Object key) {
+						return null;
+					}
+
+					@Override
+					public Boolean isValue(Object value) {
+						return null;
+					}
+
+					@Override
+					public String getNameAsString(Object key) {
+						return null;
+					}
+
+					@Override
+					public String getValueAsString(Object value) {
+						return null;
+					}
+
+					@Override
+					public String getNameAndValueSeparator() {
+						return null;
+					}
+					
+					@Override
+					public String getAsString(String key, List<String> values, String nameValueSeparator,String parameterSeparator) {
+						return null;
+					}
+					
+					/**/
+					
+					public static class Default extends Listener.Adapter implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						@Override
+						public Boolean isName(Object key) {
+							return key == null 
+								? Boolean.FALSE 
+								: (key instanceof String ? StringUtils.isNotBlank((String)key) : Boolean.FALSE);
+						}
+						
+						@Override
+						public Boolean isValue(Object value) {
+							return value!=null || (value instanceof String && StringUtils.isNotBlank((String)value));
+						}
+						
+						@Override
+						public String getNameAndValueSeparator() {
+							return Constant.CHARACTER_EQUAL.toString();
+						}
+						
+						@Override
+						public String getNameAsString(Object key) {
+							return key.toString();
+						}
+						
+						@Override
+						public String getValueAsString(Object value) {
+							return value.toString();
+						}
+						
+						@Override
+						public String getAsString(String key, List<String> values,String nameValueSeparator,String parameterSeparator) {
+							Collection<String> parameterTokens = new ArrayList<>();
+							for(String value : values)
+								parameterTokens.add(String.format(NAME_VALUE_STRING_FORMAT, key,nameValueSeparator,value));
+							return StringUtils.join(parameterTokens,parameterSeparator);
+						}
+						
+					}
+
 				}
 				
 			}
