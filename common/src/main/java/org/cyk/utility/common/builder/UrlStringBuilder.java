@@ -564,35 +564,20 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 		/**/
 		
 		@Getter @Setter @Accessors(chain=true)
-		public static class ParameterStringBuilder extends AbstractStringBuilder implements Serializable {
+		public static class ParameterStringBuilder extends NameValueStringBuilder implements Serializable {
 			private static final long serialVersionUID = -872728112292086623L;
-			
-			public static final String TOKEN_SEPARATOR = "=";
 			
 			static {
 				QueryStringBuilder.ParameterStringBuilder.Listener.COLLECTION.add(new QueryStringBuilder.ParameterStringBuilder.Listener.Adapter.Default());
 			}
 			
 			private QueryStringBuilder queryStringBuilder;
-			private Object name,value;
-			
-			@Override
-			public String build() {
-				StringBuilder stringBuilder = new StringBuilder();
-				if(StringUtils.isBlank(instance)){
-					
-				}else{
-					stringBuilder.append(instance);
-				}
-				
-				return stringBuilder.toString();
-			}
 				
 			/**/
 			
 			/**/
 			
-			public static interface Listener extends AbstractStringBuilder.Listener {
+			public static interface Listener extends NameValueStringBuilder.Listener {
 				
 				Collection<Listener> COLLECTION = new ArrayList<>();
 				
@@ -603,78 +588,13 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 				String getNameAndValueSeparator();
 				String getAsString(String key,List<String> values,String nameValueSeparator,String parameterSeparator);
 				
-				public static class Adapter extends AbstractStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
+				public static class Adapter extends NameValueStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
 					private static final long serialVersionUID = 1L;
-						
-					@Override
-					public Boolean isName(Object key) {
-						return null;
-					}
-
-					@Override
-					public Boolean isValue(Object value) {
-						return null;
-					}
-
-					@Override
-					public String getNameAsString(Object key) {
-						return null;
-					}
-
-					@Override
-					public String getValueAsString(Object value) {
-						return null;
-					}
-
-					@Override
-					public String getNameAndValueSeparator() {
-						return null;
-					}
-					
-					@Override
-					public String getAsString(String key, List<String> values, String nameValueSeparator,String parameterSeparator) {
-						return null;
-					}
-					
+								
 					/**/
 					
 					public static class Default extends Listener.Adapter implements Serializable {
 						private static final long serialVersionUID = 1L;
-						
-						@Override
-						public Boolean isName(Object key) {
-							return key == null 
-								? Boolean.FALSE 
-								: (key instanceof String ? StringUtils.isNotBlank((String)key) : Boolean.FALSE);
-						}
-						
-						@Override
-						public Boolean isValue(Object value) {
-							return value!=null || (value instanceof String && StringUtils.isNotBlank((String)value));
-						}
-						
-						@Override
-						public String getNameAndValueSeparator() {
-							return Constant.CHARACTER_EQUAL.toString();
-						}
-						
-						@Override
-						public String getNameAsString(Object key) {
-							return key.toString();
-						}
-						
-						@Override
-						public String getValueAsString(Object value) {
-							return value.toString();
-						}
-						
-						@Override
-						public String getAsString(String key, List<String> values,String nameValueSeparator,String parameterSeparator) {
-							Collection<String> parameterTokens = new ArrayList<>();
-							for(String value : values)
-								parameterTokens.add(String.format(NAME_VALUE_STRING_FORMAT, key,nameValueSeparator,value));
-							return StringUtils.join(parameterTokens,parameterSeparator);
-						}
 						
 					}
 

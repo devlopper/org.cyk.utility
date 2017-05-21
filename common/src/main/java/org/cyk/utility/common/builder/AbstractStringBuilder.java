@@ -42,6 +42,7 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 		String getDefaultIdentifierMapping(String identifier);
 		String getIdentifierWhenMappingIsBlank();
 		Map<String,String> getTokenReplacementMap();
+		String getSeparator();
 		
 		@Getter @Setter @Accessors(chain=true)
 		public static class Adapter extends AbstractBuilder.Listener.Adapter.Default<String> implements Listener,Serializable {
@@ -57,6 +58,11 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 			
 			@Override
 			public String getDefaultIdentifierMapping(String identifier) {
+				return null;
+			}
+			
+			@Override
+			public String getSeparator() {
 				return null;
 			}
 			
