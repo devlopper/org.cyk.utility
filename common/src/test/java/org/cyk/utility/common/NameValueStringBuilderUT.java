@@ -25,7 +25,7 @@ public class NameValueStringBuilderUT extends AbstractUnitTest {
 		
 		assertEquals("p1=a&p1=b&p1=v3",new NameValueStringBuilder().set("p1", "a").set("p1", "b").set("p1", "v3").build());
 		
-		assertEquals("p1=F",new NameValueStringBuilder().set("p1", "15").setEncoded(Boolean.TRUE).build());
+		assertEquals("p1=2_f_0",new NameValueStringBuilder().set("p1", "15").setEncoded(Boolean.TRUE).build());
 	}
 	
 }

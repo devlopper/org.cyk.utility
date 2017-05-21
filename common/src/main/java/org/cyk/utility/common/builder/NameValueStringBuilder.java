@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.builder.NameValueStringBuilder.Listener.Strategy;
+import org.cyk.utility.common.helper.NumberHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -237,7 +238,10 @@ public class NameValueStringBuilder extends AbstractStringBuilder implements Ser
 				
 				@Override
 				public String encode(Collection<Object> values) {
-					return "encoded_value";
+					Collection<Long> longs = new ArrayList<>();
+					for(Object v : values)
+						longs.add(Long.parseLong(v.toString()));
+					return NumberHelper.getInstance().encodeToBase62(longs);
 				}
 				
 			}
