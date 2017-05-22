@@ -3,6 +3,7 @@ package org.cyk.utility.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cyk.utility.common.builder.NameValueStringBuilder;
 import org.cyk.utility.common.builder.UrlStringBuilder;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -13,13 +14,14 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	static {
+		NameValueStringBuilder.Listener.COLLECTION.add(new NameValueStringBuilder.Listener.Adapter.Default());
 		UrlStringBuilder.PathStringBuilder.PATH_NOT_FOUND_IDENTIFIER = "pathnotfound";
 		UrlStringBuilder.PathStringBuilder.Listener.COLLECTION.add(new UrlStringBuilder.PathStringBuilder.Listener.Adapter.Default(){
 			private static final long serialVersionUID = 7112717654641763443L;
 			@Override
 			public String getIdentifierMapping(String identifier) {
 				if("pathid1".equals(identifier))
-					return "path_to_id1";
+					return "/path_to_id1";
 				if(UrlStringBuilder.PathStringBuilder.PATH_NOT_FOUND_IDENTIFIER.equals(identifier))
 					return "path_to_unknown";
 				return super.getIdentifierMapping(identifier);
@@ -45,12 +47,14 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 		assertEquals("/d1/d2/page.jsf",new UrlStringBuilder.PathStringBuilder().addTokens("d1","d2","page.xhtml").build());
 		
 		assertEquals("/path_to_id1",new UrlStringBuilder.PathStringBuilder().setIdentifier("pathid1").build());
+		assertEquals("/mycontext/path_to_id1",new UrlStringBuilder.PathStringBuilder().setContext("mycontext").setIdentifier("pathid1").build());
 		assertEquals("/path_to_unknown",new UrlStringBuilder.PathStringBuilder().setIdentifier("pathid596").build());
 	}
 	
 	@Test
 	public void query(){
 		assertEquals("p1=a",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").build());
+		
 		assertEquals("p1=a&p2=b",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").addParameter("p2", "b").build());
 		assertEquals("p1=a&p2=b",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").addParameter("p2", "b").build());
 		
@@ -66,6 +70,7 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 		assertEquals("p1=a&p2=b&p3=v3",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").addParameter("p2", "b").addParameter("p3", "v3").build());
 		
 		assertEquals("p1=a&p1=b&p1=v3",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").addParameter("p1", "b").addParameter("p1", "v3").build());
+		
 	}
 	
 	@Test
@@ -116,5 +121,6 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).getPathStringBuilder().setContext("mycontext").addTokens("mp.xhtml")
 			.getUrlStringBuilder().setRelative(Boolean.TRUE).getQueryStringBuilder().addParameter("p1", "a");
 		assertEquals("/mycontext/mp.jsf?p1=a",urlStringBuilder.build());
+		
 	}
 }

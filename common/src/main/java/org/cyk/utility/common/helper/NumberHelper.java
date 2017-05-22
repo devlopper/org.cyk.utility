@@ -16,11 +16,11 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String TOKEN_SEPARATOR = Constant.CHARACTER_UNDESCORE.toString();
-	private static final String BASE_10_CHARACTERS = "0123456789";
-	private static final String BASE_16_CHARACTERS = BASE_10_CHARACTERS + "ABCDEF";
-	private static final String BASE_36_CHARACTERS = BASE_10_CHARACTERS + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	private static final String BASE_62_CHARACTERS = BASE_10_CHARACTERS + "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	public static final String TOKEN_SEPARATOR = Constant.CHARACTER_UNDESCORE.toString();
+	public static final String BASE_10_CHARACTERS = "0123456789";
+	public static final String BASE_16_CHARACTERS = BASE_10_CHARACTERS + "ABCDEF";
+	public static final String BASE_36_CHARACTERS = BASE_10_CHARACTERS + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	public static final String BASE_62_CHARACTERS = BASE_10_CHARACTERS + "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
 	private static NumberHelper INSTANCE;
 	
@@ -91,7 +91,7 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return encode(number, BASE_62_CHARACTERS);
 	}
 	
-	public String encodeToBase62(Collection<Long> identifiers){
+	public String encode(Collection<Long> identifiers, String outputCharacters){
 		Long highest = getHighest(identifiers);
 		String number = concatenate(identifiers, highest.toString().length());
 		Integer numberOfZero = 0;
@@ -100,11 +100,15 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 				numberOfZero++;
 			else
 				break;
-		number = encodeToBase62(number);
+		number = encode(number,outputCharacters);
 		
 		String value = highest.toString().length()+TOKEN_SEPARATOR+number+TOKEN_SEPARATOR+numberOfZero;
 		logTrace("identifiers {} converted to request parameter value is {}",identifiers, value);
 		return value;
+	}
+	
+	public String encodeToBase62(Collection<Long> identifiers){
+		return encode(identifiers,BASE_62_CHARACTERS);
 	}
 	
 	@SuppressWarnings("unchecked")

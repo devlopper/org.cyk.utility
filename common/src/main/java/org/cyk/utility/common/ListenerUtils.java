@@ -25,6 +25,10 @@ public class ListenerUtils {
 		return result;
 	}
 	
+	public <LISTENER> Object getObject(Collection<LISTENER> listeners,ResultMethod<LISTENER,Object> method){
+		return getValue(Object.class, listeners, method);
+	}
+	
 	public <LISTENER> String getString(Collection<LISTENER> listeners,ResultMethod<LISTENER,String> method){
 		return getValue(String.class, listeners, method);
 	}
@@ -91,6 +95,7 @@ public class ListenerUtils {
 		}
 	}
 	
+	public static abstract class ObjectMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,Object>{}
 	public static abstract class StringMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,String>{}
 	public static abstract class BigDecimalMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,BigDecimal>{}
 	public static abstract class BooleanMethod<LISTENER> extends ResultMethod.Adapter<LISTENER,Boolean>{}
