@@ -239,8 +239,8 @@ public class NameValueStringBuilder extends AbstractStringBuilder implements Ser
 				@Override
 				public String encode(Collection<Object> values) {
 					Collection<Long> longs = new ArrayList<>();
-					for(Object v : values)
-						longs.add(Long.parseLong(v.toString()));
+					for(Object value : values)
+						longs.add(value instanceof Number ? ((Number)value).longValue() : Long.parseLong(value.toString()));
 					return NumberHelper.getInstance().encodeToBase62(longs);
 				}
 				
