@@ -285,7 +285,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 		
 		@Override
 		public String build() {
-			
+			nameValueCollectionStringBuilder.setSeparator(Constant.CHARACTER_AMPERSTAMP.toString());
 			return nameValueCollectionStringBuilder.build();
 		}
 				

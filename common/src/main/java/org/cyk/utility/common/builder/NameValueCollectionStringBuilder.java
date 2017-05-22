@@ -28,6 +28,17 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 			getCollection().add(nameValue);
 		return this;
 	}
+	
+	public NameValueCollectionStringBuilder addNameValue(Object name,Object value){
+		return add(new NameValueStringBuilder(name, value));
+	}
+	
+	public NameValueCollectionStringBuilder addNamesValues(Object...values){
+		for(int i = 0 ; i < values.length ; i = i+2){
+			addNameValue(values[i], values[i+1]);
+		}
+		return this;
+	}
 		
 	@Override
 	public String build() {
@@ -63,7 +74,7 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 				}
 				@Override
 				public String getNullValue() {
-					return Constant.CHARACTER_AMPERSTAMP.toString();
+					return StringUtils.defaultIfBlank(separator, Constant.CHARACTER_SPACE.toString());
 				}
 			})));
 		}else{

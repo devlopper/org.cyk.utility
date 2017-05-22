@@ -18,13 +18,23 @@ public class NameValueStringBuilderUT extends AbstractUnitTest {
 	static {
 		NameValueStringBuilder.Listener.COLLECTION.add(new NameValueStringBuilder.Listener.Adapter.Default(){
 			private static final long serialVersionUID = 1L;
-
+			
 			@Override
 			public Object getValueToProcessed(Object value) {
 				if(value instanceof ClassA)
 					return ((ClassA)value).getIdentifier();
 				return super.getValueToProcessed(value);
 			}
+		});
+		
+		NameValueCollectionStringBuilder.Listener.COLLECTION.add(new NameValueCollectionStringBuilder.Listener.Adapter.Default(){
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public String getSeparator() {
+				return Constant.CHARACTER_AMPERSTAMP.toString();
+			}
+			
 		});
 	}
 
