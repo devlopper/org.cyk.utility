@@ -8,6 +8,7 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.builder.NameValueCollectionStringBuilder;
 import org.cyk.utility.common.builder.TextStringBuilder;
 import org.cyk.utility.common.builder.UrlStringBuilder;
+import org.cyk.utility.common.helper.InstanceHelper;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,13 @@ public class OpenWindowStringBuilder extends AbstractJavascriptStringBuilder imp
 		if(urlStringBuilder==null)
 			urlStringBuilder = new UrlStringBuilder();
 		return urlStringBuilder;
+	}
+	
+	public OpenWindowStringBuilder addFiles(Object owner,Collection<?> files){
+		Object identifier = inject(InstanceHelper.class).getIdentifier(owner);
+		setName(identifier == null ? Constant.EMPTY_STRING : identifier.toString());
+		getUrlStringBuilder().addFiles(files);
+		return this;
 	}
 	
 	@Override
