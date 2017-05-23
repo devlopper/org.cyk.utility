@@ -38,7 +38,11 @@ public class NameValueStringBuilder extends AbstractStringBuilder implements Ser
 	
 	public NameValueStringBuilder(Object name,Object value) {
 		this.name = name;
-		add(value);
+		if(value instanceof Collection){
+			addCollection((Collection<?>) value);
+			setEncoded(Boolean.TRUE);
+		}else
+			add(value);
 	}
 	
 	public NameValueStringBuilder(Object name) {
@@ -72,169 +76,182 @@ public class NameValueStringBuilder extends AbstractStringBuilder implements Ser
 	}
 	
 	@Override
-	public String build() {
+	public String buildWhenBlank() {
 		StringBuilder stringBuilder = new StringBuilder();
-		if(StringUtils.isBlank(instance)){
-			if(Boolean.TRUE.equals(listenerUtils.getBoolean(Listener.COLLECTION, new ListenerUtils.BooleanMethod<Listener>() {
+		
+		if(Boolean.TRUE.equals(listenerUtils.getBoolean(Listener.COLLECTION, new ListenerUtils.BooleanMethod<Listener>() {
+			@Override
+			public Boolean execute(Listener listener) {
+				return listener.isName(name);
+			}
+			@Override
+			public Boolean getNullValue() {
+				return name == null 
+						? Boolean.FALSE 
+						: (name instanceof String ? StringUtils.isNotBlank((String)name) : Boolean.FALSE);
+			}
+		}))){
+			String nameAndValueSeparator = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+				@Override
+				public String execute(Listener listener) {
+					return listener.getNameAndValueSeparator();
+				}
+				@Override
+				public String getNullValue() {
+					return Constant.CHARACTER_EQUAL.toString();
+				}
+			});
+			Strategy strategy = listenerUtils.getValue(Strategy.class, Listener.COLLECTION, new ListenerUtils.ResultMethod<Listener, Strategy>() {
+
+				@Override
+				public Strategy execute(Listener listener) {
+					return listener.getStrategy();
+				}
+
+				@Override
+				public Strategy getNullValue() {
+					return Strategy.NAME_ONE_VALUE;
+				}
+			});
+			
+			resultName = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+				@Override
+				public String execute(Listener listener) {
+					return listener.getNameAsString(name);
+				}
+				
+				@Override
+				public String getNullValue() {
+					return name.toString();
+				}
+			});
+			
+			Boolean encoded = listenerUtils.getBoolean(Listener.COLLECTION, new ListenerUtils.BooleanMethod<Listener>() {
 				@Override
 				public Boolean execute(Listener listener) {
-					return listener.isName(name);
+					return listener.getEncoded(name, values);
 				}
 				@Override
 				public Boolean getNullValue() {
-					return name == null 
-							? Boolean.FALSE 
-							: (name instanceof String ? StringUtils.isNotBlank((String)name) : Boolean.FALSE);
+					return NameValueStringBuilder.this.encoded;
 				}
-			}))){
-				String nameAndValueSeparator = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
-					@Override
-					public String execute(Listener listener) {
-						return listener.getNameAndValueSeparator();
-					}
-					@Override
-					public String getNullValue() {
-						return Constant.CHARACTER_EQUAL.toString();
-					}
-				});
-				Strategy strategy = listenerUtils.getValue(Strategy.class, Listener.COLLECTION, new ListenerUtils.ResultMethod<Listener, Strategy>() {
-
-					@Override
-					public Strategy execute(Listener listener) {
-						return listener.getStrategy();
-					}
-
-					@Override
-					public Strategy getNullValue() {
-						return Strategy.NAME_ONE_VALUE;
-					}
-				});
-				
-				resultName = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
-					@Override
-					public String execute(Listener listener) {
-						return listener.getNameAsString(name);
-					}
-					
-					@Override
-					public String getNullValue() {
-						return name.toString();
-					}
-				});
-				
-				
-				final List<String> values = new ArrayList<>();
-				if(Boolean.TRUE.equals(getEncoded())){
-					Collection<Object> valuesToProcessed = listenerUtils.getCollection(Listener.COLLECTION, new ListenerUtils.CollectionMethod<Listener, Object>(){
-						@Override
-						public Collection<Object> execute(Listener listener) {
-							return listener.getValuesToProcessed(NameValueStringBuilder.this.values);
-						}
-					});
-					
-					if(valuesToProcessed==null){
-						valuesToProcessed = new ArrayList<>();
-						for(Object value : NameValueStringBuilder.this.values){
-							final Object finalValue = value;
-							Object valueToProcessed = listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
-								@Override
-								public Object execute(Listener listener) {
-									return listener.getValueToProcessed(finalValue);
-								}
-							});
-							if(valueToProcessed==null)
-								valueToProcessed = value;
-							if(valueToProcessed!=null)
-								valuesToProcessed.add(valueToProcessed);
-						}
-					}
-					
-					
-					final Collection<Object> finalValuesToProcessed = valuesToProcessed;
-					String encodedValues = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
-						@Override
-						public String execute(Listener listener) {
-							return listener.encode(finalValuesToProcessed);
-						}
-
-					});
-					if(encodedValues==null){
-						Collection<Long> longs = new ArrayList<>();
-						
-						for(Object value : finalValuesToProcessed)
-							if(value!=null)
-								longs.add(value instanceof Number ? ((Number)value).longValue() : Long.parseLong(value.toString()));
-						encodedValues = NumberHelper.getInstance().encode(longs,listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
-							@Override
-							public String execute(Listener listener) {
-								return listener.getEncodingCharacterSet();
-							}
-							
-							@Override
-							public String getNullValue() {
-								return NumberHelper.BASE_62_CHARACTERS;
-							}
-						}));
-						
-						
-					}
-					values.add(encodedValues);
-				}else{
-					for(Object value : NameValueStringBuilder.this.values){
-						final Object v = value;
-						final Object valueToProcessed = listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
-							@Override
-							public Object execute(Listener listener) {
-								return listener.getValueToProcessed(v);
-							}
-						});
-						final Object finalValue = valueToProcessed == null ? value : valueToProcessed ;
-						if(Boolean.TRUE.equals(listenerUtils.getBoolean(Listener.COLLECTION, new ListenerUtils.BooleanMethod<Listener>() {
-							@Override
-							public Boolean execute(Listener listener) {
-								return listener.isValue(finalValue);
-							}
-							public Boolean getNullValue() {
-								return finalValue!=null || (finalValue instanceof String && StringUtils.isNotBlank((String)finalValue));
-							}
-						}))){
-							values.add(listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
-								@Override
-								public String execute(Listener listener) {
-									return listener.getValueAsString(finalValue);
-								}
-								public String getNullValue() {
-									return finalValue.toString();
-								}
-							}));	
-						}	
-					}	
-				}
-				
-				if(Strategy.NAME_ONE_VALUE.equals(strategy)){
-					Set<String> set = new LinkedHashSet<>();
-					for(String value : values)
-						set.add(String.format(NAME_VALUE_STRING_FORMAT, resultName,nameAndValueSeparator,value));
-					stringBuilder.append(StringUtils.join(set,listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
-						@Override
-						public String execute(Listener listener) {
-							return listener.getSeparator();
-						}
-						@Override
-						public String getNullValue() {
-							return Constant.CHARACTER_AMPERSTAMP.toString();
-						}
-					})));
-				}else if(Strategy.NAME_MANY_VALUES.equals(strategy)) {
-					throwNotYetImplemented();
-				}	
-				
-				
+			});
+			
+			if(encoded==null){
 				
 			}
-		}else{
-			stringBuilder.append(instance);
+			
+			final List<String> values = new ArrayList<>();
+			
+			if(Boolean.TRUE.equals(encoded)){
+				Collection<Object> valuesToProcessed = listenerUtils.getCollection(Listener.COLLECTION, new ListenerUtils.CollectionMethod<Listener, Object>(){
+					@Override
+					public Collection<Object> execute(Listener listener) {
+						return listener.getValuesToProcessed(NameValueStringBuilder.this.values);
+					}
+				});
+				
+				if(valuesToProcessed==null){
+					valuesToProcessed = new ArrayList<>();
+					for(Object value : NameValueStringBuilder.this.values){
+						final Object finalValue = value;
+						Object valueToProcessed = listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
+							@Override
+							public Object execute(Listener listener) {
+								return listener.getValueToProcessed(finalValue);
+							}
+						});
+						if(valueToProcessed==null)
+							valueToProcessed = value;
+						if(valueToProcessed!=null)
+							valuesToProcessed.add(valueToProcessed);
+					}
+				}
+				
+				
+				final Collection<Object> finalValuesToProcessed = valuesToProcessed;
+				String encodedValues = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+					@Override
+					public String execute(Listener listener) {
+						return listener.encode(finalValuesToProcessed);
+					}
+
+				});
+				if(encodedValues==null){
+					Collection<Long> longs = new ArrayList<>();
+					
+					for(Object value : finalValuesToProcessed)
+						if(value!=null)
+							longs.add(value instanceof Number ? ((Number)value).longValue() : Long.parseLong(value.toString()));
+					encodedValues = NumberHelper.getInstance().encode(longs,listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+						@Override
+						public String execute(Listener listener) {
+							return listener.getEncodingCharacterSet();
+						}
+						
+						@Override
+						public String getNullValue() {
+							return NumberHelper.BASE_62_CHARACTERS;
+						}
+					}));
+					
+					
+				}
+				values.add(encodedValues);
+			}else{
+				for(Object value : NameValueStringBuilder.this.values){
+					final Object v = value;
+					final Object valueToProcessed = listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
+						@Override
+						public Object execute(Listener listener) {
+							return listener.getValueToProcessed(v);
+						}
+					});
+					final Object finalValue = valueToProcessed == null ? value : valueToProcessed ;
+					if(Boolean.TRUE.equals(listenerUtils.getBoolean(Listener.COLLECTION, new ListenerUtils.BooleanMethod<Listener>() {
+						@Override
+						public Boolean execute(Listener listener) {
+							return listener.isValue(finalValue);
+						}
+						public Boolean getNullValue() {
+							return finalValue!=null || (finalValue instanceof String && StringUtils.isNotBlank((String)finalValue));
+						}
+					}))){
+						values.add(listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+							@Override
+							public String execute(Listener listener) {
+								return listener.getValueAsString(finalValue);
+							}
+							public String getNullValue() {
+								return finalValue.toString();
+							}
+						}));	
+					}	
+				}	
+			}
+			
+			if(Strategy.NAME_ONE_VALUE.equals(strategy)){
+				Set<String> set = new LinkedHashSet<>();
+				for(String value : values)
+					set.add(String.format(NAME_VALUE_STRING_FORMAT, resultName,nameAndValueSeparator,value));
+				stringBuilder.append(StringUtils.join(set,listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+					@Override
+					public String execute(Listener listener) {
+						return listener.getSeparator();
+					}
+					@Override
+					public String getNullValue() {
+						return Constant.CHARACTER_AMPERSTAMP.toString();
+					}
+				})));
+			}else if(Strategy.NAME_MANY_VALUES.equals(strategy)) {
+				throwNotYetImplemented();
+			}	
+			
+			
+			
 		}
+		
 		return stringBuilder.toString();
 	}
 	
@@ -262,6 +279,7 @@ public class NameValueStringBuilder extends AbstractStringBuilder implements Ser
 		String getNameAndValueSeparator();
 		String encode(Collection<Object> values);
 		String getEncodingCharacterSet();
+		Boolean getEncoded(Object name,Collection<Object> values);
 		
 		@Getter 
 		public static class Adapter extends AbstractStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
@@ -314,6 +332,11 @@ public class NameValueStringBuilder extends AbstractStringBuilder implements Ser
 			
 			@Override
 			public String getEncodingCharacterSet() {
+				return null;
+			}
+			
+			@Override
+			public Boolean getEncoded(Object name,Collection<Object> values) {
 				return null;
 			}
 			

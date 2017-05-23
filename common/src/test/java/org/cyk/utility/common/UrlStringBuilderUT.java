@@ -3,7 +3,6 @@ package org.cyk.utility.common;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cyk.utility.common.builder.NameValueStringBuilder;
 import org.cyk.utility.common.builder.UrlStringBuilder;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -14,7 +13,6 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	static {
-		NameValueStringBuilder.Listener.COLLECTION.add(new NameValueStringBuilder.Listener.Adapter.Default());
 		UrlStringBuilder.PathStringBuilder.PATH_NOT_FOUND_IDENTIFIER = "pathnotfound";
 		UrlStringBuilder.PathStringBuilder.Listener.COLLECTION.add(new UrlStringBuilder.PathStringBuilder.Listener.Adapter.Default(){
 			private static final long serialVersionUID = 7112717654641763443L;

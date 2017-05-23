@@ -101,7 +101,20 @@ public class CommonUtils implements Serializable  {
 	public <T> T inject(Class<T> aClass){
 		if(aClass==null)
 			return null;
-		return CDI.current().select(aClass).get();
+		T instance = null;
+		try {
+			instance = CDI.current().select(aClass).get();
+		} catch (Exception e) {
+			if(e.getMessage().startsWith("Singleton is not set. Is your Thread.currentThread().getContextClassLoader() set correctly?"))
+				try {
+					instance = aClass.newInstance();
+				} catch (Exception exception) {
+					throw new RuntimeException(exception);
+				}
+			else
+				throw e;
+		}
+		return instance;
 	}
 	
 	public Class<?> classFormName(String name){

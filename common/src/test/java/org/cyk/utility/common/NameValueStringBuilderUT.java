@@ -1,6 +1,7 @@
 package org.cyk.utility.common;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -79,6 +80,10 @@ public class NameValueStringBuilderUT extends AbstractUnitTest {
 		assertEquals("p1=a&p2=b&p3=2_f_0&p4=2_a_0&encoded=p3&encoded=p4",new NameValueCollectionStringBuilder()
 			.add(new NameValueStringBuilder("p1","a"),new NameValueStringBuilder("p2","b"),new NameValueStringBuilder("p3").add(new ClassA(15l)).setEncoded(Boolean.TRUE))
 			.add(new NameValueStringBuilder("p4").add(new ClassA(10l)).setEncoded(Boolean.TRUE))
+			.build());
+		
+		assertEquals("p1=a&p2=b&p3=2_f_0&p4=2_a_0&encoded=p3&encoded=p4",new NameValueCollectionStringBuilder()
+			.addNamesValues("p1","a","p2","b","p3",Arrays.asList(new ClassA(15l)),"p4",Arrays.asList(new ClassA(10l)))		
 			.build());
 	}
 	

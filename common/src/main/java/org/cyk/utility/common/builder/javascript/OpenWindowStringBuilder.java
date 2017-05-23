@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.builder.NameValueCollectionStringBuilder;
+import org.cyk.utility.common.builder.TextStringBuilder;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,20 +29,20 @@ public class OpenWindowStringBuilder extends AbstractJavascriptStringBuilder imp
 	}
 	
 	@Override
-	public String build() {
+	public String buildWhenBlank() {
 		NameValueCollectionStringBuilder nameValueCollectionStringBuilder = new NameValueCollectionStringBuilder();
-		nameValueCollectionStringBuilder.setSeparator(Constant.CHARACTER_COMA.toString()).addNamesValues("toolbar",getValue(Boolean.class, showToolBar)
+		nameValueCollectionStringBuilder.setSeparator(Constant.CHARACTER_COMA.toString()).addNamesValues("toolbar",inject(TextStringBuilder.class).setResponse(showToolBar).build()
 				,"top",topIndex,"left",leftIndex,"width",width,"height",height);
-		return String.format(FORMAT, url,name,nameValueCollectionStringBuilder.build(),getValue(Boolean.class, replaced));
+		return String.format(FORMAT, url,name,nameValueCollectionStringBuilder.build(),inject(TextStringBuilder.class).setResponse(replaced).build());
 	}
 	
-	private <T> Object getValue(Class<T> aClass,T value){
+	/*private <T> Object getValue(Class<T> aClass,T value){
 		if(Boolean.class.equals(aClass))
 			return Boolean.TRUE.equals(value) ? "yes" : "no";
 		if(Number.class.isAssignableFrom(aClass))
 			return value;
 		return Constant.EMPTY_STRING;
-	}
+	}*/
 	
 	/**/
 	

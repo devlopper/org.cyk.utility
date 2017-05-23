@@ -6,12 +6,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cyk.utility.common.AbstractBuilder;
-import org.cyk.utility.common.builder.UrlStringBuilder.PathStringBuilder;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.common.AbstractBuilder;
+import org.cyk.utility.common.ListenerUtils;
+import org.cyk.utility.common.builder.UrlStringBuilder.PathStringBuilder;
 
 @Getter @Setter @Accessors(chain=true)
 public abstract class AbstractStringBuilder extends AbstractBuilder<String> implements Serializable {
@@ -19,6 +21,24 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 	private static final long serialVersionUID = 1L;
 
 	protected String identifier;
+	
+	@Override
+	public String build() {
+		if(StringUtils.isBlank(instance))
+			return buildWhenBlank();
+		return instance;
+	}
+	
+	protected String getIdentifierMapping(){
+		return listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+			@Override
+			public String execute(Listener listener) {
+				return listener.getIdentifierMapping(identifier);
+			}
+		});
+	}
+	
+	protected abstract String buildWhenBlank();
 	
 	protected Map<String,String> getTokenReplacementMap(){
 		Map<String,String> tokenReplacementMap=null;

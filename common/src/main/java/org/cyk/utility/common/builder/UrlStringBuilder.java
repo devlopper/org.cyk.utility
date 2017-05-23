@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -15,7 +16,7 @@ import org.cyk.utility.common.AbstractBuilder;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.ListenerUtils;
 
-@Getter @Setter @Accessors(chain=true)
+@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 public class UrlStringBuilder extends AbstractStringBuilder implements Serializable {
 	private static final long serialVersionUID = 4504478526075696024L;
 
@@ -32,7 +33,8 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 	private PathStringBuilder pathStringBuilder;
 	private QueryStringBuilder queryStringBuilder;
 	private Boolean relative,pretty;
-	
+	private Object request;
+		
 	public PathStringBuilder getPathStringBuilder(){
 		if(pathStringBuilder==null)
 			pathStringBuilder = new PathStringBuilder().setUrlStringBuilder(this);
@@ -45,11 +47,53 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 		return queryStringBuilder;
 	}
 	
+	public UrlStringBuilder addFiles(final Collection<?> files){
+		getPathStringBuilder().addFiles(files);
+		getQueryStringBuilder().getNameValueCollectionStringBuilder().addFiles(files);
+		return this;
+	}
+	
 	@Override
-	public String build() {
-		//buildContext();
-		//getPathStringBuilder().setAddSeparatorAtBeginning(getRelative());
-		String pathString = getPathStringBuilder().build();
+	public String buildWhenBlank() {
+		final Object request = listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
+			@Override
+			public Object execute(Listener listener) {
+				return listener.getRequest();
+			}
+		});
+		if(request!=null){
+			scheme = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+				@Override
+				public String execute(Listener listener) {
+					return listener.getScheme(request);
+				}
+				public String getNullValue() {
+					return scheme;
+				}
+			});
+			
+			host = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+				@Override
+				public String execute(Listener listener) {
+					return listener.getHost(request);
+				}
+				public String getNullValue() {
+					return host;
+				}
+			});
+			
+			port = listenerUtils.getInteger(Listener.COLLECTION, new ListenerUtils.IntegerMethod<Listener>() {
+				@Override
+				public Integer execute(Listener listener) {
+					return listener.getPort(request);
+				}
+				public Integer getNullValue() {
+					return port;
+				}
+			});
+		}
+		
+		String pathString = getPathStringBuilder().setRequest(request).build();
 		String queryString = getQueryStringBuilder().build();
 		StringBuilder stringBuilder = new StringBuilder(String.format(PATH_STRING_FORMAT,StringUtils.defaultIfBlank(pathString, Constant.EMPTY_STRING)
 				,StringUtils.isBlank(queryString) ? Constant.EMPTY_STRING : Constant.CHARACTER_QUESTION_MARK,StringUtils.defaultIfBlank(queryString, Constant.EMPTY_STRING)));
@@ -69,8 +113,34 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 		
 		Collection<Listener> COLLECTION = new ArrayList<>();
 		
+		Object getRequest();
+		
+		String getScheme(Object request);
+		String getHost(Object request);
+		Integer getPort(Object request);
+		
 		public static class Adapter extends AbstractBuilder.Listener.Adapter.Default<String> implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Object getRequest() {
+				return null;
+			}
+			
+			@Override
+			public String getScheme(Object request) {
+				return null;
+			}
+			
+			@Override
+			public String getHost(Object request) {
+				return null;
+			}
+			
+			@Override
+			public Integer getPort(Object request) {
+				return null;
+			}
 			
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
@@ -94,60 +164,82 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 		private List<String> tokens;
 		private Boolean addSeparatorAtBeginning=Boolean.TRUE;
 		private String context=CONTEXT;
+		private Object request;
+		
+		public PathStringBuilder addFiles(Collection<?> files){
+			setIdentifier(listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+				@Override
+				public String execute(Listener listener) {
+					return listener.getConsultFilesIdentifier();
+				}
+				public String getNullValue() {
+					return identifier;
+				}
+			}));
+			return this;
+		}
 		
 		@Override
-		public String build() {
+		public String buildWhenBlank() {
+			context = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+				@Override
+				public String execute(Listener listener) {
+					return listener.getContext(request);
+				}
+				public String getNullValue() {
+					return context;
+				}
+			});
+			
 			addToken(context,0);
 			StringBuilder stringBuilder = new StringBuilder();
-			if(StringUtils.isBlank(instance)){
-				String separator = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+			
+			String separator = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+				@Override
+				public String execute(Listener listener) {
+					return listener.getTokenSeparator();
+				}
+				@Override
+				public String getNullValue() {
+					return TOKEN_SEPARATOR;
+				}
+			});
+			final String identifier = getIdentifier();
+			if(StringUtils.isBlank(identifier)){
+				stringBuilder.append(StringUtils.join(getTokens(),separator));	
+			}else{
+				String fromIdentifier = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
 					@Override
 					public String execute(Listener listener) {
-						return listener.getTokenSeparator();
+						return listener.getIdentifierMapping(identifier);
 					}
-					@Override
-					public String getNullValue() {
-						return TOKEN_SEPARATOR;
-					}
-				});
-				final String identifier = getIdentifier();
-				if(StringUtils.isBlank(identifier)){
-					stringBuilder.append(StringUtils.join(getTokens(),separator));	
-				}else{
-					String fromIdentifier = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+				});	
+				
+				if(StringUtils.isBlank(fromIdentifier)){
+					logWarning("path with identifier <<{}>> not found", identifier);
+					fromIdentifier = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
 						@Override
 						public String execute(Listener listener) {
-							return listener.getIdentifierMapping(identifier);
+							return listener.getIdentifierMapping(PATH_NOT_FOUND_IDENTIFIER);
 						}
-					});	
-					
-					if(StringUtils.isBlank(fromIdentifier)){
-						logWarning("path with identifier <<{}>> not found", identifier);
-						fromIdentifier = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
-							@Override
-							public String execute(Listener listener) {
-								return listener.getIdentifierMapping(PATH_NOT_FOUND_IDENTIFIER);
-							}
-							
-							@Override
-							public String getNullValue() {
-								return PATH_NOT_FOUND_IDENTIFIER;
-							}
-						});
-				
-					}
-					
-					stringBuilder.append(StringUtils.join(getTokens(),separator)+StringUtils.defaultIfBlank(fromIdentifier, Constant.EMPTY_STRING));
+						
+						@Override
+						public String getNullValue() {
+							return PATH_NOT_FOUND_IDENTIFIER;
+						}
+					});
+			
 				}
 				
-				if(Boolean.TRUE.equals(getAddSeparatorAtBeginning()) && !StringUtils.startsWith(stringBuilder, separator))
-					stringBuilder.insert(0,separator);
-				
-				for(Entry<String, String> entry : getTokenReplacementMap().entrySet())
-					stringBuilder = new StringBuilder(StringUtils.replace(stringBuilder.toString(), entry.getKey(), entry.getValue()));
-			}else{
-				stringBuilder.append(instance);
+				stringBuilder.append(StringUtils.join(getTokens(),separator)+StringUtils.defaultIfBlank(fromIdentifier, Constant.EMPTY_STRING));
 			}
+			
+			if(Boolean.TRUE.equals(getAddSeparatorAtBeginning()) && !StringUtils.startsWith(stringBuilder, separator))
+				stringBuilder.insert(0,separator);
+			
+			for(Entry<String, String> entry : getTokenReplacementMap().entrySet())
+				stringBuilder = new StringBuilder(StringUtils.replace(stringBuilder.toString(), entry.getKey(), entry.getValue()));
+			
 			
 			return stringBuilder.toString();
 		}
@@ -230,6 +322,10 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 			String getTokenSeparator();
 			void listenBeforeAdd(PathStringBuilder builder,Object token);
 			void listenAfterAdded(PathStringBuilder builder,Object token);
+			
+			String getContext(Object request);
+			String getConsultFilesIdentifier();
+			
 			/**/
 			
 			public static class Adapter extends AbstractStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
@@ -255,7 +351,17 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 				public Boolean isToken(Object token) {
 					return null;
 				}
-								
+				
+				@Override
+				public String getContext(Object request) {
+					return null;
+				}
+				
+				@Override
+				public String getConsultFilesIdentifier() {
+					return null;
+				}
+				
 				/**/
 				
 				public static class Default extends Listener.Adapter implements Serializable {
@@ -271,6 +377,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 	
 	/**/
 	
+	
 	@Getter @Setter @Accessors(chain=true)
 	public static class QueryStringBuilder extends AbstractStringBuilder implements Serializable {
 		private static final long serialVersionUID = -872728112292086623L;
@@ -283,8 +390,13 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 			return this;
 		}
 		
+		public QueryStringBuilder addIdentifiableFiles(final Collection<?> files){
+			getNameValueCollectionStringBuilder().addFiles(files);
+			return this;
+		}
+		
 		@Override
-		public String build() {
+		public String buildWhenBlank() {
 			nameValueCollectionStringBuilder.setSeparator(Constant.CHARACTER_AMPERSTAMP.toString());
 			return nameValueCollectionStringBuilder.build();
 		}

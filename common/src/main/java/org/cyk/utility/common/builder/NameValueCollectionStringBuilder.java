@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.FileExtension;
 import org.cyk.utility.common.ListenerUtils;
 
 @Getter @Setter @NoArgsConstructor @Accessors(chain=true)
@@ -22,6 +23,7 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 	
 	private Collection<NameValueStringBuilder> collection = new ArrayList<>();
 	private String separator;
+	private FileExtension fileExtension;
 	
 	public NameValueCollectionStringBuilder add(NameValueStringBuilder...namesValues){
 		for(NameValueStringBuilder nameValue : namesValues)
@@ -32,54 +34,97 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 	public NameValueCollectionStringBuilder addNameValue(Object name,Object value){
 		return add(new NameValueStringBuilder(name, value));
 	}
-	
+		
 	public NameValueCollectionStringBuilder addNamesValues(Object...values){
 		for(int i = 0 ; i < values.length ; i = i+2){
 			addNameValue(values[i], values[i+1]);
 		}
 		return this;
 	}
-		
-	@Override
-	public String build() {
-		StringBuilder stringBuilder = new StringBuilder();
-		if(StringUtils.isBlank(instance)){
-			Collection<Object> encodedParameterNames = new ArrayList<>();
-			final List<String> values = new ArrayList<>();
-			for(NameValueStringBuilder nameValue : getCollection()){
-				String r = nameValue.build();
-				if(StringUtils.isNotBlank(r)){
-					values.add(r);
-					if(Boolean.TRUE.equals(nameValue.getEncoded()))
-						encodedParameterNames.add(nameValue.getResultName());	
-				}
+	
+	public NameValueCollectionStringBuilder addFiles(final Collection<?> files){
+		FileExtension fileExtension = listenerUtils.getValue(FileExtension.class, Listener.COLLECTION, new ListenerUtils.ResultMethod<Listener, FileExtension>(){
+			@Override
+			public FileExtension execute(Listener listener) {
+				return listener.getFileExtension(files);
 			}
-			if(!encodedParameterNames.isEmpty()){
-				NameValueStringBuilder encodedParameterNameStringBuilder = new NameValueStringBuilder(listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+
+			@Override
+			public FileExtension getNullValue() {
+				return NameValueCollectionStringBuilder.this.fileExtension;
+			}
+		});
+		
+		if(fileExtension==null)
+			fileExtension = FileExtension.PDF;
+		
+		return addNamesValues(listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+			@Override
+			public String execute(Listener listener) {
+				return listener.getFileExtensionName();
+			}
+		}),fileExtension
+				,listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
 					@Override
 					public String execute(Listener listener) {
-						return listener.getEncodedParameterName();
+						return listener.getIdentifiableName();
 					}
-					public String getNullValue() {
-						return ENCODED_PARAMETER_NAME;
+				}),files);
+	}
+	
+	public NameValueCollectionStringBuilder addDialog(){
+		return addNamesValues(listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+					@Override
+					public String execute(Listener listener) {
+						return listener.getWindowsModeName();
 					}
-				}));
-				values.add(encodedParameterNameStringBuilder.addCollection(encodedParameterNames).build());
+				}),listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+					@Override
+					public String execute(Listener listener) {
+						return listener.getWindowsModeDialogName();
+					}
+				})
+				);
+	} 
+	
+	@Override
+	public String buildWhenBlank() {
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		Collection<Object> encodedParameterNames = new ArrayList<>();
+		final List<String> values = new ArrayList<>();
+		for(NameValueStringBuilder nameValue : getCollection()){
+			String r = nameValue.build();
+			if(StringUtils.isNotBlank(r)){
+				values.add(r);
+				if(Boolean.TRUE.equals(nameValue.getEncoded()))
+					encodedParameterNames.add(nameValue.getResultName());	
 			}
-			
-			stringBuilder.append(StringUtils.join(values,listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+		}
+		if(!encodedParameterNames.isEmpty()){
+			NameValueStringBuilder encodedParameterNameStringBuilder = new NameValueStringBuilder(listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
 				@Override
 				public String execute(Listener listener) {
-					return listener.getSeparator();
+					return listener.getEncodedParameterName();
 				}
-				@Override
 				public String getNullValue() {
-					return StringUtils.defaultIfBlank(separator, Constant.CHARACTER_SPACE.toString());
+					return ENCODED_PARAMETER_NAME;
 				}
-			})));
-		}else{
-			stringBuilder.append(instance);
+			}));
+			values.add(encodedParameterNameStringBuilder.addCollection(encodedParameterNames).build());
 		}
+		
+		stringBuilder.append(StringUtils.join(values,listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+			@Override
+			public String execute(Listener listener) {
+				return listener.getSeparator();
+			}
+			@Override
+			public String getNullValue() {
+				return StringUtils.defaultIfBlank(separator, Constant.CHARACTER_SPACE.toString());
+			}
+		})));
+		
 		return stringBuilder.toString();
 	}
 		
@@ -92,6 +137,11 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 		Collection<Listener> COLLECTION = new ArrayList<>();
 		
 		String getEncodedParameterName();
+		String getFileExtensionName();
+		FileExtension getFileExtension(Collection<?> files);
+		String getIdentifiableName();
+		String getWindowsModeName();
+		String getWindowsModeDialogName();
 		
 		public static class Adapter extends AbstractStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
@@ -101,6 +151,30 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 				return null;
 			}
 			
+			@Override
+			public String getFileExtensionName() {
+				return null;
+			}
+			
+			@Override
+			public FileExtension getFileExtension(Collection<?> files) {
+				return null;
+			}
+			
+			@Override
+			public String getIdentifiableName() {
+				return null;
+			}
+			
+			@Override
+			public String getWindowsModeName() {
+				return null;
+			}
+			
+			@Override
+			public String getWindowsModeDialogName() {
+				return null;
+			}
 			/**/
 			
 			public static class Default extends Listener.Adapter implements Serializable {
