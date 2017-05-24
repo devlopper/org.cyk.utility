@@ -41,8 +41,11 @@ public class NameValueStringBuilder extends AbstractStringBuilder implements Ser
 		if(value instanceof Collection){
 			addCollection((Collection<?>) value);
 			setEncoded(Boolean.TRUE);
-		}else
+		}else{
+			if(value instanceof AbstractStringBuilder)
+				value = ((AbstractStringBuilder)value).build();
 			add(value);
+		}
 	}
 	
 	public NameValueStringBuilder(Object name) {

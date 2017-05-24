@@ -33,6 +33,11 @@ public class TextStringBuilder extends AbstractStringBuilder implements Serializ
 		identifier = Boolean.TRUE.equals(response) ? YES : NO;
 		return this;
 	}
+	
+	@Override
+	protected Collection<Listener> getListeners() {
+		return Listener.COLLECTION;
+	}
 		
 	/**/
 	

@@ -24,8 +24,9 @@ public class OpenWindowStringBuilder extends AbstractJavascriptStringBuilder imp
 	private UrlStringBuilder urlStringBuilder;
 	private String name;
 	private Integer leftIndex,topIndex,width,height;
-	private Boolean replaced,showMenuBar=Boolean.TRUE,showStatusBar=Boolean.TRUE,showTitleBar=Boolean.TRUE,showToolBar=Boolean.TRUE;
-	
+	private Boolean replaced,showMenuBar=Boolean.FALSE,showStatusBar=Boolean.FALSE,showTitleBar=Boolean.FALSE,showToolBar=Boolean.FALSE,showScrollbars=Boolean.FALSE
+			,isResiable=Boolean.FALSE,showLocation=Boolean.FALSE;
+
 	public OpenWindowStringBuilder(String name,String url){
 		this.name = name;
 		getUrlStringBuilder().setInstance(url);
@@ -61,8 +62,10 @@ public class OpenWindowStringBuilder extends AbstractJavascriptStringBuilder imp
 			width = 900;
 		if(height==null)
 			height = 500;
-		nameValueCollectionStringBuilder.setSeparator(Constant.CHARACTER_COMA.toString()).addNamesValues("toolbar",inject(TextStringBuilder.class).setResponse(showToolBar).build()
-				,"top",topIndex,"left",leftIndex,"width",width,"height",height);
+		nameValueCollectionStringBuilder.setSeparator(Constant.CHARACTER_COMA.toString()).addNamesValues(TOOLBAR,inject(TextStringBuilder.class).setResponse(showToolBar)
+				,SCROLLBARS,inject(TextStringBuilder.class).setResponse(showScrollbars),RESIZABLE,inject(TextStringBuilder.class).setResponse(isResiable)
+				,STATUS,inject(TextStringBuilder.class).setResponse(showStatusBar),LOCATION,inject(TextStringBuilder.class).setResponse(showLocation)
+				,MENUBAR,inject(TextStringBuilder.class).setResponse(showMenuBar),TOP,topIndex,LEFT,leftIndex,WIDTH,width,HEIGHT,height);
 		
 		//TODO should depends on windows _top _blank and so on
 		getUrlStringBuilder().getQueryStringBuilder().getNameValueCollectionStringBuilder().addDialog();
@@ -91,5 +94,18 @@ public class OpenWindowStringBuilder extends AbstractJavascriptStringBuilder imp
 		}
 		
 	}
+	
+	private static final String TOOLBAR = "toolbar";
+	private static final String SCROLLBARS = "scrollbars";
+	private static final String RESIZABLE = "resizable";
+	private static final String STATUS = "status";
+	private static final String LOCATION = "location";
+	private static final String MENUBAR = "menubar";
+	
+	private static final String TOP = "top";
+	private static final String LEFT = "left";
+	private static final String WIDTH = "width";
+	private static final String HEIGHT = "height";
+	
 	
 }

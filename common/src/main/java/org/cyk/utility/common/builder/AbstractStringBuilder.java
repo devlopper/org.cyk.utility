@@ -1,7 +1,6 @@
 package org.cyk.utility.common.builder;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,8 +28,9 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 		return instance;
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected String getIdentifierMapping(){
-		return listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+		return listenerUtils.getString(getListeners(), new ListenerUtils.StringMethod<Listener>() {
 			@Override
 			public String execute(Listener listener) {
 				return listener.getIdentifierMapping(identifier);
@@ -51,12 +51,17 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 			tokenReplacementMap = new HashMap<>();
 		return tokenReplacementMap;
 	}
+	
+	@SuppressWarnings("rawtypes")
+	protected Collection getListeners(){
+		return null;
+	}
 		
 	/**/
 	
 	public static interface Listener extends AbstractBuilder.Listener<String> {
 		
-		Collection<Listener> COLLECTION = new ArrayList<>();
+		//Collection<Listener> COLLECTION = new ArrayList<>();
 		
 		String getIdentifierMapping(String identifier);
 		String getDefaultIdentifierMapping(String identifier);

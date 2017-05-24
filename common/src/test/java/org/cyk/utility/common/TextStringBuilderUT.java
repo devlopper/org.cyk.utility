@@ -8,6 +8,19 @@ public class TextStringBuilderUT extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
  
+	static {
+		TextStringBuilder.Listener.COLLECTION.add(new TextStringBuilder.Listener.Adapter.Default(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getIdentifierMapping(String identifier) {
+				if("good.morning".equals(identifier))
+					return "bonjour";
+				return super.getIdentifierMapping(identifier);
+			}
+		});
+	}
+	
 	@Override
 	protected void _execute_() {
 		super._execute_();
@@ -21,4 +34,9 @@ public class TextStringBuilderUT extends AbstractUnitTest {
 		assertEquals("no", inject(TextStringBuilder.class).setResponse(null).build());
 	}
 	
+	@Test
+	public void identifier(){
+		assertEquals("bonjour", inject(TextStringBuilder.class).setIdentifier("good.morning").build());
+		
+	}
 }
