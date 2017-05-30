@@ -1,33 +1,36 @@
 package org.cyk.utility.common.builder;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.common.Constant;
 
 @Getter @Setter @NoArgsConstructor @Accessors(chain=true)
-public class TextStringBuilder extends AbstractStringBuilder implements Serializable {
+public class DateStringBuilder extends AbstractStringBuilder implements Serializable {
 	private static final long serialVersionUID = -872728112292086623L;
-			
+	
+	private Date date;
+	private Constant.Date.Part part = Constant.Date.Part.DATE_AND_TIME;
+	private Constant.Date.Length length = Constant.Date.Length.SHORT;
+	
 	@Override
 	protected String buildWhenBlank() {
-		String result = getIdentifierMapping();
-		if(StringUtils.isBlank(result))
-			if(YES.equals(identifier))
-				result = "yes";
-			else if(NO.equals(identifier))
-				result = "no";
-		return result;
+		Date date = getDate();
+		if(date==null)
+			return Constant.EMPTY_STRING;
+		return new SimpleDateFormat(Constant.Date.getPattern(getLocale(),getPart(), getLength()).getValue(),getLocale()).format(date);
 	}
 	
-	public TextStringBuilder setResponse(Boolean response){
-		identifier = Boolean.TRUE.equals(response) ? YES : NO;
+	public DateStringBuilder setDate(Integer dayOfMonth,Integer monthOfYear,Integer year,Integer hourOfDay,Integer minuteOfHour,Integer millisOfSecond){
+		setDate(new DateBuilder().setDate(dayOfMonth, monthOfYear, year, hourOfDay, minuteOfHour, millisOfSecond).build());
 		return this;
 	}
 	
@@ -58,8 +61,4 @@ public class TextStringBuilder extends AbstractStringBuilder implements Serializ
 		
 	}
 	
-	/**/
-	
-	public static final String YES = "yes";
-	public static final String NO = "no";
 }

@@ -3,6 +3,7 @@ package org.cyk.utility.common.builder;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import lombok.Getter;
@@ -19,7 +20,10 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 
 	private static final long serialVersionUID = 1L;
 
-	protected String identifier;
+	public static Locale LOCALE = Locale.FRENCH;
+	
+	protected Locale locale = LOCALE;
+	protected String identifier,separator;
 	
 	@Override
 	public String build() {
@@ -34,6 +38,21 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 			@Override
 			public String execute(Listener listener) {
 				return listener.getIdentifierMapping(identifier);
+			}
+		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected String buildSeparator(){
+		return listenerUtils.getString(getListeners(), new ListenerUtils.StringMethod<Listener>() {
+			@Override
+			public String execute(Listener listener) {
+				return listener.getSeparator();
+			}
+			
+			@Override
+			public String getNullValue() {
+				return separator;
 			}
 		});
 	}

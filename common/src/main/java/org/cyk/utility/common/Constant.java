@@ -105,8 +105,8 @@ public interface Constant {
 		
 		private static Map<Locale, Collection<Pattern>> PATTERN_MAP = new HashMap<>();
 		static{
-			putPatterns(Locale.FRENCH, "dd/MM/yyyy","EEEE , dd MMMM yyyy", "HH:mm");
-			putPatterns(Locale.ENGLISH, "dd/MM/yyyy","EEEE , dd MMMM yyyy", "HH:mm");
+			putPatterns(Locale.FRENCH, "dd/MM/yyyy","EEEE , dd MMMM yyyy", "HH:mm","yyyy");
+			putPatterns(Locale.ENGLISH, "dd/MM/yyyy","EEEE , dd MMMM yyyy", "HH:mm","yyyy");
 		}
 		
 		public static Pattern getPattern(Locale locale,Part part,Length length){
@@ -121,7 +121,7 @@ public interface Constant {
 			return Pattern.DEFAULT;
 		}
 		
-		private static void putPatterns(Locale locale,String shortDateOnlyPattern,String longDateOnlyPattern,String shortTimeOnlyPattern){
+		private static void putPatterns(Locale locale,String shortDateOnlyPattern,String longDateOnlyPattern,String shortTimeOnlyPattern,String dateYearOnlyPattern){
 			String longTimeOnlyPattern = shortTimeOnlyPattern;
 			Collection<Pattern> patterns = new ArrayList<>();
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_ONLY, Constant.Date.Length.SHORT, shortDateOnlyPattern));
@@ -130,6 +130,9 @@ public interface Constant {
 			patterns.add(new Pattern(locale, Constant.Date.Part.TIME_ONLY, Constant.Date.Length.LONG, longTimeOnlyPattern));
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME, Constant.Date.Length.SHORT, shortDateOnlyPattern+Constant.CHARACTER_SPACE+shortTimeOnlyPattern));
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME, Constant.Date.Length.LONG, longDateOnlyPattern+Constant.CHARACTER_SPACE+longTimeOnlyPattern));
+			
+			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_YEAR_ONLY, Constant.Date.Length.SHORT, dateYearOnlyPattern));
+			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_YEAR_ONLY, Constant.Date.Length.LONG, dateYearOnlyPattern));
 			PATTERN_MAP.put(locale, patterns);
 		}
 		
@@ -153,6 +156,7 @@ public interface Constant {
 			DATE_ONLY
 			,TIME_ONLY
 			,DATE_AND_TIME
+			,DATE_YEAR_ONLY
 			;			
 			
 		}

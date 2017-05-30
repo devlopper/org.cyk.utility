@@ -29,6 +29,14 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		});
 	}
 	
+	public <T> T getIfNotNullElseDefault(Class<T> valueClass,T value,T defaultValue){
+		return value == null ? defaultValue : value;
+	}
+	
+	public <T> T getIfNotNullElseDefault(T value,T defaultValue){
+		return value == null ? defaultValue : value;
+	}
+	
 	/**/
 	
 	public static interface Listener extends AbstractHelper.Listener {
