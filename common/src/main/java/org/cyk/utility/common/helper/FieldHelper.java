@@ -1,17 +1,25 @@
 package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Singleton;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.common.ClassRepository;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.annotation.FieldOverride;
+import org.cyk.utility.common.annotation.FieldOverrides;
 
 @Singleton
 public class FieldHelper extends AbstractHelper implements Serializable {
@@ -81,5 +89,201 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	/**/
+	
+	public Field getByValue(Object source,Object value){
+		for(Field field : get(source.getClass()))
+			try {
+				if(value==FieldUtils.readField(field, source, true))
+					return field;
+			} catch (Exception e) {
+				logTrace("Field named {} cannot be read from object {}",field.getName(),source);
+				logThrowable(e);
+				return null;
+			}
+		return null;
+	}
+	
+	private Collection<Field> __getAllFields__(Collection<Field> fields,Class<?> type) {
+		//super class fields first
+		if (type.getSuperclass() != null) {
+			fields = __getAllFields__(fields, type.getSuperclass());
+		}
+		//declared class fields second
+		for (Field field : type.getDeclaredFields()) {
+			fields.add(field);
+		}
+		
+		return fields;
+	}
+	
+	public Collection<Field> get(Class<?> type) {
+		Collection<Field> fields = new ArrayList<>();
+		if(Boolean.TRUE.equals(ClassRepository.ENABLED)){
+			fields.addAll(ClassRepository.getInstance().get(type).getFields());
+		}else{
+			__getAllFields__(fields, type);
+		}
+		return fields;
+	}
+	
+	public Field get(Class<?> type,String name) {
+		for(Field field : get(type))
+			if(field.getName().equals(name))
+				return field;
+		return null;
+	}
+	
+	public Collection<Field> get(Class<?> type,Collection<Class<? extends Annotation>> annotationClasses) {
+		Collection<Field> fields = new ArrayList<>();
+		for(Field field : get(type))
+			if(annotationClasses==null || annotationClasses.isEmpty())
+				fields.add(field);
+			else
+				for(Class<? extends Annotation> annotationClass : annotationClasses)
+					if(field.isAnnotationPresent(annotationClass)){
+						fields.add(field);
+						break;
+					}
+		return fields;
+	}
+	
+	public Collection<Field> get(Class<?> type,Class<? extends Annotation> annotationClass) {
+		Collection<Class<? extends Annotation>> collection = new ArrayList<>();
+		collection.add(annotationClass);
+		return get(type,collection);
+	}
+	
+	public Object readField(Object object,Field field,Boolean recursive,Boolean createIfNull,Boolean autoSet,Collection<Class<? extends Annotation>> annotationClasses){
+		Object r = __readField__(object,field,recursive,annotationClasses);
+		try {
+			if(r==null && Boolean.TRUE.equals(createIfNull)){
+				if(field.getType().equals(Collection.class) || field.getType().equals(List.class))
+					r = new ArrayList<>();
+				else if(field.getType().equals(Set.class))
+					r = new LinkedHashSet<>();
+				else
+					r = field.getType().newInstance();
+				if(Boolean.TRUE.equals(autoSet))
+					writeField(field, object, r);
+			}
+		} catch (Exception e) {
+			logThrowable(e);
+		}	
+		return r;
+	}
+	
+	public Object readField(Object object,Field field,Boolean recursive,Boolean createIfNull,Collection<Class<? extends Annotation>> annotationClasses){
+		return readField(object, field,recursive, createIfNull, Boolean.FALSE,annotationClasses);
+	}
+	
+	public Object readField(Object object,Field field,Boolean createIfNull,Boolean autoSet){
+		return readField(object, field, Boolean.FALSE, createIfNull,autoSet,null);
+	}
+	
+	public Object readField(Object object,Field field,Boolean createIfNull){
+		return readField(object, field, Boolean.FALSE, createIfNull,null);
+	}
+	
+	private Object __readField__(Object object,Field field,Boolean recursive,Collection<Class<? extends Annotation>> annotationClasses){
+		Object value = null;
+		
+		if(object==null)
+			;
+		else
+			try {
+				if(Boolean.TRUE.equals(recursive)){
+					Collection<Field> fields = get(object.getClass(),annotationClasses);
+					if(fields.contains(field))
+						value = FieldUtils.readField(field, object,Boolean.TRUE);
+					else{
+						for(Field f : fields)
+							//if(!f.getType().isPrimitive() && !f.getType().getName().startsWith("java.")){
+							if(f.getType().getName().startsWith("org.cyk.")){
+								value = __readField__(FieldUtils.readField(f, object,Boolean.TRUE),field,recursive,annotationClasses);
+								if(value!=null)
+									break;
+							}
+						/*if(value==null){
+							System.out.println(field.getName()+" not in "+object.getClass().getSimpleName());
+						}else
+							System.out.println(field.getName()+"  in "+object.getClass().getSimpleName());*/
+					}
+				}else{
+					value = FieldUtils.readField(field, object, Boolean.TRUE);
+				}
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+				return null;
+			}	
+		
+		return value;
+	}
+	
+	public void writeField(Field field, Object target, Object value){
+		try {
+			FieldUtils.writeField(field, target, value,Boolean.TRUE);
+		} catch (IllegalAccessException e) {
+			logThrowable(e);
+		}
+	}
+
+	/**/
+	
+	public FieldOverride getOverride(Class<?> aClass, String fieldName) {
+		FieldOverride fieldOverride = null;
+		FieldOverrides fieldOverrides = aClass.getAnnotation(FieldOverrides.class);
+		if(fieldOverrides==null){
+			
+		}else{
+			for(FieldOverride index : fieldOverrides.value())
+				if( fieldName.equals(index.name()) ){
+					fieldOverride = index;
+					break;
+				}
+		}
+		
+		if(fieldOverride==null)
+			for(Annotation annotation : aClass.getAnnotations())
+				if(annotation instanceof FieldOverride && ((FieldOverride)annotation).name().equals(fieldName)){
+					fieldOverride = (FieldOverride) annotation;
+					break;
+				}
+
+		return fieldOverride;
+	}
+	
+	public Object getFieldValueContainer(Object object,Field field){
+		if(object==null)
+			return null;
+		logTrace("Class={} , Field={}",object.getClass(),field);
+		/*System.out.println("Declaring Class -> "+field.getDeclaringClass());
+		System.out.println("Object Class -> "+object.getClass());
+		System.out.println("Class -> "+field.getDeclaringClass().equals(object.getClass()));
+		System.out.println("Fields -> "+getAllFields(object.getClass()));
+		System.out.println("Field -> "+field);
+		System.out.println("Contains : "+ArrayUtils.contains(new ArrayList<>(getAllFields(object.getClass())).toArray(), field));
+		System.out.println("Object : "+object);
+		*/
+		if(/*field.getDeclaringClass().equals(object.getClass()) &&*/ ArrayUtils.contains(new ArrayList<>(get(object.getClass())).toArray(), field)){
+			return object;
+		}
+		for(Field f : object.getClass().getDeclaredFields()){
+			try {
+				Object value = FieldUtils.readField(f, object, Boolean.TRUE);
+				logTrace("Field={} , Value={}",f,value);
+				if(f.equals(field)){
+					logTrace("Field found in {}",object.getClass());
+					return object;
+				}
+				if(value!=null && !value.getClass().getName().startsWith("java."))
+					return getFieldValueContainer(value, field);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 }
