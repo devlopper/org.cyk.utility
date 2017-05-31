@@ -91,6 +91,16 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 		}
 	}
 	
+	public <T> void copy(T source,T destination,String...fieldNames){
+		copy(source, destination, Arrays.asList(fieldNames));
+	}
+	
+	public <T> void copy(T source,T destination,Collection<String> fieldNames){
+		for(String fieldName : fieldNames){
+			Object value = read(source, fieldName);
+			set(destination,value, fieldName);
+		}
+	}
 	/**/
 	
 	public Field getByValue(Object source,Object value){

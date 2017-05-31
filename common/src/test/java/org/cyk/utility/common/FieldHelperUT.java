@@ -1,5 +1,8 @@
 package org.cyk.utility.common;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -23,9 +26,29 @@ public class FieldHelperUT extends AbstractUnitTest {
 		assertEquals("SF1 value cannot be set", 5, MyClass.getSF1());
 	}
 	
-	/**/
+	@Test
+	public void copy(){
+		MyClass source = new MyClass();
+		source.setF1("the val");
+		assertEquals("the val", source.getF1());
+		
+		MyClass destination = new MyClass();
+		assertThat("f1 is not null",destination.getF1()==null);
+		
+		fieldHelper.copy(source, destination, "f1");
+		
+		assertEquals("the val", source.getF1());
+		assertEquals("the val", destination.getF1());
+		assertEquals(source.getF1(),destination.getF1());
+		
+		
+	}
 	
+	/**/
+	@Getter @Setter
 	public static class MyClass {
+		
+		private String f1;
 		
 		private static Integer SF1;
 		private static String SF2;
