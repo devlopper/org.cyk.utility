@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
+import org.cyk.utility.common.helper.StringHelper.Location;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -37,6 +38,12 @@ public class StringHelperUT extends AbstractUnitTest {
 		assertEquals("premier", StringHelper.getInstance().getOrdinalNumber(Locale.FRENCH, 1));
 		assertEquals("deuxième", StringHelper.getInstance().getOrdinalNumber(Locale.FRENCH, 2));
 		assertEquals("troisième", StringHelper.getInstance().getOrdinalNumber(Locale.FRENCH, 3));
+	}
+	
+	@Test
+	public void assertLocation(){
+		assertEquals(Boolean.TRUE, StringHelper.getInstance().isAtLocation("FIELD_F", "FIELD_",Location.START));
+		
 	}
 	
 	private void assertAppliedCaseType(String string,CaseType caseType,String expected){

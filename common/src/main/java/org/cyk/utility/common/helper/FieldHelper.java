@@ -20,6 +20,7 @@ import org.cyk.utility.common.ClassRepository;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.cyk.utility.common.annotation.FieldOverrides;
+import org.cyk.utility.common.helper.StringHelper.Location;
 
 @Singleton
 public class FieldHelper extends AbstractHelper implements Serializable {
@@ -116,32 +117,40 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 		return null;
 	}
 	
-	private Collection<Field> __getAllFields__(Collection<Field> fields,Class<?> type) {
+	private Collection<Field> __getAllFields__(Collection<Field> fields,Class<?> type,String token,Location location) {
 		//super class fields first
 		if (type.getSuperclass() != null) {
-			fields = __getAllFields__(fields, type.getSuperclass());
+			fields = __getAllFields__(fields, type.getSuperclass(),token,location);
 		}
 		//declared class fields second
 		for (Field field : type.getDeclaredFields()) {
-			fields.add(field);
+			if(StringHelper.getInstance().isAtLocation(field.getName(), token, location))
+				fields.add(field);
 		}
 		
 		return fields;
 	}
 	
-	public Collection<Field> get(Class<?> type) {
+	public Collection<Field> get(Class<?> type,String name,Location location) {
 		Collection<Field> fields = new ArrayList<>();
 		if(Boolean.TRUE.equals(ClassRepository.ENABLED)){
-			fields.addAll(ClassRepository.getInstance().get(type).getFields());
+			for(Field field : ClassRepository.getInstance().get(type).getFields())
+				if(StringHelper.getInstance().isAtLocation(field.getName(), name, location))
+					fields.add(field);
 		}else{
-			__getAllFields__(fields, type);
+			__getAllFields__(fields, type,name,location);
 		}
 		return fields;
 	}
 	
+	public Collection<Field> get(Class<?> type) {
+		return get(type,null,null);
+	}
+	
 	public Field get(Class<?> type,String name) {
+		StringHelper stringHelper = new StringHelper();
 		for(Field field : get(type))
-			if(field.getName().equals(name))
+			if(stringHelper.isAtLocation(field.getName(), name, Location.EXAT))
 				return field;
 		return null;
 	}

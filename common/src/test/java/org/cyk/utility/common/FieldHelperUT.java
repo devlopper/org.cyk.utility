@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.utility.common.helper.FieldHelper;
+import org.cyk.utility.common.helper.StringHelper.Location;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -18,6 +19,20 @@ public class FieldHelperUT extends AbstractUnitTest {
 	protected void _execute_() {
 		super._execute_();
 		
+	}
+	
+	@Test
+	public void get(){
+		assertEquals(4, fieldHelper.get(MyClass.class).size());
+		assertEquals(4, fieldHelper.get(MyClass.class, null, null).size());
+		assertEquals(4, fieldHelper.get(MyClass.class, "", null).size());
+		assertEquals(4, fieldHelper.get(MyClass.class, null, Location.START).size());
+		assertEquals(4, fieldHelper.get(MyClass.class, "", Location.START).size());
+		assertEquals(1, fieldHelper.get(MyClass.class, "f", Location.START).size());
+		assertEquals(3, fieldHelper.get(MyClass.class, "S", Location.START).size());
+		assertEquals(2, fieldHelper.get(MyClass.class, "1", Location.END).size());
+		assertEquals(1, fieldHelper.get(MyClass.class, "F2", Location.INSIDE).size());
+		assertEquals(0, fieldHelper.get(MyClass.class, "F", Location.EXAT).size());
 	}
 	
 	@Test

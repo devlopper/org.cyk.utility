@@ -17,6 +17,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	public static final String[] END_LINE = {"\r\n","\n"};
 	
 	public enum CaseType{NONE,FURL}
+	public enum Location{START,INSIDE,END,EXAT}
 	
 	private static final String RESOURCE_BUNDLE_NAME = "org.cyk.utility.common.i18n";
 	private static final String KEY_ORDINAL_NUMBER_FORMAT = "ordinal.number.%s";
@@ -55,6 +56,20 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	
 	public String concatenate(Object[] strings,String separator){
 		return StringUtils.join(strings, separator);
+	}
+	
+	public Boolean isAtLocation(String string,String value,Location location){
+		if(StringUtils.isEmpty(value))
+			return Boolean.TRUE;
+		if(location==null)
+			location = Location.EXAT;
+		switch(location){
+		case START : return StringUtils.startsWith(string, value);
+		case INSIDE : return StringUtils.contains(string, value);
+		case END : return StringUtils.endsWith(string, value);
+		case EXAT : return StringUtils.equals(string, value);
+		}
+		return Boolean.FALSE;
 	}
 	
 	/**/
