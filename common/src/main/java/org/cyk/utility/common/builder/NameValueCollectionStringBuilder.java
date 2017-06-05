@@ -20,6 +20,7 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 	private static final long serialVersionUID = -872728112292086623L;
 		
 	public static String ENCODED_PARAMETER_NAME = "encoded";
+	public static String IDENTIFIABLE_PARAMETER_NAME = "identifiable";
 	
 	private Collection<NameValueStringBuilder> collection = new ArrayList<>();
 	private String separator;
@@ -40,6 +41,14 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 			addNameValue(values[i], values[i+1]);
 		}
 		return this;
+	}
+	
+	public NameValueCollectionStringBuilder addIdentifiables(final Collection<?> identifiables){
+		return addNamesValues(getIdentifiableName(),identifiables);
+	}
+	
+	public NameValueCollectionStringBuilder addIdentifiable(final Object identifiable){
+		return addNamesValues(getIdentifiableName(),identifiable);
 	}
 	
 	public NameValueCollectionStringBuilder addFiles(final Collection<?> files){
@@ -127,7 +136,23 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 		
 		return stringBuilder.toString();
 	}
+	
+	/**/
 		
+	private String getIdentifiableName(){
+		return listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
+			@Override
+			public String execute(Listener listener) {
+				return listener.getIdentifiableName();
+			}
+			
+			@Override
+			public String getNullValue() {
+				return IDENTIFIABLE_PARAMETER_NAME;
+			}
+		});
+	}
+	
 	/**/
 	
 	/**/

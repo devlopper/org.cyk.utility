@@ -1,19 +1,19 @@
 package org.cyk.utility.common.builder;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.AbstractBuilder;
 import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.builder.UrlStringBuilder.PathStringBuilder;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public abstract class AbstractStringBuilder extends AbstractBuilder<String> implements Serializable {
@@ -24,6 +24,7 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 	
 	protected Locale locale = LOCALE;
 	protected String identifier,separator;
+	protected AbstractIdentifierBuilder identifierBuilder;
 	
 	@Override
 	public String build() {
@@ -70,11 +71,6 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 			tokenReplacementMap = new HashMap<>();
 		return tokenReplacementMap;
 	}
-	
-	@SuppressWarnings("rawtypes")
-	protected Collection getListeners(){
-		return null;
-	}
 		
 	/**/
 	
@@ -113,6 +109,54 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 			
+			}
+		}
+	}
+
+	/**/
+	
+	@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
+	public abstract static class AbstractIdentifierBuilder extends AbstractBuilder<String> implements Serializable {
+		private static final long serialVersionUID = -872728112292086623L;
+		
+		private static final String CANNOT_BUILD_IDENTIFIER_FORMAT = "cannot build identifier with action <<%s>> and subject <<%s>>";
+		
+		protected Object action,subject;
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public String build() {
+			return listenerUtils.getString(getListeners(), new ListenerUtils.StringMethod<Listener>() {
+				@Override
+				public String execute(Listener listener) {
+					return listener.get(action,subject);
+				}
+				public String getNullValue() {
+					return null;//String.format(CANNOT_BUILD_IDENTIFIER_FORMAT, action,subject);
+				}
+			});
+		}
+		
+		/**/
+		
+		public static interface Listener extends AbstractBuilder.Listener<String> {
+			
+			String get(Object action,Object subject);
+			
+			public static class Adapter extends AbstractBuilder.Listener.Adapter.Default<String> implements Listener,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public String get(Object action, Object subject) {
+					return null;
+				}
+				
+				/**/
+				
+				public static class Default extends Listener.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+				}
 			}
 		}
 	}

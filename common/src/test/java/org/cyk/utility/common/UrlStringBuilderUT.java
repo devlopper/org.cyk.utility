@@ -1,18 +1,33 @@
 package org.cyk.utility.common;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cyk.utility.common.builder.NameValueStringBuilder;
 import org.cyk.utility.common.builder.UrlStringBuilder;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
+import lombok.Getter;
+import lombok.Setter;
 
 public class UrlStringBuilderUT extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	static {
+		NameValueStringBuilder.Listener.COLLECTION.add(new NameValueStringBuilder.Listener.Adapter.Default(){
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Object getValueToProcessed(Object value) {
+				if(value instanceof ClassA)
+					return ((ClassA)value).getIdentifier();
+				return super.getValueToProcessed(value);
+			}
+		});
+		
 		UrlStringBuilder.PathStringBuilder.PATH_NOT_FOUND_IDENTIFIER = "pathnotfound";
 		UrlStringBuilder.PathStringBuilder.Listener.COLLECTION.add(new UrlStringBuilder.PathStringBuilder.Listener.Adapter.Default(){
 			private static final long serialVersionUID = 7112717654641763443L;
@@ -32,6 +47,20 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 				return map;
 			}
 		});
+		
+		UrlStringBuilder.PathStringBuilder.IdentifierBuilder.Listener.COLLECTION.add(new UrlStringBuilder.PathStringBuilder.IdentifierBuilder.Listener.Adapter.Default(){
+			private static final long serialVersionUID = 7112717654641763443L;
+			@Override
+			public String get(Object action, Object subject) {
+				if("myaction".equals(action))
+					if(subject instanceof ClassA)
+						return "classa.myaction";
+					else
+						return "dynamicaction";
+				
+				return super.get(action, subject);
+			}
+		});
 	}
 	
 	@Test
@@ -47,11 +76,19 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 		assertEquals("/path_to_id1",new UrlStringBuilder.PathStringBuilder().setIdentifier("pathid1").build());
 		assertEquals("/mycontext/path_to_id1",new UrlStringBuilder.PathStringBuilder().setContext("mycontext").setIdentifier("pathid1").build());
 		assertEquals("/path_to_unknown",new UrlStringBuilder.PathStringBuilder().setIdentifier("pathid596").build());
+		
+		/*Identifier*/
+		assertEquals(null,new UrlStringBuilder.PathStringBuilder.IdentifierBuilder().build());
+		assertEquals("classa.myaction",new UrlStringBuilder.PathStringBuilder.IdentifierBuilder()
+				.setAction("myaction").setSubject(new ClassA(15l)).build());
+		
+		
 	}
 	
 	@Test
 	public void query(){
 		assertEquals("p1=a",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").build());
+		assertEquals("p1=147",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", new ClassA(147l)).build());
 		
 		assertEquals("p1=a&p2=b",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").addParameter("p2", "b").build());
 		assertEquals("p1=a&p2=b",new UrlStringBuilder.QueryStringBuilder().addParameter("p1", "a").addParameter("p2", "b").build());
@@ -119,6 +156,20 @@ public class UrlStringBuilderUT extends AbstractUnitTest {
 		urlStringBuilder.setScheme("http").setHost("localhost").setPort(8080).getPathStringBuilder().setContext("mycontext").addTokens("mp.xhtml")
 			.getUrlStringBuilder().setRelative(Boolean.TRUE).getQueryStringBuilder().addParameter("p1", "a");
 		assertEquals("/mycontext/mp.jsf?p1=a",urlStringBuilder.build());
+		
+	}
+	
+	/**/
+	
+	@Getter @Setter
+	public static class ClassA implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private Long identifier;
+		
+		public ClassA(Long identifier) {
+			this.identifier = identifier;
+		}
 		
 	}
 }

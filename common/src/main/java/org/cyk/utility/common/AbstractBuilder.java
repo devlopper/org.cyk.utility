@@ -1,6 +1,7 @@
 package org.cyk.utility.common;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
@@ -33,6 +34,11 @@ public abstract class AbstractBuilder<OBJECT> extends AbstractBean implements Se
 	public AbstractBuilder<OBJECT> instanciate(){
 		instance = newInstance(getAClass());
 		return this;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	protected Collection getListeners(){
+		return null;
 	}
 	
 	public abstract OBJECT build();

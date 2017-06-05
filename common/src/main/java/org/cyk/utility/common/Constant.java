@@ -173,6 +173,21 @@ public interface Constant {
 	
 	/**/
 	
+	public static enum Action {
+	    CREATE
+	    ,READ
+	    ,UPDATE
+	    ,DELETE
+	    ,SELECT
+	    ,SEARCH
+	    ,CONSULT
+	    ,LIST
+	    ,PRINT
+	}
+
+	
+	/**/
+	
 	public static class SimpleMailTransferProtocol implements Serializable {
 		private static final long serialVersionUID = 1L;
 		

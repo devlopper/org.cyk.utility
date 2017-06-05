@@ -85,6 +85,14 @@ public class NameValueStringBuilderUT extends AbstractUnitTest {
 		assertEquals("p1=a&p2=b&p3=2_f_0&p4=2_a_0&encoded=p3&encoded=p4",new NameValueCollectionStringBuilder()
 			.addNamesValues("p1","a","p2","b","p3",Arrays.asList(new ClassA(15l)),"p4",Arrays.asList(new ClassA(10l)))		
 			.build());
+		
+		assertEquals("identifiable=15",new NameValueCollectionStringBuilder()
+				.addIdentifiable(new ClassA(15l))		
+				.build());
+		
+		assertEquals("identifiable=2_f_0&encoded=identifiable",new NameValueCollectionStringBuilder()
+				.addIdentifiables(Arrays.asList(new ClassA(15l)))		
+				.build());
 	}
 	
 	/**/

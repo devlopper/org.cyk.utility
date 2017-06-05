@@ -6,15 +6,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.AbstractBuilder;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.ListenerUtils;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 public class UrlStringBuilder extends AbstractStringBuilder implements Serializable {
@@ -165,6 +165,8 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 		private Boolean addSeparatorAtBeginning=Boolean.TRUE;
 		private String context=CONTEXT;
 		private Object request;
+		private Object action;
+		private Object subject;
 		
 		public PathStringBuilder addFiles(Collection<?> files){
 			setIdentifier(listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
@@ -326,6 +328,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 			String getContext(Object request);
 			String getConsultFilesIdentifier();
 			
+			
 			/**/
 			
 			public static class Adapter extends AbstractStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
@@ -361,7 +364,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 				public String getConsultFilesIdentifier() {
 					return null;
 				}
-				
+								
 				/**/
 				
 				public static class Default extends Listener.Adapter implements Serializable {
@@ -373,6 +376,35 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 			
 		}
 		
+		/**/
+		
+		@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
+		public static class IdentifierBuilder extends AbstractIdentifierBuilder implements Serializable {
+			private static final long serialVersionUID = -872728112292086623L;
+					
+			@Override
+			protected Collection<Listener> getListeners() {
+				return Listener.COLLECTION;
+			}
+				
+			/**/
+			
+			public static interface Listener extends AbstractIdentifierBuilder.Listener {
+				
+				Collection<Listener> COLLECTION = new ArrayList<>();
+				
+				public static class Adapter extends AbstractIdentifierBuilder.Listener.Adapter.Default implements Listener,Serializable {
+					private static final long serialVersionUID = 1L;
+						
+					/**/
+					
+					public static class Default extends Listener.Adapter implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+					}
+				}
+			}
+		}
 	}
 	
 	/**/
