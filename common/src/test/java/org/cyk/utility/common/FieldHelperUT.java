@@ -1,5 +1,8 @@
 package org.cyk.utility.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,16 +26,23 @@ public class FieldHelperUT extends AbstractUnitTest {
 	
 	@Test
 	public void get(){
-		assertEquals(4, fieldHelper.get(MyClass.class).size());
-		assertEquals(4, fieldHelper.get(MyClass.class, null, null).size());
-		assertEquals(4, fieldHelper.get(MyClass.class, "", null).size());
-		assertEquals(4, fieldHelper.get(MyClass.class, null, Location.START).size());
-		assertEquals(4, fieldHelper.get(MyClass.class, "", Location.START).size());
+		assertEquals(7, fieldHelper.get(MyClass.class).size());
+		assertEquals(7, fieldHelper.get(MyClass.class, null, null).size());
+		assertEquals(7, fieldHelper.get(MyClass.class, "", null).size());
+		assertEquals(7, fieldHelper.get(MyClass.class, null, Location.START).size());
+		assertEquals(7, fieldHelper.get(MyClass.class, "", Location.START).size());
 		assertEquals(1, fieldHelper.get(MyClass.class, "f", Location.START).size());
 		assertEquals(3, fieldHelper.get(MyClass.class, "S", Location.START).size());
-		assertEquals(2, fieldHelper.get(MyClass.class, "1", Location.END).size());
-		assertEquals(1, fieldHelper.get(MyClass.class, "F2", Location.INSIDE).size());
+		assertEquals(3, fieldHelper.get(MyClass.class, "1", Location.END).size());
+		assertEquals(2, fieldHelper.get(MyClass.class, "F2", Location.INSIDE).size());
 		assertEquals(0, fieldHelper.get(MyClass.class, "F", Location.EXAT).size());
+		
+		List<String> names = new ArrayList<>(fieldHelper.getNamesWhereReferencedByStaticField(MyClass.class));
+		assertEquals(3, names.size());
+		assertEquals("SF1", names.get(0));
+		assertEquals("SF2", names.get(1));
+		assertEquals("SF3", names.get(2));
+		
 	}
 	
 	@Test
@@ -63,11 +73,11 @@ public class FieldHelperUT extends AbstractUnitTest {
 	@Getter @Setter
 	public static class MyClass {
 		
-		private String f1;
-		
 		private static Integer SF1;
 		private static String SF2;
 		private static MyClass SF3;
+		
+		private String f1;
 		
 		public static Integer getSF1() {
 			return SF1;
@@ -80,6 +90,10 @@ public class FieldHelperUT extends AbstractUnitTest {
 		public static MyClass getSF3() {
 			return SF3;
 		}
+		
+		public static final String FIELD_SF1 = "SF1";
+		public static final String FIELD_SF2 = "SF2";
+		public static final String FIELD_SF3 = "SF3";
 	}
 	
 }

@@ -3,6 +3,7 @@ package org.cyk.utility.common.helper;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -306,13 +307,26 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 		return null;
 	}
 	
-	public Collection<String> getNamesWhereIdentifierStartsByFieldPrefix(Class<?> aClass){
+	/*public Collection<String> getNamesWhereIdentifierStartsByFieldPrefix(Class<?> aClass){
 		Collection<Field> fields = new FieldHelper().get(aClass, Constant.FIELD_, Location.START);
 		Collection<String> names = new InstanceHelper().callGetMethod(fields, String.class, METHOD_GET_NAME_SUFFIX);
+		return new StringHelper().removeBlank(names);
+	}*/
+	
+	public Collection<String> getNamesWhereReferencedByStaticField(Class<?> aClass){
+		Collection<Field> fields = new FieldHelper().get(aClass, Constant.FIELD_, Location.START);
+		Collection<String> names = new ArrayList<>();
+		for(Field field : fields)
+			if(Modifier.isStatic(field.getModifiers()))
+				try {
+					names.add((String)field.get(null));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 		return new StringHelper().removeBlank(names);
 	}
 	
 	/**/
 	
-	private static final String METHOD_GET_NAME_SUFFIX = "name";
+	//private static final String METHOD_GET_NAME_SUFFIX = "name";
 }
