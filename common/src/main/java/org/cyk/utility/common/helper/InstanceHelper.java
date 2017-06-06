@@ -6,6 +6,8 @@ import java.util.Collection;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.common.ListenerUtils;
 
 @Singleton
@@ -36,6 +38,29 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	public <T> T getIfNotNullElseDefault(T value,T defaultValue){
 		return value == null ? defaultValue : value;
 	}
+
+	public String getMethodName(MethodType type,String suffix){
+		return type.name().toLowerCase()+StringUtils.substring(suffix, 0,1).toUpperCase()+StringUtils.substring(suffix, 1).toLowerCase();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T callGetMethod(Object instance,Class<T> resultClass,String name){
+		try {
+			return (T) MethodUtils.invokeMethod(instance, getMethodName(MethodType.GET, name));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public <T> Collection<T> callGetMethod(Collection<?> instances,Class<T> resultClass,String name){
+		Collection<T> result = new ArrayList<>();
+		for(Object instance : instances){
+			T value = (T) callGetMethod(instance, resultClass, name);
+			result.add(value);
+		}
+		return result;
+	}
 	
 	/**/
 	
@@ -63,5 +88,12 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			}
 			
 		}
+	}
+
+	/**/
+	
+	public static enum MethodType {
+		GET
+		,SET
 	}
 }

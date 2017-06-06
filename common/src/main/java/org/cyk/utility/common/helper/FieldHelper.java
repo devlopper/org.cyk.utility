@@ -92,11 +92,11 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 		}
 	}
 	
-	public <T> void copy(T source,T destination,String...fieldNames){
+	public void copy(Object source,Object destination,String...fieldNames){
 		copy(source, destination, Arrays.asList(fieldNames));
 	}
 	
-	public <T> void copy(T source,T destination,Collection<String> fieldNames){
+	public void copy(Object source,Object destination,Collection<String> fieldNames){
 		for(String fieldName : fieldNames){
 			Object value = read(source, fieldName);
 			set(destination,value, fieldName);
@@ -305,4 +305,14 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 		}
 		return null;
 	}
+	
+	public Collection<String> getNamesWhereIdentifierStartsByFieldPrefix(Class<?> aClass){
+		Collection<Field> fields = new FieldHelper().get(aClass, Constant.FIELD_, Location.START);
+		Collection<String> names = new InstanceHelper().callGetMethod(fields, String.class, METHOD_GET_NAME_SUFFIX);
+		return new StringHelper().removeBlank(names);
+	}
+	
+	/**/
+	
+	private static final String METHOD_GET_NAME_SUFFIX = "name";
 }

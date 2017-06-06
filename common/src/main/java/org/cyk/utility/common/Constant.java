@@ -68,6 +68,8 @@ public interface Constant {
 	String PREFIX_PACKAGE_ORG_CYK = "org.cyk.";	
 	String PREFIX_PACKAGE_ORG_CYK_SYSTEM = PREFIX_PACKAGE_ORG_CYK+"system.";		
 	
+	String FIELD_ = "FIELD_";	
+	
 	String EMPTY_STRING = "";
 	
 	String VARIABLE_RESULT = "result";

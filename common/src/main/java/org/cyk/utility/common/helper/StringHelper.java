@@ -2,6 +2,8 @@ package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -70,6 +72,14 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		case EXAT : return StringUtils.equals(string, value);
 		}
 		return Boolean.FALSE;
+	}
+	
+	public Collection<String> removeBlank(Collection<String> collection){
+		Collection<String> results = new ArrayList<>();
+		for(String string : collection)
+			if(StringUtils.isNotBlank(string))
+				results.add(string);
+		return results;
 	}
 	
 	/**/
