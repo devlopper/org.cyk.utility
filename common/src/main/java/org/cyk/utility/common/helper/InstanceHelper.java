@@ -61,6 +61,14 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		}
 		return result;
 	}
+
+	public <T> T instanciateOne(Class<T> aClass){
+		try {
+			return aClass.newInstance();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 	
 	/**/
 	
@@ -96,4 +104,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		GET
 		,SET
 	}
+
+	/**/
+	
+	
 }

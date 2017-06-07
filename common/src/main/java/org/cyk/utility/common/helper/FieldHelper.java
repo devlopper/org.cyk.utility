@@ -38,6 +38,10 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 		return Arrays.asList(StringUtils.split(buildPath(fieldPaths), FIELD_NAME_SEPARATOR));
 	}
 	
+	public Object read(Object instance,Field field){
+		return read(instance,field.getName());
+	}
+	
 	public Object read(Object instance,String...fieldNames){
 		try {
 			return PropertyUtils.getProperty(instance, buildPath(fieldNames));
@@ -77,6 +81,10 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public void set(Object instance,Object value,Field field){
+		set(instance,value,field.getName());
 	}
 	
 	/**
