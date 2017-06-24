@@ -132,6 +132,7 @@ public class CommonUtils implements Serializable  {
 		}
 	}
 
+	@Deprecated
 	public Class<?> getClassParameterAt(Class<?> aClass,Integer index){
 		return (Class<?>) ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments()[index];
 	}
