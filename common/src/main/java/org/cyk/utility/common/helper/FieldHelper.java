@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,11 +18,16 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.cyk.utility.common.Action;
 import org.cyk.utility.common.ClassRepository;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.cyk.utility.common.annotation.FieldOverrides;
 import org.cyk.utility.common.helper.StringHelper.Location;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Singleton
 public class FieldHelper extends AbstractHelper implements Serializable {
@@ -126,34 +132,47 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 		return null;
 	}
 	
-	private Collection<Field> __getAllFields__(Collection<Field> fields,Class<?> type,String token,Location location) {
+	private Collection<Field> __getAllFields__(Collection<Field> fields,Class<?> type,String token,Location location,Boolean recursive) {
 		//super class fields first
-		if (type.getSuperclass() != null) {
-			fields = __getAllFields__(fields, type.getSuperclass(),token,location);
+		/*if(recursive==null || Boolean.TRUE.equals(recursive)){
+			if (type.getSuperclass() != null) {
+				fields = __getAllFields__(fields, type.getSuperclass(),token,location,recursive);
+			}
 		}
 		//declared class fields second
 		for (Field field : type.getDeclaredFields()) {
 			if(StringHelper.getInstance().isAtLocation(field.getName(), token, location))
 				fields.add(field);
 		}
+		*/
+		return new Get.Adapter.Default(type).setToken(token).setTokenLocation(location).setRecursivable(recursive).execute();
 		
-		return fields;
+		//return fields;
 	}
 	
-	public Collection<Field> get(Class<?> type,String name,Location location) {
+	public Collection<Field> get(Class<?> type,String name,Location location,Boolean recursive) {
 		Collection<Field> fields = new ArrayList<>();
 		if(Boolean.TRUE.equals(ClassRepository.ENABLED)){
 			for(Field field : ClassRepository.getInstance().get(type).getFields())
 				if(StringHelper.getInstance().isAtLocation(field.getName(), name, location))
-					fields.add(field);
+					if(recursive==null || Boolean.TRUE.equals(recursive) || field.getDeclaringClass().equals(type))
+						fields.add(field);
 		}else{
-			__getAllFields__(fields, type,name,location);
+			__getAllFields__(fields, type,name,location,recursive);
 		}
 		return fields;
 	}
 	
+	public Collection<Field> get(Class<?> type,String name,Location location) {
+		return get(type,name,location,Boolean.TRUE);
+	}
+	
 	public Collection<Field> get(Class<?> type) {
 		return get(type,null,null);
+	}
+	
+	public Collection<Field> get(Class<?> type,Boolean recursive) {
+		return get(type,null,null,recursive);
 	}
 	
 	public Field get(Class<?> type,String name) {
@@ -321,8 +340,8 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 		return new StringHelper().removeBlank(names);
 	}*/
 	
-	public Collection<String> getNamesWhereReferencedByStaticField(Class<?> aClass){
-		Collection<Field> fields = new FieldHelper().get(aClass, Constant.FIELD_, Location.START);
+	public Collection<String> getNamesWhereReferencedByStaticField(Class<?> aClass,Boolean recursive){
+		Collection<Field> fields = new FieldHelper().get(aClass, Constant.FIELD_, Location.START,recursive);
 		Collection<String> names = new ArrayList<>();
 		for(Field field : fields)
 			if(Modifier.isStatic(field.getModifiers()))
@@ -334,7 +353,121 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 		return new StringHelper().removeBlank(names);
 	}
 	
+	public Collection<String> getNamesWhereReferencedByStaticField(Class<?> aClass){
+		return getNamesWhereReferencedByStaticField(aClass,Boolean.TRUE);
+	}
+	
 	/**/
 	
 	//private static final String METHOD_GET_NAME_SUFFIX = "name";
+	
+	/**/
+	
+	public static interface Get extends Action<Class<?>, Collection<Field>> {
+		
+		Boolean getRecursivable();
+		Get setRecursivable(Boolean value);
+		
+		String getToken();
+		Get setToken(String token);
+		
+		Location getTokenLocation();
+		Get setTokenLocation(Location location);
+		
+		Set<Integer> getModifiers();
+		Get setModifiers(Set<Integer> modifiers);
+		Get addModifiers(Integer...modifiers);
+		
+		@Getter @Setter @Accessors(chain=true)
+		public static class Adapter extends Action.Adapter.Default<Class<?>, Collection<Field>> implements Get,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			private Boolean recursivable = Boolean.TRUE;
+			private String token;
+			private Location tokenLocation;
+			private Set<Integer> modifiers = new HashSet<>();
+			
+			@SuppressWarnings("unchecked")
+			public Adapter(Class<?> input) {
+				super("Get fields", null, input, null, null);
+				setInputClass((Class<Class<?>>) new ClassHelper().getByName(Class.class.getName())); 
+				setOutputClass((Class<Collection<Field>>) new ClassHelper().getByName(Class.class.getName())); 
+			}
+			
+			@Override
+			public Get setRecursivable(Boolean value) {
+				this.recursivable = value;
+				return this;
+			}
+			
+			@Override
+			public Get setToken(String token) {
+				this.token = token;
+				return this;
+			}
+			
+			@Override
+			public Get setTokenLocation(Location location) {
+				this.tokenLocation = location;
+				return this;
+			}
+			
+			@Override
+			public Get setModifiers(Set<Integer> modifiers) {
+				this.modifiers = modifiers;
+				return this;
+			}
+			
+			@Override
+			public Get addModifiers(Integer...modifiers) {
+				for(Integer modifier : modifiers)
+					getModifiers().add(modifier);
+				return this;
+			}
+			
+			/**/
+			
+			public static class Default extends Get.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Default(Class<?> input) {
+					super(input);
+				}
+				
+				@Override
+				protected Collection<Field> __execute__() {
+					setOutput(new ArrayList<Field>());
+					return get(getInput());
+				}
+				
+				private Collection<Field> get(Class<?> clazz) {
+					//super class fields first
+					if(getRecursivable()==null || Boolean.TRUE.equals(getRecursivable())){
+						if (clazz.getSuperclass() != null) {
+							get(clazz.getSuperclass());
+						}
+					}
+					//declared class fields second
+					int searchMods = 0x0;
+					for (Integer modifier : getModifiers())
+						searchMods |= 0x0 | modifier;
+					for (Field field : clazz.getDeclaredFields()) {
+						System.out.println(field.getName()+" : "+field.getModifiers());
+						if(((field.getModifiers() & searchMods) == searchMods) &&  StringHelper.getInstance().isAtLocation(field.getName(), getToken(), getTokenLocation())){
+							getOutput().add(field);
+						}
+					}
+					
+					return getOutput();
+				}
+				
+			}
+
+
+
+			
+		}
+		
+	}
+	
 }

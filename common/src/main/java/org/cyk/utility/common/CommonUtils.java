@@ -148,7 +148,7 @@ public class CommonUtils implements Serializable  {
 			}
 		return null;
 	}
-	
+	@Deprecated
 	private Collection<Field> __getAllFields__(Collection<Field> fields,Class<?> type) {
 		//super class fields first
 		if (type.getSuperclass() != null) {
@@ -161,7 +161,7 @@ public class CommonUtils implements Serializable  {
 		
 		return fields;
 	}
-	
+	@Deprecated
 	public Collection<Field> getAllFields(Class<?> type) {
 		Collection<Field> fields = new ArrayList<>();
 		if(Boolean.TRUE.equals(ClassRepository.ENABLED)){
@@ -171,14 +171,14 @@ public class CommonUtils implements Serializable  {
 		}
 		return fields;
 	}
-	
+	@Deprecated
 	public Field getFieldFromClass(Class<?> type,String name) {
 		for(Field field : getAllFields(type))
 			if(field.getName().equals(name))
 				return field;
 		return null;
 	}
-	
+	@Deprecated
 	public Collection<Field> getAllFields(Class<?> type,Collection<Class<? extends Annotation>> annotationClasses) {
 		Collection<Field> fields = new ArrayList<>();
 		for(Field field : getAllFields(type))

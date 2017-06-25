@@ -71,6 +71,7 @@ public interface Constant {
 	String FIELD_ = "FIELD_";	
 	
 	String EMPTY_STRING = "";
+	String[] EMPTY_STRING_ARRAY = new String[]{};
 	
 	String VARIABLE_RESULT = "result";
 	

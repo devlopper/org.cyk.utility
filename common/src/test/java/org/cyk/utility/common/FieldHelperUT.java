@@ -1,16 +1,17 @@
 package org.cyk.utility.common;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.StringHelper.Location;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class FieldHelperUT extends AbstractUnitTest {
 
@@ -22,6 +23,18 @@ public class FieldHelperUT extends AbstractUnitTest {
 	protected void _execute_() {
 		super._execute_();
 		
+	}
+	
+	@Test
+	public void getAction(){
+		assertEquals(7, new FieldHelper.Get.Adapter.Default(MyClass.class).execute().size());
+		assertEquals(0, new FieldHelper.Get.Adapter.Default(MyClass.class).addModifiers(Modifier.ABSTRACT).execute().size());
+		assertEquals(6, new FieldHelper.Get.Adapter.Default(MyClass.class).addModifiers(Modifier.STATIC).execute().size());
+		assertEquals(3, new FieldHelper.Get.Adapter.Default(MyClass.class).addModifiers(Modifier.PUBLIC).execute().size());
+		assertEquals(4, new FieldHelper.Get.Adapter.Default(MyClass.class).addModifiers(Modifier.PRIVATE).execute().size());
+		assertEquals(3, new FieldHelper.Get.Adapter.Default(MyClass.class).addModifiers(Modifier.PRIVATE,Modifier.STATIC).execute().size());
+		assertEquals(3, new FieldHelper.Get.Adapter.Default(MyClass.class).addModifiers(Modifier.PUBLIC,Modifier.STATIC).execute().size());
+		//assertEquals(1, new FieldHelper.Get.Adapter.Default(MyClass.class).addModifiers(2).execute().size()); //FIXME
 	}
 	
 	@Test
@@ -43,6 +56,10 @@ public class FieldHelperUT extends AbstractUnitTest {
 		assertEquals("SF2", names.get(1));
 		assertEquals("SF3", names.get(2));
 		
+		assertEquals(14, fieldHelper.get(MyChildClass.class).size());
+		assertEquals(7, fieldHelper.get(MyChildClass.class,Boolean.FALSE).size());
+		assertEquals(6, fieldHelper.get(MyChildClass.class, "S", Location.START).size());
+		assertEquals(3, fieldHelper.get(MyChildClass.class, "S", Location.START,Boolean.FALSE).size());
 	}
 	
 	@Test
@@ -96,4 +113,29 @@ public class FieldHelperUT extends AbstractUnitTest {
 		public static final String FIELD_SF3 = "SF3";
 	}
 	
+	@Getter @Setter
+	public static class MyChildClass extends MyClass {
+		
+		private static Integer S_CC_F1;
+		private static String S_CC_F2;
+		private static MyClass S_CC_F3;
+		
+		private String cc_f1;
+		
+		public static Integer getS_CC_F1() {
+			return S_CC_F1;
+		}
+		
+		public static String getS_CC_F2() {
+			return S_CC_F2;
+		}
+		
+		public static MyClass getS_CC_F3() {
+			return S_CC_F3;
+		}
+		
+		public static final String FIELD_CC_SF1 = "S_CC_F1";
+		public static final String FIELD_CC_SF2 = "S_CC_F2";
+		public static final String FIELD_CC_SF3 = "S_CC_F3";
+	}
 }
