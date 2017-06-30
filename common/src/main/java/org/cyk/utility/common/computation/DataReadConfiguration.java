@@ -1,8 +1,13 @@
 package org.cyk.utility.common.computation;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import org.cyk.utility.common.cdi.AbstractBean;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +20,7 @@ import lombok.experimental.Accessors;
  *
  */
 @Getter @Setter @NoArgsConstructor @Accessors(chain=true)
-public class DataReadConfiguration implements Serializable {
+public class DataReadConfiguration extends AbstractBean implements Serializable {
 
 	private static final long serialVersionUID = -8258556701704160443L;
 	
@@ -26,6 +31,9 @@ public class DataReadConfiguration implements Serializable {
 	private Boolean ascendingOrder;
 	private Map<String, Object> filters;
 	private String globalFilter;
+	
+	private Map<String, Object> hints;
+	private Set<String> attributes;
 	
 	public DataReadConfiguration(Long firstResultIndex, Long maximumResultCount, String sortField,
 			Boolean ascendingOrder, Map<String, Object> filters, String globalFilter) {
@@ -67,6 +75,28 @@ public class DataReadConfiguration implements Serializable {
 		this.globalFilter = configuration.globalFilter;
 	}
 	
+	public DataReadConfiguration setHint(String name,Object value){
+		if(hints==null)
+			hints = new HashMap<>();
+		hints.put(name, value);
+		return this;
+	}
+	
+	public DataReadConfiguration addAttributes(Set<String> attributes){
+		if(attributes!=null){
+			if(this.attributes==null)
+				this.attributes = new HashSet<>();
+			this.attributes.addAll(attributes);
+		}
+		return this;
+	}
+	
+	public DataReadConfiguration addAttributes(String...attributes){
+		if(attributes!=null)
+			addAttributes(new HashSet<String>(Arrays.asList(attributes)));
+		return this;
+	}
+	
 	public void clear(){
 		this.firstResultIndex = null;
 		this.maximumResultCount =  null;
@@ -74,6 +104,8 @@ public class DataReadConfiguration implements Serializable {
 		this.ascendingOrder = null;
 		this.filters = null;
 		this.globalFilter = null;
+		this.hints=null;
+		this.attributes=null;
 	}
 
 	@Override
