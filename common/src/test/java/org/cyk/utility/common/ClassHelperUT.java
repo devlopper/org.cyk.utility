@@ -32,17 +32,18 @@ public class ClassHelperUT extends AbstractUnitTest {
 	/**/
 	
 	public static class MyHelper extends AbstractHelper {
+		private static final long serialVersionUID = 1L;
 		
 	}
 	
 	@Singleton
 	public static class MyAnnotatedHelper extends AbstractHelper {
-		
+		private static final long serialVersionUID = 1L;
 	}
 	
 	@Named
 	public static class MyAnnotatedHelper2 extends AbstractHelper {
-		
+		private static final long serialVersionUID = 1L;
 	}
 	
 }
