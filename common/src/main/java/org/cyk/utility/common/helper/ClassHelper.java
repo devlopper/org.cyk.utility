@@ -1,9 +1,12 @@
 package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.inject.Singleton;
 
@@ -13,7 +16,6 @@ import org.reflections.Reflections;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Singleton
 public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements Serializable {
@@ -118,6 +120,15 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				@Override
 				protected Collection<Class<?>> getTypes(Package aPackage) {
 					return new ClassHelper().get(aPackage.getName(), getBaseClass());
+				}
+				
+				@Override
+				public Set<Class<?>> getAnnotationClasses(Class<?> aClass) {
+					Set<Class<?>> classes = new HashSet<>();
+					for(Annotation annotation : aClass.getAnnotations()){
+						classes.add(annotation.annotationType());
+					}
+					return classes;
 				}
 				
 			}

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.helper.StringHelper.Location;
 
@@ -21,6 +22,7 @@ public abstract class AbstractReflectionHelper<TYPE> extends AbstractHelper impl
 	
 	public static interface Get<SOURCE,TYPE> extends Action<SOURCE, Collection<TYPE>> {
 		
+		Set<Class<?>> getAnnotationClasses(TYPE type);
 		Integer getModifiers(TYPE type);
 		String getName(TYPE type);
 		
@@ -37,6 +39,10 @@ public abstract class AbstractReflectionHelper<TYPE> extends AbstractHelper impl
 		Get<SOURCE,TYPE> setModifiers(Set<Integer> modifiers);
 		Get<SOURCE,TYPE> addModifiers(Integer...modifiers);
 		
+		Set<Class<?>> getAnnotationClasses();
+		Get<SOURCE,TYPE> setAnnotationClasses(Set<Class<?>> annotationClasses);
+		Get<SOURCE,TYPE> addAnnotationClasses(Class<?>...annotationClasses);
+		
 		@Getter @Setter @Accessors(chain=true)
 		public static class Adapter<SOURCE,TYPE> extends Action.Adapter.Default<SOURCE, Collection<TYPE>> implements Get<SOURCE,TYPE>,Serializable {
 			private static final long serialVersionUID = 1L;
@@ -45,6 +51,7 @@ public abstract class AbstractReflectionHelper<TYPE> extends AbstractHelper impl
 			protected String token;
 			protected Location tokenLocation;
 			protected Set<Integer> modifiers = new HashSet<>();
+			protected Set<Class<?>> annotationClasses = new HashSet<>();
 			
 			public Adapter(SOURCE input) {
 				super("Get fields", null, input, null, null);
@@ -57,6 +64,11 @@ public abstract class AbstractReflectionHelper<TYPE> extends AbstractHelper impl
 			
 			@Override
 			public Integer getModifiers(TYPE type) {
+				return null;
+			}
+			
+			@Override
+			public Set<Class<?>> getAnnotationClasses(TYPE type) {
 				return null;
 			}
 			
@@ -91,6 +103,19 @@ public abstract class AbstractReflectionHelper<TYPE> extends AbstractHelper impl
 				return this;
 			}
 			
+			@Override
+			public Get<SOURCE,TYPE> setAnnotationClasses(Set<Class<?>> annotationClasses) {
+				this.annotationClasses = annotationClasses;
+				return this;
+			}
+			
+			@Override
+			public Get<SOURCE,TYPE> addAnnotationClasses(Class<?>...annotationClasses) {
+				for(Class<?> annotationClass : annotationClasses)
+					getAnnotationClasses().add(annotationClass);
+				return this;
+			}
+			
 			/**/
 			
 			public static class Default<SOURCE,TYPE> extends Get.Adapter<SOURCE,TYPE> implements Serializable {
@@ -120,7 +145,13 @@ public abstract class AbstractReflectionHelper<TYPE> extends AbstractHelper impl
 					for (Integer modifier : getModifiers())
 						searchMods |= 0x0 | modifier;
 					
+					Collection<Class<?>> annotationClasses = getAnnotationClasses();
+					CollectionHelper collectionHelper = new CollectionHelper();
 					for (TYPE type : getTypes(source)) {
+						if(!collectionHelper.isEmpty(annotationClasses) && !collectionHelper.contains(getAnnotationClasses(type), annotationClasses)){
+							continue;
+						}
+								
 						if(((getModifiers(type) & searchMods) == searchMods) &&  StringHelper.getInstance().isAtLocation(getName(type), getToken(), getTokenLocation())){
 							getOutput().add(type);
 						}

@@ -2,6 +2,9 @@ package org.cyk.utility.common;
 
 import java.lang.reflect.Modifier;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import org.cyk.utility.common.helper.AbstractHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -16,10 +19,30 @@ public class ClassHelperUT extends AbstractUnitTest {
 	
 	@Test
 	public void getClasses(){
-		System.out.println( new ClassHelper().get("org.cyk.utility.common",AbstractHelper.class) );
+		System.out.println( new ClassHelper().get("org.cyk",AbstractHelper.class) );
 		System.out.println( new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class).execute());
 		System.out.println( new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class)
 				.addModifiers(Modifier.ABSTRACT).execute());
+		System.out.println( new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class)
+				.addAnnotationClasses(Singleton.class).execute());
+		System.out.println( new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class)
+				.addAnnotationClasses(Named.class).execute());
+	}
+	
+	/**/
+	
+	public static class MyHelper extends AbstractHelper {
+		
+	}
+	
+	@Singleton
+	public static class MyAnnotatedHelper extends AbstractHelper {
+		
+	}
+	
+	@Named
+	public static class MyAnnotatedHelper2 extends AbstractHelper {
+		
 	}
 	
 }
