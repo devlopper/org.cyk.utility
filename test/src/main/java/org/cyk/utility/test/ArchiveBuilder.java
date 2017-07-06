@@ -3,14 +3,14 @@ package org.cyk.utility.test;
 import java.util.HashSet;
 import java.util.Set;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter @Setter
 public class ArchiveBuilder {
@@ -25,11 +25,16 @@ public class ArchiveBuilder {
 	private ServiceLayer businessServiceLayer = new ServiceLayer("business", "Business");
 	
 	private JavaArchive archive;
+	//private WebArchive archive;
 	
 	private String jpaPersistenceXml="test-persistence.xml";
 	
 	public ArchiveBuilder create() {
-		archive = ShrinkWrap.create(JavaArchive.class).addAsResource(jpaPersistenceXml,"META-INF/persistence.xml").addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+		archive = ShrinkWrap.create(JavaArchive.class)
+				.addAsResource(jpaPersistenceXml,"META-INF/persistence.xml")
+				.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
+				//.addAsWebInfResource("jbossas-ds.xml")
+				;
 		return this;
 	}
 	

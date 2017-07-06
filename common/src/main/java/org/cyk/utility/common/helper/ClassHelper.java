@@ -11,8 +11,12 @@ import org.apache.commons.lang3.ClassUtils;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.reflections.Reflections;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 @Singleton
-public class ClassHelper extends AbstractHelper implements Serializable {
+public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -44,6 +48,7 @@ public class ClassHelper extends AbstractHelper implements Serializable {
 		Reflections reflections = new Reflections(packageName);
 		@SuppressWarnings("rawtypes")
 		Collection classes = reflections.getSubTypesOf(baseClass);
+		logTrace("sub types of {} in package {} are : {}", baseClass,packageName,classes);
 	    return classes;
 	}
 	
@@ -59,5 +64,64 @@ public class ClassHelper extends AbstractHelper implements Serializable {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	/**/
+	
+	public static interface Get extends AbstractReflectionHelper.Get<Package, Class<?>> {
+		
+		Class<?> getBaseClass();
+		Get setBaseClass(Class<?> aClass);
+		
+		@Getter @Setter 
+		public static class Adapter extends AbstractReflectionHelper.Get.Adapter.Default<Package, Class<?>> implements Get,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			protected Class<?> baseClass;
+			
+			@SuppressWarnings("unchecked")
+			public Adapter(Package input) {
+				super(input);
+				setInputClass((Class<Package>) new ClassHelper().getByName(Class.class.getName())); 
+				setOutputClass((Class<Collection<Class<?>>>) new ClassHelper().getByName(Class.class.getName())); 
+			}
+			
+			public Get setBaseClass(Class<?> baseClass){
+				this.baseClass = baseClass;
+				return this;
+			}
+			
+			/**/
+			
+			public static class Default extends Get.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Default(Package input) {
+					super(input);
+				}
+				
+				@Override
+				public Integer getModifiers(Class<?> clazz) {
+					return clazz.getModifiers();
+				}
+				
+				@Override
+				public String getName(Class<?> clazz) {
+					return clazz.getName();
+				}
+				
+				@Override
+				protected Package getParent(Package aPackage) {
+					return null;
+				}
+				
+				@Override
+				protected Collection<Class<?>> getTypes(Package aPackage) {
+					return new ClassHelper().get(aPackage.getName(), getBaseClass());
+				}
+				
+			}
+		}
+		
 	}
 }

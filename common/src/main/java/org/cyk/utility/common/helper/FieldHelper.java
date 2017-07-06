@@ -7,7 +7,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +17,6 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.cyk.utility.common.Action;
 import org.cyk.utility.common.ClassRepository;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
@@ -30,7 +28,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Singleton
-public class FieldHelper extends AbstractHelper implements Serializable {
+public class FieldHelper extends AbstractReflectionHelper<Field> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -363,66 +361,17 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 	
 	/**/
 	
-	public static interface Get extends Action<Class<?>, Collection<Field>> {
-		
-		Boolean getRecursivable();
-		Get setRecursivable(Boolean value);
-		
-		String getToken();
-		Get setToken(String token);
-		
-		Location getTokenLocation();
-		Get setTokenLocation(Location location);
-		
-		Set<Integer> getModifiers();
-		Get setModifiers(Set<Integer> modifiers);
-		Get addModifiers(Integer...modifiers);
-		
+	public static interface Get extends AbstractReflectionHelper.Get<Class<?>, Field> {
+		 
 		@Getter @Setter @Accessors(chain=true)
-		public static class Adapter extends Action.Adapter.Default<Class<?>, Collection<Field>> implements Get,Serializable {
+		public static class Adapter extends AbstractReflectionHelper.Get.Adapter.Default<Class<?>, Field> implements Get,Serializable {
 			private static final long serialVersionUID = 1L;
 
-			private Boolean recursivable = Boolean.TRUE;
-			private String token;
-			private Location tokenLocation;
-			private Set<Integer> modifiers = new HashSet<>();
-			
 			@SuppressWarnings("unchecked")
 			public Adapter(Class<?> input) {
-				super("Get fields", null, input, null, null);
+				super(input);
 				setInputClass((Class<Class<?>>) new ClassHelper().getByName(Class.class.getName())); 
 				setOutputClass((Class<Collection<Field>>) new ClassHelper().getByName(Class.class.getName())); 
-			}
-			
-			@Override
-			public Get setRecursivable(Boolean value) {
-				this.recursivable = value;
-				return this;
-			}
-			
-			@Override
-			public Get setToken(String token) {
-				this.token = token;
-				return this;
-			}
-			
-			@Override
-			public Get setTokenLocation(Location location) {
-				this.tokenLocation = location;
-				return this;
-			}
-			
-			@Override
-			public Get setModifiers(Set<Integer> modifiers) {
-				this.modifiers = modifiers;
-				return this;
-			}
-			
-			@Override
-			public Get addModifiers(Integer...modifiers) {
-				for(Integer modifier : modifiers)
-					getModifiers().add(modifier);
-				return this;
 			}
 			
 			/**/
@@ -435,37 +384,26 @@ public class FieldHelper extends AbstractHelper implements Serializable {
 				}
 				
 				@Override
-				protected Collection<Field> __execute__() {
-					setOutput(new ArrayList<Field>());
-					return get(getInput());
+				public Integer getModifiers(Field field) {
+					return field.getModifiers();
 				}
 				
-				private Collection<Field> get(Class<?> clazz) {
-					//super class fields first
-					if(getRecursivable()==null || Boolean.TRUE.equals(getRecursivable())){
-						if (clazz.getSuperclass() != null) {
-							get(clazz.getSuperclass());
-						}
-					}
-					//declared class fields second
-					int searchMods = 0x0;
-					for (Integer modifier : getModifiers())
-						searchMods |= 0x0 | modifier;
-					for (Field field : clazz.getDeclaredFields()) {
-						System.out.println(field.getName()+" : "+field.getModifiers());
-						if(((field.getModifiers() & searchMods) == searchMods) &&  StringHelper.getInstance().isAtLocation(field.getName(), getToken(), getTokenLocation())){
-							getOutput().add(field);
-						}
-					}
-					
-					return getOutput();
+				@Override
+				public String getName(Field field) {
+					return field.getName();
+				}
+				
+				@Override
+				protected Class<?> getParent(Class<?> clazz) {
+					return clazz.getSuperclass();
+				}
+				
+				@Override
+				protected Collection<Field> getTypes(Class<?> clazz) {
+					return Arrays.asList(clazz.getDeclaredFields());
 				}
 				
 			}
-
-
-
-			
 		}
 		
 	}
