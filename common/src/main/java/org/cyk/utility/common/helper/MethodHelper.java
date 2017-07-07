@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.inject.Singleton;
 
+import org.cyk.utility.common.Constant;
+
 @Singleton
 public class MethodHelper extends AbstractHelper implements Serializable  {
 
@@ -23,13 +25,20 @@ public class MethodHelper extends AbstractHelper implements Serializable  {
 		super.initialisation();
 	}
 	
-	public String getMethodNameAt(Integer index){
-		//System.out.println(commonUtils.convertToString(Thread.currentThread().getStackTrace(), "\n\r"));
+	public String getNamesFromStackTrace(String separator){
+		return commonUtils.convertToString(Thread.currentThread().getStackTrace(), separator);
+	}
+	
+	public String getNamesStackTrace(){
+		return getNamesFromStackTrace(Constant.LINE_DELIMITER);
+	}
+	
+	public String getNameFromStackTraceAt(Integer index){
 		return Thread.currentThread().getStackTrace()[index].getMethodName();
 	}
 	
-	public String getCurrentMethodName(){
-		return getMethodNameAt(3);
+	public String getCurrentNameFromStackTrace(){
+		return getNameFromStackTraceAt(3);
 	}
 	
 }

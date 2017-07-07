@@ -9,8 +9,8 @@ public class MethodHelperUT extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	@Test
-	public void getCurrentMethodN(){
-		assertEquals("getCurrentMethodN",new MethodHelper().getCurrentMethodName());
+	public void doTest1(){
+		assertEquals("doTest1",new MethodHelper().getCurrentNameFromStackTrace());
 	}
 	
 	/**/
