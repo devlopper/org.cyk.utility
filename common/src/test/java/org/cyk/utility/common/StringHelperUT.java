@@ -13,6 +13,33 @@ public class StringHelperUT extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 
+	static {
+		StringHelper.ToStringMapping.RESOURCE_BUNDLE_MAP.put("org.cyk.utility.common.testmsg", StringHelper.class.getClassLoader());
+		StringHelper.ToStringMapping.MAP.put("stringid1", "string_result_one");
+		StringHelper.ToStringMapping.MAP.put("stringid2", "string_result_2");
+		StringHelper.ToStringMapping.MAP.put("stringid3", "third");
+	}
+	
+	@Test
+	public void executeBuildStringCacheIdentifier(){
+		assertEquals("fr_stringid1", new StringHelper.Builder.CacheIdentifier.Adapter.Default().setInput("stringid1").execute());
+		assertEquals("fr_stringid1_NONE", new StringHelper.Builder.CacheIdentifier.Adapter.Default().setInput("stringid1").addParameters(new Object[]{CaseType.NONE}).execute());
+		assertEquals("fr_stringid1_liste_employee_NONE", new StringHelper.Builder.CacheIdentifier.Adapter.Default().setInput("stringid1")
+				.addParameters(new Object[]{"liste","employee",CaseType.NONE}).execute());
+		assertEquals("fr_stringid1_liste_employee_2016_NONE", new StringHelper.Builder.CacheIdentifier.Adapter.Default().setInput("stringid1")
+				.addParameters(new Object[]{"liste","employee",2016,CaseType.NONE}).execute());
+	}
+	
+	@Test
+	public void executeToStringMapping(){
+		assertEquals("string_result_one", new StringHelper.ToStringMapping.Adapter.Default("stringid1").execute());
+		assertEquals("string_result_2", new StringHelper.ToStringMapping.Adapter.Default("stringid2").execute());
+		assertEquals("third", new StringHelper.ToStringMapping.Adapter.Default("stringid3").execute());
+		assertEquals("string 1", new StringHelper.ToStringMapping.Adapter.Default("mid1").execute());
+		assertEquals("string 2", new StringHelper.ToStringMapping.Adapter.Default("mid2").execute());
+		assertEquals("string 2 avec string 1", new StringHelper.ToStringMapping.Adapter.Default("mid1_2").execute());
+	}
+	
 	@Test
 	public void assertCaseType(){
 		assertAppliedCaseType("mY pHraSE", CaseType.NONE,"mY pHraSE");

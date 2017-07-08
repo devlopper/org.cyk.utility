@@ -98,7 +98,7 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 	
 	@Override
 	public String buildWhenBlank() {
-		StringBuilder stringBuilder = new StringBuilder();
+		java.lang.StringBuilder stringBuilder = new java.lang.StringBuilder();
 		
 		Collection<Object> encodedParameterNames = new ArrayList<>();
 		final List<String> values = new ArrayList<>();

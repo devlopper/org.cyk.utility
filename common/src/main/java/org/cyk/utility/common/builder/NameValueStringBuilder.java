@@ -80,7 +80,7 @@ public class NameValueStringBuilder extends AbstractStringBuilder implements Ser
 	
 	@Override
 	public String buildWhenBlank() {
-		StringBuilder stringBuilder = new StringBuilder();
+		java.lang.StringBuilder stringBuilder = new java.lang.StringBuilder();
 		
 		if(Boolean.TRUE.equals(listenerUtils.getBoolean(Listener.COLLECTION, new ListenerUtils.BooleanMethod<Listener>() {
 			@Override

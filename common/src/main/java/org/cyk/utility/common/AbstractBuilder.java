@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
+import org.cyk.utility.common.helper.ClassHelper;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ public abstract class AbstractBuilder<OBJECT> extends AbstractBean implements Se
 	@SuppressWarnings("unchecked")
 	public Class<OBJECT> getAClass(){
 		if(aClass==null)
-			aClass = (Class<OBJECT>) inject(CommonUtils.class).getClassParameterAt(getClass(), 0);
+			aClass = (Class<OBJECT>) new ClassHelper().getParameterAt(getClass(), 0,Object.class);
 		return aClass;
 	}
 

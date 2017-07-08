@@ -7,6 +7,9 @@ import java.util.LinkedHashSet;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.common.Constant;
+
 @Singleton
 public class CollectionHelper extends AbstractHelper implements Serializable  {
 
@@ -71,6 +74,12 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 	
 	public Boolean isEmpty(Collection<?> collection){
 		return collection==null || collection.isEmpty();
+	}
+
+	public String concatenate(Collection<Object> collection, String separator) {
+		if(isEmpty(collection))
+			return Constant.EMPTY_STRING;
+		return StringUtils.join(collection,separator);
 	}
 	
 }

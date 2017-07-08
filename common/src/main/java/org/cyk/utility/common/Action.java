@@ -1,12 +1,15 @@
 package org.cyk.utility.common;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
 
-import lombok.Getter;
-
 import org.cyk.utility.common.cdi.BeanAdapter;
+
+import lombok.Getter;
 
 public interface Action<INPUT,OUTPUT> {
 
@@ -24,6 +27,9 @@ public interface Action<INPUT,OUTPUT> {
 	
 	INPUT getInput();
 	Action<INPUT,OUTPUT> setInput(INPUT input);
+	
+	Boolean getIsInputRequired();
+	Action<INPUT,OUTPUT> setIsInputRequired(Boolean isInputRequired);
 	
 	OUTPUT execute();
 	
@@ -44,6 +50,11 @@ public interface Action<INPUT,OUTPUT> {
 	Action<INPUT, OUTPUT> setProperties(Properties properties);
 	Action<INPUT, OUTPUT> setProperty(String name,Object value);
 	
+	Collection<Object> getParameters();
+	Action<INPUT, OUTPUT> setParameters(Collection<Object> collection);
+	Action<INPUT, OUTPUT> addParameters(Collection<Object> collection);
+	Action<INPUT, OUTPUT> addParameters(Object[] objects);
+	
 	/**/
 	
 	@Getter
@@ -57,8 +68,9 @@ public interface Action<INPUT,OUTPUT> {
 		protected OUTPUT output;
 		protected Class<OUTPUT> outputClass;
 		protected LogMessage.Builder logMessageBuilder;
-		protected Boolean automaticallyLogMessage = Boolean.TRUE;
+		protected Boolean automaticallyLogMessage = Boolean.TRUE,isInputRequired=Boolean.TRUE;
 		protected Properties properties;
+		protected Collection<Object> parameters;
 		
 		public Adapter(String name,Class<INPUT> inputClass,INPUT input,Class<OUTPUT> outputClass,LogMessage.Builder logMessageBuilder) {
 			setName(name);
@@ -71,6 +83,12 @@ public interface Action<INPUT,OUTPUT> {
 		@Override
 		public Action<INPUT, OUTPUT> setAutomaticallyLogMessage(Boolean automaticallyLogMessage) {
 			this.automaticallyLogMessage = automaticallyLogMessage;
+			return this;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setIsInputRequired(Boolean isInputRequired) {
+			this.isInputRequired = isInputRequired;
 			return this;
 		}
 		
@@ -132,6 +150,30 @@ public interface Action<INPUT,OUTPUT> {
 			return this;
 		}
 		
+		@Override
+		public Action<INPUT, OUTPUT> setParameters(Collection<Object> parameters) {
+			this.parameters = parameters;
+			return this;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> addParameters(Collection<Object> parameters) {
+			if(parameters!=null && parameters.size()>0){
+				if(this.parameters==null)
+					this.parameters = new ArrayList<>();
+				getParameters().addAll(parameters);
+			}
+			return this;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> addParameters(Object[] parameters) {
+			if(parameters!=null && parameters.length>0){
+				addParameters(Arrays.asList(parameters));
+			}
+			return this;
+		}
+		
 		/**/
 		
 		public static class Default<INPUT,OUTPUT> extends Action.Adapter<INPUT,OUTPUT> implements Serializable {
@@ -140,18 +182,25 @@ public interface Action<INPUT,OUTPUT> {
 			public Default(String name,Class<INPUT> inputClass,INPUT input, Class<OUTPUT> outputClass, LogMessage.Builder logMessageBuilder) {
 				super(name,inputClass,input, outputClass, logMessageBuilder);
 			}
+			
+			protected Boolean isInputRequired(){
+				return getIsInputRequired()==null || Boolean.TRUE.equals(getIsInputRequired());
+			}
 						
 			@Override
 			public final OUTPUT execute() {
-				if(getInputClass() == null)
-					throw new RuntimeException("Input class required");
-				if(getInput() == null)
-					throw new RuntimeException("Input value required");
+				if(Boolean.TRUE.equals(isInputRequired())){
+					if(getInputClass() == null)
+						throw new RuntimeException("Input class required");	
+					if(getInput() == null)
+						throw new RuntimeException("Input value required");
+				}
+				
 				if(getOutputClass() == null)
 					throw new RuntimeException("Output class required");
 				
 				if(getLogMessageBuilder()==null)
-					setLogMessageBuilder(new LogMessage.Builder(name, getInput().getClass().getSimpleName()));
+					setLogMessageBuilder(new LogMessage.Builder(name, getInput() ==null ? Constant.EMPTY_STRING : getInput().getClass().getSimpleName()));
 				if(Boolean.TRUE.equals(isShowInputLogMessage(getInput())))
 					addLogMessageBuilderParameters(getLogMessageBuilder(),"input",getInputLogMessage(getInput()));
 				if(Boolean.TRUE.equals(isShowOuputClassLogMessage(getOutputClass())))

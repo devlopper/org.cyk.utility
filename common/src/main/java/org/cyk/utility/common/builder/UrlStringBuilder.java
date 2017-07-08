@@ -95,7 +95,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 		
 		String pathString = getPathStringBuilder().setRequest(request).build();
 		String queryString = getQueryStringBuilder().build();
-		StringBuilder stringBuilder = new StringBuilder(String.format(PATH_STRING_FORMAT,StringUtils.defaultIfBlank(pathString, Constant.EMPTY_STRING)
+		java.lang.StringBuilder stringBuilder = new java.lang.StringBuilder(String.format(PATH_STRING_FORMAT,StringUtils.defaultIfBlank(pathString, Constant.EMPTY_STRING)
 				,StringUtils.isBlank(queryString) ? Constant.EMPTY_STRING : Constant.CHARACTER_QUESTION_MARK,StringUtils.defaultIfBlank(queryString, Constant.EMPTY_STRING)));
 		if(Boolean.TRUE.equals(relative)){
 			if(!Constant.CHARACTER_SLASH.equals(stringBuilder.charAt(0)))
@@ -194,7 +194,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 			});
 			
 			addToken(context,0);
-			StringBuilder stringBuilder = new StringBuilder();
+			java.lang.StringBuilder stringBuilder = new java.lang.StringBuilder();
 			
 			String separator = listenerUtils.getString(Listener.COLLECTION, new ListenerUtils.StringMethod<Listener>() {
 				@Override
@@ -240,7 +240,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 				stringBuilder.insert(0,separator);
 			
 			for(Entry<String, String> entry : getTokenReplacementMap().entrySet())
-				stringBuilder = new StringBuilder(StringUtils.replace(stringBuilder.toString(), entry.getKey(), entry.getValue()));
+				stringBuilder = new java.lang.StringBuilder(StringUtils.replace(stringBuilder.toString(), entry.getKey(), entry.getValue()));
 			
 			
 			return stringBuilder.toString();

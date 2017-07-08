@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.helper.StringHelper.Location;
 
