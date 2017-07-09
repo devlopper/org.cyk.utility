@@ -11,7 +11,7 @@ import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
 
-@Getter
+@Getter @Deprecated
 public class LogMessage extends AbstractBean implements Serializable {
 
 	private static final long serialVersionUID = 4892967981949897943L;
@@ -30,7 +30,7 @@ public class LogMessage extends AbstractBean implements Serializable {
 	}
 	
 	/**/
-	
+	@Deprecated
 	public static class Builder extends AbstractBuilder<LogMessage> implements Serializable {
 		private static final long serialVersionUID = 1L;
 		

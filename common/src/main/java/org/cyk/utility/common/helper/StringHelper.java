@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
 
 import lombok.Getter;
@@ -175,6 +176,8 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	
 	public static interface ToStringMapping extends org.cyk.utility.common.Mapping<String,String> {
 
+		Collection<Datasource> DATASOURCES = new ArrayList<>();
+		
 		CaseType getCaseType();
 		ToStringMapping setCaseType(CaseType caseType);
 		
@@ -220,56 +223,210 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					return __execute__(identifier, getCaseType(), getLocale(), getCachable());
 				}
 				
-				private String __execute__(String identifier,CaseType caseType,Locale locale,Boolean cachabled){
-					locale = commonUtils.getValueIfNotNullElseDefault(locale, Locale.FRENCH);
-					caseType = commonUtils.getValueIfNotNullElseDefault(caseType, CaseType.DEFAULT);
-					String value = MAP.get(identifier);
-					if(value==null){
-						CollectionHelper collectionHelper = new CollectionHelper();
-						Collection<Object> parameters = getParameters();
-						for(Entry<String, ClassLoader> entry : RESOURCE_BUNDLE_MAP.entrySet()){
-							try {
-								ResourceBundle resourceBundle = ResourceBundle.getBundle(entry.getKey(), locale, entry.getValue());
-								//logDebug("Bunble={}, Locale={}, Key={}",entry.getKey(),locale, code);
-								/*if(!locale.equals(resourceBundle.getLocale()))
-									throw new RuntimeException("Locale has changed! No same locale : "+locale+" <> "+resourceBundle.getLocale());*/
-								value = collectionHelper.isEmpty(parameters)?resourceBundle.getString(identifier):MessageFormat.format(resourceBundle.getString(identifier),parameters);
-								
-								String substituteCode = null;
-								while((substituteCode = StringUtils.substringBetween(value, SUBSTITUTE_TAG_START, SUBSTITUTE_TAG_END)) != null){
-									value = StringUtils.replace(value, SUBSTITUTE_TAG_START+substituteCode+SUBSTITUTE_TAG_END, __execute__(substituteCode,CaseType.NONE,locale,cachabled));
-								}
-								
-								if(StringUtils.startsWith(value,DO_NOT_PROCESS_TAG_START) && StringUtils.endsWith(value,DO_NOT_PROCESS_TAG_END)){
-									value = StringUtils.substringBetween(value, DO_NOT_PROCESS_TAG_START, DO_NOT_PROCESS_TAG_END);
-								}else{
-									value = StringHelper.getInstance().applyCaseType(value, caseType);
-								}
-								
-								if(Boolean.TRUE.equals(cachabled)){
-									String cacheIdentifier = new Builder.CacheIdentifier.Adapter.Default().setInput(identifier).setLocale(locale).addParameters(parameters)
-											.addParameters(new Object[]{caseType})/*.setLogMessageBuilder(getLogMessageBuilder())*/.execute();
-									CACHE.put(cacheIdentifier, value);
-									//logTrace("identifier {} has been put in cache with value {}",cacheIdentifier,value);
-									addLogMessageBuilderParameters(getLogMessageBuilder(), "cache identifier",cacheIdentifier,"cache value",value);
-								}
-								break;
-							} catch (Exception e) {
-								//It is not in that bundle. Let try the next one
-								e.printStackTrace();
-							}
-						}	
-					}else{
-						addLogMessageBuilderParameters(getLogMessageBuilder(), "found in user defined map","");
-						//logTrace("identifier {} has been found in user defined map with value {}", identifier,value);
-					}
+				private String __execute__(final String identifier,final CaseType pCaseType,final Locale pLocale,Boolean cachabled){
+					final Locale locale = commonUtils.getValueIfNotNullElseDefault(pLocale, Locale.FRENCH);
+					final CaseType caseType = commonUtils.getValueIfNotNullElseDefault(pCaseType, CaseType.DEFAULT);
+					final Collection<Object> parameters = getParameters();
 					
+					String value = new ListenerHelper.Executor.Function.Adapter.Default.String<Datasource>().setReturnFirstNotNull(Boolean.TRUE)
+						.setResultMethod(new ListenerHelper.Executor.ResultMethod.Adapter.Default.String<Datasource>() {
+							private static final long serialVersionUID = 1L;
+
+							@Override
+							protected java.lang.String __execute__() {
+								return getListener().setInput(identifier).setLocale(ToStringMapping.Adapter.Default.this.getLocale())
+										.setParameters(ToStringMapping.Adapter.Default.this.getParameters())
+										.setParent(ToStringMapping.Adapter.Default.this).execute();
+							}
+						}).setInput(DATASOURCES).execute();
+					
+					if(value==null){
+						value = MAP.get(identifier);
+						if(value==null){
+							CollectionHelper collectionHelper = new CollectionHelper();
+							for(Entry<String, ClassLoader> entry : RESOURCE_BUNDLE_MAP.entrySet()){
+								try {
+									ResourceBundle resourceBundle = ResourceBundle.getBundle(entry.getKey(), locale, entry.getValue());
+									value = collectionHelper.isEmpty(parameters)?resourceBundle.getString(identifier):MessageFormat.format(resourceBundle.getString(identifier),parameters);
+									
+									addLoggingMessageBuilderNamedParameters("location","resource bundle "+entry.getKey());
+									
+									String substituteCode = null;
+									while((substituteCode = StringUtils.substringBetween(value, SUBSTITUTE_TAG_START, SUBSTITUTE_TAG_END)) != null){
+										value = StringUtils.replace(value, SUBSTITUTE_TAG_START+substituteCode+SUBSTITUTE_TAG_END, __execute__(substituteCode,CaseType.NONE,locale,cachabled));
+									}
+									
+									if(StringUtils.startsWith(value,DO_NOT_PROCESS_TAG_START) && StringUtils.endsWith(value,DO_NOT_PROCESS_TAG_END)){
+										value = StringUtils.substringBetween(value, DO_NOT_PROCESS_TAG_START, DO_NOT_PROCESS_TAG_END);
+									}else{
+										value = StringHelper.getInstance().applyCaseType(value, caseType);
+									}
+									
+									if(Boolean.TRUE.equals(cachabled)){
+										String cacheIdentifier = new Builder.CacheIdentifier.Adapter.Default().setInput(identifier).setLocale(locale).addParameters(parameters)
+												.addParameters(new Object[]{caseType}).execute();
+										CACHE.put(cacheIdentifier, value);
+										addLoggingMessageBuilderNamedParameters("cache identifier",cacheIdentifier,"cache value",value);
+									}
+									break;
+								} catch (Exception e) {
+									//It is not in that bundle. Let try the next one
+									e.printStackTrace();
+								}
+							}	
+						}else{
+							addLoggingMessageBuilderNamedParameters("location","map");
+							//logTrace("identifier {} has been found in user defined map with value {}", identifier,value);
+						}
+					}
 					return value;
 				}
+				
 				
 			}
 			
 		}
+
+		/**/
+		
+		public static interface Datasource extends Action<String, String>{
+			
+			public static class Adapter extends Action.Adapter.Default<String, String> implements Datasource,Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Adapter() {
+					super("get", String.class, null, String.class);
+				}
+				
+				@Override
+				public ToStringMapping getParent() {
+					return (ToStringMapping) super.getParent();
+				}
+				
+				/**/
+				
+				public static class Default extends Datasource.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					/**/
+				}
+				
+			}
+			
+			/**/
+			
+			public static interface UserDefined extends Datasource {
+				public static final java.util.Map<String,String> REPOSITORY = new HashMap<>();
+				public static class Adapter extends Datasource.Adapter.Default implements UserDefined,Serializable {
+					private static final long serialVersionUID = 1L;
+				
+					public static class Default extends UserDefined.Adapter implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						@Override
+						protected String __execute__() {
+							return REPOSITORY.get(getInput());
+						}
+						
+					}
+					
+				}
+			}
+			
+			public static interface Cache extends Datasource {
+				public static final java.util.Map<String,String> REPOSITORY = new HashMap<>();
+				public static class Adapter extends Datasource.Adapter.Default implements Cache,Serializable {
+					private static final long serialVersionUID = 1L;
+				
+					public static class Default extends Cache.Adapter implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						@Override
+						protected String __execute__() {
+							return REPOSITORY.get(getInput());
+						}
+						
+					}
+					
+				}
+			}
+			
+			public static interface Database extends Datasource {
+				public static final java.util.Map<String,String> REPOSITORY = new HashMap<>();
+				public static class Adapter extends Datasource.Adapter.Default implements Database,Serializable {
+					private static final long serialVersionUID = 1L;
+				
+					public static class Default extends Database.Adapter implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						@Override
+						protected String __execute__() {
+							return REPOSITORY.get(getInput());
+						}
+						
+					}
+					
+				}
+			}
+			
+			public static interface ResourceBundle extends Datasource {
+				public static final java.util.Map<String,ClassLoader> REPOSITORY = new LinkedHashMap<>();
+				public static class Adapter extends Datasource.Adapter.Default implements ResourceBundle,Serializable {
+					private static final long serialVersionUID = 1L;
+				
+					public static class Default extends ResourceBundle.Adapter implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						protected String __execute__() {
+							String identifier = getParent().getInput();
+							final Locale locale = commonUtils.getValueIfNotNullElseDefault(getParent().getLocale(), Locale.FRENCH);
+							final CaseType caseType = commonUtils.getValueIfNotNullElseDefault(getParent().getCaseType(), CaseType.DEFAULT);
+							final Boolean cachable = commonUtils.getValueIfNotNullElseDefault(getParent().getCachable(), Boolean.TRUE);
+							return __execute__(identifier, caseType, locale, cachable);
+							
+						}
+					
+						private String __execute__(final String identifier,final CaseType caseType,final Locale locale,Boolean cachable){
+							CollectionHelper collectionHelper = new CollectionHelper();
+							for(Entry<String, ClassLoader> entry : REPOSITORY.entrySet()){
+								try {
+									java.util.ResourceBundle resourceBundle = java.util.ResourceBundle.getBundle(entry.getKey(), locale, entry.getValue());
+									String value = collectionHelper.isEmpty(parameters)?resourceBundle.getString(identifier):MessageFormat.format(resourceBundle.getString(identifier)
+											,collectionHelper.getArray(parameters));
+									
+									addLoggingMessageBuilderNamedParameters("location","resource bundle "+entry.getKey());
+									
+									String substituteCode = null;
+									while((substituteCode = StringUtils.substringBetween(value, SUBSTITUTE_TAG_START, SUBSTITUTE_TAG_END)) != null){
+										value = StringUtils.replace(value, SUBSTITUTE_TAG_START+substituteCode+SUBSTITUTE_TAG_END, __execute__(substituteCode,CaseType.NONE,locale,cachable));
+									}
+									
+									if(StringUtils.startsWith(value,DO_NOT_PROCESS_TAG_START) && StringUtils.endsWith(value,DO_NOT_PROCESS_TAG_END)){
+										value = StringUtils.substringBetween(value, DO_NOT_PROCESS_TAG_START, DO_NOT_PROCESS_TAG_END);
+									}else{
+										value = StringHelper.getInstance().applyCaseType(value, caseType);
+									}
+									
+									if(Boolean.TRUE.equals(cachable)){
+										String cacheIdentifier = new Builder.CacheIdentifier.Adapter.Default().setInput(identifier).setLocale(locale).addParameters(parameters)
+												.addParameters(new Object[]{caseType}).execute();
+										CACHE.put(cacheIdentifier, value);
+										addLoggingMessageBuilderNamedParameters("cache identifier",cacheIdentifier,"cache value",value);
+									}
+									return value;
+								} catch (Exception e) {
+									//It is not in that bundle. Let try the next one
+									//e.printStackTrace();
+								}
+							}
+							return null;
+						}
+					}
+				}
+			}
+		}
+		
+		/**/
 		
 		Map<String,String> CACHE = new HashMap<>();
 		Map<String,ClassLoader> RESOURCE_BUNDLE_MAP = new LinkedHashMap<>();

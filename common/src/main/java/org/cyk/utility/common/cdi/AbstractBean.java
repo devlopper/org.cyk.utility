@@ -18,8 +18,6 @@ import javax.enterprise.inject.spi.CDI;
 import javax.naming.Context;
 import javax.rmi.PortableRemoteObject;
 
-import lombok.Getter;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -29,8 +27,12 @@ import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.LogMessage;
 import org.cyk.utility.common.RunnableListener;
+import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.LoggingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import lombok.Getter;
 
 public class AbstractBean implements Serializable {
 
@@ -323,10 +325,17 @@ public class AbstractBean implements Serializable {
 		__logger__().trace(stringMessage,arguments);
 		systemOut(SYSTEM_OUT_LOG_TRACE,message, arguments);
 	}
+	
+	@Deprecated
 	protected void logTrace(LogMessage logMessage) {
 		logTrace(logMessage.getTemplate(), logMessage.getArgumentsArray());
 	}
 	
+	protected void logTrace(LoggingHelper.Message message) {
+		logTrace(message.getTemplate(), new CollectionHelper().getArray(message.getArguments()));
+	}
+	
+	@Deprecated
 	protected void logTrace(LogMessage.Builder logMessageBuilder) {
 		if(logMessageBuilder==null)
 			return;
@@ -334,10 +343,17 @@ public class AbstractBean implements Serializable {
 		logTrace(logMessage);
 	}
 	
+	protected void logTrace(LoggingHelper.Message.Builder loggingMessageBuilder) {
+		if(loggingMessageBuilder==null)
+			return;
+		LoggingHelper.Message message = loggingMessageBuilder.execute();
+		logTrace(message);
+	}
+	
 	protected void logTrace(Action<?, ?> action) {
 		if(action==null)
 			return;
-		logTrace(action.getLogMessageBuilder());
+		logTrace(action.getLoggingMessageBuilder());
 	}
 
 	protected void logDebug(Object message,Object...arguments) {
@@ -360,10 +376,17 @@ public class AbstractBean implements Serializable {
 			System.out.println(message+" : "+StringUtils.join(arguments," , "));
 	}
 	
+	@Deprecated
 	protected void addLogMessageBuilderParameters(LogMessage.Builder logMessageBuilder,Object...parameters){
 		if(logMessageBuilder==null)
 			return;
 		logMessageBuilder.addParameters(parameters);
+	}
+	
+	protected void addLoggingMessageBuilderParameters(LoggingHelper.Message.Builder loggingMessageBuilder,Object...parameters){
+		if(loggingMessageBuilder==null)
+			return;
+		loggingMessageBuilder.addParameters(parameters);
 	}
 	
 	protected void throwNotYetImplemented(){

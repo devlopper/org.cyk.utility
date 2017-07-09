@@ -14,10 +14,41 @@ public class StringHelperUT extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 
 	static {
-		StringHelper.ToStringMapping.RESOURCE_BUNDLE_MAP.put("org.cyk.utility.common.testmsg", StringHelper.class.getClassLoader());
-		StringHelper.ToStringMapping.MAP.put("stringid1", "string_result_one");
-		StringHelper.ToStringMapping.MAP.put("stringid2", "string_result_2");
-		StringHelper.ToStringMapping.MAP.put("stringid3", "third");
+		StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.UserDefined.Adapter.Default());
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.UserDefined.REPOSITORY.put("stringid1", "string_result_one");
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.UserDefined.REPOSITORY.put("stringid2", "string_result_2");
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.UserDefined.REPOSITORY.put("stringid3", "third");
+		
+		StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.Cache.Adapter.Default());
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.Cache.REPOSITORY.put("cache001", "cache value one");
+		
+		StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.ResourceBundle.Adapter.Default());
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.testmsg", StringHelper.class.getClassLoader());
+	}
+	
+	@Test
+	public void executeMapStringFromUserDefinedDatasource(){
+		assertEquals("string_result_one", new StringHelper.ToStringMapping.Adapter.Default("stringid1").execute());
+		assertEquals("string_result_2", new StringHelper.ToStringMapping.Adapter.Default("stringid2").execute());
+		assertEquals("third", new StringHelper.ToStringMapping.Adapter.Default("stringid3").execute());
+	}
+	
+	@Test
+	public void executeMapStringFromResourceBundleDatasource(){
+		assertEquals("string 1", new StringHelper.ToStringMapping.Adapter.Default("mid1").execute());
+		assertEquals("string 2", new StringHelper.ToStringMapping.Adapter.Default("mid2").execute());
+		assertEquals("string 2 avec string 1", new StringHelper.ToStringMapping.Adapter.Default("mid1_2").execute());
+	}
+	
+	@Test
+	public void executeMapStringFromResourceBundleDatasourceWithParameters(){
+		assertEquals("hi v1 , it is v2", new StringHelper.ToStringMapping.Adapter.Default("myparamid1").addManyParameters("v1","v2").execute());
+		assertEquals("hi komenan , it is mom", new StringHelper.ToStringMapping.Adapter.Default("myparamid1").addManyParameters("komenan","mom").execute());
+	}
+	
+	@Test
+	public void executeMapStringFromCacheDatasource(){
+		assertEquals("cache value one", new StringHelper.ToStringMapping.Adapter.Default("cache001").execute());
 	}
 	
 	@Test
@@ -29,17 +60,7 @@ public class StringHelperUT extends AbstractUnitTest {
 		assertEquals("fr_stringid1_liste_employee_2016_NONE", new StringHelper.Builder.CacheIdentifier.Adapter.Default().setInput("stringid1")
 				.addParameters(new Object[]{"liste","employee",2016,CaseType.NONE}).execute());
 	}
-	
-	@Test
-	public void executeToStringMapping(){
-		assertEquals("string_result_one", new StringHelper.ToStringMapping.Adapter.Default("stringid1").execute());
-		assertEquals("string_result_2", new StringHelper.ToStringMapping.Adapter.Default("stringid2").execute());
-		assertEquals("third", new StringHelper.ToStringMapping.Adapter.Default("stringid3").execute());
-		assertEquals("string 1", new StringHelper.ToStringMapping.Adapter.Default("mid1").execute());
-		assertEquals("string 2", new StringHelper.ToStringMapping.Adapter.Default("mid2").execute());
-		assertEquals("string 2 avec string 1", new StringHelper.ToStringMapping.Adapter.Default("mid1_2").execute());
-	}
-	
+		
 	@Test
 	public void assertCaseType(){
 		assertAppliedCaseType("mY pHraSE", CaseType.NONE,"mY pHraSE");

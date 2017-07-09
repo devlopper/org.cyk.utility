@@ -82,4 +82,8 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return StringUtils.join(collection,separator);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <ELEMENT> ELEMENT[] getArray(Collection<ELEMENT> collection){
+		return (ELEMENT[]) (collection == null ? null : collection.toArray());
+	}
 }

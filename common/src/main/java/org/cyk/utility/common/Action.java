@@ -8,13 +8,17 @@ import java.util.Locale;
 import java.util.Properties;
 
 import org.cyk.utility.common.cdi.BeanAdapter;
+import org.cyk.utility.common.helper.LoggingHelper;
 
 import lombok.Getter;
 
 public interface Action<INPUT,OUTPUT> {
 
-	LogMessage.Builder getLogMessageBuilder();
-	Action<INPUT,OUTPUT> setLogMessageBuilder(LogMessage.Builder logMessageBuilder);
+	LoggingHelper.Message.Builder getLoggingMessageBuilder();
+	Action<INPUT,OUTPUT> setLoggingMessageBuilder(LoggingHelper.Message.Builder loggingMessageBuilder);
+	
+	@Deprecated LogMessage.Builder getLogMessageBuilder();
+	@Deprecated Action<INPUT,OUTPUT> setLogMessageBuilder(LogMessage.Builder logMessageBuilder);
 	
 	Boolean getAutomaticallyLogMessage();
 	Action<INPUT,OUTPUT> setAutomaticallyLogMessage(Boolean value);
@@ -42,6 +46,9 @@ public interface Action<INPUT,OUTPUT> {
 	Locale getLocale();
 	Action<INPUT, OUTPUT> setLocale(Locale locale);
 	
+	Action<INPUT,OUTPUT> getParent();
+	Action<INPUT,OUTPUT> setParent(Action<INPUT,OUTPUT> parent);
+	
 	/**
 	 * The following will be used to extend the attributes list 
 	 **/
@@ -54,6 +61,10 @@ public interface Action<INPUT,OUTPUT> {
 	Action<INPUT, OUTPUT> setParameters(Collection<Object> collection);
 	Action<INPUT, OUTPUT> addParameters(Collection<Object> collection);
 	Action<INPUT, OUTPUT> addParameters(Object[] objects);
+	Action<INPUT, OUTPUT> addManyParameters(Object...objects);
+	Action<INPUT, OUTPUT> addNamedParameters(Object...objects);
+	
+	Action<INPUT, OUTPUT> clear();
 	
 	/**/
 	
@@ -67,17 +78,27 @@ public interface Action<INPUT,OUTPUT> {
 		protected INPUT input;
 		protected OUTPUT output;
 		protected Class<OUTPUT> outputClass;
-		protected LogMessage.Builder logMessageBuilder;
+		@Deprecated protected LogMessage.Builder logMessageBuilder;
+		protected LoggingHelper.Message.Builder loggingMessageBuilder;
 		protected Boolean automaticallyLogMessage = Boolean.TRUE,isInputRequired=Boolean.TRUE;
 		protected Properties properties;
 		protected Collection<Object> parameters;
+		protected Action<INPUT,OUTPUT> parent;
 		
+		@Deprecated
 		public Adapter(String name,Class<INPUT> inputClass,INPUT input,Class<OUTPUT> outputClass,LogMessage.Builder logMessageBuilder) {
 			setName(name);
 			setInputClass(inputClass);
 			setInput(input);
 			setOutputClass(outputClass);
 			setLogMessageBuilder(logMessageBuilder);
+		}
+		
+		public Adapter(String name,Class<INPUT> inputClass,INPUT input,Class<OUTPUT> outputClass) {
+			setName(name);
+			setInputClass(inputClass);
+			setInput(input);
+			setOutputClass(outputClass);
 		}
 		
 		@Override
@@ -132,9 +153,15 @@ public interface Action<INPUT,OUTPUT> {
 			return this;
 		}
 	
-		@Override
+		@Override @Deprecated
 		public Action<INPUT, OUTPUT> setLogMessageBuilder(LogMessage.Builder logMessageBuilder) {
 			this.logMessageBuilder = logMessageBuilder;
+			return this;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setLoggingMessageBuilder(LoggingHelper.Message.Builder loggingMessageBuilder) {
+			this.loggingMessageBuilder = loggingMessageBuilder;
 			return this;
 		}
 		
@@ -151,6 +178,12 @@ public interface Action<INPUT,OUTPUT> {
 		}
 		
 		@Override
+		public Action<INPUT, OUTPUT> setParent(Action<INPUT, OUTPUT> parent) {
+			this.parent = parent;
+			return this;
+		}
+		
+		@Override
 		public Action<INPUT, OUTPUT> setParameters(Collection<Object> parameters) {
 			this.parameters = parameters;
 			return this;
@@ -161,7 +194,7 @@ public interface Action<INPUT,OUTPUT> {
 			if(parameters!=null && parameters.size()>0){
 				if(this.parameters==null)
 					this.parameters = new ArrayList<>();
-				getParameters().addAll(parameters);
+				this.parameters.addAll(parameters);
 			}
 			return this;
 		}
@@ -174,13 +207,66 @@ public interface Action<INPUT,OUTPUT> {
 			return this;
 		}
 		
+		@Override
+		public Action<INPUT, OUTPUT> addManyParameters(Object...parameters) {
+			if(parameters!=null && parameters.length>0){
+				for(Object parameter : parameters)
+					addParameters(Arrays.asList(parameter));
+			}
+			return this;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> addNamedParameters(Object...parameters) {
+			Collection<Object> collection = new ArrayList<>();
+			if(parameters!=null && parameters.length>0){
+				for(int i = 0 ; i< parameters.length ; i = i + 2)
+					collection.add(new Object[]{parameters[i],parameters[i+1]});
+			}
+			addParameters(collection);
+			return this;
+		}
+		
+		protected void addLoggingMessageBuilderNamedParameters(Object...parameters){
+			LoggingHelper.Message.Builder builder = getLoggingMessageBuilder();
+			if(builder==null)
+				/*if(this instanceof LoggingHelper.Message.Builder)
+					logTrace(StringUtils.join(parameters, LoggingHelper.Message.Builder.PARAMETER_SEPARATOR));
+				else*/
+					;
+			else{
+				builder.addNamedParameters(parameters);
+			}
+		}
+		
+		protected void addLoggingMessageBuilderParameters(Object...parameters){
+			LoggingHelper.Message.Builder builder = getLoggingMessageBuilder();
+			if(builder==null)
+				/*if(this instanceof LoggingHelper.Message.Builder)
+					logTrace(StringUtils.join(parameters, LoggingHelper.Message.Builder.PARAMETER_SEPARATOR));
+				else*/
+					return;
+			//else
+				builder.addParameters(parameters);
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> clear() {
+			return null;
+		}
+		
 		/**/
 		
 		public static class Default<INPUT,OUTPUT> extends Action.Adapter<INPUT,OUTPUT> implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
+			@Deprecated
 			public Default(String name,Class<INPUT> inputClass,INPUT input, Class<OUTPUT> outputClass, LogMessage.Builder logMessageBuilder) {
 				super(name,inputClass,input, outputClass, logMessageBuilder);
+			}
+			
+			public Default(String name,Class<INPUT> inputClass,INPUT input, Class<OUTPUT> outputClass) {
+				super(name,inputClass,input, outputClass);
 			}
 			
 			protected Boolean isInputRequired(){
@@ -199,17 +285,24 @@ public interface Action<INPUT,OUTPUT> {
 				if(getOutputClass() == null)
 					throw new RuntimeException("Output class required");
 				
-				if(getLogMessageBuilder()==null)
-					setLogMessageBuilder(new LogMessage.Builder(name, getInput() ==null ? Constant.EMPTY_STRING : getInput().getClass().getSimpleName()));
+				LoggingHelper.Message.Builder loggingMessageBuilder = getLoggingMessageBuilder();
+				if(loggingMessageBuilder==null && !(this instanceof LoggingHelper.Message.Builder))
+					setLoggingMessageBuilder(loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default());
+				
+				//if(loggingMessageBuilder==null)
+				//	setLogMessageBuilder(new LogMessage.Builder(name, getInput() ==null ? Constant.EMPTY_STRING : getInput().getClass().getSimpleName()));
+				
 				if(Boolean.TRUE.equals(isShowInputLogMessage(getInput())))
-					addLogMessageBuilderParameters(getLogMessageBuilder(),"input",getInputLogMessage(getInput()));
+					addLoggingMessageBuilderNamedParameters("input",getInputLogMessage(getInput()));
 				if(Boolean.TRUE.equals(isShowOuputClassLogMessage(getOutputClass())))
-					addLogMessageBuilderParameters(getLogMessageBuilder(),"output class",getOutputClass().getSimpleName());
+					addLoggingMessageBuilderNamedParameters("output class",getOutputClass().getSimpleName());
 				output = __execute__();
 				if(Boolean.TRUE.equals(isShowOutputLogMessage(output)))
-					addLogMessageBuilderParameters(getLogMessageBuilder(),"output",getOutputLogMessage(output));
-				if(Boolean.TRUE.equals(getAutomaticallyLogMessage()))
+					addLoggingMessageBuilderNamedParameters("output",getOutputLogMessage(output));
+				if(Boolean.TRUE.equals(getAutomaticallyLogMessage())){
+					//LoggingHelper.Message message = loggingMessageBuilder.execute();
 					logTrace(this);
+				}
 				return output;
 			}
 			
@@ -242,6 +335,13 @@ public interface Action<INPUT,OUTPUT> {
 				if(properties==null)
 					properties = new Properties();
 				return properties;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> clear() {
+				this.output = null;
+				this.parameters = null;
+				return this;
 			}
 		}
 	}
