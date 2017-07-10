@@ -27,6 +27,25 @@ public class StringHelperUT extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void applyCaseType(){
+		assertThat("string is not null", StringHelper.getInstance().applyCaseType(null, CaseType.NONE)==null);
+		assertThat("string is not null", StringHelper.getInstance().applyCaseType(null, CaseType.FU)==null);
+		assertThat("string is not null", StringHelper.getInstance().applyCaseType(null, CaseType.FURL)==null);
+		
+		assertEquals("", StringHelper.getInstance().applyCaseType("", CaseType.NONE));
+		assertEquals("", StringHelper.getInstance().applyCaseType("", CaseType.FU));
+		assertEquals("", StringHelper.getInstance().applyCaseType("", CaseType.FURL));
+		
+		assertEquals("S", StringHelper.getInstance().applyCaseType("S", CaseType.NONE));
+		assertEquals("S", StringHelper.getInstance().applyCaseType("s", CaseType.FU));
+		assertEquals("S", StringHelper.getInstance().applyCaseType("s", CaseType.FURL));
+		
+		assertEquals("sAlut géRArd!", StringHelper.getInstance().applyCaseType("sAlut géRArd!", CaseType.NONE));
+		assertEquals("SAlut géRArd!", StringHelper.getInstance().applyCaseType("sAlut géRArd!", CaseType.FU));
+		assertEquals("Salut gérard!", StringHelper.getInstance().applyCaseType("sAlut géRArd!", CaseType.FURL));
+	}
+	
+	@Test
 	public void executeMapStringFromUserDefinedDatasource(){
 		assertEquals("string_result_one", new StringHelper.ToStringMapping.Adapter.Default("stringid1").execute());
 		assertEquals("string_result_2", new StringHelper.ToStringMapping.Adapter.Default("stringid2").execute());
@@ -44,6 +63,13 @@ public class StringHelperUT extends AbstractUnitTest {
 	public void executeMapStringFromResourceBundleDatasourceWithParameters(){
 		assertEquals("hi v1 , it is v2", new StringHelper.ToStringMapping.Adapter.Default("myparamid1").addManyParameters("v1","v2").execute());
 		assertEquals("hi komenan , it is mom", new StringHelper.ToStringMapping.Adapter.Default("myparamid1").addManyParameters("komenan","mom").execute());
+		assertEquals("hi KOMENAN , it is mOm", new StringHelper.ToStringMapping.Adapter.Default("myparamid1").addManyParameters("KOMENAN","mOm").execute());
+		assertEquals("Hi komenan , it is mom", new StringHelper.ToStringMapping.Adapter.Default("myparamid1").setCaseType(CaseType.FURL).addManyParameters("komenan","mom")
+				.execute());
+		assertEquals("Hi komenan , it is mom", new StringHelper.ToStringMapping.Adapter.Default("myparamid1").setCaseType(CaseType.FURL).addManyParameters("KOMENAN","mOm")
+				.execute());
+		assertEquals("Hi KOMENAN , it is mOm", new StringHelper.ToStringMapping.Adapter.Default("myparamid1").setCaseType(CaseType.FU)
+				.addManyParameters("KOMENAN","mOm").execute());
 	}
 	
 	@Test

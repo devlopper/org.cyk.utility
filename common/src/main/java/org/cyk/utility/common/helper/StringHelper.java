@@ -18,7 +18,9 @@ import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Singleton
 public class StringHelper extends AbstractHelper implements Serializable {
@@ -28,7 +30,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	public static final String[] END_LINE = {"\r\n","\n"};
 	
 	public enum CaseType{
-		NONE,FURL
+		NONE,FURL,FU,L,U
 		;
 		
 		public static CaseType DEFAULT = NONE;
@@ -40,11 +42,16 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	private static final String KEY_ORDINAL_NUMBER_SUFFIX_FORMAT = KEY_ORDINAL_NUMBER_FORMAT+".suffix";
 			
 	public String applyCaseType(String string,CaseType caseType){
+		if(string==null)
+			return null;
 		if(caseType==null)
 			caseType = CaseType.DEFAULT;
 		switch(caseType){
 		case NONE:return string;
+		case L:return StringUtils.lowerCase(string);
+		case U:return StringUtils.upperCase(string);
 		case FURL:return StringUtils.capitalize(string.toLowerCase());
+		case FU:return StringUtils.upperCase(StringUtils.substring(string, 0,1))+StringUtils.substring(string, 1);
 		}
 		return string;	
 	}
@@ -96,11 +103,6 @@ public class StringHelper extends AbstractHelper implements Serializable {
 			if(StringUtils.isNotBlank(string))
 				results.add(string);
 		return results;
-	}
-	
-	public String buildCacheIdentifier(Locale locale,String code,Object[] parameters,CaseType caseType){
-		return locale+Constant.CHARACTER_UNDESCORE.toString()+code+(parameters==null?Constant.EMPTY_STRING:StringUtils.join(parameters))
-				+Constant.CHARACTER_UNDESCORE.toString()+caseType;
 	}
 	
 	/**/
@@ -408,11 +410,12 @@ public class StringHelper extends AbstractHelper implements Serializable {
 									}
 									
 									if(Boolean.TRUE.equals(cachable)){
-										String cacheIdentifier = new Builder.CacheIdentifier.Adapter.Default().setInput(identifier).setLocale(locale).addParameters(parameters)
-												.addParameters(new Object[]{caseType}).execute();
+										String cacheIdentifier = new Builder.CacheIdentifier.Adapter.Default().setInput(identifier).setLocale(locale)
+												.addParameters(parameters).addParameters(new Object[]{caseType}).execute();
 										CACHE.put(cacheIdentifier, value);
 										addLoggingMessageBuilderNamedParameters("cache identifier",cacheIdentifier,"cache value",value);
 									}
+									
 									return value;
 								} catch (Exception e) {
 									//It is not in that bundle. Let try the next one
@@ -439,5 +442,36 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		String SUBSTITUTE_TAG = "cyk_code";
 		String SUBSTITUTE_TAG_START = "<"+SUBSTITUTE_TAG+">";
 		String SUBSTITUTE_TAG_END = "</"+SUBSTITUTE_TAG+">";
+	}
+
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
+	public static class Parameter extends Action.Parameter implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		protected CaseType caseType;
+
+		public Parameter(Object name, Object value, CaseType caseType) {
+			super(name, value);
+			this.caseType = caseType;
+		}
+		
+		public Parameter(Object name, Object value) {
+			this(name, value,null);
+		}
+		
+		public Parameter(Object value) {
+			this(null, value);
+		}
+		
+		public Parameter(Object value, CaseType caseType) {
+			this(null, value,caseType);
+		}
+		
+		@Override
+		public String toString() {
+			return super.toString()+(caseType == null ? Constant.EMPTY_STRING : (Constant.CHARACTER_COLON.toString()+caseType));
+		}
 	}
 }

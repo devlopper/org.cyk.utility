@@ -10,7 +10,11 @@ import java.util.Properties;
 import org.cyk.utility.common.cdi.BeanAdapter;
 import org.cyk.utility.common.helper.LoggingHelper;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public interface Action<INPUT,OUTPUT> {
 
@@ -343,6 +347,25 @@ public interface Action<INPUT,OUTPUT> {
 				this.parameters = null;
 				return this;
 			}
+		}
+	}
+
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true) @NoArgsConstructor @AllArgsConstructor
+	public static class Parameter implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		protected Object name;
+		protected Object value;
+		
+		public Parameter(Object value) {
+			this(null,value);
+		}
+		
+		@Override
+		public String toString() {
+			return (name == null ? Constant.EMPTY_STRING : (name+Constant.CHARACTER_COLON.toString()))+value.toString();
 		}
 	}
 }
