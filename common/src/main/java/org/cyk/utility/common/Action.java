@@ -39,6 +39,9 @@ public interface Action<INPUT,OUTPUT> {
 	Boolean getIsInputRequired();
 	Action<INPUT,OUTPUT> setIsInputRequired(Boolean isInputRequired);
 	
+	Boolean getExecutable();
+	Action<INPUT,OUTPUT> setExecutable(Boolean executable);
+	
 	OUTPUT execute();
 	
 	OUTPUT getOutput();
@@ -84,7 +87,7 @@ public interface Action<INPUT,OUTPUT> {
 		protected Class<OUTPUT> outputClass;
 		@Deprecated protected LogMessage.Builder logMessageBuilder;
 		protected LoggingHelper.Message.Builder loggingMessageBuilder;
-		protected Boolean automaticallyLogMessage = Boolean.TRUE,isInputRequired=Boolean.TRUE;
+		protected Boolean automaticallyLogMessage = Boolean.TRUE,isInputRequired=Boolean.TRUE,executable;
 		protected Properties properties;
 		protected Collection<Object> parameters;
 		protected Action<INPUT,OUTPUT> parent;
@@ -103,6 +106,11 @@ public interface Action<INPUT,OUTPUT> {
 			setInputClass(inputClass);
 			setInput(input);
 			setOutputClass(outputClass);
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setExecutable(Boolean executable) {
+			return null;
 		}
 		
 		@Override
@@ -276,9 +284,18 @@ public interface Action<INPUT,OUTPUT> {
 			protected Boolean isInputRequired(){
 				return getIsInputRequired()==null || Boolean.TRUE.equals(getIsInputRequired());
 			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setExecutable(Boolean executable) {
+				this.executable = executable;
+				return this;
+			}
 						
 			@Override
 			public final OUTPUT execute() {
+				Boolean executable = getExecutable();
+				if(executable!=null && Boolean.FALSE.equals(executable))
+					return output;
 				if(Boolean.TRUE.equals(isInputRequired())){
 					if(getInputClass() == null)
 						throw new RuntimeException("Input class required");	

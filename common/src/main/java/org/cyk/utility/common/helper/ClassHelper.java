@@ -68,6 +68,22 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		}
 	}
 	
+	public <T> T instanciate(Class<T> aClass,Object[] constructorParameters){
+		Class<?>[] classes = new Class[constructorParameters.length / 2];
+		Object[] arguments = new Object[constructorParameters.length / 2];
+		int j = 0;
+		for(int i = 0 ; i < constructorParameters.length ; i = i + 2){
+			classes[j] = (Class<?>) constructorParameters[i];
+			arguments[j++] = constructorParameters[i+1];
+		}
+		try {
+			return aClass.getConstructor(classes).newInstance(arguments);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			return null;
+		}
+	}
+	
 	/**/
 	
 	public static interface Get extends AbstractReflectionHelper.Get<Package, Class<?>> {

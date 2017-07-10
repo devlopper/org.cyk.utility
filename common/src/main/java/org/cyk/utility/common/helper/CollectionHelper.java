@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.inject.Singleton;
 
@@ -42,10 +44,10 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return get(Boolean.FALSE,elements);
 	}
 	
-	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,Boolean append,Collection<ELEMENT> elements){
+	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass,Collection<ELEMENT> collection,Boolean append,Collection<ELEMENT> elements){
 		Collection<ELEMENT> result = Boolean.TRUE.equals(append) ? collection : null;
 		if(result==null)
-			result = new ArrayList<ELEMENT>();
+			result = Set.class.isAssignableFrom(collectionClass) ? new LinkedHashSet<ELEMENT>() : new ArrayList<ELEMENT>();
 		if(Boolean.TRUE.equals(append))
 			;
 		else
@@ -53,6 +55,14 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				result.addAll(collection);
 		result.addAll(elements);
 		return result;
+	}
+	
+	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,Boolean append,Collection<ELEMENT> elements){
+		return add(List.class, collection, append, elements);
+	}
+	
+	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass,Collection<ELEMENT> collection,Boolean append,@SuppressWarnings("unchecked") ELEMENT...elements){
+		return add(collectionClass,collection,append,get(elements));
 	}
 	
 	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,Boolean append,@SuppressWarnings("unchecked") ELEMENT...elements){
@@ -76,7 +86,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return collection==null || collection.isEmpty();
 	}
 
-	public String concatenate(Collection<Object> collection, String separator) {
+	public String concatenate(Collection<?> collection, String separator) {
 		if(isEmpty(collection))
 			return Constant.EMPTY_STRING;
 		return StringUtils.join(collection,separator);

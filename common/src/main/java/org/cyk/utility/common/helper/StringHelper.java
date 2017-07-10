@@ -80,7 +80,15 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	}
 	
 	public String concatenate(Object[] strings,String separator){
+		if(strings==null)
+			return Constant.EMPTY_STRING;
 		return StringUtils.join(strings, separator);
+	}
+	
+	public String concatenate(Collection<String> strings,String separator){
+		if(strings==null)
+			return Constant.EMPTY_STRING;
+		return concatenate(strings.toArray(), separator);
 	}
 	
 	public Boolean isAtLocation(String string,String value,Location location){
