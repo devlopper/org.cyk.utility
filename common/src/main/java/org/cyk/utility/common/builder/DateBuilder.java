@@ -28,7 +28,7 @@ public class DateBuilder extends AbstractBuilder<Date> implements Serializable {
 	
 	@Override
 	public Date build() {
-		InstanceHelper instanceHelper = inject(InstanceHelper.class);
+		InstanceHelper instanceHelper = new InstanceHelper();
 		return new DateTime(instanceHelper.getIfNotNullElseDefault(year,YEAR), instanceHelper.getIfNotNullElseDefault(monthOfYear,MONTHOFYEAR)
 				, instanceHelper.getIfNotNullElseDefault(dayOfMonth,DAYOFMONTH), instanceHelper.getIfNotNullElseDefault(hourOfDay,HOUROFDAY)
 				, instanceHelper.getIfNotNullElseDefault(minuteOfHour,MINUTEOFHOUR), instanceHelper.getIfNotNullElseDefault(secondOfMinute,SECONDOFMINUTE)

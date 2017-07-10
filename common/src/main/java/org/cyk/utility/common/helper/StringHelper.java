@@ -15,6 +15,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
+import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.Constant;
 
 import lombok.Getter;
@@ -173,12 +174,38 @@ public class StringHelper extends AbstractHelper implements Serializable {
 						String parameters = new CollectionHelper().concatenate(getParameters(),Constant.CHARACTER_UNDESCORE.toString());
 						return commonUtils.getValueIfNotNullElseDefault(getLocale(),Locale.FRENCH)+Constant.CHARACTER_UNDESCORE.toString()+getInput()
 							+(StringUtils.isBlank(parameters) ? Constant.EMPTY_STRING : Constant.CHARACTER_UNDESCORE+parameters);
-					}
-					
+					}	
+				}	
+			}	
+		}
+	
+		public static interface ClassIdentifier extends Builder {
+			
+			@Override
+			ClassIdentifier setInput(Object input);
+			
+			public static class Adapter extends Builder.Adapter.Default implements ClassIdentifier,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public ClassIdentifier setInput(Object input) {
+					return (ClassIdentifier) super.setInput(input);
 				}
 				
-			}
-			
+				public static class Default extends ClassIdentifier.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					@Override
+					public ClassIdentifier setInput(Object input) {
+						return (ClassIdentifier) super.setInput(input);
+					}
+					
+					@Override
+					protected String __execute__() {
+						return "model.entity."+StringUtils.uncapitalize(((Class<?>)getInput()).getSimpleName());
+					}	
+				}	
+			}	
 		}
 	}
 
@@ -187,6 +214,9 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	public static interface ToStringMapping extends org.cyk.utility.common.Mapping<String,String> {
 
 		Collection<Datasource> DATASOURCES = new ArrayList<>();
+		String UNKNOWN_MARKER_START = "##";
+		String UNKNOWN_MARKER_END = "##";
+		String UNKNOWN_FORMAT = "%s%s%s";
 		
 		CaseType getCaseType();
 		ToStringMapping setCaseType(CaseType caseType);
@@ -289,6 +319,10 @@ public class StringHelper extends AbstractHelper implements Serializable {
 							//logTrace("identifier {} has been found in user defined map with value {}", identifier,value);
 						}
 					}
+					
+					if(value==null)
+						value = String.format(UNKNOWN_FORMAT, UNKNOWN_MARKER_START,identifier,UNKNOWN_MARKER_END);
+					
 					return value;
 				}
 				
@@ -319,6 +353,15 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
 					/**/
+					
+					public static void initialize(){
+						StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.ResourceBundle.Adapter.Default());
+						
+				        StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.i18n", CommonUtils.class.getClassLoader());
+						StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.field", CommonUtils.class.getClassLoader());
+						StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.condition", CommonUtils.class.getClassLoader());
+				        
+					}
 				}
 				
 			}

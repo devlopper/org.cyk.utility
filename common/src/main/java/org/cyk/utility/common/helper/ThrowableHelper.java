@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.helper.StringHelper.ToStringMapping;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -66,6 +67,15 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 		throw new RuntimeException(throwable.getCause());
 	}
 	
+	public <T extends java.lang.Throwable> void throw_(ConditionHelper.Condition condition,Class<T> causeClass){
+		if(Boolean.TRUE.equals(condition.getValue()))
+			throw_(new Throwable.Builder.Adapter.Default<T>(causeClass).addManyParameters(condition.getMessage()).execute());
+	}
+	
+	public <T extends java.lang.Throwable> void throw_(ConditionHelper.Condition.Builder builder,Class<T> causeClass){
+		throw_(builder.execute(),causeClass);
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
@@ -81,23 +91,15 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 			Class<CAUSE> getCauseClass();
 			Builder<CAUSE> setCauseClass(Class<CAUSE> causeClass);
 
-			/*
-			String getIdentifier();
-			Builder setIdentifier(String identifier);
+			StringHelper.ToStringMapping getMessageMapping();
+			Builder<CAUSE> setMessageMapping(StringHelper.ToStringMapping messageMapping);
 			
-			Set<String> getMessages();
-			Builder setMessages(Set<String> messages);
-			Builder addMessages(Collection<String> messages);
-			Builder addMessages(String...messages);
-			*/
 			@Getter @Setter 
 			public static class Adapter<CAUSE extends java.lang.Throwable> extends org.cyk.utility.common.Builder.Adapter.Default<Throwable> implements Builder<CAUSE>,Serializable {
 				private static final long serialVersionUID = 1L;
-				/*
-				protected String identifier;
-				protected Set<String> messages;
-				*/
+				
 				protected Class<CAUSE> causeClass;
+				protected StringHelper.ToStringMapping messageMapping;
 				
 				public Adapter(Class<CAUSE> causeClass) {
 					super(Throwable.class);
@@ -109,27 +111,11 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 					return null;
 				}
 				
-				/*
 				@Override
-				public Builder setIdentifier(String identifier) {
+				public Builder<CAUSE> setMessageMapping(ToStringMapping stringMapping) {
 					return null;
 				}
 				
-				@Override
-				public Builder setMessages(Set<String> messages) {
-					return null;
-				}
-				
-				@Override
-				public Builder addMessages(Collection<String> messages) {
-					return null;
-				}
-				
-				@Override
-				public Builder addMessages(String...messages) {
-					return null;
-				}
-				*/
 				public static class Default<CAUSE extends java.lang.Throwable> extends Builder.Adapter<CAUSE> implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
@@ -137,35 +123,15 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 						super(causeClass);
 					}
 					
-					/*
-					@Override
-					public Builder setIdentifier(String identifier) {
-						this.identifier = identifier;
-						return this;
-					}
-
-					@Override
-					public Builder setMessages(Set<String> messages) {
-						this.messages = messages;
-						return this;
-					}
-					
-					@Override
-					public Builder addMessages(Collection<String> messages) {
-						this.messages = (Set<String>) new CollectionHelper().add(Set.class,this.messages, Boolean.TRUE, messages);
-						return this;
-					}
-					
-					@Override
-					public Builder addMessages(String...messages) {
-						this.messages = (Set<String>) new CollectionHelper().add(Set.class,this.messages, Boolean.TRUE, messages);
-						return this;
-					}	
-					*/
-					
 					@Override
 					public Builder<CAUSE> setCauseClass(Class<CAUSE> causeClass) {
 						this.causeClass = causeClass;
+						return this;
+					}
+					
+					@Override
+					public Builder<CAUSE> setMessageMapping(ToStringMapping messageMapping) {
+						this.messageMapping = messageMapping;
 						return this;
 					}
 					
@@ -175,6 +141,9 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 						//throwable.setIdentifier(getIdentifier());
 						StringBuilder messageBuilder = new StringBuilder();
 						//messageBuilder.append(new CollectionHelper().concatenate(getMessages(), Constant.LINE_DELIMITER.toString()));
+						StringHelper.ToStringMapping messageMapping = getMessageMapping();
+						if(messageMapping!=null)
+							addManyParameters(messageMapping.execute());
 						messageBuilder.append(new CollectionHelper().concatenate(getParameters(), Constant.LINE_DELIMITER.toString()));
 						throwable.setCause(new ClassHelper().instanciate(getCauseClass(), new Object[]{String.class,messageBuilder.toString()}));
 						return throwable;
@@ -189,24 +158,4 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 		}
 	}
 	
-	/*@Getter @Setter @Accessors(chain=true)
-	public static class Runtime extends java.lang.RuntimeException implements Serializable {
-
-		private static final long serialVersionUID = 108726134018949961L;
-		
-		protected String identifier;
-		protected Set<String> messages = new LinkedHashSet<>();
-	    
-	    public Runtime(String message) {
-	        super(message);
-	        messages.add(message);
-	    }
-	    
-	    public Runtime(Set<String> messages) {
-	        super(new StringHelper().concatenate(messages,"\r\n"));
-	        this.messages.addAll(messages);
-	    }
-
-	}*/
-
 }

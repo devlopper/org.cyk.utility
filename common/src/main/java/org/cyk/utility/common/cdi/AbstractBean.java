@@ -28,7 +28,9 @@ import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.LogMessage;
 import org.cyk.utility.common.RunnableListener;
 import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.ConditionHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
+import org.cyk.utility.common.helper.ThrowableHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -232,6 +234,10 @@ public class AbstractBean implements Serializable {
 	
 	protected void logStackTraceAsString(){
 		logStackTraceAsString(new LinkedHashSet<String>());
+	}
+	
+	protected static <T extends java.lang.Throwable> void throw__(ConditionHelper.Condition.Builder builder,Class<T> causeClass){
+		ThrowableHelper.getInstance().throw_(builder,causeClass);
 	}
 	
 	/**/

@@ -62,15 +62,15 @@ public class OpenWindowStringBuilder extends AbstractJavascriptStringBuilder imp
 			width = 900;
 		if(height==null)
 			height = 500;
-		nameValueCollectionStringBuilder.setSeparator(Constant.CHARACTER_COMA.toString()).addNamesValues(TOOLBAR,inject(TextStringBuilder.class).setResponse(showToolBar)
-				,SCROLLBARS,inject(TextStringBuilder.class).setResponse(showScrollbars),RESIZABLE,inject(TextStringBuilder.class).setResponse(isResiable)
-				,STATUS,inject(TextStringBuilder.class).setResponse(showStatusBar),LOCATION,inject(TextStringBuilder.class).setResponse(showLocation)
-				,MENUBAR,inject(TextStringBuilder.class).setResponse(showMenuBar),TOP,topIndex,LEFT,leftIndex,WIDTH,width,HEIGHT,height);
+		nameValueCollectionStringBuilder.setSeparator(Constant.CHARACTER_COMA.toString()).addNamesValues(TOOLBAR,new TextStringBuilder().setResponse(showToolBar)
+				,SCROLLBARS,new TextStringBuilder().setResponse(showScrollbars),RESIZABLE,new TextStringBuilder().setResponse(isResiable)
+				,STATUS,new TextStringBuilder().setResponse(showStatusBar),LOCATION,new TextStringBuilder().setResponse(showLocation)
+				,MENUBAR,new TextStringBuilder().setResponse(showMenuBar),TOP,topIndex,LEFT,leftIndex,WIDTH,width,HEIGHT,height);
 		
 		//TODO should depends on windows _top _blank and so on
 		getUrlStringBuilder().getQueryStringBuilder().getNameValueCollectionStringBuilder().addDialog();
 		
-		return String.format(FORMAT, urlStringBuilder.build(),name,nameValueCollectionStringBuilder.build(),inject(TextStringBuilder.class).setResponse(replaced).build());
+		return String.format(FORMAT, urlStringBuilder.build(),name,nameValueCollectionStringBuilder.build(),new TextStringBuilder().setResponse(replaced).build());
 	}
 	
 	/**/
