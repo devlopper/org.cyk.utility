@@ -5,7 +5,6 @@ import java.util.Locale;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 import org.cyk.utility.common.helper.StringHelper.Location;
-import org.cyk.utility.common.helper.StringHelper.ToStringMapping.Datasource;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -56,18 +55,12 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void executeMapStringFromResourceBundleDatasource(){
-		assertEquals("string 1", new StringHelper.ToStringMapping.Adapter.Default("mid1").execute());
+		assertStringMapping("mid1", "string 1", StringHelper.ToStringMapping.Datasource.ResourceBundle.class);
+		assertStringMapping("mid1", "string 1", StringHelper.ToStringMapping.Datasource.Cache.class);
 		assertEquals("string 2", new StringHelper.ToStringMapping.Adapter.Default("mid2").execute());
 		assertEquals("string 2 avec string 1", new StringHelper.ToStringMapping.Adapter.Default("mid1_2").execute());
 	}
-	
-	@Test
-	public void executeMapStringFromResourceBundleDatasourceThenCacheDatasource(){
-		Datasource.Cache.REPOSITORY.clear();
-		assertStringMapping("mid1", "string 1", StringHelper.ToStringMapping.Datasource.ResourceBundle.class);
-		assertStringMapping("mid1", "string 1", StringHelper.ToStringMapping.Datasource.Cache.class);
-	}
-	
+
 	@Test
 	public void executeMapStringFromResourceBundleDatasourceWithParameters(){
 		assertEquals("hi v1 , it is v2", new StringHelper.ToStringMapping.Adapter.Default("myparamid1").addManyParameters("v1","v2").execute());
