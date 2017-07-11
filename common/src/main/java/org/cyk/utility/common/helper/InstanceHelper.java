@@ -62,6 +62,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		return result;
 	}
 
+	@Deprecated
 	public <T> T instanciateOne(Class<T> aClass){
 		try {
 			return aClass.newInstance();

@@ -213,7 +213,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	
 	public static interface ToStringMapping extends org.cyk.utility.common.Mapping<String,String> {
 
-		Collection<Datasource> DATASOURCES = new ArrayList<>();
+		@Deprecated Collection<Datasource> DATASOURCES = new ArrayList<>();
 		String UNKNOWN_MARKER_START = "##";
 		String UNKNOWN_MARKER_END = "##";
 		String UNKNOWN_FORMAT = "%s%s%s";
@@ -224,26 +224,35 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		Boolean getCachable();
 		ToStringMapping setCachable(Boolean cachable);
 		
+		ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> getDatasourcesExecutor();
+		ToStringMapping setDatasourcesExecutor(ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor);
+		
 		@Getter @Setter
 		public static class Adapter extends org.cyk.utility.common.Mapping.Adapter.Default<String,String> implements ToStringMapping,Serializable {
 			private static final long serialVersionUID = 1L;
 
 			protected CaseType caseType;
 			protected Boolean cachable;
+			protected ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor;
 			
 			public Adapter(String input) {
 				super(String.class, input, String.class);
 				setName("build string cache identifier");
 			}
 
+			@Override
 			public ToStringMapping setCaseType(CaseType caseType){
-				this.caseType = caseType;
-				return this;
+				return null;
 			}
 			
+			@Override
 			public ToStringMapping setCachable(Boolean cachable){
-				this.cachable = cachable;
-				return this;
+				return null;
+			}
+			
+			@Override
+			public ToStringMapping setDatasourcesExecutor(ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor){
+				return null;
 			}
 			
 			/**/
@@ -258,6 +267,24 @@ public class StringHelper extends AbstractHelper implements Serializable {
 				}
 				
 				@Override
+				public ToStringMapping setCaseType(CaseType caseType){
+					this.caseType = caseType;
+					return this;
+				}
+				
+				@Override
+				public ToStringMapping setCachable(Boolean cachable){
+					this.cachable = cachable;
+					return this;
+				}
+				
+				@Override
+				public ToStringMapping setDatasourcesExecutor(ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor){
+					this.datasourcesExecutor = datasourcesExecutor;
+					return this;
+				}
+				
+				@Override
 				protected String __execute__() {
 					String identifier = getInput();
 					return __execute__(identifier, getCaseType(), getLocale(), getCachable());
@@ -267,18 +294,31 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					final Locale locale = commonUtils.getValueIfNotNullElseDefault(pLocale, Locale.FRENCH);
 					final CaseType caseType = commonUtils.getValueIfNotNullElseDefault(pCaseType, CaseType.DEFAULT);
 					final Collection<Object> parameters = getParameters();
-					
-					String value = new ListenerHelper.Executor.Function.Adapter.Default.String<Datasource>().setReturnFirstNotNull(Boolean.TRUE)
-						.setResultMethod(new ListenerHelper.Executor.ResultMethod.Adapter.Default.String<Datasource>() {
-							private static final long serialVersionUID = 1L;
+					Collection<Datasource> datasources = new ArrayList<>();
+					ClassHelper classHelper = new ClassHelper();
+					for(Class<? extends Datasource> aClass : Datasource.CLASSES)
+						datasources.add(classHelper.instanciateOne(aClass));
+					ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor = getDatasourcesExecutor();
+					if(datasourcesExecutor==null){
+						this.datasourcesExecutor = datasourcesExecutor = new ListenerHelper.Executor.Function.Adapter.Default.String<Datasource>();
+						datasourcesExecutor.setReturnFirstNotNull(Boolean.TRUE)
+								.setResultMethod(new ListenerHelper.Executor.ResultMethod.Adapter.Default.String<Datasource>() {
+									private static final long serialVersionUID = 1L;
 
-							@Override
-							protected java.lang.String __execute__() {
-								return getListener().setInput(identifier).setLocale(ToStringMapping.Adapter.Default.this.getLocale())
-										.setParameters(ToStringMapping.Adapter.Default.this.getParameters())
-										.setParent(ToStringMapping.Adapter.Default.this).execute();
-							}
-						}).setInput(DATASOURCES).execute();
+									@Override
+									protected java.lang.String __execute__() {
+										java.lang.String lIdentifier = identifier;
+										if(getListener() instanceof Datasource.Cache)
+											lIdentifier = new StringHelper.Builder.CacheIdentifier.Adapter.Default().setInput(identifier)
+													.setLocale(ToStringMapping.Adapter.Default.this.getLocale()).setParameters(ToStringMapping.Adapter.Default.this.getParameters())
+													.addManyParameters(new InstanceHelper().getIfNotNullElseDefault(ToStringMapping.Adapter.Default.this.getCaseType(),CaseType.DEFAULT)).execute();
+										return getListener().setInput(lIdentifier).setLocale(ToStringMapping.Adapter.Default.this.getLocale())
+												.setParameters(ToStringMapping.Adapter.Default.this.getParameters())
+												.setParent(ToStringMapping.Adapter.Default.this).execute();
+									}
+								}).setInput(datasources);
+					}
+					String value = datasourcesExecutor.execute();
 					
 					if(value==null){
 						value = MAP.get(identifier);
@@ -335,6 +375,8 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		
 		public static interface Datasource extends Action<String, String>{
 			
+			Collection<Class<? extends Datasource>> CLASSES = new ArrayList<>();
+			
 			public static class Adapter extends Action.Adapter.Default<String, String> implements Datasource,Serializable {
 				private static final long serialVersionUID = 1L;
 
@@ -355,8 +397,14 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					/**/
 					
 					public static void initialize(){
+						StringHelper.ToStringMapping.Datasource.CLASSES.add(StringHelper.ToStringMapping.Datasource.UserDefined.Adapter.Default.class);
+						StringHelper.ToStringMapping.Datasource.CLASSES.add(StringHelper.ToStringMapping.Datasource.Cache.Adapter.Default.class);
+						StringHelper.ToStringMapping.Datasource.CLASSES.add(StringHelper.ToStringMapping.Datasource.ResourceBundle.Adapter.Default.class);
+						/*
+						StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.UserDefined.Adapter.Default());
+						StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.Cache.Adapter.Default());
 						StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.ResourceBundle.Adapter.Default());
-						
+						*/
 				        StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.i18n", CommonUtils.class.getClassLoader());
 						StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.field", CommonUtils.class.getClassLoader());
 						StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.condition", CommonUtils.class.getClassLoader());
@@ -463,7 +511,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 									if(Boolean.TRUE.equals(cachable)){
 										String cacheIdentifier = new Builder.CacheIdentifier.Adapter.Default().setInput(identifier).setLocale(locale)
 												.addParameters(parameters).addParameters(new Object[]{caseType}).execute();
-										CACHE.put(cacheIdentifier, value);
+										Datasource.Cache.REPOSITORY.put(cacheIdentifier, value);
 										addLoggingMessageBuilderNamedParameters("cache identifier",cacheIdentifier,"cache value",value);
 									}
 									

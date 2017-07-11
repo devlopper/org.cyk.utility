@@ -6,7 +6,6 @@ import java.util.Collection;
 import javax.inject.Singleton;
 
 import org.cyk.utility.common.Action;
-import org.cyk.utility.common.ListenerUtils.ResultMethod;
 import org.cyk.utility.common.helper.MethodHelper.Method;
 
 import lombok.Getter;
@@ -14,21 +13,6 @@ import lombok.Getter;
 @Singleton
 public class ListenerHelper extends AbstractHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	public <RESULT,LISTENER> RESULT getValue(Class<RESULT> valueClass,Collection<LISTENER> listeners,ResultMethod<LISTENER,RESULT> method){
-		RESULT result = null;
-		if(listeners!=null)
-			for(LISTENER listener : listeners){
-				RESULT value = method.execute(listener);
-				if(value==null)
-					;
-				else
-					result = value;
-			}
-		if(result==null)
-			result = method.getNullValue();
-		return result;
-	}
 	
 	public static interface Executor<LISTENER,RESULT> extends Action<Collection<LISTENER>, RESULT>{
 		
@@ -38,12 +22,15 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 		Boolean getReturnFirstNotNull();
 		Executor<LISTENER,RESULT> setReturnFirstNotNull(Boolean returnFirstNotNull);
 		
+		LISTENER getMatchingListener();
+		
 		@Getter
 		public static class Adapter<LISTENER,RESULT> extends Action.Adapter.Default<Collection<LISTENER>,RESULT> implements Executor<LISTENER,RESULT>,Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			protected ResultMethod<RESULT,LISTENER> resultMethod;
 			protected Boolean returnFirstNotNull;
+			protected LISTENER matchingListener;
 			
 			@SuppressWarnings("unchecked")
 			public Adapter(Class<RESULT> outputClass) {
@@ -165,6 +152,7 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 									;
 								else{
 									result = value;
+									matchingListener = listener;
 									if(Boolean.TRUE.equals(getReturnFirstNotNull()))
 										break;
 								}

@@ -5,6 +5,7 @@ import java.util.Locale;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 import org.cyk.utility.common.helper.StringHelper.Location;
+import org.cyk.utility.common.helper.StringHelper.ToStringMapping.Datasource;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -14,15 +15,14 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 
 	static {
-		StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.UserDefined.Adapter.Default());
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();
+		
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.UserDefined.REPOSITORY.put("stringid1", "string_result_one");
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.UserDefined.REPOSITORY.put("stringid2", "string_result_2");
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.UserDefined.REPOSITORY.put("stringid3", "third");
 		
-		StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.Cache.Adapter.Default());
-		StringHelper.ToStringMapping.Datasource.Adapter.Default.Cache.REPOSITORY.put("cache001", "cache value one");
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.Cache.REPOSITORY.put("fr_cache001_NONE", "cache value one");
 		
-		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.testmsg", StringHelper.class.getClassLoader());
 	}
 	
@@ -59,6 +59,13 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		assertEquals("string 1", new StringHelper.ToStringMapping.Adapter.Default("mid1").execute());
 		assertEquals("string 2", new StringHelper.ToStringMapping.Adapter.Default("mid2").execute());
 		assertEquals("string 2 avec string 1", new StringHelper.ToStringMapping.Adapter.Default("mid1_2").execute());
+	}
+	
+	@Test
+	public void executeMapStringFromResourceBundleDatasourceThenCacheDatasource(){
+		Datasource.Cache.REPOSITORY.clear();
+		assertStringMapping("mid1", "string 1", StringHelper.ToStringMapping.Datasource.ResourceBundle.class);
+		assertStringMapping("mid1", "string 1", StringHelper.ToStringMapping.Datasource.Cache.class);
 	}
 	
 	@Test
@@ -130,6 +137,13 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	
 	private void assertAppliedCaseType(String string,CaseType caseType,String expected){
 		assertEquals(expected, StringHelper.getInstance().applyCaseType(string, caseType));
+	}
+	
+	private void assertStringMapping(String identifier,String expectedString,Class<? extends StringHelper.ToStringMapping.Datasource> expectedDatasourceInterface){
+		StringHelper.ToStringMapping mapping = new StringHelper.ToStringMapping.Adapter.Default(identifier);
+		assertEquals(expectedString, mapping.execute());
+		assertThat("datasource is supposed to be "+expectedDatasourceInterface.getSimpleName()+" but "+mapping.getDatasourcesExecutor().getMatchingListener().getClass().getSimpleName()+" found"
+				, expectedDatasourceInterface.isAssignableFrom(mapping.getDatasourcesExecutor().getMatchingListener().getClass()));
 	}
 	
 	/**/

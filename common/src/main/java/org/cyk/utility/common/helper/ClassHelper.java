@@ -84,6 +84,14 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		}
 	}
 	
+	public <T> T instanciateOne(Class<T> aClass){
+		try {
+			return aClass.newInstance();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	/**/
 	
 	public static interface Get extends AbstractReflectionHelper.Get<Package, Class<?>> {
