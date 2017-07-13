@@ -50,12 +50,12 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 		
 		/**/
 		
-		public static interface Builder extends org.cyk.utility.common.Builder<Message> {
+		public static interface Builder extends org.cyk.utility.common.Builder.NullableInput<Message> {
 			
 			String PARAMETER_SEPARATOR = Constant.CHARACTER_SPACE.toString()+Constant.CHARACTER_COMA+Constant.CHARACTER_SPACE;
 			String PARAMETER_NAME_VALUE_SEPARATOR = Constant.CHARACTER_EQUAL.toString();
 			
-			public static class Adapter extends org.cyk.utility.common.Builder.Adapter.Default<Message> implements Builder,Serializable {
+			public static class Adapter extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<Message> implements Builder,Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				public Adapter() {

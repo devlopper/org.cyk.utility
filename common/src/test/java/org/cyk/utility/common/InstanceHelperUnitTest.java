@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.builder.InstanceCopyBuilder;
+import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -22,6 +23,29 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	
 	@Override
 	protected void _execute_() {}
+	
+	@Test
+	public void set(){
+		A a = new A();
+		assertA(a,new Object[]{"f1","name","f2",12},"name", 12);
+		assertA(a,new Object[]{"f2",12,"f1","name"},"name", 12);
+	}
+	
+	@Test
+	public void buildFromOneDimensionArray(){
+		assertA(new Object[]{"name",12},"name", 12);
+	}
+	
+	@Test
+	public void buildFromTwoDimensionArray(){
+		contains(A.class, new InstanceHelper.Builder.TwoDimensionArray.Adapter.Default<A>(new Object[][]{{"string one",1},{"string 2",2}})
+				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addManyParameters("f1","f2"))
+				.execute(), new Object[]{"f1","f2"}, new Object[][]{ {"string one",1},{"string 2",2}  });
+		
+		contains(A.class, new InstanceHelper.Builder.TwoDimensionArray.Adapter.Default<A>(new Object[][]{{1,"string one"},{2,"string 2"}})
+				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addManyParameters("f2","f1"))
+				.execute(), new Object[]{"f1","f2"}, new Object[][]{ {"string one",1},{"string 2",2}  });
+	}
 	
 	@Test
 	public void copy(){
@@ -52,8 +76,18 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	private void assertA(A a,String f1,Integer f2){
-		assertEquals(f1, a.getF1());
-		assertEquals(f2, a.getF2());
+		assertEquals("field value f1 is not correct",f1, a.getF1());
+		assertEquals("field value f2 is not correct",f2, a.getF2());
+	}
+	
+	private void assertA(A a,Object[] values,String f1,Integer f2){
+		new InstanceHelper.Setter.Adapter.Default<A>(A.class, a).setManyProperties(values).execute();
+		assertA(a, f1, f2);
+	}
+	
+	private void assertA(Object[] values,String f1,Integer f2){
+		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(values, A.class).addManyParameters("f1","f2").execute(),f1, f2);
+		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(new ArrayHelper().reverse(values), A.class).addManyParameters("f2","f1").execute(),f1, f2);
 	}
 	
 	/**/

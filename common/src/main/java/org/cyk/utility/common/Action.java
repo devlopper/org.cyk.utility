@@ -63,6 +63,7 @@ public interface Action<INPUT,OUTPUT> {
 	Properties getProperties();
 	Action<INPUT, OUTPUT> setProperties(Properties properties);
 	Action<INPUT, OUTPUT> setProperty(String name,Object value);
+	Action<INPUT, OUTPUT> setManyProperties(Object...objects);
 	
 	Collection<Object> getParameters();
 	Action<INPUT, OUTPUT> setParameters(Collection<Object> collection);
@@ -190,6 +191,11 @@ public interface Action<INPUT,OUTPUT> {
 		}
 		
 		@Override
+		public Action<INPUT, OUTPUT> setManyProperties(Object... objects) {
+			return null;
+		}
+		
+		@Override
 		public Action<INPUT, OUTPUT> setParent(Action<INPUT, OUTPUT> parent) {
 			this.parent = parent;
 			return this;
@@ -279,6 +285,15 @@ public interface Action<INPUT,OUTPUT> {
 			
 			public Default(String name,Class<INPUT> inputClass,INPUT input, Class<OUTPUT> outputClass) {
 				super(name,inputClass,input, outputClass);
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setManyProperties(Object... objects) {
+				if(objects!=null){
+					for(int i = 0 ; i < objects.length ; i = i + 2)
+						setProperty((String)objects[i], objects[i+1]);
+				}
+				return this;
 			}
 			
 			protected Boolean isInputRequired(){

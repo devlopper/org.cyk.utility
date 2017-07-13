@@ -86,7 +86,7 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 		protected Set<String> messages;
 		protected java.lang.Throwable cause;
 		
-		public static interface Builder<CAUSE extends java.lang.Throwable> extends org.cyk.utility.common.Builder<Throwable> {
+		public static interface Builder<CAUSE extends java.lang.Throwable> extends org.cyk.utility.common.Builder.NullableInput<Throwable> {
 			
 			Class<CAUSE> getCauseClass();
 			Builder<CAUSE> setCauseClass(Class<CAUSE> causeClass);
@@ -95,7 +95,7 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 			Builder<CAUSE> setMessageMapping(StringHelper.ToStringMapping messageMapping);
 			
 			@Getter @Setter 
-			public static class Adapter<CAUSE extends java.lang.Throwable> extends org.cyk.utility.common.Builder.Adapter.Default<Throwable> implements Builder<CAUSE>,Serializable {
+			public static class Adapter<CAUSE extends java.lang.Throwable> extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<Throwable> implements Builder<CAUSE>,Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				protected Class<CAUSE> causeClass;

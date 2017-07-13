@@ -37,7 +37,7 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 		private Boolean value;
 		private String message;
 		
-		public static interface Builder extends org.cyk.utility.common.Builder<Condition> {
+		public static interface Builder extends org.cyk.utility.common.Builder.NullableInput<Condition> {
 			
 			String getDomainNameIdentifier();
 			Builder setDomainNameIdentifier(String domainNameIdentifier);
@@ -51,7 +51,7 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 			Builder setInput(Object input);
 			
 			@Getter @Setter
-			public static class Adapter extends org.cyk.utility.common.Builder.Adapter.Default<Condition> implements Builder,Serializable {
+			public static class Adapter extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<Condition> implements Builder,Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				protected String messageIdentifier,domainNameIdentifier;

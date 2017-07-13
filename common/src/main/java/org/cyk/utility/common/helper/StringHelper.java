@@ -123,13 +123,13 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	
 	//TODO listener has to be added
 	
-	public static interface Builder extends org.cyk.utility.common.Builder<String> {
+	public static interface Builder extends org.cyk.utility.common.Builder.NullableInput<String> {
 
 		String getSeparator();
 		Builder setSeparator(String separator);
 		
 		@Getter @Setter
-		public static class Adapter extends org.cyk.utility.common.Builder.Adapter.Default<String> implements Builder,Serializable {
+		public static class Adapter extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<String> implements Builder,Serializable {
 			private static final long serialVersionUID = 1L;
 
 			protected String separator;
