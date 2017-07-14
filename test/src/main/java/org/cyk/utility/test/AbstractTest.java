@@ -170,6 +170,17 @@ public abstract class AbstractTest implements Serializable {
 		MatcherAssert.assertThat(list,Matchers.contains(hasPropertiesMatchers(aClass,names, values)));
 	}
 	
+	protected void assertArray(Object[] array,Object...expecteds){
+		assertEquals("array are not same length",expecteds.length, array.length);
+		for(int i = 0 ; i < array.length ; i++){
+			assertEquals("array elements do not match",expecteds[i], array[i]);
+		}
+	}
+	
+	protected void assertArray(Object[][] array,Object[][] expecteds){
+		for(int i = 0 ; i < array.length ; i++)
+			assertArray(array[i], expecteds[i]);
+	}
 	
 	/**/
 	

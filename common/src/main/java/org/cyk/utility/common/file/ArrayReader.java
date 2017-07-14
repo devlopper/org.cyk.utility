@@ -204,7 +204,7 @@ public interface ArrayReader<RESULT> extends FileReader<RESULT> {
 	
 	/**/
 	
-	/*@Getter/* @Setter*/ //@Accessors(chain=true) //TODo use table model ....model.table package
+	@Deprecated /*@Getter/* @Setter*/ //@Accessors(chain=true) //TODo use table model ....model.table package
 	public static class Dimension<CELL> implements Serializable {
 		private static final long serialVersionUID = -4369275413090667872L;
 		
@@ -275,7 +275,7 @@ public interface ArrayReader<RESULT> extends FileReader<RESULT> {
 		
 		/**/
 		
-		@Getter @Setter @Accessors(chain=true)
+		@Getter @Setter @Accessors(chain=true) @Deprecated
 		public static class Row<CELL> extends Dimension<CELL> implements Serializable {
 			private static final long serialVersionUID = -4369275413090667872L;
 			

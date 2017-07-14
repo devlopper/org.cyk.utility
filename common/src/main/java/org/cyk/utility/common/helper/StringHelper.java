@@ -114,6 +114,10 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return results;
 	}
 	
+	public Boolean isBlank(String string){
+		return StringUtils.isBlank(string);
+	}
+	
 	/**/
 	
 	private static final StringHelper INSTANCE = new StringHelper();

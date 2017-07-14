@@ -5,8 +5,10 @@ import java.io.Serializable;
 
 import org.cyk.utility.common.Action;
 
+@Deprecated
 public interface FileReader<RESULT> extends Action<File, RESULT> {
 	
+	@Deprecated
 	public static class Adapter<RESULT> extends Action.Adapter.Default<File, RESULT> implements FileReader<RESULT>,Serializable {
 		private static final long serialVersionUID = 1L;
 	
@@ -15,7 +17,7 @@ public interface FileReader<RESULT> extends Action<File, RESULT> {
 		}
 		
 		/**/
-		
+		@Deprecated
 		public static class Default<RESULT> extends FileReader.Adapter<RESULT> implements Serializable {
 			private static final long serialVersionUID = 1L;
 			

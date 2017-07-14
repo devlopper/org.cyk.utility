@@ -96,4 +96,20 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 	public <ELEMENT> ELEMENT[] getArray(Collection<ELEMENT> collection){
 		return (ELEMENT[]) (collection == null ? null : collection.toArray());
 	}
+	
+	public Integer getSize(Collection<?> collection) {
+		if(isEmpty(collection))
+			return 0;
+		return collection.size();
+	}
+	
+	public Boolean isBlank(Collection<?> collection){
+		for(Object object : collection){
+			if(object instanceof String){
+				if( !StringHelper.getInstance().isBlank( (String)object) )
+					return Boolean.FALSE;
+			}
+		}
+		return Boolean.TRUE;
+	}
 }

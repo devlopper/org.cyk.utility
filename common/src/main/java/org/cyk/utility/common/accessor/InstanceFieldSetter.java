@@ -92,7 +92,7 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 		
 		/**/
 		
-		@Getter
+		@Getter @Deprecated
 		public static class Adapter<OUTPUT> extends InstanceFieldSetter.Adapter.Default<Object[], OUTPUT> implements OneDimensionObjectArray<OUTPUT>,Serializable {
 			private static final long serialVersionUID = 3887225153998606760L;
 
@@ -160,7 +160,7 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 			}
 			
 			/**/
-			
+			@Deprecated
 			public static class Default<OUTPUT> extends OneDimensionObjectArray.Adapter<OUTPUT> implements Serializable {
 				private static final long serialVersionUID = 3887225153998606760L;
 
@@ -277,7 +277,7 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 		public static final String KEY_TYPE_LOCAL = "local";
 		public static final String KEY_TYPE_GLOBAL = "global";
 	}
-	
+	@Deprecated
 	public static interface TwoDimensionObjectArray<OUTPUT> extends InstanceFieldSetter<Object[][], Collection<OUTPUT>> {
 		
 		OneDimensionObjectArray<OUTPUT> getOneDimension();
@@ -296,7 +296,7 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 		
 		/**/
 		
-		@Getter
+		@Getter @Deprecated
 		public static class Adapter<OUTPUT> extends InstanceFieldSetter.Adapter.Default<Object[][], Collection<OUTPUT>> implements TwoDimensionObjectArray<OUTPUT>,Serializable {
 			private static final long serialVersionUID = 3887225153998606760L;
 
@@ -352,7 +352,7 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 			}
 			
 			/**/
-			
+			@Deprecated
 			public static class Default<OUTPUT> extends TwoDimensionObjectArray.Adapter<OUTPUT> implements Serializable {
 				private static final long serialVersionUID = 3887225153998606760L;
 

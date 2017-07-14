@@ -8,6 +8,8 @@ import java.util.Locale;
 import java.util.Properties;
 
 import org.cyk.utility.common.cdi.BeanAdapter;
+import org.cyk.utility.common.helper.ArrayHelper;
+import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
 
 import lombok.AllArgsConstructor;
@@ -73,6 +75,16 @@ public interface Action<INPUT,OUTPUT> {
 	Action<INPUT, OUTPUT> addManyParameters(Object...objects);
 	Action<INPUT, OUTPUT> addNamedParameters(Object...objects);
 	
+	<T> Action<INPUT, OUTPUT> addParameterArrayElement(Class<T> aClass,Integer index,T instance);
+	<T> Action<INPUT, OUTPUT> addParameterArrayElement(Class<T> aClass,@SuppressWarnings("unchecked") T...instances);
+	
+	Action<INPUT, OUTPUT> addParameterArrayElementInteger(Integer index,Integer integer);
+	Action<INPUT, OUTPUT> addParameterArrayElementInteger(Integer...integers);
+	
+	Action<INPUT, OUTPUT> addParameterArrayElementString(Integer index,String string);
+	Action<INPUT, OUTPUT> addParameterArrayElementString(String...strings);
+	Action<INPUT, OUTPUT> addParameterArrayElementStringIndexInstance(Object...objects);
+	
 	Action<INPUT, OUTPUT> clear();
 	
 	/**/
@@ -112,6 +124,41 @@ public interface Action<INPUT,OUTPUT> {
 		
 		@Override
 		public Action<INPUT, OUTPUT> setExecutable(Boolean executable) {
+			return null;
+		}
+		
+		@Override
+		public <T> Action<INPUT, OUTPUT> addParameterArrayElement(Class<T> aClass, Integer index, T instance) {
+			return null;
+		}
+		
+		@Override
+		public <T> Action<INPUT, OUTPUT> addParameterArrayElement(Class<T> aClass, @SuppressWarnings("unchecked") T... instances) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> addParameterArrayElementInteger(Integer index, Integer integer) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> addParameterArrayElementInteger(Integer... integers) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> addParameterArrayElementString(Integer index, String string) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> addParameterArrayElementString(String... strings) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> addParameterArrayElementStringIndexInstance(Object... objects) {
 			return null;
 		}
 		
@@ -318,6 +365,15 @@ public interface Action<INPUT,OUTPUT> {
 				this.executable = executable;
 				return this;
 			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> addParameterArrayElementStringIndexInstance(Object... objects) {
+				if(objects!=null)
+					for(int i = 0 ; i < objects.length ; i = i + 2){
+						addParameterArrayElementString((Integer)objects[i],(String)objects[i+1]);
+					}
+				return this;
+			}
 						
 			@Override
 			public final OUTPUT execute() {
@@ -377,6 +433,46 @@ public interface Action<INPUT,OUTPUT> {
 			
 			protected Boolean isShowOutputLogMessage(OUTPUT output){
 				return Boolean.TRUE;
+			}
+			
+			@Override
+			public <T> Action<INPUT, OUTPUT> addParameterArrayElement(Class<T> aClass, Integer index, T instance) {
+				addManyParameters(new ArrayHelper.Element<T>(index, instance));
+				return this;
+			}
+			
+			@Override
+			public <T> Action<INPUT, OUTPUT> addParameterArrayElement(Class<T> aClass, @SuppressWarnings("unchecked") T... instances) {
+				if(instances!=null){
+					CollectionHelper collectionHelper = new CollectionHelper();
+					for(T instance : instances)
+						addParameterArrayElement(aClass, collectionHelper.getSize(getParameters()), instance);
+				}
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> addParameterArrayElementInteger(Integer index, Integer integer) {
+				addParameterArrayElement(Integer.class, index, integer);
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> addParameterArrayElementInteger(Integer... integers) {
+				addParameterArrayElement(Integer.class, integers);
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> addParameterArrayElementString(Integer index, String string) {
+				addParameterArrayElement(String.class, index, string);
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> addParameterArrayElementString(String... strings) {
+				addParameterArrayElement(String.class, strings);
+				return this;
 			}
 			
 			@Override

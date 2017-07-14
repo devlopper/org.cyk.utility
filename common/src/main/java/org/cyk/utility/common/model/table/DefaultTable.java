@@ -2,6 +2,7 @@ package org.cyk.utility.common.model.table;
 
 import org.apache.commons.lang3.StringUtils;
 
+@Deprecated
 public class DefaultTable<DATA> extends Table<DefaultRow<DATA>, DefaultColumn, DATA, String, DefaultCell, String> {
 
 	//TODO DefaultRow.class throw inconvertible type at compile time

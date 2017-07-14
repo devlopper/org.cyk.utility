@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -15,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.ListenerUtils;
+import org.cyk.utility.common.helper.ArrayHelper.Element;
 
 import lombok.Getter;
 
@@ -253,17 +253,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		
 		public static interface OneDimensionArray<INSTANCE> extends Builder<Object[],INSTANCE> {
 			/*
-			Map<String,Integer> getFieldNamesIndexes();
-			OneDimensionArray<INSTANCE> setFieldNamesIndexes(Map<String,Integer> fieldNamesIndexes);
-			
 			Boolean isArrayValueAtProcessable(Integer index);
-			
-			Object getValue(Class<?> fieldType,Object value);
-			
-			OneDimensionArray<INSTANCE> addFieldName(String name,Integer index);
-			OneDimensionArray<INSTANCE> addFieldName(String name);
-			OneDimensionArray<INSTANCE> addFieldNames(String...names);
-			
+		
 			Object getKeyType(Object[] values);
 			
 			Object getKeyType();
@@ -296,9 +287,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					@Override
 					protected INSTANCE __execute__() {
 						INSTANCE instance = new ClassHelper().instanciateOne(getOutputClass());
-						Object[] attributes = new CollectionHelper().getArray(getParameters());
-						
-						if(attributes!=null){
+						Object[] parametersArray = new CollectionHelper().getArray(getParameters());
+						if(parametersArray!=null){
 							Setter<INSTANCE> setter = getSetter();
 							if(setter==null){
 								setter = new Setter.Adapter.Default<INSTANCE>(getOutputClass());
@@ -306,9 +296,14 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 							setter.setInput(instance);
 							Object[] values = getInput();
 							Collection<Object> objects = new ArrayList<>();
-							for(int i = 0 ; i < attributes.length ; i++){
-								objects.add(attributes[i]);
-								objects.add(values[i]);
+							for(int i = 0 ; i < parametersArray.length ; i++){
+								if(parametersArray[i] instanceof ArrayHelper.Element<?>){
+									ArrayHelper.Element<?> element = (Element<?>) parametersArray[i];
+									objects.add(element.getInstance());
+									objects.add(values[element.getIndex()]);	
+								}else
+									throw new RuntimeException("parameter class should be a sub type of ArrayHelper.Element");
+								
 							}
 							setter.setManyProperties(objects.toArray()).execute();
 						}
@@ -317,7 +312,12 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					
 					@Override
 					public OneDimensionArray<INSTANCE> addManyParameters(Object... parameters) {
-						return (org.cyk.utility.common.helper.InstanceHelper.Builder.OneDimensionArray<INSTANCE>) super.addManyParameters(parameters);
+						return (OneDimensionArray<INSTANCE>) super.addManyParameters(parameters);
+					}
+					
+					@Override
+					public OneDimensionArray<INSTANCE> addParameterArrayElementString(String... strings) {
+						return (OneDimensionArray<INSTANCE>) super.addParameterArrayElementString(strings);
 					}
 				}
 			}

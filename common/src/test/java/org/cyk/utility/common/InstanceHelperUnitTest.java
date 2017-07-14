@@ -50,25 +50,25 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		assertA(new Object[]{"name",12},"name", 12);
 		
 		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(new Object[]{"c0","c1",13,14,15}, A.class)
-				.addManyParameters("f1","f2").execute(),"c1", 15);
+				.addParameterArrayElementStringIndexInstance(1, "f1",4, "f2").execute(),"c1", 15);
 	}
 	
 	@Test
 	public void buildFromTwoDimensionArray(){
 		contains(A.class, new InstanceHelper.Builder.TwoDimensionArray.Adapter.Default<A>(new Object[][]{{"string one",1},{"string 2",2}})
-				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addManyParameters("f1","f2"))
+				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addParameterArrayElementString("f1","f2"))
 				.execute(), new Object[]{"f1","f2"}, new Object[][]{ {"string one",1},{"string 2",2}  });
 		
 		contains(A.class, new InstanceHelper.Builder.TwoDimensionArray.Adapter.Default<A>(new Object[][]{{"string one","1"},{"string 2","2"}})
-				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addManyParameters("f1","f2"))
+				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addParameterArrayElementString("f1","f2"))
 				.execute(), new Object[]{"f1","f2"}, new Object[][]{ {"string one",1},{"string 2",2}  });
 		
 		contains(A.class, new InstanceHelper.Builder.TwoDimensionArray.Adapter.Default<A>(new Object[][]{{1,"string one"},{2,"string 2"}})
-				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addManyParameters("f2","f1"))
+				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addParameterArrayElementString("f2","f1"))
 				.execute(), new Object[]{"f1","f2"}, new Object[][]{ {"string one",1},{"string 2",2}  });
 		
 		contains(A.class, new InstanceHelper.Builder.TwoDimensionArray.Adapter.Default<A>(new Object[][]{{"1","string one"},{"2","string 2"}})
-				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addManyParameters("f2","f1"))
+				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addParameterArrayElementString("f2","f1"))
 				.execute(), new Object[]{"f1","f2"}, new Object[][]{ {"string one",1},{"string 2",2}  });
 	}
 	
@@ -111,8 +111,9 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	private void assertA(Object[] values,String f1,Integer f2){
-		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(values, A.class).addManyParameters("f1","f2").execute(),f1, f2);
-		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(new ArrayHelper().reverse(values), A.class).addManyParameters("f2","f1").execute(),f1, f2);
+		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(values, A.class).addParameterArrayElementString("f1","f2").execute(),f1, f2);
+		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(new ArrayHelper().reverse(values), A.class).addParameterArrayElementString("f2","f1")
+				.execute(),f1, f2);
 	}
 	
 	/**/

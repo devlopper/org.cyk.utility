@@ -3,30 +3,30 @@ package org.cyk.utility.common;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.model.table.Column;
 import org.cyk.utility.common.model.table.DefaultCell;
 import org.cyk.utility.common.model.table.DefaultColumn;
 import org.cyk.utility.common.model.table.DefaultRow;
-import org.cyk.utility.common.model.table.DefaultTable;
 import org.cyk.utility.common.model.table.Row;
+import org.cyk.utility.common.model.table.Table;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
 import org.junit.Test;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-public class TableUT extends AbstractUnitTest {
+
+public class TableUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	@Test
 	public void manual(){
-		DefaultTable<String> table = new DefaultTable<>(String.class);
+		Table.Default<String> table = new Table.Default<>(String.class);
 		table.build();
 		table.addColumnTitled("C1");
 		
@@ -37,9 +37,9 @@ public class TableUT extends AbstractUnitTest {
 		Assert.assertEquals("Row 1","Yao",table.getRows().get(0).getCells().get(0).getValue());
 	}
 	
-	//@Test
+	@Test
 	public void simple(){
-		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
+		Table.Default<RowData> table = new Table.Default<>(RowData.class);
 		
 		table.addRow(new RowData("Yao"));
 		table.addRow(new RowData("Zadi"));
@@ -52,9 +52,9 @@ public class TableUT extends AbstractUnitTest {
 		Assert.assertEquals("Row 3",2,table.getRows().get(2).getUiIndex().intValue());
 	}
 	
-	//@Test
+	@Test
 	public void complex1(){
-		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
+		Table.Default<RowData> table = new Table.Default<>(RowData.class);
 		table.getRowListeners().add(new Row.Listener.Adapter.Default<DefaultRow<RowData>, RowData, DefaultCell, String>(){
 			private static final long serialVersionUID = 1L;
 
@@ -86,7 +86,7 @@ public class TableUT extends AbstractUnitTest {
 	
 	@Test
 	public void columnOneListener(){
-		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
+		Table.Default<RowData> table = new Table.Default<>(RowData.class);
 		table.getColumnListeners().add(new Column.Listener.Adapter<DefaultColumn, String, DefaultCell, String>(){
 
 			private static final long serialVersionUID = 1L;
@@ -107,7 +107,7 @@ public class TableUT extends AbstractUnitTest {
 	
 	@Test
 	public void columnTwoListeners(){
-		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
+		Table.Default<RowData> table = new Table.Default<>(RowData.class);
 		table.getColumnListeners().add(new Column.Listener.Adapter.Default<DefaultColumn, String, DefaultCell, String>(){
 
 			private static final long serialVersionUID = 1L;
@@ -142,7 +142,7 @@ public class TableUT extends AbstractUnitTest {
 	/*
 	@Test
 	public void complex2(){
-		DefaultTable<RowData> table = new DefaultTable<>(RowData.class);
+		Table.Default<RowData> table = new Table.Default<>(RowData.class);
 		DefaultRow<RowData> row = null;
 		table.addColumnFromDataClass();
 		

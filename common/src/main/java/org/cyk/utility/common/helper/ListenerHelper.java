@@ -101,7 +101,7 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 					
 					public Default(Class<OUTPUT> outputClass) {
 						super(outputClass);
-						setIsInputRequired(Boolean.FALSE);
+						setIsInputRequired(java.lang.Boolean.FALSE);
 					}
 					
 					@Override
@@ -123,6 +123,14 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 						
 						public Object() {
 							super(java.lang.Object.class);
+						}
+					}
+					
+					public static class Boolean<LISTENER> extends Default<java.lang.Boolean,LISTENER> implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						public Boolean() {
+							super(java.lang.Boolean.class);
 						}
 					}
 				}
@@ -162,7 +170,7 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 								else{
 									result = value;
 									matchingListener = listener;
-									if(Boolean.TRUE.equals(getReturnFirstNotNull()))
+									if(java.lang.Boolean.TRUE.equals(getReturnFirstNotNull()))
 										break;
 								}
 							}
@@ -185,6 +193,15 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 						
 						public Object() {
 							super(java.lang.Object.class);
+						}
+						
+					}
+					
+					public static class Boolean<LISTENER> extends Default<LISTENER, java.lang.Boolean> implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						public Boolean() {
+							super(java.lang.Boolean.class);
 						}
 						
 					}
