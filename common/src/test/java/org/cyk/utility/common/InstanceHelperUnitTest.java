@@ -3,9 +3,6 @@ package org.cyk.utility.common;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.builder.InstanceCopyBuilder;
@@ -15,9 +12,26 @@ import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class InstanceHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	static {
+		//InstanceHelper.Setter.ProcessValue.CLASSES.add(A.StringProcessor.class);
+		/*InstanceHelper.Setter.ProcessValue.Adapter.Default.RESULT_METHOD = new InstanceHelper.Setter.ProcessValue.ResultMethod(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected java.lang.Object __execute__() {
+				if("f2".equals(getProperty(InstanceHelper.Setter.ProcessValue.PROPERTY_FIELD_NAME)))
+					return Integer.parseInt(getProperty(InstanceHelper.Setter.ProcessValue.PROPERTY_VALUE).toString());
+				return super.__execute__();
+			}
+		};*/
+	}
 	
 	@InjectMocks private InstanceHelper instanceHelper; 
 	
@@ -34,6 +48,9 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void buildFromOneDimensionArray(){
 		assertA(new Object[]{"name",12},"name", 12);
+		
+		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(new Object[]{"c0","c1",13,14,15}, A.class)
+				.addManyParameters("f1","f2").execute(),"c1", 15);
 	}
 	
 	@Test
@@ -42,7 +59,15 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addManyParameters("f1","f2"))
 				.execute(), new Object[]{"f1","f2"}, new Object[][]{ {"string one",1},{"string 2",2}  });
 		
+		contains(A.class, new InstanceHelper.Builder.TwoDimensionArray.Adapter.Default<A>(new Object[][]{{"string one","1"},{"string 2","2"}})
+				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addManyParameters("f1","f2"))
+				.execute(), new Object[]{"f1","f2"}, new Object[][]{ {"string one",1},{"string 2",2}  });
+		
 		contains(A.class, new InstanceHelper.Builder.TwoDimensionArray.Adapter.Default<A>(new Object[][]{{1,"string one"},{2,"string 2"}})
+				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addManyParameters("f2","f1"))
+				.execute(), new Object[]{"f1","f2"}, new Object[][]{ {"string one",1},{"string 2",2}  });
+		
+		contains(A.class, new InstanceHelper.Builder.TwoDimensionArray.Adapter.Default<A>(new Object[][]{{"1","string one"},{"2","string 2"}})
 				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addManyParameters("f2","f1"))
 				.execute(), new Object[]{"f1","f2"}, new Object[][]{ {"string one",1},{"string 2",2}  });
 	}
@@ -106,6 +131,7 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		public String toString() {
 			return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 		}
+		
 	}
 	
 	@Getter @Setter

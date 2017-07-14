@@ -16,6 +16,7 @@ import org.cyk.utility.common.LogMessage;
 
 import lombok.Getter;
 
+@Deprecated
 public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT> {
 
 	OUTPUT getInstance();
@@ -64,6 +65,7 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 	
 	/**/
 	
+	@Deprecated
 	public static interface OneDimensionObjectArray<OUTPUT> extends InstanceFieldSetter<Object[], OUTPUT> {
 		
 		Map<String,Integer> getFieldNamesIndexes();

@@ -294,10 +294,8 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					final Locale locale = commonUtils.getValueIfNotNullElseDefault(pLocale, Locale.FRENCH);
 					final CaseType caseType = commonUtils.getValueIfNotNullElseDefault(pCaseType, CaseType.DEFAULT);
 					final Collection<Object> parameters = getParameters();
-					Collection<Datasource> datasources = new ArrayList<>();
 					ClassHelper classHelper = new ClassHelper();
-					for(Class<? extends Datasource> aClass : Datasource.CLASSES)
-						datasources.add(classHelper.instanciateOne(aClass));
+					
 					ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor = getDatasourcesExecutor();
 					if(datasourcesExecutor==null){
 						this.datasourcesExecutor = datasourcesExecutor = new ListenerHelper.Executor.Function.Adapter.Default.String<Datasource>();
@@ -316,7 +314,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 												.setParameters(ToStringMapping.Adapter.Default.this.getParameters())
 												.setParent(ToStringMapping.Adapter.Default.this).execute();
 									}
-								}).setInput(datasources);
+								}).setInput(classHelper.instanciateMany(Datasource.class,Datasource.CLASSES));
 					}
 					String value = datasourcesExecutor.execute();
 					

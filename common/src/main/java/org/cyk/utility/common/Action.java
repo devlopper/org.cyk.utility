@@ -64,6 +64,7 @@ public interface Action<INPUT,OUTPUT> {
 	Action<INPUT, OUTPUT> setProperties(Properties properties);
 	Action<INPUT, OUTPUT> setProperty(String name,Object value);
 	Action<INPUT, OUTPUT> setManyProperties(Object...objects);
+	Object getProperty(String name);
 	
 	Collection<Object> getParameters();
 	Action<INPUT, OUTPUT> setParameters(Collection<Object> collection);
@@ -196,6 +197,11 @@ public interface Action<INPUT,OUTPUT> {
 		}
 		
 		@Override
+		public Object getProperty(String name) {
+			return null;
+		}
+		
+		@Override
 		public Action<INPUT, OUTPUT> setParent(Action<INPUT, OUTPUT> parent) {
 			this.parent = parent;
 			return this;
@@ -285,6 +291,13 @@ public interface Action<INPUT,OUTPUT> {
 			
 			public Default(String name,Class<INPUT> inputClass,INPUT input, Class<OUTPUT> outputClass) {
 				super(name,inputClass,input, outputClass);
+			}
+			
+			@Override
+			public Object getProperty(String name) {
+				Properties properties = getProperties();
+				
+				return properties == null ? null : properties.get(name);
 			}
 			
 			@Override

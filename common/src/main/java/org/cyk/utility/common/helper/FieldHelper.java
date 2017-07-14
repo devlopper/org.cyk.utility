@@ -2,7 +2,6 @@ package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,12 +22,13 @@ import org.cyk.utility.common.annotation.FieldOverride;
 import org.cyk.utility.common.annotation.FieldOverrides;
 import org.cyk.utility.common.helper.StringHelper.Location;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Singleton
-public class FieldHelper extends AbstractReflectionHelper<Field> implements Serializable {
+public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Field> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -42,7 +42,7 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		return Arrays.asList(StringUtils.split(buildPath(fieldPaths), FIELD_NAME_SEPARATOR));
 	}
 	
-	public Object read(Object instance,Field field){
+	public Object read(Object instance,java.lang.reflect.Field field){
 		return read(instance,field.getName());
 	}
 	
@@ -59,7 +59,7 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		for(String p : getFieldNames(fieldNames)){
 			Object pValue = read(object, p);
 			if(pValue==null){
-				Field field = ClassRepository.getInstance().getField(object.getClass(), p);
+				java.lang.reflect.Field field = ClassRepository.getInstance().getField(object.getClass(), p);
 				try {
 					FieldUtils.writeField(object, p, pValue = field.getType().newInstance(), Boolean.TRUE);
 				} catch (Exception e) {
@@ -87,7 +87,7 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		}
 	}
 	
-	public void set(Object instance,Object value,Field field){
+	public void set(Object instance,Object value,java.lang.reflect.Field field){
 		set(instance,value,field.getName());
 	}
 	
@@ -117,8 +117,8 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 	}
 	/**/
 	
-	public Field getByValue(Object source,Object value){
-		for(Field field : get(source.getClass()))
+	public java.lang.reflect.Field getByValue(Object source,Object value){
+		for(java.lang.reflect.Field field : get(source.getClass()))
 			try {
 				if(value==FieldUtils.readField(field, source, true))
 					return field;
@@ -130,7 +130,7 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		return null;
 	}
 	
-	private Collection<Field> __getAllFields__(Collection<Field> fields,Class<?> type,String token,Location location,Boolean recursive) {
+	private Collection<java.lang.reflect.Field> __getAllFields__(Collection<java.lang.reflect.Field> fields,Class<?> type,String token,Location location,Boolean recursive) {
 		//super class fields first
 		/*if(recursive==null || Boolean.TRUE.equals(recursive)){
 			if (type.getSuperclass() != null) {
@@ -148,10 +148,10 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		//return fields;
 	}
 	
-	public Collection<Field> get(Class<?> type,String name,Location location,Boolean recursive) {
-		Collection<Field> fields = new ArrayList<>();
+	public Collection<java.lang.reflect.Field> get(Class<?> type,String name,Location location,Boolean recursive) {
+		Collection<java.lang.reflect.Field> fields = new ArrayList<>();
 		if(Boolean.TRUE.equals(ClassRepository.ENABLED)){
-			for(Field field : ClassRepository.getInstance().get(type).getFields())
+			for(java.lang.reflect.Field field : ClassRepository.getInstance().get(type).getFields())
 				if(StringHelper.getInstance().isAtLocation(field.getName(), name, location))
 					if(recursive==null || Boolean.TRUE.equals(recursive) || field.getDeclaringClass().equals(type))
 						fields.add(field);
@@ -161,29 +161,29 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		return fields;
 	}
 	
-	public Collection<Field> get(Class<?> type,String name,Location location) {
+	public Collection<java.lang.reflect.Field> get(Class<?> type,String name,Location location) {
 		return get(type,name,location,Boolean.TRUE);
 	}
 	
-	public Collection<Field> get(Class<?> type) {
+	public Collection<java.lang.reflect.Field> get(Class<?> type) {
 		return get(type,null,null);
 	}
 	
-	public Collection<Field> get(Class<?> type,Boolean recursive) {
+	public Collection<java.lang.reflect.Field> get(Class<?> type,Boolean recursive) {
 		return get(type,null,null,recursive);
 	}
 	
-	public Field get(Class<?> type,String name) {
+	public java.lang.reflect.Field get(Class<?> type,String name) {
 		StringHelper stringHelper = new StringHelper();
-		for(Field field : get(type))
+		for(java.lang.reflect.Field field : get(type))
 			if(stringHelper.isAtLocation(field.getName(), name, Location.EXAT))
 				return field;
 		return null;
 	}
 	
-	public Collection<Field> get(Class<?> type,Collection<Class<? extends Annotation>> annotationClasses) {
-		Collection<Field> fields = new ArrayList<>();
-		for(Field field : get(type))
+	public Collection<java.lang.reflect.Field> get(Class<?> type,Collection<Class<? extends Annotation>> annotationClasses) {
+		Collection<java.lang.reflect.Field> fields = new ArrayList<>();
+		for(java.lang.reflect.Field field : get(type))
 			if(annotationClasses==null || annotationClasses.isEmpty())
 				fields.add(field);
 			else
@@ -195,13 +195,13 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		return fields;
 	}
 	
-	public Collection<Field> get(Class<?> type,Class<? extends Annotation> annotationClass) {
+	public Collection<java.lang.reflect.Field> get(Class<?> type,Class<? extends Annotation> annotationClass) {
 		Collection<Class<? extends Annotation>> collection = new ArrayList<>();
 		collection.add(annotationClass);
 		return get(type,collection);
 	}
 	
-	public Object readField(Object object,Field field,Boolean recursive,Boolean createIfNull,Boolean autoSet,Collection<Class<? extends Annotation>> annotationClasses){
+	public Object readField(Object object,java.lang.reflect.Field field,Boolean recursive,Boolean createIfNull,Boolean autoSet,Collection<Class<? extends Annotation>> annotationClasses){
 		Object r = __readField__(object,field,recursive,annotationClasses);
 		try {
 			if(r==null && Boolean.TRUE.equals(createIfNull)){
@@ -220,19 +220,19 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		return r;
 	}
 	
-	public Object readField(Object object,Field field,Boolean recursive,Boolean createIfNull,Collection<Class<? extends Annotation>> annotationClasses){
+	public Object readField(Object object,java.lang.reflect.Field field,Boolean recursive,Boolean createIfNull,Collection<Class<? extends Annotation>> annotationClasses){
 		return readField(object, field,recursive, createIfNull, Boolean.FALSE,annotationClasses);
 	}
 	
-	public Object readField(Object object,Field field,Boolean createIfNull,Boolean autoSet){
+	public Object readField(Object object,java.lang.reflect.Field field,Boolean createIfNull,Boolean autoSet){
 		return readField(object, field, Boolean.FALSE, createIfNull,autoSet,null);
 	}
 	
-	public Object readField(Object object,Field field,Boolean createIfNull){
+	public Object readField(Object object,java.lang.reflect.Field field,Boolean createIfNull){
 		return readField(object, field, Boolean.FALSE, createIfNull,null);
 	}
 	
-	private Object __readField__(Object object,Field field,Boolean recursive,Collection<Class<? extends Annotation>> annotationClasses){
+	private Object __readField__(Object object,java.lang.reflect.Field field,Boolean recursive,Collection<Class<? extends Annotation>> annotationClasses){
 		Object value = null;
 		
 		if(object==null)
@@ -240,11 +240,11 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		else
 			try {
 				if(Boolean.TRUE.equals(recursive)){
-					Collection<Field> fields = get(object.getClass(),annotationClasses);
+					Collection<java.lang.reflect.Field> fields = get(object.getClass(),annotationClasses);
 					if(fields.contains(field))
 						value = FieldUtils.readField(field, object,Boolean.TRUE);
 					else{
-						for(Field f : fields)
+						for(java.lang.reflect.Field f : fields)
 							//if(!f.getType().isPrimitive() && !f.getType().getName().startsWith("java.")){
 							if(f.getType().getName().startsWith("org.cyk.")){
 								value = __readField__(FieldUtils.readField(f, object,Boolean.TRUE),field,recursive,annotationClasses);
@@ -267,7 +267,7 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		return value;
 	}
 	
-	public void writeField(Field field, Object target, Object value){
+	public void writeField(java.lang.reflect.Field field, Object target, Object value){
 		try {
 			FieldUtils.writeField(field, target, value,Boolean.TRUE);
 		} catch (IllegalAccessException e) {
@@ -300,7 +300,7 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		return fieldOverride;
 	}
 	
-	public Object getFieldValueContainer(Object object,Field field){
+	public Object getFieldValueContainer(Object object,java.lang.reflect.Field field){
 		if(object==null)
 			return null;
 		logTrace("Class={} , Field={}",object.getClass(),field);
@@ -315,7 +315,7 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		if(/*field.getDeclaringClass().equals(object.getClass()) &&*/ ArrayUtils.contains(new ArrayList<>(get(object.getClass())).toArray(), field)){
 			return object;
 		}
-		for(Field f : object.getClass().getDeclaredFields()){
+		for(java.lang.reflect.Field f : object.getClass().getDeclaredFields()){
 			try {
 				Object value = FieldUtils.readField(f, object, Boolean.TRUE);
 				logTrace("Field={} , Value={}",f,value);
@@ -339,9 +339,9 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 	}*/
 	
 	public Collection<String> getNamesWhereReferencedByStaticField(Class<?> aClass,Boolean recursive){
-		Collection<Field> fields = new FieldHelper().get(aClass, Constant.FIELD_, Location.START,recursive);
+		Collection<java.lang.reflect.Field> fields = new FieldHelper().get(aClass, Constant.FIELD_, Location.START,recursive);
 		Collection<String> names = new ArrayList<>();
-		for(Field field : fields)
+		for(java.lang.reflect.Field field : fields)
 			if(Modifier.isStatic(field.getModifiers()))
 				try {
 					names.add((String)field.get(null));
@@ -361,17 +361,17 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 	
 	/**/
 	
-	public static interface Get extends AbstractReflectionHelper.Get<Class<?>, Field> {
+	public static interface Get extends AbstractReflectionHelper.Get<Class<?>, java.lang.reflect.Field> {
 		 
 		@Getter @Setter @Accessors(chain=true)
-		public static class Adapter extends AbstractReflectionHelper.Get.Adapter.Default<Class<?>, Field> implements Get,Serializable {
+		public static class Adapter extends AbstractReflectionHelper.Get.Adapter.Default<Class<?>, java.lang.reflect.Field> implements Get,Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@SuppressWarnings("unchecked")
 			public Adapter(Class<?> input) {
 				super(input);
 				setInputClass((Class<Class<?>>) new ClassHelper().getByName(Class.class.getName())); 
-				setOutputClass((Class<Collection<Field>>) new ClassHelper().getByName(Class.class.getName())); 
+				setOutputClass((Class<Collection<java.lang.reflect.Field>>) new ClassHelper().getByName(Class.class.getName())); 
 			}
 			
 			/**/
@@ -384,12 +384,12 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 				}
 				
 				@Override
-				public Integer getModifiers(Field field) {
+				public Integer getModifiers(java.lang.reflect.Field field) {
 					return field.getModifiers();
 				}
 				
 				@Override
-				public String getName(Field field) {
+				public String getName(java.lang.reflect.Field field) {
 					return field.getName();
 				}
 				
@@ -399,7 +399,7 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 				}
 				
 				@Override
-				protected Collection<Field> getTypes(Class<?> clazz) {
+				protected Collection<java.lang.reflect.Field> getTypes(Class<?> clazz) {
 					return Arrays.asList(clazz.getDeclaredFields());
 				}
 				
@@ -408,4 +408,14 @@ public class FieldHelper extends AbstractReflectionHelper<Field> implements Seri
 		
 	}
 	
+	/**/
+	
+	@Getter @Setter @EqualsAndHashCode(of={"name"})
+	public static class Field implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private String name;
+		private Object value;
+		
+	}
 }

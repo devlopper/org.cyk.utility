@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,8 +24,12 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	private static final long serialVersionUID = 1L;
 
 	public Boolean isNumber(Class<?> aClass){
-		return Number.class.isAssignableFrom(ClassUtils.primitiveToWrapper(aClass));
-	}	
+		return Number.class.isAssignableFrom(getWrapper(aClass));
+	}
+	
+	public Class<?> getWrapper(Class<?> aClass){
+		return ClassUtils.primitiveToWrapper(aClass);
+	}
 	
 	public Class<?> get(Class<?> aClass, String fieldName,Class<?> fieldType) {
 		FieldOverride fieldOverride = inject(FieldHelper.class).getOverride(aClass,fieldName);
@@ -90,6 +95,19 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public Collection<?> instanciateMany(@SuppressWarnings("rawtypes") Collection classes){
+		Collection<Object> collection = new ArrayList<>();
+		if(classes!=null)
+			for(Object aClass : classes)
+				collection.add(instanciateOne((Class<?>) aClass));
+		return collection;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> Collection<T> instanciateMany(Class<T> aClass,@SuppressWarnings("rawtypes") Collection classes){
+		return (Collection<T>) instanciateMany(classes);
 	}
 	
 	/**/

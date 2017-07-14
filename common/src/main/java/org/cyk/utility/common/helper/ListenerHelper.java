@@ -117,6 +117,14 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 							super(java.lang.String.class);
 						}
 					}
+					
+					public static class Object<LISTENER> extends Default<java.lang.Object,LISTENER> implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						public Object() {
+							super(java.lang.Object.class);
+						}
+					}
 				}
 			}
 			
@@ -147,6 +155,7 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 						Collection<LISTENER> listeners = getInput();
 						if(listeners!=null)
 							for(LISTENER listener : listeners){
+								resultMethod.setProperties(getProperties());
 								RESULT value = resultMethod.setListener(listener).execute();
 								if(value==null)
 									;
@@ -167,6 +176,15 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 						
 						public String() {
 							super(java.lang.String.class);
+						}
+						
+					}
+					
+					public static class Object<LISTENER> extends Default<LISTENER, java.lang.Object> implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						public Object() {
+							super(java.lang.Object.class);
 						}
 						
 					}

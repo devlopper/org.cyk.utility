@@ -1,8 +1,11 @@
 package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -80,11 +83,22 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	
 	public static interface Setter<INSTANCE> extends Action<INSTANCE, INSTANCE> {
 		
+		ListenerHelper.Executor.Function.Adapter.Default.Object<ProcessValue> getProcessValuesExecutor();
+		Setter<INSTANCE> setProcessValuesExecutor(ListenerHelper.Executor.Function.Adapter.Default.Object<ProcessValue> processValuesExecutor);
+		
+		@Getter
 		public static class Adapter<INSTANCE> extends Action.Adapter.Default<INSTANCE, INSTANCE> implements Setter<INSTANCE>,Serializable {
 			private static final long serialVersionUID = 1L;
 			
+			protected ListenerHelper.Executor.Function.Adapter.Default.Object<ProcessValue> processValuesExecutor;
+			
 			public Adapter(Class<INSTANCE> instanceClass, INSTANCE instance) {
 				super("set", instanceClass, instance, instanceClass);
+			}
+			
+			@Override
+			public Setter<INSTANCE> setProcessValuesExecutor(ListenerHelper.Executor.Function.Adapter.Default.Object<ProcessValue> processValuesExecutor) {
+				return null;
 			}
 			
 			/**/
@@ -96,42 +110,107 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					super(instanceClass, instance);
 				}
 				
+				public Default(Class<INSTANCE> instanceClass) {
+					super(instanceClass, null);
+				}
+				
+				@Override
+				public Setter<INSTANCE> setProcessValuesExecutor(ListenerHelper.Executor.Function.Adapter.Default.Object<ProcessValue> processValuesExecutor) {
+					this.processValuesExecutor = processValuesExecutor;
+					return this;
+				}
+				
 				@Override
 				protected INSTANCE __execute__() {
 					INSTANCE instance = getInput();
 					Properties properties = getProperties();
 					if(properties!=null){
 						FieldHelper fieldHelper = new FieldHelper();
+						CollectionHelper collectionHelper = new CollectionHelper();
+						
+						ListenerHelper.Executor.Function.Adapter.Default.Object<ProcessValue> valueProcessorExecutor = getProcessValuesExecutor();
+						if(valueProcessorExecutor==null){
+							valueProcessorExecutor = new ListenerHelper.Executor.Function.Adapter.Default.Object<ProcessValue>();
+							valueProcessorExecutor.setResultMethod(ProcessValue.Adapter.Default.RESULT_METHOD);
+							valueProcessorExecutor.setInput((Collection<ProcessValue>) new ClassHelper().instanciateMany(ProcessValue.class
+									,collectionHelper.isEmpty(ProcessValue.CLASSES) ? Arrays.asList(ProcessValue.Adapter.Default.class) : ProcessValue.CLASSES));
+						}
+						
 						for(Entry<Object, Object> entry : properties.entrySet()){
-							fieldHelper.set(instance, entry.getValue(),(String)entry.getKey());
+							valueProcessorExecutor.setManyProperties(ProcessValue.PROPERTY_INSTANCE,instance,ProcessValue.PROPERTY_FIELD_NAME,(String)entry.getKey()
+									,ProcessValue.PROPERTY_VALUE,entry.getValue());
+							setFieldValue(fieldHelper, instance, (String)entry.getKey(), collectionHelper.isEmpty(valueProcessorExecutor.getInput()) ? entry.getValue() : valueProcessorExecutor.execute());
 						}
 					}
 					return instance;
+				}
+				
+				protected void setFieldValue(FieldHelper fieldHelper,INSTANCE instance,String fieldName,Object value){
+					fieldHelper.set(instance, value,fieldName);
 				}
 			}
 		}
 		
 		/**/
 		
-		/*public static interface Collection<INSTANCE> extends Action<Collection<INSTANCE>, Collection<INSTANCE>> {
+		public static interface ProcessValue extends Action<Object, Object> {
 			
-			public static class Adapter<INSTANCE> extends Action.Adapter.Default<Collection<INSTANCE>, Collection<INSTANCE>> implements Collection<INSTANCE>,Serializable {
+			String PROPERTY_INSTANCE = "instance";
+			String PROPERTY_FIELD_NAME = "fieldName";
+			String PROPERTY_VALUE = "value";
+			
+			Collection<Class<? extends ProcessValue>> CLASSES = new ArrayList<>();
+			
+			public static class Adapter extends Action.Adapter.Default<Object, Object> implements ProcessValue,Serializable {
 				private static final long serialVersionUID = 1L;
-			
-				public Adapter(Collection<INSTANCE> input) {
-					super("set", null, input, null);
+				
+				public Adapter(Object value) {
+					super("process", Object.class, value, Object.class);
 				}
-			
-				public static class Default<INSTANCE> extends Collection.Adapter<INSTANCE> implements Serializable {
+				
+				public static class Default extends ProcessValue.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					public Default(Collection<INSTANCE> input) {
-						super(input);
+					public static ListenerHelper.Executor.ResultMethod<Object, ProcessValue> RESULT_METHOD = new ResultMethod();
+					
+					public Default(Object value) {
+						super(value);
 					}
+					
+					public Default() {
+						this(null);
+					}
+					
 					
 				}
 			}
-		}*/
+			
+			public static class ResultMethod extends ListenerHelper.Executor.ResultMethod.Adapter.Default.Object<ProcessValue> {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected java.lang.Object __execute__() {
+					java.lang.Object value = getProperty(ProcessValue.PROPERTY_VALUE);
+					if(value!=null){
+						if(value instanceof java.lang.String){
+							ClassHelper classHelper = new ClassHelper();
+							Field field = new FieldHelper().get(getProperty(PROPERTY_INSTANCE).getClass(), (java.lang.String)getProperty(PROPERTY_FIELD_NAME));
+							Class<?> wrapperClass = classHelper.getWrapper(field.getType());
+							if(!wrapperClass.isAssignableFrom(value.getClass())){
+								if(new ClassHelper().isNumber(wrapperClass)){
+									value = new NumberHelper().get(wrapperClass,(java.lang.String)value);
+								}
+							}	
+						}
+					}
+					return value;
+				}
+			}
+		}
+		
+		/**/
+		
+		
 	}
 	
 	public static interface Builder<INPUT,INSTANCE> extends org.cyk.utility.common.Builder<INPUT,INSTANCE> {
@@ -173,7 +252,29 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		/**/
 		
 		public static interface OneDimensionArray<INSTANCE> extends Builder<Object[],INSTANCE> {
+			/*
+			Map<String,Integer> getFieldNamesIndexes();
+			OneDimensionArray<INSTANCE> setFieldNamesIndexes(Map<String,Integer> fieldNamesIndexes);
 			
+			Boolean isArrayValueAtProcessable(Integer index);
+			
+			Object getValue(Class<?> fieldType,Object value);
+			
+			OneDimensionArray<INSTANCE> addFieldName(String name,Integer index);
+			OneDimensionArray<INSTANCE> addFieldName(String name);
+			OneDimensionArray<INSTANCE> addFieldNames(String...names);
+			
+			Object getKeyType(Object[] values);
+			
+			Object getKeyType();
+			OneDimensionArray<INSTANCE> setKeyType(Object keyType);
+			
+			Integer getKeyIndex(Object[] values);
+			Integer getKeyIndex();
+			OneDimensionArray<INSTANCE> setKeyIndex(Integer keyIndex);
+			
+			Object getKeyValue(Object[] values);
+			*/
 			public static class Adapter<INSTANCE> extends Builder.Adapter.Default<Object[], INSTANCE> implements OneDimensionArray<INSTANCE>,Serializable {
 				private static final long serialVersionUID = 1L;
 				
@@ -200,16 +301,16 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 						if(attributes!=null){
 							Setter<INSTANCE> setter = getSetter();
 							if(setter==null){
-								setter = new Setter.Adapter.Default<INSTANCE>(getOutputClass(), instance);
+								setter = new Setter.Adapter.Default<INSTANCE>(getOutputClass());
 							}
-							
+							setter.setInput(instance);
 							Object[] values = getInput();
-							Object[] objects = new Object[values.length*2];
-							for(int i = 0 , j = 0; j < attributes.length ; i = i + 2 , j++){
-								objects[i] = attributes[j];
-								objects[i+1] = values[j];
+							Collection<Object> objects = new ArrayList<>();
+							for(int i = 0 ; i < attributes.length ; i++){
+								objects.add(attributes[i]);
+								objects.add(values[i]);
 							}
-							setter.setManyProperties(objects).execute();
+							setter.setManyProperties(objects.toArray()).execute();
 						}
 						return instance;
 					}

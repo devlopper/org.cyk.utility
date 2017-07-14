@@ -164,4 +164,8 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return decode(number, BASE_62_CHARACTERS);
 	}
 	
+	public <T> T get(Class<T> aClass,String string){
+		return new ClassHelper().instanciate(aClass, new Object[]{String.class,string});
+	}
+	
 }
