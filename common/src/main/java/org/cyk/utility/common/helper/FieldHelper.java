@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.beanutils.FluentPropertyBeanIntrospector;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +34,24 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	private static final long serialVersionUID = 1L;
 
 	private static final String FIELD_NAME_SEPARATOR = Constant.CHARACTER_DOT.toString();
+	
+	static {
+		PropertyUtils.addBeanIntrospector(new FluentPropertyBeanIntrospector());
+	}
+	
+	private static FieldHelper INSTANCE;
+	
+	public static FieldHelper getInstance() {
+		if(INSTANCE == null)
+			INSTANCE = new FieldHelper();
+		return INSTANCE;
+	}
+	
+	@Override
+	protected void initialisation() {
+		INSTANCE = this;
+		super.initialisation();
+	}
 	
 	public String buildPath(String...fieldNames){
 		return StringUtils.join(fieldNames,FIELD_NAME_SEPARATOR);
@@ -81,6 +100,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		String path = buildPath(fieldNames);
 		set(instance, path);//we want to be sure we can reach the latest field
 		try {
+	        //org.apache.commons.beanutils.BeanUtils.setProperty( instance, path, value );
 			PropertyUtils.setProperty(instance, path, value);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -174,10 +194,16 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	}
 	
 	public java.lang.reflect.Field get(Class<?> type,String name) {
-		StringHelper stringHelper = new StringHelper();
+		String fieldName = StringUtils.substringBefore(name, FIELD_NAME_SEPARATOR);
 		for(java.lang.reflect.Field field : get(type))
-			if(stringHelper.isAtLocation(field.getName(), name, Location.EXAT))
+			if(StringHelper.getInstance().isAtLocation(field.getName(), fieldName, Location.EXAT))
+				return fieldName.equals(name) ? field : get(field.getType(),StringUtils.substringAfter(name, FIELD_NAME_SEPARATOR));
+		
+		/*
+		for(java.lang.reflect.Field field : get(type))
+			if(StringHelper.getInstance().isAtLocation(field.getName(), name, Location.EXAT))
 				return field;
+		*/
 		return null;
 	}
 	

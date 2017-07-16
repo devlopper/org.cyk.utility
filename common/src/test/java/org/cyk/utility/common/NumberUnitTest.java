@@ -1,7 +1,5 @@
 package org.cyk.utility.common;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,12 +15,6 @@ public class NumberUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	@InjectMocks private NumberHelper numberHelper;
-	
-	@Override
-	protected void _execute_() {
-		super._execute_();
-		assertEquals("Create student. Class {} , Level {}", new LogMessage.Builder().set("Create","student","Class",5,"Level","B2").build().getTemplate());
-	}
 		
 	@Test
 	public void concatenate(){
@@ -145,9 +137,9 @@ public class NumberUnitTest extends AbstractUnitTest {
 	private void assertCoding(String number,String base,String actualResult,String expectedResult){
 		String message = number+" to base "+base;
 		assertEquals(message,expectedResult, actualResult);
-		Integer numberOfCharacterDifference = number.length()-expectedResult.length();
-		BigDecimal ratio = new BigDecimal(numberOfCharacterDifference).divide(new BigDecimal(number.length()),2,RoundingMode.DOWN);
-		System.out.println(number.length()+" characters to "+expectedResult.length()+". Difference : "+numberOfCharacterDifference+". Ratio = "+ratio);
+		//Integer numberOfCharacterDifference = number.length()-expectedResult.length();
+		//BigDecimal ratio = new BigDecimal(numberOfCharacterDifference).divide(new BigDecimal(number.length()),2,RoundingMode.DOWN);
+		//System.out.println(number.length()+" characters to "+expectedResult.length()+". Difference : "+numberOfCharacterDifference+". Ratio = "+ratio);
 	}
 	
 }

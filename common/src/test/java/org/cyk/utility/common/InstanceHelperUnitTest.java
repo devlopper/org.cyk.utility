@@ -1,5 +1,7 @@
 package org.cyk.utility.common;
 
+import java.lang.reflect.Field;
+
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
@@ -7,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.builder.InstanceCopyBuilder;
 import org.cyk.utility.common.helper.ArrayHelper;
+import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -20,6 +23,7 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	static {
+		InstanceHelper.Lookup.Source.Adapter.Default.RESULT_METHOD = new MySource();
 		//InstanceHelper.Setter.ProcessValue.CLASSES.add(A.StringProcessor.class);
 		/*InstanceHelper.Setter.ProcessValue.Adapter.Default.RESULT_METHOD = new InstanceHelper.Setter.ProcessValue.ResultMethod(){
 			private static final long serialVersionUID = 1L;
@@ -39,10 +43,24 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	protected void _execute_() {}
 	
 	@Test
+	public void lookup(){
+		assertA(new InstanceHelper.Lookup.Adapter.Default<>(String.class, "159", A.class).execute(),"From My Source _ 159", 147);
+	}
+	
+	@Test
 	public void set(){
 		A a = new A();
 		assertA(a,new Object[]{"f1","name","f2",12},"name", 12);
 		assertA(a,new Object[]{"f2",12,"f1","name"},"name", 12);
+		
+		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(new Object[]{}, A.class).setKeyBuilder(
+				new ArrayHelper.Dimension.Key.Builder.Adapter.Default(){
+					private static final long serialVersionUID = 1L;
+
+					protected org.cyk.utility.common.helper.ArrayHelper.Dimension.Key __execute__() {
+						return new ArrayHelper.Dimension.Key("159");
+					}
+				} ).execute(),"From My Source _ 159", 147);
 	}
 	
 	@Test
@@ -51,6 +69,9 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		
 		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(new Object[]{"c0","c1",13,14,15}, A.class)
 				.addParameterArrayElementStringIndexInstance(1, "f1",4, "f2").execute(),"c1", 15);
+		
+		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(new Object[]{"c0","c1",13,14,15}, A.class)
+				.addParameterArrayElementStringIndexInstance(1, "f1",4, "f2", 0, "subAEntity.ff1").execute(),"c1", 15);
 	}
 	
 	@Test
@@ -70,6 +91,18 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		contains(A.class, new InstanceHelper.Builder.TwoDimensionArray.Adapter.Default<A>(new Object[][]{{"1","string one"},{"2","string 2"}})
 				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addParameterArrayElementString("f2","f1"))
 				.execute(), new Object[]{"f1","f2"}, new Object[][]{ {"string one",1},{"string 2",2}  });
+		
+		/**/
+		
+		contains(A.class, new InstanceHelper.Builder.TwoDimensionArray.Adapter.Default<A>(new Object[][]{{"string one","1","ss1"},{"string 2","2","ss2"}})
+				.setOneDimensionArray(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(A.class).addParameterArrayElementString("f1","f2","subA.ff1"))
+				.execute(), new Object[]{"f1","f2"/*,"subA.ff1"*/}, new Object[][]{ {"string one",1/*,"ss1"*/},{"string 2",2/*,"ss2"*/}  });
+		
+	}
+	
+	@Override
+	protected Field getField(Class<?> aClass, String name) {
+		return FieldHelper.getInstance().get(aClass, name);
 	}
 	
 	@Test
@@ -184,5 +217,23 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		
 	}
 	
+	public static class MySource extends InstanceHelper.Lookup.Source.Adapter.Default.ResultMethod {
+		
+		private static final long serialVersionUID = 1L;
+
+		private static final A A_159 = new A();
+		static{
+			A_159.setF1("From My Source _ 159");
+			A_159.setF2(147);
+		}
+		
+		@Override
+		protected java.lang.Object __execute__() {
+			if("159".equals(getInput()))
+				return A_159;
+			return super.__execute__();
+		}
+		
+	}
 	
 }

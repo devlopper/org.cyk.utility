@@ -1,6 +1,5 @@
 package org.cyk.utility.common;
 
-import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.MicrosoftExcelHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -11,10 +10,8 @@ public class MicrosoftExcelHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void readWorkbook_1_xls_sheet_0(){
-		MicrosoftExcelHelper.Workbook workbook = new MicrosoftExcelHelper.Workbook.Builder.InputStream.Adapter
-				.Default(new FileHelper().getInputStream(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel\\1xls.xls")).execute();
-		
-		MicrosoftExcelHelper.Workbook.Sheet sheet = new MicrosoftExcelHelper.Workbook.Sheet.Builder.Adapter.Default(workbook).setSheetIndex(0).execute();
+		MicrosoftExcelHelper.Workbook.Sheet sheet = new MicrosoftExcelHelper.Workbook.Sheet.Builder.Adapter
+				.Default(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel\\1xls.xls",0).execute();
 		
 		assertArray(sheet.getValues(), new Object[][]{
 			{"Nom","Prenoms","Age","Mail"}
@@ -22,6 +19,26 @@ public class MicrosoftExcelHelperUnitTest extends AbstractUnitTest {
 			,{"Jack","Mama","52","yahoo523"}
 			,{"Pul","Gnab","24","hotmail"}
 		});
+		
+		assertNull(sheet.getIgnoreds());
 	}
 	
+	@Test
+	public void readWorkbook_1_xls_sheet_0_ignored_keys(){
+		MicrosoftExcelHelper.Workbook.Sheet.Builder builder = new MicrosoftExcelHelper.Workbook.Sheet.Builder.Adapter
+				.Default(System.getProperty("user.dir")+"\\src\\test\\resources\\files\\excel\\1xls.xls",0);
+		builder.createMatrix().getMatrix().getRow().createKeyBuilder(new Object[]{0}, new String[]{"Jack"});
+		MicrosoftExcelHelper.Workbook.Sheet sheet = builder.execute();
+		
+		assertArray(sheet.getValues(), new Object[][]{
+			{"Nom","Prenoms","Age","Mail"}
+			,{"Yao","Paul","12","mail555"}
+			,{"Pul","Gnab","24","hotmail"}
+		});
+		
+		assertArray(sheet.getIgnoreds(), new Object[][]{
+			{"Jack","Mama","52","yahoo523"}
+			
+		});
+	}
 }

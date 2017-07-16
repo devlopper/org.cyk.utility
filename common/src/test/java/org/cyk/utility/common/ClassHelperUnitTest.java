@@ -1,11 +1,10 @@
 package org.cyk.utility.common;
 
-import java.lang.reflect.Modifier;
-
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.cyk.utility.common.helper.AbstractHelper;
+import org.cyk.utility.common.helper.AbstractReflectionHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -19,14 +18,22 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void getClasses(){
-		System.out.println( new ClassHelper().get("org.cyk",AbstractHelper.class) );
-		System.out.println( new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class).execute());
-		System.out.println( new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class)
-				.addModifiers(Modifier.ABSTRACT).execute());
-		System.out.println( new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class)
-				.addAnnotationClasses(Singleton.class).execute());
-		System.out.println( new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class)
-				.addAnnotationClasses(Named.class).execute());
+		assertCollectionContains(ClassHelper.getInstance().get("org.cyk",AbstractHelper.class), ClassHelper.class);
+		assertCollectionContains(new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class).execute()
+				, ClassHelper.class);
+		assertCollectionContains(new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class)
+				.addModifiers(java.lang.reflect.Modifier.ABSTRACT).execute(), AbstractReflectionHelper.class);
+		assertCollectionContains(new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class)
+				.addAnnotationClasses(Singleton.class).execute(), ClassHelper.class);
+		assertCollectionContains(new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class)
+				.addAnnotationClasses(Named.class).execute(), MyAnnotatedHelper2.class);
+		
+	}
+	
+	@Test
+	public void instanciate(){
+		assertNotNull(new ClassHelper.Instanciation.Adapter.Default<ClassHelper>(ClassHelper.class).execute());
+		assertThat("instance is not a class helper", new ClassHelper.Instanciation.Adapter.Default<ClassHelper>(ClassHelper.class).execute().getClass().equals(ClassHelper.class));
 	}
 	
 	/**/

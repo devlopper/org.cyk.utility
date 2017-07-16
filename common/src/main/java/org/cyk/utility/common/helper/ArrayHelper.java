@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.file.ArrayReader.Dimension.Row;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,11 +44,17 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 		return objects;
 	}
 	
+	public Integer size(Object[] objects){
+		return objects == null ? 0 : objects.length;
+	}
+	
 	/**/
 	
 	@Getter @Setter @NoArgsConstructor
 	public static class Element<INSTANCE> implements Serializable {
 		private static final long serialVersionUID = 1L;
+		
+		private static final java.lang.String TO_STRING_FORMAT = "%s[%s]";
 		
 		private Integer index;
 		private INSTANCE instance;
@@ -56,6 +63,11 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 			super();
 			this.index = index;
 			this.instance = instance;
+		}
+		
+		@Override
+		public java.lang.String toString() {
+			return java.lang.String.format(TO_STRING_FORMAT, instance,index);
 		}
 		
 		/**/
@@ -112,6 +124,37 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 				}
 				
 			}
+		
+			/**/
+			
+			@Getter @Setter @Accessors(chain=true)
+			public static class Values implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				private Key primaryKey;
+				
+			}
+			
+			@Getter @Setter @Accessors(chain=true)
+			public static class Key implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				private Set<Integer> indexes;
+				private String separator;
+				
+				public String get(Object[] objects){
+					if(objects==null || indexes==null)
+						return null;
+					Collection<String> values = new ArrayList<>();
+					for(Integer index : indexes)
+						values.add(String.valueOf(objects[index]));
+					return StringHelper.getInstance().concatenate(values, separator);
+				}
+				
+				public static interface Builderr extends org.cyk.utility.common.Builder.NullableInput<Key> {
+					
+				}
+			}
 		}
 		
 		public static interface TwoDimensions<INPUT, OUTPUT> extends Builder<INPUT, OUTPUT[][]> {
@@ -134,8 +177,107 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 			}
 		}
 		
+		/**/
 		
+		@Getter @Setter @Accessors(chain=true)
+		public static class Key implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			private Set<Integer> indexes;
+			private String separator;
+			
+			public String get(Object[] objects){
+				if(objects==null || indexes==null)
+					return null;
+				Collection<String> values = new ArrayList<>();
+				for(Integer index : indexes)
+					values.add(String.valueOf(objects[index]));
+				return StringHelper.getInstance().concatenate(values, separator);
+			}
+			
+		}
 	}
+	
+	public static interface Dimension {
+		
+		@Getter @Setter @Accessors(chain=true) @NoArgsConstructor @EqualsAndHashCode(of={"value"})
+		public static class Key implements Serializable {
+			private static final long serialVersionUID = 1L;
+		
+			private String value;
+			
+			public Key(String value) {
+				super();
+				this.value = value;
+			}
+			
+			@Override
+			public String toString() {
+				return value;
+			}
+
+			public static interface Builder extends org.cyk.utility.common.Builder<Object[],Key> {
+				
+				String getSeparator();
+				Builder setSeparator(String separator);
+				
+				@Getter
+				public static class Adapter extends org.cyk.utility.common.Builder.Adapter.Default<Object[],Key> implements Builder,Serializable{
+					private static final long serialVersionUID = 1L;
+					
+					protected String separator;
+					
+					public Adapter(Object[] objects) {
+						super(Object[].class,objects,Key.class);
+					}
+					
+					@Override
+					public Builder setSeparator(String separator) {
+						return null;
+					}
+					
+					public static class Default extends Builder.Adapter implements Serializable{
+						private static final long serialVersionUID = 1L;
+						
+						public Default(Object[] objects) {
+							super(objects);
+						}
+						
+						public Default() {
+							super(null);
+						}
+						
+						@Override
+						public Builder setSeparator(String separator) {
+							this.separator = separator;
+							return this;
+						}
+						
+						@Override
+						protected Key __execute__() {
+							Key key = new Key();
+							Object[] objects = getInput();
+							if(objects.length>0){
+								Collection<Object> indexes = getParameters();
+								Collection<String> values = new ArrayList<>();
+								if(indexes!=null){
+									for(Object index : indexes)
+										if(index instanceof Integer)
+											values.add(String.valueOf(objects[(Integer)index]));
+									key.setValue(StringHelper.getInstance().concatenate(values, separator));
+								}	
+							}
+							return key;
+						}
+						
+					}
+				}
+				
+			}
+		}
+	}
+	
+	
 	
 	public static interface ArrayReader<RESULT> extends FileHelper.Read<RESULT> {
 

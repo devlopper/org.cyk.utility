@@ -53,7 +53,7 @@ public abstract class AbstractReflectionHelper<TYPE> extends AbstractHelper impl
 			protected Set<Class<?>> annotationClasses = new HashSet<>();
 			
 			public Adapter(SOURCE input) {
-				super("Get fields", null, input, null, null);
+				super("Get fields", null, input, null);
 			}
 			
 			@Override

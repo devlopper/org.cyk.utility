@@ -5,6 +5,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +13,7 @@ import java.util.Set;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.cyk.utility.common.Action;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.reflections.Reflections;
 
@@ -23,6 +25,20 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 
 	private static final long serialVersionUID = 1L;
 
+	private static ClassHelper INSTANCE;
+	
+	public static ClassHelper getInstance() {
+		if(INSTANCE == null)
+			INSTANCE = new ClassHelper();
+		return INSTANCE;
+	}
+	
+	@Override
+	protected void initialisation() {
+		INSTANCE = this;
+		super.initialisation();
+	}
+	
 	public Boolean isNumber(Class<?> aClass){
 		return Number.class.isAssignableFrom(getWrapper(aClass));
 	}
@@ -177,4 +193,100 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		}
 		
 	}
+
+	public static interface Instanciation<INSTANCE> extends org.cyk.utility.common.Builder<INSTANCE,INSTANCE> {
+		
+		ListenerHelper.Executor.Function.Adapter.Default.Object<Get<?>> getGetExecutor();
+		Instanciation<INSTANCE> setGetExecutor(ListenerHelper.Executor.Function.Adapter.Default.Object<Get<?>> getExecutor);
+		
+		@Getter
+		public static class Adapter<INSTANCE> extends org.cyk.utility.common.Builder.Adapter.Default<INSTANCE,INSTANCE> implements Instanciation<INSTANCE>,Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			protected ListenerHelper.Executor.Function.Adapter.Default.Object<Get<?>> getExecutor;
+			
+			@SuppressWarnings("unchecked")
+			public Adapter(Class<INSTANCE> outputClass) {
+				super(outputClass, (INSTANCE) outputClass, outputClass);
+			}
+			
+			@Override
+			public Instanciation<INSTANCE> setGetExecutor(ListenerHelper.Executor.Function.Adapter.Default.Object<Get<?>> getExecutor) {
+				return null;
+			}
+			
+			public static class Default<INSTANCE> extends Instanciation.Adapter<INSTANCE> implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				//public static ListenerHelper.Executor.ResultMethod<Object, Instanciation<?>> RESULT_METHOD = new ResultMethod<Object>();
+				
+				public Default(Class<INSTANCE> outputClass) {
+					super(outputClass);
+				}
+				
+				@Override
+				public Instanciation<INSTANCE> setGetExecutor(ListenerHelper.Executor.Function.Adapter.Default.Object<Get<?>> getExecutor) {
+					this.getExecutor = getExecutor;
+					return this;
+				}
+				
+				@SuppressWarnings({ "rawtypes", "unchecked" })
+				@Override
+				protected INSTANCE __execute__() {
+					ListenerHelper.Executor.Function.Adapter.Default.Object<Get<?>> getExecutor = getGetExecutor();
+					if(getExecutor==null){
+						getExecutor = new ListenerHelper.Executor.Function.Adapter.Default.Object<Get<?>>();
+						getExecutor.setResultMethod(Get.Adapter.Default.RESULT_METHOD);
+						getExecutor.setInput((Collection) ClassHelper.getInstance().instanciateMany(Get.class
+								,CollectionHelper.getInstance().isEmpty(Get.CLASSES) ? Arrays.asList(Get.Adapter.Default.class) : Get.CLASSES));
+					}
+					getExecutor.getResultMethod().setInputClass((Class<Object>) getOutputClass());
+					getExecutor.getResultMethod().setInput(getOutputClass());
+					getExecutor.getResultMethod().setOutputClass((Class<Object>) getOutputClass());
+					INSTANCE instance = (INSTANCE) getExecutor.execute();
+					return instance;
+				}
+			}
+		}
+		
+		/**/
+		
+		public static interface Get<INSTANCE> extends Action<INSTANCE, INSTANCE> {
+			
+			Collection<Class<? extends Get<?>>> CLASSES = new ArrayList<>();
+			
+			public static class Adapter<INSTANCE> extends Action.Adapter.Default<INSTANCE, INSTANCE> implements Get<INSTANCE>,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@SuppressWarnings("unchecked")
+				public Adapter(Class<INSTANCE> outputClass) {
+					super("get", outputClass, (INSTANCE) outputClass, outputClass);
+				}
+				
+				public static class Default<INSTANCE> extends Get.Adapter<INSTANCE> implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					public static ListenerHelper.Executor.ResultMethod<Object, Get<?>> RESULT_METHOD = new ResultMethod();
+					
+					public Default(Class<INSTANCE> outputClass) {
+						super(outputClass);
+					}
+					
+					public Default() {
+						this(null);
+					}
+				}
+			}
+			
+			public static class ResultMethod extends ListenerHelper.Executor.ResultMethod.Adapter.Default.Object<Get<?>> {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected java.lang.Object __execute__() {
+					return ClassHelper.getInstance().instanciateOne((Class<?>)getInput());
+				}
+			}
+		}
+	}
+	
 }

@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -125,28 +126,25 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					INSTANCE instance = getInput();
 					Properties properties = getProperties();
 					if(properties!=null){
-						FieldHelper fieldHelper = new FieldHelper();
-						CollectionHelper collectionHelper = new CollectionHelper();
-						
 						ListenerHelper.Executor.Function.Adapter.Default.Object<ProcessValue> valueProcessorExecutor = getProcessValuesExecutor();
 						if(valueProcessorExecutor==null){
 							valueProcessorExecutor = new ListenerHelper.Executor.Function.Adapter.Default.Object<ProcessValue>();
 							valueProcessorExecutor.setResultMethod(ProcessValue.Adapter.Default.RESULT_METHOD);
 							valueProcessorExecutor.setInput((Collection<ProcessValue>) new ClassHelper().instanciateMany(ProcessValue.class
-									,collectionHelper.isEmpty(ProcessValue.CLASSES) ? Arrays.asList(ProcessValue.Adapter.Default.class) : ProcessValue.CLASSES));
+									,CollectionHelper.getInstance().isEmpty(ProcessValue.CLASSES) ? Arrays.asList(ProcessValue.Adapter.Default.class) : ProcessValue.CLASSES));
 						}
 						
 						for(Entry<Object, Object> entry : properties.entrySet()){
 							valueProcessorExecutor.setManyProperties(ProcessValue.PROPERTY_INSTANCE,instance,ProcessValue.PROPERTY_FIELD_NAME,(String)entry.getKey()
 									,ProcessValue.PROPERTY_VALUE,entry.getValue());
-							setFieldValue(fieldHelper, instance, (String)entry.getKey(), collectionHelper.isEmpty(valueProcessorExecutor.getInput()) ? entry.getValue() : valueProcessorExecutor.execute());
+							setFieldValue(instance, (String)entry.getKey(), CollectionHelper.getInstance().isEmpty(valueProcessorExecutor.getInput()) ? entry.getValue() : valueProcessorExecutor.execute());
 						}
 					}
 					return instance;
 				}
 				
-				protected void setFieldValue(FieldHelper fieldHelper,INSTANCE instance,String fieldName,Object value){
-					fieldHelper.set(instance, value,fieldName);
+				protected void setFieldValue(INSTANCE instance,String fieldName,Object value){
+					FieldHelper.getInstance().set(instance, value,fieldName);
 				}
 			}
 		}
@@ -193,14 +191,15 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					java.lang.Object value = getProperty(ProcessValue.PROPERTY_VALUE);
 					if(value!=null){
 						if(value instanceof java.lang.String){
-							ClassHelper classHelper = new ClassHelper();
-							Field field = new FieldHelper().get(getProperty(PROPERTY_INSTANCE).getClass(), (java.lang.String)getProperty(PROPERTY_FIELD_NAME));
-							Class<?> wrapperClass = classHelper.getWrapper(field.getType());
+							Field field = FieldHelper.getInstance().get(getProperty(PROPERTY_INSTANCE).getClass(), (java.lang.String)getProperty(PROPERTY_FIELD_NAME));
+							//if(field!=null){
+							Class<?> wrapperClass = ClassHelper.getInstance().getWrapper(field.getType());
 							if(!wrapperClass.isAssignableFrom(value.getClass())){
-								if(new ClassHelper().isNumber(wrapperClass)){
+								if(ClassHelper.getInstance().isNumber(wrapperClass)){
 									value = new NumberHelper().get(wrapperClass,(java.lang.String)value);
 								}
 							}	
+							//}
 						}
 					}
 					return value;
@@ -252,6 +251,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		/**/
 		
 		public static interface OneDimensionArray<INSTANCE> extends Builder<Object[],INSTANCE> {
+			
+			//ListenerHelper.Executor.Function.Adapter.Default<Datasource> getDatasourcesExecutor();
+			//ToStringMapping setDatasourcesExecutor(ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor);
+			
 			/*
 			Boolean isArrayValueAtProcessable(Integer index);
 		
@@ -266,11 +269,23 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			
 			Object getKeyValue(Object[] values);
 			*/
+			
+			ArrayHelper.Dimension.Key.Builder getKeyBuilder();
+			OneDimensionArray<INSTANCE> setKeyBuilder(ArrayHelper.Dimension.Key.Builder keyBuilder);
+			
+			@Getter
 			public static class Adapter<INSTANCE> extends Builder.Adapter.Default<Object[], INSTANCE> implements OneDimensionArray<INSTANCE>,Serializable {
 				private static final long serialVersionUID = 1L;
 				
+				protected ArrayHelper.Dimension.Key.Builder keyBuilder;
+				
 				public Adapter(Object[] array, Class<INSTANCE> outputClass) {
 					super(Object[].class, array, outputClass);
+				}
+				
+				@Override
+				public Builder.OneDimensionArray<INSTANCE> setKeyBuilder(ArrayHelper.Dimension.Key.Builder keyBuilder) {
+					return null;
 				}
 				
 				public static class Default<INSTANCE> extends OneDimensionArray.Adapter<INSTANCE> implements Serializable {
@@ -285,8 +300,23 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					}
 					
 					@Override
+					public Builder.OneDimensionArray<INSTANCE> setKeyBuilder(ArrayHelper.Dimension.Key.Builder keyBuilder) {
+						this.keyBuilder = keyBuilder;
+						return this;
+					}
+					
+					@Override
 					protected INSTANCE __execute__() {
-						INSTANCE instance = new ClassHelper().instanciateOne(getOutputClass());
+						INSTANCE instance = null;
+						Object[] values = getInput();
+						ArrayHelper.Dimension.Key.Builder keyBuilder = getKeyBuilder();
+						ArrayHelper.Dimension.Key key = null;
+						if(keyBuilder!=null)
+							key = keyBuilder.setInput(values).execute();
+						if(key!=null)
+							instance = new InstanceHelper.Lookup.Adapter.Default<>(Object.class, key.getValue(), getOutputClass()).execute();
+						if(instance==null)
+							instance = new ClassHelper().instanciateOne(getOutputClass());
 						Object[] parametersArray = new CollectionHelper().getArray(getParameters());
 						if(parametersArray!=null){
 							Setter<INSTANCE> setter = getSetter();
@@ -294,7 +324,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 								setter = new Setter.Adapter.Default<INSTANCE>(getOutputClass());
 							}
 							setter.setInput(instance);
-							Object[] values = getInput();
+							
 							Collection<Object> objects = new ArrayList<>();
 							for(int i = 0 ; i < parametersArray.length ; i++){
 								if(parametersArray[i] instanceof ArrayHelper.Element<?>){
@@ -378,6 +408,141 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			}
 		
 		}
+	}
+	
+	public static interface Lookup<IDENTIFIER,INSTANCE> extends Action<IDENTIFIER, INSTANCE> {
+		
+		ListenerHelper.Executor.Function.Adapter.Default.Object<Source<?,?>> getSourcesExecutor();
+		Setter<INSTANCE> setSourcesExecutor(ListenerHelper.Executor.Function.Adapter.Default.Object<Source<?,?>> sourcesExecutor);
+		
+		@Getter
+		public static class Adapter<IDENTIFIER,INSTANCE> extends Action.Adapter.Default<IDENTIFIER, INSTANCE> implements Lookup<IDENTIFIER,INSTANCE> , Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			protected ListenerHelper.Executor.Function.Adapter.Default.Object<Source<?,?>> sourcesExecutor;
+			
+			public Adapter(Class<IDENTIFIER> inputClass, IDENTIFIER input, Class<INSTANCE> outputClass) {
+				super("lookup", inputClass, input, outputClass);
+			}
+			
+			@Override
+			public Setter<INSTANCE> setSourcesExecutor(ListenerHelper.Executor.Function.Adapter.Default.Object<Lookup.Source<?, ?>> sourcesExecutor) {
+				return null;
+			}
+		
+			public static class Default<IDENTIFIER,INSTANCE> extends Lookup.Adapter<IDENTIFIER, INSTANCE> implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public Default(Class<IDENTIFIER> inputClass, IDENTIFIER input, Class<INSTANCE> outputClass) {
+					super(inputClass, input, outputClass);
+				}
+				
+				@SuppressWarnings({ "rawtypes", "unchecked" })
+				@Override
+				protected INSTANCE __execute__() {
+					ListenerHelper.Executor.Function.Adapter.Default.Object<Source<?,?>> sourcesExecutor = getSourcesExecutor();
+					if(sourcesExecutor==null){
+						sourcesExecutor = new ListenerHelper.Executor.Function.Adapter.Default.Object<Source<?,?>>();
+						sourcesExecutor.setResultMethod(Source.Adapter.Default.RESULT_METHOD);
+						sourcesExecutor.setInput(new ArrayList());
+						for(Source<?,?> source : new ClassHelper().instanciateMany(Source.class
+								,CollectionHelper.getInstance().isEmpty(Source.CLASSES) ? Arrays.asList(Source.Adapter.Default.class) : Source.CLASSES))
+							sourcesExecutor.getInput().add(source);
+						//sourcesExecutor.getInput().addAll(new ClassHelper().instanciateMany(Source.class
+						//		,CollectionHelper.getInstance().isEmpty(Source.CLASSES) ? Arrays.asList(Source.Adapter.Default.class) : Source.CLASSES));
+					}
+					sourcesExecutor.getResultMethod().setInputClass((Class<Object>) getInputClass());
+					sourcesExecutor.getResultMethod().setInput(getInput());
+					sourcesExecutor.getResultMethod().setOutputClass((Class<Object>) getOutputClass());
+					return (INSTANCE) sourcesExecutor.execute();
+				}
+			}
+			
+		}
+		
+		/**/
+		
+		public static interface Source<IDENTIFIER,INSTANCE> extends Action<IDENTIFIER,INSTANCE>{
+			
+			Collection<Class<? extends Source<?,?>>> CLASSES = new ArrayList<>();
+			
+			public static class Adapter<IDENTIFIER,INSTANCE> extends Action.Adapter.Default<IDENTIFIER,INSTANCE> implements Source<IDENTIFIER,INSTANCE>,Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Adapter(Class<IDENTIFIER> inputClass, IDENTIFIER input,Class<INSTANCE> outputClass) {
+					super("get", inputClass, input, outputClass);
+				}
+				
+				/**/
+				
+				public static class Default<IDENTIFIER,INSTANCE> extends Source.Adapter<IDENTIFIER,INSTANCE> implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					public static ListenerHelper.Executor.ResultMethod<Object, Source<?,?>> RESULT_METHOD = new ResultMethod();
+					
+					public Default(Class<IDENTIFIER> inputClass, IDENTIFIER input,Class<INSTANCE> outputClass) {
+						super(inputClass, input, outputClass);
+					}
+					
+					public Default() {
+						super(null, null, null);
+					}
+					
+					public static class ResultMethod extends ListenerHelper.Executor.ResultMethod.Adapter.Default.Object<Source<?,?>> {
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						protected java.lang.Object __execute__() {
+							return ClassHelper.getInstance().instanciateOne((Class<?>)getOutputClass());
+						}
+					}
+					
+				}
+				
+			}
+			
+			/**/
+			
+			public static interface UserDefined extends Source<Object,Object> {
+				public static final java.util.Map<Object,Object> REPOSITORY = new HashMap<>();
+				public static class Adapter extends Source.Adapter.Default<Object,Object> implements UserDefined,Serializable {
+					private static final long serialVersionUID = 1L;
+					public Adapter(Object identifier) {
+						super(Object.class, identifier, Object.class);
+					}
+					public static class Default extends UserDefined.Adapter implements Serializable {
+						private static final long serialVersionUID = 1L;
+						public Default(Object identifier) {
+							super(identifier);
+						}
+						@Override
+						protected Object __execute__() {
+							return REPOSITORY.get(getInput());
+						}
+					}
+				}
+			}
+			
+			public static interface Database extends Source<Object,Object> {
+				
+				public static class Adapter extends Source.Adapter.Default<Object,Object> implements Database,Serializable {
+					private static final long serialVersionUID = 1L;
+					public Adapter(Object identifier) {
+						super(Object.class, identifier, Object.class);
+					}
+					public static class Default extends Database.Adapter implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						public Default() {
+							super(null);
+						}
+						
+					}
+				}
+			}
+			
+		}
+	
 	}
 	
 	/**/

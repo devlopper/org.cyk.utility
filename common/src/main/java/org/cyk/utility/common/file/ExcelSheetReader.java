@@ -25,6 +25,7 @@ import org.cyk.utility.common.Constant;
 
 import lombok.Getter;
 
+@Deprecated
 public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 	
 	byte[] getWorkbookBytes();
@@ -56,7 +57,7 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 	
 	//Collection<String[]> getValues();
 	
-	@Getter
+	@Getter @Deprecated
 	public static class Adapter extends TwoDimension.Adapter.Default<String> implements ExcelSheetReader,Serializable {
 		private static final long serialVersionUID = 1L;
 
@@ -133,7 +134,7 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		}
 		
 		/**/
-		
+		@Deprecated
 		public static class Default extends ExcelSheetReader.Adapter implements Serializable {
 			private static final long serialVersionUID = 1L;
 			

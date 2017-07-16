@@ -3,6 +3,7 @@ package org.cyk.utility.test;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -143,6 +144,40 @@ public abstract class AbstractTest implements Serializable {
     	Assert.assertEquals(message,new BigDecimal(expected).doubleValue()+"", value.doubleValue()+"");
     }
 	
+	protected void assertArray(Object[] array,Object...expecteds){
+		assertEquals("one dimension array are not same length",expecteds.length, array.length);
+		for(int i = 0 ; i < array.length ; i++){
+			assertEquals("array elements do not match",expecteds[i], array[i]);
+		}
+	}
+	
+	protected void assertArray(Object[][] array,Object[][] expecteds){
+		assertEquals("two dimension array are not same length", expecteds.length, array.length);
+		for(int i = 0 ; i < array.length ; i++)
+			assertArray(array[i], expecteds[i]);
+	}
+	
+	protected void assertTrue(Boolean value){
+		assertThat("it is not true", Boolean.TRUE.equals(value));
+	}
+	
+	protected void assertFalse(Boolean value){
+		assertThat("it is not false", Boolean.FALSE.equals(value));
+	}
+	
+	protected void assertNull(Object object){
+		assertThat("object is not null", object==null);
+	}
+	
+	protected void assertNotNull(Object object){
+		assertThat("object is null", object!=null);
+	}
+	
+	protected void assertCollectionContains(Collection<?> collection,Object...objects){
+		for(Object object : objects)
+			assertThat("collection <<"+collection+">> does not contain object <<"+object+">>", collection.contains(object));
+	}
+	
 	/* Hamcrest Short cuts*/
 	
 	protected static void assertThat(String reason,Boolean assertion){
@@ -166,21 +201,11 @@ public abstract class AbstractTest implements Serializable {
 			hasProperty(object, (String) entries[i], entries[i+1]);
 	}
 	
-	protected static <T> void contains(Class<T> aClass,Collection<T> list,Object[] names,Object[][] values){
+	protected <T> void contains(Class<T> aClass,Collection<T> list,Object[] names,Object[][] values){
 		MatcherAssert.assertThat(list,Matchers.contains(hasPropertiesMatchers(aClass,names, values)));
 	}
 	
-	protected void assertArray(Object[] array,Object...expecteds){
-		assertEquals("array are not same length",expecteds.length, array.length);
-		for(int i = 0 ; i < array.length ; i++){
-			assertEquals("array elements do not match",expecteds[i], array[i]);
-		}
-	}
 	
-	protected void assertArray(Object[][] array,Object[][] expecteds){
-		for(int i = 0 ; i < array.length ; i++)
-			assertArray(array[i], expecteds[i]);
-	}
 	
 	/**/
 	
@@ -190,7 +215,11 @@ public abstract class AbstractTest implements Serializable {
 		return Matchers.hasProperty(name,Matchers.is(value));
 	}
 	
-	protected static <T> List<Matcher<? super T>> hasPropertiesMatchers(Class<T> aClass,Object[] names,Object[][] values){
+	protected Field getField(Class<?> aClass,String name){
+		return FieldUtils.getField(aClass, name, Boolean.TRUE);
+	}
+	
+	protected <T> List<Matcher<? super T>> hasPropertiesMatchers(Class<T> aClass,Object[] names,Object[][] values){
 		List<Matcher<? super T>> matchers = new ArrayList<>();
 		for(Object[] objectValues : values){
 			List<Matcher<? super T>> objectMatchers = new ArrayList<>();
@@ -208,7 +237,7 @@ public abstract class AbstractTest implements Serializable {
 					name = (String) names[i];
 				}
 				if(type==null){
-					type = FieldUtils.getField(aClass, name, Boolean.TRUE).getType();
+					type = getField(aClass, name).getType();
 				}
 				if(value!=null && !value.getClass().equals(type)){
 					if(BigDecimal.class.equals(type))

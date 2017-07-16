@@ -2,6 +2,7 @@ package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -65,14 +66,22 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return add(collectionClass,collection,append,get(elements));
 	}
 	
+	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass,Collection<ELEMENT> collection,@SuppressWarnings("unchecked") ELEMENT...elements){
+		return add(collectionClass,collection,Boolean.TRUE,get(elements));
+	}
+	
 	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,Boolean append,@SuppressWarnings("unchecked") ELEMENT...elements){
 		return add(collection,append,get(elements));
+	}
+	
+	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,@SuppressWarnings("unchecked") ELEMENT...elements){
+		return add(collection,Boolean.TRUE,get(elements));
 	}
 		
 	public <ELEMENT> Boolean contains(Collection<ELEMENT> collection1,Collection<ELEMENT> collection2){
 		if(collection1==null)
 			if(collection2==null)
-				return Boolean.TRUE;
+				return Boolean.TRUE;//TODO is it correct ???
 			else
 				return Boolean.FALSE;
 		else
@@ -80,6 +89,11 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				return Boolean.TRUE;
 			else
 				return collection1.containsAll(collection2);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <ELEMENT> Boolean contains(Collection<ELEMENT> collection1,ELEMENT...elements){
+		return contains(collection1, (Collection<ELEMENT>) Arrays.asList(elements));
 	}
 	
 	public Boolean isEmpty(Collection<?> collection){

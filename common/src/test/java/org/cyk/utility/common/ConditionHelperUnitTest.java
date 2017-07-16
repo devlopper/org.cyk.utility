@@ -11,10 +11,7 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	static {
-		StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.ResourceBundle.Adapter.Default());
-		StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.i18n", CommonUtils.class.getClassLoader());
-		StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.field", CommonUtils.class.getClassLoader());
-		StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.condition", CommonUtils.class.getClassLoader());
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();	
 	}
 	
 	@Test

@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public class FieldHelperUnitTest extends AbstractUnitTest {
 
@@ -60,12 +61,24 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 		assertEquals(7, fieldHelper.get(MyChildClass.class,Boolean.FALSE).size());
 		assertEquals(6, fieldHelper.get(MyChildClass.class, "S", Location.START).size());
 		assertEquals(3, fieldHelper.get(MyChildClass.class, "S", Location.START,Boolean.FALSE).size());
+		
+		assertEquals(1, fieldHelper.get(A.class, "af1", Location.EXAT).size());
+		assertEquals(1, fieldHelper.get(B.class, "bf1", Location.EXAT).size());
+		assertEquals(1, fieldHelper.get(A.class, "b1", Location.EXAT).size());
+		assertNotNull(fieldHelper.get(A.class, "b1.bf1"));
 	}
 	
 	@Test
 	public void setStatic(){
 		fieldHelper.set(MyClass.class, "SF1",5);
 		assertEquals("SF1 value cannot be set", 5, MyClass.getSF1());
+	}
+	
+	@Test
+	public void set(){
+		MyClass a = new MyClass();
+		fieldHelper.set(a,(Object)"my value","f1");
+		assertEquals("my value", a.getF1());
 	}
 	
 	@Test
@@ -87,7 +100,7 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	/**/
-	@Getter @Setter
+	@Getter @Setter @Accessors(chain=true)
 	public static class MyClass {
 		
 		private static Integer SF1;
@@ -137,5 +150,20 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 		public static final String FIELD_CC_SF1 = "S_CC_F1";
 		public static final String FIELD_CC_SF2 = "S_CC_F2";
 		public static final String FIELD_CC_SF3 = "S_CC_F3";
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class A {
+		
+		private String af1;
+		private B b1;
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class B {
+		
+		private String bf1;
+		
 	}
 }
