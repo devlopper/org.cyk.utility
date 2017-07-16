@@ -161,7 +161,9 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 						ResultMethod<RESULT, LISTENER> resultMethod = getResultMethod();
 						RESULT result = null;
 						Collection<LISTENER> listeners = getInput();
-						if(listeners!=null)
+						if(listeners!=null){
+							java.lang.Boolean returnFirstNotNull = getReturnFirstNotNull();
+							addLoggingMessageBuilderNamedParameters("#listeners",CollectionHelper.getInstance().getSize(listeners),"return if first not null",returnFirstNotNull);
 							for(LISTENER listener : listeners){
 								resultMethod.setProperties(getProperties());
 								RESULT value = resultMethod.setListener(listener).execute();
@@ -170,10 +172,11 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 								else{
 									result = value;
 									matchingListener = listener;
-									if(java.lang.Boolean.TRUE.equals(getReturnFirstNotNull()))
+									if(java.lang.Boolean.TRUE.equals(returnFirstNotNull))
 										break;
 								}
 							}
+						}
 						if(result==null)
 							result = resultMethod.getNullValue();
 						return result;

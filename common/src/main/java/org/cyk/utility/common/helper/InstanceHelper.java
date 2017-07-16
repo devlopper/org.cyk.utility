@@ -311,10 +311,14 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 						Object[] values = getInput();
 						ArrayHelper.Dimension.Key.Builder keyBuilder = getKeyBuilder();
 						ArrayHelper.Dimension.Key key = null;
-						if(keyBuilder!=null)
+						if(keyBuilder!=null){
 							key = keyBuilder.setInput(values).execute();
-						if(key!=null)
+							addLoggingMessageBuilderNamedParameters("key",key.getValue());
+						}
+						if(key!=null){
 							instance = new InstanceHelper.Lookup.Adapter.Default<>(Object.class, key.getValue(), getOutputClass()).execute();
+							addLoggingMessageBuilderNamedParameters("lookuped instance is not null",instance!=null);
+						}
 						if(instance==null)
 							instance = new ClassHelper().instanciateOne(getOutputClass());
 						Object[] parametersArray = new CollectionHelper().getArray(getParameters());
@@ -457,7 +461,6 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					return (INSTANCE) sourcesExecutor.execute();
 				}
 			}
-			
 		}
 		
 		/**/
@@ -493,7 +496,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 
 						@Override
 						protected java.lang.Object __execute__() {
-							return ClassHelper.getInstance().instanciateOne((Class<?>)getOutputClass());
+							return new ClassHelper.Instanciation.Adapter.Default<java.lang.Object>(getOutputClass()).execute(); //ClassHelper.getInstance().instanciateOne((Class<?>)getOutputClass());
 						}
 					}
 					

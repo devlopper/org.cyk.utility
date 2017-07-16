@@ -163,7 +163,7 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		
 		@Override
 		public String toString() {
-			return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+			return f1+"/"+f2; //ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 		}
 		
 	}
