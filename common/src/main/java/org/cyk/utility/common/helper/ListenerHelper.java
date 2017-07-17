@@ -1,6 +1,7 @@
 package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Singleton;
@@ -24,6 +25,8 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 		
 		LISTENER getMatchingListener();
 		
+		Executor<LISTENER,RESULT> addListener(LISTENER listener);
+		
 		@Getter
 		public static class Adapter<LISTENER,RESULT> extends Action.Adapter.Default<Collection<LISTENER>,RESULT> implements Executor<LISTENER,RESULT>,Serializable {
 			private static final long serialVersionUID = 1L;
@@ -35,7 +38,12 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 			@SuppressWarnings("unchecked")
 			public Adapter(Class<RESULT> outputClass) {
 				super("listen", null, null, outputClass);
-				setInputClass((Class<Collection<LISTENER>>) new ClassHelper().getByName(Collection.class.getName()));
+				setInputClass((Class<Collection<LISTENER>>) ClassHelper.getInstance().getByName(Collection.class.getName()));
+			}
+			
+			@Override
+			public Executor<LISTENER, RESULT> addListener(LISTENER listener) {
+				return null;
 			}
 			
 			@Override
@@ -54,6 +62,19 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 				public Default(Class<RESULT> outputClass) {
 					super(outputClass);
 					setIsInputRequired(Boolean.FALSE);
+				}
+				
+				@Override
+				protected Boolean isShowInputLogMessage(Collection<LISTENER> input) {
+					return Boolean.FALSE;
+				}
+				
+				@Override
+				public Executor<LISTENER, RESULT> addListener(LISTENER listener) {
+					if(input==null)
+						input = new ArrayList<>();
+					input.add(listener);
+					return this;
 				}
 				
 				@Override
@@ -163,8 +184,11 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 						Collection<LISTENER> listeners = getInput();
 						if(listeners!=null){
 							java.lang.Boolean returnFirstNotNull = getReturnFirstNotNull();
-							addLoggingMessageBuilderNamedParameters("#listeners",CollectionHelper.getInstance().getSize(listeners),"return if first not null",returnFirstNotNull);
+							addLoggingMessageBuilderNamedParameters("#listeners",CollectionHelper.getInstance().getSize(listeners),"return if first not null",returnFirstNotNull
+									);
+							Integer count = 0;
 							for(LISTENER listener : listeners){
+								count++;
 								resultMethod.setProperties(getProperties());
 								RESULT value = resultMethod.setListener(listener).execute();
 								if(value==null)
@@ -176,6 +200,9 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 										break;
 								}
 							}
+							addLoggingMessageBuilderNamedParameters("#called",count);
+							if(java.lang.Boolean.TRUE.equals(returnFirstNotNull) && matchingListener!=null)
+								addLoggingMessageBuilderNamedParameters("#matching",matchingListener);
 						}
 						if(result==null)
 							result = resultMethod.getNullValue();

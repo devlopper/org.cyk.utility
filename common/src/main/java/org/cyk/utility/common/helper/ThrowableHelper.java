@@ -140,12 +140,12 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 						Throwable throwable = new Throwable();
 						//throwable.setIdentifier(getIdentifier());
 						StringBuilder messageBuilder = new StringBuilder();
-						//messageBuilder.append(new CollectionHelper().concatenate(getMessages(), Constant.LINE_DELIMITER.toString()));
+						//messageBuilder.append(CollectionHelper.getInstance().concatenate(getMessages(), Constant.LINE_DELIMITER.toString()));
 						StringHelper.ToStringMapping messageMapping = getMessageMapping();
 						if(messageMapping!=null)
 							addManyParameters(messageMapping.execute());
-						messageBuilder.append(new CollectionHelper().concatenate(getParameters(), Constant.LINE_DELIMITER.toString()));
-						throwable.setCause(new ClassHelper().instanciate(getCauseClass(), new Object[]{String.class,messageBuilder.toString()}));
+						messageBuilder.append(CollectionHelper.getInstance().concatenate(getParameters(), Constant.LINE_DELIMITER.toString()));
+						throwable.setCause(ClassHelper.getInstance().instanciate(getCauseClass(), new Object[]{String.class,messageBuilder.toString()}));
 						return throwable;
 					}
 				}

@@ -358,14 +358,8 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return null;
 	}
 	
-	/*public Collection<String> getNamesWhereIdentifierStartsByFieldPrefix(Class<?> aClass){
-		Collection<Field> fields = new FieldHelper().get(aClass, Constant.FIELD_, Location.START);
-		Collection<String> names = new InstanceHelper().callGetMethod(fields, String.class, METHOD_GET_NAME_SUFFIX);
-		return new StringHelper().removeBlank(names);
-	}*/
-	
 	public Collection<String> getNamesWhereReferencedByStaticField(Class<?> aClass,Boolean recursive){
-		Collection<java.lang.reflect.Field> fields = new FieldHelper().get(aClass, Constant.FIELD_, Location.START,recursive);
+		Collection<java.lang.reflect.Field> fields = FieldHelper.getInstance().get(aClass, Constant.FIELD_, Location.START,recursive);
 		Collection<String> names = new ArrayList<>();
 		for(java.lang.reflect.Field field : fields)
 			if(Modifier.isStatic(field.getModifiers()))
@@ -374,7 +368,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-		return new StringHelper().removeBlank(names);
+		return StringHelper.getInstance().removeBlank(names);
 	}
 	
 	public Collection<String> getNamesWhereReferencedByStaticField(Class<?> aClass){
@@ -396,8 +390,8 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			@SuppressWarnings("unchecked")
 			public Adapter(Class<?> input) {
 				super(input);
-				setInputClass((Class<Class<?>>) new ClassHelper().getByName(Class.class.getName())); 
-				setOutputClass((Class<Collection<java.lang.reflect.Field>>) new ClassHelper().getByName(Class.class.getName())); 
+				setInputClass((Class<Class<?>>) ClassHelper.getInstance().getByName(Class.class)); 
+				setOutputClass((Class<Collection<java.lang.reflect.Field>>) ClassHelper.getInstance().getByName(Class.class)); 
 			}
 			
 			/**/

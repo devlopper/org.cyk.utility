@@ -175,7 +175,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					
 					@Override
 					protected String __execute__() {
-						String parameters = new CollectionHelper().concatenate(getParameters(),Constant.CHARACTER_UNDESCORE.toString());
+						String parameters = CollectionHelper.getInstance().concatenate(getParameters(),Constant.CHARACTER_UNDESCORE.toString());
 						return commonUtils.getValueIfNotNullElseDefault(getLocale(),Locale.FRENCH)+Constant.CHARACTER_UNDESCORE.toString()+getInput()
 							+(StringUtils.isBlank(parameters) ? Constant.EMPTY_STRING : Constant.CHARACTER_UNDESCORE+parameters);
 					}	
@@ -298,7 +298,6 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					final Locale locale = commonUtils.getValueIfNotNullElseDefault(pLocale, Locale.FRENCH);
 					final CaseType caseType = commonUtils.getValueIfNotNullElseDefault(pCaseType, CaseType.DEFAULT);
 					final Collection<Object> parameters = getParameters();
-					ClassHelper classHelper = new ClassHelper();
 					
 					ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor = getDatasourcesExecutor();
 					if(datasourcesExecutor==null){
@@ -313,23 +312,22 @@ public class StringHelper extends AbstractHelper implements Serializable {
 										if(getListener() instanceof Datasource.Cache)
 											lIdentifier = new StringHelper.Builder.CacheIdentifier.Adapter.Default().setInput(identifier)
 													.setLocale(ToStringMapping.Adapter.Default.this.getLocale()).setParameters(ToStringMapping.Adapter.Default.this.getParameters())
-													.addManyParameters(new InstanceHelper().getIfNotNullElseDefault(ToStringMapping.Adapter.Default.this.getCaseType(),CaseType.DEFAULT)).execute();
+													.addManyParameters(InstanceHelper.getInstance().getIfNotNullElseDefault(ToStringMapping.Adapter.Default.this.getCaseType(),CaseType.DEFAULT)).execute();
 										return getListener().setInput(lIdentifier).setLocale(ToStringMapping.Adapter.Default.this.getLocale())
 												.setParameters(ToStringMapping.Adapter.Default.this.getParameters())
 												.setParent(ToStringMapping.Adapter.Default.this).execute();
 									}
-								}).setInput(classHelper.instanciateMany(Datasource.class,Datasource.CLASSES));
+								}).setInput(ClassHelper.getInstance().instanciateMany(Datasource.class,Datasource.CLASSES));
 					}
 					String value = datasourcesExecutor.execute();
 					
 					if(value==null){
 						value = MAP.get(identifier);
 						if(value==null){
-							CollectionHelper collectionHelper = new CollectionHelper();
 							for(Entry<String, ClassLoader> entry : RESOURCE_BUNDLE_MAP.entrySet()){
 								try {
 									ResourceBundle resourceBundle = ResourceBundle.getBundle(entry.getKey(), locale, entry.getValue());
-									value = collectionHelper.isEmpty(parameters)?resourceBundle.getString(identifier):MessageFormat.format(resourceBundle.getString(identifier),parameters);
+									value = CollectionHelper.getInstance().isEmpty(parameters)?resourceBundle.getString(identifier):MessageFormat.format(resourceBundle.getString(identifier),parameters);
 									
 									addLoggingMessageBuilderNamedParameters("location","resource bundle "+entry.getKey());
 									
@@ -490,12 +488,11 @@ public class StringHelper extends AbstractHelper implements Serializable {
 						}
 					
 						private String __execute__(final String identifier,final CaseType caseType,final Locale locale,Boolean cachable){
-							CollectionHelper collectionHelper = new CollectionHelper();
 							for(Entry<String, ClassLoader> entry : REPOSITORY.entrySet()){
 								try {
 									java.util.ResourceBundle resourceBundle = java.util.ResourceBundle.getBundle(entry.getKey(), locale, entry.getValue());
-									String value = collectionHelper.isEmpty(parameters)?resourceBundle.getString(identifier):MessageFormat.format(resourceBundle.getString(identifier)
-											,collectionHelper.getArray(parameters));
+									String value = CollectionHelper.getInstance().isEmpty(parameters)?resourceBundle.getString(identifier):MessageFormat.format(resourceBundle.getString(identifier)
+											,CollectionHelper.getInstance().getArray(parameters));
 									
 									addLoggingMessageBuilderNamedParameters("location","resource bundle "+entry.getKey());
 									

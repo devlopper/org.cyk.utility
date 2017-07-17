@@ -145,9 +145,8 @@ public abstract class AbstractReflectionHelper<TYPE> extends AbstractHelper impl
 						searchMods |= 0x0 | modifier;
 					
 					Collection<Class<?>> annotationClasses = getAnnotationClasses();
-					CollectionHelper collectionHelper = new CollectionHelper();
 					for (TYPE type : getTypes(source)) {
-						if(!collectionHelper.isEmpty(annotationClasses) && !collectionHelper.contains(getAnnotationClasses(type), annotationClasses)){
+						if(!CollectionHelper.getInstance().isEmpty(annotationClasses) && !CollectionHelper.getInstance().contains(getAnnotationClasses(type), annotationClasses)){
 							continue;
 						}
 								

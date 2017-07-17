@@ -28,7 +28,7 @@ public abstract class AbstractBuilder<OBJECT> extends AbstractBean implements Se
 	@SuppressWarnings("unchecked")
 	public Class<OBJECT> getAClass(){
 		if(aClass==null)
-			aClass = (Class<OBJECT>) new ClassHelper().getParameterAt(getClass(), 0,Object.class);
+			aClass = (Class<OBJECT>) ClassHelper.getInstance().getParameterAt(getClass(), 0,Object.class);
 		return aClass;
 	}
 

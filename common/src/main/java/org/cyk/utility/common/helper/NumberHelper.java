@@ -165,7 +165,7 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	public <T> T get(Class<T> aClass,String string){
-		return new ClassHelper().instanciate(aClass, new Object[]{String.class,string});
+		return ClassHelper.getInstance().instanciate(aClass, new Object[]{String.class,string});
 	}
 	
 }

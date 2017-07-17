@@ -24,6 +24,20 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
 
+	private static InstanceHelper INSTANCE;
+	
+	public static InstanceHelper getInstance() {
+		if(INSTANCE == null)
+			INSTANCE = new InstanceHelper();
+		return INSTANCE;
+	}
+	
+	@Override
+	protected void initialisation() {
+		INSTANCE = this;
+		super.initialisation();
+	}
+	
 	public Object getIdentifier(final Object instance){
 		return listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
 			@Override
@@ -129,8 +143,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 						ListenerHelper.Executor.Function.Adapter.Default.Object<ProcessValue> valueProcessorExecutor = getProcessValuesExecutor();
 						if(valueProcessorExecutor==null){
 							valueProcessorExecutor = new ListenerHelper.Executor.Function.Adapter.Default.Object<ProcessValue>();
-							valueProcessorExecutor.setResultMethod(ProcessValue.Adapter.Default.RESULT_METHOD);
-							valueProcessorExecutor.setInput((Collection<ProcessValue>) new ClassHelper().instanciateMany(ProcessValue.class
+							valueProcessorExecutor.setResultMethod(ClassHelper.getInstance().instanciateOne(ProcessValue.Adapter.Default.RESULT_METHOD_CLASS));
+							valueProcessorExecutor.setInput((Collection<ProcessValue>) ClassHelper.getInstance().instanciateMany(ProcessValue.class
 									,CollectionHelper.getInstance().isEmpty(ProcessValue.CLASSES) ? Arrays.asList(ProcessValue.Adapter.Default.class) : ProcessValue.CLASSES));
 						}
 						
@@ -169,7 +183,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				public static class Default extends ProcessValue.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					public static ListenerHelper.Executor.ResultMethod<Object, ProcessValue> RESULT_METHOD = new ResultMethod();
+					@SuppressWarnings("unchecked")
+					public static Class<ListenerHelper.Executor.ResultMethod<Object, ProcessValue>> RESULT_METHOD_CLASS = (Class<org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod<Object, ProcessValue>>) ClassHelper.getInstance().getByName(ResultMethod.class);
 					
 					public Default(Object value) {
 						super(value);
@@ -196,7 +211,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 							Class<?> wrapperClass = ClassHelper.getInstance().getWrapper(field.getType());
 							if(!wrapperClass.isAssignableFrom(value.getClass())){
 								if(ClassHelper.getInstance().isNumber(wrapperClass)){
-									value = new NumberHelper().get(wrapperClass,(java.lang.String)value);
+									value = NumberHelper.getInstance().get(wrapperClass,(java.lang.String)value);
 								}
 							}	
 							//}
@@ -320,8 +335,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 							addLoggingMessageBuilderNamedParameters("lookuped instance is not null",instance!=null);
 						}
 						if(instance==null)
-							instance = new ClassHelper().instanciateOne(getOutputClass());
-						Object[] parametersArray = new CollectionHelper().getArray(getParameters());
+							instance = ClassHelper.getInstance().instanciateOne(getOutputClass());
+						Object[] parametersArray = CollectionHelper.getInstance().getArray(getParameters());
 						if(parametersArray!=null){
 							Setter<INSTANCE> setter = getSetter();
 							if(setter==null){
@@ -370,7 +385,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				
 				@SuppressWarnings("unchecked")
 				public Adapter(Object[][] array) {
-					super(Object[][].class, array, (Class<Collection<INSTANCE>>) new ClassHelper().getByName(Collection.class.getName()));
+					super(Object[][].class, array, (Class<Collection<INSTANCE>>) ClassHelper.getInstance().getByName(Collection.class.getName()));
 				}
 				
 				@Override
@@ -397,7 +412,6 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 						Object[][] arrays = getInput();
 						if(arrays!=null){
 							OneDimensionArray<INSTANCE> oneDimensionArray = getOneDimensionArray();
-							//CollectionHelper collectionHelper = new CollectionHelper();
 							for(Object[] array : arrays){
 								INSTANCE instance = oneDimensionArray.setInput(array).execute();
 								if(instance!=null)
@@ -447,13 +461,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					ListenerHelper.Executor.Function.Adapter.Default.Object<Source<?,?>> sourcesExecutor = getSourcesExecutor();
 					if(sourcesExecutor==null){
 						sourcesExecutor = new ListenerHelper.Executor.Function.Adapter.Default.Object<Source<?,?>>();
-						sourcesExecutor.setResultMethod(Source.Adapter.Default.RESULT_METHOD);
+						sourcesExecutor.setResultMethod(ClassHelper.getInstance().instanciateOne(Source.Adapter.Default.RESULT_METHOD_CLASS));
 						sourcesExecutor.setInput(new ArrayList());
-						for(Source<?,?> source : new ClassHelper().instanciateMany(Source.class
+						for(Source<?,?> source : ClassHelper.getInstance().instanciateMany(Source.class
 								,CollectionHelper.getInstance().isEmpty(Source.CLASSES) ? Arrays.asList(Source.Adapter.Default.class) : Source.CLASSES))
 							sourcesExecutor.getInput().add(source);
-						//sourcesExecutor.getInput().addAll(new ClassHelper().instanciateMany(Source.class
-						//		,CollectionHelper.getInstance().isEmpty(Source.CLASSES) ? Arrays.asList(Source.Adapter.Default.class) : Source.CLASSES));
 					}
 					sourcesExecutor.getResultMethod().setInputClass((Class<Object>) getInputClass());
 					sourcesExecutor.getResultMethod().setInput(getInput());
@@ -481,7 +493,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				public static class Default<IDENTIFIER,INSTANCE> extends Source.Adapter<IDENTIFIER,INSTANCE> implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					public static ListenerHelper.Executor.ResultMethod<Object, Source<?,?>> RESULT_METHOD = new ResultMethod();
+					@SuppressWarnings("unchecked")
+					public static Class<ListenerHelper.Executor.ResultMethod<Object, Source<?,?>>> RESULT_METHOD_CLASS = (Class<org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod<Object, Source<?, ?>>>) ClassHelper.getInstance().getByName(ResultMethod.class);
 					
 					public Default(Class<IDENTIFIER> inputClass, IDENTIFIER input,Class<INSTANCE> outputClass) {
 						super(inputClass, input, outputClass);

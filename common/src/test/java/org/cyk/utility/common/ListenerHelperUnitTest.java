@@ -10,7 +10,21 @@ import org.junit.Test;
 public class ListenerHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
- 	
+
+	@Test
+	public void assertNumberOfListeners(){
+		ListenerHelper.Executor<MyListener, String> executor = new ListenerHelper.Executor.Function.Adapter.Default.String<MyListener>();
+		executor.setResultMethod(new ListenerHelper.Executor.ResultMethod.Adapter.Default.String<MyListener>() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			protected java.lang.String __execute__() {
+				return getListener().getString("p");
+			}
+		});
+		executor.addListener(new MyListener.Adapter() ).execute();
+		
+	}
+	
 	@Test
 	public void getString(){
 		Collection<MyListener> listeners = null;

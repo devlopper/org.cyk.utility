@@ -32,6 +32,8 @@ import java.util.zip.InflaterInputStream;
 
 import javax.enterprise.inject.spi.CDI;
 
+import lombok.Getter;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
@@ -42,18 +44,9 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellValue;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.cyk.utility.common.ClassRepository.ClassField;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.cyk.utility.common.annotation.FieldOverrides;
-import org.cyk.utility.common.cdi.BeanAdapter;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.reflections.Reflections;
@@ -64,10 +57,6 @@ import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 public class CommonUtils implements Serializable  {
@@ -890,124 +879,6 @@ public class CommonUtils implements Serializable  {
 	public <T> Collection<T> getPropertyValue(Collection<?> collection,Class<T> aClass,String name){
 		return getPropertyValue(collection, aClass, name, Boolean.TRUE);
 	}
-	
-	@Deprecated
-	public List<String[]> readExcelSheet(ReadExcelSheetArguments arguments) throws Exception{
-		Workbook workbook = WorkbookFactory.create(new ByteArrayInputStream(arguments.getWorkbookBytes()));
-        Sheet sheet = StringUtils.isBlank(arguments.getName()) ? workbook.getSheetAt(arguments.getSheetIndex()) : workbook.getSheet(arguments.getName());
-        List<String[]> list = new ArrayList<>();
-        if(sheet==null){
-        	System.out.println("No sheet named <<"+arguments.getName()+">> or at index <<"+arguments.getSheetIndex()+">> found");
-        }else{
-        	FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
-        	Integer fromRowIndex = arguments.getFromRowIndex(),fromColumnIndex = arguments.getFromColumnIndex();
-            Integer rowCount = arguments.getRowCount(),columnCount = arguments.getColumnCount();
-            if(rowCount==null)
-            	rowCount = sheet.getPhysicalNumberOfRows();
-            if(columnCount==null)
-            	columnCount = new Integer(sheet.getRow(0).getLastCellNum());
-            
-            for (int i=0; i<rowCount; i++) {
-            	String[] array = null;
-                Row row = sheet.getRow(i + fromRowIndex);
-                if(row==null){
-                	
-                }else{
-                	array = new String[columnCount];
-                	for (int j=0; j<columnCount; j++) {
-                        Cell cell = row.getCell(j+fromColumnIndex);
-                        if(cell==null)
-                        	array[j] = Constant.EMPTY_STRING;
-                        else{
-                        	CellValue cellValue = formulaEvaluator.evaluate(cell);
-                        	String stringValue;
-                        	if(cellValue==null)
-                        		stringValue = Constant.EMPTY_STRING;
-                        	else switch(cellValue.getCellType()){
-    	    	                case Cell.CELL_TYPE_FORMULA : 
-    	    	                	throw new RuntimeException("Must never happen! Cannot process a formula. Please change field to result of formula.("+i+","+j+")");
-    	    	                case Cell.CELL_TYPE_BLANK: stringValue = Constant.EMPTY_STRING; break;
-    	    	                case Cell.CELL_TYPE_NUMERIC: 
-    	    	                	if(DateUtil.isCellDateFormatted(cell))
-    	                        		stringValue = Constant.DATE_TIME_FORMATTER.format(cell.getDateCellValue());
-    	                        	else
-    	                        		stringValue = /*cellValue.getStringValue();*/ new BigDecimal(cellValue.getNumberValue()).toString(); //cellValue.getNumberValue()); 
-    	    	                	break;
-    	    	                case Cell.CELL_TYPE_STRING: stringValue = cellValue.getStringValue(); break;
-    	    	                default:
-    	    	                	stringValue = StringUtils.trim(cellValue.getStringValue());
-    	    	                	break;
-    	    	                }
-                        	array[j] = StringUtils.defaultIfBlank(stringValue,Constant.EMPTY_STRING);
-                        }
-                    }
-                }
-                if(array==null)
-                	;
-                else{
-                	Boolean isEmpty = Boolean.TRUE;
-                	for(int k = 0; k < array.length; k++)
-                		if(StringUtils.isNotBlank(array[k])){
-                			isEmpty = Boolean.FALSE;
-                			break;
-                		}
-                	if(!Boolean.TRUE.equals(arguments.getIgnoreEmptyRow()) || Boolean.FALSE.equals(isEmpty))
-                		if(arguments.getListener()==null || Boolean.TRUE.equals(arguments.getListener().addable(array)))
-                			list.add(array);
-                }
-            }	
-        }
-        workbook.close();
-        return list;
-	}
-	
-	@Deprecated
-	@Getter @Setter @NoArgsConstructor
-	public static class ReadExcelSheetArguments{
-		private byte[] workbookBytes;
-		private Integer sheetIndex,fromRowIndex=0,fromColumnIndex=0,rowCount,columnCount;
-		private Boolean ignoreEmptyRow = Boolean.TRUE;
-		private String name;
-		private Listener listener;
-		
-		public ReadExcelSheetArguments(InputStream inputStream,Class<?> aClass) throws IOException {
-			workbookBytes = IOUtils.toByteArray(inputStream);
-			fromRowIndex = 1;//row 0 should be used for labels
-			setName(aClass);
-		}
-		
-		public ReadExcelSheetArguments setName(Class<?> aClass){
-			this.name = aClass.getSimpleName();
-			return this;
-		}
-		
-		public static interface Listener {
-			
-			Boolean addable(String[] row);
-			
-			public static class Adapter extends BeanAdapter implements Listener,Serializable{
-				private static final long serialVersionUID = 1L;
-				
-				@Override
-				public Boolean addable(String[] row) {
-					return null;
-				}
-				
-				public static class Default extends Listener.Adapter implements Serializable{
-					private static final long serialVersionUID = 1L;
-					
-					@Override
-					public Boolean addable(String[] row) {
-						return Boolean.TRUE;
-					}
-					
-				}
-			}
-		}
-	
-	}
-	
-	/**/
 	
 	public Execution execute(String name,Runnable aRunnable){
 		Execution execution;

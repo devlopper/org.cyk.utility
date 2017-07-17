@@ -16,7 +16,7 @@ import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 
-@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
+@Getter @Setter @NoArgsConstructor @Accessors(chain=true) @Deprecated
 public class InstanceCopyBuilder<T> extends AbstractBuilder<T> implements Serializable {
 	private static final long serialVersionUID = -872728112292086623L;
 	
@@ -33,11 +33,10 @@ public class InstanceCopyBuilder<T> extends AbstractBuilder<T> implements Serial
 	@SuppressWarnings("unchecked")
 	@Override
 	public T build() {
-		instance = new InstanceHelper().instanciateOne(aClass);
-		FieldHelper fieldHelper = new FieldHelper();
+		instance = InstanceHelper.getInstance().instanciateOne(aClass);
 		@SuppressWarnings("rawtypes")
 		Collection listeners = Listener.COLLECTION;
-		for(Field field : fieldHelper.get(instance.getClass())){
+		for(Field field : FieldHelper.getInstance().get(instance.getClass())){
 			final Field finalField = field;
 			if(Boolean.TRUE.equals(listenerUtils.getBoolean(listeners, new ListenerUtils.BooleanMethod<Listener<T>>() {
 				@Override
@@ -60,7 +59,7 @@ public class InstanceCopyBuilder<T> extends AbstractBuilder<T> implements Serial
 					return Boolean.FALSE.equals(ignored) ;
 				}
 			}) )){
-				fieldHelper.set(instance, fieldHelper.read(source, field), field);
+				FieldHelper.getInstance().set(instance, FieldHelper.getInstance().read(source, field), field);
 			}
 		}
 		return instance;

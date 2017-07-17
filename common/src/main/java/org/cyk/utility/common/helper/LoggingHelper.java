@@ -44,8 +44,7 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 		
 		@Override
 		public String toString() {
-			CollectionHelper collectionHelper = new CollectionHelper();
-			return template+(collectionHelper.isEmpty(arguments) ? Constant.EMPTY_STRING : arguments);
+			return template+(CollectionHelper.getInstance().isEmpty(arguments) ? Constant.EMPTY_STRING : arguments);
 		}
 		
 		/**/

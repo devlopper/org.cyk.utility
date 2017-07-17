@@ -80,6 +80,10 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return (Class<TYPE>) ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments()[index];
 	}
 	
+	public Class<?> getByName(Class<?> aClass){
+		return getByName(aClass.getName());
+	}
+	
 	public Class<?> getByName(String name){
 		try {
 			return Class.forName(name);
@@ -142,8 +146,8 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 			@SuppressWarnings("unchecked")
 			public Adapter(Package input) {
 				super(input);
-				setInputClass((Class<Package>) new ClassHelper().getByName(Class.class.getName())); 
-				setOutputClass((Class<Collection<Class<?>>>) new ClassHelper().getByName(Class.class.getName())); 
+				setInputClass((Class<Package>) ClassHelper.getInstance().getByName(Class.class.getName())); 
+				setOutputClass((Class<Collection<Class<?>>>) ClassHelper.getInstance().getByName(Class.class.getName())); 
 			}
 			
 			public Get setBaseClass(Class<?> baseClass){
@@ -177,7 +181,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				
 				@Override
 				protected Collection<Class<?>> getTypes(Package aPackage) {
-					return new ClassHelper().get(aPackage.getName(), getBaseClass());
+					return ClassHelper.getInstance().get(aPackage.getName(), getBaseClass());
 				}
 				
 				@Override
@@ -218,8 +222,6 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 			public static class Default<INSTANCE> extends Instanciation.Adapter<INSTANCE> implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				//public static ListenerHelper.Executor.ResultMethod<Object, Instanciation<?>> RESULT_METHOD = new ResultMethod<Object>();
-				
 				public Default(Class<INSTANCE> outputClass) {
 					super(outputClass);
 				}
@@ -236,7 +238,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 					ListenerHelper.Executor.Function.Adapter.Default.Object<Get<?>> getExecutor = getGetExecutor();
 					if(getExecutor==null){
 						getExecutor = new ListenerHelper.Executor.Function.Adapter.Default.Object<Get<?>>();
-						getExecutor.setResultMethod(Get.Adapter.Default.RESULT_METHOD);
+						getExecutor.setResultMethod(ClassHelper.getInstance().instanciateOne(Get.Adapter.Default.RESULT_METHOD_CLASS));
 						getExecutor.setInput((Collection) ClassHelper.getInstance().instanciateMany(Get.class
 								,CollectionHelper.getInstance().isEmpty(Get.CLASSES) ? Arrays.asList(Get.Adapter.Default.class) : Get.CLASSES));
 					}
@@ -266,7 +268,8 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				public static class Default<INSTANCE> extends Get.Adapter<INSTANCE> implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					public static ListenerHelper.Executor.ResultMethod<Object, Get<?>> RESULT_METHOD = new ResultMethod();
+					@SuppressWarnings("unchecked")
+					public static Class<ListenerHelper.Executor.ResultMethod<Object, Get<?>>> RESULT_METHOD_CLASS = (Class<org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod<Object, Get<?>>>) ClassHelper.getInstance().getByName(ResultMethod.class);
 					
 					public Default(Class<INSTANCE> outputClass) {
 						super(outputClass);

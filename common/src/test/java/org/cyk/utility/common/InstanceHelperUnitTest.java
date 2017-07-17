@@ -9,8 +9,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.builder.InstanceCopyBuilder;
 import org.cyk.utility.common.helper.ArrayHelper;
+import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
+import org.cyk.utility.common.helper.InstanceHelper.Lookup.Source;
+import org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -18,12 +21,13 @@ import org.mockito.InjectMocks;
 import lombok.Getter;
 import lombok.Setter;
 
+@SuppressWarnings("unchecked")
 public class InstanceHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	static {
-		InstanceHelper.Lookup.Source.Adapter.Default.RESULT_METHOD = new MySource();
+		InstanceHelper.Lookup.Source.Adapter.Default.RESULT_METHOD_CLASS = (Class<ResultMethod<Object, Source<?, ?>>>) ClassHelper.getInstance().getByName(MySource.class);
 		//InstanceHelper.Setter.ProcessValue.CLASSES.add(A.StringProcessor.class);
 		/*InstanceHelper.Setter.ProcessValue.Adapter.Default.RESULT_METHOD = new InstanceHelper.Setter.ProcessValue.ResultMethod(){
 			private static final long serialVersionUID = 1L;
@@ -145,7 +149,7 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	
 	private void assertA(Object[] values,String f1,Integer f2){
 		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(values, A.class).addParameterArrayElementString("f1","f2").execute(),f1, f2);
-		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(new ArrayHelper().reverse(values), A.class).addParameterArrayElementString("f2","f1")
+		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(ArrayHelper.getInstance().reverse(values), A.class).addParameterArrayElementString("f2","f1")
 				.execute(),f1, f2);
 	}
 	

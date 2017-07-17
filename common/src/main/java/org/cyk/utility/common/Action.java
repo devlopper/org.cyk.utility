@@ -444,9 +444,8 @@ public interface Action<INPUT,OUTPUT> {
 			@Override
 			public <T> Action<INPUT, OUTPUT> addParameterArrayElement(Class<T> aClass, @SuppressWarnings("unchecked") T... instances) {
 				if(instances!=null){
-					CollectionHelper collectionHelper = new CollectionHelper();
 					for(T instance : instances)
-						addParameterArrayElement(aClass, collectionHelper.getSize(getParameters()), instance);
+						addParameterArrayElement(aClass, CollectionHelper.getInstance().getSize(getParameters()), instance);
 				}
 				return this;
 			}

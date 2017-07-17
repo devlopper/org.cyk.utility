@@ -10,7 +10,7 @@ public class MethodHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void doTest1(){
-		assertEquals("doTest1",new MethodHelper().getCurrentNameFromStackTrace());
+		assertEquals("doTest1",MethodHelper.getInstance().getCurrentNameFromStackTrace());
 	}
 	
 	/**/

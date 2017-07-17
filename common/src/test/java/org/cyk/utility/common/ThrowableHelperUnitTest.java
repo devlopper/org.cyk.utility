@@ -16,7 +16,7 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	public void executeThrowableBuilder(){
 		ThrowableHelper.Throwable throwable = new ThrowableHelper.Throwable.Builder.Adapter.Default<RuntimeException>(RuntimeException.class)
 				.addManyParameters("message1","message2","another message again","one more...").execute();
-		System.out.println(throwable);
+		//System.out.println(throwable);
 		/*assertEquals("java.lang.Throwable: message1"+Constant.LINE_DELIMITER
 				+ "message2"+Constant.LINE_DELIMITER
 				+ "another message again"

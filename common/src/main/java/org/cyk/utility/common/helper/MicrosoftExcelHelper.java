@@ -262,8 +262,8 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 								ListenerHelper.Executor.Function.Adapter.Default.Boolean<DimensionSelectable> rowSelectableExecutor = matrix.getRow().getSelectableExecutor();
 								if(rowSelectableExecutor==null){
 									rowSelectableExecutor = new ListenerHelper.Executor.Function.Adapter.Default.Boolean<DimensionSelectable>();
-									rowSelectableExecutor.setResultMethod(DimensionSelectable.Adapter.Default.RESULT_METHOD);
-									rowSelectableExecutor.setInput((Collection<DimensionSelectable>) new ClassHelper().instanciateMany(DimensionSelectable.class
+									rowSelectableExecutor.setResultMethod(ClassHelper.getInstance().instanciateOne(DimensionSelectable.Adapter.Default.RESULT_METHOD_CLASS));
+									rowSelectableExecutor.setInput((Collection<DimensionSelectable>) ClassHelper.getInstance().instanciateMany(DimensionSelectable.class
 											,CollectionHelper.getInstance().isEmpty(DimensionSelectable.CLASSES) ? Arrays.asList(DimensionSelectable.Adapter.Default.class) : DimensionSelectable.CLASSES));
 								}
 					            
@@ -362,7 +362,8 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 						public static class Default extends DimensionSelectable.Adapter implements Serializable {
 							private static final long serialVersionUID = 1L;
 							
-							public static ListenerHelper.Executor.ResultMethod<java.lang.Boolean, DimensionSelectable> RESULT_METHOD = new ResultMethod();
+							@SuppressWarnings("unchecked")
+							public static Class<ListenerHelper.Executor.ResultMethod<java.lang.Boolean, DimensionSelectable>> RESULT_METHOD_CLASS = (Class<org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod<Boolean, DimensionSelectable>>) ClassHelper.getInstance().getByName(ResultMethod.class);
 							
 							public Default(Object value) {
 								super(value);
