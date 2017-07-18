@@ -358,10 +358,7 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 						values.add(String.valueOf(objects[index]));
 					return StringHelper.getInstance().concatenate(values, separator);
 				}
-				
-				public static interface Builderr extends org.cyk.utility.common.Builder.NullableInput<Key> {
-					
-				}
+
 			}
 		}
 		
