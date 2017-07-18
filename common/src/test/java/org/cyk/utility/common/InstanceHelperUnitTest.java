@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.cyk.utility.common.builder.InstanceCopyBuilder;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
@@ -115,25 +114,23 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		a1.setF1("inF1");
 		a1.setF2(15);
 		
-		A a2 = new InstanceCopyBuilder<A>(a1).build();
-		assertA(a2, "inF1", 15);
+		assertA(new InstanceHelper.Copy.Adapter.Default<A>(a1).execute(), "inF1", 15);
 		
-		A a3 = new InstanceCopyBuilder<A>(a1).addIgnoredFieldNames("f1").build();
-		assertA(a3, null, 15);
+		assertA(new InstanceHelper.Copy.Adapter.Default<A>(a1).addIgnoredFieldNames("f1").execute(), null, 15);
 		
-		A a4 = new InstanceCopyBuilder<A>(a1).addIgnoredFieldNames("f2").build();
+		A a4 = new InstanceHelper.Copy.Adapter.Default<A>(a1).addIgnoredFieldNames("f2").execute();
 		assertA(a4, "inF1", null);
 		
-		A a5 = new InstanceCopyBuilder<A>(a1).addIgnoredFieldNames("f1","f2").build();
+		A a5 = new InstanceHelper.Copy.Adapter.Default<A>(a1).addIgnoredFieldNames("f1","f2").execute();
 		assertA(a5, null, null);
 		
-		A a6 = new InstanceCopyBuilder<A>(a1).addIgnoredFieldAnnotationClasses(NotNull.class).build();
+		A a6 = new InstanceHelper.Copy.Adapter.Default<A>(a1).addIgnoredFieldAnnotationClasses(NotNull.class).execute();
 		assertA(a6, null, 15);
 		
-		A a7 = new InstanceCopyBuilder<A>(a1).addIgnoredFieldAnnotationClasses(Digits.class).build();
+		A a7 = new InstanceHelper.Copy.Adapter.Default<A>(a1).addIgnoredFieldAnnotationClasses(Digits.class).execute();
 		assertA(a7, "inF1", null);
 		
-		A a8 = new InstanceCopyBuilder<A>(a1).addIgnoredFieldAnnotationClasses(NotNull.class,Digits.class).build();
+		A a8 = new InstanceHelper.Copy.Adapter.Default<A>(a1).addIgnoredFieldAnnotationClasses(NotNull.class,Digits.class).execute();
 		assertA(a8, null, null);
 	}
 	

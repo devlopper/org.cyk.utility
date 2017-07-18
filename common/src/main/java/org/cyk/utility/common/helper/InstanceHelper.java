@@ -12,20 +12,14 @@ import java.util.Properties;
 
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.cyk.utility.common.AbstractBuilder;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.ListenerUtils;
-import org.cyk.utility.common.builder.InstanceCopyBuilder;
-import org.cyk.utility.common.builder.InstanceCopyBuilder.Listener;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
+
+import lombok.Getter;
 
 @Singleton
 public class InstanceHelper extends AbstractHelper implements Serializable  {
@@ -577,106 +571,180 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	
 	public static interface Copy<INSTANCE> extends org.cyk.utility.common.Builder<INSTANCE, INSTANCE> {
 		
-		public static class Adapter {
-			
-		}
+		Collection<Class<?>> IS_FIELD_CLASSES = new ArrayList<>();
 		
-		@Getter @Setter @NoArgsConstructor @Accessors(chain=true) @Deprecated
-		public class InstanceCopyBuilder<T> extends AbstractBuilder<T> implements Serializable {
-			private static final long serialVersionUID = -872728112292086623L;
+		ListenerHelper.Executor.Function.Adapter.Default.Object<Action<?,Boolean>> getIsFieldExecutor();
+		Copy<INSTANCE> setIsFieldExecutor(ListenerHelper.Executor.Function.Adapter.Default.Object<Action<?,Boolean>> isFieldExecutor);
+		
+		Collection<String> getIgnoredFieldNames();
+		Copy<INSTANCE> setIgnoredFieldNames(Collection<String> ignoredFieldNames);
+		Copy<INSTANCE> addIgnoredFieldNames(Collection<String> ignoredFieldNames);
+		Copy<INSTANCE> addIgnoredFieldNames(String...ignoredFieldNames);
+		
+		Collection<Class<?>> getIgnoredFieldAnnotationClasses();
+		Copy<INSTANCE> setIgnoredFieldAnnotationClasses(Collection<Class<?>> ignoredFieldAnnotationClasses);
+		Copy<INSTANCE> addIgnoredFieldAnnotationClasses(Collection<Class<?>> ignoredFieldAnnotationClasses);
+		Copy<INSTANCE> addIgnoredFieldAnnotationClasses(Class<?>...ignoredFieldAnnotationClasses);
+		
+		@Getter
+		public static class Adapter<INSTANCE> extends org.cyk.utility.common.Builder.Adapter.Default<INSTANCE, INSTANCE> implements Copy<INSTANCE>,Serializable {
+			private static final long serialVersionUID = 1L;
 			
-			private T source;
-			private Collection<String> ignoredFieldNames = new ArrayList<>();
-			private Collection<Class<?>> ignoredFieldAnnotationClasses = new ArrayList<>();
+			protected Collection<String> ignoredFieldNames;
+			protected Collection<Class<?>> ignoredFieldAnnotationClasses;
+			protected ListenerHelper.Executor.Function.Adapter.Default.Object<Action<?,Boolean>> isFieldExecutor;
 			
-			@SuppressWarnings("unchecked")
-			public InstanceCopyBuilder(T source){
-				super((Class<T>) source.getClass());
-				this.source = source;
+			public Adapter(Class<INSTANCE> inputClass, INSTANCE input) {
+				super(inputClass, input, inputClass);
 			}
 			
-			@SuppressWarnings("unchecked")
 			@Override
-			public T build() {
-				instance = InstanceHelper.getInstance().instanciateOne(aClass);
-				@SuppressWarnings("rawtypes")
-				Collection listeners = Listener.COLLECTION;
-				for(Field field : FieldHelper.getInstance().get(instance.getClass())){
-					final Field finalField = field;
-					if(Boolean.TRUE.equals(listenerUtils.getBoolean(listeners, new ListenerUtils.BooleanMethod<Listener<T>>() {
-						@Override
-						public Boolean execute(Listener<T> listener) {
-							return listener.isField(finalField);
-						}
+			public Copy<INSTANCE> setIsFieldExecutor(ListenerHelper.Executor.Function.Adapter.Default.Object<Action<?, Boolean>> isFieldExecutor) {
+				return null;
+			}
+			
+			@Override
+			public Copy<INSTANCE> setIgnoredFieldNames(Collection<String> ignoredFieldNames) {
+				return null;
+			}
+			
+			@Override
+			public Copy<INSTANCE> addIgnoredFieldNames(Collection<String> ignoredFieldNames) {
+				return null;
+			}
+			
+			@Override
+			public Copy<INSTANCE> addIgnoredFieldNames(String... ignoredFieldNames) {
+				return null;
+			}
+			
+			@Override
+			public Copy<INSTANCE> setIgnoredFieldAnnotationClasses(Collection<Class<?>> ignoredFieldAnnotationClasses) {
+				return null;
+			}
+			
+			@Override
+			public Copy<INSTANCE> addIgnoredFieldAnnotationClasses(Class<?>... ignoredFieldAnnotationClasses) {
+				return null;
+			}
+			
+			@Override
+			public Copy<INSTANCE> addIgnoredFieldAnnotationClasses(Collection<Class<?>> ignoredFieldAnnotationClasses) {
+				return null;
+			}
+			
+			public static class Default<INSTANCE> extends Copy.Adapter<INSTANCE> implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@SuppressWarnings("unchecked")
+				public static Class<ListenerHelper.Executor.ResultMethod<Object, Action<?,Boolean>>> RESULT_METHOD_CLASS =
+						(Class<ListenerHelper.Executor.ResultMethod<Object, Action<?, Boolean>>>) ClassHelper.getInstance()
+						.getByName(ListenerHelper.Executor.ResultMethod.Adapter.Default.Boolean.class);
+				
+				@SuppressWarnings("unchecked")
+				public Default(INSTANCE input) {
+					super(input == null ? null :  (Class<INSTANCE>) input.getClass(), input);
+				}
+				
+				@Override
+				public Copy<INSTANCE> setIsFieldExecutor(ListenerHelper.Executor.Function.Adapter.Default.Object<Action<?, Boolean>> isFieldExecutor) {
+					this.isFieldExecutor = isFieldExecutor;
+					return this;
+				}
+				
+				@Override
+				public Copy<INSTANCE> setIgnoredFieldNames(Collection<String> ignoredFieldNames) {
+					this.ignoredFieldNames = ignoredFieldNames;
+					return this;
+				}
+				
+				@Override
+				public Copy<INSTANCE> addIgnoredFieldNames(Collection<String> ignoredFieldNames) {
+					if(!CollectionHelper.getInstance().isEmpty(ignoredFieldNames)){
+						if(this.ignoredFieldNames == null)
+							this.ignoredFieldNames = new ArrayList<>();
+						this.ignoredFieldNames.addAll(ignoredFieldNames);
+					}
+					return this;
+				}
+				
+				@Override
+				public Copy<INSTANCE> addIgnoredFieldNames(String... ignoredFieldNames) {
+					if(ignoredFieldNames!=null && ignoredFieldNames.length>0)
+						addIgnoredFieldNames(Arrays.asList(ignoredFieldNames));
+					return this;
+				}
+				
+				@Override
+				public Copy<INSTANCE> setIgnoredFieldAnnotationClasses(Collection<Class<?>> ignoredFieldAnnotationClasses) {
+					this.ignoredFieldAnnotationClasses = ignoredFieldAnnotationClasses;
+					return this;
+				}
+				
+				@Override
+				public Copy<INSTANCE> addIgnoredFieldAnnotationClasses(Class<?>... ignoredFieldAnnotationClasses) {
+					if(ignoredFieldAnnotationClasses!=null && ignoredFieldAnnotationClasses.length>0)
+						addIgnoredFieldAnnotationClasses(Arrays.asList(ignoredFieldAnnotationClasses));
+					return this;
+				}
+				
+				@Override
+				public Copy<INSTANCE> addIgnoredFieldAnnotationClasses(Collection<Class<?>> ignoredFieldAnnotationClasses) {
+					if(!CollectionHelper.getInstance().isEmpty(ignoredFieldAnnotationClasses)){
+						if(this.ignoredFieldAnnotationClasses == null)
+							this.ignoredFieldAnnotationClasses = new ArrayList<>();
+						this.ignoredFieldAnnotationClasses.addAll(ignoredFieldAnnotationClasses);
+					}
+					return this;
+				}
+				
+				@SuppressWarnings("unchecked")
+				@Override
+				protected INSTANCE __execute__() {
+					INSTANCE instance = ClassHelper.getInstance().instanciateOne(getOutputClass());
+					Collection<String> ignoredFieldNames = getIgnoredFieldNames();
+					Collection<Class<?>> ignoredFieldAnnotationClasses = getIgnoredFieldAnnotationClasses();
+					ListenerHelper.Executor.Function.Adapter.Default.Object<Action<?,Boolean>> isFieldExecutor = getIsFieldExecutor();
+					if(isFieldExecutor==null){
+						isFieldExecutor = new ListenerHelper.Executor.Function.Adapter.Default.Object<Action<?,Boolean>>();
+						isFieldExecutor.setResultMethod(ClassHelper.getInstance().instanciateOne(RESULT_METHOD_CLASS));
+						isFieldExecutor.setInput(new ArrayList<Action<?,Boolean>>());
+						for(Action<?,Boolean> source : ClassHelper.getInstance().instanciateMany(ListenerHelper.Executor.ResultMethod.class
+								,CollectionHelper.getInstance().isEmpty(IS_FIELD_CLASSES) ? 
+										Arrays.asList(ListenerHelper.Executor.ResultMethod.Adapter.Default.Boolean.class) : IS_FIELD_CLASSES))
+							isFieldExecutor.getInput().add(source);
+					}
+					
+					for(Field field : FieldHelper.getInstance().get(instance.getClass())){
+						Boolean b = null;//(Boolean) isFieldExecutor.getResultMethod().setInput(field).execute();
 						
-						@Override
-						public Boolean getNullValue() {
-							Boolean ignored = ignoredFieldNames!=null && ignoredFieldNames.contains(finalField.getName());
+						//sourcesExecutor.getResultMethod().setInputClass((Class<Object>) getInputClass());
+						//sourcesExecutor.getResultMethod().setInput(getInput());
+						//sourcesExecutor.getResultMethod().setOutputClass((Class<Object>) getOutputClass());
+						
+						//final Field finalField = field;
+						
+						if(b==null){
+							Boolean ignored = ignoredFieldNames!=null && ignoredFieldNames.contains(field.getName());
 							if(Boolean.FALSE.equals(ignored)){
 								if(ignoredFieldAnnotationClasses!=null)
 									for(@SuppressWarnings("rawtypes") Class aClass : ignoredFieldAnnotationClasses){
-										if(finalField.getAnnotation(aClass)!=null){
+										if(field.getAnnotation(aClass)!=null){
 											ignored = Boolean.TRUE;
 											break;
 										}
 									}
 							}
-							return Boolean.FALSE.equals(ignored) ;
+							b = Boolean.FALSE.equals(ignored) ;
 						}
-					}) )){
-						FieldHelper.getInstance().set(instance, FieldHelper.getInstance().read(source, field), field);
-					}
-				}
-				return instance;
-			}
-			
-			public InstanceCopyBuilder<T> addIgnoredFieldNames(String...names){
-				return addIgnoredFieldNames(Arrays.asList(names));
-			}
-			
-			public InstanceCopyBuilder<T> addIgnoredFieldNames(Collection<String> names){
-				if(names!=null)
-					ignoredFieldNames.addAll(names);
-				return this;
-			}
-			
-			public InstanceCopyBuilder<T> addIgnoredFieldAnnotationClasses(Class<?>...classes){
-				return addIgnoredFieldAnnotationClasses(Arrays.asList(classes));
-			}
-			
-			public InstanceCopyBuilder<T> addIgnoredFieldAnnotationClasses(Collection<Class<?>> classes){
-				if(classes!=null)
-					ignoredFieldAnnotationClasses.addAll(classes);
-				return this;
-			}
-			
-			/**/
-			
-			
-			/**/
-			
-			public static interface Listener<T> extends AbstractBuilder.Listener<T> {
-				
-				Collection<Listener<?>> COLLECTION = new ArrayList<>();
-				
-				Boolean isField(Field field);
-				
-				public static class Adapter<T> extends AbstractBuilder.Listener.Adapter.Default<T> implements Listener<T>,Serializable {
-					private static final long serialVersionUID = 1L;
 						
-					/**/
-					
-					@Override
-					public Boolean isField(Field field) {
-						return null;
+						if(Boolean.TRUE.equals(b)) {
+							FieldHelper.getInstance().set(instance, FieldHelper.getInstance().read(getInput(), field), field);
+						}		
 					}
-					
-					public static class Default<T> extends Listener.Adapter<T> implements Serializable {
-						private static final long serialVersionUID = 1L;
-						
-					}
-				}	
-			}	
+					return instance;
+				}		
+			}
 		}
 	}
 	
