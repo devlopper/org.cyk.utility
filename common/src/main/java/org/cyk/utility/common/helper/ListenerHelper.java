@@ -15,6 +15,20 @@ import lombok.Getter;
 public class ListenerHelper extends AbstractHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private static ListenerHelper INSTANCE;
+	
+	public static ListenerHelper getInstance() {
+		if(INSTANCE == null)
+			INSTANCE = new ListenerHelper();
+		return INSTANCE;
+	}
+	
+	@Override
+	protected void initialisation() {
+		INSTANCE = this;
+		super.initialisation();
+	}
+	
 	public static interface Executor<LISTENER,RESULT> extends Action<Collection<LISTENER>, RESULT>{
 		
 		ResultMethod<RESULT,LISTENER> getResultMethod();

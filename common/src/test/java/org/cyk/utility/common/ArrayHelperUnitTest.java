@@ -26,6 +26,30 @@ public class ArrayHelperUnitTest extends AbstractUnitTest {
 		assertEquals("CB", new ArrayHelper.Dimension.Key.Builder.Adapter.Default(new Object[]{"A","1","B","2","C"}).addManyParameters(4,2).execute().getValue());
 	}
 	
+	@Test
+	public void filter(){
+		Object[][] data = new Object[][] {
+				{"A","1","A1"}
+				,{"B","2","A2"}
+				,{"C","3","C3"}
+				,{"D","4","D4"}
+				,{"D1","4","D14"}
+				,{"E","5","E5"}
+		};
+		assertFilter(data, 0, "0", null);
+		
+		assertFilter(data, 0, "A", new Object[][] {
+				{"A","1","A1"}
+		});
+		
+		assertFilter(data, 1, "4", new Object[][] {
+				{"D","4","D4"}
+				,{"D1","4","D14"}
+		});
+	}
 	
-	
+	private void assertFilter(Object[][] array,Integer index,String value,Object[][] expected){
+		Object[][] result = ArrayHelper.getInstance().filter(array, index, value);
+		assertArray(result, expected);
+	}
 }

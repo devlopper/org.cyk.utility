@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -41,7 +42,21 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	private static final String RESOURCE_BUNDLE_NAME = "org.cyk.utility.common.i18n";
 	private static final String KEY_ORDINAL_NUMBER_FORMAT = "ordinal.number.%s";
 	private static final String KEY_ORDINAL_NUMBER_SUFFIX_FORMAT = KEY_ORDINAL_NUMBER_FORMAT+".suffix";
-			
+	
+	private static StringHelper INSTANCE;
+	
+	public static StringHelper getInstance() {
+		if(INSTANCE == null)
+			INSTANCE = new StringHelper();
+		return INSTANCE;
+	}
+	
+	@Override
+	protected void initialisation() {
+		INSTANCE = this;
+		super.initialisation();
+	}
+	
 	public String applyCaseType(String string,CaseType caseType){
 		if(string==null)
 			return null;
@@ -118,12 +133,37 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return StringUtils.isBlank(string);
 	}
 	
-	/**/
-	
-	private static final StringHelper INSTANCE = new StringHelper();
-	public static StringHelper getInstance() {
-		return INSTANCE;
+	public String get(Collection<?> collection,String separator){
+		if(collection==null)
+			return Constant.EMPTY_STRING;
+		return get(collection.toArray(), separator);
 	}
+	
+	public String get(Object[] array,Object separator){
+		List<String> list = new ArrayList<>();
+		for(Object object : array)
+			if(object==null)
+				list.add(Constant.EMPTY_STRING);
+			else if(object instanceof Object[])
+				list.add(get((Object[])object, separator));
+			else if(object instanceof Collection<?>) {
+				Collection<String> collection = new ArrayList<>();
+				for(Object collectionItem : (Collection<?>)object)
+					collection.add(/*get(collectionItem)*/ collectionItem.toString());
+				list.add(StringUtils.join(collection,Constant.CHARACTER_COMA.toString()));
+			}else
+				list.add(object.toString());
+		return StringUtils.join(list,separator.toString());
+	}
+	
+	public String get(Object[][] array,Object firstDimensionElementSeparator,Object secondDimensionElementSeparator){
+		Collection<String> collection = new ArrayList<>();
+		for(Object[] index : array)
+			collection.add(get(index, secondDimensionElementSeparator.toString()));
+		return StringUtils.join(collection,firstDimensionElementSeparator.toString());
+	}
+	
+	/**/
 	
 	//TODO listener has to be added
 	

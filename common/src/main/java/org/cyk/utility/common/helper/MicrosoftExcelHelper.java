@@ -197,6 +197,11 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 							setSheetIndex(sheetIndex);
 						}
 						
+						public Default(String filePath,Class<?> aClass) {
+							this(new MicrosoftExcelHelper.Workbook.Builder.InputStream.Adapter.Default(filePath).execute());
+							setSheetName(aClass);
+						}
+						
 						@Override
 						public Builder setMatrix(Matrix matrix) {
 							this.matrix = matrix;
@@ -241,9 +246,10 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 					        	Matrix matrix = getMatrix();
 					        	if(matrix==null)
 					        		matrix = new Matrix();
+					        	
 					        	addLoggingMessageBuilderNamedParameters("sheet", sheet.getModel().getSheetName());
 					        	FormulaEvaluator formulaEvaluator = sheet.getWorkbook().getModel().getCreationHelper().createFormulaEvaluator();
-					        	Integer fromRowIndex = matrix.getColumn().getFromIndex(),fromColumnIndex = matrix.getColumn().getFromIndex();
+					        	Integer fromRowIndex = matrix.getRow().getFromIndex(),fromColumnIndex = matrix.getColumn().getFromIndex();
 					            if(fromRowIndex==null)
 					            	fromRowIndex = 0;
 					            if(fromColumnIndex==null)
@@ -267,7 +273,7 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 											,CollectionHelper.getInstance().isEmpty(DimensionSelectable.CLASSES) ? Arrays.asList(DimensionSelectable.Adapter.Default.class) : DimensionSelectable.CLASSES));
 								}
 					            
-					            List<Object[]> rowCollection = new ArrayList<>(); 
+								List<Object[]> rowCollection = new ArrayList<>(); 
 					            for (int i=0; i<rowCount; i++) {
 					            	Row row = sheet.getModel().getRow(i + fromRowIndex);
 					            	Object[] _row = null;
@@ -410,6 +416,20 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 					public Dimension createKeyBuilder(Object[] indexes,String[] ignoredKeyValues){
 						return createKeyBuilder(Arrays.asList(indexes), Arrays.asList(ignoredKeyValues));
 					}
+					
+					public Dimension createKeyBuilder(Object[] indexes,Collection<String> ignoredKeyValues){
+						return createKeyBuilder(Arrays.asList(indexes), ignoredKeyValues);
+					}
+					
+					@Override
+					public String toString() {
+						Collection<String> collection = new ArrayList<>();
+						if(fromIndex!=null)
+							collection.add("from:"+fromIndex);
+						if(numberOfIndexes!=null)
+							collection.add("numberOfIndexes:"+numberOfIndexes);
+						return StringHelper.getInstance().get(collection, " ");
+					}
 				}
 				
 				@Getter @Setter @Accessors(chain=true)
@@ -418,6 +438,15 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 					
 					private Dimension row = new Dimension(),column = new Dimension();
 					
+					@Override
+					public String toString() {
+						Collection<String> collection = new ArrayList<>();
+						if(row!=null)
+							collection.add("row:"+row);
+						if(column!=null)
+							collection.add("column:"+column);
+						return StringHelper.getInstance().get(collection, " | ");
+					}
 				}
 			}
 		

@@ -6,18 +6,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.inject.Singleton;
 
+import lombok.Getter;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.ListenerUtils;
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
-
-import lombok.Getter;
 
 @Singleton
 public class InstanceHelper extends AbstractHelper implements Serializable  {
@@ -400,6 +402,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 						super(array);
 					}
 					
+					public Default() {
+						super(null);
+					}
+					
 					@Override
 					public TwoDimensionArray<INSTANCE> setOneDimensionArray(OneDimensionArray<INSTANCE> oneDimensionArray) {
 						this.oneDimensionArray = oneDimensionArray;
@@ -598,5 +604,82 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 
 	/**/
 	
+	@Singleton
+	public static class Pool extends AbstractBean implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private static final Map<Class<?>,Collection<?>> MAP = new HashMap<>();
+		
+		private static Pool INSTANCE;
+		
+		public static Pool getInstance() {
+			if(INSTANCE == null)
+				INSTANCE = new Pool();
+			return INSTANCE;
+		}
+		
+		@Override
+		protected void initialisation() {
+			INSTANCE = this;
+			super.initialisation();
+		}
+		
+		public <T> Pool load(Class<T> aClass){
+			Collection<T> result = null,c;
+			for(Class<?> listenerClass : Listener.CLASSES){
+				Listener listener = (Listener) ClassHelper.getInstance().instanciateOne(listenerClass);
+				c = listener.load(aClass);
+				if(c!=null)
+					result = c;
+			}
+			add(aClass, result);
+			return this;
+		}
+		
+		public <T> Pool add(Class<T> aClass,Collection<T> collection){
+			if(collection!=null){
+				Collection<T> c = get(aClass);
+				if(c==null)
+					MAP.put(aClass, c = new ArrayList<>());
+				c.addAll(collection);
+			}
+			return this;
+		}
+		
+		@SuppressWarnings("unchecked")
+		public <T> Collection<T> get(Class<T> aClass){
+			return (Collection<T>) MAP.get(aClass);
+		}
+		
+		public Pool clear(){
+			MAP.clear();
+			return this;
+		}
+		
+		/**/
+		
+		public static interface Listener {
+			
+			Collection<Class<?>> CLASSES = new ArrayList<>();
+			
+			<T> Collection<T> load(Class<T> aClass);
+			
+			public static class Adapter implements Listener , Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public <T> Collection<T> load(Class<T> aClass) {
+					return null;
+				}
+				
+				public static class Default extends Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					
+				}
+				
+			}
+			
+		}
+	}
 	
 }

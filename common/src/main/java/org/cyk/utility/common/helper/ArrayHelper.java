@@ -43,6 +43,24 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 		return objects == null ? 0 : objects.length;
 	}
 	
+	public Object[][] filter(Object[][] array,Integer index,Object value){
+		if(array == null || array.length == 0)
+			return null;
+		Collection<Object[]> collection = new ArrayList<>();
+		for(Object[] objectArray : array){
+			if((value==null && objectArray[index]==null) || value.equals(objectArray[index]))
+				collection.add(objectArray);
+		}
+		if(CollectionHelper.getInstance().isEmpty(collection))
+			return null;
+		Object[][] result = new Object[collection.size()][array[0].length];
+		int i = 0;
+		for(Object[] objectArray : collection){
+			result[i++] = objectArray;
+		}
+		return result;
+	}
+	
 	/**/
 	
 	@Getter @Setter @NoArgsConstructor
@@ -272,4 +290,121 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 			}
 		}
 	}
+
+	/**/
+	
+	public static interface Filter<INPUT, OUTPUT>  extends org.cyk.utility.common.Builder<INPUT, OUTPUT>{
+		
+		public static class Adapter<INPUT, OUTPUT> extends org.cyk.utility.common.Builder.Adapter.Default<INPUT, OUTPUT> implements Filter<INPUT, OUTPUT>,Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public Adapter(Class<INPUT> inputClass, INPUT input, Class<OUTPUT> outputClass) {
+				super(inputClass, input, outputClass);
+			}
+			
+			public static class Default<INPUT, OUTPUT> extends Filter.Adapter<INPUT, OUTPUT> implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public Default(Class<INPUT> inputClass, INPUT input, Class<OUTPUT> outputClass) {
+					super(inputClass, input, outputClass);
+				}	
+			}
+			
+		}
+		
+		/**/
+		
+		public static interface OneDimension<INPUT, OUTPUT> extends Filter<INPUT, OUTPUT[]> {
+			
+			public static class Adapter<INPUT, OUTPUT> extends Filter.Adapter.Default<INPUT, OUTPUT[]> implements OneDimension<INPUT, OUTPUT>,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public Adapter(Class<INPUT> inputClass, INPUT input, Class<OUTPUT[]> outputClass) {
+					super(inputClass, input, outputClass);
+				}
+				
+				public static class Default<INPUT, OUTPUT> extends OneDimension.Adapter<INPUT, OUTPUT> implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					public Default(Class<INPUT> inputClass, INPUT input, Class<OUTPUT[]> outputClass) {
+						super(inputClass, input, outputClass);
+					}	
+				}
+				
+			}
+		
+			/**/
+			
+			@Getter @Setter @Accessors(chain=true)
+			public static class Values implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				private Key primaryKey;
+				
+			}
+			
+			@Getter @Setter @Accessors(chain=true)
+			public static class Key implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				private Set<Integer> indexes;
+				private String separator;
+				
+				public String get(Object[] objects){
+					if(objects==null || indexes==null)
+						return null;
+					Collection<String> values = new ArrayList<>();
+					for(Integer index : indexes)
+						values.add(String.valueOf(objects[index]));
+					return StringHelper.getInstance().concatenate(values, separator);
+				}
+				
+				public static interface Builderr extends org.cyk.utility.common.Builder.NullableInput<Key> {
+					
+				}
+			}
+		}
+		
+		public static interface TwoDimensions<INPUT, OUTPUT> extends Filter<INPUT[][], OUTPUT[][]> {
+			
+			public static class Adapter<INPUT, OUTPUT> extends Filter.Adapter.Default<INPUT[][], OUTPUT[][]> implements TwoDimensions<INPUT, OUTPUT>,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public Adapter(Class<INPUT[][]> inputClass, INPUT[][] input, Class<OUTPUT[][]> outputClass) {
+					super(inputClass, input, outputClass);
+				}
+				
+				public static class Default<INPUT, OUTPUT> extends TwoDimensions.Adapter<INPUT, OUTPUT> implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					public Default(Class<INPUT[][]> inputClass, INPUT[][] input, Class<OUTPUT[][]> outputClass) {
+						super(inputClass, input, outputClass);
+					}
+					
+					@Override
+					protected OUTPUT[][] __execute__() {
+						/*Object[][] array = getInput();
+						if(array.length == 0)
+							return null;
+						Collection<Object[]> collection = new ArrayList<>();
+						for(Object[] objectArray : array){
+							if((value==null && objectArray[index]==null) || value.equals(objectArray[index]))
+								collection.add(objectArray);
+						}
+						Object[][] result = new Object[collection.size()][array[0].length];
+						int i = 0;
+						for(Object[] objectArray : collection){
+							result[i++] = objectArray;
+						}
+						return result;
+						*/
+						return null;
+					}
+				}
+				
+			}
+		}
+		
+	}
+	
 }

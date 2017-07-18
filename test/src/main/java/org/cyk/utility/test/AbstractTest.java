@@ -144,6 +144,18 @@ public abstract class AbstractTest implements Serializable {
     	Assert.assertEquals(message,new BigDecimal(expected).doubleValue()+"", value.doubleValue()+"");
     }
 	
+	protected void assertList(List<?> list,List<?> expected){
+		if(expected==null)
+			assertNull(list);
+		else{
+			assertEquals("collection are not same length",expected.size(), list.size());
+			for(int i = 0 ; i < list.size() ; i++){
+				assertEquals("list element do not match",expected.get(i), list.get(i));
+			}
+		}
+		
+	}
+	
 	protected void assertArray(Object[] array,Object...expecteds){
 		assertEquals("one dimension array are not same length",expecteds.length, array.length);
 		for(int i = 0 ; i < array.length ; i++){
@@ -152,9 +164,14 @@ public abstract class AbstractTest implements Serializable {
 	}
 	
 	protected void assertArray(Object[][] array,Object[][] expecteds){
-		assertEquals("two dimension array are not same length", expecteds.length, array.length);
-		for(int i = 0 ; i < array.length ; i++)
-			assertArray(array[i], expecteds[i]);
+		if(expecteds==null)
+			assertNull(array);
+		else{
+			assertEquals("two dimension array are not same length", expecteds.length, array.length);
+			for(int i = 0 ; i < array.length ; i++)
+				assertArray(array[i], expecteds[i]);	
+		}
+		
 	}
 	
 	protected void assertTrue(Boolean value){

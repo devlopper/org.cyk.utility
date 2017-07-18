@@ -126,4 +126,53 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		}
 		return Boolean.TRUE;
 	}
+	
+	public <T> T getFirst(Collection<T> collection){
+		if(isEmpty(collection))
+			return null;
+		return collection.iterator().next();
+	}
+	
+	/**/
+	
+	public static interface Filter<TYPE>  extends org.cyk.utility.common.Action<Collection<TYPE>, Collection<TYPE>>{
+		
+		public static class Adapter<TYPE> extends org.cyk.utility.common.Action.Adapter.Default<Collection<TYPE>, Collection<TYPE>> implements Filter<TYPE>,Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			@SuppressWarnings("unchecked")
+			public Adapter(Collection<TYPE> input) {
+				super("filter",(Class<Collection<TYPE>>) ClassHelper.getInstance().getByName(Collection.class), input
+						, (Class<Collection<TYPE>>) ClassHelper.getInstance().getByName(Collection.class));
+			}
+			
+			public static class Default<TYPE> extends Filter.Adapter<TYPE> implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public Default(Collection<TYPE> collection) {
+					super(collection);
+				}	
+				
+				@Override
+				protected Collection<TYPE> __execute__() {
+					String fieldName = (String) getProperty(PROPERTY_NAME_FIELD_NAME);
+					Object fieldValue = getProperty(PROPERTY_NAME_FIELD_VALUE);
+					Collection<TYPE> input = getInput();
+					Collection<TYPE> collection = null;
+					for(TYPE instance : input){
+						Object instanceFieldValue = FieldHelper.getInstance().read(instance, fieldName);
+						if((fieldValue==null && instanceFieldValue==null) || fieldValue.equals(instanceFieldValue)){
+							if(collection==null)
+								collection = new ArrayList<>();
+							collection.add(instance);
+						}
+					}
+					return collection;
+				}
+				
+			}
+			
+		}
+				
+	}
 }

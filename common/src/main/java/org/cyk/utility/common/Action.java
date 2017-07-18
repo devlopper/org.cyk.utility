@@ -87,6 +87,9 @@ public interface Action<INPUT,OUTPUT> {
 	
 	Action<INPUT, OUTPUT> clear();
 	
+	String PROPERTY_NAME_FIELD_NAME = "fieldName";
+	String PROPERTY_NAME_FIELD_VALUE = "fieldValue";
+	
 	/**/
 	
 	@Getter
