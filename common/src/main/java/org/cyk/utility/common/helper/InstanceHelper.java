@@ -19,6 +19,7 @@ import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
 
+import javassist.Modifier;
 import lombok.Getter;
 
 @Singleton
@@ -716,6 +717,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					}
 					
 					for(Field field : FieldHelper.getInstance().get(instance.getClass())){
+						if(Modifier.isStatic(field.getModifiers()))//TODO should be avoid , use FieldHelper to get desired fields
+							continue;
 						Boolean b = null;//(Boolean) isFieldExecutor.getResultMethod().setInput(field).execute();
 						
 						//sourcesExecutor.getResultMethod().setInputClass((Class<Object>) getInputClass());

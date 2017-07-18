@@ -1,5 +1,6 @@
 package org.cyk.utility.common;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import javax.validation.constraints.Digits;
@@ -153,7 +154,9 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	/**/
 	
 	@Getter @Setter
-	public static class A {
+	public static class A implements Serializable {
+		
+		private static final long serialVersionUID = 1L;
 		
 		@NotNull private String f1;
 		@Digits(integer=2,fraction=2) private Integer f2;
