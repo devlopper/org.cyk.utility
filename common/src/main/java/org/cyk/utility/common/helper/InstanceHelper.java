@@ -318,6 +318,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					}
 					
 					@Override
+					protected Boolean isShowInputLogMessage(Object[] input) {
+						return Boolean.FALSE;
+					}
+					
+					@Override
 					public Builder.OneDimensionArray<INSTANCE> setKeyBuilder(ArrayHelper.Dimension.Key.Builder keyBuilder) {
 						this.keyBuilder = keyBuilder;
 						return this;
@@ -325,6 +330,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					
 					@Override
 					protected INSTANCE __execute__() {
+						Class<INSTANCE> instanceClass = getOutputClass();
 						INSTANCE instance = null;
 						Object[] values = getInput();
 						ArrayHelper.Dimension.Key.Builder keyBuilder = getKeyBuilder();
@@ -334,16 +340,21 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 							addLoggingMessageBuilderNamedParameters("key",key.getValue());
 						}
 						if(key!=null){
-							instance = new InstanceHelper.Lookup.Adapter.Default<>(Object.class, key.getValue(), getOutputClass()).execute();
-							addLoggingMessageBuilderNamedParameters("lookuped instance is not null",instance!=null);
+							Boolean pooled = Boolean.TRUE.equals(Pool.getInstance().contains(instanceClass));
+							if(pooled)
+								instance = Pool.getInstance().get(instanceClass, key.getValue());
+							addLoggingMessageBuilderNamedParameters(instanceClass.getSimpleName()+" pooled",pooled,"found",instance!=null);
+							if(instance==null)
+								instance = new InstanceHelper.Lookup.Adapter.Default<>(Object.class, key.getValue(), instanceClass).execute();
+							addLoggingMessageBuilderNamedParameters("looked up instance is not null",instance!=null);
 						}
 						if(instance==null)
-							instance = ClassHelper.getInstance().instanciateOne(getOutputClass());
+							instance = ClassHelper.getInstance().instanciateOne(instanceClass);
 						Object[] parametersArray = CollectionHelper.getInstance().getArray(getParameters());
 						if(parametersArray!=null){
 							Setter<INSTANCE> setter = getSetter();
 							if(setter==null){
-								setter = new Setter.Adapter.Default<INSTANCE>(getOutputClass());
+								setter = new Setter.Adapter.Default<INSTANCE>(instanceClass);
 							}
 							setter.setInput(instance);
 							
@@ -815,6 +826,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				if(c!=null)
 					result = c;
 			}
+			MAP.remove(aClass);
 			add(aClass, result);
 			return this;
 		}
@@ -834,6 +846,21 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			return (Collection<T>) MAP.get(aClass);
 		}
 		
+		public Boolean contains(Class<?> aClass){
+			return MAP.containsKey(aClass);
+		}
+		
+		public <T> T get(Class<T> aClass,Object identifier){
+			T result = null,c;
+			for(Class<?> listenerClass : Listener.CLASSES){
+				Listener listener = (Listener) ClassHelper.getInstance().instanciateOne(listenerClass);
+				c = listener.get(aClass,identifier);
+				if(c!=null)
+					result = c;
+			}
+			return result;
+		}
+		
 		public Pool clear(){
 			MAP.clear();
 			return this;
@@ -846,12 +873,18 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			Collection<Class<?>> CLASSES = new ArrayList<>();
 			
 			<T> Collection<T> load(Class<T> aClass);
-			
+			<T> T get(Class<T> aClass,Object identifier);
+		
 			public static class Adapter implements Listener , Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				@Override
 				public <T> Collection<T> load(Class<T> aClass) {
+					return null;
+				}
+				
+				@Override
+				public <T> T get(Class<T> aClass, Object identifier) {
 					return null;
 				}
 				

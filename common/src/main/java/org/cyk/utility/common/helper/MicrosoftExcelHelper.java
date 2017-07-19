@@ -421,6 +421,16 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 						return createKeyBuilder(Arrays.asList(indexes), ignoredKeyValues);
 					}
 					
+					public Dimension addIgnoredKeyValues(Collection<?> values){
+						if(!CollectionHelper.getInstance().isEmpty(values)){
+							if(ignoredKeys==null)
+								ignoredKeys = new ArrayList<>();
+							for(Object value : values)
+								ignoredKeys.add(new ArrayHelper.Dimension.Key(value.toString()));
+						}
+						return this;
+					}
+					
 					@Override
 					public String toString() {
 						Collection<String> collection = new ArrayList<>();
