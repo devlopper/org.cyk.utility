@@ -140,6 +140,8 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	}
 	
 	public String get(Object[] array,Object separator){
+		if(array==null)
+			return Constant.EMPTY_STRING;
 		List<String> list = new ArrayList<>();
 		for(Object object : array)
 			if(object==null)
@@ -157,6 +159,8 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	}
 	
 	public String get(Object[][] array,Object firstDimensionElementSeparator,Object secondDimensionElementSeparator){
+		if(array==null)
+			return Constant.EMPTY_STRING;
 		Collection<String> collection = new ArrayList<>();
 		for(Object[] index : array)
 			collection.add(get(index, secondDimensionElementSeparator.toString()));

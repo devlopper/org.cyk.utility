@@ -341,8 +341,9 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 						}
 						if(key!=null){
 							Boolean pooled = Boolean.TRUE.equals(Pool.getInstance().contains(instanceClass));
-							if(pooled)
+							if(pooled){
 								instance = Pool.getInstance().get(instanceClass, key.getValue());
+							}
 							addLoggingMessageBuilderNamedParameters(instanceClass.getSimpleName()+" pooled",pooled,"found",instance!=null);
 							if(instance==null)
 								instance = new InstanceHelper.Lookup.Adapter.Default<>(Object.class, key.getValue(), instanceClass).execute();
@@ -851,14 +852,15 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		}
 		
 		public <T> T get(Class<T> aClass,Object identifier){
-			T result = null,c;
-			for(Class<?> listenerClass : Listener.CLASSES){
-				Listener listener = (Listener) ClassHelper.getInstance().instanciateOne(listenerClass);
-				c = listener.get(aClass,identifier);
-				if(c!=null)
-					result = c;
-			}
-			return result;
+			if(aClass==null || identifier==null)
+				return null;
+			Collection<T> collection = get(aClass);
+			if(collection==null)
+				return null;
+			for(T instance : collection)
+				if( identifier.equals(InstanceHelper.getInstance().getIdentifier(instance)) )
+					return instance;
+			return null;
 		}
 		
 		public Pool clear(){
@@ -873,18 +875,12 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			Collection<Class<?>> CLASSES = new ArrayList<>();
 			
 			<T> Collection<T> load(Class<T> aClass);
-			<T> T get(Class<T> aClass,Object identifier);
-		
+			
 			public static class Adapter implements Listener , Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				@Override
 				public <T> Collection<T> load(Class<T> aClass) {
-					return null;
-				}
-				
-				@Override
-				public <T> T get(Class<T> aClass, Object identifier) {
 					return null;
 				}
 				
