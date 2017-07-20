@@ -15,6 +15,7 @@ import org.cyk.utility.common.builder.DatePeriodStringBuilder;
 import org.cyk.utility.common.builder.DateStringBuilder;
 import org.cyk.utility.common.formatter.DateFormatter;
 import org.cyk.utility.common.generator.AbstractGeneratable;
+import org.cyk.utility.common.helper.DateHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -23,10 +24,17 @@ import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 
-
-public class DateUnitTest extends AbstractUnitTest {
+public class DateHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	@Test
+	public void build(){
+		Date date = new DateHelper.Builder.String.Adapter.Default("19/11/2015").execute();
+		assertEquals(19, DateHelper.getInstance().getDayOfMonth(date));
+		assertEquals(11, DateHelper.getInstance().getMonthOfYear(date));
+		assertEquals(2015, DateHelper.getInstance().getYear(date));
+	}
 	
 	//@Test
 	public void stringBuilder(){
@@ -41,7 +49,7 @@ public class DateUnitTest extends AbstractUnitTest {
 			.build());
 	}
 	
-	@Test
+	//@Test
 	public void dateFormatter(){
 		assertDate(2,5,2016);	
 		
@@ -51,7 +59,7 @@ public class DateUnitTest extends AbstractUnitTest {
 	
 	}
 	
-	@Test
+	//@Test
 	public void jodaTime(){
 		DateTime fromDate = new DateTime(createDate(1, 1, 2000, 10, 0)),toDate = new DateTime(createDate(27, 1, 2000, 11, 30));
 		int numberOfDays = Days.daysBetween(fromDate,toDate).getDays();
@@ -68,7 +76,7 @@ public class DateUnitTest extends AbstractUnitTest {
 		
 	}
 	
-	@Test
+	//@Test
 	public void apache(){
 		Date d1=createDate(1,1,1990,10,0),d2=createDate(1,1,1990,8,0),d3=createDate(2,1,1990,13,10)
 				,d4=createDate(2,1,1990,0,30),d5=createDate(1,1,1991,0,0);

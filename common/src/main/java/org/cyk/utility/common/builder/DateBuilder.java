@@ -14,7 +14,7 @@ import org.cyk.utility.common.AbstractBuilder;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.joda.time.DateTime;
 
-@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
+@Getter @Setter @NoArgsConstructor @Accessors(chain=true) @Deprecated
 public class DateBuilder extends AbstractBuilder<Date> implements Serializable {
 	private static final long serialVersionUID = -872728112292086623L;
 	

@@ -87,8 +87,15 @@ public interface Action<INPUT,OUTPUT> {
 	
 	Action<INPUT, OUTPUT> clear();
 	
-	String PROPERTY_NAME_FIELD_NAME = "fieldName";
-	String PROPERTY_NAME_FIELD_VALUE = "fieldValue";
+	java.lang.String PROPERTY_NAME_FIELD_NAME = "fieldName";
+	java.lang.String PROPERTY_NAME_FIELD_VALUE = "fieldValue";
+	java.lang.String PROPERTY_NAME_YEAR="YEAR";
+	java.lang.String PROPERTY_NAME_MONTHOFYEAR="MONTHOFYEAR";
+	java.lang.String PROPERTY_NAME_DAYOFMONTH="DAYOFMONTH";
+	java.lang.String PROPERTY_NAME_HOUROFDAY="HOUROFDAY";
+	java.lang.String PROPERTY_NAME_MINUTEOFHOUR="MINUTEOFHOUR";
+	java.lang.String PROPERTY_NAME_SECONDOFMINUTE="SECONDOFMINUTE";
+	java.lang.String PROPERTY_NAME_MILLISOFSECOND="MILLISOFSECOND";
 	
 	/**/
 	

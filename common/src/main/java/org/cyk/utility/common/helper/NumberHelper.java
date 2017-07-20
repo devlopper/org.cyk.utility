@@ -9,6 +9,7 @@ import java.util.Collection;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.cyk.utility.common.Constant;
 
 @Singleton
@@ -34,6 +35,18 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public Boolean isNumber(String string){
+		return NumberUtils.isNumber(string);
+	}
+	
+	public Number get(String string){
+		if(StringHelper.getInstance().isBlank(string))
+			return null;
+		if(StringUtils.contains(string, Constant.CHARACTER_DOT.toString()))
+			return new BigDecimal(string);
+		return NumberUtils.toLong(string);
 	}
 	
 	public String concatenate(Collection<? extends Number> numbers,Integer elementLenght) {

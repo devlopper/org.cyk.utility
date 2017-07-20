@@ -209,15 +209,35 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					java.lang.Object value = getProperty(ProcessValue.PROPERTY_VALUE);
 					if(value!=null){
 						if(value instanceof java.lang.String){
-							Field field = FieldHelper.getInstance().get(getProperty(PROPERTY_INSTANCE).getClass(), (java.lang.String)getProperty(PROPERTY_FIELD_NAME));
-							//if(field!=null){
-							Class<?> wrapperClass = ClassHelper.getInstance().getWrapper(field.getType());
-							if(!wrapperClass.isAssignableFrom(value.getClass())){
-								if(ClassHelper.getInstance().isNumber(wrapperClass)){
-									value = NumberHelper.getInstance().get(wrapperClass,(java.lang.String)value);
-								}
-							}	
-							//}
+							if( StringHelper.getInstance().isBlank((java.lang.String)value) )
+								value = null;
+							
+							if(value!=null){
+								Field field = FieldHelper.getInstance().get(getProperty(PROPERTY_INSTANCE).getClass(), (java.lang.String)getProperty(PROPERTY_FIELD_NAME));
+								//if(field!=null){
+								Class<?> fieldType = ClassHelper.getInstance().getWrapper(field.getType());
+								if(ClassHelper.getInstance().isString(fieldType)){
+									
+								}else if(ClassHelper.getInstance().isNumber(fieldType)){
+									value = NumberHelper.getInstance().get(fieldType,(java.lang.String)value);
+								}else if(ClassHelper.getInstance().isBoolean(fieldType)){
+									value = new BooleanHelper.Builder.String.Adapter.Default((java.lang.String)value).execute();
+								}else if(ClassHelper.getInstance().isDate(fieldType)){
+									value = new DateHelper.Builder.String.Adapter.Default((java.lang.String)value).execute();
+								}else
+									value = Pool.getInstance().get(fieldType, value);
+								/*
+								if(!fieldType.isAssignableFrom(value.getClass())){
+									if(ClassHelper.getInstance().isNumber(fieldType)){
+										value = NumberHelper.getInstance().get(fieldType,(java.lang.String)value);
+									}else {
+										value = StringUtils.defaultIfBlank((java.lang.String)value, null);
+									}
+								}	
+								*/
+								//}	
+							}
+							
 						}
 					}
 					return value;
@@ -860,7 +880,15 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			for(T instance : collection)
 				if( identifier.equals(InstanceHelper.getInstance().getIdentifier(instance)) )
 					return instance;
-			return null;
+			
+			T instance = null,c;
+			for(Class<?> listenerClass : Listener.CLASSES){
+				Listener listener = (Listener) ClassHelper.getInstance().instanciateOne(listenerClass);
+				c = listener.get(aClass,identifier);
+				if(c!=null)
+					instance = c;
+			}
+			return instance;
 		}
 		
 		public Pool clear(){
@@ -875,12 +903,18 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			Collection<Class<?>> CLASSES = new ArrayList<>();
 			
 			<T> Collection<T> load(Class<T> aClass);
+			<T> T get(Class<T> aClass,Object identifier);
 			
 			public static class Adapter implements Listener , Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				@Override
 				public <T> Collection<T> load(Class<T> aClass) {
+					return null;
+				}
+				
+				@Override
+				public <T> T get(Class<T> aClass, Object identifier) {
 					return null;
 				}
 				

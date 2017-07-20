@@ -39,12 +39,24 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		super.initialisation();
 	}
 	
-	public Boolean isNumber(Class<?> aClass){
-		return Number.class.isAssignableFrom(getWrapper(aClass));
-	}
-	
 	public Class<?> getWrapper(Class<?> aClass){
 		return ClassUtils.primitiveToWrapper(aClass);
+	}
+	
+	public Boolean isNumber(Class<?> aClass){
+		return isInstanceOf(Number.class, getWrapper(aClass));
+	}
+	
+	public Boolean isString(Class<?> aClass){
+		return isEqual(java.lang.String.class, aClass);
+	}
+	
+	public Boolean isDate(Class<?> aClass){
+		return isEqual(java.util.Date.class, aClass);
+	}
+	
+	public Boolean isBoolean(Class<?> aClass){
+		return isEqual(Boolean.class, getWrapper(aClass));
 	}
 	
 	public Class<?> get(Class<?> aClass, String fieldName,Class<?> fieldType) {
@@ -128,6 +140,18 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	@SuppressWarnings("unchecked")
 	public <T> Collection<T> instanciateMany(Class<T> aClass,@SuppressWarnings("rawtypes") Collection classes){
 		return (Collection<T>) instanciateMany(classes);
+	}
+	
+	public Boolean isInstanceOf(Class<?> parentClass,Class<?> childClass){
+		if(parentClass==null || childClass==null)
+			return Boolean.FALSE;
+		return parentClass.isAssignableFrom(childClass);
+	}
+	
+	public Boolean isEqual(Class<?> aClass1,Class<?> aClass2){
+		if(aClass1==null || aClass2==null)
+			return Boolean.FALSE;
+		return aClass1.equals(aClass2);
 	}
 	
 	/**/

@@ -2,9 +2,13 @@ package org.cyk.utility.common;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.Date;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -17,9 +21,6 @@ import org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @SuppressWarnings("unchecked")
 public class InstanceHelperUnitTest extends AbstractUnitTest {
@@ -53,6 +54,12 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void set(){
+		new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(new Object[]{"","","","",""}, A.class)
+			.addParameterArrayElementString("f1","f2","f4","f5","subAEntity").execute();
+		
+		new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(new Object[]{"MyString","1547","true","12/11/2015","18"}, A.class)
+		.addParameterArrayElementString("f1","f2","f4","f5","subAEntity").execute();
+		
 		A a = new A();
 		assertA(a,new Object[]{"f1","name","f2",12},"name", 12);
 		assertA(a,new Object[]{"f2",12,"f1","name"},"name", 12);
@@ -65,6 +72,8 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 						return new ArrayHelper.Dimension.Key("159");
 					}
 				} ).execute(),"From My Source _ 159", 147);
+		
+		
 	}
 	
 	@Test
@@ -162,12 +171,13 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		@Digits(integer=2,fraction=2) private Integer f2;
 		private double f3;
 		private Boolean f4;
+		private Date f5;
 		private SubA subA = new SubA();
 		private SubAEntity subAEntity;
 		
 		@Override
 		public String toString() {
-			return f1+"/"+f2; //ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 		}
 		
 	}
@@ -184,7 +194,7 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		
 		@Override
 		public String toString() {
-			return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 		}
 		
 	}
@@ -199,7 +209,7 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		
 		@Override
 		public String toString() {
-			return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 		}
 		
 	}
@@ -216,7 +226,7 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		
 		@Override
 		public String toString() {
-			return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 		}
 		
 	}
