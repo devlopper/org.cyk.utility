@@ -136,7 +136,8 @@ public class MeasureHelper extends AbstractHelper implements Serializable {
 							do{
 								q = d / unit.getValue();
 								r = d % unit.getValue();
-								strings.add(String.valueOf(q)+Constant.CHARACTER_SPACE+new StringHelper.ToStringMapping.Adapter.Default().setInput(unit.getNameIdentifier()).setProperty(PROPERTY_NAME_PLURAL, q>1).execute());
+								if(q!=0)
+									strings.add(String.valueOf(q)+Constant.CHARACTER_SPACE+new StringHelper.ToStringMapping.Adapter.Default().setInput(unit.getNameIdentifier()).setProperty(PROPERTY_NAME_PLURAL, q>1).execute());
 								if(r==0)
 									break;
 								d = r;
