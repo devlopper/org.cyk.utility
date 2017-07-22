@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.time.DateUtils;
+import org.cyk.utility.common.Action;
 import org.joda.time.DateTime;
 
 @Singleton
@@ -122,4 +123,53 @@ public class DateHelper extends AbstractHelper implements Serializable {
 		
 	}
 	
+	public static interface Stringifier<INPUT> extends org.cyk.utility.common.Builder.Stringifier<INPUT> {
+		
+		public static class Adapter<INPUT> extends org.cyk.utility.common.Builder.Stringifier.Adapter.Default<INPUT> implements DateHelper.Stringifier<INPUT>,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			public Adapter(Class<INPUT> inputClass, INPUT input) {
+				super(inputClass, input);
+			}
+			
+			public static class Default<INPUT> extends DateHelper.Stringifier.Adapter<INPUT> implements Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Default(Class<INPUT> inputClass, INPUT input) {
+					super(inputClass, input);
+				}
+			}
+		}
+		
+		/**/
+		
+		public static interface Duration extends DateHelper.Stringifier<Long> {
+			
+			public static class Adapter extends DateHelper.Stringifier.Adapter.Default<Long> implements Duration,Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Adapter(Long input) {
+					super(Long.class, input);
+				}
+				
+				public static class Default extends Duration.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+
+					public Default(Long input) {
+						super(input);
+					}
+					
+					public Default(Integer input) {
+						this(input.longValue());
+					}
+					
+					@Override
+					protected java.lang.String __execute__() {
+						return new MeasureHelper.Type.Unit.Stringifier.Adapter.Default(getInput()).setProperty(Action.PROPERTY_NAME_MEASURE_TYPE_UNIT
+								, MeasureHelper.Type.Time.HOUR).execute();
+					}
+				}
+			}
+		}
+	}
 }

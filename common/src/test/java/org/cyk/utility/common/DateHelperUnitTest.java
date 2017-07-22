@@ -36,6 +36,11 @@ public class DateHelperUnitTest extends AbstractUnitTest {
 		assertEquals(2015, DateHelper.getInstance().getYear(date));
 	}
 	
+	@Test
+	public void stringfy(){
+		assertEquals("0 seconde", new DateHelper.Stringifier.Duration.Adapter.Default(0).execute());
+	}
+	
 	//@Test
 	public void stringBuilder(){
 		assertEquals("01/01/2000 00:00", new DateStringBuilder().setDate(1,1,2000,0,0,0).build());

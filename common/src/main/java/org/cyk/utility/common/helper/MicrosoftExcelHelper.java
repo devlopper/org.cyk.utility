@@ -96,7 +96,7 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 							super(stream);
 						}
 						
-						public Default(String filePath) {
+						public Default(java.lang.String filePath) {
 							this(FileHelper.getInstance().getInputStream(filePath));
 						}
 						
@@ -137,8 +137,8 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 			
 			public static interface Builder extends org.cyk.utility.common.Builder<Workbook, Sheet> {
 			
-				String getSheetName();
-				Builder setSheetName(String name);
+				java.lang.String getSheetName();
+				Builder setSheetName(java.lang.String name);
 				Builder setSheetName(Class<?> aClass);
 				
 				Integer getSheetIndex();
@@ -152,7 +152,7 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 				public static class Adapter extends org.cyk.utility.common.Builder.Adapter.Default<Workbook, Sheet> implements Builder,Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					protected String sheetName;
+					protected java.lang.String sheetName;
 					protected Integer sheetIndex;
 					protected Matrix matrix;
 					
@@ -171,7 +171,7 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 					}
 					
 					@Override
-					public Builder setSheetName(String sheetName){
+					public Builder setSheetName(java.lang.String sheetName){
 						return null;
 					}
 					
@@ -192,12 +192,12 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 							super(workbook);
 						}
 						
-						public Default(String filePath,Integer sheetIndex) {
+						public Default(java.lang.String filePath,Integer sheetIndex) {
 							this(new MicrosoftExcelHelper.Workbook.Builder.InputStream.Adapter.Default(filePath).execute());
 							setSheetIndex(sheetIndex);
 						}
 						
-						public Default(String filePath,Class<?> aClass) {
+						public Default(java.lang.String filePath,Class<?> aClass) {
 							this(new MicrosoftExcelHelper.Workbook.Builder.InputStream.Adapter.Default(filePath).execute());
 							setSheetName(aClass);
 						}
@@ -216,7 +216,7 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 						}
 						
 						@Override
-						public Builder setSheetName(String sheetName){
+						public Builder setSheetName(java.lang.String sheetName){
 							this.sheetName = sheetName;
 							return this;
 						}
@@ -237,7 +237,7 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 							Sheet sheet = new Sheet();
 							sheet.setWorkbook(getInput());
 							Integer index = getSheetIndex();
-							String name = getSheetName();
+							java.lang.String name = getSheetName();
 							sheet.setModel(StringUtils.isBlank(name) ? getInput().getModel().getSheetAt(index) : getInput().getModel().getSheet(name));
 							
 							if(sheet.getModel()==null){
@@ -287,7 +287,7 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 					                        	_row[j] = Constant.EMPTY_STRING;
 					                        else{
 					                        	CellValue cellValue = formulaEvaluator.evaluate(cell);
-					                        	String stringValue;
+					                        	java.lang.String stringValue;
 					                        	if(cellValue==null)
 					                        		stringValue = Constant.EMPTY_STRING;
 					                        	else switch(cellValue.getCellType()){
@@ -403,21 +403,21 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 					private List<Object[]> ignoreds;
 					private ListenerHelper.Executor.Function.Adapter.Default.Boolean<DimensionSelectable> selectableExecutor;
 					
-					public Dimension createKeyBuilder(Collection<Object> indexes,Collection<String> ignoredKeyValues){
+					public Dimension createKeyBuilder(Collection<Object> indexes,Collection<java.lang.String> ignoredKeyValues){
 						keyBuilder = new ArrayHelper.Dimension.Key.Builder.Adapter.Default();
 						keyBuilder.addParameters(indexes);
 						ignoredKeys = new ArrayList<>();
 						if(ignoredKeys!=null)
-							for(String keyValue : ignoredKeyValues)
+							for(java.lang.String keyValue : ignoredKeyValues)
 								ignoredKeys.add(new ArrayHelper.Dimension.Key(keyValue));
 						return this;
 					}
 					
-					public Dimension createKeyBuilder(Object[] indexes,String[] ignoredKeyValues){
+					public Dimension createKeyBuilder(Object[] indexes,java.lang.String[] ignoredKeyValues){
 						return createKeyBuilder(Arrays.asList(indexes), Arrays.asList(ignoredKeyValues));
 					}
 					
-					public Dimension createKeyBuilder(Object[] indexes,Collection<String> ignoredKeyValues){
+					public Dimension createKeyBuilder(Object[] indexes,Collection<java.lang.String> ignoredKeyValues){
 						return createKeyBuilder(Arrays.asList(indexes), ignoredKeyValues);
 					}
 					
@@ -432,8 +432,8 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 					}
 					
 					@Override
-					public String toString() {
-						Collection<String> collection = new ArrayList<>();
+					public java.lang.String toString() {
+						Collection<java.lang.String> collection = new ArrayList<>();
 						if(fromIndex!=null)
 							collection.add("from:"+fromIndex);
 						if(numberOfIndexes!=null)
@@ -449,8 +449,8 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 					private Dimension row = new Dimension(),column = new Dimension();
 					
 					@Override
-					public String toString() {
-						Collection<String> collection = new ArrayList<>();
+					public java.lang.String toString() {
+						Collection<java.lang.String> collection = new ArrayList<>();
 						if(row!=null)
 							collection.add("row:"+row);
 						if(column!=null)

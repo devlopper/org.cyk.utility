@@ -265,6 +265,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		String UNKNOWN_MARKER_START = "##";
 		String UNKNOWN_MARKER_END = "##";
 		String UNKNOWN_FORMAT = "%s%s%s";
+		String PLURAL_FORMAT = "%s.__plural__";
 		
 		CaseType getCaseType();
 		ToStringMapping setCaseType(CaseType caseType);
@@ -314,6 +315,10 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					setCachable(Boolean.TRUE);
 				}
 				
+				public Default() {
+					this(null);
+				}
+				
 				@Override
 				public ToStringMapping setCaseType(CaseType caseType){
 					this.caseType = caseType;
@@ -335,6 +340,9 @@ public class StringHelper extends AbstractHelper implements Serializable {
 				@Override
 				protected String __execute__() {
 					String identifier = getInput();
+					Boolean plural = (Boolean) getProperty(PROPERTY_NAME_PLURAL);
+					if(Boolean.TRUE.equals(plural))
+						identifier = String.format(PLURAL_FORMAT,identifier);
 					return __execute__(identifier, getCaseType(), getLocale(), getCachable());
 				}
 				
@@ -362,6 +370,9 @@ public class StringHelper extends AbstractHelper implements Serializable {
 												.setParent(ToStringMapping.Adapter.Default.this).execute();
 									}
 								}).setInput(ClassHelper.getInstance().instanciateMany(Datasource.class,Datasource.CLASSES));
+						for(Datasource datasource : datasourcesExecutor.getInput()){
+							datasource.setInput(identifier);
+						}
 					}
 					String value = datasourcesExecutor.execute();
 					
@@ -523,7 +534,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 						private static final long serialVersionUID = 1L;
 						
 						protected String __execute__() {
-							String identifier = getParent().getInput();
+							String identifier = getInput();
 							final Locale locale = commonUtils.getValueIfNotNullElseDefault(getParent().getLocale(), Locale.FRENCH);
 							final CaseType caseType = commonUtils.getValueIfNotNullElseDefault(getParent().getCaseType(), CaseType.DEFAULT);
 							final Boolean cachable = commonUtils.getValueIfNotNullElseDefault(getParent().getCachable(), Boolean.TRUE);

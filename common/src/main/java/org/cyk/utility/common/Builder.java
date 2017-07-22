@@ -76,4 +76,32 @@ public interface Builder<INPUT,OUTPUT> extends Action<INPUT, OUTPUT> {
 		}
 		
 	}
+
+	/**/
+	
+	public interface Stringifier<INPUT> extends Builder<INPUT,String> {
+
+		public static class Adapter<INPUT> extends Builder.Adapter.Default<INPUT, String> implements Stringifier<INPUT>,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			public Adapter(Class<INPUT> inputClass, INPUT input) {
+				super(inputClass, input, String.class);
+				setName("stringify");
+			}
+			
+			/**/
+			
+			public static class Default<INPUT> extends Stringifier.Adapter<INPUT> implements Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Default(Class<INPUT> inputClass, INPUT input) {
+					super(inputClass, input);
+				}
+				
+			}
+			
+		}
+		
+	}
+
 }
