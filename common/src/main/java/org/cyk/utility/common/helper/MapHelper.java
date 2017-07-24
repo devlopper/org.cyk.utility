@@ -4,8 +4,14 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.inject.Singleton;
+
+import lombok.Getter;
+
+import org.cyk.utility.common.Action;
+import org.cyk.utility.common.helper.MapHelper.ContainsKey.String;
 
 @Singleton
 public class MapHelper extends AbstractHelper implements Serializable  {
@@ -53,4 +59,87 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 			return null;
 		return map.get(key);
 	}
+	
+	/**/
+	
+	public static interface ContainsKey<KEY> extends Action<KEY, Boolean> {
+		
+		public static class Adapter<KEY> extends Action.Adapter.Default<KEY, Boolean> implements ContainsKey<KEY>,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			public Adapter(Class<KEY> inputClass, KEY input) {
+				super("contains key", inputClass, input, Boolean.class);
+			}
+			
+			public static class Default<KEY> extends ContainsKey.Adapter<KEY> implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public Default(Class<KEY> inputClass, KEY input) {
+					super(inputClass, input);
+				}
+				
+				@Override
+				protected Boolean __execute__() {
+					@SuppressWarnings("unchecked")
+					Map<KEY,?> map = (Map<KEY, ?>) getProperty(PROPERTY_NAME_MAP);
+					if(contains(map,getInput())){
+						
+					}
+					map.containsKey(getInput());
+					return super.__execute__();
+				}
+				
+				protected Boolean contains(Map<KEY,?> map,KEY key){
+					return map.containsKey(key);
+				}
+				
+				protected void found(Map<KEY,?> map,Entry<KEY, ?> entry){
+					setProperty(PROPERTY_NAME_KEY, entry.getKey());
+				}
+			}
+			
+		}
+		
+		/**/
+		
+		public static interface String extends ContainsKey<java.lang.String> {
+			
+			public static class Adapter extends ContainsKey.Adapter.Default<java.lang.String> implements String,Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Adapter(java.lang.String input) {
+					super(java.lang.String.class, input);
+				}
+				
+				public static class Default extends String.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					public Default(java.lang.String input) {
+						super(input);
+					}
+					
+					@Override
+					protected Boolean __execute__() {
+						@SuppressWarnings("unchecked")
+						Map<java.lang.String,Object> map = (Map<java.lang.String, Object>) getProperty(PROPERTY_NAME_MAP);
+						Boolean caseSensitive = (Boolean) getProperty(PROPERTY_NAME_CASE_SENSITIVE);
+						if(caseSensitive==null || Boolean.TRUE.equals(caseSensitive))
+							return map.containsKey(getInput());
+						else for(Entry<java.lang.String, Object> entry : map.entrySet()){
+							if(entry.getKey().equalsIgnoreCase(getInput())){
+								found(map, entry);
+								return Boolean.TRUE;
+							}
+						}
+						return Boolean.FALSE;
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+	}
+
 }

@@ -98,6 +98,9 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_MILLISOFSECOND="MILLISOFSECOND";
 	java.lang.String PROPERTY_NAME_MEASURE_TYPE_UNIT="MEASURETYPEUNIT";
 	java.lang.String PROPERTY_NAME_PLURAL="PLURAL";
+	java.lang.String PROPERTY_NAME_MAP="MAP";
+	java.lang.String PROPERTY_NAME_CASE_SENSITIVE="CASE_SENSITIVE";
+	java.lang.String PROPERTY_NAME_KEY="KEY";
 	
 	/**/
 	
