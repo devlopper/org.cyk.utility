@@ -107,18 +107,24 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return concatenate(strings.toArray(), separator);
 	}
 	
-	public Boolean isAtLocation(String string,String value,Location location){
+	public Boolean isAtLocation(String string,String value,Location location,Boolean caseSensitive){
 		if(StringUtils.isEmpty(value))
 			return Boolean.TRUE;
 		if(location==null)
 			location = Location.EXAT;
+		if(caseSensitive==null)
+			caseSensitive = Boolean.TRUE;
 		switch(location){
-		case START : return StringUtils.startsWith(string, value);
-		case INSIDE : return StringUtils.contains(string, value);
-		case END : return StringUtils.endsWith(string, value);
-		case EXAT : return StringUtils.equals(string, value);
+		case START : return Boolean.TRUE.equals(caseSensitive) ? StringUtils.startsWith(string, value) : StringUtils.startsWithIgnoreCase(string, value);
+		case INSIDE : return Boolean.TRUE.equals(caseSensitive) ? StringUtils.contains(string, value) : StringUtils.containsIgnoreCase(string, value);
+		case END : return Boolean.TRUE.equals(caseSensitive) ? StringUtils.endsWith(string, value) : StringUtils.endsWithIgnoreCase(string, value);
+		case EXAT : return Boolean.TRUE.equals(caseSensitive) ? StringUtils.equals(string, value) : StringUtils.equalsIgnoreCase(string, value);
 		}
 		return Boolean.FALSE;
+	}
+	
+	public Boolean isAtLocation(String string,String value,Location location){
+		return isAtLocation(string, value, location, Boolean.TRUE);
 	}
 	
 	public Collection<String> removeBlank(Collection<String> collection){
@@ -165,6 +171,12 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		for(Object[] index : array)
 			collection.add(get(index, secondDimensionElementSeparator.toString()));
 		return StringUtils.join(collection,firstDimensionElementSeparator.toString());
+	}
+	
+	public String appendIfDoesNotEndWith(String string,String end){
+		if(!isAtLocation(string, end, Location.END, Boolean.FALSE))
+			return string+end;
+		return string;
 	}
 	
 	/**/

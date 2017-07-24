@@ -2,7 +2,6 @@ package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.inject.Singleton;
 
@@ -24,22 +23,33 @@ public class SystemHelper extends AbstractHelper implements Serializable {
 		super.initialisation();
 	}
 	
-	public String getProperty(String key){
-		Properties properties = System.getProperties();
-		if(properties.containsKey(key))
-			return System.getProperty(key);
-		logWarning("system property <<{}>> not defined", key);
-		return null;
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public String getProperty(String key,String nullValue){
+		return new MapHelper.GetValue.String.Adapter.Default<java.lang.String>((Map)System.getProperties(),java.lang.String.class)
+				.setProperty(MapHelper.GetValue.PROPERTY_NAME_KEY, key)
+				.setProperty(MapHelper.GetValue.PROPERTY_NAME_NULL_VALUE, nullValue)
+				.execute();
 	}
 	
+	public String getProperty(String key){
+		return getProperty(key, (String)null);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public <VALUE> VALUE getPropertyAs(Class<VALUE> valueClass,String key,String nullValue){
+		return (VALUE) MapHelper.getInstance().getStringValueAs(valueClass, (Map)System.getProperties(), key, nullValue); 
+	}
+	
+	public <VALUE> VALUE getPropertyAs(Class<VALUE> valueClass,String key){
+		return getPropertyAs(valueClass, key, null);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String getEnvironmentVariable(String key){
-		Map<String, String> map = System.getenv();
-		MapHelper.ContainsKey.String containsKey = new MapHelper.ContainsKey.String.Adapter.Default(key);
-		containsKey.setProperty(MapHelper.ContainsKey.PROPERTY_NAME_MAP, map).setProperty(MapHelper.ContainsKey.PROPERTY_NAME_CASE_SENSITIVE, Boolean.FALSE);
-		if(containsKey.execute())
-			return map.get(containsKey.getProperty(MapHelper.ContainsKey.PROPERTY_NAME_KEY));
-		logWarning("system environment variable <<{}>> not defined", key);
-		return null;
+		return new MapHelper.GetValue.String.Adapter.Default<java.lang.String>((Map)System.getenv(),java.lang.String.class)
+				.setProperty(MapHelper.GetValue.PROPERTY_NAME_KEY, key)
+				.setProperty(MapHelper.ContainsKey.PROPERTY_NAME_CASE_SENSITIVE, Boolean.FALSE)
+				.execute();
 	}
 	
 }

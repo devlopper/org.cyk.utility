@@ -101,6 +101,8 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_MAP="MAP";
 	java.lang.String PROPERTY_NAME_CASE_SENSITIVE="CASE_SENSITIVE";
 	java.lang.String PROPERTY_NAME_KEY="KEY";
+	java.lang.String PROPERTY_NAME_VALUE="VALUE";
+	java.lang.String PROPERTY_NAME_NULL_VALUE="NULL_VALUE";
 	
 	/**/
 	
@@ -249,7 +251,8 @@ public interface Action<INPUT,OUTPUT> {
 		
 		@Override
 		public Action<INPUT, OUTPUT> setProperty(String name, Object value) {
-			getProperties().put(name, value);
+			if(name!=null && value!=null)
+				getProperties().put(name, value);
 			return this;
 		}
 		
