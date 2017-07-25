@@ -202,6 +202,11 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 							setSheetName(aClass);
 						}
 						
+						public Default(java.io.InputStream fileInputStream,Class<?> aClass) {
+							this(new MicrosoftExcelHelper.Workbook.Builder.InputStream.Adapter.Default(fileInputStream).execute());
+							setSheetName(aClass);
+						}
+						
 						@Override
 						public Builder setMatrix(Matrix matrix) {
 							this.matrix = matrix;
