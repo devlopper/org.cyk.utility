@@ -16,6 +16,7 @@ import org.cyk.utility.common.builder.DateStringBuilder;
 import org.cyk.utility.common.formatter.DateFormatter;
 import org.cyk.utility.common.generator.AbstractGeneratable;
 import org.cyk.utility.common.helper.DateHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -28,6 +29,10 @@ public class DateHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
+	static {
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();
+	}
+	
 	@Test
 	public void build(){
 		Date date = new DateHelper.Builder.String.Adapter.Default("19/11/2015").execute();
@@ -38,7 +43,8 @@ public class DateHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void stringfy(){
-		assertEquals("0 seconde", new DateHelper.Stringifier.Duration.Adapter.Default(0).execute());
+		assertNull(new DateHelper.Stringifier.Duration.Adapter.Default(0).execute());
+		assertEquals("1 seconde", new DateHelper.Stringifier.Duration.Adapter.Default(1000).execute());
 	}
 	
 	//@Test

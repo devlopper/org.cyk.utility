@@ -110,7 +110,7 @@ public class CommonUtilsUnitTest extends AbstractUnitTest {
 
 	//@Test
 	public void cdiLookup(){
-		System.out.println("CommonUtilsUT.cdiLookup() : "+CDI.current().select(Master.class).get());
+		//System.out.println("CommonUtilsUT.cdiLookup() : "+CDI.current().select(Master.class).get());
 		assertThat("Master injected", CDI.current().select(Master.class).get()!=null);
 	}
 	
@@ -221,7 +221,7 @@ public class CommonUtilsUnitTest extends AbstractUnitTest {
 		String t1 = StringUtils.repeat(m, 10);
 		assertEquals(10 * m.length(), t1.length());
 		byte[] bytes = CommonUtils.getInstance().compress(t1);
-		System.out.println(t1.length()+" : "+bytes.length);
+		//System.out.println(t1.length()+" : "+bytes.length);
 		String nt1 = Base64.encodeBase64String(bytes);
 		assertThat("less", nt1.length() < t1.length());
 		nt1 = CommonUtils.getInstance().decompress(Base64.decodeBase64(nt1));
@@ -234,7 +234,7 @@ public class CommonUtilsUnitTest extends AbstractUnitTest {
 		String t1 = StringUtils.repeat(m, 10);
 		assertEquals(10 * m.length(), t1.length());
 		String nt1 = CommonUtils.getInstance().compressString(t1);
-		System.out.println(t1.length()+" : "+nt1.length());
+		//System.out.println(t1.length()+" : "+nt1.length());
 		assertThat("less", nt1.length() < t1.length());
 		nt1 = CommonUtils.getInstance().decompressString(nt1);
 		assertEquals(t1, nt1);
@@ -253,7 +253,7 @@ public class CommonUtilsUnitTest extends AbstractUnitTest {
 			c1.getAttributeC2().setAttributeA1("v"+i);
 			cs.add(c1);
 		}
-		System.out.println(CommonUtils.getInstance().getPropertyValue(cs, String.class, "attributeC2.attributeA1"));
+		//System.out.println(CommonUtils.getInstance().getPropertyValue(cs, String.class, "attributeC2.attributeA1"));
 	}
 	
 	@Test

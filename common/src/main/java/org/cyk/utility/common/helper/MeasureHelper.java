@@ -131,19 +131,20 @@ public class MeasureHelper extends AbstractHelper implements Serializable {
 						@Override
 						protected String __execute__() {
 							Collection<String> strings = new ArrayList<>();
+							Boolean skipZero = InstanceHelper.getInstance().getIfNotNullElseDefault((Boolean) getProperty(PROPERTY_NAME_SKIP_ZERO),Boolean.TRUE);
 							Unit unit = (Unit) getProperty(PROPERTY_NAME_MEASURE_TYPE_UNIT);
 							Long d = getInput(),q,r;
 							do{
 								q = d / unit.getValue();
 								r = d % unit.getValue();
-								if(q!=0)
+								if(q!=0 || Boolean.FALSE.equals(skipZero))
 									strings.add(String.valueOf(q)+Constant.CHARACTER_SPACE+new StringHelper.ToStringMapping.Adapter.Default().setInput(unit.getNameIdentifier()).setProperty(PROPERTY_NAME_PLURAL, q>1).execute());
 								if(r==0)
 									break;
 								d = r;
 								unit = unit.getType().getNextUnit(unit);
 							}while(unit!=null);
-							return CollectionHelper.getInstance().concatenate(strings, Constant.CHARACTER_COMA.toString());
+							return CollectionHelper.getInstance().isEmpty(strings) ? null : CollectionHelper.getInstance().concatenate(strings, Constant.CHARACTER_COMA.toString());
 						}
 						
 					}

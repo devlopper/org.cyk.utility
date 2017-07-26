@@ -15,8 +15,10 @@ public class MeasureHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void stringfy(){
-		assertEquals("0 seconde", new MeasureHelper.Type.Unit.Stringifier.Adapter.Default(0).setProperty(Action.PROPERTY_NAME_MEASURE_TYPE_UNIT
+		assertNull(new MeasureHelper.Type.Unit.Stringifier.Adapter.Default(0).setProperty(Action.PROPERTY_NAME_MEASURE_TYPE_UNIT
 				, MeasureHelper.Type.Time.SECOND).execute());
+		assertEquals("0 seconde", new MeasureHelper.Type.Unit.Stringifier.Adapter.Default(0).setProperty(Action.PROPERTY_NAME_MEASURE_TYPE_UNIT
+				, MeasureHelper.Type.Time.SECOND).setProperty(Action.PROPERTY_NAME_SKIP_ZERO, Boolean.FALSE).execute());
 		assertEquals("1 seconde", new MeasureHelper.Type.Unit.Stringifier.Adapter.Default(1000).setProperty(Action.PROPERTY_NAME_MEASURE_TYPE_UNIT
 				, MeasureHelper.Type.Time.SECOND).execute());
 		assertEquals("2 secondes", new MeasureHelper.Type.Unit.Stringifier.Adapter.Default(2000).setProperty(Action.PROPERTY_NAME_MEASURE_TYPE_UNIT

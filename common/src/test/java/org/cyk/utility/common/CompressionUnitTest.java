@@ -50,12 +50,14 @@ public class CompressionUnitTest extends AbstractUnitTest {
 		BigInteger bigInteger = new BigInteger(StringUtils.join(sequences,Constant.EMPTY_STRING));
 		String requestParameterDecimalValue = new String(StringUtils.join(sequences,Constant.CHARACTER_COMA.toString()));
 	
+		/*
 		System.out.println("Decimal value                              : "+bigInteger);
 		System.out.println("Request parameter decimal value            : "+requestParameterDecimalValue);
 		System.out.println("Request parameter decimal value lenght     : "+requestParameterDecimalValue.length());
 		String requestParameterHexadecimalValue = bigInteger.toString(10 + 26);
 		System.out.println("Hexadecimal value                          : "+requestParameterHexadecimalValue);
 		System.out.println("Hexadecimal value lenght                   : "+requestParameterHexadecimalValue.length());
+		*/
 
 	}
 	

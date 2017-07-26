@@ -31,7 +31,7 @@ public class CdiAnnotationUnitTest extends AbstractUnitTest {
 	public static class LogAnnotation {
 		
 		public void f1(){
-			System.out.println("CdiAnnotationUT.LogAnnotation.f1()");
+			//System.out.println("CdiAnnotationUT.LogAnnotation.f1()");
 		}
 		
 	}
