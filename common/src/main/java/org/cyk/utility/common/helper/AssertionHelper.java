@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 
 @Singleton
 public class AssertionHelper extends AbstractHelper implements Serializable {
@@ -26,69 +27,84 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 	
 	/**/
 	
-	public static interface Assertion<OUTPUT> extends org.cyk.utility.common.Builder.NullableInput<OUTPUT>  {
+	public static interface Assertion<INPUT> extends org.cyk.utility.common.Action<INPUT,java.lang.Object>  {
 		
-		public static class Adapter<OUTPUT> extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<OUTPUT> implements Assertion<OUTPUT> , Serializable {
+		public static class Adapter<INPUT> extends org.cyk.utility.common.Action.Adapter.Default<INPUT,java.lang.Object> implements Assertion<INPUT> , Serializable {
 			private static final long serialVersionUID = 1L;
 
-			public Adapter(Class<OUTPUT> outputClass) {
-				super(outputClass);
+			public Adapter(Class<INPUT> inputClass,INPUT input) {
+				super("assert",inputClass,input,java.lang.Object.class);
 			}
 			
 			/**/
 			
-			public static class Default<OUTPUT> extends Assertion.Adapter<OUTPUT> implements Serializable {
+			public static class Default<INPUT> extends Assertion.Adapter<INPUT> implements Serializable {
 				private static final long serialVersionUID = 1L;
 
-				public Default(Class<OUTPUT> outputClass) {
-					super(outputClass);
+				public Default(Class<INPUT> inputClass,INPUT input,INPUT expected,String message) {
+					super(inputClass,input);
+					setProperty(PROPERTY_NAME_EXPECTED, expected);
+					setProperty(PROPERTY_NAME_MESSAGE, message);
+					setIsInputRequired(Boolean.FALSE);
 				}
+				
+				public Default(Class<INPUT> inputClass,INPUT input,INPUT expected) {
+					this(inputClass,input,expected,null);
+				}
+				
+				@Override
+				protected java.lang.Object __execute__() {
+					INPUT input = getInput();
+					@SuppressWarnings("unchecked")
+					INPUT expected = (INPUT) getProperty(PROPERTY_NAME_EXPECTED);
+					String message = (String) getProperty(PROPERTY_NAME_MESSAGE);
+					__assert__(message,expected, input);
+					return input;
+				}
+				
+				protected void __assert__(String message,INPUT expected,INPUT actual){
+					//Assert.assertEquals(message, expected, actual);
+					ThrowableHelper.getInstance().throwNotYetImplemented();
+				}
+				
 			}
 		}
 		
 		/**/
 		
-		public static interface Boolean extends Assertion<java.lang.Boolean>  {
+		public static interface Equals<INPUT> extends Assertion<INPUT>  {
 			
-			public static class Adapter extends Assertion.Adapter.Default<java.lang.Boolean> implements Boolean , Serializable {
+			public static class Adapter<INPUT> extends Assertion.Adapter.Default<INPUT> implements Equals<INPUT> , Serializable {
 				private static final long serialVersionUID = 1L;
 
-				public Adapter() {
-					super(java.lang.Boolean.class);
+				public Adapter(Class<INPUT> inputClass,INPUT input,INPUT expected,String message) {
+					super(inputClass,input,expected,message);
+				}
+				
+				public Adapter(Class<INPUT> inputClass,INPUT input,INPUT expected) {
+					super(inputClass,input,expected);
 				}
 				
 				/**/
 				
-				public static class Default extends Boolean.Adapter implements Serializable {
+				public static class Default<INPUT> extends Equals.Adapter<INPUT> implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					@Override
-					protected java.lang.Boolean __execute__() {
-						return super.__execute__();
+					public Default(Class<INPUT> inputClass,INPUT input,INPUT expected,String message) {
+						super(inputClass,input,expected,message);
 					}
 					
+					public Default(Class<INPUT> inputClass,INPUT input,INPUT expected) {
+						super(inputClass,input,expected);
+					}
+					
+					@Override
+					protected void __assert__(java.lang.String message, INPUT expected, INPUT actual) {
+						Assert.assertEquals(message, expected, actual);
+					}
 				}
 			}
 		}
-		
-		public static interface Void extends Assertion<java.lang.Void>  {
-			
-			public static class Adapter extends Assertion.Adapter.Default<java.lang.Void> implements Void , Serializable {
-				private static final long serialVersionUID = 1L;
-
-				public Adapter() {
-					super(java.lang.Void.class);
-				}
-				
-				/**/
-				
-				public static class Default extends Boolean.Adapter implements Serializable {
-					private static final long serialVersionUID = 1L;
-
-				}
-			}
-		}
-		
 	}
 	
 	public static  interface Builder<INPUT> extends org.cyk.utility.common.Builder<INPUT, java.lang.Boolean> {

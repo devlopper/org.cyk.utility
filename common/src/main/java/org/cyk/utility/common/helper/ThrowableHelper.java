@@ -76,6 +76,10 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 		throw_(builder.execute(),causeClass);
 	}
 	
+	public void throwNotYetImplemented(){
+		throw new RuntimeException("not yet implemented.");
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)

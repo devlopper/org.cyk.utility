@@ -104,6 +104,9 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_VALUE="VALUE";
 	java.lang.String PROPERTY_NAME_NULL_VALUE="NULL_VALUE";
 	java.lang.String PROPERTY_NAME_SKIP_ZERO="SKIP_ZERO";
+	java.lang.String PROPERTY_NAME_RUNNABLE="RUNNABLE";
+	java.lang.String PROPERTY_NAME_EXPECTED="EXPECTED";
+	java.lang.String PROPERTY_NAME_MESSAGE="MESSAGE";
 	
 	/**/
 	
