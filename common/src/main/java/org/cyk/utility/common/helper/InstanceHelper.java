@@ -223,7 +223,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 								}else if(ClassHelper.getInstance().isBoolean(fieldType)){
 									value = new BooleanHelper.Builder.String.Adapter.Default((java.lang.String)value).execute();
 								}else if(ClassHelper.getInstance().isDate(fieldType)){
-									value = new DateHelper.Builder.String.Adapter.Default((java.lang.String)value).execute();
+									value = new TimeHelper.Builder.String.Adapter.Default((java.lang.String)value).execute();
 								}else
 									value = Pool.getInstance().get(fieldType, value);
 								/*

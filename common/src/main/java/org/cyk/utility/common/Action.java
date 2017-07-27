@@ -107,6 +107,8 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_RUNNABLE="RUNNABLE";
 	java.lang.String PROPERTY_NAME_EXPECTED="EXPECTED";
 	java.lang.String PROPERTY_NAME_MESSAGE="MESSAGE";
+	java.lang.String PROPERTY_NAME_TIME_PART="TIME_PART";
+	java.lang.String PROPERTY_NAME_TIME_LENGTH="TIME_LENGTH";
 	
 	/**/
 	
