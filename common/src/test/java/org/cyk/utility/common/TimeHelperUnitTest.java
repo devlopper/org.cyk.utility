@@ -95,6 +95,28 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void stringfyUnit(){
+		new AssertionHelper.Assertion.Equals.Adapter.Default<String>(String.class,new TimeHelper.Stringifier.Unit.Adapter.Default()
+			.execute(),null).execute();
+		new AssertionHelper.Assertion.Equals.Adapter.Default<String>(String.class,new TimeHelper.Stringifier.Unit.Adapter.Default()
+		.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_YEAR, 2015).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_MONTHOFYEAR, 7)
+		.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_DAYOFMONTH, 15).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_HOUROFDAY, 13)
+		.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_MINUTEOFHOUR, 31).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_SECONDOFMINUTE, 57)
+		.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_MILLISOFSECOND, 518)
+		.execute(),"15/07/2015 13:31").execute();
+		
+		new AssertionHelper.Assertion.Equals.Adapter.Default<String>(String.class,new TimeHelper.Stringifier.Unit.Adapter.Default()
+		.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_YEAR, 2015).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_MONTHOFYEAR, 7)
+		.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_DAYOFMONTH, 15)
+		.execute(),"15/07/2015").execute();
+		
+		new AssertionHelper.Assertion.Equals.Adapter.Default<String>(String.class,new TimeHelper.Stringifier.Unit.Adapter.Default()
+		.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_HOUROFDAY, 13).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_MINUTEOFHOUR, 31)
+		.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_SECONDOFMINUTE, 57).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_MILLISOFSECOND, 518)
+		.execute(),"13:31").execute();
+	}
+	
+	@Test
 	public void collection(){
 		TimeHelper.Collection collection = new TimeHelper.Collection();
 		new AssertionHelper.Assertion.Equals.Adapter.Default<Long>(Long.class,collection.getDuration(),0l).execute();

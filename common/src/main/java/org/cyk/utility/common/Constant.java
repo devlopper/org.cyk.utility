@@ -99,6 +99,9 @@ public interface Constant {
 	
 	java.lang.Void VOID = null;
 	
+	java.lang.String DAY_MONTH_YEAR_PATTERN_FORMAT = "%s/%s/%s";
+	java.lang.String HOUR_MINUTE_PATTERN_FORMAT = "%s:%s";
+	
 	/**/
 	
 	@Getter
@@ -110,8 +113,8 @@ public interface Constant {
 		
 		private static Map<Locale, Collection<Pattern>> PATTERN_MAP = new HashMap<>();
 		static{
-			putPatterns(Locale.FRENCH, "dd/MM/yyyy","EEEE , dd MMMM yyyy", "HH:mm","yyyy");
-			putPatterns(Locale.ENGLISH, "dd/MM/yyyy","EEEE , dd MMMM yyyy", "HH:mm","yyyy");
+			putPatterns(Locale.FRENCH, String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy"),"EEEE , dd MMMM yyyy", String.format(HOUR_MINUTE_PATTERN_FORMAT, "HH","mm"),"yyyy");
+			putPatterns(Locale.ENGLISH, String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy"),"EEEE , dd MMMM yyyy", String.format(HOUR_MINUTE_PATTERN_FORMAT, "HH","mm"),"yyyy");
 		}
 		
 		public static Pattern getPattern(Locale locale,Part part,Length length){

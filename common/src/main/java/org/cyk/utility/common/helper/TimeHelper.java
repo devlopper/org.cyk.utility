@@ -283,6 +283,63 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 				}
 			}
 		}
+	
+		public static interface Unit extends TimeHelper.Stringifier<java.lang.Object> {
+			
+			public static class Adapter extends TimeHelper.Stringifier.Adapter.Default<java.lang.Object> implements Unit,Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Adapter(java.lang.Object input) {
+					super(java.lang.Object.class, input);
+				}
+				
+				public static class Default extends Date.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+
+					public Default() {
+						super(null);
+						setIsInputRequired(Boolean.FALSE);
+					}
+					
+					@Override
+					protected java.lang.String __execute__() {
+						java.util.Collection<String> strings = new ArrayList<>();
+						Integer year = (Integer) getProperty(PROPERTY_NAME_YEAR);
+						Integer monthOfYear = (Integer) getProperty(PROPERTY_NAME_MONTHOFYEAR);
+						Integer dayOfMonth = (Integer) getProperty(PROPERTY_NAME_DAYOFMONTH);
+						Integer hourOfDay = (Integer) getProperty(PROPERTY_NAME_HOUROFDAY);
+						Integer minuteOfHour = (Integer) getProperty(PROPERTY_NAME_MINUTEOFHOUR);
+						/*
+						Integer secondOfMinute = (Integer) getProperty(PROPERTY_NAME_SECONDOFMINUTE);
+						Integer millisecondOfMinute = (Integer) getProperty(PROPERTY_NAME_MILLISOFSECOND);
+						*/
+						if(dayOfMonth!=null && monthOfYear!=null && year!=null && hourOfDay!=null && minuteOfHour!=null /*&& secondOfMinute!=null && millisecondOfMinute!=null*/){
+							strings.add(new TimeHelper.Stringifier.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default().setProperties(getProperties()).execute()).execute());
+						}else{
+							if(dayOfMonth!=null && monthOfYear!=null && year!=null){
+								strings.add(new TimeHelper.Stringifier.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default().setProperties(getProperties()).execute())
+									.setProperty(PROPERTY_NAME_TIME_PART, Constant.Date.Part.DATE_ONLY).execute());
+							}else{
+								strings.add(String.format(Constant.DAY_MONTH_YEAR_PATTERN_FORMAT, 
+									dayOfMonth == null ? new StringHelper.ToStringMapping.Adapter.Default("day.all").execute() : String.valueOf(dayOfMonth)
+									,monthOfYear == null ? new StringHelper.ToStringMapping.Adapter.Default("month.all").execute() : String.valueOf(monthOfYear)
+									,year == null ? new StringHelper.ToStringMapping.Adapter.Default("year.all").execute() : String.valueOf(year)));
+							}
+							
+							if(hourOfDay!=null && minuteOfHour!=null/* && secondOfMinute!=null && millisecondOfMinute!=null*/){
+								strings.add(new TimeHelper.Stringifier.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default().setProperties(getProperties()).execute())
+									.setProperty(PROPERTY_NAME_TIME_PART, Constant.Date.Part.TIME_ONLY).execute());
+							}else{
+								strings.add(String.format(Constant.HOUR_MINUTE_PATTERN_FORMAT, 
+										hourOfDay == null ? new StringHelper.ToStringMapping.Adapter.Default("hour.all").execute() : String.valueOf(hourOfDay)
+										,minuteOfHour == null ? new StringHelper.ToStringMapping.Adapter.Default("minute.all").execute() : String.valueOf(minuteOfHour)));
+							}
+						}
+						return CollectionHelper.getInstance().isBlank(strings) ? null : CollectionHelper.getInstance().concatenate(strings, Constant.EMPTY_STRING);
+					}
+				}
+			}
+		}
 	}
 	
 	@Getter @Setter
