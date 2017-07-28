@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.CommonUtils;
@@ -30,6 +31,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	private static final long serialVersionUID = 2366347884051000495L;
 
 	public static final String[] END_LINE = {"\r\n","\n"};
+	public static final Character[] VOYELS = {'a','e','i','o','u','y'};
 	
 	public enum CaseType{
 		NONE,FURL,FU,L,U
@@ -55,6 +57,10 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public Boolean isVoyel(Character character){
+		return ArrayUtils.contains(VOYELS, Character.toLowerCase(character));
 	}
 	
 	public String applyCaseType(String string,CaseType caseType){
@@ -179,6 +185,24 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return string;
 	}
 	
+	public String getWordArticle(Boolean masculine,Boolean any,Boolean plural){
+		String identifier = String.format(ToStringMapping.WORD_ARTICLE_IDENTIFIER_FORMAT, Boolean.TRUE.equals(masculine)?"mascul":"femin"
+			,Boolean.TRUE.equals(any) ? "any" : "specific" );
+		identifier = Boolean.TRUE.equals(plural) ? String.format(ToStringMapping.PLURAL_FORMAT, identifier) : identifier;
+		return new ToStringMapping.Adapter.Default(identifier).execute();
+	}
+	
+	public String getWordArticleAll(Boolean masculine,Boolean plural){
+		String identifier = String.format(ToStringMapping.WORD_ARTICLE_ALL_IDENTIFIER_FORMAT, Boolean.TRUE.equals(masculine)?"mascul":"femin" );
+		identifier = Boolean.TRUE.equals(plural) ? String.format(ToStringMapping.PLURAL_FORMAT, identifier) : identifier;
+		return new ToStringMapping.Adapter.Default(identifier).execute();
+	}
+	
+	public Boolean isMasculine(String identifier){
+		String value = new StringHelper.ToStringMapping.Adapter.Default(String.format(ToStringMapping.GENDER_FORMAT,identifier)).execute();
+		return new BooleanHelper.Builder.String.Adapter.Default(value).execute();
+	}
+	
 	/**/
 	
 	//TODO listener has to be added
@@ -278,6 +302,9 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		String UNKNOWN_MARKER_END = "##";
 		String UNKNOWN_FORMAT = "%s%s%s";
 		String PLURAL_FORMAT = "%s.__plural__";
+		String GENDER_FORMAT = "%s.__gender__";
+		String WORD_ARTICLE_IDENTIFIER_FORMAT = "word.article.__%sine__.__%s__";
+		String WORD_ARTICLE_ALL_IDENTIFIER_FORMAT = "word.article.all.__%sine__";
 		
 		CaseType getCaseType();
 		ToStringMapping setCaseType(CaseType caseType);
@@ -287,6 +314,18 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		
 		ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> getDatasourcesExecutor();
 		ToStringMapping setDatasourcesExecutor(ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor);
+		
+		Boolean getPlural();
+		ToStringMapping setPlural(Boolean value);
+		
+		Boolean getGender();
+		ToStringMapping setGender(Boolean value);
+		
+		Boolean getGenderAny();
+		ToStringMapping setGenderAny(Boolean value);
+		
+		Boolean getWordArticleAll();
+		ToStringMapping setWordArticleAll(Boolean value);
 		
 		@Getter @Setter
 		public static class Adapter extends org.cyk.utility.common.Mapping.Adapter.Default<String,String> implements ToStringMapping,Serializable {
@@ -313,6 +352,46 @@ public class StringHelper extends AbstractHelper implements Serializable {
 			
 			@Override
 			public ToStringMapping setDatasourcesExecutor(ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor){
+				return null;
+			}
+			
+			@Override
+			public Boolean getPlural() {
+				return null;
+			}
+			
+			@Override
+			public ToStringMapping setPlural(Boolean value) {
+				return null;
+			}
+			
+			@Override
+			public Boolean getGender() {
+				return null;
+			}
+			
+			@Override
+			public ToStringMapping setGender(Boolean value) {
+				return null;
+			}
+			
+			@Override
+			public Boolean getGenderAny() {
+				return null;
+			}
+			
+			@Override
+			public ToStringMapping setGenderAny(Boolean value) {
+				return null;
+			}
+			
+			@Override
+			public Boolean getWordArticleAll() {
+				return null;
+			}
+			
+			@Override
+			public ToStringMapping setWordArticleAll(Boolean value) {
 				return null;
 			}
 			
@@ -350,12 +429,79 @@ public class StringHelper extends AbstractHelper implements Serializable {
 				}
 				
 				@Override
+				public Boolean getPlural() {
+					return (Boolean) getProperty(PROPERTY_NAME_PLURAL);
+				}
+				
+				@Override
+				public ToStringMapping setPlural(Boolean value) {
+					setProperty(PROPERTY_NAME_PLURAL, value);
+					return this;
+				}
+				
+				@Override
+				public Boolean getGender() {
+					return (Boolean) getProperty(PROPERTY_NAME_GENDER);
+				}
+				
+				@Override
+				public ToStringMapping setGender(Boolean value) {
+					setProperty(PROPERTY_NAME_GENDER, value);
+					return this;
+				}
+				
+				@Override
+				public Boolean getGenderAny() {
+					return (Boolean) getProperty(PROPERTY_NAME_GENDER_ANY);
+				}
+				
+				@Override
+				public ToStringMapping setGenderAny(Boolean value) {
+					setProperty(PROPERTY_NAME_GENDER_ANY, value);
+					return this;
+				}
+				
+				@Override
+				public Boolean getWordArticleAll() {
+					return (Boolean) getProperty(PROPERTY_NAME_WORD_ARTICLE_ALL);
+				}
+				
+				@Override
+				public ToStringMapping setWordArticleAll(Boolean value) {
+					setProperty(PROPERTY_NAME_WORD_ARTICLE_ALL, value);
+					return this;
+				}
+				
+				@Override
 				protected String __execute__() {
 					String identifier = getInput();
-					Boolean plural = (Boolean) getProperty(PROPERTY_NAME_PLURAL);
+					String gender = null , all = null;
+					Boolean plural = getPlural();
+					Locale locale = InstanceHelper.getInstance().getIfNotNullElseDefault(getLocale(), Locale.FRENCH);
+					Boolean useGender = getGender();
+					
+					if(Boolean.TRUE.equals(getWordArticleAll())){
+						all = StringHelper.getInstance().getWordArticleAll(StringHelper.getInstance().isMasculine(identifier), plural);
+						if(!StringHelper.getInstance().isBlank(all))
+							all+=Constant.CHARACTER_SPACE;
+					}
+					all = StringUtils.defaultString(all, Constant.EMPTY_STRING);
+					
+					if(Boolean.TRUE.equals(useGender)){
+						gender = StringHelper.getInstance().getWordArticle(StringHelper.getInstance().isMasculine(identifier), getGenderAny(), plural);
+						if(!StringHelper.getInstance().isBlank(gender))
+							gender+=Constant.CHARACTER_SPACE;
+					}
+					gender = StringUtils.defaultString(gender, Constant.EMPTY_STRING);
+					
 					if(Boolean.TRUE.equals(plural))
 						identifier = String.format(PLURAL_FORMAT,identifier);
-					return __execute__(identifier, getCaseType(), getLocale(), getCachable());
+					String result = __execute__(identifier, getCaseType(), locale, getCachable());
+					if(Locale.FRENCH.equals(locale)){
+						if(ArrayUtils.contains(new String[]{"le ","la "}, gender) && StringHelper.getInstance().isVoyel(result.charAt(0)))
+							gender = "l'";
+					}
+					return all+gender+result;
 				}
 				
 				private String __execute__(final String identifier,final CaseType pCaseType,final Locale pLocale,Boolean cachabled){

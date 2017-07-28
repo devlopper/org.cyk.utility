@@ -2,6 +2,7 @@ package org.cyk.utility.common;
 
 import java.util.Locale;
 
+import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 import org.cyk.utility.common.helper.StringHelper.Location;
@@ -23,6 +24,50 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.Cache.REPOSITORY.put("fr_cache001_NONE", "cache value one");
 		
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.testmsg", StringHelper.class.getClassLoader());
+	}
+	
+	@Test
+	public void assertWordArticle(){
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticleAll(Boolean.FALSE, Boolean.FALSE), "toute").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticleAll(Boolean.TRUE, Boolean.FALSE), "tout").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticleAll(Boolean.FALSE, Boolean.TRUE), "toutes").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticleAll(Boolean.TRUE, Boolean.TRUE), "tous").execute();
+		
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticle(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE), "la").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticle(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE), "une").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticle(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE), "les").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticle(Boolean.FALSE, Boolean.TRUE, Boolean.TRUE), "des").execute();
+		
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticle(Boolean.TRUE, Boolean.FALSE, Boolean.FALSE), "le").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticle(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE), "un").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticle(Boolean.TRUE, Boolean.FALSE, Boolean.TRUE), "les").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticle(Boolean.TRUE, Boolean.TRUE, Boolean.TRUE), "des").execute();
+		
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
+				.setGender(Boolean.FALSE).execute(), "année").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
+				.setGender(Boolean.TRUE).execute(), "l'année").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
+				.setGender(Boolean.TRUE).setGenderAny(Boolean.FALSE).execute(), "l'année").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
+				.setGender(Boolean.TRUE).setGenderAny(Boolean.TRUE).execute(), "une année").execute();
+		
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
+				.setGender(Boolean.TRUE).setGenderAny(Boolean.FALSE).setWordArticleAll(Boolean.TRUE).execute(), "toute l'année").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
+				.setGender(Boolean.TRUE).setGenderAny(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute(), "toute une année").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
+				.setGender(Boolean.TRUE).setGenderAny(Boolean.FALSE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute(), "toutes les années").execute();
+		
+	}
+	
+	@Test
+	public void assertPlural(){
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
+				.setPlural(Boolean.FALSE).execute(), "année").execute();;
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
+				.setPlural(Boolean.TRUE).execute(), "années").execute();;
+		
 	}
 	
 	@Test
@@ -127,6 +172,8 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		assertEquals(Boolean.TRUE, StringHelper.getInstance().isAtLocation("FIELD_F", "FIELD_",Location.START));
 		
 	}
+	
+	
 	
 	private void assertAppliedCaseType(String string,CaseType caseType,String expected){
 		assertEquals(expected, StringHelper.getInstance().applyCaseType(string, caseType));

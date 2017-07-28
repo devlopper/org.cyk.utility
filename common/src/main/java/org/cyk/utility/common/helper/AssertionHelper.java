@@ -100,7 +100,7 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 			public static class Adapter<INPUT> extends Assertion.Adapter.Default<INPUT> implements Equals<INPUT> , Serializable {
 				private static final long serialVersionUID = 1L;
 
-				public Adapter(Class<INPUT> inputClass,INPUT input,INPUT expected,String message) {
+				public Adapter(Class<INPUT> inputClass,INPUT input,INPUT expected,java.lang.String message) {
 					super(inputClass,input,expected,message);
 				}
 				
@@ -113,7 +113,7 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 				public static class Default<INPUT> extends Equals.Adapter<INPUT> implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					public Default(Class<INPUT> inputClass,INPUT input,INPUT expected,String message) {
+					public Default(Class<INPUT> inputClass,INPUT input,INPUT expected,java.lang.String message) {
 						super(inputClass,input,expected,message);
 					}
 					
@@ -129,6 +129,32 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 			}
 			
 			/**/
+			
+			public static interface String extends Equals<java.lang.String>  {
+				
+				public static class Adapter extends Equals.Adapter.Default<java.lang.String> implements String , Serializable {
+					private static final long serialVersionUID = 1L;
+
+					public Adapter(java.lang.String input,java.lang.String expected) {
+						super(java.lang.String.class,input,expected,null);
+					}
+					
+					/**/
+					
+					public static class Default extends String.Adapter implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						public Default(java.lang.String input,java.lang.String expected) {
+							super(input,expected);
+						}
+						
+						@Override
+						protected void __assert__(java.lang.String message, java.lang.String expected,java.lang.String actual) {
+							AssertionHelper.getInstance().assertEquals(message,expected, actual);
+						}
+					}
+				}
+			}
 			
 			public static interface Date extends Equals<java.util.Date>  {
 				
