@@ -321,18 +321,25 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 									.setProperty(PROPERTY_NAME_TIME_PART, Constant.Date.Part.DATE_ONLY).execute());
 							}else{
 								strings.add(String.format(Constant.DAY_MONTH_YEAR_PATTERN_FORMAT, 
-									dayOfMonth == null ? new StringHelper.ToStringMapping.Adapter.Default("day.all").execute() : String.valueOf(dayOfMonth)
-									,monthOfYear == null ? new StringHelper.ToStringMapping.Adapter.Default("month.all").execute() : String.valueOf(monthOfYear)
-									,year == null ? new StringHelper.ToStringMapping.Adapter.Default("year.all").execute() : String.valueOf(year)));
+									dayOfMonth == null ? new StringHelper.ToStringMapping.Adapter.Default("day")
+											.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(dayOfMonth)
+									,monthOfYear == null ? new StringHelper.ToStringMapping.Adapter.Default("month")
+											.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(monthOfYear)
+									,year == null ? new StringHelper.ToStringMapping.Adapter.Default("year")
+											.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(year)));
 							}
+							
+							strings.add(Constant.CHARACTER_SPACE.toString());
 							
 							if(hourOfDay!=null && minuteOfHour!=null/* && secondOfMinute!=null && millisecondOfMinute!=null*/){
 								strings.add(new TimeHelper.Stringifier.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default().setProperties(getProperties()).execute())
 									.setProperty(PROPERTY_NAME_TIME_PART, Constant.Date.Part.TIME_ONLY).execute());
 							}else{
 								strings.add(String.format(Constant.HOUR_MINUTE_PATTERN_FORMAT, 
-										hourOfDay == null ? new StringHelper.ToStringMapping.Adapter.Default("hour.all").execute() : String.valueOf(hourOfDay)
-										,minuteOfHour == null ? new StringHelper.ToStringMapping.Adapter.Default("minute.all").execute() : String.valueOf(minuteOfHour)));
+										hourOfDay == null ? new StringHelper.ToStringMapping.Adapter.Default("hour")
+												.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(hourOfDay)
+										,minuteOfHour == null ? new StringHelper.ToStringMapping.Adapter.Default("minute")
+												.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(minuteOfHour)));
 							}
 						}
 						return CollectionHelper.getInstance().isBlank(strings) ? null : CollectionHelper.getInstance().concatenate(strings, Constant.EMPTY_STRING);

@@ -57,7 +57,16 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
 				.setGender(Boolean.TRUE).setGenderAny(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute(), "toute une année").execute();
 		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
-				.setGender(Boolean.TRUE).setGenderAny(Boolean.FALSE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute(), "toutes les années").execute();
+				.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute(), "toutes les années").execute();
+		
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("month")
+				.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute(), "tous les mois").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("day")
+				.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute(), "tous les jours").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("hour")
+				.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute(), "toutes les heures").execute();
+		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("minute")
+				.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute(), "toutes les minutes").execute();
 		
 	}
 	

@@ -98,6 +98,7 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 	public void stringfyUnit(){
 		new AssertionHelper.Assertion.Equals.Adapter.Default<String>(String.class,new TimeHelper.Stringifier.Unit.Adapter.Default()
 			.execute(),null).execute();
+		
 		new AssertionHelper.Assertion.Equals.Adapter.Default<String>(String.class,new TimeHelper.Stringifier.Unit.Adapter.Default()
 		.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_YEAR, 2015).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_MONTHOFYEAR, 7)
 		.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_DAYOFMONTH, 15).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_HOUROFDAY, 13)
