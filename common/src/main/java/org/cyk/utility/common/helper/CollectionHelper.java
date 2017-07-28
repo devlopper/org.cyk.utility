@@ -133,6 +133,11 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return collection.iterator().next();
 	}
 	
+	public void clear(Collection<?> collection){
+		if(collection!=null)
+			collection.clear();
+	}
+	
 	/**/
 	
 	public static interface Filter<TYPE>  extends org.cyk.utility.common.Action<Collection<TYPE>, Collection<TYPE>>{

@@ -43,6 +43,10 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 		return objects == null ? 0 : objects.length;
 	}
 	
+	public Boolean isEmpty(Object[] objects){
+		return objects == null ? Boolean.TRUE : objects.length == 0;
+	}
+	
 	public Object[][] filter(Object[][] array,Integer index,Object value){
 		if(array == null || array.length == 0)
 			return null;

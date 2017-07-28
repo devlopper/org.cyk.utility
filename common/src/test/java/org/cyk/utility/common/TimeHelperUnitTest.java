@@ -94,6 +94,16 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 		}).execute(),"du 15/07/2015 13:31 au 07/02/2016 08:15").execute();
 	}
 	
+	@Test
+	public void collection(){
+		TimeHelper.Collection collection = new TimeHelper.Collection();
+		new AssertionHelper.Assertion.Equals.Adapter.Default<Long>(Long.class,collection.getDuration(),0l).execute();
+		new AssertionHelper.Assertion.Equals.Adapter.Default<Long>(Long.class,collection.add(0l).getDuration(),0l).execute();
+		new AssertionHelper.Assertion.Equals.Adapter.Default<Long>(Long.class,collection.add(17l).getDuration(),17l).execute();
+		new AssertionHelper.Assertion.Equals.Adapter.Default<Long>(Long.class,collection.add(20l).getDuration(),3l).execute();
+		new AssertionHelper.Assertion.Equals.Adapter.Default<Long>(Long.class,collection.add(21l).getDuration(),1l).execute();
+	}
+	
 	//@Test
 	public void jodaTime(){
 		DateTime fromDate = new DateTime(createDate(1, 1, 2000, 10, 0)),toDate = new DateTime(createDate(27, 1, 2000, 11, 30));

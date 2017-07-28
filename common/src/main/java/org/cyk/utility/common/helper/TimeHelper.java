@@ -3,10 +3,17 @@ package org.cyk.utility.common.helper;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Singleton;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.utility.common.Action;
@@ -75,7 +82,7 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 	
 	/**/
 	
-	public static  interface Builder<INPUT> extends org.cyk.utility.common.Builder<INPUT, java.util.Date> {
+	public static interface Builder<INPUT> extends org.cyk.utility.common.Builder<INPUT, java.util.Date> {
 		
 		public static class Adapter<INPUT> extends org.cyk.utility.common.Builder.Adapter.Default<INPUT, java.util.Date> implements Builder<INPUT> , Serializable {
 			private static final long serialVersionUID = 1L;
@@ -275,6 +282,55 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 					}
 				}
 			}
+		}
+	}
+	
+	@Getter @Setter
+	public static class Collection implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private java.util.Collection<Long> collection;
+		
+		public Collection add(java.util.Collection<Long> times){
+			if(!CollectionHelper.getInstance().isEmpty(times)){
+				if(collection == null)
+					collection = new LinkedHashSet<>();
+				CollectionHelper.getInstance().add(collection,Boolean.TRUE, times);	
+			}
+			return this;
+		}
+		
+		public Collection add(Long...times){
+			if(!ArrayHelper.getInstance().isEmpty(times)){
+				add(Arrays.asList(times));
+			}
+			return this;
+		}
+		
+		public Collection addCurrent(){
+			return add(System.currentTimeMillis());
+		}
+		
+		public Collection clear(){
+			CollectionHelper.getInstance().clear(collection);
+			return this;
+		}
+		
+		public Long getDuration(Integer previousIndex){
+			Long result = 0l;
+			if(!CollectionHelper.getInstance().isEmpty(collection)){
+				//if(collection.size()==1)
+				//	addCurrent();
+				if(collection.size()>1){
+					List<Long> list = new ArrayList<>(collection);
+					result = list.get(list.size()-1) - list.get(list.size()-1-previousIndex);
+				}
+			}
+			return result;
+		}
+		
+		public Long getDuration(){
+			return getDuration(1);
 		}
 	}
 }
