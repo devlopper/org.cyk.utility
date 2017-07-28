@@ -1,10 +1,13 @@
 package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.inject.Singleton;
 
-import org.junit.Assert;
+import org.cyk.utility.common.Constant;
 
 @Singleton
 public class AssertionHelper extends AbstractHelper implements Serializable {
@@ -22,6 +25,27 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public AssertionHelper assertEquals(final String message,final Object expected,final Object actual){
+		ListenerHelper.Executor.Procedure<Listener> procedure = new ListenerHelper.Executor.Procedure.Adapter.Default<Listener>();
+		procedure.setResultMethod(new ListenerHelper.Executor.ResultMethod.Adapter.Default.Void<Listener>(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void __execute__(Listener listener) {
+				listener.assertEquals(message, expected, actual);
+			}
+			
+		});
+		Collection<Listener> listeners = new ArrayList<>(); 
+		listeners.addAll(CollectionHelper.getInstance().isEmpty(Listener.COLLECTION) ? Arrays.asList(new Listener.Adapter.Default()) : Listener.COLLECTION);
+		procedure.setInput(listeners).execute();
+		return this;
+	}
+	
+	public AssertionHelper assertEquals(Object expected,Object actual){
+		return assertEquals(Constant.EMPTY_STRING, expected, actual);
 	}
 	
 	/**/
@@ -99,7 +123,7 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 					
 					@Override
 					protected void __assert__(java.lang.String message, INPUT expected, INPUT actual) {
-						Assert.assertEquals(message, expected, actual);
+						AssertionHelper.getInstance().assertEquals(message, expected, actual);
 					}
 				}
 			}
@@ -141,25 +165,77 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 							Integer expectedSecondOfMinute = (Integer) getProperty(PROPERTY_NAME_SECONDOFMINUTE);
 							Integer expectedMillisecondOfMinute = (Integer) getProperty(PROPERTY_NAME_MILLISOFSECOND);
 							if(expectedYear!=null)
-								Assert.assertEquals(expectedYear, TimeHelper.getInstance().getYear(actual));
+								AssertionHelper.getInstance().assertEquals(expectedYear, TimeHelper.getInstance().getYear(actual));
 							if(expectedMonthOfYear!=null)
-								Assert.assertEquals(expectedMonthOfYear, TimeHelper.getInstance().getMonthOfYear(actual));
+								AssertionHelper.getInstance().assertEquals(expectedMonthOfYear, TimeHelper.getInstance().getMonthOfYear(actual));
 							if(expectedDayOfMonth!=null)
-								Assert.assertEquals(expectedDayOfMonth, TimeHelper.getInstance().getDayOfMonth(actual));
+								AssertionHelper.getInstance().assertEquals(expectedDayOfMonth, TimeHelper.getInstance().getDayOfMonth(actual));
 							if(expectedHourOfDay!=null)
-								Assert.assertEquals(expectedHourOfDay, TimeHelper.getInstance().getHourOfDay(actual));
+								AssertionHelper.getInstance().assertEquals(expectedHourOfDay, TimeHelper.getInstance().getHourOfDay(actual));
 							if(expectedMinuteOfHour!=null)
-								Assert.assertEquals(expectedMinuteOfHour, TimeHelper.getInstance().getMinuteOfHour(actual));
+								AssertionHelper.getInstance().assertEquals(expectedMinuteOfHour, TimeHelper.getInstance().getMinuteOfHour(actual));
 							if(expectedSecondOfMinute!=null)
-								Assert.assertEquals(expectedSecondOfMinute, TimeHelper.getInstance().getSecondOfMinute(actual));
+								AssertionHelper.getInstance().assertEquals(expectedSecondOfMinute, TimeHelper.getInstance().getSecondOfMinute(actual));
 							if(expectedMillisecondOfMinute!=null)
-								Assert.assertEquals(expectedMillisecondOfMinute, TimeHelper.getInstance().getMillisecondOfSecond(actual));
+								AssertionHelper.getInstance().assertEquals(expectedMillisecondOfMinute, TimeHelper.getInstance().getMillisecondOfSecond(actual));
 						}
 					}
 				}
 			}
+		}
+	}
+
+	public static interface Listener {
+		
+		Collection<Listener> COLLECTION = new ArrayList<>();
+		
+		void assertEquals(String message,Object expected,Object actual);
+		void assertEquals(Object expected,Object actual);
+		
+		/*
+		void assertCodeExists(Class<?> aClass,String code);
+		
+		void assertBigDecimalEquals(String message,BigDecimal expected,BigDecimal actual);
+		
+		void assertThat(String reason,Boolean assertion);
+		
+		<T> void assertThat(T actual,Matcher<? super T> matcher);
+		
+		<T> void assertThat(String reason,T actual,Matcher<? super T> matcher);
+		
+		void assertEquals(Object actualValues,ObjectFieldValues expectedValues);
+		
+		void hasProperty(Object object,String name,Object value);
+		
+		void hasProperties(Object object,Object...entries);
+		
+		<T> void contains(Class<T> aClass,Collection<T> list,Object[] names,Object[][] values);
+		*/
+		public static class Adapter implements Listener,Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public void assertEquals(Object expected, Object actual) {}
+			
+			@Override
+			public void assertEquals(String message, Object expected, Object actual) {}
+			
+			public static class Default extends Listener.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public void assertEquals(String message, Object expected,Object actual) {
+					org.junit.Assert.assertEquals(message, expected, actual);
+				}
+				
+				@Override
+				public void assertEquals(Object expected, Object actual) {
+					assertEquals(null,expected, actual);
+				}
+			}
 			
 		}
+		
 	}
 	
 }

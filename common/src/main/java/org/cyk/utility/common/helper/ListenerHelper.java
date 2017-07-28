@@ -7,6 +7,7 @@ import java.util.Collection;
 import javax.inject.Singleton;
 
 import org.cyk.utility.common.Action;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.MethodHelper.Method;
 
 import lombok.Getter;
@@ -168,6 +169,24 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 							super(java.lang.Boolean.class);
 						}
 					}
+					
+					public static class Void<LISTENER> extends Default<java.lang.Void,LISTENER> implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						public Void() {
+							super(java.lang.Void.class);
+						}
+						
+						@Override
+						protected final java.lang.Void __execute__() {
+							__execute__(getListener());
+							return Constant.VOID;
+						}
+						
+						protected void __execute__(LISTENER listener){
+							ThrowableHelper.getInstance().throwNotYetImplemented();
+						}
+					}
 				}
 			}
 			
@@ -255,20 +274,36 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 		
 		}
 		
-		public static interface Procedure<LISTENER,RESULT> extends Executor<LISTENER, RESULT>{
+		public static interface Procedure<LISTENER> extends Executor<LISTENER, java.lang.Void>{
 			
-			public static class Adapter<LISTENER,RESULT> extends Executor.Adapter.Default<LISTENER,RESULT> implements Serializable {
+			public static class Adapter<LISTENER> extends Executor.Adapter.Default<LISTENER,java.lang.Void> implements Procedure<LISTENER>,Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				public Adapter(Class<RESULT> outputClass) {
-					super(outputClass);
+				public Adapter() {
+					super(java.lang.Void.class);
 				}
 				
-				public static class Default<LISTENER, RESULT> extends Procedure.Adapter<LISTENER, RESULT> implements Serializable {
+				public static class Default<LISTENER> extends Procedure.Adapter<LISTENER> implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					public Default(Class<RESULT> outputClass) {
-						super(outputClass);
+					@Override
+					protected Void __execute__() {
+						Collection<LISTENER> listeners = getInput();
+						if(listeners!=null){
+							java.lang.Boolean returnFirstNotNull = getReturnFirstNotNull();
+							addLoggingMessageBuilderNamedParameters("#listeners",CollectionHelper.getInstance().getSize(listeners),"return if first not null",returnFirstNotNull
+									);
+							Integer count = 0;
+							for(LISTENER listener : listeners){
+								count++;
+								resultMethod.setProperties(getProperties());
+								resultMethod.setListener(listener).execute();
+							}
+							addLoggingMessageBuilderNamedParameters("#called",count);
+							if(java.lang.Boolean.TRUE.equals(returnFirstNotNull) && matchingListener!=null)
+								addLoggingMessageBuilderNamedParameters("#matching",matchingListener);
+						}
+						return Constant.VOID;
 					}
 					
 				}

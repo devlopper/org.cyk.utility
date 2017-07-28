@@ -97,6 +97,8 @@ public interface Constant {
 	
 	BigDecimal BIGDECIMAL_100 = new BigDecimal("100");
 	
+	java.lang.Void VOID = null;
+	
 	/**/
 	
 	@Getter
