@@ -47,8 +47,8 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void buildFromPart(){
-		new AssertionHelper.Assertion.Equals.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default().execute(),TimeHelper.Builder.Part.Adapter.Default.YEAR
-				,TimeHelper.Builder.Part.Adapter.Default.MONTHOFYEAR,TimeHelper.Builder.Part.Adapter.Default.DAYOFMONTH,null,null,null,null).execute();
+		new AssertionHelper.Assertion.Equals.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default().execute(),TimeHelper.YEAR
+				,TimeHelper.MONTHOFYEAR,TimeHelper.DAYOFMONTH,null,null,null,null).execute();
 		
 		new AssertionHelper.Assertion.Equals.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default()
 				.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_YEAR, 2015).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_MONTHOFYEAR, 7)
@@ -96,8 +96,15 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void stringfyUnit(){
+		//new AssertionHelper.Assertion.Equals.Adapter.Default<String>(String.class,new TimeHelper.Stringifier.Unit.Adapter.Default()
+		//	.execute(),null).execute();
+		
 		new AssertionHelper.Assertion.Equals.Adapter.Default<String>(String.class,new TimeHelper.Stringifier.Unit.Adapter.Default()
-			.execute(),null).execute();
+				.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_YEAR, TimeHelper.YEAR_ALL).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_MONTHOFYEAR, TimeHelper.MONTHOFYEAR_ALL)
+				.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_DAYOFMONTH, TimeHelper.DAYOFMONTH_ALL).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_HOUROFDAY, TimeHelper.HOUROFDAY_ALL)
+				.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_MINUTEOFHOUR, TimeHelper.MINUTEOFHOUR_ALL).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_SECONDOFMINUTE, TimeHelper.SECONDOFMINUTE_ALL)
+				.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_MILLISOFSECOND, TimeHelper.MILLISOFSECOND_ALL)
+				.execute(),"tous les jours/tous les mois/toutes les années toutes les heures:toutes les minutes").execute();
 		
 		new AssertionHelper.Assertion.Equals.Adapter.Default<String>(String.class,new TimeHelper.Stringifier.Unit.Adapter.Default()
 		.setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_YEAR, 2015).setProperty(TimeHelper.Builder.Part.PROPERTY_NAME_MONTHOFYEAR, 7)

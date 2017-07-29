@@ -24,6 +24,10 @@ import org.joda.time.DateTime;
 public class TimeHelper extends AbstractHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static Integer YEAR=2000,MONTHOFYEAR=1,DAYOFMONTH=1,HOUROFDAY=0,MINUTEOFHOUR=0,SECONDOFMINUTE=0,MILLISOFSECOND=0;
+	public static Integer YEAR_ALL=-1,MONTHOFYEAR_ALL=-1,DAYOFMONTH_ALL=-1,DAYOFMONTH_LAST=32,HOUROFDAY_ALL=-1,MINUTEOFHOUR_ALL=-1
+			,SECONDOFMINUTE_ALL=-1,MILLISOFSECOND_ALL=-1;
+	
 	private static TimeHelper INSTANCE;
 	
 	public static TimeHelper getInstance() {
@@ -120,8 +124,6 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 				public static class Default extends String.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 
-					public static Integer YEAR=2000,MONTHOFYEAR=1,DAYOFMONTH=1,HOUROFDAY=0,MINUTEOFHOUR=0,SECONDOFMINUTE=0,MILLISOFSECOND=0;
-					
 					public Default(java.lang.String input) {
 						super(input);
 					}
@@ -129,21 +131,11 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 					@Override
 					protected Date __execute__() {
 						try {
-							return DateUtils.parseDate(getInput(), "dd/MM/yyyy");
+							return DateUtils.parseDate(getInput(), "dd/MM/yyyy");//TODO format should taken as parameter
 						} catch (ParseException e) {
 							e.printStackTrace();
 							return null;
 						}
-						/*
-						InstanceHelper instanceHelper = InstanceHelper.getInstance();
-						return new DateTime(instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_YEAR),YEAR)
-								, instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_MONTHOFYEAR),MONTHOFYEAR)
-								, instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_DAYOFMONTH),DAYOFMONTH)
-								, instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_HOUROFDAY),HOUROFDAY)
-								, instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_MINUTEOFHOUR),MINUTEOFHOUR)
-								, instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_SECONDOFMINUTE),SECONDOFMINUTE)
-								, instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_MILLISOFSECOND),MILLISOFSECOND)).toDate();
-								*/
 					}
 				}
 			}
@@ -166,18 +158,12 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 				public static class Default extends Part.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 
-					public static Integer YEAR=2000,MONTHOFYEAR=1,DAYOFMONTH=1,HOUROFDAY=0,MINUTEOFHOUR=0,SECONDOFMINUTE=0,MILLISOFSECOND=0;
-					
 					@Override
 					protected Date __execute__() {
-						InstanceHelper instanceHelper = InstanceHelper.getInstance();
-						return new DateTime(instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_YEAR),YEAR)
-								, instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_MONTHOFYEAR),MONTHOFYEAR)
-								, instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_DAYOFMONTH),DAYOFMONTH)
-								, instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_HOUROFDAY),HOUROFDAY)
-								, instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_MINUTEOFHOUR),MINUTEOFHOUR)
-								, instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_SECONDOFMINUTE),SECONDOFMINUTE)
-								, instanceHelper.getIfNotNullElseDefault((Integer)getProperty(PROPERTY_NAME_MILLISOFSECOND),MILLISOFSECOND)).toDate();		
+						return new DateTime(getPropertyAsInteger(PROPERTY_NAME_YEAR,YEAR), getPropertyAsInteger(PROPERTY_NAME_MONTHOFYEAR,MONTHOFYEAR)
+								, getPropertyAsInteger(PROPERTY_NAME_DAYOFMONTH,DAYOFMONTH), getPropertyAsInteger(PROPERTY_NAME_HOUROFDAY,HOUROFDAY)
+								, getPropertyAsInteger(PROPERTY_NAME_MINUTEOFHOUR,MINUTEOFHOUR), getPropertyAsInteger(PROPERTY_NAME_SECONDOFMINUTE,SECONDOFMINUTE)
+								, getPropertyAsInteger(PROPERTY_NAME_MILLISOFSECOND,MILLISOFSECOND)).toDate();		
 					}
 				}
 			}
@@ -304,43 +290,48 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 					@Override
 					protected java.lang.String __execute__() {
 						java.util.Collection<String> strings = new ArrayList<>();
-						Integer year = (Integer) getProperty(PROPERTY_NAME_YEAR);
-						Integer monthOfYear = (Integer) getProperty(PROPERTY_NAME_MONTHOFYEAR);
-						Integer dayOfMonth = (Integer) getProperty(PROPERTY_NAME_DAYOFMONTH);
-						Integer hourOfDay = (Integer) getProperty(PROPERTY_NAME_HOUROFDAY);
-						Integer minuteOfHour = (Integer) getProperty(PROPERTY_NAME_MINUTEOFHOUR);
+						Integer year = getPropertyAsInteger(PROPERTY_NAME_YEAR);
+						Integer monthOfYear = getPropertyAsInteger(PROPERTY_NAME_MONTHOFYEAR);
+						Integer dayOfMonth = getPropertyAsInteger(PROPERTY_NAME_DAYOFMONTH);
+						Integer hourOfDay = getPropertyAsInteger(PROPERTY_NAME_HOUROFDAY);
+						Integer minuteOfHour = getPropertyAsInteger(PROPERTY_NAME_MINUTEOFHOUR);
 						/*
 						Integer secondOfMinute = (Integer) getProperty(PROPERTY_NAME_SECONDOFMINUTE);
 						Integer millisecondOfMinute = (Integer) getProperty(PROPERTY_NAME_MILLISOFSECOND);
 						*/
-						if(dayOfMonth!=null && monthOfYear!=null && year!=null && hourOfDay!=null && minuteOfHour!=null /*&& secondOfMinute!=null && millisecondOfMinute!=null*/){
-							strings.add(new TimeHelper.Stringifier.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default().setProperties(getProperties()).execute()).execute());
-						}else{
-							if(dayOfMonth!=null && monthOfYear!=null && year!=null){
-								strings.add(new TimeHelper.Stringifier.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default().setProperties(getProperties()).execute())
-									.setProperty(PROPERTY_NAME_TIME_PART, Constant.Date.Part.DATE_ONLY).execute());
+						if(dayOfMonth!=null || monthOfYear!=null || year!=null || hourOfDay!=null || minuteOfHour!=null){
+							if(dayOfMonth!=null && monthOfYear!=null && year!=null && hourOfDay!=null && minuteOfHour!=null /*&& secondOfMinute!=null && millisecondOfMinute!=null*/ 
+									&& !dayOfMonth.equals(DAYOFMONTH_ALL) && !dayOfMonth.equals(DAYOFMONTH_LAST) && !monthOfYear.equals(MONTHOFYEAR_ALL) && !year.equals(YEAR_ALL) && !hourOfDay.equals(HOUROFDAY_ALL) && !minuteOfHour.equals(MINUTEOFHOUR_ALL)){
+								strings.add(new TimeHelper.Stringifier.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default().setProperties(getProperties()).execute()).execute());
 							}else{
-								strings.add(String.format(Constant.DAY_MONTH_YEAR_PATTERN_FORMAT, 
-									dayOfMonth == null ? new StringHelper.ToStringMapping.Adapter.Default("day")
-											.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(dayOfMonth)
-									,monthOfYear == null ? new StringHelper.ToStringMapping.Adapter.Default("month")
-											.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(monthOfYear)
-									,year == null ? new StringHelper.ToStringMapping.Adapter.Default("year")
-											.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(year)));
-							}
-							
-							strings.add(Constant.CHARACTER_SPACE.toString());
-							
-							if(hourOfDay!=null && minuteOfHour!=null/* && secondOfMinute!=null && millisecondOfMinute!=null*/){
-								strings.add(new TimeHelper.Stringifier.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default().setProperties(getProperties()).execute())
-									.setProperty(PROPERTY_NAME_TIME_PART, Constant.Date.Part.TIME_ONLY).execute());
-							}else{
-								strings.add(String.format(Constant.HOUR_MINUTE_PATTERN_FORMAT, 
-										hourOfDay == null ? new StringHelper.ToStringMapping.Adapter.Default("hour")
-												.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(hourOfDay)
-										,minuteOfHour == null ? new StringHelper.ToStringMapping.Adapter.Default("minute")
-												.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(minuteOfHour)));
-							}
+								if(dayOfMonth!=null && monthOfYear!=null && year!=null){
+									if(!dayOfMonth.equals(DAYOFMONTH_ALL) && !dayOfMonth.equals(DAYOFMONTH_LAST) && !monthOfYear.equals(MONTHOFYEAR_ALL) && !year.equals(YEAR_ALL))
+										strings.add(new TimeHelper.Stringifier.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default().setProperties(getProperties()).execute())
+												.setProperty(PROPERTY_NAME_TIME_PART, Constant.Date.Part.DATE_ONLY).execute());
+									else
+										strings.add(String.format(Constant.DAY_MONTH_YEAR_PATTERN_FORMAT, 
+												dayOfMonth.equals(DAYOFMONTH_ALL) ? new StringHelper.ToStringMapping.Adapter.Default("day")
+														.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(dayOfMonth)
+												,monthOfYear.equals(MONTHOFYEAR_ALL) ? new StringHelper.ToStringMapping.Adapter.Default("month")
+														.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(monthOfYear)
+												,year.equals(YEAR_ALL) ? new StringHelper.ToStringMapping.Adapter.Default("year")
+														.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(year)));
+								}
+								
+								if(hourOfDay!=null && minuteOfHour!=null/* && secondOfMinute!=null && millisecondOfMinute!=null*/){
+									if(strings.size()>0)
+										strings.add(Constant.CHARACTER_SPACE.toString());
+									if(!hourOfDay.equals(HOUROFDAY_ALL) && !minuteOfHour.equals(MINUTEOFHOUR_ALL))
+										strings.add(new TimeHelper.Stringifier.Date.Adapter.Default(new TimeHelper.Builder.Part.Adapter.Default().setProperties(getProperties()).execute())
+												.setProperty(PROPERTY_NAME_TIME_PART, Constant.Date.Part.TIME_ONLY).execute());
+									else
+										strings.add(String.format(Constant.HOUR_MINUTE_PATTERN_FORMAT, 
+												hourOfDay.equals(HOUROFDAY_ALL) ? new StringHelper.ToStringMapping.Adapter.Default("hour")
+														.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(hourOfDay)
+												,minuteOfHour.equals(MINUTEOFHOUR_ALL) ? new StringHelper.ToStringMapping.Adapter.Default("minute")
+														.setGender(Boolean.TRUE).setPlural(Boolean.TRUE).setWordArticleAll(Boolean.TRUE).execute() : String.valueOf(minuteOfHour)));
+								}
+							}	
 						}
 						return CollectionHelper.getInstance().isBlank(strings) ? null : CollectionHelper.getInstance().concatenate(strings, Constant.EMPTY_STRING);
 					}

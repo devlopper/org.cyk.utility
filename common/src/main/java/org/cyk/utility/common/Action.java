@@ -11,6 +11,7 @@ import org.cyk.utility.common.cdi.BeanAdapter;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
+import org.cyk.utility.common.helper.NumberHelper;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -67,6 +68,10 @@ public interface Action<INPUT,OUTPUT> {
 	Action<INPUT, OUTPUT> setProperty(String name,Object value);
 	Action<INPUT, OUTPUT> setManyProperties(Object...objects);
 	Object getProperty(String name);
+	<T extends Number> T getPropertyAsNumber(Class<T> numberClass,String name,T nullValue);
+	<T extends Number> T getPropertyAsNumber(Class<T> numberClass,String name);
+	Integer getPropertyAsInteger(String name,Integer nullValue);
+	Integer getPropertyAsInteger(String name);
 	
 	Collection<Object> getParameters();
 	Action<INPUT, OUTPUT> setParameters(Collection<Object> collection);
@@ -146,6 +151,26 @@ public interface Action<INPUT,OUTPUT> {
 			setInputClass(inputClass);
 			setInput(input);
 			setOutputClass(outputClass);
+		}
+		
+		@Override
+		public <T extends Number> T getPropertyAsNumber(Class<T> numberClass, String name, T nullValue) {
+			return null;
+		}
+		
+		@Override
+		public <T extends Number> T getPropertyAsNumber(Class<T> numberClass, String name) {
+			return null;
+		}
+		
+		@Override
+		public Integer getPropertyAsInteger(String name, Integer nullValue) {
+			return null;
+		}
+		
+		@Override
+		public Integer getPropertyAsInteger(String name) {
+			return null;
 		}
 		
 		@Override
@@ -372,6 +397,26 @@ public interface Action<INPUT,OUTPUT> {
 				Properties properties = getProperties();
 				
 				return properties == null ? null : properties.get(name);
+			}
+			
+			@Override
+			public <T extends Number> T getPropertyAsNumber(Class<T> numberClass, String name,T nullValue) {
+				return NumberHelper.getInstance().get(numberClass, getProperty(name),nullValue);
+			}
+			
+			@Override
+			public <T extends Number> T getPropertyAsNumber(Class<T> numberClass, String name) {
+				return getPropertyAsNumber(numberClass, name,null);
+			}
+			
+			@Override
+			public Integer getPropertyAsInteger(String name,Integer nullValue) {
+				return getPropertyAsNumber(Integer.class, name,nullValue);
+			}
+			
+			@Override
+			public Integer getPropertyAsInteger(String name) {
+				return getPropertyAsInteger(name,null);
 			}
 			
 			@Override

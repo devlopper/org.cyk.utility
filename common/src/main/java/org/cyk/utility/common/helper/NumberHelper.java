@@ -49,6 +49,13 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return NumberUtils.toLong(string);
 	}
 	
+	/*public <T extends Number> T cast(Number number,Class<T> aClass){
+		if(number==null)
+			return null;
+		if(aClass.equals(Short.class) && !(number instanceof Short))
+			return number.shortValue();
+	}*/
+	
 	public String concatenate(Collection<? extends Number> numbers,Integer elementLenght) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for(Number number : numbers)
@@ -177,13 +184,24 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return decode(number, BASE_62_CHARACTERS);
 	}
 	
-	public <T> T get(Class<T> aClass,String string,T nullValue){
-		if(StringHelper.getInstance().isBlank(string))
+	public <T> T get(Class<T> aClass,Object object,T nullValue){
+		if(object==null || ( (object instanceof String) && StringHelper.getInstance().isBlank((String)object) ) )
 			return nullValue;
-		return ClassHelper.getInstance().instanciate(aClass, new Object[]{String.class,string});
+		return ClassHelper.getInstance().instanciate(aClass, new Object[]{String.class,object.toString()});
 	}
 	
-	public <T> T get(Class<T> aClass,String string){
-		return get(aClass,string,(T)null);
+	public <T> T get(Class<T> aClass,Object object){
+		return get(aClass,object,(T)null);
 	}
+	/*
+	public <T> T get(Class<T> aClass,Number number,T nullValue){
+		if(number==null)
+			return null;
+		return get(aClass, number.toString(), nullValue);
+	}
+	
+	public <T> T get(Class<T> aClass,Number number){
+		return get(aClass, number, null);
+	}
+	*/
 }

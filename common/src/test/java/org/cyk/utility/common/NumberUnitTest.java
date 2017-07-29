@@ -5,17 +5,24 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 
 public class NumberUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
-	@InjectMocks private NumberHelper numberHelper;
-		
+	@Test
+	public void get(){
+		AssertionHelper.getInstance().assertEquals(null, NumberHelper.getInstance().get(Integer.class, (Short)null));
+		AssertionHelper.getInstance().assertEquals(2, NumberHelper.getInstance().get(Integer.class, new Short("2")));
+		AssertionHelper.getInstance().assertEquals(2, NumberHelper.getInstance().get(Integer.class, "2"));
+		AssertionHelper.getInstance().assertEquals(2l, NumberHelper.getInstance().get(Long.class, new Short("2")));
+		AssertionHelper.getInstance().assertEquals(2l, NumberHelper.getInstance().get(Long.class, "2"));
+	}
+	
 	@Test
 	public void concatenate(){
 		List<Long> numbers = Arrays.asList(7657L,7827L,7997L,8167L,8337L,8507L,8677L,8847L,9017L,9187L,9357L,9527L,9697L,9867L,10037L,10207L,10377L,10547L,10717L,10887L);
@@ -97,11 +104,11 @@ public class NumberUnitTest extends AbstractUnitTest {
 	/**/
 	
 	private <NUMBER extends Number> void assertConcatenate(Class<NUMBER> numberClass,List<NUMBER> numbers,Integer highestIndex,String expectedConcatenation){
-		NUMBER highest = numberHelper.getHighest(numbers);
+		NUMBER highest = NumberHelper.getInstance().getHighest(numbers);
 		assertEquals(numbers.get(highestIndex.intValue()), highest);
-		String c = numberHelper.concatenate(numbers, highest.toString().length());
+		String c = NumberHelper.getInstance().concatenate(numbers, highest.toString().length());
 		assertEquals(expectedConcatenation, c);
-		List<NUMBER> numbers2 = new ArrayList<>(numberHelper.deconcatenate(numberClass, c, highest.toString().length()));
+		List<NUMBER> numbers2 = new ArrayList<>(NumberHelper.getInstance().deconcatenate(numberClass, c, highest.toString().length()));
 		for(int i=0;i<numbers.size();i++)
 			assertEquals(numbers.get(i), numbers2.get(i));
 	}
@@ -117,21 +124,21 @@ public class NumberUnitTest extends AbstractUnitTest {
 	}*/
 	
 	private void assertEncode16(String number,String result){
-		assertCoding(number, "16", numberHelper.encodeToBase16(number), result);
+		assertCoding(number, "16", NumberHelper.getInstance().encodeToBase16(number), result);
 		//assertEquals(number+" to base 16" ,result, numberBusiness.encodeToBase16(number));
-		assertEquals(result+" to base 10" ,number, numberHelper.decodeBase16(result));
+		assertEquals(result+" to base 10" ,number, NumberHelper.getInstance().decodeBase16(result));
 	}
 	
 	private void assertEncode36(String number,String result){
-		assertCoding(number, "36", numberHelper.encodeToBase36(number), result);
+		assertCoding(number, "36", NumberHelper.getInstance().encodeToBase36(number), result);
 		//assertEquals(number+" to base 36" ,result, numberBusiness.encodeToBase36(number));
-		assertEquals(result+" to base 10" ,number, numberHelper.decodeBase36(result));
+		assertEquals(result+" to base 10" ,number, NumberHelper.getInstance().decodeBase36(result));
 	}
 	
 	private void assertEncode62(String number,String result){
-		assertCoding(number, "62", numberHelper.encodeToBase62(number), result);
+		assertCoding(number, "62", NumberHelper.getInstance().encodeToBase62(number), result);
 		//assertEquals(number+" to base 36" ,result, numberBusiness.encodeToBase36(number));
-		assertEquals(result+" to base 10" ,number, numberHelper.decodeBase62(result));
+		assertEquals(result+" to base 10" ,number, NumberHelper.getInstance().decodeBase62(result));
 	}
 	
 	private void assertCoding(String number,String base,String actualResult,String expectedResult){
