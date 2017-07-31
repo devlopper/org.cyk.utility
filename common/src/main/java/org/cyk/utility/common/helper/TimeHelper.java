@@ -15,6 +15,7 @@ import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
@@ -124,14 +125,17 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 				public static class Default extends String.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 
+					public static final java.lang.String FORMAT = "dd/MM/yyyy";
+					
 					public Default(java.lang.String input) {
 						super(input);
 					}
 					
 					@Override
 					protected Date __execute__() {
+						java.lang.String format = StringUtils.defaultString((java.lang.String)getProperty(PROPERTY_FORMAT),FORMAT);
 						try {
-							return DateUtils.parseDate(getInput(), "dd/MM/yyyy");//TODO format should taken as parameter
+							return DateUtils.parseDate(getInput(), format);
 						} catch (ParseException e) {
 							e.printStackTrace();
 							return null;

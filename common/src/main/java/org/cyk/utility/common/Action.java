@@ -117,6 +117,12 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_MESSAGE="MESSAGE";
 	java.lang.String PROPERTY_NAME_TIME_PART="TIME_PART";
 	java.lang.String PROPERTY_NAME_TIME_LENGTH="TIME_LENGTH";
+	java.lang.String PROPERTY_NAME_IDENTIFIER="IDENTIFIER";
+	java.lang.String PROPERTY_NAME_FROM="FROM";
+	java.lang.String PROPERTY_NAME_TO="TO";
+	java.lang.String PROPERTY_NAME_DURATION_IN_MILLISECOND="DURATION_IN_MILLISECOND";
+	java.lang.String PROPERTY_NAME="NAME";
+	java.lang.String PROPERTY_FORMAT="FORMAT";
 	
 	/**/
 	
