@@ -12,7 +12,9 @@ import java.util.Locale;
 
 import javax.inject.Singleton;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.apache.commons.lang3.StringUtils;
@@ -391,5 +393,41 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 		public Long getDuration(){
 			return getDuration(1);
 		}
+	}
+
+	@Getter @Setter @NoArgsConstructor
+	public static class Instant implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private Long year;
+		private Long monthOfYear;
+		private Long dayOfMonth;
+		private Long dayOfWeek;
+		private Long hourOfDay;
+		private Long minuteOfHour;
+		private Long secondOfMinute;
+		private Long millisecondOfSecond;
+		
+		private Long millisecond;
+
+		public Instant(Long year, Long monthOfYear, Long dayOfMonth,
+				Long dayOfWeek, Long hourOfDay, Long minuteOfHour,
+				Long secondOfMinute, Long millisecondOfSecond) {
+			super();
+			this.year = year;
+			this.monthOfYear = monthOfYear;
+			this.dayOfMonth = dayOfMonth;
+			this.dayOfWeek = dayOfWeek;
+			this.hourOfDay = hourOfDay;
+			this.minuteOfHour = minuteOfHour;
+			this.secondOfMinute = secondOfMinute;
+			this.millisecondOfSecond = millisecondOfSecond;
+		}
+
+		public Instant(Long millisecond) {
+			super();
+			this.millisecond = millisecond;
+		}
+		
 	}
 }
