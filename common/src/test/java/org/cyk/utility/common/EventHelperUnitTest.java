@@ -45,19 +45,9 @@ public class EventHelperUnitTest extends AbstractUnitTest {
 		EventHelper.Event.Builder.Interval builder = new EventHelper.Event.Builder.Interval.Adapter.Default();
 		Collection<EventHelper.Event> events = builder
 			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME, "Mon évènement")
-			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_DURATION_IN_MILLISECOND, 1000 * 60 * 5)
-			
-			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_YEAR_1, "2000")
-			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_MONTHOFYEAR_1, "1")
-			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_DAYOFMONTH_1, "5")
-			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_HOUROFDAY_1, "8")
-			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_MINUTEOFHOUR_1, "30")
-			
-			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_YEAR_2, "2000")
-			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_MONTHOFYEAR_2, "3")
-			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_DAYOFMONTH_2, "5")
-			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_HOUROFDAY_2, "8")
-			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_MINUTEOFHOUR_2, "30")
+			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_PORTION_IN_MILLISECOND, 1000 * 60 * 5)
+			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_INSTANT_1, new TimeHelper.Instant(2000, 1, 3, 3, 8, 30, 0, 0))
+			.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_INSTANT_2, new TimeHelper.Instant(2000, 3, 3, 3, 8, 30, 0, 0))
 			
 			.execute();
 		

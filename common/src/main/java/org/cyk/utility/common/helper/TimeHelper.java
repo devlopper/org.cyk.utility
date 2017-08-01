@@ -12,16 +12,16 @@ import java.util.Locale;
 
 import javax.inject.Singleton;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
 import org.joda.time.DateTime;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Singleton
 public class TimeHelper extends AbstractHelper implements Serializable {
@@ -30,6 +30,7 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 	public static Integer YEAR=2000,MONTHOFYEAR=1,DAYOFMONTH=1,HOUROFDAY=0,MINUTEOFHOUR=0,SECONDOFMINUTE=0,MILLISOFSECOND=0;
 	public static Integer YEAR_ALL=-1,MONTHOFYEAR_ALL=-1,DAYOFMONTH_ALL=-1,DAYOFMONTH_LAST=32,HOUROFDAY_ALL=-1,MINUTEOFHOUR_ALL=-1
 			,SECONDOFMINUTE_ALL=-1,MILLISOFSECOND_ALL=-1;
+	public static final Byte WEEK_NUMBER_OF_DAY = 7;
 	
 	private static TimeHelper INSTANCE;
 	
@@ -85,6 +86,22 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 		if(date==null)
 			return null;
 		return new DateTime(date).getMillisOfSecond();
+	}
+	
+	public Integer getNumberOfDaysOfMonth(Integer monthOfYear,Integer year){
+		return new DateTime(year, monthOfYear, 1, 0, 0).dayOfMonth().getMaximumValue();
+	}
+	
+	public Integer getDayOfWeek(Integer dayOfMonth,Integer monthOfYear,Integer year){
+		return new DateTime(year, monthOfYear, dayOfMonth, 0, 0).getDayOfWeek();
+	}
+	
+	public Date getDate(Integer year,Integer monthOfYear,Integer dayOfMonth){
+		return new Builder.Instant.Adapter.Default(new Instant(year, monthOfYear, dayOfMonth, null, null, null, null, null)).execute();
+	}
+	
+	public Integer compare(Integer year,Integer monthOfYear,Integer dayOfMonth,Date date){
+		return getDate(year, monthOfYear, dayOfMonth).compareTo(date);
 	}
 	
 	/**/
@@ -170,6 +187,39 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 								, getPropertyAsInteger(PROPERTY_NAME_DAYOFMONTH,DAYOFMONTH), getPropertyAsInteger(PROPERTY_NAME_HOUROFDAY,HOUROFDAY)
 								, getPropertyAsInteger(PROPERTY_NAME_MINUTEOFHOUR,MINUTEOFHOUR), getPropertyAsInteger(PROPERTY_NAME_SECONDOFMINUTE,SECONDOFMINUTE)
 								, getPropertyAsInteger(PROPERTY_NAME_MILLISOFSECOND,MILLISOFSECOND)).toDate();		
+					}
+				}
+			}
+		}
+		
+		public static interface Instant extends Builder<TimeHelper.Instant> {
+			
+			public static class Adapter extends Builder.Adapter.Default<TimeHelper.Instant> implements Instant , Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Adapter(TimeHelper.Instant instant) {
+					super(TimeHelper.Instant.class, instant);
+				}
+				
+				/**/
+				
+				public static class Default extends Instant.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+
+					public Default(TimeHelper.Instant instant) {
+						super(instant);
+					}
+					
+					@Override
+					protected Date __execute__() {
+						TimeHelper.Instant instant = getInput();
+						return new DateTime(NumberHelper.getInstance().getInteger(instant.getYear(), YEAR)
+								,NumberHelper.getInstance().getInteger(instant.getMonthOfYear(),MONTHOFYEAR)
+								,NumberHelper.getInstance().getInteger(instant.getDayOfMonth(),DAYOFMONTH)
+								, NumberHelper.getInstance().getInteger(instant.getHourOfDay(),HOUROFDAY)
+								, NumberHelper.getInstance().getInteger(instant.getMinuteOfHour(),MINUTEOFHOUR)
+								, NumberHelper.getInstance().getInteger(instant.getSecondOfMinute(),SECONDOFMINUTE)
+								, NumberHelper.getInstance().getInteger(instant.getMillisecondOfSecond(),MILLISOFSECOND)).toDate();		
 					}
 				}
 			}
@@ -395,24 +445,22 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 		}
 	}
 
-	@Getter @Setter @NoArgsConstructor
+	@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
 	public static class Instant implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
-		private Long year;
-		private Long monthOfYear;
-		private Long dayOfMonth;
-		private Long dayOfWeek;
-		private Long hourOfDay;
-		private Long minuteOfHour;
-		private Long secondOfMinute;
-		private Long millisecondOfSecond;
+		private Short year;
+		private Byte monthOfYear;
+		private Byte dayOfMonth;
+		private Byte dayOfWeek;
+		private Byte hourOfDay;
+		private Byte minuteOfHour;
+		private Byte secondOfMinute;
+		private Short millisecondOfSecond;
 		
 		private Long millisecond;
 
-		public Instant(Long year, Long monthOfYear, Long dayOfMonth,
-				Long dayOfWeek, Long hourOfDay, Long minuteOfHour,
-				Long secondOfMinute, Long millisecondOfSecond) {
+		public Instant(Short year, Byte monthOfYear, Byte dayOfMonth,Byte dayOfWeek, Byte hourOfDay, Byte minuteOfHour,Byte secondOfMinute, Short millisecondOfSecond) {
 			super();
 			this.year = year;
 			this.monthOfYear = monthOfYear;
@@ -423,11 +471,30 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 			this.secondOfMinute = secondOfMinute;
 			this.millisecondOfSecond = millisecondOfSecond;
 		}
+		
+		public Instant(Integer year, Integer monthOfYear, Integer dayOfMonth,Integer dayOfWeek, Integer hourOfDay, Integer minuteOfHour,Integer secondOfMinute, Integer millisecondOfSecond) {
+			this(NumberHelper.getInstance().get(Short.class, year),NumberHelper.getInstance().get(Byte.class, monthOfYear),NumberHelper.getInstance().get(Byte.class, dayOfMonth)
+					,NumberHelper.getInstance().get(Byte.class, dayOfWeek),NumberHelper.getInstance().get(Byte.class, hourOfDay),NumberHelper.getInstance().get(Byte.class, minuteOfHour)
+					,NumberHelper.getInstance().get(Byte.class, secondOfMinute),NumberHelper.getInstance().get(Short.class, millisecondOfSecond));
+		}
 
 		public Instant(Long millisecond) {
 			super();
 			this.millisecond = millisecond;
 		}
+		
+		public Date getDate(){
+			return TimeHelper.getInstance().getDate(year.intValue(), monthOfYear.intValue(), dayOfMonth.intValue());
+		}
+	}
+	
+	@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
+	public static class InstantInterval implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private Instant from,to;
+		private Long distanceInMillisecond;
+		private Long portionInMillisecond;
 		
 	}
 }

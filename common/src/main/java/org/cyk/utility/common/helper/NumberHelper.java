@@ -193,6 +193,10 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 	public <T> T get(Class<T> aClass,Object object){
 		return get(aClass,object,(T)null);
 	}
+	
+	public  Integer getInteger(Object object,Integer nullValue){
+		return get(Integer.class, object, nullValue);
+	}
 	/*
 	public <T> T get(Class<T> aClass,Number number,T nullValue){
 		if(number==null)

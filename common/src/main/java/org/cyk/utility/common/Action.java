@@ -92,6 +92,9 @@ public interface Action<INPUT,OUTPUT> {
 	
 	Action<INPUT, OUTPUT> clear();
 	
+	java.lang.String PROPERTY_NAME_INSTANT = "INSTANT";
+	java.lang.String PROPERTY_NAME_INSTANT_1 = "INSTANT_1";
+	java.lang.String PROPERTY_NAME_INSTANT_2 = "INSTANT_2";
 	java.lang.String PROPERTY_NAME_FIELD_NAME = "fieldName";
 	java.lang.String PROPERTY_NAME_FIELD_VALUE = "fieldValue";
 	java.lang.String PROPERTY_NAME_YEAR="YEAR";
@@ -131,6 +134,7 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_FROM="FROM";
 	java.lang.String PROPERTY_NAME_TO="TO";
 	java.lang.String PROPERTY_NAME_DURATION_IN_MILLISECOND="DURATION_IN_MILLISECOND";
+	java.lang.String PROPERTY_NAME_PORTION_IN_MILLISECOND="PORTION_IN_MILLISECOND";
 	java.lang.String PROPERTY_NAME="NAME";
 	java.lang.String PROPERTY_FORMAT="FORMAT";
 	

@@ -4,8 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.inject.Singleton;
+
+import org.cyk.utility.common.helper.TimeHelper.Instant;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -127,33 +131,39 @@ public class EventHelper extends AbstractHelper implements Serializable  {
 						@Override
 						protected Collection<Event> __execute__() {
 							Collection<Event> events = new ArrayList<Event>();
-							
 							EventHelper.Event.Builder.Property eventBuilder = new EventHelper.Event.Builder.Property.Adapter.Default();
+							Instant from = (Instant) getProperty(PROPERTY_NAME_INSTANT_1);
+							Instant to = (Instant) getProperty(PROPERTY_NAME_INSTANT_2);
+							Integer durationInMillisecond = getPropertyAsInteger(Builder.PROPERTY_NAME_PORTION_IN_MILLISECOND);
+							Integer dayOfMonth = InstanceHelper.getInstance().getIfNotNullElseDefault(from.getDayOfMonth(), new Byte("1")).intValue();
+							Date endDate = to.getDate();
 							
-							Integer year_1 = getPropertyAsInteger(PROPERTY_NAME_YEAR_1);
-							Integer monthOfYear_1 = getPropertyAsInteger(PROPERTY_NAME_MONTHOFYEAR_1);
-							Integer dayOfMonth_1 = getPropertyAsInteger(PROPERTY_NAME_DAYOFMONTH_1);
-							Integer hourOfDay_1 = getPropertyAsInteger(PROPERTY_NAME_HOUROFDAY_1);
-							Integer minuteOfHour_1 = getPropertyAsInteger(PROPERTY_NAME_MINUTEOFHOUR_1);
-							
-							Integer durationInMillisecond = getPropertyAsInteger(Builder.PROPERTY_NAME_DURATION_IN_MILLISECOND);
-							
-							Integer year_2 = getPropertyAsInteger(PROPERTY_NAME_YEAR_2);
-							Integer monthOfYear_2 = getPropertyAsInteger(PROPERTY_NAME_MONTHOFYEAR_2);
-							Integer dayOfMonth_2 = getPropertyAsInteger(PROPERTY_NAME_DAYOFMONTH_2);
-							Integer hourOfDay_2 = getPropertyAsInteger(PROPERTY_NAME_HOUROFDAY_2);
-							Integer minuteOfHour_2 = getPropertyAsInteger(PROPERTY_NAME_MINUTEOFHOUR_2);
-							
-							for(Integer yearIndex = year_1 ; yearIndex <= year_2 ; yearIndex++){
-								for(Integer monthOfYearIndex = monthOfYear_1 ; monthOfYearIndex <= monthOfYear_2 ; monthOfYearIndex++){
-									for(Integer dayOfMonthIndex = dayOfMonth_1 ; dayOfMonthIndex <= dayOfMonth_2 ; dayOfMonthIndex++){
-										for(Integer hourOfDayIndex = hourOfDay_1 ; hourOfDayIndex <= hourOfDay_2 ; hourOfDayIndex++){	
-											for(Integer minuteOfHourIndex = minuteOfHour_1 ; minuteOfHourIndex <= minuteOfHour_2 ; minuteOfHourIndex++){
+							for(Short yearIndex = from.getYear() ; yearIndex <= to.getYear() ; yearIndex++){	
+								for(Byte monthOfYearIndex = from.getMonthOfYear() ; monthOfYearIndex <= to.getMonthOfYear() ; monthOfYearIndex++){
+									Set<Byte> dayIndexes = new LinkedHashSet<>();
+									if(from.getDayOfWeek()==null){
+										dayIndexes.add(from.getDayOfMonth());
+									}else{
+										Integer monthNumberOfDays = TimeHelper.getInstance().getNumberOfDaysOfMonth(monthOfYearIndex.intValue(), yearIndex.intValue());
+										do{
+											Integer dayOfWeek = TimeHelper.getInstance().getDayOfWeek(dayOfMonth, monthOfYearIndex.intValue(), yearIndex.intValue());
+											if(from.getDayOfWeek().equals(dayOfWeek.byteValue()) || dayOfMonth==monthNumberOfDays){
+												break;
+											}
+											dayOfMonth++;
+										}while(true);
+										for(Integer i = dayOfMonth ; i <= monthNumberOfDays ; i = i + TimeHelper.WEEK_NUMBER_OF_DAY)
+											if(TimeHelper.getInstance().compare(yearIndex.intValue(), monthOfYearIndex.intValue(), i, endDate)<=0)
+												dayIndexes.add(i.byteValue());
+									}
+									dayOfMonth = 1;
+									for(Byte dayOfMonthIndex : dayIndexes){
+										for(Byte hourOfDayIndex = from.getHourOfDay() ; hourOfDayIndex <= to.getHourOfDay() ; hourOfDayIndex++){	
+											for(Byte minuteOfHourIndex = from.getMinuteOfHour() ; minuteOfHourIndex <= to.getMinuteOfHour() ; minuteOfHourIndex++){
 												events.add(eventBuilder.setProperty(EventHelper.Event.Builder.PROPERTY_NAME, getProperty(PROPERTY_NAME))
-													.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_FROM, new TimeHelper.Builder.Part.Adapter.Default()
-													.setProperty(PROPERTY_NAME_YEAR, yearIndex).setProperty(PROPERTY_NAME_MONTHOFYEAR, monthOfYearIndex)
-													.setProperty(PROPERTY_NAME_DAYOFMONTH, dayOfMonthIndex).setProperty(PROPERTY_NAME_HOUROFDAY, hourOfDayIndex)
-													.setProperty(PROPERTY_NAME_MINUTEOFHOUR, minuteOfHourIndex).execute())
+													.setProperty(EventHelper.Event.Builder.PROPERTY_NAME_FROM, new TimeHelper.Builder.Instant.Adapter
+															.Default(new TimeHelper.Instant(yearIndex, monthOfYearIndex, dayOfMonthIndex, null, hourOfDayIndex
+																	, minuteOfHourIndex, null, null)).execute())
 													.setProperty(PROPERTY_NAME_DURATION_IN_MILLISECOND, durationInMillisecond)
 													.execute());
 											}
