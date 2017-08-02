@@ -92,6 +92,7 @@ public interface Action<INPUT,OUTPUT> {
 	
 	Action<INPUT, OUTPUT> clear();
 	
+	java.lang.String PROPERTY_NAME_INSTANT_INTERVAL = "INSTANT_INTERVAL";
 	java.lang.String PROPERTY_NAME_INSTANT = "INSTANT";
 	java.lang.String PROPERTY_NAME_INSTANT_1 = "INSTANT_1";
 	java.lang.String PROPERTY_NAME_INSTANT_2 = "INSTANT_2";

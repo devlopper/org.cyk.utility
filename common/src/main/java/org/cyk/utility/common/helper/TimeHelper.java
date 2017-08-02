@@ -18,6 +18,7 @@ import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
 import org.joda.time.DateTime;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -152,7 +153,20 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 					
 					@Override
 					protected Date __execute__() {
-						java.lang.String format = StringUtils.defaultString((java.lang.String)getProperty(PROPERTY_FORMAT),FORMAT);
+						java.lang.String format = (java.lang.String)getProperty(PROPERTY_FORMAT);
+						if(StringHelper.getInstance().isBlank(format)){
+							if(StringUtils.contains(getInput(), "/"))
+								if(StringUtils.contains(getInput(), ":"))
+									format = Constant.DAY_MONTH_YEAR_HOUR_MINUTE_PATTERN;
+								else
+									format = Constant.DAY_MONTH_YEAR_PATTERN;
+							else
+								if(StringUtils.contains(getInput(), ":"))
+									format = Constant.HOUR_MINUTE_PATTERN;
+								else
+									;
+						}
+						format = StringUtils.defaultString(format,FORMAT);
 						try {
 							return DateUtils.parseDate(getInput(), format);
 						} catch (ParseException e) {
@@ -486,15 +500,18 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 		public Date getDate(){
 			return TimeHelper.getInstance().getDate(year.intValue(), monthOfYear.intValue(), dayOfMonth.intValue());
 		}
-	}
-	
-	@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
-	public static class InstantInterval implements Serializable {
-		private static final long serialVersionUID = 1L;
 		
-		private Instant from,to;
-		private Long distanceInMillisecond;
-		private Long portionInMillisecond;
+		/**/
 		
+		@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Accessors(chain=true)
+		public static class Interval implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			private Instant from,to;
+			private Long distanceInMillisecond;
+			private Long portionInMillisecond;
+			
+		}
 	}
+
 }

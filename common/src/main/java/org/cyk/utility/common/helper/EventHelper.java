@@ -132,9 +132,10 @@ public class EventHelper extends AbstractHelper implements Serializable  {
 						protected Collection<Event> __execute__() {
 							Collection<Event> events = new ArrayList<Event>();
 							EventHelper.Event.Builder.Property eventBuilder = new EventHelper.Event.Builder.Property.Adapter.Default();
-							Instant from = (Instant) getProperty(PROPERTY_NAME_INSTANT_1);
-							Instant to = (Instant) getProperty(PROPERTY_NAME_INSTANT_2);
-							Integer durationInMillisecond = getPropertyAsInteger(Builder.PROPERTY_NAME_PORTION_IN_MILLISECOND);
+							Instant.Interval interval = (Instant.Interval) getProperty(PROPERTY_NAME_INSTANT_INTERVAL);
+							Instant from = interval.getFrom(); //(Instant) getProperty(PROPERTY_NAME_INSTANT_1);
+							Instant to =  interval.getTo(); //(Instant) getProperty(PROPERTY_NAME_INSTANT_2);
+							Integer durationInMillisecond = interval.getPortionInMillisecond().intValue(); //getPropertyAsInteger(Builder.PROPERTY_NAME_PORTION_IN_MILLISECOND);
 							Integer dayOfMonth = InstanceHelper.getInstance().getIfNotNullElseDefault(from.getDayOfMonth(), new Byte("1")).intValue();
 							Date endDate = to.getDate();
 							

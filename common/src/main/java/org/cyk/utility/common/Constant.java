@@ -79,12 +79,21 @@ public interface Constant {
 	
 	String LINE_DELIMITER = "\r\n";
 	
-	String DATE_PATTERN = "dd/MM/yyyy";
-	String TIME_PATTERN = "HH:mm";
-	String DATE_TIME_PATTERN = DATE_PATTERN+CHARACTER_SPACE+TIME_PATTERN;
-	SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat(DATE_PATTERN);
-	SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(TIME_PATTERN);
-	SimpleDateFormat DATE_TIME_FORMATTER = new SimpleDateFormat(DATE_TIME_PATTERN);
+	java.lang.String DAY_MONTH_YEAR_PATTERN_FORMAT = "%s/%s/%s";
+	java.lang.String HOUR_MINUTE_PATTERN_FORMAT = "%s:%s";
+	java.lang.String DAY_MONTH_YEAR_HOUR_MINUTE_PATTERN_FORMAT = "%s"+CHARACTER_SPACE+"%s";
+	
+	java.lang.String DAY_MONTH_YEAR_PATTERN = String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy");
+	java.lang.String HOUR_MINUTE_PATTERN = String.format(HOUR_MINUTE_PATTERN_FORMAT, "HH","mm");
+	java.lang.String DAY_MONTH_YEAR_HOUR_MINUTE_PATTERN = String.format(DAY_MONTH_YEAR_HOUR_MINUTE_PATTERN_FORMAT, DAY_MONTH_YEAR_PATTERN,HOUR_MINUTE_PATTERN);
+	
+	@Deprecated String DATE_PATTERN = "dd/MM/yyyy";
+	@Deprecated String TIME_PATTERN = "HH:mm";
+	@Deprecated String DATE_TIME_PATTERN = DATE_PATTERN+CHARACTER_SPACE+TIME_PATTERN;
+	
+	@Deprecated SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat(DATE_PATTERN);
+	@Deprecated SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(TIME_PATTERN);
+	@Deprecated SimpleDateFormat DATE_TIME_FORMATTER = new SimpleDateFormat(DATE_TIME_PATTERN);
 	
 	java.util.Date DATE_LOWEST_VALUE = new DateTime(0, 1, 1, 0, 0, 0, 0).toDate();
 	java.util.Date DATE_HIGHEST_VALUE = new DateTime(9999, 12, 31, 23, 59, 59, 999).toDate();
@@ -98,9 +107,6 @@ public interface Constant {
 	BigDecimal BIGDECIMAL_100 = new BigDecimal("100");
 	
 	java.lang.Void VOID = null;
-	
-	java.lang.String DAY_MONTH_YEAR_PATTERN_FORMAT = "%s/%s/%s";
-	java.lang.String HOUR_MINUTE_PATTERN_FORMAT = "%s:%s";
 	
 	/**/
 	
