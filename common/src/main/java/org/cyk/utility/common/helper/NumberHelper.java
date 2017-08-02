@@ -208,4 +208,9 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return get(aClass, number, null);
 	}
 	*/
+	
+	public static final Short SHORT_ZERO = new Short("0");
+	
+	public static final Byte BYTE_ZERO = new Byte("0");
+	
 }
