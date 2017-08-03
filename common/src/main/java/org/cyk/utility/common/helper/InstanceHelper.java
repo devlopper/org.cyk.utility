@@ -66,7 +66,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	}
 
 	public String getMethodName(MethodType type,String suffix){
-		return type.name().toLowerCase()+StringUtils.substring(suffix, 0,1).toUpperCase()+StringUtils.substring(suffix, 1).toLowerCase();
+		return type.name().toLowerCase()+StringUtils.substring(suffix, 0,1).toUpperCase()+StringUtils.substring(suffix, 1)/*.toLowerCase()*/;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -80,6 +80,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	public <T> Collection<T> callGetMethod(Collection<?> instances,Class<T> resultClass,String name){
+		if(CollectionHelper.getInstance().isEmpty(instances))
+			return null;
 		Collection<T> result = new ArrayList<>();
 		for(Object instance : instances){
 			T value = (T) callGetMethod(instance, resultClass, name);

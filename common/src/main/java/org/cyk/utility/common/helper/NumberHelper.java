@@ -213,4 +213,8 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 	
 	public static final Byte BYTE_ZERO = new Byte("0");
 	
+	/**/
+	
+	
+	
 }

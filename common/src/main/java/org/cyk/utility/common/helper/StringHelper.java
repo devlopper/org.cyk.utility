@@ -3,7 +3,8 @@ package org.cyk.utility.common.helper;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,16 +15,16 @@ import java.util.ResourceBundle;
 
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.Constant;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Singleton
 public class StringHelper extends AbstractHelper implements Serializable {
@@ -107,7 +108,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return StringUtils.join(strings, separator);
 	}
 	
-	public String concatenate(Collection<String> strings,String separator){
+	public String concatenate(java.util.Collection<String> strings,String separator){
 		if(strings==null)
 			return Constant.EMPTY_STRING;
 		return concatenate(strings.toArray(), separator);
@@ -133,19 +134,19 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return isAtLocation(string, value, location, Boolean.TRUE);
 	}
 	
-	public Collection<String> removeBlank(Collection<String> collection){
-		Collection<String> results = new ArrayList<>();
+	public java.util.Collection<String> removeBlank(java.util.Collection<String> collection){
+		java.util.Collection<String> results = new ArrayList<>();
 		for(String string : collection)
 			if(StringUtils.isNotBlank(string))
 				results.add(string);
 		return results;
 	}
 	
-	public Boolean isBlank(String string){
-		return StringUtils.isBlank(string);
+	public Boolean isBlank(CharSequence charSequence){
+		return StringUtils.isBlank(charSequence);
 	}
 	
-	public String get(Collection<?> collection,String separator){
+	public String get(java.util.Collection<?> collection,String separator){
 		if(collection==null)
 			return Constant.EMPTY_STRING;
 		return get(collection.toArray(), separator);
@@ -160,9 +161,9 @@ public class StringHelper extends AbstractHelper implements Serializable {
 				list.add(Constant.EMPTY_STRING);
 			else if(object instanceof Object[])
 				list.add(get((Object[])object, separator));
-			else if(object instanceof Collection<?>) {
-				Collection<String> collection = new ArrayList<>();
-				for(Object collectionItem : (Collection<?>)object)
+			else if(object instanceof java.util.Collection<?>) {
+				java.util.Collection<String> collection = new ArrayList<>();
+				for(Object collectionItem : (java.util.Collection<?>)object)
 					collection.add(/*get(collectionItem)*/ collectionItem.toString());
 				list.add(StringUtils.join(collection,Constant.CHARACTER_COMA.toString()));
 			}else
@@ -173,7 +174,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	public String get(Object[][] array,Object firstDimensionElementSeparator,Object secondDimensionElementSeparator){
 		if(array==null)
 			return Constant.EMPTY_STRING;
-		Collection<String> collection = new ArrayList<>();
+		java.util.Collection<String> collection = new ArrayList<>();
 		for(Object[] index : array)
 			collection.add(get(index, secondDimensionElementSeparator.toString()));
 		return StringUtils.join(collection,firstDimensionElementSeparator.toString());
@@ -291,13 +292,101 @@ public class StringHelper extends AbstractHelper implements Serializable {
 				}	
 			}	
 		}
+	
+		public static interface Collection extends Builder {
+			
+			Collection addTokens(java.util.Collection<String> tokens);
+			Collection addTokens(String...tokens);
+			Collection space();
+			Collection and();
+			Collection or();
+			
+			public static class Adapter extends Builder.Adapter implements Collection,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				protected java.util.Collection<String> tokens;
+				
+				@Override
+				public Collection addTokens(java.util.Collection<String> tokens) {
+					return null;
+				}
+				
+				@Override
+				public Collection addTokens(String...tokens) {
+					return null;
+				}
+				
+				@Override
+				public Collection space() {
+					return null;
+				}
+				
+				@Override
+				public Collection and() {
+					return null;
+				}
+				
+				@Override
+				public Collection or() {
+					return null;
+				}
+				
+				public static class Default extends Collection.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					@Override
+					protected String __execute__() {
+						return CollectionHelper.getInstance().concatenate(tokens, null);
+					}
+					
+					@Override
+					public Collection addTokens(java.util.Collection<String> tokens) {
+						if(!CollectionHelper.getInstance().isEmpty(tokens)){
+							if(this.tokens == null)
+								this.tokens = new ArrayList<>();
+							this.tokens.addAll(tokens);
+						}
+						return this;
+					}
+					
+					@Override
+					public Collection addTokens(String...tokens) {
+						if(!ArrayHelper.getInstance().isEmpty(tokens))
+							addTokens(Arrays.asList(tokens));
+						return this;
+					}
+					
+					@Override
+					public Collection space() {
+						return addTokens(Constant.CHARACTER_SPACE.toString());
+					}
+					
+					@Override
+					public Collection and() {
+						return addTokens(AND);
+					}
+					
+					@Override
+					public Collection or() {
+						return addTokens(OR);
+					}
+					
+				}
+				
+			}
+			
+			/**/
+			
+			String AND = "and";
+			String OR = "or";
+		}
 	}
 
 	/**/
 	
 	public static interface ToStringMapping extends org.cyk.utility.common.Mapping<String,String> {
 
-		@Deprecated Collection<Datasource> DATASOURCES = new ArrayList<>();
+		@Deprecated java.util.Collection<Datasource> DATASOURCES = new ArrayList<>();
 		String UNKNOWN_MARKER_START = "##";
 		String UNKNOWN_MARKER_END = "##";
 		String UNKNOWN_FORMAT = "%s%s%s";
@@ -507,7 +596,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 				private String __execute__(final String identifier,final CaseType pCaseType,final Locale pLocale,Boolean cachabled){
 					final Locale locale = commonUtils.getValueIfNotNullElseDefault(pLocale, Locale.FRENCH);
 					final CaseType caseType = commonUtils.getValueIfNotNullElseDefault(pCaseType, CaseType.DEFAULT);
-					final Collection<Object> parameters = getParameters();
+					final java.util.Collection<Object> parameters = getParameters();
 					
 					ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor = getDatasourcesExecutor();
 					if(datasourcesExecutor==null){
@@ -588,7 +677,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		
 		public static interface Datasource extends Action<String, String>{
 			
-			Collection<Class<? extends Datasource>> CLASSES = new ArrayList<>();
+			java.util.Collection<Class<? extends Datasource>> CLASSES = new ArrayList<>();
 			
 			public static class Adapter extends Action.Adapter.Default<String, String> implements Datasource,Serializable {
 				private static final long serialVersionUID = 1L;
@@ -755,6 +844,8 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		String SUBSTITUTE_TAG_END = "</"+SUBSTITUTE_TAG+">";
 	}
 
+	/**/
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
