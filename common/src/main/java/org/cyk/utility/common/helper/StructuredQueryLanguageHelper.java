@@ -44,7 +44,6 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				private static final long serialVersionUID = 1L;
 
 				
-				
 			}
 		}
 		
