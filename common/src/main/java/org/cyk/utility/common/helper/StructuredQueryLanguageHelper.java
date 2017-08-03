@@ -63,6 +63,9 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		Builder setWhere(String...expressions);
 		Builder addWhere(String expression);
 		
+		String getParameterFormat();
+		Builder setParameterFormat(String format);
+		
 		@Getter @Setter
 		public static class Adapter extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<String> implements Builder,Serializable{
 			private static final long serialVersionUID = 1L;
