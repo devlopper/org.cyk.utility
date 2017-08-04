@@ -326,6 +326,10 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		
 		Where addBetween(String fieldName,String parameterSuffix);
 		Where addBetween(String fieldName);
+		
+		Where addLessThanOrEqual(String fieldName,String parameter);
+		Where addGreaterThanOrEqual(String fieldName,String parameter);
+		
 		@Override Where leftParathensis();
 		@Override Where rightParathensis();
 		@Override Where and();
@@ -337,6 +341,16 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			private static final long serialVersionUID = 1L;
 
 			protected StructuredQueryLanguageHelper.Builder structuredQueryLanguageBuilder;
+			
+			@Override
+			public Where addGreaterThanOrEqual(String fieldName, String parameter) {
+				return null;
+			}
+			
+			@Override
+			public Where addLessThanOrEqual(String fieldName, String parameter) {
+				return null;
+			}
 			
 			@Override
 			public Where setStructuredQueryLanguageBuilder(Builder structuredQueryLanguageBuilder) {
@@ -400,6 +414,16 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					public Where setStructuredQueryLanguageBuilder(Builder structuredQueryLanguageBuilder) {
 						this.structuredQueryLanguageBuilder = structuredQueryLanguageBuilder;
 						return this;
+					}
+					
+					@Override
+					public Where addGreaterThanOrEqual(String fieldName, String parameter) {
+						return addTokens(fieldName,">=",getStructuredQueryLanguageBuilder().formatParameter(parameter));
+					}
+					
+					@Override
+					public Where addLessThanOrEqual(String fieldName, String parameter) {
+						return addTokens(fieldName,"<=",getStructuredQueryLanguageBuilder().formatParameter(parameter));
 					}
 				}
 			}

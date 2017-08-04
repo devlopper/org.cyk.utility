@@ -55,7 +55,9 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 			.rightParathensis()
 			.or()
 			.leftParathensis()
-				
+				.addLessThanOrEqual("r.instantInterval.from.year","fromYear").and().addLessThanOrEqual("r.instantInterval.from.monthOfYear","fromMonthOfYear")
+					.and().addLessThanOrEqual("r.instantInterval.from.dayOfMonth","fromDayOfMonth").and().addGreaterThanOrEqual("r.instantInterval.to.year","toYear")
+					.and().addGreaterThanOrEqual("r.instantInterval.to.monthOfYear","toMonthOfYear").and().addGreaterThanOrEqual("r.instantInterval.to.dayOfMonth","toDayOfMonth")
 			.rightParathensis()
 			;
 		
@@ -63,7 +65,9 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 				+ "AND r.instantInterval.from.monthOfYear BETWEEN :fromMonthOfYear AND :toMonthOfYear AND r.instantInterval.from.dayOfMonth "
 				+ "BETWEEN :fromDayOfMonth AND :toDayOfMonth) OR (r.instantInterval.to.year BETWEEN :fromYear AND :toYear "
 				+ "AND r.instantInterval.to.monthOfYear BETWEEN :fromMonthOfYear AND :toMonthOfYear AND r.instantInterval.to.dayOfMonth "
-				+ "BETWEEN :fromDayOfMonth AND :toDayOfMonth) OR (r.instantInterval.from.year>=)", jpql.addTupleCollection("ScheduleItem", "r")
+				+ "BETWEEN :fromDayOfMonth AND :toDayOfMonth) OR (r.instantInterval.from.year<=:fromYear AND r.instantInterval.from.monthOfYear<=:fromMonthOfYear AND "
+				+ "r.instantInterval.from.dayOfMonth<=:fromDayOfMonth AND r.instantInterval.to.year>=:toYear AND r.instantInterval.to.monthOfYear>=:toMonthOfYear AND "
+				+ "r.instantInterval.to.dayOfMonth>=:toDayOfMonth)", jpql.addTupleCollection("ScheduleItem", "r")
 				.addWhere(where.execute())
 				.execute());
 	}
