@@ -68,6 +68,7 @@ public interface Action<INPUT,OUTPUT> {
 	Action<INPUT, OUTPUT> setProperty(String name,Object value);
 	Action<INPUT, OUTPUT> setManyProperties(Object...objects);
 	Object getProperty(String name);
+	String getPropertyAsString(String name);
 	<T extends Number> T getPropertyAsNumber(Class<T> numberClass,String name,T nullValue);
 	<T extends Number> T getPropertyAsNumber(Class<T> numberClass,String name);
 	Integer getPropertyAsInteger(String name,Integer nullValue);
@@ -97,7 +98,11 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_INSTANT_1 = "INSTANT_1";
 	java.lang.String PROPERTY_NAME_INSTANT_2 = "INSTANT_2";
 	java.lang.String PROPERTY_NAME_FIELD_NAME = "fieldName";
+	java.lang.String PROPERTY_NAME_INDEX = "index";
+	java.lang.String PROPERTY_NAME_SUFFIX = "suffix";
 	java.lang.String PROPERTY_NAME_FIELD_VALUE = "fieldValue";
+	java.lang.String PROPERTY_NAME_PARAMETER_1 = "parameter1";
+	java.lang.String PROPERTY_NAME_PARAMETER_2 = "parameter2";
 	java.lang.String PROPERTY_NAME_YEAR="YEAR";
 	java.lang.String PROPERTY_NAME_YEAR_1="YEAR1";
 	java.lang.String PROPERTY_NAME_YEAR_2="YEAR2";
@@ -172,6 +177,11 @@ public interface Action<INPUT,OUTPUT> {
 			setInputClass(inputClass);
 			setInput(input);
 			setOutputClass(outputClass);
+		}
+		
+		@Override
+		public String getPropertyAsString(String name) {
+			return null;
 		}
 		
 		@Override
@@ -418,6 +428,11 @@ public interface Action<INPUT,OUTPUT> {
 				Properties properties = getProperties();
 				
 				return properties == null ? null : properties.get(name);
+			}
+			
+			@Override
+			public java.lang.String getPropertyAsString(String name) {
+				return (java.lang.String) getProperty(name);
 			}
 			
 			@Override

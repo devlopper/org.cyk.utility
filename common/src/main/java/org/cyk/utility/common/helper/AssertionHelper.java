@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
 
 @Singleton
@@ -48,6 +49,13 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 		return assertEquals(Constant.EMPTY_STRING, expected, actual);
 	}
 	
+	public AssertionHelper assertEquals(String expected,String actual,Boolean caseSensitive){
+		if(!Boolean.TRUE.equals(caseSensitive)){
+			expected = StringUtils.lowerCase(expected);
+			actual = StringUtils.lowerCase(actual);
+		}
+		return assertEquals(expected,actual);
+	}
 	/**/
 	
 	public static interface Assertion<INPUT> extends org.cyk.utility.common.Action<INPUT,java.lang.Object>  {

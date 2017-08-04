@@ -3,7 +3,8 @@ package org.cyk.utility.common;
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Builder.Adapter.Default.JavaPersistenceQueryLanguage;
-import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Builder.Operator;
+import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where;
+import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.Between;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -15,6 +16,16 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 	public void jpqlWhere(){
 		AssertionHelper.getInstance().assertEquals("c1=v1", new StructuredQueryLanguageHelper.Where.Adapter.Default.JavaPersistenceQueryLanguage()
 			.addTokens("c1","=","v1").execute());
+	}
+	
+	@Test
+	public void jpqlBetween(){
+		JavaPersistenceQueryLanguage jpql = new JavaPersistenceQueryLanguage();
+		Between between = new Between.Adapter.Default.JavaPersistenceQueryLanguage().setStructuredQueryLanguageBuilder(jpql);
+		AssertionHelper.getInstance().assertEquals("r.instantInterval.from.year BETWEEN :fromYear AND :toYear"
+				, between.setProperty(Between.PROPERTY_NAME_FIELD_NAME, "r.instantInterval.from.year").execute());
+		AssertionHelper.getInstance().assertEquals("r.instantInterval.from.monthOfYear BETWEEN :fromMonthOfYear AND :toMonthOfYear"
+				, between.clear().setProperty(Between.PROPERTY_NAME_FIELD_NAME, "r.instantInterval.from.monthOfYear").execute());
 	}
 	
 	@Test
@@ -32,12 +43,29 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 						+ "AND r.instantInterval.from.monthOfYear BETWEEN :fromMonthOfYear AND :toMonthOfYear AND r.instantInterval.from.dayOfMonth "
 						+ "BETWEEN :fromDayOfMonth AND :toDayOfMonth").execute());
 		*/
-		AssertionHelper.getInstance().assertEquals("SELECT r FROM ScheduleItem r WHERE r.instantInterval.from.year BETWEEN :fromYear AND :toYear "
+		JavaPersistenceQueryLanguage jpql = new JavaPersistenceQueryLanguage();
+		Where where = new Where.Adapter.Default.JavaPersistenceQueryLanguage().setStructuredQueryLanguageBuilder(jpql);
+		
+		where.leftParathensis()
+				.addBetween("r.instantInterval.from.year").and().addBetween("r.instantInterval.from.monthOfYear").and().addBetween("r.instantInterval.from.dayOfMonth")
+			.rightParathensis()
+			.or()
+			.leftParathensis()
+				.addBetween("r.instantInterval.to.year").and().addBetween("r.instantInterval.to.monthOfYear").and().addBetween("r.instantInterval.to.dayOfMonth")
+			.rightParathensis()
+			.or()
+			.leftParathensis()
+				
+			.rightParathensis()
+			;
+		
+		AssertionHelper.getInstance().assertEquals("SELECT r FROM ScheduleItem r WHERE (r.instantInterval.from.year BETWEEN :fromYear AND :toYear "
 				+ "AND r.instantInterval.from.monthOfYear BETWEEN :fromMonthOfYear AND :toMonthOfYear AND r.instantInterval.from.dayOfMonth "
-				+ "BETWEEN :fromDayOfMonth AND :toDayOfMonth", new JavaPersistenceQueryLanguage().addTupleCollection("ScheduleItem", "r")
-				.addExpressions(Operator.WHERE, StructuredQueryLanguageHelper.getInstance().getBetween("r.instantInterval.from.year", ":fromYear", ":toYear")
-						+" AND "+StructuredQueryLanguageHelper.getInstance().getBetween("r.instantInterval.from.monthOfYear", ":fromMonthOfYear", ":toMonthOfYear")+
-						" AND "+StructuredQueryLanguageHelper.getInstance().getBetween("r.instantInterval.from.dayOfMonth", ":fromDayOfMonth", ":toDayOfMonth")).execute());
+				+ "BETWEEN :fromDayOfMonth AND :toDayOfMonth) OR (r.instantInterval.to.year BETWEEN :fromYear AND :toYear "
+				+ "AND r.instantInterval.to.monthOfYear BETWEEN :fromMonthOfYear AND :toMonthOfYear AND r.instantInterval.to.dayOfMonth "
+				+ "BETWEEN :fromDayOfMonth AND :toDayOfMonth) OR (r.instantInterval.from.year>=)", jpql.addTupleCollection("ScheduleItem", "r")
+				.addWhere(where.execute())
+				.execute());
 	}
 	
 	

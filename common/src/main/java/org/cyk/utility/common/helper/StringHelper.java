@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,16 +14,16 @@ import java.util.ResourceBundle;
 
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.Constant;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Singleton
 public class StringHelper extends AbstractHelper implements Serializable {
@@ -295,19 +294,40 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	
 		public static interface Collection extends Builder {
 			
-			Collection addTokens(java.util.Collection<String> tokens);
+			Collection addTokens(java.util.List<String> tokens);
 			Collection addTokens(String...tokens);
+			Collection addActions(@SuppressWarnings("rawtypes") java.util.List<Action> actions);
+			Collection addActions(@SuppressWarnings({ "rawtypes" }) Action...actions);
 			Collection space();
 			Collection and();
 			Collection or();
+			Collection leftParathensis();
+			Collection rightParathensis();
+			
+			Collection applyCaseToLastToken(CaseType caseType);
 			
 			public static class Adapter extends Builder.Adapter implements Collection,Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				protected java.util.Collection<String> tokens;
+				protected java.util.List<String> tokens;
 				
 				@Override
-				public Collection addTokens(java.util.Collection<String> tokens) {
+				public Collection addActions(@SuppressWarnings("rawtypes") List<Action> actions) {
+					return null;
+				}
+				
+				@Override
+				public Collection addActions(@SuppressWarnings({ "rawtypes" }) Action...actions) {
+					return null;
+				}
+				
+				@Override
+				public Collection applyCaseToLastToken(CaseType caseType) {
+					return null;
+				}
+				
+				@Override
+				public Collection addTokens(java.util.List<String> tokens) {
 					return null;
 				}
 				
@@ -331,6 +351,16 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					return null;
 				}
 				
+				@Override
+				public Collection leftParathensis() {
+					return null;
+				}
+
+				@Override
+				public Collection rightParathensis() {
+					return null;
+				}
+
 				public static class Default extends Collection.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
@@ -340,7 +370,30 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					}
 					
 					@Override
-					public Collection addTokens(java.util.Collection<String> tokens) {
+					public Collection addActions(@SuppressWarnings("rawtypes") List<Action> actions) {
+						if(!CollectionHelper.getInstance().isEmpty(actions))
+							for(Action<?,?> action : actions)
+								addTokens((java.lang.String)action.execute());
+						return this;
+					}
+					
+					@Override
+					public Collection addActions(@SuppressWarnings({ "rawtypes" }) Action...actions) {
+						if(!ArrayHelper.getInstance().isEmpty(actions))
+							addActions(Arrays.asList(actions));
+						return this;
+					}
+					
+					@Override
+					public Collection applyCaseToLastToken(CaseType caseType) {
+						if(!CollectionHelper.getInstance().isEmpty(tokens)){
+							tokens.set(tokens.size()-1, StringHelper.getInstance().applyCaseType(tokens.get(tokens.size()-1), caseType));
+						}
+						return this;
+					}
+					
+					@Override
+					public Collection addTokens(java.util.List<String> tokens) {
 						if(!CollectionHelper.getInstance().isEmpty(tokens)){
 							if(this.tokens == null)
 								this.tokens = new ArrayList<>();
@@ -369,6 +422,22 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					@Override
 					public Collection or() {
 						return addTokens(OR);
+					}
+					
+					@Override
+					public Collection leftParathensis() {
+						return addTokens(Constant.CHARACTER_LEFT_PARENTHESIS.toString());
+					}
+
+					@Override
+					public Collection rightParathensis() {
+						return addTokens(Constant.CHARACTER_RIGHT_PARENTHESIS.toString());
+					}
+					
+					@Override
+					public Action<Object, String> clear() {
+						CollectionHelper.getInstance().clear(tokens);
+						return super.clear();
 					}
 					
 				}
