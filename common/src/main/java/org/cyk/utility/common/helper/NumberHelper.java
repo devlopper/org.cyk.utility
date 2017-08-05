@@ -209,6 +209,21 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 	}
 	*/
 	
+	public Boolean isGreaterThanZero(Number number){
+		if(number == null)
+			return Boolean.FALSE;
+		return number.intValue() > 0 || number.floatValue() > 0;
+	}
+	
+	public Boolean areGreaterThanZero(Number...numbers){
+		if(!ArrayHelper.getInstance().isEmpty(numbers)){
+			for(Number number : numbers)
+				if(Boolean.FALSE.equals(isGreaterThanZero(number)))
+					return Boolean.FALSE;
+		}
+		return Boolean.TRUE;
+	}
+	
 	public static final Short SHORT_ZERO = new Short("0");
 	
 	public static final Byte BYTE_ZERO = new Byte("0");
