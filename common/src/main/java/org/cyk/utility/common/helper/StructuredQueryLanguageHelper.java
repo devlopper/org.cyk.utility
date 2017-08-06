@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 
@@ -72,15 +73,42 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		Builder setParameterFormat(String format);
 		String formatParameter(String parameter);
 		
+		Where getWhere();
+		Where getWhere(Boolean createIfNull);
+		Where createWhere();
+		Builder setWhere(Where where);
+		Where where();
+		
+		String getFieldNamePrefix();
+		Builder setFieldNamePrefix(String fieldNamePrefix);
+		String formatFieldName(String fieldName);
+		Builder setFieldName(String fieldName);
+		
 		@Getter
 		public static class Adapter extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<String> implements Builder,Serializable{
 			private static final long serialVersionUID = 1L;
 
 			protected Collection<TupleCollection> tupleCollections;
-			protected String parameterFormat;
+			protected String parameterFormat,fieldNamePrefix;
+			protected Where where;
 			
 			public Adapter() {
 				super(String.class);
+			}
+			
+			@Override
+			public String formatFieldName(String fieldName) {
+				return null;
+			}
+			
+			@Override
+			public Builder setFieldName(String fieldName) {
+				return null;
+			}
+			
+			@Override
+			public Builder setFieldNamePrefix(String fieldNamePrefix) {
+				return null;
 			}
 			
 			@Override
@@ -143,6 +171,26 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				return null;
 			}
 			
+			@Override
+			public Builder setWhere(Where where) {
+				return null;
+			}
+			
+			@Override
+			public Where getWhere(Boolean createIfNull) {
+				return null;
+			}
+			
+			@Override
+			public Where createWhere() {
+				return null;
+			}
+			
+			@Override
+			public Where where() {
+				return null;
+			}
+			
 			public static class Default extends Builder.Adapter implements Serializable{
 				private static final long serialVersionUID = 1L;
 
@@ -150,6 +198,32 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				public static final String FROM_FORMAT = "FROM %s";
 				public static final String WHERE_FORMAT = "WHERE %s";
 				public static final String ORDER_BY_FORMAT = "ORDER BY %s";
+				public static final String DEFAULT_TUPLE_COLLECTION_ALIAS = "t";
+				
+				public Default(String tupleCollection,String alias){
+					addTupleCollection(tupleCollection, alias);
+				}
+				
+				public Default(String tupleCollection){
+					this(tupleCollection,DEFAULT_TUPLE_COLLECTION_ALIAS);
+				}
+				
+				@Override
+				public Builder setFieldName(String fieldName) {
+					setFieldNamePrefix(DEFAULT_TUPLE_COLLECTION_ALIAS+Constant.CHARACTER_DOT+fieldName+Constant.CHARACTER_DOT);
+					return this;
+				}
+				
+				@Override
+				public String formatFieldName(String fieldName) {
+					return StringUtils.defaultString(getFieldNamePrefix())+fieldName;
+				}
+				
+				@Override
+				public Builder setFieldNamePrefix(String fieldNamePrefix) {
+					this.fieldNamePrefix = fieldNamePrefix;
+					return this;
+				}
 				
 				@Override
 				public Builder addTupleCollection(String name, String alias) {
@@ -231,6 +305,17 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				}
 				
 				@Override
+				public Builder setWhere(Where where) {
+					this.where = where;
+					return this;
+				}
+				
+				@Override
+				public Where where() {
+					return getWhere(Boolean.TRUE);
+				}
+				
+				@Override
 				protected String __execute__() {
 					Collection<TupleCollection> tupleCollections = getTupleCollections();
 					Collection<String> collection = new ArrayList<>();
@@ -249,12 +334,32 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						}
 					}
 					
+					Where where = getWhere();
+					if(StringHelper.getInstance().isBlank(get(Operator.WHERE))){
+						if(where!=null){
+							addExpressions(Operator.WHERE, where.execute());
+						}
+					}
+					
 					for(Operator operator : new Operator[]{Operator.SELECT,Operator.FROM,Operator.WHERE,Operator.ORDER_BY}){
 						String string = get(operator);
 						if(!StringHelper.getInstance().isBlank(string))
 							collection.add(string);
 					}
 					return CollectionHelper.getInstance().concatenate(collection, Constant.CHARACTER_SPACE.toString());
+				}
+				
+				@Override
+				public Where getWhere(Boolean createIfNull) {
+					if(where==null)
+						if(Boolean.TRUE.equals(createIfNull)){
+							where = createWhere();
+							if(where!=null){
+								where.setParent(this);
+							}
+						}
+					setWhere(where);
+					return where;
 				}
 				
 				/**/
@@ -266,6 +371,24 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 
 					{
 						setParameterFormat(PARAMETER_FORMAT);
+					}
+					
+					public JavaPersistenceQueryLanguage(String tupleCollection,String alias){
+						super(tupleCollection, alias);
+					}
+					
+					public JavaPersistenceQueryLanguage(String tupleCollection){
+						super(tupleCollection);
+					}
+					
+					@Override
+					public JavaPersistenceQueryLanguage addTupleCollection(String name, String alias) {
+						return (JavaPersistenceQueryLanguage) super.addTupleCollection(name, alias);
+					}
+					
+					@Override
+					public Where createWhere() {
+						return new Where.Adapter.Default.JavaPersistenceQueryLanguage();
 					}
 				}
 				
@@ -321,26 +444,58 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 	
 	public static interface Where extends StringHelper.Builder.Collection {
 		
-		StructuredQueryLanguageHelper.Builder getStructuredQueryLanguageBuilder();
-		Where setStructuredQueryLanguageBuilder(StructuredQueryLanguageHelper.Builder builder);
-		
 		Where addBetween(String fieldName,String parameterSuffix);
 		Where addBetween(String fieldName);
+		Where bw(String fieldName);
 		
 		Where addLessThanOrEqual(String fieldName,String parameter);
+		Where lte(String fieldName,String parameter);
 		Where addGreaterThanOrEqual(String fieldName,String parameter);
+		Where gte(String fieldName,String parameter);
 		
 		@Override Where leftParathensis();
+		Where lp();
 		@Override Where rightParathensis();
+		Where rp();
 		@Override Where and();
 		@Override Where or();
 		@Override Where addTokens(String... tokens);
+		
+		@Override StructuredQueryLanguageHelper.Builder getParent();
 		
 		@Getter
 		public static class Adapter extends StringHelper.Builder.Collection.Adapter.Default implements Where , Serializable{
 			private static final long serialVersionUID = 1L;
 
-			protected StructuredQueryLanguageHelper.Builder structuredQueryLanguageBuilder;
+			@Override
+			public StructuredQueryLanguageHelper.Builder getParent() {
+				return (StructuredQueryLanguageHelper.Builder) super.getParent();
+			}
+			
+			@Override
+			public Where lte(String fieldName, String parameter) {
+				return null;
+			}
+			
+			@Override
+			public Where gte(String fieldName, String parameter) {
+				return null;
+			}
+			
+			@Override
+			public Where bw(String fieldName) {
+				return null;
+			}
+			
+			@Override
+			public Where lp() {
+				return null;
+			}
+			
+			@Override
+			public Where rp() {
+				return null;
+			}
 			
 			@Override
 			public Where addGreaterThanOrEqual(String fieldName, String parameter) {
@@ -349,11 +504,6 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			
 			@Override
 			public Where addLessThanOrEqual(String fieldName, String parameter) {
-				return null;
-			}
-			
-			@Override
-			public Where setStructuredQueryLanguageBuilder(Builder structuredQueryLanguageBuilder) {
 				return null;
 			}
 			
@@ -379,12 +529,12 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			
 			@Override
 			public Where and() {
-				return (Where) addTokens(Constant.CHARACTER_SPACE.toString()+"AND"+Constant.CHARACTER_SPACE.toString());
+				return (Where) super.and();
 			}
 			
 			@Override
 			public Where or() {
-				return (Where) addTokens(Constant.CHARACTER_SPACE.toString()+"OR"+Constant.CHARACTER_SPACE.toString());
+				return (Where) super.or();
 			}
 			
 			@Override
@@ -395,13 +545,58 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			public static class Default extends Where.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 			
+				@Override
+				public Where lte(String fieldName, String parameter) {
+					return addLessThanOrEqual(fieldName, parameter);
+				}
+				
+				@Override
+				public Where gte(String fieldName, String parameter) {
+					return addGreaterThanOrEqual(fieldName, parameter);
+				}
+				
+				@Override
+				public Where bw(String fieldName) {
+					return addBetween(fieldName);
+				}
+				
+				@Override
+				public Where and() {
+					return (Where) addTokens(Constant.CHARACTER_SPACE.toString()+"AND"+Constant.CHARACTER_SPACE.toString());
+				}
+				
+				@Override
+				public Where or() {
+					return (Where) addTokens(Constant.CHARACTER_SPACE.toString()+"OR"+Constant.CHARACTER_SPACE.toString());
+				}
+				
+				@Override
+				public Where lp() {
+					return leftParathensis();
+				}
+				
+				@Override
+				public Where rp() {
+					return rightParathensis();
+				}
+				
+				@Override
+				public Where addGreaterThanOrEqual(String fieldName, String parameter) {
+					return addTokens(getParent().formatFieldName(fieldName),">=", getParent().formatParameter(parameter));
+				}
+				
+				@Override
+				public Where addLessThanOrEqual(String fieldName, String parameter) {
+					return addTokens(getParent().formatFieldName(fieldName),"<=",getParent().formatParameter(parameter));
+				}
+				
 				public static class JavaPersistenceQueryLanguage extends Where.Adapter.Default implements Serializable{
 					private static final long serialVersionUID = 1L;
-						
+					
 					@Override
 					public Where addBetween(String fieldName,String parameterSuffix) {
-						addActions(new Between.Adapter.Default.JavaPersistenceQueryLanguage().setStructuredQueryLanguageBuilder(getStructuredQueryLanguageBuilder())
-							.setProperty(Between.PROPERTY_NAME_FIELD_NAME, fieldName).setProperty(Between.PROPERTY_NAME_SUFFIX, parameterSuffix));
+						addActions(new Between.Adapter.Default.JavaPersistenceQueryLanguage().setParent(this)
+							.setProperty(Between.PROPERTY_NAME_FIELD_NAME, getParent().formatFieldName(fieldName)).setProperty(Between.PROPERTY_NAME_SUFFIX, parameterSuffix));
 						return this;
 					}
 					
@@ -410,21 +605,6 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						return addBetween(fieldName, null);
 					}
 					
-					@Override
-					public Where setStructuredQueryLanguageBuilder(Builder structuredQueryLanguageBuilder) {
-						this.structuredQueryLanguageBuilder = structuredQueryLanguageBuilder;
-						return this;
-					}
-					
-					@Override
-					public Where addGreaterThanOrEqual(String fieldName, String parameter) {
-						return addTokens(fieldName,">=",getStructuredQueryLanguageBuilder().formatParameter(parameter));
-					}
-					
-					@Override
-					public Where addLessThanOrEqual(String fieldName, String parameter) {
-						return addTokens(fieldName,"<=",getStructuredQueryLanguageBuilder().formatParameter(parameter));
-					}
 				}
 			}
 		}
@@ -434,21 +614,24 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		// field BETWEEN parameter1 AND parameter2
 		public static interface Between extends StringHelper.Builder.Collection {
 			
-			StructuredQueryLanguageHelper.Builder getStructuredQueryLanguageBuilder();
-			Between setStructuredQueryLanguageBuilder(StructuredQueryLanguageHelper.Builder builder);
-			
 			String PARAMETER_FROM_FORMAT = "from%s";
 			String PARAMETER_TO_FORMAT = "to%s";
+			
+			@Override Where getParent();
+			@Override Between setParent(Action<Object, String> parent);
 			
 			@Getter
 			public static class Adapter extends StringHelper.Builder.Collection.Adapter.Default implements Between , Serializable{
 				private static final long serialVersionUID = 1L;
 
-				protected StructuredQueryLanguageHelper.Builder structuredQueryLanguageBuilder;
+				@Override
+				public Between setParent(Action<Object, String> parent) {
+					return (Between) super.setParent(parent);
+				}
 				
 				@Override
-				public Between setStructuredQueryLanguageBuilder(Builder structuredQueryLanguageBuilder) {
-					return null;
+				public Where getParent() {
+					return (Where) super.getParent();
 				}
 				
 				public static String getFromParameterName(String field){
@@ -463,23 +646,17 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				
 				public static class Default extends Between.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
-				
-					@Override
-					public Between setStructuredQueryLanguageBuilder(Builder structuredQueryLanguageBuilder) {
-						this.structuredQueryLanguageBuilder = structuredQueryLanguageBuilder;
-						return this;
-					}
-					
+							
 					@Override
 					protected String __execute__() {
 						String suffix = getPropertyAsString(PROPERTY_NAME_SUFFIX);
 						String fieldName = getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
 						String parameter1 = getPropertyAsString(PROPERTY_NAME_PARAMETER_1);
 						if(StringHelper.getInstance().isBlank(parameter1))
-							parameter1 = structuredQueryLanguageBuilder.formatParameter(getFromParameterName(fieldName)+StringUtils.defaultString(suffix));
+							parameter1 = getParent().getParent().formatParameter(getFromParameterName(fieldName)+StringUtils.defaultString(suffix));
 						String parameter2 = getPropertyAsString(PROPERTY_NAME_PARAMETER_2);
 						if(StringHelper.getInstance().isBlank(parameter2))
-							parameter2 = structuredQueryLanguageBuilder.formatParameter(getToParameterName(fieldName)+StringUtils.defaultString(suffix));
+							parameter2 = getParent().getParent().formatParameter(getToParameterName(fieldName)+StringUtils.defaultString(suffix));
 						addTokens(fieldName).space().addTokens("BETWEEN").space()
 						.addTokens(parameter1).space().and().applyCaseToLastToken(CaseType.U).space().addTokens(parameter2);
 						return super.__execute__();

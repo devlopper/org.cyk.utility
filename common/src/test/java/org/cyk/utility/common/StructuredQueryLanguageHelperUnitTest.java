@@ -3,7 +3,6 @@ package org.cyk.utility.common;
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Builder.Adapter.Default.JavaPersistenceQueryLanguage;
-import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.Between;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -20,8 +19,8 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void jpqlBetween(){
-		JavaPersistenceQueryLanguage jpql = new JavaPersistenceQueryLanguage();
-		Between between = new Between.Adapter.Default.JavaPersistenceQueryLanguage().setStructuredQueryLanguageBuilder(jpql);
+		JavaPersistenceQueryLanguage jpql = new JavaPersistenceQueryLanguage("","");
+		Between between = new Between.Adapter.Default.JavaPersistenceQueryLanguage().setParent(jpql);
 		AssertionHelper.getInstance().assertEquals("r.instantInterval.from.year BETWEEN :fromYear AND :toYear"
 				, between.setProperty(Between.PROPERTY_NAME_FIELD_NAME, "r.instantInterval.from.year").execute());
 		AssertionHelper.getInstance().assertEquals("r.instantInterval.from.monthOfYear BETWEEN :fromMonthOfYear AND :toMonthOfYear"
@@ -43,33 +42,11 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 						+ "AND r.instantInterval.from.monthOfYear BETWEEN :fromMonthOfYear AND :toMonthOfYear AND r.instantInterval.from.dayOfMonth "
 						+ "BETWEEN :fromDayOfMonth AND :toDayOfMonth").execute());
 		*/
-		JavaPersistenceQueryLanguage jpql = new JavaPersistenceQueryLanguage();
-		Where where = new Where.Adapter.Default.JavaPersistenceQueryLanguage().setStructuredQueryLanguageBuilder(jpql);
 		
-		where.leftParathensis()
-				.addBetween("r.instantInterval.from.year").and().addBetween("r.instantInterval.from.monthOfYear").and().addBetween("r.instantInterval.from.dayOfMonth")
-			.rightParathensis()
-			.or()
-			.leftParathensis()
-				.addBetween("r.instantInterval.to.year").and().addBetween("r.instantInterval.to.monthOfYear").and().addBetween("r.instantInterval.to.dayOfMonth")
-			.rightParathensis()
-			.or()
-			.leftParathensis()
-				.addLessThanOrEqual("r.instantInterval.from.year","fromYear").and().addLessThanOrEqual("r.instantInterval.from.monthOfYear","fromMonthOfYear")
-					.and().addLessThanOrEqual("r.instantInterval.from.dayOfMonth","fromDayOfMonth").and().addGreaterThanOrEqual("r.instantInterval.to.year","toYear")
-					.and().addGreaterThanOrEqual("r.instantInterval.to.monthOfYear","toMonthOfYear").and().addGreaterThanOrEqual("r.instantInterval.to.dayOfMonth","toDayOfMonth")
-			.rightParathensis()
-			;
-		
-		AssertionHelper.getInstance().assertEquals("SELECT r FROM ScheduleItem r WHERE (r.instantInterval.from.year BETWEEN :fromYear AND :toYear "
-				+ "AND r.instantInterval.from.monthOfYear BETWEEN :fromMonthOfYear AND :toMonthOfYear AND r.instantInterval.from.dayOfMonth "
-				+ "BETWEEN :fromDayOfMonth AND :toDayOfMonth) OR (r.instantInterval.to.year BETWEEN :fromYear AND :toYear "
-				+ "AND r.instantInterval.to.monthOfYear BETWEEN :fromMonthOfYear AND :toMonthOfYear AND r.instantInterval.to.dayOfMonth "
-				+ "BETWEEN :fromDayOfMonth AND :toDayOfMonth) OR (r.instantInterval.from.year<=:fromYear AND r.instantInterval.from.monthOfYear<=:fromMonthOfYear AND "
-				+ "r.instantInterval.from.dayOfMonth<=:fromDayOfMonth AND r.instantInterval.to.year>=:toYear AND r.instantInterval.to.monthOfYear>=:toMonthOfYear AND "
-				+ "r.instantInterval.to.dayOfMonth>=:toDayOfMonth)", jpql.addTupleCollection("ScheduleItem", "r")
-				.addWhere(where.execute())
-				.execute());
+		AssertionHelper.getInstance().assertEquals("SELECT t FROM ScheduleItem t WHERE (t.instantInterval.from.date BETWEEN :fromDate AND :toDate"
+				+ " OR t.instantInterval.to.date BETWEEN :fromDate AND :toDate) OR (t.instantInterval.from.date<=:fromDate AND t.instantInterval.to.date>=:toDate)"
+				, new JavaPersistenceQueryLanguage("ScheduleItem").setFieldName("instantInterval").where().lp().bw("from.date").or().bw("to.date").rp()
+				.or().lp().lte("from.date","fromDate").and().gte("to.date","toDate").rp().getParent().execute());
 	}
 	
 	
