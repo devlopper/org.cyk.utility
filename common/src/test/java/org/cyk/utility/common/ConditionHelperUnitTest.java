@@ -24,6 +24,14 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 		
 		assertCondition(new ConditionHelper.Condition.Builder.Duplicate.Adapter.Default().setValueNameIdentifier("code").setValueCount(1l)
 				.setDomainNameIdentifier("person").setInput("ABC").execute(), Boolean.TRUE, "Un enregistrement de type personne avec pour code <<ABC>> existe déja.");
+
+	}
+	
+	@Test
+	public void comparison(){
+		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
+				.setDomainNameIdentifier("sale").setNumber1(1).setNumber2(2).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				, "La balance(1) doit être supérieure ou égale à 2.");		
 	}
 	
 	private void assertCondition(Condition condition,Boolean expectedValue,String expectedMessage){

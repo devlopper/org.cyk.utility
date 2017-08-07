@@ -224,6 +224,30 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return Boolean.TRUE;
 	}
 	
+	public Boolean compare(Number number1,Number number2,Boolean greater,Boolean equal){
+		if(number1==null || number2==null)
+			return Boolean.FALSE;
+		if(greater==null){
+			
+		}else{
+			if(equal==null){
+				
+			}else{
+				if(Boolean.TRUE.equals(greater))
+					if(Boolean.TRUE.equals(equal))
+						return number1.doubleValue() >= number2.doubleValue();
+					else
+						return number1.doubleValue() > number2.doubleValue();
+				else
+					if(Boolean.TRUE.equals(equal))
+						return number1.doubleValue() <= number2.doubleValue();
+					else
+						return number1.doubleValue() < number2.doubleValue();
+			}
+		}
+		return number1.doubleValue() == number2.doubleValue();
+	}
+	
 	public static final Short SHORT_ZERO = new Short("0");
 	
 	public static final Byte BYTE_ZERO = new Byte("0");

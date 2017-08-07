@@ -85,12 +85,17 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return line;
 	}
 	
+	@Deprecated
 	public String getText(Locale locale,String identifier,Object[] parameters){
 		if(locale==null)
 			locale = Locale.FRENCH;
 		ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME,locale);
 		String value = parameters==null?resourceBundle.getString(identifier):MessageFormat.format(resourceBundle.getString(identifier),parameters);
 		return value;
+    }
+	
+	public String get(String identifier,Object[] parameters){
+		return new StringHelper.ToStringMapping.Adapter.Default(identifier).setCaseType(CaseType.FURL).addParameters(parameters).execute();
     }
 	
 	public java.lang.String getOrdinalNumberSuffix(Locale locale,Number number) {
@@ -185,6 +190,16 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return string;
 	}
 	
+	public String getWordIdentifier(String identifier,Boolean masculine,Boolean plural){
+		identifier = String.format(ToStringMapping.MASCULINE_FORMAT,identifier, Boolean.TRUE.equals(masculine)?"mascul":"femin");
+		identifier = Boolean.TRUE.equals(plural) ? String.format(ToStringMapping.PLURAL_FORMAT, identifier) : identifier;
+		return identifier;
+	}
+	
+	public String getWord(String identifier,Boolean masculine,Boolean plural){
+		return new ToStringMapping.Adapter.Default(getWordIdentifier(identifier, masculine, plural)).execute();
+	}
+	
 	public String getWordArticle(Boolean masculine,Boolean any,Boolean plural){
 		String identifier = String.format(ToStringMapping.WORD_ARTICLE_IDENTIFIER_FORMAT, Boolean.TRUE.equals(masculine)?"mascul":"femin"
 			,Boolean.TRUE.equals(any) ? "any" : "specific" );
@@ -196,6 +211,15 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		String identifier = String.format(ToStringMapping.WORD_ARTICLE_ALL_IDENTIFIER_FORMAT, Boolean.TRUE.equals(masculine)?"mascul":"femin" );
 		identifier = Boolean.TRUE.equals(plural) ? String.format(ToStringMapping.PLURAL_FORMAT, identifier) : identifier;
 		return new ToStringMapping.Adapter.Default(identifier).execute();
+	}
+	
+	public String getComparisonOperator(Boolean greater,Boolean equal,Boolean masculine,Boolean plural){
+		String identifier = String.format(ToStringMapping.COMPARISON_OPERATOR_IDENTIFIER_FORMAT, Boolean.TRUE.equals(equal) ? ".equal" : Constant.EMPTY_STRING );
+		return new ToStringMapping.Adapter.Default(identifier)
+				.addManyParameters(
+						StringHelper.getInstance().getWord(Boolean.TRUE.equals(greater) ? "superior" : "inferior", masculine, plural)
+				,StringHelper.getInstance().getWord("equal", masculine, plural)
+				).execute();
 	}
 	
 	public Boolean isMasculine(String identifier){
@@ -461,8 +485,11 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		String UNKNOWN_FORMAT = "%s%s%s";
 		String PLURAL_FORMAT = "%s.__plural__";
 		String GENDER_FORMAT = "%s.__gender__";
+		String MASCULINE_FORMAT = "%s.__%sine__";
+		String WORD_IDENTIFIER_FORMAT = "word.%s.__%sine__";
 		String WORD_ARTICLE_IDENTIFIER_FORMAT = "word.article.__%sine__.__%s__";
 		String WORD_ARTICLE_ALL_IDENTIFIER_FORMAT = "word.article.all.__%sine__";
+		String COMPARISON_OPERATOR_IDENTIFIER_FORMAT = "__comparison.operator%s__";
 		
 		CaseType getCaseType();
 		ToStringMapping setCaseType(CaseType caseType);

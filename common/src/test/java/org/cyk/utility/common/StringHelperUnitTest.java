@@ -182,7 +182,42 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		
 	}
 	
+	@Test
+	public void assertWord(){
+		AssertionHelper.getInstance().assertEquals("supérieure", StringHelper.getInstance().getWord("superior",Boolean.FALSE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("supérieures", StringHelper.getInstance().getWord("superior",Boolean.FALSE, Boolean.TRUE));
+		AssertionHelper.getInstance().assertEquals("supérieur", StringHelper.getInstance().getWord("superior",Boolean.TRUE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("supérieurs", StringHelper.getInstance().getWord("superior",Boolean.TRUE, Boolean.TRUE));
+		
+		AssertionHelper.getInstance().assertEquals("inférieure", StringHelper.getInstance().getWord("inferior",Boolean.FALSE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("inférieures", StringHelper.getInstance().getWord("inferior",Boolean.FALSE, Boolean.TRUE));
+		AssertionHelper.getInstance().assertEquals("inférieur", StringHelper.getInstance().getWord("inferior",Boolean.TRUE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("inférieurs", StringHelper.getInstance().getWord("inferior",Boolean.TRUE, Boolean.TRUE));
+		
+		AssertionHelper.getInstance().assertEquals("égale", StringHelper.getInstance().getWord("equal",Boolean.FALSE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("égales", StringHelper.getInstance().getWord("equal",Boolean.FALSE, Boolean.TRUE));
+		AssertionHelper.getInstance().assertEquals("égal", StringHelper.getInstance().getWord("equal",Boolean.TRUE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("égaux", StringHelper.getInstance().getWord("equal",Boolean.TRUE, Boolean.TRUE));
+	}
 	
+	@Test
+	public void assertComparisonOperator(){
+		AssertionHelper.getInstance().assertEquals("supérieur ou égal", StringHelper.getInstance().getComparisonOperator(Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("supérieur", StringHelper.getInstance().getComparisonOperator(Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("inférieur ou égal", StringHelper.getInstance().getComparisonOperator(Boolean.FALSE, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("inférieur", StringHelper.getInstance().getComparisonOperator(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE));
+		
+		AssertionHelper.getInstance().assertEquals("supérieure ou égale", StringHelper.getInstance().getComparisonOperator(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("supérieure", StringHelper.getInstance().getComparisonOperator(Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("inférieure ou égale", StringHelper.getInstance().getComparisonOperator(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("inférieure", StringHelper.getInstance().getComparisonOperator(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
+		
+		AssertionHelper.getInstance().assertEquals("supérieurs ou égaux", StringHelper.getInstance().getComparisonOperator(Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE));
+		AssertionHelper.getInstance().assertEquals("supérieurs", StringHelper.getInstance().getComparisonOperator(Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, Boolean.TRUE));
+		AssertionHelper.getInstance().assertEquals("inférieurs ou égaux", StringHelper.getInstance().getComparisonOperator(Boolean.FALSE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE));
+		AssertionHelper.getInstance().assertEquals("inférieurs", StringHelper.getInstance().getComparisonOperator(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.TRUE));
+		
+	}
 	
 	private void assertAppliedCaseType(String string,CaseType caseType,String expected){
 		assertEquals(expected, StringHelper.getInstance().applyCaseType(string, caseType));
