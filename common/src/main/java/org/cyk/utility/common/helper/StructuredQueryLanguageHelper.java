@@ -57,6 +57,9 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		Collection<TupleCollection> getTupleCollections();
 		Builder setTupleCollections(Collection<TupleCollection> tupleCollections);
 		Builder addTupleCollection(String name,String alias);
+		Builder addTupleCollection(Class<?> tupleClass,String alias);
+		Builder addTupleCollection(Class<?> tupleClass);
+		String getTupleCollectionName(Class<?> tupleClass);
 		
 		String getFormat(Operator operator);
 		
@@ -94,6 +97,21 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			
 			public Adapter() {
 				super(String.class);
+			}
+			
+			@Override
+			public Builder addTupleCollection(Class<?> tupleClass, String alias) {
+				return null;
+			}
+			
+			@Override
+			public Builder addTupleCollection(Class<?> tupleClass) {
+				return null;
+			}
+			
+			@Override
+			public String getTupleCollectionName(Class<?> tupleClass) {
+				return null;
 			}
 			
 			@Override
@@ -206,6 +224,30 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				
 				public Default(String tupleCollection){
 					this(tupleCollection,DEFAULT_TUPLE_COLLECTION_ALIAS);
+				}
+				
+				public Default(Class<?> tupleClass, String alias){
+					addTupleCollection(tupleClass,alias);
+				}
+				
+				public Default(Class<?> tupleClass){
+					this(tupleClass,DEFAULT_TUPLE_COLLECTION_ALIAS);
+				}
+				
+				@Override
+				public Builder addTupleCollection(Class<?> tupleClass, String alias) {
+					return addTupleCollection(getTupleCollectionName(tupleClass), alias);
+				}
+				
+				@Override
+				public Builder addTupleCollection(Class<?> tupleClass) {
+					return addTupleCollection(tupleClass, DEFAULT_TUPLE_COLLECTION_ALIAS);
+				}
+				
+				@Override
+				public String getTupleCollectionName(Class<?> tupleClass) {
+					String name = tupleClass.getSimpleName();
+					return name;
 				}
 				
 				@Override
@@ -379,6 +421,14 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					
 					public JavaPersistenceQueryLanguage(String tupleCollection){
 						super(tupleCollection);
+					}
+					
+					public JavaPersistenceQueryLanguage(Class<?> tupleClass, String alias){
+						super(tupleClass,alias);
+					}
+					
+					public JavaPersistenceQueryLanguage(Class<?> tupleClass){
+						super(tupleClass);
 					}
 					
 					@Override

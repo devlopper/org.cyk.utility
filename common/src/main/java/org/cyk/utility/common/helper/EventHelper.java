@@ -33,6 +33,10 @@ public class EventHelper extends AbstractHelper implements Serializable  {
 		super.initialisation();
 	}
 	
+	public Collection<Event> get(Date from,Date to){
+		return new Event.Get.Adapter.Default(new Date[]{from,to}).execute();
+	}
+	
 	/**/
 	
 	@Getter @Setter
@@ -181,5 +185,69 @@ public class EventHelper extends AbstractHelper implements Serializable  {
 			
 		}
 		
+		public static interface Get extends org.cyk.utility.common.Action<Date[], Collection<Event>> {
+			
+			public static class Adapter extends org.cyk.utility.common.Action.Adapter.Default<Date[], Collection<Event>> implements Get,Serializable {
+				private static final long serialVersionUID = 1L;
+
+				@SuppressWarnings("unchecked")
+				public Adapter(Date[] dates) {
+					super("get", Date[].class, dates, (Class<Collection<Event>>) ClassHelper.getInstance().getByName(Collection.class));
+				}
+				
+				public static class Default extends Get.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+
+					public Default(Date[] dates) {
+						super(dates);
+					}
+					
+					@Override
+					protected Collection<Event> __execute__() {
+						Collection<Event> events = new ArrayList<>();
+						Date[] dates = getInput();
+						Date from = dates[0];
+						Date to = dates[1];
+						for(Datasource datasource : ClassHelper.getInstance().instanciateMany(Datasource.class,Datasource.CLASSES)){
+							Collection<Event> r = datasource.setInput(new Date[]{from,to}).execute();
+							if(r!=null)
+								events.addAll(r);
+						}
+						return events;
+					}
+				}
+			}
+			
+			public static interface Datasource extends org.cyk.utility.common.Action<Date[], Collection<Event>> {
+				
+				java.util.Collection<Class<? extends Datasource>> CLASSES = new ArrayList<>();
+				
+				public static class Adapter extends org.cyk.utility.common.Action.Adapter.Default<Date[], Collection<Event>> implements Datasource,Serializable {
+					private static final long serialVersionUID = 1L;
+
+					@SuppressWarnings("unchecked")
+					public Adapter() {
+						super("get", Date[].class, null, (Class<Collection<Event>>) ClassHelper.getInstance().getByName(Collection.class));
+					}
+					
+					public static class Default extends Datasource.Adapter implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						@Override
+						protected Collection<Event> __execute__() {
+							return __execute__(getInput()[0],getInput()[1]);
+						}
+						
+						protected Collection<Event> __execute__(Date from,Date to){
+							ThrowableHelper.getInstance().throwNotYetImplemented();
+							return null;
+						}
+					}
+					
+				}
+				
+			}
+			
+		}
 	}
 }
