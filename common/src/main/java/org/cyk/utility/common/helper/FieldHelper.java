@@ -43,6 +43,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			public void introspect(IntrospectionContext introspectionContext) throws IntrospectionException {
 				if(!CollectionHelper.getInstance().contains(introspectionContext.propertyNames(),"fieldsRandomValues") 
 						&& !introspectionContext.getTargetClass().getSimpleName().equals("StandardColumn"))
+				if(introspectionContext.getTargetClass().getName().equals("org.cyk."))
 					super.introspect(introspectionContext);
 			}
 		});
