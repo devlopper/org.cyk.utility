@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.helper.ArrayHelper;
+import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
@@ -46,6 +47,11 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	
 	@Override
 	protected void _execute_() {}
+	
+	@Test
+	public void call(){
+		AssertionHelper.getInstance().assertEquals("Hi komenan!", InstanceHelper.getInstance().call(new A(), String.class, "hi", "komenan"));
+	}
 	
 	@Test
 	public void lookup(){
@@ -174,6 +180,10 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		private Date f5;
 		private SubA subA = new SubA();
 		private SubAEntity subAEntity;
+		
+		public String hi(String name){
+			return "Hi "+name+"!";
+		}
 		
 		@Override
 		public String toString() {

@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 import javax.inject.Singleton;
 
+import lombok.Getter;
+
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
-
-import lombok.Getter;
 
 @Singleton
 public class MethodHelper extends AbstractHelper implements Serializable  {
@@ -43,7 +43,7 @@ public class MethodHelper extends AbstractHelper implements Serializable  {
 	public String getCurrentNameFromStackTrace(){
 		return getNameFromStackTraceAt(3);
 	}
-	
+
 	/**/
 	
 	public interface Method<INPUT,OUTPUT> extends Action<INPUT, OUTPUT>{

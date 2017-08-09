@@ -70,6 +70,15 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public <T> T call(Object instance,Class<T> resultClass,String name,Object...parameters){
+		try {
+			return (T) MethodUtils.invokeMethod(instance, name, parameters);
+		} catch (Exception e) {
+			throw new RuntimeException(e); 
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
 	public <T> T callGetMethod(Object instance,Class<T> resultClass,String name){
 		try {
 			return (T) MethodUtils.invokeMethod(instance, getMethodName(MethodType.GET, name));
