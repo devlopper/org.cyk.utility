@@ -19,6 +19,7 @@ import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.InstanceHelper.Lookup.Source;
 import org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod;
+import org.cyk.utility.common.helper.MethodHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -50,7 +51,10 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void call(){
-		AssertionHelper.getInstance().assertEquals("Hi komenan!", InstanceHelper.getInstance().call(new A(), String.class, "hi", "komenan"));
+		AssertionHelper.getInstance().assertEquals("Hi komenan!", InstanceHelper.getInstance().call(new A(), String.class, "hi"
+				, MethodHelper.Method.Parameter.buildArray(String.class,"komenan")));
+		AssertionHelper.getInstance().assertEquals("Hi null!", InstanceHelper.getInstance().call(new A(), String.class, "hi"
+				, MethodHelper.Method.Parameter.buildArray(String.class,null)));
 	}
 	
 	@Test

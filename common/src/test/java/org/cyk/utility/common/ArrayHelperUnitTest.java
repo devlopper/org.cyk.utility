@@ -1,8 +1,15 @@
 package org.cyk.utility.common;
 
 import org.cyk.utility.common.helper.ArrayHelper;
+import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
 public class ArrayHelperUnitTest extends AbstractUnitTest {
 
@@ -24,6 +31,18 @@ public class ArrayHelperUnitTest extends AbstractUnitTest {
 		assertEquals("12", new ArrayHelper.Dimension.Key.Builder.Adapter.Default(new Object[]{"A","1","B","2","C"}).addManyParameters(1,3).execute().getValue());
 		
 		assertEquals("CB", new ArrayHelper.Dimension.Key.Builder.Adapter.Default(new Object[]{"A","1","B","2","C"}).addManyParameters(4,2).execute().getValue());
+	}
+	
+	@Test
+	public void get(){
+		A[] array = ArrayHelper.getInstance().get(A.class, new String[]{"f1"}, "my string1","my string two");
+		System.out.println(CollectionHelper.getInstance().get(array));
+		
+		array = ArrayHelper.getInstance().get(A.class, new String[]{"f2"}, 1,new Integer(2));
+		System.out.println(CollectionHelper.getInstance().get(array));
+		
+		array = ArrayHelper.getInstance().get(A.class, new String[]{"f1","f2"}, "my string1",new Integer(1),"my string two",2);
+		System.out.println(CollectionHelper.getInstance().get(array));
 	}
 	
 	@Test
@@ -51,5 +70,12 @@ public class ArrayHelperUnitTest extends AbstractUnitTest {
 	private void assertFilter(Object[][] array,Integer index,String value,Object[][] expected){
 		Object[][] result = ArrayHelper.getInstance().filter(array, index, value);
 		assertArray(result, expected);
+	}
+	
+	@Getter @Setter @ToString @Accessors(chain=true)
+	public static class A {
+		
+		private String f1;
+		private Integer f2;
 	}
 }

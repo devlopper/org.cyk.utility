@@ -1,6 +1,7 @@
 package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -32,6 +33,27 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public <T> T[] get(Class<T> aClass,String[] fieldNames,Object...objects){
+		@SuppressWarnings("unchecked")
+		T[] array = (T[]) Array.newInstance(aClass, objects.length / 2);
+		int j = 0;
+		for(int i = 0 ; i < objects.length ;){
+			T instance = ClassHelper.getInstance().instanciateOne(aClass);
+			for(String fieldName : fieldNames){
+				InstanceHelper.getInstance().callSetMethod(instance,fieldName,objects[i].getClass(),objects[i++]);
+			}
+			array[j] = instance;
+		}
+		return array;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T[] get(Class<T> aClass,Collection<T> collection){
+		if(CollectionHelper.getInstance().isEmpty(collection))
+			return null;
+		return (T[]) collection.toArray((T[]) Array.newInstance(aClass, 0));
 	}
 	
 	public Object[] reverse(Object[] objects){

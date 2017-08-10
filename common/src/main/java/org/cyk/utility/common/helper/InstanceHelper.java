@@ -70,12 +70,19 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T> T call(Object instance,Class<T> resultClass,String name,Object...parameters){
+	public <T> T call(Object instance,Class<T> resultClass,String name,MethodHelper.Method.Parameter...parameters){
 		try {
-			return (T) MethodUtils.invokeMethod(instance, name, parameters);
+			Class<?>[] classes = ArrayHelper.getInstance().get(Class.class, callGetMethod(parameters, Class.class, MethodHelper.Method.Parameter.FIELD_CLAZZ));
+			Object[] values = ArrayHelper.getInstance().get(Object.class, callGetMethod(parameters, Object.class, MethodHelper.Method.Parameter.FIELD_VALUE));
+			return (T) MethodUtils.invokeExactMethod(instance, name,values,classes);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException(e); 
 		}
+	}
+	
+	public void callSetMethod(Object instance,String name,Class<?> valueClass,Object value){
+		call(instance, Void.class, getMethodName(MethodType.SET, name), new MethodHelper.Method.Parameter(valueClass,value));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -97,6 +104,12 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			result.add(value);
 		}
 		return result;
+	}
+	
+	public <T> Collection<T> callGetMethod(Object[] instances,Class<T> resultClass,String name){
+		if(ArrayHelper.getInstance().isEmpty(instances))
+			return null;
+		return callGetMethod(Arrays.asList(instances), resultClass, name);
 	}
 
 	@Deprecated

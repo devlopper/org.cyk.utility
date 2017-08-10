@@ -4,10 +4,13 @@ import java.io.Serializable;
 
 import javax.inject.Singleton;
 
-import lombok.Getter;
-
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Singleton
 public class MethodHelper extends AbstractHelper implements Serializable  {
@@ -80,6 +83,35 @@ public class MethodHelper extends AbstractHelper implements Serializable  {
 				}
 				
 			}
+		}
+	
+		/**/
+		
+		@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
+		public static class Parameter implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			private Class<?> clazz;
+			private Object value;
+		
+			public Parameter(Class<?> clazz, Object value) {
+				super();
+				this.clazz = clazz;
+				this.value = value;
+			}
+			
+			public static Parameter[] buildArray(Object...objects){
+				Parameter[] parameters = new Parameter[objects.length / 2];
+				int j = 0;
+				for(int i = 0 ; i < objects.length ; i = i + 2){
+					parameters[j] = new Parameter((Class<?>)objects[i], objects[i+1]);
+				}
+				return parameters;
+			}
+			
+			public static final String FIELD_CLAZZ = "clazz";
+			public static final String FIELD_VALUE = "value";
+			
 		}
 	}
 	
