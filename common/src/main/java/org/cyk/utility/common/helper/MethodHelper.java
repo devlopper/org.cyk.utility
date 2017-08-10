@@ -10,6 +10,7 @@ import org.cyk.utility.common.Constant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Singleton
@@ -87,7 +88,7 @@ public class MethodHelper extends AbstractHelper implements Serializable  {
 	
 		/**/
 		
-		@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
+		@Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString
 		public static class Parameter implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
