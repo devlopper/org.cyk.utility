@@ -28,6 +28,17 @@ public class MethodHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void isExist(){
+		AssertionHelper.getInstance().assertEquals(Boolean.FALSE, MethodHelper.getInstance().isExist(A.class, "yes"));
+		AssertionHelper.getInstance().assertEquals(Boolean.TRUE, MethodHelper.getInstance().isExist(A.class, "hi",String.class));
+	}
+	
+	@Test(expected=RuntimeException.class)
+	public void notFound(){
+		MethodHelper.getInstance().get(Boolean.TRUE, A.class, "yes", String.class,Integer.class);
+	}
+	
+	@Test
 	public void callGet(){
 		AssertionHelper.getInstance().assertEquals(null, MethodHelper.getInstance().callGet(new A(), String.class, "f1"));
 		AssertionHelper.getInstance().assertEquals("hello", MethodHelper.getInstance().callGet(new A().setF1("hello"), String.class, "f1"));

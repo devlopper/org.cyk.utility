@@ -154,6 +154,19 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return aClass1.equals(aClass2);
 	}
 	
+	public String getVariableName(Class<?> aClass,Boolean many){
+		if(aClass==null)
+			return null;
+		String name = StringHelper.getInstance().normalizeToVariableName(aClass.getSimpleName());
+		if(Boolean.TRUE.equals(many))
+			name = StringHelper.getInstance().getVariableNameMany(name);
+		return name;
+	}
+	
+	public String getVariableName(Class<?> aClass){
+		return getVariableName(aClass, Boolean.FALSE);
+	}
+	
 	/**/
 	
 	public static interface Get extends AbstractReflectionHelper.Get<Package, Class<?>> {

@@ -25,6 +25,7 @@ public class MethodHelper extends AbstractHelper implements Serializable  {
 	private static final long serialVersionUID = 1L;
 
 	private static MethodHelper INSTANCE;
+	private static final String METHOD_NOT_FOUND_FORMAT = "Method %s.%s(%s) not found";
 	
 	public static MethodHelper getInstance() {
 		if(INSTANCE == null)
@@ -47,12 +48,34 @@ public class MethodHelper extends AbstractHelper implements Serializable  {
 		return getName(type.getPrefix(), suffix);
 	}
 	
+	public java.lang.reflect.Method get(Boolean throwIfNull,Class<?> aClass,String name,Class<?>...parameterClasses){
+		java.lang.reflect.Method method = MethodUtils.getMatchingAccessibleMethod(aClass, name,parameterClasses);
+		if(method==null && Boolean.TRUE.equals(throwIfNull))
+			throw new RuntimeException(String.format(METHOD_NOT_FOUND_FORMAT,aClass,name,StringHelper.getInstance().get(parameterClasses, ",")));
+		return method;
+	}
+	
 	public java.lang.reflect.Method get(Class<?> aClass,String name,Class<?>...parameterClasses){
-		return MethodUtils.getMatchingAccessibleMethod(aClass, name,parameterClasses);
+		return get(Boolean.FALSE, aClass, name, parameterClasses);
+	}
+	
+	public java.lang.reflect.Method get(Boolean throwIfNull,Object instance,String name,Class<?>...parameterClasses){
+		return get(throwIfNull,instance.getClass(), name, parameterClasses);
 	}
 	
 	public java.lang.reflect.Method get(Object instance,String name,Class<?>...parameterClasses){
-		return get(instance.getClass(), name, parameterClasses);
+		return get(Boolean.FALSE, instance, name, parameterClasses);
+	}
+	
+	public Boolean isExist(Class<?> aClass,String name,Class<?>...parameterClasses){
+		return get(aClass, name,parameterClasses)!=null;
+	}
+	
+	public String getFirstExist(Class<?> aClass,String[] names,Class<?>...parameterClasses){
+		for(String name : names)
+			if(Boolean.TRUE.equals(isExist(aClass, name, parameterClasses)))
+				return name;
+		return null;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -60,7 +83,7 @@ public class MethodHelper extends AbstractHelper implements Serializable  {
 		try {
 			Class<?>[] classes = ArrayHelper.getInstance().get(Class.class, callGet(parameters, Class.class, MethodHelper.Method.Parameter.FIELD_CLAZZ));
 			Object[] values = ArrayHelper.getInstance().get(Object.class, callGet(parameters, Object.class, MethodHelper.Method.Parameter.FIELD_VALUE));
-			T result = (T) get(instance, name, classes).invoke(instance, values);
+			T result = (T) get(Boolean.TRUE,instance, name, classes).invoke(instance, values);
 			if(callBack!=null && Boolean.TRUE.equals(callBack.isExecutable(instance, resultClass, name, parameters, result))){
 				result = callBack.execute(instance, resultClass, name, parameters, result);
 			}
@@ -174,7 +197,7 @@ public class MethodHelper extends AbstractHelper implements Serializable  {
 					protected OUTPUT __execute__() {
 						Object instance = getProperty(Method.PROPERTY_NAME_INSTANCE);
 						String name = getPropertyAsString(PROPERTY_NAME);
-						Class<OUTPUT> outputClass = getOutputClass();
+						//Class<OUTPUT> outputClass = getOutputClass();
 						Object[] parameters = null;
 						try {
 							Class<?>[] classes = getArgumentClasses(parameters);

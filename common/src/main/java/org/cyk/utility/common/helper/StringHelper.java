@@ -1,5 +1,6 @@
 package org.cyk.utility.common.helper;
 
+import java.beans.Introspector;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		}
 	public enum Location{START,INSIDE,END,EXAT}
 	
+	private static final String VARIABLE_NAME_MANY_FORMAT = "%ss";
 	private static final String RESOURCE_BUNDLE_NAME = "org.cyk.utility.common.i18n";
 	private static final String KEY_ORDINAL_NUMBER_FORMAT = "ordinal.number.%s";
 	private static final String KEY_ORDINAL_NUMBER_SUFFIX_FORMAT = KEY_ORDINAL_NUMBER_FORMAT+".suffix";
@@ -225,6 +227,14 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	public Boolean isMasculine(String identifier){
 		String value = new StringHelper.ToStringMapping.Adapter.Default(String.format(ToStringMapping.GENDER_FORMAT,identifier)).execute();
 		return new BooleanHelper.Builder.String.Adapter.Default(value).execute();
+	}
+	
+	public String normalizeToVariableName(String string){
+		return Introspector.decapitalize(string);
+	}
+	
+	public String getVariableNameMany(String variableName){
+		return String.format(VARIABLE_NAME_MANY_FORMAT, variableName);
 	}
 	
 	/**/
