@@ -7,22 +7,20 @@ import java.util.Date;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.helper.ArrayHelper;
-import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.InstanceHelper.Lookup.Source;
 import org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod;
-import org.cyk.utility.common.helper.MethodHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @SuppressWarnings("unchecked")
 public class InstanceHelperUnitTest extends AbstractUnitTest {
@@ -48,14 +46,6 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	
 	@Override
 	protected void _execute_() {}
-	
-	@Test
-	public void call(){
-		AssertionHelper.getInstance().assertEquals("Hi komenan!", InstanceHelper.getInstance().call(new A(), String.class, "hi"
-				, MethodHelper.Method.Parameter.buildArray(String.class,"komenan")));
-		AssertionHelper.getInstance().assertEquals("Hi null!", InstanceHelper.getInstance().call(new A(), String.class, "hi"
-				, MethodHelper.Method.Parameter.buildArray(String.class,null)));
-	}
 	
 	@Test
 	public void lookup(){

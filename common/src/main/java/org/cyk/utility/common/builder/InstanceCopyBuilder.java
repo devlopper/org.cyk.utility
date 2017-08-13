@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.cyk.utility.common.AbstractBuilder;
+import org.cyk.utility.common.ListenerUtils;
+import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.helper.FieldHelper;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
-import org.cyk.utility.common.AbstractBuilder;
-import org.cyk.utility.common.ListenerUtils;
-import org.cyk.utility.common.helper.FieldHelper;
-import org.cyk.utility.common.helper.InstanceHelper;
 
 @Getter @Setter @NoArgsConstructor @Accessors(chain=true) @Deprecated
 public class InstanceCopyBuilder<T> extends AbstractBuilder<T> implements Serializable {
@@ -33,7 +33,7 @@ public class InstanceCopyBuilder<T> extends AbstractBuilder<T> implements Serial
 	@SuppressWarnings("unchecked")
 	@Override
 	public T build() {
-		instance = InstanceHelper.getInstance().instanciateOne(aClass);
+		instance = ClassHelper.getInstance().instanciateOne(aClass);
 		@SuppressWarnings("rawtypes")
 		Collection listeners = Listener.COLLECTION;
 		for(Field field : FieldHelper.getInstance().get(instance.getClass())){

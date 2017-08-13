@@ -364,14 +364,14 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					
 					if(StringHelper.getInstance().isBlank(get(Operator.SELECT))){
 						if(tupleCollections!=null){
-							addExpressions(Operator.SELECT, CollectionHelper.getInstance().concatenate(InstanceHelper.getInstance()
-								.callGetMethod(tupleCollections, String.class, "alias"), Constant.CHARACTER_COMA.toString()) );
+							addExpressions(Operator.SELECT, CollectionHelper.getInstance().concatenate(MethodHelper.getInstance()
+								.callGet(tupleCollections, String.class, "alias"), Constant.CHARACTER_COMA.toString()) );
 						}
 					}
 					
 					if(StringHelper.getInstance().isBlank(get(Operator.FROM))){
 						if(tupleCollections!=null){
-							addExpressions(Operator.FROM, CollectionHelper.getInstance().concatenate(InstanceHelper.getInstance().callGetMethod(tupleCollections, String.class, "nameSpaceAlias")
+							addExpressions(Operator.FROM, CollectionHelper.getInstance().concatenate(MethodHelper.getInstance().callGet(tupleCollections, String.class, "nameSpaceAlias")
 								, Constant.CHARACTER_COMA.toString()) );
 						}
 					}

@@ -12,8 +12,6 @@ import java.util.Properties;
 
 import javax.inject.Singleton;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
@@ -65,62 +63,6 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		return value == null ? defaultValue : value;
 	}
 
-	public String getMethodName(MethodType type,String suffix){
-		return type.name().toLowerCase()+StringUtils.substring(suffix, 0,1).toUpperCase()+StringUtils.substring(suffix, 1)/*.toLowerCase()*/;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public <T> T call(Object instance,Class<T> resultClass,String name,MethodHelper.Method.Parameter...parameters){
-		try {
-			Class<?>[] classes = ArrayHelper.getInstance().get(Class.class, callGetMethod(parameters, Class.class, MethodHelper.Method.Parameter.FIELD_CLAZZ));
-			Object[] values = ArrayHelper.getInstance().get(Object.class, callGetMethod(parameters, Object.class, MethodHelper.Method.Parameter.FIELD_VALUE));
-			return (T) MethodUtils.invokeExactMethod(instance, name,values,classes);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException(e); 
-		}
-	}
-	
-	public void callSetMethod(Object instance,String name,Class<?> valueClass,Object value){
-		call(instance, Void.class, getMethodName(MethodType.SET, name), new MethodHelper.Method.Parameter(valueClass,value));
-	}
-	
-	@SuppressWarnings("unchecked")
-	public <T> T callGetMethod(Object instance,Class<T> resultClass,String name){
-		try {
-			return (T) MethodUtils.invokeMethod(instance, getMethodName(MethodType.GET, name));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public <T> Collection<T> callGetMethod(Collection<?> instances,Class<T> resultClass,String name){
-		if(CollectionHelper.getInstance().isEmpty(instances))
-			return null;
-		Collection<T> result = new ArrayList<>();
-		for(Object instance : instances){
-			T value = (T) callGetMethod(instance, resultClass, name);
-			result.add(value);
-		}
-		return result;
-	}
-	
-	public <T> Collection<T> callGetMethod(Object[] instances,Class<T> resultClass,String name){
-		if(ArrayHelper.getInstance().isEmpty(instances))
-			return null;
-		return callGetMethod(Arrays.asList(instances), resultClass, name);
-	}
-
-	@Deprecated
-	public <T> T instanciateOne(Class<T> aClass){
-		try {
-			return aClass.newInstance();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
 	/**/
 	
 	public static interface Setter<INSTANCE> extends Action<INSTANCE, INSTANCE> {
@@ -836,11 +778,6 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	}
 
 	/**/
-	
-	public static enum MethodType {
-		GET
-		,SET
-	}
 
 	/**/
 	

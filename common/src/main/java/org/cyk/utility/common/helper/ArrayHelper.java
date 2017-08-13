@@ -42,7 +42,7 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 		for(int i = 0 ; i < objects.length ;){
 			T instance = ClassHelper.getInstance().instanciateOne(aClass);
 			for(String fieldName : fieldNames){
-				InstanceHelper.getInstance().callSetMethod(instance,fieldName,objects[i].getClass(),objects[i++]);
+				MethodHelper.getInstance().callSet(instance,fieldName,objects[i].getClass(),objects[i++]);
 			}
 			array[j] = instance;
 		}
