@@ -49,7 +49,8 @@ public class MethodHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	public java.lang.reflect.Method get(Boolean throwIfNull,Class<?> aClass,String name,Class<?>...parameterClasses){
-		java.lang.reflect.Method method = MethodUtils.getMatchingAccessibleMethod(aClass, name,parameterClasses);
+		java.lang.reflect.Method method = aClass == null || StringHelper.getInstance().isBlank(name) ? null 
+				: MethodUtils.getMatchingAccessibleMethod(aClass, name,parameterClasses);
 		if(method==null && Boolean.TRUE.equals(throwIfNull))
 			throw new RuntimeException(String.format(METHOD_NOT_FOUND_FORMAT,aClass,name,StringHelper.getInstance().get(parameterClasses, ",")));
 		return method;
