@@ -96,6 +96,24 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return contains(collection1, (Collection<ELEMENT>) Arrays.asList(elements));
 	}
 	
+	public <ELEMENT> Boolean equals(Collection<ELEMENT> collection1,Collection<ELEMENT> collection2){
+		if(collection1==null)
+			if(collection2==null)
+				return Boolean.TRUE;//TODO is it correct ???
+			else
+				return Boolean.FALSE;
+		else
+			if(collection2==null)
+				return Boolean.FALSE;
+			else{
+				Collection<ELEMENT> c1 = new ArrayList<>(collection2);
+				Collection<ELEMENT> c2 = new ArrayList<>(collection1);
+				c1.removeAll(collection1);
+				c2.removeAll(collection2);
+				return c1.isEmpty() && c2.isEmpty();
+			}
+	}
+	
 	public Boolean isEmpty(Collection<?> collection){
 		return collection==null || collection.isEmpty();
 	}

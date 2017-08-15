@@ -248,6 +248,13 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return number1.doubleValue() == number2.doubleValue();
 	}
 	
+	public Collection<Long> getIntegers(Number from,Number to){
+		Collection<Long> integers = new ArrayList<>();
+		for(Long index = from.longValue() ; index <= to.longValue() ; index ++ )
+			integers.add(index);
+		return integers;
+	}
+	
 	public static final Short SHORT_ZERO = new Short("0");
 	
 	public static final Byte BYTE_ZERO = new Byte("0");

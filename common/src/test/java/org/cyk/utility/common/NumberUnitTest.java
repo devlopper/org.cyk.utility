@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.helper.AssertionHelper;
+import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -13,6 +14,11 @@ import org.junit.Test;
 public class NumberUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	@Test
+	public void getIntegers(){
+		AssertionHelper.getInstance().assertEquals(Boolean.TRUE,  CollectionHelper.getInstance().equals(Arrays.asList(1l,2l,3l,4l,5l),NumberHelper.getInstance().getIntegers(1, 5)));
+	}
 	
 	@Test
 	public void get(){
