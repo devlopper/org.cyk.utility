@@ -108,10 +108,10 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return getText(locale, String.format(KEY_ORDINAL_NUMBER_FORMAT, number), null);
 	}
 	
-	public String concatenate(Object[] strings,String separator){
+	public String concatenate(Object[] strings,Object separator){
 		if(strings==null)
 			return Constant.EMPTY_STRING;
-		return StringUtils.join(strings, separator);
+		return StringUtils.join(strings, separator == null ? Constant.EMPTY_STRING : separator.toString());
 	}
 	
 	public String concatenate(java.util.Collection<String> strings,String separator){

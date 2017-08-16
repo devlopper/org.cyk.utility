@@ -9,10 +9,31 @@ import org.cyk.utility.common.helper.LoggingHelper.Message;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
-
-public class LoggingUnitTest extends AbstractUnitTest {
+public class LoggingHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	@Test
+	public void marker(){
+		new LoggingHelper.Run.Adapter.Default(getClass(),"create"){
+			private static final long serialVersionUID = 1L;
+			
+			public void addParameters(org.cyk.utility.common.helper.LoggingHelper.Message.Builder builder, Boolean before) {
+				builder.addManyParameters(before ? "create" : "created");
+			}
+			
+			public Object __execute__() {
+				return null;
+			}
+			
+		}.execute();
+		LoggingHelper.Logger<?,?,?> logger = LoggingHelper.getInstance().getLogger();
+		logger.getMessageBuilder(Boolean.TRUE).addManyParameters("my message",new Object[]{"p1","v1"}).getLogger()
+			.execute(getClass(),LoggingHelper.Logger.Level.TRACE,"m1");
+		
+		//LoggingHelper.Logger.Log4j.Adapter.Default.log("my debug message1",getClass(),LoggingHelper.Logger.Level.TRACE,"m1");
+		LoggingHelper.Logger.Log4j.Adapter.Default.log("my debug message1 with marker 1",getClass(),LoggingHelper.Logger.Level.TRACE,"FLOW");
+	}
 	
 	@Test
 	public void executeMessageBuild(){

@@ -18,12 +18,12 @@ import javax.enterprise.inject.spi.CDI;
 import javax.naming.Context;
 import javax.rmi.PortableRemoteObject;
 
-import lombok.Getter;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.ListenerUtils;
@@ -33,8 +33,8 @@ import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.ConditionHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
 import org.cyk.utility.common.helper.ThrowableHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.Getter;
 
 public class AbstractBean implements Serializable {
 
@@ -298,7 +298,7 @@ public class AbstractBean implements Serializable {
 	
 	protected Logger __logger__(){
 		if(__logger__==null)
-			__logger__ = LoggerFactory.getLogger(getClass());
+			__logger__ = LogManager.getLogger(getClass());
 		//return LOGGER;
 		return __logger__;
 	}
