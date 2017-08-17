@@ -15,7 +15,6 @@ import org.cyk.utility.common.helper.LoggingHelper.Message.Builder;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Singleton
 public class LoggingHelper extends AbstractHelper implements Serializable  {
@@ -48,12 +47,20 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 	
 	/**/
 	
-	@Getter @Setter @Accessors(chain=true)
+	//@Getter @Setter @Accessors(chain=true) //TODO getting symbol not found when comoiling with maven
 	public static class Message extends AbstractBean implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		private String template;
 		private List<Object> arguments;
+		
+		public String getTemplate() {
+			return template;
+		}
+		
+		public List<Object> getArguments() {
+			return arguments;
+		}
 		
 		@Override
 		public String toString() {
