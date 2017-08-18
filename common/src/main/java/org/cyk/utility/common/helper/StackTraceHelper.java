@@ -1,6 +1,11 @@
 package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.cyk.utility.common.Constant;
 
 public class StackTraceHelper extends AbstractHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,4 +32,17 @@ public class StackTraceHelper extends AbstractHelper implements Serializable {
 		return getAt(3);
 	}
 	
+	public String getStackTraceAsString(String packagePrefix){
+		List<String> list = new ArrayList<>();
+		for(StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()){
+			if(packagePrefix==null || stackTraceElement.getClassName().startsWith(packagePrefix))
+				list.add(stackTraceElement.getMethodName());
+		}
+		Collections.reverse(list);
+		return StringHelper.getInstance().concatenate(list, Constant.CHARACTER_GREATER_THAN);
+	}
+	
+	public String getStackTraceAsString(){
+		return getStackTraceAsString(null);
+	}
 }

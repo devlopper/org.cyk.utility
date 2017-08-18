@@ -114,7 +114,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return StringUtils.join(strings, separator == null ? Constant.EMPTY_STRING : separator.toString());
 	}
 	
-	public String concatenate(java.util.Collection<String> strings,String separator){
+	public String concatenate(java.util.Collection<String> strings,Object separator){
 		if(strings==null)
 			return Constant.EMPTY_STRING;
 		return concatenate(strings.toArray(), separator);
