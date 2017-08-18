@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
 
 public class StackTraceHelper extends AbstractHelper implements Serializable {
@@ -17,7 +18,7 @@ public class StackTraceHelper extends AbstractHelper implements Serializable {
 			INSTANCE = new StackTraceHelper();
 		return INSTANCE;
 	}
-	
+	 
 	@Override
 	protected void initialisation() {
 		INSTANCE = this;
@@ -36,7 +37,7 @@ public class StackTraceHelper extends AbstractHelper implements Serializable {
 		List<String> list = new ArrayList<>();
 		for(StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()){
 			if(packagePrefix==null || stackTraceElement.getClassName().startsWith(packagePrefix))
-				list.add(stackTraceElement.getMethodName());
+				list.add(StringUtils.substringAfterLast(stackTraceElement.getClassName(),Constant.CHARACTER_DOT.toString())+Constant.CHARACTER_DOT+stackTraceElement.getMethodName());
 		}
 		Collections.reverse(list);
 		return StringHelper.getInstance().concatenate(list, Constant.CHARACTER_GREATER_THAN);
