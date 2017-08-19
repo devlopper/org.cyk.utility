@@ -64,6 +64,10 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	public Boolean isVoyel(Character character){
 		return ArrayUtils.contains(VOYELS, Character.toLowerCase(character));
 	}
+	/*
+	public String generate(Long identifier){
+		return identifier+System.currentTimeMillis()+Constant.CHARACTER_UNDESCORE+RandomStringUtils.randomAlphanumeric(10);
+	}*/
 	
 	public String applyCaseType(String string,CaseType caseType){
 		if(string==null)
