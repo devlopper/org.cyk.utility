@@ -41,11 +41,9 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		PropertyUtils.addBeanIntrospector(new FluentPropertyBeanIntrospector(){
 			@Override//TODO allow only for org.cyk ????
 			public void introspect(IntrospectionContext introspectionContext) throws IntrospectionException {
-				/*if(!CollectionHelper.getInstance().contains(introspectionContext.propertyNames(),"fieldsRandomValues") 
-						&& !introspectionContext.getTargetClass().getSimpleName().equals("StandardColumn"))
-					*/
-				if(introspectionContext.getTargetClass().getName().startsWith("org.cyk."))
+				if(introspectionContext.getTargetClass().getName().startsWith("org.cyk.")){
 					super.introspect(introspectionContext);
+				}
 			}
 		});
 	}

@@ -20,12 +20,6 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
  
 	@InjectMocks private FieldHelper fieldHelper;
 	
-	@Override
-	protected void _execute_() {
-		super._execute_();
-		
-	}
-	
 	@Test
 	public void getAction(){
 		assertEquals(7, new FieldHelper.Get.Adapter.Default(MyClass.class).execute().size());
@@ -121,6 +115,14 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 			return SF3;
 		}
 		
+		public String get(){
+			return null;
+		}
+		
+		public void set_(String var){
+			
+		}
+		
 		public static final String FIELD_SF1 = "SF1";
 		public static final String FIELD_SF2 = "SF2";
 		public static final String FIELD_SF3 = "SF3";
@@ -157,6 +159,7 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 		
 		private String af1;
 		private B b1;
+		
 		
 	}
 	
