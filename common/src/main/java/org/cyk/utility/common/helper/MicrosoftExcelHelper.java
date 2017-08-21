@@ -448,7 +448,8 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 							if(ignoredKeys==null)
 								ignoredKeys = new ArrayList<>();
 							for(Object value : values)
-								ignoredKeys.add(new ArrayHelper.Dimension.Key(value.toString()));
+								if(value!=null)
+									ignoredKeys.add(new ArrayHelper.Dimension.Key(value));
 						}
 						return this;
 					}

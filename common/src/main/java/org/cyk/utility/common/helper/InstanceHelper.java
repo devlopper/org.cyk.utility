@@ -346,8 +346,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 							for(int i = 0 ; i < parametersArray.length ; i++){
 								if(parametersArray[i] instanceof ArrayHelper.Element<?>){
 									ArrayHelper.Element<?> element = (Element<?>) parametersArray[i];
-									objects.add(element.getInstance());
-									objects.add(values[element.getIndex()]);	
+									if(element.getIndex()<values.length){
+										objects.add(element.getInstance());
+										objects.add(values[element.getIndex()]);	
+									}
+										
 								}else
 									throw new RuntimeException("parameter class should be a sub type of ArrayHelper.Element");
 								
