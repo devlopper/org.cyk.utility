@@ -335,6 +335,13 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return fieldOverride;
 	}
 	
+	public Class<?> getType(Class<?> aClass,java.lang.reflect.Field field){
+		FieldOverride fieldOverride = getOverride(aClass,field.getName());
+		if(fieldOverride==null)
+			return field.getType();
+		return fieldOverride.type();
+	}
+	
 	public Object getFieldValueContainer(Object object,java.lang.reflect.Field field){
 		if(object==null)
 			return null;

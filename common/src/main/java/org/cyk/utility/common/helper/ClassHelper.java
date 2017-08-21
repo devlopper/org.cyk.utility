@@ -96,12 +96,32 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return getByName(aClass.getName());
 	}
 	
-	public Class<?> getByName(String name){
+	public Class<?> getByName(String name,Boolean returnNullIfNotExist){
 		try {
-			return Class.forName(name);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			if(Boolean.TRUE.equals(returnNullIfNotExist))
+				return Boolean.TRUE.equals(getIsExist(name)) ? __getByName__(name) : null;
+			return __getByName__(name);
+		} catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	public Class<?> getByName(String name){
+		return getByName(name, Boolean.FALSE);
+	}
+	
+	private Class<?> __getByName__(String name) throws ClassNotFoundException{
+		return Class.forName(name);
+	}
+	
+	public Boolean getIsExist(String name){
+		try {
+			__getByName__(name);
+			return Boolean.TRUE;
+		} catch (Exception exception) {
+			if(exception.getClass().equals(ClassNotFoundException.class))
+				return Boolean.FALSE;
+			throw new RuntimeException(exception);
 		}
 	}
 	

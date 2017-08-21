@@ -179,9 +179,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 								value = null;
 							
 							if(value!=null){
-								Field field = FieldHelper.getInstance().get(getProperty(PROPERTY_INSTANCE).getClass(), (java.lang.String)getProperty(PROPERTY_FIELD_NAME));
+								Class<?> aClass = getProperty(PROPERTY_INSTANCE).getClass();
+								Field field = FieldHelper.getInstance().get(aClass, (java.lang.String)getProperty(PROPERTY_FIELD_NAME));
 								//if(field!=null){
-								Class<?> fieldType = ClassHelper.getInstance().getWrapper(field.getType());
+								Class<?> fieldType =  ClassHelper.getInstance().getWrapper(FieldHelper.getInstance().getType(aClass, field));
 								if(ClassHelper.getInstance().isString(fieldType)){
 									
 								}else if(ClassHelper.getInstance().isNumber(fieldType)){

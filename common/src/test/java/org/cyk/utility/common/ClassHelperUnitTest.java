@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 
 import org.cyk.utility.common.helper.AbstractHelper;
 import org.cyk.utility.common.helper.AbstractReflectionHelper;
+import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -15,6 +16,17 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 	
 	@Override
 	protected void _execute_() {}
+	
+	@Test
+	public void getByName(){
+		AssertionHelper.getInstance().assertEquals(ClassHelper.class, ClassHelper.getInstance().getByName(ClassHelper.class.getName()));
+		AssertionHelper.getInstance().assertEquals(null,ClassHelper.getInstance().getByName(ClassHelper.class.getName()+"XXX",Boolean.TRUE));
+	}
+	
+	@Test(expected=RuntimeException.class)
+	public void getByNameException(){
+		ClassHelper.getInstance().getByName(ClassHelper.class.getName()+"XXX",Boolean.FALSE);
+	}
 	
 	@Test
 	public void getClasses(){
