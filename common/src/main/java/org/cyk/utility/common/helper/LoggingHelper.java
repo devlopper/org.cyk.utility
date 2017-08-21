@@ -354,13 +354,16 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 					
 					@Override
 					public Logger<org.apache.logging.log4j.Logger, org.apache.logging.log4j.Level, org.apache.logging.log4j.Marker> setMarker(String marker) {
-						setMarker(MarkerManager.getMarker(marker));
+						setMarker(StringHelper.getInstance().isBlank(marker) ? null : MarkerManager.getMarker(marker));
 						return this;
 					}
 					
 					@Override
 					protected void __log__(Message message,Class<?> aClass, org.apache.logging.log4j.Logger logger, org.apache.logging.log4j.Level level,org.apache.logging.log4j.Marker marker) {
-						logger.log(level, marker, message.getTemplate(),ArrayHelper.getInstance().get(Object.class, message.getArguments()));
+						if(marker==null)
+							logger.log(level, message.getTemplate(),ArrayHelper.getInstance().get(Object.class, message.getArguments()));
+						else
+							logger.log(level, marker, message.getTemplate(),ArrayHelper.getInstance().get(Object.class, message.getArguments()));
 					}
 				
 					/**/

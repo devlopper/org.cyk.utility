@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.cyk.utility.common.Constant;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -243,16 +244,16 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 		public static class Key implements Serializable {
 			private static final long serialVersionUID = 1L;
 		
-			private String value;
+			private Object value;
 			
-			public Key(String value) {
+			public Key(Object value) {
 				super();
 				this.value = value;
 			}
 			
 			@Override
 			public String toString() {
-				return value;
+				return value == null ? Constant.EMPTY_STRING : value.toString();
 			}
 
 			public static interface Builder extends org.cyk.utility.common.Builder<Object[],Key> {

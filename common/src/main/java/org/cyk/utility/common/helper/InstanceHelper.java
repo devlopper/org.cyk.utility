@@ -191,17 +191,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 								}else if(ClassHelper.getInstance().isDate(fieldType)){
 									value = new TimeHelper.Builder.String.Adapter.Default((java.lang.String)value).execute();
 								}else
-									value = Pool.getInstance().get(fieldType, value);
-								/*
-								if(!fieldType.isAssignableFrom(value.getClass())){
-									if(ClassHelper.getInstance().isNumber(fieldType)){
-										value = NumberHelper.getInstance().get(fieldType,(java.lang.String)value);
-									}else {
-										value = StringUtils.defaultIfBlank((java.lang.String)value, null);
-									}
-								}	
-								*/
-								//}	
+									value = Pool.getInstance().get(fieldType, value,java.lang.Boolean.TRUE);
+	
 							}
 							
 						}
@@ -321,22 +312,27 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 						Object[] values = getInput();
 						ArrayHelper.Dimension.Key.Builder keyBuilder = getKeyBuilder();
 						ArrayHelper.Dimension.Key key = null;
+						addLoggingMessageBuilderNamedParameters("class",instanceClass.getSimpleName());
 						if(keyBuilder!=null){
 							key = keyBuilder.setInput(values).execute();
 							addLoggingMessageBuilderNamedParameters("key",key.getValue());
 						}
 						if(key!=null){
-							Boolean pooled = Boolean.TRUE.equals(Pool.getInstance().contains(instanceClass));
+							/*Boolean pooled = Boolean.TRUE.equals(Pool.getInstance().contains(instanceClass));
 							if(pooled){
 								instance = Pool.getInstance().get(instanceClass, key.getValue());
+								addLoggingMessageBuilderNamedParameters("pooled found",instance!=null);
 							}
-							addLoggingMessageBuilderNamedParameters(instanceClass.getSimpleName()+" pooled",pooled,"found",instance!=null);
-							if(instance==null)
+							
+							if(instance==null){*/
 								instance = new InstanceHelper.Lookup.Adapter.Default<>(Object.class, key.getValue(), instanceClass).execute();
-							addLoggingMessageBuilderNamedParameters("looked up instance is not null",instance!=null);
+								addLoggingMessageBuilderNamedParameters("looked up found",instance!=null);
+							//}
 						}
-						if(instance==null)
+						if(instance==null){
 							instance = ClassHelper.getInstance().instanciateOne(instanceClass);
+							addLoggingMessageBuilderNamedParameters("instanciated",instance!=null);
+						}
 						Object[] parametersArray = CollectionHelper.getInstance().getArray(getParameters());
 						if(parametersArray!=null){
 							Setter<INSTANCE> setter = getSetter();
@@ -472,9 +468,12 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 								,CollectionHelper.getInstance().isEmpty(Source.CLASSES) ? Arrays.asList(Source.Adapter.Default.class) : Source.CLASSES))
 							sourcesExecutor.getInput().add(source);
 					}
+					sourcesExecutor.setProperty(PROPERTY_INSTANCES, getProperty(PROPERTY_INSTANCES));
+					
 					sourcesExecutor.getResultMethod().setInputClass((Class<Object>) getInputClass());
 					sourcesExecutor.getResultMethod().setInput(getInput());
 					sourcesExecutor.getResultMethod().setOutputClass((Class<Object>) getOutputClass());
+					
 					return (INSTANCE) sourcesExecutor.execute();
 				}
 			}
@@ -514,8 +513,13 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 
 						@Override
 						protected java.lang.Object __execute__() {
-							return new ClassHelper.Instanciation.Adapter.Default<java.lang.Object>(getOutputClass()).execute(); //ClassHelper.getInstance().instanciateOne((Class<?>)getOutputClass());
+							Class<java.lang.Object> instanceClass = getOutputClass();
+							return __execute__(Pool.getInstance().get(instanceClass, getInput()));
 						}
+						
+						protected java.lang.Object __execute__(java.lang.Object instance) {
+							return instance;// == null ? new ClassHelper.Instanciation.Adapter.Default<java.lang.Object>(getOutputClass()).execute() : instance;
+						} 
 					}
 					
 				}
@@ -800,25 +804,38 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			super.initialisation();
 		}
 		
-		public <T> Pool load(Class<T> aClass){
-			Collection<T> result = null,c;
-			for(Class<?> listenerClass : Listener.CLASSES){
-				Listener listener = (Listener) ClassHelper.getInstance().instanciateOne(listenerClass);
-				c = listener.load(aClass);
-				if(c!=null)
-					result = c;
+		public <T> Pool load(Class<T> aClass,Boolean renew){
+			if(!MAP.containsKey(aClass) || Boolean.TRUE.equals(renew)){
+				Collection<T> result = null,c;
+				for(Class<?> listenerClass : Listener.CLASSES){
+					Listener listener = (Listener) ClassHelper.getInstance().instanciateOne(listenerClass);
+					c = listener.load(aClass);
+					if(c!=null)
+						result = c;
+				}
+				MAP.remove(aClass);
+				add(aClass, result);	
 			}
-			MAP.remove(aClass);
-			add(aClass, result);
 			return this;
 		}
 		
+		public <T> Pool load(Class<T> aClass){
+			return load(aClass,Boolean.TRUE);
+		}
+		
 		public <T> Pool add(Class<T> aClass,Collection<T> collection){
-			if(collection!=null){
+			if(!CollectionHelper.getInstance().isEmpty(collection)){
 				Collection<T> c = get(aClass);
 				if(c==null)
 					MAP.put(aClass, c = new ArrayList<>());
 				c.addAll(collection);
+			}
+			return this;
+		}
+		
+		public <T> Pool add(Class<T> aClass,@SuppressWarnings("unchecked") T...instances){
+			if(!ArrayHelper.getInstance().isEmpty(instances)){
+				return add(aClass, Arrays.asList(instances));
 			}
 			return this;
 		}
@@ -832,24 +849,43 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			return MAP.containsKey(aClass);
 		}
 		
-		public <T> T get(Class<T> aClass,Object identifier){
+		public <T> T get(Class<T> aClass,Object identifier,Boolean automaticallyCallLoadIfNotMapped){
 			if(aClass==null || identifier==null)
-				return null;
-			Collection<T> collection = get(aClass);
-			if(collection==null)
-				return null;
-			for(T instance : collection)
-				if( identifier.equals(InstanceHelper.getInstance().getIdentifier(instance)) )
-					return instance;
+				return null;			
+			LoggingHelper.Logger<?,?,?> logger = LoggingHelper.getInstance().getLogger();
+			logger.getMessageBuilder(Boolean.TRUE).addManyParameters("get",new Object[]{"class",aClass.getSimpleName()},new Object[]{"identifier",identifier}
+				,new Object[]{"automatically call load if not contains",automaticallyCallLoadIfNotMapped});
+			if(!MAP.containsKey(aClass) && Boolean.TRUE.equals(automaticallyCallLoadIfNotMapped))
+				load(aClass);
 			
-			T instance = null,c;
-			for(Class<?> listenerClass : Listener.CLASSES){
-				Listener listener = (Listener) ClassHelper.getInstance().instanciateOne(listenerClass);
-				c = listener.get(aClass,identifier);
-				if(c!=null)
-					instance = c;
+			Collection<T> collection = get(aClass);
+			T result = null,c;
+			logger.getMessageBuilder().addManyParameters(new Object[]{"collection size",collection == null ? "null" : collection.size()});
+			if(collection==null){
+				
+			}else{
+				
+				for(T instance : collection)
+					if( identifier.equals(InstanceHelper.getInstance().getIdentifier(instance)) ){
+						result = instance;
+						break;
+					}
+				
+				for(Class<?> listenerClass : Listener.CLASSES){
+					Listener listener = (Listener) ClassHelper.getInstance().instanciateOne(listenerClass);
+					c = listener.get(aClass,identifier);
+					if(c!=null)
+						result = c;
+				}	
 			}
-			return instance;
+				
+			logger.getMessageBuilder().addManyParameters(new Object[]{"found",result!=null}).getLogger()
+				.execute(getClass(),LoggingHelper.Logger.Level.TRACE,null);
+			return result;
+		}
+		
+		public <T> T get(Class<T> aClass,Object identifier){
+			return get(aClass,identifier,Boolean.FALSE);
 		}
 		
 		public Pool clear(){
@@ -866,7 +902,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			<T> Collection<T> load(Class<T> aClass);
 			<T> T get(Class<T> aClass,Object identifier);
 			
-			public static class Adapter implements Listener , Serializable {
+			public static class Adapter extends AbstractBean implements Listener , Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				@Override

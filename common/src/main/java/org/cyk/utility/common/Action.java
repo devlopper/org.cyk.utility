@@ -148,6 +148,8 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_MARKER="MARKER";
 	java.lang.String PROPERTY_NAME_INSTANCE="INSTANCE";
 	java.lang.String PROPERTY_FORMAT="FORMAT";
+	java.lang.String PROPERTY_COLLECTION="COLLECTION";
+	java.lang.String PROPERTY_INSTANCES="INSTANCES";
 	
 	/**/
 	

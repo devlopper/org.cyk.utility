@@ -148,6 +148,9 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 				Builder setMatrix(Matrix matrix);
 				Builder createMatrix();
 				
+				Boolean getCloseWorkbook();
+				Builder setCloseWorkbook(Boolean closeWorkbook);
+				
 				@Getter @Setter
 				public static class Adapter extends org.cyk.utility.common.Builder.Adapter.Default<Workbook, Sheet> implements Builder,Serializable {
 					private static final long serialVersionUID = 1L;
@@ -155,9 +158,15 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 					protected java.lang.String sheetName;
 					protected Integer sheetIndex;
 					protected Matrix matrix;
+					protected Boolean closeWorkbook;
 					
 					public Adapter(Workbook workbook) {
 						super(Workbook.class, workbook, Sheet.class);
+					}
+					
+					@Override
+					public Builder setCloseWorkbook(Boolean closeWorkbook){
+						return null;
 					}
 					
 					@Override
@@ -190,6 +199,7 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 						
 						public Default(Workbook workbook) {
 							super(workbook);
+							setCloseWorkbook(Boolean.TRUE);
 						}
 						
 						public Default(java.lang.String filePath,Integer sheetIndex) {
@@ -205,6 +215,12 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 						public Default(java.io.InputStream fileInputStream,Class<?> aClass) {
 							this(new MicrosoftExcelHelper.Workbook.Builder.InputStream.Adapter.Default(fileInputStream).execute());
 							setSheetName(aClass);
+						}
+						
+						@Override
+						public Builder setCloseWorkbook(Boolean closeWorkbook) {
+							this.closeWorkbook = closeWorkbook;
+							return this;
 						}
 						
 						@Override
@@ -349,11 +365,12 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 					            addLoggingMessageBuilderNamedParameters("#row",rowCount);   
 					        }
 							addLoggingMessageBuilderNamedParameters("#selected",ArrayHelper.getInstance().size(sheet.getValues()), "#ignored",ArrayHelper.getInstance().size(sheet.getIgnoreds()));					        
-					        try {
-								sheet.getWorkbook().getModel().close();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}	
+					        if(Boolean.TRUE.equals(getCloseWorkbook()))
+								try {
+									sheet.getWorkbook().getModel().close();
+								} catch (IOException e) {
+									e.printStackTrace();
+								}	
 							return sheet;
 						}
 					}

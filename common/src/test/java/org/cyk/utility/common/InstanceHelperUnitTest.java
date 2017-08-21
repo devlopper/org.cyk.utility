@@ -2,6 +2,8 @@ package org.cyk.utility.common;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.validation.constraints.Digits;
@@ -10,9 +12,11 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.helper.ArrayHelper;
+import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
+import org.cyk.utility.common.helper.InstanceHelper.Pool;
 import org.cyk.utility.common.helper.InstanceHelper.Lookup.Source;
 import org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -40,6 +44,16 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 				return super.__execute__();
 			}
 		};*/
+		InstanceHelper.Listener.COLLECTION.add(new InstanceHelper.Listener.Adapter.Default(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Object getIdentifier(Object instance) {
+				if(instance instanceof A)
+					return((A)instance).getF2();
+				return super.getIdentifier(instance);
+			}
+		});
 	}
 	
 	@InjectMocks private InstanceHelper instanceHelper; 
@@ -48,8 +62,39 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	protected void _execute_() {}
 	
 	@Test
+	public void pool(){
+		AssertionHelper.getInstance().assertEquals(null, Pool.getInstance().get(A.class, 181818));
+		Collection<A> instances = new ArrayList<>();
+		Pool.getInstance().add(A.class, instances);
+		AssertionHelper.getInstance().assertEquals(null, Pool.getInstance().get(A.class, 181818));
+		A a = new A();
+		a.setF1("From My Source _ 159");
+		a.setF2(147);
+		Pool.getInstance().add(A.class, a);
+		AssertionHelper.getInstance().assertEquals(null, Pool.getInstance().get(A.class, 181818));
+		A a888 = new A();
+		a888.setF1("From My Source _ 888");
+		a888.setF2(181818);
+		Pool.getInstance().add(A.class, a888);
+		AssertionHelper.getInstance().assertEquals(a888, Pool.getInstance().get(A.class, 181818));
+		A a777 = new A();
+		a777.setF1("From My Source _ 777");
+		a777.setF2(475747);
+		Pool.getInstance().add(A.class, a777);
+		AssertionHelper.getInstance().assertEquals(a888, Pool.getInstance().get(A.class, 181818));
+		AssertionHelper.getInstance().assertEquals(a777, Pool.getInstance().get(A.class, 475747));
+		AssertionHelper.getInstance().assertEquals(null, Pool.getInstance().get(A.class, 111));
+		AssertionHelper.getInstance().assertEquals(a, Pool.getInstance().get(A.class, 147));
+
+	}
+	
+	@Test
 	public void lookup(){
-		assertA(new InstanceHelper.Lookup.Adapter.Default<>(String.class, "159", A.class).execute(),"From My Source _ 159", 147);
+		A a = new A();
+		a.setF1("From My Source _ 159");
+		a.setF2(147);
+		Pool.getInstance().add(A.class, a);
+		assertA(new InstanceHelper.Lookup.Adapter.Default<>(Integer.class, 147, A.class).execute(),"From My Source _ 159", 147);
 	}
 	
 	@Test
@@ -64,16 +109,20 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		assertA(a,new Object[]{"f1","name","f2",12},"name", 12);
 		assertA(a,new Object[]{"f2",12,"f1","name"},"name", 12);
 		
+		a = new A();
+		a.setF1("From My Source _ 159");
+		a.setF2(147);
+		Pool.getInstance().add(A.class, a);
 		assertA(new InstanceHelper.Builder.OneDimensionArray.Adapter.Default<A>(new Object[]{}, A.class).setKeyBuilder(
 				new ArrayHelper.Dimension.Key.Builder.Adapter.Default(){
 					private static final long serialVersionUID = 1L;
 
 					protected org.cyk.utility.common.helper.ArrayHelper.Dimension.Key __execute__() {
-						return new ArrayHelper.Dimension.Key("159");
+						return new ArrayHelper.Dimension.Key(147);
 					}
 				} ).execute(),"From My Source _ 159", 147);
 		
-		
+		Pool.getInstance().clear();
 	}
 	
 	@Test
@@ -239,16 +288,10 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		
 		private static final long serialVersionUID = 1L;
 
-		private static final A A_159 = new A();
-		static{
-			A_159.setF1("From My Source _ 159");
-			A_159.setF2(147);
-		}
-		
 		@Override
 		protected java.lang.Object __execute__() {
-			if("159".equals(getInput()))
-				return A_159;
+			//if("159".equals(getInput()))
+			//	return A_159;
 			return super.__execute__();
 		}
 		
