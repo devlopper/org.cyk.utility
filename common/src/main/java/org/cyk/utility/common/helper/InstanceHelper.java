@@ -55,6 +55,15 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		});
 	}
 	
+	public Boolean getAreEqual(final Object instance1,final Object instance2){
+		return listenerUtils.getBoolean(Listener.COLLECTION, new ListenerUtils.BooleanMethod<Listener>() {
+			@Override
+			public Boolean execute(Listener listener) {
+				return listener.getAreEqual(instance1, instance2);
+			}
+		});
+	}
+	
 	public <T> T getIfNotNullElseDefault(Class<T> valueClass,T value,T defaultValue){
 		return value == null ? defaultValue : value;
 	}
@@ -247,24 +256,6 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		/**/
 		
 		public static interface OneDimensionArray<INSTANCE> extends Builder<Object[],INSTANCE> {
-			
-			//ListenerHelper.Executor.Function.Adapter.Default<Datasource> getDatasourcesExecutor();
-			//ToStringMapping setDatasourcesExecutor(ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor);
-			
-			/*
-			Boolean isArrayValueAtProcessable(Integer index);
-		
-			Object getKeyType(Object[] values);
-			
-			Object getKeyType();
-			OneDimensionArray<INSTANCE> setKeyType(Object keyType);
-			
-			Integer getKeyIndex(Object[] values);
-			Integer getKeyIndex();
-			OneDimensionArray<INSTANCE> setKeyIndex(Integer keyIndex);
-			
-			Object getKeyValue(Object[] values);
-			*/
 			
 			ArrayHelper.Dimension.Key.Builder getKeyBuilder();
 			OneDimensionArray<INSTANCE> setKeyBuilder(ArrayHelper.Dimension.Key.Builder keyBuilder);
@@ -764,6 +755,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		java.util.Collection<Listener> COLLECTION = new ArrayList<>();
 		
 		Object getIdentifier(Object instance);
+		Boolean getAreEqual(Object object1,Object object2);
 		
 		/**/
 		
@@ -775,10 +767,22 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				return null;
 			}
 			
+			@Override
+			public Boolean getAreEqual(Object object1, Object object2) {
+				return null;
+			}
+			
 			/**/
 			
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public Boolean getAreEqual(Object object1, Object object2) {
+					Object identifier1 = getIdentifier(object1);
+					Object identifier2 = getIdentifier(object2);
+					return identifier1!=null && identifier2!=null && identifier1.equals(identifier2);
+				}
 				
 			}
 			
@@ -870,6 +874,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			}else{
 				
 				for(T instance : collection)
+					//Equals method to be created
 					if( identifier.equals(InstanceHelper.getInstance().getIdentifier(instance)) ){
 						result = instance;
 						break;
@@ -906,6 +911,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			<T> Collection<T> load(Class<T> aClass);
 			<T> T get(Class<T> aClass,Object identifier);
 			
+			
 			public static class Adapter extends AbstractBean implements Listener , Serializable {
 				private static final long serialVersionUID = 1L;
 				
@@ -921,7 +927,6 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				
 				public static class Default extends Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
-					
 					
 				}
 				

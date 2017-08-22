@@ -141,10 +141,19 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		}
 	}
 	
-	public <T> T instanciateOne(Class<T> aClass){
+	private <T> T __instanciate__(Class<T> aClass){
 		try {
 			return aClass.newInstance();
 		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public <T> T instanciateOne(Class<T> aClass){
+		try {
+			return new Instanciation.Get.Adapter.Default<>(aClass).execute();
+		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
@@ -335,6 +344,12 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 					public Default() {
 						this(null);
 					}
+					
+					@SuppressWarnings("unchecked")
+					@Override
+					protected INSTANCE __execute__() {
+						return (INSTANCE) ClassHelper.getInstance().__instanciate__(RESULT_METHOD_CLASS).setInput(getInput()).execute();
+					}
 				}
 			}
 			
@@ -343,7 +358,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 
 				@Override
 				protected java.lang.Object __execute__() {
-					return ClassHelper.getInstance().instanciateOne((Class<?>)getInput());
+					return ClassHelper.getInstance().__instanciate__((Class<?>)getInput());
 				}
 			}
 		}
