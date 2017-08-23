@@ -39,7 +39,6 @@ public abstract class AbstractIntegrationTestJpaBased extends AbstractIntegratio
 		super._before_();
 		if(Boolean.TRUE.equals(data))
 			return;
-		System.out.println("Populating with data");
 		if(Boolean.TRUE.equals(populateInTransaction()))
 			transaction(new TestMethod() {private static final long serialVersionUID = 1L; @Override protected void test() { populate(); } });	
 		else{
