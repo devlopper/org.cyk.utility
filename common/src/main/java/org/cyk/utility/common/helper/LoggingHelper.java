@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
+import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
@@ -163,6 +164,11 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 		Logger<LOGGER,LEVEL,MARKER> setLevel(Level level);
 		Logger<LOGGER,LEVEL,MARKER> setMarker(MARKER marker);
 		Logger<LOGGER,LEVEL,MARKER> setMarker(String marker);
+		Logger<LOGGER,LEVEL,MARKER> setStackTraceElement(StackTraceElement stackTraceElement);
+		
+		MARKER createMarker(String marker);
+		MARKER createMarker(String marker,MARKER parent);
+		Logger<LOGGER,LEVEL,MARKER> setMarkerParent(MARKER marker,MARKER parent);
 		
 		LOGGER instanciateLogger(Class<?> aClass);
 		
@@ -214,7 +220,27 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 			}
 			
 			@Override
+			public Logger<LOGGER, LEVEL, MARKER> setStackTraceElement(StackTraceElement stackTraceElement) {
+				return null;
+			}
+			
+			@Override
 			public LOGGER instanciateLogger(Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public MARKER createMarker(String marker) {
+				return null;
+			}
+			
+			@Override
+			public MARKER createMarker(String marker, MARKER parent) {
+				return null;
+			}
+			
+			@Override
+			public Logger<LOGGER, LEVEL, MARKER> setMarkerParent(MARKER marker,MARKER parent) {
 				return null;
 			}
 			
@@ -271,6 +297,19 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 					return this;
 				}
 				
+				@Override
+				public Logger<LOGGER, LEVEL, MARKER> setStackTraceElement(StackTraceElement stackTraceElement) {
+					setProperty(PROPERTY_NAME_STACK_TRACE_ELEMENT, stackTraceElement);
+					return this;
+				}
+				
+				@Override
+				public MARKER createMarker(String marker, MARKER parent) {
+					MARKER m = createMarker(marker);
+					setMarkerParent(m, parent);
+					return m;
+				}
+				
 				@SuppressWarnings("unchecked")
 				@Override
 				protected Void __execute__() {
@@ -286,6 +325,21 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 						logger = instanciateLogger(aClass);
 					LEVEL level = (LEVEL) getProperty(PROPERTY_NAME_LEVEL);
 					MARKER marker = (MARKER) getProperty(PROPERTY_NAME_MARKER);
+					StackTraceElement stackTraceElement = (StackTraceElement) getProperty(PROPERTY_NAME_STACK_TRACE_ELEMENT);
+					
+					if(stackTraceElement==null){
+						//stackTraceElement = StackTraceHelper.getInstance().getAt(8);
+					}
+					
+					if(stackTraceElement!=null){
+						Class<?> stackTraceElementClass = ClassHelper.getInstance().getByName(stackTraceElement.getClassName());
+						MARKER packageMarker = createMarker(stackTraceElementClass.getPackage().getName());
+						MARKER classMarker = createMarker(stackTraceElementClass.getSimpleName(),packageMarker);
+						MARKER lineNumberMarker = createMarker(String.valueOf(stackTraceElement.getLineNumber()),classMarker);
+						MARKER methodMarker = createMarker(stackTraceElement.getMethodName(),lineNumberMarker);
+						if(marker!=null)
+							setMarkerParent(marker,methodMarker);
+					}
 					
 					__log__(message, aClass, logger, level, marker);
 					return Constant.VOID;
@@ -338,6 +392,17 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 					}
 					
 					@Override
+					public Logger<org.apache.logging.log4j.Logger, org.apache.logging.log4j.Level, Marker> setMarkerParent(org.apache.logging.log4j.Marker marker, org.apache.logging.log4j.Marker parent) {
+						marker.setParents(parent);
+						return this;
+					}
+					
+					@Override
+					public org.apache.logging.log4j.Marker createMarker(String marker) {
+						return MarkerManager.getMarker(marker);
+					}
+					
+					@Override
 					public Logger<org.apache.logging.log4j.Logger, org.apache.logging.log4j.Level, org.apache.logging.log4j.Marker> setLevel(Level level) {
 						switch(level){
 						case ALL: return setLevel(org.apache.logging.log4j.Level.ALL);
@@ -368,20 +433,30 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 				
 					/**/
 					
-					public static void log(Message.Builder messageBuilder,Class<?> aClass, org.apache.logging.log4j.Level level,org.apache.logging.log4j.Marker marker){
-						new LoggingHelper.Logger.Log4j.Adapter.Default(messageBuilder.execute()).setClass(aClass).setLevel(level).setMarker(marker).execute();
+					public static void log(Message.Builder messageBuilder,Class<?> aClass, org.apache.logging.log4j.Level level,org.apache.logging.log4j.Marker marker,StackTraceElement stackTraceElement){
+						new LoggingHelper.Logger.Log4j.Adapter.Default(messageBuilder.execute()).setClass(aClass).setLevel(level).setMarker(marker)
+							.setStackTraceElement(stackTraceElement).execute();
+					}
+					
+					public static void log(Message.Builder messageBuilder,Class<?> aClass, Level level,String marker,StackTraceElement stackTraceElement){
+						new LoggingHelper.Logger.Log4j.Adapter.Default(messageBuilder.execute()).setClass(aClass).setLevel(level).setMarker(marker)
+							.setStackTraceElement(stackTraceElement).execute();
 					}
 					
 					public static void log(Message.Builder messageBuilder,Class<?> aClass, Level level,String marker){
-						new LoggingHelper.Logger.Log4j.Adapter.Default(messageBuilder.execute()).setClass(aClass).setLevel(level).setMarker(marker).execute();
+						log(messageBuilder, aClass, level, marker,null);
 					}
 					
 					public static void log(String message,Class<?> aClass, org.apache.logging.log4j.Level level,org.apache.logging.log4j.Marker marker){
-						log(new Message.Builder.Adapter.Default(message), aClass, level, marker);
+						log(new Message.Builder.Adapter.Default(message), aClass, level, marker,null);
+					}
+					
+					public static void log(String message,Class<?> aClass, Level level,String marker,StackTraceElement stackTraceElement){
+						log(new Message.Builder.Adapter.Default(message), aClass, level, marker,stackTraceElement);
 					}
 					
 					public static void log(String message,Class<?> aClass, Level level,String marker){
-						log(new Message.Builder.Adapter.Default(message), aClass, level, marker);
+						log(new Message.Builder.Adapter.Default(message), aClass, level, marker,StackTraceHelper.getInstance().getAt(3));
 					}
 				}
 			}
@@ -394,11 +469,16 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 	
 	public static interface Run {
 		
+		String BEFORE = "BEFORE";
+		String AFTER = "AFTER";
+		String RUNNING = "RUNNING...";
+		String DONE = "DONE.";
+		
+		StackTraceElement getStackTraceElement();
+		Run setStackTraceElement(StackTraceElement stackTraceElement);
 		void log(Boolean before);
 		void addParameters(LoggingHelper.Message.Builder builder,Boolean before);
 		String getMarker(Boolean before);
-		Class<?> getClazz();
-		String getName();
 		Object __execute__();
 		
 		Object execute();
@@ -407,11 +487,15 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 		public static class Adapter implements Run,Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			protected Class<?> clazz;
-			protected String name;
+			protected StackTraceElement stackTraceElement;
 			
 			@Override
 			public void log(Boolean before) {}
+			
+			@Override
+			public Run setStackTraceElement(StackTraceElement stackTraceElement) {
+				return null;
+			}
 			
 			@Override
 			public String getMarker(Boolean before) {
@@ -434,21 +518,38 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 			public static class Default extends Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				public Default(Class<?> aClass,String name) {
-					this.clazz = aClass;
-					this.name = name;
+				protected Long millisecond;
+				
+				public Default(StackTraceElement stackTraceElement) {
+					setStackTraceElement(stackTraceElement);
+				}
+				
+				@Override
+				public Run setStackTraceElement(StackTraceElement stackTraceElement) {
+					this.stackTraceElement = stackTraceElement;
+					return this;
+				}
+				
+				@Override
+				public void addParameters(org.cyk.utility.common.helper.LoggingHelper.Message.Builder builder, Boolean before) {
+					builder.addManyParameters((getStackTraceElement().getMethodName()+Constant.CHARACTER_SPACE) + (before ? RUNNING : DONE));
 				}
 				
 				@Override
 				public String getMarker(Boolean before) {
-					return LoggingHelper.getInstance().getMarkerName(getClazz().getSimpleName(),getName(),Boolean.TRUE.equals(before) ? "BEFORE" : "AFTER");
+					return LoggingHelper.getInstance().getMarkerName(Boolean.TRUE.equals(before) ? BEFORE : AFTER);
 				}
 				
 				@Override
 				public void log(Boolean before) {
 					LoggingHelper.Logger<?, ?, ?> logger = LoggingHelper.getInstance().getLogger();
 					addParameters(logger.getMessageBuilder(Boolean.TRUE),before); 
-					logger.execute(getClass(),Boolean.TRUE.equals(before) ? LoggingHelper.Logger.Level.TRACE : LoggingHelper.Logger.Level.DEBUG,getMarker(before));
+					if(!Boolean.TRUE.equals(before)){
+						String duration = new TimeHelper.Stringifier.Duration.Adapter.Default(System.currentTimeMillis()-millisecond).execute();
+						logger.getMessageBuilder().addNamedParameters("duration",InstanceHelper.getInstance().getIfNotNullElseDefault(duration,"0"));
+					}
+					logger.setStackTraceElement(getStackTraceElement())
+						.execute(getClass(),Boolean.TRUE.equals(before) ? LoggingHelper.Logger.Level.TRACE : LoggingHelper.Logger.Level.DEBUG,getMarker(before));
 				}
 				
 				@Override
@@ -460,6 +561,7 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 				@Override
 				public Object execute() {
 					log(Boolean.TRUE);
+					millisecond = System.currentTimeMillis();
 					Object result = __execute__();
 					log(Boolean.FALSE);
 				    return result;

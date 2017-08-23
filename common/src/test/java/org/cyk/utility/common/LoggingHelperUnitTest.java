@@ -5,7 +5,9 @@ import java.util.Set;
 
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.LoggingHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.LoggingHelper.Message;
+import org.cyk.utility.common.helper.StackTraceHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -13,26 +15,51 @@ public class LoggingHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
+	static{
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();
+	}
+	
+	
 	@Test
-	public void marker(){
-		new LoggingHelper.Run.Adapter.Default(getClass(),"create"){
+	public void marker(){		
+		LoggingHelper.Logger<?,?,?> logger = LoggingHelper.getInstance().getLogger();
+		logger.getMessageBuilder(Boolean.TRUE).addManyParameters("my message",new Object[]{"p1","v1"}).getLogger()
+			.execute(getClass(),LoggingHelper.Logger.Level.TRACE,"m1");
+		
+		LoggingHelper.Logger.Log4j.Adapter.Default.log("my debug message1 with marker ml0",getClass(),LoggingHelper.Logger.Level.TRACE,"ML0");
+		LoggingHelper.Logger.Log4j.Adapter.Default.log("my debug message1 with marker ml1",getClass(),LoggingHelper.Logger.Level.TRACE,"ML1");
+		LoggingHelper.Logger.Log4j.Adapter.Default.log("my debug message1 with marker ml2",getClass(),LoggingHelper.Logger.Level.TRACE,"ML2");
+		LoggingHelper.Logger.Log4j.Adapter.Default.log("my debug message1 with marker ml3",getClass(),LoggingHelper.Logger.Level.TRACE,"ML3");
+		
+		LoggingHelper.Logger.Log4j.Adapter.Default.log("MY ACTION",getClass(),LoggingHelper.Logger.Level.TRACE,"MY MARKER");
+		
+		LoggingHelper.Logger.Log4j.Adapter.Default.log("MY ACTION",getClass(),LoggingHelper.Logger.Level.TRACE,"MY MARKER 2");
+		
+		new LogClass().m1();
+	}
+	
+	@Test
+	public void myoperation001(){		
+		new LoggingHelper.Run.Adapter.Default(StackTraceHelper.getInstance().getAt(2)){
 			private static final long serialVersionUID = 1L;
-			
-			public void addParameters(org.cyk.utility.common.helper.LoggingHelper.Message.Builder builder, Boolean before) {
-				builder.addManyParameters(before ? "create" : "created");
-			}
 			
 			public Object __execute__() {
 				return null;
 			}
 			
 		}.execute();
-		LoggingHelper.Logger<?,?,?> logger = LoggingHelper.getInstance().getLogger();
-		logger.getMessageBuilder(Boolean.TRUE).addManyParameters("my message",new Object[]{"p1","v1"}).getLogger()
-			.execute(getClass(),LoggingHelper.Logger.Level.TRACE,"m1");
-		
-		//LoggingHelper.Logger.Log4j.Adapter.Default.log("my debug message1",getClass(),LoggingHelper.Logger.Level.TRACE,"m1");
-		LoggingHelper.Logger.Log4j.Adapter.Default.log("my debug message1 with marker 1",getClass(),LoggingHelper.Logger.Level.TRACE,"FLOW");
+	}
+	
+	@Test
+	public void myoperation002(){		
+		new LoggingHelper.Run.Adapter.Default(StackTraceHelper.getInstance().getAt(2)){
+			private static final long serialVersionUID = 1L;
+			
+			public Object __execute__() {
+				return null;
+			}
+			
+		}.execute();
 	}
 	
 	@Test
@@ -50,6 +77,15 @@ public class LoggingHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void stackTrace(){
 		new A().fa();
+	}
+	
+	public static class LogClass {
+		
+		public void m1(){
+			LoggingHelper.Logger.Log4j.Adapter.Default.log("another message from m1",getClass(),LoggingHelper.Logger.Level.TRACE,"ML3"
+					,StackTraceHelper.getInstance().getAt(3));
+		}
+		
 	}
 	
 	private class A{

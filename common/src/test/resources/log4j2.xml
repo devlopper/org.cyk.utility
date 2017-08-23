@@ -2,14 +2,23 @@
 <Configuration status="WARN">
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
-			<!--MarkerFilter marker="LoggingHelperUnitTest_create_AFTER" onMatch="ACCEPT" onMismatch="DENY" /-->
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+		<Console name="CustomConsole" target="SYSTEM_OUT">
+			<Filters>
+				<MarkerFilter marker="myoperation002" onMatch="ACCEPT" onMismatch="DENY" />
+			</Filters>
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level - %marker - %msg%n" />
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="org.cyk.utility.common.helper"
+		<Logger name="org.cyk.utility.common.LoggingHelperUnitTest"
 			level="trace">
-			<AppenderRef ref="Console" />
+			<AppenderRef ref="CustomConsole" />
+		</Logger>
+		<Logger name="org.cyk.utility.common"
+			level="trace">
+			<AppenderRef ref="CustomConsole" />
 		</Logger>
 		<Root level="trace">
 			<!--AppenderRef ref="Console"/ -->

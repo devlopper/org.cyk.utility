@@ -150,6 +150,7 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_FORMAT="FORMAT";
 	java.lang.String PROPERTY_COLLECTION="COLLECTION";
 	java.lang.String PROPERTY_INSTANCES="INSTANCES";
+	java.lang.String PROPERTY_NAME_STACK_TRACE_ELEMENT="STACK_TRACE_ELEMENT";
 	
 	/**/
 	
