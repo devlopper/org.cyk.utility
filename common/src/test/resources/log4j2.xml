@@ -6,7 +6,7 @@
 		</Console>
 		<Console name="CustomConsole" target="SYSTEM_OUT">
 			<Filters>
-				<MarkerFilter marker="myoperation002" onMatch="ACCEPT" onMismatch="DENY" />
+				
 			</Filters>
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level - %marker - %msg%n" />
 		</Console>

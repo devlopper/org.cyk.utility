@@ -334,7 +334,7 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 					if(stackTraceElement!=null){
 						Class<?> stackTraceElementClass = ClassHelper.getInstance().getByName(stackTraceElement.getClassName());
 						MARKER packageMarker = createMarker(stackTraceElementClass.getPackage().getName());
-						MARKER classMarker = createMarker(stackTraceElementClass.getSimpleName(),packageMarker);
+						MARKER classMarker = createMarker(/*aClass == null ?*/ aClass.getSimpleName() /*: aClass.getSimpleName()*/,packageMarker);
 						MARKER lineNumberMarker = createMarker(String.valueOf(stackTraceElement.getLineNumber()),classMarker);
 						MARKER methodMarker = createMarker(stackTraceElement.getMethodName(),lineNumberMarker);
 						if(marker!=null)
@@ -476,6 +476,8 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 		
 		StackTraceElement getStackTraceElement();
 		Run setStackTraceElement(StackTraceElement stackTraceElement);
+		Class<?> getClazz();
+		Run setClazz(Class<?> clazz);
 		void log(Boolean before);
 		void addParameters(LoggingHelper.Message.Builder builder,Boolean before);
 		String getMarker(Boolean before);
@@ -488,12 +490,18 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 			private static final long serialVersionUID = 1L;
 			
 			protected StackTraceElement stackTraceElement;
+			protected Class<?> clazz;
 			
 			@Override
 			public void log(Boolean before) {}
 			
 			@Override
 			public Run setStackTraceElement(StackTraceElement stackTraceElement) {
+				return null;
+			}
+			
+			@Override
+			public Run setClazz(Class<?> clazz) {
 				return null;
 			}
 			
@@ -520,13 +528,24 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 				
 				protected Long millisecond;
 				
-				public Default(StackTraceElement stackTraceElement) {
+				public Default(StackTraceElement stackTraceElement,Class<?> aClass) {
 					setStackTraceElement(stackTraceElement);
+					setClazz(aClass);
+				}
+				
+				public Default(StackTraceElement stackTraceElement) {
+					this(stackTraceElement,ClassHelper.getInstance().getByName(stackTraceElement.getClassName()));
 				}
 				
 				@Override
 				public Run setStackTraceElement(StackTraceElement stackTraceElement) {
 					this.stackTraceElement = stackTraceElement;
+					return this;
+				}
+				
+				@Override
+				public Run setClazz(Class<?> clazz) {
+					this.clazz=clazz;
 					return this;
 				}
 				
@@ -543,13 +562,16 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 				@Override
 				public void log(Boolean before) {
 					LoggingHelper.Logger<?, ?, ?> logger = LoggingHelper.getInstance().getLogger();
+					StackTraceElement stackTraceElement = getStackTraceElement();
+					//if(stackTraceElement!=null)
+					//	logger.getMessageBuilder(Boolean.TRUE).addNamedParameters("action",stackTraceElement.getMethodName());
 					addParameters(logger.getMessageBuilder(Boolean.TRUE),before); 
 					if(!Boolean.TRUE.equals(before)){
 						String duration = new TimeHelper.Stringifier.Duration.Adapter.Default(System.currentTimeMillis()-millisecond).execute();
 						logger.getMessageBuilder().addNamedParameters("duration",InstanceHelper.getInstance().getIfNotNullElseDefault(duration,"0"));
 					}
-					logger.setStackTraceElement(getStackTraceElement())
-						.execute(getClass(),Boolean.TRUE.equals(before) ? LoggingHelper.Logger.Level.TRACE : LoggingHelper.Logger.Level.DEBUG,getMarker(before));
+					logger.setStackTraceElement(stackTraceElement)
+						.execute(getClazz(),Boolean.TRUE.equals(before) ? LoggingHelper.Logger.Level.TRACE : LoggingHelper.Logger.Level.DEBUG,getMarker(before));
 				}
 				
 				@Override

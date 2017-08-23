@@ -35,12 +35,18 @@ public class LoggingHelperUnitTest extends AbstractUnitTest {
 		
 		LoggingHelper.Logger.Log4j.Adapter.Default.log("MY ACTION",getClass(),LoggingHelper.Logger.Level.TRACE,"MY MARKER 2");
 		
-		new LogClass().m1();
+	}
+	
+	@Test
+	public void logClass(){		
+		LogClass1 logClass1 = new LogClass1();
+		//logClass.m1();
+		logClass1.myoperation003();
 	}
 	
 	@Test
 	public void myoperation001(){		
-		new LoggingHelper.Run.Adapter.Default(StackTraceHelper.getInstance().getAt(2)){
+		new LoggingHelper.Run.Adapter.Default(StackTraceHelper.getInstance().getAt(2),getClass()){
 			private static final long serialVersionUID = 1L;
 			
 			public Object __execute__() {
@@ -52,7 +58,7 @@ public class LoggingHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void myoperation002(){		
-		new LoggingHelper.Run.Adapter.Default(StackTraceHelper.getInstance().getAt(2)){
+		new LoggingHelper.Run.Adapter.Default(StackTraceHelper.getInstance().getAt(2),getClass()){
 			private static final long serialVersionUID = 1L;
 			
 			public Object __execute__() {
@@ -79,12 +85,31 @@ public class LoggingHelperUnitTest extends AbstractUnitTest {
 		new A().fa();
 	}
 	
-	public static class LogClass {
+	public static class BaseLogClass {
 		
 		public void m1(){
 			LoggingHelper.Logger.Log4j.Adapter.Default.log("another message from m1",getClass(),LoggingHelper.Logger.Level.TRACE,"ML3"
 					,StackTraceHelper.getInstance().getAt(3));
 		}
+		
+		public void myoperation003(){		
+			new LoggingHelper.Run.Adapter.Default(StackTraceHelper.getInstance().getAt(2),getClass()){
+				private static final long serialVersionUID = 1L;
+				
+				public Object __execute__() {
+					return null;
+				}
+				
+			}.execute();
+		}
+		
+	}
+	
+	public static class LogClass1 extends BaseLogClass {
+				
+	}
+	
+	public static class LogClass2 extends BaseLogClass {
 		
 	}
 	
