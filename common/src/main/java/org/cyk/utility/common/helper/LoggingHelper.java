@@ -136,7 +136,7 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 										message.arguments = new ArrayList<>();
 									message.arguments.add(((Object[])parameter)[1]);
 								}else{
-									templateStringBuilder.append(parameter.toString());
+									templateStringBuilder.append(parameter == null ? "null" : parameter.toString());
 								}
 							}
 						message.template = String.format(FORMAT, templateStringBuilder.toString());

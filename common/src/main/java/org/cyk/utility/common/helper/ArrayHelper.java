@@ -88,6 +88,10 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 		return result;
 	}
 	
+	/*public getIfNotNullElseDefault(){
+		
+	}*/
+	
 	/**/
 	
 	@Getter @Setter @NoArgsConstructor
