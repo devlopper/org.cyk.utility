@@ -156,6 +156,19 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			collection.clear();
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <T> Collection<T> cast(Class<T> aClass,Collection<?> collection){
+		Collection<T> result;
+		if(collection==null){
+			result = null;
+		}else{
+			result = new ArrayList<T>();
+			for(Object item : collection)
+				result.add((T) item);	
+		}
+		return result;
+	}
+	
 	/**/
 	
 	public static interface Filter<TYPE>  extends org.cyk.utility.common.Action<Collection<TYPE>, Collection<TYPE>>{
