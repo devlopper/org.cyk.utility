@@ -16,6 +16,7 @@ import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
+import org.cyk.utility.common.helper.RandomHelper;
 import org.cyk.utility.common.helper.InstanceHelper.Pool;
 import org.cyk.utility.common.helper.InstanceHelper.Lookup.Source;
 import org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod;
@@ -53,6 +54,14 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 					return((A)instance).getF2();
 				return super.getIdentifier(instance);
 			}
+			
+			@Override
+			public <T> T generateFieldValue(Object instance, String name,Class<T> valueClass) {
+				if(instance instanceof A)
+					return (T) (((A)instance).getF1()+"_I_"+RandomHelper.getInstance().get(String.class));
+				return super.generateFieldValue(instance, name, valueClass);
+			}
+	
 		});
 	}
 	
@@ -60,6 +69,13 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	
 	@Override
 	protected void _execute_() {}
+	
+	@Test
+	public void generateFieldValue(){
+		A a = new A();
+		a.setF1("a1code1");
+		AssertionHelper.getInstance().assertEquals(Boolean.TRUE,InstanceHelper.getInstance().generateFieldValue(a, "f1", String.class).startsWith(a.getF1()+"_I_"));
+	}
 	
 	@Test
 	public void pool(){

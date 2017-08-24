@@ -55,6 +55,16 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		});
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <T> T generateFieldValue(final Object instance,final String name, final Class<T> valueClass){
+		return (T) listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
+			@Override
+			public Object execute(Listener listener) {
+				return listener.generateFieldValue(instance, name, valueClass);
+			}
+		});
+	}
+	
 	public Boolean getAreEqual(final Object instance1,final Object instance2){
 		return listenerUtils.getBoolean(Listener.COLLECTION, new ListenerUtils.BooleanMethod<Listener>() {
 			@Override
@@ -756,6 +766,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		
 		Object getIdentifier(Object instance);
 		Boolean getAreEqual(Object object1,Object object2);
+		<T> T generateFieldValue(Object instance,String name,Class<T> valueClass);
+		<T> T generateFieldStringValue(Object instance,String name);
 		
 		/**/
 		
@@ -772,6 +784,16 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				return null;
 			}
 			
+			@Override
+			public <T> T generateFieldValue(Object instance, String name,Class<T> valueClass) {
+				return null;
+			}
+			
+			@Override
+			public <T> T generateFieldStringValue(Object instance,String name) {
+				return null;
+			}
+			
 			/**/
 			
 			public static class Default extends Listener.Adapter implements Serializable {
@@ -782,6 +804,20 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					Object identifier1 = getIdentifier(object1);
 					Object identifier2 = getIdentifier(object2);
 					return identifier1!=null && identifier2!=null && identifier1.equals(identifier2);
+				}
+				
+				@SuppressWarnings("unchecked")
+				@Override
+				public <T> T generateFieldStringValue(Object instance,String name) {
+					return (T) generateFieldValue(instance, name,String.class);
+				}
+				
+				@SuppressWarnings("unchecked")
+				@Override
+				public <T> T generateFieldValue(Object instance,String name, Class<T> valueClass) {
+					if(String.class.equals(valueClass))
+						return (T) RandomHelper.getInstance().get(String.class);
+					return null;
 				}
 				
 			}
