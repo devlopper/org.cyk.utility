@@ -10,15 +10,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import javassist.Modifier;
+
 import javax.inject.Singleton;
+
+import lombok.Getter;
 
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
-
-import javassist.Modifier;
-import lombok.Getter;
+import org.cyk.utility.common.helper.InstanceHelper.Listener.FieldValueGenerator;
 
 @Singleton
 public class InstanceHelper extends AbstractHelper implements Serializable  {
@@ -53,6 +55,23 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				return super.getNullValue();
 			}
 		});
+	}
+	
+	public void setFieldValueGenerator(Class<?> aClass,String fieldName,FieldValueGenerator<?> fieldValueGenerator){
+		Map<String, FieldValueGenerator<?>> map = FieldValueGenerator.MAP.get(aClass);
+		if(map==null){
+			FieldValueGenerator.MAP.put(aClass, map = new HashMap<>());
+		}
+		map.put(fieldName, fieldValueGenerator);
+	}
+	
+	public FieldValueGenerator<?> getFieldValueGenerator(Class<?> aClass,String name){
+		FieldValueGenerator<?> fieldValueGenerator = null;
+		Map<String, FieldValueGenerator<?>> map = FieldValueGenerator.MAP.get(aClass);
+		if(map!=null){
+			fieldValueGenerator = (FieldValueGenerator<?>) map.get(name);
+		}
+		return fieldValueGenerator;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -815,13 +834,93 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				@SuppressWarnings("unchecked")
 				@Override
 				public <T> T generateFieldValue(Object instance,String name, Class<T> valueClass) {
-					if(String.class.equals(valueClass))
-						return (T) RandomHelper.getInstance().get(String.class);
-					return null;
+					FieldValueGenerator<T> fieldValueGenerator = (FieldValueGenerator<T>) InstanceHelper.getInstance().getFieldValueGenerator(instance.getClass(), name);
+					if(fieldValueGenerator==null){
+						fieldValueGenerator =  new FieldValueGenerator.Adapter.Default<>(valueClass);
+					}
+					return fieldValueGenerator.setInstance(instance).setFieldName(name).execute();
 				}
 				
 			}
 			
+		}
+	
+		public static interface FieldValueGenerator<OUTPUT> extends Action<Object, OUTPUT> {
+			
+			Map<Class<?>, Map<String, FieldValueGenerator<?>>> MAP = new HashMap<>();
+			
+			Object getInstance();
+			FieldValueGenerator<OUTPUT> setInstance(Object instance);
+			
+			String getFieldName();
+			FieldValueGenerator<OUTPUT> setFieldName(String fieldName);
+			
+			public static class Adapter<OUTPUT> extends Action.Adapter.Default<Object, OUTPUT> implements FieldValueGenerator<OUTPUT>,Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Adapter(Class<OUTPUT> outputClass) {
+					super("generate field value", Object.class, null, outputClass);
+				}
+				
+				@Override
+				public Object getInstance() {
+					return null;
+				}
+				
+				@Override
+				public FieldValueGenerator<OUTPUT> setInstance(Object instance) {
+					return null;
+				}
+				
+				@Override
+				public String getFieldName() {
+					return null;
+				}
+				
+				@Override
+				public FieldValueGenerator<OUTPUT> setFieldName(String fieldName) {
+					return null;
+				}
+				
+				/**/
+				public static class Default<OUTPUT> extends FieldValueGenerator.Adapter<OUTPUT> {
+					private static final long serialVersionUID = 1L;
+
+					public Default(Class<OUTPUT> outputClass) {
+						super(outputClass);
+						setIsInputRequired(Boolean.FALSE);
+					}
+					
+					@Override
+					protected OUTPUT __execute__() {
+						return __execute__(getInstance(), getFieldName(), getOutputClass());
+					}
+					
+					protected OUTPUT __execute__(Object instance,String fieldName,Class<OUTPUT> outputClass) {
+						return (OUTPUT) RandomHelper.getInstance().get(getOutputClass());
+					}
+					
+					@Override
+					public Object getInstance() {
+						return getProperty(PROPERTY_NAME_INSTANCE);
+					}
+					
+					@Override
+					public FieldValueGenerator<OUTPUT> setInstance(Object instance) {
+						return (FieldValueGenerator<OUTPUT>) setProperty(PROPERTY_NAME_INSTANCE, instance);
+					}
+					
+					@Override
+					public String getFieldName() {
+						return getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
+					}
+					
+					@Override
+					public FieldValueGenerator<OUTPUT> setFieldName(String fieldName) {
+						return (FieldValueGenerator<OUTPUT>) setProperty(PROPERTY_NAME_FIELD_NAME, fieldName);
+					}
+				}
+			}
 		}
 	}
 

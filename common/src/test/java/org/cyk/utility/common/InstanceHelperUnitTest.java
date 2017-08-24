@@ -9,6 +9,9 @@ import java.util.Date;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.helper.ArrayHelper;
@@ -16,16 +19,14 @@ import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
-import org.cyk.utility.common.helper.RandomHelper;
-import org.cyk.utility.common.helper.InstanceHelper.Pool;
+import org.cyk.utility.common.helper.InstanceHelper.Listener.FieldValueGenerator;
 import org.cyk.utility.common.helper.InstanceHelper.Lookup.Source;
+import org.cyk.utility.common.helper.InstanceHelper.Pool;
 import org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod;
+import org.cyk.utility.common.helper.RandomHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @SuppressWarnings("unchecked")
 public class InstanceHelperUnitTest extends AbstractUnitTest {
@@ -55,14 +56,25 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 				return super.getIdentifier(instance);
 			}
 			
-			@Override
+			/*@Override
 			public <T> T generateFieldValue(Object instance, String name,Class<T> valueClass) {
 				if(instance instanceof A)
 					return (T) (((A)instance).getF1()+"_I_"+RandomHelper.getInstance().get(String.class));
 				return super.generateFieldValue(instance, name, valueClass);
-			}
+			}*/
 	
 		});
+		
+		InstanceHelper.getInstance().setFieldValueGenerator(A.class, "f1", new FieldValueGenerator.Adapter.Default<String>(String.class){
+			private static final long serialVersionUID = 1L;
+			@Override
+			protected String __execute__(Object instance, String fieldName,Class<String> outputClass) {
+				if(instance instanceof A)
+					return (((A)instance).getF1()+"_I_"+RandomHelper.getInstance().get(String.class));
+				return super.__execute__(instance, fieldName, outputClass);
+			}
+		});
+
 	}
 	
 	@InjectMocks private InstanceHelper instanceHelper; 
