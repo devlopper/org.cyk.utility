@@ -197,7 +197,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 					Collection<TYPE> collection = null;
 					for(TYPE instance : input){
 						Object instanceFieldValue = FieldHelper.getInstance().read(instance, fieldName);
-						if((fieldValue==null && instanceFieldValue==null) || fieldValue.equals(instanceFieldValue)){
+						if((fieldValue==null && instanceFieldValue==null) || (fieldValue!=null && fieldValue.equals(instanceFieldValue))){
 							if(collection==null)
 								collection = new ArrayList<>();
 							collection.add(instance);

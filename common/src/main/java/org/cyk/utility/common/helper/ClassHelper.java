@@ -7,13 +7,17 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.reflections.Reflections;
 
@@ -194,6 +198,17 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	
 	public String getVariableName(Class<?> aClass){
 		return getVariableName(aClass, Boolean.FALSE);
+	}
+	
+	public List<String> getContainerNames(Class<?> aClass){
+		List<String> names = new ArrayList<>();
+		String packageName = aClass.getPackage().getName()+Constant.CHARACTER_DOT;
+		String[] classeNames = StringUtils.split(StringUtils.substringAfter(aClass.getName(),packageName), Constant.CHARACTER_DOLLAR.toString());
+		for(String className : classeNames)
+			if(!aClass.getSimpleName().equals(className))
+				names.add(className);
+		Collections.reverse(names);
+		return names;
 	}
 	
 	/**/

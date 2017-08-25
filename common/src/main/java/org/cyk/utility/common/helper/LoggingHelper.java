@@ -333,8 +333,13 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 					
 					if(stackTraceElement!=null){
 						Class<?> stackTraceElementClass = ClassHelper.getInstance().getByName(stackTraceElement.getClassName());
-						MARKER packageMarker = createMarker(stackTraceElementClass.getPackage().getName());
-						MARKER classMarker = createMarker(/*aClass == null ?*/ aClass.getSimpleName() /*: aClass.getSimpleName()*/,packageMarker);
+						MARKER packageMarker = createMarker((aClass == null ? stackTraceElementClass.getPackage() : aClass.getPackage()).getName());
+						MARKER classMarker = createMarker(aClass.getName(),packageMarker);
+						classMarker = createMarker(aClass.getSimpleName(),classMarker);
+						for(String conainerClassName : ClassHelper.getInstance().getContainerNames(aClass)){
+							classMarker = createMarker(conainerClassName,classMarker);
+						}
+						//MARKER classMarker = createMarker(/*aClass == null ?*/ aClass.getName() /*: aClass.getSimpleName()*/,packageMarker);
 						MARKER lineNumberMarker = createMarker(String.valueOf(stackTraceElement.getLineNumber()),classMarker);
 						MARKER methodMarker = createMarker(stackTraceElement.getMethodName(),lineNumberMarker);
 						if(marker!=null)

@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -25,12 +27,22 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 				,new A("D",4,"D4")
 				,new A("D1",4,"D14")
 				,new A("E",5,"E5")
+				,new A(null,5,"E5")
+				,new A("Z",null,"E58888")
+				,new A(null,545,"E5df")
+				,new A("456123",545,null)
 		);
 		assertFilter(data, "f1", "0", null);
 		
 		assertFilter(data, "f1", "A", Arrays.asList(data.get(0)));
 		
 		assertFilter(data, "f2", 4, Arrays.asList(data.get(3),data.get(4)));
+		
+		assertFilter(data, "f1", null, Arrays.asList(data.get(6),data.get(8)));
+		
+		assertFilter(data, "f2", null, Arrays.asList(data.get(7)));
+		
+		assertFilter(data, "f3", null, Arrays.asList(data.get(9)));
 	}
 	
 	private <T> void assertFilter(Collection<T> collection,String fieldName,Object fieldValue,Collection<T> expected){
@@ -48,5 +60,10 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 		private String f1;
 		private Integer f2;
 		private String f3;
+		
+		@Override
+		public String toString() {
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+		}
 	}
 }

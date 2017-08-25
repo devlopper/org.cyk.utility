@@ -1,4 +1,4 @@
-package org.cyk.utility.common;
+package org.cyk.utility.common.utility.loghelper;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -6,6 +6,9 @@ import java.util.Set;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.LoggingHelper;
 import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.utility.loghelper.p1.LogClass1;
+import org.cyk.utility.common.utility.loghelper.p2.LogClass2;
+import org.cyk.utility.common.utility.loghelper.p2.LogClass3;
 import org.cyk.utility.common.helper.LoggingHelper.Message;
 import org.cyk.utility.common.helper.StackTraceHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -38,10 +41,39 @@ public class LoggingHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void logClass(){		
-		LogClass1 logClass1 = new LogClass1();
-		//logClass.m1();
-		logClass1.myoperation003();
+	public void logClassOneCall(){
+		new LogClass1().myoperation001();
+	}
+	
+	@Test
+	public void logClassManyCall(){
+		new LogClass1.CustomLogClass().myoperation001();
+		new LogClass1.CustomLogClass().myoperation002();
+		new LogClass1.CustomLogClass().myoperation003();
+		
+		myoperation001();
+		
+		new LogClass2.CustomLogClass().myoperation001();
+		new LogClass2.CustomLogClass().myoperation002();
+		new LogClass2.CustomLogClass().myoperation003();
+		
+		myoperation002();
+		
+		new LogClass3.CustomLogClass().myoperation001();
+		new LogClass3.CustomLogClass().myoperation002();
+		new LogClass3.CustomLogClass().myoperation003();
+		
+		new LogClass1.DefinedLogClass().myoperation001();
+		new LogClass1.DefinedLogClass().myoperation002();
+		new LogClass1.DefinedLogClass().myoperation003();
+		
+		new LogClass2.DefinedLogClass().myoperation001();
+		new LogClass2.DefinedLogClass().myoperation002();
+		new LogClass2.DefinedLogClass().myoperation003();
+		
+		new LogClass3.DefinedLogClass().myoperation001();
+		new LogClass3.DefinedLogClass().myoperation002();
+		new LogClass3.DefinedLogClass().myoperation003();
 	}
 	
 	@Test
@@ -83,34 +115,6 @@ public class LoggingHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void stackTrace(){
 		new A().fa();
-	}
-	
-	public static class BaseLogClass {
-		
-		public void m1(){
-			LoggingHelper.Logger.Log4j.Adapter.Default.log("another message from m1",getClass(),LoggingHelper.Logger.Level.TRACE,"ML3"
-					,StackTraceHelper.getInstance().getAt(3));
-		}
-		
-		public void myoperation003(){		
-			new LoggingHelper.Run.Adapter.Default(StackTraceHelper.getInstance().getAt(2),getClass()){
-				private static final long serialVersionUID = 1L;
-				
-				public Object __execute__() {
-					return null;
-				}
-				
-			}.execute();
-		}
-		
-	}
-	
-	public static class LogClass1 extends BaseLogClass {
-				
-	}
-	
-	public static class LogClass2 extends BaseLogClass {
-		
 	}
 	
 	private class A{

@@ -1,8 +1,11 @@
 package org.cyk.utility.common;
 
+import java.util.Arrays;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.cyk.utility.common.ClassHelperUnitTest.A.A1.A11.A111;
 import org.cyk.utility.common.helper.AbstractHelper;
 import org.cyk.utility.common.helper.AbstractReflectionHelper;
 import org.cyk.utility.common.helper.AssertionHelper;
@@ -16,6 +19,11 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 	
 	@Override
 	protected void _execute_() {}
+	
+	@Test
+	public void getContainerNames(){
+		assertList(ClassHelper.getInstance().getContainerNames(A111.class), Arrays.asList("A11","A1","A","ClassHelperUnitTest"));
+	}
 	
 	@Test
 	public void getByName(){
@@ -63,6 +71,20 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 	@Named
 	public static class MyAnnotatedHelper2 extends AbstractHelper {
 		private static final long serialVersionUID = 1L;
+	}
+	
+	public static class A  {
+		public static class A1  {
+			public static class A11  {
+				public static class A111  {
+					
+					
+				}	
+				
+			}	
+			
+		}	
+		
 	}
 	
 }

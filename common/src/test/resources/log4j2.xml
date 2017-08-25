@@ -2,26 +2,32 @@
 <Configuration status="WARN">
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
-			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %marker - %msg%n" />
 		</Console>
 		<Console name="CustomConsole" target="SYSTEM_OUT">
 			<Filters>
-				
+				<MarkerFilter marker="org.cyk.utility.common.utility.loghelper.p2" onMatch="NEUTRAL" onMismatch="DENY" />
+				<MarkerFilter marker="CustomLogClass" onMatch="NEUTRAL" onMismatch="DENY" />
+				<MarkerFilter marker="AFTER" onMatch="NEUTRAL" onMismatch="DENY" />
+				<MarkerFilter marker="LogClass2" onMatch="ACCEPT" onMismatch="DENY" />
+				<!--
+				<MarkerFilter marker="org.cyk.utility.common" onMatch="ACCEPT" onMismatch="DENY" />
+				<MarkerFilter marker="org.cyk.utility.common.LoggingHelperUnitTest" onMatch="ACCEPT" onMismatch="DENY" />
+				-->
 			</Filters>
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level - %marker - %msg%n" />
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="org.cyk.utility.common.LoggingHelperUnitTest"
+		<!--Logger name="org" level="trace">
+			<AppenderRef ref="Console" />
+		</Logger-->
+		<!--Logger name="org.cyk.utility.common"
 			level="trace">
 			<AppenderRef ref="CustomConsole" />
-		</Logger>
-		<Logger name="org.cyk.utility.common"
-			level="trace">
-			<AppenderRef ref="CustomConsole" />
-		</Logger>
+		</Logger-->
 		<Root level="trace">
-			<!--AppenderRef ref="Console"/ -->
+			<AppenderRef ref="CustomConsole"/>
 		</Root>
 	</Loggers>
 </Configuration>
