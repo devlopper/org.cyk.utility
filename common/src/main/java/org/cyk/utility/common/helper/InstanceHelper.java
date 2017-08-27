@@ -329,6 +329,36 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					@Override
 					protected INSTANCE __execute__() {
 						Class<INSTANCE> instanceClass = getOutputClass();
+						INSTANCE instance = instanciate();
+						Object[] values = getInput();						
+						Object[] parametersArray = CollectionHelper.getInstance().getArray(getParameters());
+						if(parametersArray!=null){
+							Setter<INSTANCE> setter = getSetter();
+							if(setter==null){
+								setter = new Setter.Adapter.Default<INSTANCE>(instanceClass);
+							}
+							setter.setInput(instance);
+							
+							Collection<Object> objects = new ArrayList<>();
+							for(int i = 0 ; i < parametersArray.length ; i++){
+								if(parametersArray[i] instanceof ArrayHelper.Element<?>){
+									ArrayHelper.Element<?> element = (Element<?>) parametersArray[i];
+									if(element.getIndex()<values.length){
+										objects.add(element.getInstance());
+										objects.add(values[element.getIndex()]);	
+									}
+										
+								}else
+									throw new RuntimeException("parameter class should be a sub type of ArrayHelper.Element");
+								
+							}
+							setter.setManyProperties(objects.toArray()).execute();
+						}
+						return instance;
+					}
+					
+					protected INSTANCE instanciate(){
+						Class<INSTANCE> instanceClass = getOutputClass();
 						INSTANCE instance = null;
 						Object[] values = getInput();
 						ArrayHelper.Dimension.Key.Builder keyBuilder = getKeyBuilder();
@@ -353,29 +383,6 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 						if(instance==null){
 							instance = ClassHelper.getInstance().instanciateOne(instanceClass);
 							addLoggingMessageBuilderNamedParameters("instanciated",instance!=null);
-						}
-						Object[] parametersArray = CollectionHelper.getInstance().getArray(getParameters());
-						if(parametersArray!=null){
-							Setter<INSTANCE> setter = getSetter();
-							if(setter==null){
-								setter = new Setter.Adapter.Default<INSTANCE>(instanceClass);
-							}
-							setter.setInput(instance);
-							
-							Collection<Object> objects = new ArrayList<>();
-							for(int i = 0 ; i < parametersArray.length ; i++){
-								if(parametersArray[i] instanceof ArrayHelper.Element<?>){
-									ArrayHelper.Element<?> element = (Element<?>) parametersArray[i];
-									if(element.getIndex()<values.length){
-										objects.add(element.getInstance());
-										objects.add(values[element.getIndex()]);	
-									}
-										
-								}else
-									throw new RuntimeException("parameter class should be a sub type of ArrayHelper.Element");
-								
-							}
-							setter.setManyProperties(objects.toArray()).execute();
 						}
 						return instance;
 					}
