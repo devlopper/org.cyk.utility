@@ -74,7 +74,7 @@ public class MethodHelper extends AbstractHelper implements Serializable  {
 	
 	public String getFirstExist(Class<?> aClass,String[] names,Class<?>...parameterClasses){
 		for(String name : names)
-			if(Boolean.TRUE.equals(isExist(aClass, name, parameterClasses)))
+			if(!StringHelper.getInstance().isBlank(name) && Boolean.TRUE.equals(isExist(aClass, name, parameterClasses)))
 				return name;
 		return null;
 	}
