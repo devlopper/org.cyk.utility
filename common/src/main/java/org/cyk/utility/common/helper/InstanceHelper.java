@@ -289,11 +289,15 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			ArrayHelper.Dimension.Key.Builder getKeyBuilder();
 			OneDimensionArray<INSTANCE> setKeyBuilder(ArrayHelper.Dimension.Key.Builder keyBuilder);
 			
+			Boolean getIsAddInstanceToPool();
+			OneDimensionArray<INSTANCE> setIsAddInstanceToPool(Boolean isAddInstanceToPool);
+			
 			@Getter
 			public static class Adapter<INSTANCE> extends Builder.Adapter.Default<Object[], INSTANCE> implements OneDimensionArray<INSTANCE>,Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				protected ArrayHelper.Dimension.Key.Builder keyBuilder;
+				protected Boolean isAddInstanceToPool;
 				
 				public Adapter(Object[] array, Class<INSTANCE> outputClass) {
 					super(Object[].class, array, outputClass);
@@ -301,6 +305,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				
 				@Override
 				public Builder.OneDimensionArray<INSTANCE> setKeyBuilder(ArrayHelper.Dimension.Key.Builder keyBuilder) {
+					return null;
+				}
+				
+				@Override
+				public Builder.OneDimensionArray<INSTANCE> setIsAddInstanceToPool(Boolean isAddInstanceToPool) {
 					return null;
 				}
 				
@@ -326,6 +335,13 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 						return this;
 					}
 					
+					@Override
+					public Builder.OneDimensionArray<INSTANCE> setIsAddInstanceToPool(Boolean isAddInstanceToPool) {
+						this.isAddInstanceToPool = isAddInstanceToPool;
+						return this;
+					}
+					
+					@SuppressWarnings("unchecked")
 					@Override
 					protected INSTANCE __execute__() {
 						Class<INSTANCE> instanceClass = getOutputClass();
@@ -354,6 +370,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 							}
 							setter.setManyProperties(objects.toArray()).execute();
 						}
+						if(Boolean.TRUE.equals(getIsAddInstanceToPool()))
+							Pool.getInstance().add(instanceClass, instance);
 						return instance;
 					}
 					
@@ -445,13 +463,17 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 						if(arrays!=null){
 							OneDimensionArray<INSTANCE> oneDimensionArray = getOneDimensionArray();
 							for(Object[] array : arrays){
-								INSTANCE instance = oneDimensionArray.setInput(array).execute();
+								INSTANCE instance = instanciate(oneDimensionArray,array);
 								if(instance!=null)
 									instances.add(instance);
 							}	
 						}
 						
 						return instances;
+					}
+					
+					protected INSTANCE instanciate(OneDimensionArray<INSTANCE> oneDimensionArray,Object[] array){
+						return oneDimensionArray.setInput(array).execute();
 					}
 					
 				}
