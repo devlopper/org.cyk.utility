@@ -962,6 +962,35 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 
 	/**/
 
+	public static interface Many extends Builder.NullableInput<Collection<?>> {
+		
+		public static class Adapter extends Builder.NullableInput.Adapter.Default<Collection<?>> implements Many,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			@SuppressWarnings("unchecked")
+			public Adapter() {
+				super((Class<Collection<?>>) ClassHelper.getInstance().getByName(Collection.class));
+			}
+			
+			/**/
+			
+			public static class Default extends Many.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+
+				@SuppressWarnings("unchecked")
+				public static Class<InstanceHelper.Many> DEFAULT_CLASS = (Class<Many>) ClassHelper.getInstance().getByName(InstanceHelper.Many.Adapter.Default.class);
+				
+			}
+			
+		}
+		
+		public static interface Null extends InstanceHelper.Many {
+			
+		}
+	}
+	
+	/**/
+	
 	public static interface Stringifier extends org.cyk.utility.common.Builder.Stringifier<Object> {
 		
 		public static class Adapter extends org.cyk.utility.common.Builder.Stringifier.Adapter.Default<Object> implements InstanceHelper.Stringifier,Serializable {

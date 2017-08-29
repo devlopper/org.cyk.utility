@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.SelectItemHelper;
 
 @Retention(RetentionPolicy.RUNTIME)
@@ -36,6 +37,12 @@ public @interface InputChoice {
 	Class<? extends SelectItemHelper.Builder.Many<?>> itemsBuilderClass() default SelectItemHelper.Builder.Many.Null.class;
 	
 	/**
+	 * Choices getter class
+	 * @return
+	 */
+	Class<? extends InstanceHelper.Many> getChoicesClass() default InstanceHelper.Many.Null.class;
+	
+	/**
 	 * Set of choices
 	 * @return
 	 */
@@ -44,6 +51,8 @@ public @interface InputChoice {
 	/**/
 	
 	public enum ChoiceSet{AUTO,YES_NO}
+	
+	
 	
 	/**/
 }
