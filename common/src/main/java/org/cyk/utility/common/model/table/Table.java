@@ -108,7 +108,7 @@ public class Table<
 		for(Column.Listener<COLUMN_DIMENSION,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : columnListeners)
 			listener.sort(fields);
 		
-		logMessageBuilder.addParameters("Fields",commonUtils.getCollectionByMethodCall(String.class, fields, "getName"));
+		//logMessageBuilder.addParameters("Fields",commonUtils.getCollectionByMethodCall(String.class, fields, "getName"));
 		
 		addColumns();
 		addRows(datas);

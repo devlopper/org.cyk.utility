@@ -100,9 +100,13 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return value;
     }
 	
-	public String get(String identifier,Object[] parameters){
-		return new StringHelper.ToStringMapping.Adapter.Default(identifier).setCaseType(CaseType.FURL).addParameters(parameters).execute();
+	public String get(String identifier,CaseType caseType,Object[] parameters){
+		return new StringHelper.ToStringMapping.Adapter.Default(identifier).setCaseType(caseType).addParameters(parameters).execute();
     }
+	
+	public String get(String identifier,Object[] parameters){
+		return get(identifier, CaseType.FURL, parameters);
+	}
 	
 	public java.lang.String getOrdinalNumberSuffix(Locale locale,Number number) {
 		return getText(locale, String.format(KEY_ORDINAL_NUMBER_SUFFIX_FORMAT, number), null);

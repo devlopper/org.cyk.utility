@@ -10,17 +10,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import javassist.Modifier;
-
 import javax.inject.Singleton;
-
-import lombok.Getter;
 
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
 import org.cyk.utility.common.helper.InstanceHelper.Listener.FieldValueGenerator;
+
+import javassist.Modifier;
+import lombok.Getter;
 
 @Singleton
 public class InstanceHelper extends AbstractHelper implements Serializable  {
@@ -101,6 +100,14 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		return value == null ? defaultValue : value;
 	}
 
+	public String getLabel(Object instance){
+		return ClassHelper.getInstance().instanciateOne(Stringifier.Label.Adapter.Default.DEFAULT_CLASS).setInput(instance).execute();
+	}
+	
+	public String getDescription(Object instance){
+		return ClassHelper.getInstance().instanciateOne(Stringifier.Description.Adapter.Default.DEFAULT_CLASS).setInput(instance).execute();
+	}
+	
 	/**/
 	
 	public static interface Setter<INSTANCE> extends Action<INSTANCE, INSTANCE> {
@@ -521,7 +528,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 								,CollectionHelper.getInstance().isEmpty(Source.CLASSES) ? Arrays.asList(Source.Adapter.Default.class) : Source.CLASSES))
 							sourcesExecutor.getInput().add(source);
 					}
-					sourcesExecutor.setProperty(PROPERTY_INSTANCES, getProperty(PROPERTY_INSTANCES));
+					sourcesExecutor.setProperty(PROPERTY_NAME_INSTANCES, getProperty(PROPERTY_NAME_INSTANCES));
 					
 					sourcesExecutor.getResultMethod().setInputClass((Class<Object>) getInputClass());
 					sourcesExecutor.getResultMethod().setInput(getInput());
@@ -955,6 +962,69 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 
 	/**/
 
+	public static interface Stringifier extends org.cyk.utility.common.Builder.Stringifier<Object> {
+		
+		public static class Adapter extends org.cyk.utility.common.Builder.Stringifier.Adapter.Default<Object> implements InstanceHelper.Stringifier,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			public Adapter(Object input) {
+				super(Object.class, input);
+			}
+			
+			public static class Default extends InstanceHelper.Stringifier.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Default(Object input) {
+					super(input);
+				}
+				
+				public Default() {
+					this(null);
+				}
+			}
+		}
+		
+		/**/
+		
+		public static interface Label extends InstanceHelper.Stringifier {
+			
+			public static class Adapter extends InstanceHelper.Stringifier.Adapter.Default implements Label,Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public static class Default extends Label.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+
+					public static Class<? extends Label> DEFAULT_CLASS = Label.Adapter.Default.class;
+					
+					@Override
+					protected java.lang.String __execute__() {
+						Object instance = getInput();
+						return instance == null ? "NULL_LABEL" : instance.toString();
+					}
+				}
+			}
+		}
+		
+		public static interface Description extends InstanceHelper.Stringifier {
+			
+			public static class Adapter extends InstanceHelper.Stringifier.Adapter.Default implements Description,Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public static class Default extends Description.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+
+					public static Class<? extends Description> DEFAULT_CLASS = Description.Adapter.Default.class;
+					
+					@Override
+					protected java.lang.String __execute__() {
+						Object instance = getInput();
+						return instance == null ? "NULL_DESCRIPTION" : instance.toString();
+					}
+				}
+			}
+		}
+	}
+	
 	/**/
 	
 	@Singleton

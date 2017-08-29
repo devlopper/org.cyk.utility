@@ -20,7 +20,7 @@ public @interface Input {
 	
 	Text label() default @Text;
 	
-	Text description() default @Text;
+	Texts texts() default @Texts(value={});
 	
 	/* Rendering */
 	
@@ -29,5 +29,7 @@ public @interface Input {
 	DataCollectorType[] ignoreDataCollectorType() default {};
 	
 	RendererStrategy rendererStrategy() default RendererStrategy.AUTO;
+	
+	/**/
 	
 }

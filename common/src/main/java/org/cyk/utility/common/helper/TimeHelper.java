@@ -153,7 +153,7 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 					
 					@Override
 					protected Date __execute__() {
-						java.lang.String format = (java.lang.String)getProperty(PROPERTY_FORMAT);
+						java.lang.String format = (java.lang.String)getProperty(PROPERTY_NAME_FORMAT);
 						if(StringHelper.getInstance().isBlank(format)){
 							if(StringUtils.contains(getInput(), "/"))
 								if(StringUtils.contains(getInput(), ":"))
