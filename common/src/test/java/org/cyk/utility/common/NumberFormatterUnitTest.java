@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import org.cyk.utility.common.formatter.Formatter.CharacterSet;
 import org.cyk.utility.common.formatter.NumberFormatter;
+import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 

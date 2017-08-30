@@ -1,19 +1,162 @@
 package org.cyk.utility.common;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.common.Builder.Stringifier.CharacterSet;
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.NumberHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
-public class NumberUnitTest extends AbstractUnitTest {
+public class NumberHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	{
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();
+	}
+	
+	@Test
+	public void assertNumber(){
+		NumberHelper.Stringifier stringifier = new NumberHelper.Stringifier.Adapter.Default();
+		assertEquals("63", stringifier.setInput(new BigDecimal("63.00")).execute());	
+	}
+	
+	@Test
+	public void assertOrdinalDigitEnglish(){
+		NumberHelper.Stringifier stringifier = new NumberHelper.Stringifier.Adapter.Default();
+		stringifier.setIsOrdinal(Boolean.TRUE);
+		stringifier.setLocale(Locale.ENGLISH);
+		stringifier.setIsAppendOrdinalSuffix(Boolean.TRUE);
+		stringifier.setInput(1);
+		assertEquals("1st", stringifier.execute());
+		
+		stringifier.setInput(2);
+		assertEquals("2nd", stringifier.execute());
+		
+		stringifier.setInput(3);
+		assertEquals("3rd", stringifier.execute());
+		
+		stringifier.setInput(3);
+		stringifier.setIsAppendExaequo(Boolean.TRUE);
+		assertEquals("3rd exaequo", stringifier.execute());
+		
+		stringifier.setInput(22);
+		stringifier.setIsAppendExaequo(Boolean.FALSE);
+		assertEquals("22nd", stringifier.execute());
+	}
+	
+	@Test
+	public void assertOrdinalDigitFrench(){
+		NumberHelper.Stringifier stringifier = new NumberHelper.Stringifier.Adapter.Default();
+		stringifier.setIsOrdinal(Boolean.TRUE);
+		stringifier.setLocale(Locale.FRENCH);
+		stringifier.setIsAppendOrdinalSuffix(Boolean.TRUE);
+		stringifier.setInput(1);
+		assertEquals("1er", stringifier.execute());
+		
+		stringifier.setInput(2);
+		assertEquals("2ième", stringifier.execute());
+		
+		stringifier.setInput(3);
+		assertEquals("3ième", stringifier.execute());
+		
+		stringifier.setInput(3);
+		stringifier.setIsAppendExaequo(Boolean.TRUE);
+		assertEquals("3ième exaequo", stringifier.execute());
+		
+		stringifier.setInput(22);
+		stringifier.setIsAppendExaequo(Boolean.FALSE);
+		assertEquals("22ième", stringifier.execute());
+	}
+	
+	@Test
+	public void assertOrdinalLetterEnglish(){
+		NumberHelper.Stringifier stringifier = new NumberHelper.Stringifier.Adapter.Default();
+		stringifier.setIsOrdinal(Boolean.TRUE);
+		stringifier.setLocale(Locale.ENGLISH);
+		stringifier.setCharacterSet(CharacterSet.LETTER);
+		stringifier.setIsAppendOrdinalSuffix(Boolean.TRUE);
+		stringifier.setInput(1);
+		assertEquals("first", stringifier.execute());
+		
+		stringifier.setInput(2);
+		assertEquals("second", stringifier.execute());
+		
+		stringifier.setInput(3);
+		assertEquals("third", stringifier.execute());
+		
+		stringifier.setInput(3);
+		stringifier.setIsAppendExaequo(Boolean.TRUE);
+		assertEquals("third exaequo", stringifier.execute());
+	}
+	
+	@Test
+	public void assertOrdinalLetterFrench(){
+		NumberHelper.Stringifier stringifier = new NumberHelper.Stringifier.Adapter.Default();
+		stringifier.setIsOrdinal(Boolean.TRUE);
+		stringifier.setLocale(Locale.FRENCH);
+		stringifier.setCharacterSet(CharacterSet.LETTER);
+		stringifier.setIsAppendOrdinalSuffix(Boolean.TRUE);
+		stringifier.setInput(1);
+		assertEquals("premier", stringifier.execute());
+		
+		stringifier.setInput(2);
+		assertEquals("deuxième", stringifier.execute());
+		
+		stringifier.setInput(3);
+		assertEquals("troisième", stringifier.execute());
+		
+		stringifier.setInput(3);
+		stringifier.setIsAppendExaequo(Boolean.TRUE);
+		assertEquals("troisième exaequo", stringifier.execute());
+	}
+	
+	@Test
+	public void assertLetterEnglish(){
+		NumberHelper.Stringifier stringifier = new NumberHelper.Stringifier.Adapter.Default();
+		stringifier.setLocale(Locale.ENGLISH);
+		stringifier.setCharacterSet(CharacterSet.LETTER);
+		assertEquals("zero", stringifier.setInput(0).execute());
+		assertEquals("one", stringifier.setInput(1).execute());
+		assertEquals("two", stringifier.setInput(2).execute());
+		assertEquals("three", stringifier.setInput(3).execute());
+		assertEquals("four", stringifier.setInput(4).execute());
+		assertEquals("five", stringifier.setInput(5).execute());
+		assertEquals("fifteen", stringifier.setInput(15).execute());
+		assertEquals("forty nine", stringifier.setInput(49).execute());
+	}
+	
+	@Test
+	public void assertLetterFrench(){
+		NumberHelper.Stringifier stringifier = new NumberHelper.Stringifier.Adapter.Default();
+		stringifier.setLocale(Locale.ENGLISH);
+		stringifier.setCharacterSet(CharacterSet.LETTER);
+		assertEquals("zero", stringifier.setInput(0).execute());
+		assertEquals("one", stringifier.setInput(1).execute());
+		assertEquals("two", stringifier.setInput(2).execute());
+		assertEquals("three", stringifier.setInput(3).execute());
+		assertEquals("four", stringifier.setInput(4).execute());
+		assertEquals("five", stringifier.setInput(5).execute());
+		assertEquals("fifteen", stringifier.setInput(15).execute());
+		assertEquals("forty nine", stringifier.setInput(49).execute());
+	}
+	
+	@Test
+	public void assertPercentage(){
+		NumberHelper.Stringifier stringifier = new NumberHelper.Stringifier.Adapter.Default();
+		stringifier.setIsPercentage(Boolean.TRUE);
+		stringifier.setLocale(Locale.FRENCH);
+		assertEquals("33,33 %", stringifier.setInput( new BigDecimal("1").divide(new BigDecimal("3"),4,RoundingMode.HALF_DOWN)).execute());
+	}
 	
 	@Test
 	public void getIntegers(){

@@ -3,14 +3,22 @@ package org.cyk.utility.common.helper;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import javax.inject.Singleton;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.formatter.EnglishNumberToWords;
+import org.cyk.utility.common.formatter.FrenchNumberToWords;
+import org.cyk.utility.common.helper.StringHelper.CaseType;
 
 @Singleton
 public class NumberHelper extends AbstractHelper implements Serializable  {
@@ -38,7 +46,7 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	public Boolean isNumber(String string){
-		return NumberUtils.isNumber(string);
+		return NumberUtils.isCreatable(string);
 	}
 	
 	public Number get(String string){
@@ -254,6 +262,157 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 			integers.add(index);
 		return integers;
 	}
+	
+	/**/
+	
+	public interface Stringifier extends org.cyk.utility.common.Builder.Stringifier<Number> {
+		
+		Boolean isOrdinal();
+		NumberHelper.Stringifier setIsOrdinal(Boolean isOrdinal);
+		
+		Boolean isPercentage();
+		NumberHelper.Stringifier setIsPercentage(Boolean isPercentage);
+		
+		Boolean isAppendOrdinalSuffix();
+		NumberHelper.Stringifier setIsAppendOrdinalSuffix(Boolean isAppendOrdinalSuffix);
+		
+		Boolean isAppendExaequo();
+		NumberHelper.Stringifier setIsAppendExaequo(Boolean isAppendExaequo);
+		
+		/**/
+		
+		@Getter @Setter
+		public static class Adapter extends org.cyk.utility.common.Builder.Stringifier.Adapter.Default<Number> implements NumberHelper.Stringifier,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			protected Boolean isOrdinal = Boolean.FALSE,isAppendOrdinalSuffix=Boolean.FALSE,isAppendExaequo=Boolean.FALSE;
+			protected Boolean isPercentage = Boolean.FALSE;
+			
+			public Adapter(Number number) {
+				super(Number.class, number);
+			}
+			
+			@Override
+			public Boolean isPercentage() {
+				return Boolean.TRUE.equals(isPercentage);
+			}
+			
+			@Override
+			public Boolean isOrdinal() {
+				return Boolean.TRUE.equals(isOrdinal);
+			}
+			
+			@Override
+			public Boolean isAppendOrdinalSuffix() {
+				return Boolean.TRUE.equals(isAppendOrdinalSuffix);
+			}
+			
+			@Override
+			public Boolean isAppendExaequo() {
+				return Boolean.TRUE.equals(isAppendExaequo);
+			}
+			
+			@Override
+			public NumberHelper.Stringifier setIsOrdinal(Boolean isOrdinal) {
+				this.isOrdinal = isOrdinal;
+				return this;
+			}
+			
+			@Override
+			public NumberHelper.Stringifier setIsPercentage(Boolean isPercentage) {
+				this.isPercentage = isPercentage;
+				return this;
+			}
+			
+			@Override
+			public NumberHelper.Stringifier setIsAppendOrdinalSuffix(Boolean isAppendOrdinalSuffix) {
+				this.isAppendOrdinalSuffix = isAppendOrdinalSuffix;
+				return this;
+			}
+			
+			@Override
+			public NumberHelper.Stringifier setIsAppendExaequo(Boolean isAppendExaequo) {
+				this.isAppendExaequo = isAppendExaequo;
+				return this;
+			}
+			
+			/**/
+			
+			public static class Default extends NumberHelper.Stringifier.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public Default(Number number) {
+					super(number);
+				}
+				
+				public Default() {
+					this(null);
+				}
+				
+				@Override
+				protected java.lang.String __execute__() {
+					/*addLogMessageBuilderParameters(logMessageBuilder,"locale",locale, "character set",getCharacterSet(),"append exaequo",getIsAppendExaequo(),"percentage",getIsPercentage(),"ordinal",getIsOrdinal());
+					if(Boolean.TRUE.equals(getIsOrdinal())){
+						addLogMessageBuilderParameters(logMessageBuilder, "append ordinal suffix",getIsAppendOrdinalSuffix());
+					}*/
+					StringBuilder stringBuilder = new StringBuilder();
+					BigDecimal number = new BigDecimal(getInput().toString());
+					Locale locale = InstanceHelper.getInstance().getIfNotNullElseDefault(getLocale(),Locale.FRENCH);
+					CharacterSet characterSet = InstanceHelper.getInstance().getIfNotNullElseDefault(getCharacterSet(), CharacterSet.DEFAULT);
+					
+					if(CharacterSet.DIGIT.equals(characterSet)){
+						NumberFormat numberFormatter = NumberFormat.getNumberInstance(locale);
+						if(Boolean.TRUE.equals(getIsPercentage())){
+							number = new BigDecimal(number.toString()).multiply(Constant.BIGDECIMAL_100);
+						}
+						if(Boolean.TRUE.equals(getIsOrdinal())){
+							
+						}
+						stringBuilder.append(numberFormatter.format(number));
+						Boolean isPercentageSymbol = InstanceHelper.getInstance().getIfNotNullElseDefault(getIsPercentage(),Boolean.FALSE);
+						if(Boolean.TRUE.equals(isPercentageSymbol)){
+							String percentageSymbol = InstanceHelper.getInstance().getIfNotNullElseDefault(getPercentageSymbol(),Constant.CHARACTER_PERCENTAGE.toString());
+							if(StringUtils.isNotBlank(percentageSymbol))
+								stringBuilder.append(Constant.CHARACTER_SPACE+percentageSymbol);
+						}
+						if(Boolean.TRUE.equals(getIsOrdinal())){
+							
+						}
+						if(Boolean.TRUE.equals(getIsAppendOrdinalSuffix()))
+							stringBuilder.append(StringUtils.defaultIfBlank(StringHelper.getInstance().getOrdinalNumberSuffix(locale,number),Constant.EMPTY_STRING));
+						
+					}else if(CharacterSet.LETTER.equals(getCharacterSet())){
+						if(Boolean.TRUE.equals(getIsOrdinal())){
+							stringBuilder.append(StringHelper.getInstance().getOrdinalNumber(locale, number));
+							
+						}else{
+							if(Locale.ENGLISH.equals(locale))
+								stringBuilder.append(EnglishNumberToWords.convert(number.longValue()));
+							else if(Locale.FRENCH.equals(locale))
+								stringBuilder.append(FrenchNumberToWords.convert(number.longValue()));
+							else
+								throw new RuntimeException("Number to "+locale+" words not yet implemented");
+							
+						}
+					}
+					
+					if(Boolean.TRUE.equals(getIsAppendExaequo()))
+						stringBuilder.append(StringUtils.defaultIfBlank(Constant.CHARACTER_SPACE+StringHelper.getInstance().get("exaequo",CaseType.L,new Object[]{}),Constant.EMPTY_STRING));
+					
+					
+					if(getWidth()!=null){
+						stringBuilder = new StringBuilder(StringUtils.leftPad(stringBuilder.toString(), getWidth(), getLeftPadding()));
+					}
+					
+					return stringBuilder.toString();
+				}	
+			}	
+		}
+				
+	}
+
+	
+	/**/
 	
 	public static final Short SHORT_ZERO = new Short("0");
 	

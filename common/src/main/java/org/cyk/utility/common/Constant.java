@@ -25,6 +25,7 @@ public interface Constant {
 	Character CHARACTER_SEMI_COLON = new Character(';');
 	Character CHARACTER_CARET_CIRCUMFLEX = new Character('^');
 	Character CHARACTER_BACK_SLASH = new Character('\\');
+	Character CHARACTER_PERCENTAGE = new Character('%');
 	
 	/**
 	 * \\/

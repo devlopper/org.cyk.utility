@@ -13,6 +13,7 @@ import org.cyk.utility.common.helper.StringHelper;
 import lombok.Getter;
 import lombok.Setter;
 
+@Deprecated
 public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 	
 	Boolean isOrdinal();
@@ -29,7 +30,7 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 	
 	/**/
 	
-	@Getter @Setter
+	@Getter @Setter @Deprecated
 	public static class Adapter<OUTPUT> extends Formatter.Adapter.Default<Number, OUTPUT> implements NumberFormatter<OUTPUT>,Serializable {
 		private static final long serialVersionUID = 1L;
 
@@ -85,7 +86,7 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 		}
 		
 		/**/
-		
+		@Deprecated
 		public static class Default<OUTPUT> extends NumberFormatter.Adapter<OUTPUT> implements Serializable {
 			private static final long serialVersionUID = 1L;
 
@@ -96,10 +97,10 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 		}
 		
 	}
-	
+	@Deprecated
 	public static interface String extends NumberFormatter<java.lang.String> {
 		
-		@Getter @Setter
+		@Getter @Setter @Deprecated
 		public static class Adapter extends NumberFormatter.Adapter.Default<java.lang.String> implements String,Serializable {
 			private static final long serialVersionUID = 1L;
 
@@ -108,7 +109,7 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 			}
 			
 			/**/
-			
+			@Deprecated
 			public static class Default extends String.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 
