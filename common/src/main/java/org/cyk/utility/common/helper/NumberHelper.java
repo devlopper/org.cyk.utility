@@ -57,6 +57,11 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return NumberUtils.toLong(string);
 	}
 	
+	public String stringify(Number number){
+		NumberHelper.Stringifier stringifier = new NumberHelper.Stringifier.Adapter.Default(number);
+		return stringifier.execute();
+	}
+	
 	/*public <T extends Number> T cast(Number number,Class<T> aClass){
 		if(number==null)
 			return null;
