@@ -1197,5 +1197,36 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			
 		}
 	}
+
+	/**/
 	
+	public static interface Mapping extends Action<Object, Object> {
+		
+		public static class Adapter extends Action.Adapter.Default<Object, Object> implements Mapping,Serializable {
+			private static final long serialVersionUID = -4167553207734748200L;
+
+			public Adapter(Object input) {
+				super("instance mapping", Object.class, input, Object.class);
+			}
+			
+			public static class Default extends Mapping.Adapter implements Serializable {
+				private static final long serialVersionUID = -4167553207734748200L;
+
+				public Default(Object input) {
+					super(input);
+				}
+				
+				public Default() {
+					this(null);
+				}
+				
+				@Override
+				protected Object __execute__() {
+					return getInput();
+				}
+				
+			}
+		}
+		
+	}
 }

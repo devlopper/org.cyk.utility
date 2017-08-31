@@ -18,7 +18,7 @@ import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.builder.NameValueStringBuilder.Listener.Strategy;
 import org.cyk.utility.common.helper.NumberHelper;
 
-@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
+@Getter @Setter @NoArgsConstructor @Accessors(chain=true) @Deprecated
 public class NameValueStringBuilder extends AbstractStringBuilder implements Serializable {
 	private static final long serialVersionUID = -872728112292086623L;
 	
@@ -265,7 +265,7 @@ public class NameValueStringBuilder extends AbstractStringBuilder implements Ser
 	/**/
 	
 	/**/
-	
+	@Deprecated
 	public static interface Listener extends AbstractStringBuilder.Listener {
 		
 		Collection<Listener> COLLECTION = new ArrayList<>();
@@ -283,7 +283,7 @@ public class NameValueStringBuilder extends AbstractStringBuilder implements Ser
 		String encode(Collection<Object> values);
 		String getEncodingCharacterSet();
 		Boolean getEncoded(Object name,Collection<Object> values);
-		
+		@Deprecated
 		@Getter 
 		public static class Adapter extends AbstractStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
@@ -344,7 +344,7 @@ public class NameValueStringBuilder extends AbstractStringBuilder implements Ser
 			}
 			
 			/**/
-			
+			@Deprecated
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 									

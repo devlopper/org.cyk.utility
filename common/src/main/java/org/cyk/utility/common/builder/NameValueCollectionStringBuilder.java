@@ -15,7 +15,7 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.FileExtension;
 import org.cyk.utility.common.ListenerUtils;
 
-@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
+@Getter @Setter @NoArgsConstructor @Accessors(chain=true) @Deprecated
 public class NameValueCollectionStringBuilder extends AbstractStringBuilder implements Serializable {
 	private static final long serialVersionUID = -872728112292086623L;
 		
@@ -156,7 +156,7 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 	/**/
 	
 	/**/
-	
+	@Deprecated
 	public static interface Listener extends AbstractStringBuilder.Listener {
 		
 		Collection<Listener> COLLECTION = new ArrayList<>();
@@ -167,7 +167,7 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 		String getIdentifiableName();
 		String getWindowsModeName();
 		String getWindowsModeDialogName();
-		
+		@Deprecated
 		public static class Adapter extends AbstractStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 				
@@ -201,7 +201,7 @@ public class NameValueCollectionStringBuilder extends AbstractStringBuilder impl
 				return null;
 			}
 			/**/
-			
+			@Deprecated
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
