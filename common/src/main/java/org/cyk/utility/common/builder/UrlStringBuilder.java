@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
+@Getter @Setter @Accessors(chain=true) @NoArgsConstructor @Deprecated
 public class UrlStringBuilder extends AbstractStringBuilder implements Serializable {
 	private static final long serialVersionUID = 4504478526075696024L;
 
@@ -108,7 +108,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 	}
 	
 	/**/
-	
+	@Deprecated
 	public static interface Listener extends AbstractBuilder.Listener<String> {
 		
 		Collection<Listener> COLLECTION = new ArrayList<>();
@@ -151,7 +151,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 	
 	/**/
 	
-	@Getter @Setter @Accessors(chain=true)
+	@Getter @Setter @Accessors(chain=true) @Deprecated
 	public static class PathStringBuilder extends AbstractStringBuilder implements Serializable {
 		private static final long serialVersionUID = -872728112292086623L;
 		
@@ -314,7 +314,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 		/**/
 		
 		/**/
-		
+		@Deprecated
 		public static interface Listener extends AbstractStringBuilder.Listener {
 			
 			Collection<Listener> COLLECTION = new ArrayList<>();
@@ -378,7 +378,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 		
 		/**/
 		
-		@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
+		@Getter @Setter @NoArgsConstructor @Accessors(chain=true) @Deprecated
 		public static class IdentifierBuilder extends AbstractIdentifierBuilder implements Serializable {
 			private static final long serialVersionUID = -872728112292086623L;
 					
@@ -388,7 +388,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 			}
 				
 			/**/
-			
+			@Deprecated
 			public static interface Listener extends AbstractIdentifierBuilder.Listener {
 				
 				Collection<Listener> COLLECTION = new ArrayList<>();
@@ -409,7 +409,7 @@ public class UrlStringBuilder extends AbstractStringBuilder implements Serializa
 	
 	/**/
 	
-	
+	@Deprecated
 	@Getter @Setter @Accessors(chain=true)
 	public static class QueryStringBuilder extends AbstractStringBuilder implements Serializable {
 		private static final long serialVersionUID = -872728112292086623L;

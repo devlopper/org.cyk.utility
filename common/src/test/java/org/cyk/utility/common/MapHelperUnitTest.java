@@ -120,14 +120,14 @@ public class MapHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void stringify(){
-		assertEquals("p1=v1&p2=v2&p4=17&5&p3=v3&p5=9&4&13&p6=v6", new MapHelper.Stringifier.Adapter.Default(MapHelper.getInstance()
-				.getByKeyValue("p1", "v1","p2", "v2","p4", new Object[]{17,5},"p3", "v3","p5", Arrays.asList("9","4","13"),"p6", "v6")).execute());
+		assertEquals("p1=v1&p2=v2&p4=17&5&p3=v3&p5=9&4&13&p6=v6", new MapHelper.Stringifier.Adapter.Default().addKeyValue(
+				"p1", "v1","p2", "v2","p4", new Object[]{17,5},"p3", "v3","p5", Arrays.asList("9","4","13"),"p6", "v6").execute());
 		
-		assertEquals("p1=a&p2=b",new MapHelper.Stringifier.Adapter.Default(MapHelper.getInstance().getByKeyValue("p1","a","p2","b")).execute());
-		assertEquals("p1=a&p2=b",new MapHelper.Stringifier.Adapter.Default(MapHelper.getInstance().getByKeyValue("p1","a","p2","b","","b")).execute());
-		assertEquals("p1=a&p2=b",new MapHelper.Stringifier.Adapter.Default(MapHelper.getInstance().getByKeyValue("p1","a","p2","b"," ","b")).execute());
-		assertEquals("p1=a&p2=b&p3=15",new MapHelper.Stringifier.Adapter.Default(MapHelper.getInstance().getByKeyValue("p1","a","p2","b","p3",15)).execute());		
-		assertEquals("p1=a&p2=b&p3=2_f_0&encoded=p3",new MapHelper.Stringifier.Adapter.Default(MapHelper.getInstance().getByKeyValue("p1","a","p2","b","p3",15))
+		assertEquals("p1=a&p2=b",new MapHelper.Stringifier.Adapter.Default().addKeyValue("p1","a","p2","b").execute());
+		assertEquals("p1=a&p2=b",new MapHelper.Stringifier.Adapter.Default().addKeyValue("p1","a","p2","b","","b").execute());
+		assertEquals("p1=a&p2=b",new MapHelper.Stringifier.Adapter.Default().addKeyValue("p1","a","p2","b"," ","b").execute());
+		assertEquals("p1=a&p2=b&p3=15",new MapHelper.Stringifier.Adapter.Default().addKeyValue("p1","a","p2","b","p3",15).execute());		
+		assertEquals("p1=a&p2=b&p3=2_f_0&encoded=p3",new MapHelper.Stringifier.Adapter.Default().addKeyValue("p1","a","p2","b","p3",15)
 				.addEncodedKeys("p3").execute());
 		assertEquals("p1=a&p2=b&p3=2_f_0&p4=2_a_0&encoded=p3&encoded=p4",new MapHelper.Stringifier.Adapter.Default(MapHelper.getInstance()
 				.getByKeyValue("p1","a","p2","b","p3",15,"p4",10)).addEncodedKeys("p3","p4").execute());

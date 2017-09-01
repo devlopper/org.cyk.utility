@@ -200,6 +200,12 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return string;
 	}
 	
+	public String addAtBeginingIfDoesNotStartWith(String string,String start){
+		if(!isAtLocation(string, start, Location.START, Boolean.FALSE))
+			return start+string;
+		return string;
+	}
+	
 	public String getWordIdentifier(String identifier,Boolean masculine,Boolean plural){
 		identifier = String.format(ToStringMapping.MASCULINE_FORMAT,identifier, Boolean.TRUE.equals(masculine)?"mascul":"femin");
 		identifier = Boolean.TRUE.equals(plural) ? String.format(ToStringMapping.PLURAL_FORMAT, identifier) : identifier;
@@ -336,6 +342,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	
 		public static interface Collection extends Builder {
 			
+			Collection addTokenAt(String token,Integer index);
 			Collection addTokens(java.util.List<String> tokens);
 			Collection addTokens(String...tokens);
 			Collection addActions(@SuppressWarnings("rawtypes") java.util.List<Action> actions);
@@ -348,10 +355,28 @@ public class StringHelper extends AbstractHelper implements Serializable {
 			
 			Collection applyCaseToLastToken(CaseType caseType);
 			
+			Collection setSequenceReplacementMap(Map<String,String> map);
+			Map<String,String> getSequenceReplacementMap();
+			Collection addSequenceReplacement(String key,String value);
+			
+			@Getter
 			public static class Adapter extends Builder.Adapter implements Collection,Serializable {
 				private static final long serialVersionUID = 1L;
 				
+				protected Map<String,String> sequenceReplacementMap;
 				protected java.util.List<String> tokens;
+				
+				public Collection addSequenceReplacement(String key,String value){
+					return null;
+				}
+				
+				public Collection setSequenceReplacementMap(Map<String,String> map){
+					return null;
+				}
+				
+				public Collection addTokenAt(String token,Integer index){
+					return null;
+				}
 				
 				@Override
 				public Collection addActions(@SuppressWarnings("rawtypes") List<Action> actions) {
@@ -408,7 +433,30 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					
 					@Override
 					protected String __execute__() {
-						return CollectionHelper.getInstance().concatenate(tokens, null);
+						String string = CollectionHelper.getInstance().concatenate(tokens, getSeparator());
+						Map<String,String> sequenceReplacementMap = getSequenceReplacementMap();
+						if(sequenceReplacementMap!=null)
+							for(Entry<String, String> entry : sequenceReplacementMap.entrySet())
+								string = StringUtils.replaceAll(string, entry.getKey(), entry.getValue());
+						return string;
+					}
+					
+					public Collection addSequenceReplacement(String key,String value){
+						if(sequenceReplacementMap==null)
+							sequenceReplacementMap = new LinkedHashMap<>();
+						sequenceReplacementMap.put(key, value);
+						return this;
+					}
+					
+					public Collection setSequenceReplacementMap(Map<String,String> map){
+						this.sequenceReplacementMap = map;
+						return this;
+					}
+					
+					@Override
+					public Builder setSeparator(String separator) {
+						this.separator = separator;
+						return this;
 					}
 					
 					@Override
@@ -452,6 +500,16 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					}
 					
 					@Override
+					public Collection addTokenAt(String token,Integer index) {
+						if(token!=null && index!=null){
+							if(this.tokens == null)
+								this.tokens = new ArrayList<>();
+							this.tokens.add(index, token);
+						}
+						return this;
+					}
+					
+					@Override
 					public Collection space() {
 						return addTokens(Constant.CHARACTER_SPACE.toString());
 					}
@@ -476,6 +534,8 @@ public class StringHelper extends AbstractHelper implements Serializable {
 						return addTokens(Constant.CHARACTER_RIGHT_PARENTHESIS.toString());
 					}
 					
+					
+					
 					@Override
 					public Action<Object, String> clear() {
 						CollectionHelper.getInstance().clear(tokens);
@@ -490,7 +550,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 			
 			String AND = "and";
 			String OR = "or";
-		}
+		} 
 	}
 
 	/**/
@@ -989,5 +1049,35 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		public String toString() {
 			return super.toString()+(caseType == null ? Constant.EMPTY_STRING : (Constant.CHARACTER_COLON.toString()+caseType));
 		}
+	}
+	
+	public static interface Mapping extends Action<String, String> {
+		
+		public static class Adapter extends Action.Adapter.Default<String, String> implements Mapping,Serializable {
+			private static final long serialVersionUID = -4167553207734748200L;
+
+			public Adapter(String input) {
+				super("st mapringping", String.class, input, String.class);
+			}
+			
+			public static class Default extends Mapping.Adapter implements Serializable {
+				private static final long serialVersionUID = -4167553207734748200L;
+
+				public Default(String input) {
+					super(input);
+				}
+				
+				public Default() {
+					this(null);
+				}
+				
+				@Override
+				protected String __execute__() {
+					return getInput();
+				}
+				
+			}
+		}
+		
 	}
 }

@@ -16,9 +16,8 @@ import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Builder;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.InstanceHelper.Mapping;
-import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.OutputStrategy;
 import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.InputStrategy;
-import org.hsqldb.lib.HashSet;
+import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.OutputStrategy;
 
 import lombok.Getter;
 
@@ -270,6 +269,8 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 
 	public static interface Stringifier extends Builder.Stringifier<java.util.Map<?, ?>> {
 		
+		MapHelper.Stringifier addKeyValue(Object...objects);
+		
 		MapHelper.Stringifier.Entry getEntryStringifier();
 		MapHelper.Stringifier setEntryStringifier(MapHelper.Stringifier.Entry entryStringifier);
 		
@@ -294,6 +295,11 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 			@SuppressWarnings("unchecked")
 			public Adapter(java.util.Map<?, ?> input) {
 				super((Class<java.util.Map<?, ?>>) ClassHelper.getInstance().getByName(java.util.Map.class), input);
+			}
+			
+			@Override
+			public MapHelper.Stringifier addKeyValue(Object...objects) {
+				return null;
 			}
 			
 			@Override
@@ -331,6 +337,19 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 				
 				public Default(java.util.Map<?, ?> input) {
 					super(input);
+				}
+				
+				public Default() {
+					this(null);
+				}
+				
+				@Override
+				public MapHelper.Stringifier addKeyValue(Object...objects) {
+					Map<?,?> map = getInput();
+					if(map==null)
+						setInput(map = new LinkedHashMap<>());
+					MapHelper.getInstance().addKeyValue(map, objects);
+					return this;
 				}
 				
 				@Override
@@ -377,6 +396,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 					Set<Object> encodedKeys = getEncodedKeys();
 					for(java.util.Map.Entry<?, ?> entry : getInput().entrySet()){
 						entryStringifier.setInputStrategy(null).setOutputStrategy(null).setIsEncoded(CollectionHelper.getInstance().contains(encodedKeys,entry.getKey())).setInput(entry);
+						configure(entryStringifier);
 						String entryString = entryStringifier.execute();
 						if(!StringHelper.getInstance().isBlank(entryString))
 							entries.add(entryString);
@@ -386,6 +406,10 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 						entries.add(entryStringifier.setOutputStrategy(OutputStrategy.KEY_MANY_VALUES).setInputStrategy(InputStrategy.MANY).setIsEncoded(Boolean.FALSE).set(encodedKeyName, encodedKeys).execute());
 					}
 					return StringHelper.getInstance().concatenate(entries,separator);
+				}
+				
+				protected void configure(MapHelper.Stringifier.Entry entryStringifier){
+					
 				}
 			}
 		}
