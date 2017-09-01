@@ -142,6 +142,7 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_DURATION_IN_MILLISECOND="DURATION_IN_MILLISECOND";
 	java.lang.String PROPERTY_NAME_PORTION_IN_MILLISECOND="PORTION_IN_MILLISECOND";
 	java.lang.String PROPERTY_NAME="NAME";
+	java.lang.String PROPERTY_NAME_PARENT="PARENT";
 	java.lang.String PROPERTY_NAME_CHARACTER_SET = "CHARACTER_SET";
 	java.lang.String PROPERTY_NAME_WIDTH = "WIDTH";
 	java.lang.String PROPERTY_NAME_LEFT_PADDING = "LEFT_PADDING";
@@ -628,4 +629,49 @@ public interface Action<INPUT,OUTPUT> {
 			return (name == null ? Constant.EMPTY_STRING : (name+Constant.CHARACTER_COLON.toString()))+value.toString();
 		}
 	}
+
+	/**/
+	/*
+	public static interface GetValue<VALUE> extends Action<Object, VALUE> {
+		
+		public static class Adapter<VALUE> extends Action.Adapter.Default<Object, VALUE> implements GetValue<VALUE>,Serializable {
+			private static final long serialVersionUID = -4167553207734748200L;
+
+			public Adapter(Object input,Class<VALUE> valueClass) {
+				super("get value", Object.class, input, valueClass);
+			}
+			
+			public static class Default<VALUE> extends GetValue.Adapter<VALUE> implements Serializable {
+				private static final long serialVersionUID = -4167553207734748200L;
+
+				public Default(Object input,Class<VALUE> valueClass) {
+					super(input,valueClass);
+				}
+			}
+		}
+		
+		public static interface GetString extends GetValue<String> {
+			
+			public static class Adapter extends GetValue.Adapter.Default<String> implements GetValue<String>,Serializable {
+				private static final long serialVersionUID = -4167553207734748200L;
+
+				public Adapter(Object input) {
+					super(input, String.class);
+				}
+				
+				public static class Default extends GetString.Adapter implements Serializable {
+					private static final long serialVersionUID = -4167553207734748200L;
+
+					public Default(Object input) {
+						super(input);
+					}
+					
+					public Default() {
+						this(null);
+					}
+				}
+			}
+		}
+	}*/
+	
 }

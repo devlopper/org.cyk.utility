@@ -160,6 +160,10 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return StringUtils.isBlank(charSequence);
 	}
 	
+	public Boolean isNotBlank(CharSequence charSequence){
+		return StringUtils.isNotBlank(charSequence);
+	}
+	
 	public String get(java.util.Collection<?> collection,String separator){
 		if(collection==null)
 			return Constant.EMPTY_STRING;
@@ -437,7 +441,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 						Map<String,String> sequenceReplacementMap = getSequenceReplacementMap();
 						if(sequenceReplacementMap!=null)
 							for(Entry<String, String> entry : sequenceReplacementMap.entrySet())
-								string = StringUtils.replaceAll(string, entry.getKey(), entry.getValue());
+								string = StringUtils.replaceEach(string, new String[]{entry.getKey()}, new String[]{entry.getValue()});
 						return string;
 					}
 					
