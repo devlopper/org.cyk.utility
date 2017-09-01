@@ -113,6 +113,8 @@ public class UniformResourceLocatorUnitTest extends AbstractUnitTest {
 	
 	public static class IdentifierMapping extends StringHelper.Mapping.Adapter.Default {
 		
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		protected String __execute__() {
 			if("pathid1".equals(getInput()))
