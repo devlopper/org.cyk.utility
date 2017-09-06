@@ -65,7 +65,7 @@ public class JavascriptHelperUnitTest extends AbstractUnitTest {
 		public String getPathIdentifierMapping(String identifier) {
 			if("pathid1".equals(identifier))
 				return "/path_to_id1";
-			if("entityCreate".equals(identifier) || "entityUpdate".equals(identifier) || "entityDelete".equals(identifier))
+			if("entityEdit".equals(identifier) || "entityDelete".equals(identifier))
 				return "/entity/edit.jsf";
 			if("entityConsult".equals(identifier))
 				return "/entity/consult.jsf";

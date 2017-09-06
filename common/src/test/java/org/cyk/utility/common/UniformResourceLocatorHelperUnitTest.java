@@ -197,7 +197,7 @@ public class UniformResourceLocatorHelperUnitTest extends AbstractUnitTest {
 		public String getPathIdentifierMapping(String identifier) {
 			if("pathid1".equals(identifier))
 				return "/path_to_id1";
-			if("classACreate".equals(identifier) || "classAUpdate".equals(identifier) || "classADelete".equals(identifier))
+			if("classAEdit".equals(identifier) || "classADelete".equals(identifier))
 				return "/classa/edit.jsf";
 			if("classAConsult".equals(identifier))
 				return "/classa/consult.jsf";
