@@ -198,6 +198,12 @@ public interface Constant {
 	    ,CONSULT
 	    ,LIST
 	    ,PRINT
+	    
+	    ;
+		
+		public static Boolean isCreateOrUpdate(Action action){
+			return Action.CREATE.equals(action) || Action.UPDATE.equals(action);
+		}
 	}
 
 	

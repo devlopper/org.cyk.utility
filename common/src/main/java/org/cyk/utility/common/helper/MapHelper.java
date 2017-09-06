@@ -15,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Builder;
 import org.cyk.utility.common.Constant;
-import org.cyk.utility.common.helper.InstanceHelper.Mapping;
 import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.InputStrategy;
 import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.OutputStrategy;
 
@@ -23,8 +22,10 @@ import lombok.Getter;
 
 @Singleton
 public class MapHelper extends AbstractHelper implements Serializable  {
-
 	private static final long serialVersionUID = 1L;
+	
+	public static enum EntryComponent{KEY,VALUE}
+	public static enum EntryKey{ENCODED,ACTION,CLAZZ,IDENTIFIABLE}
 
 	private static MapHelper INSTANCE;
 	
@@ -269,6 +270,9 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 
 	public static interface Stringifier extends Builder.Stringifier<java.util.Map<?, ?>> {
 		
+		MapHelper.Listener getListener();
+		MapHelper.Stringifier setListener(MapHelper.Listener listener);
+		
 		MapHelper.Stringifier addKeyValue(Object...objects);
 		
 		MapHelper.Stringifier.Entry getEntryStringifier();
@@ -291,10 +295,16 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 			protected MapHelper.Stringifier.Entry entryStringifier;
 			protected String separator,encodedKeyName;
 			protected Set<Object> encodedKeys;
+			protected MapHelper.Listener listener;
 			
 			@SuppressWarnings("unchecked")
 			public Adapter(java.util.Map<?, ?> input) {
 				super((Class<java.util.Map<?, ?>>) ClassHelper.getInstance().getByName(java.util.Map.class), input);
+			}
+			
+			@Override
+			public org.cyk.utility.common.helper.MapHelper.Stringifier setListener(Listener listener) {
+				return null;
 			}
 			
 			@Override
@@ -332,8 +342,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 			public static class Default extends MapHelper.Stringifier.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 
-				public static String DEFAULT_SEPARATOR = Constant.CHARACTER_COMA.toString();
-				public static String DEFAULT_ENCODED_KEY_NAME = "encoded";
+				public static Class<? extends MapHelper.Listener> DEFAULT_MAP_LISTENER_CLASS = MapHelper.Listener.Adapter.Default.class;
 				
 				public Default(java.util.Map<?, ?> input) {
 					super(input);
@@ -341,6 +350,12 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 				
 				public Default() {
 					this(null);
+				}
+				
+				@Override
+				public org.cyk.utility.common.helper.MapHelper.Stringifier setListener(Listener listener) {
+					this.listener = listener;
+					return this;
 				}
 				
 				@Override
@@ -388,8 +403,11 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 				
 				@Override
 				protected java.lang.String __execute__() {
+					MapHelper.Listener listener = getListener();
+					if(listener==null)
+						listener = ClassHelper.getInstance().instanciateOne(MapHelper.Stringifier.Adapter.Default.DEFAULT_MAP_LISTENER_CLASS);
 					Collection<String> entries = new ArrayList<>();
-					String separator = InstanceHelper.getInstance().getIfNotNullElseDefault(getSeparator(), DEFAULT_SEPARATOR);
+					String separator = InstanceHelper.getInstance().getIfNotNullElseDefault(getSeparator(), listener.getSeparatorOfKeyValue());
 					MapHelper.Stringifier.Entry entryStringifier = getEntryStringifier();
 					if(entryStringifier==null)
 						entryStringifier = new MapHelper.Stringifier.Entry.Adapter.Default();
@@ -402,7 +420,9 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 							entries.add(entryString);
 					}
 					if(!CollectionHelper.getInstance().isEmpty(encodedKeys)){
-						String encodedKeyName = InstanceHelper.getInstance().getIfNotNullElseDefault(getEncodedKeyName(), DEFAULT_ENCODED_KEY_NAME);
+						String encodedKeyName = getEncodedKeyName();
+						if(encodedKeyName==null)
+							encodedKeyName = listener.getAs(EntryComponent.KEY, EntryKey.ENCODED).toString();
 						entries.add(entryStringifier.setOutputStrategy(OutputStrategy.KEY_MANY_VALUES).setInputStrategy(InputStrategy.MANY).setIsEncoded(Boolean.FALSE).set(encodedKeyName, encodedKeys).execute());
 					}
 					return StringHelper.getInstance().concatenate(entries,separator);
@@ -419,8 +439,8 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 			public static enum OutputStrategy{KEY_ONE_VALUE,KEY_MANY_VALUES}
 			public static enum InputStrategy{ONE,ONE_MANY,MANY}
 			
-			InstanceHelper.Mapping getValueMapping();
-			MapHelper.Stringifier.Entry setValueMapping(InstanceHelper.Mapping mapping);
+			MapHelper.Listener getListener();
+			MapHelper.Stringifier.Entry setListener(MapHelper.Listener listener);
 			
 			MapHelper.Stringifier.Entry set(Object key,Object value);
 			
@@ -442,10 +462,6 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 			String getKey(Object key);
 			String getValue(Object value);
 			Collection<Object> getValues(Object value);
-			/*Object getValueToProcessed(Object value);
-			Collection<Object> getValuesToProcessed(Collection<Object> values);
-			String getValueAsString(Object value);
-			*/
 			
 			String getValuesSeparator();
 			MapHelper.Stringifier.Entry setValuesSeparator(String valuesSeparator);
@@ -456,13 +472,8 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 			String getKeyValuesSeparator();
 			MapHelper.Stringifier.Entry setKeyValuesSeparator(String keyValuesSeparator);
 			
-			/*String encode(Collection<Object> values);
-			*/
 			String getEncodingCharacterSet();
 			MapHelper.Stringifier.Entry setEncodingCharacterSet(String encodingCharacterSet);
-			/*
-			Boolean getIsEncoded(Object key,Collection<Object> values);
-			*/
 			
 			Boolean getIsEncoded();
 			MapHelper.Stringifier.Entry setIsEncoded(Boolean isEncoded);
@@ -477,7 +488,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 				protected InputStrategy inputStrategy;
 				protected OutputStrategy outputStrategy;
 				protected String encodingCharacterSet,separator,valuesSeparator,keyValuesSeparator;
-				protected InstanceHelper.Mapping valueMapping;
+				protected MapHelper.Listener listener;
 				protected Boolean isEncoded;
 				
 				@SuppressWarnings("unchecked")
@@ -497,7 +508,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 				}
 				
 				@Override
-				public Entry setValueMapping(Mapping mapping) {
+				public Entry setListener(MapHelper.Listener listener) {
 					return null;
 				}
 				
@@ -576,10 +587,8 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 				public static class Default extends MapHelper.Stringifier.Entry.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 
-					public static Class<? extends InstanceHelper.Mapping> GET_VALUE_CLASS;
-					public static String DEFAULT_SEPARATOR = Constant.CHARACTER_EQUAL.toString();
-					public static String DEFAULT_VALUES_SEPARATOR = Constant.CHARACTER_COMA.toString();
-					public static String DEFAULT_KEY_VALUES_SEPARATOR = Constant.CHARACTER_COMA.toString();
+					public static Class<? extends Entry.Listener> DEFAULT_LISTENER_CLASS = Entry.Listener.Adapter.Default.class;
+					public static Class<? extends MapHelper.Listener> DEFAULT_MAP_LISTENER_CLASS = MapHelper.Listener.Adapter.Default.class;
 					
 					public Default(java.util.Map.Entry<?, ?> input) {
 						super(input);
@@ -690,6 +699,12 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 					}
 					
 					@Override
+					public Entry setListener(MapHelper.Listener listener) {
+						this.listener = listener;
+						return this;
+					}
+					
+					@Override
 					public Collection<Object> getValues(Object value) {
 						Collection<Object> collection = new ArrayList<>();
 						InputStrategy inputStrategy = InstanceHelper.getInstance().getIfNotNullElseDefault(getInputStrategy(), InputStrategy.ONE);
@@ -706,8 +721,9 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 										collection.add(object);
 							}
 						}else if(InputStrategy.ONE_MANY.equals(inputStrategy)){
+							MapHelper.Listener listener = __getListener__();
 							if(value instanceof String){
-								String[] values = StringUtils.split((java.lang.String) value, InstanceHelper.getInstance().getIfNotNullElseDefault(getValuesSeparator(), DEFAULT_VALUES_SEPARATOR));
+								String[] values = StringUtils.split((java.lang.String) value, InstanceHelper.getInstance().getIfNotNullElseDefault(getValuesSeparator(), listener.getSeparatorOfValueInput()));
 								for(String object : values)
 									if(!Boolean.TRUE.equals(StringHelper.getInstance().isBlank(object)))
 										collection.add(object);
@@ -719,10 +735,11 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 					@Override
 					protected java.lang.String __execute__() {
 						java.util.Map.Entry<?,?> entry = getInput();
+						MapHelper.Listener listener = __getListener__();
 						Object key = getKey();
 						if(key==null && entry!=null)
 							key = entry.getKey();
-						key = getKey(key);
+						key = getKey(listener.getAs(EntryComponent.KEY, key));
 						if(Boolean.TRUE.equals(isNullKey(key)))
 							return null;
 						
@@ -735,23 +752,19 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 						InputStrategy inputStrategy = InstanceHelper.getInstance().getIfNotNullElseDefault(getInputStrategy(), InputStrategy.ONE);
 						OutputStrategy outputStrategy = InstanceHelper.getInstance().getIfNotNullElseDefault(getOutputStrategy(), OutputStrategy.KEY_ONE_VALUE);
 						
-						InstanceHelper.Mapping valueMapping = getValueMapping();
-						if(valueMapping==null)
-							valueMapping = ClassHelper.getInstance().instanciateOne(Entry.Adapter.Default.GET_VALUE_CLASS == null 
-							? InstanceHelper.Mapping.Adapter.Default.class : Entry.Adapter.Default.GET_VALUE_CLASS );
 						if(InputStrategy.MANY.equals(inputStrategy)){
 							Collection<Object> objects = new ArrayList<>();
 							for(Object object : value instanceof Collection<?> ? (Collection<?>)value : CollectionHelper.getInstance().get((Object[])value))
-								objects.add(valueMapping.setInput(object).execute());							
+								objects.add(listener.getAs(EntryComponent.VALUE, object));							
 							value = objects;	
 						}else {
-							value = valueMapping.setInput(value).execute();
+							value = listener.getAs(EntryComponent.VALUE, value);
 						}
 						
 						
 						Collection<String> keyValues = new ArrayList<>();
 						
-						String keyValueSeparator = InstanceHelper.getInstance().getIfNotNullElseDefault(getSeparator(), DEFAULT_SEPARATOR);
+						String keyValueSeparator = InstanceHelper.getInstance().getIfNotNullElseDefault(getSeparator(), listener.getSeparatorOfKeyAndValue());
 						
 						if(OutputStrategy.KEY_ONE_VALUE.equals(outputStrategy)){
 							if(InputStrategy.ONE.equals(inputStrategy)){
@@ -769,7 +782,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 											longs.add(object instanceof Number ? ((Number)object).longValue() : Long.parseLong(object.toString()));	
 									value = encode(longs,  InstanceHelper.getInstance().getIfNotNullElseDefault(getEncodingCharacterSet(),NumberHelper.BASE_62_CHARACTERS));
 								}else
-									value = CollectionHelper.getInstance().concatenate(objects, InstanceHelper.getInstance().getIfNotNullElseDefault(getSeparator(), DEFAULT_KEY_VALUES_SEPARATOR));
+									value = CollectionHelper.getInstance().concatenate(objects, InstanceHelper.getInstance().getIfNotNullElseDefault(getSeparator(), listener.getSeparatorOfKeyValue()));
 							}else
 								value = null;
 							keyValues.add(key+keyValueSeparator+getValue(value));
@@ -781,7 +794,14 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 							}
 							
 						}
-						return StringHelper.getInstance().concatenate(keyValues, InstanceHelper.getInstance().getIfNotNullElseDefault(getKeyValuesSeparator(), DEFAULT_KEY_VALUES_SEPARATOR));
+						return StringHelper.getInstance().concatenate(keyValues, InstanceHelper.getInstance().getIfNotNullElseDefault(getKeyValuesSeparator(), listener.getSeparatorOfKeyValue()));
+					}
+					
+					protected MapHelper.Listener __getListener__(){
+						MapHelper.Listener listener = getListener();
+						if(listener==null)
+							listener = ClassHelper.getInstance().instanciateOne(Entry.Adapter.Default.DEFAULT_MAP_LISTENER_CLASS);
+						return listener;
 					}
 					
 					@Override
@@ -802,7 +822,130 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 			
 			/**/
 			
+			public static interface Listener {
+				
+				//Object getValue(Object object);
+			
+				public static class Adapter implements Listener,Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					/*@Override
+					public Object getValue(Object object) {
+						return null;
+					}*/
+					
+					public static class Default extends Listener.Adapter implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						/*@Override
+						public Object getValue(Object object) {
+							return object;
+						}*/	
+					}	
+				}
+			}
 		}
 		
+	}
+
+	/**/
+	
+	public static interface Listener {
+		
+		Object getAs(EntryComponent entryComponent,Object object);
+		
+		String getSeparatorOfKeyAndValue();
+		Listener setSeparatorOfKeyAndValue(String separatorOfKeyAndValue);
+		
+		String getSeparatorOfKeyValue();
+		Listener setSeparatorOfKeyValue(String separatorOfKeyValue);
+		
+		String getSeparatorOfValue();
+		Listener setSeparatorOfValue(String separatorOfValue);
+		
+		String getSeparatorOfValueInput();
+		Listener setSeparatorOfValueInput(String separatorOfValueInput);
+		
+		@Getter
+		public static class Adapter implements Listener,Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			protected String separatorOfKeyAndValue,separatorOfKeyValue,separatorOfValue,separatorOfValueInput;
+			
+			@Override
+			public Listener setSeparatorOfKeyAndValue(java.lang.String separatorOfKeyAndValue) {
+				return null;
+			}
+			
+			@Override
+			public Listener setSeparatorOfKeyValue(java.lang.String separatorOfKeyValue) {
+				return null;
+			}
+			
+			@Override
+			public Listener setSeparatorOfValue(java.lang.String separatorOfValue) {
+				return null;
+			}
+			
+			@Override
+			public Listener setSeparatorOfValueInput(java.lang.String separatorOfValueInput) {
+				return null;
+			}
+			
+			@Override
+			public Object getAs(EntryComponent entryComponent, Object object) {
+				return null;
+			}
+			
+			public static class Default extends Listener.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public static String SEPARATOR_OF_KEY_AND_VALUE = Constant.CHARACTER_EQUAL.toString();
+				public static String SEPARATOR_OF_KEY_VALUE = Constant.CHARACTER_COMA.toString();
+				public static String SEPARATOR_OF_VALUE = Constant.CHARACTER_COMA.toString();
+				public static String SEPARATOR_OF_VALUE_INPUT = Constant.CHARACTER_COMA.toString();
+				
+				public Default() {
+					this.separatorOfKeyAndValue = SEPARATOR_OF_KEY_AND_VALUE;
+					this.separatorOfKeyValue = SEPARATOR_OF_KEY_VALUE;
+					this.separatorOfValue = SEPARATOR_OF_VALUE;
+					this.separatorOfValueInput = SEPARATOR_OF_VALUE_INPUT;
+				}
+				
+				@Override
+				public Listener setSeparatorOfKeyAndValue(java.lang.String separatorOfKeyAndValue) {
+					this.separatorOfKeyAndValue = separatorOfKeyAndValue;
+					return this;
+				}
+				
+				@Override
+				public Listener setSeparatorOfKeyValue(java.lang.String separatorOfKeyValue) {
+					this.separatorOfKeyValue = separatorOfKeyValue;
+					return this;
+				}
+				
+				@Override
+				public Listener setSeparatorOfValue(java.lang.String separatorOfValue) {
+					this.separatorOfValue = separatorOfValue;
+					return this;
+				}
+				
+				@Override
+				public Listener setSeparatorOfValueInput(java.lang.String separatorOfValueInput) {
+					this.separatorOfValueInput = separatorOfValueInput;
+					return this;
+				}
+				
+				@Override
+				public Object getAs(EntryComponent entryComponent, Object object) {
+					if(object instanceof Class)
+						return ((Class<?>)object).getSimpleName().toLowerCase();
+					if(object instanceof Enum<?>){
+						return ((Enum<?>)object).name().toLowerCase();
+					}
+					return object;
+				}
+			}	
+		}
 	}
 }

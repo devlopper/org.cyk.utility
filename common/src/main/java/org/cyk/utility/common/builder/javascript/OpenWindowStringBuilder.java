@@ -76,16 +76,16 @@ public class OpenWindowStringBuilder extends AbstractJavascriptStringBuilder imp
 	/**/
 	
 	/**/
-	
+	@Deprecated
 	public static interface Listener extends AbstractJavascriptStringBuilder.Listener {
 		
 		Collection<Listener> COLLECTION = new ArrayList<>();
-		
+		@Deprecated
 		public static class Adapter extends AbstractJavascriptStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 				
 			/**/
-			
+			@Deprecated
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				

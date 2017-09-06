@@ -5,8 +5,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.MapHelper;
+import org.cyk.utility.common.helper.MapHelper.EntryComponent;
+import org.cyk.utility.common.helper.MapHelper.EntryKey;
 import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.InputStrategy;
 import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.OutputStrategy;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -20,9 +21,32 @@ public class MapHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 
 	static {
-		MapHelper.Stringifier.Entry.Adapter.Default.GET_VALUE_CLASS = Mapping.class;
-		MapHelper.Stringifier.Entry.Adapter.Default.DEFAULT_KEY_VALUES_SEPARATOR = "&";
-		MapHelper.Stringifier.Adapter.Default.DEFAULT_SEPARATOR = "&";
+		MapHelper.Stringifier.Adapter.Default.DEFAULT_MAP_LISTENER_CLASS = MapListener.class;
+		MapHelper.Stringifier.Entry.Adapter.Default.DEFAULT_MAP_LISTENER_CLASS = MapListener.class;
+	}
+	
+	@Test
+	public void getAs(){
+		assertEquals(null, new MapListener().getAs(EntryComponent.KEY, null));
+		assertEquals("", new MapListener().getAs(EntryComponent.KEY, ""));
+		assertEquals(" ", new MapListener().getAs(EntryComponent.KEY, " "));
+		assertEquals("a", new MapListener().getAs(EntryComponent.KEY, "a"));
+		assertEquals("encoded", new MapListener().getAs(EntryComponent.KEY, EntryKey.ENCODED));
+		assertEquals("action", new MapListener().getAs(EntryComponent.KEY, EntryKey.ACTION));
+		assertEquals("clazz", new MapListener().getAs(EntryComponent.KEY, EntryKey.CLAZZ));
+		assertEquals("classa", new MapListener().getAs(EntryComponent.KEY, ClassA.class));
+		assertEquals(153l, new MapListener().getAs(EntryComponent.KEY, new ClassA(153l)));
+		assertEquals("create", new MapListener().getAs(EntryComponent.KEY, Constant.Action.CREATE));
+		
+		assertEquals(null, new MapListener().getAs(EntryComponent.VALUE, null));
+		assertEquals("", new MapListener().getAs(EntryComponent.VALUE, ""));
+		assertEquals(" ", new MapListener().getAs(EntryComponent.VALUE, " "));
+		assertEquals("a", new MapListener().getAs(EntryComponent.VALUE, "a"));
+		assertEquals("encoded", new MapListener().getAs(EntryComponent.VALUE, EntryKey.ENCODED));
+		assertEquals(153l, new MapListener().getAs(EntryComponent.VALUE, new ClassA(153l)));
+		assertEquals("classa", new MapListener().getAs(EntryComponent.VALUE, ClassA.class));
+		assertEquals("create", new MapListener().getAs(EntryComponent.VALUE, Constant.Action.CREATE));
+		
 	}
 	
 	@Test
@@ -76,6 +100,16 @@ public class MapHelperUnitTest extends AbstractUnitTest {
 		assertEquals("a=15", new MapHelper.Stringifier.Entry.Adapter.Default().set("a", new ClassA(15l)).execute());
 		assertEquals("a=15", new MapHelper.Stringifier.Entry.Adapter.Default().set("a", Arrays.asList(new ClassA(15l))).execute());
 		assertEquals("a=15", new MapHelper.Stringifier.Entry.Adapter.Default().set("a", new Object[]{new ClassA(15l)}).execute());
+		
+		assertEquals("a=<<15>>", new MapHelper.Stringifier.Entry.Adapter.Default().set("a", new ClassA(15l)).setListener(new MapHelper.Listener.Adapter.Default(){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Object getAs(EntryComponent entryComponent, Object object) {
+				if(object instanceof ClassA)
+					return "<<"+((ClassA)object).getIdentifier()+">>";
+				return super.getAs(entryComponent, object);
+			}
+		}).execute());
 		
 		assertEquals("a=2_f_0", new MapHelper.Stringifier.Entry.Adapter.Default().set("a", 15).setIsEncoded(Boolean.TRUE).execute());
 		assertEquals("a=2_f_0", new MapHelper.Stringifier.Entry.Adapter.Default().set("a", new ClassA(15l)).setIsEncoded(Boolean.TRUE).execute());
@@ -148,17 +182,35 @@ public class MapHelperUnitTest extends AbstractUnitTest {
 		
 	}
 	
-	public static class Mapping extends InstanceHelper.Mapping.Adapter.Default {
+	public static class MapListener extends MapHelper.Listener.Adapter.Default {
 		
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected Object __execute__() {
-			if(getInput() instanceof ClassA)
-				return ((ClassA)getInput()).getIdentifier();
-			return super.__execute__();
+		public Object getAs(EntryComponent entryComponent, Object object) {
+			if(object instanceof ClassA)
+				return ((ClassA)object).getIdentifier();
+			return super.getAs(entryComponent, object);
 		}
 		
+		@Override
+		public String getSeparatorOfValue() {
+			return "&";
+		}
+		
+		@Override
+		public String getSeparatorOfKeyValue() {
+			return "&";
+		}
+			
+	}
+	
+	public static class EntryListener extends MapHelper.Stringifier.Entry.Listener.Adapter.Default {
+		
+		private static final long serialVersionUID = 1L;
+
+		
+			
 	}
 	
 }

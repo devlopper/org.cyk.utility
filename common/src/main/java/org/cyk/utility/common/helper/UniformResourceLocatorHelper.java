@@ -1,6 +1,8 @@
 package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +12,13 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.Constant.Action;
 import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.OutputStrategy;
+import org.cyk.utility.common.helper.StringHelper.CaseType;
 
+import static org.cyk.utility.common.helper.UniformResourceLocatorHelper.TokenName.SCHEME;
+import static org.cyk.utility.common.helper.UniformResourceLocatorHelper.TokenName.HOST;
+import static org.cyk.utility.common.helper.UniformResourceLocatorHelper.TokenName.PORT;
 import lombok.Getter;
 
 @Singleton
@@ -19,6 +26,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 
 	private static final long serialVersionUID = 1L;
 
+	public static Class<? extends UniformResourceLocatorHelper.Listener> DEFAULT_LISTENER_CLASS = UniformResourceLocatorHelper.Listener.Adapter.Default.class;
 	private static UniformResourceLocatorHelper INSTANCE;
 	
 	public static UniformResourceLocatorHelper getInstance() {
@@ -31,6 +39,33 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public String getToken(TokenName name,String url){
+		if(name == null || StringHelper.getInstance().isBlank(url))
+			return null;
+		URI uri = URI.create(url);
+		java.net.URL u = null;
+		try {
+			u = new java.net.URL(url);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		switch(name){
+		case SCHEME: return uri.getScheme();
+		case HOST: return u.getHost();
+		case PORT: return String.valueOf(uri.getPort());
+		case PATH: return uri.getPath();
+		case QUERY: return uri.getQuery();
+		case FRAGMENT: return uri.getFragment();
+		}
+		return null;
+	}
+	
+	public String getToken(TokenName name){
+		UniformResourceLocatorHelper.Listener listener = ClassHelper.getInstance().instanciateOne(DEFAULT_LISTENER_CLASS);
+		Object request = listener.getRequest();
+		return getToken(name,listener.getRequestUniformResourceLocator(request));
 	}
 	
 	public static interface Stringifier extends org.cyk.utility.common.Builder.Stringifier<Object> {
@@ -51,11 +86,17 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 		UniformResourceLocatorHelper.Stringifier setPathStringifier(PathStringifier pathStringifier);
 		UniformResourceLocatorHelper.Stringifier addPathTokens(String...tokens);
 		UniformResourceLocatorHelper.Stringifier setPathContext(String context);
+		UniformResourceLocatorHelper.Stringifier setPathIdentifier(String identifier);
 		
 		QueryStringifier getQueryStringifier();
 		QueryStringifier getQueryStringifier(Boolean createIfNull);
 		UniformResourceLocatorHelper.Stringifier setQueryStringifier(QueryStringifier queryStringifier);
 		UniformResourceLocatorHelper.Stringifier addQueryKeyValue(Object...objects);
+		//UniformResourceLocatorHelper.Stringifier addQueryParameter(Object key,Object value);
+		
+		UniformResourceLocatorHelper.Stringifier addQueryParameterAction(Constant.Action action);
+		UniformResourceLocatorHelper.Stringifier addQueryParameterClass(Class<?> aClass);
+		UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifiable(Object object);
 		
 		Boolean getRelative();
 		UniformResourceLocatorHelper.Stringifier setRelative(Boolean relative);
@@ -85,7 +126,27 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			}
 			
 			@Override
+			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterAction(Action action) {
+				return null;
+			}
+			
+			@Override
+			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterClass(Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifiable(Object identifiable) {
+				return null;
+			}
+			
+			@Override
 			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPathContext(String context) {
+				return null;
+			}
+			
+			@Override
+			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPathIdentifier(String identifier) {
 				return null;
 			}
 			
@@ -161,13 +222,11 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 
 				public static final String SCHEME_HOST_PORT_FORMAT = "%s://%s%s%s";
 				
-				public static String DEFAULT_SCHEME,DEFAULT_HOST,DEFAULT_QUERY_SEPARATOR=Constant.CHARACTER_QUESTION_MARK.toString();
-				public static  Integer DEFAULT_PORT;
+				public static String DEFAULT_QUERY_SEPARATOR=Constant.CHARACTER_QUESTION_MARK.toString();
 				public static  Boolean DEFAULT_RELATIVE,DEFAULT_PRETTY;
 				
 				public Default() {
 					setIsInputRequired(Boolean.FALSE);
-					setPort(DEFAULT_PORT);
 				}
 				
 				@Override
@@ -186,6 +245,9 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 					}
 					if(pathStringifier!=null && StringHelper.getInstance().isNotBlank(query)){
 						pathStringifier.setAddSeparatorAfterContext(Boolean.TRUE);
+						pathStringifier.setProperty(PROPERTY_NAME_ACTION, queryStringifier.getInput().get(MapHelper.EntryKey.ACTION));
+						pathStringifier.setProperty(PROPERTY_NAME_CLASS, queryStringifier.getInput().get(MapHelper.EntryKey.CLAZZ));
+						pathStringifier.setProperty(PROPERTY_NAME_INSTANCE, queryStringifier.getInput().get(MapHelper.EntryKey.IDENTIFIABLE));
 					}
 					String path = pathStringifier == null ? Constant.EMPTY_STRING : pathStringifier.execute();
 					if(StringHelper.getInstance().isNotBlank(path))
@@ -194,15 +256,45 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 					if(Boolean.TRUE.equals(relative)){
 						
 					}else{
-						String scheme = InstanceHelper.getInstance().getIfNotNullElseDefault(getScheme(),DEFAULT_SCHEME);
-						String host = InstanceHelper.getInstance().getIfNotNullElseDefault(getHost(),DEFAULT_HOST);
+						String scheme = getScheme();
+						if(scheme==null) 
+							scheme = getInstance().getToken(SCHEME);
+						String host = getHost();
+						if(host==null) 
+							host = getInstance().getToken(HOST);
 						Integer port = getPort();
 						Integer defaultPort = UniformResourceLocatorHelper.SCHEME_DEFAULT_PORT_MAP.get(scheme);
+						if(port==null)
+							port = NumberHelper.getInstance().getInteger(getInstance().getToken(PORT),defaultPort);
 						Boolean isDefaultPort = port == null || defaultPort!=null && defaultPort == port;
 						tokens.add(0,String.format(SCHEME_HOST_PORT_FORMAT, scheme,host,isDefaultPort ? Constant.EMPTY_STRING : Constant.CHARACTER_COLON.toString()
 								,isDefaultPort ? Constant.EMPTY_STRING : port));
 					}
 					return StringHelper.getInstance().concatenate(tokens, null);
+				}
+				
+				@Override 
+				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterAction(Action action) {
+					addQueryKeyValue(MapHelper.EntryKey.ACTION,action);
+					return this;
+				}
+				
+				@Override
+				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterClass(Class<?> aClass) {
+					addQueryKeyValue(MapHelper.EntryKey.CLAZZ,aClass);
+					return this;
+				}
+				
+				@Override
+				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifiable(Object identifiable) {
+					addQueryKeyValue(MapHelper.EntryKey.IDENTIFIABLE,identifiable);
+					return this;
+				}
+				
+				@Override
+				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPathIdentifier(String identifier) {
+					getPathStringifier(Boolean.TRUE).setIdentifier(identifier);
+					return this;
 				}
 				
 				@Override
@@ -299,6 +391,9 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	
 	public static interface PathStringifier extends org.cyk.utility.common.helper.StringHelper.Builder.Collection {
 		
+		UniformResourceLocatorHelper.Listener getListener();
+		PathStringifier setListener(UniformResourceLocatorHelper.Listener listener);
+		
 		Boolean getAddSeparatorAtBeginning();
 		PathStringifier setAddSeparatorAtBeginning(Boolean addSeparatorAtBeginning);
 		
@@ -321,6 +416,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 
 			protected Boolean addSeparatorAtBeginning=Boolean.TRUE,addSeparatorAfterContext;
 			protected String context,identifier;
+			protected UniformResourceLocatorHelper.Listener listener;
 			
 			@Override
 			public PathStringifier addTokens(String... tokens) {
@@ -352,13 +448,18 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				return null;
 			}
 			
+			@Override
+			public PathStringifier setListener(org.cyk.utility.common.helper.UniformResourceLocatorHelper.Listener listener) {
+				return null;
+			}
+			
 			/**/
 			
 			public static class Default extends PathStringifier.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 
 				public static Map<String,String> DEFAULT_SEQUENCE_REPLACEMENT_MAP = null;
-				public static Class<? extends StringHelper.Mapping> DEFAULT_IDENTIFIER_MAPPING_CLASS = StringHelper.Mapping.Adapter.Default.class;
+				public static Class<? extends UniformResourceLocatorHelper.Listener> DEFAULT_UNIFORM_RESOURCE_LOCATOR_LISTENER_CLASS = UniformResourceLocatorHelper.Listener.Adapter.Default.class;
 				public static String IDENTIFIER_UNKNOWN = "unknown";
 				public static String DEFAULT_CONTEXT;
 				
@@ -371,20 +472,38 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				
 				@Override
 				protected String __execute__() {
+					UniformResourceLocatorHelper.Listener listener = getListener();
+					if(listener==null)
+						listener = ClassHelper.getInstance().instanciateOne(DEFAULT_UNIFORM_RESOURCE_LOCATOR_LISTENER_CLASS);
 					String identifier = getIdentifier();
+					if(identifier==null){
+						Constant.Action action = (Action) getProperty(PROPERTY_NAME_ACTION);
+						Class<?> aClass = (Class<?>) getProperty(PROPERTY_NAME_CLASS);
+						if(aClass==null){
+							Object instance = getProperty(PROPERTY_NAME_INSTANCE);
+							if(instance!=null)
+								aClass = instance.getClass();
+						}
+						identifier = listener.getPathIdentifier(action, aClass);
+					}
 					String string;
 					String context = getContext();
 					Boolean addSeparatorAfterContext = getAddSeparatorAfterContext();
 					java.util.Collection<String> tokens = getTokens();
+					String separator = getSeparator();
 					//if(addSeparatorAfterContext==null)
 					//	addSeparatorAfterContext = StringHelper.getInstance().isNotBlank(context) && !CollectionHelper.getInstance().isEmpty(tokens);
-					if(Boolean.TRUE.equals(addSeparatorAfterContext) && CollectionHelper.getInstance().isEmpty(tokens))
-						addTokenAt(getSeparator(),0);
+					if(Boolean.TRUE.equals(addSeparatorAfterContext) && CollectionHelper.getInstance().isEmpty(tokens) && StringHelper.getInstance().isBlank(identifier))
+						addTokenAt(separator,0);
 					addTokenAt(context,0);
 					if(StringHelper.getInstance().isBlank(identifier)){
 						
 					}else{
-						addTokens(ClassHelper.getInstance().instanciateOne(DEFAULT_IDENTIFIER_MAPPING_CLASS).setInput(identifier).execute());
+						String mapping = listener.getPathIdentifierMapping(identifier);
+						if(StringHelper.getInstance().isNotBlank(mapping)){
+							mapping = StringHelper.getInstance().removeAtBeginingIfDoesNotStartWith(mapping, separator);//TODO make it in super
+							addTokens(mapping);
+						}
 					}
 					string = super.__execute__();	
 					if(Boolean.TRUE.equals(getAddSeparatorAtBeginning()))
@@ -420,7 +539,27 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorStringifier() {
 					return (org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier) getProperty(PROPERTY_NAME_PARENT);
 				}
+			
+				@Override
+				public PathStringifier setListener(org.cyk.utility.common.helper.UniformResourceLocatorHelper.Listener listener) {
+					this.listener = listener;
+					return this;
+				}
 			}	
+		}
+		
+		public static interface Listener {
+			
+			public static class Adapter implements Listener,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public static class Default extends Listener.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+				}
+				
+			}
+			
 		}
 	}
 	
@@ -466,28 +605,79 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				
 			}	
 		}
+	
+		public static interface Listener {
+			
+			public static class Adapter implements Listener,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public static class Default extends Listener.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+				}
+				
+			}
+			
+		}
 	}
 	
 	/**/
 	
 	public static interface Listener {
 		
-		
+		Object getRequest();
+		String getRequestUniformResourceLocator(Object request);
+		String getPathIdentifier(Constant.Action action,Class<?> aClass);
+		String getPathIdentifierMapping(String identifier);
 		
 		public static class Adapter implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 			
+			@Override
+			public Object getRequest() {
+				return null;
+			}
+			
+			@Override
+			public String getRequestUniformResourceLocator(Object request) {
+				return null;
+			}
+			
+			@Override
+			public String getPathIdentifier(Action action, Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public String getPathIdentifierMapping(String identifier) {
+				return null;
+			}
+			
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
+				private static final String EDIT = "Edit";
+				
+				@Override
+				public String getPathIdentifier(Action action, Class<?> aClass) {
+					if(action==null || aClass==null)
+						return null;
+					return ClassHelper.getInstance().getVariableName(aClass)
+							+(Action.isCreateOrUpdate(action) ? EDIT : StringHelper.getInstance().applyCaseType(action.name(), CaseType.FURL));
+				}
+				
+				@Override
+				public String getPathIdentifierMapping(String identifier) {
+					return identifier;
+				}
 			}
-			
 		}
-		
 	}
 
 	public static final Map<String,Integer> SCHEME_DEFAULT_PORT_MAP = new HashMap<>();
 	static {
 		SCHEME_DEFAULT_PORT_MAP.put("http", 80);
 	}
+	
+	public static enum TokenName{SCHEME,HOST,PORT,PATH,QUERY,FRAGMENT}
 }

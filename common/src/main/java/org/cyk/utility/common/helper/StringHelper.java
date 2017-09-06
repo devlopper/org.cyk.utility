@@ -210,6 +210,12 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return string;
 	}
 	
+	public String removeAtBeginingIfDoesNotStartWith(String string,String start){
+		if(isAtLocation(string, start, Location.START, Boolean.FALSE))
+			return StringUtils.substring(string, start.length());
+		return string;
+	}
+	
 	public String getWordIdentifier(String identifier,Boolean masculine,Boolean plural){
 		identifier = String.format(ToStringMapping.MASCULINE_FORMAT,identifier, Boolean.TRUE.equals(masculine)?"mascul":"femin");
 		identifier = Boolean.TRUE.equals(plural) ? String.format(ToStringMapping.PLURAL_FORMAT, identifier) : identifier;

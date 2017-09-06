@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.Constant.Action;
 import org.cyk.utility.common.builder.TextStringBuilder;
 
 import lombok.Getter;
@@ -111,8 +112,10 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 		
 		public static interface Window extends JavaScriptHelper.Script {
 			
-			UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorHelperStringifier();
-			Window setUniformResourceLocatorHelperStringifier(UniformResourceLocatorHelper.Stringifier uniformResourceLocatorHelperStringifier);
+			UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorStringifier();
+			Window setUniformResourceLocatorStringifier(UniformResourceLocatorHelper.Stringifier uniformResourceLocatorStringifier);
+			Window setUniformResourceLocatorStringifier(String pathIdentifier,Object[] queryKeyValues);
+			Window setUniformResourceLocatorStringifier(Constant.Action action,Object object);
 			
 			String getIdentifier();
 			Window setIdentifier(String identifier);
@@ -155,10 +158,20 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 				protected String identifier;
 				protected Integer leftIndex,topIndex,width,height;
 				protected Map<String,Boolean> showableMap;
-				protected UniformResourceLocatorHelper.Stringifier uniformResourceLocatorHelperStringifier;
+				protected UniformResourceLocatorHelper.Stringifier uniformResourceLocatorStringifier;
 				
 				@Override
-				public Window setUniformResourceLocatorHelperStringifier(UniformResourceLocatorHelper.Stringifier uniformResourceLocatorHelperStringifier) {
+				public Window setUniformResourceLocatorStringifier(Action action, Object object) {
+					return null;
+				}
+				
+				@Override
+				public Window setUniformResourceLocatorStringifier(UniformResourceLocatorHelper.Stringifier uniformResourceLocatorStringifier) {
+					return null;
+				}
+				
+				@Override
+				public Window setUniformResourceLocatorStringifier(String pathIdentifier, Object[] queryKeyValues) {
 					return null;
 				}
 				
@@ -211,12 +224,29 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
 					public Default() {
-						setUniformResourceLocatorHelperStringifier(new UniformResourceLocatorHelper.Stringifier.Adapter.Default());
+						setUniformResourceLocatorStringifier(new UniformResourceLocatorHelper.Stringifier.Adapter.Default());
 					}
 					
 					@Override
-					public Window setUniformResourceLocatorHelperStringifier(UniformResourceLocatorHelper.Stringifier uniformResourceLocatorHelperStringifier) {
-						this.uniformResourceLocatorHelperStringifier = uniformResourceLocatorHelperStringifier;
+					public Window setUniformResourceLocatorStringifier(Action action, Object object) {
+						getUniformResourceLocatorStringifier().addQueryParameterAction(action);
+						if(object instanceof Class<?>)
+							getUniformResourceLocatorStringifier().addQueryParameterClass((Class<?>) object);
+						else
+							getUniformResourceLocatorStringifier().addQueryParameterIdentifiable(object);
+						return this;
+					}
+					
+					@Override
+					public Window setUniformResourceLocatorStringifier(UniformResourceLocatorHelper.Stringifier uniformResourceLocatorStringifier) {
+						this.uniformResourceLocatorStringifier = uniformResourceLocatorStringifier;
+						return this;
+					}
+					
+					@Override
+					public Window setUniformResourceLocatorStringifier(String pathIdentifier, Object[] queryKeyValues) {
+						getUniformResourceLocatorStringifier().setPathIdentifier(pathIdentifier);
+						getUniformResourceLocatorStringifier().addQueryKeyValue(queryKeyValues);
 						return this;
 					}
 					
@@ -280,6 +310,24 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 				}				
 			}
 			
+			public static interface Navigate extends JavaScriptHelper.Script.Window {
+				
+				String FORMAT = "window.location.href='%s'";
+				
+				public static class Adapter extends JavaScriptHelper.Script.Window.Adapter.Default implements Navigate,Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					public static class Default extends Navigate.Adapter implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						@Override
+						protected String __execute__() {
+							return String.format(FORMAT, getUniformResourceLocatorStringifier().execute());
+						}
+					}
+				}
+			}
+			
 			public static interface Open extends JavaScriptHelper.Script.Window {
 				
 				String FORMAT = "window.open('%s','%s','%s','%s')";
@@ -307,23 +355,19 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 									,RESIZABLE,new TextStringBuilder().setResponse(isResizable).build()
 									,STATUS_BAR,new TextStringBuilder().setResponse(getShowable(STATUS_BAR)).build()
 									,LOCATION,new TextStringBuilder().setResponse(getShowable(LOCATION)).build()
-									,MENU_BAR,new TextStringBuilder().setResponse(getShowable(MENU_BAR)).build(),TOP,topIndex,LEFT,leftIndex,WIDTH,width,HEIGHT,height).execute();
+									,MENU_BAR,new TextStringBuilder().setResponse(getShowable(MENU_BAR)).build(),TOP,topIndex,LEFT,leftIndex,WIDTH,width,HEIGHT,height)
+									.setSeparator(Constant.CHARACTER_COMA.toString())
+									.execute();
 							
 							//TODO should depends on windows _top _blank and so on
 							//getUrlStringBuilder().getQueryStringBuilder().getNameValueCollectionStringBuilder().addDialog();
 							
-							return String.format(FORMAT, getUniformResourceLocatorHelperStringifier().execute(),getIdentifier(),s,new TextStringBuilder().setResponse(replaced).build());
+							return String.format(FORMAT, getUniformResourceLocatorStringifier().execute(),getIdentifier(),s,new TextStringBuilder().setResponse(replaced).build());
 						}
-						
-						
-						
 					}
-				}
-				
+				}				
 			}
-			
 		}
-		
 	}
 	
 }
