@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 import org.cyk.utility.common.builder.AbstractStringBuilder;
 
-@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
+@Getter @Setter @NoArgsConstructor @Accessors(chain=true) @Deprecated
 public abstract class AbstractJavascriptStringBuilder extends AbstractStringBuilder implements Serializable {
 	private static final long serialVersionUID = -872728112292086623L;
 		
@@ -20,16 +20,16 @@ public abstract class AbstractJavascriptStringBuilder extends AbstractStringBuil
 	/**/
 	
 	/**/
-	
+	@Deprecated
 	public static interface Listener extends AbstractStringBuilder.Listener {
 		
 		Collection<Listener> COLLECTION = new ArrayList<>();
-		
+		@Deprecated
 		public static class Adapter extends AbstractStringBuilder.Listener.Adapter.Default implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 				
 			/**/
-			
+			@Deprecated
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				

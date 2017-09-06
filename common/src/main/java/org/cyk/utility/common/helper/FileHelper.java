@@ -9,7 +9,9 @@ import java.io.Serializable;
 import javax.inject.Singleton;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
+import org.cyk.utility.common.Constant;
 
 @Singleton
 public class FileHelper extends AbstractHelper implements Serializable  {
@@ -72,4 +74,38 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 		}
 		
 	}
+
+	/**/
+	
+	public interface NameTransformer extends StringHelper.Transformer {
+		
+		public static class Adapter extends StringHelper.Transformer.Adapter.Default implements NameTransformer , Serializable {
+			private static final long serialVersionUID = 1L;
+
+			/**/
+			
+			public static class Default extends NameTransformer.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+
+				public static String ILLEGAL_CHARACTERS = "\\/.,;:!?";
+				public static String ILLEGAL_CHARACTERS_REPLACEMENT = StringUtils.repeat(Constant.CHARACTER_UNDESCORE.charValue(), ILLEGAL_CHARACTERS.length());
+				
+				public Default() {
+					super();
+					for(Integer index = 0 ; index < ILLEGAL_CHARACTERS.length() ; index++){
+						addSequenceReplacement(Character.toString(ILLEGAL_CHARACTERS.charAt(index)), Character.toString(ILLEGAL_CHARACTERS_REPLACEMENT.charAt(index)));
+					}
+					/*addSequenceReplacement("\\", Constant.CHARACTER_UNDESCORE.toString());
+					addSequenceReplacement("/", Constant.CHARACTER_UNDESCORE.toString());
+					addSequenceReplacement(".", Constant.CHARACTER_UNDESCORE.toString());
+					addSequenceReplacement(",", Constant.CHARACTER_UNDESCORE.toString());
+					addSequenceReplacement(";", Constant.CHARACTER_UNDESCORE.toString());
+					addSequenceReplacement(":", Constant.CHARACTER_UNDESCORE.toString());
+					addSequenceReplacement("!", Constant.CHARACTER_UNDESCORE.toString());
+					addSequenceReplacement("?", Constant.CHARACTER_UNDESCORE.toString());*/
+				}
+			}	
+		}
+	}
 }
+	

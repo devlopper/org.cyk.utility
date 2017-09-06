@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.test.unit.AbstractUnitTest;
-import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -55,15 +54,6 @@ public class CommonUtilsUnitTest extends AbstractUnitTest {
 		result = CommonUtils.getInstance().sum(Sumable.class, sumables, null);
 		Assert.assertEquals(new BigDecimal("12.2"), result.getAttribute2());
 		Assert.assertEquals(new Integer("16"), result.getAttribute3());
-		
-		Assert.assertEquals(new String("yao"), CommonUtils.getInstance().convertString("yao", String.class));
-		Assert.assertEquals(new String("12"), CommonUtils.getInstance().convertString("12", String.class));
-		Assert.assertEquals(new BigDecimal("12.36"), CommonUtils.getInstance().convertString("12.36", BigDecimal.class));
-		Assert.assertEquals(new Long("159"), CommonUtils.getInstance().convertString("159", Long.class));
-		Assert.assertEquals(new Integer("951"), CommonUtils.getInstance().convertString("951", Integer.class));
-		Assert.assertEquals(new Byte("5"), CommonUtils.getInstance().convertString("5", Byte.class));
-		Assert.assertEquals(new DateTime(2000, 2, 1, 0, 0).toDate(), CommonUtils.getInstance().convertString("1/2/2000", Date.class));
-		Assert.assertEquals(null, CommonUtils.getInstance().convertString("951", Object.class));
 	}
 
 	//@Test

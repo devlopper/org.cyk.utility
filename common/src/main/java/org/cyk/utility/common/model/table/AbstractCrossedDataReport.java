@@ -18,9 +18,9 @@ public abstract class AbstractCrossedDataReport<T,CELL extends AbstractCrossedDa
 	protected Class<CELL> cellClass;
 	protected ArrayList<CELL> cells = new ArrayList<>();
 	
-	@SuppressWarnings("unchecked")
+	//@SuppressWarnings("unchecked")
 	public AbstractCrossedDataReport() {
-		cellClass = (Class<CELL>) commonUtils.getClassParameterAt(getClass(), 1);
+		//cellClass = (Class<CELL>) commonUtils.getClassParameterAt(getClass(), 1);
 	}
 	
 	public AbstractCrossedDataReport<T,CELL> addCell(String row,String column,String value){

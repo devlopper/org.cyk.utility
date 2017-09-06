@@ -7,12 +7,12 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.LogMessage;
 
 import lombok.Getter;
-
+@Deprecated
 public interface OneConverter<T,R> extends Converter<T, R> {
 	
 	/**/
 	
-	@Getter
+	@Getter @Deprecated
 	public static class Adapter<T,R> extends Converter.Adapter.Default<T, R> implements OneConverter<T,R>,Serializable {
 		private static final long serialVersionUID = 1L;
 		
@@ -21,7 +21,7 @@ public interface OneConverter<T,R> extends Converter<T, R> {
 		}
 		
 		/**/
-		
+		@Deprecated
 		public static class Default<T,R> extends OneConverter.Adapter<T,R> implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
@@ -33,7 +33,7 @@ public interface OneConverter<T,R> extends Converter<T, R> {
 	}
 
 	/**/
-	
+	@Deprecated
 	public static interface OneConverterToArray<T,R> extends OneConverter<T, R>{
 		
 		Integer getLength();
@@ -43,7 +43,7 @@ public interface OneConverter<T,R> extends Converter<T, R> {
 		Boolean isBlankValue(Object value);
 		Object getBlankValueOf(Integer index);
 		
-		@Getter
+		@Getter @Deprecated
 		public static class Adapter<T,R> extends OneConverter.Adapter.Default<T, R> implements OneConverterToArray<T,R>,Serializable {
 			private static final long serialVersionUID = 1L;
 			
@@ -76,7 +76,7 @@ public interface OneConverter<T,R> extends Converter<T, R> {
 			}
 			
 			/**/
-			
+			@Deprecated
 			public static class Default<T,R> extends OneConverterToArray.Adapter<T,R> implements Serializable {
 				private static final long serialVersionUID = 1L;
 				

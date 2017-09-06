@@ -7,7 +7,7 @@ import org.cyk.utility.common.LogMessage;
 import org.cyk.utility.common.converter.OneConverter.OneConverterToArray;
 
 import lombok.Getter;
-
+@Deprecated
 public interface ManyConverter<T,R> extends Converter<Collection<T>, R> {
 
 	OneConverter<T, R> getOneConverter();
@@ -15,7 +15,7 @@ public interface ManyConverter<T,R> extends Converter<Collection<T>, R> {
 	
 	/**/
 	
-	@Getter
+	@Getter @Deprecated
 	public static class Adapter<T,R> extends Converter.Adapter.Default<Collection<T>, R> implements ManyConverter<T,R>,Serializable {
 		private static final long serialVersionUID = 1L;
 		
@@ -32,7 +32,7 @@ public interface ManyConverter<T,R> extends Converter<Collection<T>, R> {
 		}
 		
 		/**/
-		
+		@Deprecated
 		public static class Default<T,R> extends ManyConverter.Adapter<T,R> implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
@@ -63,10 +63,10 @@ public interface ManyConverter<T,R> extends Converter<Collection<T>, R> {
 	}
 
 	/**/
-	
+	@Deprecated
 	public static interface ManyConverterToArray<T,R> extends ManyConverter<T, R>{
 		
-		@Getter
+		@Getter @Deprecated
 		public static class Adapter<T,R> extends ManyConverter.Adapter.Default<T, R> implements ManyConverterToArray<T,R>,Serializable {
 			private static final long serialVersionUID = 1L;
 			
@@ -75,7 +75,7 @@ public interface ManyConverter<T,R> extends Converter<Collection<T>, R> {
 			}
 			
 			/**/
-			
+			@Deprecated
 			public static class Default<T,R> extends ManyConverterToArray.Adapter<T,R> implements Serializable {
 				private static final long serialVersionUID = 1L;
 				

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
+@Getter @Setter @NoArgsConstructor @Accessors(chain=true) @Deprecated
 public class OpenWindowStringBuilder extends AbstractJavascriptStringBuilder implements Serializable {
 	private static final long serialVersionUID = -872728112292086623L;
 	

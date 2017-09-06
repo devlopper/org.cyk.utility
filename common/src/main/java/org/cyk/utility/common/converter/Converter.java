@@ -6,7 +6,7 @@ import org.cyk.utility.common.LogMessage;
 import org.cyk.utility.common.cdi.BeanAdapter;
 
 import lombok.Getter;
-
+@Deprecated
 public interface Converter<T,R> {
 
 	R execute();
@@ -25,7 +25,7 @@ public interface Converter<T,R> {
 	
 	/**/
 	
-	@Getter
+	@Getter @Deprecated
 	public static class Adapter<T,R> extends BeanAdapter implements Converter<T,R>,Serializable {
 		private static final long serialVersionUID = 1L;
 		
@@ -70,7 +70,7 @@ public interface Converter<T,R> {
 		}
 		
 		/**/
-		
+		@Deprecated
 		public static class Default<T,R> extends Converter.Adapter<T,R> implements Serializable {
 			private static final long serialVersionUID = 1L;
 			

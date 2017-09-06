@@ -73,7 +73,7 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 	}
 		
 	/**/
-	
+	@Deprecated
 	public static interface Listener extends AbstractBuilder.Listener<String> {
 		
 		//Collection<Listener> COLLECTION = new ArrayList<>();
@@ -84,7 +84,7 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 		Map<String,String> getTokenReplacementMap();
 		String getSeparator();
 		
-		@Getter @Setter @Accessors(chain=true)
+		@Getter @Setter @Accessors(chain=true) @Deprecated
 		public static class Adapter extends AbstractBuilder.Listener.Adapter.Default<String> implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 			
@@ -115,11 +115,11 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 
 	/**/
 	
-	@Getter @Setter @NoArgsConstructor @Accessors(chain=true)
+	@Getter @Setter @NoArgsConstructor @Accessors(chain=true) @Deprecated
 	public abstract static class AbstractIdentifierBuilder extends AbstractBuilder<String> implements Serializable {
 		private static final long serialVersionUID = -872728112292086623L;
 		
-		private static final String CANNOT_BUILD_IDENTIFIER_FORMAT = "cannot build identifier with action <<%s>> and subject <<%s>>";
+		//private static final String CANNOT_BUILD_IDENTIFIER_FORMAT = "cannot build identifier with action <<%s>> and subject <<%s>>";
 		
 		protected Object action,subject;
 		
@@ -138,11 +138,11 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 		}
 		
 		/**/
-		
+		@Deprecated
 		public static interface Listener extends AbstractBuilder.Listener<String> {
 			
 			String get(Object action,Object subject);
-			
+			@Deprecated
 			public static class Adapter extends AbstractBuilder.Listener.Adapter.Default<String> implements Listener,Serializable {
 				private static final long serialVersionUID = 1L;
 				
@@ -152,7 +152,7 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 				}
 				
 				/**/
-				
+				@Deprecated
 				public static class Default extends Listener.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 					

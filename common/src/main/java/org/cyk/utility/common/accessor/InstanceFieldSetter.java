@@ -13,6 +13,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.LogMessage;
+import org.cyk.utility.common.helper.StringHelper;
 
 import lombok.Getter;
 
@@ -27,7 +28,7 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 	
 	/**/
 	
-	@Getter
+	@Getter @Deprecated
 	public static class Adapter<INPUT, OUTPUT> extends Action.Adapter.Default<INPUT, OUTPUT> implements InstanceFieldSetter<INPUT, OUTPUT>,Serializable {
 		private static final long serialVersionUID = 3887225153998606760L;
 
@@ -51,7 +52,7 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 		}
 		
 		/**/
-		
+		@Deprecated
 		public static class Default<INPUT, OUTPUT> extends InstanceFieldSetter.Adapter<INPUT, OUTPUT> implements Serializable {
 			private static final long serialVersionUID = 3887225153998606760L;
 
@@ -197,7 +198,7 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 				
 				@Override
 				public Object getValue(Class<?> fieldType,Object value) {
-					return commonUtils.convertString(value.toString(), fieldType);
+					return StringHelper.getInstance().convert(value.toString(), fieldType);
 				}
 				
 				@Override

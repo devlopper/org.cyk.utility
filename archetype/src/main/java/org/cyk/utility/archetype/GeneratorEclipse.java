@@ -9,13 +9,13 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.Properties;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.CommonUtils;
+import org.cyk.utility.common.helper.RandomHelper;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter @Setter
 public class GeneratorEclipse implements Serializable {
@@ -43,7 +43,7 @@ public class GeneratorEclipse implements Serializable {
 	public GeneratorEclipse() throws FileNotFoundException, IOException {
 		properties.load(new FileInputStream(userDir+"/config.properties"));
 		workspaceDirectory = new File(properties.getProperty(CYK_WORKSPACE_PATH));
-		commandFile = File.createTempFile(System.currentTimeMillis()+"", RandomStringUtils.randomAlphabetic(4)+".cmd", new File(userDir));
+		commandFile = File.createTempFile(System.currentTimeMillis()+"", RandomHelper.getInstance().getString(4)+".cmd", new File(userDir));
 		commandFile.deleteOnExit();
 		FileUtils.writeStringToFile(commandFile, COMMANDS);
 	}

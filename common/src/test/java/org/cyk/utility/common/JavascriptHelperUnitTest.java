@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.common.helper.JavaScriptHelper;
 import org.cyk.utility.common.helper.MapHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.MapHelper.EntryComponent;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper.PathStringifier;
@@ -20,6 +21,8 @@ public class JavascriptHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	static {
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();
+		
 		UniformResourceLocatorHelper.DEFAULT_LISTENER_CLASS = UniformResourceLocatorHelperListener.class;
 		PathStringifier.Adapter.Default.DEFAULT_CONTEXT = "mycontext";		
 		PathStringifier.Adapter.Default.DEFAULT_UNIFORM_RESOURCE_LOCATOR_LISTENER_CLASS = UniformResourceLocatorHelperListener.class;

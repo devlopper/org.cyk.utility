@@ -8,7 +8,7 @@ public interface Mapping<INPUT,OUTPUT> extends Action<INPUT, OUTPUT> {
 		private static final long serialVersionUID = 1L;
 
 		public Adapter(Class<INPUT> inputClass,INPUT input,Class<OUTPUT> outputClass) {
-			super("build", inputClass, input, outputClass, null);
+			super("build", inputClass, input, outputClass);
 		}
 		
 		/**/

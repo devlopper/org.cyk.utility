@@ -2,9 +2,11 @@ package org.cyk.utility.common.helper;
 
 import java.beans.Introspector;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -230,6 +232,18 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return new ToStringMapping.Adapter.Default(getWordIdentifier(identifier, masculine, plural)).execute();
 	}
 	
+	public String getResponse(Boolean response,CaseType caseType,Locale locale){
+		return StringHelper.getInstance().get(response == null ? "response.undefined" : response ? "response.yes" : "response.no", caseType, null, locale);
+	}
+	
+	public String getResponse(Boolean response,Locale locale){
+		return getResponse(response, CaseType.L, locale);
+	}
+	
+	public String getResponse(Boolean response){
+		return getResponse(response, null);
+	}
+	
 	public String getWordArticle(Boolean masculine,Boolean any,Boolean plural){
 		String identifier = String.format(ToStringMapping.WORD_ARTICLE_IDENTIFIER_FORMAT, Boolean.TRUE.equals(masculine)?"mascul":"femin"
 			,Boolean.TRUE.equals(any) ? "any" : "specific" );
@@ -263,6 +277,42 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	
 	public String getVariableNameMany(String variableName){
 		return String.format(VARIABLE_NAME_MANY_FORMAT, variableName);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T convert(String value,Class<T> type){
+		Object convertedValue = null;
+		if(String.class.equals(type))
+			convertedValue = value;
+		else if(BigDecimal.class.equals(type))
+			convertedValue = new BigDecimal(value);
+		else if(Long.class.equals(type))
+			convertedValue = new Long(value);
+		else if(Integer.class.equals(type))
+			convertedValue = new Integer(value);
+		else if(Byte.class.equals(type))
+			convertedValue = new Byte(value);
+		else if(Short.class.equals(type))
+			convertedValue = new Short(value);
+		else if(Double.class.equals(type))
+			convertedValue = new Double(value);
+		else if(double.class.equals(type))
+			convertedValue = new Double(value);
+		else if(Boolean.class.equals(type))
+			convertedValue = new Boolean(value);
+		else if(type.isEnum()){
+			for(Object object : type.getEnumConstants()){
+				if(object.toString().equals(value)){
+					convertedValue = object;
+					break;
+				}
+			}
+		}
+		else if(Date.class.equals(type))
+			convertedValue = new TimeHelper.Builder.String.Adapter.Default(value).execute();
+		else
+			ThrowableHelper.getInstance().throwNotYetImplemented("convert string to "+type);
+		return (T) convertedValue;
 	}
 	
 	/**/
@@ -1094,4 +1144,21 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		}
 		
 	}
+
+	/**/
+	
+	public interface Transformer extends org.cyk.utility.common.helper.StringHelper.Builder.Collection {
+		
+		public static class Adapter extends org.cyk.utility.common.helper.StringHelper.Builder.Collection.Adapter.Default implements Transformer , Serializable {
+			private static final long serialVersionUID = 1L;
+
+			/**/
+			
+			public static class Default extends Transformer.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+			}	
+		}
+	}
+	
 }

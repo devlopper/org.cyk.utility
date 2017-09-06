@@ -14,19 +14,18 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.commons.math3.random.RandomData;
-import org.apache.commons.math3.random.RandomDataImpl;
+import org.apache.commons.math3.random.RandomDataGenerator;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.helper.RandomHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter @Setter
 public class RandomDataProvider implements Serializable {
@@ -53,7 +52,8 @@ public class RandomDataProvider implements Serializable {
 	
 	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRENCH);
 	
-	private RandomData randomApache = new RandomDataImpl();
+	//private RandomData randomApache = new RandomDataImpl();
+	private RandomDataGenerator randomApache = new RandomDataGenerator();
 	private Random random = new Random();
 	private RandomPerson male=new RandomPerson("male"),female=new RandomPerson("female");
 	
@@ -184,14 +184,14 @@ public class RandomDataProvider implements Serializable {
 	
 	public String randomWord(Integer type,int minLength,int maxLength){
 		switch(type){
-		case WORD_EMAIL:return RandomStringUtils.randomAlphanumeric(10)+"@examplemail.com";
+		case WORD_EMAIL:return RandomHelper.getInstance().getAlphanumeric(10)+"@examplemail.com";
 		case WORD_DATE:return simpleDateFormat.format(randomDate(new Date(System.currentTimeMillis()-DateUtils.MILLIS_PER_DAY*30), new Date()));
-		case WORD_NUMBER:return RandomStringUtils.randomNumeric(randomInt(1, 3));
-		case WORD_WEBSITE:return "www."+RandomStringUtils.randomAlphabetic(randomInt(5, 6))+".com";
-		case WORD_POSTALBOX:return "BP "+RandomStringUtils.randomNumeric(randomInt(2, 3))+" Abidjan";
+		case WORD_NUMBER:return String.valueOf(RandomHelper.getInstance().getNumeric(randomInt(1, 3)));
+		case WORD_WEBSITE:return "www."+RandomHelper.getInstance().getAlphabetic(randomInt(5, 6))+".com";
+		case WORD_POSTALBOX:return "BP "+RandomHelper.getInstance().getNumeric(randomInt(2, 3))+" Abidjan";
 		case WORD_LOCATION:return "Abidjan";
-		case WORD_PHONE_NUMBER:return RandomStringUtils.randomNumeric(8);
-		default:return RandomStringUtils.randomAlphabetic(randomInt(minLength, maxLength));
+		case WORD_PHONE_NUMBER:return String.valueOf(RandomHelper.getInstance().getNumeric(8));
+		default:return RandomHelper.getInstance().getAlphabetic(randomInt(minLength, maxLength));
 		}
 	}
 	
@@ -310,7 +310,7 @@ public class RandomDataProvider implements Serializable {
 		public File createTemporaryFile(){
 			File file = null;
 			try {
-				file = File.createTempFile(RandomStringUtils.randomAlphabetic(5), System.currentTimeMillis()+"");
+				file = File.createTempFile(RandomHelper.getInstance().getAlphabetic(5), System.currentTimeMillis()+"");
 				if(file!=null && file.exists()){
 					file.deleteOnExit();
 					IOUtils.write(bytes, new FileOutputStream(file));

@@ -39,10 +39,9 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void buildFromString(){
-		Date date = new TimeHelper.Builder.String.Adapter.Default("19/11/2015").execute();
-		assertEquals(19, TimeHelper.getInstance().getDayOfMonth(date));
-		assertEquals(11, TimeHelper.getInstance().getMonthOfYear(date));
-		assertEquals(2015, TimeHelper.getInstance().getYear(date));
+		assertDate(new TimeHelper.Builder.String.Adapter.Default("19/11/2015").execute(), 2015,11,19,0,0,0,0);
+		assertDate(new TimeHelper.Builder.String.Adapter.Default("19/11/2015 14:29").execute(), 2015,11,19,14,29,0,0);
+		assertDate(new TimeHelper.Builder.String.Adapter.Default("14:29").execute(), 1970,1,1,14,29,0,0);
 	}
 	
 	@Test

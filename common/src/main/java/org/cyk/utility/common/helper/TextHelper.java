@@ -11,7 +11,7 @@ import org.cyk.utility.common.builder.IdentifierBuilder;
 
 import lombok.Getter;
 
-@Singleton
+@Singleton @Deprecated
 public class TextHelper extends AbstractHelper implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
@@ -31,13 +31,13 @@ public class TextHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	/**/
-	
+	@Deprecated
 	public static interface Get extends Action<String, String> {
 		
 		String getIdentifier();
 		Get setIdentifier(String identifier);
 		
-		@Getter
+		@Getter @Deprecated
 		public static class Adapter extends Action.Adapter.Default<String, String> implements Get,Serializable {
 			private static final long serialVersionUID = 1L;
 			
@@ -54,7 +54,7 @@ public class TextHelper extends AbstractHelper implements Serializable  {
 			}
 			
 			/**/
-			
+			@Deprecated
 			public static class Default extends Get.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				

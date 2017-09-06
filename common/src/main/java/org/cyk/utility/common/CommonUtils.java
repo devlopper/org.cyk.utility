@@ -15,7 +15,6 @@ import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,8 +30,6 @@ import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
 import javax.enterprise.inject.spi.CDI;
-
-import lombok.Getter;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.codec.binary.Base64;
@@ -58,7 +55,7 @@ import org.reflections.util.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+//TODO some method must be moved to their corresponding helper
 public class CommonUtils implements Serializable  {
 
 	private static final long serialVersionUID = -6146661020703974108L;
@@ -744,54 +741,6 @@ public class CommonUtils implements Serializable  {
 		return list;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public <T> T convertString(String value,Class<T> type){
-		Object convertedValue = null;
-		if(String.class.equals(type))
-			convertedValue = value;
-		else if(BigDecimal.class.equals(type))
-			convertedValue = new BigDecimal(value);
-		else if(Long.class.equals(type))
-			convertedValue = new Long(value);
-		else if(Integer.class.equals(type))
-			convertedValue = new Integer(value);
-		else if(Byte.class.equals(type))
-			convertedValue = new Byte(value);
-		else if(Short.class.equals(type))
-			convertedValue = new Short(value);
-		else if(Double.class.equals(type))
-			convertedValue = new Double(value);
-		else if(double.class.equals(type))
-			convertedValue = new Double(value);
-		else if(Boolean.class.equals(type))
-			convertedValue = new Boolean(value);
-		else if(type.isEnum()){
-			for(Object object : type.getEnumConstants()){
-				if(object.toString().equals(value)){
-					convertedValue = object;
-					break;
-				}
-			}
-		}
-		else if(Date.class.equals(type))
-			try {
-				convertedValue =  Constant.DATE_TIME_FORMATTER.parse(value);
-			} catch (ParseException dateTimeParseException) {
-				try {
-					convertedValue =  Constant.DATE_FORMATTER.parse(value);
-				} catch (ParseException dateParseException) {
-					try {
-						convertedValue =  Constant.TIME_FORMATTER.parse(value);
-					} catch (ParseException timeParseException) {
-						timeParseException.printStackTrace();
-					}
-				}
-			}
-		else
-			LOGGER.error("Convert string to {} not yet implemented",type);
-		return (T) convertedValue;
-	}
-	
 	public String addWordSeparatorToVariableName(String name,String separator){
 		StringBuilder newName = new StringBuilder();
 		for(int i=0;i<name.length();i++){
@@ -878,44 +827,6 @@ public class CommonUtils implements Serializable  {
 	
 	public <T> Collection<T> getPropertyValue(Collection<?> collection,Class<T> aClass,String name){
 		return getPropertyValue(collection, aClass, name, Boolean.TRUE);
-	}
-	
-	public Execution execute(String name,Runnable aRunnable){
-		Execution execution;
-		execution = new Execution(name);
-		execution.start();
-		aRunnable.run();
-		execution.end();
-		return execution;
-	}
-	
-	@Getter
-	public static class Execution{
-		private String name;
-		private long startTimestamp;
-		private long duration;
-		private LogMessage.Builder logMessageBuilder;
-		
-		public void start(){
-			logMessageBuilder = new LogMessage.Builder("execute", name);
-			startTimestamp = System.currentTimeMillis();
-		}
-		
-		public void end(){
-			duration = System.currentTimeMillis()-startTimestamp;
-			logMessageBuilder.addParameters("millisecond",duration,"second",duration/1000,"minute",duration/1000/60);
-			LogMessage logMessage = logMessageBuilder.build();
-			LOGGER.trace(logMessage.getTemplate(),logMessage.getArguments().toArray());
-		}
-
-		public Execution(String name) {
-			super();
-			this.name = name;
-		}
-		@Override
-		public String toString() {
-			return name+" , "+duration+" , "+(duration/1000)+"s , "+" , "+(duration/1000/60)+"min";
-		}
 	}
 	
 	public String toString(Object object){

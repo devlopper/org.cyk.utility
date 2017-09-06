@@ -1,12 +1,16 @@
 package org.cyk.utility.common;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Locale;
 
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 import org.cyk.utility.common.helper.StringHelper.Location;
+import org.cyk.utility.common.helper.StringHelper.Transformer;
 import org.cyk.utility.test.unit.AbstractUnitTest;
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 
@@ -201,6 +205,21 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void assertResponse(){
+		assertEquals("non défini", StringHelper.getInstance().getResponse(null));
+		assertEquals("oui", StringHelper.getInstance().getResponse(Boolean.TRUE));
+		assertEquals("non", StringHelper.getInstance().getResponse(Boolean.FALSE));
+		
+		assertEquals("non défini", StringHelper.getInstance().getResponse(null,Locale.FRENCH));
+		assertEquals("oui", StringHelper.getInstance().getResponse(Boolean.TRUE,Locale.FRENCH));
+		assertEquals("non", StringHelper.getInstance().getResponse(Boolean.FALSE,Locale.FRENCH));
+		
+		assertEquals("undefined", StringHelper.getInstance().getResponse(null,Locale.ENGLISH));
+		assertEquals("yes", StringHelper.getInstance().getResponse(Boolean.TRUE,Locale.ENGLISH));
+		assertEquals("no", StringHelper.getInstance().getResponse(Boolean.FALSE,Locale.ENGLISH));
+	}
+	
+	@Test
 	public void assertComparisonOperator(){
 		AssertionHelper.getInstance().assertEquals("supérieur ou égal", StringHelper.getInstance().getComparisonOperator(Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE));
 		AssertionHelper.getInstance().assertEquals("supérieur", StringHelper.getInstance().getComparisonOperator(Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE));
@@ -217,6 +236,26 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		AssertionHelper.getInstance().assertEquals("inférieurs ou égaux", StringHelper.getInstance().getComparisonOperator(Boolean.FALSE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE));
 		AssertionHelper.getInstance().assertEquals("inférieurs", StringHelper.getInstance().getComparisonOperator(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE, Boolean.TRUE));
 		
+	}
+	
+	@Test
+	public void convert(){
+		assertEquals(new String("yao"), StringHelper.getInstance().convert("yao", String.class));
+		assertEquals(new String("12"), StringHelper.getInstance().convert("12", String.class));
+		assertEquals(new BigDecimal("12.36"), StringHelper.getInstance().convert("12.36", BigDecimal.class));
+		assertEquals(new Long("159"), StringHelper.getInstance().convert("159", Long.class));
+		assertEquals(new Integer("951"), StringHelper.getInstance().convert("951", Integer.class));
+		assertEquals(new Byte("5"), StringHelper.getInstance().convert("5", Byte.class));
+		assertEquals(new DateTime(2000, 2, 1, 0, 0).toDate(), StringHelper.getInstance().convert("1/2/2000", Date.class));
+		//assertEquals(null, StringHelper.getInstance().convert("951", Object.class));
+	}
+	
+	@Test
+	public void transform(){
+		assertEquals("aBcDe", new Transformer.Adapter.Default().addSequenceReplacement("1", "").addSequenceReplacement("2", "")
+				.addSequenceReplacement("3", "").addSequenceReplacement("4", "").addTokens("a1B1c2D3e4").execute());
+		assertEquals("a__B__cDeZZ", new Transformer.Adapter.Default().addSequenceReplacement("1", "__").addSequenceReplacement("2", "")
+				.addSequenceReplacement("3", "").addSequenceReplacement("4", "ZZ").addTokens("a1B1c2D3e4").execute());
 	}
 	
 	private void assertAppliedCaseType(String string,CaseType caseType,String expected){

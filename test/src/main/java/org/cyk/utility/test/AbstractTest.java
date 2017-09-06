@@ -12,9 +12,6 @@ import java.util.List;
 
 import javax.enterprise.inject.spi.CDI;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -33,6 +30,9 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class AbstractTest implements Serializable {
 	
@@ -143,6 +143,27 @@ public abstract class AbstractTest implements Serializable {
 	protected void assertBigDecimalValue(String message,String expected,BigDecimal value){
     	Assert.assertEquals(message,new BigDecimal(expected).doubleValue()+"", value.doubleValue()+"");
     }
+	
+	protected void assertDate(Date actual,Integer year,Integer monthOfYear,Integer dayOfMonth, Integer hourOfDay, Integer minuteOfHour, Integer secondOfMinute, Integer millisOfSecond){
+		DateTime dateTime = new DateTime(year = year==null?0:year, monthOfYear = monthOfYear==null?0:monthOfYear, dayOfMonth = dayOfMonth==null?0:dayOfMonth
+				, hourOfDay = hourOfDay==null?0:hourOfDay, minuteOfHour = minuteOfHour==null?0:minuteOfHour, secondOfMinute = secondOfMinute==null?0:secondOfMinute
+						, millisOfSecond = millisOfSecond==null?0:millisOfSecond);
+		assertEquals("year is not correct", new DateTime(actual).getYear(), dateTime.getYear());
+		assertEquals("month of year is not correct", new DateTime(actual).getMonthOfYear(), dateTime.getMonthOfYear());
+		assertEquals("day of month is not correct", new DateTime(actual).getDayOfMonth(), dateTime.getDayOfMonth());
+		assertEquals("hour of day is not correct", new DateTime(actual).getHourOfDay(), dateTime.getHourOfDay());
+		assertEquals("minute of hour is not correct", new DateTime(actual).getMinuteOfHour(), dateTime.getMinuteOfHour());
+		assertEquals("second of minute is not correct", new DateTime(actual).getSecondOfMinute(), dateTime.getSecondOfMinute());
+		assertEquals("millisecond of second is not correct", new DateTime(actual).getMillisOfSecond(), dateTime.getMillisOfSecond());
+	}
+	
+	protected void assertDate(Date actual,Integer year,Integer monthOfYear,Integer dayOfMonth, Integer hourOfDay, Integer minuteOfHour){
+		assertDate(actual, year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, null, null);
+	}
+	
+	protected void assertDate(Date actual,Integer year,Integer monthOfYear,Integer dayOfMonth){
+		assertDate(actual, year, monthOfYear, dayOfMonth, null, null);
+	}
 	
 	protected void assertList(List<?> list,List<?> expected){
 		if(expected==null)

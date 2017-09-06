@@ -10,17 +10,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Constant.Date.Length;
 import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
-import org.cyk.utility.common.formatter.DateFormatter;
-import org.cyk.utility.common.formatter.Formatter.CharacterSet;
-import org.cyk.utility.common.formatter.NumberFormatter;
+import org.cyk.utility.common.helper.NumberHelper;
+import org.cyk.utility.common.helper.TimeHelper;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class AbstractGeneratable<T> extends AbstractBean implements Serializable {
 
@@ -205,10 +204,8 @@ public abstract class AbstractGeneratable<T> extends AbstractBean implements Ser
 				public Object format(Object object, Object fieldValue) {
 					if(fieldValue==null)
 						return NULL_VALUE;
-					if(fieldValue instanceof Number){
-						NumberFormatter.String numberFormatter = new NumberFormatter.String.Adapter.Default((Number) fieldValue,null);
-						return numberFormatter.execute();
-					}
+					if(fieldValue instanceof Number)
+						return new NumberHelper.Stringifier.Adapter.Default().setInput((Number) fieldValue).execute();
 					if(fieldValue instanceof Date){
 						return formatDate(object, (Date)fieldValue, Constant.Date.Part.DATE_ONLY, Constant.Date.Length.SHORT);
 					}
@@ -219,19 +216,24 @@ public abstract class AbstractGeneratable<T> extends AbstractBean implements Ser
 				public Object formatNumberToWords(Object object, Number fieldValue) {
 					if(fieldValue==null)
 						return NULL_VALUE;
-					NumberFormatter.String numberFormatter = new NumberFormatter.String.Adapter.Default((Number) fieldValue,null);
+					/*NumberFormatter.String numberFormatter = new NumberFormatter.String.Adapter.Default((Number) fieldValue,null);
 					numberFormatter.setCharacterSet(CharacterSet.LETTER);
 					numberFormatter.setLocale(getLocale());
-					return numberFormatter.execute();
+					*/
+					return new NumberHelper.Stringifier.Adapter.Default().setCharacterSet(NumberHelper.Stringifier.CharacterSet.LETTER).setInput((Number) fieldValue)
+							.setLocale(getLocale()).execute();
 				}
 				
 				@Override
 				public Object formatDate(Object object, Date fieldValue,Constant.Date.Part part,Constant.Date.Length length) {
 					if(fieldValue==null)
 						return NULL_VALUE;
-					DateFormatter.String formatter = new DateFormatter.String.Adapter.Default(fieldValue,null);
+					/*DateFormatter.String formatter = new DateFormatter.String.Adapter.Default(fieldValue,null);
 					formatter.setPart(part).setLength(length).setLocale(getLocale());
-					return formatter.execute();
+					*/
+					return new TimeHelper.Stringifier.Date.Adapter.Default(fieldValue).setLocale(getLocale())
+							.setProperty(TimeHelper.Stringifier.PROPERTY_NAME_TIME_PART, part)
+							.setProperty(TimeHelper.Stringifier.PROPERTY_NAME_TIME_LENGTH, length).execute();
 				}
 				
 			}

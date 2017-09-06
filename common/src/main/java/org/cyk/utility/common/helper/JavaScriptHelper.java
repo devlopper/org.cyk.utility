@@ -2,6 +2,7 @@ package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Singleton;
@@ -9,7 +10,6 @@ import javax.inject.Singleton;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Constant.Action;
-import org.cyk.utility.common.builder.TextStringBuilder;
 
 import lombok.Getter;
 
@@ -18,7 +18,9 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 
 	private static final long serialVersionUID = 4662624027559597185L;
 	
+	@Deprecated
 	private static final String OPEN_WINDOW_FORMAT = "window.open('%s', '%s', 'location=no,menubar=no,titlebar=no,toolbar=no,width=%s, height=%s');";
+	@Deprecated
 	private static final String WINDOW_LOCATION = "window.location = '%s';";
 	
 	private static final String INSTRUCTION_SEPARATOR = ";";
@@ -350,19 +352,19 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 								width = 900;
 							if(height==null)
 								height = 500;
-							String s = new MapHelper.Stringifier.Adapter.Default().addKeyValue(TOOL_BAR,new TextStringBuilder().setResponse(getShowable(TOOL_BAR, Boolean.TRUE)).build()
-									,SCROLL_BARS,new TextStringBuilder().setResponse(getShowable(SCROLL_BARS)).build()
-									,RESIZABLE,new TextStringBuilder().setResponse(isResizable).build()
-									,STATUS_BAR,new TextStringBuilder().setResponse(getShowable(STATUS_BAR)).build()
-									,LOCATION,new TextStringBuilder().setResponse(getShowable(LOCATION)).build()
-									,MENU_BAR,new TextStringBuilder().setResponse(getShowable(MENU_BAR)).build(),TOP,topIndex,LEFT,leftIndex,WIDTH,width,HEIGHT,height)
+							String s = new MapHelper.Stringifier.Adapter.Default().addKeyValue(TOOL_BAR,StringHelper.getInstance().getResponse(getShowable(TOOL_BAR, Boolean.TRUE),Locale.ENGLISH)
+									,SCROLL_BARS,StringHelper.getInstance().getResponse(getShowable(SCROLL_BARS),Locale.ENGLISH)
+									,RESIZABLE,StringHelper.getInstance().getResponse(Boolean.TRUE.equals(isResizable),Locale.ENGLISH)
+									,STATUS_BAR,StringHelper.getInstance().getResponse(getShowable(STATUS_BAR),Locale.ENGLISH)
+									,LOCATION,StringHelper.getInstance().getResponse(getShowable(LOCATION),Locale.ENGLISH)
+									,MENU_BAR,StringHelper.getInstance().getResponse(getShowable(MENU_BAR),Locale.ENGLISH),TOP,topIndex,LEFT,leftIndex,WIDTH,width,HEIGHT,height)
 									.setSeparator(Constant.CHARACTER_COMA.toString())
 									.execute();
 							
 							//TODO should depends on windows _top _blank and so on
 							//getUrlStringBuilder().getQueryStringBuilder().getNameValueCollectionStringBuilder().addDialog();
 							
-							return String.format(FORMAT, getUniformResourceLocatorStringifier().execute(),getIdentifier(),s,new TextStringBuilder().setResponse(replaced).build());
+							return String.format(FORMAT, getUniformResourceLocatorStringifier().execute(),getIdentifier(),s,StringHelper.getInstance().getResponse(Boolean.TRUE.equals(replaced),Locale.ENGLISH));
 						}
 					}
 				}				

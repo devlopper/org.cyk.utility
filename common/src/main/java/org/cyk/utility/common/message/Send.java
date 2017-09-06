@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.LogMessage.Builder;
 
+@Deprecated
 public interface Send<ADDRESS> extends Action<Message, Void> {
 
 	/*
@@ -32,7 +33,7 @@ public interface Send<ADDRESS> extends Action<Message, Void> {
 	
 	/**/
 	
-	@Getter @Setter
+	@Getter @Setter @Deprecated
 	public static class Adapter<ADDRESS> extends Action.Adapter.Default<Message, Void> implements Send<ADDRESS>,Serializable {
 		private static final long serialVersionUID = 1L;
 
@@ -75,7 +76,7 @@ public interface Send<ADDRESS> extends Action<Message, Void> {
 		}
 		
 		/**/
-		@Getter @Setter
+		@Getter @Setter @Deprecated
 		public static class Default<ADDRESS> extends Send.Adapter<ADDRESS> implements Serializable {
 			private static final long serialVersionUID = 1L;
 

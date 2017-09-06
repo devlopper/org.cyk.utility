@@ -24,12 +24,13 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.LogMessage.Builder;
 import org.cyk.utility.common.message.Message.Attachement;
 
+@Deprecated
 public interface SendMail extends Send<InternetAddress> {
 	
 	Session getSession();
 	SendMail setSession(Session session);
 	
-	@Getter @Setter
+	@Getter @Setter @Deprecated
 	public static class Adapter extends Send.Adapter.Default<InternetAddress> implements SendMail,Serializable {
 		private static final long serialVersionUID = 1L;
 
@@ -48,7 +49,7 @@ public interface SendMail extends Send<InternetAddress> {
 		
 		/**/
 		
-		@Getter @Setter
+		@Getter @Setter @Deprecated
 		public static class Default extends SendMail.Adapter implements Serializable {
 			private static final long serialVersionUID = 1L;
 
