@@ -1,27 +1,24 @@
 package org.cyk.utility.common;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import org.cyk.utility.common.ClassRepository.ClassField;
 import org.cyk.utility.common.ClassRepository.Clazz;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
 import org.junit.Test;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 public class ClassRepositoryUnitTestO extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
-	private int getFieldsMaxRound = 100/*0000*/;
+	//private int getFieldsMaxRound = 100/*0000*/;
 	
 	public void getFields(Boolean classRepositoryEnabled){
-		ClassRepository.ENABLED = classRepositoryEnabled;
+		/*ClassRepository.ENABLED = classRepositoryEnabled;
 		Collection<Class<?>> classes = new ArrayList<>();
 		classes.add(ClassA.class);
 		classes.add(ClassA1.class);
@@ -31,6 +28,7 @@ public class ClassRepositoryUnitTestO extends AbstractUnitTest {
 		for(int i=0;i<getFieldsMaxRound;i++)
 			for(Class<?> clazz : classes)
 				CommonUtils.getInstance().getAllFields(clazz);
+		*/
 	}
 	
 	@Test

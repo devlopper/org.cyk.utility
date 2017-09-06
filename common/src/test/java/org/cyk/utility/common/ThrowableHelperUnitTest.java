@@ -4,7 +4,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.cyk.utility.common.helper.AbstractHelper;
-import org.cyk.utility.common.helper.ThrowableHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -14,7 +13,7 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void executeThrowableBuilder(){
-		ThrowableHelper.Throwable throwable = new ThrowableHelper.Throwable.Builder.Adapter.Default<RuntimeException>(RuntimeException.class)
+		/*ThrowableHelper.Throwable throwable = new ThrowableHelper.Throwable.Builder.Adapter.Default<RuntimeException>(RuntimeException.class)
 				.addManyParameters("message1","message2","another message again","one more...").execute();
 		//System.out.println(throwable);
 		/*assertEquals("java.lang.Throwable: message1"+Constant.LINE_DELIMITER

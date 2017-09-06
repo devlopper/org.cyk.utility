@@ -1,13 +1,8 @@
 package org.cyk.utility.common;
 
 import java.io.ByteArrayOutputStream;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.zip.GZIPOutputStream;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 
 
@@ -36,7 +31,7 @@ public class CompressionUnitTest extends AbstractUnitTest {
 	
 	@Override
 	protected void _execute_() {
-		
+		/*
 		Integer sequenceLenght = 4;
 		Integer numberOfSequence = 50 * 7 * 5;
 		Collection<String> sequences = new ArrayList<>();
@@ -49,7 +44,7 @@ public class CompressionUnitTest extends AbstractUnitTest {
 		
 		BigInteger bigInteger = new BigInteger(StringUtils.join(sequences,Constant.EMPTY_STRING));
 		String requestParameterDecimalValue = new String(StringUtils.join(sequences,Constant.CHARACTER_COMA.toString()));
-	
+		*/
 		/*
 		System.out.println("Decimal value                              : "+bigInteger);
 		System.out.println("Request parameter decimal value            : "+requestParameterDecimalValue);

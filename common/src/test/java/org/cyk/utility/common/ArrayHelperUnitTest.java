@@ -1,8 +1,6 @@
 package org.cyk.utility.common;
 
 import org.cyk.utility.common.helper.ArrayHelper;
-import org.cyk.utility.common.helper.CollectionHelper;
-import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -36,13 +34,21 @@ public class ArrayHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void get(){
 		A[] array = ArrayHelper.getInstance().get(A.class, new String[]{"f1"}, "my string1","my string two");
-		System.out.println(CollectionHelper.getInstance().get(array));
+		assertEquals(2, array.length);
+		assertEquals("my string1", array[0].getF1());
+		assertEquals("my string two", array[1].getF1());
 		
 		array = ArrayHelper.getInstance().get(A.class, new String[]{"f2"}, 1,new Integer(2));
-		System.out.println(CollectionHelper.getInstance().get(array));
+		assertEquals(2, array.length);
+		assertEquals(1, array[0].getF2());
+		assertEquals(2, array[1].getF2());
 		
 		array = ArrayHelper.getInstance().get(A.class, new String[]{"f1","f2"}, "my string1",new Integer(1),"my string two",2);
-		System.out.println(CollectionHelper.getInstance().get(array));
+		assertEquals(2, array.length);
+		assertEquals("my string1", array[0].getF1());
+		assertEquals(1, array[0].getF2());
+		assertEquals("my string two", array[1].getF1());
+		assertEquals(2, array[1].getF2());
 	}
 	
 	@Test

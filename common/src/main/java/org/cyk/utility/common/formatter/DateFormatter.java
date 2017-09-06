@@ -9,7 +9,7 @@ import org.cyk.utility.common.LogMessage.Builder;
 
 import lombok.Getter;
 import lombok.Setter;
-
+@Deprecated
 public interface DateFormatter<OUTPUT> extends Formatter<Date, OUTPUT> {
 	
 	public static enum Token{DATE_ONLY,TIME_ONLY,DATE_AND_TIME}
@@ -22,7 +22,7 @@ public interface DateFormatter<OUTPUT> extends Formatter<Date, OUTPUT> {
 	
 	/**/
 	
-	@Getter @Setter
+	@Getter @Setter @Deprecated
 	public static class Adapter<OUTPUT> extends Formatter.Adapter.Default<Date, OUTPUT> implements DateFormatter<OUTPUT>,Serializable {
 		private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ public interface DateFormatter<OUTPUT> extends Formatter<Date, OUTPUT> {
 		}
 		
 		/**/
-		
+		@Deprecated
 		public static class Default<OUTPUT> extends DateFormatter.Adapter<OUTPUT> implements Serializable {
 			private static final long serialVersionUID = 1L;
 
@@ -57,10 +57,10 @@ public interface DateFormatter<OUTPUT> extends Formatter<Date, OUTPUT> {
 		}
 		
 	}
-	
+	@Deprecated
 	public static interface String extends DateFormatter<java.lang.String> {
 		
-		@Getter @Setter
+		@Getter @Setter @Deprecated
 		public static class Adapter extends DateFormatter.Adapter.Default<java.lang.String> implements String,Serializable {
 			private static final long serialVersionUID = 1L;
 
@@ -69,7 +69,7 @@ public interface DateFormatter<OUTPUT> extends Formatter<Date, OUTPUT> {
 			}
 			
 			/**/
-			
+			@Deprecated
 			public static class Default extends String.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 

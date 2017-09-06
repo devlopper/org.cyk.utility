@@ -157,7 +157,7 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void assertText(){
-		assertEquals("exaequo", StringHelper.getInstance().getText(Locale.ENGLISH, "exaequo",null));
+		assertEquals("exaequo", StringHelper.getInstance().get("exaequo",null,null,Locale.ENGLISH));
 		assertEquals("th", StringHelper.getInstance().getOrdinalNumberSuffix(Locale.ENGLISH, 0));
 		assertEquals("st", StringHelper.getInstance().getOrdinalNumberSuffix(Locale.ENGLISH, 1));
 		assertEquals("nd", StringHelper.getInstance().getOrdinalNumberSuffix(Locale.ENGLISH, 2));

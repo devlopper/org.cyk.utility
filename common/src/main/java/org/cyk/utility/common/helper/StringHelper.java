@@ -100,9 +100,13 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return value;
     }
 	
-	public String get(String identifier,CaseType caseType,Object[] parameters){
-		return new StringHelper.ToStringMapping.Adapter.Default(identifier).setCaseType(caseType).addParameters(parameters).execute();
+	public String get(String identifier,CaseType caseType,Object[] parameters,Locale locale){
+		return new StringHelper.ToStringMapping.Adapter.Default(identifier).setCaseType(caseType).setLocale(locale).addParameters(parameters).execute();
     }
+	
+	public String get(String identifier,CaseType caseType,Object[] parameters){
+		return get(identifier,caseType,parameters,null);
+	}
 	
 	public String get(String identifier,Object[] parameters){
 		return get(identifier, CaseType.FURL, parameters);

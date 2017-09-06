@@ -38,14 +38,14 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 	
 	public <T> T[] get(Class<T> aClass,String[] fieldNames,Object...objects){
 		@SuppressWarnings("unchecked")
-		T[] array = (T[]) Array.newInstance(aClass, objects.length / 2);
+		T[] array = (T[]) Array.newInstance(aClass, objects.length / fieldNames.length);
 		int j = 0;
 		for(int i = 0 ; i < objects.length ;){
 			T instance = ClassHelper.getInstance().instanciateOne(aClass);
 			for(String fieldName : fieldNames){
 				MethodHelper.getInstance().callSet(instance,fieldName,objects[i].getClass(),objects[i++]);
 			}
-			array[j] = instance;
+			array[j++] = instance;
 		}
 		return array;
 	}

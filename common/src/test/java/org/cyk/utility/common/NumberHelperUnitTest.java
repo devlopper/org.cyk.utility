@@ -26,8 +26,8 @@ public class NumberHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void assertNumber(){
-		NumberHelper.Stringifier stringifier = new NumberHelper.Stringifier.Adapter.Default();
-		assertEquals("63", stringifier.setInput(new BigDecimal("63.00")).execute());	
+		assertEquals("63", new NumberHelper.Stringifier.Adapter.Default().setInput(63).execute());	
+		assertEquals("63", new NumberHelper.Stringifier.Adapter.Default().setInput(new BigDecimal("63.00")).execute());	
 	}
 	
 	@Test

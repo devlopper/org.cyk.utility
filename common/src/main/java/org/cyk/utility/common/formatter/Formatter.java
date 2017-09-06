@@ -9,6 +9,7 @@ import org.cyk.utility.common.LogMessage.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+@Deprecated
 public interface Formatter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT> {
 
 	public static enum CharacterSet{DIGIT,LETTER};
@@ -28,7 +29,7 @@ public interface Formatter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT> {
 	
 	/**/
 	
-	@Getter @Setter
+	@Getter @Setter @Deprecated
 	public static class Adapter<INPUT, OUTPUT> extends Action.Adapter.Default<INPUT, OUTPUT> implements Formatter<INPUT, OUTPUT>,Serializable {
 		private static final long serialVersionUID = 1L;
 
@@ -72,7 +73,7 @@ public interface Formatter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT> {
 		
 		
 		/**/
-		@Getter @Setter
+		@Getter @Setter @Deprecated
 		public static class Default<INPUT, OUTPUT> extends Formatter.Adapter<INPUT, OUTPUT> implements Serializable {
 			private static final long serialVersionUID = 1L;
 

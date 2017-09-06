@@ -1,6 +1,5 @@
 package org.cyk.utility.common;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,53 +35,12 @@ public class CommonUtilsUnitTest extends AbstractUnitTest {
 		Assert.assertNotNull(CommonUtils.getInstance().getAnnotation(ClassA.class, ModelBean.class));
 		Assert.assertNotNull(CommonUtils.getInstance().getAnnotation(ClassB.class, ModelBean.class));
 		
-		Field fieldA1 = CommonUtils.getInstance().getFieldFromClass(ClassA.class, "attributeA1");
-		Field fieldB1 = CommonUtils.getInstance().getFieldFromClass(ClassB.class, "attributeB1");
-		//Field fieldC2 = CommonUtils.getInstance().getFieldFromClass(ClassC.class, "attributeC2");
-		//Field fieldD3 = CommonUtils.getInstance().getFieldFromClass(ClassD.class, "attributeD3");
-		
-		Collection<Field> fieldsA = CommonUtils.getInstance().getAllFields(ClassA.class);
-		Assert.assertTrue(fieldsA.contains(fieldA1));
-		
-		Collection<Field> fieldsB = CommonUtils.getInstance().getAllFields(ClassB.class);
-		Assert.assertTrue(fieldsB.contains(fieldB1));
-		
-		Assert.assertTrue(fieldsB.contains(fieldA1));
-		
-		Collection<Field> fieldsC = CommonUtils.getInstance().getAllFields(ClassC.class);
-		Assert.assertFalse(fieldsC.contains(fieldB1));
-		
-		ClassA aObject = new ClassA();
-		ClassC cObject = new ClassC();
-		
-		Assert.assertTrue(CommonUtils.getInstance().canWriteSourceToDestination(
-				aObject, CommonUtils.getInstance().getFieldFromClass(ClassA.class, "attributeA2"), 
-				cObject, CommonUtils.getInstance().getFieldFromClass(ClassC.class, "attributeC3")
-			));
-		
-		Assert.assertTrue(CommonUtils.getInstance().canWriteSourceToDestination(
-				cObject, CommonUtils.getInstance().getFieldFromClass(ClassC.class, "attributeC3"),
-				aObject, CommonUtils.getInstance().getFieldFromClass(ClassA.class, "attributeA2")
-			));
-		
-		//Assert.assertEquals(CommonUtils.getInstance().readField(new ClassD(), fieldC2,Boolean.TRUE, Boolean.FALSE).toString(), "It is B");
-		//Assert.assertEquals(CommonUtils.getInstance().readField(new ClassD(), fieldD3,Boolean.TRUE, Boolean.FALSE).toString(), "It is A");
-		//System.out.println(CommonUtils.getInstance().readField(new ClassD(), fieldC2, Boolean.TRUE));
-		
 		ClassD objectD = new ClassD();
 		objectD.setAttributeD1("aD1");
 		objectD.setAttributeD4(new ClassC());
 		objectD.getAttributeD3().setAttributeA1("aD1C1");
 		//objectD.getAttributeD4().setAttributeC2(new ClassB());
 		//objectD.getAttributeD4().getAttributeC2().setAttributeA1("aD1C1A1");
-		
-		Assert.assertEquals(objectD,CommonUtils.getInstance().getFieldValueContainer(objectD, 
-				CommonUtils.getInstance().getFieldFromClass(ClassD.class, "attributeD1")));
-		//Assert.assertEquals(objectD.getAttributeD4(),CommonUtils.getInstance().getFieldValueContainer(objectD, 
-		//		CommonUtils.getInstance().getFieldFromClass(ClassC.class, "attributeD4")));
-		Assert.assertEquals(objectD.getAttributeD3(),CommonUtils.getInstance().getFieldValueContainer(objectD, 
-				CommonUtils.getInstance().getFieldFromClass(ClassA.class, "attributeA1")));
-		
 		
 		Collection<Sumable> sumables = new ArrayList<>();
 		sumables.add(new Sumable(null, new BigDecimal("5"), 6));
