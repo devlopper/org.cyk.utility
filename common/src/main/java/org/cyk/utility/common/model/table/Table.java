@@ -13,9 +13,11 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.ListenerUtils;
-import org.cyk.utility.common.LogMessage;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.computation.DataReadConfiguration;
+import org.cyk.utility.common.helper.FieldHelper;
+import org.cyk.utility.common.helper.LoggingHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.model.table.Dimension.DimensionType;
 
 import lombok.Getter;
@@ -72,8 +74,8 @@ public class Table<
 	 * Create columns , rows cell and cell's value
 	 */
 	public void build(){
-		LogMessage.Builder logMessageBuilder = new LogMessage.Builder("Build", "table");
-		logMessageBuilder.addParameters("Row data class",rowDataClass==null?null:rowDataClass.getSimpleName());
+		LoggingHelper.Message.Builder loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default("build table");
+		addLoggingMessageBuilderParameters(loggingMessageBuilder, "Row data class",rowDataClass==null?null:rowDataClass.getSimpleName());
 		__building__ = Boolean.TRUE;
 		for(Table.Listener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
 			listener.beforeBuild();
@@ -116,7 +118,7 @@ public class Table<
 		for(Table.Listener<ROW_DIMENSION,COLUMN_DIMENSION,ROW_DATA,COLUMN_DATA,CELL_TYPE,CELL_VALUE> listener : tableListeners)
 			listener.afterBuild();
 		
-		logTrace(logMessageBuilder);
+		logTrace(loggingMessageBuilder);
 	}
 	
 	public void addColumn(COLUMN_DIMENSION column) {
@@ -164,7 +166,9 @@ public class Table<
 	}
 	
 	public void addColumn(String fieldName) {
-		addColumn(commonUtils.getFieldFromClass(rowDataClass, fieldName));
+		Collection<Field> fields = FieldHelper.getInstance().get(rowDataClass, fieldName, StringHelper.Location.EXAT);
+		if(fields.size()==1)
+			addColumn(fields.iterator().next());// commonUtils.getFieldFromClass(rowDataClass, fieldName));
 	}
 	
 	public void addColumnTitled(String title) {

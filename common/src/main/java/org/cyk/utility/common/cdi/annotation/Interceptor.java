@@ -37,7 +37,7 @@ public interface Interceptor extends Action<Object[], Object> {
 		}
 		
 		public Adapter() {
-			super("Intercept", Object[].class, null, Object.class, null);
+			super("Intercept", Object[].class, null, Object.class);
 		}
 		
 		/**/

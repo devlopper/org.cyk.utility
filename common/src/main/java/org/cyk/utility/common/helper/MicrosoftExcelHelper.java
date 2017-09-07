@@ -317,7 +317,7 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 					    	    	                case Cell.CELL_TYPE_BLANK: stringValue = Constant.EMPTY_STRING; break;
 					    	    	                case Cell.CELL_TYPE_NUMERIC: 
 					    	    	                	if(DateUtil.isCellDateFormatted(cell))
-					    	                        		stringValue = Constant.DATE_TIME_FORMATTER.format(cell.getDateCellValue());
+					    	                        		stringValue = new TimeHelper.Stringifier.Date.Adapter.Default(cell.getDateCellValue()).execute();
 					    	                        	else
 					    	                        		stringValue = /*cellValue.getStringValue();*/ new BigDecimal(cellValue.getNumberValue()).toString(); //cellValue.getNumberValue()); 
 					    	    	                	break;

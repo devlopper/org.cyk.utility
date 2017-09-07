@@ -27,7 +27,6 @@ import org.cyk.utility.common.helper.MessagingHelper.Message.Attachement;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 public class MessagingHelper extends AbstractHelper implements Serializable {
 
@@ -36,7 +35,7 @@ public class MessagingHelper extends AbstractHelper implements Serializable {
 	private static MessagingHelper INSTANCE;
 	
 	public static MessagingHelper getInstance() {
-		if(INSTANCE == null)
+		if(INSTANCE == null) 
 			INSTANCE = new MessagingHelper();
 		return INSTANCE;
 	}
@@ -47,7 +46,27 @@ public class MessagingHelper extends AbstractHelper implements Serializable {
 		super.initialisation();
 	}
 	
-	@Getter @Setter @Accessors(chain=true)
+	/**/
+	
+	public static interface Transfer extends Action<Object, Void> {
+		
+		public static class Adapter extends Action.Adapter.Default<Object, Void> implements Transfer , Serializable {
+			private static final long serialVersionUID = 1L;
+
+			public Adapter() {
+				super("transfer", Object.class, null, Void.class);
+			}
+			
+			public static class Default extends Transfer.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+
+			}
+			
+		}
+		
+	}
+	
+	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
 	public static class Message implements Serializable {
 
 		private static final long serialVersionUID = 1L;
