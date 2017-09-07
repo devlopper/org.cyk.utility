@@ -12,17 +12,17 @@ import java.util.Locale;
 
 import javax.inject.Singleton;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.cyk.utility.common.Action;
-import org.cyk.utility.common.Constant;
-import org.joda.time.DateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.cyk.utility.common.Action;
+import org.cyk.utility.common.Constant;
+import org.joda.time.DateTime;
 
 @Singleton
 public class TimeHelper extends AbstractHelper implements Serializable {
@@ -513,5 +513,7 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 			
 		}
 	}
+
+	/**/
 
 }

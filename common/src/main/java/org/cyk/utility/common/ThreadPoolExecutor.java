@@ -16,6 +16,7 @@ import org.cyk.utility.common.cdi.BeanAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Deprecated
 public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor implements Serializable {
 
 	private static final long serialVersionUID = -3776387708622454944L;
@@ -192,7 +193,7 @@ public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor 
 
 	/**/
 	
-	@Getter @Setter
+	@Getter @Setter @Deprecated
 	private static class ExecutedTask implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
@@ -221,6 +222,7 @@ public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor 
 	
 	/**/
 	
+	@Deprecated
 	public static interface Listener {
 		
 		/**/
@@ -290,7 +292,7 @@ public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor 
 
 	/**/
 	
-	@Getter @Setter @Accessors(chain=true)
+	@Getter @Setter @Accessors(chain=true) @Deprecated
 	public static class Builder extends AbstractBuilder<ThreadPoolExecutor> implements Serializable {
 		private static final long serialVersionUID = 1L;
 

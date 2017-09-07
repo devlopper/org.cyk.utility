@@ -145,6 +145,10 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return Boolean.TRUE;
 	}
 	
+	public Boolean isNotEmpty(Collection<?> collection){
+		return !Boolean.TRUE.equals(isEmpty(collection));
+	}
+	
 	public <T> T getFirst(Collection<T> collection){
 		if(isEmpty(collection))
 			return null;

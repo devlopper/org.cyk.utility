@@ -181,6 +181,16 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return parentClass.isAssignableFrom(childClass);
 	}
 	
+	public Boolean isInstanceOfOneAtLeast(Class<?> aClass,Collection<Class<?>> classes){
+		if(CollectionHelper.getInstance().isNotEmpty(classes)){
+			for(Class<?> indexClass : classes)
+				if((aClass.equals(indexClass) || isInstanceOf(indexClass, aClass)))
+					return Boolean.TRUE;	
+		}
+		
+		return Boolean.FALSE;
+	}
+	
 	public Boolean isEqual(Class<?> aClass1,Class<?> aClass2){
 		if(aClass1==null || aClass2==null)
 			return Boolean.FALSE;
