@@ -47,6 +47,15 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 		super.initialisation();
 	}
 	
+	public void pause(Number millisecond){
+		if(millisecond!=null)
+			try {
+				Thread.sleep(millisecond.longValue());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	}
+	
 	public Integer getYear(java.util.Date date){
 		if(date==null)
 			return null;

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.experimental.Accessors;
 
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
 
 public class ThreadHelper extends AbstractHelper implements Serializable {
@@ -44,14 +46,39 @@ public class ThreadHelper extends AbstractHelper implements Serializable {
 		Throwable getThrowable();
 		Executable setThrowable(Throwable throwable);
 		
-		void __execute__();
+		Long getStartedMillisecond();
+		Executable setStartedMillisecond(Long startedMillisecond);
+		
+		Long getEndedMillisecond();
+		Executable setEndedMillisecond(Long endedMillisecond);
+		
+		Long getDurationMillisecond();
+		Executable setDurationMillisecond(Long durationMillisecond);
+		
+		void ____execute____();
 		
 		@Getter
-		public static class Adapter implements Executable,Serializable {
+		public static class Adapter extends AbstractBean implements Executable,Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			protected Throwable throwable;
 			protected String name;
+			protected Long startedMillisecond,endedMillisecond,durationMillisecond;
+			
+			@Override
+			public Executable setDurationMillisecond(Long durationMillisecond) {
+				return null;
+			}
+			
+			@Override
+			public Executable setStartedMillisecond(Long startedMillisecond) {
+				return null;
+			}
+			
+			@Override
+			public Executable setEndedMillisecond(Long endedMillisecond) {
+				return null;
+			}
 			
 			@Override
 			public Executable setThrowable(Throwable throwable) {
@@ -64,19 +91,58 @@ public class ThreadHelper extends AbstractHelper implements Serializable {
 			}
 			
 			@Override
-			public void __execute__() {}
+			public void ____execute____() {}
 			
 			@Override
-			public void run() {
-				__execute__();
-			}
+			public void run() {}
 			
 			public static class Default extends Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				@Override
-				public void __execute__() {
+				public void run() {
+					final String name = getName();
+					new LoggingHelper.Run.Adapter.Default(StackTraceHelper.getInstance().getAt(2),getClass()){
+						private static final long serialVersionUID = 1L;
+						
+						public Object __execute__() {
+							try {
+								____execute____();
+							} catch (Exception e) {
+								setThrowable(e);
+							}
+							return null;
+						}
+						
+						@Override
+						public String getName() {
+							return StringHelper.getInstance().isBlank(name) ? super.getName() : name;
+						}
+						
+					}.execute();
+				}
+				
+				@Override
+				public void ____execute____() {
 					ThrowableHelper.getInstance().throwNotYetImplemented();
+				}
+				
+				@Override
+				public Executable setDurationMillisecond(Long durationMillisecond) {
+					this.durationMillisecond = durationMillisecond;
+					return this;
+				}
+				
+				@Override
+				public Executable setStartedMillisecond(Long startedMillisecond) {
+					this.startedMillisecond = startedMillisecond;
+					return this;
+				}
+				
+				@Override
+				public Executable setEndedMillisecond(Long endedMillisecond) {
+					this.endedMillisecond = endedMillisecond;
+					return this;
 				}
 				
 				@Override
@@ -90,18 +156,34 @@ public class ThreadHelper extends AbstractHelper implements Serializable {
 					this.name = name;
 					return this;
 				}
+				
+				@Override
+				public String toString() {
+					return getName();
+				}
 			}
 		}
 	}
 	
 	public static interface Executor extends Action<Collection<Executable>, Void> {
 		
+		ThreadPoolExecutor getPool();
+		ThreadPoolExecutor getPool(Boolean createIfNull);
+		Executor setPool(ThreadPoolExecutor pool);
+		ThreadPoolExecutor createPool();
+		
 		Collection<Executable> getWhereThrowableInstanceOf();
 		Collection<Executable> getWhereThrowableIsNull();
 		Collection<Executable> getWhereThrowableIsNotNull();
 		
-		Long getNumberOfReexecution();
-		Executor setNumberOfReexecution(Long numberOfReexecution);
+		Long getNumberOfMillisecondBetweenExecutableScheduling();
+		Executor setNumberOfMillisecondBetweenExecutableScheduling(Long numberOfMillisecondBetweenExecutableScheduling);
+		
+		Long getMaximumNumberOfExecution();
+		Executor setMaximumNumberOfExecution(Long maximumNumberOfExecution);
+		
+		Long getNumberOfExecution();
+		Executor setNumberOfExecution(Long numberOfExecution);
 		
 		Long getNumberOfMillisecondBeforeReexecuting();
 		Executor setNumberOfMillisecondBeforeReexecuting(Long numberOfMillisecondBeforeReexecuting);
@@ -138,13 +220,42 @@ public class ThreadHelper extends AbstractHelper implements Serializable {
 			protected Collection<Class<?>> throwableClasses;
 			protected Duration keepAliveDuration,maximumDuration;
 			protected Integer workQueueInitialSize,corePoolSize,maximumPoolSize;
-			protected Long numberOfReexecution,numberOfMillisecondBeforeReexecuting;
-			
-			protected Long numberOfPlannedTask = 0l,numberOfExecutedTask = 0l;
+			protected Long maximumNumberOfExecution,numberOfExecution,numberOfMillisecondBeforeReexecuting,numberOfMillisecondBetweenExecutableScheduling;
+			protected ThreadPoolExecutor pool;
 			
 			@SuppressWarnings("unchecked")
 			public Adapter(Collection<Executable> input) {
 				super("execute", (Class<Collection<Executable>>) ClassHelper.getInstance().getByName(Collection.class), input, Void.class);
+			}
+			
+			@Override
+			public Executor setMaximumNumberOfExecution(Long maximumNumberOfExecution) {
+				return null;
+			}
+			
+			@Override
+			public Executor setNumberOfExecution(Long numberOfExecution) {
+				return null;
+			}
+			
+			@Override
+			public Executor setNumberOfMillisecondBetweenExecutableScheduling(Long numberOfMillisecondBetweenExecutableScheduling) {
+				return null;
+			}
+			
+			@Override
+			public ThreadPoolExecutor getPool(Boolean createIfNull) {
+				return null;
+			}
+			
+			@Override
+			public Executor setPool(ThreadPoolExecutor pool) {
+				return null;
+			}
+			
+			@Override
+			public ThreadPoolExecutor createPool() {
+				return null;
 			}
 			
 			@Override
@@ -183,11 +294,6 @@ public class ThreadHelper extends AbstractHelper implements Serializable {
 			}
 			
 			@Override
-			public Executor setNumberOfReexecution(Long numberOfReexecution) {
-				return null;
-			}
-			
-			@Override
 			public Executor setWorkQueueInitialSize(Integer workQueueInitialSize) {
 				return null;
 			}
@@ -220,8 +326,6 @@ public class ThreadHelper extends AbstractHelper implements Serializable {
 			public static class Default extends Executor.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				protected java.util.concurrent.ThreadPoolExecutor threadPoolExecutor;
-				
 				public Default(Collection<Executable> input) {
 					super(input);
 				}
@@ -232,51 +336,40 @@ public class ThreadHelper extends AbstractHelper implements Serializable {
 				
 				@Override
 				protected Void __execute__() {
-					Duration keepAliveDuration = getKeepAliveDuration();
-					threadPoolExecutor = new java.util.concurrent.ThreadPoolExecutor(getCorePoolSize(), getMaximumPoolSize(), keepAliveDuration.getValue(), keepAliveDuration.getUnit()
-							, new ArrayBlockingQueue<Runnable>(getWorkQueueInitialSize()));
-					//logTrace("run executor. #reexecution={} , #millisecond before reexecuting={}",numberOfReexecution,numberOfMillisecondBeforeReexecuting);
-					//Long executionCount = 0l;
-					//executor.waitTermination();
-					
-					for(Executable executable : getInput()){
-						threadPoolExecutor.execute(executable);
-						//LogMessage.Builder logMessageBuilder = new LogMessage.Builder("Execute", getName(runnable));
-						synchronized (this) {
-							numberOfPlannedTask++;
+					Long maximumNumberOfExecution = InstanceHelper.getInstance().getIfNotNullElseDefault(getMaximumNumberOfExecution(),1l);
+					Long numberOfExecution = InstanceHelper.getInstance().getIfNotNullElseDefault(getNumberOfExecution(),0l);
+					Long numberOfMillisecondBeforeReexecuting = InstanceHelper.getInstance().getIfNotNullElseDefault(getNumberOfMillisecondBeforeReexecuting(),3000l);
+					Long numberOfMillisecondBetweenExecutableScheduling = InstanceHelper.getInstance().getIfNotNullElseDefault(getNumberOfMillisecondBetweenExecutableScheduling(), 1000l);
+					logDebug("{} , #max execution={} , #millisecond before reexecuting={} , #millisecond between scheduling={}",getName()
+							,maximumNumberOfExecution,numberOfMillisecondBeforeReexecuting,numberOfMillisecondBetweenExecutableScheduling);
+					Collection<Executable> executables;
+					while(CollectionHelper.getInstance().isNotEmpty(executables = (numberOfExecution == 0l ? getInput() : getWhereThrowableIsNotNull())) && numberOfExecution<maximumNumberOfExecution){
+						if(numberOfExecution>0){
+							logTrace("Waiting {} ms before re-executing",numberOfMillisecondBeforeReexecuting);
+							TimeHelper.getInstance().pause(numberOfMillisecondBeforeReexecuting);
 						}
-						//logMessageBuilder.addParameters("#task planned",numberOfPlannedTask,"#task executed",numberOfExecutedTask);
-						//LogMessage logMessage = logMessageBuilder.build();
-						//LOGGER.trace(logMessage.getTemplate(),logMessage.getArgumentsArray());
+						logTrace("execution No {} , #executables={}",numberOfExecution+1,CollectionHelper.getInstance().getSize(executables));
+						ThreadPoolExecutor pool = getPool(Boolean.TRUE);
+						for(Executable executable : executables){
+							executable.setStartedMillisecond(null);
+							executable.setEndedMillisecond(null);
+							executable.setDurationMillisecond(null);
+							executable.setThrowable(null);
+							pool.execute(executable);
+							TimeHelper.getInstance().pause(numberOfMillisecondBetweenExecutableScheduling);
+						}
+						Duration maximumDuration = getMaximumDuration();
+						try {
+							logDebug("waiting for termination. timeout in {} {} ...",maximumDuration.getValue(),maximumDuration.getUnit());
+							pool.awaitTermination(maximumDuration.getValue(), maximumDuration.getUnit());
+						} catch (InterruptedException e) {
+							logThrowable(e);
+						}
+						setNumberOfExecution(numberOfExecution++);
+						setLoggingMessageBuilder(null);
+						setPool(null);
 					}
-					
-					waitTermination(threadPoolExecutor);
-					
-					/*
-					while(++executionCount<numberOfReexecution && CollectionHelper.getInstance().isNotEmpty(getWhereThrowableInstanceOf())){
-						//LOGGER.trace("Waiting "+numberOfMillisecondBeforeReexecuting+" ms before re-executing where throwable is not null");
-						CommonUtils.getInstance().pause(numberOfMillisecondBeforeReexecuting);
-						//LOGGER.trace("#execution={},Re-executing where throwable is not null",executionCount);
-						//executor = ThreadPoolExecutor.createExecutorWhereThrowableInstanceOfOne(executor,executor.getThrowableClasses());
-						//executor.waitTermination();
-					}
-					*/
 					return Constant.VOID;
-				}
-				
-				private void waitTermination(java.util.concurrent.ThreadPoolExecutor threadPoolExecutor){
-					Duration maximumDuration = getMaximumDuration();
-					//LogMessage.Builder logMessageBuilder = new LogMessage.Builder("Wait for", "termination");
-					//logMessageBuilder.addParameters("#task planned",numberOfPlannedTask,"#task executed",numberOfExecutedTask,"throwables",throwableClasses);
-					try {
-						if(numberOfPlannedTask-numberOfExecutedTask>0)
-							threadPoolExecutor.awaitTermination(maximumDuration.getValue(), maximumDuration.getUnit());
-					} catch (InterruptedException e) {
-						//LOGGER.error("Thread pool executor fail while awaiting termination",e);
-					}
-					//logMessageBuilder.addParameters("has throwable",hasExecutedWhereThrowableInstanceOfOne(throwableClasses),"executed tasks",executedTasks);
-					//LogMessage logMessage = logMessageBuilder.build();
-					//LOGGER.trace(logMessage.getTemplate(),logMessage.getArgumentsArray());
 				}
 				
 				@Override
@@ -318,6 +411,66 @@ public class ThreadHelper extends AbstractHelper implements Serializable {
 				}
 				
 				@Override
+				public ThreadPoolExecutor getPool(Boolean createIfNull) {
+					if(pool==null && Boolean.TRUE.equals(createIfNull))
+						pool = createPool();
+					return pool;
+				}
+				
+				@Override
+				public Executor setPool(ThreadPoolExecutor pool) {
+					this.pool = pool;
+					return this;
+				}
+				
+				@Override
+				public ThreadPoolExecutor createPool() {
+					Duration keepAliveDuration = getKeepAliveDuration();
+					ThreadPoolExecutor threadPoolExecutor = new java.util.concurrent.ThreadPoolExecutor(getCorePoolSize(), getMaximumPoolSize(), keepAliveDuration.getValue(), keepAliveDuration.getUnit()
+							, new ArrayBlockingQueue<Runnable>(getWorkQueueInitialSize())) {
+						
+						@Override
+						protected void beforeExecute(Thread thread, Runnable runnable) {
+							super.beforeExecute(thread, runnable);
+							((Executable)runnable).setStartedMillisecond(System.currentTimeMillis());
+						}
+						
+						@Override
+						protected void afterExecute(Runnable runnable, Throwable throwable) {
+							super.afterExecute(runnable, throwable);
+							((Executable)runnable).setEndedMillisecond(System.currentTimeMillis());
+							Long executableCount = getTaskCount();
+							Integer executableFailCount = CollectionHelper.getInstance().getSize(getWhereThrowableIsNotNull());
+							if(getCompletedTaskCount() == executableCount - 1){
+								logDebug("All {} executable(s) completed. #success={} , #fail={} shutdown signal sent."
+										, executableCount,executableCount - executableFailCount,executableFailCount);
+								shutdown();
+							}
+						}
+						
+					};
+					return threadPoolExecutor;
+				}
+				
+				@Override
+				public Executor setMaximumNumberOfExecution(Long maximumNumberOfExecution) {
+					this.maximumNumberOfExecution = maximumNumberOfExecution;
+					return this;
+				}
+				
+				@Override
+				public Executor setNumberOfExecution(Long numberOfExecution) {
+					this.numberOfExecution = numberOfExecution;
+					return this;
+				}
+				
+				@Override
+				public Executor setNumberOfMillisecondBetweenExecutableScheduling(Long numberOfMillisecondBetweenExecutableScheduling) {
+					this.numberOfMillisecondBetweenExecutableScheduling = numberOfMillisecondBetweenExecutableScheduling;
+					return this;
+				}
+				
+				@Override
 				public Executor setCorePoolSize(Integer corePoolSize) {
 					this.corePoolSize = corePoolSize;
 					return this;
@@ -332,12 +485,6 @@ public class ThreadHelper extends AbstractHelper implements Serializable {
 				@Override
 				public Executor setNumberOfMillisecondBeforeReexecuting(Long numberOfMillisecondBeforeReexecuting) {
 					this.numberOfMillisecondBeforeReexecuting = numberOfMillisecondBeforeReexecuting;
-					return this;
-				}
-				
-				@Override
-				public Executor setNumberOfReexecution(Long numberOfReexecution) {
-					this.numberOfReexecution = numberOfReexecution;
 					return this;
 				}
 				

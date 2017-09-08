@@ -486,6 +486,9 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 		void log(Boolean before);
 		void addParameters(LoggingHelper.Message.Builder builder,Boolean before);
 		String getMarker(Boolean before);
+		
+		String getName();
+		
 		Object __execute__();
 		
 		Object execute();
@@ -499,6 +502,11 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 			
 			@Override
 			public void log(Boolean before) {}
+			
+			@Override
+			public String getName() {
+				return null;
+			}
 			
 			@Override
 			public Run setStackTraceElement(StackTraceElement stackTraceElement) {
@@ -543,6 +551,12 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 				}
 				
 				@Override
+				public String getName() {
+					StackTraceElement stackTraceElement = getStackTraceElement();
+					return stackTraceElement == null ? Constant.EMPTY_STRING : stackTraceElement.getMethodName();
+				}
+				
+				@Override
 				public Run setStackTraceElement(StackTraceElement stackTraceElement) {
 					this.stackTraceElement = stackTraceElement;
 					return this;
@@ -556,7 +570,7 @@ public class LoggingHelper extends AbstractHelper implements Serializable  {
 				
 				@Override
 				public void addParameters(org.cyk.utility.common.helper.LoggingHelper.Message.Builder builder, Boolean before) {
-					builder.addManyParameters((getStackTraceElement().getMethodName()+Constant.CHARACTER_SPACE) + (before ? RUNNING : DONE));
+					builder.addManyParameters((getName()+Constant.CHARACTER_SPACE) + (before ? RUNNING : DONE));
 				}
 				
 				@Override

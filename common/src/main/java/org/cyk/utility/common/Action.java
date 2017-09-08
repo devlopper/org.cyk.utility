@@ -523,9 +523,14 @@ public interface Action<INPUT,OUTPUT> {
 					addLoggingMessageBuilderNamedParameters("input",getInputLogMessage(getInput()));
 				if(Boolean.TRUE.equals(isShowOuputClassLogMessage(getOutputClass())))
 					addLoggingMessageBuilderNamedParameters("output class",getOutputClass().getSimpleName());
+				Long millisecond = System.currentTimeMillis();
 				output = __execute__();
+				millisecond = System.currentTimeMillis() - millisecond;
 				if(Boolean.TRUE.equals(isShowOutputLogMessage(output)))
 					addLoggingMessageBuilderNamedParameters("output",getOutputLogMessage(output));
+				//if(!(this instanceof TimeHelper.Stringifier.Duration.Adapter.Default)){
+					addLoggingMessageBuilderNamedParameters("duration",millisecond);
+				//}
 				if(Boolean.TRUE.equals(getAutomaticallyLogMessage())){
 					//LoggingHelper.Message message = loggingMessageBuilder.execute();
 					logTrace(this);
