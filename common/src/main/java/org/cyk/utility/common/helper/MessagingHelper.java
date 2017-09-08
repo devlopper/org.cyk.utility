@@ -60,10 +60,8 @@ public class MessagingHelper extends AbstractHelper implements Serializable {
 			public static class Default extends Transfer.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 
-			}
-			
-		}
-		
+			}			
+		}		
 	}
 	
 	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
