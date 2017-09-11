@@ -73,6 +73,7 @@ public interface Action<INPUT,OUTPUT> {
 	<T extends Number> T getPropertyAsNumber(Class<T> numberClass,String name);
 	Integer getPropertyAsInteger(String name,Integer nullValue);
 	Integer getPropertyAsInteger(String name);
+	java.lang.Boolean getPropertyAsBoolean(String name);
 	
 	Collection<Object> getParameters();
 	Action<INPUT, OUTPUT> setParameters(Collection<Object> collection);
@@ -142,6 +143,8 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_DURATION_IN_MILLISECOND="DURATION_IN_MILLISECOND";
 	java.lang.String PROPERTY_NAME_PORTION_IN_MILLISECOND="PORTION_IN_MILLISECOND";
 	java.lang.String PROPERTY_NAME="NAME";
+	java.lang.String PROPERTY_NAME_SEPARATOR="SEPARATOR";
+	java.lang.String PROPERTY_NAME_IS_ADD_COUNT_PREFIX = "IS_ADD_COUNT_PREFIX";
 	java.lang.String PROPERTY_NAME_ACTION="ACTION";
 	java.lang.String PROPERTY_NAME_PARENT="PARENT";
 	java.lang.String PROPERTY_NAME_CHARACTER_SET = "CHARACTER_SET";
@@ -195,6 +198,11 @@ public interface Action<INPUT,OUTPUT> {
 		
 		@Override
 		public String getPropertyAsString(String name) {
+			return null;
+		}
+		
+		@Override
+		public Boolean getPropertyAsBoolean(String name) {
 			return null;
 		}
 		
@@ -447,6 +455,11 @@ public interface Action<INPUT,OUTPUT> {
 			@Override
 			public java.lang.String getPropertyAsString(String name) {
 				return (java.lang.String) getProperty(name);
+			}
+			
+			@Override
+			public java.lang.Boolean getPropertyAsBoolean(String name) {
+				return (Boolean) getProperty(name);
 			}
 			
 			@Override

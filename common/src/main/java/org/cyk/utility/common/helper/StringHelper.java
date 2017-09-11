@@ -1170,6 +1170,95 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		}
 		
 	}
+	
+	public static interface Concatenate extends Action<java.util.Collection<String>, String> {
+		
+		java.lang.String getSeparator();
+		Concatenate setSeparator(java.lang.String separator);
+		
+		java.lang.Boolean getIsAddCountPrefix();
+		Concatenate setIsAddCountPrefix(Boolean isAddCountPrefix);
+		
+		@Getter
+		public static class Adapter extends Action.Adapter.Default<java.util.Collection<String>, String> implements Concatenate,Serializable {
+			private static final long serialVersionUID = -4167553207734748200L;
+
+			@SuppressWarnings("unchecked")
+			public Adapter(java.util.Collection<String> strings) {
+				super("concatenate", (Class<java.util.Collection<String>>) ClassHelper.getInstance().getByName(java.util.Collection.class), strings, String.class);
+			}
+			
+			@Override
+			public String getSeparator() {
+				return null;
+			}
+			
+			@Override
+			public Concatenate setSeparator(String separator) {
+				return null;
+			}
+			
+			@Override
+			public Boolean getIsAddCountPrefix() {
+				return null;
+			}
+			
+			@Override
+			public Concatenate setIsAddCountPrefix(Boolean isAddCountPrefix) {
+				return null;
+			}
+			
+			public static class Default extends Concatenate.Adapter implements Serializable {
+				private static final long serialVersionUID = -4167553207734748200L;
+
+				public Default(java.util.Collection<String> strings) {
+					super(strings);
+				}
+				
+				public Default() {
+					this(null);
+				}
+				
+				@Override
+				public String getSeparator() {
+					return getPropertyAsString(PROPERTY_NAME_SEPARATOR);
+				}
+				
+				@Override
+				public Concatenate setSeparator(String separator) {
+					return (Concatenate) setProperty(PROPERTY_NAME_SEPARATOR, separator);
+				}
+				
+				@Override
+				public Boolean getIsAddCountPrefix() {
+					return getPropertyAsBoolean(PROPERTY_NAME_IS_ADD_COUNT_PREFIX);
+				}
+				
+				@Override
+				public Concatenate setIsAddCountPrefix(Boolean isAddCountPrefix) {
+					return (Concatenate) setProperty(PROPERTY_NAME_IS_ADD_COUNT_PREFIX, isAddCountPrefix);
+				}
+				
+				@Override
+				protected String __execute__() {
+					java.util.Collection<String> collection = new ArrayList<>();
+					String separator = InstanceHelper.getInstance().getIfNotNullElseDefault(getSeparator(),Constant.CHARACTER_SPACE.toString());
+					Boolean isAddCountPrefix = InstanceHelper.getInstance().getIfNotNullElseDefault(getIsAddCountPrefix(),Boolean.FALSE);
+					Integer count = 0;
+					for(String string : getInput()){
+						StringBuilder stringBuilder = new StringBuilder();
+						if(Boolean.TRUE.equals(isAddCountPrefix))
+							stringBuilder.append(++count+Constant.CHARACTER_SPACE.toString());
+						stringBuilder.append(string);
+						collection.add(stringBuilder.toString());
+					}
+					return StringUtils.join(collection,separator);
+				}
+				
+			}
+		}
+		
+	}
 
 	/**/
 	

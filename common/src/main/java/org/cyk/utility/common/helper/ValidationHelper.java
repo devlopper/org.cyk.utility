@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -13,10 +12,9 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.conn.routing.RouteInfo.LayerType;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.helper.LayerHelper.Type;
+import org.cyk.utility.common.validation.MessageInterpolator;
 
 import lombok.Getter;
 
@@ -43,6 +41,12 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 		Listener getListener();
 		Validate setListener(Listener listener);
 		
+		Boolean getIsAutomaticallyThrowMessages();
+		Validate setIsAutomaticallyThrowMessages(Boolean isAutomaticallyThrowMessages);
+		
+		Class<? extends java.lang.Throwable> getThrowableClass();
+		Validate setThrowableClass(Class<? extends java.lang.Throwable> throwableClass);
+		
 		LayerHelper.Type getLayerType();
 		Validate setLayerType(LayerHelper.Type layerType);
 		
@@ -58,10 +62,22 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 			protected Listener listener;
 			protected LayerHelper.Type layerType;
 			protected Collection<Class<?>> groups;
+			protected Boolean isAutomaticallyThrowMessages;
+			protected Class<? extends java.lang.Throwable> throwableClass;
 			
 			@SuppressWarnings("unchecked")
 			public Adapter(Object input) {
 				super("validate", Object.class, input, (Class<Collection<String>>) ClassHelper.getInstance().getByName(Collection.class));
+			}
+			
+			@Override
+			public Validate setThrowableClass(Class<? extends java.lang.Throwable> throwableClass) {
+				return null;
+			}
+			
+			@Override
+			public Validate setIsAutomaticallyThrowMessages(Boolean isAutomaticallyThrowMessages) {
+				return null;
 			}
 			
 			@Override
@@ -97,6 +113,18 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 
 				public Default(Object input) {
 					super(input);
+				}
+				
+				@Override
+				public Validate setThrowableClass(Class<? extends java.lang.Throwable> throwableClass) {
+					this.throwableClass = throwableClass;
+					return this;
+				}
+				
+				@Override
+				public Validate setIsAutomaticallyThrowMessages(Boolean isAutomaticallyThrowMessages) {
+					this.isAutomaticallyThrowMessages = isAutomaticallyThrowMessages;
+					return this;
 				}
 				
 				@Override
@@ -143,7 +171,7 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 						listener = new Listener.Adapter.Default();
 					LayerHelper.Type layerType = InstanceHelper.getInstance().getIfNotNullElseDefault(getLayerType(),LayerHelper.Type.DEFAULT);
 					object = listener.getObjectToValidate(object, layerType);
-					Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+					Validator validator = Validation.buildDefaultValidatorFactory().usingContext().messageInterpolator(MessageInterpolator.getInstance()).getValidator();  //getValidator();
 					Set<ConstraintViolation<Object>> constraintViolationsModel = groups==null || groups.isEmpty()?validator.validate(object):validator.validate(object,groups.toArray(new Class<?>[]{}));
 					if(!constraintViolationsModel.isEmpty())
 			        	for(ConstraintViolation<?> violation : constraintViolationsModel){
@@ -151,6 +179,11 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 			        		messages.add(formatMessage(object,violation));
 			        		//messages.add(String.format("Constraint Violation : %s.%s : %s ",aObject.getClass().getName(),violation.getPropertyPath(),violation.getMessage()));
 			        	}
+					Boolean isAutomaticallyThrowMessages = getIsAutomaticallyThrowMessages();
+					if(Boolean.TRUE.equals(isAutomaticallyThrowMessages)){
+						Class<? extends java.lang.Throwable> throwableClass = InstanceHelper.getInstance().getIfNotNullElseDefault(getThrowableClass(),RuntimeException.class);
+						ThrowableHelper.getInstance().throw_(messages, throwableClass);
+					}
 					return messages;
 				}
 				
@@ -159,11 +192,11 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 					Field field = null;
 					if(StringUtils.contains(constraintViolation.getPropertyPath().toString(), Constant.CHARACTER_DOT.toString())){
 						for(String fieldName : StringUtils.split(constraintViolation.getPropertyPath().toString(), Constant.CHARACTER_DOT.toString())){
-							field = commonUtils.getFieldFromClass(clazz, fieldName);
+							field = FieldHelper.getInstance().get(clazz, fieldName);
 							clazz = field.getType();
 						}	
 					}else{
-						field = commonUtils.getFieldFromClass(clazz, constraintViolation.getPropertyPath().toString());
+						field = FieldHelper.getInstance().get(clazz, constraintViolation.getPropertyPath().toString());
 					}
 					
 					return StringHelper.getInstance().getField(field.getName())+Constant.CHARACTER_SPACE+constraintViolation.getMessage();

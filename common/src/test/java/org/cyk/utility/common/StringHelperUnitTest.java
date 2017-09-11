@@ -33,6 +33,15 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void concatenate(){
+		assertEquals("string one second one another string", new StringHelper.Concatenate.Adapter.Default(Arrays.asList("string one","second one","another string")).execute());
+		assertEquals("1 string one 2 second one 3 another string", new StringHelper.Concatenate.Adapter.Default(Arrays.asList("string one","second one","another string"))
+				.setIsAddCountPrefix(Boolean.TRUE).execute());
+		assertEquals("1 string one"+Constant.LINE_DELIMITER+"2 second one"+Constant.LINE_DELIMITER+"3 another string", new StringHelper.Concatenate.Adapter.Default(Arrays.asList("string one","second one","another string"))
+				.setIsAddCountPrefix(Boolean.TRUE).setSeparator(Constant.LINE_DELIMITER).execute());
+	}
+	
+	@Test
 	public void assertWordArticle(){
 		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticleAll(Boolean.FALSE, Boolean.FALSE), "toute").execute();
 		new AssertionHelper.Assertion.Equals.String.Adapter.Default(StringHelper.getInstance().getWordArticleAll(Boolean.TRUE, Boolean.FALSE), "tout").execute();

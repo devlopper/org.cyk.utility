@@ -69,7 +69,10 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	public <T extends java.lang.Throwable> void throw_(Collection<String> messages,Class<T> causeClass){
-		//throw_(new Throwable.Builder.Adapter.Default<T>(causeClass).addManyParameters(condition.getMessage()).execute());
+		if(CollectionHelper.getInstance().isNotEmpty(messages)){
+			String message = new StringHelper.Concatenate.Adapter.Default(messages).setSeparator(Constant.LINE_DELIMITER).setIsAddCountPrefix(messages.size()>1).execute();
+			throw_(new Throwable.Builder.Adapter.Default<T>(causeClass).addManyParameters(message).execute());	
+		}
 	}
 	
 	public <T extends java.lang.Throwable> void throw_(ConditionHelper.Condition condition,Class<T> causeClass){
