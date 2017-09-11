@@ -1,6 +1,7 @@
 package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 
 import javax.inject.Singleton;
@@ -65,6 +66,10 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 		if(throwable==null || throwable.getCause()==null)
 			return;
 		throw new RuntimeException(throwable.getCause());
+	}
+	
+	public <T extends java.lang.Throwable> void throw_(Collection<String> messages,Class<T> causeClass){
+		//throw_(new Throwable.Builder.Adapter.Default<T>(causeClass).addManyParameters(condition.getMessage()).execute());
 	}
 	
 	public <T extends java.lang.Throwable> void throw_(ConditionHelper.Condition condition,Class<T> causeClass){
