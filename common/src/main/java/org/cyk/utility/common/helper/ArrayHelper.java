@@ -96,6 +96,39 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 		
 	}*/
 	
+	@SuppressWarnings("unchecked")
+	public <T> T[] getOneDimension(Class<T> aClass,Object instance,String[] fieldNames){
+		if(instance == null || ArrayHelper.getInstance().isEmpty(fieldNames))
+			return null;
+		T[] array = (T[]) Array.newInstance(aClass, fieldNames.length);
+		for(Integer index = 0 ; index < fieldNames.length ; index++){
+			Object value = FieldHelper.getInstance().read(instance, fieldNames[index]);
+			if( !(value instanceof String) && String.class.equals(aClass))
+				value = value.toString();
+			array[index] = (T) value;
+		}
+		return array;
+	}
+	
+	public Object[] getOneDimension(Object instance,String[] fieldNames){
+		return getOneDimension(Object.class,instance, fieldNames);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T[][] getTwoDimension(Class<T> aClass,Collection<?> instances,String[] fieldNames){
+		if(CollectionHelper.getInstance().isEmpty(instances) || ArrayHelper.getInstance().isEmpty(fieldNames))
+			return null;
+		T[][] array = (T[][]) Array.newInstance(aClass, instances.size(),0);
+		Integer index = 0;
+		for(Object instance : instances)
+			array[index++] = getOneDimension(aClass,instance, fieldNames);
+		return array;
+	}
+	
+	public Object[][] getTwoDimension(Collection<?> instances,String[] fieldNames){
+		return getTwoDimension(Object.class, instances, fieldNames);
+	}
+	
 	/**/
 	
 	@Getter @Setter @NoArgsConstructor

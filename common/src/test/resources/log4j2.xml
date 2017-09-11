@@ -18,12 +18,12 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="org.cyk.utility.common.helper.ThreadHelper$Executor$Adapter$Default" level="trace">
+		<!--Logger name="org.cyk.utility.common.helper.ThreadHelper$Executor$Adapter$Default" level="trace">
 			<AppenderRef ref="ThreadHelperConsole" />
 		</Logger>
 		<Logger name="org.cyk.utility.common" level="trace">
 			<AppenderRef ref="CustomConsole" />
-		</Logger>
+		</Logger-->
 		<Root level="trace">
 			<!--AppenderRef ref="Console"/-->
 		</Root>

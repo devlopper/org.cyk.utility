@@ -1,6 +1,8 @@
 package org.cyk.utility.common;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
@@ -85,9 +87,9 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void applyCaseType(){
-		assertThat("string is not null", StringHelper.getInstance().applyCaseType(null, CaseType.NONE)==null);
-		assertThat("string is not null", StringHelper.getInstance().applyCaseType(null, CaseType.FU)==null);
-		assertThat("string is not null", StringHelper.getInstance().applyCaseType(null, CaseType.FURL)==null);
+		assertThat("string is not null", StringHelper.getInstance().applyCaseType((String)null, CaseType.NONE)==null);
+		assertThat("string is not null", StringHelper.getInstance().applyCaseType((String)null, CaseType.FU)==null);
+		assertThat("string is not null", StringHelper.getInstance().applyCaseType((String)null, CaseType.FURL)==null);
 		
 		assertEquals("", StringHelper.getInstance().applyCaseType("", CaseType.NONE));
 		assertEquals("", StringHelper.getInstance().applyCaseType("", CaseType.FU));
@@ -100,6 +102,8 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		assertEquals("sAlut géRArd!", StringHelper.getInstance().applyCaseType("sAlut géRArd!", CaseType.NONE));
 		assertEquals("SAlut géRArd!", StringHelper.getInstance().applyCaseType("sAlut géRArd!", CaseType.FU));
 		assertEquals("Salut gérard!", StringHelper.getInstance().applyCaseType("sAlut géRArd!", CaseType.FURL));
+		
+		assertList(StringHelper.getInstance().applyCaseType(Arrays.asList("first","Second","T"), CaseType.L), Arrays.asList("first","second","t"));
 	}
 	
 	@Test
@@ -160,6 +164,19 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void getWordsFromCamelCase(){
+		assertList(StringHelper.getInstance().getWordsFromCamelCase(null), new ArrayList<>());
+		assertList(StringHelper.getInstance().getWordsFromCamelCase(""), new ArrayList<>());
+		assertList(StringHelper.getInstance().getWordsFromCamelCase(" "), new ArrayList<>());
+		assertList(StringHelper.getInstance().getWordsFromCamelCase("a"), Arrays.asList("a"));
+		assertList(StringHelper.getInstance().getWordsFromCamelCase("A"), Arrays.asList("A"));
+		assertList(StringHelper.getInstance().getWordsFromCamelCase("aa"), Arrays.asList("aa"));
+		assertList(StringHelper.getInstance().getWordsFromCamelCase("aaA"), Arrays.asList("aa","A"));
+		assertList(StringHelper.getInstance().getWordsFromCamelCase("firstSecond"), Arrays.asList("first","Second"));
+		assertList(StringHelper.getInstance().getWordsFromCamelCase("aAaA"), Arrays.asList("a","Aa","A"));
+	}
+	
+	@Test
 	public void assertText(){
 		assertEquals("exaequo", StringHelper.getInstance().get("exaequo",null,null,Locale.ENGLISH));
 		assertEquals("th", StringHelper.getInstance().getOrdinalNumberSuffix(Locale.ENGLISH, 0));
@@ -217,6 +234,12 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		assertEquals("undefined", StringHelper.getInstance().getResponse(null,Locale.ENGLISH));
 		assertEquals("yes", StringHelper.getInstance().getResponse(Boolean.TRUE,Locale.ENGLISH));
 		assertEquals("no", StringHelper.getInstance().getResponse(Boolean.FALSE,Locale.ENGLISH));
+	}
+	
+	@Test
+	public void assertFieldIdentifier(){
+		assertEquals("field.value", StringHelper.getInstance().getFieldIdentifier("value"));
+		assertEquals("field.balance.value", StringHelper.getInstance().getFieldIdentifier("balanceValue"));
 	}
 	
 	@Test

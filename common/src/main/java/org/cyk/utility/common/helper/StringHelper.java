@@ -37,7 +37,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	public static final Character[] VOYELS = {'a','e','i','o','u','y'};
 	
 	public enum CaseType{
-		NONE,FURL,FU,L,U
+		NONE,L,U,FL,FU,FURL
 		;
 		
 		public static CaseType DEFAULT = NONE;
@@ -80,10 +80,26 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		case NONE:return string;
 		case L:return StringUtils.lowerCase(string);
 		case U:return StringUtils.upperCase(string);
-		case FURL:return StringUtils.capitalize(string.toLowerCase());
 		case FU:return StringUtils.upperCase(StringUtils.substring(string, 0,1))+StringUtils.substring(string, 1);
+		case FL:return StringUtils.lowerCase(StringUtils.substring(string, 0,1))+StringUtils.substring(string, 1);
+		case FURL:return StringUtils.capitalize(string.toLowerCase());
 		}
 		return string;	
+	}
+	
+	public List<String> applyCaseType(List<String> strings,CaseType caseType){
+		List<String> list = new ArrayList<>();
+		for(String string : strings)
+			list.add(applyCaseType(string, caseType));
+		return list;
+	}
+	
+	public List<String> getWordsFromCamelCase(String stringInCamelCase){
+		List<String> strings = new ArrayList<>();
+		if(!isBlank(stringInCamelCase)){
+			strings.addAll(Arrays.asList(StringUtils.splitByCharacterTypeCamelCase(stringInCamelCase)));
+		}
+		return strings;
 	}
 	
 	public String removeEndLineMarker(String line){
@@ -170,7 +186,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return StringUtils.isNotBlank(charSequence);
 	}
 	
-	public String get(java.util.Collection<?> collection,String separator){
+	public String get(java.util.Collection<?> collection,Object separator){
 		if(collection==null)
 			return Constant.EMPTY_STRING;
 		return get(collection.toArray(), separator);
@@ -230,6 +246,15 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	
 	public String getWord(String identifier,Boolean masculine,Boolean plural){
 		return new ToStringMapping.Adapter.Default(getWordIdentifier(identifier, masculine, plural)).execute();
+	}
+	
+	public String getFieldIdentifier(String name){
+		name = String.format(ToStringMapping.FIELD_IDENTIFIER_FORMAT,applyCaseType(concatenate(getWordsFromCamelCase(name), Constant.CHARACTER_DOT.toString()),CaseType.L));
+		return name;
+	}
+	
+	public String getField(String identifier){
+		return new ToStringMapping.Adapter.Default(getFieldIdentifier(identifier)).execute();
 	}
 	
 	public String getResponse(Boolean response,CaseType caseType,Locale locale){
@@ -629,6 +654,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		String GENDER_FORMAT = "%s.__gender__";
 		String MASCULINE_FORMAT = "%s.__%sine__";
 		String WORD_IDENTIFIER_FORMAT = "word.%s.__%sine__";
+		String FIELD_IDENTIFIER_FORMAT = "field.%s";
 		String WORD_ARTICLE_IDENTIFIER_FORMAT = "word.article.__%sine__.__%s__";
 		String WORD_ARTICLE_ALL_IDENTIFIER_FORMAT = "word.article.all.__%sine__";
 		String COMPARISON_OPERATOR_IDENTIFIER_FORMAT = "__comparison.operator%s__";

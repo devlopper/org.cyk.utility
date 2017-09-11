@@ -1,5 +1,7 @@
 package org.cyk.utility.common;
 
+import java.util.Arrays;
+
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -32,7 +34,7 @@ public class ArrayHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void get(){
+	public void getArrayToInstance(){
 		A[] array = ArrayHelper.getInstance().get(A.class, new String[]{"f1"}, "my string1","my string two");
 		assertEquals(2, array.length);
 		assertEquals("my string1", array[0].getF1());
@@ -49,6 +51,26 @@ public class ArrayHelperUnitTest extends AbstractUnitTest {
 		assertEquals(1, array[0].getF2());
 		assertEquals("my string two", array[1].getF1());
 		assertEquals(2, array[1].getF2());
+	}
+	
+	@Test
+	public void getInstanceToArray(){
+		assertArray(ArrayHelper.getInstance().getOneDimension(new A().setF1("my f one").setF2(3), new String[]{"f1"}), "my f one");
+		assertArray(ArrayHelper.getInstance().getOneDimension(new A().setF1("my f one").setF2(3), new String[]{"f1","f2"}), "my f one",3);
+	}
+	
+	@Test
+	public void getInstancesToArray(){
+		assertArray(ArrayHelper.getInstance().getTwoDimension(Arrays.asList(new A().setF1("my f one").setF2(3)), new String[]{"f1"}), new Object[][]{ new Object[]{ "my f one"} });
+		assertArray(ArrayHelper.getInstance().getTwoDimension(Arrays.asList(new A().setF1("my f one").setF2(3)), new String[]{"f1","f2"})
+			, new Object[][]{ 
+			new Object[]{ "my f one",3} 
+			});
+		assertEquals(Boolean.FALSE, ArrayHelper.getInstance().getTwoDimension(Arrays.asList(new A().setF1("my f one").setF2(3)), new String[]{"f1"}) instanceof String[][]);
+		assertEquals(Boolean.TRUE, ArrayHelper.getInstance().getTwoDimension(String.class,Arrays.asList(new A().setF1("my f one").setF2(3)), new String[]{"f1"}) instanceof String[][]);
+		assertEquals(Boolean.FALSE, ArrayHelper.getInstance().getTwoDimension(Arrays.asList(new A().setF1("my f one").setF2(3)), new String[]{"f1","f2"}) instanceof String[][]);
+		assertEquals(Boolean.TRUE, ArrayHelper.getInstance().getTwoDimension(String.class,Arrays.asList(new A().setF1("my f one").setF2(3)), new String[]{"f1","f2"}) instanceof String[][]);
+	
 	}
 	
 	@Test
