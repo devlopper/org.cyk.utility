@@ -27,23 +27,23 @@ public class ValidationHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
     public void electronicMailFormatMessage() {
-    	ElectronicMail electronicMail = new ElectronicMail().setAddress("a..@mail.com");
-    	ValidationHelper.Validate validate = new ValidationHelper.Validate.Adapter.Default(electronicMail);
-    	assertList(new ArrayList<>(validate.execute()), Arrays.asList("adresse Adresse email mal formée"));
+		assertList(new ArrayList<>(new ValidationHelper.Validate.Adapter.Default(new ElectronicMail("a..@mail.com"))
+    			.execute()), Arrays.asList("adresse : a..@mail.com n'est pas une adresse de courrier électronique bien formée"));
+		assertList(new ArrayList<>(new ValidationHelper.Validate.Adapter.Default(new ElectronicMail("a..@mail.com")).setIsFieldNameIncludedInMessage(false)
+    			.execute()), Arrays.asList("a..@mail.com n'est pas une adresse de courrier électronique bien formée"));
+		assertList(new ArrayList<>(new ValidationHelper.Validate.Adapter.Default(new ElectronicMail("a..@mail.com")).setIsFieldNameIncludedInMessage(true)
+    			.execute()), Arrays.asList("adresse : a..@mail.com n'est pas une adresse de courrier électronique bien formée"));
     }
-	
+
 	@Test(expected=RuntimeException.class)
     public void electronicMailFormatThrowMessage() {
-    	ElectronicMail electronicMail = new ElectronicMail().setAddress("a..@mail.com");
-    	ValidationHelper.Validate validate = new ValidationHelper.Validate.Adapter.Default(electronicMail).setIsAutomaticallyThrowMessages(Boolean.TRUE);
-    	validate.execute();
+    	new ValidationHelper.Validate.Adapter.Default(new ElectronicMail("a..@mail.com")).setIsThrowMessages(Boolean.TRUE).execute();
     }
 	
 	@Test
     public void electronicMailFormatMessageCustom() {
-		ElectronicMailCustomMessage electronicMail = new ElectronicMailCustomMessage().setAddress("a..@mail.com");
-    	ValidationHelper.Validate validate = new ValidationHelper.Validate.Adapter.Default(electronicMail);
-    	assertList(new ArrayList<>(validate.execute()), Arrays.asList("adresse ##pas vraiment bon##"));
+		assertList(new ArrayList<>(new ValidationHelper.Validate.Adapter.Default(new ElectronicMailCustomMessage("a..@mail.com")).execute())
+				, Arrays.asList("adresse : ##pas vraiment bon##"));
     }
     
     /**/
@@ -55,6 +55,11 @@ public class ValidationHelperUnitTest extends AbstractUnitTest {
     	@Email @NotNull
 		private String address;
     	
+    	public ElectronicMail() {}
+    	
+    	public ElectronicMail(String address) {
+    		this.address = address;
+    	}
     }
     
     @Getter @Setter @Accessors(chain=true)
@@ -64,6 +69,11 @@ public class ValidationHelperUnitTest extends AbstractUnitTest {
     	@Email(message="{pas vraiment bon}") @NotNull
 		private String address;
     	
+    	public ElectronicMailCustomMessage() {}
+    	
+    	public ElectronicMailCustomMessage(String address) {
+    		this.address = address;
+    	}
     }
 	
 	

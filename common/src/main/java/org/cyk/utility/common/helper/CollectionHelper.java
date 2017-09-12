@@ -11,7 +11,13 @@ import java.util.Set;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.Constant;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Singleton
 public class CollectionHelper extends AbstractHelper implements Serializable  {
@@ -30,6 +36,19 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public <ELEMENT> Collection<ELEMENT> filter(Collection<ELEMENT> collection,Class<?> aClass){
+		if(collection==null || aClass==null)
+			return null;
+		return new CollectionHelper.Filter.Adapter.Default<ELEMENT>(collection).setProperty(CollectionHelper.Filter.PROPERTY_NAME_CLASS, aClass).execute();
+	}
+	
+	public <ELEMENT> Collection<ELEMENT> filter(Collection<ELEMENT> collection,String fieldName,Object fieldValue){
+		if(collection==null)
+			return null;
+		return new CollectionHelper.Filter.Adapter.Default<ELEMENT>(collection).setProperty(CollectionHelper.Filter.PROPERTY_NAME_FIELD_NAME, fieldName)
+				.setProperty(CollectionHelper.Filter.PROPERTY_NAME_FIELD_VALUE, fieldValue).execute();
 	}
 	
 	public <ELEMENT> Collection<ELEMENT> get(Boolean distinct,@SuppressWarnings("unchecked") ELEMENT...elements){
@@ -118,10 +137,10 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return collection==null || collection.isEmpty();
 	}
 
-	public String concatenate(Collection<?> collection, String separator) {
+	public String concatenate(Collection<?> collection, Object separator) {
 		if(isEmpty(collection))
 			return Constant.EMPTY_STRING;
-		return StringUtils.join(collection,separator);
+		return StringUtils.join(collection,separator == null ? null : separator.toString());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -195,24 +214,96 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				
 				@Override
 				protected Collection<TYPE> __execute__() {
-					String fieldName = (String) getProperty(PROPERTY_NAME_FIELD_NAME);
-					Object fieldValue = getProperty(PROPERTY_NAME_FIELD_VALUE);
+					Class<?> aClass = (Class<?>) getProperty(PROPERTY_NAME_CLASS);
 					Collection<TYPE> input = getInput();
 					Collection<TYPE> collection = null;
 					for(TYPE instance : input){
-						Object instanceFieldValue = FieldHelper.getInstance().read(instance, fieldName);
-						if((fieldValue==null && instanceFieldValue==null) || (fieldValue!=null && fieldValue.equals(instanceFieldValue))){
-							if(collection==null)
-								collection = new ArrayList<>();
-							collection.add(instance);
+						if(aClass==null){
+							String fieldName = (String) getProperty(PROPERTY_NAME_FIELD_NAME);
+							Object fieldValue = getProperty(PROPERTY_NAME_FIELD_VALUE);
+							Object instanceFieldValue = FieldHelper.getInstance().read(instance, fieldName);
+							if((fieldValue==null && instanceFieldValue==null) || (fieldValue!=null && fieldValue.equals(instanceFieldValue))){
+								if(collection==null)
+									collection = new ArrayList<>();
+								collection.add(instance);
+							}	
+						}else {
+							if(ClassHelper.getInstance().isInstanceOf(aClass, instance.getClass())){
+								if(collection==null)
+									collection = new ArrayList<>();
+								collection.add(instance);
+							}
 						}
+						
 					}
 					return collection;
 				}
 				
-			}
-			
-		}
-				
+			}	
+		}	
 	}
+	
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class Instance<T> implements Serializable {
+
+		private static final long serialVersionUID = -130189077130420874L;
+
+		private Collection<T> collection;
+		private Boolean synchonizationEnabled;
+		private Boolean isOrderNumberComputeEnabled;
+		private Collection<String> fieldNames;
+		
+		public Instance<T> addOne(T item){
+			getCollection().add(item);
+			return this;
+		}
+		
+		public Instance<T> addMany(Collection<T> items){
+			getCollection().addAll(items);
+			return this;
+		}
+		
+		public Collection<T> getCollection(){
+			if(collection==null)
+				collection=new ArrayList<>();
+			return collection;
+		}
+		
+		public Collection<String> getFieldNames(){
+			if(fieldNames==null)
+				fieldNames=new LinkedHashSet<>();
+			return fieldNames;
+		}
+		
+		public Instance<T> addOneFieldName(String fieldName){
+			getFieldNames().add(fieldName);
+			return this;
+		}
+		
+		public Instance<T> addManyFieldName(Collection<String> fieldNames){
+			getFieldNames().addAll(fieldNames);
+			return this;
+		}
+		
+		public Instance<T> addManyFieldName(String...fieldNames){
+			return addManyFieldName(Arrays.asList(fieldNames));
+		}
+		
+		public Boolean isSynchonizationEnabled(){
+			return Boolean.TRUE.equals(synchonizationEnabled);
+		}
+		
+		@SuppressWarnings("unchecked")
+		public <CLASS> Collection<CLASS> filter(Class<CLASS> aClass){
+			return (Collection<CLASS>) getInstance().filter(collection, aClass);
+		}
+		
+		@Override
+		public String toString() {
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+		}
+	}
+
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -43,18 +44,41 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 		assertFilter(data, "f2", null, Arrays.asList(data.get(7)));
 		
 		assertFilter(data, "f3", null, Arrays.asList(data.get(9)));
+		
+		List<Object> data2 = Arrays.asList(
+				new A()
+				,new A1()
+				,new A2()
+				,new A3()
+				,new A4()
+				,new A1()
+				,new A2()
+				,new A3()
+				,new A2()
+				,new A2()
+		);
+		assertFilter(data2, A2.class, Arrays.asList(data2.get(2),data2.get(6),data2.get(8),data2.get(9)));
 	}
 	
-	private <T> void assertFilter(Collection<T> collection,String fieldName,Object fieldValue,Collection<T> expected){
+	private <T> void assertFilter(Collection<T> collection,Class<?> aClass,String fieldName,Object fieldValue,Collection<T> expected){
 		Collection<T> result = new CollectionHelper.Filter.Adapter.Default<T>(collection).setProperty(CollectionHelper.Filter.PROPERTY_NAME_FIELD_NAME, fieldName)
 				.setProperty(CollectionHelper.Filter.PROPERTY_NAME_FIELD_VALUE, fieldValue)
+				.setProperty(CollectionHelper.Filter.PROPERTY_NAME_CLASS, aClass)
 				.execute();
 		assertList((List<?>)result, (List<?>)expected);
 	}
 	
+	private <T> void assertFilter(Collection<T> collection,String fieldName,Object fieldValue,Collection<T> expected){
+		assertFilter(collection, null, fieldName, fieldValue, expected);
+	}
+	
+	private <T> void assertFilter(Collection<T> collection,Class<?> aClass,Collection<T> expected){
+		assertFilter(collection, aClass, null, null, expected);
+	}
+	
 	/**/
 	
-	@AllArgsConstructor @Getter @Setter
+	@AllArgsConstructor @NoArgsConstructor @Getter @Setter
 	public static class A {
 		
 		private String f1;
@@ -66,4 +90,9 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 			return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
 		}
 	}
+	
+	@AllArgsConstructor @Getter @Setter public static class A1 {}
+	@AllArgsConstructor @Getter @Setter public static class A2 {}
+	@AllArgsConstructor @Getter @Setter public static class A3 {}
+	@AllArgsConstructor @Getter @Setter public static class A4 {}
 }

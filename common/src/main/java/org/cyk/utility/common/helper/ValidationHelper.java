@@ -14,6 +14,7 @@ import javax.validation.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.helper.LayerHelper.Type;
 import org.cyk.utility.common.validation.MessageInterpolator;
 
 import lombok.Getter;
@@ -41,8 +42,11 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 		Listener getListener();
 		Validate setListener(Listener listener);
 		
-		Boolean getIsAutomaticallyThrowMessages();
-		Validate setIsAutomaticallyThrowMessages(Boolean isAutomaticallyThrowMessages);
+		Boolean getIsThrowMessages();
+		Validate setIsThrowMessages(Boolean isThrowMessages);
+		
+		Boolean getIsFieldNameIncludedInMessage();
+		Validate setIsFieldNameIncludedInMessage(Boolean isFieldNameIncludedInMessage);
 		
 		Class<? extends java.lang.Throwable> getThrowableClass();
 		Validate setThrowableClass(Class<? extends java.lang.Throwable> throwableClass);
@@ -62,7 +66,7 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 			protected Listener listener;
 			protected LayerHelper.Type layerType;
 			protected Collection<Class<?>> groups;
-			protected Boolean isAutomaticallyThrowMessages;
+			protected Boolean isThrowMessages,isFieldNameIncludedInMessage;
 			protected Class<? extends java.lang.Throwable> throwableClass;
 			
 			@SuppressWarnings("unchecked")
@@ -71,12 +75,17 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 			}
 			
 			@Override
+			public Validate setIsFieldNameIncludedInMessage(Boolean isFieldNameIncludedInMessage) {
+				return null;
+			}
+			
+			@Override
 			public Validate setThrowableClass(Class<? extends java.lang.Throwable> throwableClass) {
 				return null;
 			}
 			
 			@Override
-			public Validate setIsAutomaticallyThrowMessages(Boolean isAutomaticallyThrowMessages) {
+			public Validate setIsThrowMessages(Boolean isThrowMessages) {
 				return null;
 			}
 			
@@ -116,14 +125,20 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 				}
 				
 				@Override
+				public Validate setIsFieldNameIncludedInMessage(Boolean isFieldNameIncludedInMessage) {
+					this.isFieldNameIncludedInMessage = isFieldNameIncludedInMessage;
+					return this;
+				}
+				
+				@Override
 				public Validate setThrowableClass(Class<? extends java.lang.Throwable> throwableClass) {
 					this.throwableClass = throwableClass;
 					return this;
 				}
 				
 				@Override
-				public Validate setIsAutomaticallyThrowMessages(Boolean isAutomaticallyThrowMessages) {
-					this.isAutomaticallyThrowMessages = isAutomaticallyThrowMessages;
+				public Validate setIsThrowMessages(Boolean isThrowMessages) {
+					this.isThrowMessages = isThrowMessages;
 					return this;
 				}
 				
@@ -170,17 +185,31 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 					if(listener==null)
 						listener = new Listener.Adapter.Default();
 					LayerHelper.Type layerType = InstanceHelper.getInstance().getIfNotNullElseDefault(getLayerType(),LayerHelper.Type.DEFAULT);
+					Boolean isFieldNameIncludedInMessage = InstanceHelper.getInstance().getIfNotNullElseDefault(getIsFieldNameIncludedInMessage(),Boolean.TRUE);
+					String messageFormat = listener.getMessageFormat(layerType, isFieldNameIncludedInMessage);
 					object = listener.getObjectToValidate(object, layerType);
 					Validator validator = Validation.buildDefaultValidatorFactory().usingContext().messageInterpolator(MessageInterpolator.getInstance()).getValidator();  //getValidator();
 					Set<ConstraintViolation<Object>> constraintViolationsModel = groups==null || groups.isEmpty()?validator.validate(object):validator.validate(object,groups.toArray(new Class<?>[]{}));
 					if(!constraintViolationsModel.isEmpty())
 			        	for(ConstraintViolation<?> violation : constraintViolationsModel){
-			        		//logWarning("Constraint Violation : {}.{} : {} ",aObject.getClass().getName(),violation.getPropertyPath(),violation.getMessage());
-			        		messages.add(formatMessage(object,violation));
-			        		//messages.add(String.format("Constraint Violation : %s.%s : %s ",aObject.getClass().getName(),violation.getPropertyPath(),violation.getMessage()));
+			        		Class<?> clazz = object.getClass();
+							Field field = null;
+							if(StringUtils.contains(violation.getPropertyPath().toString(), Constant.CHARACTER_DOT.toString())){
+								for(String fieldName : StringUtils.split(violation.getPropertyPath().toString(), Constant.CHARACTER_DOT.toString())){
+									field = FieldHelper.getInstance().get(clazz, fieldName);
+									clazz = field.getType();
+								}	
+							}else{
+								field = FieldHelper.getInstance().get(clazz, violation.getPropertyPath().toString());
+							}
+							Collection<Object> arguments = new ArrayList<>();
+							if(Boolean.TRUE.equals(isFieldNameIncludedInMessage))
+								arguments.add(StringHelper.getInstance().getField(field.getName()));
+							arguments.add(violation.getMessage());
+							messages.add(String.format(messageFormat, arguments.toArray()));
 			        	}
-					Boolean isAutomaticallyThrowMessages = getIsAutomaticallyThrowMessages();
-					if(Boolean.TRUE.equals(isAutomaticallyThrowMessages)){
+					Boolean isThrowMessages = getIsThrowMessages();
+					if(Boolean.TRUE.equals(isThrowMessages)){
 						Class<? extends java.lang.Throwable> throwableClass = InstanceHelper.getInstance().getIfNotNullElseDefault(getThrowableClass(),RuntimeException.class);
 						ThrowableHelper.getInstance().throw_(messages, throwableClass);
 					}
@@ -214,6 +243,9 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 		
 		Object getObjectToValidate(Object object,LayerHelper.Type layerType);
 		
+		String getMessageFormat(LayerHelper.Type layerType,Boolean isFieldNameIncludedInMessage);
+		String getMessageFormat(LayerHelper.Type layerType);
+		
 		public static class Adapter extends AbstractBean implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 
@@ -222,14 +254,39 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 				return null;
 			}
 			
+			@Override
+			public String getMessageFormat(LayerHelper.Type layerType,Boolean isFieldNameIncludedInMessage) {
+				return null;
+			}
+			
+			@Override
+			public String getMessageFormat(LayerHelper.Type layerType) {
+				return null;
+			}
+			
 			/**/
 			
 			public static class Default extends Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
+				public static String MESSAGE_WITHOUT_FIELD_NAME_FORMAT = "%s";
+				public static String MESSAGE_WITH_FIELD_NAME_FORMAT = "%s : "+MESSAGE_WITHOUT_FIELD_NAME_FORMAT;
+				
 				@Override
 				public Object getObjectToValidate(Object object,LayerHelper.Type layerType) {
 					return object;
+				}
+				
+				@Override
+				public String getMessageFormat(LayerHelper.Type layerType,Boolean isFieldNameIncludedInMessage) {
+					if(isFieldNameIncludedInMessage == null || Boolean.TRUE.equals(isFieldNameIncludedInMessage))
+						return MESSAGE_WITH_FIELD_NAME_FORMAT;
+					return MESSAGE_WITHOUT_FIELD_NAME_FORMAT;
+				}
+				
+				@Override
+				public String getMessageFormat(LayerHelper.Type layerType) {
+					return getMessageFormat(layerType, !LayerHelper.Type.VIEW.equals(layerType));
 				}
 				
 			}
