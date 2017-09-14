@@ -1,5 +1,6 @@
 package org.cyk.utility.common;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -58,6 +59,16 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 				,new A2()
 		);
 		assertFilter(data2, A2.class, Arrays.asList(data2.get(2),data2.get(6),data2.get(8),data2.get(9)));
+		
+		assertEquals(CollectionHelper.getInstance().getElementAt(data2, 0), data2.get(0));
+		assertEquals(CollectionHelper.getInstance().getElementAt(data2, 3), data2.get(3));
+		assertEquals(CollectionHelper.getInstance().getElementAt(data2, 9), data2.get(9));
+		
+		assertList((List<?>) CollectionHelper.getInstance().removeElementAt(new ArrayList<>(data2), 0), Arrays.asList(data2.get(1),data2.get(2),data2.get(3),data2.get(4),data2.get(5),data2.get(6),data2.get(7),data2.get(8),data2.get(9)));
+		assertList((List<?>) CollectionHelper.getInstance().removeElementAt(new ArrayList<>(data2), 1), Arrays.asList(data2.get(0),data2.get(2),data2.get(3),data2.get(4),data2.get(5),data2.get(6),data2.get(7),data2.get(8),data2.get(9)));
+	
+		assertList((List<?>) CollectionHelper.getInstance().removeElement(new ArrayList<>(data2), data2.get(0)), Arrays.asList(data2.get(1),data2.get(2),data2.get(3),data2.get(4),data2.get(5),data2.get(6),data2.get(7),data2.get(8),data2.get(9)));
+		assertList((List<?>) CollectionHelper.getInstance().removeElement(new ArrayList<>(data2), data2.get(1)), Arrays.asList(data2.get(0),data2.get(2),data2.get(3),data2.get(4),data2.get(5),data2.get(6),data2.get(7),data2.get(8),data2.get(9)));
 	}
 	
 	private <T> void assertFilter(Collection<T> collection,Class<?> aClass,String fieldName,Object fieldValue,Collection<T> expected){

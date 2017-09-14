@@ -54,6 +54,47 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return element;
 	}
 	
+	public <ELEMENT> Collection<ELEMENT> removeElementAt(Collection<ELEMENT> collection,Integer index){
+		Collection<ELEMENT> newCollection = collection;
+		if(isNotEmpty(collection) && index < getSize(collection)){
+			if(collection instanceof List){
+				((List<ELEMENT>)collection).remove(index.intValue());
+				newCollection = collection;
+			}else {
+				if(collection instanceof Set)
+					newCollection = new LinkedHashSet<>();
+				Iterator<ELEMENT> iterator = collection.iterator();
+				Integer count = 0;
+				while (iterator.hasNext()){
+					ELEMENT element = iterator.next();
+					if(count++ != index )
+						newCollection.add(element);
+				}
+			}
+		}
+		return newCollection;
+	}
+	
+	public <ELEMENT> Collection<ELEMENT> removeElement(Collection<ELEMENT> collection,Object element){
+		Collection<ELEMENT> newCollection = collection;
+		if(isNotEmpty(collection)){
+			if(collection instanceof List){
+				((List<ELEMENT>)collection).remove(element);
+				newCollection = collection;
+			}else {
+				if(collection instanceof Set)
+					newCollection = new LinkedHashSet<>();
+				Iterator<ELEMENT> iterator = collection.iterator();
+				while (iterator.hasNext()){
+					ELEMENT index = iterator.next();
+					if(element != index )
+						newCollection.add(index);
+				}
+			}
+		}
+		return newCollection;
+	}
+	
 	public <ELEMENT> List<ELEMENT> createList(Collection<ELEMENT> collection){
 		if(collection==null)
 			return null;
@@ -324,6 +365,14 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		
 		public <CLASS> CLASS getItemAt(Class<CLASS> aClass,Integer index){
 			return getInstance().getElementAt(filter(aClass), index);
+		}
+		
+		public <CLASS> void removeItem(CLASS element){
+			collection = getInstance().removeElement(collection, element);
+		}
+		
+		public <CLASS> void removeItemAt(Class<CLASS> aClass,Integer index){
+			removeItem(getItemAt(aClass, index));
 		}
 		
 		/*@SuppressWarnings("unchecked")
