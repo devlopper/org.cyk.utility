@@ -15,6 +15,7 @@ import javax.enterprise.inject.spi.CDI;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.text.RandomStringGenerator;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -129,6 +130,10 @@ public abstract class AbstractTest implements Serializable {
 	}
 	protected BigDecimal bigDecimal(Integer value){
 		return new BigDecimal(value);
+	}
+	
+	protected String generateRandomCode(){
+		return new RandomStringGenerator.Builder().withinRange('a', 'z').build().generate(10);
 	}
 	
 	/**/

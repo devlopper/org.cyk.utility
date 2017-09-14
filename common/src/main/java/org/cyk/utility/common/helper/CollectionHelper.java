@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +37,27 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public <ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection,Integer index){
+		ELEMENT element = null;
+		if(isNotEmpty(collection) && index < getSize(collection)){
+			if(collection instanceof List)
+				element = ((List<ELEMENT>)collection).get(index.intValue());
+			else {
+				Iterator<ELEMENT> iterator = collection.iterator();
+				Integer count = 0;
+				while (count++ <= index)
+					element = iterator.next();
+			}
+		}
+		return element;
+	}
+	
+	public <ELEMENT> List<ELEMENT> createList(Collection<ELEMENT> collection){
+		if(collection==null)
+			return null;
+		return new ArrayList<>(collection);
 	}
 	
 	public <ELEMENT> Collection<ELEMENT> filter(Collection<ELEMENT> collection,Class<?> aClass){
@@ -299,6 +321,17 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		public <CLASS> Collection<CLASS> filter(Class<CLASS> aClass){
 			return (Collection<CLASS>) getInstance().filter(collection, aClass);
 		}
+		
+		public <CLASS> CLASS getItemAt(Class<CLASS> aClass,Integer index){
+			return getInstance().getElementAt(filter(aClass), index);
+		}
+		
+		/*@SuppressWarnings("unchecked")
+		public <CLASS> Instance<T> clear(Class<CLASS> aClass){
+			for(int index = 0 ; index < ((List<?>)collection).size() ; )
+				if( ((List<?>)collection).get(index).getClass().equals(aClass) );
+			return this;
+		}*/
 		
 		@Override
 		public String toString() {
