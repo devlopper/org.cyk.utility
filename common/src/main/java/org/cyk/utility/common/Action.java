@@ -7,11 +7,17 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
 
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.ListenerHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
+import org.cyk.utility.common.helper.MethodHelper;
+import org.cyk.utility.common.helper.NotificationHelper;
 import org.cyk.utility.common.helper.NumberHelper;
+import org.cyk.utility.common.helper.ThrowableHelper;
+import org.cyk.utility.common.helper.NotificationHelper.Notification;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,17 +27,54 @@ import lombok.experimental.Accessors;
 
 public interface Action<INPUT,OUTPUT> {
 
+	@AllArgsConstructor @Getter
+	public enum Status{
+		SUCCESS(Boolean.TRUE,"command.serve.succeed"),
+		FAILURE(Boolean.TRUE,"command.serve.fail"),
+		
+		;
+		
+		private Boolean notify;
+		private String notificationMessageId;
+	};
+	
+	Collection<ActionListener> getActionListeners();
+	Action<INPUT,OUTPUT> setActionListener(Collection<ActionListener> actionListeners);
+	Action<INPUT,OUTPUT> addActionListener(Collection<ActionListener> actionListeners);
+	Action<INPUT,OUTPUT> addActionListener(ActionListener...actionListeners);
+	
 	LoggingHelper.Message.Builder getLoggingMessageBuilder();
 	Action<INPUT,OUTPUT> setLoggingMessageBuilder(LoggingHelper.Message.Builder loggingMessageBuilder);
 	
 	@Deprecated LogMessage.Builder getLogMessageBuilder();
 	@Deprecated Action<INPUT,OUTPUT> setLogMessageBuilder(LogMessage.Builder logMessageBuilder);
 	
+	Status getStatus();
+	Action<INPUT,OUTPUT> setStatus(Status status);
+	
+	Boolean getIsProcessableOnStatus();
+	Action<INPUT,OUTPUT> setIsProcessableOnStatus(Boolean isProcessableOnStatus); 
+	Action<INPUT,OUTPUT> processOnStatus(Status status);
+	
+	Boolean getIsNotifiable();
+	Action<INPUT,OUTPUT> setIsNotifiable(Boolean isNotifiable); 
+	Action<INPUT,OUTPUT> notify_();
+	
+	Boolean getIsInputValidatable();
+	Action<INPUT,OUTPUT> setIsInputValidatable(Boolean isInputValidatable);
+	Action<INPUT,OUTPUT> validateInput();
+	
+	java.lang.Throwable getThrowable();
+	Action<INPUT,OUTPUT> setThrowable(java.lang.Throwable throwable);
+	
 	Boolean getAutomaticallyLogMessage();
 	Action<INPUT,OUTPUT> setAutomaticallyLogMessage(Boolean value);
 	
 	String getName();
 	Action<INPUT,OUTPUT> setName(String name);
+	
+	Object getIdentifier();
+	Action<INPUT,OUTPUT> setIdentifier(Object identifier);
 	
 	Class<INPUT> getInputClass();
 	Action<INPUT,OUTPUT> setInputClass(Class<INPUT> inputClass);
@@ -42,8 +85,20 @@ public interface Action<INPUT,OUTPUT> {
 	Boolean getIsInputRequired();
 	Action<INPUT,OUTPUT> setIsInputRequired(Boolean isInputRequired);
 	
+	Boolean getIsConfirmable();
+	Action<INPUT,OUTPUT> setIsConfirmable(Boolean isConfirmable);
+	
+	Boolean getIsConfirmed();
+	Action<INPUT,OUTPUT> setIsConfirmed(Boolean isConfirmed);
+	
 	Boolean getExecutable();
 	Action<INPUT,OUTPUT> setExecutable(Boolean executable);
+	
+	Boolean getIsLoggable();
+	Action<INPUT,OUTPUT> setIsLoggable(Boolean isLoggable);
+	
+	Boolean getIsProduceOutputOnly();
+	Action<INPUT,OUTPUT> setIsProduceOutputOnly(Boolean isProcuceOutputOnly);
 	
 	OUTPUT execute();
 	
@@ -175,10 +230,15 @@ public interface Action<INPUT,OUTPUT> {
 		protected Class<OUTPUT> outputClass;
 		@Deprecated protected LogMessage.Builder logMessageBuilder;
 		protected LoggingHelper.Message.Builder loggingMessageBuilder;
-		protected Boolean automaticallyLogMessage = Boolean.TRUE,isInputRequired=Boolean.TRUE,executable;
+		protected Boolean automaticallyLogMessage = Boolean.TRUE,isInputRequired=Boolean.TRUE,executable,isInputValidatable,isProcessableOnStatus,isConfirmable,isConfirmed
+				,isNotifiable,isLoggable,isProduceOutputOnly;
 		protected Properties properties;
 		protected Collection<Object> parameters;
 		protected Action<INPUT,OUTPUT> parent;
+		protected Status status;
+		protected java.lang.Throwable throwable;
+		protected Collection<ActionListener> actionListeners;
+		protected Object identifier;
 		
 		@Deprecated
 		public Adapter(String name,Class<INPUT> inputClass,INPUT input,Class<OUTPUT> outputClass,LogMessage.Builder logMessageBuilder) {
@@ -194,6 +254,86 @@ public interface Action<INPUT,OUTPUT> {
 			setInputClass(inputClass);
 			setInput(input);
 			setOutputClass(outputClass);
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setIsNotifiable(Boolean isNotifiable) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setIsLoggable(Boolean isLoggable) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setIsProduceOutputOnly(Boolean isProduceOutputOnly) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> notify_() {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setIdentifier(Object identifier) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setIsConfirmed(Boolean isConfirmed) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setActionListener(Collection<org.cyk.utility.common.Action.ActionListener> actionListeners) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> addActionListener(org.cyk.utility.common.Action.ActionListener... actionListeners) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> addActionListener(Collection<org.cyk.utility.common.Action.ActionListener> actionListeners) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setIsConfirmable(Boolean isConfirmable) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setStatus(org.cyk.utility.common.Action.Status status) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setIsInputValidatable(Boolean isInputValidatable) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setIsProcessableOnStatus(Boolean isProcessableOnStatus) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> validateInput() {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> processOnStatus(Status status) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setThrowable(Throwable throwable) {
+			return null;
 		}
 		
 		@Override
@@ -446,6 +586,89 @@ public interface Action<INPUT,OUTPUT> {
 			}
 			
 			@Override
+			public Action<INPUT, OUTPUT> setIsLoggable(Boolean isLoggable) {
+				this.isLoggable = isLoggable;
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setIsProduceOutputOnly(Boolean isProcuceOutputOnly) {
+				this.isProduceOutputOnly = isProcuceOutputOnly;
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setIsNotifiable(Boolean isNotifiable) {
+				this.isNotifiable = isNotifiable;
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setIsConfirmable(Boolean isConfirmable) {
+				this.isConfirmable = isConfirmable;
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setIsConfirmed(Boolean isConfirmed) {
+				this.isConfirmed = isConfirmed;
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setIdentifier(Object identifier) {
+				this.identifier = identifier;
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setStatus(org.cyk.utility.common.Action.Status status) {
+				this.status = status;
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setIsInputValidatable(Boolean isInputValidatable) {
+				this.isInputValidatable = isInputValidatable;
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setIsProcessableOnStatus(Boolean isProcessableOnStatus) {
+				this.isProcessableOnStatus = isProcessableOnStatus;
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> notify_() {
+				Notification notification = getNotification(getStatus());
+				if(notification!=null)
+					NotificationHelper.getInstance().getViewer().setInput(notification).setType(NotificationHelper.Notification.Viewer.Type.DEFAULT).execute();
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> validateInput() {
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> processOnStatus(org.cyk.utility.common.Action.Status status) {
+				setStatus(status);
+				return this;
+			}
+			
+			protected NotificationHelper.Notification getNotification(org.cyk.utility.common.Action.Status status){
+				if(Action.Status.SUCCESS.equals(status))
+					return NotificationHelper.getInstance().getNotification("notification.operation.executed.success");
+				if(Action.Status.FAILURE.equals(status))
+					return NotificationHelper.getInstance().getNotification("notification.operation.executed.fail"
+							,new Object[]{ThrowableHelper.getInstance().getInstanceOf(getThrowable(),ThrowableHelper.ThrowableMarker.class,RuntimeException.class
+									).getMessage()}).setSeverityType(NotificationHelper.SeverityType.ERROR);
+				return null;
+			}
+			
+			@Override
 			public Object getProperty(String name) {
 				Properties properties = getProperties();
 				
@@ -512,47 +735,115 @@ public interface Action<INPUT,OUTPUT> {
 						
 			@Override
 			public final OUTPUT execute() {
-				Boolean executable = getExecutable();
-				if(executable!=null && Boolean.FALSE.equals(executable))
-					return output;
-				if(Boolean.TRUE.equals(isInputRequired())){
-					if(getInputClass() == null)
-						throw new RuntimeException("Input class required");	
-					if(getInput() == null)
-						throw new RuntimeException("Input value required");
+				Boolean isInputValid = Boolean.TRUE;
+				Long millisecond = null;
+				if(isProduceOutputOnly == null || !isProduceOutputOnly){
+					Boolean executable = getExecutable();
+					if(executable!=null && Boolean.FALSE.equals(executable))
+						return output;
+					
+					if(getIsConfirmed() == null){
+						Boolean isConfirmable = getIsConfirmable();
+						if(Boolean.TRUE.equals(isConfirmable)){
+							confirm();
+							ListenerHelper.getInstance().listen(actionListeners, ActionListener.METHOD_NAME_CONFIRM,new MethodHelper.Method.Parameter(Action.class, this));
+						}else
+							setIsConfirmed(Boolean.TRUE);	
+					}
+					
+					if(!Boolean.TRUE.equals(getIsConfirmed()))
+						return output;
+					
+					Collection<ActionListener> actionListeners = getActionListeners();
+					ListenerHelper.getInstance().listen(actionListeners, ActionListener.METHOD_NAME_GET_INPUT,new MethodHelper.Method.Parameter(Action.class, this));
+					if(Boolean.TRUE.equals(isInputRequired())){
+						if(getInputClass() == null)
+							throw new RuntimeException("Input class required");	
+						if(getInput() == null)
+							throw new RuntimeException("Input value required");
+					}
+					
+					if(getOutputClass() == null)
+						throw new RuntimeException("Output class required");
+					
+					LoggingHelper.Message.Builder loggingMessageBuilder = getLoggingMessageBuilder();
+					if(loggingMessageBuilder==null && !(this instanceof LoggingHelper.Message.Builder))
+						setLoggingMessageBuilder(loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default());
+					
+					//if(loggingMessageBuilder==null)
+					//	setLogMessageBuilder(new LogMessage.Builder(name, getInput() ==null ? Constant.EMPTY_STRING : getInput().getClass().getSimpleName()));
+					
+					if(Boolean.TRUE.equals(isShowInputLogMessage(getInput())))
+						addLoggingMessageBuilderNamedParameters("input",getInputLogMessage(getInput()));
+					if(Boolean.TRUE.equals(isShowOuputClassLogMessage(getOutputClass())))
+						addLoggingMessageBuilderNamedParameters("output class",getOutputClass().getSimpleName());
+					millisecond = System.currentTimeMillis();
+					
+					isInputValid = Boolean.TRUE;
+					if(Boolean.TRUE.equals(getIsInputValidatable())){
+						try {
+							validateInput();
+							ListenerHelper.getInstance().listen(actionListeners, ActionListener.METHOD_NAME_VALIDATE_INPUT,new MethodHelper.Method.Parameter(Action.class, this));
+						} catch (Exception exception) {
+							isInputValid = Boolean.FALSE;
+							processOnFailure(exception);
+						}
+					}	
 				}
 				
-				if(getOutputClass() == null)
-					throw new RuntimeException("Output class required");
-				
-				LoggingHelper.Message.Builder loggingMessageBuilder = getLoggingMessageBuilder();
-				if(loggingMessageBuilder==null && !(this instanceof LoggingHelper.Message.Builder))
-					setLoggingMessageBuilder(loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default());
-				
-				//if(loggingMessageBuilder==null)
-				//	setLogMessageBuilder(new LogMessage.Builder(name, getInput() ==null ? Constant.EMPTY_STRING : getInput().getClass().getSimpleName()));
-				
-				if(Boolean.TRUE.equals(isShowInputLogMessage(getInput())))
-					addLoggingMessageBuilderNamedParameters("input",getInputLogMessage(getInput()));
-				if(Boolean.TRUE.equals(isShowOuputClassLogMessage(getOutputClass())))
-					addLoggingMessageBuilderNamedParameters("output class",getOutputClass().getSimpleName());
-				Long millisecond = System.currentTimeMillis();
-				output = __execute__();
-				millisecond = System.currentTimeMillis() - millisecond;
-				if(Boolean.TRUE.equals(isShowOutputLogMessage(output)))
-					addLoggingMessageBuilderNamedParameters("output",getOutputLogMessage(output));
-				//if(!(this instanceof TimeHelper.Stringifier.Duration.Adapter.Default)){
-					addLoggingMessageBuilderNamedParameters("duration",millisecond);
-				//}
-				if(Boolean.TRUE.equals(getAutomaticallyLogMessage())){
-					//LoggingHelper.Message message = loggingMessageBuilder.execute();
-					logTrace(this);
+				if(Boolean.TRUE.equals(isInputValid)){
+					if(Boolean.TRUE.equals(getIsProcessableOnStatus())){
+						try {
+							output = __execute__();
+							ListenerHelper.getInstance().listen(actionListeners, ActionListener.METHOD_NAME___EXECUTE__,new MethodHelper.Method.Parameter(Action.class, this));
+							processOnStatus(Status.SUCCESS);
+							ListenerHelper.getInstance().listen(actionListeners, ActionListener.METHOD_NAME_PROCESS_ON_STATUS,new MethodHelper.Method.Parameter(Action.class, this));
+						} catch (Exception exception) {
+							processOnFailure(exception);
+						}	
+					}else{
+						output = __execute__();
+					}
 				}
+				
+				if(isProduceOutputOnly == null || !isProduceOutputOnly){
+					millisecond = System.currentTimeMillis() - millisecond;
+					if(Boolean.TRUE.equals(getIsNotifiable()))
+						notify_();
+					
+					if(Boolean.TRUE.equals(isShowOutputLogMessage(output)))
+						addLoggingMessageBuilderNamedParameters("output",getOutputLogMessage(output));
+					//if(!(this instanceof TimeHelper.Stringifier.Duration.Adapter.Default)){
+						addLoggingMessageBuilderNamedParameters("duration",millisecond);
+					//}
+					if(Boolean.TRUE.equals(getAutomaticallyLogMessage())){
+						//LoggingHelper.Message message = loggingMessageBuilder.execute();
+						logTrace(this);
+					}
+				}
+				
 				return output;
 			}
 			
 			protected OUTPUT __execute__(){
-				throw new RuntimeException("Action <<"+name+">> with input class "+getInput().getClass()+" and output class "+getOutputClass()+" not yet implemented.");
+				throw new RuntimeException("Action <<"+name+">> with input class "+getInputClass()+" and output class "+getOutputClass()+" not yet implemented.");
+				//throw new RuntimeException("Action <<"+name+">> with input class "+getInput().getClass()+" and output class "+getOutputClass()+" not yet implemented.");
+			}
+			
+			protected void processOnFailure(Throwable throwable){
+				setThrowable(throwable);
+				processOnStatus(Status.FAILURE);
+				ListenerHelper.getInstance().listen(actionListeners, ActionListener.METHOD_NAME_PROCESS_ON_STATUS,new MethodHelper.Method.Parameter(Action.class, this));
+			}
+			
+			protected void confirm(){
+				setIsConfirmed(Boolean.TRUE);
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setThrowable(Throwable throwable) {
+				this.throwable = throwable;
+				return this;
 			}
 			
 			protected Boolean isShowOuputClassLogMessage(Class<OUTPUT> aClass){
@@ -627,6 +918,23 @@ public interface Action<INPUT,OUTPUT> {
 				this.parameters = null;
 				return this;
 			}
+		
+			@Override
+			public Action<INPUT, OUTPUT> addActionListener(Collection<ActionListener> actionListeners) {
+				if(CollectionHelper.getInstance().isNotEmpty(actionListeners)){
+					if(this.actionListeners==null)
+						this.actionListeners = new ArrayList<>();
+					this.actionListeners.addAll(actionListeners);	
+				}
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> addActionListener(ActionListener...actionListeners) {
+				if(ArrayHelper.getInstance().isNotEmpty(actionListeners))
+					addActionListener(Arrays.asList(actionListeners));
+				return this;
+			}
 		}
 	}
 
@@ -649,6 +957,53 @@ public interface Action<INPUT,OUTPUT> {
 		}
 	}
 
+	/**/
+	
+	public static interface ActionListener {
+
+		void getInput(Action<Object,Object> action);
+		
+		void validateInput(Action<?,?> action);
+		
+		void __execute__(Action<?,?> action);
+		
+		void processOnStatus(Action<?,?> action);
+		
+		void confirm(Action<?,?> action);
+		
+		/*Boolean isNotifiable(Command command,ExecutionState state);
+		
+		String notifiy(Command command,Object parameter,ExecutionState state);
+		*/
+		/**/
+		
+		public static class Adapter extends AbstractBean implements ActionListener,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void getInput(Action<Object, Object> action) {}
+
+			@Override
+			public void validateInput(Action<?, ?> action) {}
+
+			@Override
+			public void __execute__(Action<?, ?> action) {}
+
+			@Override
+			public void processOnStatus(Action<?, ?> action) {}
+			
+			@Override
+			public void confirm(Action<?, ?> action) {}
+			
+		}
+		
+		String METHOD_NAME_GET_INPUT = "getInput";
+		String METHOD_NAME_VALIDATE_INPUT = "validateInput";
+		String METHOD_NAME___EXECUTE__ = "__execute__";
+		String METHOD_NAME_PROCESS_ON_STATUS = "processOnStatus";
+		String METHOD_NAME_CONFIRM = "confirm";
+	}
+	
 	/**/
 	/*
 	public static interface GetValue<VALUE> extends Action<Object, VALUE> {

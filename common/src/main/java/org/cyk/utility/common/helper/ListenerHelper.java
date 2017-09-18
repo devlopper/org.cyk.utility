@@ -2,6 +2,7 @@ package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.inject.Singleton;
@@ -30,6 +31,48 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 		super.initialisation();
 	}
 	
+	public <LISTENER> void listen(ListenerHelper.Executor<LISTENER,java.lang.Void> executor,Collection<LISTENER> listeners,final String methodName,final MethodHelper.Method.Parameter...pParameters){
+		if(executor == null || CollectionHelper.getInstance().isEmpty(listeners) || StringHelper.getInstance().isBlank(methodName))
+			return;
+		executor.setResultMethod(new ListenerHelper.Executor.ResultMethod.Adapter.Default.Void<LISTENER>() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			protected void __execute__(LISTENER listener) {
+				MethodHelper.getInstance().call(listener, java.lang.Void.class, methodName,pParameters);
+			}
+		});
+		executor.addListener(listeners).execute();
+	}
+	
+	public <LISTENER> void listen(ListenerHelper.Executor<LISTENER,java.lang.Void> executor,LISTENER listener,final String methodName,final MethodHelper.Method.Parameter...pParameters){
+		listen(executor, Arrays.asList(listener), methodName, pParameters);
+	}
+	
+	public <LISTENER> void listen(Collection<LISTENER> listeners,String methodName,final MethodHelper.Method.Parameter...pParameters){
+		listen(new ListenerHelper.Executor.Procedure.Adapter.Default<LISTENER>(), listeners, methodName,pParameters);
+	}
+	
+	public <LISTENER> void listen(LISTENER listener,String methodName,final MethodHelper.Method.Parameter...pParameters){
+		listen(Arrays.asList(listener), methodName, pParameters);
+	}
+	/*
+	public <LISTENER,RESULT> void listen(ListenerHelper.Executor<LISTENER,RESULT> executor,LISTENER listener,final String methodName,Class<RESULT> resultClass){
+		if(executor == null || listener == null || StringHelper.getInstance().isBlank(methodName))
+			return;
+		executor.setResultMethod(new ListenerHelper.Executor.ResultMethod.Adapter.Default.Void<LISTENER,RESULT>() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			protected void __execute__(LISTENER listener) {
+				MethodHelper.getInstance().call(listener, java.lang.Void.class, methodName);
+			}
+		});
+		executor.addListener(listener).execute();
+	}
+	
+	public <LISTENER> void listen(LISTENER listener,String methodName){
+		listen(new ListenerHelper.Executor.Procedure.Adapter.Default<LISTENER>(), listener, methodName);
+	}
+	*/
 	public static interface Executor<LISTENER,RESULT> extends Action<Collection<LISTENER>, RESULT>{
 		
 		ResultMethod<RESULT,LISTENER> getResultMethod();
@@ -40,7 +83,8 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 		
 		LISTENER getMatchingListener();
 		
-		Executor<LISTENER,RESULT> addListener(LISTENER listener);
+		Executor<LISTENER,RESULT> addListener(@SuppressWarnings("unchecked") LISTENER...listeners);
+		Executor<LISTENER,RESULT> addListener(Collection<LISTENER> listeners);
 		
 		@Getter
 		public static class Adapter<LISTENER,RESULT> extends Action.Adapter.Default<Collection<LISTENER>,RESULT> implements Executor<LISTENER,RESULT>,Serializable {
@@ -57,7 +101,12 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 			}
 			
 			@Override
-			public Executor<LISTENER, RESULT> addListener(LISTENER listener) {
+			public Executor<LISTENER, RESULT> addListener(Collection<LISTENER> listeners) {
+				return null;
+			}
+			
+			@Override
+			public Executor<LISTENER, RESULT> addListener(@SuppressWarnings("unchecked") LISTENER... listeners) {
 				return null;
 			}
 			
@@ -85,10 +134,19 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 				}
 				
 				@Override
-				public Executor<LISTENER, RESULT> addListener(LISTENER listener) {
-					if(input==null)
-						input = new ArrayList<>();
-					input.add(listener);
+				public Executor<LISTENER, RESULT> addListener(Collection<LISTENER> listeners) {
+					if(CollectionHelper.getInstance().isNotEmpty(listeners)){
+						if(input==null)
+							input = new ArrayList<>();
+						input.addAll(listeners);	
+					}
+					return this;
+				}
+				
+				@Override
+				public Executor<LISTENER, RESULT> addListener(@SuppressWarnings("unchecked") LISTENER... listeners) {
+					if(ArrayHelper.getInstance().isNotEmpty(listeners))
+						addListener(Arrays.asList(listeners));
 					return this;
 				}
 				

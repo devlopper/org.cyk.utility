@@ -13,12 +13,58 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.CollectionHelper.Instance;
+import org.cyk.utility.common.helper.CollectionHelper.Instance.Listener;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
 public class CollectionHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	@Test
+	public void listen(){
+		CollectionHelper.Instance<Child> collection = new CollectionHelper.Instance<Child>().setElementClass(Child.class);
+		collection.setListener(new CollectionHelper.Instance.Listener.Adapter.Default<Child>(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Listener<Child> addOne(Instance<Child> inputCollection, Object object) {
+				return super.addOne(inputCollection, object);
+			}
+			
+			@Override
+			public Listener<Child> removeOne(Instance<Child> inputCollection, Object object) {
+				return super.removeOne(inputCollection, object);
+			}
+			
+			@Override
+			public Boolean isInstanciatable(Instance<Child> inputCollection, Object object) {
+				return super.isInstanciatable(inputCollection, object) || Master.class.equals(object.getClass());
+			}
+			
+			@Override
+			public Child instanciate(Instance<Child> inputCollection, Object object) {
+				if(object instanceof Master)
+					return new Child();
+				return super.instanciate(inputCollection, object);
+			}
+		});
+		Child c1=new Child(),c2=new Child(),c3=new Child();
+		c1.setC1("m159");
+		Master m1 = new Master(),m2 = new Master(),m3 = new Master();
+		
+		collection.addOne(c1);
+		assertEquals(1, collection.getCollection().size());
+		collection.addOne(m1);
+		assertEquals(2, collection.getCollection().size());
+		collection.removeItem(c1);
+		assertEquals(1, collection.getCollection().size());
+		collection.addMany(Arrays.asList(c1,c2,c3));
+		assertEquals(4, collection.getCollection().size());
+		collection.addMany(Arrays.asList(m2,m3));
+		assertEquals(6, collection.getCollection().size());
+	}
 	
 	@Test
 	public void filter(){
@@ -88,6 +134,28 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	/**/
+	
+	@AllArgsConstructor @NoArgsConstructor @Getter @Setter
+	public static class Master {
+		
+		private String m1;
+
+		@Override
+		public String toString() {
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+		}
+	}
+	
+	@AllArgsConstructor @NoArgsConstructor @Getter @Setter
+	public static class Child {
+		
+		private String c1;
+
+		@Override
+		public String toString() {
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+		}
+	}
 	
 	@AllArgsConstructor @NoArgsConstructor @Getter @Setter
 	public static class A {

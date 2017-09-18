@@ -1,12 +1,14 @@
 package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Singleton;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.StringHelper.ToStringMapping;
 
@@ -45,7 +47,11 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	public java.lang.Throwable getInstanceOf(java.lang.Throwable throwable,Class<?> aClass,Class<?>...classes){
-		for(Class<?> index : ArrayUtils.add(classes, aClass)){
+		List<Class<?>> list = new ArrayList<>();
+		list.add(aClass);
+		if(ArrayHelper.getInstance().isNotEmpty(classes))
+			list.addAll(Arrays.asList(classes));
+		for(Class<?> index : list){
 			java.lang.Throwable instance = getInstanceOf(throwable, index);
 			if(instance!=null)
 				return instance;
@@ -66,6 +72,10 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 		if(throwable==null || throwable.getCause()==null)
 			return;
 		throw new RuntimeException(throwable.getCause());
+	}
+	
+	public void throw_(String message){
+		throw_(Arrays.asList(message), ThrowableMarker.class);
 	}
 	
 	public <T extends java.lang.Throwable> void throw_(Collection<String> messages,Class<T> causeClass){
@@ -174,4 +184,30 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 		}
 	}
 	
+	/**/
+	
+	public static class ThrowableMarker extends java.lang.Throwable {
+		private static final long serialVersionUID = 1L;
+
+		public ThrowableMarker() {
+			super();
+		}
+
+		public ThrowableMarker(String message, java.lang.Throwable cause, boolean enableSuppression,boolean writableStackTrace) {
+			super(message, cause, enableSuppression, writableStackTrace);
+		}
+
+		public ThrowableMarker(String message, java.lang.Throwable cause) {
+			super(message, cause);
+		}
+
+		public ThrowableMarker(String message) {
+			super(message);
+		}
+
+		public ThrowableMarker(java.lang.Throwable cause) {
+			super(cause);
+		}
+		
+	}
 }

@@ -12,6 +12,14 @@ public class ListenerHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 
 	@Test
+	public void assertProcedure(){
+		MyListener myListener = new MyListener.Adapter();
+		ListenerHelper.getInstance().listen(new ListenerHelper.Executor.Procedure.Adapter.Default<MyListener>(), myListener, "exe");
+		assertThat("has not been executed", myListener.isHasBeenExecuted());
+		
+	}
+	
+	@Test
 	public void assertNumberOfListeners(){
 		ListenerHelper.Executor<MyListener, String> executor = new ListenerHelper.Executor.Function.Adapter.Default.String<MyListener>();
 		executor.setResultMethod(new ListenerHelper.Executor.ResultMethod.Adapter.Default.String<MyListener>() {
@@ -121,9 +129,29 @@ public class ListenerHelperUnitTest extends AbstractUnitTest {
 	public static interface MyListener {
 		
 		public String getString(String myParam1);
+		public Boolean isHasBeenExecuted();
+		public void setHasBeenExecuted(Boolean value);
+		public void exe();
 		
 		public static class Adapter implements MyListener {
 
+			protected Boolean e;
+			
+			@Override
+			public void setHasBeenExecuted(Boolean value) {
+				e = value;
+			}
+			
+			@Override
+			public Boolean isHasBeenExecuted() {
+				return e;
+			}
+			
+			@Override
+			public void exe() {
+				e = true;
+			}
+			
 			@Override
 			public String getString(String myParam1) {
 				return null;

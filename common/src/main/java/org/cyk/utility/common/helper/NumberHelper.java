@@ -45,11 +45,18 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		super.initialisation();
 	}
 	
-	public Boolean isNumber(String string){
-		return NumberUtils.isCreatable(string);
+	public Boolean isNumber(Object object){
+		return object!=null && (object instanceof Number || NumberUtils.isCreatable(object.toString()));
 	}
 	
-	public Number get(String string){
+	public Boolean isNotNumber(Object object){
+		return !Boolean.TRUE.equals(isNumber(object));
+	}
+	
+	public Number get(Object object){
+		if(object==null)
+			return null;
+		String string = object.toString();
 		if(StringHelper.getInstance().isBlank(string))
 			return null;
 		if(StringUtils.contains(string, Constant.CHARACTER_DOT.toString()))

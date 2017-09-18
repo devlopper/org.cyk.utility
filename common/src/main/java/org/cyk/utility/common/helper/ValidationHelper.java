@@ -14,7 +14,6 @@ import javax.validation.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.helper.LayerHelper.Type;
 import org.cyk.utility.common.validation.MessageInterpolator;
 
 import lombok.Getter;

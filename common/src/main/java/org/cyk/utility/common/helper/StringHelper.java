@@ -857,7 +857,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					return all+gender+result;
 				}
 				
-				private String __execute__(final String identifier,final CaseType pCaseType,final Locale pLocale,Boolean cachabled){
+				private String __execute__(final String pIdentifier,final CaseType pCaseType,final Locale pLocale,Boolean cachabled){
 					final Locale locale = commonUtils.getValueIfNotNullElseDefault(pLocale, Locale.FRENCH);
 					final CaseType caseType = commonUtils.getValueIfNotNullElseDefault(pCaseType, CaseType.DEFAULT);
 					final java.util.Collection<Object> parameters = getParameters();
@@ -871,9 +871,9 @@ public class StringHelper extends AbstractHelper implements Serializable {
 
 									@Override
 									protected java.lang.String __execute__() {
-										java.lang.String lIdentifier = identifier;
+										java.lang.String lIdentifier = pIdentifier;
 										if(getListener() instanceof Datasource.Cache)
-											lIdentifier = new StringHelper.Builder.CacheIdentifier.Adapter.Default().setInput(identifier)
+											lIdentifier = new StringHelper.Builder.CacheIdentifier.Adapter.Default().setInput(pIdentifier)
 													.setLocale(ToStringMapping.Adapter.Default.this.getLocale()).setParameters(ToStringMapping.Adapter.Default.this.getParameters())
 													.addManyParameters(InstanceHelper.getInstance().getIfNotNullElseDefault(ToStringMapping.Adapter.Default.this.getCaseType(),CaseType.DEFAULT)).execute();
 										return getListener().setInput(lIdentifier).setLocale(ToStringMapping.Adapter.Default.this.getLocale())
@@ -882,18 +882,18 @@ public class StringHelper extends AbstractHelper implements Serializable {
 									}
 								}).setInput(ClassHelper.getInstance().instanciateMany(Datasource.class,Datasource.CLASSES));
 						for(Datasource datasource : datasourcesExecutor.getInput()){
-							datasource.setInput(identifier);
+							datasource.setInput(pIdentifier);
 						}
 					}
 					String value = datasourcesExecutor.execute();
 					
 					if(value==null){
-						value = MAP.get(identifier);
+						value = MAP.get(pIdentifier);
 						if(value==null){
 							for(Entry<String, ClassLoader> entry : RESOURCE_BUNDLE_MAP.entrySet()){
 								try {
 									ResourceBundle resourceBundle = ResourceBundle.getBundle(entry.getKey(), locale, entry.getValue());
-									value = CollectionHelper.getInstance().isEmpty(parameters)?resourceBundle.getString(identifier):MessageFormat.format(resourceBundle.getString(identifier),parameters);
+									value = CollectionHelper.getInstance().isEmpty(parameters)?resourceBundle.getString(pIdentifier):MessageFormat.format(resourceBundle.getString(pIdentifier),parameters);
 									
 									addLoggingMessageBuilderNamedParameters("location","resource bundle "+entry.getKey());
 									
@@ -909,7 +909,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 									}
 									
 									if(Boolean.TRUE.equals(cachabled)){
-										String cacheIdentifier = new Builder.CacheIdentifier.Adapter.Default().setInput(identifier).setLocale(locale).addParameters(parameters)
+										String cacheIdentifier = new Builder.CacheIdentifier.Adapter.Default().setInput(pIdentifier).setLocale(locale).addParameters(parameters)
 												.addParameters(new Object[]{caseType}).execute();
 										CACHE.put(cacheIdentifier, value);
 										addLoggingMessageBuilderNamedParameters("cache identifier",cacheIdentifier,"cache value",value);
@@ -927,7 +927,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					}
 					
 					if(value==null)
-						value = String.format(UNKNOWN_FORMAT, UNKNOWN_MARKER_START,identifier,UNKNOWN_MARKER_END);
+						value = String.format(UNKNOWN_FORMAT, UNKNOWN_MARKER_START,pIdentifier,UNKNOWN_MARKER_END);
 					
 					return value;
 				}
