@@ -58,7 +58,10 @@ public interface Action<INPUT,OUTPUT> {
 	
 	Boolean getIsNotifiable();
 	Action<INPUT,OUTPUT> setIsNotifiable(Boolean isNotifiable); 
+	Boolean getIsNotifiableOnStatusFailure();
+	Action<INPUT,OUTPUT> setIsNotifiableOnStatusFailure(Boolean isNotifiableOnStatusFailure);
 	Action<INPUT,OUTPUT> notify_();
+	
 	
 	Boolean getIsInputValidatable();
 	Action<INPUT,OUTPUT> setIsInputValidatable(Boolean isInputValidatable);
@@ -232,7 +235,7 @@ public interface Action<INPUT,OUTPUT> {
 		@Deprecated protected LogMessage.Builder logMessageBuilder;
 		protected LoggingHelper.Message.Builder loggingMessageBuilder;
 		protected Boolean automaticallyLogMessage = Boolean.TRUE,isInputRequired=Boolean.TRUE,executable,isInputValidatable,isProcessableOnStatus,isConfirmable,isConfirmed
-				,isNotifiable,isLoggable,isProduceOutputOnly;
+				,isNotifiable,isLoggable,isProduceOutputOnly,isNotifiableOnStatusFailure;
 		protected Properties properties;
 		protected Collection<Object> parameters;
 		protected Action<INPUT,OUTPUT> parent;
@@ -259,6 +262,11 @@ public interface Action<INPUT,OUTPUT> {
 		
 		@Override
 		public Action<INPUT, OUTPUT> setIsNotifiable(Boolean isNotifiable) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setIsNotifiableOnStatusFailure(Boolean isNotifiableOnStatusFailure) {
 			return null;
 		}
 		
@@ -598,6 +606,12 @@ public interface Action<INPUT,OUTPUT> {
 			}
 			
 			@Override
+			public Action<INPUT, OUTPUT> setIsNotifiableOnStatusFailure(Boolean isNotifiableOnStatusFailure) {
+				this.isNotifiableOnStatusFailure = isNotifiableOnStatusFailure;
+				return this;
+			}
+			
+			@Override
 			public Action<INPUT, OUTPUT> setIsProduceOutputOnly(Boolean isProcuceOutputOnly) {
 				this.isProduceOutputOnly = isProcuceOutputOnly;
 				return this;
@@ -819,7 +833,7 @@ public interface Action<INPUT,OUTPUT> {
 				
 				if(isProduceOutputOnly == null || !isProduceOutputOnly){
 					millisecond = System.currentTimeMillis() - millisecond;
-					if(Boolean.TRUE.equals(getIsNotifiable()))
+					if( Boolean.TRUE.equals(getIsNotifiable()) || (Status.FAILURE.equals(getStatus()) && Boolean.TRUE.equals(getIsNotifiableOnStatusFailure())))
 						notify_();
 					
 					if(Boolean.TRUE.equals(isShowOutputLogMessage(output)))
