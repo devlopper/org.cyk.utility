@@ -123,6 +123,7 @@ public interface Action<INPUT,OUTPUT> {
 	Action<INPUT, OUTPUT> setProperty(String name,Object value);
 	Action<INPUT, OUTPUT> setManyProperties(Object...objects);
 	Object getProperty(String name);
+	Object getProperty(String name,Object nullValue);
 	String getPropertyAsString(String name);
 	<T extends Number> T getPropertyAsNumber(Class<T> numberClass,String name,T nullValue);
 	<T extends Number> T getPropertyAsNumber(Class<T> numberClass,String name);
@@ -258,6 +259,11 @@ public interface Action<INPUT,OUTPUT> {
 		
 		@Override
 		public Action<INPUT, OUTPUT> setIsNotifiable(Boolean isNotifiable) {
+			return null;
+		}
+		
+		@Override
+		public Object getProperty(String name, Object nullValue) {
 			return null;
 		}
 		
@@ -670,9 +676,14 @@ public interface Action<INPUT,OUTPUT> {
 			
 			@Override
 			public Object getProperty(String name) {
+				return getProperty(name, null);
+			}
+			
+			@Override
+			public Object getProperty(String name, Object nullValue) {
 				Properties properties = getProperties();
-				
-				return properties == null ? null : properties.get(name);
+				Object value = properties == null ? null : properties.get(name);
+				return value == null ? nullValue : value;
 			}
 			
 			@Override

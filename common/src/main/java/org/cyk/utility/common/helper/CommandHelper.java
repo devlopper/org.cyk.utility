@@ -70,7 +70,7 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 					setIsInputRequired(Boolean.FALSE);
 					setIsInputValidatable(Boolean.TRUE);
 					setIsProcessableOnStatus(Boolean.TRUE);
-					setIsNotifiable(Boolean.TRUE);
+					setIsNotifiable(Boolean.FALSE);
 				}
 				
 				@Override
