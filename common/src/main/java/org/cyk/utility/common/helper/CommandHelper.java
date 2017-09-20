@@ -33,14 +33,34 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 		Command addListener(Collection<Listener> listeners);
 		Command addListener(Listener...listeners);
 		
+		@Override Command setName(String name);
+		
+		Command setIcon(IconHelper.Icon icon);
+		IconHelper.Icon getIcon();
+		
+		Command setMappedIcon(Object mappedIcon);
+		Object getMappedIcon();
+		
 		@Getter @Setter
 		public static class Adapter extends Action.Adapter.Default<Object,Object> implements Command,Serializable {
 			private static final long serialVersionUID = 1L;
 			
+			protected IconHelper.Icon icon;
+			protected Object mappedIcon;
 			protected Collection<Listener> listeners;
 			
 			public Adapter() {
 				super("command", Object.class, null, Object.class);
+			}
+			
+			@Override
+			public Command setMappedIcon(Object mappedIcon) {
+				return null;
+			}
+			
+			@Override
+			public Command setIcon(IconHelper.Icon icon) {
+				return null;
 			}
 			
 			@Override
@@ -58,6 +78,11 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 				return null;
 			}
 			
+			@Override
+			public Command setName(String name) {
+				return (Command) super.setName(name);
+			}
+			
 			/**/
 			
 			public static class Default extends Command.Adapter implements Serializable {
@@ -72,6 +97,19 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 					setIsProcessableOnStatus(Boolean.TRUE);
 					setIsNotifiable(Boolean.TRUE);
 					setIsNotifiableOnStatusFailure(Boolean.TRUE);
+				}
+				
+				@Override
+				public Command setMappedIcon(Object mappedIcon) {
+					this.mappedIcon = mappedIcon;
+					return this;
+				}
+				
+				@Override
+				public Command setIcon(IconHelper.Icon icon) {
+					this.icon = icon;
+					setMappedIcon(IconHelper.getInstance().map(getIcon()));
+					return this;
 				}
 				
 				@Override

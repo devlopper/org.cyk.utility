@@ -95,7 +95,10 @@ public interface Action<INPUT,OUTPUT> {
 	Action<INPUT,OUTPUT> setInput(INPUT input);
 	
 	Boolean getIsInputRequired();
-	Action<INPUT,OUTPUT> setIsInputRequired(Boolean isInputRequired);
+	Action<INPUT,OUTPUT> setIsInputRequired(Boolean isImplemented);
+	
+	Boolean getIsImplemented();
+	Action<INPUT,OUTPUT> setIsImplemented(Boolean isImplemented);
 	
 	Boolean getIsConfirmable();
 	Action<INPUT,OUTPUT> setIsConfirmable(Boolean isConfirmable);
@@ -212,6 +215,7 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_DURATION_IN_MILLISECOND="DURATION_IN_MILLISECOND";
 	java.lang.String PROPERTY_NAME_PORTION_IN_MILLISECOND="PORTION_IN_MILLISECOND";
 	java.lang.String PROPERTY_NAME="NAME";
+	java.lang.String PROPERTY_NAME_ICON_MAPPED="ICON_MAPPED";
 	java.lang.String PROPERTY_NAME_SEPARATOR="SEPARATOR";
 	java.lang.String PROPERTY_NAME_IS_ADD_COUNT_PREFIX = "IS_ADD_COUNT_PREFIX";
 	java.lang.String PROPERTY_NAME_ACTION="ACTION";
@@ -245,7 +249,7 @@ public interface Action<INPUT,OUTPUT> {
 		@Deprecated protected LogMessage.Builder logMessageBuilder;
 		protected LoggingHelper.Message.Builder loggingMessageBuilder;
 		protected Boolean automaticallyLogMessage = Boolean.TRUE,isInputRequired=Boolean.TRUE,executable,isInputValidatable,isProcessableOnStatus,isConfirmable,isConfirmed
-				,isNotifiable,isLoggable,isProduceOutputOnly,isNotifiableOnStatusFailure,isNotifiableOnStatusSuccess;
+				,isNotifiable,isLoggable,isProduceOutputOnly,isNotifiableOnStatusFailure,isNotifiableOnStatusSuccess,isImplemented;
 		protected Properties properties;
 		protected Collection<Object> parameters;
 		protected Action<INPUT,OUTPUT> parent;
@@ -274,6 +278,11 @@ public interface Action<INPUT,OUTPUT> {
 		@Override
 		public Action<INPUT, OUTPUT> setStatusNotificationStringIdentifierMap(
 				Map<org.cyk.utility.common.Action.Status, String> statusNotificationStringIdentifierMap) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setIsImplemented(Boolean isImplemented) {
 			return null;
 		}
 		
@@ -636,6 +645,12 @@ public interface Action<INPUT,OUTPUT> {
 			}
 			
 			@Override
+			public Action<INPUT, OUTPUT> setIsImplemented(Boolean isImplemented) {
+				this.isImplemented = isImplemented;
+				return this;
+			}
+			
+			@Override
 			public Action<INPUT, OUTPUT> setStatusNotificationStringIdentifierMap(
 					Map<org.cyk.utility.common.Action.Status, String> statusNotificationStringIdentifierMap) {
 				this.statusNotificationStringIdentifierMap = statusNotificationStringIdentifierMap;
@@ -924,6 +939,8 @@ public interface Action<INPUT,OUTPUT> {
 			}
 			
 			protected OUTPUT __execute__(){
+				if(Boolean.TRUE.equals(getIsImplemented()))
+					return output;
 				throw new RuntimeException("Action <<"+name+">> with input class "+getInputClass()+" and output class "+getOutputClass()+" not yet implemented.");
 				//throw new RuntimeException("Action <<"+name+">> with input class "+getInput().getClass()+" and output class "+getOutputClass()+" not yet implemented.");
 			}

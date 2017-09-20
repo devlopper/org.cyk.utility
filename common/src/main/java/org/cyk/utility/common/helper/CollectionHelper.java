@@ -40,6 +40,10 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		super.initialisation();
 	}
 	
+	public <T> Instance<T> getCollectionInstance(Class<T> aClass){
+		return new Instance<T>().setElementClass(aClass);
+	}
+	
 	public <ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection,Integer index){
 		ELEMENT element = null;
 		if(isNotEmpty(collection) && index < getSize(collection)){
