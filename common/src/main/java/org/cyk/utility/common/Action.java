@@ -4,18 +4,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.ListenerHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
+import org.cyk.utility.common.helper.MapHelper;
 import org.cyk.utility.common.helper.MethodHelper;
 import org.cyk.utility.common.helper.NotificationHelper;
 import org.cyk.utility.common.helper.NumberHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.ThrowableHelper;
 import org.cyk.utility.common.helper.NotificationHelper.Notification;
 
@@ -58,10 +63,14 @@ public interface Action<INPUT,OUTPUT> {
 	
 	Boolean getIsNotifiable();
 	Action<INPUT,OUTPUT> setIsNotifiable(Boolean isNotifiable); 
+	Boolean getIsNotifiableOnStatusSuccess();
+	Action<INPUT,OUTPUT> setIsNotifiableOnStatusSuccess(Boolean isNotifiableOnStatusSuccess);
 	Boolean getIsNotifiableOnStatusFailure();
 	Action<INPUT,OUTPUT> setIsNotifiableOnStatusFailure(Boolean isNotifiableOnStatusFailure);
+	java.util.Map<Status,String> getStatusNotificationStringIdentifierMap();
+	Action<INPUT,OUTPUT> setStatusNotificationStringIdentifierMap(java.util.Map<Status,String> statusNotificationStringIdentifierMap);
+	Action<INPUT,OUTPUT> setStatusNotificationStringIdentifier(Status status,String notificationStringIdentifier);
 	Action<INPUT,OUTPUT> notify_();
-	
 	
 	Boolean getIsInputValidatable();
 	Action<INPUT,OUTPUT> setIsInputValidatable(Boolean isInputValidatable);
@@ -104,6 +113,7 @@ public interface Action<INPUT,OUTPUT> {
 	Action<INPUT,OUTPUT> setIsProduceOutputOnly(Boolean isProcuceOutputOnly);
 	
 	OUTPUT execute();
+	OUTPUT execute(INPUT input);
 	
 	OUTPUT getOutput();
 	Action<INPUT,OUTPUT> setOutput(OUTPUT output);
@@ -235,7 +245,7 @@ public interface Action<INPUT,OUTPUT> {
 		@Deprecated protected LogMessage.Builder logMessageBuilder;
 		protected LoggingHelper.Message.Builder loggingMessageBuilder;
 		protected Boolean automaticallyLogMessage = Boolean.TRUE,isInputRequired=Boolean.TRUE,executable,isInputValidatable,isProcessableOnStatus,isConfirmable,isConfirmed
-				,isNotifiable,isLoggable,isProduceOutputOnly,isNotifiableOnStatusFailure;
+				,isNotifiable,isLoggable,isProduceOutputOnly,isNotifiableOnStatusFailure,isNotifiableOnStatusSuccess;
 		protected Properties properties;
 		protected Collection<Object> parameters;
 		protected Action<INPUT,OUTPUT> parent;
@@ -243,6 +253,7 @@ public interface Action<INPUT,OUTPUT> {
 		protected java.lang.Throwable throwable;
 		protected Collection<ActionListener> actionListeners;
 		protected Object identifier;
+		protected java.util.Map<Status,String> statusNotificationStringIdentifierMap;
 		
 		@Deprecated
 		public Adapter(String name,Class<INPUT> inputClass,INPUT input,Class<OUTPUT> outputClass,LogMessage.Builder logMessageBuilder) {
@@ -261,12 +272,29 @@ public interface Action<INPUT,OUTPUT> {
 		}
 		
 		@Override
+		public Action<INPUT, OUTPUT> setStatusNotificationStringIdentifierMap(
+				Map<org.cyk.utility.common.Action.Status, String> statusNotificationStringIdentifierMap) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setStatusNotificationStringIdentifier(org.cyk.utility.common.Action.Status status,
+				String notificationStringIdentifier) {
+			return null;
+		}
+		
+		@Override
 		public Action<INPUT, OUTPUT> setIsNotifiable(Boolean isNotifiable) {
 			return null;
 		}
 		
 		@Override
 		public Action<INPUT, OUTPUT> setIsNotifiableOnStatusFailure(Boolean isNotifiableOnStatusFailure) {
+			return null;
+		}
+		
+		@Override
+		public Action<INPUT, OUTPUT> setIsNotifiableOnStatusSuccess(Boolean isNotifiableOnStatusSuccess) {
 			return null;
 		}
 		
@@ -449,6 +477,11 @@ public interface Action<INPUT,OUTPUT> {
 		}
 		
 		@Override
+		public OUTPUT execute(INPUT input) {
+			return null;
+		}
+		
+		@Override
 		public Action<INPUT, OUTPUT> setInputClass(Class<INPUT> inputClass) {
 			this.inputClass = inputClass;
 			return this;
@@ -590,6 +623,9 @@ public interface Action<INPUT,OUTPUT> {
 		public static class Default<INPUT,OUTPUT> extends Action.Adapter<INPUT,OUTPUT> implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
+			public static final Map<org.cyk.utility.common.Action.Status, String> DEFAULT_STATUS_NOTIFICATION_STRING_IDENTIFIER_MAP
+				= MapHelper.getInstance().getByKeyValue(Status.SUCCESS,"notification.operation.executed.success",Status.FAILURE,"notification.operation.executed.fail"); 
+			
 			@Deprecated
 			public Default(String name,Class<INPUT> inputClass,INPUT input, Class<OUTPUT> outputClass, LogMessage.Builder logMessageBuilder) {
 				super(name,inputClass,input, outputClass, logMessageBuilder);
@@ -597,6 +633,21 @@ public interface Action<INPUT,OUTPUT> {
 			
 			public Default(String name,Class<INPUT> inputClass,INPUT input, Class<OUTPUT> outputClass) {
 				super(name,inputClass,input, outputClass);
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setStatusNotificationStringIdentifierMap(
+					Map<org.cyk.utility.common.Action.Status, String> statusNotificationStringIdentifierMap) {
+				this.statusNotificationStringIdentifierMap = statusNotificationStringIdentifierMap;
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setStatusNotificationStringIdentifier(org.cyk.utility.common.Action.Status status,String notificationStringIdentifier) {
+				if(this.statusNotificationStringIdentifierMap == null)
+					this.statusNotificationStringIdentifierMap = new HashMap<Action.Status, String>();
+				this.statusNotificationStringIdentifierMap.put(status, notificationStringIdentifier);
+				return this;
 			}
 			
 			@Override
@@ -608,6 +659,12 @@ public interface Action<INPUT,OUTPUT> {
 			@Override
 			public Action<INPUT, OUTPUT> setIsNotifiableOnStatusFailure(Boolean isNotifiableOnStatusFailure) {
 				this.isNotifiableOnStatusFailure = isNotifiableOnStatusFailure;
+				return this;
+			}
+			
+			@Override
+			public Action<INPUT, OUTPUT> setIsNotifiableOnStatusSuccess(Boolean isNotifiableOnStatusSuccess) {
+				this.isNotifiableOnStatusSuccess = isNotifiableOnStatusSuccess;
 				return this;
 			}
 			
@@ -679,10 +736,17 @@ public interface Action<INPUT,OUTPUT> {
 			}
 			
 			protected NotificationHelper.Notification getNotification(org.cyk.utility.common.Action.Status status){
+				String stringIdentifier = null;
+				if(status!=null){
+					Map<Status,String> map = InstanceHelper.getInstance().getIfNotNullElseDefault(getStatusNotificationStringIdentifierMap(),DEFAULT_STATUS_NOTIFICATION_STRING_IDENTIFIER_MAP);
+					stringIdentifier = map.get(status);
+					if(StringHelper.getInstance().isBlank(stringIdentifier))
+						stringIdentifier = DEFAULT_STATUS_NOTIFICATION_STRING_IDENTIFIER_MAP.get(status);
+				}
 				if(Action.Status.SUCCESS.equals(status))
-					return NotificationHelper.getInstance().getNotification("notification.operation.executed.success");
+					return NotificationHelper.getInstance().getNotification(stringIdentifier);
 				if(Action.Status.FAILURE.equals(status))
-					return NotificationHelper.getInstance().getNotification("notification.operation.executed.fail"
+					return NotificationHelper.getInstance().getNotification(stringIdentifier
 							,new Object[]{ThrowableHelper.getInstance().getInstanceOf(getThrowable(),ThrowableHelper.ThrowableMarker.class,RuntimeException.class
 									).getMessage()}).setSeverityType(NotificationHelper.SeverityType.ERROR);
 				return null;
@@ -757,7 +821,13 @@ public interface Action<INPUT,OUTPUT> {
 					}
 				return this;
 			}
-						
+			
+			@Override
+			public OUTPUT execute(INPUT input) {
+				setInput(input);
+				return execute();
+			}
+			
 			@Override
 			public final OUTPUT execute() {
 				Boolean isInputValid = Boolean.TRUE;
@@ -833,7 +903,10 @@ public interface Action<INPUT,OUTPUT> {
 				
 				if(isProduceOutputOnly == null || !isProduceOutputOnly){
 					millisecond = System.currentTimeMillis() - millisecond;
-					if( Boolean.TRUE.equals(getIsNotifiable()) || (Status.FAILURE.equals(getStatus()) && Boolean.TRUE.equals(getIsNotifiableOnStatusFailure())))
+					if( Boolean.TRUE.equals(getIsNotifiable()) 
+							&& (Status.SUCCESS.equals(getStatus()) && Boolean.TRUE.equals(getIsNotifiableOnStatusSuccess()) 
+									|| (Status.FAILURE.equals(getStatus()) && Boolean.TRUE.equals(getIsNotifiableOnStatusFailure())))
+							)
 						notify_();
 					
 					if(Boolean.TRUE.equals(isShowOutputLogMessage(output)))

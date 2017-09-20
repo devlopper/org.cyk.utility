@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod;
 import org.cyk.utility.common.helper.MethodHelper.Method;
 
 import lombok.Getter;
@@ -31,8 +32,15 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 		super.initialisation();
 	}
 	
-	public <LISTENER> void listen(ListenerHelper.Executor<LISTENER,java.lang.Void> executor,Collection<LISTENER> listeners,final String methodName,final MethodHelper.Method.Parameter...pParameters){
+	public <LISTENER,RESULT> RESULT listen(ListenerHelper.Executor<LISTENER,RESULT> executor,Collection<LISTENER> listeners,ListenerHelper.Executor.ResultMethod<RESULT, LISTENER> resultMethod,final String methodName,final MethodHelper.Method.Parameter...pParameters){
 		if(executor == null || CollectionHelper.getInstance().isEmpty(listeners) || StringHelper.getInstance().isBlank(methodName))
+			return null;
+		executor.setResultMethod(resultMethod);
+		return executor.addListener(listeners).execute();
+	}
+	
+	public <LISTENER> void listen(ListenerHelper.Executor<LISTENER,java.lang.Void> executor,Collection<LISTENER> listeners,final String methodName,final MethodHelper.Method.Parameter...pParameters){
+		/*if(executor == null || CollectionHelper.getInstance().isEmpty(listeners) || StringHelper.getInstance().isBlank(methodName))
 			return;
 		executor.setResultMethod(new ListenerHelper.Executor.ResultMethod.Adapter.Default.Void<LISTENER>() {
 			private static final long serialVersionUID = 1L;
@@ -42,8 +50,16 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 			}
 		});
 		executor.addListener(listeners).execute();
+		*/
+		listen(executor, listeners, new ListenerHelper.Executor.ResultMethod.Adapter.Default.Void<LISTENER>() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			protected void __execute__(LISTENER listener) {
+				MethodHelper.getInstance().call(listener, java.lang.Void.class, methodName,pParameters);
+			}
+		}, methodName, pParameters);
 	}
-	
+
 	public <LISTENER> void listen(ListenerHelper.Executor<LISTENER,java.lang.Void> executor,LISTENER listener,final String methodName,final MethodHelper.Method.Parameter...pParameters){
 		listen(executor, Arrays.asList(listener), methodName, pParameters);
 	}
@@ -55,24 +71,63 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 	public <LISTENER> void listen(LISTENER listener,String methodName,final MethodHelper.Method.Parameter...pParameters){
 		listen(Arrays.asList(listener), methodName, pParameters);
 	}
-	/*
-	public <LISTENER,RESULT> void listen(ListenerHelper.Executor<LISTENER,RESULT> executor,LISTENER listener,final String methodName,Class<RESULT> resultClass){
-		if(executor == null || listener == null || StringHelper.getInstance().isBlank(methodName))
-			return;
-		executor.setResultMethod(new ListenerHelper.Executor.ResultMethod.Adapter.Default.Void<LISTENER,RESULT>() {
-			private static final long serialVersionUID = 1L;
-			@Override
-			protected void __execute__(LISTENER listener) {
-				MethodHelper.getInstance().call(listener, java.lang.Void.class, methodName);
-			}
-		});
-		executor.addListener(listener).execute();
+	
+	public <LISTENER,RESULT> RESULT listen(Collection<LISTENER> listeners,Class<RESULT> resultClass,ListenerHelper.Executor.ResultMethod<RESULT, LISTENER> resultMethod,String methodName,final MethodHelper.Method.Parameter...pParameters){
+		return listen(new ListenerHelper.Executor.Function.Adapter.Default<LISTENER,RESULT>(resultClass), listeners,resultMethod, methodName,pParameters);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <LISTENER,RESULT> String listenString(Collection<LISTENER> listeners,final String methodName,final MethodHelper.Method.Parameter...pParameters){
+		ListenerHelper.Executor.ResultMethod<RESULT, LISTENER> resultMethod = (ResultMethod<RESULT, LISTENER>) 
+			new org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod.Adapter.Default.String<LISTENER>(){
+				private static final long serialVersionUID = 1L;
+			protected java.lang.String __execute__() {
+				return MethodHelper.getInstance().call(getListener(), java.lang.String.class, methodName,pParameters);
+			};
+		};
+		return (String) listen(new ListenerHelper.Executor.Function.Adapter.Default<LISTENER,RESULT>((Class<RESULT>) String.class), listeners,resultMethod, methodName,pParameters);
 	}
 	
-	public <LISTENER> void listen(LISTENER listener,String methodName){
-		listen(new ListenerHelper.Executor.Procedure.Adapter.Default<LISTENER>(), listener, methodName);
+	@SuppressWarnings("unchecked")
+	public <LISTENER,RESULT> Boolean listenBoolean(Collection<LISTENER> listeners,final String methodName,final MethodHelper.Method.Parameter...pParameters){
+		ListenerHelper.Executor.ResultMethod<RESULT, LISTENER> resultMethod = (ResultMethod<RESULT, LISTENER>) 
+			new org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod.Adapter.Default.Boolean<LISTENER>(){
+				private static final long serialVersionUID = 1L;
+			protected java.lang.Boolean __execute__() {
+				return MethodHelper.getInstance().call(getListener(), java.lang.Boolean.class, methodName,pParameters);
+			};
+		};
+		return (Boolean) listen(new ListenerHelper.Executor.Function.Adapter.Default<LISTENER,RESULT>((Class<RESULT>) Boolean.class), listeners,resultMethod, methodName,pParameters);
 	}
-	*/
+	
+	@SuppressWarnings("unchecked")
+	public <LISTENER,RESULT> Integer listenInteger(Collection<LISTENER> listeners,final String methodName,final MethodHelper.Method.Parameter...pParameters){
+		ListenerHelper.Executor.ResultMethod<RESULT, LISTENER> resultMethod = (ResultMethod<RESULT, LISTENER>) 
+			new org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod.Adapter.Default.Integer<LISTENER>(){
+				private static final long serialVersionUID = 1L;
+			protected java.lang.Integer __execute__() {
+				return MethodHelper.getInstance().call(getListener(), java.lang.Integer.class, methodName,pParameters);
+			};
+		};
+		return (Integer) listen(new ListenerHelper.Executor.Function.Adapter.Default<LISTENER,RESULT>((Class<RESULT>) Integer.class), listeners,resultMethod, methodName,pParameters);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <LISTENER,RESULT> Object listenObject(Collection<LISTENER> listeners,final String methodName,final MethodHelper.Method.Parameter...pParameters){
+		ListenerHelper.Executor.ResultMethod<RESULT, LISTENER> resultMethod = (ResultMethod<RESULT, LISTENER>) 
+			new org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod.Adapter.Default.Object<LISTENER>(){
+				private static final long serialVersionUID = 1L;
+			protected java.lang.Object __execute__() {
+				return MethodHelper.getInstance().call(getListener(), java.lang.Object.class, methodName,pParameters);
+			};
+		};
+		return (Object) listen(new ListenerHelper.Executor.Function.Adapter.Default<LISTENER,RESULT>((Class<RESULT>) Object.class), listeners,resultMethod, methodName,pParameters);
+	}
+	
+	public <LISTENER,RESULT> RESULT listen(LISTENER listener,Class<RESULT> resultClass,ListenerHelper.Executor.ResultMethod<RESULT, LISTENER> resultMethod,String methodName,final MethodHelper.Method.Parameter...pParameters){
+		return listen(Arrays.asList(listener),resultClass,resultMethod, methodName, pParameters);
+	}
+	
 	public static interface Executor<LISTENER,RESULT> extends Action<Collection<LISTENER>, RESULT>{
 		
 		ResultMethod<RESULT,LISTENER> getResultMethod();
@@ -225,6 +280,14 @@ public class ListenerHelper extends AbstractHelper implements Serializable {
 						
 						public Boolean() {
 							super(java.lang.Boolean.class);
+						}
+					}
+					
+					public static class Integer<LISTENER> extends Default<java.lang.Integer,LISTENER> implements Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						public Integer() {
+							super(java.lang.Integer.class);
 						}
 					}
 					

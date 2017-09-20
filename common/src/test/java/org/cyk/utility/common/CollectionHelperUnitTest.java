@@ -5,18 +5,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.CollectionHelper.Instance;
-import org.cyk.utility.common.helper.CollectionHelper.Instance.Listener;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class CollectionHelperUnitTest extends AbstractUnitTest {
 
@@ -25,31 +24,22 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void listen(){
 		CollectionHelper.Instance<Child> collection = new CollectionHelper.Instance<Child>().setElementClass(Child.class);
-		collection.setListener(new CollectionHelper.Instance.Listener.Adapter.Default<Child>(){
+		collection.addListener(new CollectionHelper.Instance.Listener.Adapter<Child>(){
 			private static final long serialVersionUID = 1L;
-
+			
 			@Override
-			public Listener<Child> addOne(Instance<Child> inputCollection, Object object) {
-				return super.addOne(inputCollection, object);
+			public Boolean isInstanciatable(Instance<Child> instance, Object object) {
+				return object instanceof Child || object instanceof Master;
 			}
 			
 			@Override
-			public Listener<Child> removeOne(Instance<Child> inputCollection, Object object) {
-				return super.removeOne(inputCollection, object);
-			}
-			
-			@Override
-			public Boolean isInstanciatable(Instance<Child> inputCollection, Object object) {
-				return super.isInstanciatable(inputCollection, object) || Master.class.equals(object.getClass());
-			}
-			
-			@Override
-			public Child instanciate(Instance<Child> inputCollection, Object object) {
+			public Child instanciate(Instance<Child> instance, Object object) {
 				if(object instanceof Master)
 					return new Child();
-				return super.instanciate(inputCollection, object);
+				return super.instanciate(instance, object);
 			}
 		});
+		
 		Child c1=new Child(),c2=new Child(),c3=new Child();
 		c1.setC1("m159");
 		Master m1 = new Master(),m2 = new Master(),m3 = new Master();

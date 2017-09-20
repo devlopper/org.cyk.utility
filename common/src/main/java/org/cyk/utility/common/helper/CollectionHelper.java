@@ -320,13 +320,13 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		private Boolean synchonizationEnabled;
 		private Boolean isOrderNumberComputeEnabled;
 		private Collection<String> fieldNames;
-		private Listener<T> listener;
+		private Collection<Listener<T>> listeners;
 		
-		protected Listener<T> getListener(Boolean create){
-			if(this.listener == null){
-				this.listener = new Listener.Adapter.Default<T>();
-			}
-			return this.listener;
+		public Instance<T> addListener(Listener<T> listener){
+			if(this.listeners == null)
+				this.listeners = new ArrayList<>();
+			this.listeners.add(listener);
+			return this;
 		}
 		
 		public Instance<T> setElementClass(Class<T> elementClass){
@@ -334,14 +334,37 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			return this;
 		}
 		
+		public Instance<T> addOne(){
+			T element = ClassHelper.getInstance().instanciateOne(getElementClass());
+			addOne(element);
+			return this;
+		}
+		
 		@SuppressWarnings("unchecked")
 		public Instance<T> addOne(Object element){
 			if(element!=null){
-				if(!element.getClass().equals(elementClass) && Boolean.TRUE.equals(getListener(Boolean.TRUE).isInstanciatable(this, element)))
-					element = getListener(Boolean.TRUE).instanciate(this, element);
-				if(Boolean.TRUE.equals(getListener(Boolean.TRUE).isAddable(this, element))){
+				Class<T> elementClass = getElementClass();
+				Boolean isInstanciatable = InstanceHelper.getInstance().getIfNotNullElseDefault(
+						ListenerHelper.getInstance().listenBoolean(listeners, Listener.METHOD_NAME_IS_INSTANCIATABLE
+								,new MethodHelper.Method.Parameter(Instance.class, this),new MethodHelper.Method.Parameter(Object.class,element))
+						,elementClass == null ? Boolean.TRUE : element.getClass().equals(elementClass));
+				
+				if(!element.getClass().equals(elementClass) && Boolean.TRUE.equals(isInstanciatable)){
+					element = InstanceHelper.getInstance().getIfNotNullElseDefault(
+							ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_INSTANCIATE
+									,new MethodHelper.Method.Parameter(Instance.class, this),new MethodHelper.Method.Parameter(Object.class,element))
+							,elementClass == null ? (T)element : ClassHelper.getInstance().instanciateOne(elementClass));
+				}
+				
+				Boolean isAddable = InstanceHelper.getInstance().getIfNotNullElseDefault(
+						ListenerHelper.getInstance().listenBoolean(listeners, Listener.METHOD_NAME_IS_ADDABLE
+								,new MethodHelper.Method.Parameter(Instance.class, this),new MethodHelper.Method.Parameter(Object.class,element))
+						,elementClass == null ? Boolean.TRUE : element.getClass().equals(elementClass));
+				
+				if(Boolean.TRUE.equals(isAddable)){
 					getCollection().add((T) element);
-					getListener(Boolean.TRUE).addOne(this, element);
+					ListenerHelper.getInstance().listen(listeners, Listener.METHOD_NAME_ADD_ONE
+							,new MethodHelper.Method.Parameter(Instance.class, this),new MethodHelper.Method.Parameter(elementClass,element));
 				}	
 			}
 			return this;
@@ -395,8 +418,8 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		
 		public <CLASS> void removeItem(CLASS element){
 			collection = getInstance().removeElement(collection, element);
-			if(listener!=null)
-				listener.removeOne(this, element);
+			ListenerHelper.getInstance().listen(listeners, Listener.METHOD_NAME_REMOVE_ELEMENT,new MethodHelper.Method.Parameter(Instance.class, this)
+					,new MethodHelper.Method.Parameter(getElementClass(), element));
 		}
 		
 		public <CLASS> void removeItemAt(Class<CLASS> aClass,Integer index){
@@ -419,128 +442,90 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		
 		public static interface Listener<TYPE> {
 			
-			Boolean isInstanciatable(Instance<TYPE> inputCollection,Object object);
-			TYPE instanciate(Instance<TYPE> inputCollection,Object object);
+			String METHOD_NAME_IS_INSTANCIATABLE = "isInstanciatable";
+			Boolean isInstanciatable(Instance<TYPE> instance,Object object);
 			
-			Boolean isAddable(Instance<TYPE> inputCollection,Object object);
-			Listener<TYPE> addOne(Instance<TYPE> inputCollection,Object object);
-			Listener<TYPE> addOne(Instance<TYPE> inputCollection);
-			Listener<TYPE> addMany(Instance<TYPE> inputCollection,Collection<?> collection);
-			Listener<TYPE> addMany(Instance<TYPE> inputCollection,Object...object);
+			String METHOD_NAME_INSTANCIATE = "instanciate";
+			TYPE instanciate(Instance<TYPE> instance,Object object);
 			
-			Boolean isRemovable(Instance<TYPE> inputCollection,Object object);
-			Listener<TYPE> removeOne(Instance<TYPE> inputCollection,Object object);
-			Listener<TYPE> removeMany(Instance<TYPE> inputCollection,Collection<?> collection);
-			Listener<TYPE> removeMany(Instance<TYPE> inputCollection,Object...objects);
+			String METHOD_NAME_IS_ADDABLE = "isAddable";
+			Boolean isAddable(Instance<TYPE> instance,Object object);
+			
+			String METHOD_NAME_ADD_ONE = "addOne";
+			void addOne(Instance<TYPE> instance,TYPE object);
+			Listener<TYPE> addOne(Instance<TYPE> instance);
+			Listener<TYPE> addMany(Instance<TYPE> instance,Collection<?> collection);
+			Listener<TYPE> addMany(Instance<TYPE> instance,Object...object);
+			
+			String METHOD_NAME_IS_REMOVABLE = "isRemovable";
+			Boolean isRemovable(Instance<TYPE> instance,Object object);
+			Listener<TYPE> removeOne(Instance<TYPE> instance,Object object);
+			Listener<TYPE> removeMany(Instance<TYPE> instance,Collection<?> collection);
+			Listener<TYPE> removeMany(Instance<TYPE> instance,Object...objects);
+			
+			String METHOD_NAME_REMOVE_ELEMENT = "removeElement";
+			void removeElement(Instance<TYPE> instance,TYPE element);
 			
 			@Getter
 			public static class Adapter<TYPE> implements Listener<TYPE>,Serializable {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public Boolean isInstanciatable(Instance<TYPE> inputCollection, Object object) {
+				public Boolean isInstanciatable(Instance<TYPE> instance, Object object) {
 					return null;
 				}
 				
 				@Override
-				public TYPE instanciate(Instance<TYPE> inputCollection,Object object) {
+				public TYPE instanciate(Instance<TYPE> instance,Object object) {
 					return null;
 				}
 				
 				@Override
-				public Boolean isAddable(Instance<TYPE> inputCollection, Object object) {
+				public Boolean isAddable(Instance<TYPE> instance, Object object) {
 					return null;
 				}
 				
 				@Override
-				public Listener<TYPE> addOne(Instance<TYPE> inputCollection,Object object) {
+				public void addOne(Instance<TYPE> instance,TYPE object) {}
+
+				@Override
+				public Listener<TYPE> addOne(Instance<TYPE> instance) {
 					return null;
 				}
 
 				@Override
-				public Listener<TYPE> addOne(Instance<TYPE> inputCollection) {
+				public Listener<TYPE> addMany(Instance<TYPE> instance,Collection<?> collection) {
 					return null;
 				}
 
 				@Override
-				public Listener<TYPE> addMany(Instance<TYPE> inputCollection,Collection<?> collection) {
-					return null;
-				}
-
-				@Override
-				public Listener<TYPE> addMany(Instance<TYPE> inputCollection,Object... objects) {
+				public Listener<TYPE> addMany(Instance<TYPE> instance,Object... objects) {
 					return null;
 				}
 				
 				@Override
-				public Boolean isRemovable(Instance<TYPE> inputCollection, Object object) {
+				public Boolean isRemovable(Instance<TYPE> instance, Object object) {
 					return null;
 				}
 
 				@Override
-				public Listener<TYPE> removeOne(Instance<TYPE> inputCollection,Object object) {
+				public Listener<TYPE> removeOne(Instance<TYPE> instance,Object object) {
 					return null;
 				}
 				
 				@Override
-				public Listener<TYPE> removeMany(Instance<TYPE> inputCollection, Collection<?> collection) {
+				public Listener<TYPE> removeMany(Instance<TYPE> instance, Collection<?> collection) {
 					return null;
 				}
 				
 				@Override
-				public Listener<TYPE> removeMany(Instance<TYPE> inputCollection, Object...objects) {
+				public Listener<TYPE> removeMany(Instance<TYPE> instance, Object...objects) {
 					return null;
 				}
 				
-				public static class Default<TYPE> extends Listener.Adapter<TYPE> implements Serializable {
-					private static final long serialVersionUID = 1L;
-										
-					@Override
-					public Boolean isInstanciatable(Instance<TYPE> inputCollection, Object object) {
-						Class<TYPE> elementClass = inputCollection.getElementClass();
-						return elementClass == null ? Boolean.TRUE : object.getClass().equals(elementClass);
-					}
-					
-					@Override
-					public TYPE instanciate(Instance<TYPE> inputCollection,Object object) {
-						Class<TYPE> elementClass = inputCollection.getElementClass();
-						@SuppressWarnings("unchecked")
-						TYPE instance = elementClass == null ? (TYPE)object : ClassHelper.getInstance().instanciateOne(elementClass);
-						return instance;
-					}
-					
-					@Override
-					public Boolean isAddable(Instance<TYPE> inputCollection, Object object) {
-						Class<TYPE> elementClass = inputCollection.getElementClass();
-						return elementClass == null ? Boolean.TRUE : object.getClass().equals(elementClass);
-					}
-					
-					@Override
-					public Listener<TYPE> addOne(Instance<TYPE> inputCollection,Object element) {
-						return this;
-					}
-
-					@Override
-					public Listener<TYPE> addOne(Instance<TYPE> inputCollection) {
-						return this;
-					}
-
-					@Override
-					public Listener<TYPE> addMany(Instance<TYPE> inputCollection,Collection<?> collection) {
-						return this;
-					}
-
-					@Override
-					public Listener<TYPE> addMany(Instance<TYPE> inputCollection,Object... object) {
-						return this;
-					}
-
-					@Override
-					public Listener<TYPE> removeOne(Instance<TYPE> inputCollection,Object object) {
-						return this;
-					}	
-					
-				}
+				@Override
+				public void removeElement(Instance<TYPE> instance,TYPE element) {}
+				
 			}
 		}
 	}

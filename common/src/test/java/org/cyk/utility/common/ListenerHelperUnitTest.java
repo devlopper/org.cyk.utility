@@ -132,6 +132,9 @@ public class ListenerHelperUnitTest extends AbstractUnitTest {
 		public Boolean isHasBeenExecuted();
 		public void setHasBeenExecuted(Boolean value);
 		public void exe();
+		public Boolean myBoolean();
+		public String myString();
+		public Integer myInteger();
 		
 		public static class Adapter implements MyListener {
 
@@ -156,8 +159,96 @@ public class ListenerHelperUnitTest extends AbstractUnitTest {
 			public String getString(String myParam1) {
 				return null;
 			}
+
+			@Override
+			public Boolean myBoolean() {
+				return null;
+			}
+
+			@Override
+			public String myString() {
+				return null;
+			}
+
+			@Override
+			public Integer myInteger() {
+				return null;
+			}
 			
 		}
 		
+	}
+
+	@Test
+	public void assertManyFunctions(){
+		Collection<MyListener> listeners = new ArrayList<ListenerHelperUnitTest.MyListener>();
+		listeners.add(new MyListener.Adapter(){
+			@Override
+			public String myString() {
+				return "s1";
+			}
+			@Override
+			public Boolean myBoolean() {
+				return null;
+			}
+			@Override
+			public Integer myInteger() {
+				return 0;
+			}
+		});
+		assertEquals("s1", ListenerHelper.getInstance().listenString(listeners, "myString"));
+		assertEquals(null, ListenerHelper.getInstance().listenBoolean(listeners, "myBoolean"));
+		assertEquals(0, ListenerHelper.getInstance().listenInteger(listeners, "myInteger"));
+		listeners.add(new MyListener.Adapter(){
+			@Override
+			public String myString() {
+				return "s3";
+			}
+			@Override
+			public Boolean myBoolean() {
+				return false;
+			}
+			@Override
+			public Integer myInteger() {
+				return null;
+			}
+		});
+		assertEquals("s3", ListenerHelper.getInstance().listenString(listeners, "myString"));
+		assertEquals(false, ListenerHelper.getInstance().listenBoolean(listeners, "myBoolean"));
+		assertEquals(0, ListenerHelper.getInstance().listenInteger(listeners, "myInteger"));
+		listeners.add(new MyListener.Adapter(){
+			@Override
+			public String myString() {
+				return null;
+			}
+			@Override
+			public Boolean myBoolean() {
+				return false;
+			}
+			@Override
+			public Integer myInteger() {
+				return 2;
+			}
+		});
+		assertEquals("s3", ListenerHelper.getInstance().listenString(listeners, "myString"));
+		assertEquals(false, ListenerHelper.getInstance().listenBoolean(listeners, "myBoolean"));
+		assertEquals(2, ListenerHelper.getInstance().listenInteger(listeners, "myInteger"));
+		listeners.add(new MyListener.Adapter(){
+			@Override
+			public String myString() {
+				return "s2";
+			}
+			@Override
+			public Boolean myBoolean() {
+				return true;
+			}
+			@Override
+			public Integer myInteger() {
+				return null;
+			}
+		});
+		assertEquals("s2", ListenerHelper.getInstance().listenString(listeners, "myString"));
+		assertEquals(true, ListenerHelper.getInstance().listenBoolean(listeners, "myBoolean"));
+		assertEquals(2, ListenerHelper.getInstance().listenInteger(listeners, "myInteger"));
 	}
 }
