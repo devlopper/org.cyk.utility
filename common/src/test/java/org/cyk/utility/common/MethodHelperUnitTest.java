@@ -23,6 +23,14 @@ public class MethodHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	@Test
+	public void buildParameterArray(){
+		Integer i1 = new Integer(1);
+		Object o1 = new Object();
+		assertArray(MethodHelper.Method.Parameter.buildArray(Integer.class,i1,Object.class,o1), new MethodHelper.Method.Parameter(Integer.class,i1)
+				,new MethodHelper.Method.Parameter(Object.class,o1));
+	}
+	
+	@Test
 	public void doTest1(){
 		assertEquals("doTest1",MethodHelper.getInstance().getCurrentNameFromStackTrace());
 	}

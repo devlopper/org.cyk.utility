@@ -13,6 +13,7 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -273,7 +274,7 @@ public class MethodHelper extends AbstractHelper implements Serializable  {
 			private String prefix;
 		}
 		
-		@Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString
+		@Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString @EqualsAndHashCode(of={"clazz","value"})
 		public static class Parameter implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
@@ -288,8 +289,7 @@ public class MethodHelper extends AbstractHelper implements Serializable  {
 			
 			public static Parameter[] buildArray(Object...objects){
 				Parameter[] parameters = new Parameter[objects.length / 2];
-				int j = 0;
-				for(int i = 0 ; i < objects.length ; i = i + 2){
+				for(int i = 0 , j = 0 ; i < objects.length ; i = i + 2 , j++){
 					parameters[j] = new Parameter((Class<?>)objects[i], objects[i+1]);
 				}
 				return parameters;

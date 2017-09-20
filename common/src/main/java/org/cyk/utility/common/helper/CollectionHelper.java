@@ -346,25 +346,25 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				Class<T> elementClass = getElementClass();
 				Boolean isInstanciatable = InstanceHelper.getInstance().getIfNotNullElseDefault(
 						ListenerHelper.getInstance().listenBoolean(listeners, Listener.METHOD_NAME_IS_INSTANCIATABLE
-								,new MethodHelper.Method.Parameter(Instance.class, this),new MethodHelper.Method.Parameter(Object.class,element))
+								,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element))
 						,elementClass == null ? Boolean.TRUE : element.getClass().equals(elementClass));
 				
 				if(!element.getClass().equals(elementClass) && Boolean.TRUE.equals(isInstanciatable)){
 					element = InstanceHelper.getInstance().getIfNotNullElseDefault(
 							ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_INSTANCIATE
-									,new MethodHelper.Method.Parameter(Instance.class, this),new MethodHelper.Method.Parameter(Object.class,element))
+									,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element))
 							,elementClass == null ? (T)element : ClassHelper.getInstance().instanciateOne(elementClass));
 				}
 				
 				Boolean isAddable = InstanceHelper.getInstance().getIfNotNullElseDefault(
 						ListenerHelper.getInstance().listenBoolean(listeners, Listener.METHOD_NAME_IS_ADDABLE
-								,new MethodHelper.Method.Parameter(Instance.class, this),new MethodHelper.Method.Parameter(Object.class,element))
+								,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element))
 						,elementClass == null ? Boolean.TRUE : element.getClass().equals(elementClass));
 				
 				if(Boolean.TRUE.equals(isAddable)){
 					getCollection().add((T) element);
 					ListenerHelper.getInstance().listen(listeners, Listener.METHOD_NAME_ADD_ONE
-							,new MethodHelper.Method.Parameter(Instance.class, this),new MethodHelper.Method.Parameter(elementClass,element));
+							,MethodHelper.Method.Parameter.buildArray(Instance.class, this,elementClass,element));
 				}	
 			}
 			return this;
@@ -418,8 +418,8 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		
 		public <CLASS> void removeItem(CLASS element){
 			collection = getInstance().removeElement(collection, element);
-			ListenerHelper.getInstance().listen(listeners, Listener.METHOD_NAME_REMOVE_ELEMENT,new MethodHelper.Method.Parameter(Instance.class, this)
-					,new MethodHelper.Method.Parameter(getElementClass(), element));
+			ListenerHelper.getInstance().listen(listeners, Listener.METHOD_NAME_REMOVE_ELEMENT,MethodHelper.Method.Parameter.buildArray(Instance.class, this
+					,getElementClass(), element));
 		}
 		
 		public <CLASS> void removeItemAt(Class<CLASS> aClass,Integer index){
