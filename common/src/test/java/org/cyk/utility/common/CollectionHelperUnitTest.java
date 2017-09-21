@@ -21,10 +21,14 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void assertSourceDisjoint(){
 		final Master m9=new Master(),m10=new Master();
 		final Child c1=new Child(),c2=new Child(),c3=new Child(),c4=new Child(),c5=new Child(),c6=new Child(),c7=new Child(),c8=new Child(),c9=new Child(),c10=new Child();
+		final Master m11=new Master(),m12=new Master(),m13=new Master();
+		final Child c11=new Child(),c12=new Child(),c13=new Child();
+		final SelectItem s1 = new SelectItem(m11, "M11"),s2 = new SelectItem(m12, "M12"),s3 = new SelectItem(m13, "M13");
 		CollectionHelper.Instance<Child> collection = CollectionHelper.getInstance().getCollectionInstance(Child.class);
 		collection.addListener(new CollectionHelper.Instance.Listener.Adapter<Child>(){
 			private static final long serialVersionUID = 1L;
@@ -41,6 +45,12 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 						return c9;
 					if(object==m10)
 						return c10;
+					if(object==m11)
+						return c11;
+					if(object==m12)
+						return c12;
+					if(object==m13)
+						return c13;
 				}
 				return super.instanciate(instance, object);
 			}
@@ -51,42 +61,52 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 			}
 			
 			@Override
-			public Object getSource(Instance<Child> instance, Child element) {
-				if(element==c9)
+			public Object getSource(Instance<Child> instance, Object object) {
+				if(object==c9)
 					return m9;
-				if(element==c10)
+				if(object==c10)
 					return m10;
-				return super.getSource(instance, element);
+				if(object==m11)
+					return s1;
+				if(object==m12)
+					return s2;
+				if(object==m13)
+					return s3;
+				return super.getSource(instance, object);
 			}
 		});
-		collection.setSource(new ArrayList<Child>(Arrays.asList(c1,c2,c3,c4,c5,c6)));
+		collection.setSources(new ArrayList<Child>(Arrays.asList(c1,c2,c3,c4,c5,c6)));
+		collection.getSources().addAll(Arrays.asList(s1));
 		collection.addOne(c7);
-		assertList((List<?>) collection.getCollection(), Arrays.asList(c7));
-		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c2,c3,c4,c5,c6));
+		assertList((List<?>) collection.getElements(), Arrays.asList(c7));
+		assertList((List<?>) collection.getSources(), Arrays.asList(c1,c2,c3,c4,c5,c6,s1));
 		collection.addOne(c8);
-		assertList((List<?>) collection.getCollection(), Arrays.asList(c7,c8));
-		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c2,c3,c4,c5,c6));
+		assertList((List<?>) collection.getElements(), Arrays.asList(c7,c8));
+		assertList((List<?>) collection.getSources(), Arrays.asList(c1,c2,c3,c4,c5,c6,s1));
 		collection.addOne(c2);
-		assertList((List<?>) collection.getCollection(), Arrays.asList(c7,c8,c2));
-		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c3,c4,c5,c6));
+		assertList((List<?>) collection.getElements(), Arrays.asList(c7,c8,c2));
+		assertList((List<?>) collection.getSources(), Arrays.asList(c1,c3,c4,c5,c6,s1));
 		collection.addOne(c6);
-		assertList((List<?>) collection.getCollection(), Arrays.asList(c7,c8,c2,c6));
-		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c3,c4,c5));
+		assertList((List<?>) collection.getElements(), Arrays.asList(c7,c8,c2,c6));
+		assertList((List<?>) collection.getSources(), Arrays.asList(c1,c3,c4,c5,s1));
 		collection.addOne(c3);
-		assertList((List<?>) collection.getCollection(), Arrays.asList(c7,c8,c2,c6,c3));
-		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c4,c5));
+		assertList((List<?>) collection.getElements(), Arrays.asList(c7,c8,c2,c6,c3));
+		assertList((List<?>) collection.getSources(), Arrays.asList(c1,c4,c5,s1));
 		collection.removeOne(c2);
-		assertList((List<?>) collection.getCollection(), Arrays.asList(c7,c8,c6,c3));
-		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c4,c5,c2));
+		assertList((List<?>) collection.getElements(), Arrays.asList(c7,c8,c6,c3));
+		assertList((List<?>) collection.getSources(), Arrays.asList(c1,c4,c5,s1,c2));
 		collection.removeOne(c7);
-		assertList((List<?>) collection.getCollection(), Arrays.asList(c8,c6,c3));
-		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c4,c5,c2));
+		assertList((List<?>) collection.getElements(), Arrays.asList(c8,c6,c3));
+		assertList((List<?>) collection.getSources(), Arrays.asList(c1,c4,c5,s1,c2));
 		collection.addOne(m10);
-		assertList((List<?>) collection.getCollection(), Arrays.asList(c8,c6,c3,c10));
-		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c4,c5,c2));
+		assertList((List<?>) collection.getElements(), Arrays.asList(c8,c6,c3,c10));
+		assertList((List<?>) collection.getSources(), Arrays.asList(c1,c4,c5,s1,c2));
 		collection.removeOne(c10);
-		assertList((List<?>) collection.getCollection(), Arrays.asList(c8,c6,c3));
-		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c4,c5,c2,m10));
+		assertList((List<?>) collection.getElements(), Arrays.asList(c8,c6,c3));
+		assertList((List<?>) collection.getSources(), Arrays.asList(c1,c4,c5,s1,c2,m10));
+		collection.addOne(m11);
+		assertList((List<?>) collection.getElements(), Arrays.asList(c8,c6,c3,c11));
+		assertList((List<?>) collection.getSources(), Arrays.asList(c1,c4,c5,c2,m10));
 	}
 	
 	@Test
@@ -113,15 +133,15 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 		Master m1 = new Master(),m2 = new Master(),m3 = new Master();
 		
 		collection.addOne(c1);
-		assertEquals(1, collection.getCollection().size());
+		assertEquals(1, collection.getElements().size());
 		collection.addOne(m1);
-		assertEquals(2, collection.getCollection().size());
+		assertEquals(2, collection.getElements().size());
 		collection.removeOne(c1);
-		assertEquals(1, collection.getCollection().size());
+		assertEquals(1, collection.getElements().size());
 		collection.addMany(Arrays.asList(c1,c2,c3));
-		assertEquals(4, collection.getCollection().size());
+		assertEquals(4, collection.getElements().size());
 		collection.addMany(Arrays.asList(m2,m3));
-		assertEquals(6, collection.getCollection().size());
+		assertEquals(6, collection.getElements().size());
 	}
 	
 	@Test
@@ -197,6 +217,18 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 	public static class Master {
 		
 		private String m1;
+
+		@Override
+		public String toString() {
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+		}
+	}
+	
+	@AllArgsConstructor @NoArgsConstructor @Getter @Setter
+	public static class SelectItem {
+		
+		private Object value;
+		private String name;
 
 		@Override
 		public String toString() {
