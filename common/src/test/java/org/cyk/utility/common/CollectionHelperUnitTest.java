@@ -22,6 +22,74 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	@Test
+	public void assertSourceDisjoint(){
+		final Master m9=new Master(),m10=new Master();
+		final Child c1=new Child(),c2=new Child(),c3=new Child(),c4=new Child(),c5=new Child(),c6=new Child(),c7=new Child(),c8=new Child(),c9=new Child(),c10=new Child();
+		CollectionHelper.Instance<Child> collection = CollectionHelper.getInstance().getCollectionInstance(Child.class);
+		collection.addListener(new CollectionHelper.Instance.Listener.Adapter<Child>(){
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Boolean isInstanciatable(Instance<Child> instance, Object object) {
+				return object instanceof Child || object instanceof Master;
+			}
+			
+			@Override
+			public Child instanciate(Instance<Child> instance, Object object) {
+				if(object instanceof Master){
+					if(object==m9)
+						return c9;
+					if(object==m10)
+						return c10;
+				}
+				return super.instanciate(instance, object);
+			}
+			
+			@Override
+			public Boolean isHasSource(Instance<Child> instance, Child element) {
+				return element == c1 || element == c2 || element == c3 || element == c4 || element == c5 || element == c6 || element == c9 || element == c10;
+			}
+			
+			@Override
+			public Object getSource(Instance<Child> instance, Child element) {
+				if(element==c9)
+					return m9;
+				if(element==c10)
+					return m10;
+				return super.getSource(instance, element);
+			}
+		});
+		collection.setSource(new ArrayList<Child>(Arrays.asList(c1,c2,c3,c4,c5,c6)));
+		collection.addOne(c7);
+		assertList((List<?>) collection.getCollection(), Arrays.asList(c7));
+		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c2,c3,c4,c5,c6));
+		collection.addOne(c8);
+		assertList((List<?>) collection.getCollection(), Arrays.asList(c7,c8));
+		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c2,c3,c4,c5,c6));
+		collection.addOne(c2);
+		assertList((List<?>) collection.getCollection(), Arrays.asList(c7,c8,c2));
+		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c3,c4,c5,c6));
+		collection.addOne(c6);
+		assertList((List<?>) collection.getCollection(), Arrays.asList(c7,c8,c2,c6));
+		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c3,c4,c5));
+		collection.addOne(c3);
+		assertList((List<?>) collection.getCollection(), Arrays.asList(c7,c8,c2,c6,c3));
+		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c4,c5));
+		collection.removeOne(c2);
+		assertList((List<?>) collection.getCollection(), Arrays.asList(c7,c8,c6,c3));
+		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c4,c5,c2));
+		collection.removeOne(c7);
+		assertList((List<?>) collection.getCollection(), Arrays.asList(c8,c6,c3));
+		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c4,c5,c2));
+		collection.addOne(m10);
+		assertList((List<?>) collection.getCollection(), Arrays.asList(c8,c6,c3,c10));
+		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c4,c5,c2));
+		collection.removeOne(c10);
+		assertList((List<?>) collection.getCollection(), Arrays.asList(c8,c6,c3));
+		assertList((List<?>) collection.getSource(), Arrays.asList(c1,c4,c5,c2,m10));
+	}
+	
+	@Test
 	public void listen(){
 		CollectionHelper.Instance<Child> collection = new CollectionHelper.Instance<Child>().setElementClass(Child.class);
 		collection.addListener(new CollectionHelper.Instance.Listener.Adapter<Child>(){
@@ -48,7 +116,7 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 		assertEquals(1, collection.getCollection().size());
 		collection.addOne(m1);
 		assertEquals(2, collection.getCollection().size());
-		collection.removeItem(c1);
+		collection.removeOne(c1);
 		assertEquals(1, collection.getCollection().size());
 		collection.addMany(Arrays.asList(c1,c2,c3));
 		assertEquals(4, collection.getCollection().size());

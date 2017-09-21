@@ -85,7 +85,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 		}
 		
 		protected void delete(){
-			collection.removeItem(deleteCommand.getInput());
+			collection.removeOne(deleteCommand.getInput());
 		}
 		
 		public Grid<T> addListener(Listener<T> listener){

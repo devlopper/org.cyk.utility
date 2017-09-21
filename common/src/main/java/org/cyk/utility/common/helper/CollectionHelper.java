@@ -320,9 +320,10 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 
 		private String name;
 		private Class<T> elementClass;
+		@SuppressWarnings("rawtypes")
+		private Collection source;
 		private Collection<T> collection;
-		private Boolean synchonizationEnabled;
-		private Boolean isOrderNumberComputeEnabled;
+		private Boolean synchonizationEnabled,isOrderNumberComputeEnabled,isSourceDisjoint=Boolean.TRUE;
 		private Collection<String> fieldNames;
 		private Collection<Listener<T>> listeners;
 		
@@ -330,11 +331,6 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			if(this.listeners == null)
 				this.listeners = new ArrayList<>();
 			this.listeners.add(listener);
-			return this;
-		}
-		
-		public Instance<T> setElementClass(Class<T> elementClass){
-			this.elementClass = elementClass;
 			return this;
 		}
 		
@@ -347,6 +343,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		@SuppressWarnings("unchecked")
 		public Instance<T> addOne(Object element){
 			if(element!=null){
+				Object master = element;
 				Class<T> elementClass = getElementClass();
 				Boolean isInstanciatable = InstanceHelper.getInstance().getIfNotNullElseDefault(
 						ListenerHelper.getInstance().listenBoolean(listeners, Listener.METHOD_NAME_IS_INSTANCIATABLE
@@ -366,9 +363,13 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 						,elementClass == null ? Boolean.TRUE : element.getClass().equals(elementClass));
 				
 				if(Boolean.TRUE.equals(isAddable)){
-					getCollection().add((T) element);
-					ListenerHelper.getInstance().listen(listeners, Listener.METHOD_NAME_ADD_ONE
-							,MethodHelper.Method.Parameter.buildArray(Instance.class, this,elementClass,element));
+					if(getCollection().add((T) element)){
+						if(Boolean.TRUE.equals(getIsSourceDisjoint()) && source!=null){
+							source.remove(master);
+						}
+						ListenerHelper.getInstance().listen(listeners, Listener.METHOD_NAME_ADD_ONE
+								,MethodHelper.Method.Parameter.buildArray(Instance.class, this,elementClass,element));	
+					}
 				}	
 			}
 			return this;
@@ -416,18 +417,33 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			return (Collection<CLASS>) getInstance().filter(collection, aClass);
 		}
 		
-		public <CLASS> CLASS getItemAt(Class<CLASS> aClass,Integer index){
+		public <CLASS> CLASS getOneAt(Class<CLASS> aClass,Integer index){
 			return getInstance().getElementAt(filter(aClass), index);
 		}
 		
-		public <CLASS> void removeItem(CLASS element){
+		@SuppressWarnings("unchecked")
+		public void removeOne(Object element){
+			Class<T> elementClass = getElementClass();
 			collection = getInstance().removeElement(collection, element);
-			ListenerHelper.getInstance().listen(listeners, Listener.METHOD_NAME_REMOVE_ELEMENT,MethodHelper.Method.Parameter.buildArray(Instance.class, this
-					,getElementClass(), element));
+			if(Boolean.TRUE.equals(getIsSourceDisjoint()) && source!=null){
+				Boolean isHasSource = InstanceHelper.getInstance().getIfNotNullElseDefault(
+						ListenerHelper.getInstance().listenBoolean(listeners, Listener.METHOD_NAME_IS_HAS_SOURCE
+								,MethodHelper.Method.Parameter.buildArray(Instance.class, this,elementClass,element))
+						,elementClass == null ? Boolean.FALSE : !element.getClass().equals(elementClass));
+				if(Boolean.TRUE.equals(isHasSource)){
+					Object elementSource = InstanceHelper.getInstance().getIfNotNullElseDefault(
+							ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_GET_SOURCE
+									,MethodHelper.Method.Parameter.buildArray(Instance.class, this,elementClass,element))
+							,elementClass == null ? null : element);
+					source.add(elementSource);
+				}
+			}
+			ListenerHelper.getInstance().listen(listeners, Listener.METHOD_NAME_REMOVE_ONE,MethodHelper.Method.Parameter.buildArray(Instance.class, this
+					,elementClass, element));
 		}
 		
-		public <CLASS> void removeItemAt(Class<CLASS> aClass,Integer index){
-			removeItem(getItemAt(aClass, index));
+		public <CLASS> void removeOneAt(Class<CLASS> aClass,Integer index){
+			removeOne(getOneAt(aClass, index));
 		}
 		
 		/*@SuppressWarnings("unchecked")
@@ -452,6 +468,12 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			String METHOD_NAME_INSTANCIATE = "instanciate";
 			TYPE instanciate(Instance<TYPE> instance,Object object);
 			
+			String METHOD_NAME_IS_HAS_SOURCE = "isHasSource";
+			Boolean isHasSource(Instance<TYPE> instance,TYPE element);
+			
+			String METHOD_NAME_GET_SOURCE = "getSource";
+			Object getSource(Instance<TYPE> instance,TYPE element);
+			
 			String METHOD_NAME_IS_ADDABLE = "isAddable";
 			Boolean isAddable(Instance<TYPE> instance,Object object);
 			
@@ -463,17 +485,27 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			
 			String METHOD_NAME_IS_REMOVABLE = "isRemovable";
 			Boolean isRemovable(Instance<TYPE> instance,Object object);
-			Listener<TYPE> removeOne(Instance<TYPE> instance,Object object);
+			//Listener<TYPE> removeOne(Instance<TYPE> instance,Object object);
 			Listener<TYPE> removeMany(Instance<TYPE> instance,Collection<?> collection);
 			Listener<TYPE> removeMany(Instance<TYPE> instance,Object...objects);
 			
-			String METHOD_NAME_REMOVE_ELEMENT = "removeElement";
-			void removeElement(Instance<TYPE> instance,TYPE element);
+			String METHOD_NAME_REMOVE_ONE = "removeOne";
+			void removeOne(Instance<TYPE> instance,TYPE element);
 			
 			@Getter
 			public static class Adapter<TYPE> implements Listener<TYPE>,Serializable {
 				private static final long serialVersionUID = 1L;
 
+				@Override
+				public Boolean isHasSource(Instance<TYPE> instance, TYPE element) {
+					return null;
+				}
+				
+				@Override
+				public Object getSource(Instance<TYPE> instance, TYPE element) {
+					return null;
+				}
+				
 				@Override
 				public Boolean isInstanciatable(Instance<TYPE> instance, Object object) {
 					return null;
@@ -512,10 +544,10 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 					return null;
 				}
 
-				@Override
+				/*@Override
 				public Listener<TYPE> removeOne(Instance<TYPE> instance,Object object) {
 					return null;
-				}
+				}*/
 				
 				@Override
 				public Listener<TYPE> removeMany(Instance<TYPE> instance, Collection<?> collection) {
@@ -528,7 +560,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				}
 				
 				@Override
-				public void removeElement(Instance<TYPE> instance,TYPE element) {}
+				public void removeOne(Instance<TYPE> instance,TYPE element) {}
 				
 			}
 		}
