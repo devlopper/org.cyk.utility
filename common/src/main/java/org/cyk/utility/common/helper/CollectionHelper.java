@@ -588,5 +588,9 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		protected String name;
 		protected Boolean processable=Boolean.TRUE;
 		
+		@Override
+		public String toString() {
+			return name;
+		}
 	}
 }
