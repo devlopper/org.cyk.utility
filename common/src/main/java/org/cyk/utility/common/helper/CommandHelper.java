@@ -34,6 +34,11 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 		Command addListener(Listener...listeners);
 		
 		@Override Command setName(String name);
+		Boolean getNameRendered();
+		Command setNameRendered(Boolean nameRendered);
+		
+		String getTitle();
+		Command setTitle(String title);
 		
 		Command setIcon(IconHelper.Icon icon);
 		IconHelper.Icon getIcon();
@@ -47,10 +52,22 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 			
 			protected IconHelper.Icon icon;
 			protected Object mappedIcon;
+			protected Boolean nameRendered;
+			protected String title;
 			protected Collection<Listener> listeners;
 			
 			public Adapter() {
 				super("command", Object.class, null, Object.class);
+			}
+			
+			@Override
+			public Command setNameRendered(Boolean nameRendered) {
+				return null;
+			}
+			
+			@Override
+			public Command setTitle(String title) {
+				return null;
 			}
 			
 			@Override
@@ -97,6 +114,25 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 					setIsProcessableOnStatus(Boolean.TRUE);
 					setIsNotifiable(Boolean.TRUE);
 					setIsNotifiableOnStatusFailure(Boolean.TRUE);
+				}
+				
+				@Override
+				public Command setName(String name) {
+					super.setName(name);
+					setTitle(getName());
+					return this;
+				}
+				
+				@Override
+				public Command setNameRendered(Boolean nameRendered) {
+					this.nameRendered = nameRendered;
+					return this;
+				}
+				
+				@Override
+				public Command setTitle(String title) {
+					this.title = title;
+					return this;
 				}
 				
 				@Override
