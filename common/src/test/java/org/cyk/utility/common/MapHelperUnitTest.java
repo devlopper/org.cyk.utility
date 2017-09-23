@@ -169,7 +169,21 @@ public class MapHelperUnitTest extends AbstractUnitTest {
 				.getByKeyValue("p1","a","p2","b","p3",Arrays.asList(new ClassA(15l)),"p4",Arrays.asList(new ClassA(10l)))).addEncodedKeys("p3","p4").execute());
 		
 	}
-		
+	
+	@Test
+	public void assertMap(){
+		MapHelper.Map<Object, Object> map = new MapHelper.Map<Object, Object>(Object.class,Object.class);
+		assertEquals(map.getString("k1"), null);
+		map.addString("k1", " ", "v1");
+		assertEquals(map.getString("k1"), "v1");
+		map.addString("k1", " ", "v2");
+		assertEquals(map.getString("k1"), "v1 v2");
+		map.addString("k1", " ", "v3");
+		assertEquals(map.getString("k1"), "v1 v2 v3");
+		map.removeString("k1"," ","v2");
+		assertEquals(map.getString("k1"), "v1 v3");
+	}
+	
 	@Getter @Setter
 	public static class ClassA implements Serializable {
 		private static final long serialVersionUID = 1L;

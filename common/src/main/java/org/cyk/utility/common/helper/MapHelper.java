@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -19,6 +19,8 @@ import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.InputStrategy;
 import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.OutputStrategy;
 
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Singleton
 public class MapHelper extends AbstractHelper implements Serializable  {
@@ -41,14 +43,14 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 		super.initialisation();
 	}
 	
-	public <KEY,VALUE> Map<KEY,VALUE> getByKeyValue(Object...objects){
-		Map<KEY,VALUE> map = new LinkedHashMap<>();
+	public <KEY,VALUE> java.util.Map<KEY,VALUE> getByKeyValue(Object...objects){
+		java.util.Map<KEY,VALUE> map = new LinkedHashMap<>();
 		addKeyValue(map, objects);
 		return map;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <KEY,VALUE> void addKeyValue(Map<KEY, VALUE> map,Object...objects){
+	public <KEY,VALUE> void addKeyValue(java.util.Map<KEY, VALUE> map,Object...objects){
 		if(map == null || objects == null)
 			return;
 		for(int i = 0 ; i < objects.length ; i = i + 2){
@@ -56,30 +58,30 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 		}
 	}
 	
-	public <KEY,VALUE> void add(Map<KEY, VALUE> map,KEY key,Collection<VALUE> values){
+	public <KEY,VALUE> void add(java.util.Map<KEY, VALUE> map,KEY key,Collection<VALUE> values){
 		if(map == null || key == null || values == null)
 			return;
 		for(VALUE value : values)
 			map.put(key, value);
 	}
 		
-	public <KEY,VALUE> void add(Map<KEY, VALUE> map,KEY key,@SuppressWarnings("unchecked") VALUE...values){
+	public <KEY,VALUE> void add(java.util.Map<KEY, VALUE> map,KEY key,@SuppressWarnings("unchecked") VALUE...values){
 		if(map == null || key == null || values == null)
 			return;
 		add(map,key,Arrays.asList(values));
 	}
 	
-	public <VALUE> VALUE get(Map<?, VALUE> map,Object key,Class<VALUE> valueClass){
+	public <VALUE> VALUE get(java.util.Map<?, VALUE> map,Object key,Class<VALUE> valueClass){
 		if(map == null || key == null || valueClass == null)
 			return null;
 		return map.get(key);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <VALUE> VALUE getStringValueAs(Class<VALUE> valueClass,Map<?, java.lang.String> map,Object key,String nullValue){
+	public <VALUE> VALUE getStringValueAs(Class<VALUE> valueClass,java.util.Map<?, java.lang.String> map,Object key,String nullValue){
 		if(map == null || key == null)
 			return null;
-		String value = new MapHelper.GetValue.String.Adapter.Default<java.lang.String>((Map<java.lang.String,java.lang.String>)map,java.lang.String.class)
+		String value = new MapHelper.GetValue.String.Adapter.Default<java.lang.String>((java.util.Map<java.lang.String,java.lang.String>)map,java.lang.String.class)
 				.setProperty(MapHelper.GetValue.PROPERTY_NAME_KEY, key)
 				.setProperty(MapHelper.ContainsKey.PROPERTY_NAME_CASE_SENSITIVE, Boolean.FALSE)
 				.setProperty(MapHelper.ContainsKey.PROPERTY_NAME_NULL_VALUE, nullValue)
@@ -116,7 +118,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 				@Override
 				protected Boolean __execute__() {
 					@SuppressWarnings("unchecked")
-					Map<KEY,?> map = (Map<KEY, ?>) getProperty(PROPERTY_NAME_MAP);
+					java.util.Map<KEY,?> map = (java.util.Map<KEY, ?>) getProperty(PROPERTY_NAME_MAP);
 					KEY key = getInput();
 					if(Boolean.TRUE.equals(contains(map,key))){
 						found(map, key);
@@ -125,11 +127,11 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 					return Boolean.FALSE;
 				}
 				
-				protected Boolean contains(Map<KEY,?> map,KEY key){
+				protected Boolean contains(java.util.Map<KEY,?> map,KEY key){
 					return map.containsKey(key);
 				}
 				
-				protected void found(Map<KEY,?> map,KEY key){
+				protected void found(java.util.Map<KEY,?> map,KEY key){
 					setProperty(PROPERTY_NAME_KEY, key);
 				}
 			}
@@ -157,7 +159,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 					@Override
 					protected Boolean __execute__() {
 						@SuppressWarnings("unchecked")
-						Map<java.lang.String,Object> map = (Map<java.lang.String, Object>) getProperty(PROPERTY_NAME_MAP);
+						java.util.Map<java.lang.String,Object> map = (java.util.Map<java.lang.String, Object>) getProperty(PROPERTY_NAME_MAP);
 						Boolean caseSensitive = (Boolean) getProperty(PROPERTY_NAME_CASE_SENSITIVE);
 						if(caseSensitive==null || Boolean.TRUE.equals(caseSensitive)){
 							found(map, getInput());
@@ -175,20 +177,20 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 		}
 	}
 	
-	public static interface GetValue<KEY,VALUE> extends Action<Map<KEY,VALUE>, VALUE> {
+	public static interface GetValue<KEY,VALUE> extends Action<java.util.Map<KEY,VALUE>, VALUE> {
 		
 		ContainsKey<KEY> getContainsKey();
 		GetValue<KEY,VALUE> setContainsKey(ContainsKey<KEY> containsKey);
 		
 		@Getter
-		public static class Adapter<KEY,VALUE> extends Action.Adapter.Default<Map<KEY,VALUE>, VALUE> implements GetValue<KEY,VALUE>,Serializable {
+		public static class Adapter<KEY,VALUE> extends Action.Adapter.Default<java.util.Map<KEY,VALUE>, VALUE> implements GetValue<KEY,VALUE>,Serializable {
 			private static final long serialVersionUID = 1L;
 
 			protected ContainsKey<KEY> containsKey;
 			
 			@SuppressWarnings("unchecked")
-			public Adapter(Map<KEY, VALUE> input,Class<VALUE> outputClass) {
-				super("get value", (Class<Map<KEY, VALUE>>) ClassHelper.getInstance().getByName(Map.class), input, outputClass);
+			public Adapter(java.util.Map<KEY, VALUE> input,Class<VALUE> outputClass) {
+				super("get value", (Class<java.util.Map<KEY, VALUE>>) ClassHelper.getInstance().getByName(Map.class), input, outputClass);
 			}
 			
 			@Override
@@ -199,7 +201,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 			public static class Default<KEY,VALUE> extends GetValue.Adapter<KEY,VALUE> implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				public Default(Map<KEY, VALUE> input,Class<VALUE> outputClass) {
+				public Default(java.util.Map<KEY, VALUE> input,Class<VALUE> outputClass) {
 					super(input, outputClass);
 				}
 				
@@ -212,7 +214,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 				@SuppressWarnings("unchecked")
 				@Override
 				protected VALUE __execute__() {
-					Map<KEY,VALUE> map = getInput();
+					java.util.Map<KEY,VALUE> map = getInput();
 					KEY key = (KEY) getProperty(PROPERTY_NAME_KEY);
 					ContainsKey<KEY> containsKey = getContainsKey();
 					if(containsKey==null)
@@ -244,14 +246,14 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 			public static class Adapter<VALUE> extends GetValue.Adapter.Default<java.lang.String,VALUE> implements String<VALUE>,Serializable {
 				private static final long serialVersionUID = 1L;
 
-				public Adapter(Map<java.lang.String, VALUE> input, Class<VALUE> outputClass) {
+				public Adapter(java.util.Map<java.lang.String, VALUE> input, Class<VALUE> outputClass) {
 					super(input, outputClass);
 				}
 				
 				public static class Default<VALUE> extends String.Adapter<VALUE> implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					public Default(Map<java.lang.String, VALUE> input, Class<VALUE> outputClass) {
+					public Default(java.util.Map<java.lang.String, VALUE> input, Class<VALUE> outputClass) {
 						super(input, outputClass);
 					}
 					
@@ -360,7 +362,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 				
 				@Override
 				public MapHelper.Stringifier addKeyValue(Object...objects) {
-					Map<?,?> map = getInput();
+					java.util.Map<?,?> map = getInput();
 					if(map==null)
 						setInput(map = new LinkedHashMap<>());
 					MapHelper.getInstance().addKeyValue(map, objects);
@@ -947,5 +949,83 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 				}
 			}	
 		}
+	}
+
+	@Getter @Setter @Accessors(chain=true)
+	public static class Map<KEY,VALUE> implements Serializable{
+		private static final long serialVersionUID = 1L;
+		
+		private Class<KEY> keyClass;
+		private Class<VALUE> valueClass;
+		private java.util.Map<KEY,VALUE> map;
+		
+		public Map(Class<KEY> keyClass,Class<VALUE> valueClass) {
+			setKeyClass(keyClass);
+			setValueClass(valueClass);
+		}
+		
+		public Map<KEY,VALUE> set(KEY key,VALUE value){
+			if(this.map == null)
+				this.map = new HashMap<KEY,VALUE>();
+			this.map.put(key, value);
+			return this;
+		}
+		
+		@SuppressWarnings("unchecked")
+		public <T> T get(Class<T> aClass,KEY key,T nullValue){
+			return (T) (this.map == null ? nullValue : this.map.get(key) == null ? nullValue : this.map.get(key));
+		}
+		
+		public <T> T get(KEY key,Class<T> aClass){
+			return get(aClass,key,null);
+		}
+		
+		public VALUE get(KEY key,VALUE nullValue){
+			return get(getValueClass(), key, nullValue);
+		}
+		
+		public VALUE get(KEY key){
+			return get(key,(VALUE)null);
+		}
+		
+		public String getString(KEY key){
+			return get(key,String.class);
+		}
+		
+		public Long getLong(KEY key){
+			return get(key,Long.class);
+		}
+		
+		public Integer getInteger(KEY key){
+			return get(key,Integer.class);
+		}
+		
+		@SuppressWarnings("unchecked")
+		public Map<KEY,VALUE> addString(KEY key,Object separator,String...strings){
+			String string = (java.lang.String) get(key);
+			Collection<String> collection = new ArrayList<String>();
+			if(StringHelper.getInstance().isNotBlank(string))
+				collection.add(string);
+			collection.addAll(CollectionHelper.getInstance().get(strings));
+			set(key,(VALUE) StringHelper.getInstance().concatenate(collection, separator));
+			return this;
+		}
+		
+		@SuppressWarnings("unchecked")
+		public Map<KEY,VALUE> removeString(KEY key,Object separator,String...strings){
+			String string = (java.lang.String) get(key);
+			if(ArrayHelper.getInstance().isNotEmpty(strings))
+				for(String s : strings){
+					if(string.startsWith(s+separator))
+						string = StringUtils.replace(string, s+separator, Constant.EMPTY_STRING);
+					else if(string.endsWith(separator+s))
+						string = StringUtils.replace(string, separator+s, Constant.EMPTY_STRING);
+					else if(string.contains(separator+s+separator))
+						string = StringUtils.replace(string, separator+s+separator, separator.toString());
+				}
+			set(key,(VALUE) string);
+			return this;
+		}
+		
 	}
 }

@@ -32,6 +32,7 @@ import org.cyk.utility.common.RunnableListener;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.ConditionHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
+import org.cyk.utility.common.helper.MapHelper;
 import org.cyk.utility.common.helper.ThrowableHelper;
 
 import lombok.Getter;
@@ -46,7 +47,7 @@ public class AbstractBean implements Serializable {
 	protected ListenerUtils listenerUtils = ListenerUtils.getInstance();
 	
 	@Getter protected Collection<BeanListener> beanListeners = new ArrayList<>();
-	
+	protected MapHelper.Map<Object,Object> propertiesMap;
 	private transient Logger __logger__; 
 	
 	//private Long __timestamp__;
@@ -63,6 +64,12 @@ public class AbstractBean implements Serializable {
 	protected void initialisation(){}
 
 	protected void afterInitialisation(){}
+	
+	public MapHelper.Map<Object, Object> getPropertiesMap() {
+		if(propertiesMap==null)
+			propertiesMap = new MapHelper.Map<Object, Object>(Object.class,Object.class);
+		return propertiesMap;
+	}
 	
 	protected <T> Collection<T> castCollection(Collection<?> collection,Class<T> aClass){
 		return commonUtils.castCollection(collection, aClass);
