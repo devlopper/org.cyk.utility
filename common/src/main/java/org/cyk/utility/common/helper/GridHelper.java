@@ -53,8 +53,8 @@ public class GridHelper extends AbstractHelper implements Serializable {
 		
 		/**/
 		
-		public Grid(Class<T> elementClass) {
-			collection = CollectionHelper.getInstance().getCollectionInstance(elementClass);
+		public Grid(Class<T> elementClass,Class<?> sourceClass,Class<?> sourceObjectClass) {
+			collection = CollectionHelper.getInstance().getCollectionInstance(elementClass,sourceClass,sourceObjectClass);
 			addCommand = CommandHelper.getInstance().getCommand().setName(StringHelper.getInstance().get("grid.command.add", (Object[])null))
 					.setIcon(IconHelper.Icon.ACTION_ADD);
 			addCommand.addActionListener(new Action.ActionListener.Adapter(){
@@ -78,6 +78,10 @@ public class GridHelper extends AbstractHelper implements Serializable {
 			indexColumn = getInstance().getColumn().setName(StringHelper.getInstance().get("grid.column.index", (Object[])null));
 			nameColumn = getInstance().getColumn().setName(StringHelper.getInstance().get("grid.column.name", (Object[])null));
 			commandsColumn = getInstance().getColumn().setName(StringHelper.getInstance().get("grid.column.commands", (Object[])null));
+		}
+		
+		public Grid(Class<T> elementClass) {
+			this(elementClass,(Class<?>)null,(Class<?>)null);
 		}
 		
 		protected void add(){

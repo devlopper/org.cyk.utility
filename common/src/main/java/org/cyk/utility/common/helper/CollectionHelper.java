@@ -40,8 +40,12 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		super.initialisation();
 	}
 	
+	public <T> Instance<T> getCollectionInstance(Class<T> aClass,Class<?> sourceClass,Class<?> sourceObjectClass){
+		return new Instance<T>().setElementClass(aClass).setSourceClass(sourceClass).setSourceObjectClass(sourceObjectClass);
+	}
+	
 	public <T> Instance<T> getCollectionInstance(Class<T> aClass){
-		return new Instance<T>().setElementClass(aClass);
+		return getCollectionInstance(aClass,null,null);
 	}
 	
 	public <ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection,Integer index){
@@ -322,6 +326,9 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		private Class<T> elementClass;
 		@SuppressWarnings("rawtypes")
 		private Collection sources;
+		private Class<?> sourceClass;
+		private Class<?> sourceObjectClass;
+		private String getGetSourceObjectMethodName;
 		private Collection<T> elements;
 		private Boolean synchonizationEnabled,isOrderNumberComputeEnabled,isSourceDisjoint=Boolean.TRUE;
 		private Collection<String> fieldNames;
@@ -346,14 +353,44 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		public Instance<T> addOne(Object element){
 			if(Boolean.TRUE.equals(getIsCreatable()) && (!Boolean.TRUE.equals(getIsNullAddable()) && element!=null)){
 				Class<T> elementClass = getElementClass();
-				Object source = InstanceHelper.getInstance().getIfNotNullElseDefault(
-						ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_GET_SOURCE
-								,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element))
-						,elementClass == null ? null : element);
+				Class<?> sourceObjectClass = getSourceObjectClass();
+				Object source = ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_GET_SOURCE
+								,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element));
+				Object sourceObject = null;
+				if(source==null){
+					if(sourceObjectClass!=null /*&& getSourceClass().equals(element.getClass())*/)
+						for(Object index : getSources()){
+							sourceObject = ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_GET_SOURCE_OBJECT
+									,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,index));
+							if(sourceObject==null){
+								if(StringHelper.getInstance().isNotBlank(getGetSourceObjectMethodName))
+									sourceObject = MethodHelper.getInstance().call(index, Object.class, getGetSourceObjectMethodName);
+							}
+							if(sourceObject==element){
+								source = index;
+								break;
+							}
+						}
+					if(source==null)
+						source = elementClass == null ? null : element;
+				}
+				
+				//Object sourceObject = ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_GET_SOURCE_OBJECT
+				//		,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,source));
+				/*if(sourceObject==null){
+					if(sourceObjectClass!=null)
+						for(Object index : getSources()){
+							sourceObject = ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_GET_SOURCE_OBJECT
+									,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,index));
+							if(sourceObject==element){
+								break;
+							}
+						}
+				}*/
 				Boolean isInstanciatable = InstanceHelper.getInstance().getIfNotNullElseDefault(
 						ListenerHelper.getInstance().listenBoolean(listeners, Listener.METHOD_NAME_IS_INSTANCIATABLE
 								,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element))
-						,elementClass == null ? Boolean.TRUE : element.getClass().equals(elementClass));
+						,elementClass == null ? Boolean.TRUE : sourceObjectClass == null ? element.getClass().equals(elementClass) : element.getClass().equals(sourceObjectClass));
 				
 				if(!element.getClass().equals(elementClass) && Boolean.TRUE.equals(isInstanciatable)){
 					element = InstanceHelper.getInstance().getIfNotNullElseDefault(
@@ -369,13 +406,15 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				
 				if(Boolean.TRUE.equals(isAddable)){
 					if(getElements().add((T) element)){
-						if(element instanceof Element)
+						if(element instanceof Element){
 							((Element<T>)element).setSource(source);
+							((Element<T>)element).setName(element.toString());
+						}
 						if(Boolean.TRUE.equals(getIsSourceDisjoint()) && sources!=null){
 							sources.remove(source);
 						}
 						ListenerHelper.getInstance().listen(listeners, Listener.METHOD_NAME_ADD_ONE
-								,MethodHelper.Method.Parameter.buildArray(Instance.class, this,elementClass,element,Object.class,source));	
+								,MethodHelper.Method.Parameter.buildArray(Instance.class, this,elementClass,element,Object.class,source,Object.class,sourceObject));	
 					}
 				}	
 			}
@@ -443,8 +482,27 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 					if(Boolean.TRUE.equals(isHasSource)){
 						Object elementSource = InstanceHelper.getInstance().getIfNotNullElseDefault(
 								ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_GET_SOURCE
-										,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element))
-								,elementClass == null ? null : element instanceof Element ? ((Element<T>)element).getSource() : element);
+										,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element)),elementClass == null ? null : null);
+						if(elementSource==null){
+							if(elementClass.equals(element.getClass())){
+								if(element instanceof Element)
+									elementSource = ((Element<T>)element).getSource();
+								else
+									elementSource = element;
+							}else if(getSourceClass().equals(element.getClass())){
+								for(Object index : getSources()){
+									Object sourceObject = ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_GET_SOURCE_OBJECT
+											,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,index));
+									if(sourceObject==element){
+										elementSource = index;
+										break;
+									}
+								}
+							}
+						}
+						if(elementSource==null){
+							elementSource = element instanceof Element ? ((Element<T>)element).getSource() : element;
+						}
 						sources.add(elementSource);
 					}
 				}
@@ -485,11 +543,14 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			String METHOD_NAME_GET_SOURCE = "getSource";
 			Object getSource(Instance<TYPE> instance,Object object);
 			
+			String METHOD_NAME_GET_SOURCE_OBJECT = "getSourceObject";
+			Object getSourceObject(Instance<TYPE> instance,Object object);
+			
 			String METHOD_NAME_IS_ADDABLE = "isAddable";
 			Boolean isAddable(Instance<TYPE> instance,Object object);
 			
 			String METHOD_NAME_ADD_ONE = "addOne";
-			void addOne(Instance<TYPE> instance,TYPE object,Object source);
+			void addOne(Instance<TYPE> instance,TYPE object,Object source,Object sourceObject);
 			Listener<TYPE> addOne(Instance<TYPE> instance);
 			Listener<TYPE> addMany(Instance<TYPE> instance,Collection<?> collection);
 			Listener<TYPE> addMany(Instance<TYPE> instance,Object...object);
@@ -533,7 +594,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				}
 				
 				@Override
-				public void addOne(Instance<TYPE> instance,TYPE element,Object source) {}
+				public void addOne(Instance<TYPE> instance,TYPE element,Object source,Object sourceObject) {}
 
 				@Override
 				public Listener<TYPE> addOne(Instance<TYPE> instance) {
@@ -572,6 +633,11 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				
 				@Override
 				public void removeOne(Instance<TYPE> instance,TYPE element) {}
+
+				@Override
+				public Object getSourceObject(Instance<TYPE> instance, Object object) {
+					return null;
+				}
 				
 			}
 		}
@@ -583,6 +649,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 	public static class Element<T> extends AbstractBean implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		protected Object sourceObject;
 		protected Object source;
 		protected T object;
 		protected String name;

@@ -110,6 +110,61 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void assertSourceObject(){
+		final Master ov1=new Master(),ov2=new Master(),ov3=new Master(),ov4=new Master(),ov5=new Master(),ov6=new Master(),ov7=new Master();
+		final ChildElement c1=new ChildElement(),c2=new ChildElement(),c3=new ChildElement(),c4=new ChildElement(),c5=new ChildElement(),c6=new ChildElement(),c7=new ChildElement();
+		final SelectItem s1 = new SelectItem(ov1, "OV1"),s2 = new SelectItem(ov2, "OV2"),s3 = new SelectItem(ov3, "OV3"),s4 = new SelectItem(ov4, "OV4")
+				,s5 = new SelectItem(ov5, "OV5"),s6 = new SelectItem(ov6, "OV6"),s7 = new SelectItem(ov7, "OV7");
+		CollectionHelper.Instance<ChildElement> collection = CollectionHelper.getInstance().getCollectionInstance(ChildElement.class,SelectItem.class,Master.class);
+		collection.addListener(new CollectionHelper.Instance.Listener.Adapter<ChildElement>(){
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public ChildElement instanciate(Instance<ChildElement> instance, Object object) {
+				if(object instanceof Master){
+					if(object==ov1)
+						return c1;
+					if(object==ov2)
+						return c2;
+					if(object==ov3)
+						return c3;
+					if(object==ov4)
+						return c4;
+					if(object==ov5)
+						return c5;
+					if(object==ov6)
+						return c6;
+					if(object==ov7)
+						return c7;
+				}
+				return super.instanciate(instance, object);
+			}
+		});
+		collection.setSources(new ArrayList<SelectItem>(Arrays.asList(s1,s2,s3,s4,s5,s6,s7))).setIsEachElementHasSource(Boolean.TRUE);
+		collection.setGetGetSourceObjectMethodName("getValue");
+		collection.addOne(ov1);
+		assertList((List<?>) collection.getElements(), Arrays.asList(c1));
+		assertList((List<?>) collection.getSources(), Arrays.asList(s2,s3,s4,s5,s6,s7));
+		collection.addOne(ov7);
+		assertList((List<?>) collection.getElements(), Arrays.asList(c1,c7));
+		assertList((List<?>) collection.getSources(), Arrays.asList(s2,s3,s4,s5,s6));
+		collection.addOne(ov4);
+		assertList((List<?>) collection.getElements(), Arrays.asList(c1,c7,c4));
+		assertList((List<?>) collection.getSources(), Arrays.asList(s2,s3,s5,s6));
+		collection.removeOne(c7);
+		assertList((List<?>) collection.getElements(), Arrays.asList(c1,c4));
+		assertList((List<?>) collection.getSources(), Arrays.asList(s2,s3,s5,s6,s7));
+		collection.removeOne(c1);
+		assertList((List<?>) collection.getElements(), Arrays.asList(c4));
+		assertList((List<?>) collection.getSources(), Arrays.asList(s2,s3,s5,s6,s7,s1));
+		collection.addOne(ov5);
+		assertList((List<?>) collection.getElements(), Arrays.asList(c4,c5));
+		assertList((List<?>) collection.getSources(), Arrays.asList(s2,s3,s6,s7,s1));
+		
+		
+	}
+	
+	@Test
 	public void listen(){
 		CollectionHelper.Instance<Child> collection = new CollectionHelper.Instance<Child>().setElementClass(Child.class);
 		collection.addListener(new CollectionHelper.Instance.Listener.Adapter<Child>(){
@@ -245,6 +300,12 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 		public String toString() {
 			return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
 		}
+	}
+	
+	@NoArgsConstructor @Getter @Setter
+	public static class ChildElement extends CollectionHelper.Element<Child> {
+		private static final long serialVersionUID = 1L;
+		
 	}
 	
 	@AllArgsConstructor @NoArgsConstructor @Getter @Setter
