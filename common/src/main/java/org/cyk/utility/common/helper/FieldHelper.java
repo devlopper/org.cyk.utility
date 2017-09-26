@@ -70,6 +70,10 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return Arrays.asList(StringUtils.split(buildPath(fieldPaths), FIELD_NAME_SEPARATOR));
 	}
 	
+	public List<String> getNames(Collection<java.lang.reflect.Field> fields){
+		return new ArrayList<String>(MethodHelper.getInstance().callGet(fields, String.class, Constant.WORD_NAME));
+	}
+	
 	public Object read(Object instance,java.lang.reflect.Field field){
 		return read(instance,field.getName());
 	}

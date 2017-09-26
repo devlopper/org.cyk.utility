@@ -1,5 +1,6 @@
 package org.cyk.utility.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,10 +17,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public class CollectionHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	@Test
+	public void assertElementObjet(){
+		CollectionHelper.Instance<ChildElement> collection = CollectionHelper.getInstance().getCollectionInstance(ChildElement.class,Child.class,SelectItem.class,Master.class);
+		collection.setIsElementObjectCreatable(Boolean.TRUE);
+		collection.mapElementFieldsAndElementObjectFields("ce1","c1","ce2","c2").mapElementObjectFields("cc1","cc2");
+		collection.addOne();
+		Child child = collection.getElements().iterator().next().getObject();
+		assertEquals(Boolean.TRUE,child!=null);
+		
+		
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Test
@@ -115,7 +129,7 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 		final ChildElement c1=new ChildElement(),c2=new ChildElement(),c3=new ChildElement(),c4=new ChildElement(),c5=new ChildElement(),c6=new ChildElement(),c7=new ChildElement();
 		final SelectItem s1 = new SelectItem(ov1, "OV1"),s2 = new SelectItem(ov2, "OV2"),s3 = new SelectItem(ov3, "OV3"),s4 = new SelectItem(ov4, "OV4")
 				,s5 = new SelectItem(ov5, "OV5"),s6 = new SelectItem(ov6, "OV6"),s7 = new SelectItem(ov7, "OV7");
-		CollectionHelper.Instance<ChildElement> collection = CollectionHelper.getInstance().getCollectionInstance(ChildElement.class,SelectItem.class,Master.class);
+		CollectionHelper.Instance<ChildElement> collection = CollectionHelper.getInstance().getCollectionInstance(ChildElement.class,Child.class,SelectItem.class,Master.class);
 		collection.addListener(new CollectionHelper.Instance.Listener.Adapter<ChildElement>(){
 			private static final long serialVersionUID = 1L;
 			
@@ -141,7 +155,7 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 			}
 		});
 		collection.setSources(new ArrayList<SelectItem>(Arrays.asList(s1,s2,s3,s4,s5,s6,s7))).setIsEachElementHasSource(Boolean.TRUE);
-		collection.setGetGetSourceObjectMethodName("getValue");
+		collection.setGetSourceObjectMethodName("getValue");
 		collection.addOne(ov1);
 		assertList((List<?>) collection.getElements(), Arrays.asList(c1));
 		assertList((List<?>) collection.getSources(), Arrays.asList(s2,s3,s4,s5,s6,s7));
@@ -159,9 +173,65 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 		assertList((List<?>) collection.getSources(), Arrays.asList(s2,s3,s5,s6,s7,s1));
 		collection.addOne(ov5);
 		assertList((List<?>) collection.getElements(), Arrays.asList(c4,c5));
-		assertList((List<?>) collection.getSources(), Arrays.asList(s2,s3,s6,s7,s1));
+		assertList((List<?>) collection.getSources(), Arrays.asList(s2,s3,s6,s7,s1));	
+	}
+	
+	@Test
+	public void assertElementObjetAndObjectFieldsCopy(){
+		final Master master1=new Master(),master2=new Master(),master3=new Master(),master4=new Master(),master5=new Master(),master6=new Master(),master7=new Master();
+		final Child child1=new Child().setC1("IEC1").setC2(951).setCc1("vcc1").setCc2(789),child2=new Child(),child3=new Child(),child4=new Child(),child5=new Child(),child6=new Child(),child7=new Child();
+		final ChildElement element1=new ChildElement(child1),element2=new ChildElement(child2),element3=new ChildElement(child3),element4=new ChildElement(child4)
+				,element5=new ChildElement(child5),element6=new ChildElement(child6),element7=new ChildElement(child7);
+		final SelectItem selectItem1 = new SelectItem(master1, "OV1"),selectItem2 = new SelectItem(master2, "OV2"),selectItem3 = new SelectItem(master3, "OV3")
+				,selectItem4 = new SelectItem(master4, "OV4"),selectItem5 = new SelectItem(master5, "OV5"),selectItem6 = new SelectItem(master6, "OV6")
+				,selectItem7 = new SelectItem(master7, "OV7");
+		CollectionHelper.Instance<ChildElement> collection = CollectionHelper.getInstance().getCollectionInstance(ChildElement.class,Child.class,SelectItem.class,Master.class);
+		collection.addListener(new CollectionHelper.Instance.Listener.Adapter<ChildElement>(){
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public ChildElement instanciate(Instance<ChildElement> instance, Object object) {
+				if(object instanceof Master){
+					if(object==master1)
+						return element1;
+					if(object==master2)
+						return element2;
+					if(object==master3)
+						return element3;
+					if(object==master4)
+						return element4;
+					if(object==master5)
+						return element5;
+					if(object==master6)
+						return element6;
+					if(object==master7)
+						return element7;
+				}
+				return super.instanciate(instance, object);
+			}
+		});
+		collection.setSources(new ArrayList<SelectItem>(Arrays.asList(selectItem1,selectItem2,selectItem3,selectItem4,selectItem5,selectItem6,selectItem7)))
+			.setIsEachElementHasSource(Boolean.TRUE);
+		collection.setGetSourceObjectMethodName("getValue");
+		collection.mapElementFieldsAndElementObjectFields("ce1","c1","ce2","c2").mapElementObjectFields("cc1","cc2");
+		collection.addOne(master1);
+		assertList((List<?>) collection.getElements(), Arrays.asList(element1));
+		assertList((List<?>) collection.getSources(), Arrays.asList(selectItem2,selectItem3,selectItem4,selectItem5,selectItem6,selectItem7));	
+		assertEquals(child1,element1.getObject());
 		
+		collection.read();
+		assertEquals("IEC1", element1.getCe1());
+		assertEquals(951, element1.getCe2());
+		assertEquals("vcc1", element1.getCc1());
+		assertEquals(789, element1.getCc2());
 		
+		element1.setCe1("eC1").setCe2(12).setCc1("nvCC1").setCc2(456);
+		
+		collection.write();
+		assertEquals("eC1", child1.getC1());
+		assertEquals(12, child1.getC2());
+		assertEquals("nvCC1", child1.getCc1());
+		assertEquals(456, child1.getCc2());
 	}
 	
 	@Test
@@ -291,10 +361,14 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 		}
 	}
 	
-	@AllArgsConstructor @NoArgsConstructor @Getter @Setter
-	public static class Child {
+	@AllArgsConstructor @NoArgsConstructor @Getter @Setter @Accessors(chain=true)
+	public static class Child implements Serializable {
+		private static final long serialVersionUID = 1L;
 		
 		private String c1;
+		private Integer c2;
+		private String cc1;
+		private Integer cc2;
 
 		@Override
 		public String toString() {
@@ -302,10 +376,19 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 		}
 	}
 	
-	@NoArgsConstructor @Getter @Setter
+	@NoArgsConstructor @Getter @Setter @Accessors(chain=true)
 	public static class ChildElement extends CollectionHelper.Element<Child> {
 		private static final long serialVersionUID = 1L;
 		
+		private String ce1;
+		private Integer ce2;
+		private String cc1;
+		private Integer cc2;
+		
+		public ChildElement(Child child){
+			setObject(child);
+		}
+				
 	}
 	
 	@AllArgsConstructor @NoArgsConstructor @Getter @Setter

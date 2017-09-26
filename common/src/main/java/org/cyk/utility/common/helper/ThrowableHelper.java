@@ -71,6 +71,7 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 	public void throw_(Throwable throwable){
 		if(throwable==null || throwable.getCause()==null)
 			return;
+		//throw (RuntimeException)throwable.getCause();
 		throw new RuntimeException(throwable.getCause());
 	}
 	

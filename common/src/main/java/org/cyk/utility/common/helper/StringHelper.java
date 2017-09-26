@@ -257,6 +257,19 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return new ToStringMapping.Adapter.Default(getFieldIdentifier(identifier)).execute();
 	}
 	
+	public String getClassIdentifier(String name){
+		name = String.format(ToStringMapping.CLASS_IDENTIFIER_FORMAT,applyCaseType(concatenate(getWordsFromCamelCase(name), Constant.CHARACTER_DOT.toString()),CaseType.L));
+		return name;
+	}
+	
+	public String getClazz(String identifier){
+		return new ToStringMapping.Adapter.Default(getClassIdentifier(identifier)).execute();
+	}
+	
+	public String getClazz(Class<?> aClass){
+		return getClazz(aClass.getSimpleName().toLowerCase());
+	}
+	
 	public String getResponse(Boolean response,CaseType caseType,Locale locale){
 		return StringHelper.getInstance().get(response == null ? "response.undefined" : response ? "response.yes" : "response.no", caseType, null, locale);
 	}
@@ -655,6 +668,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		String MASCULINE_FORMAT = "%s.__%sine__";
 		String WORD_IDENTIFIER_FORMAT = "word.%s.__%sine__";
 		String FIELD_IDENTIFIER_FORMAT = "field.%s";
+		String CLASS_IDENTIFIER_FORMAT = "class.%s";
 		String WORD_ARTICLE_IDENTIFIER_FORMAT = "word.article.__%sine__.__%s__";
 		String WORD_ARTICLE_ALL_IDENTIFIER_FORMAT = "word.article.all.__%sine__";
 		String COMPARISON_OPERATOR_IDENTIFIER_FORMAT = "__comparison.operator%s__";

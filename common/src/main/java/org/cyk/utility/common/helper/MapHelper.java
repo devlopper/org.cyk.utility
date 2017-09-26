@@ -93,6 +93,14 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 		return null;
 	}
 	
+	public Boolean isEmpty(java.util.Map<?, ?> map){
+		return map == null || map.isEmpty();
+	}
+	
+	public Boolean isNotEmpty(java.util.Map<?, ?> map){
+		return !Boolean.TRUE.equals(isEmpty(map));
+	}
+	
 	/**/
 	
 	/*public static interface Builder<KEY,VALUE> extends org.cyk.utility.common.Builder<INPUT, OUTPUT> {

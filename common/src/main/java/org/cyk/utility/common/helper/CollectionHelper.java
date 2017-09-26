@@ -4,9 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.inject.Singleton;
@@ -40,12 +43,13 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		super.initialisation();
 	}
 	
-	public <T> Instance<T> getCollectionInstance(Class<T> aClass,Class<?> sourceClass,Class<?> sourceObjectClass){
-		return new Instance<T>().setElementClass(aClass).setSourceClass(sourceClass).setSourceObjectClass(sourceObjectClass);
+	public <T> Instance<T> getCollectionInstance(Class<T> elementClass,Class<?> elementObjectClass,Class<?> sourceClass,Class<?> sourceObjectClass){
+		return new Instance<T>().setElementClass(elementClass).setElementObjectClass(elementObjectClass)
+				.setSourceClass(sourceClass).setSourceObjectClass(sourceObjectClass);
 	}
 	
 	public <T> Instance<T> getCollectionInstance(Class<T> aClass){
-		return getCollectionInstance(aClass,null,null);
+		return getCollectionInstance(aClass,null,null,null);
 	}
 	
 	public <ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection,Integer index){
@@ -324,17 +328,44 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 
 		private String name;
 		private Class<T> elementClass;
+		private Class<?> elementObjectClass;
 		@SuppressWarnings("rawtypes")
 		private Collection sources;
 		private Class<?> sourceClass;
 		private Class<?> sourceObjectClass;
-		private String getGetSourceObjectMethodName;
+		private String getSourceObjectMethodName;
 		private Collection<T> elements;
 		private Boolean synchonizationEnabled,isOrderNumberComputeEnabled,isSourceDisjoint=Boolean.TRUE;
 		private Collection<String> fieldNames;
+		private Map<String,String> elementFieldsAndElementObjectFieldsMap;
 		private Collection<Listener<T>> listeners;
 		private Boolean isCreatable=Boolean.TRUE,isReadable=Boolean.TRUE,isUpdatable=Boolean.TRUE,isRemovable=Boolean.TRUE,isNullAddable=Boolean.FALSE;
-		private Boolean isEachElementHasSource;
+		private Boolean isEachElementHasSource,isElementObjectCreatable;
+		
+		public Instance<T> mapElementFieldsAndElementObjectFields(String...strings){
+			if(ArrayHelper.getInstance().isNotEmpty(strings)){
+				if(elementFieldsAndElementObjectFieldsMap==null)
+					elementFieldsAndElementObjectFieldsMap = new HashMap<String, String>();
+				for(Integer index = 0 ; index < strings.length ; index = index + 2)
+					MapHelper.getInstance().addKeyValue(elementFieldsAndElementObjectFieldsMap, (Object[])strings);
+			}
+			return this;
+		}
+		
+		public Instance<T> mapElementObjectFields(String...strings){
+			if(ArrayHelper.getInstance().isNotEmpty(strings)){
+				Collection<String> collection = new ArrayList<String>();
+				for(String string : strings){
+					if(StringUtils.contains(string, Constant.CHARACTER_DOT.toString()))
+						collection.add(StringUtils.substringAfterLast(string, Constant.CHARACTER_DOT.toString()));
+					else
+						collection.add(string);
+					collection.add(string);
+				}
+				mapElementFieldsAndElementObjectFields(collection.toArray(new String[]{}));
+			}
+			return this;
+		}
 		
 		public Instance<T> addListener(Listener<T> listener){
 			if(this.listeners == null)
@@ -359,18 +390,19 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				Object sourceObject = null;
 				if(source==null){
 					if(sourceObjectClass!=null /*&& getSourceClass().equals(element.getClass())*/)
-						for(Object index : getSources()){
-							sourceObject = ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_GET_SOURCE_OBJECT
-									,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,index));
-							if(sourceObject==null){
-								if(StringHelper.getInstance().isNotBlank(getGetSourceObjectMethodName))
-									sourceObject = MethodHelper.getInstance().call(index, Object.class, getGetSourceObjectMethodName);
+						if(getInstance().isNotEmpty(sources))
+							for(Object index : sources){
+								sourceObject = ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_GET_SOURCE_OBJECT
+										,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,index));
+								if(sourceObject==null){
+									if(StringHelper.getInstance().isNotBlank(getSourceObjectMethodName))
+										sourceObject = MethodHelper.getInstance().call(index, Object.class, getSourceObjectMethodName);
+								}
+								if(sourceObject==element){
+									source = index;
+									break;
+								}
 							}
-							if(sourceObject==element){
-								source = index;
-								break;
-							}
-						}
 					if(source==null)
 						source = elementClass == null ? null : element;
 				}
@@ -407,8 +439,12 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				if(Boolean.TRUE.equals(isAddable)){
 					if(getElements().add((T) element)){
 						if(element instanceof Element){
+							((Element<T>)element).setCollection(this);
 							((Element<T>)element).setSource(source);
 							((Element<T>)element).setName(element.toString());
+							if(Boolean.TRUE.equals(getIsElementObjectCreatable()))
+								if(elementObjectClass!=null)
+									((Element<T>)element).setObject((T) ClassHelper.getInstance().instanciateOne(elementObjectClass));
 						}
 						if(Boolean.TRUE.equals(getIsSourceDisjoint()) && sources!=null){
 							sources.remove(source);
@@ -472,6 +508,9 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			if(Boolean.TRUE.equals(getIsRemovable())){
 				Class<T> elementClass = getElementClass();
 				elements = getInstance().removeElement(getElements(), element);
+				if(element instanceof Element){
+					((Element<T>)element).setCollection(null);
+				}
 				if(Boolean.TRUE.equals(getIsSourceDisjoint()) && sources!=null){
 					Boolean isHasSource = getIsEachElementHasSource();
 					if(isHasSource==null || Boolean.FALSE.equals(isHasSource))
@@ -521,6 +560,36 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				if( ((List<?>)collection).get(index).getClass().equals(aClass) );
 			return this;
 		}*/
+		
+		@SuppressWarnings("unchecked")
+		public Instance<T> read(){
+			if(ClassHelper.getInstance().isInstanceOf(Element.class, getElementClass())){
+				for(Object object : getElements())
+					((Element<T>)object).read();
+			}
+			return this;
+		}
+		
+		@SuppressWarnings("unchecked")
+		public Instance<T> write(){
+			if(ClassHelper.getInstance().isInstanceOf(Element.class, getElementClass())){
+				for(Object object : getElements())
+					((Element<T>)object).write();
+			}
+			return this;
+		}
+		
+		@SuppressWarnings("unchecked")
+		public <CLASS> Collection<CLASS> getElementObjects(Class<CLASS> aClass){
+			if(ClassHelper.getInstance().isInstanceOf(Element.class, elementClass)){
+				Collection<CLASS> collection = new ArrayList<>();
+				for(Object element : elements)
+					collection.add((CLASS) ((Element<T>)element).getObject());
+				return collection;
+			}
+			
+			return null;
+		}
 		
 		@Override
 		public String toString() {
@@ -649,11 +718,36 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 	public static class Element<T> extends AbstractBean implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		protected CollectionHelper.Instance<?> collection;
 		protected Object sourceObject;
 		protected Object source;
 		protected T object;
 		protected String name;
 		protected Boolean processable=Boolean.TRUE;
+		
+		public Element<T> read(){
+			if(collection!=null){
+				Map<String,String> map = collection.getElementFieldsAndElementObjectFieldsMap();
+				if(MapHelper.getInstance().isNotEmpty(map)){
+					Object object = getObject();
+					for(Entry<String,String> entry : map.entrySet())
+						FieldHelper.getInstance().set(this,FieldHelper.getInstance().read(object, entry.getValue()),entry.getKey());
+				}	
+			}
+			return this;
+		}
+		
+		public Element<T> write(){
+			if(collection!=null){
+				Map<String,String> map = collection.getElementFieldsAndElementObjectFieldsMap();
+				if(MapHelper.getInstance().isNotEmpty(map)){
+					Object object = getObject();
+					for(Entry<String,String> entry : map.entrySet())
+						FieldHelper.getInstance().set(object,FieldHelper.getInstance().read(this, entry.getKey()),entry.getValue());
+				}	
+			}
+			return this;
+		}
 		
 		@Override
 		public String toString() {

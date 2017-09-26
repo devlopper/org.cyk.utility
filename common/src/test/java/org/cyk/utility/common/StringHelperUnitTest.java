@@ -290,6 +290,11 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 				.addSequenceReplacement("3", "").addSequenceReplacement("4", "ZZ").addTokens("a1B1c2D3e4").execute());
 	}
 	
+	@Test
+	public void getClazz(){
+		assertEquals("Ma classe", StringHelper.getInstance().getClazz("myclass"));
+	}
+	
 	private void assertAppliedCaseType(String string,CaseType caseType,String expected){
 		assertEquals(expected, StringHelper.getInstance().applyCaseType(string, caseType));
 	}

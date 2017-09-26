@@ -34,6 +34,7 @@ import org.junit.Test;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public abstract class AbstractTest implements Serializable {
 	
@@ -365,24 +366,44 @@ public abstract class AbstractTest implements Serializable {
 	
 	/**/
 	
-	@Getter @Setter
+	@Getter @Setter @Accessors(chain=true)
 	public abstract class Try implements Serializable{
 		private static final long serialVersionUID = -4483490165697187680L;
-		private String expectedMessage;
-		public Try(String expectedMessage) {
+		
+		private Class<? extends Throwable> expectedThrowableClass;
+		private String expectedThrowableMessage;
+		
+		public Try(Class<? extends Throwable> expectedThrowableClass,String expectedThrowableMessage) {
 			super();
-			this.expectedMessage = expectedMessage;
+			this.expectedThrowableClass = expectedThrowableClass;
+			this.expectedThrowableMessage = expectedThrowableMessage;
 		}
+		
+		public Try(String expectedThrowableMessage) {
+			this(null,expectedThrowableMessage);
+		}
+		
 		public void execute(){
 			try { 
 				code();
 			} 
 			catch (Exception exception) { 
-				assertEquals("Throwable message",expectedMessage,exception.getMessage());  
+				Throwable throwable = expectedThrowableClass == null ? exception : getInstanceOf(exception,expectedThrowableClass);
+				assertEquals("Throwable message",expectedThrowableMessage,throwable.getMessage());  
 			}  
 		}
 		protected abstract void code();
 		
+		public java.lang.Throwable getInstanceOf(java.lang.Throwable throwable,Class<?> aClass){
+			java.lang.Throwable index = throwable;
+			while(index!=null){
+				if(aClass.isAssignableFrom(index.getClass())){
+					return index;
+				}else
+					index = index.getCause();
+			}
+			return null;
+		}
 	}
 	
 }

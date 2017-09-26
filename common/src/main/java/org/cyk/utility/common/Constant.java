@@ -60,6 +60,7 @@ public interface Constant {
 	String WORD_APP = "app";
 	String WORD_VALIDATION = "validation";
 	String WORD_MAIL = "mail";
+	String WORD_NAME = "name";
 	
 	String JAVA_STRING_FORMAT_MARKER_S = "%s";
 	
