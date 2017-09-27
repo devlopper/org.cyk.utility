@@ -33,6 +33,7 @@ import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.ConditionHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
 import org.cyk.utility.common.helper.MapHelper;
+import org.cyk.utility.common.helper.MapHelper.Map;
 import org.cyk.utility.common.helper.ThrowableHelper;
 
 import lombok.Getter;
@@ -65,10 +66,15 @@ public class AbstractBean implements Serializable {
 
 	protected void afterInitialisation(){}
 	
+	@SuppressWarnings("unchecked")
 	public MapHelper.Map<Object, Object> getPropertiesMap() {
 		if(propertiesMap==null)
-			propertiesMap = new MapHelper.Map<Object, Object>(Object.class,Object.class);
+			propertiesMap = (Map<Object, Object>) instanciatePropertiesMap();
 		return propertiesMap;
+	}
+	
+	protected Object instanciatePropertiesMap(){
+		return new MapHelper.Map<Object, Object>(Object.class,Object.class);
 	}
 	
 	protected <T> Collection<T> castCollection(Collection<?> collection,Class<T> aClass){

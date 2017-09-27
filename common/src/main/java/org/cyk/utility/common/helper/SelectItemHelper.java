@@ -12,6 +12,28 @@ import lombok.Getter;
 public class SelectItemHelper extends AbstractHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static SelectItemHelper INSTANCE;
+	
+	public static SelectItemHelper getInstance() {
+		if(INSTANCE == null)
+			INSTANCE = new SelectItemHelper();
+		return INSTANCE;
+	}
+	
+	@Override
+	protected void initialisation() {
+		INSTANCE = this;
+		super.initialisation();
+	}
+	
+	public <T> List<T> get(Collection<T> instances,Boolean nullable){
+		return new Builder.Many.Adapter.Default<T>().setNullable(nullable).setInstances(instances).execute();
+	}
+	
+	public <T> List<T> get(Class<T> aClass,Boolean nullable){
+		return get(InstanceHelper.getInstance().get(aClass),nullable);
+	}
+	
 	public static interface Builder {
 		
 		public static interface One<SELECTITEM> extends org.cyk.utility.common.Builder.NullableInput<SELECTITEM>  {

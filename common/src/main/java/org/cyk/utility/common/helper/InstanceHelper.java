@@ -40,6 +40,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		super.initialisation();
 	}
 	
+	public <T> Collection<T> get(Class<T> aClass){
+		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
+				, Listener.Adapter.Default.class)).get(aClass);
+	}
+	
 	public Object getIdentifier(final Object instance){
 		return listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
 			@Override
@@ -819,6 +824,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		
 		java.util.Collection<Listener> COLLECTION = new ArrayList<>();
 		
+		<T> Collection<T> get(Class<T> aClass);
+		<T> T getIdentifier(Class<T> aClass,Object identifier);
 		Object getIdentifier(Object instance);
 		Boolean getAreEqual(Object object1,Object object2);
 		<T> T generateFieldValue(Object instance,String name,Class<T> valueClass);
@@ -849,10 +856,23 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				return null;
 			}
 			
+			@Override
+			public <T> Collection<T> get(Class<T> aClass) {
+				return null;
+			}
+			
+			@Override
+			public <T> T getIdentifier(Class<T> aClass, Object identifier) {
+				return null;
+			}
+			
 			/**/
 			
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
+				
+				@SuppressWarnings("unchecked")
+				public static Class<? extends Listener> DEFAULT_CLASS = (Class<? extends Listener>) ClassHelper.getInstance().getByName(Default.class);
 				
 				@Override
 				public Boolean getAreEqual(Object object1, Object object2) {
@@ -1191,6 +1211,9 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				public static class Default extends Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
+					@SuppressWarnings("unchecked")
+					public static Class<? extends Listener> DEFAULT_CLASS = (Class<? extends Listener>) ClassHelper.getInstance().getByName(Default.class);
+					
 				}
 				
 			}
@@ -1229,4 +1252,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		}
 		
 	}
+
+	/**/
+	
 }
