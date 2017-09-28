@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -974,7 +973,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 		
 		public Map<KEY,VALUE> set(KEY key,VALUE value){
 			if(this.map == null)
-				this.map = new HashMap<KEY,VALUE>();
+				this.map = new LinkedHashMap<KEY,VALUE>();
 			this.map.put(key, value);
 			return this;
 		}

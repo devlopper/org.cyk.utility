@@ -259,7 +259,7 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 		}
 		
 		public Attributes setLabel(String label){
-			set(FILTER_MATCH_MODE, label);
+			set(LABEL, label);
 			return this;
 		}
 		

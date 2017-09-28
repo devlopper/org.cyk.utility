@@ -45,6 +45,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				, Listener.Adapter.Default.class)).get(aClass);
 	}
 	
+	public <T> Collection<T> get(Class<T> aClass,Object masterObject){
+		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
+				, Listener.Adapter.Default.class)).get(aClass,masterObject);
+	}
+	
 	public Object getIdentifier(final Object instance){
 		return listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
 			@Override
@@ -825,6 +830,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		java.util.Collection<Listener> COLLECTION = new ArrayList<>();
 		
 		<T> Collection<T> get(Class<T> aClass);
+		<T> Collection<T> get(Class<T> aClass,Object master);
 		<T> T getIdentifier(Class<T> aClass,Object identifier);
 		Object getIdentifier(Object instance);
 		Boolean getAreEqual(Object object1,Object object2);
@@ -835,6 +841,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		
 		public static class Adapter extends AbstractHelper.Listener.Adapter.Default implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public <T> Collection<T> get(Class<T> aClass, Object master) {
+				return null;
+			}
 			
 			@Override
 			public Object getIdentifier(Object instance) {

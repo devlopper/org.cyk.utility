@@ -5,19 +5,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.inject.Singleton;
 import javax.validation.constraints.NotNull;
 
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
+import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.cdi.AbstractBean;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import org.cyk.utility.common.helper.GridHelper.Grid.Column.FieldDescriptor;
+import org.cyk.utility.common.helper.MarkupLanguageHelper.Attributes;
 
 @Singleton
 public class GridHelper extends AbstractHelper implements Serializable {
@@ -42,7 +43,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Grid.Column.DEFAULT_CLASS, Grid.Column.class));
 	}
 	
-	@Getter @Setter
+	@lombok.Getter @lombok.Setter
 	public static class Grid<T,SELECT_ITEM> extends AbstractBean implements Serializable {
 		private static final long serialVersionUID = -3543754685060813767L;
 
@@ -102,30 +103,36 @@ public class GridHelper extends AbstractHelper implements Serializable {
 			collection.removeOne(deleteCommand.getInput());
 		}
 		
-		public GridHelper.Grid.Column<SELECT_ITEM> addFieldAsColumn(String fieldName,Boolean selectable,Boolean nullable){
+		public GridHelper.Grid.Column<SELECT_ITEM> addFieldAsColumn(String fieldName){
+			getCollection().mapElementObjectFields(fieldName);
 			@SuppressWarnings("unchecked")
 			GridHelper.Grid.Column<SELECT_ITEM> column = (Column<SELECT_ITEM>) GridHelper.getInstance().getColumn();
 			getColumnMap().set(fieldName, column);
 			column.setName(StringHelper.getInstance().getField(fieldName));
-			if(Boolean.TRUE.equals(selectable)){
-				Class<?> elementObjectClass = getCollection().getElementObjectClass();
-				column.setField(FieldHelper.getInstance().get(elementObjectClass, fieldName));
-				Class<?> aClass = FieldHelper.getInstance().getType(elementObjectClass, column.getField());
-				column.setSelectItems(aClass, nullable == null ? column.getNullable() : null);
+			Class<?> elementClass = getCollection().getElementClass();
+			column.setFieldDescriptor(new FieldDescriptor(column,FieldHelper.getInstance().get(elementClass, fieldName)));
+			column.setIdentifier(column.getFieldDescriptor().getField().getName()+Constant.CHARACTER_UNDESCORE+RandomHelper.getInstance().getAlphabetic(5));
+			if(Boolean.TRUE.equals(column.getFieldDescriptor().getIsValueSelectable())){				
+				Class<?> aClass = FieldHelper.getInstance().getType(elementClass, column.getFieldDescriptor().getField());
+				column.setSelectItems(aClass, column.getFieldDescriptor().getIsNullValueSelectable());
 			}
+			ListenerHelper.getInstance().listen(listeners, Listener.METHOD_NAME_ADD_COLUMN
+					,MethodHelper.Method.Parameter.buildArray(Grid.class, this,Column.class,column));
 			return column;
 		}
 		
-		public GridHelper.Grid.Column<SELECT_ITEM> addFieldAsColumn(String fieldName,Boolean selectable){
-			return addFieldAsColumn(fieldName, selectable, null);
-		}
-		
-		public GridHelper.Grid.Column<SELECT_ITEM> addFieldAsColumn(String fieldName){
-			return addFieldAsColumn(fieldName, Boolean.FALSE);
+		public Grid<T,SELECT_ITEM> addFieldsAsColumns(String...fieldNames){
+			for(String fieldName : fieldNames)
+				addFieldAsColumn(fieldName);
+			return this;
 		}
 		
 		public GridHelper.Grid.Column<SELECT_ITEM> getColumn(String key){
 			return columnMap.get(key);
+		}
+		
+		public List<Column<SELECT_ITEM>> getColumns(){
+			return new ArrayList<GridHelper.Grid.Column<SELECT_ITEM>>(columnMap.getMap().values());
 		}
 		
 		public Grid<T,SELECT_ITEM> addListener(Listener<T> listener){
@@ -135,20 +142,248 @@ public class GridHelper extends AbstractHelper implements Serializable {
 			return this;
 		}
 		
+		public Grid<T,SELECT_ITEM> addListeners(Collection<Listener<T>> listeners){
+			if(CollectionHelper.getInstance().isNotEmpty(listeners))
+				for(Listener<T> listener : listeners)
+					addListener(listener);
+			return this;
+		}
+		
 		/**/
 		
+		public static interface Builder<T> extends org.cyk.utility.common.Builder.NullableInput<Grid<T,?>> {
+			
+			Object getMasterObject();
+			Builder<T> setMasterObject(Object masterObject);
+			
+			Class<T> getElementClass();
+			Builder<T> setElementClass(Class<T> elementClass);
+			
+			Class<?> getElementObjectClass();
+			Builder<T> setElementObjectClass(Class<?> elementObjectClass);
+			
+			Class<?> getElementClassContainerClass();
+			Builder<T> setElementClassContainerClass(Class<?> elementClassContainerClass);
+			
+			Set<String> getColumnFieldNames();
+			GridHelper.Grid.Builder<T> setColumnFieldNames(Set<String> columnFieldNames);
+			
+			Class<?> getSourceClass();
+			Builder<T> setSourceClass(Class<?> sourceClass);
+			
+			Class<?> getSourceObjectClass();
+			Builder<T> setSourceObjectClass(Class<?> sourceObjectClass);
+			
+			Collection<?> getElementObjects();
+			Builder<T> setElementObjects(Collection<?> elementObjects);
+			
+			Collection<Grid<T,?>> getGridCollection();
+			Builder<T> setGridCollection(Collection<Grid<T,?>> gridCollection);
+			
+			Collection<Grid.Listener<T>> getListeners();
+			Builder<T> setListeners(Collection<Grid.Listener<T>> listeners);
+			Builder<T> addListener(Grid.Listener<T> listener);
+			
+			@lombok.Getter
+			public static class Adapter<T> extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<Grid<T,?>> implements Builder<T>,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				protected Object masterObject;
+				protected Class<T> elementClass;
+				protected Class<?> elementObjectClass,elementClassContainerClass,sourceClass,sourceObjectClass;
+				protected Set<String> columnFieldNames;
+				protected Collection<?> elementObjects;
+				protected Collection<Grid<T,?>> gridCollection;
+				protected Collection<Listener<T>> listeners;
+				
+				@SuppressWarnings("unchecked")
+				public Adapter() {
+					super((Class<Grid<T, ?>>) ClassHelper.getInstance().getByName(Grid.class));
+				}
+				
+				public static class Default<T> extends GridHelper.Grid.Builder.Adapter<T> implements Serializable {
+					private static final long serialVersionUID = 1L; 
+					
+					@SuppressWarnings("unchecked")
+					@Override
+					protected Grid<T, ?> __execute__() {
+						Class<T> elementClass = getElementClass();
+						Class<?> elementObjectClass = getElementObjectClass();
+						Class<?> sourceClass = getSourceClass();
+						Class<?> sourceObjectClass = getSourceObjectClass();
+						if(elementClass==null)
+							elementClass = (Class<T>) ClassHelper.getInstance().getByName(getElementClassContainerClass().getName()+"$"+elementObjectClass.getSimpleName()+"Item");
+						Set<String> columnFieldNames = getColumnFieldNames();
+						String[] fieldNames = columnFieldNames == null ? null : columnFieldNames.toArray(new String[]{});
+						if(ArrayHelper.getInstance().isEmpty(fieldNames))
+							fieldNames = FieldHelper.getInstance().getNamesWhereReferencedByStaticField(elementClass).toArray(new String[]{});
+						Grid<T,?> grid = output == null ? new Grid<>(elementClass,elementObjectClass,sourceClass,sourceObjectClass) : output;
+						grid.addListeners(getListeners());
+						if(grid.getCollection().getElementClass()==null)
+							grid.getCollection().setElementClass(elementClass);
+						grid.getCollection().setName(StringHelper.getInstance().getClazz(elementObjectClass));
+						grid.addFieldsAsColumns(fieldNames);
+						grid.getNameColumn().setIsShowable(sourceObjectClass!=null);
+						grid.getCollection().setIsElementObjectCreatable(Boolean.TRUE);
+						Collection<?> elementObjects = getElementObjects();
+						if(elementObjects==null){
+							Object masterObject = getMasterObject();
+							if(masterObject!=null)
+								elementObjects = InstanceHelper.getInstance().get(elementObjectClass,masterObject);
+						}
+						grid.getCollection().addMany(elementObjects);
+						Collection<Grid<T,?>> gridCollection = getGridCollection();
+						if(gridCollection!=null)
+							gridCollection.add(grid);
+						return grid;
+					}
+					
+					@Override
+					public Builder<T> setListeners(Collection<Listener<T>> listeners) {
+						this.listeners = listeners;
+						return this;
+					}
+					
+					@Override
+					public Builder<T> setMasterObject(Object masterObject) {
+						this.masterObject = masterObject;
+						return this;
+					}
+					
+					@Override
+					public Builder<T> setElementClass(Class<T> elementClass) {
+						this.elementClass = elementClass;
+						return this;
+					}
+					
+					@Override
+					public Builder<T> setElementObjectClass(Class<?> elementObjectClass) {
+						this.elementObjectClass = elementObjectClass;
+						return this;
+					}
+					
+					@Override
+					public Builder<T> setElementClassContainerClass(Class<?> elementClassContainerClass) {
+						this.elementClassContainerClass = elementClassContainerClass;
+						return this;
+					}
+					
+					@Override
+					public Builder<T> setColumnFieldNames(Set<String> columnFieldNames) {
+						this.columnFieldNames = columnFieldNames;
+						return this;
+					}
+					
+					@Override
+					public Builder<T> setSourceClass(Class<?> sourceClass) {
+						this.sourceClass = sourceClass;
+						return this;
+					}
+					
+					@Override
+					public Builder<T> setSourceObjectClass(Class<?> sourceObjectClass) {
+						this.sourceObjectClass = sourceObjectClass;
+						return this;
+					}
+					
+					@Override
+					public Builder<T> setElementObjects(Collection<?> elementObjects) {
+						this.elementObjects = elementObjects;
+						return this;
+					}
+					
+					@Override
+					public Builder<T> setGridCollection(Collection<Grid<T, ?>> gridCollection) {
+						this.gridCollection = gridCollection;
+						return this;
+					}
+					
+					@Override
+					public Builder<T> addListener(Listener<T> listener) {
+						if(this.listeners == null)
+							this.listeners = new ArrayList<GridHelper.Grid.Listener<T>>();
+						this.listeners.add(listener);
+						return this;
+					}
+					
+				}
+				
+				@Override
+				public Builder<T> addListener(Listener<T> listener) {
+					return null;
+				}
+				
+				@Override
+				public Builder<T> setListeners(Collection<Listener<T>> listeners) {
+					return null;
+				}
+				
+				@Override
+				public Builder<T> setMasterObject(Object masterObject) {
+					return null;
+				}
+				
+				@Override
+				public Builder<T> setElementClass(Class<T> elementClass) {
+					return null;
+				}
+				
+				@Override
+				public Builder<T> setElementObjectClass(Class<?> elementObjectClass) {
+					return null;
+				}
+				
+				@Override
+				public Builder<T> setElementClassContainerClass(Class<?> elementClassContainerClass) {
+					return null;
+				}
+				
+				@Override
+				public Builder<T> setColumnFieldNames(Set<String> columnFieldNames) {
+					return null;
+				}
+				
+				@Override
+				public Builder<T> setSourceClass(Class<?> sourceClass) {
+					return null;
+				}
+				
+				@Override
+				public Builder<T> setSourceObjectClass(Class<?> sourceObjectClass) {
+					return null;
+				}
+				
+				@Override
+				public Builder<T> setElementObjects(Collection<?> elementObjects) {
+					return null;
+				}
+				
+				@Override
+				public Builder<T> setGridCollection(Collection<Grid<T, ?>> gridCollection) {
+					return null;
+				}
+			}
+			
+		}
+		
 		public static interface Listener<T> {
+			
+			String METHOD_NAME_ADD_COLUMN = "addColumn";
+			void addColumn(Grid<T,?> grid,Column<?> column);
 			
 			public static class Adapter<T> extends AbstractBean implements Listener<T>,Serializable {
 				private static final long serialVersionUID = 1L;
 
+				@Override
+				public void addColumn(Grid<T,?> grid,Column<?> column) {}
+				
 			}
 			
 		}
 		
 		/**/
 		
-		@Getter @Setter @Accessors(chain=true)
+		@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
 		public static class Dimension extends AbstractBean implements Serializable{
 			private static final long serialVersionUID = 1L;
 			
@@ -157,8 +392,9 @@ public class GridHelper extends AbstractHelper implements Serializable {
 			protected Boolean isShowable=Boolean.TRUE;
 			protected Object identifier;
 			
+			
 			public Dimension() {
-				this.identifier = RandomHelper.getInstance().getAlphabetic(20);
+				this.identifier = RandomHelper.getInstance().getAlphabetic(5);
 			}
 			
 			public Dimension setProperty(Object name,Object value){
@@ -182,36 +418,16 @@ public class GridHelper extends AbstractHelper implements Serializable {
 			}
 		}
 		
-		@Getter @Setter @Accessors(chain=true)
+		@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
 		public static class Column<SELECT_ITEM> extends Dimension implements Serializable{
 			private static final long serialVersionUID = 1L;
 			
 			@SuppressWarnings("unchecked")
 			public static Class<Column<?>> DEFAULT_CLASS = (Class<Column<?>>) ClassHelper.getInstance().getByName(Column.class);
 			
-			private java.lang.reflect.Field field;
 			private List<SELECT_ITEM> selectItems;
-			private Class<?> inputClass;
-			private MarkupLanguageHelper.Attributes inputAttributes;
 			private List<CommandHelper.Command> footerCommands;
-			
-			public Boolean getIsInputText(){
-				return inputClass!=null && InputText.class.equals(inputClass);
-			}
-			
-			public Boolean getIsInputOneCombo(){
-				return inputClass!=null && InputOneCombo.class.equals(inputClass);
-			}
-			
-			public MarkupLanguageHelper.Attributes getInputAttributes(){
-				if(inputAttributes==null)
-					inputAttributes = new MarkupLanguageHelper.Attributes();
-				return inputAttributes;
-			}
-			
-			public Boolean getNullable(){
-				return field == null ? Boolean.TRUE : field.getAnnotation(NotNull.class)==null;
-			}
+			protected FieldDescriptor fieldDescriptor;
 			
 			@SuppressWarnings("unchecked")
 			public Column<SELECT_ITEM> setSelectItems(Class<?> aClass,Boolean nullable){
@@ -232,12 +448,6 @@ public class GridHelper extends AbstractHelper implements Serializable {
 				return (Column<SELECT_ITEM>) super.setName(name);
 			}
 			
-			public Column<SELECT_ITEM> setField(java.lang.reflect.Field field) {
-				this.field = field;
-				setIdentifier(field.getName()+Constant.CHARACTER_UNDESCORE+getIdentifier());
-				return this;
-			} 
-			
 			@SuppressWarnings("unchecked")
 			@Override
 			public Column<SELECT_ITEM> setProperty(Object name, Object value) {
@@ -250,6 +460,62 @@ public class GridHelper extends AbstractHelper implements Serializable {
 			
 			public Object getWidth(){
 				return getProperty(PROPERTY_NAME_WIDTH);
+			}
+			
+			public java.lang.reflect.Field getField(){
+				return fieldDescriptor.getField();
+			}
+			
+			
+			
+			@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
+			public static class FieldDescriptor extends AbstractBean implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				private Column<?> column;
+				private java.lang.reflect.Field field;
+				
+				public FieldDescriptor(Column<?> column,java.lang.reflect.Field field) {
+					this.column = column;
+					this.field = field;
+					MarkupLanguageHelper.Attributes attributes = (Attributes) MethodHelper.getInstance().callGet(this, MapHelper.Map.class, "propertiesMap");
+					attributes.setLabel(column.getName());
+					attributes.setRequired(String.valueOf(getIsValueNotNullable()));
+				}
+				
+				@Override
+				protected Object instanciatePropertiesMap() {
+					return new MarkupLanguageHelper.Attributes();
+				}
+				
+				public Boolean getIsValueTextable(){
+					return field.isAnnotationPresent(InputText.class);
+				}
+				
+				public Boolean getIsValueSelectable(){
+					return field.isAnnotationPresent(InputChoice.class);
+				}
+				
+				public Boolean getIsValueSelectableOne(){
+					return field.isAnnotationPresent(InputOneChoice.class);
+				}
+				
+				public Boolean getIsValueSelectableOneCombo(){
+					return field.isAnnotationPresent(InputOneCombo.class);
+				}
+				
+				public Boolean getIsNullValueSelectable(){
+					return Boolean.TRUE.equals(getIsValueSelectable()) && field.getAnnotation(InputChoice.class).nullable();
+				}
+				
+				public Boolean getIsValueNullable(){
+					return !field.isAnnotationPresent(NotNull.class);
+				}
+				
+				public Boolean getIsValueNotNullable(){
+					return !Boolean.TRUE.equals(getIsValueNullable());
+				}
+				
 			}
 			
 		}

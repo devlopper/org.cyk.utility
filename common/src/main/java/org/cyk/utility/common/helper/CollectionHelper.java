@@ -384,6 +384,16 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		public Instance<T> addOne(Object element){
 			if(Boolean.TRUE.equals(getIsCreatable()) && (!Boolean.TRUE.equals(getIsNullAddable()) && element!=null)){
 				Class<T> elementClass = getElementClass();
+				Class<?> elementObjectClass = getElementObjectClass();
+				if(ClassHelper.getInstance().isEqual(elementObjectClass, element.getClass())){
+					Object elementObject = element;
+					element = ClassHelper.getInstance().instanciateOne(elementClass);
+					if(element instanceof Element){
+						((Element<Object>)element).setObject(elementObject);
+						((Element<Object>)element).setCollection(this);
+						((Element<Object>)element).read();
+					}
+				}
 				Class<?> sourceObjectClass = getSourceObjectClass();
 				Object source = ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_GET_SOURCE
 								,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element));
@@ -590,7 +600,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			
 			return null;
 		}
-		
+	
 		@Override
 		public String toString() {
 			return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
