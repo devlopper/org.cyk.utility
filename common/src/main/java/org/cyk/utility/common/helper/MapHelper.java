@@ -77,6 +77,13 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public <VALUE> VALUE getAt(java.util.Map<?, ?> map,Integer index,Class<VALUE> valueClass){
+		if(map == null || valueClass == null)
+			return null;
+		return (VALUE) CollectionHelper.getInstance().getElementAt(map.values(), index);
+	}
+	
+	@SuppressWarnings("unchecked")
 	public <VALUE> VALUE getStringValueAs(Class<VALUE> valueClass,java.util.Map<?, java.lang.String> map,Object key,String nullValue){
 		if(map == null || key == null)
 			return null;

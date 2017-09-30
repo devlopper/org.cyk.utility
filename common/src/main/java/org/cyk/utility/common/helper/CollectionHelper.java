@@ -108,6 +108,21 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return newCollection;
 	}
 	
+	public Collection<?> remove(Collection<?> collection,Collection<?> elements){
+		Collection<?> newCollection = collection;
+		//TODO think better
+		if(isNotEmpty(collection) && isNotEmpty(elements)){
+			if(collection instanceof List){
+				((List<?>)collection).removeAll(elements);
+			}else {
+				if(collection instanceof Set){
+					((Set<?>)collection).removeAll(elements);
+				}					
+			}
+		}
+		return newCollection;
+	}
+	
 	public <ELEMENT> List<ELEMENT> createList(Collection<ELEMENT> collection){
 		if(collection==null)
 			return null;
@@ -341,6 +356,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		private Collection<Listener<T>> listeners;
 		private Boolean isCreatable=Boolean.TRUE,isReadable=Boolean.TRUE,isUpdatable=Boolean.TRUE,isRemovable=Boolean.TRUE,isNullAddable=Boolean.FALSE;
 		private Boolean isEachElementHasSource,isElementObjectCreatable;
+		private Instance<Object> masterElementObjectCollection;
 		
 		public Instance<T> mapElementFieldsAndElementObjectFields(String...strings){
 			if(ArrayHelper.getInstance().isNotEmpty(strings)){
@@ -452,7 +468,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 							((Element<T>)element).setCollection(this);
 							((Element<T>)element).setSource(source);
 							((Element<T>)element).setName(element.toString());
-							if(Boolean.TRUE.equals(getIsElementObjectCreatable()))
+							if(Boolean.TRUE.equals(getIsElementObjectCreatable()) && ((Element<T>)element).getObject()==null)
 								if(elementObjectClass!=null)
 									((Element<T>)element).setObject((T) ClassHelper.getInstance().instanciateOne(elementObjectClass));
 						}
@@ -586,6 +602,12 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				for(Object object : getElements())
 					((Element<T>)object).write();
 			}
+			if(masterElementObjectCollection!=null){
+				//System.out.println("CollectionHelper.Instance.write() : "+masterElementObjectCollection.getElements());
+				CollectionHelper.getInstance().remove(masterElementObjectCollection.getElements(),masterElementObjectCollection.filter(getElementObjectClass()));
+				CollectionHelper.getInstance().add(masterElementObjectCollection.getElements(), Boolean.TRUE,getElementObjects());
+			}
+			
 			return this;
 		}
 		
@@ -597,8 +619,12 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 					collection.add((CLASS) ((Element<T>)element).getObject());
 				return collection;
 			}
-			
 			return null;
+		}
+		
+		@SuppressWarnings("unchecked")
+		public <CLASS> Collection<CLASS> getElementObjects(){
+			return (Collection<CLASS>) getElementObjects(getElementObjectClass());
 		}
 	
 		@Override

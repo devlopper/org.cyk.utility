@@ -131,6 +131,11 @@ public class GridHelper extends AbstractHelper implements Serializable {
 			return columnMap.get(key);
 		}
 		
+		@SuppressWarnings("unchecked")
+		public GridHelper.Grid.Column<SELECT_ITEM> getColumnAt(Integer index){
+			return MapHelper.getInstance().getAt(columnMap.getMap(), index, Column.class);
+		}
+		
 		public List<Column<SELECT_ITEM>> getColumns(){
 			return new ArrayList<GridHelper.Grid.Column<SELECT_ITEM>>(columnMap.getMap().values());
 		}

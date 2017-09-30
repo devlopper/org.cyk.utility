@@ -667,8 +667,8 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		String GENDER_FORMAT = "%s.__gender__";
 		String MASCULINE_FORMAT = "%s.__%sine__";
 		String WORD_IDENTIFIER_FORMAT = "word.%s.__%sine__";
-		String FIELD_IDENTIFIER_FORMAT = "field.%s";
-		String CLASS_IDENTIFIER_FORMAT = "class.%s";
+		String FIELD_IDENTIFIER_FORMAT = "__field__.%s";
+		String CLASS_IDENTIFIER_FORMAT = "__class__.%s";
 		String WORD_ARTICLE_IDENTIFIER_FORMAT = "word.article.__%sine__.__%s__";
 		String WORD_ARTICLE_ALL_IDENTIFIER_FORMAT = "word.article.all.__%sine__";
 		String COMPARISON_OPERATOR_IDENTIFIER_FORMAT = "__comparison.operator%s__";
@@ -986,6 +986,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 						StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.ResourceBundle.Adapter.Default());
 						*/
 				        StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.i18n", CommonUtils.class.getClassLoader());
+						StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.class", CommonUtils.class.getClassLoader());
 						StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.field", CommonUtils.class.getClassLoader());
 						StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.condition", CommonUtils.class.getClassLoader());
 				        

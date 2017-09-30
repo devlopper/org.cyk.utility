@@ -247,8 +247,14 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void assertFieldIdentifier(){
-		assertEquals("field.value", StringHelper.getInstance().getFieldIdentifier("value"));
-		assertEquals("field.balance.value", StringHelper.getInstance().getFieldIdentifier("balanceValue"));
+		assertEquals("__field__.value", StringHelper.getInstance().getFieldIdentifier("value"));
+		assertEquals("__field__.balance.value", StringHelper.getInstance().getFieldIdentifier("balanceValue"));
+	}
+	
+	@Test
+	public void assertField(){
+		assertEquals("Code", StringHelper.getInstance().getField("code"));
+		assertEquals("Adresse", StringHelper.getInstance().getField("address"));
 	}
 	
 	@Test
@@ -293,6 +299,7 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void getClazz(){
 		assertEquals("Ma classe", StringHelper.getInstance().getClazz("myclass"));
+		assertEquals("Adresse électronique de courriel", StringHelper.getInstance().getClazz(ElectronicMailAddress.class));
 	}
 	
 	private void assertAppliedCaseType(String string,CaseType caseType,String expected){
@@ -309,6 +316,10 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	/**/
 	
 	public static class ClassA {
+		
+	}
+	
+	public static class ElectronicMailAddress {
 		
 	}
 }
