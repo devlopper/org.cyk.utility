@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.helper.StringHelper.ToStringMapping.Datasource.Cache;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -100,6 +101,10 @@ public class StringHelper extends AbstractHelper implements Serializable {
 			strings.addAll(Arrays.asList(StringUtils.splitByCharacterTypeCamelCase(stringInCamelCase)));
 		}
 		return strings;
+	}
+	
+	public String concatenateWordsFromCamelCase(String name,Object separator,CaseType caseType){
+		return applyCaseType(concatenate(getWordsFromCamelCase(name), separator),caseType);
 	}
 	
 	public String removeEndLineMarker(String line){
@@ -248,26 +253,69 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return new ToStringMapping.Adapter.Default(getWordIdentifier(identifier, masculine, plural)).execute();
 	}
 	
+	public String getI18nIdentifier(String name){
+		return concatenateWordsFromCamelCase(name,  Constant.CHARACTER_DOT, CaseType.L);
+	}
+	
 	public String getFieldIdentifier(String name){
-		name = String.format(ToStringMapping.FIELD_IDENTIFIER_FORMAT,applyCaseType(concatenate(getWordsFromCamelCase(name), Constant.CHARACTER_DOT.toString()),CaseType.L));
+		name = String.format(ToStringMapping.FIELD_IDENTIFIER_FORMAT,getI18nIdentifier(name));
 		return name;
+	}
+	
+	public String getField(String identifier,CaseType caseType){
+		String fieldIdentifier = getFieldIdentifier(identifier);
+		String result = new ToStringMapping.Adapter.Default(fieldIdentifier).setCaseType(caseType).execute();
+		String temp = result;
+		if(ToStringMapping.Adapter.Default.isUnknown(result)){
+			result = new ToStringMapping.Adapter.Default(getClassIdentifier(identifier)).setCaseType(caseType).execute();	
+			if(ToStringMapping.Adapter.Default.isUnknown(result)){
+				result = new ToStringMapping.Adapter.Default(getI18nIdentifier(identifier)).setCaseType(caseType).execute();
+				if(ToStringMapping.Adapter.Default.isUnknown(result)){
+					result = temp;
+				}
+			}
+		}
+		if(!Boolean.TRUE.equals(ToStringMapping.Adapter.Default.isUnknown(result))){
+			Cache.Adapter.Default.add(fieldIdentifier, null, caseType, null, result);
+		}
+		return result;
 	}
 	
 	public String getField(String identifier){
-		return new ToStringMapping.Adapter.Default(getFieldIdentifier(identifier)).execute();
+		return getField(identifier, CaseType.FU);
 	}
 	
 	public String getClassIdentifier(String name){
-		name = String.format(ToStringMapping.CLASS_IDENTIFIER_FORMAT,applyCaseType(concatenate(getWordsFromCamelCase(name), Constant.CHARACTER_DOT.toString()),CaseType.L));
+		name = String.format(ToStringMapping.CLASS_IDENTIFIER_FORMAT,getI18nIdentifier(name));
 		return name;
 	}
 	
+	public String getClazz(String identifier,CaseType caseType){
+		String classIdentifier = getClassIdentifier(identifier);
+		String result = new ToStringMapping.Adapter.Default(classIdentifier).setCaseType(caseType).execute();
+		String temp = result;
+		if(ToStringMapping.Adapter.Default.isUnknown(result)){
+			result = new ToStringMapping.Adapter.Default(getI18nIdentifier(identifier)).setCaseType(caseType).execute();
+			if(ToStringMapping.Adapter.Default.isUnknown(result)){
+				result = temp;
+			}
+		}
+		if(!Boolean.TRUE.equals(ToStringMapping.Adapter.Default.isUnknown(result))){
+			Cache.Adapter.Default.add(classIdentifier, null, caseType, null, result);
+		}
+		return result;
+	}
+	
 	public String getClazz(String identifier){
-		return new ToStringMapping.Adapter.Default(getClassIdentifier(identifier)).execute();
+		return getClazz(identifier, CaseType.FU);
+	}
+	
+	public String getClazz(Class<?> aClass,CaseType caseType){
+		return getClazz(aClass.getSimpleName(),caseType);
 	}
 	
 	public String getClazz(Class<?> aClass){
-		return getClazz(aClass.getSimpleName().toLowerCase());
+		return getClazz(aClass,CaseType.FU);
 	}
 	
 	public String getResponse(Boolean response,CaseType caseType,Locale locale){
@@ -694,17 +742,32 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		Boolean getWordArticleAll();
 		ToStringMapping setWordArticleAll(Boolean value);
 		
+		java.util.List<String> getIdentifiers();
+		StringHelper.ToStringMapping setIdentifiers(java.util.List<String> identifiers);
+		StringHelper.ToStringMapping addIdentifier(String identifier);
+		
 		@Getter @Setter
 		public static class Adapter extends org.cyk.utility.common.Mapping.Adapter.Default<String,String> implements ToStringMapping,Serializable {
 			private static final long serialVersionUID = 1L;
 
 			protected CaseType caseType;
 			protected Boolean cachable;
+			protected java.util.List<String> identifiers;
 			protected ListenerHelper.Executor.Function.Adapter.Default.String<Datasource> datasourcesExecutor;
 			
 			public Adapter(String input) {
 				super(String.class, input, String.class);
 				setName("build string cache identifier");
+			}
+			
+			@Override
+			public ToStringMapping addIdentifier(String identifier){
+				return null;
+			}
+			
+			@Override
+			public ToStringMapping setIdentifiers(java.util.List<String> identifiers){
+				return null;
 			}
 
 			@Override
@@ -777,6 +840,24 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					this(null);
 				}
 				
+				public static Boolean isUnknown(String result){
+					return StringUtils.startsWith(result, UNKNOWN_MARKER_START) && StringUtils.endsWith(result, UNKNOWN_MARKER_END);
+				}
+				
+				@Override
+				public ToStringMapping addIdentifier(String identifier){
+					if(identifiers==null)
+						identifiers = new ArrayList<String>();
+					identifiers.add(identifier);
+					return this;
+				}
+				
+				@Override
+				public ToStringMapping setIdentifiers(java.util.List<String> identifiers){
+					this.identifiers = identifiers;
+					return this;
+				}
+				
 				@Override
 				public ToStringMapping setCaseType(CaseType caseType){
 					this.caseType = caseType;
@@ -841,33 +922,53 @@ public class StringHelper extends AbstractHelper implements Serializable {
 				
 				@Override
 				protected String __execute__() {
-					String identifier = getInput();
-					String gender = null , all = null;
-					Boolean plural = getPlural();
-					Locale locale = InstanceHelper.getInstance().getIfNotNullElseDefault(getLocale(), Locale.FRENCH);
-					Boolean useGender = getGender();
-					
-					if(Boolean.TRUE.equals(getWordArticleAll())){
-						all = StringHelper.getInstance().getWordArticleAll(StringHelper.getInstance().isMasculine(identifier), plural);
-						if(!StringHelper.getInstance().isBlank(all))
-							all+=Constant.CHARACTER_SPACE;
+					List<String> identifiers = CollectionHelper.getInstance().createList(getIdentifiers());
+					if(identifiers==null){
+						identifiers = new ArrayList<String>();
+						identifiers.add(getInput());
+					}else {
+						identifiers.add(0, getInput());
 					}
-					all = StringUtils.defaultString(all, Constant.EMPTY_STRING);
-					
-					if(Boolean.TRUE.equals(useGender)){
-						gender = StringHelper.getInstance().getWordArticle(StringHelper.getInstance().isMasculine(identifier), getGenderAny(), plural);
-						if(!StringHelper.getInstance().isBlank(gender))
-							gender+=Constant.CHARACTER_SPACE;
+					//String identifier = getInput();
+					String firstResult = null,gender = null , all = null , result = null;
+					for(String identifier : identifiers){
+						Boolean plural = getPlural();
+						Locale locale = InstanceHelper.getInstance().getIfNotNullElseDefault(getLocale(), Locale.FRENCH);
+						Boolean useGender = getGender();
+						
+						if(Boolean.TRUE.equals(getWordArticleAll())){
+							all = StringHelper.getInstance().getWordArticleAll(StringHelper.getInstance().isMasculine(identifier), plural);
+							if(!StringHelper.getInstance().isBlank(all))
+								all+=Constant.CHARACTER_SPACE;
+						}
+						all = StringUtils.defaultString(all, Constant.EMPTY_STRING);
+						
+						if(Boolean.TRUE.equals(useGender)){
+							gender = StringHelper.getInstance().getWordArticle(StringHelper.getInstance().isMasculine(identifier), getGenderAny(), plural);
+							if(!StringHelper.getInstance().isBlank(gender))
+								gender+=Constant.CHARACTER_SPACE;
+						}
+						gender = StringUtils.defaultString(gender, Constant.EMPTY_STRING);
+						
+						if(Boolean.TRUE.equals(plural))
+							identifier = String.format(PLURAL_FORMAT,identifier);
+						result = __execute__(identifier, getCaseType(), locale, getCachable());
+						if(firstResult==null)
+							firstResult = result;
+	
+						if(Locale.FRENCH.equals(locale)){
+							if(ArrayUtils.contains(new String[]{"le ","la "}, gender) && StringHelper.getInstance().isVoyel(result.charAt(0)))
+								gender = "l'";
+						}	
+						
+						if(isUnknown(result))
+							;
+						else
+							break;
+						
 					}
-					gender = StringUtils.defaultString(gender, Constant.EMPTY_STRING);
-					
-					if(Boolean.TRUE.equals(plural))
-						identifier = String.format(PLURAL_FORMAT,identifier);
-					String result = __execute__(identifier, getCaseType(), locale, getCachable());
-					if(Locale.FRENCH.equals(locale)){
-						if(ArrayUtils.contains(new String[]{"le ","la "}, gender) && StringHelper.getInstance().isVoyel(result.charAt(0)))
-							gender = "l'";
-					}
+					if(isUnknown(result))
+						result = firstResult;
 					return all+gender+result;
 				}
 				
@@ -945,8 +1046,6 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					
 					return value;
 				}
-				
-				
 			}
 			
 		}
@@ -1028,6 +1127,12 @@ public class StringHelper extends AbstractHelper implements Serializable {
 							return REPOSITORY.get(getInput());
 						}
 						
+						public static void add(String identifier,Locale locale,CaseType caseType,java.util.Collection<Object> parameters,String value){
+							String cacheIdentifier = new Builder.CacheIdentifier.Adapter.Default().setInput(identifier).setLocale(locale)
+									.addParameters(parameters).addParameters(new Object[]{caseType}).execute();
+							REPOSITORY.put(cacheIdentifier, value);
+						}
+						
 					}
 					
 				}
@@ -1089,6 +1194,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 									}
 									
 									if(Boolean.TRUE.equals(cachable)){
+										Cache.Adapter.Default.add(identifier, locale, caseType, parameters, value);
 										String cacheIdentifier = new Builder.CacheIdentifier.Adapter.Default().setInput(identifier).setLocale(locale)
 												.addParameters(parameters).addParameters(new Object[]{caseType}).execute();
 										Datasource.Cache.REPOSITORY.put(cacheIdentifier, value);

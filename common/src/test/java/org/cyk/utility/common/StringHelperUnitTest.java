@@ -252,9 +252,18 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void getClazz(){
+		//assertEquals("Ma classe", StringHelper.getInstance().getClazz("myclass"));
+		assertEquals("Adresse électronique de courriel", StringHelper.getInstance().getClazz(ElectronicMailAddress.class));
+		assertEquals("Localité", StringHelper.getInstance().getClazz(Locality.class));
+	}
+	
+	@Test
 	public void assertField(){
 		assertEquals("Code", StringHelper.getInstance().getField("code"));
+		assertEquals("Code", StringHelper.getInstance().getField("code"));
 		assertEquals("Adresse", StringHelper.getInstance().getField("address"));
+		assertEquals("Localité", StringHelper.getInstance().getField("locality"));
 	}
 	
 	@Test
@@ -295,12 +304,7 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		assertEquals("a__B__cDeZZ", new Transformer.Adapter.Default().addSequenceReplacement("1", "__").addSequenceReplacement("2", "")
 				.addSequenceReplacement("3", "").addSequenceReplacement("4", "ZZ").addTokens("a1B1c2D3e4").execute());
 	}
-	
-	@Test
-	public void getClazz(){
-		assertEquals("Ma classe", StringHelper.getInstance().getClazz("myclass"));
-		assertEquals("Adresse électronique de courriel", StringHelper.getInstance().getClazz(ElectronicMailAddress.class));
-	}
+
 	
 	private void assertAppliedCaseType(String string,CaseType caseType,String expected){
 		assertEquals(expected, StringHelper.getInstance().applyCaseType(string, caseType));
@@ -320,6 +324,10 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	public static class ElectronicMailAddress {
+		
+	}
+	
+	public static class Locality {
 		
 	}
 }

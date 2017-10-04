@@ -490,6 +490,11 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			return this;
 		}
 		
+		public Instance<T> setMany(Collection<?> elements){
+			removeAll().addMany(elements);
+			return this;
+		}
+		
 		public Collection<T> getElements(){
 			if(elements==null)
 				elements=new ArrayList<>();
@@ -530,7 +535,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		}
 		
 		@SuppressWarnings("unchecked")
-		public void removeOne(Object element){
+		public Instance<T> removeOne(Object element){
 			if(Boolean.TRUE.equals(getIsRemovable())){
 				Class<T> elementClass = getElementClass();
 				elements = getInstance().removeElement(getElements(), element);
@@ -574,10 +579,18 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				ListenerHelper.getInstance().listen(listeners, Listener.METHOD_NAME_REMOVE_ONE,MethodHelper.Method.Parameter.buildArray(Instance.class, this
 						,elementClass, element));	
 			}
+			return this;
 		}
 		
-		public <CLASS> void removeOneAt(Class<CLASS> aClass,Integer index){
+		public <CLASS> Instance<T> removeOneAt(Class<CLASS> aClass,Integer index){
 			removeOne(getOneAt(aClass, index));
+			return this;
+		}
+		
+		public <CLASS> Instance<T> removeAll(){
+			if(elements!=null)
+				elements.clear();
+			return this;
 		}
 		
 		/*@SuppressWarnings("unchecked")

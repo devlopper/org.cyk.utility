@@ -17,6 +17,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.helper.CollectionHelper.Instance;
 import org.cyk.utility.common.helper.GridHelper.Grid.Column.FieldDescriptor;
 import org.cyk.utility.common.helper.MarkupLanguageHelper.Attributes;
 
@@ -158,6 +159,9 @@ public class GridHelper extends AbstractHelper implements Serializable {
 		
 		public static interface Builder<T> extends org.cyk.utility.common.Builder.NullableInput<Grid<T,?>> {
 			
+			Instance<?> getMasterElementObjectCollection();
+			Builder<T> setMasterElementObjectCollection(Instance<?> masterElementObjectCollection);
+			
 			Object getMasterObject();
 			Builder<T> setMasterObject(Object masterObject);
 			
@@ -200,6 +204,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 				protected Collection<?> elementObjects;
 				protected Collection<Grid<T,?>> gridCollection;
 				protected Collection<Listener<T>> listeners;
+				protected Instance<?> masterElementObjectCollection;
 				
 				@SuppressWarnings("unchecked")
 				public Adapter() {
@@ -231,16 +236,29 @@ public class GridHelper extends AbstractHelper implements Serializable {
 						grid.getNameColumn().setIsShowable(sourceObjectClass!=null);
 						grid.getCollection().setIsElementObjectCreatable(Boolean.TRUE);
 						Collection<?> elementObjects = getElementObjects();
+						CollectionHelper.Instance<?> masterElementObjectCollection = getMasterElementObjectCollection();
+						if(grid.getCollection().getMasterElementObjectCollection()==null)
+							grid.getCollection().setMasterElementObjectCollection((Instance<Object>) masterElementObjectCollection);
 						if(elementObjects==null){
-							Object masterObject = getMasterObject();
-							if(masterObject!=null)
-								elementObjects = InstanceHelper.getInstance().get(elementObjectClass,masterObject);
+							if(grid.getCollection().getMasterElementObjectCollection()==null){
+								Object masterObject = getMasterObject();
+								if(masterObject!=null)
+									elementObjects = InstanceHelper.getInstance().get(elementObjectClass,masterObject);	
+							}else {
+								elementObjects = grid.getCollection().getMasterElementObjectCollection().filter(elementObjectClass);
+							}
 						}
 						grid.getCollection().addMany(elementObjects);
 						Collection<Grid<T,?>> gridCollection = getGridCollection();
 						if(gridCollection!=null)
 							gridCollection.add(grid);
 						return grid;
+					}
+					
+					@Override
+					public Builder<T> setMasterElementObjectCollection(Instance<?> masterElementObjectCollection) {
+						this.masterElementObjectCollection = masterElementObjectCollection;
+						return this;
 					}
 					
 					@Override
@@ -311,6 +329,11 @@ public class GridHelper extends AbstractHelper implements Serializable {
 						return this;
 					}
 					
+				}
+				
+				@Override
+				public Builder<T> setMasterElementObjectCollection(Instance<?> masterElementObjectCollection) {
+					return null;
 				}
 				
 				@Override
