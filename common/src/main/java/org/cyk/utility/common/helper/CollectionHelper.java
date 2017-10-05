@@ -390,6 +390,13 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			return this;
 		}
 		
+		public Instance<T> addListeners(Collection<Listener<T>> listeners){
+			if(getInstance().isNotEmpty(listeners))
+				for(Listener<T> listener : listeners)
+					addListener(listener);
+			return this;
+		}
+		
 		public Instance<T> addOne(){
 			T element = ClassHelper.getInstance().instanciateOne(getElementClass());
 			addOne(element);
@@ -467,10 +474,17 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 						if(element instanceof Element){
 							((Element<T>)element).setCollection(this);
 							((Element<T>)element).setSource(source);
-							((Element<T>)element).setName(element.toString());
+							((Element<T>)element).set__name__(element.toString());
 							if(Boolean.TRUE.equals(getIsElementObjectCreatable()) && ((Element<T>)element).getObject()==null)
-								if(elementObjectClass!=null)
-									((Element<T>)element).setObject((T) ClassHelper.getInstance().instanciateOne(elementObjectClass));
+								if(elementObjectClass!=null){
+									if(((Element<T>)element).getObject()==null){
+										((Element<T>)element).setObject((T) ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_INSTANCIATE
+										,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element)));
+										
+										if(((Element<T>)element).getObject()==null)
+											((Element<T>)element).setObject((T) ClassHelper.getInstance().instanciateOne(elementObjectClass));
+									}
+								}
 						}
 						if(Boolean.TRUE.equals(getIsSourceDisjoint()) && sources!=null){
 							sources.remove(source);
@@ -655,6 +669,9 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			String METHOD_NAME_INSTANCIATE = "instanciate";
 			TYPE instanciate(Instance<TYPE> instance,Object object);
 			
+			String METHOD_NAME_INSTANCIATE_OBJECT = "instanciateObject";
+			Object instanciateObject(Instance<TYPE> instance,TYPE element);
+			
 			String METHOD_NAME_IS_HAS_SOURCE = "isHasSource";
 			Boolean isHasSource(Instance<TYPE> instance,TYPE element);
 			
@@ -703,6 +720,11 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				
 				@Override
 				public TYPE instanciate(Instance<TYPE> instance,Object object) {
+					return null;
+				}
+				
+				@Override
+				public Object instanciateObject(Instance<TYPE> instance, TYPE element) {
 					return null;
 				}
 				
@@ -771,8 +793,8 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		protected Object sourceObject;
 		protected Object source;
 		protected T object;
-		protected String name;
-		protected Boolean processable=Boolean.TRUE;
+		protected String __name__;
+		protected Boolean __processable__=Boolean.TRUE;
 		
 		public Element<T> read(){
 			if(collection!=null){
@@ -780,10 +802,19 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				if(MapHelper.getInstance().isNotEmpty(map)){
 					Object object = getObject();
 					for(Entry<String,String> entry : map.entrySet())
-						FieldHelper.getInstance().set(this,FieldHelper.getInstance().read(object, entry.getValue()),entry.getKey());
+						read(object,entry.getValue(),entry.getKey());
+						//FieldHelper.getInstance().set(this,FieldHelper.getInstance().read(object, entry.getValue()),entry.getKey());
 				}	
 			}
 			return this;
+		}
+		
+		protected Object read(Object object,String fieldName){
+			return FieldHelper.getInstance().read(object, fieldName);
+		}
+		
+		protected void read(Object object,String sourceFieldName,String destinationFieldName){
+			FieldHelper.getInstance().set(this,read(object, sourceFieldName),destinationFieldName);
 		}
 		
 		public Element<T> write(){
@@ -792,15 +823,25 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				if(MapHelper.getInstance().isNotEmpty(map)){
 					Object object = getObject();
 					for(Entry<String,String> entry : map.entrySet())
-						FieldHelper.getInstance().set(object,FieldHelper.getInstance().read(this, entry.getKey()),entry.getValue());
+						write(object,entry.getKey(),entry.getValue());
+						//FieldHelper.getInstance().set(object,FieldHelper.getInstance().read(this, entry.getKey()),entry.getValue());
 				}	
 			}
 			return this;
 		}
 		
+		protected void write(Object object,String fieldName,Object value){
+			FieldHelper.getInstance().set(object,value,fieldName);
+		}
+		
+		protected void write(Object object,String sourceFieldName,String destinationFieldName){
+			write(object, destinationFieldName, FieldHelper.getInstance().read(this, sourceFieldName));
+			//FieldHelper.getInstance().set(object,FieldHelper.getInstance().read(this, sourceFieldName),destinationFieldName);
+		}
+		
 		@Override
 		public String toString() {
-			return name;
+			return __name__;
 		}
 	}
 }

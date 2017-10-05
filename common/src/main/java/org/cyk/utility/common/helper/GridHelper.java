@@ -54,7 +54,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 		
 		protected CommandHelper.Command addCommand,deleteCommand;
 		protected MapHelper.Map<String,CommandHelper.Command> commandMap = new MapHelper.Map<String, CommandHelper.Command>(String.class, CommandHelper.Command.class);
-		protected Column<SELECT_ITEM> indexColumn,nameColumn,commandsColumn;
+		protected Column<SELECT_ITEM> __indexColumn__,__nameColumn__,__commandsColumn__;
 		protected Boolean isAddCommandShowableAtIndexColumnFooter;
 		@SuppressWarnings("unchecked")
 		protected MapHelper.Map<String,Column<SELECT_ITEM>> columnMap = new MapHelper.Map<String, Column<SELECT_ITEM>>(String.class
@@ -87,9 +87,9 @@ public class GridHelper extends AbstractHelper implements Serializable {
 				}
 			}).setIsImplemented(Boolean.TRUE);
 			
-			indexColumn = (Column<SELECT_ITEM>) getInstance().getColumn().setName(StringHelper.getInstance().get("grid.column.index", (Object[])null));
-			nameColumn = (Column<SELECT_ITEM>) getInstance().getColumn().setName(StringHelper.getInstance().get("grid.column.name", (Object[])null));
-			commandsColumn = (Column<SELECT_ITEM>) getInstance().getColumn().setName(StringHelper.getInstance().get("grid.column.commands", (Object[])null));
+			__indexColumn__ = (Column<SELECT_ITEM>) getInstance().getColumn().setName(StringHelper.getInstance().get("grid.column.index", (Object[])null));
+			__nameColumn__ = (Column<SELECT_ITEM>) getInstance().getColumn().setName(StringHelper.getInstance().get("grid.column.name", (Object[])null));
+			__commandsColumn__ = (Column<SELECT_ITEM>) getInstance().getColumn().setName(StringHelper.getInstance().get("grid.column.commands", (Object[])null));
 		}
 		
 		public Grid(Class<T> elementClass) {
@@ -193,6 +193,10 @@ public class GridHelper extends AbstractHelper implements Serializable {
 			Builder<T> setListeners(Collection<Grid.Listener<T>> listeners);
 			Builder<T> addListener(Grid.Listener<T> listener);
 			
+			Collection<CollectionHelper.Instance.Listener<T>> getCollectionListeners();
+			Builder<T> setCollectionListeners(Collection<CollectionHelper.Instance.Listener<T>> collectionListeners);
+			Builder<T> addCollectionListener(CollectionHelper.Instance.Listener<T> collectionListener);
+			
 			@lombok.Getter
 			public static class Adapter<T> extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<Grid<T,?>> implements Builder<T>,Serializable {
 				private static final long serialVersionUID = 1L;
@@ -204,6 +208,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 				protected Collection<?> elementObjects;
 				protected Collection<Grid<T,?>> gridCollection;
 				protected Collection<Listener<T>> listeners;
+				protected Collection<CollectionHelper.Instance.Listener<T>> collectionListeners;
 				protected Instance<?> masterElementObjectCollection;
 				
 				@SuppressWarnings("unchecked")
@@ -229,11 +234,12 @@ public class GridHelper extends AbstractHelper implements Serializable {
 							fieldNames = FieldHelper.getInstance().getNamesWhereReferencedByStaticField(elementClass).toArray(new String[]{});
 						Grid<T,?> grid = output == null ? new Grid<>(elementClass,elementObjectClass,sourceClass,sourceObjectClass) : output;
 						grid.addListeners(getListeners());
+						grid.getCollection().addListeners(getCollectionListeners());
 						if(grid.getCollection().getElementClass()==null)
 							grid.getCollection().setElementClass(elementClass);
 						grid.getCollection().setName(StringHelper.getInstance().getClazz(elementObjectClass));
 						grid.addFieldsAsColumns(fieldNames);
-						grid.getNameColumn().setIsShowable(sourceObjectClass!=null);
+						grid.get__nameColumn__().setIsShowable(sourceObjectClass!=null);
 						grid.getCollection().setIsElementObjectCreatable(Boolean.TRUE);
 						Collection<?> elementObjects = getElementObjects();
 						CollectionHelper.Instance<?> masterElementObjectCollection = getMasterElementObjectCollection();
@@ -329,8 +335,22 @@ public class GridHelper extends AbstractHelper implements Serializable {
 						return this;
 					}
 					
+					@Override
+					public Builder<T> setCollectionListeners(Collection<CollectionHelper.Instance.Listener<T>> collectionListeners) {
+						this.collectionListeners = collectionListeners;
+						return this;
+					}
+					
+					@Override
+					public Builder<T> addCollectionListener(CollectionHelper.Instance.Listener<T> collectionListener) {
+						if(this.collectionListeners == null)
+							this.collectionListeners = new ArrayList<CollectionHelper.Instance.Listener<T>>();
+						this.collectionListeners.add(collectionListener);
+						return this;
+					}
+					
 				}
-				
+						
 				@Override
 				public Builder<T> setMasterElementObjectCollection(Instance<?> masterElementObjectCollection) {
 					return null;
@@ -338,6 +358,16 @@ public class GridHelper extends AbstractHelper implements Serializable {
 				
 				@Override
 				public Builder<T> addListener(Listener<T> listener) {
+					return null;
+				}
+				
+				@Override
+				public Builder<T> setCollectionListeners(Collection<CollectionHelper.Instance.Listener<T>> collectionListeners) {
+					return null;
+				}
+				
+				@Override
+				public Builder<T> addCollectionListener(CollectionHelper.Instance.Listener<T> collectionListener) {
 					return null;
 				}
 				
