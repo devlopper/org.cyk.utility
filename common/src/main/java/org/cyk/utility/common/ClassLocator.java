@@ -89,6 +89,9 @@ public class ClassLocator extends AbstractBean implements Serializable {
 		}
 		
 		if(clazz==null)
+			clazz = getDefault(basedClass);
+		
+		if(clazz==null)
 			logClassIsNull(basedClass);
 		else
 			cache.put(basedClass, clazz);
@@ -101,6 +104,10 @@ public class ClassLocator extends AbstractBean implements Serializable {
 	}
 	
 	protected Class<?> listenClassNotFound(String name){
+		return null;
+	}
+	
+	protected Class<?> getDefault(Class<?> aClass){
 		return null;
 	}
 	
