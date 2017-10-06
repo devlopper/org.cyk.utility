@@ -6,12 +6,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
+import org.cyk.utility.common.helper.ArrayHelper;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter @Setter
 public class ClassLocator extends AbstractBean implements Serializable {
@@ -21,6 +22,7 @@ public class ClassLocator extends AbstractBean implements Serializable {
 	private String classType;
 	private final Collection<Listener> classLocatorListeners = new ArrayList<>();
 	private Map<Class<?>,Class<?>> cache = new HashMap<>();
+	private Boolean logClassNotFoundException = Boolean.TRUE;
 	
 	@SuppressWarnings("rawtypes")
 	public Class<?> locate(final Class<?> basedClass){
@@ -38,7 +40,7 @@ public class ClassLocator extends AbstractBean implements Serializable {
 			clazz = cache.get(basedClass);
 			if(clazz==null){
 				@SuppressWarnings("unchecked")
-				AbstractMethod<String, Class<?>> getNameMethod = listenerUtils.getValue(AbstractMethod.class, classLocatorListeners, new ListenerUtils.ResultMethod<Listener, AbstractMethod>(){
+				AbstractMethod<String[], Class<?>> getNameMethod = listenerUtils.getValue(AbstractMethod.class, classLocatorListeners, new ListenerUtils.ResultMethod<Listener, AbstractMethod>(){
 		
 					@Override
 					public AbstractMethod execute(Listener listener) {
@@ -67,12 +69,20 @@ public class ClassLocator extends AbstractBean implements Serializable {
 						
 					});
 				}else{
-					String name = getNameMethod.execute(basedClass);
-					if(StringUtils.isNotBlank(name))
-						try {
-							clazz = Class.forName(name);
-						} catch (ClassNotFoundException e) {
-							logThrowable(e);
+					String[] names = getNames(getNameMethod,basedClass);
+					if(ArrayHelper.getInstance().isNotEmpty(names))
+						for(String name : names){
+							if(StringUtils.isNotBlank(name)){
+								try {
+									clazz = Class.forName(name);
+								} catch (ClassNotFoundException e) {
+									clazz = listenClassNotFound(name);
+									//if(clazz == null && Boolean.TRUE.equals(getLogClassNotFoundException()))
+									//	logThrowable(e);
+								}
+								if(clazz!=null)
+									break;
+							}
 						}
 				}
 			}
@@ -83,6 +93,15 @@ public class ClassLocator extends AbstractBean implements Serializable {
 		else
 			cache.put(basedClass, clazz);
 		return clazz;
+	}
+	
+	protected String[] getNames(AbstractMethod<String[], Class<?>> getNameMethod,Class<?> basedClass){
+		String[] names = getNameMethod.execute(basedClass);
+		return names;
+	}
+	
+	protected Class<?> listenClassNotFound(String name){
+		return null;
 	}
 	
 	protected void logClassIsNull(Class<?> basedClass){
@@ -110,23 +129,27 @@ public class ClassLocator extends AbstractBean implements Serializable {
 		
 		Boolean isLocatable(Class<?> basedClass);
 		
-		AbstractMethod<String, Class<?>> getGetNameMethod();
-		void setGetNameMethod(AbstractMethod<String, Class<?>> method);
+		AbstractMethod<String[], Class<?>> getGetNameMethod();
+		void setGetNameMethod(AbstractMethod<String[], Class<?>> method);
 		
 		/**/
 		
-		public static abstract class AbstractGetOrgCykSystem extends AbstractMethod<String, Class<?>> implements Serializable {
+		public static abstract class AbstractGetOrgCykSystem extends AbstractMethod<String[], Class<?>> implements Serializable {
 			private static final long serialVersionUID = -7213562588417233353L;
 			@Override
-			protected String __execute__(Class<?> aClass) {
+			protected String[] __execute__(Class<?> aClass) {
+				String[] names = new String[getModuleSuffixes().length];
 				String systemIdentifier = StringUtils.substringBetween(aClass.getName(), Constant.PREFIX_PACKAGE_ORG_CYK_SYSTEM,Constant.CHARACTER_DOT.toString());
 				String module = StringUtils.substringAfter(aClass.getName(), Constant.CHARACTER_DOT+getBaseClassPackageName()+Constant.CHARACTER_DOT);
-				return Constant.PREFIX_PACKAGE_ORG_CYK_SYSTEM+systemIdentifier+Constant.CHARACTER_DOT+getModulePrefix()+Constant.CHARACTER_DOT+module+getModuleSuffix();
+				Integer index = 0;
+				for(String suffix : getModuleSuffixes())
+					names[index++] = Constant.PREFIX_PACKAGE_ORG_CYK_SYSTEM+systemIdentifier+Constant.CHARACTER_DOT+getModulePrefix()+Constant.CHARACTER_DOT+module+suffix;
+				return names;
 			}
 			
 			protected abstract String getBaseClassPackageName();
 			protected abstract String getModulePrefix();
-			protected abstract String getModuleSuffix();
+			protected abstract String[] getModuleSuffixes();
 		}
 		
 		/**/
@@ -136,7 +159,7 @@ public class ClassLocator extends AbstractBean implements Serializable {
 
 			private static final long serialVersionUID = -4338231956722553859L;
 
-			private AbstractMethod<String, Class<?>> getNameMethod;
+			private AbstractMethod<String[], Class<?>> getNameMethod;
 			
 			@Override
 			public Class<?> locate(Class<?> basedClass) {
