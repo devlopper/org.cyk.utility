@@ -285,6 +285,10 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return getField(identifier, CaseType.FU);
 	}
 	
+	public String getField(java.lang.reflect.Field field){
+		return getField(field.getName());
+	}
+	
 	public String getClassIdentifier(String name){
 		name = String.format(ToStringMapping.CLASS_IDENTIFIER_FORMAT,getI18nIdentifier(name));
 		return name;

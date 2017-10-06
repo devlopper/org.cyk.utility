@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.cyk.utility.common.helper.AssertionHelper;
+import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 import org.cyk.utility.common.helper.StringHelper.Location;
@@ -14,6 +15,9 @@ import org.cyk.utility.common.helper.StringHelper.Transformer;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.joda.time.DateTime;
 import org.junit.Test;
+
+import lombok.Getter;
+import lombok.Setter;
 
 
 public class StringHelperUnitTest extends AbstractUnitTest {
@@ -259,11 +263,13 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void assertField(){
+	public void getField(){
 		assertEquals("Code", StringHelper.getInstance().getField("code"));
 		assertEquals("Code", StringHelper.getInstance().getField("code"));
 		assertEquals("Adresse", StringHelper.getInstance().getField("address"));
 		assertEquals("Localité", StringHelper.getInstance().getField("locality"));
+		assertEquals("Localité", StringHelper.getInstance().getField("locality"));
+		assertEquals("Adresse électronique de courriel", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "electronicMailAddress")));
 	}
 	
 	@Test
@@ -328,6 +334,14 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	public static class Locality {
+		
+	}
+	
+	@Getter @Setter
+	public static class Fields {
+		
+		private String electronicMailAddress;
+		private String locality;
 		
 	}
 }
