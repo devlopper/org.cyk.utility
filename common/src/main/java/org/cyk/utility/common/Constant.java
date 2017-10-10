@@ -204,6 +204,10 @@ public interface Constant {
 	    
 	    ;
 		
+		public static Boolean isCreateOrUpdateOrDelete(Action action){
+			return isCreateOrUpdate(action) || Action.DELETE.equals(action);
+		}
+		
 		public static Boolean isCreateOrUpdate(Action action){
 			return Action.CREATE.equals(action) || Action.UPDATE.equals(action);
 		}

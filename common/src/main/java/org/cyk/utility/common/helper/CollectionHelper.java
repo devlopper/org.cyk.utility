@@ -416,7 +416,8 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				Class<?> elementObjectClass = getElementObjectClass();
 				if(ClassHelper.getInstance().isEqual(elementObjectClass, element.getClass())){
 					Object elementObject = element;
-					element = ClassHelper.getInstance().instanciateOne(elementClass);
+					if(elementClass!=null)
+						element = ClassHelper.getInstance().instanciateOne(elementClass);
 					if(element instanceof Element){
 						((Element<Object>)element).setObject(elementObject);
 						((Element<Object>)element).setCollection(this);
@@ -478,7 +479,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				if(Boolean.TRUE.equals(isAddable)){
 					if(getElements().add((T) element)){
 						if(element instanceof Element){
-							((Element<T>)element).setCollection(this).setSource(source).set__name__(element.toString());
+							((Element<T>)element).setCollection(this).setSource(source);
 							if(Boolean.TRUE.equals(getIsElementObjectCreatable()) && ((Element<T>)element).getObject()==null)
 								if(elementObjectClass!=null){
 									if(((Element<T>)element).getObject()==null){
@@ -492,6 +493,9 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 							Class<?> fieldsContainerClass = InstanceHelper.getInstance().getIfNotNullElseDefault(getFieldsContainerClass(),elementClass);
 							((Element<T>)element).set__fieldsContainer__(elementClass.equals(fieldsContainerClass) ? element : ((Element<T>)element).getObject());
 							((Element<T>)element).setIsReadable(getIsReadable()).setIsUpdatable(getIsUpdatable()).setIsRemovable(getIsRemovable());
+							if(((Element<T>) element).get__name__()==null)
+								((Element<T>)element).set__name__(((Element<T>) element).getObject() == null ? element.toString()
+									: InstanceHelper.getInstance().getLabel(((Element<T>) element).getObject()));
 						}
 						if(Boolean.TRUE.equals(getIsSourceDisjoint()) && sources!=null){
 							sources.remove(source);

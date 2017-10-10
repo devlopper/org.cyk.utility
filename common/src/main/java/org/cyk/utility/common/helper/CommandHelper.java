@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.cyk.utility.common.Action;
+import org.cyk.utility.common.cdi.AbstractBean;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +26,11 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 	public Command getCommand(){
 		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance()
 				.getIfNotNullElseDefault(Command.Adapter.Default.DEFAULT_CLASS , Command.Adapter.Default.class)); 
+	}
+	
+	public Commands getCommands(){
+		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance()
+				.getIfNotNullElseDefault(Commands.DEFAULT_CLASS , Commands.class)); 
 	}
 	
 	public static interface Command extends Action<Object,Object> {
@@ -46,6 +53,8 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 		Command setMappedIcon(Object mappedIcon);
 		Object getMappedIcon();
 		
+		@Override Command setIdentifier(Object identifier);
+		
 		@Getter @Setter
 		public static class Adapter extends Action.Adapter.Default<Object,Object> implements Command,Serializable {
 			private static final long serialVersionUID = 1L;
@@ -58,6 +67,11 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 			
 			public Adapter() {
 				super("command", Object.class, null, Object.class);
+			}
+			
+			@Override
+			public Command setIdentifier(Object identifier) {
+				return (Command) super.setIdentifier(identifier);
 			}
 			
 			@Override
@@ -180,5 +194,30 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 		}
 		
 	}
+	
+	/**/
+	
+	public static class Commands extends AbstractBean implements Serializable {
+		private static final long serialVersionUID = 1L;
 		
+		public static Class<? extends Commands> DEFAULT_CLASS = Commands.class;
+		
+		private MapHelper.Map<String,Command> map = new MapHelper.Map<String, Command>(String.class, Command.class);
+		
+		public Commands add(Command command){
+			if(command.getIdentifier()==null)
+				command.setIdentifier(RandomHelper.getInstance().getAlphabetic(10));
+			map.set(command.getIdentifier().toString(), command);
+			return this;
+		}
+		
+		public Commands remove(String identifier){
+			map.set(identifier, null);
+			return this;
+		}
+		
+		public List<Command> getList(){
+			return CollectionHelper.getInstance().createList(map.getMap().values());
+		}
+	}
 }

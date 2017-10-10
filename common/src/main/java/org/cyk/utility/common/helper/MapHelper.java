@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Builder;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.InputStrategy;
 import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.OutputStrategy;
 
@@ -966,7 +967,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 	}
 
 	@Getter @Setter @Accessors(chain=true)
-	public static class Map<KEY,VALUE> implements Serializable{
+	public static class Map<KEY,VALUE> extends AbstractBean implements Serializable{
 		private static final long serialVersionUID = 1L;
 		
 		private Class<KEY> keyClass;

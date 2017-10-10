@@ -55,6 +55,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 		
 		protected CommandHelper.Command addCommand,removeCommand;
 		protected MapHelper.Map<String,CommandHelper.Command> commandMap = new MapHelper.Map<String, CommandHelper.Command>(String.class, CommandHelper.Command.class);
+		protected CommandHelper.Commands menuCommands = CommandHelper.getInstance().getCommands();
 		
 		protected Column<SELECT_ITEM> __indexColumn__,__nameColumn__,__commandsColumn__;
 		protected Boolean isAddCommandShowableAtIndexColumnFooter;
@@ -70,7 +71,8 @@ public class GridHelper extends AbstractHelper implements Serializable {
 		public Grid(Class<T> elementClass,Class<?> elementObjectClass,Class<?> sourceClass,Class<?> sourceObjectClass) {
 			collection = CollectionHelper.getInstance().getCollectionInstance(elementClass,elementObjectClass,sourceClass,sourceObjectClass);
 			addCommand = CommandHelper.getInstance().getCommand().setName(StringHelper.getInstance().get("grid.command.add", (Object[])null))
-					.setIcon(IconHelper.Icon.ACTION_ADD);
+					.setIcon(IconHelper.Icon.ACTION_ADD).setIdentifier(COMMAND_ADD);
+			menuCommands.add(addCommand);
 			addCommand.addActionListener(new Action.ActionListener.Adapter(){
 				private static final long serialVersionUID = 1L;
 				@Override
@@ -80,7 +82,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 			}).setIsImplemented(Boolean.TRUE);
 			
 			removeCommand = CommandHelper.getInstance().getCommand().setName(StringHelper.getInstance().get("grid.command.delete", (Object[])null))
-					.setIcon(IconHelper.Icon.ACTION_DELETE);
+					.setIcon(IconHelper.Icon.ACTION_DELETE).setIdentifier(COMMAND_REMOVE);
 			removeCommand.addActionListener(new Action.ActionListener.Adapter(){
 				private static final long serialVersionUID = 1L;
 				@Override
@@ -88,6 +90,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 					delete();
 				}
 			}).setIsImplemented(Boolean.TRUE);
+			//commandMap.set(COMMAND_REMOVE, removeCommand);
 			
 			__indexColumn__ = (Column<SELECT_ITEM>) getInstance().getColumn().setName(StringHelper.getInstance().get("grid.column.index", (Object[])null));
 			__nameColumn__ = (Column<SELECT_ITEM>) getInstance().getColumn().setName(StringHelper.getInstance().get("grid.column.name", (Object[])null));
@@ -637,10 +640,12 @@ public class GridHelper extends AbstractHelper implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
 		}
+	
+		/**/
 	}
 	
 	public static final String COMMAND_ADD = "COMMAND_ADD";
-	public static final String COMMAND_DELETE = "COMMAND_DELETE";
+	public static final String COMMAND_REMOVE = "COMMAND_DELETE";
 	
 	public static final String COLUMN_INDEX = "COLUMN_INDEX";
 	public static final String COLUMN_NAME = "COLUMN_NAME";

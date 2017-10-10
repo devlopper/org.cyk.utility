@@ -663,7 +663,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 					if(action==null || aClass==null)
 						return null;
 					return ClassHelper.getInstance().getVariableName(aClass)
-							+(Action.isCreateOrUpdate(action) ? EDIT : StringHelper.getInstance().applyCaseType(action.name(), CaseType.FURL));
+							+(Action.isCreateOrUpdateOrDelete(action) ? EDIT : StringHelper.getInstance().applyCaseType(action.name(), CaseType.FURL));
 				}
 				
 				@Override

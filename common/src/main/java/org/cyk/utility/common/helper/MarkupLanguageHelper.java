@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.inject.Singleton;
 
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.MapHelper.Map;
 
 @Singleton
@@ -46,6 +47,29 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 		}
 		
 		/**/
+		
+		/**
+		 * get object's properties map and get the value from it
+		 * @param object
+		 * @param propertyName
+		 * @return
+		 */
+		public static String get(Object object,String propertyName){
+			return (String) FieldHelper.getInstance().read( ((AbstractBean)object).getPropertiesMap(), propertyName);
+		}
+		
+		/**
+		 * 
+		 * @param object
+		 * @param propertyName
+		 * @param value
+		 */
+		public static void set(Object object,String propertyName,Object value){
+			if(object!=null){
+				Attributes attributes = (Attributes)(Object)((AbstractBean)object).getPropertiesMap();
+				MethodHelper.getInstance().callSet(attributes, propertyName, String.class, value == null ? null : value.toString());	
+			}
+		}
 		
 		public String getIdentifier(){
 			return get(IDENTIFIER);
@@ -93,29 +117,29 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 		}
 		
 		public String getOnClick(){
-			return get(ONCLICK);
+			return get(ON_CLICK);
 		}
 		
 		public Attributes setOnClick(String onClick){
-			set(ONCLICK, onClick);
+			set(ON_CLICK, onClick);
 			return this;
 		}
 		
 		public String getOnChange(){
-			return get(ONCHANGE);
+			return get(ON_CHANGE);
 		}
 		
 		public Attributes setOnChange(String onChange){
-			set(ONCHANGE, onChange);
+			set(ON_CHANGE, onChange);
 			return this;
 		}
 		
 		public String getOnComplete(){
-			return get(ONCOMPLETE);
+			return get(ON_COMPLETE);
 		}
 		
 		public Attributes setOnComplete(String onComplete){
-			set(ONCOMPLETE, onComplete);
+			set(ON_COMPLETE, onComplete);
 			return this;
 		}
 		
@@ -182,10 +206,10 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 			return this;
 		}
 		
+		public static final String FIELD_RENDERED = "rendered";
 		public String getRendered(){
 			return get(RENDERED);
 		}
-		
 		public Attributes setRendered(String rendered){
 			set(RENDERED, rendered);
 			return this;
@@ -382,9 +406,9 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 		
 		public static final String CLASS = "CLASS";
 		public static final String IDENTIFIER = "IDENTIFIER";
-		public static final String ONCLICK = "ONCLICK";
-		public static final String ONCHANGE = "ONCHANGE";
-		public static final String ONCOMPLETE = "ONCOMPLETE";
+		public static final String ON_CLICK = "ONCLICK";
+		public static final String ON_CHANGE = "ONCHANGE";
+		public static final String ON_COMPLETE = "ONCOMPLETE";
 		public static final String STYLE = "STYLE";
 		public static final String STYLE_CLASS = "STYLE_CLASS";
 		public static final String TITLE = "TITLE";
