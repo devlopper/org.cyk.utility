@@ -272,6 +272,114 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 			return this;
 		}
 		
+		public String getValue(){
+			return get(VALUE);
+		}
+		
+		public Attributes setValue(String value){
+			set(VALUE, value);
+			return this;
+		}
+		
+		public String getEscape(){
+			return get(ESCAPE);
+		}
+		
+		public Attributes setEscape(String escape){
+			set(ESCAPE, escape);
+			return this;
+		}
+		
+		public String getEmptyMessage(){
+			return get(EMPTY_MESSAGE);
+		}
+		
+		public Attributes setEmptyMessage(String emptyMessage){
+			set(EMPTY_MESSAGE, emptyMessage);
+			return this;
+		}
+		
+		public String getSortMode(){
+			return get(SORT_MODE);
+		}
+		
+		public Attributes setSortMode(String sortMode){
+			set(SORT_MODE, sortMode);
+			return this;
+		}
+		
+		public String getReflow(){
+			return get(REFLOW);
+		}
+		
+		public Attributes setReflow(String reflow){
+			set(REFLOW, reflow);
+			return this;
+		}
+		
+		public String getLazy(){
+			return get(LAZY);
+		}
+		
+		public Attributes setLazy(String lazy){
+			set(LAZY, lazy);
+			return this;
+		}
+		
+		public String getPaginator(){
+			return get(PAGINATOR);
+		}
+		
+		public Attributes setPaginator(String paginator){
+			set(PAGINATOR, paginator);
+			return this;
+		}
+		
+		public String getPaginatorPosition(){
+			return get(PAGINATOR_POSITION);
+		}
+		
+		public Attributes setPaginatorPosition(String paginatorPosition){
+			set(PAGINATOR_POSITION, paginatorPosition);
+			return this;
+		}
+		
+		public String getPaginatorTemplate(){
+			return get(PAGINATOR_TEMPLATE);
+		}
+		
+		public Attributes setPaginatorTemplate(String paginatorTemplate){
+			set(PAGINATOR_TEMPLATE, paginatorTemplate);
+			return this;
+		}
+		
+		public String getCurrentPageReportTemplate(){
+			return get(CURRENT_PAGE_REPORT_TEMPLATE);
+		}
+		
+		public Attributes setCurrentPageReportTemplate(String currentPageReportTemplate){
+			set(CURRENT_PAGE_REPORT_TEMPLATE, currentPageReportTemplate);
+			return this;
+		}
+		
+		public String getTableStyleClass(){
+			return get(TABLE_STYLE_CLASS);
+		}
+		
+		public Attributes setTableStyleClass(String tableStyleClass){
+			set(TABLE_STYLE_CLASS, tableStyleClass);
+			return this;
+		}
+		
+		public String getRowStyleClass(){
+			return get(ROW_STYLE_CLASS);
+		}
+		
+		public Attributes setRowStyleClass(String rowStyleClass){
+			set(ROW_STYLE_CLASS, rowStyleClass);
+			return this;
+		}
+		
 		public static final String CLASS = "CLASS";
 		public static final String IDENTIFIER = "IDENTIFIER";
 		public static final String ONCLICK = "ONCLICK";
@@ -281,6 +389,8 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 		public static final String STYLE_CLASS = "STYLE_CLASS";
 		public static final String TITLE = "TITLE";
 		public static final String TYPE = "TYPE";
+		public static final String VALUE = "VALUE";
+		public static final String ESCAPE = "ESCAPE";
 		public static final String ACTION = "ACTION";			
 		public static final String AJAX = "AJAX";
 		public static final String DISABLED = "DISABLED";
@@ -297,6 +407,16 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 		public static final String LABEL = "LABEL";
 		public static final String PLACE_HOLDER = "PLACE_HOLDER";
 		public static final String FILTER_MATCH_MODE = "FILTER_MATCH_MODE";
+		public static final String EMPTY_MESSAGE = "EMPTY_MESSAGE";
+		public static final String SORT_MODE = "SORT_MODE";
+		public static final String REFLOW = "REFLOW";
+		public static final String LAZY = "LAZY";	
+		public static final String PAGINATOR = "PAGINATOR";
+		public static final String PAGINATOR_POSITION = "PAGINATOR_POSITION";
+		public static final String PAGINATOR_TEMPLATE = "PAGINATOR_TEMPLATE";
+		public static final String CURRENT_PAGE_REPORT_TEMPLATE = "CURRENT_PAGE_REPORT_TEMPLATE";		
+		public static final String TABLE_STYLE_CLASS = "TABLE_STYLE_CLASS";
+		public static final String ROW_STYLE_CLASS = "ROW_STYLE_CLASS";
 		
 	}
 }

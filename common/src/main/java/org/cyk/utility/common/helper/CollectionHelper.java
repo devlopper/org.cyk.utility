@@ -343,11 +343,9 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 
 		private String name;
 		private Class<T> elementClass;
-		private Class<?> elementObjectClass;
+		private Class<?> elementObjectClass,sourceClass,sourceObjectClass,fieldsContainerClass;
 		@SuppressWarnings("rawtypes")
 		private Collection sources;
-		private Class<?> sourceClass;
-		private Class<?> sourceObjectClass;
 		private String getSourceObjectMethodName;
 		private Collection<T> elements;
 		private Boolean synchonizationEnabled,isOrderNumberComputeEnabled,isSourceDisjoint=Boolean.TRUE;
@@ -357,6 +355,14 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		private Boolean isCreatable=Boolean.TRUE,isReadable=Boolean.TRUE,isUpdatable=Boolean.TRUE,isRemovable=Boolean.TRUE,isNullAddable=Boolean.FALSE;
 		private Boolean isEachElementHasSource,isElementObjectCreatable;
 		private Instance<Object> masterElementObjectCollection;
+		
+		public Boolean isEditable(){
+			return Boolean.TRUE.equals(getIsCreatable()) || Boolean.TRUE.equals(getIsUpdatable()) || Boolean.TRUE.equals(getIsRemovable());
+		}
+		
+		public Boolean isNotEditable(){
+			return !Boolean.TRUE.equals(isEditable());
+		}
 		
 		public Instance<T> mapElementFieldsAndElementObjectFields(String...strings){
 			if(ArrayHelper.getInstance().isNotEmpty(strings)){
@@ -472,9 +478,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				if(Boolean.TRUE.equals(isAddable)){
 					if(getElements().add((T) element)){
 						if(element instanceof Element){
-							((Element<T>)element).setCollection(this);
-							((Element<T>)element).setSource(source);
-							((Element<T>)element).set__name__(element.toString());
+							((Element<T>)element).setCollection(this).setSource(source).set__name__(element.toString());
 							if(Boolean.TRUE.equals(getIsElementObjectCreatable()) && ((Element<T>)element).getObject()==null)
 								if(elementObjectClass!=null){
 									if(((Element<T>)element).getObject()==null){
@@ -485,6 +489,9 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 											((Element<T>)element).setObject((T) ClassHelper.getInstance().instanciateOne(elementObjectClass));
 									}
 								}
+							Class<?> fieldsContainerClass = InstanceHelper.getInstance().getIfNotNullElseDefault(getFieldsContainerClass(),elementClass);
+							((Element<T>)element).set__fieldsContainer__(elementClass.equals(fieldsContainerClass) ? element : ((Element<T>)element).getObject());
+							((Element<T>)element).setIsReadable(getIsReadable()).setIsUpdatable(getIsUpdatable()).setIsRemovable(getIsRemovable());
 						}
 						if(Boolean.TRUE.equals(getIsSourceDisjoint()) && sources!=null){
 							sources.remove(source);
@@ -653,7 +660,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		public <CLASS> Collection<CLASS> getElementObjects(){
 			return (Collection<CLASS>) getElementObjects(getElementObjectClass());
 		}
-	
+		
 		@Override
 		public String toString() {
 			return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
@@ -795,6 +802,17 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		protected T object;
 		protected String __name__;
 		protected Boolean __processable__=Boolean.TRUE;
+		protected Object __fieldsContainer__;
+		protected Boolean isReadable,isUpdatable,isRemovable;
+		
+		protected CommandHelper.Command readCommand,updateCommand,deleteCommand;
+		protected MapHelper.Map<String,CommandHelper.Command> commandMap;// = new MapHelper.Map<String, CommandHelper.Command>(String.class, CommandHelper.Command.class);
+		
+		public MapHelper.Map<String,CommandHelper.Command> getCommandMap(){
+			if(commandMap==null)
+				commandMap = new MapHelper.Map<String, CommandHelper.Command>(String.class, CommandHelper.Command.class);
+			return commandMap;
+		}
 		
 		public Element<T> read(){
 			if(collection!=null){

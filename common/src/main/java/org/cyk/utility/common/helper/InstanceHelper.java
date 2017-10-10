@@ -15,6 +15,7 @@ import javax.inject.Singleton;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
 import org.cyk.utility.common.helper.InstanceHelper.Listener.FieldValueGenerator;
 
@@ -48,6 +49,16 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	public <T> Collection<T> get(Class<T> aClass,Object masterObject){
 		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
 				, Listener.Adapter.Default.class)).get(aClass,masterObject);
+	}
+	
+	public <T> Collection<T> get(Class<T> aClass,DataReadConfiguration dataReadConfiguration){
+		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
+				, Listener.Adapter.Default.class)).get(aClass,dataReadConfiguration);
+	}
+	
+	public <T> Long count(Class<T> aClass,DataReadConfiguration dataReadConfiguration){
+		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
+				, Listener.Adapter.Default.class)).count(aClass,dataReadConfiguration);
 	}
 	
 	public Object getIdentifier(final Object instance){
@@ -831,6 +842,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		
 		<T> Collection<T> get(Class<T> aClass);
 		<T> Collection<T> get(Class<T> aClass,Object master);
+		<T> Collection<T> get(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
+		
+		<T> Long count(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
+		
 		<T> T getIdentifier(Class<T> aClass,Object identifier);
 		Object getIdentifier(Object instance);
 		Boolean getAreEqual(Object object1,Object object2);
@@ -874,6 +889,16 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			
 			@Override
 			public <T> T getIdentifier(Class<T> aClass, Object identifier) {
+				return null;
+			}
+			
+			@Override
+			public <T> Collection<T> get(Class<T> aClass, DataReadConfiguration dataReadConfiguration) {
+				return null;
+			}
+			
+			@Override
+			public <T> Long count(Class<T> aClass, DataReadConfiguration dataReadConfiguration) {
 				return null;
 			}
 			
