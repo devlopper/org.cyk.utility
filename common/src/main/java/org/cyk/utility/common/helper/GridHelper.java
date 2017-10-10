@@ -53,7 +53,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 		
 		protected CollectionHelper.Instance<T> collection;
 		
-		protected CommandHelper.Command addCommand,deleteCommand;
+		protected CommandHelper.Command addCommand,removeCommand;
 		protected MapHelper.Map<String,CommandHelper.Command> commandMap = new MapHelper.Map<String, CommandHelper.Command>(String.class, CommandHelper.Command.class);
 		
 		protected Column<SELECT_ITEM> __indexColumn__,__nameColumn__,__commandsColumn__;
@@ -79,9 +79,9 @@ public class GridHelper extends AbstractHelper implements Serializable {
 				}
 			}).setIsImplemented(Boolean.TRUE);
 			
-			deleteCommand = CommandHelper.getInstance().getCommand().setName(StringHelper.getInstance().get("grid.command.delete", (Object[])null))
+			removeCommand = CommandHelper.getInstance().getCommand().setName(StringHelper.getInstance().get("grid.command.delete", (Object[])null))
 					.setIcon(IconHelper.Icon.ACTION_DELETE);
-			deleteCommand.addActionListener(new Action.ActionListener.Adapter(){
+			removeCommand.addActionListener(new Action.ActionListener.Adapter(){
 				private static final long serialVersionUID = 1L;
 				@Override
 				public void __execute__(Action<?, ?> action) {
@@ -103,7 +103,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 		}
 		
 		protected void delete(){
-			collection.removeOne(deleteCommand.getInput());
+			collection.removeOne(removeCommand.getInput());
 		}
 		
 		public GridHelper.Grid.Column<SELECT_ITEM> addFieldAsColumn(String fieldName,Class<?> fieldContainerClass){

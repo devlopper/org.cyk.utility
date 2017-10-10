@@ -805,7 +805,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		protected Object __fieldsContainer__;
 		protected Boolean isReadable,isUpdatable,isRemovable;
 		
-		protected CommandHelper.Command readCommand,updateCommand,deleteCommand;
+		protected CommandHelper.Command readCommand,updateCommand,removeCommand;
 		protected MapHelper.Map<String,CommandHelper.Command> commandMap;// = new MapHelper.Map<String, CommandHelper.Command>(String.class, CommandHelper.Command.class);
 		
 		public MapHelper.Map<String,CommandHelper.Command> getCommandMap(){
