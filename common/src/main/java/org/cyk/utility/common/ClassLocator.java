@@ -39,20 +39,7 @@ public class ClassLocator extends AbstractBean implements Serializable {
 		}))){
 			clazz = cache.get(basedClass);
 			if(clazz==null){
-				@SuppressWarnings("unchecked")
-				AbstractMethod<String[], Class<?>> getNameMethod = listenerUtils.getValue(AbstractMethod.class, classLocatorListeners, new ListenerUtils.ResultMethod<Listener, AbstractMethod>(){
-		
-					@Override
-					public AbstractMethod execute(Listener listener) {
-						return listener.getGetNameMethod();
-					}
-		
-					@Override
-					public AbstractMethod getNullValue() {
-						return null;
-					}
-					
-				});
+				AbstractMethod<String[], Class<?>> getNameMethod = getGetNameMethod();
 				
 				if(getNameMethod==null){
 					clazz = listenerUtils.getValue(Class.class, classLocatorListeners, new ListenerUtils.ResultMethod<Listener, Class>(){
@@ -96,6 +83,23 @@ public class ClassLocator extends AbstractBean implements Serializable {
 		else
 			cache.put(basedClass, clazz);
 		return clazz;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected AbstractMethod<String[], Class<?>> getGetNameMethod(){
+		return listenerUtils.getValue(AbstractMethod.class, classLocatorListeners, new ListenerUtils.ResultMethod<Listener, AbstractMethod>(){
+			
+			@Override
+			public AbstractMethod<String[], Class<?>> execute(Listener listener) {
+				return listener.getGetNameMethod();
+			}
+
+			@Override
+			public AbstractMethod<String[], Class<?>> getNullValue() {
+				return null;
+			}
+			
+		});
 	}
 	
 	protected String[] getNames(AbstractMethod<String[], Class<?>> getNameMethod,Class<?> basedClass){

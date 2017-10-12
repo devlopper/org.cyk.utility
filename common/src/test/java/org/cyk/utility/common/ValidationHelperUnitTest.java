@@ -28,8 +28,8 @@ public class ValidationHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
     public void manyConstraints() {
-		new Try(ThrowableHelper.ThrowableMarker.class,"1 ##field.f.1## : ne peut pas être nul"+Constant.LINE_DELIMITER+"2 ##field.f.2## : ne peut pas être nul"
-				+Constant.LINE_DELIMITER+"3 ##field.f.3## : ne peut pas être nul"+Constant.LINE_DELIMITER+"4 ##field.f.4## : ne peut pas être nul"){ 
+		new Try(ThrowableHelper.ThrowableMarker.class,"1 ##__field__.f.1## : ne peut pas être nul"+Constant.LINE_DELIMITER+"2 ##__field__.f.2## : ne peut pas être nul"
+				+Constant.LINE_DELIMITER+"3 ##__field__.f.3## : ne peut pas être nul"+Constant.LINE_DELIMITER+"4 ##__field__.f.4## : ne peut pas être nul"){ 
 			private static final long serialVersionUID = -8176804174113453706L;
 			@Override protected void code() {new ValidationHelper.Validate.Adapter.Default(new ManyConstraints())
 				.setIsThrowMessages(Boolean.TRUE)
@@ -45,11 +45,11 @@ public class ValidationHelperUnitTest extends AbstractUnitTest {
 	@Test
     public void electronicMailFormatMessage() {
 		assertList(new ArrayList<>(new ValidationHelper.Validate.Adapter.Default(new ElectronicMail("a..@mail.com"))
-    			.execute()), Arrays.asList("adresse : a..@mail.com n'est pas une adresse de courrier électronique bien formée"));
+    			.execute()), Arrays.asList("Adresse : a..@mail.com n'est pas une adresse de courrier électronique bien formée"));
 		assertList(new ArrayList<>(new ValidationHelper.Validate.Adapter.Default(new ElectronicMail("a..@mail.com")).setIsFieldNameIncludedInMessage(false)
     			.execute()), Arrays.asList("a..@mail.com n'est pas une adresse de courrier électronique bien formée"));
 		assertList(new ArrayList<>(new ValidationHelper.Validate.Adapter.Default(new ElectronicMail("a..@mail.com")).setIsFieldNameIncludedInMessage(true)
-    			.execute()), Arrays.asList("adresse : a..@mail.com n'est pas une adresse de courrier électronique bien formée"));
+    			.execute()), Arrays.asList("Adresse : a..@mail.com n'est pas une adresse de courrier électronique bien formée"));
     }
 
 	@Test(expected=RuntimeException.class)
@@ -60,7 +60,7 @@ public class ValidationHelperUnitTest extends AbstractUnitTest {
 	@Test
     public void electronicMailFormatMessageCustom() {
 		assertList(new ArrayList<>(new ValidationHelper.Validate.Adapter.Default(new ElectronicMailCustomMessage("a..@mail.com")).execute())
-				, Arrays.asList("adresse : ##pas vraiment bon##"));
+				, Arrays.asList("Adresse : ##pas vraiment bon##"));
     }
     
     /**/

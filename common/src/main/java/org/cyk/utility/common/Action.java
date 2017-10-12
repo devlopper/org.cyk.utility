@@ -176,6 +176,9 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_FIELD_VALUE = "fieldValue";
 	java.lang.String PROPERTY_NAME_PARAMETER_1 = "parameter1";
 	java.lang.String PROPERTY_NAME_PARAMETER_2 = "parameter2";
+	java.lang.String PROPERTY_NAME_STRING = "STRING";
+	java.lang.String PROPERTY_NAME_LENGTH = "LENGTH";
+	java.lang.String PROPERTY_NAME_LIKE = "LIKE";
 	java.lang.String PROPERTY_NAME_YEAR="YEAR";
 	java.lang.String PROPERTY_NAME_YEAR_1="YEAR1";
 	java.lang.String PROPERTY_NAME_YEAR_2="YEAR2";

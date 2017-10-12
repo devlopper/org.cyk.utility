@@ -46,7 +46,9 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		return String.format(BETWEEN_FORMAT, field,from,to);
 	}
 	
-	
+	public static String getParameterName(String fieldName){
+		return FieldHelper.getInstance().getLast(fieldName);
+	}
 	
 	/**/
 	
@@ -498,6 +500,9 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		Where addBetween(String fieldName);
 		Where bw(String fieldName);
 		
+		Where addLike(String fieldName);
+		Where lk(String fieldName);
+		
 		Where addLessThanOrEqual(String fieldName,String parameter);
 		Where lte(String fieldName,String parameter);
 		Where addGreaterThanOrEqual(String fieldName,String parameter);
@@ -520,6 +525,16 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			@Override
 			public StructuredQueryLanguageHelper.Builder getParent() {
 				return (StructuredQueryLanguageHelper.Builder) super.getParent();
+			}
+			
+			@Override
+			public Where addLike(String fieldName) {
+				return null;
+			}
+			
+			@Override
+			public Where lk(String fieldName) {
+				return null;
 			}
 			
 			@Override
@@ -640,6 +655,11 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					return addTokens(getParent().formatFieldName(fieldName),"<=",getParent().formatParameter(parameter));
 				}
 				
+				@Override
+				public Where lk(String fieldName) {
+					return addLike(fieldName);
+				}
+				
 				public static class JavaPersistenceQueryLanguage extends Where.Adapter.Default implements Serializable{
 					private static final long serialVersionUID = 1L;
 					
@@ -653,6 +673,13 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					@Override
 					public Where addBetween(String fieldName) {
 						return addBetween(fieldName, null);
+					}
+					
+					@Override
+					public Where addLike(String fieldName) {
+						addActions(new Like.Adapter.Default.JavaPersistenceQueryLanguage().setParent(this)
+								.setProperty(Between.PROPERTY_NAME_FIELD_NAME, getParent().formatFieldName(fieldName)));
+						return this;
 					}
 					
 				}
@@ -715,6 +742,66 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					public static class JavaPersistenceQueryLanguage extends Between.Adapter.Default implements Serializable{
 						private static final long serialVersionUID = 1L;
 							
+					}
+				}
+			}
+		}
+		
+		//((field IS NULL ) AND (string_length = 0)) OR ((field IS NOT NULL ) AND (LOWER(field) LIKE LOWER(string)))
+		public static interface Like extends StringHelper.Builder.Collection {
+			
+			@Override Where getParent();
+			@Override Like setParent(Action<Object, String> parent);
+			
+			@Getter
+			public static class Adapter extends StringHelper.Builder.Collection.Adapter.Default implements Like , Serializable{
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public Like setParent(Action<Object, String> parent) {
+					return (Like) super.setParent(parent);
+				}
+				
+				@Override
+				public Where getParent() {
+					return (Where) super.getParent();
+				}
+				/*
+				public static String get(String field,String parameter,String length){
+					return String.format(FORMAT, field,parameter,length);
+				}
+				
+				public static String get(String field,String parameter){
+					return get(field,parameter,parameter+"Length");
+				}
+				*/
+				public static String getParameterNameString(String fieldName){
+					return getParameterName(fieldName)+"String";
+				}
+				
+				public static String getParameterNameLike(String fieldName){
+					return getParameterName(fieldName)+"Like";
+				}
+				
+				public static class Default extends Like.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+							
+					public static class JavaPersistenceQueryLanguage extends Like.Adapter.Default implements Serializable{
+						private static final long serialVersionUID = 1L;
+					
+						//private static final String FORMAT = "(((%1$s IS NULL ) AND (%3$s = 0)) OR ((%1$s IS NOT NULL ) AND (LOWER(%1$s) LIKE LOWER(%2$s))))";
+						private static final String FORMAT = "(((%1$s IS NULL ) AND (LENGTH(%3$s) = 0)) OR ((%1$s IS NOT NULL ) AND (LOWER(%1$s) LIKE LOWER(%2$s))))";
+						
+						@Override
+						protected String __execute__() {
+							String fieldName = getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
+							String string = getParent().getParent().formatParameter(getParameterNameString(fieldName));
+							String like = getParent().getParent().formatParameter(getParameterNameLike(fieldName));
+							String s =  String.format(FORMAT, fieldName,like,string);
+							addTokens(s);
+							return super.__execute__();
+						}
+						
 					}
 				}
 			}

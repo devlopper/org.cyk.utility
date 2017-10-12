@@ -66,12 +66,30 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return StringUtils.join(fieldNames,FIELD_NAME_SEPARATOR);
 	}
 	
+	public String getLast(String fieldName){
+		return StringUtils.contains(fieldName, FIELD_NAME_SEPARATOR) ? StringUtils.substringAfterLast(fieldName, FIELD_NAME_SEPARATOR) : fieldName;
+	}
+	
 	public List<String> getFieldNames(String...fieldPaths){
 		return Arrays.asList(StringUtils.split(buildPath(fieldPaths), FIELD_NAME_SEPARATOR));
 	}
 	
 	public List<String> getNames(Collection<java.lang.reflect.Field> fields){
+		if(CollectionHelper.getInstance().isEmpty(fields))
+			return null;
 		return new ArrayList<String>(MethodHelper.getInstance().callGet(fields, String.class, Constant.WORD_NAME));
+	}
+	
+	public List<String> getNamesByTypes(Class<?> aClass,Collection<Class<?>> classes){
+		if(CollectionHelper.getInstance().isEmpty(classes))
+			return null;
+		return getNames(getByTypes(aClass, classes));
+	}
+	
+	public List<String> getNamesByTypes(Class<?> aClass,Class<?>...classes){
+		if(ArrayHelper.getInstance().isEmpty(classes))
+			return null;
+		return getNamesByTypes(aClass, Arrays.asList(classes));
 	}
 	
 	public Object read(Object instance,java.lang.reflect.Field field){
@@ -238,6 +256,21 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		Collection<Class<? extends Annotation>> collection = new ArrayList<>();
 		collection.add(annotationClass);
 		return get(type,collection);
+	}
+	
+	public Collection<java.lang.reflect.Field> getByTypes(Class<?> type,Collection<Class<?>> classes) {
+		Collection<java.lang.reflect.Field> fields = new ArrayList<>();
+		for(java.lang.reflect.Field field : get(type))
+			if(CollectionHelper.getInstance().isNotEmpty(classes))
+				if(classes.contains(getType(type, field)))
+					fields.add(field);
+		return fields;
+	}
+	
+	public Collection<java.lang.reflect.Field> getByTypes(Class<?> type,Class<?>...classes) {
+		if(ArrayHelper.getInstance().isEmpty(classes))
+			return null;
+		return getByTypes(type, Arrays.asList(classes));
 	}
 	
 	public Object readField(Object object,java.lang.reflect.Field field,Boolean recursive,Boolean createIfNull,Boolean autoSet,Collection<Class<? extends Annotation>> annotationClasses){

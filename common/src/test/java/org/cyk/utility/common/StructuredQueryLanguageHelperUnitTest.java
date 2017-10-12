@@ -4,6 +4,7 @@ import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Builder.Adapter.Default.JavaPersistenceQueryLanguage;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.Between;
+import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.Like;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -27,6 +28,16 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void jpqlLike(){
+		Like like = new Like.Adapter.Default.JavaPersistenceQueryLanguage().setParent(new JavaPersistenceQueryLanguage("","").where());
+		AssertionHelper.getInstance().assertEquals("(((field IS NULL ) AND (LENGTH(:fieldString) = 0)) OR ((field IS NOT NULL ) AND (LOWER(field) LIKE LOWER(:fieldLike))))"
+				, like.setProperty(Like.PROPERTY_NAME_FIELD_NAME, "field").execute());
+		AssertionHelper.getInstance().assertEquals("(((t.globalIdentifier.code IS NULL ) AND (LENGTH(:codeString) = 0)) OR ((t.globalIdentifier.code IS NOT NULL ) "
+				+ "AND (LOWER(t.globalIdentifier.code) LIKE LOWER(:codeLike))))"
+				, like.clear().setProperty(Like.PROPERTY_NAME_FIELD_NAME, "t.globalIdentifier.code").execute());
+	}
+	
+	@Test
 	public void jpql(){
 		/*JavaPersistenceQueryLanguage jpql = new JavaPersistenceQueryLanguage();
 		AssertionHelper.getInstance().assertEquals("SELECT myrecord", jpql.addExpressions(Operator.SELECT, "myrecord").execute());
@@ -46,9 +57,25 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 				+ " OR t.instantInterval.to.date BETWEEN :fromDate AND :toDate) OR (t.instantInterval.from.date<=:fromDate AND t.instantInterval.to.date>=:toDate)"
 				, new JavaPersistenceQueryLanguage(ScheduleItem.class).setFieldName("instantInterval").where().lp().bw("from.date").or().bw("to.date").rp()
 				.or().lp().lte("from.date","fromDate").and().gte("to.date","toDate").rp().getParent().execute());
+		
+		//SELECT record FROM Language record WHERE  (((record.globalIdentifier.code IS NULL ) AND (:codeLength = 0)) OR ((record.globalIdentifier.code IS NOT NULL ) AND (LOWER(record.globalIdentifier.code) LIKE LOWER(:code))))  OR  (((record.globalIdentifier.name IS NULL ) AND (:nameLength = 0)) OR ((record.globalIdentifier.name IS NOT NULL ) AND (LOWER(record.globalIdentifier.name) LIKE LOWER(:name)))) 
+	
+		assertEquals("SELECT t FROM Language t WHERE (((t.globalIdentifier.code IS NULL ) AND (LENGTH(:codeString) = 0)) OR ((t.globalIdentifier.code IS NOT "
+				+ "NULL ) AND (LOWER(t.globalIdentifier.code) LIKE LOWER(:codeLike))))"
+				, new JavaPersistenceQueryLanguage(Language.class).where().lk("t.globalIdentifier.code").getParent().execute());
+		
+		assertEquals("SELECT t FROM Language t WHERE (((t.globalIdentifier.code IS NULL ) AND (LENGTH(:codeString) = 0)) OR ((t.globalIdentifier.code IS NOT "
+				+ "NULL ) AND (LOWER(t.globalIdentifier.code) LIKE LOWER(:codeLike)))) OR (((t.globalIdentifier.name IS NULL ) AND (LENGTH(:nameString) = 0)) "
+				+ "OR ((t.globalIdentifier.name IS NOT NULL ) AND (LOWER(t.globalIdentifier.name) LIKE LOWER(:nameLike))))"
+				, new JavaPersistenceQueryLanguage(Language.class).where().lk("t.globalIdentifier.code").or().lk("t.globalIdentifier.name").getParent().execute());
+		
 	}
 	
 	public static class ScheduleItem {
+		
+	}
+	
+	public static class Language {
 		
 	}
 }

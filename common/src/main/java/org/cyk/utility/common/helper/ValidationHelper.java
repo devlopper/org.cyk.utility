@@ -213,6 +213,7 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 							if(Boolean.TRUE.equals(isFieldNameIncludedInMessage))
 								arguments.add(StringHelper.getInstance().getField(field.getName()));
 							arguments.add(violation.getMessage());
+							//addLoggingMessageBuilderNamedParameters("validmess",clazz+" ::: "+CollectionHelper.getInstance().concatenate(arguments, " | "));
 							messages.add(String.format(messageFormat, arguments.toArray()));
 			        	}
 					}

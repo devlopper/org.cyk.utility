@@ -184,7 +184,7 @@ public class RandomDataProvider implements Serializable {
 	
 	public String randomWord(Integer type,int minLength,int maxLength){
 		switch(type){
-		case WORD_EMAIL:return RandomHelper.getInstance().getAlphanumeric(10)+"@examplemail.com";
+		case WORD_EMAIL:return RandomHelper.getInstance().getAlphabetic(10)+"@examplemail.com";
 		case WORD_DATE:return simpleDateFormat.format(randomDate(new Date(System.currentTimeMillis()-DateUtils.MILLIS_PER_DAY*30), new Date()));
 		case WORD_NUMBER:return String.valueOf(RandomHelper.getInstance().getNumeric(randomInt(1, 3)));
 		case WORD_WEBSITE:return "www."+RandomHelper.getInstance().getAlphabetic(randomInt(5, 6))+".com";

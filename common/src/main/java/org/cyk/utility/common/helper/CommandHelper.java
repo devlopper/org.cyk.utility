@@ -28,6 +28,13 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 				.getIfNotNullElseDefault(Command.Adapter.Default.DEFAULT_CLASS , Command.Adapter.Default.class)); 
 	}
 	
+	public Command getCommand(Object identifier,String nameIdentifier,IconHelper.Icon icon,Action.ActionListener actionListener,Boolean isImplemented){
+		Command command = getCommand().setName(StringHelper.getInstance().get(nameIdentifier, (Object[])null))
+				.setIcon(icon).setIdentifier(identifier);
+		command.addActionListener(actionListener).setIsImplemented(isImplemented);
+		return command;
+	}
+	
 	public Commands getCommands(){
 		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance()
 				.getIfNotNullElseDefault(Commands.DEFAULT_CLASS , Commands.class)); 
@@ -203,6 +210,21 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 		public static Class<? extends Commands> DEFAULT_CLASS = Commands.class;
 		
 		private MapHelper.Map<String,Command> map = new MapHelper.Map<String, Command>(String.class, Command.class);
+		
+		public Command create(Object identifier,String nameIdentifier,IconHelper.Icon icon,Action.ActionListener actionListener,Boolean isImplemented){
+			Command command = getInstance().getCommand(identifier, nameIdentifier, icon, actionListener, isImplemented);
+			if(command.getIdentifier()!=null)
+				map.set(command.getIdentifier().toString(), command);
+			return command;
+		}
+		
+		public Command create(Object identifier,String nameIdentifier,IconHelper.Icon icon,Action.ActionListener actionListener){
+			return create(identifier, nameIdentifier, icon, actionListener, Boolean.TRUE);
+		}
+		
+		public Command create(String nameIdentifier,IconHelper.Icon icon,Action.ActionListener actionListener){
+			return create(RandomHelper.getInstance().getAlphabetic(10), nameIdentifier, icon, actionListener, Boolean.TRUE);
+		}
 		
 		public Commands add(Command command){
 			if(command.getIdentifier()==null)

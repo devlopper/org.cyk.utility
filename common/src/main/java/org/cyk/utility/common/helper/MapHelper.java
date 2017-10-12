@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -983,6 +985,30 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 			if(this.map == null)
 				this.map = new LinkedHashMap<KEY,VALUE>();
 			this.map.put(key, value);
+			return this;
+		}
+		
+		/**
+		 * Add value to the collection mapped to this key
+		 * @param key
+		 * @param value
+		 * @return
+		 */
+		@SuppressWarnings("unchecked")
+		public Map<KEY,VALUE> add(KEY key,Object value){
+			Object keyValue = get(key);
+			if(ClassHelper.getInstance().isInstanceOf(Collection.class, valueClass)){
+				if(keyValue==null){
+					if(ClassHelper.getInstance().isInstanceOf(List.class, valueClass))
+						keyValue = new ArrayList<>();
+					else if(ClassHelper.getInstance().isInstanceOf(Set.class, valueClass))
+						keyValue = new LinkedHashSet<>();
+					else
+						keyValue = new ArrayList<>();
+					set(key,(VALUE) keyValue);
+				}
+				((Collection<Object>)keyValue).add(value);
+			}
 			return this;
 		}
 		
