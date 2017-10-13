@@ -17,6 +17,7 @@ import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
+import org.cyk.utility.common.helper.FilterHelper.Filter;
 import org.cyk.utility.common.helper.InstanceHelper.Listener.FieldValueGenerator;
 
 import javassist.Modifier;
@@ -59,6 +60,16 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	public <T> Long count(Class<T> aClass,DataReadConfiguration dataReadConfiguration){
 		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
 				, Listener.Adapter.Default.class)).count(aClass,dataReadConfiguration);
+	}
+	
+	public <T> Collection<T> get(Class<T> aClass,FilterHelper.Filter<T> filter,DataReadConfiguration dataReadConfiguration){
+		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
+				, Listener.Adapter.Default.class)).get(aClass,filter,dataReadConfiguration);
+	}
+	
+	public <T> Long count(Class<T> aClass,FilterHelper.Filter<T> filter,DataReadConfiguration dataReadConfiguration){
+		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
+				, Listener.Adapter.Default.class)).count(aClass,filter,dataReadConfiguration);
 	}
 	
 	public Object getIdentifier(final Object instance){
@@ -843,8 +854,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		<T> Collection<T> get(Class<T> aClass);
 		<T> Collection<T> get(Class<T> aClass,Object master);
 		<T> Collection<T> get(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
+		<T> Collection<T> get(Class<T> aClass,FilterHelper.Filter<T> filter,DataReadConfiguration dataReadConfiguration);
 		
 		<T> Long count(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
+		<T> Long count(Class<T> aClass,FilterHelper.Filter<T> filter,DataReadConfiguration dataReadConfiguration);
 		
 		<T> T getIdentifier(Class<T> aClass,Object identifier);
 		Object getIdentifier(Object instance);
@@ -856,6 +869,16 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		
 		public static class Adapter extends AbstractHelper.Listener.Adapter.Default implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public <T> Collection<T> get(Class<T> aClass, Filter<T> filter,DataReadConfiguration dataReadConfiguration) {
+				return null;
+			}
+			
+			@Override
+			public <T> Long count(Class<T> aClass, Filter<T> filter, DataReadConfiguration dataReadConfiguration) {
+				return null;
+			}
 			
 			@Override
 			public <T> Collection<T> get(Class<T> aClass, Object master) {

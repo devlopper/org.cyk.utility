@@ -404,6 +404,44 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 			return this;
 		}
 		
+		public String getPaginatorAlwaysVisible(){
+			return get(PAGINATOR_ALWAYS_VISIBLE);
+		}
+		
+		public Attributes setPaginatorAlwaysVisible(String paginatorAlwaysVisible){
+			set(PAGINATOR_ALWAYS_VISIBLE, paginatorAlwaysVisible);
+			return this;
+		}
+		
+		public String getPageLinks(){
+			return get(PAGE_LINKS);
+		}
+		
+		public Attributes setPageLinks(String pageLinks){
+			set(PAGE_LINKS, pageLinks);
+			return this;
+		}
+		
+		public String getRows(){
+			return get(ROWS);
+		}
+		
+		public Attributes setRows(String rows){
+			set(ROWS, rows);
+			return this;
+		}
+		
+		public String getGlobal(){
+			return get(GLOBAL);
+		}
+		
+		public Attributes setGlobal(String global){
+			set(GLOBAL, global);
+			return this;
+		}
+		
+		public static final String GLOBAL = "GLOBAL";
+		public static final String ROWS = "ROWS";
 		public static final String CLASS = "CLASS";
 		public static final String IDENTIFIER = "IDENTIFIER";
 		public static final String ON_CLICK = "ONCLICK";
@@ -441,6 +479,8 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 		public static final String CURRENT_PAGE_REPORT_TEMPLATE = "CURRENT_PAGE_REPORT_TEMPLATE";		
 		public static final String TABLE_STYLE_CLASS = "TABLE_STYLE_CLASS";
 		public static final String ROW_STYLE_CLASS = "ROW_STYLE_CLASS";
+		public static final String PAGE_LINKS = "PAGE_LINKS";
+		public static final String PAGINATOR_ALWAYS_VISIBLE = "PAGINATOR_ALWAYS_VISIBLE";
 		
 	}
 }

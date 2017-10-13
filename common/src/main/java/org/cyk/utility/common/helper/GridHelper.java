@@ -49,7 +49,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 	public static class Grid<T,SELECT_ITEM> extends AbstractBean implements Serializable {
 		private static final long serialVersionUID = -3543754685060813767L;
 
-		protected String identifier = "grid_identifier_"+RandomHelper.getInstance().getNumeric(10);
+		protected String identifier = "grid_identifier_"+RandomHelper.getInstance().getNumeric(10),name;
 		
 		protected CollectionHelper.Instance<T> collection;
 		
@@ -112,6 +112,10 @@ public class GridHelper extends AbstractHelper implements Serializable {
 		
 		protected void remove(){
 			collection.removeOne(removeCommand.getInput());
+		}
+		
+		public String getName(){
+			return getCollection().getName();
 		}
 		
 		protected void filter(){
