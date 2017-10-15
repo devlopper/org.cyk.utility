@@ -2,6 +2,7 @@ package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
@@ -129,6 +131,15 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		}
 	}
 	
+	public <T> Constructor<T> getConstructor(Class<T> aClass,Class<?>[] parameters){
+		try {
+			//return aClass.getConstructor(parameters);
+			return ConstructorUtils.getMatchingAccessibleConstructor(aClass, parameters);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	public <T> T instanciate(Class<T> aClass,Object[] constructorParameters){
 		Class<?>[] classes = new Class[constructorParameters.length / 2];
 		Object[] arguments = new Object[constructorParameters.length / 2];
@@ -138,7 +149,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 			arguments[j++] = constructorParameters[i+1];
 		}
 		try {
-			return aClass.getConstructor(classes).newInstance(arguments);
+			return getConstructor(aClass,classes).newInstance(arguments);
 		} catch (Exception exception) {
 			exception.printStackTrace();
 			return null;

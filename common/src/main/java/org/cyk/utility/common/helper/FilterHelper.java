@@ -52,6 +52,11 @@ public class FilterHelper extends AbstractHelper implements Serializable {
 			return excluded;
 		}
 		
+		public Filter<T> addExcluded(@SuppressWarnings("unchecked") T...elements){
+			excluded = CollectionHelper.getInstance().add(getExcluded(), elements);
+			return this;
+		}
+		
 		public Filter<T> addCriterias(Criteria<?>...criterias){
 			this.criterias = (List<Criteria<?>>) CollectionHelper.getInstance().add(List.class,this.criterias, criterias);
 			return this;

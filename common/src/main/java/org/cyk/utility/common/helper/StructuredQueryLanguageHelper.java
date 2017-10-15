@@ -500,8 +500,21 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		Where addBetween(String fieldName);
 		Where bw(String fieldName);
 		
+		Where addExists(String query,Boolean not);
+		Where addExists(String query);
+		Where exists(String query,Boolean not);
+		Where exists(String query);
+		Where exists(Builder queryBuilder,Boolean not);
+		Where exists(Builder queryBuilder);
+		
 		Where addLike(String fieldName);
 		Where lk(String fieldName);
+		
+		Where addIn(String fieldName,Boolean not);
+		Where addIn(String fieldName);
+		Where in(String fieldName,Boolean not);
+		Where in(String fieldName);
+		Where notIn(String fieldName);
 		
 		Where addLessThanOrEqual(String fieldName,String parameter);
 		Where lte(String fieldName,String parameter);
@@ -514,6 +527,7 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		Where rp();
 		@Override Where and();
 		@Override Where or();
+		@Override Where space();
 		@Override Where addTokens(String... tokens);
 		
 		@Override StructuredQueryLanguageHelper.Builder getParent();
@@ -525,6 +539,61 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			@Override
 			public StructuredQueryLanguageHelper.Builder getParent() {
 				return (StructuredQueryLanguageHelper.Builder) super.getParent();
+			}
+			
+			@Override
+			public Where addExists(String query, Boolean not) {
+				return null;
+			}
+			
+			@Override
+			public Where addExists(String query) {
+				return addExists(query, Boolean.FALSE);
+			}
+			
+			@Override
+			public Where exists(String query, Boolean not) {
+				return addExists(query, not);
+			}
+			
+			@Override
+			public Where exists(String query) {
+				return exists(query, Boolean.FALSE);
+			}
+			
+			@Override
+			public Where exists(Builder queryBuilder, Boolean not) {
+				return exists(queryBuilder.execute(), not);
+			}
+			
+			@Override
+			public Where exists(Builder queryBuilder) {
+				return exists(queryBuilder,Boolean.FALSE);
+			}
+			
+			@Override
+			public Where addIn(String fieldName, Boolean not) {
+				return null;
+			}
+			
+			@Override
+			public Where addIn(String fieldName) {
+				return addIn(fieldName, Boolean.FALSE);
+			}
+			
+			@Override
+			public Where in(String fieldName, Boolean not) {
+				return addIn(fieldName, not);
+			}
+			
+			@Override
+			public Where in(String fieldName) {
+				return in(fieldName, Boolean.FALSE);
+			}
+			
+			@Override
+			public Where notIn(String fieldName) {
+				return in(fieldName, Boolean.TRUE);
 			}
 			
 			@Override
@@ -603,6 +672,11 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			}
 			
 			@Override
+			public Where space() {
+				return (Where) super.space();
+			}
+			
+			@Override
 			public Where addTokens(String... tokens) {
 				return (Where) super.addTokens(tokens);
 			}
@@ -660,6 +734,11 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					return addLike(fieldName);
 				}
 				
+				@Override
+				public Where in(String fieldName,Boolean not) {
+					return addIn(fieldName,not);
+				}
+				
 				public static class JavaPersistenceQueryLanguage extends Where.Adapter.Default implements Serializable{
 					private static final long serialVersionUID = 1L;
 					
@@ -682,33 +761,88 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						return this;
 					}
 					
+					@Override
+					public Where addIn(String fieldName, Boolean not) {
+						addActions(new In.Adapter.Default.JavaPersistenceQueryLanguage().setParent(this)
+								.setProperty(Between.PROPERTY_NAME_FIELD_NAME, getParent().formatFieldName(fieldName)).setProperty(PROPERTY_NAME_NOT, not));
+						return this;
+					}
+					
+					@Override
+					public Where addExists(String query, Boolean not) {
+						addActions(new Exists.Adapter.Default.JavaPersistenceQueryLanguage().setParent(this)
+								.setProperty(Between.PROPERTY_NAME_QUERY, query).setProperty(PROPERTY_NAME_NOT, not));
+						return this;
+					}
+					
 				}
 			}
 		}
 		
 		/**/
 		
-		// field BETWEEN parameter1 AND parameter2
-		public static interface Between extends StringHelper.Builder.Collection {
-			
-			String PARAMETER_FROM_FORMAT = "from%s";
-			String PARAMETER_TO_FORMAT = "to%s";
+		public static interface Operator extends StringHelper.Builder.Collection {
 			
 			@Override Where getParent();
-			@Override Between setParent(Action<Object, String> parent);
+			@Override Operator setParent(Action<Object, String> parent);
 			
 			@Getter
-			public static class Adapter extends StringHelper.Builder.Collection.Adapter.Default implements Between , Serializable{
+			public static class Adapter extends StringHelper.Builder.Collection.Adapter.Default implements Operator , Serializable{
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public Between setParent(Action<Object, String> parent) {
-					return (Between) super.setParent(parent);
+				public Operator setParent(Action<Object, String> parent) {
+					return (Operator) super.setParent(parent);
 				}
 				
 				@Override
 				public Where getParent() {
 					return (Where) super.getParent();
+				}
+				
+				public static class Default extends Operator.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					protected static final String NOT = "NOT";
+					
+					@Override
+					protected String __execute__() {
+						Boolean not = Boolean.TRUE.equals(getPropertyAsBoolean(PROPERTY_NAME_NOT));
+						String format =  not ? getFormatNot() : getFormat();
+						addTokens(String.format(format, getFormatParameters(format,not)));
+						return super.__execute__();
+					}
+					
+					protected String getFormat(){
+						return null;
+					}
+					
+					protected String getFormatNot(){
+						return null;
+					}
+					
+					protected Object[] getFormatParameters(String format,Boolean not){
+						return null;
+					}
+					
+				}
+			}
+		}
+		
+		// field BETWEEN parameter1 AND parameter2
+		public static interface Between extends Operator {
+			
+			String PARAMETER_FROM_FORMAT = "from%s";
+			String PARAMETER_TO_FORMAT = "to%s";
+			
+			@Override Between setParent(Action<Object, String> parent);
+			
+			@Getter
+			public static class Adapter extends Operator.Adapter.Default implements Between , Serializable{
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public Between setParent(Action<Object, String> parent) {
+					return (Between) super.setParent(parent);
 				}
 				
 				public static String getFromParameterName(String field){
@@ -724,7 +858,7 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				public static class Default extends Between.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 							
-					@Override
+					/*@Override
 					protected String __execute__() {
 						String suffix = getPropertyAsString(PROPERTY_NAME_SUFFIX);
 						String fieldName = getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
@@ -737,24 +871,48 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						addTokens(fieldName).space().addTokens("BETWEEN").space()
 						.addTokens(parameter1).space().and().applyCaseToLastToken(CaseType.U).space().addTokens(parameter2);
 						return super.__execute__();
-					}
+					}*/
 					
 					public static class JavaPersistenceQueryLanguage extends Between.Adapter.Default implements Serializable{
 						private static final long serialVersionUID = 1L;
-							
+						
+						private static final String FORMAT = "%s BETWEEN %s AND %s";
+						private static final String FORMAT_NOT = "%s NOT BETWEEN %s AND %s";
+						
+						@Override
+						protected String getFormat() {
+							return FORMAT;
+						}
+						
+						@Override
+						protected String getFormatNot() {
+							return FORMAT_NOT;
+						}
+						
+						@Override
+						protected Object[] getFormatParameters(String format,Boolean not) {
+							String suffix = getPropertyAsString(PROPERTY_NAME_SUFFIX);
+							String fieldName = getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
+							String parameter1 = getPropertyAsString(PROPERTY_NAME_PARAMETER_1);
+							if(StringHelper.getInstance().isBlank(parameter1))
+								parameter1 = getParent().getParent().formatParameter(getFromParameterName(fieldName)+StringUtils.defaultString(suffix));
+							String parameter2 = getPropertyAsString(PROPERTY_NAME_PARAMETER_2);
+							if(StringHelper.getInstance().isBlank(parameter2))
+								parameter2 = getParent().getParent().formatParameter(getToParameterName(fieldName)+StringUtils.defaultString(suffix));
+							return new Object[]{fieldName,parameter1,parameter2};
+						}
 					}
 				}
 			}
 		}
 		
 		//((field IS NULL ) AND (string_length = 0)) OR ((field IS NOT NULL ) AND (LOWER(field) LIKE LOWER(string)))
-		public static interface Like extends StringHelper.Builder.Collection {
+		public static interface Like extends Operator {
 			
-			@Override Where getParent();
 			@Override Like setParent(Action<Object, String> parent);
 			
 			@Getter
-			public static class Adapter extends StringHelper.Builder.Collection.Adapter.Default implements Like , Serializable{
+			public static class Adapter extends Operator.Adapter.Default implements Like , Serializable{
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -762,19 +920,6 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					return (Like) super.setParent(parent);
 				}
 				
-				@Override
-				public Where getParent() {
-					return (Where) super.getParent();
-				}
-				/*
-				public static String get(String field,String parameter,String length){
-					return String.format(FORMAT, field,parameter,length);
-				}
-				
-				public static String get(String field,String parameter){
-					return get(field,parameter,parameter+"Length");
-				}
-				*/
 				public static String getParameterNameString(String fieldName){
 					return getParameterName(fieldName)+"String";
 				}
@@ -793,13 +938,116 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						private static final String FORMAT = "(((%1$s IS NULL ) AND (LENGTH(%3$s) = 0)) OR ((%1$s IS NOT NULL ) AND (LOWER(%1$s) LIKE LOWER(%2$s))))";
 						
 						@Override
-						protected String __execute__() {
+						protected String getFormat() {
+							return FORMAT;
+						}
+						
+						@Override
+						protected String getFormatNot() {
+							return super.getFormatNot();
+						}
+						
+						@Override
+						protected Object[] getFormatParameters(String format,Boolean not) {
 							String fieldName = getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
 							String string = getParent().getParent().formatParameter(getParameterNameString(fieldName));
 							String like = getParent().getParent().formatParameter(getParameterNameLike(fieldName));
-							String s =  String.format(FORMAT, fieldName,like,string);
-							addTokens(s);
-							return super.__execute__();
+							return new Object[]{fieldName,like,string};
+						}
+						
+					}
+				}
+			}
+		}
+		
+		//IN     (field IN :set)
+		//NOT IN (field IS NULL OR field NOT IN :set)
+		public static interface In extends Operator {
+			
+			@Override Operator setParent(Action<Object, String> parent);
+			
+			@Getter
+			public static class Adapter extends Operator.Adapter.Default implements In , Serializable{
+				private static final long serialVersionUID = 1L;
+		
+				@Override
+				public In setParent(Action<Object, String> parent) {
+					return (In) super.setParent(parent);
+				}
+				
+				public static String getParameterNameIn(String fieldName){
+					return getParameterName(fieldName)+"In";
+				}
+				
+				public static class Default extends In.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+										
+					public static class JavaPersistenceQueryLanguage extends In.Adapter.Default implements Serializable{
+						private static final long serialVersionUID = 1L;
+						
+						//private static final String FORMAT = "(((%1$s IS NULL ) AND (%3$s = 0)) OR ((%1$s IS NOT NULL ) AND (LOWER(%1$s) LIKE LOWER(%2$s))))";
+						private static final String FORMAT = "(%1$s IN %2$s)";
+						private static final String FORMAT_NOT = "(%1$s IS NULL OR %1$s NOT IN %2$s)";
+						
+						@Override
+						protected String getFormat() {
+							return FORMAT;
+						}
+						
+						@Override
+						protected String getFormatNot() {
+							return FORMAT_NOT;
+						}
+						
+						@Override
+						protected Object[] getFormatParameters(String format,Boolean not) {
+							String fieldName = getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
+							String in = getParent().getParent().formatParameter(getParameterNameIn(fieldName));
+							return new Object[]{fieldName,in};
+						}
+						
+					}
+				}
+			}
+		}
+	
+		//EXISTS(query)
+		public static interface Exists extends Operator {
+			
+			@Override Exists setParent(Action<Object, String> parent);
+			
+			@Getter
+			public static class Adapter extends Operator.Adapter.Default implements Exists , Serializable{
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public Exists setParent(Action<Object, String> parent) {
+					return (Exists) super.setParent(parent);
+				}
+				
+				public static class Default extends Exists.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+							
+					public static class JavaPersistenceQueryLanguage extends Exists.Adapter.Default implements Serializable{
+						private static final long serialVersionUID = 1L;
+					
+						private static final String FORMAT = "EXISTS(%s)";
+						private static final String FORMAT_NOT = "EXISTS(%s)";
+						
+						@Override
+						protected String getFormat() {
+							return FORMAT;
+						}
+						
+						@Override
+						protected String getFormatNot() {
+							return FORMAT_NOT;
+						}
+						
+						@Override
+						protected Object[] getFormatParameters(String format,Boolean not) {
+							String query = getPropertyAsString(PROPERTY_NAME_QUERY);
+							return new Object[]{query};
 						}
 						
 					}

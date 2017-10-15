@@ -10,6 +10,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -39,6 +41,17 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 		INSTANCE = this;
 		super.initialisation();
 	}
+	
+	public Boolean isElectronicMailAddress(String string){
+		try {
+			new InternetAddress(string).validate();
+			return Boolean.TRUE;
+		} catch (AddressException e) {
+			return Boolean.FALSE;
+		}
+	}
+	
+	/**/
 	
 	public static interface Validate extends org.cyk.utility.common.Action<Object,Collection<String>> {
 		

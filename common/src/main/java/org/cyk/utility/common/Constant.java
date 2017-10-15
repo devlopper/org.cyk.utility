@@ -219,6 +219,7 @@ public interface Constant {
 	public static class SimpleMailTransferProtocol implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		public static final String ADDRESS_FORMAT = "%s@%s.%s";
 		public static final String SMTP = "smtp";
 		public static final String PROPERTY_FORMAT = "mail."+SMTP+"%s.%s";
 		

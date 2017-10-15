@@ -5,8 +5,10 @@ import java.math.BigDecimal;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.text.CharacterPredicate;
 import org.apache.commons.text.RandomStringGenerator;
 import org.cyk.utility.common.Builder;
+import org.cyk.utility.common.Constant;
 
 @Singleton
 public class RandomHelper extends AbstractHelper implements Serializable {
@@ -39,21 +41,19 @@ public class RandomHelper extends AbstractHelper implements Serializable {
 	}
 	
 	public String getAlphanumeric(Integer length){
-		RandomStringGenerator generator = new RandomStringGenerator.Builder().withinRange('0', 'z').build();
-		String randomLetters = generator.generate(length);
-		return randomLetters;
+		return GENERATOR_ALPHABETIC_NUMERIC.generate(length);
 	}
 	
 	public String getAlphabetic(Integer length){
-		RandomStringGenerator generator = new RandomStringGenerator.Builder().withinRange('a', 'z').build();
-		String randomLetters = generator.generate(length);
-		return randomLetters;
+		return GENERATOR_ALPHABETIC.generate(length);
 	}
 	
 	public Number getNumeric(Integer length){
-		RandomStringGenerator generator = new RandomStringGenerator.Builder().withinRange('0', '9').build();
-		String randomLetters = generator.generate(length);
-		return new BigDecimal(randomLetters);
+		return new BigDecimal(GENERATOR_NUMERIC.generate(length));
+	}
+	
+	public String getElectronicMailAddress(){
+		return String.format(Constant.SimpleMailTransferProtocol.ADDRESS_FORMAT, getAlphabetic(5),getAlphabetic(5),getAlphabetic(5));
 	}
 	
 	public static interface Random<OUTPUT> extends Builder.NullableInput<OUTPUT> {
@@ -93,5 +93,31 @@ public class RandomHelper extends AbstractHelper implements Serializable {
 			}
 		}
 	}
+	
+	/**/
+	
+	public static final CharacterPredicate CHARACTER_PREDICATE_ALPHABETIC = new CharacterPredicate() {
+		@Override
+		public boolean test(int codePoint) {
+			return Character.isLetter(codePoint);
+		}
+	};
+	public static final CharacterPredicate CHARACTER_PREDICATE_NUMERIC = new CharacterPredicate() {
+		@Override
+		public boolean test(int codePoint) {
+			return Character.isDigit(codePoint);
+		}
+	};
+	
+	public static final RandomStringGenerator GENERATOR_ALPHABETIC = new RandomStringGenerator.Builder().withinRange('A', 'z')
+			.filteredBy(CHARACTER_PREDICATE_ALPHABETIC).build();
+	
+	public static final RandomStringGenerator GENERATOR_NUMERIC = new RandomStringGenerator.Builder().withinRange('0', '9').build();
+	
+	public static final RandomStringGenerator GENERATOR_ALPHABETIC_NUMERIC = new RandomStringGenerator.Builder().withinRange('0', 'z')
+			.filteredBy(CHARACTER_PREDICATE_ALPHABETIC,CHARACTER_PREDICATE_NUMERIC).build();
+	
+	
+	
 	
 }

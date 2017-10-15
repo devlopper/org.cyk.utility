@@ -1,5 +1,6 @@
 package org.cyk.utility.common;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import javax.inject.Named;
@@ -51,6 +52,15 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void getConstructor(){
+		assertNotNull(ClassHelper.getInstance().getConstructor(MyClass.class, new Class[]{Number.class}));
+		assertNotNull(ClassHelper.getInstance().getConstructor(MyClass.class, new Class[]{Integer.class}));
+		assertNotNull(ClassHelper.getInstance().getConstructor(MyClass.class, new Class[]{Long.class}));
+		assertNotNull(ClassHelper.getInstance().getConstructor(MyClass.class, new Class[]{BigDecimal.class}));
+		assertNull(ClassHelper.getInstance().getConstructor(MyClass.class, new Class[]{Boolean.class}));
+	}
+	
+	@Test
 	public void instanciate(){
 		assertNotNull(new ClassHelper.Instanciation.Adapter.Default<ClassHelper>(ClassHelper.class).execute());
 		assertThat("instance is not a class helper", new ClassHelper.Instanciation.Adapter.Default<ClassHelper>(ClassHelper.class).execute().getClass().equals(ClassHelper.class));
@@ -86,5 +96,8 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 		}	
 		
 	}
-	
+
+	public static class MyClass {
+		public MyClass(Number number) {}
+	}
 }

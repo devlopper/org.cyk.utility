@@ -171,6 +171,8 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_INSTANT_1 = "INSTANT_1";
 	java.lang.String PROPERTY_NAME_INSTANT_2 = "INSTANT_2";
 	java.lang.String PROPERTY_NAME_FIELD_NAME = "fieldName";
+	java.lang.String PROPERTY_NAME_QUERY = "QUERY";
+	java.lang.String PROPERTY_NAME_NOT = "NOT";
 	java.lang.String PROPERTY_NAME_INDEX = "index";
 	java.lang.String PROPERTY_NAME_SUFFIX = "suffix";
 	java.lang.String PROPERTY_NAME_FIELD_VALUE = "fieldValue";

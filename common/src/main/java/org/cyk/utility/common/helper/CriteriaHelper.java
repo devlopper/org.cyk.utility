@@ -72,6 +72,11 @@ public class CriteriaHelper extends AbstractHelper implements Serializable {
 			return excluded;
 		}
 		
+		public Criteria<VALUE_TYPE> addExcluded(@SuppressWarnings("unchecked") VALUE_TYPE...elements){
+			excluded = CollectionHelper.getInstance().add(getExcluded(), elements);
+			return this;
+		}
+		
 		public Collection<VALUE_TYPE> getRequired(){
 			if(required == null)
 				required = new ArrayList<>();
