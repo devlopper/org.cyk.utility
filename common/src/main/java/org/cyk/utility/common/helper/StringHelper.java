@@ -504,6 +504,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 			Collection space();
 			Collection and();
 			Collection or();
+			Collection equal();
 			Collection leftParathensis();
 			Collection rightParathensis();
 			
@@ -569,6 +570,11 @@ public class StringHelper extends AbstractHelper implements Serializable {
 				
 				@Override
 				public Collection or() {
+					return null;
+				}
+				
+				@Override
+				public Collection equal() {
 					return null;
 				}
 				
@@ -679,6 +685,11 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					}
 					
 					@Override
+					public Collection equal() {
+						return addTokens(EQUAL);
+					}
+					
+					@Override
 					public Collection leftParathensis() {
 						return addTokens(Constant.CHARACTER_LEFT_PARENTHESIS.toString());
 					}
@@ -704,6 +715,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 			
 			String AND = "and";
 			String OR = "or";
+			String EQUAL = "=";
 		} 
 	}
 

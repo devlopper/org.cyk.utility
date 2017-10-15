@@ -42,11 +42,32 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		super.initialisation();
 	}
 	
+	public Builder getBuilder(String tupleCollection, String alias){
+		return ClassHelper.getInstance().instanciate(InstanceHelper.getInstance().getIfNotNullElseDefault(Builder.Adapter.Default.DEFAULT_CLASS
+				, Builder.Adapter.Default.JavaPersistenceQueryLanguage.class),new Object[]{String.class,tupleCollection,String.class,alias});
+	}
+	
+	public Builder getBuilder(String tupleCollection){
+		return getBuilder(tupleCollection, Builder.Adapter.Default.DEFAULT_TUPLE_COLLECTION_ALIAS);
+	}
+	
+	public Builder getBuilder(Class<?> tupleClass, String alias){
+		return getBuilder(getTupleCollectionName(tupleClass), alias);
+	}
+	
+	public Builder getBuilder(Class<?> tupleClass){
+		return getBuilder(tupleClass, Builder.Adapter.Default.DEFAULT_TUPLE_COLLECTION_ALIAS);
+	}
+	
+	public String getTupleCollectionName(Class<?> tupleClass){
+		return tupleClass.getSimpleName();
+	}
+	
 	public String getBetween(String field,Object from,Object to){
 		return String.format(BETWEEN_FORMAT, field,from,to);
 	}
 	
-	public static String getParameterName(String fieldName){
+	public String getParameterName(String fieldName){
 		return FieldHelper.getInstance().getLast(fieldName);
 	}
 	
@@ -56,11 +77,21 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		
 		public static enum Operator{SELECT,FROM,WHERE,ORDER_BY}
 		
+		@Override Builder getParent();
+		@Override Builder setParent(Action<Object, String> parent);
+		
+		Builder createBuilder(String tupleCollection, String alias,String joinMasterFieldName,String joinChildFieldName);
+		Builder createBuilder(Class<?> tupleClass, String alias,String joinMasterFieldName,String joinChildFieldName);
+		
+		Builder addToParentWhereTokens();
+		
 		Collection<TupleCollection> getTupleCollections();
 		Builder setTupleCollections(Collection<TupleCollection> tupleCollections);
 		Builder addTupleCollection(String name,String alias);
 		Builder addTupleCollection(Class<?> tupleClass,String alias);
 		Builder addTupleCollection(Class<?> tupleClass);
+		TupleCollection getTupleCollection(Class<?> aClass);
+		TupleCollection getTupleCollection(String name);
 		String getTupleCollectionName(Class<?> tupleClass);
 		
 		String getFormat(Operator operator);
@@ -102,12 +133,42 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			}
 			
 			@Override
+			public Builder getParent() {
+				return (Builder) super.getParent();
+			}
+			
+			@Override
+			public Builder setParent(Action<Object, String> parent) {
+				return (Builder) super.setParent(parent);
+			}
+			
+			@Override
+			public Builder createBuilder(String tupleCollection, String alias,String joinMasterFieldName,String joinChildFieldName) {
+				return null;
+			}
+			
+			@Override
+			public Builder createBuilder(Class<?> tupleClass, String alias,String joinMasterFieldName,String joinChildFieldName) {
+				return null;
+			}
+			
+			@Override
 			public Builder addTupleCollection(Class<?> tupleClass, String alias) {
 				return null;
 			}
 			
 			@Override
 			public Builder addTupleCollection(Class<?> tupleClass) {
+				return null;
+			}
+			
+			@Override
+			public TupleCollection getTupleCollection(Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public TupleCollection getTupleCollection(String name) {
 				return null;
 			}
 			
@@ -211,9 +272,17 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				return null;
 			}
 			
+			@Override
+			public Builder addToParentWhereTokens() {
+				return null;
+			}
+			
 			public static class Default extends Builder.Adapter implements Serializable{
 				private static final long serialVersionUID = 1L;
 
+				@SuppressWarnings("unchecked")
+				public static Class<? extends Builder> DEFAULT_CLASS = (Class<? extends Builder>) ClassHelper.getInstance().getByName(JavaPersistenceQueryLanguage.class);
+				
 				public static final String SELECT_FORMAT = "SELECT %s";
 				public static final String FROM_FORMAT = "FROM %s";
 				public static final String WHERE_FORMAT = "WHERE %s";
@@ -221,7 +290,7 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				public static final String DEFAULT_TUPLE_COLLECTION_ALIAS = "t";
 				
 				public Default(String tupleCollection,String alias){
-					addTupleCollection(tupleCollection, alias);
+					__constructor__(tupleCollection, alias);
 				}
 				
 				public Default(String tupleCollection){
@@ -229,7 +298,7 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				}
 				
 				public Default(Class<?> tupleClass, String alias){
-					addTupleCollection(tupleClass,alias);
+					__constructor__(getTupleCollectionName(tupleClass),alias);
 				}
 				
 				public Default(Class<?> tupleClass){
@@ -241,9 +310,29 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					return addTupleCollection(getTupleCollectionName(tupleClass), alias);
 				}
 				
+				private void __constructor__(String tupleCollection,String alias){
+					addTupleCollection(tupleCollection, alias);
+					setFieldName(null);
+				}
+				
 				@Override
 				public Builder addTupleCollection(Class<?> tupleClass) {
 					return addTupleCollection(tupleClass, DEFAULT_TUPLE_COLLECTION_ALIAS);
+				}
+				
+				@Override
+				public TupleCollection getTupleCollection(Class<?> aClass) {
+					return getTupleCollection(getTupleCollectionName(aClass));
+				}
+				
+				@Override
+				public TupleCollection getTupleCollection(String name) {
+					Collection<TupleCollection> tupleCollections = getTupleCollections();
+					if(CollectionHelper.getInstance().isNotEmpty(tupleCollections))
+						for(TupleCollection tupleCollection : tupleCollections)
+							if(tupleCollection.getName().equals(name))
+								return tupleCollection;
+					return null;
 				}
 				
 				@Override
@@ -253,8 +342,32 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				}
 				
 				@Override
+				public Builder createBuilder(String tupleCollection, String alias,String joinMasterFieldName,String joinChildFieldName) {
+					Builder builder = getInstance().getBuilder(tupleCollection, StringUtils.defaultIfBlank(alias, DEFAULT_TUPLE_COLLECTION_ALIAS));
+					builder.setParent(this);
+					builder.where().join(joinMasterFieldName, joinChildFieldName).and();
+					return builder;
+				}
+							
+				@Override
+				public Builder createBuilder(Class<?> tupleClass, String alias,String joinMasterFieldName,String joinChildFieldName) {
+					return createBuilder(getInstance().getTupleCollectionName(tupleClass), alias,joinMasterFieldName,joinChildFieldName);
+				}
+				
+				@Override
+				public Builder addToParentWhereTokens() {
+					getParent().where().addTokens(execute());
+					return this;
+				}
+				
+				@Override
 				public Builder setFieldName(String fieldName) {
-					setFieldNamePrefix(DEFAULT_TUPLE_COLLECTION_ALIAS+Constant.CHARACTER_DOT+fieldName+Constant.CHARACTER_DOT);
+					TupleCollection tupleCollection = CollectionHelper.getInstance().getFirst(getTupleCollections());
+					String alias = tupleCollection == null ? DEFAULT_TUPLE_COLLECTION_ALIAS : tupleCollection.getAlias();
+					if(StringHelper.getInstance().isBlank(fieldName))
+						setFieldNamePrefix(alias+Constant.CHARACTER_DOT);
+					else
+						setFieldNamePrefix(alias+Constant.CHARACTER_DOT+fieldName+Constant.CHARACTER_DOT);
 					return this;
 				}
 				
@@ -273,7 +386,7 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				public Builder addTupleCollection(String name, String alias) {
 					if(tupleCollections==null)
 						tupleCollections = new LinkedHashSet<>();
-					tupleCollections.add(new TupleCollection(name, alias));
+					tupleCollections.add(new TupleCollection(name, StringUtils.defaultIfBlank(alias, DEFAULT_TUPLE_COLLECTION_ALIAS)));
 					return this;
 				}
 				
@@ -466,35 +579,12 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		}
 		
 		/**/
-		
-		/*public static interface Parameter extends org.cyk.utility.common.Builder<java.lang.String, java.lang.String> {
-			
-			public static class Adapter extends org.cyk.utility.common.Builder.Adapter.Default<java.lang.String, java.lang.String> implements Builder.Parameter , Serializable{
-				private static final long serialVersionUID = 1L;
-
-				public Adapter(java.lang.String input) {
-					super(java.lang.String.class, input, java.lang.String.class);
-				}
-				
-				public static class Default extends Builder.Parameter.Adapter implements Serializable {
-					private static final long serialVersionUID = 1L;
-					
-					public Default(java.lang.String input) {
-						super(input);
-					}
-					
-					public static class JavaPersistenceQueryLanguage extends Builder.Parameter.Adapter.Default implements Serializable{
-						private static final long serialVersionUID = 1L;
-							
-					}
-				}
-			}
-			
-		}*/
-	
 	}
 	
 	public static interface Where extends StringHelper.Builder.Collection {
+		
+		Where addJoin(String tupleCollection1FieldName,String tupleCollection2FieldName);
+		Where join(String tupleCollection1FieldName,String tupleCollection2FieldName);
 		
 		Where addBetween(String fieldName,String parameterSuffix);
 		Where addBetween(String fieldName);
@@ -520,6 +610,8 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		Where lte(String fieldName,String parameter);
 		Where addGreaterThanOrEqual(String fieldName,String parameter);
 		Where gte(String fieldName,String parameter);
+		Where addEqual(String fieldName,String parameter);
+		Where eq(String fieldName,String parameter);
 		
 		@Override Where leftParathensis();
 		Where lp();
@@ -527,6 +619,7 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		Where rp();
 		@Override Where and();
 		@Override Where or();
+		@Override Where equal();
 		@Override Where space();
 		@Override Where addTokens(String... tokens);
 		
@@ -539,6 +632,16 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			@Override
 			public StructuredQueryLanguageHelper.Builder getParent() {
 				return (StructuredQueryLanguageHelper.Builder) super.getParent();
+			}
+			
+			@Override
+			public Where addJoin(String tupleCollection1FieldName, String tupleCollection2FieldName) {
+				return null;
+			}
+			
+			@Override
+			public Where join(String tupleCollection1FieldName, String tupleCollection2FieldName) {
+				return null;
 			}
 			
 			@Override
@@ -642,6 +745,16 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			}
 			
 			@Override
+			public Where addEqual(String fieldName, String parameter) {
+				return null;
+			}
+			
+			@Override
+			public Where eq(String fieldName, String parameter) {
+				return null;
+			}
+			
+			@Override
 			public Where addBetween(String fieldName,String parameterSuffix) {
 				return null;
 			}
@@ -677,6 +790,11 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			}
 			
 			@Override
+			public Where equal() {
+				return (Where) super.equal();
+			}
+			
+			@Override
 			public Where addTokens(String... tokens) {
 				return (Where) super.addTokens(tokens);
 			}
@@ -685,6 +803,19 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				private static final long serialVersionUID = 1L;
 			
 				@Override
+				public Where addJoin(String tupleCollection1FieldName, String tupleCollection2FieldName) {
+					tupleCollection1FieldName = getParent().getParent().formatFieldName(tupleCollection1FieldName); //getTupleCollections().iterator().next().getAlias()+"."+tupleCollection1FieldName;
+					tupleCollection2FieldName = getParent().formatFieldName(tupleCollection2FieldName); //getTupleCollections().iterator().next().getAlias()+"."+tupleCollection2FieldName;
+					addTokens(tupleCollection1FieldName,"=",tupleCollection2FieldName);
+					return this;
+				}
+				
+				@Override
+				public Where join(String tupleCollection1FieldName, String tupleCollection2FieldName) {
+					return addJoin(tupleCollection1FieldName, tupleCollection2FieldName);
+				}
+				
+				@Override
 				public Where lte(String fieldName, String parameter) {
 					return addLessThanOrEqual(fieldName, parameter);
 				}
@@ -692,6 +823,11 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				@Override
 				public Where gte(String fieldName, String parameter) {
 					return addGreaterThanOrEqual(fieldName, parameter);
+				}
+				
+				@Override
+				public Where eq(String fieldName, String parameter) {
+					return addEqual(fieldName, parameter);
 				}
 				
 				@Override
@@ -727,6 +863,11 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				@Override
 				public Where addLessThanOrEqual(String fieldName, String parameter) {
 					return addTokens(getParent().formatFieldName(fieldName),"<=",getParent().formatParameter(parameter));
+				}
+				
+				@Override
+				public Where addEqual(String fieldName, String parameter) {
+					return addTokens(getParent().formatFieldName(fieldName),"=",getParent().formatParameter(parameter));
 				}
 				
 				@Override
@@ -921,11 +1062,11 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				}
 				
 				public static String getParameterNameString(String fieldName){
-					return getParameterName(fieldName)+"String";
+					return getInstance().getParameterName(fieldName)+"String";
 				}
 				
 				public static String getParameterNameLike(String fieldName){
-					return getParameterName(fieldName)+"Like";
+					return getInstance().getParameterName(fieldName)+"Like";
 				}
 				
 				public static class Default extends Like.Adapter implements Serializable {
@@ -976,7 +1117,7 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				}
 				
 				public static String getParameterNameIn(String fieldName){
-					return getParameterName(fieldName)+"In";
+					return getInstance().getParameterName(fieldName)+"In";
 				}
 				
 				public static class Default extends In.Adapter implements Serializable {
