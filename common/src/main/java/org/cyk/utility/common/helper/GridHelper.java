@@ -20,7 +20,6 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.CollectionHelper.Instance;
 import org.cyk.utility.common.helper.GridHelper.Grid.Column.FieldDescriptor;
-import org.cyk.utility.common.helper.MarkupLanguageHelper.Attributes;
 
 @Singleton
 public class GridHelper extends AbstractHelper implements Serializable {
@@ -600,10 +599,9 @@ public class GridHelper extends AbstractHelper implements Serializable {
 					this.column = column;
 					this.field = field;
 					this.isUpdatable = isUpdatable;
-					MarkupLanguageHelper.Attributes attributes = (Attributes) MethodHelper.getInstance().callGet(this, MapHelper.Map.class, "propertiesMap");
-					attributes.setLabel(column.getName());
+					getPropertiesMap().setLabel(column.getName());
 					if(Boolean.TRUE.equals(isUpdatable))
-						attributes.setRequired(String.valueOf(getIsValueNotNullable()));
+						getPropertiesMap().setRequired(String.valueOf(getIsValueNotNullable()));
 				}
 								
 				public Boolean getIsValueTextable(){

@@ -7,7 +7,6 @@ import java.util.Collection;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
-import org.cyk.utility.common.helper.MarkupLanguageHelper;
 import org.cyk.utility.common.model.Area;
 
 import lombok.Getter;
@@ -47,11 +46,7 @@ public class Component extends AbstractBean implements Serializable {
 		collection.setElementClass(Component.class);
 		return collection;
 	}
-	
-	public MarkupLanguageHelper.Attributes getAttributes(){
-		return (MarkupLanguageHelper.Attributes)(Object)getPropertiesMap();
-	}
-	
+		
 	/**/
 	
 	public static interface BuilderBase<OUTPUT extends Component> extends org.cyk.utility.common.Builder.NullableInput<OUTPUT> {

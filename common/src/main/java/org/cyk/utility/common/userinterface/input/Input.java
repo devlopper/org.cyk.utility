@@ -28,7 +28,7 @@ public class Input<T> extends Control implements Serializable {
 	
 	public Input<T> setLabelString(String labelIdentifier){
 		label = new OutputText();
-		label.getAttributes().setLabel(StringHelper.getInstance().get(labelIdentifier, new Object[]{}));
+		label.getPropertiesMap().setValue(StringHelper.getInstance().get(labelIdentifier, new Object[]{}));
 		return this;
 	}
 	

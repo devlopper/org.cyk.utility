@@ -580,6 +580,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getName(){
+		return get(NAME);
+	}
+	
+	public Properties setName(String name){
+		set(NAME, name);
+		return this;
+	}
+	
+	public static final String NAME = "NAME";
 	public static final String GLOBAL = "GLOBAL";
 	public static final String ROWS = "ROWS";
 	public static final String CLASS = "CLASS";
