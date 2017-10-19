@@ -265,6 +265,15 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return collection.iterator().next();
 	}
 	
+	public <T> T getLast(Collection<T> collection){
+		if(isEmpty(collection))
+			return null;
+		if(collection instanceof List)
+			return ((List<T>)collection).get(((List<T>)collection).size()-1);
+		new RuntimeException("cannot find last on collection of type "+collection.getClass());
+		return null;
+	}
+	
 	public void clear(Collection<?> collection){
 		if(collection!=null)
 			collection.clear();
@@ -462,9 +471,9 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				Boolean isInstanciatable = InstanceHelper.getInstance().getIfNotNullElseDefault(
 						ListenerHelper.getInstance().listenBoolean(listeners, Listener.METHOD_NAME_IS_INSTANCIATABLE
 								,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element))
-						,elementClass == null ? Boolean.TRUE : sourceObjectClass == null ? element.getClass().equals(elementClass) : element.getClass().equals(sourceObjectClass));
+						,elementClass == null ? Boolean.TRUE : sourceObjectClass == null ? ClassHelper.getInstance().isInstanceOf(elementClass, element.getClass()) : element.getClass().equals(sourceObjectClass));
 				
-				if(!element.getClass().equals(elementClass) && Boolean.TRUE.equals(isInstanciatable)){
+				if(!ClassHelper.getInstance().isInstanceOf(elementClass, element.getClass()) && Boolean.TRUE.equals(isInstanciatable)){
 					element = InstanceHelper.getInstance().getIfNotNullElseDefault(
 							ListenerHelper.getInstance().listenObject(listeners, Listener.METHOD_NAME_INSTANCIATE
 									,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element))
@@ -474,7 +483,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				Boolean isAddable = InstanceHelper.getInstance().getIfNotNullElseDefault(
 						ListenerHelper.getInstance().listenBoolean(listeners, Listener.METHOD_NAME_IS_ADDABLE
 								,MethodHelper.Method.Parameter.buildArray(Instance.class, this,Object.class,element))
-						,elementClass == null ? Boolean.TRUE : element.getClass().equals(elementClass));
+						,elementClass == null ? Boolean.TRUE : ClassHelper.getInstance().isInstanceOf(elementClass, element.getClass()));
 				
 				if(Boolean.TRUE.equals(isAddable)){
 					if(getElements().add((T) element)){
@@ -698,6 +707,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			String METHOD_NAME_ADD_ONE = "addOne";
 			void addOne(Instance<TYPE> instance,TYPE object,Object source,Object sourceObject);
 			Listener<TYPE> addOne(Instance<TYPE> instance);
+			
 			Listener<TYPE> addMany(Instance<TYPE> instance,Collection<?> collection);
 			Listener<TYPE> addMany(Instance<TYPE> instance,Object...object);
 			

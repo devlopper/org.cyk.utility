@@ -190,11 +190,6 @@ public class GridHelper extends AbstractHelper implements Serializable {
 					addListener(listener);
 			return this;
 		}
-
-		@Override
-		protected Object instanciatePropertiesMap() {
-			return new MarkupLanguageHelper.Attributes();
-		}
 		
 		/**/
 		
@@ -610,12 +605,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 					if(Boolean.TRUE.equals(isUpdatable))
 						attributes.setRequired(String.valueOf(getIsValueNotNullable()));
 				}
-				
-				@Override
-				protected Object instanciatePropertiesMap() {
-					return new MarkupLanguageHelper.Attributes();
-				}
-				
+								
 				public Boolean getIsValueTextable(){
 					return field.isAnnotationPresent(InputText.class);
 				}

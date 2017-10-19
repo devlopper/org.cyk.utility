@@ -268,6 +268,38 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return number1.doubleValue() == number2.doubleValue();
 	}
 	
+	public Number operate(Number number1,Number number2,Operation operation){
+		if(number1==null)
+			if(number2==null)
+				return null;
+			else
+				return number2;
+		else
+			if(number2==null)
+				return number1;
+			else{
+				switch(operation){
+				case ADD:return new BigDecimal(number1.doubleValue()).add(new BigDecimal(number2.doubleValue()));
+				case SUBTRACT:return new BigDecimal(number1.doubleValue()).subtract(new BigDecimal(number2.doubleValue()));
+				case MULTIPLY:return new BigDecimal(number1.doubleValue()).multiply(new BigDecimal(number2.doubleValue()));
+				case DIVIDE:return new BigDecimal(number1.doubleValue()).divide(new BigDecimal(number2.doubleValue()));
+				}
+			}
+		return null;
+	}
+	
+	/*private Number __add__(Number number1,Number number2){
+		if(number1)
+	}*/
+	
+	public Number add(Number number1,Number number2){
+		return operate(number1, number2, Operation.ADD);
+	}
+	
+	public Number subtract(Number number1,Number number2){
+		return operate(number1, number2, Operation.SUBTRACT);
+	}
+	
 	public Collection<Long> getIntegers(Number from,Number to){
 		Collection<Long> integers = new ArrayList<>();
 		for(Long index = from.longValue() ; index <= to.longValue() ; index ++ )
@@ -432,6 +464,6 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 	
 	/**/
 	
-	
+	public static enum Operation {ADD,SUBTRACT,MULTIPLY,DIVIDE}
 	
 }

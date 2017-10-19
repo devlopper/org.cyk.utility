@@ -405,6 +405,10 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return (T) convertedValue;
 	}
 	
+	public String replace(String string,String search,String replacement){
+		return StringUtils.replace(string, search, replacement);
+	}
+	
 	/**/
 	
 	//TODO listener has to be added

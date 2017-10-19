@@ -287,6 +287,15 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 			return this;
 		}
 		
+		public String getDescription(){
+			return get(DESCRIPTION);
+		}
+		
+		public Attributes setDescription(String description){
+			set(DESCRIPTION, description);
+			return this;
+		}
+		
 		public String getPlaceholder(){
 			return get(PLACE_HOLDER);
 		}
@@ -440,6 +449,33 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 			return this;
 		}
 		
+		public String getReadableOnly(){
+			return get(READABLE_ONLY);
+		}
+		
+		public Attributes setReadableOnly(String readableOnly){
+			set(READABLE_ONLY, readableOnly);
+			return this;
+		}
+		
+		public String getReadableOnlyValue(){
+			return get(READABLE_ONLY_VALUE);
+		}
+		
+		public Attributes setReadableOnlyValue(String readableOnlyValue){
+			set(READABLE_ONLY_VALUE, readableOnlyValue);
+			return this;
+		}
+		
+		public String getKeepShowingAsReadableOnly(){
+			return get(KEEP_SHOWING_AS_READABLE_ONLY);
+		}
+		
+		public Attributes setKeepShowingAsReadableOnly(String keepShowingAsReadableOnly){
+			set(KEEP_SHOWING_AS_READABLE_ONLY, keepShowingAsReadableOnly);
+			return this;
+		}
+		
 		public static final String GLOBAL = "GLOBAL";
 		public static final String ROWS = "ROWS";
 		public static final String CLASS = "CLASS";
@@ -463,10 +499,13 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 		public static final String RENDERED = "RENDERED";
 		public static final String REQUIRED = "REQUIRED";
 		public static final String REQUIRED_MESSAGE = "REQUIRED_MESSAGE";
+		public static final String READABLE_ONLY = "READ_ONLY";
+		public static final String READABLE_ONLY_VALUE = "READ_ONLY_VALUE";
 		public static final String UPDATE = "UPDATE";
 		public static final String WIDGET_VAR = "WIDGET_VAR";
 		public static final String FILTER = "FILTER";
 		public static final String LABEL = "LABEL";
+		public static final String DESCRIPTION = "DESCRIPTION";
 		public static final String PLACE_HOLDER = "PLACE_HOLDER";
 		public static final String FILTER_MATCH_MODE = "FILTER_MATCH_MODE";
 		public static final String EMPTY_MESSAGE = "EMPTY_MESSAGE";
@@ -481,6 +520,7 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 		public static final String ROW_STYLE_CLASS = "ROW_STYLE_CLASS";
 		public static final String PAGE_LINKS = "PAGE_LINKS";
 		public static final String PAGINATOR_ALWAYS_VISIBLE = "PAGINATOR_ALWAYS_VISIBLE";
+		public static final String KEEP_SHOWING_AS_READABLE_ONLY = "KEEP_SHOWING_AS_READABLE_ONLY";
 		
 	}
 }
