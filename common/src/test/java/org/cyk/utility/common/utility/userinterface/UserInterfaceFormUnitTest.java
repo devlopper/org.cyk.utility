@@ -1,14 +1,53 @@
-package org.cyk.utility.common;
+package org.cyk.utility.common.utility.userinterface;
 
 import org.cyk.utility.common.model.Area;
-import org.cyk.utility.common.userinterface.Form;
+import org.cyk.utility.common.userinterface.Component.Visible;
+import org.cyk.utility.common.userinterface.container.Container;
+import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.Layout;
+import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputText;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	@Test
+	public void assertFromModel(){
+		Form form = new Form();
+		form.getLayout().setType(Layout.Type.VERTICAL);
+		
+		Form.Detail formDetail = new Form.Detail();
+		formDetail.getLayout().setType(Layout.Type.VERTICAL);
+		
+		InputText c1 = new InputText();
+		InputText c2 = new InputText();
+		InputText c3 = new InputText();
+		InputText c4 = new InputText();
+		
+		formDetail.add(c1,c2,c3,c4);
+		
+		assertArea(c1,0,1,0,1);
+		assertArea(c2,0,1,1,2);
+		assertArea(c3,0,1,2,3);
+		assertArea(c4,0,1,3,4);
+		
+		assertArea(formDetail.getLayout().getArea(),0,1,0,4);
+		
+		form.layOut(formDetail);
+		
+		Container commands = new Container();
+		commands.getLayout().setType(Layout.Type.HORIZONTAL);
+		form.layOut(commands);
+		
+		assertArea(formDetail,0,1,0,1);
+		assertArea(commands,0,1,1,2);
+	}
 	
 	@Test
 	public void assertVerticalLayout(){
@@ -33,8 +72,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	public void assertWithLabelVerticalLayout(){
 		Form.Detail formDetail = new Form.Detail();
 		formDetail.getLayout().setType(Layout.Type.VERTICAL);
-		InputText c1 = new InputText();
-		c1.setLabelString("a");
+		Input<String> c1 = new Input<String>().setLabelFromIdentifier("a");
 		InputText c2 = new InputText();
 		InputText c3 = new InputText();
 		InputText c4 = new InputText();
@@ -126,7 +164,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 		*/
 	}
 	
-	private void assertArea(InputText visible,Integer x1,Integer x2,Integer y1,Integer y2){
+	private void assertArea(Visible visible,Integer x1,Integer x2,Integer y1,Integer y2){
 		assertArea(visible.getArea(), x1, x2, y1, y2);;
 	}
 	
@@ -135,5 +173,12 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 		assertEquals("x2 not correct",x2,area.getLength().getTo().intValue());
 		assertEquals("y1 not correct",y1,area.getWidth().getFrom().intValue());
 		assertEquals("y2 not correct",y2,area.getWidth().getTo().intValue());
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class FormModel {
+		
+		@org.cyk.utility.common.annotation.user.interfaces.Input @org.cyk.utility.common.annotation.user.interfaces.InputText private String f1,f2,f3,f4;
+		
 	}
 }

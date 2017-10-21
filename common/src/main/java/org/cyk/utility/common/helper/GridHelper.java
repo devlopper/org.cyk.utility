@@ -62,7 +62,7 @@ public class GridHelper extends AbstractHelper implements Serializable {
 		protected MapHelper.Map<String,Column<SELECT_ITEM>> columnMap = new MapHelper.Map<String, Column<SELECT_ITEM>>(String.class
 				, (Class<Column<SELECT_ITEM>>) ClassHelper.getInstance().getByName(Column.class));
 		
-		protected MarkupLanguageHelper.Attributes filterInputAttributes = new MarkupLanguageHelper.Attributes();
+		protected org.cyk.utility.common.Properties filterInputAttributes = new org.cyk.utility.common.Properties();
 		protected Collection<Listener<T>> listeners;
 		
 		/**/

@@ -19,18 +19,14 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessBean;
 
-import lombok.Getter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.annotation.BusinessLayer;
 import org.cyk.utility.common.annotation.Deployment;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.Getter;
 
 public class StartupBeanExtension implements Extension {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(StartupBeanExtension.class);
-	
 	@Getter private Set<Class<?>> classes = new HashSet<>();
 	@Getter private Map<Class<? extends Annotation>, Set<Bean<?>>> annotationClasses = new HashMap<>();
 	@Getter private Map<Class<?>, Set<Bean<?>>> implementationClasses = new HashMap<>();
@@ -75,23 +71,23 @@ public class StartupBeanExtension implements Extension {
 			});
 			
 			
-			LOGGER.debug("Eager Deployment of {} bean(s) Starts",beans.size());
+			//LOGGER.debug("Eager Deployment of {} bean(s) Starts",beans.size());
 			for (Bean<?> bean : beans) {
 				Deployment deployment = bean.getBeanClass().getAnnotation(Deployment.class);
 				if(Deployment.InitialisationType.EAGER.equals(deployment.initialisationType())){
-					String m = "\t\t("+deployment.order()+") *"+bean.getBeanClass().getName();
+					//String m = "\t\t("+deployment.order()+") *"+bean.getBeanClass().getName();
 					try {
 						Object object = beanManager.getReference(bean, bean.getBeanClass(),beanManager.createCreationalContext(bean));
 						// the call to toString() is a cheat to force the bean to be initialized
 						object.toString();
 						references.add(object);
-						LOGGER.debug(m+" : OK");
+						//LOGGER.debug(m+" : OK");
 					} catch (Exception e) {
-						LOGGER.error("Cannot eager deploy "+m,e);
+						//LOGGER.error("Cannot eager deploy "+m,e);
 					}
 				}
 			}
-			LOGGER.debug("Eager Deployment Ends");
+			//LOGGER.debug("Eager Deployment Ends");
 		}
 			
 		return references;

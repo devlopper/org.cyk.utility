@@ -28,7 +28,7 @@ public class MarkupLanguageHelper extends AbstractHelper implements Serializable
 	}
 	
 	/**/
-	
+	@Deprecated
 	public static class Attributes extends MapHelper.Map<String, String> implements Serializable {
 		private static final long serialVersionUID = 1L;
 		

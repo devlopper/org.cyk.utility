@@ -1,6 +1,9 @@
-package org.cyk.utility.common.userinterface;
+package org.cyk.utility.common.userinterface.container;
 
 import java.io.Serializable;
+
+import org.cyk.utility.common.userinterface.Component;
+import org.cyk.utility.common.userinterface.Layout;
 
 import lombok.Getter;
 import lombok.Setter;

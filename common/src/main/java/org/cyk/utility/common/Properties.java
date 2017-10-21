@@ -179,7 +179,7 @@ public class Properties implements java.io.Serializable {
 		return get(IDENTIFIER);
 	}
 	
-	public Properties setIdentifier(String identifier){
+	public Properties setIdentifier(Object identifier){
 		set(IDENTIFIER, identifier);
 		return this;
 	}
@@ -188,7 +188,7 @@ public class Properties implements java.io.Serializable {
 		return get(CLASS);
 	}
 	
-	public Properties setClass(String aClass){
+	public Properties setClass(Object aClass){
 		set(CLASS, aClass);
 		return this;
 	}
@@ -197,7 +197,7 @@ public class Properties implements java.io.Serializable {
 		return get(STYLE);
 	}
 	
-	public Properties setStyle(String style){
+	public Properties setStyle(Object style){
 		set(STYLE, style);
 		return this;
 	}
@@ -206,7 +206,7 @@ public class Properties implements java.io.Serializable {
 		return get(STYLE_CLASS);
 	}
 	
-	public Properties setStyleClass(String styleClass){
+	public Properties setStyleClass(Object styleClass){
 		set(STYLE_CLASS, styleClass);
 		return this;
 	}
@@ -215,7 +215,7 @@ public class Properties implements java.io.Serializable {
 		return get(TITLE);
 	}
 	
-	public Properties setTitle(String title){
+	public Properties setTitle(Object title){
 		set(TITLE, title);
 		return this;
 	}
@@ -224,7 +224,7 @@ public class Properties implements java.io.Serializable {
 		return get(ON_CLICK);
 	}
 	
-	public Properties setOnClick(String onClick){
+	public Properties setOnClick(Object onClick){
 		set(ON_CLICK, onClick);
 		return this;
 	}
@@ -233,7 +233,7 @@ public class Properties implements java.io.Serializable {
 		return get(ON_CHANGE);
 	}
 	
-	public Properties setOnChange(String onChange){
+	public Properties setOnChange(Object onChange){
 		set(ON_CHANGE, onChange);
 		return this;
 	}
@@ -242,7 +242,7 @@ public class Properties implements java.io.Serializable {
 		return get(ON_COMPLETE);
 	}
 	
-	public Properties setOnComplete(String onComplete){
+	public Properties setOnComplete(Object onComplete){
 		set(ON_COMPLETE, onComplete);
 		return this;
 	}
@@ -251,7 +251,7 @@ public class Properties implements java.io.Serializable {
 		return get(ACTION);
 	}
 	
-	public Properties setAction(String action){
+	public Properties setAction(Object action){
 		set(ACTION, action);
 		return this;
 	}
@@ -260,7 +260,7 @@ public class Properties implements java.io.Serializable {
 		return get(AJAX);
 	}
 	
-	public Properties setAjax(String ajax){
+	public Properties setAjax(Object ajax){
 		set(AJAX, ajax);
 		return this;
 	}
@@ -269,7 +269,7 @@ public class Properties implements java.io.Serializable {
 		return get(DISABLED);
 	}
 	
-	public Properties setDisabled(String disabled){
+	public Properties setDisabled(Object disabled){
 		set(DISABLED, disabled);
 		return this;
 	}
@@ -278,7 +278,7 @@ public class Properties implements java.io.Serializable {
 		return get(TYPE);
 	}
 	
-	public Properties setType(String type){
+	public Properties setType(Object type){
 		set(TYPE, type);
 		return this;
 	}
@@ -287,7 +287,7 @@ public class Properties implements java.io.Serializable {
 		return get(ICON);
 	}
 	
-	public Properties setIcon(String icon){
+	public Properties setIcon(Object icon){
 		set(ICON, icon);
 		return this;
 	}
@@ -296,7 +296,7 @@ public class Properties implements java.io.Serializable {
 		return get(IMMEDIATE);
 	}
 	
-	public Properties setImmediate(String immediate){
+	public Properties setImmediate(Object immediate){
 		set(IMMEDIATE, immediate);
 		return this;
 	}
@@ -305,7 +305,7 @@ public class Properties implements java.io.Serializable {
 		return get(PROCESS);
 	}
 	
-	public Properties setProcess(String process){
+	public Properties setProcess(Object process){
 		set(PROCESS, process);
 		return this;
 	}
@@ -314,7 +314,7 @@ public class Properties implements java.io.Serializable {
 	public Object getRendered(){
 		return get(RENDERED);
 	}
-	public Properties setRendered(String rendered){
+	public Properties setRendered(Object rendered){
 		set(RENDERED, rendered);
 		return this;
 	}
@@ -323,7 +323,7 @@ public class Properties implements java.io.Serializable {
 		return get(REQUIRED);
 	}
 	
-	public Properties setRequired(String required){
+	public Properties setRequired(Object required){
 		set(REQUIRED, required);
 		return this;
 	}
@@ -332,7 +332,7 @@ public class Properties implements java.io.Serializable {
 		return get(REQUIRED_MESSAGE);
 	}
 	
-	public Properties setRequiredMessage(String requiredMessage){
+	public Properties setRequiredMessage(Object requiredMessage){
 		set(REQUIRED_MESSAGE, requiredMessage);
 		return this;
 	}
@@ -341,7 +341,7 @@ public class Properties implements java.io.Serializable {
 		return get(UPDATE);
 	}
 	
-	public Properties setUpdate(String update){
+	public Properties setUpdate(Object update){
 		set(UPDATE, update);
 		return this;
 	}
@@ -350,7 +350,7 @@ public class Properties implements java.io.Serializable {
 		return get(WIDGET_VAR);
 	}
 	
-	public Properties setWidgetVar(String widgetVar){
+	public Properties setWidgetVar(Object widgetVar){
 		set(WIDGET_VAR, widgetVar);
 		return this;
 	}
@@ -359,7 +359,7 @@ public class Properties implements java.io.Serializable {
 		return get(VALIDATABLE);
 	}
 	
-	public Properties setValidatable(String validatable){
+	public Properties setValidatable(Object validatable){
 		set(VALIDATABLE, validatable);
 		return this;
 	}
@@ -368,7 +368,7 @@ public class Properties implements java.io.Serializable {
 		return get(FILTER);
 	}
 	
-	public Properties setFilter(String filter){
+	public Properties setFilter(Object filter){
 		set(FILTER, filter);
 		return this;
 	}
@@ -377,7 +377,7 @@ public class Properties implements java.io.Serializable {
 		return get(FILTER_MATCH_MODE);
 	}
 	
-	public Properties setFilterMatchMode(String filterMatchMode){
+	public Properties setFilterMatchMode(Object filterMatchMode){
 		set(FILTER_MATCH_MODE, filterMatchMode);
 		return this;
 	}
@@ -386,7 +386,7 @@ public class Properties implements java.io.Serializable {
 		return get(LABEL);
 	}
 	
-	public Properties setLabel(String label){
+	public Properties setLabel(Object label){
 		set(LABEL, label);
 		return this;
 	}
@@ -395,7 +395,7 @@ public class Properties implements java.io.Serializable {
 		return get(DESCRIPTION);
 	}
 	
-	public Properties setDescription(String description){
+	public Properties setDescription(Object description){
 		set(DESCRIPTION, description);
 		return this;
 	}
@@ -404,7 +404,7 @@ public class Properties implements java.io.Serializable {
 		return get(PLACE_HOLDER);
 	}
 	
-	public Properties setPlaceholder(String placeHolder){
+	public Properties setPlaceholder(Object placeHolder){
 		set(PLACE_HOLDER, placeHolder);
 		return this;
 	}
@@ -413,7 +413,7 @@ public class Properties implements java.io.Serializable {
 		return get(VALUE);
 	}
 	
-	public Properties setValue(String value){
+	public Properties setValue(Object value){
 		set(VALUE, value);
 		return this;
 	}
@@ -422,7 +422,7 @@ public class Properties implements java.io.Serializable {
 		return get(ESCAPE);
 	}
 	
-	public Properties setEscape(String escape){
+	public Properties setEscape(Object escape){
 		set(ESCAPE, escape);
 		return this;
 	}
@@ -431,7 +431,7 @@ public class Properties implements java.io.Serializable {
 		return get(EMPTY_MESSAGE);
 	}
 	
-	public Properties setEmptyMessage(String emptyMessage){
+	public Properties setEmptyMessage(Object emptyMessage){
 		set(EMPTY_MESSAGE, emptyMessage);
 		return this;
 	}
@@ -440,7 +440,7 @@ public class Properties implements java.io.Serializable {
 		return get(SORT_MODE);
 	}
 	
-	public Properties setSortMode(String sortMode){
+	public Properties setSortMode(Object sortMode){
 		set(SORT_MODE, sortMode);
 		return this;
 	}
@@ -449,7 +449,7 @@ public class Properties implements java.io.Serializable {
 		return get(REFLOW);
 	}
 	
-	public Properties setReflow(String reflow){
+	public Properties setReflow(Object reflow){
 		set(REFLOW, reflow);
 		return this;
 	}
@@ -458,7 +458,7 @@ public class Properties implements java.io.Serializable {
 		return get(LAZY);
 	}
 	
-	public Properties setLazy(String lazy){
+	public Properties setLazy(Object lazy){
 		set(LAZY, lazy);
 		return this;
 	}
@@ -467,7 +467,7 @@ public class Properties implements java.io.Serializable {
 		return get(PAGINATOR);
 	}
 	
-	public Properties setPaginator(String paginator){
+	public Properties setPaginator(Object paginator){
 		set(PAGINATOR, paginator);
 		return this;
 	}
@@ -476,7 +476,7 @@ public class Properties implements java.io.Serializable {
 		return get(PAGINATOR_POSITION);
 	}
 	
-	public Properties setPaginatorPosition(String paginatorPosition){
+	public Properties setPaginatorPosition(Object paginatorPosition){
 		set(PAGINATOR_POSITION, paginatorPosition);
 		return this;
 	}
@@ -485,7 +485,7 @@ public class Properties implements java.io.Serializable {
 		return get(PAGINATOR_TEMPLATE);
 	}
 	
-	public Properties setPaginatorTemplate(String paginatorTemplate){
+	public Properties setPaginatorTemplate(Object paginatorTemplate){
 		set(PAGINATOR_TEMPLATE, paginatorTemplate);
 		return this;
 	}
@@ -494,7 +494,7 @@ public class Properties implements java.io.Serializable {
 		return get(CURRENT_PAGE_REPORT_TEMPLATE);
 	}
 	
-	public Properties setCurrentPageReportTemplate(String currentPageReportTemplate){
+	public Properties setCurrentPageReportTemplate(Object currentPageReportTemplate){
 		set(CURRENT_PAGE_REPORT_TEMPLATE, currentPageReportTemplate);
 		return this;
 	}
@@ -503,7 +503,7 @@ public class Properties implements java.io.Serializable {
 		return get(TABLE_STYLE_CLASS);
 	}
 	
-	public Properties setTableStyleClass(String tableStyleClass){
+	public Properties setTableStyleClass(Object tableStyleClass){
 		set(TABLE_STYLE_CLASS, tableStyleClass);
 		return this;
 	}
@@ -512,7 +512,7 @@ public class Properties implements java.io.Serializable {
 		return get(ROW_STYLE_CLASS);
 	}
 	
-	public Properties setRowStyleClass(String rowStyleClass){
+	public Properties setRowStyleClass(Object rowStyleClass){
 		set(ROW_STYLE_CLASS, rowStyleClass);
 		return this;
 	}
@@ -521,7 +521,7 @@ public class Properties implements java.io.Serializable {
 		return get(PAGINATOR_ALWAYS_VISIBLE);
 	}
 	
-	public Properties setPaginatorAlwaysVisible(String paginatorAlwaysVisible){
+	public Properties setPaginatorAlwaysVisible(Object paginatorAlwaysVisible){
 		set(PAGINATOR_ALWAYS_VISIBLE, paginatorAlwaysVisible);
 		return this;
 	}
@@ -530,7 +530,7 @@ public class Properties implements java.io.Serializable {
 		return get(PAGE_LINKS);
 	}
 	
-	public Properties setPageLinks(String pageLinks){
+	public Properties setPageLinks(Object pageLinks){
 		set(PAGE_LINKS, pageLinks);
 		return this;
 	}
@@ -539,7 +539,7 @@ public class Properties implements java.io.Serializable {
 		return get(ROWS);
 	}
 	
-	public Properties setRows(String rows){
+	public Properties setRows(Object rows){
 		set(ROWS, rows);
 		return this;
 	}
@@ -548,7 +548,7 @@ public class Properties implements java.io.Serializable {
 		return get(GLOBAL);
 	}
 	
-	public Properties setGlobal(String global){
+	public Properties setGlobal(Object global){
 		set(GLOBAL, global);
 		return this;
 	}
@@ -557,7 +557,7 @@ public class Properties implements java.io.Serializable {
 		return get(READABLE_ONLY);
 	}
 	
-	public Properties setReadableOnly(String readableOnly){
+	public Properties setReadableOnly(Object readableOnly){
 		set(READABLE_ONLY, readableOnly);
 		return this;
 	}
@@ -566,7 +566,7 @@ public class Properties implements java.io.Serializable {
 		return get(READABLE_ONLY_VALUE);
 	}
 	
-	public Properties setReadableOnlyValue(String readableOnlyValue){
+	public Properties setReadableOnlyValue(Object readableOnlyValue){
 		set(READABLE_ONLY_VALUE, readableOnlyValue);
 		return this;
 	}
@@ -575,7 +575,7 @@ public class Properties implements java.io.Serializable {
 		return get(KEEP_SHOWING_AS_READABLE_ONLY);
 	}
 	
-	public Properties setKeepShowingAsReadableOnly(String keepShowingAsReadableOnly){
+	public Properties setKeepShowingAsReadableOnly(Object keepShowingAsReadableOnly){
 		set(KEEP_SHOWING_AS_READABLE_ONLY, keepShowingAsReadableOnly);
 		return this;
 	}
@@ -584,8 +584,98 @@ public class Properties implements java.io.Serializable {
 		return get(NAME);
 	}
 	
-	public Properties setName(String name){
+	public Properties setName(Object name){
 		set(NAME, name);
+		return this;
+	}
+	
+	public Object getInputValueIsNotRequired(){
+		return get(INPUT_VALUE_IS_NOT_REQUIRED);
+	}
+	
+	public Properties setInputValueIsNotRequired(Object inputValueIsNotRequired){
+		set(INPUT_VALUE_IS_NOT_REQUIRED, inputValueIsNotRequired);
+		return this;
+	}
+	
+	public Object getConfirmable(){
+		return get(CONFIRMABLE);
+	}
+	
+	public Properties setConfirmable(Object confirmable){
+		set(CONFIRMABLE, confirmable);
+		return this;
+	}
+	
+	public Object getOptions(){
+		return get(OPTIONS);
+	}
+	
+	public Properties setOptions(Object options){
+		set(OPTIONS, options);
+		return this;
+	}
+	
+	public Object getFullPage(){
+		return get(FULL_PAGE);
+	}
+	
+	public Properties setFullPage(Object fullPage){
+		set(FULL_PAGE, fullPage);
+		return this;
+	}
+	
+	public Object getPosition() {
+		return get(POSITION);
+	}
+
+	public Properties setPosition(Object value) {
+		set(POSITION, value);
+		return this;
+	}
+	
+	public Object getStyleClassContent() {
+		return get(STYLE_CLASS_CONTENT);
+	}
+
+	public Properties setStyleClassContent(Object value) {
+		set(STYLE_CLASS_CONTENT, value);
+		return this;
+	}
+	
+	public Object getEnctype() {
+		return get(ENCTYPE);
+	}
+
+	public Properties setEnctype(Object value) {
+		set(ENCTYPE, value);
+		return this;
+	}
+	
+	public Object getResizable() {
+		return get(RESIZABLE);
+	}
+
+	public Properties setResizable(Object value) {
+		set(RESIZABLE, value);
+		return this;
+	}
+	
+	public Object getClosable() {
+		return get(CLOSABLE);
+	}
+
+	public Properties setClosable(Object value) {
+		set(CLOSABLE, value);
+		return this;
+	}
+	
+	public Object getInclude() {
+		return get(INCLUDE);
+	}
+
+	public Properties setInclude(Object value) {
+		set(INCLUDE, value);
 		return this;
 	}
 	
@@ -635,4 +725,14 @@ public class Properties implements java.io.Serializable {
 	public static final String PAGE_LINKS = "PAGE_LINKS";
 	public static final String PAGINATOR_ALWAYS_VISIBLE = "PAGINATOR_ALWAYS_VISIBLE";
 	public static final String KEEP_SHOWING_AS_READABLE_ONLY = "KEEP_SHOWING_AS_READABLE_ONLY";
+	public static final String INPUT_VALUE_IS_NOT_REQUIRED = "INPUT_VALUE_IS_NOT_REQUIRED";
+	public static final String CONFIRMABLE = "CONFIRMABLE";
+	public static final String OPTIONS = "OPTIONS";
+	public static final String FULL_PAGE = "FULL_PAGE";
+	public static final String STYLE_CLASS_CONTENT = "STYLE_CLASS_CONTENT";
+	public static final String POSITION = "POSITION";
+	public static final String ENCTYPE = "ENCTYPE";
+	public static final String RESIZABLE = "RESIZABLE";
+	public static final String CLOSABLE = "CLOSABLE";
+	public static final String INCLUDE = "INCLUDE";
 }

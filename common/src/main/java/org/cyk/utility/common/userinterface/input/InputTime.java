@@ -11,14 +11,14 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public class InputDate extends Input<Date> implements Serializable {
+public class InputTime extends Input<Date> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/**/
 
-	public static interface BuilderBase<OUTPUT extends InputDate> extends Input.BuilderBase<OUTPUT> {
+	public static interface BuilderBase<OUTPUT extends InputTime> extends Input.BuilderBase<OUTPUT> {
 
-		public static class Adapter<OUTPUT extends InputDate> extends Control.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {
+		public static class Adapter<OUTPUT extends InputTime> extends Control.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {
 			private static final long serialVersionUID = 1L;
 
 			public Adapter(Class<OUTPUT> outputClass) {
@@ -27,7 +27,7 @@ public class InputDate extends Input<Date> implements Serializable {
 
 			/**/
 
-			public static class Default<OUTPUT extends InputDate> extends BuilderBase.Adapter<OUTPUT> implements Serializable {
+			public static class Default<OUTPUT extends InputTime> extends BuilderBase.Adapter<OUTPUT> implements Serializable {
 				private static final long serialVersionUID = 1L;
 
 				public Default(Class<OUTPUT> outputClass) {
@@ -37,14 +37,14 @@ public class InputDate extends Input<Date> implements Serializable {
 		}
 	}
 	
-	public static interface Builder extends BuilderBase<InputDate> {
+	public static interface Builder extends BuilderBase<InputTime> {
 
-		public static class Adapter extends BuilderBase.Adapter.Default<InputDate> implements Builder, Serializable {
+		public static class Adapter extends BuilderBase.Adapter.Default<InputTime> implements Builder, Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@SuppressWarnings("unchecked")
 			public Adapter() {
-				super((Class<InputDate>) ClassHelper.getInstance().getByName(InputDate.class));
+				super((Class<InputTime>) ClassHelper.getInstance().getByName(InputTime.class));
 			}
 
 			/**/

@@ -52,14 +52,14 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 //TODO some method must be moved to their corresponding helper
 public class CommonUtils implements Serializable  {
 
 	private static final long serialVersionUID = -6146661020703974108L;
-	private static final Logger LOGGER = LoggerFactory.getLogger(CommonUtils.class);
+	private static final org.apache.logging.log4j.Logger LOGGER = org.apache.logging.log4j.LogManager.getLogger(CommonUtils.class);
 	private static final Map<String,Class<?>> CLASSES_MAP = new HashMap<String, Class<?>>();
 
 	@SuppressWarnings("unchecked")

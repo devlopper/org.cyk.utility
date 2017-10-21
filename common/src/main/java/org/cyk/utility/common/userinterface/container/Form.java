@@ -1,4 +1,4 @@
-package org.cyk.utility.common.userinterface;
+package org.cyk.utility.common.userinterface.container;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -8,6 +8,8 @@ import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
+import org.cyk.utility.common.userinterface.Component;
+import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.output.OutputText;
 

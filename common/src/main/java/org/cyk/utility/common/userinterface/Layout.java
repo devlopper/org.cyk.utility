@@ -11,6 +11,7 @@ import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.model.Area;
 import org.cyk.utility.common.model.Interval;
+import org.cyk.utility.common.userinterface.container.Container;
 import org.cyk.utility.common.userinterface.input.Input;
 
 import lombok.Getter;
