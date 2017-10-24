@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.inject.Singleton;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
@@ -47,6 +48,10 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public String getPath(String fileName){
+		return FilenameUtils.getFullPath(fileName);
 	}
 	
 	/**/

@@ -2,6 +2,7 @@ package org.cyk.utility.common.cdi;
 
 import java.io.Serializable;
 
+@Deprecated
 public class BeanAdapter extends AbstractBean implements BeanListener,Serializable {
 
 	private static final long serialVersionUID = 7673343587983459174L;
@@ -20,5 +21,11 @@ public class BeanAdapter extends AbstractBean implements BeanListener,Serializab
 
 	@Override
 	public void afterInitialisationEnded(AbstractBean bean) {}
+
+	@Override
+	public void instanciated(AbstractBean instance) {}
+
+	@Override
+	public void propertiesMapInstanciated(AbstractBean instance) {}
 
 }

@@ -4,10 +4,14 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.RandomHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.model.Area;
+import org.cyk.utility.common.userinterface.output.OutputText;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +25,15 @@ public class Component extends AbstractBean implements Serializable {
 	
 	/**/
 
+	public Component() {
+		
+	}
+	
+	@Override
+	protected Properties instanciateProperties() {
+		return super.instanciateProperties().setIdentifier(RandomHelper.getInstance().getAlphabetic(5)).setRendered(Boolean.TRUE);
+	}
+	
 	public Component addOneChild(Component component){
 		if(children == null)
 			children = instanciateChildrenCollection();
@@ -94,10 +107,25 @@ public class Component extends AbstractBean implements Serializable {
 	public static class Visible extends Component implements Serializable {
 		private static final long serialVersionUID = 1L;
 
-		private Area area = new Area();
+		protected Area area = new Area();
+		protected OutputText label;
 		
 		/**/
+		
+		public OutputText getLabel(){
+			if(label == null)
+				label = new OutputText();
+			return label;
+		}
 
+		public Visible setLabelFromIdentifier(String identifier){
+			if(StringHelper.getInstance().isBlank(identifier))
+				getLabel().getPropertiesMap().setValue(null);
+			else
+				getLabel().getPropertiesMap().setValue(StringHelper.getInstance().get(identifier, new Object[]{}));
+			return this;
+		}
+		
 		public Visible setLength(Number length){
 			getArea().getLength().setDistance(length);
 			return this;

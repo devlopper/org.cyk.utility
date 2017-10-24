@@ -25,7 +25,6 @@ public class Input<T> extends Control implements Serializable {
 	private Field field;
 	private T value,initialValue;
 
-	private OutputText label;
 	private CardinalPoint labelCardinalPoint;
 	
 	private CardinalPoint messageCardinalPoint;
@@ -54,14 +53,9 @@ public class Input<T> extends Control implements Serializable {
 		return this;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Input<T> setLabelFromIdentifier(String identifier){
-		if(label == null)
-			label = new OutputText();
-		if(StringHelper.getInstance().isBlank(identifier))
-			label.getPropertiesMap().setValue(null);
-		else
-			label.getPropertiesMap().setValue(StringHelper.getInstance().get(identifier, new Object[]{}));
-		return this;
+		return (Input<T>) super.setLabelFromIdentifier(identifier);
 	}
 	
 	@SuppressWarnings("unchecked")

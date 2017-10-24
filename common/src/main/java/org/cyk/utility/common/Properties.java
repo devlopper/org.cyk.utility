@@ -2,8 +2,11 @@ package org.cyk.utility.common;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.cyk.utility.common.helper.ArrayHelper;
@@ -19,6 +22,14 @@ public class Properties implements java.io.Serializable {
 	//private Object doubleStringValueSeparator = StringUtils.repeat(stringValueSeparator.toString(), 2);
 	
 	/**/
+		
+	public static void setDefaultValues(Class<?> aClass,Properties properties){
+		Map<Object,Object> map = DEFAULT_VALUES.get(aClass);
+		if(map != null){
+			for(Entry<Object, Object> entry : map.entrySet())
+				properties.set(entry.getKey(), entry.getValue());
+		}
+	}
 	
 	/* set */
 	
@@ -679,7 +690,372 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getTemplate() {
+		return get(TEMPLATE);
+	}
+
+	public Properties setTemplate(Object value) {
+		set(TEMPLATE, value);
+		return this;
+	}
+	
+	public Object getContracts() {
+		return get(CONTRACTS);
+	}
+
+	public Properties setContracts(Object value) {
+		set(CONTRACTS, value);
+		return this;
+	}
+	
+	public Object getNorth() {
+		return get(NORTH);
+	}
+
+	public Properties setNorth(Object value) {
+		set(NORTH, value);
+		return this;
+	}
+	
+	public Object getEast() {
+		return get(EAST);
+	}
+
+	public Properties setEast(Object value) {
+		set(EAST, value);
+		return this;
+	}
+	
+	public Object getSouth() {
+		return get(SOUTH);
+	}
+
+	public Properties setSouth(Object value) {
+		set(SOUTH, value);
+		return this;
+	}
+	
+	public Object getWest() {
+		return get(WEST);
+	}
+
+	public Properties setWest(Object value) {
+		set(WEST, value);
+		return this;
+	}
+	
+	public Object getCenter() {
+		return get(CENTER);
+	}
+
+	public Properties setCenter(Object value) {
+		set(CENTER, value);
+		return this;
+	}
+	
+	public Object getLayout() {
+		return get(LAYOUT);
+	}
+
+	public Properties setLayout(Object value) {
+		set(LAYOUT, value);
+		return this;
+	}
+	
+	public Object getHeader() {
+		return get(HEADER);
+	}
+
+	public Properties setHeader(Object value) {
+		set(HEADER, value);
+		return this;
+	}
+	
+	public Object getBody() {
+		return get(BODY);
+	}
+
+	public Properties setBody(Object value) {
+		set(BODY, value);
+		return this;
+	}
+	
+	public Object getFooter() {
+		return get(FOOTER);
+	}
+
+	public Properties setFooter(Object value) {
+		set(FOOTER, value);
+		return this;
+	}
+	
+	public Object getFor() {
+		return get(FOR);
+	}
+
+	public Properties setFor(Object value) {
+		set(FOR, value);
+		return this;
+	}
+	
+	public Object getValidator() {
+		return get(VALIDATOR);
+	}
+
+	public Properties setValidator(Object value) {
+		set(VALIDATOR, value);
+		return this;
+	}
+	
+	public Object getConverter() {
+		return get(CONVERTER);
+	}
+
+	public Properties setConverter(Object value) {
+		set(CONVERTER, value);
+		return this;
+	}
+	
+	public Object getMessage() {
+		return get(MESSAGE);
+	}
+
+	public Properties setMessage(Object value) {
+		set(MESSAGE, value);
+		return this;
+	}
+	
+	public Object getAppendTo() {
+		return get(APPEND_TO);
+	}
+
+	public Properties setAppendTo(Object value) {
+		set(APPEND_TO, value);
+		return this;
+	}
+	
+	public Object getCloseOnEscape() {
+		return get(CLOSE_ON_ESCAPE);
+	}
+
+	public Properties setCloseOnEscape(Object value) {
+		set(CLOSE_ON_ESCAPE, value);
+		return this;
+	}
+	
+	public Object getResponsive() {
+		return get(RESPONSIVE);
+	}
+
+	public Properties setResponsive(Object value) {
+		set(RESPONSIVE, value);
+		return this;
+	}
+	
+	public Object getSeverity() {
+		return get(SEVERITY);
+	}
+
+	public Properties setSeverity(Object value) {
+		set(SEVERITY, value);
+		return this;
+	}
+	
+	public Object getShowEffect() {
+		return get(SHOW_EFFECT);
+	}
+
+	public Properties setShowEffect(Object value) {
+		set(SHOW_EFFECT, value);
+		return this;
+	}
+	
+	public Object getVisible() {
+		return get(VISIBLE);
+	}
+
+	public Properties setVisible(Object value) {
+		set(VISIBLE, value);
+		return this;
+	}
+	
+	public Object getHeight() {
+		return get(HEIGHT);
+	}
+
+	public Properties setHeight(Object value) {
+		set(HEIGHT, value);
+		return this;
+	}
+	
+	public Object getWidth() {
+		return get(WIDTH);
+	}
+
+	public Properties setWidth(Object value) {
+		set(WIDTH, value);
+		return this;
+	}
+	
+	public Object getHideEffect() {
+		return get(HIDE_EFFECT);
+	}
+
+	public Properties setHideEffect(Object value) {
+		set(HIDE_EFFECT, value);
+		return this;
+	}
+	
+	public Object getClose() {
+		return get(CLOSE);
+	}
+
+	public Properties setClose(Object value) {
+		set(CLOSE, value);
+		return this;
+	}
+	
+	public Object getDraggable() {
+		return get(DRAGGABLE);
+	}
+
+	public Properties setDraggable(Object value) {
+		set(DRAGGABLE, value);
+		return this;
+	}
+	
+	public Object getDynamic() {
+		return get(DYNAMIC);
+	}
+
+	public Properties setDynamic(Object value) {
+		set(DYNAMIC, value);
+		return this;
+	}
+	
+	public Object getFitViewport() {
+		return get(FIT_VIEWPORT);
+	}
+
+	public Properties setFitViewport(Object value) {
+		set(FIT_VIEWPORT, value);
+		return this;
+	}
+	
+	public Object getFocus() {
+		return get(FOCUS);
+	}
+
+	public Properties setFocus(Object value) {
+		set(FOCUS, value);
+		return this;
+	}
+	
+	public Object getMaximizable() {
+		return get(MAXIMIZABLE);
+	}
+
+	public Properties setMaximizable(Object value) {
+		set(MAXIMIZABLE, value);
+		return this;
+	}
+	
+	public Object getMinHeight() {
+		return get(MIN_HEIGHT);
+	}
+
+	public Properties setMinHeight(Object value) {
+		set(MIN_HEIGHT, value);
+		return this;
+	}
+	
+	public Object getMinWidth() {
+		return get(MIN_WIDTH);
+	}
+
+	public Properties setMinWidth(Object value) {
+		set(MIN_WIDTH, value);
+		return this;
+	}
+	
+	public Object getModal() {
+		return get(MODAL);
+	}
+
+	public Properties setModal(Object value) {
+		set(MODAL, value);
+		return this;
+	}
+	
+	public Object getOnHide() {
+		return get(ON_HIDE);
+	}
+
+	public Properties setOnHide(Object value) {
+		set(ON_HIDE, value);
+		return this;
+	}
+	
+	public Object getOnShow() {
+		return get(ON_SHOW);
+	}
+
+	public Properties setOnShow(Object value) {
+		set(ON_SHOW, value);
+		return this;
+	}
+	
+	public Object getPositionType() {
+		return get(POSITION_TYPE);
+	}
+
+	public Properties setPositionType(Object value) {
+		set(POSITION_TYPE, value);
+		return this;
+	}
+	
+	public Object getShowHeader() {
+		return get(SHOW_HEADER);
+	}
+
+	public Properties setShowHeader(Object value) {
+		set(SHOW_HEADER, value);
+		return this;
+	}
+	
+	public Object getMinimizable() {
+		return get(MINIMIZABLE);
+	}
+
+	public Properties setMinimizable(Object value) {
+		set(MINIMIZABLE, value);
+		return this;
+	}
+	
+	public static final String DRAGGABLE = "DRAGGABLE";
+	public static final String DYNAMIC = "DYNAMIC";
+	public static final String FIT_VIEWPORT = "FIT_VIEWPORT";
+	public static final String FOCUS = "FOCUS";
+	public static final String MAXIMIZABLE = "MAXIMIZABLE";
+	public static final String MIN_HEIGHT = "MIN_HEIGHT";
+	public static final String MINIMIZABLE = "MINIMIZABLE";
+	public static final String MIN_WIDTH = "MIN_WIDTH";
+	public static final String MODAL = "MODAL";
+	public static final String ON_HIDE = "ON_HIDE";
+	public static final String ON_SHOW = "ON_SHOW";
+	public static final String POSITION_TYPE = "POSITION_TYPE";
+	public static final String SHOW_HEADER = "SHOW_HEADER";
+	public static final String RESPONSIVE = "RESPONSIVE";
+	public static final String SEVERITY = "SEVERITY";
+	public static final String SHOW_EFFECT = "SHOW_EFFECT";
+	public static final String VISIBLE = "VISIBLE";
+	public static final String HEIGHT = "HEIGHT";
+	public static final String WIDTH = "WIDTH";
+	public static final String APPEND_TO = "APPEND_TO";
+	public static final String CLOSE = "CLOSE";
+	public static final String CLOSE_ON_ESCAPE = "CLOSE_ON_ESCAPE";
 	public static final String NAME = "NAME";
+	public static final String HIDE_EFFECT = "HIDE_EFFECT";
 	public static final String GLOBAL = "GLOBAL";
 	public static final String ROWS = "ROWS";
 	public static final String CLASS = "CLASS";
@@ -735,4 +1111,47 @@ public class Properties implements java.io.Serializable {
 	public static final String RESIZABLE = "RESIZABLE";
 	public static final String CLOSABLE = "CLOSABLE";
 	public static final String INCLUDE = "INCLUDE";
+	public static final String TEMPLATE = "TEMPLATE";
+	public static final String CONTRACTS = "CONTRACTS";
+	public static final String NORTH = "NORTH";
+	public static final String EAST = "EAST";
+	public static final String SOUTH = "SOUTH";
+	public static final String WEST = "WEST";
+	public static final String CENTER = "CENTER";
+	public static final String LAYOUT = "LAYOUT";
+	public static final String HEADER = "HEADER";
+	public static final String BODY = "BODY";
+	public static final String FOOTER = "FOOTER";
+	public static final String FOR = "FOR";
+	public static final String VALIDATOR = "VALIDATOR";
+	public static final String CONVERTER = "CONVERTER";
+	public static final String MESSAGE = "MESSAGE";
+	
+	/**/
+	
+	private static final Map<Class<?>,Map<Object,Object>> DEFAULT_VALUES = new HashMap<Class<?>,Map<Object,Object>>();
+	
+	public static void setDefaultValue(Class<?> aClass,Object name,Object value){
+		if(aClass!=null && name!=null){
+			Map<Object,Object> map = DEFAULT_VALUES.get(aClass);
+			if(map == null)
+				DEFAULT_VALUES.put(aClass, map = new HashMap<Object, Object>());
+			map.put(name, value);	
+		}
+	}
+	
+	public static Object getDefaultValue(Class<?> aClass,Object name){
+		Object value = null;
+		if(aClass!=null && name!=null){
+			Map<Object,Object> map = DEFAULT_VALUES.get(aClass);
+			if(map != null)
+				value = map.get(name);	
+		}
+		return value;
+	}
+	
+	@Override
+	public String toString() {
+		return map.toString();
+	}
 }

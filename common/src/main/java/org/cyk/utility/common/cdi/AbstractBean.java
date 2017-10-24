@@ -67,7 +67,15 @@ public class AbstractBean implements Serializable {
 	
 	public Properties getPropertiesMap() {
 		if(propertiesMap==null)
-			propertiesMap = new Properties();
+			propertiesMap = instanciateProperties();
+		return propertiesMap;
+	}
+	
+	protected Properties instanciateProperties(){
+		Properties propertiesMap = new Properties();
+		Properties.setDefaultValues(getClass(), propertiesMap);
+		for(BeanListener listener : BeanListener.COLLECTION)
+			listener.propertiesMapInstanciated(this);
 		return propertiesMap;
 	}
 	
@@ -401,4 +409,16 @@ public class AbstractBean implements Serializable {
 	protected void throwNotYetImplemented(){
 		throw new RuntimeException("Not yet implemented");
 	}
+	
+	/**/
+	
+	/*public static interface BeanListener {
+		
+		Collection<BeanListener> COLLECTION = new ArrayList<BeanListener>();
+		
+		void instanciated(AbstractBean instance);
+		
+		void propertiesMapInstanciated(AbstractBean instance);
+		
+	}*/
 }

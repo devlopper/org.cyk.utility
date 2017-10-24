@@ -10,13 +10,22 @@ import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
+import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.output.OutputText;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public class Form extends Container implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**/
+	
+	public Form() {
+		
+	}
 	
 	/**/
 	
@@ -61,9 +70,14 @@ public class Form extends Container implements Serializable {
 	
 	/**/
 	
+	@Getter @Setter @Accessors(chain=true)
 	public static class Master extends Form implements Serializable {
 		private static final long serialVersionUID = 1L;
-
+		
+		private Detail detail;
+		
+		private Menu menu;
+		
 		/**/
 
 		public static interface BuilderBase<OUTPUT extends Master> extends Form.BuilderBase<OUTPUT> {

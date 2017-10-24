@@ -3,6 +3,8 @@ package org.cyk.utility.common.userinterface.command;
 import java.io.Serializable;
 
 import org.cyk.utility.common.userinterface.Control;
+import org.cyk.utility.common.userinterface.event.Confirm;
+import org.cyk.utility.common.userinterface.panel.ConfirmationDialog;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +14,8 @@ import lombok.experimental.Accessors;
 public class Command extends Control implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Confirm confirm;
+	private ConfirmationDialog confirmationDialog;
 	private org.cyk.utility.common.helper.CommandHelper.Command action;
 	
 	/**/
