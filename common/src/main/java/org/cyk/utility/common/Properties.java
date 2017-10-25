@@ -19,6 +19,7 @@ public class Properties implements java.io.Serializable {
 
 	private java.util.Map<Object,Object> map;
 	private Object stringValueSeparator = Constant.CHARACTER_SPACE;
+	private Map<Object,Getter> getterMap;
 	//private Object doubleStringValueSeparator = StringUtils.repeat(stringValueSeparator.toString(), 2);
 	
 	/**/
@@ -29,6 +30,19 @@ public class Properties implements java.io.Serializable {
 			for(Entry<Object, Object> entry : map.entrySet())
 				properties.set(entry.getKey(), entry.getValue());
 		}
+	}
+	
+	/* getters */
+	
+	public Properties setGetter(Object key,Getter getter){
+		if(getterMap == null)
+			getterMap = new HashMap<Object, Properties.Getter>();
+		getterMap.put(key, getter);
+		return this;
+	}
+	
+	public Getter getGetter(Object key){
+		return getterMap == null ? null : getterMap.get(key);
 	}
 	
 	/* set */
@@ -44,6 +58,9 @@ public class Properties implements java.io.Serializable {
 	
 	@SuppressWarnings("unchecked")
 	public <T> T get(Class<T> aClass,Object key,T nullValue){
+		Getter getter = getGetter(key);
+		if(getter!=null)
+			return (T) getter.execute(this, key,nullValue);
 		return (T) (this.map == null ? nullValue : this.map.get(key) == null ? nullValue : this.map.get(key));
 	}
 	
@@ -1032,6 +1049,106 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getAutoUpdate() {
+		return get(AUTO_UPDATE);
+	}
+
+	public Properties setAutoUpdate(Object value) {
+		set(AUTO_UPDATE, value);
+		return this;
+	}
+	
+	public Object getGlobalOnly() {
+		return get(GLOBAL_ONLY);
+	}
+
+	public Properties setGlobalOnly(Object value) {
+		set(GLOBAL_ONLY, value);
+		return this;
+	}
+	
+	public Object getRedisplay() {
+		return get(REDISPLAY);
+	}
+
+	public Properties setRedisplay(Object value) {
+		set(REDISPLAY, value);
+		return this;
+	}
+	
+	public Object getShowDetail() {
+		return get(SHOW_DETAIL);
+	}
+
+	public Properties setShowDetail(Object value) {
+		set(SHOW_DETAIL, value);
+		return this;
+	}
+	
+	public Object getShowIcon() {
+		return get(SHOW_ICON);
+	}
+
+	public Properties setShowIcon(Object value) {
+		set(SHOW_ICON, value);
+		return this;
+	}
+	
+	public Object getShowSummary() {
+		return get(SHOW_SUMMARY);
+	}
+
+	public Properties setShowSummary(Object value) {
+		set(SHOW_SUMMARY, value);
+		return this;
+	}
+	
+	public Object getOnError() {
+		return get(ON_ERROR);
+	}
+
+	public Properties setOnError(Object value) {
+		set(ON_ERROR, value);
+		return this;
+	}
+	
+	public Object getOnStart() {
+		return get(ON_START);
+	}
+
+	public Properties setOnStart(Object value) {
+		set(ON_START, value);
+		return this;
+	}
+	
+	public Object getOnSuccess() {
+		return get(ON_SUCCESS);
+	}
+
+	public Properties setOnSuccess(Object value) {
+		set(ON_SUCCESS, value);
+		return this;
+	}
+	
+	public Object getRenderType() {
+		return get(RENDER_TYPE);
+	}
+
+	public Properties setRenderType(Object value) {
+		set(RENDER_TYPE, value);
+		return this;
+	}
+	
+	public static final String RENDER_TYPE = "RENDER_TYPE";
+	public static final String ON_ERROR = "ON_ERROR";
+	public static final String ON_START = "ON_START";
+	public static final String ON_SUCCESS = "ON_SUCCESS";
+	public static final String SHOW_ICON = "SHOW_ICON";
+	public static final String SHOW_SUMMARY = "SHOW_SUMMARY";
+	public static final String SHOW_DETAIL = "SHOW_DETAIL";
+	public static final String REDISPLAY = "REDISPLAY";
+	public static final String GLOBAL_ONLY = "GLOBAL_ONLY";
+	public static final String AUTO_UPDATE = "AUTO_UPDATE";
 	public static final String DRAGGABLE = "DRAGGABLE";
 	public static final String DYNAMIC = "DYNAMIC";
 	public static final String FIT_VIEWPORT = "FIT_VIEWPORT";
@@ -1153,5 +1270,13 @@ public class Properties implements java.io.Serializable {
 	@Override
 	public String toString() {
 		return map.toString();
+	}
+	
+	/**/
+	
+	public static interface Getter {
+		
+		Object execute(Properties properties,Object key,Object nullValue);
+		
 	}
 }

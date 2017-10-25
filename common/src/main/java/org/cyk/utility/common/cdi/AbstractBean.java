@@ -75,7 +75,7 @@ public class AbstractBean implements Serializable {
 		Properties propertiesMap = new Properties();
 		Properties.setDefaultValues(getClass(), propertiesMap);
 		for(BeanListener listener : BeanListener.COLLECTION)
-			listener.propertiesMapInstanciated(this);
+			listener.propertiesMapInstanciated(this,propertiesMap);
 		return propertiesMap;
 	}
 	

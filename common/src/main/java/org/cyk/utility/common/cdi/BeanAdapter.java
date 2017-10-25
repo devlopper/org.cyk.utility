@@ -2,6 +2,8 @@ package org.cyk.utility.common.cdi;
 
 import java.io.Serializable;
 
+import org.cyk.utility.common.Properties;
+
 @Deprecated
 public class BeanAdapter extends AbstractBean implements BeanListener,Serializable {
 
@@ -26,6 +28,6 @@ public class BeanAdapter extends AbstractBean implements BeanListener,Serializab
 	public void instanciated(AbstractBean instance) {}
 
 	@Override
-	public void propertiesMapInstanciated(AbstractBean instance) {}
+	public void propertiesMapInstanciated(AbstractBean instance,Properties properties) {}
 
 }

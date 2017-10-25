@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -29,7 +30,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Singleton
+@Singleton @Named
 public class StringHelper extends AbstractHelper implements Serializable {
 
 	private static final long serialVersionUID = 2366347884051000495L;

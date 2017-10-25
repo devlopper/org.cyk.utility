@@ -2,7 +2,6 @@ package org.cyk.utility.common.userinterface.panel;
 
 import java.io.Serializable;
 
-import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.command.Command;
 
 import lombok.Getter;
@@ -16,9 +15,7 @@ public class ConfirmationDialog extends Dialog implements Serializable {
 	private Command yesCommand = new Command(),noCommand=new Command();
 	
 	public ConfirmationDialog() {
-		yesCommand.setLabelFromIdentifier(StringHelper.getInstance().get("yes", new Object[]{})).getPropertiesMap()
-			.setType("button");
-		noCommand.setLabelFromIdentifier(StringHelper.getInstance().get("no", new Object[]{}))
-			.getPropertiesMap().setType("button");
+		yesCommand.setLabelFromIdentifier("yes");
+		noCommand.setLabelFromIdentifier("no");
 	}
 }

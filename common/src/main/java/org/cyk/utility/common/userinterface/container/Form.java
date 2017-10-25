@@ -10,6 +10,7 @@ import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
+import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.output.OutputText;
@@ -76,10 +77,16 @@ public class Form extends Container implements Serializable {
 		
 		private Detail detail;
 		
-		private Menu menu;
+		private Menu menu = new Menu();
+		private Command submitCommand = new Command();
 		
 		/**/
 
+		public Master() {
+			menu.addOneChild(submitCommand);
+			submitCommand.setLabelFromIdentifier("command.submit");
+		}
+		
 		public static interface BuilderBase<OUTPUT extends Master> extends Form.BuilderBase<OUTPUT> {
 
 			public static class Adapter<OUTPUT extends Master> extends Form.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {

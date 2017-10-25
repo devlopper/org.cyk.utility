@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +25,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Singleton
+@Singleton @Named
 public class CollectionHelper extends AbstractHelper implements Serializable  {
 
 	private static final long serialVersionUID = 1L;

@@ -3,6 +3,8 @@ package org.cyk.utility.common.cdi;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cyk.utility.common.Properties;
+
 public interface BeanListener {
 
 	Collection<BeanListener> COLLECTION = new ArrayList<BeanListener>();
@@ -19,7 +21,7 @@ public interface BeanListener {
 	
 	void instanciated(AbstractBean instance);
 	
-	void propertiesMapInstanciated(AbstractBean instance);
+	void propertiesMapInstanciated(AbstractBean instance,Properties properties);
 	
 	/**/
 	

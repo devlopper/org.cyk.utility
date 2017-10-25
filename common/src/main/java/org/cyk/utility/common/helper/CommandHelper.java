@@ -66,6 +66,7 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 		public static class Adapter extends Action.Adapter.Default<Object,Object> implements Command,Serializable {
 			private static final long serialVersionUID = 1L;
 			
+			//TODO those attributes should be deleted
 			protected IconHelper.Icon icon;
 			protected Object mappedIcon;
 			protected Boolean nameRendered;

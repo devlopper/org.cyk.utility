@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.DeviceType;
+import org.cyk.utility.common.userinterface.Request;
 import org.cyk.utility.common.userinterface.panel.ConfirmationDialog;
-import org.cyk.utility.common.userinterface.panel.Dialog;
+import org.cyk.utility.common.userinterface.panel.NotificationDialog;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,21 +17,19 @@ public class Window extends Container implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	protected DeviceType deviceType;
-	protected ConfirmationDialog confirmationDialog;
-	protected Dialog notificationsDialog;
+	protected ConfirmationDialog confirmationDialog = new ConfirmationDialog();
+	protected Request requestComponent = new Request();
+	protected NotificationDialog notificationDialog = new NotificationDialog();
 	
 	/**/
 	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		notificationsDialog = new Dialog();
 		getPropertiesMap().setFullPage(Boolean.TRUE);
 	}
 	
-	public void listenBeforeRender(){
-		
-	}
+	public void listenBeforeRender(){}
 	
 	public static interface BuilderBase<OUTPUT extends Window> extends Component.BuilderBase<OUTPUT> {
 
