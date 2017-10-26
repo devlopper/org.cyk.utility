@@ -1139,6 +1139,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getBuiltTarget() {
+		return get(BUILT_TARGET);
+	}
+
+	public Properties setBuiltTarget(Object value) {
+		set(BUILT_TARGET, value);
+		return this;
+	}
+	
+	public static final String BUILT_TARGET = "BUILT_TARGET";
 	public static final String RENDER_TYPE = "RENDER_TYPE";
 	public static final String ON_ERROR = "ON_ERROR";
 	public static final String ON_START = "ON_START";

@@ -8,16 +8,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.common.ClassRepository.ClassField;
 import org.cyk.utility.common.ObjectFieldValues;
-import org.cyk.utility.common.cdi.BeanAdapter;
+import org.cyk.utility.common.cdi.BeanListener;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public interface TestEnvironmentListener {
 
@@ -51,7 +51,7 @@ public interface TestEnvironmentListener {
 	void throwableCaught(Throwable throwable,String expectedMessage);
 	/**/
 	
-	public static class Adapter extends BeanAdapter implements TestEnvironmentListener,Serializable{
+	public static class Adapter extends BeanListener.Adapter implements TestEnvironmentListener,Serializable{
 
 		private static final long serialVersionUID = 926931368237515224L;
 
@@ -112,7 +112,7 @@ public interface TestEnvironmentListener {
 		
 		/**/
 		
-		public static class Default extends Adapter implements Serializable {
+		public static class Default extends TestEnvironmentListener.Adapter implements Serializable {
 			
 			private static final long serialVersionUID = 1L;
 

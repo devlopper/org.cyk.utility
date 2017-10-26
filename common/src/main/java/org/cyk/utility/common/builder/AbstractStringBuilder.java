@@ -84,7 +84,7 @@ public abstract class AbstractStringBuilder extends AbstractBuilder<String> impl
 		Map<String,String> getTokenReplacementMap();
 		String getSeparator();
 		
-		@Getter @Setter @Accessors(chain=true) @Deprecated
+		@Getter  @Accessors(chain=true) @Deprecated
 		public static class Adapter extends AbstractBuilder.Listener.Adapter.Default<String> implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 			

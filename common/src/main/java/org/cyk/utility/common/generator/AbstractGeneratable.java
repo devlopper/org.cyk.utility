@@ -14,7 +14,7 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Constant.Date.Length;
 import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.cdi.BeanAdapter;
+import org.cyk.utility.common.cdi.BeanListener;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.TimeHelper;
 
@@ -167,7 +167,7 @@ public abstract class AbstractGeneratable<T> extends AbstractBean implements Ser
 		Object formatDate(Object object,Date fieldValue,Constant.Date.Part part,Constant.Date.Length length);
 		Object formatNumberToWords(Object object,Number fieldValue);
 		
-		public static class Adapter extends BeanAdapter implements Listener,Serializable {
+		public static class Adapter extends BeanListener.Adapter implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
@@ -190,7 +190,7 @@ public abstract class AbstractGeneratable<T> extends AbstractBean implements Ser
 				return null;
 			}
 			
-			public static class Default extends Adapter implements Serializable {
+			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				public static Locale LOCALE = Locale.FRENCH;

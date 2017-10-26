@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DefaultBeanAdapter extends BeanAdapter implements Serializable {
+public class DefaultBeanAdapter extends BeanListener.Adapter implements Serializable {
 
 	private static final long serialVersionUID = -336945445877746426L;
 

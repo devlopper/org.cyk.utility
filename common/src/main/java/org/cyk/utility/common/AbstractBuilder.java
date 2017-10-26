@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.cdi.BeanAdapter;
+import org.cyk.utility.common.cdi.BeanListener;
 import org.cyk.utility.common.helper.ClassHelper;
 
 import lombok.Getter;
@@ -50,7 +50,7 @@ public abstract class AbstractBuilder<OBJECT> extends AbstractBean implements Se
 		
 		/**/
 		
-		public static class Adapter<OBJECT> extends BeanAdapter implements Serializable {
+		public static class Adapter<OBJECT> extends BeanListener.Adapter implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			/**/

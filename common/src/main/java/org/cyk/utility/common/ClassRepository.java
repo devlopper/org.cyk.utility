@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.cdi.BeanListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.cdi.BeanAdapter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ClassRepository extends AbstractBean implements Serializable {
 
@@ -173,7 +173,7 @@ public class ClassRepository extends AbstractBean implements Serializable {
 		
 		Boolean canGetOwnedAndDependentFields(ClassField parent,Field field);
 		
-		public static class Adapter extends BeanAdapter implements Serializable,Listener {
+		public static class Adapter extends BeanListener.Adapter implements Serializable,Listener {
 			private static final long serialVersionUID = -4122987497921232243L;
 			
 			@Override
@@ -181,7 +181,7 @@ public class ClassRepository extends AbstractBean implements Serializable {
 			
 			/**/
 			
-			public static class Default extends Adapter implements Serializable {
+			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = -5446765876489940336L;
 				@Override
 				public Boolean canGetOwnedAndDependentFields(ClassField parent,Field field) {

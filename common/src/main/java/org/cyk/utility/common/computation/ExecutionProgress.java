@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.cdi.BeanListener;
+import org.joda.time.DateTimeConstants;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.cdi.BeanAdapter;
-import org.joda.time.DateTimeConstants;
 
 @Getter @Setter
 public class ExecutionProgress extends AbstractBean implements Serializable {
@@ -121,7 +121,7 @@ public class ExecutionProgress extends AbstractBean implements Serializable {
 		
 		/**/
 		
-		public static class Adapter extends BeanAdapter implements Listener,Serializable{
+		public static class Adapter extends BeanListener.Adapter implements Listener,Serializable{
 
 			private static final long serialVersionUID = -2821329924279855678L;
 
@@ -130,7 +130,7 @@ public class ExecutionProgress extends AbstractBean implements Serializable {
 			
 			/**/
 			
-			public static class Default extends Adapter implements Serializable{
+			public static class Default extends Listener.Adapter implements Serializable{
 				private static final long serialVersionUID = -4170929744491382130L;
 				
 			}

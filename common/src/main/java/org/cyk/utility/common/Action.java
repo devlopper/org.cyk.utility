@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.cdi.BeanAdapter;
+import org.cyk.utility.common.cdi.BeanListener;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
@@ -19,10 +19,10 @@ import org.cyk.utility.common.helper.LoggingHelper;
 import org.cyk.utility.common.helper.MapHelper;
 import org.cyk.utility.common.helper.MethodHelper;
 import org.cyk.utility.common.helper.NotificationHelper;
+import org.cyk.utility.common.helper.NotificationHelper.Notification;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.ThrowableHelper;
-import org.cyk.utility.common.helper.NotificationHelper.Notification;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -242,7 +242,7 @@ public interface Action<INPUT,OUTPUT> {
 	/**/
 	
 	@Getter
-	public static class Adapter<INPUT,OUTPUT> extends BeanAdapter implements Action<INPUT,OUTPUT>,Serializable {
+	public static class Adapter<INPUT,OUTPUT> extends BeanListener.Adapter implements Action<INPUT,OUTPUT>,Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		protected Locale locale;

@@ -1,5 +1,6 @@
 package org.cyk.utility.common.cdi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -25,7 +26,7 @@ public interface BeanListener {
 	
 	/**/
 	
-	/*public static class Adapter extends AbstractBean implements BeanListener,Serializable {
+	public static class Adapter extends AbstractBean implements BeanListener,Serializable {
 
 		private static final long serialVersionUID = 7673343587983459174L;
 
@@ -48,8 +49,8 @@ public interface BeanListener {
 		public void instanciated(AbstractBean instance) {}
 
 		@Override
-		public void propertiesMapInstanciated(AbstractBean instance) {}
+		public void propertiesMapInstanciated(AbstractBean instance,Properties properties) {}
 
-	}*/
+	}
 
 }

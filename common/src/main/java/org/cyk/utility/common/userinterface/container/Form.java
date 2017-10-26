@@ -11,8 +11,10 @@ import org.cyk.utility.common.helper.CommandHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
+import org.cyk.utility.common.userinterface.Layout;
 import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
+import org.cyk.utility.common.userinterface.event.Confirm;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.output.OutputText;
 
@@ -106,6 +108,8 @@ public class Form extends Container implements Serializable {
 		public Master setSubmitCommandActionAdapterClass(Class<? extends SubmitCommandActionAdapter> submitCommandActionAdapterClass){
 			submitCommand.setAction(ClassHelper.getInstance().instanciateOne(submitCommandActionAdapterClass).setForm(this));
 			submitCommand.getAction().setIsNotifiableOnStatusSuccess(Boolean.TRUE);
+			if(Boolean.TRUE.equals(submitCommand.getAction().getIsConfirmable()))
+				submitCommand.setConfirm(new Confirm());
 			return this;
 		}
 		
@@ -119,6 +123,21 @@ public class Form extends Container implements Serializable {
 			if(detail!=null)
 				detail.write();
 			return this;
+		}
+		
+		public Detail instanciateDetail(Layout.Type layoutType){
+			Detail detail = new Detail(layoutType);
+			addOneChild(this.detail = detail);
+			return detail;
+		}
+		
+		public Detail instanciateDetail(){
+			return instanciateDetail(Layout.Type.DEFAULT);
+		}
+		
+		@Override
+		public Master setLabelFromIdentifier(String identifier) {
+			return (Master) super.setLabelFromIdentifier(identifier);
 		}
 		
 		public static interface BuilderBase<OUTPUT extends Master> extends Form.BuilderBase<OUTPUT> {
@@ -177,9 +196,18 @@ public class Form extends Container implements Serializable {
 		}
 	}
 	
+	@Getter @Setter @Accessors(chain=true)
 	public static class Detail extends Form implements Serializable {
 		private static final long serialVersionUID = 1L;
 
+		public Detail(Layout.Type layoutType) {
+			getLayout().setType(layoutType);
+		}
+		
+		public Detail() {
+			this(Layout.Type.DEFAULT);
+		}
+		
 		/**/
 		
 		public void __add__(Input<?> input) {
@@ -230,6 +258,14 @@ public class Form extends Container implements Serializable {
 			}.execute();
 			return this;
 		}
+		
+		/*@SuppressWarnings("unchecked")
+		@Override
+		public Detail build() {
+			System.out.println("Form.Detail.build()");
+			return (Detail) ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance()
+					.getIfNotNullElseDefault(Builder.Target.Adapter.Default.DEFAULT_CLASS, Builder.Target.Adapter.Default.class)).setInput(this).execute();
+		}*/
 		
 		/**/
 

@@ -1,7 +1,14 @@
 package org.cyk.utility.common.userinterface.container;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.helper.ListenerHelper;
+import org.cyk.utility.common.helper.MethodHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.DeviceType;
 import org.cyk.utility.common.userinterface.Request;
@@ -27,9 +34,19 @@ public class Window extends Container implements Serializable {
 	protected void initialisation() {
 		super.initialisation();
 		getPropertiesMap().setFullPage(Boolean.TRUE);
+		getPropertiesMap().setLayout(createLayout());
 	}
 	
 	public void listenBeforeRender(){}
+	
+	protected Object createLayout(){
+		Object layout = ListenerHelper.getInstance().listenObject(Listener.MAP.get(getClass()), Listener.METHOD_NAME_CREATE_LAYOUT
+				,MethodHelper.Method.Parameter.buildArray(Window.class,this));
+		if(layout == null)
+			layout = ListenerHelper.getInstance().listenObject(Listener.COLLECTION, Listener.METHOD_NAME_CREATE_LAYOUT
+					,MethodHelper.Method.Parameter.buildArray(Window.class,this));
+		return layout;
+	}
 	
 	public static interface BuilderBase<OUTPUT extends Window> extends Component.BuilderBase<OUTPUT> {
 
@@ -72,4 +89,24 @@ public class Window extends Container implements Serializable {
 	
 	/**/
 	
+	public static interface Listener {
+		
+		Map<Class<? extends Window>,Collection<Listener>> MAP = new HashMap<Class<? extends Window>, Collection<Listener>>();
+		Collection<Listener> COLLECTION = new ArrayList<Window.Listener>();
+		
+		String METHOD_NAME_CREATE_LAYOUT = "createLayout";
+		Object createLayout(Window window);
+		
+		/**/
+		
+		public static class Adapter extends AbstractBean implements Listener , Serializable {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Object createLayout(Window window) {
+				return null;
+			}
+			
+		}
+	}
 }

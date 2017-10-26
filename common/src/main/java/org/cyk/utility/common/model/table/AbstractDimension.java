@@ -3,12 +3,12 @@ package org.cyk.utility.common.model.table;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.cdi.BeanListener;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.cdi.BeanAdapter;
 
 @NoArgsConstructor
 public abstract class AbstractDimension<DATA,CELLTYPE extends AbstractCell<CELLVALUE>,CELLVALUE> extends AbstractBean implements Dimension<DATA, CELLTYPE,CELLVALUE>, Serializable {
@@ -90,7 +90,7 @@ public abstract class AbstractDimension<DATA,CELLTYPE extends AbstractCell<CELLV
 		/**/
 		
 		@Getter @Setter
-		public static class Adapter<DIMENSION,DATA,CELL extends Cell<VALUE>,VALUE> extends BeanAdapter implements DimensionListener<DIMENSION,DATA,CELL,VALUE>,Serializable {
+		public static class Adapter<DIMENSION,DATA,CELL extends Cell<VALUE>,VALUE> extends BeanListener.Adapter implements DimensionListener<DIMENSION,DATA,CELL,VALUE>,Serializable {
 
 			private static final long serialVersionUID = 1L;
 			protected Boolean openable,updatable,deletable,countable;

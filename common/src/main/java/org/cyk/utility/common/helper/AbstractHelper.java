@@ -3,7 +3,7 @@ package org.cyk.utility.common.helper;
 import java.io.Serializable;
 
 import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.cdi.BeanAdapter;
+import org.cyk.utility.common.cdi.BeanListener;
 
 public abstract class AbstractHelper extends AbstractBean implements Serializable {
 
@@ -15,7 +15,7 @@ public abstract class AbstractHelper extends AbstractBean implements Serializabl
 		
 		/**/
 		
-		public static class Adapter extends BeanAdapter implements Listener,Serializable {
+		public static class Adapter extends BeanListener.Adapter implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			/**/

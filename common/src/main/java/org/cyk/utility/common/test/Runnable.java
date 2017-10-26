@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.cdi.BeanListener;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.cdi.BeanAdapter;
 
 public interface Runnable<LISTENER extends Runnable.Listener> {
 
@@ -36,7 +36,7 @@ public interface Runnable<LISTENER extends Runnable.Listener> {
     	    	
     	/**/
     	
-    	public static class Adapter extends BeanAdapter implements Listener,Serializable{
+    	public static class Adapter extends BeanListener.Adapter implements Listener,Serializable{
 			private static final long serialVersionUID = -8100384307117008109L;
 
     	}

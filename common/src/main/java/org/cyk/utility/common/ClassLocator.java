@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.cdi.BeanAdapter;
+import org.cyk.utility.common.cdi.BeanListener;
 import org.cyk.utility.common.helper.ArrayHelper;
 
 import lombok.Getter;
@@ -166,7 +166,7 @@ public class ClassLocator extends AbstractBean implements Serializable {
 		/**/
 		
 		@Getter @Setter
-		public static class Adapter extends BeanAdapter implements Listener,Serializable {
+		public static class Adapter extends BeanListener.Adapter implements Listener,Serializable {
 
 			private static final long serialVersionUID = -4338231956722553859L;
 
@@ -183,7 +183,7 @@ public class ClassLocator extends AbstractBean implements Serializable {
 			/**/
 			
 			@Getter @Setter
-			public static class Default extends Adapter implements Serializable {
+			public static class Default extends Listener.Adapter implements Serializable {
 
 				private static final long serialVersionUID = -4338231956722553859L;
 				

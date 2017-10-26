@@ -1,6 +1,7 @@
 package org.cyk.utility.common.userinterface;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -8,6 +9,8 @@ import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.ListenerHelper;
+import org.cyk.utility.common.helper.MethodHelper;
 import org.cyk.utility.common.helper.RandomHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.model.Area;
@@ -21,6 +24,7 @@ import lombok.experimental.Accessors;
 public class Component extends AbstractBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	protected Object built;
 	protected CollectionHelper.Instance<Component> children;
 	
 	/**/
@@ -58,6 +62,20 @@ public class Component extends AbstractBean implements Serializable {
 		CollectionHelper.Instance<Component> collection = new CollectionHelper.Instance<Component>();
 		collection.setElementClass(Component.class);
 		return collection;
+	}
+	
+	public Component build(){
+		if(children!=null)
+			new CollectionHelper.Iterator.Adapter.Default<Component>(children.getElements()){
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void __executeForEach__(Component component) {
+					component.build();
+				}
+			}.execute();
+		built = ListenerHelper.getInstance()
+				.listenObject(Listener.COLLECTION, Listener.METHOD_NAME_BUILD, MethodHelper.Method.Parameter.buildArray(Component.class,this));
+		return this;
 	}
 		
 	/**/
@@ -224,5 +242,26 @@ public class Component extends AbstractBean implements Serializable {
 				}
 			}
 		}
+	}
+
+	/**/
+	
+	public static interface Listener {
+		
+		Collection<Listener> COLLECTION = new ArrayList<Listener>();
+		
+		String METHOD_NAME_BUILD = "build";
+		Object build(Component component);
+
+		public static class Adapter extends AbstractBean implements Listener , Serializable {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Object build(Component component) {
+				return null;
+			}
+			
+		}
+		
 	}
 }

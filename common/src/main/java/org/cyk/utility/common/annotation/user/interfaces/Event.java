@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.When;
-import org.cyk.utility.common.cdi.BeanAdapter;
+import org.cyk.utility.common.cdi.BeanListener;
 
 public enum Event{
 	CLICK,
@@ -17,7 +17,7 @@ public enum Event{
 		
 		void on(Event event,When when);
 		
-		public static class Adapter extends BeanAdapter implements Listener,Serializable {
+		public static class Adapter extends BeanListener.Adapter implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			@Override

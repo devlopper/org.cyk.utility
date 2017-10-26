@@ -8,15 +8,15 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.cyk.utility.common.Action;
+import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.cdi.BeanListener;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
-import org.cyk.utility.common.Action;
-import org.cyk.utility.common.Constant;
-import org.cyk.utility.common.cdi.AbstractBean;
-import org.cyk.utility.common.cdi.BeanAdapter;
 
 public class ThreadHelper extends AbstractHelper implements Serializable {
 
@@ -566,7 +566,7 @@ public class ThreadHelper extends AbstractHelper implements Serializable {
 		Throwable getThrowable(Throwable throwable);
 		
 		@Getter @Setter
-		public static class Adapter extends BeanAdapter implements Listener,Serializable {
+		public static class Adapter extends BeanListener.Adapter implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			private Boolean autoShutdown = Boolean.TRUE;
