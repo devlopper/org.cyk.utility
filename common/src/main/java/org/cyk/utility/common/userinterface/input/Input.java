@@ -60,12 +60,14 @@ public class Input<T> extends Control implements Serializable {
 	
 	@SuppressWarnings("unchecked")
 	public Input<T> read(){
-		value = initialValue = (T) FieldHelper.getInstance().read(object, field);
+		if(object!=null && field!=null)
+			value = initialValue = (T) FieldHelper.getInstance().read(object, field);
 		return this;
 	}
 	
 	public Input<T> write(){
-		FieldHelper.getInstance().set(object,getWritableValue(), field);
+		if(object!=null && field!=null)
+			FieldHelper.getInstance().set(object,getWritableValue(), field);
 		return this;
 	}
 	

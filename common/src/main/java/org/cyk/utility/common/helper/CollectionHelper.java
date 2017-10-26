@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +58,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			if(collection instanceof List)
 				element = ((List<ELEMENT>)collection).get(index.intValue());
 			else {
-				Iterator<ELEMENT> iterator = collection.iterator();
+				java.util.Iterator<ELEMENT> iterator = collection.iterator();
 				Integer count = 0;
 				while (count++ <= index)
 					element = iterator.next();
@@ -77,7 +76,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			}else {
 				if(collection instanceof Set)
 					newCollection = new LinkedHashSet<>();
-				Iterator<ELEMENT> iterator = collection.iterator();
+				java.util.Iterator<ELEMENT> iterator = collection.iterator();
 				Integer count = 0;
 				while (iterator.hasNext()){
 					ELEMENT element = iterator.next();
@@ -98,7 +97,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			}else {
 				if(collection instanceof Set)
 					newCollection = new LinkedHashSet<>();
-				Iterator<ELEMENT> iterator = collection.iterator();
+				java.util.Iterator<ELEMENT> iterator = collection.iterator();
 				while (iterator.hasNext()){
 					ELEMENT index = iterator.next();
 					if(element != index )
@@ -875,6 +874,40 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		@Override
 		public String toString() {
 			return __name__;
+		}
+	}
+
+	public static interface Iterator<T> extends org.cyk.utility.common.Action<Collection<T>, Void>{
+		
+		public static class Adapter<T> extends org.cyk.utility.common.Action.Adapter.Default<Collection<T>, Void> implements Iterator<T>,Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			@SuppressWarnings("unchecked")
+			public Adapter(Collection<T> input) {
+				super("iterate", (Class<Collection<T>>) ClassHelper.getInstance().getByName(Collection.class), input, Void.class);
+			}
+			
+			public static class Default<T> extends Iterator.Adapter<T> implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public Default(Collection<T> collection) {
+					super(collection);
+					setIsInputRequired(Boolean.FALSE);
+					setIsProduceOutputOnly(Boolean.TRUE);
+				}
+				
+				@Override
+				protected Void __execute__() {
+					if(getInstance().isNotEmpty(getInput()))
+						for(T object : getInput())
+							__executeForEach__(object);
+					return null;
+				}
+				
+				protected void __executeForEach__(T object){
+					ThrowableHelper.getInstance().throwNotYetImplemented();
+				}
+			}
 		}
 	}
 }

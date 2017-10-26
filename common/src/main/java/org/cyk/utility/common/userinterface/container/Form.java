@@ -7,6 +7,7 @@ import java.util.Collection;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.CommandHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
@@ -26,6 +27,14 @@ public class Form extends Container implements Serializable {
 	
 	public Form() {
 		
+	}
+	
+	public Form read(){
+		return this;
+	}
+	
+	public Form write(){
+		return this;
 	}
 	
 	/**/
@@ -75,16 +84,41 @@ public class Form extends Container implements Serializable {
 	public static class Master extends Form implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		private Object object;
 		private Detail detail;
 		
 		private Menu menu = new Menu();
 		private Command submitCommand = new Command();
+		private Class<SubmitCommandActionAdapter> submitCommandActionAdapterClass;
 		
 		/**/
 
-		public Master() {
+		public Master(Class<? extends SubmitCommandActionAdapter> submitCommandActionAdapterClass) {
 			menu.addOneChild(submitCommand);
 			submitCommand.setLabelFromIdentifier("command.submit");
+			setSubmitCommandActionAdapterClass(submitCommandActionAdapterClass);
+		}
+		
+		public Master() {
+			this(SubmitCommandActionAdapter.class);
+		}
+		
+		public Master setSubmitCommandActionAdapterClass(Class<? extends SubmitCommandActionAdapter> submitCommandActionAdapterClass){
+			submitCommand.setAction(ClassHelper.getInstance().instanciateOne(submitCommandActionAdapterClass).setForm(this));
+			submitCommand.getAction().setIsNotifiableOnStatusSuccess(Boolean.TRUE);
+			return this;
+		}
+		
+		public Master read(){
+			if(detail!=null)
+				detail.read();
+			return this;
+		}
+		
+		public Master write(){
+			if(detail!=null)
+				detail.write();
+			return this;
 		}
 		
 		public static interface BuilderBase<OUTPUT extends Master> extends Form.BuilderBase<OUTPUT> {
@@ -125,6 +159,22 @@ public class Form extends Container implements Serializable {
 				}
 			}
 		}
+	
+		/**/
+		
+		@Getter @Setter @Accessors(chain=true)
+		public static class SubmitCommandActionAdapter extends CommandHelper.Command.Adapter.Default implements Serializable{
+			private static final long serialVersionUID = 1L;
+
+			protected Master form;
+			
+			@Override
+			protected Object __execute__() {
+				form.write();
+				return null;
+			}
+			
+		}
 	}
 	
 	public static class Detail extends Form implements Serializable {
@@ -154,6 +204,30 @@ public class Form extends Container implements Serializable {
 		
 		public Detail addBreak(){
 			layOutBreak();
+			return this;
+		}
+		
+		@Override
+		public Detail read(){
+			new CollectionHelper.Iterator.Adapter.Default<Component>(children.getElements()){
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void __executeForEach__(Component component) {
+					((Input<?>)component).read();
+				}
+			}.execute();
+			return this;
+		}
+		
+		@Override
+		public Detail write(){
+			new CollectionHelper.Iterator.Adapter.Default<Component>(children.getElements()){
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void __executeForEach__(Component component) {
+					((Input<?>)component).write();
+				}
+			}.execute();
 			return this;
 		}
 		
