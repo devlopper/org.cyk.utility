@@ -1,10 +1,11 @@
 package org.cyk.utility.common.utility.userinterface;
 
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.model.Area;
 import org.cyk.utility.common.userinterface.Component.Visible;
+import org.cyk.utility.common.userinterface.Layout;
 import org.cyk.utility.common.userinterface.container.Container;
 import org.cyk.utility.common.userinterface.container.Form;
-import org.cyk.utility.common.userinterface.Layout;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputText;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -16,6 +17,12 @@ import lombok.experimental.Accessors;
 
 public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
+
+	@Test
+	public void getForm(){
+		Form.Master.setClass(Entity.class, Constant.Action.CREATE, EntityForm.class);
+		assertEquals(EntityForm.class, Form.Master.getClass(Entity.class, Constant.Action.CREATE));
+	}
 	
 	@Test
 	public void assertFromModel(){
@@ -179,6 +186,14 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	public static class FormModel {
 		
 		@org.cyk.utility.common.annotation.user.interfaces.Input @org.cyk.utility.common.annotation.user.interfaces.InputText private String f1,f2,f3,f4;
+		
+	}
+
+	public static class Entity {
+		
+	}
+	
+	public static class EntityForm extends Form.Master {
 		
 	}
 }

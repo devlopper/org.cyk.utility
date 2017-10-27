@@ -3,18 +3,19 @@ package org.cyk.utility.common.userinterface.container;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
-import org.cyk.utility.common.helper.CommandHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.Layout;
 import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
-import org.cyk.utility.common.userinterface.event.Confirm;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.output.OutputText;
 
@@ -22,6 +23,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+@Getter @Setter @Accessors(chain=true)
 public class Form extends Container implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -86,12 +88,13 @@ public class Form extends Container implements Serializable {
 	public static class Master extends Form implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		private static final Map<Class<?>,Map<Constant.Action,Map<Object,Class<? extends Master>>>> MAP = new HashMap<Class<?>, Map<Constant.Action,Map<Object,Class<? extends Master>>>>();
+		
 		private Object object;
 		private Detail detail;
 		
 		private Menu menu = new Menu();
 		private Command submitCommand = new Command();
-		private Class<SubmitCommandActionAdapter> submitCommandActionAdapterClass;
 		
 		/**/
 
@@ -106,10 +109,8 @@ public class Form extends Container implements Serializable {
 		}
 		
 		public Master setSubmitCommandActionAdapterClass(Class<? extends SubmitCommandActionAdapter> submitCommandActionAdapterClass){
-			submitCommand.setAction(ClassHelper.getInstance().instanciateOne(submitCommandActionAdapterClass).setForm(this));
-			submitCommand.getAction().setIsNotifiableOnStatusSuccess(Boolean.TRUE);
-			if(Boolean.TRUE.equals(submitCommand.getAction().getIsConfirmable()))
-				submitCommand.setConfirm(new Confirm());
+			submitCommand.setActionFromClass(submitCommandActionAdapterClass);
+			submitCommand.getAction().setIsNotifiableOnStatusSuccess(Boolean.TRUE);			
 			return this;
 		}
 		
@@ -138,6 +139,11 @@ public class Form extends Container implements Serializable {
 		@Override
 		public Master setLabelFromIdentifier(String identifier) {
 			return (Master) super.setLabelFromIdentifier(identifier);
+		}
+		
+		@Override
+		public Master build() {
+			return (Master) super.build();
 		}
 		
 		public static interface BuilderBase<OUTPUT extends Master> extends Form.BuilderBase<OUTPUT> {
@@ -182,7 +188,7 @@ public class Form extends Container implements Serializable {
 		/**/
 		
 		@Getter @Setter @Accessors(chain=true)
-		public static class SubmitCommandActionAdapter extends CommandHelper.Command.Adapter.Default implements Serializable{
+		public static class SubmitCommandActionAdapter extends Command.ActionAdapter implements Serializable{
 			private static final long serialVersionUID = 1L;
 
 			protected Master form;
@@ -193,7 +199,51 @@ public class Form extends Container implements Serializable {
 				return null;
 			}
 			
+			@Override
+			public Boolean getIsNotifiableOnStatusSuccess() {
+				return Boolean.TRUE;
+			}
 		}
+	
+		/**/
+		
+		public static void setClass(Class<?> aClass,Constant.Action action,Object key,Class<? extends Master> formClass){
+			Map<Constant.Action,Map<Object,Class<? extends Master>>> actions = MAP.get(aClass);
+			if(actions==null)
+				MAP.put(aClass, actions = new HashMap<Constant.Action, Map<Object,Class<? extends Master>>>());
+			Map<Object,Class<? extends Master>> objects = actions.get(action);
+			if(objects==null)
+				actions.put(action, objects = new HashMap<Object, Class<? extends Master>>());
+			objects.put(key,formClass);
+		}
+		public static void setClass(Class<?> aClass,Constant.Action action,Class<? extends Master> formClass){
+			setClass(aClass, action, null, formClass);
+		}
+		
+		public static Class<? extends Master> getClass(Class<?> aClass,Constant.Action action,Object key){
+			Class<? extends Master> formClass = null;
+			Map<Constant.Action,Map<Object,Class<? extends Master>>> actions = MAP.get(aClass);
+			if(actions!=null){
+				Map<Object,Class<? extends Master>> objects = actions.get(action);
+				if(objects!=null){
+					formClass = objects.get(key);
+				}
+			}
+			return formClass;
+		}
+		public static Class<? extends Master> getClass(Class<?> aClass,Constant.Action action){
+			return getClass(aClass, action, null);
+		}
+		
+		public static Master get(Object object,Constant.Action action,Object key){
+			Master master = ClassHelper.getInstance().instanciate(getClass(object.getClass(), action, key),new Object[]{Object.class,object});
+			master.setObject(object);
+			return master;
+		}
+		public static Master get(Object object,Constant.Action action){
+			return get(object, action,null);
+		}
+	
 	}
 	
 	@Getter @Setter @Accessors(chain=true)

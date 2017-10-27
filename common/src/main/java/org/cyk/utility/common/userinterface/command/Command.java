@@ -2,6 +2,8 @@ package org.cyk.utility.common.userinterface.command;
 
 import java.io.Serializable;
 
+import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.helper.CommandHelper;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.event.Confirm;
 import org.cyk.utility.common.userinterface.panel.ConfirmationDialog;
@@ -17,6 +19,16 @@ public class Command extends Control implements Serializable {
 	private Confirm confirm;
 	private ConfirmationDialog confirmationDialog;
 	private org.cyk.utility.common.helper.CommandHelper.Command action;
+	
+	/**/
+	
+	public Command setActionFromClass(Class<? extends ActionAdapter> actionAdapterClass){
+		setAction(ClassHelper.getInstance().instanciateOne(actionAdapterClass));
+		//getAction().setIsNotifiableOnStatusSuccess(Boolean.TRUE);
+		if(Boolean.TRUE.equals(getAction().getIsConfirmable()))
+			setConfirm(new Confirm());
+		return this;
+	}
 	
 	/**/
 
@@ -61,5 +73,11 @@ public class Command extends Control implements Serializable {
 
 	/**/
 	
-	
+	@Getter @Setter @Accessors(chain=true)
+	public static class ActionAdapter extends CommandHelper.Command.Adapter.Default implements Serializable{
+		private static final long serialVersionUID = 1L;
+		
+		
+		
+	}
 }
