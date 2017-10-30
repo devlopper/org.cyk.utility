@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -86,5 +87,25 @@ public class PropertiesUnitTest extends AbstractUnitTest {
 		assertList((List<?>) properties.subtractCollectionElement(4, 15).get(4),Arrays.asList(7));
 	}
 	
+	@Test
+	public void setDefaultValues(){
+		//assertEquals("mytempa", new A().getPropertiesMap().getTemplate());
+		assertEquals("mytempa", new B().getPropertiesMap().getTemplate());
+	}
 
+	/**/
+	
+	public static class A extends AbstractBean {
+		
+	}
+	
+	public static class B extends A {
+		
+	}
+	
+	static {
+		Properties.setDefaultValues(A.class, new Object[]{
+				Properties.TEMPLATE,"mytempa"
+		});
+	}
 }

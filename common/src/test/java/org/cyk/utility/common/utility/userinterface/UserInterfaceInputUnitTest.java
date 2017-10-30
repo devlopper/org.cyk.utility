@@ -30,16 +30,16 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void inputTextFromField(){
-		assertNull(Input.get(new Model(), "string1"));
-		assertNotNull(Input.get(new Model(), "string2"));
-		assertNotNull(Input.get(new Model(), "string3"));
+		assertNull(Input.get(null,new Model(), "string1"));
+		assertNotNull(Input.get(null,new Model(), "string2"));
+		assertNotNull(Input.get(null,new Model(), "string3"));
 		
 		Model model = new Model();
-		InputText input = (InputText) Input.get(model, "string3");
+		InputText input = (InputText) Input.get(null,model, "string3");
 		assertInputText(input, model, "string3","myVal", new Values(null, null, null), new Values(null, null, null), new Values(null, "myVal", null), new Values("myVal", "myVal", null));
 		
 		model = new Model().setString3("is01");
-		input = (InputText) Input.get(model, "string3");
+		input = (InputText) Input.get(null,model, "string3");
 		assertBuiltInput(input, "##__field__.string.3##", new Values("is01", "is01", "is01"));
 		assertInputText(input, model, "string3","myVal", new Values("is01", "is01", "is01"), new Values("is01", "is01", "is01"), new Values("is01", "myVal", "is01"), new Values("myVal", "myVal", "is01"));
 		

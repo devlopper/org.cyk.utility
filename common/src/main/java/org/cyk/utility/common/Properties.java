@@ -3,6 +3,7 @@ package org.cyk.utility.common;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +26,16 @@ public class Properties implements java.io.Serializable {
 	/**/
 		
 	public static void setDefaultValues(Class<?> aClass,Properties properties){
-		Map<Object,Object> map = DEFAULT_VALUES.get(aClass);
-		if(map != null){
+		setDefaultValues(aClass, properties, DEFAULT_VALUES.get(aClass));
+		for(Entry<Class<?>,Map<Object,Object>> entry : DEFAULT_VALUES.entrySet()){
+			if(!entry.getClass().equals(aClass) && ClassHelper.getInstance().isInstanceOf(entry.getKey(), aClass) && isDefaultValuesInherited(entry.getKey())){
+				setDefaultValues(aClass, properties, DEFAULT_VALUES.get(entry.getKey()));
+			}
+		}
+	}
+	
+	private static void setDefaultValues(Class<?> aClass,Properties properties,Map<Object,Object> map){
+		 if(map != null){
 			for(Entry<Object, Object> entry : map.entrySet())
 				properties.set(entry.getKey(), entry.getValue());
 		}
@@ -1148,6 +1157,277 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getIdentifierAsStyleClass() {
+		return get(IDENTIFIER_AS_STYLE_CLASS);
+	}
+
+	public Properties setIdentifierAsStyleClass(Object value) {
+		set(IDENTIFIER_AS_STYLE_CLASS, value);
+		return this;
+	}
+	
+	public Object getStructureTemplate() {
+		return get(STRUCTURE_TEMPLATE);
+	}
+
+	public Properties setStructureTemplate(Object value) {
+		set(STRUCTURE_TEMPLATE, value);
+		return this;
+	}
+	
+	public Object getPartialSubmit() {
+		return get(PARTIAL_SUBMIT);
+	}
+
+	public Properties setPartialSubmit(Object value) {
+		set(PARTIAL_SUBMIT, value);
+		return this;
+	}
+	
+	public Object getOnDoubleClick() {
+		return get(ON_DOUBLE_CLICK);
+	}
+
+	public Properties setOnDoubleClick(Object value) {
+		set(ON_DOUBLE_CLICK, value);
+		return this;
+	}
+	
+	public Object getOnMouseOver() {
+		return get(ON_MOUSE_OVER);
+	}
+
+	public Properties setOnMouseOver(Object value) {
+		set(ON_MOUSE_OVER, value);
+		return this;
+	}
+	
+	public Object getOnMouseUp() {
+		return get(ON_MOUSE_UP);
+	}
+
+	public Properties setOnMouseUp(Object value) {
+		set(ON_MOUSE_UP, value);
+		return this;
+	}
+	
+	public Object getOnMouseDown() {
+		return get(ON_MOUSE_DOWN);
+	}
+
+	public Properties setOnMouseDown(Object value) {
+		set(ON_MOUSE_DOWN, value);
+		return this;
+	}
+	
+	public Object getOnMouseOut() {
+		return get(ON_MOUSE_OUT);
+	}
+
+	public Properties setOnMouseOut(Object value) {
+		set(ON_MOUSE_OUT, value);
+		return this;
+	}
+	
+	public Object getOnMouseMove() {
+		return get(ON_MOUSE_MOVE);
+	}
+
+	public Properties setOnMouseMove(Object value) {
+		set(ON_MOUSE_MOVE, value);
+		return this;
+	}
+	
+	public Object getOnKeyDown() {
+		return get(ON_KEY_DOWN);
+	}
+
+	public Properties setOnKeyDown(Object value) {
+		set(ON_KEY_DOWN, value);
+		return this;
+	}
+	
+	public Object getOnKeyUp() {
+		return get(ON_KEY_UP);
+	}
+
+	public Properties setOnKeyUp(Object value) {
+		set(ON_KEY_UP, value);
+		return this;
+	}
+	
+	public Object getOnKeyPress() {
+		return get(ON_KEY_PRESS);
+	}
+
+	public Properties setOnKeyPress(Object value) {
+		set(ON_KEY_PRESS, value);
+		return this;
+	}
+	
+	public Object getOnFocus() {
+		return get(ON_FOCUS);
+	}
+
+	public Properties setOnFocus(Object value) {
+		set(ON_FOCUS, value);
+		return this;
+	}
+	
+	public Object getOnSelect() {
+		return get(ON_SELECT);
+	}
+
+	public Properties setOnSelect(Object value) {
+		set(ON_SELECT, value);
+		return this;
+	}
+	
+	public Object getOnBlur() {
+		return get(ON_BLUR);
+	}
+
+	public Properties setOnBlur(Object value) {
+		set(ON_BLUR, value);
+		return this;
+	}
+	
+	public Object getInteractivityBlocker() {
+		return get(INTERACTIVITY_BLOCKER);
+	}
+
+	public Properties setInteractivityBlocker(Object value) {
+		set(INTERACTIVITY_BLOCKER, value);
+		return this;
+	}
+	
+	public Object getAutoShow() {
+		return get(AUTO_SHOW);
+	}
+
+	public Properties setAutoShow(Object value) {
+		set(AUTO_SHOW, value);
+		return this;
+	}
+	
+	public Object getCenterX() {
+		return get(CENTER_X);
+	}
+
+	public Properties setCenterX(Object value) {
+		set(CENTER_X, value);
+		return this;
+	}
+	
+	public Object getCenterY() {
+		return get(CENTER_Y);
+	}
+
+	public Properties setCenterY(Object value) {
+		set(CENTER_Y, value);
+		return this;
+	}
+	
+	public Object getContent() {
+		return get(CONTENT);
+	}
+
+	public Properties setContent(Object value) {
+		set(CONTENT, value);
+		return this;
+	}
+	
+	public Object getCss() {
+		return get(CSS);
+	}
+
+	public Properties setCss(Object value) {
+		set(CSS, value);
+		return this;
+	}
+	
+	public Object getCssOverlay() {
+		return get(CSS_OVERLAY);
+	}
+
+	public Properties setCssOverlay(Object value) {
+		set(CSS_OVERLAY, value);
+		return this;
+	}
+	
+	public Object getEvent() {
+		return get(EVENT);
+	}
+
+	public Properties setEvent(Object value) {
+		set(EVENT, value);
+		return this;
+	}
+	
+	public Object getSource() {
+		return get(SOURCE);
+	}
+
+	public Properties setSource(Object value) {
+		set(SOURCE, value);
+		return this;
+	}
+	
+	public Object getTarget() {
+		return get(TARGET);
+	}
+
+	public Properties setTarget(Object value) {
+		set(TARGET, value);
+		return this;
+	}
+	
+	public Object getTimeOut() {
+		return get(TIME_OUT);
+	}
+
+	public Properties setTimeOut(Object value) {
+		set(TIME_OUT, value);
+		return this;
+	}
+	
+	public Object getAsync() {
+		return get(ASYNC);
+	}
+
+	public Properties setAsync(Object value) {
+		set(ASYNC, value);
+		return this;
+	}
+	
+	public static final String ASYNC = "ASYNC";
+	public static final String AUTO_SHOW="AUTO_SHOW";
+	public static final String CENTER_X="CENTER_X";
+	public static final String CENTER_Y="CENTER_Y";
+	public static final String CONTENT="CONTENT";
+	public static final String CSS="CSS";
+	public static final String CSS_OVERLAY="CSS_OVERLAY";
+	public static final String EVENT="EVENT";
+	public static final String SOURCE="SOURCE";
+	public static final String TARGET="TARGET";
+	public static final String TIME_OUT="TIME_OUT";
+	
+	public static final String INTERACTIVITY_BLOCKER="INTERACTIVITY_BLOCKER";
+	public static final String ON_DOUBLE_CLICK="ON_DOUBLE_CLICK";
+	public static final String ON_MOUSE_OVER="ON_MOUSE_OVER";
+	public static final String ON_MOUSE_UP="ON_MOUSE_UP";
+	public static final String ON_MOUSE_DOWN="ON_MOUSE_DOWN";
+	public static final String ON_MOUSE_OUT="ON_MOUSE_OUT";
+	public static final String ON_MOUSE_MOVE="ON_MOUSE_MOVE";
+	public static final String ON_KEY_DOWN="ON_KEY_DOWN";
+	public static final String ON_KEY_PRESS="ON_KEY_PRESS";
+	public static final String ON_KEY_UP="ON_KEY_UP";
+	public static final String ON_FOCUS="ON_FOCUS";
+	public static final String ON_SELECT="ON_SELECT";
+	public static final String ON_BLUR="ON_BLUR";
+	
+	public static final String PARTIAL_SUBMIT = "PARTIAL_SUBMIT";
+	public static final String STRUCTURE_TEMPLATE = "STRUCTURE_TEMPLATE";
 	public static final String BUILT_TARGET = "BUILT_TARGET";
 	public static final String RENDER_TYPE = "RENDER_TYPE";
 	public static final String ON_ERROR = "ON_ERROR";
@@ -1233,6 +1513,7 @@ public class Properties implements java.io.Serializable {
 	public static final String OPTIONS = "OPTIONS";
 	public static final String FULL_PAGE = "FULL_PAGE";
 	public static final String STYLE_CLASS_CONTENT = "STYLE_CLASS_CONTENT";
+	public static final String IDENTIFIER_AS_STYLE_CLASS = "IDENTIFIER_AS_STYLE_CLASS";
 	public static final String POSITION = "POSITION";
 	public static final String ENCTYPE = "ENCTYPE";
 	public static final String RESIZABLE = "RESIZABLE";
@@ -1257,6 +1538,7 @@ public class Properties implements java.io.Serializable {
 	/**/
 	
 	private static final Map<Class<?>,Map<Object,Object>> DEFAULT_VALUES = new HashMap<Class<?>,Map<Object,Object>>();
+	private static final Set<Class<?>> INHERITED_DEFAULT_VALUES_CLASSES = new HashSet<Class<?>>();
 	
 	public static void setDefaultValue(Class<?> aClass,Object name,Object value){
 		if(aClass!=null && name!=null){
@@ -1267,6 +1549,16 @@ public class Properties implements java.io.Serializable {
 		}
 	}
 	
+	public static void setDefaultValues(Class<?> aClass,Object[] namesValues,Boolean inherited){
+		for(Integer index = 0 ; index < namesValues.length ; index = index + 2)
+			setDefaultValue(aClass, namesValues[index], namesValues[index+1]);
+		setDefaultValuesInherited(aClass, inherited);
+	}
+	
+	public static void setDefaultValues(Class<?> aClass,Object[] namesValues){
+		setDefaultValues(aClass, namesValues, Boolean.TRUE);
+	}
+	
 	public static Object getDefaultValue(Class<?> aClass,Object name){
 		Object value = null;
 		if(aClass!=null && name!=null){
@@ -1275,6 +1567,17 @@ public class Properties implements java.io.Serializable {
 				value = map.get(name);	
 		}
 		return value;
+	}
+	
+	public static void setDefaultValuesInherited(Class<?> aClass,Boolean value){
+		if(Boolean.TRUE.equals(value))
+			INHERITED_DEFAULT_VALUES_CLASSES.add(aClass);
+		else
+			INHERITED_DEFAULT_VALUES_CLASSES.remove(aClass);
+	}
+	
+	public static Boolean isDefaultValuesInherited(Class<?> aClass){
+		return INHERITED_DEFAULT_VALUES_CLASSES.contains(aClass);
 	}
 	
 	@Override

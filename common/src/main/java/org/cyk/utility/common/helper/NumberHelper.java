@@ -268,6 +268,20 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return number1.doubleValue() == number2.doubleValue();
 	}
 	
+	public Boolean lessThan(Number number1,Number number2){
+		return compare(number1, number2, Boolean.FALSE, Boolean.FALSE);
+	}
+	public Boolean lessThanOrEqual(Number number1,Number number2){
+		return compare(number1, number2, Boolean.FALSE, Boolean.TRUE);
+	}
+	
+	public Boolean greatThan(Number number1,Number number2){
+		return compare(number1, number2, Boolean.TRUE, Boolean.FALSE);
+	}
+	public Boolean greatThanOrEqual(Number number1,Number number2){
+		return compare(number1, number2, Boolean.TRUE, Boolean.TRUE);
+	}
+	
 	public Number operate(Number number1,Number number2,Operation operation){
 		if(number1==null)
 			if(number2==null)

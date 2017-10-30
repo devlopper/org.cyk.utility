@@ -6,11 +6,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
+import org.cyk.utility.common.userinterface.CascadeStyleSheetHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.Layout;
@@ -101,7 +104,7 @@ public class Form extends Container implements Serializable {
 		public Master(Class<? extends SubmitCommandActionAdapter> submitCommandActionAdapterClass) {
 			menu.addOneChild(submitCommand);
 			submitCommand.setLabelFromIdentifier("command.submit");
-			setSubmitCommandActionAdapterClass(submitCommandActionAdapterClass);
+			//setSubmitCommandActionAdapterClass(submitCommandActionAdapterClass);
 		}
 		
 		public Master() {
@@ -110,7 +113,8 @@ public class Form extends Container implements Serializable {
 		
 		public Master setSubmitCommandActionAdapterClass(Class<? extends SubmitCommandActionAdapter> submitCommandActionAdapterClass){
 			submitCommand.setActionFromClass(submitCommandActionAdapterClass);
-			submitCommand.getAction().setIsNotifiableOnStatusSuccess(Boolean.TRUE);			
+			((SubmitCommandActionAdapter)submitCommand.getAction()).setForm(this);
+			//submitCommand.getAction().setIsNotifiableOnStatusSuccess(Boolean.TRUE);			
 			return this;
 		}
 		
@@ -127,7 +131,7 @@ public class Form extends Container implements Serializable {
 		}
 		
 		public Detail instanciateDetail(Layout.Type layoutType){
-			Detail detail = new Detail(layoutType);
+			Detail detail = new Detail(this,layoutType);
 			addOneChild(this.detail = detail);
 			return detail;
 		}
@@ -250,17 +254,24 @@ public class Form extends Container implements Serializable {
 	public static class Detail extends Form implements Serializable {
 		private static final long serialVersionUID = 1L;
 
-		public Detail(Layout.Type layoutType) {
+		private Master master;
+		
+		public Detail(Master master,Layout.Type layoutType) {
+			this.master = master;
 			getLayout().setType(layoutType);
 		}
 		
+		public Detail(Master master) {
+			this(master,Layout.Type.DEFAULT);
+		}
+		
 		public Detail() {
-			this(Layout.Type.DEFAULT);
+			this(null,null);
 		}
 		
 		/**/
 		
-		public void __add__(Input<?> input) {
+		private void __add__(Input<?> input) {
 			/*if(input.getLabel()!=null){
 				layOut(input.getLabel());
 			}*/
@@ -280,9 +291,44 @@ public class Form extends Container implements Serializable {
 			return this;
 		}
 		
+		public Detail add(Object object,String fieldName,Number length,Number width){
+			add(Input.get(this,object, FieldHelper.getInstance().get(object.getClass(), fieldName)).setLength(length).setWidth(width));
+			return this;
+		}
+		
+		public Detail add(Object object,String fieldName){
+			return add(object, fieldName, 1, 1);
+		}
+		
+		public Detail add(String[] fieldNames,Number length,Number width){
+			Object object = fieldNames.length == 1 ? master.getObject() : FieldHelper.getInstance().read(master.getObject()
+					, ArrayUtils.remove(fieldNames, fieldNames.length-1));
+			String fieldName = fieldNames[fieldNames.length-1] ;
+			add(object, fieldName, length, width);
+			getInputByFieldName(object, fieldName).getPropertiesMap()
+				.setIdentifierAsStyleClass(CascadeStyleSheetHelper.getInstance().getClass(master.getObject(), fieldNames));
+			return this;
+		}
+		
+		public Detail add(String fieldName,String...fieldNames){
+			return add(ArrayUtils.addAll(new String[]{fieldName}, fieldNames), 1, 1);
+		}
+		
+		public Detail add(String fieldName1,String fieldName2){
+			return add(fieldName1,new String[]{fieldName2});
+		}
+		
 		public Detail addBreak(){
 			layOutBreak();
 			return this;
+		}
+		
+		public Input<?> getInputByFieldName(Object object,String fieldName){
+			if(children!=null && CollectionHelper.getInstance().isNotEmpty(children.getElements()))
+				for(Component component : children.getElements())
+					if(component instanceof Input<?> && ((Input<?>)component).getField()!=null && ((Input<?>)component).getObject() == object && ((Input<?>)component).getField().getName().equals(fieldName))
+						return (Input<?>) component;
+			return null;
 		}
 		
 		@Override
@@ -308,14 +354,6 @@ public class Form extends Container implements Serializable {
 			}.execute();
 			return this;
 		}
-		
-		/*@SuppressWarnings("unchecked")
-		@Override
-		public Detail build() {
-			System.out.println("Form.Detail.build()");
-			return (Detail) ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance()
-					.getIfNotNullElseDefault(Builder.Target.Adapter.Default.DEFAULT_CLASS, Builder.Target.Adapter.Default.class)).setInput(this).execute();
-		}*/
 		
 		/**/
 

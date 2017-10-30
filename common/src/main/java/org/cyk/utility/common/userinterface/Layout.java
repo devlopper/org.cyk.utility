@@ -70,8 +70,10 @@ public class Layout extends Component.Invisible implements Serializable {
 	
 	public Visible getComponentFacing(Visible visible){
 		for(Component element : getChildren().getElements())
-			if(NumberHelper.getInstance().compare(((Visible)element).getArea().getLength().getFrom(), visible.getArea().getLength().getTo(), Boolean.TRUE, Boolean.TRUE) 
-					&& NumberHelper.getInstance().compare(((Visible)element).getArea().getWidth().getTo(), visible.getArea().getWidth().getTo(), Boolean.TRUE, Boolean.TRUE)){
+			if(NumberHelper.getInstance().greatThanOrEqual(((Visible)element).getArea().getLength().getFrom(), visible.getArea().getLength().getTo()) 
+					&& NumberHelper.getInstance().lessThanOrEqual(((Visible)element).getArea().getWidth().getFrom(), visible.getArea().getWidth().getFrom())
+					&& NumberHelper.getInstance().greatThanOrEqual(((Visible)element).getArea().getWidth().getTo(), visible.getArea().getWidth().getTo())
+					){
 				return (Visible) element;
 		}
 		return null;
@@ -80,8 +82,10 @@ public class Layout extends Component.Invisible implements Serializable {
 	public Layout normalize(){
 		Area area = getArea();
 		for(Integer index = 0 ; index < area.getWidth().getDistance().intValue() ; index++){
-			Visible visible = (Visible) CollectionHelper.getInstance().getLast(getWhereAreaWidthFromEqual(currentAreaWidthFrom));
-			normalize(visible);
+			Visible visible = (Visible) CollectionHelper.getInstance().getLast(getWhereAreaWidthFromEqual(index));
+			if(visible!=null){
+				normalize(visible);
+			}
 		}
 		return this;
 	}
