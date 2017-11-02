@@ -14,6 +14,7 @@ import org.cyk.utility.common.helper.MethodHelper;
 import org.cyk.utility.common.helper.RandomHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.model.Area;
+import org.cyk.utility.common.userinterface.input.Watermark;
 import org.cyk.utility.common.userinterface.output.OutputText;
 
 import lombok.Getter;
@@ -135,12 +136,32 @@ public class Component extends AbstractBean implements Serializable {
 				label = new OutputText();
 			return label;
 		}
+		
+		public Visible setLabel(OutputText label){
+			this.label = label;
+			if(label!=null){
+				if(getPropertiesMap().getTitle()==null)
+					getPropertiesMap().setTitle(label.getPropertiesMap().getValue());
+			}
+			__setWatermarkFromLabel__();
+			return this;
+		}
+		
+		public Visible __setWatermarkFromLabel__(){
+			Watermark watermark = (Watermark)getPropertiesMap().getWatermark();
+			if(watermark==null){
+				getPropertiesMap().setWatermark(watermark = new Watermark());
+			}
+			watermark.getPropertiesMap().setValue(label.getPropertiesMap().getValue());
+			return this;
+		}
 
 		public Visible setLabelFromIdentifier(String identifier){
 			if(StringHelper.getInstance().isBlank(identifier))
 				getLabel().getPropertiesMap().setValue(null);
 			else
 				getLabel().getPropertiesMap().setValue(StringHelper.getInstance().get(identifier, new Object[]{}));
+			__setWatermarkFromLabel__();
 			return this;
 		}
 		

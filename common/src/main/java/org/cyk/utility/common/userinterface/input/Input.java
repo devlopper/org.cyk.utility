@@ -17,6 +17,18 @@ import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.container.Form;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyAutoComplete;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyButton;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyCheck;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyList;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyCombo;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyPickList;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneAutoComplete;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneButton;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneCascadeList;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneCombo;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneList;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneRadio;
 import org.cyk.utility.common.userinterface.output.OutputText;
 
 import lombok.Getter;
@@ -28,13 +40,13 @@ import lombok.experimental.Accessors;
 public class Input<T> extends Control implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Object object;
-	private Field field;
-	private T value,initialValue;
+	protected Object object;
+	protected Field field;
+	protected T value,initialValue;
 
-	private CardinalPoint labelCardinalPoint;
+	protected CardinalPoint labelCardinalPoint;
 	
-	private CardinalPoint messageCardinalPoint;
+	protected CardinalPoint messageCardinalPoint;
 	
 	public Input<T> setFieldFromName(String name){
 		setField(FieldHelper.getInstance().get(object.getClass(), name));
@@ -191,18 +203,60 @@ public class Input<T> extends Control implements Serializable {
 						if(String.class.equals(field.getType())){
 							aClass = InputText.class;
 						}else if(Date.class.equals(field.getType())){
-							aClass = InputTime.class;
+							aClass = InputCalendar.class;
 						}
 					}else{
 						if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputText.class)!=null)
 							aClass = InputText.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputPassword.class)!=null)
+							aClass = InputPassword.class;
+						
 						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputTextarea.class)!=null)
 							aClass = InputTextarea.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputEditor.class)!=null)
+							aClass = InputEditor.class;
+						
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton.class)!=null)
+							aClass = InputBooleanButton.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputBooleanCheck.class)!=null)
+							aClass = InputBooleanCheckBox.class;
+						
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputNumber.class)!=null)
+							aClass = InputNumber.class;
+						
 						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputCalendar.class)!=null)
-							aClass = InputTime.class;
+							aClass = InputCalendar.class;
+						//one choice
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputOneCombo.class)!=null)
+							aClass = InputChoiceOneCombo.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputOneList.class)!=null)
+							aClass = InputChoiceOneList.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputOneCascadeList.class)!=null)
+							aClass = InputChoiceOneCascadeList.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputOneButton.class)!=null)
+							aClass = InputChoiceOneButton.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputOneAutoComplete.class)!=null)
+							aClass = InputChoiceOneAutoComplete.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputOneRadio.class)!=null)
+							aClass = InputChoiceOneRadio.class;
+						//many choices
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyAutoComplete.class)!=null)
+							aClass = InputChoiceManyAutoComplete.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyButton.class)!=null)
+							aClass = InputChoiceManyButton.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyCheck.class)!=null)
+							aClass = InputChoiceManyCheck.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyList.class)!=null)
+							aClass = InputChoiceManyList.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyCombo.class)!=null)
+							aClass = InputChoiceManyCombo.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyPickList.class)!=null)
+							aClass = InputChoiceManyPickList.class;
 					}
-					if(aClass==null)
+					if(aClass==null){
+						logWarning("No input class has been found for field $", field);
 						aClass = (Class<? extends Input<?>>) ClassHelper.getInstance().getByName(Input.class);
+					}
 					return aClass;
 				}
 				
@@ -268,4 +322,5 @@ public class Input<T> extends Control implements Serializable {
 		}
 		
 	}
+
 }

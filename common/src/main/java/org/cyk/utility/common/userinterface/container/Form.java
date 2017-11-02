@@ -331,6 +331,10 @@ public class Form extends Container implements Serializable {
 			return null;
 		}
 		
+		public Input<?> getInputByFieldName(String fieldName){
+			return getInputByFieldName(master.getObject(), fieldName);
+		}
+		
 		@Override
 		public Detail read(){
 			new CollectionHelper.Iterator.Adapter.Default<Component>(children.getElements()){

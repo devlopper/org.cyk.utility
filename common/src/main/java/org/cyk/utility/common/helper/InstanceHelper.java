@@ -10,8 +10,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
@@ -23,7 +25,7 @@ import org.cyk.utility.common.helper.InstanceHelper.Listener.FieldValueGenerator
 import javassist.Modifier;
 import lombok.Getter;
 
-@Singleton
+@Singleton @Named
 public class InstanceHelper extends AbstractHelper implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
@@ -956,6 +958,33 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					return fieldValueGenerator.setInstance(instance).setFieldName(name).execute();
 				}
 				
+				@SuppressWarnings("unchecked")
+				@Override
+				public <T> Collection<T> get(Class<T> aClass, Filter<T> filter,DataReadConfiguration dataReadConfiguration) {
+					if(aClass.isEnum() || ArrayUtils.contains(new Class[]{Boolean.class}, aClass)){
+						Collection<T> collection = new ArrayList<T>();
+						if(aClass.isEnum()){
+							for(Enum<?> value : (Enum<?>[])aClass.getEnumConstants())
+								collection.add((T) value);
+						}else if(ClassHelper.getInstance().isBoolean(aClass)){
+							collection.add((T) Boolean.TRUE);
+							collection.add((T) Boolean.FALSE);
+						}
+						return collection;
+					}
+					
+					return super.get(aClass, filter, dataReadConfiguration);
+				}
+				
+				@Override
+				public <T> Collection<T> get(Class<T> aClass, DataReadConfiguration dataReadConfiguration) {
+					return get(aClass, null,dataReadConfiguration);
+				}
+				
+				@Override
+				public <T> Collection<T> get(Class<T> aClass) {
+					return get(aClass,null);
+				}
 			}
 			
 		}

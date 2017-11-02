@@ -1,7 +1,6 @@
 package org.cyk.utility.common.userinterface.input;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.userinterface.Control;
@@ -11,14 +10,14 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public class InputTime extends Input<Date> implements Serializable {
+public class InputBoolean extends Input<Boolean> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/**/
 
-	public static interface BuilderBase<OUTPUT extends InputTime> extends Input.BuilderBase<OUTPUT> {
+	public static interface BuilderBase<OUTPUT extends InputBoolean> extends Input.BuilderBase<OUTPUT> {
 
-		public static class Adapter<OUTPUT extends InputTime> extends Control.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {
+		public static class Adapter<OUTPUT extends InputBoolean> extends Control.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {
 			private static final long serialVersionUID = 1L;
 
 			public Adapter(Class<OUTPUT> outputClass) {
@@ -27,7 +26,7 @@ public class InputTime extends Input<Date> implements Serializable {
 
 			/**/
 
-			public static class Default<OUTPUT extends InputTime> extends BuilderBase.Adapter<OUTPUT> implements Serializable {
+			public static class Default<OUTPUT extends InputBoolean> extends BuilderBase.Adapter<OUTPUT> implements Serializable {
 				private static final long serialVersionUID = 1L;
 
 				public Default(Class<OUTPUT> outputClass) {
@@ -37,14 +36,14 @@ public class InputTime extends Input<Date> implements Serializable {
 		}
 	}
 	
-	public static interface Builder extends BuilderBase<InputTime> {
+	public static interface Builder extends BuilderBase<InputBoolean> {
 
-		public static class Adapter extends BuilderBase.Adapter.Default<InputTime> implements Builder, Serializable {
+		public static class Adapter extends BuilderBase.Adapter.Default<InputBoolean> implements Builder, Serializable {
 			private static final long serialVersionUID = 1L;
 
 			@SuppressWarnings("unchecked")
 			public Adapter() {
-				super((Class<InputTime>) ClassHelper.getInstance().getByName(InputTime.class));
+				super((Class<InputBoolean>) ClassHelper.getInstance().getByName(InputBoolean.class));
 			}
 
 			/**/

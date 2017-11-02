@@ -26,12 +26,14 @@ public class Properties implements java.io.Serializable {
 	/**/
 		
 	public static void setDefaultValues(Class<?> aClass,Properties properties){
-		setDefaultValues(aClass, properties, DEFAULT_VALUES.get(aClass));
+		//Inherited first
 		for(Entry<Class<?>,Map<Object,Object>> entry : DEFAULT_VALUES.entrySet()){
 			if(!entry.getClass().equals(aClass) && ClassHelper.getInstance().isInstanceOf(entry.getKey(), aClass) && isDefaultValuesInherited(entry.getKey())){
 				setDefaultValues(aClass, properties, DEFAULT_VALUES.get(entry.getKey()));
 			}
 		}
+		//own second
+		setDefaultValues(aClass, properties, DEFAULT_VALUES.get(aClass));
 	}
 	
 	private static void setDefaultValues(Class<?> aClass,Properties properties,Map<Object,Object> map){
@@ -1400,6 +1402,147 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getWatermark() {
+		return get(WATERMARK);
+	}
+
+	public Properties setWatermark(Object value) {
+		set(WATERMARK, value);
+		return this;
+	}
+	
+	public Object getOnLabel() {
+		return get(ON_LABEL);
+	}
+
+	public Properties setOnLabel(Object value) {
+		set(ON_LABEL, value);
+		return this;
+	}
+	
+	public Object getOnIcon() {
+		return get(ON_ICON);
+	}
+
+	public Properties setOnIcon(Object value) {
+		set(ON_ICON, value);
+		return this;
+	}
+	
+	public Object getOffLabel() {
+		return get(OFF_LABEL);
+	}
+
+	public Properties setOffLabel(Object value) {
+		set(OFF_LABEL, value);
+		return this;
+	}
+	
+	public Object getOffIcon() {
+		return get(OFF_ICON);
+	}
+
+	public Properties setOffIcon(Object value) {
+		set(OFF_ICON, value);
+		return this;
+	}
+	
+	public Object getDualListModel() {
+		return get(DUAL_LIST_MODEL);
+	}
+
+	public Properties setDualListModel(Object value) {
+		set(DUAL_LIST_MODEL, value);
+		return this;
+	}
+	
+	public Object getSelectItemWrappable() {
+		return get(SELECT_ITEM_WRAPPABLE);
+	}
+
+	public Properties setSelectItemWrappable(Object value) {
+		set(SELECT_ITEM_WRAPPABLE, value);
+		return this;
+	}
+	
+	public Object getVar() {
+		return get(VAR);
+	}
+
+	public Properties setVar(Object value) {
+		set(VAR, value);
+		return this;
+	}
+	
+	public Object getItemValue() {
+		return get(ITEM_VALUE);
+	}
+
+	public Properties setItemValue(Object value) {
+		set(ITEM_VALUE, value);
+		return this;
+	}
+	
+	public Object getItemLabel() {
+		return get(ITEM_LABEL);
+	}
+
+	public Properties setItemLabel(Object value) {
+		set(ITEM_LABEL, value);
+		return this;
+	}
+	
+	public Object getItemDescription() {
+		return get(ITEM_DESCRIPTION);
+	}
+
+	public Properties setItemDescription(Object value) {
+		set(ITEM_DESCRIPTION, value);
+		return this;
+	}
+	
+	public Object getItemDisabled() {
+		return get(ITEM_DISABLED);
+	}
+
+	public Properties setItemDisabled(Object value) {
+		set(ITEM_DISABLED, value);
+		return this;
+	}
+	
+	public Object getItemLabelEscaped() {
+		return get(ITEM_LABEL_ESCAPED);
+	}
+
+	public Properties setItemLabelEscaped(Object value) {
+		set(ITEM_LABEL_ESCAPED, value);
+		return this;
+	}
+	
+	public Object getSelectItems() {
+		return get(SELECT_ITEMS);
+	}
+
+	public Properties setSelectItems(Object value) {
+		set(SELECT_ITEMS, value);
+		return this;
+	}
+	
+	public static final String SELECT_ITEMS="SELECT_ITEMS";
+	public static final String VAR="VAR";
+	public static final String ITEM_VALUE="ITEM_VALUE";
+	public static final String ITEM_LABEL="ITEM_LABEL"; 
+	public static final String ITEM_DESCRIPTION="ITEM_DESCRIPTION";
+	public static final String ITEM_DISABLED="ITEM_DISABLED";
+	public static final String ITEM_LABEL_ESCAPED="ITEM_LABEL_ESCAPED";
+	
+	public static final String SELECT_ITEM_WRAPPABLE = "SELECT_ITEM_WRAPPABLE";
+	public static final String DUAL_LIST_MODEL = "DUAL_LIST_MODEL";
+	public static final String WATERMARK = "WATERMARK";
+	public static final String ON_LABEL = "ON_LABEL";
+	public static final String ON_ICON = "ON_ICON";
+	public static final String OFF_LABEL = "OFF_LABEL";
+	public static final String OFF_ICON = "OFF_ICON";
 	public static final String ASYNC = "ASYNC";
 	public static final String AUTO_SHOW="AUTO_SHOW";
 	public static final String CENTER_X="CENTER_X";

@@ -3,6 +3,7 @@ package org.cyk.utility.common;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
@@ -81,6 +82,16 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	
 	@Override
 	protected void _execute_() {}
+	
+	@Test
+	public void getEnumValues(){
+		assertList(new ArrayList<MyEnum>(InstanceHelper.getInstance().get(MyEnum.class)), Arrays.asList(MyEnum.E1,MyEnum.E2,MyEnum.E3));
+	}
+	
+	@Test
+	public void getBooleanValues(){
+		assertList(new ArrayList<Boolean>(InstanceHelper.getInstance().get(Boolean.class)), Arrays.asList(Boolean.TRUE,Boolean.FALSE));
+	}
 	
 	@Test
 	public void generateFieldValue(){
@@ -325,4 +336,14 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		
 	}
 	
+	public static class Listener extends InstanceHelper.Listener.Adapter.Default implements Serializable{
+		private static final long serialVersionUID = 1L;
+		
+		
+		
+	}
+	
+	public static enum MyEnum {
+		E1,E2,E3
+	}
 }
