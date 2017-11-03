@@ -29,6 +29,7 @@ import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneCascadeLi
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneCombo;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneList;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneRadio;
+import org.cyk.utility.common.userinterface.input.number.InputNumber;
 import org.cyk.utility.common.userinterface.output.OutputText;
 
 import lombok.Getter;
@@ -40,7 +41,7 @@ import lombok.experimental.Accessors;
 public class Input<T> extends Control implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected Object object;
+	protected Object object,valueObject;
 	protected Field field;
 	protected T value,initialValue;
 
@@ -221,8 +222,10 @@ public class Input<T> extends Control implements Serializable {
 						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputBooleanCheck.class)!=null)
 							aClass = InputBooleanCheckBox.class;
 						
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputNumber.class)!=null)
-							aClass = InputNumber.class;
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputNumber.class)!=null){
+							String name = InputNumber.class.getName()+ClassHelper.getInstance().getWrapper(field.getType()).getSimpleName();
+							aClass = (Class<? extends Input<?>>) ClassHelper.getInstance().getByName(name);
+						}
 						
 						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputCalendar.class)!=null)
 							aClass = InputCalendar.class;
@@ -251,11 +254,17 @@ public class Input<T> extends Control implements Serializable {
 						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyCombo.class)!=null)
 							aClass = InputChoiceManyCombo.class;
 						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyPickList.class)!=null)
-							aClass = InputChoiceManyPickList.class;
+							aClass = InputChoiceManyPickList.class; //InstanceHelper.getInstance().getIfNotNullElseDefault(InputChoiceManyPickList.DEFAULT_CLASS,InputChoiceManyPickList.class);
 						
 						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputFile.class)!=null)
 							aClass = InputFile.class;
 					}
+					
+					if(aClass!=null){
+						Field staticField = FieldHelper.getInstance().get(aClass, "DEFAULT_CLASS");
+						aClass = staticField == null ? aClass : (Class<? extends Input<?>>)FieldHelper.getInstance().readStatic(staticField);
+					}
+					
 					if(aClass==null){
 						logWarning("No input class has been found for field $", field);
 						aClass = (Class<? extends Input<?>>) ClassHelper.getInstance().getByName(Input.class);

@@ -25,6 +25,12 @@ public class NumberHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void assertDouble(){
+		//Double.valueOf("5,1");
+		//System.out.println("NumberHelperUnitTest.assertDouble() : "+Double.valueOf("5.1"));
+	}
+	
+	@Test
 	public void assertNumber(){
 		assertEquals("63", new NumberHelper.Stringifier.Adapter.Default().setInput(63).execute());	
 		assertEquals("63", new NumberHelper.Stringifier.Adapter.Default().setInput(new BigDecimal("63.00")).execute());	

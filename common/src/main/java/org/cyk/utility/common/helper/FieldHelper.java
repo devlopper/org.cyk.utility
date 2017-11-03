@@ -105,6 +105,15 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		}
 	}
 	
+	public Object readStatic(java.lang.reflect.Field field){
+		try {
+			return FieldUtils.readStaticField(field, Boolean.TRUE);
+		} catch (IllegalAccessException e) {
+			logThrowable(e);
+			return null;
+		}
+	}
+	
 	public void set(Object object,String...fieldNames){
 		for(String p : getFieldNames(fieldNames)){
 			Object pValue = read(object, p);
