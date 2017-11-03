@@ -1528,6 +1528,127 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getPreviewable() {
+		return get(PREVIEWABLE);
+	}
+
+	public Properties setPreviewable(Object value) {
+		set(PREVIEWABLE, value);
+		return this;
+	}
+	
+	public Object getClearable() {
+		return get(CLEARABLE);
+	}
+
+	public Properties setClearable(Object value) {
+		set(CLEARABLE, value);
+		return this;
+	}
+	
+	public Object getMinimumSize() {
+		return get(MINIMUM_SIZE);
+	}
+
+	public Properties setMinimumSize(Object value) {
+		set(MINIMUM_SIZE, value);
+		return this;
+	}
+	
+	public Object getMaximumSize() {
+		return get(MAXIMUM_SIZE);
+	}
+
+	public Properties setMaximumSize(Object value) {
+		set(MAXIMUM_SIZE, value);
+		return this;
+	}
+	
+	public Object getExtensions() {
+		return get(EXTENSIONS);
+	}
+
+	public Properties setExtensions(Object value) {
+		set(EXTENSIONS, value);
+		return this;
+	}
+	
+	public Object getAllowTypes() {
+		return get(ALLOW_TYPES);
+	}
+
+	public Properties setAllowTypes(Object value) {
+		set(ALLOW_TYPES, value);
+		return this;
+	}
+	
+	public Object getExtensionsAsString() {
+		return get(EXTENSIONS_AS_STRING);
+	}
+
+	public Properties setExtensionsAsString(Object value) {
+		set(EXTENSIONS_AS_STRING, value);
+		return this;
+	}
+	
+	public Object getMode() {
+		return get(MODE);
+	}
+
+	public Properties setMode(Object value) {
+		set(MODE, value);
+		return this;
+	}
+	
+	public Object getPreviewWidth() {
+		return get(PREVIEW_WIDTH);
+	}
+
+	public Properties setPreviewWidth(Object value) {
+		set(PREVIEW_WIDTH, value);
+		return this;
+	}
+	
+	public Object getPreviewHeight() {
+		return get(PREVIEW_HEIGHT);
+	}
+
+	public Properties setPreviewHeight(Object value) {
+		set(PREVIEW_HEIGHT, value);
+		return this;
+	}
+	
+	public Object getClearCommand() {
+		return get(CLEAR_COMMAND);
+	}
+
+	public Properties setClearCommand(Object value) {
+		set(CLEAR_COMMAND, value);
+		return this;
+	}
+	
+	public Object getSkinSimple() {
+		return get(SKIN_SIMPLE);
+	}
+
+	public Properties setSkinSimple(Object value) {
+		set(SKIN_SIMPLE, value);
+		return this;
+	}
+	
+	public static final String SKIN_SIMPLE = "SKIN_SIMPLE";
+	public static final String CLEAR_COMMAND = "CLEAR_COMMAND";
+	public static final String PREVIEWABLE = "PREVIEWABLE";
+	public static final String CLEARABLE = "CLEARABLE"; 
+	public static final String MINIMUM_SIZE = "MINIMUM_SIZE";
+	public static final String MAXIMUM_SIZE = "MAXIMUM_SIZE";
+	public static final String EXTENSIONS = "EXTENSIONS";
+	public static final String ALLOW_TYPES = "ALLOW_TYPES";
+	public static final String EXTENSIONS_AS_STRING = "EXTENSIONS_AS_STRING";
+	public static final String MODE="MODE";
+	public static final String PREVIEW_WIDTH="PREVIEW_WIDTH";
+	public static final String PREVIEW_HEIGHT="PREVIEW_HEIGHT";
+	
 	public static final String SELECT_ITEMS="SELECT_ITEMS";
 	public static final String VAR="VAR";
 	public static final String ITEM_VALUE="ITEM_VALUE";

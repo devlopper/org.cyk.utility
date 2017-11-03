@@ -20,8 +20,8 @@ import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyAutoComplete;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyButton;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyCheck;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyList;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyCombo;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyList;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyPickList;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneAutoComplete;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneButton;
@@ -252,6 +252,9 @@ public class Input<T> extends Control implements Serializable {
 							aClass = InputChoiceManyCombo.class;
 						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyPickList.class)!=null)
 							aClass = InputChoiceManyPickList.class;
+						
+						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputFile.class)!=null)
+							aClass = InputFile.class;
 					}
 					if(aClass==null){
 						logWarning("No input class has been found for field $", field);

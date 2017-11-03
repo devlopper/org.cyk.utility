@@ -1,6 +1,5 @@
 package org.cyk.utility.common.helper;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,6 +12,11 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.cdi.AbstractBean;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Singleton
 public class FileHelper extends AbstractHelper implements Serializable  {
@@ -56,13 +60,13 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 	
 	/**/
 	
-	public interface Read<RESULT> extends Action<File, RESULT> {
+	public interface Read<RESULT> extends Action<java.io.File, RESULT> {
 		
-		public static class Adapter<RESULT> extends Action.Adapter.Default<File, RESULT> implements Read<RESULT>,Serializable {
+		public static class Adapter<RESULT> extends Action.Adapter.Default<java.io.File, RESULT> implements Read<RESULT>,Serializable {
 			private static final long serialVersionUID = 1L;
 		
-			public Adapter(File file) {
-				super("read", File.class, file, null);
+			public Adapter(java.io.File file) {
+				super("read", java.io.File.class, file, null);
 			}
 			
 			/**/
@@ -70,7 +74,7 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 			public static class Default<RESULT> extends Read.Adapter<RESULT> implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				public Default(File file) {
+				public Default(java.io.File file) {
 					super(file);
 				}
 
@@ -111,6 +115,16 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 				}
 			}	
 		}
+	}
+
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class File extends AbstractBean implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private byte[] bytes;
+		
 	}
 }
 	
