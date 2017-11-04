@@ -1,6 +1,7 @@
 package org.cyk.utility.common.userinterface.input.choice;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Collection;
 
 import org.cyk.utility.common.helper.ClassHelper;
@@ -14,6 +15,8 @@ import lombok.experimental.Accessors;
 public class InputChoiceManyAutoComplete extends InputChoiceMany implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private InputAutoCompleteCommon common = new InputAutoCompleteCommon();
+	
 	/**/
 	
 	@Override
@@ -24,6 +27,13 @@ public class InputChoiceManyAutoComplete extends InputChoiceMany implements Seri
 	@Override
 	public InputChoiceManyAutoComplete setField(Object object, String fieldName) {
 		return (InputChoiceManyAutoComplete) super.setField(object, fieldName);
+	}
+	
+	@Override
+	public InputChoiceManyAutoComplete setField(Field field) {
+		super.setField(field);
+		common.setClazz(ClassHelper.getInstance().getParameterAt(field,0,Object.class));
+		return this;
 	}
 	
 	public static interface BuilderBase<OUTPUT extends InputChoiceManyAutoComplete> extends InputChoiceMany.BuilderBase<OUTPUT> {

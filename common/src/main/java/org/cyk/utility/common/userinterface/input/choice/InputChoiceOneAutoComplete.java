@@ -1,6 +1,7 @@
 package org.cyk.utility.common.userinterface.input.choice;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.userinterface.Control;
@@ -13,11 +14,21 @@ import lombok.experimental.Accessors;
 public class InputChoiceOneAutoComplete extends InputChoiceOne implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private InputAutoCompleteCommon common = new InputAutoCompleteCommon();
+	
 	/**/
 	
 	@Override
 	public InputChoiceOneAutoComplete setField(Object object, String fieldName) {
 		return (InputChoiceOneAutoComplete) super.setField(object, fieldName);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public InputChoiceOneAutoComplete setField(Field field) {
+		super.setField(field);
+		common.setClazz((Class<Object>) field.getType());
+		return this;
 	}
 	
 	public static interface BuilderBase<OUTPUT extends InputChoiceOneAutoComplete> extends InputChoiceOne.BuilderBase<OUTPUT> {

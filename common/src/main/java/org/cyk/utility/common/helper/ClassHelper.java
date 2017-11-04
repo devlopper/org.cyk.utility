@@ -98,6 +98,11 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return (Class<TYPE>) ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments()[index];
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <TYPE> Class<TYPE> getParameterAt(Field field,Integer index,Class<TYPE> typeClass){
+		return (Class<TYPE>) ((ParameterizedType)field.getGenericType()).getActualTypeArguments()[index];
+	}
+	
 	public Class<?> getByName(Class<?> aClass){
 		return getByName(aClass.getName());
 	}

@@ -2,6 +2,7 @@ package org.cyk.utility.common;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -11,6 +12,7 @@ import org.cyk.utility.common.helper.AbstractHelper;
 import org.cyk.utility.common.helper.AbstractReflectionHelper;
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -20,6 +22,11 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 	
 	@Override
 	protected void _execute_() {}
+	
+	@Test
+	public void getParameterAt(){
+		assertEquals(String.class, ClassHelper.getInstance().getParameterAt(FieldHelper.getInstance().get(ParamClass.class, "strings"), 0, String.class));
+	}
 	
 	@Test
 	public void getContainerNames(){
@@ -99,5 +106,11 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 
 	public static class MyClass {
 		public MyClass(Number number) {}
+	}
+	
+	public static class ParamClass {
+		
+		private List<String> strings;
+		
 	}
 }
