@@ -121,7 +121,7 @@ public class Properties implements java.io.Serializable {
 				((Collection<Object>)keyValue).remove(value);
 		}else if(ClassHelper.getInstance().isEqual(String.class, valueClass)){
 			if(Boolean.TRUE.equals(add))
-				keyValue = (String)keyValue + value;
+				keyValue = (String)(keyValue == null ? Constant.EMPTY_STRING : keyValue) + value;
 			else
 				keyValue = StringHelper.getInstance().replace((String)keyValue, (String) value, Constant.EMPTY_STRING);
 		}else if(ClassHelper.getInstance().isNumber(valueClass)){
@@ -1636,6 +1636,126 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getMultiple() {
+		return get(MULTIPLE);
+	}
+
+	public Properties setMultiple(Object value) {
+		set(MULTIPLE, value);
+		return this;
+	}
+	
+	public Object getImageComponent() {
+		return get(IMAGE_COMPONENT);
+	}
+
+	public Properties setImageComponent(Object value) {
+		set(IMAGE_COMPONENT, value);
+		return this;
+	}
+	
+	public Object getPreviewImageComponent() {
+		return get(PREVIEW_IMAGE_COMPONENT);
+	}
+
+	public Properties setPreviewImageComponent(Object value) {
+		set(PREVIEW_IMAGE_COMPONENT, value);
+		return this;
+	}
+	
+	public Object getSrc() {
+		return get(SRC);
+	}
+
+	public Properties setSrc(Object value) {
+		set(SRC, value);
+		return this;
+	}
+	
+	public Object getUrl() {
+		return get(URL);
+	}
+
+	public Properties setUrl(Object value) {
+		set(URL, value);
+		return this;
+	}
+	
+	public Object getLibrary() {
+		return get(LIBRARY);
+	}
+
+	public Properties setLibrary(Object value) {
+		set(LIBRARY, value);
+		return this;
+	}
+	
+	public Object getStream() {
+		return get(STREAM);
+	}
+
+	public Properties setStream(Object value) {
+		set(STREAM, value);
+		return this;
+	}
+	
+	public Object getCache() {
+		return get(CACHE);
+	}
+
+	public Properties setCache(Object value) {
+		set(CACHE, value);
+		return this;
+	}
+	
+	public Object getIsMap() {
+		return get(IS_MAP);
+	}
+
+	public Properties setIsMap(Object value) {
+		set(IS_MAP, value);
+		return this;
+	}
+	
+	public Object getUseMap() {
+		return get(USE_MAP);
+	}
+
+	public Properties setUseMap(Object value) {
+		set(USE_MAP, value);
+		return this;
+	}
+	
+	public Object getDir() {
+		return get(DIR);
+	}
+
+	public Properties setDir(Object value) {
+		set(DIR, value);
+		return this;
+	}
+	
+	public Object getAlt() {
+		return get(ALT);
+	}
+
+	public Properties setAlt(Object value) {
+		set(ALT, value);
+		return this;
+	}
+	
+	public static final String CACHE = "CACHE";
+	public static final String DIR = "DIR";
+	public static final String ALT = "ALT";
+	public static final String IS_MAP = "IS_MAP";
+	public static final String USE_MAP = "USE_MAP";
+	public static final String STREAM = "STREAM";
+	public static final String URL = "URL";
+	public static final String LIBRARY = "LIBRARY";
+	public static final String SRC = "SRC";
+	public static final String IMAGE_COMPONENT = "IMAGE_COMPONENT";
+	public static final String PREVIEW_IMAGE_COMPONENT = "PREVIEW_IMAGE_COMPONENT";
+	public static final String MULTIPLE = "MULTIPLE";
 	public static final String SKIN_SIMPLE = "SKIN_SIMPLE";
 	public static final String CLEAR_COMMAND = "CLEAR_COMMAND";
 	public static final String PREVIEWABLE = "PREVIEWABLE";

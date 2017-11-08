@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Singleton;
@@ -32,12 +34,13 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	private static final long serialVersionUID = 1L;
 
 	private static ClassHelper INSTANCE;
-	
 	public static ClassHelper getInstance() {
 		if(INSTANCE == null)
 			INSTANCE = new ClassHelper();
 		return INSTANCE;
 	}
+	
+	private static final Map<Class<?>,Class<?>> MAP = new HashMap<>();
 	
 	@Override
 	protected void initialisation() {
@@ -154,7 +157,12 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 			arguments[j++] = constructorParameters[i+1];
 		}
 		try {
-			return getConstructor(aClass,classes).newInstance(arguments);
+			Constructor<T> constructor = getConstructor(aClass, classes);
+			if(constructor == null){
+				logError("no constructor found in class % with parameters %", aClass,StringUtils.join(classes,","));
+				return null;
+			}
+			return constructor.newInstance(arguments);
 		} catch (Exception exception) {
 			exception.printStackTrace();
 			return null;
@@ -169,13 +177,17 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		}
 	}
 	
-	public <T> T instanciateOne(Class<T> aClass){
+	public <T> T instanciateOne(Class<T> aClass,Boolean getMapping){
 		try {
-			return new Instanciation.Get.Adapter.Default<>(aClass).execute();
+			return new Instanciation.Get.Adapter.Default<>(Boolean.TRUE.equals(getMapping) ? getMapping(aClass, Boolean.TRUE) : aClass).execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public <T> T instanciateOne(Class<T> aClass){
+		return instanciateOne(aClass,Boolean.TRUE);
 	}
 	
 	public Collection<?> instanciateMany(@SuppressWarnings("rawtypes") Collection classes){
@@ -235,6 +247,16 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				names.add(className);
 		Collections.reverse(names);
 		return names;
+	}
+
+	public void map(Class<?> aClass1,Class<?> aClass2){
+		MAP.put(aClass1, aClass2);
+	}
+	
+	public <T> Class<? extends T> getMapping(Class<T> aClass,Boolean returnClassIfNull){
+		@SuppressWarnings("unchecked")
+		Class<T> result = (Class<T>) MAP.get(aClass);
+		return result == null ? aClass : result;
 	}
 	
 	/**/

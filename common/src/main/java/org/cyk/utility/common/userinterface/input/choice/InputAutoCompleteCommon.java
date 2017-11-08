@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.helper.CriteriaHelper.Criteria;
 import org.cyk.utility.common.helper.FilterHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
@@ -17,11 +18,20 @@ public class InputAutoCompleteCommon extends AbstractBean implements Serializabl
 	private static final long serialVersionUID = 1L;
 
 	protected Class<Object> clazz;
+	protected FilterHelper.Filter<Object> filter = new FilterHelper.Filter<>();
+	protected Criteria.String queryCriteria;
+	protected DataReadConfiguration dataReadConfiguration;
+	
+	public InputAutoCompleteCommon() {
+		queryCriteria = filter.instanciateCriteria(Criteria.String.class);
+	}
 	
 	public List<?> complete(final String query) {
-		FilterHelper.Filter<Object> filter = new FilterHelper.Filter<>();
-		filter.instanciateCriteria(Criteria.String.class).set(query);
-		return (List<Object>) InstanceHelper.getInstance().get(clazz, filter, null);
+		return (List<Object>) InstanceHelper.getInstance().get(clazz, filter.set(query), dataReadConfiguration);
+	}
+	
+	public Object getChoiceValue(Object choice){
+		return InstanceHelper.getInstance().getIdentifier(choice);
 	}
 	
 }

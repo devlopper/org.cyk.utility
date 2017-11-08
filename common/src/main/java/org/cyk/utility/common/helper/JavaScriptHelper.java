@@ -25,6 +25,8 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 	
 	private static final String INSTRUCTION_SEPARATOR = ";";
 	private static final String DOUBLE_SPACE = Constant.CHARACTER_SPACE.toString()+Constant.CHARACTER_SPACE.toString();
+	private static final String FUNCTION_CALL_FORMAT = "%s(%s);";
+	private static final String FUNCTION_PARAMETER_STRING_FORMAT = "'%s'";
 	
 	private static JavaScriptHelper INSTANCE;
 	
@@ -79,7 +81,21 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 		return script;
 	}
 	
+	public String getFunctionCall(String name,String...parameters){
+		return String.format(FUNCTION_CALL_FORMAT, name,StringHelper.getInstance().concatenate(parameters, Constant.CHARACTER_COMA));
+	}
 	
+	public String getFunctionCallPreview(String...parameters){
+		return getFunctionCall(FUNCTION_NAME_PREVIEW, parameters);
+	}
+	
+	public String getFunctionCallResetInputFile(String...parameters){
+		return getFunctionCall(FUNCTION_NAME_RESET_INPUT_FILE, parameters);
+	}
+	
+	public String formatParameterString(Object value){
+		return String.format(FUNCTION_PARAMETER_STRING_FORMAT, value == null ? Constant.EMPTY_STRING : value);
+	}
 	
 	/*public String update(WebInput<?, ?, ?, ?> input,Object value){
 		if( Boolean.TRUE.equals(((Input<?, ?, ?, ?, ?, ?>)input).getReadOnly()) && !Boolean.TRUE.equals(((Input<?, ?, ?, ?, ?, ?>)input).getKeepShowingInputOnReadOnly())){
@@ -372,4 +388,8 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 		}
 	}
 	
+	/**/
+	
+	public static final String FUNCTION_NAME_PREVIEW = "preview";
+	public static final String FUNCTION_NAME_RESET_INPUT_FILE = "resetInputFile";
 }

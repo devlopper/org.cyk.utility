@@ -55,6 +55,15 @@ public class PropertiesUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void addStyleClass(){
+		Properties properties = new Properties();
+		properties.addString(Properties.STYLE_CLASS, "string");
+		
+		assertEquals("mystring", properties.getStyleClass());
+		
+	}
+	
+	@Test
 	public void remove(){
 		Properties properties = new Properties();
 		List<String> listString = new ArrayList<String>();
@@ -96,10 +105,12 @@ public class PropertiesUnitTest extends AbstractUnitTest {
 	/**/
 	
 	public static class A extends AbstractBean {
+		private static final long serialVersionUID = 1L;
 		
 	}
 	
 	public static class B extends A {
+		private static final long serialVersionUID = 1L;
 		
 	}
 	

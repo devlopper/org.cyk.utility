@@ -59,6 +59,10 @@ public class InputChoice<T> extends Input<T> implements Serializable {
 		return this;
 	}
 	
+	public Object getChoiceValue(Object choice){
+		return choice;
+	}
+	
 	public String getChoiceLabel(Object choice){
 		return InstanceHelper.getInstance().getLabel(choice);
 	}

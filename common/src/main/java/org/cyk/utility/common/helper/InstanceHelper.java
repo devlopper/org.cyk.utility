@@ -90,6 +90,12 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		});
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <T> T getByIdentifier(Class<T> aClass,Object identifier){
+		return (T) ListenerHelper.getInstance().listenObject(Listener.COLLECTION, Listener.METHOD_NAME_GET_BY_IDENTIFIER
+				, MethodHelper.Method.Parameter.buildArray(Object.class,identifier));
+	}
+	
 	public void setFieldValueGenerator(Class<?> aClass,String fieldName,FieldValueGenerator<?> fieldValueGenerator){
 		Map<String, FieldValueGenerator<?>> map = FieldValueGenerator.MAP.get(aClass);
 		if(map==null){
@@ -135,12 +141,20 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	}
 
 	public String getLabel(Object instance){
+		if(instance==null)
+			return null;
 		return ClassHelper.getInstance().instanciateOne(Stringifier.Label.Adapter.Default.DEFAULT_CLASS).setInput(instance).execute();
 	}
 	
 	public String getDescription(Object instance){
+		if(instance==null)
+			return null;
 		return ClassHelper.getInstance().instanciateOne(Stringifier.Description.Adapter.Default.DEFAULT_CLASS).setInput(instance).execute();
 	}
+	
+	/*public convert(Object instance1,){
+		
+	}*/
 	
 	/**/
 	
@@ -861,6 +875,9 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		<T> Long count(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
 		<T> Long count(Class<T> aClass,FilterHelper.Filter<T> filter,DataReadConfiguration dataReadConfiguration);
 		
+		String METHOD_NAME_GET_BY_IDENTIFIER = "getByIdentifier";
+		<T> T getByIdentifier(Class<T> aClass,Object identifier);
+		@Deprecated
 		<T> T getIdentifier(Class<T> aClass,Object identifier);
 		Object getIdentifier(Object instance);
 		Boolean getAreEqual(Object object1,Object object2);
@@ -924,6 +941,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			
 			@Override
 			public <T> Long count(Class<T> aClass, DataReadConfiguration dataReadConfiguration) {
+				return null;
+			}
+			
+			@Override
+			public <T> T getByIdentifier(Class<T> aClass, Object master) {
 				return null;
 			}
 			

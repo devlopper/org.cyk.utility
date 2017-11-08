@@ -14,8 +14,6 @@ import lombok.experimental.Accessors;
 public class InputChoiceManyPickList extends InputChoiceMany implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	public static Class<? extends InputChoiceManyPickList> DEFAULT_CLASS = InputChoiceManyPickList.class;
-	
 	/**/
 	
 	@Override

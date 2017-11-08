@@ -58,6 +58,14 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 		return FilenameUtils.getFullPath(fileName);
 	}
 	
+	public String getName(String name){
+		return FilenameUtils.getBaseName(name);
+	}
+	
+	public String getExtension(String name){
+		return FilenameUtils.getExtension(name);
+	}
+	
 	/**/
 	
 	public interface Read<RESULT> extends Action<java.io.File, RESULT> {
@@ -123,6 +131,7 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 	public static class File extends AbstractBean implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		private String name,extension,mime;
 		private byte[] bytes;
 		
 	}

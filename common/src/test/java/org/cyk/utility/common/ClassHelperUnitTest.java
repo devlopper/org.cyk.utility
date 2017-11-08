@@ -16,6 +16,9 @@ import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ClassHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
@@ -108,6 +111,7 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 		public MyClass(Number number) {}
 	}
 	
+	@Getter @Setter
 	public static class ParamClass {
 		
 		private List<String> strings;

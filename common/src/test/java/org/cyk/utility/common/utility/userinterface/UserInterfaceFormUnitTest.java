@@ -3,7 +3,7 @@ package org.cyk.utility.common.utility.userinterface;
 import java.lang.reflect.Field;
 
 import org.cyk.utility.common.Constant;
-import org.cyk.utility.common.helper.FieldHelper;
+import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.model.Area;
 import org.cyk.utility.common.userinterface.Component.Visible;
 import org.cyk.utility.common.userinterface.Layout;
@@ -12,7 +12,6 @@ import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputText;
 import org.cyk.utility.common.userinterface.input.InputTextarea;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyPickList;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -23,11 +22,6 @@ import lombok.experimental.Accessors;
 public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 
-	@Test
-	public void getInputClass(){
-		System.out.println( FieldHelper.getInstance().readStatic(FieldHelper.getInstance().get(InputChoiceManyPickList.class, "DEFAULT_CLASS")));
-	}
-	
 	@Test
 	public void getForm(){
 		Form.Master.setClass(Entity.class, Constant.Action.CREATE, EntityForm.class);
@@ -334,7 +328,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	}
 	
 	static {
-		Input.Listener.Adapter.Default.DEFAULT_CLASS = InputAdapter.class;
+		ClassHelper.getInstance().map(Input.Listener.Adapter.Default.class, InputAdapter.class);
 	}
 
 	

@@ -57,6 +57,14 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 				return super.getIdentifier(instance);
 			}
 			
+			@Override
+			public <T> T getByIdentifier(Class<T> aClass, Object identifier) {
+				if(aClass.equals(A.class))
+					if(identifier.equals("12"))
+						return null;
+				return super.getByIdentifier(aClass, identifier);
+			}
+			
 			/*@Override
 			public <T> T generateFieldValue(Object instance, String name,Class<T> valueClass) {
 				if(instance instanceof A)

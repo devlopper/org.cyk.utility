@@ -7,7 +7,9 @@ import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CommandHelper;
 import org.cyk.utility.common.helper.FileHelper;
+import org.cyk.utility.common.helper.JavaScriptHelper;
 import org.cyk.utility.common.userinterface.Control;
+import org.cyk.utility.common.userinterface.Image;
 import org.cyk.utility.common.userinterface.command.Command;
 
 import lombok.Getter;
@@ -33,7 +35,17 @@ public class InputFile extends Input<FileHelper.File> implements Serializable {
 				return null;
 			}
 		});
+		/*clearCommand.getPropertiesMap().setGetter(Properties.RENDERED, new Properties.Getter() {
+			@Override
+			public Object execute(Properties properties, Object key, Object nullValue) {
+				return getValue()!=null;
+			}
+		});*/
 		propertiesMap.setClearCommand(clearCommand);
+		
+		Image previewImage = new Image();
+		propertiesMap.setPreviewImageComponent(previewImage);
+		
 		super.listenPropertiesInstanciated(propertiesMap);
 	}
 	
@@ -45,6 +57,10 @@ public class InputFile extends Input<FileHelper.File> implements Serializable {
 	@Override
 	public InputFile setField(Object object, String fieldName) {
 		return (InputFile) super.setField(object, fieldName);
+	}
+	
+	public String getPreviewJavaScript(){
+		return JavaScriptHelper.getInstance().getFunctionCallPreview("this","'cyk-ui-input-file-preview-img-'","'"+getPropertiesMap().getIdentifierAsStyleClass()+"'");
 	}
 	
 	public static interface BuilderBase<OUTPUT extends InputFile> extends Input.BuilderBase<OUTPUT> {
