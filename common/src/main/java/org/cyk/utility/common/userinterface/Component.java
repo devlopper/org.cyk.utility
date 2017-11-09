@@ -162,9 +162,11 @@ public class Component extends AbstractBean implements Serializable {
 			else
 				getLabel().getPropertiesMap().setValue(StringHelper.getInstance().get(identifier, new Object[]{}));
 			__setWatermarkFromLabel__();
+			if(getPropertiesMap().getTitle()==null)
+				getPropertiesMap().setTitle(getLabel().getPropertiesMap().getValue());
 			return this;
 		}
-		
+				
 		public Visible setLength(Number length){
 			getArea().getLength().setDistance(length);
 			return this;

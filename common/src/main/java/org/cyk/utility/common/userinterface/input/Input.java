@@ -95,29 +95,13 @@ public class Input<T> extends Control implements Serializable {
 	}
 	
 	public Input<T> read(){
-		if(object!=null && field!=null)
-			value = initialValue = getReadableValue();
+		getListener().read(this);
 		return this;
 	}
 	
 	public Input<T> write(){
-		if(object!=null && field!=null)
-			FieldHelper.getInstance().set(object,getWritableValue(), field);
+		getListener().write(this);
 		return this;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public T getReadableValue(){
-		return (T) getListener().getReadableValue(object, field);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public T getWritableValue(){
-		return (T) getListener().getWritableValue(getPreparedValue());
-	}
-	
-	public T getPreparedValue(){
-		return value;
 	}
 	
 	/**/
@@ -164,7 +148,7 @@ public class Input<T> extends Control implements Serializable {
 
 	/**/
 	
-	private static final Listener LISTENER = ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class);
+	//private static final Listener LISTENER = ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class);
 	public static Listener getListener(){
 		//return LISTENER;
 		return ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class);
@@ -202,8 +186,11 @@ public class Input<T> extends Control implements Serializable {
 		Input<?> get(Form.Detail form,Object object,java.lang.reflect.Field field);
 		java.util.List<Input<?>> get(Form.Detail form,Object object);
 		
-		Object getReadableValue(Object object,Field field);
-		Object getWritableValue(Object object);
+		void read(Input<?> input);
+		void write(Input<?> input);
+		
+		Object getReadableValue(Input<?> input);
+		Object getWritableValue(Input<?> input);
 		
 		public static class Adapter extends AbstractBean implements Listener {
 			private static final long serialVersionUID = 1L;
@@ -356,14 +343,31 @@ public class Input<T> extends Control implements Serializable {
 					return ClassHelper.getInstance().isEqual(aClass,object1.getClass()) && object1 == object2 && field.getName().equals(fieldName);
 				}
 				
+				@SuppressWarnings("unchecked")
 				@Override
-				public Object getReadableValue(Object object, Field field) {
-					return FieldHelper.getInstance().read(object, field);
+				public void read(@SuppressWarnings("rawtypes") Input input){
+					if(input.object!=null && input.field!=null)
+						input.value = input.initialValue = getReadableValue(input);
 				}
 				
 				@Override
-				public Object getWritableValue(Object object) {
-					return object;
+				public void write(Input<?> input){
+					if(input.object!=null && input.field!=null)
+						FieldHelper.getInstance().set(input.object,getWritableValue(input), input.field);
+				}
+				
+				@Override
+				public Object getReadableValue(Input<?> input) {
+					return FieldHelper.getInstance().read(input.getObject(), input.getField());
+				}
+				
+				@Override
+				public Object getWritableValue(Input<?> input) {
+					return input.getValue();
+				}
+				
+				public Object getPreparedValue(Input<?> input){
+					return input.getValue();
 				}
 			}
 			
@@ -406,12 +410,18 @@ public class Input<T> extends Control implements Serializable {
 			public void sortFields(Detail form, Object object, List<Field> fields) {}
 			
 			@Override
-			public Object getReadableValue(Object object, Field field) {
+			public void read(Input<?> input) {}
+			
+			@Override
+			public void write(Input<?> input) {}
+			
+			@Override
+			public Object getReadableValue(Input<?> input) {
 				return null;
 			}
 			
 			@Override
-			public Object getWritableValue(Object object) {
+			public Object getWritableValue(Input<?> input) {
 				return null;
 			}
 		}
