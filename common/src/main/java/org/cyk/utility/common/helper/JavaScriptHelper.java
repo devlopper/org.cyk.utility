@@ -26,7 +26,9 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 	private static final String INSTRUCTION_SEPARATOR = ";";
 	private static final String DOUBLE_SPACE = Constant.CHARACTER_SPACE.toString()+Constant.CHARACTER_SPACE.toString();
 	private static final String FUNCTION_CALL_FORMAT = "%s(%s);";
+	private static final String OBJECT_FUNCTION_CALL_FORMAT = "%s.%s(%s);";
 	private static final String FUNCTION_PARAMETER_STRING_FORMAT = "'%s'";
+	public static final String OBJECT_THIS = "this";
 	
 	private static JavaScriptHelper INSTANCE;
 	
@@ -85,12 +87,20 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 		return String.format(FUNCTION_CALL_FORMAT, name,StringHelper.getInstance().concatenate(parameters, Constant.CHARACTER_COMA));
 	}
 	
+	public String getObjectFunctionCall(String object,String name,String...parameters){
+		return String.format(OBJECT_FUNCTION_CALL_FORMAT, object,name,StringHelper.getInstance().concatenate(parameters, Constant.CHARACTER_COMA));
+	}
+	
 	public String getFunctionCallPreview(String...parameters){
 		return getFunctionCall(FUNCTION_NAME_PREVIEW, parameters);
 	}
 	
 	public String getFunctionCallResetInputFile(String...parameters){
 		return getFunctionCall(FUNCTION_NAME_RESET_INPUT_FILE, parameters);
+	}
+	
+	public String getFunctionCallSetAttribute(String...parameters){
+		return getFunctionCall(FUNCTION_NAME_SET_ATTRIBUTE, parameters);
 	}
 	
 	public String formatParameterString(Object value){
@@ -392,4 +402,5 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 	
 	public static final String FUNCTION_NAME_PREVIEW = "preview";
 	public static final String FUNCTION_NAME_RESET_INPUT_FILE = "resetInputFile";
+	public static final String FUNCTION_NAME_SET_ATTRIBUTE = "setAttribute";
 }

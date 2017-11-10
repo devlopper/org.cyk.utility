@@ -4,11 +4,18 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.inject.Singleton;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
@@ -22,7 +29,7 @@ import lombok.experimental.Accessors;
 public class FileHelper extends AbstractHelper implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
-
+	private static final String NAME_EXTENSION_SEPARATOR = Constant.CHARACTER_DOT.toString();
 	private static FileHelper INSTANCE;
 	
 	public static FileHelper getInstance() {
@@ -46,13 +53,34 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 		return null;
 	}
 	
-	public java.io.InputStream getInputStream(String fileName){
+	public java.io.InputStream getInputStream(Class<?> aClass,String fileName){
 		try {
-			return new FileInputStream(fileName);
+			return aClass == null ? new FileInputStream(fileName) : aClass.getResourceAsStream(fileName);
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public java.io.InputStream getInputStream(String fileName){
+		return getInputStream(null, fileName);
+	}
+	
+	public byte[] getBytes(java.io.InputStream inputStream){
+		try {
+			return IOUtils.toByteArray(inputStream);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public byte[] getBytes(Class<?> aClass,String fileName){
+		return getBytes(getInputStream(aClass, fileName));
+	}
+	
+	public byte[] getBytes(String fileName){
+		return getBytes(getInputStream(fileName));
+	}
+	
 	
 	public String getPath(String fileName){
 		return FilenameUtils.getFullPath(fileName);
@@ -64,6 +92,38 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 	
 	public String getExtension(String name){
 		return FilenameUtils.getExtension(name);
+	}
+	
+	
+	public String getMime(String extension){
+    	if(StringUtils.isBlank(extension))
+    		return null;
+        String mime = null;
+        String fileName = NAME_EXTENSION_SEPARATOR+extension;
+        try {
+            mime = Files.probeContentType(Paths.get(fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    	if(StringUtils.isBlank(mime) || mime.equalsIgnoreCase(Mime.APPLICATION_OCTET_STREAM))
+    		mime = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(fileName);
+    	if(StringUtils.isBlank(mime) || mime.equalsIgnoreCase(Mime.APPLICATION_OCTET_STREAM))
+    		mime = URLConnection.guessContentTypeFromName(fileName);
+    	
+    	return mime;
+    }
+	
+	public File get(Class<?> aClass,String fileName){
+		File file = new File();
+		file.setBytes(getBytes(aClass, fileName));
+		file.setName(getName(fileName));
+		file.setExtension(getExtension(fileName));
+		file.setMime(getMime(file.getExtension()));
+		return file;
+	}
+	
+	public File get(String fileName){
+		return get(null, fileName);
 	}
 	
 	/**/
@@ -127,13 +187,33 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 
 	/**/
 	
+	public static interface Mime {
+    	String IMAGE = "image";
+    	String TEXT = "text";
+    	String APPLICATION_OCTET_STREAM = "application/octet-stream";
+    }
+	
 	@Getter @Setter @Accessors(chain=true)
 	public static class File extends AbstractBean implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		private Object identifier;
 		private String name,extension,mime;
 		private byte[] bytes;
 		
+		@Override
+		public String toString() {
+			Collection<String> tokens = new ArrayList<>();
+			if(identifier!=null)
+				tokens.add("identifier = "+identifier);
+			if(StringHelper.getInstance().isNotBlank(name))
+				tokens.add("name = "+name);
+			if(StringHelper.getInstance().isNotBlank(name))
+				tokens.add("extension = "+extension);
+			if(StringHelper.getInstance().isNotBlank(name))
+				tokens.add("mime = "+mime);
+			return CollectionHelper.getInstance().isEmpty(tokens) ? super.toString() : StringHelper.getInstance().concatenate(tokens, Constant.CHARACTER_COMA);
+		}
 	}
 }
 	

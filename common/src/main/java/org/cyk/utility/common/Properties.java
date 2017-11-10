@@ -1744,6 +1744,25 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getStreamedContent() {
+		return get(STREAMED_CONTENT);
+	}
+
+	public Properties setStreamedContent(Object value) {
+		set(STREAMED_CONTENT, value);
+		return this;
+	}
+	
+	public Object getRemoveCommand() {
+		return get(REMOVE_COMMAND);
+	}
+
+	public Properties setRemoveCommand(Object value) {
+		set(REMOVE_COMMAND, value);
+		return this;
+	}
+	
+	public static final String STREAMED_CONTENT = "STREAMED_CONTENT";
 	public static final String CACHE = "CACHE";
 	public static final String DIR = "DIR";
 	public static final String ALT = "ALT";
@@ -1758,6 +1777,7 @@ public class Properties implements java.io.Serializable {
 	public static final String MULTIPLE = "MULTIPLE";
 	public static final String SKIN_SIMPLE = "SKIN_SIMPLE";
 	public static final String CLEAR_COMMAND = "CLEAR_COMMAND";
+	public static final String REMOVE_COMMAND = "REMOVE_COMMAND";
 	public static final String PREVIEWABLE = "PREVIEWABLE";
 	public static final String CLEARABLE = "CLEARABLE"; 
 	public static final String MINIMUM_SIZE = "MINIMUM_SIZE";

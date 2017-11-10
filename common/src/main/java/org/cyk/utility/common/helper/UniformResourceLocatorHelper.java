@@ -625,8 +625,10 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	
 	public static interface Listener {
 		
+		//TODO should be moved in RequestHelper
 		Object getRequest();
 		String getRequestUniformResourceLocator(Object request);
+		
 		String getPathIdentifier(Constant.Action action,Class<?> aClass);
 		String getPathIdentifierMapping(String identifier);
 		
@@ -680,4 +682,26 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	}
 	
 	public static enum TokenName{SCHEME,HOST,PORT,PATH,QUERY,FRAGMENT}
+
+	/**/
+	
+	public static interface QueryParameter {
+		
+		public static interface Name {
+			
+			String FILE_EXTENSION = "fileextension";
+			String ATTACHMENT = "attachement";
+			String IDENTIFIER = "identifier";
+			String IDENTIFIABLE = "identifiable";
+			String ENCODED = "encoded";
+			String DATA_SOURCE = "datasource";
+			
+		}
+		
+		public static interface Value {
+			
+			String DATA_SOURCE_USER_SESSION = "usersession";
+			String DATA_SOURCE_DATABASE = "database";
+		}
+	}
 }

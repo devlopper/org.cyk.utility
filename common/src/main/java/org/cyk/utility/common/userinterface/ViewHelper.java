@@ -27,8 +27,8 @@ public class ViewHelper extends AbstractHelper implements Serializable {
 		super.initialisation();
 	}
 	
-	public String getParameter(String name){
-		Listener listener = ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.DEFAULT_CLASS);
+	public Object getParameter(String name){
+		Listener listener = ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class);
 		return listener.getParameter(name);
 	}
 	
@@ -36,29 +36,21 @@ public class ViewHelper extends AbstractHelper implements Serializable {
 	
 	public static interface Listener {
 		
-		String getParameter(String name);
+		Object getParameter(String name);
 		
 		public static class Adapter extends AbstractBean implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			public String getParameter(String name) {
+			public Object getParameter(String name) {
 				return null;
 			}
 			
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
-				
-				@SuppressWarnings("unchecked")
-				public static Class<Listener> DEFAULT_CLASS = (Class<Listener>) ClassHelper.getInstance().getByName(Default.class);
-				
-				
-				
-				
+												
 			}
-			
 		}
-		
 	}
 	
 }

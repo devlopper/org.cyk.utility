@@ -1,5 +1,6 @@
 package org.cyk.utility.common;
 
+import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.FileHelper.NameTransformer;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
@@ -39,6 +40,25 @@ public class FileHelperUnitTest extends AbstractUnitTest {
 				.addSequenceReplacement("3", "").addSequenceReplacement("4", "ZZ").addTokens("a1B1c2D3e4").execute());
 		assertEquals("Report sheet PREMIER TERM _ G1 REPORT SHEET1483202759651", new NameTransformer.Adapter.Default()
 				.addTokens("Report sheet PREMIER TERM , G1 REPORT SHEET1483202759651").execute());
+	}
+	
+	@Test
+	public void getResourceAsStream(){
+		assertNotNull(FileHelper.getInstance().getBytes(Action.class, "image001.png"));	
+	}
+	
+	@Test
+	public void get(){
+		FileHelper.File file = FileHelper.getInstance().get(Action.class, "image001.png");
+		assertEquals("image001", file.getName());	
+		assertEquals("png", file.getExtension());	
+		assertEquals("image/png", file.getMime());	
+	}
+	
+	@Test
+	public void getMime(){
+		assertEquals("text/plain", FileHelper.getInstance().getMime("txt"));
+		assertEquals("image/png", FileHelper.getInstance().getMime("png"));
 	}
 
 }

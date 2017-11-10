@@ -24,9 +24,27 @@ public class InputFile extends Input<FileHelper.File> implements Serializable {
 
 	@Override
 	protected void listenPropertiesInstanciated(Properties propertiesMap) {
+		//Preview selected
+		Image previewImage = new Image();
+		propertiesMap.setPreviewImageComponent(previewImage);
+		
 		Command clearCommand = new Command();
 		clearCommand.setLabelFromIdentifier("command.clear");
-		clearCommand.setAction(new CommandHelper.Command.Adapter.Default(){
+		propertiesMap.setClearCommand(clearCommand);
+		
+		//Preview current
+		Image image = new Image();
+		image.getPropertiesMap().setGetter(Properties.RENDERED, new Properties.Getter() {
+			@Override
+			public Object execute(Properties properties, Object key, Object nullValue) {
+				return getValue()!=null;
+			}
+		});
+		propertiesMap.setImageComponent(image);
+		
+		Command removeCommand = new Command();
+		removeCommand.setLabelFromIdentifier("command.remove");
+		removeCommand.setAction(new CommandHelper.Command.Adapter.Default(){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -35,16 +53,14 @@ public class InputFile extends Input<FileHelper.File> implements Serializable {
 				return null;
 			}
 		});
-		/*clearCommand.getPropertiesMap().setGetter(Properties.RENDERED, new Properties.Getter() {
+		removeCommand.getPropertiesMap().setGetter(Properties.RENDERED, new Properties.Getter() {
 			@Override
 			public Object execute(Properties properties, Object key, Object nullValue) {
-				return getValue()!=null;
+				Image image = (Image) InputFile.this.getPropertiesMap().getImageComponent();
+				return image==null ? null : image.getPropertiesMap().getRendered();
 			}
-		});*/
-		propertiesMap.setClearCommand(clearCommand);
-		
-		Image previewImage = new Image();
-		propertiesMap.setPreviewImageComponent(previewImage);
+		});
+		propertiesMap.setRemoveCommand(removeCommand);
 		
 		super.listenPropertiesInstanciated(propertiesMap);
 	}
