@@ -17,6 +17,7 @@ import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
+import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.container.Form;
@@ -363,12 +364,57 @@ public class Input<T> extends Control implements Serializable {
 				
 				@Override
 				public Object getWritableValue(Input<?> input) {
-					return input.getValue();
+					Object value = getPreparedValue(input);
+					if(input instanceof InputFile){
+						//InputFile inputFile = (InputFile) input;
+						Class<?> fileClass = getFileClass();
+						if(!FileHelper.File.class.equals(fileClass) && input.getField().getType().equals(fileClass)){
+							Object file = null;
+							if(value==null){
+								if(input.getValue()!=null)
+									value = FieldHelper.getInstance().read(input.getObject(), input.getField());
+							}else{
+								file = FieldHelper.getInstance().read(input.getObject(), input.getField());
+								if(file==null)
+									file = ClassHelper.getInstance().instanciateOne(fileClass);
+								//if(input.getValue()!=null){
+									setFileName(file, ((FileHelper.File)value).getName() );	
+									setFileExtension(file, ((FileHelper.File)value).getExtension() );	
+									setFileBytes(file, ((FileHelper.File)value).getBytes() );
+									setFileMime(file, ((FileHelper.File)value).getMime() );		
+								//}	
+								value = file;
+							}
+						}
+					}
+					
+					return value;
 				}
 				
 				public Object getPreparedValue(Input<?> input){
 					return input.getValue();
 				}
+				
+				public Class<?> getFileClass(){
+					return FileHelper.File.class;
+				}
+				
+				protected void setFileBytes(Object object,byte[] bytes){
+					FieldHelper.getInstance().set(object,(Object)bytes, "bytes");
+				}
+				
+				protected void setFileMime(Object object,String mime){
+					FieldHelper.getInstance().set(object,(Object)mime, "mime");
+				}
+				
+				protected void setFileExtension(Object object,String extension){
+					FieldHelper.getInstance().set(object,(Object)extension, "extension");
+				}
+				
+				protected void setFileName(Object object,String name){
+					FieldHelper.getInstance().set(object,(Object)name, "name");
+				}
+				
 			}
 			
 			@Override

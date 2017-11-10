@@ -2,8 +2,11 @@ package org.cyk.utility.common.utility.userinterface;
 
 import java.util.Date;
 
+import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
+import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.userinterface.input.Input;
+import org.cyk.utility.common.userinterface.input.InputFile;
 import org.cyk.utility.common.userinterface.input.InputText;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -30,7 +33,7 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void inputTextFromField(){
-		assertNull(Input.get(null,new Model(), "string1"));
+		assertNotNull(Input.get(null,new Model(), "string1"));
 		assertNotNull(Input.get(null,new Model(), "string2"));
 		assertNotNull(Input.get(null,new Model(), "string3"));
 		
@@ -43,6 +46,124 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 		assertBuiltInput(input, "##__field__.string.3##", new Values("is01", "is01", "is01"));
 		assertInputText(input, model, "string3","myVal", new Values("is01", "is01", "is01"), new Values("is01", "is01", "is01"), new Values("is01", "myVal", "is01"), new Values("myVal", "myVal", "is01"));
 		
+	}
+	
+	@Test
+	public void uploadFileNoSelectionNoCurrent(){
+		InputAdapter.FILE_CLASS = FileHelper.File.class;
+		ClassHelper.getInstance().map(Input.Listener.Adapter.Default.class, InputAdapter.class);
+		MyModelWithFile model = new MyModelWithFile();
+		InputFile input = (InputFile) Input.get(null,model, "file");
+		assertNull(model.getFile());
+		assertNull(input.getValue());
+		input.write();
+		assertNull(input.getValue());
+		assertNull(model.getFile());
+	}
+	
+	@Test
+	public void uploadFileYesSelectionNoCurrent(){
+		InputAdapter.FILE_CLASS = FileHelper.File.class;
+		ClassHelper.getInstance().map(Input.Listener.Adapter.Default.class, InputAdapter.class);
+		MyModelWithFile model = new MyModelWithFile();
+		InputFile input = (InputFile) Input.get(null,model, "file");
+		assertNull(input.getValue());
+		PrimefacesUploadFileInput primefacesUploadFileInput = new PrimefacesUploadFileInput().setName("f001.png").setContents(new byte[8]).setMime("image/png");
+		input.setValueObject(primefacesUploadFileInput);
+		input.write();
+		assertNotNull(model.getFile());
+		assertEquals("f001", model.getFile().getName());
+		assertEquals("png", model.getFile().getExtension());
+		assertEquals("image/png", model.getFile().getMime());
+	}
+	
+	@Test
+	public void uploadFileNoSelectionYesCurrent(){
+		InputAdapter.FILE_CLASS = FileHelper.File.class;
+		ClassHelper.getInstance().map(Input.Listener.Adapter.Default.class, InputAdapter.class);
+		MyModelWithFile model = new MyModelWithFile().setFile(new FileHelper.File().setName("c001").setExtension("png").setMime("image/png").setBytes(new byte[8]));
+		InputFile input = (InputFile) Input.get(null,model, "file");
+		assertNotNull(input.getValue());
+		input.write();
+		assertNotNull(model.getFile());
+		assertEquals("c001", model.getFile().getName());
+		assertEquals("png", model.getFile().getExtension());
+		assertEquals("image/png", model.getFile().getMime());
+	}
+	
+	@Test
+	public void uploadFileYesSelectionYesCurrent(){
+		InputAdapter.FILE_CLASS = FileHelper.File.class;
+		ClassHelper.getInstance().map(Input.Listener.Adapter.Default.class, InputAdapter.class);
+		MyModelWithFile model = new MyModelWithFile().setFile(new FileHelper.File().setName("c001").setExtension("png").setMime("image/png").setBytes(new byte[8]));
+		InputFile input = (InputFile) Input.get(null,model, "file");
+		assertNotNull(input.getValue());
+		PrimefacesUploadFileInput primefacesUploadFileInput = new PrimefacesUploadFileInput().setName("f001.png").setContents(new byte[8]).setMime("image/png");
+		input.setValueObject(primefacesUploadFileInput);
+		input.write();
+		assertNotNull(model.getFile());
+		assertEquals("f001", model.getFile().getName());
+		assertEquals("png", model.getFile().getExtension());
+		assertEquals("image/png", model.getFile().getMime());
+	}
+	
+	@Test
+	public void uploadFileNoSelectionNoCurrentCustomFile(){
+		InputAdapter.FILE_CLASS = MyFile.class;
+		ClassHelper.getInstance().map(Input.Listener.Adapter.Default.class, InputAdapter.class);
+		MyModelWithFile model = new MyModelWithFile();
+		InputFile input = (InputFile) Input.get(null,model, "customFile");
+		assertNull(model.getCustomFile());
+		assertNull(input.getValue());
+		input.write();
+		assertNull(input.getValue());
+		assertNull(model.getCustomFile());
+	}
+	
+	@Test
+	public void uploadFileYesSelectionNoCurrentCustomFile(){
+		InputAdapter.FILE_CLASS = MyFile.class;
+		ClassHelper.getInstance().map(Input.Listener.Adapter.Default.class, InputAdapter.class);
+		MyModelWithFile model = new MyModelWithFile();
+		InputFile input = (InputFile) Input.get(null,model, "customFile");
+		assertNull(input.getValue());
+		PrimefacesUploadFileInput primefacesUploadFileInput = new PrimefacesUploadFileInput().setName("f001.png").setContents(new byte[8]).setMime("image/png");
+		input.setValueObject(primefacesUploadFileInput);
+		input.write();
+		assertNotNull(model.getCustomFile());
+		assertEquals("f001", model.getCustomFile().getName());
+		assertEquals("png", model.getCustomFile().getExtension());
+		assertEquals("image/png", model.getCustomFile().getMime());
+	}
+	
+	@Test
+	public void uploadFileNoSelectionYesCurrentCustomFile(){
+		InputAdapter.FILE_CLASS = MyFile.class;
+		ClassHelper.getInstance().map(Input.Listener.Adapter.Default.class, InputAdapter.class);
+		MyModelWithFile model = new MyModelWithFile().setCustomFile(new MyFile().setName("c001").setExtension("png").setMime("image/png").setBytes(new byte[8]));
+		InputFile input = (InputFile) Input.get(null,model, "customFile");
+		assertNotNull(input.getValue());
+		input.write();
+		assertNotNull(model.getCustomFile());
+		assertEquals("c001", model.getCustomFile().getName());
+		assertEquals("png", model.getCustomFile().getExtension());
+		assertEquals("image/png", model.getCustomFile().getMime());
+	}
+	
+	@Test
+	public void uploadFileYesSelectionYesCurrentCustomFile(){
+		InputAdapter.FILE_CLASS = MyFile.class;
+		ClassHelper.getInstance().map(Input.Listener.Adapter.Default.class, InputAdapter.class);
+		MyModelWithFile model = new MyModelWithFile().setCustomFile(new MyFile().setName("c001").setExtension("png").setMime("image/png").setBytes(new byte[8]));
+		InputFile input = (InputFile) Input.get(null,model, "customFile");
+		assertNotNull(input.getValue());
+		PrimefacesUploadFileInput primefacesUploadFileInput = new PrimefacesUploadFileInput().setName("f001.png").setContents(new byte[8]).setMime("image/png");
+		input.setValueObject(primefacesUploadFileInput);
+		input.write();
+		assertNotNull(model.getCustomFile());
+		assertEquals("f001", model.getCustomFile().getName());
+		assertEquals("png", model.getCustomFile().getExtension());
+		assertEquals("image/png", model.getCustomFile().getMime());
 	}
 	
 	/**/
@@ -92,5 +213,73 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 		
 		private Object modelValue,inputValue,inputInitialValue;
 		
+	}
+	
+	public static class InputAdapter extends Input.Listener.Adapter.Default {
+		private static final long serialVersionUID = 1L;
+		
+		public static Class<?> FILE_CLASS = FileHelper.File.class;
+		
+		@Override
+		public Class<?> getFileClass() {
+			return FILE_CLASS;
+		}
+		
+		@Override
+		public Object getPreparedValue(Input<?> input) {
+			if(input instanceof InputFile){
+				PrimefacesUploadFileInput file = (PrimefacesUploadFileInput) ((InputFile)input).getValueObject();
+				FileHelper.File value = (FileHelper.File) input.getValue();
+				if(file==null || file.getContents()==null || file.getContents().length == 0){
+					//value = null;
+					value = (FileHelper.File) input.getValue();
+				}else {
+					if(value==null)
+						value = new FileHelper.File();
+					value.setName(FileHelper.getInstance().getName(file.getName()));
+					value.setExtension(FileHelper.getInstance().getExtension(file.getName()));
+					value.setMime(file.getMime());
+					value.setBytes(file.getContents());
+				}
+				return value;
+			}
+			return super.getPreparedValue(input);
+		}
+		
+		@Override
+		public Object getReadableValue(Input<?> input) {
+			Object value = super.getReadableValue(input);
+			if(value instanceof MyFile){
+				MyFile file = (MyFile) value;
+				value = new FileHelper.File();
+				((FileHelper.File)value).setBytes(file.getBytes());
+				((FileHelper.File)value).setMime(file.getMime());
+				((FileHelper.File)value).setName(file.getName());
+				((FileHelper.File)value).setExtension(file.getExtension());
+			}	
+			return value;
+		}
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class PrimefacesUploadFileInput {
+		
+		private byte[] contents;
+		private String name,mime;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class MyFile {
+		
+		private byte[] bytes;
+		private String name,mime,extension;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class MyModelWithFile {
+		
+		@org.cyk.utility.common.annotation.user.interfaces.Input @org.cyk.utility.common.annotation.user.interfaces.InputFile private FileHelper.File file;
+		@org.cyk.utility.common.annotation.user.interfaces.Input @org.cyk.utility.common.annotation.user.interfaces.InputFile private MyFile customFile;
 	}
 }

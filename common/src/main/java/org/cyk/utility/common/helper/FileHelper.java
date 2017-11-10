@@ -208,9 +208,9 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 				tokens.add("identifier = "+identifier);
 			if(StringHelper.getInstance().isNotBlank(name))
 				tokens.add("name = "+name);
-			if(StringHelper.getInstance().isNotBlank(name))
+			if(StringHelper.getInstance().isNotBlank(extension))
 				tokens.add("extension = "+extension);
-			if(StringHelper.getInstance().isNotBlank(name))
+			if(StringHelper.getInstance().isNotBlank(mime))
 				tokens.add("mime = "+mime);
 			return CollectionHelper.getInstance().isEmpty(tokens) ? super.toString() : StringHelper.getInstance().concatenate(tokens, Constant.CHARACTER_COMA);
 		}
