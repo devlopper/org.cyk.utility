@@ -337,6 +337,10 @@ public class Form extends Container implements Serializable {
 			return this;
 		}
 		
+		public Detail add(String fieldName,Number length,Number width){
+			return add(fieldsObject, fieldName, length, width);
+		}
+		
 		public Detail add(Object object,String fieldName){
 			return add(object, fieldName, 1, 1);
 		}
