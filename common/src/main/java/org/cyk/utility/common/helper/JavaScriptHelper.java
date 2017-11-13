@@ -103,6 +103,10 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 		return getFunctionCall(FUNCTION_NAME_SET_ATTRIBUTE, parameters);
 	}
 	
+	public String getFunctionCallHideThis(){
+		return getFunctionCall(FUNCTION_NAME_HIDE_THIS);
+	}
+	
 	public String formatParameterString(Object value){
 		return String.format(FUNCTION_PARAMETER_STRING_FORMAT, value == null ? Constant.EMPTY_STRING : value);
 	}
@@ -403,4 +407,5 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 	public static final String FUNCTION_NAME_PREVIEW = "preview";
 	public static final String FUNCTION_NAME_RESET_INPUT_FILE = "resetInputFile";
 	public static final String FUNCTION_NAME_SET_ATTRIBUTE = "setAttribute";
+	public static final String FUNCTION_NAME_HIDE_THIS = "hideThis";
 }
