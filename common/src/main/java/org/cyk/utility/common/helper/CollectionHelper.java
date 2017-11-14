@@ -227,6 +227,10 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 	public Boolean isEmpty(Collection<?> collection){
 		return collection==null || collection.isEmpty();
 	}
+	
+	public Boolean isEmpty(Instance<?> collection){
+		return collection == null || isEmpty(collection.getElements());
+	}
 
 	public String concatenate(Collection<?> collection, Object separator) {
 		if(isEmpty(collection))
@@ -257,6 +261,10 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 	
 	public Boolean isNotEmpty(Collection<?> collection){
 		return !Boolean.TRUE.equals(isEmpty(collection));
+	}
+	
+	public Boolean isNotEmpty(Instance<?> collection){
+		return collection != null && isNotEmpty(collection.getElements());
 	}
 	
 	public <T> T getFirst(Collection<T> collection){
@@ -672,6 +680,14 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		@SuppressWarnings("unchecked")
 		public <CLASS> Collection<CLASS> getElementObjects(){
 			return (Collection<CLASS>) getElementObjects(getElementObjectClass());
+		}
+
+		public Boolean isEmpty(){
+			return getInstance().isEmpty(elements);
+		}
+		
+		public Boolean isNotEmpty(){
+			return getInstance().isNotEmpty(elements);
 		}
 		
 		@Override

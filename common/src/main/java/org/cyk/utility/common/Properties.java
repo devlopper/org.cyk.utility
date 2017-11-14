@@ -1762,6 +1762,219 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getMainMenu() {
+		return get(MAIN_MENU);
+	}
+
+	public Properties setMainMenu(Object value) {
+		set(MAIN_MENU, value);
+		return this;
+	}
+	
+	public Object getContextMenu() {
+		return get(CONTEXT_MENU);
+	}
+
+	public Properties setContextMenu(Object value) {
+		set(CONTEXT_MENU, value);
+		return this;
+	}
+	
+	public Object getToolBarMenu() {
+		return get(TOOL_BAR_MENU);
+	}
+
+	public Properties setToolBarMenu(Object value) {
+		set(TOOL_BAR_MENU, value);
+		return this;
+	}
+	
+	public Object getAutoDisplay() {
+		return get(AUTO_DISPLAY);
+	}
+
+	public Properties setAutoDisplay(Object value) {
+		set(AUTO_DISPLAY, value);
+		return this;
+	}
+	
+	public Object getModel() {
+		return get(MODEL);
+	}
+
+	public Properties setModel(Object value) {
+		set(MODEL, value);
+		return this;
+	}
+	
+	public Object getTabIndex() {
+		return get(TAB_INDEX);
+	}
+
+	public Properties setTabIndex(Object value) {
+		set(TAB_INDEX, value);
+		return this;
+	}
+	
+	public Object getToggleEvent() {
+		return get(TOGGLE_EVENT);
+	}
+
+	public Properties setToggleEvent(Object value) {
+		set(TOGGLE_EVENT, value);
+		return this;
+	}
+	
+	public Object getStateful() {
+		return get(STATEFUL);
+	}
+
+	public Properties setStateful(Object value) {
+		set(STATEFUL, value);
+		return this;
+	}
+	
+	public Object getActiveIndex() {
+		return get(ACTIVE_INDEX);
+	}
+
+	public Properties setActiveIndex(Object value) {
+		set(ACTIVE_INDEX, value);
+		return this;
+	}
+	
+	public Object getDelay() {
+		return get(DELAY);
+	}
+
+	public Properties setDelay(Object value) {
+		set(DELAY, value);
+		return this;
+	}
+	
+	public Object getPartialSubmitFilter() {
+		return get(PARTIAL_SUBMIT_FILTER);
+	}
+
+	public Properties setPartialSubmitFilter(Object value) {
+		set(PARTIAL_SUBMIT_FILTER, value);
+		return this;
+	}
+	
+	public Object getIgnoreAutoUpdte() {
+		return get(IGNORE_AUTO_UPDATE);
+	}
+
+	public Properties setIgnoreAutoUpdte(Object value) {
+		set(IGNORE_AUTO_UPDATE, value);
+		return this;
+	}
+	
+	public Object getResetValues() {
+		return get(RESET_VALUES);
+	}
+
+	public Properties setResetValues(Object value) {
+		set(RESET_VALUES, value);
+		return this;
+	}
+	
+	public Object getOutcome() {
+		return get(OUTCOME);
+	}
+
+	public Properties setOutcome(Object value) {
+		set(OUTCOME, value);
+		return this;
+	}
+	
+	public Object getIncludeViewParams() {
+		return get(INCLUDE_VIEW_PARAMS);
+	}
+
+	public Properties setIncludeViewParams(Object value) {
+		set(INCLUDE_VIEW_PARAMS, value);
+		return this;
+	}
+	
+	public Object getRel() {
+		return get(REL);
+	}
+
+	public Properties setRel(Object value) {
+		set(REL, value);
+		return this;
+	}
+	
+	public Object getForm() {
+		return get(FORM);
+	}
+
+	public Properties setForm(Object value) {
+		set(FORM, value);
+		return this;
+	}
+	
+	public Object getContainerStyleClass() {
+		return get(CONTAINER_STYLE_CLASS);
+	}
+
+	public Properties setContainerStyleClass(Object value) {
+		set(CONTAINER_STYLE_CLASS, value);
+		return this;
+	}
+	
+	public Object getContainerStyle() {
+		return get(CONTAINER_STYLE);
+	}
+
+	public Properties setContainerStyle(Object value) {
+		set(CONTAINER_STYLE, value);
+		return this;
+	}
+	
+	public Object getDisableClientWindow() {
+		return get(DISABLE_CLIENT_WINDOW);
+	}
+
+	public Properties setDisableClientWindow(Object value) {
+		set(DISABLE_CLIENT_WINDOW, value);
+		return this;
+	}
+	
+	public Object getFragment() {
+		return get(FRAGMENT);
+	}
+
+	public Properties setFragment(Object value) {
+		set(FRAGMENT, value);
+		return this;
+	}
+	
+	public static final String FRAGMENT = "FRAGMENT";
+	public static final String DISABLE_CLIENT_WINDOW = "DISABLE_CLIENT_WINDOW";
+	public static final String CONTAINER_STYLE = "CONTAINER_STYLE";
+	public static final String CONTAINER_STYLE_CLASS = "CONTAINER_STYLE_CLASS";
+	public static final String FORM = "FORM";
+	public static final String REL = "REL";
+	public static final String INCLUDE_VIEW_PARAMS = "INCLUDE_VIEW_PARAMS";
+	public static final String OUTCOME = "OUTCOME";
+	public static final String RESET_VALUES = "RESET_VALUES";
+	public static final String IGNORE_AUTO_UPDATE = "IGNORE_AUTO_UPDATE";
+	
+	public static final String PARTIAL_SUBMIT_FILTER = "PARTIAL_SUBMIT_FILTER";
+	public static final String DELAY = "DELAY";
+	public static final String AUTO_DISPLAY = "AUTO_DISPLAY";
+	public static final String MODEL = "MODEL";
+	public static final String TAB_INDEX = "TAB_INDEX";
+	public static final String TOGGLE_EVENT = "TOGGLE_EVENT";
+	public static final String STATEFUL = "STATEFUL";
+	public static final String ACTIVE_INDEX = "ACTIVE_INDEX";
+	
+	public static final String MAIN_MENU = "MAIN_MENU";
+	public static final String CONTEXT_MENU = "CONTEXT_MENU";
+	public static final String TOOL_BAR_MENU = "TOOL_BAR_MENU";
+	
 	public static final String STREAMED_CONTENT = "STREAMED_CONTENT";
 	public static final String CACHE = "CACHE";
 	public static final String DIR = "DIR";

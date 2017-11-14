@@ -37,6 +37,13 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void isAtLocation(){
+		assertTrue(StringHelper.getInstance().isAtLocation("org.cyk.class1", "org.cyk", StringHelper.Location.START));
+		assertTrue(StringHelper.getInstance().isAtLocation("org.cyk.class1.class2", "org.cyk", StringHelper.Location.START));
+		assertTrue(StringHelper.getInstance().isAtLocation("org.cyk.class1", Arrays.asList("org.cyk"), StringHelper.Location.START));
+	}
+	
+	@Test
 	public void concatenate(){
 		assertEquals("string one second one another string", new StringHelper.Concatenate.Adapter.Default(Arrays.asList("string one","second one","another string")).execute());
 		assertEquals("1 string one 2 second one 3 another string", new StringHelper.Concatenate.Adapter.Default(Arrays.asList("string one","second one","another string"))

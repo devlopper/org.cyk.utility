@@ -8,6 +8,7 @@ import java.util.Collection;
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper;
+import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.ListenerHelper;
 import org.cyk.utility.common.helper.MethodHelper;
@@ -97,6 +98,40 @@ public class Component extends AbstractBean implements Serializable {
 
 				public Default(Class<OUTPUT> outputClass) {
 					super(outputClass);
+				}
+			}
+		}
+		
+		/**/
+		
+		public static interface Target<COMPONENT,OUTPUT> extends org.cyk.utility.common.Builder<COMPONENT, OUTPUT> {
+			
+			public static class Adapter<COMPONENT,OUTPUT> extends org.cyk.utility.common.Builder.Adapter.Default<COMPONENT, OUTPUT> implements Target<COMPONENT,OUTPUT>,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public Adapter(Class<COMPONENT> componentClass,COMPONENT input, Class<OUTPUT> outputClass) {
+					super(componentClass, input, outputClass);
+				}
+				
+				public static class Default<COMPONENT,OUTPUT> extends Target.Adapter<COMPONENT,OUTPUT> implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					public Default(Class<COMPONENT> componentClass,COMPONENT input, Class<OUTPUT> outputClass) {
+						super(componentClass,input, outputClass);
+					}
+					
+					@SuppressWarnings("unchecked")
+					public Default() {
+						this(null,null, null);
+						setOutputClass((Class<OUTPUT>) ClassHelper.getInstance().getParameterAt(getClass(), 0, Object.class));
+					}
+					
+					@Override
+					protected OUTPUT __execute__() {
+						OUTPUT instance = ClassHelper.getInstance().instanciateOne(getOutputClass());
+						
+						return instance;
+					}		
 				}
 			}
 		}

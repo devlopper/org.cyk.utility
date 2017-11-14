@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -174,6 +175,17 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	
 	public Boolean isAtLocation(String string,String value,Location location){
 		return isAtLocation(string, value, location, Boolean.TRUE);
+	}
+	
+	public Boolean isAtLocation(String string,Collection<String> values,Location location,Boolean caseSensitive){
+		for(String value : values)
+			if(Boolean.TRUE.equals(isAtLocation(string, value, location, caseSensitive)))
+				return Boolean.TRUE;
+		return Boolean.FALSE;
+	}
+	
+	public Boolean isAtLocation(String string,Collection<String> values,Location location){
+		return isAtLocation(string, values, location, Boolean.TRUE);
 	}
 	
 	public java.util.Collection<String> removeBlank(java.util.Collection<String> collection){

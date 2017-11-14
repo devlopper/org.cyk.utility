@@ -37,11 +37,19 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 
 	private static final String FIELD_NAME_SEPARATOR = Constant.CHARACTER_DOT.toString();
 	
+	public static final Set<String> INTROSPECTION_CONTEXT_TARGET_CLASS_NAME_PREFIXES_INCLUDED = new LinkedHashSet<String>();
+	public static final Set<String> INTROSPECTION_CONTEXT_TARGET_CLASS_NAME_PREFIXES_EXCLUDED = new LinkedHashSet<String>();
+	
 	static {
+		INTROSPECTION_CONTEXT_TARGET_CLASS_NAME_PREFIXES_INCLUDED.add("org.cyk.");
 		PropertyUtils.addBeanIntrospector(new FluentPropertyBeanIntrospector(){
-			@Override//TODO allow only for org.cyk ????
+			@Override
 			public void introspect(IntrospectionContext introspectionContext) throws IntrospectionException {
-				if(introspectionContext.getTargetClass().getName().startsWith("org.cyk.")){
+				Boolean included = StringHelper.getInstance().isAtLocation(introspectionContext.getTargetClass().getName()
+						, INTROSPECTION_CONTEXT_TARGET_CLASS_NAME_PREFIXES_INCLUDED , StringHelper.Location.START);
+				Boolean excluded = StringHelper.getInstance().isAtLocation(introspectionContext.getTargetClass().getName()
+						, INTROSPECTION_CONTEXT_TARGET_CLASS_NAME_PREFIXES_EXCLUDED , StringHelper.Location.START);
+				if(Boolean.TRUE.equals(included) && Boolean.FALSE.equals(excluded)){
 					super.introspect(introspectionContext);
 				}
 			}
