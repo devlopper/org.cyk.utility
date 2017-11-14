@@ -27,8 +27,19 @@ public class Menu extends Container implements Serializable {
 	
 	/**/
 	
-	public static Menu build(Set set,Type type){
-		return ClassHelper.getInstance().instanciateOne(Builder.Adapter.Default.class).setSet(set).setType(type).execute();
+	public static Menu build(Component parent,Type type,RenderType renderType,Boolean buildTarget){
+		Menu menu = ClassHelper.getInstance().instanciateOne(Builder.Adapter.Default.class).setComponentParent(parent).setType(type).setRenderType(renderType).execute();
+		if(Boolean.TRUE.equals(buildTarget))
+			menu.build();
+		return menu;
+	}
+	
+	public static Menu build(Component parent,Type type,RenderType renderType){
+		return build(parent, type,renderType, Boolean.TRUE);
+	}
+	
+	public static Menu build(Component parent,Type type){
+		return build(parent, type,RenderType.BAR);
 	}
 	
 	/**/
@@ -37,6 +48,7 @@ public class Menu extends Container implements Serializable {
  		
  		BuilderBase<OUTPUT> setSet(Set set);
  		BuilderBase<OUTPUT> setType(Type type);
+ 		BuilderBase<OUTPUT> setRenderType(RenderType renderType);
  		
 		public static class Adapter<OUTPUT extends Menu> extends Container.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {
 			private static final long serialVersionUID = 1L;
@@ -65,6 +77,12 @@ public class Menu extends Container implements Serializable {
 					setProperty(PROPERTY_NAME_TYPE, type);
 					return this;
 				}
+				
+				@Override
+				public BuilderBase<OUTPUT> setRenderType(RenderType renderType){
+					setProperty(PROPERTY_NAME_RENDER_TYPE, renderType);
+					return this;
+				}
 			}
 		
 			@Override
@@ -76,11 +94,20 @@ public class Menu extends Container implements Serializable {
 			public BuilderBase<OUTPUT> setType(Type type){
 				return null;
 			}
+			
+			@Override
+			public BuilderBase<OUTPUT> setRenderType(RenderType renderType) {
+				return null;
+			}
 		}
 	}
 	
 	public static interface Builder extends BuilderBase<Menu> {
-
+		
+		@Override Builder setSet(Set set);
+		@Override Builder setType(Type set);
+		Builder setComponentParent(Component component);
+		
 		public static class Adapter extends BuilderBase.Adapter.Default<Menu> implements Builder, Serializable {
 			private static final long serialVersionUID = 1L;
 
@@ -93,6 +120,31 @@ public class Menu extends Container implements Serializable {
 			public static class Default extends Builder.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
+				@Override
+				protected Menu __execute__() {
+					Menu menu = new Menu();
+					menu.setParent(componentParent);
+					menu.setSet((Set) getProperty(PROPERTY_NAME_SET));
+					menu.setType((Type) getProperty(PROPERTY_NAME_TYPE));
+					menu.setRenderType((RenderType) getProperty(PROPERTY_NAME_RENDER_TYPE));
+					return menu;
+				}
+				
+			}
+			
+			@Override
+			public Builder setSet(Set set) {
+				return (Builder) super.setSet(set);
+			}
+			
+			@Override
+			public Builder setType(Type type) {
+				return (Builder) super.setType(type);
+			}
+			
+			@Override
+			public Builder setComponentParent(Component component) {
+				return (Builder) super.setComponentParent(component);
 			}
 		}
 	
@@ -122,13 +174,14 @@ public class Menu extends Container implements Serializable {
 					protected OUTPUT __execute__() {
 						final OUTPUT instance = ClassHelper.getInstance().instanciateOne(getOutputClass());
 						Menu menu = getInput();
-						new CollectionHelper.Iterator.Adapter.Default<Component>(menu.getChildren().getElements()){
-							private static final long serialVersionUID = 1L;
-							protected void __executeForEach__(Component component) {
-								addMenuNode(instance,(MenuNode) component,null);
-							}
-							
-						}.execute();
+						if(CollectionHelper.getInstance().isNotEmpty(menu.getChildren()))
+							new CollectionHelper.Iterator.Adapter.Default<Component>(menu.getChildren().getElements()){
+								private static final long serialVersionUID = 1L;
+								protected void __executeForEach__(Component component) {
+									addMenuNode(instance,(MenuNode) component,null);
+								}
+								
+							}.execute();
 						return instance;
 					}
 					

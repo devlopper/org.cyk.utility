@@ -18,7 +18,6 @@ public class DataCleaner {
 
 	public static void processLines(String filePath,Boolean loweCase) throws Exception{
 		File file = new File(RandomDataProvider.class.getResource(filePath).toURI());
-		@SuppressWarnings("unchecked")
 		List<String> lines = IOUtils.readLines(new FileInputStream(file));
 		if(Boolean.TRUE.equals(loweCase))
 			for(int i=0;i<lines.size();i++)

@@ -169,7 +169,6 @@ public class RandomDataProvider implements Serializable {
 	
 	/* person stuff */
 		
-	@SuppressWarnings("unchecked")
 	public List<String> stringLines(String fileName){
 		try {
 			LOGGER.trace("Reading string lines from file named {}",fileName);

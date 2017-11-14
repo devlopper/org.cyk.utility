@@ -27,6 +27,7 @@ public class Component extends AbstractBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	protected Object built;
+	protected Component parent;
 	protected CollectionHelper.Instance<Component> children;
 	
 	/**/
@@ -84,11 +85,20 @@ public class Component extends AbstractBean implements Serializable {
 	
 	public static interface BuilderBase<OUTPUT extends Component> extends org.cyk.utility.common.Builder.NullableInput<OUTPUT> {
 
+		BuilderBase<OUTPUT> setComponentParent(Component componentParent);
+		
 		public static class Adapter<OUTPUT extends Component> extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {
 			private static final long serialVersionUID = 1L;
 
+			protected Component componentParent;
+			
 			public Adapter(Class<OUTPUT> outputClass) {
 				super(outputClass);
+			}
+			
+			@Override
+			public BuilderBase<OUTPUT> setComponentParent(Component componentParent) {
+				return null;
 			}
 
 			/**/
@@ -98,6 +108,12 @@ public class Component extends AbstractBean implements Serializable {
 
 				public Default(Class<OUTPUT> outputClass) {
 					super(outputClass);
+				}
+				
+				@Override
+				public BuilderBase<OUTPUT> setComponentParent(Component componentParent) {
+					this.componentParent = componentParent;
+					return this;
 				}
 			}
 		}

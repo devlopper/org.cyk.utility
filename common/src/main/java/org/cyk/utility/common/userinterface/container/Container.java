@@ -30,9 +30,9 @@ public class Container extends Component.Visible implements Serializable {
 	
 	/**/
 	
-	public static interface BuilderBase<OUTPUT extends Container> extends org.cyk.utility.common.Builder.NullableInput<OUTPUT> {
+	public static interface BuilderBase<OUTPUT extends Container> extends Component.BuilderBase<OUTPUT> {
 
-		public static class Adapter<OUTPUT extends Container> extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {
+		public static class Adapter<OUTPUT extends Container> extends Component.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {
 			private static final long serialVersionUID = 1L;
 
 			public Adapter(Class<OUTPUT> outputClass) {

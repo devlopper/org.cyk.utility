@@ -12,6 +12,7 @@ import org.cyk.utility.common.helper.MethodHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.DeviceType;
 import org.cyk.utility.common.userinterface.Request;
+import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.panel.ConfirmationDialog;
 import org.cyk.utility.common.userinterface.panel.NotificationDialog;
 
@@ -35,6 +36,8 @@ public class Window extends Container implements Serializable {
 		super.initialisation();
 		getPropertiesMap().setFullPage(Boolean.TRUE);
 		getPropertiesMap().setLayout(createLayout());
+		getPropertiesMap().setMainMenu(createMainMenu());
+		getPropertiesMap().setContextMenu(createContextMenu());
 	}
 	
 	public void listenBeforeRender(){}
@@ -46,6 +49,14 @@ public class Window extends Container implements Serializable {
 			layout = ListenerHelper.getInstance().listenObject(Listener.COLLECTION, Listener.METHOD_NAME_CREATE_LAYOUT
 					,MethodHelper.Method.Parameter.buildArray(Window.class,this));
 		return layout;
+	}
+	
+	protected Menu createMainMenu(){
+		return Menu.build(this, Menu.Type.MAIN,Menu.RenderType.BAR);
+	}
+	
+	protected Menu createContextMenu(){
+		return Menu.build(this, Menu.Type.CONTEXT,Menu.RenderType.PANEL);
 	}
 	
 	public static interface BuilderBase<OUTPUT extends Window> extends Component.BuilderBase<OUTPUT> {

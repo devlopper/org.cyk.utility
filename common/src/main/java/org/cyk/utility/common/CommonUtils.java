@@ -407,7 +407,6 @@ public class CommonUtils implements Serializable  {
 		return new DateTime(DateTimeZone.UTC).toDate();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<String> stringLines(String fileName,Class<?> aClass){
 		try {
 			return (List<String>) IOUtils.readLines(aClass.getResourceAsStream(fileName));
