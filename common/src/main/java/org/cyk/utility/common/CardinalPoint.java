@@ -8,6 +8,8 @@ public enum CardinalPoint {
 	
 	SOUTH,
 	
-	EAST
+	EAST,
+	
+	CENTER
 	
 }
