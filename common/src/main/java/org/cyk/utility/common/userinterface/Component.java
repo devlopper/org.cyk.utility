@@ -33,7 +33,7 @@ public class Component extends AbstractBean implements Serializable {
 	/**/
 
 	public Component() {
-		
+		//getPropertiesMap();//trigger settings
 	}
 	
 	@Override

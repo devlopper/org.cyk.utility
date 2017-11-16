@@ -1,5 +1,9 @@
 package org.cyk.utility.common.helper;
 
+import static org.cyk.utility.common.helper.UniformResourceLocatorHelper.TokenName.HOST;
+import static org.cyk.utility.common.helper.UniformResourceLocatorHelper.TokenName.PORT;
+import static org.cyk.utility.common.helper.UniformResourceLocatorHelper.TokenName.SCHEME;
+
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -15,10 +19,8 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Constant.Action;
 import org.cyk.utility.common.helper.MapHelper.Stringifier.Entry.OutputStrategy;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
+import org.cyk.utility.common.userinterface.RequestHelper;
 
-import static org.cyk.utility.common.helper.UniformResourceLocatorHelper.TokenName.SCHEME;
-import static org.cyk.utility.common.helper.UniformResourceLocatorHelper.TokenName.HOST;
-import static org.cyk.utility.common.helper.UniformResourceLocatorHelper.TokenName.PORT;
 import lombok.Getter;
 
 @Singleton
@@ -28,6 +30,8 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 
 	public static Class<? extends UniformResourceLocatorHelper.Listener> DEFAULT_LISTENER_CLASS = UniformResourceLocatorHelper.Listener.Adapter.Default.class;
 	private static UniformResourceLocatorHelper INSTANCE;
+	
+	private static final Map<Object,String> PATH_IDENTIFIER_LINK_MAP = new HashMap<>();
 	
 	public static UniformResourceLocatorHelper getInstance() {
 		if(INSTANCE == null)
@@ -64,8 +68,24 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	
 	public String getToken(TokenName name){
 		UniformResourceLocatorHelper.Listener listener = ClassHelper.getInstance().instanciateOne(DEFAULT_LISTENER_CLASS);
-		Object request = listener.getRequest();
-		return getToken(name,listener.getRequestUniformResourceLocator(request));
+		Object request = RequestHelper.getInstance().get();
+		return getToken(name,request == null ? listener.getDefault() : listener.getRequestUniformResourceLocator(request));
+	}
+	
+	public String getDefault(){
+		return ClassHelper.getInstance().instanciateOne(DEFAULT_LISTENER_CLASS).getDefault();
+	}
+	
+	public Boolean isRelative(String url){
+		return StringUtils.startsWith(url, "/");
+	}
+	
+	public void linkPathIdentifier(String pathIdentifierSource,String pathIdentifierDestination){
+		PATH_IDENTIFIER_LINK_MAP.put(pathIdentifierSource, pathIdentifierDestination);
+	}
+	
+	public String getPathIdentifierDestination(String pathIdentifierSource){
+		return PATH_IDENTIFIER_LINK_MAP.get(pathIdentifierSource);
 	}
 	
 	public static interface Stringifier extends org.cyk.utility.common.Builder.Stringifier<Object> {
@@ -220,8 +240,6 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			public static class Default extends UniformResourceLocatorHelper.Stringifier.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 
-				public static final String SCHEME_HOST_PORT_FORMAT = "%s://%s%s%s";
-				
 				public static String DEFAULT_QUERY_SEPARATOR=Constant.CHARACTER_QUESTION_MARK.toString();
 				public static  Boolean DEFAULT_RELATIVE,DEFAULT_PRETTY;
 				
@@ -625,8 +643,8 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	
 	public static interface Listener {
 		
+		String getDefault();
 		//TODO should be moved in RequestHelper
-		Object getRequest();
 		String getRequestUniformResourceLocator(Object request);
 		
 		String getPathIdentifier(Constant.Action action,Class<?> aClass);
@@ -636,7 +654,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			public Object getRequest() {
+			public String getDefault() {
 				return null;
 			}
 			
@@ -661,6 +679,13 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				private static final String EDIT = "Edit";
 				
 				@Override
+				public String getDefault() {
+					Object port = TOKEN_DEFAULT_VALUE_MAP.get(TokenName.PORT);
+					return String.format(Stringifier.SCHEME_HOST_PORT_FORMAT, TOKEN_DEFAULT_VALUE_MAP.get(TokenName.SCHEME), TOKEN_DEFAULT_VALUE_MAP.get(TokenName.HOST)
+							,port == null ? Constant.EMPTY_STRING : ":", port == null ? Constant.EMPTY_STRING : port);
+				}
+				
+				@Override
 				public String getPathIdentifier(Action action, Class<?> aClass) {
 					if(action==null || aClass==null)
 						return null;
@@ -682,7 +707,12 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	}
 	
 	public static enum TokenName{SCHEME,HOST,PORT,PATH,QUERY,FRAGMENT}
-
+	public static final Map<TokenName,String> TOKEN_DEFAULT_VALUE_MAP = new HashMap<>();
+	static {
+		TOKEN_DEFAULT_VALUE_MAP.put(TokenName.SCHEME, "http");
+		TOKEN_DEFAULT_VALUE_MAP.put(TokenName.HOST, "localhost");
+	}
+	
 	/**/
 	
 	public static interface QueryParameter {
@@ -695,7 +725,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			String IDENTIFIABLE = "identifiable";
 			String ENCODED = "encoded";
 			String DATA_SOURCE = "datasource";
-			
+			String URL_PREVIOUS = "urlprevious";
 		}
 		
 		public static interface Value {

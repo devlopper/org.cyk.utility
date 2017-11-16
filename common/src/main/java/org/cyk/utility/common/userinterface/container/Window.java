@@ -33,6 +33,7 @@ public class Window extends Container implements Serializable {
 	
 	@Override
 	protected void initialisation() {
+		notificationDialog.getPropertiesMap();
 		super.initialisation();
 		getPropertiesMap().setFullPage(Boolean.TRUE);
 		getPropertiesMap().setLayout(createLayout());

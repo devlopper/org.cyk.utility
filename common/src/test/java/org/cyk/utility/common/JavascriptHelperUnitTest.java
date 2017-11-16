@@ -34,6 +34,8 @@ public class JavascriptHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void navigateWindow(){
 		assertEquals("window.location.href='http://localhost:8080'", new JavaScriptHelper.Script.Window.Navigate.Adapter.Default().execute());
+		assertEquals("window.location.href='http://localhost:8080/mycontext/path_to_id1?p1=v1'", new JavaScriptHelper.Script.Window.Navigate.Adapter.Default()
+				.setUniformResourceLocatorStringifier("pathid1", new Object[]{"p1","v1"}).execute());
 		assertEquals("window.location.href='http://localhost:8080/mycontext/entity/edit.jsf?action=create&clazz=entity'", new JavaScriptHelper.Script.Window.Navigate.Adapter
 				.Default().setUniformResourceLocatorStringifier(Constant.Action.CREATE, Entity.class).execute());
 		assertEquals("window.location.href='http://localhost:8080/mycontext/entity/consult.jsf?action=consult&identifiable=15'", new JavaScriptHelper.Script.Window.Navigate.Adapter

@@ -26,6 +26,8 @@ public class UniformResourceLocatorHelperUnitTest extends AbstractUnitTest {
 		
 		MapHelper.Stringifier.Adapter.Default.DEFAULT_MAP_LISTENER_CLASS = MapListener.class;
 		MapHelper.Stringifier.Entry.Adapter.Default.DEFAULT_MAP_LISTENER_CLASS = MapListener.class;
+		
+		UniformResourceLocatorHelper.TOKEN_DEFAULT_VALUE_MAP.put(TokenName.PORT, "8080");
 	}
 	
 	@Test
@@ -139,6 +141,8 @@ public class UniformResourceLocatorHelperUnitTest extends AbstractUnitTest {
 		
 		assertEquals("http://localhost:8080/mycontext/classa/consult.jsf?action=consult&identifiable=1594",new UniformResourceLocatorHelper.Stringifier.Adapter.Default().setPathContext("mycontext")
 				.addQueryParameterAction(Constant.Action.CONSULT).addQueryParameterIdentifiable(new ClassA(1594l)).setPort(8080).execute());
+		
+		assertEquals("http://localhost:8080", UniformResourceLocatorHelper.getInstance().getDefault());
 	}
 	
 	/**/

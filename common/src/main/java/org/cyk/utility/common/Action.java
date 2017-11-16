@@ -914,8 +914,7 @@ public interface Action<INPUT,OUTPUT> {
 						try {
 							output = __execute__();
 							ListenerHelper.getInstance().listen(actionListeners, ActionListener.METHOD_NAME___EXECUTE__,new MethodHelper.Method.Parameter(Action.class, this));
-							processOnStatus(Status.SUCCESS);
-							ListenerHelper.getInstance().listen(actionListeners, ActionListener.METHOD_NAME_PROCESS_ON_STATUS,new MethodHelper.Method.Parameter(Action.class, this));
+							processOnSuccess();
 						} catch (Exception exception) {
 							processOnFailure(exception);
 						}	
@@ -951,6 +950,11 @@ public interface Action<INPUT,OUTPUT> {
 					return output;
 				throw new RuntimeException("Action <<"+name+">> with input class "+getInputClass()+" and output class "+getOutputClass()+" not yet implemented.");
 				//throw new RuntimeException("Action <<"+name+">> with input class "+getInput().getClass()+" and output class "+getOutputClass()+" not yet implemented.");
+			}
+			
+			protected void processOnSuccess(){
+				processOnStatus(Status.SUCCESS);
+				ListenerHelper.getInstance().listen(actionListeners, ActionListener.METHOD_NAME_PROCESS_ON_STATUS,new MethodHelper.Method.Parameter(Action.class, this));
 			}
 			
 			protected void processOnFailure(Throwable throwable){

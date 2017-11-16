@@ -14,4 +14,7 @@ public class Request extends Component.Invisible implements Serializable {
 	
 	private Dialog statusDialog = new Dialog();
 	
+	public Request() {
+		getPropertiesMap().setUniformResourceLocator(RequestHelper.getInstance().getUniformResourceLocator());
+	}
 }

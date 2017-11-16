@@ -1951,6 +1951,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getUniformResourceLocator() {
+		return get(UNIFORM_RESOURCE_LOCATOR);
+	}
+
+	public Properties setUniformResourceLocator(Object value) {
+		set(UNIFORM_RESOURCE_LOCATOR, value);
+		return this;
+	}
+	
+	public static final String UNIFORM_RESOURCE_LOCATOR = "UNIFORM_RESOURCE_LOCATOR";
+	
 	public static final String FRAGMENT = "FRAGMENT";
 	public static final String DISABLE_CLIENT_WINDOW = "DISABLE_CLIENT_WINDOW";
 	public static final String CONTAINER_STYLE = "CONTAINER_STYLE";

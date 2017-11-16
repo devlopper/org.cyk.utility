@@ -27,6 +27,18 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 		super.initialisation();
 	}
 	
+	public Object get(){
+		return ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class).get();
+	}
+	
+	public Object getUniformResourceLocator(Object request){
+		return ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class).getUniformResourceLocator(request);
+	}
+	
+	public Object getUniformResourceLocator(){
+		return ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class).getUniformResourceLocator();
+	}
+	
 	public Object getParameter(Object request,String name){
 		return ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class).getParameter(request,name);
 	}
@@ -48,6 +60,8 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 	public static interface Listener {
 		
 		Object get();
+		String getUniformResourceLocator(Object request);
+		String getUniformResourceLocator();
 		Object getParameter(Object request,String name);
 		Object getParameter(String name);
 		
@@ -56,6 +70,16 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 			
 			@Override
 			public Object get() {
+				return null;
+			}
+			
+			@Override
+			public String getUniformResourceLocator(Object request) {
+				return null;
+			}
+			
+			@Override
+			public String getUniformResourceLocator() {
 				return null;
 			}
 			
@@ -74,7 +98,12 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 				
 				@Override
 				public Object getParameter(String name) {
-					return super.getParameter(get(),name);
+					return getParameter(get(),name);
+				}
+				
+				@Override
+				public String getUniformResourceLocator() {
+					return getUniformResourceLocator(get());
 				}
 				
 			}

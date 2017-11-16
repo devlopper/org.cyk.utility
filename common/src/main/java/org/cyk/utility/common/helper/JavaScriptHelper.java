@@ -23,7 +23,7 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 	@Deprecated
 	private static final String WINDOW_LOCATION = "window.location = '%s';";
 	
-	private static final String INSTRUCTION_SEPARATOR = ";";
+	public static final String INSTRUCTION_SEPARATOR = ";";
 	private static final String DOUBLE_SPACE = Constant.CHARACTER_SPACE.toString()+Constant.CHARACTER_SPACE.toString();
 	private static final String FUNCTION_CALL_FORMAT = "%s(%s);";
 	private static final String OBJECT_FUNCTION_CALL_FORMAT = "%s.%s(%s);";
@@ -111,6 +111,20 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 		return String.format(FUNCTION_PARAMETER_STRING_FORMAT, value == null ? Constant.EMPTY_STRING : value);
 	}
 	
+	public String getScriptWindowGoBack(){
+		return "window.history.back();";
+	}
+	
+	public String getScriptWindowGoTo(String url,Boolean goBackIfUrlIsBlank){
+		if(StringHelper.getInstance().isBlank(url))
+			if(Boolean.TRUE.equals(goBackIfUrlIsBlank))
+				return JavaScriptHelper.getInstance().getScriptWindowGoBack();
+			else
+				return Constant.EMPTY_STRING;
+		else 
+			return new JavaScriptHelper.Script.Window.Navigate.Adapter.Default().setUniformResourceLocator(url).execute();
+	}
+	
 	/*public String update(WebInput<?, ?, ?, ?> input,Object value){
 		if( Boolean.TRUE.equals(((Input<?, ?, ?, ?, ?, ?>)input).getReadOnly()) && !Boolean.TRUE.equals(((Input<?, ?, ?, ?, ?, ?>)input).getKeepShowingInputOnReadOnly())){
 			return "$('."+input.getCss().getUniqueClass()+"').html('"+value+"');";
@@ -148,6 +162,9 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 			Window setUniformResourceLocatorStringifier(UniformResourceLocatorHelper.Stringifier uniformResourceLocatorStringifier);
 			Window setUniformResourceLocatorStringifier(String pathIdentifier,Object[] queryKeyValues);
 			Window setUniformResourceLocatorStringifier(Constant.Action action,Object object);
+			
+			String getUniformResourceLocator();
+			Window setUniformResourceLocator(String uniformResourceLocator);
 			
 			String getIdentifier();
 			Window setIdentifier(String identifier);
@@ -191,6 +208,7 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 				protected Integer leftIndex,topIndex,width,height;
 				protected Map<String,Boolean> showableMap;
 				protected UniformResourceLocatorHelper.Stringifier uniformResourceLocatorStringifier;
+				protected String uniformResourceLocator;
 				
 				@Override
 				public Window setUniformResourceLocatorStringifier(Action action, Object object) {
@@ -252,11 +270,22 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 					return null;
 				}
 				
+				@Override
+				public Window setUniformResourceLocator(String uniformResourceLocator) {
+					return null;
+				}
+				
 				public static class Default extends Window.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
 					public Default() {
 						setUniformResourceLocatorStringifier(new UniformResourceLocatorHelper.Stringifier.Adapter.Default());
+					}
+					
+					@Override
+					public Window setUniformResourceLocator(String uniformResourceLocator) {
+						this.uniformResourceLocator = uniformResourceLocator;
+						return this;
 					}
 					
 					@Override
@@ -354,7 +383,9 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 						
 						@Override
 						protected String __execute__() {
-							return String.format(FORMAT, getUniformResourceLocatorStringifier().execute());
+							String uniformResourceLocator = getUniformResourceLocator();
+							return String.format(FORMAT, StringHelper.getInstance().isBlank(uniformResourceLocator) 
+									? getUniformResourceLocatorStringifier().execute() : uniformResourceLocator);
 						}
 					}
 				}

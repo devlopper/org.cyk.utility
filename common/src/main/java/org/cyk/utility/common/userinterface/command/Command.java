@@ -4,7 +4,11 @@ import java.io.Serializable;
 
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CommandHelper;
+import org.cyk.utility.common.helper.JavaScriptHelper;
+import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.userinterface.Control;
+import org.cyk.utility.common.userinterface.RequestHelper;
 import org.cyk.utility.common.userinterface.event.Confirm;
 import org.cyk.utility.common.userinterface.panel.ConfirmationDialog;
 
@@ -27,6 +31,17 @@ public class Command extends Control implements Serializable {
 		if(Boolean.TRUE.equals(getAction().getIsConfirmable()))
 			setConfirm(new Confirm());
 		return this;
+	}
+	
+	public Command addJavaScriptGoToUniformResourceLocatorOnEvent(String event,String url){
+		String script = JavaScriptHelper.getInstance().getScriptWindowGoTo(url, Boolean.TRUE);
+		if(StringHelper.getInstance().isNotBlank(script))
+			getPropertiesMap().addString(event, JavaScriptHelper.INSTRUCTION_SEPARATOR, script);
+		return this;
+	}
+	
+	public Command addJavaScriptGoToUniformResourceLocatorOnEvent(String event){
+		return addJavaScriptGoToUniformResourceLocatorOnEvent(event, RequestHelper.getInstance().getParameterAsString(UniformResourceLocatorHelper.QueryParameter.Name.URL_PREVIOUS));
 	}
 	
 	/**/
