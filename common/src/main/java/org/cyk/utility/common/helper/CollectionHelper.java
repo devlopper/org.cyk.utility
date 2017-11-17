@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -300,6 +302,20 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return result;
 	}
 	
+	public <T> void sort(Collection<T> elements,Comparator<T> comparator){
+		if(isNotEmpty(elements))
+			if(elements instanceof List){
+				if(comparator == null)
+					comparator = new org.cyk.utility.common.Comparator<T>("orderNumber");
+				Collections.sort((List<T>)elements, comparator);
+			}else
+				ThrowableHelper.getInstance().throw_("cannot sort a collection of type "+elements.getClass());
+	}
+	
+	public <T> void sort(Collection<T> elements){
+		sort(elements,null);
+	}
+	
 	/**/
 	
 	public static interface Filter<TYPE>  extends org.cyk.utility.common.Action<Collection<TYPE>, Collection<TYPE>>{
@@ -372,6 +388,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		private Boolean isCreatable=Boolean.TRUE,isReadable=Boolean.TRUE,isUpdatable=Boolean.TRUE,isRemovable=Boolean.TRUE,isNullAddable=Boolean.FALSE;
 		private Boolean isEachElementHasSource,isElementObjectCreatable;
 		private Instance<Object> masterElementObjectCollection;
+		private Comparator<T> comparator;
 		
 		public Boolean isEditable(){
 			return Boolean.TRUE.equals(getIsCreatable()) || Boolean.TRUE.equals(getIsUpdatable()) || Boolean.TRUE.equals(getIsRemovable());
@@ -495,6 +512,10 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				
 				if(Boolean.TRUE.equals(isAddable)){
 					if(getElements().add((T) element)){
+						if(element instanceof AbstractBean){
+							if(((AbstractBean)element).getOrderNumber() == null)
+								((AbstractBean)element).setOrderNumber(new Long(getElements().size()));
+						}
 						if(element instanceof Element){
 							((Element<T>)element).setCollection(this).setSource(source);
 							if(Boolean.TRUE.equals(getIsElementObjectCreatable()) && ((Element<T>)element).getObject()==null)
@@ -688,6 +709,12 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		
 		public Boolean isNotEmpty(){
 			return getInstance().isNotEmpty(elements);
+		}
+		
+		public Instance<T> sort(){
+			if(getInstance().isNotEmpty(elements))
+				getInstance().sort(elements, comparator);
+			return this;
 		}
 		
 		@Override

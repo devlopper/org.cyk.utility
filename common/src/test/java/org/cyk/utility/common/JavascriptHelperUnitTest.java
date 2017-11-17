@@ -2,12 +2,14 @@ package org.cyk.utility.common;
 
 import java.io.Serializable;
 
+import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.JavaScriptHelper;
 import org.cyk.utility.common.helper.MapHelper;
-import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.MapHelper.EntryComponent;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper.PathStringifier;
+import org.cyk.utility.common.userinterface.RequestHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -23,12 +25,16 @@ public class JavascriptHelperUnitTest extends AbstractUnitTest {
 	static {
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();
 		
-		UniformResourceLocatorHelper.DEFAULT_LISTENER_CLASS = UniformResourceLocatorHelperListener.class;
+		ClassHelper.getInstance().map(UniformResourceLocatorHelper.Listener.class, UniformResourceLocatorHelperListener.class);
+		ClassHelper.getInstance().map(RequestHelper.Listener.class, RequestHelperListener.class);
+		
 		PathStringifier.Adapter.Default.DEFAULT_CONTEXT = "mycontext";		
 		PathStringifier.Adapter.Default.DEFAULT_UNIFORM_RESOURCE_LOCATOR_LISTENER_CLASS = UniformResourceLocatorHelperListener.class;
 		
 		MapHelper.Stringifier.Adapter.Default.DEFAULT_MAP_LISTENER_CLASS = MapListener.class;
 		MapHelper.Stringifier.Entry.Adapter.Default.DEFAULT_MAP_LISTENER_CLASS = MapListener.class;
+		
+		//UniformResourceLocatorHelper.TOKEN_DEFAULT_VALUE_MAP.put(TokenName.PORT, "8080");
 	}
 	
 	@Test
@@ -60,11 +66,6 @@ public class JavascriptHelperUnitTest extends AbstractUnitTest {
 	public static class UniformResourceLocatorHelperListener extends UniformResourceLocatorHelper.Listener.Adapter.Default {
 		
 		private static final long serialVersionUID = 1L;
-
-		@Override
-		public String getRequestUniformResourceLocator(Object request) {
-			return "http://localhost:8080";
-		}
 		
 		@Override
 		public String getPathIdentifierMapping(String identifier) {
@@ -107,6 +108,20 @@ public class JavascriptHelperUnitTest extends AbstractUnitTest {
 			return "&";
 		}
 			
+	}
+	
+	public static class RequestHelperListener extends RequestHelper.Listener.Adapter.Default {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public Object get() {
+			return new Object();
+		}
+		
+		@Override
+		public String getUniformResourceLocator(Object request) {
+			return "http://localhost:8080";
+		}
 	}
 	
 	@Getter @Setter @AllArgsConstructor

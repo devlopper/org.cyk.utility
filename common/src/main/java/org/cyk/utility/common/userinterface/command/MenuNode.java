@@ -2,6 +2,7 @@ package org.cyk.utility.common.userinterface.command;
 
 import java.io.Serializable;
 
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.userinterface.Component;
 
 import lombok.Getter;
@@ -14,6 +15,16 @@ public class MenuNode extends Component.Visible implements Serializable {
 
 	private Menu menu;
 	private MenuNode parent;
+	
+	/**/
+	
+	public MenuNode setPropertyUrl(String pathIdentifier,Object...queryKeyValue){
+		return (MenuNode) super.setPropertyUrl(pathIdentifier, queryKeyValue);
+	}
+	
+	public MenuNode setPropertyUrl(Constant.Action action,Object object,Object...queryKeyValue){
+		return (MenuNode) super.setPropertyUrl(action, object, queryKeyValue);
+	}
 	
 	/**/
 	

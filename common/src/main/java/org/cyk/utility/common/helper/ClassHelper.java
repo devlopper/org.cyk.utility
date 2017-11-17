@@ -249,14 +249,19 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return names;
 	}
 
+	public void map(Class<?> aClass1,Class<?> aClass2,Boolean overwrite){
+		if(MAP.get(aClass1)==null || Boolean.TRUE.equals(overwrite))
+			MAP.put(aClass1, aClass2);
+	}
+	
 	public void map(Class<?> aClass1,Class<?> aClass2){
-		MAP.put(aClass1, aClass2);
+		map(aClass1, aClass2, Boolean.TRUE);
 	}
 	
 	public <T> Class<? extends T> getMapping(Class<T> aClass,Boolean returnClassIfNull){
 		@SuppressWarnings("unchecked")
 		Class<T> result = (Class<T>) MAP.get(aClass);
-		return result == null ? aClass : result;
+		return result == null ? Boolean.TRUE.equals(returnClassIfNull) ? aClass : null : result;
 	}
 	
 	/**/

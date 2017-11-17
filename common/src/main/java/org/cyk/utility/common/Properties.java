@@ -1960,6 +1960,46 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getColumns() {
+		return get(COLUMNS);
+	}
+
+	public Properties setColumns(Object value) {
+		set(COLUMNS, value);
+		return this;
+	}
+	
+	public Object getHeaderText() {
+		return get(HEADER_TEXT);
+	}
+
+	public Properties setHeaderText(Object value) {
+		set(HEADER_TEXT, value);
+		return this;
+	}
+	
+	public Object getFieldName() {
+		return get(FIELD_NAME);
+	}
+
+	public Properties setFieldName(Object value) {
+		set(FIELD_NAME, value);
+		return this;
+	}
+	
+	public Object getMenuColumn() {
+		return get(MENU_COLUMN);
+	}
+
+	public Properties setMenuColumn(Object value) {
+		set(MENU_COLUMN, value);
+		return this;
+	}
+	
+	public static final String MENU_COLUMN = "MENU_COLUMN";
+	public static final String FIELD_NAME = "FIELD_NAME";
+	public static final String COLUMNS = "COLUMNS";
+	public static final String HEADER_TEXT = "HEADER_TEXT";
 	public static final String UNIFORM_RESOURCE_LOCATOR = "UNIFORM_RESOURCE_LOCATOR";
 	
 	public static final String FRAGMENT = "FRAGMENT";

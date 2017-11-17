@@ -25,6 +25,13 @@ public class Menu extends Container implements Serializable {
 	
 	/**/
 	
+	public MenuNode addNode(String labelStringIdentifier){
+		MenuNode menuNode = new MenuNode();
+		menuNode.setLabelFromIdentifier(labelStringIdentifier);
+		addOneChild(menuNode);
+		return menuNode;
+	}
+	
 	/**/
 	
 	public static Menu build(Component parent,Type type,RenderType renderType,Boolean buildTarget){

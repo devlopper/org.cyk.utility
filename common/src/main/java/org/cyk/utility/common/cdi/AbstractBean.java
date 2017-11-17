@@ -47,10 +47,9 @@ public class AbstractBean implements Serializable {
 	protected ListenerUtils listenerUtils = ListenerUtils.getInstance();
 	
 	@Getter protected Collection<BeanListener> beanListeners = new ArrayList<>();
+	@Getter protected Long orderNumber;
 	protected Properties propertiesMap;
 	private transient Logger __logger__; 
-	
-	//private Long __timestamp__;
 	
 	@PostConstruct
 	public void postConstruct(){
@@ -65,6 +64,11 @@ public class AbstractBean implements Serializable {
 
 	protected void afterInitialisation(){}
 	
+	public AbstractBean setOrderNumber(Long orderNumber){
+		this.orderNumber = orderNumber;
+		return this;
+	}
+
 	public Properties getPropertiesMap() {
 		if(propertiesMap==null)
 			propertiesMap = instanciateProperties();

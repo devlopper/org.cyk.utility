@@ -3,11 +3,14 @@ package org.cyk.utility.common;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
+import org.cyk.utility.common.Constant.Action;
+import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.MapHelper;
 import org.cyk.utility.common.helper.MapHelper.EntryComponent;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper.PathStringifier;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper.TokenName;
+import org.cyk.utility.common.userinterface.RequestHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -19,7 +22,9 @@ public class UniformResourceLocatorHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	static {
-		UniformResourceLocatorHelper.DEFAULT_LISTENER_CLASS = UniformResourceLocatorHelperListener.class;
+		ClassHelper.getInstance().map(UniformResourceLocatorHelper.Listener.class, UniformResourceLocatorHelperListener.class);
+		ClassHelper.getInstance().map(RequestHelper.Listener.class, RequestHelperListener.class);
+		
 		PathStringifier.Adapter.Default.DEFAULT_SEQUENCE_REPLACEMENT_MAP = new LinkedHashMap<>();
 		PathStringifier.Adapter.Default.DEFAULT_SEQUENCE_REPLACEMENT_MAP.put(".xhtml", ".jsf");
 		PathStringifier.Adapter.Default.DEFAULT_UNIFORM_RESOURCE_LOCATOR_LISTENER_CLASS = UniformResourceLocatorHelperListener.class;
@@ -145,6 +150,20 @@ public class UniformResourceLocatorHelperUnitTest extends AbstractUnitTest {
 		assertEquals("http://localhost:8080", UniformResourceLocatorHelper.getInstance().getDefault());
 	}
 	
+	@Test
+	public void getPathIdentifier(){
+		assertEquals("classAEdit", UniformResourceLocatorHelper.getInstance().getPathIdentifier(Constant.Action.CREATE, ClassA.class));
+		assertEquals("classARead", UniformResourceLocatorHelper.getInstance().getPathIdentifier(Constant.Action.READ, ClassA.class));
+		assertEquals("classAEdit", UniformResourceLocatorHelper.getInstance().getPathIdentifier(Constant.Action.UPDATE, ClassA.class));
+		assertEquals("classAEdit", UniformResourceLocatorHelper.getInstance().getPathIdentifier(Constant.Action.DELETE, ClassA.class));
+	}
+	
+	@Test
+	public void stringify(){
+		assertEquals("http://localhost:8080/classa/edit.jsf?action=create&clazz=classa", UniformResourceLocatorHelper.getInstance().stringify(Constant.Action.CREATE,ClassA.class));
+		assertEquals("http://localhost:8080/classa/consult.jsf?action=read&identifiable=3", UniformResourceLocatorHelper.getInstance().stringify(Constant.Action.READ,(Object)new ClassA(3l)));
+	}
+	
 	/**/
 	
 	@Getter @Setter
@@ -191,11 +210,6 @@ public class UniformResourceLocatorHelperUnitTest extends AbstractUnitTest {
 	public static class UniformResourceLocatorHelperListener extends UniformResourceLocatorHelper.Listener.Adapter.Default {
 		
 		private static final long serialVersionUID = 1L;
-
-		@Override
-		public String getRequestUniformResourceLocator(Object request) {
-			return "http://localhost:8080/mycontext_and_path";
-		}
 		
 		@Override
 		public String getPathIdentifierMapping(String identifier) {
@@ -205,10 +219,26 @@ public class UniformResourceLocatorHelperUnitTest extends AbstractUnitTest {
 				return "/classa/edit.jsf";
 			if("classAConsult".equals(identifier))
 				return "/classa/consult.jsf";
+			if("classARead".equals(identifier))
+				return "/classa/consult.jsf";
 			//if(UniformResourceLocatorHelper.PathStringBuilder.Adapter.Default.IDENTIFIER_UNKNOWN.equals(getInput()))
 				return "path_to_unknown";
 			//return super.__execute__();
 		}
 			
+	}
+	
+	public static class RequestHelperListener extends RequestHelper.Listener.Adapter.Default {
+		private static final long serialVersionUID = 1L;
+		
+		@Override
+		public Object get() {
+			return new Object();
+		}
+		
+		@Override
+		public String getUniformResourceLocator(Object request) {
+			return "http://localhost:8080/mycontext_and_path";
+		}
 	}
 }

@@ -25,10 +25,12 @@ import lombok.Getter;
 
 @Singleton
 public class UniformResourceLocatorHelper extends AbstractHelper implements Serializable {
-
 	private static final long serialVersionUID = 1L;
-
-	public static Class<? extends UniformResourceLocatorHelper.Listener> DEFAULT_LISTENER_CLASS = UniformResourceLocatorHelper.Listener.Adapter.Default.class;
+	
+	static {
+		ClassHelper.getInstance().map(UniformResourceLocatorHelper.Listener.class, UniformResourceLocatorHelper.Listener.Adapter.Default.class,Boolean.FALSE);
+	}
+	
 	private static UniformResourceLocatorHelper INSTANCE;
 	
 	private static final Map<Object,String> PATH_IDENTIFIER_LINK_MAP = new HashMap<>();
@@ -67,13 +69,13 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	}
 	
 	public String getToken(TokenName name){
-		UniformResourceLocatorHelper.Listener listener = ClassHelper.getInstance().instanciateOne(DEFAULT_LISTENER_CLASS);
+		UniformResourceLocatorHelper.Listener listener = ClassHelper.getInstance().instanciateOne(UniformResourceLocatorHelper.Listener.class);
 		Object request = RequestHelper.getInstance().get();
-		return getToken(name,request == null ? listener.getDefault() : listener.getRequestUniformResourceLocator(request));
+		return getToken(name,request == null ? listener.getDefault() :  (String)RequestHelper.getInstance().getUniformResourceLocator(request));
 	}
 	
 	public String getDefault(){
-		return ClassHelper.getInstance().instanciateOne(DEFAULT_LISTENER_CLASS).getDefault();
+		return ClassHelper.getInstance().instanciateOne(UniformResourceLocatorHelper.Listener.class).getDefault();
 	}
 	
 	public Boolean isRelative(String url){
@@ -86,6 +88,26 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	
 	public String getPathIdentifierDestination(String pathIdentifierSource){
 		return PATH_IDENTIFIER_LINK_MAP.get(pathIdentifierSource);
+	}
+	
+	public String getPathIdentifier(Constant.Action action,Class<?> aClass){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getPathIdentifier(action, aClass);
+	}
+	
+	public String stringify(String pathIdentifier,Object...queryKeyValue){
+		return new UniformResourceLocatorHelper.Stringifier.Adapter.Default().setPathIdentifier(pathIdentifier).addQueryKeyValue(queryKeyValue).execute();
+	}
+	
+	public String stringify(Constant.Action action,Object object,Object...queryKeyValue){
+		Class<?> aClass = object instanceof Class ? (Class<?>)object : object.getClass();
+		String pathIdentifier = getPathIdentifier(action, aClass);
+		UniformResourceLocatorHelper.Stringifier stringifier = new UniformResourceLocatorHelper.Stringifier.Adapter.Default()
+				.setPathIdentifier(pathIdentifier).addQueryParameterAction(action);
+		if(object instanceof Class)
+			stringifier.addQueryParameterClass((Class<?>)object);
+		else
+			stringifier.addQueryParameterIdentifiable(object);
+		return stringifier.execute();
 	}
 	
 	public static interface Stringifier extends org.cyk.utility.common.Builder.Stringifier<Object> {
@@ -644,8 +666,6 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	public static interface Listener {
 		
 		String getDefault();
-		//TODO should be moved in RequestHelper
-		String getRequestUniformResourceLocator(Object request);
 		
 		String getPathIdentifier(Constant.Action action,Class<?> aClass);
 		String getPathIdentifierMapping(String identifier);
@@ -657,12 +677,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			public String getDefault() {
 				return null;
 			}
-			
-			@Override
-			public String getRequestUniformResourceLocator(Object request) {
-				return null;
-			}
-			
+						
 			@Override
 			public String getPathIdentifier(Action action, Class<?> aClass) {
 				return null;
@@ -682,7 +697,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				public String getDefault() {
 					Object port = TOKEN_DEFAULT_VALUE_MAP.get(TokenName.PORT);
 					return String.format(Stringifier.SCHEME_HOST_PORT_FORMAT, TOKEN_DEFAULT_VALUE_MAP.get(TokenName.SCHEME), TOKEN_DEFAULT_VALUE_MAP.get(TokenName.HOST)
-							,port == null ? Constant.EMPTY_STRING : ":", port == null ? Constant.EMPTY_STRING : port);
+							,port == null ? Constant.EMPTY_STRING : Constant.CHARACTER_COLON, port == null ? Constant.EMPTY_STRING : port);
 				}
 				
 				@Override

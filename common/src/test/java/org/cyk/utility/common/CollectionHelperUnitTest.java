@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.CollectionHelper.Instance;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -22,6 +23,21 @@ import lombok.experimental.Accessors;
 public class CollectionHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	@Test
+	public void assertSort(){
+		CollectionHelper.Instance<AbstractBean> sortables = new CollectionHelper.Instance<>();
+		sortables.addOne(new Sortable().setString1("a"));
+		sortables.addOne(new Sortable().setString1("z").setOrderNumber(7l));
+		sortables.addOne(new Sortable().setString1("e"));
+		sortables.addOne(new Sortable().setString1("r"));
+		sortables.addOne(new Sortable().setString1("t"));
+		sortables.addOne(new Sortable().setString1("y"));
+		//System.out.println(sortables.getElements());
+		sortables.sort();
+		//System.out.println(sortables.getElements());
+		
+	}
 	
 	@Test
 	public void assertElementObjet(){
@@ -408,4 +424,15 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 	@AllArgsConstructor @Getter @Setter public static class A2 {}
 	@AllArgsConstructor @Getter @Setter public static class A3 {}
 	@AllArgsConstructor @Getter @Setter public static class A4 {}
+	
+	@Getter @Setter @Accessors(chain=true) public static class Sortable extends AbstractBean {
+		private static final long serialVersionUID = 1L;
+		
+		private String string1,string2;
+		
+		@Override
+		public String toString() {
+			return string1+","+string2+","+orderNumber;
+		}
+	}
 }

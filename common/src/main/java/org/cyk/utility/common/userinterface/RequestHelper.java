@@ -10,9 +10,12 @@ import org.cyk.utility.common.helper.ClassHelper;
 
 @Singleton
 public class RequestHelper extends AbstractHelper implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
+	static {
+		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
+	}
+	
 	private static RequestHelper INSTANCE;
 	
 	public static RequestHelper getInstance() {
@@ -28,23 +31,23 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 	}
 	
 	public Object get(){
-		return ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class).get();
+		return ClassHelper.getInstance().instanciateOne(Listener.class).get();
 	}
 	
-	public Object getUniformResourceLocator(Object request){
-		return ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class).getUniformResourceLocator(request);
+	public String getUniformResourceLocator(Object request){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getUniformResourceLocator(request);
 	}
 	
-	public Object getUniformResourceLocator(){
-		return ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class).getUniformResourceLocator();
+	public String getUniformResourceLocator(){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getUniformResourceLocator();
 	}
 	
 	public Object getParameter(Object request,String name){
-		return ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class).getParameter(request,name);
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getParameter(request,name);
 	}
 	
 	public Object getParameter(String name){
-		return ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class).getParameter(name);
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getParameter(name);
 	}
 	
 	public String getParameterAsString(Object request,String name){

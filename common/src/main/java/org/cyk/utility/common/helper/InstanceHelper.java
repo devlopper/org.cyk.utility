@@ -865,6 +865,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	
 	public static interface Listener extends AbstractHelper.Listener {
 		
+		@Deprecated
 		java.util.Collection<Listener> COLLECTION = new ArrayList<>();
 		
 		<T> Collection<T> get(Class<T> aClass);

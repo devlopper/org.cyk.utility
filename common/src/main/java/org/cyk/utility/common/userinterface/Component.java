@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper;
@@ -14,6 +15,7 @@ import org.cyk.utility.common.helper.ListenerHelper;
 import org.cyk.utility.common.helper.MethodHelper;
 import org.cyk.utility.common.helper.RandomHelper;
 import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.model.Area;
 import org.cyk.utility.common.userinterface.input.Watermark;
 import org.cyk.utility.common.userinterface.output.OutputText;
@@ -80,7 +82,17 @@ public class Component extends AbstractBean implements Serializable {
 				.listenObject(Listener.COLLECTION, Listener.METHOD_NAME_BUILD, MethodHelper.Method.Parameter.buildArray(Component.class,this));
 		return this;
 	}
-		
+	
+	public Component setPropertyUrl(String pathIdentifier,Object...queryKeyValue){
+		getPropertiesMap().setUrl(UniformResourceLocatorHelper.getInstance().stringify(pathIdentifier,queryKeyValue));
+		return this;
+	}
+	
+	public Component setPropertyUrl(Constant.Action action,Object object,Object...queryKeyValue){
+		getPropertiesMap().setUrl(UniformResourceLocatorHelper.getInstance().stringify(action, object, queryKeyValue));
+		return this;
+	}
+	
 	/**/
 	
 	public static interface BuilderBase<OUTPUT extends Component> extends org.cyk.utility.common.Builder.NullableInput<OUTPUT> {
