@@ -16,8 +16,8 @@ public class InputChoiceOneRadio extends InputChoiceOne implements Serializable 
 	/**/
 	
 	@Override
-	public InputChoiceOneRadio setField(Object object, String fieldName) {
-		return (InputChoiceOneRadio) super.setField(object, fieldName);
+	public InputChoiceOneRadio _setField(Object object, String fieldName) {
+		return (InputChoiceOneRadio) super._setField(object, fieldName);
 	}
 	
 	public static interface BuilderBase<OUTPUT extends InputChoiceOneRadio> extends InputChoiceOne.BuilderBase<OUTPUT> {

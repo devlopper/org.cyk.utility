@@ -3,7 +3,6 @@ package org.cyk.utility.common;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
-import org.cyk.utility.common.Constant.Action;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.MapHelper;
 import org.cyk.utility.common.helper.MapHelper.EntryComponent;
@@ -146,6 +145,12 @@ public class UniformResourceLocatorHelperUnitTest extends AbstractUnitTest {
 		
 		assertEquals("http://localhost:8080/mycontext/classa/consult.jsf?action=consult&identifiable=1594",new UniformResourceLocatorHelper.Stringifier.Adapter.Default().setPathContext("mycontext")
 				.addQueryParameterAction(Constant.Action.CONSULT).addQueryParameterIdentifiable(new ClassA(1594l)).setPort(8080).execute());
+		
+		assertEquals("http://localhost:8080/mycontext/classa/consult.jsf?action=consult&identifiable=1594",new UniformResourceLocatorHelper.Stringifier.Adapter.Default().setPathContext("mycontext")
+				.addQueryParameterAction(Constant.Action.CONSULT).addQueryParameterIdentifiable(new ClassA(1594l)).setPort(8080).execute());
+		
+		//assertEquals("http://localhost:8080/mycontext/classa/consult.jsf?action=consult&identifier=1594",new UniformResourceLocatorHelper.Stringifier.Adapter.Default().setPathContext("mycontext")
+		//		.addQueryParameterAction(Constant.Action.CONSULT).addQueryParameterIdentifier(new ClassA(1594l)).setPort(8080).execute());
 		
 		assertEquals("http://localhost:8080", UniformResourceLocatorHelper.getInstance().getDefault());
 	}

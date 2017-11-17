@@ -18,12 +18,12 @@ public class MenuNode extends Component.Visible implements Serializable {
 	
 	/**/
 	
-	public MenuNode setPropertyUrl(String pathIdentifier,Object...queryKeyValue){
-		return (MenuNode) super.setPropertyUrl(pathIdentifier, queryKeyValue);
+	public MenuNode _setPropertyUrl(String pathIdentifier,Object...queryKeyValue){
+		return (MenuNode) super._setPropertyUrl(pathIdentifier, queryKeyValue);
 	}
 	
-	public MenuNode setPropertyUrl(Constant.Action action,Object object,Object...queryKeyValue){
-		return (MenuNode) super.setPropertyUrl(action, object, queryKeyValue);
+	public MenuNode _setPropertyUrl(Constant.Action action,Object object,Object...queryKeyValue){
+		return (MenuNode) super._setPropertyUrl(action, object, queryKeyValue);
 	}
 	
 	/**/

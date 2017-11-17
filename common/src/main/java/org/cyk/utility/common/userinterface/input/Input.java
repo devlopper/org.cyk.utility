@@ -49,6 +49,7 @@ public class Input<T> extends Control implements Serializable {
 	protected Object object,valueObject;
 	protected Field field;
 	protected T value,initialValue;
+	protected Form.Detail formDetail;
 
 	protected CardinalPoint labelCardinalPoint;
 	
@@ -72,7 +73,7 @@ public class Input<T> extends Control implements Serializable {
 		return this;
 	}
 	
-	public Input<T> setField(Object object,String fieldName){
+	public Input<T> _setField(Object object,String fieldName){
 		setObject(object);
 		setFieldFromName(fieldName);
 		return this;
@@ -185,6 +186,7 @@ public class Input<T> extends Control implements Serializable {
 		void sortFields(Form.Detail form,Object object,java.util.List<Field> fields);
 		Class<? extends Input<?>> getClass(Form.Detail form,Object object,java.lang.reflect.Field field);
 		Input<?> get(Form.Detail form,Object object,java.lang.reflect.Field field);
+		void listenGet(Input<?> input);
 		java.util.List<Input<?>> get(Form.Detail form,Object object);
 		
 		void read(Input<?> input);
@@ -316,18 +318,21 @@ public class Input<T> extends Control implements Serializable {
 				}
 				
 				@Override
-				public Input<?> get(Form.Detail form,Object object, Field field) {
+				public Input<?> get(Form.Detail detail,Object object, Field field) {
 					Input<?> input = null;
-					Class<? extends Input<?>> aClass = getClass(form,object, field);
+					Class<? extends Input<?>> aClass = getClass(detail,object, field);
 					if(aClass!=null){
 						input = ClassHelper.getInstance().instanciateOne(aClass);
 					}
 					if(input!=null){
+						input.setFormDetail(detail);
 						input.setObject(object).setField(field);
 						input.getPropertiesMap().setLabel(input.getLabel().getPropertiesMap().getValue());
 						input.getPropertiesMap().setRequired(field.getAnnotation(NotNull.class)!=null);
 						input.getPropertiesMap().setRequiredMessage(StringHelper.getInstance().get("validation.userinterface.input.value.required"
 								, new Object[]{input.getLabel().getPropertiesMap().getValue()}));
+						
+						listenGet(input);
 					}
 					return input;
 				}
@@ -414,25 +419,10 @@ public class Input<T> extends Control implements Serializable {
 					}
 				}
 				
-				/*
-				protected void setFileName(Object object,String name){
-					FieldHelper.getInstance().set(object,(Object)name, "name");
-				}
-				
-				protected void setFileExtension(Object object,String extension){
-					FieldHelper.getInstance().set(object,(Object)extension, "extension");
-				}
-				
-				protected void setFileBytes(Object object,byte[] bytes){
-					FieldHelper.getInstance().set(object,(Object)bytes, "bytes");
-				}
-				
-				protected void setFileMime(Object object,String mime){
-					FieldHelper.getInstance().set(object,(Object)mime, "mime");
-				}
-				*/
-
 			}
+			
+			@Override
+			public void listenGet(Input<?> input) {}
 			
 			@Override
 			public Collection<String> getFieldNames(Form.Detail form,Object object) {

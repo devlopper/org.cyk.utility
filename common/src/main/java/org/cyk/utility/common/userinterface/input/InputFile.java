@@ -71,8 +71,8 @@ public class InputFile extends Input<FileHelper.File> implements Serializable {
 	}
 	
 	@Override
-	public InputFile setField(Object object, String fieldName) {
-		return (InputFile) super.setField(object, fieldName);
+	public InputFile _setField(Object object, String fieldName) {
+		return (InputFile) super._setField(object, fieldName);
 	}
 	
 	public String getPreviewJavaScript(){

@@ -16,8 +16,8 @@ public class InputChoiceOneButton extends InputChoiceOne implements Serializable
 	/**/
 	
 	@Override
-	public InputChoiceOneButton setField(Object object, String fieldName) {
-		return (InputChoiceOneButton) super.setField(object, fieldName);
+	public InputChoiceOneButton _setField(Object object, String fieldName) {
+		return (InputChoiceOneButton) super._setField(object, fieldName);
 	}
 	
 	public static interface BuilderBase<OUTPUT extends InputChoiceOneButton> extends InputChoiceOne.BuilderBase<OUTPUT> {

@@ -22,8 +22,8 @@ public class InputChoiceManyCombo extends InputChoiceMany implements Serializabl
 	}
 	
 	@Override
-	public InputChoiceManyCombo setField(Object object, String fieldName) {
-		return (InputChoiceManyCombo) super.setField(object, fieldName);
+	public InputChoiceManyCombo _setField(Object object, String fieldName) {
+		return (InputChoiceManyCombo) super._setField(object, fieldName);
 	}
 	
 	public static interface BuilderBase<OUTPUT extends InputChoiceManyCombo> extends InputChoiceMany.BuilderBase<OUTPUT> {

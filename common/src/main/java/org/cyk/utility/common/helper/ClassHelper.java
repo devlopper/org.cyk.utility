@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.inject.Singleton;
@@ -41,6 +42,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	}
 	
 	private static final Map<Class<?>,Class<?>> MAP = new HashMap<>();
+	private static final Map<Class<?>,String> IDENTIFIER_MAP = new HashMap<>();
 	
 	@Override
 	protected void initialisation() {
@@ -262,6 +264,41 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		@SuppressWarnings("unchecked")
 		Class<T> result = (Class<T>) MAP.get(aClass);
 		return result == null ? Boolean.TRUE.equals(returnClassIfNull) ? aClass : null : result;
+	}
+	
+	public void registerIdentifier(Collection<Class<?>> classes){
+		new CollectionHelper.Iterator.Adapter.Default<Class<?>>(classes){
+			private static final long serialVersionUID = 1L;
+
+			protected void __executeForEach__(java.lang.Class<?> aClass) {
+				String identifier = IDENTIFIER_MAP.get(aClass);
+				if(StringHelper.getInstance().isBlank(identifier)){
+					identifier = aClass.getSimpleName().toLowerCase();
+					IDENTIFIER_MAP.put(aClass, identifier);
+				}	
+			}
+		}.execute();
+	}
+	
+	public void registerIdentifier(Class<?>...classes){
+		if(ArrayHelper.getInstance().isNotEmpty(classes))
+			registerIdentifier(Arrays.asList(classes));
+	}
+	
+	public String getIdentifier(Class<?> aClass){
+		String identifier = IDENTIFIER_MAP.get(aClass);
+		if(StringHelper.getInstance().isBlank(identifier)){
+			registerIdentifier(aClass);
+			identifier = IDENTIFIER_MAP.get(aClass);
+		}
+		return identifier;
+	}
+	
+	public Class<?> getClassByIdentifier(String identifier){
+		for(Entry<Class<?>,String> entry : IDENTIFIER_MAP.entrySet())
+			if(entry.getValue().equals(identifier))
+				return entry.getClass();
+		return null;
 	}
 	
 	/**/

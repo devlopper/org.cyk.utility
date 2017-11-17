@@ -6,12 +6,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.ListenerHelper;
 import org.cyk.utility.common.helper.MethodHelper;
+import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.DeviceType;
 import org.cyk.utility.common.userinterface.Request;
+import org.cyk.utility.common.userinterface.RequestHelper;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.panel.ConfirmationDialog;
 import org.cyk.utility.common.userinterface.panel.NotificationDialog;
@@ -24,10 +28,17 @@ import lombok.experimental.Accessors;
 public class Window extends Container implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	static {
+		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class, Boolean.FALSE);
+	}
+	
 	protected DeviceType deviceType;
 	protected ConfirmationDialog confirmationDialog = new ConfirmationDialog();
 	protected Request requestComponent = new Request();
 	protected NotificationDialog notificationDialog = new NotificationDialog();
+	protected Constant.Action action;
+	protected Class<?> actionOnClass;
+	protected Collection<Object> actionOnClassInstanceIdentifiers=new ArrayList<>();
 	
 	/**/
 	
@@ -39,6 +50,26 @@ public class Window extends Container implements Serializable {
 		getPropertiesMap().setLayout(createLayout());
 		getPropertiesMap().setMainMenu(createMainMenu());
 		getPropertiesMap().setContextMenu(createContextMenu());
+		
+		action = getParameterAsEnum(Constant.Action.class,UniformResourceLocatorHelper.QueryParameter.Name.ACTION);
+		actionOnClass = getParameterAsClass(UniformResourceLocatorHelper.QueryParameter.Name.CLASS);
+		actionOnClassInstanceIdentifiers.add(getParameter(UniformResourceLocatorHelper.QueryParameter.Name.IDENTIFIABLE));
+	}
+	
+	protected Object getParameter(String name) {
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getParameter(name);
+	}
+	
+	protected <T extends Enum<?>> T getParameterAsEnum(Class<T> enumClass, String name) {
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getParameterAsEnum(enumClass, name);
+	}
+	
+	protected Class<?> getParameterAsClass(String name) {
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getParameterAsClass(name);
+	}
+	
+	protected Object getParameterAsString(String name) {
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getParameterAsString(name);
 	}
 	
 	public void listenBeforeRender(){}
@@ -109,16 +140,69 @@ public class Window extends Container implements Serializable {
 		String METHOD_NAME_CREATE_LAYOUT = "createLayout";
 		Object createLayout(Window window);
 		
+		Object getParameter(String name);
+		Object getParameterAsString(String name);
+		<T extends Enum<?>> T getParameterAsEnum(Class<T> enumClass,String name);
+		Class<?> getParameterAsClass(String name);
+		
 		/**/
 		
 		public static class Adapter extends AbstractBean implements Listener , Serializable {
 			private static final long serialVersionUID = 1L;
 
+			/**/
+			
+			public static class Default extends Listener.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public Object getParameter(String name) {
+					return RequestHelper.getInstance().getParameter(name);
+				}
+				
+				@Override
+				public <T extends Enum<?>> T getParameterAsEnum(Class<T> enumClass, String name) {
+					return RequestHelper.getInstance().getParameterAsEnum(enumClass, name);
+				}
+				
+				@Override
+				public Object getParameterAsString(String name) {
+					return RequestHelper.getInstance().getParameterAsString(name);
+				}
+				
+				@Override
+				public Class<?> getParameterAsClass(String name) {
+					return RequestHelper.getInstance().getParameterAsClass(name);
+				}
+				
+			}
+			
+			/**/
+			
 			@Override
 			public Object createLayout(Window window) {
 				return null;
 			}
 			
+			@Override
+			public Object getParameter(String name) {
+				return null;
+			}
+			
+			@Override
+			public <T extends Enum<?>> T getParameterAsEnum(Class<T> enumClass, String name) {
+				return null;
+			}
+			
+			@Override
+			public Object getParameterAsString(String name) {
+				return null;
+			}
+			
+			@Override
+			public Class<?> getParameterAsClass(String name) {
+				return null;
+			}
 		}
 	}
 }

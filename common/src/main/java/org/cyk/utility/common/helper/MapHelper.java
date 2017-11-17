@@ -29,7 +29,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 	private static final long serialVersionUID = 1L;
 	
 	public static enum EntryComponent{KEY,VALUE}
-	public static enum EntryKey{ENCODED,ACTION,CLAZZ,IDENTIFIABLE}
+	public static enum EntryKey{ENCODED,ACTION,CLAZZ,IDENTIFIABLE,IDENTIFIER}
 
 	private static MapHelper INSTANCE;
 	
@@ -958,7 +958,7 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 				@Override
 				public Object getAs(EntryComponent entryComponent, Object object) {
 					if(object instanceof Class)
-						return ((Class<?>)object).getSimpleName().toLowerCase();
+						return ClassHelper.getInstance().getIdentifier((Class<?>)object);
 					if(object instanceof Enum<?>){
 						return ((Enum<?>)object).name().toLowerCase();
 					}

@@ -16,8 +16,8 @@ public class InputChoiceOneList extends InputChoiceOne implements Serializable {
 	/**/
 	
 	@Override
-	public InputChoiceOneList setField(Object object, String fieldName) {
-		return (InputChoiceOneList) super.setField(object, fieldName);
+	public InputChoiceOneList _setField(Object object, String fieldName) {
+		return (InputChoiceOneList) super._setField(object, fieldName);
 	}
 	
 	public static interface BuilderBase<OUTPUT extends InputChoiceOneList> extends InputChoiceOne.BuilderBase<OUTPUT> {

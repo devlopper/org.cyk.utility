@@ -19,8 +19,8 @@ public class InputChoiceOneAutoComplete extends InputChoiceOne implements Serial
 	/**/
 	
 	@Override
-	public InputChoiceOneAutoComplete setField(Object object, String fieldName) {
-		return (InputChoiceOneAutoComplete) super.setField(object, fieldName);
+	public InputChoiceOneAutoComplete _setField(Object object, String fieldName) {
+		return (InputChoiceOneAutoComplete) super._setField(object, fieldName);
 	}
 	
 	@SuppressWarnings("unchecked")

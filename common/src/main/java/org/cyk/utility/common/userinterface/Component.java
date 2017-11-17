@@ -83,12 +83,12 @@ public class Component extends AbstractBean implements Serializable {
 		return this;
 	}
 	
-	public Component setPropertyUrl(String pathIdentifier,Object...queryKeyValue){
+	public Component _setPropertyUrl(String pathIdentifier,Object...queryKeyValue){
 		getPropertiesMap().setUrl(UniformResourceLocatorHelper.getInstance().stringify(pathIdentifier,queryKeyValue));
 		return this;
 	}
 	
-	public Component setPropertyUrl(Constant.Action action,Object object,Object...queryKeyValue){
+	public Component _setPropertyUrl(Constant.Action action,Object object,Object...queryKeyValue){
 		getPropertiesMap().setUrl(UniformResourceLocatorHelper.getInstance().stringify(action, object, queryKeyValue));
 		return this;
 	}

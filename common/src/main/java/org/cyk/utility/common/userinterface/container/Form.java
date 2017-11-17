@@ -101,7 +101,8 @@ public class Form extends Container implements Serializable {
 		
 		/**/
 
-		public Master(Object object,Class<? extends SubmitCommandActionAdapter> submitCommandActionAdapterClass) {
+		public Master(Component parent,Object object,Class<? extends SubmitCommandActionAdapter> submitCommandActionAdapterClass) {
+			setParent(parent);
 			this.object = object;
 			menu.addOneChild(submitCommand);
 			submitCommand.setLabelFromIdentifier("command.submit");
@@ -109,12 +110,12 @@ public class Form extends Container implements Serializable {
 			instanciateDetail();
 		}
 		
-		public Master(Object object) {
-			this(object,SubmitCommandActionAdapter.class);
+		public Master(Component parent,Object object) {
+			this(parent,object,SubmitCommandActionAdapter.class);
 		}
 		
 		public Master() {
-			this(null);
+			this(null,null);
 		}
 		
 		public Master setSubmitCommandActionAdapterClass(Class<? extends SubmitCommandActionAdapter> submitCommandActionAdapterClass){

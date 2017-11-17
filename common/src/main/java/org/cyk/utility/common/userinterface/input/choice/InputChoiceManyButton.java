@@ -22,8 +22,8 @@ public class InputChoiceManyButton extends InputChoiceMany implements Serializab
 	}
 	
 	@Override
-	public InputChoiceManyButton setField(Object object, String fieldName) {
-		return (InputChoiceManyButton) super.setField(object, fieldName);
+	public InputChoiceManyButton _setField(Object object, String fieldName) {
+		return (InputChoiceManyButton) super._setField(object, fieldName);
 	}
 	
 	public static interface BuilderBase<OUTPUT extends InputChoiceManyButton> extends InputChoiceMany.BuilderBase<OUTPUT> {

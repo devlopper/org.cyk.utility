@@ -33,7 +33,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		getPropertiesMap().setMainMenu(menu);
 		addOneChild(menu);
 		if(this.actionOnClass!=null){
-			menu.addNode("add").setPropertyUrl(Constant.Action.CREATE, this.actionOnClass);
+			menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, this.actionOnClass);
 		}
 		addColumn("order.number", "orderNumber").setCellValueSource(CellValueSource.ROW);
 		
@@ -144,9 +144,9 @@ public class DataTable extends Component.Visible implements Serializable {
 			getPropertiesMap().setMainMenu(menu);
 			addOneChild(menu);
 			//Object identifierValue = InstanceHelper.getInstance().getIdentifier(object);
-			menu.addNode("read").setPropertyUrl(Constant.Action.READ,object);
-			menu.addNode("update").setPropertyUrl(Constant.Action.UPDATE,object);
-			menu.addNode("delete").setPropertyUrl(Constant.Action.DELETE,object);
+			menu.addNode("read")._setPropertyUrl(Constant.Action.READ,object);
+			menu.addNode("update")._setPropertyUrl(Constant.Action.UPDATE,object);
+			menu.addNode("delete")._setPropertyUrl(Constant.Action.DELETE,object);
 		}
 		
 	}

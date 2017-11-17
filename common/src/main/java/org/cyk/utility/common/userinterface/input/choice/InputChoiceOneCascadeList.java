@@ -16,8 +16,8 @@ public class InputChoiceOneCascadeList extends InputChoiceOne implements Seriali
 	/**/
 	
 	@Override
-	public InputChoiceOneCascadeList setField(Object object, String fieldName) {
-		return (InputChoiceOneCascadeList) super.setField(object, fieldName);
+	public InputChoiceOneCascadeList _setField(Object object, String fieldName) {
+		return (InputChoiceOneCascadeList) super._setField(object, fieldName);
 	}
 	
 	public static interface BuilderBase<OUTPUT extends InputChoiceOneCascadeList> extends InputChoiceOne.BuilderBase<OUTPUT> {

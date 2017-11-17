@@ -25,8 +25,8 @@ public class InputChoiceManyAutoComplete extends InputChoiceMany implements Seri
 	}
 	
 	@Override
-	public InputChoiceManyAutoComplete setField(Object object, String fieldName) {
-		return (InputChoiceManyAutoComplete) super.setField(object, fieldName);
+	public InputChoiceManyAutoComplete _setField(Object object, String fieldName) {
+		return (InputChoiceManyAutoComplete) super._setField(object, fieldName);
 	}
 	
 	@Override

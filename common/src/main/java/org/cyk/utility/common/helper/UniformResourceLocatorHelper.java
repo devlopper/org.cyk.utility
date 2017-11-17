@@ -138,7 +138,9 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 		
 		UniformResourceLocatorHelper.Stringifier addQueryParameterAction(Constant.Action action);
 		UniformResourceLocatorHelper.Stringifier addQueryParameterClass(Class<?> aClass);
+		
 		UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifiable(Object object);
+		UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifier(Object object);
 		
 		Boolean getRelative();
 		UniformResourceLocatorHelper.Stringifier setRelative(Boolean relative);
@@ -179,6 +181,11 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			
 			@Override
 			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifiable(Object identifiable) {
+				return null;
+			}
+			
+			@Override
+			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifier(Object identifiable) {
 				return null;
 			}
 			
@@ -328,6 +335,12 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				@Override
 				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifiable(Object identifiable) {
 					addQueryKeyValue(MapHelper.EntryKey.IDENTIFIABLE,identifiable);
+					return this;
+				}
+				
+				@Override
+				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifier(Object identifiable) {
+					addQueryKeyValue(MapHelper.EntryKey.IDENTIFIER,identifiable);
 					return this;
 				}
 				
@@ -741,6 +754,9 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			String ENCODED = "encoded";
 			String DATA_SOURCE = "datasource";
 			String URL_PREVIOUS = "urlprevious";
+			String URL_NEXT = "urlnext";
+			String ACTION = "action";
+			String CLASS = "clazz";
 		}
 		
 		public static interface Value {
