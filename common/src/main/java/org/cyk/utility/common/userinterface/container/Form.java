@@ -93,6 +93,7 @@ public class Form extends Container implements Serializable {
 		
 		private static final Map<Class<?>,Map<Constant.Action,Map<Object,Class<? extends Master>>>> MAP = new HashMap<Class<?>, Map<Constant.Action,Map<Object,Class<? extends Master>>>>();
 		
+		private Constant.Action action;
 		private Object object;
 		private Detail detail;
 		
@@ -260,12 +261,18 @@ public class Form extends Container implements Serializable {
 			Class<? extends Master> aClass = getClass(object.getClass(), action, key);
 			//Master master = ClassHelper.getInstance().instanciate(aClass,new Object[]{Object.class,object});
 			Master master = ClassHelper.getInstance().instanciateOne(aClass);
+			
 			Detail detail = master.getDetail();
 			if(detail == null)
 				detail = master.instanciateDetail();
-			master.setObject(object);
 			
-			if(Master.class.equals(aClass)){	
+			master.setObject(object);
+			master.setAction(action);
+			
+			if(Master.class.equals(aClass)){
+				if(Constant.Action.READ.equals(action)){
+					
+				}
 				for(Input<?> input : Input.get(detail, object))
 					detail.add(input).addBreak();	
 			}else{

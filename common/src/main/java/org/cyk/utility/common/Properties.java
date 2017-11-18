@@ -1996,6 +1996,26 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getRenderAsInput() {
+		return get(RENDER_AS_INPUT);
+	}
+
+	public Properties setRenderAsInput(Object value) {
+		set(RENDER_AS_INPUT, value);
+		return this;
+	}
+	
+	public Object getThumbnail() {
+		return get(THUMBNAIL);
+	}
+
+	public Properties setThumbnail(Object value) {
+		set(THUMBNAIL, value);
+		return this;
+	}
+	
+	public static final String THUMBNAIL = "THUMBNAIL";
+	public static final String RENDER_AS_INPUT = "RENDER_AS_INPUT";
 	public static final String MENU_COLUMN = "MENU_COLUMN";
 	public static final String FIELD_NAME = "FIELD_NAME";
 	public static final String COLUMNS = "COLUMNS";

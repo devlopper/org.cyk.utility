@@ -143,7 +143,6 @@ public class DataTable extends Component.Visible implements Serializable {
 			Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
 			getPropertiesMap().setMainMenu(menu);
 			addOneChild(menu);
-			//Object identifierValue = InstanceHelper.getInstance().getIdentifier(object);
 			menu.addNode("read")._setPropertyUrl(Constant.Action.READ,object);
 			menu.addNode("update")._setPropertyUrl(Constant.Action.UPDATE,object);
 			menu.addNode("delete")._setPropertyUrl(Constant.Action.DELETE,object);

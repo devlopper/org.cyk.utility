@@ -2,6 +2,8 @@ package org.cyk.utility.common.userinterface.output;
 
 import java.io.Serializable;
 
+import org.cyk.utility.common.userinterface.Image;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -11,7 +13,14 @@ public class OutputFile extends Output implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**/
-
+	
+	public OutputFile() {
+		Image image = new Image();
+		getPropertiesMap().setThumbnail(image);
+	}
+	
+	/**/
+	
 	public static interface BuilderBase<OUTPUT extends OutputFile> extends Output.BuilderBase<OUTPUT> {
 
 		public static class Adapter<OUTPUT extends OutputFile> extends Output.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {

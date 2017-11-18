@@ -55,6 +55,10 @@ public class Input<T> extends Control implements Serializable {
 	
 	protected CardinalPoint messageCardinalPoint;
 	
+	{
+		getPropertiesMap().setRenderAsInput(Boolean.TRUE);
+	}
+	
 	public Input<T> setFieldFromName(String name){
 		setField(FieldHelper.getInstance().get(object.getClass(), name));
 		return this;
@@ -184,7 +188,9 @@ public class Input<T> extends Control implements Serializable {
 		Boolean isInputable(Form.Detail form,Object object,java.lang.reflect.Field field);
 		java.util.Collection<Field> getFields(Form.Detail form,Object object);
 		void sortFields(Form.Detail form,Object object,java.util.List<Field> fields);
+		
 		Class<? extends Input<?>> getClass(Form.Detail form,Object object,java.lang.reflect.Field field);
+		
 		Input<?> get(Form.Detail form,Object object,java.lang.reflect.Field field);
 		void listenGet(Input<?> input);
 		java.util.List<Input<?>> get(Form.Detail form,Object object);
