@@ -28,9 +28,9 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 	public void assertSort(){
 		CollectionHelper.Instance<AbstractBean> sortables = new CollectionHelper.Instance<>();
 		sortables.addOne(new Sortable().setString1("a"));
-		sortables.addOne(new Sortable().setString1("z").setOrderNumber(7l));
+		sortables.addOne(new Sortable().setString1("z").set__orderNumber__(7l));
 		sortables.addOne(new Sortable().setString1("e"));
-		sortables.addOne(new Sortable().setString1("r"));
+		sortables.addOne(new Sortable().setString1("r")); 
 		sortables.addOne(new Sortable().setString1("t"));
 		sortables.addOne(new Sortable().setString1("y"));
 		//System.out.println(sortables.getElements());
@@ -432,7 +432,7 @@ public class CollectionHelperUnitTest extends AbstractUnitTest {
 		
 		@Override
 		public String toString() {
-			return string1+","+string2+","+orderNumber;
+			return string1+","+string2+","+__orderNumber__;
 		}
 	}
 }

@@ -513,8 +513,8 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				if(Boolean.TRUE.equals(isAddable)){
 					if(getElements().add((T) element)){
 						if(element instanceof AbstractBean){
-							if(((AbstractBean)element).getOrderNumber() == null)
-								((AbstractBean)element).setOrderNumber(new Long(getElements().size()));
+							if(((AbstractBean)element).get__orderNumber__() == null)
+								((AbstractBean)element).set__orderNumber__(new Long(getElements().size()));
 						}
 						if(element instanceof Element){
 							((Element<T>)element).setCollection(this).setSource(source);

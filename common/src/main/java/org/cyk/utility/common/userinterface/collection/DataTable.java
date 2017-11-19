@@ -37,7 +37,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		}
 		addColumn("order.number", "orderNumber").setCellValueSource(CellValueSource.ROW);
 		
-		addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(CellValueType.MENU).setOrderNumber(Long.MAX_VALUE);
+		addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(CellValueType.MENU).set__orderNumber__(Long.MAX_VALUE);
 	}
 	
 	public DataTable() {
@@ -65,7 +65,7 @@ public class DataTable extends Component.Visible implements Serializable {
 				Row row = new Row(this,object);
 				//row.getPropertiesMap().setValue(object);
 				rows.addOne(row);
-				row.setOrderNumber(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements()),0l));
+				row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements()),0l));
 				addOneChild(row);
 			}
 		if(getPropertiesMap().getValue()==null && CollectionHelper.getInstance().isNotEmpty(rows))
