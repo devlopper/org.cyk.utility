@@ -16,7 +16,6 @@ import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
-import org.cyk.utility.common.userinterface.input.Input;
 
 public class Output extends Control implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -183,7 +182,10 @@ public class Output extends Control implements Serializable {
 				public Class<? extends Output> getClass(Form.Detail form,Object object, Field field) {
 					Class<? extends Output> aClass = null;
 					if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Input.class)==null){
-						
+						if(field.getType().equals(FileHelper.getListener().getModelClass()))
+							aClass = OutputFile.class;
+						else
+							aClass = OutputText.class;
 					}else{
 						if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputFile.class)!=null)
 							aClass = OutputFile.class;
