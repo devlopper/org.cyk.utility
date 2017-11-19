@@ -110,6 +110,7 @@ public class Form extends Container implements Serializable {
 			menu.addOneChild(submitCommand);
 			submitCommand.setLabelFromIdentifier("command.submit");
 			this.action = action;
+			setEditable(!Constant.Action.READ.equals(this.action) && !Constant.Action.DELETE.equals(this.action));
 			setSubmitCommandActionAdapterClass(submitCommandActionAdapterClass);
 			instanciateDetail();
 		}
