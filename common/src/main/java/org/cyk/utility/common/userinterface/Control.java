@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import org.cyk.utility.common.cdi.AbstractBean;
@@ -16,28 +15,6 @@ import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
-import org.cyk.utility.common.userinterface.input.Input;
-import org.cyk.utility.common.userinterface.input.InputBooleanButton;
-import org.cyk.utility.common.userinterface.input.InputBooleanCheckBox;
-import org.cyk.utility.common.userinterface.input.InputCalendar;
-import org.cyk.utility.common.userinterface.input.InputEditor;
-import org.cyk.utility.common.userinterface.input.InputFile;
-import org.cyk.utility.common.userinterface.input.InputPassword;
-import org.cyk.utility.common.userinterface.input.InputText;
-import org.cyk.utility.common.userinterface.input.InputTextarea;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyAutoComplete;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyButton;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyCheck;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyCombo;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyList;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyPickList;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneAutoComplete;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneButton;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneCascadeList;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneCombo;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneList;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneRadio;
-import org.cyk.utility.common.userinterface.input.number.InputNumber;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -47,8 +24,35 @@ import lombok.experimental.Accessors;
 public class Control extends Component.Visible implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	protected Object object;
+	protected Field field;
+	
 	/**/
-
+	
+	public Control setFieldFromName(String name){
+		setField(FieldHelper.getInstance().get(object.getClass(), name));
+		return this;
+	}
+	
+	public Control _setField(Object object,String fieldName){
+		setObject(object);
+		setFieldFromName(fieldName);
+		return this;
+	}
+	
+	@Override
+	public Control setWidth(Number width) {
+		return (Control) super.setWidth(width);
+	}
+	
+	@Override
+	public Control setLength(Number length) {
+		return (Control) super.setLength(length);
+	}
+	
+	public Control read(){
+		return this;
+	}
 	
 	/**/
 	
@@ -115,8 +119,7 @@ public class Control extends Component.Visible implements Serializable {
 				
 				@Override
 				public Boolean isControlable(Form.Detail form,Object object, Field field) {
-					return field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Input.class)!=null 
-							|| CollectionHelper.getInstance().contains(getFieldNames(form, object), field.getName());
+					return CollectionHelper.getInstance().contains(getFieldNames(form, object), field.getName());
 				}
 				
 				@Override
@@ -152,83 +155,6 @@ public class Control extends Component.Visible implements Serializable {
 						super.sortFields(detail, object, fields);
 				}
 				
-				@SuppressWarnings("unchecked")
-				@Override
-				public Class<? extends Control> getClass(Form.Detail form,Object object, Field field) {
-					Class<? extends Control> aClass = null;
-					if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Input.class)==null){
-						if(String.class.equals(field.getType())){
-							aClass = InputText.class;
-						}else if(Date.class.equals(field.getType())){
-							aClass = InputCalendar.class;
-						}
-					}else{
-						if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputText.class)!=null)
-							aClass = InputText.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputPassword.class)!=null)
-							aClass = InputPassword.class;
-						
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputTextarea.class)!=null)
-							aClass = InputTextarea.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputEditor.class)!=null)
-							aClass = InputEditor.class;
-						
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton.class)!=null)
-							aClass = InputBooleanButton.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputBooleanCheck.class)!=null)
-							aClass = InputBooleanCheckBox.class;
-						
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputNumber.class)!=null){
-							String name = InputNumber.class.getName()+ClassHelper.getInstance().getWrapper(field.getType()).getSimpleName();
-							aClass = (Class<? extends Control>) ClassHelper.getInstance().getByName(name);
-						}
-						
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputCalendar.class)!=null)
-							aClass = InputCalendar.class;
-						//one choice
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputOneCombo.class)!=null)
-							aClass = InputChoiceOneCombo.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputOneList.class)!=null)
-							aClass = InputChoiceOneList.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputOneCascadeList.class)!=null)
-							aClass = InputChoiceOneCascadeList.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputOneButton.class)!=null)
-							aClass = InputChoiceOneButton.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputOneAutoComplete.class)!=null)
-							aClass = InputChoiceOneAutoComplete.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputOneRadio.class)!=null)
-							aClass = InputChoiceOneRadio.class;
-						//many choices
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyAutoComplete.class)!=null)
-							aClass = InputChoiceManyAutoComplete.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyButton.class)!=null)
-							aClass = InputChoiceManyButton.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyCheck.class)!=null)
-							aClass = InputChoiceManyCheck.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyList.class)!=null)
-							aClass = InputChoiceManyList.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyCombo.class)!=null)
-							aClass = InputChoiceManyCombo.class;
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputManyPickList.class)!=null)
-							aClass = InputChoiceManyPickList.class; //InstanceHelper.getInstance().getIfNotNullElseDefault(InputChoiceManyPickList.DEFAULT_CLASS,InputChoiceManyPickList.class);
-						
-						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputFile.class)!=null)
-							aClass = InputFile.class;
-					}
-					
-					if(aClass!=null){
-						aClass = (Class<? extends Control>) ClassHelper.getInstance().getMapping(aClass, Boolean.TRUE);
-						//Field staticField = FieldHelper.getInstance().get(aClass, "DEFAULT_CLASS");
-						//aClass = staticField == null ? aClass : (Class<? extends Control>)FieldHelper.getInstance().readStatic(staticField);
-					}
-					
-					if(aClass==null){
-						logWarning("No control class has been found for field $", field);
-						aClass = (Class<? extends Control>) ClassHelper.getInstance().getByName(Input.class);
-					}
-					return aClass;
-				}
-				
 				@Override
 				public Control get(Form.Detail detail,Object object, Field field) {
 					Control control = null;
@@ -237,13 +163,6 @@ public class Control extends Component.Visible implements Serializable {
 						control = ClassHelper.getInstance().instanciateOne(aClass);
 					}
 					if(control!=null){
-						//control.setFormDetail(detail);
-						//control.setObject(object).setField(field);
-						//control.getPropertiesMap().setLabel(control.getLabel().getPropertiesMap().getValue());
-						/*control.getPropertiesMap().setRequired(field.getAnnotation(NotNull.class)!=null);
-						control.getPropertiesMap().setRequiredMessage(StringHelper.getInstance().get("validation.userinterface.control.value.required"
-								, new Object[]{control.getLabel().getPropertiesMap().getValue()}));
-						*/
 						listenGet(control);
 					}
 					return control;
@@ -271,18 +190,6 @@ public class Control extends Component.Visible implements Serializable {
 				
 				protected Object getFileFieldValue(Object file,String fieldName){
 					return FieldHelper.getInstance().read(file, fieldName);
-				}
-				
-				protected void setFileFieldValue(Object object,String name,Object value){
-					Field field = FieldHelper.getInstance().get(object.getClass(), name);
-					if(field!=null)
-						FieldHelper.getInstance().set(object,value, name);
-				}
-				
-				protected void setFile(Object file,Object value){
-					for(String fieldName : getFileFieldNames()){
-						setFileFieldValue(file, fieldName, getFileFieldValue(value, fieldName));
-					}
 				}
 				
 			}

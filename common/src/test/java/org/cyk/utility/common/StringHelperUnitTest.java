@@ -9,6 +9,7 @@ import java.util.Locale;
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.helper.TimeHelper;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 import org.cyk.utility.common.helper.StringHelper.Location;
 import org.cyk.utility.common.helper.StringHelper.Transformer;
@@ -18,6 +19,7 @@ import org.junit.Test;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 
 public class StringHelperUnitTest extends AbstractUnitTest {
@@ -318,6 +320,22 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 				.addSequenceReplacement("3", "").addSequenceReplacement("4", "ZZ").addTokens("a1B1c2D3e4").execute());
 	}
 
+	@Test
+	public void getFieldValue(){
+		FieldValue fieldValue = new FieldValue();
+		fieldValue.setString("hello").setBool1(Boolean.FALSE).setBool2(Boolean.TRUE).setInteger(5).setDoubl(2.33d).setBigDecimal(new BigDecimal("1.333333"));
+		fieldValue.setDate1(TimeHelper.getInstance().getDate(2000, 2, 1,13,57)).setDate2(TimeHelper.getInstance().getDate(2000, 2, 1))
+			.setDate3(TimeHelper.getInstance().getDate(13,57));
+		
+		assertEquals("hello", StringHelper.getInstance().getFieldValue(fieldValue, "string"));
+		
+		assertEquals("no", StringHelper.getInstance().getFieldValue(fieldValue, "bool1",Locale.ENGLISH));
+		assertEquals("yes", StringHelper.getInstance().getFieldValue(fieldValue, "bool2",Locale.ENGLISH));
+		
+		assertEquals("01/02/2000 13:57", StringHelper.getInstance().getFieldValue(fieldValue, "date1"));
+		//assertEquals("01/02/2000", StringHelper.getInstance().getFieldValue(fieldValue, "date2"));
+		//assertEquals("13:57", StringHelper.getInstance().getFieldValue(fieldValue, "date3"));
+	}
 	
 	private void assertAppliedCaseType(String string,CaseType caseType,String expected){
 		assertEquals(expected, StringHelper.getInstance().applyCaseType(string, caseType));
@@ -349,6 +367,31 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		
 		private String electronicMailAddress;
 		private String locality;
+		
+	}
+
+	@Getter @Setter @Accessors(chain=true)
+	public static class FieldValue {
+		
+		private String string;
+		private Date date1,date2,date3;
+		private Boolean bool1,bool2;
+		private Integer integer;
+		private BigDecimal bigDecimal;
+		private Double doubl;
+		private MyClass myClass;
+		
+		@Getter @Setter @Accessors(chain=true)
+		public static class MyClass {
+			
+			private String f1,f2;
+			private Date date;
+			
+			@Override
+			public String toString() {
+				return "F1 = "+f1;
+			}
+		}
 		
 	}
 }

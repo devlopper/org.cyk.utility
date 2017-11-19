@@ -106,8 +106,20 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 		return new DateTime(year, monthOfYear, dayOfMonth, 0, 0).getDayOfWeek();
 	}
 	
+	public Date getDate(Integer year,Integer monthOfYear,Integer dayOfMonth,Integer dayOfWeek,Integer hour,Integer minute,Integer second,Integer millisecond){
+		return new Builder.Instant.Adapter.Default(new Instant(year, monthOfYear, dayOfMonth, dayOfWeek,hour, minute, second, millisecond)).execute();
+	}
+	
+	public Date getDate(Integer year,Integer monthOfYear,Integer dayOfMonth,Integer hour,Integer minute){
+		return getDate(year, monthOfYear, dayOfMonth, null, hour, minute, null, null);
+	}
+	
 	public Date getDate(Integer year,Integer monthOfYear,Integer dayOfMonth){
-		return new Builder.Instant.Adapter.Default(new Instant(year, monthOfYear, dayOfMonth, null, null, null, null, null)).execute();
+		return getDate(year, monthOfYear, dayOfMonth, null, null, null, null, null);
+	}
+	
+	public Date getDate(Integer hour,Integer minute){
+		return getDate(null, null, null, null, hour, minute, null, null);
 	}
 	
 	public Integer compare(Integer year,Integer monthOfYear,Integer dayOfMonth,Date date){

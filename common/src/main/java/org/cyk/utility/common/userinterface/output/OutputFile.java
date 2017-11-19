@@ -2,6 +2,7 @@ package org.cyk.utility.common.userinterface.output;
 
 import java.io.Serializable;
 
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.userinterface.Image;
 
 import lombok.Getter;
@@ -14,9 +15,11 @@ public class OutputFile extends Output implements Serializable {
 
 	/**/
 	
-	public OutputFile() {
+	@Override
+	protected void listenPropertiesInstanciated(Properties propertiesMap) {
 		Image image = new Image();
-		getPropertiesMap().setThumbnail(image);
+		propertiesMap.setThumbnail(image);
+		super.listenPropertiesInstanciated(propertiesMap);
 	}
 	
 	/**/

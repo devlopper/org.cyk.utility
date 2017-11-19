@@ -2,6 +2,7 @@ package org.cyk.utility.common.helper;
 
 import java.beans.Introspector;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.StringHelper.ToStringMapping.Datasource.Cache;
 
 import lombok.Getter;
@@ -33,8 +35,11 @@ import lombok.experimental.Accessors;
 
 @Singleton @Named
 public class StringHelper extends AbstractHelper implements Serializable {
-
 	private static final long serialVersionUID = 2366347884051000495L;
+	
+	static {
+		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
+	}
 
 	public static final String[] END_LINE = {"\r\n","\n"};
 	public static final Character[] VOYELS = {'a','e','i','o','u','y'};
@@ -420,6 +425,28 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	
 	public String replace(String string,String search,String replacement){
 		return StringUtils.replace(string, search, replacement);
+	}
+	
+	public String getFieldValue(Object object,Field field,Locale locale){
+		return getListener().getFieldValue(object, field,locale);
+	}
+	
+	public String getFieldValue(Object object,Field field){
+		return getListener().getFieldValue(object, field);
+	}
+	
+	public String getFieldValue(Object object,String fieldName,Locale locale){
+		return getListener().getFieldValue(object, fieldName,locale);
+	}
+	
+	public String getFieldValue(Object object,String fieldName){
+		return getListener().getFieldValue(object, fieldName);
+	}
+	
+	/**/
+	
+	private static Listener getListener(){
+		return ClassHelper.getInstance().instanciateOne(Listener.class);
 	}
 	
 	/**/
@@ -1430,4 +1457,69 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		}
 	}
 	
+	public static interface Listener {
+		
+		String getFieldValue(Object object,Field field,Locale locale);
+		String getFieldValue(Object object,Field field);
+		String getFieldValue(Object object,String fieldName,Locale locale);
+		String getFieldValue(Object object,String fieldName);
+		
+		public static class Adapter extends AbstractBean implements Listener,Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static class Default extends Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public String getFieldValue(Object object, Field field,Locale locale) {
+					Object value = (object == null || field == null) ? null : FieldHelper.getInstance().read(object, field);
+					if(value==null)
+						value =  Constant.EMPTY_STRING;
+					else if(ClassHelper.getInstance().isBoolean(field.getType()))
+						value = getInstance().getResponse((Boolean) value,locale) ;
+					else if(ClassHelper.getInstance().isDate(field.getType())){
+						value = new TimeHelper.Stringifier.Date.Adapter.Default((Date)value).execute(); 
+					}else
+						value = value.toString();
+					return value.toString();
+				}
+				
+				@Override
+				public String getFieldValue(Object object, Field field) {
+					return getFieldValue(object, field, LocaleHelper.getInstance().get());
+				}
+				
+				@Override
+				public String getFieldValue(Object object, String fieldName,Locale locale) {
+					return getFieldValue(object, object == null ? null :  FieldHelper.getInstance().get(object.getClass(), fieldName),locale);
+				}
+				
+				@Override
+				public String getFieldValue(Object object, String fieldName) {
+					return getFieldValue(object, fieldName, LocaleHelper.getInstance().get());
+				}
+				
+			}
+			
+			@Override
+			public String getFieldValue(Object object, Field field) {
+				return null;
+			}
+			
+			@Override
+			public String getFieldValue(Object object, String fieldName) {
+				return null;
+			}
+			
+			@Override
+			public String getFieldValue(Object object, Field field, Locale locale) {
+				return null;
+			}
+			
+			@Override
+			public String getFieldValue(Object object, String fieldName, Locale locale) {
+				return null;
+			}
+		}
+	}
 }

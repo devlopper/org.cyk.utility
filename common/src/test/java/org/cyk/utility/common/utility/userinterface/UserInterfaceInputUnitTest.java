@@ -5,9 +5,13 @@ import java.util.Date;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FileHelper;
+import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputFile;
 import org.cyk.utility.common.userinterface.input.InputText;
+import org.cyk.utility.common.userinterface.output.Output;
+import org.cyk.utility.common.userinterface.output.OutputFile;
+import org.cyk.utility.common.userinterface.output.OutputText;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -18,6 +22,44 @@ import lombok.experimental.Accessors;
 
 public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	{
+		ClassHelper.getInstance().map(FileHelper.Listener.class, FileAdapter.class);
+		ClassHelper.getInstance().map(Output.Listener.class, OutputAdapter.class);
+	}
+	
+	@Test
+	public void inputClasses(){
+		Model model = new Model();
+		assertEquals(InputText.class, Input.getListener().getClass(new Form.Detail(), model, FieldHelper.getInstance().get(Model.class, "string1")));
+		assertEquals(InputFile.class, Input.getListener().getClass(new Form.Detail(), model, FieldHelper.getInstance().get(Model.class, "myFile1")));
+	}
+	
+	@Test
+	public void outputClasses(){
+		Model model = new Model();
+		assertEquals(Output.class, Output.getListener().getClass(new Form.Detail(), model, FieldHelper.getInstance().get(Model.class, "string1")));
+		assertEquals(OutputText.class, Output.getListener().getClass(new Form.Detail(), model, FieldHelper.getInstance().get(Model.class, "string2")));
+		assertEquals(OutputFile.class, Output.getListener().getClass(new Form.Detail(), model, FieldHelper.getInstance().get(Model.class, "myFile1")));
+	}
+	
+	@Test
+	public void outputText(){
+		Model model = new Model();
+		model.setString2("myval");
+		OutputText outputText = (OutputText) Output.getListener().get(new Form.Detail(), model, FieldHelper.getInstance().get(Model.class, "string2"));
+		assertEquals("myval", outputText.getPropertiesMap().getValue());
+	}
+	
+	@Test
+	public void outputFile(){
+		Model model = new Model();
+		model.setMyFile1(new MyFile().setBytes("my text".getBytes()).setExtension("txt").setMime("text/plain").setName("infos"));
+		OutputFile outputFile = (OutputFile) Output.getListener().get(new Form.Detail(), model, FieldHelper.getInstance().get(Model.class, "myFile1"));
+		assertEquals("value is not an instance of PrimefacesFileOutput", Boolean.TRUE, outputFile.getPropertiesMap().getValue() instanceof PrimefacesFileOutput);
+		PrimefacesFileOutput fileOutput = (PrimefacesFileOutput) outputFile.getPropertiesMap().getValue();
+		assertEquals("text/plain", fileOutput.getMime());
+	}
 	
 	@Test
 	public void inputText(){
@@ -205,6 +247,7 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 		@org.cyk.utility.common.annotation.user.interfaces.Input private String string2;
 		@org.cyk.utility.common.annotation.user.interfaces.Input @org.cyk.utility.common.annotation.user.interfaces.InputText private String string3;
 		private Date date1,date2,date3;
+		@org.cyk.utility.common.annotation.user.interfaces.Input @org.cyk.utility.common.annotation.user.interfaces.InputFile private MyFile myFile1;
 		
 	}
 	
@@ -212,6 +255,16 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	public static class Values {
 		
 		private Object modelValue,inputValue,inputInitialValue;
+		
+	}
+	
+	public static class FileAdapter extends FileHelper.Listener.Adapter.Default {
+		private static final long serialVersionUID = 1L;
+		
+		@Override
+		public Class<?> getModelClass() {
+			return MyFile.class;
+		}
 		
 	}
 	
@@ -262,11 +315,35 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 		
 	}
 	
+	public static class OutputAdapter extends Output.Listener.Adapter.Default {
+		private static final long serialVersionUID = 1L;
+		
+		@Override
+		protected Object getReadableValueFile(Object value, String name, String extension, String mime, byte[] bytes) {
+			return new PrimefacesFileOutput((MyFile)value);
+		}
+		
+	}
+	
 	@Getter @Setter @Accessors(chain=true)
 	public static class PrimefacesUploadFileInput {
 		
 		private byte[] contents;
 		private String name,mime;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class PrimefacesFileOutput {
+
+		private byte[] contents;
+		private String name,mime;
+		
+		public PrimefacesFileOutput(MyFile file) {
+			contents = file.getBytes();
+			name = file.getName();
+			mime = file.getMime();
+		}
+		
 	}
 	
 	@Getter @Setter @Accessors(chain=true)

@@ -46,21 +46,16 @@ import lombok.experimental.Accessors;
 public class Input<T> extends Control implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected Object object,valueObject;
-	protected Field field;
+	protected Object valueObject;
 	protected T value,initialValue;
 	protected Form.Detail formDetail;
 
 	protected CardinalPoint labelCardinalPoint;
 	
 	protected CardinalPoint messageCardinalPoint;
-	
-	{
-		getPropertiesMap().setRenderAsInput(Boolean.TRUE);
-	}
-	
+		
 	public Input<T> setFieldFromName(String name){
-		setField(FieldHelper.getInstance().get(object.getClass(), name));
+		super.setFieldFromName(name);
 		return this;
 	}
 	
@@ -78,8 +73,7 @@ public class Input<T> extends Control implements Serializable {
 	}
 	
 	public Input<T> _setField(Object object,String fieldName){
-		setObject(object);
-		setFieldFromName(fieldName);
+		super._setField(object, fieldName);
 		return this;
 	}
 	
@@ -88,16 +82,16 @@ public class Input<T> extends Control implements Serializable {
 		return (Input<T>) super.setLabelFromIdentifier(identifier);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Input<T> setWidth(Number width) {
-		return (Input<T>) super.setWidth(width);
+		super.setWidth(width);
+		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Input<T> setLength(Number length) {
-		return (Input<T>) super.setLength(length);
+		super.setLength(length);
+		return this;
 	}
 	
 	public Input<T> read(){

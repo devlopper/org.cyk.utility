@@ -27,8 +27,12 @@ import lombok.experimental.Accessors;
 
 @Singleton
 public class FileHelper extends AbstractHelper implements Serializable  {
-
 	private static final long serialVersionUID = 1L;
+	
+	static {
+		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
+	}
+	
 	private static final String NAME_EXTENSION_SEPARATOR = Constant.CHARACTER_DOT.toString();
 	private static FileHelper INSTANCE;
 	
@@ -126,6 +130,10 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 		return get(null, fileName);
 	}
 	
+	public static Listener getListener(){
+		return ClassHelper.getInstance().instanciateOne(Listener.class);
+	}
+	
 	/**/
 	
 	public interface Read<RESULT> extends Action<java.io.File, RESULT> {
@@ -214,6 +222,81 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 				tokens.add("mime = "+mime);
 			return CollectionHelper.getInstance().isEmpty(tokens) ? super.toString() : StringHelper.getInstance().concatenate(tokens, Constant.CHARACTER_COMA);
 		}
+	
+		public static final String FIELD_NAME = "name";
+		public static final String FIELD_BYTES = "bytes";
+		public static final String FIELD_MIME = "mime";
+		public static final String FIELD_EXTENSION = "extension";
+		
+	}
+
+	public static interface Listener {
+		
+		Class<?> getModelClass();
+		byte[] getBytes(Object file);
+		String getName(Object file);
+		String getExtension(Object file);
+		String getMime(Object file);
+		
+		public static class Adapter extends AbstractBean implements Listener,Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static class Default extends Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public Class<?> getModelClass() {
+					return File.class;
+				}
+				
+				@Override
+				public byte[] getBytes(Object file) {
+					return (byte[]) FieldHelper.getInstance().read(file, File.FIELD_BYTES);
+				}
+
+				@Override
+				public String getName(Object file) {
+					return (String) FieldHelper.getInstance().read(file, File.FIELD_NAME);
+				}
+
+				@Override
+				public String getExtension(Object file) {
+					return (String) FieldHelper.getInstance().read(file, File.FIELD_EXTENSION);
+				}
+
+				@Override
+				public String getMime(Object file) {
+					return (String) FieldHelper.getInstance().read(file, File.FIELD_MIME);
+				}
+				
+			}
+			
+			@Override
+			public Class<?> getModelClass() {
+				return null;
+			}
+
+			@Override
+			public byte[] getBytes(Object file) {
+				return null;
+			}
+
+			@Override
+			public String getName(Object file) {
+				return null;
+			}
+
+			@Override
+			public String getExtension(Object file) {
+				return null;
+			}
+
+			@Override
+			public String getMime(Object file) {
+				return null;
+			}
+		}
+		
 	}
 }
 	

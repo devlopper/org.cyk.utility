@@ -20,6 +20,7 @@ import org.cyk.utility.common.userinterface.Layout;
 import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.input.Input;
+import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputText;
 
 import lombok.Getter;
@@ -258,6 +259,7 @@ public class Form extends Container implements Serializable {
 		}
 		
 		public static Master get(Object object,Constant.Action action,Object key){
+			Boolean editable = !Constant.Action.READ.equals(action) && !Constant.Action.DELETE.equals(action);
 			Class<? extends Master> aClass = getClass(object.getClass(), action, key);
 			//Master master = ClassHelper.getInstance().instanciate(aClass,new Object[]{Object.class,object});
 			Master master = ClassHelper.getInstance().instanciateOne(aClass);
@@ -270,11 +272,14 @@ public class Form extends Container implements Serializable {
 			master.setAction(action);
 			
 			if(Master.class.equals(aClass)){
-				if(Constant.Action.READ.equals(action)){
-					
+				if(editable){
+					for(Input<?> input : Input.get(detail, object))
+						detail.add(input).addBreak();
+				}else {
+					for(Output output : Output.get(detail, object))
+						detail.add(output).addBreak();	
 				}
-				for(Input<?> input : Input.get(detail, object))
-					detail.add(input).addBreak();	
+					
 			}else{
 				
 			}
@@ -320,23 +325,23 @@ public class Form extends Container implements Serializable {
 		
 		/**/
 		
-		private void __add__(Input<?> input) {
+		private void __add__(Control control) {
 			/*if(input.getLabel()!=null){
 				layOut(input.getLabel());
 			}*/
-			layOut(input);
+			layOut(control);
 		}
 		
-		public Detail add(Collection<Input<?>> inputs) {
-			if(CollectionHelper.getInstance().isNotEmpty(inputs))
-				for(Input<?> input : inputs)
-					__add__(input);
+		public Detail add(Collection<Control> controls) {
+			if(CollectionHelper.getInstance().isNotEmpty(controls))
+				for(Control control : controls)
+					__add__(control);
 			return this;
 		}
 		
-		public Detail add(Input<?>...inputs) {
-			if(ArrayHelper.getInstance().isNotEmpty(inputs))
-				add(Arrays.asList(inputs));
+		public Detail add(Control...controls) {
+			if(ArrayHelper.getInstance().isNotEmpty(controls))
+				add(Arrays.asList(controls));
 			return this;
 		}
 		
