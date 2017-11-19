@@ -95,6 +95,7 @@ public class Form extends Container implements Serializable {
 		private static final Map<Class<?>,Map<Constant.Action,Map<Object,Class<? extends Master>>>> MAP = new HashMap<Class<?>, Map<Constant.Action,Map<Object,Class<? extends Master>>>>();
 		
 		private Constant.Action action;
+		private Boolean editable;
 		private Object object;
 		private Detail detail;
 		
@@ -259,11 +260,13 @@ public class Form extends Container implements Serializable {
 		}
 		
 		public static Master get(Object object,Constant.Action action,Object key){
-			Boolean editable = !Constant.Action.READ.equals(action) && !Constant.Action.DELETE.equals(action);
 			Class<? extends Master> aClass = getClass(object.getClass(), action, key);
 			//Master master = ClassHelper.getInstance().instanciate(aClass,new Object[]{Object.class,object});
 			Master master = ClassHelper.getInstance().instanciateOne(aClass);
-			
+			if(master.getEditable()==null)
+				master.setEditable(!Constant.Action.READ.equals(action) && !Constant.Action.DELETE.equals(action));
+			if(master.getEditable()==null)
+				master.setEditable(Boolean.TRUE);
 			Detail detail = master.getDetail();
 			if(detail == null)
 				detail = master.instanciateDetail();
@@ -272,7 +275,7 @@ public class Form extends Container implements Serializable {
 			master.setAction(action);
 			
 			if(Master.class.equals(aClass)){
-				if(editable){
+				if(Boolean.TRUE.equals(master.getEditable())){
 					for(Input<?> input : Input.get(detail, object))
 						detail.add(input).addBreak();
 				}else {
@@ -346,7 +349,10 @@ public class Form extends Container implements Serializable {
 		}
 		
 		public Detail add(Object object,String fieldName,Number length,Number width){
-			add(Input.get(this,object, FieldHelper.getInstance().get(object.getClass(), fieldName)).setLength(length).setWidth(width));
+			Control control = Boolean.TRUE.equals(getMaster().getEditable()) 
+					? Input.get(this,object, FieldHelper.getInstance().get(object.getClass(), fieldName))
+					: Output.get(this, object, FieldHelper.getInstance().get(object.getClass(), fieldName));
+			add(control.setLength(length).setWidth(width));
 			return this;
 		}
 		

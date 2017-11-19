@@ -16,6 +16,7 @@ import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
+import org.cyk.utility.common.userinterface.input.Input;
 
 public class Output extends Control implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -98,6 +99,10 @@ public class Output extends Control implements Serializable {
 	public Output read(){
 		getListener().read(this);
 		return this;
+	}
+	
+	public static Output get(Form.Detail detail,Object object,java.lang.reflect.Field field){
+		return getListener().get(detail,object, field);
 	}
 	
 	public static java.util.List<Output> get(Form.Detail detail,Object object){
