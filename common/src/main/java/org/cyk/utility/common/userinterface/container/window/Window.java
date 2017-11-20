@@ -1,4 +1,4 @@
-package org.cyk.utility.common.userinterface.container;
+package org.cyk.utility.common.userinterface.container.window;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ import org.cyk.utility.common.userinterface.DeviceType;
 import org.cyk.utility.common.userinterface.Request;
 import org.cyk.utility.common.userinterface.RequestHelper;
 import org.cyk.utility.common.userinterface.command.Menu;
+import org.cyk.utility.common.userinterface.container.Container;
 import org.cyk.utility.common.userinterface.panel.ConfirmationDialog;
 import org.cyk.utility.common.userinterface.panel.NotificationDialog;
 

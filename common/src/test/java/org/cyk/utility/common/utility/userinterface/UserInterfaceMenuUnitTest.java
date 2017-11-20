@@ -6,7 +6,7 @@ import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.command.MenuNode;
 import org.cyk.utility.common.userinterface.container.Form;
-import org.cyk.utility.common.userinterface.container.Window;
+import org.cyk.utility.common.userinterface.container.window.Window;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 

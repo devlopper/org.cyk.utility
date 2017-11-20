@@ -27,6 +27,7 @@ import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.Layout;
 import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
+import org.cyk.utility.common.userinterface.container.window.Window;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputFile;
 import org.cyk.utility.common.userinterface.output.Output;
