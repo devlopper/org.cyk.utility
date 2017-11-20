@@ -103,8 +103,9 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 		String pathIdentifier = getPathIdentifier(action, aClass);
 		UniformResourceLocatorHelper.Stringifier stringifier = new UniformResourceLocatorHelper.Stringifier.Adapter.Default()
 				.setPathIdentifier(pathIdentifier).addQueryParameterAction(action);
+		stringifier.addQueryParameterClass(aClass);
 		if(object instanceof Class)
-			stringifier.addQueryParameterClass((Class<?>)object);
+			;//stringifier.addQueryParameterClass((Class<?>)object);
 		else
 			stringifier.addQueryParameterIdentifiable(object);
 		return stringifier.execute();

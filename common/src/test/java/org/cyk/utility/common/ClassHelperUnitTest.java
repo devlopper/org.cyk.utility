@@ -27,6 +27,16 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 	protected void _execute_() {}
 	
 	@Test
+	public void getIdentifier(){
+		assertEquals("myclass", ClassHelper.getInstance().getIdentifier(MyClass.class));
+	}
+	
+	@Test
+	public void getClassByIdentifier(){
+		assertEquals(MyClass.class, ClassHelper.getInstance().getClassByIdentifier("myclass"));
+	}
+	
+	@Test
 	public void getParameterAt(){
 		assertEquals(String.class, ClassHelper.getInstance().getParameterAt(FieldHelper.getInstance().get(ParamClass.class, "strings"), 0, String.class));
 	}

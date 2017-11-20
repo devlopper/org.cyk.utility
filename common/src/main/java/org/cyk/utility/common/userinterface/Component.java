@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
@@ -23,6 +19,10 @@ import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.model.Area;
 import org.cyk.utility.common.userinterface.input.Watermark;
 import org.cyk.utility.common.userinterface.output.OutputText;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Component extends AbstractBean implements Serializable {
@@ -60,6 +60,10 @@ public class Component extends AbstractBean implements Serializable {
 	public Component addManyChild(Component...components){
 		if(ArrayHelper.getInstance().isNotEmpty(components))
 			addManyChild(Arrays.asList(components));
+		return this;
+	}
+	
+	public Component prepare(){
 		return this;
 	}
 	

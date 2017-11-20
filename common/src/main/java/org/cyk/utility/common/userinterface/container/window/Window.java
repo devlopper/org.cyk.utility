@@ -9,6 +9,8 @@ import java.util.Map;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.ListenerHelper;
 import org.cyk.utility.common.helper.MethodHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
@@ -40,6 +42,7 @@ public class Window extends Container implements Serializable {
 	protected Constant.Action action;
 	protected Class<?> actionOnClass;
 	protected Collection<Object> actionOnClassInstanceIdentifiers=new ArrayList<>();
+	protected Collection<Object> actionOnClassInstances;
 	
 	/**/
 	
@@ -55,6 +58,29 @@ public class Window extends Container implements Serializable {
 		action = getParameterAsEnum(Constant.Action.class,UniformResourceLocatorHelper.QueryParameter.Name.ACTION);
 		actionOnClass = getParameterAsClass(UniformResourceLocatorHelper.QueryParameter.Name.CLASS);
 		actionOnClassInstanceIdentifiers.add(getParameter(UniformResourceLocatorHelper.QueryParameter.Name.IDENTIFIABLE));
+		
+		if(actionOnClass!=null){
+			getPropertiesMap().setTitle(action+" "+actionOnClass.getSimpleName());
+		}
+	}
+	
+	public Collection<Object> getActionOnClassInstances(){
+		if(actionOnClassInstances==null){
+			actionOnClassInstances = new ArrayList<>();
+			if(actionOnClass!=null){
+				if(Constant.Action.CREATE.equals(action)){
+					actionOnClassInstances.add(ClassHelper.getInstance().instanciateOne(actionOnClass));
+				}else{
+					if(CollectionHelper.getInstance().isNotEmpty(actionOnClassInstanceIdentifiers))
+						for(Object identifier : actionOnClassInstanceIdentifiers){
+							Object instance = InstanceHelper.getInstance().getByIdentifier(actionOnClass, identifier);
+							if(instance!=null)
+								actionOnClassInstances.add(instance);
+						}	
+				}
+			}
+		}
+		return actionOnClassInstances;
 	}
 	
 	protected Object getParameter(String name) {

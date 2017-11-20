@@ -89,11 +89,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			}
 		});
 	}
-	
+	 
 	@SuppressWarnings("unchecked")
 	public <T> T getByIdentifier(Class<T> aClass,Object identifier){
 		return (T) ListenerHelper.getInstance().listenObject(Listener.COLLECTION, Listener.METHOD_NAME_GET_BY_IDENTIFIER
-				, MethodHelper.Method.Parameter.buildArray(Object.class,identifier));
+				, MethodHelper.Method.Parameter.buildArray(Class.class,aClass,Object.class,identifier));
 	}
 	
 	public void setFieldValueGenerator(Class<?> aClass,String fieldName,FieldValueGenerator<?> fieldValueGenerator){

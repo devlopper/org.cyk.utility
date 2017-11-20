@@ -297,7 +297,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	public Class<?> getClassByIdentifier(String identifier){
 		for(Entry<Class<?>,String> entry : IDENTIFIER_MAP.entrySet())
 			if(entry.getValue().equals(identifier))
-				return entry.getClass();
+				return entry.getKey();
 		return null;
 	}
 	

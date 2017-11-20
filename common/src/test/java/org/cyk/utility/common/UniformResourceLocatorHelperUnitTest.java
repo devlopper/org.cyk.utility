@@ -166,7 +166,7 @@ public class UniformResourceLocatorHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void stringify(){
 		assertEquals("http://localhost:8080/classa/edit.jsf?action=create&clazz=classa", UniformResourceLocatorHelper.getInstance().stringify(Constant.Action.CREATE,ClassA.class));
-		assertEquals("http://localhost:8080/classa/consult.jsf?action=read&identifiable=3", UniformResourceLocatorHelper.getInstance().stringify(Constant.Action.READ,(Object)new ClassA(3l)));
+		assertEquals("http://localhost:8080/classa/consult.jsf?action=read&clazz=classa&identifiable=3", UniformResourceLocatorHelper.getInstance().stringify(Constant.Action.READ,(Object)new ClassA(3l)));
 	}
 	
 	/**/

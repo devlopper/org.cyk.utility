@@ -116,7 +116,6 @@ public class Form extends Container implements Serializable {
 			menu.addOneChild(submitCommand);
 			submitCommand.setLabelFromIdentifier("command.submit");
 			setAction(action);
-			this.action = action;
 			setSubmitCommandActionAdapterClass(submitCommandActionAdapterClass);
 			instanciateDetail();
 		}
@@ -131,7 +130,7 @@ public class Form extends Container implements Serializable {
 		
 		public Master setAction(Constant.Action action){
 			this.action = action;
-			if(editable==null)
+			if(editable==null && this.action!=null)
 				setEditable(!Constant.Action.READ.equals(this.action) && !Constant.Action.DELETE.equals(this.action));
 			submitCommand.getPropertiesMap().setRendered(!Constant.Action.READ.equals(this.action));
 			return this;
@@ -280,6 +279,11 @@ public class Form extends Container implements Serializable {
 				return Boolean.TRUE;
 			}
 			
+			@Override
+			public Boolean getIsConfirmable() {
+				return Constant.Action.DELETE.equals(form.getAction());
+			}
+			
 			@Getter @Setter @Accessors(chain=true)
 			public static class Web extends SubmitCommandActionAdapter implements Serializable{
 				private static final long serialVersionUID = 1L;
@@ -341,17 +345,16 @@ public class Form extends Container implements Serializable {
 			return getClass(aClass, action, null);
 		}
 		
-		public static Master get(Object object,Constant.Action action,Object key){
+		public static Master get(Component parent,Object object,Constant.Action action,Object key){
 			Class<? extends Master> aClass = getClass(object.getClass(), action, key);
 			//Master master = ClassHelper.getInstance().instanciate(aClass,new Object[]{Object.class,object});
 			Master master = ClassHelper.getInstance().instanciateOne(aClass);
+			master.setParent(parent);
+			master.setObject(object);
 			master.setAction(action);
-			
 			Detail detail = master.getDetail();
 			if(detail == null)
 				detail = master.instanciateDetail();
-			
-			master.setObject(object);
 			
 			if(Master.class.equals(aClass)){
 				if(Boolean.TRUE.equals(master.getEditable())){
@@ -361,15 +364,14 @@ public class Form extends Container implements Serializable {
 					for(Output output : Output.get(detail, object))
 						detail.add(output).addBreak();	
 				}
-					
 			}else{
-				
+				master.prepare();
 			}
 			
 			return master;
 		}
-		public static Master get(Object object,Constant.Action action){
-			return get(object, action,null);
+		public static Master get(Component parent,Object object,Constant.Action action){
+			return get(parent,object, action,null);
 		}
 	
 	}
