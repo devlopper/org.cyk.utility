@@ -3,6 +3,7 @@ package org.cyk.utility.common.helper;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.apache.commons.text.CharacterPredicate;
@@ -10,7 +11,7 @@ import org.apache.commons.text.RandomStringGenerator;
 import org.cyk.utility.common.Builder;
 import org.cyk.utility.common.Constant;
 
-@Singleton
+@Singleton @Named
 public class RandomHelper extends AbstractHelper implements Serializable {
 	static final long serialVersionUID = 1L;
 	

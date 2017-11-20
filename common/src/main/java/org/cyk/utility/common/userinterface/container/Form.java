@@ -13,18 +13,22 @@ import lombok.experimental.Accessors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.Constant.Action;
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
+import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.Layout;
 import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.input.Input;
+import org.cyk.utility.common.userinterface.input.InputFile;
 import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputText;
 
@@ -110,8 +114,8 @@ public class Form extends Container implements Serializable {
 			this.object = object;
 			menu.addOneChild(submitCommand);
 			submitCommand.setLabelFromIdentifier("command.submit");
+			setAction(action);
 			this.action = action;
-			setEditable(!Constant.Action.READ.equals(this.action) && !Constant.Action.DELETE.equals(this.action));
 			setSubmitCommandActionAdapterClass(submitCommandActionAdapterClass);
 			instanciateDetail();
 		}
@@ -122,6 +126,14 @@ public class Form extends Container implements Serializable {
 		
 		public Master() {
 			this(null,null,null);
+		}
+		
+		public Master setAction(Constant.Action action){
+			this.action = action;
+			if(editable==null)
+				setEditable(!Constant.Action.READ.equals(this.action) && !Constant.Action.DELETE.equals(this.action));
+			submitCommand.getPropertiesMap().setRendered(!Constant.Action.READ.equals(this.action));
+			return this;
 		}
 		
 		public Master setSubmitCommandActionAdapterClass(Class<? extends SubmitCommandActionAdapter> submitCommandActionAdapterClass){
@@ -166,7 +178,14 @@ public class Form extends Container implements Serializable {
 		
 		@Override
 		public Master build() {
-			return (Master) super.build();
+			Master master = (Master) super.build();
+			if(CollectionHelper.getInstance().isNotEmpty(getDetail().getChildren()))
+				for(Component component : getDetail().getChildren().getElements())
+					if(component instanceof InputFile){
+						submitCommand.getPropertiesMap().setAjax(Boolean.FALSE);//because of file upload
+						break;
+					}			
+			return master;
 		}
 		
 		public static interface BuilderBase<OUTPUT extends Master> extends Form.BuilderBase<OUTPUT> {
@@ -219,12 +238,71 @@ public class Form extends Container implements Serializable {
 			@Override
 			protected Object __execute__() {
 				form.write();
+				act();
 				return null;
 			}
+			
+			protected void act(){
+				switch(form.getAction()){
+				case CREATE: create(); break;
+				case READ: read(); break;
+				case UPDATE: update(); break;
+				case DELETE: delete(); break;
+				case SELECT: select();break;
+				case SEARCH: search();break;
+				case CONSULT: consult();break;
+				case LIST: list();break;
+				case PRINT: print();break;
+				}
+			}
+			
+			protected void create(){}
+			
+			protected void read(){}
+			
+			protected void update(){}
+			
+			protected void delete(){}
+			
+			protected void select(){}
+			
+			protected void search(){}
+			
+			protected void list(){}
+			
+			protected void print(){}
+			
+			protected void consult(){}
 			
 			@Override
 			public Boolean getIsNotifiableOnStatusSuccess() {
 				return Boolean.TRUE;
+			}
+			
+			@Getter @Setter @Accessors(chain=true)
+			public static class Web extends SubmitCommandActionAdapter implements Serializable{
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				protected void processOnSuccess() {
+					super.processOnSuccess();				
+					if(Boolean.TRUE.equals(form.getSubmitCommand().getPropertiesMap().getAjax()))
+						((Window)form.getParent()).getNotificationDialog().getOkCommand().addJavaScriptGoToUniformResourceLocatorOnEvent(Properties.ON_CLICK);
+					else {
+						Constant.Action action;
+						Object object;
+						if(Constant.Action.CREATE.equals(form.getAction()) || Constant.Action.UPDATE.equals(form.getAction())){
+							action = Action.READ;
+							object = form.getObject();
+						}else {
+							action = Action.LIST;
+							object = form.getObject().getClass();	
+						}
+						((Window)form.getParent()).getNotificationDialog().getOkCommand().addJavaScriptGoToUniformResourceLocatorOnEvent(Properties.ON_CLICK
+								,UniformResourceLocatorHelper.getInstance().stringify(action, object));
+					}	
+				}
+				
 			}
 		}
 	
@@ -266,16 +344,13 @@ public class Form extends Container implements Serializable {
 			Class<? extends Master> aClass = getClass(object.getClass(), action, key);
 			//Master master = ClassHelper.getInstance().instanciate(aClass,new Object[]{Object.class,object});
 			Master master = ClassHelper.getInstance().instanciateOne(aClass);
-			if(master.getEditable()==null)
-				master.setEditable(!Constant.Action.READ.equals(action) && !Constant.Action.DELETE.equals(action));
-			if(master.getEditable()==null)
-				master.setEditable(Boolean.TRUE);
+			master.setAction(action);
+			
 			Detail detail = master.getDetail();
 			if(detail == null)
 				detail = master.instanciateDetail();
 			
 			master.setObject(object);
-			master.setAction(action);
 			
 			if(Master.class.equals(aClass)){
 				if(Boolean.TRUE.equals(master.getEditable())){
@@ -289,6 +364,7 @@ public class Form extends Container implements Serializable {
 			}else{
 				
 			}
+			
 			return master;
 		}
 		public static Master get(Object object,Constant.Action action){
@@ -417,7 +493,8 @@ public class Form extends Container implements Serializable {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void __executeForEach__(Component component) {
-					((Input<?>)component).write();
+					if(component instanceof Input<?>)
+						((Input<?>)component).write();
 				}
 			}.execute();
 			return this;
@@ -512,7 +589,7 @@ public class Form extends Container implements Serializable {
 									if(component instanceof Component.Visible && ((Component.Visible)component).getLabel()!=null)
 										label = addLabel(row, ((Component.Visible)component).getLabel());
 									CONTROL control = addControl(row, (Control) component, getType((Control) component));
-									if(label!=null)
+									if(component instanceof Input<?> && label!=null)
 										link(control, label);
 								}
 							}

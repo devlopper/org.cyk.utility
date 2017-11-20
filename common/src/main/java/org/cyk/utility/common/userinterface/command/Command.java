@@ -33,11 +33,21 @@ public class Command extends Control implements Serializable {
 		return this;
 	}
 	
-	public Command addJavaScriptGoToUniformResourceLocatorOnEvent(String event,String url){
+	public Command addJavaScriptGoToUniformResourceLocatorOnEvent(String event,String url,Boolean useUrlIfUrlRequestParameterIsBlank){
+		if(useUrlIfUrlRequestParameterIsBlank!=null){
+			String urlRequestParameterValue = RequestHelper.getInstance().getParameterAsString(UniformResourceLocatorHelper.QueryParameter.Name.URL_PREVIOUS);
+			if(StringHelper.getInstance().isNotBlank(urlRequestParameterValue) && Boolean.TRUE.equals(useUrlIfUrlRequestParameterIsBlank))
+				url = urlRequestParameterValue;
+		}
+		
 		String script = JavaScriptHelper.getInstance().getScriptWindowGoTo(url, Boolean.TRUE);
 		if(StringHelper.getInstance().isNotBlank(script))
 			getPropertiesMap().addString(event, JavaScriptHelper.INSTRUCTION_SEPARATOR, script);
 		return this;
+	}
+	
+	public Command addJavaScriptGoToUniformResourceLocatorOnEvent(String event,String url){
+		return addJavaScriptGoToUniformResourceLocatorOnEvent(event, url,null);
 	}
 	
 	public Command addJavaScriptGoToUniformResourceLocatorOnEvent(String event){
