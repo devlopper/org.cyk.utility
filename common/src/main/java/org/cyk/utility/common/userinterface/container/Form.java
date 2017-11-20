@@ -140,7 +140,7 @@ public class Form extends Container implements Serializable {
 			if(submitCommandActionAdapterClass==null){
 				
 			}else{
-				submitCommand.setActionFromClass(submitCommandActionAdapterClass);
+				submitCommand.setActionFromClass(submitCommandActionAdapterClass,Constant.Action.DELETE.equals(action));
 				((SubmitCommandActionAdapter)submitCommand.getAction()).setForm(this);
 				//submitCommand.getAction().setIsNotifiableOnStatusSuccess(Boolean.TRUE);	
 			}				
@@ -277,11 +277,6 @@ public class Form extends Container implements Serializable {
 			@Override
 			public Boolean getIsNotifiableOnStatusSuccess() {
 				return Boolean.TRUE;
-			}
-			
-			@Override
-			public Boolean getIsConfirmable() {
-				return Constant.Action.DELETE.equals(form.getAction());
 			}
 			
 			@Getter @Setter @Accessors(chain=true)

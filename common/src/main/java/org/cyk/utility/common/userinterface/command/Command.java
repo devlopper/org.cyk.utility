@@ -26,8 +26,9 @@ public class Command extends Control implements Serializable {
 	
 	/**/
 	
-	public Command setActionFromClass(Class<? extends ActionAdapter> actionAdapterClass){
+	public Command setActionFromClass(Class<? extends ActionAdapter> actionAdapterClass,Boolean isConfirmable){
 		setAction(ClassHelper.getInstance().instanciateOne(actionAdapterClass));
+		getAction().setIsConfirmable(isConfirmable);
 		if(Boolean.TRUE.equals(getAction().getIsConfirmable()))
 			setConfirm(new Confirm());
 		return this;
