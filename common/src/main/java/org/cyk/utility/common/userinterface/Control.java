@@ -13,8 +13,10 @@ import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FileHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
+import org.cyk.utility.common.userinterface.output.OutputText;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,14 +31,26 @@ public class Control extends Component.Visible implements Serializable {
 	
 	/**/
 	
-	public Control setFieldFromName(String name){
+	public Control __setFieldFromName__(String name){
 		setField(FieldHelper.getInstance().get(object.getClass(), name));
 		return this;
 	}
 	
-	public Control _setField(Object object,String fieldName){
+	public Control __setField__(Object object,String fieldName){
 		setObject(object);
-		setFieldFromName(fieldName);
+		__setFieldFromName__(fieldName);
+		return this;
+	}
+	
+	public Control __setLabelFromField__(Field field){
+		OutputText outputText = new OutputText();
+		outputText.getPropertiesMap().setValue(StringHelper.getInstance().getField(field));
+		setLabel(outputText);
+		return this;
+	}
+	
+	public Control __setLabelFromField__(){
+		__setLabelFromField__(field);
 		return this;
 	}
 	

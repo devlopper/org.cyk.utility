@@ -218,7 +218,7 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	private <T> void assertInput(Class<T> valueClass,Input<T> input,Model model,String fieldName,T valueToSet,Values expectedValuesRead,Values expectedValuesSetField,Values expectedValuesSetValue,Values expectedValuesWrite){
 		assertValues(input, model, fieldName, expectedValuesRead);
 		
-		input._setField(model, fieldName);
+		input.__setField__(model, fieldName);
 		assertValues(input, model, fieldName, expectedValuesSetField);
 		
 		input.setValue(valueToSet);

@@ -420,13 +420,5 @@ public class AbstractBean implements Serializable {
 	
 	/**/
 	
-	/*public static interface BeanListener {
-		
-		Collection<BeanListener> COLLECTION = new ArrayList<BeanListener>();
-		
-		void instanciated(AbstractBean instance);
-		
-		void propertiesMapInstanciated(AbstractBean instance);
-		
-	}*/
+	public static final String FIELD___ORDER_NUMBER__ = "__orderNumber__";
 }

@@ -21,7 +21,59 @@ public class Output extends Control implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**/
-
+	
+	@Override
+	public Output setLabelFromIdentifier(String identifier){
+		return (Output) super.setLabelFromIdentifier(identifier);
+	}
+	
+	@Override
+	public Output __setLabelFromField__(){
+		return (Output) super.__setLabelFromField__();
+	}
+	
+	@Override
+	public Output __setFieldFromName__(String name){
+		super.__setFieldFromName__(name);
+		return this;
+	}
+	
+	@Override
+	public Output setField(Field field){
+		this.field = field;
+		if(this.field == null){
+			
+		}else{
+			read();
+		}
+		return this;
+	}
+	
+	@Override
+	public Output __setField__(Object object,String fieldName){
+		super.__setField__(object, fieldName);
+		return this;
+	}
+	
+	@Override
+	public Output setWidth(Number width) {
+		super.setWidth(width);
+		return this;
+	}
+	
+	@Override
+	public Output setLength(Number length) {
+		super.setLength(length);
+		return this;
+	}
+	
+	public Output read(){
+		getListener().read(this);
+		return this;
+	}
+	
+	/**/
+	
 	public static interface BuilderBase<OUTPUT extends Output> extends Control.BuilderBase<OUTPUT> {
 
 		public static class Adapter<OUTPUT extends Output> extends Control.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {
@@ -63,43 +115,6 @@ public class Output extends Control implements Serializable {
 
 	/**/
 
-	public Output setFieldFromName(String name){
-		super.setFieldFromName(name);
-		return this;
-	}
-	
-	public Output setField(Field field){
-		this.field = field;
-		if(this.field == null){
-			
-		}else{
-			read();
-		}
-		return this;
-	}
-	
-	public Output _setField(Object object,String fieldName){
-		super._setField(object, fieldName);
-		return this;
-	}
-	
-	@Override
-	public Output setWidth(Number width) {
-		super.setWidth(width);
-		return this;
-	}
-	
-	@Override
-	public Output setLength(Number length) {
-		super.setLength(length);
-		return this;
-	}
-	
-	public Output read(){
-		getListener().read(this);
-		return this;
-	}
-	
 	public static Output get(Form.Detail detail,Object object,java.lang.reflect.Field field){
 		return getListener().get(detail,object, field);
 	}

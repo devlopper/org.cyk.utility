@@ -306,7 +306,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		if(isNotEmpty(elements))
 			if(elements instanceof List){
 				if(comparator == null)
-					comparator = new org.cyk.utility.common.Comparator<T>("orderNumber");
+					comparator = new org.cyk.utility.common.Comparator<T>(AbstractBean.FIELD___ORDER_NUMBER__);
 				Collections.sort((List<T>)elements, comparator);
 			}else
 				ThrowableHelper.getInstance().throw_("cannot sort a collection of type "+elements.getClass());

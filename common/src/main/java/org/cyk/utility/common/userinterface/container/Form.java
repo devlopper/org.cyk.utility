@@ -1,10 +1,15 @@
 package org.cyk.utility.common.userinterface.container;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Constant;
@@ -22,10 +27,6 @@ import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputText;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Form extends Container implements Serializable {
@@ -351,9 +352,8 @@ public class Form extends Container implements Serializable {
 		}
 		
 		public Detail add(Object object,String fieldName,Number length,Number width){
-			Control control = Boolean.TRUE.equals(getMaster().getEditable()) 
-					? Input.get(this,object, FieldHelper.getInstance().get(object.getClass(), fieldName))
-					: Output.get(this, object, FieldHelper.getInstance().get(object.getClass(), fieldName));
+			Field field = FieldHelper.getInstance().get(object.getClass(), fieldName);
+			Control control = Boolean.TRUE.equals(getMaster().getEditable()) ? Input.get(this,object, field) : Output.get(this, object, field).__setLabelFromField__();
 			add(control.setLength(length).setWidth(width));
 			return this;
 		}
@@ -509,8 +509,8 @@ public class Form extends Container implements Serializable {
 								ROW row = createRow(instance);
 								for (Component component : getInput().getLayout().getWhereAreaWidthFromEqual(rowIndex)) {
 									LABEL label = null;
-									if(component instanceof Input<?> && ((Input<?>)component).getLabel()!=null)
-										label = addLabel(row, ((Input<?>)component).getLabel());
+									if(component instanceof Component.Visible && ((Component.Visible)component).getLabel()!=null)
+										label = addLabel(row, ((Component.Visible)component).getLabel());
 									CONTROL control = addControl(row, (Control) component, getType((Control) component));
 									if(label!=null)
 										link(control, label);

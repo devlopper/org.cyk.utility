@@ -12,6 +12,11 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import org.cyk.utility.common.CardinalPoint;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
@@ -35,12 +40,6 @@ import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneCombo;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneList;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneRadio;
 import org.cyk.utility.common.userinterface.input.number.InputNumber;
-import org.cyk.utility.common.userinterface.output.OutputText;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 public class Input<T> extends Control implements Serializable {
@@ -54,8 +53,8 @@ public class Input<T> extends Control implements Serializable {
 	
 	protected CardinalPoint messageCardinalPoint;
 		
-	public Input<T> setFieldFromName(String name){
-		super.setFieldFromName(name);
+	public Input<T> __setFieldFromName__(String name){
+		super.__setFieldFromName__(name);
 		return this;
 	}
 	
@@ -64,16 +63,14 @@ public class Input<T> extends Control implements Serializable {
 		if(this.field == null){
 			value = initialValue = null;
 		}else{
-			OutputText outputText = new OutputText();
-			outputText.getPropertiesMap().setValue(StringHelper.getInstance().getField(field));
-			setLabel(outputText);
+			__setLabelFromField__(field);
 			read();
 		}
 		return this;
 	}
 	
-	public Input<T> _setField(Object object,String fieldName){
-		super._setField(object, fieldName);
+	public Input<T> __setField__(Object object,String fieldName){
+		super.__setField__(object, fieldName);
 		return this;
 	}
 	

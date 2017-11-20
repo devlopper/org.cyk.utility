@@ -35,7 +35,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		if(this.actionOnClass!=null){
 			menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, this.actionOnClass);
 		}
-		addColumn("order.number", "orderNumber").setCellValueSource(CellValueSource.ROW);
+		addColumn("order.number", FIELD___ORDER_NUMBER__).setCellValueSource(CellValueSource.ROW);
 		
 		addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(CellValueType.MENU).set__orderNumber__(Long.MAX_VALUE);
 	}

@@ -22,8 +22,8 @@ public class InputChoiceManyPickList extends InputChoiceMany implements Serializ
 	}
 	
 	@Override
-	public InputChoiceManyPickList _setField(Object object, String fieldName) {
-		return (InputChoiceManyPickList) super._setField(object, fieldName);
+	public InputChoiceManyPickList __setField__(Object object, String fieldName) {
+		return (InputChoiceManyPickList) super.__setField__(object, fieldName);
 	}
 	
 	public static interface BuilderBase<OUTPUT extends InputChoiceManyPickList> extends InputChoiceMany.BuilderBase<OUTPUT> {

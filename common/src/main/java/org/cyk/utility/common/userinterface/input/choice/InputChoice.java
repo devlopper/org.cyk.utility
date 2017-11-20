@@ -28,14 +28,14 @@ public class InputChoice<T> extends Input<T> implements Serializable {
 	/**/
 	
 	public InputChoice<T> setField(Object object, String fieldName,Collection<?> choicesElements) {
-		_setField(object, fieldName);
+		__setField__(object, fieldName);
 		choices.removeAll().addMany(choicesElements);
 		return this;
 	}
 	
 	@Override
-	public InputChoice<T> _setField(Object object, String fieldName) {
-		return (InputChoice<T>) super._setField(object, fieldName);
+	public InputChoice<T> __setField__(Object object, String fieldName) {
+		return (InputChoice<T>) super.__setField__(object, fieldName);
 	}
 	
 	@Override
