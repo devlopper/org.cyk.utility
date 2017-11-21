@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Properties;
+import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.NumberHelper;
@@ -22,6 +24,10 @@ import lombok.experimental.Accessors;
 public class DataTable extends Component.Visible implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	static {
+		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
+	}
+	
 	private Class<?> actionOnClass;
 	private CollectionHelper.Instance<Row> rows = new CollectionHelper.Instance<Row>();
 	
@@ -77,6 +83,10 @@ public class DataTable extends Component.Visible implements Serializable {
 		if(CollectionHelper.getInstance().isNotEmpty(collection))
 			addManyRow(collection.getElements());
 		return this;
+	}
+	
+	public static DataTable get(Constant.Action action,Class<?> actionOnClass){
+		return ClassHelper.getInstance().instanciateOne(ClassHelper.getInstance().instanciateOne(Listener.class).getClass(action, actionOnClass));
 	}
 	
 	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
@@ -153,6 +163,35 @@ public class DataTable extends Component.Visible implements Serializable {
 	@Getter @Setter @Accessors(chain=true)
 	public static class Cell extends Component.Visible implements Serializable {
 		private static final long serialVersionUID = 1L;
+		
+	}
+
+	/**/
+	
+	public static interface Listener {
+		
+		Class<? extends DataTable> getClass(Constant.Action action,Class<?> actionOnClass);
+		
+		public static class Adapter extends AbstractBean implements Listener,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Class<? extends DataTable> getClass(Constant.Action action, Class<?> actionOnClass) {
+				return null;
+			}
+			
+			public static class Default extends Listener.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@SuppressWarnings("unchecked")
+				@Override
+				public Class<? extends DataTable> getClass(Constant.Action action, Class<?> actionOnClass) {
+					return (Class<? extends DataTable>) Component.getClass(action, actionOnClass, DataTable.class);
+				}
+				
+			}
+			
+		}
 		
 	}
 }

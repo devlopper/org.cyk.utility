@@ -140,12 +140,15 @@ public class Form extends Container implements Serializable {
 			if(submitCommandActionAdapterClass==null){
 				
 			}else{
-				submitCommand.setActionFromClass(submitCommandActionAdapterClass,Constant.Action.DELETE.equals(action));
-				((SubmitCommandActionAdapter)submitCommand.getAction()).setForm(this);
-				//submitCommand.getAction().setIsNotifiableOnStatusSuccess(Boolean.TRUE);	
+				submitCommand.setActionFromClass(submitCommandActionAdapterClass).setIsConfirmable(Constant.Action.DELETE.equals(action));
+				((SubmitCommandActionAdapter)submitCommand.getAction()).setForm(this);	
 			}				
 			return this;
 		}
+		
+		/*protected Class<? extends SubmitCommandActionAdapter> getSubmitCommandActionAdapterClass(){
+			return SubmitCommandActionAdapter.class;
+		}*/
 		
 		public Master read(){
 			if(detail!=null)
@@ -173,9 +176,7 @@ public class Form extends Container implements Serializable {
 		public Master setLabelFromIdentifier(String identifier) {
 			return (Master) super.setLabelFromIdentifier(identifier);
 		}
-		
-		
-		
+				
 		@Override
 		public Master build() {
 			Master master = (Master) super.build();
@@ -365,8 +366,16 @@ public class Form extends Container implements Serializable {
 			
 			return master;
 		}
+		
 		public static Master get(Component parent,Object object,Constant.Action action){
 			return get(parent,object, action,null);
+		}
+		
+		public static Master get(Window window){
+			Object object = window.getActionOnClassInstances().iterator().next();//TODO how to handle many ? use key to point to the adequate form
+			Constant.Action action = window.getAction();
+			Object key = null;
+			return get(window,object, action,key);
 		}
 	
 	}

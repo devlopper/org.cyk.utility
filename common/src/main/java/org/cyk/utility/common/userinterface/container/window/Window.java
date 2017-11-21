@@ -18,8 +18,10 @@ import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.DeviceType;
 import org.cyk.utility.common.userinterface.Request;
 import org.cyk.utility.common.userinterface.RequestHelper;
+import org.cyk.utility.common.userinterface.collection.DataTable;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.container.Container;
+import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.panel.ConfirmationDialog;
 import org.cyk.utility.common.userinterface.panel.NotificationDialog;
 
@@ -44,6 +46,9 @@ public class Window extends Container implements Serializable {
 	protected Collection<Object> actionOnClassInstanceIdentifiers=new ArrayList<>();
 	protected Collection<Object> actionOnClassInstances;
 	
+	protected Form.Master form;
+	protected DataTable dataTable;
+	
 	/**/
 	
 	@Override
@@ -62,6 +67,9 @@ public class Window extends Container implements Serializable {
 		if(actionOnClass!=null){
 			getPropertiesMap().setTitle(action+" "+actionOnClass.getSimpleName());
 		}
+		
+		if(Boolean.TRUE.equals(getIsAutomaticallySetForm()))
+			__setForm__();
 	}
 	
 	public Collection<Object> getActionOnClassInstances(){
@@ -81,6 +89,22 @@ public class Window extends Container implements Serializable {
 			}
 		}
 		return actionOnClassInstances;
+	}
+	
+	protected Boolean getIsAutomaticallySetForm(){
+		return Boolean.TRUE;
+	}
+	
+	protected Boolean getIsAutomaticallySetDatatable(){
+		return Boolean.FALSE;
+	}
+	
+	protected void __setForm__(){
+		form = buildForm();
+	}
+	
+	protected void __setDataTable__(){
+		dataTable = buildDataTable();
 	}
 	
 	protected Object getParameter(String name) {
@@ -117,6 +141,22 @@ public class Window extends Container implements Serializable {
 	protected Menu createContextMenu(){
 		return Menu.build(this, Menu.Type.CONTEXT,Menu.RenderType.PANEL);
 	}
+	
+	/* builders */
+	
+	protected Form.Master buildForm(){
+		Form.Master form = Form.Master.get(this);
+		form.build();
+		return form;
+	}
+
+	protected DataTable buildDataTable(){
+		DataTable dataTable = new DataTable(actionOnClass);
+		dataTable.build();
+		return dataTable;
+	}
+	
+	/**/
 	
 	public static interface BuilderBase<OUTPUT extends Window> extends Component.BuilderBase<OUTPUT> {
 

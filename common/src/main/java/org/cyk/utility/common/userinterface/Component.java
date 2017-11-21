@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Properties;
@@ -20,6 +22,8 @@ import org.cyk.utility.common.model.Area;
 import org.cyk.utility.common.userinterface.input.Watermark;
 import org.cyk.utility.common.userinterface.output.OutputText;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -28,6 +32,8 @@ import lombok.experimental.Accessors;
 public class Component extends AbstractBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static final Set<ComponentClass> CLASSES = new HashSet<>();
+	
 	protected Object built;
 	protected Component parent;
 	protected CollectionHelper.Instance<Component> children;
@@ -352,6 +358,45 @@ public class Component extends AbstractBean implements Serializable {
 			}
 			
 		}
+		
+	}
+
+	/**/
+	
+	public static void setClass(Constant.Action action,Class<?> actionOnClass,Object key,Class<? extends Component> clazz){
+		ComponentClass componentClass = new ComponentClass(action, actionOnClass, key, clazz);
+		CLASSES.add(componentClass);
+	}
+	
+	public static Class<?> getClass(Constant.Action action,Class<?> actionOnClass,Object key,Class<?> nullValue){
+		for(ComponentClass componentClass : CLASSES)
+			if(componentClass.getAction().equals(action) && componentClass.getActionOnClass().equals(actionOnClass) 
+					&& ((key==null && componentClass.getKey()==null) || (componentClass.getKey()!=null && componentClass.getKey().equals(key))) )
+				return componentClass.getClazz();
+		return nullValue;
+	}
+	
+	public static Class<?> getClass(Constant.Action action,Class<?> actionOnClass,Class<?> nullValue){
+		return getClass(action, actionOnClass, null, nullValue);
+	}
+	
+	public static <T extends Component> T get(Class<T> componentClass,Constant.Action action,Class<?> actionOnClass,Object key,Class<?> nullClassValue){
+		return (T) ClassHelper.getInstance().instanciateOne(getClass(action, actionOnClass, key, nullClassValue));
+	}
+	
+	public static void clearClasses(){
+		CLASSES.clear();
+	}
+	
+	@Getter @Setter @Accessors(chain=true) @AllArgsConstructor @EqualsAndHashCode(of={"action","actionOnClass","key"})
+	public static class ComponentClass implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private Constant.Action action;
+		private Class<?> actionOnClass;
+		private Object key;
+		
+		private Class<? extends Component> clazz;
 		
 	}
 }

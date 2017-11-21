@@ -20,17 +20,24 @@ import lombok.experimental.Accessors;
 public class Command extends Control implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private org.cyk.utility.common.helper.CommandHelper.Command action;
 	private Confirm confirm;
 	private ConfirmationDialog confirmationDialog;
-	private org.cyk.utility.common.helper.CommandHelper.Command action;
 	
 	/**/
 	
-	public Command setActionFromClass(Class<? extends ActionAdapter> actionAdapterClass,Boolean isConfirmable){
+	public Command setActionFromClass(Class<? extends ActionAdapter> actionAdapterClass){
 		setAction(ClassHelper.getInstance().instanciateOne(actionAdapterClass));
+		setIsConfirmable(getAction().getIsConfirmable());
+		return this;
+	}
+	
+	public Command setIsConfirmable(Boolean isConfirmable){
 		getAction().setIsConfirmable(isConfirmable);
 		if(Boolean.TRUE.equals(getAction().getIsConfirmable()))
 			setConfirm(new Confirm());
+		else
+			setConfirm(null);
 		return this;
 	}
 	
