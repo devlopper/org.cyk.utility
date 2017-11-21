@@ -11,7 +11,7 @@ public class ListWindow extends Window implements Serializable {
 	}
 	
 	@Override
-	protected Boolean getIsAutomaticallySetDatatable() {
+	protected Boolean getIsAutomaticallySetDataTable() {
 		return Boolean.TRUE;
 	}
 }

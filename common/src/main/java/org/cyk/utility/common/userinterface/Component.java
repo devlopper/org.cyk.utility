@@ -7,6 +7,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
@@ -19,19 +25,18 @@ import org.cyk.utility.common.helper.RandomHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.model.Area;
+import org.cyk.utility.common.userinterface.container.window.Window;
 import org.cyk.utility.common.userinterface.input.Watermark;
 import org.cyk.utility.common.userinterface.output.OutputText;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Component extends AbstractBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	static {
+		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
+	}
+	
 	private static final Set<ComponentClass> CLASSES = new HashSet<>();
 	
 	protected Object built;
@@ -348,6 +353,15 @@ public class Component extends AbstractBean implements Serializable {
 		
 		String METHOD_NAME_BUILD = "build";
 		Object build(Component component);
+		
+		String METHOD_NAME_LISTEN_INSTANCIATE_ONE = "listenInstanciateOne";
+		void listenInstanciateOne(Component component);
+		
+		String METHOD_NAME_LISTEN_INSTANCIATE_ONE_NULL_SPECIFIC_CLASS = "listenInstanciateOneNullSpecificClass";
+		void listenInstanciateOneNullSpecificClass(Component component);
+		
+		String METHOD_NAME_LISTEN_INSTANCIATE_ONE_NON_NULL_SPECIFIC_CLASS = "listenInstanciateOneNonNullSpecificClass";
+		void listenInstanciateOneNonNullSpecificClass(Component component);
 
 		public static class Adapter extends AbstractBean implements Listener , Serializable {
 			private static final long serialVersionUID = 1L;
@@ -356,42 +370,91 @@ public class Component extends AbstractBean implements Serializable {
 			public Object build(Component component) {
 				return null;
 			}
+
+			@Override
+			public void listenInstanciateOne(Component component) {}
+
+			@Override
+			public void listenInstanciateOneNullSpecificClass(Component component) {}
+
+			@Override
+			public void listenInstanciateOneNonNullSpecificClass(Component component) {}
 			
+			public static class Default extends Listener.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public void listenInstanciateOneNonNullSpecificClass(Component component) {
+					component.prepare();
+				}
+			}
 		}
-		
 	}
 
 	/**/
 	
-	public static void setClass(Constant.Action action,Class<?> actionOnClass,Object key,Class<? extends Component> clazz){
-		ComponentClass componentClass = new ComponentClass(action, actionOnClass, key, clazz);
-		CLASSES.add(componentClass);
+	@SuppressWarnings("unchecked")
+	public static void setClass(Class<? extends Component> parentClass,Constant.Action[] actions,Class<?> actionOnClass,Object key,Class<?> clazz){
+		if(ArrayHelper.getInstance().isNotEmpty(actions))
+			for(Constant.Action action : actions)
+				CLASSES.add(new ComponentClass(parentClass,action, actionOnClass, key, (Class<? extends Component>) clazz));
 	}
 	
-	public static Class<?> getClass(Constant.Action action,Class<?> actionOnClass,Object key,Class<?> nullValue){
+	public static void setClass(Class<? extends Component> parentClass,Constant.Action action,Class<?> actionOnClass,Object key,Class<?> clazz){
+		setClass(parentClass, new Constant.Action[]{action}, actionOnClass, key, clazz);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static Class<? extends Component> getClass(Component parent,Constant.Action action,Class<?> actionOnClass,Object key,Class<?> nullValue){
 		for(ComponentClass componentClass : CLASSES)
-			if(componentClass.getAction().equals(action) && componentClass.getActionOnClass().equals(actionOnClass) 
-					&& ((key==null && componentClass.getKey()==null) || (componentClass.getKey()!=null && componentClass.getKey().equals(key))) )
+			if(
+					( componentClass.getParentClass()==null || parent==null || componentClass.getParentClass().equals(parent.getClass()) )
+					&& ( componentClass.getAction().equals(action) )
+					&& ( componentClass.getActionOnClass().equals(actionOnClass) )
+					&& ( componentClass.getKey()==null || componentClass.getKey().equals(key) ) 
+				)
 				return componentClass.getClazz();
-		return nullValue;
+		return (Class<? extends Component>) nullValue;
 	}
 	
-	public static Class<?> getClass(Constant.Action action,Class<?> actionOnClass,Class<?> nullValue){
-		return getClass(action, actionOnClass, null, nullValue);
+	public static Class<?> getClass(Component parent,Constant.Action action,Class<?> actionOnClass,Class<?> nullValue){
+		return getClass(parent,action, actionOnClass, null, nullValue);
 	}
 	
-	public static <T extends Component> T get(Class<T> componentClass,Constant.Action action,Class<?> actionOnClass,Object key,Class<?> nullClassValue){
-		return (T) ClassHelper.getInstance().instanciateOne(getClass(action, actionOnClass, key, nullClassValue));
+	@SuppressWarnings("unchecked")
+	public static <T extends Component> T get(Component parent,Class<T> componentClass,Constant.Action action,Class<?> actionOnClass,Object key,Class<? extends Component> nullClassValue){
+		Class<T> aClass = (Class<T>) getClass(parent,action, actionOnClass, key, nullClassValue);
+		T component = (T) ClassHelper.getInstance().instanciateOne(aClass);
+		component.setParent(parent);
+		ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE, MethodHelper.Method.Parameter
+				.buildArray(Component.class,component));
+		if(aClass.equals(nullClassValue)){
+			ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE_NULL_SPECIFIC_CLASS, MethodHelper.Method.Parameter
+					.buildArray(Component.class,component));
+		}else{
+			ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE_NON_NULL_SPECIFIC_CLASS, MethodHelper.Method.Parameter
+					.buildArray(Component.class,component));
+		}
+		return component;
+	}
+	
+	public static <T extends Component> T get(Component parent,Class<T> componentClass,Constant.Action action,Class<?> actionOnClass,Object key){
+		return get(parent, componentClass, action, actionOnClass, key, componentClass);
+	}
+	
+	public static <T extends Component> T get(Window window,Class<T> componentClass){
+		return get(window,componentClass, window.getAction(), window.getActionOnClass(), window.getActionKey());
 	}
 	
 	public static void clearClasses(){
 		CLASSES.clear();
 	}
 	
-	@Getter @Setter @Accessors(chain=true) @AllArgsConstructor @EqualsAndHashCode(of={"action","actionOnClass","key"})
+	@Getter @Setter @Accessors(chain=true) @AllArgsConstructor @EqualsAndHashCode(of={"parentClass","action","actionOnClass","key"})
 	public static class ComponentClass implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		private Class<? extends Component> parentClass;
 		private Constant.Action action;
 		private Class<?> actionOnClass;
 		private Object key;

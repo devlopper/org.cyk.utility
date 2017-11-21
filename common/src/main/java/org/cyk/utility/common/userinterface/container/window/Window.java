@@ -45,6 +45,7 @@ public class Window extends Container implements Serializable {
 	protected Class<?> actionOnClass;
 	protected Collection<Object> actionOnClassInstanceIdentifiers=new ArrayList<>();
 	protected Collection<Object> actionOnClassInstances;
+	protected Object actionKey;
 	
 	protected Form.Master form;
 	protected DataTable dataTable;
@@ -70,6 +71,9 @@ public class Window extends Container implements Serializable {
 		
 		if(Boolean.TRUE.equals(getIsAutomaticallySetForm()))
 			__setForm__();
+		
+		if(Boolean.TRUE.equals(getIsAutomaticallySetDataTable()))
+			__setDataTable__();
 	}
 	
 	public Collection<Object> getActionOnClassInstances(){
@@ -95,7 +99,7 @@ public class Window extends Container implements Serializable {
 		return Boolean.TRUE;
 	}
 	
-	protected Boolean getIsAutomaticallySetDatatable(){
+	protected Boolean getIsAutomaticallySetDataTable(){
 		return Boolean.FALSE;
 	}
 	
@@ -145,13 +149,13 @@ public class Window extends Container implements Serializable {
 	/* builders */
 	
 	protected Form.Master buildForm(){
-		Form.Master form = Form.Master.get(this);
+		Form.Master form = Component.get(this,Form.Master.class).build();
 		form.build();
 		return form;
 	}
 
 	protected DataTable buildDataTable(){
-		DataTable dataTable = new DataTable(actionOnClass);
+		DataTable dataTable = Component.get(this,DataTable.class).build();
 		dataTable.build();
 		return dataTable;
 	}

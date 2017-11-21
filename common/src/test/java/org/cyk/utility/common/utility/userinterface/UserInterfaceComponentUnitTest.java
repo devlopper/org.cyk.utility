@@ -2,6 +2,7 @@ package org.cyk.utility.common.utility.userinterface;
 
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.userinterface.Component;
+import org.cyk.utility.common.userinterface.container.window.Window;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -11,11 +12,13 @@ public class UserInterfaceComponentUnitTest extends AbstractUnitTest {
 	@Test
 	public void getClazz(){
 		Component.clearClasses();
-		assertEquals(null, Component.getClass(Constant.Action.CREATE, Model1.class, null,null));
-		assertEquals(MyForm.class, Component.getClass(Constant.Action.CREATE, Model1.class,MyForm.class));
+		Window window = new Window();
 		
-		Component.setClass(Constant.Action.CREATE, Model1.class, null, MyFormCreate.class);
-		assertEquals(MyFormCreate.class, Component.getClass(Constant.Action.CREATE, Model1.class,MyForm.class));
+		assertEquals(null, Component.getClass(window,Constant.Action.CREATE, Model1.class, null,null));
+		assertEquals(MyForm.class, Component.getClass(window,Constant.Action.CREATE, Model1.class,MyForm.class));
+		
+		Component.setClass(null,Constant.Action.CREATE, Model1.class, null, MyFormCreate.class);
+		assertEquals(MyFormCreate.class, Component.getClass(window,Constant.Action.CREATE, Model1.class,MyForm.class));
 		
 	}
 	

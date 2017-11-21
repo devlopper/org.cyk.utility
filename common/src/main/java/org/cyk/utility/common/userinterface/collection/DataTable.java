@@ -51,12 +51,12 @@ public class DataTable extends Component.Visible implements Serializable {
 	}
 	
 	@Override
-	public Component build() {
+	public DataTable build() {
 		Columns columns = (Columns) getPropertiesMap().getColumns();
 		if(columns!=null){
 			CollectionHelper.getInstance().sort((Collection<?>) columns.getPropertiesMap().getValue());
 		}
-		return super.build();
+		return (DataTable) super.build();
 	}
 	
 	public Column addColumn(String labelStringIdentifier,String fieldName){
@@ -83,10 +83,6 @@ public class DataTable extends Component.Visible implements Serializable {
 		if(CollectionHelper.getInstance().isNotEmpty(collection))
 			addManyRow(collection.getElements());
 		return this;
-	}
-	
-	public static DataTable get(Constant.Action action,Class<?> actionOnClass){
-		return ClassHelper.getInstance().instanciateOne(ClassHelper.getInstance().instanciateOne(Listener.class).getClass(action, actionOnClass));
 	}
 	
 	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
@@ -170,25 +166,13 @@ public class DataTable extends Component.Visible implements Serializable {
 	
 	public static interface Listener {
 		
-		Class<? extends DataTable> getClass(Constant.Action action,Class<?> actionOnClass);
-		
 		public static class Adapter extends AbstractBean implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Class<? extends DataTable> getClass(Constant.Action action, Class<?> actionOnClass) {
-				return null;
-			}
 			
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				@SuppressWarnings("unchecked")
-				@Override
-				public Class<? extends DataTable> getClass(Constant.Action action, Class<?> actionOnClass) {
-					return (Class<? extends DataTable>) Component.getClass(action, actionOnClass, DataTable.class);
-				}
-				
+			
 			}
 			
 		}
