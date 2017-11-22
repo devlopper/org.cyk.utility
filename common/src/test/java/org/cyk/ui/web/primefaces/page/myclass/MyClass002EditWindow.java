@@ -1,4 +1,4 @@
-package org.cyk.ui.web.primefaces.page;
+package org.cyk.ui.web.primefaces.page.myclass;
 
 import java.io.Serializable;
 

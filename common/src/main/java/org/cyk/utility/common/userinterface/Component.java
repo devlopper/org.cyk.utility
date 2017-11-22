@@ -464,7 +464,7 @@ public class Component extends AbstractBean implements Serializable {
 	@SuppressWarnings("unchecked")
 	public static <T extends Component> T get(Component parent,Class<T> componentClass,Constant.Action action,Class<?> actionOnClass,Object key
 			,Collection<Object> actionOnClassInstances,Class<? extends Component> nullClassValue){
-		Class<T> aClass = (Class<T>) getClass(parent,action, actionOnClass, key, nullClassValue);
+		Class<T> aClass = componentClass.equals(nullClassValue) ? (Class<T>) getClass(parent,action, actionOnClass, key, nullClassValue) : componentClass;
 		T component = (T) ClassHelper.getInstance().instanciateOne(aClass);
 		component.setParent(parent);
 		if(component instanceof Form.Master){
@@ -479,6 +479,7 @@ public class Component extends AbstractBean implements Serializable {
 		/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE, MethodHelper.Method.Parameter
 				.buildArray(Component.class,component));
 		*/
+		System.out.println("Component.get() : "+aClass+" NULL : "+nullClassValue);
 		if(aClass.equals(nullClassValue)){
 			/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE_NULL_SPECIFIC_CLASS, MethodHelper.Method.Parameter
 					.buildArray(Component.class,component));
@@ -511,8 +512,12 @@ public class Component extends AbstractBean implements Serializable {
 		return get(parent, componentClass, action, actionOnClass, key,actionOnClassInstances, componentClass);
 	}
 	
+	public static <T extends Component> T get(Window window,Class<T> componentClass,Class<? extends Component> nullClassValue){
+		return get(window,componentClass, window.getAction(), window.getActionOnClass(), window.getActionKey(),window.getActionOnClassInstances(),nullClassValue);
+	}
+	
 	public static <T extends Component> T get(Window window,Class<T> componentClass){
-		return get(window,componentClass, window.getAction(), window.getActionOnClass(), window.getActionKey(),window.getActionOnClassInstances());
+		return get(window, componentClass, componentClass);
 	}
 	
 	public static void clearClasses(){

@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanListener;
 import org.cyk.utility.common.helper.ArrayHelper;
+import org.cyk.utility.common.helper.StringHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -149,17 +150,24 @@ public class ClassLocator extends AbstractBean implements Serializable {
 			private static final long serialVersionUID = -7213562588417233353L;
 			@Override
 			protected String[] __execute__(Class<?> aClass) {
-				String[] names = new String[getModuleSuffixes().length];
-				String systemIdentifier = StringUtils.substringBetween(aClass.getName(), Constant.PREFIX_PACKAGE_ORG_CYK_SYSTEM,Constant.CHARACTER_DOT.toString());
+				String[] systemIdentifiers = getSystemIdentifiers(aClass);
+				String[] modulePrefixes = getModulePrefixes();
+				String[] moduleSuffixes = getModuleSuffixes();
+				String[] names = new String[systemIdentifiers.length * modulePrefixes.length * moduleSuffixes.length];
 				String module = StringUtils.substringAfter(aClass.getName(), Constant.CHARACTER_DOT+getBaseClassPackageName()+Constant.CHARACTER_DOT);
 				Integer index = 0;
-				for(String suffix : getModuleSuffixes())
-					names[index++] = Constant.PREFIX_PACKAGE_ORG_CYK_SYSTEM+systemIdentifier+Constant.CHARACTER_DOT+getModulePrefix()+Constant.CHARACTER_DOT+module+suffix;
+				for(String systemIdentifier : systemIdentifiers)
+					for(String prefix : modulePrefixes)
+						for(String suffix : moduleSuffixes)
+							names[index++] = Constant.PREFIX_PACKAGE_ORG_CYK_SYSTEM+systemIdentifier+(StringHelper.getInstance().isBlank(systemIdentifier) ? Constant.EMPTY_STRING : Constant.CHARACTER_DOT)+prefix+Constant.CHARACTER_DOT+module+suffix;
 				return names;
 			}
 			
 			protected abstract String getBaseClassPackageName();
-			protected abstract String getModulePrefix();
+			protected String[] getSystemIdentifiers(Class<?> aClass){
+				return new String[]{StringUtils.substringBetween(aClass.getName(), Constant.PREFIX_PACKAGE_ORG_CYK_SYSTEM,Constant.CHARACTER_DOT.toString())};
+			}
+			protected abstract String[] getModulePrefixes();
 			protected abstract String[] getModuleSuffixes();
 		}
 		

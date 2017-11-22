@@ -149,13 +149,18 @@ public class Window extends Container implements Serializable {
 	/* builders */
 	
 	protected Form.Master buildForm(){
-		Form.Master form = Component.get(this,Form.Master.class).build();
+		Class<Form.Master> formMasterClass = InstanceHelper.getInstance().getIfNotNullElseDefault(getFormMasterClass(),Form.Master.class);
+		Form.Master form = Component.get(this,formMasterClass,Form.Master.class);
 		form.build();
 		return form;
 	}
+	
+	protected Class<Form.Master> getFormMasterClass(){
+		return Form.Master.class;
+	}
 
 	protected DataTable buildDataTable(){
-		DataTable dataTable = Component.get(this,DataTable.class).build();
+		DataTable dataTable = Component.get(this,DataTable.class);
 		dataTable.build();
 		return dataTable;
 	}
