@@ -5,12 +5,12 @@ import java.util.Set;
 
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.LoggingHelper;
+import org.cyk.utility.common.helper.LoggingHelper.Message;
+import org.cyk.utility.common.helper.StackTraceHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.utility.loghelper.p1.LogClass1;
 import org.cyk.utility.common.utility.loghelper.p2.LogClass2;
 import org.cyk.utility.common.utility.loghelper.p2.LogClass3;
-import org.cyk.utility.common.helper.LoggingHelper.Message;
-import org.cyk.utility.common.helper.StackTraceHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 

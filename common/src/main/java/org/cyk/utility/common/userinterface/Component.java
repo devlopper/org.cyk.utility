@@ -5,14 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
@@ -25,9 +22,20 @@ import org.cyk.utility.common.helper.RandomHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.model.Area;
+import org.cyk.utility.common.userinterface.container.Form;
+import org.cyk.utility.common.userinterface.container.Form.Detail;
+import org.cyk.utility.common.userinterface.container.Form.Master;
 import org.cyk.utility.common.userinterface.container.window.Window;
+import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.Watermark;
+import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputText;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Component extends AbstractBean implements Serializable {
@@ -393,28 +401,60 @@ public class Component extends AbstractBean implements Serializable {
 
 	/**/
 	
+	public static Constant.Action[] getActionsSharingClass(Component parent,Constant.Action[] actions,Class<?> actionOnClass,Object key,Class<?> nullValue,Boolean excludeActions){
+		Set<Constant.Action> set = new LinkedHashSet<>();
+		for(Constant.Action action : actions){
+			if(!Boolean.TRUE.equals(excludeActions))
+				set.add(action);
+			if(Constant.Action.CREATE.equals(action)){
+				
+			}else if(Constant.Action.READ.equals(action)){
+				set.addAll(Arrays.asList(Constant.Action.CONSULT,Constant.Action.CREATE,Constant.Action.UPDATE,Constant.Action.DELETE));
+			}else if(Constant.Action.UPDATE.equals(action)){
+				set.addAll(Arrays.asList(Constant.Action.CREATE));
+			}else if(Constant.Action.DELETE.equals(action)){
+				set.addAll(Arrays.asList(Constant.Action.READ,Constant.Action.CREATE,Constant.Action.UPDATE));
+			}else if(Constant.Action.CONSULT.equals(action)){
+				set.addAll(Arrays.asList(Constant.Action.READ,Constant.Action.CREATE,Constant.Action.UPDATE,Constant.Action.DELETE));
+			}
+
+		}
+			
+		return set.toArray(new Constant.Action[]{});
+	}
+	
+	public static Constant.Action[] getActionsSharingClass(Component parent,Constant.Action[] actions,Class<?> actionOnClass,Object key,Class<?> nullValue){
+		return getActionsSharingClass(parent, actions, actionOnClass, key, nullValue, Boolean.FALSE);
+	}
+	
 	@SuppressWarnings("unchecked")
-	public static void setClass(Class<? extends Component> parentClass,Constant.Action[] actions,Class<?> actionOnClass,Object key,Class<?> clazz){
+	public static void __setClass__(Class<? extends Component> parentClass,Constant.Action[] actions,Class<?> actionOnClass,Object key,Class<?> clazz){
 		if(ArrayHelper.getInstance().isNotEmpty(actions))
 			for(Constant.Action action : actions)
 				CLASSES.add(new ComponentClass(parentClass,action, actionOnClass, key, (Class<? extends Component>) clazz));
 	}
 	
-	public static void setClass(Class<? extends Component> parentClass,Constant.Action action,Class<?> actionOnClass,Object key,Class<?> clazz){
-		setClass(parentClass, new Constant.Action[]{action}, actionOnClass, key, clazz);
+	public static void __setClass__(Class<? extends Component> parentClass,Constant.Action action,Class<?> actionOnClass,Object key,Class<?> clazz){
+		__setClass__(parentClass, new Constant.Action[]{action}, actionOnClass, key, clazz);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static Class<? extends Component> getClass(Component parent,Constant.Action action,Class<?> actionOnClass,Object key,Class<?> nullValue){
-		for(ComponentClass componentClass : CLASSES)
-			if(
-					( componentClass.getParentClass()==null || parent==null || componentClass.getParentClass().equals(parent.getClass()) )
-					&& ( componentClass.getAction().equals(action) )
-					&& ( componentClass.getActionOnClass().equals(actionOnClass) )
-					&& ( componentClass.getKey()==null || componentClass.getKey().equals(key) ) 
-				)
-				return componentClass.getClazz();
+	public static Class<? extends Component> getClass(Component parent,Constant.Action[] actions,Class<?> actionOnClass,Object key,Class<?> nullValue){
+		actions = getActionsSharingClass(parent, actions, actionOnClass, key, nullValue);
+		for(Constant.Action action : actions)
+			for(ComponentClass componentClass : CLASSES)
+				if(
+						( componentClass.getParentClass()==null || parent==null || componentClass.getParentClass().equals(parent.getClass()) )
+						&& ( componentClass.getAction().equals(action) )
+						&& ( componentClass.getActionOnClass().equals(actionOnClass) )
+						&& ( componentClass.getKey()==null || componentClass.getKey().equals(key) ) 
+					)
+					return componentClass.getClazz();
 		return (Class<? extends Component>) nullValue;
+	}
+	
+	public static Class<? extends Component> getClass(Component parent,Constant.Action action,Class<?> actionOnClass,Object key,Class<?> nullValue){
+		return getClass(parent, new Constant.Action[]{ action }, actionOnClass, key, nullValue);
 	}
 	
 	public static Class<?> getClass(Component parent,Constant.Action action,Class<?> actionOnClass,Class<?> nullValue){
@@ -422,28 +462,57 @@ public class Component extends AbstractBean implements Serializable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T extends Component> T get(Component parent,Class<T> componentClass,Constant.Action action,Class<?> actionOnClass,Object key,Class<? extends Component> nullClassValue){
+	public static <T extends Component> T get(Component parent,Class<T> componentClass,Constant.Action action,Class<?> actionOnClass,Object key
+			,Collection<Object> actionOnClassInstances,Class<? extends Component> nullClassValue){
 		Class<T> aClass = (Class<T>) getClass(parent,action, actionOnClass, key, nullClassValue);
 		T component = (T) ClassHelper.getInstance().instanciateOne(aClass);
 		component.setParent(parent);
-		ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE, MethodHelper.Method.Parameter
+		if(component instanceof Form.Master){
+			Object object = parent instanceof Window ? ((Window)parent).getActionOnClassInstances().iterator().next() : null;//TODO how to handle many ? use key to point to the adequate form
+			Form.Master master = (Master) component;
+			master.setObject(object);
+			master.setAction(action);
+			Detail detail = master.getDetail();
+			if(detail == null)
+				detail = master.instanciateDetail();
+		}
+		/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE, MethodHelper.Method.Parameter
 				.buildArray(Component.class,component));
+		*/
 		if(aClass.equals(nullClassValue)){
-			ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE_NULL_SPECIFIC_CLASS, MethodHelper.Method.Parameter
+			/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE_NULL_SPECIFIC_CLASS, MethodHelper.Method.Parameter
 					.buildArray(Component.class,component));
+			*/
+			if(component instanceof Form.Master){
+				Form.Master master = (Master) component;
+				Detail detail = master.getDetail();
+				if(Boolean.TRUE.equals(master.getEditable())){
+					for(Input<?> input : Input.get(detail, master.getObject()))
+						detail.add(input).addBreak();
+				}else {
+					for(Output output : Output.get(detail, master.getObject()))
+						detail.add(output).addBreak();	
+				}
+			}
 		}else{
-			ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE_NON_NULL_SPECIFIC_CLASS, MethodHelper.Method.Parameter
+			/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE_NON_NULL_SPECIFIC_CLASS, MethodHelper.Method.Parameter
 					.buildArray(Component.class,component));
+			*/
+			component.prepare();
+			if(component instanceof Form.Master){
+				//Form.Master master = (Master) component;
+			}
 		}
 		return component;
 	}
 	
-	public static <T extends Component> T get(Component parent,Class<T> componentClass,Constant.Action action,Class<?> actionOnClass,Object key){
-		return get(parent, componentClass, action, actionOnClass, key, componentClass);
+	public static <T extends Component> T get(Component parent,Class<T> componentClass,Constant.Action action,Class<?> actionOnClass,Object key
+			,Collection<Object> actionOnClassInstances){
+		return get(parent, componentClass, action, actionOnClass, key,actionOnClassInstances, componentClass);
 	}
 	
 	public static <T extends Component> T get(Window window,Class<T> componentClass){
-		return get(window,componentClass, window.getAction(), window.getActionOnClass(), window.getActionKey());
+		return get(window,componentClass, window.getAction(), window.getActionOnClass(), window.getActionKey(),window.getActionOnClassInstances());
 	}
 	
 	public static void clearClasses(){
@@ -461,5 +530,9 @@ public class Component extends AbstractBean implements Serializable {
 		
 		private Class<? extends Component> clazz;
 		
+		@Override
+		public String toString() {
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+		}
 	}
 }

@@ -204,6 +204,14 @@ public interface Constant {
 	    
 	    ;
 		
+		public static Boolean isCreateOrReadOrUpdateOrDeleteOrConsult(Action action){
+			return isCreateOrReadOrUpdateOrDelete(action) || Action.CONSULT.equals(action);
+		}
+		
+		public static Boolean isCreateOrReadOrUpdateOrDelete(Action action){
+			return isCreateOrUpdateOrDelete(action) || Action.READ.equals(action);
+		}
+		
 		public static Boolean isCreateOrUpdateOrDelete(Action action){
 			return isCreateOrUpdate(action) || Action.DELETE.equals(action);
 		}
@@ -211,6 +219,11 @@ public interface Constant {
 		public static Boolean isCreateOrUpdate(Action action){
 			return Action.CREATE.equals(action) || Action.UPDATE.equals(action);
 		}
+		
+		/**/
+		
+		public static final Action[] SET_CRUD = {CREATE,READ,UPDATE,DELETE};
+		public static final Action[] SET_CRUDC = {CREATE,READ,UPDATE,DELETE,CONSULT};
 	}
 
 	
