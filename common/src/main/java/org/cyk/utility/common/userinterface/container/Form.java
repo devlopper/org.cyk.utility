@@ -7,11 +7,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Constant.Action;
 import org.cyk.utility.common.Properties;
@@ -20,7 +17,7 @@ import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
-import org.cyk.utility.common.helper.LoggingHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
@@ -32,6 +29,10 @@ import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputFile;
 import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputText;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Form extends Container implements Serializable {
@@ -308,76 +309,82 @@ public class Form extends Container implements Serializable {
 		}
 	
 		/**/
-		
-		public static void setClass(Class<?> aClass,Constant.Action action,Object key,Class<? extends Master> formClass){
-			Map<Constant.Action,Map<Object,Class<? extends Master>>> actions = MAP.get(aClass);
-			if(actions==null)
-				MAP.put(aClass, actions = new HashMap<Constant.Action, Map<Object,Class<? extends Master>>>());
-			Map<Object,Class<? extends Master>> objects = actions.get(action);
-			if(objects==null)
-				actions.put(action, objects = new HashMap<Object, Class<? extends Master>>());
-			objects.put(key,formClass);
-		}
-		public static void setClass(Class<?> aClass,Constant.Action action,Class<? extends Master> formClass){
-			setClass(aClass, action, null, formClass);
-		}
-		
-		public static Class<? extends Master> getClass(Class<?> aClass,Constant.Action action,Object key){
-			Class<? extends Master> formClass = null;
-			Map<Constant.Action,Map<Object,Class<? extends Master>>> actions = MAP.get(aClass);
-			if(actions!=null){
-				Map<Object,Class<? extends Master>> objects = actions.get(action);
-				if(objects!=null){
-					formClass = objects.get(key);
-				}
-			}
-			if(formClass == null){
-				LoggingHelper.Logger.Log4j.Adapter.Default.log("no registered form class found for "+aClass,Form.class,LoggingHelper.Logger.Level.TRACE,null);
-				formClass = Form.Master.class;
-			}
-			return formClass;
-		}
-		public static Class<? extends Master> getClass(Class<?> aClass,Constant.Action action){
-			return getClass(aClass, action, null);
-		}
-		
-		public static Master get(Component parent,Object object,Constant.Action action,Object key){
-			Class<? extends Master> aClass = getClass(object.getClass(), action, key);
-			//Master master = ClassHelper.getInstance().instanciate(aClass,new Object[]{Object.class,object});
-			Master master = ClassHelper.getInstance().instanciateOne(aClass);
-			master.setParent(parent);
-			master.setObject(object);
-			master.setAction(action);
-			Detail detail = master.getDetail();
-			if(detail == null)
-				detail = master.instanciateDetail();
-			
-			if(Master.class.equals(aClass)){
-				if(Boolean.TRUE.equals(master.getEditable())){
-					for(Input<?> input : Input.get(detail, object))
-						detail.add(input).addBreak();
-				}else {
-					for(Output output : Output.get(detail, object))
-						detail.add(output).addBreak();	
-				}
-			}else{
-				master.prepare();
-			}
-			
-			return master;
-		}
-		
-		public static Master get(Component parent,Object object,Constant.Action action){
-			return get(parent,object, action,null);
-		}
-		
-		public static Master get(Window window){
-			Object object = window.getActionOnClassInstances().iterator().next();//TODO how to handle many ? use key to point to the adequate form
-			Constant.Action action = window.getAction();
-			Object key = null;
-			return get(window,object, action,key);
-		}
 	
+		/**/
+		
+		public static class ClassLocator extends org.cyk.utility.common.ClassLocator implements Serializable {
+
+			private static final long serialVersionUID = -3187769614985951029L;
+
+			private String action;
+			
+			public ClassLocator(String action) {
+				this.action = action;
+				setClassType(this.action+"FormMaster");
+				Listener listener = new Listener.Adapter(){
+					private static final long serialVersionUID = -979036256355287919L;
+
+					@Override
+					public Boolean isLocatable(Class<?> basedClass) {
+						return Boolean.TRUE;
+					}
+				};
+				
+				listener.setGetNameMethod(new GetOrgCykSystem(this));
+				getClassLocatorListeners().add(listener);
+			}
+			
+			public ClassLocator(Constant.Action action) {
+				this(StringHelper.getInstance().applyCaseType(action.name(), StringHelper.CaseType.FURL));
+			}
+			
+			@Override
+			protected Class<?> getDefault(Class<?> aClass) {
+				return Form.Master.class;
+			}
+			
+			/**/
+			
+			public static class GetOrgCykSystem extends Listener.AbstractGetOrgCykSystem {
+				private static final long serialVersionUID = 1L;
+
+				private ClassLocator classLocator;
+				
+				public GetOrgCykSystem(ClassLocator classLocator) {
+					this.classLocator = classLocator;
+				}
+				
+				@Override
+				protected String getBaseClassPackageName() {
+					return "model";
+				}
+				
+				@Override
+				protected String[] getSystemIdentifiers(Class<?> aClass) {
+					return ArrayUtils.addAll(super.getSystemIdentifiers(aClass), "") ;
+				}
+				
+				@Override
+				protected String[] getModulePrefixes() {
+					return new String[]{"ui.web.primefaces.page"};
+				}
+				
+				@Override
+				protected String[] getModuleSuffixes() {
+					return new String[]{"FormMaster",classLocator.action+"Window$FormMaster"};
+				}
+				
+				@Override
+				protected String[] __execute__(Class<?> aClass) {
+					String[] names =  super.__execute__(aClass);
+					for(int index = 0 ; index < names.length ; index++)
+						if(StringUtils.contains(names[index], "org.cyk.system.ui."))
+							names[index] = StringUtils.replace(names[index],"org.cyk.system.ui.", "org.cyk.ui.");
+					return names;
+				}
+			}
+			
+		}
 	}
 	
 	@Getter @Setter @Accessors(chain=true)

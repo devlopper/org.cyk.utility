@@ -2,7 +2,6 @@ package org.cyk.utility.common.utility.userinterface;
 
 import java.lang.reflect.Field;
 
-import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.model.Area;
 import org.cyk.utility.common.userinterface.Component.Visible;
@@ -22,12 +21,6 @@ import lombok.experimental.Accessors;
 public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 
-	@Test
-	public void getForm(){
-		Form.Master.setClass(Entity.class, Constant.Action.CREATE, EntityForm.class);
-		assertEquals(EntityForm.class, Form.Master.getClass(Entity.class, Constant.Action.CREATE));
-	}
-	
 	@Test
 	public void assertFromModel(){
 		Form form = new Form();

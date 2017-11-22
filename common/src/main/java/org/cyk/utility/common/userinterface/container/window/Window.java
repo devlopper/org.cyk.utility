@@ -160,9 +160,14 @@ public class Window extends Container implements Serializable {
 	}
 
 	protected DataTable buildDataTable(){
-		DataTable dataTable = Component.get(this,DataTable.class);
+		Class<DataTable> dataTableClass = InstanceHelper.getInstance().getIfNotNullElseDefault(getDataTableClass(),DataTable.class);
+		DataTable dataTable = Component.get(this,dataTableClass,DataTable.class);
 		dataTable.build();
 		return dataTable;
+	}
+	
+	protected Class<DataTable> getDataTableClass(){
+		return DataTable.class;
 	}
 	
 	/**/

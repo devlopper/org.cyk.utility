@@ -464,7 +464,9 @@ public class Component extends AbstractBean implements Serializable {
 	@SuppressWarnings("unchecked")
 	public static <T extends Component> T get(Component parent,Class<T> componentClass,Constant.Action action,Class<?> actionOnClass,Object key
 			,Collection<Object> actionOnClassInstances,Class<? extends Component> nullClassValue){
+		//System.out.println("Component.get() C : "+componentClass+" N : "+nullClassValue);
 		Class<T> aClass = componentClass.equals(nullClassValue) ? (Class<T>) getClass(parent,action, actionOnClass, key, nullClassValue) : componentClass;
+		//System.out.println("Component.get() A : "+aClass);
 		T component = (T) ClassHelper.getInstance().instanciateOne(aClass);
 		component.setParent(parent);
 		if(component instanceof Form.Master){
@@ -479,7 +481,6 @@ public class Component extends AbstractBean implements Serializable {
 		/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE, MethodHelper.Method.Parameter
 				.buildArray(Component.class,component));
 		*/
-		System.out.println("Component.get() : "+aClass+" NULL : "+nullClassValue);
 		if(aClass.equals(nullClassValue)){
 			/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE_NULL_SPECIFIC_CLASS, MethodHelper.Method.Parameter
 					.buildArray(Component.class,component));
