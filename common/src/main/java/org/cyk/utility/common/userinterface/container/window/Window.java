@@ -63,7 +63,9 @@ public class Window extends Container implements Serializable {
 		
 		action = getParameterAsEnum(Constant.Action.class,UniformResourceLocatorHelper.QueryParameter.Name.ACTION);
 		actionOnClass = getParameterAsClass(UniformResourceLocatorHelper.QueryParameter.Name.CLASS);
-		actionOnClassInstanceIdentifiers.add(getParameter(UniformResourceLocatorHelper.QueryParameter.Name.IDENTIFIABLE));
+		Object identifiable = getParameter(UniformResourceLocatorHelper.QueryParameter.Name.IDENTIFIABLE);
+		if(identifiable!=null)
+			actionOnClassInstanceIdentifiers.add(identifiable);
 		
 		if(actionOnClass!=null){
 			getPropertiesMap().setTitle(action+" "+actionOnClass.getSimpleName());
@@ -74,6 +76,8 @@ public class Window extends Container implements Serializable {
 		
 		if(Boolean.TRUE.equals(getIsAutomaticallySetDataTable()))
 			__setDataTable__();
+		
+		logTrace("Properties={} , Parameters : Action={} , ActionOnClass={} , ActionOnClassInstanceIdentifiers={}",getPropertiesMap(), action,actionOnClass,actionOnClassInstanceIdentifiers);
 	}
 	
 	public Collection<Object> getActionOnClassInstances(){
@@ -83,7 +87,6 @@ public class Window extends Container implements Serializable {
 				if(Constant.Action.CREATE.equals(action)){
 					actionOnClassInstances.add(ClassHelper.getInstance().instanciateOne(actionOnClass));
 				}else{
-					System.out.println("Window.getActionOnClassInstances() : "+actionOnClassInstanceIdentifiers);
 					if(CollectionHelper.getInstance().isNotEmpty(actionOnClassInstanceIdentifiers))
 						for(Object identifier : actionOnClassInstanceIdentifiers){
 							Object instance = InstanceHelper.getInstance().getByIdentifier(actionOnClass, identifier);
@@ -97,7 +100,7 @@ public class Window extends Container implements Serializable {
 	}
 	
 	protected Boolean getIsAutomaticallySetForm(){
-		return Boolean.TRUE;
+		return action!=null && actionOnClass!=null && getActionOnClassInstances().size() > 0;
 	}
 	
 	protected Boolean getIsAutomaticallySetDataTable(){

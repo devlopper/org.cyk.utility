@@ -28,6 +28,15 @@
 		<Logger name="org.cyk.utility.common" level="trace">
 			<AppenderRef ref="CustomConsole" />
 		</Logger-->
+		
+		<Logger name="org.cyk.utility.common.utility.userinterface.UserInterfaceLoggingUnitTest$MyEditWindow" level="trace">
+			<AppenderRef ref="Console" />
+		</Logger>
+		
+		<Logger name="org.cyk.utility.common.utility.userinterface.UserInterfaceLoggingUnitTest$MyListWindow" level="trace">
+			<AppenderRef ref="Console" />
+		</Logger>
+		
 		<Root level="trace">
 			<!--AppenderRef ref="Console"/-->
 		</Root>

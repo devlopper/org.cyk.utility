@@ -72,6 +72,11 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void getIdentifiers(){
+		assertEquals(MyEnum.E1.name(), InstanceHelper.getInstance().getIdentifier(MyEnum.E1));
+	}
+	
+	@Test
 	public void getBooleanValues(){
 		assertList(new ArrayList<Boolean>(InstanceHelper.getInstance().get(Boolean.class)), Arrays.asList(Boolean.TRUE,Boolean.FALSE));
 	}

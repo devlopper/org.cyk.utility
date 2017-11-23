@@ -8,6 +8,14 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.Constant;
@@ -30,12 +38,6 @@ import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.Watermark;
 import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputText;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Component extends AbstractBean implements Serializable {
@@ -540,5 +542,96 @@ public class Component extends AbstractBean implements Serializable {
 		public String toString() {
 			return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
 		}
+	}
+	
+	/**/
+	
+	public static class ClassLocator extends org.cyk.utility.common.ClassLocator implements Serializable {
+
+		private static final long serialVersionUID = -3187769614985951029L;
+
+		private String action;
+		private Class<?> componentClass;
+		private String className;
+		
+		public ClassLocator(Class<?> componentClass,String action,String className) {
+			this.componentClass = componentClass;
+			this.action = action;
+			this.className = className;
+			setClassType(this.action+this.componentClass.getSimpleName());
+			Listener listener = new Listener.Adapter(){
+				private static final long serialVersionUID = -979036256355287919L;
+
+				@Override
+				public Boolean isLocatable(Class<?> basedClass) {
+					return Boolean.TRUE;
+				}
+			};
+			
+			listener.setGetNameMethod(new GetOrgCykSystem(this));
+			getClassLocatorListeners().add(listener);
+		}
+		
+		public ClassLocator(Class<?> componentClass,String action) {
+			this(componentClass,action,componentClass.getSimpleName());
+		}
+		
+		public ClassLocator(Class<?> componentClass,Constant.Action action,String className) {
+			this(componentClass,StringHelper.getInstance().applyCaseType(action.name(), StringHelper.CaseType.FURL),className);
+		}
+		
+		public ClassLocator(Class<?> componentClass,Constant.Action action) {
+			this(componentClass,action,componentClass.getSimpleName());
+		}
+		
+		@Override
+		protected Class<?> getDefault(Class<?> aClass) {
+			return componentClass;
+		}
+		
+		/**/
+		
+		public static class GetOrgCykSystem extends Listener.AbstractGetOrgCykSystem {
+			private static final long serialVersionUID = 1L;
+
+			public static String WINDOW = "Window";
+			public static String[] MODULE_PREFIXES = {"ui.web.primefaces.page"};
+			
+			private ClassLocator classLocator;
+			
+			public GetOrgCykSystem(ClassLocator classLocator) {
+				this.classLocator = classLocator;
+			}
+			
+			@Override
+			protected String getBaseClassPackageName() {
+				return "model";
+			}
+			
+			@Override
+			protected String[] getSystemIdentifiers(Class<?> aClass) {
+				return ArrayUtils.addAll(super.getSystemIdentifiers(aClass), "") ;
+			}
+			
+			@Override
+			protected String[] getModulePrefixes() {
+				return MODULE_PREFIXES;
+			}
+			
+			@Override
+			protected String[] getModuleSuffixes() {
+				return new String[]{classLocator.className,classLocator.action+WINDOW+"$"+classLocator.className};
+			}
+			
+			@Override
+			protected String[] __execute__(Class<?> aClass) {
+				String[] names =  super.__execute__(aClass);
+				for(int index = 0 ; index < names.length ; index++)
+					if(StringUtils.contains(names[index], "org.cyk.system.ui."))
+						names[index] = StringUtils.replace(names[index],"org.cyk.system.ui.", "org.cyk.ui.");
+				return names;
+			}
+		}
+		
 	}
 }

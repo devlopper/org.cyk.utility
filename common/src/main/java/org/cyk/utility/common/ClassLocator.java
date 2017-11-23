@@ -17,9 +17,10 @@ import lombok.Setter;
 
 @Getter @Setter
 public class ClassLocator extends AbstractBean implements Serializable {
-
 	private static final long serialVersionUID = -5858728987562936549L;
 
+	//private static final Map<> m;
+	
 	private String classType;
 	private final Collection<Listener> classLocatorListeners = new ArrayList<>();
 	private Map<Class<?>,Class<?>> cache = new HashMap<>();

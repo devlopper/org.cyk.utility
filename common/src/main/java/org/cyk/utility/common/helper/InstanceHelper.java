@@ -1009,6 +1009,13 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				public <T> Collection<T> get(Class<T> aClass) {
 					return get(aClass,null);
 				}
+			
+				@Override
+				public Object getIdentifier(Object instance) {
+					if(instance instanceof Enum<?>)
+						return ((Enum<?>)instance).name();
+					return super.getIdentifier(instance);
+				}
 			}
 			
 		}
