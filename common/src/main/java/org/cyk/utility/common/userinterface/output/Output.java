@@ -20,6 +20,10 @@ import org.cyk.utility.common.userinterface.container.Form.Detail;
 public class Output extends Control implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	static {
+		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
+	}
+	
 	/**/
 	
 	@Override

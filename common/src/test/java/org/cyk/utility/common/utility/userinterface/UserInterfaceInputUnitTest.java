@@ -38,7 +38,7 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	@Test
 	public void outputClasses(){
 		Model model = new Model();
-		assertEquals(Output.class, Output.getListener().getClass(new Form.Detail(), model, FieldHelper.getInstance().get(Model.class, "string1")));
+		assertEquals(OutputText.class, Output.getListener().getClass(new Form.Detail(), model, FieldHelper.getInstance().get(Model.class, "string1")));
 		assertEquals(OutputText.class, Output.getListener().getClass(new Form.Detail(), model, FieldHelper.getInstance().get(Model.class, "string2")));
 		assertEquals(OutputFile.class, Output.getListener().getClass(new Form.Detail(), model, FieldHelper.getInstance().get(Model.class, "myFile1")));
 	}

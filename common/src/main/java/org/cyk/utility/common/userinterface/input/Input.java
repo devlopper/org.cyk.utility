@@ -45,6 +45,10 @@ import org.cyk.utility.common.userinterface.input.number.InputNumber;
 public class Input<T> extends Control implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	static {
+		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
+	}
+	
 	protected Object valueObject;
 	protected T value,initialValue;
 	protected Form.Detail formDetail;
@@ -148,7 +152,7 @@ public class Input<T> extends Control implements Serializable {
 	//private static final Listener LISTENER = ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class);
 	public static Listener getListener(){
 		//return LISTENER;
-		return ClassHelper.getInstance().instanciateOne(Listener.Adapter.Default.class);
+		return ClassHelper.getInstance().instanciateOne(Listener.class);
 	}
 	
 	public static Input<?> get(Form.Detail detail,Object object,java.lang.reflect.Field field){
