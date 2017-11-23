@@ -373,7 +373,7 @@ public class Input<T> extends Control implements Serializable {
 					Object value = getPreparedValue(input);
 					if(input instanceof InputFile){
 						//InputFile inputFile = (InputFile) input;
-						Class<?> fileClass = getFileClass();
+						Class<?> fileClass = FileHelper.getListener().getModelClass();
 						if(!FileHelper.File.class.equals(fileClass) && input.getField().getType().equals(fileClass)){
 							Object file = null;
 							if(value==null){
@@ -395,13 +395,9 @@ public class Input<T> extends Control implements Serializable {
 				public Object getPreparedValue(Input<?> input){
 					return input.getValue();
 				}
-				
-				public Class<?> getFileClass(){
-					return FileHelper.File.class;
-				}
-				
+								
 				protected String[] getFileFieldNames(){
-					return new String[]{"name","extension","bytes","mime"};
+					return new String[]{FileHelper.File.FIELD_NAME,FileHelper.File.FIELD_EXTENSION,FileHelper.File.FIELD_BYTES,FileHelper.File.FIELD_MIME};
 				}
 				
 				protected Object getFileFieldValue(Object file,String fieldName){

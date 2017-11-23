@@ -92,7 +92,7 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void uploadFileNoSelectionNoCurrent(){
-		InputAdapter.FILE_CLASS = FileHelper.File.class;
+		FileHelper.Listener.Adapter.Default.FILE_CLASS = FileHelper.File.class;
 		ClassHelper.getInstance().map(Input.Listener.class, InputAdapter.class);
 		MyModelWithFile model = new MyModelWithFile();
 		InputFile input = (InputFile) Input.get(null,model, "file");
@@ -105,7 +105,7 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void uploadFileYesSelectionNoCurrent(){
-		InputAdapter.FILE_CLASS = FileHelper.File.class;
+		FileHelper.Listener.Adapter.Default.FILE_CLASS = FileHelper.File.class;
 		ClassHelper.getInstance().map(Input.Listener.class, InputAdapter.class);
 		MyModelWithFile model = new MyModelWithFile();
 		InputFile input = (InputFile) Input.get(null,model, "file");
@@ -121,7 +121,7 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void uploadFileNoSelectionYesCurrent(){
-		InputAdapter.FILE_CLASS = FileHelper.File.class;
+		FileHelper.Listener.Adapter.Default.FILE_CLASS = FileHelper.File.class;
 		ClassHelper.getInstance().map(Input.Listener.class, InputAdapter.class);
 		MyModelWithFile model = new MyModelWithFile().setFile(new FileHelper.File().setName("c001").setExtension("png").setMime("image/png").setBytes(new byte[8]));
 		InputFile input = (InputFile) Input.get(null,model, "file");
@@ -135,7 +135,7 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void uploadFileYesSelectionYesCurrent(){
-		InputAdapter.FILE_CLASS = FileHelper.File.class;
+		FileHelper.Listener.Adapter.Default.FILE_CLASS = FileHelper.File.class;
 		ClassHelper.getInstance().map(Input.Listener.class, InputAdapter.class);
 		MyModelWithFile model = new MyModelWithFile().setFile(new FileHelper.File().setName("c001").setExtension("png").setMime("image/png").setBytes(new byte[8]));
 		InputFile input = (InputFile) Input.get(null,model, "file");
@@ -151,7 +151,7 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void uploadFileNoSelectionNoCurrentCustomFile(){
-		InputAdapter.FILE_CLASS = MyFile.class;
+		FileHelper.Listener.Adapter.Default.FILE_CLASS = MyFile.class;
 		ClassHelper.getInstance().map(Input.Listener.class, InputAdapter.class);
 		MyModelWithFile model = new MyModelWithFile();
 		InputFile input = (InputFile) Input.get(null,model, "customFile");
@@ -164,7 +164,7 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void uploadFileYesSelectionNoCurrentCustomFile(){
-		InputAdapter.FILE_CLASS = MyFile.class;
+		FileHelper.Listener.Adapter.Default.FILE_CLASS = MyFile.class;
 		ClassHelper.getInstance().map(Input.Listener.class, InputAdapter.class);
 		MyModelWithFile model = new MyModelWithFile();
 		InputFile input = (InputFile) Input.get(null,model, "customFile");
@@ -180,7 +180,7 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void uploadFileNoSelectionYesCurrentCustomFile(){
-		InputAdapter.FILE_CLASS = MyFile.class;
+		FileHelper.Listener.Adapter.Default.FILE_CLASS = MyFile.class;
 		ClassHelper.getInstance().map(Input.Listener.class, InputAdapter.class);
 		MyModelWithFile model = new MyModelWithFile().setCustomFile(new MyFile().setName("c001").setExtension("png").setMime("image/png").setBytes(new byte[8]));
 		InputFile input = (InputFile) Input.get(null,model, "customFile");
@@ -194,7 +194,7 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void uploadFileYesSelectionYesCurrentCustomFile(){
-		InputAdapter.FILE_CLASS = MyFile.class;
+		FileHelper.Listener.Adapter.Default.FILE_CLASS = MyFile.class;
 		ClassHelper.getInstance().map(Input.Listener.class, InputAdapter.class);
 		MyModelWithFile model = new MyModelWithFile().setCustomFile(new MyFile().setName("c001").setExtension("png").setMime("image/png").setBytes(new byte[8]));
 		InputFile input = (InputFile) Input.get(null,model, "customFile");
@@ -270,13 +270,6 @@ public class UserInterfaceInputUnitTest extends AbstractUnitTest {
 	
 	public static class InputAdapter extends Input.Listener.Adapter.Default {
 		private static final long serialVersionUID = 1L;
-		
-		public static Class<?> FILE_CLASS = FileHelper.File.class;
-		
-		@Override
-		public Class<?> getFileClass() {
-			return FILE_CLASS;
-		}
 		
 		@Override
 		public Object getPreparedValue(Input<?> input) {

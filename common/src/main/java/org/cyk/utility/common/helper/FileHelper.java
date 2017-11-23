@@ -244,9 +244,11 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 			public static class Default extends Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
+				public static Class<?> FILE_CLASS = File.class;
+				
 				@Override
 				public Class<?> getModelClass() {
-					return File.class;
+					return FILE_CLASS;
 				}
 				
 				@Override
