@@ -83,6 +83,7 @@ public class Window extends Container implements Serializable {
 				if(Constant.Action.CREATE.equals(action)){
 					actionOnClassInstances.add(ClassHelper.getInstance().instanciateOne(actionOnClass));
 				}else{
+					System.out.println("Window.getActionOnClassInstances() : "+actionOnClassInstanceIdentifiers);
 					if(CollectionHelper.getInstance().isNotEmpty(actionOnClassInstanceIdentifiers))
 						for(Object identifier : actionOnClassInstanceIdentifiers){
 							Object instance = InstanceHelper.getInstance().getByIdentifier(actionOnClass, identifier);

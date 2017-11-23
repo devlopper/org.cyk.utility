@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -98,8 +96,6 @@ public class Form extends Container implements Serializable {
 	@Getter @Setter @Accessors(chain=true)
 	public static class Master extends Form implements Serializable {
 		private static final long serialVersionUID = 1L;
-		
-		private static final Map<Class<?>,Map<Constant.Action,Map<Object,Class<? extends Master>>>> MAP = new HashMap<Class<?>, Map<Constant.Action,Map<Object,Class<? extends Master>>>>();
 		
 		private Constant.Action action;
 		private Boolean editable;

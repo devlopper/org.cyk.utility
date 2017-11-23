@@ -15,7 +15,6 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Action;
-import org.cyk.utility.common.ListenerUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
@@ -27,9 +26,12 @@ import lombok.Getter;
 
 @Singleton @Named
 public class InstanceHelper extends AbstractHelper implements Serializable  {
-
 	private static final long serialVersionUID = 1L;
 
+	static {
+		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
+	}
+	
 	private static InstanceHelper INSTANCE;
 	
 	public static InstanceHelper getInstance() {
@@ -45,37 +47,32 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	public <T> Collection<T> get(Class<T> aClass){
-		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
-				, Listener.Adapter.Default.class)).get(aClass);
+		return ClassHelper.getInstance().instanciateOne(Listener.class).get(aClass);
 	}
 	
 	public <T> Collection<T> get(Class<T> aClass,Object masterObject){
-		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
-				, Listener.Adapter.Default.class)).get(aClass,masterObject);
+		return ClassHelper.getInstance().instanciateOne(Listener.class).get(aClass,masterObject);
 	}
 	
 	public <T> Collection<T> get(Class<T> aClass,DataReadConfiguration dataReadConfiguration){
-		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
-				, Listener.Adapter.Default.class)).get(aClass,dataReadConfiguration);
+		return ClassHelper.getInstance().instanciateOne(Listener.class).get(aClass,dataReadConfiguration);
 	}
 	
 	public <T> Long count(Class<T> aClass,DataReadConfiguration dataReadConfiguration){
-		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
-				, Listener.Adapter.Default.class)).count(aClass,dataReadConfiguration);
+		return ClassHelper.getInstance().instanciateOne(Listener.class).count(aClass,dataReadConfiguration);
 	}
 	
 	public <T> Collection<T> get(Class<T> aClass,FilterHelper.Filter<T> filter,DataReadConfiguration dataReadConfiguration){
-		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
-				, Listener.Adapter.Default.class)).get(aClass,filter,dataReadConfiguration);
+		return ClassHelper.getInstance().instanciateOne(Listener.class).get(aClass,filter,dataReadConfiguration);
 	}
 	
 	public <T> Long count(Class<T> aClass,FilterHelper.Filter<T> filter,DataReadConfiguration dataReadConfiguration){
-		return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance().getIfNotNullElseDefault(Listener.Adapter.Default.DEFAULT_CLASS
-				, Listener.Adapter.Default.class)).count(aClass,filter,dataReadConfiguration);
+		return ClassHelper.getInstance().instanciateOne(Listener.class).count(aClass,filter,dataReadConfiguration);
 	}
 	
 	public Object getIdentifier(final Object instance){
-		return listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getIdentifier(instance);
+		/*return listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
 			@Override
 			public Object execute(Listener listener) {
 				return listener.getIdentifier(instance);
@@ -87,13 +84,13 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					return instance.toString();
 				return super.getNullValue();
 			}
-		});
+		});*/
 	}
 	 
-	@SuppressWarnings("unchecked")
 	public <T> T getByIdentifier(Class<T> aClass,Object identifier){
-		return (T) ListenerHelper.getInstance().listenObject(Listener.COLLECTION, Listener.METHOD_NAME_GET_BY_IDENTIFIER
-				, MethodHelper.Method.Parameter.buildArray(Class.class,aClass,Object.class,identifier));
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getByIdentifier(aClass, identifier);
+		//return (T) ListenerHelper.getInstance().listenObject(Listener.COLLECTION, Listener.METHOD_NAME_GET_BY_IDENTIFIER
+		//		, MethodHelper.Method.Parameter.buildArray(Class.class,aClass,Object.class,identifier));
 	}
 	
 	public void setFieldValueGenerator(Class<?> aClass,String fieldName,FieldValueGenerator<?> fieldValueGenerator){
@@ -113,23 +110,27 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		return fieldValueGenerator;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public <T> T generateFieldValue(final Object instance,final String name, final Class<T> valueClass){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).generateFieldStringValue(instance, name);
+		/*
 		return (T) listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
 			@Override
 			public Object execute(Listener listener) {
 				return listener.generateFieldValue(instance, name, valueClass);
 			}
-		});
+		});*/
 	}
 	
 	public Boolean getAreEqual(final Object instance1,final Object instance2){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getAreEqual(instance1, instance2);
+		/*
 		return listenerUtils.getBoolean(Listener.COLLECTION, new ListenerUtils.BooleanMethod<Listener>() {
 			@Override
 			public Boolean execute(Listener listener) {
 				return listener.getAreEqual(instance1, instance2);
 			}
 		});
+		*/
 	}
 	
 	public <T> T getIfNotNullElseDefault(Class<T> valueClass,T value,T defaultValue){
@@ -865,8 +866,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	
 	public static interface Listener extends AbstractHelper.Listener {
 		
-		@Deprecated
-		java.util.Collection<Listener> COLLECTION = new ArrayList<>();
+		//@Deprecated
+		//java.util.Collection<Listener> COLLECTION = new ArrayList<>();
 		
 		<T> Collection<T> get(Class<T> aClass);
 		<T> Collection<T> get(Class<T> aClass,Object master);
@@ -955,8 +956,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				@SuppressWarnings("unchecked")
-				public static Class<? extends Listener> DEFAULT_CLASS = (Class<? extends Listener>) ClassHelper.getInstance().getByName(Default.class);
+				//@SuppressWarnings("unchecked")
+				//public static Class<? extends Listener> DEFAULT_CLASS = (Class<? extends Listener>) ClassHelper.getInstance().getByName(Default.class);
 				
 				@Override
 				public Boolean getAreEqual(Object object1, Object object2) {

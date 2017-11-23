@@ -10,9 +10,6 @@ import java.util.Date;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.common.helper.ArrayHelper;
@@ -29,12 +26,16 @@ import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @SuppressWarnings("unchecked")
 public class InstanceHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	static {
+		ClassHelper.getInstance().map(InstanceHelper.Listener.class, Listener.class);
 		InstanceHelper.Lookup.Source.Adapter.Default.RESULT_METHOD_CLASS = (Class<ResultMethod<Object, Source<?, ?>>>) ClassHelper.getInstance().getByName(MySource.class);
 		//InstanceHelper.Setter.ProcessValue.CLASSES.add(A.StringProcessor.class);
 		/*InstanceHelper.Setter.ProcessValue.Adapter.Default.RESULT_METHOD = new InstanceHelper.Setter.ProcessValue.ResultMethod(){
@@ -47,32 +48,6 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 				return super.__execute__();
 			}
 		};*/
-		InstanceHelper.Listener.COLLECTION.add(new InstanceHelper.Listener.Adapter.Default(){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Object getIdentifier(Object instance) {
-				if(instance instanceof A)
-					return((A)instance).getF2();
-				return super.getIdentifier(instance);
-			}
-			
-			@Override
-			public <T> T getByIdentifier(Class<T> aClass, Object identifier) {
-				if(aClass.equals(A.class))
-					if(identifier.equals("12"))
-						return null;
-				return super.getByIdentifier(aClass, identifier);
-			}
-			
-			/*@Override
-			public <T> T generateFieldValue(Object instance, String name,Class<T> valueClass) {
-				if(instance instanceof A)
-					return (T) (((A)instance).getF1()+"_I_"+RandomHelper.getInstance().get(String.class));
-				return super.generateFieldValue(instance, name, valueClass);
-			}*/
-	
-		});
 		
 		InstanceHelper.getInstance().setFieldValueGenerator(A.class, "f1", new FieldValueGenerator.Adapter.Default<String>(String.class){
 			private static final long serialVersionUID = 1L;
@@ -347,7 +322,27 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 	public static class Listener extends InstanceHelper.Listener.Adapter.Default implements Serializable{
 		private static final long serialVersionUID = 1L;
 		
+		@Override
+		public Object getIdentifier(Object instance) {
+			if(instance instanceof A)
+				return((A)instance).getF2();
+			return super.getIdentifier(instance);
+		}
 		
+		@Override
+		public <T> T getByIdentifier(Class<T> aClass, Object identifier) {
+			if(aClass.equals(A.class))
+				if(identifier.equals("12"))
+					return null;
+			return super.getByIdentifier(aClass, identifier);
+		}
+		
+		/*@Override
+		public <T> T generateFieldValue(Object instance, String name,Class<T> valueClass) {
+			if(instance instanceof A)
+				return (T) (((A)instance).getF1()+"_I_"+RandomHelper.getInstance().get(String.class));
+			return super.generateFieldValue(instance, name, valueClass);
+		}*/
 		
 	}
 	

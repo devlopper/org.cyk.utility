@@ -321,7 +321,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	}
 	
 	static {
-		ClassHelper.getInstance().map(Input.Listener.Adapter.Default.class, InputAdapter.class);
+		ClassHelper.getInstance().map(Input.Listener.class, InputAdapter.class);
 	}
 
 	
