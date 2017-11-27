@@ -30,6 +30,7 @@ import org.cyk.utility.common.helper.RandomHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.model.Area;
+import org.cyk.utility.common.userinterface.collection.DataTable;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
 import org.cyk.utility.common.userinterface.container.Form.Master;
@@ -480,6 +481,9 @@ public class Component extends AbstractBean implements Serializable {
 			Detail detail = master.getDetail();
 			if(detail == null)
 				detail = master.instanciateDetail();
+		}else if(component instanceof DataTable){
+			DataTable dataTable = (DataTable) component;
+			dataTable.setActionOnClass(((Window)parent).getActionOnClass());
 		}
 		/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE, MethodHelper.Method.Parameter
 				.buildArray(Component.class,component));
@@ -597,6 +601,8 @@ public class Component extends AbstractBean implements Serializable {
 
 			public static String WINDOW = "Window";
 			public static String[] MODULE_PREFIXES = {"ui.web.primefaces.page"};
+			public static String NAME_TOKEN_TO_REPLACE = "org.cyk.system.ui.";
+			public static String NAME_TOKEN_REPLACEMENT = "org.cyk.ui.";
 			
 			private ClassLocator classLocator;
 			
@@ -628,8 +634,8 @@ public class Component extends AbstractBean implements Serializable {
 			protected String[] __execute__(Class<?> aClass) {
 				String[] names =  super.__execute__(aClass);
 				for(int index = 0 ; index < names.length ; index++)
-					if(StringUtils.contains(names[index], "org.cyk.system.ui."))
-						names[index] = StringUtils.replace(names[index],"org.cyk.system.ui.", "org.cyk.ui.");
+					if(StringUtils.contains(names[index], NAME_TOKEN_TO_REPLACE))
+						names[index] = StringUtils.replace(names[index],NAME_TOKEN_TO_REPLACE, NAME_TOKEN_REPLACEMENT);
 				return names;
 			}
 		}

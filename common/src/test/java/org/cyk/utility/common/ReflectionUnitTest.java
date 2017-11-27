@@ -1,6 +1,7 @@
 package org.cyk.utility.common;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +10,16 @@ import lombok.Setter;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
+import org.cyk.utility.common.helper.AbstractHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
 import org.junit.Test;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 
 
 public class ReflectionUnitTest extends AbstractUnitTest {
@@ -72,6 +80,23 @@ public class ReflectionUnitTest extends AbstractUnitTest {
 		}
 	}
 	
+	@Test
+	public void getReflections(){
+		Reflections reflections = new Reflections(new ConfigurationBuilder()
+	    	.filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix("org.cyk")))
+	    	.setUrls(ClasspathHelper.forPackage("org.cyk"))
+	    	.setScanners(new SubTypesScanner(){
+	    		@Override
+	    		public boolean acceptsInput(String file) {
+	    			System.out.println(file);
+	    			return super.acceptsInput(file);
+	    		}
+	    	}));
+	 
+	       Set<Class<? extends ClassA>> modules = reflections.getSubTypesOf(ClassA.class);
+	       assertEquals(6, modules.size());
+	}
+	
 	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 	public static class ClassA{
 		private String v_a;
@@ -82,9 +107,29 @@ public class ReflectionUnitTest extends AbstractUnitTest {
 		private String vA1;
 	}
 	
+	@Getter @Setter
+	public static class ClassA11 extends ClassA1 {
+		
+	}
+	
 	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 	public static class ClassA2 extends ClassA{
 		private String vA2;
+	}
+	
+	@Getter @Setter
+	public static class ClassA21 extends ClassA2 {
+		
+	}
+	
+	@Getter @Setter
+	public static class ClassA22 extends ClassA2 {
+		
+	}
+	
+	@Getter @Setter
+	public static class ClassA221 extends ClassA22 {
+		
 	}
 	
 	@Getter @Setter @NoArgsConstructor @AllArgsConstructor

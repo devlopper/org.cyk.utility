@@ -59,6 +59,7 @@ public class ClassLocator extends AbstractBean implements Serializable {
 					});
 				}else{
 					String[] names = getNames(getNameMethod,basedClass);
+					logTrace("names : {}", StringHelper.getInstance().concatenate(names, " , "));
 					if(ArrayHelper.getInstance().isNotEmpty(names))
 						for(String name : names){
 							if(StringUtils.isNotBlank(name)){

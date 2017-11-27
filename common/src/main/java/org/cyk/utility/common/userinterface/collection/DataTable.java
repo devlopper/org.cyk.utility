@@ -13,6 +13,7 @@ import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
+import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Component;
@@ -35,15 +36,6 @@ public class DataTable extends Component.Visible implements Serializable {
 	
 	public DataTable(Class<?> actionOnClass) {
 		this.actionOnClass = actionOnClass;
-		Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
-		getPropertiesMap().setMainMenu(menu);
-		addOneChild(menu);
-		if(this.actionOnClass!=null){
-			menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, this.actionOnClass);
-		}
-		addColumn("order.number", FIELD___ORDER_NUMBER__).setCellValueSource(CellValueSource.ROW);
-		
-		addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(CellValueType.MENU).set__orderNumber__(Long.MAX_VALUE);
 	}
 	
 	public DataTable() {
@@ -59,10 +51,41 @@ public class DataTable extends Component.Visible implements Serializable {
 		return (DataTable) super.build();
 	}
 	
+	@Override
+	public DataTable prepare() {
+		super.prepare();
+		Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
+		getPropertiesMap().setMainMenu(menu);
+		addOneChild(menu);
+		if(this.actionOnClass!=null){
+			menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, this.actionOnClass);
+		}
+		addColumn("order.number", FIELD___ORDER_NUMBER__).setCellValueSource(CellValueSource.ROW);
+		__prepare__();
+		addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(CellValueType.MENU).set__orderNumber__(Long.MAX_VALUE);
+		
+		loadRows();//can be trigger by callback to enabled fast rendering of table structure
+		
+		return this;
+	}
+	
+	protected void __prepare__(){}
+	
 	public Column addColumn(String labelStringIdentifier,String fieldName){
 		if(getPropertiesMap().getColumns()==null)
 			getPropertiesMap().setColumns(new Columns());
 		return ((Columns)getPropertiesMap().getColumns()).addColumn(labelStringIdentifier, fieldName);
+	}
+	
+	public Column addColumnByFieldName(String fieldName){
+		String labelStringIdentifier = StringHelper.getInstance().getI18nIdentifier(FieldHelper.getInstance().getLast(fieldName));
+		return addColumn(labelStringIdentifier, fieldName);
+	}
+	
+	public DataTable addColumnsByFieldNames(String...fieldNames){
+		for(String fieldName : fieldNames)
+			addColumnByFieldName(fieldName);
+		return this;
 	}
 	
 	public DataTable addManyRow(Collection<?> collection){
@@ -83,6 +106,11 @@ public class DataTable extends Component.Visible implements Serializable {
 		if(CollectionHelper.getInstance().isNotEmpty(collection))
 			addManyRow(collection.getElements());
 		return this;
+	}
+	
+	public void loadRows(){
+		if(actionOnClass!=null)
+			addManyRow(InstanceHelper.getInstance().get(actionOnClass));
 	}
 	
 	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
