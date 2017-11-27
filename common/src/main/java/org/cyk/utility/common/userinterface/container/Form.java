@@ -128,6 +128,8 @@ public class Form extends Container implements Serializable {
 			if(editable==null && this.action!=null)
 				setEditable(!Constant.Action.READ.equals(this.action) && !Constant.Action.DELETE.equals(this.action));
 			submitCommand.getPropertiesMap().setRendered(!Constant.Action.READ.equals(this.action));
+			if(Boolean.TRUE.equals(submitCommand.getPropertiesMap().getRendered()))
+				submitCommand.setIsConfirmable(Constant.Action.DELETE.equals(this.action));
 			return this;
 		}
 		
@@ -252,23 +254,41 @@ public class Form extends Container implements Serializable {
 				}
 			}
 			
-			protected void create(){}
+			protected void create(){
+				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+			}
 			
-			protected void read(){}
+			protected void read(){
+				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+			}
 			
-			protected void update(){}
+			protected void update(){
+				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+			}
 			
-			protected void delete(){}
+			protected void delete(){
+				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+			}
 			
-			protected void select(){}
+			protected void select(){
+				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+			}
 			
-			protected void search(){}
+			protected void search(){
+				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+			}
 			
-			protected void list(){}
+			protected void list(){
+				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+			}
 			
-			protected void print(){}
+			protected void print(){
+				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+			}
 			
-			protected void consult(){}
+			protected void consult(){
+				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+			}
 			
 			@Override
 			public Boolean getIsNotifiableOnStatusSuccess() {
@@ -304,6 +324,21 @@ public class Form extends Container implements Serializable {
 	
 		/**/
 	
+		public static class Web extends Master implements Serializable {
+			private static final long serialVersionUID = 1L;
+
+			public Web() {
+				setSubmitCommandActionAdapterClass(SubmitCommandActionAdapter.Web.class);
+			}
+			
+			public Web(Component parent, Object object, Action action) {
+				super(parent, object, action,SubmitCommandActionAdapter.Web.class);
+			}
+			
+			
+			
+		}
+		
 		/**/
 		
 		public static class ClassLocator extends Component.ClassLocator implements Serializable {

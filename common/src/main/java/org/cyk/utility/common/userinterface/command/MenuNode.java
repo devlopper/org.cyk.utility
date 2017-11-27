@@ -10,11 +10,11 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public class MenuNode extends Component.Visible implements Serializable {
+public class MenuNode extends MenuContainer implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Menu menu;
-	private MenuNode parent;
+	//private MenuNode parent;
 	
 	/**/
 	
@@ -24,6 +24,10 @@ public class MenuNode extends Component.Visible implements Serializable {
 	
 	public MenuNode _setPropertyUrl(Constant.Action action,Object object,Object...queryKeyValue){
 		return (MenuNode) super._setPropertyUrl(action, object, queryKeyValue);
+	}
+	
+	public MenuContainer getParent() {
+		return (MenuContainer) super.getParent();
 	}
 	
 	/**/

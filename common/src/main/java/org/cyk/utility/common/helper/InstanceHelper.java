@@ -15,6 +15,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Action;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
@@ -72,6 +73,23 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	
 	public Object getIdentifier(final Object instance){
 		return ClassHelper.getInstance().instanciateOne(Listener.class).getIdentifier(instance);
+		/*return listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
+			@Override
+			public Object execute(Listener listener) {
+				return listener.getIdentifier(instance);
+			}
+			
+			@Override
+			public Object getNullValue() {
+				if(instance!=null)
+					return instance.toString();
+				return super.getNullValue();
+			}
+		});*/
+	}
+	
+	public Object act(Constant.Action action,Object instance){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).act(action,instance);
 		/*return listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
 			@Override
 			public Object execute(Listener listener) {
@@ -886,10 +904,17 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		<T> T generateFieldValue(Object instance,String name,Class<T> valueClass);
 		<T> T generateFieldStringValue(Object instance,String name);
 		
+		Object act(Constant.Action action,Object instance);
+		
 		/**/
 		
 		public static class Adapter extends AbstractHelper.Listener.Adapter.Default implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Object act(org.cyk.utility.common.Constant.Action action, Object instance) {
+				return null;
+			}
 			
 			@Override
 			public <T> Collection<T> get(Class<T> aClass, Filter<T> filter,DataReadConfiguration dataReadConfiguration) {

@@ -11,7 +11,7 @@ public class ConsultWindow extends Window implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Class<Form.Master> getFormMasterClass() {
+	protected Class<? extends Form.Master> getFormMasterClass() {
 		return (Class<Form.Master>) ConsultWindow.FormMaster.ClassLocator.getInstance().locate(actionOnClass);
 	}
 	

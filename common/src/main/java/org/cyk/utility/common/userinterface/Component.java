@@ -68,6 +68,7 @@ public class Component extends AbstractBean implements Serializable {
 		if(children == null)
 			children = instanciateChildrenCollection();
 		children.addOne(component);
+		component.setParent(this);
 		return this;
 	}
 	

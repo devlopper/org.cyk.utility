@@ -20,7 +20,7 @@ public class ListWindow extends Window implements Serializable {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Class<org.cyk.utility.common.userinterface.collection.DataTable> getDataTableClass(){
+	protected Class<? extends org.cyk.utility.common.userinterface.collection.DataTable> getDataTableClass(){
 		return (Class<org.cyk.utility.common.userinterface.collection.DataTable>) ListWindow.DataTable.ClassLocator.getInstance().locate(actionOnClass);
 	}
 	

@@ -10,7 +10,7 @@ public class EditWindow extends Window implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Class<Form.Master> getFormMasterClass() {
+	protected Class<? extends Form.Master> getFormMasterClass() {
 		return (Class<Form.Master>) EditWindow.FormMaster.ClassLocator.getInstance().locate(actionOnClass);
 	}
 	

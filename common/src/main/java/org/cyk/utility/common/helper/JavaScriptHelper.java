@@ -115,10 +115,14 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 		return "window.history.back();";
 	}
 	
+	public String getScriptWindowGoToReferrer(){
+		return "location.replace(document.referrer);";
+	}
+	
 	public String getScriptWindowGoTo(String url,Boolean goBackIfUrlIsBlank){
 		if(StringHelper.getInstance().isBlank(url))
 			if(Boolean.TRUE.equals(goBackIfUrlIsBlank))
-				return JavaScriptHelper.getInstance().getScriptWindowGoBack();
+				return JavaScriptHelper.getInstance().getScriptWindowGoToReferrer();
 			else
 				return Constant.EMPTY_STRING;
 		else 

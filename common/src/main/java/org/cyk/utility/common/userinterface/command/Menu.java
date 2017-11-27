@@ -12,7 +12,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public class Menu extends Container implements Serializable {
+public class Menu extends MenuContainer implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static enum Set{APPLICATION,SESSION,MODULE,WINDOW;public static Set DEFAULT = SESSION;}
@@ -24,13 +24,6 @@ public class Menu extends Container implements Serializable {
 	private RenderType renderType = RenderType.DEFAULT;
 	
 	/**/
-	
-	public MenuNode addNode(String labelStringIdentifier){
-		MenuNode menuNode = new MenuNode();
-		menuNode.setLabelFromIdentifier(labelStringIdentifier);
-		addOneChild(menuNode);
-		return menuNode;
-	}
 	
 	/**/
 	

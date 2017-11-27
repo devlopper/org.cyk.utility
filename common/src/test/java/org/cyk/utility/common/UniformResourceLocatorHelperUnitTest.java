@@ -3,6 +3,7 @@ package org.cyk.utility.common;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.MapHelper;
 import org.cyk.utility.common.helper.MapHelper.EntryComponent;
@@ -229,6 +230,11 @@ public class UniformResourceLocatorHelperUnitTest extends AbstractUnitTest {
 			//if(UniformResourceLocatorHelper.PathStringBuilder.Adapter.Default.IDENTIFIER_UNKNOWN.equals(getInput()))
 				return "path_to_unknown";
 			//return super.__execute__();
+		}
+		
+		@Override
+		public Boolean getIsPathIdentifierMappingExist(String identifier) {
+			return ArrayUtils.contains(new String[]{"pathid1","classAEdit","classADelete","classAConsult","classARead"}, identifier);
 		}
 			
 	}

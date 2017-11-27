@@ -33,11 +33,15 @@ public class Command extends Control implements Serializable {
 	}
 	
 	public Command setIsConfirmable(Boolean isConfirmable){
-		getAction().setIsConfirmable(isConfirmable);
-		if(Boolean.TRUE.equals(getAction().getIsConfirmable()))
-			setConfirm(new Confirm());
-		else
-			setConfirm(null);
+		org.cyk.utility.common.helper.CommandHelper.Command action = getAction();
+		if(action!=null){
+			action.setIsConfirmable(isConfirmable);
+			if(Boolean.TRUE.equals(action.getIsConfirmable()))
+				setConfirm(new Confirm());
+			else
+				setConfirm(null);	
+		}
+		
 		return this;
 	}
 	

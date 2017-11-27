@@ -100,9 +100,11 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	
 	public String stringify(Constant.Action action,Object object,Object...queryKeyValue){
 		Class<?> aClass = object instanceof Class ? (Class<?>)object : object.getClass();
-		String pathIdentifier = getPathIdentifier(action, aClass);
-		UniformResourceLocatorHelper.Stringifier stringifier = new UniformResourceLocatorHelper.Stringifier.Adapter.Default()
-				.setPathIdentifier(pathIdentifier).addQueryParameterAction(action);
+		//String pathIdentifier = getPathIdentifier(action, aClass);
+		Stringifier stringifier = new Stringifier.Adapter.Default();
+		//stringifier.setPathIdentifier(pathIdentifier);
+		stringifier.setProperty(Stringifier.PROPERTY_NAME_ACTION, action).setProperty(Stringifier.PROPERTY_NAME_CLASS, aClass);
+		stringifier.addQueryParameterAction(action);
 		stringifier.addQueryParameterClass(aClass);
 		if(object instanceof Class)
 			;//stringifier.addQueryParameterClass((Class<?>)object);
@@ -539,6 +541,9 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 								aClass = instance.getClass();
 						}
 						identifier = listener.getPathIdentifier(action, aClass);
+						if(!Boolean.TRUE.equals(listener.getIsPathIdentifierMappingExist(identifier))){
+							identifier = listener.getPathIdentifierWhenMappingDoesNotExist(action, aClass);
+						}
 					}
 					String string;
 					String context = getContext();
@@ -683,6 +688,8 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 		
 		String getPathIdentifier(Constant.Action action,Class<?> aClass);
 		String getPathIdentifierMapping(String identifier);
+		Boolean getIsPathIdentifierMappingExist(String identifier);		
+		String getPathIdentifierWhenMappingDoesNotExist(Constant.Action action,Class<?> aClass);
 		
 		public static class Adapter implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
@@ -702,6 +709,16 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				return null;
 			}
 			
+			@Override
+			public Boolean getIsPathIdentifierMappingExist(String identifier) {
+				return null;
+			}
+			
+			@Override
+			public String getPathIdentifierWhenMappingDoesNotExist(Action action, Class<?> aClass) {
+				return null;
+			}
+			
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
@@ -718,13 +735,23 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				public String getPathIdentifier(Action action, Class<?> aClass) {
 					if(action==null || aClass==null)
 						return null;
-					return ClassHelper.getInstance().getVariableName(aClass)
-							+(Action.isCreateOrUpdateOrDelete(action) ? EDIT : StringHelper.getInstance().applyCaseType(action.name(), CaseType.FURL));
+					return ClassHelper.getInstance().getVariableName(aClass)+getActionAsString(action);
+				}
+				
+				@Override
+				public String getPathIdentifierWhenMappingDoesNotExist(Action action, Class<?> aClass) {
+					if(action==null)
+						return null;
+					return StringHelper.getInstance().applyCaseType(getActionAsString(action), CaseType.FL);
 				}
 				
 				@Override
 				public String getPathIdentifierMapping(String identifier) {
 					return identifier;
+				}
+				
+				protected String getActionAsString(Action action){
+					return Action.isCreateOrUpdateOrDelete(action) ? EDIT : StringHelper.getInstance().applyCaseType(action.name(), CaseType.FURL);
 				}
 			}
 		}

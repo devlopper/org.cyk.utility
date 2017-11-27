@@ -22,6 +22,7 @@ import org.cyk.utility.common.userinterface.collection.DataTable;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.container.Container;
 import org.cyk.utility.common.userinterface.container.Form;
+import org.cyk.utility.common.userinterface.container.Form.Master;
 import org.cyk.utility.common.userinterface.panel.ConfirmationDialog;
 import org.cyk.utility.common.userinterface.panel.NotificationDialog;
 
@@ -153,24 +154,26 @@ public class Window extends Container implements Serializable {
 	/* builders */
 	
 	protected Form.Master buildForm(){
-		Class<Form.Master> formMasterClass = InstanceHelper.getInstance().getIfNotNullElseDefault(getFormMasterClass(),Form.Master.class);
+		@SuppressWarnings("unchecked")
+		Class<Form.Master> formMasterClass = (Class<Master>) InstanceHelper.getInstance().getIfNotNullElseDefault(getFormMasterClass(),Form.Master.class);
 		Form.Master form = Component.get(this,formMasterClass,Form.Master.class);
 		form.build();
 		return form;
 	}
 	
-	protected Class<Form.Master> getFormMasterClass(){
+	protected Class<? extends Form.Master> getFormMasterClass(){
 		return Form.Master.class;
 	}
 
 	protected DataTable buildDataTable(){
-		Class<DataTable> dataTableClass = InstanceHelper.getInstance().getIfNotNullElseDefault(getDataTableClass(),DataTable.class);
+		@SuppressWarnings("unchecked")
+		Class<DataTable> dataTableClass = (Class<DataTable>) InstanceHelper.getInstance().getIfNotNullElseDefault(getDataTableClass(),DataTable.class);
 		DataTable dataTable = Component.get(this,dataTableClass,DataTable.class);
 		dataTable.build();
 		return dataTable;
 	}
 	
-	protected Class<DataTable> getDataTableClass(){
+	protected Class<? extends DataTable> getDataTableClass(){
 		return DataTable.class;
 	}
 	
