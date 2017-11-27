@@ -25,6 +25,7 @@ import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.reflections.Reflections;
+import org.reflections.scanners.TypeAnnotationsScanner;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -48,6 +49,14 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public Collection<Class<?>> filterByPackageName(Collection<Class<?>> classes,String string,StringHelper.Location location){
+		Collection<Class<?>> result = new ArrayList<Class<?>>();
+		for(Class<?> index : classes)
+			if(StringHelper.getInstance().isAtLocation(index.getPackage().getName(), string, location))
+				result.add(index);
+		return result;
 	}
 	
 	public Class<?> getWrapper(Class<?> aClass){
@@ -96,6 +105,14 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		Collection classes = reflections.getSubTypesOf(baseClass);
 		logTrace("sub types of {} in package {} are : {}", baseClass,packageName,classes);
 	    return classes;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Class<?>> getByAnnotation(String packageName,Class<? extends Annotation> annotationClass){
+		Reflections reflections = new Reflections(packageName,new TypeAnnotationsScanner());
+		@SuppressWarnings("rawtypes")
+		Collection classes = reflections.getTypesAnnotatedWith(annotationClass);
+		return classes;
 	}
 	
 	@SuppressWarnings("unchecked")
