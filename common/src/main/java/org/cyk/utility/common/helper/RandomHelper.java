@@ -2,10 +2,12 @@ package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.apache.commons.math3.random.RandomDataGenerator;
 import org.apache.commons.text.CharacterPredicate;
 import org.apache.commons.text.RandomStringGenerator;
 import org.cyk.utility.common.Builder;
@@ -16,6 +18,8 @@ public class RandomHelper extends AbstractHelper implements Serializable {
 	static final long serialVersionUID = 1L;
 	
 	private static RandomHelper INSTANCE;
+	
+	private RandomDataGenerator randomApache = new RandomDataGenerator();
 	
 	public static RandomHelper getInstance() {
 		if(INSTANCE == null)
@@ -55,6 +59,14 @@ public class RandomHelper extends AbstractHelper implements Serializable {
 	
 	public String getElectronicMailAddress(){
 		return String.format(Constant.SimpleMailTransferProtocol.ADDRESS_FORMAT, getAlphabetic(5),getAlphabetic(5),getAlphabetic(5));
+	}
+	
+	public Integer getInteger(Integer minimum,Integer maximum){
+		return randomApache.nextInt(minimum, maximum);
+	}
+	
+	public Date getDate(){
+		return TimeHelper.getInstance().getDate(getInteger(1970, 2016), getInteger(1, 12), getInteger(1, 28));
 	}
 	
 	public static interface Random<OUTPUT> extends Builder.NullableInput<OUTPUT> {
