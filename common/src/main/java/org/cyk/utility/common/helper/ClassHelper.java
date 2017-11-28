@@ -32,9 +32,11 @@ import lombok.Setter;
 
 @Singleton
 public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
+	public static Class<? extends Annotation> ENTITY_ANNOTATION_CLASS = javax.persistence.Entity.class;
+	private static Collection<Class<?>> CLASSES_WITH_ENTITY_ANNOTATION;
+	
 	private static ClassHelper INSTANCE;
 	public static ClassHelper getInstance() {
 		if(INSTANCE == null)
@@ -49,6 +51,24 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public Collection<Class<?>> getAnnotatedWithEntity(){
+		if(CLASSES_WITH_ENTITY_ANNOTATION==null)
+			CLASSES_WITH_ENTITY_ANNOTATION = ClassHelper.getInstance().getByAnnotation("org.cyk", ENTITY_ANNOTATION_CLASS);
+		return CLASSES_WITH_ENTITY_ANNOTATION;
+	}
+	
+	public Collection<Class<?>> getAnnotatedWithEntityAndPackageNameStartsWith(String string){
+		return filterByPackageName(getAnnotatedWithEntity(),string, StringHelper.Location.START);
+	}
+	
+	public Collection<Class<?>> getAnnotatedWithEntityAndPackageNameStartsWith(Package aPackage){
+		return getAnnotatedWithEntityAndPackageNameStartsWith(aPackage.getName());
+	}
+	
+	public Collection<Class<?>> getAnnotatedWithEntityAndPackageNameStartsWith(Class<?> aClass){
+		return getAnnotatedWithEntityAndPackageNameStartsWith(aClass.getPackage());
 	}
 	
 	public Collection<Class<?>> filterByPackageName(Collection<Class<?>> classes,String string,StringHelper.Location location){

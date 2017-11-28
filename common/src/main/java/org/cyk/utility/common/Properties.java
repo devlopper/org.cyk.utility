@@ -2014,6 +2014,67 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getAt() {
+		return get(AT);
+	}
+
+	public Properties setAt(Object value) {
+		set(AT, value);
+		return this;
+	}
+	
+	public Object getBackLabel() {
+		return get(BACK_LABEL);
+	}
+
+	public Properties setBackLabel(Object value) {
+		set(BACK_LABEL, value);
+		return this;
+	}
+	
+	public Object getMy() {
+		return get(MY);
+	}
+
+	public Properties setMy(Object value) {
+		set(MY, value);
+		return this;
+	}
+	
+	public Object getOverlay() {
+		return get(OVERLAY);
+	}
+
+	public Properties setOverlay(Object value) {
+		set(OVERLAY, value);
+		return this;
+	}
+	
+	public Object getTrigger() {
+		return get(TRIGGER);
+	}
+
+	public Properties setTrigger(Object value) {
+		set(TRIGGER, value);
+		return this;
+	}
+	
+	public Object getTriggerEvent() {
+		return get(TRIGGER_EVENT);
+	}
+
+	public Properties setTriggerEvent(Object value) {
+		set(TRIGGER_EVENT, value);
+		return this;
+	}
+	
+	public static final String AT = "AT";
+	public static final String BACK_LABEL = "BACK_LABEL";
+	public static final String MY = "MY";
+	public static final String OVERLAY = "OVERLAY";
+	public static final String TRIGGER = "TRIGGER";
+	public static final String TRIGGER_EVENT = "TRIGGER_EVENT";
+	
 	public static final String THUMBNAIL = "THUMBNAIL";
 	public static final String RENDER_AS_INPUT = "RENDER_AS_INPUT";
 	public static final String MENU_COLUMN = "MENU_COLUMN";

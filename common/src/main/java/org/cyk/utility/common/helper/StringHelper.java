@@ -312,6 +312,10 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return name;
 	}
 	
+	public String getClassIdentifier(Class<?> aClass){
+		return getClassIdentifier(aClass.getSimpleName());
+	}
+	
 	public String getClazz(String identifier,CaseType caseType){
 		String classIdentifier = getClassIdentifier(identifier);
 		String result = new ToStringMapping.Adapter.Default(classIdentifier).setCaseType(caseType).execute();

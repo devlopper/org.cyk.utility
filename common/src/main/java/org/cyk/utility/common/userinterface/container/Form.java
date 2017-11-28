@@ -251,6 +251,8 @@ public class Form extends Container implements Serializable {
 				case CONSULT: consult();break;
 				case LIST: list();break;
 				case PRINT: print();break;
+				case LOGIN: login();break;
+				case LOGOUT: logout();break;
 				}
 			}
 			
@@ -287,6 +289,14 @@ public class Form extends Container implements Serializable {
 			}
 			
 			protected void consult(){
+				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+			}
+			
+			protected void login(){
+				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+			}
+			
+			protected void logout(){
 				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
 			}
 			
@@ -411,6 +421,8 @@ public class Form extends Container implements Serializable {
 		}
 		
 		public Detail add(Object object,String fieldName,Number length,Number width){
+			if(object==null)
+				object = getMaster().getObject();
 			Field field = FieldHelper.getInstance().get(object.getClass(), fieldName);
 			Control control = Boolean.TRUE.equals(getMaster().getEditable()) ? Input.get(this,object, field) : Output.get(this, object, field).__setLabelFromField__();
 			add(control.setLength(length).setWidth(width));

@@ -192,7 +192,9 @@ public interface Constant {
 	/**/
 	
 	public static enum Action {
-	    CREATE
+	    LOGIN
+	    ,LOGOUT
+		,CREATE
 	    ,READ
 	    ,UPDATE
 	    ,DELETE

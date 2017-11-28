@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ArrayHelper;
+import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.StringHelper;
@@ -81,5 +82,18 @@ public class MenuContainer extends Container implements Serializable {
 	public void addNodeActionListMany(Class<?>...classes){
 		if(ArrayHelper.getInstance().isNotEmpty(classes))
 			addNodeActionListMany(Arrays.asList(classes));
+	}
+	
+	public void addNodeActionListManyFromPackage(Package aPackage,String labelStringIdentifier){
+		addNode(labelStringIdentifier).addNodeActionListMany(ClassHelper.getInstance().getAnnotatedWithEntityAndPackageNameStartsWith(aPackage));
+	}
+	
+	public void addNodeActionListManyFromPackage(Class<?> aClass,String labelStringIdentifier){
+		addNodeActionListManyFromPackage(aClass.getPackage(),labelStringIdentifier);
+	}
+	
+	public void addNodeActionListManyFromPackage(Class<?>...classes){
+		for(Class<?> aClass : classes)
+			addNodeActionListManyFromPackage(aClass,StringHelper.getInstance().getClassIdentifier(aClass));
 	}
 }
