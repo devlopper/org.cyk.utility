@@ -91,6 +91,8 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 	public static interface Listener {
 		
 		Object get();
+		String getSession(Object request);
+		String getSession();
 		String getUniformResourceLocator(Object request);
 		String getUniformResourceLocator();
 		Object getParameter(String name,Object request);
@@ -101,6 +103,16 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 			
 			@Override
 			public Object get() {
+				return null;
+			}
+			
+			@Override
+			public String getSession(Object request) {
+				return null;
+			}
+			
+			@Override
+			public String getSession() {
 				return null;
 			}
 			
@@ -126,6 +138,11 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 			
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public String getSession() {
+					return getSession(get());
+				}
 				
 				@Override
 				public Object getParameter(String name) {

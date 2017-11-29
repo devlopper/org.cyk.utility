@@ -44,6 +44,8 @@ import org.cyk.utility.common.userinterface.output.OutputText;
 public class Component extends AbstractBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static ContentType RENDER_AS_CONTENT_TYPE = ContentType.DEFAULT;
+	
 	static {
 		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
 	}
@@ -53,6 +55,7 @@ public class Component extends AbstractBean implements Serializable {
 	protected Object built;
 	protected Component parent;
 	protected CollectionHelper.Instance<Component> children;
+	protected ContentType renderAsContentType = RENDER_AS_CONTENT_TYPE;
 	
 	/**/
 

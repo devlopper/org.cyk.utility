@@ -20,6 +20,7 @@ import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.userinterface.Component;
+import org.cyk.utility.common.userinterface.ContentType;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.Layout;
 import org.cyk.utility.common.userinterface.command.Command;
@@ -305,13 +306,10 @@ public class Form extends Container implements Serializable {
 				return Boolean.TRUE;
 			}
 			
-			@Getter @Setter @Accessors(chain=true)
-			public static class Web extends SubmitCommandActionAdapter implements Serializable{
-				private static final long serialVersionUID = 1L;
-				
-				@Override
-				protected void processOnSuccess() {
-					super.processOnSuccess();				
+			@Override
+			protected void processOnSuccess() {
+				super.processOnSuccess();
+				if(ContentType.HTML.equals(form.getSubmitCommand().getRenderAsContentType())){
 					if(Boolean.TRUE.equals(form.getSubmitCommand().getPropertiesMap().getAjax()))
 						((Window)form.getParent()).getNotificationDialog().getOkCommand().addJavaScriptGoToUniformResourceLocatorOnEvent(Properties.ON_CLICK);
 					else {
@@ -328,27 +326,11 @@ public class Form extends Container implements Serializable {
 								,UniformResourceLocatorHelper.getInstance().stringify(action, object));
 					}	
 				}
-				
 			}
 		}
 	
 		/**/
 	
-		public static class Web extends Master implements Serializable {
-			private static final long serialVersionUID = 1L;
-
-			public Web() {
-				setSubmitCommandActionAdapterClass(SubmitCommandActionAdapter.Web.class);
-			}
-			
-			public Web(Component parent, Object object, Action action) {
-				super(parent, object, action,SubmitCommandActionAdapter.Web.class);
-			}
-			
-			
-			
-		}
-		
 		/**/
 		
 		public static class ClassLocator extends Component.ClassLocator implements Serializable {

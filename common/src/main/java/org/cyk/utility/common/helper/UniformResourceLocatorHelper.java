@@ -517,6 +517,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				public static Map<String,String> DEFAULT_SEQUENCE_REPLACEMENT_MAP = null;
 				public static Class<? extends UniformResourceLocatorHelper.Listener> DEFAULT_UNIFORM_RESOURCE_LOCATOR_LISTENER_CLASS = UniformResourceLocatorHelper.Listener.Adapter.Default.class;
 				public static String IDENTIFIER_UNKNOWN = "unknown";
+				public static String IDENTIFIER_HOME = "home";
 				public static String DEFAULT_CONTEXT;
 				
 				public Default() {
@@ -792,5 +793,11 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			String DATA_SOURCE_USER_SESSION = "usersession";
 			String DATA_SOURCE_DATABASE = "database";
 		}
+	}
+
+	/**/
+	
+	public static enum Identifier{
+		HOME
 	}
 }

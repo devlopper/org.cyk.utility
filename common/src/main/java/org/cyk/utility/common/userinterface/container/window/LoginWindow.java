@@ -1,10 +1,10 @@
 package org.cyk.utility.common.userinterface.container.window;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import javax.validation.constraints.NotNull;
 
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Layout;
@@ -29,8 +29,8 @@ public class LoginWindow extends Window implements Serializable {
 	
 	@Override
 	protected void __setForm__() {
-		actionOnClassInstances = new ArrayList<Object>();
-		actionOnClassInstances.add(new Credentials());
+		action = Constant.Action.LOGIN;
+		actionOnClass = Credentials.class;
 		super.__setForm__();
 	}
 	
@@ -46,12 +46,24 @@ public class LoginWindow extends Window implements Serializable {
 			super.prepare();
 			//controls
 			//inputs
-			setEditable(Boolean.TRUE);
+			//setEditable(Boolean.TRUE);
 			Form.Detail detail = getDetail();
 			detail.getLayout().setType(Layout.Type.ADAPTIVE);
 			detail.add(Credentials.FIELD_USERNAME).addBreak();
 			detail.add(Credentials.FIELD_PASSWORD).addBreak();
+			
+			//commands
+			setSubmitCommandActionAdapterClass(ClassHelper.getInstance().getMapping(SubmitCommandActionAdapter.class));
 			return this;
+		}
+		
+		/**/
+		
+		public static class SubmitCommandActionAdapter extends Form.Master.SubmitCommandActionAdapter implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			
+			
 		}
 		
 	}

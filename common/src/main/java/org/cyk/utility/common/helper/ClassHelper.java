@@ -303,6 +303,10 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return result == null ? Boolean.TRUE.equals(returnClassIfNull) ? aClass : null : result;
 	}
 	
+	public <T> Class<? extends T> getMapping(Class<T> aClass){
+		return getMapping(aClass, Boolean.TRUE);
+	}
+	
 	public void registerIdentifier(Collection<Class<?>> classes){
 		new CollectionHelper.Iterator.Adapter.Default<Class<?>>(classes){
 			private static final long serialVersionUID = 1L;

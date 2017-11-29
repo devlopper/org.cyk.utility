@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
@@ -85,7 +86,7 @@ public class Window extends Container implements Serializable {
 		if(actionOnClassInstances==null){
 			actionOnClassInstances = new ArrayList<>();
 			if(actionOnClass!=null){
-				if(Constant.Action.CREATE.equals(action)){
+				if(ArrayUtils.contains(new Constant.Action[]{Constant.Action.CREATE,Constant.Action.LOGIN}, action)){
 					actionOnClassInstances.add(ClassHelper.getInstance().instanciateOne(actionOnClass));
 				}else{
 					if(CollectionHelper.getInstance().isNotEmpty(actionOnClassInstanceIdentifiers))
@@ -164,7 +165,7 @@ public class Window extends Container implements Serializable {
 	protected Class<? extends Form.Master> getFormMasterClass(){
 		return Form.Master.class;
 	}
-
+	
 	protected DataTable buildDataTable(){
 		@SuppressWarnings("unchecked")
 		Class<DataTable> dataTableClass = (Class<DataTable>) InstanceHelper.getInstance().getIfNotNullElseDefault(getDataTableClass(),DataTable.class);

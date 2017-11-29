@@ -7,4 +7,7 @@ public enum DeviceType {
 	;
 	
 	public static DeviceType DEFAULT = DESKTOP;
+	
+	/**/
+
 }
