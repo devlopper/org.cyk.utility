@@ -24,6 +24,7 @@ import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
 
@@ -34,6 +35,11 @@ import lombok.Setter;
 public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static final Map<Class<?>,Class<?>> MAP = new HashMap<>();
+	static {
+		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
+	}
+	
 	public static Class<? extends Annotation> ENTITY_ANNOTATION_CLASS = javax.persistence.Entity.class;
 	private static Collection<Class<?>> CLASSES_WITH_ENTITY_ANNOTATION;
 	
@@ -44,13 +50,21 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return INSTANCE;
 	}
 	
-	private static final Map<Class<?>,Class<?>> MAP = new HashMap<>();
+	
 	private static final Map<Class<?>,String> IDENTIFIER_MAP = new HashMap<>();
 	
 	@Override
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public Boolean isHierarchy(Class<?> aClass){
+		return instanciateOne(Listener.class).isHierarchy(aClass);
+	}
+	
+	public Boolean isTyped(Class<?> aClass){
+		return instanciateOne(Listener.class).isTyped(aClass);
 	}
 	
 	public Collection<Class<?>> getAnnotatedWithEntity(){
@@ -510,4 +524,39 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		}
 	}
 	
+	public static interface Listener {
+
+		Boolean isHierarchy(Class<?> aClass);
+		Boolean isTyped(Class<?> aClass);
+		
+		public static class Adapter extends AbstractBean implements Listener,Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static class Default extends Listener.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public Boolean isHierarchy(Class<?> aClass) {
+					return FieldHelper.getInstance().get(aClass, "parent")!=null;
+				}
+				
+				@Override
+				public Boolean isTyped(Class<?> aClass) {
+					return FieldHelper.getInstance().get(aClass, "type")!=null;
+				}
+				
+			}
+		
+			@Override
+			public Boolean isHierarchy(Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public Boolean isTyped(Class<?> aClass) {
+				return null;
+			}
+		}
+		
+	}
 }

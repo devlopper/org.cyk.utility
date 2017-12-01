@@ -260,4 +260,15 @@ public interface Constant {
 		
 		
 	}
+
+	/**/
+	
+	public static enum ApplicationType {
+		STAND_ALONE
+		,CLIENT_SERVER
+		;
+		
+		public static ApplicationType DEFAULT = ApplicationType.CLIENT_SERVER;
+	
+	}
 }

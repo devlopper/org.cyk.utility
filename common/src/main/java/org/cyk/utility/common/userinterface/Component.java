@@ -8,12 +8,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -39,6 +33,12 @@ import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.Watermark;
 import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputText;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Component extends AbstractBean implements Serializable {
@@ -67,7 +67,7 @@ public class Component extends AbstractBean implements Serializable {
 	protected Properties instanciateProperties() {
 		return super.instanciateProperties().setIdentifier(RandomHelper.getInstance().getAlphabetic(5)).setRendered(Boolean.TRUE);
 	}
-	
+		
 	public Component addOneChild(Component component){
 		if(children == null)
 			children = instanciateChildrenCollection();

@@ -2,21 +2,26 @@ package org.cyk.utility.common.userinterface.container.window;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
-
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.security.SecurityHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Layout;
 import org.cyk.utility.common.userinterface.container.Form;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 public class LoginWindow extends Window implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected Properties instanciateProperties() {
+		return super.instanciateProperties().setLayoutCardinalPointNorthRendered(Boolean.FALSE)
+				.setLayoutCardinalPointEastRendered(Boolean.FALSE)
+				.setLayoutCardinalPointSouthRendered(Boolean.FALSE)
+				.setLayoutCardinalPointWestRendered(Boolean.FALSE)
+				.setLayoutCardinalPointCenterRendered(Boolean.TRUE);
+	}
+	
 	@Override
 	protected Class<? extends Form.Master> getFormMasterClass() {
 		return ClassHelper.getInstance().getMapping(FormMaster.class, Boolean.TRUE);
@@ -30,7 +35,7 @@ public class LoginWindow extends Window implements Serializable {
 	@Override
 	protected void __setForm__() {
 		action = Constant.Action.LOGIN;
-		actionOnClass = Credentials.class;
+		actionOnClass = SecurityHelper.Credentials.class;
 		super.__setForm__();
 	}
 	
@@ -46,11 +51,10 @@ public class LoginWindow extends Window implements Serializable {
 			super.prepare();
 			//controls
 			//inputs
-			//setEditable(Boolean.TRUE);
 			Form.Detail detail = getDetail();
 			detail.getLayout().setType(Layout.Type.ADAPTIVE);
-			detail.add(Credentials.FIELD_USERNAME).addBreak();
-			detail.add(Credentials.FIELD_PASSWORD).addBreak();
+			detail.add(SecurityHelper.Credentials.FIELD_USERNAME).addBreak();
+			detail.add(SecurityHelper.Credentials.FIELD_PASSWORD).addBreak();
 			
 			//commands
 			setSubmitCommandActionAdapterClass(ClassHelper.getInstance().getMapping(SubmitCommandActionAdapter.class));
@@ -68,15 +72,4 @@ public class LoginWindow extends Window implements Serializable {
 		
 	}
 	
-	
-	@Getter @Setter @Accessors(chain=true)
-	public static class Credentials implements Serializable {
-		private static final long serialVersionUID = 1L;
-		
-		@NotNull private String username;
-		@NotNull private String password;
-		
-		public static final String FIELD_USERNAME = "username";
-		public static final String FIELD_PASSWORD = "password";
-	}
 }

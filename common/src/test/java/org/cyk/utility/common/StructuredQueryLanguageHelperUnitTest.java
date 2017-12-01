@@ -86,6 +86,14 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 		
 	}
 	
+	/**/
+	
+	public void nativeSqlCreateTable(){
+		assertEquals("", "");
+	}
+	
+	/**/
+	
 	public static class ScheduleItem {
 		
 	}

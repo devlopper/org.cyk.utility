@@ -101,7 +101,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	public String stringify(Constant.Action action,Object object,Object...queryKeyValue){
 		Class<?> aClass = object instanceof Class ? (Class<?>)object : object.getClass();
 		//String pathIdentifier = getPathIdentifier(action, aClass);
-		Stringifier stringifier = new Stringifier.Adapter.Default();
+		UniformResourceLocatorHelper.Stringifier stringifier = new UniformResourceLocatorHelper.Stringifier.Adapter.Default();
 		//stringifier.setPathIdentifier(pathIdentifier);
 		stringifier.setProperty(Stringifier.PROPERTY_NAME_ACTION, action).setProperty(Stringifier.PROPERTY_NAME_CLASS, aClass);
 		stringifier.addQueryParameterAction(action);
@@ -173,87 +173,87 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			}
 			
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterAction(Action action) {
+			public UniformResourceLocatorHelper.Stringifier addQueryParameterAction(Action action) {
 				return null;
 			}
 			
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterClass(Class<?> aClass) {
+			public UniformResourceLocatorHelper.Stringifier addQueryParameterClass(Class<?> aClass) {
 				return null;
 			}
 			
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifiable(Object identifiable) {
+			public UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifiable(Object identifiable) {
 				return null;
 			}
 			
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifier(Object identifiable) {
+			public UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifier(Object identifiable) {
 				return null;
 			}
 			
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPathContext(String context) {
+			public UniformResourceLocatorHelper.Stringifier setPathContext(String context) {
 				return null;
 			}
 			
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPathIdentifier(String identifier) {
+			public UniformResourceLocatorHelper.Stringifier setPathIdentifier(String identifier) {
 				return null;
 			}
 			
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addPathTokens(String...tokens) {
+			public UniformResourceLocatorHelper.Stringifier addPathTokens(String...tokens) {
 				return null;
 			}
 			
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryKeyValue(Object...objects) {
+			public UniformResourceLocatorHelper.Stringifier addQueryKeyValue(Object...objects) {
 				return null;
 			}
 			
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setQuerySeparator(String querySeparator) {
+			public UniformResourceLocatorHelper.Stringifier setQuerySeparator(String querySeparator) {
 				return null;
 			}
 			
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setScheme(String scheme) {
+			public UniformResourceLocatorHelper.Stringifier setScheme(String scheme) {
 				return null;
 			}
 
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setHost(String host) {
+			public UniformResourceLocatorHelper.Stringifier setHost(String host) {
 				return null;
 			}
 
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPort(Integer port) {
+			public UniformResourceLocatorHelper.Stringifier setPort(Integer port) {
 				return null;
 			}
 
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPathStringifier(PathStringifier pathStringifier) {
+			public UniformResourceLocatorHelper.Stringifier setPathStringifier(PathStringifier pathStringifier) {
 				return null;
 			}
 
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setQueryStringifier(QueryStringifier queryStringifier) {
+			public UniformResourceLocatorHelper.Stringifier setQueryStringifier(QueryStringifier queryStringifier) {
 				return null;
 			}
 
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setRelative(Boolean relative) {
+			public UniformResourceLocatorHelper.Stringifier setRelative(Boolean relative) {
 				return null;
 			}
 
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPretty(Boolean pretty) {
+			public UniformResourceLocatorHelper.Stringifier setPretty(Boolean pretty) {
 				return null;
 			}
 
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setRequest(Object request) {
+			public UniformResourceLocatorHelper.Stringifier setRequest(Object request) {
 				return null;
 			}
 			
@@ -324,103 +324,103 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				}
 				
 				@Override 
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterAction(Action action) {
+				public UniformResourceLocatorHelper.Stringifier addQueryParameterAction(Action action) {
 					addQueryKeyValue(MapHelper.EntryKey.ACTION,action);
 					return this;
 				}
 				
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterClass(Class<?> aClass) {
+				public UniformResourceLocatorHelper.Stringifier addQueryParameterClass(Class<?> aClass) {
 					addQueryKeyValue(MapHelper.EntryKey.CLAZZ,aClass);
 					return this;
 				}
 				
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifiable(Object identifiable) {
+				public UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifiable(Object identifiable) {
 					addQueryKeyValue(MapHelper.EntryKey.IDENTIFIABLE,identifiable);
 					return this;
 				}
 				
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifier(Object identifiable) {
+				public UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifier(Object identifiable) {
 					addQueryKeyValue(MapHelper.EntryKey.IDENTIFIER,identifiable);
 					return this;
 				}
 				
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPathIdentifier(String identifier) {
+				public UniformResourceLocatorHelper.Stringifier setPathIdentifier(String identifier) {
 					getPathStringifier(Boolean.TRUE).setIdentifier(identifier);
 					return this;
 				}
 				
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPathContext(String context) {
+				public UniformResourceLocatorHelper.Stringifier setPathContext(String context) {
 					getPathStringifier(Boolean.TRUE).setContext(context);
 					return this;
 				}
 				
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addPathTokens(String...tokens) {
+				public UniformResourceLocatorHelper.Stringifier addPathTokens(String...tokens) {
 					getPathStringifier(Boolean.TRUE).addTokens(tokens);
 					return this;
 				}
 				
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier addQueryKeyValue(Object...objects) {
+				public UniformResourceLocatorHelper.Stringifier addQueryKeyValue(Object...objects) {
 					getQueryStringifier(Boolean.TRUE).addKeyValue(objects);
 					return this;
 				}
 				
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setQuerySeparator(String querySeparator) {
+				public UniformResourceLocatorHelper.Stringifier setQuerySeparator(String querySeparator) {
 					this.querySeparator = querySeparator;
 					return this;
 				}
 				
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setScheme(String scheme) {
+				public UniformResourceLocatorHelper.Stringifier setScheme(String scheme) {
 					this.scheme = scheme;
 					return this;
 				}
 
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setHost(String host) {
+				public UniformResourceLocatorHelper.Stringifier setHost(String host) {
 					this.host = host;
 					return this;
 				}
 
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPort(Integer port) {
+				public UniformResourceLocatorHelper.Stringifier setPort(Integer port) {
 					this.port = port;
 					return this;
 				}
 
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPathStringifier(PathStringifier pathStringifier) {
+				public UniformResourceLocatorHelper.Stringifier setPathStringifier(PathStringifier pathStringifier) {
 					this.pathStringifier = pathStringifier;
 					return this;
 				}
 
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setQueryStringifier(QueryStringifier queryStringifier) {
+				public UniformResourceLocatorHelper.Stringifier setQueryStringifier(QueryStringifier queryStringifier) {
 					this.queryStringifier = queryStringifier;
 					return this;
 				}
 
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setRelative(Boolean relative) {
+				public UniformResourceLocatorHelper.Stringifier setRelative(Boolean relative) {
 					this.relative = relative;
 					return this;
 				}
 
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setPretty(Boolean pretty) {
+				public UniformResourceLocatorHelper.Stringifier setPretty(Boolean pretty) {
 					this.pretty = pretty;
 					return this;
 				}
 
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier setRequest(Object request) {
+				public UniformResourceLocatorHelper.Stringifier setRequest(Object request) {
 					this.request = request;
 					return this;
 				}	
@@ -500,7 +500,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			}
 			
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorStringifier() {
+			public UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorStringifier() {
 				return null;
 			}
 			
@@ -596,7 +596,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				}
 				
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorStringifier() {
+				public UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorStringifier() {
 					return (org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier) getProperty(PROPERTY_NAME_PARENT);
 				}
 			
@@ -633,7 +633,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorStringifier() {
+			public UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorStringifier() {
 				return null;
 			}
 			
@@ -659,7 +659,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				}
 				
 				@Override
-				public org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorStringifier() {
+				public UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorStringifier() {
 					return (org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier) getProperty(PROPERTY_NAME_PARENT);
 				}
 				

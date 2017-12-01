@@ -2068,6 +2068,57 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getLayoutCardinalPointNorthRendered() {
+		return get(LAYOUT_CARDINAL_POINT_NORTH_RENDERED);
+	}
+
+	public Properties setLayoutCardinalPointNorthRendered(Object value) {
+		set(LAYOUT_CARDINAL_POINT_NORTH_RENDERED, value);
+		return this;
+	}
+	
+	public Object getLayoutCardinalPointEastRendered() {
+		return get(LAYOUT_CARDINAL_POINT_EAST_RENDERED);
+	}
+
+	public Properties setLayoutCardinalPointEastRendered(Object value) {
+		set(LAYOUT_CARDINAL_POINT_EAST_RENDERED, value);
+		return this;
+	}
+	
+	public Object getLayoutCardinalPointSouthRendered() {
+		return get(LAYOUT_CARDINAL_POINT_SOUTH_RENDERED);
+	}
+
+	public Properties setLayoutCardinalPointSouthRendered(Object value) {
+		set(LAYOUT_CARDINAL_POINT_SOUTH_RENDERED, value);
+		return this;
+	}
+	
+	public Object getLayoutCardinalPointWestRendered() {
+		return get(LAYOUT_CARDINAL_POINT_WEST_RENDERED);
+	}
+
+	public Properties setLayoutCardinalPointWestRendered(Object value) {
+		set(LAYOUT_CARDINAL_POINT_WEST_RENDERED, value);
+		return this;
+	}
+	
+	public Object getLayoutCardinalPointCenterRendered() {
+		return get(LAYOUT_CARDINAL_POINT_CENTER_RENDERED);
+	}
+
+	public Properties setLayoutCardinalPointCenterRendered(Object value) {
+		set(LAYOUT_CARDINAL_POINT_CENTER_RENDERED, value);
+		return this;
+	}
+	
+	public static final String LAYOUT_CARDINAL_POINT_NORTH_RENDERED = "LAYOUT_CARDINAL_POINT_NORTH_RENDERED";
+	public static final String LAYOUT_CARDINAL_POINT_EAST_RENDERED = "LAYOUT_CARDINAL_POINT_EAST_RENDERED";
+	public static final String LAYOUT_CARDINAL_POINT_SOUTH_RENDERED = "LAYOUT_CARDINAL_POINT_SOUTH_RENDERED";
+	public static final String LAYOUT_CARDINAL_POINT_WEST_RENDERED = "LAYOUT_CARDINAL_POINT_WEST_RENDERED";
+	public static final String LAYOUT_CARDINAL_POINT_CENTER_RENDERED = "LAYOUT_CARDINAL_POINT_CENTER_RENDERED";
+	
 	public static final String AT = "AT";
 	public static final String BACK_LABEL = "BACK_LABEL";
 	public static final String MY = "MY";

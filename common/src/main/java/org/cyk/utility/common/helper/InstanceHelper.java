@@ -21,6 +21,7 @@ import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
 import org.cyk.utility.common.helper.FilterHelper.Filter;
 import org.cyk.utility.common.helper.InstanceHelper.Listener.FieldValueGenerator;
+import org.cyk.utility.common.security.SecurityHelper;
 
 import javassist.Modifier;
 import lombok.Getter;
@@ -1040,6 +1041,15 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					if(instance instanceof Enum<?>)
 						return ((Enum<?>)instance).name();
 					return super.getIdentifier(instance);
+				}
+			
+				@Override
+				public Object act(org.cyk.utility.common.Constant.Action action, Object instance) {
+					if(Constant.Action.LOGIN.equals(action))
+						SecurityHelper.getInstance().login((SecurityHelper.Credentials)instance);
+					else if(Constant.Action.LOGOUT.equals(action))
+						SecurityHelper.getInstance().logout();
+					return null;
 				}
 			}
 			

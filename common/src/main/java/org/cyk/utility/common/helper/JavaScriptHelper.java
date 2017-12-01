@@ -162,7 +162,7 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 		
 		public static interface Window extends JavaScriptHelper.Script {
 			
-			UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorStringifier();
+			org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier getUniformResourceLocatorStringifier();
 			Window setUniformResourceLocatorStringifier(UniformResourceLocatorHelper.Stringifier uniformResourceLocatorStringifier);
 			Window setUniformResourceLocatorStringifier(String pathIdentifier,Object[] queryKeyValues);
 			Window setUniformResourceLocatorStringifier(Constant.Action action,Object object);
@@ -211,7 +211,7 @@ public class JavaScriptHelper extends AbstractHelper implements Serializable {
 				protected String identifier;
 				protected Integer leftIndex,topIndex,width,height;
 				protected Map<String,Boolean> showableMap;
-				protected UniformResourceLocatorHelper.Stringifier uniformResourceLocatorStringifier;
+				protected org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier uniformResourceLocatorStringifier;
 				protected String uniformResourceLocator;
 				
 				@Override

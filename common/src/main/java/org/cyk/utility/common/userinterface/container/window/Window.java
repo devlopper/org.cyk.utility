@@ -86,7 +86,7 @@ public class Window extends Container implements Serializable {
 		if(actionOnClassInstances==null){
 			actionOnClassInstances = new ArrayList<>();
 			if(actionOnClass!=null){
-				if(ArrayUtils.contains(new Constant.Action[]{Constant.Action.CREATE,Constant.Action.LOGIN}, action)){
+				if(ArrayUtils.contains(new Constant.Action[]{Constant.Action.CREATE,Constant.Action.LOGIN,Constant.Action.LOGOUT}, action)){
 					actionOnClassInstances.add(ClassHelper.getInstance().instanciateOne(actionOnClass));
 				}else{
 					if(CollectionHelper.getInstance().isNotEmpty(actionOnClassInstanceIdentifiers))

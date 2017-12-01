@@ -5,10 +5,6 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Constant.Action;
@@ -30,6 +26,10 @@ import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputFile;
 import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputText;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Form extends Container implements Serializable {
@@ -454,26 +454,28 @@ public class Form extends Container implements Serializable {
 		
 		@Override
 		public Detail read(){
-			new CollectionHelper.Iterator.Adapter.Default<Component>(children.getElements()){
-				private static final long serialVersionUID = 1L;
-				@Override
-				protected void __executeForEach__(Component component) {
-					((Input<?>)component).read();
-				}
-			}.execute();
+			if(children!=null)
+				new CollectionHelper.Iterator.Adapter.Default<Component>(children.getElements()){
+					private static final long serialVersionUID = 1L;
+					@Override
+					protected void __executeForEach__(Component component) {
+						((Input<?>)component).read();
+					}
+				}.execute();
 			return this;
 		}
 		
 		@Override
 		public Detail write(){
-			new CollectionHelper.Iterator.Adapter.Default<Component>(children.getElements()){
-				private static final long serialVersionUID = 1L;
-				@Override
-				protected void __executeForEach__(Component component) {
-					if(component instanceof Input<?>)
-						((Input<?>)component).write();
-				}
-			}.execute();
+			if(children!=null)
+				new CollectionHelper.Iterator.Adapter.Default<Component>(children.getElements()){
+					private static final long serialVersionUID = 1L;
+					@Override
+					protected void __executeForEach__(Component component) {
+						if(component instanceof Input<?>)
+							((Input<?>)component).write();
+					}
+				}.execute();
 			return this;
 		}
 		
