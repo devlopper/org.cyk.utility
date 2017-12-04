@@ -564,7 +564,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				
 				@Override
 				public Boolean isTyped(Class<?> aClass) {
-					String typeFieldName = getHierarchyFieldName(aClass);
+					String typeFieldName = getTypeFieldName(aClass);
 					return StringHelper.getInstance().isBlank(typeFieldName) ? Boolean.FALSE : FieldHelper.getInstance().get(aClass, typeFieldName)!=null;
 				}
 				

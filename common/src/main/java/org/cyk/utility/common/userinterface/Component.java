@@ -29,6 +29,7 @@ import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
 import org.cyk.utility.common.userinterface.container.Form.Master;
 import org.cyk.utility.common.userinterface.container.window.Window;
+import org.cyk.utility.common.userinterface.hierarchy.Hierarchy;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.Watermark;
 import org.cyk.utility.common.userinterface.output.Output;
@@ -51,6 +52,9 @@ public class Component extends AbstractBean implements Serializable {
 	}
 	
 	private static final Set<ComponentClass> CLASSES = new HashSet<>();
+	
+	//protected Constant.Action action;
+	//protected Class<?> actionOnClass;
 	
 	protected Object built;
 	protected Component parent;
@@ -503,6 +507,9 @@ public class Component extends AbstractBean implements Serializable {
 		}else if(component instanceof DataTable){
 			DataTable dataTable = (DataTable) component;
 			dataTable.setActionOnClass(((Window)parent).getActionOnClass());
+		}else if(component instanceof Hierarchy){
+			Hierarchy hierarchy = (Hierarchy) component;
+			hierarchy.setActionOnClass(((Window)parent).getActionOnClass());
 		}
 		/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE, MethodHelper.Method.Parameter
 				.buildArray(Component.class,component));

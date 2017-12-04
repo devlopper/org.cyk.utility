@@ -111,23 +111,19 @@ public abstract class AbstractHierarchyNodesContainer<NODE extends AbstractHiera
 	
 	/**/
 	
-	@SuppressWarnings("unchecked")
-	public NODE addColumn(String labelStringIdentifier,String fieldName,DataTable.Column.CellValueSource cellValueSource){
-		DataTable.Columns.add(this, labelStringIdentifier, fieldName,cellValueSource);
-		return (NODE) this;
+	public DataTable.Column addColumn(String labelStringIdentifier,String fieldName,DataTable.Column.CellValueSource cellValueSource){
+		return DataTable.Columns.add(this, labelStringIdentifier, fieldName,cellValueSource);
 	}
 	
-	public NODE addColumn(String labelStringIdentifier,String fieldName){
+	public DataTable.Column addColumn(String labelStringIdentifier,String fieldName){
 		return addColumn(labelStringIdentifier, fieldName, DataTable.Column.CellValueSource.DEFAULT);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public NODE addColumnByFieldName(String fieldName,DataTable.Column.CellValueSource cellValueSource){
-		DataTable.Columns.addByFieldName(this, fieldName,cellValueSource);
-		return (NODE) this;
+	public DataTable.Column addColumnByFieldName(String fieldName,DataTable.Column.CellValueSource cellValueSource){
+		return DataTable.Columns.addByFieldName(this, fieldName,cellValueSource);
 	}
 	
-	public NODE addColumnByFieldName(String fieldName){
+	public DataTable.Column addColumnByFieldName(String fieldName){
 		return addColumnByFieldName(fieldName, DataTable.Column.CellValueSource.DEFAULT);
 	}
 	

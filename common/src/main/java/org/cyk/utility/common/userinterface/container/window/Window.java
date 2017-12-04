@@ -24,6 +24,7 @@ import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.container.Container;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Master;
+import org.cyk.utility.common.userinterface.hierarchy.Hierarchy;
 import org.cyk.utility.common.userinterface.panel.ConfirmationDialog;
 import org.cyk.utility.common.userinterface.panel.NotificationDialog;
 
@@ -51,6 +52,7 @@ public class Window extends Container implements Serializable {
 	
 	protected Form.Master form;
 	protected DataTable dataTable;
+	protected Hierarchy hierarchy;
 	
 	/**/
 	
@@ -78,6 +80,9 @@ public class Window extends Container implements Serializable {
 		
 		if(Boolean.TRUE.equals(getIsAutomaticallySetDataTable()))
 			__setDataTable__();
+		
+		if(Boolean.TRUE.equals(getIsAutomaticallySetHierarchy()))
+			__setHierarchy__();
 		
 		logTrace("Properties={} , Parameters : Action={} , ActionOnClass={} , ActionOnClassInstanceIdentifiers={}",getPropertiesMap(), action,actionOnClass,actionOnClassInstanceIdentifiers);
 	}
@@ -109,12 +114,20 @@ public class Window extends Container implements Serializable {
 		return Boolean.FALSE;
 	}
 	
+	protected Boolean getIsAutomaticallySetHierarchy(){
+		return Boolean.FALSE;
+	}
+	
 	protected void __setForm__(){
 		form = buildForm();
 	}
 	
 	protected void __setDataTable__(){
 		dataTable = buildDataTable();
+	}
+	
+	protected void __setHierarchy__(){
+		hierarchy = buildHierarchy();
 	}
 	
 	protected Object getParameter(String name) {
@@ -176,6 +189,18 @@ public class Window extends Container implements Serializable {
 	
 	protected Class<? extends DataTable> getDataTableClass(){
 		return DataTable.class;
+	}
+	
+	protected Hierarchy buildHierarchy(){
+		@SuppressWarnings("unchecked")
+		Class<Hierarchy> hierarchyClass = (Class<Hierarchy>) InstanceHelper.getInstance().getIfNotNullElseDefault(getHierarchyClass(),Hierarchy.class);
+		Hierarchy hierarchy = Component.get(this,hierarchyClass,Hierarchy.class);
+		hierarchy.build();
+		return hierarchy;
+	}
+	
+	protected Class<? extends Hierarchy> getHierarchyClass(){
+		return Hierarchy.class;
 	}
 	
 	/**/

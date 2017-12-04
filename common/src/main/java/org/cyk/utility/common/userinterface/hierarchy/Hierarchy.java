@@ -3,10 +3,18 @@ package org.cyk.utility.common.userinterface.hierarchy;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
+import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.userinterface.Component;
+import org.cyk.utility.common.userinterface.collection.DataTable;
+import org.cyk.utility.common.userinterface.collection.DataTable.Columns;
+import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueSource;
+import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueType;
+import org.cyk.utility.common.userinterface.command.Menu;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,8 +29,45 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 	/**/
 	
 	private RenderType renderType = RenderType.DEFAULT;
+	private Class<?> actionOnClass;
 	
 	/**/
+	
+	@Override
+	public Hierarchy build() {
+		Columns columns = (Columns) getPropertiesMap().getColumns();
+		if(columns!=null){
+			CollectionHelper.getInstance().sort((Collection<?>) columns.getPropertiesMap().getValue());
+		}
+		return (Hierarchy) super.build();
+	}
+	
+	@Override
+	public Hierarchy prepare() {
+		super.prepare();
+		Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
+		getPropertiesMap().setMainMenu(menu);
+		addOneChild(menu);
+		if(this.actionOnClass!=null){
+			menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, this.actionOnClass);
+		}
+		addColumn("order.number", FIELD___ORDER_NUMBER__,DataTable.Column.CellValueSource.ROW);
+		__prepare__();
+		addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(CellValueType.MENU).set__orderNumber__(Long.MAX_VALUE);
+		
+		load();//can be trigger by callback to enabled fast rendering of table structure
+		
+		return this;
+	}
+	
+	protected void __prepare__(){}
+	
+	@Override
+	public Component load() {
+		if(actionOnClass!=null)
+			loadNodes(InstanceHelper.getInstance().get(actionOnClass));
+		return this;
+	}
 	
 	public Hierarchy loadNodes(Collection<?> collection){
 		loadNodes(null,null, collection);
@@ -37,6 +82,7 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 	
 	protected Hierarchy loadNodes(HierarchyNode currentNode,Object parent,Collection<?> collection){
 		Collection<?> children = InstanceHelper.getInstance().getByParent(collection, parent);
+		Integer index = 0;
 		if(CollectionHelper.getInstance().isNotEmpty(children))
 			for(Object child : children){
 				//Row row = new Row()._setObject(object);
@@ -48,6 +94,7 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 				HierarchyNode node = instanciateNode();
 				node.getPropertiesMap().setValue(child);
 				node.setLabelFromIdentifier((String)InstanceHelper.getInstance().getIdentifier(child));
+				node.set__orderNumber__(NumberHelper.getInstance().get(Long.class,++index,0l));
 				if(currentNode==null)
 					addNode(node);
 				else
@@ -162,7 +209,8 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 							new CollectionHelper.Iterator.Adapter.Default<Component>(hierarchy.getChildren().getElements()){
 								private static final long serialVersionUID = 1L;
 								protected void __executeForEach__(Component component) {
-									addHierarchyNode(instance,(HierarchyNode) component,instance);
+									if(component instanceof HierarchyNode)
+										addHierarchyNode(instance,(HierarchyNode) component,instance);
 								}
 								
 							}.execute();
@@ -205,7 +253,8 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 							new CollectionHelper.Iterator.Adapter.Default<Component>(hierarchyNode.getChildren().getElements()){
 								private static final long serialVersionUID = 1L;
 								protected void __executeForEach__(Component component) {
-									addHierarchyNode(hierarchy,(HierarchyNode) component,node);
+									if(component instanceof HierarchyNode)
+										addHierarchyNode(hierarchy,(HierarchyNode) component,node);
 								}
 								
 							}.execute();
@@ -213,5 +262,21 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 				}
 			}
 		}
+	}
+
+	/**/
+	
+	public static class ClassLocator extends Component.ClassLocator implements Serializable {
+
+		private static final long serialVersionUID = -3187769614985951029L;
+
+		public ClassLocator(String action) {
+			super(Hierarchy.class,action);
+		}
+		
+		public ClassLocator(Constant.Action action) {
+			super(Hierarchy.class,action);
+		}
+		
 	}
 }
