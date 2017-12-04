@@ -2113,6 +2113,229 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getFilterBy() {
+		return get(FILTER_BY);
+	}
+
+	public Properties setFilterBy(Object value) {
+		set(FILTER_BY, value);
+		return this;
+	}
+	
+	public Object getShowUnselectableCheckbox() {
+		return get(SHOW_UNSELECTABLE_CHECKBOX);
+	}
+
+	public Properties setShowUnselectableCheckbox(Object value) {
+		set(SHOW_UNSELECTABLE_CHECKBOX, value);
+		return this;
+	}
+	
+	public Object getSkipChildren() {
+		return get(SKIP_CHILDREN);
+	}
+
+	public Properties setSkipChildren(Object value) {
+		set(SKIP_CHILDREN, value);
+		return this;
+	}
+	
+	public Object getDropRestrict() {
+		return get(DROP_RESTRICT);
+	}
+
+	public Properties setDropRestrict(Object value) {
+		set(DROP_RESTRICT, value);
+		return this;
+	}
+	
+	public Object getDragMode() {
+		return get(DRAG_MODE);
+	}
+
+	public Properties setDragMode(Object value) {
+		set(DRAG_MODE, value);
+		return this;
+	}
+	
+	public Object getDragDropScope() {
+		return get(DRAG_DROP_SCOPE);
+	}
+
+	public Properties setDragDropScope(Object value) {
+		set(DRAG_DROP_SCOPE, value);
+		return this;
+	}
+	
+	public Object getDroppable() {
+		return get(DROPPABLE);
+	}
+
+	public Properties setDroppable(Object value) {
+		set(DROPPABLE, value);
+		return this;
+	}
+	
+	public Object getPropagateSelectionUp() {
+		return get(PROPAGATE_SELECTION_UP);
+	}
+
+	public Properties setPropagateSelectionUp(Object value) {
+		set(PROPAGATE_SELECTION_UP, value);
+		return this;
+	}
+	
+	public Object getPropagateSelectionDown() {
+		return get(PROPAGATE_SELECTION_DOWN);
+	}
+
+	public Properties setPropagateSelectionDown(Object value) {
+		set(PROPAGATE_SELECTION_DOWN, value);
+		return this;
+	}
+	
+	public Object getOrientation() {
+		return get(ORIENTATION);
+	}
+
+	public Properties setOrientation(Object value) {
+		set(ORIENTATION, value);
+		return this;
+	}
+	
+	public Object getAnimate() {
+		return get(ANIMATE);
+	}
+
+	public Properties setAnimate(Object value) {
+		set(ANIMATE, value);
+		return this;
+	}
+	
+	public Object getDataKey() {
+		return get(DATA_KEY);
+	}
+
+	public Properties setDataKey(Object value) {
+		set(DATA_KEY, value);
+		return this;
+	}
+	
+	public Object getHighlight() {
+		return get(HIGHLIGHT);
+	}
+
+	public Properties setHighlight(Object value) {
+		set(HIGHLIGHT, value);
+		return this;
+	}
+	
+	public Object getSelectionMode() {
+		return get(SELECTION_MODE);
+	}
+
+	public Properties setSelectionMode(Object value) {
+		set(SELECTION_MODE, value);
+		return this;
+	}
+	
+	public Object getSelection() {
+		return get(SELECTION);
+	}
+
+	public Properties setSelection(Object value) {
+		set(SELECTION, value);
+		return this;
+	}
+	
+	public Object getOnNodeClick() {
+		return get(ON_NODE_CLICK);
+	}
+
+	public Properties setOnNodeClick(Object value) {
+		set(ON_NODE_CLICK, value);
+		return this;
+	}
+	
+	public Object getArialLabel() {
+		return get(ARIA_LABEL);
+	}
+
+	public Properties setArialLabel(Object value) {
+		set(ARIA_LABEL, value);
+		return this;
+	}
+	
+	public Object getCollapsedIcon() {
+		return get(COLLAPSED_ICON);
+	}
+
+	public Properties setCollapsedIcon(Object value) {
+		set(COLLAPSED_ICON, value);
+		return this;
+	}
+	
+	public Object getExpandedIcon() {
+		return get(EXPANDED_ICON);
+	}
+
+	public Properties setExpandedIcon(Object value) {
+		set(EXPANDED_ICON, value);
+		return this;
+	}
+	
+	public Object getData() {
+		return get(DATA);
+	}
+
+	public Properties setData(Object value) {
+		set(DATA, value);
+		return this;
+	}
+	
+	public Object getRow() {
+		return get(ROW);
+	}
+
+	public Properties setRow(Object value) {
+		set(ROW, value);
+		return this;
+	}
+	
+	public Object getColumn() {
+		return get(COLUMN);
+	}
+
+	public Properties setColumn(Object value) {
+		set(COLUMN, value);
+		return this;
+	}
+	
+	public static final String DATA = "DATA";
+	public static final String ROW = "ROW";
+	public static final String COLUMN = "COLUMN";
+	
+	public static final String ARIA_LABEL = "ARIA_LABEL";
+	public static final String COLLAPSED_ICON = "COLLAPSED_ICON";
+	public static final String EXPANDED_ICON = "EXPANDED_ICON";
+	
+	public static final String ON_NODE_CLICK = "ON_NODE_CLICK";
+	public static final String SELECTION = "SELECTION";
+	public static final String SELECTION_MODE = "SELECTION_MODE";
+	public static final String HIGHLIGHT = "HIGHLIGHT";
+	public static final String DATA_KEY = "DATA_KEY";
+	public static final String ANIMATE = "ANIMATE";
+	public static final String ORIENTATION = "ORIENTATION";
+	public static final String PROPAGATE_SELECTION_DOWN = "PROPAGATE_SELECTION_DOWN";
+	public static final String PROPAGATE_SELECTION_UP = "PROPAGATE_SELECTION_UP";
+	public static final String DROPPABLE = "DROPPABLE";
+	public static final String DRAG_DROP_SCOPE = "DRAG_DROP_SCOPE";
+	public static final String DRAG_MODE = "DRAG_MODE";
+	public static final String DROP_RESTRICT = "DROP_RESTRICT";
+	public static final String SKIP_CHILDREN = "SKIP_CHILDREN";
+	public static final String SHOW_UNSELECTABLE_CHECKBOX = "SHOW_UNSELECTABLE_CHECKBOX";
+	public static final String FILTER_BY = "FILTER_BY";
+	
 	public static final String LAYOUT_CARDINAL_POINT_NORTH_RENDERED = "LAYOUT_CARDINAL_POINT_NORTH_RENDERED";
 	public static final String LAYOUT_CARDINAL_POINT_EAST_RENDERED = "LAYOUT_CARDINAL_POINT_EAST_RENDERED";
 	public static final String LAYOUT_CARDINAL_POINT_SOUTH_RENDERED = "LAYOUT_CARDINAL_POINT_SOUTH_RENDERED";

@@ -67,6 +67,14 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return instanciateOne(Listener.class).isTyped(aClass);
 	}
 	
+	public String getHierarchyFieldName(Class<?> aClass) {
+		return instanciateOne(Listener.class).getHierarchyFieldName(aClass);
+	}
+
+	public String getTypeFieldName(Class<?> aClass) {
+		return instanciateOne(Listener.class).getTypeFieldName(aClass);
+	}
+	
 	public Collection<Class<?>> getAnnotatedWithEntity(){
 		if(CLASSES_WITH_ENTITY_ANNOTATION==null)
 			CLASSES_WITH_ENTITY_ANNOTATION = ClassHelper.getInstance().getByAnnotation("org.cyk", ENTITY_ANNOTATION_CLASS);
@@ -526,7 +534,10 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	
 	public static interface Listener {
 
+		String getHierarchyFieldName(Class<?> aClass);
 		Boolean isHierarchy(Class<?> aClass);
+		
+		String getTypeFieldName(Class<?> aClass);
 		Boolean isTyped(Class<?> aClass);
 		
 		public static class Adapter extends AbstractBean implements Listener,Serializable {
@@ -536,14 +547,27 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				private static final long serialVersionUID = 1L;
 				
 				@Override
+				public String getTypeFieldName(Class<?> aClass) {
+					return "type";
+				}
+				
+				@Override
+				public String getHierarchyFieldName(Class<?> aClass) {
+					return "parent";
+				}
+				
+				@Override
 				public Boolean isHierarchy(Class<?> aClass) {
-					return FieldHelper.getInstance().get(aClass, "parent")!=null;
+					String hierarchyFieldName = getHierarchyFieldName(aClass);
+					return StringHelper.getInstance().isBlank(hierarchyFieldName) ? Boolean.FALSE : FieldHelper.getInstance().get(aClass, hierarchyFieldName)!=null;
 				}
 				
 				@Override
 				public Boolean isTyped(Class<?> aClass) {
-					return FieldHelper.getInstance().get(aClass, "type")!=null;
+					String typeFieldName = getHierarchyFieldName(aClass);
+					return StringHelper.getInstance().isBlank(typeFieldName) ? Boolean.FALSE : FieldHelper.getInstance().get(aClass, typeFieldName)!=null;
 				}
+				
 				
 			}
 		
@@ -554,6 +578,16 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 			
 			@Override
 			public Boolean isTyped(Class<?> aClass) {
+				return null;
+			}
+		
+			@Override
+			public String getHierarchyFieldName(Class<?> aClass) {
+				return null;
+			}
+		
+			@Override
+			public String getTypeFieldName(Class<?> aClass) {
 				return null;
 			}
 		}

@@ -89,7 +89,19 @@ public class Component extends AbstractBean implements Serializable {
 		return this;
 	}
 	
+	/**
+	 * prepare structure of the data
+	 * @return
+	 */
 	public Component prepare(){
+		return this;
+	}
+	
+	/**
+	 * load data in the structure
+	 * @return
+	 */
+	public Component load(){
 		return this;
 	}
 	
@@ -99,6 +111,10 @@ public class Component extends AbstractBean implements Serializable {
 		return collection;
 	}
 	
+	/**
+	 * build the target and set the built property
+	 * @return
+	 */
 	public Component build(){
 		if(children!=null)
 			new CollectionHelper.Iterator.Adapter.Default<Component>(children.getElements()){

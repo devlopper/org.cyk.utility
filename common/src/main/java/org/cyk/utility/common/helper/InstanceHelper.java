@@ -48,6 +48,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		super.initialisation();
 	}
 	
+	public Collection<?> getByParent(Collection<?> collection, Object parent) {
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getByParent(parent,collection);
+	}
+	
 	public <T> Collection<T> get(Class<T> aClass){
 		return ClassHelper.getInstance().instanciateOne(Listener.class).get(aClass);
 	}
@@ -907,6 +911,15 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		
 		Object act(Constant.Action action,Object instance);
 		
+		Boolean isHierarchy(Object instance);
+		Boolean isTyped(Object instance);
+		
+		Object getParent(Object instance);
+		Object getType(Object instance);
+		
+		Collection<?> getWhereParentIsNull(Collection<?> collection);
+		Collection<?> getByParent(Object parent,Collection<?> collection);
+		
 		/**/
 		
 		public static class Adapter extends AbstractHelper.Listener.Adapter.Default implements Listener,Serializable {
@@ -974,6 +987,36 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			
 			@Override
 			public <T> T getByIdentifier(Class<T> aClass, Object master) {
+				return null;
+			}
+			
+			@Override
+			public Object getParent(Object instance) {
+				return null;
+			}
+			
+			@Override
+			public Collection<?> getByParent(Object parent, Collection<?> collection) {
+				return null;
+			}
+			
+			@Override
+			public Collection<?> getWhereParentIsNull(Collection<?> collection) {
+				return null;
+			}
+			
+			@Override
+			public Object getType(Object instance) {
+				return null;
+			}
+			
+			@Override
+			public Boolean isHierarchy(Object instance) {
+				return null;
+			}
+			
+			@Override
+			public Boolean isTyped(Object instance) {
 				return null;
 			}
 			
@@ -1050,6 +1093,40 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 					else if(Constant.Action.LOGOUT.equals(action))
 						SecurityHelper.getInstance().logout();
 					return null;
+				}
+			
+				@Override
+				public Boolean isHierarchy(Object instance) {
+					return instance!=null && ClassHelper.getInstance().isHierarchy(instance.getClass());
+				}
+				
+				@Override
+				public Boolean isTyped(Object instance) {
+					return instance!=null && ClassHelper.getInstance().isTyped(instance.getClass());
+				}
+				
+				@Override
+				public Collection<?> getByParent(Object parent, Collection<?> collection) {
+					Collection<Object> result = null;
+					if(CollectionHelper.getInstance().isNotEmpty(collection)){
+						result = new ArrayList<Object>();
+						for(Object object : collection)
+							if(getParent(object) == parent)
+								result.add(object);
+					}
+					return result;
+				}
+				
+				@Override
+				public Collection<?> getWhereParentIsNull(Collection<?> collection) {
+					return getByParent(null, collection);
+				}
+				
+				@Override
+				public Object getParent(Object instance) {
+					if(instance!=null && Boolean.TRUE.equals(isHierarchy(instance)))
+						return FieldHelper.getInstance().read(instance, ClassHelper.getInstance().getHierarchyFieldName(instance.getClass()));
+					return super.getParent(instance);
 				}
 			}
 			
