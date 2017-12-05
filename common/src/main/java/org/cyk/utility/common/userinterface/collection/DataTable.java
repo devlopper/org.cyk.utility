@@ -1,6 +1,7 @@
 package org.cyk.utility.common.userinterface.collection;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import lombok.Getter;
@@ -256,6 +257,23 @@ public class DataTable extends Component.Visible implements Serializable {
 			menu.addNode("update")._setPropertyUrl(Constant.Action.UPDATE,object);
 			menu.addNode("delete")._setPropertyUrl(Constant.Action.DELETE,object);
 			return this;
+		}
+		
+		/**/
+		
+		public static Collection<Row> instanciateMany(Collection<?> collection){
+			Collection<Row> rows = new ArrayList<>();
+			if(CollectionHelper.getInstance().isNotEmpty(collection))
+				for(Object object : collection){
+					Row row = new Row()._setObject(object);
+					rows.add(row);
+					row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows),0l));
+				}
+			/*
+			if(getPropertiesMap().getValue()==null && CollectionHelper.getInstance().isNotEmpty(rows))
+				getPropertiesMap().setValue(rows.getElements());
+			*/
+			return rows;
 		}
 	}
 	

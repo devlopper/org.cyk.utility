@@ -2311,6 +2311,37 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getRowsPerPageLabel() {
+		return get(ROWS_PER_PAGE_LABEL);
+	}
+
+	public Properties setRowsPerPageLabel(Object value) {
+		set(ROWS_PER_PAGE_LABEL, value);
+		return this;
+	}
+	
+	public Object getRowsPerPageTemplate() {
+		return get(ROWS_PER_PAGE_TEMPLATE);
+	}
+
+	public Properties setRowsPerPageTemplate(Object value) {
+		set(ROWS_PER_PAGE_TEMPLATE, value);
+		return this;
+	}
+	
+	public Object getFirst() {
+		return get(FIRST);
+	}
+
+	public Properties setFirst(Object value) {
+		set(FIRST, value);
+		return this;
+	}
+	
+	public static final String FIRST = "FIRST";
+	public static final String ROWS_PER_PAGE_LABEL = "ROWS_PER_PAGE_LABEL";
+	public static final String ROWS_PER_PAGE_TEMPLATE = "ROWS_PER_PAGE_TEMPLATE";
+	
 	public static final String DATA = "DATA";
 	public static final String ROW = "ROW";
 	public static final String COLUMN = "COLUMN";

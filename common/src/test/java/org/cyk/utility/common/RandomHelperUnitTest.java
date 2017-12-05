@@ -42,4 +42,14 @@ public class RandomHelperUnitTest extends AbstractUnitTest {
 		assertEquals(Boolean.TRUE, ValidationHelper.getInstance().isElectronicMailAddress(value));	
 	}
 	
+	@Test
+	public void getStringCollection(){
+		assertNotNull(RandomHelper.getInstance().get(RandomHelper.StringCollection.FIRST_NAME));
+		RandomHelper.Person person = RandomHelper.getInstance().getPerson(Boolean.TRUE);
+		assertNotNull(person);
+		assertNotNull(person.getFirstname());
+		assertNotNull(person.getLastname());
+		assertNotNull(person.getHeadOnlyPhoto());
+	}
+	
 }

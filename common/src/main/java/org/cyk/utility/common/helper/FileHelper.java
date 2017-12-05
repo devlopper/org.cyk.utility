@@ -2,6 +2,7 @@ package org.cyk.utility.common.helper;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URLConnection;
@@ -9,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.inject.Singleton;
@@ -130,6 +132,31 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 		return get(null, fileName);
 	}
 	
+	public List<String> readLines(String fileName){
+		try {
+			return IOUtils.readLines(getClass().getResourceAsStream(fileName));
+		} catch (IOException e) {
+			logThrowable(e);
+			return null;
+		}
+	}
+	
+	public java.io.File createTemporary(byte[] bytes){
+		java.io.File destination = null;
+		try {
+			destination = java.io.File.createTempFile(RandomHelper.getInstance().getAlphabetic(5), System.currentTimeMillis()+Constant.EMPTY_STRING);
+			if(destination!=null && destination.exists()){
+				destination.deleteOnExit();
+				IOUtils.write(bytes, new FileOutputStream(destination));
+			}
+			else
+				logError("Temporary file cannot be created.");
+		} catch (IOException e) {
+			logThrowable(e);
+		}
+		return destination;
+	}
+	
 	public static Listener getListener(){
 		return ClassHelper.getInstance().instanciateOne(Listener.class);
 	}
@@ -220,6 +247,8 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 				tokens.add("extension = "+extension);
 			if(StringHelper.getInstance().isNotBlank(mime))
 				tokens.add("mime = "+mime);
+			if(bytes!=null)
+				tokens.add("bytes = "+bytes.length);
 			return CollectionHelper.getInstance().isEmpty(tokens) ? super.toString() : StringHelper.getInstance().concatenate(tokens, Constant.CHARACTER_COMA);
 		}
 	
