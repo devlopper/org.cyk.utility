@@ -4,23 +4,24 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
+import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueSource;
-import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueType;
 import org.cyk.utility.common.userinterface.command.Menu;
+import org.cyk.utility.common.userinterface.output.Output;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class DataTable extends Component.Visible implements Serializable {
@@ -31,7 +32,11 @@ public class DataTable extends Component.Visible implements Serializable {
 	}
 	
 	private Class<?> actionOnClass;
-	private CollectionHelper.Instance<Row> rows = new CollectionHelper.Instance<Row>();
+	//private CollectionHelper.Instance<Row> rows = new CollectionHelper.Instance<Row>();
+	
+	private Boolean onPrepareAddMenu;
+	private Boolean onPrepareAddColumnOrderNumber;
+	private Boolean onPrepareAddColumnAction;
 	
 	/**/
 	
@@ -55,18 +60,24 @@ public class DataTable extends Component.Visible implements Serializable {
 	@Override
 	public DataTable prepare() {
 		super.prepare();
-		Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
-		getPropertiesMap().setMainMenu(menu);
-		addOneChild(menu);
-		if(this.actionOnClass!=null){
-			menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, this.actionOnClass);
+		if(Boolean.TRUE.equals(onPrepareAddMenu)){
+			Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
+			getPropertiesMap().setMainMenu(menu);
+			addOneChild(menu);
+			if(this.actionOnClass!=null){
+				menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, this.actionOnClass);
+			}	
 		}
-		addColumn("order.number", FIELD___ORDER_NUMBER__).setCellValueSource(CellValueSource.ROW);
+		if(Boolean.TRUE.equals(onPrepareAddColumnOrderNumber)){
+			addColumn("order.number", FIELD___ORDER_NUMBER__).setCellValueSource(CellValueSource.ROW).set__orderNumber__(Long.MIN_VALUE);	
+		}
 		__prepare__();
-		addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(CellValueType.MENU).set__orderNumber__(Long.MAX_VALUE);
-		
-		loadRows();//can be trigger by callback to enabled fast rendering of table structure
-		
+		if(Boolean.TRUE.equals(onPrepareAddColumnAction)){
+			addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(Cell.ValueType.MENU).set__orderNumber__(Long.MAX_VALUE);	
+		}
+		if(Boolean.TRUE.equals(onPrepareCallLoad)){
+			load(); //can be trigger by callback to enabled fast rendering of table structure	
+		}
 		return this;
 	}
 	
@@ -90,16 +101,25 @@ public class DataTable extends Component.Visible implements Serializable {
 	}
 	
 	public DataTable addManyRow(Collection<?> collection){
-		if(CollectionHelper.getInstance().isNotEmpty(collection))
-			for(Object object : collection){
+		if(CollectionHelper.getInstance().isNotEmpty(collection)){
+			@SuppressWarnings("unchecked")
+			Collection<Row> rows = (Collection<Row>) getPropertiesMap().getValue();
+			rows = Row.instanciateMany(collection,this, rows);
+			//if(rows == null)
+			//	rows = new ArrayList<>();
+			/*for(Object object : collection){
 				Row row = new Row()._setObject(object);
 				//row.getPropertiesMap().setValue(object);
-				rows.addOne(row);
-				row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements()),0l));
+				//rows.addOne(row);
+				rows.add(row);
+				//row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements()),0l));
+				row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows),0l));
 				addOneChild(row);
 			}
-		if(getPropertiesMap().getValue()==null && CollectionHelper.getInstance().isNotEmpty(rows))
-			getPropertiesMap().setValue(rows.getElements());
+			*/
+			if(getPropertiesMap().getValue()==null && CollectionHelper.getInstance().isNotEmpty(rows))
+				getPropertiesMap().setValue(rows);
+		}
 		return this;
 	}
 	
@@ -109,9 +129,19 @@ public class DataTable extends Component.Visible implements Serializable {
 		return this;
 	}
 	
-	public void loadRows(){
+	@Override
+	public Component load() {
+		super.load();
 		if(actionOnClass!=null)
 			addManyRow(InstanceHelper.getInstance().get(actionOnClass));
+		return this;
+	}
+	
+	public Column getColumn(String fieldName){
+		Columns columns = (Columns)getPropertiesMap().getColumns();
+		if(columns!=null)
+			return columns.getColumn(fieldName);
+		return null;
 	}
 	
 	/**/
@@ -123,10 +153,10 @@ public class DataTable extends Component.Visible implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		public static enum CellValueSource {ROW_PROPERTIES_MAP,ROW_PROPERTY_VALUE,ROW; public static CellValueSource DEFAULT = CellValueSource.ROW_PROPERTY_VALUE;}
-		public static enum CellValueType {TEXT,MENU,FILE,IMAGE; public static CellValueType DEFAULT = CellValueType.TEXT;}
+		//public static enum CellValueType {TEXT,MENU,FILE,IMAGE; public static CellValueType DEFAULT = CellValueType.TEXT;}
 		
 		private CellValueSource cellValueSource = CellValueSource.DEFAULT;
-		private CellValueType cellValueType = CellValueType.DEFAULT;
+		private Cell.ValueType cellValueType;
 		
 		/**/
 		
@@ -148,12 +178,30 @@ public class DataTable extends Component.Visible implements Serializable {
 						switch(cellValueSource){
 						case ROW : value = FieldHelper.getInstance().read(row, fieldName);break;
 						case ROW_PROPERTIES_MAP : value = row.getPropertiesMap().get(fieldName); break;
-						case ROW_PROPERTY_VALUE:value = FieldHelper.getInstance().read(row.getPropertiesMap().getValue(), fieldName);break;
+						case ROW_PROPERTY_VALUE:
+							Object object = FieldHelper.getInstance().readBeforeLast(row.getPropertiesMap().getValue(), fieldName);
+							Output output = Output.getListener().get(null,object, FieldHelper.getInstance().getLast(object.getClass(),fieldName));
+							value = output; 
+							//Output.getListener().getReadableValue(row.getPropertiesMap().getValue(), fieldName) ;break;
+							//value = FieldHelper.getInstance().read(row.getPropertiesMap().getValue(), fieldName);
+							break;
 						}	
 				}	
 			}
+			computeCellValueType(row.getPropertiesMap().getValue());
 			cell.getPropertiesMap().setValue(value);
 			return cell;
+		}
+		
+		public Column computeCellValueType(Object object){
+			if(object!=null && cellValueType==null){
+				String fieldName = (String) getPropertiesMap().getFieldName();
+				if(FileHelper.getListener().getModelClass().equals(FieldHelper.getInstance().get(object.getClass(), fieldName).getType()))
+					cellValueType = Cell.ValueType.FILE;
+				else
+					cellValueType = Cell.ValueType.DEFAULT;
+			}
+			return this;
 		}
 		
 		/**/
@@ -179,10 +227,11 @@ public class DataTable extends Component.Visible implements Serializable {
 		/**/
 		
 		public Column addColumn(String labelStringIdentifier,String fieldName){
-			DataTable.Column column = new DataTable.Column();
-			column.setLabelFromIdentifier(labelStringIdentifier);
-			column.getPropertiesMap().setHeaderText(column.getLabel().getPropertiesMap().getValue());
-			column.getPropertiesMap().setFieldName(fieldName);
+			DataTable.Column column = Column.instanciateOne(labelStringIdentifier, fieldName);
+			//column.setLabelFromIdentifier(labelStringIdentifier);
+			//column.getPropertiesMap().setHeaderText(column.getLabel().getPropertiesMap().getValue());
+			//column.getPropertiesMap().setFieldName(fieldName);
+			
 			addOneChild(column);
 			
 			if(getPropertiesMap().getValue()==null)
@@ -233,6 +282,16 @@ public class DataTable extends Component.Visible implements Serializable {
 			addByFieldNames(component, CellValueSource.DEFAULT, fieldNames);
 		}
 		
+		public Column getColumn(String fieldName){
+			@SuppressWarnings("unchecked")
+			Collection<Column> collection = (Collection<Column>) getPropertiesMap().getValue();
+			if(collection!=null)
+				for(Column column : collection)
+					if(fieldName==null && column.getPropertiesMap().getFieldName()==null || fieldName.equals(column.getPropertiesMap().getFieldName()))
+						return column;
+			return null;
+		}
+		
 		public static void build(Component component) {
 			Columns columns = (Columns) component.getPropertiesMap().getColumns();
 			if(columns!=null){
@@ -248,6 +307,10 @@ public class DataTable extends Component.Visible implements Serializable {
 				
 		/**/
 		
+		public Row() {
+			// TODO Auto-generated constructor stub
+		}
+		
 		public Row _setObject(Object object){
 			getPropertiesMap().setValue(object);
 			Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
@@ -261,18 +324,32 @@ public class DataTable extends Component.Visible implements Serializable {
 		
 		/**/
 		
-		public static Collection<Row> instanciateMany(Collection<?> collection){
-			Collection<Row> rows = new ArrayList<>();
-			if(CollectionHelper.getInstance().isNotEmpty(collection))
+		@SuppressWarnings("unchecked")
+		public static Collection<Row> instanciateMany(Collection<?> collection,Component component,Collection<Row> rows){
+			//Collection<Row> rows = new ArrayList<>();
+			/*if(CollectionHelper.getInstance().isNotEmpty(collection))
 				for(Object object : collection){
 					Row row = new Row()._setObject(object);
 					rows.add(row);
 					row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows),0l));
 				}
-			/*
-			if(getPropertiesMap().getValue()==null && CollectionHelper.getInstance().isNotEmpty(rows))
-				getPropertiesMap().setValue(rows.getElements());
 			*/
+			Columns columns = (Columns) component.getPropertiesMap().getColumns();
+			
+			if(CollectionHelper.getInstance().isNotEmpty(collection)){
+				if(rows == null)
+					rows = new ArrayList<>();
+				for(Object object : collection){
+					Row row = new Row()._setObject(object);
+					rows.add(row);
+					row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows),0l));
+					component.addOneChild(row);
+					
+					for(Column column : (Collection<Column>)columns.getPropertiesMap().getValue())
+						column.computeCellValueType(object);
+				}
+			}
+			
 			return rows;
 		}
 	}
@@ -280,6 +357,8 @@ public class DataTable extends Component.Visible implements Serializable {
 	@Getter @Setter @Accessors(chain=true)
 	public static class Cell extends Component.Visible implements Serializable {
 		private static final long serialVersionUID = 1L;
+		
+		public static enum ValueType {TEXT,MENU,FILE,IMAGE; public static ValueType DEFAULT = ValueType.TEXT;}
 		
 	}
 

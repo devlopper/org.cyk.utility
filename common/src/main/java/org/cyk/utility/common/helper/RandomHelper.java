@@ -131,7 +131,10 @@ public class RandomHelper extends AbstractHelper implements Serializable {
 	
 	public FileHelper.File getFile(String name){
 		try {
-			return new FileHelper.File().setBytes(FileHelper.getInstance().getBytes(RandomHelper.class,name)).setExtension(FileHelper.getInstance().getExtension(name));
+			FileHelper.File file = new FileHelper.File()
+					.setBytes(FileHelper.getInstance().getBytes(RandomHelper.class,name))
+					.setExtension(FileHelper.getInstance().getExtension(name));
+			return file.setMime(file.getExtension());
 		} catch (Exception e) {
 			logThrowable(e);
 			return null;
@@ -234,7 +237,7 @@ public class RandomHelper extends AbstractHelper implements Serializable {
 			lastname = get(StringCollection.valueOf(male.toUpperCase()+"_LAST_NAME"));
 			surname = get(StringCollection.SUR_NAME);
 			
-			headOnlyPhoto = getFile("/META-INF/generator/image/"+male+"/head/");	
+			headOnlyPhoto = getFile("/META-INF/generator/image/"+male+"/head/"+get(StringCollection.valueOf(male.toUpperCase()+"_HEAD_ONLY_PHOTO")));	
 		}
 	}
 }

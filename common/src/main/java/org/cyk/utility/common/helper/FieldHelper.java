@@ -78,6 +78,14 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return StringUtils.contains(fieldName, FIELD_NAME_SEPARATOR) ? StringUtils.substringAfterLast(fieldName, FIELD_NAME_SEPARATOR) : fieldName;
 	}
 	
+	public java.lang.reflect.Field getLast(Class<?> aClass,String fieldName){
+		return get(aClass,getLast(fieldName));
+	}
+	
+	public String getBeforeLast(String fieldName){
+		return StringUtils.contains(fieldName, FIELD_NAME_SEPARATOR) ? StringUtils.substringBeforeLast(fieldName, FIELD_NAME_SEPARATOR) : fieldName;
+	}
+	
 	public List<String> getFieldNames(String...fieldPaths){
 		return Arrays.asList(StringUtils.split(buildPath(fieldPaths), FIELD_NAME_SEPARATOR));
 	}
@@ -111,6 +119,13 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			logThrowable(e);
 			return null;
 		}
+	}
+	
+	public Object readBeforeLast(Object instance,String fieldName){
+		String beforeLastFieldName = getBeforeLast(fieldName);
+		if(fieldName.equals(beforeLastFieldName))
+			return instance;
+		return read(instance, beforeLastFieldName);
 	}
 	
 	public Object readStatic(java.lang.reflect.Field field){

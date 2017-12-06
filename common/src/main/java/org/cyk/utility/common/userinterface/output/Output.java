@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import org.cyk.utility.common.cdi.AbstractBean;
@@ -13,6 +14,8 @@ import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FileHelper;
+import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.helper.TimeHelper;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
@@ -149,7 +152,10 @@ public class Output extends Control implements Serializable {
 		
 		void read(Output output);
 		
+		Object getReadableValue(Object object,Field field);
+		Object getReadableValue(Object object,String fieldName);
 		Object getReadableValue(Output output);
+		
 		
 		public static class Adapter extends AbstractBean implements Listener {
 			private static final long serialVersionUID = 1L;
@@ -260,16 +266,32 @@ public class Output extends Control implements Serializable {
 				}
 				
 				@Override
-				public Object getReadableValue(Output output) {
-					Object value =  FieldHelper.getInstance().read(output.getObject(), output.getField());
+				public Object getReadableValue(Object object, String fieldName) {
+					Object value =  FieldHelper.getInstance().read(object, fieldName);
 					if(value!=null){
 						FileHelper.Listener listener = FileHelper.getListener();
 						if(value.getClass().equals( listener.getModelClass() ))
 							value = getReadableValueFile(value,listener.getName(value),listener.getExtension(value),listener.getMime(value),listener.getBytes(value));
+						else if(ClassHelper.getInstance().isDate(value.getClass()))
+							value = new TimeHelper.Stringifier.Date.Adapter.Default((Date) value).execute();
+						else if(ClassHelper.getInstance().isBoolean(value.getClass()))
+							StringHelper.getInstance().getResponse((Boolean) value);
+							
 					}
+					
 					return value;
 				}
 				
+				@Override
+				public Object getReadableValue(Object object, Field field) {
+					return getReadableValue(object, field.getName());
+				}
+				
+				@Override
+				public Object getReadableValue(Output output) {
+					return getReadableValue(output.getObject(), output.getField());
+				}
+					
 				protected Object getReadableValueFile(Object value,String name,String extension,String mime,byte[] bytes){
 					return value;
 				}
@@ -321,6 +343,16 @@ public class Output extends Control implements Serializable {
 			
 			@Override
 			public Object getReadableValue(Output output) {
+				return null;
+			}
+			
+			@Override
+			public Object getReadableValue(Object object, Field field) {
+				return null;
+			}
+			
+			@Override
+			public Object getReadableValue(Object object, String fieldName) {
 				return null;
 			}
 			

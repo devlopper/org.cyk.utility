@@ -2338,6 +2338,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getCells() {
+		return get(CELLS);
+	}
+
+	public Properties setCells(Object value) {
+		set(CELLS, value);
+		return this;
+	}
+	
+	public static final String CELLS = "CELLS";
 	public static final String FIRST = "FIRST";
 	public static final String ROWS_PER_PAGE_LABEL = "ROWS_PER_PAGE_LABEL";
 	public static final String ROWS_PER_PAGE_TEMPLATE = "ROWS_PER_PAGE_TEMPLATE";

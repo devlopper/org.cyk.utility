@@ -55,8 +55,10 @@ public class Component extends AbstractBean implements Serializable {
 	
 	//protected Constant.Action action;
 	//protected Class<?> actionOnClass;
+	protected Boolean onPrepareCallLoad;
 	
 	protected Object built;
+	protected Boolean hasBeenBuilt;
 	protected Component parent;
 	protected CollectionHelper.Instance<Component> children;
 	protected ContentType renderAsContentType = RENDER_AS_CONTENT_TYPE;
@@ -77,6 +79,8 @@ public class Component extends AbstractBean implements Serializable {
 			children = instanciateChildrenCollection();
 		children.addOne(component);
 		component.setParent(this);
+		if(Boolean.TRUE.equals(hasBeenBuilt))
+			component.build();
 		return this;
 	}
 	
@@ -130,6 +134,7 @@ public class Component extends AbstractBean implements Serializable {
 			}.execute();
 		built = ListenerHelper.getInstance()
 				.listenObject(Listener.COLLECTION, Listener.METHOD_NAME_BUILD, MethodHelper.Method.Parameter.buildArray(Component.class,this));
+		hasBeenBuilt = Boolean.TRUE;
 		return this;
 	}
 	
@@ -533,6 +538,12 @@ public class Component extends AbstractBean implements Serializable {
 			/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE_NON_NULL_SPECIFIC_CLASS, MethodHelper.Method.Parameter
 					.buildArray(Component.class,component));
 			*/
+			if(component instanceof Form.Master){
+				//Form.Master master = (Master) component;
+			}else if(component instanceof DataTable){
+				DataTable dataTable = (DataTable) component;
+				dataTable.setOnPrepareCallLoad(Boolean.TRUE);
+			}
 			component.prepare();
 			if(component instanceof Form.Master){
 				//Form.Master master = (Master) component;

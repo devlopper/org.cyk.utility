@@ -11,9 +11,9 @@ import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.collection.DataTable;
-import org.cyk.utility.common.userinterface.collection.DataTable.Columns;
+import org.cyk.utility.common.userinterface.collection.DataTable.Cell;
 import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueSource;
-import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueType;
+import org.cyk.utility.common.userinterface.collection.DataTable.Columns;
 import org.cyk.utility.common.userinterface.command.Menu;
 
 import lombok.Getter;
@@ -53,7 +53,7 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 		}
 		addColumn("order.number", FIELD___ORDER_NUMBER__,DataTable.Column.CellValueSource.ROW);
 		__prepare__();
-		addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(CellValueType.MENU).set__orderNumber__(Long.MAX_VALUE);
+		addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(Cell.ValueType.MENU).set__orderNumber__(Long.MAX_VALUE);
 		
 		load();//can be trigger by callback to enabled fast rendering of table structure
 		
