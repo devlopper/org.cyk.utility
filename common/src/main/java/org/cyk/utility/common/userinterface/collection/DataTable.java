@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
@@ -11,6 +15,7 @@ import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FileHelper;
+import org.cyk.utility.common.helper.IconHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
@@ -22,10 +27,6 @@ import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputFile;
 import org.cyk.utility.common.userinterface.output.OutputText;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class DataTable extends Component.Visible implements Serializable {
@@ -70,7 +71,8 @@ public class DataTable extends Component.Visible implements Serializable {
 			getPropertiesMap().setMainMenu(menu);
 			addOneChild(menu);
 			if(this.actionOnClass!=null){
-				menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, this.actionOnClass);
+				menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, this.actionOnClass)
+					._setPropertyIcon(IconHelper.Icon.FontAwesome.PLUS);
 			}	
 		}
 		if(Boolean.TRUE.equals(onPrepareAddColumnOrderNumber)){
@@ -368,9 +370,12 @@ public class DataTable extends Component.Visible implements Serializable {
 			Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
 			getPropertiesMap().setMainMenu(menu);
 			addOneChild(menu);
-			menu.addNode("read")._setPropertyUrl(Constant.Action.READ,object);
-			menu.addNode("update")._setPropertyUrl(Constant.Action.UPDATE,object);
-			menu.addNode("delete")._setPropertyUrl(Constant.Action.DELETE,object);
+			menu.addNode("read")._setPropertyUrl(Constant.Action.READ,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
+				._setPropertyIcon(IconHelper.Icon.FontAwesome.EYE);
+			menu.addNode("update")._setPropertyUrl(Constant.Action.UPDATE,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
+				._setPropertyIcon(IconHelper.Icon.FontAwesome.PENCIL);
+			menu.addNode("delete")._setPropertyUrl(Constant.Action.DELETE,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
+				._setPropertyIcon(IconHelper.Icon.FontAwesome.TRASH);
 			return this;
 		}
 		

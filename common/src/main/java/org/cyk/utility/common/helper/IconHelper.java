@@ -149,6 +149,16 @@ public class IconHelper extends AbstractHelper implements Serializable {
 				}	
 			}
 		}
+	
+		public static interface FontAwesome {
+			
+			//String  = "fa fa-";
+			String PLUS = "fa fa-plus";
+			String MINUS = "fa fa-minus";
+			String PENCIL = "fa fa-pencil";
+			String TRASH = "fa fa-trash";
+			String EYE = "fa fa-eye";
+		}
 	}
 	
 	

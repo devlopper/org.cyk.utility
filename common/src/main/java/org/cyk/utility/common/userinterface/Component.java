@@ -158,6 +158,11 @@ public class Component extends AbstractBean implements Serializable {
 		return this;
 	}
 	
+	public Component _setPropertyIcon(Object icon){
+		getPropertiesMap().setIcon(icon);
+		return this;
+	}
+	
 	/**/
 	
 	public static interface BuilderBase<OUTPUT extends Component> extends org.cyk.utility.common.Builder.NullableInput<OUTPUT> {
@@ -302,6 +307,16 @@ public class Component extends AbstractBean implements Serializable {
 		
 		public Visible setWidth(Number width){
 			getArea().getWidth().setDistance(width);
+			return this;
+		}
+		
+		public Visible _setLabelPropertyRendered(Object rendered){
+			getLabel().getPropertiesMap().setRendered(rendered);
+			return this;
+		}
+		
+		public Visible _setPropertyTitleFromLabel(){
+			getPropertiesMap().setTitle(getLabel().getPropertiesMap().getValue());
 			return this;
 		}
 		

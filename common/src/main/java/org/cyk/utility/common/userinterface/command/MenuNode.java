@@ -26,6 +26,21 @@ public class MenuNode extends MenuContainer implements Serializable {
 		return (MenuNode) super._setPropertyUrl(action, object, queryKeyValue);
 	}
 	
+	@Override
+	public MenuNode _setPropertyIcon(Object icon) {
+		return (MenuNode) super._setPropertyIcon(icon);
+	}
+	
+	@Override
+	public MenuNode _setLabelPropertyRendered(Object rendered) {
+		return (MenuNode) super._setLabelPropertyRendered(rendered);
+	}
+	
+	@Override
+	public MenuNode _setPropertyTitleFromLabel() {
+		return (MenuNode) super._setPropertyTitleFromLabel();
+	}
+	
 	public MenuContainer getParent() {
 		return (MenuContainer) super.getParent();
 	}
