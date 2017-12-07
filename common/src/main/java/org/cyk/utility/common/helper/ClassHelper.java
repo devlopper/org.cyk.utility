@@ -59,6 +59,10 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		super.initialisation();
 	}
 	
+	public Boolean isIdentified(Class<?> aClass){
+		return instanciateOne(Listener.class).isIdentified(aClass);
+	}
+	
 	public Boolean isHierarchy(Class<?> aClass){
 		return instanciateOne(Listener.class).isHierarchy(aClass);
 	}
@@ -534,6 +538,9 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	
 	public static interface Listener {
 
+		String getIdentifierFieldName(Class<?> aClass);
+		Boolean isIdentified(Class<?> aClass);
+		
 		String getHierarchyFieldName(Class<?> aClass);
 		Boolean isHierarchy(Class<?> aClass);
 		
@@ -547,8 +554,23 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				private static final long serialVersionUID = 1L;
 				
 				@Override
+				public String getIdentifierFieldName(Class<?> aClass) {
+					return "identifier";
+				}
+				
+				@Override
+				public Boolean isIdentified(Class<?> aClass) {
+					return FieldHelper.getInstance().get(aClass, getIdentifierFieldName(aClass))!=null;
+				}
+				
+				@Override
 				public String getTypeFieldName(Class<?> aClass) {
 					return "type";
+				}
+				
+				@Override
+				public Boolean isTyped(Class<?> aClass) {
+					return FieldHelper.getInstance().get(aClass, getTypeFieldName(aClass))!=null;
 				}
 				
 				@Override
@@ -558,16 +580,10 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				
 				@Override
 				public Boolean isHierarchy(Class<?> aClass) {
-					String hierarchyFieldName = getHierarchyFieldName(aClass);
-					return StringHelper.getInstance().isBlank(hierarchyFieldName) ? Boolean.FALSE : FieldHelper.getInstance().get(aClass, hierarchyFieldName)!=null;
+					return FieldHelper.getInstance().get(aClass, getHierarchyFieldName(aClass))!=null;
 				}
 				
-				@Override
-				public Boolean isTyped(Class<?> aClass) {
-					String typeFieldName = getTypeFieldName(aClass);
-					return StringHelper.getInstance().isBlank(typeFieldName) ? Boolean.FALSE : FieldHelper.getInstance().get(aClass, typeFieldName)!=null;
-				}
-				
+				/**/
 				
 			}
 		
@@ -588,6 +604,16 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		
 			@Override
 			public String getTypeFieldName(Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public String getIdentifierFieldName(Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public Boolean isIdentified(Class<?> aClass) {
 				return null;
 			}
 		}

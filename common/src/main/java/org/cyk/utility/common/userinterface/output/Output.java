@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
@@ -16,6 +17,9 @@ import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.TimeHelper;
+import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
+import org.cyk.utility.common.userinterface.Component;
+import org.cyk.utility.common.userinterface.ContentType;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
@@ -262,6 +266,23 @@ public class Output extends Control implements Serializable {
 				}
 				
 				protected void setPropertyValue(Output output,Object value){
+					if(value!=null){
+						if(ClassHelper.getInstance().isIdentified(value.getClass())){
+							OutputLink link = new OutputLink();
+							link.getPropertiesMap().setValue(UniformResourceLocatorHelper.getInstance().stringify(Constant.Action.READ, value));
+							//if(output instanceof OutputText)
+							//	link.getPropertiesMap().setOutputTextComponent(output);
+							output.getPropertiesMap().setOutputLinkComponent(link);
+						}
+						if(ClassHelper.getInstance().isString(value.getClass()))
+							if(ContentType.HTML.equals(Component.RENDER_AS_CONTENT_TYPE)){
+								if(output instanceof OutputText){
+									if(output.getPropertiesMap().getTitle() == null)
+										output.getPropertiesMap().setTitle(value);
+								}
+								value = StringHelper.getInstance().getHtml((String) value);
+							}
+					}
 					output.getPropertiesMap().setValue(value);
 				}
 				
@@ -273,10 +294,10 @@ public class Output extends Control implements Serializable {
 						if(value.getClass().equals( listener.getModelClass() ))
 							value = getReadableValueFile(value,listener.getName(value),listener.getExtension(value),listener.getMime(value),listener.getBytes(value));
 						else if(ClassHelper.getInstance().isDate(value.getClass()))
-							value = new TimeHelper.Stringifier.Date.Adapter.Default((Date) value).execute();
+							value = new TimeHelper.Stringifier.Date.Adapter.Default((Date) value).setProperty(TimeHelper.Stringifier.PROPERTY_NAME_TIME_PART
+									, Constant.Date.Part.DATE_ONLY).execute();
 						else if(ClassHelper.getInstance().isBoolean(value.getClass()))
 							value = StringHelper.getInstance().getResponse((Boolean) value);
-							
 					}
 					
 					return value;

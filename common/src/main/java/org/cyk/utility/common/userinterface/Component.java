@@ -148,6 +148,16 @@ public class Component extends AbstractBean implements Serializable {
 		return this;
 	}
 	
+	public Component _setPropertyUrlRead(String pathIdentifier,Object...queryKeyValue){
+		getPropertiesMap().setUrlRead(UniformResourceLocatorHelper.getInstance().stringify(pathIdentifier,queryKeyValue));
+		return this;
+	}
+	
+	public Component _setPropertyUrlRead(Constant.Action action,Object object,Object...queryKeyValue){
+		getPropertiesMap().setUrlRead(UniformResourceLocatorHelper.getInstance().stringify(action, object, queryKeyValue));
+		return this;
+	}
+	
 	/**/
 	
 	public static interface BuilderBase<OUTPUT extends Component> extends org.cyk.utility.common.Builder.NullableInput<OUTPUT> {
@@ -543,6 +553,13 @@ public class Component extends AbstractBean implements Serializable {
 			}else if(component instanceof DataTable){
 				DataTable dataTable = (DataTable) component;
 				dataTable.setOnPrepareCallLoad(Boolean.TRUE);
+				if(dataTable.getOnPrepareAddMenu() == null)
+					dataTable.setOnPrepareAddMenu(ClassHelper.getInstance().isIdentified(actionOnClass));
+				if(dataTable.getOnPrepareAddColumnAction() == null)
+					dataTable.setOnPrepareAddColumnAction(ClassHelper.getInstance().isIdentified(actionOnClass));
+				if(dataTable.getOnPrepareCallLoad() == null)
+					dataTable.setOnPrepareCallLoad(ClassHelper.getInstance().isIdentified(actionOnClass));
+				
 			}
 			component.prepare();
 			if(component instanceof Form.Master){

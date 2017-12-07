@@ -2347,6 +2347,46 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getUrlRead() {
+		return get(URL_READ);
+	}
+
+	public Properties setUrlRead(Object value) {
+		set(URL_READ, value);
+		return this;
+	}
+	
+	public Object getOutputTextComponent() {
+		return get(OUTPUT_TEXT_COMPONENT);
+	}
+
+	public Properties setOutputTextComponent(Object value) {
+		set(OUTPUT_TEXT_COMPONENT, value);
+		return this;
+	}
+	
+	public Object getOutputLinkComponent() {
+		return get(OUTPUT_LINK_COMPONENT);
+	}
+
+	public Properties setOutputLinkComponent(Object value) {
+		set(OUTPUT_LINK_COMPONENT, value);
+		return this;
+	}
+	
+	public Object getLinked() {
+		return get(LINKED);
+	}
+
+	public Properties setLinked(Object value) {
+		set(LINKED, value);
+		return this;
+	}
+	
+	public static final String LINKED = "LINKED";
+	public static final String OUTPUT_LINK_COMPONENT = "OUTPUT_LINK_COMPONENT";
+	public static final String OUTPUT_TEXT_COMPONENT = "OUTPUT_TEXT_COMPONENT";
+	public static final String URL_READ = "URL_READ";
 	public static final String CELLS = "CELLS";
 	public static final String FIRST = "FIRST";
 	public static final String ROWS_PER_PAGE_LABEL = "ROWS_PER_PAGE_LABEL";

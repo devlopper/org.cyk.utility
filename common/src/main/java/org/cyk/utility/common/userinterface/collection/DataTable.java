@@ -15,9 +15,13 @@ import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Component;
+import org.cyk.utility.common.userinterface.ContentType;
+import org.cyk.utility.common.userinterface.Image;
 import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueSource;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.output.Output;
+import org.cyk.utility.common.userinterface.output.OutputFile;
+import org.cyk.utility.common.userinterface.output.OutputText;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +39,7 @@ public class DataTable extends Component.Visible implements Serializable {
 	//private CollectionHelper.Instance<Row> rows = new CollectionHelper.Instance<Row>();
 	
 	private Boolean onPrepareAddMenu;
-	private Boolean onPrepareAddColumnOrderNumber;
+	private Boolean onPrepareAddColumnOrderNumber = Boolean.TRUE;
 	private Boolean onPrepareAddColumnAction;
 	
 	/**/
@@ -60,6 +64,7 @@ public class DataTable extends Component.Visible implements Serializable {
 	@Override
 	public DataTable prepare() {
 		super.prepare();
+	
 		if(Boolean.TRUE.equals(onPrepareAddMenu)){
 			Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
 			getPropertiesMap().setMainMenu(menu);
@@ -154,7 +159,8 @@ public class DataTable extends Component.Visible implements Serializable {
 
 		public static enum CellValueSource {ROW_PROPERTIES_MAP,ROW_PROPERTY_VALUE,ROW; public static CellValueSource DEFAULT = CellValueSource.ROW_PROPERTY_VALUE;}
 		//public static enum CellValueType {TEXT,MENU,FILE,IMAGE; public static CellValueType DEFAULT = CellValueType.TEXT;}
-		
+
+		//private Collection<Listener> listeners = new ArrayList<>();
 		private CellValueSource cellValueSource = CellValueSource.DEFAULT;
 		private Cell.ValueType cellValueType;
 		
@@ -162,44 +168,61 @@ public class DataTable extends Component.Visible implements Serializable {
 		
 		public Cell getCell(Row row){
 			Cell cell = new Cell();
-			Object value = null;
-			if(row==null){
+			Output output = null;
+			/*if(row==null){
 				value = "ROW IS NULL";
-			}
+			}*/
 			if(row!=null){
 				String fieldName = (String) getPropertiesMap().getFieldName();
-				if(StringHelper.getInstance().isBlank(fieldName))
-					value = "NO FIELD NAME";
-				else {
-					//CellValueSource cellValueSource = InstanceHelper.getInstance().getIfNotNullElseDefault(this.cellValueSource, CellValueSource.DEFAULT);
+				if(StringHelper.getInstance().isBlank(fieldName)){
+					output = new OutputText();
+					output.getPropertiesMap().setValue("NO FIELD NAME");
+				}else {
 					if(cellValueSource==null)
 						;
 					else
 						switch(cellValueSource){
-						case ROW : value = FieldHelper.getInstance().read(row, fieldName);break;
-						case ROW_PROPERTIES_MAP : value = row.getPropertiesMap().get(fieldName); break;
+						case ROW : 
+							output = new Output(); 
+							output.getPropertiesMap().setValue(FieldHelper.getInstance().read(row, fieldName)); 
+							break;
+						case ROW_PROPERTIES_MAP : 
+							output = new Output(); 
+							output.getPropertiesMap().setValue(row.getPropertiesMap().get(fieldName)); 
+							break;
 						case ROW_PROPERTY_VALUE:
 							Object object = FieldHelper.getInstance().readBeforeLast(row.getPropertiesMap().getValue(), fieldName);
-							Output output = Output.getListener().get(null,object, FieldHelper.getInstance().getLast(object.getClass(),fieldName));
-							value = output; 
-							//Output.getListener().getReadableValue(row.getPropertiesMap().getValue(), fieldName) ;break;
-							//value = FieldHelper.getInstance().read(row.getPropertiesMap().getValue(), fieldName);
+							output = Output.getListener().get(null,object, FieldHelper.getInstance().getLast(object.getClass(),fieldName)); 
 							break;
 						}	
 				}	
 			}
+			if(output instanceof OutputFile){
+				Image thumbnail = (Image) ((OutputFile) output).getPropertiesMap().getThumbnail();
+				if(ContentType.HTML.equals(Component.RENDER_AS_CONTENT_TYPE)){
+					thumbnail.getPropertiesMap().setWidth("20px").setHeight("20px");
+				}
+			}
 			computeCellValueType(row.getPropertiesMap().getValue());
-			cell.getPropertiesMap().setValue(value);
+			cell.getPropertiesMap().setValue(output);
 			return cell;
 		}
 		
 		public Column computeCellValueType(Object object){
 			if(object!=null && cellValueType==null){
 				String fieldName = (String) getPropertiesMap().getFieldName();
-				if(FileHelper.getListener().getModelClass().equals(FieldHelper.getInstance().get(object.getClass(), fieldName).getType()))
+				Class<?> fieldType = null;
+				if(CellValueSource.ROW.equals(cellValueSource))
+					fieldType = FieldHelper.getInstance().get(Row.class, fieldName).getType();
+				else if(CellValueSource.ROW_PROPERTIES_MAP.equals(cellValueSource))
+					fieldType = Object.class;
+				else
+					fieldType = FieldHelper.getInstance().get(object.getClass(), fieldName).getType();
+				if(FileHelper.getListener().getModelClass().equals(fieldType))
 					cellValueType = Cell.ValueType.FILE;
 				else
 					cellValueType = Cell.ValueType.DEFAULT;
+				getPropertiesMap().setLinked(ClassHelper.getInstance().isIdentified(fieldType));
 			}
 			return this;
 		}
@@ -219,6 +242,20 @@ public class DataTable extends Component.Visible implements Serializable {
 			return instanciateOne(labelStringIdentifier, fieldName, CellValueSource.DEFAULT);
 		}
 		
+		/**/
+		
+		public static interface Listener {
+			
+			public static class Adapter extends AbstractBean implements Listener,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public static class Default extends Listener.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+				
+				}				
+			}
+		}
 	}
 
 	public static class Columns extends Component implements Serializable {
@@ -298,6 +335,21 @@ public class DataTable extends Component.Visible implements Serializable {
 				CollectionHelper.getInstance().sort((Collection<?>) columns.getPropertiesMap().getValue());
 			}
 		}
+		
+		/**/
+		
+		public static interface Listener {
+			
+			public static class Adapter extends AbstractBean implements Listener,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				public static class Default extends Listener.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+				
+				}				
+			}
+		}
 
 	}
 	
@@ -358,7 +410,7 @@ public class DataTable extends Component.Visible implements Serializable {
 	public static class Cell extends Component.Visible implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
-		public static enum ValueType {TEXT,MENU,FILE,IMAGE; public static ValueType DEFAULT = ValueType.TEXT;}
+		public static enum ValueType {TEXT,LINK,MENU,FILE,IMAGE; public static ValueType DEFAULT = ValueType.TEXT;}
 		
 	}
 

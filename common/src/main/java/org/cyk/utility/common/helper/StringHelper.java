@@ -22,11 +22,13 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.StringHelper.ToStringMapping.Datasource.Cache;
+import org.cyk.utility.common.userinterface.ContentType;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -69,6 +71,13 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public String getHtml(String string){
+		string = StringEscapeUtils.escapeHtml4(string);
+		string = StringUtils.replaceAll(string, ContentType.TEXT.getNewLineMarker(), ContentType.HTML.getNewLineMarker());
+		string = StringUtils.replaceAll(string, "\n", ContentType.HTML.getNewLineMarker());
+		return string;
 	}
 	
 	public Boolean isVoyel(Character character){

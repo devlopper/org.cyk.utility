@@ -39,6 +39,15 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void convertToHtml(){
+		assertEquals("l1", StringHelper.getInstance().getHtml("l1"));
+		assertEquals("l1<br/>", StringHelper.getInstance().getHtml("l1\n"));
+		assertEquals("l1<br/>", StringHelper.getInstance().getHtml("l1\r\n"));
+		assertEquals("l1<br/>l2", StringHelper.getInstance().getHtml("l1\nl2"));
+		assertEquals("l1<br/>l2", StringHelper.getInstance().getHtml("l1\r\nl2"));
+	}
+	
+	@Test
 	public void isAtLocation(){
 		assertTrue(StringHelper.getInstance().isAtLocation("org.cyk.class1", "org.cyk", StringHelper.Location.START));
 		assertTrue(StringHelper.getInstance().isAtLocation("org.cyk.class1.class2", "org.cyk", StringHelper.Location.START));

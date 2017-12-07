@@ -87,8 +87,20 @@ public class RandomHelper extends AbstractHelper implements Serializable {
 		return null;
 	}
 	
+	public String getString(Integer minimumLength,Integer maximumLength){
+		return getAlphanumeric(getInteger(minimumLength, maximumLength));
+	}
+	
 	public String getString(Integer length){
-		return getAlphanumeric(length);
+		return getString(length,length);
+	}
+	
+	public String getLines(Integer minimumNumberOfLines,Integer maximumNumberOfLines,Integer minimumLineLength,Integer maximumLineLength){
+		Collection<String> lines = new ArrayList<>();
+		Integer numberOfLines = getInteger(minimumNumberOfLines, maximumNumberOfLines);
+		for(Integer index = 0 ; index < numberOfLines ; index ++)
+			lines.add(getString(minimumLineLength, maximumLineLength)+Constant.CHARACTER_DOT);
+		return StringHelper.getInstance().concatenate(lines,  Constant.LINE_DELIMITER);
 	}
 	
 	public String getAlphanumeric(Integer length){
