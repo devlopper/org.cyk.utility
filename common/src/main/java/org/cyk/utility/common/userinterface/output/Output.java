@@ -275,7 +275,7 @@ public class Output extends Control implements Serializable {
 						else if(ClassHelper.getInstance().isDate(value.getClass()))
 							value = new TimeHelper.Stringifier.Date.Adapter.Default((Date) value).execute();
 						else if(ClassHelper.getInstance().isBoolean(value.getClass()))
-							StringHelper.getInstance().getResponse((Boolean) value);
+							value = StringHelper.getInstance().getResponse((Boolean) value);
 							
 					}
 					
