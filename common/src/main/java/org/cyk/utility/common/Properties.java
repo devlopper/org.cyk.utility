@@ -2383,6 +2383,36 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getOnPageEventComponent() {
+		return get(ON_PAGE_EVENT_COMPONENT);
+	}
+
+	public Properties setOnPageEventComponent(Object value) {
+		set(ON_PAGE_EVENT_COMPONENT, value);
+		return this;
+	}
+	
+	public Object getOnFilterEventComponent() {
+		return get(ON_FILTER_EVENT_COMPONENT);
+	}
+
+	public Properties setOnFilterEventComponent(Object value) {
+		set(ON_FILTER_EVENT_COMPONENT, value);
+		return this;
+	}
+	
+	public Object getOnSortEventComponent() {
+		return get(ON_SORT_EVENT_COMPONENT);
+	}
+
+	public Properties setOnSortEventComponent(Object value) {
+		set(ON_SORT_EVENT_COMPONENT, value);
+		return this;
+	}
+	
+	public static final String ON_SORT_EVENT_COMPONENT = "ON_SORT_EVENT_COMPONENT";
+	public static final String ON_FILTER_EVENT_COMPONENT = "ON_FILTER_EVENT_COMPONENT";
+	public static final String ON_PAGE_EVENT_COMPONENT = "ON_PAGE_EVENT_COMPONENT";
 	public static final String LINKED = "LINKED";
 	public static final String OUTPUT_LINK_COMPONENT = "OUTPUT_LINK_COMPONENT";
 	public static final String OUTPUT_TEXT_COMPONENT = "OUTPUT_TEXT_COMPONENT";
