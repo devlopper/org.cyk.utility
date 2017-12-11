@@ -2410,6 +2410,58 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getSortable() {
+		return get(SORTABLE);
+	}
+
+	public Properties setSortable(Object value) {
+		set(SORTABLE, value);
+		return this;
+	}
+	
+	public Object getSortBy() {
+		return get(SORT_BY);
+	}
+
+	public Properties setSortBy(Object value) {
+		set(SORT_BY, value);
+		return this;
+	}
+	
+	public Object getSortFunction() {
+		return get(SORT_FUNCTION);
+	}
+
+	public Properties setSortFunction(Object value) {
+		set(SORT_FUNCTION, value);
+		return this;
+	}
+	
+	public Object getFilterable() {
+		return get(FILTERABLE);
+	}
+
+	public Properties setFilterable(Object value) {
+		set(FILTERABLE, value);
+		return this;
+	}
+	
+	public Object getFilterFunction() {
+		return get(FILTER_FUNCTION);
+	}
+
+	public Properties setFilterFunction(Object value) {
+		set(FILTER_FUNCTION, value);
+		return this;
+	}
+	
+	public static final String FILTERABLE = "FILTERABLE";
+	public static final String FILTER_FUNCTION = "FILTER_FUNCTION";
+	
+	public static final String SORTABLE = "SORTABLE";
+	public static final String SORT_BY = "SORT_BY";
+	public static final String SORT_FUNCTION = "SORT_FUNCTION";
+	
 	public static final String ON_SORT_EVENT_COMPONENT = "ON_SORT_EVENT_COMPONENT";
 	public static final String ON_FILTER_EVENT_COMPONENT = "ON_FILTER_EVENT_COMPONENT";
 	public static final String ON_PAGE_EVENT_COMPONENT = "ON_PAGE_EVENT_COMPONENT";

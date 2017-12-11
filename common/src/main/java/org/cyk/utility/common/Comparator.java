@@ -12,13 +12,20 @@ import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Comparator<T> implements java.util.Comparator<T>,Serializable {
-
 	private static final long serialVersionUID = 1L;
 	
+	public static enum Order{ASCENDING,DESCENDING;public static Order DEFAULT = ASCENDING;}
+	
 	private Collection<String> fieldNames;
+	private Order order = Order.DEFAULT;
+	
+	public Comparator(Order order,String...fieldNames) {
+		this.order = order;
+		this.fieldNames = CollectionHelper.getInstance().get(fieldNames);
+	}
 	
 	public Comparator(String...fieldNames) {
-		this.fieldNames = CollectionHelper.getInstance().get(fieldNames);
+		this(Order.DEFAULT,fieldNames);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -45,6 +52,8 @@ public class Comparator<T> implements java.util.Comparator<T>,Serializable {
 				else
 					break;//order has been found , no more check required
 			}
+		if(Order.DESCENDING.equals(order))
+			comparison = -comparison;
 		return comparison;
 	}
 
