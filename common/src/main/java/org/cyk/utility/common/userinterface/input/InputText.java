@@ -14,7 +14,17 @@ public class InputText extends Input<String> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/**/
-
+	/*
+	@Override
+	public String getValue() {
+		return super.getValue();
+	}
+	
+	@Override
+	public InputText setValue(String value) {
+		return (InputText) super.setValue(value);
+	}
+	*/
 	public static interface BuilderBase<OUTPUT extends InputText> extends Input.BuilderBase<OUTPUT> {
 
 		public static class Adapter<OUTPUT extends InputText> extends Control.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {

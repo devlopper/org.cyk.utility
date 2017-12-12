@@ -74,6 +74,10 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return StringUtils.join(fieldNames,FIELD_NAME_SEPARATOR);
 	}
 	
+	public Boolean getIsContainSeparator(String fieldName){
+		return StringUtils.contains(fieldName,FIELD_NAME_SEPARATOR);
+	}
+	
 	public String getLast(String fieldName){
 		return StringUtils.contains(fieldName, FIELD_NAME_SEPARATOR) ? StringUtils.substringAfterLast(fieldName, FIELD_NAME_SEPARATOR) : fieldName;
 	}

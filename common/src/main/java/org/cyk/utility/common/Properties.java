@@ -2455,6 +2455,27 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getFilterCommandComponent() {
+		return get(FILTER_COMMAND_COMPONENT);
+	}
+
+	public Properties setFilterCommandComponent(Object value) {
+		set(FILTER_COMMAND_COMPONENT, value);
+		return this;
+	}
+	
+	public Object getFilterInputComponent() {
+		return get(FILTER_INPUT_COMPONENT);
+	}
+
+	public Properties setFilterInputComponent(Object value) {
+		set(FILTER_INPUT_COMPONENT, value);
+		return this;
+	}
+	
+	public static final String FILTER_COMMAND_COMPONENT = "FILTER_COMMAND_COMPONENT";
+	public static final String FILTER_INPUT_COMPONENT = "FILTER_INPUT_COMPONENT";
+	
 	public static final String FILTERABLE = "FILTERABLE";
 	public static final String FILTER_FUNCTION = "FILTER_FUNCTION";
 	

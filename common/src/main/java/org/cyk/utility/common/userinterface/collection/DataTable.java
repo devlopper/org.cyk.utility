@@ -20,7 +20,10 @@ import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.ContentType;
 import org.cyk.utility.common.userinterface.Image;
 import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueSource;
+import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
+import org.cyk.utility.common.userinterface.input.InputText;
+import org.cyk.utility.common.userinterface.input.Watermark;
 import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputFile;
 import org.cyk.utility.common.userinterface.output.OutputText;
@@ -53,6 +56,22 @@ public class DataTable extends Component.Visible implements Serializable {
 	
 	public DataTable() {
 		this(null);
+	}
+	
+	@Override
+	protected void listenPropertiesInstanciated(Properties propertiesMap) {
+		InputText inputText = new InputText();
+		Watermark watermark = new Watermark();
+		watermark.getPropertiesMap().setValue("global search...");
+		inputText.getPropertiesMap().setWatermark(watermark);
+		propertiesMap.setFilterInputComponent(inputText);
+		
+		Command command = new Command();
+		command.setLabelFromIdentifier("search")._setLabelPropertyRendered(Boolean.FALSE);
+		command.getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.SEARCH);
+		propertiesMap.setFilterCommandComponent(command);
+		
+		super.listenPropertiesInstanciated(propertiesMap);
 	}
 	
 	@Override
@@ -193,6 +212,11 @@ public class DataTable extends Component.Visible implements Serializable {
 				else
 					cellValueType = Cell.ValueType.DEFAULT;
 				getPropertiesMap().setLinked(ClassHelper.getInstance().isIdentified(fieldType));
+				
+				if(Cell.ValueType.TEXT.equals(cellValueType)){
+					if(CellValueSource.ROW_PROPERTY_VALUE.equals(cellValueSource))
+						getPropertiesMap().setSortable(Boolean.TRUE);
+				}
 			}
 			return this;
 		}
@@ -253,6 +277,17 @@ public class DataTable extends Component.Visible implements Serializable {
 			if(getPropertiesMap().getValue()==null)
 				getPropertiesMap().setValue(getChildren().getElements());
 			return column;
+		}
+		
+		@Override
+		public Component addOneChild(Component component) {
+			if(component instanceof Column){
+				if(component.getPropertiesMap().getSortable()==null && FieldHelper.getInstance().getIsContainSeparator((String)component.getPropertiesMap().getFieldName())){
+					//component.getPropertiesMap().setSortable(Boolean.TRUE);
+					//component.getPropertiesMap().setFilterable(Boolean.TRUE);
+				}
+			}
+			return super.addOneChild(component);
 		}
 		
 		/**/

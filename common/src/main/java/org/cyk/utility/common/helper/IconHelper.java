@@ -158,6 +158,7 @@ public class IconHelper extends AbstractHelper implements Serializable {
 			String PENCIL = "fa fa-pencil";
 			String TRASH = "fa fa-trash";
 			String EYE = "fa fa-eye";
+			String SEARCH = "fa fa-search";
 		}
 	}
 	
