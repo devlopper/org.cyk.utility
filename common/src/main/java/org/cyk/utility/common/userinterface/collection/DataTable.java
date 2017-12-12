@@ -106,6 +106,9 @@ public class DataTable extends Component.Visible implements Serializable {
 		if(Boolean.TRUE.equals(onPrepareCallLoad)){
 			load(); //can be trigger by callback to enabled fast rendering of table structure	
 		}
+		
+		if(getPropertiesMap().getFilterable() == null)
+			;//getPropertiesMap().setFilterable(ac);
 		return this;
 	}
 	
