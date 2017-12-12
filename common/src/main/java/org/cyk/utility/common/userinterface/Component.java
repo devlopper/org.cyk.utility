@@ -536,7 +536,7 @@ public class Component extends AbstractBean implements Serializable {
 				detail = master.instanciateDetail();
 		}else if(component instanceof DataTable){
 			DataTable dataTable = (DataTable) component;
-			dataTable.setActionOnClass(((Window)parent).getActionOnClass());
+			dataTable.getPropertiesMap().setActionOnClass(((Window)parent).getActionOnClass());
 		}else if(component instanceof Hierarchy){
 			Hierarchy hierarchy = (Hierarchy) component;
 			hierarchy.setActionOnClass(((Window)parent).getActionOnClass());

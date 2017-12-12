@@ -2473,6 +2473,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getActionOnClass() {
+		return get(ACTION_ON_CLASS);
+	}
+
+	public Properties setActionOnClass(Object value) {
+		set(ACTION_ON_CLASS, value);
+		return this;
+	}
+	
+	public static final String ACTION_ON_CLASS = "ACTION_ON_CLASS";
+	
 	public static final String FILTER_COMMAND_COMPONENT = "FILTER_COMMAND_COMPONENT";
 	public static final String FILTER_INPUT_COMPONENT = "FILTER_INPUT_COMPONENT";
 	

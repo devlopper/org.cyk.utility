@@ -41,7 +41,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
 	}
 	
-	private Class<?> actionOnClass;
+	//private Class<?> actionOnClass;
 	//private CollectionHelper.Instance<Row> rows = new CollectionHelper.Instance<Row>();
 	
 	private Boolean onPrepareAddMenu;
@@ -50,13 +50,13 @@ public class DataTable extends Component.Visible implements Serializable {
 	
 	/**/
 	
-	public DataTable(Class<?> actionOnClass) {
+	/*public DataTable(Class<?> actionOnClass) {
 		this.actionOnClass = actionOnClass;
 	}
 	
 	public DataTable() {
 		this(null);
-	}
+	}*/
 	
 	@Override
 	protected void listenPropertiesInstanciated(Properties propertiesMap) {
@@ -91,8 +91,8 @@ public class DataTable extends Component.Visible implements Serializable {
 			Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
 			getPropertiesMap().setMainMenu(menu);
 			addOneChild(menu);
-			if(this.actionOnClass!=null){
-				menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, this.actionOnClass)
+			if(getPropertiesMap().getActionOnClass()!=null){
+				menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, getPropertiesMap().getActionOnClass())
 					._setPropertyIcon(IconHelper.Icon.FontAwesome.PLUS);
 			}	
 		}
@@ -107,8 +107,11 @@ public class DataTable extends Component.Visible implements Serializable {
 			load(); //can be trigger by callback to enabled fast rendering of table structure	
 		}
 		
-		if(getPropertiesMap().getFilterable() == null)
-			;//getPropertiesMap().setFilterable(ac);
+		if(getPropertiesMap().getAction() instanceof Constant.Action)
+			getPropertiesMap().setFilterable(!Constant.Action.isCreateOrUpdateOrDelete((Constant.Action)getPropertiesMap().getAction()));
+		((Component)getPropertiesMap().getFilterInputComponent()).getPropertiesMap().setRendered(getPropertiesMap().getFilterable());
+		((Component)getPropertiesMap().getFilterCommandComponent()).getPropertiesMap().setRendered(getPropertiesMap().getFilterable());
+		
 		return this;
 	}
 	
@@ -163,8 +166,8 @@ public class DataTable extends Component.Visible implements Serializable {
 	@Override
 	public Component load() {
 		super.load();
-		if(actionOnClass!=null)
-			addManyRow(InstanceHelper.getInstance().get(actionOnClass));
+		if(getPropertiesMap().getActionOnClass()!=null)
+			addManyRow(InstanceHelper.getInstance().get((Class<?>) getPropertiesMap().getActionOnClass()));
 		return this;
 	}
 	
@@ -541,7 +544,7 @@ public class DataTable extends Component.Visible implements Serializable {
 	public static <T> DataTable instanciateOne(Class<T> actionOnClass,String[] fieldNames,Collection<T> collection,Integer page,Boolean lazy){
 		DataTable dataTable = new DataTable();
 		
-		dataTable.setActionOnClass(actionOnClass);
+		dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
 		dataTable.addColumnsByFieldNames(fieldNames);
 		if(page!=null){
 			dataTable.getPropertiesMap().setRows(page);
@@ -550,6 +553,8 @@ public class DataTable extends Component.Visible implements Serializable {
 		if(lazy!=null){
 			dataTable.getPropertiesMap().setLazy(lazy);
 		}
+		dataTable.getPropertiesMap().setAction(Constant.Action.READ);
+		dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
 		dataTable.prepare();
 		dataTable.build();
 		if(collection!=null){

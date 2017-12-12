@@ -105,6 +105,11 @@ public class Input<T> extends Control implements Serializable {
 		return this;
 	}
 	
+	//Because some library scanning does not recognize chaining 
+	public void setValue(T value){
+		this.value = value;
+	}
+	
 	/**/
 
 	public static interface BuilderBase<OUTPUT extends Input<?>> extends Control.BuilderBase<OUTPUT> {
