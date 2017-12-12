@@ -6,12 +6,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import javassist.Modifier;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
+
+import lombok.Getter;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Action;
@@ -22,9 +27,6 @@ import org.cyk.utility.common.helper.ArrayHelper.Element;
 import org.cyk.utility.common.helper.FilterHelper.Filter;
 import org.cyk.utility.common.helper.InstanceHelper.Listener.FieldValueGenerator;
 import org.cyk.utility.common.security.SecurityHelper;
-
-import javassist.Modifier;
-import lombok.Getter;
 
 @Singleton @Named
 public class InstanceHelper extends AbstractHelper implements Serializable  {
@@ -892,6 +894,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		//@Deprecated
 		//java.util.Collection<Listener> COLLECTION = new ArrayList<>();
 		
+		<T> Fetch<T> getFetch(Class<T> aClass);
+		
 		<T> Collection<T> get(Class<T> aClass);
 		<T> Collection<T> get(Class<T> aClass,Object master);
 		<T> Collection<T> get(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
@@ -927,6 +931,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			
 			@Override
 			public Object act(org.cyk.utility.common.Constant.Action action, Object instance) {
+				return null;
+			}
+			
+			@Override
+			public <T> Fetch<T> getFetch(Class<T> aClass) {
 				return null;
 			}
 			
@@ -1486,4 +1495,115 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 
 	/**/
 	
+	public static interface Fetch<T> {
+		
+		List<T> get(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
+		
+		Integer count(Collection<T> instances,DataReadConfiguration dataReadConfiguration);
+		
+		Boolean isFilterable(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
+		
+		List<T> filter(List<T> collection,DataReadConfiguration dataReadConfiguration);
+		
+		Boolean isSortable(Class<T> aClass,String fieldName);
+		
+		List<T> sort(List<T> collection,DataReadConfiguration dataReadConfiguration);
+		
+		Boolean isPageable(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
+		
+		List<T> page(List<T> collection,DataReadConfiguration dataReadConfiguration);
+
+		/**/
+		
+		public static class Adapter<T> extends AbstractBean implements Fetch<T>,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			public static class Default<T> extends Adapter<T> implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public List<T> get(Class<T> aClass,DataReadConfiguration dataReadConfiguration) {
+					return null;
+				}
+
+				@Override
+				public Integer count(Collection<T> instances,DataReadConfiguration dataReadConfiguration) {
+					return instances.size();
+				}
+
+				@Override
+				public Boolean isFilterable(Class<T> aClass,DataReadConfiguration dataReadConfiguration) {
+					return null;
+				}
+
+				@Override
+				public List<T> filter(List<T> collection,DataReadConfiguration dataReadConfiguration) {
+					return null;
+				}
+
+				@Override
+				public Boolean isSortable(Class<T> aClass,String fieldName) {
+					return null;
+				}
+
+				@Override
+				public List<T> sort(List<T> collection,DataReadConfiguration dataReadConfiguration) {
+					return null;
+				}
+
+				@Override
+				public Boolean isPageable(Class<T> aClass,DataReadConfiguration dataReadConfiguration) {
+					return null;
+				}
+
+				@Override
+				public List<T> page(List<T> collection,DataReadConfiguration dataReadConfiguration) {
+					return null;
+				}
+				
+			}
+			
+			@Override
+			public List<T> get(Class<T> aClass,DataReadConfiguration dataReadConfiguration) {
+				return null;
+			}
+
+			@Override
+			public Integer count(Collection<T> instances,DataReadConfiguration dataReadConfiguration) {
+				return null;
+			}
+
+			@Override
+			public Boolean isFilterable(Class<T> aClass,DataReadConfiguration dataReadConfiguration) {
+				return null;
+			}
+
+			@Override
+			public List<T> filter(List<T> collection,DataReadConfiguration dataReadConfiguration) {
+				return null;
+			}
+
+			@Override
+			public Boolean isSortable(Class<T> aClass,String fieldName) {
+				return null;
+			}
+
+			@Override
+			public List<T> sort(List<T> collection,DataReadConfiguration dataReadConfiguration) {
+				return null;
+			}
+
+			@Override
+			public Boolean isPageable(Class<T> aClass,DataReadConfiguration dataReadConfiguration) {
+				return null;
+			}
+
+			@Override
+			public List<T> page(List<T> collection,DataReadConfiguration dataReadConfiguration) {
+				return null;
+			}
+			
+		}
+		
+	}
 }

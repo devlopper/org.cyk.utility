@@ -2482,6 +2482,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getLazyModel() {
+		return get(LAZY_MODEL);
+	}
+
+	public Properties setLazyModel(Object value) {
+		set(LAZY_MODEL, value);
+		return this;
+	}
+	
+	public static final String LAZY_MODEL = "LAZY_MODEL";
 	public static final String ACTION_ON_CLASS = "ACTION_ON_CLASS";
 	
 	public static final String FILTER_COMMAND_COMPONENT = "FILTER_COMMAND_COMPONENT";

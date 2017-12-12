@@ -113,4 +113,6 @@ public class DataReadConfiguration extends AbstractBean implements Serializable 
 		return firstResultIndex+" , "+maximumResultCount+" , "+sortField+" , "+ascendingOrder+" , "+globalFilter+" , "+filters;
 	}
 
+	/**/
+	
 }

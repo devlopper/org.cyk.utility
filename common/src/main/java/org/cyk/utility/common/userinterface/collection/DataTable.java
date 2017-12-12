@@ -115,7 +115,26 @@ public class DataTable extends Component.Visible implements Serializable {
 		return this;
 	}
 	
-	protected void __prepare__(){}
+	protected void __prepare__(){
+		Class<?> actionOnClass = (Class<?>) getPropertiesMap().getActionOnClass();
+		if(actionOnClass!=null){
+			if(getPropertiesMap().getLazy()==null){
+				getPropertiesMap().setLazy(ClassHelper.getInstance().isLazy(actionOnClass));
+			}
+			
+			if(getPropertiesMap().getPaginator()==null){
+				getPropertiesMap().setPaginator(ClassHelper.getInstance().isPaginated(actionOnClass));
+			}
+			
+			if(getPropertiesMap().getPaginator()!=null && getPropertiesMap().getRows()==null){
+				getPropertiesMap().setRows(ClassHelper.getInstance().getPageSize(actionOnClass));
+			}
+			
+			if(Boolean.TRUE.equals(getPropertiesMap().getLazy())){
+				//getPropertiesMap().setValue();
+			}
+		}
+	}
 	
 	public Column addColumn(String labelStringIdentifier,String fieldName){
 		if(getPropertiesMap().getColumns()==null)
@@ -544,7 +563,6 @@ public class DataTable extends Component.Visible implements Serializable {
 	public static <T> DataTable instanciateOne(Class<T> actionOnClass,String[] fieldNames,Collection<T> collection,Integer page,Boolean lazy){
 		DataTable dataTable = new DataTable();
 		
-		dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
 		dataTable.addColumnsByFieldNames(fieldNames);
 		if(page!=null){
 			dataTable.getPropertiesMap().setRows(page);
@@ -567,7 +585,7 @@ public class DataTable extends Component.Visible implements Serializable {
 	
 	public static interface Listener {
 		
-		void setLazyDataModel(DataTable dataTable);
+		void listenPrepare(DataTable dataTable);
 		
 		public static class Adapter extends AbstractBean implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
@@ -579,10 +597,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			}
 			
 			@Override
-			public void setLazyDataModel(DataTable dataTable) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void listenPrepare(DataTable dataTable) {}
 			
 		}
 		

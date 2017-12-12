@@ -79,6 +79,18 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return instanciateOne(Listener.class).getTypeFieldName(aClass);
 	}
 	
+	public Boolean isLazy(Class<?> aClass) {
+		return instanciateOne(Listener.class).isLazy(aClass);
+	}
+	
+	public Boolean isPaginated(Class<?> aClass) {
+		return instanciateOne(Listener.class).isPaginated(aClass);
+	}
+	
+	public Integer getPageSize(Class<?> aClass) {
+		return instanciateOne(Listener.class).getPageSize(aClass);
+	}
+	
 	public Collection<Class<?>> getAnnotatedWithEntity(){
 		if(CLASSES_WITH_ENTITY_ANNOTATION==null)
 			CLASSES_WITH_ENTITY_ANNOTATION = ClassHelper.getInstance().getByAnnotation("org.cyk", ENTITY_ANNOTATION_CLASS);
@@ -547,11 +559,17 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		String getTypeFieldName(Class<?> aClass);
 		Boolean isTyped(Class<?> aClass);
 		
+		Boolean isLazy(Class<?> aClass);
+		Boolean isPaginated(Class<?> aClass);
+		Integer getPageSize(Class<?> aClass);
+		
 		public static class Adapter extends AbstractBean implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
+				
+				public static Integer PAGE_SIZE = 10;
 				
 				@Override
 				public String getIdentifierFieldName(Class<?> aClass) {
@@ -583,10 +601,40 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 					return FieldHelper.getInstance().get(aClass, getHierarchyFieldName(aClass))!=null;
 				}
 				
+				@Override
+				public Boolean isLazy(Class<?> aClass) {
+					return isIdentified(aClass);
+				}
+				
+				@Override
+				public Boolean isPaginated(Class<?> aClass) {
+					return isLazy(aClass);
+				}
+				
+				@Override
+				public Integer getPageSize(Class<?> aClass) {
+					return PAGE_SIZE;
+				}
+				
 				/**/
 				
 			}
 		
+			@Override
+			public Boolean isLazy(Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public Boolean isPaginated(Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public Integer getPageSize(Class<?> aClass) {
+				return null;
+			}
+			
 			@Override
 			public Boolean isHierarchy(Class<?> aClass) {
 				return null;

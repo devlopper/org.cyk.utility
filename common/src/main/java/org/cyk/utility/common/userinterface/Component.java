@@ -537,6 +537,8 @@ public class Component extends AbstractBean implements Serializable {
 		}else if(component instanceof DataTable){
 			DataTable dataTable = (DataTable) component;
 			dataTable.getPropertiesMap().setActionOnClass(((Window)parent).getActionOnClass());
+			dataTable.getPropertiesMap().setAction(action);
+			
 		}else if(component instanceof Hierarchy){
 			Hierarchy hierarchy = (Hierarchy) component;
 			hierarchy.setActionOnClass(((Window)parent).getActionOnClass());
@@ -567,7 +569,7 @@ public class Component extends AbstractBean implements Serializable {
 				//Form.Master master = (Master) component;
 			}else if(component instanceof DataTable){
 				DataTable dataTable = (DataTable) component;
-				dataTable.setOnPrepareCallLoad(Boolean.TRUE);
+				dataTable.setOnPrepareCallLoad(!Boolean.TRUE.equals(ClassHelper.getInstance().isLazy(actionOnClass)));
 				if(dataTable.getOnPrepareAddMenu() == null)
 					dataTable.setOnPrepareAddMenu(ClassHelper.getInstance().isIdentified(actionOnClass));
 				if(dataTable.getOnPrepareAddColumnAction() == null)
