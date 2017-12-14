@@ -2,7 +2,9 @@ package org.cyk.utility.common;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -23,8 +25,26 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 
 	private static final long serialVersionUID = -6691092648665798471L;
 	
-	@Override
-	protected void _execute_() {}
+	@Test
+	public void buildName(){
+		ClassHelper.NameBuilder nameBuilder = ClassHelper.getInstance().instanciateOne(ClassHelper.NameBuilder.class);
+		Properties properties = nameBuilder.getPropertiesMap();
+		properties.setPackageBaseNameSet(new LinkedHashSet<String>(Arrays.asList("pack01")));
+		properties.setPrefixSet(new LinkedHashSet<String>(Arrays.asList("pre01")));
+		properties.setClassSimpleNameSet(new LinkedHashSet<String>(Arrays.asList("MyClass")));
+		properties.setSuffixSet(new LinkedHashSet<String>(Arrays.asList("$suf01")));
+		Set<String> names = nameBuilder.execute();
+		assertCollectionContains(names, "pack01.pre01MyClass$suf01");
+		
+		nameBuilder = ClassHelper.getInstance().instanciateOne(ClassHelper.NameBuilder.class);
+		properties = nameBuilder.getPropertiesMap();
+		properties.setClass(MyClass.class);
+		properties.setPrefixSet(new LinkedHashSet<String>(Arrays.asList("pre01")));
+		properties.setSuffixSet(new LinkedHashSet<String>(Arrays.asList("$suf01")));
+		names = nameBuilder.execute();
+		assertCollectionContains(names, MyClass.class.getPackage().getName()+".pre01MyClass$suf01");
+		
+	}
 	
 	@Test
 	public void getIdentifier(){

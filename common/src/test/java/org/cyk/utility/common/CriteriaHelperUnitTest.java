@@ -17,5 +17,15 @@ public class CriteriaHelperUnitTest extends AbstractUnitTest {
 		assertEquals(Boolean.FALSE, new CriteriaHelper.Criteria.String().set("maval").isNull());
 	}
 	
-
+	@Test
+	public void set(){
+		CriteriaHelper.Criteria.String string = new CriteriaHelper.Criteria.String();
+		string.set("mystring");
+		assertEquals("mystring",string.getPreparedValue());
+		CriteriaHelper.Criteria.Number.Long longNumber = new CriteriaHelper.Criteria.Number.Long();
+		longNumber.set("notanumber");
+		assertEquals(null,longNumber.getPreparedValue());
+		longNumber.set("15");
+		assertEquals(15l,longNumber.getPreparedValue());
+	}
 }

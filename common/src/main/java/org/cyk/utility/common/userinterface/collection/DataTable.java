@@ -19,6 +19,7 @@ import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.ContentType;
 import org.cyk.utility.common.userinterface.Image;
+import org.cyk.utility.common.userinterface.JavaServerFacesHelper;
 import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueSource;
 import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
@@ -107,10 +108,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			load(); //can be trigger by callback to enabled fast rendering of table structure	
 		}
 		
-		if(getPropertiesMap().getAction() instanceof Constant.Action)
-			getPropertiesMap().setFilterable(!Constant.Action.isCreateOrUpdateOrDelete((Constant.Action)getPropertiesMap().getAction()));
-		((Component)getPropertiesMap().getFilterInputComponent()).getPropertiesMap().setRendered(getPropertiesMap().getFilterable());
-		((Component)getPropertiesMap().getFilterCommandComponent()).getPropertiesMap().setRendered(getPropertiesMap().getFilterable());
+		
 		
 		return this;
 	}
@@ -118,6 +116,15 @@ public class DataTable extends Component.Visible implements Serializable {
 	protected void __prepare__(){
 		Class<?> actionOnClass = (Class<?>) getPropertiesMap().getActionOnClass();
 		if(actionOnClass!=null){
+			
+			if(getPropertiesMap().getFilterable()==null && Boolean.TRUE.equals(ClassHelper.getInstance().isFilterable(actionOnClass))){
+				if(getPropertiesMap().getAction() instanceof Constant.Action)
+					getPropertiesMap().setFilterable(!Constant.Action.isCreateOrUpdateOrDelete((Constant.Action)getPropertiesMap().getAction()));
+			}
+			
+			((Component)getPropertiesMap().getFilterInputComponent()).getPropertiesMap().setRendered(getPropertiesMap().getFilterable());
+			((Component)getPropertiesMap().getFilterCommandComponent()).getPropertiesMap().setRendered(getPropertiesMap().getFilterable());
+			
 			if(getPropertiesMap().getLazy()==null){
 				getPropertiesMap().setLazy(ClassHelper.getInstance().isLazy(actionOnClass));
 			}
@@ -132,6 +139,11 @@ public class DataTable extends Component.Visible implements Serializable {
 			
 			if(Boolean.TRUE.equals(getPropertiesMap().getLazy())){
 				//getPropertiesMap().setValue();
+				Command command = (Command) getPropertiesMap().getFilterCommandComponent();
+				if(JavaServerFacesHelper.Library.PRIMEFACES.equals(Component.JAVA_SERVER_FACES_LIBRARY)){
+					command.getPropertiesMap().setType("button");
+					command.getPropertiesMap().setOnClick(JavaServerFacesHelper.Primefaces.Script.getInstance().getMethodCallFilter(this));	
+				}
 			}
 		}
 	}

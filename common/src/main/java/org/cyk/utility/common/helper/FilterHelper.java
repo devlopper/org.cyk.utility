@@ -2,7 +2,9 @@ package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.inject.Singleton;
@@ -95,7 +97,45 @@ public class FilterHelper extends AbstractHelper implements Serializable {
 		public String toString() {
 			return criterias+" , "+excluded;
 		}
+
+		private static ClassLocator CLASS_LOCATOR;
+		public static ClassLocator getClassLocator(){
+			if(CLASS_LOCATOR == null)
+				CLASS_LOCATOR = ClassHelper.getInstance().instanciateOne(ClassLocator.class);
+			return CLASS_LOCATOR;
+		}
 		
+		/**/
+		
+		public static class ClassLocator extends org.cyk.utility.common.helper.ClassHelper.Locator implements Serializable {
+			private static final long serialVersionUID = -1L;
+
+			private static ClassLocator INSTANCE;
+			
+			public ClassLocator() {
+				setClassType("Filter");
+				nameBuilder = ClassHelper.getInstance().instanciateOne(ClassHelper.NameBuilder.class);
+				nameBuilder.getPropertiesMap().setSuffixSet(new LinkedHashSet<String>(Arrays.asList("Filter","$Filter")));
+			}
+			
+			@Override
+			protected void initialisation() {
+				INSTANCE = this;
+				super.initialisation();
+			}
+			
+			@Override
+			protected Boolean isLocatable(Class<?> aClass) {
+				return Boolean.TRUE.equals(ClassHelper.getInstance().isModel(aClass)) && Boolean.TRUE.equals(ClassHelper.getInstance().isPersisted(aClass));
+			}
+				
+			public static ClassLocator getInstance() {
+				if(INSTANCE == null)
+					INSTANCE = new ClassLocator();
+				return INSTANCE;
+			}
+		}
+
 	}
 	
 }

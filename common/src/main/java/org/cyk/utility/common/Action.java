@@ -134,6 +134,8 @@ public interface Action<INPUT,OUTPUT> {
 	 * The following will be used to extend the attributes list 
 	 **/
 	
+	org.cyk.utility.common.Properties getPropertiesMap();
+	
 	Properties getProperties();
 	Action<INPUT, OUTPUT> setProperties(Properties properties);
 	Action<INPUT, OUTPUT> setProperty(String name,Object value);
@@ -173,8 +175,11 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_FIELD_NAME = "fieldName";
 	java.lang.String PROPERTY_NAME_QUERY = "QUERY";
 	java.lang.String PROPERTY_NAME_NOT = "NOT";
-	java.lang.String PROPERTY_NAME_INDEX = "index";
-	java.lang.String PROPERTY_NAME_SUFFIX = "suffix";
+	java.lang.String PROPERTY_NAME_INDEX = "INDEX";
+	java.lang.String PROPERTY_NAME_SUFFIX = "SUFFIX";
+	java.lang.String PROPERTY_NAME_SUFFIXES = "SUFFIXES";
+	java.lang.String PROPERTY_NAME_BASE_CLASS_PACKAGE_NAME = "BASE_CLASS_PACKAGE_NAME";
+	java.lang.String PROPERTY_NAME_PACKAGE_PREFIX = "PACKAGE_PREFIX";
 	java.lang.String PROPERTY_NAME_FIELD_VALUE = "fieldValue";
 	java.lang.String PROPERTY_NAME_PARAMETER_1 = "parameter1";
 	java.lang.String PROPERTY_NAME_PARAMETER_2 = "parameter2";
@@ -233,6 +238,10 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_LEFT_PADDING = "LEFT_PADDING";
 	java.lang.String PROPERTY_NAME_PERCENTAGE_SYMBOL = "PERCENTAGE_SYMBOL";
 	java.lang.String PROPERTY_NAME_CLASS="CLASS";
+	java.lang.String PROPERTY_NAME_PACKAGES="PACKAGES";
+	java.lang.String PROPERTY_NAME_SYSTEM_IDENTIFIERS="SYSTEM_IDENTIFIERS";
+	java.lang.String PROPERTY_NAME_PREFIX="PREFIX";
+	java.lang.String PROPERTY_NAME_PREFIXES="PREFIXES";
 	java.lang.String PROPERTY_NAME_LOGGER="LOGGER";
 	java.lang.String PROPERTY_NAME_LEVEL="LEVEL";
 	java.lang.String PROPERTY_NAME_MARKER="MARKER";

@@ -2,6 +2,7 @@ package org.cyk.utility.common.utility.userinterface;
 
 import java.io.Serializable;
 
+import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.command.MenuNode;
@@ -92,19 +93,20 @@ public class UserInterfaceMenuUnitTest extends AbstractUnitTest {
 				
 	}
 	
+	public static class ComponentAdapter extends Component.Listener.Adapter.Default {
+		private static final long serialVersionUID = 1L;
+		
+		@Override
+		public Object build(Component component) {
+			if(component instanceof Form.Detail)
+				return Form.Detail.buildTarget((Form.Detail) component);
+			if(component instanceof Menu)
+				return new MenuBuilder().setInput((Menu) component).execute();
+			return super.build(component);
+		}
+	}
+	
 	static {
-		Component.Listener.COLLECTION.add(new Component.Listener.Adapter(){
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			public Object build(Component component) {
-				if(component instanceof Form.Detail)
-					return Form.Detail.buildTarget((Form.Detail) component);
-				if(component instanceof Menu)
-					return new MenuBuilder().setInput((Menu) component).execute();
-				return super.build(component);
-			}
-			
-		});
+		ClassHelper.getInstance().map(Component.Listener.class, ComponentAdapter.class);
 	}
 }

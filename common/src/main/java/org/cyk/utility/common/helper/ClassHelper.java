@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,9 +23,11 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.cyk.utility.common.Action;
+import org.cyk.utility.common.Builder;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.cdi.BeanListener;
 import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
 
@@ -38,6 +41,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	private static final Map<Class<?>,Class<?>> MAP = new HashMap<>();
 	static {
 		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
+		ClassHelper.getInstance().map(NameBuilder.class, NameBuilder.Adapter.Default.class,Boolean.FALSE);
 	}
 	
 	public static Class<? extends Annotation> ENTITY_ANNOTATION_CLASS = javax.persistence.Entity.class;
@@ -83,12 +87,24 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return instanciateOne(Listener.class).isLazy(aClass);
 	}
 	
+	public Boolean isFilterable(Class<?> aClass) {
+		return instanciateOne(Listener.class).isFilterable(aClass);
+	}
+	
 	public Boolean isPaginated(Class<?> aClass) {
 		return instanciateOne(Listener.class).isPaginated(aClass);
 	}
 	
 	public Integer getPageSize(Class<?> aClass) {
 		return instanciateOne(Listener.class).getPageSize(aClass);
+	}
+	
+	public Boolean isPersisted(Class<?> aClass) {
+		return instanciateOne(Listener.class).isPersisted(aClass);
+	}
+	
+	public Boolean isModel(Class<?> aClass) {
+		return instanciateOne(Listener.class).isModel(aClass);
 	}
 	
 	public Collection<Class<?>> getAnnotatedWithEntity(){
@@ -550,6 +566,9 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	
 	public static interface Listener {
 
+		Boolean isModel(Class<?> aClass);
+		Boolean isPersisted(Class<?> aClass);
+		
 		String getIdentifierFieldName(Class<?> aClass);
 		Boolean isIdentified(Class<?> aClass);
 		
@@ -559,6 +578,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		String getTypeFieldName(Class<?> aClass);
 		Boolean isTyped(Class<?> aClass);
 		
+		Boolean isFilterable(Class<?> aClass);
 		Boolean isLazy(Class<?> aClass);
 		Boolean isPaginated(Class<?> aClass);
 		Integer getPageSize(Class<?> aClass);
@@ -602,6 +622,11 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				}
 				
 				@Override
+				public Boolean isFilterable(Class<?> aClass) {
+					return isIdentified(aClass);
+				}
+				
+				@Override
 				public Boolean isLazy(Class<?> aClass) {
 					return isIdentified(aClass);
 				}
@@ -616,10 +641,35 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 					return PAGE_SIZE;
 				}
 				
+				@Override
+				public Boolean isModel(Class<?> aClass) {
+					return isIdentified(aClass);
+				}
+				
+				@Override
+				public Boolean isPersisted(Class<?> aClass) {
+					return isIdentified(aClass);
+				}
+				
 				/**/
 				
 			}
+			
+			@Override
+			public Boolean isModel(Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public Boolean isPersisted(Class<?> aClass) {
+				return null;
+			}
 		
+			@Override
+			public Boolean isFilterable(Class<?> aClass) {
+				return null;
+			}
+			
 			@Override
 			public Boolean isLazy(Class<?> aClass) {
 				return null;
@@ -667,4 +717,184 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		}
 		
 	}
+
+	/*
+	 * mypack.MyClass -> {mypack01.MyClass,mypack01.MyPrefixMyClass,mypack01.MyClassMySuffix,mypack01.MyPrefixMyClassMySuffix}
+	 * this can be resume as : {package base name set}{prefix set}{class simple name set}{suffix set}
+	 */
+	public static interface NameBuilder extends Builder.NullableInput<Set<String>> {
+		
+		public static class Adapter extends Builder.NullableInput.Adapter.Default<Set<String>> implements NameBuilder,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			@SuppressWarnings("unchecked")
+			public Adapter() {
+				super((Class<Set<String>>) getInstance().getByName(Set.class));
+			}
+			
+			public static class Default extends NameBuilder.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@SuppressWarnings("unchecked")
+				@Override
+				protected Set<String> __execute__() {
+					Set<String> set = new LinkedHashSet<String>();
+					Set<String> packageBaseNameSet = (Set<String>) getPropertiesMap().getPackageBaseNameSet();
+					Set<String> prefixSet = (Set<String>) getPropertiesMap().getPrefixSet();
+					Set<String> suffixSet = (Set<String>) getPropertiesMap().getSuffixSet();
+					Set<String> classSimpleNameSet = (Set<String>) getPropertiesMap().getClassSimpleNameSet();
+					
+					Class<?> aClass = (Class<?>) getPropertiesMap().getClazz();
+					
+					if(packageBaseNameSet == null && aClass!=null){
+						packageBaseNameSet = new LinkedHashSet<String>(Arrays.asList(aClass.getPackage().getName()));
+					}
+					
+					if(classSimpleNameSet == null && aClass!=null){
+						classSimpleNameSet = new LinkedHashSet<String>(Arrays.asList(aClass.getSimpleName()));
+					}
+					
+					if(prefixSet == null){
+						prefixSet = new HashSet<String>(Arrays.asList(Constant.EMPTY_STRING));
+					}
+					
+					if(suffixSet == null){
+						suffixSet = new HashSet<String>(Arrays.asList(Constant.EMPTY_STRING));
+					}
+					
+					for(String packageBaseName : packageBaseNameSet)
+						for(String prefix : prefixSet)
+							for(String classSimpleName : classSimpleNameSet)
+								for(String suffix : suffixSet)
+									set.add(StringHelper.getInstance().appendIfDoesNotEndWith(packageBaseName, Constant.CHARACTER_DOT.toString())+prefix+classSimpleName+suffix);
+					
+					return set;
+				}	
+			}
+		}
+	}
+	
+	/**/
+	
+	@Getter @Setter
+	public static class Locator extends AbstractBean implements Serializable {
+		private static final long serialVersionUID = -5858728987562936549L;
+
+		protected String classType;
+		protected NameBuilder nameBuilder;
+		protected Map<Class<?>,Class<?>> cache = new HashMap<>();
+		protected Boolean logClassNotFoundException = Boolean.TRUE;
+		
+		public Class<?> locate(final Class<?> basedClass){
+			Class<?> clazz = null;
+			if(Boolean.TRUE.equals(isLocatable(basedClass))){
+				clazz = cache.get(basedClass);
+				if(clazz==null){
+					/*if(nameBuilder==null){
+						nameBuilder = getInstance().instanciateOne(NameBuilder.class);
+					}*/
+					
+					Set<String> names = getNames(basedClass);
+					logTrace("names : {}", StringHelper.getInstance().concatenate(names, " , "));
+					if(CollectionHelper.getInstance().isNotEmpty(names))
+						for(String name : names){
+							if(StringUtils.isNotBlank(name)){
+								try {
+									clazz = Class.forName(name);
+								} catch (ClassNotFoundException e) {
+									clazz = listenClassNotFound(name);
+									//if(clazz == null && Boolean.TRUE.equals(getLogClassNotFoundException()))
+									//	logThrowable(e);
+								}
+								if(clazz!=null)
+									break;
+							}
+						}
+				}
+			}else
+				logTrace("{} is not locatable", basedClass);
+			
+			if(clazz==null)
+				clazz = getDefault(basedClass);
+			
+			if(clazz==null)
+				logClassIsNull(basedClass);
+			else
+				cache.put(basedClass, clazz);
+			return clazz;
+		}
+		
+		protected Boolean isLocatable(Class<?> aClass){
+			return Boolean.TRUE;
+		}
+		
+		protected Set<String> getNames(Class<?> basedClass){
+			nameBuilder.getPropertiesMap().setClass(basedClass);
+			return nameBuilder.execute();
+		}
+		
+		protected Class<?> listenClassNotFound(String name){
+			return null;
+		}
+		
+		protected Class<?> getDefault(Class<?> aClass){
+			return null;
+		}
+		
+		protected void logClassIsNull(Class<?> basedClass){
+			logWarning(getLogClassIsNullMessageFormat(), basedClass);
+		}
+		
+		protected String getLogClassIsNullMessageFormat(){
+			return (StringUtils.isBlank(classType) ? Constant.EMPTY_STRING : (classType+Constant.CHARACTER_SPACE))
+					+"class cannot be found based on {}";
+		}
+		
+		@SuppressWarnings("unchecked")
+		public <T> T injectLocated(Class<T> aClass) {
+			Class<?> clazz = locate(aClass);
+			if(clazz==null)
+				return null;
+			return (T) inject(clazz);
+		}
+		
+		/**/
+		
+		public static interface Listener {
+			
+			Class<?> locate(Class<?> basedClass);
+			
+			Boolean isLocatable(Class<?> basedClass);
+			
+			/**/
+			
+			/**/
+			
+			@Getter @Setter
+			public static class Adapter extends BeanListener.Adapter implements Listener,Serializable {
+				private static final long serialVersionUID = -4338231956722553859L;
+
+				@Override
+				public Class<?> locate(Class<?> basedClass) {
+					return null;
+				}
+				@Override
+				public Boolean isLocatable(Class<?> basedClass) {
+					return null;
+				}
+				/**/
+				
+				@Getter @Setter
+				public static class Default extends Listener.Adapter implements Serializable {
+
+					private static final long serialVersionUID = -4338231956722553859L;
+					
+				}
+				
+			}
+		}
+
+	}
+
+	
 }

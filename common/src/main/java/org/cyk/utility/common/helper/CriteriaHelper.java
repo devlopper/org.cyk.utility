@@ -195,6 +195,14 @@ public class CriteriaHelper extends AbstractHelper implements Serializable {
 				highest = criteria.highest;
 			}
 			
+			@SuppressWarnings("unchecked")
+			@Override
+			protected NUMBER get(java.lang.String string) {
+				if(NumberHelper.getInstance().isNotNumber(string))
+					return null;
+				return (NUMBER) NumberHelper.getInstance().get(ClassHelper.getInstance().getParameterAt(getClass(), 0, java.lang.Number.class), string,null);
+			}
+			
 			/**/
 			
 			@Getter @Setter @Accessors(chain=true) @NoArgsConstructor 
@@ -250,7 +258,7 @@ public class CriteriaHelper extends AbstractHelper implements Serializable {
 				public Long(Long criteria) {
 					super(criteria);
 				}
-
+				
 			}
 			
 			@Getter @Setter @Accessors(chain=true) @NoArgsConstructor 

@@ -1,5 +1,6 @@
 package org.cyk.utility.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.NumberHelper;
@@ -2491,6 +2493,47 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getPackageBaseNameSet() {
+		return get(PACKAGE_BASE_NAME_SET);
+	}
+
+	public Properties setPackageBaseNameSet(Object value) {
+		set(PACKAGE_BASE_NAME_SET, value);
+		return this;
+	}
+	
+	public Object getPrefixSet() {
+		return get(PREFIX_SET);
+	}
+
+	public Properties setPrefixSet(Object value) {
+		set(PREFIX_SET, value);
+		return this;
+	}
+	
+	public Object getSuffixSet() {
+		return get(SUFFIX_SET);
+	}
+
+	public Properties setSuffixSet(Object value) {
+		set(SUFFIX_SET, value);
+		return this;
+	}
+	
+	public Object getClassSimpleNameSet() {
+		return get(CLASS_SIMPLE_NAME_SET);
+	}
+
+	public Properties setClassSimpleNameSet(Object value) {
+		set(CLASS_SIMPLE_NAME_SET, value);
+		return this;
+	}
+	
+	public static final String PACKAGE_BASE_NAME_SET = "PACKAGE_BASE_NAME_SET";
+	public static final String PREFIX_SET = "PREFIX_SET";
+	public static final String SUFFIX_SET = "SUFFIX_SET";
+	public static final String CLASS_SIMPLE_NAME_SET = "CLASS_SIMPLE_NAME_SET";
+	
 	public static final String LAZY_MODEL = "LAZY_MODEL";
 	public static final String ACTION_ON_CLASS = "ACTION_ON_CLASS";
 	
@@ -2818,6 +2861,24 @@ public class Properties implements java.io.Serializable {
 	public static interface Getter {
 		
 		Object execute(Properties properties,Object key,Object nullValue);
+		
+	}
+
+	/**/
+	
+	public static interface Listener {
+		
+		public static class Adapter extends AbstractBean implements Listener,Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static class Default extends Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				
+				
+			}
+			
+		}
 		
 	}
 }

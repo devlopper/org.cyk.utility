@@ -46,6 +46,7 @@ public class Component extends AbstractBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static ContentType RENDER_AS_CONTENT_TYPE = ContentType.DEFAULT;
+	public static JavaServerFacesHelper.Library JAVA_SERVER_FACES_LIBRARY = JavaServerFacesHelper.Library.DEFAULT;
 	
 	static {
 		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
@@ -132,8 +133,9 @@ public class Component extends AbstractBean implements Serializable {
 					component.build();
 				}
 			}.execute();
-		built = ListenerHelper.getInstance()
-				.listenObject(Listener.COLLECTION, Listener.METHOD_NAME_BUILD, MethodHelper.Method.Parameter.buildArray(Component.class,this));
+		//built = ListenerHelper.getInstance()
+		//		.listenObject(Listener.COLLECTION, Listener.METHOD_NAME_BUILD, MethodHelper.Method.Parameter.buildArray(Component.class,this));
+		built = ClassHelper.getInstance().instanciateOne(Listener.class).build(this);
 		hasBeenBuilt = Boolean.TRUE;
 		return this;
 	}
@@ -414,7 +416,7 @@ public class Component extends AbstractBean implements Serializable {
 	
 	public static interface Listener {
 		
-		Collection<Listener> COLLECTION = new ArrayList<Listener>();
+		//@Deprecated Collection<Listener> COLLECTION = new ArrayList<Listener>();
 		
 		String METHOD_NAME_BUILD = "build";
 		Object build(Component component);
@@ -536,7 +538,7 @@ public class Component extends AbstractBean implements Serializable {
 				detail = master.instanciateDetail();
 		}else if(component instanceof DataTable){
 			DataTable dataTable = (DataTable) component;
-			dataTable.getPropertiesMap().setActionOnClass(((Window)parent).getActionOnClass());
+			dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
 			dataTable.getPropertiesMap().setAction(action);
 			
 		}else if(component instanceof Hierarchy){
