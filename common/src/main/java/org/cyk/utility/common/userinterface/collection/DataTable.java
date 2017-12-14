@@ -580,9 +580,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			dataTable.getPropertiesMap().setRows(page);
 			dataTable.getPropertiesMap().setPaginator(Boolean.TRUE);
 		}
-		if(lazy!=null){
-			dataTable.getPropertiesMap().setLazy(lazy);
-		}
+		dataTable.getPropertiesMap().setLazy(lazy!=null && lazy);
 		dataTable.getPropertiesMap().setAction(Constant.Action.READ);
 		dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
 		dataTable.prepare();
