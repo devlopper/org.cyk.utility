@@ -2529,6 +2529,72 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getAddCommandComponent() {
+		return get(ADD_COMMAND_COMPONENT);
+	}
+
+	public Properties setAddCommandComponent(Object value) {
+		set(ADD_COMMAND_COMPONENT, value);
+		return this;
+	}
+	
+	public Object getAddInputComponent() {
+		return get(ADD_INPUT_COMPONENT);
+	}
+
+	public Properties setAddInputComponent(Object value) {
+		set(ADD_INPUT_COMPONENT, value);
+		return this;
+	}
+	
+	public Object getParent() {
+		return get(PARENT);
+	}
+
+	public Properties setParent(Object value) {
+		set(PARENT, value);
+		return this;
+	}
+	
+	public Object getTemplateInForm() {
+		return get(TEMPLATE_IN_FORM);
+	}
+
+	public Properties setTemplateInForm(Object value) {
+		set(TEMPLATE_IN_FORM, value);
+		return this;
+	}
+	
+	public Object getTemplateWithoutIdentifier() {
+		return get(TEMPLATE_WITHOUT_IDENTIFIER);
+	}
+
+	public Properties setTemplateWithoutIdentifier(Object value) {
+		set(TEMPLATE_WITHOUT_IDENTIFIER, value);
+		return this;
+	}
+	
+	public Object getChoiceClass() {
+		return get(CHOICE_CLASS);
+	}
+
+	public Properties setChoiceClass(Object value) {
+		set(CHOICE_CLASS, value);
+		return this;
+	}
+	
+	public Object getAddCommandComponentActionAdapterClass() {
+		return get(ADD_COMMAND_COMPONENT_ACTION_ADAPTER_CLASS);
+	}
+
+	public Properties setAddCommandComponentActionAdapterClass(Object value) {
+		set(ADD_COMMAND_COMPONENT_ACTION_ADAPTER_CLASS, value);
+		return this;
+	}
+	
+	public static final String PARENT = "PARENT";
+	public static final String CHOICE_CLASS = "CHOICE_CLASS";
+	
 	public static final String PACKAGE_BASE_NAME_SET = "PACKAGE_BASE_NAME_SET";
 	public static final String PREFIX_SET = "PREFIX_SET";
 	public static final String SUFFIX_SET = "SUFFIX_SET";
@@ -2536,6 +2602,10 @@ public class Properties implements java.io.Serializable {
 	
 	public static final String LAZY_MODEL = "LAZY_MODEL";
 	public static final String ACTION_ON_CLASS = "ACTION_ON_CLASS";
+	
+	public static final String ADD_COMMAND_COMPONENT = "ADD_COMMAND_COMPONENT";
+	public static final String ADD_COMMAND_COMPONENT_ACTION_ADAPTER_CLASS = "ADD_COMMAND_COMPONENT_ACTION_ADAPTER_CLASS";
+	public static final String ADD_INPUT_COMPONENT = "ADD_INPUT_COMPONENT";
 	
 	public static final String FILTER_COMMAND_COMPONENT = "FILTER_COMMAND_COMPONENT";
 	public static final String FILTER_INPUT_COMPONENT = "FILTER_INPUT_COMPONENT";
@@ -2791,6 +2861,8 @@ public class Properties implements java.io.Serializable {
 	public static final String CLOSABLE = "CLOSABLE";
 	public static final String INCLUDE = "INCLUDE";
 	public static final String TEMPLATE = "TEMPLATE";
+	public static final String TEMPLATE_IN_FORM = "TEMPLATE_IN_FORM";
+	public static final String TEMPLATE_WITHOUT_IDENTIFIER = "TEMPLATE_WITHOUT_IDENTIFIER";
 	public static final String CONTRACTS = "CONTRACTS";
 	public static final String NORTH = "NORTH";
 	public static final String EAST = "EAST";

@@ -2,6 +2,7 @@ package org.cyk.utility.common.userinterface.container;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -19,6 +20,7 @@ import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.ContentType;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.Layout;
+import org.cyk.utility.common.userinterface.collection.DataTable;
 import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.container.window.Window;
@@ -124,6 +126,13 @@ public class Form extends Container implements Serializable {
 			this(null,null,null);
 		}
 		
+		public Master addComponentOnSubmit(Component component){
+			String identifier = (String)component.getPropertiesMap().getIdentifier();
+			getSubmitCommand().getPropertiesMap().addString(Properties.PROCESS, identifier);
+			getSubmitCommand().getPropertiesMap().addString(Properties.UPDATE,identifier);
+			return this;
+		}
+		
 		public Master setAction(Constant.Action action){
 			this.action = action;
 			if(editable==null && this.action!=null)
@@ -148,6 +157,14 @@ public class Form extends Container implements Serializable {
 			return SubmitCommandActionAdapter.class;
 		}*/
 		
+		@Override
+		public Component prepare() {
+			__prepare__();
+			return this;
+		}
+		
+		protected void __prepare__(){}
+		
 		public Master read(){
 			if(detail!=null)
 				detail.read();
@@ -163,11 +180,18 @@ public class Form extends Container implements Serializable {
 		public Detail instanciateDetail(Layout.Type layoutType){
 			Detail detail = new Detail(this,layoutType);
 			addOneChild(this.detail = detail);
+			addComponentOnSubmit(detail);
 			return detail;
 		}
 		
 		public Detail instanciateDetail(){
 			return instanciateDetail(Layout.Type.DEFAULT);
+		}
+		
+		public DataTable instanciateDataTable(){
+			DataTable dataTable = new DataTable();
+			getDetail().addDataTable(dataTable);
+			return dataTable;
 		}
 		
 		@Override
@@ -236,8 +260,13 @@ public class Form extends Container implements Serializable {
 			
 			@Override
 			protected Object __execute__() {
-				form.write();
-				act();
+				try {
+					form.write();
+					act();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return null;
 			}
 			
@@ -354,6 +383,7 @@ public class Form extends Container implements Serializable {
 
 		private Master master;
 		private Object fieldsObject;
+		private Collection<DataTable> dataTables;
 		
 		public Detail(Master master,Layout.Type layoutType) {
 			setMaster(master);
@@ -378,6 +408,24 @@ public class Form extends Container implements Serializable {
 		public Detail setFieldsObjectFromMaster(String...fieldNames){
 			setFieldsObject(ArrayHelper.getInstance().isEmpty(fieldNames) ? master.getObject() : FieldHelper.getInstance().read(master.getObject(), fieldNames));
 			return this;
+		}
+		
+		public Detail addDataTable(DataTable dataTable){
+			if(dataTables == null)
+				dataTables = new ArrayList<>();
+			if(dataTable.getForm() == null)
+				dataTable.setForm(this);
+			dataTables.add(dataTable);
+			
+			master.addComponentOnSubmit(dataTable);
+			
+			return this;
+		}
+		
+		public DataTable instanciateDataTable(){
+			DataTable dataTable = new DataTable();
+			addDataTable(dataTable);
+			return dataTable;
 		}
 		
 		/**/
@@ -462,6 +510,10 @@ public class Form extends Container implements Serializable {
 						((Input<?>)component).read();
 					}
 				}.execute();
+			
+			if(dataTables!=null)
+				for(DataTable dataTable : dataTables)
+					dataTable.read();	
 			return this;
 		}
 		
@@ -472,10 +524,16 @@ public class Form extends Container implements Serializable {
 					private static final long serialVersionUID = 1L;
 					@Override
 					protected void __executeForEach__(Component component) {
-						if(component instanceof Input<?>)
+						if(component instanceof Input<?>){
 							((Input<?>)component).write();
+						}
 					}
 				}.execute();
+			
+			if(dataTables!=null)
+				for(DataTable dataTable : dataTables)
+					dataTable.write();	
+				
 			return this;
 		}
 		

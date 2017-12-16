@@ -418,6 +418,8 @@ public class Component extends AbstractBean implements Serializable {
 		
 		//@Deprecated Collection<Listener> COLLECTION = new ArrayList<Listener>();
 		
+		String getTemplate(Component component);
+		
 		String METHOD_NAME_BUILD = "build";
 		Object build(Component component);
 		
@@ -433,6 +435,11 @@ public class Component extends AbstractBean implements Serializable {
 		public static class Adapter extends AbstractBean implements Listener , Serializable {
 			private static final long serialVersionUID = 1L;
 
+			@Override
+			public String getTemplate(Component component) {
+				return null;
+			}
+			
 			@Override
 			public Object build(Component component) {
 				return null;

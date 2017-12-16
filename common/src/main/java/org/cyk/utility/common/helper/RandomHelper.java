@@ -131,6 +131,12 @@ public class RandomHelper extends AbstractHelper implements Serializable {
 		return TimeHelper.getInstance().getDate(getInteger(1970, 2016), getInteger(1, 12), getInteger(1, 28));
 	}
 	
+	public <T> T getElement(T[] elements){
+		if(ArrayHelper.getInstance().isEmpty(elements))
+			return null;
+		return elements[getInteger(0, elements.length-1)];	
+	}
+	
 	public <T> T getElement(Collection<T> collection){
 		if(CollectionHelper.getInstance().isEmpty(collection))
 			return null;

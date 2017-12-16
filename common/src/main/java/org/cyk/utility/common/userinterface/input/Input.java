@@ -23,7 +23,9 @@ import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FileHelper;
+import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
@@ -172,6 +174,27 @@ public class Input<T> extends Control implements Serializable {
 		return getListener().get(detail,object);
 	}
 	
+	public static void read(Collection<Input<?>> inputs){
+		new CollectionHelper.Iterator.Adapter.Default<Input<?>>(inputs){
+			private static final long serialVersionUID = 1L;
+			@Override
+			protected void __executeForEach__(Input<?> input) {
+				input.read();
+			}
+		}.execute();
+	}
+	
+	public static void write(Collection<Input<?>> inputs){
+		new CollectionHelper.Iterator.Adapter.Default<Input<?>>(inputs){
+			private static final long serialVersionUID = 1L;
+			@Override
+			protected void __executeForEach__(Input<?> input) {
+				input.write();
+				//System.out.println("Input.write(...).new Default() {...}.__executeForEach__() : "+input.getValue()+" : "+input.getObject());
+			}
+		}.execute();
+	}
+	
 	/**/
 	
 	public static final java.util.List<Class<? extends Annotation>> ANNOTATIONS = new ArrayList<Class<? extends Annotation>>();
@@ -255,6 +278,9 @@ public class Input<T> extends Control implements Serializable {
 							aClass = InputText.class;
 						}else if(Date.class.equals(field.getType())){
 							aClass = InputCalendar.class;
+						}else if(ClassHelper.getInstance().isNumber(field.getType())){
+							String name = InputNumber.class.getName()+ClassHelper.getInstance().getWrapper(field.getType()).getSimpleName();
+							aClass = (Class<? extends Input<?>>) ClassHelper.getInstance().getByName(name);
 						}
 					}else{
 						if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputText.class)!=null)
