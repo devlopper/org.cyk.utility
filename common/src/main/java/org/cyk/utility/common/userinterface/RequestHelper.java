@@ -2,15 +2,14 @@ package org.cyk.utility.common.userinterface;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
-
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.AbstractHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 
-@Singleton
+@javax.inject.Singleton @javax.inject.Named
 public class RequestHelper extends AbstractHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -84,6 +83,12 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 	
 	public Class<?> getParameterAsClass(String name){
 		return getParameterAsClass(name,get());
+	}
+	
+	/**/
+	
+	public Object getParameterInputValueIsNotRequired(){
+		return getParameter(UniformResourceLocatorHelper.QueryParameter.Name.INPUT_VALUE_IS_NOT_REQUIRED);
 	}
 	
 	/**/

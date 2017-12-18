@@ -140,6 +140,11 @@ public class Form extends Container implements Serializable {
 			submitCommand.getPropertiesMap().setRendered(!Constant.Action.READ.equals(this.action));
 			if(Boolean.TRUE.equals(submitCommand.getPropertiesMap().getRendered()))
 				submitCommand.setIsConfirmable(Constant.Action.DELETE.equals(this.action));
+			
+			Detail detail = getDetail();
+			if(detail!=null){
+				detail.getPropertiesMap().setAction(this.action);
+			}
 			return this;
 		}
 		
@@ -179,6 +184,9 @@ public class Form extends Container implements Serializable {
 		
 		public Detail instanciateDetail(Layout.Type layoutType){
 			Detail detail = new Detail(this,layoutType);
+			
+			detail.getPropertiesMap().setAction(/*getPropertiesMap().getAction()*/getAction());
+			
 			addOneChild(this.detail = detail);
 			addComponentOnSubmit(detail);
 			return detail;
@@ -415,6 +423,9 @@ public class Form extends Container implements Serializable {
 				dataTables = new ArrayList<>();
 			if(dataTable.getForm() == null)
 				dataTable.setForm(this);
+			if(dataTable.getPropertiesMap().getAction() == null)
+				dataTable.getPropertiesMap().setAction(getPropertiesMap().getAction());
+	
 			dataTables.add(dataTable);
 			
 			master.addComponentOnSubmit(dataTable);

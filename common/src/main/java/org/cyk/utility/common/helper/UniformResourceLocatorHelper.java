@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +24,7 @@ import org.cyk.utility.common.userinterface.RequestHelper;
 
 import lombok.Getter;
 
-@Singleton
+@Singleton @Named
 public class UniformResourceLocatorHelper extends AbstractHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -45,6 +46,10 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public String getParameterNameInputValueIsNotRequired(){
+		return QueryParameter.Name.INPUT_VALUE_IS_NOT_REQUIRED;
 	}
 	
 	public String getToken(TokenName name,String url){
@@ -786,6 +791,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			String URL_NEXT = "urlnext";
 			String ACTION = "action";
 			String CLASS = "clazz";
+			String INPUT_VALUE_IS_NOT_REQUIRED = "INPUT_VALUE_IS_NOT_REQUIRED";
 		}
 		
 		public static interface Value {

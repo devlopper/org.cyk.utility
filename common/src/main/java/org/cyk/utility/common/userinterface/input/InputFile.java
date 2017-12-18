@@ -36,7 +36,7 @@ public class InputFile extends Input<FileHelper.File> implements Serializable {
 		Image image = new Image();
 		image.getPropertiesMap().setGetter(Properties.RENDERED, new Properties.Getter() {
 			@Override
-			public Object execute(Properties properties, Object key, Object nullValue) {
+			public Object execute(Properties properties, Object key,Object value, Object nullValue) {
 				return getValue()!=null;
 			}
 		});
@@ -55,7 +55,7 @@ public class InputFile extends Input<FileHelper.File> implements Serializable {
 		});
 		removeCommand.getPropertiesMap().setGetter(Properties.RENDERED, new Properties.Getter() {
 			@Override
-			public Object execute(Properties properties, Object key, Object nullValue) {
+			public Object execute(Properties properties, Object key,Object value, Object nullValue) {
 				Image image = (Image) InputFile.this.getPropertiesMap().getImageComponent();
 				return image==null ? null : image.getPropertiesMap().getRendered();
 			}

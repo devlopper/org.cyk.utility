@@ -145,9 +145,13 @@ public class DataTable extends Component.Visible implements Serializable {
 			actionAdapter.setDataTable(this);
 			add.setAction(actionAdapter);
 			
+			OutputText outputText = new OutputText();
+			getPropertiesMap().setAddTextComponent(outputText);
+			
 			InputChoiceOneCombo inputChoiceOneCombo = (InputChoiceOneCombo) getPropertiesMap().getAddInputComponent();
-			if(getPropertiesMap().getChoiceClass()!=null){
-				inputChoiceOneCombo.getChoices().addMany(InstanceHelper.getInstance().get((Class<?>) getPropertiesMap().getChoiceClass()));	
+			if(getPropertiesMap().getChoiceValueClass()!=null){
+				inputChoiceOneCombo.getChoices().addMany(InstanceHelper.getInstance().get((Class<?>) getPropertiesMap().getChoiceValueClass()));	
+				outputText.getPropertiesMap().setValue(StringHelper.getInstance().getClazz((Class<?>) getPropertiesMap().getChoiceValueClass()));
 			}
 			
 			((Component)getPropertiesMap().getFilterInputComponent()).getPropertiesMap().setRendered(Boolean.FALSE);
@@ -755,6 +759,7 @@ public class DataTable extends Component.Visible implements Serializable {
 				
 			}else{
 				Object object = ClassHelper.getInstance().instanciateOne(actionOnClass);
+				setObjectSource(object,inputChoiceOneCombo.getValue());
 				listenObjectCreated(object,inputChoiceOneCombo.getValue());
 				dataTable.addOneRow(object);
 				CollectionHelper.Instance<?> collection = getDestinationCollection();
@@ -769,15 +774,17 @@ public class DataTable extends Component.Visible implements Serializable {
 			return null;
 		}
 		
-		protected void listenObjectCreated(Object object,Object source){
-			/*
-			 	orderItem.setArticle((Article) inputChoiceOneCombo.getValue());
-				orderItem.setQuantity(new BigDecimal("1"));
-			 */
-			//((Order)orderForm.getObject()).getOrderItems().addOne(orderItem);
+		protected void setObjectSource(Object object,Object source){
+			if(dataTable.getPropertiesMap().getChoiceValueClass()!=null)
+				FieldHelper.getInstance().set(object, source,ClassHelper.getInstance().getVariableName((Class<?>)dataTable.getPropertiesMap().getChoiceValueClass()));
 		}
 		
+		protected void listenObjectCreated(Object object,Object source){}
+		
 		protected CollectionHelper.Instance<?> getDestinationCollection(){
+			if(dataTable.getPropertiesMap().getActionOnClass()!=null)
+				return (CollectionHelper.Instance<?>) FieldHelper.getInstance().read(dataTable.getForm().getMaster().getObject()
+					, ClassHelper.getInstance().getVariableName((Class<?>) dataTable.getPropertiesMap().getActionOnClass(),Boolean.TRUE));// ((Order)).getOrderItems();
 			return null;
 		}
 		

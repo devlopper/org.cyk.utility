@@ -73,7 +73,7 @@ public class Properties implements java.io.Serializable {
 	public <T> T get(Class<T> aClass,Object key,T nullValue){
 		Getter getter = getGetter(key);
 		if(getter!=null)
-			return (T) getter.execute(this, key,nullValue);
+			return (T) getter.execute(this, key,this.map.get(key),nullValue);
 		return (T) (this.map == null ? nullValue : this.map.get(key) == null ? nullValue : this.map.get(key));
 	}
 	
@@ -2574,12 +2574,12 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
-	public Object getChoiceClass() {
-		return get(CHOICE_CLASS);
+	public Object getChoiceValueClass() {
+		return get(CHOICE_VALUE_CLASS);
 	}
 
-	public Properties setChoiceClass(Object value) {
-		set(CHOICE_CLASS, value);
+	public Properties setChoiceValueClass(Object value) {
+		set(CHOICE_VALUE_CLASS, value);
 		return this;
 	}
 	
@@ -2592,8 +2592,26 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getAddInputComponentValueClass() {
+		return get(ADD_INPUT_COMPONENT_VALUE_CLASS);
+	}
+
+	public Properties setAddInputComponentValueClass(Object value) {
+		set(ADD_INPUT_COMPONENT_VALUE_CLASS, value);
+		return this;
+	}
+	
+	public Object getAddTextComponent() {
+		return get(ADD_TEXT_COMPONENT);
+	}
+
+	public Properties setAddTextComponent(Object value) {
+		set(ADD_TEXT_COMPONENT, value);
+		return this;
+	}
+	
 	public static final String PARENT = "PARENT";
-	public static final String CHOICE_CLASS = "CHOICE_CLASS";
+	public static final String CHOICE_VALUE_CLASS = "CHOICE_CLASS";
 	
 	public static final String PACKAGE_BASE_NAME_SET = "PACKAGE_BASE_NAME_SET";
 	public static final String PREFIX_SET = "PREFIX_SET";
@@ -2606,6 +2624,8 @@ public class Properties implements java.io.Serializable {
 	public static final String ADD_COMMAND_COMPONENT = "ADD_COMMAND_COMPONENT";
 	public static final String ADD_COMMAND_COMPONENT_ACTION_ADAPTER_CLASS = "ADD_COMMAND_COMPONENT_ACTION_ADAPTER_CLASS";
 	public static final String ADD_INPUT_COMPONENT = "ADD_INPUT_COMPONENT";
+	public static final String ADD_INPUT_COMPONENT_VALUE_CLASS = "ADD_INPUT_COMPONENT_VALUE_CLASS";
+	public static final String ADD_TEXT_COMPONENT = "ADD_TEXT_COMPONENT";
 	
 	public static final String FILTER_COMMAND_COMPONENT = "FILTER_COMMAND_COMPONENT";
 	public static final String FILTER_INPUT_COMPONENT = "FILTER_INPUT_COMPONENT";
@@ -2932,7 +2952,7 @@ public class Properties implements java.io.Serializable {
 	
 	public static interface Getter {
 		
-		Object execute(Properties properties,Object key,Object nullValue);
+		Object execute(Properties properties,Object key,Object value,Object nullValue);
 		
 	}
 
