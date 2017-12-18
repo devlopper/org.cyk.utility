@@ -2610,6 +2610,25 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getRowsCollectionInstance() {
+		return get(ROWS_COLLECTION_INSTANCE);
+	}
+
+	public Properties setRowsCollectionInstance(Object value) {
+		set(ROWS_COLLECTION_INSTANCE, value);
+		return this;
+	}
+	
+	public Object getRemoveCommandComponent() {
+		return get(REMOVE_COMMAND_COMPONENT);
+	}
+
+	public Properties setRemoveCommandComponent(Object value) {
+		set(REMOVE_COMMAND_COMPONENT, value);
+		return this;
+	}
+	
+	public static final String ROWS_COLLECTION_INSTANCE = "ROWS_COLLECTION_INSTANCE";
 	public static final String PARENT = "PARENT";
 	public static final String CHOICE_VALUE_CLASS = "CHOICE_CLASS";
 	
@@ -2626,6 +2645,8 @@ public class Properties implements java.io.Serializable {
 	public static final String ADD_INPUT_COMPONENT = "ADD_INPUT_COMPONENT";
 	public static final String ADD_INPUT_COMPONENT_VALUE_CLASS = "ADD_INPUT_COMPONENT_VALUE_CLASS";
 	public static final String ADD_TEXT_COMPONENT = "ADD_TEXT_COMPONENT";
+	
+	public static final String REMOVE_COMMAND_COMPONENT = "REMOVE_COMMAND_COMPONENT";
 	
 	public static final String FILTER_COMMAND_COMPONENT = "FILTER_COMMAND_COMPONENT";
 	public static final String FILTER_INPUT_COMPONENT = "FILTER_INPUT_COMPONENT";

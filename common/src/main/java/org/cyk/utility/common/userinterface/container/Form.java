@@ -196,10 +196,17 @@ public class Form extends Container implements Serializable {
 			return instanciateDetail(Layout.Type.DEFAULT);
 		}
 		
-		public DataTable instanciateDataTable(){
+		public DataTable instanciateDataTable(Class<?> actionOnClass,Class<?> choiceValueClass,String...fieldNames){
 			DataTable dataTable = new DataTable();
+			dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
+			dataTable.getPropertiesMap().setChoiceValueClass(choiceValueClass);
 			getDetail().addDataTable(dataTable);
+			dataTable.addColumnsByFieldNames(fieldNames);
 			return dataTable;
+		}
+		
+		public DataTable instanciateDataTable(){
+			return instanciateDataTable(null, null);
 		}
 		
 		@Override

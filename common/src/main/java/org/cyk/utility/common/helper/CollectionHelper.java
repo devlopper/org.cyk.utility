@@ -656,6 +656,13 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			return this;
 		}
 		
+		public <CLASS> Instance<T> removeMany(java.util.Collection<?> collection){
+			if(getInstance().isNotEmpty(collection))
+				for(Object object : collection)
+					removeOne(object);
+			return this;
+		}
+		
 		/*@SuppressWarnings("unchecked")
 		public <CLASS> Instance<T> clear(Class<CLASS> aClass){
 			for(int index = 0 ; index < ((List<?>)collection).size() ; )

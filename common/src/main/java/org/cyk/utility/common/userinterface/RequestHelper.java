@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.AbstractHelper;
+import org.cyk.utility.common.helper.BooleanHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
@@ -59,6 +60,14 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 		return getParameterAsString(name,get());
 	}
 	
+	public Boolean getParameterAsBoolean(String name,Object request){
+		return new BooleanHelper.Builder.String.Adapter.Default(StringUtils.defaultIfBlank(getParameterAsString(name,request),Boolean.FALSE.toString())).execute();
+	}
+	
+	public Boolean getParameterAsBoolean(String name){
+		return getParameterAsBoolean(name,get());
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <T extends Enum<?>> T getParameterAsEnum(Class<T> enumClass,String name,Object request){
 		String string = getParameterAsString(name,request);
@@ -87,8 +96,8 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 	
 	/**/
 	
-	public Object getParameterInputValueIsNotRequired(){
-		return getParameter(UniformResourceLocatorHelper.QueryParameter.Name.INPUT_VALUE_IS_NOT_REQUIRED);
+	public Boolean getParameterInputValueIsNotRequired(){
+		return getParameterAsBoolean(UniformResourceLocatorHelper.QueryParameter.Name.INPUT_VALUE_IS_NOT_REQUIRED);
 	}
 	
 	/**/
