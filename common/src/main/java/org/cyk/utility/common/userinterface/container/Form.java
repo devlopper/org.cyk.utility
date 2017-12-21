@@ -112,7 +112,7 @@ public class Form extends Container implements Serializable {
 			setParent(parent);
 			this.object = object;
 			menu.addOneChild(submitCommand);
-			submitCommand.setLabelFromIdentifier("command.submit");
+			submitCommand.setLabelFromIdentifier("userinterface.command.submit");
 			setAction(action);
 			setSubmitCommandActionAdapterClass(submitCommandActionAdapterClass);
 			instanciateDetail();
@@ -196,13 +196,18 @@ public class Form extends Container implements Serializable {
 			return instanciateDetail(Layout.Type.DEFAULT);
 		}
 		
-		public DataTable instanciateDataTable(Class<?> actionOnClass,Class<?> choiceValueClass,String...fieldNames){
+		public DataTable instanciateDataTable(Class<?> actionOnClass,Class<?> choiceValueClass,DataTable.Cell.Listener cellListener,String...fieldNames){
 			DataTable dataTable = new DataTable();
 			dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
 			dataTable.getPropertiesMap().setChoiceValueClass(choiceValueClass);
+			dataTable.getPropertiesMap().setCellListener(cellListener);
 			getDetail().addDataTable(dataTable);
 			dataTable.addColumnsByFieldNames(fieldNames);
 			return dataTable;
+		}
+		
+		public DataTable instanciateDataTable(Class<?> actionOnClass,Class<?> choiceValueClass,String...fieldNames){
+			return instanciateDataTable(null, null, (DataTable.Cell.Listener)null);
 		}
 		
 		public DataTable instanciateDataTable(){

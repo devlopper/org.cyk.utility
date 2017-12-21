@@ -1,7 +1,6 @@
 package org.cyk.utility.common.userinterface;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,8 +17,7 @@ import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
-import org.cyk.utility.common.helper.ListenerHelper;
-import org.cyk.utility.common.helper.MethodHelper;
+import org.cyk.utility.common.helper.CommandHelper;
 import org.cyk.utility.common.helper.RandomHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
@@ -29,6 +27,7 @@ import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
 import org.cyk.utility.common.userinterface.container.Form.Master;
 import org.cyk.utility.common.userinterface.container.window.Window;
+import org.cyk.utility.common.userinterface.event.Event;
 import org.cyk.utility.common.userinterface.hierarchy.Hierarchy;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.Watermark;
@@ -68,6 +67,13 @@ public class Component extends AbstractBean implements Serializable {
 
 	public Component() {
 		//getPropertiesMap();//trigger settings
+		if(Boolean.TRUE.equals(isJavaServerFacesLibraryPrimefaces()))
+			constructorJavaServerFacesLibraryPrimefaces();
+		
+	}
+	
+	protected void constructorJavaServerFacesLibraryPrimefaces(){
+		
 	}
 	
 	@Override
@@ -319,6 +325,17 @@ public class Component extends AbstractBean implements Serializable {
 		
 		public Visible _setPropertyTitleFromLabel(){
 			getPropertiesMap().setTitle(getLabel().getPropertiesMap().getValue());
+			return this;
+		}
+		
+		public Visible _setPropertyEvent(String name,String process,String update,CommandHelper.Command listener){
+			Event event = new Event();
+			event.getPropertiesMap().setEvent(name);
+			event.getPropertiesMap().setProcess(process);
+			event.getPropertiesMap().setUpdate(update);
+			if(listener!=null)
+				event.setListener(listener);
+			getPropertiesMap().setEvent(event);
 			return this;
 		}
 		
@@ -612,6 +629,10 @@ public class Component extends AbstractBean implements Serializable {
 		CLASSES.clear();
 	}
 	
+	public static Boolean isJavaServerFacesLibraryPrimefaces(){
+		return JavaServerFacesHelper.Library.PRIMEFACES.equals(JAVA_SERVER_FACES_LIBRARY);
+	}
+	
 	@Getter @Setter @Accessors(chain=true) @AllArgsConstructor @EqualsAndHashCode(of={"parentClass","action","actionOnClass","key"})
 	public static class ComponentClass implements Serializable {
 		private static final long serialVersionUID = 1L;
@@ -721,4 +742,6 @@ public class Component extends AbstractBean implements Serializable {
 		}
 		
 	}
+	
+	
 }

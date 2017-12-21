@@ -2,6 +2,7 @@ package org.cyk.utility.common.userinterface.command;
 
 import java.io.Serializable;
 
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CommandHelper;
 import org.cyk.utility.common.helper.JavaScriptHelper;
@@ -20,7 +21,8 @@ import lombok.experimental.Accessors;
 public class Command extends Control implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private org.cyk.utility.common.helper.CommandHelper.Command action;
+	private org.cyk.utility.common.helper.CommandHelper.Command action = new CommandHelper.Command.Adapter.Default.NoExecution();
+	private org.cyk.utility.common.helper.CommandHelper.Command actionListener = new CommandHelper.Command.Adapter.Default.NoExecution();
 	private Confirm confirm;
 	private ConfirmationDialog confirmationDialog;
 	
@@ -64,6 +66,37 @@ public class Command extends Control implements Serializable {
 	
 	public Command addJavaScriptGoToUniformResourceLocatorOnEvent(String event){
 		return addJavaScriptGoToUniformResourceLocatorOnEvent(event, RequestHelper.getInstance().getParameterAsString(UniformResourceLocatorHelper.QueryParameter.Name.URL_PREVIOUS));
+	}
+	
+	public Command setPropertyOnClick(String onClick,Boolean actionable){
+		getPropertiesMap().setOnClick(onClick);
+		if(!Boolean.TRUE.equals(actionable)){
+			if(isJavaServerFacesLibraryPrimefaces())
+				getPropertiesMap().setType("button");
+		}
+		return this;
+	}
+	
+	public Command usePropertyRemoteCommand(){
+		RemoteCommand remoteCommand = new RemoteCommand();
+		remoteCommand.setAction(getAction());
+		remoteCommand.setActionListener(getActionListener());
+		
+		remoteCommand.getPropertiesMap().copyFrom(getPropertiesMap(), Properties.INPUT_VALUE_IS_NOT_REQUIRED,Properties.PROCESS,Properties.UPDATE,Properties.IMMEDIATE);
+		
+		//remoteCommand.getPropertiesMap().setInputValueIsNotRequired(getPropertiesMap().getInputValueIsNotRequired());
+		//if(/*remoteCommand.getPropertiesMap().getProcess()==null && */getPropertiesMap().getProcess()!=null)
+		//	remoteCommand.getPropertiesMap().setProcess(getPropertiesMap().getProcess());
+		//remoteCommand.getPropertiesMap().setUpdate(getPropertiesMap().getUpdate());
+		
+		if(isJavaServerFacesLibraryPrimefaces()){
+			setPropertyOnClick(remoteCommand.getPropertiesMap().getName()+"();", Boolean.FALSE);
+			//remoteCommand.getPropertiesMap().setImmediate(getPropertiesMap().getInputValueIsNotRequired());
+		}
+		
+		getPropertiesMap().setRemoteCommand(remoteCommand);
+		
+		return this;
 	}
 	
 	/**/

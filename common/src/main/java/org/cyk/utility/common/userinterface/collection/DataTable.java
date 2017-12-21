@@ -12,7 +12,7 @@ import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
-import org.cyk.utility.common.helper.CommandHelper;
+import org.cyk.utility.common.helper.CollectionHelper.Instance;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.IconHelper;
@@ -30,6 +30,8 @@ import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputText;
 import org.cyk.utility.common.userinterface.input.Watermark;
+import org.cyk.utility.common.userinterface.input.choice.InputChoice;
+import org.cyk.utility.common.userinterface.input.choice.InputChoiceOne;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneCombo;
 import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputFile;
@@ -100,7 +102,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		Class<?> choiceValueClass = (Class<?>)getPropertiesMap().getChoiceValueClass();
 		Column orderNumberColumn = null,choiceValueColumn = null;
 		if(Boolean.TRUE.equals(onPrepareAddColumnOrderNumber)){
-			orderNumberColumn = addColumn("order.number", FIELD___ORDER_NUMBER__);
+			orderNumberColumn = addColumn("userinterface.column.order.number", FIELD___ORDER_NUMBER__);
 			orderNumberColumn.setCellValueSource(CellValueSource.ROW).set__orderNumber__(Long.MIN_VALUE);	
 		}
 		if(choiceValueClass!=null){
@@ -113,29 +115,41 @@ public class DataTable extends Component.Visible implements Serializable {
 	
 	protected void addLastColumns(){
 		if(Boolean.TRUE.equals(onPrepareAddColumnAction)){
-			addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(Cell.ValueType.MENU).set__orderNumber__(Long.MAX_VALUE);	
+			addColumn("userinterface.column.action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(Cell.ValueType.MENU).set__orderNumber__(Long.MAX_VALUE);	
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void __prepare__(){
 		Class<?> actionOnClass = (Class<?>) getPropertiesMap().getActionOnClass();
 		Boolean isCreateOrUpdateAction = Constant.Action.isCreateOrUpdate((Action) getPropertiesMap().getAction());
 		if(isCreateOrUpdateAction){
-						
-			Command command = new Command();
-			command.setLabelFromIdentifier("add")._setLabelPropertyRendered(Boolean.FALSE);
-			command.getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.PLUS);
-			getPropertiesMap().setAddCommandComponent(command);
-			if(JavaServerFacesHelper.Library.PRIMEFACES.equals(Component.JAVA_SERVER_FACES_LIBRARY))
-				command.getPropertiesMap().setUpdate("@(."+propertiesMap.getIdentifierAsStyleClass()+")");
+			Command addCommand = new Command();
+			addCommand.setLabelFromIdentifier("userinterface.command.add")._setLabelPropertyRendered(Boolean.FALSE);
+			addCommand.getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.PLUS);
+			addCommand.getPropertiesMap().setInputValueIsNotRequired(Boolean.TRUE);
+			addCommand.getPropertiesMap().setGetter(Properties.FIELD_RENDERED, new Properties.Getter() {
+				@Override
+				public Object execute(Properties properties, Object key, Object value, Object nullValue) {
+					if(DataTable.this.getPropertiesMap().getAddInputComponent()==null)
+						return properties.getRendered();
+					else
+						return ((InputChoice<?>)DataTable.this.getPropertiesMap().getAddInputComponent()).getPropertiesMap().getRendered();
+				}
+			});
+			getPropertiesMap().setAddCommandComponent(addCommand);
+			if(isJavaServerFacesLibraryPrimefaces()){
+				//addCommand.getPropertiesMap().setImmediate(Boolean.TRUE);
+				//addCommand.getPropertiesMap().setProcess(getPropertiesMap().getIdentifier());
+				addCommand.getPropertiesMap().setUpdate("@(."+getPropertiesMap().getIdentifierAsStyleClass()+")");
+			}
 			
-			@SuppressWarnings("unchecked")
 			Class<AddCommandComponentActionAdapter> actionAdapterClass = InstanceHelper.getInstance().getIfNotNullElseDefault(
 					(Class<AddCommandComponentActionAdapter>) getPropertiesMap().getAddCommandComponentActionAdapterClass(),AddCommandComponentActionAdapter.class);
 			
 			AddCommandComponentActionAdapter actionAdapter = ClassHelper.getInstance().instanciateOne(actionAdapterClass);
 			actionAdapter.setDataTable(this);
-			command.setAction(actionAdapter);
+			addCommand.setAction(actionAdapter);
 			
 			OutputText outputText = new OutputText();
 			getPropertiesMap().setAddTextComponent(outputText);
@@ -145,6 +159,14 @@ public class DataTable extends Component.Visible implements Serializable {
 			//watermark.getPropertiesMap().setValue(StringHelper.getInstance().get("search", new Object[]{}));
 			//inputChoice.getPropertiesMap().setWatermark(watermark);
 			getPropertiesMap().setAddInputComponent(inputChoiceOneCombo);
+			
+			inputChoiceOneCombo.getPropertiesMap().setGetter(Properties.FIELD_RENDERED, new Properties.Getter() {
+				@Override
+				public Object execute(Properties properties, Object key, Object value, Object nullValue) {
+					return CollectionHelper.getInstance().isNotEmpty(((InputChoice<?>)DataTable.this.getPropertiesMap().getAddInputComponent()).getChoices());
+				}
+			});
+			
 			if(getPropertiesMap().getChoiceValueClass()!=null){
 				Class<?> choiceValueClass = (Class<?>)getPropertiesMap().getChoiceValueClass();	
 				outputText.getPropertiesMap().setValue(StringHelper.getInstance().getClazz(choiceValueClass));
@@ -155,12 +177,26 @@ public class DataTable extends Component.Visible implements Serializable {
 				}
 			}
 			
-			((Command)getPropertiesMap().getAddCommandComponent()).getPropertiesMap().setInputValueIsNotRequired(Boolean.TRUE);
+			//((Command)getPropertiesMap().getAddCommandComponent()).getPropertiesMap().setInputValueIsNotRequired(Boolean.TRUE);
 			
 			//((Component)getPropertiesMap().getFilterInputComponent()).getPropertiesMap().setRendered(Boolean.FALSE);
 			//((Component)getPropertiesMap().getFilterCommandComponent()).getPropertiesMap().setRendered(Boolean.FALSE);
 			
-			getPropertiesMap().setRowsCollectionInstance(new CollectionHelper.Instance<>());
+			CollectionHelper.Instance<Row> rows = (CollectionHelper.Instance<Row>)getPropertiesMap().getRowsCollectionInstance();
+			if(rows==null){
+				rows = new CollectionHelper.Instance<>();
+				getPropertiesMap().setRowsCollectionInstance(rows);	
+			}
+			
+			if(getPropertiesMap().getRowsCollectionInstanceListenerClass()==null){
+				getPropertiesMap().setRowsCollectionInstanceListenerClass(RowsCollectionInstanceListener.class);
+			}
+			
+			if(getPropertiesMap().getRowsCollectionInstanceListenerClass()!=null && rows!=null){
+				RowsCollectionInstanceListener rowsCollectionInstanceListener = ClassHelper.getInstance().instanciateOne((Class<? extends RowsCollectionInstanceListener>) getPropertiesMap().getRowsCollectionInstanceListenerClass());
+				rowsCollectionInstanceListener.setDataTable(this);
+				rows.addListener(rowsCollectionInstanceListener);
+			}
 		}else{
 			if(actionOnClass!=null){
 				
@@ -220,6 +256,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		if(getPropertiesMap().getColumns()==null){
 			Columns columns = new Columns();
 			columns.getPropertiesMap().setAction(getPropertiesMap().getAction());
+			columns.getPropertiesMap().setCellListener(getPropertiesMap().getCellListener());
 			getPropertiesMap().setColumns(columns);
 		}
 		return ((Columns)getPropertiesMap().getColumns()).addColumn(labelStringIdentifier, fieldName);
@@ -289,8 +326,9 @@ public class DataTable extends Component.Visible implements Serializable {
 		if(CollectionHelper.getInstance().isNotEmpty(collection)){
 			@SuppressWarnings("unchecked")
 			CollectionHelper.Instance<Row> rows = (CollectionHelper.Instance<Row>) getPropertiesMap().getRowsCollectionInstance();
-			if(rows!=null)
+			if(rows!=null){
 				rows.removeMany(collection);
+			}
 		}
 		return this;
 	}
@@ -372,7 +410,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		public Cell getCell(Row row){
 			if(row==null)
 				return null;
-			return Cell.getOne(this, row);
+			return Cell.getOne(this, row,(Cell.Listener) getPropertiesMap().getCellListener());
 		}
 		
 		
@@ -459,6 +497,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		public Column addColumn(String labelStringIdentifier,String fieldName){
 			DataTable.Column column = Column.instanciateOne(labelStringIdentifier, fieldName);
 			column.getPropertiesMap().setAction(getPropertiesMap().getAction());
+			column.getPropertiesMap().setCellListener(getPropertiesMap().getCellListener());
 			//column.setLabelFromIdentifier(labelStringIdentifier);
 			//column.getPropertiesMap().setHeaderText(column.getLabel().getPropertiesMap().getValue());
 			//column.getPropertiesMap().setFieldName(fieldName);
@@ -583,7 +622,12 @@ public class DataTable extends Component.Visible implements Serializable {
 		}
 		
 		public Cell getCell(Column column){
-			return Cell.getOne(column, this);
+			return Cell.getOne(column, this,(Cell.Listener) getPropertiesMap().getCellListener());
+		}
+		
+		public Cell getCell(String columnFieldName){
+			DataTable dataTable = (DataTable) getPropertiesMap().getParent();
+			return getCell(dataTable.getColumn(columnFieldName));
 		}
 		
 		/**/
@@ -605,6 +649,7 @@ public class DataTable extends Component.Visible implements Serializable {
 					rows = new CollectionHelper.Instance<>();
 				for(Object object : collection){
 					Row row = new Row()._setObject(object);
+					row.getPropertiesMap().setParent(component);
 					rows.addOne(row);
 					row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements()),0l));
 					component.addOneChild(row);
@@ -622,6 +667,10 @@ public class DataTable extends Component.Visible implements Serializable {
 	public static class Cell extends Component.Visible implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		static {
+			ClassHelper.getInstance().map(Cell.Listener.class, Cell.Listener.Adapter.Default.class, Boolean.FALSE);
+		}
+		
 		public static enum ValueType {TEXT,LINK,MENU,FILE,IMAGE,INPUT; public static ValueType DEFAULT = ValueType.TEXT;}
 		
 		private Column column;
@@ -629,77 +678,11 @@ public class DataTable extends Component.Visible implements Serializable {
 		private Input<?> input;
 		/**/
 		
-		public static Cell instanciateOne(Column column,Row row){
-			column.computeCellValueType(row.getPropertiesMap().getValue());
-			
-			Cell cell = new Cell().setColumn(column).setRow(row);
-			Output output = null;
-			/*if(row==null){
-				value = "ROW IS NULL";
-			}*/
-			if(row!=null){
-				String fieldName = (String) column.getPropertiesMap().getFieldName();
-				if(StringHelper.getInstance().isBlank(fieldName)){
-					output = new OutputText();
-					output.getPropertiesMap().setValue("NO FIELD NAME");
-				}else {
-					if(column.cellValueSource==null)
-						;
-					else
-						switch(column.cellValueSource){
-						case ROW : 
-							output = new Output(); 
-							output.getPropertiesMap().setValue(FieldHelper.getInstance().read(row, fieldName)); 
-							break;
-						case ROW_PROPERTIES_MAP : 
-							output = new Output(); 
-							output.getPropertiesMap().setValue(row.getPropertiesMap().get(fieldName)); 
-							break;
-						case ROW_PROPERTY_VALUE:
-							Object object = FieldHelper.getInstance().readBeforeLast(row.getPropertiesMap().getValue(), fieldName);
-							java.lang.reflect.Field field = FieldHelper.getInstance().getLast(object.getClass(),fieldName);
-							output = Output.getListener().get(null,object, field); 
-							
-							if(column.getPropertiesMap().getAction() instanceof Constant.Action){
-								Constant.Action action = (Action) column.getPropertiesMap().getAction();
-								if(Constant.Action.isCreateOrUpdate(action) && ValueType.INPUT.equals(column.cellValueType)){
-									cell.input = Input.get(null, object, field);
-									cell.input.getPropertiesMap().setWatermark(null);
-								}
-							}
-							/*
-							if(column.inputClass == null){
-								column.inputClass = (Class<Input<?>>) Input.getListener().getClass(null, object, FieldHelper.getInstance()
-										.get(row.getPropertiesMap().getValue().getClass(), fieldName));
-							}
-							
-							if(column.getInputClass()!=null){
-								cell.input = ClassHelper.getInstance().instanciateOne(column.getInputClass());
-							}
-							*/
-							break;
-						}	
-				}	
-			}
-			if(output instanceof OutputFile){
-				Image thumbnail = (Image) ((OutputFile) output).getPropertiesMap().getThumbnail();
-				if(ContentType.HTML.equals(Component.RENDER_AS_CONTENT_TYPE)){
-					thumbnail.getPropertiesMap().setWidth("20px").setHeight("20px");
-				}
-			}
-			
-			cell.getPropertiesMap().setValue(output);
-			if(output instanceof OutputFile){
-				
-			}else{
-				cell.getPropertiesMap().setSortBy(output.getPropertiesMap().getValue());
-				cell.getPropertiesMap().setFilterBy(output.getPropertiesMap().getValue());
-			}
-			
-			return cell;
+		public static Cell instanciateOne(Column column,Row row,Cell.Listener listener){
+			return (listener == null ? ClassHelper.getInstance().instanciateOne(Cell.Listener.class) : listener).instanciateOne(column, row);
 		}
 		
-		public static Cell getOne(Column column,Row row){
+		public static Cell getOne(Column column,Row row,Cell.Listener listener){
 			Cell cell = null;
 			if(CollectionHelper.getInstance().isNotEmpty(column.cells))
 				for(Cell index : column.cells)
@@ -708,7 +691,7 @@ public class DataTable extends Component.Visible implements Serializable {
 						break;
 					}
 			if(cell==null){
-				column.addOneCell(cell = Cell.instanciateOne(column, row));
+				column.addOneCell(cell = Cell.instanciateOne(column, row,listener));
 				row.addOneCell(cell);
 			}
 			return cell;
@@ -718,6 +701,98 @@ public class DataTable extends Component.Visible implements Serializable {
 		
 		public static final String FIELD_COLUMN = "column";
 		public static final String FIELD_ROW = "row";
+		
+		/**/
+		
+		public static interface Listener {
+			
+			Cell instanciateOne(Column column,Row row);
+			
+			public static class Adapter extends AbstractBean implements Listener,Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public Cell instanciateOne(Column column, Row row) {
+					return null;
+				}
+				
+				public static class Default extends Listener.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					public Cell instanciateOne(Column column,Row row){
+						column.computeCellValueType(row.getPropertiesMap().getValue());
+						
+						Cell cell = new Cell().setColumn(column).setRow(row);
+						Output output = null;
+						/*if(row==null){
+							value = "ROW IS NULL";
+						}*/
+						if(row!=null){
+							String fieldName = (String) column.getPropertiesMap().getFieldName();
+							if(StringHelper.getInstance().isBlank(fieldName)){
+								output = new OutputText();
+								output.getPropertiesMap().setValue("NO FIELD NAME");
+							}else {
+								if(column.cellValueSource==null)
+									;
+								else
+									switch(column.cellValueSource){
+									case ROW : 
+										output = new Output(); 
+										output.getPropertiesMap().setValue(FieldHelper.getInstance().read(row, fieldName)); 
+										break;
+									case ROW_PROPERTIES_MAP : 
+										output = new Output(); 
+										output.getPropertiesMap().setValue(row.getPropertiesMap().get(fieldName)); 
+										break;
+									case ROW_PROPERTY_VALUE:
+										Object object = FieldHelper.getInstance().readBeforeLast(row.getPropertiesMap().getValue(), fieldName);
+										java.lang.reflect.Field field = FieldHelper.getInstance().getLast(object.getClass(),fieldName);
+										output = Output.getListener().get(null,object, field); 
+										
+										if(column.getPropertiesMap().getAction() instanceof Constant.Action){
+											Constant.Action action = (Action) column.getPropertiesMap().getAction();
+											if(Constant.Action.isCreateOrUpdate(action) && ValueType.INPUT.equals(column.cellValueType)){
+												cell.input = Input.get(null, object, field);
+												cell.input.getPropertiesMap().setWatermark(null);
+											}
+										}
+										/*
+										if(column.inputClass == null){
+											column.inputClass = (Class<Input<?>>) Input.getListener().getClass(null, object, FieldHelper.getInstance()
+													.get(row.getPropertiesMap().getValue().getClass(), fieldName));
+										}
+										
+										if(column.getInputClass()!=null){
+											cell.input = ClassHelper.getInstance().instanciateOne(column.getInputClass());
+										}
+										*/
+										break;
+									}	
+							}	
+						}
+						if(output instanceof OutputFile){
+							Image thumbnail = (Image) ((OutputFile) output).getPropertiesMap().getThumbnail();
+							if(ContentType.HTML.equals(Component.RENDER_AS_CONTENT_TYPE)){
+								thumbnail.getPropertiesMap().setWidth("20px").setHeight("20px");
+							}
+						}
+						
+						cell.getPropertiesMap().setValue(output);
+						if(output instanceof OutputFile){
+							
+						}else{
+							cell.getPropertiesMap().setSortBy(output.getPropertiesMap().getValue());
+							cell.getPropertiesMap().setFilterBy(output.getPropertiesMap().getValue());
+						}
+						
+						return cell;
+					}
+					
+				}
+				
+			}
+		}
 	}
 
 	/**/
@@ -805,32 +880,56 @@ public class DataTable extends Component.Visible implements Serializable {
 	/**/
 	
 	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
-	public static class AddCommandComponentActionAdapter extends CommandHelper.Command.Adapter.Default {
+	public static class RowsCollectionInstanceListener extends CollectionHelper.Instance.Listener.Adapter<Row> {
+		private static final long serialVersionUID = 1L;
+		
+		protected DataTable dataTable;
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public void addOne(Instance<Row> instance, Row row, Object source, Object sourceObject) {
+			super.addOne(instance, row, source, sourceObject);
+			Class<? extends RemoveCommandComponentActionAdapter> removeCommandComponentActionAdapterClass = InstanceHelper.getInstance()
+					.getIfNotNullElseDefault((Class<? extends RemoveCommandComponentActionAdapter>)dataTable.getPropertiesMap().getRemoveCommandComponentActionAdapterClass()
+					, RemoveCommandComponentActionAdapter.class);
+			RemoveCommandComponentActionAdapter removeCommandComponentActionAdapter = ClassHelper.getInstance().instanciateOne(removeCommandComponentActionAdapterClass);
+			removeCommandComponentActionAdapter.setDataTable(dataTable);
+			removeCommandComponentActionAdapter.setRow(row);
+			
+			Command command = new Command();
+			command.setLabelFromIdentifier("userinterface.command.remove")._setLabelPropertyRendered(Boolean.FALSE);
+			command.setAction(removeCommandComponentActionAdapter);
+			command.getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.MINUS);
+			command.getPropertiesMap().setInputValueIsNotRequired(Boolean.TRUE);
+			command.getPropertiesMap().setImmediate(Boolean.TRUE);
+			
+			command.getPropertiesMap().copyFrom(((Command)dataTable.getPropertiesMap().getAddCommandComponent()).getPropertiesMap(), Properties.PROCESS,Properties.UPDATE);
+			
+			//command.getPropertiesMap().setProcess(((Command)dataTable.getPropertiesMap().getAddCommandComponent()).getPropertiesMap().getProcess());
+			//command.getPropertiesMap().setUpdate(((Command)dataTable.getPropertiesMap().getAddCommandComponent()).getPropertiesMap().getUpdate());
+			
+			command.usePropertyRemoteCommand();
+			
+			row.getPropertiesMap().setRemoveCommandComponent(command);
+		}
+	}
+	
+	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
+	public static class AddRemoveCommandActionAdapter extends Command.ActionAdapter {
 		private static final long serialVersionUID = 1L;
 		
 		protected DataTable dataTable;
 		
 		@Override
 		protected Object __execute__() {
-			InputChoiceOneCombo inputChoiceOneCombo = (InputChoiceOneCombo) dataTable.getPropertiesMap().getAddInputComponent();
+			InputChoiceOne inputChoiceOne = (InputChoiceOne) dataTable.getPropertiesMap().getAddInputComponent();
 			Class<?> actionOnClass = (Class<?>) dataTable.getPropertiesMap().getActionOnClass();
-			if(actionOnClass==null){
-				
-			}else{
-				Object object = ClassHelper.getInstance().instanciateOne(actionOnClass);
-				setObjectSource(object,inputChoiceOneCombo.getValue());
-				listenObjectCreated(object,inputChoiceOneCombo.getValue());
-				dataTable.addOneRow(object);
-				CollectionHelper.Instance<?> collection = getDestinationCollection();
-				if(collection!=null)
-					collection.addOne(object);
-				
-				if(inputChoiceOneCombo.getValue()!=null)
-					inputChoiceOneCombo.getChoices().removeOne(inputChoiceOneCombo.getValue());
-					
-			}
-			
+			____execute____(actionOnClass, inputChoiceOne);
 			return null;
+		}
+		
+		protected void ____execute____(Class<?> actionOnClass,InputChoiceOne inputChoiceOne){
+			
 		}
 		
 		protected void setObjectSource(Object object,Object source){
@@ -846,52 +945,70 @@ public class DataTable extends Component.Visible implements Serializable {
 					, ClassHelper.getInstance().getVariableName((Class<?>) dataTable.getPropertiesMap().getActionOnClass(),Boolean.TRUE));// ((Order)).getOrderItems();
 			return null;
 		}
+	
+		protected Object getChoice(Object object){
+			if(dataTable.getPropertiesMap().getChoiceValueClass()!=null)
+				return FieldHelper.getInstance().read(object, ClassHelper.getInstance().getVariableName((Class<?>)dataTable.getPropertiesMap().getChoiceValueClass()));
+			return null;
+		}
+	}
+	
+	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
+	public static class AddCommandComponentActionAdapter extends AddRemoveCommandActionAdapter implements Serializable {
+		private static final long serialVersionUID = 1L;
 		
+		@Override
+		protected void ____execute____(Class<?> actionOnClass, InputChoiceOne inputChoiceOne) {
+			if(actionOnClass==null){
+				
+			}else{
+				Object choice = inputChoiceOne == null ? null : inputChoiceOne.getValue();
+				if(inputChoiceOne == null){
+					
+				}else{
+					if(choice!=null){
+						Object object = ClassHelper.getInstance().instanciateOne(actionOnClass);
+						setObjectSource(object,choice);
+						listenObjectCreated(object,choice);
+						dataTable.addOneRow(object);
+						CollectionHelper.Instance<?> collection = getDestinationCollection();
+						if(collection!=null)
+							collection.addOne(object);
+						inputChoiceOne.getChoices().removeOne(choice);	
+					}
+						
+				}		
+			}
+		}
 	}
 	
 	/**/
 	
 	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
-	public static class RemoveCommandComponentActionAdapter extends CommandHelper.Command.Adapter.Default {
+	public static class RemoveCommandComponentActionAdapter extends AddRemoveCommandActionAdapter implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
-		protected DataTable dataTable;
+		private Row row;
 		
 		@Override
-		protected Object __execute__() {
-			InputChoiceOneCombo inputChoiceOneCombo = (InputChoiceOneCombo) dataTable.getPropertiesMap().getAddInputComponent();
-			Class<?> actionOnClass = (Class<?>) dataTable.getPropertiesMap().getActionOnClass();
-			if(actionOnClass==null){
-				
-			}else{
-				Object object = ClassHelper.getInstance().instanciateOne(actionOnClass);
-				setObjectSource(object,inputChoiceOneCombo.getValue());
-				listenObjectCreated(object,inputChoiceOneCombo.getValue());
-				dataTable.addOneRow(object);
-				CollectionHelper.Instance<?> collection = getDestinationCollection();
-				if(collection!=null)
-					collection.addOne(object);
-				
-				if(inputChoiceOneCombo.getValue()!=null)
-					inputChoiceOneCombo.getChoices().removeOne(inputChoiceOneCombo.getValue());
+		protected void ____execute____(Class<?> actionOnClass, InputChoiceOne inputChoiceOne) {
+			dataTable.removeOneRow(row);
+			if(row.getPropertiesMap().getValue()!=null){
+				Object choice = getChoice(row.getPropertiesMap().getValue());
+				if(inputChoiceOne == null){
 					
+				}else{
+					if(choice==null){
+						
+					}else{
+						inputChoiceOne.getChoices().addOne(choice);	
+						CollectionHelper.Instance<?> collection = getDestinationCollection();
+						if(collection!=null)
+							collection.removeOne(row.getPropertiesMap().getValue());
+					}	
+				}
+				
 			}
-			
-			return null;
-		}
-		
-		protected void setObjectSource(Object object,Object source){
-			if(dataTable.getPropertiesMap().getChoiceValueClass()!=null)
-				FieldHelper.getInstance().set(object, source,ClassHelper.getInstance().getVariableName((Class<?>)dataTable.getPropertiesMap().getChoiceValueClass()));
-		}
-		
-		protected void listenObjectCreated(Object object,Object source){}
-		
-		protected CollectionHelper.Instance<?> getDestinationCollection(){
-			if(dataTable.getPropertiesMap().getActionOnClass()!=null)
-				return (CollectionHelper.Instance<?>) FieldHelper.getInstance().read(dataTable.getForm().getMaster().getObject()
-					, ClassHelper.getInstance().getVariableName((Class<?>) dataTable.getPropertiesMap().getActionOnClass(),Boolean.TRUE));// ((Order)).getOrderItems();
-			return null;
 		}
 		
 	}

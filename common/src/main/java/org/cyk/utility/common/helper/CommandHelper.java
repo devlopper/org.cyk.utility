@@ -187,6 +187,17 @@ public class CommandHelper extends AbstractHelper implements Serializable {
 					return this;
 				}
 				
+				/**/
+				
+				public static class NoExecution extends Default implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					@Override
+					protected Object __execute__() {
+						return null;
+					}
+					
+				}
 			}
 		}
 		

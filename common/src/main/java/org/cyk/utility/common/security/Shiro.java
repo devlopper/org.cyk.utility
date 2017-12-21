@@ -3,7 +3,6 @@ package org.cyk.utility.common.security;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.config.IniSecurityManagerFactory;
@@ -14,7 +13,6 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.MapHelper;
 import org.cyk.utility.common.helper.StringHelper;
-import org.cyk.utility.common.network.DatasourceHelper;
 
 import lombok.Getter;
 import lombok.Setter;

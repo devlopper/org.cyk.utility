@@ -12,20 +12,13 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.cyk.utility.common.CardinalPoint;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FileHelper;
-import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
-import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
@@ -42,6 +35,11 @@ import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneCombo;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneList;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneRadio;
 import org.cyk.utility.common.userinterface.input.number.InputNumber;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 public class Input<T> extends Control implements Serializable {

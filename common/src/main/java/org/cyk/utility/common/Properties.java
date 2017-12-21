@@ -14,6 +14,7 @@ import java.util.Set;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.helper.MapHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
 
@@ -212,6 +213,18 @@ public class Properties implements java.io.Serializable {
 	public Class<?> getValueClass(Object key){
 		Object value = get(key);
 		return value == null ? Object.class : value.getClass();
+	}
+	
+	/**/
+	
+	public Properties copyTo(Properties destination,Object...keys){
+		MapHelper.getInstance().copy(map, destination.map, keys);
+		return this;
+	}
+	
+	public Properties copyFrom(Properties source,Object...keys){
+		MapHelper.getInstance().copy(source.map, map, keys);
+		return this;
 	}
 	
 	/* specific getters and setters*/
@@ -1890,6 +1903,15 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getIgnoreAutoUpdate() {
+		return get(IGNORE_AUTO_UPDATE);
+	}
+
+	public Properties setIgnoreAutoUpdate(Object value) {
+		set(IGNORE_AUTO_UPDATE, value);
+		return this;
+	}
+	
 	public Object getIncludeViewParams() {
 		return get(INCLUDE_VIEW_PARAMS);
 	}
@@ -2628,6 +2650,65 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getRowsCollectionInstanceListenerClass() {
+		return get(ROWS_COLLECTION_INSTANCE_LISTENER_CLASS);
+	}
+
+	public Properties setRowsCollectionInstanceListenerClass(Object value) {
+		set(ROWS_COLLECTION_INSTANCE_LISTENER_CLASS, value);
+		return this;
+	}
+	
+	public Object getRemoveCommandComponentActionAdapterClass() {
+		return get(REMOVE_COMMAND_COMPONENT_ACTION_ADAPTER_CLASS);
+	}
+
+	public Properties setRemoveCommandComponentActionAdapterClass(Object value) {
+		set(REMOVE_COMMAND_COMPONENT_ACTION_ADAPTER_CLASS, value);
+		return this;
+	}
+	
+	public Object getAutoRun() {
+		return get(AUTO_RUN);
+	}
+
+	public Properties setAutoRun(Object value) {
+		set(AUTO_RUN, value);
+		return this;
+	}
+	
+	public Object getRemoteCommand() {
+		return get(REMOTE_COMMAND);
+	}
+
+	public Properties setRemoteCommand(Object value) {
+		set(REMOTE_COMMAND, value);
+		return this;
+	}
+	
+	public Object getEventOnBlur() {
+		return get(EVENT_ON_BLUR);
+	}
+
+	public Properties setEventOnBlur(Object value) {
+		set(EVENT_ON_BLUR, value);
+		return this;
+	}
+	
+	public Object getCellListener() {
+		return get(CELL_LISTENER);
+	}
+
+	public Properties setCellListener(Object value) {
+		set(CELL_LISTENER, value);
+		return this;
+	}
+	
+	public static final String CELL_LISTENER = "CELL_LISTENER";
+	public static final String EVENT_ON_BLUR = "EVENT_ON_BLUR";
+	public static final String REMOTE_COMMAND = "REMOTE_COMMAND";
+	public static final String AUTO_RUN = "AUTO_RUN";
+	public static final String ROWS_COLLECTION_INSTANCE_LISTENER_CLASS = "ROWS_COLLECTION_INSTANCE_LISTENER_CLASS";
 	public static final String ROWS_COLLECTION_INSTANCE = "ROWS_COLLECTION_INSTANCE";
 	public static final String PARENT = "PARENT";
 	public static final String CHOICE_VALUE_CLASS = "CHOICE_CLASS";
@@ -2647,6 +2728,7 @@ public class Properties implements java.io.Serializable {
 	public static final String ADD_TEXT_COMPONENT = "ADD_TEXT_COMPONENT";
 	
 	public static final String REMOVE_COMMAND_COMPONENT = "REMOVE_COMMAND_COMPONENT";
+	public static final String REMOVE_COMMAND_COMPONENT_ACTION_ADAPTER_CLASS = "REMOVE_COMMAND_COMPONENT_ACTION_ADAPTER_CLASS";
 	
 	public static final String FILTER_COMMAND_COMPONENT = "FILTER_COMMAND_COMPONENT";
 	public static final String FILTER_INPUT_COMPONENT = "FILTER_INPUT_COMPONENT";

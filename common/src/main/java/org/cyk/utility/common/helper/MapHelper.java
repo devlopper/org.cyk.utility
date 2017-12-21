@@ -110,6 +110,23 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 		return !Boolean.TRUE.equals(isEmpty(map));
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void copy(java.util.Map source,java.util.Map destination,Object[] keys,Boolean removeNullValue){
+		if(ArrayHelper.getInstance().isNotEmpty(keys))
+			for(Object key : keys){
+				Object value = source.get(key);
+				if(value == null && Boolean.TRUE.equals(removeNullValue))
+					destination.remove(key);
+				else
+					destination.put(key, value);
+			}
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	public void copy(java.util.Map source,java.util.Map destination,Object[] keys){
+		copy(source, destination, keys, Boolean.TRUE);
+	}
+	
 	/**/
 	
 	/*public static interface Builder<KEY,VALUE> extends org.cyk.utility.common.Builder<INPUT, OUTPUT> {

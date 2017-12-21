@@ -29,7 +29,7 @@ public class InputFile extends Input<FileHelper.File> implements Serializable {
 		propertiesMap.setPreviewImageComponent(previewImage);
 		
 		Command clearCommand = new Command();
-		clearCommand.setLabelFromIdentifier("command.clear");
+		clearCommand.setLabelFromIdentifier("userinterface.command.clear");
 		propertiesMap.setClearCommand(clearCommand);
 		
 		//Preview current
@@ -43,7 +43,7 @@ public class InputFile extends Input<FileHelper.File> implements Serializable {
 		propertiesMap.setImageComponent(image);
 		
 		Command removeCommand = new Command();
-		removeCommand.setLabelFromIdentifier("command.remove");
+		removeCommand.setLabelFromIdentifier("userinterface.command.remove");
 		removeCommand.setAction(new CommandHelper.Command.Adapter.Default(){
 			private static final long serialVersionUID = 1L;
 
