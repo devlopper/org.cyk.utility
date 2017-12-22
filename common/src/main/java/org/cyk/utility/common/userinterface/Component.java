@@ -23,6 +23,7 @@ import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.model.Area;
 import org.cyk.utility.common.userinterface.collection.DataTable;
+import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
 import org.cyk.utility.common.userinterface.container.Form.Master;
@@ -336,6 +337,11 @@ public class Component extends AbstractBean implements Serializable {
 			if(listener!=null)
 				event.setListener(listener);
 			getPropertiesMap().setEvent(event);
+			return this;
+		}
+		
+		public Visible _setPropertyOnClick(String onClick,Boolean actionable){
+			getPropertiesMap().setOnClick(onClick);
 			return this;
 		}
 		

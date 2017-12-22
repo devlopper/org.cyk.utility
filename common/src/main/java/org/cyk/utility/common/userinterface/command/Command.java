@@ -68,8 +68,8 @@ public class Command extends Control implements Serializable {
 		return addJavaScriptGoToUniformResourceLocatorOnEvent(event, RequestHelper.getInstance().getParameterAsString(UniformResourceLocatorHelper.QueryParameter.Name.URL_PREVIOUS));
 	}
 	
-	public Command setPropertyOnClick(String onClick,Boolean actionable){
-		getPropertiesMap().setOnClick(onClick);
+	public Command _setPropertyOnClick(String onClick,Boolean actionable){
+		super._setPropertyOnClick(onClick, actionable);
 		if(!Boolean.TRUE.equals(actionable)){
 			if(isJavaServerFacesLibraryPrimefaces())
 				getPropertiesMap().setType("button");
@@ -77,27 +77,21 @@ public class Command extends Control implements Serializable {
 		return this;
 	}
 	
-	public Command usePropertyRemoteCommand(){
+	/*public Command usePropertyRemoteCommand(){
 		RemoteCommand remoteCommand = new RemoteCommand();
 		remoteCommand.setAction(getAction());
 		remoteCommand.setActionListener(getActionListener());
 		
 		remoteCommand.getPropertiesMap().copyFrom(getPropertiesMap(), Properties.INPUT_VALUE_IS_NOT_REQUIRED,Properties.PROCESS,Properties.UPDATE,Properties.IMMEDIATE);
 		
-		//remoteCommand.getPropertiesMap().setInputValueIsNotRequired(getPropertiesMap().getInputValueIsNotRequired());
-		//if(/*remoteCommand.getPropertiesMap().getProcess()==null && */getPropertiesMap().getProcess()!=null)
-		//	remoteCommand.getPropertiesMap().setProcess(getPropertiesMap().getProcess());
-		//remoteCommand.getPropertiesMap().setUpdate(getPropertiesMap().getUpdate());
-		
 		if(isJavaServerFacesLibraryPrimefaces()){
 			setPropertyOnClick(remoteCommand.getPropertiesMap().getName()+"();", Boolean.FALSE);
-			//remoteCommand.getPropertiesMap().setImmediate(getPropertiesMap().getInputValueIsNotRequired());
 		}
 		
 		getPropertiesMap().setRemoteCommand(remoteCommand);
 		
 		return this;
-	}
+	}*/
 	
 	/**/
 

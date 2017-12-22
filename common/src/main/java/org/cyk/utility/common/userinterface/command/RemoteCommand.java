@@ -36,6 +36,32 @@ public class RemoteCommand extends Component.Invisible implements Serializable {
 		}
 	}
 	
+	public static RemoteCommand instanciateOne(Component.Visible command,CommandHelper.Command action,CommandHelper.Command listener){
+		RemoteCommand remoteCommand = new RemoteCommand();
+		if(action!=null)
+			remoteCommand.setAction(action);
+		if(listener!=null)
+			remoteCommand.setActionListener(listener);
+		
+		remoteCommand.getPropertiesMap().copyFrom(command.getPropertiesMap(), Properties.INPUT_VALUE_IS_NOT_REQUIRED,Properties.PROCESS,Properties.UPDATE,Properties.IMMEDIATE);
+		
+		if(isJavaServerFacesLibraryPrimefaces()){
+			command._setPropertyOnClick(remoteCommand.getPropertiesMap().getName()+"();", Boolean.FALSE);
+		}
+		
+		command.getPropertiesMap().setRemoteCommand(remoteCommand);
+		
+		return remoteCommand;
+	}
+	
+	public static RemoteCommand instanciateOne(Command command){
+		return instanciateOne(command, command.getAction(), command.getActionListener());
+	}
+	
+	public static RemoteCommand instanciateOne(MenuNode node){
+		return instanciateOne(node, null, null);
+	}
+	
 	/**/
 	
 	public static class CommandActionAdapter extends CommandHelper.Command.Adapter.Default implements Serializable{

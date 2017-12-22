@@ -196,22 +196,22 @@ public class Form extends Container implements Serializable {
 			return instanciateDetail(Layout.Type.DEFAULT);
 		}
 		
-		public DataTable instanciateDataTable(Class<?> actionOnClass,Class<?> choiceValueClass,DataTable.Cell.Listener cellListener,String...fieldNames){
+		public DataTable instanciateDataTable(Class<?> actionOnClass,Class<?> choiceValueClass,DataTable.Cell.Listener cellListener,Boolean bottom,String...fieldNames){
 			DataTable dataTable = new DataTable();
 			dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
 			dataTable.getPropertiesMap().setChoiceValueClass(choiceValueClass);
 			dataTable.getPropertiesMap().setCellListener(cellListener);
-			getDetail().addDataTable(dataTable);
+			getDetail().addDataTable(dataTable,bottom);
 			dataTable.addColumnsByFieldNames(fieldNames);
 			return dataTable;
 		}
 		
-		public DataTable instanciateDataTable(Class<?> actionOnClass,Class<?> choiceValueClass,String...fieldNames){
-			return instanciateDataTable(null, null, (DataTable.Cell.Listener)null);
+		public DataTable instanciateDataTable(Class<?> actionOnClass,Class<?> choiceValueClass,Boolean bottom,String...fieldNames){
+			return instanciateDataTable(null, null, (DataTable.Cell.Listener)null,bottom);
 		}
 		
 		public DataTable instanciateDataTable(){
-			return instanciateDataTable(null, null);
+			return instanciateDataTable(null, null,Boolean.TRUE);
 		}
 		
 		@Override
@@ -404,6 +404,8 @@ public class Form extends Container implements Serializable {
 		private Master master;
 		private Object fieldsObject;
 		private Collection<DataTable> dataTables;
+		private Collection<DataTable> dataTablesUp;
+		private Collection<DataTable> dataTablesBottom;
 		
 		public Detail(Master master,Layout.Type layoutType) {
 			setMaster(master);
@@ -430,14 +432,27 @@ public class Form extends Container implements Serializable {
 			return this;
 		}
 		
-		public Detail addDataTable(DataTable dataTable){
+		public Detail addDataTable(DataTable dataTable,Boolean bottom){
 			if(dataTables == null)
 				dataTables = new ArrayList<>();
+			if(Boolean.TRUE.equals(bottom)){
+				if(dataTablesBottom == null)
+					dataTablesBottom = new ArrayList<>();	
+			}else{
+				if(dataTablesUp == null)
+					dataTablesUp = new ArrayList<>();	
+			}
+			
 			if(dataTable.getForm() == null)
 				dataTable.setForm(this);
 			if(dataTable.getPropertiesMap().getAction() == null)
 				dataTable.getPropertiesMap().setAction(getPropertiesMap().getAction());
 	
+			if(Boolean.TRUE.equals(bottom)){
+				dataTablesBottom.add(dataTable);
+			}else{
+				dataTablesUp.add(dataTable);
+			}
 			dataTables.add(dataTable);
 			
 			master.addComponentOnSubmit(dataTable);
@@ -445,10 +460,26 @@ public class Form extends Container implements Serializable {
 			return this;
 		}
 		
-		public DataTable instanciateDataTable(){
+		public Detail addDataTable(DataTable dataTable){
+			return addDataTable(dataTable, Boolean.TRUE);
+		}
+		
+		public DataTable instanciateDataTable(Boolean bottom){
 			DataTable dataTable = new DataTable();
-			addDataTable(dataTable);
+			addDataTable(dataTable,bottom);
 			return dataTable;
+		}
+		
+		public DataTable instanciateDataTable(){
+			return instanciateDataTable(Boolean.TRUE);
+		}
+		
+		public DataTable getDataTableAtIndex(Integer index,Boolean bottom){
+			return CollectionHelper.getInstance().getElementAt(Boolean.TRUE.equals(bottom) ? dataTablesBottom : dataTablesUp, index);
+		}
+		
+		public DataTable getDataTableAtIndex(Integer index){
+			return getDataTableAtIndex(index, Boolean.TRUE);
 		}
 		
 		/**/

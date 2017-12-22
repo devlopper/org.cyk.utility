@@ -26,6 +26,8 @@ import org.cyk.utility.common.userinterface.JavaServerFacesHelper;
 import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueSource;
 import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
+import org.cyk.utility.common.userinterface.command.MenuNode;
+import org.cyk.utility.common.userinterface.command.RemoteCommand;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputText;
@@ -600,7 +602,10 @@ public class DataTable extends Component.Visible implements Serializable {
 	@Getter @Setter @Accessors(chain=true)
 	public static class Row extends Dimension implements Serializable {
 		private static final long serialVersionUID = 1L;
-				
+			
+		private Menu menu;
+		private MenuNode deleteMenuNode;
+		
 		/**/
 		
 		public Row() {
@@ -609,15 +614,16 @@ public class DataTable extends Component.Visible implements Serializable {
 		
 		public Row _setObject(Object object){
 			getPropertiesMap().setValue(object);
-			Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
+			menu = new Menu().setRenderType(Menu.RenderType.BAR);
 			getPropertiesMap().setMainMenu(menu);
 			addOneChild(menu);
 			menu.addNode("read")._setPropertyUrl(Constant.Action.READ,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
 				._setPropertyIcon(IconHelper.Icon.FontAwesome.EYE);
 			menu.addNode("update")._setPropertyUrl(Constant.Action.UPDATE,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
 				._setPropertyIcon(IconHelper.Icon.FontAwesome.PENCIL);
-			menu.addNode("delete")._setPropertyUrl(Constant.Action.DELETE,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
+			deleteMenuNode = menu.addNode("delete")._setPropertyUrl(Constant.Action.DELETE,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
 				._setPropertyIcon(IconHelper.Icon.FontAwesome.TRASH);
+			
 			return this;
 		}
 		
@@ -908,7 +914,13 @@ public class DataTable extends Component.Visible implements Serializable {
 			//command.getPropertiesMap().setProcess(((Command)dataTable.getPropertiesMap().getAddCommandComponent()).getPropertiesMap().getProcess());
 			//command.getPropertiesMap().setUpdate(((Command)dataTable.getPropertiesMap().getAddCommandComponent()).getPropertiesMap().getUpdate());
 			
-			command.usePropertyRemoteCommand();
+			//command.usePropertyRemoteCommand();
+			RemoteCommand.instanciateOne(command);
+			
+			row.getMenu().getPropertiesMap().setRendered(Boolean.FALSE);
+			
+			//row.getDeleteMenuNode().getPropertiesMap().setUrl(null);
+			//RemoteCommand.instanciateOne(row.getDeleteMenuNode(),command.getAction(),command.getActionListener());
 			
 			row.getPropertiesMap().setRemoveCommandComponent(command);
 		}
