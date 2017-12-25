@@ -921,6 +921,7 @@ public interface Action<INPUT,OUTPUT> {
 				if(Boolean.TRUE.equals(isInputValid)){
 					if(Boolean.TRUE.equals(getIsProcessableOnStatus())){
 						try {
+							ListenerHelper.getInstance().listen(actionListeners, ActionListener.METHOD_NAME___EXECUTE_BEFORE__,new MethodHelper.Method.Parameter(Action.class, this));
 							output = __execute__();
 							ListenerHelper.getInstance().listen(actionListeners, ActionListener.METHOD_NAME___EXECUTE__,new MethodHelper.Method.Parameter(Action.class, this));
 							processOnSuccess();
@@ -1101,6 +1102,7 @@ public interface Action<INPUT,OUTPUT> {
 		
 		void validateInput(Action<?,?> action);
 		
+		void __executeBefore__(Action<?,?> action);
 		void __execute__(Action<?,?> action);
 		
 		void processOnStatus(Action<?,?> action);
@@ -1123,6 +1125,9 @@ public interface Action<INPUT,OUTPUT> {
 			public void validateInput(Action<?, ?> action) {}
 
 			@Override
+			public void __executeBefore__(Action<?, ?> action) {}
+			
+			@Override
 			public void __execute__(Action<?, ?> action) {}
 
 			@Override
@@ -1136,6 +1141,7 @@ public interface Action<INPUT,OUTPUT> {
 		String METHOD_NAME_GET_INPUT = "getInput";
 		String METHOD_NAME_VALIDATE_INPUT = "validateInput";
 		String METHOD_NAME___EXECUTE__ = "__execute__";
+		String METHOD_NAME___EXECUTE_BEFORE__ = "__executeBefore__";
 		String METHOD_NAME_PROCESS_ON_STATUS = "processOnStatus";
 		String METHOD_NAME_CONFIRM = "confirm";
 	}

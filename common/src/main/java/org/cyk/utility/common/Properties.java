@@ -2704,6 +2704,166 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getOutputComponent() {
+		return get(OUTPUT_COMPONENT);
+	}
+
+	public Properties setOutputComponent(Object value) {
+		set(OUTPUT_COMPONENT, value);
+		return this;
+	}
+	
+	public Object getMethod() {
+		return get(METHOD);
+	}
+
+	public Properties setMethod(Object value) {
+		set(METHOD, value);
+		return this;
+	}
+	
+	public Object getCommand() {
+		return get(COMMAND);
+	}
+
+	public Properties setCommand(Object value) {
+		set(COMMAND, value);
+		return this;
+	}
+	
+	public Object getListener() {
+		return get(LISTENER);
+	}
+
+	public Properties setListener(Object value) {
+		set(LISTENER, value);
+		return this;
+	}
+	
+	public Object getComponent() {
+		return get(COMPONENT);
+	}
+
+	public Properties setComponent(Object value) {
+		set(COMPONENT, value);
+		return this;
+	}
+	
+	public Object getDetail() {
+		return get(DETAIL);
+	}
+
+	public Properties setDetail(Object value) {
+		set(DETAIL, value);
+		return this;
+	}
+	
+	public Object getProcessedFieldNames() {
+		return get(PROCESSED_FIELD_NAMES);
+	}
+
+	public Properties setProcessedFieldNames(Object value) {
+		set(PROCESSED_FIELD_NAMES, value);
+		return this;
+	}
+	
+	public Object getUpdatedFieldNames() {
+		return get(UPDATED_FIELD_NAMES);
+	}
+
+	public Properties setUpdatedFieldNames(Object value) {
+		set(UPDATED_FIELD_NAMES, value);
+		return this;
+	}
+	
+	public Object getFormDetail() {
+		return get(FORM_DETAIL);
+	}
+
+	public Properties setFormDetail(Object value) {
+		set(FORM_DETAIL, value);
+		return this;
+	}
+	
+	public Object getDecimalPlaces() {
+		return get(DECIMAL_PLACES);
+	}
+
+	public Properties setDecimalPlaces(Object value) {
+		set(DECIMAL_PLACES, value);
+		return this;
+	}
+	
+	public Object getDecimalSeparator() {
+		return get(DECIMAL_SEPARATOR);
+	}
+
+	public Properties setDecimalSeparator(Object value) {
+		set(DECIMAL_SEPARATOR, value);
+		return this;
+	}
+	
+	public Object getThousandSeparator() {
+		return get(THOUSAND_SEPARATOR);
+	}
+
+	public Properties setThousandSeparator(Object value) {
+		set(THOUSAND_SEPARATOR, value);
+		return this;
+	}
+	
+	public Object getDataTableCell() {
+		return get(DATA_TABLE_CELL);
+	}
+
+	public Properties setDataTableCell(Object value) {
+		set(DATA_TABLE_CELL, value);
+		return this;
+	}
+	
+	public Object getProcessedColumnFieldNames() {
+		return get(PROCESSED_COLUMN_FIELD_NAMES);
+	}
+
+	public Properties setProcessedColumnFieldNames(Object value) {
+		set(PROCESSED_COLUMN_FIELD_NAMES, value);
+		return this;
+	}
+	
+	public Object getUpdatedColumnFieldNames() {
+		return get(UPDATED_COLUMN_FIELD_NAMES);
+	}
+
+	public Properties setUpdatedColumnFieldNames(Object value) {
+		set(UPDATED_COLUMN_FIELD_NAMES, value);
+		return this;
+	}
+	
+	public Object getCell() {
+		return get(CELL);
+	}
+
+	public Properties setCell(Object value) {
+		set(CELL, value);
+		return this;
+	}
+	
+	public static final String CELL = "CELL";
+	public static final String DATA_TABLE_CELL = "DATA_TABLE_CELL";
+	public static final String DECIMAL_PLACES = "DECIMAL_PLACES";
+	public static final String DECIMAL_SEPARATOR = "DECIMAL_SEPARATOR";
+	public static final String THOUSAND_SEPARATOR = "THOUSAND_SEPARATOR";
+	public static final String PROCESSED_FIELD_NAMES = "PROCESSED_FIELD_NAMES";
+	public static final String UPDATED_FIELD_NAMES = "UPDATED_FIELD_NAMES";
+	public static final String PROCESSED_COLUMN_FIELD_NAMES = "PROCESSED_COLUMN_FIELD_NAMES";
+	public static final String UPDATED_COLUMN_FIELD_NAMES = "UPDATED_COLUMN_FIELD_NAMES";
+	public static final String DETAIL = "DETAIL";
+	public static final String FORM_DETAIL = "FORM_DETAIL";
+	public static final String COMPONENT = "COMPONENT";
+	public static final String LISTENER = "LISTENER";
+	public static final String METHOD = "METHOD";
+	public static final String COMMAND = "COMMAND";
+	public static final String OUTPUT_COMPONENT = "OUTPUT_COMPONENT";
 	public static final String CELL_LISTENER = "CELL_LISTENER";
 	public static final String EVENT_ON_BLUR = "EVENT_ON_BLUR";
 	public static final String REMOTE_COMMAND = "REMOTE_COMMAND";

@@ -2,6 +2,7 @@ package org.cyk.utility.common.userinterface.input.number;
 
 import java.io.Serializable;
 
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.input.Input;
@@ -16,6 +17,16 @@ public class InputNumber<NUMBER extends Number> extends Input<NUMBER> implements
 	
 	/**/
 
+	@Override
+	protected void listenPropertiesInstanciated(Properties propertiesMap) {
+		super.listenPropertiesInstanciated(propertiesMap);
+		if(isJavaServerFacesLibraryPrimefaces()){
+			propertiesMap.setDecimalPlaces(0);
+			//propertiesMap.setThousandSeparator(" ");
+			propertiesMap.setDecimalSeparator(",");
+		}
+	}
+	
 	public static interface BuilderBase<OUTPUT extends InputNumber<?>> extends Input.BuilderBase<OUTPUT> {
 
 		public static class Adapter<OUTPUT extends InputNumber<?>> extends Control.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {

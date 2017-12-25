@@ -334,6 +334,7 @@ public class Component extends AbstractBean implements Serializable {
 			event.getPropertiesMap().setEvent(name);
 			event.getPropertiesMap().setProcess(process);
 			event.getPropertiesMap().setUpdate(update);
+			event.getPropertiesMap().setDisabled(Boolean.FALSE);
 			if(listener!=null)
 				event.setListener(listener);
 			getPropertiesMap().setEvent(event);

@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
@@ -16,6 +17,7 @@ import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
+import org.cyk.utility.common.userinterface.event.Event;
 import org.cyk.utility.common.userinterface.output.OutputText;
 
 import lombok.Getter;
@@ -30,6 +32,14 @@ public class Control extends Component.Visible implements Serializable {
 	protected Field field;
 	
 	/**/
+	
+	@Override
+	protected void listenPropertiesInstanciated(Properties propertiesMap) {
+		Event event = new Event();
+		event.getPropertiesMap().setDisabled(Boolean.TRUE);
+		propertiesMap.setEvent(event);
+		super.listenPropertiesInstanciated(propertiesMap);
+	}
 	
 	public Control __setFieldFromName__(String name){
 		setField(FieldHelper.getInstance().get(object.getClass(), name));

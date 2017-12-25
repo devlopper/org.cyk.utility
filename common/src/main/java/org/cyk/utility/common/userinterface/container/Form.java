@@ -504,37 +504,65 @@ public class Form extends Container implements Serializable {
 			return this;
 		}
 		
-		public Detail add(Object object,String fieldName,Number length,Number width){
+		public Detail add(Object object,String fieldName,Number length,Number width,Boolean editable){
 			if(object==null)
 				object = getMaster().getObject();
 			Field field = FieldHelper.getInstance().get(object.getClass(), fieldName);
-			Control control = Boolean.TRUE.equals(getMaster().getEditable()) ? Input.get(this,object, field) : Output.get(this, object, field).__setLabelFromField__();
+			Control control = Boolean.TRUE.equals(editable) ? Input.get(this,object, field) : Output.get(this, object, field).__setLabelFromField__();
 			add(control.setLength(length).setWidth(width));
 			return this;
 		}
 		
+		public Detail add(Object object,String fieldName,Number length,Number width){
+			return add(object,fieldName,length,width,getMaster().getEditable());
+		}
+		
+		public Detail add(String fieldName,Number length,Number width,Boolean editable){
+			return add(fieldsObject, fieldName, length, width,editable);
+		}
+		
 		public Detail add(String fieldName,Number length,Number width){
-			return add(fieldsObject, fieldName, length, width);
+			return add(fieldName, length, width,getMaster().getEditable());
+		}
+		
+		public Detail add(Object object,String fieldName,Boolean editable){
+			return add(object, fieldName, 1, 1,editable);
 		}
 		
 		public Detail add(Object object,String fieldName){
-			return add(object, fieldName, 1, 1);
+			return add(object,fieldName,getMaster().getEditable());
 		}
 		
-		public Detail add(String[] fieldNames,Number length,Number width){
+		public Detail add(String[] fieldNames,Number length,Number width,Boolean editable){
 			Object object = fieldNames.length == 1 ? fieldsObject : FieldHelper.getInstance().read(fieldsObject, ArrayUtils.remove(fieldNames, fieldNames.length-1));
 			String fieldName = fieldNames[fieldNames.length-1] ;
-			add(object, fieldName, length, width);
+			add(object, fieldName, length, width,editable);
 			//getInputByFieldName(object, fieldName).getPropertiesMap().setIdentifierAsStyleClass(CascadeStyleSheetHelper.getInstance().getClass(fieldsObject, fieldNames));
 			return this;
 		}
 		
+		public Detail add(String[] fieldNames,Number length,Number width){
+			return add(fieldNames,length,width,getMaster().getEditable());
+		}
+		
+		public Detail addByEditable(Boolean editable,String fieldName,String...fieldNames){
+			return add(ArrayUtils.addAll(new String[]{fieldName}, fieldNames), 1, 1,editable);
+		}
+		
+		public Detail addReadOnly(String fieldName,String...fieldNames){
+			return addByEditable(Boolean.FALSE, fieldName, fieldNames);
+		}
+		
 		public Detail add(String fieldName,String...fieldNames){
-			return add(ArrayUtils.addAll(new String[]{fieldName}, fieldNames), 1, 1);
+			return addByEditable(getMaster().getEditable(),fieldName, fieldNames);
+		}
+		
+		public Detail add(String fieldName1,String fieldName2,Boolean editable){
+			return addByEditable(editable,fieldName1,new String[]{fieldName2});
 		}
 		
 		public Detail add(String fieldName1,String fieldName2){
-			return add(fieldName1,new String[]{fieldName2});
+			return add(fieldName1,fieldName2,getMaster().getEditable());
 		}
 		
 		public Detail addBreak(){
@@ -542,16 +570,40 @@ public class Form extends Container implements Serializable {
 			return this;
 		}
 		
+		public Control getControlByFieldName(Object object,String fieldName){
+			if(children!=null && CollectionHelper.getInstance().isNotEmpty(children.getElements()))
+				for(Component component : children.getElements())
+					if(component instanceof Control && ((Control)component).getField()!=null && ((Control)component).getObject() == object && ((Control)component).getField().getName().equals(fieldName))
+						return (Control) component;
+			return null;
+		}
+		
+		public Control getControlByFieldName(String fieldName){
+			return getControlByFieldName(master.getObject(), fieldName);
+		}
+		
 		public Input<?> getInputByFieldName(Object object,String fieldName){
+			/*
 			if(children!=null && CollectionHelper.getInstance().isNotEmpty(children.getElements()))
 				for(Component component : children.getElements())
 					if(component instanceof Input<?> && ((Input<?>)component).getField()!=null && ((Input<?>)component).getObject() == object && ((Input<?>)component).getField().getName().equals(fieldName))
 						return (Input<?>) component;
 			return null;
+			*/
+			return (Input<?>) getControlByFieldName(object, fieldName);
 		}
 		
 		public Input<?> getInputByFieldName(String fieldName){
-			return getInputByFieldName(master.getObject(), fieldName);
+			//return getInputByFieldName(master.getObject(), fieldName);
+			return (Input<?>) getControlByFieldName(fieldName);
+		}
+		
+		public Output getOutputByFieldName(Object object,String fieldName){
+			return (Output) getControlByFieldName(object, fieldName);
+		}
+		
+		public Output getOutputByFieldName(String fieldName){
+			return (Output) getControlByFieldName(fieldName);
 		}
 		
 		@Override
@@ -680,7 +732,7 @@ public class Form extends Container implements Serializable {
 									if(component instanceof Component.Visible && ((Component.Visible)component).getLabel()!=null)
 										label = addLabel(row, ((Component.Visible)component).getLabel());
 									CONTROL control = addControl(row, (Control) component, getType((Control) component));
-									if(component instanceof Input<?> && label!=null)
+									if(component instanceof Input<?> && label!=null && !Boolean.TRUE.equals(component.getPropertiesMap().getReadableOnly()))
 										link(control, label);
 								}
 							}

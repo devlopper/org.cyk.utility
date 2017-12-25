@@ -22,6 +22,7 @@ import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
+import org.cyk.utility.common.userinterface.input.choice.InputChoice;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyAutoComplete;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyButton;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyCheck;
@@ -35,6 +36,7 @@ import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneCombo;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneList;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneRadio;
 import org.cyk.utility.common.userinterface.input.number.InputNumber;
+import org.cyk.utility.common.userinterface.output.Output;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -279,6 +281,8 @@ public class Input<T> extends Control implements Serializable {
 						}else if(ClassHelper.getInstance().isNumber(field.getType())){
 							String name = InputNumber.class.getName()+ClassHelper.getInstance().getWrapper(field.getType()).getSimpleName();
 							aClass = (Class<? extends Input<?>>) ClassHelper.getInstance().getByName(name);
+						}else if(ClassHelper.getInstance().isIdentified(field.getType())){
+							aClass = InputChoiceOneCombo.class;
 						}
 					}else{
 						if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputText.class)!=null)
@@ -355,14 +359,24 @@ public class Input<T> extends Control implements Serializable {
 						input = ClassHelper.getInstance().instanciateOne(aClass);
 					}
 					if(input!=null){
-						input.setFormDetail(detail);
-						input.setObject(object).setField(field);
-						input.getPropertiesMap().setLabel(input.getLabel().getPropertiesMap().getValue());
 						input.getPropertiesMap().setRequired(field.getAnnotation(NotNull.class)!=null);
 						input.getPropertiesMap().setRequiredMessage(StringHelper.getInstance().get("validation.userinterface.input.value.required"
 								, new Object[]{input.getLabel().getPropertiesMap().getValue()}));
+						if(input instanceof InputChoice){
+							Object value = FieldHelper.getInstance().read(object, field);
+							((InputChoice<?>)input).setNullChoicable(value == null || !Boolean.TRUE.equals(input.getPropertiesMap().getRequired()));
+						}
+						input.setFormDetail(detail);
+						input.setObject(object).setField(field);
+						input.getPropertiesMap().setLabel(input.getLabel().getPropertiesMap().getValue());
 						
 						listenGet(input);
+						
+						if(Boolean.TRUE.equals(input.getPropertiesMap().getReadableOnly())){
+							if(input.getPropertiesMap().getOutputComponent()==null){
+								input.getPropertiesMap().setOutputComponent(Output.get(detail, object, field));
+							}
+						}
 					}
 					return input;
 				}
