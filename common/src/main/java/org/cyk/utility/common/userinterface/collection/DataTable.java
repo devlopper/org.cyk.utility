@@ -259,6 +259,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			Columns columns = new Columns();
 			columns.getPropertiesMap().setAction(getPropertiesMap().getAction());
 			columns.getPropertiesMap().setCellListener(getPropertiesMap().getCellListener());
+			columns.getPropertiesMap().setDataTable(this);
 			getPropertiesMap().setColumns(columns);
 		}
 		return ((Columns)getPropertiesMap().getColumns()).addColumn(labelStringIdentifier, fieldName);
@@ -467,6 +468,11 @@ public class DataTable extends Component.Visible implements Serializable {
 			column.setCellValueSource(cellValueSource);
 			column.setLabelFromIdentifier(labelStringIdentifier);
 			column.getPropertiesMap().setHeaderText(column.getLabel().getPropertiesMap().getValue());
+			column.getPropertiesMap().setHeader(column.getLabel());
+			
+			OutputText footer = new OutputText();
+			column.getPropertiesMap().setFooter(footer);
+			
 			column.getPropertiesMap().setFieldName(fieldName);
 			return column;
 		}
@@ -496,10 +502,29 @@ public class DataTable extends Component.Visible implements Serializable {
 
 		/**/
 		
+		@Override
+		protected void listenPropertiesInstanciated(Properties propertiesMap) {
+			super.listenPropertiesInstanciated(propertiesMap);
+			propertiesMap.setGetter(Properties.FOOTER_RENDERED, new Properties.Getter() {
+				@Override
+				public Object execute(Properties properties, Object key, Object value, Object nullValue) {
+					@SuppressWarnings("unchecked")
+					Collection<Column> columns = (Collection<Column>) getPropertiesMap().getValue();
+					for(Column column : columns)
+						if(column.getPropertiesMap().getFooter()!=null){
+							if(column.getPropertiesMap().getFooter() instanceof OutputText && ((OutputText)column.getPropertiesMap().getFooter()).getPropertiesMap().getValue()!=null)
+								return Boolean.TRUE;
+						}
+					return Boolean.FALSE;
+				}
+			});
+		}
+		
 		public Column addColumn(String labelStringIdentifier,String fieldName){
 			DataTable.Column column = Column.instanciateOne(labelStringIdentifier, fieldName);
 			column.getPropertiesMap().setAction(getPropertiesMap().getAction());
 			column.getPropertiesMap().setCellListener(getPropertiesMap().getCellListener());
+			column.getPropertiesMap().setDataTable(getPropertiesMap().getDataTable());
 			//column.setLabelFromIdentifier(labelStringIdentifier);
 			//column.getPropertiesMap().setHeaderText(column.getLabel().getPropertiesMap().getValue());
 			//column.getPropertiesMap().setFieldName(fieldName);

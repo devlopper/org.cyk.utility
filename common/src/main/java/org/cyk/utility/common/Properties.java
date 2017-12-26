@@ -2848,8 +2848,28 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getDataTable() {
+		return get(DATA_TABLE);
+	}
+
+	public Properties setDataTable(Object value) {
+		set(DATA_TABLE, value);
+		return this;
+	}
+	
+	public Object getFooterRendered() {    
+		return get(FOOTER_RENDERED);
+	}
+
+	public Properties setFooterRendered(Object value) {
+		set(FOOTER_RENDERED, value);
+		return this;
+	}
+	
+	public static final String FOOTER_RENDERED = "FOOTER_RENDERED";
 	public static final String CELL = "CELL";
 	public static final String DATA_TABLE_CELL = "DATA_TABLE_CELL";
+	public static final String DATA_TABLE = "DATA_TABLE";
 	public static final String DECIMAL_PLACES = "DECIMAL_PLACES";
 	public static final String DECIMAL_SEPARATOR = "DECIMAL_SEPARATOR";
 	public static final String THOUSAND_SEPARATOR = "THOUSAND_SEPARATOR";

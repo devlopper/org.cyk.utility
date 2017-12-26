@@ -62,29 +62,50 @@ public class Event extends Component.Invisible implements Serializable {
 	}
 	
 	public static Event instanciateOne(Form.Detail formDetail,String fieldName,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedFieldNames){
-		Control control = formDetail.getControlByFieldName(fieldName);
-		String eventName;
-		if(control instanceof InputChoiceOne)
-			eventName = "change";
-		else
-			eventName = "blur";
-		return instanciateOne(formDetail, fieldName, updatedFieldNames, listener,processedFieldNames,eventName);
+		return instanciateOne(formDetail, fieldName, updatedFieldNames, listener,processedFieldNames,getEventName(formDetail.getControlByFieldName(fieldName)));
 	}
 	
 	public static Event instanciateOne(Form.Detail formDetail,String fieldName,String[] updatedFieldNames,CommandHelper.Command listener){
 		return instanciateOne(formDetail,fieldName, updatedFieldNames, listener,(String[])null);
 	}
 	
-	public static Event.Builder instanciateBuilder(DataTable.Cell cell,String[] updatedColumnFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames,String eventName){
+	public static Event.Builder instanciateBuilder(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames,String eventName){
 		Event.Builder eventBuilder = new Event.Builder.Adapter.Default();
 		eventBuilder.getPropertiesMap().setName(eventName);		
 		eventBuilder.getPropertiesMap().setCell(cell);
+		eventBuilder.getPropertiesMap().setFormDetail( ((DataTable)cell.getColumn().getPropertiesMap().getDataTable()).getForm() );
 		if(ArrayHelper.getInstance().isNotEmpty(processedColumnFieldNames))
 			eventBuilder.getPropertiesMap().setProcessedColumnFieldNames(Arrays.asList(processedColumnFieldNames));
 		if(ArrayHelper.getInstance().isNotEmpty(updatedColumnFieldNames))
 			eventBuilder.getPropertiesMap().setUpdatedColumnFieldNames(Arrays.asList(updatedColumnFieldNames));
+		if(ArrayHelper.getInstance().isNotEmpty(updatedFieldNames))
+			eventBuilder.getPropertiesMap().setUpdatedFieldNames(Arrays.asList(updatedFieldNames));
 		eventBuilder.getPropertiesMap().setListener(listener);
 		return eventBuilder;
+	}
+	
+	public static Event instanciateOne(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames,String eventName){
+		Event.Builder builder = instanciateBuilder(cell, updatedColumnFieldNames,updatedFieldNames, listener, processedColumnFieldNames, eventName);
+		Event event = builder.execute();
+		return event;
+	}
+	
+	public static Event instanciateOne(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames){
+		return instanciateOne(cell, updatedColumnFieldNames,updatedFieldNames, listener, processedColumnFieldNames, getEventName(cell.getInput()));
+	}
+	
+	public static Event instanciateOne(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener){
+		return instanciateOne(cell, updatedColumnFieldNames,updatedFieldNames, listener, (String[])null);
+	}
+	
+	public static Event.Builder instanciateBuilder(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames){
+		return instanciateBuilder(cell, updatedColumnFieldNames,updatedFieldNames, listener, processedColumnFieldNames, getEventName(cell.getInput()));
+	}
+	
+	public static String getEventName(Control control){
+		if(control instanceof InputChoiceOne)
+			return "change";
+		return "blur";
 	}
 	
 	/**/
@@ -170,26 +191,29 @@ public class Event extends Component.Invisible implements Serializable {
 					event.getPropertiesMap().copyFrom(getPropertiesMap(), Properties.DISABLED,Properties.NAME,Properties.PROCESS,Properties.UPDATE
 							,Properties.UPDATED_FIELD_NAMES,Properties.FORM_DETAIL,Properties.UPDATED_COLUMN_FIELD_NAMES,Properties.CELL);
 					
-					Collection<String> processedFieldNames = CollectionHelper.getInstance().createList((Collection<String>) event.getPropertiesMap().getProcessedFieldNames());
-					if(StringHelper.getInstance().isNotBlank((String)getPropertiesMap().getFieldName()))
-						processedFieldNames = CollectionHelper.getInstance().add(processedFieldNames, (String)getPropertiesMap().getFieldName());
-					event.getPropertiesMap().setProcessedFieldNames(processedFieldNames);
-					
-					new CollectionHelper.Iterator.Adapter.Default<String>(processedFieldNames){
-						private static final long serialVersionUID = 1L;
+					if(cell==null){
+						Collection<String> processedFieldNames = CollectionHelper.getInstance().createList((Collection<String>) event.getPropertiesMap().getProcessedFieldNames());
+						if(StringHelper.getInstance().isNotBlank((String)getPropertiesMap().getFieldName()))
+							processedFieldNames = CollectionHelper.getInstance().add(processedFieldNames, (String)getPropertiesMap().getFieldName());
+						event.getPropertiesMap().setProcessedFieldNames(processedFieldNames);
+						
+						new CollectionHelper.Iterator.Adapter.Default<String>(processedFieldNames){
+							private static final long serialVersionUID = 1L;
 
-						protected void __executeForEach__(String fieldName) {
-							event.getPropertiesMap().addString(Properties.PROCESS,"@(."+detail.getControlByFieldName(fieldName).getPropertiesMap().getIdentifierAsStyleClass()+")");
-						}
-					}.execute();
-					
-					new CollectionHelper.Iterator.Adapter.Default<String>((Collection<String>) event.getPropertiesMap().getUpdatedFieldNames()){
-						private static final long serialVersionUID = 1L;
+							protected void __executeForEach__(String fieldName) {
+								event.getPropertiesMap().addString(Properties.PROCESS,"@(."+detail.getControlByFieldName(fieldName).getPropertiesMap().getIdentifierAsStyleClass()+")");
+							}
+						}.execute();
+						
+						new CollectionHelper.Iterator.Adapter.Default<String>((Collection<String>) event.getPropertiesMap().getUpdatedFieldNames()){
+							private static final long serialVersionUID = 1L;
 
-						protected void __executeForEach__(String fieldName) {
-							event.getPropertiesMap().addString(Properties.UPDATE,"@(."+detail.getControlByFieldName(fieldName).getPropertiesMap().getIdentifierAsStyleClass()+")");
-						}
-					}.execute();
+							protected void __executeForEach__(String fieldName) {
+								event.getPropertiesMap().addString(Properties.UPDATE,"@(."+detail.getControlByFieldName(fieldName).getPropertiesMap().getIdentifierAsStyleClass()+")");
+							}
+						}.execute();	
+					}
+					
 					
 					Collection<String> processedColumnFieldNames = CollectionHelper.getInstance().createList((Collection<String>) event.getPropertiesMap().getProcessedColumnFieldNames());
 					if(cell!=null)
