@@ -2,7 +2,6 @@ package org.cyk.utility.common.userinterface.command;
 
 import java.io.Serializable;
 
-import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CommandHelper;
 import org.cyk.utility.common.helper.JavaScriptHelper;
@@ -76,22 +75,6 @@ public class Command extends Control implements Serializable {
 		}
 		return this;
 	}
-	
-	/*public Command usePropertyRemoteCommand(){
-		RemoteCommand remoteCommand = new RemoteCommand();
-		remoteCommand.setAction(getAction());
-		remoteCommand.setActionListener(getActionListener());
-		
-		remoteCommand.getPropertiesMap().copyFrom(getPropertiesMap(), Properties.INPUT_VALUE_IS_NOT_REQUIRED,Properties.PROCESS,Properties.UPDATE,Properties.IMMEDIATE);
-		
-		if(isJavaServerFacesLibraryPrimefaces()){
-			setPropertyOnClick(remoteCommand.getPropertiesMap().getName()+"();", Boolean.FALSE);
-		}
-		
-		getPropertiesMap().setRemoteCommand(remoteCommand);
-		
-		return this;
-	}*/
 	
 	/**/
 

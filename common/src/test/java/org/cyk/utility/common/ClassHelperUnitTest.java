@@ -53,7 +53,8 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void getClassByIdentifier(){
-		assertEquals(MyClass.class, ClassHelper.getInstance().getClassByIdentifier("myclass"));
+		assertEquals("MyClass", ClassHelper.getInstance().getClassByIdentifier("myclass").getSimpleName());
+		//assertEquals(MyClass.class, ClassHelper.getInstance().getClassByIdentifier("myclass"));
 	}
 	
 	@Test
@@ -88,6 +89,8 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 				.addAnnotationClasses(Singleton.class).execute(), ClassHelper.class);
 		assertCollectionContains(new ClassHelper.Get.Adapter.Default(Package.getPackage("org.cyk.utility.common")).setBaseClass(AbstractHelper.class)
 				.addAnnotationClasses(Named.class).execute(), MyAnnotatedHelper2.class);
+		
+		System.out.println(ClassHelper.getInstance().getClasses());
 		
 	}
 	

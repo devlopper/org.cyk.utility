@@ -273,15 +273,18 @@ public class Input<T> extends Control implements Serializable {
 				@Override
 				public Class<? extends Input<?>> getClass(Form.Detail form,Object object, Field field) {
 					Class<? extends Input<?>> aClass = null;
+					Class<?> fieldType = FieldHelper.getInstance().getType(object.getClass(), field);
 					if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Input.class)==null){
-						if(String.class.equals(field.getType())){
+						if(String.class.equals(fieldType)){
 							aClass = InputText.class;
-						}else if(Date.class.equals(field.getType())){
+						}else if(Date.class.equals(fieldType)){
 							aClass = InputCalendar.class;
-						}else if(ClassHelper.getInstance().isNumber(field.getType())){
-							String name = InputNumber.class.getName()+ClassHelper.getInstance().getWrapper(field.getType()).getSimpleName();
+						}else if(ClassHelper.getInstance().isBoolean(fieldType)){
+							aClass = InputBooleanButton.class;
+						}else if(ClassHelper.getInstance().isNumber(fieldType)){
+							String name = InputNumber.class.getName()+ClassHelper.getInstance().getWrapper(fieldType).getSimpleName();
 							aClass = (Class<? extends Input<?>>) ClassHelper.getInstance().getByName(name);
-						}else if(ClassHelper.getInstance().isIdentified(field.getType())){
+						}else if(ClassHelper.getInstance().isIdentified(fieldType)){
 							aClass = InputChoiceOneCombo.class;
 						}
 					}else{
@@ -301,7 +304,7 @@ public class Input<T> extends Control implements Serializable {
 							aClass = InputBooleanCheckBox.class;
 						
 						else if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputNumber.class)!=null){
-							String name = InputNumber.class.getName()+ClassHelper.getInstance().getWrapper(field.getType()).getSimpleName();
+							String name = InputNumber.class.getName()+ClassHelper.getInstance().getWrapper(fieldType).getSimpleName();
 							aClass = (Class<? extends Input<?>>) ClassHelper.getInstance().getByName(name);
 						}
 						

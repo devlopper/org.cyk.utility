@@ -559,6 +559,9 @@ public class Component extends AbstractBean implements Serializable {
 		//System.out.println("Component.get() A : "+aClass);
 		T component = (T) ClassHelper.getInstance().instanciateOne(aClass);
 		component.setParent(parent);
+		component.getPropertiesMap().setActionOnClass(actionOnClass);
+		component.getPropertiesMap().setAction(action);
+		
 		if(component instanceof Form.Master){
 			Object object = parent instanceof Window ? ((Window)parent).getActionOnClassInstances().iterator().next() : null;//TODO how to handle many ? use key to point to the adequate form
 			Form.Master master = (Master) component;
@@ -569,8 +572,8 @@ public class Component extends AbstractBean implements Serializable {
 				detail = master.instanciateDetail();
 		}else if(component instanceof DataTable){
 			DataTable dataTable = (DataTable) component;
-			dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
-			dataTable.getPropertiesMap().setAction(action);
+			//dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
+			//dataTable.getPropertiesMap().setAction(action);
 			
 		}else if(component instanceof Hierarchy){
 			Hierarchy hierarchy = (Hierarchy) component;

@@ -286,6 +286,7 @@ public class Form extends Container implements Serializable {
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
 				return null;
 			}
@@ -563,6 +564,13 @@ public class Form extends Container implements Serializable {
 		
 		public Detail add(String fieldName1,String fieldName2){
 			return add(fieldName1,fieldName2,getMaster().getEditable());
+		}
+		
+		public Detail addFieldName(String name,String labelStringIdentifier){
+			add(name);
+			Control control = getControlByFieldName(fieldsObject,name);
+			control.setLabelFromIdentifier(labelStringIdentifier);
+			return this;
 		}
 		
 		public Detail addBreak(){

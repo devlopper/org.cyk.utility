@@ -28,8 +28,13 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanListener;
+import org.cyk.utility.common.model.Identifiable;
 import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,6 +49,9 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		ClassHelper.getInstance().map(NameBuilder.class, NameBuilder.Adapter.Default.class,Boolean.FALSE);
 	}
 	
+	public static String IDENTIFIABLES_PACKAGE = "org.cyk";
+	public static final Collection<Class<?>> IDENTIFIABLE_BASE_CLASSES = new HashSet<>();
+	private static Collection<Class<?>> IDENTIFIABLES;
 	public static Class<? extends Annotation> ENTITY_ANNOTATION_CLASS = javax.persistence.Entity.class;
 	private static Collection<Class<?>> CLASSES_WITH_ENTITY_ANNOTATION;
 	
@@ -54,8 +62,12 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return INSTANCE;
 	}
 	
-	
+	private static Collection<Class<?>> CLASSES;
 	private static final Map<Class<?>,String> IDENTIFIER_MAP = new HashMap<>();
+	
+	static {
+		IDENTIFIABLE_BASE_CLASSES.add(Identifiable.class);
+	}
 	
 	@Override
 	protected void initialisation() {
@@ -111,6 +123,12 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		if(CLASSES_WITH_ENTITY_ANNOTATION==null)
 			CLASSES_WITH_ENTITY_ANNOTATION = ClassHelper.getInstance().getByAnnotation("org.cyk", ENTITY_ANNOTATION_CLASS);
 		return CLASSES_WITH_ENTITY_ANNOTATION;
+	}
+	
+	public Collection<Class<?>> getClasses(){
+		if(CLASSES==null)
+			CLASSES = ClassHelper.getInstance().get("org.cyk", Object.class);
+		return CLASSES;
 	}
 	
 	public Collection<Class<?>> getAnnotatedWithEntityAndPackageNameStartsWith(String string){
@@ -172,13 +190,40 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return get(aClass, field.getName(), field.getType());
 	}
 	
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	public Collection<Class<?>> get(String packageName,Class<?> baseClass){
 		Reflections reflections = new Reflections(packageName);
 		@SuppressWarnings("rawtypes")
 		Collection classes = reflections.getSubTypesOf(baseClass);
 		logTrace("sub types of {} in package {} are : {}", baseClass,packageName,classes);
 	    return classes;
+	}*/
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Collection<Class<?>> get(String packageName,Class<?> baseClass){
+		SubTypesScanner subTypesScanner = new SubTypesScanner(false);
+		
+		ConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
+		    	.filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(packageName)))
+		    	.setUrls(ClasspathHelper.forPackage(packageName))
+		    	.setScanners(subTypesScanner);
+		
+		Collection classes = new Reflections(configurationBuilder).getSubTypesOf(baseClass);
+		logTrace("sub types of {} in package {} are : {}", baseClass,packageName,classes);
+		return classes;
+	}
+	
+	/*public Collection<Class<?>> getIdentifiables(String packageName){
+		return get(packageName, Identifiable.class);
+	}*/
+	
+	public Collection<Class<?>> getIdentifiables(){
+		if(IDENTIFIABLES == null){
+			IDENTIFIABLES = new HashSet<>(); 
+			for(Class<?> aClass : IDENTIFIABLE_BASE_CLASSES)
+				IDENTIFIABLES.addAll(get(IDENTIFIABLES_PACKAGE, aClass));
+		}
+		return IDENTIFIABLES;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -361,16 +406,19 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return getMapping(aClass, Boolean.TRUE);
 	}
 	
+	public String computeIdentifier(Class<?> aClass){
+		String identifier = aClass.getSimpleName().toLowerCase();
+		return identifier;
+	}
+	
 	public void registerIdentifier(Collection<Class<?>> classes){
 		new CollectionHelper.Iterator.Adapter.Default<Class<?>>(classes){
 			private static final long serialVersionUID = 1L;
 
 			protected void __executeForEach__(java.lang.Class<?> aClass) {
 				String identifier = IDENTIFIER_MAP.get(aClass);
-				if(StringHelper.getInstance().isBlank(identifier)){
-					identifier = aClass.getSimpleName().toLowerCase();
-					IDENTIFIER_MAP.put(aClass, identifier);
-				}	
+				if(StringHelper.getInstance().isBlank(identifier))
+					IDENTIFIER_MAP.put(aClass, computeIdentifier(aClass));
 			}
 		}.execute();
 	}
@@ -393,6 +441,11 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		for(Entry<Class<?>,String> entry : IDENTIFIER_MAP.entrySet())
 			if(entry.getValue().equals(identifier))
 				return entry.getKey();
+		for(Class<?> aClass : getIdentifiables())
+			if(identifier.equals(computeIdentifier(aClass))){
+				registerIdentifier(aClass);
+				return aClass;
+			}
 		return null;
 	}
 	

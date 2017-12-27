@@ -1,10 +1,11 @@
-package org.cyk.utility.common;
+package org.cyk.utility.common.reflection;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Set;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
+import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.model.Identifiable;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,11 +14,6 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 public class ReflectionUnitTest extends AbstractUnitTest {
@@ -80,63 +76,31 @@ public class ReflectionUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void getReflections(){
-		Reflections reflections = new Reflections(new ConfigurationBuilder()
-	    	.filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix("org.cyk")))
-	    	.setUrls(ClasspathHelper.forPackage("org.cyk"))
-	    	.setScanners(new SubTypesScanner(){
-	    		@Override
-	    		public boolean acceptsInput(String file) {
-	    			System.out.println(file);
-	    			return super.acceptsInput(file);
-	    		}
-	    	}));
-	 
-	       Set<Class<? extends ClassA>> modules = reflections.getSubTypesOf(ClassA.class);
-	       assertEquals(6, modules.size());
-	}
-	
-	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-	public static class ClassA{
-		private String v_a;
-	}
-	
-	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-	public static class ClassA1 extends ClassA {
-		private String vA1;
-	}
-	
-	@Getter @Setter
-	public static class ClassA11 extends ClassA1 {
+		SubTypesScanner subTypesScanner = new SubTypesScanner(false);
 		
-	}
-	
-	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-	public static class ClassA2 extends ClassA{
-		private String vA2;
-	}
-	
-	@Getter @Setter
-	public static class ClassA21 extends ClassA2 {
+		ConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
+		    	.filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix("org.cyk")))
+		    	.setUrls(ClasspathHelper.forPackage("org.cyk"))
+		    	.setScanners(subTypesScanner);
 		
+		assertEquals(new Reflections(configurationBuilder).getSubTypesOf(Identifiable.class).size(), ClassHelper.getInstance().get("org.cyk",Identifiable.class).size());
 	}
 	
-	@Getter @Setter
-	public static class ClassA22 extends ClassA2 {
-		
-	}
 	
-	@Getter @Setter
-	public static class ClassA221 extends ClassA22 {
-		
-	}
 	
-	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-	public static class ClassB{
-		private ClassA v;
-	}
 	
-	@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-	public static class ClassC{
-		private ClassA1 v;
-	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
