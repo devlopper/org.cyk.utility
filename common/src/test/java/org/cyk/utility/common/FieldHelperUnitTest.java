@@ -4,6 +4,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.StringHelper.Location;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -19,6 +21,63 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
  
 	@InjectMocks private FieldHelper fieldHelper;
+	
+	@Test
+	public void getConstraintsDefault(){
+		FieldHelper.Field.clear();
+		
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsA.class, "nullableString").getConstraints().getIsNullable()); 
+		assertEquals(Boolean.FALSE, FieldHelper.Field.get(ModelForConstraintsA.class, "notNullableString").getConstraints().getIsNullable()); 
+		
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsB.class, "a.nullableString").getConstraints().getIsNullable()); 
+		assertEquals(Boolean.FALSE, FieldHelper.Field.get(ModelForConstraintsB.class, "a.notNullableString").getConstraints().getIsNullable()); 
+		
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsC.class, "a.nullableString").getConstraints().getIsNullable()); 
+		assertEquals(Boolean.FALSE, FieldHelper.Field.get(ModelForConstraintsC.class, "a.notNullableString").getConstraints().getIsNullable()); 
+		
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsD.class, "a.nullableString").getConstraints().getIsNullable()); 
+		assertEquals(Boolean.FALSE, FieldHelper.Field.get(ModelForConstraintsD.class, "a.notNullableString").getConstraints().getIsNullable()); 
+	}
+	
+	@Test
+	public void getConstraintsSet(){
+		FieldHelper.Field.clear();
+		
+		FieldHelper.Field.get(ModelForConstraintsC.class, "a.notNullableString").getConstraints().setIsNullable(Boolean.TRUE);
+		FieldHelper.Field.get(ModelForConstraintsD.class, "a.nullableString").getConstraints().setIsNullable(Boolean.FALSE);
+		
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsA.class, "nullableString").getConstraints().getIsNullable()); 
+		assertEquals(Boolean.FALSE, FieldHelper.Field.get(ModelForConstraintsA.class, "notNullableString").getConstraints().getIsNullable()); 
+		
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsB.class, "a.nullableString").getConstraints().getIsNullable()); 
+		assertEquals(Boolean.FALSE, FieldHelper.Field.get(ModelForConstraintsB.class, "a.notNullableString").getConstraints().getIsNullable()); 
+		
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsC.class, "a.nullableString").getConstraints().getIsNullable()); 
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsC.class, "a.notNullableString").getConstraints().getIsNullable()); 
+		
+		assertEquals(Boolean.FALSE, FieldHelper.Field.get(ModelForConstraintsD.class, "a.nullableString").getConstraints().getIsNullable()); 
+		assertEquals(Boolean.FALSE, FieldHelper.Field.get(ModelForConstraintsD.class, "a.notNullableString").getConstraints().getIsNullable()); 
+	}
+	
+	@Test
+	public void getConstraintsA_AllNull(){
+		FieldHelper.Field.clear();
+		
+		FieldHelper.Field.get(ModelForConstraintsA.class, "notNullableString").getConstraints().setIsNullable(Boolean.TRUE);
+		FieldHelper.Field.get(ModelForConstraintsA.class, "nullableString").getConstraints().setIsNullable(Boolean.TRUE);
+		
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsA.class, "nullableString").getConstraints().getIsNullable()); 
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsA.class, "notNullableString").getConstraints().getIsNullable()); 
+		
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsB.class, "a.nullableString").getConstraints().getIsNullable()); 
+		assertEquals(Boolean.FALSE, FieldHelper.Field.get(ModelForConstraintsB.class, "a.notNullableString").getConstraints().getIsNullable()); 
+		
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsC.class, "a.nullableString").getConstraints().getIsNullable()); 
+		assertEquals(Boolean.FALSE, FieldHelper.Field.get(ModelForConstraintsC.class, "a.notNullableString").getConstraints().getIsNullable()); 
+		
+		assertEquals(Boolean.TRUE, FieldHelper.Field.get(ModelForConstraintsD.class, "a.nullableString").getConstraints().getIsNullable()); 
+		assertEquals(Boolean.FALSE, FieldHelper.Field.get(ModelForConstraintsD.class, "a.notNullableString").getConstraints().getIsNullable()); 
+	}
 	
 	@Test
 	public void getAction(){
@@ -167,6 +226,41 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 	public static class B {
 		
 		private String bf1;
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class ModelForConstraintsA {
+		
+		private String nullableString;
+		@NotNull private String notNullableString;
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class ModelForConstraintsB {
+		
+		private String nullableString;
+		@NotNull private String notNullableString;
+		private ModelForConstraintsA a;
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class ModelForConstraintsC {
+		
+		private String nullableString;
+		@NotNull private String notNullableString;
+		private ModelForConstraintsA a;
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class ModelForConstraintsD {
+		
+		private String nullableString;
+		@NotNull private String notNullableString;
+		private ModelForConstraintsA a;
 		
 	}
 }

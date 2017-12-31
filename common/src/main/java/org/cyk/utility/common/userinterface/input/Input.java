@@ -13,11 +13,13 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.cyk.utility.common.CardinalPoint;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FileHelper;
+import org.cyk.utility.common.helper.LocaleHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.container.Form;
@@ -162,12 +164,20 @@ public class Input<T> extends Control implements Serializable {
 		return ClassHelper.getInstance().instanciateOne(Listener.class);
 	}
 	
+	public static Input<?> get(Form.Detail detail,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints){
+		return getListener().get(detail,object, field,constraints);
+	}
+	
 	public static Input<?> get(Form.Detail detail,Object object,java.lang.reflect.Field field){
-		return getListener().get(detail,object, field);
+		return get(detail, object, field, null);
+	}
+	
+	public static Input<?> get(Form.Detail detail,Object object,String fieldName,FieldHelper.Constraints constraints){
+		return get(detail,object, FieldHelper.getInstance().get(object.getClass(), fieldName),constraints);
 	}
 	
 	public static Input<?> get(Form.Detail detail,Object object,String fieldName){
-		return get(detail,object, FieldHelper.getInstance().get(object.getClass(), fieldName));
+		return get(detail, object, fieldName, null);
 	}
 	
 	public static java.util.List<Input<?>> get(Form.Detail detail,Object object){
@@ -214,6 +224,7 @@ public class Input<T> extends Control implements Serializable {
 		
 		Class<? extends Input<?>> getClass(Form.Detail form,Object object,java.lang.reflect.Field field);
 		
+		Input<?> get(Form.Detail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints);
 		Input<?> get(Form.Detail form,Object object,java.lang.reflect.Field field);
 		void listenGet(Input<?> input);
 		java.util.List<Input<?>> get(Form.Detail form,Object object);
@@ -355,7 +366,7 @@ public class Input<T> extends Control implements Serializable {
 				}
 				
 				@Override
-				public Input<?> get(Form.Detail detail,Object object, Field field) {
+				public Input<?> get(Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints) {
 					Input<?> input = null;
 					Class<? extends Input<?>> aClass = getClass(detail,object, field);
 					if(aClass!=null){
@@ -365,6 +376,11 @@ public class Input<T> extends Control implements Serializable {
 						input.getPropertiesMap().setRequired(field.getAnnotation(NotNull.class)!=null);
 						input.getPropertiesMap().setRequiredMessage(StringHelper.getInstance().get("validation.userinterface.input.value.required"
 								, new Object[]{input.getLabel().getPropertiesMap().getValue()}));
+						if(input instanceof InputCalendar){
+							((InputCalendar)input).getPropertiesMap().setPattern(Constant.Date.getPattern(LocaleHelper.getInstance().get()
+									, constraints == null || constraints.getDatePart() == null ? Constant.Date.Part.DATE_ONLY : constraints.getDatePart()
+											, Constant.Date.Length.SHORT).getValue());
+						}
 						if(input instanceof InputChoice){
 							Object value = FieldHelper.getInstance().read(object, field);
 							((InputChoice<?>)input).setNullChoicable(value == null || !Boolean.TRUE.equals(input.getPropertiesMap().getRequired()));
@@ -382,6 +398,11 @@ public class Input<T> extends Control implements Serializable {
 						}
 					}
 					return input;
+				}
+				
+				@Override
+				public Input<?> get(Form.Detail detail,Object object, Field field) {
+					return get(detail, object, field, null);
 				}
 			
 				@Override
@@ -489,6 +510,11 @@ public class Input<T> extends Control implements Serializable {
 			
 			@Override
 			public Class<? extends Input<?>> getClass(Form.Detail form,Object object, Field field) {
+				return null;
+			}
+			
+			@Override
+			public Input<?> get(Form.Detail form,Object object, Field field, FieldHelper.Constraints constraints) {
 				return null;
 			}
 			

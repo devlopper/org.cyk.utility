@@ -115,6 +115,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			;//stringifier.addQueryParameterClass((Class<?>)object);
 		else
 			stringifier.addQueryParameterIdentifiable(object);
+		stringifier.addQueryKeyValue(queryKeyValue);
 		return stringifier.execute();
 	}
 	

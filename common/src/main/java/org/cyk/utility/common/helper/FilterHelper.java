@@ -40,12 +40,31 @@ public class FilterHelper extends AbstractHelper implements Serializable {
 	public static class Filter<T> extends AbstractBean implements Serializable{
 		private static final long serialVersionUID = 1L;
 		
+		protected List<Object> masters;
+		
 		protected List<Criteria<?>> criterias = new ArrayList<Criteria<?>>();
 		protected Collection<T> excluded;
 		
 		public Filter(Filter<T> filter){
 			criterias.addAll(filter.criterias);
 			excluded = CollectionHelper.getInstance().add(filter.excluded, Boolean.FALSE, excluded);
+		}
+		
+		public Filter<T> addMasters(Collection<Object> masters){
+			if(CollectionHelper.getInstance().isNotEmpty(masters)){
+				if(this.masters==null)
+					this.masters = new ArrayList<>();
+				for(Object index : masters)
+					if(index!=null)
+						this.masters.add(index);	
+			}
+			return this;
+		}
+		
+		public Filter<T> addMaster(Object master){
+			if(master!=null)
+				addMasters(Arrays.asList(master));
+			return this;
 		}
 		
 		public Collection<T> getExcluded(){

@@ -3,7 +3,10 @@ package org.cyk.utility.common.userinterface.input;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.helper.LocaleHelper;
 import org.cyk.utility.common.userinterface.Control;
 
 import lombok.Getter;
@@ -16,6 +19,15 @@ public class InputCalendar extends Input<Date> implements Serializable {
 	
 	/**/
 
+	@Override
+	protected void listenPropertiesInstanciated(Properties propertiesMap) {
+		super.listenPropertiesInstanciated(propertiesMap);
+		if(isJavaServerFacesLibraryPrimefaces()){
+			propertiesMap.setPattern(Constant.Date.getPattern(LocaleHelper.getInstance().get(), Constant.Date.Part.DATE_ONLY, Constant.Date.Length.SHORT).getValue());
+			propertiesMap.setTimeOnly(Boolean.FALSE);
+		}
+	}
+	
 	public static interface BuilderBase<OUTPUT extends InputCalendar> extends Input.BuilderBase<OUTPUT> {
 
 		public static class Adapter<OUTPUT extends InputCalendar> extends Control.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {

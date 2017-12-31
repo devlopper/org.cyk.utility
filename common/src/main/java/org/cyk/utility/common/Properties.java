@@ -2866,6 +2866,46 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getTimeOnly() {
+		return get(TIME_ONLY);
+	}
+
+	public Properties setTimeOnly(Object value) {
+		set(TIME_ONLY, value);
+		return this;
+	}
+	
+	public Object getPattern() {
+		return get(PATTERN);
+	}
+
+	public Properties setPattern(Object value) {
+		set(PATTERN, value);
+		return this;
+	}
+	
+	public Object getConstraints() {
+		return get(CONSTRAINTS);
+	}
+
+	public Properties setConstraints(Object value) {
+		set(CONSTRAINTS, value);
+		return this;
+	}
+	
+	public Object getMaster() {
+		return get(MASTER);
+	}
+
+	public Properties setMaster(Object value) {
+		set(MASTER, value);
+		return this;
+	}
+	
+	public static final String MASTER = "MASTER";
+	public static final String CONSTRAINTS = "CONSTRAINTS";
+	public static final String TIME_ONLY = "TIME_ONLY";
+	public static final String PATTERN = "PATTERN";
 	public static final String FOOTER_RENDERED = "FOOTER_RENDERED";
 	public static final String CELL = "CELL";
 	public static final String DATA_TABLE_CELL = "DATA_TABLE_CELL";

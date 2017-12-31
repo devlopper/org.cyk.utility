@@ -126,8 +126,12 @@ public class Output extends Control implements Serializable {
 
 	/**/
 
+	public static Output get(Form.Detail detail,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints){
+		return getListener().get(detail,object, field,constraints);
+	}
+	
 	public static Output get(Form.Detail detail,Object object,java.lang.reflect.Field field){
-		return getListener().get(detail,object, field);
+		return get(detail, object, field, null);
 	}
 	
 	public static java.util.List<Output> get(Form.Detail detail,Object object){
@@ -150,14 +154,15 @@ public class Output extends Control implements Serializable {
 		
 		Class<? extends Output> getClass(Form.Detail form,Object object,java.lang.reflect.Field field);
 		
+		Output get(Form.Detail form,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints);
 		Output get(Form.Detail form,Object object,java.lang.reflect.Field field);
 		void listenGet(Output output);
 		java.util.List<Output> get(Form.Detail form,Object object);
 		
 		void read(Output output);
 		
-		Object getReadableValue(Object object,Field field);
-		Object getReadableValue(Object object,String fieldName);
+		Object getReadableValue(Object object,Field field,FieldHelper.Constraints constraints);
+		Object getReadableValue(Object object,String fieldName,FieldHelper.Constraints constraints);
 		Object getReadableValue(Output output);
 		
 		
@@ -234,17 +239,23 @@ public class Output extends Control implements Serializable {
 				}
 				
 				@Override
-				public Output get(Form.Detail detail,Object object, Field field) {
+				public Output get(Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints) {
 					Output output = null;
 					Class<? extends Output> aClass = getClass(detail,object, field);
 					if(aClass!=null){
 						output = ClassHelper.getInstance().instanciateOne(aClass);
+						output.getPropertiesMap().setConstraints(constraints);
 					}
 					if(output!=null){
 						output.setObject(object).setField(field);
 						listenGet(output);
 					}
 					return output;
+				}
+				
+				@Override
+				public Output get(Form.Detail detail,Object object, Field field) {
+					return get(detail, object, field, null);
 				}
 			
 				@Override
@@ -287,7 +298,7 @@ public class Output extends Control implements Serializable {
 				}
 				
 				@Override
-				public Object getReadableValue(Object object, String fieldName) {
+				public Object getReadableValue(Object object, String fieldName,FieldHelper.Constraints constraints) {
 					Object value =  FieldHelper.getInstance().read(object, fieldName);
 					if(value!=null){
 						FileHelper.Listener listener = FileHelper.getListener();
@@ -295,7 +306,7 @@ public class Output extends Control implements Serializable {
 							value = getReadableValueFile(value,listener.getName(value),listener.getExtension(value),listener.getMime(value),listener.getBytes(value));
 						else if(ClassHelper.getInstance().isDate(value.getClass()))
 							value = new TimeHelper.Stringifier.Date.Adapter.Default((Date) value).setProperty(TimeHelper.Stringifier.PROPERTY_NAME_TIME_PART
-									, Constant.Date.Part.DATE_ONLY).execute();
+									, constraints == null || constraints.getDatePart() == null ? Constant.Date.Part.DATE_ONLY : constraints.getDatePart()).execute();
 						else if(ClassHelper.getInstance().isBoolean(value.getClass()))
 							value = StringHelper.getInstance().getResponse((Boolean) value);
 					}
@@ -304,13 +315,13 @@ public class Output extends Control implements Serializable {
 				}
 				
 				@Override
-				public Object getReadableValue(Object object, Field field) {
-					return getReadableValue(object, field.getName());
+				public Object getReadableValue(Object object, Field field,FieldHelper.Constraints constraints) {
+					return getReadableValue(object, field.getName(),constraints);
 				}
 				
 				@Override
 				public Object getReadableValue(Output output) {
-					return getReadableValue(output.getObject(), output.getField());
+					return getReadableValue(output.getObject(), output.getField(),(FieldHelper.Constraints)output.getPropertiesMap().getConstraints());
 				}
 					
 				protected Object getReadableValueFile(Object value,String name,String extension,String mime,byte[] bytes){
@@ -347,6 +358,11 @@ public class Output extends Control implements Serializable {
 			}
 			
 			@Override
+			public Output get(Detail form, Object object, Field field, FieldHelper.Constraints constraints) {
+				return null;
+			}
+			
+			@Override
 			public Output get(Form.Detail form,Object object, Field field) {
 				return null;
 			}
@@ -368,12 +384,12 @@ public class Output extends Control implements Serializable {
 			}
 			
 			@Override
-			public Object getReadableValue(Object object, Field field) {
+			public Object getReadableValue(Object object, Field field,FieldHelper.Constraints constraints) {
 				return null;
 			}
 			
 			@Override
-			public Object getReadableValue(Object object, String fieldName) {
+			public Object getReadableValue(Object object, String fieldName,FieldHelper.Constraints constraints) {
 				return null;
 			}
 			

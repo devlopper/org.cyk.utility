@@ -77,16 +77,33 @@ public class DataTable extends Component.Visible implements Serializable {
 		return (DataTable) super.build();
 	}
 	
+	public DataTable addMainMenuNode(String labelStringIdentifier,Object icon,Constant.Action action,Object object,Object...queryKeyValue){
+		Menu menu = (Menu) getPropertiesMap().getMainMenu();
+		if(menu == null){
+			menu = new Menu().setRenderType(Menu.RenderType.BAR);
+			getPropertiesMap().setMainMenu(menu);
+		}
+		menu.addNode(labelStringIdentifier)._setPropertyUrl(action, object,queryKeyValue)._setPropertyIcon(icon);
+		return this;
+	}
+	
 	@Override
 	public DataTable prepare() {
 		super.prepare();
 	
 		if(Boolean.TRUE.equals(onPrepareAddMenu)){
-			Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
-			getPropertiesMap().setMainMenu(menu);
+			Menu menu = (Menu) getPropertiesMap().getMainMenu();
+			if(menu == null){
+				menu = new Menu().setRenderType(Menu.RenderType.BAR);
+				getPropertiesMap().setMainMenu(menu);
+			}
 			addOneChild(menu);
 			if(getPropertiesMap().getActionOnClass()!=null){
-				menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, getPropertiesMap().getActionOnClass())
+				//System.out.println("DataTable.prepare() : "+getPropertiesMap().getMaster());
+				//System.out.println(UniformResourceLocatorHelper.getInstance().stringify(Constant.Action.CREATE, getPropertiesMap().getActionOnClass(),"aaa","bbb"));
+				menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, getPropertiesMap().getActionOnClass()
+						,getPropertiesMap().getMaster() == null ? null : getPropertiesMap().getMaster().getClass()
+								,InstanceHelper.getInstance().getIdentifier(getPropertiesMap().getMaster()))
 					._setPropertyIcon(IconHelper.Icon.FontAwesome.PLUS);
 			}	
 		}
@@ -777,14 +794,15 @@ public class DataTable extends Component.Visible implements Serializable {
 										output.getPropertiesMap().setValue(row.getPropertiesMap().get(fieldName)); 
 										break;
 									case ROW_PROPERTY_VALUE:
+										FieldHelper.Constraints constraints = FieldHelper.Field.get(row.getPropertiesMap().getValue().getClass(), fieldName).getConstraints();
 										Object object = FieldHelper.getInstance().readBeforeLast(row.getPropertiesMap().getValue(), fieldName);
 										java.lang.reflect.Field field = FieldHelper.getInstance().getLast(object.getClass(),fieldName);
-										output = Output.getListener().get(null,object, field); 
+										output = Output.getListener().get(null,object, field,constraints); 
 										
 										if(column.getPropertiesMap().getAction() instanceof Constant.Action){
 											Constant.Action action = (Action) column.getPropertiesMap().getAction();
 											if(Constant.Action.isCreateOrUpdate(action) && ValueType.INPUT.equals(column.cellValueType)){
-												cell.input = Input.get(null, object, field);
+												cell.input = Input.get(null, object, field,constraints);
 												cell.input.getPropertiesMap().setWatermark(null);
 											}
 										}

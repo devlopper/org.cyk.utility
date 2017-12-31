@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -519,12 +520,60 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	
 	/**/
 	
-	@Getter @Setter @EqualsAndHashCode(of={"name"})
+	@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(of={"clazz","name"})
 	public static class Field implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		private static final Collection<Field> COLLECTION = new HashSet<>();
+		
+		private Class<?> clazz;
 		private String name;
-		private Object value;
+		private java.lang.reflect.Field javaField;
+		
+		//private Object value;
+		
+		private Constraints constraints = new Constraints();
+		
+		public Field(Class<?> clazz,String name) {
+			this.clazz = clazz;
+			this.name = name;
+			this.javaField = getInstance().get(this.clazz, this.name);
+			constraints.isNullable = this.javaField.getAnnotation(javax.validation.constraints.NotNull.class) == null;
+		}
+		
+		public Constraints getConstraints(){
+			if(constraints == null)
+				constraints = new Constraints();
+			return constraints;
+		}
+		
+		public static Field get(Class<?> clazz,String name){
+			Field field = null;
+			for(Field index : COLLECTION)
+				if(index.clazz.equals(clazz) && index.name.equals(name)){
+					field = index;
+					break;
+				}
+			if(field == null){
+				field = new Field(clazz, name);
+				COLLECTION.add(field);
+			}
+			return field;
+		}
+		
+		public static void clear(){
+			COLLECTION.clear();
+		}
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class Constraints implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private Boolean isNullable,isUnique,isUpdatable;
+		private Integer length,precision,scale;
+		private Constant.Date.Part datePart;
 		
 	}
 }

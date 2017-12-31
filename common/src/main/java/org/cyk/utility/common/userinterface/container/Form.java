@@ -15,6 +15,7 @@ import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.ContentType;
@@ -214,6 +215,16 @@ public class Form extends Container implements Serializable {
 			return instanciateDataTable(null, null,Boolean.TRUE);
 		}
 		
+		/*public DataTable instanciateReadOnlyDataTable(Class<?> actionOnClass,DataTable.Cell.Listener cellListener,Boolean bottom,String...fieldNames){
+			DataTable dataTable = new DataTable();
+			dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
+			dataTable.getPropertiesMap().setChoiceValueClass(choiceValueClass);
+			dataTable.getPropertiesMap().setCellListener(cellListener);
+			getDetail().addDataTable(dataTable,bottom);
+			dataTable.addColumnsByFieldNames(fieldNames);
+			return dataTable;
+		}*/
+		
 		@Override
 		public Master setLabelFromIdentifier(String identifier) {
 			return (Master) super.setLabelFromIdentifier(identifier);
@@ -403,6 +414,7 @@ public class Form extends Container implements Serializable {
 		private static final long serialVersionUID = 1L;
 
 		private Master master;
+		private String fieldsObjectFieldName;
 		private Object fieldsObject;
 		private Collection<DataTable> dataTables;
 		private Collection<DataTable> dataTablesUp;
@@ -429,7 +441,9 @@ public class Form extends Container implements Serializable {
 		}
 		
 		public Detail setFieldsObjectFromMaster(String...fieldNames){
-			setFieldsObject(ArrayHelper.getInstance().isEmpty(fieldNames) ? master.getObject() : FieldHelper.getInstance().read(master.getObject(), fieldNames));
+			this.fieldsObjectFieldName = FieldHelper.getInstance().buildPath(fieldNames);
+			setFieldsObject(ArrayHelper.getInstance().isEmpty(fieldNames) ? master.getObject() 
+					: FieldHelper.getInstance().read(master.getObject(), fieldNames));
 			return this;
 		}
 		
@@ -448,7 +462,10 @@ public class Form extends Container implements Serializable {
 				dataTable.setForm(this);
 			if(dataTable.getPropertiesMap().getAction() == null)
 				dataTable.getPropertiesMap().setAction(getPropertiesMap().getAction());
-	
+			if(dataTable.getPropertiesMap().getMaster() == null)
+				dataTable.getPropertiesMap().setMaster(master.getObject());
+			
+			
 			if(Boolean.TRUE.equals(bottom)){
 				dataTablesBottom.add(dataTable);
 			}else{
@@ -508,8 +525,10 @@ public class Form extends Container implements Serializable {
 		public Detail add(Object object,String fieldName,Number length,Number width,Boolean editable){
 			if(object==null)
 				object = getMaster().getObject();
+			String constraintsFieldName = StringHelper.getInstance().isBlank(fieldsObjectFieldName) ? fieldName : FieldHelper.getInstance().buildPath(fieldsObjectFieldName,fieldName);
+			FieldHelper.Constraints constraints = FieldHelper.Field.get(getMaster().getObject().getClass(), constraintsFieldName).getConstraints();
 			Field field = FieldHelper.getInstance().get(object.getClass(), fieldName);
-			Control control = Boolean.TRUE.equals(editable) ? Input.get(this,object, field) : Output.get(this, object, field).__setLabelFromField__();
+			Control control = Boolean.TRUE.equals(editable) ? Input.get(this,object, field,constraints) : Output.get(this, object, field,constraints).__setLabelFromField__();
 			add(control.setLength(length).setWidth(width));
 			return this;
 		}

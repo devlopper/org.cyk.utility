@@ -7,6 +7,7 @@ import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.AbstractHelper;
 import org.cyk.utility.common.helper.BooleanHelper;
 import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 
@@ -92,6 +93,28 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 	
 	public Class<?> getParameterAsClass(String name){
 		return getParameterAsClass(name,get());
+	}
+	
+	public Object getParameterAsInstance(String name,Object request){
+		String string = getParameterAsString(name,request);
+		if(StringHelper.getInstance().isNotBlank(string)){
+			Class<?> aClass = ClassHelper.getInstance().getClassByIdentifier(name);
+			return InstanceHelper.getInstance().getByIdentifier(aClass, string);
+		}
+		return null;
+	}
+	
+	public Object getParameterAsInstance(String name){
+		return getParameterAsInstance(name,get());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T getParameterAsInstance(Class<T> aClass,Object request){
+		return (T) getParameterAsInstance(ClassHelper.getInstance().getIdentifier(aClass), request);
+	}
+	
+	public <T> T getParameterAsInstance(Class<T> aClass){
+		return getParameterAsInstance(aClass,get());
 	}
 	
 	/**/

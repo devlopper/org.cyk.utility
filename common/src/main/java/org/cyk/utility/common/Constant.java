@@ -85,10 +85,12 @@ public interface Constant {
 	
 	java.lang.String DAY_MONTH_YEAR_PATTERN_FORMAT = "%s/%s/%s";
 	java.lang.String HOUR_MINUTE_PATTERN_FORMAT = "%s:%s";
+	java.lang.String HOUR_MINUTE_SECOND_PATTERN_FORMAT = HOUR_MINUTE_PATTERN_FORMAT+":%s";
 	java.lang.String DAY_MONTH_YEAR_HOUR_MINUTE_PATTERN_FORMAT = "%s"+CHARACTER_SPACE+"%s";
 	
 	java.lang.String DAY_MONTH_YEAR_PATTERN = String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy");
 	java.lang.String HOUR_MINUTE_PATTERN = String.format(HOUR_MINUTE_PATTERN_FORMAT, "HH","mm");
+	java.lang.String HOUR_MINUTE_SECOND_PATTERN = String.format(HOUR_MINUTE_SECOND_PATTERN_FORMAT, "HH","mm","ss");
 	java.lang.String DAY_MONTH_YEAR_HOUR_MINUTE_PATTERN = String.format(DAY_MONTH_YEAR_HOUR_MINUTE_PATTERN_FORMAT, DAY_MONTH_YEAR_PATTERN,HOUR_MINUTE_PATTERN);
 	
 	@Deprecated String DATE_PATTERN = "dd/MM/yyyy";
@@ -123,8 +125,8 @@ public interface Constant {
 		
 		private static Map<Locale, Collection<Pattern>> PATTERN_MAP = new HashMap<>();
 		static{
-			putPatterns(Locale.FRENCH, String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy"),"EEEE , dd MMMM yyyy", String.format(HOUR_MINUTE_PATTERN_FORMAT, "HH","mm"),"yyyy");
-			putPatterns(Locale.ENGLISH, String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy"),"EEEE , dd MMMM yyyy", String.format(HOUR_MINUTE_PATTERN_FORMAT, "HH","mm"),"yyyy");
+			putPatterns(Locale.FRENCH, String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy"),"EEEE , dd MMMM yyyy", HOUR_MINUTE_PATTERN,HOUR_MINUTE_SECOND_PATTERN,"yyyy");
+			putPatterns(Locale.ENGLISH, String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy"),"EEEE , dd MMMM yyyy", HOUR_MINUTE_PATTERN,HOUR_MINUTE_SECOND_PATTERN,"yyyy");
 		}
 		
 		public static Pattern getPattern(Locale locale,Part part,Length length){
@@ -139,7 +141,7 @@ public interface Constant {
 			return Pattern.DEFAULT;
 		}
 		
-		private static void putPatterns(Locale locale,String shortDateOnlyPattern,String longDateOnlyPattern,String shortTimeOnlyPattern,String dateYearOnlyPattern){
+		private static void putPatterns(Locale locale,String shortDateOnlyPattern,String longDateOnlyPattern,String shortTimeOnlyPattern,String shortTimeOnlyHourMinuteSecondPattern,String dateYearOnlyPattern){
 			String longTimeOnlyPattern = shortTimeOnlyPattern;
 			Collection<Pattern> patterns = new ArrayList<>();
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_ONLY, Constant.Date.Length.SHORT, shortDateOnlyPattern));
@@ -148,6 +150,9 @@ public interface Constant {
 			patterns.add(new Pattern(locale, Constant.Date.Part.TIME_ONLY, Constant.Date.Length.LONG, longTimeOnlyPattern));
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME, Constant.Date.Length.SHORT, shortDateOnlyPattern+Constant.CHARACTER_SPACE+shortTimeOnlyPattern));
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME, Constant.Date.Length.LONG, longDateOnlyPattern+Constant.CHARACTER_SPACE+longTimeOnlyPattern));
+			
+			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND, Constant.Date.Length.SHORT, shortDateOnlyPattern+Constant.CHARACTER_SPACE+shortTimeOnlyHourMinuteSecondPattern));
+			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND, Constant.Date.Length.LONG, longDateOnlyPattern+Constant.CHARACTER_SPACE+shortTimeOnlyHourMinuteSecondPattern));
 			
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_YEAR_ONLY, Constant.Date.Length.SHORT, dateYearOnlyPattern));
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_YEAR_ONLY, Constant.Date.Length.LONG, dateYearOnlyPattern));
@@ -174,6 +179,7 @@ public interface Constant {
 			DATE_ONLY
 			,TIME_ONLY
 			,DATE_AND_TIME
+			,DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND
 			,DATE_YEAR_ONLY
 			;			
 			
