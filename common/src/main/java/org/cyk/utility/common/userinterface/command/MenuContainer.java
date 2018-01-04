@@ -43,6 +43,11 @@ public class MenuContainer extends Container implements Serializable {
 		return menuNode;
 	}
 	
+	public MenuNode addNode(MenuNode menuNode){
+		addOneChild(menuNode);
+		return menuNode;
+	}
+	
 	public MenuNode addNode(Constant.Action action,Object object,Object...queryKeyValue){
 		MenuNode node =  addNode(null, action, object, queryKeyValue);
 		node.getLabel().getPropertiesMap().setValue(object instanceof Class<?> ? StringHelper.getInstance().getClazz((Class<?>)object) : InstanceHelper.getInstance().getLabel(object));

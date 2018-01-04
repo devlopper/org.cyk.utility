@@ -67,6 +67,11 @@ public class FilterHelper extends AbstractHelper implements Serializable {
 			return this;
 		}
 		
+		@SuppressWarnings("unchecked")
+		public <E> Collection<E> filterMasters(Class<E> aClass){
+			return (Collection<E>) CollectionHelper.getInstance().filter(masters, aClass);
+		}
+		
 		public Collection<T> getExcluded(){
 			if(excluded==null)
 				excluded = new ArrayList<>();
@@ -94,6 +99,8 @@ public class FilterHelper extends AbstractHelper implements Serializable {
 		}
 		
 		public java.lang.Boolean isNull(){
+			if(CollectionHelper.getInstance().isNotEmpty(masters))
+				return Boolean.FALSE;
 			for(Criteria<?> criteria : criterias)
 				if(!java.lang.Boolean.TRUE.equals(criteria.isNull()))
 					return java.lang.Boolean.FALSE;
@@ -116,13 +123,18 @@ public class FilterHelper extends AbstractHelper implements Serializable {
 		public String toString() {
 			return criterias+" , "+excluded;
 		}
-
+		/*
 		private static ClassLocator CLASS_LOCATOR;
 		public static ClassLocator getClassLocator(){
 			if(CLASS_LOCATOR == null)
 				CLASS_LOCATOR = ClassHelper.getInstance().instanciateOne(ClassLocator.class);
 			return CLASS_LOCATOR;
 		}
+		
+		public static void map(Class<?> aClass){
+			ClassHelper.getInstance().map(ClassLocator.class, aClass);
+			CLASS_LOCATOR = null;
+		}*/
 		
 		/**/
 		
@@ -150,8 +162,13 @@ public class FilterHelper extends AbstractHelper implements Serializable {
 				
 			public static ClassLocator getInstance() {
 				if(INSTANCE == null)
-					INSTANCE = new ClassLocator();
+					INSTANCE = ClassHelper.getInstance().instanciateOne(ClassLocator.class);
 				return INSTANCE;
+			}
+			
+			public static void map(Class<?> aClass){
+				ClassHelper.getInstance().map(ClassLocator.class, aClass);
+				INSTANCE = null;
 			}
 		}
 

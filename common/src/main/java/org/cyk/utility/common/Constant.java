@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -76,6 +77,8 @@ public interface Constant {
 	
 	String EMPTY_STRING = "";
 	String[] EMPTY_STRING_ARRAY = new String[]{};
+	
+	Collection<Long> COLLECTION_ONE_LONG_MIN_VALUE = Arrays.asList(Long.MIN_VALUE);
 	
 	String VARIABLE_RESULT = "result";
 	

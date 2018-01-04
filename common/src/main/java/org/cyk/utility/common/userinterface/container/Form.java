@@ -21,10 +21,12 @@ import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.ContentType;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.Layout;
+import org.cyk.utility.common.userinterface.RequestHelper;
 import org.cyk.utility.common.userinterface.collection.DataTable;
 import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.container.window.Window;
+import org.cyk.utility.common.userinterface.event.Event;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputFile;
 import org.cyk.utility.common.userinterface.output.Output;
@@ -99,7 +101,7 @@ public class Form extends Container implements Serializable {
 	public static class Master extends Form implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
-		private Constant.Action action;
+		//private Constant.Action action;
 		private Boolean editable;
 		private Object object;
 		private Detail detail;
@@ -114,7 +116,7 @@ public class Form extends Container implements Serializable {
 			this.object = object;
 			menu.addOneChild(submitCommand);
 			submitCommand.setLabelFromIdentifier("userinterface.command.submit");
-			setAction(action);
+			_setPropertyAction(action);
 			setSubmitCommandActionAdapterClass(submitCommandActionAdapterClass);
 			instanciateDetail();
 		}
@@ -134,26 +136,32 @@ public class Form extends Container implements Serializable {
 			return this;
 		}
 		
-		public Master setAction(Constant.Action action){
-			this.action = action;
-			if(editable==null && this.action!=null)
-				setEditable(!Constant.Action.READ.equals(this.action) && !Constant.Action.DELETE.equals(this.action));
-			submitCommand.getPropertiesMap().setRendered(!Constant.Action.READ.equals(this.action));
+		public Master _setPropertyAction(Object value){
+			super._setPropertyAction(value);
+			Constant.Action action = (Action) value;
+			if(editable==null && action!=null)
+				setEditable(!Constant.Action.READ.equals(action) && !Constant.Action.DELETE.equals(action));
+			submitCommand.getPropertiesMap().setRendered(!Constant.Action.READ.equals(action));
 			if(Boolean.TRUE.equals(submitCommand.getPropertiesMap().getRendered()))
-				submitCommand.setIsConfirmable(Constant.Action.DELETE.equals(this.action));
+				submitCommand.setIsConfirmable(Constant.Action.DELETE.equals(action));
 			
 			Detail detail = getDetail();
 			if(detail!=null){
-				detail.getPropertiesMap().setAction(this.action);
+				detail.getPropertiesMap().setAction(action);
 			}
 			return this;
+		}
+		
+		@Override
+		public Constant.Action _getPropertyAction() {
+			return (Action) super._getPropertyAction();
 		}
 		
 		public Master setSubmitCommandActionAdapterClass(Class<? extends SubmitCommandActionAdapter> submitCommandActionAdapterClass){
 			if(submitCommandActionAdapterClass==null){
 				
 			}else{
-				submitCommand.setActionFromClass(submitCommandActionAdapterClass).setIsConfirmable(Constant.Action.DELETE.equals(action));
+				submitCommand.setActionFromClass(submitCommandActionAdapterClass).setIsConfirmable(Constant.Action.DELETE.equals(_getPropertyAction()));
 				((SubmitCommandActionAdapter)submitCommand.getAction()).setForm(this);	
 			}				
 			return this;
@@ -169,7 +177,20 @@ public class Form extends Container implements Serializable {
 			return this;
 		}
 		
-		protected void __prepare__(){}
+		protected void __prepare__(){
+			new CollectionHelper.Iterator.Adapter.Default<Class<?>>(getRequestParameterClasses()){
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void __executeForEach__(Class<?> aClass) {
+					setFromRequestParameter(aClass);
+				}
+			}.execute();
+			InstanceHelper.getInstance().computeChanges(object);
+		}
+		
+		protected Collection<Class<?>> getRequestParameterClasses(){
+			return ClassHelper.getInstance().getByFieldTypeIdentified(object.getClass());
+		}
 		
 		public Master read(){
 			if(detail!=null)
@@ -186,7 +207,7 @@ public class Form extends Container implements Serializable {
 		public Detail instanciateDetail(Layout.Type layoutType){
 			Detail detail = new Detail(this,layoutType);
 			
-			detail.getPropertiesMap().setAction(/*getPropertiesMap().getAction()*/getAction());
+			detail.getPropertiesMap().setAction(_getPropertyAction());
 			
 			addOneChild(this.detail = detail);
 			addComponentOnSubmit(detail);
@@ -241,6 +262,17 @@ public class Form extends Container implements Serializable {
 					}			
 			return master;
 		}
+		
+		public Master setFromRequestParameter(Class<?> aClass,String fieldName){
+			Form.Detail detail = getDetail();
+			FieldHelper.getInstance().set(detail.getMaster().getObject(), RequestHelper.getInstance().getParameterAsInstance(aClass), fieldName);
+			return this;
+		}
+		
+		public Master setFromRequestParameter(Class<?> aClass){
+			setFromRequestParameter(aClass, ClassHelper.getInstance().getVariableName(aClass));
+			return this;
+		} 
 		
 		public static interface BuilderBase<OUTPUT extends Master> extends Form.BuilderBase<OUTPUT> {
 
@@ -303,7 +335,7 @@ public class Form extends Container implements Serializable {
 			}
 			
 			protected void act(){
-				switch(form.getAction()){
+				switch(form._getPropertyAction()){
 				case CREATE: create(); break;
 				case READ: read(); break;
 				case UPDATE: update(); break;
@@ -319,47 +351,47 @@ public class Form extends Container implements Serializable {
 			}
 			
 			protected void create(){
-				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+				InstanceHelper.getInstance().act(form._getPropertyAction(),form.getObject());
 			}
 			
 			protected void read(){
-				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+				InstanceHelper.getInstance().act(form._getPropertyAction(),form.getObject());
 			}
 			
 			protected void update(){
-				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+				InstanceHelper.getInstance().act(form._getPropertyAction(),form.getObject());
 			}
 			
 			protected void delete(){
-				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+				InstanceHelper.getInstance().act(form._getPropertyAction(),form.getObject());
 			}
 			
 			protected void select(){
-				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+				InstanceHelper.getInstance().act(form._getPropertyAction(),form.getObject());
 			}
 			
 			protected void search(){
-				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+				InstanceHelper.getInstance().act(form._getPropertyAction(),form.getObject());
 			}
 			
 			protected void list(){
-				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+				InstanceHelper.getInstance().act(form._getPropertyAction(),form.getObject());
 			}
 			
 			protected void print(){
-				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+				InstanceHelper.getInstance().act(form._getPropertyAction(),form.getObject());
 			}
 			
 			protected void consult(){
-				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+				InstanceHelper.getInstance().act(form._getPropertyAction(),form.getObject());
 			}
 			
 			protected void login(){
-				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+				InstanceHelper.getInstance().act(form._getPropertyAction(),form.getObject());
 			}
 			
 			protected void logout(){
-				InstanceHelper.getInstance().act(form.getAction(),form.getObject());
+				InstanceHelper.getInstance().act(form._getPropertyAction(),form.getObject());
 			}
 			
 			@Override
@@ -376,7 +408,7 @@ public class Form extends Container implements Serializable {
 					else {
 						Constant.Action action;
 						Object object;
-						if(Constant.Action.CREATE.equals(form.getAction()) || Constant.Action.UPDATE.equals(form.getAction())){
+						if(Constant.Action.CREATE.equals(form._getPropertyAction()) || Constant.Action.UPDATE.equals(form._getPropertyAction())){
 							action = Action.READ;
 							object = form.getObject();
 						}else {
@@ -498,6 +530,11 @@ public class Form extends Container implements Serializable {
 		
 		public DataTable getDataTableAtIndex(Integer index){
 			return getDataTableAtIndex(index, Boolean.TRUE);
+		}
+		
+		public Detail addEvent(String fieldName,String[] updatedFieldNames){
+			Event.instanciateOne(this, fieldName, updatedFieldNames, new Event.CommandAdapter());
+			return this;
 		}
 		
 		/**/

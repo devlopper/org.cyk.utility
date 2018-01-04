@@ -23,7 +23,6 @@ import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.model.Area;
 import org.cyk.utility.common.userinterface.collection.DataTable;
-import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
 import org.cyk.utility.common.userinterface.container.Form.Master;
@@ -147,6 +146,11 @@ public class Component extends AbstractBean implements Serializable {
 		return this;
 	}
 	
+	public Component _setPropertyUrl(UniformResourceLocatorHelper.Stringifier stringifier){
+		getPropertiesMap().setUrl(stringifier.execute());
+		return this;
+	}
+	
 	public Component _setPropertyUrl(String pathIdentifier,Object...queryKeyValue){
 		getPropertiesMap().setUrl(UniformResourceLocatorHelper.getInstance().stringify(pathIdentifier,queryKeyValue));
 		return this;
@@ -170,6 +174,15 @@ public class Component extends AbstractBean implements Serializable {
 	public Component _setPropertyIcon(Object icon){
 		getPropertiesMap().setIcon(icon);
 		return this;
+	}
+	
+	public Component _setPropertyAction(Object action){
+		getPropertiesMap().setAction(action);
+		return this;
+	}
+	
+	public Object _getPropertyAction(){
+		return getPropertiesMap().getAction();
 	}
 	
 	/**/
@@ -272,6 +285,11 @@ public class Component extends AbstractBean implements Serializable {
 		protected OutputText label;
 		
 		/**/
+		
+		public Visible _setLabelPropertyValue(String value){
+			getLabel().getPropertiesMap().setValue(value);
+			return this;
+		}
 		
 		public OutputText getLabel(){
 			if(label == null)
@@ -566,12 +584,12 @@ public class Component extends AbstractBean implements Serializable {
 			Object object = parent instanceof Window ? ((Window)parent).getActionOnClassInstances().iterator().next() : null;//TODO how to handle many ? use key to point to the adequate form
 			Form.Master master = (Master) component;
 			master.setObject(object);
-			master.setAction(action);
+			master._setPropertyAction(action);
 			Detail detail = master.getDetail();
 			if(detail == null)
 				detail = master.instanciateDetail();
 		}else if(component instanceof DataTable){
-			DataTable dataTable = (DataTable) component;
+			//DataTable dataTable = (DataTable) component;
 			//dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
 			//dataTable.getPropertiesMap().setAction(action);
 			

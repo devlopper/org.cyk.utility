@@ -190,6 +190,17 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return get(aClass, field.getName(), field.getType());
 	}
 	
+	public Collection<Class<?>> get(Class<?> aClass,Collection<Field> fields){
+		Collection<Class<?>> classes = new ArrayList<Class<?>>();
+		for(Field field : fields)
+			classes.add(FieldHelper.getInstance().getType(aClass, field));
+		return classes;
+	}
+	
+	public Collection<Class<?>> getByFieldTypeIdentified(Class<?> aClass){
+		return ClassHelper.getInstance().get(aClass, FieldHelper.getInstance().getByTypeIdentified(aClass));
+	}
+	
 	/*@SuppressWarnings("unchecked")
 	public Collection<Class<?>> get(String packageName,Class<?> baseClass){
 		Reflections reflections = new Reflections(packageName);

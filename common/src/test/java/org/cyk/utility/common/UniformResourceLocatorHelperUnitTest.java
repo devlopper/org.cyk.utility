@@ -169,6 +169,13 @@ public class UniformResourceLocatorHelperUnitTest extends AbstractUnitTest {
 		assertEquals("http://localhost:8080/classa/edit.jsf?action=create&clazz=classa", UniformResourceLocatorHelper.getInstance().stringify(Constant.Action.CREATE,ClassA.class));
 		assertEquals("http://localhost:8080/classa/edit.jsf?action=create&clazz=classa&a=b", UniformResourceLocatorHelper.getInstance().stringify(Constant.Action.CREATE,ClassA.class,"a","b"));
 		assertEquals("http://localhost:8080/classa/consult.jsf?action=read&clazz=classa&identifiable=3", UniformResourceLocatorHelper.getInstance().stringify(Constant.Action.READ,(Object)new ClassA(3l)));
+		
+		UniformResourceLocatorHelper.Stringifier stringifier = UniformResourceLocatorHelper.getInstance().getStringifier(Constant.Action.READ,(Object)new ClassA(3l));
+		assertEquals("http://localhost:8080/classa/consult.jsf?action=read&clazz=classa&identifiable=3", stringifier.execute());
+		
+		stringifier = UniformResourceLocatorHelper.getInstance().getStringifier(Constant.Action.READ,(Object)new ClassA(3l));
+		stringifier.addQueryParameterInstances(new ClassA(3l));
+		assertEquals("http://localhost:8080/classa/consult.jsf?action=read&clazz=classa&identifiable=3&classa=3", stringifier.execute());
 	}
 	
 	/**/

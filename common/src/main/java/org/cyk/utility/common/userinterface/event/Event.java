@@ -9,7 +9,7 @@ import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.CommandHelper;
-import org.cyk.utility.common.helper.CommandHelper.Command;
+import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
@@ -121,7 +121,10 @@ public class Event extends Component.Invisible implements Serializable {
 			return null;
 		}
 
-		protected void ____execute____() {}
+		protected void ____execute____() {
+			if(event.getPropertiesMap().getInstance()!=null)
+				InstanceHelper.getInstance().computeChanges(event.getPropertiesMap().getInstance());
+		}
 		
 		protected Object getEventPropertyFormMasterObject(){
 			return ((Form.Detail)event.getPropertiesMap().getFormDetail()).getMaster().getObject();
@@ -211,9 +214,12 @@ public class Event extends Component.Invisible implements Serializable {
 							protected void __executeForEach__(String fieldName) {
 								event.getPropertiesMap().addString(Properties.UPDATE,"@(."+detail.getControlByFieldName(fieldName).getPropertiesMap().getIdentifierAsStyleClass()+")");
 							}
-						}.execute();	
+						}.execute();
+						
+						event.getPropertiesMap().setInstance(detail.getMaster().getObject());
+					}else{
+						event.getPropertiesMap().setInstance(cell.getRow().getPropertiesMap().getValue());
 					}
-					
 					
 					Collection<String> processedColumnFieldNames = CollectionHelper.getInstance().createList((Collection<String>) event.getPropertiesMap().getProcessedColumnFieldNames());
 					if(cell!=null)
@@ -225,7 +231,7 @@ public class Event extends Component.Invisible implements Serializable {
 					}
 					
 					if(getPropertiesMap().getListener()!=null)
-						event.setListener((Command) getPropertiesMap().getListener());
+						event.setListener((CommandHelper.Command) getPropertiesMap().getListener());
 					
 					if(getPropertiesMap().getListener() instanceof CommandAdapter)
 						((CommandAdapter)event.getListener()).setEvent(event);
@@ -298,4 +304,17 @@ public class Event extends Component.Invisible implements Serializable {
 			}
 		}
 	}
+
+	/**/
+	
+	/*public static class Command extends CommandHelper.Command.Adapter.Default implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected Object __execute__() {
+			InstanceHelper.getInstance().computeChanges(getPropertiesMap().getInstance());
+			return null;
+		}
+		
+	}*/
 }

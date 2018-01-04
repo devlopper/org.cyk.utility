@@ -2902,6 +2902,26 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getInstance() {
+		return get(INSTANCE);
+	}
+
+	public Properties setInstance(Object value) {
+		set(INSTANCE, value);
+		return this;
+	}
+	
+	public Object getRequestParameterClasses() {
+		return get(REQUEST_PARAMETER_CLASSES);
+	}
+
+	public Properties setRequestParameterClasses(Object value) {
+		set(REQUEST_PARAMETER_CLASSES, value);
+		return this;
+	}
+	
+	public static final String REQUEST_PARAMETER_CLASSES = "REQUEST_PARAMETER_CLASSES";
+	public static final String INSTANCE = "INSTANCE";
 	public static final String MASTER = "MASTER";
 	public static final String CONSTRAINTS = "CONSTRAINTS";
 	public static final String TIME_ONLY = "TIME_ONLY";

@@ -103,7 +103,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 		return new UniformResourceLocatorHelper.Stringifier.Adapter.Default().setPathIdentifier(pathIdentifier).addQueryKeyValue(queryKeyValue).execute();
 	}
 	
-	public String stringify(Constant.Action action,Object object,Object...queryKeyValue){
+	public UniformResourceLocatorHelper.Stringifier getStringifier(Constant.Action action,Object object,Object...queryKeyValue){
 		Class<?> aClass = object instanceof Class ? (Class<?>)object : object.getClass();
 		//String pathIdentifier = getPathIdentifier(action, aClass);
 		UniformResourceLocatorHelper.Stringifier stringifier = new UniformResourceLocatorHelper.Stringifier.Adapter.Default();
@@ -116,7 +116,11 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 		else
 			stringifier.addQueryParameterIdentifiable(object);
 		stringifier.addQueryKeyValue(queryKeyValue);
-		return stringifier.execute();
+		return stringifier;
+	}
+	
+	public String stringify(Constant.Action action,Object object,Object...queryKeyValue){
+		return getStringifier(action, object, queryKeyValue).execute();
 	}
 	
 	public static interface Stringifier extends org.cyk.utility.common.Builder.Stringifier<Object> {
@@ -147,6 +151,8 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 		
 		UniformResourceLocatorHelper.Stringifier addQueryParameterAction(Constant.Action action);
 		UniformResourceLocatorHelper.Stringifier addQueryParameterClass(Class<?> aClass);
+		//UniformResourceLocatorHelper.Stringifier addQueryParameterInstances(java.util.Collection<Object> objects);
+		UniformResourceLocatorHelper.Stringifier addQueryParameterInstances(Object...objects);
 		
 		UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifiable(Object object);
 		UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifier(Object object);
@@ -195,6 +201,11 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			
 			@Override
 			public UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifier(Object identifiable) {
+				return null;
+			}
+			
+			@Override
+			public UniformResourceLocatorHelper.Stringifier addQueryParameterInstances(Object...objects) {
 				return null;
 			}
 			
@@ -350,6 +361,15 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 				@Override
 				public UniformResourceLocatorHelper.Stringifier addQueryParameterIdentifier(Object identifiable) {
 					addQueryKeyValue(MapHelper.EntryKey.IDENTIFIER,identifiable);
+					return this;
+				}
+				
+				@Override
+				public UniformResourceLocatorHelper.Stringifier addQueryParameterInstances(Object...instances) {
+					if(ArrayHelper.getInstance().isNotEmpty(instances))
+						for(Object instance : instances)
+							if(instance!=null)
+								addQueryKeyValue(ClassHelper.getInstance().getIdentifier(instance.getClass()),instance);
 					return this;
 				}
 				

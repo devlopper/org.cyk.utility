@@ -3,6 +3,7 @@ package org.cyk.utility.common.userinterface.command;
 import java.io.Serializable;
 
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier;
 import org.cyk.utility.common.userinterface.Component;
 
 import lombok.Getter;
@@ -17,6 +18,16 @@ public class MenuNode extends MenuContainer implements Serializable {
 	//private MenuNode parent;
 	
 	/**/
+	
+	@Override
+	public MenuNode _setLabelPropertyValue(String value) {
+		return (MenuNode) super._setLabelPropertyValue(value);
+	}
+	
+	@Override
+	public MenuNode _setPropertyUrl(Stringifier stringifier) {
+		return (MenuNode) super._setPropertyUrl(stringifier);
+	}
 	
 	public MenuNode _setPropertyUrl(String pathIdentifier,Object...queryKeyValue){
 		return (MenuNode) super._setPropertyUrl(pathIdentifier, queryKeyValue);

@@ -3,6 +3,7 @@ package org.cyk.utility.common;
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Builder.Adapter.Default.JavaPersistenceQueryLanguage;
+import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.OrderBy;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.Between;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.In;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.Like;
@@ -17,6 +18,8 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 	public void jpqlWhere(){
 		AssertionHelper.getInstance().assertEquals("c1=v1", new StructuredQueryLanguageHelper.Where.Adapter.Default.JavaPersistenceQueryLanguage()
 			.addTokens("c1","=","v1").execute());
+		AssertionHelper.getInstance().assertEquals("c1=v1", new StructuredQueryLanguageHelper.Where.Adapter.Default.JavaPersistenceQueryLanguage()
+				.addTokens("c1=v1").execute());
 	}
 	
 	@Test
@@ -48,6 +51,14 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 				, in.clear().setProperty(In.PROPERTY_NAME_FIELD_NAME, "field").setProperty(In.PROPERTY_NAME_NOT, Boolean.TRUE).execute());
 		AssertionHelper.getInstance().assertEquals("(t.globalIdentifier.code IS NULL OR t.globalIdentifier.code NOT IN :codeIn)"
 				, in.clear().setProperty(In.PROPERTY_NAME_FIELD_NAME, "t.globalIdentifier.code").setProperty(In.PROPERTY_NAME_NOT, Boolean.TRUE).execute());
+	}
+	
+	@Test
+	public void jpqlOrderBy(){
+		AssertionHelper.getInstance().assertEquals("c1=v1", new StructuredQueryLanguageHelper.OrderBy.Adapter.Default.JavaPersistenceQueryLanguage()
+			.addTokens("c1","=","v1").execute());
+		AssertionHelper.getInstance().assertEquals("c1=v1", new StructuredQueryLanguageHelper.OrderBy.Adapter.Default.JavaPersistenceQueryLanguage()
+				.addTokens("c1=v1").execute());
 	}
 	
 	@Test

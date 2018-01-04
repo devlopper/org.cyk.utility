@@ -19,6 +19,7 @@ import org.cyk.utility.common.helper.IconHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.ContentType;
 import org.cyk.utility.common.userinterface.Image;
@@ -55,6 +56,7 @@ public class DataTable extends Component.Visible implements Serializable {
 	private Form.Detail form;
 	
 	private Boolean onPrepareAddMenu;
+	private Boolean onPrepareAddMenuAddCommand=Boolean.TRUE;
 	private Boolean onPrepareAddColumnOrderNumber = Boolean.TRUE;
 	private Boolean onPrepareAddColumnAction;
 	
@@ -77,14 +79,24 @@ public class DataTable extends Component.Visible implements Serializable {
 		return (DataTable) super.build();
 	}
 	
-	public DataTable addMainMenuNode(String labelStringIdentifier,Object icon,Constant.Action action,Object object,Object...queryKeyValue){
+	public MenuNode addMainMenuNode(String labelStringIdentifier,Object icon,UniformResourceLocatorHelper.Stringifier uniformResourceLocatorStringifier){
 		Menu menu = (Menu) getPropertiesMap().getMainMenu();
 		if(menu == null){
 			menu = new Menu().setRenderType(Menu.RenderType.BAR);
 			getPropertiesMap().setMainMenu(menu);
 		}
-		menu.addNode(labelStringIdentifier)._setPropertyUrl(action, object,queryKeyValue)._setPropertyIcon(icon);
-		return this;
+		MenuNode menuNode = menu.addNode(labelStringIdentifier)._setPropertyUrl(uniformResourceLocatorStringifier)._setPropertyIcon(icon);
+		return menuNode;
+	}
+	
+	public MenuNode addMainMenuNode(String labelStringIdentifier,Object icon,Constant.Action action,Object object,Object...queryKeyValue){
+		Menu menu = (Menu) getPropertiesMap().getMainMenu();
+		if(menu == null){
+			menu = new Menu().setRenderType(Menu.RenderType.BAR);
+			getPropertiesMap().setMainMenu(menu);
+		}
+		MenuNode menuNode = menu.addNode(labelStringIdentifier)._setPropertyUrl(action, object,queryKeyValue)._setPropertyIcon(icon);
+		return menuNode;
 	}
 	
 	@Override
@@ -99,12 +111,13 @@ public class DataTable extends Component.Visible implements Serializable {
 			}
 			addOneChild(menu);
 			if(getPropertiesMap().getActionOnClass()!=null){
-				//System.out.println("DataTable.prepare() : "+getPropertiesMap().getMaster());
-				//System.out.println(UniformResourceLocatorHelper.getInstance().stringify(Constant.Action.CREATE, getPropertiesMap().getActionOnClass(),"aaa","bbb"));
-				menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, getPropertiesMap().getActionOnClass()
-						,getPropertiesMap().getMaster() == null ? null : getPropertiesMap().getMaster().getClass()
-								,InstanceHelper.getInstance().getIdentifier(getPropertiesMap().getMaster()))
-					._setPropertyIcon(IconHelper.Icon.FontAwesome.PLUS);
+				if(Boolean.TRUE.equals(onPrepareAddMenuAddCommand)){
+					menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, getPropertiesMap().getActionOnClass()
+							,getPropertiesMap().getMaster() == null ? null : getPropertiesMap().getMaster().getClass()
+									,InstanceHelper.getInstance().getIdentifier(getPropertiesMap().getMaster()))
+						._setPropertyIcon(IconHelper.Icon.FontAwesome.PLUS);
+				}
+				
 			}	
 		}
 		addFirstColumns();

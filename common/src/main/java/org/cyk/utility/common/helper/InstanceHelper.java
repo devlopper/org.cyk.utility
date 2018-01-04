@@ -118,6 +118,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		//		, MethodHelper.Method.Parameter.buildArray(Class.class,aClass,Object.class,identifier));
 	}
 	
+	public <T> T computeChanges(T instance){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).computeChanges(instance);
+	}
+	
 	public void setFieldValueGenerator(Class<?> aClass,String fieldName,FieldValueGenerator<?> fieldValueGenerator){
 		Map<String, FieldValueGenerator<?>> map = FieldValueGenerator.MAP.get(aClass);
 		if(map==null){
@@ -914,6 +918,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		<T> T generateFieldStringValue(Object instance,String name);
 		
 		Object act(Constant.Action action,Object instance);
+		<T> T computeChanges(T instance);
 		
 		Boolean isHierarchy(Object instance);
 		Boolean isTyped(Object instance);
@@ -961,6 +966,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			
 			@Override
 			public Boolean getAreEqual(Object object1, Object object2) {
+				return null;
+			}
+			
+			@Override
+			public <T> T computeChanges(T instance) {
 				return null;
 			}
 			

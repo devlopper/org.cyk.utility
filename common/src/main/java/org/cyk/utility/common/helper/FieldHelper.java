@@ -310,6 +310,14 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return getByTypes(type, Arrays.asList(classes));
 	}
 	
+	public Collection<java.lang.reflect.Field> getByTypeIdentified(Class<?> type) {
+		Collection<java.lang.reflect.Field> fields = new ArrayList<>();
+		for(java.lang.reflect.Field field : get(type))
+			if(ClassHelper.getInstance().isIdentified(getType(type, field)))
+				fields.add(field);
+		return fields;
+	}
+	
 	public Object readField(Object object,java.lang.reflect.Field field,Boolean recursive,Boolean createIfNull,Boolean autoSet,Collection<Class<? extends Annotation>> annotationClasses){
 		Object r = __readField__(object,field,recursive,annotationClasses);
 		try {
