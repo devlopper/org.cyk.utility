@@ -36,7 +36,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String FIELD_NAME_SEPARATOR = Constant.CHARACTER_DOT.toString();
+	public static final String FIELD_NAME_SEPARATOR = Constant.CHARACTER_DOT.toString();
 	
 	public static final Set<String> INTROSPECTION_CONTEXT_TARGET_CLASS_NAME_PREFIXES_INCLUDED = new LinkedHashSet<String>();
 	public static final Set<String> INTROSPECTION_CONTEXT_TARGET_CLASS_NAME_PREFIXES_EXCLUDED = new LinkedHashSet<String>();
@@ -83,6 +83,10 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return StringUtils.contains(fieldName, FIELD_NAME_SEPARATOR) ? StringUtils.substringAfterLast(fieldName, FIELD_NAME_SEPARATOR) : fieldName;
 	}
 	
+	public String getAfterFirst(String fieldName){
+		return StringUtils.contains(fieldName, FIELD_NAME_SEPARATOR) ? StringUtils.substringAfter(fieldName, FIELD_NAME_SEPARATOR) : fieldName;
+	}
+	
 	public java.lang.reflect.Field getLast(Class<?> aClass,String fieldName){
 		return get(aClass,getLast(fieldName));
 	}
@@ -93,6 +97,25 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	
 	public List<String> getFieldNames(String...fieldPaths){
 		return Arrays.asList(StringUtils.split(buildPath(fieldPaths), FIELD_NAME_SEPARATOR));
+	}
+	
+	public String getVariableNameFromNames(Collection<String> names){
+		final StringBuilder stringBuilder = new StringBuilder();
+		new CollectionHelper.Iterator.Adapter.Default<String>(names){
+			private static final long serialVersionUID = 1L;
+			@Override
+			protected void __executeForEach__(String name) {
+				for(String string : getFieldNames(name))
+					stringBuilder.append(StringHelper.getInstance().applyCaseType(string, stringBuilder.length() == 0 ? StringHelper.CaseType.NONE : StringHelper.CaseType.FU));
+			}
+		}.execute();
+		return stringBuilder.toString();
+	}
+	
+	public String getVariableNameFromNames(String...names){
+		if(ArrayHelper.getInstance().isNotEmpty(names))
+			return getVariableNameFromNames(Arrays.asList(names));
+		return null;
 	}
 	
 	public List<String> getNames(Collection<java.lang.reflect.Field> fields){

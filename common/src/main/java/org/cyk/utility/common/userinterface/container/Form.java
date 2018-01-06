@@ -5,6 +5,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Constant;
@@ -172,8 +174,17 @@ public class Form extends Container implements Serializable {
 		}*/
 		
 		@Override
+		@SuppressWarnings("unchecked")
 		public Component prepare() {
 			__prepare__();
+			
+			new CollectionHelper.Iterator.Adapter.Default<String>((Set<String>) getPropertiesMap().getFieldNamesSetFromRequestParameters()){
+				private static final long serialVersionUID = 1L;
+
+				protected void __executeForEach__(String fieldName) {
+					Master.this.getDetail().getInputByFieldName(fieldName).getPropertiesMap().setDisabled(Boolean.TRUE);
+				};
+			}.execute();
 			return this;
 		}
 		
@@ -265,7 +276,19 @@ public class Form extends Container implements Serializable {
 		
 		public Master setFromRequestParameter(Class<?> aClass,String fieldName){
 			Form.Detail detail = getDetail();
-			FieldHelper.getInstance().set(detail.getMaster().getObject(), RequestHelper.getInstance().getParameterAsInstance(aClass), fieldName);
+			Field field = FieldHelper.getInstance().get(detail.getMaster().getObject().getClass(), fieldName);
+			if(field!=null){
+				Object value = RequestHelper.getInstance().getParameterAsInstance(aClass);
+				FieldHelper.getInstance().set(detail.getMaster().getObject(), value, field);
+				@SuppressWarnings("unchecked")
+				Set<String> set = (Set<String>) getPropertiesMap().getFieldNamesSetFromRequestParameters();
+				if(set == null){
+					set = new LinkedHashSet<>();
+					getPropertiesMap().setFieldNamesSetFromRequestParameters(set);
+				}
+				if(value!=null)
+					set.add(fieldName);
+			}
 			return this;
 		}
 		

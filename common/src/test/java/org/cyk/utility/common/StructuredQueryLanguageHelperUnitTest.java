@@ -4,6 +4,7 @@ import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Builder.Adapter.Default.JavaPersistenceQueryLanguage;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.OrderBy;
+import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.OrderBy.Order;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.Between;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.In;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.Like;
@@ -44,27 +45,82 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void jpqlIn(){
 		In in = new In.Adapter.Default.JavaPersistenceQueryLanguage().setParent(new JavaPersistenceQueryLanguage("","").where());
-		AssertionHelper.getInstance().assertEquals("(field IN :fieldIn)", in.setProperty(In.PROPERTY_NAME_FIELD_NAME, "field").execute());
-		AssertionHelper.getInstance().assertEquals("(t.globalIdentifier.code IN :codeIn)"
+		AssertionHelper.getInstance().assertEquals("((:fieldSetIsEmpty = true AND :fieldSetIsEmptyMeansAll = true) OR field IN :fieldSet)"
+				, in.setProperty(In.PROPERTY_NAME_FIELD_NAME, "field").execute());
+		
+		in = new In.Adapter.Default.JavaPersistenceQueryLanguage().setParent(new JavaPersistenceQueryLanguage("","t").setFieldName("entity").where());
+		AssertionHelper.getInstance().assertEquals("((:entityFieldSetIsEmpty = true AND :entityFieldSetIsEmptyMeansAll = true) OR t.entity.field IN :entityFieldSet)"
+				, in.setProperty(In.PROPERTY_NAME_FIELD_NAME, "t.entity.field").execute());
+		
+		in = new In.Adapter.Default.JavaPersistenceQueryLanguage().setParent(new JavaPersistenceQueryLanguage("","").setFieldName("globalIdentifier").where());
+		AssertionHelper.getInstance().assertEquals("((:globalIdentifierCodeSetIsEmpty = true AND :globalIdentifierCodeSetIsEmptyMeansAll = true) OR t.globalIdentifier.code IN :globalIdentifierCodeSet)"
 				, in.clear().setProperty(In.PROPERTY_NAME_FIELD_NAME, "t.globalIdentifier.code").execute());
-		AssertionHelper.getInstance().assertEquals("(field IS NULL OR field NOT IN :fieldIn)"
+		
+		in = new In.Adapter.Default.JavaPersistenceQueryLanguage().setParent(new JavaPersistenceQueryLanguage("","").where());
+		AssertionHelper.getInstance().assertEquals("((:fieldSetIsEmpty = true AND :fieldSetIsEmptyMeansAll = true) OR field IS NULL OR (:fieldSetIsEmpty = false AND field NOT IN :fieldSet))"
 				, in.clear().setProperty(In.PROPERTY_NAME_FIELD_NAME, "field").setProperty(In.PROPERTY_NAME_NOT, Boolean.TRUE).execute());
-		AssertionHelper.getInstance().assertEquals("(t.globalIdentifier.code IS NULL OR t.globalIdentifier.code NOT IN :codeIn)"
+		
+		in = new In.Adapter.Default.JavaPersistenceQueryLanguage().setParent(new JavaPersistenceQueryLanguage("","").setFieldName("globalIdentifier").where());
+		AssertionHelper.getInstance().assertEquals("((:globalIdentifierCodeSetIsEmpty = true AND :globalIdentifierCodeSetIsEmptyMeansAll = true) OR t.globalIdentifier.code IS NULL OR (:globalIdentifierCodeSetIsEmpty = false AND t.globalIdentifier.code NOT IN :globalIdentifierCodeSet))"
 				, in.clear().setProperty(In.PROPERTY_NAME_FIELD_NAME, "t.globalIdentifier.code").setProperty(In.PROPERTY_NAME_NOT, Boolean.TRUE).execute());
+		
+		in = new In.Adapter.Default.JavaPersistenceQueryLanguage().setParent(new JavaPersistenceQueryLanguage("","").where());
+		AssertionHelper.getInstance().assertEquals("((:myCollectionSetIsEmpty = true AND :myCollectionSetIsEmptyMeansAll = true) OR field IN :myCollectionSet)", in.setProperty(In.PROPERTY_NAME_FIELD_NAME, "field")
+				.setProperty(In.PROPERTY_NAME_SET_NAME, "myCollection")
+				.execute());
+		
 	}
 	
 	@Test
 	public void jpqlOrderBy(){
+		JavaPersistenceQueryLanguage jpql = new JavaPersistenceQueryLanguage("","");
+		AssertionHelper.getInstance().assertEquals("myfield ASC", new Order.Adapter.Default.JavaPersistenceQueryLanguage().setParent(jpql)
+				.setProperty(Order.PROPERTY_NAME_FIELD_NAME, "myfield").execute());
+		
+		jpql = new JavaPersistenceQueryLanguage("","");
+		AssertionHelper.getInstance().assertEquals("myfield ASC", new Order.Adapter.Default.JavaPersistenceQueryLanguage().setParent(jpql)
+				.setProperty(Order.PROPERTY_NAME_FIELD_NAME, "myfield").setProperty(OrderBy.Order.PROPERTY_NAME_NOT, Boolean.FALSE).execute());
+		
+		jpql = new JavaPersistenceQueryLanguage("","");
+		AssertionHelper.getInstance().assertEquals("myfield DESC", new Order.Adapter.Default.JavaPersistenceQueryLanguage().setParent(jpql)
+				.setProperty(Order.PROPERTY_NAME_FIELD_NAME, "myfield").setProperty(OrderBy.Order.PROPERTY_NAME_NOT, Boolean.TRUE).execute());
+		
 		AssertionHelper.getInstance().assertEquals("c1=v1", new StructuredQueryLanguageHelper.OrderBy.Adapter.Default.JavaPersistenceQueryLanguage()
-			.addTokens("c1","=","v1").execute());
-		AssertionHelper.getInstance().assertEquals("c1=v1", new StructuredQueryLanguageHelper.OrderBy.Adapter.Default.JavaPersistenceQueryLanguage()
-				.addTokens("c1=v1").execute());
+				.setParent(new JavaPersistenceQueryLanguage("","")).addTokens("c1=v1").execute());
+		
+		AssertionHelper.getInstance().assertEquals("t.myfield ASC", new StructuredQueryLanguageHelper.OrderBy.Adapter.Default.JavaPersistenceQueryLanguage()
+				.setParent(new JavaPersistenceQueryLanguage("","")).addOrder("myfield", null).execute());
+		
+		AssertionHelper.getInstance().assertEquals("t.myfield ASC", new StructuredQueryLanguageHelper.OrderBy.Adapter.Default.JavaPersistenceQueryLanguage()
+				.setParent(new JavaPersistenceQueryLanguage("","")).addOrder("myfield", Comparator.Order.ASCENDING).execute());
+		
+		AssertionHelper.getInstance().assertEquals("t.myfield DESC", new StructuredQueryLanguageHelper.OrderBy.Adapter.Default.JavaPersistenceQueryLanguage()
+				.setParent(new JavaPersistenceQueryLanguage("","")).addOrder("myfield", Comparator.Order.DESCENDING).execute());
+		
+		AssertionHelper.getInstance().assertEquals("t.myfield ASC", new StructuredQueryLanguageHelper.OrderBy.Adapter.Default.JavaPersistenceQueryLanguage()
+				.setParent(new JavaPersistenceQueryLanguage("","")).addOrder("myfield").execute());
+		
+		AssertionHelper.getInstance().assertEquals("t.myfield ASC", new StructuredQueryLanguageHelper.OrderBy.Adapter.Default.JavaPersistenceQueryLanguage()
+				.setParent(new JavaPersistenceQueryLanguage("","")).od("myfield").execute());
+		
+		AssertionHelper.getInstance().assertEquals("t.myfield ASC", new StructuredQueryLanguageHelper.OrderBy.Adapter.Default.JavaPersistenceQueryLanguage()
+				.setParent(new JavaPersistenceQueryLanguage("","")).asc("myfield").execute());
+		
+		AssertionHelper.getInstance().assertEquals("t.myfield DESC", new StructuredQueryLanguageHelper.OrderBy.Adapter.Default.JavaPersistenceQueryLanguage()
+				.setParent(new JavaPersistenceQueryLanguage("","")).desc("myfield").execute());
+		
+		AssertionHelper.getInstance().assertEquals("t.f1 ASC,t.f3 ASC,t.f2 DESC,t.f4 ASC", new StructuredQueryLanguageHelper.OrderBy.Adapter.Default.JavaPersistenceQueryLanguage()
+				.setParent(new JavaPersistenceQueryLanguage("","")).asc("f1").asc("f3").desc("f2").asc("f4").execute());
 	}
 	
 	@Test
 	public void jpql(){
 		assertEquals("SELECT t FROM Language t WHERE t.field=:param", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where().eq("field","param").getParent().execute());
 		assertEquals("SELECT r FROM Language r WHERE r.field=:param", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class,"r").where().eq("field","param").getParent().execute());
+		assertEquals("SELECT r FROM Language r WHERE r.field=:param ORDER BY r.field ASC", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class,"r")
+				.where().eq("field","param").getParent().orderBy().asc("field").getParent().execute());
+		
+		assertEquals("SELECT t FROM Language t WHERE t.field=:field", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where().eq("field").getParent().execute());
 		
 		assertEquals("SELECT t FROM T1 t WHERE SELECT r FROM T2 r WHERE t.code=r.mycode AND r.a=:b", StructuredQueryLanguageHelper.getInstance().getBuilder("T1")
 				.createBuilder("T2","r","code","mycode").where().eq("a", "b").getParent().addToParentWhereTokens().getParent().execute());
@@ -88,7 +144,7 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 				+ "OR ((t.globalIdentifier.name IS NOT NULL ) AND (LOWER(t.globalIdentifier.name) LIKE LOWER(:nameLike))))"
 				, StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).setFieldName("globalIdentifier").where().lk("code").or().lk("name").getParent().execute());
 		
-		assertEquals("SELECT t FROM Language t WHERE (t.globalIdentifier.code IS NULL OR t.globalIdentifier.code NOT IN :codeIn) AND ((((t.globalIdentifier.code IS NULL ) AND (LENGTH(:codeString) = 0)) OR ((t.globalIdentifier.code IS NOT "
+		assertEquals("SELECT t FROM Language t WHERE ((:globalIdentifierCodeSetIsEmpty = true AND :globalIdentifierCodeSetIsEmptyMeansAll = true) OR t.globalIdentifier.code IS NULL OR (:globalIdentifierCodeSetIsEmpty = false AND t.globalIdentifier.code NOT IN :globalIdentifierCodeSet)) AND ((((t.globalIdentifier.code IS NULL ) AND (LENGTH(:codeString) = 0)) OR ((t.globalIdentifier.code IS NOT "
 				+ "NULL ) AND (LOWER(t.globalIdentifier.code) LIKE LOWER(:codeLike)))) OR (((t.globalIdentifier.name IS NULL ) AND (LENGTH(:nameString) = 0)) "
 				+ "OR ((t.globalIdentifier.name IS NOT NULL ) AND (LOWER(t.globalIdentifier.name) LIKE LOWER(:nameLike)))))"
 				, StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).setFieldName("globalIdentifier").where().notIn("code").and().lp()

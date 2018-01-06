@@ -2920,6 +2920,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getFieldNamesSetFromRequestParameters() {
+		return get(FIELD_NAMES_SET_FROM_REQUEST_PARAMETERS);
+	}
+
+	public Properties setFieldNamesSetFromRequestParameters(Object value) {
+		set(FIELD_NAMES_SET_FROM_REQUEST_PARAMETERS, value);
+		return this;
+	}
+	
+	public static final String FIELD_NAMES_SET_FROM_REQUEST_PARAMETERS = "FIELD_NAMES_SET_FROM_REQUEST_PARAMETERS";
 	public static final String REQUEST_PARAMETER_CLASSES = "REQUEST_PARAMETER_CLASSES";
 	public static final String INSTANCE = "INSTANCE";
 	public static final String MASTER = "MASTER";

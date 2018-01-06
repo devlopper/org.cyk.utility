@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
+import org.cyk.utility.common.Comparator;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 
@@ -67,8 +68,17 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		return String.format(BETWEEN_FORMAT, field,from,to);
 	}
 	
+	public String getParameterName(String fieldName,Boolean last){
+		StringBuilder stringBuilder = new StringBuilder();
+		if(last == null || Boolean.TRUE.equals(last))
+			stringBuilder.append(FieldHelper.getInstance().getLast(fieldName));
+		else
+			stringBuilder.append(FieldHelper.getInstance().getVariableNameFromNames(fieldName));
+		return stringBuilder.toString();
+	}
+	
 	public String getParameterName(String fieldName){
-		return FieldHelper.getInstance().getLast(fieldName);
+		return getParameterName(fieldName,Boolean.TRUE);
 	}
 	
 	/**/
@@ -627,6 +637,11 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					public Where createWhere() {
 						return new Where.Adapter.Default.JavaPersistenceQueryLanguage();
 					}
+					
+					@Override
+					public OrderBy createOrderBy() {
+						return new OrderBy.Adapter.Default.JavaPersistenceQueryLanguage();
+					}
 				}
 				
 			}
@@ -688,6 +703,7 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		Where gt(String fieldName,String parameter);
 		Where addEqual(String fieldName,String parameter);
 		Where eq(String fieldName,String parameter);
+		Where eq(String fieldName);
 		Where addNotEqual(String fieldName,String parameter);
 		Where neq(String fieldName,String parameter);
 		
@@ -853,6 +869,11 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			}
 			
 			@Override
+			public Where eq(String fieldName) {
+				return null;
+			}
+			
+			@Override
 			public Where addNotEqual(String fieldName, String parameter) {
 				return null;
 			}
@@ -946,6 +967,11 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				@Override
 				public Where eq(String fieldName, String parameter) {
 					return addEqual(fieldName, parameter);
+				}
+				
+				@Override
+				public Where eq(String fieldName) {
+					return eq(fieldName,fieldName);
 				}
 				
 				@Override
@@ -1243,7 +1269,7 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			}
 		}
 		
-		//IN     (field IN :set)
+		//IN     (setIsEmpty = true or field IN :set) //when set is empty use boolean var empty to decide
 		//NOT IN (field IS NULL OR field NOT IN :set)
 		public static interface In extends Operator {
 			
@@ -1259,7 +1285,15 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				}
 				
 				public static String getParameterNameIn(String fieldName){
-					return getInstance().getParameterName(fieldName)+"In";
+					return getInstance().getParameterName(fieldName,Boolean.FALSE)+"Set";
+				}
+				
+				public static String getParameterNameIsEmpty(String fieldName){
+					return getInstance().getParameterName(fieldName,Boolean.FALSE)+"SetIsEmpty";
+				}
+				
+				public static String getParameterNameIsEmptyMeansAll(String fieldName){
+					return getInstance().getParameterName(fieldName,Boolean.FALSE)+"SetIsEmptyMeansAll";
 				}
 				
 				public static class Default extends In.Adapter implements Serializable {
@@ -1267,10 +1301,26 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 										
 					public static class JavaPersistenceQueryLanguage extends In.Adapter.Default implements Serializable{
 						private static final long serialVersionUID = 1L;
-						
+						/*
+						 * Known limitations : 
+						 * 1 - null value cannot be test IN set
+						 * 2 - empty set cannot be used for test IN | when set is empty it is not working , it is needed to use a boolean parameter
+						 */
+						//IN     (setIsEmpty = true or field IN :set) 
 						//private static final String FORMAT = "(((%1$s IS NULL ) AND (%3$s = 0)) OR ((%1$s IS NOT NULL ) AND (LOWER(%1$s) LIKE LOWER(%2$s))))";
-						private static final String FORMAT = "(%1$s IN %2$s)";
-						private static final String FORMAT_NOT = "(%1$s IS NULL OR %1$s NOT IN %2$s)";
+						//private static final String FORMAT = "(%1$s IN %2$s)";
+						//private static final String FORMAT_NOT = "(%1$s IS NULL OR %1$s NOT IN %2$s)";
+						
+						private static final String SET_IS_EMPTY_AND_EMPTY_MEANS_ALL_FORMAT = "((%1$s = true AND %2$s = true)";
+						/**
+						 * value IN set     - (set is empty AND empty set means all) OR value belongs to set
+						 */
+						private static final String FORMAT = SET_IS_EMPTY_AND_EMPTY_MEANS_ALL_FORMAT+" OR %3$s IN %4$s)";
+						/**
+						 * value NOT IN set - (set is empty AND empty set means all) OR value is null OR (set is not empty AND value does not belong to set)
+						 */
+						private static final String FORMAT_NOT = SET_IS_EMPTY_AND_EMPTY_MEANS_ALL_FORMAT+" OR %3$s IS NULL OR (%1$s = false AND %3$s NOT IN %4$s))";
+						
 						
 						@Override
 						protected String getFormat() {
@@ -1284,9 +1334,21 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						
 						@Override
 						protected Object[] getFormatParameters(String format,Boolean not) {
+							String isSetEmpty = getPropertyAsString(PROPERTY_NAME_IS_SET_EMPTY);
+							String emptySetMeansAll = getPropertyAsString(PROPERTY_NAME_EMPTY_SET_MEANS_ALL);
 							String fieldName = getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
-							String in = getParent().getParent().formatParameter(getParameterNameIn(fieldName));
-							return new Object[]{fieldName,in};
+							
+							String setName = getPropertyAsString(PROPERTY_NAME_SET_NAME);
+							if(StringHelper.getInstance().isBlank(setName)){
+								String s = FieldHelper.getInstance().getAfterFirst(getParent().getParent().getFieldNamePrefix());
+								setName =  s+StringUtils.substringAfter(fieldName, s);
+								//System.out.println(fieldName+" /// "+getParent().getParent().getFieldNamePrefix()+" - "+s+" - "+fieldName);
+								//setName = fieldName;
+							}
+							String in = getParent().getParent().formatParameter(getParameterNameIn(setName));
+							isSetEmpty = getParent().getParent().formatParameter(getParameterNameIsEmpty(setName));
+							emptySetMeansAll = getParent().getParent().formatParameter(getParameterNameIsEmptyMeansAll(setName));
+							return new Object[]{isSetEmpty,emptySetMeansAll,fieldName,in};
 						}
 						
 					}
@@ -1343,8 +1405,15 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 	public static interface OrderBy extends StringHelper.Builder.Collection {
 		
 		@Override OrderBy addTokens(String... tokens);
-		
+		@Override OrderBy setParent(Action<Object, String> parent);
 		@Override StructuredQueryLanguageHelper.Builder getParent();
+		
+		OrderBy addOrder(String fieldName,Comparator.Order order);
+		OrderBy addOrder(String fieldName);
+		OrderBy od(String fieldName,Comparator.Order order);
+		OrderBy od(String fieldName);
+		OrderBy asc(String fieldName);
+		OrderBy desc(String fieldName);
 		
 		@Getter
 		public static class Adapter extends StringHelper.Builder.Collection.Adapter.Default implements OrderBy , Serializable{
@@ -1360,8 +1429,80 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				return (OrderBy) super.addTokens(tokens);
 			}
 			
+			@Override
+			public OrderBy addOrder(String fieldName, Comparator.Order order) {
+				return null;
+			}
+			
+			@Override
+			public OrderBy addOrder(String fieldName) {
+				return null;
+			}
+			
+			@Override
+			public OrderBy od(String fieldName, Comparator.Order order) {
+				return null;
+			}
+			
+			@Override
+			public OrderBy od(String fieldName) {
+				return null;
+			}
+			
+			@Override
+			public OrderBy asc(String fieldName) {
+				return null;
+			}
+			
+			@Override
+			public OrderBy desc(String fieldName) {
+				return null;
+			}
+			
+			@Override
+			public OrderBy setParent(Action<Object, String> parent) {
+				return (OrderBy) super.setParent(parent);
+			}
+			
 			public static class Default extends OrderBy.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
+				
+				public Default() {
+					setSeparator(Constant.CHARACTER_COMA.toString());
+				}
+				
+				@Override
+				public OrderBy addOrder(String fieldName, Comparator.Order order) {
+					addActions(new Order.Adapter.Default.JavaPersistenceQueryLanguage().setParent(this)
+							.setProperty(Order.PROPERTY_NAME_FIELD_NAME, getParent().formatFieldName(fieldName))
+							.setProperty(PROPERTY_NAME_NOT, Comparator.Order.DESCENDING.equals(order)));
+					return this;
+				}
+				
+				@Override
+				public OrderBy addOrder(String fieldName) {
+					return addOrder(fieldName, Comparator.Order.ASCENDING);
+				}
+				
+				@Override
+				public OrderBy od(String fieldName, org.cyk.utility.common.Comparator.Order order) {
+					return addOrder(fieldName, order);
+				}
+				
+				@Override
+				public OrderBy od(String fieldName) {
+					return addOrder(fieldName);
+				}
+				
+				@Override
+				public OrderBy asc(String fieldName) {
+					return od(fieldName,Comparator.Order.ASCENDING);
+				}
+				
+				@Override
+				public OrderBy desc(String fieldName) {
+					return od(fieldName,Comparator.Order.DESCENDING);
+				}
 				
 				public static class JavaPersistenceQueryLanguage extends OrderBy.Adapter.Default implements Serializable{
 					private static final long serialVersionUID = 1L;
@@ -1372,13 +1513,13 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		
 		/**/
 		
-		public static interface Operator extends StringHelper.Builder.Collection {
+		public static interface Operator extends StructuredQueryLanguageHelper.Operator {
 			
 			@Override OrderBy getParent();
 			@Override Operator setParent(Action<Object, String> parent);
 			
 			@Getter
-			public static class Adapter extends StringHelper.Builder.Collection.Adapter.Default implements Operator , Serializable{
+			public static class Adapter extends StructuredQueryLanguageHelper.Operator.Adapter.Default implements Operator , Serializable{
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -1393,27 +1534,6 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				
 				public static class Default extends Operator.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
-					protected static final String NOT = "NOT";
-					
-					@Override
-					protected String __execute__() {
-						Boolean not = Boolean.TRUE.equals(getPropertyAsBoolean(PROPERTY_NAME_NOT));
-						String format =  not ? getFormatNot() : getFormat();
-						addTokens(String.format(format, getFormatParameters(format,not)));
-						return super.__execute__();
-					}
-					
-					protected String getFormat(){
-						return null;
-					}
-					
-					protected String getFormatNot(){
-						return null;
-					}
-					
-					protected Object[] getFormatParameters(String format,Boolean not){
-						return null;
-					}
 					
 				}
 			}
@@ -1421,9 +1541,6 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		
 		// field ASC|DESC
 		public static interface Order extends Operator {
-			
-			String PARAMETER_FROM_FORMAT = "from%s";
-			String PARAMETER_TO_FORMAT = "to%s";
 			
 			@Override Order setParent(Action<Object, String> parent);
 			
@@ -1434,16 +1551,6 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				@Override
 				public Order setParent(Action<Object, String> parent) {
 					return (Order) super.setParent(parent);
-				}
-				
-				public static String getFromParameterName(String field){
-					List<String> names =  FieldHelper.getInstance().getFieldNames(field);
-					return String.format(PARAMETER_FROM_FORMAT,StringHelper.getInstance().applyCaseType(names.get(names.size()-1),CaseType.FU));
-				}
-				
-				public static String getToParameterName(String field){
-					List<String> names =  FieldHelper.getInstance().getFieldNames(field);
-					return String.format(PARAMETER_TO_FORMAT,StringHelper.getInstance().applyCaseType(names.get(names.size()-1),CaseType.FU));
 				}
 				
 				public static class Default extends Order.Adapter implements Serializable {
@@ -1467,20 +1574,50 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						
 						@Override
 						protected Object[] getFormatParameters(String format,Boolean not) {
-							String suffix = getPropertyAsString(PROPERTY_NAME_SUFFIX);
 							String fieldName = getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
-							String parameter1 = getPropertyAsString(PROPERTY_NAME_PARAMETER_1);
-							if(StringHelper.getInstance().isBlank(parameter1))
-								parameter1 = getParent().getParent().formatParameter(getFromParameterName(fieldName)+StringUtils.defaultString(suffix));
-							String parameter2 = getPropertyAsString(PROPERTY_NAME_PARAMETER_2);
-							if(StringHelper.getInstance().isBlank(parameter2))
-								parameter2 = getParent().getParent().formatParameter(getToParameterName(fieldName)+StringUtils.defaultString(suffix));
-							return new Object[]{fieldName,parameter1,parameter2};
+							return new Object[]{fieldName};
 						}
 					}
 				}
 			}
 		}
 		
+	}
+
+	/**/
+	
+	public static interface Operator extends StringHelper.Builder.Collection {
+		
+		@Getter
+		public static class Adapter extends StringHelper.Builder.Collection.Adapter.Default implements Operator , Serializable{
+			private static final long serialVersionUID = 1L;
+
+			public static class Default extends Operator.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				protected static final String NOT = "NOT";
+				
+				@Override
+				protected String __execute__() {
+					Boolean not = Boolean.TRUE.equals(getPropertyAsBoolean(PROPERTY_NAME_NOT));
+					String format =  not ? getFormatNot() : getFormat();
+					addTokens(String.format(format, getFormatParameters(format,not)));
+					return super.__execute__();
+				}
+				
+				protected String getFormat(){
+					return null;
+				}
+				
+				protected String getFormatNot(){
+					return null;
+				}
+				
+				protected Object[] getFormatParameters(String format,Boolean not){
+					return null;
+				}
+				
+			}
+		}
 	}
 }

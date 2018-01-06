@@ -173,6 +173,8 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_INSTANT_1 = "INSTANT_1";
 	java.lang.String PROPERTY_NAME_INSTANT_2 = "INSTANT_2";
 	java.lang.String PROPERTY_NAME_FIELD_NAME = "fieldName";
+	java.lang.String PROPERTY_NAME_IS_SET_EMPTY = "IS_SET_EMPTY";
+	java.lang.String PROPERTY_NAME_EMPTY_SET_MEANS_ALL = "EMPTY_SET_MEANS_ALL";
 	java.lang.String PROPERTY_NAME_QUERY = "QUERY";
 	java.lang.String PROPERTY_NAME_NOT = "NOT";
 	java.lang.String PROPERTY_NAME_INDEX = "INDEX";
@@ -248,6 +250,7 @@ public interface Action<INPUT,OUTPUT> {
 	java.lang.String PROPERTY_NAME_INSTANCE="INSTANCE";
 	java.lang.String PROPERTY_NAME_FORMAT="FORMAT";
 	java.lang.String PROPERTY_NAME_COLLECTION="COLLECTION";
+	java.lang.String PROPERTY_NAME_SET_NAME="SET_NAME";
 	java.lang.String PROPERTY_NAME_INSTANCES="INSTANCES";
 	java.lang.String PROPERTY_NAME_STACK_TRACE_ELEMENT="STACK_TRACE_ELEMENT";
 	
