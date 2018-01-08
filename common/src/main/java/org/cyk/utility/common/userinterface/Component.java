@@ -594,8 +594,8 @@ public class Component extends AbstractBean implements Serializable {
 			//dataTable.getPropertiesMap().setAction(action);
 			
 		}else if(component instanceof Hierarchy){
-			Hierarchy hierarchy = (Hierarchy) component;
-			hierarchy.setActionOnClass(((Window)parent).getActionOnClass());
+			//Hierarchy hierarchy = (Hierarchy) component;
+			
 		}
 		/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE, MethodHelper.Method.Parameter
 				.buildArray(Component.class,component));
@@ -624,10 +624,8 @@ public class Component extends AbstractBean implements Serializable {
 			}else if(component instanceof DataTable){
 				DataTable dataTable = (DataTable) component;
 				dataTable.setOnPrepareCallLoad(!Boolean.TRUE.equals(ClassHelper.getInstance().isLazy(actionOnClass)));
-				if(dataTable.getOnPrepareAddMenu() == null)
-					dataTable.setOnPrepareAddMenu(ClassHelper.getInstance().isIdentified(actionOnClass));
-				if(dataTable.getOnPrepareAddColumnAction() == null)
-					dataTable.setOnPrepareAddColumnAction(ClassHelper.getInstance().isIdentified(actionOnClass));
+				dataTable.getPropertiesMap().setIfNull(Properties.ON_PREPARE_ADD_MENU, ClassHelper.getInstance().isIdentified(actionOnClass));
+				dataTable.getPropertiesMap().setIfNull(Properties.ON_PREPARE_ADD_COLUMN_ACTION, ClassHelper.getInstance().isIdentified(actionOnClass));
 				if(dataTable.getOnPrepareCallLoad() == null)
 					dataTable.setOnPrepareCallLoad(ClassHelper.getInstance().isIdentified(actionOnClass));
 				

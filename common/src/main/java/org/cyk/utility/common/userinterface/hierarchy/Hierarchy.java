@@ -29,7 +29,6 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 	/**/
 	
 	private RenderType renderType = RenderType.DEFAULT;
-	private Class<?> actionOnClass;
 	
 	/**/
 	
@@ -48,12 +47,12 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 		Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
 		getPropertiesMap().setMainMenu(menu);
 		addOneChild(menu);
-		if(this.actionOnClass!=null){
-			menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, this.actionOnClass);
+		if(getPropertiesMap().getActionOnClass()!=null){
+			menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, getPropertiesMap().getActionOnClass());
 		}
-		addColumn("order.number", FIELD___ORDER_NUMBER__,DataTable.Column.CellValueSource.ROW);
+		addColumn("order.number", FIELD___ORDER_NUMBER__,DataTable.Column.CellValueSource.ROW);//.setCellValueType(Cell.ValueType.TEXT);
 		__prepare__();
-		addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(Cell.ValueType.MENU).set__orderNumber__(Long.MAX_VALUE);
+		//addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(Cell.ValueType.MENU).set__orderNumber__(Long.MAX_VALUE);
 		
 		load();//can be trigger by callback to enabled fast rendering of table structure
 		
@@ -64,8 +63,8 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 	
 	@Override
 	public Component load() {
-		if(actionOnClass!=null)
-			loadNodes(InstanceHelper.getInstance().get(actionOnClass));
+		if(getPropertiesMap().getActionOnClass()!=null)
+			loadNodes(InstanceHelper.getInstance().get((Class<?>)getPropertiesMap().getActionOnClass()));
 		return this;
 	}
 	
@@ -95,6 +94,8 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 				node.getPropertiesMap().setValue(child);
 				node.setLabelFromIdentifier((String)InstanceHelper.getInstance().getIdentifier(child));
 				node.set__orderNumber__(NumberHelper.getInstance().get(Long.class,++index,0l));
+				node.getPropertiesMap().setTopLevelContainer(this);
+				
 				if(currentNode==null)
 					addNode(node);
 				else

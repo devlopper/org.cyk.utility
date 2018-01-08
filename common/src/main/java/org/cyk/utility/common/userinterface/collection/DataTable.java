@@ -10,6 +10,7 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Constant.Action;
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.CollectionHelper.Instance;
@@ -54,12 +55,12 @@ public class DataTable extends Component.Visible implements Serializable {
 	}
 	
 	private Form.Detail form;
-	
+	/*
 	private Boolean onPrepareAddMenu;
 	private Boolean onPrepareAddMenuAddCommand=Boolean.TRUE;
 	private Boolean onPrepareAddColumnOrderNumber = Boolean.TRUE;
 	private Boolean onPrepareAddColumnAction;
-	
+	*/
 	/**/
 	
 	/*public DataTable(Class<?> actionOnClass) {
@@ -69,6 +70,14 @@ public class DataTable extends Component.Visible implements Serializable {
 	public DataTable() {
 		this(null);
 	}*/
+	
+	@Override
+	protected void listenPropertiesInstanciated(Properties propertiesMap) {
+		// TODO Auto-generated method stub
+		super.listenPropertiesInstanciated(propertiesMap);
+		propertiesMap.setOnPrepareAddMenuAddCommand(Boolean.TRUE);
+		propertiesMap.setOnPrepareAddColumnOrderNumber(Boolean.TRUE);
+	}
 	
 	@Override
 	public DataTable build() {
@@ -103,7 +112,7 @@ public class DataTable extends Component.Visible implements Serializable {
 	public DataTable prepare() {
 		super.prepare();
 	
-		if(Boolean.TRUE.equals(onPrepareAddMenu)){
+		if(Boolean.TRUE.equals(getPropertiesMap().getOnPrepareAddMenu())){
 			Menu menu = (Menu) getPropertiesMap().getMainMenu();
 			if(menu == null){
 				menu = new Menu().setRenderType(Menu.RenderType.BAR);
@@ -111,7 +120,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			}
 			addOneChild(menu);
 			if(getPropertiesMap().getActionOnClass()!=null){
-				if(Boolean.TRUE.equals(onPrepareAddMenuAddCommand)){
+				if(Boolean.TRUE.equals(getPropertiesMap().getOnPrepareAddMenuAddCommand())){
 					menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, getPropertiesMap().getActionOnClass()
 							,getPropertiesMap().getMaster() == null ? null : getPropertiesMap().getMaster().getClass()
 									,InstanceHelper.getInstance().getIdentifier(getPropertiesMap().getMaster()))
@@ -133,7 +142,7 @@ public class DataTable extends Component.Visible implements Serializable {
 	protected void addFirstColumns(){
 		Class<?> choiceValueClass = (Class<?>)getPropertiesMap().getChoiceValueClass();
 		Column orderNumberColumn = null,choiceValueColumn = null;
-		if(Boolean.TRUE.equals(onPrepareAddColumnOrderNumber)){
+		if(Boolean.TRUE.equals(getPropertiesMap().getOnPrepareAddColumnOrderNumber())){
 			orderNumberColumn = addColumn("userinterface.column.order.number", FIELD___ORDER_NUMBER__);
 			orderNumberColumn.setCellValueSource(CellValueSource.ROW).set__orderNumber__(Long.MIN_VALUE);	
 		}
@@ -146,9 +155,22 @@ public class DataTable extends Component.Visible implements Serializable {
 	}
 	
 	protected void addLastColumns(){
-		if(Boolean.TRUE.equals(onPrepareAddColumnAction)){
+		addOtherColumns();
+		if(Boolean.TRUE.equals(getPropertiesMap().getOnPrepareAddColumnAction())){
 			addColumn("userinterface.column.action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(Cell.ValueType.MENU).set__orderNumber__(Long.MAX_VALUE);	
 		}
+	}
+	
+	protected void addOtherColumns(){
+		addColumnsByFieldNames(getColumnsFieldNames());
+	}
+	
+	protected Collection<String> getColumnsFieldNames(){
+		Collection<String> collection = ClassHelper.getInstance().instanciateOne(Listener.class).getColumnsFieldNames(this);
+		if(collection == null)
+			collection = new ArrayList<String>();
+		ClassHelper.getInstance().instanciateOne(Listener.class).processColumnsFieldNames(this, collection);
+		return collection;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -300,9 +322,16 @@ public class DataTable extends Component.Visible implements Serializable {
 		return addColumn(labelStringIdentifier, fieldName);
 	}
 	
+	public DataTable addColumnsByFieldNames(Collection<String> fieldNames){
+		if(CollectionHelper.getInstance().isNotEmpty(fieldNames))
+			for(String fieldName : fieldNames)
+				addColumnByFieldName(fieldName);
+		return this;
+	}
+	
 	public DataTable addColumnsByFieldNames(String...fieldNames){
-		for(String fieldName : fieldNames)
-			addColumnByFieldName(fieldName);
+		if(ArrayHelper.getInstance().isNotEmpty(fieldNames))
+			addColumnsByFieldNames(Arrays.asList(fieldNames));
 		return this;
 	}
 	
@@ -311,19 +340,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			@SuppressWarnings("unchecked")
 			CollectionHelper.Instance<Row> rows = (CollectionHelper.Instance<Row>) getPropertiesMap().getRowsCollectionInstance();
 			rows = Row.instanciateMany(collection,this, rows);
-			//if(rows == null)
-			//	rows = new ArrayList<>();
-			/*for(Object object : collection){
-				Row row = new Row()._setObject(object);
-				//row.getPropertiesMap().setValue(object);
-				//rows.addOne(row);
-				rows.add(row);
-				//row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements()),0l));
-				row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows),0l));
-				addOneChild(row);
-			}
-			*/
-			
+		
 			getPropertiesMap().setRowsCollectionInstance(rows);
 			
 			if(rows==null)
@@ -457,7 +474,7 @@ public class DataTable extends Component.Visible implements Serializable {
 				else if(CellValueSource.ROW_PROPERTIES_MAP.equals(cellValueSource))
 					fieldType = Object.class;
 				else{
-					fieldType = FieldHelper.getInstance().get(object.getClass(), fieldName).getType();
+					fieldType = FieldHelper.getInstance().getType(object.getClass(), FieldHelper.getInstance().get(object.getClass(), fieldName));
 					//inputClass = (Class<Input<?>>) Input.getListener().getClass(null, object, FieldHelper.getInstance().get(object.getClass(), fieldName));
 					if( Constant.Action.isCreateOrUpdate((Action) getPropertiesMap().getAction()) )
 						cellValueType = Cell.ValueType.INPUT;
@@ -477,7 +494,6 @@ public class DataTable extends Component.Visible implements Serializable {
 					if(CellValueSource.ROW_PROPERTY_VALUE.equals(cellValueSource))
 						getPropertiesMap().setSortable(Boolean.TRUE);
 				}
-				
 			}
 			return this;
 		}
@@ -630,6 +646,16 @@ public class DataTable extends Component.Visible implements Serializable {
 			return null;
 		}
 		
+		public static Columns getProperty(Component component){
+			return (Columns) component.getPropertiesMap().getColumns();
+		}
+		
+		@SuppressWarnings("unchecked")
+		public static Collection<Column> getPropertyValue(Component component){
+			Columns columns = getProperty(component);
+			return columns == null ? null : (Collection<Column>) columns.getPropertiesMap().getValue();
+		}
+		
 		public static void build(Component component) {
 			Columns columns = (Columns) component.getPropertiesMap().getColumns();
 			if(columns!=null){
@@ -694,22 +720,32 @@ public class DataTable extends Component.Visible implements Serializable {
 		/**/
 		
 		@SuppressWarnings("unchecked")
+		public static Row instanciateOne(Object object,Long orderNumber,Columns columns){
+			Row row = new Row()._setObject(object);
+			row.set__orderNumber__(orderNumber);
+			
+			for(Column column : (Collection<Column>)columns.getPropertiesMap().getValue())
+				column.computeCellValueType(object);
+				
+			return row;
+		}
+		
+		//@SuppressWarnings("unchecked")
 		public static CollectionHelper.Instance<Row> instanciateMany(Collection<?> collection,Component component,CollectionHelper.Instance<Row> rows){
-			//Collection<Row> rows = new ArrayList<>();
-			/*if(CollectionHelper.getInstance().isNotEmpty(collection))
-				for(Object object : collection){
-					Row row = new Row()._setObject(object);
-					rows.add(row);
-					row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows),0l));
-				}
-			*/
-			Columns columns = (Columns) component.getPropertiesMap().getColumns();
+			//Columns columns = (Columns) component.getPropertiesMap().getColumns();
 			
 			if(CollectionHelper.getInstance().isNotEmpty(collection)){
 				if(rows == null)
 					rows = new CollectionHelper.Instance<>();
 				for(Object object : collection){
-					Row row = new Row()._setObject(object);
+					Row row = instanciateOne(object,NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements()),0l)
+							,(Columns) component.getPropertiesMap().getColumns());
+					row.getPropertiesMap().setParent(component);
+					
+					rows.addOne(row);
+					component.addOneChild(row);
+					
+					/*Row row = new Row()._setObject(object);
 					row.getPropertiesMap().setParent(component);
 					rows.addOne(row);
 					row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements()),0l));
@@ -717,6 +753,7 @@ public class DataTable extends Component.Visible implements Serializable {
 					
 					for(Column column : (Collection<Column>)columns.getPropertiesMap().getValue())
 						column.computeCellValueType(object);
+					*/
 				}
 			}
 			
@@ -782,7 +819,6 @@ public class DataTable extends Component.Visible implements Serializable {
 					
 					public Cell instanciateOne(Column column,Row row){
 						column.computeCellValueType(row.getPropertiesMap().getValue());
-						
 						Cell cell = new Cell().setColumn(column).setRow(row);
 						Output output = null;
 						/*if(row==null){
@@ -908,13 +944,38 @@ public class DataTable extends Component.Visible implements Serializable {
 		
 		void listenPrepare(DataTable dataTable);
 		
+		Collection<String> getColumnsFieldNames(DataTable dataTable);
+		void processColumnsFieldNames(DataTable dataTable,Collection<String> fieldNames);
+		
 		public static class Adapter extends AbstractBean implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
+				@Override
+				public void processColumnsFieldNames(DataTable dataTable, Collection<String> fieldNames) {
+					super.processColumnsFieldNames(dataTable, fieldNames);
+					Class<?> actionOnClass = (Class<?>) dataTable.getPropertiesMap().getActionOnClass();
+					if(ClassHelper.getInstance().isIdentified(actionOnClass))
+						fieldNames.add(ClassHelper.getInstance().getIdentifierFieldName(actionOnClass));
+					if(ClassHelper.getInstance().isNamed(actionOnClass))
+						fieldNames.add(ClassHelper.getInstance().getNameFieldName(actionOnClass));
+					if(ClassHelper.getInstance().isHierarchy(actionOnClass))
+						fieldNames.add(ClassHelper.getInstance().getHierarchyFieldName(actionOnClass));
+					if(ClassHelper.getInstance().isTyped(actionOnClass))
+						fieldNames.add(ClassHelper.getInstance().getTypeFieldName(actionOnClass));
+				}
+			}
 			
+			@Override
+			public Collection<String> getColumnsFieldNames(DataTable dataTable) {
+				return null;
+			}
+			
+			@Override
+			public void processColumnsFieldNames(DataTable dataTable, Collection<String> fieldNames) {
+				
 			}
 			
 			@Override

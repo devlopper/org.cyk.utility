@@ -68,6 +68,12 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Properties setIfNull(Object key,Object value){
+		if(get(key) == null)
+			set(key, value);
+		return this;
+	}
+	
 	/* get */
 	
 	@SuppressWarnings("unchecked")
@@ -2929,6 +2935,66 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getOnPrepareAddMenu() {
+		return get(ON_PREPARE_ADD_MENU);
+	}
+
+	public Properties setOnPrepareAddMenu(Object value) {
+		set(ON_PREPARE_ADD_MENU, value);
+		return this;
+	}
+	
+	public Object getOnPrepareAddMenuAddCommand() {
+		return get(ON_PREPARE_ADD_MENU_ADD_COMMAND);
+	}
+
+	public Properties setOnPrepareAddMenuAddCommand(Object value) {
+		set(ON_PREPARE_ADD_MENU_ADD_COMMAND, value);
+		return this;
+	}
+	
+	public Object getOnPrepareAddColumnAction() {
+		return get(ON_PREPARE_ADD_COLUMN_ACTION);
+	}
+
+	public Properties setOnPrepareAddColumnAction(Object value) {
+		set(ON_PREPARE_ADD_COLUMN_ACTION, value);
+		return this;
+	}
+	
+	public Object getOnPrepareAddColumnOrderNumber() {
+		return get(ON_PREPARE_ADD_COLUMN_ORDER_NUMBER);
+	}
+
+	public Properties setOnPrepareAddColumnOrderNumber(Object value) {
+		set(ON_PREPARE_ADD_COLUMN_ORDER_NUMBER, value);
+		return this;
+	}
+	
+	public Object getContainer() {
+		return get(CONTAINER);
+	}
+
+	public Properties setContainer(Object value) {
+		set(CONTAINER, value);
+		return this;
+	}
+	
+	public Object getTopLevelContainer() {
+		return get(TOP_LEVEL_CONTAINER);
+	}
+
+	public Properties setTopLevelContainer(Object value) {
+		set(TOP_LEVEL_CONTAINER, value);
+		return this;
+	}
+	
+	public static final String TOP_LEVEL_CONTAINER = "TOP_LEVEL_CONTAINER";
+	public static final String CONTAINER = "CONTAINER";
+	public static final String ON_PREPARE_ADD_MENU = "ON_PREPARE_ADD_MENU";
+	public static final String ON_PREPARE_ADD_MENU_ADD_COMMAND = "ON_PREPARE_ADD_MENU_ADD_COMMAND";
+	public static final String ON_PREPARE_ADD_COLUMN_ORDER_NUMBER = "ON_PREPARE_ADD_COLUMN_ORDER_NUMBER";
+	public static final String ON_PREPARE_ADD_COLUMN_ACTION = "ON_PREPARE_ADD_COLUMN_ACTION";
 	public static final String FIELD_NAMES_SET_FROM_REQUEST_PARAMETERS = "FIELD_NAMES_SET_FROM_REQUEST_PARAMETERS";
 	public static final String REQUEST_PARAMETER_CLASSES = "REQUEST_PARAMETER_CLASSES";
 	public static final String INSTANCE = "INSTANCE";

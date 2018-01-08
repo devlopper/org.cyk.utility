@@ -62,11 +62,20 @@ public class ListWindow extends Window implements Serializable {
 	
 	public static class Hierarchy extends org.cyk.utility.common.userinterface.hierarchy.Hierarchy implements Serializable {
 		private static final long serialVersionUID = 1L;
-	
+		
 		@Override
 		protected void __prepare__() {
 			super.__prepare__();
 			setRenderType(org.cyk.utility.common.userinterface.hierarchy.Hierarchy.RenderType.TABLE);
+			Class<?> actionOnClass = (Class<?>) getPropertiesMap().getActionOnClass();
+			if(ClassHelper.getInstance().isIdentified(actionOnClass))
+				addColumn("code",ClassHelper.getInstance().getIdentifierFieldName(actionOnClass));
+			/*if(ClassHelper.getInstance().isNamed(actionOnClass))
+				addColumnsByFieldNames(ClassHelper.getInstance().getNameFieldName(actionOnClass));
+			addColumnsByFieldNames(ClassHelper.getInstance().getHierarchyFieldName(actionOnClass));
+			if(ClassHelper.getInstance().isTyped(actionOnClass))
+				addColumnsByFieldNames(ClassHelper.getInstance().getTypeFieldName(actionOnClass));
+				*/
 		}
 		
 		/**/

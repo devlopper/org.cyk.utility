@@ -279,6 +279,7 @@ public class Output extends Control implements Serializable {
 				protected void setPropertyValue(Output output,Object value){
 					if(value!=null){
 						if(ClassHelper.getInstance().isIdentified(value.getClass())){
+							output.getPropertiesMap().setLinked(Boolean.TRUE);
 							OutputLink link = new OutputLink();
 							link.getPropertiesMap().setValue(UniformResourceLocatorHelper.getInstance().stringify(Constant.Action.READ, value));
 							//if(output instanceof OutputText)

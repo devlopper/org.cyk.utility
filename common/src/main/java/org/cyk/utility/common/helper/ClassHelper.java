@@ -75,8 +75,20 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		super.initialisation();
 	}
 	
+	public String getIdentifierFieldName(Class<?> aClass){
+		return instanciateOne(Listener.class).getIdentifierFieldName(aClass);
+	}
+	
+	public String getNameFieldName(Class<?> aClass){
+		return instanciateOne(Listener.class).getNameFieldName(aClass);
+	}
+	
 	public Boolean isIdentified(Class<?> aClass){
 		return instanciateOne(Listener.class).isIdentified(aClass);
+	}
+	
+	public Boolean isNamed(Class<?> aClass){
+		return instanciateOne(Listener.class).isNamed(aClass);
 	}
 	
 	public Boolean isHierarchy(Class<?> aClass){
@@ -636,6 +648,9 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		String getIdentifierFieldName(Class<?> aClass);
 		Boolean isIdentified(Class<?> aClass);
 		
+		String getNameFieldName(Class<?> aClass);
+		Boolean isNamed(Class<?> aClass);
+		
 		String getHierarchyFieldName(Class<?> aClass);
 		Boolean isHierarchy(Class<?> aClass);
 		
@@ -663,6 +678,16 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				@Override
 				public Boolean isIdentified(Class<?> aClass) {
 					return FieldHelper.getInstance().get(aClass, getIdentifierFieldName(aClass))!=null;
+				}
+				
+				@Override
+				public String getNameFieldName(Class<?> aClass) {
+					return "name";
+				}
+				
+				@Override
+				public Boolean isNamed(Class<?> aClass) {
+					return FieldHelper.getInstance().get(aClass, getNameFieldName(aClass))!=null;
 				}
 				
 				@Override
@@ -776,6 +801,16 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 			
 			@Override
 			public Boolean isIdentified(Class<?> aClass) {
+				return null;
+			}
+		
+			@Override
+			public Boolean isNamed(Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public String getNameFieldName(Class<?> aClass) {
 				return null;
 			}
 		}
