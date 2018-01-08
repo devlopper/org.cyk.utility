@@ -73,7 +73,6 @@ public class DataTable extends Component.Visible implements Serializable {
 	
 	@Override
 	protected void listenPropertiesInstanciated(Properties propertiesMap) {
-		// TODO Auto-generated method stub
 		super.listenPropertiesInstanciated(propertiesMap);
 		propertiesMap.setOnPrepareAddMenuAddCommand(Boolean.TRUE);
 		propertiesMap.setOnPrepareAddColumnOrderNumber(Boolean.TRUE);
@@ -108,27 +107,30 @@ public class DataTable extends Component.Visible implements Serializable {
 		return menuNode;
 	}
 	
+	public static void addMenu(Component component){
+		Properties componentProperties = component.getPropertiesMap();
+		if(Boolean.TRUE.equals(componentProperties.getOnPrepareAddMenu())){
+			Menu menu = (Menu) componentProperties.getMainMenu();
+			if(menu == null){
+				menu = new Menu().setRenderType(Menu.RenderType.BAR);
+				componentProperties.setMainMenu(menu);
+			}
+			component.addOneChild(menu);
+			if(componentProperties.getActionOnClass()!=null){
+				if(Boolean.TRUE.equals(componentProperties.getOnPrepareAddMenuAddCommand())){
+					menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, componentProperties.getActionOnClass()
+							,componentProperties.getMaster() == null ? null : componentProperties.getMaster().getClass()
+									,InstanceHelper.getInstance().getIdentifier(componentProperties.getMaster()))
+						._setPropertyIcon(IconHelper.Icon.FontAwesome.PLUS);
+				}		
+			}	
+		}
+	}
+
 	@Override
 	public DataTable prepare() {
 		super.prepare();
-	
-		if(Boolean.TRUE.equals(getPropertiesMap().getOnPrepareAddMenu())){
-			Menu menu = (Menu) getPropertiesMap().getMainMenu();
-			if(menu == null){
-				menu = new Menu().setRenderType(Menu.RenderType.BAR);
-				getPropertiesMap().setMainMenu(menu);
-			}
-			addOneChild(menu);
-			if(getPropertiesMap().getActionOnClass()!=null){
-				if(Boolean.TRUE.equals(getPropertiesMap().getOnPrepareAddMenuAddCommand())){
-					menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, getPropertiesMap().getActionOnClass()
-							,getPropertiesMap().getMaster() == null ? null : getPropertiesMap().getMaster().getClass()
-									,InstanceHelper.getInstance().getIdentifier(getPropertiesMap().getMaster()))
-						._setPropertyIcon(IconHelper.Icon.FontAwesome.PLUS);
-				}
-				
-			}	
-		}
+		addMenu();
 		addFirstColumns();
 		__prepare__();
 		addLastColumns();
@@ -139,7 +141,31 @@ public class DataTable extends Component.Visible implements Serializable {
 		return this;
 	}
 	
+	protected void addMenu(){
+		addMenu(this);
+	}
+	
+	public static void addFirstColumns(Component component){
+		Column orderNumberColumn = null;
+		if(Boolean.TRUE.equals(component.getPropertiesMap().getOnPrepareAddColumnOrderNumber())){
+			orderNumberColumn =Columns.addColumn(component,"userinterface.column.order.number", FIELD___ORDER_NUMBER__);
+			orderNumberColumn.setCellValueSource(CellValueSource.ROW).set__orderNumber__(Long.MIN_VALUE);	
+		}
+		
+		if(component instanceof DataTable){
+			Class<?> choiceValueClass = (Class<?>)component.getPropertiesMap().getChoiceValueClass();
+			if(choiceValueClass!=null){
+				Column choiceValueColumn = ((DataTable)component).addColumnByFieldName(ClassHelper.getInstance().getVariableName(choiceValueClass));
+				if(orderNumberColumn!=null)
+					choiceValueColumn.set__orderNumber__(orderNumberColumn.get__orderNumber__()+1);
+				choiceValueColumn.setCellValueType(DataTable.Cell.ValueType.TEXT);	
+			}
+		}
+	}
+	
 	protected void addFirstColumns(){
+		addFirstColumns(this);
+		/*
 		Class<?> choiceValueClass = (Class<?>)getPropertiesMap().getChoiceValueClass();
 		Column orderNumberColumn = null,choiceValueColumn = null;
 		if(Boolean.TRUE.equals(getPropertiesMap().getOnPrepareAddColumnOrderNumber())){
@@ -151,6 +177,14 @@ public class DataTable extends Component.Visible implements Serializable {
 			if(orderNumberColumn!=null)
 				choiceValueColumn.set__orderNumber__(orderNumberColumn.get__orderNumber__()+1);
 			choiceValueColumn.setCellValueType(DataTable.Cell.ValueType.TEXT);
+		}
+		*/
+	}
+	
+	public static void addLastColumns(Component component){
+		if(Boolean.TRUE.equals(component.getPropertiesMap().getOnPrepareAddColumnAction())){
+			Columns.getProperty(component).addColumn("userinterface.column.action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP)
+				.setCellValueType(Cell.ValueType.MENU).set__orderNumber__(Long.MAX_VALUE);	
 		}
 	}
 	
@@ -283,6 +317,8 @@ public class DataTable extends Component.Visible implements Serializable {
 			//InputChoiceOneCombo inputChoiceOneCombo = (InputChoiceOneCombo) getPropertiesMap().getAddInputComponent();
 			//inputChoiceOneCombo.getPropertiesMap().setRendered(Boolean.FALSE);
 			
+			addFilter(this);
+			/*
 			if(Boolean.TRUE.equals(getPropertiesMap().getFilterable())){
 				InputText inputText = new InputText();
 				Watermark watermark = new Watermark();
@@ -302,19 +338,35 @@ public class DataTable extends Component.Visible implements Serializable {
 				//((Component)getPropertiesMap().getFilterInputComponent()).getPropertiesMap().setRendered(getPropertiesMap().getFilterable());
 				//((Component)getPropertiesMap().getFilterCommandComponent()).getPropertiesMap().setRendered(getPropertiesMap().getFilterable());
 			}
+			*/
 		}
 	
 	}
 	
-	public Column addColumn(String labelStringIdentifier,String fieldName){
-		if(getPropertiesMap().getColumns()==null){
-			Columns columns = new Columns();
-			columns.getPropertiesMap().setAction(getPropertiesMap().getAction());
-			columns.getPropertiesMap().setCellListener(getPropertiesMap().getCellListener());
-			columns.getPropertiesMap().setDataTable(this);
-			getPropertiesMap().setColumns(columns);
+	public static void addFilter(Component component){
+		if(Boolean.TRUE.equals(component.getPropertiesMap().getFilterable())){
+			InputText inputText = new InputText();
+			Watermark watermark = new Watermark();
+			watermark.getPropertiesMap().setValue(StringHelper.getInstance().get("search", new Object[]{}));
+			inputText.getPropertiesMap().setWatermark(watermark);
+			component.getPropertiesMap().setFilterInputComponent(inputText);
+			
+			Command command = new Command();
+			command.setLabelFromIdentifier("search")._setLabelPropertyRendered(Boolean.FALSE);
+			command.getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.SEARCH);
+			if(JavaServerFacesHelper.Library.PRIMEFACES.equals(Component.JAVA_SERVER_FACES_LIBRARY)){
+				command.getPropertiesMap().setType("button");
+				command.getPropertiesMap().setOnClick(JavaServerFacesHelper.Primefaces.Script.getInstance().getMethodCallFilter(component));	
+			}
+			component.getPropertiesMap().setFilterCommandComponent(command);
+			
+			//((Component)getPropertiesMap().getFilterInputComponent()).getPropertiesMap().setRendered(getPropertiesMap().getFilterable());
+			//((Component)getPropertiesMap().getFilterCommandComponent()).getPropertiesMap().setRendered(getPropertiesMap().getFilterable());
 		}
-		return ((Columns)getPropertiesMap().getColumns()).addColumn(labelStringIdentifier, fieldName);
+	}
+	
+	public Column addColumn(String labelStringIdentifier,String fieldName){
+		return Columns.addColumn(this, labelStringIdentifier, fieldName);
 	}
 	
 	public Column addColumnByFieldName(String fieldName){
@@ -580,6 +632,18 @@ public class DataTable extends Component.Visible implements Serializable {
 			if(getPropertiesMap().getValue()==null)
 				getPropertiesMap().setValue(getChildren().getElements());
 			return column;
+		}
+		
+		public static Column addColumn(Component component,String labelStringIdentifier,String fieldName){
+			Columns columns = (Columns) component.getPropertiesMap().getColumns();
+			if(component.getPropertiesMap().getColumns()==null){
+				columns = new Columns();
+				columns.getPropertiesMap().setAction(component.getPropertiesMap().getAction());
+				columns.getPropertiesMap().setCellListener(component.getPropertiesMap().getCellListener());
+				columns.getPropertiesMap().setDataTable(component);
+				component.getPropertiesMap().setColumns(columns);
+			}
+			return ((Columns)component.getPropertiesMap().getColumns()).addColumn(labelStringIdentifier, fieldName);
 		}
 		
 		@Override

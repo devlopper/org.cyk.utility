@@ -1,20 +1,24 @@
 package org.cyk.utility.common.userinterface.hierarchy;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Properties;
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.NumberHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.collection.DataTable;
 import org.cyk.utility.common.userinterface.collection.DataTable.Cell;
+import org.cyk.utility.common.userinterface.collection.DataTable.Column;
 import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueSource;
 import org.cyk.utility.common.userinterface.collection.DataTable.Columns;
-import org.cyk.utility.common.userinterface.command.Menu;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,13 +28,23 @@ import lombok.experimental.Accessors;
 public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	static {
+		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
+	}
+	
 	public static enum RenderType{TREE,TABLE;public static RenderType DEFAULT = TREE;}
 	
 	/**/
 	
-	private RenderType renderType = RenderType.DEFAULT;
+	private RenderType renderType;
 	
 	/**/
+	
+	@Override
+	protected void listenPropertiesInstanciated(Properties propertiesMap) {
+		super.listenPropertiesInstanciated(propertiesMap);
+		
+	}
 	
 	@Override
 	public Hierarchy build() {
@@ -44,22 +58,73 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 	@Override
 	public Hierarchy prepare() {
 		super.prepare();
-		Menu menu = new Menu().setRenderType(Menu.RenderType.BAR);
-		getPropertiesMap().setMainMenu(menu);
-		addOneChild(menu);
-		if(getPropertiesMap().getActionOnClass()!=null){
-			menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, getPropertiesMap().getActionOnClass());
+		if(getRenderType() == null)
+			setRenderType(RenderType.DEFAULT);
+		if(RenderType.TABLE.equals(renderType)){
+			getPropertiesMap().setOnPrepareAddMenu(Boolean.TRUE);
+			getPropertiesMap().setOnPrepareAddColumnAction(Boolean.TRUE);
+			getPropertiesMap().setOnPrepareAddColumnOrderNumber(Boolean.TRUE);
+			getPropertiesMap().setOnPrepareAddMenuAddCommand(Boolean.TRUE);	
 		}
-		addColumn("order.number", FIELD___ORDER_NUMBER__,DataTable.Column.CellValueSource.ROW);//.setCellValueType(Cell.ValueType.TEXT);
+		
+		addMenu();
+		addFirstColumns();
 		__prepare__();
+		addLastColumns();
+		if(Boolean.TRUE.equals(onPrepareCallLoad)){
+			load(); //can be trigger by callback to enabled fast rendering of table structure	
+		}
+		/*
 		//addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(Cell.ValueType.MENU).set__orderNumber__(Long.MAX_VALUE);
 		
 		load();//can be trigger by callback to enabled fast rendering of table structure
-		
+		*/
 		return this;
 	}
 	
-	protected void __prepare__(){}
+	protected void __prepare__(){
+		setOnPrepareCallLoad(Boolean.TRUE);
+		DataTable.addFilter(this);
+	}
+	
+	protected void addLastColumns(){
+		addOtherColumns();
+		if(Boolean.TRUE.equals(getPropertiesMap().getOnPrepareAddColumnAction())){
+			addColumn("userinterface.column.action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(Cell.ValueType.MENU).set__orderNumber__(Long.MAX_VALUE);	
+		}
+	}
+	
+	public Column addColumnByFieldName(String fieldName){
+		String labelStringIdentifier = StringHelper.getInstance().getI18nIdentifier(FieldHelper.getInstance().getLast(fieldName));
+		return addColumn(labelStringIdentifier, fieldName);
+	}
+	
+	public Hierarchy addColumnsByFieldNames(Collection<String> fieldNames){
+		if(CollectionHelper.getInstance().isNotEmpty(fieldNames))
+			for(String fieldName : fieldNames)
+				addColumnByFieldName(fieldName);
+		return this;
+	}
+	
+	protected void addOtherColumns(){
+		addColumnsByFieldNames(getColumnsFieldNames());
+	}
+	
+	protected Collection<String> getColumnsFieldNames(){
+		Collection<String> collection = ClassHelper.getInstance().instanciateOne(Listener.class).getColumnsFieldNames(this);
+		if(collection == null)
+			collection = new ArrayList<String>();
+		ClassHelper.getInstance().instanciateOne(Listener.class).processColumnsFieldNames(this, collection);
+		return collection;
+	}
+	
+	protected void addMenu(){
+		DataTable.addMenu(this);
+	}
+	
+	protected void addFirstColumns(){
+		DataTable.addFirstColumns(this);
+	}
 	
 	@Override
 	public Component load() {
@@ -84,12 +149,6 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 		Integer index = 0;
 		if(CollectionHelper.getInstance().isNotEmpty(children))
 			for(Object child : children){
-				//Row row = new Row()._setObject(object);
-				//row.getPropertiesMap().setValue(object);
-				//rows.addOne(row);
-				//row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements()),0l));
-				//addOneChild(row);
-				
 				HierarchyNode node = instanciateNode();
 				node.getPropertiesMap().setValue(child);
 				node.setLabelFromIdentifier((String)InstanceHelper.getInstance().getIdentifier(child));
@@ -102,12 +161,7 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 					currentNode.addNode(node);
 				
 				loadNodes(node,child, collection);
-				
-				//addNode((String)InstanceHelper.getInstance().getIdentifier(object));
 			}
-		/*if(getPropertiesMap().getValue()==null && CollectionHelper.getInstance().isNotEmpty(rows))
-			getPropertiesMap().setValue(rows.getElements());
-		*/
 		return this;
 	}
 	
@@ -277,6 +331,44 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 		
 		public ClassLocator(Constant.Action action) {
 			super(Hierarchy.class,action);
+		}
+		
+	}
+
+	public static interface Listener {
+		
+		Collection<String> getColumnsFieldNames(Hierarchy hierarchy);
+		void processColumnsFieldNames(Hierarchy hierarchy,Collection<String> fieldNames);
+		
+		public static class Adapter extends AbstractBean implements Listener,Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static class Default extends Listener.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public void processColumnsFieldNames(Hierarchy hierarchy, Collection<String> fieldNames) {
+					super.processColumnsFieldNames(hierarchy, fieldNames);
+					Class<?> actionOnClass = (Class<?>) hierarchy.getPropertiesMap().getActionOnClass();
+					if(ClassHelper.getInstance().isIdentified(actionOnClass))
+						fieldNames.add(ClassHelper.getInstance().getIdentifierFieldName(actionOnClass));
+					if(ClassHelper.getInstance().isNamed(actionOnClass))
+						fieldNames.add(ClassHelper.getInstance().getNameFieldName(actionOnClass));
+					if(ClassHelper.getInstance().isTyped(actionOnClass))
+						fieldNames.add(ClassHelper.getInstance().getTypeFieldName(actionOnClass));
+				}
+			}
+			
+			@Override
+			public Collection<String> getColumnsFieldNames(Hierarchy hierarchy) {
+				return null;
+			}
+			
+			@Override
+			public void processColumnsFieldNames(Hierarchy hierarchy, Collection<String> fieldNames) {
+				
+			}
+			
 		}
 		
 	}

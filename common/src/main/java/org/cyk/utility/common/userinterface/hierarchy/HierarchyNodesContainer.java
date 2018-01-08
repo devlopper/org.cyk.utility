@@ -2,7 +2,6 @@ package org.cyk.utility.common.userinterface.hierarchy;
 
 import java.io.Serializable;
 
-import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.collection.DataTable;
 
@@ -27,13 +26,9 @@ public class HierarchyNodesContainer extends AbstractHierarchyNodesContainer<Hie
 	public HierarchyNode addNode(HierarchyNode node) {
 		if(node.getPropertiesMap().getValue() == null)
 			node.getPropertiesMap().setValue(node.getLabel().getPropertiesMap().getValue());
-		DataTable.Row row = new DataTable.Row()._setObject(node.getPropertiesMap().getValue());
-		row = DataTable.Row.instanciateOne(node.getPropertiesMap().getValue(),node.get__orderNumber__()
-				,DataTable.Columns.getProperty((Component) node.getPropertiesMap().getTopLevelContainer()));
-		/*
-		row.getPropertiesMap().setValue(node.getPropertiesMap().getValue());
-		row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,node.get__orderNumber__(),0l));
-		*/
+		DataTable.Row row = DataTable.Row.instanciateOne(node.getPropertiesMap().getValue(),node.get__orderNumber__()
+			,DataTable.Columns.getProperty((Component) node.getPropertiesMap().getTopLevelContainer()));
+		
 		node.getPropertiesMap().setRow(row);
 		node.addOneChild(row);
 		

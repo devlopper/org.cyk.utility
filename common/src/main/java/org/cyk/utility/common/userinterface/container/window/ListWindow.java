@@ -3,6 +3,7 @@ package org.cyk.utility.common.userinterface.container.window;
 import java.io.Serializable;
 
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ClassHelper;
 
 public class ListWindow extends Window implements Serializable {
@@ -64,18 +65,12 @@ public class ListWindow extends Window implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		@Override
-		protected void __prepare__() {
-			super.__prepare__();
-			setRenderType(org.cyk.utility.common.userinterface.hierarchy.Hierarchy.RenderType.TABLE);
-			Class<?> actionOnClass = (Class<?>) getPropertiesMap().getActionOnClass();
-			if(ClassHelper.getInstance().isIdentified(actionOnClass))
-				addColumn("code",ClassHelper.getInstance().getIdentifierFieldName(actionOnClass));
-			/*if(ClassHelper.getInstance().isNamed(actionOnClass))
-				addColumnsByFieldNames(ClassHelper.getInstance().getNameFieldName(actionOnClass));
-			addColumnsByFieldNames(ClassHelper.getInstance().getHierarchyFieldName(actionOnClass));
-			if(ClassHelper.getInstance().isTyped(actionOnClass))
-				addColumnsByFieldNames(ClassHelper.getInstance().getTypeFieldName(actionOnClass));
-				*/
+		public Hierarchy prepare() {
+			if(getRenderType()==null)
+				setRenderType(org.cyk.utility.common.userinterface.hierarchy.Hierarchy.RenderType.TABLE);
+			getPropertiesMap().setIfNull(Properties.FILTERABLE, Boolean.FALSE);
+			getPropertiesMap().setIfNull(Properties.SORTABLE, Boolean.FALSE);
+			return (Hierarchy) super.prepare();
 		}
 		
 		/**/
