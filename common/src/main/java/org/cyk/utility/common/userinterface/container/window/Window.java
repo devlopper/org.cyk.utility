@@ -96,9 +96,12 @@ public class Window extends Container implements Serializable {
 	
 	protected String computePropertyTitle(){
 		String identifier = getPropertyTitleIdentifier();
-		if(StringHelper.getInstance().isBlank(identifier))
-			return StringHelper.getInstance().getAction(action, actionOnClass);
-		return StringHelper.getInstance().get(identifier, new Object[]{});
+		if(StringHelper.getInstance().isBlank(identifier)){
+			if(action!=null && actionOnClass!=null)
+				return StringHelper.getInstance().getAction(action, actionOnClass);
+		}else
+			return StringHelper.getInstance().get(identifier, new Object[]{});
+		return "TITLE";
 	}
 	
 	public Collection<Object> getActionOnClassInstances(){
