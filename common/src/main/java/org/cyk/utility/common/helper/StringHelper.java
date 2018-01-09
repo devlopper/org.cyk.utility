@@ -378,6 +378,14 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return new ToStringMapping.Adapter.Default(identifier).execute();
 	}
 	
+	public String getAction(Constant.Action action,Class<?> aClass){
+		return action+" "+getClazz(aClass);
+	}
+	
+	public Boolean isIdentified(String string){
+		return !ToStringMapping.Adapter.Default.isUnknown(string);
+	}
+	
 	public String getComparisonOperator(Boolean greater,Boolean equal,Boolean masculine,Boolean plural){
 		String identifier = String.format(ToStringMapping.COMPARISON_OPERATOR_IDENTIFIER_FORMAT, Boolean.TRUE.equals(equal) ? ".equal" : Constant.EMPTY_STRING );
 		return new ToStringMapping.Adapter.Default(identifier)

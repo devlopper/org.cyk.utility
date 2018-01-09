@@ -517,7 +517,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		
 		
 		
-		public Column computeCellValueType(Object object){
+		public Column computeCellValueType(Object object,Boolean sortable){
 			if(object!=null && cellValueType==null){
 				String fieldName = (String) getPropertiesMap().getFieldName();
 				Class<?> fieldType = null;
@@ -544,7 +544,7 @@ public class DataTable extends Component.Visible implements Serializable {
 				
 				if(Cell.ValueType.TEXT.equals(cellValueType)){
 					if(CellValueSource.ROW_PROPERTY_VALUE.equals(cellValueSource))
-						getPropertiesMap().setSortable(Boolean.TRUE);
+						getPropertiesMap().setSortable(sortable);
 				}
 			}
 			return this;
@@ -567,6 +567,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			column.setLabelFromIdentifier(labelStringIdentifier);
 			column.getPropertiesMap().setHeaderText(column.getLabel().getPropertiesMap().getValue());
 			column.getPropertiesMap().setHeader(column.getLabel());
+			column.getPropertiesMap().setSortable(Boolean.FALSE);
 			
 			OutputText footer = new OutputText();
 			column.getPropertiesMap().setFooter(footer);
@@ -784,12 +785,12 @@ public class DataTable extends Component.Visible implements Serializable {
 		/**/
 		
 		@SuppressWarnings("unchecked")
-		public static Row instanciateOne(Object object,Long orderNumber,Columns columns){
+		public static Row instanciateOne(Object object,Long orderNumber,Columns columns,Boolean sortable){
 			Row row = new Row()._setObject(object);
 			row.set__orderNumber__(orderNumber);
 			
 			for(Column column : (Collection<Column>)columns.getPropertiesMap().getValue())
-				column.computeCellValueType(object);
+				column.computeCellValueType(object,sortable);
 				
 			return row;
 		}
@@ -803,7 +804,7 @@ public class DataTable extends Component.Visible implements Serializable {
 					rows = new CollectionHelper.Instance<>();
 				for(Object object : collection){
 					Row row = instanciateOne(object,NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements()),0l)
-							,(Columns) component.getPropertiesMap().getColumns());
+							,(Columns) component.getPropertiesMap().getColumns(),component instanceof DataTable);
 					row.getPropertiesMap().setParent(component);
 					
 					rows.addOne(row);
@@ -882,7 +883,7 @@ public class DataTable extends Component.Visible implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
 					public Cell instanciateOne(Column column,Row row){
-						column.computeCellValueType(row.getPropertiesMap().getValue());
+						column.computeCellValueType(row.getPropertiesMap().getValue(),Boolean.TRUE);
 						Cell cell = new Cell().setColumn(column).setRow(row);
 						Output output = null;
 						/*if(row==null){

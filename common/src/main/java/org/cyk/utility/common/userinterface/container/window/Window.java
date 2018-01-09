@@ -14,6 +14,7 @@ import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.ListenerHelper;
 import org.cyk.utility.common.helper.MethodHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.DeviceType;
@@ -84,7 +85,20 @@ public class Window extends Container implements Serializable {
 		if(Boolean.TRUE.equals(getIsAutomaticallySetHierarchy()))
 			__setHierarchy__();
 		
+		_setPropertyTitle(computePropertyTitle());
+		
 		logTrace("Properties={} , Parameters : Action={} , ActionOnClass={} , ActionOnClassInstanceIdentifiers={}",getPropertiesMap(), action,actionOnClass,actionOnClassInstanceIdentifiers);
+	}
+	
+	protected String getPropertyTitleIdentifier(){
+		return null;
+	}
+	
+	protected String computePropertyTitle(){
+		String identifier = getPropertyTitleIdentifier();
+		if(StringHelper.getInstance().isBlank(identifier))
+			return StringHelper.getInstance().getAction(action, actionOnClass);
+		return StringHelper.getInstance().get(identifier, new Object[]{});
 	}
 	
 	public Collection<Object> getActionOnClassInstances(){

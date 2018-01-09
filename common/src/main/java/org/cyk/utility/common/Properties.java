@@ -21,6 +21,11 @@ import org.cyk.utility.common.helper.StringHelper;
 public class Properties implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * layer , class group , class name , property name
+	 */
+	public static final String STRING_VALUE_IDENTIFIER_FORMAT  = "%s.%s.%s.%s";
+	
 	private java.util.Map<Object,Object> map;
 	private Object stringValueSeparator = Constant.CHARACTER_SPACE;
 	private Map<Object,Getter> getterMap;
@@ -2989,6 +2994,18 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getContentTitle() {
+		return get(CONTENT_TITLE);
+	}
+
+	public Properties setContentTitle(Object value) {
+		set(CONTENT_TITLE, value);
+		return this;
+	}
+	
+	
+	
+	public static final String CONTENT_TITLE = "CONTENT_TITLE";
 	public static final String TOP_LEVEL_CONTAINER = "TOP_LEVEL_CONTAINER";
 	public static final String CONTAINER = "CONTAINER";
 	public static final String ON_PREPARE_ADD_MENU = "ON_PREPARE_ADD_MENU";
@@ -3365,6 +3382,16 @@ public class Properties implements java.io.Serializable {
 	@Override
 	public String toString() {
 		return map.toString();
+	}
+	
+	/**/
+	
+	public static String getStringValueIdentifier(String layer,String classGroup,String className,String name){
+		return String.format(STRING_VALUE_IDENTIFIER_FORMAT,layer,classGroup,className,name);
+	}
+	
+	public static String getStringValueFromIdentifier(String layer,String classGroup,String className,String name){
+		return StringHelper.getInstance().get(getStringValueIdentifier(layer, classGroup, className, name), new Object[]{});
 	}
 	
 	/**/

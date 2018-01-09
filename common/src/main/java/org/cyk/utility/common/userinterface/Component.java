@@ -47,6 +47,8 @@ public class Component extends AbstractBean implements Serializable {
 	public static ContentType RENDER_AS_CONTENT_TYPE = ContentType.DEFAULT;
 	public static JavaServerFacesHelper.Library JAVA_SERVER_FACES_LIBRARY = JavaServerFacesHelper.Library.DEFAULT;
 	
+	private static final String PROPERTY_STRING_VALUE_IDENTIFIER_LAYER  = "userinterface";
+	
 	static {
 		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
 	}
@@ -183,6 +185,45 @@ public class Component extends AbstractBean implements Serializable {
 	
 	public Object _getPropertyAction(){
 		return getPropertiesMap().getAction();
+	}
+	
+	public Component _setPropertyTitle(Object title){
+		OutputText outputText = (OutputText) getPropertiesMap().getTitle();
+		if(getPropertiesMap().getTitle() == null){
+			getPropertiesMap().setTitle(outputText = new OutputText());
+		}else{
+			if(getPropertiesMap().getTitle() instanceof OutputText)
+				outputText = (OutputText) getPropertiesMap().getTitle();
+		}
+		
+		if(outputText == null){
+			getPropertiesMap().setTitle(title);	
+		}else{
+			outputText.getPropertiesMap().setValue(title);
+		}
+		return this;
+	}
+	
+	public Component _setPropertyTitleFromStringIdentifier(String identifier){
+		_setPropertyTitle(StringHelper.getInstance().get(identifier, new Object[]{}));
+		return this;
+	}
+	
+	public Component _setPropertyContentTitle(Object contentTitle){
+		OutputText outputText = (OutputText) getPropertiesMap().getContentTitle();
+		if(getPropertiesMap().getContentTitle() == null){
+			outputText = new OutputText();
+		}else{
+			if(getPropertiesMap().getContentTitle() instanceof OutputText)
+				outputText = (OutputText) getPropertiesMap().getContentTitle();
+		}
+		
+		if(outputText == null){
+			getPropertiesMap().setContentTitle(contentTitle);	
+		}else{
+			outputText.getPropertiesMap().setValue(contentTitle);
+		}
+		return this;
 	}
 	
 	/**/
@@ -508,6 +549,14 @@ public class Component extends AbstractBean implements Serializable {
 	}
 
 	/**/
+	
+	public static String getPropertyStringValueIdentifier(String classGroup,String className,String name){
+		return Properties.getStringValueIdentifier(PROPERTY_STRING_VALUE_IDENTIFIER_LAYER, classGroup, className, name);
+	}
+	
+	public static String getPropertyStringValueFromIdentifier(String classGroup,String className,String name){
+		return Properties.getStringValueFromIdentifier(PROPERTY_STRING_VALUE_IDENTIFIER_LAYER, classGroup, className, name);
+	}
 	
 	public static Constant.Action[] getActionsSharingClass(Component parent,Constant.Action[] actions,Class<?> actionOnClass,Object key,Class<?> nullValue,Boolean excludeActions){
 		Set<Constant.Action> set = new LinkedHashSet<>();

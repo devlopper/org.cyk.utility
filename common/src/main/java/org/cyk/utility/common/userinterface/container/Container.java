@@ -2,6 +2,7 @@ package org.cyk.utility.common.userinterface.container;
 
 import java.io.Serializable;
 
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Layout;
 
@@ -25,6 +26,20 @@ public class Container extends Component.Visible implements Serializable {
 	
 	public Container layOutBreak(){
 		layout.end();
+		return this;
+	}
+	
+	@Override
+	public Container _setPropertyTitle(Object title){
+		super._setPropertyTitle(title);
+		getPropertiesMap().setIfNull(Properties.CONTENT_TITLE, getPropertiesMap().getTitle());
+		return this;
+	}
+	
+	@Override
+	public Container _setPropertyContentTitle(Object contentTitle){
+		super._setPropertyContentTitle(contentTitle);
+		getPropertiesMap().setIfNull(Properties.TITLE, getPropertiesMap().getContentTitle());
 		return this;
 	}
 	

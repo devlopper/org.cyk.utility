@@ -74,11 +74,7 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 		if(Boolean.TRUE.equals(onPrepareCallLoad)){
 			load(); //can be trigger by callback to enabled fast rendering of table structure	
 		}
-		/*
-		//addColumn("action", Properties.MAIN_MENU).setCellValueSource(CellValueSource.ROW_PROPERTIES_MAP).setCellValueType(Cell.ValueType.MENU).set__orderNumber__(Long.MAX_VALUE);
 		
-		load();//can be trigger by callback to enabled fast rendering of table structure
-		*/
 		return this;
 	}
 	

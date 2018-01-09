@@ -1,6 +1,7 @@
 package org.cyk.utility.common.utility.userinterface;
 
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.container.window.Window;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -8,6 +9,20 @@ import org.junit.Test;
 
 public class UserInterfaceComponentUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	static {
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.testmsg", StringHelper.class.getClassLoader());
+	}
+	
+	@Test
+	public void getPropertyStringValueFromIdentifier(){
+		assertEquals("##userinterface.window.home.title##", Component.getPropertyStringValueFromIdentifier("window", "home", "title"));
+		assertEquals(Boolean.FALSE, StringHelper.getInstance().isIdentified(Component.getPropertyStringValueFromIdentifier("window", "home", "title")));
+		
+		assertEquals("Déconnection de compte", Component.getPropertyStringValueFromIdentifier("window", "logout", "title"));
+		assertEquals(Boolean.TRUE, StringHelper.getInstance().isIdentified(Component.getPropertyStringValueFromIdentifier("window", "logout", "title")));
+	}
 	
 	@Test
 	public void getActionsSharingClass(){

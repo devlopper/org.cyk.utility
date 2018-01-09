@@ -27,7 +27,7 @@ public class HierarchyNodesContainer extends AbstractHierarchyNodesContainer<Hie
 		if(node.getPropertiesMap().getValue() == null)
 			node.getPropertiesMap().setValue(node.getLabel().getPropertiesMap().getValue());
 		DataTable.Row row = DataTable.Row.instanciateOne(node.getPropertiesMap().getValue(),node.get__orderNumber__()
-			,DataTable.Columns.getProperty((Component) node.getPropertiesMap().getTopLevelContainer()));
+			,DataTable.Columns.getProperty((Component) node.getPropertiesMap().getTopLevelContainer()),Boolean.FALSE);
 		
 		node.getPropertiesMap().setRow(row);
 		node.addOneChild(row);
