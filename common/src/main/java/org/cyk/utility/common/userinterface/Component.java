@@ -187,8 +187,26 @@ public class Component extends AbstractBean implements Serializable {
 		return getPropertiesMap().getAction();
 	}
 	
+	public Component _setPropertyUsingOutputText(String name,Object value){
+		OutputText outputText = null;
+		if(getPropertiesMap().get(name) == null){
+			getPropertiesMap().set(name,outputText = new OutputText());
+		}else{
+			if(getPropertiesMap().get(name) instanceof OutputText)
+				outputText = (OutputText) getPropertiesMap().get(name);
+		}
+		
+		if(outputText == null){
+			getPropertiesMap().set(name,value);	
+		}else{
+			outputText.getPropertiesMap().setValue(value);
+		}
+		return this;
+	}
+	
 	public Component _setPropertyTitle(Object title){
-		OutputText outputText = (OutputText) getPropertiesMap().getTitle();
+		_setPropertyUsingOutputText(Properties.TITLE, title);
+		/*OutputText outputText = (OutputText) getPropertiesMap().getTitle();
 		if(getPropertiesMap().getTitle() == null){
 			getPropertiesMap().setTitle(outputText = new OutputText());
 		}else{
@@ -200,7 +218,7 @@ public class Component extends AbstractBean implements Serializable {
 			getPropertiesMap().setTitle(title);	
 		}else{
 			outputText.getPropertiesMap().setValue(title);
-		}
+		}*/
 		return this;
 	}
 	

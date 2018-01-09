@@ -2130,6 +2130,15 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getLayoutCardinalPointCenterSouthRendered() {
+		return get(LAYOUT_CARDINAL_POINT_CENTER_SOUTH_RENDERED);
+	}
+
+	public Properties setLayoutCardinalPointCenterSouthRendered(Object value) {
+		set(LAYOUT_CARDINAL_POINT_CENTER_SOUTH_RENDERED, value);
+		return this;
+	}
+	
 	public Object getLayoutCardinalPointWestRendered() {
 		return get(LAYOUT_CARDINAL_POINT_WEST_RENDERED);
 	}
@@ -3115,6 +3124,7 @@ public class Properties implements java.io.Serializable {
 	public static final String LAYOUT_CARDINAL_POINT_SOUTH_RENDERED = "LAYOUT_CARDINAL_POINT_SOUTH_RENDERED";
 	public static final String LAYOUT_CARDINAL_POINT_WEST_RENDERED = "LAYOUT_CARDINAL_POINT_WEST_RENDERED";
 	public static final String LAYOUT_CARDINAL_POINT_CENTER_RENDERED = "LAYOUT_CARDINAL_POINT_CENTER_RENDERED";
+	public static final String LAYOUT_CARDINAL_POINT_CENTER_SOUTH_RENDERED = "LAYOUT_CARDINAL_POINT_CENTER_SOUTH_RENDERED";
 	
 	public static final String AT = "AT";
 	public static final String BACK_LABEL = "BACK_LABEL";

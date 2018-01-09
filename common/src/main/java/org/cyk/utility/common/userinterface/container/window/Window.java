@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
@@ -40,6 +41,8 @@ public class Window extends Container implements Serializable {
 	static {
 		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class, Boolean.FALSE);
 	}
+	
+	public static String FOOTER = "CYK";
 	
 	protected DeviceType deviceType;
 	protected ConfirmationDialog confirmationDialog = new ConfirmationDialog();
@@ -86,6 +89,7 @@ public class Window extends Container implements Serializable {
 			__setHierarchy__();
 		
 		_setPropertyTitle(computePropertyTitle());
+		_setPropertyUsingOutputText(Properties.FOOTER, FOOTER);
 		
 		logTrace("Properties={} , Parameters : Action={} , ActionOnClass={} , ActionOnClassInstanceIdentifiers={}",getPropertiesMap(), action,actionOnClass,actionOnClassInstanceIdentifiers);
 	}
