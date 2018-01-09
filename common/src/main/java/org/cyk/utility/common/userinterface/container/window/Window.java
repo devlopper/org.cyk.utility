@@ -75,10 +75,6 @@ public class Window extends Container implements Serializable {
 		if(identifiable!=null)
 			actionOnClassInstanceIdentifiers.add(identifiable);
 		
-		if(actionOnClass!=null){
-			getPropertiesMap().setTitle(action+" "+actionOnClass.getSimpleName());
-		}
-		
 		if(Boolean.TRUE.equals(getIsAutomaticallySetForm()))
 			__setForm__();
 		

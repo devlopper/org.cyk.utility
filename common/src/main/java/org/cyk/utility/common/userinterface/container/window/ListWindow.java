@@ -36,6 +36,11 @@ public class ListWindow extends Window implements Serializable {
 		return (Class<org.cyk.utility.common.userinterface.hierarchy.Hierarchy>) ListWindow.Hierarchy.ClassLocator.getInstance().locate(actionOnClass);
 	}
 	
+	@Override
+	protected Properties instanciateProperties() {
+		return super.instanciateProperties().setLayoutCardinalPointCenterSouthRendered(Boolean.FALSE);
+	}
+	
 	/**/
 	
 	public static class DataTable extends org.cyk.utility.common.userinterface.collection.DataTable implements Serializable {
