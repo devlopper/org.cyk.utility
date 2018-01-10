@@ -19,6 +19,8 @@ import lombok.Setter;
 
 public interface Constant {
 	
+	String CYK = "CYK";
+	
 	Character CHARACTER_SPACE = new Character(' ');
 	Character CHARACTER_DOT = new Character('.');
 	Character CHARACTER_COLON = new Character(':');

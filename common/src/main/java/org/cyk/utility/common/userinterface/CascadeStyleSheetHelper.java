@@ -72,7 +72,7 @@ public class CascadeStyleSheetHelper extends AbstractHelper implements Serializa
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				private static final String PREFIX = "cyk"+Constant.CHARACTER_UNDESCORE+"userinterface"+Constant.CHARACTER_UNDESCORE;
+				private static final String PREFIX = Constant.CYK.toLowerCase()+Constant.CHARACTER_UNDESCORE+"userinterface"+Constant.CHARACTER_UNDESCORE;
 				
 				@Override
 				public String getClassPrefix(Collection<String> strings) {

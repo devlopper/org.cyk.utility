@@ -345,6 +345,13 @@ public class Component extends AbstractBean implements Serializable {
 		
 		/**/
 		
+		@Override
+		protected void listenPropertiesInstanciated(Properties propertiesMap) {
+			super.listenPropertiesInstanciated(propertiesMap);
+			if(isJavaServerFacesLibraryPrimefaces())
+				propertiesMap.addString(Properties.STYLE_CLASS, Constant.CHARACTER_SPACE.toString(), CascadeStyleSheetHelper.getInstance().getClass(getClass()));
+		}
+		
 		public Visible _setLabelPropertyValue(String value){
 			getLabel().getPropertiesMap().setValue(value);
 			return this;

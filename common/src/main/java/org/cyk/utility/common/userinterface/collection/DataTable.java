@@ -80,6 +80,8 @@ public class DataTable extends Component.Visible implements Serializable {
 		super.listenPropertiesInstanciated(propertiesMap);
 		propertiesMap.setOnPrepareAddMenuAddCommand(Boolean.TRUE);
 		propertiesMap.setOnPrepareAddColumnOrderNumber(Boolean.TRUE);
+		if(isJavaServerFacesLibraryPrimefaces())
+			propertiesMap.addString(Properties.STYLE_CLASS, Constant.CHARACTER_SPACE.toString(), CascadeStyleSheetHelper.getInstance().getClass(DataTable.class));
 	}
 	
 	@Override
