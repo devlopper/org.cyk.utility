@@ -206,19 +206,6 @@ public class Component extends AbstractBean implements Serializable {
 	
 	public Component _setPropertyTitle(Object title){
 		_setPropertyUsingOutputText(Properties.TITLE, title);
-		/*OutputText outputText = (OutputText) getPropertiesMap().getTitle();
-		if(getPropertiesMap().getTitle() == null){
-			getPropertiesMap().setTitle(outputText = new OutputText());
-		}else{
-			if(getPropertiesMap().getTitle() instanceof OutputText)
-				outputText = (OutputText) getPropertiesMap().getTitle();
-		}
-		
-		if(outputText == null){
-			getPropertiesMap().setTitle(title);	
-		}else{
-			outputText.getPropertiesMap().setValue(title);
-		}*/
 		return this;
 	}
 	
@@ -241,6 +228,12 @@ public class Component extends AbstractBean implements Serializable {
 		}else{
 			outputText.getPropertiesMap().setValue(contentTitle);
 		}
+		return this;
+	}
+	
+	public Component addPropertyStyleClass(String...classes){
+		Object separator = isJavaServerFacesLibraryPrimefaces() ? Constant.CHARACTER_SPACE.toString() : Constant.CHARACTER_SPACE.toString();
+		getPropertiesMap().addString(Properties.STYLE_CLASS, separator, classes);
 		return this;
 	}
 	

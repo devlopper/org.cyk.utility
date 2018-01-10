@@ -3,8 +3,10 @@ package org.cyk.utility.common.userinterface;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.cyk.utility.common.Constant;
@@ -14,7 +16,7 @@ import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.StringHelper;
 
-@Singleton
+@Singleton @Named
 public class CascadeStyleSheetHelper extends AbstractHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -36,6 +38,11 @@ public class CascadeStyleSheetHelper extends AbstractHelper implements Serializa
 		super.initialisation();
 	}
 	
+	public String getClassPrefix(){
+		Listener listener = ClassHelper.getInstance().instanciateOne(Listener.class);
+		return listener.getClassPrefix(Arrays.asList(""));
+	}
+	
 	public String getClass(Class<?>...classes){
 		Listener listener = ClassHelper.getInstance().instanciateOne(Listener.class);
 		return listener.getClass(classes);
@@ -44,6 +51,10 @@ public class CascadeStyleSheetHelper extends AbstractHelper implements Serializa
 	public String getClass(String...strings){
 		Listener listener = ClassHelper.getInstance().instanciateOne(Listener.class);
 		return listener.getClass(strings);
+	}
+	
+	public String getClassByStrings(String...strings){
+		return getClass(strings);
 	}
 	
 	public String getClass(Object object,java.lang.reflect.Field field){

@@ -364,12 +364,12 @@ public class DataTable extends Component.Visible implements Serializable {
 		if(Boolean.TRUE.equals(component.getPropertiesMap().getFilterable())){
 			InputText inputText = new InputText();
 			Watermark watermark = new Watermark();
-			watermark.getPropertiesMap().setValue(StringHelper.getInstance().get("search", new Object[]{}));
+			watermark.getPropertiesMap().setValue(StringHelper.getInstance().get("userinterface.input.search.watermark.label", new Object[]{}));
 			inputText.getPropertiesMap().setWatermark(watermark);
 			component.getPropertiesMap().setFilterInputComponent(inputText);
 			
 			Command command = new Command();
-			command.setLabelFromIdentifier("search")._setLabelPropertyRendered(Boolean.FALSE);
+			command.setLabelFromIdentifier("userinterface.command.search")._setLabelPropertyRendered(Boolean.FALSE);
 			command.getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.SEARCH);
 			if(JavaServerFacesHelper.Library.PRIMEFACES.equals(Component.JAVA_SERVER_FACES_LIBRARY)){
 				command.getPropertiesMap().setType("button");
@@ -590,6 +590,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			column.getPropertiesMap().setFooter(footer);
 			
 			column.getPropertiesMap().setFieldName(fieldName);
+			column.addPropertyStyleClass(CascadeStyleSheetHelper.getInstance().getClass(fieldName.toLowerCase()));
 			return column;
 		}
 		
@@ -822,7 +823,7 @@ public class DataTable extends Component.Visible implements Serializable {
 				if(rows == null)
 					rows = new CollectionHelper.Instance<>();
 				for(Object object : collection){
-					Row row = instanciateOne(object,NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements()),0l)
+					Row row = instanciateOne(object,NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements())+1,0l)
 							,(Columns) component.getPropertiesMap().getColumns(),component instanceof DataTable);
 					row.getPropertiesMap().setParent(component);
 					
