@@ -245,10 +245,12 @@ public class RandomHelper extends AbstractHelper implements Serializable {
 	public class Person implements Serializable{
 		private static final long serialVersionUID = 1L;
 		
+		private Boolean isMale;
 		private String firstname,middlename,lastname,surname;
 		private FileHelper.File headOnlyPhoto;
 		
 		public Person(Boolean isMale) {
+			this.isMale = isMale;
 			String male = getMaleOrFemale(isMale);
 			firstname = get(StringCollection.FIRST_NAME);
 			middlename = get(StringCollection.MIDDLE_NAME);

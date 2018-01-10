@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 import org.cyk.utility.common.Constant;
@@ -21,6 +24,7 @@ import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
+import org.cyk.utility.common.userinterface.CascadeStyleSheetHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.ContentType;
 import org.cyk.utility.common.userinterface.Image;
@@ -204,6 +208,17 @@ public class DataTable extends Component.Visible implements Serializable {
 		if(collection == null)
 			collection = new ArrayList<String>();
 		ClassHelper.getInstance().instanciateOne(Listener.class).processColumnsFieldNames(this, collection);
+		final List<String> order = ClassHelper.getInstance().instanciateOne(Listener.class).getColumnsFieldNamesOrder(this);
+		if(CollectionHelper.getInstance().isNotEmpty(order)){
+			Collections.sort((List<String>) collection, new Comparator<String>() {
+				@Override
+				public int compare(String o1, String o2) {
+					Integer i1 = order.indexOf(o1);
+					Integer i2 = order.indexOf(o2);
+					return i1 == -1 || i2 == -1 ? 0 : i1.compareTo(i2);
+				}
+			});
+		}
 		return collection;
 	}
 	
@@ -748,7 +763,8 @@ public class DataTable extends Component.Visible implements Serializable {
 	@Getter @Setter @Accessors(chain=true)
 	public static class Row extends Dimension implements Serializable {
 		private static final long serialVersionUID = 1L;
-			
+		public static final String MENU_STYLE_CLASS = CascadeStyleSheetHelper.getInstance().getClass(DataTable.class,Row.class,Menu.class);
+		
 		private Menu menu;
 		private MenuNode deleteMenuNode;
 		
@@ -761,6 +777,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		public Row _setObject(Object object){
 			getPropertiesMap().setValue(object);
 			menu = new Menu().setRenderType(Menu.RenderType.BAR);
+			menu.getPropertiesMap().addString(Properties.STYLE_CLASS, Constant.CHARACTER_SPACE, MENU_STYLE_CLASS);
 			getPropertiesMap().setMainMenu(menu);
 			addOneChild(menu);
 			menu.addNode("read")._setPropertyUrl(Constant.Action.READ,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
@@ -1011,6 +1028,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		
 		Collection<String> getColumnsFieldNames(DataTable dataTable);
 		void processColumnsFieldNames(DataTable dataTable,Collection<String> fieldNames);
+		List<String> getColumnsFieldNamesOrder(DataTable dataTable);
 		
 		public static class Adapter extends AbstractBean implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
@@ -1041,6 +1059,11 @@ public class DataTable extends Component.Visible implements Serializable {
 			@Override
 			public void processColumnsFieldNames(DataTable dataTable, Collection<String> fieldNames) {
 				
+			}
+			
+			@Override
+			public List<String> getColumnsFieldNamesOrder(DataTable dataTable) {
+				return null;
 			}
 			
 			@Override
