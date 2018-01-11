@@ -51,8 +51,7 @@ public class Form extends Container implements Serializable {
 	@Override
 	protected void listenPropertiesInstanciated(Properties propertiesMap) {
 		super.listenPropertiesInstanciated(propertiesMap);
-		propertiesMap.setHeaderRendered(Boolean.TRUE);
-		propertiesMap.setFooterRendered(Boolean.TRUE);
+		
 	}
 	
 	@Override
@@ -203,7 +202,8 @@ public class Form extends Container implements Serializable {
 		@SuppressWarnings("unchecked")
 		public Component prepare() {
 			__prepare__();
-			
+			getPropertiesMap().setIfNull(Properties.HEADER_RENDERED, Boolean.TRUE);
+			getPropertiesMap().setIfNull(Properties.FOOTER_RENDERED, Constant.Action.isCreateOrUpdateOrDelete((Constant.Action)getPropertiesMap().getAction()));
 			new CollectionHelper.Iterator.Adapter.Default<String>((Set<String>) getPropertiesMap().getFieldNamesSetFromRequestParameters()){
 				private static final long serialVersionUID = 1L;
 
