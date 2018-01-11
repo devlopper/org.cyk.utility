@@ -3012,8 +3012,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getHeaderRendered() {
+		return get(HEADER_RENDERED);
+	}
+
+	public Properties setHeaderRendered(Object value) {
+		set(HEADER_RENDERED, value);
+		return this;
+	}
 	
-	
+	public static final String HEADER_RENDERED = "HEADER_RENDERED";
 	public static final String CONTENT_TITLE = "CONTENT_TITLE";
 	public static final String TOP_LEVEL_CONTAINER = "TOP_LEVEL_CONTAINER";
 	public static final String CONTAINER = "CONTAINER";

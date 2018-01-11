@@ -14,6 +14,13 @@ public class EditWindow extends Window implements Serializable {
 		return (Class<Form.Master>) EditWindow.FormMaster.ClassLocator.getInstance().locate(actionOnClass);
 	}
 	
+	@Override
+	protected void __setForm__() {
+		super.__setForm__();
+		if(form!=null /*&& Constant.Action.isCreateOrUpdateOrDelete((Constant.Action)form.getPropertiesMap().getAction())*/)
+			form.setLabelFromIdentifier("userinterface.form.master.label");
+	}
+	
 	/**/
 	
 	public static class FormMaster extends Form.Master implements Serializable {

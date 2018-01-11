@@ -48,6 +48,27 @@ public class Form extends Container implements Serializable {
 		
 	}
 	
+	@Override
+	protected void listenPropertiesInstanciated(Properties propertiesMap) {
+		super.listenPropertiesInstanciated(propertiesMap);
+		propertiesMap.setHeaderRendered(Boolean.TRUE);
+		propertiesMap.setFooterRendered(Boolean.TRUE);
+	}
+	
+	@Override
+	public Visible setLabel(OutputText label) {
+		super.setLabel(label);
+		getPropertiesMap().setHeader(getLabel());
+		return this;
+	}
+	
+	@Override
+	protected OutputText instanciateLabel() {
+		OutputText instance =  super.instanciateLabel();
+		getPropertiesMap().setHeader(instance);
+		return instance;
+	}
+	
 	public Form read(){
 		return this;
 	}
@@ -129,6 +150,11 @@ public class Form extends Container implements Serializable {
 		
 		public Master() {
 			this(null,null,null);
+		}
+		
+		@Override
+		protected Class<?>[] getPropertyStyleClassClasses() {
+			return ArrayUtils.addAll(new Class<?>[]{Form.class}, super.getPropertyStyleClassClasses());
 		}
 		
 		public Master addComponentOnSubmit(Component component){
@@ -486,6 +512,11 @@ public class Form extends Container implements Serializable {
 		
 		public Detail() {
 			this(null,null);
+		}
+		
+		@Override
+		protected Class<?>[] getPropertyStyleClassClasses() {
+			return ArrayUtils.addAll(new Class<?>[]{Form.class}, super.getPropertyStyleClassClasses());
 		}
 		
 		public Detail setMaster(Master master){

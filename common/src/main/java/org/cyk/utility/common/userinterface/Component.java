@@ -342,7 +342,15 @@ public class Component extends AbstractBean implements Serializable {
 		protected void listenPropertiesInstanciated(Properties propertiesMap) {
 			super.listenPropertiesInstanciated(propertiesMap);
 			if(isJavaServerFacesLibraryPrimefaces())
-				propertiesMap.addString(Properties.STYLE_CLASS, Constant.CHARACTER_SPACE.toString(), CascadeStyleSheetHelper.getInstance().getClass(getClass()));
+				propertiesMap.addString(Properties.STYLE_CLASS, Constant.CHARACTER_SPACE.toString(), generatePropertyStyleClass());
+		}
+		
+		protected String generatePropertyStyleClass(){
+			return CascadeStyleSheetHelper.getInstance().getClass(getPropertyStyleClassClasses());
+		}
+		
+		protected Class<?>[] getPropertyStyleClassClasses(){
+			return new Class<?>[]{getClass()};
 		}
 		
 		public Visible _setLabelPropertyValue(String value){
@@ -352,7 +360,7 @@ public class Component extends AbstractBean implements Serializable {
 		
 		public OutputText getLabel(){
 			if(label == null)
-				label = new OutputText();
+				label = instanciateLabel();
 			return label;
 		}
 		
@@ -364,6 +372,10 @@ public class Component extends AbstractBean implements Serializable {
 			}
 			__setWatermarkFromLabel__();
 			return this;
+		}
+		
+		protected OutputText instanciateLabel(){
+			return	new OutputText();
 		}
 		
 		public Visible __setWatermarkFromLabel__(){

@@ -182,6 +182,11 @@ public class Window extends Container implements Serializable {
 		return Menu.build(this, Menu.Type.CONTEXT,Menu.RenderType.PANEL);
 	}
 	
+	@Override
+	protected Properties instanciateProperties() {
+		return super.instanciateProperties().setLayoutCardinalPointCenterSouthRendered(Boolean.FALSE);
+	}
+	
 	/* builders */
 	
 	protected Form.Master buildForm(){
