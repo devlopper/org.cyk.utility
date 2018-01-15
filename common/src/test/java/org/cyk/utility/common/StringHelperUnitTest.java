@@ -110,9 +110,9 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void assertPlural(){
 		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
-				.setPlural(Boolean.FALSE).execute(), "année").execute();;
+				.setPlural(Boolean.FALSE).execute(), "année").execute();
 		new AssertionHelper.Assertion.Equals.String.Adapter.Default(new StringHelper.ToStringMapping.Adapter.Default("year")
-				.setPlural(Boolean.TRUE).execute(), "années").execute();;
+				.setPlural(Boolean.TRUE).execute(), "années").execute();
 		
 	}
 	
@@ -292,6 +292,21 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void assertComparisonOperator(){
+		AssertionHelper.getInstance().assertEquals("égal", StringHelper.getInstance().getComparisonOperator(null, null, Boolean.TRUE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("égale", StringHelper.getInstance().getComparisonOperator(null, null, Boolean.FALSE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("égaux", StringHelper.getInstance().getComparisonOperator(null, null, Boolean.TRUE, Boolean.TRUE));
+		AssertionHelper.getInstance().assertEquals("égales", StringHelper.getInstance().getComparisonOperator(null, null, Boolean.FALSE, Boolean.TRUE));
+		
+		AssertionHelper.getInstance().assertEquals("différent", StringHelper.getInstance().getComparisonOperator(null, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("différente", StringHelper.getInstance().getComparisonOperator(null, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("différents", StringHelper.getInstance().getComparisonOperator(null, Boolean.FALSE, Boolean.TRUE, Boolean.TRUE));
+		AssertionHelper.getInstance().assertEquals("différentes", StringHelper.getInstance().getComparisonOperator(null, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE));
+		
+		AssertionHelper.getInstance().assertEquals("égal", StringHelper.getInstance().getComparisonOperator(null, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("égale", StringHelper.getInstance().getComparisonOperator(null, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("égaux", StringHelper.getInstance().getComparisonOperator(null, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE));
+		AssertionHelper.getInstance().assertEquals("égales", StringHelper.getInstance().getComparisonOperator(null, Boolean.TRUE, Boolean.FALSE, Boolean.TRUE));
+		
 		AssertionHelper.getInstance().assertEquals("supérieur ou égal", StringHelper.getInstance().getComparisonOperator(Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE));
 		AssertionHelper.getInstance().assertEquals("supérieur", StringHelper.getInstance().getComparisonOperator(Boolean.TRUE, Boolean.FALSE, Boolean.TRUE, Boolean.FALSE));
 		AssertionHelper.getInstance().assertEquals("inférieur ou égal", StringHelper.getInstance().getComparisonOperator(Boolean.FALSE, Boolean.TRUE, Boolean.TRUE, Boolean.FALSE));

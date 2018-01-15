@@ -297,7 +297,8 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 							if(Boolean.TRUE.equals(condition.getValue()))
 								condition.setMessage(new StringHelper.ToStringMapping.Adapter.Default(getMessageIdentifier()).setCaseType(CaseType.FU)
 									.addManyParameters( new StringHelper.ToStringMapping.Adapter.Default(valueNameIdentifier).setProperty(StringHelper.ToStringMapping.PROPERTY_NAME_GENDER, Boolean.TRUE).execute()
-											,number1,StringHelper.getInstance().getComparisonOperator(!greater, !equal, masculine, Boolean.FALSE),number2)
+											,number1,StringHelper.getInstance().getComparisonOperator(greater == null ? null : !greater, equal == null ? null : !equal
+													, Boolean.TRUE.equals(masculine), Boolean.FALSE),number2)
 									.execute());
 							return condition;
 						}

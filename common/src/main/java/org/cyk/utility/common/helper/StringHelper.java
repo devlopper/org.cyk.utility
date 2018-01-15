@@ -387,12 +387,20 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	}
 	
 	public String getComparisonOperator(Boolean greater,Boolean equal,Boolean masculine,Boolean plural){
-		String identifier = String.format(ToStringMapping.COMPARISON_OPERATOR_IDENTIFIER_FORMAT, Boolean.TRUE.equals(equal) ? ".equal" : Constant.EMPTY_STRING );
-		return new ToStringMapping.Adapter.Default(identifier)
-				.addManyParameters(
-						StringHelper.getInstance().getWord(Boolean.TRUE.equals(greater) ? "superior" : "inferior", masculine, plural)
-				,StringHelper.getInstance().getWord("equal", masculine, plural)
-				).execute();
+		if(greater == null){
+			if(equal == null)
+				;
+			else
+				return StringHelper.getInstance().getWord(equal ? "equal" : "different", masculine, plural);
+		}else{
+			String identifier = String.format(ToStringMapping.COMPARISON_OPERATOR_IDENTIFIER_FORMAT, Boolean.TRUE.equals(equal) ? ".or" : Constant.EMPTY_STRING );
+			return new ToStringMapping.Adapter.Default(identifier)
+					.addManyParameters(
+							StringHelper.getInstance().getWord(Boolean.TRUE.equals(greater) ? "superior" : "inferior", masculine, plural)
+					,StringHelper.getInstance().getWord("equal", masculine, plural)
+					).execute();
+		}
+		return StringHelper.getInstance().getWord("equal", masculine, plural);
 	}
 	
 	public Boolean isMasculine(String identifier){

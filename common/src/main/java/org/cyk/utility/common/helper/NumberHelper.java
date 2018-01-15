@@ -248,7 +248,14 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		if(number1==null || number2==null)
 			return Boolean.FALSE;
 		if(greater==null){
-			
+			if(equal==null){
+				
+			}else{
+				if(Boolean.TRUE.equals(equal))
+					;
+				else
+					return number1.doubleValue() != number2.doubleValue();
+			}
 		}else{
 			if(equal==null){
 				
