@@ -25,6 +25,14 @@ public class NumberHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void compare(){
+		assertEquals(Boolean.FALSE, NumberHelper.getInstance().compare(1, null, null, null));
+		assertEquals(Boolean.FALSE, NumberHelper.getInstance().compare(null, 1, null, null));
+		assertEquals(Boolean.TRUE, NumberHelper.getInstance().compare(1, 1, null, null));
+		assertEquals(Boolean.FALSE, NumberHelper.getInstance().compare(1, 2, null, null));
+	}
+	
+	@Test
 	public void assertDouble(){
 		//Double.valueOf("5,1");
 		//System.out.println("NumberHelperUnitTest.assertDouble() : "+Double.valueOf("5.1"));

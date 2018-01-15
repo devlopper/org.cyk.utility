@@ -72,7 +72,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	}
 	
 	public String buildPath(String...fieldNames){
-		return StringUtils.join(fieldNames,FIELD_NAME_SEPARATOR);
+		return ArrayHelper.getInstance().isEmpty(fieldNames) ? Constant.EMPTY_STRING : StringUtils.join(fieldNames,FIELD_NAME_SEPARATOR);
 	}
 	
 	public Boolean getIsContainSeparator(String fieldName){
@@ -436,7 +436,10 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 					fieldOverride = (FieldOverride) annotation;
 					break;
 				}
-
+		
+		if(fieldOverride == null)
+			if(!aClass.getSuperclass().equals(Object.class))
+				return getOverride(aClass.getSuperclass(),fieldName);
 		return fieldOverride;
 	}
 	
@@ -445,6 +448,10 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		if(fieldOverride==null)
 			return field.getType();
 		return fieldOverride.type();
+	}
+	
+	public Class<?> getType(Class<?> aClass,String name){
+		return getType(aClass, get(aClass, name));
 	}
 	
 	public Object getFieldValueContainer(Object object,java.lang.reflect.Field field){

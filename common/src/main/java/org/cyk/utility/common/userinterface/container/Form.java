@@ -204,6 +204,8 @@ public class Form extends Container implements Serializable {
 			__prepare__();
 			getPropertiesMap().setIfNull(Properties.HEADER_RENDERED, Boolean.TRUE);
 			getPropertiesMap().setIfNull(Properties.FOOTER_RENDERED, Constant.Action.isCreateOrUpdateOrDelete((Constant.Action)getPropertiesMap().getAction()));
+			if(getLabel()!=null && StringHelper.getInstance().isBlank((String)getLabel().getPropertiesMap().getValue()))
+				setLabelFromIdentifier("userinterface.form.master.label");
 			new CollectionHelper.Iterator.Adapter.Default<String>((Set<String>) getPropertiesMap().getFieldNamesSetFromRequestParameters()){
 				private static final long serialVersionUID = 1L;
 

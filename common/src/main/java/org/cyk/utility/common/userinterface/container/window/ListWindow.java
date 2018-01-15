@@ -9,6 +9,8 @@ import org.cyk.utility.common.helper.ClassHelper;
 public class ListWindow extends Window implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	
+	
 	@Override
 	protected Boolean getIsAutomaticallySetForm() {
 		return Boolean.FALSE;
@@ -16,13 +18,14 @@ public class ListWindow extends Window implements Serializable {
 	
 	@Override
 	protected Boolean getIsAutomaticallySetDataTable() {
-		return !Boolean.TRUE.equals(ClassHelper.getInstance().isHierarchy(actionOnClass));
+		//return !Boolean.TRUE.equals(ClassHelper.getInstance().isHierarchy(actionOnClass));
+		return Boolean.TRUE;
 	}
 	
-	@Override
+	/*@Override
 	protected Boolean getIsAutomaticallySetHierarchy() {
 		return Boolean.TRUE.equals(ClassHelper.getInstance().isHierarchy(actionOnClass));
-	}
+	}*/
 	
 	@SuppressWarnings("unchecked")
 	@Override

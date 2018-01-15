@@ -30,6 +30,10 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void comparison(){
 		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
+				.setDomainNameIdentifier("sale").setNumber1(1).setNumber2(2).execute(), Boolean.TRUE
+				, "La balance(1) doit être supérieure ou égale à 2.");
+		
+		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
 				.setDomainNameIdentifier("sale").setNumber1(1).setNumber2(2).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
 				, "La balance(1) doit être supérieure ou égale à 2.");		
 	}

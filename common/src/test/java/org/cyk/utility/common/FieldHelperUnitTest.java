@@ -23,6 +23,12 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 	@InjectMocks private FieldHelper fieldHelper;
 	
 	@Test
+	public void fieldOverride(){
+		assertEquals(Integer.class, FieldHelper.getInstance().getType(FieldOverride.class, "f1"));
+		assertEquals(Integer.class, FieldHelper.getInstance().getType(FieldOverrideChild.class, "f1"));
+	}
+	
+	@Test
 	public void getConstraintsDefault(){
 		FieldHelper.Field.clear();
 		
@@ -261,6 +267,20 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 		private String nullableString;
 		@NotNull private String notNullableString;
 		private ModelForConstraintsA a;
+		
+	}
+	
+	@Getter @Setter
+	public static class FieldOverrideBase {
+		private String f1;
+	}
+	
+	@org.cyk.utility.common.annotation.FieldOverride(name="f1",type=Integer.class)
+	public static class FieldOverride extends FieldOverrideBase {
+		
+	}
+	
+	public static class FieldOverrideChild extends FieldOverride {
 		
 	}
 }

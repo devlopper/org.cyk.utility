@@ -9,6 +9,7 @@ import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
+import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.collection.DataTable;
 import org.cyk.utility.common.userinterface.container.Container;
@@ -21,10 +22,28 @@ import lombok.experimental.Accessors;
 public abstract class AbstractHierarchyNodesContainer<NODE extends AbstractHierarchyNodesContainer<?>> extends Container implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	protected Long numberOfChildren;
+	protected Boolean isChildrenLoaded;
+	
 	protected abstract Class<NODE> getNodeClass();
 	
 	protected NODE instanciateNode(){
 		return (NODE) ClassHelper.getInstance().instanciateOne(getNodeClass());
+	}
+	
+	public NODE addNode(Object object,Long orderNumber){
+		NODE node = instanciateNode();
+		node.getPropertiesMap().setValue(object);
+		node.setLabelFromIdentifier((String)InstanceHelper.getInstance().getIdentifier(object));
+		node.set__orderNumber__(NumberHelper.getInstance().get(Long.class,orderNumber,0l));
+		node.getPropertiesMap().setTopLevelContainer(getPropertiesMap().getTopLevelContainer());
+		return addNode(node);
+	}
+	
+	public void addNodes(Collection<Object> objects,Long orderNumber){
+		if(CollectionHelper.getInstance().isNotEmpty(objects))
+			for(Object index : objects)
+				addNode(index, orderNumber++);
 	}
 	
 	public NODE addNode(NODE node){

@@ -23,6 +23,7 @@ import org.cyk.utility.common.userinterface.ContentType;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
+import org.cyk.utility.common.userinterface.input.Input;
 
 public class Output extends Control implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -138,6 +139,10 @@ public class Output extends Control implements Serializable {
 		return getListener().get(detail,object);
 	}
 	
+	public static Boolean isOutputable(Class<?> aClass,String fieldName){
+		return getListener().isOutputable(aClass, fieldName);
+	}
+	
 	public static Listener getListener(){
 		return ClassHelper.getInstance().instanciateOne(Listener.class);
 	}
@@ -148,6 +153,7 @@ public class Output extends Control implements Serializable {
 		
 		Collection<String> getFieldNames(Form.Detail form,Object object);
 		Collection<String> getExcludedFieldNames(Form.Detail form,Object object);
+		Boolean isOutputable(Class<?> aClass,String fieldName);
 		Boolean isInputable(Form.Detail form,Object object,java.lang.reflect.Field field);
 		java.util.Collection<Field> getFields(Form.Detail form,Object object);
 		void sortFields(Form.Detail form,Object object,java.util.List<Field> fields);
@@ -171,6 +177,11 @@ public class Output extends Control implements Serializable {
 
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public Boolean isOutputable(Class<?> aClass, String fieldName) {
+					return Input.isinputable(aClass, fieldName);
+				}
 				
 				@Override
 				public Boolean isInputable(Form.Detail form,Object object, Field field) {
@@ -328,6 +339,11 @@ public class Output extends Control implements Serializable {
 				protected Object getReadableValueFile(Object value,String name,String extension,String mime,byte[] bytes){
 					return value;
 				}
+			}
+			
+			@Override
+			public Boolean isOutputable(Class<?> aClass, String fieldName) {
+				return null;
 			}
 			
 			@Override

@@ -50,6 +50,18 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		super.initialisation();
 	}
 	
+	public <T> Collection<T> getHierarchyRoots(Class<T> aClass) {
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getHierarchyRoots(aClass);
+	}
+	
+	public <T> Collection<T> getHierarchyChildren(Object parent) {
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getHierarchyChildren(parent);
+	}
+	
+	public Long getHierarchyNumberOfChildren(Object parent) {
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getHierarchyNumberOfChildren(parent);
+	}
+	
 	public Collection<?> getByParent(Collection<?> collection, Object parent) {
 		return ClassHelper.getInstance().instanciateOne(Listener.class).getByParent(parent,collection);
 	}
@@ -908,6 +920,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		<T> Long count(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
 		<T> Long count(Class<T> aClass,FilterHelper.Filter<T> filter,DataReadConfiguration dataReadConfiguration);
 		
+		<T> Collection<T> getHierarchyRoots(Class<T> aClass);
+		<T> Collection<T> getHierarchyChildren(Object parent);
+		Long getHierarchyNumberOfChildren(Object parent);
+		
 		String METHOD_NAME_GET_BY_IDENTIFIER = "getByIdentifier";
 		<T> T getByIdentifier(Class<T> aClass,Object identifier);
 		@Deprecated
@@ -1039,6 +1055,21 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				return null;
 			}
 			
+			@Override
+			public <T> Collection<T> getHierarchyRoots(Class<T> aClass) {
+				return null;
+			}
+			
+			@Override
+			public <T> Collection<T> getHierarchyChildren(Object parent) {
+				return null;
+			}
+			
+			@Override
+			public Long getHierarchyNumberOfChildren(Object parent) {
+				return null;
+			}
+			
 			/**/
 			
 			public static class Default extends Listener.Adapter implements Serializable {
@@ -1046,6 +1077,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				
 				//@SuppressWarnings("unchecked")
 				//public static Class<? extends Listener> DEFAULT_CLASS = (Class<? extends Listener>) ClassHelper.getInstance().getByName(Default.class);
+				
+				@Override
+				public Long getHierarchyNumberOfChildren(Object parent) {
+					return new Long(CollectionHelper.getInstance().getSize(getHierarchyChildren(parent)));
+				}
 				
 				@Override
 				public Boolean getAreEqual(Object object1, Object object2) {

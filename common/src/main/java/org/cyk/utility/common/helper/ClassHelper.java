@@ -99,6 +99,10 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return instanciateOne(Listener.class).isTyped(aClass);
 	}
 	
+	public Boolean isEnumerated(Class<?> aClass){
+		return instanciateOne(Listener.class).isEnumerated(aClass);
+	}
+	
 	public String getHierarchyFieldName(Class<?> aClass) {
 		return instanciateOne(Listener.class).getHierarchyFieldName(aClass);
 	}
@@ -647,6 +651,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		
 		String getIdentifierFieldName(Class<?> aClass);
 		Boolean isIdentified(Class<?> aClass);
+		Boolean isEnumerated(Class<?> aClass);
 		
 		String getNameFieldName(Class<?> aClass);
 		Boolean isNamed(Class<?> aClass);
@@ -811,6 +816,11 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 			
 			@Override
 			public String getNameFieldName(Class<?> aClass) {
+				return null;
+			}
+		
+			@Override
+			public Boolean isEnumerated(Class<?> aClass) {
 				return null;
 			}
 		}

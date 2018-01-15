@@ -23,7 +23,7 @@ public class InputChoice<T> extends Input<T> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	protected final CollectionHelper.Instance<Object> choices = new CollectionHelper.Instance<Object>();
-	protected Boolean nullChoicable;
+	protected Boolean nullChoicable,isReadChoicesElementsOnSetField=Boolean.TRUE;
 	
 	/**/
 	
@@ -41,7 +41,8 @@ public class InputChoice<T> extends Input<T> implements Serializable {
 	@Override
 	public InputChoice<T> setField(Field field) {
 		super.setField(field);
-		readChoicesElements();
+		if(Boolean.TRUE.equals(getIsReadChoicesElementsOnSetField()))
+			readChoicesElements();
 		return this;
 	}
 	

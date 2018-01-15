@@ -204,6 +204,10 @@ public class Input<T> extends Control implements Serializable {
 			}
 		}.execute();
 	}
+
+	public static Boolean isinputable(Class<?> aClass,String fieldName){
+		return getListener().isInputable(aClass, fieldName);
+	}
 	
 	/**/
 	
@@ -218,6 +222,7 @@ public class Input<T> extends Control implements Serializable {
 		
 		Collection<String> getFieldNames(Form.Detail form,Object object);
 		Collection<String> getExcludedFieldNames(Form.Detail form,Object object);
+		Boolean isInputable(Class<?> aClass,String fieldName);
 		Boolean isInputable(Form.Detail form,Object object,java.lang.reflect.Field field);
 		java.util.Collection<Field> getFields(Form.Detail form,Object object);
 		void sortFields(Form.Detail form,Object object,java.util.List<Field> fields);
@@ -240,6 +245,11 @@ public class Input<T> extends Control implements Serializable {
 
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public Boolean isInputable(Class<?> aClass, String fieldName) {
+					return Boolean.TRUE;
+				}
 				
 				@Override
 				public Boolean isInputable(Form.Detail form,Object object, Field field) {
@@ -373,21 +383,36 @@ public class Input<T> extends Control implements Serializable {
 						input = ClassHelper.getInstance().instanciateOne(aClass);
 					}
 					if(input!=null){
+						Boolean isReadChoicesElementsOnSetField = null;
+						if(input instanceof InputChoice){
+							if(Boolean.TRUE.equals(((InputChoice<?>)input).getIsReadChoicesElementsOnSetField())){
+								((InputChoice<?>)input).setIsReadChoicesElementsOnSetField(isReadChoicesElementsOnSetField = Boolean.FALSE);
+							}
+						}
+						
+						input.setFormDetail(detail);
+						input.setObject(object).setField(field);
+						input.getPropertiesMap().setLabel(input.getLabel().getPropertiesMap().getValue());
 						input.getPropertiesMap().setRequired(field.getAnnotation(NotNull.class)!=null);
 						input.getPropertiesMap().setRequiredMessage(StringHelper.getInstance().get("validation.userinterface.input.value.required"
 								, new Object[]{input.getLabel().getPropertiesMap().getValue()}));
+						
 						if(input instanceof InputCalendar){
 							((InputCalendar)input).getPropertiesMap().setPattern(Constant.Date.getPattern(LocaleHelper.getInstance().get()
 									, constraints == null || constraints.getDatePart() == null ? Constant.Date.Part.DATE_ONLY : constraints.getDatePart()
 											, Constant.Date.Length.SHORT).getValue());
 						}
 						if(input instanceof InputChoice){
-							Object value = FieldHelper.getInstance().read(object, field);
-							((InputChoice<?>)input).setNullChoicable(value == null || !Boolean.TRUE.equals(input.getPropertiesMap().getRequired()));
+							((InputChoice<?>)input).setNullChoicable(input.getInitialValue() == null || !Boolean.TRUE.equals(input.getPropertiesMap().getRequired()));
+							if(isReadChoicesElementsOnSetField == null || Boolean.FALSE.equals(isReadChoicesElementsOnSetField)){
+								((InputChoice<?>)input).readChoicesElements();
+								if(Boolean.FALSE.equals(isReadChoicesElementsOnSetField))
+									((InputChoice<?>)input).setIsReadChoicesElementsOnSetField(isReadChoicesElementsOnSetField = Boolean.TRUE);
+							}
 						}
-						input.setFormDetail(detail);
-						input.setObject(object).setField(field);
-						input.getPropertiesMap().setLabel(input.getLabel().getPropertiesMap().getValue());
+						
+						
+						
 						
 						listenGet(input);
 						
@@ -483,6 +508,11 @@ public class Input<T> extends Control implements Serializable {
 					}
 				}
 				
+			}
+			
+			@Override
+			public Boolean isInputable(Class<?> aClass, String fieldName) {
+				return null;
 			}
 			
 			@Override

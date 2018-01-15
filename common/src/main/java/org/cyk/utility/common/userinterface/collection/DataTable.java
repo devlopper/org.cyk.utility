@@ -212,11 +212,13 @@ public class DataTable extends Component.Visible implements Serializable {
 		ClassHelper.getInstance().instanciateOne(Listener.class).processColumnsFieldNames(this, collection);
 		final List<String> order = ClassHelper.getInstance().instanciateOne(Listener.class).getColumnsFieldNamesOrder(this);
 		if(CollectionHelper.getInstance().isNotEmpty(order)){
+			System.out.println("DataTable.getColumnsFieldNames() : "+collection);
 			Collections.sort((List<String>) collection, new Comparator<String>() {
 				@Override
 				public int compare(String o1, String o2) {
 					Integer i1 = order.indexOf(o1);
 					Integer i2 = order.indexOf(o2);
+					System.out.println("DataTable.getColumnsFieldNames().new Comparator() {...}.compare() "+o1+":"+o2);
 					return i1 == -1 || i2 == -1 ? 0 : i1.compareTo(i2);
 				}
 			});
@@ -1043,14 +1045,21 @@ public class DataTable extends Component.Visible implements Serializable {
 				public void processColumnsFieldNames(DataTable dataTable, Collection<String> fieldNames) {
 					super.processColumnsFieldNames(dataTable, fieldNames);
 					Class<?> actionOnClass = (Class<?>) dataTable.getPropertiesMap().getActionOnClass();
+					
 					if(ClassHelper.getInstance().isIdentified(actionOnClass))
-						fieldNames.add(ClassHelper.getInstance().getIdentifierFieldName(actionOnClass));
+						__addFieldName__(fieldNames,actionOnClass,ClassHelper.getInstance().getIdentifierFieldName(actionOnClass));
 					if(ClassHelper.getInstance().isNamed(actionOnClass))
-						fieldNames.add(ClassHelper.getInstance().getNameFieldName(actionOnClass));
+						__addFieldName__(fieldNames,actionOnClass,ClassHelper.getInstance().getNameFieldName(actionOnClass));
+					
 					if(ClassHelper.getInstance().isHierarchy(actionOnClass))
-						fieldNames.add(ClassHelper.getInstance().getHierarchyFieldName(actionOnClass));
+						__addFieldName__(fieldNames,actionOnClass,ClassHelper.getInstance().getHierarchyFieldName(actionOnClass));
 					if(ClassHelper.getInstance().isTyped(actionOnClass))
-						fieldNames.add(ClassHelper.getInstance().getTypeFieldName(actionOnClass));
+						__addFieldName__(fieldNames,actionOnClass,ClassHelper.getInstance().getTypeFieldName(actionOnClass));
+				}
+				
+				protected void __addFieldName__(Collection<String> fieldNames,Class<?> actionOnClass,String fieldName){
+					if(Output.isOutputable(actionOnClass, fieldName))
+						fieldNames.add(fieldName);
 				}
 			}
 			

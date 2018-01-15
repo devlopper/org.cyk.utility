@@ -125,12 +125,22 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 	@Override
 	public Component load() {
 		if(getPropertiesMap().getActionOnClass()!=null)
-			loadNodes(InstanceHelper.getInstance().get((Class<?>)getPropertiesMap().getActionOnClass()));
+			loadNodes(InstanceHelper.getInstance().getHierarchyRoots((Class<?>)getPropertiesMap().getActionOnClass()));
 		return this;
 	}
 	
 	public Hierarchy loadNodes(Collection<?> collection){
-		loadNodes(null,null, collection);
+		//loadNodes(null,null, collection);
+		if(CollectionHelper.getInstance().isNotEmpty(collection))
+			for(Object root : collection){
+				HierarchyNode node = instanciateNode();
+				node.getPropertiesMap().setValue(root);
+				node.setLabelFromIdentifier((String)InstanceHelper.getInstance().getIdentifier(root));
+				node.set__orderNumber__(NumberHelper.getInstance().get(Long.class,1,0l));
+				node.getPropertiesMap().setTopLevelContainer(this);
+				node.setNumberOfChildren(InstanceHelper.getInstance().getHierarchyNumberOfChildren(root));
+				addNode(node);
+			}
 		return this;
 	}
 	
@@ -141,7 +151,7 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 	}
 	
 	protected Hierarchy loadNodes(HierarchyNode currentNode,Object parent,Collection<?> collection){
-		Collection<?> children = InstanceHelper.getInstance().getByParent(collection, parent);
+		Collection<?> children = InstanceHelper.getInstance().getByParent(collection, parent);// HierarchyChildren(parent);
 		Integer index = 0;
 		if(CollectionHelper.getInstance().isNotEmpty(children))
 			for(Object child : children){
@@ -251,9 +261,13 @@ public class Hierarchy extends HierarchyNodesContainer implements Serializable {
 						setOutputClass((Class<OUTPUT>) ClassHelper.getInstance().getParameterAt(getClass(), 0, Object.class));
 					}
 					
+					protected OUTPUT instanciateOutput(){
+						return ClassHelper.getInstance().instanciateOne(getOutputClass());
+					}
+					
 					@Override
 					protected OUTPUT __execute__() {
-						final OUTPUT instance = ClassHelper.getInstance().instanciateOne(getOutputClass());
+						final OUTPUT instance = instanciateOutput();
 						initializeRoot(instance);
 						Hierarchy hierarchy = getInput();
 						if(CollectionHelper.getInstance().isNotEmpty(hierarchy.getChildren()))

@@ -11,7 +11,6 @@ import lombok.Setter;
 
 @Singleton
 public class ConditionHelper extends AbstractHelper implements Serializable  {
-
 	private static final long serialVersionUID = 1L;
 
 	private static ConditionHelper INSTANCE;
@@ -34,8 +33,20 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 	public static class Condition implements Serializable {
 		private static final long serialVersionUID = 1L;
 
+		static {
+			ClassHelper.getInstance().map(Builder.class, Builder.Adapter.Default.class,Boolean.FALSE);
+		}
+		
 		private Boolean value;
 		private String message;
+		
+		/**/
+		
+		public static Condition.Builder getBuilder(){
+			return ClassHelper.getInstance().instanciateOne(Builder.class);
+		}
+		
+		/**/
 		
 		public static interface Builder extends org.cyk.utility.common.Builder.NullableInput<Condition> {
 			
