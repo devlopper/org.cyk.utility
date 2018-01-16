@@ -259,6 +259,9 @@ public class Output extends Control implements Serializable {
 					}
 					if(output!=null){
 						output.setObject(object).setField(field);
+						if(output instanceof OutputText){
+							
+						}
 						listenGet(output);
 					}
 					return output;
@@ -303,7 +306,8 @@ public class Output extends Control implements Serializable {
 									if(output.getPropertiesMap().getTitle() == null)
 										output.getPropertiesMap().setTitle(value);
 								}
-								value = StringHelper.getInstance().getHtml((String) value);
+								if(!StringHelper.getInstance().isContainMarkupLanguageTag((String)value))
+									value = StringHelper.getInstance().getHtml((String) value);
 							}
 					}
 					output.getPropertiesMap().setValue(value);
@@ -321,6 +325,9 @@ public class Output extends Control implements Serializable {
 									, constraints == null || constraints.getDatePart() == null ? Constant.Date.Part.DATE_ONLY : constraints.getDatePart()).execute();
 						else if(ClassHelper.getInstance().isBoolean(value.getClass()))
 							value = StringHelper.getInstance().getResponse((Boolean) value);
+						else if(ClassHelper.getInstance().isString(value.getClass())){
+							//value = StringHelper.getInstance().getHtml((String) value);
+						}
 					}
 					
 					return value;

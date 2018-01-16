@@ -166,6 +166,8 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	}
 	
 	public void set(Object object,String...fieldNames){
+		LoggingHelper.Message.Builder loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default();
+		loggingMessageBuilder.addManyParameters("set instance field value by instanciating where null");
 		for(String p : getFieldNames(fieldNames)){
 			Object pValue = read(object, p);
 			if(pValue==null){
@@ -175,10 +177,11 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 				} catch (Exception e) {
 					new RuntimeException(e);
 				}
-				logTrace("Field {} of object {} instanciated",field,object);
+				loggingMessageBuilder.addManyParameters(p);
 			}
 			object = pValue;
 		}
+		logTrace(loggingMessageBuilder);
 	}
 	
 	/**
@@ -195,6 +198,8 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			PropertyUtils.setProperty(instance, path, value);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		} finally {
+			logTrace("set instance field value. class = {} , field = {} , value = {}", instance.getClass(),path,value);
 		}
 	}
 	

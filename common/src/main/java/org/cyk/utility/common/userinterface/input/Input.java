@@ -409,10 +409,8 @@ public class Input<T> extends Control implements Serializable {
 								if(Boolean.FALSE.equals(isReadChoicesElementsOnSetField))
 									((InputChoice<?>)input).setIsReadChoicesElementsOnSetField(isReadChoicesElementsOnSetField = Boolean.TRUE);
 							}
+							
 						}
-						
-						
-						
 						
 						listenGet(input);
 						
@@ -451,8 +449,11 @@ public class Input<T> extends Control implements Serializable {
 				
 				@Override
 				public void write(Input<?> input){
-					if(input.object!=null && input.field!=null)
-						FieldHelper.getInstance().set(input.object,getWritableValue(input), input.field);
+					if(input.object!=null && input.field!=null){
+						Object value = getWritableValue(input);
+						logTrace("write. class = {} , field = {} , value = {}", input.object.getClass(),input.field,value);
+						FieldHelper.getInstance().set(input.object,value, input.field);
+					}
 				}
 				
 				@Override

@@ -307,15 +307,16 @@ public class Form extends Container implements Serializable {
 			Field field = FieldHelper.getInstance().get(detail.getMaster().getObject().getClass(), fieldName);
 			if(field!=null){
 				Object value = RequestHelper.getInstance().getParameterAsInstance(aClass);
-				FieldHelper.getInstance().set(detail.getMaster().getObject(), value, field);
 				@SuppressWarnings("unchecked")
 				Set<String> set = (Set<String>) getPropertiesMap().getFieldNamesSetFromRequestParameters();
 				if(set == null){
 					set = new LinkedHashSet<>();
 					getPropertiesMap().setFieldNamesSetFromRequestParameters(set);
 				}
-				if(value!=null)
+				if(value!=null){
+					FieldHelper.getInstance().set(detail.getMaster().getObject(), value, field);
 					set.add(fieldName);
+				}
 			}
 			return this;
 		}

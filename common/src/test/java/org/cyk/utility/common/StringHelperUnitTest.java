@@ -39,6 +39,25 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void isContainMarkupLanguageTag(){
+		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag(null));
+		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag(""));
+		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag(" "));
+		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag("."));
+		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag("hello"));
+		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag("<h1>"));
+		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag("</h1>"));
+		
+		assertTrue(StringHelper.getInstance().isContainMarkupLanguageTag("< h1 >hello</h1>"));
+		assertTrue(StringHelper.getInstance().isContainMarkupLanguageTag("<h1>hello< / h1 >"));
+		assertTrue(StringHelper.getInstance().isContainMarkupLanguageTag("<  h1    >hello</  h1   >"));
+		assertTrue(StringHelper.getInstance().isContainMarkupLanguageTag("<  h1   >   hello   </  h1 >"));
+		assertTrue(StringHelper.getInstance().isContainMarkupLanguageTag("<h1>hello</h1>"));
+		
+		assertTrue(StringHelper.getInstance().isContainMarkupLanguageTag("<h1 attribute1=value1>hello</h1>"));
+	}
+	
+	@Test
 	public void convertToHtml(){
 		assertEquals("l1", StringHelper.getInstance().getHtml("l1"));
 		assertEquals("l1<br/>", StringHelper.getInstance().getHtml("l1\n"));
@@ -268,16 +287,23 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void assertFieldIdentifier(){
-		assertEquals("__field__.value", StringHelper.getInstance().getFieldIdentifier("value"));
-		assertEquals("__field__.balance.value", StringHelper.getInstance().getFieldIdentifier("balanceValue"));
-	}
-	
-	@Test
 	public void getClazz(){
 		//assertEquals("Ma classe", StringHelper.getInstance().getClazz("myclass"));
 		assertEquals("Adresse électronique de courriel", StringHelper.getInstance().getClazz(ElectronicMailAddress.class));
 		assertEquals("Localité", StringHelper.getInstance().getClazz(Locality.class));
+	}
+	
+	@Test
+	public void getI18nIdentifier(){
+		assertEquals("balance.value", StringHelper.getInstance().getI18nIdentifier("balanceValue"));
+		assertEquals("__.parent.__", StringHelper.getInstance().getI18nIdentifier("__parent__"));
+	}
+	
+	@Test
+	public void assertFieldIdentifier(){
+		assertEquals("__field__.value", StringHelper.getInstance().getFieldIdentifier("value"));
+		assertEquals("__field__.balance.value", StringHelper.getInstance().getFieldIdentifier("balanceValue"));
+		assertEquals("__field__.__.parent.__", StringHelper.getInstance().getFieldIdentifier("__parent__"));
 	}
 	
 	@Test
@@ -288,6 +314,7 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		assertEquals("Localité", StringHelper.getInstance().getField("locality"));
 		assertEquals("Localité", StringHelper.getInstance().getField("locality"));
 		assertEquals("Adresse électronique de courriel", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "electronicMailAddress")));
+		assertEquals("Parent", StringHelper.getInstance().getField("__parent__"));
 	}
 	
 	@Test

@@ -160,7 +160,7 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 					}
 					
 					if(Boolean.TRUE.equals(getIsAppendExaequo()))
-						stringBuilder.append(StringUtils.defaultIfBlank(Constant.CHARACTER_SPACE+StringHelper.getInstance().getText(getLocale(),"exaequo",null),Constant.EMPTY_STRING));
+						stringBuilder.append(StringUtils.defaultIfBlank(Constant.CHARACTER_SPACE+StringHelper.getInstance().get("exaequo",StringHelper.CaseType.NONE,null,getLocale()),Constant.EMPTY_STRING));
 					
 					
 					if(getWidth()!=null){

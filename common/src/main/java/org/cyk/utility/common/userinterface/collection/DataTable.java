@@ -212,13 +212,13 @@ public class DataTable extends Component.Visible implements Serializable {
 		ClassHelper.getInstance().instanciateOne(Listener.class).processColumnsFieldNames(this, collection);
 		final List<String> order = ClassHelper.getInstance().instanciateOne(Listener.class).getColumnsFieldNamesOrder(this);
 		if(CollectionHelper.getInstance().isNotEmpty(order)){
-			System.out.println("DataTable.getColumnsFieldNames() : "+collection);
+			//System.out.println("DataTable.getColumnsFieldNames() : "+collection);
 			Collections.sort((List<String>) collection, new Comparator<String>() {
 				@Override
 				public int compare(String o1, String o2) {
 					Integer i1 = order.indexOf(o1);
 					Integer i2 = order.indexOf(o2);
-					System.out.println("DataTable.getColumnsFieldNames().new Comparator() {...}.compare() "+o1+":"+o2);
+					//System.out.println("DataTable.getColumnsFieldNames().new Comparator() {...}.compare() "+o1+":"+o2);
 					return i1 == -1 || i2 == -1 ? 0 : i1.compareTo(i2);
 				}
 			});

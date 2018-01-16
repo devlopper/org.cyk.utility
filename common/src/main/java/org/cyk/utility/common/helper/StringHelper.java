@@ -21,6 +21,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.cyk.utility.common.Action;
@@ -55,7 +56,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	public enum Location{START,INSIDE,END,EXAT}
 	
 	private static final String VARIABLE_NAME_MANY_FORMAT = "%ss";
-	private static final String RESOURCE_BUNDLE_NAME = "org.cyk.utility.common.i18n";
+	//@Deprecated private static final String RESOURCE_BUNDLE_NAME = "org.cyk.utility.common.i18n";
 	private static final String KEY_ORDINAL_NUMBER_FORMAT = "ordinal.number.%s";
 	private static final String KEY_ORDINAL_NUMBER_SUFFIX_FORMAT = KEY_ORDINAL_NUMBER_FORMAT+".suffix";
 	
@@ -78,6 +79,36 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		string = StringUtils.replaceAll(string, ContentType.TEXT.getNewLineMarker(), ContentType.HTML.getNewLineMarker());
 		string = StringUtils.replaceAll(string, "\n", ContentType.HTML.getNewLineMarker());
 		return string;
+	}
+	
+	public Boolean isContainMarkupLanguageTag(String string){
+		Boolean contains = Boolean.FALSE;
+		
+		/*Pattern pattern = Pattern.compile("'(.*?)'");
+		Matcher matcher = pattern.matcher(mydata);
+		if (matcher.find())
+		{
+		    System.out.println(matcher.group(1));
+		}*/
+		
+		Integer endStartIndex = StringUtils.indexOf(string, "</");
+		if(endStartIndex>-1){
+			Integer endEndIndex = StringUtils.indexOf(string, ">",endStartIndex+2);
+			if(endEndIndex>-1){
+				/*String tagName = StringUtils.substring(string, endStartIndex+2, endEndIndex);
+				if(StringUtils.isNotBlank(tagName)){
+					string = StringUtils.substring(string, 0, endStartIndex);
+					Integer tagStartIndex = StringUtils.lastIndexOf(string, "<"+tagName);
+					if(string.length() > ("<"+tagName).length()){
+						String end = StringUtils.substringAfterLast(string, "<"+tagName);
+						contains = tagStartIndex > -1 && StringUtils.startsWithAny(end, ">"," ");	
+					}
+					
+				}*/
+				contains = Boolean.TRUE;
+			}
+		}
+		return contains;
 	}
 	
 	public Boolean isVoyel(Character character){
@@ -130,18 +161,22 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return line;
 	}
 	
-	@Deprecated
+	/*@Deprecated
 	public String getText(Locale locale,String identifier,Object[] parameters){
 		if(locale==null)
 			locale = Locale.FRENCH;
 		ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME,locale);
 		String value = parameters==null?resourceBundle.getString(identifier):MessageFormat.format(resourceBundle.getString(identifier),parameters);
 		return value;
-    }
+    }*/
 	
 	public String get(String identifier,CaseType caseType,Object[] parameters,Locale locale){
 		return new StringHelper.ToStringMapping.Adapter.Default(identifier).setCaseType(caseType).setLocale(locale).addParameters(parameters).execute();
     }
+	
+	public String get(String identifier,Object[] parameters,Locale locale){
+		return get(identifier,CaseType.FURL,parameters,locale);
+	}
 	
 	public String get(String identifier,CaseType caseType,Object[] parameters){
 		return get(identifier,caseType,parameters,null);
@@ -152,11 +187,11 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	}
 	
 	public java.lang.String getOrdinalNumberSuffix(Locale locale,Number number) {
-		return getText(locale, String.format(KEY_ORDINAL_NUMBER_SUFFIX_FORMAT, number), null);
+		return get(String.format(KEY_ORDINAL_NUMBER_SUFFIX_FORMAT, number),CaseType.NONE,null,locale);
 	}
 	
 	public java.lang.String getOrdinalNumber(Locale locale,Number number) {
-		return getText(locale, String.format(KEY_ORDINAL_NUMBER_FORMAT, number), null);
+		return get(String.format(KEY_ORDINAL_NUMBER_FORMAT, number),CaseType.NONE,null,locale);
 	}
 	
 	public String concatenate(Object[] strings,Object separator){
@@ -1173,10 +1208,9 @@ public class StringHelper extends AbstractHelper implements Serializable {
 						StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.Cache.Adapter.Default());
 						StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.ResourceBundle.Adapter.Default());
 						*/
-				        StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.i18n", CommonUtils.class.getClassLoader());
-						StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.class", CommonUtils.class.getClassLoader());
-						StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.field", CommonUtils.class.getClassLoader());
-						StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.condition", CommonUtils.class.getClassLoader());
+						for(String index : new String[]{"core","word","phrase","ordinal","class","field","condition"})
+							StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.i18n."+index
+									, CommonUtils.class.getClassLoader());
 				        
 					}
 				}
