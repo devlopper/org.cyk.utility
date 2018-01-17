@@ -34,8 +34,8 @@ public class LoginWindow extends Window implements Serializable {
 	
 	@Override
 	protected void __setForm__() {
-		action = Constant.Action.LOGIN;
-		actionOnClass = SecurityHelper.Credentials.class;
+		getPropertiesMap().setAction(Constant.Action.LOGIN);
+		getPropertiesMap().setActionOnClass(SecurityHelper.Credentials.class);
 		super.__setForm__();
 	}
 	

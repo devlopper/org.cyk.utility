@@ -30,13 +30,13 @@ public class ListWindow extends Window implements Serializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Class<? extends org.cyk.utility.common.userinterface.collection.DataTable> getDataTableClass(){
-		return (Class<org.cyk.utility.common.userinterface.collection.DataTable>) ListWindow.DataTable.ClassLocator.getInstance().locate(actionOnClass);
+		return (Class<org.cyk.utility.common.userinterface.collection.DataTable>) ListWindow.DataTable.ClassLocator.getInstance().locate((Class<?>)getPropertiesMap().getActionOnClass());
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Class<? extends org.cyk.utility.common.userinterface.hierarchy.Hierarchy> getHierarchyClass(){
-		return (Class<org.cyk.utility.common.userinterface.hierarchy.Hierarchy>) ListWindow.Hierarchy.ClassLocator.getInstance().locate(actionOnClass);
+		return (Class<org.cyk.utility.common.userinterface.hierarchy.Hierarchy>) ListWindow.Hierarchy.ClassLocator.getInstance().locate((Class<?>)getPropertiesMap().getActionOnClass());
 	}
 	
 	/**/

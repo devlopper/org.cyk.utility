@@ -3021,6 +3021,26 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getExpanded() {
+		return get(EXPANDED);
+	}
+
+	public Properties setExpanded(Object value) {
+		set(EXPANDED, value);
+		return this;
+	}
+	
+	public Object getCollapsed() {
+		return get(COLLAPSED);
+	}
+
+	public Properties setCollapsed(Object value) {
+		set(COLLAPSED, value);
+		return this;
+	}
+	
+	public static final String COLLAPSED = "COLLAPSED";
+	public static final String EXPANDED = "EXPANDED";
 	public static final String HEADER_RENDERED = "HEADER_RENDERED";
 	public static final String CONTENT_TITLE = "CONTENT_TITLE";
 	public static final String TOP_LEVEL_CONTAINER = "TOP_LEVEL_CONTAINER";

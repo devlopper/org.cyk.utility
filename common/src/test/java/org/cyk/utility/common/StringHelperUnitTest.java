@@ -39,6 +39,49 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void getVerb(){
+		assertEquals("Consulter", StringHelper.getInstance().getVerb(Constant.Action.CONSULT));
+		assertEquals("Créer", StringHelper.getInstance().getVerb(Constant.Action.CREATE));
+		assertEquals("Supprimer", StringHelper.getInstance().getVerb(Constant.Action.DELETE));
+		assertEquals("Lister", StringHelper.getInstance().getVerb(Constant.Action.LIST));
+		assertEquals("Se connecter", StringHelper.getInstance().getVerb(Constant.Action.LOGIN));
+		assertEquals("Se déconnecter", StringHelper.getInstance().getVerb(Constant.Action.LOGOUT));
+		assertEquals("Imprimer", StringHelper.getInstance().getVerb(Constant.Action.PRINT));
+		assertEquals("Lire", StringHelper.getInstance().getVerb(Constant.Action.READ));
+		assertEquals("Chercher", StringHelper.getInstance().getVerb(Constant.Action.SEARCH));
+		assertEquals("Sélectionner", StringHelper.getInstance().getVerb(Constant.Action.SELECT));
+		assertEquals("Mettre à jour", StringHelper.getInstance().getVerb(Constant.Action.UPDATE));
+	}
+	
+	@Test
+	public void getAction(){
+		assertEquals("Consultation", StringHelper.getInstance().getName(Constant.Action.CONSULT));
+		assertEquals("Création", StringHelper.getInstance().getName(Constant.Action.CREATE));
+		assertEquals("Suppression", StringHelper.getInstance().getName(Constant.Action.DELETE));
+		assertEquals("Liste", StringHelper.getInstance().getName(Constant.Action.LIST));
+		assertEquals("Connection", StringHelper.getInstance().getName(Constant.Action.LOGIN));
+		assertEquals("Déconnection", StringHelper.getInstance().getName(Constant.Action.LOGOUT));
+		assertEquals("Impression", StringHelper.getInstance().getName(Constant.Action.PRINT));
+		assertEquals("Lecture", StringHelper.getInstance().getName(Constant.Action.READ));
+		assertEquals("Chercher", StringHelper.getInstance().getName(Constant.Action.SEARCH));
+		assertEquals("Sélection", StringHelper.getInstance().getName(Constant.Action.SELECT));
+		assertEquals("Mise à jour", StringHelper.getInstance().getName(Constant.Action.UPDATE));
+	}
+	
+	@Test
+	public void getPhrase(){
+		assertEquals("Créer un male", StringHelper.getInstance().getPhrase(Constant.Action.CREATE, GenderMale.class));
+		assertEquals("Créer une femelle", StringHelper.getInstance().getPhrase(Constant.Action.CREATE, GenderFemale.class));
+		assertEquals("Création de male", StringHelper.getInstance().getPhrase(Constant.Action.CREATE,Boolean.FALSE, GenderMale.class));
+		assertEquals("Création de femelle", StringHelper.getInstance().getPhrase(Constant.Action.CREATE,Boolean.FALSE, GenderFemale.class));
+		
+		assertEquals("Créer un ale", StringHelper.getInstance().getPhrase(Constant.Action.CREATE, GenderVoyelMale.class));
+		assertEquals("Créer une emelle", StringHelper.getInstance().getPhrase(Constant.Action.CREATE, GenderVoyelFemale.class));
+		assertEquals("Création d'ale", StringHelper.getInstance().getPhrase(Constant.Action.CREATE,Boolean.FALSE, GenderVoyelMale.class));
+		assertEquals("Création d'emelle", StringHelper.getInstance().getPhrase(Constant.Action.CREATE,Boolean.FALSE, GenderVoyelFemale.class));
+	}
+	
+	@Test
 	public void isContainMarkupLanguageTag(){
 		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag(null));
 		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag(""));
@@ -46,10 +89,10 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag("."));
 		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag("hello"));
 		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag("<h1>"));
-		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag("</h1>"));
+		assertFalse(StringHelper.getInstance().isContainMarkupLanguageTag("<h1>hello< / h1 >"));
 		
+		assertTrue(StringHelper.getInstance().isContainMarkupLanguageTag("</h1>"));
 		assertTrue(StringHelper.getInstance().isContainMarkupLanguageTag("< h1 >hello</h1>"));
-		assertTrue(StringHelper.getInstance().isContainMarkupLanguageTag("<h1>hello< / h1 >"));
 		assertTrue(StringHelper.getInstance().isContainMarkupLanguageTag("<  h1    >hello</  h1   >"));
 		assertTrue(StringHelper.getInstance().isContainMarkupLanguageTag("<  h1   >   hello   </  h1 >"));
 		assertTrue(StringHelper.getInstance().isContainMarkupLanguageTag("<h1>hello</h1>"));
@@ -443,6 +486,22 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 				return "F1 = "+f1;
 			}
 		}
+		
+	}
+
+	public static class GenderMale {
+		
+	}
+	
+	public static class GenderFemale {
+		
+	}
+	
+	public static class GenderVoyelMale {
+		
+	}
+	
+	public static class GenderVoyelFemale {
 		
 	}
 }

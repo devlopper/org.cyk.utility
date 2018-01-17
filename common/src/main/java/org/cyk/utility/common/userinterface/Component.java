@@ -397,6 +397,15 @@ public class Component extends AbstractBean implements Serializable {
 				getPropertiesMap().setTitle(getLabel().getPropertiesMap().getValue());
 			return this;
 		}
+		
+		public Visible __setLabelValueBasedOnActionProperty__(){
+			if(getPropertiesMap().getAction() instanceof Constant.Action){
+				_setLabelPropertyValue(StringHelper.getInstance().getVerb((Constant.Action)getPropertiesMap().getAction()));
+				//_setLabelPropertyValue(StringHelper.getInstance().getPhrase((Constant.Action)getPropertiesMap().getAction()
+				//		, (Class<?>)getPropertiesMap().getActionOnClass()));
+			}
+			return this;
+		}
 				
 		public Visible setLength(Number length){
 			getArea().getLength().setDistance(length);
@@ -723,7 +732,7 @@ public class Component extends AbstractBean implements Serializable {
 	}
 	
 	public static <T extends Component> T get(Window window,Class<T> componentClass,Class<? extends Component> nullClassValue){
-		return get(window,componentClass, window.getAction(), window.getActionOnClass(), window.getActionKey(),window.getActionOnClassInstances(),nullClassValue);
+		return get(window,componentClass, (Constant.Action)window.getPropertiesMap().getAction(), (Class<?>)window.getPropertiesMap().getActionOnClass(), window.getActionKey(),window.getActionOnClassInstances(),nullClassValue);
 	}
 	
 	public static <T extends Component> T get(Window window,Class<T> componentClass){

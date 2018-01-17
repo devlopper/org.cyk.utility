@@ -21,7 +21,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.cyk.utility.common.Action;
@@ -388,6 +387,69 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return getClazz(aClass,CaseType.FU);
 	}
 	
+	public String getClassArticle(String identifier,Boolean any,Boolean plural){
+		String classIdentifier = getClassIdentifier(identifier);
+		Boolean isMasculine = isMasculine(classIdentifier);
+		if(isMasculine == null){
+			isMasculine = isMasculine(identifier);
+		}
+		return getWordArticle(isMasculine, any, plural);
+	}
+	
+	public String getClassArticle(Class<?> aClass,Boolean any,Boolean plural){
+		return getClassArticle(getI18nIdentifier(aClass.getSimpleName()), any, plural);
+	}
+	
+	public String getVerbIdentifier(String identifier){
+		identifier = String.format(ToStringMapping.VERB_FORMAT,getI18nIdentifier(identifier));
+		return identifier;
+	}
+	
+	public String getVerb(String identifier,CaseType caseType){
+		String verbIdentifier = getVerbIdentifier(identifier);
+		String result = new ToStringMapping.Adapter.Default(verbIdentifier).setCaseType(caseType).execute();
+		String temp = result;
+		if(ToStringMapping.Adapter.Default.isUnknown(result)){
+			result = new ToStringMapping.Adapter.Default(getI18nIdentifier(identifier)).setCaseType(caseType).execute();
+			if(ToStringMapping.Adapter.Default.isUnknown(result)){
+				result = temp;
+			}
+		}
+		if(!Boolean.TRUE.equals(ToStringMapping.Adapter.Default.isUnknown(result))){
+			Cache.Adapter.Default.add(verbIdentifier, null, caseType, null, result);
+		}
+		return result;
+	}
+	
+	public String getVerb(Constant.Action action){
+		return getVerb(action.name(),CaseType.FU);
+	}
+	
+	public String getNameIdentifier(String identifier){
+		identifier = String.format(ToStringMapping.NAME_FORMAT,getI18nIdentifier(identifier));
+		return identifier;
+	}
+	
+	public String getName(Constant.Action action){
+		return getName(action.name(),CaseType.FU);
+	}
+	
+	public String getName(String identifier,CaseType caseType){
+		String nameIdentifier = getNameIdentifier(identifier);
+		String result = new ToStringMapping.Adapter.Default(nameIdentifier).setCaseType(caseType).execute();
+		String temp = result;
+		if(ToStringMapping.Adapter.Default.isUnknown(result)){
+			result = new ToStringMapping.Adapter.Default(getI18nIdentifier(identifier)).setCaseType(caseType).execute();
+			if(ToStringMapping.Adapter.Default.isUnknown(result)){
+				result = temp;
+			}
+		}
+		if(!Boolean.TRUE.equals(ToStringMapping.Adapter.Default.isUnknown(result))){
+			Cache.Adapter.Default.add(nameIdentifier, null, caseType, null, result);
+		}
+		return result;
+	}
+	
 	public String getResponse(Boolean response,CaseType caseType,Locale locale){
 		return StringHelper.getInstance().get(response == null ? "response.undefined" : response ? "response.yes" : "response.no", caseType, null, locale);
 	}
@@ -413,8 +475,34 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return new ToStringMapping.Adapter.Default(identifier).execute();
 	}
 	
-	public String getAction(Constant.Action action,Class<?> aClass){
-		return action+" "+getClazz(aClass);
+	public String getPhrase(Constant.Action action,Boolean verb,Class<?> aClass){
+		Collection<String> strings = new ArrayList<>();
+		strings.add(Boolean.TRUE.equals(verb) ? getVerb(action) : getName(action));
+		String clazz = getClazz(aClass);
+		String article;
+		if(Boolean.TRUE.equals(verb)){
+			article = getClassArticle(aClass, Boolean.TRUE, Boolean.FALSE);
+		}else {
+			String ofIdentifier = null;
+			if(Locale.FRENCH.equals(LocaleHelper.getInstance().get())){
+				if(isVoyel(clazz.charAt(0)))
+					ofIdentifier = "of.voyel";
+			}
+			if(ofIdentifier == null)
+				ofIdentifier = "of";
+			article = get(ofIdentifier, new Object[]{});
+		}
+		if(Locale.FRENCH.equals(LocaleHelper.getInstance().get()) && !Boolean.TRUE.equals(verb) && isVoyel(clazz.charAt(0))){
+			strings.add(article+clazz);
+		}else{
+			strings.add(article);
+			strings.add(clazz);	
+		}
+		return applyCaseType(concatenate(strings,Constant.CHARACTER_SPACE), CaseType.FURL);
+	}
+	
+	public String getPhrase(Constant.Action action,Class<?> aClass){
+		return getPhrase(action, Boolean.TRUE, aClass);
 	}
 	
 	public Boolean isIdentified(String string){
@@ -440,7 +528,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	
 	public Boolean isMasculine(String identifier){
 		String value = new StringHelper.ToStringMapping.Adapter.Default(String.format(ToStringMapping.GENDER_FORMAT,identifier)).execute();
-		return new BooleanHelper.Builder.String.Adapter.Default(value).execute();
+		return isIdentified(value) ? new BooleanHelper.Builder.String.Adapter.Default(value).execute() : null;
 	}
 	
 	public String normalizeToVariableName(String string){
@@ -838,6 +926,8 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		String PLURAL_FORMAT = "%s.__plural__";
 		String GENDER_FORMAT = "%s.__gender__";
 		String MASCULINE_FORMAT = "%s.__%sine__";
+		String VERB_FORMAT = "%s.__verb__";
+		String NAME_FORMAT = "%s.__name__";
 		String WORD_IDENTIFIER_FORMAT = "word.%s.__%sine__";
 		String FIELD_IDENTIFIER_FORMAT = "__field__.%s";
 		String CLASS_IDENTIFIER_FORMAT = "__class__.%s";

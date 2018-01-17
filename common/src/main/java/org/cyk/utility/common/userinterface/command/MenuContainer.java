@@ -8,7 +8,6 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
-import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.container.Container;
 
@@ -31,6 +30,9 @@ public class MenuContainer extends Container implements Serializable {
 	public MenuNode addNode(String labelStringIdentifier,Constant.Action action,Object object,Object...queryKeyValue){
 		MenuNode menuNode = new MenuNode();
 		menuNode.setLabelFromIdentifier(labelStringIdentifier);
+		menuNode.getPropertiesMap().setAction(action);
+		if(object instanceof Class<?>)
+			menuNode.getPropertiesMap().setClass(object);
 		menuNode._setPropertyUrl(action,object, queryKeyValue);
 		addOneChild(menuNode);
 		return menuNode;
@@ -50,7 +52,11 @@ public class MenuContainer extends Container implements Serializable {
 	
 	public MenuNode addNode(Constant.Action action,Object object,Object...queryKeyValue){
 		MenuNode node =  addNode(null, action, object, queryKeyValue);
-		node.getLabel().getPropertiesMap().setValue(object instanceof Class<?> ? StringHelper.getInstance().getClazz((Class<?>)object) : InstanceHelper.getInstance().getLabel(object));
+		if(object instanceof Class<?>)
+			node._setLabelPropertyValue(StringHelper.getInstance().getClazz((Class<?>)object));
+		else
+			node.__setLabelValueBasedOnActionProperty__();
+		//node.getLabel().getPropertiesMap().setValue(object instanceof Class<?> ? StringHelper.getInstance().getClazz((Class<?>)object) : InstanceHelper.getInstance().getLabel(object));
 		return node;
 	}
 	

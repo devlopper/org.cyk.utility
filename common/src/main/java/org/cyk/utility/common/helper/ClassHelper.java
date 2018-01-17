@@ -247,8 +247,12 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	public Collection<Class<?>> getIdentifiables(){
 		if(IDENTIFIABLES == null){
 			IDENTIFIABLES = new HashSet<>(); 
-			for(Class<?> aClass : IDENTIFIABLE_BASE_CLASSES)
+			for(Class<?> aClass : IDENTIFIABLE_BASE_CLASSES){
+				if(aClass.getAnnotation(ENTITY_ANNOTATION_CLASS)!=null)
+					IDENTIFIABLES.add(aClass);
 				IDENTIFIABLES.addAll(get(IDENTIFIABLES_PACKAGE, aClass));
+			}
+			logTrace("base packages {} , identifiables {}", IDENTIFIABLE_BASE_CLASSES,IDENTIFIABLES);
 		}
 		return IDENTIFIABLES;
 	}
@@ -439,15 +443,20 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	}
 	
 	public void registerIdentifier(Collection<Class<?>> classes){
+		final LoggingHelper.Message.Builder loggingMessageBuiler = new LoggingHelper.Message.Builder.Adapter.Default();
+		loggingMessageBuiler.addNamedParameters("register classes",classes);
 		new CollectionHelper.Iterator.Adapter.Default<Class<?>>(classes){
 			private static final long serialVersionUID = 1L;
 
 			protected void __executeForEach__(java.lang.Class<?> aClass) {
 				String identifier = IDENTIFIER_MAP.get(aClass);
-				if(StringHelper.getInstance().isBlank(identifier))
+				if(StringHelper.getInstance().isBlank(identifier)){
 					IDENTIFIER_MAP.put(aClass, computeIdentifier(aClass));
+					loggingMessageBuiler.addNamedParameters("class",aClass,"identifier",IDENTIFIER_MAP.get(aClass));
+				}
 			}
 		}.execute();
+		logTrace(loggingMessageBuiler);
 	}
 	
 	public void registerIdentifier(Class<?>...classes){
@@ -464,16 +473,21 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return identifier;
 	}
 	
-	public Class<?> getClassByIdentifier(String identifier){
+	public Class<?> getClassByIdentifier(String identifier){ 
+		Class<?> aClass = null;
 		for(Entry<Class<?>,String> entry : IDENTIFIER_MAP.entrySet())
-			if(entry.getValue().equals(identifier))
-				return entry.getKey();
-		for(Class<?> aClass : getIdentifiables())
-			if(identifier.equals(computeIdentifier(aClass))){
-				registerIdentifier(aClass);
-				return aClass;
+			if(entry.getValue().equals(identifier)){
+				aClass = entry.getKey();
+				break;
 			}
-		return null;
+		for(Class<?> index : getIdentifiables())
+			if(identifier.equals(computeIdentifier(index))){
+				registerIdentifier(index);
+				aClass = index;
+				break;
+			}
+		logTrace("class with identifier {} is {}", identifier,aClass);
+		return aClass;
 	}
 	
 	/**/

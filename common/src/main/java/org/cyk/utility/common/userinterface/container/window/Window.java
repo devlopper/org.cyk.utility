@@ -48,8 +48,10 @@ public class Window extends Container implements Serializable {
 	protected ConfirmationDialog confirmationDialog = new ConfirmationDialog();
 	protected Request requestComponent = new Request();
 	protected NotificationDialog notificationDialog = new NotificationDialog();
+	/*
 	protected Constant.Action action;
 	protected Class<?> actionOnClass;
+	*/
 	protected Collection<Object> actionOnClassInstanceIdentifiers=new ArrayList<>();
 	protected Collection<Object> actionOnClassInstances;
 	protected Object actionKey;
@@ -65,15 +67,13 @@ public class Window extends Container implements Serializable {
 		notificationDialog.getPropertiesMap();
 		super.initialisation();
 		getPropertiesMap().setFullPage(Boolean.TRUE);
-		getPropertiesMap().setLayout(createLayout());
-		getPropertiesMap().setMainMenu(createMainMenu());
-		getPropertiesMap().setContextMenu(createContextMenu());
 		
-		action = getParameterAsEnum(Constant.Action.class,UniformResourceLocatorHelper.QueryParameter.Name.ACTION);
-		actionOnClass = getParameterAsClass(UniformResourceLocatorHelper.QueryParameter.Name.CLASS);
+		getPropertiesMap().setAction(getParameterAsEnum(Constant.Action.class,UniformResourceLocatorHelper.QueryParameter.Name.ACTION));
+		getPropertiesMap().setActionOnClass(getParameterAsClass(UniformResourceLocatorHelper.QueryParameter.Name.CLASS));
 		Object identifiable = getParameter(UniformResourceLocatorHelper.QueryParameter.Name.IDENTIFIABLE);
 		if(identifiable!=null)
 			actionOnClassInstanceIdentifiers.add(identifiable);
+		getPropertiesMap().setInstance(identifiable);
 		
 		if(Boolean.TRUE.equals(getIsAutomaticallySetForm()))
 			__setForm__();
@@ -87,7 +87,12 @@ public class Window extends Container implements Serializable {
 		_setPropertyTitle(computePropertyTitle());
 		_setPropertyUsingOutputText(Properties.FOOTER, FOOTER);
 		
-		logTrace("Properties={} , Parameters : Action={} , ActionOnClass={} , ActionOnClassInstanceIdentifiers={}",getPropertiesMap(), action,actionOnClass,actionOnClassInstanceIdentifiers);
+		getPropertiesMap().setLayout(createLayout());
+		getPropertiesMap().setMainMenu(createMainMenu());
+		getPropertiesMap().setContextMenu(createContextMenu());
+		//System.out.println("Window.initialisation() : "+getPropertiesMap());
+		//System.out.println("Window.initialisation() : "+getActionOnClassInstances());
+		logTrace("Properties={} , Parameters : ActionOnClassInstanceIdentifiers={}",getPropertiesMap(),actionOnClassInstanceIdentifiers);
 	}
 	
 	protected String getPropertyTitleIdentifier(){
@@ -95,25 +100,36 @@ public class Window extends Container implements Serializable {
 	}
 	
 	protected String computePropertyTitle(){
+		String title = null;
 		String identifier = getPropertyTitleIdentifier();
 		if(StringHelper.getInstance().isBlank(identifier)){
-			if(action!=null && actionOnClass!=null)
-				return StringHelper.getInstance().getAction(action, actionOnClass);
+			if(getPropertiesMap().getAction()!=null && getPropertiesMap().getActionOnClass()!=null)
+				title =  StringHelper.getInstance().getPhrase((Constant.Action)getPropertiesMap().getAction(),Boolean.FALSE, (Class<?>)getPropertiesMap().getActionOnClass());
 		}else
-			return StringHelper.getInstance().get(identifier, new Object[]{});
-		return "TITLE";
+			title =  StringHelper.getInstance().get(identifier, new Object[]{});
+		
+		if(StringHelper.getInstance().isBlank(title))
+			title = "UNKNOWN TITLE";
+		else {
+			if(CollectionHelper.getInstance().isNotEmpty(getActionOnClassInstances())){
+				Object id = InstanceHelper.getInstance().getIdentifier(getActionOnClassInstances().iterator().next());
+				if(id != null)
+					title  = title + Constant.CHARACTER_VERTICAL_BAR + id.toString();
+			}
+		}
+		return title;
 	}
 	
 	public Collection<Object> getActionOnClassInstances(){
 		if(actionOnClassInstances==null){
 			actionOnClassInstances = new ArrayList<>();
-			if(actionOnClass!=null){
-				if(ArrayUtils.contains(new Constant.Action[]{Constant.Action.CREATE,Constant.Action.LOGIN,Constant.Action.LOGOUT}, action)){
-					actionOnClassInstances.add(ClassHelper.getInstance().instanciateOne(actionOnClass));
+			if(getPropertiesMap().getActionOnClass()!=null){
+				if(ArrayUtils.contains(new Constant.Action[]{Constant.Action.CREATE,Constant.Action.LOGIN,Constant.Action.LOGOUT}, getPropertiesMap().getAction())){
+					actionOnClassInstances.add(ClassHelper.getInstance().instanciateOne((Class<?>)getPropertiesMap().getActionOnClass()));
 				}else{
 					if(CollectionHelper.getInstance().isNotEmpty(actionOnClassInstanceIdentifiers))
 						for(Object identifier : actionOnClassInstanceIdentifiers){
-							Object instance = InstanceHelper.getInstance().getByIdentifier(actionOnClass, identifier);
+							Object instance = InstanceHelper.getInstance().getByIdentifier((Class<?>)getPropertiesMap().getActionOnClass(), identifier);
 							if(instance!=null)
 								actionOnClassInstances.add(instance);
 						}	
@@ -124,7 +140,7 @@ public class Window extends Container implements Serializable {
 	}
 	
 	protected Boolean getIsAutomaticallySetForm(){
-		return action!=null && actionOnClass!=null && getActionOnClassInstances().size() > 0;
+		return getPropertiesMap().getAction()!=null && getPropertiesMap().getActionOnClass()!=null && getActionOnClassInstances().size() > 0;
 	}
 	
 	protected Boolean getIsAutomaticallySetDataTable(){

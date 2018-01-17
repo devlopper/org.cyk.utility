@@ -305,9 +305,11 @@ public class Input<T> extends Control implements Serializable {
 						}else if(ClassHelper.getInstance().isNumber(fieldType)){
 							String name = InputNumber.class.getName()+ClassHelper.getInstance().getWrapper(fieldType).getSimpleName();
 							aClass = (Class<? extends Input<?>>) ClassHelper.getInstance().getByName(name);
-						}else if(ClassHelper.getInstance().isIdentified(fieldType)){
+						}else if(ClassHelper.getInstance().isIdentified(fieldType) || fieldType.isEnum()){
 							aClass = InputChoiceOneCombo.class;
 						}
+						if(aClass == null)
+							System.out.println("Input.Listener.Adapter.Default.getClass() : "+fieldType);
 					}else{
 						if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputText.class)!=null)
 							aClass = InputText.class;
