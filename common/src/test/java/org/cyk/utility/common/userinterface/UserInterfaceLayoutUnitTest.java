@@ -1,4 +1,4 @@
-package org.cyk.utility.common.utility.userinterface;
+package org.cyk.utility.common.userinterface;
 
 import org.cyk.utility.common.model.Area;
 import org.cyk.utility.common.userinterface.Component;

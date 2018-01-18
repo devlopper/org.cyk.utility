@@ -4,19 +4,21 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.Constant.Action;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.collection.DataTable;
 import org.cyk.utility.common.userinterface.container.Container;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public abstract class AbstractHierarchyNodesContainer<NODE extends AbstractHierarchyNodesContainer<?>> extends Container implements Serializable {
@@ -118,17 +120,34 @@ public abstract class AbstractHierarchyNodesContainer<NODE extends AbstractHiera
 			addNodeActionListMany(Arrays.asList(classes));
 	}
 	
-	public void addNodeActionListManyFromPackage(Package aPackage,String labelStringIdentifier){
-		addNode(labelStringIdentifier).addNodeActionListMany(ClassHelper.getInstance().getAnnotatedWithEntityAndPackageNameStartsWith(aPackage));
+	public NODE addNodeActionListManyFromPackage(Package aPackage,String labelStringIdentifier){
+		NODE node = addNode(labelStringIdentifier);
+		node.addNodeActionListMany(ClassHelper.getInstance().getAnnotatedWithEntityAndPackageNameStartsWith(aPackage));
+		node.getChildren().setComparator(new Component.LabelPropertyValueComparator()).sort();
+		return node;
 	}
 	
-	public void addNodeActionListManyFromPackage(Class<?> aClass,String labelStringIdentifier){
-		addNodeActionListManyFromPackage(aClass.getPackage(),labelStringIdentifier);
+	public NODE addNodeActionListManyFromPackage(Class<?> aClass,String labelStringIdentifier){
+		return addNodeActionListManyFromPackage(aClass.getPackage(),labelStringIdentifier);
 	}
 	
 	public void addNodeActionListManyFromPackage(Class<?>...classes){
-		for(Class<?> aClass : classes)
-			addNodeActionListManyFromPackage(aClass,StringHelper.getInstance().getClassIdentifier(aClass));
+		for(Class<?> aClass : classes){
+			NODE node = addNodeActionListManyFromPackage(aClass,StringHelper.getInstance().getClassIdentifier(aClass));
+			node._setLabelPropertyValue(StringHelper.getInstance().getClazz(aClass));
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public NODE _setPropertyUrl(Action action, Object object,Object... queryKeyValue) {
+		return (NODE) super._setPropertyUrl(action, object, queryKeyValue);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public NODE _setLabelPropertyRendered(Object rendered) {
+		return (NODE) super._setLabelPropertyRendered(rendered);
 	}
 	
 	/**/

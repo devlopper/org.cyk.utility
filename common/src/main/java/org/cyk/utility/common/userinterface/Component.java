@@ -7,6 +7,12 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -33,12 +39,6 @@ import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.Watermark;
 import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputText;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Component extends AbstractBean implements Serializable {
@@ -857,5 +857,18 @@ public class Component extends AbstractBean implements Serializable {
 		
 	}
 	
+	/**/
 	
+	public static class LabelPropertyValueComparator implements java.util.Comparator<Component> {
+
+		@Override
+		public int compare(Component o1, Component o2) {
+			if(o1 instanceof Visible && o2 instanceof Visible && ((Visible)o1).getLabel()!=null && ((Visible)o1).getLabel().getPropertiesMap().getValue()!=null
+					&& ((Visible)o2).getLabel()!=null && ((Visible)o2).getLabel().getPropertiesMap().getValue()!=null){
+				return ((String)((Visible)o1).getLabel().getPropertiesMap().getValue()).compareTo( ((String)((Visible)o2).getLabel().getPropertiesMap().getValue()) );
+			}
+			return 0;
+		}
+		
+	}
 }

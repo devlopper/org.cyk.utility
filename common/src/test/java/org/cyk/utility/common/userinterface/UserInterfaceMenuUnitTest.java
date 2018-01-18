@@ -1,4 +1,4 @@
-package org.cyk.utility.common.utility.userinterface;
+package org.cyk.utility.common.userinterface;
 
 import java.io.Serializable;
 
@@ -8,6 +8,7 @@ import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.command.MenuNode;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.window.Window;
+import org.cyk.utility.common.userinterface.package01.MenuNode01;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -20,6 +21,16 @@ public class UserInterfaceMenuUnitTest extends AbstractUnitTest {
 		Menu menu = Menu.build(window, Menu.Type.MAIN);
 		assertNotNull(menu);
 		assertNotNull(menu.getParent());
+	}
+	
+	@Test
+	public void sortNodesByLabel(){
+		Menu menu = new Menu();
+		menu.addNodeActionListManyFromPackage(MenuNode01.class);
+		//System.out.println("UserInterfaceMenuUnitTest.sortNodesByLabel() 0 : "+menu.getChildren().getElements().iterator().next().getChildren().getElements());
+		
+		menu.getChildren().getElements().iterator().next().getChildren().setComparator(new Component.LabelPropertyValueComparator()).sort();
+		//System.out.println("UserInterfaceMenuUnitTest.sortNodesByLabel() 1 : "+menu.getChildren().getElements().iterator().next().getChildren().getElements());
 	}
 	
 	@Test

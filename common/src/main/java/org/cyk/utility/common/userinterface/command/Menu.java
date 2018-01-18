@@ -6,13 +6,14 @@ import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.container.Container;
+import org.cyk.utility.common.userinterface.hierarchy.MenuNodesContainer;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public class Menu extends MenuContainer implements Serializable {
+public class Menu extends MenuNodesContainer implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static enum Set{APPLICATION,SESSION,MODULE,WINDOW;public static Set DEFAULT = SESSION;}

@@ -99,7 +99,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			menu = new Menu().setRenderType(Menu.RenderType.BAR);
 			getPropertiesMap().setMainMenu(menu);
 		}
-		MenuNode menuNode = menu.addNode(labelStringIdentifier)._setPropertyUrl(uniformResourceLocatorStringifier)._setPropertyIcon(icon);
+		MenuNode menuNode = (MenuNode) menu.addNode(labelStringIdentifier)._setPropertyUrl(uniformResourceLocatorStringifier)._setPropertyIcon(icon);
 		return menuNode;
 	}
 	
@@ -109,7 +109,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			menu = new Menu().setRenderType(Menu.RenderType.BAR);
 			getPropertiesMap().setMainMenu(menu);
 		}
-		MenuNode menuNode = menu.addNode(labelStringIdentifier)._setPropertyUrl(action, object,queryKeyValue)._setPropertyIcon(icon);
+		MenuNode menuNode = (MenuNode) menu.addNode(labelStringIdentifier)._setPropertyUrl(action, object,queryKeyValue)._setPropertyIcon(icon);
 		return menuNode;
 	}
 	
@@ -789,7 +789,7 @@ public class DataTable extends Component.Visible implements Serializable {
 				._setPropertyIcon(IconHelper.Icon.FontAwesome.EYE);
 			menu.addNode("update")._setPropertyUrl(Constant.Action.UPDATE,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
 				._setPropertyIcon(IconHelper.Icon.FontAwesome.PENCIL);
-			deleteMenuNode = menu.addNode("delete")._setPropertyUrl(Constant.Action.DELETE,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
+			deleteMenuNode = (MenuNode) menu.addNode("delete")._setPropertyUrl(Constant.Action.DELETE,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
 				._setPropertyIcon(IconHelper.Icon.FontAwesome.TRASH);
 			
 			return this;

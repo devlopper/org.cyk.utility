@@ -1,4 +1,4 @@
-package org.cyk.utility.common.utility.userinterface;
+package org.cyk.utility.common.userinterface;
 
 import java.lang.reflect.Field;
 

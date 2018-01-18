@@ -1,4 +1,4 @@
-package org.cyk.utility.common.utility.userinterface;
+package org.cyk.utility.common.userinterface;
 
 import org.cyk.system.test.model.myclass.MyClass001;
 import org.cyk.system.test.model.myclass.MyClass002;

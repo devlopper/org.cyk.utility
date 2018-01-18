@@ -2,58 +2,26 @@ package org.cyk.utility.common.userinterface.command;
 
 import java.io.Serializable;
 
-import org.cyk.utility.common.Constant;
-import org.cyk.utility.common.helper.UniformResourceLocatorHelper.Stringifier;
-import org.cyk.utility.common.userinterface.Component;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import org.cyk.utility.common.userinterface.Component;
+import org.cyk.utility.common.userinterface.hierarchy.MenuNodesContainer;
+
 @Getter @Setter @Accessors(chain=true)
-public class MenuNode extends MenuContainer implements Serializable {
+public class MenuNode extends MenuNodesContainer implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Menu menu;
-	//private MenuNode parent;
+	
+	/**/
 	
 	/**/
 	
 	@Override
-	public MenuNode _setLabelPropertyValue(String value) {
-		return (MenuNode) super._setLabelPropertyValue(value);
-	}
-	
-	@Override
-	public MenuNode _setPropertyUrl(Stringifier stringifier) {
-		return (MenuNode) super._setPropertyUrl(stringifier);
-	}
-	
-	public MenuNode _setPropertyUrl(String pathIdentifier,Object...queryKeyValue){
-		return (MenuNode) super._setPropertyUrl(pathIdentifier, queryKeyValue);
-	}
-	
-	public MenuNode _setPropertyUrl(Constant.Action action,Object object,Object...queryKeyValue){
-		return (MenuNode) super._setPropertyUrl(action, object, queryKeyValue);
-	}
-	
-	@Override
-	public MenuNode _setPropertyIcon(Object icon) {
-		return (MenuNode) super._setPropertyIcon(icon);
-	}
-	
-	@Override
-	public MenuNode _setLabelPropertyRendered(Object rendered) {
-		return (MenuNode) super._setLabelPropertyRendered(rendered);
-	}
-	
-	@Override
-	public MenuNode _setPropertyTitleFromLabel() {
-		return (MenuNode) super._setPropertyTitleFromLabel();
-	}
-	
-	public MenuContainer getParent() {
-		return (MenuContainer) super.getParent();
+	public String toString() {
+		return label == null || label.getPropertiesMap().getValue() == null ? super.toString() :  (String)label.getPropertiesMap().getValue();
 	}
 	
 	/**/

@@ -20,8 +20,6 @@ public interface Identifiable<IDENTIFIER> {
     
     void setIdentifier(IDENTIFIER anIdentifier);
 
-    String getUiString();
-    
     /**/
     
     public static interface Long extends Identifiable<Long> {
@@ -29,14 +27,14 @@ public interface Identifiable<IDENTIFIER> {
     	@Getter @Setter
     	public static abstract class Class extends Identifiable.Class<Long> implements Identifiable.Long,Serializable {
 			private static final long serialVersionUID = 1L;
-        	
-			protected Long identifier;
-			
+        
     	}
     }
     
+    @Getter @Setter
     public static abstract class Class<IDENTIFIER> implements Identifiable<IDENTIFIER>,Serializable {
 		private static final long serialVersionUID = 1L;
     	
+		protected IDENTIFIER identifier;
     }
 }
