@@ -64,7 +64,13 @@ public abstract class AbstractHierarchyNodesContainer<NODE extends AbstractHiera
 	public NODE addNode(String labelStringIdentifier,Constant.Action action,Object object,Object...queryKeyValue){
 		NODE node = instanciateNode();
 		node.setLabelFromIdentifier(labelStringIdentifier);
+		node.getPropertiesMap().setAction(action);
+		if(object instanceof Class<?>)
+			node.getPropertiesMap().setClass(object);
+		else
+			node.getPropertiesMap().setInstance(object);
 		node._setPropertyUrl(action,object, queryKeyValue);
+		node.__setPropertyIconBasedOnPropertyAction__();
 		addNode(node);
 		return node;
 	}

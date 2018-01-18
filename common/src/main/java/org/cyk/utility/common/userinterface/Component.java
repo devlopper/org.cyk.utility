@@ -24,6 +24,7 @@ import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.CommandHelper;
+import org.cyk.utility.common.helper.IconHelper;
 import org.cyk.utility.common.helper.RandomHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
@@ -404,6 +405,26 @@ public class Component extends AbstractBean implements Serializable {
 				//_setLabelPropertyValue(StringHelper.getInstance().getPhrase((Constant.Action)getPropertiesMap().getAction()
 				//		, (Class<?>)getPropertiesMap().getActionOnClass()));
 			}
+			return this;
+		}
+		
+		public Visible __setPropertyIconBasedOnPropertyAction__(){
+			if(getPropertiesMap().getAction() instanceof Constant.Action){
+				switch( (Constant.Action)getPropertiesMap().getAction() ){
+				case CONSULT:getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.EYE);break;
+				case DELETE:getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.TRASH);break;
+				case CREATE:getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.PLUS);break;
+				case LIST:getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.LIST);break;
+				case LOGIN:getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.SIGNIN);break;
+				case LOGOUT:getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.SIGNOUT);break;
+				case PRINT:getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.PRINT);break;
+				case READ:getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.EYE);break;
+				case SEARCH:getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.SEARCH);break;
+				case SELECT:break;
+				case UPDATE:getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.EDIT);break;
+				}
+			}
+			
 			return this;
 		}
 				

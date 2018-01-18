@@ -10,6 +10,7 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.security.SecurityHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.container.Container;
@@ -173,8 +174,11 @@ public class Menu extends MenuNodesContainer implements Serializable {
 					}else if(Menu.Type.CONTEXT.equals(menu.getType())){
 						if(Boolean.TRUE.equals(isIdentifiablesManageWindow())){
 							addNodeIdentifiablesManage(menu);
-						}else if(Boolean.TRUE.equals(isIdentifiablesConsultWindow())){
-							addNodeInstance(menu,((Window)componentParent).getActionOnClassInstances().iterator().next(),(Constant.Action) componentParent.getPropertiesMap().getAction());
+						}else if(Boolean.TRUE.equals(isIdentifiableConsultWindow())){
+							Object instance = ((Window)componentParent).getActionOnClassInstances().iterator().next();
+							Constant.Action action = (Constant.Action) componentParent.getPropertiesMap().getAction();
+							addNodeInstance(menu,instance,action);
+							addNodeInstanceClass(menu, instance.getClass(), action);
 						}
 					}
 					
@@ -185,7 +189,7 @@ public class Menu extends MenuNodesContainer implements Serializable {
 					return null;
 				}
 				
-				protected Boolean isIdentifiablesConsultWindow(){
+				protected Boolean isIdentifiableConsultWindow(){
 					return null;
 				}
 				
@@ -195,7 +199,28 @@ public class Menu extends MenuNodesContainer implements Serializable {
 					MenuNode node = menu.addNode("");
 					node.getPropertiesMap().setExpanded(Boolean.TRUE);
 					node._setLabelPropertyValue(InstanceHelper.getInstance().getLabel(instance));
+					addNodeInstanceUpdate(node, instance, action);
+					addNodeInstanceDelete(node, instance, action);
+				}
+				
+				protected void addNodeInstanceUpdate(MenuNode node,Object instance,Constant.Action action){
 					node.addNodeActionUpdate(instance);
+				}
+				
+				protected void addNodeInstanceDelete(MenuNode node,Object instance,Constant.Action action){
+					node.addNodeActionDelete(instance);
+				}
+				
+				protected void addNodeInstanceClass(Menu menu,Class<?> instanceClass,Constant.Action action){
+					MenuNode node = menu.addNode("");
+					node.getPropertiesMap().setExpanded(Boolean.TRUE);
+					node._setLabelPropertyValue(StringHelper.getInstance().getClazz(instanceClass));
+					addNodeInstanceClassListMany(node, instanceClass);
+				}
+				
+				protected void addNodeInstanceClassListMany(MenuNode node,Class<?> instanceClass){
+					node.addNodeActionListMany(instanceClass);
+					((Component.Visible)CollectionHelper.getInstance().getLast(node.getChildren().getElements())).__setLabelValueBasedOnActionProperty__();
 				}
 			}
 			
