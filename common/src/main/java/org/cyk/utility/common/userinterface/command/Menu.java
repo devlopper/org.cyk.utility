@@ -2,15 +2,19 @@ package org.cyk.utility.common.userinterface.command;
 
 import java.io.Serializable;
 
-import org.cyk.utility.common.helper.ClassHelper;
-import org.cyk.utility.common.helper.CollectionHelper;
-import org.cyk.utility.common.userinterface.Component;
-import org.cyk.utility.common.userinterface.container.Container;
-import org.cyk.utility.common.userinterface.hierarchy.MenuNodesContainer;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.InstanceHelper;
+import org.cyk.utility.common.security.SecurityHelper;
+import org.cyk.utility.common.userinterface.Component;
+import org.cyk.utility.common.userinterface.container.Container;
+import org.cyk.utility.common.userinterface.container.window.Window;
+import org.cyk.utility.common.userinterface.hierarchy.MenuNodesContainer;
 
 @Getter @Setter @Accessors(chain=true)
 public class Menu extends MenuNodesContainer implements Serializable {
@@ -50,10 +54,16 @@ public class Menu extends MenuNodesContainer implements Serializable {
  		BuilderBase<OUTPUT> setSet(Set set);
  		BuilderBase<OUTPUT> setType(Type type);
  		BuilderBase<OUTPUT> setRenderType(RenderType renderType);
+ 		String getHomeViewIdentifier();
+ 		String getControlPanelIdentifiablesManageViewIdentifier();
+ 		String getUserLogoutViewIdentifier();
  		
+ 		@Getter
 		public static class Adapter<OUTPUT extends Menu> extends Container.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {
 			private static final long serialVersionUID = 1L;
 
+			protected String homeViewIdentifier,controlPanelIdentifiablesManageViewIdentifier,userLogoutViewIdentifier;
+			
 			public Adapter(Class<OUTPUT> outputClass) {
 				super(outputClass);
 			}
@@ -121,16 +131,72 @@ public class Menu extends MenuNodesContainer implements Serializable {
 			public static class Default extends Builder.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
+				protected MenuNode homeMainMenuNode,controlPanelMainMenuNode;
+				
+				public Default() {
+					homeViewIdentifier = "homeView";
+					controlPanelIdentifiablesManageViewIdentifier = "controlPanelIdentifiablesManageView";
+					userLogoutViewIdentifier = "userLogoutView";
+				}
+				
 				@Override
 				protected Menu __execute__() {
+					Object principal = SecurityHelper.getInstance().getPrincipal();
 					Menu menu = new Menu();
 					menu.setParent(componentParent);
 					menu.setSet((Set) getProperty(PROPERTY_NAME_SET));
 					menu.setType((Type) getProperty(PROPERTY_NAME_TYPE));
 					menu.setRenderType((RenderType) getProperty(PROPERTY_NAME_RENDER_TYPE));
+					
+					
+					if(Menu.Type.MAIN.equals(menu.getType())){
+						homeMainMenuNode = menu.addNode("userinterface.menu.main.home.label",getHomeViewIdentifier());
+					
+						controlPanelMainMenuNode = menu.addNode("userinterface.menu.main.controlpanel.label");
+						controlPanelMainMenuNode.addNode("userinterface.menu.main.controlpanel.identifiables.manage.label",getControlPanelIdentifiablesManageViewIdentifier());
+						
+						/*
+						menu.addNode("ui.menu.tools","toolsView")
+							.addNode("ui.menu.tools.data.export")
+							.getParentAsNode().addNode("ui.menu.tools.data.import")
+							;
+						*/
+						
+						if(principal!=null){
+							MenuNode menuNode = menu.addNode((String)null,"userView");
+							menuNode.getLabel().getPropertiesMap().setValue(principal);
+							menuNode.addNode("userinterface.menu.main.user.account.manage.label");
+							menuNode.addNode("userinterface.menu.main.user.logout.label",getUserLogoutViewIdentifier());
+						}
+						
+						
+					}else if(Menu.Type.CONTEXT.equals(menu.getType())){
+						if(Boolean.TRUE.equals(isIdentifiablesManageWindow())){
+							addNodeIdentifiablesManage(menu);
+						}else if(Boolean.TRUE.equals(isIdentifiablesConsultWindow())){
+							addNodeInstance(menu,((Window)componentParent).getActionOnClassInstances().iterator().next(),(Constant.Action) componentParent.getPropertiesMap().getAction());
+						}
+					}
+					
 					return menu;
 				}
 				
+				protected Boolean isIdentifiablesManageWindow(){
+					return null;
+				}
+				
+				protected Boolean isIdentifiablesConsultWindow(){
+					return null;
+				}
+				
+				protected void addNodeIdentifiablesManage(Menu menu){}
+				
+				protected void addNodeInstance(Menu menu,Object instance,Constant.Action action){
+					MenuNode node = menu.addNode("");
+					node.getPropertiesMap().setExpanded(Boolean.TRUE);
+					node._setLabelPropertyValue(InstanceHelper.getInstance().getLabel(instance));
+					node.addNodeActionUpdate(instance);
+				}
 			}
 			
 			@Override
