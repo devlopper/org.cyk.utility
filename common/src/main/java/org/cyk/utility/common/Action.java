@@ -754,7 +754,7 @@ public interface Action<INPUT,OUTPUT> {
 			@Override
 			public Action<INPUT, OUTPUT> notify_() {
 				Notification notification = getNotification(getStatus());
-				if(notification!=null)
+				if(notification!=null) 
 					NotificationHelper.getInstance().getViewer().setInput(notification).setType(NotificationHelper.Notification.Viewer.Type.DEFAULT).execute();
 				return this;
 			}

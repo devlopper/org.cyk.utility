@@ -144,7 +144,7 @@ public class Form extends Container implements Serializable {
 		}
 		
 		public Master(Component parent,Object object,Constant.Action action) {
-			this(parent,object,action,SubmitCommandActionAdapter.class);
+			this(parent,object,action,ClassHelper.getInstance().getMapping(SubmitCommandActionAdapter.class));
 		}
 		
 		public Master() {
@@ -547,8 +547,10 @@ public class Form extends Container implements Serializable {
 					dataTablesUp = new ArrayList<>();	
 			}
 			
-			if(dataTable.getForm() == null)
+			if(dataTable.getForm() == null)//TODO form attribute sould be deprecated
 				dataTable.setForm(this);
+			if(dataTable.getPropertiesMap().getFormDetail() == null)
+				dataTable.getPropertiesMap().setFormDetail(this);
 			if(dataTable.getPropertiesMap().getAction() == null)
 				dataTable.getPropertiesMap().setAction(getPropertiesMap().getAction());
 			if(dataTable.getPropertiesMap().getMaster() == null)

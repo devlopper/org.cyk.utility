@@ -3,6 +3,7 @@ package org.cyk.utility.common.userinterface.input.choice;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.userinterface.Control;
 
@@ -15,6 +16,15 @@ public class InputChoiceOneCombo extends InputChoiceOne implements Serializable 
 	private static final long serialVersionUID = 1L;
 	
 	/**/
+	
+	@Override
+	protected void listenPropertiesInstanciated(Properties propertiesMap) {
+		super.listenPropertiesInstanciated(propertiesMap);
+		if(isJavaServerFacesLibraryPrimefaces()){
+			propertiesMap.setFilter(Boolean.TRUE);
+			propertiesMap.setFilterMatchMode("contains");
+		}
+	}
 	
 	@Override
 	public InputChoiceOneCombo setField(Object object, String fieldName, Collection<?> choicesElements) {

@@ -13,20 +13,24 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Constant.Action;
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.CollectionHelper.Instance;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FileHelper;
+import org.cyk.utility.common.helper.FilterHelper;
 import org.cyk.utility.common.helper.IconHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
+import org.cyk.utility.common.helper.LoggingHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.userinterface.CascadeStyleSheetHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.ContentType;
+import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.Image;
 import org.cyk.utility.common.userinterface.JavaServerFacesHelper;
 import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueSource;
@@ -82,6 +86,28 @@ public class DataTable extends Component.Visible implements Serializable {
 		propertiesMap.setOnPrepareAddColumnOrderNumber(Boolean.TRUE);
 		if(isJavaServerFacesLibraryPrimefaces())
 			propertiesMap.addString(Properties.STYLE_CLASS, Constant.CHARACTER_SPACE.toString(), CascadeStyleSheetHelper.getInstance().getClass(DataTable.class));
+	}
+	
+	public Properties getPropertyRowProperties(Boolean createIfNull){
+		Properties properties = (Properties) getPropertiesMap().getRowProperties();
+		if(properties == null && Boolean.TRUE.equals(createIfNull))
+			getPropertiesMap().setRowProperties(properties = new Properties());
+		return properties;
+	}
+	
+	public Properties getPropertyRowProperties(){
+		return getPropertyRowProperties(Boolean.TRUE);
+	}
+	
+	public Properties getPropertyRowPropertiesPropertyRemoveCommandProperties(Boolean createIfNull){
+		Properties properties = (Properties) getPropertyRowProperties().getRemoveCommandProperties();
+		if(properties == null && Boolean.TRUE.equals(createIfNull))
+			getPropertyRowProperties().setRemoveCommandProperties(properties = new Properties());
+		return properties;
+	}
+	
+	public Properties getPropertyRowPropertiesPropertyRemoveCommandProperties(){
+		return getPropertyRowPropertiesPropertyRemoveCommandProperties(Boolean.TRUE);
 	}
 	
 	@Override
@@ -262,6 +288,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			getPropertiesMap().setAddTextComponent(outputText);
 			
 			InputChoiceOneCombo inputChoiceOneCombo = new InputChoiceOneCombo();
+			inputChoiceOneCombo.getPropertiesMap();//trigger
 			//watermark = new Watermark();
 			//watermark.getPropertiesMap().setValue(StringHelper.getInstance().get("search", new Object[]{}));
 			//inputChoice.getPropertiesMap().setWatermark(watermark);
@@ -304,6 +331,9 @@ public class DataTable extends Component.Visible implements Serializable {
 				rowsCollectionInstanceListener.setDataTable(this);
 				rows.addListener(rowsCollectionInstanceListener);
 			}
+			
+			if(onPrepareCallLoad == null && Constant.Action.UPDATE.equals(getPropertiesMap().getAction()))
+				onPrepareCallLoad = Boolean.TRUE;
 		}else{
 			if(actionOnClass!=null){
 				
@@ -325,41 +355,32 @@ public class DataTable extends Component.Visible implements Serializable {
 				}
 				
 				if(Boolean.TRUE.equals(getPropertiesMap().getLazy())){
-					//getPropertiesMap().setValue();
-					/*Command command = (Command) getPropertiesMap().getFilterCommandComponent();
-					if(JavaServerFacesHelper.Library.PRIMEFACES.equals(Component.JAVA_SERVER_FACES_LIBRARY)){
-						command.getPropertiesMap().setType("button");
-						command.getPropertiesMap().setOnClick(JavaServerFacesHelper.Primefaces.Script.getInstance().getMethodCallFilter(this));	
-					}*/
+					
 				}
 			}
-			//InputChoiceOneCombo inputChoiceOneCombo = (InputChoiceOneCombo) getPropertiesMap().getAddInputComponent();
-			//inputChoiceOneCombo.getPropertiesMap().setRendered(Boolean.FALSE);
 			
-			addFilter(this);
-			/*
-			if(Boolean.TRUE.equals(getPropertiesMap().getFilterable())){
-				InputText inputText = new InputText();
-				Watermark watermark = new Watermark();
-				watermark.getPropertiesMap().setValue(StringHelper.getInstance().get("search", new Object[]{}));
-				inputText.getPropertiesMap().setWatermark(watermark);
-				getPropertiesMap().setFilterInputComponent(inputText);
-				
-				Command command = new Command();
-				command.setLabelFromIdentifier("search")._setLabelPropertyRendered(Boolean.FALSE);
-				command.getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.SEARCH);
-				if(JavaServerFacesHelper.Library.PRIMEFACES.equals(Component.JAVA_SERVER_FACES_LIBRARY)){
-					command.getPropertiesMap().setType("button");
-					command.getPropertiesMap().setOnClick(JavaServerFacesHelper.Primefaces.Script.getInstance().getMethodCallFilter(this));	
-				}
-				getPropertiesMap().setFilterCommandComponent(command);
-				
-				//((Component)getPropertiesMap().getFilterInputComponent()).getPropertiesMap().setRendered(getPropertiesMap().getFilterable());
-				//((Component)getPropertiesMap().getFilterCommandComponent()).getPropertiesMap().setRendered(getPropertiesMap().getFilterable());
-			}
-			*/
+			addFilter(this);			
 		}
+	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public DataTable load() {
+		super.load();
+		if(getPropertiesMap().getActionOnClass()!=null){
+			Class<?> actionOnClass = (Class<?>) getPropertiesMap().getActionOnClass();
+			Collection<?> instances;
+			if(getPropertiesMap().getMaster()==null)
+				instances = InstanceHelper.getInstance().get((Class<?>) getPropertiesMap().getActionOnClass());
+			else{
+				FilterHelper.Filter<Object> filter = (FilterHelper.Filter<Object>) ClassHelper.getInstance().instanciateOne(FilterHelper.Filter.ClassLocator.getInstance()
+						.locate(actionOnClass));
+				filter.addMaster(getPropertiesMap().getMaster());
+				instances = InstanceHelper.getInstance().get((Class<Object>) getPropertiesMap().getActionOnClass(),filter, new DataReadConfiguration(null, null));
+			}
+			addManyRow(instances);
+		}
+		return this;
 	}
 	
 	public static void addFilter(Component component){
@@ -403,6 +424,14 @@ public class DataTable extends Component.Visible implements Serializable {
 	public DataTable addColumnsByFieldNames(String...fieldNames){
 		if(ArrayHelper.getInstance().isNotEmpty(fieldNames))
 			addColumnsByFieldNames(Arrays.asList(fieldNames));
+		return this;
+	}
+	
+	public DataTable addColumnListener(CollectionHelper.Instance.Listener<Component> listener){
+		Columns columns = getPropertyColumns(Boolean.TRUE);
+		if(columns.getChildren() == null)
+			columns.setChildren(instanciateChildrenCollection());
+		columns.getChildren().addListener(listener);
 		return this;
 	}
 	
@@ -474,19 +503,19 @@ public class DataTable extends Component.Visible implements Serializable {
 		return this;
 	}
 	
-	@Override
-	public Component load() {
-		super.load();
-		if(getPropertiesMap().getActionOnClass()!=null)
-			addManyRow(InstanceHelper.getInstance().get((Class<?>) getPropertiesMap().getActionOnClass()));
-		return this;
-	}
-	
 	public Column getColumn(String fieldName){
-		Columns columns = (Columns)getPropertiesMap().getColumns();
+		Columns columns = getPropertyColumns(Boolean.FALSE);
 		if(columns!=null)
 			return columns.getColumn(fieldName);
 		return null;
+	}
+	
+	public Columns getPropertyColumns(Boolean createIfNull){
+		Columns columns = Columns.getProperty(this);
+		if(Boolean.TRUE.equals(createIfNull)){
+			getPropertiesMap().setColumns(columns = new Columns(this));
+		}
+		return columns;
 	}
 	
 	public Collection<Input<?>> getInputs(){
@@ -533,12 +562,13 @@ public class DataTable extends Component.Visible implements Serializable {
 				return null;
 			return Cell.getOne(this, row,(Cell.Listener) getPropertiesMap().getCellListener());
 		}
-		
-		
-		
+			
 		public Column computeCellValueType(Object object,Boolean sortable){
 			if(object!=null && cellValueType==null){
+				LoggingHelper.Message.Builder loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default();
+				loggingMessageBuilder.addManyParameters("compute cell value type");
 				String fieldName = (String) getPropertiesMap().getFieldName();
+				loggingMessageBuilder.addNamedParameters("action",getPropertiesMap().getAction(),"field name",fieldName,"cell value source",cellValueSource);
 				Class<?> fieldType = null;
 				if(CellValueSource.ROW.equals(cellValueSource))
 					fieldType = FieldHelper.getInstance().get(Row.class, fieldName).getType();
@@ -550,6 +580,7 @@ public class DataTable extends Component.Visible implements Serializable {
 					if( Constant.Action.isCreateOrUpdate((Action) getPropertiesMap().getAction()) )
 						cellValueType = Cell.ValueType.INPUT;
 				}
+				loggingMessageBuilder.addNamedParameters("field type",fieldType);
 				if( cellValueType==null ){
 					if(FileHelper.getListener().getModelClass().equals(fieldType))
 						cellValueType = Cell.ValueType.FILE;
@@ -565,6 +596,8 @@ public class DataTable extends Component.Visible implements Serializable {
 					if(CellValueSource.ROW_PROPERTY_VALUE.equals(cellValueSource))
 						getPropertiesMap().setSortable(sortable);
 				}
+				loggingMessageBuilder.addNamedParameters("cell value type",cellValueType,"linked",getPropertiesMap().getLinked());
+				logTrace(loggingMessageBuilder);
 			}
 			return this;
 		}
@@ -598,6 +631,27 @@ public class DataTable extends Component.Visible implements Serializable {
 		
 		public static Column instanciateOne(String labelStringIdentifier,String fieldName){
 			return instanciateOne(labelStringIdentifier, fieldName, CellValueSource.DEFAULT);
+		}
+	
+		/**/
+		
+		public void __setPropertyFooterPropertyValueBasedOnMaster__(){
+			Column column = this;
+			LoggingHelper.Message.Builder loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default();
+			loggingMessageBuilder.addManyParameters("set column footer value");
+			DataTable dataTable = (DataTable) column.getPropertiesMap().getDataTable();
+			loggingMessageBuilder.addNamedParameters("field name",column.getPropertiesMap().getFieldName(),"master exist",dataTable.getPropertiesMap().getMaster()!=null);
+			if(dataTable.getPropertiesMap().getMaster()!=null){
+				java.lang.reflect.Field field = FieldHelper.getInstance().get(dataTable.getPropertiesMap().getMaster().getClass(), (String)column.getPropertiesMap().getFieldName());
+				loggingMessageBuilder.addNamedParameters("field exist",field!=null);
+				if(field!=null){
+					loggingMessageBuilder.addNamedParameters("before set",((OutputText)column.getPropertiesMap().getFooter()).getPropertiesMap().getValue());
+					((OutputText)column.getPropertiesMap().getFooter()).getPropertiesMap().setValue(FieldHelper.getInstance()
+							.read(dataTable.getPropertiesMap().getMaster(), field));
+					loggingMessageBuilder.addNamedParameters("after set",((OutputText)column.getPropertiesMap().getFooter()).getPropertiesMap().getValue());
+				}
+			}
+			logTrace(loggingMessageBuilder);
 		}
 		
 		/**/
@@ -639,6 +693,20 @@ public class DataTable extends Component.Visible implements Serializable {
 			});
 		}
 		
+		@SuppressWarnings("unchecked")
+		public Columns(Component component) {
+			getPropertiesMap().setAction(component.getPropertiesMap().getAction());
+			getPropertiesMap().setCellListener(component.getPropertiesMap().getCellListener());
+			getPropertiesMap().setDataTable(component);
+			if(component.getPropertiesMap().getColumnsCollectionInstanceListenerClass()!=null){
+				if(getChildren() == null)
+					setChildren(instanciateChildrenCollection());
+				getChildren().addListener((org.cyk.utility.common.helper.CollectionHelper.Instance.Listener<Component>) component.getPropertiesMap().getColumnsCollectionInstanceListenerClass());
+			}
+			
+			component.getPropertiesMap().setColumns(this);
+		}
+		
 		public Column addColumn(String labelStringIdentifier,String fieldName){
 			DataTable.Column column = Column.instanciateOne(labelStringIdentifier, fieldName);
 			column.getPropertiesMap().setAction(getPropertiesMap().getAction());
@@ -658,13 +726,10 @@ public class DataTable extends Component.Visible implements Serializable {
 		public static Column addColumn(Component component,String labelStringIdentifier,String fieldName){
 			Columns columns = (Columns) component.getPropertiesMap().getColumns();
 			if(component.getPropertiesMap().getColumns()==null){
-				columns = new Columns();
-				columns.getPropertiesMap().setAction(component.getPropertiesMap().getAction());
-				columns.getPropertiesMap().setCellListener(component.getPropertiesMap().getCellListener());
-				columns.getPropertiesMap().setDataTable(component);
-				component.getPropertiesMap().setColumns(columns);
+				columns = new Columns(component);
+				
 			}
-			return ((Columns)component.getPropertiesMap().getColumns()).addColumn(labelStringIdentifier, fieldName);
+			return columns.addColumn(labelStringIdentifier, fieldName);
 		}
 		
 		@Override
@@ -685,9 +750,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			
 			Columns columns;
 			if( (columns = (Columns) component.getPropertiesMap().getColumns()) == null){
-				columns = new Columns();
-				component.getPropertiesMap().setColumns(columns);
-				
+				columns = new Columns(component);
 			}
 				
 			columns.addOneChild(column);
@@ -811,8 +874,9 @@ public class DataTable extends Component.Visible implements Serializable {
 			Row row = new Row()._setObject(object);
 			row.set__orderNumber__(orderNumber);
 			
-			for(Column column : (Collection<Column>)columns.getPropertiesMap().getValue())
+			for(Column column : (Collection<Column>)columns.getPropertiesMap().getValue()){
 				column.computeCellValueType(object,sortable);
+			}
 				
 			return row;
 		}
@@ -1110,7 +1174,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		
 		@SuppressWarnings("unchecked")
 		@Override
-		public void addOne(Instance<Row> instance, Row row, Object source, Object sourceObject) {
+		public void addOne(Instance<Row> instance, final Row row, Object source, Object sourceObject) {
 			super.addOne(instance, row, source, sourceObject);
 			Class<? extends RemoveCommandComponentActionAdapter> removeCommandComponentActionAdapterClass = InstanceHelper.getInstance()
 					.getIfNotNullElseDefault((Class<? extends RemoveCommandComponentActionAdapter>)dataTable.getPropertiesMap().getRemoveCommandComponentActionAdapterClass()
@@ -1119,7 +1183,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			removeCommandComponentActionAdapter.setDataTable(dataTable);
 			removeCommandComponentActionAdapter.setRow(row);
 			
-			Command command = new Command();
+			final Command command = new Command();
 			command.setLabelFromIdentifier("userinterface.command.remove")._setLabelPropertyRendered(Boolean.FALSE);
 			command.setAction(removeCommandComponentActionAdapter);
 			command.getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.MINUS);
@@ -1127,9 +1191,10 @@ public class DataTable extends Component.Visible implements Serializable {
 			command.getPropertiesMap().setImmediate(Boolean.TRUE);
 			
 			command.getPropertiesMap().copyFrom(((Command)dataTable.getPropertiesMap().getAddCommandComponent()).getPropertiesMap(), Properties.PROCESS,Properties.UPDATE);
+			command.getPropertiesMap().copyFrom((Properties)dataTable.getPropertyRowProperties().getRemoveCommandProperties(), Properties.UPDATED_FIELD_NAMES,Properties.UPDATED_COLUMN_FIELD_NAMES);
 			
 			//command.getPropertiesMap().setProcess(((Command)dataTable.getPropertiesMap().getAddCommandComponent()).getPropertiesMap().getProcess());
-			//command.getPropertiesMap().setUpdate(((Command)dataTable.getPropertiesMap().getAddCommandComponent()).getPropertiesMap().getUpdate());
+			command.getPropertiesMap().setUpdate("@(form)");
 			
 			//command.usePropertyRemoteCommand();
 			RemoteCommand.instanciateOne(command);
@@ -1139,7 +1204,29 @@ public class DataTable extends Component.Visible implements Serializable {
 			//row.getDeleteMenuNode().getPropertiesMap().setUrl(null);
 			//RemoteCommand.instanciateOne(row.getDeleteMenuNode(),command.getAction(),command.getActionListener());
 			
+			
+			
+			new CollectionHelper.Iterator.Adapter.Default<String>((Collection<String>) row.getPropertiesMap().getUpdatedFieldNames()){
+				private static final long serialVersionUID = 1L;
+
+				protected void __executeForEach__(String fieldName) {
+					command.getPropertiesMap().addString(Properties.UPDATE,"@(."+dataTable.getForm().getControlByFieldName(fieldName).getPropertiesMap().getIdentifierAsStyleClass()+")");
+				}
+			}.execute();
+			
+			if(StringHelper.getInstance().isBlank((String)command.getPropertiesMap().getUpdate())){
+				command.getPropertiesMap().setUpdate("@(form)");
+			}
+			
 			row.getPropertiesMap().setRemoveCommandComponent(command);
+			
+			if(dataTable.getPropertiesMap().getChoiceValueClass()!=null){
+				Object choice = FieldHelper.getInstance().read(row.getPropertiesMap().getValue(), ClassHelper.getInstance().getVariableName((Class<?>)dataTable.getPropertiesMap().getChoiceValueClass()));
+				if(choice!=null && Boolean.TRUE.equals( ((InputChoice<?>)dataTable.getPropertiesMap().getAddInputComponent()).getChoices().getIsSourceDisjoint() )){
+					((InputChoice<?>)dataTable.getPropertiesMap().getAddInputComponent()).getChoices().removeOne(choice);
+				}
+			}
+			
 		}
 	}
 	
@@ -1203,7 +1290,7 @@ public class DataTable extends Component.Visible implements Serializable {
 						CollectionHelper.Instance<?> collection = getDestinationCollection();
 						if(collection!=null)
 							collection.addOne(object);
-						inputChoiceOne.getChoices().removeOne(choice);	
+						//inputChoiceOne.getChoices().removeOne(choice);	
 					}
 						
 				}		
@@ -1219,26 +1306,65 @@ public class DataTable extends Component.Visible implements Serializable {
 		
 		private Row row;
 		
+		@SuppressWarnings("unchecked")
 		@Override
 		protected void ____execute____(Class<?> actionOnClass, InputChoiceOne inputChoiceOne) {
-			dataTable.removeOneRow(row);
+			final LoggingHelper.Message.Builder vLoggingMessageBuilder = loggingMessageBuilder;//new LoggingHelper.Message.Builder.Adapter.Default();
+			vLoggingMessageBuilder.addManyParameters("remove datatable row");
+			
 			if(row.getPropertiesMap().getValue()!=null){
-				Object choice = getChoice(row.getPropertiesMap().getValue());
+				vLoggingMessageBuilder.addNamedParameters("value id",InstanceHelper.getInstance().getIdentifier(row.getPropertiesMap().getValue()));
 				if(inputChoiceOne == null){
 					
 				}else{
+					Object choice = getChoice(row.getPropertiesMap().getValue());
 					if(choice==null){
 						
 					}else{
+						vLoggingMessageBuilder.addNamedParameters("choice id",InstanceHelper.getInstance().getIdentifier(choice));
 						inputChoiceOne.getChoices().addOne(choice);	
 						CollectionHelper.Instance<?> collection = getDestinationCollection();
-						if(collection!=null)
+						if(collection!=null){
+							vLoggingMessageBuilder.addManyParameters("destination collection");
+							vLoggingMessageBuilder.addNamedParameters("count before remove",CollectionHelper.getInstance().getSize(collection.getElements()));
 							collection.removeOne(row.getPropertiesMap().getValue());
+							vLoggingMessageBuilder.addNamedParameters("count after remove",CollectionHelper.getInstance().getSize(collection.getElements()));
+							if(dataTable.getPropertiesMap().getMaster()!=null){
+								vLoggingMessageBuilder.addNamedParameters("master id",InstanceHelper.getInstance().getIdentifier(dataTable.getPropertiesMap().getMaster()));
+								Object object = dataTable.getPropertiesMap().getMaster();
+								InstanceHelper.getInstance().computeChanges(object);
+								Collection<String> updatedFieldNames = (Collection<String>) ((Command)row.getPropertiesMap().getRemoveCommandComponent()).getPropertiesMap().getUpdatedFieldNames();
+								vLoggingMessageBuilder.addNamedParameters("updated field names",updatedFieldNames);
+								
+								new CollectionHelper.Iterator.Adapter.Default<String>((Collection<String>) updatedFieldNames){
+									private static final long serialVersionUID = 1L;
+
+									protected void __executeForEach__(String fieldName) {
+										Control control = ((Form.Detail)dataTable.getPropertiesMap().getFormDetail()).getControlByFieldName(fieldName);
+										Object v1 = control instanceof Input ? ((Input<?>)control).getValue() : ((OutputText)control).getPropertiesMap().getValue();
+										control.read();
+										Object v2 = control instanceof Input ? ((Input<?>)control).getValue() : ((OutputText)control).getPropertiesMap().getValue();
+										vLoggingMessageBuilder.addNamedParameters(fieldName,v1+">"+v2);
+									}
+								}.execute();
+								
+								Collection<String> updatedColumnsFieldNames = (Collection<String>) ((Command)row.getPropertiesMap().getRemoveCommandComponent()).getPropertiesMap().getUpdatedFieldNames();
+								vLoggingMessageBuilder.addNamedParameters("updated column field names",updatedColumnsFieldNames);
+								new CollectionHelper.Iterator.Adapter.Default<String>(updatedColumnsFieldNames){
+									private static final long serialVersionUID = 1L;
+
+									protected void __executeForEach__(String columnFieldName) {
+										dataTable.getColumn(columnFieldName).__setPropertyFooterPropertyValueBasedOnMaster__();
+									}
+								}.execute();
+								
+							}
+						}
 					}	
-				}
-				
+				}				
 			}
-		}
-		
+			//all computing are done  we can now remove the row
+			dataTable.removeOneRow(row);
+		}		
 	}
 }

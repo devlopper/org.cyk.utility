@@ -69,6 +69,10 @@ public class Event extends Component.Invisible implements Serializable {
 		return instanciateOne(formDetail,fieldName, updatedFieldNames, listener,(String[])null);
 	}
 	
+	public static Event instanciateOne(Form.Detail formDetail,String fieldName,String[] updatedFieldNames){
+		return instanciateOne(formDetail,fieldName, updatedFieldNames, new CommandAdapter());
+	}
+	
 	public static Event.Builder instanciateBuilder(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames,String eventName){
 		Event.Builder eventBuilder = new Event.Builder.Adapter.Default();
 		eventBuilder.getPropertiesMap().setName(eventName);		
@@ -96,6 +100,10 @@ public class Event extends Component.Invisible implements Serializable {
 	
 	public static Event instanciateOne(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener){
 		return instanciateOne(cell, updatedColumnFieldNames,updatedFieldNames, listener, (String[])null);
+	}
+	
+	public static Event instanciateOne(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames){
+		return instanciateOne(cell, updatedColumnFieldNames,updatedFieldNames, new CommandAdapter());
 	}
 	
 	public static Event.Builder instanciateBuilder(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames){
@@ -274,11 +282,14 @@ public class Event extends Component.Invisible implements Serializable {
 								private static final long serialVersionUID = 1L;
 
 								protected void __executeForEach__(String columnFieldName) {
-									if(cell.getRow().getCell(columnFieldName).getInput()!=null)
-										cell.getRow().getCell(columnFieldName).getInput().read();
-									if(cell.getRow().getCell(columnFieldName).getPropertiesMap().getValue()!=null){
-										((Output)cell.getRow().getCell(columnFieldName).getPropertiesMap().getValue()).read();
+									DataTable.Cell vCell = cell.getRow().getCell(columnFieldName);
+									if(vCell.getInput()!=null)
+										vCell.getInput().read();
+									if(vCell.getPropertiesMap().getValue()!=null){
+										((Output)vCell.getPropertiesMap().getValue()).read();
 									}
+									vCell.getColumn().__setPropertyFooterPropertyValueBasedOnMaster__();	
+									
 								}
 							}.execute();
 							
@@ -305,16 +316,4 @@ public class Event extends Component.Invisible implements Serializable {
 		}
 	}
 
-	/**/
-	
-	/*public static class Command extends CommandHelper.Command.Adapter.Default implements Serializable {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected Object __execute__() {
-			InstanceHelper.getInstance().computeChanges(getPropertiesMap().getInstance());
-			return null;
-		}
-		
-	}*/
 }

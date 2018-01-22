@@ -229,12 +229,14 @@ public class Properties implements java.io.Serializable {
 	/**/
 	
 	public Properties copyTo(Properties destination,Object...keys){
-		MapHelper.getInstance().copy(map, destination.map, keys);
+		if(destination!=null && ArrayHelper.getInstance().isNotEmpty(keys))
+			MapHelper.getInstance().copy(map, destination.map, keys);
 		return this;
 	}
 	
 	public Properties copyFrom(Properties source,Object...keys){
-		MapHelper.getInstance().copy(source.map, map, keys);
+		if(source!=null && ArrayHelper.getInstance().isNotEmpty(keys))
+			MapHelper.getInstance().copy(source.map, map, keys);
 		return this;
 	}
 	
@@ -2679,6 +2681,15 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getColumnsCollectionInstanceListenerClass() {
+		return get(COLUMNS_COLLECTION_INSTANCE_LISTENER_CLASS);
+	}
+
+	public Properties setColumnsCollectionInstanceListenerClass(Object value) {
+		set(COLUMNS_COLLECTION_INSTANCE_LISTENER_CLASS, value);
+		return this;
+	}
+	
 	public Object getRemoveCommandComponentActionAdapterClass() {
 		return get(REMOVE_COMMAND_COMPONENT_ACTION_ADAPTER_CLASS);
 	}
@@ -3039,6 +3050,26 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getRowProperties() {
+		return get(ROW_PROPERTIES);
+	}
+
+	public Properties setRowProperties(Object value) {
+		set(ROW_PROPERTIES, value);
+		return this;
+	}
+	
+	public Object getRemoveCommandProperties() {
+		return get(REMOVE_COMMAND_PROPERTIES);
+	}
+
+	public Properties setRemoveCommandProperties(Object value) {
+		set(REMOVE_COMMAND_PROPERTIES, value);
+		return this;
+	}
+	
+	public static final String ROW_PROPERTIES = "ROW_PROPERTIES";
+	public static final String REMOVE_COMMAND_PROPERTIES = "REMOVE_COMMAND_PROPERTIES";
 	public static final String COLLAPSED = "COLLAPSED";
 	public static final String EXPANDED = "EXPANDED";
 	public static final String HEADER_RENDERED = "HEADER_RENDERED";
@@ -3078,6 +3109,7 @@ public class Properties implements java.io.Serializable {
 	public static final String EVENT_ON_BLUR = "EVENT_ON_BLUR";
 	public static final String REMOTE_COMMAND = "REMOTE_COMMAND";
 	public static final String AUTO_RUN = "AUTO_RUN";
+	public static final String COLUMNS_COLLECTION_INSTANCE_LISTENER_CLASS = "COLUMNS_COLLECTION_INSTANCE_LISTENER_CLASS";
 	public static final String ROWS_COLLECTION_INSTANCE_LISTENER_CLASS = "ROWS_COLLECTION_INSTANCE_LISTENER_CLASS";
 	public static final String ROWS_COLLECTION_INSTANCE = "ROWS_COLLECTION_INSTANCE";
 	public static final String PARENT = "PARENT";
