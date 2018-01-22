@@ -592,7 +592,9 @@ public class Form extends Container implements Serializable {
 		}
 		
 		public Detail addEvent(String fieldName,String[] updatedFieldNames){
-			Event.instanciateOne(this, fieldName, updatedFieldNames, new Event.CommandAdapter());
+			if(!Constant.Action.DELETE.equals((Action) getPropertiesMap().getAction())){
+				Event.instanciateOne(this, fieldName, updatedFieldNames);
+			}
 			return this;
 		}
 		

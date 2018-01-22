@@ -4,24 +4,27 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.CommandHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
+import org.cyk.utility.common.helper.LoggingHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.collection.DataTable;
 import org.cyk.utility.common.userinterface.container.Form;
 import org.cyk.utility.common.userinterface.container.Form.Detail;
+import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOne;
 import org.cyk.utility.common.userinterface.output.Output;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Event extends Component.Invisible implements Serializable {
@@ -243,59 +246,7 @@ public class Event extends Component.Invisible implements Serializable {
 					
 					if(getPropertiesMap().getListener() instanceof CommandAdapter)
 						((CommandAdapter)event.getListener()).setEvent(event);
-					event.getListener().addActionListener(new Action.ActionListener.Adapter(){
-						private static final long serialVersionUID = 1L;
-						
-						@Override
-						public void __executeBefore__(Action<?, ?> action) {
-							super.__executeBefore__(action);
-							new CollectionHelper.Iterator.Adapter.Default<String>((Collection<String>) event.getPropertiesMap().getProcessedFieldNames()){
-								private static final long serialVersionUID = 1L;
-
-								protected void __executeForEach__(String fieldName) {
-									detail.getInputByFieldName(fieldName).write();
-								}
-							}.execute();
-							
-							new CollectionHelper.Iterator.Adapter.Default<String>((Collection<String>) event.getPropertiesMap().getProcessedColumnFieldNames()){
-								private static final long serialVersionUID = 1L;
-
-								protected void __executeForEach__(String columnFieldName) {
-									cell.getRow().getCell(columnFieldName).getInput().write();
-								}
-							}.execute();
-							
-						}
-						
-						@Override
-						public void processOnStatus(Action<?, ?> action) {
-							super.processOnStatus(action);
-							new CollectionHelper.Iterator.Adapter.Default<String>((Collection<String>) event.getPropertiesMap().getUpdatedFieldNames()){
-								private static final long serialVersionUID = 1L;
-
-								protected void __executeForEach__(String fieldName) {
-									detail.getControlByFieldName(fieldName).read();
-								}
-							}.execute();
-							
-							new CollectionHelper.Iterator.Adapter.Default<String>((Collection<String>) event.getPropertiesMap().getUpdatedColumnFieldNames()){
-								private static final long serialVersionUID = 1L;
-
-								protected void __executeForEach__(String columnFieldName) {
-									DataTable.Cell vCell = cell.getRow().getCell(columnFieldName);
-									if(vCell.getInput()!=null)
-										vCell.getInput().read();
-									if(vCell.getPropertiesMap().getValue()!=null){
-										((Output)vCell.getPropertiesMap().getValue()).read();
-									}
-									vCell.getColumn().__setPropertyFooterPropertyValueBasedOnMaster__();	
-									
-								}
-							}.execute();
-							
-						}
-						
-					});
+					event.getListener().addActionListener(new ActionAdapter(event, detail, cell, new LoggingHelper.Message.Builder.Adapter.Default()));
 					
 					Component component = (Component) getPropertiesMap().getComponent();
 					if(component == null){
@@ -309,11 +260,100 @@ public class Event extends Component.Invisible implements Serializable {
 					if(component!=null)
 						component.getPropertiesMap().setEvent(event);
 					
+					loggingMessageBuilder.addNamedParameters("properties",event.getPropertiesMap());
+					
 					return event;
-				}
-				
+				}		
 			}
 		}
+	}
+	
+	/**/
+	
+	@AllArgsConstructor
+	public static class ActionAdapter extends Action.ActionListener.Adapter implements Serializable{
+		private static final long serialVersionUID = 1L;
+		
+		protected Event event;
+		protected Form.Detail detail;
+		protected DataTable.Cell cell;
+		protected LoggingHelper.Message.Builder vLoggingMessageBuilder;
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public void __executeBefore__(Action<?, ?> action) {
+			super.__executeBefore__(action);
+			Collection<String> processedFieldNames = (Collection<String>) event.getPropertiesMap().getProcessedFieldNames();
+			vLoggingMessageBuilder.addNamedParameters("processed field names",processedFieldNames);
+			new CollectionHelper.Iterator.Adapter.Default<String>(processedFieldNames){
+				private static final long serialVersionUID = 1L;
+
+				protected void __executeForEach__(String fieldName) {
+					Input<?> input = detail.getInputByFieldName(fieldName);
+					vLoggingMessageBuilder.addNamedParameters("field name",fieldName,"before",input.getValue());
+					input.write();
+					vLoggingMessageBuilder.addNamedParameters("after",input.getValue());
+				}
+			}.execute();
+			
+			Collection<String> processedColumnFieldNames = (Collection<String>) event.getPropertiesMap().getProcessedColumnFieldNames();
+			vLoggingMessageBuilder.addNamedParameters("processed column field names",processedColumnFieldNames);
+			new CollectionHelper.Iterator.Adapter.Default<String>(processedColumnFieldNames){
+				private static final long serialVersionUID = 1L;
+
+				protected void __executeForEach__(String columnFieldName) {
+					Input<?> input = cell.getRow().getCell(columnFieldName).getInput();
+					vLoggingMessageBuilder.addNamedParameters("column field name",columnFieldName,"before",input.getValue());
+					input.write();
+					vLoggingMessageBuilder.addNamedParameters("after",input.getValue());
+				}
+			}.execute();
+			
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public void processOnStatus(Action<?, ?> action) {
+			super.processOnStatus(action);
+			Collection<String> updatedFieldNames = (Collection<String>) event.getPropertiesMap().getUpdatedFieldNames();
+			vLoggingMessageBuilder.addNamedParameters("update field names",updatedFieldNames);
+			new CollectionHelper.Iterator.Adapter.Default<String>(updatedFieldNames){
+				private static final long serialVersionUID = 1L;
+
+				protected void __executeForEach__(String fieldName) {
+					Control control = detail.getControlByFieldName(fieldName);
+					vLoggingMessageBuilder.addNamedParameters("field name",fieldName,"before",control instanceof Input<?> ? ((Input<?>)control).getValue() : ((Output)control).getPropertiesMap().getValue());
+					control.read();
+					vLoggingMessageBuilder.addNamedParameters("after",control instanceof Input<?> ? ((Input<?>)control).getValue() : ((Output)control).getPropertiesMap().getValue());
+				}
+			}.execute();
+			
+			Collection<String> updatedColumnFieldNames = (Collection<String>) event.getPropertiesMap().getUpdatedColumnFieldNames();
+			vLoggingMessageBuilder.addNamedParameters("update column field names",updatedFieldNames);
+			new CollectionHelper.Iterator.Adapter.Default<String>(updatedColumnFieldNames){
+				private static final long serialVersionUID = 1L;
+
+				protected void __executeForEach__(String columnFieldName) {
+					DataTable.Cell vCell = cell.getRow().getCell(columnFieldName);
+					if(vCell.getInput()!=null){
+						vLoggingMessageBuilder.addNamedParameters("field name",columnFieldName,"before",vCell.getInput().getValue());
+						vCell.getInput().read();
+						vLoggingMessageBuilder.addNamedParameters("after",vCell.getInput().getValue());
+					}
+					if(vCell.getPropertiesMap().getValue()!=null){
+						Output output = (Output)vCell.getPropertiesMap().getValue();
+						vLoggingMessageBuilder.addNamedParameters("field name",columnFieldName,"before",output.getPropertiesMap().getValue());
+						output.read();
+						vLoggingMessageBuilder.addNamedParameters("after",output.getPropertiesMap().getValue());
+					}
+					vCell.getColumn().__setPropertyFooterPropertyValueBasedOnMaster__();	
+					
+				}
+			}.execute();
+			logTrace(vLoggingMessageBuilder);
+		}
+		
+		
 	}
 
 }
