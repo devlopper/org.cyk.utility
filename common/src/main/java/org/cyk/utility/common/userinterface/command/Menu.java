@@ -1,6 +1,8 @@
 package org.cyk.utility.common.userinterface.command;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -193,7 +195,16 @@ public class Menu extends MenuNodesContainer implements Serializable {
 					return null;
 				}
 				
-				protected void addNodeIdentifiablesManage(Menu menu){}
+				protected void addNodeIdentifiablesManage(Menu menu){
+					Collection<Class<?>> packageFromClass = new ArrayList<>();
+					if(CollectionHelper.getInstance().isNotEmpty(packageFromClass)){
+						populateNodeIdentifiablesManagePackageFromClass(packageFromClass);
+						menu.addNodeActionListManyFromPackage(packageFromClass.toArray(new Class<?>[]{}));
+						menu.getChildren().setComparator(new Component.LabelPropertyValueComparator()).sort();
+					}
+				}
+				
+				protected void populateNodeIdentifiablesManagePackageFromClass(Collection<Class<?>> packageFromClass){}
 				
 				protected void addNodeInstance(Menu menu,Object instance,Constant.Action action){
 					MenuNode node = menu.addNode("");

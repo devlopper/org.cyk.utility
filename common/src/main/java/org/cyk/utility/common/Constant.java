@@ -10,12 +10,14 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.common.helper.ArrayHelper;
+import org.cyk.utility.common.helper.CollectionHelper;
+import org.joda.time.DateTime;
 
 public interface Constant {
 	
@@ -231,6 +233,30 @@ public interface Constant {
 		
 		public static Boolean isCreateOrUpdate(Action action){
 			return Action.CREATE.equals(action) || Action.UPDATE.equals(action);
+		}
+		
+		public static Boolean isReadOrConsult(Action action){
+			return isOneOf(action, Action.READ, Action.CONSULT);
+		}
+		
+		public static Boolean isNotReadAndNotConsult(Action action){
+			return isNotOneOf(action, Action.READ, Action.CONSULT);
+		}
+		
+		public static Boolean isNotOneOf(Action action,Collection<Action> actions){
+			return !Boolean.TRUE.equals(isOneOf(action, actions));
+		}
+		
+		public static Boolean isNotOneOf(Action action,Action...actions){
+			return !Boolean.TRUE.equals(isOneOf(action, actions));
+		}
+		
+		public static Boolean isOneOf(Action action,Action...actions){
+			return ArrayHelper.getInstance().isNotEmpty(actions) && isOneOf(action, Arrays.asList(actions));
+		}
+		
+		public static Boolean isOneOf(Action action,Collection<Action> actions){
+			return CollectionHelper.getInstance().isNotEmpty(actions) && actions.contains(action);
 		}
 		
 		/**/

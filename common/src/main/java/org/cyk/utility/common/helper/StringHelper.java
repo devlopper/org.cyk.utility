@@ -1298,7 +1298,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 						StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.Cache.Adapter.Default());
 						StringHelper.ToStringMapping.DATASOURCES.add(new StringHelper.ToStringMapping.Datasource.ResourceBundle.Adapter.Default());
 						*/
-						for(String index : new String[]{"core","word","phrase","ordinal","class","field","condition"})
+						for(String index : new String[]{"core","word","phrase","ordinal","class","field","condition","userinterface"})
 							StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.i18n."+index
 									, CommonUtils.class.getClassLoader());
 				        

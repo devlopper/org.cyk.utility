@@ -152,7 +152,7 @@ public class Form extends Container implements Serializable {
 		public Master() {
 			this(null,null,null);
 		}
-		
+				
 		@Override
 		protected Class<?>[] getPropertyStyleClassClasses() {
 			return ArrayUtils.addAll(new Class<?>[]{Form.class}, super.getPropertyStyleClassClasses());
@@ -205,7 +205,7 @@ public class Form extends Container implements Serializable {
 		public Component prepare() {
 			__prepare__();
 			getPropertiesMap().setIfNull(Properties.HEADER_RENDERED, Boolean.TRUE);
-			getPropertiesMap().setIfNull(Properties.FOOTER_RENDERED, Constant.Action.isCreateOrUpdateOrDelete((Constant.Action)getPropertiesMap().getAction()));
+			getPropertiesMap().setIfNull(Properties.FOOTER_RENDERED, Constant.Action.isNotReadAndNotConsult((Constant.Action)getPropertiesMap().getAction()));
 			if(getLabel()!=null && StringHelper.getInstance().isBlank((String)getLabel().getPropertiesMap().getValue()))
 				setLabelFromIdentifier("userinterface.form.master.label");
 			new CollectionHelper.Iterator.Adapter.Default<String>((Set<String>) getPropertiesMap().getFieldNamesSetFromRequestParameters()){

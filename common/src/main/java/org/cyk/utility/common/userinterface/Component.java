@@ -342,6 +342,10 @@ public class Component extends AbstractBean implements Serializable {
 		@Override
 		protected void listenPropertiesInstanciated(Properties propertiesMap) {
 			super.listenPropertiesInstanciated(propertiesMap);
+			__addPropertyStyleClass__(propertiesMap);
+		}
+		
+		protected void __addPropertyStyleClass__(Properties propertiesMap){
 			if(isJavaServerFacesLibraryPrimefaces())
 				propertiesMap.addString(Properties.STYLE_CLASS, Constant.CHARACTER_SPACE.toString(), generatePropertyStyleClass());
 		}
@@ -688,8 +692,12 @@ public class Component extends AbstractBean implements Serializable {
 		component.setParent(parent);
 		component.getPropertiesMap().setActionOnClass(actionOnClass);
 		component.getPropertiesMap().setAction(action);
+		if(parent!=null)
+			component.getPropertiesMap().add(Properties.STYLE_CLASS, CascadeStyleSheetHelper.getInstance().getClass(parent.getClass()));
 		
 		if(component instanceof Form.Master){
+			//if(parent instanceof Window)
+			//	component.getPropertiesMap().add(Properties.STYLE_CLASS, CascadeStyleSheetHelper.getInstance().getClass(parent.getClass()));
 			Object object = parent instanceof Window ? ((Window)parent).getActionOnClassInstances().iterator().next() : null;//TODO how to handle many ? use key to point to the adequate form
 			Form.Master master = (Master) component;
 			master.setObject(object);

@@ -23,6 +23,11 @@ public class LoginWindow extends Window implements Serializable {
 	}
 	
 	@Override
+	protected String getPropertyTitleIdentifier() {
+		return "userinterface.window.login.title.label";
+	}
+	
+	@Override
 	protected Class<? extends Form.Master> getFormMasterClass() {
 		return ClassHelper.getInstance().getMapping(FormMaster.class, Boolean.TRUE);
 	}

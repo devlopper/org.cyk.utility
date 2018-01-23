@@ -10,6 +10,11 @@ public class LogoutWindow extends Window implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	protected String getPropertyTitleIdentifier() {
+		return "userinterface.window.logout.title.label";
+	}
+	
+	@Override
 	protected Class<? extends Form.Master> getFormMasterClass() {
 		return ClassHelper.getInstance().getMapping(FormMaster.class, Boolean.TRUE);
 	}
