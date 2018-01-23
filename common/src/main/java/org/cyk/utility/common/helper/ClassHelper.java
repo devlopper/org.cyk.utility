@@ -420,8 +420,11 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	}
 
 	public void map(Class<?> aClass1,Class<?> aClass2,Boolean overwrite){
-		if(MAP.get(aClass1)==null || Boolean.TRUE.equals(overwrite))
+		Class<?> previous = MAP.get(aClass1);
+		if(previous==null || Boolean.TRUE.equals(overwrite)){
 			MAP.put(aClass1, aClass2);
+		}
+		logTrace("map class , old={} , overwrite={} , new={}",previous,overwrite,MAP.get(aClass1));
 	}
 	
 	public void map(Class<?> aClass1,Class<?> aClass2){
