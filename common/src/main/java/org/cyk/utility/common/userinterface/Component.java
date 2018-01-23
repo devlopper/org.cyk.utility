@@ -693,7 +693,7 @@ public class Component extends AbstractBean implements Serializable {
 		component.getPropertiesMap().setActionOnClass(actionOnClass);
 		component.getPropertiesMap().setAction(action);
 		if(parent!=null)
-			component.getPropertiesMap().add(Properties.STYLE_CLASS, CascadeStyleSheetHelper.getInstance().getClass(parent.getClass()));
+			component.getPropertiesMap().addString(Properties.STYLE_CLASS,Constant.CHARACTER_SPACE, CascadeStyleSheetHelper.getInstance().getClass(parent.getClass()));
 		
 		if(component instanceof Form.Master){
 			//if(parent instanceof Window)
