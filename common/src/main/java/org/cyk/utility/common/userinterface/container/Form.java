@@ -41,8 +41,10 @@ import lombok.experimental.Accessors;
 @Getter @Setter @Accessors(chain=true)
 public class Form extends Container implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	/**/
+	
+	static {
+		ClassHelper.getInstance().map(Builder.Target.class, Builder.Target.Adapter.Default.class,Boolean.FALSE);
+	}
 	
 	public Form() {
 		
@@ -772,8 +774,7 @@ public class Form extends Container implements Serializable {
 
 		@SuppressWarnings("unchecked")
 		public static Object buildTarget(Detail detail){
-			return ClassHelper.getInstance().instanciateOne(InstanceHelper.getInstance()
-					.getIfNotNullElseDefault(Builder.Target.Adapter.Default.DEFAULT_CLASS, Builder.Target.Adapter.Default.class)).setInput(detail).execute();
+			return ClassHelper.getInstance().instanciateOne(Builder.Target.class).setInput(detail).execute();
 		}
 		
 		/**/
@@ -833,9 +834,6 @@ public class Form extends Container implements Serializable {
 					
 					public static class Default<OUTPUT,CONTROL,ROW,LABEL> extends Target.Adapter<OUTPUT,ROW,CONTROL,LABEL> implements Serializable {
 						private static final long serialVersionUID = 1L;
-						
-						@SuppressWarnings("unchecked")
-						public static Class<? extends Target<?,?,?,?>> DEFAULT_CLASS = (Class<? extends Default<?,?,?,?>>) ClassHelper.getInstance().getByName(Default.class);
 						
 						public Default(Detail input, Class<OUTPUT> outputClass) {
 							super(input, outputClass);
