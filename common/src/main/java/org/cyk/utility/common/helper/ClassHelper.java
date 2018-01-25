@@ -434,7 +434,9 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	public <T> Class<? extends T> getMapping(Class<T> aClass,Boolean returnClassIfNull){
 		@SuppressWarnings("unchecked")
 		Class<T> result = (Class<T>) MAP.get(aClass);
-		return result == null ? Boolean.TRUE.equals(returnClassIfNull) ? aClass : null : result;
+		result = result == null ? Boolean.TRUE.equals(returnClassIfNull) ? aClass : null : result;
+		logTrace("mapped class of {} is {}",aClass,result);
+		return result;
 	}
 	
 	public <T> Class<? extends T> getMapping(Class<T> aClass){

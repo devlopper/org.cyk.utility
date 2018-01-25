@@ -36,7 +36,7 @@ public class Menu extends MenuNodesContainer implements Serializable {
 	/**/
 	
 	public static Menu build(Component parent,Type type,RenderType renderType,Boolean buildTarget){
-		Menu menu = ClassHelper.getInstance().instanciateOne(Builder.Adapter.Default.class).setComponentParent(parent).setType(type).setRenderType(renderType).execute();
+		Menu menu = ClassHelper.getInstance().instanciateOne(Builder.class).setComponentParent(parent).setType(type).setRenderType(renderType).execute();
 		if(Boolean.TRUE.equals(buildTarget))
 			menu.build();
 		return menu;
@@ -197,8 +197,8 @@ public class Menu extends MenuNodesContainer implements Serializable {
 				
 				protected void addNodeIdentifiablesManage(Menu menu){
 					Collection<Class<?>> packageFromClass = new ArrayList<>();
-					if(CollectionHelper.getInstance().isNotEmpty(packageFromClass)){
-						populateNodeIdentifiablesManagePackageFromClass(packageFromClass);
+					populateNodeIdentifiablesManagePackageFromClass(packageFromClass);
+					if(CollectionHelper.getInstance().isNotEmpty(packageFromClass)){						
 						menu.addNodeActionListManyFromPackage(packageFromClass.toArray(new Class<?>[]{}));
 						menu.getChildren().setComparator(new Component.LabelPropertyValueComparator()).sort();
 					}
