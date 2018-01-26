@@ -3,6 +3,7 @@ package org.cyk.utility.common.userinterface.input;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -239,6 +240,8 @@ public class Input<T> extends Control implements Serializable {
 		
 		Object getReadableValue(Input<?> input);
 		Object getWritableValue(Input<?> input);
+		
+		Class<?> computeChoiceInstanceClass(InputChoice<?> inputChoice);
 		
 		public static class Adapter extends AbstractBean implements Listener {
 			private static final long serialVersionUID = 1L;
@@ -511,6 +514,13 @@ public class Input<T> extends Control implements Serializable {
 					}
 				}
 				
+				@Override
+				public Class<?> computeChoiceInstanceClass(InputChoice<?> inputChoice) {
+					Class<?> type = FieldHelper.getInstance().getType(inputChoice.getObject().getClass(), inputChoice.getField());
+					if(List.class.equals(type))
+				        type = (Class<?>) ((ParameterizedType) inputChoice.getField().getGenericType()).getActualTypeArguments()[0];
+					return type;
+				}
 			}
 			
 			@Override
@@ -577,6 +587,11 @@ public class Input<T> extends Control implements Serializable {
 			
 			@Override
 			public Object getWritableValue(Input<?> input) {
+				return null;
+			}
+		
+			@Override
+			public Class<?> computeChoiceInstanceClass(InputChoice<?> inputChoice) {
 				return null;
 			}
 		}

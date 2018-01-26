@@ -2,13 +2,10 @@ package org.cyk.utility.common.userinterface.input.choice;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
-import java.util.List;
 
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
-import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.SelectItemHelper;
 import org.cyk.utility.common.userinterface.Control;
@@ -49,9 +46,7 @@ public class InputChoice<T> extends Input<T> implements Serializable {
 	public InputChoice<T> readChoicesElements(){
 		if(object!=null){
 			choices.removeAll();
-			Class<?> type = FieldHelper.getInstance().getType(object.getClass(), field);
-			if(List.class.equals(type))
-		        type = (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+			Class<?> type = Input.getListener().computeChoiceInstanceClass(this);
 			Collection<?> instances = InstanceHelper.getInstance().get(type);
 			if(CollectionHelper.getInstance().isNotEmpty(instances)){
 				choices.addMany(Boolean.TRUE.equals(getPropertiesMap().getSelectItemWrappable()) ? SelectItemHelper.getInstance().get(instances, nullChoicable) : instances);
