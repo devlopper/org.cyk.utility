@@ -3068,6 +3068,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getAddCommandQueryKeyValues() {
+		return get(ADD_COMMAND_QUERY_KEY_VALUES);
+	}
+
+	public Properties setAddCommandQueryKeyValues(Object value) {
+		set(ADD_COMMAND_QUERY_KEY_VALUES, value);
+		return this;
+	}
+	
+	public static final String ADD_COMMAND_QUERY_KEY_VALUES = "ADD_COMMAND_QUERY_KEY_VALUES";
 	public static final String ROW_PROPERTIES = "ROW_PROPERTIES";
 	public static final String REMOVE_COMMAND_PROPERTIES = "REMOVE_COMMAND_PROPERTIES";
 	public static final String COLLAPSED = "COLLAPSED";

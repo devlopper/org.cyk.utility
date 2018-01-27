@@ -976,8 +976,13 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 				public Object getAs(EntryComponent entryComponent, Object object) {
 					if(object instanceof Class)
 						return ClassHelper.getInstance().getIdentifier((Class<?>)object);
-					if(object instanceof Enum<?>){
+					if(object instanceof Enum<?>)
 						return ((Enum<?>)object).name().toLowerCase();
+					if(object != null){
+						if(ClassHelper.getInstance().isSystemIdentified(object.getClass()))
+							return InstanceHelper.getInstance().getSystemIdentifier(object);
+						if(ClassHelper.getInstance().isIdentified(object.getClass()))
+							return InstanceHelper.getInstance().getIdentifier(object);
 					}
 					return object;
 				}

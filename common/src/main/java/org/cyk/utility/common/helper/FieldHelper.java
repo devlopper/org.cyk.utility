@@ -290,16 +290,12 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	}
 	
 	public java.lang.reflect.Field get(Class<?> type,String name) {
-		String fieldName = StringUtils.substringBefore(name, FIELD_NAME_SEPARATOR);
-		for(java.lang.reflect.Field field : get(type))
-			if(StringHelper.getInstance().isAtLocation(field.getName(), fieldName, Location.EXAT))
-				return fieldName.equals(name) ? field : get(field.getType(),StringUtils.substringAfter(name, FIELD_NAME_SEPARATOR));
-		
-		/*
-		for(java.lang.reflect.Field field : get(type))
-			if(StringHelper.getInstance().isAtLocation(field.getName(), name, Location.EXAT))
-				return field;
-		*/
+		if(StringHelper.getInstance().isNotBlank(name)){
+			String fieldName = StringUtils.substringBefore(name, FIELD_NAME_SEPARATOR);
+			for(java.lang.reflect.Field field : get(type))
+				if(StringHelper.getInstance().isAtLocation(field.getName(), fieldName, Location.EXAT))
+					return fieldName.equals(name) ? field : get(field.getType(),StringUtils.substringAfter(name, FIELD_NAME_SEPARATOR));	
+		}
 		return null;
 	}
 	

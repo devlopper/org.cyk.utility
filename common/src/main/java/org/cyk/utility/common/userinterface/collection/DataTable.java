@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Constant.Action;
 import org.cyk.utility.common.Properties;
@@ -139,6 +140,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		return menuNode;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static void addMenu(Component component){
 		Properties componentProperties = component.getPropertiesMap();
 		if(Boolean.TRUE.equals(componentProperties.getOnPrepareAddMenu())){
@@ -150,9 +152,13 @@ public class DataTable extends Component.Visible implements Serializable {
 			component.addOneChild(menu);
 			if(componentProperties.getActionOnClass()!=null){
 				if(Boolean.TRUE.equals(componentProperties.getOnPrepareAddMenuAddCommand())){
-					menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, componentProperties.getActionOnClass()
-							,componentProperties.getMaster() == null ? null : componentProperties.getMaster().getClass()
-									,InstanceHelper.getInstance().getIdentifier(componentProperties.getMaster()))
+					Object[] queryKeyValues = new Object[]{componentProperties.getMaster() == null ? null : componentProperties.getMaster().getClass()
+							,InstanceHelper.getInstance().getIdentifier(componentProperties.getMaster())}; 
+					Collection<Object> addCommandQueryKeyValues = (Collection<Object>)componentProperties.getAddCommandQueryKeyValues();
+					if(CollectionHelper.getInstance().isNotEmpty(addCommandQueryKeyValues))
+						queryKeyValues = ArrayUtils.addAll(queryKeyValues, addCommandQueryKeyValues.toArray());
+					
+					menu.addNode("add")._setPropertyUrl(Constant.Action.CREATE, componentProperties.getActionOnClass(),queryKeyValues)
 						._setPropertyIcon(IconHelper.Icon.FontAwesome.PLUS);
 				}		
 			}	

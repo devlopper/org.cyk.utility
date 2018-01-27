@@ -92,19 +92,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	
 	public Object getIdentifier(final Object instance){
 		return ClassHelper.getInstance().instanciateOne(Listener.class).getIdentifier(instance);
-		/*return listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
-			@Override
-			public Object execute(Listener listener) {
-				return listener.getIdentifier(instance);
-			}
-			
-			@Override
-			public Object getNullValue() {
-				if(instance!=null)
-					return instance.toString();
-				return super.getNullValue();
-			}
-		});*/
+	}
+	
+	public Object getSystemIdentifier(final Object instance){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getSystemIdentifier(instance);
 	}
 	
 	public Object act(Constant.Action action,Object instance){
@@ -926,9 +917,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		
 		String METHOD_NAME_GET_BY_IDENTIFIER = "getByIdentifier";
 		<T> T getByIdentifier(Class<T> aClass,Object identifier);
+		<T> T getBySystemIdentifier(Class<T> aClass,Object identifier);
 		@Deprecated
 		<T> T getIdentifier(Class<T> aClass,Object identifier);
 		Object getIdentifier(Object instance);
+		Object getSystemIdentifier(Object instance);
 		Boolean getAreEqual(Object object1,Object object2);
 		<T> T generateFieldValue(Object instance,String name,Class<T> valueClass);
 		<T> T generateFieldStringValue(Object instance,String name);
@@ -981,6 +974,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			}
 			
 			@Override
+			public Object getSystemIdentifier(Object instance) {
+				return null;
+			}
+			
+			@Override
 			public Boolean getAreEqual(Object object1, Object object2) {
 				return null;
 			}
@@ -1022,6 +1020,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			
 			@Override
 			public <T> T getByIdentifier(Class<T> aClass, Object master) {
+				return null;
+			}
+			
+			@Override
+			public <T> T getBySystemIdentifier(Class<T> aClass, Object master) {
 				return null;
 			}
 			
@@ -1136,6 +1139,13 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			
 				@Override
 				public Object getIdentifier(Object instance) {
+					if(instance instanceof Enum<?>)
+						return ((Enum<?>)instance).name();
+					return super.getIdentifier(instance);
+				}
+				
+				@Override
+				public Object getSystemIdentifier(Object instance) {
 					if(instance instanceof Enum<?>)
 						return ((Enum<?>)instance).name();
 					return super.getIdentifier(instance);
