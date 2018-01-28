@@ -153,7 +153,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			if(componentProperties.getActionOnClass()!=null){
 				if(Boolean.TRUE.equals(componentProperties.getOnPrepareAddMenuAddCommand())){
 					Object[] queryKeyValues = new Object[]{componentProperties.getMaster() == null ? null : componentProperties.getMaster().getClass()
-							,InstanceHelper.getInstance().getIdentifier(componentProperties.getMaster())}; 
+							,componentProperties.getMaster()}; 
 					Collection<Object> addCommandQueryKeyValues = (Collection<Object>)componentProperties.getAddCommandQueryKeyValues();
 					if(CollectionHelper.getInstance().isNotEmpty(addCommandQueryKeyValues))
 						queryKeyValues = ArrayUtils.addAll(queryKeyValues, addCommandQueryKeyValues.toArray());

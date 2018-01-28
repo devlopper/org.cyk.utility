@@ -129,7 +129,7 @@ public class Window extends Container implements Serializable {
 				}else{
 					if(CollectionHelper.getInstance().isNotEmpty(actionOnClassInstanceIdentifiers))
 						for(Object identifier : actionOnClassInstanceIdentifiers){
-							Object instance = InstanceHelper.getInstance().getByIdentifier((Class<?>)getPropertiesMap().getActionOnClass(), identifier);
+							Object instance = InstanceHelper.getInstance().getByIdentifier((Class<?>)getPropertiesMap().getActionOnClass(), identifier,ClassHelper.Listener.IdentifierType.SYSTEM);
 							if(instance!=null)
 								actionOnClassInstances.add(instance);
 						}	

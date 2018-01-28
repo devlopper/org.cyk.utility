@@ -336,9 +336,10 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	
 	public Collection<java.lang.reflect.Field> getByTypeIdentified(Class<?> type) {
 		Collection<java.lang.reflect.Field> fields = new ArrayList<>();
-		for(java.lang.reflect.Field field : get(type))
+		for(java.lang.reflect.Field field : get(type)){
 			if(ClassHelper.getInstance().isIdentified(getType(type, field)))
 				fields.add(field);
+		}
 		return fields;
 	}
 	

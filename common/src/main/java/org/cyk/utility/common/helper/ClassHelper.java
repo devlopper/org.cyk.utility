@@ -28,6 +28,7 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanListener;
+import org.cyk.utility.common.helper.ClassHelper.Listener.IdentifierType;
 import org.cyk.utility.common.model.Identifiable;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -75,24 +76,28 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		super.initialisation();
 	}
 	
-	public String getSystemIdentifierFieldName(Class<?> aClass){
-		return instanciateOne(Listener.class).getSystemIdentifierFieldName(aClass);
-	}
-	
-	public Boolean isSystemIdentified(Class<?> aClass){
-		return instanciateOne(Listener.class).isSystemIdentified(aClass);
+	public String getIdentifierFieldName(Class<?> aClass,IdentifierType type){
+		return instanciateOne(Listener.class).getIdentifierFieldName(aClass,type);
 	}
 	
 	public String getIdentifierFieldName(Class<?> aClass){
 		return instanciateOne(Listener.class).getIdentifierFieldName(aClass);
 	}
 	
-	public String getNameFieldName(Class<?> aClass){
-		return instanciateOne(Listener.class).getNameFieldName(aClass);
+	public Boolean isIdentified(Class<?> aClass,IdentifierType type){
+		return instanciateOne(Listener.class).isIdentified(aClass,type);
 	}
 	
 	public Boolean isIdentified(Class<?> aClass){
 		return instanciateOne(Listener.class).isIdentified(aClass);
+	}
+	
+	public IdentifierType getIdentifierTypeByFirstMatch(Class<?> aClass,IdentifierType...types){
+		return instanciateOne(Listener.class).getIdentifierTypeByFirstMatch(aClass,types);
+	}
+	
+	public String getNameFieldName(Class<?> aClass){
+		return instanciateOne(Listener.class).getNameFieldName(aClass);
 	}
 	
 	public Boolean isNamed(Class<?> aClass){
@@ -674,14 +679,21 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	
 	public static interface Listener {
 
+		public static enum IdentifierType {
+			BUSINESS,SYSTEM
+			;
+			public static IdentifierType DEFAULT = BUSINESS;
+		}
+		
 		Boolean isModel(Class<?> aClass);
 		Boolean isPersisted(Class<?> aClass);
 		
-		String getSystemIdentifierFieldName(Class<?> aClass);
-		Boolean isSystemIdentified(Class<?> aClass);
-		
+		String getIdentifierFieldName(Class<?> aClass,IdentifierType type);
 		String getIdentifierFieldName(Class<?> aClass);
+		Boolean isIdentified(Class<?> aClass,IdentifierType type);
 		Boolean isIdentified(Class<?> aClass);
+		IdentifierType getIdentifierTypeByFirstMatch(Class<?> aClass,IdentifierType...types);
+		
 		Boolean isEnumerated(Class<?> aClass);
 		
 		String getNameFieldName(Class<?> aClass);
@@ -707,25 +719,33 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				public static Integer PAGE_SIZE = 10;
 				
 				@Override
-				public String getIdentifierFieldName(Class<?> aClass) {
+				public String getIdentifierFieldName(Class<?> aClass,IdentifierType type) {
 					return "identifier";
 				}
 				
 				@Override
-				public Boolean isIdentified(Class<?> aClass) {
-					return FieldHelper.getInstance().get(aClass, getIdentifierFieldName(aClass))!=null;
+				public String getIdentifierFieldName(Class<?> aClass) {
+					return getIdentifierFieldName(aClass, IdentifierType.DEFAULT);
 				}
 				
 				@Override
-				public String getSystemIdentifierFieldName(Class<?> aClass) {
+				public IdentifierType getIdentifierTypeByFirstMatch(Class<?> aClass,IdentifierType...types) {
+					for(IdentifierType type : types)
+						if(Boolean.TRUE.equals(isIdentified(aClass, type)))
+							return type;
 					return null;
 				}
-
+				
 				@Override
-				public Boolean isSystemIdentified(Class<?> aClass) {
-					return FieldHelper.getInstance().get(aClass, getSystemIdentifierFieldName(aClass))!=null;
+				public Boolean isIdentified(Class<?> aClass,IdentifierType type) {
+					return FieldHelper.getInstance().get(aClass, getIdentifierFieldName(aClass,type))!=null;
 				}
 				
+				@Override
+				public Boolean isIdentified(Class<?> aClass) {
+					return isIdentified(aClass, IdentifierType.DEFAULT);
+				}
+								
 				@Override
 				public String getNameFieldName(Class<?> aClass) {
 					return "name";
@@ -758,12 +778,12 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				
 				@Override
 				public Boolean isFilterable(Class<?> aClass) {
-					return isIdentified(aClass);
+					return isIdentified(aClass,getIdentifierTypeByFirstMatch(aClass, IdentifierType.values()));
 				}
 				
 				@Override
 				public Boolean isLazy(Class<?> aClass) {
-					return isIdentified(aClass);
+					return isIdentified(aClass,getIdentifierTypeByFirstMatch(aClass, IdentifierType.values()));
 				}
 				
 				@Override
@@ -778,12 +798,12 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				
 				@Override
 				public Boolean isModel(Class<?> aClass) {
-					return isIdentified(aClass);
+					return isIdentified(aClass,getIdentifierTypeByFirstMatch(aClass, IdentifierType.values()));
 				}
 				
 				@Override
 				public Boolean isPersisted(Class<?> aClass) {
-					return isIdentified(aClass);
+					return isIdentified(aClass,getIdentifierTypeByFirstMatch(aClass, IdentifierType.values()));
 				}
 				
 				/**/
@@ -841,12 +861,27 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 			}
 			
 			@Override
+			public String getIdentifierFieldName(Class<?> aClass,IdentifierType type) {
+				return null;
+			}
+			
+			@Override
 			public String getIdentifierFieldName(Class<?> aClass) {
 				return null;
 			}
 			
 			@Override
+			public Boolean isIdentified(Class<?> aClass,IdentifierType type) {
+				return null;
+			}
+			
+			@Override
 			public Boolean isIdentified(Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public IdentifierType getIdentifierTypeByFirstMatch(Class<?> aClass, IdentifierType...types) {
 				return null;
 			}
 		
@@ -865,16 +900,6 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				return null;
 			}
 
-			
-			@Override
-			public String getSystemIdentifierFieldName(Class<?> aClass) {
-				return null;
-			}
-
-			@Override
-			public Boolean isSystemIdentified(Class<?> aClass) {
-				return null;
-			}
 		}
 		
 	}

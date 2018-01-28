@@ -99,7 +99,7 @@ public class RequestHelper extends AbstractHelper implements Serializable {
 		String string = getParameterAsString(name,request);
 		if(StringHelper.getInstance().isNotBlank(string)){
 			Class<?> aClass = ClassHelper.getInstance().getClassByIdentifier(name);
-			return InstanceHelper.getInstance().getByIdentifier(aClass, string);
+			return InstanceHelper.getInstance().getByIdentifier(aClass, string,ClassHelper.Listener.IdentifierType.SYSTEM);
 		}
 		return null;
 	}

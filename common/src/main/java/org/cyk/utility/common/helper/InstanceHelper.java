@@ -24,6 +24,7 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
+import org.cyk.utility.common.helper.ClassHelper.Listener.IdentifierType;
 import org.cyk.utility.common.helper.FilterHelper.Filter;
 import org.cyk.utility.common.helper.InstanceHelper.Listener.FieldValueGenerator;
 import org.cyk.utility.common.security.SecurityHelper;
@@ -90,14 +91,14 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		return ClassHelper.getInstance().instanciateOne(Listener.class).count(aClass,filter,dataReadConfiguration);
 	}
 	
+	public Object getIdentifier(final Object instance,ClassHelper.Listener.IdentifierType type){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getIdentifier(instance,type);
+	}
+	
 	public Object getIdentifier(final Object instance){
 		return ClassHelper.getInstance().instanciateOne(Listener.class).getIdentifier(instance);
 	}
-	
-	public Object getSystemIdentifier(final Object instance){
-		return ClassHelper.getInstance().instanciateOne(Listener.class).getSystemIdentifier(instance);
-	}
-	
+		
 	public Object act(Constant.Action action,Object instance){
 		return ClassHelper.getInstance().instanciateOne(Listener.class).act(action,instance);
 		/*return listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
@@ -115,8 +116,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		});*/
 	}
 	 
-	public <T> T getByIdentifier(Class<T> aClass,Object identifier){
-		return ClassHelper.getInstance().instanciateOne(Listener.class).getByIdentifier(aClass, identifier);
+	public <T> T getByIdentifier(Class<T> aClass,Object identifier,ClassHelper.Listener.IdentifierType identifierType){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getByIdentifier(aClass, identifier,identifierType);
 		//return (T) ListenerHelper.getInstance().listenObject(Listener.COLLECTION, Listener.METHOD_NAME_GET_BY_IDENTIFIER
 		//		, MethodHelper.Method.Parameter.buildArray(Class.class,aClass,Object.class,identifier));
 	}
@@ -916,12 +917,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		Long getHierarchyNumberOfChildren(Object parent);
 		
 		String METHOD_NAME_GET_BY_IDENTIFIER = "getByIdentifier";
-		<T> T getByIdentifier(Class<T> aClass,Object identifier);
-		<T> T getBySystemIdentifier(Class<T> aClass,Object identifier);
+		<T> T getByIdentifier(Class<T> aClass,Object identifier,ClassHelper.Listener.IdentifierType identifierType);
 		@Deprecated
 		<T> T getIdentifier(Class<T> aClass,Object identifier);
+		Object getIdentifier(Object instance,ClassHelper.Listener.IdentifierType identifierType);
 		Object getIdentifier(Object instance);
-		Object getSystemIdentifier(Object instance);
 		Boolean getAreEqual(Object object1,Object object2);
 		<T> T generateFieldValue(Object instance,String name,Class<T> valueClass);
 		<T> T generateFieldStringValue(Object instance,String name);
@@ -969,12 +969,12 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			}
 			
 			@Override
-			public Object getIdentifier(Object instance) {
+			public Object getIdentifier(Object instance,ClassHelper.Listener.IdentifierType identifierType) {
 				return null;
 			}
 			
 			@Override
-			public Object getSystemIdentifier(Object instance) {
+			public Object getIdentifier(Object instance) {
 				return null;
 			}
 			
@@ -1019,12 +1019,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			}
 			
 			@Override
-			public <T> T getByIdentifier(Class<T> aClass, Object master) {
-				return null;
-			}
-			
-			@Override
-			public <T> T getBySystemIdentifier(Class<T> aClass, Object master) {
+			public <T> T getByIdentifier(Class<T> aClass, Object identifier, IdentifierType identifierType) {
 				return null;
 			}
 			
@@ -1088,8 +1083,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				
 				@Override
 				public Boolean getAreEqual(Object object1, Object object2) {
-					Object identifier1 = getIdentifier(object1);
-					Object identifier2 = getIdentifier(object2);
+					Object identifier1 = getIdentifier(object1,ClassHelper.Listener.IdentifierType.BUSINESS);
+					Object identifier2 = getIdentifier(object2,ClassHelper.Listener.IdentifierType.BUSINESS);
 					return identifier1!=null && identifier2!=null && identifier1.equals(identifier2);
 				}
 				
@@ -1138,17 +1133,15 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				}
 			
 				@Override
-				public Object getIdentifier(Object instance) {
+				public Object getIdentifier(Object instance,ClassHelper.Listener.IdentifierType identifierType) {
 					if(instance instanceof Enum<?>)
 						return ((Enum<?>)instance).name();
-					return super.getIdentifier(instance);
+					return super.getIdentifier(instance,identifierType);
 				}
 				
 				@Override
-				public Object getSystemIdentifier(Object instance) {
-					if(instance instanceof Enum<?>)
-						return ((Enum<?>)instance).name();
-					return super.getIdentifier(instance);
+				public Object getIdentifier(Object instance) {
+					return getIdentifier(instance,ClassHelper.Listener.IdentifierType.DEFAULT);
 				}
 			
 				@Override
@@ -1454,7 +1447,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				
 				for(T instance : collection)
 					//Equals method to be created
-					if( identifier.equals(InstanceHelper.getInstance().getIdentifier(instance)) ){
+					if( identifier.equals(InstanceHelper.getInstance().getIdentifier(instance,ClassHelper.Listener.IdentifierType.BUSINESS)) ){
 						result = instance;
 						break;
 					}

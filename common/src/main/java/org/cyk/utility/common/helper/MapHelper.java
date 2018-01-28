@@ -830,7 +830,8 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 							}
 							
 						}
-						return StringHelper.getInstance().concatenate(keyValues, InstanceHelper.getInstance().getIfNotNullElseDefault(getKeyValuesSeparator(), listener.getSeparatorOfKeyValue()));
+						String result = StringHelper.getInstance().concatenate(keyValues, InstanceHelper.getInstance().getIfNotNullElseDefault(getKeyValuesSeparator(), listener.getSeparatorOfKeyValue()));
+						return result;
 					}
 					
 					protected MapHelper.Listener __getListener__(){
@@ -979,10 +980,12 @@ public class MapHelper extends AbstractHelper implements Serializable  {
 					if(object instanceof Enum<?>)
 						return ((Enum<?>)object).name().toLowerCase();
 					if(object != null){
-						if(ClassHelper.getInstance().isSystemIdentified(object.getClass()))
-							return InstanceHelper.getInstance().getSystemIdentifier(object);
-						if(ClassHelper.getInstance().isIdentified(object.getClass()))
-							return InstanceHelper.getInstance().getIdentifier(object);
+						if(ClassHelper.getInstance().isIdentified(object.getClass())){
+							ClassHelper.Listener.IdentifierType identifierType = ClassHelper.getInstance().getIdentifierTypeByFirstMatch(object.getClass(),ClassHelper.Listener.IdentifierType.SYSTEM
+									,ClassHelper.Listener.IdentifierType.BUSINESS); 
+							return InstanceHelper.getInstance().getIdentifier(object,identifierType);	
+						}
+						
 					}
 					return object;
 				}

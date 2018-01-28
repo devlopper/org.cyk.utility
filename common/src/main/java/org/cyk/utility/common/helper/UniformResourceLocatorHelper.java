@@ -812,6 +812,7 @@ public class UniformResourceLocatorHelper extends AbstractHelper implements Seri
 			String URL_NEXT = "urlnext";
 			String ACTION = "action";
 			String CLASS = "clazz";
+			String CLASS_IDENTIFIABLE_GLOBAL_IDENTIFIER = "clazzidentifiableglobalidentifier";
 			String INPUT_VALUE_IS_NOT_REQUIRED = "INPUT_VALUE_IS_NOT_REQUIRED";
 		}
 		

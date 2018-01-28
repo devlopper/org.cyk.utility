@@ -22,6 +22,7 @@ import org.cyk.utility.common.helper.InstanceHelper.Lookup.Source;
 import org.cyk.utility.common.helper.InstanceHelper.Pool;
 import org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod;
 import org.cyk.utility.common.helper.RandomHelper;
+import org.cyk.utility.common.helper.ClassHelper.Listener.IdentifierType;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -335,11 +336,11 @@ public class InstanceHelperUnitTest extends AbstractUnitTest {
 		}
 		
 		@Override
-		public <T> T getByIdentifier(Class<T> aClass, Object identifier) {
+		public <T> T getByIdentifier(Class<T> aClass, Object identifier, IdentifierType identifierType) {
 			if(aClass.equals(A.class))
 				if(identifier.equals("12"))
 					return null;
-			return super.getByIdentifier(aClass, identifier);
+			return super.getByIdentifier(aClass, identifier, identifierType);
 		}
 		
 		/*@Override

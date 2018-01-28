@@ -219,6 +219,11 @@ public class Form extends Container implements Serializable {
 		}
 		
 		protected void __prepare__(){
+			__setFromRequestParameter__();
+			InstanceHelper.getInstance().computeChanges(object);
+		}
+		
+		protected void __setFromRequestParameter__(){
 			new CollectionHelper.Iterator.Adapter.Default<Class<?>>(getRequestParameterClasses()){
 				private static final long serialVersionUID = 1L;
 				@Override
@@ -226,7 +231,6 @@ public class Form extends Container implements Serializable {
 					setFromRequestParameter(aClass);
 				}
 			}.execute();
-			InstanceHelper.getInstance().computeChanges(object);
 		}
 		
 		protected Collection<Class<?>> getRequestParameterClasses(){
