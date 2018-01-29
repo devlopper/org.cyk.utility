@@ -1262,9 +1262,16 @@ public class DataTable extends Component.Visible implements Serializable {
 		protected void listenObjectCreated(Object object,Object source){}
 		
 		protected CollectionHelper.Instance<?> getDestinationCollection(){
-			if(dataTable.getPropertiesMap().getActionOnClass()!=null)
-				return (CollectionHelper.Instance<?>) FieldHelper.getInstance().read(dataTable.getForm().getMaster().getObject()
-					, ClassHelper.getInstance().getVariableName((Class<?>) dataTable.getPropertiesMap().getActionOnClass(),Boolean.TRUE));// ((Order)).getOrderItems();
+			if(dataTable.getPropertiesMap().getActionOnClass()!=null){
+				java.lang.reflect.Field field = FieldHelper.getInstance().get(dataTable.getForm().getMaster().getObject().getClass()
+						, ClassHelper.getInstance().getVariableName((Class<?>) dataTable.getPropertiesMap().getActionOnClass(),Boolean.TRUE));
+				if(field == null){
+					field = FieldHelper.getInstance().get(dataTable.getForm().getMaster().getObject().getClass(),"items");
+				}
+				
+				if(field != null)
+					return (CollectionHelper.Instance<?>) FieldHelper.getInstance().read(dataTable.getForm().getMaster().getObject(), field);
+			}
 			return null;
 		}
 	
