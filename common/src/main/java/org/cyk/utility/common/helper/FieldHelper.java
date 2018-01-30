@@ -92,7 +92,9 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	}
 	
 	public String getBeforeLast(String fieldName){
-		return StringUtils.contains(fieldName, FIELD_NAME_SEPARATOR) ? StringUtils.substringBeforeLast(fieldName, FIELD_NAME_SEPARATOR) : fieldName;
+		String result = StringUtils.contains(fieldName, FIELD_NAME_SEPARATOR) ? StringUtils.substringBeforeLast(fieldName, FIELD_NAME_SEPARATOR) : fieldName;
+		logTrace("get field name before last , field name={} , result={}",fieldName,result);
+		return result;
 	}
 	
 	public List<String> getFieldNames(String...fieldPaths){
@@ -150,10 +152,25 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	}
 	
 	public Object readBeforeLast(Object instance,String fieldName){
-		String beforeLastFieldName = getBeforeLast(fieldName);
-		if(fieldName.equals(beforeLastFieldName))
-			return instance;
-		return read(instance, beforeLastFieldName);
+		LoggingHelper.Message.Builder loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default();
+		loggingMessageBuilder.addManyParameters("read before last");
+		if(instance!=null)
+			loggingMessageBuilder.addNamedParameters("instance class",instance.getClass());
+		loggingMessageBuilder.addNamedParameters("field name",fieldName);
+		Object result;
+		if(instance==null)
+			result = null;
+		else {
+			String beforeLastFieldName = getBeforeLast(fieldName);
+			loggingMessageBuilder.addNamedParameters("before last field name",beforeLastFieldName);
+			if(fieldName.equals(beforeLastFieldName))
+				result = instance;
+			else
+				result = read(instance, beforeLastFieldName);
+		}
+		loggingMessageBuilder.addNamedParameters("result",result);
+		logTrace(loggingMessageBuilder);
+		return result;
 	}
 	
 	public Object readStatic(java.lang.reflect.Field field){

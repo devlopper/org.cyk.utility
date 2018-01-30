@@ -14,6 +14,7 @@ import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.CommandHelper;
+import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
 import org.cyk.utility.common.helper.StringHelper;
@@ -322,13 +323,17 @@ public class Event extends Component.Invisible implements Serializable {
 
 				protected void __executeForEach__(String fieldName) {
 					vLoggingMessageBuilder.addNamedParameters("field name",fieldName);
-					Control control = detail.getControlByFieldName(fieldName);
+					Object fieldObject = FieldHelper.getInstance().readBeforeLast(detail.getMaster().getObject(), fieldName);
+					Control control = detail.getControlByFieldName(fieldObject,fieldName);
 					if(control != null){
 						vLoggingMessageBuilder.addNamedParameters("before",control instanceof Input<?> ? ((Input<?>)control).getValue() : ((Output)control).getPropertiesMap().getValue());
 						control.read();
 						vLoggingMessageBuilder.addNamedParameters("after",control instanceof Input<?> ? ((Input<?>)control).getValue() : ((Output)control).getPropertiesMap().getValue());
-					}else
-						vLoggingMessageBuilder.addManyParameters("no control found");
+					}else{
+						System.out
+								.println("Event.ActionAdapter.processOnStatus() NOT FOUND "+fieldName);
+						vLoggingMessageBuilder.addManyParameters("control not found");
+					}
 				}
 			}.execute();
 			
