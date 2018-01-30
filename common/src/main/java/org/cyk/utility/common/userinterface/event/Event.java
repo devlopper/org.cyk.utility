@@ -324,15 +324,13 @@ public class Event extends Component.Invisible implements Serializable {
 				protected void __executeForEach__(String fieldName) {
 					vLoggingMessageBuilder.addNamedParameters("field name",fieldName);
 					Object fieldObject = FieldHelper.getInstance().readBeforeLast(detail.getMaster().getObject(), fieldName);
-					Control control = detail.getControlByFieldName(fieldObject,fieldName);
+					Control control = detail.getControlByFieldName(fieldObject,FieldHelper.getInstance().getLast(fieldName));
 					if(control != null){
 						vLoggingMessageBuilder.addNamedParameters("before",control instanceof Input<?> ? ((Input<?>)control).getValue() : ((Output)control).getPropertiesMap().getValue());
 						control.read();
 						vLoggingMessageBuilder.addNamedParameters("after",control instanceof Input<?> ? ((Input<?>)control).getValue() : ((Output)control).getPropertiesMap().getValue());
 					}else{
-						System.out
-								.println("Event.ActionAdapter.processOnStatus() NOT FOUND "+fieldName);
-						vLoggingMessageBuilder.addManyParameters("control not found");
+						vLoggingMessageBuilder.addManyParameters("CONTROL NOT FOUND");
 					}
 				}
 			}.execute();
