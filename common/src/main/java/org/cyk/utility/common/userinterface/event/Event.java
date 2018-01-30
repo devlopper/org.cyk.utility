@@ -321,10 +321,14 @@ public class Event extends Component.Invisible implements Serializable {
 				private static final long serialVersionUID = 1L;
 
 				protected void __executeForEach__(String fieldName) {
+					vLoggingMessageBuilder.addNamedParameters("field name",fieldName);
 					Control control = detail.getControlByFieldName(fieldName);
-					vLoggingMessageBuilder.addNamedParameters("field name",fieldName,"before",control instanceof Input<?> ? ((Input<?>)control).getValue() : ((Output)control).getPropertiesMap().getValue());
-					control.read();
-					vLoggingMessageBuilder.addNamedParameters("after",control instanceof Input<?> ? ((Input<?>)control).getValue() : ((Output)control).getPropertiesMap().getValue());
+					if(control != null){
+						vLoggingMessageBuilder.addNamedParameters("before",control instanceof Input<?> ? ((Input<?>)control).getValue() : ((Output)control).getPropertiesMap().getValue());
+						control.read();
+						vLoggingMessageBuilder.addNamedParameters("after",control instanceof Input<?> ? ((Input<?>)control).getValue() : ((Output)control).getPropertiesMap().getValue());
+					}else
+						vLoggingMessageBuilder.addManyParameters("no control found");
 				}
 			}.execute();
 			
