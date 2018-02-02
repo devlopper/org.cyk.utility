@@ -832,13 +832,17 @@ public class DataTable extends Component.Visible implements Serializable {
 		}
 		
 		public Column getColumn(String fieldName){
+			Column column = null;
 			@SuppressWarnings("unchecked")
 			Collection<Column> collection = (Collection<Column>) getPropertiesMap().getValue();
 			if(collection!=null)
-				for(Column column : collection)
-					if(fieldName==null && column.getPropertiesMap().getFieldName()==null || fieldName.equals(column.getPropertiesMap().getFieldName()))
-						return column;
-			return null;
+				for(Column index : collection)
+					if(fieldName==null && index.getPropertiesMap().getFieldName()==null || fieldName.equals(index.getPropertiesMap().getFieldName())){
+						column = index;
+						break;
+					}
+			logTrace("get column. field name={} , column is not null={}", fieldName,column!=null);
+			return column;
 		}
 		
 		public static Columns getProperty(Component component){
