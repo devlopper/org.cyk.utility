@@ -111,6 +111,19 @@ public class DataTable extends Component.Visible implements Serializable {
 		return getPropertyRowPropertiesPropertyRemoveCommandProperties(Boolean.TRUE);
 	}
 	
+	public CollectionHelper.Instance<?> getPropertyRowsCollectionInstance(Boolean createIfNull){
+		CollectionHelper.Instance<?> result = (CollectionHelper.Instance<?>) getPropertiesMap().getRowsCollectionInstance();
+		if(result == null && Boolean.TRUE.equals(createIfNull)){
+			result = new CollectionHelper.Instance<>();
+			getPropertiesMap().setRowsCollectionInstance(result);
+		}
+		return result;
+	}
+	
+	public CollectionHelper.Instance<?> getPropertyRowsCollectionInstance(){
+		return getPropertyRowsCollectionInstance(Boolean.TRUE);
+	}
+	
 	@Override
 	public DataTable build() {
 		Columns columns = (Columns) getPropertiesMap().getColumns();
@@ -367,25 +380,39 @@ public class DataTable extends Component.Visible implements Serializable {
 			
 			addFilter(this);			
 		}
+		
+		for(Column index : Columns.getPropertyValue(this)){
+			if(Boolean.TRUE.equals(index.getPropertiesMap().getIsFooterShowable()))
+				index.__setPropertyFooterPropertyValueBasedOnMaster__();
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public DataTable load() {
 		super.load();
-		if(getPropertiesMap().getActionOnClass()!=null){
-			Class<?> actionOnClass = (Class<?>) getPropertiesMap().getActionOnClass();
-			Collection<?> instances;
-			if(getPropertiesMap().getMaster()==null)
-				instances = InstanceHelper.getInstance().get((Class<?>) getPropertiesMap().getActionOnClass());
-			else{
-				FilterHelper.Filter<Object> filter = (FilterHelper.Filter<Object>) ClassHelper.getInstance().instanciateOne(FilterHelper.Filter.ClassLocator.getInstance()
-						.locate(actionOnClass));
-				filter.addMaster(getPropertiesMap().getMaster());
-				instances = InstanceHelper.getInstance().get((Class<Object>) getPropertiesMap().getActionOnClass(),filter, new DataReadConfiguration(null, null));
-			}
-			addManyRow(instances);
+		Collection<?> instances = null;
+		if(Boolean.TRUE.equals(getPropertiesMap().getIsInstancesLoadableFromCollection())){
+			instances = getFormMasterObjectActionOnClassCollectionInstance().getElements();
+		}else{
+			if(getPropertiesMap().getActionOnClass()!=null){
+				Class<?> actionOnClass = (Class<?>) getPropertiesMap().getActionOnClass();
+				
+				if(getPropertiesMap().getMaster()==null)
+					instances = InstanceHelper.getInstance().get((Class<?>) getPropertiesMap().getActionOnClass());
+				else{
+					FilterHelper.Filter<Object> filter = (FilterHelper.Filter<Object>) ClassHelper.getInstance().instanciateOne(FilterHelper.Filter.ClassLocator.getInstance()
+							.locate(actionOnClass));
+					filter.addMaster(getPropertiesMap().getMaster());
+					instances = InstanceHelper.getInstance().get((Class<Object>) getPropertiesMap().getActionOnClass(),filter, new DataReadConfiguration(null, null));
+					if(Constant.Action.isCreateOrUpdate((Constant.Action) getPropertiesMap().getAction())){
+						getFormMasterObjectActionOnClassCollectionInstance().addMany(instances);
+					}
+				}
+				
+			}	
 		}
+		addManyRow(instances);
 		return this;
 	}
 	
@@ -545,6 +572,20 @@ public class DataTable extends Component.Visible implements Serializable {
 		return this;
 	}
 	
+	public CollectionHelper.Instance<?> getFormMasterObjectActionOnClassCollectionInstance(){
+		if(getPropertiesMap().getActionOnClass()!=null){
+			java.lang.reflect.Field field = FieldHelper.getInstance().get(getForm().getMaster().getObject().getClass()
+					, ClassHelper.getInstance().getVariableName((Class<?>) getPropertiesMap().getActionOnClass(),Boolean.TRUE));
+			if(field == null){
+				field = FieldHelper.getInstance().get(getForm().getMaster().getObject().getClass(),"items");
+			}
+			
+			if(field != null)
+				return (CollectionHelper.Instance<?>) FieldHelper.getInstance().read(getForm().getMaster().getObject(), field);
+		}
+		return null;
+	}
+	
 	/**/
 	
 	/**/
@@ -653,7 +694,7 @@ public class DataTable extends Component.Visible implements Serializable {
 				if(field!=null){
 					loggingMessageBuilder.addNamedParameters("before set",((OutputText)column.getPropertiesMap().getFooter()).getPropertiesMap().getValue());
 					((OutputText)column.getPropertiesMap().getFooter()).getPropertiesMap().setValue(FieldHelper.getInstance()
-							.read(dataTable.getPropertiesMap().getMaster(), field));
+							.read(dataTable.getPropertiesMap().getMaster(), (String)column.getPropertiesMap().getFieldName()));
 					loggingMessageBuilder.addNamedParameters("after set",((OutputText)column.getPropertiesMap().getFooter()).getPropertiesMap().getValue());
 				}
 			}
@@ -857,7 +898,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			menu.addNode("read")._setPropertyUrl(Constant.Action.READ,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
 				._setPropertyIcon(IconHelper.Icon.FontAwesome.EYE);
 			menu.addNode("update")._setPropertyUrl(Constant.Action.UPDATE,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
-				._setPropertyIcon(IconHelper.Icon.FontAwesome.PENCIL);
+				._setPropertyIcon(IconHelper.Icon.FontAwesome.EDIT);
 			deleteMenuNode = (MenuNode) menu.addNode("delete")._setPropertyUrl(Constant.Action.DELETE,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
 				._setPropertyIcon(IconHelper.Icon.FontAwesome.TRASH);
 			
@@ -1210,8 +1251,6 @@ public class DataTable extends Component.Visible implements Serializable {
 			//row.getDeleteMenuNode().getPropertiesMap().setUrl(null);
 			//RemoteCommand.instanciateOne(row.getDeleteMenuNode(),command.getAction(),command.getActionListener());
 			
-			
-			
 			new CollectionHelper.Iterator.Adapter.Default<String>((Collection<String>) row.getPropertiesMap().getUpdatedFieldNames()){
 				private static final long serialVersionUID = 1L;
 
@@ -1233,6 +1272,10 @@ public class DataTable extends Component.Visible implements Serializable {
 				}
 			}
 			
+			if(dataTable.getPropertiesMap().getMasterFieldName()!=null)
+				FieldHelper.getInstance().set(row.getPropertiesMap().getValue(), dataTable.getForm().getMaster().getObject()
+						, (String)dataTable.getPropertiesMap().getMasterFieldName());//doing this allow to share same memory object
+			//salableProductCollectionItem.setCollection((SalableProductCollection) getObject());
 		}
 	}
 	
@@ -1246,7 +1289,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		protected Object __execute__() {
 			InputChoiceOne inputChoiceOne = (InputChoiceOne) dataTable.getPropertiesMap().getAddInputComponent();
 			Class<?> actionOnClass = (Class<?>) dataTable.getPropertiesMap().getActionOnClass();
-			____execute____(actionOnClass, inputChoiceOne);
+			____execute____(actionOnClass, inputChoiceOne);	
 			return null;
 		}
 		
@@ -1262,17 +1305,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		protected void listenObjectCreated(Object object,Object source){}
 		
 		protected CollectionHelper.Instance<?> getDestinationCollection(){
-			if(dataTable.getPropertiesMap().getActionOnClass()!=null){
-				java.lang.reflect.Field field = FieldHelper.getInstance().get(dataTable.getForm().getMaster().getObject().getClass()
-						, ClassHelper.getInstance().getVariableName((Class<?>) dataTable.getPropertiesMap().getActionOnClass(),Boolean.TRUE));
-				if(field == null){
-					field = FieldHelper.getInstance().get(dataTable.getForm().getMaster().getObject().getClass(),"items");
-				}
-				
-				if(field != null)
-					return (CollectionHelper.Instance<?>) FieldHelper.getInstance().read(dataTable.getForm().getMaster().getObject(), field);
-			}
-			return null;
+			return dataTable.getFormMasterObjectActionOnClassCollectionInstance();
 		}
 	
 		protected Object getChoice(Object object){
@@ -1353,7 +1386,9 @@ public class DataTable extends Component.Visible implements Serializable {
 									private static final long serialVersionUID = 1L;
 
 									protected void __executeForEach__(String fieldName) {
-										Control control = ((Form.Detail)dataTable.getPropertiesMap().getFormDetail()).getControlByFieldName(fieldName);
+										Object fieldObject = FieldHelper.getInstance().readBeforeLast(((Form.Detail)dataTable.getPropertiesMap().getFormDetail()).getMaster().getObject(), fieldName);
+										Control control = ((Form.Detail)dataTable.getPropertiesMap().getFormDetail()).getControlByFieldName(fieldObject,FieldHelper.getInstance().getLast(fieldName));										
+										//Control control = ((Form.Detail)dataTable.getPropertiesMap().getFormDetail()).getControlByFieldName(fieldName);
 										Object v1 = control instanceof Input ? ((Input<?>)control).getValue() : ((OutputText)control).getPropertiesMap().getValue();
 										control.read();
 										Object v2 = control instanceof Input ? ((Input<?>)control).getValue() : ((OutputText)control).getPropertiesMap().getValue();

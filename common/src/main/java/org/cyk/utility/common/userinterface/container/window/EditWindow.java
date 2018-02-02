@@ -21,6 +21,8 @@ public class EditWindow extends Window implements Serializable {
 	
 		/**/
 		
+		/**/
+		
 		public static class ClassLocator extends Form.Master.ClassLocator implements Serializable {
 			private static final long serialVersionUID = 1L;
 

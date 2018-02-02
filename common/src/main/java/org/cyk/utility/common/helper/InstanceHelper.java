@@ -35,6 +35,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 
 	static {
 		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
+		ClassHelper.getInstance().map(Stringifier.Label.class, Stringifier.Label.Adapter.Default.class,Boolean.FALSE);
 	}
 	
 	private static InstanceHelper INSTANCE;
@@ -97,6 +98,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	
 	public Object getIdentifier(final Object instance){
 		return ClassHelper.getInstance().instanciateOne(Listener.class).getIdentifier(instance);
+	}
+	
+	public String getName(final Object instance){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getName(instance);
 	}
 		
 	public Object act(Constant.Action action,Object instance){
@@ -177,7 +182,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	public String getLabel(Object instance){
 		if(instance==null)
 			return null;
-		return ClassHelper.getInstance().instanciateOne(Stringifier.Label.Adapter.Default.DEFAULT_CLASS).setInput(instance).execute();
+		return ClassHelper.getInstance().instanciateOne(Stringifier.Label.class).setInput(instance).execute();
 	}
 	
 	public String getDescription(Object instance){
@@ -922,6 +927,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		<T> T getIdentifier(Class<T> aClass,Object identifier);
 		Object getIdentifier(Object instance,ClassHelper.Listener.IdentifierType identifierType);
 		Object getIdentifier(Object instance);
+		String getName(Object instance);
 		Boolean getAreEqual(Object object1,Object object2);
 		<T> T generateFieldValue(Object instance,String name,Class<T> valueClass);
 		<T> T generateFieldStringValue(Object instance,String name);
@@ -942,6 +948,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		
 		public static class Adapter extends AbstractHelper.Listener.Adapter.Default implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public String getName(Object instance) {
+				return null;
+			}
 			
 			@Override
 			public Object act(org.cyk.utility.common.Constant.Action action, Object instance) {
@@ -1143,6 +1154,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				public Object getIdentifier(Object instance) {
 					return getIdentifier(instance,ClassHelper.Listener.IdentifierType.DEFAULT);
 				}
+				
+				@Override
+				public String getName(Object instance) {
+					return (String) (instance == null ? null :FieldHelper.getInstance().read(instance, ClassHelper.getInstance().getNameFieldName(instance.getClass())));
+				}
 			
 				@Override
 				public Object act(org.cyk.utility.common.Constant.Action action, Object instance) {
@@ -1331,13 +1347,24 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 
 				public static class Default extends Label.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
-
-					public static Class<? extends Label> DEFAULT_CLASS = Label.Adapter.Default.class;
 					
 					@Override
 					protected java.lang.String __execute__() {
 						Object instance = getInput();
-						return instance == null ? "NULL_LABEL" : instance.toString();
+						Object string;
+						if(instance == null){
+							string = null;
+						}else{
+							string = getInstance().getName(instance);
+							if( string!=null && StringHelper.getInstance().isBlank(string.toString()) ){
+								string = getInstance().getIdentifier(instance, ClassHelper.Listener.IdentifierType.BUSINESS);
+								if(string==null){
+									string = getInstance().getIdentifier(instance, ClassHelper.Listener.IdentifierType.SYSTEM);
+								}
+							}
+							
+						}
+						return string == null ? "NULL_LABEL" : string.toString();
 					}
 				}
 			}

@@ -72,7 +72,15 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	}
 	
 	public String buildPath(String...fieldNames){
-		return ArrayHelper.getInstance().isEmpty(fieldNames) ? Constant.EMPTY_STRING : StringUtils.join(fieldNames,FIELD_NAME_SEPARATOR);
+		StringBuilder stringBuilder = new StringBuilder();
+		if(ArrayHelper.getInstance().isNotEmpty(fieldNames)){
+			Collection<String> strings = new ArrayList<String>();
+			for(String index : fieldNames)
+				if(StringHelper.getInstance().isNotBlank(index))
+					strings.add(index);
+			stringBuilder.append(StringUtils.join(strings,FIELD_NAME_SEPARATOR));
+		}
+		return stringBuilder.toString();
 	}
 	
 	public Boolean getIsContainSeparator(String fieldName){

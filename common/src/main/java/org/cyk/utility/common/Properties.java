@@ -3077,6 +3077,36 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getIsFooterShowable() {
+		return get(IS_FOOTER_SHOWABLE);
+	}
+
+	public Properties setIsFooterShowable(Object value) {
+		set(IS_FOOTER_SHOWABLE, value);
+		return this;
+	}
+	
+	public Object getIsInstancesLoadableFromCollection() {
+		return get(IS_INSTANCES_LOADABLE_FROM_COLLECTION);
+	}
+
+	public Properties setIsInstancesLoadableFromCollection(Object value) {
+		set(IS_INSTANCES_LOADABLE_FROM_COLLECTION, value);
+		return this;
+	}
+	
+	public Object getMasterFieldName() {
+		return get(MASTER_FIELD_NAME);
+	}
+
+	public Properties setMasterFieldName(Object value) {
+		set(MASTER_FIELD_NAME, value);
+		return this;
+	}
+	
+	public static final String MASTER_FIELD_NAME = "MASTER_FIELD_NAME";
+	public static final String IS_INSTANCES_LOADABLE_FROM_COLLECTION = "IS_INSTANCES_LOADABLE_FROM_COLLECTION";
+	public static final String IS_FOOTER_SHOWABLE = "IS_FOOTER_SHOWABLE";
 	public static final String ADD_COMMAND_QUERY_KEY_VALUES = "ADD_COMMAND_QUERY_KEY_VALUES";
 	public static final String ROW_PROPERTIES = "ROW_PROPERTIES";
 	public static final String REMOVE_COMMAND_PROPERTIES = "REMOVE_COMMAND_PROPERTIES";

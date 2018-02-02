@@ -220,7 +220,14 @@ public class Form extends Container implements Serializable {
 		
 		protected void __prepare__(){
 			__setFromRequestParameter__();
-			InstanceHelper.getInstance().computeChanges(object);
+			__computeChanges__();
+			getDetail().getLayout().setType(Layout.Type.ADAPTIVE);
+			____add____();
+		}
+		
+		protected void __computeChanges__(){
+			//if(CollectionHelper.getInstance().isNotEmpty((Collection<?>)getPropertiesMap().getFieldNamesSetFromRequestParameters()))
+			//	InstanceHelper.getInstance().computeChanges(object);
 		}
 		
 		protected void __setFromRequestParameter__(){
@@ -268,7 +275,17 @@ public class Form extends Container implements Serializable {
 			dataTable.getPropertiesMap().setActionOnClass(actionOnClass);
 			dataTable.getPropertiesMap().setChoiceValueClass(choiceValueClass);
 			dataTable.getPropertiesMap().setCellListener(cellListener);
+			dataTable.getPropertiesMap().setOnPrepareAddColumnAction(Boolean.TRUE);
+			
 			getDetail().addDataTable(dataTable,bottom);
+			
+			if(Constant.Action.isCreateOrUpdate( (Constant.Action)dataTable.getPropertiesMap().getAction() )){
+				
+			}else{
+				dataTable.getPropertiesMap().setOnPrepareAddMenu(Boolean.TRUE);
+				dataTable.getPropertiesMap().setOnPrepareAddMenuAddCommand(Boolean.TRUE);	
+			}
+			
 			dataTable.addColumnsByFieldNames(fieldNames);
 			return dataTable;
 		}
@@ -331,6 +348,50 @@ public class Form extends Container implements Serializable {
 			setFromRequestParameter(aClass, ClassHelper.getInstance().getVariableName(aClass));
 			return this;
 		} 
+		
+		/**/
+		
+		protected void ____add____(){
+			____addCode____();
+			____addName____();
+			____addHierarchy____();
+			____addType____();
+		}
+		
+		protected void ____addCode____(){
+			if(ClassHelper.getInstance().isIdentified(getObject().getClass()))
+				____add____(ClassHelper.getInstance().getIdentifierFieldName(getObject().getClass()));
+		}
+		
+		protected void ____addName____(){
+			if(ClassHelper.getInstance().isNamed(getObject().getClass()))
+				____add____(ClassHelper.getInstance().getNameFieldName(getObject().getClass()));
+		}
+		
+		protected void ____addHierarchy____(){
+			if(ClassHelper.getInstance().isHierarchy(getObject().getClass()))
+				____add____(ClassHelper.getInstance().getHierarchyFieldName(getObject().getClass()));
+		}
+		
+		protected void ____addType____(){
+			if(ClassHelper.getInstance().isTyped(getObject().getClass()))
+				____add____(ClassHelper.getInstance().getTypeFieldName(getObject().getClass()));
+		}
+		
+		/**/
+		
+		protected void ____add____(String fieldName){
+			if(Boolean.TRUE.equals(Input.isinputable(getObject().getClass(), fieldName))){
+				getDetail().setFieldsObjectFromMaster(FieldHelper.getInstance().getIsContainSeparator(fieldName) ? ____getFieldsObjectFromMaster____(fieldName) : null);
+				getDetail().add(FieldHelper.getInstance().getLast(fieldName)).addBreak();
+			}
+		}
+
+		protected String[] ____getFieldsObjectFromMaster____(String fieldName) {
+			return FieldHelper.getInstance().getFieldNames(FieldHelper.getInstance().getBeforeLast(fieldName)).toArray(new String[]{});
+		}
+		
+		/**/
 		
 		public static interface BuilderBase<OUTPUT extends Master> extends Form.BuilderBase<OUTPUT> {
 

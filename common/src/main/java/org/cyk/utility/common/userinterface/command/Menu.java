@@ -151,40 +151,45 @@ public class Menu extends MenuNodesContainer implements Serializable {
 					menu.setType((Type) getProperty(PROPERTY_NAME_TYPE));
 					menu.setRenderType((RenderType) getProperty(PROPERTY_NAME_RENDER_TYPE));
 					
+					if(Menu.Type.MAIN.equals(menu.getType()))
+						addMain(menu,principal);
+					else if(Menu.Type.CONTEXT.equals(menu.getType()))
+						addContext(menu,principal);
+					return menu;
+				}
+				
+				protected void addMain(Menu menu,Object principal){
+					homeMainMenuNode = menu.addNode("userinterface.menu.main.home.label",getHomeViewIdentifier());
 					
-					if(Menu.Type.MAIN.equals(menu.getType())){
-						homeMainMenuNode = menu.addNode("userinterface.menu.main.home.label",getHomeViewIdentifier());
+					controlPanelMainMenuNode = menu.addNode("userinterface.menu.main.controlpanel.label");
+					controlPanelMainMenuNode.addNode("userinterface.menu.main.controlpanel.identifiables.manage.label",getControlPanelIdentifiablesManageViewIdentifier());
 					
-						controlPanelMainMenuNode = menu.addNode("userinterface.menu.main.controlpanel.label");
-						controlPanelMainMenuNode.addNode("userinterface.menu.main.controlpanel.identifiables.manage.label",getControlPanelIdentifiablesManageViewIdentifier());
-						
-						/*
-						menu.addNode("ui.menu.tools","toolsView")
-							.addNode("ui.menu.tools.data.export")
-							.getParentAsNode().addNode("ui.menu.tools.data.import")
-							;
-						*/
-						
-						if(principal!=null){
-							MenuNode menuNode = menu.addNode((String)null,"userView");
-							menuNode.getLabel().getPropertiesMap().setValue(principal);
-							menuNode.addNode("userinterface.menu.main.user.account.manage.label");
-							menuNode.addNode("userinterface.menu.main.user.logout.label",getUserLogoutViewIdentifier());
-						}
-						
-						
-					}else if(Menu.Type.CONTEXT.equals(menu.getType())){
-						if(Boolean.TRUE.equals(isIdentifiablesManageWindow())){
-							addNodeIdentifiablesManage(menu);
-						}else if(Boolean.TRUE.equals(isIdentifiableConsultWindow())){
-							Object instance = ((Window)componentParent).getActionOnClassInstances().iterator().next();
+					/*
+					menu.addNode("ui.menu.tools","toolsView")
+						.addNode("ui.menu.tools.data.export")
+						.getParentAsNode().addNode("ui.menu.tools.data.import")
+						;
+					*/
+					
+					if(principal!=null){
+						MenuNode menuNode = menu.addNode((String)null,"userView");
+						menuNode.getLabel().getPropertiesMap().setValue(principal);
+						menuNode.addNode("userinterface.menu.main.user.account.manage.label");
+						menuNode.addNode("userinterface.menu.main.user.logout.label",getUserLogoutViewIdentifier());
+					}
+				}
+				
+				protected void addContext(Menu menu,Object principal){
+					if(Boolean.TRUE.equals(isIdentifiablesManageWindow())){
+						addNodeIdentifiablesManage(menu);
+					}else if(Boolean.TRUE.equals(isIdentifiableConsultWindow()) || Boolean.TRUE.equals(isIdentifiableEditWindow())){
+						Object instance = CollectionHelper.getInstance().getFirst(((Window)componentParent).getActionOnClassInstances());
+						if(instance!=null){
 							Constant.Action action = (Constant.Action) componentParent.getPropertiesMap().getAction();
 							addNodeInstance(menu,instance,action);
-							addNodeInstanceClass(menu, instance.getClass(), action);
+							addNodeInstanceClass(menu, instance.getClass(), action);	
 						}
 					}
-					
-					return menu;
 				}
 				
 				protected Boolean isIdentifiablesManageWindow(){
@@ -192,6 +197,10 @@ public class Menu extends MenuNodesContainer implements Serializable {
 				}
 				
 				protected Boolean isIdentifiableConsultWindow(){
+					return null;
+				}
+				
+				protected Boolean isIdentifiableEditWindow(){
 					return null;
 				}
 				
@@ -210,8 +219,20 @@ public class Menu extends MenuNodesContainer implements Serializable {
 					MenuNode node = menu.addNode("");
 					node.getPropertiesMap().setExpanded(Boolean.TRUE);
 					node._setLabelPropertyValue(InstanceHelper.getInstance().getLabel(instance));
-					addNodeInstanceUpdate(node, instance, action);
-					addNodeInstanceDelete(node, instance, action);
+					if(Boolean.TRUE.equals(isIdentifiableConsultWindow())){
+						addNodeInstanceUpdate(node, instance, action);
+						addNodeInstanceDelete(node, instance, action);
+					}else if(Boolean.TRUE.equals(isIdentifiableEditWindow())){
+						if(Constant.Action.isOneOf(action, Constant.Action.UPDATE,Constant.Action.DELETE)){
+							addNodeInstanceRead(node, instance, action);	
+						}else{
+								
+						}
+					} 
+				}
+				
+				protected void addNodeInstanceRead(MenuNode node,Object instance,Constant.Action action){
+					node.addNodeActionRead(instance);
 				}
 				
 				protected void addNodeInstanceUpdate(MenuNode node,Object instance,Constant.Action action){
@@ -226,11 +247,19 @@ public class Menu extends MenuNodesContainer implements Serializable {
 					MenuNode node = menu.addNode("");
 					node.getPropertiesMap().setExpanded(Boolean.TRUE);
 					node._setLabelPropertyValue(StringHelper.getInstance().getClazz(instanceClass));
-					addNodeInstanceClassListMany(node, instanceClass);
+					if(Boolean.TRUE.equals(isIdentifiableConsultWindow())){
+						addNodeInstanceClassListMany(node, instanceClass);
+						addNodeInstanceClassCreateOne(node, instanceClass);
+					}
 				}
 				
 				protected void addNodeInstanceClassListMany(MenuNode node,Class<?> instanceClass){
 					node.addNodeActionListMany(instanceClass);
+					((Component.Visible)CollectionHelper.getInstance().getLast(node.getChildren().getElements())).__setLabelValueBasedOnActionProperty__();
+				}
+				
+				protected void addNodeInstanceClassCreateOne(MenuNode node,Class<?> instanceClass){
+					node.addNodeActionCreate(instanceClass);
 					((Component.Visible)CollectionHelper.getInstance().getLast(node.getChildren().getElements())).__setLabelValueBasedOnActionProperty__();
 				}
 			}

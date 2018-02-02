@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.SelectItemHelper;
 import org.cyk.utility.common.helper.SelectItemHelper.Builder.One;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -22,7 +23,7 @@ public class SelectItemHelperUnitTest extends AbstractUnitTest {
 
 	static {
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();
-		InstanceHelper.Stringifier.Label.Adapter.Default.DEFAULT_CLASS = InstanceLabel.class;
+		ClassHelper.getInstance().map(InstanceHelper.Stringifier.Label.class, InstanceLabel.class);
 		SelectItemHelper.Builder.One.Adapter.Default.DEFAULT_CLASS = MySelectItem.Builder.class;
 	}
 	
