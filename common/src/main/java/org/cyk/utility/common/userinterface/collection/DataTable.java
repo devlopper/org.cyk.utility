@@ -185,6 +185,12 @@ public class DataTable extends Component.Visible implements Serializable {
 		addFirstColumns();
 		__prepare__();
 		addLastColumns();
+		
+		for(Column index : Columns.getPropertyValue(this)){
+			if(Boolean.TRUE.equals(index.getPropertiesMap().getIsFooterShowable()))
+				index.__setPropertyFooterPropertyValueBasedOnMaster__();
+		}
+		
 		if(Boolean.TRUE.equals(onPrepareCallLoad)){
 			load(); //can be trigger by callback to enabled fast rendering of table structure	
 		}
@@ -380,11 +386,6 @@ public class DataTable extends Component.Visible implements Serializable {
 			
 			addFilter(this);			
 		}
-		
-		for(Column index : Columns.getPropertyValue(this)){
-			if(Boolean.TRUE.equals(index.getPropertiesMap().getIsFooterShowable()))
-				index.__setPropertyFooterPropertyValueBasedOnMaster__();
-		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -409,7 +410,6 @@ public class DataTable extends Component.Visible implements Serializable {
 						getFormMasterObjectActionOnClassCollectionInstance().addMany(instances);
 					}
 				}
-				
 			}	
 		}
 		addManyRow(instances);
@@ -573,17 +573,19 @@ public class DataTable extends Component.Visible implements Serializable {
 	}
 	
 	public CollectionHelper.Instance<?> getFormMasterObjectActionOnClassCollectionInstance(){
+		LoggingHelper.Message.Builder loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default();
+		loggingMessageBuilder.addManyParameters("get form master object action on class collection instance");
+		CollectionHelper.Instance<?> collection = null;
 		if(getPropertiesMap().getActionOnClass()!=null){
-			java.lang.reflect.Field field = FieldHelper.getInstance().get(getForm().getMaster().getObject().getClass()
-					, ClassHelper.getInstance().getVariableName((Class<?>) getPropertiesMap().getActionOnClass(),Boolean.TRUE));
-			if(field == null){
-				field = FieldHelper.getInstance().get(getForm().getMaster().getObject().getClass(),"items");
-			}
-			
+			String[] names = new String[]{ClassHelper.getInstance().getVariableName((Class<?>) getPropertiesMap().getActionOnClass(),Boolean.TRUE),"items"};
+			loggingMessageBuilder.addNamedParameters("field names",StringHelper.getInstance().concatenate(names,Constant.CHARACTER_SPACE));
+			java.lang.reflect.Field field = FieldHelper.getInstance().getByFirstNotNull(getPropertiesMap().getMaster().getClass(),names);
 			if(field != null)
-				return (CollectionHelper.Instance<?>) FieldHelper.getInstance().read(getForm().getMaster().getObject(), field);
+				collection = (CollectionHelper.Instance<?>) FieldHelper.getInstance().read(getPropertiesMap().getMaster(), field);
 		}
-		return null;
+		loggingMessageBuilder.addNamedParameters("collection instance is not null",collection!=null);
+		logTrace(loggingMessageBuilder);
+		return collection;
 	}
 	
 	/**/
@@ -1277,7 +1279,7 @@ public class DataTable extends Component.Visible implements Serializable {
 			}
 			
 			if(dataTable.getPropertiesMap().getMasterFieldName()!=null)
-				FieldHelper.getInstance().set(row.getPropertiesMap().getValue(), dataTable.getForm().getMaster().getObject()
+				FieldHelper.getInstance().set(row.getPropertiesMap().getValue(), dataTable.getPropertiesMap().getMaster()
 						, (String)dataTable.getPropertiesMap().getMasterFieldName());//doing this allow to share same memory object
 			//salableProductCollectionItem.setCollection((SalableProductCollection) getObject());
 		}

@@ -324,6 +324,16 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return null;
 	}
 	
+	public java.lang.reflect.Field getByFirstNotNull(Class<?> type,String...names) {
+		java.lang.reflect.Field field = null;
+		for(String index : names){
+			field = FieldHelper.getInstance().get(type,index);
+			if(field != null)
+				return field;
+		}
+		return null;
+	}
+	
 	public Collection<java.lang.reflect.Field> get(Class<?> type,Collection<Class<? extends Annotation>> annotationClasses) {
 		Collection<java.lang.reflect.Field> fields = new ArrayList<>();
 		for(java.lang.reflect.Field field : get(type))
