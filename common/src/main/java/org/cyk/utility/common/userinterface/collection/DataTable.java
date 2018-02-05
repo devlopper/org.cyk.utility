@@ -1281,7 +1281,6 @@ public class DataTable extends Component.Visible implements Serializable {
 			if(dataTable.getPropertiesMap().getMasterFieldName()!=null)
 				FieldHelper.getInstance().set(row.getPropertiesMap().getValue(), dataTable.getPropertiesMap().getMaster()
 						, (String)dataTable.getPropertiesMap().getMasterFieldName());//doing this allow to share same memory object
-			//salableProductCollectionItem.setCollection((SalableProductCollection) getObject());
 		}
 	}
 	
@@ -1295,7 +1294,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		protected Object __execute__() {
 			InputChoiceOne inputChoiceOne = (InputChoiceOne) dataTable.getPropertiesMap().getAddInputComponent();
 			Class<?> actionOnClass = (Class<?>) dataTable.getPropertiesMap().getActionOnClass();
-			____execute____(actionOnClass, inputChoiceOne);	
+			____execute____(actionOnClass, inputChoiceOne);
 			return null;
 		}
 		
@@ -1402,7 +1401,7 @@ public class DataTable extends Component.Visible implements Serializable {
 									}
 								}.execute();
 								
-								Collection<String> updatedColumnsFieldNames = (Collection<String>) ((Command)row.getPropertiesMap().getRemoveCommandComponent()).getPropertiesMap().getUpdatedFieldNames();
+								Collection<String> updatedColumnsFieldNames = (Collection<String>) ((Command)row.getPropertiesMap().getRemoveCommandComponent()).getPropertiesMap().getUpdatedColumnFieldNames();
 								vLoggingMessageBuilder.addNamedParameters("updated column field names",updatedColumnsFieldNames);
 								new CollectionHelper.Iterator.Adapter.Default<String>(updatedColumnsFieldNames){
 									private static final long serialVersionUID = 1L;
