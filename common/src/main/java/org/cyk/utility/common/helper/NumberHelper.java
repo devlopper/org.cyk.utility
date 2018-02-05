@@ -321,6 +321,14 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return operate(number1, number2, Operation.SUBTRACT);
 	}
 	
+	public Number multiply(Number number1,Number number2){
+		return operate(number1, number2, Operation.MULTIPLY);
+	}
+	
+	public Number divide(Number number1,Number number2){
+		return operate(number1, number2, Operation.DIVIDE);
+	}
+	
 	public Collection<Long> getIntegers(Number from,Number to){
 		Collection<Long> integers = new ArrayList<>();
 		for(Long index = from.longValue() ; index <= to.longValue() ; index ++ )

@@ -575,6 +575,33 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return (T) convertedValue;
 	}
 	
+	public String convert(Object object,Collection<String> fieldNames){
+		Collection<String> strings = new ArrayList<>();
+		if(object==null){
+			
+		}else{
+			if(CollectionHelper.getInstance().isNotEmpty(fieldNames)){
+				for(String index : fieldNames){
+					Object value = FieldHelper.getInstance().read(object, index);
+					if(value!=null)
+						strings.add(index+Constant.CHARACTER_EQUAL+value);
+				}
+			}
+		}
+		return CollectionHelper.getInstance().concatenate(strings, Constant.CHARACTER_COMA);
+	}
+	
+	public String convert(Object object,String...fieldNames){
+		if(ArrayHelper.getInstance().isNotEmpty(fieldNames))
+			return convert(object, Arrays.asList(fieldNames));
+		return null;
+	}
+	
+	public String convert(Object object){
+		Collection<String> fieldNames = object == null ? null : FieldHelper.getInstance().getNamesWhereReferencedByStaticField(object.getClass());
+		return convert(object, fieldNames);
+	}
+	
 	public String replace(String string,String search,String replacement){
 		return StringUtils.replace(string, search, replacement);
 	}
