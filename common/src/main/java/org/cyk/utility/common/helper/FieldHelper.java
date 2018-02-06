@@ -246,15 +246,25 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		}
 	}
 	
+	public void copy(Object source,Object destination,Boolean overwrite,String...fieldNames){
+		copy(source, destination, Arrays.asList(fieldNames),overwrite);
+	}
+	
 	public void copy(Object source,Object destination,String...fieldNames){
-		copy(source, destination, Arrays.asList(fieldNames));
+		copy(source, destination, Boolean.TRUE,fieldNames);
+	}
+	
+	public void copy(Object source,Object destination,Collection<String> fieldNames,Boolean overwrite){
+		for(String fieldName : fieldNames){
+			Object value = read(source, fieldName);
+			Object currentDestinationValue = read(destination, fieldName);
+			if(currentDestinationValue == null || Boolean.TRUE.equals(overwrite))
+				set(destination,value, fieldName);
+		}
 	}
 	
 	public void copy(Object source,Object destination,Collection<String> fieldNames){
-		for(String fieldName : fieldNames){
-			Object value = read(source, fieldName);
-			set(destination,value, fieldName);
-		}
+		copy(source,destination,fieldNames,Boolean.TRUE);
 	}
 	/**/
 	
