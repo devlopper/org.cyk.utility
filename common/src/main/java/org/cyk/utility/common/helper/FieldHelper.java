@@ -636,6 +636,15 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			return field;
 		}
 		
+		public static Collection<Field> get(Class<?> clazz){
+			Collection<Field> collection = new ArrayList<FieldHelper.Field>();
+			for(Field index : COLLECTION)
+				if(index.clazz.equals(clazz)){
+					collection.add(index);
+				}
+			return collection;
+		}
+		
 		public static void clear(){
 			COLLECTION.clear();
 		}
