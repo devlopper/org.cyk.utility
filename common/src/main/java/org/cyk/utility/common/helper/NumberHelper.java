@@ -329,6 +329,15 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return operate(number1, number2, Operation.DIVIDE);
 	}
 	
+	public <T extends Number> void add(Class<T> valueType,Object object,String fieldName,T value){
+		if(valueType!=null && object!=null && StringHelper.getInstance().isNotBlank(fieldName) && value!=null){
+			java.lang.reflect.Field field = FieldHelper.getInstance().get(object.getClass(), fieldName);
+			if(field!=null){
+				FieldHelper.getInstance().set(object, get(valueType, add((Number)FieldHelper.getInstance().read(object, field), value)), fieldName);	
+			}
+		}
+	}
+	
 	public Collection<Long> getIntegers(Number from,Number to){
 		Collection<Long> integers = new ArrayList<>();
 		for(Long index = from.longValue() ; index <= to.longValue() ; index ++ )
