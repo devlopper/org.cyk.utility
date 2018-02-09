@@ -136,6 +136,8 @@ public class Event extends Component.Invisible implements Serializable {
 		protected void ____execute____() {
 			if(event.getPropertiesMap().getInstance()!=null)
 				InstanceHelper.getInstance().computeChanges(event.getPropertiesMap().getInstance());
+			if(getEventPropertyFormMasterObject()!=null)
+				InstanceHelper.getInstance().computeChanges(getEventPropertyFormMasterObject());
 		}
 		
 		protected Object getEventPropertyFormMasterObject(){
