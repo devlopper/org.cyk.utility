@@ -3108,6 +3108,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getChoicesIsSourceDisjoint() {
+		return get(CHOICES_IS_SOURCE_DISJOINT);
+	}
+
+	public Properties setChoicesIsSourceDisjoint(Object value) {
+		set(CHOICES_IS_SOURCE_DISJOINT, value);
+		return this;
+	}
+	
+	public static final String CHOICES_IS_SOURCE_DISJOINT = "CHOICES_IS_SOURCE_DISJOINT";
 	public static final String MASTER_FIELD_NAME = "MASTER_FIELD_NAME";
 	public static final String IS_INSTANCES_LOADABLE_FROM_COLLECTION = "IS_INSTANCES_LOADABLE_FROM_COLLECTION";
 	public static final String IS_FOOTER_SHOWABLE = "IS_FOOTER_SHOWABLE";

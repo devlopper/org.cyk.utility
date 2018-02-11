@@ -314,6 +314,8 @@ public class DataTable extends Component.Visible implements Serializable {
 			
 			InputChoiceOneCombo inputChoiceOneCombo = new InputChoiceOneCombo();
 			inputChoiceOneCombo.getPropertiesMap();//trigger
+			inputChoiceOneCombo.getChoices().setIsSourceDisjoint(Boolean.TRUE.equals(InstanceHelper.getInstance().getIfNotNullElseDefault(getPropertiesMap()
+					.getChoicesIsSourceDisjoint(),Boolean.TRUE)));
 			//watermark = new Watermark();
 			//watermark.getPropertiesMap().setValue(StringHelper.getInstance().get("search", new Object[]{}));
 			//inputChoice.getPropertiesMap().setWatermark(watermark);
