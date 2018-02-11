@@ -31,6 +31,10 @@ public class Properties implements java.io.Serializable {
 	private Map<Object,Getter> getterMap;
 	//private Object doubleStringValueSeparator = StringUtils.repeat(stringValueSeparator.toString(), 2);
 	
+	public java.util.Map<Object,Object> __getMap__(){
+		return map;
+	}
+	
 	/**/
 		
 	public static void setDefaultValues(Class<?> aClass,Properties properties){

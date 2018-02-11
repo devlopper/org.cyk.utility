@@ -45,6 +45,24 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		super.initialisation();
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <NUMBER extends Number> NUMBER negate(NUMBER number){
+		if(number == null)
+			return null;
+		Number result = null;
+		if(number instanceof BigDecimal)
+			result = ((BigDecimal)number).negate();
+		else if(number instanceof Integer)
+			result = -((Integer)number);
+		else if(number instanceof Long)
+			result = -((Long)number);
+		else if(number instanceof Float)
+			result = -((Float)number);
+		else if(number instanceof Double)
+			result = -((Double)number);
+		return (NUMBER) result;
+	}
+	
 	public Boolean isNumber(Object object){
 		return object!=null && (object instanceof Number || NumberUtils.isCreatable(object.toString()));
 	}
