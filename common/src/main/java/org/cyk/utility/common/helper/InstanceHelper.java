@@ -1682,4 +1682,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		}
 		
 	}
+
+	/**/
+	
+	public static interface ActionListener {
+		void act(Object instance,Constant.Action action);
+	}
 }
