@@ -1686,6 +1686,18 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	/**/
 	
 	public static interface ActionListener<T> {
-		void act(T instance,Constant.Action action);
+		void actBefore(T instance,Constant.Action action);
+		void actAfter(T instance,Constant.Action action);
+		
+		public static class Adapter<T> extends AbstractBean implements ActionListener<T>,Serializable {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void actBefore(T instance, org.cyk.utility.common.Constant.Action action) {}
+
+			@Override
+			public void actAfter(T instance, org.cyk.utility.common.Constant.Action action) {}
+			
+		}
 	}
 }
