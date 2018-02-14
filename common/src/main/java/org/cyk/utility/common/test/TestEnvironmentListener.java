@@ -133,7 +133,7 @@ public interface TestEnvironmentListener {
 			
 			@Override
 			public String formatBigDecimal(BigDecimal value) {
-				return value.toString();
+				return value == null ? null : value.toString();
 			}
 			
 			@Override
