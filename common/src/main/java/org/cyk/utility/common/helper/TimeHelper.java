@@ -23,6 +23,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 @Singleton
 public class TimeHelper extends AbstractHelper implements Serializable {
@@ -54,6 +55,10 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+	}
+	
+	public Date getUniversalTimeCoordinated(){
+		return new DateTime(DateTimeZone.UTC).toDate();
 	}
 	
 	public Integer getYear(java.util.Date date){

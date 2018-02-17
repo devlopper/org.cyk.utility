@@ -148,15 +148,12 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		return fieldValueGenerator;
 	}
 	
+	public <T> T generateFieldValue(final Object instance,final String name, final Class<T> valueClass,Boolean useDefaultIfFieldGeneratorIsNull){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).generateFieldValue(instance, name,valueClass,useDefaultIfFieldGeneratorIsNull);
+	}
+	
 	public <T> T generateFieldValue(final Object instance,final String name, final Class<T> valueClass){
-		return ClassHelper.getInstance().instanciateOne(Listener.class).generateFieldStringValue(instance, name);
-		/*
-		return (T) listenerUtils.getObject(Listener.COLLECTION, new ListenerUtils.ObjectMethod<Listener>() {
-			@Override
-			public Object execute(Listener listener) {
-				return listener.generateFieldValue(instance, name, valueClass);
-			}
-		});*/
+		return generateFieldValue(instance, name,valueClass,Boolean.TRUE);
 	}
 	
 	public Boolean getAreEqual(final Object instance1,final Object instance2){
@@ -929,8 +926,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		Object getIdentifier(Object instance);
 		String getName(Object instance);
 		Boolean getAreEqual(Object object1,Object object2);
-		<T> T generateFieldValue(Object instance,String name,Class<T> valueClass);
-		<T> T generateFieldStringValue(Object instance,String name);
+		<T> T generateFieldValue(Object instance,String name,Class<T> valueClass,Boolean useDefaultIfFieldGeneratorIsNull);
+		<T> T generateFieldStringValue(Object instance,String name,Boolean useDefaultIfFieldGeneratorIsNull);
 		
 		Object act(Constant.Action action,Object instance);
 		<T> T computeChanges(T instance);
@@ -1000,12 +997,12 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			}
 			
 			@Override
-			public <T> T generateFieldValue(Object instance, String name,Class<T> valueClass) {
+			public <T> T generateFieldValue(Object instance, String name,Class<T> valueClass,Boolean useDefaultIfFieldGeneratorIsNull) {
 				return null;
 			}
 			
 			@Override
-			public <T> T generateFieldStringValue(Object instance,String name) {
+			public <T> T generateFieldStringValue(Object instance,String name,Boolean useDefaultIfFieldGeneratorIsNull) {
 				return null;
 			}
 			
@@ -1101,18 +1098,22 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				
 				@SuppressWarnings("unchecked")
 				@Override
-				public <T> T generateFieldStringValue(Object instance,String name) {
-					return (T) generateFieldValue(instance, name,String.class);
+				public <T> T generateFieldStringValue(Object instance,String name,Boolean useDefaultIfFieldGeneratorIsNull) {
+					return (T) generateFieldValue(instance, name,String.class,useDefaultIfFieldGeneratorIsNull);
 				}
 				
 				@SuppressWarnings("unchecked")
 				@Override
-				public <T> T generateFieldValue(Object instance,String name, Class<T> valueClass) {
+				public <T> T generateFieldValue(Object instance,String name, Class<T> valueClass,Boolean useDefaultIfFieldGeneratorIsNull) {
+					T value = null;
 					FieldValueGenerator<T> fieldValueGenerator = (FieldValueGenerator<T>) InstanceHelper.getInstance().getFieldValueGenerator(instance.getClass(), name);
 					if(fieldValueGenerator==null){
-						fieldValueGenerator =  new FieldValueGenerator.Adapter.Default<>(valueClass);
+						if(Boolean.TRUE.equals(useDefaultIfFieldGeneratorIsNull))
+							fieldValueGenerator =  new FieldValueGenerator.Adapter.Default<>(valueClass);
 					}
-					return fieldValueGenerator.setInstance(instance).setFieldName(name).execute();
+					if(fieldValueGenerator!=null)
+						value = fieldValueGenerator.setInstance(instance).setFieldName(name).execute();
+					return value;
 				}
 				
 				@SuppressWarnings("unchecked")
@@ -1356,9 +1357,9 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 							string = null;
 						}else{
 							string = getInstance().getName(instance);
-							if( string!=null && StringHelper.getInstance().isBlank(string.toString()) ){
+							if(string==null || string!=null && StringHelper.getInstance().isBlank(string.toString()) ){
 								string = getInstance().getIdentifier(instance, ClassHelper.Listener.IdentifierType.BUSINESS);
-								if(string==null){
+								if(string==null || string!=null && StringHelper.getInstance().isBlank(string.toString())){
 									string = getInstance().getIdentifier(instance, ClassHelper.Listener.IdentifierType.SYSTEM);
 								}
 							}
