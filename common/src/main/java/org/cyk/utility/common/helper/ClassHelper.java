@@ -104,6 +104,10 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		return instanciateOne(Listener.class).isNamed(aClass);
 	}
 	
+	public Boolean isNamedInBusiness(Class<?> aClass){
+		return instanciateOne(Listener.class).isNamedInBusiness(aClass);
+	}
+	
 	public Boolean isHierarchy(Class<?> aClass){
 		return instanciateOne(Listener.class).isHierarchy(aClass);
 	}
@@ -698,6 +702,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		
 		String getNameFieldName(Class<?> aClass);
 		Boolean isNamed(Class<?> aClass);
+		Boolean isNamedInBusiness(Class<?> aClass);
 		
 		String getHierarchyFieldName(Class<?> aClass);
 		Boolean isHierarchy(Class<?> aClass);
@@ -754,6 +759,11 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				@Override
 				public Boolean isNamed(Class<?> aClass) {
 					return FieldHelper.getInstance().get(aClass, getNameFieldName(aClass))!=null;
+				}
+				
+				@Override
+				public Boolean isNamedInBusiness(Class<?> aClass) {
+					return isNamed(aClass);
 				}
 				
 				@Override
@@ -887,6 +897,11 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		
 			@Override
 			public Boolean isNamed(Class<?> aClass) {
+				return null;
+			}
+			
+			@Override
+			public Boolean isNamedInBusiness(Class<?> aClass) {
 				return null;
 			}
 			

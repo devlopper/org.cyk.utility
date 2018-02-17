@@ -364,7 +364,7 @@ public class Form extends Container implements Serializable {
 		}
 		
 		protected void ____addName____(){
-			if(ClassHelper.getInstance().isNamed(getObject().getClass()))
+			if(ClassHelper.getInstance().isNamedInBusiness(getObject().getClass()))
 				____add____(ClassHelper.getInstance().getNameFieldName(getObject().getClass()));
 		}
 		

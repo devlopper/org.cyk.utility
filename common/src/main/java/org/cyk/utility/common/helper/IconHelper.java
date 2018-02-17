@@ -164,6 +164,9 @@ public class IconHelper extends AbstractHelper implements Serializable {
 			String SIGNIN = "fa fa-signin";
 			String SIGNOUT = "fa fa-signout";
 			String PRINT = "fa fa-print";
+			
+			String ARROW_UP = "fa fa-arrow-up";
+			String ARROW_DOWN = "fa fa-arrow-down";
 		}
 	}
 	
