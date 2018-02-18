@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -354,6 +355,22 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 				FieldHelper.getInstance().set(object, get(valueType, add((Number)FieldHelper.getInstance().read(object, field), value)), fieldName);	
 			}
 		}
+	}
+	
+	public Number sum(Collection<? extends Number> numbers){
+		if(CollectionHelper.getInstance().isEmpty(numbers))
+			return null;
+		Number result = BigDecimal.ZERO;
+		for(Number index : numbers){
+			result = add(result, index);
+		}
+		return result;
+	}
+	
+	public Number sum(Number...numbers){
+		if(ArrayHelper.getInstance().isNotEmpty(numbers))
+			return sum(Arrays.asList(numbers));
+		return null;
 	}
 	
 	public Collection<Long> getIntegers(Number from,Number to){
