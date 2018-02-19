@@ -284,7 +284,7 @@ public class Event extends Component.Invisible implements Serializable {
 		
 		@SuppressWarnings("unchecked")
 		@Override
-		public void __executeBefore__(Action<?, ?> action) {
+		public void __executeBefore__(Action<?, ?> action) { try{
 			super.__executeBefore__(action);
 			Collection<String> processedFieldNames = (Collection<String>) event.getPropertiesMap().getProcessedFieldNames();
 			vLoggingMessageBuilder.addNamedParameters("processed field names",processedFieldNames);
@@ -311,12 +311,15 @@ public class Event extends Component.Invisible implements Serializable {
 					vLoggingMessageBuilder.addNamedParameters("after",input.getValue());
 				}
 			}.execute();
-			
+		}catch(Exception e){
+			System.out.println("Event.ActionAdapter.__executeBefore__()*************************************************************************");
+			e.printStackTrace();
+		}
 		}
 		
 		@SuppressWarnings("unchecked")
 		@Override
-		public void processOnStatus(Action<?, ?> action) {
+		public void processOnStatus(Action<?, ?> action) {try{
 			super.processOnStatus(action);
 			Collection<String> updatedFieldNames = (Collection<String>) event.getPropertiesMap().getUpdatedFieldNames();
 			vLoggingMessageBuilder.addNamedParameters("update field names",updatedFieldNames);
@@ -360,6 +363,10 @@ public class Event extends Component.Invisible implements Serializable {
 				}
 			}.execute();
 			logTrace(vLoggingMessageBuilder);
+		}catch(Exception e){
+			System.out.println("Event.ActionAdapter.processOnStatus()*************************************************************************");
+			e.printStackTrace();
+		}
 		}
 		
 		

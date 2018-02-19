@@ -971,6 +971,11 @@ public interface Action<INPUT,OUTPUT> {
 			}
 			
 			protected void processOnFailure(Throwable throwable){
+				if(throwable!=null){
+					System.out
+							.println("Action.Adapter.Default.processOnFailure()********************************************************************************");
+					throwable.printStackTrace();
+				}
 				setThrowable(throwable);
 				processOnStatus(Status.FAILURE);
 				ListenerHelper.getInstance().listen(actionListeners, ActionListener.METHOD_NAME_PROCESS_ON_STATUS,new MethodHelper.Method.Parameter(Action.class, this));

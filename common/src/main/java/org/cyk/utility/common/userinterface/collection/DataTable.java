@@ -202,6 +202,16 @@ public class DataTable extends Component.Visible implements Serializable {
 		addMenu(this);
 	}
 	
+	public String getChoiceValueClassMasterFieldName(){
+		String fieldName = (String) getPropertiesMap().getMasterFieldName();
+		if(StringHelper.getInstance().isBlank(fieldName)){
+			if(getPropertiesMap().getChoiceValueClass()!=null){
+				fieldName = ClassHelper.getInstance().getVariableName((Class<?>)getPropertiesMap().getChoiceValueClass());
+			}
+		}
+		return fieldName;
+	}
+	
 	public static void addFirstColumns(Component component){
 		Column orderNumberColumn = null;
 		if(Boolean.TRUE.equals(component.getPropertiesMap().getOnPrepareAddColumnOrderNumber())){
@@ -210,9 +220,9 @@ public class DataTable extends Component.Visible implements Serializable {
 		}
 		
 		if(component instanceof DataTable){
-			Class<?> choiceValueClass = (Class<?>)component.getPropertiesMap().getChoiceValueClass();
-			if(choiceValueClass!=null){
-				Column choiceValueColumn = ((DataTable)component).addColumnByFieldName(ClassHelper.getInstance().getVariableName(choiceValueClass));
+			String fieldName = ((DataTable)component).getChoiceValueClassMasterFieldName();
+			if(StringHelper.getInstance().isNotBlank(fieldName)){
+				Column choiceValueColumn = ((DataTable)component).addColumnByFieldName(fieldName);
 				if(orderNumberColumn!=null)
 					choiceValueColumn.set__orderNumber__(orderNumberColumn.get__orderNumber__()+1);
 				choiceValueColumn.setCellValueType(DataTable.Cell.ValueType.TEXT);	
@@ -1280,9 +1290,15 @@ public class DataTable extends Component.Visible implements Serializable {
 				}
 			}
 			
-			if(dataTable.getPropertiesMap().getMasterFieldName()!=null)
-				FieldHelper.getInstance().set(row.getPropertiesMap().getValue(), dataTable.getPropertiesMap().getMaster()
-						, (String)dataTable.getPropertiesMap().getMasterFieldName());//doing this allow to share same memory object
+			if(dataTable.getPropertiesMap().getMasterFieldName()!=null){
+				//Class<?> fieldType = FieldHelper.getInstance().getType(row.getPropertiesMap().getValue().getClass(), fieldName);
+				if(!dataTable.getPropertiesMap().getMaster().getClass().equals(row.getPropertiesMap().getValue().getClass())){
+					String fieldName = (String)dataTable.getPropertiesMap().getMasterFieldName();
+					FieldHelper.getInstance().set(row.getPropertiesMap().getValue(), dataTable.getPropertiesMap().getMaster()
+							, fieldName);//doing this allow to share same memory object	
+				}
+				
+			}
 		}
 	}
 	
@@ -1296,7 +1312,13 @@ public class DataTable extends Component.Visible implements Serializable {
 		protected Object __execute__() {
 			InputChoiceOne inputChoiceOne = (InputChoiceOne) dataTable.getPropertiesMap().getAddInputComponent();
 			Class<?> actionOnClass = (Class<?>) dataTable.getPropertiesMap().getActionOnClass();
-			____execute____(actionOnClass, inputChoiceOne);
+			try {
+				____execute____(actionOnClass, inputChoiceOne);
+			} catch (Exception e) {
+				System.out
+						.println("DataTable.AddRemoveCommandActionAdapter.__execute__() ***********************************************************");
+				e.printStackTrace();
+			}
 			return null;
 		}
 		
@@ -1305,8 +1327,9 @@ public class DataTable extends Component.Visible implements Serializable {
 		}
 		
 		protected void setObjectSource(Object object,Object source){
-			if(dataTable.getPropertiesMap().getChoiceValueClass()!=null)
-				FieldHelper.getInstance().set(object, source,ClassHelper.getInstance().getVariableName((Class<?>)dataTable.getPropertiesMap().getChoiceValueClass()));
+			String fieldName = dataTable.getChoiceValueClassMasterFieldName();
+			if(StringHelper.getInstance().isNotBlank(fieldName))
+				FieldHelper.getInstance().set(object, source,fieldName);
 		}
 		
 		protected void listenObjectCreated(Object object,Object source){}

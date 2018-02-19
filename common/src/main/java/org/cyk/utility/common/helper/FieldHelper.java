@@ -623,6 +623,8 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			this.clazz = clazz;
 			this.name = name;
 			this.javaField = getInstance().get(this.clazz, this.name);
+			if(this.javaField==null)
+				System.out.println("FieldHelper.Field.Field() "+clazz+"."+name);
 			constraints.isNullable = this.javaField.getAnnotation(javax.validation.constraints.NotNull.class) == null;
 		}
 		
