@@ -3117,6 +3117,26 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getFormMasterObjectActionOnClassCollectionInstanceFieldName() {
+		return get(FORM_MASTER_OBJECT_ACTION_ON_CLASS_COLLECTION_INSTANCE_FIELD_NAME);
+	}
+
+	public Properties setFormMasterObjectActionOnClassCollectionInstanceFieldName(Object value) {
+		set(FORM_MASTER_OBJECT_ACTION_ON_CLASS_COLLECTION_INSTANCE_FIELD_NAME, value);
+		return this;
+	}
+	
+	public Object getFormMasterObjectActionOnClassCollectionInstance() {
+		return get(FORM_MASTER_OBJECT_ACTION_ON_CLASS_COLLECTION_INSTANCE);
+	}
+
+	public Properties setFormMasterObjectActionOnClassCollectionInstance(Object value) {
+		set(FORM_MASTER_OBJECT_ACTION_ON_CLASS_COLLECTION_INSTANCE, value);
+		return this;
+	}
+	
+	public static final String FORM_MASTER_OBJECT_ACTION_ON_CLASS_COLLECTION_INSTANCE = "FormMasterObjectActionOnClassCollectionInstance";
+	public static final String FORM_MASTER_OBJECT_ACTION_ON_CLASS_COLLECTION_INSTANCE_FIELD_NAME = "FORM_MASTER_OBJECT_ACTION_ON_CLASS_COLLECTION_INSTANCE_FIELD_NAME";
 	public static final String CHOICES_IS_SOURCE_DISJOINT = "CHOICES_IS_SOURCE_DISJOINT";
 	public static final String MASTER_FIELD_NAME = "MASTER_FIELD_NAME";
 	public static final String IS_INSTANCES_LOADABLE_FROM_COLLECTION = "IS_INSTANCES_LOADABLE_FROM_COLLECTION";

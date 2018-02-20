@@ -587,13 +587,27 @@ public class DataTable extends Component.Visible implements Serializable {
 	public CollectionHelper.Instance<?> getFormMasterObjectActionOnClassCollectionInstance(){
 		LoggingHelper.Message.Builder loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default();
 		loggingMessageBuilder.addManyParameters("get form master object action on class collection instance");
-		CollectionHelper.Instance<?> collection = null;
-		if(getPropertiesMap().getActionOnClass()!=null){
-			String[] names = new String[]{ClassHelper.getInstance().getVariableName((Class<?>) getPropertiesMap().getActionOnClass(),Boolean.TRUE),"items"};
-			loggingMessageBuilder.addNamedParameters("field names",StringHelper.getInstance().concatenate(names,Constant.CHARACTER_SPACE));
-			java.lang.reflect.Field field = FieldHelper.getInstance().getByFirstNotNull(getPropertiesMap().getMaster().getClass(),names);
-			if(field != null)
-				collection = (CollectionHelper.Instance<?>) FieldHelper.getInstance().read(getPropertiesMap().getMaster(), field);
+		CollectionHelper.Instance<?> collection = (CollectionHelper.Instance<?>) getPropertiesMap().getFormMasterObjectActionOnClassCollectionInstance();
+		if(collection == null){
+			if(getPropertiesMap().getFormMasterObjectActionOnClassCollectionInstanceFieldName()!=null)
+				collection = (CollectionHelper.Instance<?>) FieldHelper.getInstance().read(getPropertiesMap().getMaster(), (String)getPropertiesMap().getFormMasterObjectActionOnClassCollectionInstanceFieldName());
+			if(collection == null){
+				if(getPropertiesMap().getActionOnClass()!=null){
+					String[] names = new String[]{ClassHelper.getInstance().getVariableName((Class<?>) getPropertiesMap().getActionOnClass(),Boolean.TRUE),"items"};
+					loggingMessageBuilder.addNamedParameters("field names",StringHelper.getInstance().concatenate(names,Constant.CHARACTER_SPACE));
+					java.lang.reflect.Field field = FieldHelper.getInstance().getByFirstNotNull(getPropertiesMap().getMaster().getClass(),names);
+					if(field != null)
+						collection = (CollectionHelper.Instance<?>) FieldHelper.getInstance().read(getPropertiesMap().getMaster(), field);
+				}
+				
+				if(collection == null && getPropertiesMap().getFormMasterObjectActionOnClassCollectionInstanceFieldName()!=null){
+					Class<?> fieldType = FieldHelper.getInstance().getType(getPropertiesMap().getMaster().getClass(), (String)getPropertiesMap().getFormMasterObjectActionOnClassCollectionInstanceFieldName());
+					collection = (CollectionHelper.Instance<?>) ClassHelper.getInstance().instanciateOne(fieldType);
+					System.out
+							.println("DataTable.getFormMasterObjectActionOnClassCollectionInstance() INSTANCIATED : "+collection);
+				}
+					
+			}
 		}
 		loggingMessageBuilder.addNamedParameters("collection instance is not null",collection!=null);
 		logTrace(loggingMessageBuilder);
@@ -1364,8 +1378,9 @@ public class DataTable extends Component.Visible implements Serializable {
 						listenObjectCreated(object,choice);
 						dataTable.addOneRow(object);
 						CollectionHelper.Instance<?> collection = getDestinationCollection();
-						if(collection!=null)
+						if(collection!=null){
 							collection.addOne(object);
+						}
 						//inputChoiceOne.getChoices().removeOne(choice);	
 					}
 						
