@@ -603,8 +603,7 @@ public class DataTable extends Component.Visible implements Serializable {
 				if(collection == null && getPropertiesMap().getFormMasterObjectActionOnClassCollectionInstanceFieldName()!=null){
 					Class<?> fieldType = FieldHelper.getInstance().getType(getPropertiesMap().getMaster().getClass(), (String)getPropertiesMap().getFormMasterObjectActionOnClassCollectionInstanceFieldName());
 					collection = (CollectionHelper.Instance<?>) ClassHelper.getInstance().instanciateOne(fieldType);
-					System.out
-							.println("DataTable.getFormMasterObjectActionOnClassCollectionInstance() INSTANCIATED : "+collection);
+					FieldHelper.getInstance().set(getPropertiesMap().getMaster(), collection, (String)getPropertiesMap().getFormMasterObjectActionOnClassCollectionInstanceFieldName());
 				}
 					
 			}
