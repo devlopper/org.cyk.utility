@@ -3505,7 +3505,7 @@ public class Properties implements java.io.Serializable {
 	
 	@Override
 	public String toString() {
-		return map.toString();
+		return map == null ? null : map.toString();
 	}
 	
 	/**/
