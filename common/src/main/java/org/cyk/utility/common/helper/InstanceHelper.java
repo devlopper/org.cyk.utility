@@ -5,18 +5,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import javassist.Modifier;
-
 import javax.inject.Named;
 import javax.inject.Singleton;
-
-import lombok.Getter;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Action;
@@ -28,6 +25,9 @@ import org.cyk.utility.common.helper.ClassHelper.Listener.IdentifierType;
 import org.cyk.utility.common.helper.FilterHelper.Filter;
 import org.cyk.utility.common.helper.InstanceHelper.Listener.FieldValueGenerator;
 import org.cyk.utility.common.security.SecurityHelper;
+
+import javassist.Modifier;
+import lombok.Getter;
 
 @Singleton @Named
 public class InstanceHelper extends AbstractHelper implements Serializable  {
@@ -1258,7 +1258,13 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 						return __execute__(getInstance(), getFieldName(), getOutputClass());
 					}
 					
+					@SuppressWarnings("unchecked")
 					protected OUTPUT __execute__(Object instance,String fieldName,Class<OUTPUT> outputClass) {
+						if(String.class.equals(outputClass))
+							if(ClassHelper.getInstance().isIdentified(instance.getClass()))
+								return (OUTPUT) (instance.getClass().getSimpleName().toUpperCase()+System.currentTimeMillis()+RandomHelper.getInstance().getAlphabetic(2));
+						if(Date.class.equals(outputClass))
+							return (OUTPUT) TimeHelper.getInstance().getUniversalTimeCoordinated();
 						return (OUTPUT) RandomHelper.getInstance().get(getOutputClass());
 					}
 					
