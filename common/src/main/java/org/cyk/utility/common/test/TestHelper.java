@@ -36,6 +36,10 @@ public class TestHelper extends AbstractHelper implements Serializable {
 			return ClassHelper.getInstance().instanciateOne(aClass);
 		}
 		
+		public <T> T instanciateOne(Class<T> aClass,Object identifier){
+			return ClassHelper.getInstance().instanciateOne(aClass,identifier);
+		}
+		
 		/* shortcuts */
 		
 		public RandomHelper getRandomHelper(){

@@ -14,16 +14,22 @@ import org.cyk.utility.common.helper.AbstractHelper;
 import org.cyk.utility.common.helper.AbstractReflectionHelper;
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.helper.ClassHelper.Instanciation.Get;
 import org.cyk.utility.common.helper.FieldHelper;
+import org.cyk.utility.common.helper.ListenerHelper.Executor.ResultMethod;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
 import lombok.Getter;
 import lombok.Setter;
 
+@SuppressWarnings("unchecked")
 public class ClassHelperUnitTest extends AbstractUnitTest {
-
 	private static final long serialVersionUID = -6691092648665798471L;
+	
+	static {
+		ClassHelper.Instanciation.Get.Adapter.Default.RESULT_METHOD_CLASS = (Class<ResultMethod<Object, Get<?>>>) ClassHelper.getInstance().getByName(I.class);
+	}
 	
 	@Test
 	public void buildName(){
@@ -107,7 +113,13 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 	public void instanciate(){
 		assertNotNull(new ClassHelper.Instanciation.Adapter.Default<ClassHelper>(ClassHelper.class).execute());
 		assertThat("instance is not a class helper", new ClassHelper.Instanciation.Adapter.Default<ClassHelper>(ClassHelper.class).execute().getClass().equals(ClassHelper.class));
+		MyInstanciatedClass mic = new MyInstanciatedClass();
+		assertEquals(null, mic.getStrings());
+		mic = ClassHelper.getInstance().instanciateOne(MyInstanciatedClass.class);
+		assertEquals("values", mic.getStrings());
 	}
+	
+	
 	
 	/**/
 	
@@ -148,6 +160,27 @@ public class ClassHelperUnitTest extends AbstractUnitTest {
 	public static class ParamClass {
 		
 		private List<String> strings;
+		
+	}
+	
+	@Getter @Setter
+	public static class MyInstanciatedClass {
+		
+		private String strings;
+		
+	}
+	
+	public static class I extends ClassHelper.Instanciation.Get.ResultMethod {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected java.lang.Object __execute__() {
+			java.lang.Object instance = super.__execute__();
+			if(instance instanceof MyInstanciatedClass){
+				((MyInstanciatedClass)instance).setStrings("values");
+			}
+			return instance;
+		}
 		
 	}
 }

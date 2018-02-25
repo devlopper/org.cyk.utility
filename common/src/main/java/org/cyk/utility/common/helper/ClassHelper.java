@@ -367,6 +367,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	public <T> T instanciateOne(Class<T> aClass,Boolean getMapping){
 		try {
 			return new Instanciation.Get.Adapter.Default<>(Boolean.TRUE.equals(getMapping) ? getMapping(aClass, Boolean.TRUE) : aClass).execute();
+			//return getListener().instanciateOne(Boolean.TRUE.equals(getMapping) ? getMapping(aClass, Boolean.TRUE) : aClass);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -375,6 +376,16 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	
 	public <T> T instanciateOne(Class<T> aClass){
 		return instanciateOne(aClass,Boolean.TRUE);
+	}
+	
+	public <T> T instanciateOne(Class<T> aClass,Object identifier,Listener.IdentifierType identifierType){
+		T instance = instanciateOne(aClass);
+		FieldHelper.getInstance().set(instance, identifier, getIdentifierFieldName(aClass,identifierType));
+		return instance;
+	}
+	
+	public <T> T instanciateOne(Class<T> aClass,Object identifier){
+		return instanciateOne(aClass, identifier,Listener.IdentifierType.BUSINESS);
 	}
 	
 	public Collection<?> instanciateMany(@SuppressWarnings("rawtypes") Collection classes){
@@ -689,6 +700,8 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 			public static IdentifierType DEFAULT = BUSINESS;
 		}
 		
+		<T> T instanciateOne(Class<T> aClass);
+		
 		Boolean isModel(Class<?> aClass);
 		Boolean isPersisted(Class<?> aClass);
 		
@@ -722,6 +735,15 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				private static final long serialVersionUID = 1L;
 				
 				public static Integer PAGE_SIZE = 10;
+				
+				@Override
+				public <T> T instanciateOne(Class<T> aClass) {
+					try {
+						return aClass.newInstance();
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				}
 				
 				@Override
 				public String getIdentifierFieldName(Class<?> aClass,IdentifierType type) {
@@ -818,6 +840,11 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				
 				/**/
 				
+			}
+			
+			@Override
+			public <T> T instanciateOne(Class<T> aClass) {
+				return null;
 			}
 			
 			@Override
