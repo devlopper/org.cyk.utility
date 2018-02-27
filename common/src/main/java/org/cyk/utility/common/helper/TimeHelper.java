@@ -60,6 +60,12 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 	public Date getUniversalTimeCoordinated(){
 		return new DateTime(DateTimeZone.UTC).toDate();
 	}
+
+	public Date getDateFromString(String date){
+		if(StringHelper.getInstance().isBlank(date))
+			return null;
+		return new TimeHelper.Builder.String.Adapter.Default(date).execute();
+	}
 	
 	public Integer getYear(java.util.Date date){
 		if(date==null)
