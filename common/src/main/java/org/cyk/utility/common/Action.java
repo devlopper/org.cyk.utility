@@ -782,7 +782,7 @@ public interface Action<INPUT,OUTPUT> {
 					return NotificationHelper.getInstance().getNotification(stringIdentifier);
 				if(Action.Status.FAILURE.equals(status))
 					return NotificationHelper.getInstance().getNotification(stringIdentifier
-							,new Object[]{ThrowableHelper.getInstance().getInstanceOf(getThrowable(),ThrowableHelper.ThrowableMarker.class,RuntimeException.class
+							,new Object[]{ThrowableHelper.getInstance().getInstanceOf(getThrowable(),ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class
 									).getMessage()}).setSeverityType(NotificationHelper.SeverityType.ERROR);
 				return null;
 			}

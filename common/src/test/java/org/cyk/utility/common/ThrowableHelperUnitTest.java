@@ -5,6 +5,8 @@ import javax.inject.Singleton;
 
 import org.cyk.utility.common.helper.AbstractHelper;
 import org.cyk.utility.common.helper.ThrowableHelper;
+import org.cyk.utility.common.test.Try;
+import org.cyk.utility.common.test.Runnable;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -20,41 +22,41 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 		Throwable t1111 = new E4("t1111", t111);
 		Throwable t11111 = new E5("t11111", t1111);
 		
-		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t1, E1.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t11, E1.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t111, E1.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t1111, E1.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t11111, E1.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
+		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t1, E1.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t11, E1.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t111, E1.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t1111, E1.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t11111, E1.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
 		
-		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t1, E2.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t11, ThrowableHelper.getInstance().getInstanceOf(t11, E2.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t11, ThrowableHelper.getInstance().getInstanceOf(t111, E2.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t11, ThrowableHelper.getInstance().getInstanceOf(t1111, E2.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t11, ThrowableHelper.getInstance().getInstanceOf(t11111, E2.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
+		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t1, E2.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t11, ThrowableHelper.getInstance().getInstanceOf(t11, E2.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t11, ThrowableHelper.getInstance().getInstanceOf(t111, E2.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t11, ThrowableHelper.getInstance().getInstanceOf(t1111, E2.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t11, ThrowableHelper.getInstance().getInstanceOf(t11111, E2.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
 		
-		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t1, E3.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t11, E3.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t111, ThrowableHelper.getInstance().getInstanceOf(t111, E3.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t111, ThrowableHelper.getInstance().getInstanceOf(t1111, E3.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t111, ThrowableHelper.getInstance().getInstanceOf(t11111, E3.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
+		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t1, E3.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t11, E3.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t111, ThrowableHelper.getInstance().getInstanceOf(t111, E3.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t111, ThrowableHelper.getInstance().getInstanceOf(t1111, E3.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t111, ThrowableHelper.getInstance().getInstanceOf(t11111, E3.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
 		
-		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t1, E4.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t11, E4.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t111, E4.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t1111, ThrowableHelper.getInstance().getInstanceOf(t1111, E4.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t1111, ThrowableHelper.getInstance().getInstanceOf(t11111, E4.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
+		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t1, E4.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t11, E4.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t111, E4.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t1111, ThrowableHelper.getInstance().getInstanceOf(t1111, E4.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t1111, ThrowableHelper.getInstance().getInstanceOf(t11111, E4.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
 		
-		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t1, E5.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t11, E5.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t111, E5.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t1111, E5.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t11111, ThrowableHelper.getInstance().getInstanceOf(t11111, E5.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
+		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t1, E5.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t11, E5.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t111, E5.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(null, ThrowableHelper.getInstance().getInstanceOf(t1111, E5.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t11111, ThrowableHelper.getInstance().getInstanceOf(t11111, E5.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
 		
-		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t11111, E1.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t11, ThrowableHelper.getInstance().getInstanceOf(t11111, E2.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t111, ThrowableHelper.getInstance().getInstanceOf(t11111, E3.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t1111, ThrowableHelper.getInstance().getInstanceOf(t11111, E4.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
-		assertEquals(t11111, ThrowableHelper.getInstance().getInstanceOf(t11111, E5.class,ThrowableHelper.ThrowableMarker.class,RuntimeException.class));
+		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t11111, E1.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t11, ThrowableHelper.getInstance().getInstanceOf(t11111, E2.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t111, ThrowableHelper.getInstance().getInstanceOf(t11111, E3.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t1111, ThrowableHelper.getInstance().getInstanceOf(t11111, E4.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
+		assertEquals(t11111, ThrowableHelper.getInstance().getInstanceOf(t11111, E5.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
 	}
 	
 	@Test
@@ -177,7 +179,7 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 		}
 	}
 	
-	protected static class MyBusinessException extends ThrowableHelper.ThrowableMarker {
+	protected static class MyBusinessException extends ThrowableHelper.ThrowableMarkerCompileTime {
 		private static final long serialVersionUID = 1L;
 		public MyBusinessException(String message) {
 			super(message);

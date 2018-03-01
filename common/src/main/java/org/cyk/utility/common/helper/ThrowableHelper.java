@@ -80,7 +80,7 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	public void throw_(String message){
-		throw_(Arrays.asList(message), ThrowableMarker.class);
+		throw_(Arrays.asList(message), ThrowableMarkerCompileTime.class);
 	}
 	
 	public <T extends java.lang.Throwable> void throw_(Collection<String> messages,Class<T> causeClass){
@@ -192,36 +192,98 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
-	public static class ThrowableMarker extends java.lang.Throwable {
+	public static class ThrowableMarkerCompileTime extends java.lang.Throwable {
 		private static final long serialVersionUID = 1L;
 
-		@Setter protected Object identifier;
-		protected Set<String> messages = new LinkedHashSet<>();
+		protected ThrowableMarkerFields fields = new ThrowableMarkerFields();
 		
-		public ThrowableMarker() {
+		public ThrowableMarkerCompileTime() {
 			super();
 		}
 
-		public ThrowableMarker(String message, java.lang.Throwable cause, boolean enableSuppression,boolean writableStackTrace) {
+		public ThrowableMarkerCompileTime(String message, java.lang.Throwable cause, boolean enableSuppression,boolean writableStackTrace) {
 			super(message, cause, enableSuppression, writableStackTrace);
+			getFields().addMessages(message);
 		}
 
-		public ThrowableMarker(String message, java.lang.Throwable cause) {
+		public ThrowableMarkerCompileTime(String message, java.lang.Throwable cause) {
 			super(message, cause);
 		}
 
-		public ThrowableMarker(String message) {
+		public ThrowableMarkerCompileTime(String message) {
 			this(new HashSet<>(Arrays.asList(message)));
 		}
 
-		public ThrowableMarker(Set<String> messages) {
+		public ThrowableMarkerCompileTime(Set<String> messages) {
 	        super(StringUtils.join(messages,ContentType.TEXT.getNewLineMarker()));
-	        this.messages.addAll(messages);
+	        getFields().addMessages(messages);
 	    }
 		
-		public ThrowableMarker(java.lang.Throwable cause) {
+		public ThrowableMarkerCompileTime(java.lang.Throwable cause) {
 			super(cause);
 		}
 		
+		public ThrowableMarkerCompileTime setIdentifier(Object identifier) {
+			getFields().setIdentifier(identifier);
+			return this;
+		}
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class ThrowableMarkerRunTime extends java.lang.Throwable {
+		private static final long serialVersionUID = 1L;
+
+		protected ThrowableMarkerFields fields = new ThrowableMarkerFields();
+		
+		public ThrowableMarkerRunTime() {
+			super();
+		}
+
+		public ThrowableMarkerRunTime(String message, java.lang.Throwable cause, boolean enableSuppression,boolean writableStackTrace) {
+			super(message, cause, enableSuppression, writableStackTrace);
+			getFields().addMessages(message);
+		}
+
+		public ThrowableMarkerRunTime(String message, java.lang.Throwable cause) {
+			super(message, cause);
+		}
+
+		public ThrowableMarkerRunTime(String message) {
+			this(new HashSet<>(Arrays.asList(message)));
+		}
+
+		public ThrowableMarkerRunTime(Set<String> messages) {
+	        super(StringUtils.join(messages,ContentType.TEXT.getNewLineMarker()));
+	        getFields().addMessages(messages);
+	    }
+		
+		public ThrowableMarkerRunTime(java.lang.Throwable cause) {
+			super(cause);
+		}
+		
+		public ThrowableMarkerRunTime setIdentifier(Object identifier) {
+			getFields().setIdentifier(identifier);
+			return this;
+		}
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class ThrowableMarkerFields implements Serializable {			
+		private static final long serialVersionUID = 1L;
+		
+		protected Object identifier;
+		protected Set<String> messages = new LinkedHashSet<>();
+	
+		public ThrowableMarkerFields addMessages(Collection<String> messages) {
+			if(CollectionHelper.getInstance().isNotEmpty(messages))
+				this.messages.addAll(messages);
+			return this;
+		}
+		
+		public ThrowableMarkerFields addMessages(String...messages) {
+			if(ArrayHelper.getInstance().isNotEmpty(messages))
+				addMessages(Arrays.asList(messages));
+			return this;
+		}
 	}
 }

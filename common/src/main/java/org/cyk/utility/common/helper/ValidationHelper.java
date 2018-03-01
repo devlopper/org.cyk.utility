@@ -232,7 +232,7 @@ public class ValidationHelper extends AbstractHelper implements Serializable {
 					}
 					Boolean isThrowMessages = getIsThrowMessages();
 					if(Boolean.TRUE.equals(isThrowMessages)){
-						Class<? extends java.lang.Throwable> throwableClass = InstanceHelper.getInstance().getIfNotNullElseDefault(getThrowableClass(),ThrowableHelper.ThrowableMarker.class);
+						Class<? extends java.lang.Throwable> throwableClass = InstanceHelper.getInstance().getIfNotNullElseDefault(getThrowableClass(),ThrowableHelper.ThrowableMarkerCompileTime.class);
 						ThrowableHelper.getInstance().throw_(messages, throwableClass);
 					}
 					return messages;

@@ -1,13 +1,8 @@
 package org.cyk.utility.common;
 
-import org.cyk.utility.common.ThrowableHelperUnitTest.MyBusinessException;
-import org.cyk.utility.common.ValidationHelperUnitTest.ManyConstraints;
 import org.cyk.utility.common.helper.ThrowableHelper;
-import org.cyk.utility.common.helper.ValidationHelper;
-import org.cyk.utility.common.test.TestHelper;
-import org.cyk.utility.common.test.TestHelper.TestCase;
-import org.cyk.utility.test.AbstractTest.Runnable;
-import org.cyk.utility.test.AbstractTest.Try;
+import org.cyk.utility.common.test.Runnable;
+import org.cyk.utility.common.test.TestCase;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -17,12 +12,13 @@ public class TestHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void assertThrowMyBusinessExceptionNotNested(){
-		new Try(new Runnable() {
+		TestCase testCase = new TestCase();
+		testCase.assertThrowable(new Runnable() {
 			@Override
 			protected void __run__() throws Throwable {
 				throw new MyBusinessException("My_Business_Message");
 			}
-		}).setExpectedThrowableClass(MyBusinessException.class).setExpectedThrowableMessage("My_Business_Message").execute();
+		}, MyBusinessException.class, null, "My_Business_Message");
 	}
 	/*
 	@Test
@@ -69,7 +65,7 @@ public class TestHelperUnitTest extends AbstractUnitTest {
 	*/
 	/**/
 	
-	protected static class MyBusinessException extends ThrowableHelper.ThrowableMarker {
+	protected static class MyBusinessException extends ThrowableHelper.ThrowableMarkerCompileTime {
 		private static final long serialVersionUID = 1L;
 		public MyBusinessException(String message) {
 			super(message);

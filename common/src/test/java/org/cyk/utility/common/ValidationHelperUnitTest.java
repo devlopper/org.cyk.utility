@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.ThrowableHelper;
 import org.cyk.utility.common.helper.ValidationHelper;
+import org.cyk.utility.common.test.Try;
+import org.cyk.utility.common.test.Runnable;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.hibernate.validator.constraints.Email;
 import org.junit.Test;
@@ -35,7 +37,7 @@ public class ValidationHelperUnitTest extends AbstractUnitTest {
 				.setIsThrowMessages(Boolean.TRUE)
     			.execute();
 			}
-		}).setExpectedThrowableClass(ThrowableHelper.ThrowableMarker.class)
+		}).setExpectedThrowableClass(ThrowableHelper.ThrowableMarkerCompileTime.class)
 			.setExpectedThrowableMessage("1 ##__field__.f.1## : ne peut pas être nul"+Constant.LINE_DELIMITER+"2 ##__field__.f.2## : ne peut pas être nul"
 				+Constant.LINE_DELIMITER+"3 ##__field__.f.3## : ne peut pas être nul"+Constant.LINE_DELIMITER+"4 ##__field__.f.4## : ne peut pas être nul")
 		.execute();
