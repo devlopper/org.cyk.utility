@@ -28,6 +28,12 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void assertBoolean(){
+		assertCondition(new ConditionHelper.Condition.Builder.Adapter.Default().setValueNameIdentifier("code").setConditionValue(Boolean.TRUE)
+				.setDomainNameIdentifier("person").setInput(123).execute(), Boolean.TRUE, null);
+	}
+	
+	@Test
 	public void comparison(){
 		assertEquals(Boolean.FALSE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
 				.setDomainNameIdentifier("sale").setNumber1(1).setNumber2(2).setEqual(null).execute().getValue());
