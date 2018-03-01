@@ -62,11 +62,10 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 			String getValueNameIdentifier();
 			Builder setValueNameIdentifier(String valueNameIdentifier);
 			
-			Object getConditionIdentifier();
-			Builder setConditionIdentifier(Object conditionIdentifier);
-			
 			java.lang.Boolean getConditionValue();
 			Builder setConditionValue(java.lang.Boolean conditionValue);
+			
+			@Override Builder setIdentifier(Object identifier);
 			
 			@Override 
 			Builder setInput(Object input);
@@ -75,7 +74,6 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 			public static class Adapter extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<Condition> implements Builder,Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				protected Object conditionIdentifier;
 				protected String valueNameIdentifier;
 				protected String messageIdentifier,domainNameIdentifier;
 				protected java.lang.Boolean conditionValue;
@@ -115,13 +113,13 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				}
 				
 				@Override
-				public Builder setConditionIdentifier(Object conditionIdentifier){
-					return null;
+				public Builder setInput(Object input) {
+					return (Builder) super.setInput(input);
 				}
 				
 				@Override
-				public Builder setInput(Object input) {
-					return (Builder) super.setInput(input);
+				public Builder setIdentifier(Object identifier) {
+					return (Builder) super.setIdentifier(identifier);
 				}
 				
 				public static class Default extends Builder.Adapter implements Serializable {
@@ -175,12 +173,6 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					@Override
 					public Builder setConditionValue(java.lang.Boolean conditionValue) {
 						this.conditionValue = conditionValue;
-						return this;
-					}
-					
-					@Override
-					public Builder setConditionIdentifier(Object conditionIdentifier) {
-						this.conditionIdentifier = conditionIdentifier;
 						return this;
 					}
 					

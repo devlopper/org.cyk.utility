@@ -182,6 +182,7 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 						}else if(throwable.getCause() instanceof ThrowableMarkerRunTime) {
 							((ThrowableMarkerRunTime)throwable.getCause()).getFields().setIdentifier(getIdentifier());
 						}
+						System.out.println("ThrowableHelper.Throwable.Builder.Adapter.Default.__execute__() : "+throwable.getIdentifier());
 						return throwable;
 					}
 				}
@@ -235,7 +236,7 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
-	public static class ThrowableMarkerRunTime extends java.lang.Throwable {
+	public static class ThrowableMarkerRunTime extends java.lang.RuntimeException {
 		private static final long serialVersionUID = 1L;
 
 		protected ThrowableMarkerFields fields = new ThrowableMarkerFields();
