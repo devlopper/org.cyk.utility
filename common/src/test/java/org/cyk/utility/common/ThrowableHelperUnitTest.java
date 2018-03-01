@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 
 import org.cyk.utility.common.helper.AbstractHelper;
 import org.cyk.utility.common.helper.ThrowableHelper;
+import org.cyk.utility.common.helper.ThrowableHelper.Throwable;
 import org.cyk.utility.common.test.Try;
 import org.cyk.utility.common.test.Runnable;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -16,11 +17,11 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void getInstanceOfRuntimeException(){
-		Throwable t1 = new E1("t1", null);
-		Throwable t11 = new E2("t11", t1);
-		Throwable t111 = new E3("t111", t11);
-		Throwable t1111 = new E4("t1111", t111);
-		Throwable t11111 = new E5("t11111", t1111);
+		java.lang.Throwable t1 = new E1("t1", null);
+		java.lang.Throwable t11 = new E2("t11", t1);
+		java.lang.Throwable t111 = new E3("t111", t11);
+		java.lang.Throwable t1111 = new E4("t1111", t111);
+		java.lang.Throwable t11111 = new E5("t11111", t1111);
 		
 		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t1, E1.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
 		assertEquals(t1, ThrowableHelper.getInstance().getInstanceOf(t11, E1.class,ThrowableHelper.ThrowableMarkerCompileTime.class,RuntimeException.class));
@@ -81,7 +82,7 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	public void assertThrowMyBusinessExceptionNotNested(){
 		new Try(new Runnable() {
 			@Override
-			protected void __run__() throws Throwable {
+			protected void __run__() throws java.lang.Throwable {
 				throw new MyBusinessException("My_Business_Message");
 			}
 		}).setExpectedThrowableClass(MyBusinessException.class).setExpectedThrowableMessage("My_Business_Message").execute();
@@ -91,7 +92,7 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	public void assertThrowMyBusinessExceptionIdentifierNotNested(){
 		new Try(new Runnable() {
 			@Override
-			protected void __run__() throws Throwable {
+			protected void __run__() throws java.lang.Throwable {
 				throw new MyBusinessException("My_Business_Message").setIdentifier(123);
 			}
 		}).setExpectedThrowableClass(MyBusinessException.class).setExpectedThrowableIdentifier(123).execute();
@@ -101,7 +102,7 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	public void assertThrowMyBusinessExceptionNestedLevel1(){
 		new Try(new Runnable() {
 			@Override
-			protected void __run__() throws Throwable {
+			protected void __run__() throws java.lang.Throwable {
 				throw new RuntimeException(new MyBusinessException("My_Business_Message"));
 			}
 		}).setExpectedThrowableClass(MyBusinessException.class).setExpectedThrowableMessage("My_Business_Message").execute();
@@ -111,7 +112,7 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	public void assertThrowMyBusinessExceptionNestedLevel2(){
 		new Try(new Runnable() {
 			@Override
-			protected void __run__() throws Throwable {
+			protected void __run__() throws java.lang.Throwable {
 				throw new RuntimeException(new RuntimeException(new MyBusinessException("My_Business_Message")));
 			}
 		}).setExpectedThrowableClass(MyBusinessException.class).setExpectedThrowableMessage("My_Business_Message").execute();
@@ -121,10 +122,16 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	public void assertThrowMyBusinessExceptionNestedLevel3(){
 		new Try(new Runnable() {
 			@Override
-			protected void __run__() throws Throwable {
+			protected void __run__() throws java.lang.Throwable {
 				throw new RuntimeException(new RuntimeException(new RuntimeException(new MyBusinessException("My_Business_Message"))));
 			}
 		}).setExpectedThrowableClass(MyBusinessException.class).setExpectedThrowableMessage("My_Business_Message").execute();
+	}
+	
+	@Test
+	public void assertThrowable(){
+		Throwable throwable = new Throwable.Builder.Adapter.Default<MyBusinessException>(MyBusinessException.class).setIdentifier(159).addManyParameters("message").execute();
+		assertEquals(159, throwable.getIdentifier());
 	}
 	
 	/**/
@@ -146,35 +153,35 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	
 	protected static class E1 extends Exception {
 		private static final long serialVersionUID = 1L;
-		public E1(String message,Throwable throwable) {
+		public E1(String message,java.lang.Throwable throwable) {
 			super(message,throwable);
 		}
 	}
 	
 	protected static class E2 extends Exception {
 		private static final long serialVersionUID = 1L;
-		public E2(String message,Throwable throwable) {
+		public E2(String message,java.lang.Throwable throwable) {
 			super(message,throwable);
 		}
 	}
 	
 	protected static class E3 extends Exception {
 		private static final long serialVersionUID = 1L;
-		public E3(String message,Throwable throwable) {
+		public E3(String message,java.lang.Throwable throwable) {
 			super(message,throwable);
 		}
 	}
 	
 	protected static class E4 extends Exception {
 		private static final long serialVersionUID = 1L;
-		public E4(String message,Throwable throwable) {
+		public E4(String message,java.lang.Throwable throwable) {
 			super(message,throwable);
 		}
 	}
 	
 	protected static class E5 extends Exception {
 		private static final long serialVersionUID = 1L;
-		public E5(String message,Throwable throwable) {
+		public E5(String message,java.lang.Throwable throwable) {
 			super(message,throwable);
 		}
 	}

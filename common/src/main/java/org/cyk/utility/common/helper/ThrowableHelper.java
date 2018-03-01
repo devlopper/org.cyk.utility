@@ -113,7 +113,7 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 	public static class Throwable implements Serializable  {
 		private static final long serialVersionUID = 1L;
 		
-		protected String identifier;
+		protected Object identifier;
 		protected Set<String> messages;
 		protected java.lang.Throwable cause;
 		
@@ -169,7 +169,7 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 					@Override
 					protected Throwable __execute__() {
 						Throwable throwable = new Throwable();
-						//throwable.setIdentifier(getIdentifier());
+						throwable.setIdentifier(getIdentifier());
 						StringBuilder messageBuilder = new StringBuilder();
 						//messageBuilder.append(CollectionHelper.getInstance().concatenate(getMessages(), Constant.LINE_DELIMITER.toString()));
 						StringHelper.ToStringMapping messageMapping = getMessageMapping();
