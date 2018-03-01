@@ -92,7 +92,7 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 	
 	public <T extends java.lang.Throwable> void throw_(ConditionHelper.Condition condition,Class<T> causeClass){
 		if(Boolean.TRUE.equals(condition.getValue()))
-			throw_(new Throwable.Builder.Adapter.Default<T>(causeClass).addManyParameters(condition.getMessage()).execute());
+			throw_(new Throwable.Builder.Adapter.Default<T>(causeClass).setIdentifier(condition.getIdentifier()).addManyParameters(condition.getMessage()).execute());
 	}
 	
 	public <T extends java.lang.Throwable> void throw_(ConditionHelper.Condition.Builder builder,Class<T> causeClass){
@@ -177,6 +177,11 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 							addManyParameters(messageMapping.execute());
 						messageBuilder.append(CollectionHelper.getInstance().concatenate(getParameters(), Constant.LINE_DELIMITER.toString()));
 						throwable.setCause(ClassHelper.getInstance().instanciate(getCauseClass(), new Object[]{String.class,messageBuilder.toString()}));
+						if(throwable.getCause() instanceof ThrowableMarkerCompileTime) {
+							((ThrowableMarkerCompileTime)throwable.getCause()).getFields().setIdentifier(getIdentifier());
+						}else if(throwable.getCause() instanceof ThrowableMarkerRunTime) {
+							((ThrowableMarkerRunTime)throwable.getCause()).getFields().setIdentifier(getIdentifier());
+						}
 						return throwable;
 					}
 				}
