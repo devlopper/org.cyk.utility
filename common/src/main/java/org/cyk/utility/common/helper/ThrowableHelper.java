@@ -4,13 +4,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.StringHelper.ToStringMapping;
+import org.cyk.utility.common.userinterface.ContentType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -187,9 +191,13 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 	
 	/**/
 	
+	@Getter @Setter @Accessors(chain=true)
 	public static class ThrowableMarker extends java.lang.Throwable {
 		private static final long serialVersionUID = 1L;
 
+		@Setter protected Object identifier;
+		protected Set<String> messages = new LinkedHashSet<>();
+		
 		public ThrowableMarker() {
 			super();
 		}
@@ -203,9 +211,14 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 		}
 
 		public ThrowableMarker(String message) {
-			super(message);
+			this(new HashSet<>(Arrays.asList(message)));
 		}
 
+		public ThrowableMarker(Set<String> messages) {
+	        super(StringUtils.join(messages,ContentType.TEXT.getNewLineMarker()));
+	        this.messages.addAll(messages);
+	    }
+		
 		public ThrowableMarker(java.lang.Throwable cause) {
 			super(cause);
 		}

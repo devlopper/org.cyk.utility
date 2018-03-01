@@ -75,6 +75,56 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 		*/
 	}
 	
+	@Test
+	public void assertThrowMyBusinessExceptionNotNested(){
+		new Try(new Runnable() {
+			@Override
+			protected void __run__() throws Throwable {
+				throw new MyBusinessException("My_Business_Message");
+			}
+		}).setExpectedThrowableClass(MyBusinessException.class).setExpectedThrowableMessage("My_Business_Message").execute();
+	}
+	
+	@Test
+	public void assertThrowMyBusinessExceptionIdentifierNotNested(){
+		new Try(new Runnable() {
+			@Override
+			protected void __run__() throws Throwable {
+				throw new MyBusinessException("My_Business_Message").setIdentifier(123);
+			}
+		}).setExpectedThrowableClass(MyBusinessException.class).setExpectedThrowableIdentifier(123).execute();
+	}
+	
+	@Test
+	public void assertThrowMyBusinessExceptionNestedLevel1(){
+		new Try(new Runnable() {
+			@Override
+			protected void __run__() throws Throwable {
+				throw new RuntimeException(new MyBusinessException("My_Business_Message"));
+			}
+		}).setExpectedThrowableClass(MyBusinessException.class).setExpectedThrowableMessage("My_Business_Message").execute();
+	}
+	
+	@Test
+	public void assertThrowMyBusinessExceptionNestedLevel2(){
+		new Try(new Runnable() {
+			@Override
+			protected void __run__() throws Throwable {
+				throw new RuntimeException(new RuntimeException(new MyBusinessException("My_Business_Message")));
+			}
+		}).setExpectedThrowableClass(MyBusinessException.class).setExpectedThrowableMessage("My_Business_Message").execute();
+	}
+	
+	@Test
+	public void assertThrowMyBusinessExceptionNestedLevel3(){
+		new Try(new Runnable() {
+			@Override
+			protected void __run__() throws Throwable {
+				throw new RuntimeException(new RuntimeException(new RuntimeException(new MyBusinessException("My_Business_Message"))));
+			}
+		}).setExpectedThrowableClass(MyBusinessException.class).setExpectedThrowableMessage("My_Business_Message").execute();
+	}
+	
 	/**/
 	
 	public static class MyHelper extends AbstractHelper {
@@ -127,4 +177,10 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 		}
 	}
 	
+	protected static class MyBusinessException extends ThrowableHelper.ThrowableMarker {
+		private static final long serialVersionUID = 1L;
+		public MyBusinessException(String message) {
+			super(message);
+		}
+	}
 }

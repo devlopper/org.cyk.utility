@@ -98,6 +98,10 @@ public abstract class AbstractTest implements Serializable {
 			method.execute();*/
 	}
 	
+	public void assertThrowable(final java.lang.Runnable runnable,Class<? extends java.lang.Throwable> expectedClass,Object expectedIdentifier,String expectedMessage){
+		new AbstractTest.Try(runnable).__set__(expectedIdentifier,expectedClass,expectedMessage).execute();	
+	}
+	
 	protected Date date(Integer year,Integer monthOfYear,Integer dayOfMonth,Integer hourOfDay,Integer minuteOfHour,Integer secondOfMinute,Integer millisOfSecond){
 		return new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond).toDate();
 	}
@@ -367,32 +371,48 @@ public abstract class AbstractTest implements Serializable {
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
-	public abstract class Try implements Serializable{
+	public class Try implements Serializable{
 		private static final long serialVersionUID = -4483490165697187680L;
 		
+		private java.lang.Runnable runnable;
+		
+		private Object expectedThrowableIdentifier;
 		private Class<? extends Throwable> expectedThrowableClass;
 		private String expectedThrowableMessage;
 		
-		public Try(Class<? extends Throwable> expectedThrowableClass,String expectedThrowableMessage) {
+		public Try(java.lang.Runnable runnable) {
 			super();
-			this.expectedThrowableClass = expectedThrowableClass;
-			this.expectedThrowableMessage = expectedThrowableMessage;
+			this.runnable = runnable;
 		}
 		
-		public Try(String expectedThrowableMessage) {
-			this(null,expectedThrowableMessage);
+		public Try __set__(Object expectedThrowableIdentifier,Class<? extends Throwable> expectedThrowableClass,String expectedThrowableMessage) {
+			this.expectedThrowableIdentifier = expectedThrowableIdentifier;
+			this.expectedThrowableClass = expectedThrowableClass;
+			this.expectedThrowableMessage = expectedThrowableMessage;
+			return this;
 		}
 		
 		public void execute(){
 			try { 
 				code();
-			} 
-			catch (Exception exception) { 
-				Throwable throwable = expectedThrowableClass == null ? exception : getInstanceOf(exception,expectedThrowableClass);
-				assertEquals("Throwable message",expectedThrowableMessage,throwable.getMessage());  
+			} catch (Throwable throwable) {
+				Throwable expectedThrowable = expectedThrowableClass == null ? throwable : getInstanceOf(throwable,expectedThrowableClass);
+				if(expectedThrowableClass!=null)
+					assertEquals("Throwable class is not equal",expectedThrowableClass,expectedThrowable.getClass());
+				if(expectedThrowableIdentifier!=null)
+					try {
+						assertEquals("Throwable identifier is not equal",expectedThrowableIdentifier,FieldUtils.readField(expectedThrowable, "identifier", Boolean.TRUE));
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} 
+				if(expectedThrowableMessage!=null)
+					assertEquals("Throwable message is not equal",expectedThrowableMessage,expectedThrowable.getMessage());
 			}  
 		}
-		protected abstract void code();
+		
+		protected void code() throws Throwable {
+			runnable.run();	
+		}
 		
 		public java.lang.Throwable getInstanceOf(java.lang.Throwable throwable,Class<?> aClass){
 			java.lang.Throwable index = throwable;
@@ -404,6 +424,24 @@ public abstract class AbstractTest implements Serializable {
 			}
 			return null;
 		}
+	
+		/**/
+	
+	}
+	
+	public static abstract class Runnable implements java.lang.Runnable {
+
+		@Override
+		public void run() {
+			try {
+				__run__();
+			} catch (Throwable throwable) {
+				throw new RuntimeException(throwable);
+			}
+		}
+		
+		protected abstract void __run__() throws java.lang.Throwable;
+		
 	}
 	
 }

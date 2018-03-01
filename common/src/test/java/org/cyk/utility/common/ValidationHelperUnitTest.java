@@ -28,13 +28,17 @@ public class ValidationHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
     public void manyConstraints() {
-		new Try(ThrowableHelper.ThrowableMarker.class,"1 ##__field__.f.1## : ne peut pas être nul"+Constant.LINE_DELIMITER+"2 ##__field__.f.2## : ne peut pas être nul"
-				+Constant.LINE_DELIMITER+"3 ##__field__.f.3## : ne peut pas être nul"+Constant.LINE_DELIMITER+"4 ##__field__.f.4## : ne peut pas être nul"){ 
-			private static final long serialVersionUID = -8176804174113453706L;
-			@Override protected void code() {new ValidationHelper.Validate.Adapter.Default(new ManyConstraints())
+		new Try(new Runnable() {
+			@Override
+			protected void __run__() throws Throwable {
+				new ValidationHelper.Validate.Adapter.Default(new ManyConstraints())
 				.setIsThrowMessages(Boolean.TRUE)
-    			.execute();}
-		}.execute();
+    			.execute();
+			}
+		}).setExpectedThrowableClass(ThrowableHelper.ThrowableMarker.class)
+			.setExpectedThrowableMessage("1 ##__field__.f.1## : ne peut pas être nul"+Constant.LINE_DELIMITER+"2 ##__field__.f.2## : ne peut pas être nul"
+				+Constant.LINE_DELIMITER+"3 ##__field__.f.3## : ne peut pas être nul"+Constant.LINE_DELIMITER+"4 ##__field__.f.4## : ne peut pas être nul")
+		.execute();
 	}
 	
 	@Test

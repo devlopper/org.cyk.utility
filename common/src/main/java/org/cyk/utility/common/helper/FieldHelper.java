@@ -648,6 +648,11 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			return field;
 		}
 		
+		public static Boolean isComputedByUser(Class<?> clazz,String name) {
+			Field field = get(clazz, name);
+			return field == null ? null : field.getConstraints().getIsComputedByUser();
+		}
+		
 		public static Collection<Field> get(Class<?> clazz){
 			Collection<Field> collection = new ArrayList<FieldHelper.Field>();
 			for(Field index : COLLECTION)
@@ -667,7 +672,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	public static class Constraints implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
-		private Boolean isNullable,isUnique,isUpdatable;
+		private Boolean isNullable,isUnique,isUpdatable,isComputedByUser;
 		private Integer length,precision,scale;
 		private Constant.Date.Part datePart;
 		

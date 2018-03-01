@@ -8,6 +8,7 @@ import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.AbstractHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
+import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.RandomHelper;
 
 @Singleton
@@ -47,6 +48,11 @@ public class TestHelper extends AbstractHelper implements Serializable {
 			if(String.class.equals(identifierClass))
 				identifier = getRandomHelper().getAlphabetic(5);
 			return ClassHelper.getInstance().instanciateOne(aClass,identifier);
+		}
+		
+		public TestCase computeChanges(Object instance) {
+			InstanceHelper.getInstance().computeChanges(instance);
+			return this;
 		}
 		
 		/* shortcuts */
