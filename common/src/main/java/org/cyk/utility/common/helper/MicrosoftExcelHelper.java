@@ -28,7 +28,6 @@ import lombok.experimental.Accessors;
 
 @Singleton
 public class MicrosoftExcelHelper extends AbstractHelper implements Serializable  {
-
 	private static final long serialVersionUID = 1L;
 
 	private static MicrosoftExcelHelper INSTANCE;
@@ -129,6 +128,8 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 		public static class Sheet implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
+			private static final Integer MAXIMUM_NUMBER_OF_CHARACTER_OF_NAME = 31;
+			
 			private Workbook workbook;
 			private org.apache.poi.ss.usermodel.Sheet model;
 			private Object[][] values;
@@ -217,6 +218,18 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 							setSheetName(aClass);
 						}
 						
+						public Default(java.io.InputStream fileInputStream,String sheetName,Class<?> aClass) {
+							this(new MicrosoftExcelHelper.Workbook.Builder.InputStream.Adapter.Default(fileInputStream).execute());
+							if(StringHelper.getInstance().isBlank(sheetName))
+								setSheetName(aClass);
+							else
+								setSheetName(sheetName);
+						}
+						
+						public Default(java.io.InputStream fileInputStream,String sheetName) {
+							this(fileInputStream,sheetName,null);
+						}
+						
 						@Override
 						public Builder setCloseWorkbook(Boolean closeWorkbook) {
 							this.closeWorkbook = closeWorkbook;
@@ -259,6 +272,11 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 							sheet.setWorkbook(getInput());
 							Integer index = getSheetIndex();
 							java.lang.String name = getSheetName();
+							if(StringHelper.getInstance().isNotBlank(name)){
+								if(name.length() > MAXIMUM_NUMBER_OF_CHARACTER_OF_NAME)
+									name = name.substring(0, MAXIMUM_NUMBER_OF_CHARACTER_OF_NAME+1);
+							}
+								
 							sheet.setModel(StringUtils.isBlank(name) ? getInput().getModel().getSheetAt(index) : getInput().getModel().getSheet(name));
 							
 							if(sheet.getModel()==null){
