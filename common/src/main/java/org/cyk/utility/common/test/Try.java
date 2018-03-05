@@ -36,6 +36,7 @@ public class Try implements Serializable{
 			code();
 		} catch (Throwable throwable) {
 			Throwable expectedThrowable = expectedThrowableClass == null ? throwable : getInstanceOf(throwable,expectedThrowableClass);
+			AssertionHelper.getInstance().assertEquals("expected throwable is null", Boolean.TRUE, expectedThrowable!=null);
 			if(expectedThrowableClass!=null)
 				AssertionHelper.getInstance().assertEquals("Throwable class is not equal",expectedThrowableClass,expectedThrowable.getClass());
 			if(expectedThrowableIdentifier!=null)
