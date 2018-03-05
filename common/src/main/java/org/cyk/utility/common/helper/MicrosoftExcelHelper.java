@@ -273,8 +273,9 @@ public class MicrosoftExcelHelper extends AbstractHelper implements Serializable
 							Integer index = getSheetIndex();
 							java.lang.String name = getSheetName();
 							if(StringHelper.getInstance().isNotBlank(name)){
-								if(name.length() > MAXIMUM_NUMBER_OF_CHARACTER_OF_NAME)
-									name = name.substring(0, MAXIMUM_NUMBER_OF_CHARACTER_OF_NAME+1);
+								if(name.length() > MAXIMUM_NUMBER_OF_CHARACTER_OF_NAME) {
+									name = name.substring(0, MAXIMUM_NUMBER_OF_CHARACTER_OF_NAME);
+								}
 							}
 								
 							sheet.setModel(StringUtils.isBlank(name) ? getInput().getModel().getSheetAt(index) : getInput().getModel().getSheet(name));
