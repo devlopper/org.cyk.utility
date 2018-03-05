@@ -7,9 +7,11 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Singleton;
@@ -634,6 +636,15 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			return constraints;
 		}
 		
+		public String getIdentifier(Class<?> aClass) {
+			String identifier = constraints.getIdentifier(aClass);
+			if(StringHelper.getInstance().isBlank(identifier)) {
+				identifier = StringHelper.getInstance().concatenate(new Object[] {clazz.getSimpleName(),name,aClass.getSimpleName()}, Constant.CHARACTER_UNDESCORE);
+				constraints.getIdentifierMap().put(aClass, identifier);
+			}
+			return identifier;
+		}
+		
 		public static Field get(Class<?> clazz,String name){
 			Field field = null;
 			for(Field index : COLLECTION)
@@ -675,6 +686,15 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		private Boolean isNullable,isUnique,isUpdatable,isComputedByUser;
 		private Integer length,precision,scale;
 		private Constant.Date.Part datePart;
+		
+		/**
+		 * 
+		 */
+		private final Map<Object,String> identifierMap = new HashMap<>();
+		
+		public String getIdentifier(Object object) {
+			return identifierMap.get(object);
+		}
 		
 	}
 }

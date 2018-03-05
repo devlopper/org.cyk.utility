@@ -86,6 +86,14 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void getConstraintIdentifier(){
+		FieldHelper.Field.clear();
+		
+		assertEquals("ModelForConstraintsA_nullableString_NotNull", FieldHelper.Field.get(ModelForConstraintsA.class, "nullableString").getIdentifier(NotNull.class)); 
+		
+	}
+	
+	@Test
 	public void getAction(){
 		assertEquals(7, new FieldHelper.Get.Adapter.Default(MyClass.class).execute().size());
 		assertEquals(0, new FieldHelper.Get.Adapter.Default(MyClass.class).addModifiers(Modifier.ABSTRACT).execute().size());
