@@ -31,6 +31,12 @@ public class NumberHelperUnitTest extends AbstractUnitTest {
 		assertEquals(Boolean.TRUE, NumberHelper.getInstance().compare(1, 1, null, null));
 		assertEquals(Boolean.FALSE, NumberHelper.getInstance().compare(1, 2, null, null));
 		assertEquals(Boolean.TRUE, NumberHelper.getInstance().compare(1, 2, null, Boolean.FALSE));
+		
+		assertEquals(Boolean.TRUE, NumberHelper.getInstance().compare(3, 2, Boolean.TRUE, null));
+		assertEquals(Boolean.TRUE, NumberHelper.getInstance().compare(1, 2, Boolean.FALSE, null));
+		
+		assertEquals(Boolean.TRUE, NumberHelper.getInstance().compare(3, 2, Boolean.TRUE, Boolean.FALSE));
+		assertEquals(Boolean.TRUE, NumberHelper.getInstance().compare(1, 2, Boolean.FALSE, Boolean.FALSE));
 	}
 	
 	@Test

@@ -1,15 +1,18 @@
 package org.cyk.utility.common;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.cyk.utility.common.helper.ConditionHelper;
 import org.cyk.utility.common.helper.ConditionHelper.Condition;
 import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.helper.TimeHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public class ConditionHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
@@ -40,7 +43,7 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 				.execute(), Boolean.TRUE, "La valeur de l'attribut <<f1>> de l'entité <<mon entité>> doit être unique.");
 	}
 	
-	@Test
+	//@Test
 	public void duplicate(){
 		assertCondition(new ConditionHelper.Condition.Builder.Count.Adapter.Default().setValueNameIdentifier("code").setValueCount(0l)
 				.setDomainNameIdentifier("person").setInput(123).execute(), Boolean.FALSE, null);
@@ -52,45 +55,71 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 				.setDomainNameIdentifier("person").setInput("ABC").execute(), Boolean.TRUE, "Un enregistrement de type personne avec pour code <<ABC>> existe déja.");
 
 	}
-		
+	
 	@Test
-	public void assertNumberComparison(){
-		assertEquals(Boolean.FALSE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setValue1(1).setValue2(2).setEqual(null).execute().getValue());
+	public void assertNumberComparisonUsingField(){
+		assertEquals(Boolean.FALSE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("int1")
+				.setFieldObject(new MyEntity().setInt1(1)).setValue2(2).setEqual(null).execute().getValue());
 		
-		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setValue1(1).setValue2(2).setEqual(Boolean.FALSE).execute().getValue());
+		assertEquals(Boolean.FALSE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("int1")
+				.setFieldObject(new MyEntity().setInt1(3)).setValue2(2).setEqual(null).execute().getValue());
 		
-		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setValue1(2).setValue2(2).setEqual(Boolean.TRUE).execute().getValue());
+		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("int1")
+				.setFieldObject(new MyEntity().setInt1(1)).setValue2(2).setGreater(Boolean.FALSE).execute().getValue());
 		
-		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setValue1(1).setValue2(2).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
-				, "La balance(1) doit être égale à 2.");		
+		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("int1")
+				.setFieldObject(new MyEntity().setInt1(3)).setValue2(2).setGreater(Boolean.TRUE).execute().getValue());
 		
-		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setValue1(1).setValue2(2).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
-				, "La balance(1) doit être supérieure ou égale à 2.");		
+		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("int1")
+				.setFieldObject(new MyEntity().setInt1(1)).setValue2(2).setEqual(Boolean.FALSE).execute().getValue());
+		
+		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("int1")
+				.setFieldObject(new MyEntity().setInt1(2)).setValue2(2).setEqual(Boolean.TRUE).execute().getValue());
+		
+		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("balance")
+				.setFieldObject(new Sale().setBalance(1)).setValue2(2).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				, "La valeur(1) de l'attribut <<balance>> de l'entité <<vente>> doit être égale à 2.");
+		
+		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("total")
+				.setFieldObject(new Sale().setTotal(1)).setValue2(2).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				, "La valeur(1) de l'attribut <<total>> de l'entité <<vente>> doit être supérieure ou égale à 2.");	
 	}
 	
 	@Test
-	public void assertDateComparison(){
-		assertEquals(Boolean.FALSE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setValue1(date(2001,1,1)).setValue2(date(2002,1,1)).setEqual(null).execute().getValue());
+	public void assertDateComparisonUsingField(){
+		assertEquals(Boolean.FALSE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("date")
+				.setFieldObject(new Sale().setDate(TimeHelper.getInstance().getDateFromString("1/1/2000")))
+				.setValue2(TimeHelper.getInstance().getDateFromString("2/1/2000")).setEqual(null).execute().getValue());
 		
-		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setValue1(date(2001,1,1)).setValue2(date(2002,1,1)).setEqual(Boolean.FALSE).execute().getValue());
+		assertEquals(Boolean.FALSE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("date")
+				.setFieldObject(new Sale().setDate(TimeHelper.getInstance().getDateFromString("3/1/2000")))
+				.setValue2(TimeHelper.getInstance().getDateFromString("2/1/2000")).setEqual(null).execute().getValue());
 		
-		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setValue1(date(2002,1,1)).setValue2(date(2002,1,1)).setEqual(Boolean.TRUE).execute().getValue());
+		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("date")
+				.setFieldObject(new Sale().setDate(TimeHelper.getInstance().getDateFromString("1/1/2000")))
+				.setValue2(TimeHelper.getInstance().getDateFromString("2/1/2000")).setGreater(Boolean.FALSE).execute().getValue());
 		
-		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setValue1(date(2001,1,1)).setValue2(date(2002,1,1)).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
-				, "La balance(1) doit être égale à 2.");		
+		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("date")
+				.setFieldObject(new Sale().setDate(TimeHelper.getInstance().getDateFromString("3/1/2000")))
+				.setValue2(TimeHelper.getInstance().getDateFromString("2/1/2000")).setGreater(Boolean.TRUE).execute().getValue());
 		
-		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setValue1(date(2001,1,1)).setValue2(date(2002,1,1)).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
-				, "La balance(1) doit être supérieure ou égale à 2.");		
+		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("date")
+				.setFieldObject(new Sale().setDate(TimeHelper.getInstance().getDateFromString("1/1/2000")))
+				.setValue2(TimeHelper.getInstance().getDateFromString("2/1/2000")).setEqual(Boolean.FALSE).execute().getValue());
+		
+		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("date")
+				.setFieldObject(new Sale().setDate(TimeHelper.getInstance().getDateFromString("2/1/2000")))
+				.setValue2(TimeHelper.getInstance().getDateFromString("2/1/2000")).setEqual(Boolean.TRUE).execute().getValue());
+		
+		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("date")
+				.setFieldObject(new Sale().setDate(TimeHelper.getInstance().getDateFromString("1/1/2000")))
+				.setValue2(TimeHelper.getInstance().getDateFromString("2/1/2000")).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				, "La valeur(01/01/2000 00:00) de l'attribut <<date>> de l'entité <<vente>> doit être égale à 02/01/2000 00:00.");
+		
+		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("date")
+				.setFieldObject(new Sale().setDate(TimeHelper.getInstance().getDateFromString("1/1/2000")))
+				.setValue2(TimeHelper.getInstance().getDateFromString("2/1/2000")).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				, "La valeur(01/01/2000 00:00) de l'attribut <<date>> de l'entité <<vente>> doit être supérieure ou égale à 02/01/2000 00:00.");		
 	}
 	
 	/**/
@@ -106,11 +135,22 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 	
 	/**/
 	
-	@Getter @Setter
+	@Getter @Setter @Accessors(chain=true)
 	public static class MyEntity implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		private String f1;
+		private Integer int1;
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class Sale implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private Integer balance;
+		private Integer total;
+		private Date date;
 		
 	}
 	

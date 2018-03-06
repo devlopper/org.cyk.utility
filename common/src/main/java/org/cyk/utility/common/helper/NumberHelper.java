@@ -278,9 +278,9 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 					return number1.doubleValue() != number2.doubleValue();
 			}
 		}else{
-			if(equal==null){
+			//if(equal==null){
 				
-			}else{
+			//}else{
 				if(Boolean.TRUE.equals(greater))
 					if(Boolean.TRUE.equals(equal))
 						return number1.doubleValue() >= number2.doubleValue();
@@ -291,7 +291,7 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 						return number1.doubleValue() <= number2.doubleValue();
 					else
 						return number1.doubleValue() < number2.doubleValue();
-			}
+			//}
 		}
 		return number1.doubleValue() == number2.doubleValue();
 	}

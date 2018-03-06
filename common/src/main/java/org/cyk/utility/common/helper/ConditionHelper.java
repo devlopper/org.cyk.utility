@@ -2,9 +2,11 @@ package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.Date;
 
 import javax.inject.Singleton;
 
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 
 import lombok.Getter;
@@ -245,16 +247,42 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					protected void ____execute____(Condition condition,Object instance,java.lang.reflect.Field field,Object value){}
 					
 					protected Object[] getParameters(Condition condition,Object instance,java.lang.reflect.Field field,Object value,String domainName,String valueName){
-						return new Object[]{domainName,valueName,getValueMustBe(condition, instance, field, valueName)};
+						return new Object[]{domainName,getFieldValueName(condition, instance, field,value, valueName),getFieldValue(condition, instance, field, value)
+								,getValueMustBe(condition, instance, field, valueName)};
+					}
+					
+					protected String getFieldValueName(Condition condition,Object instance,java.lang.reflect.Field field,Object value,String name) {
+						return name;
+					}
+					
+					protected String getFieldValue(Condition condition,Object instance,java.lang.reflect.Field field,Object value) {
+						String string = formatValue(value);
+						return StringHelper.getInstance().isBlank(string) ? Constant.EMPTY_STRING : "("+string+")";
 					}
 					
 					protected String getValueMustBe(Condition condition,Object instance,java.lang.reflect.Field field,Object value) {
 						return "??? MUST BE ???";
 					}
+					
+					protected String formatValue(Object value) {
+						String string;
+						if(value == null)
+							string = Constant.EMPTY_STRING;
+						else if(value instanceof Date)
+							string = new TimeHelper.Stringifier.Date.Adapter.Default((Date)value).execute();
+						else
+							string = value.toString();
+						return string;
+					}
 				}
 				
 			}
 			
+			/**
+			 * 
+			 * Arithmetic comparison of the number of occurrence of a value 
+			 *
+			 */
 			public static interface Count extends Builder {
 				
 				Long getValueCount();
@@ -315,6 +343,11 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				}
 			}
 			
+			/**
+			 * 
+			 * Arithmetic comparison of two values. value can be number , date and so on.
+			 *
+			 */
 			public static interface Comparison extends Builder {
 				
 				@Override Comparison setDomainNameIdentifier(String domainNameIdentifier);
@@ -332,6 +365,9 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				java.lang.Boolean getEqual();
 				
 				@Override Comparison setValueNameIdentifier(String valueNameIdentifier);
+				
+				@Override Comparison setFieldObject(Object fieldObject);
+				@Override Comparison setFieldName(String fieldName);
 				
 				@Getter @Setter
 				public static class Adapter extends Builder.Adapter.Default implements Comparison,Serializable {
@@ -370,6 +406,16 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						return null;
 					}
 					
+					@Override
+					public Comparison setFieldName(String fieldName) {
+						return (Comparison) super.setFieldName(fieldName);
+					}
+					
+					@Override
+					public Comparison setFieldObject(Object fieldObject) {
+						return (Comparison) super.setFieldObject(fieldObject);
+					}
+					
 					public static class Default extends Comparison.Adapter implements Serializable {
 						private static final long serialVersionUID = 1L;
 						
@@ -401,34 +447,19 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						protected void ____execute____(Condition condition, Object instance, Field field,Object value) {
 							java.lang.Boolean greater = getGreater();
 							java.lang.Boolean equal = getEqual();
-							Number number1 = NumberHelper.getInstance().get(getValue1());
+							Number number1 = NumberHelper.getInstance().get(getValue1() == null ? value : getValue1());
 							Number number2 = NumberHelper.getInstance().get(getValue2());
 							condition.setValue(java.lang.Boolean.TRUE.equals(NumberHelper.getInstance().compare(number1,number2,greater,equal)));
 						}
 						
 						@Override
-						protected Object[] getParameters(Condition condition, Object instance, Field field,Object value, String domainName, String valueName) {
-							Object value1 = null;
-							if(getValue1() instanceof Number)
-								value1 = getValue1();
-							else if(getValue1() instanceof java.util.Date)
-								value1 = getValue1();
-							
-							Object value2 = null;
-							if(getValue2() instanceof Number)
-								value2 = getValue2();
-							else if(getValue1() instanceof java.util.Date)
-								value2 = getValue2();
-							
-							java.lang.Boolean masculine = StringHelper.getInstance().isMasculine(valueNameIdentifier);
-							return new Object[]{
-									new StringHelper.ToStringMapping.Adapter.Default(valueNameIdentifier).setProperty(StringHelper.ToStringMapping.PROPERTY_NAME_GENDER, java.lang.Boolean.TRUE).execute()
-									,value1,StringHelper.getInstance().getComparisonOperator(greater == null ? null : !greater, equal == null ? null : !equal
-											, java.lang.Boolean.TRUE.equals(masculine), java.lang.Boolean.FALSE),value2
-							};
+						protected String getValueMustBe(Condition condition, Object instance, Field field,Object value) {
+							return StringHelper.getInstance().get("__comparison__to__",CaseType.L, new Object[] {
+									StringHelper.getInstance().getComparisonOperator(greater == null ? null : !greater, equal == null ? null : !equal
+											, java.lang.Boolean.TRUE.equals(Boolean.FALSE), java.lang.Boolean.FALSE)
+									, formatValue(getValue2())
+							}); 
 						}
-					
-						
 					}	
 				}
 			}
