@@ -279,67 +279,52 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				
 			}
 			
-			/**
-			 * 
-			 * Arithmetic comparison of the number of occurrence of a value 
-			 *
-			 */
-			public static interface Count extends Builder {
+			public static interface NotNull extends Builder {
 				
-				Long getValueCount();
-				Count setValueCount(Long valueCount);
+				@Override NotNull setDomainNameIdentifier(String domainNameIdentifier);
 				
-				@Override Count setFieldObject(Object fieldObject);
-				@Override Count setFieldName(String fieldName);
+				@Override NotNull setValueNameIdentifier(String valueNameIdentifier);
 				
-				@Override Count setValueNameIdentifier(String valueNameIdentifier);
+				NotNull setFieldObject(Object fieldObject);
+				
+				NotNull setFieldName(String fieldName);
 				
 				@Getter @Setter
-				public static class Adapter extends Builder.Adapter.Default implements Count,Serializable {
+				public static class Adapter extends Builder.Adapter.Default implements NotNull,Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					protected Long valueCount;
-					
 					@Override
-					public Count setValueCount(Long valueCount){
-						return null;
+					public NotNull setDomainNameIdentifier(String domainNameIdentifier) {
+						return (NotNull) super.setDomainNameIdentifier(domainNameIdentifier);
 					}
 					
 					@Override
-					public Count setFieldObject(Object fieldObject) {
-						return (Count) super.setFieldObject(fieldObject);
+					public NotNull setValueNameIdentifier(String valueNameIdentifier) {
+						return (NotNull) super.setValueNameIdentifier(valueNameIdentifier);
 					}
 					
 					@Override
-					public Count setFieldName(String fieldName) {
-						return (Count) super.setFieldName(fieldName);
+					public NotNull setFieldObject(Object fieldObject) {
+						return (NotNull) super.setFieldObject(fieldObject);
 					}
 					
 					@Override
-					public Count setValueNameIdentifier(String valueNameIdentifier) {
-						return (Count) super.setValueNameIdentifier(valueNameIdentifier);
+					public NotNull setFieldName(String fieldName) {
+						return (NotNull) super.setFieldName(fieldName);
 					}
 					
-					public static class Default extends Count.Adapter implements Serializable {
+					public static class Default extends NotNull.Adapter implements Serializable {
 						private static final long serialVersionUID = 1L;
 						
 						@Override
-						public Count setValueCount(Long valueCount) {
-							this.valueCount = valueCount;
-							return this;
+						protected void ____execute____(Condition condition,Object instance, Field field, Object value) {
+							condition.setValue(value == null);
 						}
-						
-						@Override
-						protected void ____execute____(Condition condition, Object instance, Field field,Object value) {
-							Long count = getValueCount();
-							condition.setValue(count!=null && count>0);
-						}
-						
+
 						@Override
 						protected String getValueMustBe(Condition condition, Object instance, Field field, Object value) {
-							return StringHelper.getInstance().get("unique",CaseType.L, new Object[] {});
+							return StringHelper.getInstance().get("not.null.__feminine__",CaseType.L, new Object[] {});
 						}
-						
 					}	
 				}
 			}
@@ -463,6 +448,51 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						}
 					}	
 				}
+			
+				/**/
+				
+				/**
+				 * 
+				 * Arithmetic comparison of the number of occurrence of a value 
+				 *
+				 */
+				public static interface Count extends Comparison {
+					
+					@Override Count setFieldObject(Object fieldObject);
+					@Override Count setFieldName(String fieldName);
+					
+					@Override Count setValueNameIdentifier(String valueNameIdentifier);
+					
+					@Getter @Setter
+					public static class Adapter extends Comparison.Adapter.Default implements Count,Serializable {
+						private static final long serialVersionUID = 1L;
+						
+						@Override
+						public Count setFieldObject(Object fieldObject) {
+							return (Count) super.setFieldObject(fieldObject);
+						}
+						
+						@Override
+						public Count setFieldName(String fieldName) {
+							return (Count) super.setFieldName(fieldName);
+						}
+						
+						@Override
+						public Count setValueNameIdentifier(String valueNameIdentifier) {
+							return (Count) super.setValueNameIdentifier(valueNameIdentifier);
+						}
+						
+						public static class Default extends Count.Adapter implements Serializable {
+							private static final long serialVersionUID = 1L;
+							
+							/*@Override
+							protected String getValueMustBe(Condition condition, Object instance, Field field, Object value) {
+								return StringHelper.getInstance().get("unique",CaseType.L, new Object[] {});
+							}*/							
+						}	
+					}
+				}
+				
 			}
 			
 			public static interface Contains extends Builder {
@@ -527,56 +557,6 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						}
 						
 						
-					}	
-				}
-			}
-			
-			public static interface NotNull extends Builder {
-				
-				@Override NotNull setDomainNameIdentifier(String domainNameIdentifier);
-				
-				@Override NotNull setValueNameIdentifier(String valueNameIdentifier);
-				
-				NotNull setFieldObject(Object fieldObject);
-				
-				NotNull setFieldName(String fieldName);
-				
-				@Getter @Setter
-				public static class Adapter extends Builder.Adapter.Default implements NotNull,Serializable {
-					private static final long serialVersionUID = 1L;
-					
-					@Override
-					public NotNull setDomainNameIdentifier(String domainNameIdentifier) {
-						return (NotNull) super.setDomainNameIdentifier(domainNameIdentifier);
-					}
-					
-					@Override
-					public NotNull setValueNameIdentifier(String valueNameIdentifier) {
-						return (NotNull) super.setValueNameIdentifier(valueNameIdentifier);
-					}
-					
-					@Override
-					public NotNull setFieldObject(Object fieldObject) {
-						return (NotNull) super.setFieldObject(fieldObject);
-					}
-					
-					@Override
-					public NotNull setFieldName(String fieldName) {
-						return (NotNull) super.setFieldName(fieldName);
-					}
-					
-					public static class Default extends NotNull.Adapter implements Serializable {
-						private static final long serialVersionUID = 1L;
-						
-						@Override
-						protected void ____execute____(Condition condition,Object instance, Field field, Object value) {
-							condition.setValue(value == null);
-						}
-
-						@Override
-						protected String getValueMustBe(Condition condition, Object instance, Field field, Object value) {
-							return StringHelper.getInstance().get("not.null.__feminine__",CaseType.L, new Object[] {});
-						}
 					}	
 				}
 			}

@@ -36,7 +36,7 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 				.execute(), Boolean.TRUE, "La valeur de l'attribut <<code>> de l'entité <<domaine>> doit être non nulle.");
 	}
 	
-	@Test
+	/*@Test
 	public void assertCountUsingField(){
 		assertCondition(new ConditionHelper.Condition.Builder.Count.Adapter.Default()
 				.setFieldObject(new MyEntity()).setFieldName("f1").setValueCount(2l)
@@ -54,7 +54,7 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 		assertCondition(new ConditionHelper.Condition.Builder.Count.Adapter.Default().setValueNameIdentifier("code").setValueCount(1l)
 				.setDomainNameIdentifier("person").setInput("ABC").execute(), Boolean.TRUE, "Un enregistrement de type personne avec pour code <<ABC>> existe déja.");
 
-	}
+	}*/
 	
 	@Test
 	public void assertNumberComparisonUsingField(){
