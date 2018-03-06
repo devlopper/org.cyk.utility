@@ -122,6 +122,28 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 				, "La valeur(01/01/2000 00:00) de l'attribut <<date>> de l'entité <<vente>> doit être supérieure ou égale à 02/01/2000 00:00.");		
 	}
 	
+	@Test
+	public void assertCountNotUsingField(){
+		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Count.Adapter.Default().setDomainNameIdentifier("sale").setValueNameIdentifier("code")
+				.setFieldValue("ABC").setValue1(1).setValue2(2).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				, "Le nombre d'enregistrement de l'entité <<vente>> où la valeur de l'attribut <<code>> est ABC doit être égale à 2.");
+		
+		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Count.Adapter.Default().setDomainNameIdentifier("sale").setValueNameIdentifier("code")
+				.setFieldValue("ABC").setValue1(1).setValue2(2).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				, "Le nombre d'enregistrement de l'entité <<vente>> où la valeur de l'attribut <<code>> est ABC doit être supérieure ou égale à 2.");	
+	}
+	
+	@Test
+	public void assertCountUsingField(){
+		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Count.Adapter.Default().setFieldObject(new Sale().setCode("AZE")).setFieldName("code")
+				.setValue1(1).setValue2(2).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				, "Le nombre d'enregistrement de l'entité <<vente>> où la valeur de l'attribut <<code>> est AZE doit être égale à 2.");
+		
+		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Count.Adapter.Default().setFieldObject(new Sale().setCode("AZE")).setFieldName("code")
+				.setValue1(1).setValue2(2).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				, "Le nombre d'enregistrement de l'entité <<vente>> où la valeur de l'attribut <<code>> est AZE doit être supérieure ou égale à 2.");	
+	}
+	
 	/**/
 	
 	private void assertCondition(Condition condition,Boolean expectedValue,String expectedMessage){
@@ -148,6 +170,7 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 	public static class Sale implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		private String code;
 		private Integer balance;
 		private Integer total;
 		private Date date;

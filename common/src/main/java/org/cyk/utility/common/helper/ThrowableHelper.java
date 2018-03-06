@@ -33,6 +33,8 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 		return INSTANCE;
 	}
 	
+	@Getter @Setter @Accessors(chain=true) private Class<? extends java.lang.Throwable> defaultThrowableClass;
+	
 	@Override
 	protected void initialisation() {
 		INSTANCE = this;
@@ -97,6 +99,25 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 	
 	public <T extends java.lang.Throwable> void throw_(ConditionHelper.Condition.Builder builder,Class<T> causeClass){
 		throw_(builder.execute(),causeClass);
+	}
+	
+	public <T extends java.lang.Throwable> void throw_(Class<T> causeClass,Collection<ConditionHelper.Condition.Builder> builders){
+		if(CollectionHelper.getInstance().isNotEmpty(builders))
+			for(ConditionHelper.Condition.Builder index : builders)
+				throw_(causeClass,index);
+	}
+	
+	public <T extends java.lang.Throwable> void throw_(Collection<ConditionHelper.Condition.Builder> builders){
+		throw_(getDefaultThrowableClass(),builders);
+	}
+	
+	public <T extends java.lang.Throwable> void throw_(Class<T> causeClass,ConditionHelper.Condition.Builder...builders){
+		if(ArrayHelper.getInstance().isNotEmpty(builders))
+			throw_(causeClass,Arrays.asList(builders));
+	}
+	
+	public <T extends java.lang.Throwable> void throw_(ConditionHelper.Condition.Builder...builders){
+		throw_(getDefaultThrowableClass(),builders);
 	}
 	
 	public void throwNotYetImplemented(String action){

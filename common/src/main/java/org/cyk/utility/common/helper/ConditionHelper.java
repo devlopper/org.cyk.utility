@@ -61,6 +61,15 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 			Builder setFieldName(String fieldName);
 			String getFieldName();
 			
+			Builder setFieldValue(Object fieldValue);
+			Object getFieldValue();
+			
+			Builder setFieldValueFormat(String fieldValueFormat);
+			String getFieldValueFormat();
+			
+			Builder setDomainClass(Class<?> domainClass);
+			Class<?> getDomainClass();
+			
 			String getDomainNameIdentifier();
 			Builder setDomainNameIdentifier(String domainNameIdentifier);
 			Builder setDomainNameIdentifier(StringHelper.Builder messageIdentifierMapping);
@@ -87,11 +96,17 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				protected String valueNameIdentifier;
 				protected String messageIdentifier,domainNameIdentifier;
 				protected java.lang.Boolean conditionValue;
-				protected Object fieldObject;
-				protected String fieldName;
+				protected Object fieldObject,fieldValue;
+				protected String fieldName,fieldValueFormat;
+				protected Class<?> domainClass;
 				
 				public Adapter() {
 					super(Condition.class);
+				}
+				
+				@Override
+				public Builder setFieldValueFormat(String fieldValueFormat){
+					return null;
 				}
 				
 				@Override
@@ -130,7 +145,17 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				}
 				
 				@Override
+				public Builder setFieldValue(Object fieldValue) {
+					return null;
+				}
+				
+				@Override
 				public Builder setFieldName(String fieldName) {
+					return null;
+				}
+				
+				@Override
+				public Builder setDomainClass(Class<?> domainClass) {
 					return null;
 				}
 				
@@ -147,6 +172,10 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				public static class Default extends Builder.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
+					{
+						setFieldValueFormat("(%s)");
+					}
+					
 					@Override
 					public Builder setFieldObject(Object fieldObject) {
 						this.fieldObject = fieldObject;
@@ -156,6 +185,18 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					@Override
 					public Builder setFieldName(String fieldName) {
 						this.fieldName = fieldName;
+						return this;
+					}
+					
+					@Override
+					public Builder setFieldValue(Object fieldValue) {
+						this.fieldValue = fieldValue;
+						return this;
+					}
+					
+					@Override
+					public Builder setFieldValueFormat(String fieldValueFormat) {
+						this.fieldValueFormat = fieldValueFormat;
 						return this;
 					}
 					
@@ -180,6 +221,12 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					@Override
 					public Builder setDomainNameIdentifier(StringHelper.Builder domainNameIdentifierBuilder){
 						setDomainNameIdentifier(domainNameIdentifierBuilder.execute());
+						return this;
+					}
+					
+					@Override
+					public Builder setDomainClass(Class<?> domainClass) {
+						this.domainClass = domainClass;
 						return this;
 					}
 					
@@ -214,7 +261,10 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						java.lang.reflect.Field field = getFieldObject() == null || StringHelper.getInstance().isBlank(getFieldName()) ? null 
 								: FieldHelper.getInstance().get(getFieldObject().getClass(), getFieldName());
 						
-						Object value = field==null ? null : FieldHelper.getInstance().read(getFieldObject(), field);
+						Object value = getFieldValue();
+						if(value == null){
+							value = field == null ? null : FieldHelper.getInstance().read(getFieldObject(), field);
+						}
 						____execute____(condition,getFieldObject(), field, value);
 						
 						if(java.lang.Boolean.TRUE.equals(condition.getValue())){
@@ -258,7 +308,7 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					
 					protected String getFieldValue(Condition condition,Object instance,java.lang.reflect.Field field,Object value) {
 						String string = formatValue(value);
-						return StringHelper.getInstance().isBlank(string) ? Constant.EMPTY_STRING : "("+string+")";
+						return StringHelper.getInstance().isBlank(string) ? Constant.EMPTY_STRING : String.format(getFieldValueFormat(),string);
 					}
 					
 					protected String getValueMustBe(Condition condition,Object instance,java.lang.reflect.Field field,Object value) {
@@ -460,12 +510,25 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					
 					@Override Count setFieldObject(Object fieldObject);
 					@Override Count setFieldName(String fieldName);
+					@Override Count setFieldValue(Object fieldValue);
 					
+					@Override Count setDomainNameIdentifier(String domainNameIdentifier);
 					@Override Count setValueNameIdentifier(String valueNameIdentifier);
+					@Override Count setDomainClass(Class<?> domainClass);
 					
 					@Getter @Setter
 					public static class Adapter extends Comparison.Adapter.Default implements Count,Serializable {
 						private static final long serialVersionUID = 1L;
+						
+						@Override
+						public Count setDomainNameIdentifier(String domainNameIdentifier) {
+							return (Count) super.setDomainNameIdentifier(domainNameIdentifier);
+						}
+						
+						@Override
+						public Count setDomainClass(Class<?> domainClass) {
+							return (Count) super.setDomainClass(domainClass);
+						}
 						
 						@Override
 						public Count setFieldObject(Object fieldObject) {
@@ -478,6 +541,11 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						}
 						
 						@Override
+						public Count setFieldValue(Object fieldValue) {
+							return (Count) super.setFieldValue(fieldValue);
+						}
+						
+						@Override
 						public Count setValueNameIdentifier(String valueNameIdentifier) {
 							return (Count) super.setValueNameIdentifier(valueNameIdentifier);
 						}
@@ -485,10 +553,11 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						public static class Default extends Count.Adapter implements Serializable {
 							private static final long serialVersionUID = 1L;
 							
-							/*@Override
-							protected String getValueMustBe(Condition condition, Object instance, Field field, Object value) {
-								return StringHelper.getInstance().get("unique",CaseType.L, new Object[] {});
-							}*/							
+							{
+								setMessageIdentifier("condition.entity.instance.count");
+								setFieldValueFormat("%s");
+							}
+													
 						}	
 					}
 				}

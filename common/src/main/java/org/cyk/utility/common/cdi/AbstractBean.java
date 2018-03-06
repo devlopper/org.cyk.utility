@@ -260,6 +260,14 @@ public class AbstractBean implements Serializable {
 		ThrowableHelper.getInstance().throw_(builder,causeClass);
 	}
 	
+	protected static <T extends java.lang.Throwable> void throw__(Class<T> causeClass,ConditionHelper.Condition.Builder...builders){
+		ThrowableHelper.getInstance().throw_(causeClass,builders);
+	}
+	
+	protected static <T extends java.lang.Throwable> void throw__(ConditionHelper.Condition.Builder...builders){
+		ThrowableHelper.getInstance().throw_(builders);
+	}
+	
 	/**/
 	
 	protected static <RUNNABLE extends Runnable> void runnableStarted(RUNNABLE aRunnable,Collection<RunnableListener<RUNNABLE>> listeners){
