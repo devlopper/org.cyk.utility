@@ -75,6 +75,8 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 	public Number get(Object object){
 		if(object==null)
 			return null;
+		if(object instanceof java.util.Date)
+			return ((java.util.Date)object).getTime();
 		String string = object.toString();
 		if(StringHelper.getInstance().isBlank(string))
 			return null;

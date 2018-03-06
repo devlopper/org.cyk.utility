@@ -41,40 +41,40 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void assertNumberComparison(){
 		assertEquals(Boolean.FALSE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setNumber1(1).setNumber2(2).setEqual(null).execute().getValue());
+				.setDomainNameIdentifier("sale").setValue1(1).setValue2(2).setEqual(null).execute().getValue());
 		
 		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setNumber1(1).setNumber2(2).setEqual(Boolean.FALSE).execute().getValue());
+				.setDomainNameIdentifier("sale").setValue1(1).setValue2(2).setEqual(Boolean.FALSE).execute().getValue());
 		
 		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setNumber1(2).setNumber2(2).setEqual(Boolean.TRUE).execute().getValue());
+				.setDomainNameIdentifier("sale").setValue1(2).setValue2(2).setEqual(Boolean.TRUE).execute().getValue());
 		
 		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setNumber1(1).setNumber2(2).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				.setDomainNameIdentifier("sale").setValue1(1).setValue2(2).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
 				, "La balance(1) doit être égale à 2.");		
 		
 		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setNumber1(1).setNumber2(2).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				.setDomainNameIdentifier("sale").setValue1(1).setValue2(2).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
 				, "La balance(1) doit être supérieure ou égale à 2.");		
 	}
 	
 	@Test
 	public void assertDateComparison(){
 		assertEquals(Boolean.FALSE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setNumber1(1).setNumber2(2).setEqual(null).execute().getValue());
+				.setDomainNameIdentifier("sale").setValue1(date(2001,1,1)).setValue2(date(2002,1,1)).setEqual(null).execute().getValue());
 		
 		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setNumber1(1).setNumber2(2).setEqual(Boolean.FALSE).execute().getValue());
+				.setDomainNameIdentifier("sale").setValue1(date(2001,1,1)).setValue2(date(2002,1,1)).setEqual(Boolean.FALSE).execute().getValue());
 		
 		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setNumber1(2).setNumber2(2).setEqual(Boolean.TRUE).execute().getValue());
+				.setDomainNameIdentifier("sale").setValue1(date(2002,1,1)).setValue2(date(2002,1,1)).setEqual(Boolean.TRUE).execute().getValue());
 		
 		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setNumber1(1).setNumber2(2).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				.setDomainNameIdentifier("sale").setValue1(date(2001,1,1)).setValue2(date(2002,1,1)).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
 				, "La balance(1) doit être égale à 2.");		
 		
 		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
-				.setDomainNameIdentifier("sale").setNumber1(1).setNumber2(2).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
+				.setDomainNameIdentifier("sale").setValue1(date(2001,1,1)).setValue2(date(2002,1,1)).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
 				, "La balance(1) doit être supérieure ou égale à 2.");		
 	}
 	

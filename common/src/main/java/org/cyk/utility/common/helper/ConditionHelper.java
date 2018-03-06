@@ -297,11 +297,11 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				
 				@Override Comparison setDomainNameIdentifier(String domainNameIdentifier);
 				
-				Comparison setNumber1(Number number);
-				Number getNumber1();
+				Comparison setValue1(Object value);
+				Object getValue1();
 				
-				Comparison setNumber2(Number number);
-				Number getNumber2();
+				Comparison setValue2(Object value);
+				Object getValue2();
 				
 				Comparison setGreater(java.lang.Boolean greater);
 				java.lang.Boolean getGreater();
@@ -315,7 +315,7 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				public static class Adapter extends Builder.Adapter.Default implements Comparison,Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					protected Number number1,number2;
+					protected Object value1,value2;
 					protected java.lang.Boolean equal,greater;
 					
 					@Override
@@ -329,12 +329,12 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					}
 					
 					@Override
-					public Comparison setNumber1(Number number){
+					public Comparison setValue1(Object value){
 						return null;
 					}
 					
 					@Override
-					public Comparison setNumber2(Number number){
+					public Comparison setValue2(Object value){
 						return null;
 					}
 					
@@ -356,14 +356,14 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						}
 						
 						@Override
-						public Comparison setNumber1(Number number){
-							this.number1 = number;
+						public Comparison setValue1(Object value){
+							this.value1 = value;
 							return this;
 						}
 						
 						@Override
-						public Comparison setNumber2(Number number){
-							this.number2 = number;
+						public Comparison setValue2(Object value){
+							this.value2 = value;
 							return this;
 						}
 						
@@ -383,78 +383,94 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						protected void ____execute____(Condition condition, Object instance, Field field,Object value) {
 							java.lang.Boolean greater = getGreater();
 							java.lang.Boolean equal = getEqual();
-							condition.setValue(java.lang.Boolean.TRUE.equals(NumberHelper.getInstance().compare(getNumber1(),getNumber2(),greater,equal)));
+							Number number1 = NumberHelper.getInstance().get(getValue1());
+							Number number2 = NumberHelper.getInstance().get(getValue2());
+							condition.setValue(java.lang.Boolean.TRUE.equals(NumberHelper.getInstance().compare(number1,number2,greater,equal)));
 						}
 						
 						@Override
 						protected Object[] getParameters(Condition condition, Object instance, Field field,Object value, String domainName, String valueName) {
+							Object value1 = null;
+							if(getValue1() instanceof Number)
+								value1 = getValue1();
+							else if(getValue1() instanceof java.util.Date)
+								value1 = getValue1();
+							
+							Object value2 = null;
+							if(getValue2() instanceof Number)
+								value2 = getValue2();
+							else if(getValue1() instanceof java.util.Date)
+								value2 = getValue2();
+							
 							java.lang.Boolean masculine = StringHelper.getInstance().isMasculine(valueNameIdentifier);
 							return new Object[]{
 									new StringHelper.ToStringMapping.Adapter.Default(valueNameIdentifier).setProperty(StringHelper.ToStringMapping.PROPERTY_NAME_GENDER, java.lang.Boolean.TRUE).execute()
-									,number1,StringHelper.getInstance().getComparisonOperator(greater == null ? null : !greater, equal == null ? null : !equal
-											, java.lang.Boolean.TRUE.equals(masculine), java.lang.Boolean.FALSE),number2
+									,value1,StringHelper.getInstance().getComparisonOperator(greater == null ? null : !greater, equal == null ? null : !equal
+											, java.lang.Boolean.TRUE.equals(masculine), java.lang.Boolean.FALSE),value2
 							};
 						}
+					
+						
 					}	
 				}
 			}
 			
 			public static interface Contains extends Builder {
 				
-				@Override Comparison setDomainNameIdentifier(String domainNameIdentifier);
+				@Override Contains setDomainNameIdentifier(String domainNameIdentifier);
 				
-				Comparison setNumber1(Number number);
+				Contains setNumber1(Number number);
 				Number getNumber1();
 				
-				Comparison setNumber2(Number number);
+				Contains setNumber2(Number number);
 				Number getNumber2();
 				
-				Comparison setGreater(java.lang.Boolean greater);
+				Contains setGreater(java.lang.Boolean greater);
 				java.lang.Boolean getGreater();
 				
-				Comparison setEqual(java.lang.Boolean equal);
+				Contains setEqual(java.lang.Boolean equal);
 				java.lang.Boolean getEqual();
 				
-				@Override Comparison setValueNameIdentifier(String valueNameIdentifier);
+				@Override Contains setValueNameIdentifier(String valueNameIdentifier);
 				
 				@Getter @Setter
-				public static class Adapter extends Builder.Adapter.Default implements Comparison,Serializable {
+				public static class Adapter extends Builder.Adapter.Default implements Contains,Serializable {
 					private static final long serialVersionUID = 1L;
 					
 					protected Number number1,number2;
 					protected java.lang.Boolean equal,greater;
 					
 					@Override
-					public Comparison setDomainNameIdentifier(String domainNameIdentifier) {
-						return (Comparison) super.setDomainNameIdentifier(domainNameIdentifier);
+					public Contains setDomainNameIdentifier(String domainNameIdentifier) {
+						return (Contains) super.setDomainNameIdentifier(domainNameIdentifier);
 					}
 					
 					@Override
-					public Comparison setValueNameIdentifier(String valueNameIdentifier) {
-						return (Comparison) super.setValueNameIdentifier(valueNameIdentifier);
+					public Contains setValueNameIdentifier(String valueNameIdentifier) {
+						return (Contains) super.setValueNameIdentifier(valueNameIdentifier);
 					}
 					
 					@Override
-					public Comparison setNumber1(Number number){
+					public Contains setNumber1(Number number){
 						return null;
 					}
 					
 					@Override
-					public Comparison setNumber2(Number number){
+					public Contains setNumber2(Number number){
 						return null;
 					}
 					
 					@Override
-					public Comparison setGreater(java.lang.Boolean greater){
+					public Contains setGreater(java.lang.Boolean greater){
 						return null;
 					}
 					
 					@Override
-					public Comparison setEqual(java.lang.Boolean equal){
+					public Contains setEqual(java.lang.Boolean equal){
 						return null;
 					}
 					
-					public static class Default extends Comparison.Adapter implements Serializable {
+					public static class Default extends Contains.Adapter implements Serializable {
 						private static final long serialVersionUID = 1L;
 						
 						{
@@ -462,25 +478,25 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						}
 						
 						@Override
-						public Comparison setNumber1(Number number){
+						public Contains setNumber1(Number number){
 							this.number1 = number;
 							return this;
 						}
 						
 						@Override
-						public Comparison setNumber2(Number number){
+						public Contains setNumber2(Number number){
 							this.number2 = number;
 							return this;
 						}
 						
 						@Override
-						public Comparison setGreater(java.lang.Boolean greater){
+						public Contains setGreater(java.lang.Boolean greater){
 							this.greater = greater;
 							return this;
 						}
 						
 						@Override
-						public Comparison setEqual(java.lang.Boolean equal){
+						public Contains setEqual(java.lang.Boolean equal){
 							this.equal = equal;
 							return this;
 						}
