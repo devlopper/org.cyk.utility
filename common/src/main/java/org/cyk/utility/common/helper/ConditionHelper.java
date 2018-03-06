@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
+import org.cyk.utility.common.userinterface.ContentType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -467,27 +468,19 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 			public static interface Contains extends Builder {
 				
 				@Override Contains setDomainNameIdentifier(String domainNameIdentifier);
-				
-				Contains setNumber1(Number number);
-				Number getNumber1();
-				
-				Contains setNumber2(Number number);
-				Number getNumber2();
-				
-				Contains setGreater(java.lang.Boolean greater);
-				java.lang.Boolean getGreater();
-				
-				Contains setEqual(java.lang.Boolean equal);
-				java.lang.Boolean getEqual();
-				
 				@Override Contains setValueNameIdentifier(String valueNameIdentifier);
+				
+				Contains setExtremity1(Comparison comparison);
+				Object getExtremity1();
+				
+				Contains setExtremity2(Comparison comparison);
+				Object getExtremity2();
 				
 				@Getter @Setter
 				public static class Adapter extends Builder.Adapter.Default implements Contains,Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					protected Number number1,number2;
-					protected java.lang.Boolean equal,greater;
+					protected Comparison extremity1,extremity2;
 					
 					@Override
 					public Contains setDomainNameIdentifier(String domainNameIdentifier) {
@@ -500,72 +493,40 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					}
 					
 					@Override
-					public Contains setNumber1(Number number){
+					public Contains setExtremity1(Comparison comparison) {
 						return null;
 					}
 					
 					@Override
-					public Contains setNumber2(Number number){
-						return null;
-					}
-					
-					@Override
-					public Contains setGreater(java.lang.Boolean greater){
-						return null;
-					}
-					
-					@Override
-					public Contains setEqual(java.lang.Boolean equal){
+					public Contains setExtremity2(Comparison comparison) {
 						return null;
 					}
 					
 					public static class Default extends Contains.Adapter implements Serializable {
 						private static final long serialVersionUID = 1L;
 						
-						{
-							setMessageIdentifier("condition.comparison");
-						}
-						
 						@Override
-						public Contains setNumber1(Number number){
-							this.number1 = number;
+						public Contains setExtremity1(Comparison comparison) {
+							this.extremity1 = comparison;
 							return this;
 						}
 						
 						@Override
-						public Contains setNumber2(Number number){
-							this.number2 = number;
-							return this;
-						}
-						
-						@Override
-						public Contains setGreater(java.lang.Boolean greater){
-							this.greater = greater;
-							return this;
-						}
-						
-						@Override
-						public Contains setEqual(java.lang.Boolean equal){
-							this.equal = equal;
+						public Contains setExtremity2(Comparison comparison) {
+							this.extremity2 = comparison;
 							return this;
 						}
 						
 						@Override
 						protected void ____execute____(Condition condition, Object instance, Field field,Object value) {
-							java.lang.Boolean greater = getGreater();
-							java.lang.Boolean equal = getEqual();
-							condition.setValue(java.lang.Boolean.TRUE.equals(NumberHelper.getInstance().compare(getNumber1(),getNumber2(),greater,equal)));
+							Condition condition1 = getExtremity1().execute();
+							Condition condition2 = getExtremity1().execute();
+							condition.setValue(java.lang.Boolean.TRUE.equals(condition1.getValue()) || java.lang.Boolean.TRUE.equals(condition2.getValue()));
+							condition.setMessage(StringHelper.getInstance().concatenate(new Object[] {condition1.getMessage(),condition2.getMessage()}
+							, ContentType.DEFAULT.getNewLineMarker()));
 						}
 						
-						@Override
-						protected Object[] getParameters(Condition condition, Object instance, Field field,Object value, String domainName, String valueName) {
-							java.lang.Boolean masculine = StringHelper.getInstance().isMasculine(valueNameIdentifier);
-							return new Object[]{
-									new StringHelper.ToStringMapping.Adapter.Default(valueNameIdentifier).setProperty(StringHelper.ToStringMapping.PROPERTY_NAME_GENDER, java.lang.Boolean.TRUE).execute()
-									,number1,StringHelper.getInstance().getComparisonOperator(greater == null ? null : !greater, equal == null ? null : !equal
-											, java.lang.Boolean.TRUE.equals(masculine), java.lang.Boolean.FALSE),number2
-							};
-						}
+						
 					}	
 				}
 			}
