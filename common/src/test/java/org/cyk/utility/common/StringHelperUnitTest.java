@@ -362,6 +362,12 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void assertComparisonOperator(){
+		/*
+		AssertionHelper.getInstance().assertEquals("égal", StringHelper.getInstance().getComparisonOperator(null, null, Boolean.TRUE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("égale", StringHelper.getInstance().getComparisonOperator(null, null, Boolean.FALSE, Boolean.FALSE));
+		AssertionHelper.getInstance().assertEquals("égaux", StringHelper.getInstance().getComparisonOperator(null, null, Boolean.TRUE, Boolean.TRUE));
+		AssertionHelper.getInstance().assertEquals("égales", StringHelper.getInstance().getComparisonOperator(null, null, Boolean.FALSE, Boolean.TRUE));
+		*/
 		AssertionHelper.getInstance().assertEquals("égal", StringHelper.getInstance().getComparisonOperator(null, null, Boolean.TRUE, Boolean.FALSE));
 		AssertionHelper.getInstance().assertEquals("égale", StringHelper.getInstance().getComparisonOperator(null, null, Boolean.FALSE, Boolean.FALSE));
 		AssertionHelper.getInstance().assertEquals("égaux", StringHelper.getInstance().getComparisonOperator(null, null, Boolean.TRUE, Boolean.TRUE));

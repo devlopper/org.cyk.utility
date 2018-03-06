@@ -16,28 +16,43 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 	
 	static {
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();	
+		StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.testmsg", StringHelper.class.getClassLoader());
+	}
+	
+	@Test
+	public void assertNotNullUsingField(){
+		assertCondition(new ConditionHelper.Condition.Builder.NotNull.Adapter.Default()
+				.setFieldObject(new MyEntity()).setFieldName("f1")
+				.execute(), Boolean.TRUE, "La valeur de l'attribut <<f1>> de l'entité <<mon entité>> doit être non nulle.");
+	}
+	
+	@Test
+	public void assertNotNullNotUsingField(){
+		assertCondition(new ConditionHelper.Condition.Builder.NotNull.Adapter.Default()
+				.setDomainNameIdentifier("domain").setValueNameIdentifier("code")
+				.execute(), Boolean.TRUE, "La valeur de l'attribut <<code>> de l'entité <<domaine>> doit être non nulle.");
+	}
+	
+	@Test
+	public void assertCountUsingField(){
+		assertCondition(new ConditionHelper.Condition.Builder.Count.Adapter.Default()
+				.setFieldObject(new MyEntity()).setFieldName("f1").setValueCount(2l)
+				.execute(), Boolean.TRUE, "La valeur de l'attribut <<f1>> de l'entité <<mon entité>> doit être unique.");
 	}
 	
 	@Test
 	public void duplicate(){
-		assertCondition(new ConditionHelper.Condition.Builder.Duplicate.Adapter.Default().setValueNameIdentifier("code").setValueCount(0l)
+		assertCondition(new ConditionHelper.Condition.Builder.Count.Adapter.Default().setValueNameIdentifier("code").setValueCount(0l)
 				.setDomainNameIdentifier("person").setInput(123).execute(), Boolean.FALSE, null);
 		
-		assertCondition(new ConditionHelper.Condition.Builder.Duplicate.Adapter.Default().setValueNameIdentifier("code").setValueCount(1l)
+		assertCondition(new ConditionHelper.Condition.Builder.Count.Adapter.Default().setValueNameIdentifier("code").setValueCount(1l)
 				.setDomainNameIdentifier("person").setInput(123).execute(), Boolean.TRUE, "Un enregistrement de type personne avec pour code <<123>> existe déja.");
 		
-		assertCondition(new ConditionHelper.Condition.Builder.Duplicate.Adapter.Default().setValueNameIdentifier("code").setValueCount(1l)
+		assertCondition(new ConditionHelper.Condition.Builder.Count.Adapter.Default().setValueNameIdentifier("code").setValueCount(1l)
 				.setDomainNameIdentifier("person").setInput("ABC").execute(), Boolean.TRUE, "Un enregistrement de type personne avec pour code <<ABC>> existe déja.");
 
 	}
-	
-	@Test
-	public void assertNotNull(){
-		assertCondition(new ConditionHelper.Condition.Builder.NotNull.Adapter.Default()
-				.setFieldObject(new PhoneNumber()).setFieldName("code")
-				.execute(), Boolean.TRUE, "La valeur du champ <<code>> du type <<numéro de téléphone>> est obligatoire.");
-	}
-	
+		
 	@Test
 	public void assertNumberComparison(){
 		assertEquals(Boolean.FALSE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setValueNameIdentifier("balance")
@@ -92,10 +107,10 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 	/**/
 	
 	@Getter @Setter
-	public static class PhoneNumber implements Serializable {
+	public static class MyEntity implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
-		private String code;
+		private String f1;
 		
 	}
 	

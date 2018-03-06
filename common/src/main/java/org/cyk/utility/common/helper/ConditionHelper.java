@@ -144,10 +144,6 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				public static class Default extends Builder.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
-					{
-						setMessageIdentifier("condition.default");
-					}
-					
 					@Override
 					public Builder setFieldObject(Object fieldObject) {
 						this.fieldObject = fieldObject;
@@ -219,6 +215,14 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						____execute____(condition,getFieldObject(), field, value);
 						
 						if(java.lang.Boolean.TRUE.equals(condition.getValue())){
+							String messageIdentifier = getMessageIdentifier();
+							if(StringHelper.getInstance().isBlank(messageIdentifier)) {
+								//if(field == null)
+								//	messageIdentifier = "condition.default";
+								//else
+									messageIdentifier = "condition.entity.field.value";
+							}
+							
 							String domainName;
 							if(StringHelper.getInstance().isBlank(getDomainNameIdentifier()))
 								domainName = StringHelper.getInstance().getClazz(getFieldObject().getClass(),CaseType.L);
@@ -231,7 +235,7 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 							else
 								valueName = StringHelper.getInstance().get(getValueNameIdentifier(),CaseType.L, new Object[]{});
 							
-							condition.setMessage(new StringHelper.ToStringMapping.Adapter.Default(getMessageIdentifier()).setCaseType(CaseType.FU)
+							condition.setMessage(new StringHelper.ToStringMapping.Adapter.Default(messageIdentifier).setCaseType(CaseType.FU)
 									.addManyParameters(getParameters(condition, getFieldObject(), field, value, domainName, valueName)).execute());
 						}			
 						
@@ -241,44 +245,57 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					protected void ____execute____(Condition condition,Object instance,java.lang.reflect.Field field,Object value){}
 					
 					protected Object[] getParameters(Condition condition,Object instance,java.lang.reflect.Field field,Object value,String domainName,String valueName){
-						return new Object[]{domainName,valueName,getInput()};
+						return new Object[]{domainName,valueName,getValueMustBe(condition, instance, field, valueName)};
+					}
+					
+					protected String getValueMustBe(Condition condition,Object instance,java.lang.reflect.Field field,Object value) {
+						return "??? MUST BE ???";
 					}
 				}
 				
 			}
 			
-			public static interface Duplicate extends Builder {
+			public static interface Count extends Builder {
 				
 				Long getValueCount();
-				Duplicate setValueCount(Long valueCount);
+				Count setValueCount(Long valueCount);
 				
-				@Override Duplicate setValueNameIdentifier(String valueNameIdentifier);
+				@Override Count setFieldObject(Object fieldObject);
+				@Override Count setFieldName(String fieldName);
+				
+				@Override Count setValueNameIdentifier(String valueNameIdentifier);
 				
 				@Getter @Setter
-				public static class Adapter extends Builder.Adapter.Default implements Duplicate,Serializable {
+				public static class Adapter extends Builder.Adapter.Default implements Count,Serializable {
 					private static final long serialVersionUID = 1L;
 					
 					protected Long valueCount;
 					
 					@Override
-					public Duplicate setValueCount(Long valueCount){
+					public Count setValueCount(Long valueCount){
 						return null;
 					}
 					
 					@Override
-					public Duplicate setValueNameIdentifier(String valueNameIdentifier) {
-						return (Duplicate) super.setValueNameIdentifier(valueNameIdentifier);
+					public Count setFieldObject(Object fieldObject) {
+						return (Count) super.setFieldObject(fieldObject);
 					}
 					
-					public static class Default extends Duplicate.Adapter implements Serializable {
+					@Override
+					public Count setFieldName(String fieldName) {
+						return (Count) super.setFieldName(fieldName);
+					}
+					
+					@Override
+					public Count setValueNameIdentifier(String valueNameIdentifier) {
+						return (Count) super.setValueNameIdentifier(valueNameIdentifier);
+					}
+					
+					public static class Default extends Count.Adapter implements Serializable {
 						private static final long serialVersionUID = 1L;
 						
-						{
-							setMessageIdentifier("condition.duplicate");
-						}
-						
 						@Override
-						public Duplicate setValueCount(Long valueCount) {
+						public Count setValueCount(Long valueCount) {
 							this.valueCount = valueCount;
 							return this;
 						}
@@ -287,6 +304,11 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						protected void ____execute____(Condition condition, Object instance, Field field,Object value) {
 							Long count = getValueCount();
 							condition.setValue(count!=null && count>0);
+						}
+						
+						@Override
+						protected String getValueMustBe(Condition condition, Object instance, Field field, Object value) {
+							return StringHelper.getInstance().get("unique",CaseType.L, new Object[] {});
 						}
 						
 					}	
@@ -350,10 +372,6 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					
 					public static class Default extends Comparison.Adapter implements Serializable {
 						private static final long serialVersionUID = 1L;
-						
-						{
-							setMessageIdentifier("condition.comparison");
-						}
 						
 						@Override
 						public Comparison setValue1(Object value){
@@ -558,15 +576,15 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					public static class Default extends NotNull.Adapter implements Serializable {
 						private static final long serialVersionUID = 1L;
 						
-						{
-							setMessageIdentifier("condition.notnull");
-						}
-						
 						@Override
 						protected void ____execute____(Condition condition,Object instance, Field field, Object value) {
 							condition.setValue(value == null);
 						}
 
+						@Override
+						protected String getValueMustBe(Condition condition, Object instance, Field field, Object value) {
+							return StringHelper.getInstance().get("not.null.__feminine__",CaseType.L, new Object[] {});
+						}
 					}	
 				}
 			}
