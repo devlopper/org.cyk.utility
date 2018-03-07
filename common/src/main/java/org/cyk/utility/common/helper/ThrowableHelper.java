@@ -104,7 +104,7 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 	public <T extends java.lang.Throwable> void throw_(Class<T> causeClass,Collection<ConditionHelper.Condition.Builder> builders){
 		if(CollectionHelper.getInstance().isNotEmpty(builders))
 			for(ConditionHelper.Condition.Builder index : builders)
-				throw_(causeClass,index);
+				throw_(index,causeClass);
 	}
 	
 	public <T extends java.lang.Throwable> void throw_(Collection<ConditionHelper.Condition.Builder> builders){
