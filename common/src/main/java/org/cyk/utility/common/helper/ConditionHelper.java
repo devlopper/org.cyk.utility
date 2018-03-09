@@ -2,6 +2,8 @@ package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.inject.Singleton;
@@ -59,6 +61,13 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 		public static Condition.Builder.Comparison getBuilderComparison(Object instance,Object value,Boolean greater,Boolean equal,String...names){
 			return new Builder.Comparison.Adapter.Default().setFieldObject(instance).setFieldName(FieldHelper.getInstance().buildPath(names))
 					.setValue2(value).setGreater(greater).setEqual(equal);
+		}
+		
+		public static Collection<Condition.Builder> getBelongsTo(Object instance,Object from,Object to,String...names){
+			Collection<Condition.Builder> collection = new ArrayList<ConditionHelper.Condition.Builder>();
+			collection.add(ConditionHelper.Condition.getBuilderComparison(instance, from, Boolean.FALSE, Boolean.FALSE, names));
+			collection.add(ConditionHelper.Condition.getBuilderComparison(instance, to, Boolean.TRUE, Boolean.FALSE, names));
+			return collection;
 		}
 		
 		public static Condition.Builder getBuilder(){
