@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * Any object that can be identified by a unique identifier.
@@ -18,20 +19,20 @@ public interface Identifiable<IDENTIFIER> {
      */
     IDENTIFIER getIdentifier();
     
-    void setIdentifier(IDENTIFIER anIdentifier);
+    Identifiable<IDENTIFIER> setIdentifier(IDENTIFIER anIdentifier);
 
     /**/
     
     public static interface Long extends Identifiable<Long> {
     	
-    	@Getter @Setter
+    	@Getter @Setter 
     	public static abstract class Class extends Identifiable.Class<Long> implements Identifiable.Long,Serializable {
 			private static final long serialVersionUID = 1L;
-        
+			
     	}
     }
     
-    @Getter @Setter
+    @Getter @Setter @Accessors(chain=true)
     public static abstract class Class<IDENTIFIER> implements Identifiable<IDENTIFIER>,Serializable {
 		private static final long serialVersionUID = 1L;
     	

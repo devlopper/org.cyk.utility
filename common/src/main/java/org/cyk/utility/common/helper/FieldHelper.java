@@ -645,7 +645,8 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			return identifier;
 		}
 		
-		public static Field get(Class<?> clazz,String name){
+		public static Field get(Class<?> clazz,String...names){
+			String name = getInstance().buildPath(names);
 			Field field = null;
 			for(Field index : COLLECTION)
 				if(index.clazz.equals(clazz) && index.name.equals(name)){
@@ -683,8 +684,8 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	public static class Constraints implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
-		private Boolean isNullable,isUnique,isUpdatable,isComputedByUser;
-		private Integer length,precision,scale;
+		private Boolean isNullable,isUpdatable,isComputedByUser;
+		private Integer length,precision,scale,minimumNumberOfOccurence,maximumNumberOfOccurence;
 		private Constant.Date.Part datePart;
 		
 		/**
@@ -696,5 +697,14 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			return identifierMap.get(object);
 		}
 		
+		public Constraints setIsUnique(Boolean isUnique){
+			this.minimumNumberOfOccurence = 0;
+			this.maximumNumberOfOccurence = 1;
+			return this;
+		}
+		
+		public Boolean getIsUnique(){
+			return this.minimumNumberOfOccurence!=null && this.minimumNumberOfOccurence == 0 && this.maximumNumberOfOccurence!=null && this.maximumNumberOfOccurence == 1;
+		}
 	}
 }

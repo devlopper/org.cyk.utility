@@ -32,10 +32,12 @@ public class Try implements Serializable{
 	}
 	
 	public void execute(){
+		Throwable expectedThrowable = null;
 		try { 
 			code();
 		} catch (Throwable throwable) {
-			Throwable expectedThrowable = expectedThrowableClass == null ? throwable : getInstanceOf(throwable,expectedThrowableClass);
+			expectedThrowable = expectedThrowableClass == null ? throwable : getInstanceOf(throwable,expectedThrowableClass);
+		}  finally {
 			AssertionHelper.getInstance().assertEquals("expected throwable is null", Boolean.TRUE, expectedThrowable!=null);
 			if(expectedThrowableClass!=null)
 				AssertionHelper.getInstance().assertEquals("Throwable class is not equal",expectedThrowableClass,expectedThrowable.getClass());
@@ -43,7 +45,7 @@ public class Try implements Serializable{
 				AssertionHelper.getInstance().assertEquals("Throwable identifier is not equal",expectedThrowableIdentifier,FieldHelper.getInstance().read(expectedThrowable, "fields.identifier")); 
 			if(expectedThrowableMessage!=null)
 				AssertionHelper.getInstance().assertEquals("Throwable message is not equal",expectedThrowableMessage,expectedThrowable.getMessage());
-		}  
+		}
 	}
 	
 	protected void code() throws Throwable {

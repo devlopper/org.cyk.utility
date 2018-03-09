@@ -47,6 +47,20 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 		
 		/**/
 		
+		@Override
+		public String toString() {
+			return identifier+","+value+","+message;
+		}
+		
+		public static Condition.Builder.Null getBuilderNull(Object instance,String...names){
+			return new Builder.Null.Adapter.Default().setFieldObject(instance).setFieldName(FieldHelper.getInstance().buildPath(names));
+		}
+		
+		public static Condition.Builder.Comparison getBuilderComparison(Object instance,Object value,Boolean greater,Boolean equal,String...names){
+			return new Builder.Comparison.Adapter.Default().setFieldObject(instance).setFieldName(FieldHelper.getInstance().buildPath(names))
+					.setValue2(value).setGreater(greater).setEqual(equal);
+		}
+		
 		public static Condition.Builder getBuilder(){
 			return ClassHelper.getInstance().instanciateOne(Builder.class);
 		}
@@ -84,10 +98,16 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 			java.lang.Boolean getConditionValue();
 			Builder setConditionValue(java.lang.Boolean conditionValue);
 			
+			java.lang.Class<?> getConditionIdentifierClass();
+			Builder setConditionIdentifierClass(java.lang.Class<?> identifierClass);
+			
 			@Override Builder setIdentifier(Object identifier);
 			
 			@Override 
 			Builder setInput(Object input);
+			
+			java.lang.Boolean getIsNegateConditionValue();
+			Builder setIsNegateConditionValue(java.lang.Boolean isNegateConditionValue);
 			
 			@Getter @Setter
 			public static class Adapter extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<Condition> implements Builder,Serializable {
@@ -95,13 +115,17 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				
 				protected String valueNameIdentifier;
 				protected String messageIdentifier,domainNameIdentifier;
-				protected java.lang.Boolean conditionValue;
+				protected java.lang.Boolean conditionValue,isNegateConditionValue;
 				protected Object fieldObject,fieldValue;
 				protected String fieldName,fieldValueFormat;
-				protected Class<?> domainClass;
+				protected Class<?> domainClass,conditionIdentifierClass;
 				
 				public Adapter() {
 					super(Condition.class);
+				}
+				
+				public Builder setIsNegateConditionValue(java.lang.Boolean isNegateConditionValue){
+					return null;
 				}
 				
 				@Override
@@ -169,11 +193,22 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					return (Builder) super.setIdentifier(identifier);
 				}
 				
+				@Override
+				public Builder setConditionIdentifierClass(Class<?> conditionIdentifierClass) {
+					return null;
+				}
+				
 				public static class Default extends Builder.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
 					{
 						setFieldValueFormat("(%s)");
+					}
+					
+					@Override
+					public Builder setIsNegateConditionValue(Boolean isNegateConditionValue) {
+						this.isNegateConditionValue = isNegateConditionValue;
+						return this;
 					}
 					
 					@Override
@@ -254,18 +289,37 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					}
 					
 					@Override
+					public Builder setConditionIdentifierClass(Class<?> conditionIdentifierClass) {
+						this.conditionIdentifierClass = conditionIdentifierClass;
+						return this;
+					}
+					
+					@Override
 					protected Condition __execute__() {
 						Condition condition = new Condition();
 						condition.setIdentifier(getIdentifier());
 						condition.setValue(getConditionValue());
 						java.lang.reflect.Field field = getFieldObject() == null || StringHelper.getInstance().isBlank(getFieldName()) ? null 
 								: FieldHelper.getInstance().get(getFieldObject().getClass(), getFieldName());
-						
+						loggingMessageBuilder.addNamedParameters("object",getFieldObject(),"field",field);
 						Object value = getFieldValue();
 						if(value == null){
-							value = field == null ? null : FieldHelper.getInstance().read(getFieldObject(), field);
+							value = field == null ? null : FieldHelper.getInstance().read(getFieldObject(), getFieldName());
 						}
+						loggingMessageBuilder.addNamedParameters("value",value);
 						____execute____(condition,getFieldObject(), field, value);
+						
+						if(condition.getValue()!=null && Boolean.TRUE.equals(getIsNegateConditionValue()))
+							condition.setValue(!condition.getValue());
+						
+						if(condition.getIdentifier() == null){
+							FieldHelper.Field __field__  = field == null ? null : FieldHelper.Field.get(getFieldObject().getClass(), getFieldName());
+							if(field != null){
+								Class<?> identifierClass = getConditionIdentifierClass();
+								if(identifierClass!=null)
+									condition.setIdentifier(__field__.getIdentifier(identifierClass));
+							}
+						}
 						
 						if(java.lang.Boolean.TRUE.equals(condition.getValue())){
 							String messageIdentifier = getMessageIdentifier();
@@ -325,56 +379,73 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 							string = value.toString();
 						return string;
 					}
+				
 				}
 				
 			}
 			
-			public static interface NotNull extends Builder {
+			public static interface Null extends Builder {
 				
-				@Override NotNull setDomainNameIdentifier(String domainNameIdentifier);
+				@Override Null setDomainNameIdentifier(String domainNameIdentifier);
 				
-				@Override NotNull setValueNameIdentifier(String valueNameIdentifier);
+				@Override Null setValueNameIdentifier(String valueNameIdentifier);
 				
-				NotNull setFieldObject(Object fieldObject);
+				Null setFieldObject(Object fieldObject);
 				
-				NotNull setFieldName(String fieldName);
+				Null setFieldName(String fieldName);
 				
 				@Getter @Setter
-				public static class Adapter extends Builder.Adapter.Default implements NotNull,Serializable {
+				public static class Adapter extends Builder.Adapter.Default implements Null,Serializable {
 					private static final long serialVersionUID = 1L;
 					
 					@Override
-					public NotNull setDomainNameIdentifier(String domainNameIdentifier) {
-						return (NotNull) super.setDomainNameIdentifier(domainNameIdentifier);
+					public Null setDomainNameIdentifier(String domainNameIdentifier) {
+						return (Null) super.setDomainNameIdentifier(domainNameIdentifier);
 					}
 					
 					@Override
-					public NotNull setValueNameIdentifier(String valueNameIdentifier) {
-						return (NotNull) super.setValueNameIdentifier(valueNameIdentifier);
+					public Null setValueNameIdentifier(String valueNameIdentifier) {
+						return (Null) super.setValueNameIdentifier(valueNameIdentifier);
 					}
 					
 					@Override
-					public NotNull setFieldObject(Object fieldObject) {
-						return (NotNull) super.setFieldObject(fieldObject);
+					public Null setFieldObject(Object fieldObject) {
+						return (Null) super.setFieldObject(fieldObject);
 					}
 					
 					@Override
-					public NotNull setFieldName(String fieldName) {
-						return (NotNull) super.setFieldName(fieldName);
+					public Null setFieldName(String fieldName) {
+						return (Null) super.setFieldName(fieldName);
 					}
 					
-					public static class Default extends NotNull.Adapter implements Serializable {
+					public static class Default extends Null.Adapter implements Serializable {
 						private static final long serialVersionUID = 1L;
+						
+						{
+							setConditionIdentifierClass(Null.class);
+						}
 						
 						@Override
 						protected void ____execute____(Condition condition,Object instance, Field field, Object value) {
+							/*FieldHelper.Field __field__  = field == null ? null : FieldHelper.Field.get(instance.getClass(), getFieldName());
+							if(field == null || __field__.getConstraints().getIsNullable() == null || Boolean.TRUE.equals(__field__.getConstraints().getIsNullable()))
+								condition.setValue(value == null);
+							else
+								condition.setValue(value != null);
+							
+							condition.setValue(
+								field == null ? Boolean.TRUE : (__field__.getConstraints().getIsNullable() == null || Boolean.TRUE.equals(__field__.getConstraints().getIsNullable()))
+								&& value == null
+								);
+							*/
 							condition.setValue(value == null);
 						}
 
 						@Override
 						protected String getValueMustBe(Condition condition, Object instance, Field field, Object value) {
-							return StringHelper.getInstance().get("not.null.__feminine__",CaseType.L, new Object[] {});
+							return StringHelper.getInstance().get((Boolean.TRUE.equals(getIsNegateConditionValue()) ? Constant.EMPTY_STRING : "not.")+"null.__feminine__",CaseType.L, new Object[] {});
 						}
+					
 					}	
 				}
 			}
@@ -485,6 +556,7 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 							java.lang.Boolean equal = getEqual();
 							Number number1 = NumberHelper.getInstance().get(getValue1() == null ? value : getValue1());
 							Number number2 = NumberHelper.getInstance().get(getValue2());
+							loggingMessageBuilder.addNamedParameters("number1",number1,"number2",number2,"greater",greater,"equal",equal);
 							condition.setValue(java.lang.Boolean.TRUE.equals(NumberHelper.getInstance().compare(number1,number2,greater,equal)));
 						}
 						
@@ -556,6 +628,7 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 							{
 								setMessageIdentifier("condition.entity.instance.count");
 								setFieldValueFormat("%s");
+								setConditionIdentifierClass(Count.class);
 							}
 													
 						}	

@@ -57,6 +57,14 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 			}
 	}
 	
+	public Date getAfterNow(Object numberOfMillisecond){
+		return new Date(System.currentTimeMillis() + NumberHelper.getInstance().get(Long.class,numberOfMillisecond));
+	}
+	
+	public Date getAfterNowByNumberOfMinute(Object numberOfMinutes){
+		return getAfterNow(1000l * 60 * NumberHelper.getInstance().get(Long.class,numberOfMinutes));
+	}
+	
 	public Date getUniversalTimeCoordinated(){
 		return new DateTime(DateTimeZone.UTC).toDate();
 	}

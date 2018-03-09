@@ -1,12 +1,14 @@
 package org.cyk.utility.common.test;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.RandomHelper;
+import org.cyk.utility.common.helper.TimeHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -53,6 +55,14 @@ public class TestCase extends AbstractBean implements Serializable {
 	
 	public RandomHelper getRandomHelper(){
 		return RandomHelper.getInstance();
+	}
+
+	public Date getTimeAfterNow(Object numberOfMillisecond){
+		return TimeHelper.getInstance().getAfterNow(numberOfMillisecond);
+	}
+	
+	public Date getTimeAfterNowByNumberOfMinute(Object numberOfMinutes){
+		return TimeHelper.getInstance().getAfterNowByNumberOfMinute(numberOfMinutes);
 	}
 	
 	/**/

@@ -24,14 +24,19 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void assertNotNullUsingField(){
-		assertCondition(new ConditionHelper.Condition.Builder.NotNull.Adapter.Default()
-				.setFieldObject(new MyEntity()).setFieldName("f1")
+		assertCondition(ConditionHelper.Condition.getBuilderNull(new MyEntity(), "f1")
 				.execute(), Boolean.TRUE, "La valeur de l'attribut <<f1>> de l'entité <<mon entité>> doit être non nulle.");
 	}
 	
 	@Test
+	public void assertNullUsingField(){
+		assertCondition(ConditionHelper.Condition.getBuilderNull(new MyEntity().setF1("myf1"),"f1").setIsNegateConditionValue(Boolean.TRUE)
+				.execute(), Boolean.TRUE, "La valeur(myf1) de l'attribut <<f1>> de l'entité <<mon entité>> doit être nulle.");
+	}
+	
+	@Test
 	public void assertNotNullNotUsingField(){
-		assertCondition(new ConditionHelper.Condition.Builder.NotNull.Adapter.Default()
+		assertCondition(new ConditionHelper.Condition.Builder.Null.Adapter.Default()
 				.setDomainNameIdentifier("domain").setValueNameIdentifier("code")
 				.execute(), Boolean.TRUE, "La valeur de l'attribut <<code>> de l'entité <<domaine>> doit être non nulle.");
 	}
@@ -76,13 +81,11 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 		assertEquals(Boolean.TRUE,new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("int1")
 				.setFieldObject(new MyEntity().setInt1(2)).setValue2(2).setEqual(Boolean.TRUE).execute().getValue());
 		
-		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("balance")
-				.setFieldObject(new Sale().setBalance(1)).setValue2(2).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
-				, "La valeur(1) de l'attribut <<balance>> de l'entité <<vente>> doit être égale à 2.");
+		assertCondition(ConditionHelper.Condition.getBuilderComparison(new Sale().setBalance(1), 2, null, Boolean.FALSE, "balance").execute()
+				, Boolean.TRUE, "La valeur(1) de l'attribut <<balance>> de l'entité <<vente>> doit être égale à 2.");
 		
-		assertCondition(new ConditionHelper.Condition.Builder.Comparison.Adapter.Default().setFieldName("total")
-				.setFieldObject(new Sale().setTotal(1)).setValue2(2).setGreater(Boolean.FALSE).setEqual(Boolean.FALSE).execute(), Boolean.TRUE
-				, "La valeur(1) de l'attribut <<total>> de l'entité <<vente>> doit être supérieure ou égale à 2.");	
+		assertCondition(ConditionHelper.Condition.getBuilderComparison(new Sale().setTotal(1),2,Boolean.FALSE,Boolean.FALSE,"total").execute()
+				, Boolean.TRUE, "La valeur(1) de l'attribut <<total>> de l'entité <<vente>> doit être supérieure ou égale à 2.");	
 	}
 	
 	@Test

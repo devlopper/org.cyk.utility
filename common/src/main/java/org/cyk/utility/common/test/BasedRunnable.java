@@ -1,7 +1,12 @@
 package org.cyk.utility.common.test;
 
-public abstract class BasedRunnable<TEST_CASE extends TestCase> implements java.lang.Runnable {
+import java.io.Serializable;
 
+import org.cyk.utility.common.cdi.AbstractBean;
+
+public abstract class BasedRunnable<TEST_CASE extends TestCase> extends AbstractBean implements java.lang.Runnable,Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	protected TEST_CASE testCase;
 	
 	public BasedRunnable(TEST_CASE testCase) {

@@ -19,9 +19,9 @@
 	</Appenders>
 	<Loggers>
 	
-		<Logger name="org.cyk.utility.common.helper.ValidationHelper$Validate$Adapter$Default" level="trace">
+		<!--Logger name="org.cyk.utility.common.helper.ValidationHelper$Validate$Adapter$Default" level="trace">
 			<AppenderRef ref="Console" />
-		</Logger>
+		</Logger-->
 		<!--Logger name="org.cyk.utility.common.helper.ThreadHelper$Executor$Adapter$Default" level="trace">
 			<AppenderRef ref="ThreadHelperConsole" />
 		</Logger>
@@ -29,7 +29,7 @@
 			<AppenderRef ref="CustomConsole" />
 		</Logger-->
 		
-		<Logger name="org.cyk.utility.common.utility.userinterface.UserInterfaceLoggingUnitTest$MyEditWindow" level="trace">
+		<!--Logger name="org.cyk.utility.common.utility.userinterface.UserInterfaceLoggingUnitTest$MyEditWindow" level="trace">
 			<AppenderRef ref="Console" />
 		</Logger>
 		
@@ -49,7 +49,7 @@
 		</Logger> 
 		<Logger name="org.cyk.utility.common.userinterface.event.Event$ActionAdapter" level="trace">
 			<AppenderRef ref="Console" />
-		</Logger> 
+		</Logger--> 
 		
 		<Root level="trace">
 			<!--AppenderRef ref="Console"/-->
