@@ -3135,6 +3135,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getChoiceValueClassMasterFieldName() {
+		return get(CHOICE_VALUE_CLASS_MASTER_FIELD_NAME);
+	}
+
+	public Properties setChoiceValueClassMasterFieldName(Object value) {
+		set(CHOICE_VALUE_CLASS_MASTER_FIELD_NAME, value);
+		return this;
+	}
+	
+	public static final String CHOICE_VALUE_CLASS_MASTER_FIELD_NAME = "ChoiceValueClassMasterFieldName";
 	public static final String FORM_MASTER_OBJECT_ACTION_ON_CLASS_COLLECTION_INSTANCE = "FormMasterObjectActionOnClassCollectionInstance";
 	public static final String FORM_MASTER_OBJECT_ACTION_ON_CLASS_COLLECTION_INSTANCE_FIELD_NAME = "FORM_MASTER_OBJECT_ACTION_ON_CLASS_COLLECTION_INSTANCE_FIELD_NAME";
 	public static final String CHOICES_IS_SOURCE_DISJOINT = "CHOICES_IS_SOURCE_DISJOINT";

@@ -210,13 +210,26 @@ public class DataTable extends Component.Visible implements Serializable {
 				fieldName = ClassHelper.getInstance().getVariableName((Class<?>)getPropertiesMap().getChoiceValueClass());
 			}
 		}
-		*/
+		
 		
 		String fieldName = null;		
 		if(getPropertiesMap().getChoiceValueClass()!=null){
 			fieldName = ClassHelper.getInstance().getVariableName((Class<?>)getPropertiesMap().getChoiceValueClass());
 			if(StringHelper.getInstance().isBlank(fieldName)){
 				fieldName = (String) getPropertiesMap().getMasterFieldName();
+			}
+		}
+		
+		return fieldName;
+		*/
+		
+		String fieldName = (String) getPropertiesMap().getChoiceValueClassMasterFieldName();		
+		if(StringHelper.getInstance().isBlank(fieldName)){
+			fieldName = ClassHelper.getInstance().getVariableName((Class<?>)getPropertiesMap().getChoiceValueClass());
+			if(StringHelper.getInstance().isBlank(fieldName)){
+				if(getPropertiesMap().getChoiceValueClass()!=null){
+					fieldName = (String) getPropertiesMap().getMasterFieldName();
+				}
 			}
 		}
 		
@@ -1353,7 +1366,13 @@ public class DataTable extends Component.Visible implements Serializable {
 		protected void setObjectSource(Object object,Object source){
 			String fieldName = dataTable.getChoiceValueClassMasterFieldName();
 			if(StringHelper.getInstance().isNotBlank(fieldName)){
-				FieldHelper.getInstance().set(object, source,fieldName);
+				try {
+					FieldHelper.getInstance().set(object, source,fieldName);
+				} catch (Exception e) {
+					System.out.println("DataTable.AddRemoveCommandActionAdapter.setObjectSource() SET OBJECT SOURCE : field name = "+fieldName+" value = "+source);
+					debug(object);
+					e.printStackTrace();
+				}
 			}
 		}
 		
