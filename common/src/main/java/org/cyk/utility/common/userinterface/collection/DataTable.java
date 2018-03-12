@@ -203,12 +203,23 @@ public class DataTable extends Component.Visible implements Serializable {
 	}
 	
 	public String getChoiceValueClassMasterFieldName(){
+		/*
 		String fieldName = (String) getPropertiesMap().getMasterFieldName();
 		if(StringHelper.getInstance().isBlank(fieldName)){
 			if(getPropertiesMap().getChoiceValueClass()!=null){
 				fieldName = ClassHelper.getInstance().getVariableName((Class<?>)getPropertiesMap().getChoiceValueClass());
 			}
 		}
+		*/
+		
+		String fieldName = null;		
+		if(getPropertiesMap().getChoiceValueClass()!=null){
+			fieldName = ClassHelper.getInstance().getVariableName((Class<?>)getPropertiesMap().getChoiceValueClass());
+			if(StringHelper.getInstance().isBlank(fieldName)){
+				fieldName = (String) getPropertiesMap().getMasterFieldName();
+			}
+		}
+		
 		return fieldName;
 	}
 	
@@ -1341,8 +1352,9 @@ public class DataTable extends Component.Visible implements Serializable {
 		
 		protected void setObjectSource(Object object,Object source){
 			String fieldName = dataTable.getChoiceValueClassMasterFieldName();
-			if(StringHelper.getInstance().isNotBlank(fieldName))
+			if(StringHelper.getInstance().isNotBlank(fieldName)){
 				FieldHelper.getInstance().set(object, source,fieldName);
+			}
 		}
 		
 		protected void listenObjectCreated(Object object,Object source){}
