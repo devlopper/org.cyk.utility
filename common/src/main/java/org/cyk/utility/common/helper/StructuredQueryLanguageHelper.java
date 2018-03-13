@@ -693,6 +693,12 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		Where in(String fieldName);
 		Where notIn(String fieldName);
 		
+		Where addEqual(String fieldName,Boolean not);
+		Where addEqual(String fieldName);
+		/*Where equal(String fieldName,Boolean not);
+		Where equal(String fieldName);
+		Where notEqual(String fieldName);
+		*/
 		Where addLessThanOrEqual(String fieldName,String parameter);
 		Where lte(String fieldName,String parameter);
 		Where addLessThan(String fieldName,String parameter);
@@ -792,6 +798,31 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			public Where notIn(String fieldName) {
 				return in(fieldName, Boolean.TRUE);
 			}
+			
+			public Where addEqual(String fieldName, Boolean not) {
+				return null;
+			}
+			
+			@Override
+			public Where addEqual(String fieldName) {
+				return addEqual(fieldName, (Boolean)null);
+			}
+			/*
+			@Override
+			public Where equal(String fieldName, Boolean not) {
+				return addEqual(fieldName, not);
+			}
+			
+			@Override
+			public Where equal(String fieldName) {
+				return equal(fieldName, null);
+			}
+			
+			@Override
+			public Where notEqual(String fieldName) {
+				return equal(fieldName, Boolean.TRUE);
+			}
+			*/
 			
 			@Override
 			public Where addLike(String fieldName) {
@@ -1067,6 +1098,14 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					}
 					
 					@Override
+					public Where addEqual(String fieldName, Boolean not) {
+						addActions(new Equal.Adapter.Default.JavaPersistenceQueryLanguage().setParent(this)
+								.setProperty(Between.PROPERTY_NAME_FIELD_NAME, getParent().formatFieldName(fieldName))
+								.setProperty(Equal.PROPERTY_NAME_NOT, not));
+						return this;
+					}
+					
+					@Override
 					public Where addIn(String fieldName, Boolean not) {
 						addActions(new In.Adapter.Default.JavaPersistenceQueryLanguage().setParent(this)
 								.setProperty(Between.PROPERTY_NAME_FIELD_NAME, getParent().formatFieldName(fieldName)).setProperty(PROPERTY_NAME_NOT, not));
@@ -1092,6 +1131,11 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		
 		public static interface Operator extends StringHelper.Builder.Collection {
 			
+			java.util.Collection<String> getParameterNames();
+			Operator setParameterNames(java.util.Collection<String> parameterNames);
+			Operator addParameterNames(java.util.Collection<String> parameterNames);
+			Operator addParameterNames(String...parameterNames);
+			
 			@Override Where getParent();
 			@Override Operator setParent(Action<Object, String> parent);
 			
@@ -1099,6 +1143,8 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			public static class Adapter extends StringHelper.Builder.Collection.Adapter.Default implements Operator , Serializable{
 				private static final long serialVersionUID = 1L;
 
+				protected java.util.Collection<String> parameterNames;
+				
 				@Override
 				public Operator setParent(Action<Object, String> parent) {
 					return (Operator) super.setParent(parent);
@@ -1109,32 +1155,140 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					return (Where) super.getParent();
 				}
 				
+				@Override
+				public Operator setParameterNames(java.util.Collection<String> parameterNames) {
+					return null;
+				}
+				
+				@Override
+				public Operator addParameterNames(java.util.Collection<String> parameterNames) {
+					return null;
+				}
+				
+				@Override
+				public Operator addParameterNames(String...parameterNames) {
+					return null;
+				}
+				
 				public static class Default extends Operator.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
-					protected static final String NOT = "NOT";
 					
 					@Override
 					protected String __execute__() {
-						Boolean not = Boolean.TRUE.equals(getPropertyAsBoolean(PROPERTY_NAME_NOT));
-						String format =  not ? getFormatNot() : getFormat();
+						Boolean not = getPropertyAsBoolean(PROPERTY_NAME_NOT);
+						String format = not == null ? getFormatNotIsNull() : not ? getFormatNotIsTrue() : getFormatNotIsFalse();
 						addTokens(String.format(format, getFormatParameters(format,not)));
 						return super.__execute__();
 					}
 					
-					protected String getFormat(){
+					protected String getFormatNotIsFalse(){
 						return null;
 					}
 					
-					protected String getFormatNot(){
+					protected String getFormatNotIsTrue(){
 						return null;
+					}
+					
+					protected String getFormatNotIsNull(){
+						return getFormatNotIsFalse();
 					}
 					
 					protected Object[] getFormatParameters(String format,Boolean not){
 						return null;
 					}
 					
+					@Override
+					public Operator setParameterNames(java.util.Collection<String> parameterNames) {
+						this.parameterNames = parameterNames;
+						return this;
+					}
+					
+					@Override
+					public Operator addParameterNames(java.util.Collection<String> parameterNames) {
+						if(CollectionHelper.getInstance().isNotEmpty(parameterNames)) {
+							if(this.parameterNames == null)
+								this.parameterNames = new LinkedHashSet<>();
+							this.parameterNames.addAll(parameterNames);
+						}
+						return this;
+					}
+					
+					@Override
+					public Operator addParameterNames(String...parameterNames) {
+						if(ArrayHelper.getInstance().isNotEmpty(parameterNames))
+							addParameterNames(Arrays.asList(parameterNames));
+						return this;
+					}
+					
+					protected String buildFromParameterNames(final String field,final String conjunction,Integer index) {
+						final java.util.Collection<String> collection = new ArrayList<>();
+						if(CollectionHelper.getInstance().isNotEmpty(this.parameterNames)) {
+							for(Integer i = 0 ; i < this.parameterNames.size() ; i++)
+								collection.add("("+field+" = %"+(index++)+"$s)");
+						}
+						return CollectionHelper.getInstance().concatenate(collection, " OR ");
+					}
 				}
 			}
+		}
+		
+		//((field IS NULL ) AND (param == NULL)) OR ((field IS NOT NULL ) AND (field == param))
+		public static interface Equal extends Operator {
+			
+			@Override Equal setParent(Action<Object, String> parent);
+			
+			@Getter
+			public static class Adapter extends Operator.Adapter.Default implements Equal , Serializable{
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public Equal setParent(Action<Object, String> parent) {
+					return (Equal) super.setParent(parent);
+				}
+				
+				public static String getParameterNameEqual(String fieldName){
+					return getInstance().getParameterName(fieldName)+"Equal";
+				}
+				
+				public static class Default extends Equal.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+							
+					public static class JavaPersistenceQueryLanguage extends Equal.Adapter.Default implements Serializable{
+						private static final long serialVersionUID = 1L;
+					
+						//private static final String FORMAT = "(((%1$s IS NULL) AND (%2$s = NULL)) OR ((%1$s IS NOT NULL) AND (%1$s = %2$s)))";
+						private static final String FORMAT = "(((%1$s IS NULL) AND (%2$s = NULL)) OR ((%1$s IS NOT NULL) AND ((%1$s = %3$s) OR (%1$s = %4$s))))";
+						private static final String FORMAT_NOT = "(((%1$s IS NOT NULL) AND (%2$s = NULL)) OR ((%1$s IS NULL OR %1$s <> %2$s) AND (%2$s <> NULL)))";
+						private static final String FORMAT_NOT_IS_NULL = "((%1$s IS NULL) OR (%1$s IS NOT NULL))";
+						
+						@Override
+						protected String getFormatNotIsFalse() {
+							return FORMAT;
+						}
+						
+						@Override
+						protected String getFormatNotIsTrue() {
+							return FORMAT_NOT;
+						}
+						
+						@Override
+						protected String getFormatNotIsNull() {
+							return FORMAT_NOT_IS_NULL;
+						}
+						
+						@Override
+						protected Object[] getFormatParameters(String format,Boolean not) {
+							String fieldName = getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
+							String parameter = getParent().getParent().formatParameter(getParameterNameEqual(fieldName));
+							return new Object[]{fieldName,parameter};
+						}
+						
+					}
+				}
+			}
+			
+			/**/
+		
 		}
 		
 		// field BETWEEN parameter1 AND parameter2
@@ -1189,12 +1343,12 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						private static final String FORMAT_NOT = "%s NOT BETWEEN %s AND %s";
 						
 						@Override
-						protected String getFormat() {
+						protected String getFormatNotIsFalse() {
 							return FORMAT;
 						}
 						
 						@Override
-						protected String getFormatNot() {
+						protected String getFormatNotIsTrue() {
 							return FORMAT_NOT;
 						}
 						
@@ -1246,15 +1400,15 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						//private static final String FORMAT = "(((%1$s IS NULL ) AND (%3$s = 0)) OR ((%1$s IS NOT NULL ) AND (LOWER(%1$s) LIKE LOWER(%2$s))))";
 						private static final String FORMAT = "(((%1$s IS NULL ) AND (LENGTH(%3$s) = 0)) OR ((%1$s IS NOT NULL ) AND (LOWER(%1$s) LIKE LOWER(%2$s))))";
 						
-						@Override
-						protected String getFormat() {
-							return FORMAT;
-						}
-						
-						@Override
-						protected String getFormatNot() {
-							return super.getFormatNot();
-						}
+			@Override
+			protected String getFormatNotIsFalse() {
+				return FORMAT;
+			}
+			
+			@Override
+			protected String getFormatNotIsTrue() {
+				return super.getFormatNotIsTrue();
+			}
 						
 						@Override
 						protected Object[] getFormatParameters(String format,Boolean not) {
@@ -1323,12 +1477,12 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						
 						
 						@Override
-						protected String getFormat() {
+						protected String getFormatNotIsFalse() {
 							return FORMAT;
 						}
 						
 						@Override
-						protected String getFormatNot() {
+						protected String getFormatNotIsTrue() {
 							return FORMAT_NOT;
 						}
 						
@@ -1380,12 +1534,12 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						private static final String FORMAT_NOT = "EXISTS(%s)";
 						
 						@Override
-						protected String getFormat() {
+						protected String getFormatNotIsFalse() {
 							return FORMAT;
 						}
 						
 						@Override
-						protected String getFormatNot() {
+						protected String getFormatNotIsTrue() {
 							return FORMAT_NOT;
 						}
 						

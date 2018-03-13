@@ -1061,6 +1061,7 @@ public interface Action<INPUT,OUTPUT> {
 			public Action<INPUT, OUTPUT> clear() {
 				this.output = null;
 				this.parameters = null;
+				this.properties = null;
 				return this;
 			}
 		

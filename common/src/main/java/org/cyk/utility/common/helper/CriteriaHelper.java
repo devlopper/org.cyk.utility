@@ -83,6 +83,11 @@ public class CriteriaHelper extends AbstractHelper implements Serializable {
 			return required;
 		}
 		
+		public Criteria<VALUE_TYPE> addRequired(@SuppressWarnings("unchecked") VALUE_TYPE...elements){
+			required = CollectionHelper.getInstance().add(getRequired(), elements);
+			return this;
+		}
+		
 		public VALUE_TYPE getPreparedValue(){
 			return value==null?nullValue:value;
 		}
@@ -292,6 +297,11 @@ public class CriteriaHelper extends AbstractHelper implements Serializable {
 			
 			public Boolean(Boolean criteria) {
 				super(criteria);
+			}
+			
+			@Override
+			protected java.lang.Boolean get(java.lang.String string) {
+				return new BooleanHelper.Builder.String.Adapter.Default(string).execute();
 			}
 
 		}

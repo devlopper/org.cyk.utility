@@ -6,6 +6,7 @@ import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Builder.Adapt
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.OrderBy;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.OrderBy.Order;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.Between;
+import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.Equal;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.In;
 import org.cyk.utility.common.helper.StructuredQueryLanguageHelper.Where.Like;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -21,6 +22,17 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 			.addTokens("c1","=","v1").execute());
 		AssertionHelper.getInstance().assertEquals("c1=v1", new StructuredQueryLanguageHelper.Where.Adapter.Default.JavaPersistenceQueryLanguage()
 				.addTokens("c1=v1").execute());
+	}
+	
+	@Test
+	public void jpqlEqual(){
+		Equal equal = new Equal.Adapter.Default.JavaPersistenceQueryLanguage().setParent(new JavaPersistenceQueryLanguage("","").where());
+		AssertionHelper.getInstance().assertEquals("(((r.closed IS NULL) AND (:closedEqual = NULL)) OR ((r.closed IS NOT NULL) AND (r.closed = :closedEqual)))"
+				, equal.setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, Boolean.FALSE).execute());
+		AssertionHelper.getInstance().assertEquals("(((r.closed IS NOT NULL) AND (:closedEqual = NULL)) OR ((r.closed IS NULL OR r.closed <> :closedEqual) AND (:closedEqual <> NULL)))"
+				, equal.clear().setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, Boolean.TRUE).execute());		
+		AssertionHelper.getInstance().assertEquals("((r.closed IS NULL) OR (r.closed IS NOT NULL))"
+				, equal.clear().setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, null).execute());
 	}
 	
 	@Test
@@ -151,6 +163,17 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 				.lk("code").or().lk("name").rp().getParent().execute());
 		
 		
+		assertEquals("SELECT t FROM Language t WHERE ((t.closed IS NULL) OR (t.closed IS NOT NULL))", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where()
+				.addEqual("closed",(Boolean)null).getParent().execute());
+		
+		assertEquals("SELECT t FROM Language t WHERE (((t.closed IS NOT NULL) AND (:closedEqual = NULL)) OR ((t.closed IS NULL OR t.closed <> :closedEqual) AND (:closedEqual <> NULL)))", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where()
+				.addEqual("closed",Boolean.TRUE).getParent().execute());
+		
+		assertEquals("SELECT t FROM Language t WHERE (((t.closed IS NULL) AND (:closedEqual = NULL)) OR ((t.closed IS NOT NULL) AND (t.closed = :closedEqual)))", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where()
+				.addEqual("closed",Boolean.FALSE).getParent().execute());
+		
+		assertEquals("SELECT t FROM Language t WHERE ((t.closed IS NULL) OR (t.closed IS NOT NULL))", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where()
+				.addEqual("closed").getParent().execute());
 	}
 	
 	/**/
