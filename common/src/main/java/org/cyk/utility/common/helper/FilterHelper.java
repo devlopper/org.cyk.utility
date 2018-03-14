@@ -67,6 +67,14 @@ public class FilterHelper extends AbstractHelper implements Serializable {
 			return this;
 		}
 		
+		public Filter<T> addMaster(Class<?> aClass,Object identifier,ClassHelper.Listener.IdentifierType identifierType){
+			return addMaster(InstanceHelper.getInstance().getByIdentifier(aClass, identifier, identifierType));
+		}
+		
+		public Filter<T> addMaster(Class<?> aClass,Object identifier){
+			return addMaster(aClass, identifier, ClassHelper.Listener.IdentifierType.BUSINESS);
+		}
+		
 		@SuppressWarnings("unchecked")
 		public <E> Collection<E> filterMasters(Class<E> aClass){
 			return (Collection<E>) CollectionHelper.getInstance().filter(masters, aClass);
