@@ -693,7 +693,7 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		Where in(String fieldName);
 		Where notIn(String fieldName);
 		
-		Where addEqual(String fieldName,Boolean not);
+		Where addEqual(String fieldName,Boolean not,Integer numberOfParameterNamesToGenerateFromFieldName);
 		Where addEqual(String fieldName);
 		/*Where equal(String fieldName,Boolean not);
 		Where equal(String fieldName);
@@ -799,13 +799,13 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				return in(fieldName, Boolean.TRUE);
 			}
 			
-			public Where addEqual(String fieldName, Boolean not) {
+			public Where addEqual(String fieldName, Boolean not,Integer numberOfParameterNamesToGenerateFromFieldName) {
 				return null;
 			}
 			
 			@Override
 			public Where addEqual(String fieldName) {
-				return addEqual(fieldName, (Boolean)null);
+				return addEqual(fieldName, (Boolean)null,null);
 			}
 			/*
 			@Override
@@ -1098,8 +1098,9 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 					}
 					
 					@Override
-					public Where addEqual(String fieldName, Boolean not) {
+					public Where addEqual(String fieldName, Boolean not,Integer numberOfParameterNamesToGenerateFromFieldName) {
 						addActions(new Equal.Adapter.Default.JavaPersistenceQueryLanguage().setParent(this)
+								.setNumberOfParameterNamesToGenerateFromFieldName(numberOfParameterNamesToGenerateFromFieldName)
 								.setProperty(Between.PROPERTY_NAME_FIELD_NAME, getParent().formatFieldName(fieldName))
 								.setProperty(Equal.PROPERTY_NAME_NOT, not));
 						return this;
@@ -1136,6 +1137,9 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 			Operator addParameterNames(java.util.Collection<String> parameterNames);
 			Operator addParameterNames(String...parameterNames);
 			
+			Integer getNumberOfParameterNamesToGenerateFromFieldName();
+			Operator setNumberOfParameterNamesToGenerateFromFieldName(Integer numberOfParameterNamesToGenerateFromFieldName);
+			
 			@Override Where getParent();
 			@Override Operator setParent(Action<Object, String> parent);
 			
@@ -1144,6 +1148,12 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 				private static final long serialVersionUID = 1L;
 
 				protected java.util.Collection<String> parameterNames;
+				protected Integer numberOfParameterNamesToGenerateFromFieldName;
+				
+				@Override
+				public Operator setNumberOfParameterNamesToGenerateFromFieldName(Integer numberOfParameterNamesToGenerateFromFieldName) {
+					return null;
+				}
 				
 				@Override
 				public Operator setParent(Action<Object, String> parent) {
@@ -1220,13 +1230,26 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						return this;
 					}
 					
-					protected String buildFromParameterNames(final String field,final String conjunction,Integer index) {
-						final java.util.Collection<String> collection = new ArrayList<>();
-						if(CollectionHelper.getInstance().isNotEmpty(this.parameterNames)) {
-							for(Integer i = 0 ; i < this.parameterNames.size() ; i++)
-								collection.add("("+field+" = %"+(index++)+"$s)");
+					@Override
+					public Operator setNumberOfParameterNamesToGenerateFromFieldName(Integer numberOfParameterNamesToGenerateFromFieldName) {
+						this.numberOfParameterNamesToGenerateFromFieldName = numberOfParameterNamesToGenerateFromFieldName;
+						return this;
+					}
+					
+					protected String getParameterNameFromFieldName(String fieldName){
+						ThrowableHelper.getInstance().throwNotYetImplemented();
+						return null;
+					}
+					
+					protected java.util.Collection<String> generateParameterNamesFromFieldName(){
+						java.util.Collection<String> collection = null;
+						if(numberOfParameterNamesToGenerateFromFieldName!=null){
+							collection = new ArrayList<>();
+							String fieldName = getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
+							for(Integer index = 1 ; index <= numberOfParameterNamesToGenerateFromFieldName ; index++)
+								addParameterNames(getParameterNameFromFieldName(fieldName)+index);
 						}
-						return CollectionHelper.getInstance().concatenate(collection, " OR ");
+						return collection;
 					}
 				}
 			}
@@ -1257,13 +1280,56 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						private static final long serialVersionUID = 1L;
 					
 						//private static final String FORMAT = "(((%1$s IS NULL) AND (%2$s = NULL)) OR ((%1$s IS NOT NULL) AND (%1$s = %2$s)))";
-						private static final String FORMAT = "(((%1$s IS NULL) AND (%2$s = NULL)) OR ((%1$s IS NOT NULL) AND ((%1$s = %3$s) OR (%1$s = %4$s))))";
+						private static final String FORMAT_FORMAT = "((%1$s IS NULL AND %2$s) OR (%1$s IS NOT NULL AND %3$s))";
+						//private static final String FORMAT = "(((%1$s IS NULL) AND (%2$s = NULL)) OR ((%1$s IS NOT NULL) AND (%1$s = %2$s)))";
+						//private static final String FORMAT = String.format(FORMAT_FORMAT, "%1$s","(%2$s = NULL)","(%1$s = %2$s)");
 						private static final String FORMAT_NOT = "(((%1$s IS NOT NULL) AND (%2$s = NULL)) OR ((%1$s IS NULL OR %1$s <> %2$s) AND (%2$s <> NULL)))";
 						private static final String FORMAT_NOT_IS_NULL = "((%1$s IS NULL) OR (%1$s IS NOT NULL))";
 						
 						@Override
+						protected String getParameterNameFromFieldName(String fieldName) {
+							return getParameterNameEqual(fieldName);
+						}
+						
+						protected java.util.Collection<String> __getParameterNames__(){
+							String fieldName = getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
+							java.util.Collection<String> collection = generateParameterNamesFromFieldName();
+							if(CollectionHelper.getInstance().isEmpty(this.parameterNames)){
+								if(collection == null)
+									collection = Arrays.asList(getParent().getParent().formatParameter(getParameterNameEqual(fieldName)));
+							}else{
+								if(collection == null)
+									collection = this.parameterNames;
+								else
+									collection.addAll(this.parameterNames);
+							}
+							return collection;
+						}
+						
+						@Override
 						protected String getFormatNotIsFalse() {
-							return FORMAT;
+							final java.util.Collection<String> parameters = __getParameterNames__();
+							final java.util.Collection<String> isNull = new ArrayList<>();
+							final java.util.Collection<String> isEqual = new ArrayList<>();
+							final Integer[] indexes = {2};
+							
+							new CollectionHelper.Iterator.Adapter.Default<String>(parameters){
+								private static final long serialVersionUID = 1L;
+								@Override
+								protected void __executeForEach__(String name) {
+									isNull.add("%"+indexes[0]+"$s = NULL");
+									isEqual.add("%1$s = %"+indexes[0]+"$s");
+									indexes[0] = indexes[0] + 1;
+								}
+							}.execute();
+							return String.format(FORMAT_FORMAT, "%1$s",addParenthesis(StringHelper.getInstance().concatenate(isNull, " OR "),isNull.size()>1)
+									,addParenthesis(StringHelper.getInstance().concatenate(isEqual, " OR "),isEqual.size()>1));
+						}
+						
+						protected String addParenthesis(String string,Boolean yes){
+							if(Boolean.TRUE.equals(yes))
+								string = Constant.CHARACTER_LEFT_PARENTHESIS+string+Constant.CHARACTER_RIGHT_PARENTHESIS;
+							return string;
 						}
 						
 						@Override
@@ -1278,9 +1344,14 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 						
 						@Override
 						protected Object[] getFormatParameters(String format,Boolean not) {
+							java.util.Collection<String> collection = new ArrayList<>();
 							String fieldName = getPropertyAsString(PROPERTY_NAME_FIELD_NAME);
-							String parameter = getParent().getParent().formatParameter(getParameterNameEqual(fieldName));
-							return new Object[]{fieldName,parameter};
+							collection.add(fieldName);
+							if(CollectionHelper.getInstance().isEmpty(this.parameterNames))
+								collection.add(getParent().getParent().formatParameter(getParameterNameEqual(fieldName)));
+							else for(String parameter : this.parameterNames)
+								collection.add(getParent().getParent().formatParameter(parameter));
+							return collection.toArray();
 						}
 						
 					}

@@ -437,6 +437,11 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		//assertEquals("13:57", StringHelper.getInstance().getFieldValue(fieldValue, "date3"));
 	}
 	
+	@Test
+	public void getFormat(){
+		assertEquals("%2$s", String.format("%1$s", "%2$s"));
+	}
+	
 	private void assertAppliedCaseType(String string,CaseType caseType,String expected){
 		assertEquals(expected, StringHelper.getInstance().applyCaseType(string, caseType));
 	}

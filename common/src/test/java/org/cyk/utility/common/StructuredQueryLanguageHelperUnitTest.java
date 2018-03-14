@@ -27,12 +27,52 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void jpqlEqual(){
 		Equal equal = new Equal.Adapter.Default.JavaPersistenceQueryLanguage().setParent(new JavaPersistenceQueryLanguage("","").where());
-		AssertionHelper.getInstance().assertEquals("(((r.closed IS NULL) AND (:closedEqual = NULL)) OR ((r.closed IS NOT NULL) AND (r.closed = :closedEqual)))"
+		AssertionHelper.getInstance().assertEquals("((r.closed IS NULL AND :closedEqual = NULL) OR (r.closed IS NOT NULL AND r.closed = :closedEqual))"
 				, equal.setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, Boolean.FALSE).execute());
 		AssertionHelper.getInstance().assertEquals("(((r.closed IS NOT NULL) AND (:closedEqual = NULL)) OR ((r.closed IS NULL OR r.closed <> :closedEqual) AND (:closedEqual <> NULL)))"
 				, equal.clear().setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, Boolean.TRUE).execute());		
 		AssertionHelper.getInstance().assertEquals("((r.closed IS NULL) OR (r.closed IS NOT NULL))"
 				, equal.clear().setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, null).execute());
+	}
+	
+	@Test
+	public void jpqlEqualToOneSpecifiedParameter(){
+		Equal equal = new Equal.Adapter.Default.JavaPersistenceQueryLanguage().setParent(new JavaPersistenceQueryLanguage("","").where());
+		AssertionHelper.getInstance().assertEquals("((r.closed IS NULL AND :closedEqual1 = NULL) OR (r.closed IS NOT NULL AND r.closed = :closedEqual1))"
+				, equal.addParameterNames("closedEqual1").setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, Boolean.FALSE).execute());
+		/*
+		AssertionHelper.getInstance().assertEquals("(((r.closed IS NOT NULL) AND (:closedEqual = NULL)) OR ((r.closed IS NULL OR r.closed <> :closedEqual) AND (:closedEqual <> NULL)))"
+				, equal.clear().setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, Boolean.TRUE).execute());		
+		AssertionHelper.getInstance().assertEquals("((r.closed IS NULL) OR (r.closed IS NOT NULL))"
+				, equal.clear().setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, null).execute());
+		*/		
+	}
+	
+	@Test
+	public void jpqlEqualToOneGeneratedParameter(){
+		Equal equal = new Equal.Adapter.Default.JavaPersistenceQueryLanguage().setParent(new JavaPersistenceQueryLanguage("","").where());
+		AssertionHelper.getInstance().assertEquals("((r.closed IS NULL AND :closedEqual1 = NULL) OR (r.closed IS NOT NULL AND r.closed = :closedEqual1))"
+				, equal.setNumberOfParameterNamesToGenerateFromFieldName(1).setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, Boolean.FALSE).execute());
+		/*
+		AssertionHelper.getInstance().assertEquals("(((r.closed IS NOT NULL) AND (:closedEqual = NULL)) OR ((r.closed IS NULL OR r.closed <> :closedEqual) AND (:closedEqual <> NULL)))"
+				, equal.clear().setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, Boolean.TRUE).execute());		
+		AssertionHelper.getInstance().assertEquals("((r.closed IS NULL) OR (r.closed IS NOT NULL))"
+				, equal.clear().setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, null).execute());
+		*/		
+	}
+	
+	@Test
+	public void jpqlEqualToTwoGeneratedParameters(){
+		Equal equal = new Equal.Adapter.Default.JavaPersistenceQueryLanguage().setParent(new JavaPersistenceQueryLanguage("","").where());
+		AssertionHelper.getInstance().assertEquals("((r.closed IS NULL AND (:closedEqual1 = NULL OR :closedEqual2 = NULL)) OR (r.closed IS NOT NULL AND (r.closed = :closedEqual1 OR r.closed = :closedEqual2)))"
+				, equal.setNumberOfParameterNamesToGenerateFromFieldName(2).addParameterNames("closedEqual1").addParameterNames("closedEqual2").setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed")
+				.setProperty(Equal.PROPERTY_NAME_NOT, Boolean.FALSE).execute());
+		/*
+		AssertionHelper.getInstance().assertEquals("(((r.closed IS NOT NULL) AND (:closedEqual = NULL)) OR ((r.closed IS NULL OR r.closed <> :closedEqual) AND (:closedEqual <> NULL)))"
+				, equal.clear().setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, Boolean.TRUE).execute());		
+		AssertionHelper.getInstance().assertEquals("((r.closed IS NULL) OR (r.closed IS NOT NULL))"
+				, equal.clear().setProperty(Equal.PROPERTY_NAME_FIELD_NAME, "r.closed").setProperty(Equal.PROPERTY_NAME_NOT, null).execute());
+		*/		
 	}
 	
 	@Test
@@ -164,16 +204,25 @@ public class StructuredQueryLanguageHelperUnitTest extends AbstractUnitTest {
 		
 		
 		assertEquals("SELECT t FROM Language t WHERE ((t.closed IS NULL) OR (t.closed IS NOT NULL))", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where()
-				.addEqual("closed",(Boolean)null).getParent().execute());
+				.addEqual("closed",(Boolean)null,null).getParent().execute());
 		
 		assertEquals("SELECT t FROM Language t WHERE (((t.closed IS NOT NULL) AND (:closedEqual = NULL)) OR ((t.closed IS NULL OR t.closed <> :closedEqual) AND (:closedEqual <> NULL)))", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where()
-				.addEqual("closed",Boolean.TRUE).getParent().execute());
+				.addEqual("closed",Boolean.TRUE,null).getParent().execute());
 		
-		assertEquals("SELECT t FROM Language t WHERE (((t.closed IS NULL) AND (:closedEqual = NULL)) OR ((t.closed IS NOT NULL) AND (t.closed = :closedEqual)))", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where()
-				.addEqual("closed",Boolean.FALSE).getParent().execute());
+		assertEquals("SELECT t FROM Language t WHERE ((t.closed IS NULL AND :closedEqual = NULL) OR (t.closed IS NOT NULL AND t.closed = :closedEqual))", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where()
+				.addEqual("closed",Boolean.FALSE,null).getParent().execute());
 		
 		assertEquals("SELECT t FROM Language t WHERE ((t.closed IS NULL) OR (t.closed IS NOT NULL))", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where()
 				.addEqual("closed").getParent().execute());
+		
+		assertEquals("SELECT t FROM Language t WHERE ((t.closed IS NULL AND :closedEqual1 = NULL) OR (t.closed IS NOT NULL AND t.closed = :closedEqual1))", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where()
+				.addEqual("closed",Boolean.FALSE,1).getParent().execute());
+		
+		assertEquals("SELECT t FROM Language t WHERE ((t.closed IS NULL AND (:closedEqual1 = NULL OR :closedEqual2 = NULL)) OR (t.closed IS NOT NULL AND (t.closed = :closedEqual1 OR t.closed = :closedEqual2)))", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where()
+				.addEqual("closed",Boolean.FALSE,2).getParent().execute());
+		
+		assertEquals("SELECT t FROM Language t WHERE ((t.closed IS NULL AND (:closedEqual1 = NULL OR :closedEqual2 = NULL OR :closedEqual3 = NULL)) OR (t.closed IS NOT NULL AND (t.closed = :closedEqual1 OR t.closed = :closedEqual2 OR t.closed = :closedEqual3)))", StructuredQueryLanguageHelper.getInstance().getBuilder(Language.class).where()
+				.addEqual("closed",Boolean.FALSE,3).getParent().execute());
 	}
 	
 	/**/

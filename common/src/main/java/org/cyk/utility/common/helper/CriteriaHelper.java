@@ -3,6 +3,7 @@ package org.cyk.utility.common.helper;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.inject.Singleton;
@@ -41,6 +42,8 @@ public class CriteriaHelper extends AbstractHelper implements Serializable {
 	public static class Criteria<VALUE_TYPE> extends AbstractBean implements Serializable {
 		private static final long serialVersionUID = 2055293289197179106L;
 
+		protected java.lang.Boolean isMulptipleValues = java.lang.Boolean.FALSE;
+		protected Collection<VALUE_TYPE> values;
 		protected VALUE_TYPE value,nullValue;
 		protected java.lang.Boolean ascendingOrdered=java.lang.Boolean.FALSE;
 		protected Collection<VALUE_TYPE> excluded;
@@ -64,6 +67,8 @@ public class CriteriaHelper extends AbstractHelper implements Serializable {
 				this.excluded = new ArrayList<>(criteria.excluded);
 			if(criteria.required!=null)
 				this.required = new ArrayList<>(criteria.required);
+			if(criteria.values!=null)
+				this.values = new ArrayList<>(criteria.values);
 		}
 		
 		public Collection<VALUE_TYPE> getExcluded(){
@@ -83,8 +88,49 @@ public class CriteriaHelper extends AbstractHelper implements Serializable {
 			return required;
 		}
 		
+		public Criteria<VALUE_TYPE> addRequired(Collection<VALUE_TYPE> elements){
+			if(CollectionHelper.getInstance().isNotEmpty(elements)){
+				getRequired().addAll(elements);
+			}
+			return this;
+		}
+		
 		public Criteria<VALUE_TYPE> addRequired(@SuppressWarnings("unchecked") VALUE_TYPE...elements){
-			required = CollectionHelper.getInstance().add(getRequired(), elements);
+			if(ArrayHelper.getInstance().isNotEmpty(elements))
+				addRequired(Arrays.asList(elements));
+			return this;
+		}
+		
+		public Collection<VALUE_TYPE> getValues(){
+			if(values == null)
+				values = new ArrayList<>();
+			return values;
+		}
+		
+		public Criteria<VALUE_TYPE> addValues(Collection<VALUE_TYPE> values){
+			if(CollectionHelper.getInstance().isNotEmpty(values)){
+				getValues().addAll(values);
+			}
+			return this;
+		}
+		
+		public Criteria<VALUE_TYPE> addValues(@SuppressWarnings("unchecked") VALUE_TYPE...values){
+			if(ArrayHelper.getInstance().isNotEmpty(values))
+				addValues(Arrays.asList(values));
+			return this;
+		}
+		
+		public Criteria<VALUE_TYPE> setValues(Collection<VALUE_TYPE> values){
+			if(CollectionHelper.getInstance().isNotEmpty(values)){
+				getValues().clear();
+				addValues(values);
+			}
+			return this;
+		}
+		
+		public Criteria<VALUE_TYPE> setValues(@SuppressWarnings("unchecked") VALUE_TYPE...values){
+			if(ArrayHelper.getInstance().isNotEmpty(values))
+				setValues(Arrays.asList(values));
 			return this;
 		}
 		
@@ -288,7 +334,7 @@ public class CriteriaHelper extends AbstractHelper implements Serializable {
 			private static final long serialVersionUID = -1648133246443265214L;
 			
 			{
-				nullValue = java.lang.Boolean.FALSE;
+				setIsMulptipleValues(java.lang.Boolean.TRUE);
 			}
 			
 			public Boolean(java.lang.Boolean value) {

@@ -12,6 +12,8 @@ public class BooleanHelper extends AbstractHelper implements Serializable {
 
 	private static BooleanHelper INSTANCE;
 	
+	public static final Boolean NULL = null;
+	
 	public static BooleanHelper getInstance() {
 		if(INSTANCE == null)
 			INSTANCE = new BooleanHelper();
