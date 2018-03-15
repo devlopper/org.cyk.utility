@@ -335,6 +335,7 @@ public class CriteriaHelper extends AbstractHelper implements Serializable {
 			
 			{
 				setIsMulptipleValues(java.lang.Boolean.TRUE);
+				setValues(BooleanHelper.NULL,java.lang.Boolean.FALSE,java.lang.Boolean.TRUE);
 			}
 			
 			public Boolean(java.lang.Boolean value) {
@@ -347,7 +348,7 @@ public class CriteriaHelper extends AbstractHelper implements Serializable {
 			
 			@Override
 			protected java.lang.Boolean get(java.lang.String string) {
-				return new BooleanHelper.Builder.String.Adapter.Default(string).execute();
+				return StringHelper.getInstance().isBlank(string) ? null : new BooleanHelper.Builder.String.Adapter.Default(string).execute();
 			}
 
 		}
