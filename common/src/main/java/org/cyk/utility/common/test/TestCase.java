@@ -56,6 +56,14 @@ public class TestCase extends AbstractBean implements Serializable {
 	public RandomHelper getRandomHelper(){
 		return RandomHelper.getInstance();
 	}
+	
+	public String getRandomAlphabetic(Integer length){
+		return getRandomHelper().getAlphabetic(length);
+	}
+	
+	public String getRandomAlphabetic(){
+		return getRandomAlphabetic(5);
+	}
 
 	public Date getTimeAfterNow(Object numberOfMillisecond){
 		return TimeHelper.getInstance().getAfterNow(numberOfMillisecond);
