@@ -61,4 +61,8 @@ public class FileHelperUnitTest extends AbstractUnitTest {
 		assertEquals("image/png", FileHelper.getInstance().getMime("png"));
 	}
 
+	@Test
+	public void write(){
+		//StreamHelper.getInstance().w FileHelper.getInstance().get
+	}
 }

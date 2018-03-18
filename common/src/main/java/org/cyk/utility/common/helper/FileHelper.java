@@ -50,6 +50,10 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 		super.initialisation();
 	}
 	
+	public String concatenate(String name,String extension){
+		return name+NAME_EXTENSION_SEPARATOR+extension;
+	}
+	
 	public byte[] getBytes(java.io.File file){
 		try {
 			return FileUtils.readFileToByteArray(file);

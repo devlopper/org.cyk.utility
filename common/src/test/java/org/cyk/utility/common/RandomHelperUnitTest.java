@@ -1,6 +1,8 @@
 package org.cyk.utility.common;
 
+import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.RandomHelper;
+import org.cyk.utility.common.helper.StreamHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.ValidationHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -34,6 +36,12 @@ public class RandomHelperUnitTest extends AbstractUnitTest {
 	public void getAlphanumeric(){
 		String value = RandomHelper.getInstance().getAlphanumeric(5);
 		assertEquals(5, value.length());	
+	}
+	
+	@Test
+	public void getFilePersonHeadOnly(){
+		FileHelper.File file = RandomHelper.getInstance().getFilePersonHeadOnly(Boolean.TRUE);
+		StreamHelper.getInstance().write(file.getBytes(), "target/"+file.getName(), file.getExtension());
 	}
 	
 	@Test

@@ -150,13 +150,23 @@ public class RandomHelper extends AbstractHelper implements Serializable {
 	public FileHelper.File getFile(String name){
 		try {
 			FileHelper.File file = new FileHelper.File()
+					.setName(FileHelper.getInstance().getName(name))
 					.setBytes(FileHelper.getInstance().getBytes(RandomHelper.class,name))
-					.setExtension(FileHelper.getInstance().getExtension(name));
+					.setExtension(FileHelper.getInstance().getExtension(name))
+					;
 			return file.setMime(file.getExtension());
 		} catch (Exception e) {
 			logThrowable(e);
 			return null;
 		}
+	}
+	
+	public FileHelper.File getFilePersonHeadOnly(Boolean isMale){
+		String male = getMaleOrFemale(isMale);
+		String name = get(StringCollection.valueOf(male.toUpperCase()+"_HEAD_ONLY_PHOTO"));
+		FileHelper.File file = getFile("/META-INF/generator/image/"+male+"/head/"+name);
+		file.setName(file.getName()+Constant.CHARACTER_UNDESCORE+System.currentTimeMillis());
+		return file;
 	}
 	
 	public Person getPerson(Boolean isMale){
@@ -251,13 +261,13 @@ public class RandomHelper extends AbstractHelper implements Serializable {
 		
 		public Person(Boolean isMale) {
 			this.isMale = isMale;
-			String male = getMaleOrFemale(isMale);
+			String male = getMaleOrFemale(this.isMale);
 			firstname = get(StringCollection.FIRST_NAME);
 			middlename = get(StringCollection.MIDDLE_NAME);
 			lastname = get(StringCollection.valueOf(male.toUpperCase()+"_LAST_NAME"));
 			surname = get(StringCollection.SUR_NAME);
 			
-			headOnlyPhoto = getFile("/META-INF/generator/image/"+male+"/head/"+get(StringCollection.valueOf(male.toUpperCase()+"_HEAD_ONLY_PHOTO")));	
+			headOnlyPhoto = getFilePersonHeadOnly(this.isMale);	
 		}
 	}
 }
