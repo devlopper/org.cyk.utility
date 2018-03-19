@@ -771,7 +771,7 @@ public class Form extends Container implements Serializable {
 		}
 		
 		public Control getControlByFieldName(String fieldName){
-			return getControlByFieldName(master.getObject(), fieldName);
+			return getControlByFieldName(FieldHelper.getInstance().readBeforeLast(master.getObject(), fieldName), FieldHelper.getInstance().getLast(fieldName));
 		}
 		
 		public Input<?> getInputByFieldName(Object object,String fieldName){
