@@ -133,15 +133,12 @@ public class Event extends Component.Invisible implements Serializable {
 			return null;
 		}
 
-		protected void ____execute____() { try {
+		protected void ____execute____() { 
 			if(event.getPropertiesMap().getInstance()!=null)
 				InstanceHelper.getInstance().computeChanges(event.getPropertiesMap().getInstance());
 			if(getEventPropertyFormMasterObject()!=null)
 				InstanceHelper.getInstance().computeChanges(getEventPropertyFormMasterObject());
-			}catch(Exception exception){
-				System.out.println("Event.CommandAdapter.____execute____()**************************************************************************************");
-				exception.printStackTrace();
-			}
+			
 		}
 		
 		protected Object getEventPropertyFormMasterObject(){

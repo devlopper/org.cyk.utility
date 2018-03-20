@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Notifications;
 import org.cyk.utility.common.userinterface.command.Command;
@@ -24,6 +25,12 @@ public class NotificationDialog extends Dialog implements Serializable {
 	
 	public NotificationDialog() {
 		okCommand.setLabelFromIdentifier("ok");
+	}
+	
+	@Override
+	protected void listenPropertiesInstanciated(Properties propertiesMap) {
+		super.listenPropertiesInstanciated(propertiesMap);
+		propertiesMap.setEscape(Boolean.TRUE);
 	}
 	
 	/**/
