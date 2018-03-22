@@ -35,6 +35,12 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 			,SECONDOFMINUTE_ALL=-1,MILLISOFSECOND_ALL=-1;
 	public static final Byte WEEK_NUMBER_OF_DAY = 7;
 	
+	public static final Integer NUMBER_OF_HOUR_BY_DAY_MINIMUM = 0;
+	public static final Integer NUMBER_OF_HOUR_BY_DAY_MAXIMUM = 23;
+	
+	public static final Integer NUMBER_OF_MINUTE_BY_HOUR_MINIMUM = 0;
+	public static final Integer NUMBER_OF_MINUTE_BY_HOUR_MAXIMUM = 59;
+	
 	public static final Integer NUMBER_OF_MILLISECOND_BY_SECOND = DateTimeConstants.MILLIS_PER_SECOND;
 	public static final Integer NUMBER_OF_MILLISECOND_BY_MINUTE = DateTimeConstants.MILLIS_PER_MINUTE;
 	public static final Integer NUMBER_OF_MILLISECOND_BY_HOUR = DateTimeConstants.MILLIS_PER_HOUR;
@@ -111,6 +117,14 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 		if(StringHelper.getInstance().isBlank(date))
 			return null;
 		return new TimeHelper.Builder.String.Adapter.Default(date).execute();
+	}
+	
+	public Date getEarliestOfTheDay(Date date) {
+		return getDate(getYear(date), getMonthOfYear(date), getDayOfMonth(date), NUMBER_OF_HOUR_BY_DAY_MINIMUM, NUMBER_OF_MINUTE_BY_HOUR_MINIMUM);
+	}
+	
+	public Date getLatestOfTheDay(Date date) {
+		return getDate(getYear(date), getMonthOfYear(date), getDayOfMonth(date), NUMBER_OF_HOUR_BY_DAY_MAXIMUM, NUMBER_OF_MINUTE_BY_HOUR_MAXIMUM);
 	}
 	
 	public Integer getYear(java.util.Date date){

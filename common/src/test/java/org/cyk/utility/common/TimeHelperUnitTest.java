@@ -134,7 +134,7 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void getNumberOfMillisecondWithDurationType() {		
+	public void getNumberOfMillisecondWithDurationTypeFull() {		
 		AssertionHelper.getInstance().assertEquals(TimeHelper.NUMBER_OF_MILLISECOND_BY_MINUTE * 59, TimeHelper.getInstance().getNumberOfMillisecond(TimeHelper.DurationType.FULL
 				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0), TimeHelper.getInstance().getDate(2000, 1, 1, 1, 59)
 				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0)).intValue());
@@ -146,7 +146,10 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 		AssertionHelper.getInstance().assertEquals(TimeHelper.NUMBER_OF_MILLISECOND_BY_MINUTE * 59, TimeHelper.getInstance().getNumberOfMillisecond(TimeHelper.DurationType.FULL
 				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0), TimeHelper.getInstance().getDate(2000, 1, 1, 1, 59)
 				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0)).intValue());
-		
+	}
+	
+	@Test
+	public void getNumberOfMillisecondWithDurationTypePartial() {		
 		AssertionHelper.getInstance().assertEquals(TimeHelper.NUMBER_OF_MILLISECOND_BY_MINUTE * 58, TimeHelper.getInstance().getNumberOfMillisecond(TimeHelper.DurationType.PARTIAL
 				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0), TimeHelper.getInstance().getDate(2000, 1, 1, 1, 59)
 				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 1)).intValue());
@@ -158,6 +161,42 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 		AssertionHelper.getInstance().assertEquals(TimeHelper.NUMBER_OF_MILLISECOND_BY_MINUTE * 29, TimeHelper.getInstance().getNumberOfMillisecond(TimeHelper.DurationType.PARTIAL
 				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0), TimeHelper.getInstance().getDate(2000, 1, 1, 1, 59)
 				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 30)).intValue());
+	}
+	
+	@Test
+	public void getEarliestOfTheDay() {		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 0)
+				, TimeHelper.getInstance().getEarliestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 0)));
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 0)
+				, TimeHelper.getInstance().getEarliestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 1)));
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 0)
+				, TimeHelper.getInstance().getEarliestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 30)));
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 0)
+				, TimeHelper.getInstance().getEarliestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 59)));
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 0)
+				, TimeHelper.getInstance().getEarliestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 10, 30)));
+	}
+	
+	@Test
+	public void getLatestOfTheDay() {		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59)
+				, TimeHelper.getInstance().getLatestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 0)));
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59)
+				, TimeHelper.getInstance().getLatestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 1)));
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59)
+				, TimeHelper.getInstance().getLatestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 30)));
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59)
+				, TimeHelper.getInstance().getLatestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 59)));
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59)
+				, TimeHelper.getInstance().getLatestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59)));
 	}
 	
 	//@Test
