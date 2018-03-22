@@ -133,6 +133,33 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 		new AssertionHelper.Assertion.Equals.Adapter.Default<Long>(Long.class,collection.add(21l).getDuration(),1l).execute();
 	}
 	
+	@Test
+	public void getNumberOfMillisecondWithDurationType() {		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.NUMBER_OF_MILLISECOND_BY_MINUTE * 59, TimeHelper.getInstance().getNumberOfMillisecond(TimeHelper.DurationType.FULL
+				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0), TimeHelper.getInstance().getDate(2000, 1, 1, 1, 59)
+				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0)).intValue());
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.NUMBER_OF_MILLISECOND_BY_MINUTE * 59, TimeHelper.getInstance().getNumberOfMillisecond(TimeHelper.DurationType.FULL
+				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0), TimeHelper.getInstance().getDate(2000, 1, 1, 1, 59)
+				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 30)).intValue());
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.NUMBER_OF_MILLISECOND_BY_MINUTE * 59, TimeHelper.getInstance().getNumberOfMillisecond(TimeHelper.DurationType.FULL
+				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0), TimeHelper.getInstance().getDate(2000, 1, 1, 1, 59)
+				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0)).intValue());
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.NUMBER_OF_MILLISECOND_BY_MINUTE * 58, TimeHelper.getInstance().getNumberOfMillisecond(TimeHelper.DurationType.PARTIAL
+				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0), TimeHelper.getInstance().getDate(2000, 1, 1, 1, 59)
+				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 1)).intValue());
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.NUMBER_OF_MILLISECOND_BY_MINUTE * 50, TimeHelper.getInstance().getNumberOfMillisecond(TimeHelper.DurationType.PARTIAL
+				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0), TimeHelper.getInstance().getDate(2000, 1, 1, 1, 59)
+				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 9)).intValue());
+		
+		AssertionHelper.getInstance().assertEquals(TimeHelper.NUMBER_OF_MILLISECOND_BY_MINUTE * 29, TimeHelper.getInstance().getNumberOfMillisecond(TimeHelper.DurationType.PARTIAL
+				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 0), TimeHelper.getInstance().getDate(2000, 1, 1, 1, 59)
+				, TimeHelper.getInstance().getDate(2000, 1, 1, 1, 30)).intValue());
+	}
+	
 	//@Test
 	public void jodaTime(){
 		DateTime fromDate = new DateTime(createDate(1, 1, 2000, 10, 0)),toDate = new DateTime(createDate(27, 1, 2000, 11, 30));

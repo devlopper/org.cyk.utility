@@ -23,6 +23,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeZone;
 
 @Singleton
@@ -33,6 +34,10 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 	public static Integer YEAR_ALL=-1,MONTHOFYEAR_ALL=-1,DAYOFMONTH_ALL=-1,DAYOFMONTH_LAST=32,HOUROFDAY_ALL=-1,MINUTEOFHOUR_ALL=-1
 			,SECONDOFMINUTE_ALL=-1,MILLISOFSECOND_ALL=-1;
 	public static final Byte WEEK_NUMBER_OF_DAY = 7;
+	
+	public static final Integer NUMBER_OF_MILLISECOND_BY_SECOND = DateTimeConstants.MILLIS_PER_SECOND;
+	public static final Integer NUMBER_OF_MILLISECOND_BY_MINUTE = DateTimeConstants.MILLIS_PER_MINUTE;
+	public static final Integer NUMBER_OF_MILLISECOND_BY_HOUR = DateTimeConstants.MILLIS_PER_HOUR;
 	
 	private static TimeHelper INSTANCE;
 	
@@ -57,8 +62,41 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 			}
 	}
 	
+	public Long getNumberOfMillisecond(Object instant){
+		if(NumberHelper.getInstance().isNumber(instant))
+			return NumberHelper.getInstance().get(Long.class, instant);
+		if(instant instanceof Date)
+			return ((Date)instant).getTime();
+		return null;
+	}
+	
+	public Long getNumberOfMillisecondBetween(Object instant1,Object instant2){
+		return NumberHelper.getInstance().get(Long.class,  NumberHelper.getInstance().subtract(getNumberOfMillisecond(instant2), getNumberOfMillisecond(instant1)));
+	}
+	
+	public Long getNumberOfMillisecond(DurationType durationType, Date expectedFromDate, Date expectedToDate,Date currentFromDate) {
+		Long instant1 = getNumberOfMillisecond(currentFromDate),instant2 = null;		
+		Long durarion = null;
+		if(DurationType.FULL.equals(durationType)) {
+			durarion = getNumberOfMillisecondBetween(expectedFromDate, expectedToDate);
+		}else if(DurationType.PARTIAL.equals(durationType)) {
+			durarion = getNumberOfMillisecondBetween(currentFromDate, expectedToDate);
+		}
+		instant2 = NumberHelper.getInstance().get(Long.class, NumberHelper.getInstance().add(instant1, durarion));
+		return getNumberOfMillisecondBetween(instant1, instant2);
+	}
+	
+	public Long getNumberOfMillisecond(DurationType durationType, Date expectedFromDate, Date expectedToDate) {
+		return getNumberOfMillisecond(durationType, expectedFromDate, expectedToDate, TimeHelper.getInstance().getUniversalTimeCoordinated());
+	}
+	
+	public Date getAfter(Object instant,Object numberOfMillisecond){
+		return new Date(NumberHelper.getInstance().get(Long.class
+				,NumberHelper.getInstance().add(getNumberOfMillisecond(instant), NumberHelper.getInstance().get(Long.class,numberOfMillisecond))));
+	}
+	
 	public Date getAfterNow(Object numberOfMillisecond){
-		return new Date(System.currentTimeMillis() + NumberHelper.getInstance().get(Long.class,numberOfMillisecond));
+		return getAfter(getUniversalTimeCoordinated(), numberOfMillisecond);
 	}
 	
 	public Date getAfterNowByNumberOfMinute(Object numberOfMinutes){
@@ -143,15 +181,6 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 	
 	public Integer compare(Integer year,Integer monthOfYear,Integer dayOfMonth,Date date){
 		return getDate(year, monthOfYear, dayOfMonth).compareTo(date);
-	}
-	
-	public Long computeNumberOfMillisecond(DurationType durationType, Date expectedFromDate, Date expectedToDate,Date currentFromDate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public Long computeNumberOfMillisecond(DurationType durationType, Date expectedFromDate, Date expectedToDate) {
-		return computeNumberOfMillisecond(durationType, expectedFromDate, expectedToDate, TimeHelper.getInstance().getUniversalTimeCoordinated());
 	}
 	
 	/**/
