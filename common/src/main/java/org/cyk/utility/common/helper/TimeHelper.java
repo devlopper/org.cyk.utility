@@ -145,6 +145,15 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 		return getDate(year, monthOfYear, dayOfMonth).compareTo(date);
 	}
 	
+	public Long computeNumberOfMillisecond(DurationType durationType, Date expectedFromDate, Date expectedToDate,Date currentFromDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public Long computeNumberOfMillisecond(DurationType durationType, Date expectedFromDate, Date expectedToDate) {
+		return computeNumberOfMillisecond(durationType, expectedFromDate, expectedToDate, TimeHelper.getInstance().getUniversalTimeCoordinated());
+	}
+	
 	/**/
 	
 	public static interface Builder<INPUT> extends org.cyk.utility.common.Builder<INPUT, java.util.Date> {
@@ -556,4 +565,10 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 
 	/**/
 
+	public static enum DurationType {
+		FULL
+		,PARTIAL
+		
+		;
+	}
 }
