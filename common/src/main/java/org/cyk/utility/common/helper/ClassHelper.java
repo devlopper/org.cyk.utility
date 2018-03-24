@@ -28,6 +28,8 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanListener;
+import org.cyk.utility.common.helper.ClassHelper.Listener.FieldName;
+import org.cyk.utility.common.helper.ClassHelper.Listener.FieldName.ValueUsageType;
 import org.cyk.utility.common.helper.ClassHelper.Listener.IdentifierType;
 import org.cyk.utility.common.model.Identifiable;
 import org.reflections.Reflections;
@@ -74,6 +76,18 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public String getIdentifiablePeriodFieldName(Class<?> aClass){
+		return getFieldName(aClass, FieldName.IDENTIFIABLE_PERIOD);
+	}
+	
+	public String getFieldName(Class<?> aClass,FieldName fieldName,FieldName.ValueUsageType valueUsageType){
+		return instanciateOne(Listener.class).getFieldName(aClass, fieldName, valueUsageType);
+	}
+	
+	public String getFieldName(Class<?> aClass,FieldName fieldName){
+		return instanciateOne(Listener.class).getFieldName(aClass, fieldName);
 	}
 	
 	public String getIdentifierFieldName(Class<?> aClass,IdentifierType type){
@@ -693,7 +707,41 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	}
 	
 	public static interface Listener {
-
+		@lombok.Getter
+		public static enum FieldName {
+			IDENTIFIER,TYPE,NAME,BIRTH_DATE("birthDate"),DEATH_DATE("deathDate"),IDENTIFIABLE_PERIOD("identifiablePeriod");
+			private java.util.Map<ValueUsageType,String> valueMap = new java.util.HashMap<>();
+			
+			private FieldName(String business,String system) {
+				if(StringHelper.getInstance().isBlank(business))
+					business = name().toLowerCase();
+				if(StringHelper.getInstance().isBlank(system))
+					system = name().toLowerCase();
+				valueMap.put(ValueUsageType.BUSINESS, business);
+				valueMap.put(ValueUsageType.SYSTEM, system);
+			}
+			
+			private FieldName(String business) {
+				this(business,business);
+			}
+			
+			private FieldName() {
+				this(null,null);
+			}
+			
+			public String getByValueUsageType(ValueUsageType valueUsageType){
+				return valueMap.get(valueUsageType);
+			}
+			
+			/**/
+			
+			public static enum ValueUsageType {
+				BUSINESS,SYSTEM
+				;
+				public static ValueUsageType DEFAULT = BUSINESS;
+			}
+		}
+		
 		public static enum IdentifierType {
 			BUSINESS,SYSTEM
 			;
@@ -704,6 +752,13 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 		
 		Boolean isModel(Class<?> aClass);
 		Boolean isPersisted(Class<?> aClass);
+		
+		String getFieldName(Class<?> aClass,FieldName fieldName,FieldName.ValueUsageType valueUsageType);
+		String getFieldName(Class<?> aClass,FieldName fieldName);
+		
+		Boolean hasFieldNamed(Class<?> aClass,FieldName fieldName,FieldName.ValueUsageType valueUsageType);
+		Boolean hasFieldNamed(Class<?> aClass,FieldName fieldName);
+		
 		
 		String getIdentifierFieldName(Class<?> aClass,IdentifierType type);
 		String getIdentifierFieldName(Class<?> aClass);
@@ -746,6 +801,16 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				}
 				
 				@Override
+				public String getFieldName(Class<?> aClass, FieldName fieldName, FieldName.ValueUsageType valueUsageType) {
+					return fieldName.getByValueUsageType(valueUsageType);
+				}
+				
+				@Override
+				public String getFieldName(Class<?> aClass, FieldName fieldName) {
+					return getFieldName(aClass, fieldName, FieldName.ValueUsageType.DEFAULT);
+				}
+				
+				@Override
 				public String getIdentifierFieldName(Class<?> aClass,IdentifierType type) {
 					return "identifier";
 				}
@@ -761,6 +826,16 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 						if(Boolean.TRUE.equals(isIdentified(aClass, type)))
 							return type;
 					return null;
+				}
+				
+				@Override
+				public Boolean hasFieldNamed(Class<?> aClass,FieldName fieldName,FieldName.ValueUsageType valueUsageType) {
+					return FieldHelper.getInstance().get(aClass, getFieldName(aClass, fieldName, valueUsageType))!=null;
+				}
+				
+				@Override
+				public Boolean hasFieldNamed(Class<?> aClass,FieldName fieldName) {
+					return hasFieldNamed(aClass, fieldName,FieldName.ValueUsageType.DEFAULT);
 				}
 				
 				@Override
@@ -840,6 +915,26 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				
 				/**/
 				
+			}
+			
+			@Override
+			public Boolean hasFieldNamed(Class<?> aClass, FieldName fieldName, ValueUsageType valueUsageType) {
+				return null;
+			}
+			
+			@Override
+			public Boolean hasFieldNamed(Class<?> aClass, FieldName fieldName) {
+				return null;
+			}
+			
+			@Override
+			public String getFieldName(Class<?> aClass, FieldName fieldName, FieldName.ValueUsageType valueUsageType) {
+				return null;
+			}
+			
+			@Override
+			public String getFieldName(Class<?> aClass, FieldName fieldName) {
+				return null;
 			}
 			
 			@Override

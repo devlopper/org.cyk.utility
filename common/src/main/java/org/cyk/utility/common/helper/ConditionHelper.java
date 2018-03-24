@@ -63,7 +63,7 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					.setValue2(value).setGreater(greater).setEqual(equal);
 		}
 		
-		public static Collection<Condition.Builder> getBelongsTo(Object instance,Object from,Object to,String...names){
+		public static Collection<Condition.Builder> getBuildersDoesNotBelongsTo(Object instance,Object from,Object to,String...names){
 			Collection<Condition.Builder> collection = new ArrayList<ConditionHelper.Condition.Builder>();
 			collection.add(ConditionHelper.Condition.getBuilderComparison(instance, from, Boolean.FALSE, Boolean.FALSE, names));
 			collection.add(ConditionHelper.Condition.getBuilderComparison(instance, to, Boolean.TRUE, Boolean.FALSE, names));

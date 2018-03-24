@@ -21,7 +21,9 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
+import org.cyk.utility.common.helper.ClassHelper.Listener.FieldName;
 import org.cyk.utility.common.helper.ClassHelper.Listener.IdentifierType;
+import org.cyk.utility.common.helper.ClassHelper.Listener.FieldName.ValueUsageType;
 import org.cyk.utility.common.helper.FilterHelper.Filter;
 import org.cyk.utility.common.helper.InstanceHelper.Listener.FieldValueGenerator;
 import org.cyk.utility.common.security.SecurityHelper;
@@ -102,6 +104,18 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	
 	public String getName(final Object instance){
 		return ClassHelper.getInstance().instanciateOne(Listener.class).getName(instance);
+	}
+	
+	public java.util.Date getBirthDate(final Object instance){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getBirthDate(instance);
+	}
+	
+	public java.util.Date getDeathDate(final Object instance){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getDeathDate(instance);
+	}
+	
+	public Object getIdentifiablePeriod(final Object instance){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getIdentifiablePeriod(instance);
 	}
 		
 	public Object act(Constant.Action action,Object instance){
@@ -922,9 +936,16 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		<T> T getByIdentifier(Class<T> aClass,Object identifier,ClassHelper.Listener.IdentifierType identifierType);
 		@Deprecated
 		<T> T getIdentifier(Class<T> aClass,Object identifier);
+		
+		Object getFieldValue(Object instance,ClassHelper.Listener.FieldName fieldName,ClassHelper.Listener.FieldName.ValueUsageType valueUsageType);
+		Object getFieldValue(Object instance,ClassHelper.Listener.FieldName fieldName);
+		
 		Object getIdentifier(Object instance,ClassHelper.Listener.IdentifierType identifierType);
 		Object getIdentifier(Object instance);
 		String getName(Object instance);
+		java.util.Date getBirthDate(Object instance);
+		java.util.Date getDeathDate(Object instance);
+		Object getIdentifiablePeriod(Object instance);
 		Boolean getAreEqual(Object object1,Object object2);
 		<T> T generateFieldValue(Object instance,String name,Class<T> valueClass,Boolean useDefaultIfFieldGeneratorIsNull);
 		<T> T generateFieldStringValue(Object instance,String name,Boolean useDefaultIfFieldGeneratorIsNull);
@@ -945,6 +966,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		
 		public static class Adapter extends AbstractHelper.Listener.Adapter.Default implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Object getIdentifiablePeriod(Object instance) {
+				return null;
+			}
 			
 			@Override
 			public String getName(Object instance) {
@@ -1076,6 +1102,26 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				return null;
 			}
 			
+			@Override
+			public Object getFieldValue(Object instance,ClassHelper.Listener.FieldName fieldName,ClassHelper.Listener.FieldName.ValueUsageType valueUsageType) {
+				return null;
+			}
+			
+			@Override
+			public Object getFieldValue(Object instance, FieldName fieldName) {
+				return null;
+			}
+			
+			@Override
+			public Date getBirthDate(Object instance) {
+				return null;
+			}
+			
+			@Override
+			public Date getDeathDate(Object instance) {
+				return null;
+			}
+			
 			/**/
 			
 			public static class Default extends Listener.Adapter implements Serializable {
@@ -1143,6 +1189,18 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				public <T> Collection<T> get(Class<T> aClass) {
 					return get(aClass,null);
 				}
+				
+				@Override
+				public Object getFieldValue(Object instance, FieldName fieldName, ValueUsageType valueUsageType) {
+					if(instance instanceof Enum<?>)
+						return ((Enum<?>)instance).name();
+					return instance == null ? null : FieldHelper.getInstance().read(instance, ClassHelper.getInstance().getFieldName(instance.getClass(),fieldName,valueUsageType));
+				}
+				
+				@Override
+				public Object getFieldValue(Object instance, FieldName fieldName) {
+					return getFieldValue(instance, fieldName,FieldName.ValueUsageType.DEFAULT);
+				}
 			
 				@Override
 				public Object getIdentifier(Object instance,ClassHelper.Listener.IdentifierType identifierType) {
@@ -1159,6 +1217,21 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				@Override
 				public String getName(Object instance) {
 					return (String) (instance == null ? null :FieldHelper.getInstance().read(instance, ClassHelper.getInstance().getNameFieldName(instance.getClass())));
+				}
+				
+				@Override
+				public Date getBirthDate(Object instance) {
+					return (Date) getFieldValue(instance, FieldName.BIRTH_DATE);
+				}
+				
+				@Override
+				public Date getDeathDate(Object instance) {
+					return (Date) getFieldValue(instance, FieldName.DEATH_DATE);
+				}
+				
+				@Override
+				public Object getIdentifiablePeriod(Object instance) {
+					return getFieldValue(instance, FieldName.IDENTIFIABLE_PERIOD);
 				}
 			
 				@Override

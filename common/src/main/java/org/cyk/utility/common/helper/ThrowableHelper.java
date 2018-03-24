@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -39,6 +40,27 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public void throwIfDoesNotBelongsTo(Object instance,Date fromDate,Date toDate,String...fieldNames){
+		throw_(ConditionHelper.Condition.getBuildersDoesNotBelongsTo(instance, fromDate, toDate, fieldNames));
+	}
+	
+	public void throwIfDoesNotBelongsTo(Object instance,Object period,String...fieldNames){
+		throw_(ConditionHelper.Condition.getBuildersDoesNotBelongsTo(instance, InstanceHelper.getInstance().getBirthDate(period)
+				, InstanceHelper.getInstance().getDeathDate(period), fieldNames));
+	}
+	
+	public void throwIfDoesNotBelongsToIdentifiablePeriod(Object instance,String...fieldNames){
+		throwIfDoesNotBelongsTo(instance, InstanceHelper.getInstance().getIdentifiablePeriod(instance), fieldNames);
+	}
+	
+	public void throwIfNull(Object instance,String...fieldNames){
+		throw_(ConditionHelper.Condition.getBuilderNull(instance, fieldNames));
+	}
+	
+	public void throwIfIdentifiablePeriodIsNull(Object instance){
+		throwIfNull(instance, ClassHelper.getInstance().getIdentifiablePeriodFieldName(instance.getClass()));
 	}
 	
 	public java.lang.Throwable getInstanceOf(java.lang.Throwable throwable,Class<?> aClass){
