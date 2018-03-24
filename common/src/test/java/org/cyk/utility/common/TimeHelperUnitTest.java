@@ -41,6 +41,7 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 	public void buildFromString(){
 		assertDate(new TimeHelper.Builder.String.Adapter.Default("19/11/2015").execute(), 2015,11,19,0,0,0,0);
 		assertDate(new TimeHelper.Builder.String.Adapter.Default("19/11/2015 14:29").execute(), 2015,11,19,14,29,0,0);
+		assertDate(new TimeHelper.Builder.String.Adapter.Default("19/11/2015 14:29:17:999").execute(), 2015,11,19,14,29,17,999);
 		assertDate(new TimeHelper.Builder.String.Adapter.Default("14:29").execute(), 1970,1,1,14,29,0,0);
 	}
 	
@@ -165,7 +166,7 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void getEarliestOfTheDay() {		
-		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 0)
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 0, 0, 0)
 				, TimeHelper.getInstance().getEarliestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 0)));
 		
 		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 0)
@@ -183,19 +184,19 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void getLatestOfTheDay() {		
-		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59)
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59, 59, 999)
 				, TimeHelper.getInstance().getLatestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 0)));
 		
-		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59)
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59, 59, 999)
 				, TimeHelper.getInstance().getLatestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 1)));
 		
-		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59)
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59, 59, 999)
 				, TimeHelper.getInstance().getLatestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 30)));
 		
-		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59)
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59, 59, 999)
 				, TimeHelper.getInstance().getLatestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 0, 59)));
 		
-		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59)
+		AssertionHelper.getInstance().assertEquals(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59, 59, 999)
 				, TimeHelper.getInstance().getLatestOfTheDay(TimeHelper.getInstance().getDate(2000, 1, 1, 23, 59)));
 	}
 	

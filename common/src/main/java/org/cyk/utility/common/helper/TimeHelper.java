@@ -41,6 +41,12 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 	public static final Integer NUMBER_OF_MINUTE_BY_HOUR_MINIMUM = 0;
 	public static final Integer NUMBER_OF_MINUTE_BY_HOUR_MAXIMUM = 59;
 	
+	public static final Integer NUMBER_OF_SECOND_BY_MINUTE_MINIMUM = 0;
+	public static final Integer NUMBER_OF_SECOND_BY_MINUTE_MAXIMUM = 59;
+	
+	public static final Integer NUMBER_OF_MILLISECOND_BY_SECOND_MINIMUM = 0;
+	public static final Integer NUMBER_OF_MILLISECOND_BY_SECOND_MAXIMUM = 999;
+	
 	public static final Integer NUMBER_OF_MILLISECOND_BY_SECOND = DateTimeConstants.MILLIS_PER_SECOND;
 	public static final Integer NUMBER_OF_MILLISECOND_BY_MINUTE = DateTimeConstants.MILLIS_PER_MINUTE;
 	public static final Integer NUMBER_OF_MILLISECOND_BY_HOUR = DateTimeConstants.MILLIS_PER_HOUR;
@@ -124,7 +130,8 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 	}
 	
 	public Date getLatestOfTheDay(Date date) {
-		return getDate(getYear(date), getMonthOfYear(date), getDayOfMonth(date), NUMBER_OF_HOUR_BY_DAY_MAXIMUM, NUMBER_OF_MINUTE_BY_HOUR_MAXIMUM);
+		return getDate(getYear(date), getMonthOfYear(date), getDayOfMonth(date), NUMBER_OF_HOUR_BY_DAY_MAXIMUM, NUMBER_OF_MINUTE_BY_HOUR_MAXIMUM
+				,NUMBER_OF_SECOND_BY_MINUTE_MAXIMUM,NUMBER_OF_MILLISECOND_BY_SECOND_MAXIMUM);
 	}
 	
 	public Integer getYear(java.util.Date date){
@@ -179,6 +186,10 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 	
 	public Date getDate(Integer year,Integer monthOfYear,Integer dayOfMonth,Integer dayOfWeek,Integer hour,Integer minute,Integer second,Integer millisecond){
 		return new Builder.Instant.Adapter.Default(new Instant(year, monthOfYear, dayOfMonth, dayOfWeek,hour, minute, second, millisecond)).execute();
+	}
+	
+	public Date getDate(Integer year,Integer monthOfYear,Integer dayOfMonth,Integer hourOfDay,Integer minuteOfHour,Integer secondOfMinute,Integer millisecondOfSecond){
+		return new Builder.Instant.Adapter.Default(new Instant(year, monthOfYear, dayOfMonth, null,hourOfDay, minuteOfHour, secondOfMinute, millisecondOfSecond)).execute();
 	}
 	
 	public Date getDate(Integer year,Integer monthOfYear,Integer dayOfMonth,Integer hour,Integer minute){
@@ -249,7 +260,12 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 						if(StringHelper.getInstance().isBlank(format)){
 							if(StringUtils.contains(getInput(), "/"))
 								if(StringUtils.contains(getInput(), ":"))
-									format = Constant.DAY_MONTH_YEAR_HOUR_MINUTE_PATTERN;
+									if(StringUtils.countMatches(getInput(), ":") == 1)
+										format = Constant.DAY_MONTH_YEAR_HOUR_MINUTE_PATTERN;
+									else if(StringUtils.countMatches(getInput(), ":") == 2)
+										format = Constant.DAY_MONTH_YEAR_HOUR_MINUTE_SECOND_PATTERN;
+									else
+										format = Constant.DAY_MONTH_YEAR_HOUR_MINUTE_SECOND_MILLISECOND_PATTERN;
 								else
 									format = Constant.DAY_MONTH_YEAR_PATTERN;
 							else
