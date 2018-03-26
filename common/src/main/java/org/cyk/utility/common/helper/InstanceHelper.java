@@ -94,6 +94,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		return ClassHelper.getInstance().instanciateOne(Listener.class).count(aClass,filter,dataReadConfiguration);
 	}
 	
+	public Object getFieldValue(final Object instance,ClassHelper.Listener.FieldName fieldName,ClassHelper.Listener.FieldName.ValueUsageType valueUsageType){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getFieldValue(instance, fieldName, valueUsageType);
+	}
+	
 	public Object getIdentifier(final Object instance,ClassHelper.Listener.IdentifierType type){
 		return ClassHelper.getInstance().instanciateOne(Listener.class).getIdentifier(instance,type);
 	}
