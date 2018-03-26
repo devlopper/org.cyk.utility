@@ -709,7 +709,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 	public static interface Listener {
 		@lombok.Getter
 		public static enum FieldName {
-			IDENTIFIER,TYPE,NAME,BIRTH_DATE("birthDate"),DEATH_DATE("deathDate"),IDENTIFIABLE_PERIOD("__identifiablePeriod__");
+			IDENTIFIER("code","identifier"),TYPE,NAME,BIRTH_DATE("birthDate"),DEATH_DATE("deathDate"),IDENTIFIABLE_PERIOD("__identifiablePeriod__");
 			private java.util.Map<ValueUsageType,String> valueMap = new java.util.HashMap<>();
 			
 			private FieldName(String business,String system) {

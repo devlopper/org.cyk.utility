@@ -102,6 +102,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		return ClassHelper.getInstance().instanciateOne(Listener.class).getIdentifier(instance,type);
 	}
 	
+	public Object getIdentifier(final Object instance,ClassHelper.Listener.FieldName.ValueUsageType valueUsageType){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getIdentifier(instance,valueUsageType);
+	}
+	
 	public Object getIdentifier(final Object instance){
 		return ClassHelper.getInstance().instanciateOne(Listener.class).getIdentifier(instance);
 	}
@@ -945,6 +949,7 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		Object getFieldValue(Object instance,ClassHelper.Listener.FieldName fieldName);
 		
 		Object getIdentifier(Object instance,ClassHelper.Listener.IdentifierType identifierType);
+		Object getIdentifier(Object instance,ClassHelper.Listener.FieldName.ValueUsageType valueUsageType);
 		Object getIdentifier(Object instance);
 		String getName(Object instance);
 		java.util.Date getBirthDate(Object instance);
@@ -970,6 +975,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		
 		public static class Adapter extends AbstractHelper.Listener.Adapter.Default implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Object getIdentifier(Object instance, ValueUsageType valueUsageType) {
+				return null;
+			}
 			
 			@Override
 			public Object getIdentifiablePeriod(Object instance) {
@@ -1133,6 +1143,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				
 				//@SuppressWarnings("unchecked")
 				//public static Class<? extends Listener> DEFAULT_CLASS = (Class<? extends Listener>) ClassHelper.getInstance().getByName(Default.class);
+				
+				@Override
+				public Object getIdentifier(Object instance, ValueUsageType valueUsageType) {
+					return getFieldValue(instance, ClassHelper.Listener.FieldName.IDENTIFIER, valueUsageType);
+				}
 				
 				@Override
 				public Long getHierarchyNumberOfChildren(Object parent) {
