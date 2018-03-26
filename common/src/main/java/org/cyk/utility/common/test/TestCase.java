@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
@@ -52,10 +52,6 @@ public class TestCase extends AbstractBean implements Serializable {
 	/*public void assertBigDecimalEquals(String message, BigDecimal expected, BigDecimal actual) {
 		assertEquals(message, formatBigDecimal(expected),formatBigDecimal(actual));
 	}*/
-	
-	public void assertNull(String message, Object object) {
-		assertEquals(message, null, object);
-	}
 	
 	public String formatBigDecimal(BigDecimal value) {
 		return value == null ? null : value.toString();
@@ -228,5 +224,26 @@ public class TestCase extends AbstractBean implements Serializable {
 					i++;
 		}			
 	}
+	
+	/* Assertions */
+	
+	public AssertionHelper getAssertionHelper(){
+		return AssertionHelper.getInstance();
+	}
 
+	public void assertNull(String message, Object object) {
+		getAssertionHelper().assertNull(message, object);
+	}
+	
+	public void assertNull(Object object) {
+		assertNull("object is null", object);
+	}
+	
+	public void assertNotNull(String message, Object object) {
+		getAssertionHelper().assertNotNull(message, object);
+	}
+	
+	public void assertNotNull(Object object) {
+		assertNotNull("object is not null", object);
+	}
 }

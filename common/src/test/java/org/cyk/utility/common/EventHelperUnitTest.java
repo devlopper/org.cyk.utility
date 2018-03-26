@@ -7,7 +7,6 @@ import org.cyk.utility.common.helper.EventHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.TimeHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class EventHelperUnitTest extends AbstractUnitTest {
@@ -16,14 +15,6 @@ public class EventHelperUnitTest extends AbstractUnitTest {
 	
 	static {
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();
-		AssertionHelper.Listener.COLLECTION.add(new AssertionHelper.Listener.Adapter.Default(){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void assertEquals(String message, Object expected,Object actual) {
-				Assert.assertEquals(message, expected, actual);
-			}
-		});
 	}
 	
 	@Test

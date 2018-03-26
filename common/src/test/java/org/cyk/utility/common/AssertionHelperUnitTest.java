@@ -5,17 +5,45 @@ import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
 public class AssertionHelperUnitTest extends AbstractUnitTest {
-
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	@Test
-	public void equalsString(){
-		new AssertionHelper.Assertion.Equals.Adapter.Default<Object>(Object.class,"computation result","computation result").execute();
+	public void assertNull(){
+		AssertionHelper.getInstance().assertNull(null);
 	}
 	
 	@Test
-	public void equalsNull(){
-		new AssertionHelper.Assertion.Equals.Adapter.Default<Object>(Object.class,null,null).execute();
+	public void assertNotNull(){
+		AssertionHelper.getInstance().assertNotNull(new Object());
 	}
-
+	
+	@Test
+	public void assertTrue(){
+		AssertionHelper.getInstance().assertTrue(Boolean.TRUE);
+	}
+	
+	@Test
+	public void assertFalse(){
+		AssertionHelper.getInstance().assertFalse(Boolean.FALSE);
+	}
+	
+	@Test
+	public void assertEqualsString(){
+		AssertionHelper.getInstance().assertEquals("abc", "abc");
+	}
+	
+	@Test
+	public void assertNotEqualsString(){
+		AssertionHelper.getInstance().assertNotEquals("abc", "cba");
+	}
+	
+	@Test
+	public void assertEqualsNull(){
+		AssertionHelper.getInstance().assertEquals(null, null);
+	}
+	
+	@Test
+	public void assertNotEqualsNull(){
+		AssertionHelper.getInstance().assertNotEquals(null, "a");
+	}
 }

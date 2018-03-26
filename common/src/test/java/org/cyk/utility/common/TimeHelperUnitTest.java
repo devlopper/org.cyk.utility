@@ -27,14 +27,6 @@ public class TimeHelperUnitTest extends AbstractUnitTest {
 	
 	static {
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.initialize();
-		AssertionHelper.Listener.COLLECTION.add(new AssertionHelper.Listener.Adapter.Default(){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void assertEquals(String message, Object expected,Object actual) {
-				Assert.assertEquals(message, expected, actual);
-			}
-		});
 	}
 	
 	@Test

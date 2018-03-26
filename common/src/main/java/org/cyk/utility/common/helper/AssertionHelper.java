@@ -1,19 +1,19 @@
 package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.common.Constant;
 
 @Singleton
 public class AssertionHelper extends AbstractHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	static {
+		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.JUnit.class,Boolean.FALSE);
+	}
+	
 	private static AssertionHelper INSTANCE;
 	
 	public static AssertionHelper getInstance() {
@@ -28,25 +28,64 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 		super.initialisation();
 	}
 	
-	public AssertionHelper assertEquals(final String message,final Object expected,final Object actual){
-		ListenerHelper.Executor.Procedure<Listener> procedure = new ListenerHelper.Executor.Procedure.Adapter.Default<Listener>();
-		procedure.setResultMethod(new ListenerHelper.Executor.ResultMethod.Adapter.Default.Void<Listener>(){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void __execute__(Listener listener) {
-				listener.assertEquals(message, expected, actual);
-			}
-			
-		});
-		Collection<Listener> listeners = new ArrayList<>(); 
-		listeners.addAll(CollectionHelper.getInstance().isEmpty(Listener.COLLECTION) ? Arrays.asList(new Listener.Adapter.Default()) : Listener.COLLECTION);
-		procedure.setInput(listeners).execute();
+	public AssertionHelper assertNull(String message,Object object){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertNull(message, object);
+		return this;
+	}
+	
+	public AssertionHelper assertNull(Object object){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertNull(object);
+		return this;
+	}
+	
+	public AssertionHelper assertNotNull(String message,Object object){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertNotNull(message, object);
+		return this;
+	}
+	
+	public AssertionHelper assertNotNull(Object object){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertNotNull(object);
+		return this;
+	}
+	
+	public AssertionHelper assertTrue(String message,Boolean condition){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertTrue(message, condition);
+		return this;
+	}
+	
+	public AssertionHelper assertTrue(Boolean condition){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertTrue(condition);
+		return this;
+	}
+	
+	public AssertionHelper assertFalse(String message,Boolean condition){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertFalse(message, condition);
+		return this;
+	}
+	
+	public AssertionHelper assertFalse(Boolean condition){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertFalse(condition);
+		return this;
+	}
+	
+	public AssertionHelper assertEquals(String message,Object expected,Object actual){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertEquals(message, expected, actual);
 		return this;
 	}
 	
 	public AssertionHelper assertEquals(Object expected,Object actual){
-		return assertEquals(Constant.EMPTY_STRING, expected, actual);
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertEquals(expected, actual);
+		return this;
+	}
+	
+	public AssertionHelper assertNotEquals(String message,Object expected,Object actual){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertNotEquals(message, expected, actual);
+		return this;
+	}
+	
+	public AssertionHelper assertNotEquals(Object expected,Object actual){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertNotEquals(expected, actual);
+		return this;
 	}
 	
 	public AssertionHelper assertEquals(String expected,String actual,Boolean caseSensitive){
@@ -221,10 +260,23 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 
 	public static interface Listener {
 		
-		Collection<Listener> COLLECTION = new ArrayList<>();
+		void assertNull(String message,Object object);
+		void assertNull(Object object);
+		
+		void assertNotNull(String message,Object object);
+		void assertNotNull(Object object);
+		
+		void assertTrue(String message,Boolean condition);
+		void assertTrue(Boolean condition);
+		
+		void assertFalse(String message,Boolean condition);
+		void assertFalse(Boolean condition);
 		
 		void assertEquals(String message,Object expected,Object actual);
 		void assertEquals(Object expected,Object actual);
+		
+		void assertNotEquals(String message,Object expected,Object actual);
+		void assertNotEquals(Object expected,Object actual);
 		
 		/*
 		void assertCodeExists(Class<?> aClass,String code);
@@ -248,25 +300,95 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 		public static class Adapter implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			@Override
-			public void assertEquals(Object expected, Object actual) {}
-			
-			@Override
-			public void assertEquals(String message, Object expected, Object actual) {}
-			
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				@Override
-				public void assertEquals(String message, Object expected,Object actual) {
-					org.junit.Assert.assertEquals(message, expected, actual);
+				/**/
+				
+				public static class JUnit extends Listener.Adapter.Default implements Serializable {
+					private static final long serialVersionUID = 1L;
+				
+					@Override
+					public void assertNull(java.lang.String message, Object object) {
+						org.junit.Assert.assertNull(message, object);
+					}
+					
+					@Override
+					public void assertNull(Object object) {
+						org.junit.Assert.assertNull(object);
+					}
+					
+					@Override
+					public void assertNotNull(java.lang.String message, Object object) {
+						org.junit.Assert.assertNotNull(message, object);
+					}
+					
+					@Override
+					public void assertNotNull(Object object) {
+						org.junit.Assert.assertNotNull(object);
+					}
+					
+					@Override
+					public void assertTrue(java.lang.String message, Boolean condition) {
+						org.junit.Assert.assertTrue(message, condition);
+					}
+					
+					@Override
+					public void assertTrue(Boolean condition) {
+						org.junit.Assert.assertTrue(condition);
+					}
+					
+					@Override
+					public void assertFalse(java.lang.String message, Boolean condition) {
+						org.junit.Assert.assertFalse(message, condition);
+					}
+					
+					@Override
+					public void assertFalse(Boolean condition) {
+						org.junit.Assert.assertFalse(condition);
+					}
+					
+					@Override
+					public void assertEquals(String message, Object expected,Object actual) {
+						org.junit.Assert.assertEquals(message, expected, actual);
+					}
+					
+					@Override
+					public void assertEquals(Object expected, Object actual) {
+						org.junit.Assert.assertEquals(expected, actual);
+					}
+					
+					@Override
+					public void assertNotEquals(String message, Object expected,Object actual) {
+						org.junit.Assert.assertNotEquals(message, expected, actual);
+					}
+					
+					@Override
+					public void assertNotEquals(Object expected, Object actual) {
+						org.junit.Assert.assertNotEquals(expected, actual);
+					}
+					
 				}
 				
-				@Override
-				public void assertEquals(Object expected, Object actual) {
-					assertEquals(null,expected, actual);
-				}
 			}
+			
+			@Override public void assertNull(java.lang.String message, Object object) {ThrowableHelper.getInstance().throwNotYetImplemented();}
+			@Override public void assertNull(Object object) {ThrowableHelper.getInstance().throwNotYetImplemented();}
+			
+			@Override public void assertNotNull(java.lang.String message, Object object) {ThrowableHelper.getInstance().throwNotYetImplemented();}
+			@Override public void assertNotNull(Object object) {ThrowableHelper.getInstance().throwNotYetImplemented();}
+			
+			@Override public void assertTrue(java.lang.String message, Boolean condition) {ThrowableHelper.getInstance().throwNotYetImplemented();}
+			@Override public void assertTrue(Boolean condition) {ThrowableHelper.getInstance().throwNotYetImplemented();}
+			
+			@Override public void assertFalse(java.lang.String message, Boolean condition) {ThrowableHelper.getInstance().throwNotYetImplemented();}
+			@Override public void assertFalse(Boolean condition) {ThrowableHelper.getInstance().throwNotYetImplemented();}
+			
+			@Override public void assertEquals(String message, Object expected, Object actual) {ThrowableHelper.getInstance().throwNotYetImplemented();}
+			@Override public void assertEquals(Object expected, Object actual) {ThrowableHelper.getInstance().throwNotYetImplemented();}
+			
+			@Override public void assertNotEquals(String message, Object expected, Object actual) {ThrowableHelper.getInstance().throwNotYetImplemented();}
+			@Override public void assertNotEquals(Object expected, Object actual) {ThrowableHelper.getInstance().throwNotYetImplemented();}
 			
 		}
 		
