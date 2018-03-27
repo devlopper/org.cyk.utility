@@ -206,6 +206,29 @@ public class TestCase extends AbstractBean implements Serializable {
 		return TimeHelper.getInstance().getAfterNowByNumberOfMinute(numberOfMinutes);
 	}
 	
+	public Object getIdentifierWhereValueUsageTypeIsSystem(Object instance) {
+		return InstanceHelper.getInstance().getIdentifierWhereValueUsageTypeIsSystem(instance);
+	}
+	
+	public Object getIdentifierWhereValueUsageTypeIsBusiness(Object instance) {
+		return InstanceHelper.getInstance().getIdentifierWhereValueUsageTypeIsBusiness(instance);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T getByIdentifierWhereValueUsageTypeIsSystem(T object){
+		Object identifier = getIdentifierWhereValueUsageTypeIsSystem(object);
+		return (T) InstanceHelper.getInstance().getByIdentifier(object.getClass(), identifier, ClassHelper.Listener.IdentifierType.SYSTEM);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T getByIdentifierWhereValueUsageTypeIsBusiness(T object,Object identifier){
+		return (T) InstanceHelper.getInstance().getByIdentifier(object.getClass(), identifier, ClassHelper.Listener.IdentifierType.BUSINESS);
+	}
+	
+	public <T> T getByIdentifierWhereValueUsageTypeIsBusiness(T object){
+		return getByIdentifierWhereValueUsageTypeIsBusiness(object,getIdentifierWhereValueUsageTypeIsBusiness(object));
+	}
+	
 	/**/
 	
 	public void addObject(Object object){
