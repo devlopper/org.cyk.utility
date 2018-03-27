@@ -229,6 +229,10 @@ public class TestCase extends AbstractBean implements Serializable {
 		return getByIdentifierWhereValueUsageTypeIsBusiness(object,getIdentifierWhereValueUsageTypeIsBusiness(object));
 	}
 	
+	public <T> T getByIdentifierWhereValueUsageTypeIsBusiness(Class<T> aClass,Object identifier){
+		return (T) InstanceHelper.getInstance().getByIdentifier(aClass, identifier, ClassHelper.Listener.IdentifierType.BUSINESS);
+	}
+	
 	/**/
 	
 	public void addObject(Object object){

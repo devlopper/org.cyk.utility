@@ -160,6 +160,40 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 		protected Set<String> messages;
 		protected java.lang.Throwable cause;
 		
+		public Throwable addMessages(Collection<String> messages) {
+			if(CollectionHelper.getInstance().isNotEmpty(messages)) {
+				if(this.messages != null)
+					this.messages = new LinkedHashSet<>();
+				this.messages.addAll(messages);
+			}
+			return this;
+		}
+		
+		public Throwable addMessages(String...messages) {
+			if(ArrayHelper.getInstance().isNotEmpty(messages)) {
+				addMessages(Arrays.asList(messages));
+			}
+			return this;
+		}
+		
+		public Throwable setMessages(Collection<String> messages) {
+			if(CollectionHelper.getInstance().isNotEmpty(messages))
+				clearMessages().addMessages(messages);
+			return this;
+		}
+		
+		public Throwable setMessages(String...messages) {
+			if(ArrayHelper.getInstance().isNotEmpty(messages))
+				setMessages(Arrays.asList(messages));
+			return this;
+		}
+		
+		public Throwable clearMessages() {
+			if(CollectionHelper.getInstance().isNotEmpty(messages))
+				messages.clear();
+			return this;
+		}
+		
 		public static interface Builder<CAUSE extends java.lang.Throwable> extends org.cyk.utility.common.Builder.NullableInput<Throwable> {
 			
 			Class<CAUSE> getCauseClass();

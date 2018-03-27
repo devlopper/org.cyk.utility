@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
+import org.cyk.utility.common.helper.ThrowableHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ public class Try implements Serializable{
 	
 	private java.lang.Runnable runnable;
 	
+	private ThrowableHelper.Throwable expectedThrowable = new ThrowableHelper.Throwable();
 	private Object expectedThrowableIdentifier;
 	private Class<? extends Throwable> expectedThrowableClass;
 	private String expectedThrowableMessage;
@@ -65,4 +67,13 @@ public class Try implements Serializable{
 
 	/**/
 
+	public Try setExpectedThrowableIdentifier(Object identifier) {
+		expectedThrowable.setIdentifier(identifier);
+		return this;
+	}
+	
+	public Try setExpectedThrowableMessage(String message) {
+		expectedThrowable.getMessages().clear();
+		return this;
+	}
 }
