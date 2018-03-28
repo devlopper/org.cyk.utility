@@ -95,6 +95,16 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 		}
 		return assertEquals(expected,actual);
 	}
+	
+	public AssertionHelper assertEqualsNumber(String message,Object expected,Object actual){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertEqualsNumber(message, expected, actual);
+		return this;
+	}
+	
+	public AssertionHelper assertEqualsNumber(Object expected,Object actual){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertEqualsNumber(expected, actual);
+		return this;
+	}
 	/**/
 	
 	public static interface Assertion<INPUT> extends org.cyk.utility.common.Action<INPUT,java.lang.Object>  {
@@ -278,6 +288,9 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 		void assertNotEquals(String message,Object expected,Object actual);
 		void assertNotEquals(Object expected,Object actual);
 		
+		void assertEqualsNumber(String message,Object expected,Object actual);
+		void assertEqualsNumber(Object expected,Object actual);
+		
 		/*
 		void assertCodeExists(Class<?> aClass,String code);
 		
@@ -370,6 +383,15 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 					
 				}
 				
+				@Override
+				public void assertEqualsNumber(java.lang.String message, Object expected, Object actual) {
+					assertEquals(message, NumberHelper.getInstance().get(Double.class, expected), NumberHelper.getInstance().get(Double.class, actual));
+				}
+				
+				@Override
+				public void assertEqualsNumber(Object expected, Object actual) {
+					assertEqualsNumber(null,expected, actual);
+				}
 			}
 			
 			@Override public void assertNull(java.lang.String message, Object object) {ThrowableHelper.getInstance().throwNotYetImplemented();}
@@ -390,6 +412,8 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 			@Override public void assertNotEquals(String message, Object expected, Object actual) {ThrowableHelper.getInstance().throwNotYetImplemented();}
 			@Override public void assertNotEquals(Object expected, Object actual) {ThrowableHelper.getInstance().throwNotYetImplemented();}
 			
+			@Override public void assertEqualsNumber(java.lang.String message, Object expected, Object actual) {}
+			@Override public void assertEqualsNumber(Object expected, Object actual) {}
 		}
 		
 	}

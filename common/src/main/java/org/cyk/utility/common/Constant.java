@@ -10,14 +10,17 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.helper.FieldHelper;
 import org.joda.time.DateTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 public interface Constant {
 	
@@ -315,5 +318,48 @@ public interface Constant {
 		
 		public static ApplicationType DEFAULT = ApplicationType.CLIENT_SERVER;
 	
+	}
+
+	/**/
+	
+	public static class Code implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		public static String SEPARATOR = Constant.EMPTY_STRING;
+		
+		public static String generateFromString(String string){
+			return StringUtils.remove(string, Constant.CHARACTER_SPACE);
+		}
+		
+		public static String generate(Object[] objects,Object separator){
+			Collection<String> collection = new ArrayList<>();
+			for(Object object : objects)
+				if(object instanceof Class<?>)
+					collection.add(((Class<?>)object).getSimpleName().toUpperCase());
+				else
+					collection.add(object.toString());
+			return StringUtils.join(collection,SEPARATOR);
+		}
+		
+		public static String generate(Object[] objects){
+			return generate(objects, SEPARATOR);
+		}
+		
+		public static String generate(String masterCode,String detailCode,Object separator){
+			return generate(new Object[]{masterCode,detailCode}, separator);
+		}
+		
+		/*public static String getRelativeCode(AbstractCollection<?> collection,String code){
+			return StringUtils.isBlank(collection.getItemCodeSeparator()) ? code : StringUtils.split(code,collection.getItemCodeSeparator())[1];
+		}
+		
+		public static String getRelativeCode(AbstractCollectionItem<?> item){
+			return getRelativeCode((AbstractCollection<?>) item.getCollection(), item.getCode());
+		}*/
+		
+		public static String generateFieldNotNull(Class<?> aClass,String...fieldNames){
+			return generate(new Object[]{aClass,FieldHelper.getInstance().buildPath(fieldNames),NotNull.class});
+		}
+		
 	}
 }

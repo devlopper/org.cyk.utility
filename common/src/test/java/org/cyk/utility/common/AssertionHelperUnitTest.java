@@ -38,6 +38,17 @@ public class AssertionHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void assertEqualsNumner(){
+		AssertionHelper.getInstance().assertEqualsNumber("1", "1");
+		AssertionHelper.getInstance().assertEqualsNumber("1.0", "1");
+		AssertionHelper.getInstance().assertEqualsNumber("1", "1.0");
+		AssertionHelper.getInstance().assertEqualsNumber(1, "1");
+		AssertionHelper.getInstance().assertEqualsNumber("1", 1);
+		AssertionHelper.getInstance().assertEqualsNumber(1.0, "1");
+		AssertionHelper.getInstance().assertEqualsNumber("1", 1.0);
+	}
+	
+	@Test
 	public void assertEqualsNull(){
 		AssertionHelper.getInstance().assertEquals(null, null);
 	}

@@ -86,6 +86,10 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		return ClassHelper.getInstance().instanciateOne(Listener.class).count(aClass,dataReadConfiguration);
 	}
 	
+	public <T> Long count(Class<T> aClass){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).count(aClass);
+	}
+	
 	public <T> Collection<T> get(Class<T> aClass,FilterHelper.Filter<T> filter,DataReadConfiguration dataReadConfiguration){
 		return ClassHelper.getInstance().instanciateOne(Listener.class).get(aClass,filter,dataReadConfiguration);
 	}
@@ -941,8 +945,9 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		<T> Collection<T> get(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
 		<T> Collection<T> get(Class<T> aClass,FilterHelper.Filter<T> filter,DataReadConfiguration dataReadConfiguration);
 		
-		<T> Long count(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
 		<T> Long count(Class<T> aClass,FilterHelper.Filter<T> filter,DataReadConfiguration dataReadConfiguration);
+		<T> Long count(Class<T> aClass,DataReadConfiguration dataReadConfiguration);
+		<T> Long count(Class<T> aClass);
 		
 		<T> Collection<T> getHierarchyRoots(Class<T> aClass);
 		<T> Collection<T> getHierarchyChildren(Object parent);
@@ -1018,6 +1023,11 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 			
 			@Override
 			public <T> Long count(Class<T> aClass, Filter<T> filter, DataReadConfiguration dataReadConfiguration) {
+				return null;
+			}
+			
+			@Override
+			public <T> Long count(Class<T> aClass) {
 				return null;
 			}
 			

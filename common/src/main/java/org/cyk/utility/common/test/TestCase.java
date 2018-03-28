@@ -3,6 +3,9 @@ package org.cyk.utility.common.test;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -10,14 +13,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.RandomHelper;
+import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.helper.ThrowableHelper;
 import org.cyk.utility.common.helper.TimeHelper;
-import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 
 import lombok.Getter;
@@ -35,18 +43,240 @@ public class TestCase extends AbstractBean implements Serializable {
 	protected Map<Class<?>,Long> countAllMap = new HashMap<>();
 	protected Class<? extends java.lang.Throwable> defaultThrowableClass;
 	
-	/* Assertions */
-	
-	public void assertThat(String reason,Boolean assertion){
-		MatcherAssert.assertThat(reason, assertion);
+	public TestCase prepare(){
+		addIdentifiableClasses();
+		System.out.println("Preparing test case "+name+". #Classes="+classes.size());
+		countAll(classes);
+		return this;
 	}
 	
-	public void assertEquals(String message, Object expected, Object actual){
-		Assert.assertEquals(message, expected, actual);
+	public void clean(){
+		if(Boolean.TRUE.equals(cleaned))
+			return;
+		System.out.println(StringUtils.repeat("#", 5)+" CLEAN "+StringUtils.repeat("#", 5));
+		if(objects!=null){
+			Collections.reverse(objects);
+			while(!objects.isEmpty())
+				delete(objects.iterator().next());	
+		}
+		cleaned = Boolean.TRUE;
+		assertCountAll(classes);
 	}
 	
-	public void assertEquals(Object expected, Object actual){
-		Assert.assertEquals(expected, actual);
+	/*  Act */
+	
+	public <T> T act(final Constant.Action action,final T object,ThrowableHelper.Throwable expectedThrowable){
+		T result = object;
+		if(expectedThrowable == null) {
+			Object identifier = getIdentifierWhereValueUsageTypeIsBusiness(object);
+			if(identifier==null){
+				
+			}else{
+				if( StringHelper.getInstance().isNotBlank((CharSequence) identifier) ){
+					if(Constant.Action.CREATE.equals(action))
+						assertNull("Object to create with code <<"+identifier+">> already exist",getByIdentifierWhereValueUsageTypeIsBusiness(object,identifier));
+					else
+						;//assertNotNull("Object to "+action+" with code <<"+identifier+">> not found",getByIdentifierWhereValueUsageTypeIsBusiness(object,identifier));
+				}
+			}
+			InstanceHelper.getInstance().act(action, object);
+			result = getByIdentifierWhereValueUsageTypeIsSystem(object);
+    		if(Constant.Action.DELETE.equals(action)){
+    			assertNull(getByIdentifierWhereValueUsageTypeIsBusiness(object,identifier));
+    			remove(object);
+    		}else{
+    			assertNotNull(object);
+    			if(Constant.Action.CREATE.equals(action))
+	    			add(result);
+    			else if(Constant.Action.READ.equals(action))
+    				;
+    		}
+		}else {
+			new org.cyk.utility.common.test.Try(new Runnable() {
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected void __run__() throws Throwable {
+					InstanceHelper.getInstance().act(action, object);
+				}
+			}).setExpectedThrowable(expectedThrowable).execute();
+		}
+		return result;
+	}
+	
+	public <T> T act(final Constant.Action action,final T object,Object expectedThrowableIdentifier,String expectedThrowableMessage){
+		return act(action, object, new ThrowableHelper.Throwable().setIdentifier(expectedThrowableIdentifier).setMessages(expectedThrowableMessage));
+	}
+	
+	public <T> T act(final Constant.Action action,final T object,Object expectedThrowableIdentifier){
+		return act(action, object, expectedThrowableIdentifier,null);
+	}
+	
+	public <T> T act(final Constant.Action action,final T object){
+		return act(action, object,null);
+	}
+	
+	/* Create */
+	
+	public <T> T create(final T object,ThrowableHelper.Throwable expectedThrowable){
+		return act(Constant.Action.CREATE, object, expectedThrowable);
+	}
+	
+	public <T> T create(final T object,Object expectedThrowableIdentifier,String expectedThrowableMessage){
+		return act(Constant.Action.CREATE, object, expectedThrowableIdentifier, expectedThrowableMessage);
+	}
+	
+	public <T> T create(final T object,Object expectedThrowableIdentifier){
+		return act(Constant.Action.CREATE,object, expectedThrowableIdentifier);
+	}
+	
+	public <T> T create(final T object){
+		return act(Constant.Action.CREATE,object);
+	}
+	
+	/* Read */
+	
+	public <T> T read(Class<T> aClass,Object identifier,ThrowableHelper.Throwable expectedThrowable){
+		return act(Constant.Action.READ, getByIdentifierWhereValueUsageTypeIsBusiness(aClass, identifier), expectedThrowable);
+	}
+	
+	public <T> T read(Class<T> aClass,Object identifier,Object expectedThrowableIdentifier,String expectedThrowableMessage){
+		return act(Constant.Action.READ, getByIdentifierWhereValueUsageTypeIsBusiness(aClass, identifier), expectedThrowableIdentifier, expectedThrowableMessage);
+	}
+	
+	public <T> T read(Class<T> aClass,Object identifier,Object expectedThrowableIdentifier){
+		return act(Constant.Action.READ,getByIdentifierWhereValueUsageTypeIsBusiness(aClass, identifier), expectedThrowableIdentifier);
+	}
+	
+	public <T> T read(Class<T> aClass,Object identifier){
+		return act(Constant.Action.READ,getByIdentifierWhereValueUsageTypeIsBusiness(aClass, identifier));
+	}
+	
+	public <T> T readByIdentifiers(Class<T> aClass,Object parentIdentifier,Object childIdentifier,Object identifiersSeparator){
+		return read(aClass, Constant.Code.generate(new Object[]{parentIdentifier,childIdentifier}, identifiersSeparator));
+	}
+	
+	public <T> T readByIdentifiers(Class<T> aClass,Object parentIdentifier,Object childIdentifier){
+		return read(aClass, Constant.Code.generate(new Object[]{parentIdentifier,childIdentifier}));
+	}
+	
+	/* Update */
+	
+	public <T> T update(final T object,ThrowableHelper.Throwable expectedThrowable){
+		return act(Constant.Action.UPDATE, object, expectedThrowable);
+	}
+	
+	public <T> T update(final T object,Object expectedThrowableIdentifier,String expectedThrowableMessage){
+		return act(Constant.Action.UPDATE, object, expectedThrowableIdentifier, expectedThrowableMessage);
+	}
+	
+	public <T> T update(final T object,Object expectedThrowableIdentifier){
+		return act(Constant.Action.UPDATE,object, expectedThrowableIdentifier);
+	}
+	
+	public <T> T update(final T object){
+		return act(Constant.Action.UPDATE,object);
+	}
+	
+	/* Delete */
+	
+	public <T> T delete(final T object,ThrowableHelper.Throwable expectedThrowable){
+		return act(Constant.Action.DELETE, object, expectedThrowable);
+	}
+	
+	public <T> T delete(final T object,Object expectedThrowableIdentifier,String expectedThrowableMessage){
+		return act(Constant.Action.DELETE, object, expectedThrowableIdentifier, expectedThrowableMessage);
+	}
+	
+	public <T> T delete(final T object,Object expectedThrowableIdentifier){
+		return act(Constant.Action.DELETE,object, expectedThrowableIdentifier);
+	}
+	
+	public <T> T delete(final T object){
+		return act(Constant.Action.DELETE,object);
+	}
+	
+	public <T> T deleteByCode(final Class<T> aClass,final String code){
+		T object = (T) getByIdentifierWhereValueUsageTypeIsBusiness(aClass, code);
+		assertNotNull("Object to delete not found", object);
+		delete(object);
+		object = (T) getByIdentifierWhereValueUsageTypeIsBusiness(aClass, code); 
+		assertNull("Object not deleted", object);
+		return object;
+	}
+	
+	/**/
+	
+	public void add(Object object){
+		if(objects==null)
+			objects = new ArrayList<>();
+		objects.add(object);
+	}
+	
+	public void remove(Object object){
+		if(objects!=null){
+			for(int i = 0 ; i< objects.size() ; )
+				if(objects.get(i).equals(object)){
+					objects.remove(i);
+					break;
+				}else
+					i++;
+		}				
+	}
+	
+	public TestCase addClasses(Class<?>...classes){
+		if(classes!=null){
+			Collection<Class<?>> collection = new ArrayList<>();
+			for(@SuppressWarnings("rawtypes") Class aClass : classes)
+				collection.add(aClass);
+			addClasses(collection);
+		}
+		return this;
+	}
+	
+	public TestCase addClasses(Collection<Class<?>> classes){
+		this.classes.addAll(classes);
+		return this;
+	}
+	
+	public TestCase addIdentifiableClasses(){		
+		addClasses(ClassHelper.getInstance().getAnnotatedWithEntity());	
+		return this;
+	}
+	
+	/* Count */
+	
+	protected Long getCountAll(Class<?> aClass){
+		return InstanceHelper.getInstance().count(aClass);
+	}
+	
+	public void countAll(Collection<Class<?>> classes){
+		for(@SuppressWarnings("rawtypes") Class aClass : classes){
+			countAllMap.put((Class<?>) aClass, getCountAll(aClass));	
+		}
+	}
+	
+	public TestCase countAll(Class<?>...classes){
+		if(classes!=null)
+			countAll(Arrays.asList(classes));
+		return this;
+	}
+	
+	public TestCase assertCountAll(@SuppressWarnings("rawtypes") Class aClass,Integer increment){
+		assertEquals(aClass.getSimpleName()+" count all is not correct", new Long(commonUtils.getValueIfNotNullElseDefault(countAllMap.get(aClass),0l)+increment)
+				, getCountAll(aClass));
+		return this;
+	}
+	
+	public TestCase assertCountAll(Collection<Class<?>> classes){
+		for(Class<?> aClass : classes)
+			assertCountAll(aClass,0);
+		return this;
+	}
+	
+	public TestCase assertCountAll(Class<?>...classes){
+		if(classes!=null)
+			assertCountAll(Arrays.asList(classes));
+		return this;
 	}
 	
 	/*public void assertBigDecimalEquals(String message, BigDecimal expected, BigDecimal actual) {
@@ -93,96 +323,6 @@ public class TestCase extends AbstractBean implements Serializable {
 		InstanceHelper.getInstance().computeChanges(instance);
 		return this;
 	}
-	
-	/*public <T> T act(final Constant.Action action,final T object,Object expectedThrowableIdentifier,String expectedThrowableMessage){
-		if(expectedThrowableMessage!=null){
-    		new Try(new Runnable() {
-				private static final long serialVersionUID = 1L;
-				@Override
-				protected void __run__() throws Throwable {
-					InstanceHelper.getInstance().act(action, object);
-				}
-			}).setExpectedThrowableIdentifier(expectedThrowableIdentifier).setExpectedThrowableMessage(expectedThrowableMessage).execute();
-    	}else{
-    		InstanceHelper.getInstance().getByIdentifier(object.getClass(), InstanceHelper.getInstance().getFieldValue(object, ClassHelper.Listener.FieldName.IDENTIFIER
-    				, ClassHelper.Listener.FieldName.ValueUsageType.SYSTEM), ClassHelper.Listener.IdentifierType.SYSTEM);
-    		//assertThat("Created", inject(PersistenceInterfaceLocator.class).injectTypedByObject(identifiable).read(identifiable.getIdentifier())!=null);
-    	}
-		return object;
-	}
-	
-	public <T> T create(final T object,Object expectedThrowableIdentifier,String expectedThrowableMessage){
-		return act(Constant.Action.CREATE, object,expectedThrowableIdentifier, expectedThrowableMessage);
-	}
-	public <T> T create(final T identifiable){
-		return create(identifiable,null, null);
-	}
-	
-	public <T> T read(final Class<T> aClass,final String code,Object expectedThrowableIdentifier,String expectedThrowableMessage){
-		T read = null;
-		if(expectedThrowableMessage!=null){
-    		new Try(expectedThrowableMessage){ 
-    			private static final long serialVersionUID = -8176804174113453706L;
-    			@Override protected void code() {inject(PersistenceInterfaceLocator.class).injectTyped(aClass).read(code);}
-    		}.execute();
-    	}else{
-    		read = inject(PersistenceInterfaceLocator.class).injectTyped(aClass).read(code);
-    		assertThat("Read code "+code+" is null", read!=null);
-    	}
-		return read;
-		
-		return null;
-	}
-	public <T> T read(final Class<T> aClass,final String code){
-		return read(aClass,code,null, null);
-	}
-	
-	public <T> T update(final T identifiable,Object expectedThrowableIdentifier,String expectedThrowableMessage){
-		if(expectedThrowableMessage!=null){
-    		new Try(expectedThrowableMessage){ 
-    			private static final long serialVersionUID = -8176804174113453706L;
-    			@Override protected void code() {inject(GenericBusiness.class).update(identifiable);}
-    		}.execute();
-    	}else{
-    		inject(GenericBusiness.class).update(identifiable);
-    		assertThat("Updated", inject(PersistenceInterfaceLocator.class).injectTypedByObject(identifiable).read(identifiable.getIdentifier())!=null);
-    	}
-		return identifiable;
-		
-		return null;
-	}
-	public <T> T update(T identifiable){
-		return (T) update(identifiable,null,null);
-	}
-	
-	public <T> T delete(final T identifiable,Object expectedThrowableIdentifier,String expectedThrowableMessage){
-		if(expectedThrowableMessage!=null){
-    		new Try(expectedThrowableMessage){ 
-    			private static final long serialVersionUID = -8176804174113453706L;
-    			@Override protected void code() {inject(GenericBusiness.class).delete(identifiable);}
-    		}.execute();
-    	}else{
-    		inject(GenericBusiness.class).delete(identifiable);
-    		assertThat("Deleted", inject(PersistenceInterfaceLocator.class).injectTypedByObject(identifiable).read(identifiable.getIdentifier())==null);
-    	}
-		return identifiable;
-		
-		return null;
-	}
-	public <T> T delete(T identifiable){
-		return delete(identifiable,null,null);
-	}
-	public <T> T delete(Class<T> aClass,String code,Object expectedThrowableIdentifier,String expectedThrowableMessage){
-		T identifiable = inject(PersistenceInterfaceLocator.class).injectTyped(aClass).read(code);
-		assertThat("Found "+aClass.getSimpleName()+" with code "+code+" to delete", identifiable!=null);
-		return delete(identifiable,expectedThrowableMessage);
-		
-		return null;
-	}
-	public <T> T delete(Class<T> aClass,String code){
-		return delete(aClass,code,null,null);
-	}*/
-	
 	
 	/* shortcuts */
 	
@@ -252,6 +392,28 @@ public class TestCase extends AbstractBean implements Serializable {
 		}			
 	}
 	
+	public TestCase deleteAll(Collection<Class<?>> classes){
+		new CollectionHelper.Iterator.Adapter.Default<Class<?>>((Collection<Class<?>>) classes){
+			private static final long serialVersionUID = 1L;
+			protected void __executeForEach__(java.lang.Class<?> aClass) {
+				Collection<?> identifiables = InstanceHelper.getInstance().get(aClass);
+				deleteInstances(identifiables);
+				//inject(GenericBusiness.class).delete(identifiables);
+			}
+		}.execute();
+		return this;
+	}
+	
+	public void deleteInstances(Collection<?> instances){
+		
+	}
+	
+	public TestCase deleteAll(Class<?>...classes){
+		if(ArrayHelper.getInstance().isNotEmpty(classes))
+			deleteAll(Arrays.asList(classes));
+		return this;
+	}
+	
 	/* Assertions */
 	
 	public AssertionHelper getAssertionHelper(){
@@ -272,5 +434,83 @@ public class TestCase extends AbstractBean implements Serializable {
 	
 	public void assertNotNull(Object object) {
 		assertNotNull("object is not null", object);
+	}
+	
+	public void assertTrue(String message, Boolean condition) {
+		getAssertionHelper().assertTrue(message, condition);
+	}
+	
+	public void assertTrue(Boolean condition) {
+		assertTrue("it is false", condition);
+	}
+	
+	public void assertFalse(String message, Boolean condition) {
+		getAssertionHelper().assertFalse(message, condition);
+	}
+	
+	public void assertFalse(Boolean condition) {
+		assertTrue("it is true", condition);
+	}
+	
+	public void assertEquals(String message, Object expected,Object actual) {
+		getAssertionHelper().assertEquals(message, expected,actual);
+	}
+	
+	public void assertEquals(Object expected,Object actual) {
+		getAssertionHelper().assertEquals(expected,actual);
+	}
+	
+	public void assertEqualsNumber(String message, Object expected,Object actual) {
+		getAssertionHelper().assertEqualsNumber(message, expected,actual);
+	}
+	
+	public void assertEqualsNumber(Object expected,Object actual) {
+		getAssertionHelper().assertEqualsNumber(expected,actual);
+	}
+	
+	public TestCase assertNullByBusinessIdentifier(Class<?> aClass,Collection<Object> identifiers){
+		if(CollectionHelper.getInstance().isNotEmpty(identifiers))
+			for(Object identifier : identifiers)
+				assertNull(aClass+" with business identifier "+identifier+" is not null", getByIdentifierWhereValueUsageTypeIsBusiness(aClass, identifier));
+		return this;
+	}
+	
+	public TestCase assertNullByBusinessIdentifier(Class<?> aClass,Object...identifiers){
+		if(ArrayHelper.getInstance().isNotEmpty(identifiers))
+			assertNullByBusinessIdentifier(aClass, Arrays.asList(identifiers));
+		return this;
+	}
+	
+	public TestCase assertNotNullByBusinessIdentifier(Class<?> aClass,Collection<Object> identifiers){
+		if(CollectionHelper.getInstance().isNotEmpty(identifiers))
+			for(Object identifier : identifiers)
+				assertNotNull(aClass+" with business identifier "+identifier+" is null", getByIdentifierWhereValueUsageTypeIsBusiness(aClass, identifier));
+		return this;
+	}
+	
+	public TestCase assertNotNullByBusinessIdentifier(Class<?> aClass,Object...identifiers){
+		if(ArrayHelper.getInstance().isNotEmpty(identifiers))
+			assertNotNullByBusinessIdentifier(aClass, Arrays.asList(identifiers));
+		return this;
+	}
+	
+	public void assertList(List<?> collection,List<?> expected){
+		assertEquals("collection size not equals", CollectionHelper.getInstance().getSize(expected), CollectionHelper.getInstance().getSize(collection));
+		if(collection!=null)
+			for(Integer index = 0 ; index < collection.size() ; index++){
+				assertEquals("element at position "+index+" not equals", expected.get(index.intValue()), collection.get(index.intValue()));
+			}
+	}
+	
+	public void assertFieldValueEquals(Class<?> aClass,String code,Object...objects){
+		assertFieldValueEquals(read(aClass, code), objects);
+	}
+	
+	public void assertFieldValueEquals(Object instance,Object...objects){
+		if(ArrayHelper.getInstance().isNotEmpty(objects)){
+			for(Integer index = 0 ; index < objects.length - 2; index = index + 2){
+				assertEquals("not equal", objects[index+1], FieldHelper.getInstance().read(instance, (String)objects[index]));
+			}
+		}
 	}
 }
