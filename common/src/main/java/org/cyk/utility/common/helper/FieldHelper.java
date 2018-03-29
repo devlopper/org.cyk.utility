@@ -76,7 +76,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	public String buildPath(String...fieldNames){
 		StringBuilder stringBuilder = new StringBuilder();
 		if(ArrayHelper.getInstance().isNotEmpty(fieldNames)){
-			Collection<String> strings = new ArrayList<String>();
+			java.util.Collection<String> strings = new ArrayList<String>();
 			for(String index : fieldNames)
 				if(StringHelper.getInstance().isNotBlank(index))
 					strings.add(index);
@@ -111,7 +111,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return Arrays.asList(StringUtils.split(buildPath(fieldPaths), FIELD_NAME_SEPARATOR));
 	}
 	
-	public String getVariableNameFromNames(Collection<String> names){
+	public String getVariableNameFromNames(java.util.Collection<String> names){
 		final StringBuilder stringBuilder = new StringBuilder();
 		new CollectionHelper.Iterator.Adapter.Default<String>(names){
 			private static final long serialVersionUID = 1L;
@@ -283,7 +283,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return null;
 	}
 	
-	private Collection<java.lang.reflect.Field> __getAllFields__(Collection<java.lang.reflect.Field> fields,Class<?> type,String token,Location location,Boolean recursive) {
+	private java.util.Collection<java.lang.reflect.Field> __getAllFields__(Collection<java.lang.reflect.Field> fields,Class<?> type,String token,Location location,Boolean recursive) {
 		//super class fields first
 		/*if(recursive==null || Boolean.TRUE.equals(recursive)){
 			if (type.getSuperclass() != null) {
@@ -301,7 +301,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		//return fields;
 	}
 	
-	public Collection<java.lang.reflect.Field> get(Class<?> type,String name,Location location,Boolean recursive) {
+	public java.util.Collection<java.lang.reflect.Field> get(Class<?> type,String name,Location location,Boolean recursive) {
 		Collection<java.lang.reflect.Field> fields = new ArrayList<>();
 		if(Boolean.TRUE.equals(ClassRepository.ENABLED)){
 			for(java.lang.reflect.Field field : ClassRepository.getInstance().get(type).getFields())
@@ -314,15 +314,15 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return fields;
 	}
 	
-	public Collection<java.lang.reflect.Field> get(Class<?> type,String name,Location location) {
+	public java.util.Collection<java.lang.reflect.Field> get(Class<?> type,String name,Location location) {
 		return get(type,name,location,Boolean.TRUE);
 	}
 	
-	public Collection<java.lang.reflect.Field> get(Class<?> type) {
+	public java.util.Collection<java.lang.reflect.Field> get(Class<?> type) {
 		return get(type,null,null);
 	}
 	
-	public Collection<java.lang.reflect.Field> get(Class<?> type,Boolean recursive) {
+	public java.util.Collection<java.lang.reflect.Field> get(Class<?> type,Boolean recursive) {
 		return get(type,null,null,recursive);
 	}
 	
@@ -346,7 +346,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return null;
 	}
 	
-	public Collection<java.lang.reflect.Field> get(Class<?> type,Collection<Class<? extends Annotation>> annotationClasses) {
+	public java.util.Collection<java.lang.reflect.Field> get(Class<?> type,Collection<Class<? extends Annotation>> annotationClasses) {
 		Collection<java.lang.reflect.Field> fields = new ArrayList<>();
 		for(java.lang.reflect.Field field : get(type))
 			if(annotationClasses==null || annotationClasses.isEmpty())
@@ -360,13 +360,13 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return fields;
 	}
 	
-	public Collection<java.lang.reflect.Field> get(Class<?> type,Class<? extends Annotation> annotationClass) {
+	public java.util.Collection<java.lang.reflect.Field> get(Class<?> type,Class<? extends Annotation> annotationClass) {
 		Collection<Class<? extends Annotation>> collection = new ArrayList<>();
 		collection.add(annotationClass);
 		return get(type,collection);
 	}
 	
-	public Collection<java.lang.reflect.Field> getByTypes(Class<?> type,Collection<Class<?>> classes) {
+	public java.util.Collection<java.lang.reflect.Field> getByTypes(Class<?> type,Collection<Class<?>> classes) {
 		Collection<java.lang.reflect.Field> fields = new ArrayList<>();
 		for(java.lang.reflect.Field field : get(type))
 			if(CollectionHelper.getInstance().isNotEmpty(classes))
@@ -375,13 +375,13 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return fields;
 	}
 	
-	public Collection<java.lang.reflect.Field> getByTypes(Class<?> type,Class<?>...classes) {
+	public java.util.Collection<java.lang.reflect.Field> getByTypes(Class<?> type,Class<?>...classes) {
 		if(ArrayHelper.getInstance().isEmpty(classes))
 			return null;
 		return getByTypes(type, Arrays.asList(classes));
 	}
 	
-	public Collection<java.lang.reflect.Field> getByTypeIdentified(Class<?> type) {
+	public java.util.Collection<java.lang.reflect.Field> getByTypeIdentified(Class<?> type) {
 		Collection<java.lang.reflect.Field> fields = new ArrayList<>();
 		for(java.lang.reflect.Field field : get(type)){
 			if(ClassHelper.getInstance().isIdentified(getType(type, field)))
@@ -535,7 +535,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return null;
 	}
 	
-	public Collection<String> getNamesWhereReferencedByStaticField(Class<?> aClass,Boolean recursive){
+	public java.util.Collection<String> getNamesWhereReferencedByStaticField(Class<?> aClass,Boolean recursive){
 		Collection<java.lang.reflect.Field> fields = FieldHelper.getInstance().get(aClass, Constant.FIELD_, Location.START,recursive);
 		Collection<String> names = new ArrayList<>();
 		for(java.lang.reflect.Field field : fields)
@@ -548,7 +548,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		return StringHelper.getInstance().removeBlank(names);
 	}
 	
-	public Collection<String> getNamesWhereReferencedByStaticField(Class<?> aClass){
+	public java.util.Collection<String> getNamesWhereReferencedByStaticField(Class<?> aClass){
 		return getNamesWhereReferencedByStaticField(aClass,Boolean.TRUE);
 	}
 	
@@ -596,7 +596,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 				}
 				
 				@Override
-				protected Collection<java.lang.reflect.Field> getTypes(Class<?> clazz) {
+				protected java.util.Collection<java.lang.reflect.Field> getTypes(Class<?> clazz) {
 					return Arrays.asList(clazz.getDeclaredFields());
 				}
 				
@@ -611,7 +611,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	public static class Field implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
-		private static final Collection<Field> COLLECTION = new HashSet<>();
+		private static final java.util.Collection<Field> COLLECTION = new HashSet<>();
 		
 		private Class<?> clazz;
 		private String name;
@@ -665,7 +665,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			return field == null ? null : field.getConstraints().getIsComputedByUser();
 		}
 		
-		public static Collection<Field> get(Class<?> clazz){
+		public static java.util.Collection<Field> get(Class<?> clazz){
 			Collection<Field> collection = new ArrayList<FieldHelper.Field>();
 			for(Field index : COLLECTION)
 				if(index.clazz.equals(clazz)){
@@ -678,7 +678,46 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			COLLECTION.clear();
 		}
 		
-	}
+		/**/
+		
+		@Getter @Setter @Accessors(chain=true)
+		public static class Value implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			private Field field;
+			private Object value;
+			
+			/**/
+			
+			@Getter @Setter @Accessors(chain=true)
+			public static class Collection implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				private java.util.Collection<Value> values;
+				
+				public Collection add(java.util.Collection<Field.Value> fields) {
+					if(CollectionHelper.getInstance().isNotEmpty(fields)) {
+						if(this.values == null)
+							this.values = new ArrayList<>();
+						this.values.addAll(fields);
+					}
+					return this;
+				}
+				
+				public Collection add(Field.Value...fields) {
+					if(ArrayHelper.getInstance().isNotEmpty(fields)) {
+						add(Arrays.asList(fields));
+					}
+					return this;
+				}
+				
+				public Collection addValue(Class<?> aClass,Object value,String...fieldNames) {
+					add(new Value().setField(Field.get(aClass, fieldNames)).setValue(value));
+					return this;
+				}
+			}
+		}
+	}	
 	
 	@Getter @Setter @Accessors(chain=true)
 	public static class Constraints implements Serializable {

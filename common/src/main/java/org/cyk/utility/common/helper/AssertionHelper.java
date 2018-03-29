@@ -105,6 +105,22 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 		ClassHelper.getInstance().instanciateOne(Listener.class).assertEqualsNumber(expected, actual);
 		return this;
 	}
+	
+	/**/
+	
+	public AssertionHelper assertEqualsFieldValues(Object object,FieldHelper.Field.Value.Collection expectedFieldValues){
+		for(FieldHelper.Field.Value fieldValue : expectedFieldValues.getValues()){
+			Object expected = fieldValue.getValue();
+			Object actual = FieldHelper.getInstance().read(object, fieldValue.getField().getName());
+			String message = "value of field "+fieldValue.getField().getName()+"("+actual+") is not equal to "+expected;
+			if(ClassHelper.getInstance().isNumber(fieldValue.getField().getJavaField().getType()))
+				assertEqualsNumber(message, expected, actual);
+			else
+				assertEquals(message, expected, actual);			
+		}
+		return this;	
+	}
+	
 	/**/
 	
 	public static interface Assertion<INPUT> extends org.cyk.utility.common.Action<INPUT,java.lang.Object>  {

@@ -420,52 +420,69 @@ public class TestCase extends AbstractBean implements Serializable {
 		return AssertionHelper.getInstance();
 	}
 
-	public void assertNull(String message, Object object) {
+	public TestCase assertNull(String message, Object object) {
 		getAssertionHelper().assertNull(message, object);
+		return this;
 	}
 	
-	public void assertNull(Object object) {
+	public TestCase assertNull(Object object) {
 		assertNull("object is null", object);
+		return this;
 	}
 	
-	public void assertNotNull(String message, Object object) {
+	public TestCase assertNotNull(String message, Object object) {
 		getAssertionHelper().assertNotNull(message, object);
+		return this;
 	}
 	
-	public void assertNotNull(Object object) {
+	public TestCase assertNotNull(Object object) {
 		assertNotNull("object is not null", object);
+		return this;
 	}
 	
-	public void assertTrue(String message, Boolean condition) {
+	public TestCase assertTrue(String message, Boolean condition) {
 		getAssertionHelper().assertTrue(message, condition);
+		return this;
 	}
 	
-	public void assertTrue(Boolean condition) {
+	public TestCase assertTrue(Boolean condition) {
 		assertTrue("it is false", condition);
+		return this;
 	}
 	
-	public void assertFalse(String message, Boolean condition) {
+	public TestCase assertFalse(String message, Boolean condition) {
 		getAssertionHelper().assertFalse(message, condition);
+		return this;
 	}
 	
-	public void assertFalse(Boolean condition) {
+	public TestCase assertFalse(Boolean condition) {
 		assertTrue("it is true", condition);
+		return this;
 	}
 	
-	public void assertEquals(String message, Object expected,Object actual) {
+	public TestCase assertEquals(String message, Object expected,Object actual) {
 		getAssertionHelper().assertEquals(message, expected,actual);
+		return this;
 	}
 	
-	public void assertEquals(Object expected,Object actual) {
+	public TestCase assertEquals(Object expected,Object actual) {
 		getAssertionHelper().assertEquals(expected,actual);
+		return this;
 	}
 	
-	public void assertEqualsNumber(String message, Object expected,Object actual) {
+	public TestCase assertEqualsNumber(String message, Object expected,Object actual) {
 		getAssertionHelper().assertEqualsNumber(message, expected,actual);
+		return this;
 	}
 	
-	public void assertEqualsNumber(Object expected,Object actual) {
+	public TestCase assertEqualsNumber(Object expected,Object actual) {
 		getAssertionHelper().assertEqualsNumber(expected,actual);
+		return this;
+	}
+	
+	public TestCase assertEqualsFieldValues(Object object,FieldHelper.Field.Value.Collection expectedFieldValues){
+		getAssertionHelper().assertEqualsFieldValues(object, expectedFieldValues);
+		return this;
 	}
 	
 	public TestCase assertNullByBusinessIdentifier(Class<?> aClass,Collection<Object> identifiers){
