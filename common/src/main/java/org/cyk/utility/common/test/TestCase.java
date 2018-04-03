@@ -148,7 +148,7 @@ public class TestCase extends AbstractBean implements Serializable {
 	}
 	
 	public <T> T read(Class<T> aClass,Object identifier){
-		return act(Constant.Action.READ,getByIdentifierWhereValueUsageTypeIsBusiness(aClass, identifier));
+		return act(Constant.Action.READ,getByIdentifierWhereValueUsageTypeIsBusiness(aClass, identifier,Boolean.TRUE));
 	}
 	
 	public <T> T readByIdentifiers(Class<T> aClass,Object parentIdentifier,Object childIdentifier,Object identifiersSeparator){
@@ -369,8 +369,17 @@ public class TestCase extends AbstractBean implements Serializable {
 		return getByIdentifierWhereValueUsageTypeIsBusiness(object,getIdentifierWhereValueUsageTypeIsBusiness(object));
 	}
 	
+	public <T> T getByIdentifierWhereValueUsageTypeIsBusiness(Class<T> aClass,Object identifier,Boolean assertNotNull){
+		T instance = (T) InstanceHelper.getInstance().getByIdentifier(aClass, identifier, ClassHelper.Listener.IdentifierType.BUSINESS);
+		if(assertNotNull == null)
+			assertNotNull = Boolean.FALSE;
+		if(assertNotNull)
+			assertNotNull(instance);
+		return instance;
+	}
+	
 	public <T> T getByIdentifierWhereValueUsageTypeIsBusiness(Class<T> aClass,Object identifier){
-		return (T) InstanceHelper.getInstance().getByIdentifier(aClass, identifier, ClassHelper.Listener.IdentifierType.BUSINESS);
+		return getByIdentifierWhereValueUsageTypeIsBusiness(aClass, identifier, Boolean.FALSE);
 	}
 	
 	/**/
@@ -426,7 +435,7 @@ public class TestCase extends AbstractBean implements Serializable {
 	}
 	
 	public TestCase assertNull(Object object) {
-		assertNull("object is null", object);
+		assertNull("object is not null", object);
 		return this;
 	}
 	
@@ -436,7 +445,7 @@ public class TestCase extends AbstractBean implements Serializable {
 	}
 	
 	public TestCase assertNotNull(Object object) {
-		assertNotNull("object is not null", object);
+		assertNotNull("object is null", object);
 		return this;
 	}
 	
@@ -477,6 +486,11 @@ public class TestCase extends AbstractBean implements Serializable {
 	
 	public TestCase assertEqualsNumber(Object expected,Object actual) {
 		getAssertionHelper().assertEqualsNumber(expected,actual);
+		return this;
+	}
+	
+	public TestCase assertEqualsByFieldValue(Object expected,Object actual,String...fieldNames) {
+		getAssertionHelper().assertEqualsByFieldValue(expected,actual,fieldNames);
 		return this;
 	}
 	

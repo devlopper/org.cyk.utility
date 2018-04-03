@@ -1,6 +1,12 @@
 package org.cyk.utility.common.helper;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Singleton;
 
@@ -16,6 +22,8 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 	
 	private static AssertionHelper INSTANCE;
 	
+	private static final Map<Class<?>,Set<String>> FIELD_NAMES_ASSERTED_MAP = new HashMap<>();
+	
 	public static AssertionHelper getInstance() {
 		if(INSTANCE == null)
 			INSTANCE = new AssertionHelper();
@@ -26,6 +34,26 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public AssertionHelper addFieldNamesAsserted(Class<?> aClass,Collection<String> fieldNames){
+		if(CollectionHelper.getInstance().isNotEmpty(fieldNames)){
+			Set<String> collection = FIELD_NAMES_ASSERTED_MAP.get(aClass);
+			if(collection == null)
+				FIELD_NAMES_ASSERTED_MAP.put(aClass, collection = new LinkedHashSet<String>());
+			collection.addAll(fieldNames);
+		}
+		return this;
+	}
+	
+	public AssertionHelper addFieldNamesAsserted(Class<?> aClass,String...fieldNames){
+		if(ArrayHelper.getInstance().isNotEmpty(fieldNames))
+			addFieldNamesAsserted(aClass, Arrays.asList(fieldNames));
+		return this;
+	}
+	
+	public Collection<String> getFieldNamesAsserted(Class<?> aClass){
+		return FIELD_NAMES_ASSERTED_MAP.get(aClass);
 	}
 	
 	public AssertionHelper assertNull(String message,Object object){
@@ -103,6 +131,11 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 	
 	public AssertionHelper assertEqualsNumber(Object expected,Object actual){
 		ClassHelper.getInstance().instanciateOne(Listener.class).assertEqualsNumber(expected, actual);
+		return this;
+	}
+	
+	public AssertionHelper assertEqualsByFieldValue(Object expected,Object actual,String...fieldNames){
+		ClassHelper.getInstance().instanciateOne(Listener.class).assertEqualsByFieldValue(expected, actual, fieldNames);
 		return this;
 	}
 	
@@ -300,6 +333,7 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 		
 		void assertEquals(String message,Object expected,Object actual);
 		void assertEquals(Object expected,Object actual);
+		<T> void assertEqualsByFieldValue(T expected,T actual,String...fieldNames);
 		
 		void assertNotEquals(String message,Object expected,Object actual);
 		void assertNotEquals(Object expected,Object actual);
@@ -408,6 +442,19 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 				public void assertEqualsNumber(Object expected, Object actual) {
 					assertEqualsNumber(null,expected, actual);
 				}
+			
+				@Override
+				public <T> void assertEqualsByFieldValue(T expected, T actual, java.lang.String... fieldNames) {
+					if(expected!=null && ArrayHelper.getInstance().isEmpty(fieldNames)){
+						Collection<String> collection = getInstance().getFieldNamesAsserted(expected.getClass());
+						if(CollectionHelper.getInstance().isNotEmpty(collection))
+							fieldNames = collection.toArray(new String[]{});
+					}
+					String fieldName = FieldHelper.getInstance().buildPath(fieldNames);
+					Object expectedValue = FieldHelper.getInstance().read(expected, fieldName);
+					Object actualValue = FieldHelper.getInstance().read(actual, fieldName);
+					assertEquals("field "+(expected == null ? "???" : expected.getClass().getSimpleName())+"."+fieldName+" with expected value <<"+expectedValue+">> is not equal to actual value <<"+actualValue+">>",expectedValue,actualValue);
+				}
 			}
 			
 			@Override public void assertNull(java.lang.String message, Object object) {ThrowableHelper.getInstance().throwNotYetImplemented();}
@@ -424,6 +471,7 @@ public class AssertionHelper extends AbstractHelper implements Serializable {
 			
 			@Override public void assertEquals(String message, Object expected, Object actual) {ThrowableHelper.getInstance().throwNotYetImplemented();}
 			@Override public void assertEquals(Object expected, Object actual) {ThrowableHelper.getInstance().throwNotYetImplemented();}
+			@Override public <T> void assertEqualsByFieldValue(T expected, T actual, java.lang.String...fieldNames) {}
 			
 			@Override public void assertNotEquals(String message, Object expected, Object actual) {ThrowableHelper.getInstance().throwNotYetImplemented();}
 			@Override public void assertNotEquals(Object expected, Object actual) {ThrowableHelper.getInstance().throwNotYetImplemented();}

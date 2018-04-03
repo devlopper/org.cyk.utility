@@ -1,8 +1,14 @@
 package org.cyk.utility.common;
 
+import java.math.BigDecimal;
+
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public class AssertionHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
@@ -38,7 +44,7 @@ public class AssertionHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void assertEqualsNumner(){
+	public void assertEqualsNumber(){
 		AssertionHelper.getInstance().assertEqualsNumber("1", "1");
 		AssertionHelper.getInstance().assertEqualsNumber("1.0", "1");
 		AssertionHelper.getInstance().assertEqualsNumber("1", "1.0");
@@ -49,6 +55,11 @@ public class AssertionHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void assertEqualsByFieldValue(){
+		AssertionHelper.getInstance().assertEqualsByFieldValue(new MyClass().setF1("hi"), new MyClass().setF1("hi"), "f1");
+	}
+	
+	@Test
 	public void assertEqualsNull(){
 		AssertionHelper.getInstance().assertEquals(null, null);
 	}
@@ -56,5 +67,15 @@ public class AssertionHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void assertNotEqualsNull(){
 		AssertionHelper.getInstance().assertNotEquals(null, "a");
+	}
+	
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class MyClass {
+		
+		private String f1;
+		private BigDecimal f2;
+		
 	}
 }

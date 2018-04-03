@@ -192,6 +192,25 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		}
 	}
 	
+	public <T> T read(Object instance,Class<T> fieldValueClass,Boolean instanciateIfValueIsNull,String...fieldNames){
+		String fieldName = buildPath(fieldNames);
+		//Class<?> fieldValueClass = getType(instance.getClass(), fieldName);
+		@SuppressWarnings("unchecked")
+		T fieldValue = (T) FieldHelper.getInstance().read(instance, fieldName);
+		if(fieldValue == null && Boolean.TRUE.equals(instanciateIfValueIsNull))
+			FieldHelper.getInstance().set(instance, fieldValue = ClassHelper.getInstance().instanciateOne(fieldValueClass), fieldName);
+		return fieldValue;
+	}
+	
+	public <T> T read(Object instance,Boolean instanciateIfValueIsNull,String...fieldNames){
+		String fieldName = buildPath(fieldNames);
+		String fieldValueClassFieldName = getLast(fieldName)+"Class";
+		java.lang.reflect.Field field = get(instance.getClass(), fieldValueClassFieldName);
+		@SuppressWarnings("unchecked")
+		Class<T> fieldValueClass = (Class<T>) (field == null ? getType(instance.getClass(), fieldName) : read(instance, field));
+		return read(instance, fieldValueClass, instanciateIfValueIsNull, fieldName);
+	}
+	
 	public void set(Object object,String...fieldNames){
 		LoggingHelper.Message.Builder loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default();
 		loggingMessageBuilder.addManyParameters("set instance field value by instanciating where null");
