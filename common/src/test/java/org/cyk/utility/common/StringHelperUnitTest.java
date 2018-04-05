@@ -365,7 +365,7 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		assertEquals("##__field__.my.field.locality.03##", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality03")));
 		assertEquals("##__field__.my.field.locality.04##", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality04")));
 		assertEquals("Localité", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality05")));
-		assertEquals("Localité", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality06")));
+		assertEquals("Prix d'achat", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality06")));
 		assertEquals("locality", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality07")));
 	}
 	
@@ -487,7 +487,7 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		private @Text(value="") String myFieldLocality03;
 		private @Text(value=" ") String myFieldLocality04;
 		private @Text(value="locality") String myFieldLocality05;
-		private @Text(value="locality",valueType=ValueType.ID) String myFieldLocality06;
+		private @Text(value="buying.price",valueType=ValueType.ID) String myFieldLocality06;
 		private @Text(value="locality",valueType=ValueType.VALUE) String myFieldLocality07;
 	}
 

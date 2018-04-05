@@ -360,7 +360,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 				type = org.cyk.utility.common.annotation.user.interfaces.Text.Type.LABEL;
 			
 			if(org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.ID.equals(valueType))
-				identifier = text.value();
+				return get(text.value(), CaseType.FU,new Object[]{});
 			else
 				return text.value();
 		}
