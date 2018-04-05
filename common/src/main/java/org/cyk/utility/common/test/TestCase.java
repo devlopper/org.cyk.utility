@@ -374,7 +374,7 @@ public class TestCase extends AbstractBean implements Serializable {
 		if(assertNotNull == null)
 			assertNotNull = Boolean.FALSE;
 		if(assertNotNull)
-			assertNotNull(instance);
+			assertNotNull("object with business identifier "+identifier+" is null",instance);
 		return instance;
 	}
 	

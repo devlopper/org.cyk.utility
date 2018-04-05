@@ -347,7 +347,24 @@ public class StringHelper extends AbstractHelper implements Serializable {
 	}
 	
 	public String getField(java.lang.reflect.Field field){
-		return getField(field.getName());
+		org.cyk.utility.common.annotation.user.interfaces.Text text = field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Text.class);
+		String identifier = null;
+		if(text == null || isBlank(text.value()))
+			identifier = field.getName();
+		else {
+			org.cyk.utility.common.annotation.user.interfaces.Text.ValueType valueType = text.valueType();
+			if(org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.AUTO.equals(valueType))
+				valueType = org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.ID;
+			org.cyk.utility.common.annotation.user.interfaces.Text.Type type = text.type();
+			if(org.cyk.utility.common.annotation.user.interfaces.Text.Type.AUTO.equals(type))
+				type = org.cyk.utility.common.annotation.user.interfaces.Text.Type.LABEL;
+			
+			if(org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.ID.equals(valueType))
+				identifier = text.value();
+			else
+				return text.value();
+		}
+		return getField(identifier);
 	}
 	
 	public String getClassIdentifier(String name){

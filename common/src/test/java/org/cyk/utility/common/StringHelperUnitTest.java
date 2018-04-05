@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
+import org.cyk.utility.common.annotation.user.interfaces.Text;
+import org.cyk.utility.common.annotation.user.interfaces.Text.ValueType;
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.StringHelper;
@@ -358,6 +360,13 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		assertEquals("Localité", StringHelper.getInstance().getField("locality"));
 		assertEquals("Adresse électronique de courriel", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "electronicMailAddress")));
 		assertEquals("Parent", StringHelper.getInstance().getField("__parent__"));
+		assertEquals("##__field__.my.field.locality.01##", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality01")));
+		assertEquals("##__field__.my.field.locality.02##", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality02")));
+		assertEquals("##__field__.my.field.locality.03##", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality03")));
+		assertEquals("##__field__.my.field.locality.04##", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality04")));
+		assertEquals("Localité", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality05")));
+		assertEquals("Localité", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality06")));
+		assertEquals("locality", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality07")));
 	}
 	
 	@Test
@@ -473,6 +482,13 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		private String electronicMailAddress;
 		private String locality;
 		
+		private String myFieldLocality01;
+		private @Text String myFieldLocality02;
+		private @Text(value="") String myFieldLocality03;
+		private @Text(value=" ") String myFieldLocality04;
+		private @Text(value="locality") String myFieldLocality05;
+		private @Text(value="locality",valueType=ValueType.ID) String myFieldLocality06;
+		private @Text(value="locality",valueType=ValueType.VALUE) String myFieldLocality07;
 	}
 
 	@Getter @Setter @Accessors(chain=true)
