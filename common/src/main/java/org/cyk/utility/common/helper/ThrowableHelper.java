@@ -162,7 +162,7 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 		
 		public Throwable addMessages(Collection<String> messages) {
 			if(CollectionHelper.getInstance().isNotEmpty(messages)) {
-				if(this.messages != null)
+				if(this.messages == null)
 					this.messages = new LinkedHashSet<>();
 				this.messages.addAll(messages);
 			}
