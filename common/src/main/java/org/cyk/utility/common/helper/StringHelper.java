@@ -1300,10 +1300,14 @@ public class StringHelper extends AbstractHelper implements Serializable {
 					}
 					
 					if(value==null)
-						value = String.format(UNKNOWN_FORMAT, UNKNOWN_MARKER_START,pIdentifier,UNKNOWN_MARKER_END);
+						value =formatUnknownIdentifier(pIdentifier);
 					
 					return value;
 				}
+			}
+			
+			public static String formatUnknownIdentifier(String identifier){
+				return String.format(UNKNOWN_FORMAT, UNKNOWN_MARKER_START,identifier,UNKNOWN_MARKER_END);
 			}
 			
 		}
@@ -1441,7 +1445,12 @@ public class StringHelper extends AbstractHelper implements Serializable {
 									
 									String substituteCode = null;
 									while((substituteCode = StringUtils.substringBetween(value, SUBSTITUTE_TAG_START, SUBSTITUTE_TAG_END)) != null){
-										value = StringUtils.replace(value, SUBSTITUTE_TAG_START+substituteCode+SUBSTITUTE_TAG_END, __execute__(substituteCode,CaseType.NONE,locale,cachable));
+										String substituteValue = __execute__(substituteCode,CaseType.NONE,locale,cachable);
+										if(substituteValue == null){
+											value = ToStringMapping.Adapter.formatUnknownIdentifier(substituteCode);
+											break;
+										}else
+											value = StringUtils.replace(value, SUBSTITUTE_TAG_START+substituteCode+SUBSTITUTE_TAG_END, substituteValue);										
 									}
 									
 									if(StringUtils.startsWith(value,DO_NOT_PROCESS_TAG_START) && StringUtils.endsWith(value,DO_NOT_PROCESS_TAG_END)){

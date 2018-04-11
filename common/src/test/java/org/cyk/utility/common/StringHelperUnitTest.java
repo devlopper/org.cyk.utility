@@ -279,6 +279,8 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		assertEquals("nd", StringHelper.getInstance().getOrdinalNumberSuffix(Locale.ENGLISH, 2));
 		assertEquals("rd", StringHelper.getInstance().getOrdinalNumberSuffix(Locale.ENGLISH, 3));
 		assertEquals("th", StringHelper.getInstance().getOrdinalNumberSuffix(Locale.ENGLISH, 4));
+		assertEquals("##id1##", StringHelper.getInstance().get("test.my.sub.key.notfound01",new Object[]{}));
+		assertEquals("##id2##", StringHelper.getInstance().get("test.my.sub.key.notfound02",new Object[]{}));
 	}
 	
 	@Test
