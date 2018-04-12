@@ -480,7 +480,14 @@ public class DataTable extends Component.Visible implements Serializable {
 	
 	public Column addColumnByFieldName(String fieldName){
 		String labelStringIdentifier = StringHelper.getInstance().getI18nIdentifier(FieldHelper.getInstance().getLast(fieldName));
-		return addColumn(labelStringIdentifier, fieldName);
+		Column column = addColumn(labelStringIdentifier, fieldName);
+		
+		Class<?> actionOnClass = (Class<?>) getPropertiesMap().getActionOnClass();
+		if(actionOnClass != null){
+			column._setLabelPropertyValue(StringHelper.getInstance().getField(FieldHelper.getInstance().get(actionOnClass, fieldName)));
+		}
+		
+		return column;
 	}
 	
 	public DataTable addColumnsByFieldNames(Collection<String> fieldNames){
@@ -825,7 +832,6 @@ public class DataTable extends Component.Visible implements Serializable {
 			Columns columns = (Columns) component.getPropertiesMap().getColumns();
 			if(component.getPropertiesMap().getColumns()==null){
 				columns = new Columns(component);
-				
 			}
 			return columns.addColumn(labelStringIdentifier, fieldName);
 		}

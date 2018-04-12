@@ -322,7 +322,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		name = String.format(ToStringMapping.FIELD_IDENTIFIER_FORMAT,getI18nIdentifier(name));
 		return name;
 	}
-	
+
 	public String getField(String identifier,CaseType caseType){
 		String fieldIdentifier = getFieldIdentifier(identifier);
 		String result = new ToStringMapping.Adapter.Default(fieldIdentifier).setCaseType(caseType).execute();
