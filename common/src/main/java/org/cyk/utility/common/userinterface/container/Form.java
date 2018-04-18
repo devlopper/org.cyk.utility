@@ -212,7 +212,11 @@ public class Form extends Container implements Serializable {
 				private static final long serialVersionUID = 1L;
 
 				protected void __executeForEach__(String fieldName) {
-					Master.this.getDetail().getInputByFieldName(fieldName).getPropertiesMap().setDisabled(Boolean.TRUE);
+					Input<?> input = Master.this.getDetail().getInputByFieldName(fieldName);
+					if(input==null)
+						logWarning("getFieldNamesSetFromRequestParameters : input of field named <<{}>> is null",fieldName);
+					else
+						input.getPropertiesMap().setDisabled(Boolean.TRUE);
 				};
 			}.execute();
 			return this;

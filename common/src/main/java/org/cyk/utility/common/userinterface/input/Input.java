@@ -310,9 +310,11 @@ public class Input<T> extends Control implements Serializable {
 							aClass = (Class<? extends Input<?>>) ClassHelper.getInstance().getByName(name);
 						}else if(ClassHelper.getInstance().isIdentified(fieldType) || fieldType.isEnum()){
 							aClass = InputChoiceOneCombo.class;
+						}else if(ClassHelper.getInstance().isInstanceOf(Collection.class, fieldType)){
+							aClass = InputChoiceManyList.class; //InputChoiceManyPickList.class;
 						}
 						if(aClass == null)
-							System.out.println("Input.Listener.Adapter.Default.getClass() : "+fieldType);
+							logWarning("No input class found for field named <<{}>> of type <<{}>>", field,fieldType);
 					}else{
 						if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.InputText.class)!=null)
 							aClass = InputText.class;
@@ -374,7 +376,7 @@ public class Input<T> extends Control implements Serializable {
 					}
 					
 					if(aClass==null){
-						logWarning("No input class has been found for field $", field);
+						logWarning("No input class has been found for field {}", field);
 						aClass = (Class<? extends Input<?>>) ClassHelper.getInstance().getByName(Input.class);
 					}
 					return aClass;
