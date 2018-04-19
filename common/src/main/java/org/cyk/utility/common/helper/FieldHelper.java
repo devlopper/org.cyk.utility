@@ -4,6 +4,7 @@ import java.beans.IntrospectionException;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -569,6 +570,15 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 	
 	public java.util.Collection<String> getNamesWhereReferencedByStaticField(Class<?> aClass){
 		return getNamesWhereReferencedByStaticField(aClass,Boolean.TRUE);
+	}
+	
+	public Class<?> getParameterType(java.lang.reflect.Field field,Integer index){
+        ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+        return (Class<?>) parameterizedType.getActualTypeArguments()[index];
+	}
+	
+	public Class<?> getParameterType(Class<?> aClass,String name,Integer index){
+		return getParameterType(get(aClass, name), index);
 	}
 	
 	/**/

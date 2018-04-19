@@ -311,7 +311,7 @@ public class Input<T> extends Control implements Serializable {
 						}else if(ClassHelper.getInstance().isIdentified(fieldType) || fieldType.isEnum()){
 							aClass = InputChoiceOneCombo.class;
 						}else if(ClassHelper.getInstance().isInstanceOf(Collection.class, fieldType)){
-							aClass = InputChoiceManyList.class; //InputChoiceManyPickList.class;
+							aClass = InputChoiceManyPickList.class;
 						}
 						if(aClass == null)
 							logWarning("No input class found for field named <<{}>> of type <<{}>>", field,fieldType);
@@ -519,6 +519,8 @@ public class Input<T> extends Control implements Serializable {
 				@Override
 				public Class<?> computeChoiceInstanceClass(InputChoice<?> inputChoice) {
 					Class<?> type = FieldHelper.getInstance().getType(inputChoice.getObject().getClass(), inputChoice.getField());
+					if(ClassHelper.getInstance().isInstanceOf(Collection.class, type))
+						return FieldHelper.getInstance().getParameterType(inputChoice.getField(), 0);
 					if(List.class.equals(type))
 				        type = (Class<?>) ((ParameterizedType) inputChoice.getField().getGenericType()).getActualTypeArguments()[0];
 					return type;

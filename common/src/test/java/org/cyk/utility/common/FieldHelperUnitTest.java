@@ -1,7 +1,10 @@
 package org.cyk.utility.common;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -21,6 +24,21 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
  
 	@InjectMocks private FieldHelper fieldHelper;
+	
+	@Test
+	public void getType(){
+		assertEquals(String.class, FieldHelper.getInstance().getType(FieldType.class, "f1"));
+		assertEquals(Integer.class, FieldHelper.getInstance().getType(FieldType.class, "f2"));
+		assertEquals(Collection.class, FieldHelper.getInstance().getType(FieldType.class, "f3"));
+		assertEquals(Collection.class, FieldHelper.getInstance().getType(FieldType.class, "f4"));
+		
+		Field stringListField = FieldHelper.getInstance().get(FieldType.class, "f3");
+        ParameterizedType stringListType = (ParameterizedType) stringListField.getGenericType();
+        Class<?> stringListClass = (Class<?>) stringListType.getActualTypeArguments()[0];
+        System.out.println(stringListClass); // class java.lang.String.
+
+        
+	}
 	
 	@Test
 	public void fieldOverride(){
@@ -289,6 +307,16 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	public static class FieldOverrideChild extends FieldOverride {
+		
+	}
+
+	@Getter @Setter @Accessors(chain=true)
+	public static class FieldType {
+		
+		private String f1;
+		private Integer f2;
+		private Collection<String> f3;
+		private Collection<Integer> f4;
 		
 	}
 }
