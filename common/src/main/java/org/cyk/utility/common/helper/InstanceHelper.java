@@ -122,6 +122,14 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		return ClassHelper.getInstance().instanciateOne(Listener.class).getIdentifierWhereValueUsageTypeIsBusiness(instance);
 	}
 	
+	public Object getOrderNumberWhereValueUsageTypeIsSystem(final Object instance){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getOrderNumberWhereValueUsageTypeIsSystem(instance);
+	}
+	
+	public Object getOrderNumberWhereValueUsageTypeIsBusiness(final Object instance){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).getOrderNumberWhereValueUsageTypeIsBusiness(instance);
+	}
+	
 	public String getName(final Object instance){
 		return ClassHelper.getInstance().instanciateOne(Listener.class).getName(instance);
 	}
@@ -966,6 +974,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		Object getIdentifier(Object instance);
 		Object getIdentifierWhereValueUsageTypeIsSystem(Object instance);
 		Object getIdentifierWhereValueUsageTypeIsBusiness(Object instance);
+		Object getOrderNumberWhereValueUsageTypeIsSystem(Object instance);
+		Object getOrderNumberWhereValueUsageTypeIsBusiness(Object instance);
 		String getName(Object instance);
 		java.util.Date getBirthDate(Object instance);
 		java.util.Date getDeathDate(Object instance);
@@ -1166,6 +1176,16 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				return null;
 			}
 			
+			@Override
+			public Object getOrderNumberWhereValueUsageTypeIsSystem(Object instance) {
+				return null;
+			}
+			
+			@Override
+			public Object getOrderNumberWhereValueUsageTypeIsBusiness(Object instance) {
+				return null;
+			}
+			
 			/**/
 			
 			public static class Default extends Listener.Adapter implements Serializable {
@@ -1271,6 +1291,16 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				@Override
 				public Object getIdentifierWhereValueUsageTypeIsBusiness(Object instance) {
 					return getFieldValue(instance, FieldName.IDENTIFIER,FieldName.ValueUsageType.BUSINESS);
+				}
+				
+				@Override
+				public Object getOrderNumberWhereValueUsageTypeIsSystem(Object instance) {
+					return getFieldValue(instance, FieldName.ORDER_NUMBER,FieldName.ValueUsageType.SYSTEM);
+				}
+				
+				@Override
+				public Object getOrderNumberWhereValueUsageTypeIsBusiness(Object instance) {
+					return getFieldValue(instance, FieldName.ORDER_NUMBER,FieldName.ValueUsageType.BUSINESS);
 				}
 				
 				@Override

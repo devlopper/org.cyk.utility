@@ -484,7 +484,11 @@ public class DataTable extends Component.Visible implements Serializable {
 		
 		Class<?> actionOnClass = (Class<?>) getPropertiesMap().getActionOnClass();
 		if(actionOnClass != null){
-			column._setLabelPropertyValue(StringHelper.getInstance().getField(FieldHelper.getInstance().get(actionOnClass, fieldName)));
+			java.lang.reflect.Field field = FieldHelper.getInstance().get(actionOnClass, fieldName);
+			if(field == null){
+				column._setLabelPropertyValue("??"+actionOnClass.getSimpleName()+"."+fieldName+"??");
+			}else
+				column._setLabelPropertyValue(StringHelper.getInstance().getField(field));
 		}
 		
 		return column;

@@ -499,6 +499,24 @@ public class TestCase extends AbstractBean implements Serializable {
 		return this;
 	}
 	
+	public TestCase assertEqualsOrderNumberByBusinessIdentifier(Class<?> aClass,Object identifier,Object orderNumber){
+		Object instance = getByIdentifierWhereValueUsageTypeIsBusiness(aClass, identifier, Boolean.TRUE);
+		assertEqualsNumber("order number are not equal", orderNumber, InstanceHelper.getInstance().getOrderNumberWhereValueUsageTypeIsBusiness(instance));
+		return this;
+	}
+	
+	public TestCase assertEqualsCreationOrderNumberByBusinessIdentifier(Class<?> aClass,Object identifier,Object creationOrderNumber){
+		Object instance = getByIdentifierWhereValueUsageTypeIsBusiness(aClass, identifier, Boolean.TRUE);
+		assertEqualsNumber("creation order number are not equal", creationOrderNumber, InstanceHelper.getInstance().getOrderNumberWhereValueUsageTypeIsSystem(instance));
+		return this;
+	}
+	
+	public TestCase assertEqualsOrderNumbersByBusinessIdentifier(Class<?> aClass,Object identifier,Object creationOrderNumber,Object orderNumber){
+		assertEqualsCreationOrderNumberByBusinessIdentifier(aClass, identifier, creationOrderNumber);
+		assertEqualsOrderNumberByBusinessIdentifier(aClass, identifier, orderNumber);
+		return this;
+	}
+	
 	public TestCase assertNullByBusinessIdentifier(Class<?> aClass,Collection<Object> identifiers){
 		if(CollectionHelper.getInstance().isNotEmpty(identifiers))
 			for(Object identifier : identifiers)
