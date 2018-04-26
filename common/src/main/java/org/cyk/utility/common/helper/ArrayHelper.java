@@ -70,6 +70,10 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 		return objects == null ? Boolean.TRUE : objects.length == 0;
 	}
 	
+	public Boolean isEmpty(byte[] objects){
+		return objects == null ? Boolean.TRUE : objects.length == 0;
+	}
+	
 	public Boolean isNotEmpty(Object[] objects){
 		return !Boolean.TRUE.equals(isEmpty(objects));
 	}

@@ -107,6 +107,10 @@ public class ThrowableHelper extends AbstractHelper implements Serializable  {
 		throw_(Arrays.asList(message), ThrowableMarkerCompileTime.class);
 	}
 	
+	public void throw_(java.lang.Throwable throwable){
+		throw_(throwable.getMessage());
+	}
+	
 	public <T extends java.lang.Throwable> void throw_(Collection<String> messages,Class<T> causeClass){
 		if(CollectionHelper.getInstance().isNotEmpty(messages)){
 			String message = new StringHelper.Concatenate.Adapter.Default(messages).setSeparator(Constant.LINE_DELIMITER).setIsAddCountPrefix(messages.size()>1).execute();

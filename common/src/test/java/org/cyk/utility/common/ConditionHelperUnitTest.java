@@ -23,22 +23,55 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void assertNotNullUsingField(){
+	public void assertNotNullUsingOneField(){
 		assertCondition(ConditionHelper.Condition.getBuilderNull(new MyEntity(), "f1")
 				.execute(), Boolean.TRUE, "La valeur de l'attribut <<f1>> de l'entité <<mon entité>> doit être non nulle.");
 	}
 	
 	@Test
-	public void assertNullUsingField(){
+	public void assertNullUsingOneField(){
 		assertCondition(ConditionHelper.Condition.getBuilderNull(new MyEntity().setF1("myf1"),"f1").setIsNegateConditionValue(Boolean.TRUE)
 				.execute(), Boolean.TRUE, "La valeur(myf1) de l'attribut <<f1>> de l'entité <<mon entité>> doit être nulle.");
 	}
 	
 	@Test
-	public void assertNotNullNotUsingField(){
+	public void assertNotNullNotUsingOneField(){
 		assertCondition(new ConditionHelper.Condition.Builder.Null.Adapter.Default()
 				.setDomainNameIdentifier("domain").setValueNameIdentifier("code")
 				.execute(), Boolean.TRUE, "La valeur de l'attribut <<code>> de l'entité <<domaine>> doit être non nulle.");
+	}
+	
+	@Test
+	public void assertNullNotUsingOneField(){
+		assertCondition(new ConditionHelper.Condition.Builder.Null.Adapter.Default()
+				.setDomainNameIdentifier("domain").setValueNameIdentifier("code").setFieldValue(1).setIsNegateConditionValue(Boolean.TRUE)
+				.execute(), Boolean.TRUE, "La valeur(1) de l'attribut <<code>> de l'entité <<domaine>> doit être nulle.");
+	}
+	
+	@Test
+	public void assertNotNullUsingMultipleField(){
+		assertCondition(ConditionHelper.Condition.getBuilderNullMultiple(new MyEntity(), "f1","f2")
+				.execute(), Boolean.TRUE, "La valeur de l'attribut <<f1>> ou <<f2>> de l'entité <<mon entité>> doit être non nulle.");
+	}
+	
+	@Test
+	public void assertNullUsingMultipleField(){
+		assertCondition(ConditionHelper.Condition.getBuilderNull(new MyEntity().setF1("myf1"),"f1").setIsNegateConditionValue(Boolean.TRUE)
+				.execute(), Boolean.TRUE, "La valeur(myf1) de l'attribut <<f1>> ou <<f2>> de l'entité <<mon entité>> doit être nulle.");
+	}
+	
+	@Test
+	public void assertNotNullNotUsingMultipleField(){
+		assertCondition(new ConditionHelper.Condition.Builder.Null.Adapter.Default()
+				.setDomainNameIdentifier("domain").setValueNameIdentifier("code")
+				.execute(), Boolean.TRUE, "La valeur de l'attribut <<code>> ou <<f2>> de l'entité <<domaine>> doit être non nulle.");
+	}
+	
+	@Test
+	public void assertNullNotUsingMultipleField(){
+		assertCondition(new ConditionHelper.Condition.Builder.Null.Adapter.Default()
+				.setDomainNameIdentifier("domain").setValueNameIdentifier("code").setFieldValue(1).setIsNegateConditionValue(Boolean.TRUE)
+				.execute(), Boolean.TRUE, "La valeur(1) de l'attribut <<code>> ou <<f2>> de l'entité <<domaine>> doit être nulle.");
 	}
 	
 	/*@Test

@@ -3,6 +3,7 @@ package org.cyk.utility.common.helper;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
@@ -58,6 +59,10 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 			return new Builder.Null.Adapter.Default().setFieldObject(instance).setFieldName(FieldHelper.getInstance().buildPath(names));
 		}
 		
+		public static Condition.Builder.Null getBuilderNullMultiple(Object instance,String...names){
+			return new Builder.Null.Adapter.Default().setFieldObject(instance).setFieldNames(names);
+		}
+		
 		public static Condition.Builder.Comparison getBuilderComparison(Object instance,Object value,Boolean greater,Boolean equal,String...names){
 			return new Builder.Comparison.Adapter.Default().setFieldObject(instance).setFieldName(FieldHelper.getInstance().buildPath(names))
 					.setValue2(value).setGreater(greater).setEqual(equal);
@@ -83,6 +88,10 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 			
 			Builder setFieldName(String fieldName);
 			String getFieldName();
+			
+			Builder setFieldNames(Collection<String> fieldNames);
+			Collection<String> getFieldNames();
+			Builder setFieldNames(String...fieldNames);
 			
 			Builder setFieldValue(Object fieldValue);
 			Object getFieldValue();
@@ -128,6 +137,7 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				protected Object fieldObject,fieldValue;
 				protected String fieldName,fieldValueFormat;
 				protected Class<?> domainClass,conditionIdentifierClass;
+				protected Collection<String> fieldNames;
 				
 				public Adapter() {
 					super(Condition.class);
@@ -207,6 +217,16 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					return null;
 				}
 				
+				@Override
+				public Builder setFieldNames(Collection<String> fieldNames) {
+					return null;
+				}
+				
+				@Override
+				public Builder setFieldNames(String...fieldNames) {
+					return null;
+				}
+				
 				public static class Default extends Builder.Adapter implements Serializable {
 					private static final long serialVersionUID = 1L;
 					
@@ -217,6 +237,19 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					@Override
 					public Builder setIsNegateConditionValue(Boolean isNegateConditionValue) {
 						this.isNegateConditionValue = isNegateConditionValue;
+						return this;
+					}
+					
+					@Override
+					public Builder setFieldNames(Collection<String> fieldNames) {
+						this.fieldNames = fieldNames;
+						return this;
+					}
+					
+					@Override
+					public Builder setFieldNames(String... fieldNames) {
+						if(ArrayHelper.getInstance().isNotEmpty(fieldNames))
+							setFieldNames(Arrays.asList(fieldNames));
 						return this;
 					}
 					
@@ -310,6 +343,7 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 						condition.setValue(getConditionValue());
 						java.lang.reflect.Field field = getFieldObject() == null || StringHelper.getInstance().isBlank(getFieldName()) ? null 
 								: FieldHelper.getInstance().get(getFieldObject().getClass(), getFieldName());
+						Collection<Field> fields = new ArrayList<>();
 						loggingMessageBuilder.addNamedParameters("object",getFieldObject(),"field",field);
 						Object value = getFieldValue();
 						if(value == null){
@@ -402,6 +436,7 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 				Null setFieldObject(Object fieldObject);
 				
 				Null setFieldName(String fieldName);
+				Null setFieldNames(String...fieldNames);
 				
 				@Getter @Setter
 				public static class Adapter extends Builder.Adapter.Default implements Null,Serializable {
@@ -425,6 +460,11 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					@Override
 					public Null setFieldName(String fieldName) {
 						return (Null) super.setFieldName(fieldName);
+					}
+					
+					@Override
+					public Null setFieldNames(String... fieldNames) {
+						return (Null) super.setFieldNames(fieldNames);
 					}
 					
 					public static class Default extends Null.Adapter implements Serializable {
