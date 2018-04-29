@@ -646,6 +646,8 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		private String name;
 		private java.lang.reflect.Field javaField;
 		
+		private String nameIdentifier,valueFormat;
+		
 		//private Object value;
 		
 		private Constraints constraints = new Constraints();
@@ -653,10 +655,13 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		public Field(Class<?> clazz,String name) {
 			this.clazz = clazz;
 			this.name = name;
-			this.javaField = getInstance().get(this.clazz, this.name);
-			if(this.javaField==null)
-				System.out.println("FieldHelper.Field.Field() "+clazz+"."+name);
-			constraints.isNullable = this.javaField.getAnnotation(javax.validation.constraints.NotNull.class) == null;
+			if(this.clazz != null){
+				this.javaField = getInstance().get(this.clazz, this.name);
+				if(this.javaField==null)
+					System.out.println("FieldHelper.Field.Field() "+clazz+"."+name);
+				constraints.isNullable = this.javaField.getAnnotation(javax.validation.constraints.NotNull.class) == null;	
+			}
+			
 		}
 		
 		public Constraints getConstraints(){

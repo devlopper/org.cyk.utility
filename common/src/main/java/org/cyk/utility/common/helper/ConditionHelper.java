@@ -6,10 +6,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Singleton;
 
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.computation.LogicalOperator;
+import org.cyk.utility.common.helper.FieldHelper.Field.Value;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 import org.cyk.utility.common.userinterface.ContentType;
 
@@ -93,11 +97,23 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 			Collection<String> getFieldNames();
 			Builder setFieldNames(String...fieldNames);
 			
+			Builder setFieldValueMap(Map<Integer,FieldHelper.Field.Value> fieldValueMap);
+			Map<Integer,FieldHelper.Field.Value> getFieldValueMap();
+			
+			Builder setFieldValueAt(Integer index,FieldHelper.Field.Value fieldValue);
+			FieldHelper.Field.Value getFieldValueAt(Integer index);
+					
 			Builder setFieldValue(Object fieldValue);
 			Object getFieldValue();
 			
+			Builder setFieldValue(String name,Object value);
+			Object getFieldValue(String name);
+			
 			Builder setFieldValueFormat(String fieldValueFormat);
 			String getFieldValueFormat();
+			
+			Builder setLogicalOperator(LogicalOperator logicalOperator);
+			LogicalOperator getLogicalOperator();
 			
 			Builder setDomainClass(Class<?> domainClass);
 			Class<?> getDomainClass();
@@ -131,16 +147,369 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 			public static class Adapter extends org.cyk.utility.common.Builder.NullableInput.Adapter.Default<Condition> implements Builder,Serializable {
 				private static final long serialVersionUID = 1L;
 				
-				protected String valueNameIdentifier;
 				protected String messageIdentifier,domainNameIdentifier;
 				protected java.lang.Boolean conditionValue,isNegateConditionValue;
-				protected Object fieldObject,fieldValue;
-				protected String fieldName,fieldValueFormat;
+				protected Object fieldObject;
+				protected String fieldValueFormat;
 				protected Class<?> domainClass,conditionIdentifierClass;
-				protected Collection<String> fieldNames;
+				protected Map<Integer,FieldHelper.Field.Value> fieldValueMap;
+				protected LogicalOperator logicalOperator;
+				
+				public static class Default extends Builder.Adapter implements Serializable {
+					private static final long serialVersionUID = 1L;
+					
+					{
+						setFieldValueFormat("(%s)");
+					}
+					
+					@Override
+					public String getFieldValueFormat() {
+						return fieldValueFormat;
+					}
+					
+					@Override
+					public Builder setFieldValueFormat(String fieldValueFormat) {
+						this.fieldValueFormat = fieldValueFormat;
+						return this;
+					}
+					
+					@Override
+					public String getValueNameIdentifier() {
+						return getFieldValueAt(0).getField().getNameIdentifier();
+					}
+					
+					@Override
+					public Builder setValueNameIdentifier(String valueNameIdentifier) {
+						getFieldValueAt(0).getField().setNameIdentifier(valueNameIdentifier);
+						return this;
+					}
+					
+					@Override
+					public Builder setFieldValueMap(Map<Integer,FieldHelper.Field.Value> fieldValueMap) {
+						this.fieldValueMap = fieldValueMap;
+						return this;
+					}
+					
+					protected Map<Integer, FieldHelper.Field.Value> getFieldValueMap(Boolean instanciateIfNull){
+						if(this.fieldValueMap == null && Boolean.TRUE.equals(instanciateIfNull))
+							this.fieldValueMap = new HashMap<Integer, FieldHelper.Field.Value>();
+						return this.fieldValueMap;
+					}
+					
+					@Override
+					public Builder setFieldValueAt(Integer index, FieldHelper.Field.Value fieldValue) {
+						if(index != null)
+							getFieldValueMap(Boolean.TRUE).put(index, fieldValue);	
+						return null;
+					}
+					
+					@Override
+					public FieldHelper.Field.Value getFieldValueAt(Integer index) {
+						FieldHelper.Field.Value fieldValue = getFieldValueMap(Boolean.TRUE).get(index);
+						if(fieldValue == null){
+							fieldValue = new FieldHelper.Field.Value();
+							fieldValue.setField(new FieldHelper.Field(null,null));
+							fieldValue.getField().setValueFormat(getFieldValueFormat());
+							setFieldValueAt(index, fieldValue);
+						}
+						return fieldValue;
+					}
+					
+					@Override
+					public Builder setFieldValue(String name, Object value) {
+						return super.setFieldValue(name, value);
+					}
+					
+					@Override
+					public Builder setFieldNames(Collection<String> fieldNames) {
+						if(CollectionHelper.getInstance().isNotEmpty(fieldNames)){
+							getFieldValueMap(Boolean.TRUE).clear();
+							Integer i = 0;
+							for(String index : fieldNames){
+								FieldHelper.Field.Value fieldValue = getFieldValueAt(i++);
+								fieldValue.getField().setName(index);
+								if(getFieldObject()!=null){
+									fieldValue.getField().setJavaField(FieldHelper.getInstance().get(getFieldObject().getClass(), index));
+									fieldValue.setValue(FieldHelper.getInstance().read(getFieldObject(), fieldValue.getField().getJavaField()));
+								}
+							}
+						}
+						return this;
+					}
+					
+					@Override
+					public Builder setFieldNames(String... fieldNames) {
+						if(ArrayHelper.getInstance().isNotEmpty(fieldNames))
+							setFieldNames(Arrays.asList(fieldNames));
+						return this;
+					}
+					
+					@Override
+					public Collection<String> getFieldNames() {
+						if(this.fieldValueMap == null)
+							return null;
+						Collection<String> collection = new ArrayList<String>();
+						for(java.util.Map.Entry<Integer,FieldHelper.Field.Value> entry : this.fieldValueMap.entrySet())
+							if(entry.getValue().getField()!=null)
+								collection.add(entry.getValue().getField().getName());
+						return collection;
+					}
+					
+					@Override
+					public String getFieldName() {
+						return CollectionHelper.getInstance().getFirst(getFieldNames());
+					}
+					
+					@Override
+					public Builder setLogicalOperator(LogicalOperator logicalOperator) {
+						this.logicalOperator = logicalOperator;
+						return this;
+					}
+					
+					@Override
+					public Builder setIsNegateConditionValue(Boolean isNegateConditionValue) {
+						this.isNegateConditionValue = isNegateConditionValue;
+						return this;
+					}
+					
+					
+					@Override
+					public Builder setFieldObject(Object fieldObject) {
+						this.fieldObject = fieldObject;
+						return this;
+					}
+					
+					@Override
+					public Builder setFieldName(String fieldName) {
+						setFieldNames(fieldName);
+						return this;
+					}
+					
+					@Override
+					public Builder setFieldValue(Object fieldValue) {
+						getFieldValueAt(0).setValue(fieldValue);
+						return this;
+					}
+					
+					@Override
+					public Object getFieldValue() {
+						return getFieldValueAt(0).getValue();
+					}
+					
+					@Override
+					public Builder setMessageIdentifier(String messageIdentifier){
+						this.messageIdentifier = messageIdentifier;
+						return this;
+					}
+					
+					@Override
+					public Builder setMessageIdentifier(StringHelper.Builder messageIdentifierBuilder){
+						setMessageIdentifier(messageIdentifierBuilder.execute());
+						return this;
+					}
+					
+					@Override
+					public Builder setDomainNameIdentifier(String domainNameIdentifier){
+						this.domainNameIdentifier = domainNameIdentifier;
+						return this;
+					}
+					
+					@Override
+					public Builder setDomainNameIdentifier(StringHelper.Builder domainNameIdentifierBuilder){
+						setDomainNameIdentifier(domainNameIdentifierBuilder.execute());
+						return this;
+					}
+					
+					@Override
+					public Builder setDomainClass(Class<?> domainClass) {
+						this.domainClass = domainClass;
+						return this;
+					}
+					
+					@Override
+					public Builder setIdentifier(Object identifier) {
+						this.identifier = identifier;
+						return this;
+					}
+					
+					@Override
+					public Builder setInput(Object input) {
+						return (Builder) super.setInput(input);
+					}
+					
+					@Override
+					public Builder setConditionValue(java.lang.Boolean conditionValue) {
+						this.conditionValue = conditionValue;
+						return this;
+					}
+					
+					@Override
+					public Builder setConditionIdentifierClass(Class<?> conditionIdentifierClass) {
+						this.conditionIdentifierClass = conditionIdentifierClass;
+						return this;
+					}
+					
+					@Override
+					protected Condition __execute__() {
+						Condition condition = new Condition();
+						condition.setIdentifier(getIdentifier());
+						condition.setValue(getConditionValue());
+
+						String fieldName = getFieldName();
+						java.lang.reflect.Field field = getFieldObject() == null || StringHelper.getInstance().isBlank(fieldName) ? null 
+								: FieldHelper.getInstance().get(getFieldObject().getClass(), fieldName);
+						
+						final Collection<java.lang.reflect.Field> fields = new ArrayList<java.lang.reflect.Field>();
+						/*for(java.util.Map.Entry<Integer, FieldHelper.Field.Value> entry : getFieldValueMap().entrySet())
+							if(entry.getValue().getField().getJavaField()!=null)
+								fields.add(entry.getValue().getField().getJavaField());
+						*/
+						new CollectionHelper.Iterator.Adapter.Default<String>(getFieldNames()){
+							private static final long serialVersionUID = 1L;
+							protected void __executeForEach__(String fieldName) {
+								fields.add(getFieldObject() == null || StringHelper.getInstance().isBlank(fieldName) ? null 
+										: FieldHelper.getInstance().get(getFieldObject().getClass(), fieldName));
+							}
+						}.execute();
+						
+						loggingMessageBuilder.addNamedParameters("object",getFieldObject(),"fields",fields);
+						//loggingMessageBuilder.addNamedParameters("object",getFieldObject(),"field",field);
+						Object value = getFieldValue();
+						if(value == null){
+							value = CollectionHelper.getInstance().isEmpty(fields) ? null : FieldHelper.getInstance().read(getFieldObject(), fieldName);
+						}
+						loggingMessageBuilder.addNamedParameters("value",value);
+						____execute____(condition,getFieldObject(), field, value);
+						
+						if(condition.getValue()!=null && Boolean.TRUE.equals(getIsNegateConditionValue()))
+							condition.setValue(!condition.getValue());
+						
+						if(condition.getIdentifier() == null){
+							FieldHelper.Field __field__  = field == null ? null : FieldHelper.Field.get(getFieldObject().getClass(), fieldName);
+							if(field != null){
+								Class<?> identifierClass = getConditionIdentifierClass();
+								if(identifierClass!=null)
+									condition.setIdentifier(__field__.getIdentifier(identifierClass));
+							}
+						}
+						
+						if(java.lang.Boolean.TRUE.equals(condition.getValue())){
+							String messageIdentifier = getMessageIdentifier();
+							if(StringHelper.getInstance().isBlank(messageIdentifier)) {
+								//if(field == null)
+								//	messageIdentifier = "condition.default";
+								//else
+									messageIdentifier = "condition.entity.field.value";
+							}
+							
+							String domainName;
+							if(StringHelper.getInstance().isBlank(getDomainNameIdentifier()))
+								domainName = StringHelper.getInstance().getClazz(getFieldObject().getClass(),CaseType.L);
+							else
+								domainName = StringHelper.getInstance().get(getDomainNameIdentifier(),CaseType.L, new Object[]{});
+							
+							String valueName;
+							if(StringHelper.getInstance().isBlank(getValueNameIdentifier())){
+								Collection<String> valueNames = new ArrayList<String>();
+								for(java.lang.reflect.Field index : fields)
+									valueNames.add(StringHelper.getInstance().getField(index.getName(),CaseType.L));
+								valueName = CollectionHelper.getInstance().concatenate(valueNames, Constant.CHARACTER_SPACE
+										+StringHelper.getInstance().getField("or",CaseType.L)+Constant.CHARACTER_SPACE);
+							}else
+								valueName = StringHelper.getInstance().get(getValueNameIdentifier(),CaseType.L, new Object[]{});
+							
+							condition.setMessage(new StringHelper.ToStringMapping.Adapter.Default(messageIdentifier).setCaseType(CaseType.FU)
+									.addManyParameters(getParameters(condition, getFieldObject(), field, value, domainName, valueName)).execute());
+						}			
+						
+						return condition;
+					}
+					
+					protected void ____execute____(Condition condition,Object instance,java.lang.reflect.Field field,Object value){}
+					
+					protected Object[] getParameters(Condition condition,Object instance,java.lang.reflect.Field field,Object value,String domainName,String valueName){
+						return new Object[]{domainName,getFieldValueName(condition, instance, field,value, valueName),getFieldValue(condition, instance, field, value)
+								,getValueMustBe(condition, instance, field, valueName)};
+					}
+					
+					protected String getFieldValueName(Condition condition,Object instance,java.lang.reflect.Field field,Object value,String name) {
+						return name;
+					}
+					
+					protected String getFieldValue(Condition condition,Object instance,java.lang.reflect.Field field,Object value) {
+						String string = formatValue(value);
+						return StringHelper.getInstance().isBlank(string) ? Constant.EMPTY_STRING : String.format(getFieldValueAt(0).getField().getValueFormat(),string);
+					}
+					
+					protected String getValueMustBe(Condition condition,Object instance,java.lang.reflect.Field field,Object value) {
+						return "??? MUST BE ???";
+					}
+					
+					protected String formatValue(Object value) {
+						String string;
+						if(value == null)
+							string = Constant.EMPTY_STRING;
+						else if(value instanceof Date)
+							string = new TimeHelper.Stringifier.Date.Adapter.Default((Date)value).execute();
+						else
+							string = value.toString();
+						return string;
+					}
+				
+				}
 				
 				public Adapter() {
 					super(Condition.class);
+				}
+				
+				@Override
+				public String getFieldValueFormat() {
+					return null;
+				}
+				
+				@Override
+				public String getValueNameIdentifier() {
+					return null;
+				}
+				
+				@Override
+				public Builder setFieldValueMap(Map<Integer,FieldHelper.Field.Value> fieldValueMap) {
+					return null;
+				}
+				
+				@Override
+				public Builder setFieldValueAt(Integer index, Value fieldValue) {
+					return null;
+				}
+				
+				@Override
+				public Value getFieldValueAt(Integer index) {
+					return null;
+				}
+				
+				@Override
+				public Object getFieldValue() {
+					return null;
+				}
+				
+				@Override
+				public Collection<String> getFieldNames() {
+					return null;
+				}
+				
+				@Override
+				public Object getFieldValue(String name) {
+					return null;
+				}
+				
+				@Override
+				public Builder setFieldValue(String name, Object value) {
+					return null;
+				}
+				
+				@Override
+				public String getFieldName() {
+					return null;
 				}
 				
 				public Builder setIsNegateConditionValue(java.lang.Boolean isNegateConditionValue){
@@ -227,204 +596,10 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 					return null;
 				}
 				
-				public static class Default extends Builder.Adapter implements Serializable {
-					private static final long serialVersionUID = 1L;
-					
-					{
-						setFieldValueFormat("(%s)");
-					}
-					
-					@Override
-					public Builder setIsNegateConditionValue(Boolean isNegateConditionValue) {
-						this.isNegateConditionValue = isNegateConditionValue;
-						return this;
-					}
-					
-					@Override
-					public Builder setFieldNames(Collection<String> fieldNames) {
-						this.fieldNames = fieldNames;
-						return this;
-					}
-					
-					@Override
-					public Builder setFieldNames(String... fieldNames) {
-						if(ArrayHelper.getInstance().isNotEmpty(fieldNames))
-							setFieldNames(Arrays.asList(fieldNames));
-						return this;
-					}
-					
-					@Override
-					public Builder setFieldObject(Object fieldObject) {
-						this.fieldObject = fieldObject;
-						return this;
-					}
-					
-					@Override
-					public Builder setFieldName(String fieldName) {
-						this.fieldName = fieldName;
-						return this;
-					}
-					
-					@Override
-					public Builder setFieldValue(Object fieldValue) {
-						this.fieldValue = fieldValue;
-						return this;
-					}
-					
-					@Override
-					public Builder setFieldValueFormat(String fieldValueFormat) {
-						this.fieldValueFormat = fieldValueFormat;
-						return this;
-					}
-					
-					@Override
-					public Builder setMessageIdentifier(String messageIdentifier){
-						this.messageIdentifier = messageIdentifier;
-						return this;
-					}
-					
-					@Override
-					public Builder setMessageIdentifier(StringHelper.Builder messageIdentifierBuilder){
-						setMessageIdentifier(messageIdentifierBuilder.execute());
-						return this;
-					}
-					
-					@Override
-					public Builder setDomainNameIdentifier(String domainNameIdentifier){
-						this.domainNameIdentifier = domainNameIdentifier;
-						return this;
-					}
-					
-					@Override
-					public Builder setDomainNameIdentifier(StringHelper.Builder domainNameIdentifierBuilder){
-						setDomainNameIdentifier(domainNameIdentifierBuilder.execute());
-						return this;
-					}
-					
-					@Override
-					public Builder setDomainClass(Class<?> domainClass) {
-						this.domainClass = domainClass;
-						return this;
-					}
-					
-					@Override
-					public Builder setIdentifier(Object identifier) {
-						this.identifier = identifier;
-						return this;
-					}
-					
-					@Override
-					public Builder setInput(Object input) {
-						return (Builder) super.setInput(input);
-					}
-					
-					@Override
-					public Builder setValueNameIdentifier(String valueNameIdentifier) {
-						this.valueNameIdentifier = valueNameIdentifier;
-						return this;
-					}
-					
-					@Override
-					public Builder setConditionValue(java.lang.Boolean conditionValue) {
-						this.conditionValue = conditionValue;
-						return this;
-					}
-					
-					@Override
-					public Builder setConditionIdentifierClass(Class<?> conditionIdentifierClass) {
-						this.conditionIdentifierClass = conditionIdentifierClass;
-						return this;
-					}
-					
-					@Override
-					protected Condition __execute__() {
-						Condition condition = new Condition();
-						condition.setIdentifier(getIdentifier());
-						condition.setValue(getConditionValue());
-						java.lang.reflect.Field field = getFieldObject() == null || StringHelper.getInstance().isBlank(getFieldName()) ? null 
-								: FieldHelper.getInstance().get(getFieldObject().getClass(), getFieldName());
-						Collection<Field> fields = new ArrayList<>();
-						loggingMessageBuilder.addNamedParameters("object",getFieldObject(),"field",field);
-						Object value = getFieldValue();
-						if(value == null){
-							value = field == null ? null : FieldHelper.getInstance().read(getFieldObject(), getFieldName());
-						}
-						loggingMessageBuilder.addNamedParameters("value",value);
-						____execute____(condition,getFieldObject(), field, value);
-						
-						if(condition.getValue()!=null && Boolean.TRUE.equals(getIsNegateConditionValue()))
-							condition.setValue(!condition.getValue());
-						
-						if(condition.getIdentifier() == null){
-							FieldHelper.Field __field__  = field == null ? null : FieldHelper.Field.get(getFieldObject().getClass(), getFieldName());
-							if(field != null){
-								Class<?> identifierClass = getConditionIdentifierClass();
-								if(identifierClass!=null)
-									condition.setIdentifier(__field__.getIdentifier(identifierClass));
-							}
-						}
-						
-						if(java.lang.Boolean.TRUE.equals(condition.getValue())){
-							String messageIdentifier = getMessageIdentifier();
-							if(StringHelper.getInstance().isBlank(messageIdentifier)) {
-								//if(field == null)
-								//	messageIdentifier = "condition.default";
-								//else
-									messageIdentifier = "condition.entity.field.value";
-							}
-							
-							String domainName;
-							if(StringHelper.getInstance().isBlank(getDomainNameIdentifier()))
-								domainName = StringHelper.getInstance().getClazz(getFieldObject().getClass(),CaseType.L);
-							else
-								domainName = StringHelper.getInstance().get(getDomainNameIdentifier(),CaseType.L, new Object[]{});
-							
-							String valueName;
-							if(StringHelper.getInstance().isBlank(getValueNameIdentifier()))
-								valueName = StringHelper.getInstance().getField(field.getName(),CaseType.L);
-							else
-								valueName = StringHelper.getInstance().get(getValueNameIdentifier(),CaseType.L, new Object[]{});
-							
-							condition.setMessage(new StringHelper.ToStringMapping.Adapter.Default(messageIdentifier).setCaseType(CaseType.FU)
-									.addManyParameters(getParameters(condition, getFieldObject(), field, value, domainName, valueName)).execute());
-						}			
-						
-						return condition;
-					}
-					
-					protected void ____execute____(Condition condition,Object instance,java.lang.reflect.Field field,Object value){}
-					
-					protected Object[] getParameters(Condition condition,Object instance,java.lang.reflect.Field field,Object value,String domainName,String valueName){
-						return new Object[]{domainName,getFieldValueName(condition, instance, field,value, valueName),getFieldValue(condition, instance, field, value)
-								,getValueMustBe(condition, instance, field, valueName)};
-					}
-					
-					protected String getFieldValueName(Condition condition,Object instance,java.lang.reflect.Field field,Object value,String name) {
-						return name;
-					}
-					
-					protected String getFieldValue(Condition condition,Object instance,java.lang.reflect.Field field,Object value) {
-						String string = formatValue(value);
-						return StringHelper.getInstance().isBlank(string) ? Constant.EMPTY_STRING : String.format(getFieldValueFormat(),string);
-					}
-					
-					protected String getValueMustBe(Condition condition,Object instance,java.lang.reflect.Field field,Object value) {
-						return "??? MUST BE ???";
-					}
-					
-					protected String formatValue(Object value) {
-						String string;
-						if(value == null)
-							string = Constant.EMPTY_STRING;
-						else if(value instanceof Date)
-							string = new TimeHelper.Stringifier.Date.Adapter.Default((Date)value).execute();
-						else
-							string = value.toString();
-						return string;
-					}
-				
+				@Override
+				public Builder setLogicalOperator(LogicalOperator logicalOperator) {
+					return null;
 				}
-				
 			}
 			
 			public static interface Null extends Builder {
@@ -487,7 +662,12 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 								&& value == null
 								);
 							*/
-							condition.setValue(value == null);
+							for(java.util.Map.Entry<Integer,FieldHelper.Field.Value> entry : getFieldValueMap().entrySet()){
+								condition.setValue(entry.getValue().getValue() == null);
+								if(Boolean.FALSE.equals(condition.getValue()))
+									break;
+							}
+							//condition.setValue(value == null);
 						}
 
 						@Override

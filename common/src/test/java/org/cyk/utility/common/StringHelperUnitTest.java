@@ -11,10 +11,11 @@ import org.cyk.utility.common.annotation.user.interfaces.Text.ValueType;
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.StringHelper;
-import org.cyk.utility.common.helper.TimeHelper;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 import org.cyk.utility.common.helper.StringHelper.Location;
 import org.cyk.utility.common.helper.StringHelper.Transformer;
+import org.cyk.utility.common.helper.TimeHelper;
+import org.cyk.utility.common.test.TestCase;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -38,6 +39,15 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.Cache.REPOSITORY.put("fr_cache001_NONE", "cache value one");
 		
 		StringHelper.ToStringMapping.Datasource.Adapter.Default.ResourceBundle.REPOSITORY.put("org.cyk.utility.common.testmsg", StringHelper.class.getClassLoader());
+	}
+	
+	@Test
+	public void getFirstLetterOfEach(){
+		TestCase testCase = new TestCase();
+		testCase.assertCollection(Arrays.asList("K","Y","C"), StringHelper.getInstance().getFirstLetterOfEach("Komenan Yao Christian"));
+		testCase.assertCollection(Arrays.asList("K","y","c"), StringHelper.getInstance().getFirstLetterOfEach("Komenan yao christian"));
+		testCase.assertEquals("KYC", StringHelper.getInstance().concatenateFirstLetterOfEach("Komenan Yao Christian"));
+		testCase.assertEquals("K.Y.C", StringHelper.getInstance().concatenateFirstLetterOfEach("Komenan Yao Christian","."));
 	}
 	
 	@Test

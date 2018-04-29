@@ -22,8 +22,8 @@ import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.helper.ArrayHelper.Element;
 import org.cyk.utility.common.helper.ClassHelper.Listener.FieldName;
-import org.cyk.utility.common.helper.ClassHelper.Listener.IdentifierType;
 import org.cyk.utility.common.helper.ClassHelper.Listener.FieldName.ValueUsageType;
+import org.cyk.utility.common.helper.ClassHelper.Listener.IdentifierType;
 import org.cyk.utility.common.helper.FilterHelper.Filter;
 import org.cyk.utility.common.helper.InstanceHelper.Listener.FieldValueGenerator;
 import org.cyk.utility.common.security.SecurityHelper;
@@ -48,10 +48,27 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		return INSTANCE;
 	}
 	
+	private static final Map<Class<?>,Object> DEFAULT_BUSINESS_IDENTIFIER_MAP = new HashMap<>();
+	
+	public Object getDefaultBusinessIdentifier(Class<?> aClass){
+		return DEFAULT_BUSINESS_IDENTIFIER_MAP.get(aClass);
+	}
+	
+	public void setDefaultBusinessIdentifier(Class<?> aClass,Object identifier){
+		DEFAULT_BUSINESS_IDENTIFIER_MAP.put(aClass, identifier);
+	}
+	
 	@Override
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public <T> T getDefaultUsingBusinessIdentifier(Class<T> aClass){
+		Object identifier = getDefaultBusinessIdentifier(aClass);
+		if(identifier!=null)
+			return InstanceHelper.getInstance().getByIdentifier(aClass, identifier, IdentifierType.BUSINESS);
+		return null;
 	}
 	
 	public <T> Collection<T> getHierarchyRoots(Class<T> aClass) {

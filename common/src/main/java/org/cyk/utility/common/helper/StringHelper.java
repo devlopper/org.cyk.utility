@@ -73,6 +73,42 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		super.initialisation();
 	}
 	
+	public Collection<String> getSubString(Integer from,Integer to,Collection<String> strings){
+		Collection<String> subStrings = null;
+		if(strings!=null){
+			subStrings = new ArrayList<String>();
+			for(String string : strings)
+				subStrings.add(StringUtils.substring(string, from, to));
+		}
+		return subStrings;
+	}
+	
+	public Collection<String> getSubString(Integer from,Integer to,String...strings){
+		if(strings!=null)
+			return getSubString(from, to, Arrays.asList(strings));
+		return null;
+	}
+	
+	public Collection<String> getSubStringOfEach(Integer from,Integer to,String string,String separator){
+		return getSubString(from, to, StringUtils.split(string,separator));
+	}
+	
+	public Collection<String> getSubStringOfEach(Integer from,Integer to,String string){
+		return getSubStringOfEach(from, to, string, Constant.CHARACTER_SPACE.toString());
+	}
+	
+	public Collection<String> getFirstLetterOfEach(String string){
+		return getSubStringOfEach(0, 1, string);
+	}
+	
+	public String concatenateFirstLetterOfEach(String string,Object separator){
+		return concatenate(getFirstLetterOfEach(string), separator);
+	}
+	
+	public String concatenateFirstLetterOfEach(String string){
+		return concatenateFirstLetterOfEach(string, Constant.EMPTY_STRING);
+	}
+	
 	public String getHtml(String string){
 		string = StringEscapeUtils.escapeHtml4(string);
 		string = StringUtils.replaceAll(string, ContentType.TEXT.getNewLineMarker(), ContentType.HTML.getNewLineMarker());

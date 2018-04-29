@@ -543,11 +543,11 @@ public class TestCase extends AbstractBean implements Serializable {
 		return this;
 	}
 	
-	public void assertList(List<?> collection,List<?> expected){
-		assertEquals("collection size not equals", CollectionHelper.getInstance().getSize(expected), CollectionHelper.getInstance().getSize(collection));
-		if(collection!=null)
-			for(Integer index = 0 ; index < collection.size() ; index++){
-				assertEquals("element at position "+index+" not equals", expected.get(index.intValue()), collection.get(index.intValue()));
+	public void assertCollection(Collection<?> expected,Collection<?> actual){
+		assertEquals("collection size not equals", CollectionHelper.getInstance().getSize(expected), CollectionHelper.getInstance().getSize(actual));
+		if(actual!=null)
+			for(Integer index = 0 ; index < actual.size() ; index++){
+				assertEquals("element at position "+index+" not equals", CollectionHelper.getInstance().getElementAt(expected, index), CollectionHelper.getInstance().getElementAt(actual, index));
 			}
 	}
 	

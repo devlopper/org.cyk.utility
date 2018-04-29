@@ -19,6 +19,9 @@
 	</Appenders>
 	<Loggers>
 	
+		<!--Logger name="org.cyk.utility.common.helper.ConditionHelper$Condition$Builder$Comparison$Count$Adapter$Default" level="trace">
+			<AppenderRef ref="Console" />
+		</Logger-->
 		<!--Logger name="org.cyk.utility.common.helper.ValidationHelper$Validate$Adapter$Default" level="trace">
 			<AppenderRef ref="Console" />
 		</Logger-->
