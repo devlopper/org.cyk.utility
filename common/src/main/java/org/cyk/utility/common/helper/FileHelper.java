@@ -1,5 +1,6 @@
 package org.cyk.utility.common.helper;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -48,6 +49,31 @@ public class FileHelper extends AbstractHelper implements Serializable  {
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public String getText(byte[] bytes,Boolean removeEmptyLine,Boolean trim){
+		if(bytes == null)
+			return null;
+		org.apache.tika.sax.BodyContentHandler bodyContentHandler = new org.apache.tika.sax.BodyContentHandler();
+		org.apache.tika.metadata.Metadata metadata = new org.apache.tika.metadata.Metadata();
+		org.apache.tika.parser.ParseContext parseContext=new org.apache.tika.parser.ParseContext();  
+		org.apache.tika.parser.Parser parser = new org.apache.tika.parser.AutoDetectParser();
+		try {
+			parser.parse(new ByteArrayInputStream(bytes), bodyContentHandler, metadata,parseContext);
+			String string =  bodyContentHandler.toString();
+			if(Boolean.TRUE.equals(removeEmptyLine))
+				string = StringHelper.getInstance().removeEmptyLine(string);
+			if(Boolean.TRUE.equals(trim))
+				string = StringHelper.getInstance().trim(string);
+			return string;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public String getText(byte[] bytes){
+		return getText(bytes, Boolean.FALSE, Boolean.FALSE);
 	}
 	
 	public String concatenate(String name,String extension){

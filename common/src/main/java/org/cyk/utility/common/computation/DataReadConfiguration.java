@@ -35,6 +35,8 @@ public class DataReadConfiguration extends AbstractBean implements Serializable 
 	private Map<String, Object> hints;
 	private Set<String> attributes;
 	
+	private Boolean computeChanges;
+	
 	public DataReadConfiguration(Long firstResultIndex, Long maximumResultCount, String sortField,
 			Boolean ascendingOrder, Map<String, Object> filters, String globalFilter) {
 		super();

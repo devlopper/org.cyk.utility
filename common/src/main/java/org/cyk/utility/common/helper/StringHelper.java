@@ -73,6 +73,25 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		super.initialisation();
 	}
 	
+	public String removeEmptyLine(String string){
+		String result;
+		if(isBlank(string))
+			result = string;
+		else {
+			String[] array = StringUtils.split(string, '\n');
+			Collection<String> strings = new ArrayList<String>();
+			for(String index : array)
+				if(isNotBlank(index))
+					strings.add(index);
+			result = concatenate(strings, ContentType.TEXT.getNewLineMarker());
+		}
+		return result;
+	}
+	
+	public String trim(String string){
+		return StringUtils.trimToEmpty(string);
+	}
+	
 	public Collection<String> getSubString(Integer from,Integer to,Collection<String> strings){
 		Collection<String> subStrings = null;
 		if(strings!=null){

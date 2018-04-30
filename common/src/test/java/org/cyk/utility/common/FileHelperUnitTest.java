@@ -11,6 +11,17 @@ public class FileHelperUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	@Test
+	public void getTextFromFileTxt(){
+		assertEquals("Hello World!!!",FileHelper.getInstance().getText(FileHelper.getInstance().getBytes(Action.class, "files/text/hello world.txt"),Boolean.TRUE,Boolean.TRUE));
+	}
+	
+	@Test
+	public void getTextFromFilePdf(){
+		assertEquals("This is a text from pdf file.",FileHelper.getInstance().getText(FileHelper.getInstance().getBytes(Action.class, "files/pdf/0.pdf"),Boolean.TRUE,Boolean.TRUE));
+		//assertEquals("This is a text from pdf file.",FileHelper.getInstance().getText(FileHelper.getInstance().getBytes(Action.class, "files/pdf/1.pdf"),Boolean.TRUE,Boolean.TRUE));
+	}
+	
+	@Test
 	public void extension(){
 		assertEquals(FileExtension.BMP,FileExtension.getByValue("bmp"));
 		assertEquals(FileExtension.PDF,FileExtension.getByValue("pDf"));
@@ -23,6 +34,11 @@ public class FileHelperUnitTest extends AbstractUnitTest {
 		assertEquals(FileContentType.APPLICATION,FileContentType.getByValue("application"));
 		assertEquals(FileContentType.IMAGE,FileContentType.getByValue("ImAge"));
 		Assert.assertNull(FileContentType.getByValue("iamnull"));
+	}
+	
+	@Test
+	public void getContentTypeByBytes(){
+		assertEquals(FileContentType.TEXT,FileContentType.getByBytes("application".getBytes()));
 	}
 	
 	@Test
