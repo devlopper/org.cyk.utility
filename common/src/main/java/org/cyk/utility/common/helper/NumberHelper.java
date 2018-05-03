@@ -265,6 +265,12 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 		return Boolean.TRUE;
 	}
 	
+	public Boolean isGreaterThanOrEqualsZero(Number number){
+		if(number == null)
+			return Boolean.FALSE;
+		return number.intValue() >= 0;
+	}
+	
 	public Boolean compare(Number number1,Number number2,Boolean greater,Boolean equal){
 		if(number1==null || number2==null)
 			return Boolean.FALSE;

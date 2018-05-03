@@ -56,8 +56,21 @@ public class TestCase extends AbstractBean implements Serializable {
 		System.out.println(StringUtils.repeat("#", 5)+" CLEAN "+StringUtils.repeat("#", 5));
 		if(objects!=null){
 			Collections.reverse(objects);
-			while(!objects.isEmpty())
-				delete(objects.iterator().next());	
+			while(!objects.isEmpty()){
+				Object object = objects.iterator().next();
+				Object identifier = getIdentifierWhereValueUsageTypeIsBusiness(object);
+				if(identifier == null){
+					identifier = getIdentifierWhereValueUsageTypeIsSystem(object);
+					if(identifier != null)
+						object = getByIdentifierWhereValueUsageTypeIsSystem(object);
+				}else
+					object = getByIdentifierWhereValueUsageTypeIsBusiness(object.getClass(),identifier);
+				
+				if(object != null)
+					delete(object);
+				
+				//delete(objects.iterator().next());
+			}
 		}
 		cleaned = Boolean.TRUE;
 		assertCountAll(classes);

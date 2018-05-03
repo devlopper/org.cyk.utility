@@ -250,6 +250,8 @@ public class Menu extends MenuNodesContainer implements Serializable {
 					if(Boolean.TRUE.equals(isIdentifiableConsultWindow())){
 						addNodeInstanceClassListMany(node, instanceClass);
 						addNodeInstanceClassCreateOne(node, instanceClass);
+					}else if(Boolean.TRUE.equals(isIdentifiableEditWindow())){
+						addNodeInstanceClassListMany(node, instanceClass);
 					}
 				}
 				

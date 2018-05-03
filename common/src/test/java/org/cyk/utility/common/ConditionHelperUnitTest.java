@@ -35,6 +35,18 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
+	public void assertNotNullUsingOneFieldSub(){
+		assertCondition(ConditionHelper.Condition.getBuilderNull(new MyEntity(), "sub.f1")
+				.execute(), Boolean.TRUE, "La valeur de l'attribut <<f1>> de l'entité <<mon entité>> doit être non nulle.");
+	}
+	
+	@Test
+	public void assertNullUsingOneFieldSub(){
+		assertCondition(ConditionHelper.Condition.getBuilderNull(new MyEntity().setF1("myf1"),"sub.f1").setIsNegateConditionValue(Boolean.TRUE)
+				.execute(), Boolean.TRUE, "La valeur(myf1) de l'attribut <<f1>> de l'entité <<mon entité>> doit être nulle.");
+	}
+	
+	@Test
 	public void assertNotNullNotUsingOneField(){
 		assertCondition(new ConditionHelper.Condition.Builder.Null.Adapter.Default()
 				.setDomainNameIdentifier("domain").setValueNameIdentifier("code")
@@ -198,6 +210,16 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 		private static final long serialVersionUID = 1L;
 		
 		private String f1,f2;
+		private Integer int1;
+		private MySubEntity sub = new MySubEntity();
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class MySubEntity implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private String f1,f2="2222";
 		private Integer int1;
 		
 	}

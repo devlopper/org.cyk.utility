@@ -648,6 +648,13 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		
 		private String nameIdentifier,valueFormat;
 		
+		/**
+		 * relationship of field type towards class
+		 */
+		private Relationship relationship;
+		
+		private Collection<Constant.Action> cascadedActions;
+		
 		//private Object value;
 		
 		private Constraints constraints = new Constraints();
@@ -679,6 +686,20 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			return identifier;
 		}
 		
+		public Field addCascadedActions(Collection<Constant.Action> cascadedActions){
+			if(CollectionHelper.getInstance().isNotEmpty(cascadedActions)){
+				if(this.cascadedActions == null)
+					this.cascadedActions = new LinkedHashSet<>();
+				this.cascadedActions.addAll(cascadedActions);
+			}
+			return this;
+		}
+		
+		public Field addCascadedActions(Constant.Action...cascadedActions){
+			addCascadedActions(CollectionHelper.getInstance().get(cascadedActions));
+			return this;
+		}
+		
 		public static Field get(Class<?> clazz,String...names){
 			String name = getInstance().buildPath(names);
 			Field field = null;
@@ -708,11 +729,25 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			return collection;
 		}
 		
+		public static java.util.Collection<Field> getByClassByRelationshipByActions(Class<?> clazz,Relationship relationship,Constant.Action...actions){
+			java.util.Collection<Field> result = new ArrayList<FieldHelper.Field>();
+			for(FieldHelper.Field index : FieldHelper.Field.get(clazz)){
+		    	if(relationship.equals(index.getRelationship()) && CollectionHelper.getInstance().contains(index.getCascadedActions(), actions)){
+		    		result.add(index);
+		    	}
+		    }
+			return result;
+		}
+		
 		public static void clear(){
 			COLLECTION.clear();
 		}
 		
 		/**/
+	
+		public static enum Relationship {
+			PARENT,CHILD
+		}
 		
 		@Getter @Setter @Accessors(chain=true)
 		public static class Value implements Serializable {
@@ -751,6 +786,7 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 				}
 			}
 		}
+	
 	}	
 	
 	@Getter @Setter @Accessors(chain=true)

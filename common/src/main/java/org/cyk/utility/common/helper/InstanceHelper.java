@@ -50,6 +50,28 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 	
 	private static final Map<Class<?>,Object> DEFAULT_BUSINESS_IDENTIFIER_MAP = new HashMap<>();
 	
+	public void cascadeAct(Constant.Action action,Object instance,FieldHelper.Field.Relationship relationship){
+		for(FieldHelper.Field index : FieldHelper.Field.getByClassByRelationshipByActions(instance.getClass(), relationship, action)){
+			Object relatedInstance = FieldHelper.getInstance().read(instance, index.getName());
+			Boolean actable;
+			if(Constant.Action.CREATE.equals(action))
+				actable = Boolean.TRUE.equals(isNotIdentifiedBySystem(relatedInstance));
+			else
+				actable = Boolean.TRUE;
+	    	
+			if(actable)
+	    		act(action,relatedInstance);
+	    }
+	}
+	
+	public Boolean isIdentifiedBySystem(Object instance){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).isIdentifiedBySystem(instance);
+	}
+	
+	public Boolean isNotIdentifiedBySystem(Object instance){
+		return ClassHelper.getInstance().instanciateOne(Listener.class).isNotIdentifiedBySystem(instance);
+	}
+	
 	public Object getDefaultBusinessIdentifier(Class<?> aClass){
 		return DEFAULT_BUSINESS_IDENTIFIER_MAP.get(aClass);
 	}
@@ -1004,6 +1026,8 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		Object act(Constant.Action action,Object instance);
 		<T> T computeChanges(T instance);
 		
+		Boolean isIdentifiedBySystem(Object instance);
+		Boolean isNotIdentifiedBySystem(Object instance);
 		Boolean isHierarchy(Object instance);
 		Boolean isTyped(Object instance);
 		
@@ -1017,6 +1041,16 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		
 		public static class Adapter extends AbstractHelper.Listener.Adapter.Default implements Listener,Serializable {
 			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Boolean isIdentifiedBySystem(Object instance) {
+				return null;
+			}
+			
+			@Override
+			public Boolean isNotIdentifiedBySystem(Object instance) {
+				return null;
+			}
 			
 			@Override
 			public Object getIdentifier(Object instance, ValueUsageType valueUsageType) {
@@ -1210,6 +1244,23 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 				
 				//@SuppressWarnings("unchecked")
 				//public static Class<? extends Listener> DEFAULT_CLASS = (Class<? extends Listener>) ClassHelper.getInstance().getByName(Default.class);
+				
+				@Override
+				public Boolean isIdentifiedBySystem(Object instance) {
+					if(instance == null)
+						return Boolean.FALSE;
+					Object identifier = getIdentifierWhereValueUsageTypeIsSystem(instance);
+					if(identifier == null)
+						return Boolean.FALSE;
+					if(ClassHelper.getInstance().isNumber(identifier.getClass()))
+						return NumberHelper.getInstance().isGreaterThanOrEqualsZero(NumberHelper.getInstance().get(identifier));
+					return Boolean.TRUE;
+				}
+				
+				@Override
+				public Boolean isNotIdentifiedBySystem(Object instance) {
+					return Boolean.FALSE.equals(isIdentifiedBySystem(instance));
+				}
 				
 				@Override
 				public Object getIdentifier(Object instance, ValueUsageType valueUsageType) {

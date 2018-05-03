@@ -1220,5 +1220,11 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 
 	}
 
+	/**/
 	
+	/*@Getter @Setter @Accessors(chain=true)
+	public static class Clazz extends AbstractBean implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+	}*/
 }
