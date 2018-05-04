@@ -118,11 +118,11 @@ public interface Constant {
 	java.util.Date DATE_LOWEST_VALUE = new DateTime(0, 1, 1, 0, 0, 0, 0).toDate();
 	java.util.Date DATE_HIGHEST_VALUE = new DateTime(9999, 12, 31, 23, 59, 59, 999).toDate();
 	
-	BigDecimal NUMBER_LOWEST_NEGATIVE=new BigDecimal("-1"+StringUtils.repeat('0', 18));
+	BigDecimal NUMBER_LOWEST_NEGATIVE=new BigDecimal("-"+StringUtils.repeat('9', 18));
 	BigDecimal NUMBER_HIGHEST_NEGATIVE_LOWER_THAN_ZERO=new BigDecimal("-0."+StringUtils.repeat('0', 18)+"1");
 	
-	BigDecimal NUMBER_LOWEST_POSITIVE_GREATER_THAN_ZERO=new BigDecimal("0."+StringUtils.repeat('0', 18)+"1");
-	BigDecimal NUMBER_HIGHEST_POSITIVE=new BigDecimal("1"+StringUtils.repeat('0', 18));
+	BigDecimal NUMBER_LOWEST_POSITIVE_GREATER_THAN_ZERO=NUMBER_HIGHEST_NEGATIVE_LOWER_THAN_ZERO.negate();
+	BigDecimal NUMBER_HIGHEST_POSITIVE=NUMBER_LOWEST_NEGATIVE.negate();
 	
 	BigDecimal BIGDECIMAL_100 = new BigDecimal("100");
 	

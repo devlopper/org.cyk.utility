@@ -451,6 +451,8 @@ public class ConditionHelper extends AbstractHelper implements Serializable  {
 							string = Constant.EMPTY_STRING;
 						else if(value instanceof Date)
 							string = new TimeHelper.Stringifier.Date.Adapter.Default((Date)value).execute();
+						else if(NumberHelper.getInstance().isNumber(value))
+							string = NumberHelper.getInstance().stringify(NumberHelper.getInstance().get(value));
 						else
 							string = value.toString();
 						return string;

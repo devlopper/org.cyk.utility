@@ -1,9 +1,11 @@
 package org.cyk.utility.common;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.cyk.utility.common.helper.ConditionHelper;
+import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.ConditionHelper.Condition;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.TimeHelper;
@@ -129,8 +131,14 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 		assertCondition(ConditionHelper.Condition.getBuilderComparison(new Sale().setBalance(1), 2, null, Boolean.FALSE, "balance").execute()
 				, Boolean.TRUE, "La valeur(1) de l'attribut <<balance>> de l'entité <<vente>> doit être égale à 2.");
 		
-		assertCondition(ConditionHelper.Condition.getBuilderComparison(new Sale().setTotal(1),2,Boolean.FALSE,Boolean.FALSE,"total").execute()
-				, Boolean.TRUE, "La valeur(1) de l'attribut <<total>> de l'entité <<vente>> doit être supérieure ou égale à 2.");	
+		assertCondition(ConditionHelper.Condition.getBuilderComparison(new Sale().setTotal(1),Constant.NUMBER_LOWEST_NEGATIVE,Boolean.TRUE,Boolean.FALSE,"total").execute()
+				, Boolean.TRUE, "La valeur(1) de l'attribut <<total>> de l'entité <<vente>> doit être inférieure ou égale à "+NumberHelper.getInstance().stringify(Constant.NUMBER_LOWEST_NEGATIVE)+".");	
+		
+		assertCondition(ConditionHelper.Condition.getBuilderComparison(new Sale().setTotal(1),Constant.NUMBER_HIGHEST_POSITIVE,Boolean.FALSE,Boolean.FALSE,"total").execute()
+				, Boolean.TRUE, "La valeur(1) de l'attribut <<total>> de l'entité <<vente>> doit être supérieure ou égale à "+NumberHelper.getInstance().stringify(Constant.NUMBER_HIGHEST_POSITIVE)+".");	
+		
+		assertCondition(ConditionHelper.Condition.getBuilderComparison(new Sale().setTotal(1),Constant.NUMBER_LOWEST_POSITIVE_GREATER_THAN_ZERO,Boolean.TRUE,Boolean.FALSE,"total").execute()
+				, Boolean.TRUE, "La valeur(1) de l'attribut <<total>> de l'entité <<vente>> doit être inférieure ou égale à "+NumberHelper.getInstance().stringify(Constant.NUMBER_LOWEST_POSITIVE_GREATER_THAN_ZERO).toLowerCase()+".");		
 	}
 	
 	@Test
@@ -211,6 +219,7 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 		
 		private String f1,f2;
 		private Integer int1;
+		private BigDecimal number;
 		private MySubEntity sub = new MySubEntity();
 		
 	}
@@ -231,6 +240,7 @@ public class ConditionHelperUnitTest extends AbstractUnitTest {
 		private String code;
 		private Integer balance;
 		private Integer total;
+		private BigDecimal number;
 		private Date date;
 		
 	}

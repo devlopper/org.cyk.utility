@@ -17,7 +17,6 @@ import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
 public class NumberHelperUnitTest extends AbstractUnitTest {
-
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	{
@@ -37,6 +36,10 @@ public class NumberHelperUnitTest extends AbstractUnitTest {
 		
 		assertEquals(Boolean.TRUE, NumberHelper.getInstance().compare(3, 2, Boolean.TRUE, Boolean.FALSE));
 		assertEquals(Boolean.TRUE, NumberHelper.getInstance().compare(1, 2, Boolean.FALSE, Boolean.FALSE));
+		
+		assertEquals(Boolean.TRUE, NumberHelper.getInstance().compare(1, Constant.NUMBER_HIGHEST_POSITIVE, Boolean.FALSE, null));
+		assertEquals(Boolean.TRUE, NumberHelper.getInstance().compare(1, Constant.NUMBER_HIGHEST_POSITIVE, Boolean.FALSE, Boolean.FALSE));
+		assertEquals(Boolean.TRUE, NumberHelper.getInstance().compare(1, Constant.NUMBER_LOWEST_NEGATIVE, Boolean.TRUE, null));
 	}
 	
 	@Test

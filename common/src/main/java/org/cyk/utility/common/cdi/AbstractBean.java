@@ -48,6 +48,7 @@ public class AbstractBean implements Serializable {
 	
 	@Getter protected Collection<BeanListener> beanListeners = new ArrayList<>();
 	@Getter protected Long __orderNumber__;
+	//@Getter protected Boolean __initialized__;
 	protected Properties propertiesMap;
 	private transient Logger __logger__; 
 	

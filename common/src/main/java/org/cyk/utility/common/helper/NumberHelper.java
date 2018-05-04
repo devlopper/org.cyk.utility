@@ -250,6 +250,12 @@ public class NumberHelper extends AbstractHelper implements Serializable  {
 	}
 	*/
 	
+	public Boolean isZero(Number number){
+		if(number == null)
+			return Boolean.FALSE;
+		return number.intValue() == 0 && number.floatValue() == 0 && number.doubleValue() == 0;
+	}
+	
 	public Boolean isGreaterThanZero(Number number){
 		if(number == null)
 			return Boolean.FALSE;

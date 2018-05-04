@@ -386,7 +386,7 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		private Map<String,String> elementFieldsAndElementObjectFieldsMap;
 		private Collection<Listener<T>> listeners;
 		private Boolean isCreatable=Boolean.TRUE,isReadable=Boolean.TRUE,isUpdatable=Boolean.TRUE,isRemovable=Boolean.TRUE,isNullAddable=Boolean.FALSE;
-		private Boolean isEachElementHasSource,isElementObjectCreatable;
+		private Boolean isEachElementHasSource,isElementObjectCreatable,hasAlreadyContainedElements;
 		private Instance<Object> masterElementObjectCollection;
 		private Comparator<T> comparator;
 		
@@ -512,6 +512,8 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 				
 				if(Boolean.TRUE.equals(isAddable)){
 					if(getElements().add((T) element)){
+						if(hasAlreadyContainedElements == null)
+							hasAlreadyContainedElements = Boolean.TRUE;
 						if(element instanceof AbstractBean){
 							if(((AbstractBean)element).get__orderNumber__() == null)
 								((AbstractBean)element).set__orderNumber__(new Long(getElements().size()));
