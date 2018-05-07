@@ -403,6 +403,26 @@ public class Component extends AbstractBean implements Serializable {
 			return this;
 		}
 		
+		public Visible __setPropertyLabelFromLabelValue__(){
+			getPropertiesMap().setTitle(getLabel().getPropertiesMap().getValue());
+			return this;
+		}
+		
+		public Visible __setPropertyTitleFromLabelValue__(){
+			getPropertiesMap().setTitle(getLabel().getPropertiesMap().getValue());
+			return this;
+		}
+		
+		public Visible setPropertyLabel(Object object){
+			getPropertiesMap().setLabel(object);
+			return this;
+		}
+		
+		public Visible setLabelPropertyValue(Object object){
+			getLabel().getPropertiesMap().setValue(object);
+			return this;
+		}
+		
 		public Visible __setLabelValueBasedOnActionProperty__(){
 			if(getPropertiesMap().getAction() instanceof Constant.Action){
 				_setLabelPropertyValue(StringHelper.getInstance().getVerb((Constant.Action)getPropertiesMap().getAction()));

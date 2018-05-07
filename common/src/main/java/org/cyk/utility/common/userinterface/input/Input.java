@@ -73,7 +73,8 @@ public class Input<T> extends Control implements Serializable {
 		if(this.field == null){
 			value = initialValue = null;
 		}else{
-			__setLabelFromField__(field);
+			if(getLabel().getPropertiesMap().getValue() == null)
+				__setLabelFromField__(field);
 			read();
 		}
 		return this;
@@ -414,9 +415,13 @@ public class Input<T> extends Control implements Serializable {
 					
 					input.setFormDetail(detail);
 					input.setObject(object).setField(field);
+					
 					if(listener != null && StringHelper.getInstance().isNotBlank(listener.getLabelValueIdentifier()))
-							input.getLabel().getPropertiesMap().setValue(StringHelper.getInstance().get(listener.getLabelValueIdentifier(), new Object[]{}));
-					input.getPropertiesMap().setLabel(input.getLabel().getPropertiesMap().getValue());
+						input.getLabel().getPropertiesMap().setValue(StringHelper.getInstance().get(listener.getLabelValueIdentifier(), new Object[]{}));
+						
+					input.__setPropertyLabelFromLabelValue__();
+					input.__setPropertyTitleFromLabelValue__();
+					
 					input.getPropertiesMap().setRequired(field.getAnnotation(NotNull.class)!=null);
 					input.getPropertiesMap().setRequiredMessage(StringHelper.getInstance().get("validation.userinterface.input.value.required"
 							, new Object[]{input.getLabel().getPropertiesMap().getValue()}));
