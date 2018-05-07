@@ -21,7 +21,7 @@ public class InputChoice<T> extends Input<T> implements Serializable {
 	
 	protected final CollectionHelper.Instance<Object> choices = new CollectionHelper.Instance<Object>();
 	protected Boolean nullChoicable,isReadChoicesElementsOnSetField=Boolean.TRUE;
-	
+	protected Collection<?> instances;
 	/**/
 	
 	public InputChoice<T> setField(Object object, String fieldName,Collection<?> choicesElements) {
@@ -47,7 +47,9 @@ public class InputChoice<T> extends Input<T> implements Serializable {
 		if(object!=null){
 			choices.removeAll();
 			Class<?> type = Input.getListener().computeChoiceInstanceClass(this);
-			Collection<?> instances = InstanceHelper.getInstance().get(type);
+			if(instances == null)
+				instances = InstanceHelper.getInstance().get(type);
+			//Collection<?> instances = InstanceHelper.getInstance().get(type);
 			if(CollectionHelper.getInstance().isNotEmpty(instances)){
 				choices.addMany(Boolean.TRUE.equals(getPropertiesMap().getSelectItemWrappable()) ? SelectItemHelper.getInstance().get(instances, nullChoicable) : instances);
 			}

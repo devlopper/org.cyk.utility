@@ -691,15 +691,19 @@ public class Form extends Container implements Serializable {
 			return this;
 		}
 		
-		public Detail add(Object object,String fieldName,Number length,Number width,Boolean editable){
+		public Detail add(Object object,String fieldName,Number length,Number width,Boolean editable,Control.Listener.Get getControlListener){
 			if(object==null)
 				object = getMaster().getObject();
 			String constraintsFieldName = StringHelper.getInstance().isBlank(fieldsObjectFieldName) ? fieldName : FieldHelper.getInstance().buildPath(fieldsObjectFieldName,fieldName);
 			FieldHelper.Constraints constraints = FieldHelper.Field.get(getMaster().getObject().getClass(), constraintsFieldName).getConstraints();
 			Field field = FieldHelper.getInstance().get(object.getClass(), fieldName);
-			Control control = Boolean.TRUE.equals(editable) ? Input.get(this,object, field,constraints) : Output.get(this, object, field,constraints).__setLabelFromField__();
+			Control control = Boolean.TRUE.equals(editable) ? Input.get(this,object, field,constraints,getControlListener) : Output.get(this, object, field,constraints).__setLabelFromField__();
 			add(control.setLength(length).setWidth(width));
 			return this;
+		}
+		
+		public Detail add(Object object,String fieldName,Number length,Number width,Boolean editable){
+			return add(object,fieldName,length,width,editable,null);
 		}
 		
 		public Detail add(Object object,String fieldName,Number length,Number width){
@@ -722,28 +726,40 @@ public class Form extends Container implements Serializable {
 			return add(object,fieldName,getMaster().getEditable());
 		}
 		
-		public Detail add(String[] fieldNames,Number length,Number width,Boolean editable){
+		public Detail add(String[] fieldNames,Number length,Number width,Boolean editable,Control.Listener.Get getControlListener){
 			Object object = fieldNames.length == 1 ? fieldsObject : FieldHelper.getInstance().read(fieldsObject, ArrayUtils.remove(fieldNames, fieldNames.length-1));
 			String fieldName = fieldNames[fieldNames.length-1] ;
-			add(object, fieldName, length, width,editable);
+			add(object, fieldName, length, width,editable,getControlListener);
 			//getInputByFieldName(object, fieldName).getPropertiesMap().setIdentifierAsStyleClass(CascadeStyleSheetHelper.getInstance().getClass(fieldsObject, fieldNames));
 			return this;
+		}
+		
+		public Detail add(String[] fieldNames,Number length,Number width,Boolean editable){
+			return add(fieldNames,length,width,editable,null);
 		}
 		
 		public Detail add(String[] fieldNames,Number length,Number width){
 			return add(fieldNames,length,width,getMaster().getEditable());
 		}
 		
+		public Detail addByEditable(Control.Listener.Get getControlListener,Boolean editable,String fieldName,String...fieldNames){
+			return add(ArrayUtils.addAll(new String[]{fieldName}, fieldNames), 1, 1,editable,getControlListener);
+		}
+		
 		public Detail addByEditable(Boolean editable,String fieldName,String...fieldNames){
-			return add(ArrayUtils.addAll(new String[]{fieldName}, fieldNames), 1, 1,editable);
+			return addByEditable(null,editable,fieldName,fieldNames);
 		}
 		
 		public Detail addReadOnly(String fieldName,String...fieldNames){
 			return addByEditable(Boolean.FALSE, fieldName, fieldNames);
 		}
 		
+		public Detail addByControlGetListener(Control.Listener.Get getControlListener,String fieldName,String...fieldNames){
+			return addByEditable(getControlListener,getMaster().getEditable(),fieldName, fieldNames);
+		}
+		
 		public Detail add(String fieldName,String...fieldNames){
-			return addByEditable(getMaster().getEditable(),fieldName, fieldNames);
+			return addByControlGetListener(null,fieldName,fieldNames);
 		}
 		
 		public Detail add(String fieldName1,String fieldName2,Boolean editable){

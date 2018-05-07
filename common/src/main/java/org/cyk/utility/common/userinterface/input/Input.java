@@ -19,6 +19,7 @@ import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
+import org.cyk.utility.common.helper.FieldHelper.Constraints;
 import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.LocaleHelper;
 import org.cyk.utility.common.helper.StringHelper;
@@ -165,6 +166,10 @@ public class Input<T> extends Control implements Serializable {
 		return ClassHelper.getInstance().instanciateOne(Listener.class);
 	}
 	
+	public static Input<?> get(Form.Detail detail,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints,Control.Listener.Get getListener){
+		return getListener().get(detail,object, field,constraints,getListener);
+	}
+	
 	public static Input<?> get(Form.Detail detail,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints){
 		return getListener().get(detail,object, field,constraints);
 	}
@@ -180,6 +185,13 @@ public class Input<T> extends Control implements Serializable {
 	public static Input<?> get(Form.Detail detail,Object object,String fieldName){
 		return get(detail, object, fieldName, null);
 	}
+	
+	/*public static Input<?> get(Form.Detail detail,Object object,String fieldName,Listener.Get getListener){
+		String constraintsFieldName = StringHelper.getInstance().isBlank(fieldsObjectFieldName) ? fieldName : FieldHelper.getInstance().buildPath(fieldsObjectFieldName,fieldName);
+		FieldHelper.Constraints constraints = FieldHelper.Field.get(getMaster().getObject().getClass(), constraintsFieldName).getConstraints();
+		Field field = FieldHelper.getInstance().get(object.getClass(), fieldName);
+		return get(detail,object, field,constraints,getInputListener);
+	}*/
 	
 	public static java.util.List<Input<?>> get(Form.Detail detail,Object object){
 		return getListener().get(detail,object);
@@ -230,6 +242,10 @@ public class Input<T> extends Control implements Serializable {
 		
 		Class<? extends Input<?>> getClass(Form.Detail form,Object object,java.lang.reflect.Field field);
 		
+		Input<?> instanciate(Class<? extends Input<?>> aClass,Form.Detail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints);
+		void initialse(Input<?> input,Form.Detail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints,Control.Listener.Get listener);
+		
+		Input<?> get(Form.Detail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints,Control.Listener.Get listener);
 		Input<?> get(Form.Detail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints);
 		Input<?> get(Form.Detail form,Object object,java.lang.reflect.Field field);
 		void listenGet(Input<?> input);
@@ -383,51 +399,71 @@ public class Input<T> extends Control implements Serializable {
 				}
 				
 				@Override
-				public Input<?> get(Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints) {
+				public Input<?> instanciate(Class<? extends Input<?>> aClass, Detail form, Object object, Field field,Constraints constraints) {
+					return ClassHelper.getInstance().instanciateOne(aClass);
+				}
+				
+				@Override
+				public void initialse(Input<?> input, Detail detail, Object object, Field field,Constraints constraints,Control.Listener.Get listener) {
+					Boolean isReadChoicesElementsOnSetField = null;
+					if(input instanceof InputChoice){
+						if(Boolean.TRUE.equals(((InputChoice<?>)input).getIsReadChoicesElementsOnSetField())){
+							((InputChoice<?>)input).setIsReadChoicesElementsOnSetField(isReadChoicesElementsOnSetField = Boolean.FALSE);
+						}
+					}
+					
+					input.setFormDetail(detail);
+					input.setObject(object).setField(field);
+					if(listener != null && StringHelper.getInstance().isNotBlank(listener.getLabelValueIdentifier()))
+							input.getLabel().getPropertiesMap().setValue(StringHelper.getInstance().get(listener.getLabelValueIdentifier(), new Object[]{}));
+					input.getPropertiesMap().setLabel(input.getLabel().getPropertiesMap().getValue());
+					input.getPropertiesMap().setRequired(field.getAnnotation(NotNull.class)!=null);
+					input.getPropertiesMap().setRequiredMessage(StringHelper.getInstance().get("validation.userinterface.input.value.required"
+							, new Object[]{input.getLabel().getPropertiesMap().getValue()}));
+					
+					if(input instanceof InputCalendar){
+						((InputCalendar)input).getPropertiesMap().setPattern(Constant.Date.getPattern(LocaleHelper.getInstance().get()
+								, constraints == null || constraints.getDatePart() == null ? Constant.Date.Part.DATE_ONLY : constraints.getDatePart()
+										, Constant.Date.Length.SHORT).getValue());
+					}
+					if(input instanceof InputChoice){
+						((InputChoice<?>)input).setNullChoicable(input.getInitialValue() == null || !Boolean.TRUE.equals(input.getPropertiesMap().getRequired()));
+						if(isReadChoicesElementsOnSetField == null || Boolean.FALSE.equals(isReadChoicesElementsOnSetField)){
+							((InputChoice<?>)input).readChoicesElements();
+							if(Boolean.FALSE.equals(isReadChoicesElementsOnSetField))
+								((InputChoice<?>)input).setIsReadChoicesElementsOnSetField(isReadChoicesElementsOnSetField = Boolean.TRUE);
+						}
+						
+					}
+					
+					listenGet(input);
+					
+					if(Boolean.TRUE.equals(input.getPropertiesMap().getReadableOnly())){
+						if(input.getPropertiesMap().getOutputComponent()==null){
+							input.getPropertiesMap().setOutputComponent(Output.get(detail, object, field));
+						}
+					}
+				}
+				
+				@Override
+				public Input<?> get(Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints,Control.Listener.Get listener) {
 					Input<?> input = null;
 					Class<? extends Input<?>> aClass = getClass(detail,object, field);
-					if(aClass!=null){
-						input = ClassHelper.getInstance().instanciateOne(aClass);
-					}
+					if(aClass!=null)
+						input = instanciate(aClass, detail, object, field, constraints);
 					if(input!=null){
-						Boolean isReadChoicesElementsOnSetField = null;
-						if(input instanceof InputChoice){
-							if(Boolean.TRUE.equals(((InputChoice<?>)input).getIsReadChoicesElementsOnSetField())){
-								((InputChoice<?>)input).setIsReadChoicesElementsOnSetField(isReadChoicesElementsOnSetField = Boolean.FALSE);
-							}
-						}
-						
-						input.setFormDetail(detail);
-						input.setObject(object).setField(field);
-						input.getPropertiesMap().setLabel(input.getLabel().getPropertiesMap().getValue());
-						input.getPropertiesMap().setRequired(field.getAnnotation(NotNull.class)!=null);
-						input.getPropertiesMap().setRequiredMessage(StringHelper.getInstance().get("validation.userinterface.input.value.required"
-								, new Object[]{input.getLabel().getPropertiesMap().getValue()}));
-						
-						if(input instanceof InputCalendar){
-							((InputCalendar)input).getPropertiesMap().setPattern(Constant.Date.getPattern(LocaleHelper.getInstance().get()
-									, constraints == null || constraints.getDatePart() == null ? Constant.Date.Part.DATE_ONLY : constraints.getDatePart()
-											, Constant.Date.Length.SHORT).getValue());
-						}
-						if(input instanceof InputChoice){
-							((InputChoice<?>)input).setNullChoicable(input.getInitialValue() == null || !Boolean.TRUE.equals(input.getPropertiesMap().getRequired()));
-							if(isReadChoicesElementsOnSetField == null || Boolean.FALSE.equals(isReadChoicesElementsOnSetField)){
-								((InputChoice<?>)input).readChoicesElements();
-								if(Boolean.FALSE.equals(isReadChoicesElementsOnSetField))
-									((InputChoice<?>)input).setIsReadChoicesElementsOnSetField(isReadChoicesElementsOnSetField = Boolean.TRUE);
-							}
-							
-						}
-						
-						listenGet(input);
-						
-						if(Boolean.TRUE.equals(input.getPropertiesMap().getReadableOnly())){
-							if(input.getPropertiesMap().getOutputComponent()==null){
-								input.getPropertiesMap().setOutputComponent(Output.get(detail, object, field));
-							}
-						}
+						if(listener!=null)
+							listener.processBeforeInitialise(input,detail, object, field, constraints);
+						initialse(input, detail, object, field, constraints,listener);
+						if(listener!=null)
+							listener.processAfterInitialise(input,detail, object, field, constraints);
 					}
 					return input;
+				}
+				
+				@Override
+				public Input<?> get(Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints) {
+					return get(detail,object,field,constraints,null);
 				}
 				
 				@Override
@@ -528,6 +564,14 @@ public class Input<T> extends Control implements Serializable {
 			}
 			
 			@Override
+			public Input<?> instanciate(Class<? extends Input<?>> aClass, Detail form, Object object, Field field,Constraints constraints) {
+				return null;
+			}
+			
+			@Override
+			public void initialse(Input<?> input, Detail form, Object object, Field field,Constraints constraints,Control.Listener.Get listener) {}
+			
+			@Override
 			public Boolean isInputable(Class<?> aClass, String fieldName) {
 				return null;
 			}
@@ -557,6 +601,11 @@ public class Input<T> extends Control implements Serializable {
 			
 			@Override
 			public Class<? extends Input<?>> getClass(Form.Detail form,Object object, Field field) {
+				return null;
+			}
+			
+			@Override
+			public Input<?> get(Form.Detail form,Object object, Field field, FieldHelper.Constraints constraints,Control.Listener.Get listener) {
 				return null;
 			}
 			
@@ -599,6 +648,8 @@ public class Input<T> extends Control implements Serializable {
 				return null;
 			}
 		}
+		
+		/**/
 		
 	}
 

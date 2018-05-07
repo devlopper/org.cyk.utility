@@ -261,5 +261,26 @@ public class Control extends Component.Visible implements Serializable {
 			
 		}
 		
+		/**/
+		
+		public static interface Get {
+			void processBeforeInitialise(Control control,Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints);
+			void processAfterInitialise(Control control,Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints);
+			
+			String getLabelValueIdentifier();
+			
+			public static class Adapter extends AbstractBean implements Get,Serializable {
+				private static final long serialVersionUID = 1L;
+
+				@Override public void processBeforeInitialise(Control control,Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints) {}
+				
+				@Override public void processAfterInitialise(Control control,Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints) {}
+				
+				@Override
+				public String getLabelValueIdentifier() {
+					return null;
+				}
+			}
+		}
 	}
 }

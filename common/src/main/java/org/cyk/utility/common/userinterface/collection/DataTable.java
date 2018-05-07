@@ -366,7 +366,10 @@ public class DataTable extends Component.Visible implements Serializable {
 				Class<?> choiceValueClass = (Class<?>)getPropertiesMap().getChoiceValueClass();	
 				outputText.getPropertiesMap().setValue(StringHelper.getInstance().getClazz(choiceValueClass));
 				
-				if(ClassHelper.getInstance().isIdentified(choiceValueClass)){
+				Boolean addCoices = (Boolean) getPropertiesMap().getIsAutomaticallyAddChoiceValues();
+				if(addCoices == null)
+					addCoices = Boolean.TRUE;
+				if(addCoices && ClassHelper.getInstance().isIdentified(choiceValueClass)){
 					inputChoiceOneCombo.getChoices().addMany(InstanceHelper.getInstance().get(choiceValueClass));
 										
 				}
