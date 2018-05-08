@@ -264,6 +264,7 @@ public class Control extends Component.Visible implements Serializable {
 		/**/
 		
 		public static interface Get {
+			
 			void processBeforeInitialise(Control control,Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints);
 			void processAfterInitialise(Control control,Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints);
 			
