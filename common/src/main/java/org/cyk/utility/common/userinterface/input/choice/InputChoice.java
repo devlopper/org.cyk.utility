@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
@@ -22,6 +23,7 @@ public class InputChoice<T> extends Input<T> implements Serializable {
 	protected final CollectionHelper.Instance<Object> choices = new CollectionHelper.Instance<Object>();
 	protected Boolean nullChoicable,isReadChoicesElementsOnSetField=Boolean.TRUE;
 	protected Collection<?> instances;
+	protected Listener inputChoiceListener;
 	/**/
 	
 	public InputChoice<T> setField(Object object, String fieldName,Collection<?> choicesElements) {
@@ -62,7 +64,9 @@ public class InputChoice<T> extends Input<T> implements Serializable {
 	}
 	
 	public String getChoiceLabel(Object choice){
-		return InstanceHelper.getInstance().getLabel(choice);
+		if(inputChoiceListener == null)
+			return InstanceHelper.getInstance().getLabel(choice);
+		return inputChoiceListener.getChoiceLabel(choice);
 	}
 	
 	/*
@@ -121,4 +125,30 @@ public class InputChoice<T> extends Input<T> implements Serializable {
 	/**/
 	
 	public enum ChoiceSet{AUTO,YES_NO}
+	
+	/**/
+	
+	public static interface Listener {
+		
+		String getChoiceLabel(Object value);
+		
+		public static class Adapter extends AbstractBean implements Listener,Serializable {
+			private static final long serialVersionUID = 1L;
+		
+			public static class Default extends Listener.Adapter implements Serializable {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public String getChoiceLabel(Object value) {
+					return InstanceHelper.getInstance().getLabel(value);
+				}
+				
+			}
+		
+			@Override
+			public String getChoiceLabel(Object value) {
+				return null;
+			}
+		}
+	}
 }

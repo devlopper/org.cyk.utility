@@ -166,7 +166,8 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		else
 			if(collection!=null)
 				result.addAll(collection);
-		result.addAll(elements);
+		if(CollectionHelper.getInstance().isNotEmpty(elements))
+			result.addAll(elements);
 		return result;
 	}
 	

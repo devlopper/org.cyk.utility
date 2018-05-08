@@ -50,7 +50,7 @@ public class FilterHelper extends AbstractHelper implements Serializable {
 			excluded = CollectionHelper.getInstance().add(filter.excluded, Boolean.FALSE, excluded);
 		}
 		
-		public Filter<T> addMasters(Collection<Object> masters){
+		public Filter<T> addMasters(Collection<? extends Object> masters){
 			if(CollectionHelper.getInstance().isNotEmpty(masters)){
 				if(this.masters==null)
 					this.masters = new ArrayList<>();
