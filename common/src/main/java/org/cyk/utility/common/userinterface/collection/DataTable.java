@@ -1499,6 +1499,7 @@ public class DataTable extends Component.Visible implements Serializable {
 					}	
 				}				
 			}
+			
 			//all computing are done  we can now remove the row
 			dataTable.removeOneRow(row);
 		}		
