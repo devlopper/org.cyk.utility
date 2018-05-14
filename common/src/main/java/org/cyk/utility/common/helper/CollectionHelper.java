@@ -567,6 +567,10 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 			return elements;
 		}
 		
+		public T getAt(Integer index){
+			return (T) getInstance().getElementAt(getElements(), index);
+		}
+		
 		public Collection<String> getFieldNames(){
 			if(fieldNames==null)
 				fieldNames=new LinkedHashSet<>();
