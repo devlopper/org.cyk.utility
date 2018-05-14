@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Constant.Action;
 import org.cyk.utility.common.helper.ArrayHelper;
@@ -17,8 +13,13 @@ import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Component;
-import org.cyk.utility.common.userinterface.collection.DataTable;
+import org.cyk.utility.common.userinterface.collection.Column;
+import org.cyk.utility.common.userinterface.collection.Columns;
 import org.cyk.utility.common.userinterface.container.Container;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public abstract class AbstractHierarchyNodesContainer<NODE extends AbstractHierarchyNodesContainer<?>> extends Container implements Serializable {
@@ -158,29 +159,29 @@ public abstract class AbstractHierarchyNodesContainer<NODE extends AbstractHiera
 	
 	/**/
 	
-	public DataTable.Column addColumn(String labelStringIdentifier,String fieldName,DataTable.Column.CellValueSource cellValueSource){
-		return DataTable.Columns.add(this, labelStringIdentifier, fieldName,cellValueSource);
+	public Column addColumn(String labelStringIdentifier,String fieldName,Column.CellValueSource cellValueSource){
+		return Columns.add(this, labelStringIdentifier, fieldName,cellValueSource);
 	}
 	
-	public DataTable.Column addColumn(String labelStringIdentifier,String fieldName){
-		return addColumn(labelStringIdentifier, fieldName, DataTable.Column.CellValueSource.DEFAULT);
+	public Column addColumn(String labelStringIdentifier,String fieldName){
+		return addColumn(labelStringIdentifier, fieldName, Column.CellValueSource.DEFAULT);
 	}
 	
-	public DataTable.Column addColumnByFieldName(String fieldName,DataTable.Column.CellValueSource cellValueSource){
-		return DataTable.Columns.addByFieldName(this, fieldName,cellValueSource);
+	public Column addColumnByFieldName(String fieldName,Column.CellValueSource cellValueSource){
+		return Columns.addByFieldName(this, fieldName,cellValueSource);
 	}
 	
-	public DataTable.Column addColumnByFieldName(String fieldName){
-		return addColumnByFieldName(fieldName, DataTable.Column.CellValueSource.DEFAULT);
+	public Column addColumnByFieldName(String fieldName){
+		return addColumnByFieldName(fieldName, Column.CellValueSource.DEFAULT);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public NODE addColumnsByFieldNames(DataTable.Column.CellValueSource cellValueSource,String...fieldNames){
-		DataTable.Columns.addByFieldNames(this,cellValueSource, fieldNames);
+	public NODE addColumnsByFieldNames(Column.CellValueSource cellValueSource,String...fieldNames){
+		Columns.addByFieldNames(this,cellValueSource, fieldNames);
 		return (NODE) this;
 	}
 	
 	public NODE addColumnsByFieldNames(String...fieldNames){
-		return addColumnsByFieldNames(DataTable.Column.CellValueSource.DEFAULT, fieldNames);
+		return addColumnsByFieldNames(Column.CellValueSource.DEFAULT, fieldNames);
 	}
 }

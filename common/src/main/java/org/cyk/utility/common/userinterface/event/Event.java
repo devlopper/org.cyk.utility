@@ -4,11 +4,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.helper.ArrayHelper;
@@ -20,12 +15,17 @@ import org.cyk.utility.common.helper.LoggingHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Control;
+import org.cyk.utility.common.userinterface.collection.Cell;
 import org.cyk.utility.common.userinterface.collection.DataTable;
-import org.cyk.utility.common.userinterface.container.Form;
-import org.cyk.utility.common.userinterface.container.Form.Detail;
+import org.cyk.utility.common.userinterface.container.form.FormDetail;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOne;
 import org.cyk.utility.common.userinterface.output.Output;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Event extends Component.Invisible implements Serializable {
@@ -46,7 +46,7 @@ public class Event extends Component.Invisible implements Serializable {
 		return event;
 	}
 	
-	public static Event.Builder instanciateBuilder(Form.Detail formDetail,String fieldName,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedFieldNames,String eventName){
+	public static Event.Builder instanciateBuilder(FormDetail formDetail,String fieldName,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedFieldNames,String eventName){
 		Event.Builder eventBuilder = new Event.Builder.Adapter.Default();
 		eventBuilder.getPropertiesMap().setName(eventName);		
 		eventBuilder.getPropertiesMap().setFormDetail(formDetail);
@@ -59,25 +59,25 @@ public class Event extends Component.Invisible implements Serializable {
 		return eventBuilder;
 	}
 	
-	public static Event instanciateOne(Form.Detail formDetail,String fieldName,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedFieldNames,String eventName){
+	public static Event instanciateOne(FormDetail formDetail,String fieldName,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedFieldNames,String eventName){
 		Event.Builder builder = instanciateBuilder(formDetail, fieldName, updatedFieldNames, listener, processedFieldNames, eventName);
 		Event event = builder.execute();
 		return event;
 	}
 	
-	public static Event instanciateOne(Form.Detail formDetail,String fieldName,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedFieldNames){
+	public static Event instanciateOne(FormDetail formDetail,String fieldName,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedFieldNames){
 		return instanciateOne(formDetail, fieldName, updatedFieldNames, listener,processedFieldNames,getEventName(formDetail.getControlByFieldName(fieldName)));
 	}
 	
-	public static Event instanciateOne(Form.Detail formDetail,String fieldName,String[] updatedFieldNames,CommandHelper.Command listener){
+	public static Event instanciateOne(FormDetail formDetail,String fieldName,String[] updatedFieldNames,CommandHelper.Command listener){
 		return instanciateOne(formDetail,fieldName, updatedFieldNames, listener,(String[])null);
 	}
 	
-	public static Event instanciateOne(Form.Detail formDetail,String fieldName,String[] updatedFieldNames){
+	public static Event instanciateOne(FormDetail formDetail,String fieldName,String[] updatedFieldNames){
 		return instanciateOne(formDetail,fieldName, updatedFieldNames, new CommandAdapter());
 	}
 	
-	public static Event.Builder instanciateBuilder(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames,String eventName){
+	public static Event.Builder instanciateBuilder(Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames,String eventName){
 		Event.Builder eventBuilder = new Event.Builder.Adapter.Default();
 		eventBuilder.getPropertiesMap().setName(eventName);		
 		eventBuilder.getPropertiesMap().setCell(cell);
@@ -92,25 +92,25 @@ public class Event extends Component.Invisible implements Serializable {
 		return eventBuilder;
 	}
 	
-	public static Event instanciateOne(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames,String eventName){
+	public static Event instanciateOne(Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames,String eventName){
 		Event.Builder builder = instanciateBuilder(cell, updatedColumnFieldNames,updatedFieldNames, listener, processedColumnFieldNames, eventName);
 		Event event = builder.execute();
 		return event;
 	}
 	
-	public static Event instanciateOne(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames){
+	public static Event instanciateOne(Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames){
 		return instanciateOne(cell, updatedColumnFieldNames,updatedFieldNames, listener, processedColumnFieldNames, getEventName(cell.getInput()));
 	}
 	
-	public static Event instanciateOne(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener){
+	public static Event instanciateOne(Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener){
 		return instanciateOne(cell, updatedColumnFieldNames,updatedFieldNames, listener, (String[])null);
 	}
 	
-	public static Event instanciateOne(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames){
+	public static Event instanciateOne(Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames){
 		return instanciateOne(cell, updatedColumnFieldNames,updatedFieldNames, new CommandAdapter());
 	}
 	
-	public static Event.Builder instanciateBuilder(DataTable.Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames){
+	public static Event.Builder instanciateBuilder(Cell cell,String[] updatedColumnFieldNames,String[] updatedFieldNames,CommandHelper.Command listener,String[] processedColumnFieldNames){
 		return instanciateBuilder(cell, updatedColumnFieldNames,updatedFieldNames, listener, processedColumnFieldNames, getEventName(cell.getInput()));
 	}
 	
@@ -142,11 +142,11 @@ public class Event extends Component.Invisible implements Serializable {
 		}
 		
 		protected Object getEventPropertyFormMasterObject(){
-			return ((Form.Detail)event.getPropertiesMap().getFormDetail()).getMaster().getObject();
+			return ((FormDetail)event.getPropertiesMap().getFormDetail()).getMaster().getObject();
 		}
 		
-		protected DataTable.Cell getCell(){
-			return (DataTable.Cell)event.getPropertiesMap().getCell();
+		protected Cell getCell(){
+			return (Cell)event.getPropertiesMap().getCell();
 		}
 		
 		protected Object getEventPropertyCellRowValue(){
@@ -203,8 +203,8 @@ public class Event extends Component.Invisible implements Serializable {
 				@Override
 				protected Event __execute__() {
 					final Event event = new Event();
-					final Form.Detail detail = (Detail) getPropertiesMap().getFormDetail();
-					final DataTable.Cell cell = (DataTable.Cell) getPropertiesMap().getCell();
+					final FormDetail detail = (FormDetail) getPropertiesMap().getFormDetail();
+					final Cell cell = (Cell) getPropertiesMap().getCell();
 					
 					event.getPropertiesMap().copyFrom(getPropertiesMap(), Properties.DISABLED,Properties.NAME,Properties.PROCESS,Properties.UPDATE
 							,Properties.UPDATED_FIELD_NAMES,Properties.FORM_DETAIL,Properties.UPDATED_COLUMN_FIELD_NAMES,Properties.CELL);
@@ -279,8 +279,8 @@ public class Event extends Component.Invisible implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		protected Event event;
-		protected Form.Detail detail;
-		protected DataTable.Cell cell;
+		protected FormDetail detail;
+		protected Cell cell;
 		protected LoggingHelper.Message.Builder vLoggingMessageBuilder;
 		
 		@SuppressWarnings("unchecked")
@@ -347,7 +347,7 @@ public class Event extends Component.Invisible implements Serializable {
 				private static final long serialVersionUID = 1L;
 
 				protected void __executeForEach__(String columnFieldName) {
-					DataTable.Cell vCell = cell.getRow().getCell(columnFieldName);
+					Cell vCell = cell.getRow().getCell(columnFieldName);
 					if(vCell.getInput()!=null){
 						vLoggingMessageBuilder.addNamedParameters("field name",columnFieldName,"before",vCell.getInput().getValue());
 						vCell.getInput().read();

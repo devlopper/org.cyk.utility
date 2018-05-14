@@ -8,7 +8,8 @@ import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.security.SecurityHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.Layout;
-import org.cyk.utility.common.userinterface.container.Form;
+import org.cyk.utility.common.userinterface.container.form.FormDetail;
+import org.cyk.utility.common.userinterface.container.form.Form;
 
 public class LoginWindow extends Window implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,7 +29,7 @@ public class LoginWindow extends Window implements Serializable {
 	}
 	
 	@Override
-	protected Class<? extends Form.Master> getFormMasterClass() {
+	protected Class<? extends Form> getFormMasterClass() {
 		return ClassHelper.getInstance().getMapping(FormMaster.class, Boolean.TRUE);
 	}
 	
@@ -46,7 +47,7 @@ public class LoginWindow extends Window implements Serializable {
 	
 	/**/
 	
-	public static class FormMaster extends Form.Master implements Serializable {
+	public static class FormMaster extends Form implements Serializable {
 		private static final long serialVersionUID = 1L;
 	
 		/**/
@@ -56,7 +57,7 @@ public class LoginWindow extends Window implements Serializable {
 			super.prepare();
 			//controls
 			//inputs
-			Form.Detail detail = getDetail();
+			FormDetail detail = getDetail();
 			detail.getLayout().setType(Layout.Type.ADAPTIVE);
 			detail.add(SecurityHelper.Credentials.FIELD_USERNAME).addBreak();
 			detail.add(SecurityHelper.Credentials.FIELD_PASSWORD).addBreak();
@@ -68,7 +69,7 @@ public class LoginWindow extends Window implements Serializable {
 		
 		/**/
 		
-		public static class SubmitCommandActionAdapter extends Form.Master.SubmitCommandActionAdapter implements Serializable {
+		public static class SubmitCommandActionAdapter extends Form.SubmitCommandActionAdapter implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			

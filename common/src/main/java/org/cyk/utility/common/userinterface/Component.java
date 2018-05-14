@@ -7,12 +7,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -30,9 +24,8 @@ import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.model.Area;
 import org.cyk.utility.common.userinterface.collection.DataTable;
-import org.cyk.utility.common.userinterface.container.Form;
-import org.cyk.utility.common.userinterface.container.Form.Detail;
-import org.cyk.utility.common.userinterface.container.Form.Master;
+import org.cyk.utility.common.userinterface.container.form.Form;
+import org.cyk.utility.common.userinterface.container.form.FormDetail;
 import org.cyk.utility.common.userinterface.container.window.Window;
 import org.cyk.utility.common.userinterface.event.Event;
 import org.cyk.utility.common.userinterface.hierarchy.Hierarchy;
@@ -40,6 +33,12 @@ import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.Watermark;
 import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputText;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 public class Component extends AbstractBean implements Serializable {
@@ -108,7 +107,7 @@ public class Component extends AbstractBean implements Serializable {
 	}
 	
 	/**
-	 * prepare structure of the data
+	 * prepare structure of the component
 	 * @return
 	 */
 	public Component prepare(){
@@ -232,10 +231,24 @@ public class Component extends AbstractBean implements Serializable {
 		return this;
 	}
 	
+	public Component setPropertyValue(Object value){
+		getPropertiesMap().setValue(value);
+		return this;
+	}
+	
 	public Component addPropertyStyleClass(String...classes){
 		Object separator = isJavaServerFacesLibraryPrimefaces() ? Constant.CHARACTER_SPACE.toString() : Constant.CHARACTER_SPACE.toString();
 		getPropertiesMap().addString(Properties.STYLE_CLASS, separator, classes);
 		return this;
+	}
+	
+	public Object getPropertyHeaderPropertyValue(){
+		OutputText outputText = null;
+		if(getPropertiesMap().getHeader() instanceof OutputText)
+			outputText = (OutputText) getPropertiesMap().getHeader();
+		if(outputText == null)
+			return null;
+		return outputText.getPropertiesMap().getValue();
 	}
 	
 	/**/
@@ -489,16 +502,23 @@ public class Component extends AbstractBean implements Serializable {
 			return this;
 		}
 		
+		public Visible setPropertyHeaderPropertyValue(Object value) {
+			if(getPropertiesMap().getHeader() == null)
+				getPropertiesMap().setHeader(new OutputText());
+			((OutputText)getPropertiesMap().getHeader()).setPropertyValue(value);
+			return this;
+		}
+		
 		/**/
 		
 		public static interface BuilderBase<OUTPUT extends Visible> extends Component.BuilderBase<OUTPUT> {
 
+			BuilderBase<OUTPUT> setPropertyHeaderPropertyValue(Object value);
+			BuilderBase<OUTPUT> setPropertyField(Object value);
+			BuilderBase<OUTPUT> setPropertyFieldName(Object value);
+			
 			public static class Adapter<OUTPUT extends Visible> extends Component.BuilderBase.Adapter.Default<OUTPUT> implements BuilderBase<OUTPUT>, Serializable {
 				private static final long serialVersionUID = 1L;
-
-				public Adapter(Class<OUTPUT> outputClass) {
-					super(outputClass);
-				}
 
 				/**/
 
@@ -508,6 +528,45 @@ public class Component extends AbstractBean implements Serializable {
 					public Default(Class<OUTPUT> outputClass) {
 						super(outputClass);
 					}
+					
+					@Override
+					public BuilderBase<OUTPUT> setPropertyHeaderPropertyValue(Object value) {
+						if(getPropertiesMap().getHeader() == null)
+							getPropertiesMap().setHeader(new OutputText());
+						((OutputText)getPropertiesMap().getHeader()).setPropertyValue(value);
+						return this;
+					}
+					
+					@Override
+					public BuilderBase<OUTPUT> setPropertyField(Object value) {
+						getPropertiesMap().setField(value);
+						return this;
+					}
+					
+					@Override
+					public BuilderBase<OUTPUT> setPropertyFieldName(Object value) {
+						getPropertiesMap().setFieldName(value);
+						return this;
+					}
+				}
+				
+				public Adapter(Class<OUTPUT> outputClass) {
+					super(outputClass);
+				}
+				
+				@Override
+				public BuilderBase<OUTPUT> setPropertyHeaderPropertyValue(Object value) {
+					return null;
+				}
+				
+				@Override
+				public BuilderBase<OUTPUT> setPropertyField(Object value) {
+					return null;
+				}
+				
+				@Override
+				public BuilderBase<OUTPUT> setPropertyFieldName(Object value) {
+					return null;
 				}
 			}
 		}
@@ -715,14 +774,14 @@ public class Component extends AbstractBean implements Serializable {
 		if(parent!=null)
 			component.getPropertiesMap().addString(Properties.STYLE_CLASS,Constant.CHARACTER_SPACE, CascadeStyleSheetHelper.getInstance().getClass(parent.getClass()));
 		
-		if(component instanceof Form.Master){
+		if(component instanceof Form){
 			//if(parent instanceof Window)
 			//	component.getPropertiesMap().add(Properties.STYLE_CLASS, CascadeStyleSheetHelper.getInstance().getClass(parent.getClass()));
 			Object object = parent instanceof Window ? ((Window)parent).getActionOnClassInstances().iterator().next() : null;//TODO how to handle many ? use key to point to the adequate form
-			Form.Master master = (Master) component;
+			Form master = (Form) component;
 			master.setObject(object);
 			master._setPropertyAction(action);
-			Detail detail = master.getDetail();
+			FormDetail detail = master.getDetail();
 			if(detail == null)
 				detail = master.instanciateDetail();
 		}else if(component instanceof DataTable){
@@ -741,9 +800,9 @@ public class Component extends AbstractBean implements Serializable {
 			/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE_NULL_SPECIFIC_CLASS, MethodHelper.Method.Parameter
 					.buildArray(Component.class,component));
 			*/
-			if(component instanceof Form.Master){
-				Form.Master master = (Master) component;
-				Detail detail = master.getDetail();
+			if(component instanceof Form){
+				Form master = (Form) component;
+				FormDetail detail = master.getDetail();
 				if(Boolean.TRUE.equals(master.getEditable())){
 					for(Input<?> input : Input.get(detail, master.getObject()))
 						detail.add(input).addBreak();
@@ -756,7 +815,7 @@ public class Component extends AbstractBean implements Serializable {
 			/*ListenerHelper.getInstance().listen(Listener.COLLECTION, Listener.METHOD_NAME_LISTEN_INSTANCIATE_ONE_NON_NULL_SPECIFIC_CLASS, MethodHelper.Method.Parameter
 					.buildArray(Component.class,component));
 			*/
-			if(component instanceof Form.Master){
+			if(component instanceof Form){
 				//Form.Master master = (Master) component;
 			}else if(component instanceof DataTable){
 				DataTable dataTable = (DataTable) component;
@@ -768,7 +827,7 @@ public class Component extends AbstractBean implements Serializable {
 				
 			}
 			component.prepare();
-			if(component instanceof Form.Master){
+			if(component instanceof Form){
 				//Form.Master master = (Master) component;
 			}
 		}

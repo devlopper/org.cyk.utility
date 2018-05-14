@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,6 +17,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
@@ -48,7 +50,55 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		return INSTANCE;
 	}
 	
+	private static final Collection<Class<?>> GENERATABLE_BUSINESS_IDENTIFIERS = new LinkedHashSet<>();
 	private static final Map<Class<?>,Object> DEFAULT_BUSINESS_IDENTIFIER_MAP = new HashMap<>();
+	private static final Map<Class<?>,String> BUSINESS_IDENTIFIER_PREFIX_MAP = new HashMap<>();
+	private static final String BUSINESS_IDENTIFIER_DATE_PATTERN = StringUtils.remove(Constant.DAY_MONTH_YEAR_PATTERN,Constant.CHARACTER_SLASH)+StringUtils.remove(Constant.HOUR_MINUTE_PATTERN,Constant.CHARACTER_COLON);
+	private static final String BUSINESS_IDENTIFIER_ORDER_NUMBER_FORMAT = "%04d";
+	
+	@Override
+	protected void initialisation() {
+		INSTANCE = this;
+		super.initialisation();
+	}
+	
+	public void addGeneratableBusinessIdentifiers(Collection<Class<?>> classes){
+		CollectionHelper.getInstance().add(GENERATABLE_BUSINESS_IDENTIFIERS, Boolean.TRUE, classes);
+	}
+	
+	public void addGeneratableBusinessIdentifiers(Class<?>...classes){
+		if(ArrayHelper.getInstance().isNotEmpty(classes))
+			addGeneratableBusinessIdentifiers(Arrays.asList(classes));
+	}
+	
+	public Boolean isBusinessIdentifierGeneratable(Class<?> aClass){
+		return GENERATABLE_BUSINESS_IDENTIFIERS.contains(aClass);
+	}
+	
+	public String generateBusinessIdentifier(Object instance,Date date,String datePattern,Object orderNumber,String orderNumberFormat){
+		if(instance == null)
+			return null;
+		Class<?> aClass = instance instanceof Class<?> ? (Class<?>)instance : instance.getClass();
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(StringUtils.defaultString(getBusinessIdentifierPrefix(aClass)));
+		if(date!=null){
+			if(StringHelper.getInstance().isBlank(datePattern))
+				datePattern = BUSINESS_IDENTIFIER_DATE_PATTERN;
+			stringBuilder.append(new TimeHelper.Stringifier.Date.Adapter.Default(date).setPattern(datePattern).execute());	
+		}
+		orderNumber = NumberHelper.getInstance().get(Long.class, orderNumber, null);
+		if(orderNumber!=null){
+			if(StringHelper.getInstance().isBlank(orderNumberFormat))
+				orderNumberFormat = BUSINESS_IDENTIFIER_ORDER_NUMBER_FORMAT;
+			stringBuilder.append(String.format(orderNumberFormat, orderNumber));
+		}
+		return stringBuilder.toString();
+	}
+	
+	public String generateBusinessIdentifier(Object instance,Date date){
+		Class<?> aClass = instance instanceof Class<?> ? (Class<?>)instance : instance.getClass();
+		return generateBusinessIdentifier(instance, date, null, count(aClass)+1, null);
+	}
 	
 	public void cascadeAct(Constant.Action action,Object instance,FieldHelper.Field.Relationship relationship){
 		for(FieldHelper.Field index : FieldHelper.Field.getByClassByRelationshipByActions(instance.getClass(), relationship, action)){
@@ -80,12 +130,16 @@ public class InstanceHelper extends AbstractHelper implements Serializable  {
 		DEFAULT_BUSINESS_IDENTIFIER_MAP.put(aClass, identifier);
 	}
 	
-	@Override
-	protected void initialisation() {
-		INSTANCE = this;
-		super.initialisation();
+	public String getBusinessIdentifierPrefix(Class<?> aClass){
+		if(!BUSINESS_IDENTIFIER_PREFIX_MAP.containsKey(aClass))
+			BUSINESS_IDENTIFIER_PREFIX_MAP.put(aClass, StringUtils.substring(aClass.getSimpleName(),0,3));
+		return BUSINESS_IDENTIFIER_PREFIX_MAP.get(aClass);
 	}
 	
+	public void setBusinessIdentifierPrefix(Class<?> aClass,String prefix){
+		BUSINESS_IDENTIFIER_PREFIX_MAP.put(aClass, prefix);
+	}
+		
 	public <T> T getDefaultUsingBusinessIdentifier(Class<T> aClass){
 		Object identifier = getDefaultBusinessIdentifier(aClass);
 		if(identifier!=null)

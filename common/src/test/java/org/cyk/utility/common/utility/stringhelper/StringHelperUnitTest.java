@@ -1,4 +1,4 @@
-package org.cyk.utility.common;
+package org.cyk.utility.common.utility.stringhelper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -6,8 +6,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-import org.cyk.utility.common.annotation.user.interfaces.Text;
-import org.cyk.utility.common.annotation.user.interfaces.Text.ValueType;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.AssertionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.StringHelper;
@@ -23,7 +22,6 @@ import org.junit.Test;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-
 
 public class StringHelperUnitTest extends AbstractUnitTest {
 
@@ -270,6 +268,7 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void getWordsFromCamelCase(){
+		TestCase testCase = new TestCase();
 		assertList(StringHelper.getInstance().getWordsFromCamelCase(null), new ArrayList<>());
 		assertList(StringHelper.getInstance().getWordsFromCamelCase(""), new ArrayList<>());
 		assertList(StringHelper.getInstance().getWordsFromCamelCase(" "), new ArrayList<>());
@@ -279,6 +278,21 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		assertList(StringHelper.getInstance().getWordsFromCamelCase("aaA"), Arrays.asList("aa","A"));
 		assertList(StringHelper.getInstance().getWordsFromCamelCase("firstSecond"), Arrays.asList("first","Second"));
 		assertList(StringHelper.getInstance().getWordsFromCamelCase("aAaA"), Arrays.asList("a","Aa","A"));
+		testCase.assertCollection(Arrays.asList("a","B"), StringHelper.getInstance().getWordsFromCamelCase("aB"));
+		testCase.assertCollection(Arrays.asList("a","B"), StringHelper.getInstance().getWordsFromCamelCase("a.B"));
+		testCase.assertCollection(Arrays.asList("a","B"), StringHelper.getInstance().getWordsFromCamelCase("a$B"));
+	}
+	
+	@Test
+	public void concatenateWordsFromCamelCase(){
+		assertEquals(null, StringHelper.getInstance().concatenateWordsFromCamelCase(null, Constant.CHARACTER_DOT, StringHelper.CaseType.L));
+		assertEquals("", StringHelper.getInstance().concatenateWordsFromCamelCase("", Constant.CHARACTER_DOT, StringHelper.CaseType.L));
+		assertEquals("", StringHelper.getInstance().concatenateWordsFromCamelCase(" ", Constant.CHARACTER_DOT, StringHelper.CaseType.L));
+		assertEquals("", StringHelper.getInstance().concatenateWordsFromCamelCase("   ", Constant.CHARACTER_DOT, StringHelper.CaseType.L));
+		assertEquals("a", StringHelper.getInstance().concatenateWordsFromCamelCase("a", Constant.CHARACTER_DOT, StringHelper.CaseType.L));
+		assertEquals("ab", StringHelper.getInstance().concatenateWordsFromCamelCase("ab", Constant.CHARACTER_DOT, StringHelper.CaseType.L));
+		assertEquals("a.b", StringHelper.getInstance().concatenateWordsFromCamelCase("aB", Constant.CHARACTER_DOT, StringHelper.CaseType.L));
+		assertEquals("a.b", StringHelper.getInstance().concatenateWordsFromCamelCase("a.B", Constant.CHARACTER_DOT, StringHelper.CaseType.L));
 	}
 	
 	@Test
@@ -357,10 +371,74 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void assertFieldIdentifier(){
-		assertEquals("__field__.value", StringHelper.getInstance().getFieldIdentifier("value"));
-		assertEquals("__field__.balance.value", StringHelper.getInstance().getFieldIdentifier("balanceValue"));
-		assertEquals("__field__.__.parent.__", StringHelper.getInstance().getFieldIdentifier("__parent__"));
+	public void getFieldIdentifiers(){
+		TestCase testCase = new TestCase();
+		testCase.assertEquals("__field__.value", StringHelper.getInstance().getFieldIdentifier("value"));
+		testCase.assertEquals("__field__.balance.value", StringHelper.getInstance().getFieldIdentifier("balanceValue"));
+		testCase.assertEquals("__field__.__.parent.__", StringHelper.getInstance().getFieldIdentifier("__parent__"));
+		
+		testCase.assertCollection(Arrays.asList("__field__.org.cyk.utility.common.utility.stringhelper.fields.string"
+				,"__field__.fields.string","__field__.string","__class__.string","string"
+				), StringHelper.getInstance().getFieldIdentifiers(FieldHelper.getInstance().get(Fields.class, "string")));
+		
+		testCase.assertCollection(Arrays.asList(
+				 "__field__.org.cyk.utility.common.utility.stringhelper.fields.string"
+				,"__field__.fields.string"
+				,"__field__.string","__class__.string","string"
+				), StringHelper.getInstance().getFieldIdentifiers(Fields.class,"string"));
+		
+		testCase.assertCollection(Arrays.asList(
+				"__field__.org.cyk.utility.common.utility.stringhelper.fields.org.cyk.utility.common.utility.stringhelper.sub.fields.string"
+				,"__field__.org.cyk.utility.common.utility.stringhelper.fields.sub.fields.string"
+				,"__field__.org.cyk.utility.common.utility.stringhelper.sub.fields.string"
+				,"__field__.sub.fields.string"
+				,"__field__.string","__class__.string","string"
+				), StringHelper.getInstance().getFieldIdentifiers(Fields.class,"subFields.string"));
+		
+		testCase.assertCollection(Arrays.asList(
+				 "__field__.org.cyk.utility.common.utility.stringhelper.fields.org.cyk.utility.common.utility.stringhelper.sub.fields.string"
+				,"__field__.org.cyk.utility.common.utility.stringhelper.fields.sub.fields.string"
+				,"__field__.org.cyk.utility.common.utility.stringhelper.sub.fields.string"
+				,"__field__.sub.fields.string"
+				,"__field__.string","__class__.string","string"
+				), StringHelper.getInstance().getFieldIdentifiers(null,Fields.class,"subFields.string"));
+		
+		testCase.assertCollection(Arrays.asList(
+				 "__field__.mydomain.org.cyk.utility.common.utility.stringhelper.fields.org.cyk.utility.common.utility.stringhelper.sub.fields.string"
+				,"__field__.mydomain.org.cyk.utility.common.utility.stringhelper.fields.sub.fields.string"
+				,"__field__.org.cyk.utility.common.utility.stringhelper.fields.org.cyk.utility.common.utility.stringhelper.sub.fields.string"
+				,"__field__.org.cyk.utility.common.utility.stringhelper.fields.sub.fields.string"
+				,"__field__.org.cyk.utility.common.utility.stringhelper.sub.fields.string"
+				,"__field__.sub.fields.string"
+				,"__field__.string","__class__.string","string"
+				), StringHelper.getInstance().getFieldIdentifiers("mydomain",Fields.class,"subFields.string"));
+		
+		testCase.assertCollection(Arrays.asList("__field__.org.cyk.utility.common.utility.stringhelper.fields.my.field.locality.05"
+				,"__field__.fields.my.field.locality.05","__field__.locality","__class__.my.field.locality.05","locality"
+				), StringHelper.getInstance().getFieldIdentifiers(FieldHelper.getInstance().get(Fields.class, "myFieldLocality05")));
+		
+		testCase.assertCollection(Arrays.asList("__field__.org.cyk.utility.common.utility.stringhelper.fields.org.cyk.utility.common.utility.stringhelper.sub.fields.my.field.locality.05"
+				,"__field__.org.cyk.utility.common.utility.stringhelper.fields.sub.fields.my.field.locality.05"
+				,"__field__.org.cyk.utility.common.utility.stringhelper.sub.fields.my.field.locality.05"
+				,"__field__.sub.fields.my.field.locality.05"
+				,"__field__.locality","__class__.my.field.locality.05","locality"
+				), StringHelper.getInstance().getFieldIdentifiers(Fields.class,"subFields.myFieldLocality05"));
+		
+		testCase.assertCollection(Arrays.asList("__field__.org.cyk.utility.common.utility.stringhelper.fields.my.field.locality.07"
+				,"__field__.fields.my.field.locality.07"
+				), StringHelper.getInstance().getFieldIdentifiers(FieldHelper.getInstance().get(Fields.class, "myFieldLocality07")));
+		
+		testCase.assertCollection(Arrays.asList("__field__.org.cyk.utility.common.utility.stringhelper.fields.org.cyk.utility.common.utility.stringhelper.sub.fields.my.field.locality.07"
+				,"__field__.org.cyk.utility.common.utility.stringhelper.fields.sub.fields.my.field.locality.07"
+				,"__field__.org.cyk.utility.common.utility.stringhelper.sub.fields.my.field.locality.07"
+				,"__field__.sub.fields.my.field.locality.07"
+				), StringHelper.getInstance().getFieldIdentifiers(Fields.class,"subFields.myFieldLocality07"));
+		
+		testCase.assertCollection(Arrays.asList(
+				 "__field__.org.cyk.utility.common.utility.stringhelper.fields.value.gap"
+				,"__field__.fields.value.gap"
+				,"__field__.value.gap","__class__.value.gap","value.gap"
+				), StringHelper.getInstance().getFieldIdentifiers(Fields.class,"valueGap"));
 	}
 	
 	@Test
@@ -379,6 +457,7 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		assertEquals("Localité", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality05")));
 		assertEquals("Prix d'achat", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality06")));
 		assertEquals("locality", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "myFieldLocality07")));
+		assertEquals("Écart de valeur", StringHelper.getInstance().getField(FieldHelper.getInstance().get(Fields.class, "valueGap")));
 	}
 	
 	@Test
@@ -488,21 +567,6 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 		
 	}
 	
-	@Getter @Setter
-	public static class Fields {
-		
-		private String electronicMailAddress;
-		private String locality;
-		
-		private String myFieldLocality01;
-		private @Text String myFieldLocality02;
-		private @Text(value="") String myFieldLocality03;
-		private @Text(value=" ") String myFieldLocality04;
-		private @Text(value="locality") String myFieldLocality05;
-		private @Text(value="buying.price",valueType=ValueType.ID) String myFieldLocality06;
-		private @Text(value="locality",valueType=ValueType.VALUE) String myFieldLocality07;
-	}
-
 	@Getter @Setter @Accessors(chain=true)
 	public static class FieldValue {
 		
@@ -542,5 +606,27 @@ public class StringHelperUnitTest extends AbstractUnitTest {
 	
 	public static class GenderVoyelFemale {
 		
+	}
+	
+	@Getter @Setter
+	public static class ClassWithFieldNamedTotal {
+		
+		private String tot;
+		private ClassWithFieldNamedSub sub;
+	
+	}
+	
+	@Getter @Setter
+	public static class AnotherClassWithFieldNamedF1 {
+		
+		private String tot;
+	
+	}
+	
+	@Getter @Setter
+	public static class ClassWithFieldNamedSub {
+		
+		private String myField;
+	
 	}
 }

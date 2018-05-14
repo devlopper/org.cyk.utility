@@ -24,8 +24,7 @@ import org.cyk.utility.common.userinterface.RequestHelper;
 import org.cyk.utility.common.userinterface.collection.DataTable;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.container.Container;
-import org.cyk.utility.common.userinterface.container.Form;
-import org.cyk.utility.common.userinterface.container.Form.Master;
+import org.cyk.utility.common.userinterface.container.form.Form;
 import org.cyk.utility.common.userinterface.hierarchy.Hierarchy;
 import org.cyk.utility.common.userinterface.panel.ConfirmationDialog;
 import org.cyk.utility.common.userinterface.panel.NotificationDialog;
@@ -56,7 +55,7 @@ public class Window extends Container implements Serializable {
 	protected Collection<Object> actionOnClassInstances;
 	protected Object actionKey;
 	
-	protected Form.Master form;
+	protected Form form;
 	protected DataTable dataTable;
 	protected Hierarchy hierarchy;
 	
@@ -205,16 +204,16 @@ public class Window extends Container implements Serializable {
 	
 	/* builders */
 	
-	protected Form.Master buildForm(){
+	protected Form buildForm(){
 		@SuppressWarnings("unchecked")
-		Class<Form.Master> formMasterClass = (Class<Master>) InstanceHelper.getInstance().getIfNotNullElseDefault(getFormMasterClass(),Form.Master.class);
-		Form.Master form = Component.get(this,formMasterClass,Form.Master.class);
+		Class<Form> formMasterClass = (Class<Form>) InstanceHelper.getInstance().getIfNotNullElseDefault(getFormMasterClass(),Form.class);
+		Form form = Component.get(this,formMasterClass,Form.class);
 		form.build();
 		return form;
 	}
 	
-	protected Class<? extends Form.Master> getFormMasterClass(){
-		return Form.Master.class;
+	protected Class<? extends Form> getFormMasterClass(){
+		return Form.class;
 	}
 	
 	protected DataTable buildDataTable(){

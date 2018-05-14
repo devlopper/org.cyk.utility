@@ -1,4 +1,4 @@
-package org.cyk.utility.common.userinterface.container;
+package org.cyk.utility.common.userinterface.container.form;
 
 import java.io.Serializable;
 
@@ -31,7 +31,7 @@ public class FormMasterClassLocator extends org.cyk.utility.common.ClassLocator 
 	
 	@Override
 	protected Class<?> getDefault(Class<?> aClass) {
-		return Form.Master.class;
+		return Form.class;
 	}
 	
 	/**/

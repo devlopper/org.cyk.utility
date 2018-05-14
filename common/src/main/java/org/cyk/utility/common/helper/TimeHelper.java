@@ -12,12 +12,6 @@ import java.util.Locale;
 
 import javax.inject.Singleton;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.utility.common.Action;
@@ -25,6 +19,12 @@ import org.cyk.utility.common.Constant;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.DateTimeZone;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Singleton
 public class TimeHelper extends AbstractHelper implements Serializable {
@@ -63,6 +63,10 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	public String stringify(Date date){
+		return new Stringifier.Date.Adapter.Default(date).execute();
 	}
 	
 	public void pause(Number millisecond){
@@ -370,9 +374,15 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 		
 		public static interface Date extends TimeHelper.Stringifier<java.util.Date> {
 			
+			String getPattern();
+			Date setPattern(String pattern);
+			
+			@Getter
 			public static class Adapter extends TimeHelper.Stringifier.Adapter.Default<java.util.Date> implements Date,Serializable {
 				private static final long serialVersionUID = 1L;
 
+				protected String pattern;
+				
 				public Adapter(java.util.Date input) {
 					super(java.util.Date.class, input);
 				}
@@ -385,12 +395,27 @@ public class TimeHelper extends AbstractHelper implements Serializable {
 					}
 					
 					@Override
-					protected java.lang.String __execute__() {
-						Constant.Date.Part part = (org.cyk.utility.common.Constant.Date.Part) InstanceHelper.getInstance().getIfNotNullElseDefault(getProperty(PROPERTY_NAME_TIME_PART),Constant.Date.Part.DATE_AND_TIME);
-						Constant.Date.Length length = (org.cyk.utility.common.Constant.Date.Length) InstanceHelper.getInstance().getIfNotNullElseDefault(getProperty(PROPERTY_NAME_TIME_LENGTH),Constant.Date.Length.SHORT);
-						Locale locale = InstanceHelper.getInstance().getIfNotNullElseDefault(getLocale(), Locale.FRENCH);
-						return new SimpleDateFormat(Constant.Date.getPattern(locale,part, length).getValue(),locale).format(getInput());
+					public Date setPattern(java.lang.String pattern) {
+						this.pattern = pattern;
+						return this;
 					}
+					
+					@Override
+					protected java.lang.String __execute__() {
+						String pattern = getPattern();
+						Locale locale = InstanceHelper.getInstance().getIfNotNullElseDefault(getLocale(), Locale.FRENCH);
+						if(StringHelper.getInstance().isBlank(pattern)){
+							Constant.Date.Part part = (org.cyk.utility.common.Constant.Date.Part) InstanceHelper.getInstance().getIfNotNullElseDefault(getProperty(PROPERTY_NAME_TIME_PART),Constant.Date.Part.DATE_AND_TIME);
+							Constant.Date.Length length = (org.cyk.utility.common.Constant.Date.Length) InstanceHelper.getInstance().getIfNotNullElseDefault(getProperty(PROPERTY_NAME_TIME_LENGTH),Constant.Date.Length.SHORT);
+							pattern = Constant.Date.getPattern(locale,part, length).getValue();
+						}				
+						return new SimpleDateFormat(pattern,locale).format(getInput());
+					}
+				}
+				
+				@Override
+				public Date setPattern(java.lang.String pattern) {
+					return null;
 				}
 			}
 		}

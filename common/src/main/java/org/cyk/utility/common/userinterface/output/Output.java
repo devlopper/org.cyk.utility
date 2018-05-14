@@ -21,8 +21,7 @@ import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.ContentType;
 import org.cyk.utility.common.userinterface.Control;
-import org.cyk.utility.common.userinterface.container.Form;
-import org.cyk.utility.common.userinterface.container.Form.Detail;
+import org.cyk.utility.common.userinterface.container.form.FormDetail;
 import org.cyk.utility.common.userinterface.input.Input;
 
 public class Output extends Control implements Serializable {
@@ -127,15 +126,15 @@ public class Output extends Control implements Serializable {
 
 	/**/
 
-	public static Output get(Form.Detail detail,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints){
+	public static Output get(FormDetail detail,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints){
 		return getListener().get(detail,object, field,constraints);
 	}
 	
-	public static Output get(Form.Detail detail,Object object,java.lang.reflect.Field field){
+	public static Output get(FormDetail detail,Object object,java.lang.reflect.Field field){
 		return get(detail, object, field, null);
 	}
 	
-	public static java.util.List<Output> get(Form.Detail detail,Object object){
+	public static java.util.List<Output> get(FormDetail detail,Object object){
 		return getListener().get(detail,object);
 	}
 	
@@ -151,19 +150,19 @@ public class Output extends Control implements Serializable {
 	
 	public static interface Listener {
 		
-		Collection<String> getFieldNames(Form.Detail form,Object object);
-		Collection<String> getExcludedFieldNames(Form.Detail form,Object object);
+		Collection<String> getFieldNames(FormDetail form,Object object);
+		Collection<String> getExcludedFieldNames(FormDetail form,Object object);
 		Boolean isOutputable(Class<?> aClass,String fieldName);
-		Boolean isInputable(Form.Detail form,Object object,java.lang.reflect.Field field);
-		java.util.Collection<Field> getFields(Form.Detail form,Object object);
-		void sortFields(Form.Detail form,Object object,java.util.List<Field> fields);
+		Boolean isInputable(FormDetail form,Object object,java.lang.reflect.Field field);
+		java.util.Collection<Field> getFields(FormDetail form,Object object);
+		void sortFields(FormDetail form,Object object,java.util.List<Field> fields);
 		
-		Class<? extends Output> getClass(Form.Detail form,Object object,java.lang.reflect.Field field);
+		Class<? extends Output> getClass(FormDetail form,Object object,java.lang.reflect.Field field);
 		
-		Output get(Form.Detail form,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints);
-		Output get(Form.Detail form,Object object,java.lang.reflect.Field field);
+		Output get(FormDetail form,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints);
+		Output get(FormDetail form,Object object,java.lang.reflect.Field field);
 		void listenGet(Output output);
-		java.util.List<Output> get(Form.Detail form,Object object);
+		java.util.List<Output> get(FormDetail form,Object object);
 		
 		void read(Output output);
 		
@@ -184,13 +183,13 @@ public class Output extends Control implements Serializable {
 				}
 				
 				@Override
-				public Boolean isInputable(Form.Detail form,Object object, Field field) {
+				public Boolean isInputable(FormDetail form,Object object, Field field) {
 					return field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Input.class)!=null 
 							|| CollectionHelper.getInstance().contains(getFieldNames(form, object), field.getName());
 				}
 				
 				@Override
-				public Collection<Field> getFields(final Form.Detail detail,final Object object) {
+				public Collection<Field> getFields(final FormDetail detail,final Object object) {
 					final Collection<String> fieldNames = getFieldNames(detail, object);
 					final Collection<String> excludedFieldNames = getExcludedFieldNames(detail, object);
 					final List<Field> fields = new ArrayList<Field>();
@@ -209,7 +208,7 @@ public class Output extends Control implements Serializable {
 				}
 				
 				@Override
-				public void sortFields(Detail detail, Object object, List<Field> fields) {
+				public void sortFields(FormDetail detail, Object object, List<Field> fields) {
 					final List<String> fieldNames = CollectionHelper.getInstance().createList(getFieldNames(detail, object));
 					if(CollectionHelper.getInstance().isNotEmpty(fieldNames)){
 						Collections.sort(fields, new Comparator<Field>() {
@@ -224,7 +223,7 @@ public class Output extends Control implements Serializable {
 				
 				@SuppressWarnings("unchecked")
 				@Override
-				public Class<? extends Output> getClass(Form.Detail form,Object object, Field field) {
+				public Class<? extends Output> getClass(FormDetail form,Object object, Field field) {
 					Class<? extends Output> aClass = null;
 					if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Input.class)==null){
 						if(field.getType().equals(FileHelper.getListener().getModelClass()))
@@ -250,7 +249,7 @@ public class Output extends Control implements Serializable {
 				}
 				
 				@Override
-				public Output get(Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints) {
+				public Output get(FormDetail detail,Object object, Field field, FieldHelper.Constraints constraints) {
 					Output output = null;
 					Class<? extends Output> aClass = getClass(detail,object, field);
 					if(aClass!=null){
@@ -268,12 +267,12 @@ public class Output extends Control implements Serializable {
 				}
 				
 				@Override
-				public Output get(Form.Detail detail,Object object, Field field) {
+				public Output get(FormDetail detail,Object object, Field field) {
 					return get(detail, object, field, null);
 				}
 			
 				@Override
-				public java.util.List<Output> get(Form.Detail form,Object object) {
+				public java.util.List<Output> get(FormDetail form,Object object) {
 					java.util.List<Output> list = new ArrayList<Output>();
 					for(Field field : getFields(form,object))
 						list.add(get(form,object, field));
@@ -357,47 +356,47 @@ public class Output extends Control implements Serializable {
 			public void listenGet(Output output) {}
 			
 			@Override
-			public Collection<String> getFieldNames(Form.Detail form,Object object) {
+			public Collection<String> getFieldNames(FormDetail form,Object object) {
 				return null;
 			}
 			
 			@Override
-			public Collection<String> getExcludedFieldNames(Detail form, Object object) {
+			public Collection<String> getExcludedFieldNames(FormDetail form, Object object) {
 				return null;
 			}
 			
 			@Override
-			public Boolean isInputable(Form.Detail form,Object object, Field field) {
+			public Boolean isInputable(FormDetail form,Object object, Field field) {
 				return null;
 			}
 			
 			@Override
-			public Collection<Field> getFields(Form.Detail form,Object object) {
+			public Collection<Field> getFields(FormDetail form,Object object) {
 				return null;
 			}
 			
 			@Override
-			public Class<? extends Output> getClass(Form.Detail form,Object object, Field field) {
+			public Class<? extends Output> getClass(FormDetail form,Object object, Field field) {
 				return null;
 			}
 			
 			@Override
-			public Output get(Detail form, Object object, Field field, FieldHelper.Constraints constraints) {
+			public Output get(FormDetail form, Object object, Field field, FieldHelper.Constraints constraints) {
 				return null;
 			}
 			
 			@Override
-			public Output get(Form.Detail form,Object object, Field field) {
+			public Output get(FormDetail form,Object object, Field field) {
 				return null;
 			}
 			
 			@Override
-			public java.util.List<Output> get(Form.Detail form,Object object) {
+			public java.util.List<Output> get(FormDetail form,Object object) {
 				return null;
 			}
 			
 			@Override
-			public void sortFields(Detail form, Object object, List<Field> fields) {}
+			public void sortFields(FormDetail form, Object object, List<Field> fields) {}
 			
 			@Override
 			public void read(Output output) {}

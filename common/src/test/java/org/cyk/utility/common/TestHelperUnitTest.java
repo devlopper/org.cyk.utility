@@ -14,6 +14,8 @@ public class TestHelperUnitTest extends AbstractUnitTest {
 	public void assertThrowMyBusinessExceptionNotNested(){
 		TestCase testCase = new TestCase();
 		testCase.assertThrowable(new Runnable() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void __run__() throws Throwable {
 				throw new MyBusinessException("My_Business_Message");

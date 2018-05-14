@@ -24,8 +24,7 @@ import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.LocaleHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Control;
-import org.cyk.utility.common.userinterface.container.Form;
-import org.cyk.utility.common.userinterface.container.Form.Detail;
+import org.cyk.utility.common.userinterface.container.form.FormDetail;
 import org.cyk.utility.common.userinterface.input.choice.InputChoice;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyAutoComplete;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceManyButton;
@@ -57,7 +56,7 @@ public class Input<T> extends Control implements Serializable {
 	
 	protected Object valueObject;
 	protected T value,initialValue;
-	protected Form.Detail formDetail;
+	protected FormDetail formDetail;
 
 	protected CardinalPoint labelCardinalPoint;
 	
@@ -167,34 +166,34 @@ public class Input<T> extends Control implements Serializable {
 		return ClassHelper.getInstance().instanciateOne(Listener.class);
 	}
 	
-	public static Input<?> get(Form.Detail detail,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints,Control.Listener.Get getListener){
+	public static Input<?> get(FormDetail detail,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints,Control.Listener.Get getListener){
 		return getListener().get(detail,object, field,constraints,getListener);
 	}
 	
-	public static Input<?> get(Form.Detail detail,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints){
+	public static Input<?> get(FormDetail detail,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints){
 		return getListener().get(detail,object, field,constraints);
 	}
 	
-	public static Input<?> get(Form.Detail detail,Object object,java.lang.reflect.Field field){
+	public static Input<?> get(FormDetail detail,Object object,java.lang.reflect.Field field){
 		return get(detail, object, field, null);
 	}
 	
-	public static Input<?> get(Form.Detail detail,Object object,String fieldName,FieldHelper.Constraints constraints){
+	public static Input<?> get(FormDetail detail,Object object,String fieldName,FieldHelper.Constraints constraints){
 		return get(detail,object, FieldHelper.getInstance().get(object.getClass(), fieldName),constraints);
 	}
 	
-	public static Input<?> get(Form.Detail detail,Object object,String fieldName){
+	public static Input<?> get(FormDetail detail,Object object,String fieldName){
 		return get(detail, object, fieldName, null);
 	}
 	
-	/*public static Input<?> get(Form.Detail detail,Object object,String fieldName,Listener.Get getListener){
+	/*public static Input<?> get(Detail detail,Object object,String fieldName,Listener.Get getListener){
 		String constraintsFieldName = StringHelper.getInstance().isBlank(fieldsObjectFieldName) ? fieldName : FieldHelper.getInstance().buildPath(fieldsObjectFieldName,fieldName);
 		FieldHelper.Constraints constraints = FieldHelper.Field.get(getMaster().getObject().getClass(), constraintsFieldName).getConstraints();
 		Field field = FieldHelper.getInstance().get(object.getClass(), fieldName);
 		return get(detail,object, field,constraints,getInputListener);
 	}*/
 	
-	public static java.util.List<Input<?>> get(Form.Detail detail,Object object){
+	public static java.util.List<Input<?>> get(FormDetail detail,Object object){
 		return getListener().get(detail,object);
 	}
 	
@@ -234,23 +233,23 @@ public class Input<T> extends Control implements Serializable {
 	
 	public static interface Listener {
 		
-		Collection<String> getFieldNames(Form.Detail form,Object object);
-		Collection<String> getExcludedFieldNames(Form.Detail form,Object object);
+		Collection<String> getFieldNames(FormDetail form,Object object);
+		Collection<String> getExcludedFieldNames(FormDetail form,Object object);
 		Boolean isInputable(Class<?> aClass,String fieldName);
-		Boolean isInputable(Form.Detail form,Object object,java.lang.reflect.Field field);
-		java.util.Collection<Field> getFields(Form.Detail form,Object object);
-		void sortFields(Form.Detail form,Object object,java.util.List<Field> fields);
+		Boolean isInputable(FormDetail form,Object object,java.lang.reflect.Field field);
+		java.util.Collection<Field> getFields(FormDetail form,Object object);
+		void sortFields(FormDetail form,Object object,java.util.List<Field> fields);
 		
-		Class<? extends Input<?>> getClass(Form.Detail form,Object object,java.lang.reflect.Field field);
+		Class<? extends Input<?>> getClass(FormDetail form,Object object,java.lang.reflect.Field field);
 		
-		Input<?> instanciate(Class<? extends Input<?>> aClass,Form.Detail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints);
-		void initialse(Input<?> input,Form.Detail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints,Control.Listener.Get listener);
+		Input<?> instanciate(Class<? extends Input<?>> aClass,FormDetail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints);
+		void initialse(Input<?> input,FormDetail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints,Control.Listener.Get listener);
 		
-		Input<?> get(Form.Detail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints,Control.Listener.Get listener);
-		Input<?> get(Form.Detail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints);
-		Input<?> get(Form.Detail form,Object object,java.lang.reflect.Field field);
+		Input<?> get(FormDetail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints,Control.Listener.Get listener);
+		Input<?> get(FormDetail form,Object object,java.lang.reflect.Field field, FieldHelper.Constraints constraints);
+		Input<?> get(FormDetail form,Object object,java.lang.reflect.Field field);
 		void listenGet(Input<?> input);
-		java.util.List<Input<?>> get(Form.Detail form,Object object);
+		java.util.List<Input<?>> get(FormDetail form,Object object);
 		
 		void read(Input<?> input);
 		void write(Input<?> input);
@@ -272,13 +271,13 @@ public class Input<T> extends Control implements Serializable {
 				}
 				
 				@Override
-				public Boolean isInputable(Form.Detail form,Object object, Field field) {
+				public Boolean isInputable(FormDetail form,Object object, Field field) {
 					return field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Input.class)!=null 
 							|| CollectionHelper.getInstance().contains(getFieldNames(form, object), field.getName());
 				}
 				
 				@Override
-				public Collection<Field> getFields(final Form.Detail detail,final Object object) {
+				public Collection<Field> getFields(final FormDetail detail,final Object object) {
 					final Collection<String> fieldNames = getFieldNames(detail, object);
 					final Collection<String> excludedFieldNames = getExcludedFieldNames(detail, object);
 					final List<Field> fields = new ArrayList<Field>();
@@ -297,7 +296,7 @@ public class Input<T> extends Control implements Serializable {
 				}
 				
 				@Override
-				public void sortFields(Detail detail, Object object, List<Field> fields) {
+				public void sortFields(FormDetail detail, Object object, List<Field> fields) {
 					final List<String> fieldNames = CollectionHelper.getInstance().createList(getFieldNames(detail, object));
 					if(CollectionHelper.getInstance().isNotEmpty(fieldNames)){
 						Collections.sort(fields, new Comparator<Field>() {
@@ -312,7 +311,7 @@ public class Input<T> extends Control implements Serializable {
 				
 				@SuppressWarnings("unchecked")
 				@Override
-				public Class<? extends Input<?>> getClass(Form.Detail form,Object object, Field field) {
+				public Class<? extends Input<?>> getClass(FormDetail form,Object object, Field field) {
 					Class<? extends Input<?>> aClass = null;
 					Class<?> fieldType = FieldHelper.getInstance().getType(object.getClass(), field);
 					if(field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Input.class)==null){
@@ -400,12 +399,12 @@ public class Input<T> extends Control implements Serializable {
 				}
 				
 				@Override
-				public Input<?> instanciate(Class<? extends Input<?>> aClass, Detail form, Object object, Field field,Constraints constraints) {
+				public Input<?> instanciate(Class<? extends Input<?>> aClass, FormDetail form, Object object, Field field,Constraints constraints) {
 					return ClassHelper.getInstance().instanciateOne(aClass);
 				}
 				
 				@Override
-				public void initialse(Input<?> input, Detail detail, Object object, Field field,Constraints constraints,Control.Listener.Get listener) {
+				public void initialse(Input<?> input, FormDetail detail, Object object, Field field,Constraints constraints,Control.Listener.Get listener) {
 					Boolean isReadChoicesElementsOnSetField = null;
 					if(input instanceof InputChoice){
 						if(Boolean.TRUE.equals(((InputChoice<?>)input).getIsReadChoicesElementsOnSetField())){
@@ -451,7 +450,7 @@ public class Input<T> extends Control implements Serializable {
 				}
 				
 				@Override
-				public Input<?> get(Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints,Control.Listener.Get listener) {
+				public Input<?> get(FormDetail detail,Object object, Field field, FieldHelper.Constraints constraints,Control.Listener.Get listener) {
 					Input<?> input = null;
 					Class<? extends Input<?>> aClass = getClass(detail,object, field);
 					if(aClass!=null)
@@ -467,17 +466,17 @@ public class Input<T> extends Control implements Serializable {
 				}
 				
 				@Override
-				public Input<?> get(Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints) {
+				public Input<?> get(FormDetail detail,Object object, Field field, FieldHelper.Constraints constraints) {
 					return get(detail,object,field,constraints,null);
 				}
 				
 				@Override
-				public Input<?> get(Form.Detail detail,Object object, Field field) {
+				public Input<?> get(FormDetail detail,Object object, Field field) {
 					return get(detail, object, field, null);
 				}
 			
 				@Override
-				public java.util.List<Input<?>> get(Form.Detail form,Object object) {
+				public java.util.List<Input<?>> get(FormDetail form,Object object) {
 					java.util.List<Input<?>> list = new ArrayList<Input<?>>();
 					for(Field field : getFields(form,object))
 						list.add(get(form,object, field));
@@ -569,12 +568,12 @@ public class Input<T> extends Control implements Serializable {
 			}
 			
 			@Override
-			public Input<?> instanciate(Class<? extends Input<?>> aClass, Detail form, Object object, Field field,Constraints constraints) {
+			public Input<?> instanciate(Class<? extends Input<?>> aClass, FormDetail form, Object object, Field field,Constraints constraints) {
 				return null;
 			}
 			
 			@Override
-			public void initialse(Input<?> input, Detail form, Object object, Field field,Constraints constraints,Control.Listener.Get listener) {}
+			public void initialse(Input<?> input, FormDetail form, Object object, Field field,Constraints constraints,Control.Listener.Get listener) {}
 			
 			@Override
 			public Boolean isInputable(Class<?> aClass, String fieldName) {
@@ -585,52 +584,52 @@ public class Input<T> extends Control implements Serializable {
 			public void listenGet(Input<?> input) {}
 			
 			@Override
-			public Collection<String> getFieldNames(Form.Detail form,Object object) {
+			public Collection<String> getFieldNames(FormDetail form,Object object) {
 				return null;
 			}
 			
 			@Override
-			public Collection<String> getExcludedFieldNames(Detail form, Object object) {
+			public Collection<String> getExcludedFieldNames(FormDetail form, Object object) {
 				return null;
 			}
 			
 			@Override
-			public Boolean isInputable(Form.Detail form,Object object, Field field) {
+			public Boolean isInputable(FormDetail form,Object object, Field field) {
 				return null;
 			}
 			
 			@Override
-			public Collection<Field> getFields(Form.Detail form,Object object) {
+			public Collection<Field> getFields(FormDetail form,Object object) {
 				return null;
 			}
 			
 			@Override
-			public Class<? extends Input<?>> getClass(Form.Detail form,Object object, Field field) {
+			public Class<? extends Input<?>> getClass(FormDetail form,Object object, Field field) {
 				return null;
 			}
 			
 			@Override
-			public Input<?> get(Form.Detail form,Object object, Field field, FieldHelper.Constraints constraints,Control.Listener.Get listener) {
+			public Input<?> get(FormDetail form,Object object, Field field, FieldHelper.Constraints constraints,Control.Listener.Get listener) {
 				return null;
 			}
 			
 			@Override
-			public Input<?> get(Form.Detail form,Object object, Field field, FieldHelper.Constraints constraints) {
+			public Input<?> get(FormDetail form,Object object, Field field, FieldHelper.Constraints constraints) {
 				return null;
 			}
 			
 			@Override
-			public Input<?> get(Form.Detail form,Object object, Field field) {
+			public Input<?> get(FormDetail form,Object object, Field field) {
 				return null;
 			}
 			
 			@Override
-			public java.util.List<Input<?>> get(Form.Detail form,Object object) {
+			public java.util.List<Input<?>> get(FormDetail form,Object object) {
 				return null;
 			}
 			
 			@Override
-			public void sortFields(Detail form, Object object, List<Field> fields) {}
+			public void sortFields(FormDetail form, Object object, List<Field> fields) {}
 			
 			@Override
 			public void read(Input<?> input) {}

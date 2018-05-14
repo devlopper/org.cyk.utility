@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Constant;
@@ -20,26 +19,22 @@ import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.CollectionHelper.Instance;
 import org.cyk.utility.common.helper.FieldHelper;
-import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.FilterHelper;
 import org.cyk.utility.common.helper.IconHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
-import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.userinterface.CascadeStyleSheetHelper;
 import org.cyk.utility.common.userinterface.Component;
-import org.cyk.utility.common.userinterface.ContentType;
 import org.cyk.utility.common.userinterface.Control;
-import org.cyk.utility.common.userinterface.Image;
 import org.cyk.utility.common.userinterface.JavaServerFacesHelper;
-import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueSource;
+import org.cyk.utility.common.userinterface.collection.Column.CellValueSource;
 import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.command.MenuNode;
 import org.cyk.utility.common.userinterface.command.RemoteCommand;
-import org.cyk.utility.common.userinterface.container.Form;
+import org.cyk.utility.common.userinterface.container.form.FormDetail;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputText;
 import org.cyk.utility.common.userinterface.input.Watermark;
@@ -47,13 +42,7 @@ import org.cyk.utility.common.userinterface.input.choice.InputChoice;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOne;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneCombo;
 import org.cyk.utility.common.userinterface.output.Output;
-import org.cyk.utility.common.userinterface.output.OutputFile;
 import org.cyk.utility.common.userinterface.output.OutputText;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
 public class DataTable extends Component.Visible implements Serializable {
@@ -63,7 +52,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		ClassHelper.getInstance().map(Listener.class, Listener.Adapter.Default.class,Boolean.FALSE);
 	}
 	
-	private Form.Detail form;
+	private FormDetail form;
 	/*
 	private Boolean onPrepareAddMenu;
 	private Boolean onPrepareAddMenuAddCommand=Boolean.TRUE;
@@ -195,6 +184,8 @@ public class DataTable extends Component.Visible implements Serializable {
 			load(); //can be trigger by callback to enabled fast rendering of table structure	
 		}
 		
+		logTrace("columns({},{})", CollectionHelper.getInstance().getSize(getColumnsFieldNames()),getColumnsFieldNames());
+		
 		return this;
 	}
 	
@@ -249,7 +240,7 @@ public class DataTable extends Component.Visible implements Serializable {
 				Column choiceValueColumn = ((DataTable)component).addColumnByFieldName(fieldName);
 				if(orderNumberColumn!=null)
 					choiceValueColumn.set__orderNumber__(orderNumberColumn.get__orderNumber__()+1);
-				choiceValueColumn.setCellValueType(DataTable.Cell.ValueType.TEXT);	
+				choiceValueColumn.setCellValueType(Cell.ValueType.TEXT);	
 			}
 		}
 	}
@@ -481,6 +472,7 @@ public class DataTable extends Component.Visible implements Serializable {
 		return Columns.addColumn(this, labelStringIdentifier, fieldName);
 	}
 	
+	/*
 	public Column addColumnByFieldName(String fieldName){
 		String labelStringIdentifier = StringHelper.getInstance().getI18nIdentifier(FieldHelper.getInstance().getLast(fieldName));
 		Column column = addColumn(labelStringIdentifier, fieldName);
@@ -494,6 +486,28 @@ public class DataTable extends Component.Visible implements Serializable {
 				column._setLabelPropertyValue(StringHelper.getInstance().getField(field));
 		}
 		
+		return column;
+	}
+	*/
+	
+	public Column addColumnByFieldName(String fieldName){
+		String labelStringIdentifier = StringHelper.getInstance().getI18nIdentifier(FieldHelper.getInstance().getLast(fieldName));
+		Column column = Columns.addColumn(this, labelStringIdentifier, fieldName);
+		
+		Class<?> actionOnClass = (Class<?>) getPropertiesMap().getActionOnClass();
+		if(actionOnClass != null){
+			java.lang.reflect.Field field = FieldHelper.getInstance().get(actionOnClass, fieldName);
+			if(field == null){
+				column._setLabelPropertyValue("??"+actionOnClass.getSimpleName()+"."+fieldName+"??");
+			}else
+				column._setLabelPropertyValue(StringHelper.getInstance().getField(field));
+		}
+		/*
+		Column.Builder builder = Column.instanciateOneBuilder();
+		builder.setPropertyField(FieldHelper.getInstance().get(MyClass.class, "code01"));
+		builder.getPropertiesMap().setActionOnClass(MyClass.class);
+		Column column = builder.execute();
+		*/
 		return column;
 	}
 	
@@ -607,8 +621,8 @@ public class DataTable extends Component.Visible implements Serializable {
 			for(Component component : children.getElements())
 				if(component instanceof Row && ((Row)component).cells!=null)
 					for(Cell cell : ((Row)component).cells)
-						if(cell.input!=null)
-							inputs.add(cell.input);
+						if(cell.getInput()!=null)
+							inputs.add(cell.getInput());
 		return inputs;
 	}
 	
@@ -654,534 +668,6 @@ public class DataTable extends Component.Visible implements Serializable {
 	/**/
 	
 	/**/
-	
-	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
-	public static class Column extends Dimension implements Serializable {
-		private static final long serialVersionUID = 1L;
-
-		public static enum CellValueSource {ROW_PROPERTIES_MAP,ROW_PROPERTY_VALUE,ROW; public static CellValueSource DEFAULT = CellValueSource.ROW_PROPERTY_VALUE;}
-		//public static enum CellValueType {TEXT,MENU,FILE,IMAGE; public static CellValueType DEFAULT = CellValueType.TEXT;}
-
-		//private Collection<Listener> listeners = new ArrayList<>();
-		private CellValueSource cellValueSource = CellValueSource.DEFAULT;
-		private Cell.ValueType cellValueType;
-		private Class<Input<?>> inputClass;
-		
-		/**/
-		
-		public Cell getCell(Row row){
-			if(row==null)
-				return null;
-			return Cell.getOne(this, row,(Cell.Listener) getPropertiesMap().getCellListener());
-		}
-			
-		public Column computeCellValueType(Object object,Boolean sortable){
-			if(object!=null && cellValueType==null){
-				LoggingHelper.Message.Builder loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default();
-				loggingMessageBuilder.addManyParameters("compute cell value type");
-				String fieldName = (String) getPropertiesMap().getFieldName();
-				loggingMessageBuilder.addNamedParameters("action",getPropertiesMap().getAction(),"field name",fieldName,"cell value source",cellValueSource);
-				Class<?> fieldType = null;
-				if(CellValueSource.ROW.equals(cellValueSource))
-					fieldType = FieldHelper.getInstance().get(Row.class, fieldName).getType();
-				else if(CellValueSource.ROW_PROPERTIES_MAP.equals(cellValueSource))
-					fieldType = Object.class;
-				else{
-					fieldType = FieldHelper.getInstance().getType(object.getClass(), FieldHelper.getInstance().get(object.getClass(), fieldName));
-					//inputClass = (Class<Input<?>>) Input.getListener().getClass(null, object, FieldHelper.getInstance().get(object.getClass(), fieldName));
-					if( Constant.Action.isCreateOrUpdate((Action) getPropertiesMap().getAction()) )
-						cellValueType = Cell.ValueType.INPUT;
-				}
-				loggingMessageBuilder.addNamedParameters("field type",fieldType);
-				if( cellValueType==null ){
-					if(FileHelper.getListener().getModelClass().equals(fieldType))
-						cellValueType = Cell.ValueType.FILE;
-					else
-						cellValueType = Cell.ValueType.DEFAULT;
-				}
-				if( Constant.Action.isCreateOrUpdate((Action) getPropertiesMap().getAction()) )
-					;
-				else
-					getPropertiesMap().setLinked(ClassHelper.getInstance().isIdentified(fieldType));
-				
-				if(Cell.ValueType.TEXT.equals(cellValueType)){
-					if(CellValueSource.ROW_PROPERTY_VALUE.equals(cellValueSource))
-						getPropertiesMap().setSortable(sortable);
-				}
-				loggingMessageBuilder.addNamedParameters("cell value type",cellValueType,"linked",getPropertiesMap().getLinked());
-				logTrace(loggingMessageBuilder);
-			}
-			return this;
-		}
-
-		@SuppressWarnings("unchecked")
-		public int sort(Object o1,Object o2){
-			return ((Comparable<Object>)o1).compareTo(o2);
-		}
-		
-		public boolean filter(Object value,Object filter,Locale locale){
-			return ((String)value).startsWith((String) filter);
-		}
-		
-		/**/
-		
-		public static Column instanciateOne(String labelStringIdentifier,String fieldName,Column.CellValueSource cellValueSource){
-			DataTable.Column column = new DataTable.Column();
-			column.setCellValueSource(cellValueSource);
-			column.setLabelFromIdentifier(labelStringIdentifier);
-			column.getPropertiesMap().setHeaderText(column.getLabel().getPropertiesMap().getValue());
-			column.getPropertiesMap().setHeader(column.getLabel());
-			column.getPropertiesMap().setSortable(Boolean.FALSE);
-			
-			OutputText footer = new OutputText();
-			column.getPropertiesMap().setFooter(footer);
-			
-			column.getPropertiesMap().setFieldName(fieldName);
-			column.addPropertyStyleClass(CascadeStyleSheetHelper.getInstance().getClass(fieldName.toLowerCase()));
-			return column;
-		}
-		
-		public static Column instanciateOne(String labelStringIdentifier,String fieldName){
-			return instanciateOne(labelStringIdentifier, fieldName, CellValueSource.DEFAULT);
-		}
-	
-		/**/
-		
-		public void __setPropertyFooterPropertyValueBasedOnMaster__(){
-			Column column = this;
-			LoggingHelper.Message.Builder loggingMessageBuilder = new LoggingHelper.Message.Builder.Adapter.Default();
-			loggingMessageBuilder.addManyParameters("set column footer value");
-			DataTable dataTable = (DataTable) column.getPropertiesMap().getDataTable();
-			loggingMessageBuilder.addNamedParameters("field name",column.getPropertiesMap().getFieldName(),"master exist",dataTable.getPropertiesMap().getMaster()!=null);
-			if(dataTable.getPropertiesMap().getMaster()!=null){
-				java.lang.reflect.Field field = FieldHelper.getInstance().get(dataTable.getPropertiesMap().getMaster().getClass(), (String)column.getPropertiesMap().getFieldName());
-				loggingMessageBuilder.addNamedParameters("field exist",field!=null);
-				if(field!=null){
-					loggingMessageBuilder.addNamedParameters("before set",((OutputText)column.getPropertiesMap().getFooter()).getPropertiesMap().getValue());
-					((OutputText)column.getPropertiesMap().getFooter()).getPropertiesMap().setValue(FieldHelper.getInstance()
-							.read(dataTable.getPropertiesMap().getMaster(), (String)column.getPropertiesMap().getFieldName()));
-					loggingMessageBuilder.addNamedParameters("after set",((OutputText)column.getPropertiesMap().getFooter()).getPropertiesMap().getValue());
-				}
-			}
-			logTrace(loggingMessageBuilder);
-		}
-		
-		/**/
-		
-		public static interface Listener {
-			
-			public static class Adapter extends AbstractBean implements Listener,Serializable {
-				private static final long serialVersionUID = 1L;
-				
-				public static class Default extends Listener.Adapter implements Serializable {
-					private static final long serialVersionUID = 1L;
-					
-				
-				}				
-			}
-		}
-	}
-
-	public static class Columns extends Component implements Serializable {
-		private static final long serialVersionUID = 1L;
-
-		/**/
-		
-		@Override
-		protected void listenPropertiesInstanciated(Properties propertiesMap) {
-			super.listenPropertiesInstanciated(propertiesMap);
-			propertiesMap.setGetter(Properties.FOOTER_RENDERED, new Properties.Getter() {
-				@Override
-				public Object execute(Properties properties, Object key, Object value, Object nullValue) {
-					@SuppressWarnings("unchecked")
-					Collection<Column> columns = (Collection<Column>) getPropertiesMap().getValue();
-					for(Column column : columns)
-						if(column.getPropertiesMap().getFooter()!=null){
-							if(column.getPropertiesMap().getFooter() instanceof OutputText && ((OutputText)column.getPropertiesMap().getFooter()).getPropertiesMap().getValue()!=null)
-								return Boolean.TRUE;
-						}
-					return Boolean.FALSE;
-				}
-			});
-		}
-		
-		@SuppressWarnings("unchecked")
-		public Columns(Component component) {
-			getPropertiesMap().setAction(component.getPropertiesMap().getAction());
-			getPropertiesMap().setCellListener(component.getPropertiesMap().getCellListener());
-			getPropertiesMap().setDataTable(component);
-			if(component.getPropertiesMap().getColumnsCollectionInstanceListenerClass()!=null){
-				if(getChildren() == null)
-					setChildren(instanciateChildrenCollection());
-				getChildren().addListener((org.cyk.utility.common.helper.CollectionHelper.Instance.Listener<Component>) component.getPropertiesMap().getColumnsCollectionInstanceListenerClass());
-			}
-			
-			component.getPropertiesMap().setColumns(this);
-		}
-		
-		public Column addColumn(String labelStringIdentifier,String fieldName){
-			DataTable.Column column = Column.instanciateOne(labelStringIdentifier, fieldName);
-			column.getPropertiesMap().setAction(getPropertiesMap().getAction());
-			column.getPropertiesMap().setCellListener(getPropertiesMap().getCellListener());
-			column.getPropertiesMap().setDataTable(getPropertiesMap().getDataTable());
-			//column.setLabelFromIdentifier(labelStringIdentifier);
-			//column.getPropertiesMap().setHeaderText(column.getLabel().getPropertiesMap().getValue());
-			//column.getPropertiesMap().setFieldName(fieldName);
-			
-			addOneChild(column);
-			
-			if(getPropertiesMap().getValue()==null)
-				getPropertiesMap().setValue(getChildren().getElements());
-			return column;
-		}
-		
-		public static Column addColumn(Component component,String labelStringIdentifier,String fieldName){
-			Columns columns = (Columns) component.getPropertiesMap().getColumns();
-			if(component.getPropertiesMap().getColumns()==null){
-				columns = new Columns(component);
-			}
-			return columns.addColumn(labelStringIdentifier, fieldName);
-		}
-		
-		@Override
-		public Component addOneChild(Component component) {
-			if(component instanceof Column){
-				if(component.getPropertiesMap().getSortable()==null && FieldHelper.getInstance().getIsContainSeparator((String)component.getPropertiesMap().getFieldName())){
-					//component.getPropertiesMap().setSortable(Boolean.TRUE);
-					//component.getPropertiesMap().setFilterable(Boolean.TRUE);
-				}
-			}
-			return super.addOneChild(component);
-		}
-		
-		/**/
-		
-		public static Column add(Component component,String labelStringIdentifier,String fieldName,CellValueSource cellValueSource){
-			DataTable.Column column = Column.instanciateOne(labelStringIdentifier, fieldName, cellValueSource);
-			
-			Columns columns;
-			if( (columns = (Columns) component.getPropertiesMap().getColumns()) == null){
-				columns = new Columns(component);
-			}
-				
-			columns.addOneChild(column);
-			
-			if( columns.getPropertiesMap().getValue() == null){
-				columns.getPropertiesMap().setValue(columns.getChildren().getElements());
-			}
-			
-			return column;
-		}
-		
-		public static Column add(Component component,String labelStringIdentifier,String fieldName){
-			return add(component, labelStringIdentifier, fieldName, CellValueSource.DEFAULT);
-		}
-		
-		public static Column addByFieldName(Component component,String fieldName,CellValueSource cellValueSource){
-			String labelStringIdentifier = StringHelper.getInstance().getI18nIdentifier(FieldHelper.getInstance().getLast(fieldName));
-			return add(component,labelStringIdentifier, fieldName,cellValueSource);
-		}
-		
-		public static Column addByFieldName(Component component,String fieldName){
-			return addByFieldName(component, fieldName, CellValueSource.DEFAULT);
-		}
-		
-		public static void addByFieldNames(Component component,CellValueSource cellValueSource,String...fieldNames){
-			for(String fieldName : fieldNames)
-				addByFieldName(component,fieldName,cellValueSource);
-		}
-		
-		public static void addByFieldNames(Component component,String...fieldNames){
-			addByFieldNames(component, CellValueSource.DEFAULT, fieldNames);
-		}
-		
-		public Column getColumn(String fieldName){
-			Column column = null;
-			@SuppressWarnings("unchecked")
-			Collection<Column> collection = (Collection<Column>) getPropertiesMap().getValue();
-			if(collection!=null)
-				for(Column index : collection)
-					if(fieldName==null && index.getPropertiesMap().getFieldName()==null || fieldName.equals(index.getPropertiesMap().getFieldName())){
-						column = index;
-						break;
-					}
-			logTrace("get column. field name={} , column is not null={}", fieldName,column!=null);
-			return column;
-		}
-		
-		public static Columns getProperty(Component component){
-			return (Columns) component.getPropertiesMap().getColumns();
-		}
-		
-		@SuppressWarnings("unchecked")
-		public static Collection<Column> getPropertyValue(Component component){
-			Columns columns = getProperty(component);
-			return columns == null ? null : (Collection<Column>) columns.getPropertiesMap().getValue();
-		}
-		
-		public static void build(Component component) {
-			Columns columns = (Columns) component.getPropertiesMap().getColumns();
-			if(columns!=null){
-				CollectionHelper.getInstance().sort((Collection<?>) columns.getPropertiesMap().getValue());
-			}
-		}
-		
-		/**/
-		
-		public static interface Listener {
-			
-			public static class Adapter extends AbstractBean implements Listener,Serializable {
-				private static final long serialVersionUID = 1L;
-				
-				public static class Default extends Listener.Adapter implements Serializable {
-					private static final long serialVersionUID = 1L;
-					
-				
-				}				
-			}
-		}
-
-	}
-	
-	@Getter @Setter @Accessors(chain=true)
-	public static class Row extends Dimension implements Serializable {
-		private static final long serialVersionUID = 1L;
-		public static final String MENU_STYLE_CLASS = CascadeStyleSheetHelper.getInstance().getClass(DataTable.class,Row.class,Menu.class);
-		
-		private Menu menu;
-		private MenuNode deleteMenuNode;
-		
-		/**/
-		
-		public Row() {
-			// TODO Auto-generated constructor stub
-		}
-		
-		public Row _setObject(Object object){
-			getPropertiesMap().setValue(object);
-			menu = new Menu().setRenderType(Menu.RenderType.BAR);
-			menu.getPropertiesMap().addString(Properties.STYLE_CLASS, Constant.CHARACTER_SPACE, MENU_STYLE_CLASS);
-			getPropertiesMap().setMainMenu(menu);
-			addOneChild(menu);
-			menu.addNode("read")._setPropertyUrl(Constant.Action.READ,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
-				._setPropertyIcon(IconHelper.Icon.FontAwesome.EYE);
-			menu.addNode("update")._setPropertyUrl(Constant.Action.UPDATE,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
-				._setPropertyIcon(IconHelper.Icon.FontAwesome.EDIT);
-			deleteMenuNode = (MenuNode) menu.addNode("delete")._setPropertyUrl(Constant.Action.DELETE,object)._setLabelPropertyRendered(Boolean.FALSE)._setPropertyTitleFromLabel()
-				._setPropertyIcon(IconHelper.Icon.FontAwesome.TRASH);
-			
-			return this;
-		}
-		
-		public Cell getCell(Column column){
-			return Cell.getOne(column, this,(Cell.Listener) getPropertiesMap().getCellListener());
-		}
-		
-		public Cell getCell(String columnFieldName){
-			DataTable dataTable = (DataTable) getPropertiesMap().getParent();
-			return getCell(dataTable.getColumn(columnFieldName));
-		}
-		
-		/**/
-		
-		@SuppressWarnings("unchecked")
-		public static Row instanciateOne(Object object,Long orderNumber,Columns columns,Boolean sortable){
-			Row row = new Row()._setObject(object);
-			row.set__orderNumber__(orderNumber);
-			
-			for(Column column : (Collection<Column>)columns.getPropertiesMap().getValue()){
-				column.computeCellValueType(object,sortable);
-			}
-				
-			return row;
-		}
-		
-		//@SuppressWarnings("unchecked")
-		public static CollectionHelper.Instance<Row> instanciateMany(Collection<?> collection,Component component,CollectionHelper.Instance<Row> rows){
-			//Columns columns = (Columns) component.getPropertiesMap().getColumns();
-			
-			if(CollectionHelper.getInstance().isNotEmpty(collection)){
-				if(rows == null)
-					rows = new CollectionHelper.Instance<>();
-				for(Object object : collection){
-					Row row = instanciateOne(object,NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements())+1,0l)
-							,(Columns) component.getPropertiesMap().getColumns(),component instanceof DataTable);
-					row.getPropertiesMap().setParent(component);
-					
-					rows.addOne(row);
-					component.addOneChild(row);
-					
-					/*Row row = new Row()._setObject(object);
-					row.getPropertiesMap().setParent(component);
-					rows.addOne(row);
-					row.set__orderNumber__(NumberHelper.getInstance().get(Long.class,CollectionHelper.getInstance().getSize(rows.getElements()),0l));
-					component.addOneChild(row);
-					
-					for(Column column : (Collection<Column>)columns.getPropertiesMap().getValue())
-						column.computeCellValueType(object);
-					*/
-				}
-			}
-			
-			return rows;
-		}
-	}
-	
-	@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(callSuper=false,of={Cell.FIELD_COLUMN,Cell.FIELD_ROW})
-	public static class Cell extends Component.Visible implements Serializable {
-		private static final long serialVersionUID = 1L;
-		
-		static {
-			ClassHelper.getInstance().map(Cell.Listener.class, Cell.Listener.Adapter.Default.class, Boolean.FALSE);
-		}
-		
-		public static enum ValueType {TEXT,LINK,MENU,FILE,IMAGE,INPUT; public static ValueType DEFAULT = ValueType.TEXT;}
-		
-		private Column column;
-		private Row row;
-		private Input<?> input;
-		/**/
-		
-		public static Cell instanciateOne(Column column,Row row,Cell.Listener listener){
-			return (listener == null ? ClassHelper.getInstance().instanciateOne(Cell.Listener.class) : listener).instanciateOne(column, row);
-		}
-		
-		public static Cell getOne(Column column,Row row,Cell.Listener listener){
-			Cell cell = null;
-			if(CollectionHelper.getInstance().isNotEmpty(column.cells))
-				for(Cell index : column.cells)
-					if(index.column.equals(column) && index.row.equals(row)) {
-						cell = index;
-						break;
-					}
-			if(cell==null){
-				column.addOneCell(cell = Cell.instanciateOne(column, row,listener));
-				row.addOneCell(cell);
-			}
-			return cell;
-		}
-		
-		/**/
-		
-		public static final String FIELD_COLUMN = "column";
-		public static final String FIELD_ROW = "row";
-		
-		/**/
-		
-		public static interface Listener {
-			
-			Cell instanciateOne(Column column,Row row);
-			
-			public static class Adapter extends AbstractBean implements Listener,Serializable {
-				private static final long serialVersionUID = 1L;
-				
-				@Override
-				public Cell instanciateOne(Column column, Row row) {
-					return null;
-				}
-				
-				public static class Default extends Listener.Adapter implements Serializable {
-					private static final long serialVersionUID = 1L;
-					
-					public Cell instanciateOne(Column column,Row row){
-						column.computeCellValueType(row.getPropertiesMap().getValue(),Boolean.TRUE);
-						Cell cell = new Cell().setColumn(column).setRow(row);
-						Output output = null;
-						/*if(row==null){
-							value = "ROW IS NULL";
-						}*/
-						if(row!=null){
-							String fieldName = (String) column.getPropertiesMap().getFieldName();
-							if(StringHelper.getInstance().isBlank(fieldName)){
-								output = new OutputText();
-								output.getPropertiesMap().setValue("NO FIELD NAME");
-							}else {
-								if(column.cellValueSource==null)
-									;
-								else
-									switch(column.cellValueSource){
-									case ROW : 
-										output = new Output(); 
-										output.getPropertiesMap().setValue(FieldHelper.getInstance().read(row, fieldName)); 
-										break;
-									case ROW_PROPERTIES_MAP : 
-										output = new Output(); 
-										output.getPropertiesMap().setValue(row.getPropertiesMap().get(fieldName)); 
-										break;
-									case ROW_PROPERTY_VALUE:
-										FieldHelper.Constraints constraints = FieldHelper.Field.get(row.getPropertiesMap().getValue().getClass(), fieldName).getConstraints();
-										Object object = FieldHelper.getInstance().readBeforeLast(row.getPropertiesMap().getValue(), fieldName);
-										java.lang.reflect.Field field = FieldHelper.getInstance().getLast(object.getClass(),fieldName);
-										output = Output.getListener().get(null,object, field,constraints); 
-										
-										if(column.getPropertiesMap().getAction() instanceof Constant.Action){
-											Constant.Action action = (Action) column.getPropertiesMap().getAction();
-											if(Constant.Action.isCreateOrUpdate(action) && ValueType.INPUT.equals(column.cellValueType)){
-												cell.input = Input.get(null, object, field,constraints);
-												cell.input.getPropertiesMap().setWatermark(null);
-											}
-										}
-										/*
-										if(column.inputClass == null){
-											column.inputClass = (Class<Input<?>>) Input.getListener().getClass(null, object, FieldHelper.getInstance()
-													.get(row.getPropertiesMap().getValue().getClass(), fieldName));
-										}
-										
-										if(column.getInputClass()!=null){
-											cell.input = ClassHelper.getInstance().instanciateOne(column.getInputClass());
-										}
-										*/
-										break;
-									}	
-							}	
-						}
-						if(output instanceof OutputFile){
-							Image thumbnail = (Image) ((OutputFile) output).getPropertiesMap().getThumbnail();
-							if(ContentType.HTML.equals(Component.RENDER_AS_CONTENT_TYPE)){
-								thumbnail.getPropertiesMap().setWidth("20px").setHeight("20px");
-							}
-						}
-						
-						cell.getPropertiesMap().setValue(output);
-						if(output instanceof OutputFile){
-							
-						}else{
-							cell.getPropertiesMap().setSortBy(output.getPropertiesMap().getValue());
-							cell.getPropertiesMap().setFilterBy(output.getPropertiesMap().getValue());
-						}
-						
-						return cell;
-					}
-					
-				}
-				
-			}
-		}
-	}
-
-	/**/
-	  
-	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
-	private static class Dimension extends Component.Visible implements Serializable {
-		private static final long serialVersionUID = 1L;
-		
-		protected Collection<Cell> cells;
-		
-		public Dimension addOneCell(Cell cell){
-			if(cells == null)
-				cells = new ArrayList<>();
-			cells.add(cell);
-			return this;
-		}
-		
-		public Cell getCellByIndex(Integer index){
-			if(index==null)
-				return null;
-			
-			return CollectionHelper.getInstance().getElementAt(cells, index);
-		}
-		
-	}
 	
 	/**/
 	
@@ -1474,9 +960,9 @@ public class DataTable extends Component.Visible implements Serializable {
 									private static final long serialVersionUID = 1L;
 
 									protected void __executeForEach__(String fieldName) {
-										Object fieldObject = FieldHelper.getInstance().readBeforeLast(((Form.Detail)dataTable.getPropertiesMap().getFormDetail()).getMaster().getObject(), fieldName);
-										Control control = ((Form.Detail)dataTable.getPropertiesMap().getFormDetail()).getControlByFieldName(fieldObject,FieldHelper.getInstance().getLast(fieldName));										
-										//Control control = ((Form.Detail)dataTable.getPropertiesMap().getFormDetail()).getControlByFieldName(fieldName);
+										Object fieldObject = FieldHelper.getInstance().readBeforeLast(((FormDetail)dataTable.getPropertiesMap().getFormDetail()).getMaster().getObject(), fieldName);
+										Control control = ((FormDetail)dataTable.getPropertiesMap().getFormDetail()).getControlByFieldName(fieldObject,FieldHelper.getInstance().getLast(fieldName));										
+										//Control control = ((Detail)dataTable.getPropertiesMap().getFormDetail()).getControlByFieldName(fieldName);
 										Object v1 = control instanceof Input ? ((Input<?>)control).getValue() : ((OutputText)control).getPropertiesMap().getValue();
 										control.read();
 										Object v2 = control instanceof Input ? ((Input<?>)control).getValue() : ((OutputText)control).getPropertiesMap().getValue();

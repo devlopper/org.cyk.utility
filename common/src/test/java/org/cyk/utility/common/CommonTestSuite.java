@@ -1,5 +1,6 @@
 package org.cyk.utility.common;
 
+import org.cyk.utility.common.utility.stringhelper.StringHelperUnitTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;

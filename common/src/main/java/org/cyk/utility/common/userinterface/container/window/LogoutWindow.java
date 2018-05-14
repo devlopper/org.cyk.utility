@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ClassHelper;
-import org.cyk.utility.common.userinterface.container.Form;
+import org.cyk.utility.common.userinterface.container.form.Form;
 
 public class LogoutWindow extends Window implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -15,7 +15,7 @@ public class LogoutWindow extends Window implements Serializable {
 	}
 	
 	@Override
-	protected Class<? extends Form.Master> getFormMasterClass() {
+	protected Class<? extends Form> getFormMasterClass() {
 		return ClassHelper.getInstance().getMapping(FormMaster.class, Boolean.TRUE);
 	}
 	
@@ -33,7 +33,7 @@ public class LogoutWindow extends Window implements Serializable {
 	
 	/**/
 	
-	public static class FormMaster extends Form.Master implements Serializable {
+	public static class FormMaster extends Form implements Serializable {
 		private static final long serialVersionUID = 1L;
 	
 	}

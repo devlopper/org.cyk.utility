@@ -3,10 +3,9 @@ package org.cyk.utility.common.userinterface;
 import java.io.Serializable;
 
 import org.cyk.utility.common.helper.ClassHelper;
-import org.cyk.utility.common.userinterface.Component;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.command.MenuNode;
-import org.cyk.utility.common.userinterface.container.Form;
+import org.cyk.utility.common.userinterface.container.form.FormDetail;
 import org.cyk.utility.common.userinterface.container.window.Window;
 import org.cyk.utility.common.userinterface.package01.MenuNode01;
 import org.cyk.utility.test.unit.AbstractUnitTest;
@@ -109,8 +108,8 @@ public class UserInterfaceMenuUnitTest extends AbstractUnitTest {
 		
 		@Override
 		public Object build(Component component) {
-			if(component instanceof Form.Detail)
-				return Form.Detail.buildTarget((Form.Detail) component);
+			if(component instanceof FormDetail)
+				return FormDetail.buildTarget((FormDetail) component);
 			if(component instanceof Menu)
 				return new MenuBuilder().setInput((Menu) component).execute();
 			return super.build(component);

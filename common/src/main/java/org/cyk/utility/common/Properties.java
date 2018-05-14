@@ -3153,6 +3153,15 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getField() {
+		return get(FIELD);
+	}
+
+	public Properties setField(Object value) {
+		set(FIELD, value);
+		return this;
+	}
+	
 	public static final String IS_AUTOMATICALLY_ADD_CHOICE_VALUES = "IS_AUTOMATICALLY_ADD_CHOICE_VALUES";
 	public static final String CHOICE_VALUE_CLASS_MASTER_FIELD_NAME = "ChoiceValueClassMasterFieldName";
 	public static final String FORM_MASTER_OBJECT_ACTION_ON_CLASS_COLLECTION_INSTANCE = "FormMasterObjectActionOnClassCollectionInstance";
@@ -3497,6 +3506,7 @@ public class Properties implements java.io.Serializable {
 	public static final String VALIDATOR = "VALIDATOR";
 	public static final String CONVERTER = "CONVERTER";
 	public static final String MESSAGE = "MESSAGE";
+	public static final String FIELD = "FIELD";
 	
 	/**/
 	

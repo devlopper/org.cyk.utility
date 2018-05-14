@@ -15,8 +15,7 @@ import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.StringHelper;
-import org.cyk.utility.common.userinterface.container.Form;
-import org.cyk.utility.common.userinterface.container.Form.Detail;
+import org.cyk.utility.common.userinterface.container.form.FormDetail;
 import org.cyk.utility.common.userinterface.event.Event;
 import org.cyk.utility.common.userinterface.output.OutputText;
 
@@ -123,17 +122,17 @@ public class Control extends Component.Visible implements Serializable {
 	
 	public static interface Listener {
 		
-		Collection<String> getFieldNames(Form.Detail form,Object object);
-		Collection<String> getExcludedFieldNames(Form.Detail form,Object object);
-		Boolean isControlable(Form.Detail form,Object object,java.lang.reflect.Field field);
-		java.util.Collection<Field> getFields(Form.Detail form,Object object);
-		void sortFields(Form.Detail form,Object object,java.util.List<Field> fields);
+		Collection<String> getFieldNames(FormDetail form,Object object);
+		Collection<String> getExcludedFieldNames(FormDetail form,Object object);
+		Boolean isControlable(FormDetail form,Object object,java.lang.reflect.Field field);
+		java.util.Collection<Field> getFields(FormDetail form,Object object);
+		void sortFields(FormDetail form,Object object,java.util.List<Field> fields);
 		
-		Class<? extends Control> getClass(Form.Detail form,Object object,java.lang.reflect.Field field);
+		Class<? extends Control> getClass(FormDetail form,Object object,java.lang.reflect.Field field);
 		
-		Control get(Form.Detail form,Object object,java.lang.reflect.Field field);
+		Control get(FormDetail form,Object object,java.lang.reflect.Field field);
 		void listenGet(Control control);
-		java.util.List<Control> get(Form.Detail form,Object object);
+		java.util.List<Control> get(FormDetail form,Object object);
 		
 		public static class Adapter extends AbstractBean implements Listener {
 			private static final long serialVersionUID = 1L;
@@ -142,12 +141,12 @@ public class Control extends Component.Visible implements Serializable {
 				private static final long serialVersionUID = 1L;
 				
 				@Override
-				public Boolean isControlable(Form.Detail form,Object object, Field field) {
+				public Boolean isControlable(FormDetail form,Object object, Field field) {
 					return CollectionHelper.getInstance().contains(getFieldNames(form, object), field.getName());
 				}
 				
 				@Override
-				public Collection<Field> getFields(final Form.Detail detail,final Object object) {
+				public Collection<Field> getFields(final FormDetail detail,final Object object) {
 					final Collection<String> fieldNames = getFieldNames(detail, object);
 					final Collection<String> excludedFieldNames = getExcludedFieldNames(detail, object);
 					final List<Field> fields = new ArrayList<Field>();
@@ -166,7 +165,7 @@ public class Control extends Component.Visible implements Serializable {
 				}
 				
 				@Override
-				public void sortFields(Detail detail, Object object, List<Field> fields) {
+				public void sortFields(FormDetail detail, Object object, List<Field> fields) {
 					final List<String> fieldNames = CollectionHelper.getInstance().createList(getFieldNames(detail, object));
 					if(CollectionHelper.getInstance().isNotEmpty(fieldNames)){
 						Collections.sort(fields, new Comparator<Field>() {
@@ -180,7 +179,7 @@ public class Control extends Component.Visible implements Serializable {
 				}
 				
 				@Override
-				public Control get(Form.Detail detail,Object object, Field field) {
+				public Control get(FormDetail detail,Object object, Field field) {
 					Control control = null;
 					Class<? extends Control> aClass = getClass(detail,object, field);
 					if(aClass!=null){
@@ -193,7 +192,7 @@ public class Control extends Component.Visible implements Serializable {
 				}
 			
 				@Override
-				public java.util.List<Control> get(Form.Detail form,Object object) {
+				public java.util.List<Control> get(FormDetail form,Object object) {
 					java.util.List<Control> list = new ArrayList<Control>();
 					for(Field field : getFields(form,object))
 						list.add(get(form,object, field));
@@ -222,42 +221,42 @@ public class Control extends Component.Visible implements Serializable {
 			public void listenGet(Control control) {}
 			
 			@Override
-			public Collection<String> getFieldNames(Form.Detail form,Object object) {
+			public Collection<String> getFieldNames(FormDetail form,Object object) {
 				return null;
 			}
 			
 			@Override
-			public Collection<String> getExcludedFieldNames(Detail form, Object object) {
+			public Collection<String> getExcludedFieldNames(FormDetail form, Object object) {
 				return null;
 			}
 			
 			@Override
-			public Boolean isControlable(Form.Detail form,Object object, Field field) {
+			public Boolean isControlable(FormDetail form,Object object, Field field) {
 				return null;
 			}
 			
 			@Override
-			public Collection<Field> getFields(Form.Detail form,Object object) {
+			public Collection<Field> getFields(FormDetail form,Object object) {
 				return null;
 			}
 			
 			@Override
-			public Class<? extends Control> getClass(Form.Detail form,Object object, Field field) {
+			public Class<? extends Control> getClass(FormDetail form,Object object, Field field) {
 				return null;
 			}
 			
 			@Override
-			public Control get(Form.Detail form,Object object, Field field) {
+			public Control get(FormDetail form,Object object, Field field) {
 				return null;
 			}
 			
 			@Override
-			public java.util.List<Control> get(Form.Detail form,Object object) {
+			public java.util.List<Control> get(FormDetail form,Object object) {
 				return null;
 			}
 			
 			@Override
-			public void sortFields(Detail form, Object object, List<Field> fields) {}
+			public void sortFields(FormDetail form, Object object, List<Field> fields) {}
 			
 		}
 		
@@ -265,17 +264,17 @@ public class Control extends Component.Visible implements Serializable {
 		
 		public static interface Get {
 			
-			void processBeforeInitialise(Control control,Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints);
-			void processAfterInitialise(Control control,Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints);
+			void processBeforeInitialise(Control control,FormDetail detail,Object object, Field field, FieldHelper.Constraints constraints);
+			void processAfterInitialise(Control control,FormDetail detail,Object object, Field field, FieldHelper.Constraints constraints);
 			
 			String getLabelValueIdentifier();
 			
 			public static class Adapter extends AbstractBean implements Get,Serializable {
 				private static final long serialVersionUID = 1L;
 
-				@Override public void processBeforeInitialise(Control control,Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints) {}
+				@Override public void processBeforeInitialise(Control control,FormDetail detail,Object object, Field field, FieldHelper.Constraints constraints) {}
 				
-				@Override public void processAfterInitialise(Control control,Form.Detail detail,Object object, Field field, FieldHelper.Constraints constraints) {}
+				@Override public void processAfterInitialise(Control control,FormDetail detail,Object object, Field field, FieldHelper.Constraints constraints) {}
 				
 				@Override
 				public String getLabelValueIdentifier() {

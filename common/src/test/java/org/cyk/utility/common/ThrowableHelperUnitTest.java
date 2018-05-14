@@ -6,8 +6,8 @@ import javax.inject.Singleton;
 import org.cyk.utility.common.helper.AbstractHelper;
 import org.cyk.utility.common.helper.ThrowableHelper;
 import org.cyk.utility.common.helper.ThrowableHelper.Throwable;
-import org.cyk.utility.common.test.Try;
 import org.cyk.utility.common.test.Runnable;
+import org.cyk.utility.common.test.Try;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
 
@@ -81,6 +81,8 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void assertThrowMyBusinessExceptionNotNested(){
 		new Try(new Runnable() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void __run__() throws java.lang.Throwable {
 				throw new MyBusinessException("My_Business_Message");
@@ -91,6 +93,8 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void assertThrowMyBusinessExceptionIdentifierNotNested(){
 		new Try(new Runnable() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void __run__() throws java.lang.Throwable {
 				throw new MyBusinessException("My_Business_Message").setIdentifier(123);
@@ -101,6 +105,8 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void assertThrowMyBusinessExceptionNestedLevel1(){
 		new Try(new Runnable() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void __run__() throws java.lang.Throwable {
 				throw new RuntimeException(new MyBusinessException("My_Business_Message"));
@@ -111,6 +117,8 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void assertThrowMyBusinessExceptionNestedLevel2(){
 		new Try(new Runnable() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void __run__() throws java.lang.Throwable {
 				throw new RuntimeException(new RuntimeException(new MyBusinessException("My_Business_Message")));
@@ -121,6 +129,8 @@ public class ThrowableHelperUnitTest extends AbstractUnitTest {
 	@Test
 	public void assertThrowMyBusinessExceptionNestedLevel3(){
 		new Try(new Runnable() {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void __run__() throws java.lang.Throwable {
 				throw new RuntimeException(new RuntimeException(new RuntimeException(new MyBusinessException("My_Business_Message"))));

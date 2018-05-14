@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -45,6 +46,7 @@ public class StringHelper extends AbstractHelper implements Serializable {
 
 	public static final String[] END_LINE = {"\r\n","\n"};
 	public static final Character[] VOYELS = {'a','e','i','o','u','y'};
+	public static final Collection<String> WORDS_FROM_CAMEL_CASE_EXCLUDED = Arrays.asList(Constant.CHARACTER_DOT.toString(),Constant.CHARACTER_DOLLAR.toString());
 	
 	public enum CaseType{
 		NONE,L,U,FL,FU,FURL
@@ -196,16 +198,24 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return list;
 	}
 	
-	public List<String> getWordsFromCamelCase(String stringInCamelCase){
-		List<String> strings = new ArrayList<>();
-		if(!isBlank(stringInCamelCase)){
-			strings.addAll(Arrays.asList(StringUtils.splitByCharacterTypeCamelCase(stringInCamelCase)));
+	public List<String> getFromCamelCase(String stringInCamelCase,Collection<String> excludedTokens){
+		List<String> tokens = new ArrayList<>();
+		if(isNotBlank(stringInCamelCase)){
+			tokens.addAll(Arrays.asList(StringUtils.splitByCharacterTypeCamelCase(stringInCamelCase)));
 		}
-		return strings;
+		CollectionHelper.getInstance().remove(tokens, excludedTokens);
+		return tokens;
+	}
+	
+	public List<String> getWordsFromCamelCase(String stringInCamelCase){
+		return getFromCamelCase(stringInCamelCase,WORDS_FROM_CAMEL_CASE_EXCLUDED);
 	}
 	
 	public String concatenateWordsFromCamelCase(String name,Object separator,CaseType caseType){
-		return applyCaseType(concatenate(getWordsFromCamelCase(name), separator),caseType);
+		if(name == null)
+			return null;
+		Collection<String> tokens = getWordsFromCamelCase(name);
+		return applyCaseType(concatenate(tokens, separator),caseType);
 	}
 	
 	public String removeEndLineMarker(String line){
@@ -373,6 +383,87 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return concatenateWordsFromCamelCase(name,  Constant.CHARACTER_DOT, CaseType.L);
 	}
 	
+	public Collection<String> getFieldIdentifiers(java.lang.reflect.Field field,Collection<String> domains){
+		Collection<String> identifiers = new LinkedHashSet<>();
+		Collection<String> noDomainIdentifiers = new LinkedHashSet<>();
+		//from field declaring class full name
+		noDomainIdentifiers.add(FieldHelper.getInstance().buildPath(field.getDeclaringClass().getName(),field.getName()));
+		//from field declaring class simple name
+		noDomainIdentifiers.add(FieldHelper.getInstance().buildPath(field.getDeclaringClass().getSimpleName(),field.getName()));
+		/*
+		String domainPrefix = null;
+		if(domain instanceof Class<?>)
+			domainPrefix = ((Class<?>)domain).getName();
+		else if(domain instanceof Package)
+			domainPrefix = ((Package)domain).getName();
+		else if(domain instanceof String)
+			domainPrefix = domain.toString();
+		*/
+		if(CollectionHelper.getInstance().isNotEmpty(domains))
+			for(String domain : domains)
+				if(StringHelper.getInstance().isNotBlank(domain))
+					for(String index : noDomainIdentifiers)
+						identifiers.add(getFieldIdentifier(FieldHelper.getInstance().buildPath(domain,index)));
+		for(String index : noDomainIdentifiers)
+			identifiers.add(getFieldIdentifier(index));
+		
+		//identifiers.add(getClassIdentifier(field.getName()));
+		
+		//from annotations
+		org.cyk.utility.common.annotation.user.interfaces.Text text = field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Text.class);
+		if(text == null || isBlank(text.value())){
+			identifiers.add(getFieldIdentifier(field.getName()));
+			identifiers.add(getClassIdentifier(field.getName()));//field first : we can use comparator to sort field first , class second , and others
+			identifiers.add(getI18nIdentifier(field.getName()));
+		}else {
+			org.cyk.utility.common.annotation.user.interfaces.Text.ValueType valueType = text.valueType();
+			if(org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.AUTO.equals(valueType))
+				valueType = org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.ID;
+			org.cyk.utility.common.annotation.user.interfaces.Text.Type type = text.type();
+			if(org.cyk.utility.common.annotation.user.interfaces.Text.Type.AUTO.equals(type))
+				type = org.cyk.utility.common.annotation.user.interfaces.Text.Type.LABEL;
+			
+			if(org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.ID.equals(valueType)){
+				identifiers.add(getFieldIdentifier(text.value()));
+				identifiers.add(getClassIdentifier(field.getName()));//field first : we can use comparator to sort field first , class second , and others
+				identifiers.add(text.value());
+			}
+		}	
+		return identifiers;
+	}
+	
+	public Collection<String> getFieldIdentifiers(java.lang.reflect.Field field){
+		return getFieldIdentifiers(field, null);
+	}
+	
+	public Collection<String> getFieldIdentifiers(Object domain,Class<?> aClass,String...fieldNames){
+		String fieldName = FieldHelper.getInstance().buildPath(fieldNames);
+		java.lang.reflect.Field field = FieldHelper.getInstance().get(aClass, fieldName);
+		Collection<String> identifiers = new LinkedHashSet<>();
+		Collection<String> domains = new ArrayList<String>();
+		String domainName = null;
+		if(domain instanceof Package)
+			domainName = ((Package)domain).getName();
+		else if(domain instanceof Class<?>)
+			domainName = ((Class<?>)domain).getName();
+		else if(domain instanceof String)
+			domainName = (String)domain;
+		
+		if(aClass!=null){
+			if(isNotBlank(domainName))
+				domains.add(domainName+Constant.CHARACTER_DOT+aClass.getName());
+			domains.add(aClass.getName());
+		}
+		
+		CollectionHelper.getInstance().add(identifiers, Boolean.TRUE, getFieldIdentifiers(field,FieldHelper.getInstance().getLast(fieldName)
+				.equals(fieldName) ? null : domains));
+		return identifiers;
+	}
+	
+	public Collection<String> getFieldIdentifiers(Class<?> aClass,String...fieldNames){
+		return getFieldIdentifiers(null,aClass,fieldNames);
+	}
+	
 	public String getFieldIdentifier(String name){
 		name = String.format(ToStringMapping.FIELD_IDENTIFIER_FORMAT,getI18nIdentifier(name));
 		return name;
@@ -401,9 +492,41 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		return getField(identifier, CaseType.FU);
 	}
 	
-	public String getField(java.lang.reflect.Field field){
+	public String getFieldOLD(java.lang.reflect.Field field){
+		//FieldHelper.Field fieldHelperField = FieldHelper.Field.get(field.getDeclaringClass(), field.getName());
+		String identifier = null;//fieldHelperField.getNameIdentifier();
+		/*if(isBlank(identifier)){
+			
+			org.cyk.utility.common.annotation.user.interfaces.Text text = field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Text.class);
+			/*
+			if(text == null || isBlank(text.value()))
+				identifier = field.getName();
+			else {
+				org.cyk.utility.common.annotation.user.interfaces.Text.ValueType valueType = text.valueType();
+				if(org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.AUTO.equals(valueType))
+					valueType = org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.ID;
+				org.cyk.utility.common.annotation.user.interfaces.Text.Type type = text.type();
+				if(org.cyk.utility.common.annotation.user.interfaces.Text.Type.AUTO.equals(type))
+					type = org.cyk.utility.common.annotation.user.interfaces.Text.Type.LABEL;
+				
+				if(org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.ID.equals(valueType))
+					return get(text.value(), CaseType.FU,new Object[]{});
+				else
+					return text.value();
+			}	
+			
+			for(String index : getFieldIdentifiers(field)){
+				String result = getField(index);
+				if(!ToStringMapping.Adapter.Default.isUnknown(result)){
+					fieldHelperField.setNameIdentifier(index);
+					return result;
+				}
+			}
+		}else {
+			
+		}
+		*/
 		org.cyk.utility.common.annotation.user.interfaces.Text text = field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Text.class);
-		String identifier = null;
 		if(text == null || isBlank(text.value()))
 			identifier = field.getName();
 		else {
@@ -418,8 +541,47 @@ public class StringHelper extends AbstractHelper implements Serializable {
 				return get(text.value(), CaseType.FU,new Object[]{});
 			else
 				return text.value();
-		}
+		}	
+		/*fieldHelperField.setNameIdentifier(identifier);
+		System.out.println("StringHelper.getField() DANGEEERRR");
+		*/
 		return getField(identifier);
+	}
+	
+	public String getField(java.lang.reflect.Field field,CaseType caseType){
+		FieldHelper.Field fieldHelperField = FieldHelper.Field.get(field.getDeclaringClass(), field.getName());
+		String identifier = fieldHelperField.getNameIdentifier();
+		if(isBlank(identifier)){
+			for(String index : getFieldIdentifiers(field)){
+				String result = new ToStringMapping.Adapter.Default(index).setCaseType(caseType).execute();
+				if(!ToStringMapping.Adapter.Default.isUnknown(result)){
+					fieldHelperField.setNameIdentifier(index);
+					Cache.Adapter.Default.add(index, null, caseType, null, result);
+					return result;
+				}
+			}
+			
+			org.cyk.utility.common.annotation.user.interfaces.Text text = field.getAnnotation(org.cyk.utility.common.annotation.user.interfaces.Text.class);
+			if(text != null && isNotBlank(text.value())){
+				org.cyk.utility.common.annotation.user.interfaces.Text.ValueType valueType = text.valueType();
+				if(org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.AUTO.equals(valueType))
+					valueType = org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.ID;
+				org.cyk.utility.common.annotation.user.interfaces.Text.Type type = text.type();
+				if(org.cyk.utility.common.annotation.user.interfaces.Text.Type.AUTO.equals(type))
+					type = org.cyk.utility.common.annotation.user.interfaces.Text.Type.LABEL;
+				if(!org.cyk.utility.common.annotation.user.interfaces.Text.ValueType.ID.equals(valueType))
+					return text.value();
+			}	
+		}else
+			return new ToStringMapping.Adapter.Default(identifier).setCaseType(caseType).execute();
+		
+		
+		
+		return new ToStringMapping.Adapter.Default(getFieldIdentifier(field.getName())).setCaseType(caseType).execute();
+	}
+	
+	public String getField(java.lang.reflect.Field field){
+		return getField(field, CaseType.FU);
 	}
 	
 	public String getClassIdentifier(String name){
@@ -1028,8 +1190,10 @@ public class StringHelper extends AbstractHelper implements Serializable {
 		String VERB_FORMAT = "%s.__verb__";
 		String NAME_FORMAT = "%s.__name__";
 		String WORD_IDENTIFIER_FORMAT = "word.%s.__%sine__";
-		String FIELD_IDENTIFIER_FORMAT = "__field__.%s";
-		String CLASS_IDENTIFIER_FORMAT = "__class__.%s";
+		String FIELD_IDENTIFIER_PREFIX = "__field__.";
+		String FIELD_IDENTIFIER_FORMAT = FIELD_IDENTIFIER_PREFIX+"%s";
+		String CLASS_IDENTIFIER_PREFIX = "__class__.";
+		String CLASS_IDENTIFIER_FORMAT = CLASS_IDENTIFIER_PREFIX+"%s";
 		String WORD_ARTICLE_IDENTIFIER_FORMAT = "word.article.__%sine__.__%s__";
 		String WORD_ARTICLE_ALL_IDENTIFIER_FORMAT = "word.article.all.__%sine__";
 		String COMPARISON_OPERATOR_IDENTIFIER_FORMAT = "__comparison.operator%s__";
@@ -1783,4 +1947,20 @@ public class StringHelper extends AbstractHelper implements Serializable {
 			}
 		}
 	}
+	/*
+	public static class FieldIdentifierComparator implements Comparator<String>,Serializable {
+
+		@Override
+		public int compare(String identifier1, String identifier2) {
+			if(StringUtils.startsWith(identifier1, ToStringMapping.FIELD_IDENTIFIER_PREFIX))
+				return 0;
+			
+				if(StringUtils.startsWith(identifier2, ToStringMapping.FIELD_IDENTIFIER_PREFIX))
+					return 0;
+				else if(StringUtils.startsWith(identifier2, ToStringMapping.CLASS_IDENTIFIER_PREFIX))
+					return -1;
+			
+			return 0;
+		}
+	}*/
 }

@@ -3,26 +3,29 @@ package org.cyk.utility.common.userinterface;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.CollectionHelper;
+import org.cyk.utility.common.userinterface.collection.Cell;
+import org.cyk.utility.common.userinterface.collection.Column;
 import org.cyk.utility.common.userinterface.collection.DataTable;
-import org.cyk.utility.common.userinterface.collection.DataTable.Row;
-import org.cyk.utility.common.userinterface.container.Form;
+import org.cyk.utility.common.userinterface.collection.Row;
+import org.cyk.utility.common.userinterface.container.form.Form;
+import org.cyk.utility.common.userinterface.container.form.FormDetail;
 import org.cyk.utility.common.userinterface.event.Event;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Test;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public class UserInterfaceEventUnitTest extends AbstractUnitTest {
 	private static final long serialVersionUID = -6691092648665798471L;
 	
 	@Test
 	public void build(){
-		Form.Master master = new Form.Master();
-		Form.Detail detail = master.getDetail();
+		Form master = new Form();
+		FormDetail detail = master.getDetail();
 		DataTable dataTable = new DataTable(){
 			private static final long serialVersionUID = 1L;
 
@@ -40,10 +43,10 @@ public class UserInterfaceEventUnitTest extends AbstractUnitTest {
 		
 		final Event[] events = new Event[1];
 		
-		dataTable.getPropertiesMap().setCellListener(new DataTable.Cell.Listener.Adapter.Default(){
+		dataTable.getPropertiesMap().setCellListener(new Cell.Listener.Adapter.Default(){
 			private static final long serialVersionUID = 1L;
-			public DataTable.Cell instanciateOne(DataTable.Column column, DataTable.Row row) {
-				final DataTable.Cell cell = super.instanciateOne(column, row);
+			public Cell instanciateOne(Column column, Row row) {
+				final Cell cell = super.instanciateOne(column, row);
 				if(ArrayUtils.contains(new String[]{"name"},column.getPropertiesMap().getFieldName())){
 					events[0] = Event.instanciateOne(cell, new String[]{"name"},null);
 					

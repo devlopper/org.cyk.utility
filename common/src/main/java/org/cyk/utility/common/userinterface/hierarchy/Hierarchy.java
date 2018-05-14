@@ -14,11 +14,11 @@ import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.userinterface.Component;
+import org.cyk.utility.common.userinterface.collection.Cell;
+import org.cyk.utility.common.userinterface.collection.Column;
+import org.cyk.utility.common.userinterface.collection.Column.CellValueSource;
+import org.cyk.utility.common.userinterface.collection.Columns;
 import org.cyk.utility.common.userinterface.collection.DataTable;
-import org.cyk.utility.common.userinterface.collection.DataTable.Cell;
-import org.cyk.utility.common.userinterface.collection.DataTable.Column;
-import org.cyk.utility.common.userinterface.collection.DataTable.Column.CellValueSource;
-import org.cyk.utility.common.userinterface.collection.DataTable.Columns;
 
 import lombok.Getter;
 import lombok.Setter;

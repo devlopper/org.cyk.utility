@@ -5,9 +5,10 @@ import java.lang.reflect.Field;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.model.Area;
 import org.cyk.utility.common.userinterface.Component.Visible;
-import org.cyk.utility.common.userinterface.Layout;
 import org.cyk.utility.common.userinterface.container.Container;
-import org.cyk.utility.common.userinterface.container.Form;
+import org.cyk.utility.common.userinterface.container.form.FormDetail;
+import org.cyk.utility.common.userinterface.container.form.FormContainer;
+import org.cyk.utility.common.userinterface.container.form.Form;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputText;
 import org.cyk.utility.common.userinterface.input.InputTextarea;
@@ -23,10 +24,10 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 
 	@Test
 	public void assertFromModel(){
-		Form form = new Form();
+		FormContainer form = new FormContainer();
 		form.getLayout().setType(Layout.Type.VERTICAL);
 		
-		Form.Detail formDetail = new Form.Detail();
+		FormDetail formDetail = new FormDetail();
 		formDetail.getLayout().setType(Layout.Type.VERTICAL);
 		
 		InputText c1 = new InputText();
@@ -55,7 +56,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void assertVerticalLayout(){
-		Form.Detail formDetail = new Form.Detail();
+		FormDetail formDetail = new FormDetail();
 		formDetail.getLayout().setType(Layout.Type.VERTICAL);
 		InputText c1 = new InputText();
 		InputText c2 = new InputText();
@@ -74,7 +75,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void assertWithLabelVerticalLayout(){
-		Form.Detail formDetail = new Form.Detail();
+		FormDetail formDetail = new FormDetail();
 		formDetail.getLayout().setType(Layout.Type.VERTICAL);
 		Input<String> c1 = new Input<String>().setLabelFromIdentifier("a");
 		InputText c2 = new InputText();
@@ -93,7 +94,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void assertHorizontalLayout(){
-		Form.Detail formDetail = new Form.Detail();
+		FormDetail formDetail = new FormDetail();
 		formDetail.getLayout().setType(Layout.Type.HORIZONTAL);
 		InputText c1 = new InputText();
 		InputText c2 = new InputText();
@@ -112,7 +113,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void assertAdaptiveLayout01(){
-		Form.Detail formDetail = new Form.Detail();
+		FormDetail formDetail = new FormDetail();
 		formDetail.getLayout().setType(Layout.Type.ADAPTIVE);
 		InputText c1 = new InputText();
 		InputText c2 = new InputText();
@@ -139,7 +140,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	
 	@Test
 	public void assertAdaptiveLayout02(){
-		Form.Detail formDetail = new Form.Detail(null,Layout.Type.ADAPTIVE);
+		FormDetail formDetail = new FormDetail(null,Layout.Type.ADAPTIVE);
 		InputText c1 = new InputText();
 		InputText c2 = new InputText();
 		InputText c3 = new InputText();
@@ -166,7 +167,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	@Test
 	public void assertAdaptiveLayout03(){
 		FormModel model = new FormModel();
-		Form.Detail formDetail = new Form.Detail(new Form.Master().setObject(model),Layout.Type.ADAPTIVE);
+		FormDetail formDetail = new FormDetail(new Form().setObject(model),Layout.Type.ADAPTIVE);
 		
 		formDetail.add(model,"f1").addBreak().add(model,"f2").add(model,"f3").addBreak().add(model,"f4").add(model,"f5").addBreak()
 		.add(model,"f6").add(model,"f7",1,2).addBreak().add(model,"f8").addBreak();
@@ -186,7 +187,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	@Test
 	public void assertWithLabelAdaptiveLayout(){
 		/*
-		Form.Detail formDetail = new Form.Detail();
+		Detail formDetail = new Detail();
 		formDetail.getLayout().setType(Layout.Type.ADAPTIVE);
 		InputText c1 = new InputText();
 		c1.setLabel(new OutputText());
@@ -218,9 +219,9 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	public void getInputByFieldName(){
 		FormModel model = new FormModel();
 		
-		Form.Master master = new Form.Master();
+		Form master = new Form();
 		master.setObject(model);
-		Form.Detail formDetail = new Form.Detail(master);
+		FormDetail formDetail = new FormDetail(master);
 		formDetail.add("f1");
 		formDetail.add("sub","f1");
 		
@@ -232,9 +233,9 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	public void assertInputIdentifierAsStyleClass(){
 		FormModel model = new FormModel();
 		
-		Form.Master master = new Form.Master();
+		Form master = new Form();
 		master.setObject(model);
-		Form.Detail formDetail = new Form.Detail(master);
+		FormDetail formDetail = new FormDetail(master);
 		formDetail.add("f1");
 		formDetail.add("sub","f1");
 		
@@ -246,9 +247,9 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	public void assertInputInstanceof(){
 		FormModel model = new FormModel();
 		
-		Form.Master master = new Form.Master();
+		Form master = new Form();
 		master.setObject(model);
-		Form.Detail formDetail = new Form.Detail(master);
+		FormDetail formDetail = new FormDetail(master);
 		formDetail.add("f1");
 		formDetail.add("sub","f1").add("sub1","f1").add("sub2","f1");
 		
@@ -294,7 +295,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
-	public static class EntityForm extends Form.Master {
+	public static class EntityForm extends Form {
 		private static final long serialVersionUID = 1L;
 		
 	}
@@ -312,7 +313,7 @@ public class UserInterfaceFormUnitTest extends AbstractUnitTest {
 		private static final long serialVersionUID = 1L;
 		
 		@Override
-		public Class<? extends Input<?>> getClass(Form.Detail form,Object object, Field field) {
+		public Class<? extends Input<?>> getClass(FormDetail form,Object object, Field field) {
 			if(isField(SubFormModel.class, object, ((FormModel)form.getMaster().getObject()).getSub(), field, "f1"))
 				return InputTextarea.class;
 			return super.getClass(form,object, field);

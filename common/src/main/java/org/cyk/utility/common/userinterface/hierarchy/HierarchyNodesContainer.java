@@ -3,7 +3,8 @@ package org.cyk.utility.common.userinterface.hierarchy;
 import java.io.Serializable;
 
 import org.cyk.utility.common.userinterface.Component;
-import org.cyk.utility.common.userinterface.collection.DataTable;
+import org.cyk.utility.common.userinterface.collection.Columns;
+import org.cyk.utility.common.userinterface.collection.Row;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,8 +27,8 @@ public class HierarchyNodesContainer extends AbstractHierarchyNodesContainer<Hie
 	public HierarchyNode addNode(HierarchyNode node) {
 		if(node.getPropertiesMap().getValue() == null)
 			node.getPropertiesMap().setValue(node.getLabel().getPropertiesMap().getValue());
-		DataTable.Row row = DataTable.Row.instanciateOne(node.getPropertiesMap().getValue(),node.get__orderNumber__()
-			,DataTable.Columns.getProperty((Component) node.getPropertiesMap().getTopLevelContainer()),Boolean.FALSE);
+		Row row = Row.instanciateOne(node.getPropertiesMap().getValue(),node.get__orderNumber__()
+			,Columns.getProperty((Component) node.getPropertiesMap().getTopLevelContainer()),Boolean.FALSE);
 		
 		node.getPropertiesMap().setRow(row);
 		node.addOneChild(row);

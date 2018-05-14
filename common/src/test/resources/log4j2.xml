@@ -47,13 +47,14 @@
 			<AppenderRef ref="Console" />
 		</Logger> 
 		
-		<Logger name="org.cyk.utility.common.userinterface.collection.DataTable" level="trace">
-			<AppenderRef ref="Console" />
-		</Logger> 
 		<Logger name="org.cyk.utility.common.userinterface.event.Event$ActionAdapter" level="trace">
 			<AppenderRef ref="Console" />
 		</Logger--> 
-		
+		<!--
+		<Logger name="org.cyk.utility.common.userinterface.collection.DataTable" level="trace">
+			<AppenderRef ref="Console" />
+		</Logger> 
+		-->
 		<Root level="trace">
 			<!--AppenderRef ref="Console"/-->
 		</Root>
