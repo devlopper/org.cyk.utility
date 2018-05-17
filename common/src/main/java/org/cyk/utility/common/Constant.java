@@ -230,43 +230,43 @@ public interface Constant {
 	    
 	    ;
 		
-		public static Boolean isCreateOrReadOrUpdateOrDeleteOrConsult(Action action){
+		public static Boolean isCreateOrReadOrUpdateOrDeleteOrConsult(Object action){
 			return isCreateOrReadOrUpdateOrDelete(action) || Action.CONSULT.equals(action);
 		}
 		
-		public static Boolean isCreateOrReadOrUpdateOrDelete(Action action){
+		public static Boolean isCreateOrReadOrUpdateOrDelete(Object action){
 			return isCreateOrUpdateOrDelete(action) || Action.READ.equals(action);
 		}
 		
-		public static Boolean isCreateOrUpdateOrDelete(Action action){
+		public static Boolean isCreateOrUpdateOrDelete(Object action){
 			return isCreateOrUpdate(action) || Action.DELETE.equals(action);
 		}
 		
-		public static Boolean isCreateOrUpdate(Action action){
+		public static Boolean isCreateOrUpdate(Object action){
 			return Action.CREATE.equals(action) || Action.UPDATE.equals(action);
 		}
 		
-		public static Boolean isReadOrConsult(Action action){
+		public static Boolean isReadOrConsult(Object action){
 			return isOneOf(action, Action.READ, Action.CONSULT);
 		}
 		
-		public static Boolean isNotReadAndNotConsult(Action action){
+		public static Boolean isNotReadAndNotConsult(Object action){
 			return isNotOneOf(action, Action.READ, Action.CONSULT);
 		}
 		
-		public static Boolean isNotOneOf(Action action,Collection<Action> actions){
+		public static Boolean isNotOneOf(Object action,Collection<Action> actions){
 			return !Boolean.TRUE.equals(isOneOf(action, actions));
 		}
 		
-		public static Boolean isNotOneOf(Action action,Action...actions){
+		public static Boolean isNotOneOf(Object action,Action...actions){
 			return !Boolean.TRUE.equals(isOneOf(action, actions));
 		}
 		
-		public static Boolean isOneOf(Action action,Action...actions){
-			return ArrayHelper.getInstance().isNotEmpty(actions) && isOneOf(action, Arrays.asList(actions));
+		public static Boolean isOneOf(Object action,Action...actions){
+			return ArrayHelper.getInstance().isNotEmpty(actions) && ArrayHelper.getInstance().isNotEmpty(actions) && isOneOf(action, Arrays.asList(actions));
 		}
 		
-		public static Boolean isOneOf(Action action,Collection<Action> actions){
+		public static Boolean isOneOf(Object action,Collection<Action> actions){
 			return CollectionHelper.getInstance().isNotEmpty(actions) && actions.contains(action);
 		}
 		

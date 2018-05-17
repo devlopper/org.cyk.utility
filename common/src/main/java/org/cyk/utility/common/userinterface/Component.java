@@ -187,6 +187,10 @@ public class Component extends AbstractBean implements Serializable {
 		return getPropertiesMap().getAction();
 	}
 	
+	public Object getPropertyAction(){
+		return getPropertiesMap().getAction();
+	}
+	
 	public Component _setPropertyUsingOutputText(String name,Object value){
 		OutputText outputText = null;
 		if(getPropertiesMap().get(name) == null){
