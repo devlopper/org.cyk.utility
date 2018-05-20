@@ -160,7 +160,9 @@ public class FormDetail extends FormContainer implements Serializable {
 		String constraintsFieldName = StringHelper.getInstance().isBlank(fieldsObjectFieldName) ? fieldName : FieldHelper.getInstance().buildPath(fieldsObjectFieldName,fieldName);
 		FieldHelper.Constraints constraints = FieldHelper.Field.get(getMaster().getObject().getClass(), constraintsFieldName).getConstraints();
 		Field field = FieldHelper.getInstance().get(object.getClass(), fieldName);
-		Control control = Boolean.TRUE.equals(editable) ? Input.get(this,object, field,constraints,getControlListener) : Output.get(this, object, field,constraints).__setLabelFromField__();
+		Control control = Boolean.TRUE.equals(editable) 
+				? Input.get(this,object, field,constraints,getControlListener) 
+				: Output.get(this, object, field,constraints,getControlListener)/*.__setLabelFromField__()*/;
 		add(control.setLength(length).setWidth(width));
 		return this;
 	}
@@ -400,8 +402,11 @@ public class FormDetail extends FormContainer implements Serializable {
 							ROW row = createRow(instance);
 							for (Component component : getInput().getLayout().getWhereAreaWidthFromEqual(rowIndex)) {
 								LABEL label = null;
-								if(component instanceof Component.Visible && ((Component.Visible)component).getLabel()!=null)
+								if(component instanceof Component.Visible && ((Component.Visible)component).getLabel()!=null){
+									//System.out.println("FormDetail.Builder.Target.Adapter.Default.__execute__()");
+									//debug(((Component.Visible)component));
 									label = addLabel(row, ((Component.Visible)component).getLabel());
+								}
 								CONTROL control = addControl(row, (Control) component, getType((Control) component));
 								if(component instanceof Input<?> && label!=null && !Boolean.TRUE.equals(component.getPropertiesMap().getReadableOnly()))
 									link(control, label);

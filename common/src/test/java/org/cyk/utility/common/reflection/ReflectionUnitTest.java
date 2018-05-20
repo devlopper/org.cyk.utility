@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.cyk.utility.common.helper.ClassHelper;
-import org.cyk.utility.common.model.Identifiable;
+import org.cyk.utility.common.model.identifiable.Identifiable;
 import org.cyk.utility.test.unit.AbstractUnitTest;
 import org.junit.Assert;
 import org.junit.Test;

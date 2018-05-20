@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.Constant.Action;
+import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
@@ -105,7 +106,8 @@ public class Column extends Dimension implements Serializable {
 		column.setCellValueSource(cellValueSource);
 		column.setLabelFromIdentifier(labelStringIdentifier);
 		column.getPropertiesMap().setHeaderText(column.getLabel().getPropertiesMap().getValue());
-		column.getPropertiesMap().setHeader(column.getLabel());
+		column.getPropertiesMap().getInstanciateIfNull(Properties.HEADER,OutputText.class).setPropertyValue(
+				StringHelper.getInstance().get(labelStringIdentifier, new Object[]{}));
 		column.getPropertiesMap().setSortable(Boolean.FALSE);
 		
 		OutputText footer = new OutputText();

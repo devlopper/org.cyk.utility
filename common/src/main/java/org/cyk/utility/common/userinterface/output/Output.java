@@ -14,6 +14,7 @@ import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
+import org.cyk.utility.common.helper.FieldHelper.Constraints;
 import org.cyk.utility.common.helper.FileHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.TimeHelper;
@@ -46,17 +47,6 @@ public class Output extends Control implements Serializable {
 	@Override
 	public Output __setFieldFromName__(String name){
 		super.__setFieldFromName__(name);
-		return this;
-	}
-	
-	@Override
-	public Output setField(Field field){
-		this.field = field;
-		if(this.field == null){
-			
-		}else{
-			read();
-		}
 		return this;
 	}
 	
@@ -126,6 +116,10 @@ public class Output extends Control implements Serializable {
 
 	/**/
 
+	public static Output get(FormDetail detail,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints,Control.Listener.Get getListener){
+		return getListener().get(detail,object, field,constraints,getListener);
+	}
+	
 	public static Output get(FormDetail detail,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints){
 		return getListener().get(detail,object, field,constraints);
 	}
@@ -159,6 +153,7 @@ public class Output extends Control implements Serializable {
 		
 		Class<? extends Output> getClass(FormDetail form,Object object,java.lang.reflect.Field field);
 		
+		Output get(FormDetail form,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints,Control.Listener.Get getListener);
 		Output get(FormDetail form,Object object,java.lang.reflect.Field field,FieldHelper.Constraints constraints);
 		Output get(FormDetail form,Object object,java.lang.reflect.Field field);
 		void listenGet(Output output);
@@ -249,7 +244,7 @@ public class Output extends Control implements Serializable {
 				}
 				
 				@Override
-				public Output get(FormDetail detail,Object object, Field field, FieldHelper.Constraints constraints) {
+				public Output get(FormDetail detail,Object object, Field field, FieldHelper.Constraints constraints, Control.Listener.Get listener) {
 					Output output = null;
 					Class<? extends Output> aClass = getClass(detail,object, field);
 					if(aClass!=null){
@@ -258,12 +253,24 @@ public class Output extends Control implements Serializable {
 					}
 					if(output!=null){
 						output.setObject(object).setField(field);
+						if(listener != null && StringHelper.getInstance().isNotBlank(listener.getLabelValueIdentifier())){
+							//System.out.println("Output.Listener.Adapter.Default.get()");
+							output.getLabel().getPropertiesMap().setValue(StringHelper.getInstance().get(listener.getLabelValueIdentifier(), new Object[]{}));	
+							//output.getPropertiesMap().setValue(StringHelper.getInstance().get(listener.getLabelValueIdentifier(), new Object[]{}));
+							//debug(output);
+						}
+						
 						if(output instanceof OutputText){
 							
 						}
 						listenGet(output);
 					}
 					return output;
+				}
+				
+				@Override
+				public Output get(FormDetail detail,Object object, Field field, FieldHelper.Constraints constraints) {
+					return get(detail, object, field, constraints, null);
 				}
 				
 				@Override
@@ -377,6 +384,11 @@ public class Output extends Control implements Serializable {
 			
 			@Override
 			public Class<? extends Output> getClass(FormDetail form,Object object, Field field) {
+				return null;
+			}
+			
+			@Override
+			public Output get(FormDetail form, Object object, Field field, Constraints constraints, Control.Listener.Get getListener) {
 				return null;
 			}
 			

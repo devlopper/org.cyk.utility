@@ -187,11 +187,11 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		        if(sheet==null){
 		        	System.out.println("No sheet named <<"+getSheetName()+">> or at index <<"+getIndex()+">> found");
 		        }else{
-		        	addLogMessageBuilderParameters(getLogMessageBuilder(),"sheet", sheet.getSheetName());
+		        	addLoggingMessageBuilderNamedParameters("sheet", sheet.getSheetName());
 		        	if(getPrimaryKeyColumnIndexes()!=null)
-		        		addLogMessageBuilderParameters(getLogMessageBuilder(), "primary key column indexes",getPrimaryKeyColumnIndexes());
+		        		addLoggingMessageBuilderNamedParameters("primary key column indexes",getPrimaryKeyColumnIndexes());
 		        	if(getPrimaryKeys()!=null)
-		        		addLogMessageBuilderParameters(getLogMessageBuilder(), "#primary keys",getPrimaryKeys().size());
+		        		addLoggingMessageBuilderNamedParameters("#primary keys",getPrimaryKeys().size());
 		        	FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
 		        	Integer fromRowIndex = getFromRowIndex(),fromColumnIndex = getFromColumnIndex();
 		            if(fromRowIndex==null)
@@ -252,12 +252,12 @@ public interface ExcelSheetReader extends ArrayReader.TwoDimension<String> {
 		                }
 		                //System.out.println("ExcelSheetReader : "+StringUtils.join(array,"|"));
 		            }	
-		            addLogMessageBuilderParameters(getLogMessageBuilder(),"#row",rowCount);   
+		            addLoggingMessageBuilderNamedParameters("#row",rowCount);   
 		        }
 		        
-		        addLogMessageBuilderParameters(getLogMessageBuilder(),"#selected",getOutput().size(), "#ignored",numberOfNotAdded);
+		        addLoggingMessageBuilderNamedParameters("#selected",getOutput().size(), "#ignored",numberOfNotAdded);
 		        if(Boolean.TRUE.equals(getHasPrimaryKey())) 
-		        	addLogMessageBuilderParameters(getLogMessageBuilder(),"#has primary keys",getRowsWhereHasPrimaryKey(String.class,getOutput()).size(),"#has no primary keys"
+		        	addLoggingMessageBuilderNamedParameters("#has primary keys",getRowsWhereHasPrimaryKey(String.class,getOutput()).size(),"#has no primary keys"
 		        			,getRowsWhereHasNotPrimaryKey(String.class,getOutput()).size());
 		        try {
 					workbook.close();

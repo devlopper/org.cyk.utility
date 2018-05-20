@@ -40,6 +40,18 @@ public class Control extends Component.Visible implements Serializable {
 		super.listenPropertiesInstanciated(propertiesMap);
 	}
 	
+	public Control setField(Field field){
+		this.field = field;
+		if(this.field == null){
+			
+		}else{
+			if(getLabel().getPropertiesMap().getValue() == null)
+				__setLabelFromField__(field);
+			read();
+		}
+		return this;
+	}
+	
 	public Control __setFieldFromName__(String name){
 		setField(FieldHelper.getInstance().get(object.getClass(), name));
 		return this;
@@ -52,11 +64,20 @@ public class Control extends Component.Visible implements Serializable {
 	}
 	
 	public Control __setLabelFromField__(Field field){
+		OutputText outputText = getLabel();
+		if(outputText == null)
+			setLabel(outputText = new OutputText());
+		outputText.getPropertiesMap().setValue(StringHelper.getInstance().getField(field));
+		return this;
+	}
+	/*
+	public Control __setLabelFromField__(Field field){
 		OutputText outputText = new OutputText();
 		outputText.getPropertiesMap().setValue(StringHelper.getInstance().getField(field));
 		setLabel(outputText);
 		return this;
 	}
+	*/
 	
 	public Control __setLabelFromField__(){
 		__setLabelFromField__(field);

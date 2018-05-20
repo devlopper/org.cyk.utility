@@ -46,9 +46,9 @@ public interface ManyConverter<T,R> extends Converter<Collection<T>, R> {
 					return null;
 				if(getLogMessageBuilder()==null)
 					setLogMessageBuilder(new LogMessage.Builder("Convert collection of",getOneConverter().getInstanceClass().getSimpleName()));
-				addLogMessageBuilderParameters(getLogMessageBuilder(),"result class",getResultClass().getSimpleName());
+				//addLoggingMessageBuilderNamedParameters("result class",getResultClass().getSimpleName());
 				R result = __execute__();
-				addLogMessageBuilderParameters(getLogMessageBuilder(),"result",getResultLogMessage(result));
+				//addLoggingMessageBuilderNamedParameters("result",getResultLogMessage(result));
 				return result;
 			}
 			

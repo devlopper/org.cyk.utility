@@ -8,7 +8,7 @@ import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.ThrowableHelper;
 import org.cyk.utility.common.helper.ValidationHelper;
-import org.cyk.utility.common.model.Identifiable;
+import org.cyk.utility.common.model.identifiable.Identifiable;
 import org.cyk.utility.common.test.Runnable;
 import org.cyk.utility.common.test.TestHelper;
 import org.cyk.utility.common.test.Try;

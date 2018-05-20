@@ -229,23 +229,23 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 				@Override
 				protected OUTPUT __execute__() {
 					if(getInstance()==null){
-						addLogMessageBuilderParameters(getLogMessageBuilder(),"instance","is null");
+						//addLogMessageBuilderParameters(getLogMessageBuilder(),"instance","is null");
 					}else{
-						addLogMessageBuilderParameters(getLogMessageBuilder(),"length",getInput().length);
+						//addLogMessageBuilderParameters(getLogMessageBuilder(),"length",getInput().length);
 						for(String fieldName : getFieldNames()){
 							try{
 								Class<?> fieldType = PropertyUtils.getPropertyType(instance, fieldName);
 								Integer index = getFieldNamesIndexes().get(fieldName);
 								Boolean isArrayValueAtProcessable = isArrayValueAtProcessable(index);
 								Object value = getInput()[getFieldNamesIndexes().get(fieldName)];
-								addLogMessageBuilderParameters(getLogMessageBuilder(), "field name",fieldName);
+								/*addLogMessageBuilderParameters(getLogMessageBuilder(), "field name",fieldName);
 								addLogMessageBuilderParameters(getLogMessageBuilder(),"index",index);
 								addLogMessageBuilderParameters(getLogMessageBuilder(),"value",value);
-								addLogMessageBuilderParameters(getLogMessageBuilder(),"processable",isArrayValueAtProcessable);
+								addLogMessageBuilderParameters(getLogMessageBuilder(),"processable",isArrayValueAtProcessable);*/
 								if(Boolean.TRUE.equals(isArrayValueAtProcessable)){
 									value = getValue(fieldType, value);
 									if(Boolean.TRUE.equals(isShowFieldValueLogMessage(value)))
-										addLogMessageBuilderParameters(getLogMessageBuilder(),"field value",value);
+										;//addLogMessageBuilderParameters(getLogMessageBuilder(),"field value",value);
 									PropertyUtils.setProperty(instance, fieldName, value);
 								}
 							}catch(Exception exception){
@@ -403,7 +403,7 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 					
 				@Override
 				protected Collection<OUTPUT> __execute__() {
-					addLogMessageBuilderParameters(getLogMessageBuilder(), "existing keys",existingKeys.size());
+					//addLogMessageBuilderParameters(getLogMessageBuilder(), "existing keys",existingKeys.size());
 					output = new ArrayList<>();
 					for(Object[] values : getInput()){
 						OUTPUT instance = getInstance(values);
@@ -416,8 +416,8 @@ public interface InstanceFieldSetter<INPUT, OUTPUT> extends Action<INPUT, OUTPUT
 						}
 						
 					}
-					addLogMessageBuilderParameters(getLogMessageBuilder(), "numberOfExisitingInstanceKey",numberOfExisitingInstanceKey,"numberOfIgnoredExistingKey"
-							,numberOfIgnoredExistingKey,"size",getOutput().size());
+					//addLogMessageBuilderParameters(getLogMessageBuilder(), "numberOfExisitingInstanceKey",numberOfExisitingInstanceKey,"numberOfIgnoredExistingKey"
+					//		,numberOfIgnoredExistingKey,"size",getOutput().size());
 					return getOutput();
 				}
 				

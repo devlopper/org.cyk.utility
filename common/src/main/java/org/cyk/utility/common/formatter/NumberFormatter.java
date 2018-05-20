@@ -119,9 +119,9 @@ public interface NumberFormatter<OUTPUT> extends Formatter<Number, OUTPUT> {
 				
 				@Override
 				protected java.lang.String __execute__() {
-					addLogMessageBuilderParameters(logMessageBuilder,"locale",getLocale(), "character set",getCharacterSet(),"append exaequo",getIsAppendExaequo(),"percentage",getIsPercentage(),"ordinal",getIsOrdinal());
+					//addLogMessageBuilderParameters(logMessageBuilder,"locale",getLocale(), "character set",getCharacterSet(),"append exaequo",getIsAppendExaequo(),"percentage",getIsPercentage(),"ordinal",getIsOrdinal());
 					if(Boolean.TRUE.equals(getIsOrdinal())){
-						addLogMessageBuilderParameters(logMessageBuilder, "append ordinal suffix",getIsAppendOrdinalSuffix());
+						//addLogMessageBuilderParameters(logMessageBuilder, "append ordinal suffix",getIsAppendOrdinalSuffix());
 					}
 					StringBuilder stringBuilder = new StringBuilder();
 					BigDecimal number = new BigDecimal(getInput().toString());

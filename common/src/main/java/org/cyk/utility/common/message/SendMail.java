@@ -82,7 +82,7 @@ public interface SendMail extends Send<InternetAddress> {
 				if(getSession()==null){
 					if(getProperties()==null)
 						throw new RuntimeException("Properties are required to create a session");
-					addLogMessageBuilderParameters(getLogMessageBuilder(),"properties", getProperties());
+					//addLogMessageBuilderParameters(getLogMessageBuilder(),"properties", getProperties());
 					setSession(Session.getInstance(getProperties(),new Authenticator() {
 			    		@Override
 			    		protected PasswordAuthentication getPasswordAuthentication() {

@@ -20,6 +20,7 @@ public class Columns extends Component implements Serializable {
 	@Override
 	protected void listenPropertiesInstanciated(Properties propertiesMap) {
 		super.listenPropertiesInstanciated(propertiesMap);
+		propertiesMap.setHeaderRendered(Boolean.TRUE);
 		propertiesMap.setGetter(Properties.FOOTER_RENDERED, new Properties.Getter() {
 			@Override
 			public Object execute(Properties properties, Object key, Object value, Object nullValue) {

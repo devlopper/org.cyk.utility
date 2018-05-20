@@ -257,6 +257,13 @@ public class Component extends AbstractBean implements Serializable {
 	
 	/**/
 	
+	@Override
+	public String toString() {
+		return super.toString() + (propertiesMap == null ? Constant.EMPTY_STRING : propertiesMap);
+	}
+	
+	/**/
+	
 	public static interface BuilderBase<OUTPUT extends Component> extends org.cyk.utility.common.Builder.NullableInput<OUTPUT> {
 
 		BuilderBase<OUTPUT> setComponentParent(Component componentParent);

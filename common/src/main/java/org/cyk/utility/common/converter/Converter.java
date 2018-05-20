@@ -84,9 +84,9 @@ public interface Converter<T,R> {
 					return null;
 				if(getLogMessageBuilder()==null)
 					setLogMessageBuilder(new LogMessage.Builder("Convert", getInstance().getClass().getSimpleName()));
-				addLogMessageBuilderParameters(getLogMessageBuilder(),"result class",getResultClass().getSimpleName());
+				//addLogMessageBuilderParameters(getLogMessageBuilder(),"result class",getResultClass().getSimpleName());
 				R result = __execute__();
-				addLogMessageBuilderParameters(getLogMessageBuilder(),"result",getResultLogMessage(result));
+				//addLogMessageBuilderParameters(getLogMessageBuilder(),"result",getResultLogMessage(result));
 				return result;
 			}
 			

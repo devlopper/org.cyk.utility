@@ -85,6 +85,15 @@ public class Properties implements java.io.Serializable {
 	
 	/* get */
 	
+	public <T> T getInstanciateIfNull(Object key,Class<T> aClass){
+		T value = get(aClass, key, null);
+		if(value == null){
+			value = ClassHelper.getInstance().instanciateOne(aClass);
+			set(key, value);
+		}
+		return value;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <T> T get(Class<T> aClass,Object key,T nullValue){
 		Getter getter = getGetter(key);

@@ -27,12 +27,13 @@ import org.apache.logging.log4j.Logger;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.ListenerUtils;
-import org.cyk.utility.common.LogMessage;
+
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.RunnableListener;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.ConditionHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
+import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.ThrowableHelper;
 
 import lombok.Getter;
@@ -74,6 +75,28 @@ public class AbstractBean implements Serializable {
 		if(propertiesMap==null)
 			propertiesMap = instanciateProperties();
 		return propertiesMap;
+	}
+	
+	public <T> T getPropertyInstanciateIfNull(Object key,Class<T> aClass){
+		return getPropertiesMap().getInstanciateIfNull(key, aClass);
+	}
+	
+	public AbstractBean setPropertyFromStringIdentifier(Object key,String identifier,Object[] parameters){
+		getPropertiesMap().set(key,StringHelper.getInstance().get(identifier, parameters));
+		return this;
+	}
+	
+	public AbstractBean setPropertyFromStringIdentifier(Object key,String identifier){
+		return setPropertyFromStringIdentifier(key,identifier,new Object[]{});
+	}
+	
+	public AbstractBean setPropertyValueFromStringIdentifier(String identifier,Object[] parameters){
+		setPropertyFromStringIdentifier(Properties.VALUE, identifier, parameters);
+		return this;
+	}
+	
+	public AbstractBean setPropertyValueFromStringIdentifier(String identifier){
+		return setPropertyValueFromStringIdentifier(identifier,new Object[]{});
 	}
 	
 	protected Properties instanciateProperties(){
@@ -364,23 +387,10 @@ public class AbstractBean implements Serializable {
 		systemOut(SYSTEM_OUT_LOG_TRACE,message, arguments);
 	}
 	
-	@Deprecated
-	protected void logTrace(LogMessage logMessage) {
-		logTrace(logMessage.getTemplate(), logMessage.getArgumentsArray());
-	}
-	
 	protected void logTrace(LoggingHelper.Message message) {
 		logTrace(message.getTemplate(), CollectionHelper.getInstance().getArray(message.getArguments()));
 	}
-	
-	@Deprecated
-	protected void logTrace(LogMessage.Builder logMessageBuilder) {
-		if(logMessageBuilder==null)
-			return;
-		LogMessage logMessage = logMessageBuilder.build();
-		logTrace(logMessage);
-	}
-	
+		
 	protected void logTrace(LoggingHelper.Message.Builder loggingMessageBuilder) {
 		if(loggingMessageBuilder==null)
 			return;
@@ -412,13 +422,6 @@ public class AbstractBean implements Serializable {
 	private static void systemOut(Boolean condition,Object message,Object...arguments) {
 		if(Boolean.TRUE.equals(condition))
 			System.out.println(message+" : "+StringUtils.join(arguments," , "));
-	}
-	
-	@Deprecated
-	protected void addLogMessageBuilderParameters(LogMessage.Builder logMessageBuilder,Object...parameters){
-		if(logMessageBuilder==null)
-			return;
-		logMessageBuilder.addParameters(parameters);
 	}
 	
 	protected void addLoggingMessageBuilderParameters(LoggingHelper.Message.Builder loggingMessageBuilder,Object...parameters){

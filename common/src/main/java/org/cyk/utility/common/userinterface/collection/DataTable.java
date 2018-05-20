@@ -355,7 +355,10 @@ public class DataTable extends Component.Visible implements Serializable {
 			
 			if(getPropertiesMap().getChoiceValueClass()!=null){
 				Class<?> choiceValueClass = (Class<?>)getPropertiesMap().getChoiceValueClass();	
-				outputText.getPropertiesMap().setValue(StringHelper.getInstance().getClazz(choiceValueClass));
+				String choiceValueClassMasterFieldName = getChoiceValueClassMasterFieldName();
+				Column choiceColumn = StringHelper.getInstance().isBlank(choiceValueClassMasterFieldName) ? null : getColumn(choiceValueClassMasterFieldName);
+				outputText.getPropertiesMap().setValue(choiceColumn == null ? StringHelper.getInstance().getClazz(choiceValueClass) : choiceColumn.getPropertiesMap()
+						.get(Properties.HEADER, OutputText.class).getPropertiesMap().getValue());
 				
 				Boolean addCoices = (Boolean) getPropertiesMap().getIsAutomaticallyAddChoiceValues();
 				if(addCoices == null)
@@ -868,8 +871,8 @@ public class DataTable extends Component.Visible implements Serializable {
 				try {
 					FieldHelper.getInstance().set(object, source,fieldName);
 				} catch (Exception e) {
-					System.out.println("DataTable.AddRemoveCommandActionAdapter.setObjectSource() SET OBJECT SOURCE : field name = "+fieldName+" value = "+source);
-					debug(object);
+					//System.out.println("DataTable.AddRemoveCommandActionAdapter.setObjectSource() SET OBJECT SOURCE : field name = "+fieldName+" value = "+source);
+					//debug(object);
 					e.printStackTrace();
 				}
 			}
