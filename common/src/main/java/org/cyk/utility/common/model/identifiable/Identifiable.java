@@ -2,6 +2,8 @@ package org.cyk.utility.common.model.identifiable;
 
 import java.io.Serializable;
 
+import org.cyk.utility.common.helper.LoggingHelper;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -23,29 +25,29 @@ public interface Identifiable<IDENTIFIER> {
 
     /**/
     
-    public static interface Long extends Identifiable<java.lang.Long> {
+    public static interface ByLong extends Identifiable<java.lang.Long> {
     	
     	@Getter @Setter 
-    	public static class Class extends Identifiable.Class<java.lang.Long> implements Identifiable.Long,Serializable {
+    	public static class BaseClass extends Identifiable.BaseClass<java.lang.Long> implements Identifiable.ByLong,Serializable {
 			private static final long serialVersionUID = 1L;
 			
     	}
     }
     
     @Getter @Setter @Accessors(chain=true)
-    public static class Class<IDENTIFIER> implements Identifiable<IDENTIFIER>,Serializable {
+    public static class BaseClass<IDENTIFIER> extends Common implements Identifiable<IDENTIFIER>,Serializable {
 		private static final long serialVersionUID = 1L;
     	
 		protected IDENTIFIER identifier;
 		
-		//protected java.util.Map<String, Boolean> fieldValueComputedByUserMap;
+		protected java.util.Map<String, Boolean> fieldValueComputedByUserMap;
 		
-		//@Transient protected LoggingHelper.Message.Builder loggingMessageBuilder;
+		protected LoggingHelper.Message.Builder loggingMessageBuilder;
 		
     }
     
     /**/
-    
+    /*
     String COLUMN_NAME_UNKEYWORD = "the_";
 	String COLUMN_NAME_WORD_SEPARATOR = "_";
 	Integer COLUMN_VALUE_PRECISION = 30;
@@ -53,5 +55,5 @@ public interface Identifiable<IDENTIFIER> {
 	Integer PERCENT_PRECISION = 5;
 	Integer FLOAT_SCALE = 2;
 	Integer PERCENT_SCALE = 4;
-	
+	*/
 }

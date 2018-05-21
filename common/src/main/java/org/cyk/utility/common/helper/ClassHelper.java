@@ -289,7 +289,7 @@ public class ClassHelper extends AbstractReflectionHelper<Class<?>> implements S
 				IDENTIFIABLES.addAll(get(IDENTIFIABLES_PACKAGE, aClass));
 			}
 			IDENTIFIABLES.removeAll(
-					Arrays.asList(Identifiable.Class.class, Identifiable.Long.class, Identifiable.Long.Class.class));
+					Arrays.asList(Identifiable.BaseClass.class, Identifiable.ByLong.class, Identifiable.ByLong.BaseClass.class));
 			logTrace("base packages {} , identifiables {}", IDENTIFIABLE_BASE_CLASSES, IDENTIFIABLES);
 		}
 		return IDENTIFIABLES;

@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import org.cyk.utility.common.model.identifiable.Identifiable;
 
 @Entity
-public class MenuNode04 extends Identifiable.Long.Class {
+public class MenuNode04 extends Identifiable.ByLong.BaseClass {
 	private static final long serialVersionUID = 1L;
 
 }

@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Entity @Getter @Setter @Accessors(chain=true)
-public class EntityWithExtendsAndMethodAnnotated extends IdentifiablePersistable.Long.Class.JavaPersistenceApiEntity {
+public class EntityWithExtendsAndMethodAnnotated extends IdentifiablePersistable.ByLong.BaseClass.JavaPersistenceEntity {
 	private static final long serialVersionUID = 1L;
 	
 }
