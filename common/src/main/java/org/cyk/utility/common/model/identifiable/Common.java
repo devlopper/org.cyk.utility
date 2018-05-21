@@ -2,18 +2,22 @@ package org.cyk.utility.common.model.identifiable;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-
-import javax.persistence.Transient;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.common.CommonUtils;
+import org.cyk.utility.common.computation.Trigger;
+import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
+import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
 import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.helper.instance.FieldValueComputationTriggers;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,10 +36,51 @@ public class Common implements Serializable {
 	public static final int PERCENT_SCALE = 4;
 	public static final BigDecimal LOWEST_NON_ZERO_POSITIVE_VALUE = new BigDecimal("0."+StringUtils.repeat('0', 10)+"1");
 	
-	protected java.util.Map<String, Boolean> fieldValueComputedByUserMap;
+	@javax.persistence.Transient protected java.util.Map<String, Boolean> fieldValueComputedByUserMap;
+	@javax.persistence.Transient protected FieldValueComputationTriggers fieldValueComputationTriggers;
 	
-	@Transient protected LoggingHelper.Message.Builder loggingMessageBuilder;
-	protected String lastComputedLogMessage;
+	@javax.persistence.Transient protected LoggingHelper.Message.Builder loggingMessageBuilder;
+	@javax.persistence.Transient protected String lastComputedLogMessage;
+	
+	/**/
+	
+	public Common register(Trigger trigger,Collection<String> fieldNames){
+		if(CollectionHelper.getInstance().isNotEmpty(fieldNames)){
+			if(fieldValueComputationTriggers == null)
+				fieldValueComputationTriggers = new FieldValueComputationTriggers();
+			fieldValueComputationTriggers.register(trigger, fieldNames);
+		}
+		
+		return this;
+	}
+	
+	public Common register(Trigger trigger,String...fieldNames){
+		if(ArrayHelper.getInstance().isNotEmpty(fieldNames))
+			register(trigger, Arrays.asList(fieldNames));
+		return this;
+	}
+	
+	public Common register(Trigger trigger,ClassHelper.Listener.FieldName fieldName){
+		if(fieldName != null)
+			register(trigger, fieldName.getByValueUsageType(ClassHelper.Listener.FieldName.ValueUsageType.BUSINESS));
+		return this;
+	}
+	
+	public Trigger getTrigger(Collection<String> fieldNames){
+		if(fieldValueComputationTriggers == null)
+			return null;
+		return fieldValueComputationTriggers.getTrigger(fieldNames);
+	}
+	
+	public Trigger getTrigger(String...fieldNames){
+		if(ArrayHelper.getInstance().isNotEmpty(fieldNames))
+			return getTrigger(Arrays.asList(fieldNames));
+		return null;
+	}
+	
+	public Trigger getTrigger(ClassHelper.Listener.FieldName fieldName){
+		return getTrigger(fieldName.getByValueUsageType(ClassHelper.Listener.FieldName.ValueUsageType.BUSINESS));
+	}
 	
 	public Common __setFieldValueComputedByUser__(String name,Boolean value){
 		if(StringHelper.getInstance().isNotBlank(name)){

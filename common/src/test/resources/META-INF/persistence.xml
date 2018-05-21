@@ -6,8 +6,10 @@
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<!-- classes -->
-		<class>org.cyk.utility.common.persistence.jpa.EntityWithoutExtendsAndPropertyAnnotated</class>
-		<class>org.cyk.utility.common.persistence.jpa.EntityWithoutExtendsAndMethodAnnotated</class>
+		<class>org.cyk.utility.common.persistence.jpa.EntityWithoutExtendsAndAccessIsField</class>
+		<class>org.cyk.utility.common.persistence.jpa.EntityWithoutExtendsAndAccessIsProperty</class>
+		<class>org.cyk.utility.common.persistence.jpa.EntityWithoutExtendsAndAccessIsMixed</class>
+		
 		<class>org.cyk.utility.common.persistence.jpa.EntityWithExtendsAndMethodAnnotated</class>
 		<!-- properties will be added at runtime -->
 		

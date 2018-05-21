@@ -492,6 +492,16 @@ public class TestCase extends AbstractBean implements Serializable {
 		return this;
 	}
 	
+	public TestCase assertNotEquals(String message, Object expected,Object actual) {
+		getAssertionHelper().assertNotEquals(message, expected,actual);
+		return this;
+	}
+	
+	public TestCase assertNotEquals(Object expected,Object actual) {
+		getAssertionHelper().assertNotEquals(expected,actual);
+		return this;
+	}
+	
 	public TestCase assertEqualsNumber(String message, Object expected,Object actual) {
 		getAssertionHelper().assertEqualsNumber(message, expected,actual);
 		return this;

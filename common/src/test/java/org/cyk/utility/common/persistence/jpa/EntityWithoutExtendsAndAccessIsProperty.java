@@ -8,9 +8,13 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Entity @Getter @Setter @Accessors(chain=true)
-public class EntityWithoutExtendsAndPropertyAnnotated {
+public class EntityWithoutExtendsAndAccessIsProperty {
 
-	@Id
 	private Long identifier;
+	
+	@Id
+	public Long getIdentifier(){
+		return identifier;
+	}
 	
 }

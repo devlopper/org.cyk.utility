@@ -25,6 +25,20 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
  
 	@InjectMocks private FieldHelper fieldHelper;
 	
+	//@Test
+	public void getShadowed(){
+		//TestCase testCase = new TestCase();
+		//testCase.assertNotEquals(FieldHelper.getInstance().get(BaseShadow.class, "privateField"), FieldHelper.getInstance().get(ChildShadow.class, "privateField"));
+		//testCase.assertNotEquals(FieldHelper.getInstance().get(BaseShadow.class, "protectedField"), FieldHelper.getInstance().get(ChildShadow.class, "protectedField"));
+		
+		//testCase.assertEquals(FieldHelper.getInstance().get(BaseShadow.class, "privateField"), FieldHelper.getInstance().get(ChildShadow.class, "privateFieldNoShadow"));
+		
+		assertEquals(String.class, FieldHelper.getInstance().getType(FieldType.class, "f1"));
+		assertEquals(Integer.class, FieldHelper.getInstance().getType(FieldType.class, "f2"));
+		assertEquals(Collection.class, FieldHelper.getInstance().getType(FieldType.class, "f3"));
+		assertEquals(Collection.class, FieldHelper.getInstance().getType(FieldType.class, "f4"));
+	}
+	
 	@Test
 	public void getType(){
 		assertEquals(String.class, FieldHelper.getInstance().getType(FieldType.class, "f1"));
@@ -317,6 +331,27 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 		private Integer f2;
 		private Collection<String> f3;
 		private Collection<Integer> f4;
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class BaseShadow {
+		
+		private String privateField;
+		protected String protectedField;
+		String defaultField;
+		public String publicField;
+		
+		private String privateFieldNoShadow;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class ChildShadow extends BaseShadow {
+		
+		private String privateField;
+		protected String protectedField;
+		String defaultField;
+		public String publicField;	
 		
 	}
 }

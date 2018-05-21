@@ -74,9 +74,9 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 		super.initialisation();
 	}
 	
-	public String buildPath(String...fieldNames){
+	public String buildPath(Collection<String> fieldNames){
 		StringBuilder stringBuilder = new StringBuilder();
-		if(ArrayHelper.getInstance().isNotEmpty(fieldNames)){
+		if(CollectionHelper.getInstance().isNotEmpty(fieldNames)){
 			java.util.Collection<String> strings = new ArrayList<String>();
 			for(String index : fieldNames)
 				if(StringHelper.getInstance().isNotBlank(index))
@@ -84,6 +84,12 @@ public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Fiel
 			stringBuilder.append(StringUtils.join(strings,FIELD_NAME_SEPARATOR));
 		}
 		return stringBuilder.toString();
+	}
+	
+	public String buildPath(String...fieldNames){
+		if(ArrayHelper.getInstance().isNotEmpty(fieldNames))
+			return buildPath(Arrays.asList(fieldNames));
+		return null;
 	}
 	
 	public Boolean getIsContainSeparator(String fieldName){

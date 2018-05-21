@@ -2,6 +2,9 @@ package org.cyk.utility.common.model.identifiable;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.LoggingHelper;
 
 import lombok.Getter;
@@ -44,6 +47,29 @@ public interface Identifiable<IDENTIFIER> {
 		
 		protected LoggingHelper.Message.Builder loggingMessageBuilder;
 		
+		/**/
+		
+		private String getRuntimeIdentifier(){
+			return //getMemoryAddress()
+					getClass().getSimpleName()
+					+Constant.CHARACTER_SLASH+StringUtils.defaultString(identifier==null?null:identifier.toString(),Constant.CHARACTER_QUESTION_MARK.toString());
+		}
+		
+		@Override
+		public int hashCode() {
+			String id = getRuntimeIdentifier();
+			return id==null?HashCodeBuilder.reflectionHashCode(this, false):id.hashCode();
+		}
+		
+		@Override
+		public boolean equals(Object object) {
+			if(!(object instanceof BaseClass))
+				return Boolean.FALSE;
+			String id1 = getRuntimeIdentifier() , id2 = ((BaseClass<?>) object).getRuntimeIdentifier();
+			if(id1==null || id2==null)
+				return Boolean.FALSE;
+			return id1.equals(id2);
+		}
     }
     
     /**/

@@ -48,8 +48,8 @@ public class JpaUnitTest extends AbstractUnitTest {
 		testCase.assertNotNull(entityManagerFactory);
 		
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		entityManager.createQuery("SELECT p FROM EntityWithoutExtendsAndPropertyAnnotated p");
-		entityManager.createQuery("SELECT p FROM EntityWithoutExtendsAndMethodAnnotated p");
+		entityManager.createQuery("SELECT p FROM EntityWithoutExtendsAndAccessIsField p");
+		entityManager.createQuery("SELECT p FROM EntityWithoutExtendsAndAccessIsProperty p");
 		entityManager.createQuery("SELECT p FROM EntityWithExtendsAndMethodAnnotated p");
 	}
 }
