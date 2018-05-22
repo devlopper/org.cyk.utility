@@ -27,13 +27,11 @@ import org.apache.logging.log4j.Logger;
 import org.cyk.utility.common.Action;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.ListenerUtils;
-
 import org.cyk.utility.common.Properties;
 import org.cyk.utility.common.RunnableListener;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.ConditionHelper;
 import org.cyk.utility.common.helper.LoggingHelper;
-import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.ThrowableHelper;
 
 import lombok.Getter;
@@ -81,22 +79,22 @@ public class AbstractBean implements Serializable {
 		return getPropertiesMap().getInstanciateIfNull(key, aClass);
 	}
 	
-	public AbstractBean setPropertyFromStringIdentifier(Object key,String identifier,Object[] parameters){
-		getPropertiesMap().set(key,StringHelper.getInstance().get(identifier, parameters));
+	public AbstractBean computeAndSetPropertyFromStringIdentifier(Object key,String identifier,Object[] parameters){
+		getPropertiesMap().computeAndSetPropertyFromStringIdentifier(key, identifier, parameters);
 		return this;
 	}
 	
-	public AbstractBean setPropertyFromStringIdentifier(Object key,String identifier){
-		return setPropertyFromStringIdentifier(key,identifier,new Object[]{});
+	public AbstractBean computeAndSetPropertyFromStringIdentifier(Object key,String identifier){
+		return computeAndSetPropertyFromStringIdentifier(key,identifier,new Object[]{});
 	}
 	
-	public AbstractBean setPropertyValueFromStringIdentifier(String identifier,Object[] parameters){
-		setPropertyFromStringIdentifier(Properties.VALUE, identifier, parameters);
+	public AbstractBean computeAndSetPropertyValueFromStringIdentifier(String identifier,Object[] parameters){
+		computeAndSetPropertyFromStringIdentifier(Properties.VALUE, identifier, parameters);
 		return this;
 	}
 	
-	public AbstractBean setPropertyValueFromStringIdentifier(String identifier){
-		return setPropertyValueFromStringIdentifier(identifier,new Object[]{});
+	public AbstractBean computeAndSetPropertyValueFromStringIdentifier(String identifier){
+		return computeAndSetPropertyValueFromStringIdentifier(identifier,new Object[]{});
 	}
 	
 	protected Properties instanciateProperties(){

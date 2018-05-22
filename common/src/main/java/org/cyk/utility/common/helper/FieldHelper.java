@@ -1,6 +1,5 @@
 package org.cyk.utility.common.helper;
 
-import java.beans.IntrospectionException;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
@@ -17,8 +16,6 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
-import org.apache.commons.beanutils.FluentPropertyBeanIntrospector;
-import org.apache.commons.beanutils.IntrospectionContext;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +25,7 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.cyk.utility.common.annotation.FieldOverrides;
 import org.cyk.utility.common.helper.StringHelper.Location;
+import org.cyk.utility.common.property.FluentPropertyBeanIntrospector;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,28 +34,18 @@ import lombok.experimental.Accessors;
 
 @Singleton
 public class FieldHelper extends AbstractReflectionHelper<java.lang.reflect.Field> implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
 	public static final String FIELD_NAME_SEPARATOR = Constant.CHARACTER_DOT.toString();
 	
-	public static final Set<String> INTROSPECTION_CONTEXT_TARGET_CLASS_NAME_PREFIXES_INCLUDED = new LinkedHashSet<String>();
-	public static final Set<String> INTROSPECTION_CONTEXT_TARGET_CLASS_NAME_PREFIXES_EXCLUDED = new LinkedHashSet<String>();
-	
 	static {
-		INTROSPECTION_CONTEXT_TARGET_CLASS_NAME_PREFIXES_INCLUDED.add("org.cyk.");
-		PropertyUtils.addBeanIntrospector(new FluentPropertyBeanIntrospector(){
-			@Override
-			public void introspect(IntrospectionContext introspectionContext) throws IntrospectionException {
-				Boolean included = StringHelper.getInstance().isAtLocation(introspectionContext.getTargetClass().getName()
-						, INTROSPECTION_CONTEXT_TARGET_CLASS_NAME_PREFIXES_INCLUDED , StringHelper.Location.START);
-				Boolean excluded = StringHelper.getInstance().isAtLocation(introspectionContext.getTargetClass().getName()
-						, INTROSPECTION_CONTEXT_TARGET_CLASS_NAME_PREFIXES_EXCLUDED , StringHelper.Location.START);
-				if(Boolean.TRUE.equals(included) && Boolean.FALSE.equals(excluded)){
-					super.introspect(introspectionContext);
-				}
-			}
-		});
+		/*
+		 * Take class from cyk model packages
+		 */
+		
+		
+		//DefaultBeanIntrospector.INSTANCE = null;
+		PropertyUtils.addBeanIntrospector(new FluentPropertyBeanIntrospector().setTargetClassNameIncludedRegularExpression("(^org.cyk.)(.+)(.model.)"));
 	}
 	
 	private static FieldHelper INSTANCE;

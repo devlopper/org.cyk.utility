@@ -115,7 +115,7 @@ public class FilterHelper extends AbstractHelper implements Serializable {
 			return java.lang.Boolean.TRUE;
 		}
 		
-		public Filter<T> set(java.lang.String string){
+		public Filter<T> use(java.lang.String string){
 			for(Criteria<?> criteria : criterias)
 				criteria.set(string);
 			return this;

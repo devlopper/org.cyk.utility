@@ -27,7 +27,7 @@ public class InputAutoCompleteCommon extends AbstractBean implements Serializabl
 	}
 	
 	public List<?> complete(final String query) {
-		return (List<Object>) InstanceHelper.getInstance().get(clazz, filter.set(query), dataReadConfiguration);
+		return (List<Object>) InstanceHelper.getInstance().get(clazz, filter.use(query), dataReadConfiguration);
 	}
 	
 	public Object getChoiceValue(Object choice){

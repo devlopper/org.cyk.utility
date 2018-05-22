@@ -1,12 +1,16 @@
-package org.cyk.utility.common.helper;
+package org.cyk.utility.common.string;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.common.helper.AbstractHelper;
+import org.cyk.utility.common.helper.CollectionHelper;
 
 @Singleton
 public class RegularExpressionHelper extends AbstractHelper implements Serializable {
@@ -34,12 +38,30 @@ public class RegularExpressionHelper extends AbstractHelper implements Serializa
 		super.initialisation();
 	}
 	
+	public Collection<String> getMatches(String string,String patternString){
+		Collection<String> matches = null;
+		if(string != null && patternString != null){
+			Pattern pattern = Pattern.compile(patternString);
+			Matcher matcher = pattern.matcher(string);			
+			if (matcher.find()){
+				matches = new ArrayList<>();
+				if(matcher.groupCount() > 0){
+					for(Integer index = 1; index <= matcher.groupCount(); index++){
+						matches.add(matcher.group(index));
+					}	
+				}else
+					matches.add(matcher.group());
+			}
+		}
+		return matches;
+	}
+	
+	public Boolean hasMatch(String string,String patternString){
+		return CollectionHelper.getInstance().isNotEmpty(getMatches(string, patternString));
+	}
+	
 	public String getMatch(String string,String patternString){
-		Pattern pattern = Pattern.compile(patternString);
-		Matcher matcher = pattern.matcher(string);
-		if (matcher.find())
-			return matcher.group(1);
-		return null;
+		return CollectionHelper.getInstance().getFirst(getMatches(string, patternString));
 	}
 	
 	public String getMatchMarkupLanguageTagStart(String string,String name){

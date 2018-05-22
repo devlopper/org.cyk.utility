@@ -2,7 +2,9 @@ package org.cyk.utility.test.unit;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.test.AbstractTest;
@@ -36,5 +38,11 @@ public abstract class AbstractUnitTest extends AbstractTest  {
 	
 	protected void registerBeans(Collection<Object> collection){}
 
-
+	/**/
+	
+	protected <T> List<T> getList(@SuppressWarnings("unchecked") T...elements){
+		if(elements == null)
+			return null;
+		return Arrays.asList(elements);
+	}
 }

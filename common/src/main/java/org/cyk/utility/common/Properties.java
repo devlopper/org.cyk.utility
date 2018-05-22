@@ -3602,4 +3602,24 @@ public class Properties implements java.io.Serializable {
 		}
 		
 	}
+
+	/* shortcuts method */
+
+	public Properties computeAndSetPropertyFromStringIdentifier(Object key,String identifier,Object[] parameters){
+		set(key,StringHelper.getInstance().get(identifier, parameters));
+		return this;
+	}
+	
+	public Properties computeAndSetPropertyFromStringIdentifier(Object key,String identifier){
+		return computeAndSetPropertyFromStringIdentifier(key,identifier,new Object[]{});
+	}
+	
+	public Properties computeAndSetPropertyValueFromStringIdentifier(String identifier,Object[] parameters){
+		computeAndSetPropertyFromStringIdentifier(Properties.VALUE, identifier, parameters);
+		return this;
+	}
+	
+	public Properties computeAndSetPropertyValueFromStringIdentifier(String identifier){
+		return computeAndSetPropertyValueFromStringIdentifier(identifier,new Object[]{});
+	}
 }

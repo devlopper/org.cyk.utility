@@ -125,10 +125,37 @@ public class CollectionHelper extends AbstractHelper implements Serializable  {
 		return newCollection;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <COLLECTION extends Collection<?>,ELEMENT> COLLECTION instanciate(Class<COLLECTION> collectionClass){
+		if(collectionClass==null)
+			return null;
+		if(Set.class.equals(collectionClass))
+			collectionClass = (Class<COLLECTION>) LinkedHashSet.class;
+		else if(List.class.equals(collectionClass))
+			collectionClass = (Class<COLLECTION>) ArrayList.class;
+		else if(Collection.class.equals(collectionClass))
+			collectionClass = (Class<COLLECTION>) ArrayList.class;			
+		COLLECTION collection = ClassHelper.getInstance().instanciateOne(collectionClass);
+		return collection;
+	}
+	
 	public <ELEMENT> List<ELEMENT> createList(Collection<ELEMENT> collection){
 		if(collection==null)
 			return null;
 		return new ArrayList<>(collection);
+	}
+	
+	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> instanciate(Class<COLLECTION> collectionClass,@SuppressWarnings("unchecked") ELEMENT...elements){
+		if(elements==null)
+			return null;
+		@SuppressWarnings("unchecked")
+		Collection<ELEMENT> collection = (Collection<ELEMENT>) instanciate(collectionClass);
+		collection.addAll(Arrays.asList(elements));
+		return collection;
+	}
+	
+	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> instanciate(@SuppressWarnings("unchecked") ELEMENT...elements){
+		return instanciate(ArrayList.class, elements);
 	}
 	
 	public <ELEMENT> Collection<ELEMENT> filter(Collection<ELEMENT> collection,Class<?> aClass){

@@ -35,7 +35,7 @@ public class ArrayHelper extends AbstractHelper implements Serializable  {
 		INSTANCE = this;
 		super.initialisation();
 	}
-	
+
 	public <T> T[] get(Class<T> aClass,String[] fieldNames,Object...objects){
 		@SuppressWarnings("unchecked")
 		T[] array = (T[]) Array.newInstance(aClass, objects.length / fieldNames.length);

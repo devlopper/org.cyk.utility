@@ -25,6 +25,7 @@ public class UserInterfaceOutputUnitTest extends AbstractUnitTest {
 		Output output = Output.get(null, new MyClass(), FieldHelper.getInstance().get(MyClass.class, "name")
 				, null, null);
 		testCase.assertNotNull(testCase);
+		new MyClass().setXxx("",2);
 		testCase.assertEquals("Nom", output.getLabel().getPropertiesMap().getValue());
 	}
 	
@@ -34,7 +35,12 @@ public class UserInterfaceOutputUnitTest extends AbstractUnitTest {
 	public static class MyClass extends AbstractBean {
 		private static final long serialVersionUID = 1L;
 		
-		private String name;
+		private String name,myOtherField;
+		
+		public MyClass setXxx(String string,Integer integer){
+			
+			return this;
+		}
 		
 	}
 	
