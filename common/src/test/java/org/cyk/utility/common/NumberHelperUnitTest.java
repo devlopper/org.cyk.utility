@@ -49,9 +49,12 @@ public class NumberHelperUnitTest extends AbstractUnitTest {
 	}
 	
 	@Test
-	public void assertNumber(){
+	public void stringify(){
 		assertEquals("63", new NumberHelper.Stringifier.Adapter.Default().setInput(63).execute());	
-		assertEquals("63", new NumberHelper.Stringifier.Adapter.Default().setInput(new BigDecimal("63.00")).execute());	
+		assertEquals("63", new NumberHelper.Stringifier.Adapter.Default().setInput(new BigDecimal("63.00")).execute());
+		assertEquals("63,1", new NumberHelper.Stringifier.Adapter.Default().setInput(new BigDecimal("63.10")).execute());
+		assertEquals("63,01", new NumberHelper.Stringifier.Adapter.Default().setInput(new BigDecimal("63.01")).execute());
+		assertEquals("63,12", new NumberHelper.Stringifier.Adapter.Default().setInput(new BigDecimal("63.12")).execute());
 	}
 	
 	@Test

@@ -16,6 +16,7 @@ import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FieldHelper.Constraints;
 import org.cyk.utility.common.helper.FileHelper;
+import org.cyk.utility.common.helper.NumberHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.TimeHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
@@ -329,10 +330,12 @@ public class Output extends Control implements Serializable {
 						else if(ClassHelper.getInstance().isDate(value.getClass()))
 							value = new TimeHelper.Stringifier.Date.Adapter.Default((Date) value).setProperty(TimeHelper.Stringifier.PROPERTY_NAME_TIME_PART
 									, constraints == null || constraints.getDatePart() == null ? Constant.Date.Part.DATE_ONLY : constraints.getDatePart()).execute();
-						else if(ClassHelper.getInstance().isBoolean(value.getClass()))
+						else if(ClassHelper.getInstance().isBoolean(value.getClass())) {
 							value = StringHelper.getInstance().getResponse((Boolean) value);
-						else if(ClassHelper.getInstance().isString(value.getClass())){
+						}else if(ClassHelper.getInstance().isString(value.getClass())){
 							//value = StringHelper.getInstance().getHtml((String) value);
+						}else if(ClassHelper.getInstance().isNumber(value.getClass())){
+							value = NumberHelper.getInstance().stringify((Number) value);
 						}
 					}
 					
