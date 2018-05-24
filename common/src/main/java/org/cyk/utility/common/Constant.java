@@ -139,8 +139,8 @@ public interface Constant {
 		
 		private static Map<Locale, Collection<Pattern>> PATTERN_MAP = new HashMap<>();
 		static{
-			putPatterns(Locale.FRENCH, String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy"),"EEEE , dd MMMM yyyy", HOUR_MINUTE_PATTERN,HOUR_MINUTE_SECOND_PATTERN,HOUR_MINUTE_SECOND_MILLISECOND_PATTERN,"yyyy");
-			putPatterns(Locale.ENGLISH, String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy"),"EEEE , dd MMMM yyyy", HOUR_MINUTE_PATTERN,HOUR_MINUTE_SECOND_PATTERN,HOUR_MINUTE_SECOND_MILLISECOND_PATTERN,"yyyy");
+			putPatterns(Locale.FRENCH, String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy"),"EEEE , dd MMMM yyyy", HOUR_MINUTE_PATTERN,HOUR_MINUTE_PATTERN,HOUR_MINUTE_SECOND_PATTERN,HOUR_MINUTE_SECOND_MILLISECOND_PATTERN,"yyyy");
+			putPatterns(Locale.ENGLISH, String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy"),"EEEE , dd MMMM yyyy", HOUR_MINUTE_PATTERN,HOUR_MINUTE_PATTERN,HOUR_MINUTE_SECOND_PATTERN,HOUR_MINUTE_SECOND_MILLISECOND_PATTERN,"yyyy");
 		}
 		
 		public static Pattern getPattern(Locale locale,Part part,Length length){
@@ -155,7 +155,7 @@ public interface Constant {
 			return Pattern.DEFAULT;
 		}
 		
-		private static void putPatterns(Locale locale,String shortDateOnlyPattern,String longDateOnlyPattern,String shortTimeOnlyPattern,String shortTimeOnlyHourMinuteSecondPattern,String shortTimeOnlyHourMinuteSecondMillisecondPattern,String dateYearOnlyPattern){
+		private static void putPatterns(Locale locale,String shortDateOnlyPattern,String longDateOnlyPattern,String shortTimeOnlyPattern,String shortTimeOnlyHourMinutePattern,String shortTimeOnlyHourMinuteSecondPattern,String shortTimeOnlyHourMinuteSecondMillisecondPattern,String dateYearOnlyPattern){
 			String longTimeOnlyPattern = shortTimeOnlyPattern;
 			Collection<Pattern> patterns = new ArrayList<>();
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_ONLY, Constant.Date.Length.SHORT, shortDateOnlyPattern));
@@ -164,6 +164,9 @@ public interface Constant {
 			patterns.add(new Pattern(locale, Constant.Date.Part.TIME_ONLY, Constant.Date.Length.LONG, longTimeOnlyPattern));
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME, Constant.Date.Length.SHORT, shortDateOnlyPattern+Constant.CHARACTER_SPACE+shortTimeOnlyPattern));
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME, Constant.Date.Length.LONG, longDateOnlyPattern+Constant.CHARACTER_SPACE+longTimeOnlyPattern));
+			
+			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE, Constant.Date.Length.SHORT, shortDateOnlyPattern+Constant.CHARACTER_SPACE+shortTimeOnlyHourMinutePattern));
+			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE, Constant.Date.Length.LONG, longDateOnlyPattern+Constant.CHARACTER_SPACE+shortTimeOnlyHourMinutePattern));
 			
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND, Constant.Date.Length.SHORT, shortDateOnlyPattern+Constant.CHARACTER_SPACE+shortTimeOnlyHourMinuteSecondPattern));
 			patterns.add(new Pattern(locale, Constant.Date.Part.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND, Constant.Date.Length.LONG, longDateOnlyPattern+Constant.CHARACTER_SPACE+shortTimeOnlyHourMinuteSecondPattern));
@@ -196,6 +199,7 @@ public interface Constant {
 			DATE_ONLY
 			,TIME_ONLY
 			,DATE_AND_TIME
+			,DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE
 			,DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND
 			,DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND_MILLISECOND
 			,DATE_YEAR_ONLY

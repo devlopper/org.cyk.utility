@@ -17,7 +17,6 @@ import org.cyk.utility.common.computation.DataReadConfiguration;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.CollectionHelper;
-import org.cyk.utility.common.helper.CollectionHelper.Instance;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.FilterHelper;
 import org.cyk.utility.common.helper.IconHelper;
@@ -27,19 +26,16 @@ import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.UniformResourceLocatorHelper;
 import org.cyk.utility.common.userinterface.CascadeStyleSheetHelper;
 import org.cyk.utility.common.userinterface.Component;
-import org.cyk.utility.common.userinterface.Control;
 import org.cyk.utility.common.userinterface.JavaServerFacesHelper;
 import org.cyk.utility.common.userinterface.collection.Column.CellValueSource;
 import org.cyk.utility.common.userinterface.command.Command;
 import org.cyk.utility.common.userinterface.command.Menu;
 import org.cyk.utility.common.userinterface.command.MenuNode;
-import org.cyk.utility.common.userinterface.command.RemoteCommand;
 import org.cyk.utility.common.userinterface.container.form.FormDetail;
 import org.cyk.utility.common.userinterface.input.Input;
 import org.cyk.utility.common.userinterface.input.InputText;
 import org.cyk.utility.common.userinterface.input.Watermark;
 import org.cyk.utility.common.userinterface.input.choice.InputChoice;
-import org.cyk.utility.common.userinterface.input.choice.InputChoiceOne;
 import org.cyk.utility.common.userinterface.input.choice.InputChoiceOneCombo;
 import org.cyk.utility.common.userinterface.output.Output;
 import org.cyk.utility.common.userinterface.output.OutputText;
@@ -435,6 +431,7 @@ public class DataTable extends Component.Visible implements Serializable {
 				if(getPropertiesMap().getMaster()==null)
 					instances = InstanceHelper.getInstance().get((Class<?>) getPropertiesMap().getActionOnClass());
 				else{
+					System.out.println("DataTable.load() LOAD FROM FILTER");
 					FilterHelper.Filter<Object> filter = (FilterHelper.Filter<Object>) ClassHelper.getInstance().instanciateOne(FilterHelper.Filter.ClassLocator.getInstance()
 							.locate(actionOnClass));
 					filter.addMaster(getPropertiesMap().getMaster());
@@ -540,7 +537,6 @@ public class DataTable extends Component.Visible implements Serializable {
 			@SuppressWarnings("unchecked")
 			CollectionHelper.Instance<Row> rows = (CollectionHelper.Instance<Row>) getPropertiesMap().getRowsCollectionInstance();
 			rows = Row.instanciateMany(collection,this, rows);
-		
 			getPropertiesMap().setRowsCollectionInstance(rows);
 			
 			if(rows==null)
@@ -770,227 +766,6 @@ public class DataTable extends Component.Visible implements Serializable {
 	
 	/**/
 	
-	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
-	public static class RowsCollectionInstanceListener extends CollectionHelper.Instance.Listener.Adapter<Row> {
-		private static final long serialVersionUID = 1L;
-		
-		protected DataTable dataTable;
-		
-		@SuppressWarnings("unchecked")
-		@Override
-		public void addOne(Instance<Row> instance, final Row row, Object source, Object sourceObject) {
-			super.addOne(instance, row, source, sourceObject);
-			Class<? extends RemoveCommandComponentActionAdapter> removeCommandComponentActionAdapterClass = InstanceHelper.getInstance()
-					.getIfNotNullElseDefault((Class<? extends RemoveCommandComponentActionAdapter>)dataTable.getPropertiesMap().getRemoveCommandComponentActionAdapterClass()
-					, RemoveCommandComponentActionAdapter.class);
-			RemoveCommandComponentActionAdapter removeCommandComponentActionAdapter = ClassHelper.getInstance().instanciateOne(removeCommandComponentActionAdapterClass);
-			removeCommandComponentActionAdapter.setDataTable(dataTable);
-			removeCommandComponentActionAdapter.setRow(row);
-			
-			final Command command = new Command();
-			command.setLabelFromIdentifier("userinterface.command.remove")._setLabelPropertyRendered(Boolean.FALSE);
-			command.setAction(removeCommandComponentActionAdapter);
-			command.getPropertiesMap().setIcon(IconHelper.Icon.FontAwesome.MINUS);
-			command.getPropertiesMap().setInputValueIsNotRequired(Boolean.TRUE);
-			command.getPropertiesMap().setImmediate(Boolean.TRUE);
-			
-			command.getPropertiesMap().copyFrom(((Command)dataTable.getPropertiesMap().getAddCommandComponent()).getPropertiesMap(), Properties.PROCESS,Properties.UPDATE);
-			command.getPropertiesMap().copyFrom((Properties)dataTable.getPropertyRowProperties().getRemoveCommandProperties(), Properties.UPDATED_FIELD_NAMES,Properties.UPDATED_COLUMN_FIELD_NAMES);
-			
-			//command.getPropertiesMap().setProcess(((Command)dataTable.getPropertiesMap().getAddCommandComponent()).getPropertiesMap().getProcess());
-			command.getPropertiesMap().setUpdate("@(form)");
-			
-			//command.usePropertyRemoteCommand();
-			RemoteCommand.instanciateOne(command);
-			
-			row.getMenu().getPropertiesMap().setRendered(Boolean.FALSE);
-			
-			//row.getDeleteMenuNode().getPropertiesMap().setUrl(null);
-			//RemoteCommand.instanciateOne(row.getDeleteMenuNode(),command.getAction(),command.getActionListener());
-			
-			new CollectionHelper.Iterator.Adapter.Default<String>((Collection<String>) row.getPropertiesMap().getUpdatedFieldNames()){
-				private static final long serialVersionUID = 1L;
-
-				protected void __executeForEach__(String fieldName) {
-					command.getPropertiesMap().addString(Properties.UPDATE,"@(."+dataTable.getForm().getControlByFieldName(fieldName).getPropertiesMap().getIdentifierAsStyleClass()+")");
-				}
-			}.execute();
-			
-			if(StringHelper.getInstance().isBlank((String)command.getPropertiesMap().getUpdate())){
-				command.getPropertiesMap().setUpdate("@(form)");
-			}
-			
-			row.getPropertiesMap().setRemoveCommandComponent(command);
-			
-			if(dataTable.getPropertiesMap().getChoiceValueClass()!=null){
-				Object choice = FieldHelper.getInstance().read(row.getPropertiesMap().getValue(), ClassHelper.getInstance().getVariableName((Class<?>)dataTable.getPropertiesMap().getChoiceValueClass()));
-				if(choice!=null && Boolean.TRUE.equals( ((InputChoice<?>)dataTable.getPropertiesMap().getAddInputComponent()).getChoices().getIsSourceDisjoint() )){
-					((InputChoice<?>)dataTable.getPropertiesMap().getAddInputComponent()).getChoices().removeOne(choice);
-				}
-			}
-			
-			if(dataTable.getPropertiesMap().getMasterFieldName()!=null){
-				//Class<?> fieldType = FieldHelper.getInstance().getType(row.getPropertiesMap().getValue().getClass(), fieldName);
-				if(!dataTable.getPropertiesMap().getMaster().getClass().equals(row.getPropertiesMap().getValue().getClass())){
-					String fieldName = (String)dataTable.getPropertiesMap().getMasterFieldName();
-					FieldHelper.getInstance().set(row.getPropertiesMap().getValue(), dataTable.getPropertiesMap().getMaster()
-							, fieldName);//doing this allow to share same memory object	
-				}
-				
-			}
-		}
-	}
-	
-	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
-	public static class AddRemoveCommandActionAdapter extends Command.ActionAdapter {
-		private static final long serialVersionUID = 1L;
-		
-		protected DataTable dataTable;
-		
-		@Override
-		protected Object __execute__() {
-			InputChoiceOne inputChoiceOne = (InputChoiceOne) dataTable.getPropertiesMap().getAddInputComponent();
-			Class<?> actionOnClass = (Class<?>) dataTable.getPropertiesMap().getActionOnClass();
-			try {
-				____execute____(actionOnClass, inputChoiceOne);
-			} catch (Exception e) {
-				System.out
-						.println("DataTable.AddRemoveCommandActionAdapter.__execute__() ***********************************************************");
-				e.printStackTrace();
-			}
-			return null;
-		}
-		
-		protected void ____execute____(Class<?> actionOnClass,InputChoiceOne inputChoiceOne){
-			
-		}
-		
-		protected void setObjectSource(Object object,Object source){
-			String fieldName = dataTable.getChoiceValueClassMasterFieldName();
-			if(StringHelper.getInstance().isNotBlank(fieldName)){
-				try {
-					FieldHelper.getInstance().set(object, source,fieldName);
-				} catch (Exception e) {
-					//System.out.println("DataTable.AddRemoveCommandActionAdapter.setObjectSource() SET OBJECT SOURCE : field name = "+fieldName+" value = "+source);
-					//debug(object);
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		protected void listenObjectCreated(Object object,Object source){}
-		
-		protected CollectionHelper.Instance<?> getDestinationCollection(){
-			return dataTable.getFormMasterObjectActionOnClassCollectionInstance();
-		}
-	
-		protected Object getChoice(Object object){
-			if(dataTable.getPropertiesMap().getChoiceValueClass()!=null)
-				return FieldHelper.getInstance().read(object, ClassHelper.getInstance().getVariableName((Class<?>)dataTable.getPropertiesMap().getChoiceValueClass()));
-			return null;
-		}
-	}
-	
-	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
-	public static class AddCommandComponentActionAdapter extends AddRemoveCommandActionAdapter implements Serializable {
-		private static final long serialVersionUID = 1L;
-		
-		@Override
-		protected void ____execute____(Class<?> actionOnClass, InputChoiceOne inputChoiceOne) {
-			if(actionOnClass==null){
-				
-			}else{
-				Object choice = inputChoiceOne == null ? null : inputChoiceOne.getValue();
-				if(inputChoiceOne == null){
-					
-				}else{
-					if(choice!=null){
-						Object object = ClassHelper.getInstance().instanciateOne(actionOnClass);
-						setObjectSource(object,choice);
-						listenObjectCreated(object,choice);
-						dataTable.addOneRow(object);
-						CollectionHelper.Instance<?> collection = getDestinationCollection();
-						if(collection!=null){
-							collection.addOne(object);
-						}
-						//inputChoiceOne.getChoices().removeOne(choice);	
-					}
-						
-				}		
-			}
-		}
-	}
-	
 	/**/
 	
-	@lombok.Getter @lombok.Setter @lombok.experimental.Accessors(chain=true)
-	public static class RemoveCommandComponentActionAdapter extends AddRemoveCommandActionAdapter implements Serializable {
-		private static final long serialVersionUID = 1L;
-		
-		private Row row;
-		
-		@SuppressWarnings("unchecked")
-		@Override
-		protected void ____execute____(Class<?> actionOnClass, InputChoiceOne inputChoiceOne) {
-			final LoggingHelper.Message.Builder vLoggingMessageBuilder = loggingMessageBuilder;//new LoggingHelper.Message.Builder.Adapter.Default();
-			vLoggingMessageBuilder.addManyParameters("remove datatable row");
-			
-			if(row.getPropertiesMap().getValue()!=null){
-				vLoggingMessageBuilder.addNamedParameters("value id",InstanceHelper.getInstance().getIdentifier(row.getPropertiesMap().getValue()));
-				if(inputChoiceOne == null){
-					
-				}else{
-					Object choice = getChoice(row.getPropertiesMap().getValue());
-					if(choice==null){
-						
-					}else{
-						vLoggingMessageBuilder.addNamedParameters("choice id",InstanceHelper.getInstance().getIdentifier(choice));
-						inputChoiceOne.getChoices().addOne(choice);	
-						CollectionHelper.Instance<?> collection = getDestinationCollection();
-						if(collection!=null){
-							vLoggingMessageBuilder.addManyParameters("destination collection");
-							vLoggingMessageBuilder.addNamedParameters("count before remove",CollectionHelper.getInstance().getSize(collection.getElements()));
-							collection.removeOne(row.getPropertiesMap().getValue());
-							vLoggingMessageBuilder.addNamedParameters("count after remove",CollectionHelper.getInstance().getSize(collection.getElements()));
-							if(dataTable.getPropertiesMap().getMaster()!=null){
-								vLoggingMessageBuilder.addNamedParameters("master id",InstanceHelper.getInstance().getIdentifier(dataTable.getPropertiesMap().getMaster()));
-								Object object = dataTable.getPropertiesMap().getMaster();
-								InstanceHelper.getInstance().computeChanges(object);
-								Collection<String> updatedFieldNames = (Collection<String>) ((Command)row.getPropertiesMap().getRemoveCommandComponent()).getPropertiesMap().getUpdatedFieldNames();
-								vLoggingMessageBuilder.addNamedParameters("updated field names",updatedFieldNames);
-								
-								new CollectionHelper.Iterator.Adapter.Default<String>((Collection<String>) updatedFieldNames){
-									private static final long serialVersionUID = 1L;
-
-									protected void __executeForEach__(String fieldName) {
-										Object fieldObject = FieldHelper.getInstance().readBeforeLast(((FormDetail)dataTable.getPropertiesMap().getFormDetail()).getMaster().getObject(), fieldName);
-										Control control = ((FormDetail)dataTable.getPropertiesMap().getFormDetail()).getControlByFieldName(fieldObject,FieldHelper.getInstance().getLast(fieldName));										
-										//Control control = ((Detail)dataTable.getPropertiesMap().getFormDetail()).getControlByFieldName(fieldName);
-										Object v1 = control instanceof Input ? ((Input<?>)control).getValue() : ((OutputText)control).getPropertiesMap().getValue();
-										control.read();
-										Object v2 = control instanceof Input ? ((Input<?>)control).getValue() : ((OutputText)control).getPropertiesMap().getValue();
-										vLoggingMessageBuilder.addNamedParameters(fieldName,v1+">"+v2);
-									}
-								}.execute();
-								
-								Collection<String> updatedColumnsFieldNames = (Collection<String>) ((Command)row.getPropertiesMap().getRemoveCommandComponent()).getPropertiesMap().getUpdatedColumnFieldNames();
-								vLoggingMessageBuilder.addNamedParameters("updated column field names",updatedColumnsFieldNames);
-								new CollectionHelper.Iterator.Adapter.Default<String>(updatedColumnsFieldNames){
-									private static final long serialVersionUID = 1L;
-
-									protected void __executeForEach__(String columnFieldName) {
-										dataTable.getColumn(columnFieldName).__setPropertyFooterPropertyValueBasedOnMaster__();
-									}
-								}.execute();
-								
-							}
-						}
-					}	
-				}				
-			}
-			
-			//all computing are done  we can now remove the row
-			dataTable.removeOneRow(row);
-		}		
-	}
 }

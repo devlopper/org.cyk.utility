@@ -74,7 +74,6 @@ public class Row extends Dimension implements Serializable {
 	//@SuppressWarnings("unchecked")
 	public static CollectionHelper.Instance<Row> instanciateMany(Collection<?> collection,Component component,CollectionHelper.Instance<Row> rows){
 		//Columns columns = (Columns) component.getPropertiesMap().getColumns();
-		
 		if(CollectionHelper.getInstance().isNotEmpty(collection)){
 			if(rows == null)
 				rows = new CollectionHelper.Instance<>();

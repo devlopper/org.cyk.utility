@@ -161,4 +161,11 @@ public class Common implements Serializable {
 	public String toString() {
 		return StringHelper.getInstance().convert(this);
 	}
+	
+	/**/
+	
+	public Common computeChanges(){
+		InstanceHelper.getInstance().computeChanges(this);
+		return this;
+	}
 }
