@@ -431,7 +431,6 @@ public class DataTable extends Component.Visible implements Serializable {
 				if(getPropertiesMap().getMaster()==null)
 					instances = InstanceHelper.getInstance().get((Class<?>) getPropertiesMap().getActionOnClass());
 				else{
-					System.out.println("DataTable.load() LOAD FROM FILTER");
 					FilterHelper.Filter<Object> filter = (FilterHelper.Filter<Object>) ClassHelper.getInstance().instanciateOne(FilterHelper.Filter.ClassLocator.getInstance()
 							.locate(actionOnClass));
 					filter.addMaster(getPropertiesMap().getMaster());
