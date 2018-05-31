@@ -300,6 +300,7 @@ public class DataTable extends Component.Visible implements Serializable {
 	
 	@SuppressWarnings("unchecked")
 	protected void __prepare__(){
+		ClassHelper.getInstance().instanciateOne(Listener.class).listenPrepare(this);
 		Class<?> actionOnClass = (Class<?>) getPropertiesMap().getActionOnClass();
 		Boolean isCreateOrUpdateAction = Constant.Action.isCreateOrUpdate((Action) getPropertiesMap().getAction());
 		if(isCreateOrUpdateAction){
@@ -434,7 +435,8 @@ public class DataTable extends Component.Visible implements Serializable {
 					FilterHelper.Filter<Object> filter = (FilterHelper.Filter<Object>) ClassHelper.getInstance().instanciateOne(FilterHelper.Filter.ClassLocator.getInstance()
 							.locate(actionOnClass));
 					filter.addMaster(getPropertiesMap().getMaster());
-					instances = InstanceHelper.getInstance().get((Class<Object>) getPropertiesMap().getActionOnClass(),filter, new DataReadConfiguration(null, null));
+					instances = InstanceHelper.getInstance().get((Class<Object>) getPropertiesMap().getActionOnClass(),filter, new DataReadConfiguration(null, null)
+							.setComputeChanges(Boolean.TRUE));
 					if(Constant.Action.isCreateOrUpdate((Constant.Action) getPropertiesMap().getAction())){
 						getFormMasterObjectActionOnClassCollectionInstance().addMany(instances);
 					}
