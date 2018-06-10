@@ -2,7 +2,6 @@ package org.cyk.utility.archetype;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,28 +23,76 @@ public class GeneratorEclipse implements Serializable {
 	
 	public static final String CYK_WORKSPACE_PATH = "cyk.workspace.path";
 	
-	public static final String COMMANDS ="%1"+"\r\n"
+	//archetype-jee-server-microservices-jboss-swarm
+	public static final String COMMANDS_SERVER ="%1"+"\r\n"
 			+ " cd %2"+"\r\n"
-			+ " mvn archetype:generate -DarchetypeGroupId=org.cyk.archetype -DarchetypeArtifactId=system -DarchetypeVersion=1.0.0 -DarchetypeCatalog=local -DsystemId=%3";
+			+ " mvn archetype:generate"
+			+ " -DarchetypeGroupId=org.cyk.archetype"
+			+ " -DarchetypeArtifactId=archetype-jee-server-microservices-jboss-swarm"
+			+ " -DarchetypeVersion=0.0.1"
+			+ " -DarchetypeCatalog=local"
+			+ " -DsystemIdentifier=%3 "
+			+ " -DinteractiveMode=false";
+	
+	public static final String COMMANDS_CLIENT ="%1"+"\r\n"
+			+ " cd %2"+"\r\n"
+			+ " mvn archetype:generate"
+			+ " -DarchetypeGroupId=org.cyk.archetype"
+			+ " -DarchetypeArtifactId=archetype-jee-client-microservices-jboss-swarm"
+			+ " -DarchetypeVersion=0.0.1"
+			+ " -DarchetypeCatalog=local"
+			+ " -DsystemIdentifier=%3 "
+			+ " -DinteractiveMode=false";
 	
 	public static final String ARCHETYPE_GENERATE_COMMAND_FORMAT = 
-			"start %s"+/*System.getProperty("user.dir")+"\\command\\maven.cmd"+*/ " %s %s %s";
+			"start \"\" \"%s\""+/*System.getProperty("user.dir")+"\\command\\maven.cmd"+*/ " %s %s %s";
 	
 	public enum Type{SYSTEM}
 	
 	private Properties properties = new Properties();
 	private File workspaceDirectory;
-	private String identifier,systemPomFolderName="_pom",/*pomFileName="pom.xml",*/driveId,systemApplicationFolderName="application";
+	private String identifier,systemPomFolderName,/*pomFileName="pom.xml",*/driveId,systemApplicationFolderName="application";
 	private Type type = Type.SYSTEM;
 	private String userDir = System.getProperty("user.dir");
 	private File commandFile;
 	
 	public GeneratorEclipse() throws FileNotFoundException, IOException {
-		properties.load(new FileInputStream(userDir+"/config.properties"));
+		properties.put("cyk.workspace.path", "E:\\Workspaces\\Eclipse\\neon\\org\\cyk");
+		//properties.load(new FileInputStream(userDir+"/config.properties"));
 		workspaceDirectory = new File(properties.getProperty(CYK_WORKSPACE_PATH));
+		
+	}
+	
+	private void executeSystem(File systemDirectory,String side,String commands) throws Exception{
+		systemPomFolderName="_pom";
 		commandFile = File.createTempFile(System.currentTimeMillis()+"", RandomHelper.getInstance().getString(4)+".cmd", new File(userDir));
 		commandFile.deleteOnExit();
-		FileUtils.writeStringToFile(commandFile, COMMANDS);
+		FileUtils.writeStringToFile(commandFile, commands);
+		
+		System.out.println("Creating jee "+side);
+		
+		driveId = StringUtils.substringBefore(systemDirectory.toString(), ":")+":";	
+		String command = String.format(ARCHETYPE_GENERATE_COMMAND_FORMAT,commandFile.getPath(),driveId,systemDirectory,identifier,side);
+		System.out.println("Command : "+command);
+		System.out.println(CommonUtils.getInstance().executeCommand(command));
+		
+		File targetDirectory = new File(systemDirectory, identifier);
+		if(targetDirectory.exists()){
+			for(File file : new File(systemDirectory, "pom").listFiles())
+				FileUtils.moveToDirectory(file, targetDirectory,true);
+			new File(systemDirectory, "pom").deleteOnExit();
+		}else{
+			new File(systemDirectory, "pom").renameTo(new File(systemDirectory, identifier));
+			//systemDirectory = new File(systemDirectory, identifier);	
+		}
+		systemDirectory = targetDirectory;//new File(systemDirectory, identifier);
+		
+		systemPomFolderName = identifier+"-"+side+"-"+systemPomFolderName;
+		File pomFolder = new File(systemDirectory,systemPomFolderName);
+		pomFolder.mkdir();		
+		System.out.println("Parent pom folder : "+pomFolder);
+		FileUtils.moveFile(new File(systemDirectory,"pom.xml"), new File(pomFolder,"pom.xml"));
+		
 	}
 	
 	public void execute() throws Exception{
@@ -57,25 +104,10 @@ public class GeneratorEclipse implements Serializable {
 		System.out.println();
 		
 		File systemDirectory = new File(workspaceDirectory, type.name().toLowerCase());
-	
 		System.out.println("System directory : "+systemDirectory);
-		driveId = StringUtils.substringBefore(systemDirectory.toString(), ":")+":";	
-		//System.out.println(executeCommand(String.format(ARCHETYPE_GENERATE_COMMAND_FORMAT,commandFile.getPath(),driveId,systemDirectory,identifier)));
-		System.out.println(CommonUtils.getInstance().executeCommand(String.format(ARCHETYPE_GENERATE_COMMAND_FORMAT,commandFile.getPath(),driveId,systemDirectory,identifier)));
 		
-		new File(systemDirectory, "pom").renameTo(new File(systemDirectory, identifier));
-		systemDirectory = new File(systemDirectory, identifier);
-		
-		File pomFolder = new File(systemDirectory,systemPomFolderName);
-		pomFolder.mkdir();		
-		
-		FileUtils.moveFile(new File(systemDirectory,"pom.xml"), new File(pomFolder,"pom.xml"));
-		
-		for(File file : systemDirectory.listFiles())
-			if(file.isDirectory() && !file.getName().equals(systemPomFolderName) && !file.getName().equals(systemApplicationFolderName)){
-				String name = new File(systemDirectory,systemDirectory.getName()+"-"+file.getName()).getAbsolutePath();
-				file.renameTo(new File(name));
-			}
+		executeSystem(systemDirectory,"server", COMMANDS_SERVER);
+		executeSystem(systemDirectory,"client",COMMANDS_CLIENT);
 		
 		System.out.println("###   Done   ###");
 	}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.cyk.pom.jee.server.jboss</groupId>
+		<artifactId>pom-jee-server-jboss</artifactId>
+		<version>pom.jee.server.jboss.0.0.1</version>
+	</parent>
+
+	<groupId>org.cyk.system.file.server</groupId>
+	<artifactId>file-server-_pom</artifactId>
+	<version>0.0.1</version>
+	<packaging>pom</packaging>
+
+	<name>file system server</name>
+	<url>http://www.cykcorp.org</url>
+	
+	<modules>
+		<!-- Persistence Layer -->
+		<module>../file-server-persistence-entities</module>
+		<module>../file-server-persistence-api</module>
+		<module>../file-server-persistence-impl</module>
+		
+		<!-- Business Layer -->
+		<module>../file-server-business-entities</module>
+		<module>../file-server-business-api</module>
+		<module>../file-server-business-impl</module>
+		
+		<!-- Representation Layer -->
+		<module>../file-server-representation-entities</module>
+		<module>../file-server-representation-api</module>
+		<module>../file-server-representation-impl</module>
+		
+	</modules>
+
+</project>
