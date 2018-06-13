@@ -1,0 +1,16 @@
+package org.cyk.utility.instant;
+
+import lombok.Getter;
+
+@Getter
+public enum InstantPart {
+	DATE_ONLY
+	,TIME_ONLY
+	,DATE_AND_TIME
+	,DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE
+	,DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND
+	,DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND_MILLISECOND
+	,DATE_YEAR_ONLY
+	;			
+	
+}
