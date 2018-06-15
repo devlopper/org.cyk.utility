@@ -2,7 +2,9 @@ package org.cyk.utility.map;
 
 import java.util.Map;
 
-public interface MapHelper {
+import org.cyk.utility.helper.Helper;
+
+public interface MapHelper extends Helper {
 
 	Boolean isEmpty(Map<?, ?> map);
 	Boolean isNotEmpty(Map<?, ?> map);

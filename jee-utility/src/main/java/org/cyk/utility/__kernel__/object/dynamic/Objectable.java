@@ -7,4 +7,7 @@ public interface Objectable extends org.cyk.utility.__kernel__.object.Objectable
 	Properties getProperties();
 	Objectable setProperties(Properties properties);
 	
+	Object getParent();
+	Objectable setParent(Object parent);
+	
 }

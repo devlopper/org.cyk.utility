@@ -1,12 +1,14 @@
 package org.cyk.utility.clazz;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.method.MethodHelper;
 import org.cyk.utility.number.NumberHelper;
 
 public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Serializable {
@@ -19,6 +21,29 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 		return baseClass.isAssignableFrom(aClass);
 	}
 
+	@Override
+	public <T> T instanciate(Class<T> aClass, Object[] constructorParameters) {
+		Class<?>[] classes = new Class[constructorParameters.length / 2];
+		Object[] arguments = new Object[constructorParameters.length / 2];
+		int j = 0;
+		for (int i = 0; i < constructorParameters.length; i = i + 2) {
+			classes[j] = (Class<?>) constructorParameters[i];
+			arguments[j++] = constructorParameters[i + 1];
+		}
+		try {
+			Constructor<T> constructor = __inject__(MethodHelper.class).getConstructor(aClass, classes);
+			if (constructor == null) {
+				//TODO log error
+				//logError("no constructor found in class % with parameters %", aClass, StringUtils.join(classes, ","));
+				return null;
+			}
+			return constructor.newInstance(arguments);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			return null;
+		}
+	}
+	
 	@Override
 	public <T> T instanciateOne(Class<T> aClass) {
 		try {

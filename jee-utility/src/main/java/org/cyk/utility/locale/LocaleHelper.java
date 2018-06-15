@@ -2,7 +2,9 @@ package org.cyk.utility.locale;
 
 import java.util.Locale;
 
-public interface LocaleHelper {
+import org.cyk.utility.helper.Helper;
+
+public interface LocaleHelper extends Helper {
 
 	LocaleHelper setDefaultLocale(Locale defaultLocale);
 	Locale getDefaultLocale();

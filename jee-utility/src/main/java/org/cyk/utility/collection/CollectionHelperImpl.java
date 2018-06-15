@@ -64,4 +64,64 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 		return concatenate(instanciate(collections));
 	}
 	
+	@Override
+	public Integer getSize(Collection<?> collection) {
+		if(isEmpty(collection))
+			return 0;
+		return collection.size();
+	}
+	
+	@Override
+	public <ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection,Integer index){
+		ELEMENT element = null;
+		if(isNotEmpty(collection) && index < getSize(collection)){
+			if(collection instanceof List)
+				element = ((List<ELEMENT>)collection).get(index.intValue());
+			else {
+				java.util.Iterator<ELEMENT> iterator = collection.iterator();
+				Integer count = 0;
+				while (count++ <= index)
+					element = iterator.next();
+			}
+		}
+		return element;
+	}
+
+	@Override
+	public <ELEMENT> ELEMENT getFirst(Collection<ELEMENT> collection){
+		if(isEmpty(collection))
+			return null;
+		return collection.iterator().next();
+	}
+	
+	@Override
+	public <ELEMENT> ELEMENT getLast(Collection<ELEMENT> collection){
+		if(isEmpty(collection))
+			return null;
+		if(collection instanceof List)
+			return ((List<ELEMENT>)collection).get(((List<ELEMENT>)collection).size()-1);
+		new RuntimeException("cannot find last on collection of type "+collection.getClass());
+		return null;
+	}
+	
+	@Override
+	public CollectionHelper clear(Collection<?> collection){
+		if(collection!=null)
+			collection.clear();
+		return this;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public <ELEMENT> Collection<ELEMENT> cast(Class<ELEMENT> aClass,Collection<?> collection){
+		Collection<ELEMENT> result;
+		if(collection==null){
+			result = null;
+		}else{
+			result = new ArrayList<ELEMENT>();
+			for(Object item : collection)
+				result.add((ELEMENT) item);	
+		}
+		return result;
+	}
 }

@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 
+import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.string.StringHelper;
 
 public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -77,4 +79,43 @@ public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Ser
 		return operate(Operation.SUBTRACT, numbers);
 	}
 	
+	@Override
+	public <NUMBER> NUMBER get(Class<NUMBER> aClass,Object object,NUMBER nullValue){
+		if(object==null || ( (object instanceof String) && __inject__(StringHelper.class).isBlank((String)object) ) )
+			return nullValue;
+		return __inject__(ClassHelper.class).instanciate(aClass, new Object[]{String.class,object.toString()});
+	}
+	
+	@Override
+	public <NUMBER> NUMBER get(Class<NUMBER> aClass,Object object){
+		return get(aClass,object,(NUMBER)null);
+	}
+	
+	@Override
+	public  Integer getInteger(Object object,Integer nullValue){
+		return get(Integer.class, object, nullValue);
+	}
+	
+	@Override
+	public  Long getLong(Object object,Long nullValue){
+		return get(Long.class, object, nullValue);
+	}
+
+	@Override
+	public Long getLong(Object object) {
+		return getLong(object, null);
+	}
+
+	
+	@Override
+	public BigDecimal getBigDecimal(Object object, BigDecimal nullValue) {
+		return get(BigDecimal.class, object, nullValue);
+	}
+
+	@Override
+	public BigDecimal getBigDecimal(Object object) {
+		return getBigDecimal(object, null);
+	}
+
+
 }

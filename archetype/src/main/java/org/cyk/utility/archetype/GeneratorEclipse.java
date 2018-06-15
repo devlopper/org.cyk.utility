@@ -32,6 +32,7 @@ public class GeneratorEclipse implements Serializable {
 			+ " -DarchetypeVersion=0.0.1"
 			+ " -DarchetypeCatalog=local"
 			+ " -DsystemIdentifier=%3 "
+			+ " -Dpackage=org.cyk.system "
 			+ " -DinteractiveMode=false";
 	
 	public static final String COMMANDS_CLIENT ="%1"+"\r\n"
@@ -42,6 +43,7 @@ public class GeneratorEclipse implements Serializable {
 			+ " -DarchetypeVersion=0.0.1"
 			+ " -DarchetypeCatalog=local"
 			+ " -DsystemIdentifier=%3 "
+			+ " -Dpackage=org.cyk.system "
 			+ " -DinteractiveMode=false";
 	
 	public static final String ARCHETYPE_GENERATE_COMMAND_FORMAT = 
@@ -51,7 +53,7 @@ public class GeneratorEclipse implements Serializable {
 	
 	private Properties properties = new Properties();
 	private File workspaceDirectory;
-	private String identifier,systemPomFolderName,/*pomFileName="pom.xml",*/driveId,systemApplicationFolderName="application";
+	private String identifier,systemPomFolderName,/*pomFileName="pom.xml",*/driveId,systemApplicationFolderName="application",packageName;
 	private Type type = Type.SYSTEM;
 	private String userDir = System.getProperty("user.dir");
 	private File commandFile;
@@ -72,7 +74,7 @@ public class GeneratorEclipse implements Serializable {
 		System.out.println("Creating jee "+side);
 		
 		driveId = StringUtils.substringBefore(systemDirectory.toString(), ":")+":";	
-		String command = String.format(ARCHETYPE_GENERATE_COMMAND_FORMAT,commandFile.getPath(),driveId,systemDirectory,identifier,side);
+		String command = String.format(ARCHETYPE_GENERATE_COMMAND_FORMAT,commandFile.getPath(),driveId,systemDirectory,identifier,side,packageName);
 		System.out.println("Command : "+command);
 		System.out.println(CommonUtils.getInstance().executeCommand(command));
 		
@@ -100,6 +102,10 @@ public class GeneratorEclipse implements Serializable {
 		System.out.println("Type : "+type);
 		System.out.print(type+" ID : ");
 		identifier = new BufferedReader(new InputStreamReader(System.in)).readLine();
+		System.out.print(type+" package : ");
+		packageName = new BufferedReader(new InputStreamReader(System.in)).readLine();
+		if(StringUtils.isBlank(packageName))
+			packageName = "org.cyk.system";
 		//identifier="hello";
 		System.out.println();
 		

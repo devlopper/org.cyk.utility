@@ -1,7 +1,7 @@
 package org.cyk.utility.string.repository.bundle;
 
-import org.cyk.utility.__kernel__.function.Function;
+import org.cyk.utility.function.Function;
 
-public interface OneGetter extends Function {
+public interface OneGetter extends Function<String,String> {
 
 }

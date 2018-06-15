@@ -56,6 +56,12 @@ public class Properties implements java.io.Serializable {
 		}
 	}
 	
+	/**/
+	
+	public Boolean has(Object property){
+		return map!=null && map.containsKey(property);
+	}
+	
 	/* getters */
 	
 	public Properties setGetter(Object key,Getter getter){
@@ -125,6 +131,13 @@ public class Properties implements java.io.Serializable {
 	
 	public Integer getInteger(Object key){
 		return get(key,Integer.class);
+	}
+	
+	public Object getRecursively(Object key){
+		Object value = get(key);
+		if(value instanceof Properties)
+			return ((Properties)value).get(key);
+		return value;
 	}
 	
 	/* add */
@@ -3253,6 +3266,116 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getInput() {
+		return get(INPUT);
+	}
+
+	public Properties setInput(Object value) {
+		set(INPUT, value);
+		return this;
+	}
+	
+	public Object getOutput() {
+		return get(OUTPUT);
+	}
+
+	public Properties setOutput(Object value) {
+		set(OUTPUT, value);
+		return this;
+	}
+	
+	public Object getParameterSeparator() {
+		return get(PARAMETER_SEPARATOR);
+	}
+
+	public Properties setParameterSeparator(Object value) {
+		set(PARAMETER_SEPARATOR, value);
+		return this;
+	}
+	
+	public Object getParameterFormat() {
+		return get(PARAMETER_FORMAT);
+	}
+
+	public Properties setParameterFormat(Object value) {
+		set(PARAMETER_FORMAT, value);
+		return this;
+	}
+	
+	public Object getFormat() {
+		return get(FORMAT);
+	}
+
+	public Properties setFormat(Object value) {
+		set(FORMAT, value);
+		return this;
+	}
+	
+	public Object getTemplateFormat() {
+		return get(TEMPLATE_FORMAT);
+	}
+
+	public Properties setTemplateFormat(Object value) {
+		set(TEMPLATE_FORMAT, value);
+		return this;
+	}
+	
+	public Object getLevel() {
+		return get(LEVEL);
+	}
+
+	public Properties setLevel(Object value) {
+		set(LEVEL, value);
+		return this;
+	}
+	
+	public Object getLogLevel() {
+		return get(LOG_LEVEL);
+	}
+
+	public Properties setLogLevel(Object value) {
+		set(LOG_LEVEL, value);
+		return this;
+	}
+	
+	public Object getBuilder() {
+		return get(BUILDER);
+	}
+
+	public Properties setBuilder(Object value) {
+		set(BUILDER, value);
+		return this;
+	}
+	
+	public Object getMarker() {
+		return get(MARKER);
+	}
+
+	public Properties setMarker(Object value) {
+		set(MARKER, value);
+		return this;
+	}
+	
+	public Object getMarkers() {
+		return get(MARKERS);
+	}
+
+	public Properties setMarkers(Object value) {
+		set(MARKERS, value);
+		return this;
+	}
+	
+	public static final String MARKERS = "MARKERS";
+	public static final String MARKER = "MARKER";
+	public static final String BUILDER = "BUILDER";
+	public static final String LOG_LEVEL = "LOG_LEVEL";
+	public static final String LEVEL = "LEVEL";
+	public static final String TEMPLATE_FORMAT = "TEMPLATE_FORMAT";
+	public static final String FORMAT = "FORMAT";
+	public static final String PARAMETER_SEPARATOR = "PARAMETER_SEPARATOR";
+	public static final String PARAMETER_FORMAT = "PARAMETER_FORMAT";
+	public static final String INPUT = "INPUT";
+	public static final String OUTPUT = "OUTPUT";
 	public static final String RESOURCE_BUNDLES = "RESOURCE_BUNDLES";
 	public static final String RESOURCE_BUNDLE_KEY_VALUE_FOUND_LISTENER = "RESOURCE_BUNDLE_KEY_VALUE_FOUND_LISTENER";
 	public static final String BEFORE_EXECUTION_LISTENER = "BEFORE_EXECUTION_LISTENER";

@@ -1,8 +1,9 @@
 package org.cyk.utility.string;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.helper.Helper;
 
-public interface StringHelper {
+public interface StringHelper extends Helper {
 
 	Number getLength(String string);
 	Boolean isBlank(String string);

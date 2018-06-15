@@ -2,10 +2,13 @@ package org.cyk.utility.clazz;
 
 import java.util.Collection;
 
-public interface ClassHelper {
+import org.cyk.utility.helper.Helper;
+
+public interface ClassHelper extends Helper {
 
 	Boolean isInstanceOf(Class<?> aClass, Class<?> baseClass);
 
+	<T> T instanciate(Class<T> aClass, Object[] constructorParameters);
 	<T> T instanciateOne(Class<T> aClass);
 	<T> Collection<T> instanciate(Class<T> aClass,Integer count);
 	<T> T instanciate(Class<T> aClass);
@@ -21,5 +24,7 @@ public interface ClassHelper {
 	Boolean isDate(Class<?> aClass);
 
 	Boolean isBoolean(Class<?> aClass);
+
+	
 
 }

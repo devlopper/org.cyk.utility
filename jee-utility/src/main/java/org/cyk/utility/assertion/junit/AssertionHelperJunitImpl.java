@@ -1,16 +1,17 @@
-package org.cyk.utility.assertion;
+package org.cyk.utility.assertion.junit;
 
 import java.io.Serializable;
 
 import javax.inject.Singleton;
 
-import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.assertion.AbstractAssertionHelperImpl;
+import org.cyk.utility.assertion.AssertionHelper;
 import org.junit.Assert;
 
 @Singleton
-public class AssertionHelperJunit extends AbstractHelper implements AssertionHelper,Serializable {
+public class AssertionHelperJunitImpl extends AbstractAssertionHelperImpl implements AssertionHelperJunit,Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	public AssertionHelper assertEquals(String message,Object expected,Object actual){
 		Assert.assertEquals(message, expected, actual);
 		return this;
@@ -87,16 +88,4 @@ public class AssertionHelperJunit extends AbstractHelper implements AssertionHel
 		return this;
 	}
 
-	@Override
-	public AssertionHelper assertEqualsNumber(String message, Object expected, Object actual) {
-		throw new RuntimeException("not yet implemented");
-		//return this;
-	}
-
-	@Override
-	public AssertionHelper assertEqualsNumber(Object expected, Object actual) {
-		throw new RuntimeException("not yet implemented");
-		//return this;
-	}
-	
 }

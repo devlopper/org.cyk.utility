@@ -1,5 +1,7 @@
 package org.cyk.utility.structurequerylanguage;
 
-public interface StructureQueryLanguageHelper {
+import org.cyk.utility.helper.Helper;
+
+public interface StructureQueryLanguageHelper extends Helper {
 
 }
