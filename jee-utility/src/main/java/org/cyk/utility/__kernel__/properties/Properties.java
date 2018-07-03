@@ -3365,6 +3365,86 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getIsRecursive() {
+		return get(IS_RECURSIVE);
+	}
+
+	public Properties setIsRecursive(Object value) {
+		set(IS_RECURSIVE, value);
+		return this;
+	}
+	
+	public Object getModifiers() {
+		return get(MODIFIERS);
+	}
+
+	public Properties setModifiers(Object value) {
+		set(MODIFIERS, value);
+		return this;
+	}
+	
+	public Object getAnnotationClasses() {
+		return get(ANNOTATION_CLASSES);
+	}
+
+	public Properties setAnnotationClasses(Object value) {
+		set(ANNOTATION_CLASSES, value);
+		return this;
+	}
+	
+	public Object getToken() {
+		return get(TOKEN);
+	}
+
+	public Properties setToken(Object value) {
+		set(TOKEN, value);
+		return this;
+	}
+	
+	public Object getTokenLocation() {
+		return get(TOKEN_LOCATION);
+	}
+
+	public Properties setTokenLocation(Object value) {
+		set(TOKEN_LOCATION, value);
+		return this;
+	}
+	
+	public Object getValueUsageType() {
+		return get(VALUE_USAGE_TYPE);
+	}
+
+	public Properties setValueUsageType(Object value) {
+		set(VALUE_USAGE_TYPE, value);
+		return this;
+	}
+	
+	public Object getObject() {
+		return get(OBJECT);
+	}
+
+	public Properties setObject(Object value) {
+		set(OBJECT, value);
+		return this;
+	}
+	
+	public Object getThrowable() {
+		return get(THROWABLE);
+	}
+
+	public Properties setThrowable(Object value) {
+		set(THROWABLE, value);
+		return this;
+	}
+	
+	public static final String THROWABLE = "THROWABLE";
+	public static final String OBJECT = "OBJECT";
+	public static final String VALUE_USAGE_TYPE = "VALUE_USAGE_TYPE";
+	public static final String TOKEN = "TOKEN";
+	public static final String TOKEN_LOCATION = "TOKEN_LOCATION";
+	public static final String ANNOTATION_CLASSES = "ANNOTATION_CLASSES";
+	public static final String MODIFIERS = "MODIFIERS";
+	public static final String IS_RECURSIVE = "IS_RECURSIVE";
 	public static final String MARKERS = "MARKERS";
 	public static final String MARKER = "MARKER";
 	public static final String BUILDER = "BUILDER";

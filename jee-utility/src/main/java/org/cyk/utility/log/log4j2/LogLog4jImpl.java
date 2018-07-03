@@ -35,9 +35,13 @@ public class LogLog4jImpl extends AbstractLogImpl implements LogLog4j, Serializa
 		org.apache.logging.log4j.Logger logger = org.apache.logging.log4j.LogManager.getLogger(aClass);
 		Level level = (Level) __getLevel__(getLevel());
 		Marker marker = (Marker) __getMarker__(getMarkers());
-		String template = message.getTemplate();
+		String template = message == null ? null : message.getTemplate();
 		Object[] parameters = __inject__(ArrayHelper.class).instanciate(message.getArguments());
-		logger.log(level,marker, template,parameters);
+		Throwable throwable = getThrowable();
+		if(throwable == null)
+			logger.log(level,marker, template,parameters);
+		else
+			logger.catching(throwable);
 		return null;
 	}
 

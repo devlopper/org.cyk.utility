@@ -4,7 +4,7 @@ import org.cyk.utility.test.AbstractArquillianUnitTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
-public class InstanceUnitTest extends AbstractArquillianUnitTest {
+public class InstanceUnitTestNotYet extends AbstractArquillianUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	
@@ -13,7 +13,7 @@ public class InstanceUnitTest extends AbstractArquillianUnitTest {
 	
 	@Deployment
 	public static JavaArchive createDeployment01() {
-		return AbstractArquillianUnitTest.createDeployment().addPackage(InstanceUnitTest.class.getPackage());
+		return AbstractArquillianUnitTest.createDeployment().addPackage(InstanceUnitTestNotYet.class.getPackage());
 	}
 	
 }

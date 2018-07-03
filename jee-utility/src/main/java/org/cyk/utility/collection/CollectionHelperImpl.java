@@ -11,6 +11,7 @@ import java.util.Set;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.value.ValueHelper;
 
 public class CollectionHelperImpl extends AbstractHelper implements CollectionHelper,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -31,11 +32,11 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 		if(collectionClass==null)
 			return null;
 		if(Set.class.equals(collectionClass))
-			collectionClass = (Class<COLLECTION>) LinkedHashSet.class;
+			collectionClass = __inject__(ValueHelper.class).cast(LinkedHashSet.class,collectionClass);
 		else if(List.class.equals(collectionClass))
-			collectionClass = (Class<COLLECTION>) ArrayList.class;
+			collectionClass = __inject__(ValueHelper.class).cast(ArrayList.class, collectionClass);
 		else if(Collection.class.equals(collectionClass))
-			collectionClass = (Class<COLLECTION>) ArrayList.class;			
+			collectionClass = __inject__(ValueHelper.class).cast(ArrayList.class, collectionClass);			
 		Collection<ELEMENT> collection = (Collection<ELEMENT>) __inject__(ClassHelper.class).instanciateOne(collectionClass);
 		if(__inject__(ArrayHelper.class).isNotEmpty(elements))
 			collection.addAll(Arrays.asList(elements));

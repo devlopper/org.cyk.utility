@@ -52,6 +52,17 @@ public abstract class AbstractLogImpl extends AbstractFunctionWithVoidAsOutputIm
 	protected abstract Object __getMarker__(Collection<Object> markers);
 	
 	@Override
+	public Log setThrowable(Throwable throwable) {
+		getProperties().setThrowable(throwable);
+		return this;
+	}
+	
+	@Override
+	public Throwable getThrowable() {
+		return (Throwable) getProperties().getThrowable();
+	}
+	
+	@Override
 	public LogMessage getMessage() {
 		return (LogMessage) getProperties().getMessage();
 	}
@@ -100,5 +111,39 @@ public abstract class AbstractLogImpl extends AbstractFunctionWithVoidAsOutputIm
 	public Log addMarkers(String... markers) {
 		addMarkers(__inject__(CollectionHelper.class).instanciate(markers));
 		return this;
+	}
+	
+	/**/
+	
+	@Override
+	public Log execute(String message, LogLevel level) {
+		setLevel(level).getMessageBuilder(Boolean.TRUE).addParameter(message).getParent().execute();
+		return this;
+	}
+	
+	@Override
+	public Log executeInfo(String message) {
+		return execute(message, LogLevel.INFO);
+	}
+	
+	@Override
+	public Log executeWarn(String message) {
+		return execute(message, LogLevel.WARN);
+	}
+	
+	@Override
+	public Log executeTrace(String message) {
+		return execute(message, LogLevel.TRACE);
+	}
+	
+	@Override
+	public Log executeDebug(String message) {
+		return execute(message, LogLevel.DEBUG);
+	}
+	
+	@Override
+	public Log executeThrowable(Throwable throwable) {
+		setLevel(LogLevel.ERROR).setThrowable(throwable).execute();
+		return null;
 	}
 }

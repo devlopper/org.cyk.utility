@@ -7,6 +7,6 @@ public interface ValueHelper extends Helper {
 	<T> T defaultToIfNull(Class<T> aClass, T value, T defaultValue);
 	<T> T defaultToIfNull(T value, T defaultValue);
 
-	
+	<FROM,CLASS> CLASS cast(Object object,CLASS aClass);
 	
 }

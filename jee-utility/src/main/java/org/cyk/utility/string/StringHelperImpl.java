@@ -1,9 +1,11 @@
 package org.cyk.utility.string;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 
 public class StringHelperImpl extends AbstractHelper implements StringHelper,Serializable {
@@ -52,4 +54,40 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 		return null;
 	}
 
+	@Override
+	public Boolean isAtLocation(String string,String subString,StringLocation location,Boolean caseSensitive){
+		if(StringUtils.isEmpty(subString))
+			return Boolean.TRUE;
+		if(location==null)
+			location = StringLocation.EXAT;
+		if(caseSensitive==null)
+			caseSensitive = Boolean.TRUE;
+		switch(location){
+		case START : return Boolean.TRUE.equals(caseSensitive) ? StringUtils.startsWith(string, subString) : StringUtils.startsWithIgnoreCase(string, subString);
+		case INSIDE : return Boolean.TRUE.equals(caseSensitive) ? StringUtils.contains(string, subString) : StringUtils.containsIgnoreCase(string, subString);
+		case END : return Boolean.TRUE.equals(caseSensitive) ? StringUtils.endsWith(string, subString) : StringUtils.endsWithIgnoreCase(string, subString);
+		case EXAT : return Boolean.TRUE.equals(caseSensitive) ? StringUtils.equals(string, subString) : StringUtils.equalsIgnoreCase(string, subString);
+		}
+		return Boolean.FALSE;
+	}
+	
+	@Override
+	public Boolean isAtLocation(String string, String subString, StringLocation location) {
+		return isAtLocation(string, subString, location, Boolean.TRUE);
+	}
+
+	@Override
+	public String concatenate(Collection<String> strings,String separator) {
+		return StringUtils.join(strings,separator);
+	}
+	
+	@Override
+	public String concatenate(Collection<String> strings) {
+		return concatenate(strings, StringConstant.EMPTY);
+	}
+
+	@Override
+	public String concatenate(String... strings) {
+		return concatenate(__inject__(CollectionHelper.class).instanciate(strings));
+	}
 }

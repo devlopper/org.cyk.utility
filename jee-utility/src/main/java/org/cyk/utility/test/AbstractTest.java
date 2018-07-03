@@ -6,11 +6,9 @@ import javax.inject.Inject;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.config.ConfigurationFactory;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.assertion.AssertionHelper;
 import org.cyk.utility.log.log4j2.Log4j2Appender;
-import org.cyk.utility.log.log4j2.Log4j2ConfigurationFactory;
 import org.cyk.utility.log.log4j2.LogEventRepositoryLog4j;
 import org.junit.Before;
 
@@ -23,7 +21,8 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 		 * Let us use Log4j as logging framework for our tests.
 		 * This can be disabled by setting null 
 		 */
-		ConfigurationFactory.setConfigurationFactory(new Log4j2ConfigurationFactory());
+		//ConfigurationFactory.setConfigurationFactory(new Log4j2ConfigurationFactory());
+		//System.setProperty("log4j.configurationFile", "org/cyk/utility/log/log4j2.xml");
 	}
 	
 	protected LogEventRepositoryLog4j logEventRepository;

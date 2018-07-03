@@ -11,6 +11,10 @@ import org.junit.Test;
 public class LogUnitTest extends AbstractArquillianUnitTest {
 	private static final long serialVersionUID = 1L;
 
+	static {
+		System.setProperty("log4j.configurationFile", "org/cyk/utility/log/log4j2.xml");
+	}
+	
 	@Test
 	public void logWithoutParameter() {
 		assertionHelper.assertEqualsLogEventCount(0, logEventRepository);
@@ -44,6 +48,13 @@ public class LogUnitTest extends AbstractArquillianUnitTest {
 		assertionHelper.assertEqualsLogEventCount(0, logEventRepository);
 		__inject__(Log.class).setLevel(LogLevel.INFO).addMarkers("MASTER","DETAIL","SPECIFIC").getMessageBuilder(Boolean.TRUE).addParameter("this is info with markers").getParent().execute();
 		assertionHelper.assertEqualsLastLogEventProperties(new Properties().setLogLevel(LogLevel.INFO).setMarker("SPECIFIC").setMessage("this is info with markers"), logEventRepository);
+	}
+	
+	@Test
+	public void logInfoUsingMessageOnly() {
+		assertionHelper.assertEqualsLogEventCount(0, logEventRepository);
+		__inject__(Log.class).executeInfo("this a info message");
+		assertionHelper.assertEqualsLastLogEventProperties(new Properties().setLogLevel(LogLevel.INFO).setMessage("this a info message"), logEventRepository);
 	}
 
 	@Test

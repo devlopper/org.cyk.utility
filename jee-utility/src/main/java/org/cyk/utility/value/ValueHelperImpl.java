@@ -17,4 +17,9 @@ public class ValueHelperImpl extends AbstractHelper implements ValueHelper,Seria
 		return value == null ? defaultValue : value;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <FROM, CLASS> CLASS cast(Object object, CLASS aClass) {
+		return (CLASS) object;
+	}
 }

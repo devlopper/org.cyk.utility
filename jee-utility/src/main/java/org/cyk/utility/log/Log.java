@@ -15,6 +15,9 @@ public interface Log extends FunctionWithVoidAsOutput<LogMessage> {
 	LogMessage getMessage();
 	Log setMessage(LogMessage message);
 	
+	Throwable getThrowable();
+	Log setThrowable(Throwable throwable);
+	
 	LogLevel getLevel();
 	Log setLevel(LogLevel level);
 	
@@ -22,4 +25,14 @@ public interface Log extends FunctionWithVoidAsOutput<LogMessage> {
 	Log setMarkers(Collection<Object> markers);
 	Log addMarkers(Collection<?> markers);
 	Log addMarkers(String...markers);
+
+	/* execution shortcuts */
+	
+	Log execute(String message,LogLevel level);
+	Log executeInfo(String message);
+	Log executeWarn(String message);
+	Log executeTrace(String message);
+	Log executeDebug(String message);
+	
+	Log executeThrowable(Throwable throwable);
 }
