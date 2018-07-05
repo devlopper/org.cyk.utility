@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.inject.Inject;
 
-import org.apache.logging.log4j.core.config.Configurator;
 import org.cyk.utility.test.AbstractArquillianIntegrationTest;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -16,10 +15,6 @@ public class PersistenceUnitTest extends AbstractArquillianIntegrationTest {
 		
 	@Inject private Persistence persistence;
 	
-	static {
-		//System.setProperty("log4j.configurationFile", "log4j2.xml");
-	}
-	
 	@Test
 	public void create() throws Exception{
 		MyEntity myEntity = new MyEntity().setCode("mc001");
@@ -27,7 +22,7 @@ public class PersistenceUnitTest extends AbstractArquillianIntegrationTest {
 		persistence.create(myEntity);
 		userTransaction.commit();
 		assertThat(myEntity.getIdentifier()).isNotNull();
-		assertionHelper.assertEqualsLastLogEventMarker("MyEntity", logEventRepository);
+		assertThat(getLastLogEventMessage()).startsWith("Server Persistence Create MyEntity");
 	}
 	
 	@Test
@@ -38,6 +33,7 @@ public class PersistenceUnitTest extends AbstractArquillianIntegrationTest {
 		userTransaction.commit();
 		assertThat(myEntity.getIdentifier()).isNotNull();
 		myEntity = persistence.read(MyEntity.class,myEntity.getIdentifier());
+		assertThat(getLastLogEventMessage()).startsWith("Server Persistence Read MyEntity");
 		assertThat(myEntity).isNotNull();
 		assertThat(myEntity.getCode()).isEqualTo("mc001");
 	}
@@ -53,6 +49,7 @@ public class PersistenceUnitTest extends AbstractArquillianIntegrationTest {
 		userTransaction.begin();
 		persistence.update(myEntity);
 		userTransaction.commit();
+		assertThat(getLastLogEventMessage()).startsWith("Server Persistence Update MyEntity");
 		myEntity = persistence.read(MyEntity.class,myEntity.getIdentifier());
 		assertThat(myEntity).isNotNull();
 		assertThat(myEntity.getCode()).isEqualTo("nc001");
@@ -69,6 +66,7 @@ public class PersistenceUnitTest extends AbstractArquillianIntegrationTest {
 		userTransaction.begin();
 		persistence.delete(myEntity);
 		userTransaction.commit();
+		assertThat(getLastLogEventMessage()).startsWith("Server Persistence Delete MyEntity");
 		myEntity = persistence.read(MyEntity.class,myEntity.getIdentifier());
 		assertThat(myEntity).isNull();
 	}

@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 import org.cyk.utility.architecture.system.SystemAction;
 
-public class PersistenceFunctionCreateImpl extends AbstractPersistenceFunctionTransactionImpl implements PersistenceFunctionCreate, Serializable {
+public class PersistenceFunctionDeleteImpl extends AbstractPersistenceFunctionTransactionImpl implements PersistenceFunctionDelete, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void __executeQuery__(SystemAction action,Object entity) {
-		getEntityManager().persist(entity);		
+		getEntityManager().remove(getEntityManager().merge(entity));
 	}
 
 }

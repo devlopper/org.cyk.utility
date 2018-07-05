@@ -10,4 +10,10 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	OUTPUT getOutput();
 	
 	Function<INPUT,OUTPUT> setProperties(Properties properties);
+	
+	Function<INPUT,OUTPUT> setLoggable(Boolean loggable);
+	Boolean getLoggable();
+	
+	Function<INPUT,OUTPUT> setMonitorable(Boolean monitorable);
+	Boolean getMonitorable();
 }

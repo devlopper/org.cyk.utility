@@ -20,4 +20,7 @@ public interface StringHelper extends Helper {
 	String concatenate(Collection<String> strings,String separator);
 	String concatenate(Collection<String> strings);
 	String concatenate(String...strings);
+	
+	Collection<String> get(Collection<?> collection);
+	Collection<String> getFromArray(Object...array);
 }

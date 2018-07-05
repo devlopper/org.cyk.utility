@@ -3,21 +3,15 @@ package org.cyk.utility.server.persistence.jpa;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.architecture.system.SystemAction;
 import org.cyk.utility.architecture.system.SystemActionCreate;
+import org.cyk.utility.architecture.system.SystemActionDelete;
 import org.cyk.utility.architecture.system.SystemActionRead;
-import org.cyk.utility.field.FieldGetName;
-import org.cyk.utility.field.FieldGetValue;
-import org.cyk.utility.field.FieldName;
-import org.cyk.utility.log.Log;
-import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.architecture.system.SystemActionUpdate;
 import org.cyk.utility.server.persistence.PersistenceFunctionCreate;
+import org.cyk.utility.server.persistence.PersistenceFunctionDelete;
 import org.cyk.utility.server.persistence.PersistenceFunctionRead;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.server.persistence.PersistenceFunctionUpdate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,28 +21,9 @@ import lombok.experimental.Accessors;
 public abstract class AbstractPersistenceImpl extends org.cyk.utility.server.persistence.AbstractPersistenceImpl implements Persistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@PersistenceContext
-	private EntityManager entityManager;
-	
 	@Override
 	public Persistence create(Object entity,Properties properties) {
-		__inject__(PersistenceFunctionCreate.class).setAction(properties == null || properties.getAction() == null ? __inject__(SystemActionCreate.class) 
-				: (SystemAction) properties.getAction()).setEntity(entity).execute();
-		/*
-		SystemAction action = properties == null || properties.getAction() == null ? __inject__(SystemActionCreate.class) : (SystemAction) properties.getAction();
-		if(entity == null){
-			__inject__(Log.class).executeTrace("entity must not be null");
-		}else{
-			getEntityManager().persist(entity);
-			String systemIdentifierFieldName = __inject__(FieldGetName.class).execute(entity.getClass(), FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput();
-			String businessIdentifierFieldName = __inject__(FieldGetName.class).execute(entity.getClass(), FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput();
-			
-			injectLog(action,entity).setLevel(LogLevel.INFO).getMessageBuilder(Boolean.TRUE)
-				.addParameter(systemIdentifierFieldName, __inject__(FieldGetValue.class).setObject(entity).setField(systemIdentifierFieldName).execute().getOutput())
-				.addParameter(businessIdentifierFieldName, __inject__(FieldGetValue.class).setObject(entity).setField(businessIdentifierFieldName).execute().getOutput())
-					.getParent().execute();
-		}
-		*/
+		__inject__(PersistenceFunctionCreate.class).setAction(getSystemAction(properties, SystemActionCreate.class)).setEntity(entity).execute();
 		return this;
 	}
 	
@@ -60,29 +35,7 @@ public abstract class AbstractPersistenceImpl extends org.cyk.utility.server.per
 	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> ENTITY read(Class<ENTITY> aClass, Object identifier,Properties properties) {
-		/*SystemAction action = properties == null || properties.getAction() == null ? __inject__(SystemActionRead.class) : (SystemAction) properties.getAction();
-		ENTITY entity = null;
-		if(aClass == null || identifier == null){
-			__inject__(Log.class).executeTrace("class and identifier must not be null");
-		}else{
-			entity = getEntityManager().find(aClass,identifier);
-			if(entity == null){
-				//TODO log not found
-			}else{
-				String systemIdentifierFieldName = __inject__(FieldGetName.class).execute(entity.getClass(), FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput();
-				String businessIdentifierFieldName = __inject__(FieldGetName.class).execute(entity.getClass(), FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput();
-				injectLog(action,entity).setLevel(LogLevel.INFO).getMessageBuilder(Boolean.TRUE)
-				.addParameter(systemIdentifierFieldName, __inject__(FieldGetValue.class).setObject(entity).setField(systemIdentifierFieldName).execute().getOutput())
-				.addParameter(businessIdentifierFieldName, __inject__(FieldGetValue.class).setObject(entity).setField(businessIdentifierFieldName).execute().getOutput())
-					.getParent().execute();
-			}
-			
-		}
-		return entity;
-		*/
-		
-		return (ENTITY) __inject__(PersistenceFunctionRead.class).setAction(properties == null || properties.getAction() == null ? __inject__(SystemActionRead.class) 
-				: (SystemAction) properties.getAction()).setEntityClass(aClass).setEntityIdentifier(identifier).execute().getProperties().getEntity();
+		return (ENTITY) __inject__(PersistenceFunctionRead.class).setAction(getSystemAction(properties, SystemActionRead.class)).setEntityClass(aClass).setEntityIdentifier(identifier).execute().getProperties().getEntity();
 	}
 	
 	@Override
@@ -104,7 +57,7 @@ public abstract class AbstractPersistenceImpl extends org.cyk.utility.server.per
 
 	@Override
 	public Persistence update(Object entity, Properties properties) {
-		getEntityManager().merge(entity);
+		__inject__(PersistenceFunctionUpdate.class).setAction(getSystemAction(properties, SystemActionUpdate.class)).setEntity(entity).execute();
 		return this;
 	}
 	
@@ -116,7 +69,7 @@ public abstract class AbstractPersistenceImpl extends org.cyk.utility.server.per
 
 	@Override
 	public Persistence delete(Object entity, Properties properties) {
-		getEntityManager().remove(getEntityManager().merge(entity));
+		__inject__(PersistenceFunctionDelete.class).setAction(getSystemAction(properties, SystemActionDelete.class)).setEntity(entity).execute();
 		return this;
 	}
 	

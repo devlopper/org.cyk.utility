@@ -8,16 +8,16 @@ public abstract class AbstractPersistenceFunctionTransactionImpl extends Abstrac
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void __execute__(SystemAction action) {
-		Object entity = getEntity();
-		if(entity == null){
-			//TODO log entity must not be null
-		}else{
-			__execute__(action, entity);	
-		}
+	protected void __executeQuery__(SystemAction action) {
+		__executeQuery__(action, getEntity());	
 	}
 	
-	protected abstract void __execute__(SystemAction action,Object entity);
+	@Override
+	protected Boolean __isQueryExecutable__(SystemAction action) {
+		return getEntity() != null;
+	}
+	
+	protected abstract void __executeQuery__(SystemAction action,Object entity);
 	
 	@Override
 	public Object getEntity() {

@@ -3498,6 +3498,36 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getLog() {
+		return get(LOG);
+	}
+
+	public Properties setLog(Object value) {
+		set(LOG, value);
+		return this;
+	}
+	
+	public Object getLoggable() {
+		return get(LOGGABLE);
+	}
+
+	public Properties setLoggable(Object value) {
+		set(LOGGABLE, value);
+		return this;
+	}
+	
+	public Object getMonitorable() {
+		return get(MONITORABLE);
+	}
+
+	public Properties setMonitorable(Object value) {
+		set(MONITORABLE, value);
+		return this;
+	}
+	
+	public static final String MONITORABLE = "MONITORABLE";
+	public static final String LOGGABLE = "LOGGABLE";
+	public static final String LOG = "LOG";
 	public static final String ENTITY = "ENTITY";
 	public static final String ENTITY_MANAGER = "ENTITY_MANAGER";
 	public static final String SYSTEM_ACTION = "SYSTEM_ACTION";

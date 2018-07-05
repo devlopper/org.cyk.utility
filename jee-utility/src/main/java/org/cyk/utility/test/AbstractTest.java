@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Appender;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.assertion.AssertionHelper;
+import org.cyk.utility.log.LogEventPropertyAccessor;
 import org.cyk.utility.log.log4j2.Log4j2Appender;
 import org.cyk.utility.log.log4j2.LogEventRepositoryLog4j;
 import org.junit.Before;
@@ -39,6 +40,10 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 		logEventRepository = new Log4j2Appender();
 		((Appender)logEventRepository).start();
 		logger.getContext().getConfiguration().addLoggerAppender(logger, (Appender) logEventRepository);
+	}
+	
+	protected String getLastLogEventMessage(){
+		return __inject__(LogEventPropertyAccessor.class).getMessage(logEventRepository.getLast());
 	}
 	
 }

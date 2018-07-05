@@ -1,6 +1,7 @@
 package org.cyk.utility.string;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
@@ -89,5 +90,21 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	@Override
 	public String concatenate(String... strings) {
 		return concatenate(__inject__(CollectionHelper.class).instanciate(strings));
+	}
+	
+	@Override
+	public Collection<String> get(Collection<?> collection) {
+		Collection<String> strings = null;
+		if(__inject__(CollectionHelper.class).isNotEmpty(strings)){
+			strings = new ArrayList<>();
+			for(Object index : collection)
+				strings.add(index == null ? null : index.toString());	
+		}
+		return strings;
+	}
+	
+	@Override
+	public Collection<String> getFromArray(Object... array) {
+		return get(__inject__(CollectionHelper.class).instanciate(array));
 	}
 }
