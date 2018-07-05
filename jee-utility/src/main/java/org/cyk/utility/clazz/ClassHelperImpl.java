@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.method.MethodHelper;
 import org.cyk.utility.number.NumberHelper;
+import org.cyk.utility.string.StringConstant;
 
 public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Serializable {
 	private static final long serialVersionUID = 1L;
@@ -100,5 +103,37 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	public Boolean isBoolean(Class<?> aClass) {
 		return areEqual(Boolean.class, getWrapper(aClass));
 	}
-
+	
+	@Override
+	public Collection<Class<?>> getInterfaces(Class<?> aClass) {
+		return ClassUtils.getAllInterfaces(aClass);
+	}
+	
+	@Override
+	public Class<?> getInterfaceByClassSimpleName(Class<?> aClass) {
+		Class<?> result = null;
+		if(aClass == null){
+			
+		}else {
+			Collection<Class<?>> interfaces = getInterfaces(aClass);
+			if(__inject__(CollectionHelper.class).isNotEmpty(interfaces))
+				for(Class<?> index : interfaces)
+					if(index!=null)
+						if(getImplementationClassSimpleName(index).equals(aClass.getSimpleName())){
+							result = index;	
+							break;
+						}
+		}
+		return result;
+	}
+	
+	@Override
+	public String getImplementationClassSimpleName(Class<?> interfaceClass) {
+		return interfaceClass == null ? null : interfaceClass.getSimpleName()+StringConstant.IMPL;
+	}
+	
+	@Override
+	public String getInterfaceSimpleName(Class<?> aClass) {
+		return aClass == null ? null : StringUtils.substringBefore(aClass.getSimpleName(),StringConstant.IMPL);
+	}
 }

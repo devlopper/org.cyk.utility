@@ -25,6 +25,11 @@ public interface ClassHelper extends Helper {
 
 	Boolean isBoolean(Class<?> aClass);
 
-	
+	Collection<Class<?>> getInterfaces(Class<?> aClass);
 
+	Class<?> getInterfaceByClassSimpleName(Class<?> aClass);
+	
+	String getImplementationClassSimpleName(Class<?> interfaceClass);
+	
+	String getInterfaceSimpleName(Class<?> aClass);
 }

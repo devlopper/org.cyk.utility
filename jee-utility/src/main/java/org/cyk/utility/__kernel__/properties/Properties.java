@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.character.CharacterConstant;
@@ -90,6 +91,27 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Properties setFromPath(Object[] keys,Object value){
+		if(keys == null || keys.length == 0){
+			//TODO log warning
+		}else{
+			if(keys.length == 1){
+				set(keys[0], value);
+			}else {
+				Object properties = get(keys[0]);
+				if(properties == null){
+					set(keys[0], properties = new Properties());
+				}
+				if(properties instanceof Properties)
+					((Properties)properties).setFromPath(ArrayUtils.subarray(keys, 1, keys.length),value);
+				else {
+					//TODO log warning
+				}
+			}
+		}
+		return this;
+	}
+	
 	/* get */
 	
 	public <T> T getInstanciateIfNull(Object key,Class<T> aClass){
@@ -138,6 +160,18 @@ public class Properties implements java.io.Serializable {
 		if(value instanceof Properties)
 			return ((Properties)value).get(key);
 		return value;
+	}
+	
+	public Object getFromPath(Object...keys){
+		if(keys == null || keys.length == 0)
+			return null;
+		Object value = get(keys[0]);
+		if(keys.length == 1)
+			return value;
+		if(value instanceof Properties)
+			return ((Properties)value).getFromPath(ArrayUtils.subarray(keys, 1, keys.length));	
+		//TODO log warning
+		return null;
 	}
 	
 	/* add */
@@ -3437,6 +3471,36 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getEntityManager() {
+		return get(ENTITY_MANAGER);
+	}
+
+	public Properties setEntityManager(Object value) {
+		set(ENTITY_MANAGER, value);
+		return this;
+	}
+	
+	public Object getSystemAction() {
+		return get(SYSTEM_ACTION);
+	}
+
+	public Properties setSystemAction(Object value) {
+		set(SYSTEM_ACTION, value);
+		return this;
+	}
+	
+	public Object getEntity() {
+		return get(ENTITY);
+	}
+
+	public Properties setEntity(Object value) {
+		set(ENTITY, value);
+		return this;
+	}
+	
+	public static final String ENTITY = "ENTITY";
+	public static final String ENTITY_MANAGER = "ENTITY_MANAGER";
+	public static final String SYSTEM_ACTION = "SYSTEM_ACTION";
 	public static final String THROWABLE = "THROWABLE";
 	public static final String OBJECT = "OBJECT";
 	public static final String VALUE_USAGE_TYPE = "VALUE_USAGE_TYPE";

@@ -4,6 +4,11 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Getter @Setter @Accessors(chain=true)
 public abstract class AbstractObject implements Objectable,Serializable {
 	private static final long serialVersionUID = 1L;
 

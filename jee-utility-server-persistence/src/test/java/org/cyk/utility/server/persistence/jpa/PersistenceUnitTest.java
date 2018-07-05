@@ -3,42 +3,39 @@ package org.cyk.utility.server.persistence.jpa;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.inject.Inject;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
 
+import org.apache.logging.log4j.core.config.Configurator;
 import org.cyk.utility.test.AbstractArquillianIntegrationTest;
-import org.cyk.utility.test.AbstractArquillianUnitTest;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.InSequence;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Test;
 
 public class PersistenceUnitTest extends AbstractArquillianIntegrationTest {
 	private static final long serialVersionUID = 1L;
-	
-	static {
-		System.setProperty("log4j.configurationFile", "org/cyk/utility/server/persistence/jpa/log4j2.xml");
-	}
-	
+		
 	@Inject private Persistence persistence;
 	
-	@Override
-	protected void __listenBefore__() {
-		super.__listenBefore__();
-		persistence.setEntityManager(javax.persistence.Persistence.createEntityManagerFactory("persistenceUnit").createEntityManager());
+	static {
+		//System.setProperty("log4j.configurationFile", "log4j2.xml");
 	}
 	
 	@Test
 	public void create() throws Exception{
 		MyEntity myEntity = new MyEntity().setCode("mc001");
+		userTransaction.begin();
 		persistence.create(myEntity);
+		userTransaction.commit();
 		assertThat(myEntity.getIdentifier()).isNotNull();
+		assertionHelper.assertEqualsLastLogEventMarker("MyEntity", logEventRepository);
 	}
 	
 	@Test
-	public void read(){
+	public void read() throws Exception{
 		MyEntity myEntity = new MyEntity().setCode("mc001");
+		userTransaction.begin();
 		persistence.create(myEntity);
+		userTransaction.commit();
 		assertThat(myEntity.getIdentifier()).isNotNull();
 		myEntity = persistence.read(MyEntity.class,myEntity.getIdentifier());
 		assertThat(myEntity).isNotNull();
@@ -46,31 +43,47 @@ public class PersistenceUnitTest extends AbstractArquillianIntegrationTest {
 	}
 	
 	@Test
-	public void update(){
+	public void update() throws Exception{
 		MyEntity myEntity = new MyEntity().setCode("mc001");
+		userTransaction.begin();
 		persistence.create(myEntity);
+		userTransaction.commit();
 		myEntity = persistence.read(MyEntity.class,myEntity.getIdentifier());
 		myEntity.setCode("nc001");
+		userTransaction.begin();
 		persistence.update(myEntity);
+		userTransaction.commit();
 		myEntity = persistence.read(MyEntity.class,myEntity.getIdentifier());
 		assertThat(myEntity).isNotNull();
 		assertThat(myEntity.getCode()).isEqualTo("nc001");
 	}
 	
 	@Test
-	public void delete(){
+	public void delete() throws Exception{
 		MyEntity myEntity = new MyEntity().setCode("mc001");
+		userTransaction.begin();
 		persistence.create(myEntity);
+		userTransaction.commit();
 		myEntity = persistence.read(MyEntity.class,myEntity.getIdentifier());
 		assertThat(myEntity).isNotNull();
+		userTransaction.begin();
 		persistence.delete(myEntity);
+		userTransaction.commit();
 		myEntity = persistence.read(MyEntity.class,myEntity.getIdentifier());
 		assertThat(myEntity).isNull();
 	}
 	
-	@Deployment
-	public static JavaArchive createDeployment01() {
-		return AbstractArquillianUnitTest.createJavaArchiveDeployment().addPackage(PersistenceUnitTest.class.getPackage())
-				.addAsManifestResource("org/cyk/utility/server/persistence/jpa/persistence.xml", "persistence.xml");
+	@org.jboss.arquillian.container.test.api.Deployment
+	public static WebArchive createArchive01(){
+		return ShrinkWrap.create(WebArchive.class)
+				.addAsResource("org/cyk/utility/server/persistence/jpa/project-defaults.yml", "project-defaults.yml")
+				//.addAsResource("org/cyk/utility/server/persistence/jpa/jboss-deployment-structure.xml", "jboss-deployment-structure.xml")
+				.addAsResource("org/cyk/utility/server/persistence/jpa/persistence.xml", "META-INF/persistence.xml")
+				.addAsResource("org/cyk/utility/server/persistence/jpa/log4j2.xml", "log4j2.xml")
+				.addAsLibraries(Maven.resolver().loadPomFromFile("pom.xml")
+						.importRuntimeDependencies().resolve().withTransitivity().asFile())
+				.addAsLibraries(Maven.resolver().resolve("org.cyk.jee.utility.server.persistence:jee-utility-server-persistence:0.0.1").withoutTransitivity().asFile())
+				.addClasses(MyEntity.class)
+		;
 	}
 }

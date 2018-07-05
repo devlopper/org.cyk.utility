@@ -12,7 +12,7 @@ public class LogUnitTest extends AbstractArquillianUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	static {
-		System.setProperty("log4j.configurationFile", "org/cyk/utility/log/log4j2.xml");
+		System.setProperty("log4j.configurationFile", "org/cyk/utility/log/log4j2/log4j2.xml");
 	}
 	
 	@Test

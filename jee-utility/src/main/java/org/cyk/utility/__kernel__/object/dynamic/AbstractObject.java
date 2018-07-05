@@ -6,6 +6,11 @@ import javax.annotation.PostConstruct;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Getter @Setter @Accessors(chain=true)
 public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractObject implements Objectable, Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -39,6 +44,17 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	@Override
 	public Objectable setParent(Object parent) {
 		getProperties().setParent(parent);
+		return this;
+	}
+	
+	@Override
+	public String getIdentifier() {
+		return (String) getProperties().getIdentifier();
+	}
+	
+	@Override
+	public Objectable setIdentifier(Object identifier) {
+		getProperties().setIdentifier(identifier);
 		return this;
 	}
 }

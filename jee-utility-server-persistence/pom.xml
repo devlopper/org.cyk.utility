@@ -15,12 +15,50 @@
 
 	<name>JEE utility server persistence</name>
 
+	<properties>
+		<wildfly.swarm.bom.version>2017.2.0</wildfly.swarm.bom.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.wildfly.swarm</groupId>
+				<artifactId>bom-all</artifactId>
+				<version>${wildfly.swarm.bom.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility</groupId>
 			<artifactId>jee-utility</artifactId>
 			<version>0.0.1</version>
 		</dependency>
+		
+		<!--dependency>
+			<groupId>org.cyk.pom.jee.utility.test.jboss.swarm</groupId>
+			<artifactId>pom-jee-utility-test-jboss-swarm</artifactId>
+			<type>pom</type>
+			<version>0.0.1</version>
+			<scope>test</scope>
+		</dependency-->
+		
+		<dependency>
+			<groupId>org.wildfly.swarm</groupId>
+			<artifactId>arquillian</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.197</version>
+			<scope>test</scope>
+		</dependency>
+		
 	</dependencies>
 
 </project>

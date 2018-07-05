@@ -10,7 +10,7 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 
-public class JpaUnitTest extends AbstractArquillianUnitTest {
+public class JpaUnitTestToDel extends AbstractArquillianUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test
@@ -29,7 +29,7 @@ public class JpaUnitTest extends AbstractArquillianUnitTest {
 	
 	@Deployment
 	public static JavaArchive createDeployment01() {
-		return AbstractArquillianUnitTest.createJavaArchiveDeployment().addPackage(JpaUnitTest.class.getPackage())
+		return AbstractArquillianUnitTest.createJavaArchiveDeployment().addPackage(JpaUnitTestToDel.class.getPackage())
 				.addAsManifestResource("org/cyk/utility/server/persistence/jpa/persistence.xml", "persistence.xml");
 	}
 }
