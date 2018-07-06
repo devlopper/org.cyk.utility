@@ -1,6 +1,6 @@
 package org.cyk.utility.test.__kernel__;
 
-import org.cyk.utility.test.AbstractArquillianUnitTest;
+import org.cyk.utility.test.arquillian.AbstractArquillianUnitTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
@@ -22,8 +22,7 @@ public class DependencyInjectionWithAlternativesUnitTest extends AbstractDepende
 	
 	@Deployment
 	public static JavaArchive createDeploymentWithClass01SecondVersion() {
-		return AbstractArquillianUnitTest.createJavaArchiveDeployment("org/cyk/utility/test/__kernel__/beans-with-alternatices.xml")
-				.addPackage(Class01FirstVersion.class.getPackage());
+		return AbstractArquillianUnitTest.createJavaArchiveDeployment("org/cyk/utility/test/__kernel__/beans-with-alternatices.xml");
 	}
 	
 }

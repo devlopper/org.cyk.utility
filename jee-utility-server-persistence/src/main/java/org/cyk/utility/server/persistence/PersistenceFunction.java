@@ -2,8 +2,8 @@ package org.cyk.utility.server.persistence;
 
 import javax.persistence.EntityManager;
 
-import org.cyk.utility.architecture.system.SystemAction;
-import org.cyk.utility.architecture.system.SystemFunction;
+import org.cyk.utility.system.SystemFunction;
+import org.cyk.utility.system.action.SystemAction;
 
 public interface PersistenceFunction extends SystemFunction {
 

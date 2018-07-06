@@ -1,6 +1,6 @@
 package org.cyk.utility.test.__kernel__;
 
-import org.cyk.utility.test.AbstractArquillianUnitTest;
+import org.cyk.utility.test.arquillian.AbstractArquillianUnitTest;
 import org.junit.Test;
 
 public abstract class AbstractDependencyInjectionUnitTesting extends AbstractArquillianUnitTest {

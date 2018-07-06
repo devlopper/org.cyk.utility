@@ -6,19 +6,19 @@ import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.cyk.utility.architecture.system.AbstractSystemFunctionImpl;
-import org.cyk.utility.architecture.system.SystemAction;
-import org.cyk.utility.architecture.system.SystemActor;
-import org.cyk.utility.architecture.system.SystemActorServer;
-import org.cyk.utility.architecture.system.SystemLayer;
-import org.cyk.utility.architecture.system.SystemLayerPersistence;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldGetName;
-import org.cyk.utility.field.FieldGetValue;
+import org.cyk.utility.field.FieldNameGetter;
+import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.system.AbstractSystemFunctionImpl;
+import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActor;
+import org.cyk.utility.system.action.SystemActorServer;
+import org.cyk.utility.system.layer.SystemLayer;
+import org.cyk.utility.system.layer.SystemLayerPersistence;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunctionImpl implements PersistenceFunction, Serializable {
@@ -42,7 +42,7 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 					Collection<ValueUsageType> valueUsageTypes = getValueUsageTypes(index);
 					if(__inject__(CollectionHelper.class).isNotEmpty(valueUsageTypes))
 						for(ValueUsageType indexValueUsageType : valueUsageTypes){
-							String fieldName = __inject__(FieldGetName.class).execute(entityClass, index,indexValueUsageType).getOutput();
+							String fieldName = __inject__(FieldNameGetter.class).execute(entityClass, index,indexValueUsageType).getOutput();
 							__getLog__().getMessageBuilder().addParameter(fieldName, getEnityFieldValue(entity,index,indexValueUsageType, fieldName));	
 						}
 				}
@@ -65,7 +65,7 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 	}
 	
 	protected Object getEnityFieldValue(Object entity,FieldName fieldName,ValueUsageType valueUsageType,String derivedFieldName){
-		return __inject__(FieldGetValue.class).setObject(entity).setField(derivedFieldName).execute().getOutput();
+		return __inject__(FieldValueGetter.class).setObject(entity).setField(derivedFieldName).execute().getOutput();
 	}
 	
 	@Override

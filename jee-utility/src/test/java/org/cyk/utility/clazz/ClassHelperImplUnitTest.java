@@ -1,11 +1,9 @@
 package org.cyk.utility.clazz;
 
-import org.cyk.utility.test.AbstractArquillianUnitTest;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
-public class ClassHelperImplUnitTest extends AbstractArquillianUnitTest {
+public class ClassHelperImplUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 
 	@Test
@@ -38,10 +36,4 @@ public class ClassHelperImplUnitTest extends AbstractArquillianUnitTest {
 		assertionHelper.assertEquals(I2.class, __inject__(ClassHelper.class).getInterfaceByClassSimpleName(I2Impl.class));
 	}
 	
-	/* Deployment */
-
-	@Deployment
-	public static JavaArchive createDeployment() {
-		return AbstractArquillianUnitTest.createJavaArchiveDeployment().addPackage(ClassHelperImplUnitTest.class.getPackage());
-	}
 }

@@ -2,7 +2,7 @@ package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
 
-import org.cyk.utility.architecture.system.AbstractSystemServiceProviderImpl;
+import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
 
 import lombok.Getter;
 import lombok.Setter;

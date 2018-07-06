@@ -1,5 +1,6 @@
 package org.cyk.utility.test;
 
+import java.io.File;
 import java.io.Serializable;
 
 import javax.inject.Inject;
@@ -22,7 +23,7 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 		 * Let us use Log4j as logging framework for our tests.
 		 * We will use a default configuration file. Child can set their own.
 		 */
-		//setLog4j2ConfigurationFile("org/cyk/utility/log4j2.xml");
+		setLog4j2ConfigurationFile("org/cyk/utility/log4j2.xml");
 	}
 	
 	protected LogEventRepositoryLog4j logEventRepository;
@@ -48,7 +49,10 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 	/**/
 	
 	protected static void setLog4j2ConfigurationFile(String path){
-		System.setProperty("log4j.configurationFile", path);
-		((org.apache.logging.log4j.core.LoggerContext) org.apache.logging.log4j.LogManager.getContext(false)).reconfigure();
+		File file = new File(System.getProperty("user.dir")+"/src/test/resources/org/cyk/utility/log4j2.xml");
+		if(Boolean.TRUE.equals(file.exists())){
+			System.setProperty("log4j.configurationFile", path);
+			((org.apache.logging.log4j.core.LoggerContext) org.apache.logging.log4j.LogManager.getContext(false)).reconfigure();	
+		}
 	}
 }

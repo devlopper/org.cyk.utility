@@ -1,12 +1,10 @@
 package org.cyk.utility.test.__kernel__.properties;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.test.AbstractArquillianUnitTest;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
-public class PropertiesUnitTest extends AbstractArquillianUnitTest {
+public class PropertiesUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 
 	@Test
@@ -110,14 +108,6 @@ public class PropertiesUnitTest extends AbstractArquillianUnitTest {
 		assertionHelper.assertNotNull(actionOnClassProperties.getAction());
 		assertionHelper.assertTrue(actionOnClassProperties.getAction() instanceof String);
 		assertionHelper.assertEquals("MyClass", properties.getFromPath(Properties.ACTION_ON_CLASS,Properties.ACTION) );
-	}
-	
-	/* Deployment*/
-	
-	@Deployment
-	public static JavaArchive createDeployment() {
-		return AbstractArquillianUnitTest.createJavaArchiveDeployment()
-				.addPackage(PropertiesUnitTest.class.getPackage());
 	}
 	
 }

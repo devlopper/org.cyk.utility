@@ -7,7 +7,7 @@ import javax.enterprise.inject.Alternative;
 import org.cyk.utility.value.ValueUsageType;
 
 @Alternative
-public class FieldGetNameTestImpl extends FieldGetNameImpl implements Serializable {
+public class FieldGetNameTestImpl extends FieldNameGetterImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

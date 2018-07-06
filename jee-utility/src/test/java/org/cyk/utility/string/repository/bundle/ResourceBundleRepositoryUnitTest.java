@@ -6,13 +6,11 @@ import javax.inject.Inject;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.test.AbstractArquillianUnitTest;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class ResourceBundleRepositoryUnitTest extends AbstractArquillianUnitTest {
+public class ResourceBundleRepositoryUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 
 	@Inject ResourceBundleRepository resourceBundleRepository;
@@ -60,11 +58,5 @@ public class ResourceBundleRepositoryUnitTest extends AbstractArquillianUnitTest
 		properties.setKey("good");
 		assertionHelper.assertEquals("bon", resourceBundleRepository.getOne(properties));
 	}
-	
-	/* Deployment */
-	
-	@Deployment
-	public static JavaArchive createDeployment01() {
-		return AbstractArquillianUnitTest.createDeployment().addPackage(ResourceBundleRepositoryUnitTest.class.getPackage());
-	}
+
 }

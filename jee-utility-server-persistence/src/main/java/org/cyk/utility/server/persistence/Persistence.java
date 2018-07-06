@@ -3,7 +3,7 @@ package org.cyk.utility.server.persistence;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.architecture.system.SystemServiceProvider;
+import org.cyk.utility.system.SystemServiceProvider;
 
 public interface Persistence extends SystemServiceProvider {
 

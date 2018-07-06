@@ -1,6 +1,6 @@
 package org.cyk.utility.test.__kernel__;
 
-import org.cyk.utility.test.AbstractArquillianUnitTest;
+import org.cyk.utility.test.arquillian.AbstractArquillianUnitTest;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
@@ -17,8 +17,7 @@ public class DependencyInjectionUnitTest extends AbstractDependencyInjectionUnit
 	
 	@Deployment
 	public static JavaArchive createDeployment() {
-		return AbstractArquillianUnitTest.createJavaArchiveDeployment()
-				.addPackage(Class01FirstVersion.class.getPackage());
+		return AbstractArquillianUnitTest.createJavaArchiveDeployment();
 	}
 	
 }

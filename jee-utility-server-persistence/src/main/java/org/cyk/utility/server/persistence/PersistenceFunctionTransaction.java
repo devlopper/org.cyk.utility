@@ -1,6 +1,6 @@
 package org.cyk.utility.server.persistence;
 
-import org.cyk.utility.architecture.system.SystemAction;
+import org.cyk.utility.system.action.SystemAction;
 
 public interface PersistenceFunctionTransaction extends PersistenceFunction {
 

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.architecture.system.SystemAction;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.Log;
+import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractServiceProviderImpl extends AbstractObject implements ServiceProvider, Serializable {
 	private static final long serialVersionUID = 1L;

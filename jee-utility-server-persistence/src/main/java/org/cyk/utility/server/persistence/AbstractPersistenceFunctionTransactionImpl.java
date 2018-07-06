@@ -2,7 +2,7 @@ package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
 
-import org.cyk.utility.architecture.system.SystemAction;
+import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractPersistenceFunctionTransactionImpl extends AbstractPersistenceFunctionImpl implements PersistenceFunctionTransaction, Serializable {
 	private static final long serialVersionUID = 1L;
