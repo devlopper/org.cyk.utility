@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.function.AbstractFunctionImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.function.AbstractFunctionWithVoidAsOutputImpl;
 import org.cyk.utility.log.message.LogMessage;
 import org.cyk.utility.log.message.LogMessageBuilder;
 
-public abstract class AbstractLogImpl extends AbstractFunctionWithVoidAsOutputImpl<LogMessage> implements Log,Serializable {
+public abstract class AbstractLogImpl extends AbstractFunctionImpl<LogMessage,Void> implements Log,Serializable {
 	private static final long serialVersionUID = 8661933611010350759L;
 
 	@Override

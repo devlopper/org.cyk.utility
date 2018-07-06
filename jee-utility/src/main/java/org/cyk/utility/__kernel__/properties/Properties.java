@@ -3525,6 +3525,76 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getFunction() {
+		return get(FUNCTION);
+	}
+
+	public Properties setFunction(Object value) {
+		set(FUNCTION, value);
+		return this;
+	}
+	
+	public Object getExecution() {
+		return get(EXECUTION);
+	}
+
+	public Properties setExecution(Object value) {
+		set(EXECUTION, value);
+		return this;
+	}
+	
+	public Object getStart() {
+		return get(START);
+	}
+
+	public Properties setStart(Object value) {
+		set(START, value);
+		return this;
+	}
+	
+	public Object getEnd() {
+		return get(END);
+	}
+
+	public Properties setEnd(Object value) {
+		set(END, value);
+		return this;
+	}
+	
+	public Object getDuration() {
+		return get(DURATION);
+	}
+
+	public Properties setDuration(Object value) {
+		set(DURATION, value);
+		return this;
+	}
+	
+	public Object getEntityClass() {
+		return get(ENTITY_CLASS);
+	}
+
+	public Properties setEntityClass(Object value) {
+		set(ENTITY_CLASS, value);
+		return this;
+	}
+	
+	public Object getEntityIdentifier() {
+		return get(ENTITY_IDENTIFIER);
+	}
+
+	public Properties setEntityIdentifier(Object value) {
+		set(ENTITY_IDENTIFIER, value);
+		return this;
+	}
+	
+	public static final String ENTITY_CLASS = "ENTITY_CLASS";
+	public static final String ENTITY_IDENTIFIER = "ENTITY_IDENTIFIER";
+	public static final String FUNCTION = "FUNCTION";
+	public static final String EXECUTION = "EXECUTION";
+	public static final String START = "START";
+	public static final String END = "END";
+	public static final String DURATION = "DURATION";
 	public static final String MONITORABLE = "MONITORABLE";
 	public static final String LOGGABLE = "LOGGABLE";
 	public static final String LOG = "LOG";

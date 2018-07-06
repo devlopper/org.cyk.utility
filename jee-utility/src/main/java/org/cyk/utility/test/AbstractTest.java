@@ -20,10 +20,9 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 	static {
 		/*
 		 * Let us use Log4j as logging framework for our tests.
-		 * This can be disabled by setting null 
+		 * We will use a default configuration file. Child can set their own.
 		 */
-		//ConfigurationFactory.setConfigurationFactory(new Log4j2ConfigurationFactory());
-		//System.setProperty("log4j.configurationFile", "org/cyk/utility/log/log4j2.xml");
+		//setLog4j2ConfigurationFile("org/cyk/utility/log4j2.xml");
 	}
 	
 	protected LogEventRepositoryLog4j logEventRepository;
@@ -46,4 +45,10 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 		return __inject__(LogEventPropertyAccessor.class).getMessage(logEventRepository.getLast());
 	}
 	
+	/**/
+	
+	protected static void setLog4j2ConfigurationFile(String path){
+		System.setProperty("log4j.configurationFile", path);
+		((org.apache.logging.log4j.core.LoggerContext) org.apache.logging.log4j.LogManager.getContext(false)).reconfigure();
+	}
 }

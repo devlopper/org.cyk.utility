@@ -37,7 +37,6 @@ public class LogLog4jImpl extends AbstractLogImpl implements LogLog4j, Serializa
 		Marker marker = (Marker) __getMarker__(getMarkers());
 		String template = message == null ? null : message.getTemplate();
 		
-		
 		Throwable throwable = getThrowable();
 		if(throwable == null){
 			if(message != null){

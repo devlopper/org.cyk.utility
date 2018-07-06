@@ -12,4 +12,6 @@ public interface PersistenceFunction extends SystemFunction {
 	EntityManager getEntityManager();
 	PersistenceFunction setEntityManager(EntityManager entityManager);
 	
+	PersistenceFunction setEntityClass(Class<?> aClass);
+	Class<?> getEntityClass();
 }

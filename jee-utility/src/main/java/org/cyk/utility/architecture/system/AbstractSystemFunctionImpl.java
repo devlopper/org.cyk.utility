@@ -4,12 +4,10 @@
 package org.cyk.utility.architecture.system;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
-import org.cyk.utility.log.Log;
 import org.cyk.utility.string.StringHelper;
 
 import lombok.Getter;
@@ -28,6 +26,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		setMonitorable(Boolean.TRUE).setLoggable(Boolean.TRUE);
+		addLogMarkers(__inject__(CollectionHelper.class).instanciate(getSystemActor().getIdentifier().toString()));
 	}
 	
 	@Override
@@ -61,18 +60,8 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	protected abstract SystemLayer getSystemLayer();
 	
-	protected Log injectLog(SystemAction systemAction,Object object){
-		return __getLog__().addMarkers(getLogMarkers(systemAction,object)).getMessageBuilder(Boolean.TRUE).addParameter(getLogMessagePrefix(systemAction, object))
-				.getParent();
-	}
-	
-	protected Collection<String> getLogMarkers(SystemAction systemAction,Object object){
-		return systemAction == null ? null :__inject__(CollectionHelper.class).instanciate(getSystemActor().getIdentifier().toString()
-				,getSystemLayer().getIdentifier().toString(),systemAction.getIdentifier().toString(),object.getClass().getSimpleName());
-	}
-	
-	protected String getLogMessagePrefix(SystemAction systemAction,Object object){
-		return __inject__(StringHelper.class).concatenate(getLogMarkers(systemAction, object),CharacterConstant.SPACE.toString());
+	protected String getLogMessagePrefix(){
+		return __inject__(StringHelper.class).concatenate(getLogMarkers(),CharacterConstant.SPACE.toString());
 	}
 
 }

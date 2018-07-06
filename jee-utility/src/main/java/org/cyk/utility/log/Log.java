@@ -2,11 +2,11 @@ package org.cyk.utility.log;
 
 import java.util.Collection;
 
-import org.cyk.utility.function.FunctionWithVoidAsOutput;
+import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.log.message.LogMessage;
 import org.cyk.utility.log.message.LogMessageBuilder;
 
-public interface Log extends FunctionWithVoidAsOutput<LogMessage> {
+public interface Log extends Function<LogMessage,Void> {
 
 	LogMessageBuilder getMessageBuilder();
 	LogMessageBuilder getMessageBuilder(Boolean instanciateIfNull);

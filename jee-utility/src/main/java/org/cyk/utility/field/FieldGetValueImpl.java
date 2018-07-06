@@ -81,13 +81,17 @@ public class FieldGetValueImpl extends AbstractFunctionWithPropertiesAsInputImpl
 	
 	@Override
 	public FieldGetValue setField(Collection<String> names) {
-		setField(getObject().getClass(), names);
+		Object object = getObject();
+		if(object!=null)
+			setField(object.getClass(), names);
 		return this;
 	}
 	
 	@Override
 	public FieldGetValue setField(String... names) {
-		setField(getObject().getClass(), names);
+		Object object = getObject();
+		if(object!=null)
+			setField(object.getClass(), names);
 		return this;
 	}
 

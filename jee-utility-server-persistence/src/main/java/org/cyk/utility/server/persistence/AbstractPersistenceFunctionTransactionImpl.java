@@ -27,6 +27,8 @@ public abstract class AbstractPersistenceFunctionTransactionImpl extends Abstrac
 	@Override
 	public PersistenceFunctionTransaction setEntity(Object entity) {
 		getProperties().setEntity(entity);
+		if(entity!=null)
+			setEntityClass(entity.getClass());
 		return this;
 	}
 	

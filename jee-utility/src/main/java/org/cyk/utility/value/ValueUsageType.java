@@ -7,4 +7,5 @@ public enum ValueUsageType {
 	
 	public static ValueUsageType DEFAULT = BUSINESS;
 
+	//public static final Collection<ValueUsageType> COLLECTION = Arrays.asList(ValueUsageType.values());
 }
