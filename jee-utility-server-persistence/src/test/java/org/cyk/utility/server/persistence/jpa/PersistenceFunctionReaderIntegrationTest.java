@@ -29,9 +29,9 @@ public class PersistenceFunctionReaderIntegrationTest extends AbstractArquillian
 		assertThat(myEntity).isNotNull();
 		assertThat(myEntity.getIdentifier()).isNotNull();
 		assertThat(myEntity.getCode()).isEqualTo("mc001");
-		assertThat(getLastLogEventMessage()).startsWith("Server Persistence Read MyEntity");
-		assertThat(getLastLogEventMessage()).contains("identifier="+myEntity.getIdentifier());
-		assertThat(getLastLogEventMessage()).contains("code=mc001");
+		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Read MyEntity");
+		assertThat(logEventEntityRepository.getLastMessage()).contains("identifier="+myEntity.getIdentifier());
+		assertThat(logEventEntityRepository.getLastMessage()).contains("code=mc001");
 	}
 	
 	@Test
@@ -40,9 +40,9 @@ public class PersistenceFunctionReaderIntegrationTest extends AbstractArquillian
 				.getProperties().getEntity();
 		
 		assertThat(myEntity).isNull();
-		assertThat(getLastLogEventMessage()).startsWith("Server Persistence Read MyEntity");
-		assertThat(getLastLogEventMessage()).contains("not found");
-		assertThat(getLastLogEventMessage()).contains("identifier=-1");
+		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Read MyEntity");
+		assertThat(logEventEntityRepository.getLastMessage()).contains("not found");
+		assertThat(logEventEntityRepository.getLastMessage()).contains("identifier=-1");
 	}
 	
 }

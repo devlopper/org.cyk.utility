@@ -18,7 +18,7 @@ public class PersistenceIntegrationTest extends AbstractArquillianIntegrationTes
 		persistence.create(myEntity);
 		userTransaction.commit();
 		assertThat(myEntity.getIdentifier()).isNotNull();
-		assertThat(getLastLogEventMessage()).startsWith("Server Persistence Create MyEntity");
+		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Create MyEntity");
 	}
 	
 	@Test
@@ -29,7 +29,7 @@ public class PersistenceIntegrationTest extends AbstractArquillianIntegrationTes
 		userTransaction.commit();
 		assertThat(myEntity.getIdentifier()).isNotNull();
 		myEntity = persistence.read(MyEntity.class,myEntity.getIdentifier());
-		assertThat(getLastLogEventMessage()).startsWith("Server Persistence Read MyEntity");
+		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Read MyEntity");
 		assertThat(myEntity).isNotNull();
 		assertThat(myEntity.getCode()).isEqualTo("mc001");
 	}
@@ -45,7 +45,7 @@ public class PersistenceIntegrationTest extends AbstractArquillianIntegrationTes
 		userTransaction.begin();
 		persistence.update(myEntity);
 		userTransaction.commit();
-		assertThat(getLastLogEventMessage()).startsWith("Server Persistence Update MyEntity");
+		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Update MyEntity");
 		myEntity = persistence.read(MyEntity.class,myEntity.getIdentifier());
 		assertThat(myEntity).isNotNull();
 		assertThat(myEntity.getCode()).isEqualTo("nc001");
@@ -62,7 +62,7 @@ public class PersistenceIntegrationTest extends AbstractArquillianIntegrationTes
 		userTransaction.begin();
 		persistence.delete(myEntity);
 		userTransaction.commit();
-		assertThat(getLastLogEventMessage()).startsWith("Server Persistence Delete MyEntity");
+		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Delete MyEntity");
 		myEntity = persistence.read(MyEntity.class,myEntity.getIdentifier());
 		assertThat(myEntity).isNull();
 	}

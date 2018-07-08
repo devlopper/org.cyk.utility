@@ -24,9 +24,9 @@ public class PersistenceFunctionCreatorIntegrationTest extends AbstractArquillia
 		persistenceFunctionCreator.setAction(__inject__(SystemActionCreate.class)).setEntity(myEntity).execute();
 		userTransaction.commit();
 		assertThat(myEntity.getIdentifier()).isNotNull();
-		assertThat(getLastLogEventMessage()).startsWith("Server Persistence Create MyEntity");
-		assertThat(getLastLogEventMessage()).contains("identifier="+myEntity.getIdentifier());
-		assertThat(getLastLogEventMessage()).contains("code=mc001");
+		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Create MyEntity");
+		assertThat(logEventEntityRepository.getLastMessage()).contains("identifier="+myEntity.getIdentifier());
+		assertThat(logEventEntityRepository.getLastMessage()).contains("code=mc001");
 	}
 	
 }

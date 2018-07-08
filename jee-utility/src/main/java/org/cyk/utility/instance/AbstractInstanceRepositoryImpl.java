@@ -23,7 +23,6 @@ public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractR
 			if(instances == null)
 				instances = new LinkedHashSet<INSTANCE>();
 			instances.add(instance);
-			//System.out.println("AbstractInstanceRepositoryImpl.add() : "+this+" : "+instance);
 		}
 		return null;
 	}
@@ -40,7 +39,6 @@ public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractR
 	
 	@Override
 	public INSTANCE getLast() {
-		//System.out.println("AbstractInstanceRepositoryImpl.getLast() : "+this+" : "+instances);
 		return __inject__(CollectionHelper.class).getLast(readAll());
 	}
 	

@@ -6,12 +6,10 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import javax.enterprise.inject.Alternative;
-
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.log.AbstractLogImpl;
 import org.cyk.utility.log.LogEventEntityBuilder;
-import org.cyk.utility.log.LogEventRepository;
+import org.cyk.utility.log.LogEventEntityRepository;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.log.message.LogMessage;
 import org.cyk.utility.log.message.LogMessageBuilder;
@@ -43,7 +41,7 @@ public class LogJulImpl extends AbstractLogImpl implements LogJul, Serializable 
 
 			@Override
 			public void publish(LogRecord record) {
-				__inject__(LogEventRepository.class).add(__inject__(LogEventEntityBuilder.class).execute(record).getOutput());
+				__inject__(LogEventEntityRepository.class).add(__inject__(LogEventEntityBuilder.class).execute(record).getOutput());
 			}
 
 			@Override public void flush() {}

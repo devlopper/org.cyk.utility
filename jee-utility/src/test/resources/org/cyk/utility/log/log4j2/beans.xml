@@ -3,7 +3,11 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_0.xsd">
 	
 	<alternatives>
+        <class>org.cyk.utility.log.log4j2.LogMessageBuilderLog4j2Impl</class>
         <class>org.cyk.utility.log.log4j2.LogLog4j2Impl</class>
+        <class>org.cyk.utility.log.log4j2.LogEventPropertyAccessorLog4j2Impl</class>
+        <class>org.cyk.utility.log.log4j2.LogEventEntityBuilderLog4j2Impl</class>
+        <class>org.cyk.utility.log.log4j2.LogEventEntityRepositoryLog4j2Impl</class>
     </alternatives>
 	
 </beans> 
