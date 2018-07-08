@@ -8,6 +8,7 @@ public abstract class AbstractArquillianIntegrationTest extends org.cyk.utility.
 		
 	@org.jboss.arquillian.container.test.api.Deployment
 	public static WebArchive createArchive(){
+		System.setProperty("org.apache.logging.log4j.simplelog.StatusLogger.level", "TRACE");
 		return new ArchiveBuilder<WebArchive>(WebArchive.class)
 				.setProjectDefaultsYml("org/cyk/utility/server/persistence/jpa/project-defaults.yml")
 				.setPersistenceXml("org/cyk/utility/server/persistence/jpa/persistence.xml")

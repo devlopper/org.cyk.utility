@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.log.LogEventPropertyAccessor;
 import org.cyk.utility.log.LogEventRepository;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.number.NumberHelper;
@@ -25,44 +24,44 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 	}
 	
 	@Override
-	public AssertionHelper assertEqualsLastLogEventMessage(String message,String expected,LogEventRepository<?> logEventRepository){
-		assertEquals(message,expected, __inject__(LogEventPropertyAccessor.class).getMessage(logEventRepository.getLast()));
+	public AssertionHelper assertEqualsLastLogEventMessage(String message,String expected,LogEventRepository logEventRepository){
+		assertEquals(message,expected, logEventRepository.getLast().getMessage());
 		//assertEquals(org.apache.logging.log4j.Level.INFO, log4j2Appender.getLastEvent().getLevel());	
 		return this;
 	}
 	
 	@Override
-	public AssertionHelper assertEqualsLastLogEventMessage(String expected,LogEventRepository<?> logEventRepository){
-		assertEquals(expected, __inject__(LogEventPropertyAccessor.class).getMessage(logEventRepository.getLast()));
+	public AssertionHelper assertEqualsLastLogEventMessage(String expected,LogEventRepository logEventRepository){
+		assertEquals(expected, logEventRepository.getLast().getMessage());
 		return this;
 	}
 
 	@Override
-	public AssertionHelper assertEqualsLastLogEventLevel(String message, LogLevel expected,LogEventRepository<?> logEventRepository) {
-		assertEquals(message,expected, __inject__(LogEventPropertyAccessor.class).getLevel(logEventRepository.getLast()));
+	public AssertionHelper assertEqualsLastLogEventLevel(String message, LogLevel expected,LogEventRepository logEventRepository) {
+		assertEquals(message,expected, logEventRepository.getLast().getLevel());
 		return this;
 	}
 
 	@Override
-	public AssertionHelper assertEqualsLastLogEventLevel(LogLevel expected, LogEventRepository<?> logEventRepository) {
-		assertEquals(expected, __inject__(LogEventPropertyAccessor.class).getLevel(logEventRepository.getLast()));
+	public AssertionHelper assertEqualsLastLogEventLevel(LogLevel expected, LogEventRepository logEventRepository) {
+		assertEquals(expected, logEventRepository.getLast().getLevel());
 		return this;
 	}
 	
 	@Override
-	public AssertionHelper assertEqualsLastLogEventMarker(String message, Object expected,LogEventRepository<?> logEventRepository) {
-		assertEquals(message,expected, __inject__(LogEventPropertyAccessor.class).getMarker(logEventRepository.getLast()));
+	public AssertionHelper assertEqualsLastLogEventMarker(String message, Object expected,LogEventRepository logEventRepository) {
+		assertEquals(message,expected, logEventRepository.getLast().getMarker());
 		return this;
 	}
 	
 	@Override
-	public AssertionHelper assertEqualsLastLogEventMarker(Object expected, LogEventRepository<?> logEventRepository) {
-		assertEquals(expected, __inject__(LogEventPropertyAccessor.class).getMarker(logEventRepository.getLast()));
+	public AssertionHelper assertEqualsLastLogEventMarker(Object expected, LogEventRepository logEventRepository) {
+		assertEquals(expected, logEventRepository.getLast().getMarker());
 		return this;
 	}
 	
 	@Override
-	public AssertionHelper assertEqualsLastLogEventProperties(Properties expected,LogEventRepository<?> logEventRepository) {
+	public AssertionHelper assertEqualsLastLogEventProperties(Properties expected,LogEventRepository logEventRepository) {
 		if(expected.has(Properties.LOG_LEVEL))
 			assertEqualsLastLogEventLevel((LogLevel) expected.get(Properties.LOG_LEVEL), logEventRepository);
 		if(expected.has(Properties.MARKER))
@@ -73,13 +72,13 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 	}
 	
 	@Override
-	public AssertionHelper assertEqualsLogEventCount(String message, Object expected,LogEventRepository<?> logEventRepository) {
+	public AssertionHelper assertEqualsLogEventCount(String message, Object expected,LogEventRepository logEventRepository) {
 		assertEqualsNumber(message, expected, logEventRepository.countAll());
 		return null;
 	}
 	
 	@Override
-	public AssertionHelper assertEqualsLogEventCount(Object expected,LogEventRepository<?> logEventRepository) {
+	public AssertionHelper assertEqualsLogEventCount(Object expected,LogEventRepository logEventRepository) {
 		assertEqualsNumber(expected, logEventRepository.countAll());
 		return null;
 	}

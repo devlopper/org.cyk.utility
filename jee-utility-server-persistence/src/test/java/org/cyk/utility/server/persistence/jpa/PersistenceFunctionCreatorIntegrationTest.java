@@ -10,7 +10,11 @@ import org.junit.Test;
 
 public class PersistenceFunctionCreatorIntegrationTest extends AbstractArquillianIntegrationTest {
 	private static final long serialVersionUID = 1L;
-		
+	
+	static {
+		setLog4j2ConfigurationFile("org/cyk/utility/server/persistence/jpa/log4j2.xml");
+	}
+	
 	@Inject private PersistenceFunctionCreator persistenceFunctionCreator;
 	
 	@Test

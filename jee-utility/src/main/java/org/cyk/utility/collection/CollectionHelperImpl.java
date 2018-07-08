@@ -99,10 +99,11 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	public <ELEMENT> ELEMENT getLast(Collection<ELEMENT> collection){
 		if(isEmpty(collection))
 			return null;
+		if(collection instanceof LinkedHashSet)
+			collection = new ArrayList<>(collection);
 		if(collection instanceof List)
 			return ((List<ELEMENT>)collection).get(((List<ELEMENT>)collection).size()-1);
-		new RuntimeException("cannot find last on collection of type "+collection.getClass());
-		return null;
+		throw new RuntimeException("cannot find last on collection of type "+collection.getClass());
 	}
 	
 	@Override

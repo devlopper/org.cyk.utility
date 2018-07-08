@@ -5,34 +5,46 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.enterprise.inject.Alternative;
+
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.instance.InstanceRepository;
+import org.cyk.utility.log.LogEventEntity;
+import org.cyk.utility.log.LogEventEntityBuilder;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.random.RandomHelper;
+import org.cyk.utility.repository.Repository;
 
-@Plugin(name = "Appender", category = "Core", elementType = "apender", printObject = true)
-public class Log4j2Appender extends AbstractAppender implements LogEventRepositoryLog4j, Serializable {
+@Plugin(name = "CustomAppender", category = "Core", elementType = "apender", printObject = true) @Alternative
+public class LogEventRepositoryLog4j2Impl extends AbstractAppender implements LogEventRepositoryLog4j2, Serializable {
     private static final long serialVersionUID = 1L;
     
-	private List<LogEvent> logEvents;
+	private List<LogEventEntity> logEvents;
 
-	public Log4j2Appender() {
-		super(Log4j2Appender.class.getSimpleName()+DependencyInjection.inject(RandomHelper.class).getAlphanumeric(5), null, PatternLayout.createDefaultLayout());
+	public LogEventRepositoryLog4j2Impl() {
+		super(LogEventRepositoryLog4j2Impl.class.getSimpleName()+DependencyInjection.inject(RandomHelper.class).getAlphanumeric(5), null, PatternLayout.createDefaultLayout());
 	}
 	
     @Override
     public void append(LogEvent event) {
     	if(event!=null && logEvents == null)
     		logEvents = new ArrayList<>();
-        logEvents.add(event);
+        logEvents.add(DependencyInjection.inject(LogEventEntityBuilder.class).setEvent(event).execute().getOutput());
+    }
+    
+    @Override
+    public InstanceRepository<LogEventEntity> add(LogEventEntity event) {
+    	//append(event);
+    	return this;
     }
     
 	@Override
-	public Collection<LogEvent> readAll() {
+	public Collection<LogEventEntity> readAll() {
 		return logEvents;
 	}
 	
@@ -42,18 +54,24 @@ public class Log4j2Appender extends AbstractAppender implements LogEventReposito
 	}
 
 	@Override
-	public LogEvent getAt(Integer index) {
+	public LogEventEntity getAt(Integer index) {
 		return DependencyInjection.inject(CollectionHelper.class).getElementAt(logEvents, index);
 	}
 
 	@Override
-	public LogEvent getFirst() {
+	public LogEventEntity getFirst() {
 		return DependencyInjection.inject(CollectionHelper.class).getFirst(logEvents);
 	}
 
 	@Override
-	public LogEvent getLast() {
+	public LogEventEntity getLast() {
 		return DependencyInjection.inject(CollectionHelper.class).getLast(logEvents);
 	}
 
+	@Override
+	public Repository clear() {
+		if(logEvents!=null)
+			logEvents.clear();
+		return null;
+	}
 }

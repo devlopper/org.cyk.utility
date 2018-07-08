@@ -3,6 +3,8 @@ package org.cyk.utility.log.log4j2;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.inject.Alternative;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
@@ -14,7 +16,8 @@ import org.cyk.utility.log.message.LogMessage;
 import org.cyk.utility.log.message.LogMessageBuilder;
 import org.cyk.utility.value.ValueHelper;
 
-public class LogLog4jImpl extends AbstractLogImpl implements LogLog4j, Serializable {
+@Alternative
+public class LogLog4j2Impl extends AbstractLogImpl implements LogLog4j2, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

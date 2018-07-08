@@ -5,13 +5,11 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Appender;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.assertion.AssertionHelper;
-import org.cyk.utility.log.LogEventPropertyAccessor;
-import org.cyk.utility.log.log4j2.Log4j2Appender;
-import org.cyk.utility.log.log4j2.LogEventRepositoryLog4j;
+import org.cyk.utility.log.Log;
+import org.cyk.utility.log.LogEventRepository;
+import org.cyk.utility.log.jul.LogJul;
 import org.junit.Before;
 
 public abstract class AbstractTest extends AbstractObject implements Serializable {
@@ -26,7 +24,8 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 		setLog4j2ConfigurationFile("org/cyk/utility/log4j2.xml");
 	}
 	
-	protected LogEventRepositoryLog4j logEventRepository;
+	//protected LogEventRepositoryLog4j2 logEventRepository;
+	@Inject protected LogEventRepository logEventRepository;
 	
 	@Inject protected AssertionHelper assertionHelper;
 	
@@ -36,14 +35,21 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 	}
 	
 	protected void __listenBefore__(){
-		org.apache.logging.log4j.core.Logger logger = (org.apache.logging.log4j.core.Logger) LogManager.getRootLogger();
-		logEventRepository = new Log4j2Appender();
-		((Appender)logEventRepository).start();
-		logger.getContext().getConfiguration().addLoggerAppender(logger, (Appender) logEventRepository);
+		/*if(LogLog4j2.class.equals(__getLogClass__())){
+			org.apache.logging.log4j.core.Logger logger = (org.apache.logging.log4j.core.Logger) LogManager.getRootLogger();
+			logEventRepository = new LogEventRepositoryLog4j2Impl();
+			((Appender)logEventRepository).start();
+			logger.getContext().getConfiguration().addLoggerAppender(logger, (Appender) logEventRepository);	
+		}*/
+		logEventRepository.clear();
+	}
+	
+	protected Class<? extends Log> __getLogClass__(){
+		return LogJul.class;
 	}
 	
 	protected String getLastLogEventMessage(){
-		return __inject__(LogEventPropertyAccessor.class).getMessage(logEventRepository.getLast());
+		return logEventRepository.getLast().getMessage();
 	}
 	
 	/**/

@@ -3588,6 +3588,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getBean() {
+		return get(BEAN);
+	}
+
+	public Properties setBean(Object value) {
+		set(BEAN, value);
+		return this;
+	}
+	
+	public static final String BEAN = "BEAN";
 	public static final String ENTITY_CLASS = "ENTITY_CLASS";
 	public static final String ENTITY_IDENTIFIER = "ENTITY_IDENTIFIER";
 	public static final String FUNCTION = "FUNCTION";

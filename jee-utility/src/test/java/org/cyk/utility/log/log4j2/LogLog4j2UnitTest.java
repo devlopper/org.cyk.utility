@@ -3,10 +3,13 @@ package org.cyk.utility.log.log4j2;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.test.arquillian.AbstractArquillianUnitTest;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 
-public class LogUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class LogLog4j2UnitTest extends AbstractArquillianUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	static {
@@ -67,6 +70,13 @@ public class LogUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment
 		assertionHelper.assertEqualsLogEventCount(0, logEventRepository);
 		__inject__(Log.class).setLevel(LogLevel.DEBUG).getMessageBuilder(Boolean.TRUE).addParameter("this a debug").getParent().execute();
 		assertionHelper.assertEqualsLastLogEventProperties(new Properties().setLogLevel(LogLevel.DEBUG).setMessage("this a debug"), logEventRepository);
+	}
+	
+	/* Deployment */
+
+	@Deployment
+	public static JavaArchive createDeployment() {
+		return AbstractArquillianUnitTestWithDefaultDeployment.createJavaArchiveDeployment(/*"org/cyk/utility/log/log4j2/beans-with-alternatices.xml"*/);
 	}
 
 }

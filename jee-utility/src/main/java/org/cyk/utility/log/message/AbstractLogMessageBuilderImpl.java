@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -26,12 +27,13 @@ public abstract class AbstractLogMessageBuilderImpl extends AbstractFunctionWith
 		LogMessage message = new LogMessage();
 		Collection<Object> parameters = (Collection<Object>) getProperties().getParameters();
 		StringBuilder templateStringBuilder = new StringBuilder();
-		if(__inject__(CollectionHelper.class).isNotEmpty(parameters))
+		if(__inject__(CollectionHelper.class).isNotEmpty(parameters)){
+			Integer index = 0;
 			for(Object parameter : parameters){
 				if(templateStringBuilder.length()>0)
 					templateStringBuilder.append(__inject__(ValueHelper.class).defaultToIfNull(getProperties().getParameterSeparator(),CharacterConstant.SPACE));
 				if(parameter instanceof Object[]){
-					templateStringBuilder.append(String.format((String)getProperties().getParameterFormat(), ((Object[])parameter)[0]));
+					templateStringBuilder.append(formatParameter((String)getProperties().getParameterFormat(),index++, ((Object[])parameter)[0]));
 					if(message.getArguments()==null)
 						message.setArguments(new ArrayList<>());
 					message.getArguments().add(((Object[])parameter)[1]);
@@ -39,8 +41,13 @@ public abstract class AbstractLogMessageBuilderImpl extends AbstractFunctionWith
 					templateStringBuilder.append(parameter == null ? "null" : parameter.toString());
 				}
 			}
+		}
 		message.setTemplate(String.format((String)getProperties().getTemplateFormat(), templateStringBuilder.toString()));
 		return message;
+	}
+	
+	protected String formatParameter(String format,Integer index,Object...arguments){
+		return String.format(format, ArrayUtils.add(arguments, index));
 	}
 
 	protected abstract String getParameterFormatRightSide();

@@ -1,4 +1,4 @@
-package org.cyk.utility.maven;
+package org.cyk.utility.maven.pom;
 
 import java.io.Serializable;
 
@@ -11,6 +11,8 @@ import lombok.ToString;
 @XmlRootElement(name="project",namespace="http://maven.apache.org/POM/4.0.0") @Getter @Setter @ToString
 public class Pom implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	private Parent parent;
 	
 	private String groupId;
 	private String artifactId;

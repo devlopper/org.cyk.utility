@@ -2,13 +2,17 @@ package org.cyk.utility.log.log4j2;
 
 import java.io.Serializable;
 
+import javax.enterprise.inject.Alternative;
+import javax.inject.Singleton;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.core.LogEvent;
 import org.cyk.utility.log.AbstractLogEventPropertyAccessorImpl;
 import org.cyk.utility.log.LogLevel;
 
-public class LogEventPropertyAccessorLog4jImpl extends AbstractLogEventPropertyAccessorImpl implements LogEventPropertyAccessorLog4j, Serializable {
+@Singleton @Alternative
+public class LogEventPropertyAccessorLog4j2Impl extends AbstractLogEventPropertyAccessorImpl implements LogEventPropertyAccessorLog4j2, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

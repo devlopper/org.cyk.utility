@@ -6,7 +6,7 @@ import java.io.StringReader;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
-import org.cyk.utility.maven.Pom;
+import org.cyk.utility.maven.pom.Pom;
 import org.cyk.utility.stream.StreamHelperImpl;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -26,7 +26,8 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 	private Class<ARCHIVE> clazz;
 	private ARCHIVE archive;
 	
-	private String beanXml,projectDefaultsYml,persistenceXml,log4j2Xml,pomXml="pom.xml";
+	private String beanXml,projectDefaultsYml,persistenceXml,log4j2Xml,pomXml="pom.xml"
+			,jbossDeploymentStructureXml;
 	
 	public ArchiveBuilder(Class<ARCHIVE> clazz) {
 		this.clazz = clazz;
@@ -46,6 +47,8 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 			addlog4j2Xml(log4j2Xml);
 		if(pomXml!=null)
 			addPomXml(pomXml);
+		if(jbossDeploymentStructureXml!=null)
+			addJbossDeploymentStructureXml(jbossDeploymentStructureXml);
 		return archive;
 	}
 	
@@ -58,6 +61,11 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 				if(archive instanceof JavaArchive)
 					((JavaArchive)archive).addAsManifestResource((String) beansXml,"beans.xml");
 		}
+		return this;
+	}
+	
+	private ArchiveBuilder<ARCHIVE> addJbossDeploymentStructureXml(String path){
+		((WebArchive)archive).addAsWebInfResource(path,"jboss-deployment-structure.xml");
 		return this;
 	}
 	
@@ -83,7 +91,8 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 			String xml = StreamHelperImpl.__getStringFromFile__(System.getProperty("user.dir")+"/"+path);
 			Pom pom = xml == null ? null : (Pom) unmarshaller.unmarshal(new StringReader(xml));
 			if(pom != null){
-				((WebArchive)archive).addAsLibraries(Maven.resolver().resolve(pom.getGroupId()+":"+pom.getArtifactId()+":"+pom.getVersion()).withTransitivity().asFile());
+				String version = pom.getVersion() == null ? pom.getParent().getVersion() : pom.getVersion();
+				((WebArchive)archive).addAsLibraries(Maven.resolver().resolve(pom.getGroupId()+":"+pom.getArtifactId()+":"+version).withTransitivity().asFile());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
