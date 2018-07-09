@@ -3606,6 +3606,36 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getPackage() {
+		return get(PACKAGE);
+	}
+
+	public Properties setPackage(Object value) {
+		set(PACKAGE, value);
+		return this;
+	}
+	
+	public Object getInterface() {
+		return get(INTERFACE);
+	}
+
+	public Properties setInterface(Object value) {
+		set(INTERFACE, value);
+		return this;
+	}
+	
+	public Object getSuffix() {
+		return get(SUFFIX);
+	}
+
+	public Properties setSuffix(Object value) {
+		set(SUFFIX, value);
+		return this;
+	}
+	
+	public static final String SUFFIX = "SUFFIX";
+	public static final String INTERFACE = "INTERFACE";
+	public static final String PACKAGE = "PACKAGE";
 	public static final String ENTITIES = "ENTITIES";
 	public static final String BEAN = "BEAN";
 	public static final String ENTITY_CLASS = "ENTITY_CLASS";

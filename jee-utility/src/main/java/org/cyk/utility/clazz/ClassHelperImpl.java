@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.log.Log;
 import org.cyk.utility.method.MethodHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.StringConstant;
@@ -142,5 +143,15 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	@Override
 	public <TYPE> Class<TYPE> getParameterAt(Class<?> aClass, Integer index, Class<TYPE> typeClass) {
 		return (Class<TYPE>) ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments()[index];
+	}
+	
+	@Override
+	public Class<?> getByName(String name) {
+		try {
+			return Class.forName(name);
+		} catch (Exception exception) {
+			__inject__(Log.class).executeThrowable(exception);
+			return null;
+		}
 	}
 }

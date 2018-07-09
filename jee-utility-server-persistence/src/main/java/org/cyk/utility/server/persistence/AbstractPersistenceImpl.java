@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.system.layer.SystemLayerPersistence;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,15 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> ENTITY readOne(Class<ENTITY> aClass, Object identifier,Properties properties) {
-		return (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).setEntityIdentifier(identifier).execute().getProperties().getEntity();
+		Class<PersistenceEntity<ENTITY>> persistenceClass = (Class<PersistenceEntity<ENTITY>>) __inject__(SystemLayerPersistence.class).getInterfaceClassFromEntityClassName(aClass);
+		ENTITY entity;
+		if(persistenceClass == null){
+			//TODO log warning
+			entity = (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).setEntityIdentifier(identifier).execute().getProperties().getEntity();
+		}else{
+			entity = __inject__(persistenceClass).readOne(identifier);
+		}
+		return entity;
 	}
 	
 	@Override
