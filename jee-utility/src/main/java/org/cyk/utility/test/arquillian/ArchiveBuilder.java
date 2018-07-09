@@ -56,6 +56,10 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 		if(beansXml == null){
 			if(archive instanceof JavaArchive)
 				((JavaArchive)archive).addAsManifestResource(EmptyAsset.INSTANCE,"beans.xml");
+			else if(archive instanceof WebArchive){
+				//((WebArchive)archive).addAsManifestResource(EmptyAsset.INSTANCE,"beans.xml");
+				((WebArchive)archive).addAsWebInfResource(EmptyAsset.INSTANCE,"beans.xml");
+			}
 		}else{
 			if(beansXml instanceof String)
 				if(archive instanceof JavaArchive)
@@ -90,7 +94,9 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			String xml = StreamHelperImpl.__getStringFromFile__(System.getProperty("user.dir")+"/"+path);
 			Pom pom = xml == null ? null : (Pom) unmarshaller.unmarshal(new StringReader(xml));
-			if(pom != null){
+			if(pom == null){
+				System.out.println("Pom no found : "+(System.getProperty("user.dir")+"/"+path));
+			}else {
 				String version = pom.getVersion() == null ? pom.getParent().getVersion() : pom.getVersion();
 				((WebArchive)archive).addAsLibraries(Maven.resolver().resolve(pom.getGroupId()+":"+pom.getArtifactId()+":"+version).withTransitivity().asFile());
 			}

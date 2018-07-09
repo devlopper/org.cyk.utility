@@ -3,14 +3,11 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.field.FieldValueGetter;
-import org.cyk.utility.field.FieldName;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.AbstractSystemFunctionImpl;
@@ -23,9 +20,6 @@ import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunctionImpl implements PersistenceFunction, Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@PersistenceContext
-	private EntityManager entityManager;
 	
 	@Override
 	protected void __execute__(SystemAction action) {
@@ -71,25 +65,12 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		getProperties().setEntityManager(entityManager);
 		addLogMarkers(__inject__(SystemLayerPersistence.class).getIdentifier().toString());
 	}
 	
 	@Override
 	public PersistenceFunction setAction(SystemAction action) {
 		return (PersistenceFunction) super.setAction(action);
-	}
-	
-	@Override
-	public EntityManager getEntityManager() {
-		return (EntityManager) getProperties().getEntityManager();
-	}
-	
-	@Override
-	public PersistenceFunction setEntityManager(EntityManager entityManager) {
-		this.entityManager = entityManager;
-		getProperties().setEntityManager(entityManager);
-		return this;
 	}
 	
 	@Override

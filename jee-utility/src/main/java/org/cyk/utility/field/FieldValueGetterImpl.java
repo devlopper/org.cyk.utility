@@ -8,6 +8,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.log.Log;
+import org.cyk.utility.value.ValueUsageType;
 
 public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements FieldValueGetter, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -40,6 +41,12 @@ public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputI
 	@Override
 	public FieldValueGetter execute(Object object, String fieldName) {
 		setObject(object).setField(fieldName).execute();
+		return this;
+	}
+	
+	@Override
+	public FieldValueGetter execute(Object object, FieldName fieldName,ValueUsageType valueUsageType) {
+		setObject(object).setField(fieldName,valueUsageType).execute();
 		return this;
 	}
 
@@ -92,6 +99,16 @@ public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputI
 		Object object = getObject();
 		if(object!=null)
 			setField(object.getClass(), names);
+		return this;
+	}
+	
+	@Override
+	public FieldValueGetter setField(FieldName fieldName,ValueUsageType valueUsageType) {
+		if(getObject() == null){
+			//TODO log warning
+		}else{
+			setField(__inject__(FieldNameGetter.class).setClazz(getObject().getClass()).setFieldName(fieldName).setValueUsageType(valueUsageType).execute().getOutput());	
+		}
 		return this;
 	}
 

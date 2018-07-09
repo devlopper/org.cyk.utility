@@ -14,5 +14,5 @@ public interface PersistenceFunctionReader extends PersistenceFunction {
 	
 	/**/
 	
-	String NOT_FOUND = "not found";
+	String MESSAGE_NOT_FOUND = "not found";
 }

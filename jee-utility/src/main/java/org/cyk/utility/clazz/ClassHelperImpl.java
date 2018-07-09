@@ -2,6 +2,7 @@ package org.cyk.utility.clazz;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -135,5 +136,11 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	@Override
 	public String getInterfaceSimpleName(Class<?> aClass) {
 		return aClass == null ? null : StringUtils.substringBefore(aClass.getSimpleName(),StringConstant.IMPL);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <TYPE> Class<TYPE> getParameterAt(Class<?> aClass, Integer index, Class<TYPE> typeClass) {
+		return (Class<TYPE>) ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments()[index];
 	}
 }

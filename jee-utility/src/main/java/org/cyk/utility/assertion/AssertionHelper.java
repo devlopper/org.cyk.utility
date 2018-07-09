@@ -21,6 +21,7 @@ public interface AssertionHelper extends Helper {
 	AssertionHelper assertEquals(String message,Object expected,Object actual);
 	AssertionHelper assertEquals(Object expected,Object actual);
 	<T> AssertionHelper assertEqualsByFieldValue(T expected,T actual,String...fieldNames);
+	<T> AssertionHelper assertEqualsByFieldValue(Properties expected,T actual);
 	
 	AssertionHelper assertNotEquals(String message,Object unexpected,Object actual);
 	AssertionHelper assertNotEquals(Object unexpected,Object actual);
@@ -36,6 +37,12 @@ public interface AssertionHelper extends Helper {
 	
 	AssertionHelper assertEqualsLastLogEventMessage(String message,String expected);
 	AssertionHelper assertEqualsLastLogEventMessage(String expected);
+	
+	AssertionHelper assertStartsWithLastLogEventMessage(String message,String expected);
+	AssertionHelper assertStartsWithLastLogEventMessage(String expected);
+	
+	AssertionHelper assertContainsLastLogEventMessage(String message,String expected);
+	AssertionHelper assertContainsLastLogEventMessage(String expected);
 	
 	AssertionHelper assertEqualsLastLogEventMarker(String message,Object expected);
 	AssertionHelper assertEqualsLastLogEventMarker(Object expected);

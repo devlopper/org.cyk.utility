@@ -1,7 +1,9 @@
 package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
+import java.util.Collection;
 
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractPersistenceFunctionTransactionImpl extends AbstractPersistenceFunctionImpl implements PersistenceFunctionTransaction, Serializable {
@@ -29,6 +31,20 @@ public abstract class AbstractPersistenceFunctionTransactionImpl extends Abstrac
 		getProperties().setEntity(entity);
 		if(entity!=null)
 			setEntityClass(entity.getClass());
+		return this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<?> getEntities() {
+		return (Collection<Object>) getProperties().getEntities();
+	}
+	
+	@Override
+	public PersistenceFunctionTransaction setEntities(Collection<?> entities) {
+		getProperties().setEntities(entities);
+		if(__inject__(CollectionHelper.class).isNotEmpty(entities))
+			setEntityClass(entities.iterator().next().getClass());
 		return this;
 	}
 	

@@ -7,6 +7,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.Log;
+import org.cyk.utility.log.message.LogMessageBuilder;
 
 public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.function.AbstractFunctionImpl<INPUT, OUTPUT> implements Function<INPUT,OUTPUT>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -43,6 +44,18 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 		if(log == null)
 			getProperties().setLog( log = __inject__(Log.class));
 		return log;
+	}
+	
+	protected LogMessageBuilder __getLogMessageBuilder__(){
+		return __getLog__().getMessageBuilder(Boolean.TRUE);
+	}
+	
+	protected LogMessageBuilder __addLogMessageBuilderParameter__(Object parameter){
+		return __getLogMessageBuilder__().addParameter(parameter);
+	}
+	
+	protected LogMessageBuilder __addLogMessageBuilderParameter__(Object key,Object value){
+		return __getLogMessageBuilder__().addParameter(key, value);
 	}
 	
 	@Override

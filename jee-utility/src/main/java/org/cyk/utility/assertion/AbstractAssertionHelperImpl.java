@@ -1,5 +1,6 @@
 package org.cyk.utility.assertion;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -83,4 +84,27 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 		return null;
 	}
 	
+	@Override
+	public AssertionHelper assertContainsLastLogEventMessage(String message, String expected) {
+		assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).contains(expected);
+		return this;
+	}
+	
+	@Override
+	public AssertionHelper assertContainsLastLogEventMessage(String expected) {
+		assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).contains(expected);
+		return this;
+	}
+	
+	@Override
+	public AssertionHelper assertStartsWithLastLogEventMessage(String message, String expected) {
+		assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).startsWith(expected);
+		return this;
+	}
+	
+	@Override
+	public AssertionHelper assertStartsWithLastLogEventMessage(String expected) {
+		assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).startsWith(expected);
+		return this;
+	}
 }

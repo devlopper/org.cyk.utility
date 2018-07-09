@@ -32,4 +32,6 @@ public interface ClassHelper extends Helper {
 	String getImplementationClassSimpleName(Class<?> interfaceClass);
 	
 	String getInterfaceSimpleName(Class<?> aClass);
+	
+	<TYPE> Class<TYPE> getParameterAt(Class<?> aClass, Integer index, Class<TYPE> typeClass);
 }

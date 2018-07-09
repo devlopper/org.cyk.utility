@@ -3597,6 +3597,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getEntities() {
+		return get(ENTITIES);
+	}
+
+	public Properties setEntities(Object value) {
+		set(ENTITIES, value);
+		return this;
+	}
+	
+	public static final String ENTITIES = "ENTITIES";
 	public static final String BEAN = "BEAN";
 	public static final String ENTITY_CLASS = "ENTITY_CLASS";
 	public static final String ENTITY_IDENTIFIER = "ENTITY_IDENTIFIER";

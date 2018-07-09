@@ -9,22 +9,12 @@ import org.cyk.utility.field.FieldName;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.value.ValueUsageType;
 
-public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionImpl implements PersistenceFunctionReader, Serializable {
+public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPersistenceFunctionImpl implements PersistenceFunctionReader, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected Boolean __isQueryExecutable__(SystemAction action) {
 		return Boolean.TRUE;
-	}
-	
-	@Override
-	protected void __executeQuery__(SystemAction action) {
-		Class<?> aClass = getEntityClass();
-		Object entityIdentifier = getEntityIdentifier();
-		Object entity = getEntityManager().find(aClass,entityIdentifier);
-		getProperties().setEntity(entity);
-		if(entity == null)
-			__getLog__().getMessageBuilder(Boolean.TRUE).addParameter(NOT_FOUND);
 	}
 	
 	@Override

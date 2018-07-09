@@ -14,7 +14,7 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 	private static final long serialVersionUID = -4375668358714913342L;
 	
 	static {
-		setLog4j2ConfigurationFile("org/cyk/utility/log4j2.xml");
+		//setLog4j2ConfigurationFile("org/cyk/utility/log4j2.xml");
 	}
 	
 	@Inject protected LogEventEntityRepository logEventEntityRepository;
