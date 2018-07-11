@@ -12,7 +12,7 @@ public class LogJulUnitTest extends AbstractArquillianUnitTestWithDefaultDeploym
 	@Test
 	public void logWithoutParameter() {
 		assertionHelper.assertEqualsLogEventCount(0);
-		__inject__(Log.class).getMessageBuilder(Boolean.TRUE).addParameter("this is info without parameters").getParent().execute();
+		__inject__(Log.class).setSourceClassName(LogJulUnitTest.class.getName()).setSourceMethodName("logWithoutParameter").getMessageBuilder(Boolean.TRUE).addParameter("this is info without parameters").getParent().execute();
 		assertionHelper.assertEqualsLastLogEventProperties(new Properties().setLogLevel(LogLevel.INFO).setMessage("this is info without parameters"));
 	}
 	

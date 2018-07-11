@@ -1,6 +1,7 @@
 package org.cyk.utility.server.persistence;
 
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.value.ValueUsageType;
 
 public interface PersistenceFunctionReader extends PersistenceFunction {
 
@@ -11,6 +12,9 @@ public interface PersistenceFunctionReader extends PersistenceFunction {
 	
 	PersistenceFunctionReader setEntityIdentifier(Object identifier);
 	Object getEntityIdentifier();
+	
+	PersistenceFunctionReader setEntityIdentifierValueUsageType(ValueUsageType valueUsageType);
+	ValueUsageType getEntityIdentifierValueUsageType();
 	
 	/**/
 	

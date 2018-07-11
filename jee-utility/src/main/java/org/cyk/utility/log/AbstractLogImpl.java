@@ -6,13 +6,51 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.message.LogMessage;
 import org.cyk.utility.log.message.LogMessageBuilder;
+import org.cyk.utility.string.StringHelper;
 
-public abstract class AbstractLogImpl extends AbstractFunctionImpl<LogMessage,Void> implements Log,Serializable {
+public abstract class AbstractLogImpl<LEVEL> extends AbstractFunctionImpl<LogMessage,Void> implements Log,Serializable {
 	private static final long serialVersionUID = 8661933611010350759L;
 
+	@Override
+	protected Void __execute__() {
+		StackTraceElement sourceStackTraceElement = __inject__(StackTraceHelper.class).getAt(5);
+		LEVEL level = (LEVEL) __getLevel__(getLevel());
+		Class<?> aClass = (Class<?>) getProperties().getClazz();
+		if(aClass == null)
+			aClass = getClass();
+		String sourceClassName = getSourceClassName();
+		if(__inject__(StringHelper.class).isBlank(sourceClassName)){
+			if(aClass != null)
+				sourceClassName = aClass.getName();
+			if(__inject__(StringHelper.class).isBlank(sourceClassName)){
+				sourceClassName = sourceStackTraceElement.getClassName();
+			}
+		}
+		String sourceMethodName = getSourceMethodName();
+		if(__inject__(StringHelper.class).isBlank(sourceMethodName)){
+			sourceMethodName = sourceStackTraceElement.getMethodName();
+		}
+		LogMessage message = null;
+		if(getProperties().getMessage() instanceof LogMessage){
+			message = (LogMessage) getProperties().getMessage();
+		}else{
+			LogMessageBuilder messageBuilder = getMessageBuilder();
+			if(messageBuilder == null){
+				//TODO log warning
+			}else{
+				message = messageBuilder.execute().getOutput();
+			}
+		}
+		__execute__(level, sourceClassName, sourceMethodName, message, getThrowable());
+		return null;
+	}
+	
+	protected abstract void __execute__(LEVEL level,String sourceClassName,String sourceMethodName,LogMessage message,Throwable throwable);
+	
 	@Override
 	public LogMessageBuilder getMessageBuilder(Boolean instanciateIfNull) {
 		LogMessageBuilder messageBuilder = getMessageBuilder();
@@ -48,8 +86,30 @@ public abstract class AbstractLogImpl extends AbstractFunctionImpl<LogMessage,Vo
 		return this;
 	}
 	
-	protected abstract Object __getLevel__(LogLevel level);
+	protected abstract LEVEL __getLevel__(LogLevel level);
 	protected abstract Object __getMarker__(Collection<Object> markers);
+	
+	@Override
+	public String getSourceClassName() {
+		return (String) getProperties().getFromPath(Properties.SOURCE,Properties.CLASS,Properties.NAME);
+	}
+	
+	@Override
+	public Log setSourceClassName(String sourceClassName) {
+		getProperties().setFromPath(new Object[]{Properties.SOURCE,Properties.CLASS,Properties.NAME}, sourceClassName);
+		return this;
+	}
+	
+	@Override
+	public String getSourceMethodName() {
+		return (String) getProperties().getFromPath(Properties.SOURCE,Properties.METHOD,Properties.NAME);
+	}
+	
+	@Override
+	public Log setSourceMethodName(String sourceClassName) {
+		getProperties().setFromPath(new Object[]{Properties.SOURCE,Properties.METHOD,Properties.NAME}, sourceClassName);
+		return this;
+	}
 	
 	@Override
 	public Log setThrowable(Throwable throwable) {

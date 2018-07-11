@@ -2,8 +2,11 @@ package org.cyk.utility.value;
 
 import java.io.Serializable;
 
+import javax.inject.Singleton;
+
 import org.cyk.utility.helper.AbstractHelper;
 
+@Singleton
 public class ValueHelperImpl extends AbstractHelper implements ValueHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

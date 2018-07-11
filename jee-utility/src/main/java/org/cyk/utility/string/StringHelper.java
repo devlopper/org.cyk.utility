@@ -23,4 +23,5 @@ public interface StringHelper extends Helper {
 	
 	Collection<String> get(Collection<?> collection);
 	Collection<String> getFromArray(Object...array);
+	String getVariableNameFrom(String string);
 }

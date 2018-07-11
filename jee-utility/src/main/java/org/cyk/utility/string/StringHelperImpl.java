@@ -1,5 +1,6 @@
 package org.cyk.utility.string;
 
+import java.beans.Introspector;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -106,5 +107,10 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	@Override
 	public Collection<String> getFromArray(Object... array) {
 		return get(__inject__(CollectionHelper.class).instanciate(array));
+	}
+	
+	@Override
+	public String getVariableNameFrom(String string){
+		return Introspector.decapitalize(string);
 	}
 }

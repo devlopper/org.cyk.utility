@@ -26,8 +26,6 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 			__getLog__().addMarkers(getLogMarkers()).execute();
 	}
 
-	protected abstract OUTPUT __execute__();
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public OUTPUT getOutput() {

@@ -1,7 +1,7 @@
 package org.cyk.utility.helper;
 
-import org.cyk.utility.__kernel__.object.dynamic.Objectable;
+import org.cyk.utility.__kernel__.object.dynamic.Singleton;
 
-public interface Helper extends Objectable {
+public interface Helper extends Singleton {
 
 }

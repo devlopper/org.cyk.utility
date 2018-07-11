@@ -3,9 +3,12 @@ package org.cyk.utility.map;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.inject.Singleton;
+
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.helper.AbstractHelper;
 
+@Singleton
 public class MapHelperImpl extends AbstractHelper implements MapHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

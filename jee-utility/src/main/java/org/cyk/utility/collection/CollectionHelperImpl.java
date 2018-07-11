@@ -8,11 +8,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Singleton;
+
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.value.ValueHelper;
 
+@Singleton
 public class CollectionHelperImpl extends AbstractHelper implements CollectionHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -125,5 +128,47 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 				result.add((ELEMENT) item);	
 		}
 		return result;
+	}
+
+	/**/
+	
+	@Override
+	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass,Collection<ELEMENT> collection,Boolean append,Collection<ELEMENT> elements){
+		Collection<ELEMENT> result = Boolean.TRUE.equals(append) ? collection : null;
+		if(result==null)
+			result = Set.class.isAssignableFrom(collectionClass) ? new LinkedHashSet<ELEMENT>() : new ArrayList<ELEMENT>();
+		if(Boolean.TRUE.equals(append))
+			;
+		else
+			if(collection!=null)
+				result.addAll(collection);
+		if(isNotEmpty(elements))
+			result.addAll(elements);
+		return result;
+	}
+	
+	@Override
+	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,Boolean append,Collection<ELEMENT> elements){
+		return add(List.class, collection, append, elements);
+	}
+	
+	@Override
+	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass,Collection<ELEMENT> collection,Boolean append,@SuppressWarnings("unchecked") ELEMENT...elements){
+		return add(collectionClass,collection,append,instanciate(elements));
+	}
+	
+	@Override
+	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass,Collection<ELEMENT> collection,@SuppressWarnings("unchecked") ELEMENT...elements){
+		return add(collectionClass,collection,Boolean.TRUE,instanciate(elements));
+	}
+	
+	@Override
+	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,Boolean append,@SuppressWarnings("unchecked") ELEMENT...elements){
+		return add(collection,append,instanciate(elements));
+	}
+	
+	@Override
+	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,@SuppressWarnings("unchecked") ELEMENT...elements){
+		return add(collection,Boolean.TRUE,instanciate(elements));
 	}
 }

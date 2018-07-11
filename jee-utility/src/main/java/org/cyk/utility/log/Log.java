@@ -15,6 +15,12 @@ public interface Log extends Function<LogMessage,Void> {
 	LogMessage getMessage();
 	Log setMessage(LogMessage message);
 	
+	String getSourceClassName();
+	Log setSourceClassName(String sourceClassName);
+	
+	String getSourceMethodName();
+	Log setSourceMethodName(String sourceMethodName);
+	
 	Throwable getThrowable();
 	Log setThrowable(Throwable throwable);
 	

@@ -2,6 +2,8 @@ package org.cyk.utility.log.jul;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -12,12 +14,42 @@ import org.cyk.utility.log.LogEventEntityBuilder;
 import org.cyk.utility.log.LogEventEntityRepository;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.log.message.LogMessage;
-import org.cyk.utility.log.message.LogMessageBuilder;
 import org.cyk.utility.value.ValueHelper;
 
-public class LogJulImpl extends AbstractLogImpl implements LogJul, Serializable {
+public class LogJulImpl extends AbstractLogImpl<Level> implements LogJul, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __execute__(Level level, String sourceClassName, String sourceMethodName, LogMessage message,Throwable throwable) {
+		Logger logger = Logger.getLogger(sourceClassName);
+		if(INITIALSED.contains(logger.getName())){
+			
+		}else {
+			logger.setLevel(Level.ALL);
+			logger.addHandler(new java.util.logging.Handler(){
+
+				@Override
+				public void publish(LogRecord record) {
+					__inject__(LogEventEntityRepository.class).add(__inject__(LogEventEntityBuilder.class).execute(record).getOutput());
+				}
+
+				@Override public void flush() {}
+				@Override public void close() throws SecurityException {}
+				
+			});	
+			INITIALSED.add(logger.getName());
+		}
+		if(throwable == null){
+			if(message != null){
+				Object[] parameters = __inject__(ArrayHelper.class).instanciate(message.getArguments());
+				if(parameters == null)
+					parameters = new Object[]{};
+				logger.logp(level,sourceClassName,sourceMethodName, message == null ? null : message.getTemplate(), parameters);
+			}			
+		}else
+			logger.log(level,throwable.getMessage(),throwable);
+	}
+	/*
 	@Override
 	protected Void __execute__() {
 		LogMessage message = null;
@@ -35,19 +67,27 @@ public class LogJulImpl extends AbstractLogImpl implements LogJul, Serializable 
 		Class<?> aClass = (Class<?>) getProperties().getClazz();
 		if(aClass == null)
 			aClass = getClass();
+		String sourceClassName = aClass.getName();
+		String sourceMethodName = "THE_METH";
 		Logger logger = Logger.getLogger(aClass.getName());
-		logger.setLevel(Level.ALL);
-		logger.addHandler(new java.util.logging.Handler(){
-
-			@Override
-			public void publish(LogRecord record) {
-				__inject__(LogEventEntityRepository.class).add(__inject__(LogEventEntityBuilder.class).execute(record).getOutput());
-			}
-
-			@Override public void flush() {}
-			@Override public void close() throws SecurityException {}
+		if(INITIALSED.contains(logger.getName())){
 			
-		});
+		}else {
+			logger.setLevel(Level.ALL);
+			logger.addHandler(new java.util.logging.Handler(){
+
+				@Override
+				public void publish(LogRecord record) {
+					__inject__(LogEventEntityRepository.class).add(__inject__(LogEventEntityBuilder.class).execute(record).getOutput());
+				}
+
+				@Override public void flush() {}
+				@Override public void close() throws SecurityException {}
+				
+			});	
+			INITIALSED.add(logger.getName());
+		}
+		
 		Level level = (Level) __getLevel__(getLevel());
 		String template = message == null ? null : message.getTemplate();
 		
@@ -57,15 +97,15 @@ public class LogJulImpl extends AbstractLogImpl implements LogJul, Serializable 
 				Object[] parameters = __inject__(ArrayHelper.class).instanciate(message.getArguments());
 				if(parameters == null)
 					parameters = new Object[]{};
-				logger.log(level, template, parameters);
+				logger.logp(level,sourceClassName,sourceMethodName, template, parameters);
 			}			
 		}else
 			logger.log(level,throwable.getMessage(),throwable);
 		return null;
 	}
-
+*/
 	@Override
-	protected Object __getLevel__(LogLevel level) {
+	protected Level __getLevel__(LogLevel level) {
 		level = __inject__(ValueHelper.class).defaultToIfNull(level, LogLevel.DEFAULT);
 		switch(level){
 		case ALL: return Level.ALL;
@@ -88,4 +128,8 @@ public class LogJulImpl extends AbstractLogImpl implements LogJul, Serializable 
 	protected Object __getMarker__(Collection<Object> markers) {
 		return null;
 	}
+	
+	/**/
+	
+	private static final Set<String> INITIALSED = new HashSet<>();
 }

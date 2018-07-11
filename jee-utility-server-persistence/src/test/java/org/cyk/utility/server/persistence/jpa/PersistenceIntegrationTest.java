@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import javax.inject.Inject;
 
 import org.cyk.utility.server.persistence.Persistence;
+import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
 import org.junit.Test;
 
 public class PersistenceIntegrationTest extends AbstractArquillianIntegrationTestWithDefaultDeployment {
@@ -14,17 +15,13 @@ public class PersistenceIntegrationTest extends AbstractArquillianIntegrationTes
 	
 	@Test
 	public void create() throws Exception{
-		MyEntity myEntity = new MyEntity().setCode("mc001");
-		userTransaction.begin();
-		persistence.create(myEntity);
-		userTransaction.commit();
-		assertThat(myEntity.getIdentifier()).isNotNull();
-		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Create MyEntity");
+		__inject__(TestPersistenceCreate.class).setObject(new MyEntity().setCode(getRandomCode())).execute();
 	}
 	
 	@Test
 	public void read() throws Exception{
-		MyEntity myEntity = new MyEntity().setCode("mc001");
+		String code = getRandomCode();
+		MyEntity myEntity = new MyEntity().setCode(code);
 		userTransaction.begin();
 		persistence.create(myEntity);
 		userTransaction.commit();
@@ -32,29 +29,30 @@ public class PersistenceIntegrationTest extends AbstractArquillianIntegrationTes
 		myEntity = persistence.readOne(MyEntity.class,myEntity.getIdentifier());
 		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Read MyEntity");
 		assertThat(myEntity).isNotNull();
-		assertThat(myEntity.getCode()).isEqualTo("mc001");
+		assertThat(myEntity.getCode()).isEqualTo(code);
 	}
 	
 	@Test
 	public void update() throws Exception{
-		MyEntity myEntity = new MyEntity().setCode("mc001");
+		MyEntity myEntity = new MyEntity().setCode(getRandomCode());
 		userTransaction.begin();
 		persistence.create(myEntity);
 		userTransaction.commit();
 		myEntity = persistence.readOne(MyEntity.class,myEntity.getIdentifier());
-		myEntity.setCode("nc001");
+		String newCode = getRandomCode();
+		myEntity.setCode(newCode);
 		userTransaction.begin();
 		persistence.update(myEntity);
 		userTransaction.commit();
 		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Update MyEntity");
 		myEntity = persistence.readOne(MyEntity.class,myEntity.getIdentifier());
 		assertThat(myEntity).isNotNull();
-		assertThat(myEntity.getCode()).isEqualTo("nc001");
+		assertThat(myEntity.getCode()).isEqualTo(newCode);
 	}
 	
 	@Test
 	public void delete() throws Exception{
-		MyEntity myEntity = new MyEntity().setCode("mc001");
+		MyEntity myEntity = new MyEntity().setCode(getRandomCode());
 		userTransaction.begin();
 		persistence.create(myEntity);
 		userTransaction.commit();
@@ -66,6 +64,23 @@ public class PersistenceIntegrationTest extends AbstractArquillianIntegrationTes
 		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Delete MyEntity");
 		myEntity = persistence.readOne(MyEntity.class,myEntity.getIdentifier());
 		assertThat(myEntity).isNull();
+	}
+	
+	@Test(expected=javax.transaction.RollbackException.class)
+	public void isCodeMustBeUnique() throws Exception{
+		String code = getRandomCode();
+		userTransaction.begin();
+		persistence.create(new MyEntity().setCode(code));
+		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Create MyEntity").contains("code="+code);
+		persistence.create(new MyEntity().setCode(code));
+		userTransaction.commit();
+	}
+	
+	@Test(expected=javax.transaction.RollbackException.class)
+	public void isCodeMustBeNotNull() throws Exception{
+		userTransaction.begin();
+		persistence.create(new MyEntity());
+		userTransaction.commit();
 	}
 	
 }

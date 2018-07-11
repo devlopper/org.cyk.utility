@@ -58,4 +58,15 @@ public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPers
 	public PersistenceFunctionReader setAction(SystemAction action) {
 		return (PersistenceFunctionReader) super.setAction(action);
 	}
+	
+	@Override
+	public ValueUsageType getEntityIdentifierValueUsageType() {
+		return (ValueUsageType) getProperties().getValueUsageType();
+	}
+	
+	@Override
+	public PersistenceFunctionReader setEntityIdentifierValueUsageType(ValueUsageType valueUsageType) {
+		getProperties().setValueUsageType(valueUsageType);
+		return this;
+	}
 }

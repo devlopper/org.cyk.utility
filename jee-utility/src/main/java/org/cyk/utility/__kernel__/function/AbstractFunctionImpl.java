@@ -9,10 +9,24 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public final Function<INPUT,OUTPUT> execute() {
+	public Function<INPUT,OUTPUT> execute() {
 		Long start = System.currentTimeMillis();
 		getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.START}, start);
-		OUTPUT output = __execute__();
+		
+		OUTPUT output = null;
+		Runnable runnable = (Runnable) getProperties().getRunnable();
+		try {
+			if(runnable == null){
+				output = __execute__();
+			}else {
+				runnable.run();
+			}
+		} catch (Exception exception) {
+			if(Boolean.TRUE.equals(getIsCatchThrowable()))
+				getProperties().setThrowable(exception);	
+			else
+				throw new RuntimeException(exception);
+		}
 		Long end = System.currentTimeMillis();
 		getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.END}, end);
 		getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION}, end - start);
@@ -21,7 +35,9 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		return this;
 	}
 	
-	protected abstract OUTPUT __execute__();
+	protected OUTPUT __execute__() throws Exception {
+		throw new RuntimeException("Implementation or runnable required");
+	}
 	
 	protected void afterExecute(){
 		
@@ -45,4 +61,14 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		return (Function<INPUT,OUTPUT>) super.setProperties(properties);
 	}
 	
+	@Override
+	public Boolean getIsCatchThrowable() {
+		return (Boolean) getProperties().getFromPath(Properties.IS,Properties.CATCH,Properties.THROWABLE);
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setIsCatchThrowable(Boolean value) {
+		getProperties().setFromPath(new Object[]{Properties.IS,Properties.CATCH,Properties.THROWABLE}, value);
+		return this;
+	}
 }

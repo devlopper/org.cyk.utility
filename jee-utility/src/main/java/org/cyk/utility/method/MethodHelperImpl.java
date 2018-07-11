@@ -3,9 +3,12 @@ package org.cyk.utility.method;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 
+import javax.inject.Singleton;
+
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.cyk.utility.helper.AbstractHelper;
 
+@Singleton
 public class MethodHelperImpl extends AbstractHelper implements MethodHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

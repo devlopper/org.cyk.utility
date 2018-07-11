@@ -11,4 +11,7 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	
 	Function<INPUT,OUTPUT> setProperties(Properties properties);
 	
+	Function<INPUT,OUTPUT> setIsCatchThrowable(Boolean value);
+	Boolean getIsCatchThrowable();
+	
 }

@@ -6,6 +6,8 @@ import java.util.Collection;
 import javax.enterprise.inject.Alternative;
 
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 import org.cyk.utility.array.ArrayHelper;
@@ -13,34 +15,18 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.AbstractLogImpl;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.log.message.LogMessage;
-import org.cyk.utility.log.message.LogMessageBuilder;
 import org.cyk.utility.value.ValueHelper;
 
 @Alternative
-public class LogLog4j2Impl extends AbstractLogImpl implements LogLog4j2, Serializable {
+public class LogLog4j2Impl extends AbstractLogImpl<Level> implements LogLog4j2, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Void __execute__() {
-		LogMessage message = null;
-		if(getProperties().getMessage() instanceof LogMessage){
-			message = (LogMessage) getProperties().getMessage();
-		}else{
-			LogMessageBuilder messageBuilder = getMessageBuilder();
-			if(messageBuilder == null){
-				//TODO log error
-			}else{
-				message = messageBuilder.execute().getOutput();
-			}
-		}
-		
-		Class<?> aClass = (Class<?>) getProperties().getClazz();
-		org.apache.logging.log4j.Logger logger = org.apache.logging.log4j.LogManager.getLogger(aClass);
-		Level level = (Level) __getLevel__(getLevel());
+	protected void __execute__(Level level, String sourceClassName, String sourceMethodName, LogMessage message,Throwable throwable) {
+		Logger logger = LogManager.getLogger(sourceClassName);
 		Marker marker = (Marker) __getMarker__(getMarkers());
 		String template = message == null ? null : message.getTemplate();
 		
-		Throwable throwable = getThrowable();
 		if(throwable == null){
 			if(message != null){
 				Object[] parameters = __inject__(ArrayHelper.class).instanciate(message.getArguments());
@@ -48,11 +34,10 @@ public class LogLog4j2Impl extends AbstractLogImpl implements LogLog4j2, Seriali
 			}			
 		}else
 			logger.catching(throwable);
-		return null;
 	}
-
+	
 	@Override
-	protected Object __getLevel__(LogLevel level) {
+	protected Level __getLevel__(LogLevel level) {
 		level = __inject__(ValueHelper.class).defaultToIfNull(level, LogLevel.DEFAULT);
 		switch(level){
 		case ALL: return org.apache.logging.log4j.Level.ALL;

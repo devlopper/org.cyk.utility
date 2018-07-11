@@ -18,4 +18,10 @@ public interface CollectionHelper extends Helper {
 	<ELEMENT> ELEMENT getLast(Collection<ELEMENT> collection);
 	CollectionHelper clear(Collection<?> collection);
 	<ELEMENT> Collection<ELEMENT> cast(Class<ELEMENT> aClass, Collection<?> collection);
+	<COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass, Collection<ELEMENT> collection, Boolean append,Collection<ELEMENT> elements);
+	<ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection, Boolean append, Collection<ELEMENT> elements);
+	<COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass, Collection<ELEMENT> collection, Boolean append,ELEMENT[] elements);
+	<COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass, Collection<ELEMENT> collection, ELEMENT[] elements);
+	<ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection, Boolean append, ELEMENT[] elements);
+	<ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection, ELEMENT[] elements);
 }

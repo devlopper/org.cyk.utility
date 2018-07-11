@@ -3633,6 +3633,146 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getUser() {
+		return get(USER);
+	}
+
+	public Properties setUser(Object value) {
+		set(USER, value);
+		return this;
+	}
+	
+	public Object getTransaction() {
+		return get(TRANSACTION);
+	}
+
+	public Properties setTransaction(Object value) {
+		set(TRANSACTION, value);
+		return this;
+	}
+	
+	public Object getIs() {
+		return get(IS);
+	}
+
+	public Properties setIs(Object value) {
+		set(IS, value);
+		return this;
+	}
+	
+	public Object getCatch() {
+		return get(CATCH);
+	}
+
+	public Properties setCatch(Object value) {
+		set(CATCH, value);
+		return this;
+	}
+	
+	public Object getRunnable() {
+		return get(RUNNABLE);
+	}
+
+	public Properties setRunnable(Object value) {
+		set(RUNNABLE, value);
+		return this;
+	}
+	
+	public Object getCount() {
+		return get(COUNT);
+	}
+
+	public Properties setCount(Object value) {
+		set(COUNT, value);
+		return this;
+	}
+	
+	public Object getObjects() {
+		return get(OBJECTS);
+	}
+
+	public Properties setObjects(Object value) {
+		set(OBJECTS, value);
+		return this;
+	}
+	
+	public Object getBusiness() {
+		return get(BUSINESS);
+	}
+
+	public Properties setBusiness(Object value) {
+		set(BUSINESS, value);
+		return this;
+	}
+	
+	public Object getKeyword() {
+		return get(KEYWORD);
+	}
+
+	public Properties setKeyword(Object value) {
+		set(KEYWORD, value);
+		return this;
+	}
+	
+	public Object getArguments() {
+		return get(ARGUMENTS);
+	}
+
+	public Properties setArguments(Object value) {
+		set(ARGUMENTS, value);
+		return this;
+	}
+	
+	public Object getAlias() {
+		return get(ALIAS);
+	}
+
+	public Properties setAlias(Object value) {
+		set(ALIAS, value);
+		return this;
+	}
+	
+	public Object getTuple() {
+		return get(TUPLE);
+	}
+
+	public Properties setTuple(Object value) {
+		set(TUPLE, value);
+		return this;
+	}
+	
+	public Object getTuples() {
+		return get(TUPLE);
+	}
+
+	public Properties setTuples(Object value) {
+		set(TUPLE, value);
+		return this;
+	}
+	
+	public Object getPrefix() {
+		return get(PREFIX);
+	}
+
+	public Properties setPrefix(Object value) {
+		set(PREFIX, value);
+		return this;
+	}
+	
+	public static final String PREFIX = "PREFIX";
+	public static final String TUPLES = "TUPLES";
+	public static final String TUPLE = "TUPLE";
+	public static final String ALIAS = "ALIAS";
+	public static final String ARGUMENTS = "ARGUMENTS";
+	public static final String KEYWORD = "KEYWORD";
+	public static final String BUSINESS = "BUSINESS";
+	public static final String OBJECTS = "OBJECTS";
+	public static final String COUNT = "COUNT";
+	public static final String RUNNABLE = "RUNNABLE";
+	public static final String IS = "IS";
+	public static final String CATCH = "CATCH";
+	public static final String USER = "USER";
+	public static final String TRANSACTION = "TRANSACTION";
 	public static final String SUFFIX = "SUFFIX";
 	public static final String INTERFACE = "INTERFACE";
 	public static final String PACKAGE = "PACKAGE";

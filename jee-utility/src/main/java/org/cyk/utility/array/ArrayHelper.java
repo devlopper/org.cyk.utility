@@ -10,4 +10,5 @@ public interface ArrayHelper extends Helper {
 	Boolean isNotEmpty(Object[] objects);
 	<ELEMENT> ELEMENT[] instanciate(Class<ELEMENT> aClass,Collection<ELEMENT> collection);
 	Object[] instanciate(Collection<Object> collection);
+	Integer getSize(Object[] objects);
 }

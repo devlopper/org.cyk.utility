@@ -33,15 +33,13 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	}
 	
 	@Override
-	protected Void __execute__() {
+	protected void ____execute____() {
 		SystemAction action = getAction();
 		if(action == null){
-			//TODO log action must not be null
+			//TODO log error : action must not be null
 		}else{
 			__execute__(action);	
 		}
-		
-		return null;
 	}
 	
 	protected abstract void __execute__(SystemAction action);

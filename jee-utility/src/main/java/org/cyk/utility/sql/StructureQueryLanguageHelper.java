@@ -1,4 +1,4 @@
-package org.cyk.utility.structurequerylanguage;
+package org.cyk.utility.sql;
 
 import org.cyk.utility.helper.Helper;
 

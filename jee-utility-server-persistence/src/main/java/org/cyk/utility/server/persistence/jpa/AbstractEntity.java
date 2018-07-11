@@ -2,13 +2,17 @@ package org.cyk.utility.server.persistence.jpa;
 
 import java.io.Serializable;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @MappedSuperclass
+@Getter @Setter @Accessors(chain=true) @MappedSuperclass @Access(AccessType.FIELD)
 public abstract class AbstractEntity extends AbstractIdentifiedByLong implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -21,7 +25,7 @@ public abstract class AbstractEntity extends AbstractIdentifiedByLong implements
 	/*
 	 * Business properties
 	 */
-	
+	@NotNull @Column(nullable=false,unique=true)
 	private String code;
 	
 }

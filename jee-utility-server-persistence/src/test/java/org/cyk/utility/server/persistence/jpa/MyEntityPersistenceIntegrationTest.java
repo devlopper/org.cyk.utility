@@ -11,29 +11,29 @@ public class MyEntityPersistenceIntegrationTest extends AbstractArquillianIntegr
 	
 	@Test
 	public void create() throws Exception{
-		create(persistence, new MyEntity().setCode("mc001"));
+		create(persistence, new MyEntity().setCode(getRandomCode()));
 	}
 	
 	@Test
 	public void read() throws Exception{
-		MyEntity myEntity = new MyEntity().setCode("mc001");
+		MyEntity myEntity = new MyEntity().setCode(getRandomCode());
 		create(persistence, myEntity);
 		read(persistence, myEntity.getIdentifier());
 	}
 	
 	@Test
 	public void update() throws Exception{
-		MyEntity myEntity = new MyEntity().setCode("mc001");
+		MyEntity myEntity = new MyEntity().setCode(getRandomCode());
 		create(persistence, myEntity);
 		myEntity = read(persistence, myEntity.getIdentifier());
-		myEntity.setCode("nc001");
+		myEntity.setCode(getRandomCode());
 		update(persistence, myEntity);
 		read(persistence, myEntity.getIdentifier());
 	}
 	
 	@Test
 	public void delete() throws Exception{
-		MyEntity myEntity = new MyEntity().setCode("mc001");
+		MyEntity myEntity = new MyEntity().setCode(getRandomCode());
 		create(persistence, myEntity);
 		myEntity = read(persistence, myEntity.getIdentifier());
 		delete(persistence, myEntity);

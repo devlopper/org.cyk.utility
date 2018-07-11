@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.assertion.AssertionHelper;
 import org.cyk.utility.log.LogEventEntityRepository;
+import org.cyk.utility.random.RandomHelper;
 import org.junit.Before;
 
 public abstract class AbstractTest extends AbstractObject implements Serializable {
@@ -27,7 +28,12 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 	}
 	
 	protected void __listenBefore__(){
-		logEventEntityRepository.clear();
+		if(logEventEntityRepository!=null)
+			logEventEntityRepository.clear();
+	}
+	
+	protected String getRandomCode(){
+		return __inject__(RandomHelper.class).getAlphabetic(3);
 	}
 	
 	/**/

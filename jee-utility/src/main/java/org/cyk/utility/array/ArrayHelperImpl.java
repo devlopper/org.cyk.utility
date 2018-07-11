@@ -40,4 +40,9 @@ public class ArrayHelperImpl extends AbstractHelper implements ArrayHelper,Seria
 	public Object[] instanciate(Collection<Object> collection) {
 		return instanciate(Object.class, collection);
 	}
+	
+	@Override
+	public Integer getSize(Object[] objects) {
+		return objects == null ? null : objects.length;
+	}
 }
