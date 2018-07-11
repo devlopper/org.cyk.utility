@@ -4165,6 +4165,7 @@ public class Properties implements java.io.Serializable {
 	public static final String MESSAGE = "MESSAGE";
 	public static final String FIELD = "FIELD";
 	
+	public static final String __THIS__ = "__THIS__";
 	/**/
 	
 	private static final Map<Class<?>,Map<Object,Object>> DEFAULT_VALUES = new HashMap<Class<?>,Map<Object,Object>>();

@@ -1,7 +1,9 @@
 package org.cyk.utility.sql.builder;
 
-import org.cyk.utility.function.FunctionWithPropertiesAsInput;
+import org.cyk.utility.function.FunctionWithPropertiesAsInputAndStringAsOutput;
 
-public interface QueryPredicateStringBuilder extends FunctionWithPropertiesAsInput<String> {
+public interface QueryPredicateStringBuilder extends FunctionWithPropertiesAsInputAndStringAsOutput {
 
+	
+	
 }
