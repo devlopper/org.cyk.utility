@@ -7,11 +7,11 @@ import java.util.LinkedHashSet;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 
-public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements QueryClauseStringBuilder, Serializable {
+public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements QueryClauseStringBuilder, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

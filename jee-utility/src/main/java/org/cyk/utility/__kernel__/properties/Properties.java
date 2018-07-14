@@ -3858,6 +3858,27 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getWher() {
+		return get(WHERE);
+	}
+
+	public Properties setWher(Object value) {
+		set(WHERE, value);
+		return this;
+	}
+	
+	public Object getFrom() {
+		return get(FROM);
+	}
+
+	public Properties setFrom(Object value) {
+		set(FROM, value);
+		return this;
+	}
+	
+	public static final String WHERE = "WHERE";
+	public static final String FROM = "FROM";
+	public static final String SELECT = "SELECT";
 	public static final String PREDICATE = "PREDICATE";
 	public static final String CONJUNCTION = "CONJUNCTION";
 	public static final String CHILDREN = "CHILDREN";

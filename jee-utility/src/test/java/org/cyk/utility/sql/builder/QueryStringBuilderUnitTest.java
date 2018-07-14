@@ -7,13 +7,17 @@ import org.junit.Test;
 public class QueryStringBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 
-	//@Test
+	@Test
 	public void select(){
-		assertionHelper.assertEquals("select", __inject__(QueryStringBuilderSelect.class).execute().getOutput());
+		Tuple tuple = new Tuple().setName("Tuple");
+		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class)
+				.addFormatArguments("column1","=","1");
+		
+		assertionHelper.assertEquals("SELECT * FROM Tuple tuple WHERE column1=1", __inject__(QueryStringBuilderSelect.class)
+				.setSelectBuilder((QueryClauseStringBuilderSelect) __inject__(QueryClauseStringBuilderSelect.class).addTuples(tuple))
+				.setFromBuilder((QueryClauseStringBuilderFrom) __inject__(QueryClauseStringBuilderFrom.class).addTuples(tuple))
+				.setWhereBuilder(__inject__(QueryClauseStringBuilderWhere.class).setPredicateBuilder(predicateBuilder))
+				.execute().getOutput());
 	}
 	
-	@Test
-	public void provideTestMethods(){
-		//TODO provides test methods
-	}
 }

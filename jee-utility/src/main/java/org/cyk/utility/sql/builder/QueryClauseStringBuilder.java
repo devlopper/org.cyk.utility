@@ -2,19 +2,16 @@ package org.cyk.utility.sql.builder;
 
 import java.util.Collection;
 
-import org.cyk.utility.function.FunctionWithPropertiesAsInput;
+import org.cyk.utility.function.FunctionWithPropertiesAsInputAndStringAsOutput;
 
-public interface QueryClauseStringBuilder extends FunctionWithPropertiesAsInput<String> {
+public interface QueryClauseStringBuilder extends FunctionWithPropertiesAsInputAndStringAsOutput {
 
 	String getKeyword();
 	QueryClauseStringBuilder setKeyword(String keyword);
 	
 	Collection<String> getArguments();
 	QueryClauseStringBuilder setArguments(Collection<String> arguments);
-	
-	String getFormat();
-	QueryClauseStringBuilder setFormat(String format);
-	
+
 	Collection<Tuple> getTuples();
 	QueryClauseStringBuilder setTuples(Collection<Tuple> tuples);
 	QueryClauseStringBuilder addTuples(Collection<Tuple> tuples);
