@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -16,14 +17,34 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 
 	@Override
 	protected String __execute__() throws Exception {
-		String format = __getFormat__(getFormat());
-		if(__inject__(StringHelper.class).isBlank(format) && Boolean.TRUE.equals(getProperties().getFromPath(Properties.IS,Properties.FORMAT,Properties.REQUIRED)))
-			__inject__(ThrowableHelper.class).throwRuntimeException("Function to output string : format is required");
-		Collection<String> formatArguments = __getFormatArguments__(getFormatArguments());
-		if(__inject__(CollectionHelper.class).isEmpty(formatArguments) && Boolean.TRUE.equals(getProperties().getFromPath(Properties.IS,Properties.FORMAT,Properties.REQUIRED)))
-			__inject__(ThrowableHelper.class).throwRuntimeException("Function to output string : format arguments are required");
-		if(__inject__(StringHelper.class).isNotBlank(format) && __inject__(CollectionHelper.class).isNotEmpty(formatArguments))
-			return __execute__(format,formatArguments);
+		Collection<Object> children = getChildren();
+		if(__inject__(CollectionHelper.class).isNotEmpty(children)){
+			Collection<String> strings = new ArrayList<>();
+			for(Object index : children){
+				String string = null;
+				if(index == null){
+					
+				}else
+					if(index instanceof FunctionWithPropertiesAsInputAndStringAsOutput)
+						string = ((FunctionWithPropertiesAsInputAndStringAsOutput)index).execute().getOutput();
+					else
+						string = index.toString();
+				if(__inject__(StringHelper.class).isNotBlank(string)){
+					strings.add(string);
+				}
+			}
+			return __inject__(StringHelper.class).concatenate(strings,CharacterConstant.SPACE.toString());
+		}else {
+			Boolean isFormatRequired = __getIsFormatRequired__(Boolean.TRUE.equals(getProperties().getFromPath(Properties.IS,Properties.FORMAT,Properties.REQUIRED)));
+			String format = __getFormat__(getFormat());
+			if(__inject__(StringHelper.class).isBlank(format) && isFormatRequired)
+				__inject__(ThrowableHelper.class).throwRuntimeException("Function to output string : format is required");
+			Collection<String> formatArguments = isFormatRequired ? __getFormatArguments__(isFormatRequired,getFormatArguments()) : null;
+			if(__inject__(CollectionHelper.class).isEmpty(formatArguments) && isFormatRequired)
+				__inject__(ThrowableHelper.class).throwRuntimeException("Function to output string : format arguments are required");
+			if(__inject__(StringHelper.class).isNotBlank(format) && __inject__(CollectionHelper.class).isNotEmpty(formatArguments))
+				return __execute__(format,formatArguments);	
+		}
 		return super.__execute__();
 	}
 	
@@ -35,8 +56,12 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 		return format;
 	}
 	
-	protected Collection<String> __getFormatArguments__(Collection<String> formatArguments){
+	protected Collection<String> __getFormatArguments__(Boolean isFormatRequired,Collection<String> formatArguments){
 		return formatArguments;
+	}
+	
+	protected Boolean __getIsFormatRequired__(Boolean value){
+		return value;
 	}
 	
 	@Override
@@ -76,5 +101,10 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 	public FunctionWithPropertiesAsInputAndStringAsOutput addFormatArguments(String... formatArguments) {
 		addFormatArguments(__inject__(CollectionHelper.class).instanciate(formatArguments));
 		return this;
+	}
+	
+	@Override
+	public FunctionWithPropertiesAsInputAndStringAsOutput getParent() {
+		return (FunctionWithPropertiesAsInputAndStringAsOutput) super.getParent();
 	}
 }

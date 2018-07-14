@@ -1,10 +1,13 @@
 package org.cyk.utility.__kernel__.object.dynamic;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.collection.CollectionHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -55,6 +58,34 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	@Override
 	public Objectable setIdentifier(Object identifier) {
 		getProperties().setIdentifier(identifier);
+		return this;
+	}
+	
+	@Override
+	public Collection<Object> getChildren() {
+		return (Collection<Object>) getProperties().getChildren();
+	}
+	
+	@Override
+	public Objectable setChildren(Collection<Object> children) {
+		getProperties().setChildren(children);
+		return this;
+	}
+	
+	@Override
+	public Objectable addChild(Object... children) {
+		addChildren(__inject__(CollectionHelper.class).instanciate(children));
+		return this;
+	}
+	
+	@Override
+	public Objectable addChildren(Collection<Object> children) {
+		if(__inject__(CollectionHelper.class).isNotEmpty(children)){
+			Collection<Object> collection = getChildren();
+			if(collection == null)
+				setChildren(collection = new ArrayList<Object>());
+			collection.addAll(children);
+		}
 		return this;
 	}
 }

@@ -1,4 +1,4 @@
-package org.cyk.utility.sql.jpql;
+package org.cyk.utility.sql.jpql.builder;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.sql.builder.AbstractQueryClauseStringBuilderSelectImpl;
 import org.cyk.utility.sql.builder.Tuple;
+import org.cyk.utility.sql.jpql.Jpql;
 
 @Jpql
 public class QueryClauseStringBuilderSelectJpqlImpl extends AbstractQueryClauseStringBuilderSelectImpl implements QueryClauseStringBuilderSelectJpql, Serializable {

@@ -3759,6 +3759,115 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getParameter() {
+		return get(PARAMETER);
+	}
+
+	public Properties setParameter(Object value) {
+		set(PARAMETER, value);
+		return this;
+	}
+	
+	public Object getOperator() {
+		return get(OPERATOR);
+	}
+
+	public Properties setOperator(Object value) {
+		set(OPERATOR, value);
+		return this;
+	}
+	
+	public Object getLeft() {
+		return get(LEFT);
+	}
+
+	public Properties setLeft(Object value) {
+		set(LEFT, value);
+		return this;
+	}
+	
+	public Object getRight() {
+		return get(RIGHT);
+	}
+
+	public Properties setRight(Object value) {
+		set(RIGHT, value);
+		return this;
+	}
+	
+	public Object getOperand() {
+		return get(OPERAND);
+	}
+
+	public Properties setOperand(Object value) {
+		set(OPERAND, value);
+		return this;
+	}
+	
+	public Object getAttributes() {
+		return get(ATTRIBUTES);
+	}
+
+	public Properties setAttributes(Object value) {
+		set(ATTRIBUTES, value);
+		return this;
+	}
+	
+	public Object getAttribute() {
+		return get(ATTRIBUTE);
+	}
+
+	public Properties setAttribute(Object value) {
+		set(ATTRIBUTE, value);
+		return this;
+	}
+	
+	public Object getLiteral() {
+		return get(LITERAL);
+	}
+
+	public Properties setLiteral(Object value) {
+		set(LITERAL, value);
+		return this;
+	}
+	
+	public Object getChildren() {
+		return get(CHILDREN);
+	}
+
+	public Properties setChildren(Object value) {
+		set(CHILDREN, value);
+		return this;
+	}
+	
+	public Object getConjunction() {
+		return get(CONJUNCTION);
+	}
+
+	public Properties setConjunction(Object value) {
+		set(CONJUNCTION, value);
+		return this;
+	}
+	
+	public Object getPredicate() {
+		return get(PREDICATE);
+	}
+
+	public Properties setPredicate(Object value) {
+		set(PREDICATE, value);
+		return this;
+	}
+	
+	public static final String PREDICATE = "PREDICATE";
+	public static final String CONJUNCTION = "CONJUNCTION";
+	public static final String CHILDREN = "CHILDREN";
+	public static final String LITERAL = "LITERAL";
+	public static final String ATTRIBUTE = "ATTRIBUTE";
+	public static final String ATTRIBUTES = "ATTRIBUTES";
+	public static final String LEFT = "LEFT";
+	public static final String RIGHT = "RIGHT";
+	public static final String OPERAND = "OPERAND";
+	public static final String OPERATOR = "OPERATOR";
 	public static final String PREFIX = "PREFIX";
 	public static final String TUPLES = "TUPLES";
 	public static final String TUPLE = "TUPLE";
@@ -3814,6 +3923,7 @@ public class Properties implements java.io.Serializable {
 	public static final String RESOURCE_BUNDLE_KEY_VALUE_FOUND_LISTENER = "RESOURCE_BUNDLE_KEY_VALUE_FOUND_LISTENER";
 	public static final String BEFORE_EXECUTION_LISTENER = "BEFORE_EXECUTION_LISTENER";
 	public static final String AFTER_EXECUTION_LISTENER = "AFTER_EXECUTION_LISTENER";
+	public static final String PARAMETER = "PARAMETER";
 	public static final String PARAMETERS = "PARAMETERS";
 	public static final String CACHABLE = "CACHABLE";
 	public static final String LOCALE = "LOCALE";

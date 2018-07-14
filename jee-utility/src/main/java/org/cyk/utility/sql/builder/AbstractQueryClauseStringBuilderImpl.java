@@ -39,6 +39,7 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		setFormat("%s %s");
+		setAttributeNameBuilder(__inject__(QueryAttributeNameBuilder.class));
 	}
 	
 	protected String __execute__(String format,String keyword,Collection<String> arguments) throws Exception {
@@ -70,48 +71,48 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Column> getColumns() {
-		return (Collection<Column>) getProperties().getColumns();
+	public Collection<Attribute> getAttributes() {
+		return (Collection<Attribute>) getProperties().getColumns();
 	}
 	
 	@Override
-	public QueryClauseStringBuilder setColumns(Collection<Column> columns) {
-		getProperties().setColumns(columns);
+	public QueryClauseStringBuilder setAttributes(Collection<Attribute> attributes) {
+		getProperties().setColumns(attributes);
 		return this;
 	}
 	
 	@Override
-	public QueryClauseStringBuilder addColumns(Collection<Column> columns) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(columns)){
-			Collection<Column> collection = getColumns();
+	public QueryClauseStringBuilder addAttributes(Collection<Attribute> attributes) {
+		if(__inject__(CollectionHelper.class).isNotEmpty(attributes)){
+			Collection<Attribute> collection = getAttributes();
 			if(collection == null)
-				setColumns(collection = new LinkedHashSet<Column>());
-			for(Column index : columns)
+				setAttributes(collection = new LinkedHashSet<Attribute>());
+			for(Attribute index : attributes)
 				if(index.getTuple() == null)
 					index.setTuple(__inject__(CollectionHelper.class).getFirst(getTuples()));
-			collection.addAll(columns);
+			collection.addAll(attributes);
 		}
 		return this;
 	}
 	
 	@Override
-	public QueryClauseStringBuilder addColumns(Column... columns) {
-		addColumns(__inject__(CollectionHelper.class).instanciate(columns));
+	public QueryClauseStringBuilder addAttributes(Attribute... attributes) {
+		addAttributes(__inject__(CollectionHelper.class).instanciate(attributes));
 		return this;
 	}
 	
 	@Override
-	public QueryClauseStringBuilder addColumnsByNames(Collection<String> columnNames) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(columnNames)){
-			for(String index : columnNames)
-				addColumns(new Column().setName(index));
+	public QueryClauseStringBuilder addAttributesByNames(Collection<String> attributeNames) {
+		if(__inject__(CollectionHelper.class).isNotEmpty(attributeNames)){
+			for(String index : attributeNames)
+				addAttributes(new Attribute().setName(index));
 		}
 		return this;
 	}
 	
 	@Override
-	public QueryClauseStringBuilder addColumnsByNames(String... columnNames) {
-		addColumnsByNames(__inject__(CollectionHelper.class).instanciate(columnNames));
+	public QueryClauseStringBuilder addAttributesByNames(String... attributeNames) {
+		addAttributesByNames(__inject__(CollectionHelper.class).instanciate(attributeNames));
 		return this;
 	}
 	
@@ -171,13 +172,24 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	}
 	
 	@Override
-	public QueryClauseStringBuilder setIsPrefixColumnWithTupleRequired(Boolean value) {
-		getProperties().setFromPath(new Object[]{Properties.IS,Properties.PREFIX,Properties.COLUMN,Properties.TUPLE},value);
+	public QueryClauseStringBuilder setAttributeNameBuilder(QueryAttributeNameBuilder builder) {
+		getProperties().setFromPath(new Object[]{Properties.ATTRIBUTE,Properties.NAME,Properties.BUILDER},builder);
 		return this;
 	}
 	
 	@Override
-	public Boolean getIsPrefixColumnWithTupleRequired() {
-		return (Boolean) getProperties().getFromPath(Properties.IS,Properties.PREFIX,Properties.COLUMN,Properties.TUPLE);
+	public QueryAttributeNameBuilder getAttributeNameBuilder() {
+		return (QueryAttributeNameBuilder) getProperties().getFromPath(Properties.ATTRIBUTE,Properties.NAME,Properties.BUILDER);
+	}
+	
+	@Override
+	public QueryClauseStringBuilder setIsAttributeNamePrefixedWithTuple(Boolean isAttributeNamePrefixedWithTuple){
+		getProperties().setFromPath(new Object[]{Properties.IS,Properties.ATTRIBUTE,Properties.PREFIX,Properties.TUPLE}, isAttributeNamePrefixedWithTuple);
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsAttributeNamePrefixedWithTuple(){
+		return (Boolean) getProperties().getFromPath(Properties.IS,Properties.ATTRIBUTE,Properties.PREFIX,Properties.TUPLE);
 	}
 }

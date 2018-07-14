@@ -12,4 +12,5 @@ public interface FunctionWithPropertiesAsInputAndStringAsOutput extends Function
 	FunctionWithPropertiesAsInputAndStringAsOutput addFormatArguments(Collection<String> formatArguments);
 	FunctionWithPropertiesAsInputAndStringAsOutput addFormatArguments(String...formatArguments);
 	
+	@Override FunctionWithPropertiesAsInputAndStringAsOutput getParent();
 }

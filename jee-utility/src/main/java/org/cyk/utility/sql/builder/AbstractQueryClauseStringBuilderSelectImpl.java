@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -22,17 +21,14 @@ public abstract class AbstractQueryClauseStringBuilderSelectImpl extends Abstrac
 	
 	@Override
 	protected Collection<String> __executeGetArguments__(Collection<Tuple> tuples,Collection<String> arguments) {
-		Collection<Column> columns = getColumns();
+		Collection<Attribute> columns = getAttributes();
 		if(__inject__(CollectionHelper.class).isNotEmpty(columns)){
-			for(Column index : columns){
+			QueryAttributeNameBuilder attributeNameBuilder = getAttributeNameBuilder();
+			attributeNameBuilder.setIsPrefixedWithTuple(getIsAttributeNamePrefixedWithTuple());
+			for(Attribute index : columns){
 				if(arguments == null)
 					arguments = new LinkedHashSet<String>();
-				if(Boolean.TRUE.equals(getIsPrefixColumnWithTupleRequired())){
-					if(index.getTuple() == null)
-						__inject__(ThrowableHelper.class).throwRuntimeException("Sql clause select column tuple is required");
-					arguments.add(index.getTuple().getAlias()+CharacterConstant.DOT+index.getName());
-				}else
-					arguments.add(index.getName());
+				arguments.add(attributeNameBuilder.setAttribute(index).execute().getOutput());
 			}
 		}
 		if(__inject__(CollectionHelper.class).isEmpty(arguments)){

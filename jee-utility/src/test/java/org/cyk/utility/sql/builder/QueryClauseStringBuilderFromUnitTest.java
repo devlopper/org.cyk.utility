@@ -1,5 +1,7 @@
 package org.cyk.utility.sql.builder;
 
+import org.cyk.utility.sql.builder.QueryClauseStringBuilderFrom;
+import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 

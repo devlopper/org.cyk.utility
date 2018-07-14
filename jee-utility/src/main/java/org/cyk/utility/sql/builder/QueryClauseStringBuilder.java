@@ -22,13 +22,17 @@ public interface QueryClauseStringBuilder extends FunctionWithPropertiesAsInput<
 	QueryClauseStringBuilder addTuplesByNames(Collection<String> tupleNames);
 	QueryClauseStringBuilder addTuplesByNames(String...tupleNames);
 	
-	Collection<Column> getColumns();
-	QueryClauseStringBuilder setColumns(Collection<Column> columns);
-	QueryClauseStringBuilder addColumns(Collection<Column> columns);
-	QueryClauseStringBuilder addColumns(Column...columns);
-	QueryClauseStringBuilder addColumnsByNames(Collection<String> columnNames);
-	QueryClauseStringBuilder addColumnsByNames(String...columnNames);
+	Collection<Attribute> getAttributes();
+	QueryClauseStringBuilder setAttributes(Collection<Attribute> attributes);
+	QueryClauseStringBuilder addAttributes(Collection<Attribute> attributes);
+	QueryClauseStringBuilder addAttributes(Attribute...attributes);
+	QueryClauseStringBuilder addAttributesByNames(Collection<String> attributeNames);
+	QueryClauseStringBuilder addAttributesByNames(String...attributeNames);
 	
-	Boolean getIsPrefixColumnWithTupleRequired();
-	QueryClauseStringBuilder setIsPrefixColumnWithTupleRequired(Boolean value);
+	QueryAttributeNameBuilder getAttributeNameBuilder();
+	QueryClauseStringBuilder setAttributeNameBuilder(QueryAttributeNameBuilder builder);
+	
+	QueryClauseStringBuilder setIsAttributeNamePrefixedWithTuple(Boolean isAttributeNamePrefixedWithTuple);
+	
+	Boolean getIsAttributeNamePrefixedWithTuple();
 }

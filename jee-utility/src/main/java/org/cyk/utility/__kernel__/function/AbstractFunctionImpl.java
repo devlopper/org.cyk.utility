@@ -1,6 +1,7 @@
 package org.cyk.utility.__kernel__.function;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -70,5 +71,15 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	public Function<INPUT, OUTPUT> setIsCatchThrowable(Boolean value) {
 		getProperties().setFromPath(new Object[]{Properties.IS,Properties.CATCH,Properties.THROWABLE}, value);
 		return this;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> addChild(Object... children) {
+		return (Function<INPUT, OUTPUT>) super.addChild(children);
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> addChildren(Collection<Object> children) {
+		return (Function<INPUT, OUTPUT>) super.addChildren(children);
 	}
 }
