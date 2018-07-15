@@ -1,11 +1,8 @@
 package org.cyk.utility.sql.builder;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 
 public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements QueryPredicateStringBuilder, Serializable {
@@ -15,15 +12,15 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		getProperties().setFromPath(new Object[]{Properties.IS,Properties.FORMAT,Properties.REQUIRED}, Boolean.TRUE);
-		setFormat("%s%s%s");
+		//setFormat("%s%s%s");
 	}
-	
+	/*
 	@Override
 	public QueryPredicateStringBuilder execute(QueryOperandStringBuilder...operandsBuilders) {
 		setOperandStringBuilders(operandsBuilders);
 		return (QueryPredicateStringBuilder) execute();
 	}
-	
+	/*
 	@Override
 	public QueryPredicateStringBuilder setOperandStringBuilders(QueryOperandStringBuilder... operandsBuilders) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(operandsBuilders)){
@@ -36,21 +33,21 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 		}
 		return this;
 	}
-	
+	*/
 	@Override
 	public QueryPredicateStringBuilder addOperandStringBuilderAttributeName(String attributeName, Tuple tuple) {
-		
+		addFormatArgumentObjects(____inject____(QueryOperandStringBuilder.class).setAttributeNameBuilder(attributeName, tuple));
 		return this;
 	}
 	
 	@Override
 	public QueryPredicateStringBuilder addOperandStringBuilderParameterString(String parameterName) {
-		// TODO Auto-generated method stub
+		addFormatArgumentObjects(____inject____(QueryOperandStringBuilder.class).setParameterStringBuilder(parameterName));
 		return this;
 	}
-	
+	/*
 	@Override
-	protected Collection<String> __getFormatArguments__(Boolean isFormatRequired,Collection<String> formatArguments) {
+	protected Collection<Object> __getFormatArguments__(Boolean isFormatRequired,Collection<Object> formatArguments) {
 		return __inject__(CollectionHelper.class).isEmpty(formatArguments) ? __inject__(CollectionHelper.class)
 				.instanciate(getFirstOperandStringBuilder().execute().getOutput(),getOperator(),getSecondOperandStringBuilder().execute().getOutput()) : formatArguments;
 	}
@@ -87,5 +84,5 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 	public QueryOperandStringBuilder getSecondOperandStringBuilder() {
 		return (QueryOperandStringBuilder) getProperties().getFromPath(Properties.RIGHT,Properties.OPERAND,Properties.BUILDER);
 	}
-	
+	*/
 }

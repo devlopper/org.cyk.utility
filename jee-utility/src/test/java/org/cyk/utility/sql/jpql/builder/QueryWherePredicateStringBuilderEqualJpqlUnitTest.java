@@ -12,28 +12,28 @@ public class QueryWherePredicateStringBuilderEqualJpqlUnitTest extends AbstractA
 	@Test
 	public void builFieldEqualParameter(){
 		assertionHelper.assertEquals("tuple.name=:name", JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
-				.setFirstOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
-						JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
-				.setSecondOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setParameterStringBuilder(
-						JpqlQualifier.inject(QueryParameterStringBuilderJpql.class).setParameterName("name"))).execute().getOutput())
-				;
+			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
+				JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
+			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setParameterStringBuilder(
+				JpqlQualifier.inject(QueryParameterStringBuilderJpql.class).setParameterName("name"))).execute().getOutput())
+			;
 	}
 	
 	@Test
 	public void builFieldEqualLiteralNumber(){
 		assertionHelper.assertEquals("tuple.name=51", JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
-				.setFirstOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
-						JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
-				.setSecondOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setLiteral(51)).execute().getOutput())
-				;
+			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
+				JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
+			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setLiteral(51)).execute().getOutput())
+			;
 	}
 	
 	@Test
 	public void builFieldEqualLiteralString(){
 		assertionHelper.assertEquals("tuple.name='hello'", JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
-				.setFirstOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
-						JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
-				.setSecondOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setLiteral("'hello'")).execute().getOutput())
-				;
+			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
+					JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
+			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setLiteral("'hello'")).execute().getOutput())	
+			;
 	}
 }

@@ -3,7 +3,7 @@ package org.cyk.utility.sql.builder;
 import org.cyk.utility.function.FunctionWithPropertiesAsInputAndStringAsOutput;
 
 public interface QueryPredicateStringBuilder extends FunctionWithPropertiesAsInputAndStringAsOutput {
-
+	/*
 	String getOperator();
 	QueryPredicateStringBuilder setOperator(String operator);
 	
@@ -14,8 +14,9 @@ public interface QueryPredicateStringBuilder extends FunctionWithPropertiesAsInp
 	QueryPredicateStringBuilder setSecondOperandStringBuilder(QueryOperandStringBuilder builder);
 	
 	QueryPredicateStringBuilder setOperandStringBuilders(QueryOperandStringBuilder...operandsBuilders);
+	*/
 	QueryPredicateStringBuilder addOperandStringBuilderAttributeName(String attributeName,Tuple tuple);
 	QueryPredicateStringBuilder addOperandStringBuilderParameterString(String parameterName);
 	
-	QueryPredicateStringBuilder execute(QueryOperandStringBuilder...operandsBuilders);
+	//QueryPredicateStringBuilder execute(QueryOperandStringBuilder...operandsBuilders);
 }

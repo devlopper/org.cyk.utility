@@ -22,7 +22,7 @@ public class QueryStringBuilderSelectJpqlUnitTest extends AbstractArquillianUnit
 	public void selectFromTupleWhereColumn1Equal1(){
 		Tuple tuple = new Tuple().setName("Tuple");
 		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
-				.addFormatArguments("column1","=","1");
+				.addFormatArgumentObjects("column1","1");
 		
 		QueryStringBuilderSelectJpql queryBuilder = JpqlQualifier.inject(QueryStringBuilderSelectJpql.class).from(tuple).where(predicateBuilder);
 		

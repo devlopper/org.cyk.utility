@@ -20,11 +20,11 @@ public class QueryStringBuilderSelectUnitTest extends AbstractArquillianUnitTest
 	public void selectAllAttributeFromTupleWhereColumn1Equal1(){
 		Tuple tuple = new Tuple().setName("Tuple");
 		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class)
-				.addFormatArguments("column1","=","1");
+				.addOperandBuilderByAttributeByParameter("column1", tuple,"myparam");
 		
 		QueryStringBuilderSelect queryBuilder = __inject__(QueryStringBuilderSelect.class).from(tuple).where(predicateBuilder);
 		
-		assertionHelper.assertEquals("SELECT * FROM Tuple tuple WHERE column1=1", queryBuilder.execute().getOutput());
+		assertionHelper.assertEquals("SELECT * FROM Tuple tuple WHERE tuple.column1=@myparam", queryBuilder.execute().getOutput());
 	}
 	
 }

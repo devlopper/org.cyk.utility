@@ -7,10 +7,10 @@ public interface FunctionWithPropertiesAsInputAndStringAsOutput extends Function
 	FunctionWithPropertiesAsInputAndStringAsOutput setFormat(String format);
 	String getFormat();
 	
-	Collection<String> getFormatArguments();
-	FunctionWithPropertiesAsInputAndStringAsOutput setFormatArguments(Collection<String> formatArguments);
-	FunctionWithPropertiesAsInputAndStringAsOutput addFormatArguments(Collection<String> formatArguments);
-	FunctionWithPropertiesAsInputAndStringAsOutput addFormatArguments(String...formatArguments);
+	Collection<Object> getFormatArguments();
+	FunctionWithPropertiesAsInputAndStringAsOutput setFormatArguments(Collection<Object> formatArguments);
+	FunctionWithPropertiesAsInputAndStringAsOutput addFormatArguments(Collection<Object> formatArguments);
+	FunctionWithPropertiesAsInputAndStringAsOutput addFormatArgumentObjects(Object...formatArguments);
 	
 	@Override FunctionWithPropertiesAsInputAndStringAsOutput getParent();
 }

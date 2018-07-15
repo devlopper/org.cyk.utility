@@ -8,7 +8,13 @@ public abstract class AbstractQueryWherePredicateStringBuilderEqualImpl extends 
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		setOperator("=");
+		setFormat("%s=%s");
 	}
-	
+
+	@Override
+	public QueryWherePredicateStringBuilderEqual addOperandBuilderByAttributeByParameter(String attributeName,Tuple tuple, String parameterName) {
+		addFormatArgumentObjects(____inject____(QueryOperandStringBuilder.class).setAttributeNameBuilder(attributeName,tuple)
+				,____inject____(QueryOperandStringBuilder.class).setParameterStringBuilder(parameterName));
+		return this;
+	}
 }

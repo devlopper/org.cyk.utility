@@ -8,7 +8,7 @@ public class QueryClauseStringBuilderWhereUnitTest extends AbstractArquillianUni
 
 	@Test
 	public void build(){
-		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArguments("column1","=","1");
+		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","1");
 		assertionHelper.assertEquals("WHERE column1=1", __inject__(QueryClauseStringBuilderWhere.class).setPredicateBuilder(predicateBuilder).execute().getOutput());
 	}
 	

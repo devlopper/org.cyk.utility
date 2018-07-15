@@ -10,7 +10,7 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 
 	@Test
 	public void isColumn1Equal1ByFormat(){
-		assertionHelper.assertEquals("column1=1", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArguments("column1","=","1").execute().getOutput());
+		assertionHelper.assertEquals("column1=1", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","1").execute().getOutput());
 	}
 	
 	@Test
@@ -23,24 +23,31 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 		Tuple tuple = new Tuple().setName("Tuple").addAttributes(new Attribute().setName("code"));
 		QueryOperandStringBuilder operand1 = __inject__(QueryOperandStringBuilder.class).setAttributeNameBuilder("code",tuple);
 		QueryOperandStringBuilder operand2 = __inject__(QueryOperandStringBuilder.class).setParameterStringBuilder("myparam");
-		assertionHelper.assertEquals("tuple.code=@myparam", __inject__(QueryWherePredicateStringBuilderEqual.class).setOperandStringBuilders(operand1,operand2)
+		assertionHelper.assertEquals("tuple.code=@myparam", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects(operand1,operand2)
 				.execute().getOutput());
 	}
 	
 	@Test
+	public void isColumn1Equal1ByOperandsShortcut(){
+		Tuple tuple = new Tuple().setName("Tuple").addAttributes(new Attribute().setName("code"));
+		assertionHelper.assertEquals("tuple.code=@myparam", __inject__(QueryWherePredicateStringBuilderEqual.class)
+				.addOperandBuilderByAttributeByParameter("code", tuple,"myparam").execute().getOutput());
+	}
+	
+	@Test
 	public void isColumn1Equala(){
-		assertionHelper.assertEquals("column1=a", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArguments("column1","=","a").execute().getOutput());
+		assertionHelper.assertEquals("column1=a", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","a").execute().getOutput());
 	}
 	
 	@Test
 	public void isColumn1EqualParameterMarker(){
-		assertionHelper.assertEquals("column1=?", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArguments("column1","=","?").execute().getOutput());
+		assertionHelper.assertEquals("column1=?", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","?").execute().getOutput());
 	}
 	
 	@Test
 	public void isColumn1Equal1AndColumn2Equal2(){
-		QueryWherePredicateStringBuilder predicate1 = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArguments("column1","=","1");
-		QueryWherePredicateStringBuilder predicate2 = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArguments("column2","=","2");
+		QueryWherePredicateStringBuilder predicate1 = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","1");
+		QueryWherePredicateStringBuilder predicate2 = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column2","2");
 		assertionHelper.assertEquals("column1=1 AND column2=2", __inject__(QueryWherePredicateStringBuilderEqual.class)
 				.addChild(predicate1,LogicalOperator.AND,predicate2).execute().getOutput());
 	}

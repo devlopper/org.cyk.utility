@@ -19,7 +19,7 @@ public abstract class AbstractQueryParameterStringBuilderImpl extends AbstractFu
 	}
 	
 	@Override
-	protected Collection<String> __getFormatArguments__(Boolean isFormatRequired,Collection<String> formatArguments) {
+	protected Collection<Object> __getFormatArguments__(Boolean isFormatRequired,Collection<Object> formatArguments) {
 		return __inject__(CollectionHelper.class).isEmpty(formatArguments) ? __inject__(CollectionHelper.class).instanciate(getParameterName()) : formatArguments;
 	}
 	

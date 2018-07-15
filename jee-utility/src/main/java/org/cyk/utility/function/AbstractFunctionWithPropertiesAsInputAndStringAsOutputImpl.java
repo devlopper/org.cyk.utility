@@ -38,26 +38,40 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 			Boolean isFormatRequired = __getIsFormatRequired__(Boolean.TRUE.equals(getProperties().getFromPath(Properties.IS,Properties.FORMAT,Properties.REQUIRED)));
 			String format = __getFormat__(getFormat());
 			if(__inject__(StringHelper.class).isBlank(format) && isFormatRequired)
-				__inject__(ThrowableHelper.class).throwRuntimeException("Function to output string : format is required");
-			Collection<String> formatArguments = isFormatRequired ? __getFormatArguments__(isFormatRequired,getFormatArguments()) : null;
+				__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getName()+" : format is required");
+			Collection<Object> formatArguments = isFormatRequired ? __getFormatArguments__(isFormatRequired,getFormatArguments()) : null;
 			if(__inject__(CollectionHelper.class).isEmpty(formatArguments) && isFormatRequired)
-				__inject__(ThrowableHelper.class).throwRuntimeException("Function to output string : format arguments are required");
+				__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getName()+" : format arguments are required");
 			if(__inject__(StringHelper.class).isNotBlank(format) && __inject__(CollectionHelper.class).isNotEmpty(formatArguments))
 				return __execute__(format,formatArguments);	
 		}
 		return super.__execute__();
 	}
 	
-	protected String __execute__(String format,Collection<String> formatArguments) throws Exception {
-		return String.format(format, formatArguments.toArray());
+	protected String __execute__(String format,Collection<Object> formatArguments) throws Exception {
+		return String.format(format, __executeConvertFormatArguments__(formatArguments));
 	}
 	
 	protected String __getFormat__(String format){
 		return format;
 	}
 	
-	protected Collection<String> __getFormatArguments__(Boolean isFormatRequired,Collection<String> formatArguments){
+	protected Collection<Object> __getFormatArguments__(Boolean isFormatRequired,Collection<Object> formatArguments){
 		return formatArguments;
+	}
+	
+	protected Object[] __executeConvertFormatArguments__(Collection<Object> formatArguments){
+		Collection<Object> collection = new ArrayList<>();
+		for(Object index : formatArguments){
+			Object object;
+			if(index instanceof FunctionWithPropertiesAsInputAndStringAsOutput)
+				object = ((FunctionWithPropertiesAsInputAndStringAsOutput)index).execute().getOutput();
+			else
+				object = index;
+			//if(object != null)
+				collection.add(object);
+		}
+		return collection.toArray();
 	}
 	
 	protected Boolean __getIsFormatRequired__(Boolean value){
@@ -76,29 +90,29 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 	}
 	
 	@Override
-	public Collection<String> getFormatArguments() {
-		return (Collection<String>) getProperties().getFromPath(Properties.FORMAT,Properties.ARGUMENTS);
+	public Collection<Object> getFormatArguments() {
+		return (Collection<Object>) getProperties().getFromPath(Properties.FORMAT,Properties.ARGUMENTS);
 	}
 	
 	@Override
-	public FunctionWithPropertiesAsInputAndStringAsOutput setFormatArguments(Collection<String> formatArguments) {
+	public FunctionWithPropertiesAsInputAndStringAsOutput setFormatArguments(Collection<Object> formatArguments) {
 		getProperties().setFromPath(new Object[]{Properties.FORMAT,Properties.ARGUMENTS}, formatArguments);
 		return this;
 	}
 	
 	@Override
-	public FunctionWithPropertiesAsInputAndStringAsOutput addFormatArguments(Collection<String> formatArguments) {
+	public FunctionWithPropertiesAsInputAndStringAsOutput addFormatArguments(Collection<Object> formatArguments) {
 		if(__inject__(CollectionHelper.class).isNotEmpty(formatArguments)){
-			Collection<String> collection = getFormatArguments();
+			Collection<Object> collection = getFormatArguments();
 			if(collection == null)
-				setFormatArguments(collection = new ArrayList<String>());
+				setFormatArguments(collection = new ArrayList<Object>());
 			collection.addAll(formatArguments);
 		}
 		return this;
 	}
 	
 	@Override
-	public FunctionWithPropertiesAsInputAndStringAsOutput addFormatArguments(String... formatArguments) {
+	public FunctionWithPropertiesAsInputAndStringAsOutput addFormatArgumentObjects(Object... formatArguments) {
 		addFormatArguments(__inject__(CollectionHelper.class).instanciate(formatArguments));
 		return this;
 	}
