@@ -8,6 +8,15 @@ public class QueryStringBuilderSelectUnitTest extends AbstractArquillianUnitTest
 	private static final long serialVersionUID = 1L;
 
 	@Test
+	public void select(){
+		Tuple tuple = new Tuple().setName("Tuple");
+	
+		QueryStringBuilderSelect queryBuilder = __inject__(QueryStringBuilderSelect.class).select(tuple);
+		
+		assertionHelper.assertEquals("SELECT *", queryBuilder.execute().getOutput());
+	}
+	
+	@Test
 	public void selectAllAttributeFromTuple(){
 		Tuple tuple = new Tuple().setName("Tuple");
 	

@@ -2,6 +2,8 @@ package org.cyk.utility.sql.jpql.builder;
 
 import java.io.Serializable;
 
+import javax.enterprise.util.AnnotationLiteral;
+
 import org.cyk.utility.sql.builder.AbstractQueryStringBuilderSelectImpl;
 import org.cyk.utility.sql.builder.QueryWherePredicateStringBuilder;
 import org.cyk.utility.sql.builder.Tuple;
@@ -12,12 +14,12 @@ import org.cyk.utility.sql.jpql.JpqlQualifier;
 public class QueryStringBuilderSelectJpqlImpl extends AbstractQueryStringBuilderSelectImpl implements QueryStringBuilderSelectJpql, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Override
+	/*@Override
 	protected void __listenPostConstructSetClausesBuilders__() {
 		setFromClauseBuilder(JpqlQualifier.inject(QueryClauseStringBuilderFromJpql.class));
 		setWhereClauseBuilder(JpqlQualifier.inject(QueryClauseStringBuilderWhereJpql.class));
 		setSelectClauseBuilder(JpqlQualifier.inject(QueryClauseStringBuilderSelectJpql.class));
-	}
+	}*/
 	
 	@Override
 	public QueryStringBuilderSelectJpql from(Tuple tuple) {
@@ -34,4 +36,10 @@ public class QueryStringBuilderSelectJpqlImpl extends AbstractQueryStringBuilder
 		return (QueryStringBuilderSelectJpql) super.select(tuple);
 	}
 	
+	/**/
+	
+	@Override
+	protected <OBJECT> OBJECT ____inject____(Class<OBJECT> aClass, AnnotationLiteral<?>... annotationLiterals) {
+		return JpqlQualifier.map(aClass, annotationLiterals);
+	}
 }

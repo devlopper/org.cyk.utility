@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 
@@ -23,12 +24,23 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@SuppressWarnings("unchecked")
 	@Override
 	public ENTITY readOne(Object identifier, Properties properties) {
-		return (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier).execute().getProperties().getEntity();
+		return (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier)
+				.setEntityIdentifierValueUsageType(properties == null ? null : (ValueUsageType)properties.getValueUsageType()).execute().getProperties().getEntity();
 	}
 	
 	@Override
 	public ENTITY readOne(Object identifier) {
-		return readOne(identifier, null);
+		return readOne(identifier, (Properties)null);
+	}
+	
+	@Override
+	public ENTITY readOne(Object identifier, ValueUsageType valueUsageType) {
+		return readOne(identifier, new Properties().setValueUsageType(valueUsageType));
+	}
+	
+	@Override
+	public ENTITY readOneByBusinessIdentifier(Object identifier) {
+		return readOne(identifier, ValueUsageType.BUSINESS);
 	}
 	
 	@SuppressWarnings("unchecked")

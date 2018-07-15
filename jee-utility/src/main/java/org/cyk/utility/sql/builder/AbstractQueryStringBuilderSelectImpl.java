@@ -23,7 +23,7 @@ public abstract class AbstractQueryStringBuilderSelectImpl extends AbstractQuery
 		
 		return super.__execute__();
 	}
-	
+	/*
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
@@ -34,11 +34,20 @@ public abstract class AbstractQueryStringBuilderSelectImpl extends AbstractQuery
 		setFromClauseBuilder(__inject__(QueryClauseStringBuilderFrom.class));
 		setWhereClauseBuilder(__inject__(QueryClauseStringBuilderWhere.class));
 		setSelectClauseBuilder(__inject__(QueryClauseStringBuilderSelect.class));
-	}
+	}*/
 	
 	@Override
 	public QueryClauseStringBuilderSelect getSelectClauseBuilder() {
 		return (QueryClauseStringBuilderSelect) getProperties().getFromPath(Properties.BUILDER,Properties.SELECT);
+	}
+	
+	@Override
+	public QueryClauseStringBuilderSelect getSelectClauseBuilder(Boolean injectIfNull) {
+		QueryClauseStringBuilderSelect clause = getSelectClauseBuilder();
+		if(clause == null && Boolean.TRUE.equals(injectIfNull)){
+			setSelectClauseBuilder(clause = ____inject____(QueryClauseStringBuilderSelect.class));
+		}
+		return clause;
 	}
 
 	@Override
@@ -49,13 +58,13 @@ public abstract class AbstractQueryStringBuilderSelectImpl extends AbstractQuery
 
 	@Override
 	public QueryStringBuilderSelect select(Tuple tuple) {
-		getSelectClauseBuilder().addTuples(tuple);
+		getSelectClauseBuilder(Boolean.TRUE).addTuples(tuple);
 		return this;
 	}
 
 	@Override
 	public QueryStringBuilderSelect from(Tuple tuple) {
-		getSelectClauseBuilder().addTuples(tuple);
+		getSelectClauseBuilder(Boolean.TRUE).addTuples(tuple);
 		return (QueryStringBuilderSelect) super.from(tuple);
 	}
 	

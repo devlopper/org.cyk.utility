@@ -3,5 +3,6 @@ package org.cyk.utility.sql.builder;
 public interface QueryWherePredicateStringBuilderEqual extends QueryWherePredicateStringBuilder {
 
 	QueryWherePredicateStringBuilderEqual addOperandBuilderByAttributeByParameter(String attributeName,Tuple tuple,String parameterName);
+	QueryWherePredicateStringBuilderEqual addOperandBuilderByAttribute(String attributeName,Tuple tuple);
 	
 }

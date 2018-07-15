@@ -12,6 +12,14 @@ public abstract class AbstractQueryStringBuilderImpl extends AbstractFunctionWit
 	public QueryClauseStringBuilderFrom getFromClauseBuilder() {
 		return (QueryClauseStringBuilderFrom) getProperties().getFromPath(Properties.BUILDER,Properties.FROM);
 	}
+	
+	@Override
+	public QueryClauseStringBuilderFrom getFromClauseBuilder(Boolean injectIfNull) {
+		QueryClauseStringBuilderFrom clause = getFromClauseBuilder();
+		if(clause == null && Boolean.TRUE.equals(injectIfNull))
+			setFromClauseBuilder(clause = ____inject____(QueryClauseStringBuilderFrom.class));
+		return clause;
+	}
 
 	@Override
 	public QueryStringBuilder setFromClauseBuilder(QueryClauseStringBuilderFrom builder) {
@@ -21,13 +29,21 @@ public abstract class AbstractQueryStringBuilderImpl extends AbstractFunctionWit
 	
 	@Override
 	public QueryStringBuilder from(Tuple tuple) {
-		getFromClauseBuilder().addTuples(tuple);
+		getFromClauseBuilder(Boolean.TRUE).addTuples(tuple);
 		return this;
 	}
 
 	@Override
 	public QueryClauseStringBuilderWhere getWhereClauseBuilder() {
 		return (QueryClauseStringBuilderWhere) getProperties().getFromPath(Properties.BUILDER,Properties.WHERE);
+	}
+	
+	@Override
+	public QueryClauseStringBuilderWhere getWhereClauseBuilder(Boolean injectIfNull) {
+		QueryClauseStringBuilderWhere clause = getWhereClauseBuilder();
+		if(clause == null && Boolean.TRUE.equals(injectIfNull))
+			setWhereClauseBuilder(clause = ____inject____(QueryClauseStringBuilderWhere.class));
+		return clause;
 	}
 
 	@Override
@@ -38,7 +54,7 @@ public abstract class AbstractQueryStringBuilderImpl extends AbstractFunctionWit
 	
 	@Override
 	public QueryStringBuilder where(QueryWherePredicateStringBuilder predicateBuilder) {
-		getWhereClauseBuilder().setPredicateBuilder(predicateBuilder);
+		getWhereClauseBuilder(Boolean.TRUE).setPredicateBuilder(predicateBuilder);
 		return this;
 	}
 	

@@ -17,4 +17,10 @@ public abstract class AbstractQueryWherePredicateStringBuilderEqualImpl extends 
 				,____inject____(QueryOperandStringBuilder.class).setParameterStringBuilder(parameterName));
 		return this;
 	}
+	
+	@Override
+	public QueryWherePredicateStringBuilderEqual addOperandBuilderByAttribute(String attributeName,Tuple tuple) {
+		addOperandBuilderByAttributeByParameter(attributeName, tuple, attributeName);
+		return this;
+	}
 }

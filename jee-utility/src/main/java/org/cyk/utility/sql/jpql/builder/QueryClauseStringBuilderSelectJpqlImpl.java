@@ -3,10 +3,13 @@ package org.cyk.utility.sql.jpql.builder;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.util.AnnotationLiteral;
+
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.sql.builder.AbstractQueryClauseStringBuilderSelectImpl;
 import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.sql.jpql.Jpql;
+import org.cyk.utility.sql.jpql.JpqlQualifier;
 
 @Jpql
 public class QueryClauseStringBuilderSelectJpqlImpl extends AbstractQueryClauseStringBuilderSelectImpl implements QueryClauseStringBuilderSelectJpql, Serializable {
@@ -15,6 +18,11 @@ public class QueryClauseStringBuilderSelectJpqlImpl extends AbstractQueryClauseS
 	@Override
 	protected String getAllColumnsArgument(Collection<Tuple> tuples) {
 		return __inject__(CollectionHelper.class).getFirst(tuples).getAlias();
+	}
+	
+	@Override
+	protected <OBJECT> OBJECT ____inject____(Class<OBJECT> aClass, AnnotationLiteral<?>... annotationLiterals) {
+		return JpqlQualifier.map(aClass, annotationLiterals);
 	}
 
 }

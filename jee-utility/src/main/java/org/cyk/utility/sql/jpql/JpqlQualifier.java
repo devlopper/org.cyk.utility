@@ -3,6 +3,18 @@ package org.cyk.utility.sql.jpql;
 import javax.enterprise.util.AnnotationLiteral;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.sql.builder.QueryAttributeNameBuilder;
+import org.cyk.utility.sql.builder.QueryClauseStringBuilderFrom;
+import org.cyk.utility.sql.builder.QueryClauseStringBuilderSelect;
+import org.cyk.utility.sql.builder.QueryClauseStringBuilderWhere;
+import org.cyk.utility.sql.builder.QueryOperandStringBuilder;
+import org.cyk.utility.sql.builder.QueryParameterStringBuilder;
+import org.cyk.utility.sql.jpql.builder.QueryAttributeNameBuilderJpql;
+import org.cyk.utility.sql.jpql.builder.QueryClauseStringBuilderFromJpql;
+import org.cyk.utility.sql.jpql.builder.QueryClauseStringBuilderSelectJpql;
+import org.cyk.utility.sql.jpql.builder.QueryClauseStringBuilderWhereJpql;
+import org.cyk.utility.sql.jpql.builder.QueryOperandStringBuilderJpql;
+import org.cyk.utility.sql.jpql.builder.QueryParameterStringBuilderJpql;
 
 public class JpqlQualifier extends AnnotationLiteral<Jpql> implements Jpql {
 	private static final long serialVersionUID = 1L;
@@ -10,5 +22,30 @@ public class JpqlQualifier extends AnnotationLiteral<Jpql> implements Jpql {
 	public static <T> T inject(Class<T> aClass){
 		return DependencyInjection.injectByQualifiersClasses(aClass, JpqlQualifier.class);
 	}
+
+	/**/
 	
+	public static <OBJECT> OBJECT map(Class<OBJECT> aClass, AnnotationLiteral<?>... annotationLiterals) {
+		/* clause */
+		if(QueryClauseStringBuilderSelect.class.equals(aClass))
+			return (OBJECT) JpqlQualifier.inject(QueryClauseStringBuilderSelectJpql.class);
+		if(QueryClauseStringBuilderWhere.class.equals(aClass))
+			return (OBJECT) JpqlQualifier.inject(QueryClauseStringBuilderWhereJpql.class);
+		if(QueryClauseStringBuilderFrom.class.equals(aClass))
+			return (OBJECT) JpqlQualifier.inject(QueryClauseStringBuilderFromJpql.class);
+		
+		if(QueryAttributeNameBuilder.class.equals(aClass))
+			return (OBJECT) JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class);
+		
+		if(QueryParameterStringBuilder.class.equals(aClass))
+			return (OBJECT) JpqlQualifier.inject(QueryParameterStringBuilderJpql.class);
+		
+		if(QueryOperandStringBuilder.class.equals(aClass))
+			return (OBJECT) JpqlQualifier.inject(QueryOperandStringBuilderJpql.class);
+		
+		//if(QueryPredicateStringBuilder.class.equals(aClass))
+		//	return (OBJECT) JpqlQualifier.inject(QueryPredicateStringBuilder.class);
+		
+		return DependencyInjection.inject(aClass, annotationLiterals);
+	}
 }
