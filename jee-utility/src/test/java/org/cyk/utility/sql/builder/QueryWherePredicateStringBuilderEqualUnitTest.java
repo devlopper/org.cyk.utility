@@ -5,12 +5,26 @@ import org.cyk.utility.sql.builder.QueryWherePredicateStringBuilderEqual;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
-public class QueryPredicateStringBuilderEqualUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 
 	@Test
-	public void isColumn1Equal1(){
+	public void isColumn1Equal1ByFormat(){
 		assertionHelper.assertEquals("column1=1", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArguments("column1","=","1").execute().getOutput());
+	}
+	
+	@Test
+	public void isColumn1Equal1ByChild(){
+		assertionHelper.assertEquals("column1 = 1", __inject__(QueryWherePredicateStringBuilderEqual.class).addChild("column1","=","1").execute().getOutput());
+	}
+	
+	@Test
+	public void isColumn1Equal1ByOperands(){
+		Tuple tuple = new Tuple().setName("Tuple").addAttributes(new Attribute().setName("code"));
+		QueryOperandStringBuilder operand1 = __inject__(QueryOperandStringBuilder.class).setAttributeNameBuilder("code",tuple);
+		QueryOperandStringBuilder operand2 = __inject__(QueryOperandStringBuilder.class).setParameterStringBuilder("myparam");
+		assertionHelper.assertEquals("tuple.code=@myparam", __inject__(QueryWherePredicateStringBuilderEqual.class).setOperandStringBuilders(operand1,operand2)
+				.execute().getOutput());
 	}
 	
 	@Test

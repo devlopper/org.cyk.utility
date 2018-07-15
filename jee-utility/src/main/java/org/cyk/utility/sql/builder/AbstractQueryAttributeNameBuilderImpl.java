@@ -29,9 +29,31 @@ public abstract class AbstractQueryAttributeNameBuilderImpl extends AbstractFunc
 	}
 	
 	@Override
+	public QueryAttributeNameBuilder execute(String attributeName, Tuple tuple) {
+		setAttribute(attributeName,tuple);
+		return (QueryAttributeNameBuilder) execute();
+	}
+	
+	@Override
+	public QueryAttributeNameBuilder execute(String attributeName) {
+		return execute(attributeName,null);
+	}
+	
+	@Override
 	public QueryAttributeNameBuilder setAttribute(Attribute attribute) {
 		getProperties().setAttribute(attribute);
 		return this;
+	}
+	
+	@Override
+	public QueryAttributeNameBuilder setAttribute(String attributeName, Tuple tuple) {
+		setAttribute(tuple == null ? new Attribute().setName(attributeName).setIsPrefixedWithTuple(Boolean.FALSE) : tuple.getAttributeByName(attributeName, Boolean.TRUE));
+		return this;
+	}
+	
+	@Override
+	public QueryAttributeNameBuilder setAttribute(String attributeName) {
+		return setAttribute(attributeName, null);
 	}
 
 	@Override

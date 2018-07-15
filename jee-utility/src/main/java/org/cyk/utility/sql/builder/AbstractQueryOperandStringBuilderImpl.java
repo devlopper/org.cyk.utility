@@ -22,6 +22,24 @@ public abstract class AbstractQueryOperandStringBuilderImpl extends
 	}
 	
 	@Override
+	public QueryOperandStringBuilder executeAttribute(String attributeName, Tuple tuple) {
+		setAttributeNameBuilder(____inject____(QueryAttributeNameBuilder.class).setAttribute(attributeName, tuple));
+		return (QueryOperandStringBuilder) execute();
+	}
+	
+	@Override
+	public QueryOperandStringBuilder executeLiteral(Object literal) {
+		setLiteral(literal);
+		return (QueryOperandStringBuilder) execute();
+	}
+	
+	@Override
+	public QueryOperandStringBuilder executeParameter(String name) {
+		setParameterStringBuilder(____inject____(QueryParameterStringBuilder.class).setParameterName(name));
+		return (QueryOperandStringBuilder) execute();
+	}
+	
+	@Override
 	public QueryOperandStringBuilder setAttributeNameBuilder(QueryAttributeNameBuilder builder) {
 		getProperties().setFromPath(new Object[]{Properties.ATTRIBUTE,Properties.NAME,Properties.BUILDER}, builder);
 		return this;
@@ -30,6 +48,12 @@ public abstract class AbstractQueryOperandStringBuilderImpl extends
 	@Override
 	public QueryAttributeNameBuilder getAttributeNameBuilder() {
 		return (QueryAttributeNameBuilder) getProperties().getFromPath(Properties.ATTRIBUTE,Properties.NAME,Properties.BUILDER);
+	}
+	
+	@Override
+	public QueryOperandStringBuilder setAttributeNameBuilder(String attributeName, Tuple tuple) {
+		setAttributeNameBuilder(____inject____(QueryAttributeNameBuilder.class).setAttribute(attributeName, tuple));
+		return this;
 	}
 
 	@Override
@@ -54,6 +78,10 @@ public abstract class AbstractQueryOperandStringBuilderImpl extends
 		return (QueryParameterStringBuilder) getProperties().getFromPath(Properties.PARAMETER,Properties.BUILDER);
 	}
 
-	
+	@Override
+	public QueryOperandStringBuilder setParameterStringBuilder(String parameterName) {
+		setParameterStringBuilder(____inject____(QueryParameterStringBuilder.class).setParameterName(parameterName));
+		return this;
+	}
 	
 }

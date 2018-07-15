@@ -14,6 +14,16 @@ import lombok.experimental.Accessors;
 public abstract class AbstractObject implements Objectable,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	protected <OBJECT> OBJECT ____inject____(Class<OBJECT> aClass,AnnotationLiteral<?>...annotationLiterals){
+		return __inject__(aClass, annotationLiterals);
+	}
+	
+	public <OBJECT> OBJECT ____injectByQualifiersClasses____(Class<OBJECT> aClass,@SuppressWarnings("unchecked") Class<? extends AnnotationLiteral<?>>...annotationLiteralClasses){
+		return __injectByQualifiersClasses__(aClass, annotationLiteralClasses);
+	}
+	
+	/**/
+	
 	protected static <OBJECT> OBJECT __inject__(Class<OBJECT> aClass,AnnotationLiteral<?>...annotationLiterals){
 		if(aClass == null){
 			//TODO log warning
@@ -22,7 +32,7 @@ public abstract class AbstractObject implements Objectable,Serializable {
 		return DependencyInjection.inject(aClass,annotationLiterals);
 	}
 	
-	public <OBJECT> OBJECT __injectByQualifiersClasses__(Class<OBJECT> aClass,@SuppressWarnings("unchecked") Class<? extends AnnotationLiteral<?>>...annotationLiteralClasses){
+	public static <OBJECT> OBJECT __injectByQualifiersClasses__(Class<OBJECT> aClass,@SuppressWarnings("unchecked") Class<? extends AnnotationLiteral<?>>...annotationLiteralClasses){
 		if(aClass == null){
 			//TODO log warning
 			return null;

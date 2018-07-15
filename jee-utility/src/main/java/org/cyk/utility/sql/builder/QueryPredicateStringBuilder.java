@@ -7,9 +7,15 @@ public interface QueryPredicateStringBuilder extends FunctionWithPropertiesAsInp
 	String getOperator();
 	QueryPredicateStringBuilder setOperator(String operator);
 	
-	QueryOperandStringBuilder getLeftOperandStringBuilder();
-	QueryPredicateStringBuilder setLeftOperandStringBuilder(QueryOperandStringBuilder builder);
+	QueryOperandStringBuilder getFirstOperandStringBuilder();
+	QueryPredicateStringBuilder setFirstOperandStringBuilder(QueryOperandStringBuilder builder);
 	
-	QueryOperandStringBuilder getRightOperandStringBuilder();
-	QueryPredicateStringBuilder setRightOperandStringBuilder(QueryOperandStringBuilder builder);
+	QueryOperandStringBuilder getSecondOperandStringBuilder();
+	QueryPredicateStringBuilder setSecondOperandStringBuilder(QueryOperandStringBuilder builder);
+	
+	QueryPredicateStringBuilder setOperandStringBuilders(QueryOperandStringBuilder...operandsBuilders);
+	QueryPredicateStringBuilder addOperandStringBuilderAttributeName(String attributeName,Tuple tuple);
+	QueryPredicateStringBuilder addOperandStringBuilderParameterString(String parameterName);
+	
+	QueryPredicateStringBuilder execute(QueryOperandStringBuilder...operandsBuilders);
 }

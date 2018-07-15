@@ -12,9 +12,9 @@ public class QueryWherePredicateStringBuilderEqualJpqlUnitTest extends AbstractA
 	@Test
 	public void builFieldEqualParameter(){
 		assertionHelper.assertEquals("tuple.name=:name", JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
-				.setLeftOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
+				.setFirstOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
 						JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
-				.setRightOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setParameterStringBuilder(
+				.setSecondOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setParameterStringBuilder(
 						JpqlQualifier.inject(QueryParameterStringBuilderJpql.class).setParameterName("name"))).execute().getOutput())
 				;
 	}
@@ -22,18 +22,18 @@ public class QueryWherePredicateStringBuilderEqualJpqlUnitTest extends AbstractA
 	@Test
 	public void builFieldEqualLiteralNumber(){
 		assertionHelper.assertEquals("tuple.name=51", JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
-				.setLeftOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
+				.setFirstOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
 						JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
-				.setRightOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setLiteral(51)).execute().getOutput())
+				.setSecondOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setLiteral(51)).execute().getOutput())
 				;
 	}
 	
 	@Test
 	public void builFieldEqualLiteralString(){
 		assertionHelper.assertEquals("tuple.name='hello'", JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
-				.setLeftOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
+				.setFirstOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
 						JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
-				.setRightOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setLiteral("'hello'")).execute().getOutput())
+				.setSecondOperandStringBuilder(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setLiteral("'hello'")).execute().getOutput())
 				;
 	}
 }

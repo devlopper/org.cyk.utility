@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.throwable.ThrowableHelper;
 
 public abstract class AbstractQueryClauseStringBuilderWhereImpl extends AbstractQueryClauseStringBuilderImpl implements QueryClauseStringBuilderWhere, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -18,7 +19,10 @@ public abstract class AbstractQueryClauseStringBuilderWhereImpl extends Abstract
 	
 	@Override
 	protected Collection<String> __executeGetArguments__(Collection<Tuple> tuples, Collection<String> arguments) {
-		return __inject__(CollectionHelper.class).isEmpty(arguments) ? __inject__(CollectionHelper.class).instanciate(getPredicateBuilder().execute().getOutput()) 
+		QueryWherePredicateStringBuilder predicateBuilder = getPredicateBuilder();
+		if(predicateBuilder == null)
+			__inject__(ThrowableHelper.class).throwRuntimeException("Sql query clause where : predicate is required");
+		return __inject__(CollectionHelper.class).isEmpty(arguments) ? __inject__(CollectionHelper.class).instanciate(predicateBuilder.execute().getOutput()) 
 				: super.__executeGetArguments__(tuples, arguments);
 	}
 	

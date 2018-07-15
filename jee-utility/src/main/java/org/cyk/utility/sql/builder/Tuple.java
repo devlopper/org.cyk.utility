@@ -11,6 +11,23 @@ import org.cyk.utility.string.StringHelper;
 public class Tuple extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public Attribute getAttributeByName(String name,Boolean instanciateIfNull){
+		Collection<Attribute> attributes = getAttributes();
+		Attribute attribute = null;
+		if(__inject__(CollectionHelper.class).isNotEmpty(attributes)){
+			for(Attribute index : attributes)
+				if(index.getName().equals(name)){
+					attribute = index;
+					break;
+				}
+		}
+		if(attribute == null && Boolean.TRUE.equals(instanciateIfNull)){
+			attribute = new Attribute().setName(name).setTuple(this);
+			addAttributes(attribute);
+		}
+		return attribute;
+	}
+	
 	public String getName(){
 		return (String) getProperties().getName();
 	}

@@ -9,41 +9,58 @@ public abstract class AbstractQueryStringBuilderSelectImpl extends AbstractQuery
 
 	@Override
 	protected String __execute__() throws Exception {
-		addChild(getSelectBuilder(),getFromBuilder(),getWhereBuilder());
+		QueryClauseStringBuilderSelect select = getSelectClauseBuilder();
+		if(select!=null)
+			addChild(select);
+		
+		QueryClauseStringBuilderFrom from = getFromClauseBuilder();
+		if(from!=null)
+			addChild(from);
+		
+		QueryClauseStringBuilderWhere where = getWhereClauseBuilder();
+		if(where!=null && where.getPredicateBuilder()!=null)
+			addChild(where);
+		
 		return super.__execute__();
 	}
 	
 	@Override
-	public QueryClauseStringBuilderSelect getSelectBuilder() {
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		__listenPostConstructSetClausesBuilders__();
+	}
+	
+	protected void __listenPostConstructSetClausesBuilders__() {
+		setFromClauseBuilder(__inject__(QueryClauseStringBuilderFrom.class));
+		setWhereClauseBuilder(__inject__(QueryClauseStringBuilderWhere.class));
+		setSelectClauseBuilder(__inject__(QueryClauseStringBuilderSelect.class));
+	}
+	
+	@Override
+	public QueryClauseStringBuilderSelect getSelectClauseBuilder() {
 		return (QueryClauseStringBuilderSelect) getProperties().getFromPath(Properties.BUILDER,Properties.SELECT);
 	}
 
 	@Override
-	public QueryStringBuilder setSelectBuilder(QueryClauseStringBuilderSelect builder) {
+	public QueryStringBuilderSelect setSelectClauseBuilder(QueryClauseStringBuilderSelect builder) {
 		getProperties().setFromPath(new Object[]{Properties.BUILDER,Properties.SELECT}, builder);
 		return this;
 	}
 
 	@Override
-	public QueryClauseStringBuilderFrom getFromBuilder() {
-		return (QueryClauseStringBuilderFrom) getProperties().getFromPath(Properties.BUILDER,Properties.FROM);
-	}
-
-	@Override
-	public QueryStringBuilder setFromBuilder(QueryClauseStringBuilderFrom builder) {
-		getProperties().setFromPath(new Object[]{Properties.BUILDER,Properties.FROM}, builder);
+	public QueryStringBuilderSelect select(Tuple tuple) {
+		getSelectClauseBuilder().addTuples(tuple);
 		return this;
 	}
 
 	@Override
-	public QueryClauseStringBuilderWhere getWhereBuilder() {
-		return (QueryClauseStringBuilderWhere) getProperties().getFromPath(Properties.BUILDER,Properties.WHERE);
+	public QueryStringBuilderSelect from(Tuple tuple) {
+		getSelectClauseBuilder().addTuples(tuple);
+		return (QueryStringBuilderSelect) super.from(tuple);
 	}
-
+	
 	@Override
-	public QueryStringBuilder setWhereBuilder(QueryClauseStringBuilderWhere builder) {
-		getProperties().setFromPath(new Object[]{Properties.BUILDER,Properties.WHERE}, builder);
-		return this;
+	public QueryStringBuilderSelect where(QueryWherePredicateStringBuilder predicateBuilder) {
+		return (QueryStringBuilderSelect) super.where(predicateBuilder);
 	}
-
 }

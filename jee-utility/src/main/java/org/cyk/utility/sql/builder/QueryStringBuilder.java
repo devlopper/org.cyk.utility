@@ -4,11 +4,11 @@ import org.cyk.utility.function.FunctionWithPropertiesAsInputAndStringAsOutput;
 
 public interface QueryStringBuilder extends FunctionWithPropertiesAsInputAndStringAsOutput {
 
+	QueryClauseStringBuilderFrom getFromClauseBuilder();
+	QueryStringBuilder setFromClauseBuilder(QueryClauseStringBuilderFrom builder);
+	QueryStringBuilder from(Tuple tuple);
 	
-	
-	QueryClauseStringBuilderFrom getFromBuilder();
-	QueryStringBuilder setFromBuilder(QueryClauseStringBuilderFrom builder);
-	
-	QueryClauseStringBuilderWhere getWhereBuilder();
-	QueryStringBuilder setWhereBuilder(QueryClauseStringBuilderWhere builder);
+	QueryClauseStringBuilderWhere getWhereClauseBuilder();
+	QueryStringBuilder setWhereClauseBuilder(QueryClauseStringBuilderWhere builder);
+	QueryStringBuilder where(QueryWherePredicateStringBuilder predicateBuilder);
 }
