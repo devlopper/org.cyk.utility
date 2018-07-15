@@ -18,7 +18,7 @@ public abstract class AbstractQueryOperandStringBuilderImpl extends
 		Object literal = getLiteral();
 		if(literal!=null)
 			return literal.toString();
-		return getParameterStringBuilder().execute().getOutput();
+		return getParameterNameBuilder().execute().getOutput();
 	}
 	
 	@Override
@@ -35,7 +35,7 @@ public abstract class AbstractQueryOperandStringBuilderImpl extends
 	
 	@Override
 	public QueryOperandStringBuilder executeParameter(String name) {
-		setParameterStringBuilder(____inject____(QueryParameterStringBuilder.class).setParameterName(name));
+		setParameterNameBuilder(____inject____(QueryParameterNameBuilder.class).setParameter(name));
 		return (QueryOperandStringBuilder) execute();
 	}
 	
@@ -68,19 +68,19 @@ public abstract class AbstractQueryOperandStringBuilderImpl extends
 	}
 
 	@Override
-	public QueryOperandStringBuilder setParameterStringBuilder(QueryParameterStringBuilder builder) {
+	public QueryOperandStringBuilder setParameterNameBuilder(QueryParameterNameBuilder builder) {
 		getProperties().setFromPath(new Object[]{Properties.PARAMETER,Properties.BUILDER}, builder);
 		return this;
 	}
 
 	@Override
-	public QueryParameterStringBuilder getParameterStringBuilder() {
-		return (QueryParameterStringBuilder) getProperties().getFromPath(Properties.PARAMETER,Properties.BUILDER);
+	public QueryParameterNameBuilder getParameterNameBuilder() {
+		return (QueryParameterNameBuilder) getProperties().getFromPath(Properties.PARAMETER,Properties.BUILDER);
 	}
 
 	@Override
-	public QueryOperandStringBuilder setParameterStringBuilder(String parameterName) {
-		setParameterStringBuilder(____inject____(QueryParameterStringBuilder.class).setParameterName(parameterName));
+	public QueryOperandStringBuilder setParameterNameBuilder(String parameterName) {
+		setParameterNameBuilder(____inject____(QueryParameterNameBuilder.class).setParameter(parameterName));
 		return this;
 	}
 	

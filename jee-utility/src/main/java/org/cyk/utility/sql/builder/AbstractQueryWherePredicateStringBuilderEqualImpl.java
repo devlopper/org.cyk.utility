@@ -14,7 +14,7 @@ public abstract class AbstractQueryWherePredicateStringBuilderEqualImpl extends 
 	@Override
 	public QueryWherePredicateStringBuilderEqual addOperandBuilderByAttributeByParameter(String attributeName,Tuple tuple, String parameterName) {
 		addFormatArgumentObjects(____inject____(QueryOperandStringBuilder.class).setAttributeNameBuilder(attributeName,tuple)
-				,____inject____(QueryOperandStringBuilder.class).setParameterStringBuilder(parameterName));
+				,____inject____(QueryOperandStringBuilder.class).setParameterNameBuilder(parameterName));
 		return this;
 	}
 	

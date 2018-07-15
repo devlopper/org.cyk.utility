@@ -153,22 +153,22 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	}
 	
 	@Override
-	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass,Collection<ELEMENT> collection,Boolean append,@SuppressWarnings("unchecked") ELEMENT...elements){
+	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass,Collection<ELEMENT> collection,Boolean append,ELEMENT[] elements){
 		return add(collectionClass,collection,append,instanciate(elements));
 	}
 	
 	@Override
-	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass,Collection<ELEMENT> collection,@SuppressWarnings("unchecked") ELEMENT...elements){
+	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass,Collection<ELEMENT> collection,ELEMENT[] elements){
 		return add(collectionClass,collection,Boolean.TRUE,instanciate(elements));
 	}
 	
 	@Override
-	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,Boolean append,@SuppressWarnings("unchecked") ELEMENT...elements){
+	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,Boolean append,ELEMENT[] elements){
 		return add(collection,append,instanciate(elements));
 	}
 	
 	@Override
-	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,@SuppressWarnings("unchecked") ELEMENT...elements){
+	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,ELEMENT[] elements){
 		return add(collection,Boolean.TRUE,instanciate(elements));
 	}
 }

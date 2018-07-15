@@ -23,7 +23,7 @@ public class QueryOperandStringBuilderJpqlUnitTest extends AbstractArquillianUni
 	
 	@Test
 	public void buildOperandUsingParameter(){
-		assertionHelper.assertEquals(":myparam", JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setParameterStringBuilder(
-				JpqlQualifier.inject(QueryParameterStringBuilderJpql.class).setParameterName("myparam")).execute().getOutput());
+		assertionHelper.assertEquals(":myparam", JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setParameterNameBuilder(
+				JpqlQualifier.inject(QueryParameterNameBuilderJpql.class).setParameter("myparam")).execute().getOutput());
 	}
 }

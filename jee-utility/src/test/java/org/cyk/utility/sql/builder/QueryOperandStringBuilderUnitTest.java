@@ -31,8 +31,8 @@ public class QueryOperandStringBuilderUnitTest extends AbstractArquillianUnitTes
 	
 	@Test
 	public void buildOperandUsingParameter(){
-		assertionHelper.assertEquals("@myparam", __inject__(QueryOperandStringBuilder.class).setParameterStringBuilder(
-				__inject__(QueryParameterStringBuilder.class).setParameterName("myparam")).execute().getOutput());
+		assertionHelper.assertEquals("@myparam", __inject__(QueryOperandStringBuilder.class).setParameterNameBuilder(
+				__inject__(QueryParameterNameBuilder.class).setParameter("myparam")).execute().getOutput());
 	}
 	
 	@Test

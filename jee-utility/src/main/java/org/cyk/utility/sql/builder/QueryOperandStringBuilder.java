@@ -18,9 +18,9 @@ public interface QueryOperandStringBuilder extends FunctionWithPropertiesAsInput
 	QueryOperandStringBuilder setLiteral(Object literal);
 	Object getLiteral();
 	
-	QueryOperandStringBuilder setParameterStringBuilder(QueryParameterStringBuilder builder);
-	QueryOperandStringBuilder setParameterStringBuilder(String parameterName);
-	QueryParameterStringBuilder getParameterStringBuilder();
+	QueryOperandStringBuilder setParameterNameBuilder(QueryParameterNameBuilder builder);
+	QueryOperandStringBuilder setParameterNameBuilder(String parameterName);
+	QueryParameterNameBuilder getParameterNameBuilder();
 	
 	QueryOperandStringBuilder executeAttribute(String attributeName,Tuple tuple);
 	QueryOperandStringBuilder executeLiteral(Object literal);

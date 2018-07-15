@@ -2,7 +2,6 @@ package org.cyk.utility.clazz;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public class ClassNameGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements ClassNameGetter , Serializable {
@@ -21,7 +20,7 @@ public class ClassNameGetterImpl extends AbstractFunctionWithPropertiesAsInputIm
 
 	@Override
 	protected String __execute__() {
-		Class<?> clazz = null;
+		//Class<?> clazz = null;
 		
 		
 		return null;

@@ -2,7 +2,6 @@ package org.cyk.utility.clazz;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public class ClassLocatorImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class<?>> implements ClassLocator , Serializable {

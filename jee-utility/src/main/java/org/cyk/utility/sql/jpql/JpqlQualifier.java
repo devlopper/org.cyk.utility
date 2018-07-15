@@ -8,13 +8,13 @@ import org.cyk.utility.sql.builder.QueryClauseStringBuilderFrom;
 import org.cyk.utility.sql.builder.QueryClauseStringBuilderSelect;
 import org.cyk.utility.sql.builder.QueryClauseStringBuilderWhere;
 import org.cyk.utility.sql.builder.QueryOperandStringBuilder;
-import org.cyk.utility.sql.builder.QueryParameterStringBuilder;
+import org.cyk.utility.sql.builder.QueryParameterNameBuilder;
 import org.cyk.utility.sql.jpql.builder.QueryAttributeNameBuilderJpql;
 import org.cyk.utility.sql.jpql.builder.QueryClauseStringBuilderFromJpql;
 import org.cyk.utility.sql.jpql.builder.QueryClauseStringBuilderSelectJpql;
 import org.cyk.utility.sql.jpql.builder.QueryClauseStringBuilderWhereJpql;
 import org.cyk.utility.sql.jpql.builder.QueryOperandStringBuilderJpql;
-import org.cyk.utility.sql.jpql.builder.QueryParameterStringBuilderJpql;
+import org.cyk.utility.sql.jpql.builder.QueryParameterNameBuilderJpql;
 
 public class JpqlQualifier extends AnnotationLiteral<Jpql> implements Jpql {
 	private static final long serialVersionUID = 1L;
@@ -37,8 +37,8 @@ public class JpqlQualifier extends AnnotationLiteral<Jpql> implements Jpql {
 		if(QueryAttributeNameBuilder.class.equals(aClass))
 			return (OBJECT) JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class);
 		
-		if(QueryParameterStringBuilder.class.equals(aClass))
-			return (OBJECT) JpqlQualifier.inject(QueryParameterStringBuilderJpql.class);
+		if(QueryParameterNameBuilder.class.equals(aClass))
+			return (OBJECT) JpqlQualifier.inject(QueryParameterNameBuilderJpql.class);
 		
 		if(QueryOperandStringBuilder.class.equals(aClass))
 			return (OBJECT) JpqlQualifier.inject(QueryOperandStringBuilderJpql.class);

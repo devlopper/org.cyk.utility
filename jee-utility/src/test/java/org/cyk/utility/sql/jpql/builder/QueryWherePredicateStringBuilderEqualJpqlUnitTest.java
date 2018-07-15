@@ -14,8 +14,8 @@ public class QueryWherePredicateStringBuilderEqualJpqlUnitTest extends AbstractA
 		assertionHelper.assertEquals("tuple.name=:name", JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
 			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
 				JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
-			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setParameterStringBuilder(
-				JpqlQualifier.inject(QueryParameterStringBuilderJpql.class).setParameterName("name"))).execute().getOutput())
+			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setParameterNameBuilder(
+				JpqlQualifier.inject(QueryParameterNameBuilderJpql.class).setParameter("name"))).execute().getOutput())
 			;
 	}
 	

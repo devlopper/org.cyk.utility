@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 import javax.enterprise.util.AnnotationLiteral;
 
-import org.cyk.utility.sql.builder.AbstractQueryParameterStringBuilderImpl;
+import org.cyk.utility.sql.builder.AbstractQueryParameterNameBuilderImpl;
 import org.cyk.utility.sql.jpql.Jpql;
 import org.cyk.utility.sql.jpql.JpqlQualifier;
 
 @Jpql
-public class QueryParameterStringBuilderJpqlImpl extends AbstractQueryParameterStringBuilderImpl implements QueryParameterStringBuilderJpql, Serializable {
+public class QueryParameterNameBuilderJpqlImpl extends AbstractQueryParameterNameBuilderImpl implements QueryParameterNameBuilderJpql, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

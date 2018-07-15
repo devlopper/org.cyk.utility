@@ -22,7 +22,7 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 	public void isColumn1Equal1ByOperands(){
 		Tuple tuple = new Tuple().setName("Tuple").addAttributes(new Attribute().setName("code"));
 		QueryOperandStringBuilder operand1 = __inject__(QueryOperandStringBuilder.class).setAttributeNameBuilder("code",tuple);
-		QueryOperandStringBuilder operand2 = __inject__(QueryOperandStringBuilder.class).setParameterStringBuilder("myparam");
+		QueryOperandStringBuilder operand2 = __inject__(QueryOperandStringBuilder.class).setParameterNameBuilder("myparam");
 		assertionHelper.assertEquals("tuple.code=@myparam", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects(operand1,operand2)
 				.execute().getOutput());
 	}
