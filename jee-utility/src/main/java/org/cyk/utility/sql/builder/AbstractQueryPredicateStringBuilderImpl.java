@@ -38,6 +38,18 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 	}
 	
 	@Override
+	public QueryPredicateStringBuilder addOperandStringBuilderAttributeName(String attributeName, Tuple tuple) {
+		
+		return this;
+	}
+	
+	@Override
+	public QueryPredicateStringBuilder addOperandStringBuilderParameterString(String parameterName) {
+		// TODO Auto-generated method stub
+		return this;
+	}
+	
+	@Override
 	protected Collection<String> __getFormatArguments__(Boolean isFormatRequired,Collection<String> formatArguments) {
 		return __inject__(CollectionHelper.class).isEmpty(formatArguments) ? __inject__(CollectionHelper.class)
 				.instanciate(getFirstOperandStringBuilder().execute().getOutput(),getOperator(),getSecondOperandStringBuilder().execute().getOutput()) : formatArguments;
