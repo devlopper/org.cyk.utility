@@ -1,8 +1,9 @@
 package org.cyk.utility.sql.builder;
 
 import org.cyk.utility.computation.LogicalOperator;
-import org.cyk.utility.sql.builder.QueryWherePredicateStringBuilderEqual;
+import org.cyk.utility.criteria.Criteria;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
 public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
@@ -32,6 +33,34 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 		Tuple tuple = new Tuple().setName("Tuple").addAttributes(new Attribute().setName("code"));
 		assertionHelper.assertEquals("tuple.code=@myparam", __inject__(QueryWherePredicateStringBuilderEqual.class)
 				.addOperandBuilderByAttributeByParameter("code", tuple,"myparam").execute().getOutput());
+	}
+	
+	@Test
+	public void buildByCriteriaNotDerived(){
+		Criteria criteria = __inject__(Criteria.class).setClassName("Tuple").setFieldNameAsString("code");
+		assertionHelper.assertEquals("tuple.code=@code", __inject__(QueryWherePredicateStringBuilderEqual.class)
+				.setCriteria(criteria).execute().getOutput());
+	}
+	
+	@Test
+	public void buildByCriteriaDerived(){
+		Criteria criteria = __inject__(Criteria.class).setClazz(MyTuple.class);
+		assertionHelper.assertEquals("myTuple.code=@code", __inject__(QueryWherePredicateStringBuilderEqual.class)
+				.setCriteria(criteria).execute().getOutput());
+	}
+	
+	@Test
+	public void buildByCriteriaWithSystemIdentifierFieldName(){
+		Criteria criteria = __inject__(Criteria.class).setClazz(MyTuple.class).setFieldValueUsageType(ValueUsageType.SYSTEM);
+		assertionHelper.assertEquals("myTuple.identifier=@identifier", __inject__(QueryWherePredicateStringBuilderEqual.class)
+				.setCriteria(criteria).execute().getOutput());
+	}
+	
+	@Test
+	public void buildByCriteriaWithSystemIdentifierFieldNameDerived(){
+		Criteria criteria = __inject__(Criteria.class).setClazz(MyTuple.class).setFieldValueUsageType(ValueUsageType.SYSTEM);
+		assertionHelper.assertEquals("myTuple.identifier=@identifier", __inject__(QueryWherePredicateStringBuilderEqual.class)
+				.setCriteria(criteria).execute().getOutput());
 	}
 	
 	@Test

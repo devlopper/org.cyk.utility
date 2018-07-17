@@ -36,4 +36,10 @@ public interface ClassHelper extends Helper {
 	<TYPE> Class<TYPE> getParameterAt(Class<?> aClass, Integer index, Class<TYPE> typeClass);
 	
 	Class<?> getByName(String name);
+	
+	String getSimpleName(Class<?> aClass);
+	String getSimpleName(String string);
+	
+	/**/
+
 }

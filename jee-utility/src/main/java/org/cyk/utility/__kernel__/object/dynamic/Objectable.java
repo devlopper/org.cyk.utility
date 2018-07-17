@@ -18,5 +18,5 @@ public interface Objectable extends org.cyk.utility.__kernel__.object.Objectable
 	Objectable setChildren(Collection<Object> children);
 	Collection<Object> getChildren();
 	Objectable addChildren(Collection<Object> children);
-	Objectable addChild(Object...children);
+	Objectable addChild(Object...child);
 }

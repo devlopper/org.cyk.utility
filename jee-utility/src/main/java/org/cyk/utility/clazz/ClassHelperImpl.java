@@ -157,4 +157,18 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 			return null;
 		}
 	}
+	
+	@Override
+	public String getSimpleName(Class<?> aClass) {
+		return aClass == null ? null : aClass.getSimpleName();
+	}
+	
+	@Override
+	public String getSimpleName(String string) {
+		return StringUtils.contains(string, DOT) ? StringUtils.substringAfterLast(string, DOT) : string;
+	}
+	
+	/**/
+	
+	private static final String DOT = ".";
 }

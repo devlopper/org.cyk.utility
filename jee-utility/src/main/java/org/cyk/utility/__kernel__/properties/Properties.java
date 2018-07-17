@@ -3876,6 +3876,86 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getNull() {
+		return get(NULL);
+	}
+
+	public Properties setNull(Object value) {
+		set(NULL, value);
+		return this;
+	}
+	
+	public Object getAscending() {
+		return get(ASCENDING);
+	}
+
+	public Properties setAscending(Object value) {
+		set(ASCENDING, value);
+		return this;
+	}
+	
+	public Object getMatched() {
+		return get(MATCHED);
+	}
+
+	public Properties setMatched(Object value) {
+		set(MATCHED, value);
+		return this;
+	}
+	
+	public Object getExcluded() {
+		return get(EXCLUDED);
+	}
+
+	public Properties setExcluded(Object value) {
+		set(EXCLUDED, value);
+		return this;
+	}
+	
+	public Object getMatch() {
+		return get(MATCH);
+	}
+
+	public Properties setMatch(Object value) {
+		set(MATCH, value);
+		return this;
+	}
+	
+	public Object getCriterias() {
+		return get(CRITERIAS);
+	}
+
+	public Properties setCriterias(Object value) {
+		set(CRITERIAS, value);
+		return this;
+	}
+	
+	public Object getCriteria() {
+		return get(CRITERIA);
+	}
+
+	public Properties setCriteria(Object value) {
+		set(CRITERIA, value);
+		return this;
+	}
+	
+	public Object getString() {
+		return get(STRING);
+	}
+
+	public Properties setString(Object value) {
+		set(STRING, value);
+		return this;
+	}
+	
+	public static final String STRING = "STRING";
+	public static final String CRITERIA = "CRITERIA";
+	public static final String CRITERIAS = "CRITERIAS";
+	public static final String MATCH = "MATCH";
+	public static final String MATCHED = "MATCHED";
+	public static final String EXCLUDED = "EXCLUDED";
+	public static final String ASCENDING = "ASCENDING";
+	public static final String NULL = "NULL";
 	public static final String WHERE = "WHERE";
 	public static final String FROM = "FROM";
 	public static final String SELECT = "SELECT";
