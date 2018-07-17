@@ -1,9 +1,12 @@
 package org.cyk.utility.sql.builder;
 
 import java.io.Serializable;
+import java.util.Collection;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.criteria.Criteria;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
@@ -51,7 +54,44 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 			addOperandStringBuilderAttributeName(fieldNameAsString, tuple);
 			addOperandStringBuilderParameterName(fieldNameAsString);
 		}
-		return super.__execute__();
+		String string = super.__execute__();
+		string = StringUtils.replaceAll(string, "\\( ", "(");
+		string = StringUtils.replaceAll(string, " \\)", ")");
+		return string;
+	}
+	
+	protected void __executeProcessCriteria__(Criteria criteria){
+		Collection<Object> children = criteria.getChildren();
+		if(__inject__(CollectionHelper.class).isEmpty(children)){
+			Class<?> clazz = criteria.getClazz();
+			/*String className = criteria.getClassName();
+			if(__inject__(StringHelper.class).isBlank(className)){
+				if(clazz != null)
+					className = clazz.getSimpleName();
+			}*/
+			String classSimpleName = __inject__(ClassHelper.class).getSimpleName(criteria.getClassName());
+			if(__inject__(StringHelper.class).isBlank(classSimpleName)){
+				if(clazz!=null)
+					classSimpleName = clazz.getSimpleName();
+			}
+			Tuple tuple = new Tuple().setName(classSimpleName);
+			
+			FieldName fieldName = __inject__(ValueHelper.class).defaultToIfNull(criteria.getFieldName(), FieldName.IDENTIFIER);
+			ValueUsageType valueUsageType = __inject__(ValueHelper.class).defaultToIfNull(criteria.getFieldValueUsageType(),ValueUsageType.BUSINESS);
+			
+			String fieldNameAsString = criteria.getFieldNameAsString();
+			if(__inject__(StringHelper.class).isBlank(fieldNameAsString)){				
+				fieldNameAsString = __inject__(FieldNameGetter.class).execute(criteria.getClazz(), fieldName, valueUsageType)
+					.execute().getOutput();
+			}
+			
+			addOperandStringBuilderAttributeName(fieldNameAsString, tuple);
+			addOperandStringBuilderParameterName(fieldNameAsString);
+		}else{
+			/*for(Object index : children){
+				
+			}*/
+		}
 	}
 	
 	@Override
@@ -66,6 +106,11 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 	}
 	
 	@Override
+	public QueryPredicateStringBuilder addChild(Object... child) {
+		return (QueryPredicateStringBuilder) super.addChild(child);
+	}
+	
+	@Override
 	public QueryPredicateStringBuilder addOperandStringBuilderAttributeName(String attributeName, Tuple tuple) {
 		addFormatArgumentObjects(____inject____(QueryOperandStringBuilder.class).setAttributeNameBuilder(attributeName, tuple));
 		return this;
@@ -77,4 +122,13 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 		return this;
 	}
 	
+	@Override
+	public QueryPredicateStringBuilder and() {
+		return (QueryPredicateStringBuilder) super.and();
+	}
+	
+	@Override
+	public QueryPredicateStringBuilder or() {
+		return (QueryPredicateStringBuilder) super.or();
+	}
 }

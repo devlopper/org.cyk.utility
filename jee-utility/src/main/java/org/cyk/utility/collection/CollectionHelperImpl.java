@@ -13,6 +13,7 @@ import javax.inject.Singleton;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueHelper;
 
 @Singleton
@@ -171,4 +172,16 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	public <ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection,ELEMENT[] elements){
 		return add(collection,Boolean.TRUE,instanciate(elements));
 	}
+
+	@Override
+	public <ELEMENT> Collection<ELEMENT> addElementAt(Collection<ELEMENT> collection, Integer index, ELEMENT element) {
+		if( index < getSize(collection) ){
+			if(collection instanceof List)
+				((List<ELEMENT>)collection).add(index, element);
+			else
+				__inject__(ThrowableHelper.class).throwRuntimeException("cannot insert in collection of type : "+collection.getClass());	
+		}		
+		return collection;
+	}
+	
 }

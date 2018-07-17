@@ -24,4 +24,6 @@ public interface CollectionHelper extends Helper {
 	<COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> add(Class<COLLECTION> collectionClass, Collection<ELEMENT> collection, ELEMENT[] elements);
 	<ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection, Boolean append, ELEMENT[] elements);
 	<ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection, ELEMENT[] elements);
+	
+	<ELEMENT> Collection<ELEMENT> addElementAt(Collection<ELEMENT> collection,Integer index, ELEMENT element);
 }

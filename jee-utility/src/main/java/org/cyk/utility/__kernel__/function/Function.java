@@ -16,7 +16,7 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	Function<INPUT,OUTPUT> setIsCatchThrowable(Boolean value);
 	Boolean getIsCatchThrowable();
 	
-	Function<INPUT,OUTPUT> addChild(Object... children);
+	Function<INPUT,OUTPUT> addChild(Object... child);
 	
 	Function<INPUT,OUTPUT> addChildren(Collection<Object> children);
 }

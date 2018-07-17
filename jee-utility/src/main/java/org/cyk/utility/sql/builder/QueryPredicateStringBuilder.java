@@ -11,4 +11,8 @@ public interface QueryPredicateStringBuilder extends FunctionWithPropertiesAsInp
 	Criteria getCriteria();
 	QueryPredicateStringBuilder setCriteria(Criteria criteria);
 	
+	QueryPredicateStringBuilder addChild(Object... child);
+	
+	@Override FunctionWithPropertiesAsInputAndStringAsOutput and();
+	@Override FunctionWithPropertiesAsInputAndStringAsOutput or();
 }

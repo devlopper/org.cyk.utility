@@ -74,8 +74,8 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	}
 	
 	@Override
-	public Function<INPUT, OUTPUT> addChild(Object... children) {
-		return (Function<INPUT, OUTPUT>) super.addChild(children);
+	public Function<INPUT, OUTPUT> addChild(Object... child) {
+		return (Function<INPUT, OUTPUT>) super.addChild(child);
 	}
 	
 	@Override

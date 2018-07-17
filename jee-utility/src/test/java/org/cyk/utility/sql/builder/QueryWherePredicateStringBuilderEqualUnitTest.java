@@ -9,6 +9,14 @@ import org.junit.Test;
 public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 
+	private Tuple tuple;
+	
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		tuple = new Tuple().setName("Tuple");
+	}
+	
 	@Test
 	public void isColumn1Equal1ByFormat(){
 		assertionHelper.assertEquals("column1=1", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","1").execute().getOutput());
@@ -17,6 +25,47 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 	@Test
 	public void isColumn1Equal1ByChild(){
 		assertionHelper.assertEquals("column1 = 1", __inject__(QueryWherePredicateStringBuilderEqual.class).addChild("column1","=","1").execute().getOutput());
+	}
+	
+	@Test
+	public void execute_predicateWithOneChildWhichIsLogicalOperatorAND_AND(){
+		assertionHelper.assertEquals("AND", 
+				__inject__(QueryWherePredicateStringBuilderEqual.class).addChild(
+						LogicalOperator.AND
+					).execute().getOutput());
+	}
+	
+	@Test
+	public void execute_predicateWithOneChildWhichIsPredicate_predicate(){
+		assertionHelper.assertEquals("tuple.code=@code", 
+				__inject__(QueryWherePredicateStringBuilderEqual.class).addChild(
+						__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("code", tuple)
+					).execute().getOutput());
+	}
+	
+	@Test
+	public void execute_predicateWithThreeChildWhichArePredicateANDPredicate_predicateAndPredicate(){
+		assertionHelper.assertEquals("tuple.code=@code AND tuple.name=@name", 
+				__inject__(QueryWherePredicateStringBuilderEqual.class).addChild(
+						__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("code", tuple)
+						,LogicalOperator.AND
+						,__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("name", tuple)
+					).execute().getOutput());
+	}
+	
+	@Test
+	public void execute_predicateWithThreeChildWhichAreNestedPredicateANDPredicate_nestedPredicateWithParenthesisAndPredicate(){
+		assertionHelper.assertEquals("(tuple.code=@code OR tuple.firstname=@firstname) AND tuple.lastname=@lastname", 
+				__inject__(QueryWherePredicateStringBuilderEqual.class).addChild(
+						__inject__(QueryWherePredicateStringBuilderEqual.class)
+						.surroundedWithParentheses()
+						.addChild(__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("code", tuple))
+						.or()
+						.addChild(__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("firstname", tuple))
+						
+						,LogicalOperator.AND
+						,__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("lastname", tuple)
+					).execute().getOutput());
 	}
 	
 	@Test
@@ -62,6 +111,15 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 		assertionHelper.assertEquals("myTuple.identifier=@identifier", __inject__(QueryWherePredicateStringBuilderEqual.class)
 				.setCriteria(criteria).execute().getOutput());
 	}
+	
+	/*@Test
+	public void buildByCriteriaWithSystemIdentifierFieldNameDerived02(){
+		Criteria criteria01 = __inject__(Criteria.class).setClazz(MyTuple.class).setFieldValueUsageType(ValueUsageType.SYSTEM);
+		Criteria criteria02 = __inject__(Criteria.class).setClazz(MyTuple.class).setFieldValueUsageType(ValueUsageType.BUSINESS);
+		Criteria criteria = __inject__(Criteria.class).addChild(criteria01,LogicalOperator.AND,criteria02);
+		assertionHelper.assertEquals("myTuple.identifier=@identifier", __inject__(QueryWherePredicateStringBuilderEqual.class)
+				.setCriteria(criteria).execute().getOutput());
+	}*/
 	
 	@Test
 	public void isColumn1Equala(){

@@ -45,8 +45,16 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	}
 	
 	@Override
-	public Objectable setParent(Object parent) {
+	public Objectable setParent(Object parent, Boolean executeAddChild) {
 		getProperties().setParent(parent);
+		if(Boolean.TRUE.equals(executeAddChild) && parent instanceof Objectable)
+			((Objectable)parent).addChild(this);
+		return this;
+	}
+	
+	@Override
+	public Objectable setParent(Object parent) {
+		setParent(parent, Boolean.FALSE);
 		return this;
 	}
 	
@@ -84,6 +92,9 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 			Collection<Object> collection = getChildren();
 			if(collection == null)
 				setChildren(collection = new ArrayList<Object>());
+			for(Object index : children)
+				if(index instanceof Objectable)
+					((Objectable)index).setParent(this);
 			collection.addAll(children);
 		}
 		return this;

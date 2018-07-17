@@ -13,4 +13,21 @@ public interface FunctionWithPropertiesAsInputAndStringAsOutput extends Function
 	FunctionWithPropertiesAsInputAndStringAsOutput addFormatArgumentObjects(Object...formatArguments);
 	
 	@Override FunctionWithPropertiesAsInputAndStringAsOutput getParent();
+	
+	/* shortcut */
+	
+	Boolean getIsSurroundedWithParentheses();
+	FunctionWithPropertiesAsInputAndStringAsOutput setIsSurroundedWithParentheses(Boolean value);
+	FunctionWithPropertiesAsInputAndStringAsOutput surroundedWithParentheses();
+	
+	/* add child */
+	
+	FunctionWithPropertiesAsInputAndStringAsOutput lp();
+	FunctionWithPropertiesAsInputAndStringAsOutput and();
+	FunctionWithPropertiesAsInputAndStringAsOutput or();
+	FunctionWithPropertiesAsInputAndStringAsOutput rp();
+	
+	//FunctionWithPropertiesAsInputAndStringAsOutput parentheses();
+	
+	@Override FunctionWithPropertiesAsInputAndStringAsOutput addChild(Object... child);
 }

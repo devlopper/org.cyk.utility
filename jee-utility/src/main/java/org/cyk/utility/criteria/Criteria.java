@@ -45,5 +45,7 @@ public interface Criteria extends Objectable {
 
 	Object getNullValue();
 	Criteria setNullValue(Object nullValue);
+	
+	Criteria addChild(Object... child);
 
 }

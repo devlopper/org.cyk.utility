@@ -59,4 +59,9 @@ public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelp
 	public void throwRuntimeException(String message) {
 		throw_(new RuntimeException(message));
 	}
+
+	@Override
+	public void throwRuntimeExceptionNotYetImplemented() {
+		throwRuntimeException("Not yet implemented");
+	}
 }

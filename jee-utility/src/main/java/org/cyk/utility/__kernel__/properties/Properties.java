@@ -3948,6 +3948,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getParenthesis() {
+		return get(PARENTHESIS);
+	}
+
+	public Properties setParenthesis(Object value) {
+		set(PARENTHESIS, value);
+		return this;
+	}
+	
+	public static final String PARENTHESIS = "PARENTHESIS";
 	public static final String STRING = "STRING";
 	public static final String CRITERIA = "CRITERIA";
 	public static final String CRITERIAS = "CRITERIAS";

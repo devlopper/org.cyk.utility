@@ -10,6 +10,7 @@ public interface Objectable extends org.cyk.utility.__kernel__.object.Objectable
 	Objectable setProperties(Properties properties);
 	
 	Object getParent();
+	Objectable setParent(Object parent,Boolean executeAddChild);
 	Objectable setParent(Object parent);
 	
 	Object getIdentifier();
@@ -17,6 +18,7 @@ public interface Objectable extends org.cyk.utility.__kernel__.object.Objectable
 	
 	Objectable setChildren(Collection<Object> children);
 	Collection<Object> getChildren();
+	//Objectable addChildren(Boolean executeSetParent,Collection<Object> children);
 	Objectable addChildren(Collection<Object> children);
 	Objectable addChild(Object...child);
 }

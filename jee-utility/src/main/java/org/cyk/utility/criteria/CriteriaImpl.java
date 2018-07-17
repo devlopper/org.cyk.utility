@@ -138,6 +138,11 @@ public class CriteriaImpl extends AbstractObject implements Criteria,Serializabl
 		return this;
 	}
 	
+	@Override
+	public Criteria addChild(Object... children) {
+		return (Criteria) super.addChild(children);
+	}
+	
 	/**/
 	
 	/*public T getPreparedValue(){

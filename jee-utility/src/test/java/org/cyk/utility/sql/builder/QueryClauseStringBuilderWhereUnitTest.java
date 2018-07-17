@@ -9,6 +9,14 @@ import org.junit.Test;
 public class QueryClauseStringBuilderWhereUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 
+	private Tuple tuple;
+	
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		tuple = new Tuple().setName("Tuple");
+	}
+	
 	@Test
 	public void build(){
 		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","1");
@@ -28,7 +36,7 @@ public class QueryClauseStringBuilderWhereUnitTest extends AbstractArquillianUni
 	
 	@Test
 	public void buildUsingFilter(){
-		Criteria criteria = __inject__(Criteria.class).setClassName("Tuple").setFieldNameAsString("name");
+		Criteria criteria = __inject__(Criteria.class).setClassName(tuple.getName()).setFieldNameAsString("name");
 		Filter filter = __inject__(Filter.class).addChild(criteria);
 		assertionHelper.assertEquals("WHERE tuple.name=@name", __inject__(QueryClauseStringBuilderWhere.class).setFilter(filter).execute().getOutput());
 	}
@@ -40,4 +48,22 @@ public class QueryClauseStringBuilderWhereUnitTest extends AbstractArquillianUni
 		Filter filter = __inject__(Filter.class).addChild(criteriaA,LogicalOperator.AND,criteriaB);
 		assertionHelper.assertEquals("WHERE person.firstname=@firstname AND person.lastnames=@lastnames", __inject__(QueryClauseStringBuilderWhere.class).setFilter(filter).execute().getOutput());
 	}
+	
+	/*@Test
+	public void execute_filterWithOneChildWithThreeChildWhichAreNestedPredicateANDPredicate_nestedPredicateWithParenthesisAndPredicate(){
+		Filter filter = __inject__(Filter.class).addChild(criteriaA,LogicalOperator.AND,criteriaB);
+		assertionHelper.assertEquals("(tuple.code=@code OR tuple.firstname=@firstname) AND tuple.lastname=@lastname", 
+				__inject__(QueryWherePredicateStringBuilderEqual.class).addChild(
+						__inject__(QueryWherePredicateStringBuilderEqual.class)
+						.surroundedWithParentheses()
+						.addChild(__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("code", tuple))
+						.or()
+						.addChild(__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("firstname", tuple))
+						
+						,LogicalOperator.AND
+						,__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("lastname", tuple)
+					).execute().getOutput());
+		assertionHelper.assertEquals("WHERE (tuple.code=@code OR tuple.firstname=@firstname) AND tuple.lastname=@lastname"
+				, __inject__(QueryClauseStringBuilderWhere.class).setFilter(filter).execute().getOutput());
+	}*/
 }
