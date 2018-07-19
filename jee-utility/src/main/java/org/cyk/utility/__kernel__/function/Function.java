@@ -13,6 +13,9 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	
 	Function<INPUT,OUTPUT> setProperties(Properties properties);
 	
+	Function<INPUT,OUTPUT> setIsExecutable(Boolean value);
+	Boolean getIsExecutable();
+	
 	Function<INPUT,OUTPUT> setIsCatchThrowable(Boolean value);
 	Boolean getIsCatchThrowable();
 	

@@ -26,4 +26,12 @@ public class PersistenceQuery extends AbstractObject implements Serializable {
 		return this;
 	}
 	
+	public Class<?> getResultClass(){
+		return (Class<?>) getProperties().getClazz();
+	}
+	
+	public PersistenceQuery setResultClass(Class<?> aClass){
+		getProperties().setClass(aClass);
+		return this;
+	}
 }

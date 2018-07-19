@@ -95,4 +95,9 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 	public String getLastMessage() {
 		return getLast().getMessage();
 	}
+
+	@Override
+	public LogEventEntity getBySystemIdentifier(Object identifier) {
+		return null;
+	}
 }

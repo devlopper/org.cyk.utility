@@ -3,7 +3,6 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.system.action.SystemAction;
@@ -12,11 +11,6 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPersistenceFunctionImpl implements PersistenceFunctionReader, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	protected Boolean __isQueryExecutable__(SystemAction action) {
-		return Boolean.TRUE;
-	}
-	
 	@Override
 	protected Object getEnityFieldValue(Object entity, FieldName fieldName, ValueUsageType valueUsageType,String derivedFieldName) {
 		if(getProperties().getEntity() == null){
@@ -34,13 +28,7 @@ public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPers
 
 	@Override
 	public PersistenceFunctionReader setEntityClass(Class<?> aClass) {
-		getProperties().setFromPath(new Object[]{Properties.ENTITY,Properties.CLASS}, aClass);
-		return this;
-	}
-
-	@Override
-	public Class<?> getEntityClass() {
-		return (Class<?>) getProperties().getFromPath(Properties.ENTITY,Properties.CLASS);
+		return (PersistenceFunctionReader) super.setEntityClass(aClass);
 	}
 
 	@Override
@@ -68,5 +56,10 @@ public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPers
 	public PersistenceFunctionReader setEntityIdentifierValueUsageType(ValueUsageType valueUsageType) {
 		getProperties().setValueUsageType(valueUsageType);
 		return this;
+	}
+	
+	@Override
+	public PersistenceFunctionReader setNamedQueryIdentifier(Object identifier) {
+		return (PersistenceFunctionReader) super.setNamedQueryIdentifier(identifier);
 	}
 }

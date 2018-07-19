@@ -16,4 +16,6 @@ public interface InstanceRepository<INSTANCE> extends Repository {
 	
 	INSTANCE getLast();
 	
+	INSTANCE getBySystemIdentifier(Object identifier);
+	
 }

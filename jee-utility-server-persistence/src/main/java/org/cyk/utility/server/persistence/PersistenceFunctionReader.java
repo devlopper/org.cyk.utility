@@ -8,13 +8,14 @@ public interface PersistenceFunctionReader extends PersistenceFunction {
 	PersistenceFunctionReader setAction(SystemAction action);
 	
 	PersistenceFunctionReader setEntityClass(Class<?> aClass);
-	Class<?> getEntityClass();
 	
 	PersistenceFunctionReader setEntityIdentifier(Object identifier);
 	Object getEntityIdentifier();
 	
 	PersistenceFunctionReader setEntityIdentifierValueUsageType(ValueUsageType valueUsageType);
 	ValueUsageType getEntityIdentifierValueUsageType();
+	
+	PersistenceFunctionReader setNamedQueryIdentifier(Object identifier);
 	
 	/**/
 	

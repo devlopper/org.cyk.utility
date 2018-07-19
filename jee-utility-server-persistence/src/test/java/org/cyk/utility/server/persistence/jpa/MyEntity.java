@@ -13,4 +13,8 @@ public class MyEntity extends AbstractEntity implements Serializable {
 		return (MyEntity) super.setCode(code);
 	}
 	
+	@Override
+	public String toString() {
+		return getCode();
+	}
 }

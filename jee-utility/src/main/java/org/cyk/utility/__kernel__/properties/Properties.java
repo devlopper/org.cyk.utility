@@ -3957,6 +3957,26 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getQuery() {
+		return get(QUERY);
+	}
+
+	public Properties setQuery(Object value) {
+		set(QUERY, value);
+		return this;
+	}
+	
+	public Object getIsExecutable() {
+		return get(EXECUTABLE);
+	}
+
+	public Properties setIsExecutable(Object value) {
+		set(EXECUTABLE, value);
+		return this;
+	}
+	
+	public static final String EXECUTABLE = "EXECUTABLE";
+	public static final String QUERY = "QUERY";
 	public static final String PARENTHESIS = "PARENTHESIS";
 	public static final String STRING = "STRING";
 	public static final String CRITERIA = "CRITERIA";

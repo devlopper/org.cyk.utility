@@ -6,9 +6,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldName;
+import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.repository.AbstractRepositoryImpl;
 import org.cyk.utility.repository.Repository;
+import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractRepositoryImpl implements InstanceRepository<INSTANCE>, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -40,6 +43,29 @@ public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractR
 	@Override
 	public INSTANCE getLast() {
 		return __inject__(CollectionHelper.class).getLast(readAll());
+	}
+	
+	@Override
+	public INSTANCE getBySystemIdentifier(Object identifier) {
+		INSTANCE instance = null;
+		if(identifier == null){
+			
+		}else{
+			if(__inject__(CollectionHelper.class).isNotEmpty(instances)){
+				for(INSTANCE index : instances){
+					Object indexSystemIdentifier = getSystemIdentifier(index);
+					if(identifier.equals(indexSystemIdentifier)){
+						instance = index;
+						break;
+					}
+				}
+			}
+		}
+		return instance;
+	}
+	
+	protected Object getSystemIdentifier(INSTANCE instance){
+		return __inject__(FieldValueGetter.class).execute(instance, FieldName.IDENTIFIER, ValueUsageType.SYSTEM);
 	}
 	
 	@Override
