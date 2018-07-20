@@ -103,11 +103,13 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		return this;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Function<INPUT, OUTPUT> addChild(Object... child) {
 		return (Function<INPUT, OUTPUT>) super.addChild(child);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Function<INPUT, OUTPUT> addChildren(Collection<Object> children) {
 		return (Function<INPUT, OUTPUT>) super.addChildren(children);
