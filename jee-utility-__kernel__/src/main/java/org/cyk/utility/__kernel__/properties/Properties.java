@@ -13,7 +13,7 @@ import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.helper.KernelHelper;
+import org.cyk.utility.__kernel__.KernelHelper;
 
 public class Properties implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;

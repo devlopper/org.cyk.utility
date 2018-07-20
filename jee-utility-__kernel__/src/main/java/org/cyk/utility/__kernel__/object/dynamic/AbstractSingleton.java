@@ -2,7 +2,7 @@ package org.cyk.utility.__kernel__.object.dynamic;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.helper.KernelHelper;
+import org.cyk.utility.__kernel__.KernelHelper;
 
 import lombok.Getter;
 import lombok.Setter;

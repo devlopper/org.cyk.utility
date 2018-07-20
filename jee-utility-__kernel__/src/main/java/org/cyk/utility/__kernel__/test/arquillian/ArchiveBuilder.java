@@ -6,7 +6,7 @@ import java.io.StringReader;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
-import org.cyk.utility.__kernel__.helper.KernelHelperImpl;
+import org.cyk.utility.__kernel__.KernelHelperImpl;
 import org.cyk.utility.__kernel__.maven.pom.Pom;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;

@@ -1,11 +1,13 @@
 package org.cyk.utility.__kernel__.object.__static__.identifiable;
 
+import org.cyk.utility.__kernel__.object.Objectable;
+
 /**
  * Any object that is uniquely identified by an identifier.
  * @author Christian Yao Komenan
  * @param <IDENTIFIER>
  */
-public interface Identified<IDENTIFIER> {
+public interface Identified<IDENTIFIER> extends Objectable {
 
     /**
      * Get the identifier of the object.

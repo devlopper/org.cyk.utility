@@ -1,12 +1,10 @@
-package org.cyk.utility.__kernel__.helper;
+package org.cyk.utility.__kernel__;
 
 import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.Map;
 
-import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-
-public interface KernelHelper extends Objectable {
+public interface KernelHelper {
 
 	String getInterfaceImplementationNameSuffix();
 	

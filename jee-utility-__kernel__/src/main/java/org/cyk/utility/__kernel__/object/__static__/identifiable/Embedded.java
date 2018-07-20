@@ -1,5 +1,7 @@
 package org.cyk.utility.__kernel__.object.__static__.identifiable;
 
-public interface Embedded {
+import org.cyk.utility.__kernel__.object.Objectable;
+
+public interface Embedded extends Objectable {
 	
 }

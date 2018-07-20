@@ -1,4 +1,4 @@
-package org.cyk.utility.__kernel__.helper;
+package org.cyk.utility.__kernel__;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,11 +17,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
 @Singleton
-public class KernelHelperImpl extends AbstractObject implements KernelHelper,Serializable {
+public class KernelHelperImpl implements KernelHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

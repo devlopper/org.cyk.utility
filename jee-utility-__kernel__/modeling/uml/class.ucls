@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.2" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="org.cyk.utility.__kernel__.DependencyInjection" project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/DependencyInjection.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="142" x="646" y="316"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="org.cyk.utility.__kernel__.KernelHelperImpl" project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/KernelHelperImpl.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="122" x="281" y="223"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="org.cyk.utility.__kernel__.function.AbstractFunctionImpl" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/function/AbstractFunctionImpl.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="248" x="686" y="130"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="org.cyk.utility.__kernel__.maven.pom.Pom" project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/maven/pom/Pom.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="168" x="41" y="223"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="org.cyk.utility.__kernel__.maven.pom.Parent" project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/maven/pom/Parent.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="168" x="161" y="316"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="org.cyk.utility.__kernel__.object.AbstractObject" project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/object/AbstractObject.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="143" x="645" y="223"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" 
+    name="org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedByLong" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/object/__static__/identifiable/AbstractIdentifiedByLong.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="237" x="659" y="595"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractObject" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/object/__static__/identifiable/AbstractObject.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="237" x="369" y="316"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" 
+    name="org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByLong" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/object/__static__/identifiable/AbstractIdentifiedPersistableByLong.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="237" x="209" y="688"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" 
+    name="org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByString" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/object/__static__/identifiable/AbstractIdentifiedPersistableByString.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="240" x="486" y="688"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractEmbedded" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/object/__static__/identifiable/AbstractEmbedded.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="237" x="228" y="502"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentified" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/object/__static__/identifiable/AbstractIdentified.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="237" x="505" y="502"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="org.cyk.utility.__kernel__.object.__static__.identifiable.Common" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/object/__static__/identifiable/Common.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="237" x="369" y="409"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" 
+    name="org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistable" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/object/__static__/identifiable/AbstractIdentifiedPersistable.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="271" x="348" y="595"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="org.cyk.utility.__kernel__.object.dynamic.AbstractObject" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/object/dynamic/AbstractObject.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="182" x="686" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/object/dynamic/AbstractSingleton.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="182" x="443" y="130"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="17" language="java" name="org.cyk.utility.__kernel__.properties.Properties.Getter" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/properties/Properties.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="159" x="828" y="316"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="18" language="java" name="org.cyk.utility.__kernel__.properties.Properties" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/properties/Properties.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="159" x="828" y="223"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="org.cyk.utility.__kernel__.stacktrace.StackTraceHelperImpl" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/stacktrace/StackTraceHelperImpl.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="162" x="443" y="223"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="org.cyk.utility.__kernel__.test.AbstractTest" project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/test/AbstractTest.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="134" x="1380" y="130"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="org.cyk.utility.__kernel__.test.AbstractUnitTest" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/test/AbstractUnitTest.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="134" x="1261" y="223"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="org.cyk.utility.__kernel__.test.AbstractIntegrationTest" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/test/AbstractIntegrationTest.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="160" x="1435" y="223"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="org.cyk.utility.__kernel__.test.arquillian.AbstractArquillianTest" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/test/arquillian/AbstractArquillianTest.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="173" x="1027" y="223"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="org.cyk.utility.__kernel__.test.arquillian.ArchiveBuilder" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/test/arquillian/ArchiveBuilder.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="173" x="230" y="130"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="org.cyk.utility.__kernel__.test.arquillian.AbstractArquillianIntegrationTest" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/test/arquillian/AbstractArquillianIntegrationTest.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="215" x="1027" y="316"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="org.cyk.utility.__kernel__.test.arquillian.AbstractArquillianUnitTest" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/test/arquillian/AbstractArquillianUnitTest.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="177" x="1282" y="316"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" 
+    name="org.cyk.utility.__kernel__.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment" 
+    project="jee-utility-__kernel__" 
+    file="/jee-utility-__kernel__/src/main/java/org/cyk/utility/__kernel__/test/arquillian/AbstractArquillianUnitTestWithDefaultDeployment.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="313" x="1027" y="130"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="28">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="29">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <generalization id="30">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="20"/>  
+  </generalization>  
+  <generalization id="31">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="13"/>  
+  </generalization>  
+  <generalization id="32">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="20"/>  
+  </generalization>  
+  <dependency id="33">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <generalization id="34">    
+    <bendpoint x="655" y="130"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <association id="35">    
+    <bendpoint x="964" y="130"/>    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="36" name="properties"/>      
+      <multiplicity id="37" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="38">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="13"/>  
+  </generalization>  
+  <generalization id="39">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="15"/>  
+  </generalization>  
+  <generalization id="40">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="20"/>  
+  </generalization>  
+  <generalization id="41">    
+    <bendpoint x="1230" y="223"/>    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="26"/>  
+  </generalization>  
+  <association id="42">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="43" name="parent"/>      
+      <multiplicity id="44" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="45">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="46">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <association id="47">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="48" name="getterMap"/>      
+      <multiplicity id="49" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="50">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <generalization id="51">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="15"/>  
+  </generalization>  
+  <generalization id="52">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="23"/>  
+  </generalization>  
+  <generalization id="53">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <dependency id="54">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="23"/>  
+  </dependency>  
+  <generalization id="55">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="15"/>  
+  </generalization>  
+  <nesting id="56">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="17"/>  
+  </nesting>  
+  <dependency id="57">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="58">    
+    <bendpoint x="239" y="223"/>    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <generalization id="59">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="23"/>  
+  </generalization>  
+  <generalization id="60">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <generalization id="61">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <generalization id="62">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="14"/>  
+  </generalization>  
+  <generalization id="63">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <generalization id="64">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="14"/>  
+  </generalization>  
+  <generalization id="65">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="16"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="false" package="false" protected="false" private="false" static="true"/>    
+    <operations public="false" package="false" protected="false" private="false" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
