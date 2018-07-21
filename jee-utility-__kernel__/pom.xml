@@ -41,7 +41,7 @@
 		</dependency>
 
 	</dependencies>
-
+	
 	<profiles>
 		<!-- Arquillian JEE managed profile -->
 		<profile>

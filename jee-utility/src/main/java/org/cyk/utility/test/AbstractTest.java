@@ -5,13 +5,12 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
-import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.assertion.AssertionHelper;
 import org.cyk.utility.log.LogEventEntityRepository;
 import org.cyk.utility.random.RandomHelper;
 import org.junit.Before;
 
-public abstract class AbstractTest extends AbstractObject implements Serializable {
+public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.AbstractTest implements Serializable {
 	private static final long serialVersionUID = -4375668358714913342L;
 	
 	static {

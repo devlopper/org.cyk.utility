@@ -1,26 +1,12 @@
-package org.cyk.utility.server.persistence.test.arquillian;
-
-import static org.assertj.core.api.Assertions.assertThat;
+package org.cyk.utility.server.business.test.arquillian;
 
 import java.io.Serializable;
 
-import javax.inject.Inject;
-import javax.transaction.UserTransaction;
-
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.field.FieldName;
-import org.cyk.utility.field.FieldValueGetter;
-import org.cyk.utility.server.persistence.Persistence;
-import org.cyk.utility.server.persistence.PersistenceEntity;
-import org.cyk.utility.server.persistence.PersistenceServiceProvider;
 import org.cyk.utility.test.arquillian.AbstractArquillianTest;
-import org.cyk.utility.throwable.ThrowableHelper;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractArquillianIntegrationTest extends AbstractArquillianTest implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+/*
 	@Inject protected UserTransaction userTransaction;
 	
 	public <OBJECT> void create(PersistenceEntity<OBJECT> persistence,OBJECT object) throws Exception{
@@ -32,18 +18,18 @@ public abstract class AbstractArquillianIntegrationTest extends AbstractArquilli
 			.assertContainsLastLogEventMessage("code="+__inject__(FieldValueGetter.class).execute(object,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
 	}
 	
-	public <OBJECT> OBJECT read(PersistenceEntity<OBJECT> persistence,Object identifier,ValueUsageType valueUsageType,Properties expectedFieldValues) throws Exception{
-		OBJECT object = persistence.readOne(identifier,valueUsageType);
+	public <OBJECT> OBJECT read(PersistenceEntity<OBJECT> persistence,Object identifier,Properties expectedFieldValues) throws Exception{
+		OBJECT object = persistence.readOne(identifier);
 		assertThat(object).isNotNull();
 		assertionHelper.assertEqualsByFieldValue(expectedFieldValues, object);
-		Object businessIdentifier = ValueUsageType.BUSINESS.equals(valueUsageType) ? identifier : __inject__(FieldValueGetter.class).execute(object,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput();
+		Object businessIdentifier = __inject__(FieldValueGetter.class).execute(object,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput();
 		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Read "+object.getClass().getSimpleName())
 		.assertContainsLastLogEventMessage("code="+businessIdentifier);
 		return object;
 	}
 	
-	public <OBJECT> OBJECT read(PersistenceEntity<OBJECT> persistence,Object identifier,ValueUsageType valueUsageType) throws Exception{
-		return read(persistence, identifier,valueUsageType, null);
+	public <OBJECT> OBJECT read(PersistenceEntity<OBJECT> persistence,Object identifier) throws Exception{
+		return read(persistence, identifier, null);
 	}
 	
 	public <OBJECT> void update(PersistenceEntity<OBJECT> persistence,OBJECT object) throws Exception{
@@ -65,7 +51,7 @@ public abstract class AbstractArquillianIntegrationTest extends AbstractArquilli
 		object = persistence.readOne(systemIdentifier);
 		assertThat(object).isNull();
 	}
-	
+	*/
 	/*
 	public void delete() throws Exception{
 		NestedSet entity = new NestedSet().setCode("mc001");
@@ -82,8 +68,4 @@ public abstract class AbstractArquillianIntegrationTest extends AbstractArquilli
 		assertThat(entity).isNull();
 	}
 	*/
-	
-	/**/
-	
-	
 }

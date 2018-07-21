@@ -1,7 +1,7 @@
 package org.cyk.utility.server.business;
 
+import org.cyk.utility.__kernel__.test.arquillian.ArchiveBuilder;
 import org.cyk.utility.server.persistence.test.arquillian.AbstractArquillianIntegrationTest;
-import org.cyk.utility.test.arquillian.ArchiveBuilder;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 public abstract class AbstractArquillianIntegrationTestWithDefaultDeployment extends AbstractArquillianIntegrationTest {

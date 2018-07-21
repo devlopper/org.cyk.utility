@@ -1,15 +1,17 @@
-package org.cyk.utility.server.persistence;
+package org.cyk.utility.server.business.test.arquillian;
 
 import org.cyk.utility.__kernel__.test.arquillian.ArchiveBuilder;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
-public abstract class AbstractArquillianIntegrationTestWithDefaultDeployment extends org.cyk.utility.test.arquillian.AbstractArquillianIntegrationTest {
+public abstract class AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram extends AbstractArquillianIntegrationTest {
 	private static final long serialVersionUID = 1L;
-		
+
 	@org.jboss.arquillian.container.test.api.Deployment
 	public static WebArchive createArchive(){
 		return new ArchiveBuilder<WebArchive>(WebArchive.class)
-				.setProjectDefaultsYml("org/cyk/utility/server/persistence/project-defaults.yml")
-				.execute(); 
+				.setProjectDefaultsYml("project-defaults.yml")
+				.execute()
+				; 
 	}
+	
 }
