@@ -1,14 +1,15 @@
-package org.cyk.utility.maven.pom;
+package org.cyk.utility.__kernel__.maven.pom;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @ToString
-public class Parent {
+public class Plugin {
 
 	private String groupId;
 	private String artifactId;
 	private String version;
 	
+	private Configuration configuration;
 }

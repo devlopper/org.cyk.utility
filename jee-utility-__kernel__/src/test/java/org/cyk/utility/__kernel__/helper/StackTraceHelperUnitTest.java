@@ -1,7 +1,8 @@
-package org.cyk.utility.test.__kernel__.stacktrace;
+package org.cyk.utility.__kernel__.helper;
 
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.__kernel__.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class StackTraceHelperUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
@@ -10,8 +11,8 @@ public class StackTraceHelperUnitTest extends AbstractArquillianUnitTestWithDefa
 	@Test
 	public void getCurrent(){
 		StackTraceElement stackTraceElement = __inject__(StackTraceHelper.class).getCurrent();
-		assertionHelper.assertEquals("org.cyk.utility.test.__kernel__.stacktrace.StackTraceHelperUnitTest", stackTraceElement.getClassName());
-		assertionHelper.assertEquals("getCurrent", stackTraceElement.getMethodName());
+		Assert.assertEquals("org.cyk.utility.__kernel__.helper.StackTraceHelperUnitTest", stackTraceElement.getClassName());
+		Assert.assertEquals("getCurrent", stackTraceElement.getMethodName());
 	}
 	
 }

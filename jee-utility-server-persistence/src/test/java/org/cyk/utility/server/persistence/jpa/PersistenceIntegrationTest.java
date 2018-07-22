@@ -6,9 +6,10 @@ import javax.inject.Inject;
 
 import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
+import org.cyk.utility.server.persistence.test.arquillian.AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram;
 import org.junit.Test;
 
-public class PersistenceIntegrationTest extends AbstractArquillianIntegrationTestWithDefaultDeployment {
+public class PersistenceIntegrationTest extends AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram {
 	private static final long serialVersionUID = 1L;
 		
 	@Inject private Persistence persistence;

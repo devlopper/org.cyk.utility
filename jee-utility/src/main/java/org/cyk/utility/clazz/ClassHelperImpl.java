@@ -145,7 +145,7 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	@SuppressWarnings("unchecked")
 	@Override
 	public <TYPE> Class<TYPE> getParameterAt(Class<?> aClass, Integer index, Class<TYPE> typeClass) {
-		return (Class<TYPE>) ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments()[index];
+		return __getParameterAt__(aClass, index, typeClass);
 	}
 	
 	@Override
@@ -171,4 +171,11 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	/**/
 	
 	private static final String DOT = ".";
+	
+	/**/
+	
+	@SuppressWarnings("unchecked")
+	public static <TYPE> Class<TYPE> __getParameterAt__(Class<?> aClass, Integer index, Class<TYPE> typeClass) {
+		return (Class<TYPE>) ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments()[index];
+	}
 }

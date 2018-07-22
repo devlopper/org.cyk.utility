@@ -17,5 +17,6 @@ public interface SystemLayer extends Singleton {
 	Class<?> getInterfaceClassFromEntityClassName(String entityClassName);
 	Class<?> getInterfaceClassFromEntityClassName(Class<?> entityClass);
 	
+	<T> T injectInterfaceClassFromEntityClassName(Class<?> entityClass,Class<T> type);
 	Object injectInterfaceClassFromEntityClassName(Class<?> entityClass);
 }

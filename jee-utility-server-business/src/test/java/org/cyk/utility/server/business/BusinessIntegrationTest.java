@@ -1,11 +1,7 @@
 package org.cyk.utility.server.business;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import javax.inject.Inject;
 
-import org.cyk.utility.server.persistence.Persistence;
-import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
 import org.junit.Test;
 
 public class BusinessIntegrationTest extends AbstractArquillianIntegrationTestWithDefaultDeployment {

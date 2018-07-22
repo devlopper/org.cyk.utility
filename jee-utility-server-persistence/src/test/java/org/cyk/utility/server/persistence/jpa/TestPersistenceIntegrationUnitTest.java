@@ -1,9 +1,10 @@
 package org.cyk.utility.server.persistence.jpa;
 
 import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
+import org.cyk.utility.server.persistence.test.arquillian.AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram;
 import org.junit.Test;
 
-public class TestPersistenceIntegrationUnitTest extends AbstractArquillianIntegrationTestWithDefaultDeployment {
+public class TestPersistenceIntegrationUnitTest extends AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram {
 	private static final long serialVersionUID = 1L;
 
 	@Test

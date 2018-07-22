@@ -20,7 +20,7 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 
 	@Override
 	public Boolean isBlank(String string) {
-		return StringUtils.isBlank(string);
+		return __isBlank__(string);
 	}
 	
 	@Override
@@ -112,5 +112,15 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	@Override
 	public String getVariableNameFrom(String string){
 		return Introspector.decapitalize(string);
+	}
+	
+	/**/
+	
+	public static Boolean __isBlank__(String string) {
+		return StringUtils.isBlank(string);
+	}
+	
+	public static String __defaultIfBlank__(String string,String defaultString) {
+		return StringUtils.defaultIfBlank(string,defaultString);
 	}
 }

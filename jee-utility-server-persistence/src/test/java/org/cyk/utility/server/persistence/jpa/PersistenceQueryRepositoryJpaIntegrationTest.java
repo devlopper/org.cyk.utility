@@ -6,9 +6,11 @@ import org.cyk.utility.server.persistence.PersistenceFunctionCreator;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
+import org.cyk.utility.server.persistence.test.arquillian.AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram;
+import org.junit.Assert;
 import org.junit.Test;
 
-public class PersistenceQueryRepositoryJpaIntegrationTest extends AbstractArquillianIntegrationTestWithDefaultDeployment {
+public class PersistenceQueryRepositoryJpaIntegrationTest extends AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
@@ -30,7 +32,8 @@ public class PersistenceQueryRepositoryJpaIntegrationTest extends AbstractArquil
 		List<MyEntity> results = (List<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setNamedQueryIdentifier("MyEntity.readAll")
 				.execute().getProperties().getEntities();
 		
-		System.out.println(results);
+		Assert.assertEquals(3, results.size());
+		//System.out.println(results);
 		/*
 		myEntity = (MyEntity) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class)
 				.setEntityIdentifier(myEntity.getIdentifier()).execute().getProperties().getEntity();

@@ -1,6 +1,7 @@
-package org.cyk.utility.test.__kernel__.function;
+package org.cyk.utility.__kernel__.function;
 
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.__kernel__.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class FunctionUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
@@ -8,7 +9,7 @@ public class FunctionUnitTest extends AbstractArquillianUnitTestWithDefaultDeplo
 
 	@Test
 	public void injectNullIsNull(){
-		assertionHelper.assertNull(__inject__(null));
+		Assert.assertNull(__inject__(null));
 	}
 	
 }

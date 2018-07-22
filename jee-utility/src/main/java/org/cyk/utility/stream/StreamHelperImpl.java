@@ -35,7 +35,7 @@ public class StreamHelperImpl extends AbstractHelper implements StreamHelper, Se
 	
 	public static String __getString__(InputStream inputStream) {
 		try {
-			return IOUtils.toString(inputStream);
+			return IOUtils.toString(inputStream,"UTF-8");
 		} catch (IOException exception) {
 			throw new RuntimeException(exception);
 		}

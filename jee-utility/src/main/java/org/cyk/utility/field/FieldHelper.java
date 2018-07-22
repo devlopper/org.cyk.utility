@@ -10,4 +10,9 @@ public interface FieldHelper extends Helper {
 	
 	String concatenate(Collection<String> names);
 	String concatenate(String...names);
+	
+	Object getFieldValueSystemIdentifier(Object object);
+	Object getFieldValueBusinessIdentifier(Object object);
+	
+	FieldHelper setFieldValueBusinessIdentifier(Object object,Object value);
 }

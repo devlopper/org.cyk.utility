@@ -9,6 +9,7 @@ import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.value.ValueUsageType;
 
 @Singleton
 public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Serializable {
@@ -22,6 +23,22 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	@Override
 	public String concatenate(String... names) {
 		return concatenate(__inject__(CollectionHelper.class).instanciate(names));
+	}
+
+	@Override
+	public Object getFieldValueSystemIdentifier(Object object) {
+		return __inject__(FieldValueGetter.class).execute(object, FieldName.IDENTIFIER, ValueUsageType.SYSTEM).execute().getOutput();
+	}
+
+	@Override
+	public Object getFieldValueBusinessIdentifier(Object object) {
+		return __inject__(FieldValueGetter.class).execute(object, FieldName.IDENTIFIER, ValueUsageType.BUSINESS).execute().getOutput();
+	}
+
+	@Override
+	public FieldHelper setFieldValueBusinessIdentifier(Object object, Object value) {
+		__inject__(FieldValueSetter.class).setObject(object).setField(FieldName.IDENTIFIER, ValueUsageType.BUSINESS).setValue(value).execute();
+		return this;
 	}
 
 }

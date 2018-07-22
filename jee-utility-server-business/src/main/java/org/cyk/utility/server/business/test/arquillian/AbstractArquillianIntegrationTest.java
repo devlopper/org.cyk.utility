@@ -2,70 +2,44 @@ package org.cyk.utility.server.business.test.arquillian;
 
 import java.io.Serializable;
 
-import org.cyk.utility.test.arquillian.AbstractArquillianTest;
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.server.business.BusinessEntity;
+import org.cyk.utility.test.arquillian.AbstractSystemLayerIntegrationTestImpl;
+import org.cyk.utility.test.arquillian.SystemLayerIntegrationTest;
+import org.cyk.utility.value.ValueUsageType;
 
-public abstract class AbstractArquillianIntegrationTest extends AbstractArquillianTest implements Serializable {
+@SuppressWarnings({"rawtypes","unchecked"})
+public  class AbstractArquillianIntegrationTest extends AbstractSystemLayerIntegrationTestImpl<BusinessEntity> implements SystemLayerIntegrationTest<BusinessEntity>, Serializable {
 	private static final long serialVersionUID = 1L;
-/*
-	@Inject protected UserTransaction userTransaction;
-	
-	public <OBJECT> void create(PersistenceEntity<OBJECT> persistence,OBJECT object) throws Exception{
-		userTransaction.begin();
-		persistence.create(object);
-		userTransaction.commit();
-		assertThat(__inject__(FieldValueGetter.class).execute(object,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput()).isNotNull();
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Create "+object.getClass().getSimpleName())
-			.assertContainsLastLogEventMessage("code="+__inject__(FieldValueGetter.class).execute(object,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
+
+	@Override
+	protected <ENTITY> void ____createEntity____(ENTITY entity, BusinessEntity business) {
+		business.create(entity);
 	}
-	
-	public <OBJECT> OBJECT read(PersistenceEntity<OBJECT> persistence,Object identifier,Properties expectedFieldValues) throws Exception{
-		OBJECT object = persistence.readOne(identifier);
-		assertThat(object).isNotNull();
-		assertionHelper.assertEqualsByFieldValue(expectedFieldValues, object);
-		Object businessIdentifier = __inject__(FieldValueGetter.class).execute(object,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput();
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Read "+object.getClass().getSimpleName())
-		.assertContainsLastLogEventMessage("code="+businessIdentifier);
-		return object;
+
+	@Override
+	protected <ENTITY> ENTITY ____readEntity____(Class<ENTITY> entityClass, Object identifier,ValueUsageType valueUsageType, Properties expectedFieldValues, BusinessEntity business) {
+		return (ENTITY) business.findOne(identifier, valueUsageType);
 	}
-	
-	public <OBJECT> OBJECT read(PersistenceEntity<OBJECT> persistence,Object identifier) throws Exception{
-		return read(persistence, identifier, null);
+
+	@Override
+	protected <ENTITY> void ____updateEntity____(ENTITY entity, BusinessEntity business) {
+		business.update(entity);
 	}
-	
-	public <OBJECT> void update(PersistenceEntity<OBJECT> persistence,OBJECT object) throws Exception{
-		userTransaction.begin();
-		persistence.update(object);
-		userTransaction.commit();
-		assertThat(__inject__(FieldValueGetter.class).execute(object,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput()).isNotNull();
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Update "+object.getClass().getSimpleName())
-			.assertContainsLastLogEventMessage("code="+__inject__(FieldValueGetter.class).execute(object,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
+
+	@Override
+	protected <ENTITY> void ____deleteEntity____(ENTITY entity, BusinessEntity business) {
+		business.delete(entity);
 	}
-	
-	public <OBJECT> void delete(PersistenceEntity<OBJECT> persistence,OBJECT object) throws Exception{
-		userTransaction.begin();
-		persistence.delete(object);
-		userTransaction.commit();
-		Object systemIdentifier = __inject__(FieldValueGetter.class).execute(object,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput();
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Delete "+object.getClass().getSimpleName()).assertContainsLastLogEventMessage(
-				"code="+__inject__(FieldValueGetter.class).execute(object,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
-		object = persistence.readOne(systemIdentifier);
-		assertThat(object).isNull();
+
+	@Override
+	public BusinessEntity __getLayerEntityInterfaceFromObject__(Object object) {
+		return null;
 	}
-	*/
-	/*
-	public void delete() throws Exception{
-		NestedSet entity = new NestedSet().setCode("mc001");
-		userTransaction.begin();
-		persistence.create(entity);
-		userTransaction.commit();
-		entity = persistence.readOne(entity.getIdentifier());
-		assertThat(entity).isNotNull();
-		userTransaction.begin();
-		persistence.delete(entity);
-		userTransaction.commit();
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Delete NestedSet").assertContainsLastLogEventMessage("code=mc001");
-		entity = persistence.readOne(entity.getIdentifier());
-		assertThat(entity).isNull();
-	}
-	*/
+
+	@Override
+	public BusinessEntity __getLayerEntityInterfaceFromClass__(Class<?> aClass) {
+		return null;
+	}	
+
 }

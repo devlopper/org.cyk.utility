@@ -73,13 +73,13 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 	}
 	
 	@Override
-	public Object injectInterfaceClassFromEntityClassName(Class<?> entityClass) {
-		Object object = null;
-		Class<?> persistenceClass = __inject__(SystemLayerPersistence.class).getInterfaceClassFromEntityClassName(entityClass);
-		if(persistenceClass == null){
+	public <T> T injectInterfaceClassFromEntityClassName(Class<?> entityClass, Class<T> type) {
+		T object = null;
+		Class<?> interfaceClass = __inject__(SystemLayerPersistence.class).getInterfaceClassFromEntityClassName(entityClass);
+		if(interfaceClass == null){
 			//TODO log warning
 		}else{
-			object = __inject__(persistenceClass);
+			object = (T) __inject__(interfaceClass);
 		}
 		
 		if(object == null){
@@ -87,5 +87,10 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 		}
 		
 		return object;
+	}
+	
+	@Override
+	public Object injectInterfaceClassFromEntityClassName(Class<?> entityClass) {
+		return injectInterfaceClassFromEntityClassName(entityClass, Object.class);
 	}
 }

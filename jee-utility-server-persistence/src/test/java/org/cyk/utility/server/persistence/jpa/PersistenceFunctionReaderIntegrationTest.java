@@ -4,10 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.cyk.utility.server.persistence.PersistenceFunctionCreator;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
+import org.cyk.utility.server.persistence.test.arquillian.AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
-public class PersistenceFunctionReaderIntegrationTest extends AbstractArquillianIntegrationTestWithDefaultDeployment {
+public class PersistenceFunctionReaderIntegrationTest extends AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram {
 	private static final long serialVersionUID = 1L;
 		
 	@Test

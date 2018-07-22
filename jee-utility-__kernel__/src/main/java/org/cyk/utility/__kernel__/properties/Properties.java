@@ -3973,6 +3973,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getPath() {
+		return get(PATH);
+	}
+
+	public Properties setPath(Object value) {
+		set(PATH, value);
+		return this;
+	}
+	
+	public static final String PATH = "PATH";
 	public static final String EXECUTABLE = "EXECUTABLE";
 	public static final String QUERY = "QUERY";
 	public static final String PARENTHESIS = "PARENTHESIS";

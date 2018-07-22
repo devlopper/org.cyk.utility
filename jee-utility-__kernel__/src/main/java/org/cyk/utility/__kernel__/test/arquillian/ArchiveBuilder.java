@@ -6,8 +6,10 @@ import java.io.StringReader;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.KernelHelperImpl;
 import org.cyk.utility.__kernel__.maven.pom.Pom;
+import org.cyk.utility.__kernel__.maven.pom.Profile;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -37,6 +39,22 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 	}
 	
 	public ARCHIVE execute(){
+		System.out.println("Building archive starts");
+		String testProfileIdentifier = "org.cyk.test";
+		Profile profile = Pom.INSTANCE.getProfile(testProfileIdentifier);
+		if(profile == null){
+			System.out.println("No test profile found under id "+testProfileIdentifier);
+		}
+		
+		if(StringUtils.isBlank(projectDefaultsYml) && profile!=null)
+			projectDefaultsYml = profile.getProperty("org.cyk.test.swarm.project.defaults.file");
+		
+		if(StringUtils.isBlank(persistenceXml) && profile!=null)
+			persistenceXml = profile.getProperty("org.cyk.test.jpa.persistence.file");
+		
+		String _package = profile == null ? null : profile.getProperty("org.cyk.test.package");
+		String[] classes = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.classes")) ? null : profile.getProperty("org.cyk.test.classes").split(",");
+		
 		archive = ShrinkWrap.create(this.clazz);
 		addBeanXml(beanXml);
 		if(projectDefaultsYml!=null)
@@ -49,6 +67,24 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 			addPomXml(pomXml);
 		if(jbossDeploymentStructureXml!=null)
 			addJbossDeploymentStructureXml(jbossDeploymentStructureXml);
+		
+		if(StringUtils.isNotBlank(_package)){
+			if(archive instanceof WebArchive)
+				((WebArchive)archive).addPackages(Boolean.TRUE, _package);
+		}
+		
+		if(classes!=null)
+			for(String index : classes){
+				try {
+					Class<?> aClass = Class.forName(index);
+					if(archive instanceof WebArchive)
+						((WebArchive)archive).addClass(aClass);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		
+		System.out.println("Building archive done.");
 		return archive;
 	}
 	

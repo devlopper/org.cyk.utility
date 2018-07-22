@@ -161,6 +161,7 @@ public class KernelHelperImpl implements KernelHelper,Serializable {
 		}else{
 			strings = null;
 			//TODO log warning
+			System.err.println("File "+filePath+" does not exist");
 		}
 		return strings;
 	}
