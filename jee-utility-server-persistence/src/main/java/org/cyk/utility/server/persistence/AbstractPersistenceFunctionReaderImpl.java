@@ -48,11 +48,6 @@ public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPers
 	}
 	
 	@Override
-	public ValueUsageType getEntityIdentifierValueUsageType() {
-		return (ValueUsageType) getProperties().getValueUsageType();
-	}
-	
-	@Override
 	public PersistenceFunctionReader setEntityIdentifierValueUsageType(ValueUsageType valueUsageType) {
 		getProperties().setValueUsageType(valueUsageType);
 		return this;

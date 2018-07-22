@@ -72,4 +72,15 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>org.cyk.test</id>
+			<properties>
+				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/business/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
+				<org.cyk.test.jpa.persistence.file>org/cyk/utility/server/business/persistence.xml</org.cyk.test.jpa.persistence.file>
+				<org.cyk.test.classes>org.cyk.utility.server.business.MyEntity,org.cyk.utility.server.business.MyEntityPersistence,org.cyk.utility.server.business.MyEntityPersistenceImpl,org.cyk.utility.server.business.MyEntityBusiness,org.cyk.utility.server.business.MyEntityBusinessImpl</org.cyk.test.classes>
+			</properties>
+		</profile>
+	</profiles>
+
 </project>

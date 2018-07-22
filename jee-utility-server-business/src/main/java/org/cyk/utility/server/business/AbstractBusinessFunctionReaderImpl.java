@@ -4,10 +4,17 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractBusinessFunctionReaderImpl extends AbstractBusinessFunctionImpl implements BusinessFunctionReader, Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		setAction(__inject__(SystemActionRead.class));
+	}
 	
 	@Override
 	public BusinessFunctionReader setEntityIdentifier(Object identifier) {

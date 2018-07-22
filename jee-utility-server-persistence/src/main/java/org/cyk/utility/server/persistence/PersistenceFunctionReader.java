@@ -10,10 +10,8 @@ public interface PersistenceFunctionReader extends PersistenceFunction {
 	PersistenceFunctionReader setEntityClass(Class<?> aClass);
 	
 	PersistenceFunctionReader setEntityIdentifier(Object identifier);
-	Object getEntityIdentifier();
 	
 	PersistenceFunctionReader setEntityIdentifierValueUsageType(ValueUsageType valueUsageType);
-	ValueUsageType getEntityIdentifierValueUsageType();
 	
 	PersistenceFunctionReader setNamedQueryIdentifier(Object identifier);
 	

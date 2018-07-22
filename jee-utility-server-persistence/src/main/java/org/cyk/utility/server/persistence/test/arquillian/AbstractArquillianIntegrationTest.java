@@ -7,12 +7,14 @@ import javax.transaction.UserTransaction;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.PersistenceEntity;
-import org.cyk.utility.test.arquillian.AbstractSystemLayerIntegrationTestImpl;
-import org.cyk.utility.test.arquillian.SystemLayerIntegrationTest;
+import org.cyk.utility.system.layer.SystemLayer;
+import org.cyk.utility.system.layer.SystemLayerPersistence;
+import org.cyk.utility.test.arquillian.AbstractSystemServerIntegrationTestImpl;
+import org.cyk.utility.test.arquillian.SystemServerIntegrationTest;
 import org.cyk.utility.value.ValueUsageType;
 
 @SuppressWarnings({"rawtypes","unchecked"})
-public abstract class AbstractArquillianIntegrationTest extends AbstractSystemLayerIntegrationTestImpl<PersistenceEntity> implements SystemLayerIntegrationTest<PersistenceEntity>, Serializable {
+public abstract class AbstractArquillianIntegrationTest extends AbstractSystemServerIntegrationTestImpl<PersistenceEntity> implements SystemServerIntegrationTest<PersistenceEntity>, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject protected UserTransaction userTransaction;
@@ -50,5 +52,14 @@ public abstract class AbstractArquillianIntegrationTest extends AbstractSystemLa
 			throw new RuntimeException(exception);
 		}
 	}
+	
+	@Override
+	protected PersistenceEntity ____getLayerEntityInterfaceFromClass____(Class<?> aClass) {
+		return __inject__(SystemLayerPersistence.class).injectInterfaceClassFromEntityClassName(aClass,__getLayerEntityInterfaceClass__());
+	}
 
+	@Override
+	public SystemLayer __getSystemLayer__() {
+		return __inject__(SystemLayerPersistence.class);
+	}
 }

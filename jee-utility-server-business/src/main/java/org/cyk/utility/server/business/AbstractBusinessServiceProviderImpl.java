@@ -34,8 +34,8 @@ public  class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystem
 
 	@Override
 	public BusinessServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
-		// TODO Auto-generated method stub
-		return null;
+		__inject__(BusinessFunctionModifier.class).setEntity(object).execute();
+		return this;
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public  class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystem
 
 	@Override
 	public BusinessServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
-		// TODO Auto-generated method stub
+		__inject__(BusinessFunctionRemover.class).setEntity(object).execute();
 		return this;
 	}
 

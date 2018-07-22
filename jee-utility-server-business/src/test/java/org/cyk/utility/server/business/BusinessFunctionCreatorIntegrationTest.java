@@ -2,6 +2,7 @@ package org.cyk.utility.server.business;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.cyk.utility.system.action.SystemActionCreate;
 import org.junit.Test;
 
 public class BusinessFunctionCreatorIntegrationTest extends AbstractArquillianIntegrationTestWithDefaultDeployment {
@@ -12,7 +13,7 @@ public class BusinessFunctionCreatorIntegrationTest extends AbstractArquillianIn
 		MyEntity myEntity = new MyEntity().setCode("mc001");
 		__inject__(BusinessFunctionCreator.class).setEntity(myEntity).execute();
 		assertThat(myEntity.getIdentifier()).isNotNull();
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Business Create MyEntity")
+		assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(SystemActionCreate.class),MyEntity.class))
 			.assertContainsLastLogEventMessage("identifier="+myEntity.getIdentifier())
 			.assertContainsLastLogEventMessage("code=mc001")
 			;

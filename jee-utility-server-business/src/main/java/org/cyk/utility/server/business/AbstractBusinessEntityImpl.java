@@ -4,15 +4,28 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.value.ValueUsageType;
+
+import lombok.Getter;
 
 public abstract class AbstractBusinessEntityImpl<ENTITY> extends AbstractBusinessServiceProviderImpl<ENTITY> implements BusinessEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Getter protected Class<ENTITY> entityClass;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		entityClass = (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public ENTITY findOne(Object identifier, Properties properties) {
-		return (ENTITY) __inject__(BusinessFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier).execute().getProperties().getEntity();
+		return (ENTITY) __inject__(BusinessFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier)
+				.setEntityIdentifierValueUsageType(properties == null ? ValueUsageType.SYSTEM: (ValueUsageType) properties.getValueUsageType()).execute().getProperties().getEntity();
 	}
 
 	@Override
@@ -50,12 +63,6 @@ public abstract class AbstractBusinessEntityImpl<ENTITY> extends AbstractBusines
 
 	@Override
 	public Long count() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Class<ENTITY> getEntityClass() {
 		// TODO Auto-generated method stub
 		return null;
 	}

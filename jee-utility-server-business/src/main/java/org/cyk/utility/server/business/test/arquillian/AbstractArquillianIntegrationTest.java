@@ -4,12 +4,14 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.business.BusinessEntity;
-import org.cyk.utility.test.arquillian.AbstractSystemLayerIntegrationTestImpl;
-import org.cyk.utility.test.arquillian.SystemLayerIntegrationTest;
+import org.cyk.utility.system.layer.SystemLayer;
+import org.cyk.utility.system.layer.SystemLayerBusiness;
+import org.cyk.utility.test.arquillian.AbstractSystemServerIntegrationTestImpl;
+import org.cyk.utility.test.arquillian.SystemServerIntegrationTest;
 import org.cyk.utility.value.ValueUsageType;
 
 @SuppressWarnings({"rawtypes","unchecked"})
-public  class AbstractArquillianIntegrationTest extends AbstractSystemLayerIntegrationTestImpl<BusinessEntity> implements SystemLayerIntegrationTest<BusinessEntity>, Serializable {
+public  class AbstractArquillianIntegrationTest extends AbstractSystemServerIntegrationTestImpl<BusinessEntity> implements SystemServerIntegrationTest<BusinessEntity>, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -31,15 +33,14 @@ public  class AbstractArquillianIntegrationTest extends AbstractSystemLayerInteg
 	protected <ENTITY> void ____deleteEntity____(ENTITY entity, BusinessEntity business) {
 		business.delete(entity);
 	}
-
+	
 	@Override
-	public BusinessEntity __getLayerEntityInterfaceFromObject__(Object object) {
-		return null;
+	protected BusinessEntity ____getLayerEntityInterfaceFromClass____(Class<?> aClass) {
+		return __inject__(SystemLayerBusiness.class).injectInterfaceClassFromEntityClassName(aClass,__getLayerEntityInterfaceClass__());
 	}
 
 	@Override
-	public BusinessEntity __getLayerEntityInterfaceFromClass__(Class<?> aClass) {
-		return null;
-	}	
-
+	public SystemLayer __getSystemLayer__() {
+		return __inject__(SystemLayerBusiness.class);
+	}
 }

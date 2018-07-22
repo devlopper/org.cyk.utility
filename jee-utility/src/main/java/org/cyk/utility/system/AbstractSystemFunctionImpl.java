@@ -80,6 +80,17 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	}
 	
 	@Override
+	public ValueUsageType getEntityIdentifierValueUsageType() {
+		return (ValueUsageType) getProperties().getValueUsageType();
+	}
+	
+	@Override
+	public SystemFunction setEntityIdentifierValueUsageType(ValueUsageType valueUsageType) {
+		getProperties().setValueUsageType(valueUsageType);
+		return this;
+	}
+	
+	@Override
 	public Object getEntity() {
 		return getProperties().getEntity();
 	}

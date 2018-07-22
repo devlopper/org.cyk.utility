@@ -8,7 +8,11 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldValueGetter;
-import org.cyk.utility.system.layer.SystemLayerBusiness;
+import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractSystemLayerIntegrationTestImpl<LAYER_ENTITY_INTERFACE> extends org.cyk.utility.test.arquillian.AbstractArquillianIntegrationTest implements SystemLayerIntegrationTest<LAYER_ENTITY_INTERFACE>, Serializable {
@@ -25,7 +29,7 @@ public abstract class AbstractSystemLayerIntegrationTestImpl<LAYER_ENTITY_INTERF
 	public <ENTITY> void __createEntity__(ENTITY entity,LAYER_ENTITY_INTERFACE layerEntityInterface){
 		____createEntity____(entity, layerEntityInterface);
 		assertThat(__inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput()).isNotNull();
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Create "+entity.getClass().getSimpleName())
+		assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(SystemActionCreate.class),entity.getClass()))
 			.assertContainsLastLogEventMessage("code="+__inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
 	}
 	
@@ -40,7 +44,7 @@ public abstract class AbstractSystemLayerIntegrationTestImpl<LAYER_ENTITY_INTERF
 		assertThat(entity).isNotNull();
 		assertionHelper.assertEqualsByFieldValue(expectedFieldValues, entity);
 		Object businessIdentifier = ValueUsageType.BUSINESS.equals(valueUsageType) ? identifier : __inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput();
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Read "+entity.getClass().getSimpleName())
+		assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(SystemActionRead.class),entity.getClass()))
 		.assertContainsLastLogEventMessage("code="+businessIdentifier);
 		return entity;
 	}
@@ -62,7 +66,7 @@ public abstract class AbstractSystemLayerIntegrationTestImpl<LAYER_ENTITY_INTERF
 	public <ENTITY> void __updateEntity__(ENTITY entity,LAYER_ENTITY_INTERFACE layerEntityInterface) {
 		____updateEntity____(entity, layerEntityInterface);
 		assertThat(__inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput()).isNotNull();
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Update "+entity.getClass().getSimpleName())
+		assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(SystemActionUpdate.class),entity.getClass()))
 			.assertContainsLastLogEventMessage("code="+__inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
 	}
 	
@@ -74,7 +78,7 @@ public abstract class AbstractSystemLayerIntegrationTestImpl<LAYER_ENTITY_INTERF
 	
 	public <ENTITY> void __deleteEntity__(ENTITY entity,LAYER_ENTITY_INTERFACE layerEntityInterface){
 		____deleteEntity____(entity, layerEntityInterface);
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Delete "+entity.getClass().getSimpleName()).assertContainsLastLogEventMessage(
+		assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(SystemActionDelete.class),entity.getClass())).assertContainsLastLogEventMessage(
 				"code="+__inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
 		
 		//Object systemIdentifier = __inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput();
@@ -91,13 +95,23 @@ public abstract class AbstractSystemLayerIntegrationTestImpl<LAYER_ENTITY_INTERF
 		return layerEntityInterfaceClass;
 	}
 	
+	protected abstract LAYER_ENTITY_INTERFACE ____getLayerEntityInterfaceFromClass____(Class<?> aClass);
+	
 	@Override
 	public LAYER_ENTITY_INTERFACE __getLayerEntityInterfaceFromClass__(Class<?> aClass) {
-		return __inject__(SystemLayerBusiness.class).injectInterfaceClassFromEntityClassName(aClass,__getLayerEntityInterfaceClass__());
+		LAYER_ENTITY_INTERFACE instance = ____getLayerEntityInterfaceFromClass____(aClass);
+		if(instance == null)
+			throw new RuntimeException("We cannot find entity interface from class "+aClass);
+		return instance;
 	}
 	
 	@Override
 	public LAYER_ENTITY_INTERFACE __getLayerEntityInterfaceFromObject__(Object object) {
 		return __getLayerEntityInterfaceFromClass__(object.getClass());
+	}
+	
+	protected String __getLogMessageStart__(SystemAction systemAction,Class<?> aClass){
+		return __getSystemActor__().getIdentifier().toString()+" "+__getSystemLayer__().getIdentifier().toString()+" "+systemAction.getIdentifier().toString()
+				+" "+aClass.getSimpleName();
 	}
 }

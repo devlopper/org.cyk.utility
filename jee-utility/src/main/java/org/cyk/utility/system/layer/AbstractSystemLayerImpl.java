@@ -75,7 +75,7 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 	@Override
 	public <T> T injectInterfaceClassFromEntityClassName(Class<?> entityClass, Class<T> type) {
 		T object = null;
-		Class<?> interfaceClass = __inject__(SystemLayerPersistence.class).getInterfaceClassFromEntityClassName(entityClass);
+		Class<?> interfaceClass = getInterfaceClassFromEntityClassName(entityClass);
 		if(interfaceClass == null){
 			//TODO log warning
 		}else{

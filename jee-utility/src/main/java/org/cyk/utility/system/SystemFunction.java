@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInputAndVoidAsOutput;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.value.ValueUsageType;
 
 public interface SystemFunction extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 
@@ -18,6 +19,9 @@ public interface SystemFunction extends FunctionWithPropertiesAsInputAndVoidAsOu
 	
 	SystemFunction setEntityIdentifier(Object identifier);
 	Object getEntityIdentifier();
+	
+	SystemFunction setEntityIdentifierValueUsageType(ValueUsageType valueUsageType);
+	ValueUsageType getEntityIdentifierValueUsageType();
 	
 	Collection<?> getEntities();
 	SystemFunction setEntities(Collection<?> entities);

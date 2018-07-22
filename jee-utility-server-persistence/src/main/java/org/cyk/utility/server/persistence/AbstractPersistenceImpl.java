@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
+import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,13 +19,15 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> ENTITY readOne(Class<ENTITY> aClass, Object identifier,Properties properties) {
+		ValueUsageType valueUsageType = properties == null ? ValueUsageType.SYSTEM : (ValueUsageType) __inject__(ValueHelper.class).defaultToIfNull(properties.getValueUsageType(),ValueUsageType.SYSTEM);
 		Class<PersistenceEntity<ENTITY>> persistenceClass = (Class<PersistenceEntity<ENTITY>>) __inject__(SystemLayerPersistence.class).getInterfaceClassFromEntityClassName(aClass);
 		ENTITY entity;
 		if(persistenceClass == null){
-			//TODO log warning
-			entity = (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).setEntityIdentifier(identifier).execute().getProperties().getEntity();
+			__logWarn__("No persistence interface found for entity "+aClass);
+			entity = (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).setEntityIdentifier(identifier)
+					.setEntityIdentifierValueUsageType(valueUsageType).execute().getProperties().getEntity();
 		}else{
-			entity = __inject__(persistenceClass).readOne(identifier);
+			entity = ValueUsageType.SYSTEM.equals(valueUsageType) ? __inject__(persistenceClass).readOne(identifier) : __inject__(persistenceClass).readOneByBusinessIdentifier(identifier);
 		}
 		return entity;
 	}
