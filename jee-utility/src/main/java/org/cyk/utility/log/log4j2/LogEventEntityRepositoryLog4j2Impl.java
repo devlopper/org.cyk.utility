@@ -14,6 +14,8 @@ import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.object.dynamic.Objectable;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.instance.InstanceRepository;
 import org.cyk.utility.log.LogEventEntity;
@@ -34,7 +36,7 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 	public void __listenPostConstruct__(){
 		org.apache.logging.log4j.core.Logger logger = (org.apache.logging.log4j.core.Logger) org.apache.logging.log4j.LogManager.getRootLogger();
 		((org.apache.logging.log4j.core.Appender)this).start();
-		logger.getContext().getConfiguration().addLoggerAppender(logger, (org.apache.logging.log4j.core.Appender) this);	
+		logger.getContext().getConfiguration().addLoggerAppender(logger, (org.apache.logging.log4j.core.Appender) this);
 	}
 	
 	public LogEventEntityRepositoryLog4j2Impl() {
@@ -49,7 +51,13 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
     }
     
     @Override
-    public InstanceRepository<LogEventEntity> add(LogEventEntity event) {
+	public InstanceRepository<LogEventEntity> add(Collection<LogEventEntity> instances) {
+    	//append(event);
+		return null;
+	}
+    
+    @Override
+    public InstanceRepository<LogEventEntity> add(LogEventEntity...events) {
     	//append(event);
     	return this;
     }
@@ -98,6 +106,80 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 
 	@Override
 	public LogEventEntity getBySystemIdentifier(Object identifier) {
+		//no operation
 		return null;
 	}
+
+	@Override
+	public LogEventEntity getBySystemIdentifier(Object identifier, Boolean logIfResultIsNull) {
+		//no operation
+		return null;
+	}
+
+	@Override
+	public InstanceRepository<LogEventEntity> setInstanceClass(Class<LogEventEntity> aClass) {
+		//no operation
+		return this;
+	}
+
+	@Override
+	public Class<LogEventEntity> getInstanceClass() {
+		return LogEventEntity.class;
+	}
+
+	@Override
+	public Properties getProperties() {
+		return null;
+	}
+
+	@Override
+	public Objectable setProperties(Properties properties) {
+		return null;
+	}
+
+	@Override
+	public Object getParent() {
+		return null;
+	}
+
+	@Override
+	public Objectable setParent(Object parent, Boolean executeAddChild) {
+		return null;
+	}
+
+	@Override
+	public Objectable setParent(Object parent) {
+		return null;
+	}
+
+	@Override
+	public Object getIdentifier() {
+		return null;
+	}
+
+	@Override
+	public Objectable setIdentifier(Object identifier) {
+		return null;
+	}
+
+	@Override
+	public Objectable setChildren(Collection<Object> children) {
+		return null;
+	}
+
+	@Override
+	public Collection<Object> getChildren() {
+		return null;
+	}
+
+	@Override
+	public Objectable addChildren(Collection<Object> children) {
+		return null;
+	}
+
+	@Override
+	public Objectable addChild(Object... child) {
+		return null;
+	}
+
 }

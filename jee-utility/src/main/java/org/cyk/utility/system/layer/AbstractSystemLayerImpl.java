@@ -35,6 +35,17 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 	}
 	
 	@Override
+	public SystemLayer setLayerPackageNameToken(String token) {
+		getProperties().setFromPath(new Object[]{Properties.LAYER,Properties.PACKAGE,Properties.NAME,Properties.TOKEN}, token);
+		return this;
+	}
+	
+	@Override
+	public String getLayerPackageNameToken() {
+		return (String) getProperties().getFromPath(Properties.LAYER,Properties.PACKAGE,Properties.NAME,Properties.TOKEN);
+	}
+	
+	@Override
 	public SystemLayer setInterfacePackageNameToken(String token) {
 		getProperties().setFromPath(new Object[]{Properties.INTERFACE,Properties.PACKAGE,Properties.NAME,Properties.TOKEN}, token);
 		return this;

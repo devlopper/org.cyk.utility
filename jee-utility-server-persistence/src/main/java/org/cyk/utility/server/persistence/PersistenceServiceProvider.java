@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.system.SystemServiceProvider;
 
 public interface PersistenceServiceProvider<OBJECT> extends SystemServiceProvider {
@@ -32,4 +33,10 @@ public interface PersistenceServiceProvider<OBJECT> extends SystemServiceProvide
 	
 	/* Count */
 	
+	/**/
+	
+	Collection<PersistenceQuery> getQueries();
+	PersistenceServiceProvider<OBJECT> setQueries(Collection<PersistenceQuery> queries);
+	PersistenceServiceProvider<OBJECT> addQueries(Collection<PersistenceQuery> queries);
+	PersistenceServiceProvider<OBJECT> addQueries(PersistenceQuery...queries);
 }

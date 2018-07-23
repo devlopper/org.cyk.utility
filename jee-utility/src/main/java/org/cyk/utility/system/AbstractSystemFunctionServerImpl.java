@@ -9,6 +9,7 @@ import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActor;
 import org.cyk.utility.system.action.SystemActorServer;
 import org.cyk.utility.value.ValueUsageType;
@@ -29,7 +30,13 @@ public abstract class AbstractSystemFunctionServerImpl extends AbstractSystemFun
 	protected void __beforeExecute__() {
 		super.__beforeExecute__();
 		__getLog__().setLevel(LogLevel.INFO);
-		addLogMarkers(getAction().getIdentifier().toString(),getEntityClass().getSimpleName());
+		SystemAction action = getAction();
+		if(action!=null)
+			addLogMarkers(action.getIdentifier().toString());
+		Class<?> entityClass = getEntityClass();
+		if(entityClass!=null)
+			addLogMarkers(entityClass.getSimpleName());
+		//addLogMarkers(getAction().getIdentifier().toString(),getEntityClass().getSimpleName());
 		__getLog__().getMessageBuilder(Boolean.TRUE).addParameter(__inject__(StringHelper.class).concatenate(getLogMarkers(),CharacterConstant.SPACE.toString()));
 	}
 	

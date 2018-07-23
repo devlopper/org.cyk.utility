@@ -33,9 +33,10 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 	
 	/**/
 	
+	PersistenceEntity<ENTITY> setEntityClass(Class<ENTITY> aClass);
 	Class<ENTITY> getEntityClass();
 	
 	/**/
 	
-	//PersistenceEntity<ENTITY> addNamedQuery(String name,String query);
+	PersistenceEntity<ENTITY> addQuery(Object identifier,String value);
 }

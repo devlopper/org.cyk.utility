@@ -3,6 +3,8 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.server.persistence.query.PersistenceQuery;
+import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
@@ -27,14 +29,38 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 	}
 	
 	@Override
-	public PersistenceFunction setNamedQueryIdentifier(Object identifier) {
+	public PersistenceFunction setQueryIdentifier(Object identifier) {
 		getProperties().setFromPath(new Object[]{Properties.QUERY}, identifier);
+		if(getEntityClass() == null){
+			PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(identifier,Boolean.TRUE);
+			if(persistenceQuery!=null)
+				setEntityClass(persistenceQuery.getResultClass());
+		}
 		return this;
 	}
 	
 	@Override
-	public Object getNamedQueryIdentifier() {
+	public Object getQueryIdentifier() {
 		return getProperties().getFromPath(Properties.QUERY);
 	}
 
+	@Override
+	public PersistenceFunction setQueryParameters(Properties parameters) {
+		getProperties().setParameters(parameters);
+		return this;
+	}
+	
+	@Override
+	public Properties getQueryParameters() {
+		return (Properties) getProperties().getParameters();
+	}
+	
+	@Override
+	public PersistenceFunction setQueryParameter(String name, Object value) {
+		Properties parameters = getQueryParameters();
+		if(parameters == null)
+			setQueryParameters(parameters = new Properties());
+		parameters.set(name, value);
+		return this;
+	}
 }

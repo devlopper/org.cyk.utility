@@ -3982,6 +3982,26 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getLayer() {
+		return get(LAYER);
+	}
+
+	public Properties setLayer(Object value) {
+		set(LAYER, value);
+		return this;
+	}
+	
+	public Object getQueries() {
+		return get(QUERIES);
+	}
+
+	public Properties setQueries(Object value) {
+		set(QUERIES, value);
+		return this;
+	}
+	
+	public static final String QUERIES = "QUERIES";
+	public static final String LAYER = "LAYER";
 	public static final String PATH = "PATH";
 	public static final String EXECUTABLE = "EXECUTABLE";
 	public static final String QUERY = "QUERY";

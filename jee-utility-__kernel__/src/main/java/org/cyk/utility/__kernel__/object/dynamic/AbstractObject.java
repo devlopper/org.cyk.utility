@@ -21,10 +21,14 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	
 	@PostConstruct
 	private void listenPostConstruct(){
+		__listenBeforePostConstruct__();
 		__listenPostConstruct__();
+		__listenAfterPostConstruct__();
 	}
 	
+	protected void __listenBeforePostConstruct__(){}
 	protected void __listenPostConstruct__(){}
+	protected void __listenAfterPostConstruct__(){}
 	
 	@Override
 	public Properties getProperties() {

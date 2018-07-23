@@ -31,4 +31,10 @@ public class SystemLayerPersistenceUnitTest extends AbstractArquillianUnitTestWi
 	public void getInterfaceNameFromEntityClassName() {
 		assertionHelper.assertEquals("package01.api.MyEntity01Persistence", __inject__(SystemLayerPersistence.class).getInterfaceNameFromEntityClassName("package01.entities.MyEntity01"));
 	}
+	
+	@Test
+	public void getInterfaceNameFromEntityClassName02() {
+		assertionHelper.assertEquals("org.cyk.system.datastructure.server.persistence.api.collection.set.nested.NestedSetPersistence"
+				, __inject__(SystemLayerPersistence.class).getInterfaceNameFromEntityClassName("org.cyk.system.datastructure.server.persistence.entities.collection.set.nested.NestedSet"));
+	}
 }

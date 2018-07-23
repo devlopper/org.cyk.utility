@@ -13,7 +13,9 @@ public interface PersistenceFunctionReader extends PersistenceFunction {
 	
 	PersistenceFunctionReader setEntityIdentifierValueUsageType(ValueUsageType valueUsageType);
 	
-	PersistenceFunctionReader setNamedQueryIdentifier(Object identifier);
+	PersistenceFunctionReader setQueryIdentifier(Object identifier);
+	
+	PersistenceFunction setQueryParameter(String name, Object value);
 	
 	/**/
 	

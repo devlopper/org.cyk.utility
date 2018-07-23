@@ -1,6 +1,7 @@
 package org.cyk.utility.server.persistence.jpa;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -17,10 +18,14 @@ public class PersistenceQueryRepositoryJpaImpl extends AbstractPersistenceQueryR
 	@Inject private EntityManager entityManager;
 	
 	@Override
-	public InstanceRepository<PersistenceQuery> add(PersistenceQuery query) {
-		super.add(query);
-		entityManager.getEntityManagerFactory().addNamedQuery(query.getIdentifier(), entityManager.createQuery(query.getValue(), query.getResultClass()));	
+	public InstanceRepository<PersistenceQuery> add(Collection<PersistenceQuery> instances) {
+		super.add(instances);
+		for(PersistenceQuery index : instances){
+			entityManager.getEntityManagerFactory().addNamedQuery(index.getIdentifier(), entityManager.createQuery(index.getValue(), index.getResultClass()));
+			//__inject__(Log.class).executeInfo("named query added to entity manager factory. name="+index.getIdentifier()+" , value="+index.getValue()
+			//	+" , class="+index.getResultClass()).execute();
+		}
 		return this;
 	}
-	
+
 }

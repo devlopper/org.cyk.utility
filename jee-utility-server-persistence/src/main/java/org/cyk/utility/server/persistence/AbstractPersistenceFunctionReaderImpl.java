@@ -54,7 +54,12 @@ public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPers
 	}
 	
 	@Override
-	public PersistenceFunctionReader setNamedQueryIdentifier(Object identifier) {
-		return (PersistenceFunctionReader) super.setNamedQueryIdentifier(identifier);
+	public PersistenceFunctionReader setQueryIdentifier(Object identifier) {
+		return (PersistenceFunctionReader) super.setQueryIdentifier(identifier);
+	}
+	
+	@Override
+	public PersistenceFunctionReader setQueryParameter(String name, Object value) {
+		return (PersistenceFunctionReader) super.setQueryParameter(name, value);
 	}
 }

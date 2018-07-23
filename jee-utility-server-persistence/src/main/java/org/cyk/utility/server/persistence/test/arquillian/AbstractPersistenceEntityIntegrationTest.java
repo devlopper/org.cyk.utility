@@ -11,7 +11,7 @@ import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
-public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends AbstractArquillianIntegrationTest {
+public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends AbstractPersistenceArquillianIntegrationTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test
@@ -55,6 +55,27 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 		object = __getPersistenceEntity__(action).readOne(__getSystemIdentifier__(object));
 		__deleteEntity__(object);
 	}
+	
+	//TODO following code must be enable
+	
+	/*
+	@Test(expected=javax.transaction.RollbackException.class)
+	public void isCodeMustBeUnique() throws Exception{
+		String code = getRandomCode();
+		userTransaction.begin();
+		__getPersistenceEntity__(null).create(new MyEntity().setCode(code));
+		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Create MyEntity").contains("code="+code);
+		__getPersistenceEntity__(null).create(new MyEntity().setCode(code));
+		userTransaction.commit();
+	}
+	
+	@Test(expected=javax.transaction.RollbackException.class)
+	public void isCodeMustBeNotNull() throws Exception{
+		userTransaction.begin();
+		__getPersistenceEntity__(null).create(new MyEntity());
+		userTransaction.commit();
+	}
+	*/
 	
 	/**/
 	

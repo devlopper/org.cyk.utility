@@ -4,6 +4,9 @@ import org.cyk.utility.__kernel__.object.dynamic.Singleton;
 
 public interface SystemLayer extends Singleton {
 
+	SystemLayer setLayerPackageNameToken(String token);
+	String getLayerPackageNameToken();
+	
 	SystemLayer setEntityPackageNameToken(String token);
 	String getEntityPackageNameToken();
 	

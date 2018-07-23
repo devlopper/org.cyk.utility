@@ -6,12 +6,12 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerBusiness;
-import org.cyk.utility.test.arquillian.AbstractSystemServerIntegrationTestImpl;
+import org.cyk.utility.test.arquillian.AbstractSystemServerArquillianIntegrationTestImpl;
 import org.cyk.utility.test.arquillian.SystemServerIntegrationTest;
 import org.cyk.utility.value.ValueUsageType;
 
 @SuppressWarnings({"rawtypes","unchecked"})
-public  class AbstractArquillianIntegrationTest extends AbstractSystemServerIntegrationTestImpl<BusinessEntity> implements SystemServerIntegrationTest<BusinessEntity>, Serializable {
+public abstract class AbstractBusinessArquillianIntegrationTest extends AbstractSystemServerArquillianIntegrationTestImpl<BusinessEntity> implements SystemServerIntegrationTest<BusinessEntity>, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

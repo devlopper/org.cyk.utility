@@ -15,7 +15,7 @@ import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.value.ValueUsageType;
 
-public abstract class AbstractSystemLayerIntegrationTestImpl<LAYER_ENTITY_INTERFACE> extends org.cyk.utility.test.arquillian.AbstractArquillianIntegrationTest implements SystemLayerIntegrationTest<LAYER_ENTITY_INTERFACE>, Serializable {
+public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENTITY_INTERFACE> extends org.cyk.utility.test.arquillian.AbstractArquillianIntegrationTest implements SystemLayerIntegrationTest<LAYER_ENTITY_INTERFACE>, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	protected Class<LAYER_ENTITY_INTERFACE> layerEntityInterfaceClass;

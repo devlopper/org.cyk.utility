@@ -3,10 +3,10 @@ package org.cyk.utility.server.persistence.jpa;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.cyk.utility.server.persistence.PersistenceFunctionCreator;
-import org.cyk.utility.server.persistence.test.arquillian.AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram;
+import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram;
 import org.junit.Test;
 
-public class PersistenceFunctionCreatorIntegrationTest extends AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram {
+public class PersistenceFunctionCreatorIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram {
 	private static final long serialVersionUID = 1L;
 	
 	@Test

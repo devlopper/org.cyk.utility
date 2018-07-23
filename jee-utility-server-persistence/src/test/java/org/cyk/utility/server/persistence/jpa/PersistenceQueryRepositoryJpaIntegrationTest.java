@@ -6,11 +6,11 @@ import org.cyk.utility.server.persistence.PersistenceFunctionCreator;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
-import org.cyk.utility.server.persistence.test.arquillian.AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram;
+import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class PersistenceQueryRepositoryJpaIntegrationTest extends AbstractArquillianIntegrationTestWithDefaultDeploymentAsSwram {
+public class PersistenceQueryRepositoryJpaIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
@@ -29,7 +29,7 @@ public class PersistenceQueryRepositoryJpaIntegrationTest extends AbstractArquil
 		userTransaction.commit();
 		
 		@SuppressWarnings("unchecked")
-		List<MyEntity> results = (List<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setNamedQueryIdentifier("MyEntity.readAll")
+		List<MyEntity> results = (List<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setQueryIdentifier("MyEntity.readAll")
 				.execute().getProperties().getEntities();
 		
 		Assert.assertEquals(3, results.size());

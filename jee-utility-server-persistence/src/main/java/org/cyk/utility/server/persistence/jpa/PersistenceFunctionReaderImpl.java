@@ -1,10 +1,13 @@
 package org.cyk.utility.server.persistence.jpa;
 
 import java.util.Collection;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
@@ -30,7 +33,7 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 	
 	@Override
 	protected void __execute__(SystemAction action) {
-		String queryIdentifier = (String) getNamedQueryIdentifier();
+		String queryIdentifier = (String) getQueryIdentifier();
 		if(__inject__(StringHelper.class).isBlank(queryIdentifier)){
 			Class<?> aClass = getEntityClass();
 			Object entityIdentifier = getEntityIdentifier();
@@ -60,9 +63,16 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 			if(persistenceQuery == null){
 				__inject__(ThrowableHelper.class).throwRuntimeException("persistence query with identifier "+queryIdentifier+" not found.");
 			}else {
-				Collection<?> objects = getEntityManager().createNamedQuery(queryIdentifier, persistenceQuery.getResultClass())
-						//TODO how to handle parameters
-						.getResultList();
+				TypedQuery<?> typedQuery = getEntityManager().createNamedQuery(queryIdentifier, persistenceQuery.getResultClass());
+				//TODO handle Paging
+				
+				//Parameters
+				Properties parameters = getQueryParameters();
+				if(parameters != null && parameters.__getMap__()!=null)
+					for(Map.Entry<Object, Object> entry : parameters.__getMap__().entrySet())
+						typedQuery.setParameter(entry.getKey().toString(), entry.getValue());
+				
+				Collection<?> objects = typedQuery.getResultList();
 				getProperties().setEntities(objects);
 				if(__inject__(CollectionHelper.class).isEmpty(objects)){
 					//TODO log not found

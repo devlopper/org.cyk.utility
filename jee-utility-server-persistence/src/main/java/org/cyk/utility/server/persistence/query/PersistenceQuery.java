@@ -34,4 +34,24 @@ public class PersistenceQuery extends AbstractObject implements Serializable {
 		getProperties().setClass(aClass);
 		return this;
 	}
+	
+	@Override
+	public int hashCode() {
+		Object identifier = getIdentifier();
+		return identifier == null ? super.hashCode() : identifier.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		Object identifier1 = getIdentifier();
+		Object identifier2 = ((PersistenceQuery)object).getIdentifier();
+		return identifier1!=null && identifier2!=null && identifier1.equals(identifier2);
+	}
+	
+	@Override
+	public String toString() {
+		return String.format(TO_STRING_FORMAT, PersistenceQuery.class.getSimpleName(),getIdentifier(),getValue(),getResultClass());
+	}
+	
+	private static final String TO_STRING_FORMAT = "%s(%s , %s , %s)";
 }

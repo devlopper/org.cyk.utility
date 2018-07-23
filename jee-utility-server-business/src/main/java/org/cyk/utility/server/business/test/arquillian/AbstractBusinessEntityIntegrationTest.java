@@ -11,7 +11,7 @@ import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
-public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends AbstractArquillianIntegrationTest {
+public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends AbstractBusinessArquillianIntegrationTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

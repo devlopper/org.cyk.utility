@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.cyk.utility.system.action.SystemActor;
 import org.cyk.utility.system.action.SystemActorServer;
 
-public abstract class AbstractSystemServerIntegrationTestImpl<LAYER_ENTITY_INTERFACE> extends AbstractSystemLayerIntegrationTestImpl<LAYER_ENTITY_INTERFACE> implements SystemServerIntegrationTest<LAYER_ENTITY_INTERFACE>, Serializable {
+public abstract class AbstractSystemServerArquillianIntegrationTestImpl<LAYER_ENTITY_INTERFACE> extends AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENTITY_INTERFACE> implements SystemServerIntegrationTest<LAYER_ENTITY_INTERFACE>, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

@@ -8,6 +8,12 @@ public abstract class AbstractPersistenceQueryRepositoryImpl extends AbstractIns
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		setInstanceClass(PersistenceQuery.class);
+	}
+	
+	@Override
 	protected Object getSystemIdentifier(PersistenceQuery instance) {
 		return instance.getIdentifier();
 	}

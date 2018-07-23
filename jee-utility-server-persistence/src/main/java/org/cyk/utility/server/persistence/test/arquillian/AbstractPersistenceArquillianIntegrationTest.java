@@ -9,12 +9,12 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
-import org.cyk.utility.test.arquillian.AbstractSystemServerIntegrationTestImpl;
+import org.cyk.utility.test.arquillian.AbstractSystemServerArquillianIntegrationTestImpl;
 import org.cyk.utility.test.arquillian.SystemServerIntegrationTest;
 import org.cyk.utility.value.ValueUsageType;
 
 @SuppressWarnings({"rawtypes","unchecked"})
-public abstract class AbstractArquillianIntegrationTest extends AbstractSystemServerIntegrationTestImpl<PersistenceEntity> implements SystemServerIntegrationTest<PersistenceEntity>, Serializable {
+public abstract class AbstractPersistenceArquillianIntegrationTest extends AbstractSystemServerArquillianIntegrationTestImpl<PersistenceEntity> implements SystemServerIntegrationTest<PersistenceEntity>, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject protected UserTransaction userTransaction;
