@@ -39,4 +39,6 @@ public interface PersistenceServiceProvider<OBJECT> extends SystemServiceProvide
 	PersistenceServiceProvider<OBJECT> setQueries(Collection<PersistenceQuery> queries);
 	PersistenceServiceProvider<OBJECT> addQueries(Collection<PersistenceQuery> queries);
 	PersistenceServiceProvider<OBJECT> addQueries(PersistenceQuery...queries);
+	
+	PersistenceServiceProvider<OBJECT> addQuery(Object identifier,String value,Class<?> resultClass);
 }

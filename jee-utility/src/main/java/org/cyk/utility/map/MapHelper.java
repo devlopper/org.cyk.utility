@@ -13,4 +13,5 @@ public interface MapHelper extends Helper {
 	@SuppressWarnings("rawtypes")
 	void copy(Map source, Map destination, Object[] keys);
 
+	Map<Object,Object> instanciate(Object...objects);
 }

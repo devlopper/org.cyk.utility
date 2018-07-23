@@ -11,27 +11,23 @@ import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEntity> implements MyEntityPersistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String readByIntegerValue;
+	private String readByIntegerValue,countByIntegerValue;
 	
 	@Override
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
 		addQuery(readByIntegerValue, "SELECT r FROM MyEntity r WHERE r.integerValue = :integerValue");
+		addQuery(countByIntegerValue, "SELECT COUNT(r) FROM MyEntity r WHERE r.integerValue = :integerValue",Long.class);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<MyEntity> readByIntegerValue(Integer value) {
-		return (Collection<MyEntity>) __inject__(PersistenceFunctionReader.class)
-				.setQueryIdentifier(__buildQueryStringIdentifierFromCurrentCall__())
-				.setQueryParameter("integerValue", 2)
-				.execute().getProperties().getEntities();
+		return __readMany__(MyEntity.FIELD_INTEGER_VALUE, value);
 	}
 	
 	@Override
 	public Long countByIntegerValue(Integer value) {
-		// TODO Auto-generated method stub
-		return null;
+		return __count__(MyEntity.FIELD_INTEGER_VALUE, value);
 	}
 	
 }

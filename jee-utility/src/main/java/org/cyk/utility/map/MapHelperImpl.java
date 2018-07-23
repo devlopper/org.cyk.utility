@@ -1,6 +1,7 @@
 package org.cyk.utility.map;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Singleton;
@@ -41,4 +42,15 @@ public class MapHelperImpl extends AbstractHelper implements MapHelper,Serializa
 		copy(source, destination, keys, Boolean.TRUE);
 	}
 	
+	@Override
+	public Map<Object, Object> instanciate(Object... objects) {
+		Map<Object, Object> map = null;
+		if(__inject__(ArrayHelper.class).isNotEmpty(objects)){
+			map = new HashMap<Object, Object>();
+			for(Integer index = 0 ; index < objects.length - 1 ; index = index + 1){
+				map.put(objects[index], objects[index+1]);
+			}
+		}
+		return map;
+	}
 }

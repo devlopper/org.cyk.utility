@@ -23,4 +23,8 @@ public class MyEntity extends AbstractEntity implements Serializable {
 	public String toString() {
 		return getCode();
 	}
+	
+	/**/
+	
+	public static final String FIELD_INTEGER_VALUE = "integerValue";
 }

@@ -7,7 +7,8 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.server.persistence.query.PersistenceQuery;
+import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
@@ -74,7 +75,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@Override
 	public PersistenceEntity<ENTITY> addQuery(Object identifier, String value) {
-		addQueries(new PersistenceQuery().setIdentifier(identifier).setValue(value).setResultClass(getEntityClass()));
+		addQuery(identifier, value,getEntityClass());
 		return this;
 	}
 	
@@ -94,6 +95,21 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected String __buildQueryStringIdentifierFromCurrentCall__(){
 		return __inject__(PersistenceQueryIdentifierStringBuilder.class).setClassSimpleName(getEntityClass())
-				.setFieldName(__inject__(StackTraceHelper.class).getAt(3).getMethodName()).execute().getOutput();
+				.setFieldName(__inject__(StackTraceHelper.class).getAt(5/* TODO index vary on deep. it must be provided as param*/).getMethodName()).execute().getOutput();
+	}
+	
+	protected PersistenceFunctionReader __getReader__(Object...parameters) {
+		return __inject__(PersistenceFunctionReader.class)
+				.setQueryIdentifier(__buildQueryStringIdentifierFromCurrentCall__())
+				.setQueryParameters(Properties.instanciate(__inject__(MapHelper.class).instanciate(parameters)));
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected Collection<ENTITY> __readMany__(Object...parameters) {
+		return (Collection<ENTITY>) __getReader__(parameters).execute().getEntities();
+	}
+	
+	protected Long __count__(Object...parameters) {
+		return (Long) __inject__(CollectionHelper.class).getFirst(__getReader__(parameters).execute().getEntities());
 	}
 }

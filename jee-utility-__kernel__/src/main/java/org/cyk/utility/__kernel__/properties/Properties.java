@@ -29,6 +29,16 @@ public class Properties implements java.io.Serializable {
 	private Map<Object,Getter> getterMap;
 	//private Object doubleStringValueSeparator = StringUtils.repeat(stringValueSeparator.toString(), 2);
 	
+	public static Properties instanciate(Map<Object,Object> map){
+		Properties properties = null; 
+		if(map != null && !map.isEmpty()){
+			properties = new Properties();
+			properties.map = new HashMap<>();
+			properties.map.putAll(map);
+		}
+		return properties;
+	}
+	
 	public java.util.Map<Object,Object> __getMap__(){
 		return map;
 	}

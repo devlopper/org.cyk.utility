@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.system.action.SystemAction;
@@ -56,6 +57,11 @@ public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPers
 	@Override
 	public PersistenceFunctionReader setQueryIdentifier(Object identifier) {
 		return (PersistenceFunctionReader) super.setQueryIdentifier(identifier);
+	}
+	
+	@Override
+	public PersistenceFunctionReader setQueryParameters(Properties parameters) {
+		return (PersistenceFunctionReader) super.setQueryParameters(parameters);
 	}
 	
 	@Override

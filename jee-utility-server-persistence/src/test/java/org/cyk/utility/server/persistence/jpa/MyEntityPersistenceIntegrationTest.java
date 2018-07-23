@@ -20,5 +20,6 @@ public class MyEntityPersistenceIntegrationTest extends AbstractPersistenceEntit
 		Collection<MyEntity> collection = ____inject____(MyEntityPersistence.class).readByIntegerValue(2);
 		Assert.assertNotNull(collection);
 		Assert.assertEquals(3, collection.size());
+		Assert.assertEquals(new Long(3), ____inject____(MyEntityPersistence.class).countByIntegerValue(2));
 	}
 }

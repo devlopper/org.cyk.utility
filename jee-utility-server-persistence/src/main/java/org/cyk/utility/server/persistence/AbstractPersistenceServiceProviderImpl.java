@@ -149,4 +149,10 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	public PersistenceServiceProvider<OBJECT> addQueries(PersistenceQuery... queries) {
 		return addQueries(__inject__(CollectionHelper.class).instanciate(queries));
 	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> addQuery(Object identifier, String value, Class<?> resultClass) {
+		addQueries(new PersistenceQuery().setIdentifier(identifier).setValue(value).setResultClass(resultClass));
+		return this;
+	}
 }

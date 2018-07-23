@@ -44,6 +44,11 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		}
 	}
 	
+	@Override
+	public SystemFunction execute() {
+		return (SystemFunction) super.execute();
+	}
+	
 	protected abstract void __execute__(SystemAction action);
 	
 	@Override

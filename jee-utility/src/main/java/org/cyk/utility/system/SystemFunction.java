@@ -25,4 +25,6 @@ public interface SystemFunction extends FunctionWithPropertiesAsInputAndVoidAsOu
 	
 	Collection<?> getEntities();
 	SystemFunction setEntities(Collection<?> entities);
+	
+	SystemFunction execute();
 }

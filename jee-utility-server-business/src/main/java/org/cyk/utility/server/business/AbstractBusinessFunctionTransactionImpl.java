@@ -5,16 +5,14 @@ import java.util.Collection;
 
 import javax.transaction.Transactional;
 
-import org.cyk.utility.__kernel__.function.Function;
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractBusinessFunctionTransactionImpl extends AbstractBusinessFunctionImpl implements BusinessFunctionTransaction, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Override @Transactional
-	public Function<Properties, Void> execute() {
-		return super.execute();
+	public BusinessFunctionTransaction execute() {
+		return (BusinessFunctionTransaction) super.execute();
 	}
 	
 	@Override

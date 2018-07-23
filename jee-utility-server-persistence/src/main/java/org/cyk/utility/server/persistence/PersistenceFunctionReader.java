@@ -1,5 +1,6 @@
 package org.cyk.utility.server.persistence;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -15,7 +16,9 @@ public interface PersistenceFunctionReader extends PersistenceFunction {
 	
 	PersistenceFunctionReader setQueryIdentifier(Object identifier);
 	
-	PersistenceFunction setQueryParameter(String name, Object value);
+	PersistenceFunctionReader setQueryParameters(Properties parameters);
+	
+	PersistenceFunctionReader setQueryParameter(String name, Object value);
 	
 	/**/
 	
