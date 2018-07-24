@@ -2,6 +2,7 @@ package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -21,7 +22,7 @@ public class PersistenceQueryIdentifierStringBuilderImpl extends AbstractFunctio
 	@Override
 	protected Collection<Object> __getFormatArguments__(Boolean isFormatRequired, Collection<Object> formatArguments) {
 		if(__inject__(CollectionHelper.class).isEmpty(formatArguments)){
-			formatArguments = __inject__(CollectionHelper.class).instanciate(getClassSimpleName(),getFieldName());
+			formatArguments = __inject__(CollectionHelper.class).instanciate(getClassSimpleName(),getName());
 		}
 		return super.__getFormatArguments__(isFormatRequired, formatArguments);
 	}
@@ -49,18 +50,23 @@ public class PersistenceQueryIdentifierStringBuilderImpl extends AbstractFunctio
 	}
 	
 	@Override
-	public PersistenceQueryIdentifierStringBuilder setFieldName(String name) {
-		getProperties().setFromPath(new Object[]{Properties.FIELD,Properties.NAME}, name);
+	public PersistenceQueryIdentifierStringBuilder setName(String name) {
+		getProperties().setFromPath(new Object[]{Properties.NAME}, name);
 		return this;
 	}
 	
 	@Override
-	public String getFieldName() {
-		return (String) getProperties().getFromPath(Properties.FIELD,Properties.NAME);
+	public String getName() {
+		return (String) getProperties().getFromPath(Properties.NAME);
 	}
 	
 	@Override
-	public PersistenceQueryIdentifierStringBuilder setFieldName(Field field) {
-		return setFieldName(field.getName());
+	public PersistenceQueryIdentifierStringBuilder setName(Field field) {
+		return setName(field.getName());
+	}
+	
+	@Override
+	public PersistenceQueryIdentifierStringBuilder setName(Method method) {
+		return setName(method.getName());
 	}
 }

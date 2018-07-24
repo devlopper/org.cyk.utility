@@ -12,6 +12,8 @@ import lombok.experimental.Accessors;
 public class PersistenceQuery extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	//private PersistenceQueryAggregateFunction aggregateFunction;
+	
 	@Override
 	public PersistenceQuery setIdentifier(Object identifier) {
 		return (PersistenceQuery) super.setIdentifier(identifier);

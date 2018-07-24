@@ -39,4 +39,7 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 	/**/
 	
 	PersistenceEntity<ENTITY> addQuery(Object identifier,String value);
+	PersistenceEntity<ENTITY> addQueryCollectInstances(Object identifier,String value);
+	
+
 }

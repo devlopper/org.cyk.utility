@@ -105,4 +105,7 @@ public class AssertionHelperJunitImpl extends AbstractAssertionHelperImpl implem
 		return this;
 	}
 
+	/**/
+	
+	
 }

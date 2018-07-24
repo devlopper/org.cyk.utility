@@ -26,85 +26,112 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 	
 	@Override
 	public AssertionHelper assertEqualsLastLogEventMessage(String message,String expected){
-		assertEquals(message,expected, __inject__(LogEventEntityRepository.class).getLast().getMessage());
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertEquals(message,expected, __inject__(LogEventEntityRepository.class).getLast().getMessage());
 		//assertEquals(org.apache.logging.log4j.Level.INFO, log4j2Appender.getLastEvent().getLevel());	
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertEqualsLastLogEventMessage(String expected){
-		assertEquals(expected, __inject__(LogEventEntityRepository.class).getLast().getMessage());
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertEquals(expected, __inject__(LogEventEntityRepository.class).getLast().getMessage());
 		return this;
 	}
 
 	@Override
 	public AssertionHelper assertEqualsLastLogEventLevel(String message, LogLevel expected) {
-		assertEquals(message,expected, __inject__(LogEventEntityRepository.class).getLast().getLevel());
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertEquals(message,expected, __inject__(LogEventEntityRepository.class).getLast().getLevel());
 		return this;
 	}
 
 	@Override
 	public AssertionHelper assertEqualsLastLogEventLevel(LogLevel expected) {
-		assertEquals(expected, __inject__(LogEventEntityRepository.class).getLast().getLevel());
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertEquals(expected, __inject__(LogEventEntityRepository.class).getLast().getLevel());
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertEqualsLastLogEventMarker(String message, Object expected) {
-		assertEquals(message,expected, __inject__(LogEventEntityRepository.class).getLast().getMarker());
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertEquals(message,expected, __inject__(LogEventEntityRepository.class).getLast().getMarker());
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertEqualsLastLogEventMarker(Object expected) {
-		assertEquals(expected, __inject__(LogEventEntityRepository.class).getLast().getMarker());
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertEquals(expected, __inject__(LogEventEntityRepository.class).getLast().getMarker());
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertEqualsLastLogEventProperties(Properties expected) {
-		if(expected.has(Properties.LOG_LEVEL))
-			assertEqualsLastLogEventLevel((LogLevel) expected.get(Properties.LOG_LEVEL));
-		if(expected.has(Properties.MARKER))
-			assertEqualsLastLogEventMarker(expected.get(Properties.MARKER));
-		if(expected.has(Properties.MESSAGE))
-			assertEqualsLastLogEventMessage((String) expected.get(Properties.MESSAGE));
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable())){
+			if(expected.has(Properties.LOG_LEVEL))
+				assertEqualsLastLogEventLevel((LogLevel) expected.get(Properties.LOG_LEVEL));
+			if(expected.has(Properties.MARKER))
+				assertEqualsLastLogEventMarker(expected.get(Properties.MARKER));
+			if(expected.has(Properties.MESSAGE))
+				assertEqualsLastLogEventMessage((String) expected.get(Properties.MESSAGE));
+		}
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertEqualsLogEventCount(String message, Object expected) {
-		assertEqualsNumber(message, expected, __inject__(LogEventEntityRepository.class).countAll());
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertEqualsNumber(message, expected, __inject__(LogEventEntityRepository.class).countAll());
 		return null;
 	}
 	
 	@Override
 	public AssertionHelper assertEqualsLogEventCount(Object expected) {
-		assertEqualsNumber(expected, __inject__(LogEventEntityRepository.class).countAll());
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertEqualsNumber(expected, __inject__(LogEventEntityRepository.class).countAll());
 		return null;
 	}
 	
 	@Override
 	public AssertionHelper assertContainsLastLogEventMessage(String message, String expected) {
-		assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).contains(expected);
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).contains(expected);
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertContainsLastLogEventMessage(String expected) {
-		assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).contains(expected);
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).contains(expected);
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertStartsWithLastLogEventMessage(String message, String expected) {
-		assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).startsWith(expected);
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).startsWith(expected);
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertStartsWithLastLogEventMessage(String expected) {
-		assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).startsWith(expected);
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertThat(__inject__(LogEventEntityRepository.class).getLastMessage()).startsWith(expected);
+		return this;
+	}
+	
+	/**/
+	
+	@Override
+	public Boolean getIsLogAssertionEnable() {
+		return (Boolean) getProperties().getFromPath(Properties.IS,Properties.LOG);
+	}
+	
+	@Override
+	public AssertionHelper setIsLogAssertionEnable(Boolean value) {
+		getProperties().setFromPath(new Object[]{Properties.IS,Properties.LOG}, value);
 		return this;
 	}
 }

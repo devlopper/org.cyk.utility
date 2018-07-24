@@ -47,7 +47,7 @@ public class MapHelperImpl extends AbstractHelper implements MapHelper,Serializa
 		Map<Object, Object> map = null;
 		if(__inject__(ArrayHelper.class).isNotEmpty(objects)){
 			map = new HashMap<Object, Object>();
-			for(Integer index = 0 ; index < objects.length - 1 ; index = index + 1){
+			for(Integer index = 0 ; index < objects.length - 1 ; index = index + 2){
 				map.put(objects[index], objects[index+1]);
 			}
 		}

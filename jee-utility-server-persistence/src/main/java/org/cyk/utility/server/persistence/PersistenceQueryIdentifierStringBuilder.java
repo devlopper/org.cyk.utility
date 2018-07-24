@@ -1,6 +1,7 @@
 package org.cyk.utility.server.persistence;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInputAndStringAsOutput;
 
@@ -10,7 +11,8 @@ public interface PersistenceQueryIdentifierStringBuilder extends FunctionWithPro
 	PersistenceQueryIdentifierStringBuilder setClassSimpleName(String name);
 	PersistenceQueryIdentifierStringBuilder setClassSimpleName(Class<?> aClass);
 	
-	String getFieldName();
-	PersistenceQueryIdentifierStringBuilder setFieldName(String name);
-	PersistenceQueryIdentifierStringBuilder setFieldName(Field field);
+	String getName();
+	PersistenceQueryIdentifierStringBuilder setName(String name);
+	PersistenceQueryIdentifierStringBuilder setName(Field field);
+	PersistenceQueryIdentifierStringBuilder setName(Method method);
 }

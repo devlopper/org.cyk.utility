@@ -48,4 +48,8 @@ public interface AssertionHelper extends Helper {
 	AssertionHelper assertEqualsLastLogEventMarker(Object expected);
 	
 	AssertionHelper assertEqualsLastLogEventProperties(Properties expected);
+	
+	AssertionHelper setIsLogAssertionEnable(Boolean value);
+	Boolean getIsLogAssertionEnable();
+	
 }

@@ -1,7 +1,6 @@
 package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -22,7 +21,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 
 	@Override
-	protected String __getQueryIdentifierStringBuilderClassSimpleClassNameProperty__(Field field) {
+	protected String __getQueryIdentifierStringBuilderClassSimpleClassNameProperty__(Object object) {
 		return getEntityClass().getSimpleName();
 	}
 	
@@ -79,6 +78,12 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return this;
 	}
 	
+	@Override
+	public PersistenceEntity<ENTITY> addQueryCollectInstances(Object identifier, String value) {
+		addQueryCollectInstances(identifier, value, getEntityClass());
+		return this;
+	}
+	
 	/**/
 	
 	@SuppressWarnings("unchecked")
@@ -95,7 +100,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected String __buildQueryStringIdentifierFromCurrentCall__(){
 		return __inject__(PersistenceQueryIdentifierStringBuilder.class).setClassSimpleName(getEntityClass())
-				.setFieldName(__inject__(StackTraceHelper.class).getAt(5/* TODO index vary on deep. it must be provided as param*/).getMethodName()).execute().getOutput();
+				.setName(__inject__(StackTraceHelper.class).getAt(5/* TODO index vary on deep. it must be provided as param*/).getMethodName()).execute().getOutput();
 	}
 	
 	protected PersistenceFunctionReader __getReader__(Object...parameters) {

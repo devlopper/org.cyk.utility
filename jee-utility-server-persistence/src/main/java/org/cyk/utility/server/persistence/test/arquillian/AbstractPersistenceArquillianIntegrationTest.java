@@ -7,6 +7,7 @@ import javax.transaction.UserTransaction;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.PersistenceEntity;
+import org.cyk.utility.server.persistence.jpa.Persistence;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
 import org.cyk.utility.test.arquillian.AbstractSystemServerArquillianIntegrationTestImpl;
@@ -61,5 +62,11 @@ public abstract class AbstractPersistenceArquillianIntegrationTest extends Abstr
 	@Override
 	public SystemLayer __getSystemLayer__() {
 		return __inject__(SystemLayerPersistence.class);
+	}
+	
+	/**/
+	
+	protected <T> T __readByBusinessIdentifier__(Class<T> aClass,Object identifier){
+		return identifier == null ? null : __inject__(Persistence.class).readOne(aClass,identifier,new Properties().setValueUsageType(ValueUsageType.BUSINESS));
 	}
 }
