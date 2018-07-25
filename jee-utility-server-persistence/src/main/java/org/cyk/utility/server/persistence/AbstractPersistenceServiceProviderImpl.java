@@ -21,6 +21,8 @@ import org.cyk.utility.throwable.ThrowableHelper;
 public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements PersistenceServiceProvider<OBJECT>, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	//protected Map<Object,Set<Object>> derivedQueryIdentifierMap;
+	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
@@ -97,6 +99,31 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		}
 	}
 	
+	protected Object[] __getQueryParameters__(String queryIdentifier,Object...objects){
+		return null;
+	}
+	/*
+	protected void addDerivedQueryIdentifier(Object from,Object value){
+		if(__inject__(StringHelper.class).isNotBlank((String)from) && __inject__(StringHelper.class).isNotBlank((String)value)){
+			if(derivedQueryIdentifierMap == null)
+				derivedQueryIdentifierMap = new HashMap<Object, Set<Object>>();
+			Set<Object> values = derivedQueryIdentifierMap.get(from);
+			if(values == null)
+				derivedQueryIdentifierMap.put(from, values = new HashSet<Object>());
+			values.add(value);
+		}
+	}
+	
+	protected Object getQueryIdentifierDerivedFrom(Object value){
+		if(derivedQueryIdentifierMap!=null){
+			for(Map.Entry<Object,Set<Object>> entry : derivedQueryIdentifierMap.entrySet()){
+				if(entry.getValue().contains(value))
+					return entry.getKey();
+			}
+		}
+		return null;
+	}
+	*/
 	/**/
 	
 	@Override
@@ -212,8 +239,11 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 			String value = "SELECT COUNT("
 					+StringUtils.substringBetween(persistenceQuery.getValue(),"SELECT ", " FROM ")
 					+") FROM "+StringUtils.substringAfter(persistenceQuery.getValue(), " FROM ");
-			String identifier = StringUtils.replace((String)collectionIdentifier, "readBy", "countBy");
+			String identifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setIsDerivedFromQueryIdentifier(Boolean.TRUE)
+					.setDerivedFromQueryIdentifier(collectionIdentifier).setIsCountInstances(Boolean.TRUE).execute().getOutput();
 			addQuery(identifier, value, Long.class);
+			__inject__(PersistenceQueryRepository.class).getBySystemIdentifier(identifier, Boolean.TRUE).setQueryDerivedFromQuery(persistenceQuery);
+			//addDerivedQueryIdentifier(collectionIdentifier, identifier);
 		}
 		return this;
 	}

@@ -5,9 +5,11 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.map.MapHelper;
+import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
@@ -116,5 +118,23 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected Long __count__(Object...parameters) {
 		return (Long) __inject__(CollectionHelper.class).getFirst(__getReader__(parameters).execute().getEntities());
+	}
+	
+	protected Object[] __getQueryParameters__(Object...objects){
+		String queryIdentifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setClassSimpleName(getEntityClass())
+				.setName(__inject__(StackTraceHelper.class).getAt(3).getMethodName()).execute().getOutput();
+		Object[] parameters = __getQueryParameters__(queryIdentifier, objects);
+		if(__inject__(ArrayHelper.class).isEmpty(parameters)){
+			__inject__(ThrowableHelper.class).throwRuntimeException("Parameters of query "+queryIdentifier+" are required");
+		}
+		return parameters;
+	}
+	
+	protected Object[] __getCollectInstancesQueryParameters__(Object...objects){
+		return __getQueryParameters__(objects);
+	}
+	
+	protected Object[] __getCountInstancesQueryParameters__(Object...objects){
+		return __getQueryParameters__(objects);
 	}
 }

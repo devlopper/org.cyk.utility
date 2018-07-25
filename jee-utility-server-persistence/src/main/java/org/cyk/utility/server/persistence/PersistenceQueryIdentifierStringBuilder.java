@@ -15,4 +15,13 @@ public interface PersistenceQueryIdentifierStringBuilder extends FunctionWithPro
 	PersistenceQueryIdentifierStringBuilder setName(String name);
 	PersistenceQueryIdentifierStringBuilder setName(Field field);
 	PersistenceQueryIdentifierStringBuilder setName(Method method);
+	
+	Object getDerivedFromQueryIdentifier();
+	PersistenceQueryIdentifierStringBuilder setDerivedFromQueryIdentifier(Object identifier);
+	
+	Boolean getIsDerivedFromQueryIdentifier();
+	PersistenceQueryIdentifierStringBuilder setIsDerivedFromQueryIdentifier(Boolean value);
+	
+	Boolean getIsCountInstances();
+	PersistenceQueryIdentifierStringBuilder setIsCountInstances(Boolean value);
 }

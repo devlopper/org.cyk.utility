@@ -2,12 +2,15 @@ package org.cyk.utility.server.persistence.jpa;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Singleton;
 
-import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.server.persistence.PersistenceQueryIdentifierStringBuilder;
+import org.cyk.utility.server.persistence.query.PersistenceQuery;
+import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.sql.builder.QueryWherePredicateStringBuilder;
 import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.sql.jpql.JpqlQualifier;
@@ -40,20 +43,15 @@ public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEnt
 	@Override 
 	//@Query(value="SELECT COUNT(r) FROM MyEntity r WHERE r.integerValue = :"+MyEntity.FIELD_INTEGER_VALUE,resultClass=Long.class)
 	public Long countByIntegerValue(Integer value) {
-		return __count__(__getQueryParameters__(readByIntegerValue,value));
+		return __count__(__getQueryParameters__(value));
 	}
 	
 	protected Object[] __getQueryParameters__(String queryIdentifier,Object...objects){
-		if(readByIntegerValue.equals(queryIdentifier))
+		PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
+		if(persistenceQuery.isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByIntegerValue,queryIdentifier))
 			return new Object[]{MyEntity.FIELD_INTEGER_VALUE,objects[0]};
-		//TODO log warning
-		return null;
+		return super.__getQueryParameters__(queryIdentifier, objects);
 	}
 	
-	protected Object[] __getQueryParameters__(Object...objects){
-		String queryIdentifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setClassSimpleName(getEntityClass())
-				.setName(__inject__(StackTraceHelper.class).getAt(3).getMethodName()).execute().getOutput();
-		return __getQueryParameters__(queryIdentifier, objects);
-	}
 	
 }

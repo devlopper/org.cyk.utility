@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence.query;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.__kernel__.properties.Properties;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +36,28 @@ public class PersistenceQuery extends AbstractObject implements Serializable {
 	public PersistenceQuery setResultClass(Class<?> aClass){
 		getProperties().setClass(aClass);
 		return this;
+	}
+	
+	public PersistenceQuery getQueryDerivedFromQuery(){
+		return (PersistenceQuery) getProperties().getFromPath(Properties.FROM);
+	}
+	
+	public PersistenceQuery setQueryDerivedFromQuery(PersistenceQuery query){
+		getProperties().setFromPath(new Object[]{Properties.FROM},query);
+		return this;
+	}
+	
+	public PersistenceQuery setQueryDerivedFromQueryIdentifier(Object identifier){
+		setQueryDerivedFromQuery(__inject__(PersistenceQueryRepository.class).getBySystemIdentifier(identifier, Boolean.TRUE));
+		return this;
+	}
+	
+	public Boolean isQueryDerivedFromQueryIdentifierEqualsTo(Object identifer){
+		return getQueryDerivedFromQuery()!=null && getQueryDerivedFromQuery().getIdentifier().equals(identifer);
+	}
+	
+	public Boolean isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(Object queryIdentifier,Object value){
+		return queryIdentifier.equals(value) || isQueryDerivedFromQueryIdentifierEqualsTo(queryIdentifier);
 	}
 	
 	@Override
