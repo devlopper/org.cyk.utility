@@ -132,4 +132,14 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 		return (QueryPredicateStringBuilder) super.or();
 	}
 	
+	@Override
+	public Tuple getTuple() {
+		return (Tuple) getProperties().getTuple();
+	}
+	@Override
+	public QueryPredicateStringBuilder setTuple(Tuple tuple) {
+		getProperties().setTuple(tuple);
+		return this;
+	}
+	
 }

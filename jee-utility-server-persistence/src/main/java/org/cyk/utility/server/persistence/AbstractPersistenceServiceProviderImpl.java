@@ -14,6 +14,10 @@ import org.cyk.utility.method.MethodGetter;
 import org.cyk.utility.server.persistence.annotation.Query;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
+import org.cyk.utility.sql.builder.QueryStringBuilder;
+import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
+import org.cyk.utility.sql.builder.Tuple;
+import org.cyk.utility.sql.jpql.JpqlQualifier;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -233,6 +237,11 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	}
 	
 	@Override
+	public PersistenceServiceProvider<OBJECT> addQueryCollectInstances(Object identifier,QueryStringBuilder stringBuilder, Class<?> resultClass) {
+		return addQueryCollectInstances(identifier, stringBuilder.execute().getOutput(), resultClass);
+	}
+	
+	@Override
 	public PersistenceServiceProvider<OBJECT> addQueryCountInstancesFromCollection(Object collectionIdentifier) {
 		PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(collectionIdentifier, Boolean.TRUE);
 		if(persistenceQuery!=null){
@@ -246,5 +255,10 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 			//addDerivedQueryIdentifier(collectionIdentifier, identifier);
 		}
 		return this;
+	}
+	
+	protected QueryStringBuilderSelect __instanciateQuerySelect__(Class<?> entityClass){
+		Tuple tuple = new Tuple().setName(entityClass.getSimpleName());
+		return JpqlQualifier.map(QueryStringBuilderSelect.class).from(tuple);
 	}
 }

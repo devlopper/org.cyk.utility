@@ -23,4 +23,9 @@ public abstract class AbstractQueryWherePredicateStringBuilderEqualImpl extends 
 		addOperandBuilderByAttributeByParameter(attributeName, tuple, attributeName);
 		return this;
 	}
+	
+	@Override
+	public QueryWherePredicateStringBuilderEqual addOperandBuilderByAttribute(String attributeName) {
+		return addOperandBuilderByAttribute(attributeName,getTuple());
+	}
 }

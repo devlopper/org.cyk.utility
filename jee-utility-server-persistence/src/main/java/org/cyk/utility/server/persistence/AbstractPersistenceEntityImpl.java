@@ -9,6 +9,8 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.map.MapHelper;
+import org.cyk.utility.sql.builder.QueryStringBuilder;
+import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -86,6 +88,11 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return this;
 	}
 	
+	@Override
+	public PersistenceEntity<ENTITY> addQueryCollectInstances(Object identifier, QueryStringBuilder stringBuilder) {
+		return addQueryCollectInstances(identifier, stringBuilder.execute().getOutput());
+	}
+	
 	/**/
 	
 	@SuppressWarnings("unchecked")
@@ -136,5 +143,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected Object[] __getCountInstancesQueryParameters__(Object...objects){
 		return __getQueryParameters__(objects);
+	}
+	
+	protected QueryStringBuilderSelect __instanciateQuerySelect__(){
+		return __instanciateQuerySelect__(getEntityClass());
 	}
 }

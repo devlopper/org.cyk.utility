@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
+import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.system.SystemServiceProvider;
 
 public interface PersistenceServiceProvider<OBJECT> extends SystemServiceProvider {
@@ -41,7 +42,10 @@ public interface PersistenceServiceProvider<OBJECT> extends SystemServiceProvide
 	PersistenceServiceProvider<OBJECT> addQueries(PersistenceQuery...queries);
 	
 	PersistenceServiceProvider<OBJECT> addQuery(Object identifier,String value,Class<?> resultClass);
+	
 	PersistenceServiceProvider<OBJECT> addQueryCollectInstances(Object identifier,String value,Class<?> resultClass);
+	PersistenceServiceProvider<OBJECT> addQueryCollectInstances(Object identifier,QueryStringBuilder stringBuilder,Class<?> resultClass);
+	
 	PersistenceServiceProvider<OBJECT> addQueryCountInstancesFromCollection(Object collectionIdentifier);
 
 }

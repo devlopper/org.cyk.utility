@@ -15,4 +15,7 @@ public interface QueryPredicateStringBuilder extends FunctionWithPropertiesAsInp
 	
 	@Override FunctionWithPropertiesAsInputAndStringAsOutput and();
 	@Override FunctionWithPropertiesAsInputAndStringAsOutput or();
+	
+	Tuple getTuple();
+	QueryPredicateStringBuilder setTuple(Tuple tuple);
 }

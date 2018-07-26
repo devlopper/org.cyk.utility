@@ -26,8 +26,7 @@ public abstract class AbstractQueryClauseStringBuilderWhereImpl extends Abstract
 			QueryWherePredicateStringBuilder predicateBuilder = null;
 			Filter filter = getFilter();
 			if(filter != null){
-				//TODO why Equal ???
-				predicateBuilder = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class);
+				predicateBuilder = __inject__(QueryWherePredicateStringBuilderGroup.class);
 				Collection<Object> children = filter.getChildren();
 				if(children != null){
 					//QueryWherePredicateStringBuilder predicateBuilderSub = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class);
@@ -38,7 +37,7 @@ public abstract class AbstractQueryClauseStringBuilderWhereImpl extends Abstract
 						}else if(index instanceof LogicalOperator){
 							predicateBuilder.addChild(index);
 						}
-					}	
+					}
 				}
 			}
 			setPredicateBuilder(predicateBuilder);

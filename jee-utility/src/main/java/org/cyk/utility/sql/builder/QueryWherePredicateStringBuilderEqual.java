@@ -4,5 +4,5 @@ public interface QueryWherePredicateStringBuilderEqual extends QueryWherePredica
 
 	QueryWherePredicateStringBuilderEqual addOperandBuilderByAttributeByParameter(String attributeName,Tuple tuple,String parameterName);
 	QueryWherePredicateStringBuilderEqual addOperandBuilderByAttribute(String attributeName,Tuple tuple);
-	
+	QueryWherePredicateStringBuilderEqual addOperandBuilderByAttribute(String attributeName);
 }
