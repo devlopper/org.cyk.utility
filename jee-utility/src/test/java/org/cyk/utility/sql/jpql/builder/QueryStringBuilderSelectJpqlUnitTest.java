@@ -1,6 +1,6 @@
 package org.cyk.utility.sql.jpql.builder;
 
-import org.cyk.utility.sql.builder.QueryWherePredicateStringBuilder;
+import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.sql.jpql.JpqlQualifier;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
@@ -21,10 +21,11 @@ public class QueryStringBuilderSelectJpqlUnitTest extends AbstractArquillianUnit
 	@Test
 	public void selectFromTupleWhereColumn1Equal1(){
 		Tuple tuple = new Tuple().setName("Tuple");
-		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
-				.addOperandBuilderByAttribute("code",tuple);
 		
-		QueryStringBuilderSelectJpql queryBuilder = JpqlQualifier.inject(QueryStringBuilderSelectJpql.class).from(tuple).where(predicateBuilder);
+		QueryStringBuilderSelect queryBuilder = JpqlQualifier.inject(QueryStringBuilderSelectJpql.class)
+				.from(tuple).getWherePredicateBuilderAsEqual().addOperandBuilderByAttribute("code",tuple)
+				.getParentAsWhereClause().getParentAs(QueryStringBuilderSelect.class);
+		
 		
 		assertionHelper.assertEquals("SELECT tuple FROM Tuple tuple WHERE tuple.code=:code", queryBuilder.execute().getOutput());
 	}

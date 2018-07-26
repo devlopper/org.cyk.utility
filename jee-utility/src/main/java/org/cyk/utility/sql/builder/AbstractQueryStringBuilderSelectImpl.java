@@ -72,4 +72,5 @@ public abstract class AbstractQueryStringBuilderSelectImpl extends AbstractQuery
 	public QueryStringBuilderSelect where(QueryWherePredicateStringBuilder predicateBuilder) {
 		return (QueryStringBuilderSelect) super.where(predicateBuilder);
 	}
+	
 }

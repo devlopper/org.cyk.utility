@@ -8,5 +8,7 @@ public interface QueryStringBuilderSelect extends QueryStringBuilder {
 	QueryStringBuilderSelect select(Tuple tuple);
 	
 	QueryStringBuilderSelect from(Tuple tuple);
+	
 	QueryStringBuilderSelect where(QueryWherePredicateStringBuilder predicateBuilder);
+	
 }

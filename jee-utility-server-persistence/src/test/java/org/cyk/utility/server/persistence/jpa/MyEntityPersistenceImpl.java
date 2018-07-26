@@ -2,13 +2,10 @@ package org.cyk.utility.server.persistence.jpa;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Singleton;
 
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
-import org.cyk.utility.server.persistence.PersistenceQueryIdentifierStringBuilder;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.sql.builder.QueryWherePredicateStringBuilder;

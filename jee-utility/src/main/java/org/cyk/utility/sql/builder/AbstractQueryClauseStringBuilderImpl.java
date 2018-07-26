@@ -47,6 +47,11 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	}
 	
 	@Override
+	public QueryStringBuilder getParent() {
+		return (QueryStringBuilder) super.getParent();
+	}
+	
+	@Override
 	public String getKeyword() {
 		return (String) getProperties().getKeyword();
 	}

@@ -12,7 +12,6 @@ import org.cyk.utility.sql.jpql.JpqlQualifier;
 public class QueryWherePredicateStringBuilderEqualJpqlImpl extends AbstractQueryWherePredicateStringBuilderEqualImpl implements QueryWherePredicateStringBuilderEqualJpql,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	
 	@Override
 	protected <OBJECT> OBJECT ____inject____(Class<OBJECT> aClass, AnnotationLiteral<?>... annotationLiterals) {
 		return JpqlQualifier.map(aClass, annotationLiterals);

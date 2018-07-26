@@ -13,4 +13,6 @@ public interface QueryStringBuilder extends FunctionWithPropertiesAsInputAndStri
 	QueryClauseStringBuilderWhere getWhereClauseBuilder(Boolean injectIfNull);
 	QueryStringBuilder setWhereClauseBuilder(QueryClauseStringBuilderWhere builder);
 	QueryStringBuilder where(QueryWherePredicateStringBuilder predicateBuilder);
+	<I extends QueryWherePredicateStringBuilder> I getWherePredicateBuilderAs(Class<I> aClass);
+	QueryWherePredicateStringBuilderEqual getWherePredicateBuilderAsEqual();
 }

@@ -14,13 +14,6 @@ import org.cyk.utility.sql.jpql.JpqlQualifier;
 public class QueryStringBuilderSelectJpqlImpl extends AbstractQueryStringBuilderSelectImpl implements QueryStringBuilderSelectJpql, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	/*@Override
-	protected void __listenPostConstructSetClausesBuilders__() {
-		setFromClauseBuilder(JpqlQualifier.inject(QueryClauseStringBuilderFromJpql.class));
-		setWhereClauseBuilder(JpqlQualifier.inject(QueryClauseStringBuilderWhereJpql.class));
-		setSelectClauseBuilder(JpqlQualifier.inject(QueryClauseStringBuilderSelectJpql.class));
-	}*/
-	
 	@Override
 	public QueryStringBuilderSelectJpql from(Tuple tuple) {
 		return (QueryStringBuilderSelectJpql) super.from(tuple);

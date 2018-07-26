@@ -48,6 +48,12 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 		return getProperties().getParent();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <I extends Objectable> I getParentAs(Class<I> aClass) {
+		return (I) getParent();
+	}
+	
 	@Override
 	public Objectable setParent(Object parent, Boolean executeAddChild) {
 		getProperties().setParent(parent);

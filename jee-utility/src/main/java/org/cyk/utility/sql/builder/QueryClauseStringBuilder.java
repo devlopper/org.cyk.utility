@@ -6,6 +6,8 @@ import org.cyk.utility.function.FunctionWithPropertiesAsInputAndStringAsOutput;
 
 public interface QueryClauseStringBuilder extends FunctionWithPropertiesAsInputAndStringAsOutput {
 
+	QueryStringBuilder getParent();
+	
 	String getKeyword();
 	QueryClauseStringBuilder setKeyword(String keyword);
 	

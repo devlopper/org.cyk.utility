@@ -41,8 +41,10 @@ public abstract class AbstractQueryStringBuilderImpl extends AbstractFunctionWit
 	@Override
 	public QueryClauseStringBuilderWhere getWhereClauseBuilder(Boolean injectIfNull) {
 		QueryClauseStringBuilderWhere clause = getWhereClauseBuilder();
-		if(clause == null && Boolean.TRUE.equals(injectIfNull))
+		if(clause == null && Boolean.TRUE.equals(injectIfNull)){
 			setWhereClauseBuilder(clause = ____inject____(QueryClauseStringBuilderWhere.class));
+			clause.setParent(this);
+		}
 		return clause;
 	}
 
@@ -56,6 +58,20 @@ public abstract class AbstractQueryStringBuilderImpl extends AbstractFunctionWit
 	public QueryStringBuilder where(QueryWherePredicateStringBuilder predicateBuilder) {
 		getWhereClauseBuilder(Boolean.TRUE).setPredicateBuilder(predicateBuilder);
 		return this;
+	}
+	
+	@Override
+	public <I extends QueryWherePredicateStringBuilder> I getWherePredicateBuilderAs(Class<I> aClass) {
+		QueryClauseStringBuilderWhere where = getWhereClauseBuilder(Boolean.TRUE);
+		QueryWherePredicateStringBuilder builder = where.getPredicateBuilder();
+		if(builder == null)
+			where.setPredicateBuilder(builder = ____inject____(aClass).setParent(where));
+		return (I) builder;
+	}
+	
+	@Override
+	public QueryWherePredicateStringBuilderEqual getWherePredicateBuilderAsEqual() {
+		return getWherePredicateBuilderAs(QueryWherePredicateStringBuilderEqual.class);
 	}
 	
 }

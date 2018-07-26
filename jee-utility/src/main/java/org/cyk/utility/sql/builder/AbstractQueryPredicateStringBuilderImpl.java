@@ -131,4 +131,5 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 	public QueryPredicateStringBuilder or() {
 		return (QueryPredicateStringBuilder) super.or();
 	}
+	
 }
