@@ -12,8 +12,24 @@ public abstract class AbstractQueryWherePredicateStringBuilderGroupImpl extends 
 	}
 	
 	@Override
+	public QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName) {
+		addOperandBuilderByAttribute(attributeName,getTuple());
+		return this;
+	}
+	
+	@Override
 	public QueryWherePredicateStringBuilderGroup addChild(Object... child) {
 		return (QueryWherePredicateStringBuilderGroup) super.addChild(child);
+	}
+	
+	@Override
+	public QueryWherePredicateStringBuilderGroup and() {
+		return (QueryWherePredicateStringBuilderGroup) super.and();
+	}
+	
+	@Override
+	public QueryWherePredicateStringBuilderGroup or() {
+		return (QueryWherePredicateStringBuilderGroup) super.or();
 	}
 	
 }

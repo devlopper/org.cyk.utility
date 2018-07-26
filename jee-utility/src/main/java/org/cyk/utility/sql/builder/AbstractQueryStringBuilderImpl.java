@@ -77,4 +77,9 @@ public abstract class AbstractQueryStringBuilderImpl extends AbstractFunctionWit
 		return getWherePredicateBuilderAs(QueryWherePredicateStringBuilderEqual.class);
 	}
 	
+	@Override
+	public QueryWherePredicateStringBuilderGroup getWherePredicateBuilderAsGroup() {
+		return getWherePredicateBuilderAs(QueryWherePredicateStringBuilderGroup.class);
+	}
+	
 }

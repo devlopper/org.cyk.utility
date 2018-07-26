@@ -8,4 +8,7 @@ public interface QueryWherePredicateStringBuilderGroup extends QueryWherePredica
 	
 	QueryWherePredicateStringBuilderGroup addChild(Object... child);
 	QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName,Tuple tuple);
+	QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName);
+	QueryWherePredicateStringBuilderGroup and();
+	QueryWherePredicateStringBuilderGroup or();
 }
