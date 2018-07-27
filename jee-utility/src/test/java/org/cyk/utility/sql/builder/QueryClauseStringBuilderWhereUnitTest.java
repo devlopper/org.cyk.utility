@@ -1,6 +1,7 @@
 package org.cyk.utility.sql.builder;
 
-import org.cyk.utility.computation.LogicalOperator;
+import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.criteria.Criteria;
 import org.cyk.utility.filter.Filter;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
@@ -19,16 +20,17 @@ public class QueryClauseStringBuilderWhereUnitTest extends AbstractArquillianUni
 	
 	@Test
 	public void build(){
-		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","1");
+		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1",
+				ComparisonOperator.EQ.getSymbol(),"1");
 		assertionHelper.assertEquals("WHERE column1=1", __inject__(QueryClauseStringBuilderWhere.class).setPredicateBuilder(predicateBuilder).execute().getOutput());
 	}
 	
 	@Test
 	public void buildWithAnd(){
 		QueryWherePredicateStringBuilder predicateBuilderA = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class)
-				.addFormatArgumentObjects("tuple.f1","@f1");
+				.addFormatArgumentObjects("tuple.f1","=","@f1");
 		QueryWherePredicateStringBuilder predicateBuilderB = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class)
-				.addFormatArgumentObjects("tuple.f2","@f2");
+				.addFormatArgumentObjects("tuple.f2","=","@f2");
 		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class)
 				.addChild(predicateBuilderA,LogicalOperator.AND,predicateBuilderB);
 		assertionHelper.assertEquals("WHERE tuple.f1=@f1 AND tuple.f2=@f2", __inject__(QueryClauseStringBuilderWhere.class).setPredicateBuilder(predicateBuilder).execute().getOutput());

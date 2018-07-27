@@ -1,5 +1,7 @@
 package org.cyk.utility.sql.builder;
 
+import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+
 public interface QueryWherePredicateStringBuilderGroup extends QueryWherePredicateStringBuilder {
 
 	//QueryWherePredicateStringBuilderGroup setParent(Object parent);
@@ -7,8 +9,8 @@ public interface QueryWherePredicateStringBuilderGroup extends QueryWherePredica
 	//QueryClauseStringBuilderWhere getParentAsWhereClause();
 	
 	QueryWherePredicateStringBuilderGroup addChild(Object... child);
-	QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName,Tuple tuple);
-	QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName);
+	QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName,ComparisonOperator operator,Tuple tuple);
+	QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName,ComparisonOperator operator);
 	QueryWherePredicateStringBuilderGroup and();
 	QueryWherePredicateStringBuilderGroup or();
 }

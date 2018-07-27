@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
@@ -48,7 +49,7 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 			else{
 				Tuple tuple = new Tuple().setName(aClass.getSimpleName());
 				QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
-						.addOperandBuilderByAttribute(identifierFieldName,tuple);
+						.addOperandBuilderByAttribute(identifierFieldName,ComparisonOperator.EQ,tuple);
 				
 				QueryStringBuilderSelectJpql queryBuilder = JpqlQualifier.inject(QueryStringBuilderSelectJpql.class).from(tuple).where(predicateBuilder);
 				

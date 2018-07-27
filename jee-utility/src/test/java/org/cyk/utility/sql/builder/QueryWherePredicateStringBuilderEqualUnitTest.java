@@ -1,6 +1,7 @@
 package org.cyk.utility.sql.builder;
 
-import org.cyk.utility.computation.LogicalOperator;
+import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.criteria.Criteria;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.cyk.utility.value.ValueUsageType;
@@ -19,7 +20,7 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 	
 	@Test
 	public void isColumn1Equal1ByFormat(){
-		assertionHelper.assertEquals("column1=1", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","1").execute().getOutput());
+		assertionHelper.assertEquals("column1=1", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","=","1").execute().getOutput());
 	}
 	
 	@Test
@@ -39,7 +40,7 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 	public void execute_predicateWithOneChildWhichIsPredicate_predicate(){
 		assertionHelper.assertEquals("tuple.code=@code", 
 				__inject__(QueryWherePredicateStringBuilderEqual.class).addChild(
-						__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("code", tuple)
+						__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("code",ComparisonOperator.EQ, tuple)
 					).execute().getOutput());
 	}
 	
@@ -47,9 +48,9 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 	public void execute_predicateWithThreeChildWhichArePredicateANDPredicate_predicateAndPredicate(){
 		assertionHelper.assertEquals("tuple.code=@code AND tuple.name=@name", 
 				__inject__(QueryWherePredicateStringBuilderEqual.class).addChild(
-						__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("code", tuple)
+						__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("code",ComparisonOperator.EQ, tuple)
 						,LogicalOperator.AND
-						,__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("name", tuple)
+						,__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("name",ComparisonOperator.EQ, tuple)
 					).execute().getOutput());
 	}
 	
@@ -59,12 +60,12 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 				__inject__(QueryWherePredicateStringBuilderEqual.class).addChild(
 						__inject__(QueryWherePredicateStringBuilderEqual.class)
 						.surroundedWithParentheses()
-						.addChild(__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("code", tuple))
+						.addChild(__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("code",ComparisonOperator.EQ, tuple))
 						.or()
-						.addChild(__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("firstname", tuple))
+						.addChild(__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("firstname",ComparisonOperator.EQ, tuple))
 						
 						,LogicalOperator.AND
-						,__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("lastname", tuple)
+						,__inject__(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute("lastname",ComparisonOperator.EQ, tuple)
 					).execute().getOutput());
 	}
 	
@@ -73,7 +74,7 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 		Tuple tuple = new Tuple().setName("Tuple").addAttributes(new Attribute().setName("code"));
 		QueryOperandStringBuilder operand1 = __inject__(QueryOperandStringBuilder.class).setAttributeNameBuilder("code",tuple);
 		QueryOperandStringBuilder operand2 = __inject__(QueryOperandStringBuilder.class).setParameterNameBuilder("myparam");
-		assertionHelper.assertEquals("tuple.code=@myparam", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects(operand1,operand2)
+		assertionHelper.assertEquals("tuple.code=@myparam", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects(operand1,"=",operand2)
 				.execute().getOutput());
 	}
 	
@@ -81,7 +82,7 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 	public void isColumn1Equal1ByOperandsShortcut(){
 		Tuple tuple = new Tuple().setName("Tuple").addAttributes(new Attribute().setName("code"));
 		assertionHelper.assertEquals("tuple.code=@myparam", __inject__(QueryWherePredicateStringBuilderEqual.class)
-				.addOperandBuilderByAttributeByParameter("code", tuple,"myparam").execute().getOutput());
+				.addOperandBuilderByAttributeByParameter("code",ComparisonOperator.EQ, tuple,"myparam").execute().getOutput());
 	}
 	
 	@Test
@@ -123,18 +124,18 @@ public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArqui
 	
 	@Test
 	public void isColumn1Equala(){
-		assertionHelper.assertEquals("column1=a", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","a").execute().getOutput());
+		assertionHelper.assertEquals("column1=a", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","=","a").execute().getOutput());
 	}
 	
 	@Test
 	public void isColumn1EqualParameterMarker(){
-		assertionHelper.assertEquals("column1=?", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","?").execute().getOutput());
+		assertionHelper.assertEquals("column1=?", __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","=","?").execute().getOutput());
 	}
 	
 	@Test
 	public void isColumn1Equal1AndColumn2Equal2(){
-		QueryWherePredicateStringBuilder predicate1 = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","1");
-		QueryWherePredicateStringBuilder predicate2 = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column2","2");
+		QueryWherePredicateStringBuilder predicate1 = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column1","=","1");
+		QueryWherePredicateStringBuilder predicate2 = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class).addFormatArgumentObjects("column2","=","2");
 		assertionHelper.assertEquals("column1=1 AND column2=2", __inject__(QueryWherePredicateStringBuilderEqual.class)
 				.addChild(predicate1,LogicalOperator.AND,predicate2).execute().getOutput());
 	}

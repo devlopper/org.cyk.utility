@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.computation.LogicalOperator;
 import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;

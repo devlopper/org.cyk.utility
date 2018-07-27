@@ -1,4 +1,4 @@
-package org.cyk.utility.computation;
+package org.cyk.utility.__kernel__.computation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.inject.Singleton;
 
+import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
@@ -21,7 +22,7 @@ public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEnt
 		super.__listenPostConstructPersistenceQueries__();
 		
 		QueryStringBuilderSelect queryBuilder = __instanciateQuerySelect__()
-				.getWherePredicateBuilderAsEqual().addOperandBuilderByAttribute(MyEntity.FIELD_INTEGER_VALUE)
+				.getWherePredicateBuilderAsEqual().addOperandBuilderByAttribute(MyEntity.FIELD_INTEGER_VALUE,ComparisonOperator.EQ)
 				.getParentAsWhereClause().getParentAs(QueryStringBuilderSelect.class);
 
 		addQueryCollectInstances(readByIntegerValue, queryBuilder);
@@ -30,13 +31,13 @@ public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEnt
 	@Override 
 	//@Query(value="SELECT r FROM MyEntity r WHERE r.integerValue = :"+MyEntity.FIELD_INTEGER_VALUE,resultClass=MyEntity.class)
 	public Collection<MyEntity> readByIntegerValue(Integer value) {
-		return __readMany__(__getQueryParameters__(value));
+		return __readMany__(____getQueryParameters____(value));
 	}
 	
 	@Override 
 	//@Query(value="SELECT COUNT(r) FROM MyEntity r WHERE r.integerValue = :"+MyEntity.FIELD_INTEGER_VALUE,resultClass=Long.class)
 	public Long countByIntegerValue(Integer value) {
-		return __count__(__getQueryParameters__(value));
+		return __count__(____getQueryParameters____(value));
 	}
 	
 	protected Object[] __getQueryParameters__(String queryIdentifier,Object...objects){

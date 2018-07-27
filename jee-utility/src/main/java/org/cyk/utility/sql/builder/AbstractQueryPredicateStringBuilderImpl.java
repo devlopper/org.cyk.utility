@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
@@ -52,6 +53,8 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 			}
 			
 			addOperandStringBuilderAttributeName(fieldNameAsString, tuple);
+			addFormatArgumentObjects(ComparisonOperator.EQ.getSymbol());
+			//addChild(ComparisonOperator.EQ.getSymbol());//TODO must be get from criteria
 			addOperandStringBuilderParameterName(fieldNameAsString);
 		}
 		String string = super.__execute__();

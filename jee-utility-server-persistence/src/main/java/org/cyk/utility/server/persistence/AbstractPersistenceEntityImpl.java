@@ -127,7 +127,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return (Long) __inject__(CollectionHelper.class).getFirst(__getReader__(parameters).execute().getEntities());
 	}
 	
-	protected Object[] __getQueryParameters__(Object...objects){
+	protected Object[] ____getQueryParameters____(Object...objects){
 		String queryIdentifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setClassSimpleName(getEntityClass())
 				.setName(__inject__(StackTraceHelper.class).getAt(3).getMethodName()).execute().getOutput();
 		Object[] parameters = __getQueryParameters__(queryIdentifier, objects);
@@ -138,11 +138,11 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected Object[] __getCollectInstancesQueryParameters__(Object...objects){
-		return __getQueryParameters__(objects);
+		return ____getQueryParameters____(objects);
 	}
 	
 	protected Object[] __getCountInstancesQueryParameters__(Object...objects){
-		return __getQueryParameters__(objects);
+		return ____getQueryParameters____(objects);
 	}
 	
 	protected QueryStringBuilderSelect __instanciateQuerySelect__(){

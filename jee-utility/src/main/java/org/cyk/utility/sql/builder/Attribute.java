@@ -38,4 +38,9 @@ public class Attribute extends AbstractObject implements Serializable {
 	public Boolean getIsPrefixedWithTuple(){
 		return (Boolean) getProperties().getFromPath(Properties.IS,Properties.PREFIX,Properties.TUPLE);
 	}
+	
+	@Override
+	public String toString() {
+		return getName();
+	}
 }

@@ -14,6 +14,7 @@ public class QueryWherePredicateStringBuilderEqualJpqlUnitTest extends AbstractA
 		assertionHelper.assertEquals("tuple.name=:name", JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
 			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
 				JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
+			.addFormatArgumentObjects("=")
 			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setParameterNameBuilder(
 				JpqlQualifier.inject(QueryParameterNameBuilderJpql.class).setParameter("name"))).execute().getOutput())
 			;
@@ -24,6 +25,7 @@ public class QueryWherePredicateStringBuilderEqualJpqlUnitTest extends AbstractA
 		assertionHelper.assertEquals("tuple.name=51", JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
 			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
 				JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
+			.addFormatArgumentObjects("=")
 			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setLiteral(51)).execute().getOutput())
 			;
 	}
@@ -33,6 +35,7 @@ public class QueryWherePredicateStringBuilderEqualJpqlUnitTest extends AbstractA
 		assertionHelper.assertEquals("tuple.name='hello'", JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
 			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setAttributeNameBuilder(
 					JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class).setAttribute(new Attribute().setName("name").setTuple(new Tuple().setName("Tuple")))))
+			.addFormatArgumentObjects("=")
 			.addFormatArgumentObjects(JpqlQualifier.inject(QueryOperandStringBuilderJpql.class).setLiteral("'hello'")).execute().getOutput())	
 			;
 	}

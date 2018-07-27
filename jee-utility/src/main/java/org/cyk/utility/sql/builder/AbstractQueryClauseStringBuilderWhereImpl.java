@@ -3,9 +3,9 @@ package org.cyk.utility.sql.builder;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.computation.LogicalOperator;
 import org.cyk.utility.criteria.Criteria;
 import org.cyk.utility.filter.Filter;
 import org.cyk.utility.throwable.ThrowableHelper;
