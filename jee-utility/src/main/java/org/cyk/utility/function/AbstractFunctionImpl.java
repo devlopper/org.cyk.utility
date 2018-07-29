@@ -5,13 +5,44 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.assertion.Assertion;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.message.LogMessageBuilder;
+import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.function.AbstractFunctionImpl<INPUT, OUTPUT> implements Function<INPUT,OUTPUT>,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __executeVerifyPreConditions__() {
+		super.__executeVerifyPreConditions__();
+		ExecutionPhase executionPhase = getPreExecutionPhase();
+		if(executionPhase!=null){
+			Collection<Assertion> assertions = executionPhase.getAssertions();	
+			if(__injectCollectionHelper__().isNotEmpty(assertions)){
+				for(Assertion index : assertions){
+					if(Boolean.FALSE.equals(index.getValue()))
+						__injectThrowableHelper__().throwRuntimeException(index.getMessageWhenValueIsNotTrue());
+				}
+			}
+			
+			Collection<Runnable> runnables = executionPhase.getRunnables();
+			if(__injectCollectionHelper__().isNotEmpty(runnables)){
+				for(Runnable index : runnables){
+					index.run();
+				}
+			}
+		}
+		
+	}
+	
+	@Override
+	protected void __executeVerifyPostConditions__() {
+		super.__executeVerifyPostConditions__();
+	}
+	
 	@Override
 	public Function<INPUT, OUTPUT> setInput(INPUT input) {
 		getProperties().setInput(input);
@@ -104,5 +135,39 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	public Function<INPUT,OUTPUT> setMonitorable(Boolean monitorable) {
 		getProperties().setLoggable(monitorable);
 		return this;
+	}
+	
+	@Override
+	public ExecutionPhase getPreExecutionPhase() {
+		return (ExecutionPhase) getProperties().getFromPath(Properties.EXECUTION,Properties.PRE);
+	}
+	@Override
+	public Function<INPUT, OUTPUT> setPreExecutionPhase(ExecutionPhase executionPhase) {
+		getProperties().setFromPath(new Object[]{Properties.EXECUTION,Properties.PRE}, executionPhase);
+		return this;
+	}
+	
+	@Override
+	public ExecutionPhase getPostExecutionPhase() {
+		return (ExecutionPhase) getProperties().getFromPath(Properties.EXECUTION,Properties.POST);
+	}
+	@Override
+	public Function<INPUT, OUTPUT> setPostExecutionPhase(ExecutionPhase executionPhase) {
+		getProperties().setFromPath(new Object[]{Properties.EXECUTION,Properties.POST}, executionPhase);
+		return this;
+	}
+	
+	/**/
+	
+	protected ValueHelper __injectValueHelper__(){
+		return __inject__(ValueHelper.class);
+	}
+	
+	protected CollectionHelper __injectCollectionHelper__(){
+		return __inject__(CollectionHelper.class);
+	}
+	
+	protected ThrowableHelper __injectThrowableHelper__(){
+		return __inject__(ThrowableHelper.class);
 	}
 }

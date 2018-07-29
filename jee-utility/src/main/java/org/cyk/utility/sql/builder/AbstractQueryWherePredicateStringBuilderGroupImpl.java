@@ -8,8 +8,20 @@ public abstract class AbstractQueryWherePredicateStringBuilderGroupImpl extends 
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	public QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName,ComparisonOperator operator, Tuple tuple,String parameterName) {
+		addChild(____inject____(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttributeByParameter(attributeName,operator, tuple,parameterName));
+		return this;
+	}
+	
+	@Override
 	public QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName,ComparisonOperator operator, Tuple tuple) {
 		addChild(____inject____(QueryWherePredicateStringBuilderEqual.class).addOperandBuilderByAttribute(attributeName,operator, tuple));
+		return this;
+	}
+	
+	@Override
+	public QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName,ComparisonOperator operator,String parameterName) {
+		addOperandBuilderByAttribute(attributeName,operator,getTuple(),parameterName);
 		return this;
 	}
 	
@@ -22,6 +34,16 @@ public abstract class AbstractQueryWherePredicateStringBuilderGroupImpl extends 
 	@Override
 	public QueryWherePredicateStringBuilderGroup addChild(Object... child) {
 		return (QueryWherePredicateStringBuilderGroup) super.addChild(child);
+	}
+	
+	@Override
+	public QueryWherePredicateStringBuilderGroup lp() {
+		return (QueryWherePredicateStringBuilderGroup) super.lp();
+	}
+	
+	@Override
+	public QueryWherePredicateStringBuilderGroup rp() {
+		return (QueryWherePredicateStringBuilderGroup) super.rp();
 	}
 	
 	@Override

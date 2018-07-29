@@ -109,14 +109,27 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected String __buildQueryStringIdentifierFromCurrentCall__(){
 		return __inject__(PersistenceQueryIdentifierStringBuilder.class).setClassSimpleName(getEntityClass())
-				.setName(__inject__(StackTraceHelper.class).getAt(5/* TODO index vary on deep. it must be provided as param*/).getMethodName()).execute().getOutput();
+				.setName(__inject__(StackTraceHelper.class).getAt(6/* TODO index vary on deep. it must be provided as param*/).getMethodName()).execute().getOutput();
 	}
 	
-	protected PersistenceFunctionReader __getReader__(Object...parameters) {
-		return __inject__(PersistenceFunctionReader.class)
+	/**/
+	
+	@SuppressWarnings("unchecked")
+	protected <FUNCTION extends PersistenceFunction> FUNCTION __getFunction__(Class<FUNCTION> aClass,Object...parameters) {
+		return (FUNCTION) __inject__(aClass)
 				.setQueryIdentifier(__buildQueryStringIdentifierFromCurrentCall__())
 				.setQueryParameters(Properties.instanciate(__inject__(MapHelper.class).instanciate(parameters)));
 	}
+	
+	protected PersistenceFunctionReader __getReader__(Object...parameters) {
+		return __getFunction__(PersistenceFunctionReader.class, parameters);
+	}
+	
+	protected PersistenceFunctionModifier __getModifier__(Object...parameters) {
+		return __getFunction__(PersistenceFunctionModifier.class, parameters);
+	}
+	
+	/**/
 	
 	@SuppressWarnings("unchecked")
 	protected Collection<ENTITY> __readMany__(Object...parameters) {
@@ -125,6 +138,11 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected Long __count__(Object...parameters) {
 		return (Long) __inject__(CollectionHelper.class).getFirst(__getReader__(parameters).execute().getEntities());
+	}
+	
+	protected Long __modify__(Object...parameters) {
+		__getModifier__(parameters).execute();//TODO we should get the number of entities modified
+		return null;
 	}
 	
 	protected Object[] ____getQueryParameters____(Object...objects){

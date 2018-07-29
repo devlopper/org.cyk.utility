@@ -8,4 +8,6 @@ public interface MyEntityPersistence extends PersistenceEntity<MyEntity> {
 
 	Collection<MyEntity> readByIntegerValue(Integer value);
 	Long countByIntegerValue(Integer value);
+	
+	Long executeIncrementIntegerValue(Integer value);
 }

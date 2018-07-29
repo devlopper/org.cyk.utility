@@ -8,6 +8,7 @@ import javax.persistence.AccessType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
 
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByLong;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -51,4 +52,22 @@ public abstract class AbstractIdentifiedByLong extends AbstractIdentifiedPersist
 	public AbstractIdentifiedByLong setFromBusinessIdentifier(String fieldName,Object identifier){
 		return setFromBusinessIdentifier(__inject__(CollectionHelper.class).getFirst(__inject__(FieldGetter.class).execute(getClass(), fieldName).getOutput()), identifier);
 	}
+	
+	/**/
+	
+	 @PrePersist 
+	 private void listenPrePersist() {
+		 __listenPrePersist__();
+	 }
+	 
+	 protected void __listenPrePersist__() {}
+	 
+	 /*   
+	 @PostPersist void onPostPersist() {}
+	    @PostLoad void onPostLoad() {}
+	    @PreUpdate void onPreUpdate() {}
+	    @PostUpdate void onPostUpdate() {}
+	    @PreRemove void onPreRemove() {}
+	    @PostRemove void onPostRemove() {}
+	    */
 }

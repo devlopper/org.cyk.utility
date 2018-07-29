@@ -9,13 +9,15 @@ import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
+import org.cyk.utility.sql.builder.QueryParameterNameBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
+import org.cyk.utility.throwable.ThrowableHelper;
 
 @Singleton
 public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEntity> implements MyEntityPersistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String readByIntegerValue;
+	private String readByIntegerValue,executeIncrementIntegerValue;
 	
 	@Override
 	protected void __listenPostConstructPersistenceQueries__() {
@@ -26,6 +28,8 @@ public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEnt
 				.getParentAsWhereClause().getParentAs(QueryStringBuilderSelect.class);
 
 		addQueryCollectInstances(readByIntegerValue, queryBuilder);
+		
+		addQuery(executeIncrementIntegerValue, "UPDATE MyEntity myEntity SET myEntity.integerValue = myEntity.integerValue + :value", null);
 	}
 	
 	@Override 
@@ -40,10 +44,20 @@ public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEnt
 		return __count__(____getQueryParameters____(value));
 	}
 	
+	@Override
+	public Long executeIncrementIntegerValue(Integer value) {
+		return __modify__(____getQueryParameters____(value));
+	}
+	
 	protected Object[] __getQueryParameters__(String queryIdentifier,Object...objects){
 		PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
+		if(persistenceQuery == null)
+			__inject__(ThrowableHelper.class).throwRuntimeException("persistence query with identifier "+queryIdentifier+" not found.");
 		if(persistenceQuery.isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByIntegerValue,queryIdentifier))
 			return new Object[]{MyEntity.FIELD_INTEGER_VALUE,objects[0]};
+		if(executeIncrementIntegerValue.equals(queryIdentifier))
+			return new Object[]{QueryParameterNameBuilder.VALUE,objects[0]};
+		
 		return super.__getQueryParameters__(queryIdentifier, objects);
 	}
 	

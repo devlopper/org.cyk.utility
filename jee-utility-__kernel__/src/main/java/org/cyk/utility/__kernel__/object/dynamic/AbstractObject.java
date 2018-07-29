@@ -69,8 +69,8 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	}
 	
 	@Override
-	public String getIdentifier() {
-		return (String) getProperties().getIdentifier();
+	public Object getIdentifier() {
+		return getProperties().getIdentifier();
 	}
 	
 	@Override

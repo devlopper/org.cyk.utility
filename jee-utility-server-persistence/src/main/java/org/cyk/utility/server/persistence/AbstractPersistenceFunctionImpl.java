@@ -5,14 +5,39 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
+import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
+import org.cyk.utility.throwable.ThrowableHelper;
 
 public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunctionServerImpl implements PersistenceFunction, Serializable {
 	private static final long serialVersionUID = 1L;
-			
+
+	@Override
+	protected final void __execute__(SystemAction action) {
+		String queryIdentifier = (String) getQueryIdentifier();
+		if(__inject__(StringHelper.class).isBlank(queryIdentifier)){
+			__executeQuery__(action);		
+		}else {
+			PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
+			if(persistenceQuery == null){
+				__inject__(ThrowableHelper.class).throwRuntimeException("persistence query with identifier "+queryIdentifier+" not found.");
+			}else {
+				__executeQuery__(action, persistenceQuery);
+			}
+		}
+	}
+	
+	protected void __executeQuery__(SystemAction action){
+		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
+	}
+	
+	protected void __executeQuery__(SystemAction action,PersistenceQuery persistenceQuery){
+		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
+	}
+	
 	@Override
 	public PersistenceFunction setAction(SystemAction action) {
 		return (PersistenceFunction) super.setAction(action);

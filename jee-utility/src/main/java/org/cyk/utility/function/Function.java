@@ -21,4 +21,11 @@ public interface Function<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.funct
 	
 	Function<INPUT,OUTPUT> setMonitorable(Boolean monitorable);
 	Boolean getMonitorable();
+	
+	ExecutionPhase getPreExecutionPhase();
+	Function<INPUT,OUTPUT> setPreExecutionPhase(ExecutionPhase executionPhase);
+	
+	ExecutionPhase getPostExecutionPhase();
+	Function<INPUT,OUTPUT> setPostExecutionPhase(ExecutionPhase executionPhase);
+	
 }

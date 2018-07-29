@@ -20,6 +20,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		Boolean executable = __executeGetIsExecutable__(getIsExecutable());
 		if(Boolean.TRUE.equals(executable)){
 			Long start = System.currentTimeMillis();
+			__executeVerifyPreConditions__();
 			getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.START}, start);
 			
 			OUTPUT output = null;
@@ -38,12 +39,16 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 					throw new RuntimeException(exception);
 			}
 			__afterExecute__();
+			__executeVerifyPostConditions__();
 			Long end = System.currentTimeMillis();
 			getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.END}, end);
 			getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION}, end - start);
 			getProperties().setOutput(output);
 			afterExecute();	
+			
 		}else {
+			//throw new RuntimeException(getClass()+" is not executable.");
+			System.err.println(getClass()+" is not executable.");
 			//TODO log warning not executable
 		}
 		return this;
@@ -56,6 +61,9 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	protected Boolean __executeGetIsExecutable__(Boolean value){
 		return value;
 	}
+	
+	protected void __executeVerifyPreConditions__(){}
+	protected void __executeVerifyPostConditions__(){}
 	
 	protected void __beforeExecute__(){}
 

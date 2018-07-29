@@ -9,8 +9,14 @@ public interface QueryWherePredicateStringBuilderGroup extends QueryWherePredica
 	//QueryClauseStringBuilderWhere getParentAsWhereClause();
 	
 	QueryWherePredicateStringBuilderGroup addChild(Object... child);
+	QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName,ComparisonOperator operator,Tuple tuple,String parameterName);
 	QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName,ComparisonOperator operator,Tuple tuple);
+	QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName,ComparisonOperator operator,String parameterName);
 	QueryWherePredicateStringBuilderGroup addOperandBuilderByAttribute(String attributeName,ComparisonOperator operator);
+	
+	
+	QueryWherePredicateStringBuilderGroup lp();
+	QueryWherePredicateStringBuilderGroup rp();
 	QueryWherePredicateStringBuilderGroup and();
 	QueryWherePredicateStringBuilderGroup or();
 }

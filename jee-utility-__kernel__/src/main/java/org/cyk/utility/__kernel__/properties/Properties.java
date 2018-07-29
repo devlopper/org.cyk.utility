@@ -63,6 +63,27 @@ public class Properties implements java.io.Serializable {
 		}
 	}
 	
+	public static Properties setFromPath(Properties properties,Object[] keys,Object value){
+		if(properties == null)
+			properties = new Properties();
+		properties.setFromPath(keys, value);
+		return properties;
+	}
+	
+	public static Object getFromPath(Properties properties,Object...keys){
+		if(properties == null)
+			return null;
+		return properties.getFromPath(keys);
+	}
+	
+	public static <T> T getFromPathInstanciateIfNull(Properties properties,Class<T> aClass,Object...keys){
+		@SuppressWarnings("unchecked")
+		T result = (T) getFromPath(properties, keys);
+		if(result == null)
+			result = DependencyInjection.inject(KernelHelper.class).instanciate(aClass);
+		return result;
+	}
+	
 	/**/
 	
 	public Boolean has(Object property){
@@ -4010,6 +4031,66 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getGetter() {
+		return get(GETTER);
+	}
+
+	public Properties setGetter(Object value) {
+		set(GETTER, value);
+		return this;
+	}
+	
+	public Object getAffirmation() {
+		return get(AFFIRMATION);
+	}
+
+	public Properties setAffirmation(Object value) {
+		set(AFFIRMATION, value);
+		return this;
+	}
+	
+	public Object getAssertions() {
+		return get(ASSERTIONS);
+	}
+
+	public Properties setAssertions(Object value) {
+		set(ASSERTIONS, value);
+		return this;
+	}
+	
+	public Object getPost() {
+		return get(POST);
+	}
+
+	public Properties setPost(Object value) {
+		set(POST, value);
+		return this;
+	}
+	
+	public Object getPre() {
+		return get(PRE);
+	}
+
+	public Properties setPre(Object value) {
+		set(PRE, value);
+		return this;
+	}
+	
+	public Object getRunnables() {
+		return get(RUNNABLES);
+	}
+
+	public Properties setRunnables(Object value) {
+		set(RUNNABLES, value);
+		return this;
+	}
+	
+	public static final String RUNNABLES = "RUNNABLES";
+	public static final String POST = "POST";
+	public static final String PRE = "PRE";
+	public static final String ASSERTIONS = "ASSERTIONS";
+	public static final String AFFIRMATION = "AFFIRMATION";
+	public static final String GETTER = "GETTER";
 	public static final String QUERIES = "QUERIES";
 	public static final String LAYER = "LAYER";
 	public static final String PATH = "PATH";

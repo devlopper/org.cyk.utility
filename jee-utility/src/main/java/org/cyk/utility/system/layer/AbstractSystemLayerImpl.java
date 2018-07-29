@@ -15,7 +15,7 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 		super.__listenPostConstruct__();
 		setEntityPackageNameToken(".entities.");
 		setInterfacePackageNameToken(".api.");
-		setInterfaceNameSuffix(getIdentifier());
+		setInterfaceNameSuffix((String) getIdentifier());
 	}
 	
 	@Override

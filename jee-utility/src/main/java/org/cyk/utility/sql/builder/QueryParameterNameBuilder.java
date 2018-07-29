@@ -11,4 +11,7 @@ public interface QueryParameterNameBuilder extends FunctionWithPropertiesAsInput
 	@Deprecated QueryParameterNameBuilder setParameterName(String name);
 	@Deprecated String getParameterName();
 	
+	/**/
+	
+	String VALUE = "value";
 }

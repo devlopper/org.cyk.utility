@@ -39,6 +39,11 @@ public abstract class AbstractQueryWherePredicateStringBuilderEqualImpl extends 
 	}
 	
 	@Override
+	public QueryWherePredicateStringBuilderEqual addOperandBuilderByAttribute(String attributeName,ComparisonOperator operator, String parameterName) {
+		return addOperandBuilderByAttributeByParameter(attributeName,operator,getTuple(),parameterName);
+	}
+	
+	@Override
 	public QueryWherePredicateStringBuilderEqual addOperandBuilderByAttribute(String attributeName,ComparisonOperator operator) {
 		return addOperandBuilderByAttribute(attributeName,operator,getTuple());
 	}

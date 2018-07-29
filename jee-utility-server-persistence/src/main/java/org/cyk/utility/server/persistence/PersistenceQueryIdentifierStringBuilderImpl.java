@@ -14,6 +14,8 @@ import org.cyk.utility.string.StringHelper;
 public class PersistenceQueryIdentifierStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements PersistenceQueryIdentifierStringBuilder, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	//private static final String[] PREFIXES = {"readBy","countBy","execute"};
+	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();

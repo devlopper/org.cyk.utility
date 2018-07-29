@@ -13,13 +13,15 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 public class PersistenceQueryIdentifierFieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Field>> implements PersistenceQueryIdentifierFieldGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static final String[] PREFIXES = {"create","read","count","update","delete","execute"};
+	
 	@Override
 	protected Collection<Field> __execute__() throws Exception {
 		Collection<Field> classFields = __inject__(FieldGetter.class).execute(getClazz()).getOutput();
 		Collection<Field> identifierfields = null;
 		if(__inject__(CollectionHelper.class).isNotEmpty(classFields)){
 			for(Field index : classFields){
-				if(StringUtils.startsWithAny(index.getName(), new String[]{"create","read","count","update","delete"})){
+				if(StringUtils.startsWithAny(index.getName(), PREFIXES)){
 					if(identifierfields == null)
 						identifierfields = new ArrayList<Field>();
 					identifierfields.add(index);

@@ -5,20 +5,24 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.server.persistence.PersistenceEntity;
+import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 
-public abstract class AbstractBusinessEntityImpl<ENTITY> extends AbstractBusinessServiceProviderImpl<ENTITY> implements BusinessEntity<ENTITY>,Serializable {
+public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends PersistenceEntity<ENTITY>> extends AbstractBusinessServiceProviderImpl<ENTITY> implements BusinessEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Getter protected Class<ENTITY> entityClass;
+	@Getter private Class<ENTITY> entityClass;
+	@Getter private PERSISTENCE persistence;
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		entityClass = (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+		persistence = (PERSISTENCE) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(getEntityClass());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -66,5 +70,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY> extends AbstractBusines
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	/**/
+	
 }
