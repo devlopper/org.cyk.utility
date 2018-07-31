@@ -10,6 +10,7 @@ import org.cyk.utility.function.ExecutionPhase;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
+import org.cyk.utility.system.action.SystemAction;
 
 public  class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements BusinessServiceProvider<OBJECT>,Serializable {
 
@@ -105,6 +106,14 @@ public  class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystem
 	protected AssertionBuilderNull __injectAssertionBuilderNull__(Boolean isAffirmation,Object object,String...names){
 		return __inject__(AssertionBuilderNull.class).setIsAffirmation(isAffirmation).setFieldValueGetter(object,names);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void __validateOne__(Object object, SystemAction action) {
+		____validateOne____((OBJECT) object, action);
+	}
+	
+	protected void ____validateOne____(OBJECT object, SystemAction action) {}
 	
 	protected Properties addExecutionPhaseAssertions(Properties properties,Boolean isPre,AssertionBuilder...assertionBuilders){
 		String pre = Boolean.TRUE.equals(isPre) ? Properties.PRE : Properties.POST;

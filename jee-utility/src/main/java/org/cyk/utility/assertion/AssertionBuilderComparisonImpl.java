@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.number.NumberHelper;
 
 public class AssertionBuilderComparisonImpl extends AbstractAssertionBuilderImpl implements AssertionBuilderComparison, Serializable {
@@ -14,20 +13,19 @@ public class AssertionBuilderComparisonImpl extends AbstractAssertionBuilderImpl
 	protected Boolean __computeValue__(Assertion assertion, Boolean isAffirmation) {	
 		Boolean value = super.__computeValue__(assertion, isAffirmation);
 		if(value == null){
-			//TODO think better to handle value from field1 and field2. we might group it to a bean
-			FieldValueGetter fieldValueGetter1 = getFieldValueGetter1();
-			FieldValueGetter fieldValueGetter2 = getFieldValueGetter2();
-			Number number1 = (Number) fieldValueGetter1.execute().getOutput();
-			Number number2 = (Number) fieldValueGetter2.execute().getOutput();
+			Number number1 = (Number) getAssertedValue1().getValueFromSource();
+			Number number2 = (Number) getAssertedValue2().getValueFromSource();
 			ComparisonOperator operator = getOperator();
-			__inject__(NumberHelper.class).compare(number1, number2, operator);
+			if(operator == null)
+				__injectThrowableHelper__().throwRuntimeException(getClass()+" : operator is required.");
+			value = __inject__(NumberHelper.class).compare(number1, number2, operator);
 		}
 		return value;
 	}
 	
 	@Override
 	protected String __computeMessageWhenValueIsNotTrue__(Assertion assertion,Boolean isAffirmation) {
-		String message = Boolean.TRUE.equals(isAffirmation) ? "la valeur doit être nulle" : "la valeur ne doit pas être nulle";
+		String message = "la comparaison n'est pas correcte : "+getAssertedValue1().getValueFromSource()+" "+getOperator()+" "+getAssertedValue2().getValueFromSource(); //Boolean.TRUE.equals(isAffirmation) ? "la valeur doit être nulle" : "la valeur ne doit pas être nulle";
 		return message;
 	}
 	
@@ -53,36 +51,42 @@ public class AssertionBuilderComparisonImpl extends AbstractAssertionBuilderImpl
 	}*/
 
 	@Override
-	public FieldValueGetter getFieldValueGetter1() {
-		return (FieldValueGetter) getProperties().getFromPath(Properties.FIELD,Properties.VALUE,Properties.GETTER,Properties._1);
+	public AssertionValue getAssertedValue1() {
+		return (AssertionValue) getProperties().getFromPath(Properties.ASSERTION,Properties.VALUE,Properties._1);
 	}
 	
 	@Override
-	public AssertionBuilderComparison setFieldValueGetter1(FieldValueGetter fieldValueGetter) {
-		getProperties().setFromPath(new Object[]{Properties.FIELD,Properties.VALUE,Properties.GETTER,Properties._1}, fieldValueGetter);
+	public AssertionValue getAssertedValue1(Boolean instanciateIfNull) {
+		AssertionValue assertionValue = getAssertedValue1();
+		if(assertionValue == null && Boolean.TRUE.equals(instanciateIfNull)){
+			setAssertedValue1(assertionValue = __inject__(AssertionValue.class).setParent(this));
+		}
+		return assertionValue;
+	}
+	
+	@Override
+	public AssertionBuilderComparison setAssertedValue1(AssertionValue assertionValue) {
+		getProperties().setFromPath(new Object[]{Properties.ASSERTION,Properties.VALUE,Properties._1}, assertionValue);
 		return this;
 	}
 	
 	@Override
-	public AssertionBuilderComparison setFieldValueGetter1(Object object, String... names) {
-		setFieldValueGetter1(__inject__(FieldValueGetter.class).setObject(object).setField(names));
-		return this;
+	public AssertionValue getAssertedValue2() {
+		return (AssertionValue) getProperties().getFromPath(Properties.ASSERTION,Properties.VALUE,Properties._2);
 	}
 	
 	@Override
-	public FieldValueGetter getFieldValueGetter2() {
-		return (FieldValueGetter) getProperties().getFromPath(Properties.FIELD,Properties.VALUE,Properties.GETTER,Properties._2);
+	public AssertionValue getAssertedValue2(Boolean instanciateIfNull) {
+		AssertionValue assertionValue = getAssertedValue2();
+		if(assertionValue == null && Boolean.TRUE.equals(instanciateIfNull)){
+			setAssertedValue2(assertionValue = __inject__(AssertionValue.class).setParent(this));
+		}
+		return assertionValue;
 	}
 	
 	@Override
-	public AssertionBuilderComparison setFieldValueGetter2(FieldValueGetter fieldValueGetter) {
-		getProperties().setFromPath(new Object[]{Properties.FIELD,Properties.VALUE,Properties.GETTER,Properties._2}, fieldValueGetter);
-		return this;
-	}
-	
-	@Override
-	public AssertionBuilderComparison setFieldValueGetter2(Object object, String... names) {
-		setFieldValueGetter1(__inject__(FieldValueGetter.class).setObject(object).setField(names));
+	public AssertionBuilderComparison setAssertedValue2(AssertionValue assertionValue) {
+		getProperties().setFromPath(new Object[]{Properties.ASSERTION,Properties.VALUE,Properties._2}, assertionValue);
 		return this;
 	}
 	
@@ -101,5 +105,5 @@ public class AssertionBuilderComparisonImpl extends AbstractAssertionBuilderImpl
 	public AssertionBuilderComparison setIsAffirmation(Boolean value) {
 		return (AssertionBuilderComparison) super.setIsAffirmation(value);
 	}
-
+	
 }

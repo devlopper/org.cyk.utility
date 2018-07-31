@@ -12,9 +12,12 @@ public class AssertionBuilderNullImpl extends AbstractAssertionBuilderImpl imple
 	protected Boolean __computeValue__(Assertion assertion, Boolean isAffirmation) {	
 		Boolean value = super.__computeValue__(assertion, isAffirmation);
 		if(value == null){
-			FieldValueGetter fieldValueGetter = getFieldValueGetter();
-			if(fieldValueGetter != null){
-				value = fieldValueGetter.execute().getOutput() == null;
+			AssertionValue assertionValue = getAssertedValue();
+			if(assertionValue!=null){
+				FieldValueGetter fieldValueGetter = assertionValue.getFieldValueGetter();
+				if(fieldValueGetter != null){
+					value = fieldValueGetter.execute().getOutput() == null;
+				}
 			}
 		}
 		return value;
@@ -49,29 +52,54 @@ public class AssertionBuilderNullImpl extends AbstractAssertionBuilderImpl imple
 
 	@Override
 	public FieldValueGetter getFieldValueGetter() {
-		return (FieldValueGetter) getProperties().getFromPath(Properties.FIELD,Properties.VALUE,Properties.GETTER);
+		//return (FieldValueGetter) getProperties().getFromPath(Properties.FIELD,Properties.VALUE,Properties.GETTER);
+		return getAssertedValue(Boolean.TRUE).getFieldValueGetter();
 	}
 	
 	@Override
 	public AssertionBuilderNull setFieldValueGetter(FieldValueGetter fieldValueGetter) {
 		getProperties().setFromPath(new Object[]{Properties.FIELD,Properties.VALUE,Properties.GETTER}, fieldValueGetter);
+		getAssertedValue(Boolean.TRUE).setFieldValueGetter(fieldValueGetter);
 		return this;
 	}
 	
 	@Override
 	public AssertionBuilderNull setFieldValueGetter(Object object, String... names) {
 		setFieldValueGetter(__inject__(FieldValueGetter.class).setObject(object).setField(names));
+		getAssertedValue(Boolean.TRUE).setFieldValueGetter(object, names);
 		return this;
 	}
 	
 	@Override
 	public String getValueName() {
-		return (String) getProperties().getFromPath(Properties.VALUE,Properties.NAME);
+		return getAssertedValue(Boolean.TRUE).getName();
+		//return (String) getProperties().getFromPath(Properties.VALUE,Properties.NAME);
 	}
 
 	@Override
 	public AssertionBuilderNull setValueName(String identifier) {
 		getProperties().setFromPath(new Object[]{Properties.VALUE,Properties.NAME}, identifier);
+		getAssertedValue(Boolean.TRUE).setName(identifier);
+		return this;
+	}
+	
+	@Override
+	public AssertionValue getAssertedValue() {
+		return (AssertionValue) getProperties().getFromPath(Properties.ASSERTION,Properties.VALUE);
+	}
+	
+	@Override
+	public AssertionValue getAssertedValue(Boolean instanciateIfNull) {
+		AssertionValue assertionValue = getAssertedValue();
+		if(assertionValue == null && Boolean.TRUE.equals(instanciateIfNull)){
+			setAssertedValue(assertionValue = __inject__(AssertionValue.class).setParent(this));
+		}
+		return assertionValue;
+	}
+	
+	@Override
+	public AssertionBuilderNull setAssertedValue(AssertionValue assertionValue) {
+		getProperties().setFromPath(new Object[]{Properties.ASSERTION,Properties.VALUE}, assertionValue);
 		return this;
 	}
 	

@@ -11,6 +11,10 @@ public interface AssertionBuilderNull extends AssertionBuilder {
 	String getValueName();
 	AssertionBuilderNull setValueName(String name);
 	
+	AssertionValue getAssertedValue();
+	AssertionValue getAssertedValue(Boolean instanciateIfNull);
+	AssertionBuilderNull setAssertedValue(AssertionValue assertionValue);
+	
 	AssertionBuilderNull setIsAffirmation(Boolean value);
 	
 }

@@ -26,7 +26,7 @@ public abstract class AbstractAssertionBuilderImpl extends AbstractFunctionWithP
 			assertion.setIdentifier(__computeIdentifier__(assertion));	
 		}
 		
-		if(Boolean.TRUE.equals(getIsThrownWhenValueIsNotTrue())){
+		if(!Boolean.TRUE.equals(assertion.getValue()) && Boolean.TRUE.equals(getIsThrownWhenValueIsNotTrue())){
 			__injectThrowableHelper__().throwRuntimeException(assertion.getMessageWhenValueIsNotTrue());
 		}
 		

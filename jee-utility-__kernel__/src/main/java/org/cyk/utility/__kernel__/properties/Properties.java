@@ -4085,12 +4085,22 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getAssertion() {
+		return get(ASSERTION);
+	}
+
+	public Properties setAssertion(Object value) {
+		set(ASSERTION, value);
+		return this;
+	}
+	
 	public static final String _1 = "_1";
 	public static final String _2 = "_2";
 	public static final String RUNNABLES = "RUNNABLES";
 	public static final String POST = "POST";
 	public static final String PRE = "PRE";
 	public static final String ASSERTIONS = "ASSERTIONS";
+	public static final String ASSERTION = "ASSERTION";
 	public static final String AFFIRMATION = "AFFIRMATION";
 	public static final String GETTER = "GETTER";
 	public static final String QUERIES = "QUERIES";
