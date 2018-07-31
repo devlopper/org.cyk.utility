@@ -3,6 +3,7 @@ package org.cyk.utility.number;
 import java.math.BigDecimal;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.helper.Helper;
 
 public interface NumberHelper extends Helper {
@@ -23,4 +24,6 @@ public interface NumberHelper extends Helper {
 	Long getLong(Object object);
 	BigDecimal getBigDecimal(Object object, BigDecimal nullValue);
 	BigDecimal getBigDecimal(Object object);
+	
+	Boolean compare(Number number1,Number number2,ComparisonOperator operator);
 }

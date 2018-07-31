@@ -26,6 +26,10 @@ public abstract class AbstractAssertionBuilderImpl extends AbstractFunctionWithP
 			assertion.setIdentifier(__computeIdentifier__(assertion));	
 		}
 		
+		if(Boolean.TRUE.equals(getIsThrownWhenValueIsNotTrue())){
+			__injectThrowableHelper__().throwRuntimeException(assertion.getMessageWhenValueIsNotTrue());
+		}
+		
 		return assertion;
 	}
 	
@@ -72,6 +76,17 @@ public abstract class AbstractAssertionBuilderImpl extends AbstractFunctionWithP
 	@Override
 	public AssertionBuilder setMessageWhenValueIsNotTrue(String message) {
 		getProperties().setFromPath(new Object[]{Properties.MESSAGE}, message);
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsThrownWhenValueIsNotTrue() {
+		return (Boolean) getProperties().getFromPath(Properties.THROWABLE);
+	}
+	
+	@Override
+	public AssertionBuilder setIsThrownWhenValueIsNotTrue(Boolean value) {
+		getProperties().setFromPath(new Object[]{Properties.THROWABLE}, value);
 		return this;
 	}
 	

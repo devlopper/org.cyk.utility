@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.Assertion;
+import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.message.LogMessageBuilder;
@@ -154,6 +155,28 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	@Override
 	public Function<INPUT, OUTPUT> setPostExecutionPhase(ExecutionPhase executionPhase) {
 		getProperties().setFromPath(new Object[]{Properties.EXECUTION,Properties.POST}, executionPhase);
+		return this;
+	}
+	
+	/**/
+	
+	@Override
+	public Function<INPUT, OUTPUT> addExecutionPhaseAssertions(Boolean isPre,AssertionBuilder...assertionBuilders){
+		String pre = Boolean.TRUE.equals(isPre) ? Properties.PRE : Properties.POST;
+		ExecutionPhase executionPhase = (ExecutionPhase) getProperties().getFromPath(Properties.EXECUTION,pre);
+		if(executionPhase == null)
+			getProperties().setFromPath(new Object[]{Properties.EXECUTION,pre}, executionPhase = new ExecutionPhase());
+		executionPhase.addAssertionBuilders(assertionBuilders);
+		return this;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> addExecutionPhaseRunnables(Boolean isPre,Runnable...runnables){
+		String pre = Boolean.TRUE.equals(isPre) ? Properties.PRE : Properties.POST;
+		ExecutionPhase executionPhase = (ExecutionPhase) getProperties().getFromPath(Properties.EXECUTION,pre);
+		if(executionPhase == null)
+			getProperties().setFromPath(new Object[]{Properties.EXECUTION,pre}, executionPhase = new ExecutionPhase());
+		executionPhase.addRunnables(runnables);
 		return this;
 	}
 	

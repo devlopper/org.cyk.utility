@@ -3,6 +3,7 @@ package org.cyk.utility.function;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.assertion.AssertionBuilder;
 
 public interface Function<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.function.Function<INPUT, OUTPUT> {
 
@@ -28,4 +29,6 @@ public interface Function<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.funct
 	ExecutionPhase getPostExecutionPhase();
 	Function<INPUT,OUTPUT> setPostExecutionPhase(ExecutionPhase executionPhase);
 	
+	Function<INPUT, OUTPUT> addExecutionPhaseAssertions(Boolean isPre,AssertionBuilder...assertionBuilders);
+	Function<INPUT, OUTPUT> addExecutionPhaseRunnables(Boolean isPre,Runnable...runnables);
 }

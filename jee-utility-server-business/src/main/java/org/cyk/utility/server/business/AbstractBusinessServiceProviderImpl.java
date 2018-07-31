@@ -17,7 +17,12 @@ public  class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystem
 
 	@Override
 	public BusinessServiceProvider<OBJECT> create(OBJECT object, Properties properties) {
-		__inject__(BusinessFunctionCreator.class).setEntity(object).setPreExecutionPhase(properties == null ? null : (ExecutionPhase)properties.getFromPath(Properties.EXECUTION,Properties.PRE)).execute();
+		BusinessFunctionCreator function = __inject__(BusinessFunctionCreator.class);
+		function.setEntity(object)
+				.setPreExecutionPhase(properties == null ? null : (ExecutionPhase)properties.getFromPath(Properties.EXECUTION,Properties.PRE));
+		validateOne(object, function.getAction());
+		function.execute();
+		validateOne(object);
 		return this;
 	}
 
@@ -39,7 +44,11 @@ public  class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystem
 
 	@Override
 	public BusinessServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
-		__inject__(BusinessFunctionModifier.class).setEntity(object).execute();
+		BusinessFunctionModifier function = __inject__(BusinessFunctionModifier.class);
+		function.setEntity(object);
+		validateOne(object, function.getAction());
+		function.execute();
+		validateOne(object);
 		return this;
 	}
 
@@ -61,7 +70,11 @@ public  class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystem
 
 	@Override
 	public BusinessServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
-		__inject__(BusinessFunctionRemover.class).setEntity(object).execute();
+		BusinessFunctionRemover function =  __inject__(BusinessFunctionRemover.class);
+		function.setEntity(object);
+		validateOne(object, function.getAction());
+		function.execute();
+		//object has been remove so it is not more persisted. no validation
 		return this;
 	}
 

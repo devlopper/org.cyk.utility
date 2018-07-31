@@ -4085,6 +4085,8 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public static final String _1 = "_1";
+	public static final String _2 = "_2";
 	public static final String RUNNABLES = "RUNNABLES";
 	public static final String POST = "POST";
 	public static final String PRE = "PRE";
