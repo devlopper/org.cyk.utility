@@ -2,12 +2,16 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.log.Log;
+import org.cyk.utility.string.Case;
+import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueUsageType;
 
 public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements FieldValueGetter, Serializable {
@@ -20,11 +24,21 @@ public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputI
 		Field field = getField();
 		if(object!=null){
 			if(field!=null){
-				try {
-					value = FieldUtils.readField(field, object, Boolean.TRUE);
-				} catch (IllegalAccessException exception) {
-					__inject__(Log.class).executeThrowable(exception);
+				Method method = MethodUtils.getAccessibleMethod(object.getClass(), "get"+__inject__(StringHelper.class).applyCase(field.getName(), Case.FIRST_CHARACTER_UPPER));
+				if(method == null){
+					try {
+						value = FieldUtils.readField(field, object, Boolean.TRUE);
+					} catch (IllegalAccessException exception) {
+						__inject__(Log.class).executeThrowable(exception);
+					}	
+				}else {
+					try {
+						value = method.invoke(object);
+					} catch (Exception exception) {
+						__inject__(Log.class).executeThrowable(exception);
+					}
 				}
+				
 			}else {
 				
 			}

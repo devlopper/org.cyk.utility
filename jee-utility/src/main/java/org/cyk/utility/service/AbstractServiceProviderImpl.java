@@ -8,6 +8,7 @@ import org.cyk.utility.assertion.AssertionBuilderNull;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.log.Log;
+import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -62,5 +63,9 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	
 	protected AssertionBuilderNull __injectAssertionBuilderNull__(){
 		return __inject__(AssertionBuilderNull.class);
+	}
+	
+	protected NumberHelper __injectNumberHelper__(){
+		return __inject__(NumberHelper.class);
 	}
 }
