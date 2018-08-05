@@ -129,6 +129,10 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return __getFunction__(PersistenceFunctionModifier.class, parameters);
 	}
 	
+	protected PersistenceFunctionRemover __getRemover__(Object...parameters) {
+		return __getFunction__(PersistenceFunctionRemover.class, parameters);
+	}
+	
 	/**/
 	
 	@SuppressWarnings("unchecked")
@@ -142,6 +146,11 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected Long __modify__(Object...parameters) {
 		__getModifier__(parameters).execute();//TODO we should get the number of entities modified
+		return null;
+	}
+	
+	protected Long __delete__(Object...parameters) {
+		__getRemover__(parameters).execute();//TODO we should get the number of entities deleted
 		return null;
 	}
 	

@@ -38,7 +38,7 @@ public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunction
 	
 	@Override
 	protected void __listenPostConstruct__() {
-		getProperties().setEntityManager(__inject__(EntityManager.class)).setAction(__inject__(SystemActionUpdate.class));
+		setEntityManager(__inject__(EntityManager.class)).setAction(__inject__(SystemActionUpdate.class));
 		super.__listenPostConstruct__();
 	}
 	

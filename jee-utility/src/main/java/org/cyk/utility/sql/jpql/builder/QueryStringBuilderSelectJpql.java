@@ -11,4 +11,6 @@ public interface QueryStringBuilderSelectJpql extends QueryStringBuilderSelect {
 	QueryStringBuilderSelectJpql where(QueryWherePredicateStringBuilder predicateBuilder);
 	
 	QueryStringBuilderSelectJpql select(Tuple tuple);
+	
+	QueryStringBuilderSelectJpql orderBy(String...attributeNames);
 }

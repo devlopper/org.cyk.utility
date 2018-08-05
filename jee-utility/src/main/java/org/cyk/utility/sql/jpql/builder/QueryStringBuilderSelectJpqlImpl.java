@@ -29,6 +29,11 @@ public class QueryStringBuilderSelectJpqlImpl extends AbstractQueryStringBuilder
 		return (QueryStringBuilderSelectJpql) super.select(tuple);
 	}
 	
+	@Override
+	public QueryStringBuilderSelectJpql orderBy(String... attributeNames) {
+		return (QueryStringBuilderSelectJpql) super.orderBy(attributeNames);
+	}
+	
 	/**/
 	
 	@Override

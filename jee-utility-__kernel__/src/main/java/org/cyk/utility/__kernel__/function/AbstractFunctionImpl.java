@@ -28,6 +28,10 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 			__beforeExecute__();
 			try {
 				if(runnable == null){
+					executable = (Boolean) getProperties().getFromPath(Properties.IS,Properties.CORE,Properties.EXECUTABLE);
+					if(executable == null)
+						executable =  Boolean.TRUE;
+					if(Boolean.TRUE.equals(executable))
 					output = __execute__();
 				}else {
 					runnable.run();

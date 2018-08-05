@@ -65,12 +65,12 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<String> getArguments() {
-		return (Collection<String>) getProperties().getArguments();
+		return (Collection<String>) getProperties().getFromPath(Properties.FORMAT,Properties.ARGUMENTS);
 	}
 	
 	@Override
 	public QueryClauseStringBuilder setArguments(Collection<String> arguments) {
-		getProperties().setArguments(arguments);
+		getProperties().setFromPath(new Object[]{Properties.FORMAT,Properties.ARGUMENTS}, arguments);
 		return this;
 	}
 	
@@ -167,12 +167,12 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	
 	@Override
 	public String getFormat() {
-		return (String) getProperties().getFormat();
+		return (String) getProperties().getFromPath(Properties.FORMAT,Properties.__THIS__);
 	}
 	
 	@Override
 	public QueryClauseStringBuilder setFormat(String format) {
-		getProperties().setFormat(format);
+		getProperties().setFromPath(new Object[]{Properties.FORMAT,Properties.__THIS__}, format);
 		return this;
 	}
 	

@@ -19,8 +19,8 @@ public  class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystem
 	@Override
 	public BusinessServiceProvider<OBJECT> create(OBJECT object, Properties properties) {
 		BusinessFunctionCreator function = __inject__(BusinessFunctionCreator.class);
-		function.setEntity(object)
-				.setPreExecutionPhase(properties == null ? null : (ExecutionPhase)properties.getFromPath(Properties.EXECUTION,Properties.PRE));
+		__configure__(function, properties);
+		function.setEntity(object);
 		validateOne(object, function.getAction());
 		function.execute();
 		validateOne(object);
@@ -46,6 +46,7 @@ public  class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystem
 	@Override
 	public BusinessServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
 		BusinessFunctionModifier function = __inject__(BusinessFunctionModifier.class);
+		__configure__(function, properties);
 		function.setEntity(object);
 		validateOne(object, function.getAction());
 		function.execute();
@@ -72,6 +73,7 @@ public  class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystem
 	@Override
 	public BusinessServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
 		BusinessFunctionRemover function =  __inject__(BusinessFunctionRemover.class);
+		__configure__(function, properties);
 		function.setEntity(object);
 		validateOne(object, function.getAction());
 		function.execute();
@@ -132,5 +134,13 @@ public  class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystem
 			properties = Properties.setFromPath(properties, new Object[]{Properties.EXECUTION,pre}, executionPhase = new ExecutionPhase());
 		executionPhase.addRunnables(runnables);
 		return properties;
+	}
+	
+	protected void __configure__(BusinessFunction function, Properties properties) {
+		if(properties != null){
+			function.setPreExecutionPhase((ExecutionPhase)properties.getFromPath(Properties.EXECUTION,Properties.PRE));
+			//TODO use getter setter from properties
+			function.getProperties().setFromPath(new Object[]{Properties.IS,Properties.CORE,Properties.EXECUTABLE}, properties.getFromPath(Properties.IS,Properties.CORE,Properties.EXECUTABLE));	
+		}
 	}
 }

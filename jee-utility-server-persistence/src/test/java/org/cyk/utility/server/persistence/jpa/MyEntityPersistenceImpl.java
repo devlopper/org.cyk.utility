@@ -20,14 +20,17 @@ public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEnt
 	private String readByIntegerValue,executeIncrementIntegerValue;
 	
 	@Override
+	public QueryStringBuilderSelect instanciateReadByIntegerValueQueryStringBuilder() {
+		return __instanciateQuerySelect__()
+				.getWherePredicateBuilderAsEqual().addOperandBuilderByAttribute(MyEntity.FIELD_INTEGER_VALUE,ComparisonOperator.EQ)
+				.getParentAsWhereClause().getParentAs(QueryStringBuilderSelect.class);
+	}
+	
+	@Override
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
 		
-		QueryStringBuilderSelect queryBuilder = __instanciateQuerySelect__()
-				.getWherePredicateBuilderAsEqual().addOperandBuilderByAttribute(MyEntity.FIELD_INTEGER_VALUE,ComparisonOperator.EQ)
-				.getParentAsWhereClause().getParentAs(QueryStringBuilderSelect.class);
-
-		addQueryCollectInstances(readByIntegerValue, queryBuilder);
+		addQueryCollectInstances(readByIntegerValue, instanciateReadByIntegerValueQueryStringBuilder());
 		
 		addQuery(executeIncrementIntegerValue, "UPDATE MyEntity myEntity SET myEntity.integerValue = myEntity.integerValue + :value", null);
 	}

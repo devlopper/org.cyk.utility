@@ -2,12 +2,42 @@ package org.cyk.utility.server.persistence.jpa;
 
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.computation.SortOrder;
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram;
+import org.cyk.utility.sql.builder.Attribute;
+import org.cyk.utility.sql.builder.Tuple;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class MyEntityPersistenceIntegrationTest extends AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram<MyEntity> {
 	private static final long serialVersionUID = 1L;
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void readByIntegerValueUsingCustom(){
+		__createEntity__(new MyEntity().setCode("ee01").setIntegerValue(1));
+		__createEntity__(new MyEntity().setCode("ee02").setIntegerValue(2));
+		__createEntity__(new MyEntity().setCode("ee03").setIntegerValue(1));
+		__createEntity__(new MyEntity().setCode("ee04").setIntegerValue(2));
+		__createEntity__(new MyEntity().setCode("ee05").setIntegerValue(2));
+		
+		String query = __inject__(MyEntityPersistence.class).instanciateReadByIntegerValueQueryStringBuilder()
+				.orderBy("code")
+				.execute().getOutput();
+
+		Collection<MyEntity> c1 = (Collection<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setQueryValue(query)
+				.setQueryParameters(new Properties().set("integerValue", 2)).execute().getEntities();
+		System.out.println(c1);
+		
+		query = __inject__(MyEntityPersistence.class).instanciateReadByIntegerValueQueryStringBuilder()
+				.orderBy(new Attribute().setName("code").setTuple(new Tuple().setName("MyEntity")).setSortOrder(SortOrder.DESCENDING))
+				.execute().getOutput();
+		Collection<MyEntity> c2 = (Collection<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setQueryValue(query)
+				.setQueryParameters(new Properties().set("integerValue", 2)).execute().getEntities();
+		System.out.println(c2);
+	}
 	
 	@Test
 	public void readByIntegerValue(){

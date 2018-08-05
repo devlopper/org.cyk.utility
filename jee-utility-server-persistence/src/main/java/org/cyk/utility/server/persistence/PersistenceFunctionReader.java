@@ -16,6 +16,8 @@ public interface PersistenceFunctionReader extends PersistenceFunction {
 	
 	PersistenceFunctionReader setQueryIdentifier(Object identifier);
 	
+	PersistenceFunctionReader setQueryValue(String value);
+	
 	PersistenceFunctionReader setQueryParameters(Properties parameters);
 	
 	PersistenceFunctionReader setQueryParameter(String name, Object value);

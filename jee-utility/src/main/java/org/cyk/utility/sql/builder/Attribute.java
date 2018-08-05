@@ -2,6 +2,7 @@ package org.cyk.utility.sql.builder;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
 
@@ -37,6 +38,15 @@ public class Attribute extends AbstractObject implements Serializable {
 	
 	public Boolean getIsPrefixedWithTuple(){
 		return (Boolean) getProperties().getFromPath(Properties.IS,Properties.PREFIX,Properties.TUPLE);
+	}
+	
+	public Attribute setSortOrder(SortOrder sortOrder){
+		getProperties().setFromPath(new Object[]{Properties.SORT_MODE}, sortOrder);
+		return this;
+	}
+	
+	public SortOrder getSortOrder(){
+		return (SortOrder) getProperties().getFromPath(Properties.SORT_MODE);
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import javax.enterprise.util.AnnotationLiteral;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.sql.builder.QueryAttributeNameBuilder;
 import org.cyk.utility.sql.builder.QueryClauseStringBuilderFrom;
+import org.cyk.utility.sql.builder.QueryClauseStringBuilderOrderBy;
 import org.cyk.utility.sql.builder.QueryClauseStringBuilderSelect;
 import org.cyk.utility.sql.builder.QueryClauseStringBuilderWhere;
 import org.cyk.utility.sql.builder.QueryOperandStringBuilder;
@@ -14,6 +15,7 @@ import org.cyk.utility.sql.builder.QueryWherePredicateStringBuilderEqual;
 import org.cyk.utility.sql.builder.QueryWherePredicateStringBuilderGroup;
 import org.cyk.utility.sql.jpql.builder.QueryAttributeNameBuilderJpql;
 import org.cyk.utility.sql.jpql.builder.QueryClauseStringBuilderFromJpql;
+import org.cyk.utility.sql.jpql.builder.QueryClauseStringBuilderOrderByJpql;
 import org.cyk.utility.sql.jpql.builder.QueryClauseStringBuilderSelectJpql;
 import org.cyk.utility.sql.jpql.builder.QueryClauseStringBuilderWhereJpql;
 import org.cyk.utility.sql.jpql.builder.QueryOperandStringBuilderJpql;
@@ -39,6 +41,8 @@ public class JpqlQualifier extends AnnotationLiteral<Jpql> implements Jpql {
 			return (OBJECT) JpqlQualifier.inject(QueryClauseStringBuilderWhereJpql.class);
 		if(QueryClauseStringBuilderFrom.class.equals(aClass))
 			return (OBJECT) JpqlQualifier.inject(QueryClauseStringBuilderFromJpql.class);
+		if(QueryClauseStringBuilderOrderBy.class.equals(aClass))
+			return (OBJECT) JpqlQualifier.inject(QueryClauseStringBuilderOrderByJpql.class);
 		
 		if(QueryAttributeNameBuilder.class.equals(aClass))
 			return (OBJECT) JpqlQualifier.inject(QueryAttributeNameBuilderJpql.class);

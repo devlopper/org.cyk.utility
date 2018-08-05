@@ -9,7 +9,7 @@ public class QueryClauseStringBuilderSelectJpqlUnitTest extends AbstractArquilli
 	private static final long serialVersionUID = 1L;
 
 	@Test
-	public void selectStart(){
+	public void selectTuple(){
 		assertionHelper.assertEquals("SELECT tuple", JpqlQualifier.inject(QueryClauseStringBuilderSelectJpql.class).addTuplesByNames("Tuple").execute().getOutput());
 	}
 	

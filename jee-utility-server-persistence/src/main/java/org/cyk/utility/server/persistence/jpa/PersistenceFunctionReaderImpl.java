@@ -54,7 +54,11 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 	
 	@Override
 	protected void __executeQuery__(SystemAction action, PersistenceQuery persistenceQuery) {
-		TypedQuery<?> typedQuery = getEntityManager().createNamedQuery(persistenceQuery.getIdentifier().toString(), persistenceQuery.getResultClass());
+		String identifier = persistenceQuery.getIdentifier() == null ? null : persistenceQuery.getIdentifier().toString();
+		Class<?> resultClass = persistenceQuery.getResultClass();
+		EntityManager entityManager = getEntityManager();
+		TypedQuery<?> typedQuery = __injectStringHelper__().isBlank(identifier) ? entityManager.createQuery(persistenceQuery.getValue(), resultClass) 
+				: entityManager.createNamedQuery(identifier, resultClass);
 		//TODO handle Paging
 		
 		//Parameters

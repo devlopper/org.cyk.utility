@@ -4094,6 +4094,26 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getCore() {
+		return get(CORE);
+	}
+
+	public Properties setCore(Object value) {
+		set(CORE, value);
+		return this;
+	}
+	
+	public Object getResult() {
+		return get(RESULT);
+	}
+
+	public Properties setResult(Object value) {
+		set(RESULT, value);
+		return this;
+	}
+	
+	public static final String RESULT = "RESULT";
+	public static final String CORE = "CORE";
 	public static final String _1 = "_1";
 	public static final String _2 = "_2";
 	public static final String RUNNABLES = "RUNNABLES";

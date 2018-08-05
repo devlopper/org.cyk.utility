@@ -91,6 +91,16 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	}
 	
 	@Override
+	public <ENTITY> void __deleteEntity__(Class<ENTITY> entityClass, Object identifier,ValueUsageType valueUsageType) {
+		__deleteEntity__(__readEntity__(entityClass, identifier, valueUsageType));
+	}
+	
+	@Override
+	public <ENTITY> void __deleteEntityByBusinessIdentifier__(Class<ENTITY> entityClass, Object identifier) {
+		__deleteEntity__(entityClass, identifier, ValueUsageType.BUSINESS);
+	}
+	
+	@Override
 	public Class<LAYER_ENTITY_INTERFACE> __getLayerEntityInterfaceClass__() {
 		return layerEntityInterfaceClass;
 	}

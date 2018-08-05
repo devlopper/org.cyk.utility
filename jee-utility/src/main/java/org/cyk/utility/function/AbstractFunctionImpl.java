@@ -10,6 +10,7 @@ import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.message.LogMessageBuilder;
+import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueHelper;
 
@@ -181,6 +182,10 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	}
 	
 	/**/
+	
+	protected StringHelper __injectStringHelper__(){
+		return __inject__(StringHelper.class);
+	}
 	
 	protected ValueHelper __injectValueHelper__(){
 		return __inject__(ValueHelper.class);

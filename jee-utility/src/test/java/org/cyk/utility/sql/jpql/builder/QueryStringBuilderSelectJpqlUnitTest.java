@@ -13,10 +13,15 @@ public class QueryStringBuilderSelectJpqlUnitTest extends AbstractArquillianUnit
 	@Test
 	public void selectFromTuple(){
 		Tuple tuple = new Tuple().setName("Tuple");
-		
 		QueryStringBuilderSelectJpql queryBuilder = JpqlQualifier.inject(QueryStringBuilderSelectJpql.class).from(tuple);
-		
 		assertionHelper.assertEquals("SELECT tuple FROM Tuple tuple", queryBuilder.execute().getOutput());
+	}
+	
+	@Test
+	public void selectFromTupleOrderBy(){
+		Tuple tuple = new Tuple().setName("Tuple");
+		QueryStringBuilderSelectJpql queryBuilder = JpqlQualifier.inject(QueryStringBuilderSelectJpql.class).from(tuple).orderBy("code","name");
+		assertionHelper.assertEquals("SELECT tuple FROM Tuple tuple ORDER BY tuple.code ASC,tuple.name ASC", queryBuilder.execute().getOutput());
 	}
 	
 	@Test

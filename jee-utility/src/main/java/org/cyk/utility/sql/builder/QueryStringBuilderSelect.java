@@ -11,4 +11,10 @@ public interface QueryStringBuilderSelect extends QueryStringBuilder {
 	
 	QueryStringBuilderSelect where(QueryWherePredicateStringBuilder predicateBuilder);
 	
+	QueryClauseStringBuilderOrderBy getOrderByClauseBuilder();
+	QueryClauseStringBuilderOrderBy getOrderByClauseBuilder(Boolean injectIfNull);
+	QueryStringBuilderSelect setOrderByClauseBuilder(QueryClauseStringBuilderOrderBy builder);
+	QueryStringBuilderSelect orderBy(Attribute...attributes);
+	QueryStringBuilderSelect orderBy(String...attributeNames);
+	
 }

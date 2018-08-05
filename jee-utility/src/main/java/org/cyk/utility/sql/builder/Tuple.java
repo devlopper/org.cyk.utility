@@ -1,10 +1,12 @@
 package org.cyk.utility.sql.builder;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.StringHelper;
@@ -27,6 +29,21 @@ public class Tuple extends AbstractObject implements Serializable {
 			addAttributes(attribute);
 		}
 		return attribute;
+	}
+	
+	public Collection<Attribute> getAttributesByNames(String[] names,Boolean instanciateIfNull){
+		Collection<Attribute> result = null;
+		if(__inject__(ArrayHelper.class).isNotEmpty(names)){
+			for(String index : names){
+				Attribute attribute = getAttributeByName(index, instanciateIfNull);
+				if(attribute!=null){
+					if(result == null)
+						result = new ArrayList<>();
+					result.add(attribute);	
+				}
+			}
+		}
+		return result;
 	}
 	
 	public String getName(){

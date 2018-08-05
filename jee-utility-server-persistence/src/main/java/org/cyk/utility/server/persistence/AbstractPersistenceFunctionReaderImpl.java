@@ -29,7 +29,10 @@ public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPers
 
 	@Override
 	public PersistenceFunctionReader setEntityClass(Class<?> aClass) {
-		return (PersistenceFunctionReader) super.setEntityClass(aClass);
+		super.setEntityClass(aClass);
+		if(getQueryResultClass() == null)
+			setQueryResultClass(getEntityClass());
+		return this;
 	}
 
 	@Override
@@ -57,6 +60,11 @@ public abstract class AbstractPersistenceFunctionReaderImpl extends AbstractPers
 	@Override
 	public PersistenceFunctionReader setQueryIdentifier(Object identifier) {
 		return (PersistenceFunctionReader) super.setQueryIdentifier(identifier);
+	}
+	
+	@Override
+	public PersistenceFunctionReader setQueryValue(String value) {
+		return (PersistenceFunctionReader) super.setQueryValue(value);
 	}
 	
 	@Override

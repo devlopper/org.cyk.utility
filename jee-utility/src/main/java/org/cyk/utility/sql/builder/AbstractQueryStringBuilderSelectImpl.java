@@ -1,6 +1,7 @@
 package org.cyk.utility.sql.builder;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 
@@ -21,21 +22,13 @@ public abstract class AbstractQueryStringBuilderSelectImpl extends AbstractQuery
 		if(where!=null && where.getPredicateBuilder()!=null)
 			addChild(where);
 		
+		QueryClauseStringBuilderOrderBy orderBy = getOrderByClauseBuilder();
+		if(orderBy!=null)
+			addChild(orderBy);
+		
 		return super.__execute__();
 	}
-	/*
-	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		__listenPostConstructSetClausesBuilders__();
-	}
-	
-	protected void __listenPostConstructSetClausesBuilders__() {
-		setFromClauseBuilder(__inject__(QueryClauseStringBuilderFrom.class));
-		setWhereClauseBuilder(__inject__(QueryClauseStringBuilderWhere.class));
-		setSelectClauseBuilder(__inject__(QueryClauseStringBuilderSelect.class));
-	}*/
-	
+
 	@Override
 	public QueryClauseStringBuilderSelect getSelectClauseBuilder() {
 		return (QueryClauseStringBuilderSelect) getProperties().getFromPath(Properties.BUILDER,Properties.SELECT);
@@ -71,6 +64,46 @@ public abstract class AbstractQueryStringBuilderSelectImpl extends AbstractQuery
 	@Override
 	public QueryStringBuilderSelect where(QueryWherePredicateStringBuilder predicateBuilder) {
 		return (QueryStringBuilderSelect) super.where(predicateBuilder);
+	}
+	
+	@Override
+	public QueryClauseStringBuilderOrderBy getOrderByClauseBuilder() {
+		return (QueryClauseStringBuilderOrderBy) getProperties().getFromPath(Properties.BUILDER,Properties.SORT_BY);
+	}
+	
+	@Override
+	public QueryClauseStringBuilderOrderBy getOrderByClauseBuilder(Boolean injectIfNull) {
+		QueryClauseStringBuilderOrderBy clause = getOrderByClauseBuilder();
+		if(clause == null && Boolean.TRUE.equals(injectIfNull)){
+			setOrderByClauseBuilder(clause = ____inject____(QueryClauseStringBuilderOrderBy.class));
+		}
+		return clause;
+	}
+
+	@Override
+	public QueryStringBuilderSelect setOrderByClauseBuilder(QueryClauseStringBuilderOrderBy builder) {
+		getProperties().setFromPath(new Object[]{Properties.BUILDER,Properties.SORT_BY}, builder);
+		return this;
+	}
+
+	@Override
+	public QueryStringBuilderSelect orderBy(Attribute...attributes) {
+		getOrderByClauseBuilder(Boolean.TRUE).addAttributes(attributes);
+		return this;
+	}
+	
+	@Override
+	public QueryStringBuilderSelect orderBy(String...attributeNames) {
+		QueryClauseStringBuilderFrom from = getFromClauseBuilder();
+		if(from == null || __injectCollectionHelper__().getSize(from.getTuples()) != 1){
+			getOrderByClauseBuilder(Boolean.TRUE).addAttributesByNames(attributeNames);
+		}else{
+			Tuple tuple = __injectCollectionHelper__().getFirst(from.getTuples());
+			Collection<Attribute> attributes = tuple.getAttributesByNames(attributeNames, Boolean.TRUE);
+			if(attributes!=null)
+				getOrderByClauseBuilder(Boolean.TRUE).addAttributes(attributes);
+		}
+		return this;
 	}
 	
 }
