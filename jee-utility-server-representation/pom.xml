@@ -39,6 +39,18 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
 		    <groupId>org.jboss.shrinkwrap.resolver</groupId>
 		    <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
 		    <scope>compile</scope>
@@ -71,5 +83,16 @@
 			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>org.cyk.test</id>
+			<properties>
+				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/representation/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
+				<org.cyk.test.jpa.persistence.file>org/cyk/utility/server/representation/persistence.xml</org.cyk.test.jpa.persistence.file>
+				<org.cyk.test.classes>org.cyk.utility.server.representation.MyEntity</org.cyk.test.classes>
+			</properties>
+		</profile>
+	</profiles>
 
 </project>

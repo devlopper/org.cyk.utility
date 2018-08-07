@@ -2,6 +2,8 @@ package org.cyk.utility.__kernel__.test.arquillian;
 
 import java.io.Serializable;
 import java.io.StringReader;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -53,7 +55,7 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 			persistenceXml = profile.getProperty("org.cyk.test.jpa.persistence.file");
 		
 		String _package = profile == null ? null : profile.getProperty("org.cyk.test.package");
-		String[] classes = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.classes")) ? null : profile.getProperty("org.cyk.test.classes").split(",");
+		String[] classesArray = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.classes")) ? null : profile.getProperty("org.cyk.test.classes").split(",");
 		
 		archive = ShrinkWrap.create(this.clazz);
 		addBeanXml(beanXml);
@@ -73,16 +75,32 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 				((WebArchive)archive).addPackages(Boolean.TRUE, _package);
 		}
 		
-		if(classes!=null)
-			for(String index : classes){
+		String[] suffixes = {"Persistence","PersistenceImpl","Business","BusinessImpl","Representation","RepresentationImpl"};
+		Set<Class<?>> classes = new HashSet<>();
+		if(classesArray!=null)
+			for(String index : classesArray){
 				try {
 					Class<?> aClass = Class.forName(index);
-					if(archive instanceof WebArchive)
-						((WebArchive)archive).addClass(aClass);
+					classes.add(aClass);
+					if(!StringUtils.endsWithAny(aClass.getName(), suffixes)) {
+						for(String suffix : suffixes)
+							try {
+								Class<?> relatedClass = Class.forName(aClass.getName()+suffix);
+								classes.add(relatedClass);
+							} catch (Exception e) {}
+					}
+					//if(archive instanceof WebArchive)
+					//	((WebArchive)archive).addClass(aClass);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
+		
+		if(classes!=null && !classes.isEmpty()) {
+			System.out.println("#classes derived : "+classes.size());
+			if(archive instanceof WebArchive)
+				((WebArchive)archive).addClasses(classes.toArray(new Class<?>[] {}));
+		}
 		
 		System.out.println("Building archive done.");
 		return archive;
