@@ -22,7 +22,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(callSuper=false,of={Cell.FIELD_COLUMN,Cell.FIELD_ROW})
+@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(callSuper=false,of={"column","row"})
 public class Cell extends Component.Visible implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

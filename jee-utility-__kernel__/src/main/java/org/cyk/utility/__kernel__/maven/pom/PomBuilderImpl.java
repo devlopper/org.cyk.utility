@@ -23,6 +23,7 @@ public class PomBuilderImpl implements PomBuilder {
 		} catch(Exception exception) {
 			throw new RuntimeException(exception);
 		}
+		
 		if(pom == null){
 			//TODO log warning 
 		}	
@@ -34,6 +35,6 @@ public class PomBuilderImpl implements PomBuilder {
 	}
 	
 	public static Pom __execute__() {
-		return __execute__(new Properties().setPath(System.getProperty("user.dir")+"/pom.xml"));
+		return __execute__(new Properties().setPath(System.getProperty("user.dir")+"\\pom.xml"));
 	}
 }

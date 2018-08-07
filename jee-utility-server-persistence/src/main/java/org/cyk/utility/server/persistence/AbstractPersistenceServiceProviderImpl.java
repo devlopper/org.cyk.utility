@@ -250,6 +250,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 					+") FROM "+StringUtils.substringAfter(persistenceQuery.getValue(), " FROM ");
 			String identifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setIsDerivedFromQueryIdentifier(Boolean.TRUE)
 					.setDerivedFromQueryIdentifier(collectionIdentifier).setIsCountInstances(Boolean.TRUE).execute().getOutput();
+			value = StringUtils.substringBefore(value, "ORDER BY");
 			addQuery(identifier, value, Long.class);
 			__inject__(PersistenceQueryRepository.class).getBySystemIdentifier(identifier, Boolean.TRUE).setQueryDerivedFromQuery(persistenceQuery);
 			//addDerivedQueryIdentifier(collectionIdentifier, identifier);

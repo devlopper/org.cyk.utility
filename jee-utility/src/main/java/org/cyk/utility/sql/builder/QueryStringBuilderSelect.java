@@ -1,5 +1,7 @@
 package org.cyk.utility.sql.builder;
 
+import org.cyk.utility.__kernel__.computation.SortOrder;
+
 public interface QueryStringBuilderSelect extends QueryStringBuilder {
 
 	QueryClauseStringBuilderSelect getSelectClauseBuilder();
@@ -16,5 +18,5 @@ public interface QueryStringBuilderSelect extends QueryStringBuilder {
 	QueryStringBuilderSelect setOrderByClauseBuilder(QueryClauseStringBuilderOrderBy builder);
 	QueryStringBuilderSelect orderBy(Attribute...attributes);
 	QueryStringBuilderSelect orderBy(String...attributeNames);
-	
+	QueryStringBuilderSelect orderBy(String attributeName,SortOrder sortOrder);
 }

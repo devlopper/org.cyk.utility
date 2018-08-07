@@ -13,7 +13,7 @@ public class MyEntityBusinessIntegrationTest extends AbstractBusinessEntityInteg
 	
 	@Test
 	public void createWithLong1Null(){
-		MyEntity myEntity = new MyEntity();
+		MyEntity myEntity = new MyEntity().setCode("c01").setLong1(1l);
 		__createEntity__(myEntity);
 	}
 }

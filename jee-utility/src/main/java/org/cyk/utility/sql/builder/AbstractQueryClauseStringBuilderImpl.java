@@ -62,7 +62,6 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<String> getArguments() {
 		return (Collection<String>) getProperties().getFromPath(Properties.FORMAT,Properties.ARGUMENTS);
@@ -74,7 +73,6 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Attribute> getAttributes() {
 		return (Collection<Attribute>) getProperties().getColumns();
@@ -121,10 +119,14 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Tuple> getTuples() {
 		return (Collection<Tuple>) getProperties().getTuples();
+	}
+	
+	@Override
+	public Tuple getFirstTuple() {
+		return __injectCollectionHelper__().getFirst(getTuples());
 	}
 	
 	@Override

@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter @AllArgsConstructor @NoArgsConstructor @EqualsAndHashCode(callSuper=false,of={InstantPattern.FIELD_LOCALE,InstantPattern.FIELD_PART,InstantPattern.FIELD_LENGTH})
+@Getter @Setter @AllArgsConstructor @NoArgsConstructor @EqualsAndHashCode(callSuper=false,of={"locale","part","length"})
 public class InstantPattern extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

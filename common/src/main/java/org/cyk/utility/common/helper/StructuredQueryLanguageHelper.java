@@ -649,7 +649,7 @@ public class StructuredQueryLanguageHelper extends AbstractHelper implements Ser
 		
 		/**/
 		 
-		@Getter @Setter @NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode(of={TupleCollection.FIELD_ALIAS})
+		@Getter @Setter @NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode(of={"alias"})
 		public static class TupleCollection implements Serializable {	
 			private static final long serialVersionUID = 1L;
 			

@@ -15,6 +15,7 @@ public interface QueryClauseStringBuilder extends FunctionWithPropertiesAsInputA
 	QueryClauseStringBuilder setArguments(Collection<String> arguments);
 
 	Collection<Tuple> getTuples();
+	Tuple getFirstTuple();
 	QueryClauseStringBuilder setTuples(Collection<Tuple> tuples);
 	QueryClauseStringBuilder addTuples(Collection<Tuple> tuples);
 	QueryClauseStringBuilder addTuples(Tuple...tuples);

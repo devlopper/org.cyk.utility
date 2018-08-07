@@ -21,8 +21,9 @@ public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunction
 	
 	@Override
 	protected void __executeQuery__(SystemAction action, PersistenceQuery persistenceQuery) {
+		EntityManager entityManager = getEntityManager();
 		//Instantiate query
-		Query query = getEntityManager().createNamedQuery(persistenceQuery.getIdentifier().toString());
+		Query query = entityManager.createNamedQuery(persistenceQuery.getIdentifier().toString());
 		
 		//Set query parameters
 		Properties parameters = getQueryParameters();
@@ -34,6 +35,9 @@ public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunction
 		Integer count = query.executeUpdate();
 		
 		getProperties().setCount(count);
+		
+		//This is required when doing batch processing
+		entityManager.clear();
 	}
 	
 	@Override

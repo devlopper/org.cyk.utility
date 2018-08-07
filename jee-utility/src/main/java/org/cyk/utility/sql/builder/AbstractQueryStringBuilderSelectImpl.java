@@ -3,6 +3,7 @@ package org.cyk.utility.sql.builder;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.properties.Properties;
 
 public abstract class AbstractQueryStringBuilderSelectImpl extends AbstractQueryStringBuilderImpl implements QueryStringBuilderSelect, Serializable {
@@ -98,10 +99,23 @@ public abstract class AbstractQueryStringBuilderSelectImpl extends AbstractQuery
 		if(from == null || __injectCollectionHelper__().getSize(from.getTuples()) != 1){
 			getOrderByClauseBuilder(Boolean.TRUE).addAttributesByNames(attributeNames);
 		}else{
-			Tuple tuple = __injectCollectionHelper__().getFirst(from.getTuples());
+			Tuple tuple = from.getFirstTuple();
 			Collection<Attribute> attributes = tuple.getAttributesByNames(attributeNames, Boolean.TRUE);
 			if(attributes!=null)
 				getOrderByClauseBuilder(Boolean.TRUE).addAttributes(attributes);
+		}
+		return this;
+	}
+	
+	@Override
+	public QueryStringBuilderSelect orderBy(String attributeName, SortOrder sortOrder) {
+		QueryClauseStringBuilderFrom from = getFromClauseBuilder();
+		if(from == null || __injectCollectionHelper__().getSize(from.getTuples()) != 1){
+			orderBy(attributeName);
+		}else{
+			Tuple tuple = from.getFirstTuple();
+			Attribute attribute = tuple.getAttributeByName(attributeName, Boolean.TRUE);
+			orderBy(attribute);
 		}
 		return this;
 	}

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(callSuper=false,of={Bundle.FIELD_NAME,Bundle.FIELD_CLASS_LOADER})
+@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(callSuper=false,of={"name","classLoader"})
 @NoArgsConstructor @AllArgsConstructor
 public class Bundle extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
