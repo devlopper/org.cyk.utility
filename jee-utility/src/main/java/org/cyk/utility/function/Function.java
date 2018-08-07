@@ -1,9 +1,8 @@
 package org.cyk.utility.function;
 
-import java.util.Collection;
-
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AssertionBuilder;
+import org.cyk.utility.log.Log;
 
 public interface Function<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.function.Function<INPUT, OUTPUT> {
 
@@ -12,13 +11,14 @@ public interface Function<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.funct
 	
 	Function<INPUT,OUTPUT> setProperties(Properties properties);
 	
+	Function<INPUT,OUTPUT> setLog(Log log);
+	Log getLog();
+	Log getLog(Boolean injectIfNull);
+	Function<INPUT,OUTPUT> addLogMessageBuilderParameter(Object parameter);
+	Function<INPUT,OUTPUT> addLogMessageBuilderParameter(Object key,Object value);
+	
 	Function<INPUT,OUTPUT> setLoggable(Boolean loggable);
 	Boolean getLoggable();
-	
-	Function<INPUT,OUTPUT> setLogMarkers(Collection<String> markers);
-	Collection<String> getLogMarkers();
-	Function<INPUT,OUTPUT> addLogMarkers(Collection<String> markers);
-	Function<INPUT,OUTPUT> addLogMarkers(String...markers);
 	
 	Function<INPUT,OUTPUT> setMonitorable(Boolean monitorable);
 	Boolean getMonitorable();

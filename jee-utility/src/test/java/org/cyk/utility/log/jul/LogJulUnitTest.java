@@ -65,6 +65,11 @@ public class LogJulUnitTest extends AbstractArquillianUnitTestWithDefaultDeploym
 		assertionHelper.assertEqualsLastLogEventProperties(new Properties().setLogLevel(LogLevel.DEBUG).setMessage("this a debug"));
 	}
 	
-	
+	@Test
+	public void logInfoFromClass001FromMethodM001() {
+		assertionHelper.assertEqualsLogEventCount(0);
+		__inject__(Log.class).setLevel(LogLevel.INFO).getMessageBuilder(Boolean.TRUE).addParameter("INFOS From Class01.M001").getParent().setSourceMethodName("Class001").setSourceMethodName("M001").execute();
+		assertionHelper.assertEqualsLastLogEventProperties(new Properties().setLogLevel(LogLevel.INFO).setMessage("INFOS From Class01.M001"));
+	}
 
 }

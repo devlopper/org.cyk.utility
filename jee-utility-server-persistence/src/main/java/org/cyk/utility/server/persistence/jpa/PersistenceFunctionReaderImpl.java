@@ -49,7 +49,7 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 		}
 		getProperties().setEntity(entity);
 		if(entity == null)
-			__addLogMessageBuilderParameter__(MESSAGE_NOT_FOUND);
+			addLogMessageBuilderParameter(MESSAGE_NOT_FOUND);
 	}
 	
 	@Override

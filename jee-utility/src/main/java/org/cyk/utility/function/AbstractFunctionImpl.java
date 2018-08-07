@@ -1,15 +1,16 @@
 package org.cyk.utility.function;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.Assertion;
 import org.cyk.utility.assertion.AssertionBuilder;
+import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.Log;
-import org.cyk.utility.log.message.LogMessageBuilder;
+import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueHelper;
@@ -54,12 +55,12 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	@Override
 	protected void afterExecute() {
 		super.afterExecute();
-		__getLog__().getMessageBuilder(Boolean.TRUE).addParameter("duration", getProperties().getFromPath(Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION));
-		if(Boolean.TRUE.equals(getLoggable()))
-			__getLog__().addMarkers(getLogMarkers()).execute();
+		getLog(Boolean.TRUE).getMessageBuilder(Boolean.TRUE).addParameter("duration", getProperties().getFromPath(Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION));
+		Log log = getLog();
+		if(log!=null && Boolean.TRUE.equals(getLoggable()))
+			log.execute();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public OUTPUT getOutput() {
 		return (OUTPUT) getProperties().getOutput();
@@ -70,23 +71,40 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 		return (Function<INPUT,OUTPUT>) super.setProperties(properties);
 	}
 	
-	protected Log __getLog__(){
-		Log log = (Log) getProperties().getLog();
-		if(log == null)
-			getProperties().setLog( log = __inject__(Log.class));
+	@Override
+	public Log getLog() {
+		return (Log) getProperties().getLog();
+	}
+	
+	@Override
+	public Log getLog(Boolean injectIfNull) {
+		Log log = getLog();
+		if(log == null && Boolean.TRUE.equals(injectIfNull))
+			setLog(log = __injectLog__());
 		return log;
 	}
 	
-	protected LogMessageBuilder __getLogMessageBuilder__(){
-		return __getLog__().getMessageBuilder(Boolean.TRUE);
+	protected Log __injectLog__() {
+		return ____inject____(Log.class).setLevel(LogLevel.TRACE).setSourceClassName(StringUtils.substringBefore(getClass().getName(),CharacterConstant.DOLLAR.toString()))
+				.setSourceMethodName("execute");
 	}
 	
-	protected LogMessageBuilder __addLogMessageBuilderParameter__(Object parameter){
-		return __getLogMessageBuilder__().addParameter(parameter);
+	@Override
+	public Function<INPUT, OUTPUT> setLog(Log log) {
+		getProperties().setLog(log);
+		return this;
 	}
 	
-	protected LogMessageBuilder __addLogMessageBuilderParameter__(Object key,Object value){
-		return __getLogMessageBuilder__().addParameter(key, value);
+	@Override
+	public Function<INPUT, OUTPUT> addLogMessageBuilderParameter(Object key, Object value) {
+		getLog(Boolean.TRUE).getMessageBuilder(Boolean.TRUE).addParameter(key, value);
+		return this;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> addLogMessageBuilderParameter(Object parameter) {
+		getLog(Boolean.TRUE).getMessageBuilder(Boolean.TRUE).addParameter(parameter);
+		return this;
 	}
 	
 	@Override
@@ -99,14 +117,13 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 		return this;
 	}
 	
-	@Override
+	/*@Override
 	public Function<INPUT, OUTPUT> setLogMarkers(Collection<String> markers) {
 		getProperties().setMarkers(markers);
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
+	/*@Override
 	public Collection<String> getLogMarkers() {
 		return (Collection<String>) getProperties().getMarkers();
 	}
@@ -127,7 +144,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	public Function<INPUT, OUTPUT> addLogMarkers(String... markers) {
 		addLogMarkers(__inject__(CollectionHelper.class).instanciate(markers));
 		return this;
-	}
+	}*/
 	
 	@Override
 	public Boolean getMonitorable() {

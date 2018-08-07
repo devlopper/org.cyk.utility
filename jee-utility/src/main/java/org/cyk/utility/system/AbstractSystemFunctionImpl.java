@@ -8,8 +8,12 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.log.Log;
+import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.system.action.SystemActor;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -31,7 +35,6 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		setMonitorable(Boolean.TRUE).setLoggable(Boolean.TRUE);
-		addLogMarkers(__inject__(CollectionHelper.class).instanciate(getSystemActor().getIdentifier().toString(),getSystemLayer().getIdentifier().toString()));
 	}
 	
 	@Override
@@ -42,6 +45,26 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		}else{
 			__execute__(action);	
 		}
+	}
+	
+	@Override
+	protected Log __injectLog__() {
+		Log log =  super.__injectLog__();
+		log.addMarkers(getSystemActor().getIdentifier().toString(),getSystemLayer().getIdentifier().toString());
+		SystemAction action = getAction();
+		//info action that might modify system state
+		if(action instanceof SystemActionCreate || action instanceof SystemActionUpdate || action instanceof SystemActionDelete)
+			log.setLevel(LogLevel.INFO);
+		if(action!=null) {
+			log.addMarkers(action.getIdentifier().toString());
+			log.setSourceMethodName(log.getSourceMethodName()+CharacterConstant.DOT+action.getIdentifier());
+		}
+		Class<?> entityClass = getEntityClass();
+		if(entityClass!=null) {
+			log.setSourceClassName(log.getSourceClassName()+CharacterConstant.DOT+entityClass.getSimpleName());
+			log.addMarkers(entityClass.getSimpleName());
+		}
+		return log;
 	}
 	
 	@Override
@@ -108,7 +131,6 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<?> getEntities() {
 		return (Collection<Object>) getProperties().getEntities();
@@ -129,10 +151,6 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	protected abstract SystemLayer getSystemLayer();
 	
 	/* following can be more upper*/
-	
-	protected String getLogMessagePrefix(){
-		return __inject__(StringHelper.class).concatenate(getLogMarkers(),CharacterConstant.SPACE.toString());
-	}
 	
 	protected Collection<FieldName> getLoggedEntityFieldNames(){
 		return __inject__(CollectionHelper.class).instanciate(FieldName.IDENTIFIER);

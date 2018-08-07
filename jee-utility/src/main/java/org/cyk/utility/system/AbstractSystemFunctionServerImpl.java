@@ -7,9 +7,7 @@ import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
-import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActor;
 import org.cyk.utility.system.action.SystemActorServer;
 import org.cyk.utility.value.ValueUsageType;
@@ -29,15 +27,9 @@ public abstract class AbstractSystemFunctionServerImpl extends AbstractSystemFun
 	@Override
 	protected void __beforeExecute__() {
 		super.__beforeExecute__();
-		__getLog__().setLevel(LogLevel.INFO);
-		SystemAction action = getAction();
-		if(action!=null)
-			addLogMarkers(action.getIdentifier().toString());
-		Class<?> entityClass = getEntityClass();
-		if(entityClass!=null)
-			addLogMarkers(entityClass.getSimpleName());
-		//addLogMarkers(getAction().getIdentifier().toString(),getEntityClass().getSimpleName());
-		__getLog__().getMessageBuilder(Boolean.TRUE).addParameter(__inject__(StringHelper.class).concatenate(getLogMarkers(),CharacterConstant.SPACE.toString()));
+		//we put markers in message to support those logging framework which do not handle markers
+		addLogMessageBuilderParameter(__inject__(StringHelper.class).concatenate(__injectCollectionHelper__().cast(String.class, getLog(Boolean.TRUE).getMarkers())
+				,CharacterConstant.SPACE.toString()));
 	}
 	
 	@Override
@@ -51,7 +43,7 @@ public abstract class AbstractSystemFunctionServerImpl extends AbstractSystemFun
 				if(__inject__(CollectionHelper.class).isNotEmpty(valueUsageTypes))
 					for(ValueUsageType indexValueUsageType : valueUsageTypes){
 						String fieldName = __inject__(FieldNameGetter.class).execute(getEntityClass(), index,indexValueUsageType).getOutput();
-						__getLog__().getMessageBuilder().addParameter(fieldName, getEnityFieldValue(entity,index,indexValueUsageType, fieldName));	
+						addLogMessageBuilderParameter(fieldName, getEnityFieldValue(entity,index,indexValueUsageType, fieldName));	
 					}
 			}
 		}
