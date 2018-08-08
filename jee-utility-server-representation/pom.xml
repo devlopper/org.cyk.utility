@@ -39,15 +39,9 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.cyk.jee.utility</groupId>
-			<artifactId>jee-utility</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		
-		<dependency>
 			<groupId>org.cyk.pom.jee.server.representation.main.jboss.swarm</groupId>
 			<artifactId>pom-jee-server-representation-main-jboss-swarm</artifactId>
-			<version>0.0.1</version>
+			<version>pom.jee.server.representation.main.jboss.swarm.0.0.1</version>
 			<type>pom</type>
 			<scope>compile</scope>
 		</dependency>
@@ -55,7 +49,7 @@
 		<dependency>
 			<groupId>org.cyk.pom.jee.server.representation.test.jboss.swarm</groupId>
 			<artifactId>pom-jee-server-representation-test-jboss-swarm</artifactId>
-			<version>0.0.1</version>
+			<version>pom.jee.server.representation.test.jboss.swarm.0.0.1</version>
 			<type>pom</type>
 			<scope>test</scope>
 		</dependency>
@@ -106,9 +100,16 @@
 			<properties>
 				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/representation/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.jpa.persistence.file>org/cyk/utility/server/representation/persistence.xml</org.cyk.test.jpa.persistence.file>
-				<org.cyk.test.classes>org.cyk.utility.server.representation.MyEntity</org.cyk.test.classes>
+				<org.cyk.test.classes>org.cyk.utility.server.representation.MyEntity,org.cyk.utility.server.representation.Application</org.cyk.test.classes>
 			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<version>1.4.197</version>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>
-
+	
 </project>

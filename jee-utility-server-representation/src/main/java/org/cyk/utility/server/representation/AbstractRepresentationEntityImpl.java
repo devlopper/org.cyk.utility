@@ -11,7 +11,7 @@ import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 
-public abstract class AbstractRepresentationEntityImpl<ENTITY,PERSISTENCE extends PersistenceEntity<ENTITY>> extends AbstractRepresentationServiceProviderImpl<ENTITY> implements RepresentationEntity<ENTITY>,Serializable {
+public abstract class AbstractRepresentationEntityImpl<ENTITY,PERSISTENCE extends PersistenceEntity<ENTITY>,DTO> extends AbstractRepresentationServiceProviderImpl<ENTITY> implements RepresentationEntity<ENTITY,DTO>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Getter private Class<ENTITY> entityClass;

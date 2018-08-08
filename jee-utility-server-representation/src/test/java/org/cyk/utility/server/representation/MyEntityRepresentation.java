@@ -11,12 +11,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path(MyEntityRepresentation.PATH)
-public interface MyEntityRepresentation extends RepresentationEntity<MyEntity> {
-
+public interface MyEntityRepresentation extends RepresentationEntity<MyEntity,MyEntityDto> {
+	/*
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)
 	Response createOne(MyEntityDto dto);
-	
+	*/
 	@GET
 	@Produces({ MediaType.APPLICATION_XML })
 	Collection<MyEntityDto> getMany();

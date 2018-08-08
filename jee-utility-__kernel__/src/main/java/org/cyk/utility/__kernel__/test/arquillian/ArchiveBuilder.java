@@ -57,6 +57,9 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 		String _package = profile == null ? null : profile.getProperty("org.cyk.test.package");
 		String[] classesArray = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.classes")) ? null : profile.getProperty("org.cyk.test.classes").split(",");
 		
+		//System.out.println("Swarm project defaults file : "+projectDefaultsYml);
+		//System.out.println("JPA persistence file : "+persistenceXml);
+		
 		archive = ShrinkWrap.create(this.clazz);
 		addBeanXml(beanXml);
 		if(projectDefaultsYml!=null)

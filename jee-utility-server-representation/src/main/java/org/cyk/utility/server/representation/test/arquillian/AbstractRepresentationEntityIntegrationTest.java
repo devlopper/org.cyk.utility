@@ -14,12 +14,12 @@ import org.junit.Test;
 public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extends AbstractRepresentationArquillianIntegrationTest {
 	private static final long serialVersionUID = 1L;
 
-	@Test
+	/*@Test
 	public void createOne() throws Exception{
 		//Object action = __inject__(SystemActionCreate.class);
 		//Object object = __instanciateEntity__(action);
 		//__createEntity__(object);
-	}
+	}*/
 	
 	//@Test
 	public void readOneBySystemIdentifier() throws Exception{
@@ -63,8 +63,8 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		return (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
 	}
 	
-	protected RepresentationEntity<ENTITY> __getRepresentationEntity__(Object action){
-		return (RepresentationEntity<ENTITY>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntityClass(__getEntityClass__(action));
+	protected RepresentationEntity<ENTITY,?> __getRepresentationEntity__(Object action){
+		return null;//(RepresentationEntity<ENTITY,?>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntityClass(__getEntityClass__(action));
 	}
 	
 	protected ENTITY __instanciateEntity__(Object action) throws Exception{
