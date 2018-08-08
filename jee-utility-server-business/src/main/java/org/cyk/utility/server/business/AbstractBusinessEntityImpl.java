@@ -49,26 +49,24 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 
 	@Override
 	public Collection<ENTITY> findMany(Properties properties) {
-		// TODO Auto-generated method stub
-		return null;
+		return getPersistence().readMany(properties);
 	}
 
 	@Override
 	public Collection<ENTITY> findMany() {
-		// TODO Auto-generated method stub
-		return null;
+		//TODO use default settings like pagination and sorting
+		return findMany(null);
 	}
 
 	@Override
 	public Long count(Properties properties) {
-		// TODO Auto-generated method stub
-		return null;
+		return getPersistence().count(properties);
 	}
 
 	@Override
 	public Long count() {
-		// TODO Auto-generated method stub
-		return null;
+		//TODO use default settings like pagination and sorting
+		return count(null);
 	}
 	
 	/**/

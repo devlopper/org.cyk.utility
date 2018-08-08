@@ -3,6 +3,7 @@ package org.cyk.utility.server.representation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URL;
+import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -38,10 +39,19 @@ public class MyEntityRepresentationIntegrationTest extends AbstractRepresentatio
 	}
 	
 	@Test
-	public void create(){
-		Response response = MY_ENTITY_REPRESENTATION.create(new MyEntityDto().setCode("C01"));
+	public void createOne(){
+		Response response = MY_ENTITY_REPRESENTATION.createOne(new MyEntityDto().setCode("C01"));
 		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		response.close();
+	}
+	
+	@Test
+	public void getMany(){
+		MY_ENTITY_REPRESENTATION.createOne(new MyEntityDto().setCode("CA01"));
+		MY_ENTITY_REPRESENTATION.createOne(new MyEntityDto().setCode("CA02"));
+		Collection<MyEntityDto> dtos = MY_ENTITY_REPRESENTATION.getMany();
+		assertThat(dtos).isNotEmpty();
+		
 	}
 	
 	/*@Override

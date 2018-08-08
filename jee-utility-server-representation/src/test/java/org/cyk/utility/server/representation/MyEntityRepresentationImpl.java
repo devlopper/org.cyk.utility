@@ -12,13 +12,13 @@ public class MyEntityRepresentationImpl extends AbstractRepresentationEntityImpl
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Response create(MyEntityDto dto) {
+	public Response createOne(MyEntityDto dto) {
 		__inject__(MyEntityBusiness.class).create(dto.getPersistenceEntity());
-		return null;
+		return Response.ok().status(Response.Status.CREATED).build();
 	}
 
 	@Override
-	public Collection<MyEntityDto> getAll() {
+	public Collection<MyEntityDto> getMany() {
 		Collection<MyEntityDto> dtos = new ArrayList<>();
 		for(MyEntity index : __inject__(MyEntityBusiness.class).findMany())
 			dtos.add(new MyEntityDto(index));

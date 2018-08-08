@@ -39,7 +39,8 @@ public class PersistenceQueryIdentifierStringBuilderImpl extends AbstractFunctio
 				if(Boolean.TRUE.equals(isDerivedFromQueryIdentifier)){
 					name =  StringUtils.substringAfter(derivedFromQueryIdentifier, ".");
 					if(Boolean.TRUE.equals(getIsCountInstances()))
-						name = StringUtils.replace(name, "readBy", "countBy");
+						//replace first occurence of read by count
+						name = StringUtils.replaceOnce(name, "read", "count");
 				}
 			}
 			formatArguments = __inject__(CollectionHelper.class).instanciate(classSimpleName,name);

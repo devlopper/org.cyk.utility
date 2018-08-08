@@ -9,14 +9,35 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.map.MapHelper;
+import org.cyk.utility.server.persistence.query.PersistenceQuery;
+import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
-import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	protected String read;
+	
+	@Override
+	public QueryStringBuilderSelect instanciateReadQueryStringBuilder() {
+		return __instanciateQuerySelect__();
+	}
+	
+	@Override
+	protected void __listenPostConstructPersistenceQueries__() {
+		super.__listenPostConstructPersistenceQueries__();
+		addQueryCollectInstances(read, instanciateReadQueryStringBuilder());
+	}
+	
+	protected Object[] __getQueryParameters__(String queryIdentifier,Object...objects){
+		PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
+		if(persistenceQuery.isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(read,queryIdentifier))
+			return null;
+		return super.__getQueryParameters__(queryIdentifier, objects);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenBeforePostConstruct__() {
@@ -30,6 +51,17 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	/**/
+	
+	@Override
+	public Collection<ENTITY> read(Properties properties) {
+		return __readMany__(____getQueryParameters____());
+	}
+	
+	@Override
+	public Collection<ENTITY> read() {
+		// TODO user default settings like pagination
+		return read(null);
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -53,10 +85,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return readOne(identifier, ValueUsageType.BUSINESS);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ENTITY> readMany(Properties properties) {
-		return (Collection<ENTITY>) __inject__(PersistenceFunctionReader.class).setEntityClass(getEntityClass()).execute().getProperties().getEntities();
+		return read(properties);
 	}
 	
 	@Override
@@ -66,12 +97,12 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@Override
 	public Long count(Properties properties) {
-		return null;
+		return __count__(____getQueryParameters____());
 	}
 	
 	@Override
 	public Long count() {
-		return null;
+		return count(null);
 	}
 	
 	/**/
@@ -159,7 +190,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 				.setName(__inject__(StackTraceHelper.class).getAt(3).getMethodName()).execute().getOutput();
 		Object[] parameters = __getQueryParameters__(queryIdentifier, objects);
 		if(__inject__(ArrayHelper.class).isEmpty(parameters)){
-			__inject__(ThrowableHelper.class).throwRuntimeException("Parameters of query "+queryIdentifier+" are required");
+			//Query can have no parameters
+			//TODO base on query string structure you can know the expected parameters and decide to throw exception
+			//__inject__(ThrowableHelper.class).throwRuntimeException("Parameters of query "+queryIdentifier+" are required");
 		}
 		return parameters;
 	}

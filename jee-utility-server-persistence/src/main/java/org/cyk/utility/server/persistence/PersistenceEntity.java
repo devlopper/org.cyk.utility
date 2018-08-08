@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
+import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.value.ValueUsageType;
 
 /**
@@ -16,6 +17,10 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 	/* Create */
 	
 	/* Read */ 
+	QueryStringBuilderSelect instanciateReadQueryStringBuilder();
+	Collection<ENTITY> read(Properties properties);
+	Collection<ENTITY> read();
+	
 	ENTITY readOne(Object identifier,Properties properties);
 	ENTITY readOne(Object identifier,ValueUsageType valueUsageType);
 	ENTITY readOne(Object identifier);

@@ -37,6 +37,9 @@ public class MyEntityPersistenceIntegrationTest extends AbstractPersistenceEntit
 		Collection<MyEntity> c2 = (Collection<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setQueryValue(query)
 				.setQueryParameters(new Properties().set("integerValue", 2)).execute().getEntities();
 		System.out.println(c2);
+		
+		Collection<MyEntity> c3 = (Collection<MyEntity>) __inject__(MyEntityPersistence.class).read();
+		System.out.println(c3+" : #="+__inject__(MyEntityPersistence.class).count());
 	}
 	
 	@Test

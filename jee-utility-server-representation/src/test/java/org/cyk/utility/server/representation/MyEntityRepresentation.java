@@ -15,11 +15,11 @@ public interface MyEntityRepresentation extends RepresentationEntity<MyEntity> {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)
-	Response create(MyEntityDto dto);
+	Response createOne(MyEntityDto dto);
 	
 	@GET
 	@Produces({ MediaType.APPLICATION_XML })
-	Collection<MyEntityDto> getAll();
+	Collection<MyEntityDto> getMany();
 	
 	String PATH = "/myentities/";
 	
