@@ -1,4 +1,4 @@
-package org.cyk.utility.server.representation;
+package org.cyk.jee.utility.server.representation.application;
 
 import java.util.Collection;
 
@@ -10,18 +10,21 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.server.representation.RepresentationEntity;
+
 @Path(MyEntityRepresentation.PATH)
 public interface MyEntityRepresentation extends RepresentationEntity<MyEntity,MyEntityDto> {
-	/*
+	
 	@POST
+	@Path("/")
 	@Consumes(MediaType.APPLICATION_XML)
 	Response createOne(MyEntityDto dto);
-	*/
+	
 	@GET
-	@Path("/all")
+	@Path("/")
 	@Produces({ MediaType.APPLICATION_XML })
 	Collection<MyEntityDto> getMany();
 	
-	String PATH = "/myentities/";
+	String PATH = "/myentities";
 	
 }
