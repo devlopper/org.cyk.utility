@@ -13,7 +13,20 @@ import org.cyk.utility.value.ValueUsageType;
 @SuppressWarnings({"rawtypes","unchecked"})
 public abstract class AbstractRepresentationArquillianIntegrationTest extends AbstractSystemServerArquillianIntegrationTestImpl<RepresentationEntity> implements SystemServerIntegrationTest<RepresentationEntity>, Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
+	/* Global variable */
+	/*protected static ResteasyClient CLIENT;
+	protected static ResteasyWebTarget TARGET;
+	
+	
+	*/
+	@Override
+	protected void __listenBeforeFirstCall__() {
+		super.__listenBeforeFirstCall__();
+		//CLIENT = new ResteasyClientBuilder().build();
+		//TARGET = CLIENT.target(UriBuilder.fromPath(contextPath.toExternalForm()));
+	}
+	
 	@Override
 	protected <ENTITY> void ____createEntity____(ENTITY entity, RepresentationEntity business) {
 		business.create(entity);

@@ -16,12 +16,12 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 
 	@Test
 	public void createOne() throws Exception{
-		Object action = __inject__(SystemActionCreate.class);
-		Object object = __instanciateEntity__(action);
-		__createEntity__(object);
+		//Object action = __inject__(SystemActionCreate.class);
+		//Object object = __instanciateEntity__(action);
+		//__createEntity__(object);
 	}
 	
-	@Test
+	//@Test
 	public void readOneBySystemIdentifier() throws Exception{
 		Object action = __inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
@@ -29,7 +29,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__readEntity__(__getEntityClass__(action),__getSystemIdentifier__(object),ValueUsageType.SYSTEM);
 	}
 	
-	@Test
+	//@Test
 	public void readOneByRepresentationIdentifier() throws Exception{
 		Object action = __inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
@@ -37,7 +37,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__readEntity__(__getEntityClass__(action),__getBusinessIdentifier__(object), ValueUsageType.BUSINESS);
 	}
 	
-	@Test
+	//@Test
 	public void updateOne() throws Exception{
 		Object action = __inject__(SystemActionUpdate.class);
 		ENTITY object = __instanciateEntity__(action);
@@ -47,7 +47,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__updateEntity__(object);
 	}
 	
-	@Test
+	//@Test
 	public void deleteOne() throws Exception{
 		Object action = __inject__(SystemActionDelete.class);
 		Object object = __instanciateEntity__(action);

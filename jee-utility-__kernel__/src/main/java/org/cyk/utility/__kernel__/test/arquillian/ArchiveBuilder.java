@@ -75,7 +75,7 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 				((WebArchive)archive).addPackages(Boolean.TRUE, _package);
 		}
 		
-		String[] suffixes = {"Persistence","PersistenceImpl","Business","BusinessImpl","Representation","RepresentationImpl"};
+		String[] suffixes = {"Persistence","PersistenceImpl","Business","BusinessImpl","Representation","RepresentationImpl","Dto"};
 		Set<Class<?>> classes = new HashSet<>();
 		if(classesArray!=null)
 			for(String index : classesArray){

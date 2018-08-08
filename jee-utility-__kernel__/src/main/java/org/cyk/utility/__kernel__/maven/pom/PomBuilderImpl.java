@@ -3,6 +3,7 @@ package org.cyk.utility.__kernel__.maven.pom;
 import java.io.StringReader;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.cyk.utility.__kernel__.KernelHelperImpl;
@@ -36,5 +37,17 @@ public class PomBuilderImpl implements PomBuilder {
 	
 	public static Pom __execute__() {
 		return __execute__(new Properties().setPath(System.getProperty("user.dir")+"\\pom.xml"));
+	}
+	
+	public static void marshall(Pom pom) {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Pom.class);
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			//System.out.println("PomBuilderImpl.marshall()");
+			marshaller.marshal(pom, System.out);
+		} catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+		//System.out.println();
 	}
 }

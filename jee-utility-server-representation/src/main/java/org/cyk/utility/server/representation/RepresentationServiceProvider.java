@@ -8,6 +8,7 @@ import org.cyk.utility.system.SystemServiceProvider;
 public interface RepresentationServiceProvider<OBJECT> extends SystemServiceProvider {
 
 	/* Create */
+	
 	RepresentationServiceProvider<OBJECT> create(OBJECT object,Properties properties);
 	RepresentationServiceProvider<OBJECT> create(OBJECT object);
 	
