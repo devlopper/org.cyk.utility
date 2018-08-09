@@ -21,11 +21,7 @@ public class MyEntityDto extends AbstractEntity<MyEntity> implements Serializabl
 	private String code;
 
 	public MyEntityDto(MyEntity myEntity) {
-		if(myEntity!=null) {
-			if( myEntity.getIdentifier()!=null)
-				identifier = myEntity.getIdentifier().toString();
-			code = myEntity.getCode();
-		}
+		super(myEntity);
 	}
 	
 	public MyEntity getPersistenceEntity() {

@@ -1,9 +1,5 @@
 package org.cyk.utility.server.representation;
 
-import java.util.Collection;
-
-import org.cyk.utility.__kernel__.properties.Properties;
-
 /**
  * 
  * @author Christian

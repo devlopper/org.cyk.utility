@@ -18,21 +18,20 @@ public class MyEntityDto extends AbstractEntity<MyEntity> implements Serializabl
 	
 	private static final long serialVersionUID = 1L;
 
-	private String identifier;
-	private String code;
+	private String name;
 
 	public MyEntityDto(MyEntity myEntity) {
+		super(myEntity);
 		if(myEntity!=null) {
-			if( myEntity.getIdentifier()!=null)
-				identifier = myEntity.getIdentifier().toString();
-			code = myEntity.getCode();
+			name = myEntity.getName();
 		}
 	}
 	
 	public MyEntity getPersistenceEntity() {
 		MyEntity myEntity = new MyEntity();
-		myEntity.setIdentifier(DependencyInjection.inject(NumberHelper.class).getLong(identifier));
+		myEntity.setIdentifier(DependencyInjection.inject(NumberHelper.class).getLong(getIdentifier()));
 		myEntity.setCode(getCode());
+		myEntity.setName(getName());
 		return myEntity;
 	}
 	
