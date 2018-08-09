@@ -1,28 +1,49 @@
 package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+
+import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.server.persistence.PersistenceEntity;
-import org.cyk.utility.server.persistence.PersistenceLayer;
+import org.cyk.utility.server.business.BusinessEntity;
+import org.cyk.utility.server.business.BusinessLayer;
 import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 
-public abstract class AbstractRepresentationEntityImpl<ENTITY,PERSISTENCE extends PersistenceEntity<ENTITY>,DTO> extends AbstractRepresentationServiceProviderImpl<ENTITY> implements RepresentationEntity<ENTITY,DTO>,Serializable {
+public abstract class AbstractRepresentationEntityImpl<ENTITY,BUSINESS extends BusinessEntity<ENTITY>,DTO extends AbstractEntity<ENTITY>> extends AbstractRepresentationServiceProviderImpl<ENTITY,DTO> implements RepresentationEntity<ENTITY,DTO>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Getter private Class<ENTITY> entityClass;
-	@Getter private PERSISTENCE persistence;
+	@Getter private Class<DTO> representationEntityClass;
+	@Getter private BUSINESS business;
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		entityClass = (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
-		persistence = (PERSISTENCE) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(getEntityClass());
+		business = (BUSINESS) __inject__(BusinessLayer.class).injectInterfaceClassFromEntityClass(getEntityClass());
+		representationEntityClass =  (Class<DTO>) __inject__(ClassHelper.class).getParameterAt(getClass(), 2, AbstractEntity.class);
+	}
+	
+	@Override
+	public Response createOne(DTO dto) {
+		getBusiness().create(dto.getPersistenceEntity());
+		return Response.ok().status(Response.Status.CREATED).build();
+	}
+	
+	@Override
+	public Collection<DTO> getMany() {
+		Collection<DTO> dtos = new ArrayList<>();
+		for(ENTITY index : getBusiness().findMany()) {
+			DTO dto = __injectClassHelper__().instanciate(representationEntityClass,new Object[] {entityClass,index});
+			dtos.add(/*new MyEntityDto(index)*/dto);
+		}
+		return dtos;
 	}
 	
 	@SuppressWarnings("unchecked")

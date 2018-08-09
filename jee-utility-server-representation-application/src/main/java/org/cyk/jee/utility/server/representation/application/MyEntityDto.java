@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.number.NumberHelper;
+import org.cyk.utility.server.representation.AbstractEntity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
-public class MyEntityDto implements Serializable {
+public class MyEntityDto extends AbstractEntity<MyEntity> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 

@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 
 @Singleton
-public class MyEntityRepresentationImpl extends AbstractRepresentationEntityImpl<MyEntity,MyEntityPersistence,MyEntityDto> implements MyEntityRepresentation,Serializable {
+public class MyEntityRepresentationImpl extends AbstractRepresentationEntityImpl<MyEntity,MyEntityBusiness,MyEntityDto> implements MyEntityRepresentation,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

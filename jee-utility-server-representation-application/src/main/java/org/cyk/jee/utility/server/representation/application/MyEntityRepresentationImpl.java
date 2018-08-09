@@ -10,9 +10,9 @@ import javax.ws.rs.core.Response;
 import org.cyk.utility.server.representation.AbstractRepresentationEntityImpl;
 
 @Singleton
-public class MyEntityRepresentationImpl extends AbstractRepresentationEntityImpl<MyEntity,MyEntityPersistence,MyEntityDto> implements MyEntityRepresentation,Serializable {
+public class MyEntityRepresentationImpl extends AbstractRepresentationEntityImpl<MyEntity,MyEntityBusiness,MyEntityDto> implements MyEntityRepresentation,Serializable {
 	private static final long serialVersionUID = 1L;
-
+/*
 	@Override
 	public Response createOne(MyEntityDto dto) {
 		__inject__(MyEntityBusiness.class).create(dto.getPersistenceEntity());
@@ -26,7 +26,7 @@ public class MyEntityRepresentationImpl extends AbstractRepresentationEntityImpl
 			dtos.add(new MyEntityDto(index));
 		return dtos;
 	}
-
+	*/
 	
 
 }

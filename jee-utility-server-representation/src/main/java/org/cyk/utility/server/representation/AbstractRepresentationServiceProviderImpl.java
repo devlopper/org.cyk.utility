@@ -12,10 +12,10 @@ import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
 import org.cyk.utility.system.action.SystemAction;
 
-public  class AbstractRepresentationServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements RepresentationServiceProvider<OBJECT>,Serializable {
+public  class AbstractRepresentationServiceProviderImpl<OBJECT,DTO> extends AbstractSystemServiceProviderImpl implements RepresentationServiceProvider<OBJECT,DTO>,Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	/*
 	@Override //@Transactional
 	public RepresentationServiceProvider<OBJECT> create(OBJECT object, Properties properties) {
 		RepresentationFunctionCreator function = __inject__(RepresentationFunctionCreator.class);
@@ -100,13 +100,11 @@ public  class AbstractRepresentationServiceProviderImpl<OBJECT> extends Abstract
 		return deleteMany(objects, null);
 	}
 
-	/**/
 	
 	protected PersistenceEntity<?> __injectPersistenceFromClass__(Class<?> entityClass){
 		return (PersistenceEntity<?>) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(entityClass);
 	}
 	
-	/**/
 	
 	protected AssertionBuilderNull __injectAssertionBuilderNull__(Boolean isAffirmation,Object object,String...names){
 		return __inject__(AssertionBuilderNull.class).setIsAffirmation(isAffirmation).setFieldValueGetter(object,names);
@@ -146,4 +144,5 @@ public  class AbstractRepresentationServiceProviderImpl<OBJECT> extends Abstract
 			function.getProperties().setFromPath(new Object[]{Properties.IS,Properties.CORE,Properties.EXECUTABLE}, properties.getFromPath(Properties.IS,Properties.CORE,Properties.EXECUTABLE));	
 		}
 	}
+	*/
 }

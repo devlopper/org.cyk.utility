@@ -1,15 +1,22 @@
 package org.cyk.utility.server.representation;
 
-@javax.ws.rs.ApplicationPath("/")
-@javax.ws.rs.Path("/")
-@javax.enterprise.context.ApplicationScoped
+import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+@ApplicationPath("/")
+@Path("/")
+@ApplicationScoped
 public class Application extends javax.ws.rs.core.Application {
 
-	@javax.ws.rs.GET
-	@javax.ws.rs.Path("/")
-	@javax.ws.rs.Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
-	public String getRootResource() {
-		return "Hi from workflow system server. Time is "+new java.util.Date();
+	@GET
+	@Path("/")
+	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
+	public String get() {
+		//TODO this message could come from database
+		return "Your API is running. Time is "+new java.util.Date();
 	}
 	
 }

@@ -5,32 +5,32 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.SystemServiceProvider;
 
-public interface RepresentationServiceProvider<OBJECT> extends SystemServiceProvider {
+public interface RepresentationServiceProvider<OBJECT,DTO> extends SystemServiceProvider {
 
 	/* Create */
+	/*
+	RepresentationServiceProvider<OBJECT,DTO> create(OBJECT object,Properties properties);
+	RepresentationServiceProvider<OBJECT,DTO> create(OBJECT object);
 	
-	RepresentationServiceProvider<OBJECT> create(OBJECT object,Properties properties);
-	RepresentationServiceProvider<OBJECT> create(OBJECT object);
-	
-	RepresentationServiceProvider<OBJECT> createMany(Collection<OBJECT> objects,Properties properties);
-	RepresentationServiceProvider<OBJECT> createMany(Collection<OBJECT> objects);
-	
+	RepresentationServiceProvider<OBJECT,DTO> createMany(Collection<OBJECT> objects,Properties properties);
+	RepresentationServiceProvider<OBJECT,DTO> createMany(Collection<OBJECT> objects);
+	*/
 	/* Read */ 
 	
 	/* Update */
-	RepresentationServiceProvider<OBJECT> update(OBJECT object,Properties properties);
-	RepresentationServiceProvider<OBJECT> update(OBJECT object);
+	/*RepresentationServiceProvider<OBJECT,DTO> update(OBJECT object,Properties properties);
+	RepresentationServiceProvider<OBJECT,DTO> update(OBJECT object);
 	
-	RepresentationServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects,Properties properties);
-	RepresentationServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects);
-	
+	RepresentationServiceProvider<OBJECT,DTO> updateMany(Collection<OBJECT> objects,Properties properties);
+	RepresentationServiceProvider<OBJECT,DTO> updateMany(Collection<OBJECT> objects);
+	*/
 	/* Delete */
-	RepresentationServiceProvider<OBJECT> delete(OBJECT object,Properties properties);
-	RepresentationServiceProvider<OBJECT> delete(OBJECT object);
+	/*RepresentationServiceProvider<OBJECT,DTO> delete(OBJECT object,Properties properties);
+	RepresentationServiceProvider<OBJECT,DTO> delete(OBJECT object);
 	
-	RepresentationServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects,Properties properties);
-	RepresentationServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects);
-	
+	RepresentationServiceProvider<OBJECT,DTO> deleteMany(Collection<OBJECT> objects,Properties properties);
+	RepresentationServiceProvider<OBJECT,DTO> deleteMany(Collection<OBJECT> objects);
+	*/
 	/* Count */
 	
 	/**/

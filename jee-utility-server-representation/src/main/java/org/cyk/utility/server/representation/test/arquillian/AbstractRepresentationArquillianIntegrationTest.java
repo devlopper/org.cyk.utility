@@ -8,6 +8,7 @@ import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
 import org.cyk.utility.test.arquillian.AbstractSystemServerArquillianIntegrationTestImpl;
 import org.cyk.utility.test.arquillian.SystemServerIntegrationTest;
+import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueUsageType;
 
 @SuppressWarnings({"rawtypes","unchecked"})
@@ -29,7 +30,8 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	
 	@Override
 	protected <ENTITY> void ____createEntity____(ENTITY entity, RepresentationEntity business) {
-		business.create(entity);
+		//business.create(entity);
+		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
 	}
 
 	@Override
@@ -39,12 +41,14 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 
 	@Override
 	protected <ENTITY> void ____updateEntity____(ENTITY entity, RepresentationEntity business) {
-		business.update(entity);
+		//business.update(entity);
+		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
 	}
 
 	@Override
 	protected <ENTITY> void ____deleteEntity____(ENTITY entity, RepresentationEntity business) {
-		business.delete(entity);
+		//business.delete(entity);
+		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
 	}
 	
 	@Override
