@@ -3,13 +3,10 @@ package org.cyk.utility.server.representation.test.arquillian;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.server.representation.RepresentationLayer;
-import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.value.ValueUsageType;
-import org.junit.Test;
 
 public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extends AbstractRepresentationArquillianIntegrationTest {
 	private static final long serialVersionUID = 1L;
@@ -38,11 +35,13 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	}
 	
 	//@Test
+	@SuppressWarnings("unchecked")
 	public void updateOne() throws Exception{
 		Object action = __inject__(SystemActionUpdate.class);
 		ENTITY object = __instanciateEntity__(action);
 		__createEntity__(object);
-		object = (ENTITY) __getRepresentationEntity__(action).findOne(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(object));
+		Object identifier = __inject__(FieldHelper.class).getFieldValueSystemIdentifier(object);
+		object = (ENTITY) __getRepresentationEntity__(action).getOne(identifier == null ? null : identifier.toString(),ValueUsageType.SYSTEM.name());
 		__setEntityFields__(object,action);
 		__updateEntity__(object);
 	}
@@ -52,7 +51,8 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		Object action = __inject__(SystemActionDelete.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
-		object = __getRepresentationEntity__(action).findOne(__getSystemIdentifier__(object));
+		Object identifier = __getSystemIdentifier__(object);
+		object = __getRepresentationEntity__(action).getOne(identifier == null ? null : identifier.toString(),ValueUsageType.SYSTEM.name());
 		__deleteEntity__(object);
 	}
 	

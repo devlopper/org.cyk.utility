@@ -36,7 +36,8 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 
 	@Override
 	protected <ENTITY> ENTITY ____readEntity____(Class<ENTITY> entityClass, Object identifier,ValueUsageType valueUsageType, Properties expectedFieldValues, RepresentationEntity business) {
-		return (ENTITY) business.findOne(identifier, valueUsageType);
+		return (ENTITY) (ValueUsageType.SYSTEM.equals(valueUsageType) ? business.getOne(identifier.toString(),ValueUsageType.SYSTEM.name()) 
+				: business.getOne(identifier.toString(),ValueUsageType.SYSTEM.name()));
 	}
 
 	@Override

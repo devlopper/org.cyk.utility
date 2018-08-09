@@ -6,7 +6,6 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.server.business.BusinessLayer;
@@ -97,52 +96,19 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return dtos;
 	}
 	
-	@Override
-	public ENTITY getOne(Long identifier) {
-		return getOneBySystemIdentifier(identifier);
+	protected ValueUsageType __getValueUsageType__(String string) {
+		ValueUsageType valueUsageType = __injectStringHelper__().isBlank(string) || ValueUsageType.SYSTEM.name().equalsIgnoreCase(string) ? ValueUsageType.SYSTEM 
+				: (ValueUsageType.BUSINESS.name().equalsIgnoreCase(string) ? ValueUsageType.BUSINESS : null);
+		return valueUsageType;
 	}
 	
 	@Override
-	public ENTITY getOneBySystemIdentifier(Long identifier) {
-		return instantiate(getBusiness().findOne(identifier));
-	}
-	
-	@Override
-	public ENTITY getOneByBusinessIdentifier(String identifier) {
-		return instantiate(getBusiness().findOneByBusinessIdentifier(identifier));
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public PERSISTENCE_ENTITY findOne(Object identifier, Properties properties) {
-		return (PERSISTENCE_ENTITY) __inject__(RepresentationFunctionReader.class).setEntityClass(getPersistenceEntityClass()).setEntityIdentifier(identifier)
-				.setEntityIdentifierValueUsageType(properties == null ? ValueUsageType.SYSTEM: (ValueUsageType) properties.getValueUsageType()).execute().getProperties().getEntity();
-	}
-
-	@Override
-	public PERSISTENCE_ENTITY findOne(Object identifier, ValueUsageType valueUsageType) {
-		return findOne(identifier,new Properties().setValueUsageType(valueUsageType));
-	}
-
-	@Override
-	public PERSISTENCE_ENTITY findOne(Object identifier) {
-		return findOne(identifier,(Properties)null);
-	}
-
-	@Override
-	public PERSISTENCE_ENTITY findOneByBusinessIdentifier(Object identifier) {
-		return findOne(identifier, ValueUsageType.BUSINESS);
-	}
-
-	@Override
-	public Collection<PERSISTENCE_ENTITY> findMany(Properties properties) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<PERSISTENCE_ENTITY> findMany() {
-		// TODO Auto-generated method stub
+	public ENTITY getOne(String identifier,String type) {
+		ValueUsageType valueUsageType = __getValueUsageType__(type);
+		if(ValueUsageType.SYSTEM.equals(valueUsageType))
+			return instantiate(getBusiness().findOne(__injectNumberHelper__().getLong(identifier)));
+		if(ValueUsageType.BUSINESS.equals(valueUsageType))
+			return instantiate(getBusiness().findOneByBusinessIdentifier(identifier));
 		return null;
 	}
 	
@@ -159,16 +125,20 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public Response deleteOne(Long identifier) {
-		getBusiness().deleteBySystemIdentifier(identifier);
-		return Response.ok().status(Response.Status.CREATED).build();
+	public Response deleteOne(String identifier,String type) {
+		ValueUsageType valueUsageType = __getValueUsageType__(type);
+		if(ValueUsageType.SYSTEM.equals(valueUsageType))
+			getBusiness().deleteBySystemIdentifier(__injectNumberHelper__().getLong(identifier));
+		else if(ValueUsageType.BUSINESS.equals(valueUsageType))
+			getBusiness().deleteByBusinessIdentifier(identifier);
+		return Response.ok().status(Response.Status.OK).build();
 	}
 	
 	@Override
 	public Response deleteMany() {
 		//TODO get query parameters to build properties
 		
-		return Response.ok().status(Response.Status.CREATED).build();
+		return Response.ok().status(Response.Status.OK).build();
 	}
 
 	@Override

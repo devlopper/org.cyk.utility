@@ -10,11 +10,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.value.ValueUsageType;
 
 /**
  * 
@@ -23,14 +21,6 @@ import org.cyk.utility.value.ValueUsageType;
  */
 public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends RepresentationServiceProvider<PERSISTENCE_ENTITY,ENTITY> {
 
-	/* Instantiate */
-	ENTITY instantiate(PERSISTENCE_ENTITY persistenceEntity);
-	Collection<ENTITY> instantiate(Collection<PERSISTENCE_ENTITY> persistenceEntities);
-	PERSISTENCE_ENTITY instantiatePersistenceEntity(ENTITY entity);
-	Collection<PERSISTENCE_ENTITY> instantiatePersistenceEntity(Collection<ENTITY> entities);
-	PERSISTENCE_ENTITY getPersistenceEntityByIdentifier(ENTITY entity);
-	Collection<PERSISTENCE_ENTITY> getPersistenceEntityByIdentifier(Collection<ENTITY> entities);
-	
 	/* Create */
 	@POST
 	@Path("/")
@@ -42,15 +32,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	@Consumes(MediaType.APPLICATION_XML)
 	Response createMany(Collection<ENTITY> dtos);
 	
-	/* Get */ 
-	PERSISTENCE_ENTITY findOne(Object identifier,Properties properties);
-	PERSISTENCE_ENTITY findOne(Object identifier,ValueUsageType valueUsageType);
-	PERSISTENCE_ENTITY findOne(Object identifier);
-	PERSISTENCE_ENTITY findOneByBusinessIdentifier(Object identifier);
-	
-	Collection<PERSISTENCE_ENTITY> findMany(Properties properties);
-	Collection<PERSISTENCE_ENTITY> findMany();
-	
+	/* Read */ 
 	@GET
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_XML })
@@ -59,17 +41,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	@GET
 	@Path("/{identifier}")
 	@Produces({ MediaType.APPLICATION_XML })
-	ENTITY getOne(@PathParam("identifier") Long identifier);
-	
-	@GET
-	@Path("/system/{identifier}")
-	@Produces({ MediaType.APPLICATION_XML })
-	ENTITY getOneBySystemIdentifier(@PathParam("identifier") Long identifier);
-	
-	@GET
-	@Path("/business/{identifier}")
-	@Produces({ MediaType.APPLICATION_XML })
-	ENTITY getOneByBusinessIdentifier(@PathParam("identifier") String identifier);
+	ENTITY getOne(@PathParam("identifier") String identifier,@QueryParam("type") String type);
 	
 	/* Update */
 	@PUT
@@ -86,7 +58,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	@DELETE
 	@Path("/{identifier}")
 	@Produces(MediaType.APPLICATION_XML)
-	Response deleteOne(@PathParam("identifier") Long identifier);
+	Response deleteOne(@PathParam("identifier") String identifier,@QueryParam("type") String type);
 	
 	@DELETE
 	@Path("/many")
@@ -95,15 +67,25 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	
 	/* Count */
 	@GET
-	@Path("/count")
+	@Path(GET+"count")
 	@Produces(MediaType.TEXT_PLAIN)
 	Long count();
 	
 	/**/
+
+	/* Instantiate */
+	ENTITY instantiate(PERSISTENCE_ENTITY persistenceEntity);
+	Collection<ENTITY> instantiate(Collection<PERSISTENCE_ENTITY> persistenceEntities);
+	PERSISTENCE_ENTITY instantiatePersistenceEntity(ENTITY entity);
+	Collection<PERSISTENCE_ENTITY> instantiatePersistenceEntity(Collection<ENTITY> entities);
+	PERSISTENCE_ENTITY getPersistenceEntityByIdentifier(ENTITY entity);
+	Collection<PERSISTENCE_ENTITY> getPersistenceEntityByIdentifier(Collection<ENTITY> entities);
 	
 	Class<PERSISTENCE_ENTITY> getPersistenceEntityClass();
 	Class<ENTITY> getRepresentationEntityClass();
 	
 	/**/
 	
+	String GET = "/get/";
+	String OPERATION = "/operation";
 }
