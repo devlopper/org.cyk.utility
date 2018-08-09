@@ -3,6 +3,7 @@ package org.cyk.utility.server.representation;
 import java.util.Collection;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -40,12 +41,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	@Path("/many")
 	@Consumes(MediaType.APPLICATION_XML)
 	Response createMany(Collection<ENTITY> dtos);
-	/*
-	@POST
-	@Path("/")
-	@Consumes(MediaType.APPLICATION_XML)
-	Response createOne(Collection<DTO> dtos);
-	*/
+	
 	/* Get */ 
 	PERSISTENCE_ENTITY findOne(Object identifier,Properties properties);
 	PERSISTENCE_ENTITY findOne(Object identifier,ValueUsageType valueUsageType);
@@ -87,9 +83,20 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	Response updateMany(Collection<ENTITY> dtos);
 	
 	/* Delete */
+	@DELETE
+	@Path("/{identifier}")
+	@Produces(MediaType.APPLICATION_XML)
+	Response deleteOne(@PathParam("identifier") Long identifier);
+	
+	@DELETE
+	@Path("/many")
+	@Produces(MediaType.APPLICATION_XML)
+	Response deleteMany();
 	
 	/* Count */
-	Long count(Properties properties);
+	@GET
+	@Path("/count")
+	@Produces(MediaType.TEXT_PLAIN)
 	Long count();
 	
 	/**/

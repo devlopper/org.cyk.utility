@@ -25,6 +25,18 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		persistence = (PERSISTENCE) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(getEntityClass());
 	}
 	
+	@Override
+	public BusinessEntity<ENTITY> deleteBySystemIdentifier(Object identifier) {
+		delete(getPersistence().readOne(identifier));
+		return this;
+	}
+	
+	@Override
+	public BusinessEntity<ENTITY> deleteByBusinessIdentifier(Object identifier) {
+		delete(getPersistence().readOneByBusinessIdentifier(identifier));
+		return this;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public ENTITY findOne(Object identifier, Properties properties) {

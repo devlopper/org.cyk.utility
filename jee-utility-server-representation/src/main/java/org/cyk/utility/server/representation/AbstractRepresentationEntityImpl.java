@@ -89,7 +89,8 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	@Override
 	public Collection<ENTITY> getMany() {
 		Collection<ENTITY> dtos = new ArrayList<>();
-		for(PERSISTENCE_ENTITY index : getBusiness().findMany()) {
+		//TODO get query parameters to build properties
+		for(PERSISTENCE_ENTITY index : getBusiness().findMany(/* properties */)) {
 			ENTITY dto = instantiate(index);
 			dtos.add(/*new MyEntityDto(index)*/dto);
 		}
@@ -156,17 +157,26 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		getBusiness().updateMany(getPersistenceEntityByIdentifier(entities));
 		return Response.ok().status(Response.Status.OK).build();
 	}
-
+	
 	@Override
-	public Long count(Properties properties) {
-		return getBusiness().count(properties);
+	public Response deleteOne(Long identifier) {
+		getBusiness().deleteBySystemIdentifier(identifier);
+		return Response.ok().status(Response.Status.CREATED).build();
+	}
+	
+	@Override
+	public Response deleteMany() {
+		//TODO get query parameters to build properties
+		
+		return Response.ok().status(Response.Status.CREATED).build();
 	}
 
 	@Override
 	public Long count() {
-		return count(null);
+		//TODO get query parameters to build properties
+		return getBusiness().count(/* properties */);
 	}
-	
+
 	/**/
 	
 }

@@ -1,11 +1,8 @@
 package org.cyk.jee.utility.server.representation.application;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.inject.Singleton;
-import javax.ws.rs.core.Response;
 
 import org.cyk.utility.server.representation.AbstractRepresentationEntityImpl;
 

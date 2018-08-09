@@ -27,6 +27,9 @@ public interface BusinessEntity<ENTITY> extends BusinessServiceProvider<ENTITY> 
 	
 	/* Delete */
 	
+	BusinessEntity<ENTITY> deleteBySystemIdentifier(Object identifier);
+	BusinessEntity<ENTITY> deleteByBusinessIdentifier(Object identifier);
+	
 	/* Count */
 	Long count(Properties properties);
 	Long count();
