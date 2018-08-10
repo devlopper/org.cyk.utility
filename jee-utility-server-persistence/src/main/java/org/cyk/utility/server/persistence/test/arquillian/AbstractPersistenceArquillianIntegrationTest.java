@@ -55,6 +55,22 @@ public abstract class AbstractPersistenceArquillianIntegrationTest extends Abstr
 	}
 	
 	@Override
+	protected <ENTITY> void ____deleteEntityAll____(Class<ENTITY> entityClass, PersistenceEntity persistence) {
+		try {
+			userTransaction.begin();
+			persistence.deleteAll();
+			userTransaction.commit();
+		}catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Override
+	protected <ENTITY> Long ____countEntitiesAll____(Class<ENTITY> entityClass,PersistenceEntity persistence) {
+		return persistence.count();
+	}
+	
+	@Override
 	protected PersistenceEntity ____getLayerEntityInterfaceFromClass____(Class<?> aClass) {
 		return __inject__(SystemLayerPersistence.class).injectInterfaceClassFromEntityClassName(aClass,__getLayerEntityInterfaceClass__());
 	}

@@ -32,6 +32,8 @@ public interface PersistenceServiceProvider<OBJECT> extends SystemServiceProvide
 	PersistenceServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects,Properties properties);
 	PersistenceServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects);
 	
+	PersistenceServiceProvider<OBJECT> deleteAll();
+	
 	/* Count */
 	
 	/**/

@@ -10,7 +10,13 @@ public class BusinessFunctionRemoverImpl extends AbstractBusinessFunctionRemover
 	
 	@Override
 	protected void __execute__(SystemAction action) {
-		__inject__(Persistence.class).delete(getEntity());
+		Object entity = getEntity();
+		if(entity == null) {
+			__inject__(Persistence.class).deleteAll(getEntityClass());
+		}else {
+			__inject__(Persistence.class).delete(entity);	
+		}
+		
 	}
 
 }

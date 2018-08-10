@@ -53,6 +53,17 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	}
 	
 	@Override
+	protected <ENTITY> void ____deleteEntityAll____(Class<ENTITY> entityClass,RepresentationEntity layerEntityInterface) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	protected <ENTITY> Long ____countEntitiesAll____(Class<ENTITY> entityClass,RepresentationEntity layerEntityInterface) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	protected RepresentationEntity ____getLayerEntityInterfaceFromClass____(Class<?> aClass) {
 		return __inject__(SystemLayerRepresentation.class).injectInterfaceClassFromEntityClassName(aClass,__getLayerEntityInterfaceClass__());
 	}

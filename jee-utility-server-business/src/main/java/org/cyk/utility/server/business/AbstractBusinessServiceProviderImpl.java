@@ -12,7 +12,7 @@ import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
 import org.cyk.utility.system.action.SystemAction;
 
-public  class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements BusinessServiceProvider<OBJECT>,Serializable {
+public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements BusinessServiceProvider<OBJECT>,Serializable {
 
 	private static final long serialVersionUID = 1L;
 

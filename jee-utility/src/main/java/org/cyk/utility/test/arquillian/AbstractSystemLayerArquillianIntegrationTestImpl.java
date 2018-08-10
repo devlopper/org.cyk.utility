@@ -100,6 +100,30 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 		__deleteEntity__(entityClass, identifier, ValueUsageType.BUSINESS);
 	}
 	
+	protected abstract <ENTITY> void ____deleteEntityAll____(Class<ENTITY> entityClass,LAYER_ENTITY_INTERFACE layerEntityInterface);
+	
+	public <ENTITY> void __deleteEntitiesAll__(Class<ENTITY> entityClass,LAYER_ENTITY_INTERFACE layerEntityInterface){
+		____deleteEntityAll____(entityClass, layerEntityInterface);
+		assertionHelper.assertEqualsNumber("number of "+entityClass.getSimpleName()+" is not zero", 0, __countEntitiesAll__(entityClass, layerEntityInterface));
+		//Object systemIdentifier = __inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput();
+		//entity = (ENTITY) layerEntityInterface.readOne(systemIdentifier);
+		//assertThat(entity).isNull();
+	}
+	
+	public <ENTITY> void __deleteEntitiesAll__(Class<ENTITY> entityClass){
+		__deleteEntitiesAll__(entityClass, __getLayerEntityInterfaceFromClass__(entityClass));
+	}
+	
+	protected abstract <ENTITY> Long ____countEntitiesAll____(Class<ENTITY> entityClass,LAYER_ENTITY_INTERFACE layerEntityInterface);
+	
+	public <ENTITY> Long __countEntitiesAll__(Class<ENTITY> entityClass,LAYER_ENTITY_INTERFACE layerEntityInterface){
+		return ____countEntitiesAll____(entityClass, layerEntityInterface);
+	}
+	
+	public <ENTITY> Long __countEntitiesAll__(Class<ENTITY> entityClass){
+		return __countEntitiesAll__(entityClass, __getLayerEntityInterfaceFromClass__(entityClass));
+	}
+	
 	@Override
 	public Class<LAYER_ENTITY_INTERFACE> __getLayerEntityInterfaceClass__() {
 		return layerEntityInterfaceClass;

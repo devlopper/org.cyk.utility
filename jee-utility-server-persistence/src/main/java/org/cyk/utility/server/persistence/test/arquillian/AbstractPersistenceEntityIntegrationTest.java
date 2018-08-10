@@ -19,6 +19,8 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 		Object action = __inject__(SystemActionCreate.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
+		//cleanup
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
 	@Test
@@ -27,6 +29,8 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
 		__readEntity__(__getEntityClass__(action),__getSystemIdentifier__(object),ValueUsageType.SYSTEM);
+		//cleanup
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
 	@Test
@@ -35,6 +39,8 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
 		__readEntity__(__getEntityClass__(action),__getBusinessIdentifier__(object), ValueUsageType.BUSINESS);
+		//cleanup
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
 	@Test
@@ -45,6 +51,8 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 		object = (ENTITY) __getPersistenceEntity__(action).readOne(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(object));
 		__setEntityFields__(object,action);
 		__updateEntity__(object);
+		//cleanup
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
 	@Test
@@ -54,6 +62,8 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 		__createEntity__(object);
 		object = __getPersistenceEntity__(action).readOne(__getSystemIdentifier__(object));
 		__deleteEntity__(object);
+		//cleanup
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
 	//TODO following code must be enable

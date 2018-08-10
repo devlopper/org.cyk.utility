@@ -25,7 +25,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		persistenceEntityClass = (Class<PERSISTENCE_ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
-		business = (BUSINESS) __inject__(BusinessLayer.class).injectInterfaceClassFromEntityClass(getPersistenceEntityClass());
+		business = (BUSINESS) __inject__(BusinessLayer.class).injectInterfaceClassFromPersistenceEntityClass(getPersistenceEntityClass());
 		representationEntityClass =  (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 2, AbstractEntity.class);
 	}
 	

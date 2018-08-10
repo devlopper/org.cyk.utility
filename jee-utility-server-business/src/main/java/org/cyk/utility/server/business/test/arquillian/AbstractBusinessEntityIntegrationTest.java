@@ -19,6 +19,7 @@ public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends Abst
 		Object action = __inject__(SystemActionCreate.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
 	@Test
@@ -27,6 +28,7 @@ public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends Abst
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
 		__readEntity__(__getEntityClass__(action),__getSystemIdentifier__(object),ValueUsageType.SYSTEM);
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
 	@Test
@@ -35,6 +37,7 @@ public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends Abst
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
 		__readEntity__(__getEntityClass__(action),__getBusinessIdentifier__(object), ValueUsageType.BUSINESS);
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
 	@Test
@@ -45,6 +48,7 @@ public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends Abst
 		object = (ENTITY) __getBusinessEntity__(action).findOne(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(object));
 		__setEntityFields__(object,action);
 		__updateEntity__(object);
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
 	@Test
@@ -54,6 +58,7 @@ public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends Abst
 		__createEntity__(object);
 		object = __getBusinessEntity__(action).findOne(__getSystemIdentifier__(object));
 		__deleteEntity__(object);
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
 	/**/
@@ -64,7 +69,7 @@ public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends Abst
 	}
 	
 	protected BusinessEntity<ENTITY> __getBusinessEntity__(Object action){
-		return (BusinessEntity<ENTITY>) __inject__(BusinessLayer.class).injectInterfaceClassFromEntityClass(__getEntityClass__(action));
+		return (BusinessEntity<ENTITY>) __inject__(BusinessLayer.class).injectInterfaceClassFromPersistenceEntityClass(__getEntityClass__(action));
 	}
 	
 	protected ENTITY __instanciateEntity__(Object action) throws Exception{

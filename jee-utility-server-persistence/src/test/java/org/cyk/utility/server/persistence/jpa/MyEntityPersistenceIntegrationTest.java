@@ -40,6 +40,9 @@ public class MyEntityPersistenceIntegrationTest extends AbstractPersistenceEntit
 		
 		Collection<MyEntity> c3 = (Collection<MyEntity>) __inject__(MyEntityPersistence.class).read();
 		System.out.println(c3+" : #="+__inject__(MyEntityPersistence.class).count());
+		
+		__deleteEntitiesAll__(MyEntity.class);
+		
 	}
 	
 	@Test
@@ -54,6 +57,8 @@ public class MyEntityPersistenceIntegrationTest extends AbstractPersistenceEntit
 		Assert.assertNotNull(collection);
 		Assert.assertEquals(3, collection.size());
 		Assert.assertEquals(new Long(3), ____inject____(MyEntityPersistence.class).countByIntegerValue(2));
+		
+		__deleteEntitiesAll__(MyEntity.class);
 	}
 	
 	@Test
@@ -74,6 +79,8 @@ public class MyEntityPersistenceIntegrationTest extends AbstractPersistenceEntit
 		
 		MyEntity myEntity = ____inject____(MyEntityPersistence.class).readOneByBusinessIdentifier("e02B");
 		Assert.assertEquals(new Integer(27), myEntity.getIntegerValue());
+		
+		__deleteEntitiesAll__(MyEntity.class);
 		
 	}
 }

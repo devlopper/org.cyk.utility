@@ -59,6 +59,30 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		return count(aClass,null);
 	}
 	
+	@Override
+	public <ENTITY> Persistence deleteAll(Class<ENTITY> aClass, Properties properties) {
+		@SuppressWarnings("unchecked")
+		Class<PersistenceEntity<ENTITY>> persistenceClass = (Class<PersistenceEntity<ENTITY>>) __inject__(SystemLayerPersistence.class).getInterfaceClassFromEntityClassName(aClass);
+		if(persistenceClass == null){
+			__logWarn__("No persistence interface found for entity "+aClass);
+			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		}else{
+			__inject__(persistenceClass).deleteAll();
+		}
+		return this;
+	}
+	
+	@Override
+	public <ENTITY> Persistence deleteAll(Class<ENTITY> aClass) {
+		return deleteAll(aClass, null);
+	}
+	
+	@Override
+	public PersistenceServiceProvider<Object> deleteAll() {
+		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		return null;
+	}
+	
 	/**/
 	
 }

@@ -23,6 +23,8 @@ public interface Persistence extends PersistenceServiceProvider<Object> {
 	/* Update */
 	
 	/* Delete */
+	<ENTITY> Persistence deleteAll(Class<ENTITY> aClass,Properties properties);
+	<ENTITY> Persistence deleteAll(Class<ENTITY> aClass);
 	
 	/* Count */
 	<ENTITY> Long count(Class<ENTITY> aClass,Properties properties);

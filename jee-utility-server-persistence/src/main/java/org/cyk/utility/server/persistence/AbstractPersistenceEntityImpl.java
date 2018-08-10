@@ -18,7 +18,7 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected String read;
+	protected String read,deleteAll;
 	
 	@Override
 	public QueryStringBuilderSelect instanciateReadQueryStringBuilder() {
@@ -29,6 +29,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
 		addQueryCollectInstances(read, instanciateReadQueryStringBuilder());
+		addQuery(deleteAll, "DELETE FROM "+getEntityClass().getSimpleName()+" tuple",null);
 	}
 	
 	protected Object[] __getQueryParameters__(String queryIdentifier,Object...objects){
@@ -103,6 +104,43 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@Override
 	public Long count() {
 		return count(null);
+	}
+	
+	@Override
+	public PersistenceEntity<ENTITY> deleteByIdentifier(Object identifier, ValueUsageType valueUsageType,Properties properties) {
+		delete(readOne(identifier, valueUsageType), properties);
+		return this;
+	}
+	
+	@Override
+	public PersistenceEntity<ENTITY> deleteByIdentifier(Object identifier, ValueUsageType valueUsageType) {
+		return deleteByIdentifier(identifier, valueUsageType, null);
+	}
+	
+	@Override
+	public PersistenceEntity<ENTITY> deleteBySystemIdentifier(Object identifier, Properties properties) {
+		return deleteByIdentifier(identifier, ValueUsageType.SYSTEM, properties);
+	}
+	
+	@Override
+	public PersistenceEntity<ENTITY> deleteBySystemIdentifier(Object identifier) {
+		return deleteBySystemIdentifier(identifier, null);
+	}
+	
+	@Override
+	public PersistenceEntity<ENTITY> deleteByBusinessIdentifier(Object identifier, Properties properties) {
+		return deleteByIdentifier(identifier, ValueUsageType.BUSINESS, properties);
+	}
+	
+	@Override
+	public PersistenceEntity<ENTITY> deleteByBusinessIdentifier(Object identifier) {
+		return deleteByBusinessIdentifier(identifier, null);
+	}
+	
+	@Override
+	public PersistenceServiceProvider<ENTITY> deleteAll() {
+		__inject__(PersistenceFunctionRemover.class).setQueryIdentifier(deleteAll).execute();
+		return this;
 	}
 	
 	/**/

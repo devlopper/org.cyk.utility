@@ -12,5 +12,16 @@ public abstract class AbstractBusinessFunctionRemoverImpl extends AbstractBusine
 		super.__listenPostConstruct__();
 		setAction(__inject__(SystemActionDelete.class));
 	}
+	
+	@Override
+	public BusinessFunctionRemover setAll(Boolean value) {
+		getProperties().setAll(value);
+		return this;
+	}
+	
+	@Override
+	public Boolean getAll() {
+		return (Boolean) getProperties().getAll();
+	}
 
 }

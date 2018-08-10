@@ -44,6 +44,10 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		return null;
 	}
 
-	
+	@Override
+	public BusinessServiceProvider<Object> deleteAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

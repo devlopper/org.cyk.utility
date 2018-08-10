@@ -15,5 +15,6 @@ public class MyEntityBusinessIntegrationTest extends AbstractBusinessEntityInteg
 	public void createWithLong1Null(){
 		MyEntity myEntity = new MyEntity().setCode("c01").setLong1(1l);
 		__createEntity__(myEntity);
+		__deleteEntitiesAll__(MyEntity.class);
 	}
 }

@@ -14,21 +14,21 @@ import lombok.Getter;
 public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends PersistenceEntity<ENTITY>> extends AbstractBusinessServiceProviderImpl<ENTITY> implements BusinessEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Getter private Class<ENTITY> entityClass;
+	@Getter private Class<ENTITY> persistenceEntityClass;
 	@Getter private PERSISTENCE persistence;
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		entityClass = (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
-		persistence = (PERSISTENCE) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(getEntityClass());
+		persistenceEntityClass = (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+		persistence = (PERSISTENCE) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(getPersistenceEntityClass());
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public ENTITY findOne(Object identifier, Properties properties) {
-		return (ENTITY) __inject__(BusinessFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier)
+		return (ENTITY) __inject__(BusinessFunctionReader.class).setEntityClass(getPersistenceEntityClass()).setEntityIdentifier(identifier)
 				.setEntityIdentifierValueUsageType(properties == null ? ValueUsageType.SYSTEM: (ValueUsageType) properties.getValueUsageType()).execute().getProperties().getEntity();
 	}
 
@@ -88,4 +88,11 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		deleteByIdentifier(identifier,ValueUsageType.BUSINESS);
 		return this;
 	}
+	
+	@Override
+	public BusinessServiceProvider<ENTITY> deleteAll() {
+		__inject__(BusinessFunctionRemover.class).setAll(Boolean.TRUE).setEntityClass(getPersistenceEntityClass()).execute();
+		return this;
+	}
+	
 }

@@ -33,6 +33,15 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 	
 	/* Delete */
 	
+	PersistenceEntity<ENTITY> deleteByIdentifier(Object identifier,ValueUsageType valueUsageType,Properties properties);
+	PersistenceEntity<ENTITY> deleteByIdentifier(Object identifier,ValueUsageType valueUsageType);
+	
+	PersistenceEntity<ENTITY> deleteBySystemIdentifier(Object identifier,Properties properties);
+	PersistenceEntity<ENTITY> deleteBySystemIdentifier(Object identifier);
+	
+	PersistenceEntity<ENTITY> deleteByBusinessIdentifier(Object identifier,Properties properties);
+	PersistenceEntity<ENTITY> deleteByBusinessIdentifier(Object identifier);
+	
 	/* Count */
 	Long count(Properties properties);
 	Long count();

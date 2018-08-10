@@ -30,6 +30,8 @@ public interface BusinessServiceProvider<OBJECT> extends SystemServiceProvider {
 	BusinessServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects,Properties properties);
 	BusinessServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects);
 	
+	BusinessServiceProvider<OBJECT> deleteAll();
+	
 	/* Count */
 	
 	/**/

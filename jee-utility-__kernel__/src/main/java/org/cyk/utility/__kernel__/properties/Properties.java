@@ -4112,6 +4112,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getAll() {
+		return get(ALL);
+	}
+
+	public Properties setAll(Object value) {
+		set(ALL, value);
+		return this;
+	}
+	
+	public static final String ALL = "ALL";
 	public static final String RESULT = "RESULT";
 	public static final String CORE = "CORE";
 	public static final String _1 = "_1";

@@ -10,26 +10,25 @@ import org.cyk.utility.value.ValueUsageType;
  * @author Christian
  *
  */
-public interface BusinessEntity<ENTITY> extends BusinessServiceProvider<ENTITY> {
+public interface BusinessEntity<PERSISTENCE_ENTITY> extends BusinessServiceProvider<PERSISTENCE_ENTITY> {
 
 	/* Create */
 	
-	/* Find */ 
-	ENTITY findOne(Object identifier,Properties properties);
-	ENTITY findOne(Object identifier,ValueUsageType valueUsageType);
-	ENTITY findOne(Object identifier);
-	ENTITY findOneByBusinessIdentifier(Object identifier);
+	/* Read */ 
+	PERSISTENCE_ENTITY findOne(Object identifier,Properties properties);
+	PERSISTENCE_ENTITY findOne(Object identifier,ValueUsageType valueUsageType);
+	PERSISTENCE_ENTITY findOne(Object identifier);
+	PERSISTENCE_ENTITY findOneByBusinessIdentifier(Object identifier);
 	
-	Collection<ENTITY> findMany(Properties properties);
-	Collection<ENTITY> findMany();
+	Collection<PERSISTENCE_ENTITY> findMany(Properties properties);
+	Collection<PERSISTENCE_ENTITY> findMany();
 	
 	/* Update */
 	
 	/* Delete */
-	
-	BusinessEntity<ENTITY> deleteByIdentifier(Object identifier,ValueUsageType valueUsageType);
-	BusinessEntity<ENTITY> deleteBySystemIdentifier(Object identifier);
-	BusinessEntity<ENTITY> deleteByBusinessIdentifier(Object identifier);
+	BusinessEntity<PERSISTENCE_ENTITY> deleteByIdentifier(Object identifier,ValueUsageType valueUsageType);
+	BusinessEntity<PERSISTENCE_ENTITY> deleteBySystemIdentifier(Object identifier);
+	BusinessEntity<PERSISTENCE_ENTITY> deleteByBusinessIdentifier(Object identifier);
 	
 	/* Count */
 	Long count(Properties properties);
@@ -37,7 +36,7 @@ public interface BusinessEntity<ENTITY> extends BusinessServiceProvider<ENTITY> 
 	
 	/**/
 	
-	Class<ENTITY> getEntityClass();
+	Class<PERSISTENCE_ENTITY> getPersistenceEntityClass();
 	
 	/**/
 	
