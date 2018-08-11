@@ -17,6 +17,8 @@
 
 	<properties>
 		<wildfly.swarm.bom.version>2017.2.0</wildfly.swarm.bom.version>
+		<resteasy-bom.version>3.5.1.Final</resteasy-bom.version>
+		<graphene-webdriver.version>2.3.2</graphene-webdriver.version>
 	</properties>
 
 	<dependencyManagement>
@@ -28,6 +30,27 @@
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
+			
+			<!--dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-bom</artifactId>
+				<version>${resteasy-bom.version}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-client</artifactId>
+				<version>${resteasy-bom.version}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jaxb-provider</artifactId>
+				<version>${resteasy-bom.version}</version>
+			</dependency-->
+			
 		</dependencies>
 	</dependencyManagement>
 
@@ -72,6 +95,20 @@
 		    <scope>compile</scope>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.jboss.arquillian.graphene</groupId>
+			<artifactId>graphene-webdriver</artifactId>
+			<version>${graphene-webdriver.version}</version>
+			<type>pom</type>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+			<version>${resteasy-bom.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
 		<!--dependency>
 			<groupId>org.cyk.pom.jee.utility.test.jboss.swarm</groupId>
 			<artifactId>pom-jee-utility-test-jboss-swarm</artifactId>
@@ -86,12 +123,12 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!--dependency>
+		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>1.4.197</version>
 			<scope>test</scope>
-		</dependency-->
+		</dependency>
 	</dependencies>
 
 	<profiles>
@@ -100,15 +137,8 @@
 			<properties>
 				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/representation/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.jpa.persistence.file>org/cyk/utility/server/representation/persistence.xml</org.cyk.test.jpa.persistence.file>
-				<org.cyk.test.classes>org.cyk.utility.server.representation.MyEntity,org.cyk.utility.server.representation.Application</org.cyk.test.classes>
+				<org.cyk.test.classes>org.cyk.utility.server.representation.MyEntity</org.cyk.test.classes>
 			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>com.h2database</groupId>
-					<artifactId>h2</artifactId>
-					<version>1.4.197</version>
-				</dependency>
-			</dependencies>
 		</profile>
 	</profiles>
 	

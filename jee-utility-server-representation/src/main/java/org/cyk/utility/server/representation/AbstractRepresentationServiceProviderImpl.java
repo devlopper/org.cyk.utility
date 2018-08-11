@@ -1,20 +1,13 @@
 package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
-import java.util.Collection;
 
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.assertion.AssertionBuilder;
-import org.cyk.utility.assertion.AssertionBuilderNull;
-import org.cyk.utility.function.ExecutionPhase;
-import org.cyk.utility.server.persistence.PersistenceEntity;
-import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
-import org.cyk.utility.system.action.SystemAction;
 
-public  class AbstractRepresentationServiceProviderImpl<OBJECT,DTO> extends AbstractSystemServiceProviderImpl implements RepresentationServiceProvider<OBJECT,DTO>,Serializable {
+public abstract class AbstractRepresentationServiceProviderImpl<OBJECT,DTO> extends AbstractSystemServiceProviderImpl implements RepresentationServiceProvider<OBJECT,DTO>,Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
 	/*
 	@Override //@Transactional
 	public RepresentationServiceProvider<OBJECT> create(OBJECT object, Properties properties) {

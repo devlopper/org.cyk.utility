@@ -1,8 +1,5 @@
 package org.cyk.utility.server.representation;
 
-import java.util.Collection;
-
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.SystemServiceProvider;
 
 public interface RepresentationServiceProvider<OBJECT,DTO> extends SystemServiceProvider {

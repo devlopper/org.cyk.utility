@@ -3,17 +3,12 @@ package org.cyk.utility.server.representation;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.transaction.Transactional;
+import javax.ws.rs.core.Response;
 
 import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractRepresentationFunctionTransactionImpl extends AbstractRepresentationFunctionImpl implements RepresentationFunctionTransaction, Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	@Override @Transactional
-	public RepresentationFunctionTransaction execute() {
-		return (RepresentationFunctionTransaction) super.execute();
-	}
 	
 	@Override
 	public RepresentationFunctionTransaction setAction(SystemAction action) {
@@ -28,5 +23,10 @@ public abstract class AbstractRepresentationFunctionTransactionImpl extends Abst
 	@Override
 	public RepresentationFunctionTransaction setEntities(Collection<?> entities) {
 		return (RepresentationFunctionTransaction) super.setEntities(entities);
+	}
+	
+	@Override
+	public RepresentationFunctionTransaction setResponse(Response response) {
+		return (RepresentationFunctionTransaction) super.setResponse(response);
 	}
 }

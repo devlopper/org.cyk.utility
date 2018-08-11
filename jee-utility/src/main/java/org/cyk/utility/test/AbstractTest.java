@@ -9,7 +9,6 @@ import org.cyk.utility.assertion.AssertionHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.log.LogEventEntityRepository;
 import org.cyk.utility.random.RandomHelper;
-import org.junit.Before;
 
 public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.AbstractTest implements Serializable {
 	private static final long serialVersionUID = -4375668358714913342L;
@@ -18,24 +17,13 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 		//setLog4j2ConfigurationFile("org/cyk/utility/log4j2.xml");
 	}
 	
-	protected static Integer LISTEN_BEFORE_CALL_COUNT = 0;
 	@Inject protected LogEventEntityRepository logEventEntityRepository;
 	@Inject protected AssertionHelper assertionHelper;
-	
-	@Before
-	public void listenBefore() {
-		__listenBefore__();
-		LISTEN_BEFORE_CALL_COUNT++;
-	}
 	
 	protected void __listenBefore__(){
 		if(logEventEntityRepository!=null)
 			logEventEntityRepository.clear();
-		if(LISTEN_BEFORE_CALL_COUNT == 0)
-			__listenBeforeFirstCall__();
 	}
-	
-	protected void __listenBeforeFirstCall__(){}
 	
 	protected String getRandomCode(){
 		return __inject__(RandomHelper.class).getAlphabetic(3);

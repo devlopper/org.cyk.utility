@@ -41,7 +41,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	@GET
 	@Path("/{identifier}")
 	@Produces({ MediaType.APPLICATION_XML })
-	ENTITY getOne(@PathParam("identifier") String identifier,@QueryParam("type") String type);
+	Response getOne(@PathParam("identifier") String identifier,@QueryParam("type") String type);
 	
 	/* Update */
 	@PUT
@@ -65,11 +65,16 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	@Produces(MediaType.APPLICATION_XML)
 	Response deleteMany();
 	
+	@DELETE
+	@Path(PATH_DELETE_ALL)
+	@Produces(MediaType.APPLICATION_XML)
+	Response deleteAll();
+	
 	/* Count */
 	@GET
-	@Path(GET+"count")
+	@Path(PATH_GET_COUNT)
 	@Produces(MediaType.TEXT_PLAIN)
-	Long count();
+	Response count();
 	
 	/**/
 
@@ -81,11 +86,14 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	PERSISTENCE_ENTITY getPersistenceEntityByIdentifier(ENTITY entity);
 	Collection<PERSISTENCE_ENTITY> getPersistenceEntityByIdentifier(Collection<ENTITY> entities);
 	
+	Class<ENTITY> getEntityClass();
 	Class<PERSISTENCE_ENTITY> getPersistenceEntityClass();
-	Class<ENTITY> getRepresentationEntityClass();
 	
 	/**/
 	
-	String GET = "/get/";
-	String OPERATION = "/operation";
+	String PATH_GET = "/get/";
+	String PATH_GET_COUNT = PATH_GET+"count";
+	String PATH_DELETE = "/delete/";
+	String PATH_DELETE_ALL = PATH_DELETE+"all";
+	
 }

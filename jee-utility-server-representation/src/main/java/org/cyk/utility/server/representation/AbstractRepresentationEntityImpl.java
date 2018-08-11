@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.clazz.ClassHelper;
@@ -16,7 +17,7 @@ import lombok.Getter;
 public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINESS extends BusinessEntity<PERSISTENCE_ENTITY>,ENTITY extends AbstractEntity<PERSISTENCE_ENTITY>> extends AbstractRepresentationServiceProviderImpl<PERSISTENCE_ENTITY,ENTITY> implements RepresentationEntity<PERSISTENCE_ENTITY,ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Getter private Class<ENTITY> representationEntityClass;
+	@Getter private Class<ENTITY> entityClass;
 	@Getter private Class<PERSISTENCE_ENTITY> persistenceEntityClass;
 	@Getter private BUSINESS business;
 	
@@ -26,12 +27,12 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		super.__listenPostConstruct__();
 		persistenceEntityClass = (Class<PERSISTENCE_ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
 		business = (BUSINESS) __inject__(BusinessLayer.class).injectInterfaceClassFromPersistenceEntityClass(getPersistenceEntityClass());
-		representationEntityClass =  (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 2, AbstractEntity.class);
+		entityClass =  (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 2, AbstractEntity.class);
 	}
 	
 	@Override
 	public ENTITY instantiate(PERSISTENCE_ENTITY persistenceEntity) {
-		return __injectClassHelper__().instanciate(representationEntityClass,new Object[] {getPersistenceEntityClass(),persistenceEntity});
+		return __injectClassHelper__().instanciate(getEntityClass(),new Object[] {getPersistenceEntityClass(),persistenceEntity});
 	}
 	
 	@Override
@@ -72,8 +73,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	
 	@Override
 	public Response createOne(ENTITY dto) {
-		getBusiness().create(dto.getPersistenceEntity());
-		return Response.ok().status(Response.Status.CREATED).build();
+		return __inject__(RepresentationFunctionCreator.class).setEntity(dto).execute().getResponse();
 	}
 	
 	@Override
@@ -103,13 +103,14 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public ENTITY getOne(String identifier,String type) {
+	public Response getOne(String identifier,String type) {
 		ValueUsageType valueUsageType = __getValueUsageType__(type);
+		ENTITY entity = null;
 		if(ValueUsageType.SYSTEM.equals(valueUsageType))
-			return instantiate(getBusiness().findOne(__injectNumberHelper__().getLong(identifier)));
-		if(ValueUsageType.BUSINESS.equals(valueUsageType))
-			return instantiate(getBusiness().findOneByBusinessIdentifier(identifier));
-		return null;
+			entity =  instantiate(getBusiness().findOne(__injectNumberHelper__().getLong(identifier)));
+		else if(ValueUsageType.BUSINESS.equals(valueUsageType))
+			entity = instantiate(getBusiness().findOneByBusinessIdentifier(identifier));
+		return Response.ok().status(Response.Status.OK).entity(new GenericEntity<ENTITY>(entity, getEntityClass())).build();
 	}
 	
 	@Override
@@ -142,9 +143,16 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 
 	@Override
-	public Long count() {
+	public Response deleteAll() {
+		getBusiness().deleteAll();
+		return Response.ok().status(Response.Status.OK).build();
+	}
+
+	@Override
+	public Response count() {
 		//TODO get query parameters to build properties
-		return getBusiness().count(/* properties */);
+		Long count = getBusiness().count(/* properties */);
+		return Response.ok().status(Response.Status.OK).entity(count).build();
 	}
 
 	/**/

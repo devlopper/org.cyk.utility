@@ -17,18 +17,24 @@ public class MyEntityDto extends AbstractEntity<MyEntity> implements Serializabl
 	
 	private static final long serialVersionUID = 1L;
 
-	private String identifier;
-	private String code;
-
 	public MyEntityDto(MyEntity myEntity) {
 		super(myEntity);
 	}
 	
 	public MyEntity getPersistenceEntity() {
 		MyEntity myEntity = new MyEntity();
-		myEntity.setIdentifier(DependencyInjection.inject(NumberHelper.class).getLong(identifier));
+		myEntity.setIdentifier(DependencyInjection.inject(NumberHelper.class).getLong(getIdentifier()));
 		myEntity.setCode(getCode());
 		return myEntity;
 	}
 	
+	@Override
+	public MyEntityDto setCode(String code) {
+		return (MyEntityDto) super.setCode(code);
+	}
+	
+	@Override
+	public String toString() {
+		return getIdentifier()+":"+getCode();
+	}
 }

@@ -2,6 +2,8 @@ package org.cyk.utility.server.representation;
 
 import java.util.Collection;
 
+import javax.ws.rs.core.Response;
+
 import org.cyk.utility.system.action.SystemAction;
 
 public interface RepresentationFunctionTransaction extends RepresentationFunction {
@@ -11,4 +13,6 @@ public interface RepresentationFunctionTransaction extends RepresentationFunctio
 	RepresentationFunctionTransaction setEntities(Collection<?> entities);
 	
 	RepresentationFunctionTransaction setAction(SystemAction action);
+	
+	RepresentationFunctionTransaction setResponse(Response response);
 }

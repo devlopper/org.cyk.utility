@@ -40,7 +40,7 @@ public interface SystemLayerIntegrationTest<LAYER_ENTITY_INTERFACE> {
 	<ENTITY> Long __countEntitiesAll__(Class<ENTITY> entityClass);
 	/**/
 	
-	Class<LAYER_ENTITY_INTERFACE> __getLayerEntityInterfaceClass__();
+	Class<? extends LAYER_ENTITY_INTERFACE> __getLayerEntityInterfaceClass__();
 	
 	LAYER_ENTITY_INTERFACE __getLayerEntityInterfaceFromObject__(Object object);
 	

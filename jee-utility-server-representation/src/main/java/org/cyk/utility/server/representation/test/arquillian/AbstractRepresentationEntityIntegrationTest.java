@@ -1,75 +1,102 @@
 package org.cyk.utility.server.representation.test.arquillian;
 
-import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.clazz.ClassHelperImpl;
+import org.cyk.utility.server.representation.AbstractEntity;
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.value.ValueUsageType;
+import org.junit.Test;
 
 public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extends AbstractRepresentationArquillianIntegrationTest {
 	private static final long serialVersionUID = 1L;
 
-	/*@Test
+	@Test
 	public void createOne() throws Exception{
-		//Object action = __inject__(SystemActionCreate.class);
-		//Object object = __instanciateEntity__(action);
-		//__createEntity__(object);
-	}*/
+		Object object = __instanciateEntity__(null);
+		__createEntity__(object);
+		__deleteEntitiesAll__(object.getClass());
+	}
 	
-	//@Test
+	@Test
 	public void readOneBySystemIdentifier() throws Exception{
-		Object action = __inject__(SystemActionRead.class);
+		Object action = null;//__inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
 		__readEntity__(__getEntityClass__(action),__getSystemIdentifier__(object),ValueUsageType.SYSTEM);
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
-	//@Test
+	@Test
 	public void readOneByRepresentationIdentifier() throws Exception{
-		Object action = __inject__(SystemActionRead.class);
+		Object action = null;//__inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
 		__readEntity__(__getEntityClass__(action),__getBusinessIdentifier__(object), ValueUsageType.BUSINESS);
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
-	//@Test
+	@Test
 	@SuppressWarnings("unchecked")
 	public void updateOne() throws Exception{
-		Object action = __inject__(SystemActionUpdate.class);
+		Object action = null;//__inject__(SystemActionUpdate.class);
 		ENTITY object = __instanciateEntity__(action);
 		__createEntity__(object);
-		Object identifier = __inject__(FieldHelper.class).getFieldValueSystemIdentifier(object);
-		object = (ENTITY) __getRepresentationEntity__(action).getOne(identifier == null ? null : identifier.toString(),ValueUsageType.SYSTEM.name());
+		Object identifier = getFieldValueSystemIdentifier(object); //__inject__(FieldHelper.class).getFieldValueSystemIdentifier(object);
+		object = (ENTITY) __getRepresentationEntity__(action).getOne(identifier == null ? null : identifier.toString(),ValueUsageType.SYSTEM.name()).readEntity(object.getClass());
 		__setEntityFields__(object,action);
 		__updateEntity__(object);
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
-	//@Test
+	@Test
 	public void deleteOne() throws Exception{
-		Object action = __inject__(SystemActionDelete.class);
+		Object action = null;//__inject__(SystemActionDelete.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
-		Object identifier = __getSystemIdentifier__(object);
-		object = __getRepresentationEntity__(action).getOne(identifier == null ? null : identifier.toString(),ValueUsageType.SYSTEM.name());
+		Object identifier = getFieldValueSystemIdentifier(object);//__getSystemIdentifier__(object);
+		object = __getRepresentationEntity__(action).getOne(identifier == null ? null : identifier.toString(),ValueUsageType.SYSTEM.name()).readEntity(object.getClass());
 		__deleteEntity__(object);
+		__deleteEntitiesAll__(object.getClass());
 	}
 	
 	/**/
 	
-	@SuppressWarnings("unchecked")
-	protected Class<ENTITY> __getEntityClass__(Object action){
-		return (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+	@Override
+	protected Object getFieldValueSystemIdentifier(Object object) {
+		if(object instanceof AbstractEntity)
+			return ((AbstractEntity<?>)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntity<?>)object).getCode(),ValueUsageType.BUSINESS.name())
+					.readEntity(object.getClass())).getIdentifier();
+		return super.getFieldValueSystemIdentifier(object);
 	}
 	
+	@Override
+	protected Object __getSystemIdentifier__(Object object) {
+		if(object instanceof AbstractEntity)
+			return ((AbstractEntity<?>)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntity<?>)object).getCode(),ValueUsageType.BUSINESS.name())
+					.readEntity(object.getClass())).getIdentifier();
+		return super.__getSystemIdentifier__(object);
+	}
+	
+	@Override
+	protected Object __getBusinessIdentifier__(Object object) {
+		if(object instanceof AbstractEntity)
+			return ((AbstractEntity<?>)object).getCode();
+		return super.__getBusinessIdentifier__(object);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected Class<ENTITY> __getEntityClass__(Object action){
+		return (Class<ENTITY>) ClassHelperImpl.__getParameterAt__(getClass(), 0, Object.class);
+	}
+	
+	@SuppressWarnings("unchecked")
 	protected RepresentationEntity<ENTITY,?> __getRepresentationEntity__(Object action){
-		return null;//(RepresentationEntity<ENTITY,?>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntityClass(__getEntityClass__(action));
+		return __getLayerEntityInterfaceFromClass__(null);//(RepresentationEntity<ENTITY,?>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntityClass(__getEntityClass__(action));
 	}
 	
 	protected ENTITY __instanciateEntity__(Object action) throws Exception{
-		ENTITY object = __inject__(ClassHelper.class).instanciateOne(__getEntityClass__(action));
-		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, getRandomCode());
+		ENTITY object = __getEntityClass__(action).newInstance();
+		if(object instanceof AbstractEntity)
+			((AbstractEntity<?>)object).setCode(String.valueOf(System.currentTimeMillis()));
 		return object;
 	}
 	
