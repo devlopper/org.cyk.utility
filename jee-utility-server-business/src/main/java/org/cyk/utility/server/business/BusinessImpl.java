@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.system.layer.SystemLayerBusiness;
 
 public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> implements Business,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -50,4 +51,16 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		return null;
 	}
 
+	@Override
+	public BusinessServiceProvider<Object> create(Object object, Properties properties) {
+		@SuppressWarnings("unchecked")
+		Class<BusinessEntity<Object>> interfaceClass = (Class<BusinessEntity<Object>>) __inject__(SystemLayerBusiness.class).getInterfaceClassFromEntityClassName(object.getClass());
+		if(interfaceClass == null){
+			__logWarn__("No specific business interface found for persistence entity "+object.getClass());
+			super.create(object, properties);
+		}else{
+			__inject__(interfaceClass).create(object, properties);
+		}
+		return this;
+	}
 }

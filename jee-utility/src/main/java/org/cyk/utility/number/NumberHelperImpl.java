@@ -101,6 +101,11 @@ public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Ser
 	}
 	
 	@Override
+	public Integer getInteger(Object object) {
+		return getInteger(object, null);
+	}
+	
+	@Override
 	public  Long getLong(Object object,Long nullValue){
 		return get(Long.class, object, nullValue);
 	}

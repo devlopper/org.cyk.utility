@@ -20,6 +20,7 @@ public interface NumberHelper extends Helper {
 	<NUMBER> NUMBER get(Class<NUMBER> aClass, Object object, NUMBER nullValue);
 	<NUMBER> NUMBER get(Class<NUMBER> aClass, Object object);
 	Integer getInteger(Object object, Integer nullValue);
+	Integer getInteger(Object object);
 	Long getLong(Object object, Long nullValue);
 	Long getLong(Object object);
 	BigDecimal getBigDecimal(Object object, BigDecimal nullValue);

@@ -32,20 +32,20 @@ public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputA
 	}
 	
 	@Override
-	public FieldValueSetter execute(Object object, Field field) {
-		setObject(object).setField(field).execute();
+	public FieldValueSetter execute(Object object, Field field,Object value) {
+		setObject(object).setField(field).setValue(value).execute();
 		return this;
 	}
 
 	@Override
-	public FieldValueSetter execute(Object object, String fieldName) {
-		setObject(object).setField(fieldName).execute();
+	public FieldValueSetter execute(Object object, String fieldName,Object value) {
+		setObject(object).setField(fieldName).setValue(value).execute();
 		return this;
 	}
 	
 	@Override
-	public FieldValueSetter execute(Object object, FieldName fieldName,ValueUsageType valueUsageType) {
-		setObject(object).setField(fieldName,valueUsageType).execute();
+	public FieldValueSetter execute(Object object, FieldName fieldName,ValueUsageType valueUsageType,Object value) {
+		setObject(object).setField(fieldName,valueUsageType).setValue(value).execute();
 		return this;
 	}
 

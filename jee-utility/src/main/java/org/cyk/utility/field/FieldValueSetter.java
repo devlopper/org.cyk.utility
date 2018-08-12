@@ -27,7 +27,7 @@ public interface FieldValueSetter extends FunctionWithPropertiesAsInputAndVoidAs
 	
 	/**/
 	
-	FieldValueSetter execute(Object object,Field field);
-	FieldValueSetter execute(Object object,String fieldName);
-	FieldValueSetter execute(Object object,FieldName fieldName,ValueUsageType valueUsageType);
+	FieldValueSetter execute(Object object,Field field,Object value);
+	FieldValueSetter execute(Object object,String fieldName,Object value);
+	FieldValueSetter execute(Object object,FieldName fieldName,ValueUsageType valueUsageType,Object value);
 }

@@ -40,5 +40,15 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 		__inject__(FieldValueSetter.class).setObject(object).setField(FieldName.IDENTIFIER, ValueUsageType.BUSINESS).setValue(value).execute();
 		return this;
 	}
-
+	/*
+	public FieldHelper __set__(Object source,Object destination){
+		for(FieldName indexFieldName : new FieldName[] {FieldName.IDENTIFIER})
+			for(ValueUsageType indexValueUsageType : new ValueUsageType[] {ValueUsageType.SYSTEM,ValueUsageType.BUSINESS}) {
+				Object value = __inject__(FieldValueGetter.class).execute(persistenceEntity, indexFieldName, indexValueUsageType);
+				__inject__(FieldValueSetter.class).execute(this, indexFieldName, indexValueUsageType,__stringify__(value));
+			}
+				
+		//__inject__(FieldValueSetter.class).execute(this, FieldName.IDENTIFIER, ValueUsageType.BUSINESS,);
+		return this;
+	}*/
 }
