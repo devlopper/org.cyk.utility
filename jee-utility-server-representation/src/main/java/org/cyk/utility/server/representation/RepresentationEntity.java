@@ -79,7 +79,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	/**/
 
 	/* Instantiate */
-	ENTITY instantiate(PERSISTENCE_ENTITY persistenceEntity);
+	/*ENTITY instantiate(PERSISTENCE_ENTITY persistenceEntity);
 	Collection<ENTITY> instantiate(Collection<PERSISTENCE_ENTITY> persistenceEntities);
 	PERSISTENCE_ENTITY instantiatePersistenceEntity(ENTITY entity);
 	Collection<PERSISTENCE_ENTITY> instantiatePersistenceEntity(Collection<ENTITY> entities);
@@ -88,7 +88,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	
 	Class<ENTITY> getEntityClass();
 	Class<PERSISTENCE_ENTITY> getPersistenceEntityClass();
-	
+	*/
 	/**/
 	
 	String PATH_GET = "/get/";

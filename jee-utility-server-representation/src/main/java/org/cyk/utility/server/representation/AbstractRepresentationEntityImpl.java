@@ -30,12 +30,12 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		entityClass =  (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 2, AbstractEntity.class);
 	}
 	
-	@Override
+	//@Override
 	public ENTITY instantiate(PERSISTENCE_ENTITY persistenceEntity) {
 		return __injectClassHelper__().instanciate(getEntityClass(),new Object[] {getPersistenceEntityClass(),persistenceEntity});
 	}
 	
-	@Override
+	//@Override
 	public Collection<ENTITY> instantiate(Collection<PERSISTENCE_ENTITY> persistenceEntities) {
 		Collection<ENTITY> entities = new ArrayList<>();
 		for(PERSISTENCE_ENTITY index : persistenceEntities)
@@ -43,12 +43,12 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return entities;
 	}
 	
-	@Override
+	//@Override
 	public PERSISTENCE_ENTITY instantiatePersistenceEntity(ENTITY entity) {
 		return entity.getPersistenceEntity();
 	}
 	
-	@Override
+	//@Override
 	public Collection<PERSISTENCE_ENTITY> instantiatePersistenceEntity(Collection<ENTITY> entities) {
 		Collection<PERSISTENCE_ENTITY> persistenceEntites = new ArrayList<>();
 		for(ENTITY index : entities)
@@ -56,14 +56,14 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return persistenceEntites;
 	}
 	
-	@Override
+	//@Override
 	public PERSISTENCE_ENTITY getPersistenceEntityByIdentifier(ENTITY entity) {
 		PERSISTENCE_ENTITY persistenceEntity = getBusiness().findOne(__injectNumberHelper__().getLong(entity.getIdentifier()));
 		
 		return persistenceEntity;
 	}
 	
-	@Override
+	//@Override
 	public Collection<PERSISTENCE_ENTITY> getPersistenceEntityByIdentifier(Collection<ENTITY> entities) {
 		Collection<PERSISTENCE_ENTITY> persistenceEntites = new ArrayList<>();
 		for(ENTITY index : entities)
