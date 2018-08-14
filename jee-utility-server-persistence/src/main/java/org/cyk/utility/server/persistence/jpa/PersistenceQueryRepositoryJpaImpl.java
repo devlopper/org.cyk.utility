@@ -3,7 +3,6 @@ package org.cyk.utility.server.persistence.jpa;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -16,11 +15,10 @@ import org.cyk.utility.server.persistence.query.PersistenceQuery;
 public class PersistenceQueryRepositoryJpaImpl extends AbstractPersistenceQueryRepositoryImpl implements PersistenceQueryRepositoryJpa, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Inject private EntityManager entityManager;
-	
 	@Override
 	public InstanceRepository<PersistenceQuery> add(Collection<PersistenceQuery> instances) {
 		super.add(instances);
+		EntityManager entityManager = __inject__(EntityManager.class);
 		for(PersistenceQuery index : instances){
 			Class<?> resultClass = index.getResultClass();
 			Query query = resultClass == null ? entityManager.createQuery(index.getValue()) : entityManager.createQuery(index.getValue(), resultClass);

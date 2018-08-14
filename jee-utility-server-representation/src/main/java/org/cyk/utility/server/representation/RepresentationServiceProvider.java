@@ -1,8 +1,9 @@
 package org.cyk.utility.server.representation;
 
-import org.cyk.utility.system.SystemServiceProvider;
-
-public interface RepresentationServiceProvider<OBJECT,DTO> extends SystemServiceProvider {
+/*
+ * All method must be annotated with HTTP method
+ */
+public interface RepresentationServiceProvider<OBJECT,DTO> /*extends Singleton*/ {
 
 	/* Create */
 	/*

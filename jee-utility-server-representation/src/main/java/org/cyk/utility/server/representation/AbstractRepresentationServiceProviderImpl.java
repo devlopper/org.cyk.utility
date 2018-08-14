@@ -2,6 +2,7 @@ package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
 
 public abstract class AbstractRepresentationServiceProviderImpl<OBJECT,DTO> extends AbstractSystemServiceProviderImpl implements RepresentationServiceProvider<OBJECT,DTO>,Serializable {
