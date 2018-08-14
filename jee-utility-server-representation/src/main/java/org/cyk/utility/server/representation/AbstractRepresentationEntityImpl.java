@@ -1,8 +1,11 @@
 package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
@@ -86,14 +89,35 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public Collection<ENTITY> getMany() {
-		Collection<ENTITY> dtos = new ArrayList<>();
+	public Response getMany() {
+		List<ENTITY> dtos = new ArrayList<>();
 		//TODO get query parameters to build properties
 		for(PERSISTENCE_ENTITY index : getBusiness().findMany(/* properties */)) {
 			ENTITY dto = instantiate(index);
-			dtos.add(/*new MyEntityDto(index)*/dto);
+			dtos.add(dto);
 		}
-		return dtos;
+		ParameterizedType parameterizedType = new ParameterizedType() {
+			
+			@Override
+			public Type getRawType() {
+				// TODO Auto-generated method stub
+				return List.class;
+			}
+			
+			@Override
+			public Type getOwnerType() {
+				// TODO Auto-generated method stub
+				return List.class;
+			}
+			
+			@Override
+			public Type[] getActualTypeArguments() {
+				// TODO Auto-generated method stub
+				return new Type[] { getEntityClass() };
+			}
+		};
+		GenericEntity<List<ENTITY>> generic = new GenericEntity<List<ENTITY>>(dtos,parameterizedType) {};
+		return Response.ok().status(Response.Status.OK).entity(generic).build();
 	}
 	
 	protected ValueUsageType __getValueUsageType__(String string) {

@@ -36,7 +36,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	@GET
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_XML })
-	Collection<ENTITY> getMany();
+	Response getMany();
 	
 	@GET
 	@Path("/{identifier}")
