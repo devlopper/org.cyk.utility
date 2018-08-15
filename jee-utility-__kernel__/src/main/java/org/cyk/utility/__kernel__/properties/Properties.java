@@ -4130,6 +4130,35 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getSetter() {
+		return get(SETTER);
+	}
+
+	public Properties setSetter(Object value) {
+		set(SETTER, value);
+		return this;
+	}
+	
+	public Object getCopy() {
+		return get(COPY);
+	}
+
+	public Properties setCopy(Object copy) {
+		set(COPY, copy);
+		return this;
+	}
+	
+	public Object getMap() {
+		return get(MAP);
+	}
+
+	public Properties setMap(Object map) {
+		set(MAP, map);
+		return this;
+	}
+	
+	public static final String MAP = "MAP";
+	public static final String COPY = "COPY";
 	public static final String RESPONSE = "RESPONSE";
 	public static final String ALL = "ALL";
 	public static final String RESULT = "RESULT";
@@ -4143,6 +4172,7 @@ public class Properties implements java.io.Serializable {
 	public static final String ASSERTION = "ASSERTION";
 	public static final String AFFIRMATION = "AFFIRMATION";
 	public static final String GETTER = "GETTER";
+	public static final String SETTER = "SETTER";
 	public static final String QUERIES = "QUERIES";
 	public static final String LAYER = "LAYER";
 	public static final String PATH = "PATH";
@@ -4576,6 +4606,8 @@ public class Properties implements java.io.Serializable {
 	public static final String CONVERTER = "CONVERTER";
 	public static final String MESSAGE = "MESSAGE";
 	public static final String FIELD = "FIELD";
+	public static final String AUTO = "AUTO";
+	public static final String DETECT = "DETECT";
 	
 	public static final String __THIS__ = "__THIS__";
 	/**/

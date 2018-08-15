@@ -14,4 +14,5 @@ public interface MapHelper extends Helper {
 	void copy(Map source, Map destination, Object[] keys);
 
 	Map<Object,Object> instanciate(Object...objects);
+	Map<String,String> instanciateKeyAsStringValueAsString(Object...objects);
 }

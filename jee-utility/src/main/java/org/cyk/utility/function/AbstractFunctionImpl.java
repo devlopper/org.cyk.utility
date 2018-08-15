@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.Assertion;
 import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
@@ -210,6 +211,10 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	protected CollectionHelper __injectCollectionHelper__(){
 		return __inject__(CollectionHelper.class);
+	}
+	
+	protected ClassHelper __injectClassHelper__(){
+		return __inject__(ClassHelper.class);
 	}
 	
 	protected ThrowableHelper __injectThrowableHelper__(){

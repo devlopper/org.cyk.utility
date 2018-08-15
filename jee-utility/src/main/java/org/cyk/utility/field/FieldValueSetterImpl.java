@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.log.Log;
+import org.cyk.utility.value.ValueConverter;
 import org.cyk.utility.value.ValueUsageType;
 
 public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FieldValueSetter, Serializable {
@@ -20,7 +22,12 @@ public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputA
 		Field field = getField();
 		if(object!=null){
 			if(field!=null){
+				Class<?> fieldType = ClassUtils.primitiveToWrapper(__inject__(FieldTypeGetter.class).execute(field).getOutput());
 				try {
+					if(value!=null && !fieldType.equals(value.getClass())) {
+						value = __inject__(ValueConverter.class).execute(value, fieldType).getOutput();
+					}
+					
 					FieldUtils.writeField(field, object,value, Boolean.TRUE);
 				} catch (IllegalAccessException exception) {
 					__inject__(Log.class).executeThrowable(exception);

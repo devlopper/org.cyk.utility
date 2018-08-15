@@ -8,13 +8,19 @@ public interface CharacterConstant {
 	Character COMA = new Character(',');
 	Character SEMI_COLON = new Character(';');
 	Character CARET_CIRCUMFLEX = new Character('^');
+	/**
+	 * \
+	 */
 	Character BACK_SLASH = new Character('\\');
 	Character PERCENTAGE = new Character('%');
 	
 	/**
-	 * \\/
+	 * 0
 	 */
 	Character ZERO = new Character('0');
+	/**
+	 * /
+	 */
 	Character SLASH = new Character('/');
 	Character DOLLAR = new Character('$');
 	Character QUESTION_MARK = new Character('?');

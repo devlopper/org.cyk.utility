@@ -23,45 +23,45 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 
 	/* Create */
 	@POST
-	@Path("/")
+	@Path(PATH_ROOT)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response createOne(ENTITY dto);
 	
 	@POST
-	@Path("/many")
+	@Path(PATH_MANY)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response createMany(Collection<ENTITY> dtos);
 	
 	/* Read */ 
 	@GET
-	@Path("/")
+	@Path(PATH_ROOT)
 	@Produces({ MediaType.APPLICATION_XML })
 	Response getMany();
 	
 	@GET
-	@Path("/{identifier}")
+	@Path(PATH_IDENTIFIER)
 	@Produces({ MediaType.APPLICATION_XML })
-	Response getOne(@PathParam("identifier") String identifier,@QueryParam("type") String type);
+	Response getOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type);
 	
 	/* Update */
 	@PUT
-	@Path("/")
+	@Path(PATH_ROOT)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response updateOne(ENTITY dto);
 	
 	@PUT
-	@Path("/many")
+	@Path(PATH_MANY)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response updateMany(Collection<ENTITY> dtos);
 	
 	/* Delete */
 	@DELETE
-	@Path("/{identifier}")
+	@Path(PATH_IDENTIFIER)
 	@Produces(MediaType.APPLICATION_XML)
-	Response deleteOne(@PathParam("identifier") String identifier,@QueryParam("type") String type);
+	Response deleteOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type);
 	
 	@DELETE
-	@Path("/many")
+	@Path(PATH_MANY)
 	@Produces(MediaType.APPLICATION_XML)
 	Response deleteMany();
 	
@@ -89,11 +89,5 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	Class<ENTITY> getEntityClass();
 	Class<PERSISTENCE_ENTITY> getPersistenceEntityClass();
 	*/
-	/**/
-	
-	String PATH_GET = "/get/";
-	String PATH_GET_COUNT = PATH_GET+"count";
-	String PATH_DELETE = "/delete/";
-	String PATH_DELETE_ALL = PATH_DELETE+"all";
 	
 }

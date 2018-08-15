@@ -40,6 +40,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.cyk.jee.utility.server.persistence.impl</groupId>
+			<artifactId>jee-utility-server-persistence-impl</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.wildfly.swarm</groupId>
 			<artifactId>arquillian</artifactId>
 			<scope>test</scope>
