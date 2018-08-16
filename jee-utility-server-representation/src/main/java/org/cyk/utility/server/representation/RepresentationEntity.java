@@ -33,7 +33,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	Response createMany(Collection<ENTITY> dtos);
 	
 	@POST
-	@Path(PATH_MANY+"nv")
+	@Path(PATH_MANY_COLLECTION)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response createMany(ENTITY_COLLECTION entityCollection);
 	

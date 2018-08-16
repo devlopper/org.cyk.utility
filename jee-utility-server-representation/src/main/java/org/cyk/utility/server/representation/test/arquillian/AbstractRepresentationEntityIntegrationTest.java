@@ -11,7 +11,7 @@ import org.junit.Test;
 public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extends AbstractRepresentationArquillianIntegrationTest {
 	private static final long serialVersionUID = 1L;
 
-	//@Test
+	@Test
 	public void createOne() throws Exception{
 		Object object = __instanciateEntity__(null);
 		__createEntity__(object);
@@ -25,7 +25,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__deleteEntitiesAll__(__getEntityClass__(null));
 	}
 	
-	//@Test
+	@Test
 	public void readOneBySystemIdentifier() throws Exception{
 		Object action = null;//__inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
@@ -34,7 +34,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__deleteEntitiesAll__(object.getClass());
 	}
 	
-	//@Test
+	@Test
 	public void readOneByRepresentationIdentifier() throws Exception{
 		Object action = null;//__inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
@@ -43,7 +43,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__deleteEntitiesAll__(object.getClass());
 	}
 	
-	//@Test
+	@Test
 	@SuppressWarnings("unchecked")
 	public void updateOne() throws Exception{
 		Object action = null;//__inject__(SystemActionUpdate.class);
@@ -56,7 +56,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__deleteEntitiesAll__(object.getClass());
 	}
 	
-	//@Test
+	@Test
 	public void deleteOne() throws Exception{
 		Object action = null;//__inject__(SystemActionDelete.class);
 		Object object = __instanciateEntity__(action);

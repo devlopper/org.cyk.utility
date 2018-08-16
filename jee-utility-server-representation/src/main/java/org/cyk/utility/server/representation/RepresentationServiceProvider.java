@@ -31,6 +31,16 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	*/
 	/* Count */
 	
+	/**/
+	
+	String __SLASH__ = "/";
+	String __MANY__ = "many";
+	String __COLLECTION__ = "collection";
+	String __ALL__ = "all";
+	String __DELETE__ = "delete";
+	String __GET__ = "get";
+	String __GOUNT__ = "count";
+	
 	/* Parameter */
 	
 	String PARAMETER_IDENTIFIER = "identifier";
@@ -38,17 +48,20 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	
 	/* Paths */
 	
-	String PATH_ROOT = "/";
-	String PATH_MANY = PATH_ROOT+"many"+"/";
+	String PATH_ROOT = __SLASH__;
+	String PATH_MANY = PATH_ROOT+__MANY__+__SLASH__;
+	String PATH_MANY_COLLECTION = PATH_MANY+__COLLECTION__+__SLASH__;
 	
 	String PATH_IDENTIFIER = PATH_ROOT+"{"+PARAMETER_IDENTIFIER+"}";
 	
-	String PATH_DELETE = PATH_ROOT+"delete"+"/";
-	String PATH_DELETE_MANY = PATH_DELETE+"many"+"/";
-	String PATH_DELETE_ALL = PATH_DELETE+"all"+"/";
+	String PATH_DELETE = PATH_ROOT+__DELETE__+__SLASH__;
+	String PATH_DELETE_MANY = PATH_DELETE+__MANY__+__SLASH__;
+	String PATH_DELETE_ALL = PATH_DELETE+__ALL__+__SLASH__;
 	
-	String PATH_GET = PATH_ROOT+"get/";
-	String PATH_GET_COUNT = PATH_GET+"count";
+	String PATH_GET = PATH_ROOT+__GET__+__SLASH__;
+	String PATH_GET_COUNT = PATH_GET+__GOUNT__+__SLASH__;
 
+	/**/
+	
 	
 }

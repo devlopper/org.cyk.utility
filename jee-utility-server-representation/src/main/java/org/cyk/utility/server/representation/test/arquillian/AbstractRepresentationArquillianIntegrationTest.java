@@ -60,12 +60,10 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	
 	@Override
 	protected <ENTITY> void ____createEntity____(Collection<ENTITY> entities,RepresentationEntity representation) {
-		//Response response = representation.createMany(entities);
-		AbstractEntityCollection collection = instanciateOne(__getEntityCollectionClass__());
-		for(Object index: entities)
-			collection.add(index);
+		AbstractEntityCollection<ENTITY> collection = (AbstractEntityCollection<ENTITY>) instanciateOne(__getEntityCollectionClass__(entities.iterator().next().getClass()));
+		collection.add(entities);		
 		Response response = representation.createMany(collection);
-		/*assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
+		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		response.close();
 		for(ENTITY index : entities)
 			if(index instanceof AbstractEntity) {
@@ -74,7 +72,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 				entity = (ENTITY) response.readEntity(entity.getClass());
 				assertThat(((AbstractEntity)entity).getIdentifier()).isNotBlank();	
 				response.close();
-			}*/
+			}
 	}
 	
 	@Override
@@ -138,5 +136,5 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 		}
 	}
 	
-	protected abstract Class<? extends AbstractEntityCollection<?>> __getEntityCollectionClass__();
+	protected abstract <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass);
 }

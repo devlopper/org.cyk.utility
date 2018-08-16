@@ -11,9 +11,15 @@ public class MyEntityRepresentationIntegrationTest extends AbstractRepresentatio
 		return MyEntityRepresentation.class;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	protected Class<? extends AbstractEntityCollection<?>> __getEntityCollectionClass__() {
-		return MyEntityDtoCollection.class;
+	protected <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass) {
+		try {
+			return (Class<? extends AbstractEntityCollection<ENTITY>>) Class.forName(MyEntityDtoCollection.class.getName());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}	
 
 }
