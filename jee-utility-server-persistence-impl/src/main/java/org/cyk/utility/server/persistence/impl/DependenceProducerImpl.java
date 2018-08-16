@@ -1,4 +1,4 @@
-package org.cyk.jee.utility.server.persistence.impl;
+package org.cyk.utility.server.persistence.impl;
 
 import java.io.Serializable;
 

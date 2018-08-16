@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<manyOfOne>
+    <one>
+        <f1>v1</f1>
+        <f2>v2</f2>
+    </one>
+    <one>
+        <f1>va1</f1>
+        <f2>va2</f2>
+    </one>
+</manyOfOne>

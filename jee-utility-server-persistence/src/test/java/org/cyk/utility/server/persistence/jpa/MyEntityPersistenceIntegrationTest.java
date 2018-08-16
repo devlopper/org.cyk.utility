@@ -29,17 +29,17 @@ public class MyEntityPersistenceIntegrationTest extends AbstractPersistenceEntit
 
 		Collection<MyEntity> c1 = (Collection<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setQueryValue(query)
 				.setQueryParameters(new Properties().set("integerValue", 2)).execute().getEntities();
-		System.out.println(c1);
+		Assert.assertEquals(3, c1.size());
 		
 		query = __inject__(MyEntityPersistence.class).instanciateReadByIntegerValueQueryStringBuilder()
 				.orderBy(new Attribute().setName("code").setTuple(new Tuple().setName("MyEntity")).setSortOrder(SortOrder.DESCENDING))
 				.execute().getOutput();
 		Collection<MyEntity> c2 = (Collection<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setQueryValue(query)
 				.setQueryParameters(new Properties().set("integerValue", 2)).execute().getEntities();
-		System.out.println(c2);
+		Assert.assertEquals(3, c2.size());
 		
 		Collection<MyEntity> c3 = (Collection<MyEntity>) __inject__(MyEntityPersistence.class).read();
-		System.out.println(c3+" : #="+__inject__(MyEntityPersistence.class).count());
+		Assert.assertEquals(5, c3.size());
 		
 		__deleteEntitiesAll__(MyEntity.class);
 		

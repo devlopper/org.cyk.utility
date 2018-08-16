@@ -6,6 +6,7 @@ import java.io.Serializable;
 import javax.inject.Inject;
 
 import org.cyk.utility.assertion.AssertionHelper;
+import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.log.LogEventEntityRepository;
 import org.cyk.utility.random.RandomHelper;
@@ -25,7 +26,13 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 			logEventEntityRepository.clear();
 	}
 	
-	protected String getRandomCode(){
+	protected <T> T instanciateOne(Class<T> aClass) {
+		return __inject__(ClassHelper.class).instanciateOne(aClass);
+	}
+	
+	protected void __setFieldValues__(Object object) {}
+	
+	protected String __getRandomCode__(){
 		return __inject__(RandomHelper.class).getAlphabetic(3);
 	}
 	

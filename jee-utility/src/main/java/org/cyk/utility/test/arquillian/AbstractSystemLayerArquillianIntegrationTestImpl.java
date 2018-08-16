@@ -3,6 +3,8 @@ package org.cyk.utility.test.arquillian;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelperImpl;
@@ -46,6 +48,28 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	
 	public <ENTITY> void __createEntity__(ENTITY entity){
 		__createEntity__(entity,  __getLayerEntityInterfaceFromObject__(entity));
+	}
+	
+	/* Create many entities */
+	
+	protected abstract <ENTITY> void ____createEntity____(Collection<ENTITY> entities,LAYER_ENTITY_INTERFACE layerEntityInterface);
+	
+	public <ENTITY> void __createEntity__(Collection<ENTITY> entities,LAYER_ENTITY_INTERFACE layerEntityInterface){
+		____createEntity____(entities, layerEntityInterface);
+		____assertThatEntityHasBeenPersisted____(entities, layerEntityInterface);
+		____assertThatLogSaysEntityHasBeen____(SystemActionCreate.class,entities, layerEntityInterface);
+	}
+	
+	protected <ENTITY> void ____assertThatEntityHasBeenPersisted____(Collection<ENTITY> entities,LAYER_ENTITY_INTERFACE layerEntityInterface) {
+		for(ENTITY index : entities)
+			assertThat(getFieldValueSystemIdentifier(index)).isNotNull();
+	}
+	
+	protected <ENTITY> void ____assertThatLogSaysEntityHasBeen____(Class<? extends SystemAction> systemActionClass,Collection<ENTITY> entities,LAYER_ENTITY_INTERFACE layerEntityInterface) {}
+	
+	public <ENTITY> void __createEntity__(Collection<ENTITY> entities){
+		if(entities!=null && !entities.isEmpty())
+			__createEntity__(entities,  __getLayerEntityInterfaceFromObject__(entities.iterator().next()));
 	}
 	
 	/* Read one entity */
@@ -180,5 +204,26 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	
 	protected Object getFieldValueBusinessIdentifier(Object object) {
 		return __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(object);
+	}
+	
+	/**/
+	
+	@Override
+	protected void __setFieldValues__(Object object) {
+		super.__setFieldValues__(object);
+		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, __getRandomCode__());
+	}
+	
+	protected <T> T __instanciate__(Class<T> aClass,Object action) throws Exception{
+		T object = instanciateOne(aClass);
+		__setFieldValues__(object);
+		return object;
+	}
+	
+	protected <T> Collection<T> __instanciate__(Class<T> aClass,Object action,Integer count) throws Exception{
+		Collection<T> collection = new ArrayList<>();
+		for(Integer index = 0 ; index < count ; index = index + 1)
+			collection.add(__instanciate__(aClass,action));
+		return collection;
 	}
 }

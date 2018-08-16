@@ -9,12 +9,12 @@ public class TestPersistenceIntegrationUnitTest extends AbstractPersistenceArqui
 
 	@Test
 	public void create(){
-		__inject__(TestPersistenceCreate.class).setObject(new MyEntity().setCode(getRandomCode())).execute();
+		__inject__(TestPersistenceCreate.class).setObject(new MyEntity().setCode(__getRandomCode__())).execute();
 	}
 	
 	@Test
 	public void isCodeMustBeUnique(){
-		String code = getRandomCode();
+		String code = __getRandomCode__();
 		__inject__(TestPersistenceCreate.class).addObjects(new MyEntity().setCode(code),new MyEntity().setCode(code)).execute()
 			.assertThrowableCauseIsInstanceOfSqlException();
 	}

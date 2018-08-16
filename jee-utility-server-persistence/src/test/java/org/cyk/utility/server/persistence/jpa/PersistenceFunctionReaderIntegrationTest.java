@@ -40,7 +40,7 @@ public class PersistenceFunctionReaderIntegrationTest extends AbstractPersistenc
 	
 	@Test
 	public void readOneByCodeExisting() throws Exception{
-		String code = getRandomCode();
+		String code = __getRandomCode__();
 		MyEntity myEntity = new MyEntity().setCode(code);
 		userTransaction.begin();
 		__inject__(PersistenceFunctionCreator.class).setEntity(myEntity).execute();

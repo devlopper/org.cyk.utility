@@ -17,7 +17,7 @@ import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 
-public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINESS extends BusinessEntity<PERSISTENCE_ENTITY>,ENTITY extends AbstractEntity> extends AbstractRepresentationServiceProviderImpl<PERSISTENCE_ENTITY,ENTITY> implements RepresentationEntity<PERSISTENCE_ENTITY,ENTITY>,Serializable {
+public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINESS extends BusinessEntity<PERSISTENCE_ENTITY>,ENTITY extends AbstractEntity,ENTITY_COLLECTION> extends AbstractRepresentationServiceProviderImpl<PERSISTENCE_ENTITY,ENTITY> implements RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Getter private Class<ENTITY> entityClass;
@@ -66,12 +66,19 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		//return Response.status(Response.Status.CREATED).build();
 	}
 	
+	@Override
+	public Response createMany(ENTITY_COLLECTION entityCollection) {
+		return __inject__(RepresentationFunctionCreator.class).setEntities(__getEntities__(entityCollection)).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+	}
+	
 	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response getMany() {
 		List<ENTITY> entities = (List<ENTITY>) __injectInstanceHelper__().buildMany(getEntityClass(),getBusiness().findMany(/* properties */));
+		if(entities == null)
+			entities = new ArrayList<>();
 		GenericEntity<List<ENTITY>> genericEntity = new GenericEntity<List<ENTITY>>(entities,getCollectionType(List.class, getEntityClass()));
-		return Response.ok().status(Response.Status.OK).entity(genericEntity).build();
+		return Response.status(Response.Status.OK).entity(genericEntity).build();
 	}
 	
 	protected ValueUsageType __getValueUsageType__(String string) {
@@ -159,5 +166,12 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 				return new Type[] { elementClass };
 			}
 		};
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected Collection<ENTITY> __getEntities__(ENTITY_COLLECTION entityCollection) {
+		if(entityCollection instanceof AbstractEntityCollection<?>)
+			return (Collection<ENTITY>) ((AbstractEntityCollection<?>)entityCollection).getCollection();
+		return null;
 	}
 }

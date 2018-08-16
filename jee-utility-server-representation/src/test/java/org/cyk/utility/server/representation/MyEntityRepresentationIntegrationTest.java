@@ -9,6 +9,11 @@ public class MyEntityRepresentationIntegrationTest extends AbstractRepresentatio
 	@Override
 	public Class<? extends RepresentationEntity> __getLayerEntityInterfaceClass__() {
 		return MyEntityRepresentation.class;
+	}
+
+	@Override
+	protected Class<? extends AbstractEntityCollection<?>> __getEntityCollectionClass__() {
+		return MyEntityDtoCollection.class;
 	}	
 
 }

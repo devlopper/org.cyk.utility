@@ -1,5 +1,8 @@
 package org.cyk.utility.server.persistence.jpa;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.persistence.EntityManager;
 
 import org.cyk.utility.server.persistence.AbstractPersistenceFunctionCreatorImpl;
@@ -11,7 +14,13 @@ public class PersistenceFunctionCreatorImpl extends AbstractPersistenceFunctionC
 
 	@Override
 	protected void __executeQuery__(SystemAction action) {
-		getEntityManager().persist(getEntity());		
+		Collection<Object> entities = new ArrayList<>();
+		if(getEntities()!=null)
+			entities.addAll(getEntities());
+		else
+			entities.add(getEntity());
+		for(Object index : entities)
+			getEntityManager().persist(index);		
 	}
 	
 	@Override

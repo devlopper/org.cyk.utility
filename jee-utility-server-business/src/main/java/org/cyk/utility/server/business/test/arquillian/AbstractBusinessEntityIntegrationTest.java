@@ -1,5 +1,7 @@
 package org.cyk.utility.server.business.test.arquillian;
 
+import java.util.Collection;
+
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.business.BusinessEntity;
@@ -20,6 +22,14 @@ public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends Abst
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
 		__deleteEntitiesAll__(object.getClass());
+	}
+	
+	@Test
+	public void createMany() throws Exception{
+		Object action = __inject__(SystemActionCreate.class);
+		Collection<ENTITY> entities = __instanciateEntity__(action,3);
+		__createEntity__(entities);
+		__deleteEntitiesAll__(__getEntityClass__(action));
 	}
 	
 	@Test
@@ -73,9 +83,11 @@ public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends Abst
 	}
 	
 	protected ENTITY __instanciateEntity__(Object action) throws Exception{
-		ENTITY object = __inject__(ClassHelper.class).instanciateOne(__getEntityClass__(action));
-		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, getRandomCode());
-		return object;
+		return __instanciate__(__getEntityClass__(action), action);
+	}
+	
+	protected Collection<ENTITY> __instanciateEntity__(Object action,Integer count) throws Exception{
+		return __instanciate__(__getEntityClass__(action), action, count);
 	}
 	
 	protected void __setEntityFields__(ENTITY entity,Object action){}

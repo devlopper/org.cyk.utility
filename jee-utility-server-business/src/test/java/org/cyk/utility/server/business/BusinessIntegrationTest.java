@@ -11,7 +11,7 @@ public class BusinessIntegrationTest extends AbstractArquillianIntegrationTestWi
 	
 	@Test
 	public void create() throws Exception{
-		business.create(new MyEntity().setCode(getRandomCode()));
+		business.create(new MyEntity().setCode(__getRandomCode__()));
 	}
 	/*
 	@Test

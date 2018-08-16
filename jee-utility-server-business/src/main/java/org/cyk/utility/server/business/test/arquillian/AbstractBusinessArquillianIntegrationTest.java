@@ -1,6 +1,7 @@
 package org.cyk.utility.server.business.test.arquillian;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.business.BusinessEntity;
@@ -17,6 +18,11 @@ public abstract class AbstractBusinessArquillianIntegrationTest extends Abstract
 	@Override
 	protected <ENTITY> void ____createEntity____(ENTITY entity, BusinessEntity business) {
 		business.create(entity);
+	}
+	
+	@Override
+	protected <ENTITY> void ____createEntity____(Collection<ENTITY> entities, BusinessEntity business) {
+		business.createMany(entities);
 	}
 
 	@Override

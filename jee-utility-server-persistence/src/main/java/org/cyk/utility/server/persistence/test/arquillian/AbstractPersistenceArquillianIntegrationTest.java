@@ -1,6 +1,7 @@
 package org.cyk.utility.server.persistence.test.arquillian;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.transaction.UserTransaction;
@@ -24,6 +25,17 @@ public abstract class AbstractPersistenceArquillianIntegrationTest extends Abstr
 		try {
 			userTransaction.begin();
 			persistence.create(entity);
+			userTransaction.commit();	
+		}catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Override
+	protected <ENTITY> void ____createEntity____(Collection<ENTITY> entities, PersistenceEntity persistence) {
+		try {
+			userTransaction.begin();
+			persistence.createMany(entities);
 			userTransaction.commit();	
 		}catch(Exception exception) {
 			throw new RuntimeException(exception);

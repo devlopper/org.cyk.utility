@@ -19,7 +19,7 @@ import javax.ws.rs.core.Response;
  * @author Christian
  *
  */
-public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends RepresentationServiceProvider<PERSISTENCE_ENTITY,ENTITY> {
+public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION> extends RepresentationServiceProvider<PERSISTENCE_ENTITY,ENTITY> {
 
 	/* Create */
 	@POST
@@ -31,6 +31,11 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY> extends Represe
 	@Path(PATH_MANY)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response createMany(Collection<ENTITY> dtos);
+	
+	@POST
+	@Path(PATH_MANY+"nv")
+	@Consumes(MediaType.APPLICATION_XML)
+	Response createMany(ENTITY_COLLECTION entityCollection);
 	
 	/* Read */ 
 	@GET

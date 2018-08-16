@@ -25,7 +25,7 @@ public interface SystemServiceProvider extends ServiceProvider {
 	
 	ServiceProvider validateOne(Object object);
 	
-	ServiceProvider validateMany(Collection<Object> objects,SystemAction action);
+	ServiceProvider validateMany(Collection<?> objects,SystemAction action);
 	
-	ServiceProvider validateMany(Collection<Object> objects);
+	ServiceProvider validateMany(Collection<?> objects);
 }

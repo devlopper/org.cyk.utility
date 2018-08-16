@@ -16,7 +16,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 
 	private static final long serialVersionUID = 1L;
 
-	@Override //@Transactional
+	@Override 
 	public BusinessServiceProvider<OBJECT> create(OBJECT object, Properties properties) {
 		BusinessFunctionCreator function = __inject__(BusinessFunctionCreator.class);
 		__configure__(function, properties);
@@ -27,24 +27,31 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		return this;
 	}
 
-	@Override //@Transactional
+	@Override 
 	public BusinessServiceProvider<OBJECT> create(OBJECT object) {
 		return create(object, null);
 	}
 
-	@Override //@Transactional
+	@Override 
 	public BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects, Properties properties) {
-		for(OBJECT index : objects)
-			create(index, properties);
+		BusinessFunctionCreator function = __inject__(BusinessFunctionCreator.class);
+		__configure__(function, properties);
+		function.setEntities(objects);
+		validateMany(objects, function.getAction());
+		function.execute();
+		validateMany(objects);
+		
+		//for(OBJECT index : objects)
+		//	create(index, properties);
 		return this;
 	}
 
-	@Override //@Transactional
+	@Override 
 	public BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects) {
 		return createMany(objects, null);
 	}
 
-	@Override //@Transactional
+	@Override 
 	public BusinessServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
 		BusinessFunctionModifier function = __inject__(BusinessFunctionModifier.class);
 		__configure__(function, properties);
@@ -55,24 +62,24 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		return this;
 	}
 
-	@Override //@Transactional
+	@Override 
 	public BusinessServiceProvider<OBJECT> update(OBJECT object) {
 		return update(object, null);
 	}
 
-	@Override //@Transactional
+	@Override 
 	public BusinessServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects, Properties properties) {
 		for(OBJECT index : objects)
 			update(index, properties);
 		return this;
 	}
 
-	@Override //@Transactional
+	@Override 
 	public BusinessServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects) {
 		return updateMany(objects, null);
 	}
 
-	@Override //@Transactional
+	@Override 
 	public BusinessServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
 		BusinessFunctionRemover function =  __inject__(BusinessFunctionRemover.class);
 		__configure__(function, properties);
@@ -83,19 +90,19 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		return this;
 	}
 
-	@Override //@Transactional
+	@Override 
 	public BusinessServiceProvider<OBJECT> delete(OBJECT object) {
 		return delete(object, null);
 	}
 
-	@Override //@Transactional
+	@Override 
 	public BusinessServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects, Properties properties) {
 		for(OBJECT index : objects)
 			delete(index, properties);
 		return this;
 	}
 
-	@Override //@Transactional
+	@Override 
 	public BusinessServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects) {
 		return deleteMany(objects, null);
 	}

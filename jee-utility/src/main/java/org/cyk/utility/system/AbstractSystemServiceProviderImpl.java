@@ -50,23 +50,23 @@ public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceP
 	}
 	
 	@Override
-	public final ServiceProvider validateMany(Collection<Object> objects, SystemAction action) {
+	public final ServiceProvider validateMany(Collection<?> objects, SystemAction action) {
 		__validateMany__(objects, action);
 		return this;
 	}
 	
-	protected void __validateMany__(Collection<Object> objects, SystemAction action){
+	protected void __validateMany__(Collection<?> objects, SystemAction action){
 		for(Object index : objects)
 			validateOne(index, action);
 	}
 	
 	@Override
-	public final ServiceProvider validateMany(Collection<Object> objects) {
+	public final ServiceProvider validateMany(Collection<?> objects) {
 		__validateMany__(objects);
 		return this;
 	}
 	
-	protected void __validateMany__(Collection<Object> objects){
+	protected void __validateMany__(Collection<?> objects){
 		__validateMany__(objects, null);
 	}
 	

@@ -1,15 +1,25 @@
 package org.cyk.utility.test.arquillian;
 
+import java.util.Collection;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.action.SystemActor;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.value.ValueUsageType;
 
 public interface SystemLayerIntegrationTest<LAYER_ENTITY_INTERFACE> {
-
+	
+	/* Create */
+	
 	<ENTITY> void __createEntity__(ENTITY entity,LAYER_ENTITY_INTERFACE layerEntityInterface);
 	
 	<ENTITY> void __createEntity__(ENTITY entity);
+	
+	<ENTITY> void __createEntity__(Collection<ENTITY> entities,LAYER_ENTITY_INTERFACE layerEntityInterface);
+	
+	<ENTITY> void __createEntity__(Collection<ENTITY> entities);
+	
+	/* Read */
 	
 	<ENTITY> ENTITY __readEntity__(Class<ENTITY> entityClass,Object identifier,ValueUsageType valueUsageType,Properties expectedFieldValues,LAYER_ENTITY_INTERFACE layerEntityInterface);
 	
@@ -19,9 +29,13 @@ public interface SystemLayerIntegrationTest<LAYER_ENTITY_INTERFACE> {
 	
 	<ENTITY> ENTITY __readEntity__(Class<ENTITY> entityClass,Object identifier,ValueUsageType valueUsageType);
 	
+	/* Update */
+	
 	<ENTITY> void __updateEntity__(ENTITY entity,LAYER_ENTITY_INTERFACE layerEntityInterface);
 	
 	<ENTITY> void __updateEntity__(ENTITY entity);
+	
+	/* Delete */
 	
 	<ENTITY> void __deleteEntity__(ENTITY entity,LAYER_ENTITY_INTERFACE layerEntityInterface);
 	
@@ -35,9 +49,12 @@ public interface SystemLayerIntegrationTest<LAYER_ENTITY_INTERFACE> {
 	
 	<ENTITY> void __deleteEntitiesAll__(Class<ENTITY> entityClass);
 	
+	/* Count */
+	
 	<ENTITY> Long __countEntitiesAll__(Class<ENTITY> entityClass,LAYER_ENTITY_INTERFACE layerEntityInterface);
 	
 	<ENTITY> Long __countEntitiesAll__(Class<ENTITY> entityClass);
+	
 	/**/
 	
 	Class<? extends LAYER_ENTITY_INTERFACE> __getLayerEntityInterfaceClass__();

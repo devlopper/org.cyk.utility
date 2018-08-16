@@ -12,8 +12,11 @@ public abstract class AbstractPersistenceFunctionTransactionImpl extends Abstrac
 
 	@Override
 	protected Boolean __executeGetIsExecutable__(Boolean value) {
-		Object queryIdentifier = getQueryIdentifier();
+		/*Object queryIdentifier = getQueryIdentifier();
 		return queryIdentifier == null ? getEntity() != null : Boolean.TRUE;
+		*/
+		
+		return getQueryIdentifier()!=null || getEntities()!=null || getEntity()!=null;
 	}
 	
 	@Override

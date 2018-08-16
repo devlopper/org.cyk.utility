@@ -16,12 +16,12 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	
 	@Test
 	public void create() throws Exception{
-		__inject__(TestPersistenceCreate.class).setObject(new MyEntity().setCode(getRandomCode())).execute();
+		__inject__(TestPersistenceCreate.class).setObject(new MyEntity().setCode(__getRandomCode__())).execute();
 	}
 	
 	@Test
 	public void read() throws Exception{
-		String code = getRandomCode();
+		String code = __getRandomCode__();
 		MyEntity myEntity = new MyEntity().setCode(code);
 		userTransaction.begin();
 		persistence.create(myEntity);
@@ -35,12 +35,12 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	
 	@Test
 	public void update() throws Exception{
-		MyEntity myEntity = new MyEntity().setCode(getRandomCode());
+		MyEntity myEntity = new MyEntity().setCode(__getRandomCode__());
 		userTransaction.begin();
 		persistence.create(myEntity);
 		userTransaction.commit();
 		myEntity = persistence.readOne(MyEntity.class,myEntity.getIdentifier());
-		String newCode = getRandomCode();
+		String newCode = __getRandomCode__();
 		myEntity.setCode(newCode);
 		userTransaction.begin();
 		persistence.update(myEntity);
@@ -53,7 +53,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	
 	@Test
 	public void delete() throws Exception{
-		MyEntity myEntity = new MyEntity().setCode(getRandomCode());
+		MyEntity myEntity = new MyEntity().setCode(__getRandomCode__());
 		userTransaction.begin();
 		persistence.create(myEntity);
 		userTransaction.commit();
@@ -69,7 +69,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	
 	@Test(expected=javax.transaction.RollbackException.class)
 	public void isCodeMustBeUnique() throws Exception{
-		String code = getRandomCode();
+		String code = __getRandomCode__();
 		userTransaction.begin();
 		persistence.create(new MyEntity().setCode(code));
 		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Create MyEntity").contains("code="+code);

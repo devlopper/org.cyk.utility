@@ -1,5 +1,7 @@
 package org.cyk.utility.server.representation.test.arquillian;
 
+import java.util.Collection;
+
 import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.server.representation.AbstractEntity;
 import org.cyk.utility.server.representation.RepresentationEntity;
@@ -9,7 +11,7 @@ import org.junit.Test;
 public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extends AbstractRepresentationArquillianIntegrationTest {
 	private static final long serialVersionUID = 1L;
 
-	@Test
+	//@Test
 	public void createOne() throws Exception{
 		Object object = __instanciateEntity__(null);
 		__createEntity__(object);
@@ -17,6 +19,13 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	}
 	
 	@Test
+	public void createMany() throws Exception{
+		Collection<ENTITY> entities = __instanciateEntity__(null,3);
+		__createEntity__(entities);
+		__deleteEntitiesAll__(__getEntityClass__(null));
+	}
+	
+	//@Test
 	public void readOneBySystemIdentifier() throws Exception{
 		Object action = null;//__inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
@@ -25,7 +34,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__deleteEntitiesAll__(object.getClass());
 	}
 	
-	@Test
+	//@Test
 	public void readOneByRepresentationIdentifier() throws Exception{
 		Object action = null;//__inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
@@ -34,7 +43,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__deleteEntitiesAll__(object.getClass());
 	}
 	
-	@Test
+	//@Test
 	@SuppressWarnings("unchecked")
 	public void updateOne() throws Exception{
 		Object action = null;//__inject__(SystemActionUpdate.class);
@@ -47,7 +56,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__deleteEntitiesAll__(object.getClass());
 	}
 	
-	@Test
+	//@Test
 	public void deleteOne() throws Exception{
 		Object action = null;//__inject__(SystemActionDelete.class);
 		Object object = __instanciateEntity__(action);
@@ -89,16 +98,24 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected RepresentationEntity<ENTITY,?> __getRepresentationEntity__(Object action){
+	protected RepresentationEntity<ENTITY,?,?> __getRepresentationEntity__(Object action){
 		return __getLayerEntityInterfaceFromClass__(null);//(RepresentationEntity<ENTITY,?>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntityClass(__getEntityClass__(action));
 	}
 	
 	protected ENTITY __instanciateEntity__(Object action) throws Exception{
+		return __instanciate__(__getEntityClass__(action), action);
+	}
+	
+	protected Collection<ENTITY> __instanciateEntity__(Object action,Integer count) throws Exception{
+		return __instanciate__(__getEntityClass__(action), action, count);
+	}
+	
+	/*protected ENTITY __instanciateEntity__(Object action) throws Exception{
 		ENTITY object = __getEntityClass__(action).newInstance();
 		if(object instanceof AbstractEntity)
 			((AbstractEntity)object).setCode(String.valueOf(System.currentTimeMillis()));
 		return object;
-	}
+	}*/
 	
 	protected void __setEntityFields__(ENTITY entity,Object action){}
 }
