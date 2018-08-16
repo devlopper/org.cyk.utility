@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
@@ -15,6 +16,17 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	@Override
 	public RepresentationFunction execute() {
 		return (RepresentationFunction) super.execute();
+	}
+	
+	@Override
+	public Class<?> getPersistenceEntityClass() {
+		return (Class<?>) getProperties().getFromPath(Properties.PERSISTENCE,Properties.ENTITY_CLASS);
+	}
+	
+	@Override
+	public RepresentationFunction setPersistenceEntityClass(Class<?> aClass) {
+		getProperties().setFromPath(new Object[] {Properties.PERSISTENCE,Properties.ENTITY_CLASS},aClass);
+		return this;
 	}
 	
 	@Override

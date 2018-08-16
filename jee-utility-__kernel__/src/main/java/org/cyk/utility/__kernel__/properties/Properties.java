@@ -4157,6 +4157,8 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public static final String PERSISTENCE = "PERSISTENCE";
+	public static final String REPRESENTATION = "REPRESENTATION";
 	public static final String MAP = "MAP";
 	public static final String COPY = "COPY";
 	public static final String RESPONSE = "RESPONSE";

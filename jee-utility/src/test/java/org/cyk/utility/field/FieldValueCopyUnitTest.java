@@ -2,6 +2,7 @@ package org.cyk.utility.field;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
@@ -51,7 +52,9 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
-	public static class MyClass01 {
+	public static class MyClass01 implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
 		private int intField;
 		private Integer integerField;
 		private String stringField;
@@ -61,7 +64,9 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
-	public static class MyClass02 {
+	public static class MyClass02 implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
 		private String intField;
 		private String integerField;
 		private String stringField;

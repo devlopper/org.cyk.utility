@@ -89,6 +89,12 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public <T extends OUTPUT> T getOutputAs(Class<T> aClass) {
+		return (T) getOutput();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public Function<INPUT,OUTPUT> setProperties(Properties properties) {
 		return (Function<INPUT,OUTPUT>) super.setProperties(properties);
 	}

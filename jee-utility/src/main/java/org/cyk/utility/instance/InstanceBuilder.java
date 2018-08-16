@@ -7,9 +7,10 @@ public interface InstanceBuilder<INSTANCE> extends FunctionWithPropertiesAsInput
 	Class<INSTANCE> getClazz();
 	InstanceBuilder<INSTANCE> setClazz(Class<?> aClass);
 	
-	Object[] getParameters();
-	InstanceBuilder<INSTANCE> setParameters(Object[] parameters);
+	Object[] getConstructorParameters();
+	InstanceBuilder<INSTANCE> setConstructorParameters(Object[] parameters);
 	
-	Object getCopy();
-	InstanceBuilder<INSTANCE> setCopy(Object copy);
+	Object getFieldsValuesObject();
+	InstanceBuilder<INSTANCE> setFieldsValuesObject(Object fieldsValuesObject);
+	
 }

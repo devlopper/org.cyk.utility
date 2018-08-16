@@ -40,6 +40,13 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 		__inject__(FieldValueSetter.class).setObject(object).setField(FieldName.IDENTIFIER, ValueUsageType.BUSINESS).setValue(value).execute();
 		return this;
 	}
+	
+	@Override
+	public FieldHelper copy(Object source, Object destination) {
+		__inject__(FieldValueCopy.class).setSource(source).setDestination(destination).setIsAutomaticallyDetectFields(Boolean.TRUE).execute();
+		return this;
+	}
+	
 	/*
 	public FieldHelper __set__(Object source,Object destination){
 		for(FieldName indexFieldName : new FieldName[] {FieldName.IDENTIFIER})

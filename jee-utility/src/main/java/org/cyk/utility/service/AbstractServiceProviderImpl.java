@@ -8,6 +8,7 @@ import org.cyk.utility.assertion.AssertionBuilderNull;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldValueGetter;
+import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.StringHelper;
@@ -48,6 +49,10 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	
 	protected CollectionHelper __injectCollectionHelper__(){
 		return __inject__(CollectionHelper.class);
+	}
+	
+	protected InstanceHelper __injectInstanceHelper__(){
+		return __inject__(InstanceHelper.class);
 	}
 	
 	protected ThrowableHelper __injectThrowableHelper__(){

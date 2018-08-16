@@ -63,7 +63,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	@Override
 	protected Object getFieldValueSystemIdentifier(Object object) {
 		if(object instanceof AbstractEntity)
-			return ((AbstractEntity<?>)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntity<?>)object).getCode(),ValueUsageType.BUSINESS.name())
+			return ((AbstractEntity)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntity)object).getCode(),ValueUsageType.BUSINESS.name())
 					.readEntity(object.getClass())).getIdentifier();
 		return super.getFieldValueSystemIdentifier(object);
 	}
@@ -71,7 +71,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	@Override
 	protected Object __getSystemIdentifier__(Object object) {
 		if(object instanceof AbstractEntity)
-			return ((AbstractEntity<?>)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntity<?>)object).getCode(),ValueUsageType.BUSINESS.name())
+			return ((AbstractEntity)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntity)object).getCode(),ValueUsageType.BUSINESS.name())
 					.readEntity(object.getClass())).getIdentifier();
 		return super.__getSystemIdentifier__(object);
 	}
@@ -79,7 +79,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	@Override
 	protected Object __getBusinessIdentifier__(Object object) {
 		if(object instanceof AbstractEntity)
-			return ((AbstractEntity<?>)object).getCode();
+			return ((AbstractEntity)object).getCode();
 		return super.__getBusinessIdentifier__(object);
 	}
 	
@@ -96,7 +96,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	protected ENTITY __instanciateEntity__(Object action) throws Exception{
 		ENTITY object = __getEntityClass__(action).newInstance();
 		if(object instanceof AbstractEntity)
-			((AbstractEntity<?>)object).setCode(String.valueOf(System.currentTimeMillis()));
+			((AbstractEntity)object).setCode(String.valueOf(System.currentTimeMillis()));
 		return object;
 	}
 	

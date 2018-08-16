@@ -17,7 +17,7 @@ import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 
-public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINESS extends BusinessEntity<PERSISTENCE_ENTITY>,ENTITY extends AbstractEntity<PERSISTENCE_ENTITY>> extends AbstractRepresentationServiceProviderImpl<PERSISTENCE_ENTITY,ENTITY> implements RepresentationEntity<PERSISTENCE_ENTITY,ENTITY>,Serializable {
+public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINESS extends BusinessEntity<PERSISTENCE_ENTITY>,ENTITY extends AbstractEntity> extends AbstractRepresentationServiceProviderImpl<PERSISTENCE_ENTITY,ENTITY> implements RepresentationEntity<PERSISTENCE_ENTITY,ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Getter private Class<ENTITY> entityClass;
@@ -31,36 +31,6 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		persistenceEntityClass = (Class<PERSISTENCE_ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
 		business = (BUSINESS) __inject__(BusinessLayer.class).injectInterfaceClassFromPersistenceEntityClass(getPersistenceEntityClass());
 		entityClass =  (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 2, AbstractEntity.class);
-	}
-	
-	//TODO instantiation function must be implemented
-	//1 - instantiate from a set of fields and their values
-	//2 - instantiate from an object and a set of fields
-	
-	//@Override
-	public ENTITY instantiate(PERSISTENCE_ENTITY persistenceEntity) {
-		return __injectClassHelper__().instanciate(getEntityClass(),new Object[] {getPersistenceEntityClass(),persistenceEntity});
-	}
-	
-	//@Override
-	public Collection<ENTITY> instantiate(Collection<PERSISTENCE_ENTITY> persistenceEntities) {
-		Collection<ENTITY> entities = new ArrayList<>();
-		for(PERSISTENCE_ENTITY index : persistenceEntities)
-			entities.add(instantiate(index));
-		return entities;
-	}
-	
-	//@Override
-	public PERSISTENCE_ENTITY instantiatePersistenceEntity(ENTITY entity) {
-		return entity.getPersistenceEntity();
-	}
-	
-	//@Override
-	public Collection<PERSISTENCE_ENTITY> instantiatePersistenceEntity(Collection<ENTITY> entities) {
-		Collection<PERSISTENCE_ENTITY> persistenceEntites = new ArrayList<>();
-		for(ENTITY index : entities)
-			persistenceEntites.add(instantiatePersistenceEntity(index));
-		return persistenceEntites;
 	}
 	
 	//TODO think about getPersistenceEntityByIdentifier to be make as function
@@ -82,26 +52,25 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	
 	/* */
 	
-	//TODO business processing should follow these steps:
-	//1 - call business
-	//2 - catch throwable if any
-	//3 - send response
-	
 	@Override
-	public Response createOne(ENTITY dto) {
-		return __inject__(RepresentationFunctionCreator.class).setEntity(dto).execute().getResponse();
+	public Response createOne(ENTITY entity) {
+		return __inject__(RepresentationFunctionCreator.class).setEntity(entity).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 	
+	//TODO use representation function to get the response to the desired request
 	@Override
-	public Response createMany(Collection<ENTITY> dtos) {
-		getBusiness().createMany(instantiatePersistenceEntity(dtos));
-		return Response.status(Response.Status.CREATED).build();
+	public Response createMany(Collection<ENTITY> entities) {
+		return __inject__(RepresentationFunctionCreator.class).setEntities(entities).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+		
+		//getBusiness().createMany(__injectInstanceHelper__().buildMany(getPersistenceEntityClass(),entities));
+		//return Response.status(Response.Status.CREATED).build();
 	}
 	
+	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response getMany() {
-		List<ENTITY> dtos = (List<ENTITY>) instantiate(getBusiness().findMany(/* properties */));
-		GenericEntity<List<ENTITY>> genericEntity = new GenericEntity<List<ENTITY>>(dtos,getCollectionType(List.class, getEntityClass()));
+		List<ENTITY> entities = (List<ENTITY>) __injectInstanceHelper__().buildMany(getEntityClass(),getBusiness().findMany(/* properties */));
+		GenericEntity<List<ENTITY>> genericEntity = new GenericEntity<List<ENTITY>>(entities,getCollectionType(List.class, getEntityClass()));
 		return Response.ok().status(Response.Status.OK).entity(genericEntity).build();
 	}
 	
@@ -111,29 +80,33 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return valueUsageType;
 	}
 	
+	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response getOne(String identifier,String type) {
 		ValueUsageType valueUsageType = __getValueUsageType__(type);
 		ENTITY entity = null;
 		if(ValueUsageType.SYSTEM.equals(valueUsageType))
-			entity =  instantiate(getBusiness().findOne(__injectNumberHelper__().getLong(identifier)));
+			entity =  __injectInstanceHelper__().buildOne(getEntityClass(),getBusiness().findOne(__injectNumberHelper__().getLong(identifier)));
 		else if(ValueUsageType.BUSINESS.equals(valueUsageType))
-			entity = instantiate(getBusiness().findOneByBusinessIdentifier(identifier));
+			entity = __injectInstanceHelper__().buildOne(getEntityClass(),getBusiness().findOneByBusinessIdentifier(identifier));
 		return Response.status(Response.Status.OK).entity(new GenericEntity<ENTITY>(entity, getEntityClass())).build();
 	}
 	
+	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response updateOne(ENTITY entity) {
 		getBusiness().update(getPersistenceEntityByIdentifier(entity));
 		return Response.status(Response.Status.OK).build();
 	}
 	
+	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response updateMany(Collection<ENTITY> entities) {
 		getBusiness().updateMany(getPersistenceEntityByIdentifier(entities));
 		return Response.status(Response.Status.OK).build();
 	}
 	
+	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response deleteOne(String identifier,String type) {
 		ValueUsageType valueUsageType = __getValueUsageType__(type);
@@ -144,6 +117,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return Response.status(Response.Status.OK).build();
 	}
 	
+	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response deleteMany() {
 		//TODO get query parameters to build properties
@@ -151,12 +125,14 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return Response.status(Response.Status.OK).build();
 	}
 
+	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response deleteAll() {
 		getBusiness().deleteAll();
 		return Response.status(Response.Status.OK).build();
 	}
 
+	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response count() {
 		//TODO get query parameters to build properties

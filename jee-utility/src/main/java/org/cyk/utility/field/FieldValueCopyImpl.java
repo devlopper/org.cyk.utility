@@ -16,6 +16,7 @@ public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAnd
 	protected void ____execute____() throws Exception {
 		Boolean isAutomaticallyDetectFields = getIsAutomaticallyDetectFields();
 		FieldValueGetter getterModel = getValueGetter();
+		FieldValueSetter setterModel = getValueSetter();
 		Map<String,String> fieldNameMap = getFieldNameMap();
 		if(fieldNameMap == null) {
 			if(isAutomaticallyDetectFields == null)
@@ -29,9 +30,12 @@ public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAnd
 			}
 		}
 		
-		if(fieldNameMap != null) {
-			
-			FieldValueSetter setterModel = getValueSetter();
+		if(fieldNameMap == null) {
+			Object value = getterModel.execute().getOutput();
+			if(setterModel.getField() == null)
+				setterModel.setField(getValueGetter().getField().getName());
+			setterModel.setValue(value).execute();
+		}else {
 			for(Map.Entry<String, String> entry : fieldNameMap.entrySet()) {
 				FieldValueGetter getter = __inject__(FieldValueGetter.class).setObject(getterModel.getObject()).setField(entry.getKey());
 				Object value = getter.execute().getOutput();
@@ -40,10 +44,6 @@ public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAnd
 					setter.setField(getter.getField().getName());
 				setter.execute();
 			}
-			/*Object value = getValueGetter().execute().getOutput();
-			if(getValueSetter().getField() == null)
-				getValueSetter().setField(getValueGetter().getField().getName());
-			getValueSetter().setValue(value).execute();*/
 		}
 	}
 	

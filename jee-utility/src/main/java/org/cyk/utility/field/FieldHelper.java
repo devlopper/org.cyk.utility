@@ -15,4 +15,6 @@ public interface FieldHelper extends Helper {
 	Object getFieldValueBusinessIdentifier(Object object);
 	
 	FieldHelper setFieldValueBusinessIdentifier(Object object,Object value);
+	
+	FieldHelper copy(Object source,Object destination);
 }

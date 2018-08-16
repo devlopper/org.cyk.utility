@@ -1,10 +1,12 @@
 package org.cyk.utility.instance;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Singleton;
 
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.value.ValueUsageType;
@@ -25,6 +27,20 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 		return null;
 	}
 
+	@Override
+	public <INSTANCE> INSTANCE buildOne(Class<INSTANCE> aClass, Object fieldsValuesObject) {
+		return (INSTANCE) __inject__(InstanceBuilder.class).setClazz(aClass).setFieldsValuesObject(fieldsValuesObject).execute().getOutput();
+	}
 	
+	@Override
+	public <INSTANCE> Collection<INSTANCE> buildMany(Class<INSTANCE> aClass, Collection<?> fieldsValuesObjects) {
+		Collection<INSTANCE> instances = null;
+		if(__inject__(CollectionHelper.class).isNotEmpty(fieldsValuesObjects)) {
+			instances = new ArrayList<>();
+			for(Object index : fieldsValuesObjects)
+				instances.add(buildOne(aClass, index));
+		}
+		return instances;
+	}
 
 }

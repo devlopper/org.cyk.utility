@@ -2,11 +2,7 @@ package org.cyk.utility.instance;
 
 import java.io.Serializable;
 
-import org.cyk.utility.field.FieldName;
-import org.cyk.utility.field.FieldNameGetter;
-import org.cyk.utility.field.FieldValueCopy;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.value.ValueUsageType;
 
 public class InstanceBuilderImpl<INSTANCE> extends AbstractFunctionWithPropertiesAsInputImpl<INSTANCE> implements InstanceBuilder<INSTANCE>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -14,15 +10,11 @@ public class InstanceBuilderImpl<INSTANCE> extends AbstractFunctionWithPropertie
 	@Override
 	protected INSTANCE __execute__() throws Exception {
 		Class<?> aClass = getClazz();
-		Object[] parameters = getParameters();
+		Object[] parameters = getConstructorParameters();
 		INSTANCE instance = (INSTANCE) __injectClassHelper__().instanciate(aClass,parameters);
-		Object copy = getCopy();
-		if(copy != null) {
-			for(FieldName indexFieldName : new FieldName[] {FieldName.IDENTIFIER})
-				for(ValueUsageType indexValueUsageType : new ValueUsageType[] {ValueUsageType.SYSTEM,ValueUsageType.BUSINESS}) {
-					String fieldName = __inject__(FieldNameGetter.class).execute(instance.getClass(), indexFieldName, indexValueUsageType).getOutput();
-					__inject__(FieldValueCopy.class).execute(copy, instance, fieldName);
-				}		
+		Object fieldsValuesObject = getFieldsValuesObject();
+		if(fieldsValuesObject != null) {
+			__injectFieldHelper__().copy(fieldsValuesObject, instance);
 		}
 		return instance;
 	}
@@ -39,23 +31,23 @@ public class InstanceBuilderImpl<INSTANCE> extends AbstractFunctionWithPropertie
 	}
 	
 	@Override
-	public Object[] getParameters() {
+	public Object[] getConstructorParameters() {
 		return (Object[]) getProperties().getParameters();
 	}
 	
 	@Override
-	public InstanceBuilder<INSTANCE> setParameters(Object[] parameters) {
+	public InstanceBuilder<INSTANCE> setConstructorParameters(Object[] parameters) {
 		getProperties().setParameters(parameters);
 		return this;
 	}
 	
 	@Override
-	public Object getCopy() {
+	public Object getFieldsValuesObject() {
 		return getProperties().getCopy();
 	}
 	
 	@Override
-	public InstanceBuilder<INSTANCE> setCopy(Object copy) {
+	public InstanceBuilder<INSTANCE> setFieldsValuesObject(Object copy) {
 		getProperties().setCopy(copy);
 		return this;
 	}

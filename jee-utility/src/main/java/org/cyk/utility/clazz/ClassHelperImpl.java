@@ -31,6 +31,8 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 
 	@Override
 	public <T> T instanciate(Class<T> aClass, Object[] constructorParameters) {
+		if(constructorParameters == null)
+			return instanciateOne(aClass);
 		Class<?>[] classes = new Class[constructorParameters.length / 2];
 		Object[] arguments = new Object[constructorParameters.length / 2];
 		int j = 0;

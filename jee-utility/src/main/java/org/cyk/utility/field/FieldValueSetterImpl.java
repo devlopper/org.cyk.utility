@@ -2,6 +2,7 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 
 import org.apache.commons.lang3.ClassUtils;
@@ -27,8 +28,11 @@ public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputA
 					if(value!=null && !fieldType.equals(value.getClass())) {
 						value = __inject__(ValueConverter.class).execute(value, fieldType).getOutput();
 					}
-					
-					FieldUtils.writeField(field, object,value, Boolean.TRUE);
+					if(Modifier.isFinal(field.getModifiers())) {
+						//TODO log warning
+					}else {
+						FieldUtils.writeField(field, object,value, Boolean.TRUE);	
+					}
 				} catch (IllegalAccessException exception) {
 					__inject__(Log.class).executeThrowable(exception);
 				}

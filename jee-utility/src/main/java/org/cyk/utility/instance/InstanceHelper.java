@@ -10,4 +10,7 @@ public interface InstanceHelper extends Helper {
 
 	<INSTANCE> Collection<INSTANCE> getByFieldNameByValueUsageType(Class<INSTANCE> aClass,FieldName fieldName,ValueUsageType valueUsageType,Object value);
 	<INSTANCE> INSTANCE getByIdentifierBusiness(Class<INSTANCE> aClass,Object value);
+	
+	<INSTANCE> INSTANCE buildOne(Class<INSTANCE> aClass,Object fieldsValuesObject);
+	<INSTANCE> Collection<INSTANCE> buildMany(Class<INSTANCE> aClass,Collection<?> fieldsValuesObjects);
 }
