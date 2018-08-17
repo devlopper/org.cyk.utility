@@ -2,7 +2,9 @@ package org.cyk.utility.server.business;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 import org.cyk.utility.server.persistence.jpa.AbstractEntity;
 
@@ -16,6 +18,7 @@ public class MyEntity extends AbstractEntity implements Serializable {
 
 	private Long long1;
 	private Long long2;
+	@NotNull @Column(nullable=false) private Long timestamp;
 	
 	@Override
 	public MyEntity setCode(String code) {
@@ -24,6 +27,6 @@ public class MyEntity extends AbstractEntity implements Serializable {
 	
 	@Override
 	public String toString() {
-		return getCode();
+		return getCode()+"/"+getTimestamp();
 	}
 }

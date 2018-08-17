@@ -39,6 +39,10 @@ public class Properties implements java.io.Serializable {
 		return properties;
 	}
 	
+	public static Properties instanciate(Properties properties){
+		return instanciate(properties.map);
+	}
+	
 	public java.util.Map<Object,Object> __getMap__(){
 		return map;
 	}

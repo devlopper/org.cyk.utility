@@ -19,6 +19,7 @@ public class MyEntityBusinessImpl extends AbstractBusinessEntityImpl<MyEntity,My
 				System.out.println("MyEntityBusinessImpl.create(...).new Runnable() {...}.run()");
 			}});
 		*/
+		myEntity.setTimestamp(System.currentTimeMillis());
 		return super.create(myEntity, properties);
 	}
 

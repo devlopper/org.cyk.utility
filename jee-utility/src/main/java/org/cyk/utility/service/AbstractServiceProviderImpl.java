@@ -7,6 +7,7 @@ import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.assertion.AssertionBuilderNull;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.log.Log;
@@ -65,6 +66,10 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	
 	protected FieldValueGetter __injectFieldValueGetter__(){
 		return __inject__(FieldValueGetter.class);
+	}
+	
+	protected FieldHelper __injectFieldHelper__(){
+		return __inject__(FieldHelper.class);
 	}
 	
 	protected ClassHelper __injectClassHelper__(){

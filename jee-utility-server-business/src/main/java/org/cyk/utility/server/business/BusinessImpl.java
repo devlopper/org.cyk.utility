@@ -63,4 +63,18 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		}
 		return this;
 	}
+	
+	@Override
+	public BusinessServiceProvider<Object> createMany(Collection<Object> objects, Properties properties) {
+		Class<?> aClass = objects.iterator().next().getClass();
+		@SuppressWarnings("unchecked")
+		Class<BusinessEntity<Object>> interfaceClass = (Class<BusinessEntity<Object>>) __inject__(SystemLayerBusiness.class).getInterfaceClassFromEntityClassName(aClass);
+		if(interfaceClass == null){
+			__logWarn__("No specific business interface found for persistence entity "+aClass);
+			super.createMany(objects, properties);
+		}else{
+			__inject__(interfaceClass).createMany(objects, properties);
+		}
+		return this;
+	}
 }

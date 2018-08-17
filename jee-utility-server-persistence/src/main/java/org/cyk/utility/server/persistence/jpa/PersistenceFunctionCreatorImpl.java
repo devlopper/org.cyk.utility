@@ -17,7 +17,7 @@ public class PersistenceFunctionCreatorImpl extends AbstractPersistenceFunctionC
 		Collection<Object> entities = new ArrayList<>();
 		if(getEntities()!=null)
 			entities.addAll(getEntities());
-		else
+		if(getEntity()!=null)
 			entities.add(getEntity());
 		for(Object index : entities)
 			getEntityManager().persist(index);		

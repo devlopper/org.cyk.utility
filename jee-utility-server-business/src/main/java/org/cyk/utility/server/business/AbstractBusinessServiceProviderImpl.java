@@ -36,19 +36,42 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	public BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects, Properties properties) {
 		BusinessFunctionCreator function = __inject__(BusinessFunctionCreator.class);
 		__configure__(function, properties);
-		function.setEntities(objects);
-		validateMany(objects, function.getAction());
-		function.execute();
-		validateMany(objects);
+		if(Boolean.TRUE.equals(__isCreateManyOneByOne__())) {
+			//Loop execution
+			function.addExecutionPhaseRunnables(Boolean.TRUE, new Runnable() {
+				@Override
+				public void run() {
+					for(OBJECT index : objects) {
+						create(index);
+					}
+				}
+			});
+			function.getProperties().setFromPath(new Object[]{Properties.IS,Properties.CORE,Properties.EXECUTABLE}, Boolean.FALSE);
+		}else {
+			//Batch execution
+			function.setEntities(objects);
+			validateMany(objects, function.getAction());
+		}
 		
-		//for(OBJECT index : objects)
-		//	create(index, properties);
+		function.execute();
+		
+		if(Boolean.TRUE.equals(__isCreateManyOneByOne__())) {
+			//Loop execution
+			
+		}else {
+			//Batch execution
+			validateMany(objects);
+		}
 		return this;
 	}
 
 	@Override 
 	public BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects) {
 		return createMany(objects, null);
+	}
+	
+	protected Boolean __isCreateManyOneByOne__() {
+		return Boolean.TRUE;
 	}
 
 	@Override 
