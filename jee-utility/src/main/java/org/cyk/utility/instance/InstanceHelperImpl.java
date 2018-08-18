@@ -17,14 +17,13 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 
 	@Override
 	public <INSTANCE> Collection<INSTANCE> getByFieldNameByValueUsageType(Class<INSTANCE> aClass, FieldName fieldName,ValueUsageType valueUsageType, Object value) {
-		// TODO Auto-generated method stub
-		return null;
+		return (Collection<INSTANCE>) __inject__(InstanceGetter.class).setClazz(aClass).setFieldName(fieldName).setValueUsageType(valueUsageType).setValue(value)
+				.execute().getOutput();
 	}
 
 	@Override
 	public <INSTANCE> INSTANCE getByIdentifierBusiness(Class<INSTANCE> aClass, Object value) {
-		// TODO Auto-generated method stub
-		return null;
+		return __inject__(CollectionHelper.class).getFirst(getByFieldNameByValueUsageType(aClass, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, value));
 	}
 
 	@Override

@@ -3,6 +3,8 @@ package org.cyk.utility.__kernel__.function;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.KernelHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
 
@@ -58,8 +60,23 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		return this;
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected OUTPUT __execute__() throws Exception {
-		throw new RuntimeException("Implementation or runnable required");
+		Class<? extends FunctionRunnable<?>> functionRunnableClass = DependencyInjection.inject(FunctionRunnableMap.class).get(getClass());	
+		if(functionRunnableClass != null) {
+			@SuppressWarnings("rawtypes")
+			FunctionRunnable functionRunnable = DependencyInjection.inject(KernelHelper.class).instanciate(functionRunnableClass);
+			functionRunnable.setFunction(this);
+			Runnable runnable = functionRunnable.getRunnable();
+			if(runnable == null) {
+				throw new RuntimeException(getClass()+" : Function runnable implementation required");
+			}else {
+				runnable.run();
+				return (OUTPUT) functionRunnable.getOutput();	
+			}
+			
+		}
+		throw new RuntimeException(getClass().getName()+" : Implementation or runnable required");
 	}
 	
 	protected Boolean __executeGetIsExecutable__(Boolean value){

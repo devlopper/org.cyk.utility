@@ -7,9 +7,11 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.apache.commons.lang.StringUtils;
+import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldValueSetter;
+import org.cyk.utility.instance.InstanceGetterImpl;
 import org.cyk.utility.method.MethodGetter;
 import org.cyk.utility.server.persistence.annotation.Query;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
@@ -32,6 +34,9 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		super.__listenPostConstruct__();
 		__listenPostConstructPersistenceQueries__();
 		__listenPostConstructGetQueriesFromAnnotation__();
+		
+		//TODO will be done more than once. where to put it to be sure it will be done before call
+		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class);
 	}
 	
 	@Override

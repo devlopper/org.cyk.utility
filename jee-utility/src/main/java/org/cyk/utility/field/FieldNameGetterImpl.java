@@ -21,7 +21,10 @@ public class FieldNameGetterImpl extends AbstractFunctionWithPropertiesAsInputIm
 	}
 	
 	protected String __execute__(Class<?> aClass,FieldName fieldName,ValueUsageType valueUsageType) {
-		return fieldName.getByValueUsageType(valueUsageType);
+		String value = __inject__(FieldNameValueUsageMap.class).get(aClass, fieldName, valueUsageType);
+		if(value == null)
+			value = fieldName.getByValueUsageType(valueUsageType);
+		return value;
 	}
 	
 	@Override

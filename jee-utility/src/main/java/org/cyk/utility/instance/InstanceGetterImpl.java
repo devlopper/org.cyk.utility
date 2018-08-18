@@ -11,27 +11,50 @@ public class InstanceGetterImpl extends AbstractFunctionWithPropertiesAsInputImp
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	public InstanceGetter setClazz(Class<?> aClass) {
+		getProperties().setClass(aClass);
+		return this;
+	}
+
+	@Override
+	public Class<?> getClazz() {
+		return (Class<?>) getProperties().getClazz();
+	}
+	
+	@Override
 	public InstanceGetter setFieldName(FieldName fieldName) {
-		// TODO Auto-generated method stub
-		return null;
+		getProperties().setFieldName(fieldName);
+		return this;
 	}
 
 	@Override
 	public FieldName getFieldName() {
-		// TODO Auto-generated method stub
-		return null;
+		return (FieldName) getProperties().getFieldName();
 	}
 
 	@Override
 	public InstanceGetter setValueUsageType(ValueUsageType valueUsageType) {
-		// TODO Auto-generated method stub
-		return null;
+		getProperties().setValueUsageType(valueUsageType);
+		return this;
 	}
 
 	@Override
 	public ValueUsageType getValueUsageType() {
-		// TODO Auto-generated method stub
-		return null;
+		return (ValueUsageType) getProperties().getValueUsageType();
 	}
+
+	
+	@Override
+	public InstanceGetter setValue(Object value) {
+		getProperties().setValue(value);
+		return this;
+	}
+
+	@Override
+	public Object getValue() {
+		return getProperties().getValue();
+	}
+
+	
 
 }

@@ -121,6 +121,11 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 			if(beansXml instanceof String)
 				if(archive instanceof JavaArchive)
 					((JavaArchive)archive).addAsManifestResource((String) beansXml,"beans.xml");
+				else if(archive instanceof WebArchive){
+					((WebArchive)archive).addAsManifestResource((String) beansXml,"beans.xml");
+					((WebArchive)archive).addAsWebInfResource((String) beansXml,"beans.xml");
+					//((WebArchive)archive).addAsResource((String) beansXml,"META-INF/beans.xml");
+				}
 		}
 		return this;
 	}

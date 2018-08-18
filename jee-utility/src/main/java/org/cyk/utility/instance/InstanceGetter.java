@@ -8,11 +8,15 @@ import org.cyk.utility.value.ValueUsageType;
 
 public interface InstanceGetter extends FunctionWithPropertiesAsInput<Collection<Object>> {
 
+	InstanceGetter setClazz(Class<?> aClass);
+	Class<?> getClazz();
+	
 	InstanceGetter setFieldName(FieldName fieldName);
 	FieldName getFieldName();
 	
 	InstanceGetter setValueUsageType(ValueUsageType valueUsageType);
 	ValueUsageType getValueUsageType();
 	
-	
+	InstanceGetter setValue(Object value);
+	Object getValue();
 }

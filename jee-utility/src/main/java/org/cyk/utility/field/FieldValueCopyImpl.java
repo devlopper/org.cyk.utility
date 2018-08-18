@@ -5,8 +5,10 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
+import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.map.MapHelper;
 
 public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FieldValueCopy,Serializable {
@@ -38,13 +40,28 @@ public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAnd
 		}else {
 			for(Map.Entry<String, String> entry : fieldNameMap.entrySet()) {
 				FieldValueGetter getter = __inject__(FieldValueGetter.class).setObject(getterModel.getObject()).setField(entry.getKey());
+				FieldValueSetter setter = __inject__(FieldValueSetter.class).setObject(setterModel.getObject()).setField(entry.getValue());
 				Object value = getter.execute().getOutput();
-				FieldValueSetter setter = __inject__(FieldValueSetter.class).setObject(setterModel.getObject()).setField(entry.getValue()).setValue(value);
+				if(value!=null)
+					value = __processValue__(getter.getField(),setter.getField(),value);
+				setter.setValue(value);
 				if(setter.getField() == null)
 					setter.setField(getter.getField().getName());
 				setter.execute();
 			}
 		}
+	}
+	
+	protected Object __processValue__(Field source,Field destination,Object value) {
+		Class<?> sourceType = __inject__(FieldTypeGetter.class).execute(source).getOutput();
+		Class<?> destinationType = __inject__(FieldTypeGetter.class).execute(destination).getOutput();
+		
+		if(!sourceType.isPrimitive() && !StringUtils.startsWithAny(sourceType.getName(), "java.","javax."))
+			value = __injectFieldHelper__().getFieldValueBusinessIdentifier(value);
+		
+		if(!destinationType.isPrimitive() && !StringUtils.startsWithAny(destinationType.getName(), "java.","javax."))
+			value = __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, value);
+		return value;
 	}
 	
 	@Override

@@ -4,6 +4,7 @@
 	
 	<alternatives>
         <class>org.cyk.utility.field.FieldGetNameTestImpl</class>
+        <class>org.cyk.utility.field.InstanceHelperTestImpl</class>
     </alternatives>
 	
 </beans> 
