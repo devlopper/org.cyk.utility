@@ -2,6 +2,7 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,8 @@ public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAnd
 				for(Field index : __inject__(FieldGetter.class).setClazz(getterModel.getObject().getClass()).execute().getOutput()) {
 					if(fieldNameMap == null)
 						fieldNameMap = new HashMap<>();
-					fieldNameMap.put(index.getName(), index.getName());
+					if(!Modifier.isStatic(index.getModifiers()) && !Modifier.isFinal(index.getModifiers()))
+						fieldNameMap.put(index.getName(), index.getName());
 				}
 			}
 		}
@@ -39,15 +41,17 @@ public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAnd
 			setterModel.setValue(value).execute();
 		}else {
 			for(Map.Entry<String, String> entry : fieldNameMap.entrySet()) {
-				FieldValueGetter getter = __inject__(FieldValueGetter.class).setObject(getterModel.getObject()).setField(entry.getKey());
 				FieldValueSetter setter = __inject__(FieldValueSetter.class).setObject(setterModel.getObject()).setField(entry.getValue());
-				Object value = getter.execute().getOutput();
-				if(value!=null)
-					value = __processValue__(getter.getField(),setter.getField(),value);
-				setter.setValue(value);
-				if(setter.getField() == null)
-					setter.setField(getter.getField().getName());
-				setter.execute();
+				if(setter.getField()!=null) {
+					FieldValueGetter getter = __inject__(FieldValueGetter.class).setObject(getterModel.getObject()).setField(entry.getKey());
+					Object value = getter.execute().getOutput();
+					if(value!=null)
+						value = __processValue__(getter.getField(),setter.getField(),value);
+					setter.setValue(value);
+					if(setter.getField() == null)
+						setter.setField(getter.getField().getName());
+					setter.execute();	
+				}
 			}
 		}
 	}
@@ -55,6 +59,7 @@ public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAnd
 	protected Object __processValue__(Field source,Field destination,Object value) {
 		Class<?> sourceType = __inject__(FieldTypeGetter.class).execute(source).getOutput();
 		Class<?> destinationType = __inject__(FieldTypeGetter.class).execute(destination).getOutput();
+		//System.out.println("FieldValueCopyImpl.__processValue__() "+source+" *** "+sourceType+" *** "+destination+" *** "+destinationType);
 		
 		if(!sourceType.isPrimitive() && !StringUtils.startsWithAny(sourceType.getName(), "java.","javax."))
 			value = __injectFieldHelper__().getFieldValueBusinessIdentifier(value);

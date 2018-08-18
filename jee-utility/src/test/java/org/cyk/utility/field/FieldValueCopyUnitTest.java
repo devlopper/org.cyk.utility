@@ -82,6 +82,22 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		assertThat(instance01.getMyData().getNum()).isEqualTo("a001");
 	}
 	
+	@Test
+	public void one_copy_myData_StringToMyData_null(){
+		MyClass02 instance02 = new MyClass02();
+		MyClass01 instance01 = new MyClass01();
+		__inject__(FieldValueCopy.class).setSource(instance02).setDestination(instance01).setFieldName("myData").execute();
+		assertThat(instance01.getMyData()).isNull();
+	}
+	
+	@Test
+	public void one_copy_myData_MyDataToString_null(){
+		MyClass01 instance01 = new MyClass01();
+		MyClass02 instance02 = new MyClass02();
+		__inject__(FieldValueCopy.class).setSource(instance01).setDestination(instance02).setFieldName("myData").execute();
+		assertThat(instance02.getMyData()).isNull();
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
