@@ -4161,6 +4161,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getUri() {
+		return get(URI);
+	}
+
+	public Properties setUri(Object uri) {
+		set(URI, uri);
+		return this;
+	}
+	
+	public static final String URI = "URI";
 	public static final String PERSISTENCE = "PERSISTENCE";
 	public static final String REPRESENTATION = "REPRESENTATION";
 	public static final String MAP = "MAP";

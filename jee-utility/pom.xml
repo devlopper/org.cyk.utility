@@ -15,11 +15,6 @@
 
 	<name>JEE utility</name>
 
-	<!--properties> <wildfly.swarm.bom.version>2017.2.0</wildfly.swarm.bom.version> 
-		</properties> <dependencyManagement> <dependencies> <dependency> <groupId>org.wildfly.swarm</groupId> 
-		<artifactId>bom-all</artifactId> <version>${wildfly.swarm.bom.version}</version> 
-		<scope>import</scope> <type>pom</type> </dependency> </dependencies> </dependencyManagement -->
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
