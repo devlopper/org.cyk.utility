@@ -10,7 +10,7 @@ public class BusinessFunctionCreatorIntegrationTest extends AbstractArquillianIn
 	
 	@Test
 	public void createOne(){
-		MyEntity myEntity = new MyEntity().setCode("mc001");
+		MyEntity myEntity = new MyEntity().setCode("mc001").setTimestamp(1l);
 		__inject__(BusinessFunctionCreator.class).setEntity(myEntity).execute();
 		assertThat(myEntity.getIdentifier()).isNotNull();
 		assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(SystemActionCreate.class),MyEntity.class))

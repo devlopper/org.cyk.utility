@@ -19,6 +19,9 @@
 		<module>../jee-utility-client-controller-web</module>
 		<module>../jee-utility-client-controller-web-jsf</module>
 		<module>../jee-utility-client-controller-web-jsf-primefaces</module>
+		<module>../jee-utility-client-controller-web-jsf-primefaces-playground-common</module>
+		<module>../jee-utility-client-controller-web-jsf-primefaces-playground-jboss</module>
+		<module>../jee-utility-client-controller-web-jsf-primefaces-playground-swarm</module>
 	</modules>
 
 </project>

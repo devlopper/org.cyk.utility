@@ -14,8 +14,7 @@ public class FieldGetNameUnitTest extends AbstractArquillianUnitTest {
 	@Override
 	protected void __listenBeforeCallCountIsZero__() {
 		super.__listenBeforeCallCountIsZero__();
-		__inject__(FieldNameValueUsageMap.class).set(MyOtherEntity02.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "sysId");
-		__inject__(FieldNameValueUsageMap.class).set(MyOtherEntity02.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, "matricule");
+		
 	}
 	
 	@Test
@@ -44,12 +43,18 @@ public class FieldGetNameUnitTest extends AbstractArquillianUnitTest {
 	
 	@Test
 	public void getSystemFieldNameIdentifierOfMyOtherEntity02(){
+		__inject__(FieldNameValueUsageMap.class).set(MyOtherEntity02.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "sysId");
+		__inject__(FieldNameValueUsageMap.class).set(MyOtherEntity02.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, "matricule");
+		
 		assertThat(__inject__(FieldNameGetter.class).setClazz(MyOtherEntity02.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.SYSTEM).execute().getOutput())
 			.isEqualTo("sysId");
 	}
 	
 	@Test
 	public void getBusinessFieldNameIdentifierOfMyOtherEntity02(){
+		__inject__(FieldNameValueUsageMap.class).set(MyOtherEntity02.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "sysId");
+		__inject__(FieldNameValueUsageMap.class).set(MyOtherEntity02.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, "matricule");
+		
 		assertThat(__inject__(FieldNameGetter.class).setClazz(MyOtherEntity02.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.BUSINESS).execute().getOutput())
 			.isEqualTo("matricule");
 	}

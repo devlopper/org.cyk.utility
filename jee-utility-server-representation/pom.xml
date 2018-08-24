@@ -16,43 +16,9 @@
 	<name>JEE utility server representation</name>
 
 	<properties>
-		<wildfly.swarm.bom.version>2017.2.0</wildfly.swarm.bom.version>
 		<resteasy-bom.version>3.5.1.Final</resteasy-bom.version>
 		<graphene-webdriver.version>2.3.2</graphene-webdriver.version>
 	</properties>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.wildfly.swarm</groupId>
-				<artifactId>bom-all</artifactId>
-				<version>${wildfly.swarm.bom.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			
-			<!--dependency>
-				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>resteasy-bom</artifactId>
-				<version>${resteasy-bom.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>resteasy-client</artifactId>
-				<version>${resteasy-bom.version}</version>
-			</dependency>
-	
-			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>resteasy-jaxb-provider</artifactId>
-				<version>${resteasy-bom.version}</version>
-			</dependency-->
-			
-		</dependencies>
-	</dependencyManagement>
 
 	<dependencies>
 		<dependency>
@@ -60,14 +26,6 @@
 			<artifactId>jee-utility-server-business</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-		
-		<!--dependency>
-			<groupId>org.cyk.pom.jee.server.representation.main.jboss.swarm</groupId>
-			<artifactId>pom-jee-server-representation-main-jboss-swarm</artifactId>
-			<version>pom.jee.server.representation.main.jboss.swarm.0.0.1</version>
-			<type>pom</type>
-			<scope>compile</scope>
-		</dependency-->
 		
 		<dependency>
 			<groupId>org.cyk.pom.jee.server.representation.test.jboss.swarm</groupId>
@@ -109,24 +67,10 @@
 			<scope>provided</scope>
 		</dependency>
 		
-		<!--dependency>
-			<groupId>org.cyk.pom.jee.utility.test.jboss.swarm</groupId>
-			<artifactId>pom-jee-utility-test-jboss-swarm</artifactId>
-			<type>pom</type>
-			<version>0.0.1</version>
-			<scope>test</scope>
-		</dependency-->
-		
 		<dependency>
 			<groupId>org.cyk.jee.utility.server.persistence.impl</groupId>
 			<artifactId>jee-utility-server-persistence-impl</artifactId>
 			<version>0.0.1</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.wildfly.swarm</groupId>
-			<artifactId>arquillian</artifactId>
 			<scope>test</scope>
 		</dependency>
 		

@@ -66,6 +66,11 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	
 	@Test
 	public void one_copy_myData_MyDataToString(){
+		__inject__(FieldNameValueUsageMap.class).set(MyData.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		__inject__(FieldNameValueUsageMap.class).set(MyData.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, "num");
+		
+		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class);
+		
 		MyClass01 instance01 = new MyClass01().setMyData(new MyData().setId("159").setNum("a001"));
 		MyClass02 instance02 = new MyClass02();
 		__inject__(FieldValueCopy.class).setSource(instance01).setDestination(instance02).setFieldName("myData").execute();
