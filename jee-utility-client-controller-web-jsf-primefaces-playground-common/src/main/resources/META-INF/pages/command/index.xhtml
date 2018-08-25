@@ -13,11 +13,28 @@
     <h:body>
     	<h2>Command HOT AS V1 YES!! 123</h2><p:separator/>
     	<h:form>
-    		Without composite component<p:separator/>
-    		<p:commandButton value="Simple Command Button" action="#{myPage.call}"/>
-    		
-    		With composite component<p:separator/>
-    		<cyk:command value="#{commandPage.commandSimple}" />
+    		<table>
+    			<tr>
+    				<td>
+    					Without composite component
+    				</td>
+    			</tr>
+    			<tr>
+    				<td>
+    					<p:commandButton value="Simple Command Button" action="#{commandPage.executeCommandSimple}"/>
+    				</td>
+    			</tr>
+    			<tr>
+    				<td>
+    					With composite component
+    				</td>
+    			</tr>
+    			<tr>
+    				<td>
+    					<cyk:command value="#{commandPage.noServerNoClient}" />
+    				</td>
+    			</tr>
+    		</table>
     		
     	</h:form>
     </h:body>

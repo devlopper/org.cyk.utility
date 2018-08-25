@@ -14,14 +14,6 @@ import org.junit.Test;
 public class MyEntityPersistenceIntegrationTest extends AbstractPersistenceEntityIntegrationTestWithDefaultDeploymentAsSwram<MyEntity> {
 	private static final long serialVersionUID = 1L;
 	
-	/*@Override
-	protected void __listenBeforeCallCountIsZero__() {
-		super.__listenBeforeCallCountIsZero__();
-		for(Map.Entry<Object, Object> entry : System.getProperties().entrySet()) {
-			System.out.println(entry);
-		}
-	}*/
-	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void readByIntegerValueUsingCustom(){

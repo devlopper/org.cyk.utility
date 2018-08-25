@@ -21,15 +21,6 @@ import lombok.experimental.Accessors;
 public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	protected void __listenBeforeCallCountIsZero__() {
-		super.__listenBeforeCallCountIsZero__();
-		__inject__(FieldNameValueUsageMap.class).set(MyData.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-		__inject__(FieldNameValueUsageMap.class).set(MyData.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, "num");
-		
-		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class);
-	}
-	
 	@Test
 	public void one_2_int_string(){
 		MyClass01 instance01 = new MyClass01().setIntField(2);
@@ -81,6 +72,9 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	public void one_copy_myData_StringToMyData(){
 		MyClass02 instance02 = new MyClass02().setMyData("a001");
 		MyClass01 instance01 = new MyClass01();
+		
+		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class);
+		
 		__inject__(FieldValueCopy.class).setSource(instance02).setDestination(instance01).setFieldName("myData").execute();
 		assertThat(instance01.getMyData()).isNotNull();
 		assertThat(instance01.getMyData().getId()).isEqualTo("159");
@@ -156,6 +150,23 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		}
 		
 	}
+	
+	/*@ApplicationScoped
+	public static class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void __initialize__(Object object) {
+			System.out.println("FieldValueCopyUnitTest.ApplicationScopeLifeCycleListener.__initialize__()");
+		}
+
+		@Override
+		protected void __destroy__(Object object) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}*/
 	
 	/**/
 	

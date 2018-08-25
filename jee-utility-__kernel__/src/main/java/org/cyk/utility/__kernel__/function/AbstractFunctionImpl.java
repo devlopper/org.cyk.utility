@@ -34,7 +34,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 					if(executable == null)
 						executable =  Boolean.TRUE;
 					if(Boolean.TRUE.equals(executable))
-					output = __execute__();
+						output = _execute_();
 				}else {
 					runnable.run();
 				}
@@ -60,23 +60,32 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
-	protected OUTPUT __execute__() throws Exception {
+	protected final OUTPUT _execute_() throws Exception {
+		OUTPUT output = null;
 		Class<? extends FunctionRunnable<?>> functionRunnableClass = DependencyInjection.inject(FunctionRunnableMap.class).get(getClass());	
-		if(functionRunnableClass != null) {
-			@SuppressWarnings("rawtypes")
-			FunctionRunnable functionRunnable = DependencyInjection.inject(KernelHelper.class).instanciate(functionRunnableClass);
-			functionRunnable.setFunction(this);
-			Runnable runnable = functionRunnable.getRunnable();
-			if(runnable == null) {
-				throw new RuntimeException(getClass()+" : Function runnable implementation required");
-			}else {
-				runnable.run();
-				return (OUTPUT) functionRunnable.getOutput();	
-			}
-			
+		if(functionRunnableClass == null)
+			output = __execute__();
+		else
+			output = __execute__(functionRunnableClass);
+		return output;
+	}
+	
+	protected OUTPUT __execute__() throws Exception {
+		throw new RuntimeException(getClass()+" : Implementation or runnable required");
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected OUTPUT __execute__(Class<? extends FunctionRunnable<?>> functionRunnableClass) throws Exception {
+		@SuppressWarnings("rawtypes")
+		FunctionRunnable functionRunnable = DependencyInjection.inject(KernelHelper.class).instanciate(functionRunnableClass);
+		functionRunnable.setFunction(this);
+		Runnable runnable = functionRunnable.getRunnable();
+		if(runnable == null) {
+			throw new RuntimeException(getClass()+" : Function runnable implementation required");
+		}else {
+			runnable.run();
+			return (OUTPUT) functionRunnable.getOutput();	
 		}
-		throw new RuntimeException(getClass().getName()+" : Implementation or runnable required");
 	}
 	
 	protected Boolean __executeGetIsExecutable__(Boolean value){

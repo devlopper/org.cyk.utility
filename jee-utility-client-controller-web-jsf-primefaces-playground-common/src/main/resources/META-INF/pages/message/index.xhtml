@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:cyk="http://java.sun.com/jsf/composite/org.cyk.utility.client.controller.web.jsf.primefaces/component">
+	
+    <h:head>
+        <title></title>
+    </h:head>
+    <h:body>
+    	<h2>Message</h2><p:separator/>
+    	<h:form>
+    		<p:autoUpdate >
+    			<p:messages/>
+    		</p:autoUpdate>
+    		
+    		<!--p:autoUpdate >
+    			<p:growl/>
+    		</p:autoUpdate-->
+    		
+    		<p:separator/>
+    		
+    		Inline
+    		<p:separator/>
+    		<p:panelGrid columns="4">	
+    			<p:commandButton value="Info" action="#{messagePage.showInformationInline}" />
+    			<p:commandButton value="Warn" action="#{messagePage.showWarningInline}" />
+    			<p:commandButton value="Error" action="#{messagePage.showErrorInline}" />
+    			<p:commandButton value="Fatal" action="#{messagePage.showFatalInline}" />
+    		</p:panelGrid>
+    		
+    		
+    		Dialog
+    		<p:separator/>
+    		<p:panelGrid columns="4">	
+    			<p:commandButton value="Info" action="#{messagePage.showInformationDialog}" />
+    			<p:commandButton value="Warn" action="#{messagePage.showWarningDialog}" />
+    			<p:commandButton value="Error" action="#{messagePage.showErrorDialog}" />
+    			<p:commandButton value="Fatal" action="#{messagePage.showFatalDialog}" />
+    		</p:panelGrid>
+    		
+    		Growl
+    		<p:separator/>
+    		<p:panelGrid columns="4">	
+    			<p:commandButton value="Info" action="#{messagePage.showInformationGrowl}" />
+    			<p:commandButton value="Warn" action="#{messagePage.showWarningGrowl}" />
+    			<p:commandButton value="Error" action="#{messagePage.showErrorGrowl}" />
+    			<p:commandButton value="Fatal" action="#{messagePage.showFatalGrowl}" />
+    		</p:panelGrid>
+    	</h:form>
+    </h:body>
+</html>

@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
+import org.cyk.utility.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.assertion.AssertionHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.field.FieldHelper;
@@ -24,6 +25,7 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 	protected void __listenBefore__(){
 		if(logEventEntityRepository!=null)
 			logEventEntityRepository.clear();
+		__inject__(ApplicationScopeLifeCycleListener.class).initialize(null);
 	}
 	
 	protected <T> T instanciateOne(Class<T> aClass) {

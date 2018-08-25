@@ -6,6 +6,8 @@ import java.util.Collection;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.client.controller.proxy.ProxyClassUniformResourceIdentifierGetter;
+import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.instance.InstanceHelper;
 
 public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.dynamic.AbstractObject implements Objectable,Serializable {

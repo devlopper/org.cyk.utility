@@ -16,18 +16,20 @@ import lombok.Setter;
 public class CommandPage extends AbstractPageImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Inject private Command commandSimple;
+	@Inject private Command noServerNoClient;
+	@Inject private Command serverOnlyNoConfirmation,serverThenClientNoConfirmation;
+	@Inject private Command clientOnlyNoConfirmation,clientThenServerNoConfirmation;
 	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		commandSimple.getProperties().setValue("Simple");
-		commandSimple.getProperties().setRendered(Boolean.TRUE);
-		
-		commandSimple.setFunctionRunnable(new Runnable() {	
+		noServerNoClient.getProperties().setValue("No Server No Client");
+	
+		serverOnlyNoConfirmation.getProperties().setValue("Server Only No Confirmation");
+		serverOnlyNoConfirmation.setFunctionRunnable(new Runnable() {	
 			@Override
 			public void run() {
-				System.out.println("Call done!!!");
+				System.out.println("Server Only No Confirmation");
 			}
 		});
 	}

@@ -15,14 +15,14 @@
 	<cc:implementation>
 		<p:commandButton 
 			id="#{cc.id}CommandButton"
-			action="#{cc.value.properties.function.execute()}" 
+			action="#{cc.value.function.execute}" 
 			ajax="#{cc.value.properties.ajax}"
 			icon="#{cc.value.properties.icon}"
 			process="#{cc.value.properties.process}"
 			rendered="#{cc.value.properties.rendered}"
 			disabled="#{cc.value.properties.disabled}"
 			type="#{cc.value.properties.type}"
-			title="#{cc.value.properties.title == null ? cc.value.properties.value : cc.value.properties.title}"
+			title="#{cc.value.properties.title}"
 			update="#{cc.value.properties.update}"
 			value="#{cc.value.properties.value}" 
 			oncomplete="#{cc.value.properties.onComplete}"
