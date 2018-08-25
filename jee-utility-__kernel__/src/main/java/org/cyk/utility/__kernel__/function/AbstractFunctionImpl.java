@@ -149,4 +149,15 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	public Function<INPUT, OUTPUT> addChildren(Collection<Object> children) {
 		return (Function<INPUT, OUTPUT>) super.addChildren(children);
 	}
+	
+	@Override
+	public Runnable getRunnable() {
+		return (Runnable) getProperties().getRunnable();
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setRunnable(Runnable runnable) {
+		getProperties().setRunnable(runnable);
+		return this;
+	}
 }

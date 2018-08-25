@@ -12,7 +12,7 @@ public class BusinessFunctionReaderIntegrationTest extends AbstractArquillianInt
 	@Test
 	public void findOneBySystemIdentifierExisting() {
 		String code = __getRandomCode__();
-		MyEntity myEntity = new MyEntity().setCode(code);
+		MyEntity myEntity = new MyEntity().setCode(code).setTimestamp(1l);
 		__inject__(BusinessFunctionCreator.class).setEntity(myEntity).execute();
 		myEntity = (MyEntity) __inject__(BusinessFunctionReader.class).setEntityClass(MyEntity.class)
 				.setEntityIdentifier(myEntity.getIdentifier()).execute().getProperties().getEntity();
@@ -26,7 +26,7 @@ public class BusinessFunctionReaderIntegrationTest extends AbstractArquillianInt
 	@Test
 	public void findOneByBusinessIdentifierExisting() {
 		String code = __getRandomCode__();
-		MyEntity myEntity = new MyEntity().setCode(code);
+		MyEntity myEntity = new MyEntity().setCode(code).setTimestamp(1l);
 		__inject__(BusinessFunctionCreator.class).setEntity(myEntity).execute();
 		myEntity = (MyEntity) __inject__(BusinessFunctionReader.class).setEntityClass(MyEntity.class)
 				.setEntityIdentifier(code).setEntityIdentifierValueUsageType(ValueUsageType.BUSINESS).execute().getProperties().getEntity();

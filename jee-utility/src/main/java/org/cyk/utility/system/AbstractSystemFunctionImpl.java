@@ -10,6 +10,7 @@ import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
@@ -35,6 +36,14 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		setMonitorable(Boolean.TRUE).setLoggable(Boolean.TRUE);
+	}
+
+	@Override
+	protected void __beforeExecute__() {
+		super.__beforeExecute__();
+		//we put markers in message to support those logging framework which do not handle markers
+		addLogMessageBuilderParameter(__inject__(StringHelper.class).concatenate(__injectCollectionHelper__().cast(String.class, getLog(Boolean.TRUE).getMarkers())
+				,CharacterConstant.SPACE.toString()));
 	}
 	
 	@Override

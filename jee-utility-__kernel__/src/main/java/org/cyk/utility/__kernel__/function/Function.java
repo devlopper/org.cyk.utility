@@ -24,4 +24,6 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	
 	Function<INPUT,OUTPUT> addChildren(Collection<Object> children);
 	
+	Function<INPUT,OUTPUT> setRunnable(Runnable runnable);
+	Runnable getRunnable();
 }

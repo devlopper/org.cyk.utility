@@ -9,6 +9,7 @@ import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemActor;
+import org.cyk.utility.system.action.SystemActorClient;
 import org.cyk.utility.system.action.SystemActorServer;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -21,18 +22,18 @@ import lombok.experimental.Accessors;
  *
  */
 @Getter @Setter @Accessors(chain=true)
-public abstract class AbstractSystemFunctionServerImpl extends AbstractSystemFunctionImpl implements SystemFunctionServer, Serializable {
+public abstract class AbstractSystemFunctionClientImpl extends AbstractSystemFunctionImpl implements SystemFunctionClient, Serializable {
 	private static final long serialVersionUID = 1L;
-	/*
-	@Override
+	
+	/*@Override
 	protected void __beforeExecute__() {
 		super.__beforeExecute__();
 		//we put markers in message to support those logging framework which do not handle markers
 		addLogMessageBuilderParameter(__inject__(StringHelper.class).concatenate(__injectCollectionHelper__().cast(String.class, getLog(Boolean.TRUE).getMarkers())
 				,CharacterConstant.SPACE.toString()));
-	}
-	*/
-	@Override
+	}*/
+	
+	/*@Override
 	protected void __afterExecute__() {
 		super.__afterExecute__();
 		Object entity = getProperties().getEntity();
@@ -47,10 +48,10 @@ public abstract class AbstractSystemFunctionServerImpl extends AbstractSystemFun
 					}
 			}
 		}
-	}
+	}*/
 	
 	protected SystemActor getSystemActor(){
-		return __inject__(SystemActorServer.class);
+		return __inject__(SystemActorClient.class);
 	}
 
 }

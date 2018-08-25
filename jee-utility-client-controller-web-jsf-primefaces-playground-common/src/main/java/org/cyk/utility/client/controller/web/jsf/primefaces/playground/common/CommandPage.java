@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.Command;
-import org.cyk.utility.client.controller.component.Execution;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
 
 import lombok.Getter;
@@ -24,16 +23,13 @@ public class CommandPage extends AbstractPageImpl implements Serializable {
 		super.__listenPostConstruct__();
 		commandSimple.getProperties().setValue("Simple");
 		commandSimple.getProperties().setRendered(Boolean.TRUE);
-		Execution execution = __inject__(Execution.class);
-		execution.getProperties().setRunnable(new Runnable() {
-			
+		
+		commandSimple.setFunctionRunnable(new Runnable() {	
 			@Override
 			public void run() {
-				System.out.println("CommandPage.__listenPostConstruct__().new Runnable() {...}.run() ");
-				
+				System.out.println("Call done!!!");
 			}
 		});
-		commandSimple.getProperties().setFunction(execution);
 	}
 	
 	public void executeCommandSimple() {
