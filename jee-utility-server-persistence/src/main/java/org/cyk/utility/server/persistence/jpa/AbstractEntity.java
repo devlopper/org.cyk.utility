@@ -27,5 +27,8 @@ public abstract class AbstractEntity extends AbstractIdentifiedByLong implements
 	 */
 	@NotNull @Column(nullable=false,unique=true)
 	private String code;
+
+	/**/
 	
+	public static final String FIELD_CODE = "code";
 }

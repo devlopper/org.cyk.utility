@@ -1,5 +1,6 @@
 package org.cyk.utility.__kernel__.test.arquillian;
 
+import java.io.File;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.HashSet;
@@ -8,6 +9,8 @@ import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.KernelHelperImpl;
 import org.cyk.utility.__kernel__.maven.pom.Pom;
@@ -56,6 +59,7 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 		
 		String _package = profile == null ? null : profile.getProperty("org.cyk.test.package");
 		String[] classesArray = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.classes")) ? null : profile.getProperty("org.cyk.test.classes").split(",");
+		String[] resourcesFoldersArray = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.resources.folders")) ? null : profile.getProperty("org.cyk.test.resources.folders").split(",");
 		
 		//System.out.println("Swarm project defaults file : "+projectDefaultsYml);
 		//System.out.println("JPA persistence file : "+persistenceXml);
@@ -103,6 +107,24 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 			System.out.println("#classes derived : "+classes.size());
 			if(archive instanceof WebArchive)
 				((WebArchive)archive).addClasses(classes.toArray(new Class<?>[] {}));
+		}
+		
+		/* Resources */
+		
+		Set<String> resources = new HashSet<>();
+		if(resourcesFoldersArray!=null) {
+			String javaResourceFolder = System.getProperty("user.dir")+"\\src\\test\\resources\\";
+			for(String indexDirectory : resourcesFoldersArray){
+				for(File indexFile : FileUtils.listFiles(new File(javaResourceFolder+indexDirectory), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE))
+					resources.add(StringUtils.substringAfter(indexFile.getPath(), javaResourceFolder));
+			}
+		}
+		if(resources!=null && !resources.isEmpty()) {
+			System.out.println("#resources derived : "+resources.size());
+			for(String index : resources) {
+				index = StringUtils.replace(index, "\\", "/");
+				((WebArchive) archive).addAsResource(index,index);
+			}
 		}
 		
 		System.out.println("Building archive done.");
