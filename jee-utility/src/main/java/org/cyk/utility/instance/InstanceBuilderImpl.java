@@ -9,11 +9,12 @@ public class InstanceBuilderImpl<INSTANCE> extends AbstractFunctionWithPropertie
 
 	@Override
 	protected INSTANCE __execute__() throws Exception {
-		Class<?> aClass = getClazz();
-		Object[] parameters = getConstructorParameters();
-		INSTANCE instance = (INSTANCE) __injectClassHelper__().instanciate(aClass,parameters);
+		INSTANCE instance = null;
 		Object fieldsValuesObject = getFieldsValuesObject();
 		if(fieldsValuesObject != null) {
+			Class<?> aClass = getClazz();
+			Object[] parameters = getConstructorParameters();
+			instance = (INSTANCE) __injectClassHelper__().instanciate(aClass,parameters);
 			__injectFieldHelper__().copy(fieldsValuesObject, instance);
 		}
 		return instance;

@@ -27,4 +27,14 @@ public abstract class AbstractEntity extends AbstractRepresentationObject implem
 	protected Integer __getIntegerFrom__(Object object) {
 		return __inject__(NumberHelper.class).getInteger(object);
 	}
+	
+	@Override
+	public String toString() {
+		return FIELD_IDENTIFIER+"="+identifier+" , "+FIELD_CODE+"="+code;
+	}
+	
+	/**/
+	
+	public static final String FIELD_IDENTIFIER = "identifier";
+	public static final String FIELD_CODE = "code";
 }

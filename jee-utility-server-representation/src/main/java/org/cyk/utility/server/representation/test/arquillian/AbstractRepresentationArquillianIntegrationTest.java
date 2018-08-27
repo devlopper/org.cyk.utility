@@ -25,6 +25,7 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
 @SuppressWarnings({"rawtypes","unchecked"})
@@ -47,7 +48,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	
 	@Override
 	protected void __initializeApplicationScopeLifeCycleListener__() {
-		
+		//TODO how to handle CDI
 	}
 	
 	@Override
@@ -56,9 +57,11 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		response.close();
 		if(entity instanceof AbstractEntity) {
-			response = representation.getOne(((AbstractEntity)entity).getCode(), ValueUsageType.BUSINESS.name());
+			String businessIdentifier = ((AbstractEntity)entity).getCode();
+			response = representation.getOne(businessIdentifier, ValueUsageType.BUSINESS.name());
 			entity = (ENTITY) response.readEntity(entity.getClass());
-			assertThat(((AbstractEntity)entity).getIdentifier()).isNotBlank();	
+			Assert.assertNotNull("Get entity with business identifier <"+businessIdentifier+"> not found", entity);
+			Assert.assertNotNull("Entity <"+entity+"> found under business identifier <"+businessIdentifier+"> has null system identifier", ((AbstractEntity)entity).getIdentifier());
 			response.close();
 		}
 	}
@@ -111,7 +114,9 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	
 	@Override
 	protected RepresentationEntity ____getLayerEntityInterfaceFromClass____(Class<?> aClass) {
-		return TARGET.proxy(__getLayerEntityInterfaceClass__());
+		//if(aClass == null)
+			aClass = __getLayerEntityInterfaceClass__();
+		return (RepresentationEntity) TARGET.proxy(aClass);
 	}
 
 	@Override

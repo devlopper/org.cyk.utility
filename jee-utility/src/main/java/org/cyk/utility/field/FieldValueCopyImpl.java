@@ -3,6 +3,7 @@ package org.cyk.utility.field;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,19 +26,21 @@ public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAnd
 			if(isAutomaticallyDetectFields == null)
 				isAutomaticallyDetectFields = Boolean.TRUE;
 			if(Boolean.TRUE.equals(isAutomaticallyDetectFields)) {
-				for(Field index : __inject__(FieldGetter.class).setClazz(getterModel.getObject().getClass()).execute().getOutput()) {
-					if(fieldNameMap == null)
-						fieldNameMap = new HashMap<>();
-					if(!Modifier.isStatic(index.getModifiers()) && !Modifier.isFinal(index.getModifiers()))
-						fieldNameMap.put(index.getName(), index.getName());
-				}
+				Collection<Field> fields = __inject__(FieldGetter.class).setClazz(getterModel.getObject().getClass()).execute().getOutput();
+				if(__injectCollectionHelper__().isNotEmpty(fields))
+					for(Field index : fields) {
+						if(fieldNameMap == null)
+							fieldNameMap = new HashMap<>();
+						if(!Modifier.isStatic(index.getModifiers()) && !Modifier.isFinal(index.getModifiers()))
+							fieldNameMap.put(index.getName(), index.getName());
+					}
 			}
 		}
 		
 		if(fieldNameMap == null) {
 			Object value = getterModel.execute().getOutput();
-			if(setterModel.getField() == null)
-				setterModel.setField(getValueGetter().getField().getName());
+			if(setterModel.getField() == null && getterModel.getField()!=null)
+				setterModel.setField(getterModel.getField().getName());
 			setterModel.setValue(value).execute();
 		}else {
 			for(Map.Entry<String, String> entry : fieldNameMap.entrySet()) {

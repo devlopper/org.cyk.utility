@@ -51,7 +51,14 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass, Properties properties) {
-		return (Collection<ENTITY>) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).execute().getProperties().getEntities();
+		Class<PersistenceEntity<ENTITY>> persistenceClass = __getPersistenceEntityClass__(aClass);
+		Collection<ENTITY> entities;
+		if(persistenceClass == null){
+			entities = (Collection<ENTITY>) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).execute().getProperties().getEntities();
+		}else{
+			entities =  __inject__(persistenceClass).readMany(properties);
+		}
+		return entities;
 	}
 	
 	@Override
@@ -61,8 +68,14 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public <ENTITY> Long count(Class<ENTITY> aClass, Properties properties) {
-		// TODO Auto-generated method stub
-		return null;
+		Class<PersistenceEntity<ENTITY>> persistenceClass = __getPersistenceEntityClass__(aClass);
+		Long count = null;
+		if(persistenceClass == null){
+			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		}else{
+			count =  __inject__(persistenceClass).count(properties);
+		}
+		return count;
 	}
 	
 	@Override
@@ -98,7 +111,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	public <ENTITY> Persistence deleteAll(Class<ENTITY> aClass, Properties properties) {
 		Class<PersistenceEntity<ENTITY>> persistenceClass = __getPersistenceEntityClass__(aClass);
 		if(persistenceClass == null){
-			super.deleteAll();
+			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
 		}else{
 			__inject__(persistenceClass).deleteAll();
 		}
