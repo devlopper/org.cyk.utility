@@ -39,10 +39,15 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	@ArquillianResource protected URL contextPath;
 	
 	@Override
-	protected void __listenBeforeCallCountIsZero__() {
+	protected void __listenBeforeCallCountIsZero__() throws Exception{
 		super.__listenBeforeCallCountIsZero__();
 		CLIENT = new ResteasyClientBuilder().build();
 		TARGET = CLIENT.target(UriBuilder.fromPath(contextPath.toExternalForm()));
+	}
+	
+	@Override
+	protected void __initializeApplicationScopeLifeCycleListener__() {
+		
 	}
 	
 	@Override

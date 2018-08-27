@@ -10,12 +10,6 @@ import org.junit.Test;
 
 public class FieldGetNameUnitTest extends AbstractArquillianUnitTest {
 	private static final long serialVersionUID = 1L;
-
-	@Override
-	protected void __listenBeforeCallCountIsZero__() {
-		super.__listenBeforeCallCountIsZero__();
-		
-	}
 	
 	@Test
 	public void getSystemFieldNameIdentifierOfMyEntity(){

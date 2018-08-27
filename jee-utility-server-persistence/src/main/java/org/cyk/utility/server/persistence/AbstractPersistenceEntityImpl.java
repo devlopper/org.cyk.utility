@@ -3,6 +3,8 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.persistence.Entity;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.array.ArrayHelper;
@@ -28,8 +30,11 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@Override
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
-		addQueryCollectInstances(read, instanciateReadQueryStringBuilder());
-		addQuery(deleteAll, "DELETE FROM "+getEntityClass().getSimpleName()+" tuple",null);
+		if(Boolean.TRUE.equals(getIsPhysicallyMapped())) {
+			//TODO even not physically mapped we should be able to read
+			addQueryCollectInstances(read, instanciateReadQueryStringBuilder());
+			addQuery(deleteAll, "DELETE FROM "+getEntityClass().getSimpleName()+" tuple",null);	
+		}
 	}
 	
 	protected Object[] __getQueryParameters__(String queryIdentifier,Object...objects){
@@ -44,6 +49,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	protected void __listenBeforePostConstruct__() {
 		super.__listenBeforePostConstruct__();
 		setEntityClass((Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class));
+		setIsPhysicallyMapped(getEntityClass().getAnnotation(Entity.class)!=null);
 	}
 
 	@Override
@@ -173,6 +179,17 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@Override
 	public PersistenceEntity<ENTITY> setEntityClass(Class<ENTITY> aClass) {
 		getProperties().setEntityClass(aClass);
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsPhysicallyMapped() {
+		return (Boolean) getProperties().get("isPhysicallyMapped");
+	}
+	
+	@Override
+	public PersistenceEntity<ENTITY> setIsPhysicallyMapped(Boolean isPhysicallyMapped) {
+		getProperties().set("isPhysicallyMapped", isPhysicallyMapped);
 		return this;
 	}
 	

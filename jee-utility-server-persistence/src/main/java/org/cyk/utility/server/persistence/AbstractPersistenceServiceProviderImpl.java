@@ -128,6 +128,10 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	*/
 	/**/
 	
+	protected Boolean __isCreateManyOneByOne__() {
+		return Boolean.TRUE;
+	}
+	
 	@Override
 	public PersistenceServiceProvider<OBJECT> create(Object object,Properties properties) {
 		__inject__(PersistenceFunctionCreator.class).setEntity(object).execute();
@@ -141,8 +145,36 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> createMany(Collection<OBJECT> objects,Properties properties) {
-		__inject__(PersistenceFunctionCreator.class).setEntities(objects).execute();
+		PersistenceFunctionCreator function = __inject__(PersistenceFunctionCreator.class);
+		if(Boolean.TRUE.equals(__isCreateManyOneByOne__())) {
+			//Loop execution
+			function.addExecutionPhaseRunnables(Boolean.TRUE, new Runnable() {
+				@Override
+				public void run() {
+					for(OBJECT index : objects) {
+						create(index);
+					}
+				}
+			});
+			function.getProperties().setFromPath(new Object[]{Properties.IS,Properties.CORE,Properties.EXECUTABLE}, Boolean.FALSE);
+		}else {
+			//Batch execution
+			function.setEntities(objects);
+		}
+		
+		function.execute();
+		
+		if(Boolean.TRUE.equals(__isCreateManyOneByOne__())) {
+			//Loop execution
+			
+		}else {
+			//Batch execution
+			
+		}
 		return this;
+		
+		//__inject__(PersistenceFunctionCreator.class).setEntities(objects).execute();
+		//return this;
 	}
 	
 	@Override
@@ -193,6 +225,12 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	@Override
 	public PersistenceServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects) {
 		return deleteMany(objects, null);
+	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> deleteAll() {
+		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		return this;
 	}
 	
 	/**/

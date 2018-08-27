@@ -16,7 +16,8 @@ public abstract class AbstractPersistenceFunctionTransactionImpl extends Abstrac
 		return queryIdentifier == null ? getEntity() != null : Boolean.TRUE;
 		*/
 		
-		return getQueryIdentifier()!=null || getEntities()!=null || getEntity()!=null;
+		//return getQueryIdentifier()!=null || getEntities()!=null || getEntity()!=null;
+		return Boolean.TRUE;
 	}
 	
 	@Override

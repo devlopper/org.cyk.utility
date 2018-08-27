@@ -5,6 +5,8 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 
 /**
+ * Generic persistence functions provider. It tries , first , to find the specific persistence defined for a specific object class.<br/>
+ * If no specific persistence defined for a specific class then generic processing takes place.
  * 
  * @author Christian
  *

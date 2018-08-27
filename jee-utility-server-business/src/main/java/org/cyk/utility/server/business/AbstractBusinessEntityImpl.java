@@ -21,8 +21,17 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		persistenceEntityClass = (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
-		persistence = (PERSISTENCE) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(getPersistenceEntityClass());
+		persistenceEntityClass = __getEntityClass__();
+		if(persistenceEntityClass == null) {
+			System.err.println(getClass()+" : persistence entity class cannot be derived");
+		}else {
+			persistence = (PERSISTENCE) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(getPersistenceEntityClass());	
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected Class<ENTITY> __getEntityClass__(){
+		return (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
 	}
 	
 	@SuppressWarnings("unchecked")

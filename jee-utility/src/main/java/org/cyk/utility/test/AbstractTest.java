@@ -25,6 +25,10 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 	protected void __listenBefore__(){
 		if(logEventEntityRepository!=null)
 			logEventEntityRepository.clear();
+		__initializeApplicationScopeLifeCycleListener__();
+	}
+	
+	protected void __initializeApplicationScopeLifeCycleListener__() {
 		__inject__(ApplicationScopeLifeCycleListener.class).initialize(null);
 	}
 	

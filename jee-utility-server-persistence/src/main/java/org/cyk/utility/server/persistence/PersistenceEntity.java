@@ -51,6 +51,9 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 	PersistenceEntity<ENTITY> setEntityClass(Class<ENTITY> aClass);
 	Class<ENTITY> getEntityClass();
 	
+	PersistenceEntity<ENTITY> setIsPhysicallyMapped(Boolean isPhysicallyMapped);
+	Boolean getIsPhysicallyMapped();
+	
 	/**/
 	
 	PersistenceEntity<ENTITY> addQuery(Object identifier,String value);

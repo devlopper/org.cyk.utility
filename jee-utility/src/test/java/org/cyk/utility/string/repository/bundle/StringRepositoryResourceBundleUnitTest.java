@@ -15,17 +15,11 @@ public class StringRepositoryResourceBundleUnitTest extends AbstractArquillianUn
 
 	@Inject private StringRepositoryResourceBundle repository;
 	
-	@Override
-	protected void __listenBeforeCallCountIsZero__() {
-		super.__listenBeforeCallCountIsZero__();
-		repository.addBundle("org.cyk.utility.string.repository.bundle.message");
-	}
-	
 	@Test
 	public void isNullWhenKeyNotExist(){
-		assertionHelper.assertNull(repository.getOne("sale"));
-		assertionHelper.assertNull(repository.getOne("person"));
-		assertionHelper.assertNull(repository.getOne("abc"));
+		assertionHelper.assertNull(repository.getOne("sale01"));
+		assertionHelper.assertNull(repository.getOne("person01"));
+		assertionHelper.assertNull(repository.getOne("abc01"));
 	}
 	
 	@Test
