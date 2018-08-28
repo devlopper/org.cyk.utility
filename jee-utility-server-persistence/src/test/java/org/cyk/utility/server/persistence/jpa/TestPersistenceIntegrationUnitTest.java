@@ -9,7 +9,7 @@ public class TestPersistenceIntegrationUnitTest extends AbstractPersistenceArqui
 
 	@Test
 	public void create(){
-		__inject__(TestPersistenceCreate.class).setObject(new MyEntity().setCode(__getRandomCode__())).execute();
+		__inject__(TestPersistenceCreate.class).addObjects(new MyEntity().setCode(__getRandomCode__())).execute();
 	}
 	
 	@Test

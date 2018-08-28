@@ -134,7 +134,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> create(Object object,Properties properties) {
-		__inject__(PersistenceFunctionCreator.class).setEntity(object).execute();
+		__inject__(PersistenceFunctionCreator.class).setEntity(object).setCallerClass(getClass()).setCallerIdentifier(getIdentifier()).execute();
 		return this;
 	}
 	

@@ -58,6 +58,13 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	protected void afterExecute() {
 		super.afterExecute();
 		getLog(Boolean.TRUE).getMessageBuilder(Boolean.TRUE).addParameter("duration", getProperties().getFromPath(Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION));
+		Class<?> callerClass = getCallerClass();
+		if(callerClass !=null)
+			getLog(Boolean.TRUE).getMessageBuilder(Boolean.TRUE).addParameter("caller class", callerClass);
+		//TODO log is not printed when following are uncommented
+		//Object callerIdentifier = getCallerIdentifier();
+		//if(callerIdentifier !=null)
+		//	getLog(Boolean.TRUE).getMessageBuilder(Boolean.TRUE).addParameter("calleridentifier", callerIdentifier);
 		Log log = getLog();
 		if(log!=null && Boolean.TRUE.equals(getLoggable()))
 			log.execute();

@@ -4,14 +4,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.field.FieldName;
+import org.cyk.utility.field.FieldNameGetter;
+import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.log.LogEventEntityRepository;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.number.NumberHelper;
+import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractAssertionHelperImpl extends AbstractHelper implements AssertionHelper, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	public AssertionHelper assertNotNull(String message, Object object,FieldName fieldName, ValueUsageType valueUsageType) {
+		String name = __inject__(FieldNameGetter.class).execute(object.getClass(), fieldName, valueUsageType).getOutput();
+		if(__inject__(StringHelper.class).isNotBlank(name))
+			assertNotNull(message, __inject__(FieldValueGetter.class).execute(object, name).getOutput());
+		return this;
+	}
+	
+	@Override
+	public AssertionHelper assertNotNull(Object object,FieldName fieldName, ValueUsageType valueUsageType) {
+		return assertNotNull(valueUsageType+" "+fieldName+" value of object "+object+" is null", object, fieldName, valueUsageType);
+	}
+	
 	@Override
 	public AssertionHelper assertEqualsNumber(String message, Object expected, Object actual) {
 		assertEquals(message, __inject__(NumberHelper.class).getBigDecimal(expected), __inject__(NumberHelper.class).getBigDecimal(actual));

@@ -169,4 +169,26 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		getProperties().setRunnable(runnable);
 		return this;
 	}
+	
+	@Override
+	public Class<?> getCallerClass() {
+		return (Class<?>) getProperties().getFromPath(Properties.CALLER,Properties.CLASS);
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setCallerClass(Class<?> aClass) {
+		getProperties().setFromPath(new Object[] {Properties.CALLER,Properties.CLASS}, aClass);
+		return this;
+	}
+	
+	@Override
+	public Class<?> getCallerIdentifier() {
+		return (Class<?>) getProperties().getFromPath(Properties.CALLER,Properties.IDENTIFIER);
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setCallerIdentifier(Object identifier) {
+		getProperties().setFromPath(new Object[] {Properties.CALLER,Properties.IDENTIFIER}, identifier);
+		return this;
+	}
 }

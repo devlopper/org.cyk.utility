@@ -5,18 +5,26 @@ import java.util.Collection;
 import javax.transaction.UserTransaction;
 
 import org.cyk.utility.test.TestIntegration;
+import org.cyk.utility.value.ValueUsageType;
 
 public interface TestPersistenceServiceProviderFunction extends TestIntegration {
 
 	UserTransaction getUserTransaction();
 	TestPersistenceServiceProviderFunction setUserTransaction(UserTransaction userTransaction);
 	
-	Object getObject();
-	TestPersistenceServiceProviderFunction setObject(Object object);
+	Class<?> getObjectClass();
+	TestPersistenceServiceProviderFunction setObjectClass(Class<?> objectClass);
 	
 	Collection<Object> getObjects();
 	TestPersistenceServiceProviderFunction setObjects(Collection<Object> objects);
 	TestPersistenceServiceProviderFunction addObjects(Object...objects);
+	
+	ValueUsageType getIdentifierValueUsageType();
+	TestPersistenceServiceProviderFunction setIdentifierValueUsageType(ValueUsageType valueUsageType);
+	
+	Collection<Object> getObjectIdentifiers();
+	TestPersistenceServiceProviderFunction setObjectIdentifiers(Collection<Object> objectIdentifiers);
+	TestPersistenceServiceProviderFunction addObjectIdentifiers(Object...objectIdentifiers);
 	
 	TestPersistenceServiceProviderFunction setExecutionCount(Integer count);
 	Integer getExecutionCount();

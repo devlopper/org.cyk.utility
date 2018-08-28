@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.server.business.BusinessEntity;
@@ -90,13 +91,18 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response getOne(String identifier,String type) {
+		ResponseBuilder responseBuilder = null;
 		ValueUsageType valueUsageType = __getValueUsageType__(type);
 		ENTITY entity = null;
 		if(ValueUsageType.SYSTEM.equals(valueUsageType))
 			entity =  __injectInstanceHelper__().buildOne(getEntityClass(),getBusiness().findOne(__injectNumberHelper__().getLong(identifier)));
 		else if(ValueUsageType.BUSINESS.equals(valueUsageType))
 			entity = __injectInstanceHelper__().buildOne(getEntityClass(),getBusiness().findOneByBusinessIdentifier(identifier));
-		return Response.status(Response.Status.OK).entity(new GenericEntity<ENTITY>(entity, getEntityClass())).build();
+		if(entity == null)
+			responseBuilder = Response.status(Response.Status.NO_CONTENT);
+		else
+			responseBuilder = Response.status(Response.Status.OK).entity(new GenericEntity<ENTITY>(entity, getEntityClass()));
+		return responseBuilder.build();
 	}
 	
 	//TODO use representation function to get the response to the desired request

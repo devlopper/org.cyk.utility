@@ -26,4 +26,10 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	
 	Function<INPUT,OUTPUT> setRunnable(Runnable runnable);
 	Runnable getRunnable();
+	
+	Function<INPUT,OUTPUT> setCallerClass(Class<?> aClass);
+	Class<?> getCallerClass();
+	
+	Function<INPUT,OUTPUT> setCallerIdentifier(Object identifier);
+	Object getCallerIdentifier();
 }

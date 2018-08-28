@@ -1,8 +1,10 @@
 package org.cyk.utility.assertion;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.field.FieldName;
 import org.cyk.utility.helper.Helper;
 import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.value.ValueUsageType;
 
 public interface AssertionHelper extends Helper {
 
@@ -11,6 +13,8 @@ public interface AssertionHelper extends Helper {
 	
 	AssertionHelper assertNotNull(String message,Object object);
 	AssertionHelper assertNotNull(Object object);
+	AssertionHelper assertNotNull(String message,Object object,FieldName fieldName,ValueUsageType valueUsageType);
+	AssertionHelper assertNotNull(Object object,FieldName fieldName,ValueUsageType valueUsageType);
 	
 	AssertionHelper assertTrue(String message,Boolean condition);
 	AssertionHelper assertTrue(Boolean condition);
