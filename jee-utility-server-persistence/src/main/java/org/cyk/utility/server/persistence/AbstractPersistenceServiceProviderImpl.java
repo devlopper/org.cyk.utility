@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
 
+import javax.enterprise.util.AnnotationLiteral;
+
 import org.apache.commons.lang.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
@@ -134,7 +136,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> create(Object object,Properties properties) {
-		__inject__(PersistenceFunctionCreator.class).setEntity(object).setCallerClass(getClass()).setCallerIdentifier(getIdentifier()).execute();
+		____inject____(PersistenceFunctionCreator.class).setEntity(object).execute();
 		return this;
 	}
 	
@@ -184,7 +186,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> update(Object object, Properties properties) {
-		__inject__(PersistenceFunctionModifier.class).setEntity(object).execute();
+		____inject____(PersistenceFunctionModifier.class).setEntity(object).execute();
 		return this;
 	}
 	
@@ -196,7 +198,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects,Properties properties) {
-		__inject__(PersistenceFunctionModifier.class).setEntities(objects).execute();
+		____inject____(PersistenceFunctionModifier.class).setEntities(objects).execute();
 		return this;
 	}
 	
@@ -207,7 +209,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 
 	@Override
 	public PersistenceServiceProvider<OBJECT> delete(Object object, Properties properties) {
-		__inject__(PersistenceFunctionRemover.class).setEntity(object).execute();
+		____inject____(PersistenceFunctionRemover.class).setEntity(object).execute();
 		return this;
 	}
 	
@@ -218,7 +220,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects, Properties properties) {
-		__inject__(PersistenceFunctionRemover.class).setEntities(objects).execute();
+		____inject____(PersistenceFunctionRemover.class).setEntities(objects).execute();
 		return this;
 	}
 	
@@ -298,4 +300,14 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		Tuple tuple = new Tuple().setName(entityClass.getSimpleName());
 		return JpqlQualifier.map(QueryStringBuilderSelect.class).from(tuple);
 	}
+	
+	@Override
+	protected <O> O ____inject____(Class<O> aClass, AnnotationLiteral<?>... annotationLiterals) {
+		O o = super.____inject____(aClass, annotationLiterals);
+		if(o instanceof PersistenceFunction) {
+			((PersistenceFunction)o).setCallerClass(getClass()).setCallerIdentifier(getIdentifier());
+		}
+		return o;
+	}
+	
 }

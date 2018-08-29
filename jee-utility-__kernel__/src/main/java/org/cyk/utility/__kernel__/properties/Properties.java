@@ -4188,6 +4188,8 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public static final String TRY_CATCH_FINALLY = "TRY_CATCH_FINALLY";
+	public static final String FINALLY = "FINALLY";
 	public static final String IDENTIFIERS = "IDENTIFIERS";
 	public static final String CALLER = "CALLER";
 	public static final String URI = "URI";

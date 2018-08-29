@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 
-import org.cyk.utility.__kernel__.function.FunctionRunnableImpl;
+import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.instance.InstanceGetter;
 import org.cyk.utility.instance.InstanceGetterImpl;
@@ -134,7 +134,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		
 	}
 	
-	public static class InstanceGetterFunctionRunnableImpl extends FunctionRunnableImpl<InstanceGetter> implements Serializable {
+	public static class InstanceGetterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<InstanceGetter> implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
 		public InstanceGetterFunctionRunnableImpl() {

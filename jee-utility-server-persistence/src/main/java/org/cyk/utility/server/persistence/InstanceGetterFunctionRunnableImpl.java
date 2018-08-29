@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.function.FunctionRunnableImpl;
+import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.instance.InstanceGetter;
 
-public class InstanceGetterFunctionRunnableImpl extends FunctionRunnableImpl<InstanceGetter> implements Serializable {
+public class InstanceGetterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<InstanceGetter> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public InstanceGetterFunctionRunnableImpl() {

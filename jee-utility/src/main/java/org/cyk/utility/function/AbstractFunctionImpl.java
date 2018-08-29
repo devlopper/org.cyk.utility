@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.function.FunctionRunnable;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.assertion.Assertion;
 import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.character.CharacterConstant;
@@ -39,13 +42,37 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 					index.run();
 				}
 			}
+			
+			Collection<FunctionRunnable<?>> functionRunnables = executionPhase.getFunctionRunnables();
+			if(__injectCollectionHelper__().isNotEmpty(functionRunnables)){
+				for(FunctionRunnable<?> index : functionRunnables){
+					index.getRunnable().run();
+				}
+			}
 		}
 		
 	}
 	
 	@Override
-	protected void __executeVerifyPostConditions__() {
-		super.__executeVerifyPostConditions__();
+	protected void __finally__() {
+		super.__finally__();
+		ExecutionPhase executionPhase = getPostExecutionPhase();
+		if(executionPhase!=null){
+			Collection<Runnable> runnables = executionPhase.getFinallyRunnables();
+			if(__injectCollectionHelper__().isNotEmpty(runnables)){
+				for(Runnable index : runnables){
+					index.run();
+				}
+			}
+			/*
+			Collection<FunctionRunnable<?>> functionRunnables = executionPhase.getFinallyFunctionRunnables();
+			if(__injectCollectionHelper__().isNotEmpty(functionRunnables)){
+				for(FunctionRunnable<?> index : functionRunnables){
+					index.getRunnable().run();
+				}
+			}
+			*/
+		}
 	}
 	
 	@Override
@@ -204,6 +231,29 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 		if(executionPhase == null)
 			getProperties().setFromPath(new Object[]{Properties.EXECUTION,pre}, executionPhase = new ExecutionPhase());
 		executionPhase.addRunnables(runnables);
+		return this;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> addExecutionPhaseFunctionRunnables(Boolean isPre,FunctionRunnable<?>...functionRunnables){
+		String pre = Boolean.TRUE.equals(isPre) ? Properties.PRE : Properties.POST;
+		ExecutionPhase executionPhase = (ExecutionPhase) getProperties().getFromPath(Properties.EXECUTION,pre);
+		if(executionPhase == null)
+			getProperties().setFromPath(new Object[]{Properties.EXECUTION,pre}, executionPhase = new ExecutionPhase());
+		executionPhase.addFunctionRunnables(functionRunnables);
+		
+		if(__inject__(ArrayHelper.class).isNotEmpty(functionRunnables)) {
+			for(FunctionRunnable<?> index : functionRunnables)
+				if(index.getFunction() == null)
+					try {
+						//TODO must be integrated in FieldValueSetter
+						MethodUtils.invokeMethod(index, "setFunction", this);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				
+		}
+		
 		return this;
 	}
 	

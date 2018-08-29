@@ -34,7 +34,6 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 			valueUsageType = ValueUsageType.SYSTEM;
 		String identifierFieldName = __inject__(FieldNameGetter.class).execute(aClass, FieldName.IDENTIFIER, valueUsageType).getOutput();
 		Object entity;
-		
 		if(ValueUsageType.SYSTEM.equals(valueUsageType))
 			entity = getEntityManager().find(aClass,entityIdentifier);
 		else{

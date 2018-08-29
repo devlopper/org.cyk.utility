@@ -5,12 +5,12 @@ import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
-import org.cyk.utility.__kernel__.function.FunctionRunnableImpl;
+import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderType;
 import org.cyk.utility.client.controller.message.MessageRenderTypeInline;
 
-public abstract class AbstractMessageRenderFunctionRunnableImpl extends FunctionRunnableImpl<MessageRender> implements Serializable {
+public abstract class AbstractMessageRenderFunctionRunnableImpl extends AbstractFunctionRunnableImpl<MessageRender> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public AbstractMessageRenderFunctionRunnableImpl() {

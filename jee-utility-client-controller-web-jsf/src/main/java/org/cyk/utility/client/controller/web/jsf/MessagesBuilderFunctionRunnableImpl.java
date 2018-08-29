@@ -7,7 +7,7 @@ import java.util.Collection;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 
-import org.cyk.utility.__kernel__.function.FunctionRunnableImpl;
+import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.message.MessagesBuilder;
 import org.cyk.utility.notification.Notification;
 import org.cyk.utility.notification.NotificationSeverity;
@@ -16,7 +16,7 @@ import org.cyk.utility.notification.NotificationSeverityFatal;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
 
-public class MessagesBuilderFunctionRunnableImpl extends FunctionRunnableImpl<MessagesBuilder> implements Serializable {
+public class MessagesBuilderFunctionRunnableImpl extends AbstractFunctionRunnableImpl<MessagesBuilder> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public MessagesBuilderFunctionRunnableImpl() {

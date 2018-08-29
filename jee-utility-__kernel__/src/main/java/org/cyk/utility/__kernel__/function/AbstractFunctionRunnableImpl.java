@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
-public class FunctionRunnableImpl<FUNCTION extends Function<?,?>> extends AbstractObject implements FunctionRunnable<FUNCTION>,Serializable {
+public abstract class AbstractFunctionRunnableImpl<FUNCTION extends Function<?,?>> extends AbstractObject implements FunctionRunnable<FUNCTION>,Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@SuppressWarnings("unchecked")

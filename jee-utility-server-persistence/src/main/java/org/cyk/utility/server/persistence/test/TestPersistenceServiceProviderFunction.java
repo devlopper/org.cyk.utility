@@ -32,4 +32,9 @@ public interface TestPersistenceServiceProviderFunction extends TestIntegration 
 	TestPersistenceServiceProviderFunction assertThrowableCauseIsInstanceOfSqlException();
 	
 	TestPersistenceServiceProviderFunction execute();
+	
+	@Override TestPersistenceServiceProviderFunction addObjectsToBeCreatedCollection(Collection<Object> objects);
+	@Override TestPersistenceServiceProviderFunction addObjectsToBeCreatedArray(Object... objects);
+	
+	@Override TestPersistenceServiceProviderFunction setName(String name);
 }

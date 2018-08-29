@@ -8,6 +8,7 @@ public abstract class AbstractTestPersistenceServiceProviderCreateImpl extends A
 	@Override
 	protected void __perform__(Object object) throws Exception {
 		__inject__(Persistence.class).create(object);
+		addGarbagesArray(object);
 	}
 	
 }

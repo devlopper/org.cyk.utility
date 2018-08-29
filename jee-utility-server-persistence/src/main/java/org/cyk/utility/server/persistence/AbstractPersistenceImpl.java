@@ -37,6 +37,10 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> ENTITY readOne(Class<ENTITY> aClass, Object identifier,Properties properties) {
+		if(aClass == null)
+			__injectThrowableHelper__().throwRuntimeException("class is required");
+		if(identifier == null)
+			__injectThrowableHelper__().throwRuntimeException("identifier is required");
 		ValueUsageType valueUsageType = properties == null ? ValueUsageType.SYSTEM : (ValueUsageType) __inject__(ValueHelper.class).defaultToIfNull(properties.getValueUsageType(),ValueUsageType.SYSTEM);
 		Class<PersistenceEntity<ENTITY>> persistenceClass = __getPersistenceEntityClass__(aClass,__inject__(SystemActionRead.class));
 		ENTITY entity;

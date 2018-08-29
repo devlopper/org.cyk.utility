@@ -2,88 +2,77 @@ package org.cyk.utility.server.persistence.jpa;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import javax.inject.Inject;
+import java.sql.SQLException;
 
-import org.cyk.utility.server.persistence.Persistence;
+import javax.validation.ConstraintViolationException;
+
+import org.cyk.utility.server.persistence.test.FunctionRunnableTest;
 import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
+import org.cyk.utility.server.persistence.test.TestPersistenceDelete;
+import org.cyk.utility.server.persistence.test.TestPersistenceRead;
+import org.cyk.utility.server.persistence.test.TestPersistenceUpdate;
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram;
+import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
 public class PersistenceIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram {
 	private static final long serialVersionUID = 1L;
 		
-	@Inject private Persistence persistence;
-	
 	@Test
 	public void create() throws Exception{
-		__inject__(TestPersistenceCreate.class).addObjects(new MyEntity().setCode(__getRandomCode__())).execute();
+		__inject__(TestPersistenceCreate.class).addObjects(new MyEntity().setCode("a")).execute();
 	}
 	
-	//@Test
+	@Test
 	public void read() throws Exception{
-		String code = __getRandomCode__();
-		MyEntity myEntity = new MyEntity().setCode(code);
-		userTransaction.begin();
-		persistence.create(myEntity);
-		userTransaction.commit();
-		
-		//__inject__(TestPersistenceRead.class).setObject(new MyEntity().setCode(__getRandomCode__())).execute();
-		assertThat(myEntity.getIdentifier()).isNotNull();
-		myEntity = persistence.readOne(MyEntity.class,myEntity.getIdentifier());
-		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Read MyEntity");
-		assertThat(myEntity).isNotNull();
-		assertThat(myEntity.getCode()).isEqualTo(code);
+		String code = "a";
+		__inject__(TestPersistenceRead.class).setObjectClass(MyEntity.class).setIdentifierValueUsageType(ValueUsageType.BUSINESS).addObjectIdentifiers(code)
+			.addObjectsToBeCreatedArray(new MyEntity().setCode(code)).execute();
 	}
-	/*
+	
 	@Test
 	public void update() throws Exception{
-		MyEntity myEntity = new MyEntity().setCode(__getRandomCode__());
-		userTransaction.begin();
-		persistence.create(myEntity);
-		userTransaction.commit();
-		myEntity = persistence.readOne(MyEntity.class,myEntity.getIdentifier());
-		String newCode = __getRandomCode__();
-		myEntity.setCode(newCode);
-		userTransaction.begin();
-		persistence.update(myEntity);
-		userTransaction.commit();
-		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Update MyEntity");
-		myEntity = persistence.readOne(MyEntity.class,myEntity.getIdentifier());
-		assertThat(myEntity).isNotNull();
-		assertThat(myEntity.getCode()).isEqualTo(newCode);
+		String code = "a";
+		FunctionRunnableTest functionRunnable = __inject__(FunctionRunnableTest.class);
+		functionRunnable.setRunnable(new Runnable() {
+			@Override
+			public void run() {
+				MyEntity myEntity = __inject__(MyEntityPersistence.class).readOneByBusinessIdentifier(code);
+				myEntity.setIntegerValue(33);
+				((TestPersistenceUpdate)functionRunnable.getFunction()).addObjects(myEntity);
+			}
+		});
+		
+		__inject__(TestPersistenceUpdate.class).addObjectsToBeCreatedArray(new MyEntity().setCode(code))
+			.addExecutionPhaseFunctionRunnables(Boolean.TRUE, functionRunnable).execute();
 	}
 	
 	@Test
 	public void delete() throws Exception{
-		MyEntity myEntity = new MyEntity().setCode(__getRandomCode__());
-		userTransaction.begin();
-		persistence.create(myEntity);
-		userTransaction.commit();
-		myEntity = persistence.readOne(MyEntity.class,myEntity.getIdentifier());
-		assertThat(myEntity).isNotNull();
-		userTransaction.begin();
-		persistence.delete(myEntity);
-		userTransaction.commit();
-		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Delete MyEntity");
-		myEntity = persistence.readOne(MyEntity.class,myEntity.getIdentifier());
-		assertThat(myEntity).isNull();
+		MyEntity myEntity = new MyEntity().setCode("a");
+		__inject__(TestPersistenceDelete.class).addObjectsToBeCreatedArray(myEntity).addObjects(myEntity).execute();
 	}
 	
-	@Test(expected=javax.transaction.RollbackException.class)
+	@Test
 	public void isCodeMustBeUnique() throws Exception{
-		String code = __getRandomCode__();
-		userTransaction.begin();
-		persistence.create(new MyEntity().setCode(code));
-		assertThat(logEventEntityRepository.getLastMessage()).startsWith("Server Persistence Create MyEntity").contains("code="+code);
-		persistence.create(new MyEntity().setCode(code));
-		userTransaction.commit();
+		String code = "a";
+		__inject__(TestPersistenceCreate.class).addObjects(new MyEntity().setCode(code),new MyEntity().setCode(code)).setName("MyEntity.code unicity")
+		.setExpectedThrowableCauseClass(SQLException.class).execute()
+			//.assertThrowableCauseIsInstanceOfSqlException()
+			;
 	}
 	
-	@Test(expected=javax.transaction.RollbackException.class)
+	@Test
 	public void isCodeMustBeNotNull() throws Exception{
-		userTransaction.begin();
-		persistence.create(new MyEntity());
-		userTransaction.commit();
+		TestPersistenceCreate test = __inject__(TestPersistenceCreate.class);
+		test.addObjects(new MyEntity()).setName("MyEntity.code notnull")
+		.setExpectedThrowableCauseClass(ConstraintViolationException.class)
+		.execute()
+			//.assertThrowableCauseIsInstanceOfConstraintViolationException()
+			;
+		assertThat(__inject__(ThrowableHelper.class).getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage())
+			.contains("propertyPath=code");
 	}
-	*/
+	
 }

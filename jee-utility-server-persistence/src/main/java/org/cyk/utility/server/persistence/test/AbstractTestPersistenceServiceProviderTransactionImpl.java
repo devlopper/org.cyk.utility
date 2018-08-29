@@ -6,6 +6,11 @@ public abstract class AbstractTestPersistenceServiceProviderTransactionImpl exte
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	protected Boolean __getIsTransactional__() {
+		return Boolean.TRUE;
+	}
+	
+	@Override
 	protected Collection<Object> __getExecutionObjects__() throws Exception {
 		return getObjects();
 	}

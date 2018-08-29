@@ -1,6 +1,8 @@
 package org.cyk.utility.__kernel__.function;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
@@ -22,13 +24,14 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		Boolean executable = __executeGetIsExecutable__(getIsExecutable());
 		if(Boolean.TRUE.equals(executable)){
 			Long start = System.currentTimeMillis();
-			__executeVerifyPreConditions__();
-			getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.START}, start);
-			
 			OUTPUT output = null;
-			Runnable runnable = (Runnable) getProperties().getRunnable();
-			__beforeExecute__();
 			try {
+				__executeVerifyPreConditions__();
+				getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.START}, start);
+				
+				Runnable runnable = (Runnable) getProperties().getRunnable();
+				__beforeExecute__();
+				
 				if(runnable == null){
 					executable = (Boolean) getProperties().getFromPath(Properties.IS,Properties.CORE,Properties.EXECUTABLE);
 					if(executable == null)
@@ -39,10 +42,20 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 					runnable.run();
 				}
 			} catch (Exception exception) {
-				if(Boolean.TRUE.equals(getIsCatchThrowable()))
+				if(Boolean.TRUE.equals(getIsCatchThrowable())) {
+					//TODO print the className.methodName.lineNumber. Those values can be taken from the stack trace elements array
+					System.err.println(getClass()+" : Caught exception : "+exception);
 					getProperties().setThrowable(exception);	
-				else
-					throw new RuntimeException(exception);
+				}else {
+					RuntimeException runtimeException;
+					if(exception instanceof RuntimeException)
+						runtimeException =  (RuntimeException) exception;
+					else
+						runtimeException = new RuntimeException(exception);
+					throw runtimeException;
+				}
+			} finally {
+				__finally__();
 			}
 			__afterExecute__();
 			__executeVerifyPostConditions__();
@@ -100,6 +113,14 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	protected void __afterExecute__(){}
 	
 	protected void afterExecute(){}
+	
+	protected void __finally__() {
+		Collection<Runnable> runnables = getFinallyRunnablesInTryCatchFinally();
+		if(runnables!=null && !runnables.isEmpty()) {
+			for(Runnable index : runnables)
+				index.run();
+		}
+	}
 	
 	@Override
 	public Function<INPUT, OUTPUT> setInput(INPUT input) {
@@ -189,6 +210,37 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	@Override
 	public Function<INPUT, OUTPUT> setCallerIdentifier(Object identifier) {
 		getProperties().setFromPath(new Object[] {Properties.CALLER,Properties.IDENTIFIER}, identifier);
+		return this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<Runnable> getFinallyRunnablesInTryCatchFinally(){
+		return (Collection<Runnable>) getProperties().getFromPath(Properties.TRY_CATCH_FINALLY,Properties.FINALLY,Properties.RUNNABLES);
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setFinallyRunnablesInTryCatchFinally(Collection<Runnable> runnables){
+		getProperties().setFromPath(new Object[] {Properties.TRY_CATCH_FINALLY,Properties.FINALLY,Properties.RUNNABLES}, runnables);
+		return this;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> addFinallyRunnablesInTryCatchFinally(Collection<Runnable> runnables){
+		if(runnables!=null && !runnables.isEmpty()) {
+			Collection<Runnable> collection = getFinallyRunnablesInTryCatchFinally();
+			if(collection == null)
+				setFinallyRunnablesInTryCatchFinally(collection = new ArrayList<>());	
+			collection.addAll(runnables);
+		}
+		return this;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> addFinallyRunnablesInTryCatchFinally(Runnable...runnables){
+		if(runnables!=null && runnables.length>0) {
+			addFinallyRunnablesInTryCatchFinally(Arrays.asList(runnables));
+		}
 		return this;
 	}
 }

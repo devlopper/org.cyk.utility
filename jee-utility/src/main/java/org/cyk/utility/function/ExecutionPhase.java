@@ -3,6 +3,7 @@ package org.cyk.utility.function;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.function.FunctionRunnable;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.Assertion;
 import org.cyk.utility.assertion.AssertionBuilder;
@@ -69,6 +70,46 @@ public class ExecutionPhase extends org.cyk.utility.__kernel__.function.Executio
 	
 	public ExecutionPhase addRunnables(Runnable...runnables){
 		addRunnables(__inject__(CollectionHelper.class).instanciate(runnables));
+		return this;
+	}
+	
+	public Collection<FunctionRunnable<?>> getFunctionRunnables(){
+		return (Collection<FunctionRunnable<?>>) getProperties().getFromPath(Properties.FUNCTION,Properties.RUNNABLES);
+	}
+	
+	public ExecutionPhase setFunctionRunnables(Collection<FunctionRunnable<?>> functionRunnables){
+		getProperties().setFromPath(new Object[] {Properties.FUNCTION,Properties.RUNNABLES}, functionRunnables);
+		return this;
+	}
+	
+	public ExecutionPhase addFunctionRunnables(Collection<FunctionRunnable<?>> functionRunnables){
+		setFunctionRunnables(__inject__(CollectionHelper.class).add(getFunctionRunnables(), Boolean.TRUE, functionRunnables));
+		return this;
+	}
+	
+	public ExecutionPhase addFunctionRunnables(FunctionRunnable<?>...functionRunnables){
+		addFunctionRunnables(__inject__(CollectionHelper.class).instanciate(functionRunnables));
+		return this;
+	}
+	
+	/* Try finally */
+	
+	public Collection<Runnable> getFinallyRunnables(){
+		return (Collection<Runnable>) getProperties().getFromPath(Properties.FINALLY,Properties.RUNNABLES);
+	}
+	
+	public ExecutionPhase setFinallyRunnables(Collection<Runnable> runnables){
+		getProperties().setFromPath(new Object[] {Properties.FINALLY,Properties.RUNNABLES}, runnables);
+		return this;
+	}
+	
+	public ExecutionPhase addFinallyRunnables(Collection<Runnable> runnables){
+		setFinallyRunnables(__inject__(CollectionHelper.class).add(getFinallyRunnables(), Boolean.TRUE, runnables));
+		return this;
+	}
+	
+	public ExecutionPhase addFinallyRunnables(Runnable...runnables){
+		addFinallyRunnables(__inject__(CollectionHelper.class).instanciate(runnables));
 		return this;
 	}
 	

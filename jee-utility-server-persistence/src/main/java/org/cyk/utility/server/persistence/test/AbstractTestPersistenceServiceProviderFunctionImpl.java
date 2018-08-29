@@ -4,25 +4,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.inject.Inject;
+import javax.persistence.Entity;
 import javax.transaction.UserTransaction;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
+import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.test.AbstractTestIntegrationImpl;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends AbstractTestIntegrationImpl implements TestPersistenceServiceProviderFunction {
 	private static final long serialVersionUID = 1L;
 
-	@Inject private UserTransaction userTransaction;
-	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		setUserTransaction(userTransaction);
+		setUserTransaction(__inject__(UserTransaction.class));
 	}
 	
 	@Override
@@ -107,12 +106,27 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 	@Override
 	public TestPersistenceServiceProviderFunction addObjectIdentifiers(Object... objectIdentifiers) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(objectIdentifiers)){
-			Collection<Object> collection = getObjects();
+			Collection<Object> collection = getObjectIdentifiers();
 			if(collection == null)
 				setObjectIdentifiers(collection = new ArrayList<Object>());
 			__inject__(CollectionHelper.class).add(collection, objectIdentifiers);
 		}
 		return this;
+	}
+	
+	@Override
+	public TestPersistenceServiceProviderFunction addObjectsToBeCreatedArray(Object... objects) {
+		return (TestPersistenceServiceProviderFunction) super.addObjectsToBeCreatedArray(objects);
+	}
+	
+	@Override
+	public TestPersistenceServiceProviderFunction addObjectsToBeCreatedCollection(Collection<Object> objects) {
+		return (TestPersistenceServiceProviderFunction) super.addObjectsToBeCreatedCollection(objects);
+	}
+	
+	@Override
+	public TestPersistenceServiceProviderFunction setName(String name) {
+		return (TestPersistenceServiceProviderFunction) super.setName(name);
 	}
 	
 	@Override
@@ -126,22 +140,55 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 		return this;
 	}
 
+	@Override
+	protected void __create__(Collection<Object> objects) {
+		for(Object index : objects) {
+			try {
+				getUserTransaction().begin();
+				__inject__(Persistence.class).create(index);
+				getUserTransaction().commit();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Override
+	protected void __delete__(Collection<Object> objects) {
+		for(Object index : objects) {
+			try {
+				getUserTransaction().begin();
+				__inject__(Persistence.class).delete(index);
+				getUserTransaction().commit();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	/**/
 	
 	@Override
-	protected void ____execute____() throws Exception{
+	protected void ______execute______() throws Exception{
 		Collection<Object> objects = __getExecutionObjects__();
 		Integer executionCount = __getExecutionCount__(objects);		
 		__listenExecuteBeforeFor__();
+		Boolean isTransactional = __getIsTransactional__();
 		for(Integer index = 0 ; index < executionCount ; index++){
 			for(Object indexObject : objects){
-				getUserTransaction().begin();
+				if(Boolean.TRUE.equals(isTransactional))
+					getUserTransaction().begin();
 				__perform__(indexObject);
-				getUserTransaction().commit();
+				if(Boolean.TRUE.equals(isTransactional))
+					getUserTransaction().commit();
 				__assertAfterPerform__(indexObject);
 			}
 		}
 		__listenExecuteAfterFor__();
+	}
+	
+	protected Boolean __getIsTransactional__() {
+		return Boolean.FALSE;
 	}
 	
 	protected abstract Collection<Object> __getExecutionObjects__() throws Exception;
@@ -158,9 +205,12 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 	protected abstract void __perform__(Object object) throws Exception;
 	
 	protected void __assertAfterPerform__(Object object) throws Exception {
-		__assertSystemIdentifierIsNotNull__(object);
-		__assertBusinessIdentifierIsNotNull__(object);
-		__assertLogEventMessage__(object);	
+		if(object.getClass().getAnnotation(Entity.class)!=null) {
+			__assertSystemIdentifierIsNotNull__(object);
+			__assertBusinessIdentifierIsNotNull__(object);
+			__assertLogEventMessage__(object);		
+		}
+		
 	}
 	
 	protected void __assertSystemIdentifierIsNotNull__(Object object) {
