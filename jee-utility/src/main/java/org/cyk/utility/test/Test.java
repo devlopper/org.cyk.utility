@@ -37,6 +37,7 @@ public interface Test extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 
 	Test setExpectedThrowableCauseClass(Class<? extends Throwable> aClass);
 	Class<? extends Throwable> getExpectedThrowableCauseClass();
+	Test setExpectedThrowableCauseClassIsConstraintViolationException();
 	
 	Test assertThrowableCauseIsInstanceOf(Class<?> aClass);
 	Test assertThrowableIsNull();

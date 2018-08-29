@@ -41,6 +41,9 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 				}else {
 					runnable.run();
 				}
+				
+				__afterExecute__();
+				__executeVerifyPostConditions__();
 			} catch (Exception exception) {
 				if(Boolean.TRUE.equals(getIsCatchThrowable())) {
 					//TODO print the className.methodName.lineNumber. Those values can be taken from the stack trace elements array
@@ -57,8 +60,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 			} finally {
 				__finally__();
 			}
-			__afterExecute__();
-			__executeVerifyPostConditions__();
+			
 			Long end = System.currentTimeMillis();
 			getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.END}, end);
 			getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION}, end - start);

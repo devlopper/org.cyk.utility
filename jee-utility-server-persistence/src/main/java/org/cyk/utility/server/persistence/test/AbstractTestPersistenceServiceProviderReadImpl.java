@@ -12,6 +12,12 @@ public abstract class AbstractTestPersistenceServiceProviderReadImpl extends Abs
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		setIdentifierValueUsageType(ValueUsageType.BUSINESS);
+	}
+	
+	@Override
 	protected Collection<Object> __getExecutionObjects__() throws Exception {
 		return getObjectIdentifiers();
 	}

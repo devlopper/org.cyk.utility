@@ -135,6 +135,16 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 	}
 	
 	@Override
+	public TestPersistenceServiceProviderFunction setExpectedThrowableCauseClassIsConstraintViolationException() {
+		return (TestPersistenceServiceProviderFunction) super.setExpectedThrowableCauseClassIsConstraintViolationException();
+	}
+	
+	@Override
+	public TestPersistenceServiceProviderFunction setExpectedThrowableCauseClassIsSqlException() {
+		return (TestPersistenceServiceProviderFunction) setExpectedThrowableCauseClass(SQLException.class);
+	}
+	
+	@Override
 	public TestPersistenceServiceProviderFunction assertThrowableCauseIsInstanceOfSqlException() {
 		assertThrowableCauseIsInstanceOf(SQLException.class);
 		return this;

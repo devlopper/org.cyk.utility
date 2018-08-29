@@ -10,4 +10,6 @@ public abstract class AbstractTestPersistenceServiceProviderUpdateImpl extends A
 		__inject__(Persistence.class).update(object);
 	}
 	
+	
+	
 }

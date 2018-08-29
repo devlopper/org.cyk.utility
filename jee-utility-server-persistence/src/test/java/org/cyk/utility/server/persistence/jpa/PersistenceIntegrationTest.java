@@ -2,10 +2,9 @@ package org.cyk.utility.server.persistence.jpa;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.sql.SQLException;
-
 import javax.validation.ConstraintViolationException;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.test.FunctionRunnableTest;
 import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
 import org.cyk.utility.server.persistence.test.TestPersistenceDelete;
@@ -27,8 +26,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	@Test
 	public void read() throws Exception{
 		String code = "a";
-		__inject__(TestPersistenceRead.class).setObjectClass(MyEntity.class).setIdentifierValueUsageType(ValueUsageType.BUSINESS).addObjectIdentifiers(code)
-			.addObjectsToBeCreatedArray(new MyEntity().setCode(code)).execute();
+		__inject__(TestPersistenceRead.class).addObjectsToBeCreatedArray(new MyEntity().setCode(code)).setObjectClass(MyEntity.class).addObjectIdentifiers(code).execute();
 	}
 	
 	@Test
@@ -38,14 +36,23 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		functionRunnable.setRunnable(new Runnable() {
 			@Override
 			public void run() {
-				MyEntity myEntity = __inject__(MyEntityPersistence.class).readOneByBusinessIdentifier(code);
+				MyEntity myEntity = __inject__(Persistence.class).readOne(MyEntity.class, code, new Properties().setValueUsageType(ValueUsageType.BUSINESS));
 				myEntity.setIntegerValue(33);
 				((TestPersistenceUpdate)functionRunnable.getFunction()).addObjects(myEntity);
 			}
 		});
 		
 		__inject__(TestPersistenceUpdate.class).addObjectsToBeCreatedArray(new MyEntity().setCode(code))
-			.addExecutionPhaseFunctionRunnables(Boolean.TRUE, functionRunnable).execute();
+			.addExecutionPhaseFunctionRunnables(Boolean.TRUE, functionRunnable)
+			.addExecutionPhaseRunnables(Boolean.FALSE, new Runnable() {
+				@Override
+				public void run() {
+					MyEntity myEntity = __inject__(MyEntityPersistence.class).readOneByBusinessIdentifier(code);
+					assertionHelper.assertNotNull("object with business identifier <"+code+"> not found",myEntity);
+					assertionHelper.assertEqualsNumber("integerValue("+myEntity.getIntegerValue()+") is not equal to 33", 33, myEntity.getIntegerValue());
+				}
+			})
+			.execute();
 	}
 	
 	@Test
@@ -58,19 +65,15 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	public void isCodeMustBeUnique() throws Exception{
 		String code = "a";
 		__inject__(TestPersistenceCreate.class).addObjects(new MyEntity().setCode(code),new MyEntity().setCode(code)).setName("MyEntity.code unicity")
-		.setExpectedThrowableCauseClass(SQLException.class).execute()
-			//.assertThrowableCauseIsInstanceOfSqlException()
-			;
+		.setExpectedThrowableCauseClassIsSqlException().execute();
 	}
 	
 	@Test
 	public void isCodeMustBeNotNull() throws Exception{
 		TestPersistenceCreate test = __inject__(TestPersistenceCreate.class);
 		test.addObjects(new MyEntity()).setName("MyEntity.code notnull")
-		.setExpectedThrowableCauseClass(ConstraintViolationException.class)
-		.execute()
-			//.assertThrowableCauseIsInstanceOfConstraintViolationException()
-			;
+		.setExpectedThrowableCauseClassIsConstraintViolationException().execute();
+		
 		assertThat(__inject__(ThrowableHelper.class).getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage())
 			.contains("propertyPath=code");
 	}

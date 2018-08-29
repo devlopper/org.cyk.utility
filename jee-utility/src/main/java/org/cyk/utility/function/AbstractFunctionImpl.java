@@ -54,6 +54,35 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	}
 	
 	@Override
+	protected void __executeVerifyPostConditions__() {
+		super.__executeVerifyPostConditions__();
+		ExecutionPhase executionPhase = getPostExecutionPhase();
+		if(executionPhase!=null){
+			Collection<Assertion> assertions = executionPhase.getAssertions();	
+			if(__injectCollectionHelper__().isNotEmpty(assertions)){
+				for(Assertion index : assertions){
+					if(Boolean.FALSE.equals(index.getValue()))
+						__injectThrowableHelper__().throwRuntimeException(index.getMessageWhenValueIsNotTrue());
+				}
+			}
+			
+			Collection<Runnable> runnables = executionPhase.getRunnables();
+			if(__injectCollectionHelper__().isNotEmpty(runnables)){
+				for(Runnable index : runnables){
+					index.run();
+				}
+			}
+			
+			Collection<FunctionRunnable<?>> functionRunnables = executionPhase.getFunctionRunnables();
+			if(__injectCollectionHelper__().isNotEmpty(functionRunnables)){
+				for(FunctionRunnable<?> index : functionRunnables){
+					index.getRunnable().run();
+				}
+			}
+		}
+	}
+	
+	@Override
 	protected void __finally__() {
 		super.__finally__();
 		ExecutionPhase executionPhase = getPostExecutionPhase();

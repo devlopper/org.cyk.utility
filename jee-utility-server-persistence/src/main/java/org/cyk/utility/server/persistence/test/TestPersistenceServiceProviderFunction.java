@@ -29,6 +29,8 @@ public interface TestPersistenceServiceProviderFunction extends TestIntegration 
 	TestPersistenceServiceProviderFunction setExecutionCount(Integer count);
 	Integer getExecutionCount();
 	
+	@Override TestPersistenceServiceProviderFunction setExpectedThrowableCauseClassIsConstraintViolationException();
+	TestPersistenceServiceProviderFunction setExpectedThrowableCauseClassIsSqlException();
 	TestPersistenceServiceProviderFunction assertThrowableCauseIsInstanceOfSqlException();
 	
 	TestPersistenceServiceProviderFunction execute();

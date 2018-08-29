@@ -159,6 +159,11 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	public Class<? extends Throwable> getExpectedThrowableCauseClass() {
 		return expectedThrowableCauseClass;
 	}
+	
+	@Override
+	public Test setExpectedThrowableCauseClassIsConstraintViolationException() {
+		return setExpectedThrowableCauseClass(ConstraintViolationException.class);
+	}
 
 	protected void __clean__() {
 		Collection<Object> garbages = getGarbages();
