@@ -8,7 +8,8 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.value.ValueUsageType;
 
-public class FieldTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class<?>> implements FieldTypeGetter, Serializable {
+@SuppressWarnings("rawtypes")
+public class FieldTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class> implements FieldTypeGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

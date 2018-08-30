@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-public class ClassLocatorImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class<?>> implements ClassLocator , Serializable {
+@SuppressWarnings("rawtypes") // <?> has been removed to solve WELD-001125: Illegal bean type
+public class ClassLocatorImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class> implements ClassLocator , Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/*

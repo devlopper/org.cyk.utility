@@ -51,6 +51,9 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 			System.out.println("No test profile found under id "+testProfileIdentifier);
 		}
 		
+		if(StringUtils.isBlank(beanXml) && profile!=null)
+			beanXml = profile.getProperty("org.cyk.test.cdi.beans.file");
+		
 		if(StringUtils.isBlank(projectDefaultsYml) && profile!=null)
 			projectDefaultsYml = profile.getProperty("org.cyk.test.swarm.project.defaults.file");
 		

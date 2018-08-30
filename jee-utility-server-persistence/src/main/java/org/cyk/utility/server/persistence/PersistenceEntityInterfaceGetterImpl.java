@@ -6,7 +6,8 @@ import org.codehaus.plexus.util.StringUtils;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-public class PersistenceEntityInterfaceGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class<?>> implements PersistenceEntityInterfaceGetter,Serializable {
+@SuppressWarnings("rawtypes")
+public class PersistenceEntityInterfaceGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class> implements PersistenceEntityInterfaceGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
