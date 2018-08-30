@@ -27,14 +27,23 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	Function<INPUT,OUTPUT> setRunnable(Runnable runnable);
 	Runnable getRunnable();
 	
-	Function<INPUT,OUTPUT> setFinallyRunnablesInTryCatchFinally(Collection<Runnable> runnables);
-	Collection<Runnable> getFinallyRunnablesInTryCatchFinally();
-	Function<INPUT,OUTPUT> addFinallyRunnablesInTryCatchFinally(Collection<Runnable> runnables);
-	Function<INPUT,OUTPUT> addFinallyRunnablesInTryCatchFinally(Runnable...runnables);
+	@Deprecated Function<INPUT,OUTPUT> setFinallyRunnablesInTryCatchFinally(Collection<Runnable> runnables);
+	@Deprecated Collection<Runnable> getFinallyRunnablesInTryCatchFinally();
+	@Deprecated Function<INPUT,OUTPUT> addFinallyRunnablesInTryCatchFinally(Collection<Runnable> runnables);
+	@Deprecated Function<INPUT,OUTPUT> addFinallyRunnablesInTryCatchFinally(Runnable...runnables);
 	
 	Function<INPUT,OUTPUT> setCallerClass(Class<?> aClass);
 	Class<?> getCallerClass();
 	
 	Function<INPUT,OUTPUT> setCallerIdentifier(Object identifier);
 	Object getCallerIdentifier();
+	
+	Function<INPUT,OUTPUT> setExecutionPhaseTry(FunctionExecutionPhaseTry executionPhaseTry);
+	FunctionExecutionPhaseTry getExecutionPhaseTry();
+	
+	Function<INPUT,OUTPUT> setExecutionPhaseCatch(FunctionExecutionPhaseCatch executionPhaseCatch);
+	FunctionExecutionPhaseCatch getExecutionPhaseCatch();
+	
+	Function<INPUT,OUTPUT> setExecutionPhaseFinally(FunctionExecutionPhaseFinally executionPhaseFinally);
+	FunctionExecutionPhaseFinally getExecutionPhaseFinally();
 }

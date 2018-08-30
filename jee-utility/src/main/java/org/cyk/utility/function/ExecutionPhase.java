@@ -9,6 +9,7 @@ import org.cyk.utility.assertion.Assertion;
 import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 
+@Deprecated
 public class ExecutionPhase extends org.cyk.utility.__kernel__.function.ExecutionPhase implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -54,39 +55,47 @@ public class ExecutionPhase extends org.cyk.utility.__kernel__.function.Executio
 	
 	/**/
 	
+	@Deprecated
 	public Collection<Runnable> getRunnables(){
 		return (Collection<Runnable>) getProperties().getRunnables();
 	}
 	
+	@Deprecated
 	public ExecutionPhase setRunnables(Collection<Runnable> runnables){
 		getProperties().setRunnables(runnables);
 		return this;
 	}
 	
+	@Deprecated
 	public ExecutionPhase addRunnables(Collection<Runnable> runnables){
 		setRunnables(__inject__(CollectionHelper.class).add(getRunnables(), Boolean.TRUE, runnables));
 		return this;
 	}
 	
+	@Deprecated
 	public ExecutionPhase addRunnables(Runnable...runnables){
 		addRunnables(__inject__(CollectionHelper.class).instanciate(runnables));
 		return this;
 	}
 	
+	@Deprecated
 	public Collection<FunctionRunnable<?>> getFunctionRunnables(){
 		return (Collection<FunctionRunnable<?>>) getProperties().getFromPath(Properties.FUNCTION,Properties.RUNNABLES);
 	}
 	
+	@Deprecated
 	public ExecutionPhase setFunctionRunnables(Collection<FunctionRunnable<?>> functionRunnables){
 		getProperties().setFromPath(new Object[] {Properties.FUNCTION,Properties.RUNNABLES}, functionRunnables);
 		return this;
 	}
 	
+	@Deprecated
 	public ExecutionPhase addFunctionRunnables(Collection<FunctionRunnable<?>> functionRunnables){
 		setFunctionRunnables(__inject__(CollectionHelper.class).add(getFunctionRunnables(), Boolean.TRUE, functionRunnables));
 		return this;
 	}
 	
+	@Deprecated
 	public ExecutionPhase addFunctionRunnables(FunctionRunnable<?>...functionRunnables){
 		addFunctionRunnables(__inject__(CollectionHelper.class).instanciate(functionRunnables));
 		return this;
@@ -94,20 +103,24 @@ public class ExecutionPhase extends org.cyk.utility.__kernel__.function.Executio
 	
 	/* Try finally */
 	
+	@Deprecated
 	public Collection<Runnable> getFinallyRunnables(){
 		return (Collection<Runnable>) getProperties().getFromPath(Properties.FINALLY,Properties.RUNNABLES);
 	}
 	
+	@Deprecated
 	public ExecutionPhase setFinallyRunnables(Collection<Runnable> runnables){
 		getProperties().setFromPath(new Object[] {Properties.FINALLY,Properties.RUNNABLES}, runnables);
 		return this;
 	}
 	
+	@Deprecated
 	public ExecutionPhase addFinallyRunnables(Collection<Runnable> runnables){
 		setFinallyRunnables(__inject__(CollectionHelper.class).add(getFinallyRunnables(), Boolean.TRUE, runnables));
 		return this;
 	}
 	
+	@Deprecated
 	public ExecutionPhase addFinallyRunnables(Runnable...runnables){
 		addFinallyRunnables(__inject__(CollectionHelper.class).instanciate(runnables));
 		return this;

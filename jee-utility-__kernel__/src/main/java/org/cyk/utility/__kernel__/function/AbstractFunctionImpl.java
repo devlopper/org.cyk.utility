@@ -13,6 +13,10 @@ import org.cyk.utility.__kernel__.properties.Properties;
 public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject implements Function<INPUT,OUTPUT>,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private FunctionExecutionPhaseTry executionPhaseTry;
+	private FunctionExecutionPhaseCatch executionPhaseCatch;
+	private FunctionExecutionPhaseFinally executionPhaseFinally;
+	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
@@ -23,56 +27,84 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	public Function<INPUT,OUTPUT> execute() {
 		Boolean executable = __executeGetIsExecutable__(getIsExecutable());
 		if(Boolean.TRUE.equals(executable)){
-			Long start = System.currentTimeMillis();
-			OUTPUT output = null;
 			try {
-				__executeVerifyPreConditions__();
-				getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.START}, start);
-				
-				Runnable runnable = (Runnable) getProperties().getRunnable();
-				__beforeExecute__();
-				
-				if(runnable == null){
-					executable = (Boolean) getProperties().getFromPath(Properties.IS,Properties.CORE,Properties.EXECUTABLE);
-					if(executable == null)
-						executable =  Boolean.TRUE;
-					if(Boolean.TRUE.equals(executable))
-						output = _execute_();
-				}else {
-					runnable.run();
-				}
-				
-				__afterExecute__();
-				__executeVerifyPostConditions__();
+				__try__();
 			} catch (Exception exception) {
-				if(Boolean.TRUE.equals(getIsCatchThrowable())) {
-					//TODO print the className.methodName.lineNumber. Those values can be taken from the stack trace elements array
-					System.err.println(getClass()+" : Caught exception : "+exception);
-					getProperties().setThrowable(exception);	
-				}else {
-					RuntimeException runtimeException;
-					if(exception instanceof RuntimeException)
-						runtimeException =  (RuntimeException) exception;
-					else
-						runtimeException = new RuntimeException(exception);
-					throw runtimeException;
-				}
+				__catch__(exception);
 			} finally {
 				__finally__();
 			}
-			
-			Long end = System.currentTimeMillis();
-			getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.END}, end);
-			getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION}, end - start);
-			getProperties().setOutput(output);
-			afterExecute();	
-			
 		}else {
 			//throw new RuntimeException(getClass()+" is not executable.");
 			System.err.println(getClass()+" is not executable.");
 			//TODO log warning not executable
 		}
 		return this;
+	}
+	
+	protected void __try__() throws Exception {
+		Long start = System.currentTimeMillis();
+		
+		__executePhaseMoment__(getExecutionPhaseTry(), FunctionExecutionPhaseMomentBegin.class);
+		OUTPUT output = null;
+		__executeVerifyPreConditions__();
+		getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.START}, start);
+		
+		Runnable runnable = (Runnable) getProperties().getRunnable();
+		__beforeExecute__();
+		
+		if(runnable == null){
+			Boolean executable = (Boolean) getProperties().getFromPath(Properties.IS,Properties.CORE,Properties.EXECUTABLE);
+			if(executable == null)
+				executable =  Boolean.TRUE;
+			if(Boolean.TRUE.equals(executable))
+				output = _execute_();
+		}else {
+			runnable.run();
+		}
+		
+		__afterExecute__();
+		__executeVerifyPostConditions__();
+		
+		afterExecute();	
+		
+		__executePhaseMoment__(getExecutionPhaseTry(), FunctionExecutionPhaseMomentEnd.class);
+		
+		Long end = System.currentTimeMillis();
+		getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.END}, end);
+		getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION}, end - start);
+		getProperties().setOutput(output);
+	}
+	
+	protected void __catch__(Exception exception) {
+		__executePhaseMoment__(getExecutionPhaseTry(), FunctionExecutionPhaseMomentBegin.class);
+		if(Boolean.TRUE.equals(getIsCatchThrowable())) {
+			//TODO print the className.methodName.lineNumber. Those values can be taken from the stack trace elements array
+			System.err.println(getClass()+" : Caught exception : "+exception);
+			getProperties().setThrowable(exception);
+			__executePhaseMoment__(getExecutionPhaseCatch(), FunctionExecutionPhaseMomentEnd.class);
+		}else {
+			RuntimeException runtimeException;
+			if(exception instanceof RuntimeException)
+				runtimeException =  (RuntimeException) exception;
+			else
+				runtimeException = new RuntimeException(exception);
+			__executePhaseMoment__(getExecutionPhaseCatch(), FunctionExecutionPhaseMomentEnd.class);
+			throw runtimeException;
+		}
+		
+	}
+
+	protected void __finally__() {
+		__executePhaseMoment__(getExecutionPhaseFinally(), FunctionExecutionPhaseMomentBegin.class);
+		
+		Collection<Runnable> runnables = getFinallyRunnablesInTryCatchFinally();
+		if(runnables!=null && !runnables.isEmpty()) {
+			for(Runnable index : runnables)
+				index.run();
+		}
+		
+		__executePhaseMoment__(getExecutionPhaseFinally(), FunctionExecutionPhaseMomentEnd.class);
 	}
 	
 	protected final OUTPUT _execute_() throws Exception {
@@ -116,12 +148,18 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	
 	protected void afterExecute(){}
 	
-	protected void __finally__() {
-		Collection<Runnable> runnables = getFinallyRunnablesInTryCatchFinally();
-		if(runnables!=null && !runnables.isEmpty()) {
-			for(Runnable index : runnables)
-				index.run();
+	protected void __executePhaseMoment__(FunctionExecutionPhase executionPhase,Class<? extends FunctionExecutionPhaseMoment> momentClass) {
+		if(executionPhase!=null) {
+			FunctionExecutionPhaseMoment moment = null;
+			if(FunctionExecutionPhaseMomentBegin.class.equals(momentClass))
+				moment = executionPhase.getBegin();
+			else if(FunctionExecutionPhaseMomentEnd.class.equals(momentClass))
+				moment = executionPhase.getEnd();
+			
+			if(moment!=null)
+				moment.run();
 		}
+		
 	}
 	
 	@Override
@@ -212,6 +250,39 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	@Override
 	public Function<INPUT, OUTPUT> setCallerIdentifier(Object identifier) {
 		getProperties().setFromPath(new Object[] {Properties.CALLER,Properties.IDENTIFIER}, identifier);
+		return this;
+	}
+	
+	@Override
+	public FunctionExecutionPhaseTry getExecutionPhaseTry() {
+		return executionPhaseTry;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setExecutionPhaseTry(FunctionExecutionPhaseTry executionPhaseTry) {
+		this.executionPhaseTry = executionPhaseTry;
+		return this;
+	}
+	
+	@Override
+	public FunctionExecutionPhaseCatch getExecutionPhaseCatch() {
+		return executionPhaseCatch;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setExecutionPhaseCatch(FunctionExecutionPhaseCatch executionPhaseCatch) {
+		this.executionPhaseCatch = executionPhaseCatch;
+		return this;
+	}
+	
+	@Override
+	public FunctionExecutionPhaseFinally getExecutionPhaseFinally() {
+		return executionPhaseFinally;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setExecutionPhaseFinally(FunctionExecutionPhaseFinally executionPhaseFinally) {
+		this.executionPhaseFinally = executionPhaseFinally;
 		return this;
 	}
 	
