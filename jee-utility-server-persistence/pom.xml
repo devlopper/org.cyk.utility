@@ -14,7 +14,12 @@
 	<packaging>jar</packaging>
 
 	<name>JEE utility server persistence</name>
-
+	
+	<properties>
+		<org.wildfly.wildfly-arquillian-container-managed.version>8.2.1.Final</org.wildfly.wildfly-arquillian-container-managed.version>
+		<org.wildfly.wildfly-arquillian-container-remote.version>8.2.1.Final</org.wildfly.wildfly-arquillian-container-remote.version>
+	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility</groupId>
@@ -53,15 +58,11 @@
 			<version>0.0.1</version>
 			<scope>test</scope>
 		</dependency>
-		
 	</dependencies>
 	
 	<profiles>
 		<profile>
 			<id>org.cyk.test</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<properties>
 				<org.cyk.test.cdi.beans.file>org/cyk/utility/server/persistence/jpa/beans.xml</org.cyk.test.cdi.beans.file>
 				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/persistence/jpa/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
@@ -69,6 +70,67 @@
 				<org.cyk.test.classes>org.cyk.utility.server.persistence.jpa.MyEntity,org.cyk.utility.server.persistence.impl.DependenceProducer</org.cyk.test.classes>
 			</properties>
 		</profile>
+	
+		<profile>
+			<id>wildfly-arquillian-container-managed</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.wildfly</groupId>
+					<artifactId>wildfly-arquillian-container-managed</artifactId>
+					<version>${org.wildfly.wildfly-arquillian-container-managed.version}</version>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<groupId>sun.jdk</groupId>
+							<artifactId>jconsole</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>wildfly-arquillian-container-remote</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.wildfly</groupId>
+					<artifactId>wildfly-arquillian-container-remote</artifactId>
+					<version>${org.wildfly.wildfly-arquillian-container-remote.version}</version>
+					<scope>test</scope>
+					<exclusions>
+						<exclusion>
+							<groupId>sun.jdk</groupId>
+							<artifactId>jconsole</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+		
+		<profile>
+			<id>org.wildfly.swarm</id>
+			<activation><activeByDefault>true</activeByDefault> </activation>
+			<dependencyManagement>
+				<dependencies>
+					<dependency>
+						<groupId>org.wildfly.swarm</groupId>
+						<artifactId>bom-all</artifactId>
+						<version>${org.wildfly.swarm.bom-all.version}</version>
+						<scope>import</scope>
+						<type>pom</type>
+					</dependency>
+				</dependencies>
+			</dependencyManagement>
+			
+			<dependencies>
+				<dependency>
+					<groupId>org.wildfly.swarm</groupId>
+					<artifactId>arquillian</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+
 	</profiles>
 	
 </project>
