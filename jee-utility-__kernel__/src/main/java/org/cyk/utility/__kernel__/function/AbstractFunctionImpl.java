@@ -27,12 +27,20 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	public Function<INPUT,OUTPUT> execute() {
 		Boolean executable = __executeGetIsExecutable__(getIsExecutable());
 		if(Boolean.TRUE.equals(executable)){
+			Long start = System.currentTimeMillis();
+			getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.START}, start);
 			try {
 				__try__();
 			} catch (Exception exception) {
 				__catch__(exception);
 			} finally {
 				__finally__();
+				
+				Long end = System.currentTimeMillis();
+				getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.END}, end);
+				getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION}, end - start);
+				
+				__log__();
 			}
 		}else {
 			//throw new RuntimeException(getClass()+" is not executable.");
@@ -43,37 +51,20 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	}
 	
 	protected void __try__() throws Exception {
-		Long start = System.currentTimeMillis();
+		FunctionExecutionPhaseTry executionPhaseTry = getExecutionPhaseTry();
+		__executePhaseMoment__(executionPhaseTry, FunctionExecutionPhaseMomentBegin.class);
 		
-		__executePhaseMoment__(getExecutionPhaseTry(), FunctionExecutionPhaseMomentBegin.class);
-		OUTPUT output = null;
-		__executeVerifyPreConditions__();
-		getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.START}, start);
+		__executePhaseMoment__(executionPhaseTry, FunctionExecutionPhaseMomentRun.class);
+		Boolean isCodeFromFunctionExecutable = executionPhaseTry == null || executionPhaseTry.getIsCodeFromFunctionExecutable() == null 
+				|| Boolean.TRUE.equals(executionPhaseTry.getIsCodeFromFunctionExecutable());
 		
-		Runnable runnable = (Runnable) getProperties().getRunnable();
-		__beforeExecute__();
-		
-		if(runnable == null){
-			Boolean executable = (Boolean) getProperties().getFromPath(Properties.IS,Properties.CORE,Properties.EXECUTABLE);
-			if(executable == null)
-				executable =  Boolean.TRUE;
-			if(Boolean.TRUE.equals(executable))
-				output = _execute_();
-		}else {
-			runnable.run();
+		if(Boolean.TRUE.equals(isCodeFromFunctionExecutable)) {
+			OUTPUT output = null;
+			if(Boolean.TRUE.equals(isCodeFromFunctionExecutable))
+				output = _execute_();	
+			getProperties().setOutput(output);	
 		}
-		
-		__afterExecute__();
-		__executeVerifyPostConditions__();
-		
-		afterExecute();	
-		
-		__executePhaseMoment__(getExecutionPhaseTry(), FunctionExecutionPhaseMomentEnd.class);
-		
-		Long end = System.currentTimeMillis();
-		getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.END}, end);
-		getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION}, end - start);
-		getProperties().setOutput(output);
+		__executePhaseMoment__(executionPhaseTry, FunctionExecutionPhaseMomentEnd.class);
 	}
 	
 	protected void __catch__(Exception exception) {
@@ -139,27 +130,27 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		return value;
 	}
 	
-	protected void __executeVerifyPreConditions__(){}
-	protected void __executeVerifyPostConditions__(){}
+	protected void __log__(){}
 	
-	protected void __beforeExecute__(){}
-
-	protected void __afterExecute__(){}
-	
-	protected void afterExecute(){}
+	@Deprecated protected void __executeVerifyPreConditions__(){}
+	@Deprecated protected void __executeVerifyPostConditions__(){}
+	@Deprecated protected void __beforeExecute__(){}
+	@Deprecated protected void __afterExecute__(){}
+	@Deprecated protected void afterExecute(){}
 	
 	protected void __executePhaseMoment__(FunctionExecutionPhase executionPhase,Class<? extends FunctionExecutionPhaseMoment> momentClass) {
 		if(executionPhase!=null) {
 			FunctionExecutionPhaseMoment moment = null;
 			if(FunctionExecutionPhaseMomentBegin.class.equals(momentClass))
 				moment = executionPhase.getBegin();
+			else if(FunctionExecutionPhaseMomentRun.class.equals(momentClass))
+				moment = executionPhase.getRun();
 			else if(FunctionExecutionPhaseMomentEnd.class.equals(momentClass))
 				moment = executionPhase.getEnd();
 			
 			if(moment!=null)
 				moment.run();
 		}
-		
 	}
 	
 	@Override
@@ -259,8 +250,18 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	}
 	
 	@Override
+	public FunctionExecutionPhaseTry getExecutionPhaseTry(Boolean injectIfNull) {
+		FunctionExecutionPhaseTry executionPhaseTry = getExecutionPhaseTry();
+		if(executionPhaseTry == null && Boolean.TRUE.equals(injectIfNull))
+			setExecutionPhaseTry(executionPhaseTry = __inject__(FunctionExecutionPhaseTry.class));
+		return executionPhaseTry;
+	}
+	
+	@Override
 	public Function<INPUT, OUTPUT> setExecutionPhaseTry(FunctionExecutionPhaseTry executionPhaseTry) {
 		this.executionPhaseTry = executionPhaseTry;
+		if(this.executionPhaseTry!=null)
+			this.executionPhaseTry.setParent(this);
 		return this;
 	}
 	
@@ -270,9 +271,29 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	}
 	
 	@Override
+	public FunctionExecutionPhaseTry try_() {
+		return getExecutionPhaseTry(Boolean.TRUE);
+	}
+	
+	@Override
+	public FunctionExecutionPhaseCatch getExecutionPhaseCatch(Boolean injectIfNull) {
+		FunctionExecutionPhaseCatch executionPhaseCatch = getExecutionPhaseCatch();
+		if(executionPhaseCatch == null && Boolean.TRUE.equals(injectIfNull))
+			setExecutionPhaseCatch(executionPhaseCatch = __inject__(FunctionExecutionPhaseCatch.class));
+		return executionPhaseCatch;
+	}
+	
+	@Override
 	public Function<INPUT, OUTPUT> setExecutionPhaseCatch(FunctionExecutionPhaseCatch executionPhaseCatch) {
 		this.executionPhaseCatch = executionPhaseCatch;
+		if(this.executionPhaseCatch!=null)
+			this.executionPhaseCatch.setParent(this);
 		return this;
+	}
+	
+	@Override
+	public FunctionExecutionPhaseCatch catch_() {
+		return getExecutionPhaseCatch(Boolean.TRUE);
 	}
 	
 	@Override
@@ -280,25 +301,40 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		return executionPhaseFinally;
 	}
 	
+	@Override 
+	public FunctionExecutionPhaseFinally getExecutionPhaseFinally(Boolean injectIfNull) {
+		FunctionExecutionPhaseFinally executionPhaseFinally = getExecutionPhaseFinally();
+		if(executionPhaseFinally == null && Boolean.TRUE.equals(injectIfNull))
+			setExecutionPhaseFinally(executionPhaseFinally = __inject__(FunctionExecutionPhaseFinally.class));
+		return executionPhaseFinally;
+	}
+	
 	@Override
 	public Function<INPUT, OUTPUT> setExecutionPhaseFinally(FunctionExecutionPhaseFinally executionPhaseFinally) {
 		this.executionPhaseFinally = executionPhaseFinally;
+		if(this.executionPhaseFinally!=null)
+			this.executionPhaseFinally.setParent(this);
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
+	public FunctionExecutionPhaseFinally finally_() {
+		return getExecutionPhaseFinally(Boolean.TRUE);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override @Deprecated
 	public Collection<Runnable> getFinallyRunnablesInTryCatchFinally(){
 		return (Collection<Runnable>) getProperties().getFromPath(Properties.TRY_CATCH_FINALLY,Properties.FINALLY,Properties.RUNNABLES);
 	}
 	
-	@Override
+	@Override @Deprecated
 	public Function<INPUT, OUTPUT> setFinallyRunnablesInTryCatchFinally(Collection<Runnable> runnables){
 		getProperties().setFromPath(new Object[] {Properties.TRY_CATCH_FINALLY,Properties.FINALLY,Properties.RUNNABLES}, runnables);
 		return this;
 	}
 	
-	@Override
+	@Override @Deprecated
 	public Function<INPUT, OUTPUT> addFinallyRunnablesInTryCatchFinally(Collection<Runnable> runnables){
 		if(runnables!=null && !runnables.isEmpty()) {
 			Collection<Runnable> collection = getFinallyRunnablesInTryCatchFinally();
@@ -309,7 +345,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		return this;
 	}
 	
-	@Override
+	@Override @Deprecated
 	public Function<INPUT, OUTPUT> addFinallyRunnablesInTryCatchFinally(Runnable...runnables){
 		if(runnables!=null && runnables.length>0) {
 			addFinallyRunnablesInTryCatchFinally(Arrays.asList(runnables));

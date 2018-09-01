@@ -5,14 +5,48 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.assertion.Assertion;
+import org.cyk.utility.__kernel__.assertion.AssertionBuilder;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
 
 public abstract class AbstractFunctionExecutionPhaseMomentImpl extends AbstractObject implements FunctionExecutionPhaseMoment,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Collection<AssertionBuilder> assertionBuilders;
+	private Boolean runned;
+	
 	@Override
 	public FunctionExecutionPhaseMoment run() {
+		setRunned(Boolean.TRUE);
+		
+		Collection<Assertion> assertions = new ArrayList<>();	
+		Collection<Assertion> __assertions__ = getAssertions();	
+		if(__assertions__!=null) {
+			for(Assertion index : __assertions__) {
+				if(assertions == null)
+					assertions = new ArrayList<>();
+				assertions.add(index);
+			}
+		}
+		
+		Collection<AssertionBuilder> assertionBuilders = getAssertionBuilders();	
+		if(assertionBuilders!=null){
+			for(AssertionBuilder index : assertionBuilders){
+				if(assertions == null)
+					assertions = new ArrayList<>();
+				assertions.add(index.execute());
+			}
+		}
+		
+		if(assertions!=null){
+			for(Assertion index : assertions){
+				if(Boolean.FALSE.equals(index.getValue()))
+					throw new RuntimeException(index.getMessageWhenValueIsNotTrue());
+			}
+		}
+		
 		Collection<Runnable> runnables = getRunnables();
 		if(runnables!=null){
 			for(Runnable index : runnables){
@@ -26,6 +60,66 @@ public abstract class AbstractFunctionExecutionPhaseMomentImpl extends AbstractO
 				index.getRunnable().run();
 			}
 		}
+		
+		return this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<Assertion> getAssertions(){
+		return (Collection<Assertion>) getProperties().getAssertions();
+	}
+	
+	@Override
+	public FunctionExecutionPhaseMoment setAssertions(Collection<Assertion> assertions){
+		getProperties().setAssertions(assertions);
+		return this;
+	}
+	
+	@Override
+	public FunctionExecutionPhaseMoment addAssertions(Collection<Assertion> assertions){
+		if(assertions!=null && !assertions.isEmpty()) {
+			Collection<Assertion> collection = getAssertions();
+			if(collection == null)
+				setAssertions(collection = new ArrayList<>());
+			collection.addAll(assertions);
+		}
+		return this;
+	}
+	
+	@Override
+	public FunctionExecutionPhaseMoment addAssertions(Assertion...assertions){
+		if(assertions!=null && assertions.length>0)
+			addAssertions(Arrays.asList(assertions));
+		return this;
+	}
+	
+	@Override
+	public Collection<AssertionBuilder> getAssertionBuilders(){
+		return assertionBuilders;
+	}
+	
+	@Override
+	public FunctionExecutionPhaseMoment setAssertionBuilders(Collection<AssertionBuilder> assertionBuilders){
+		this.assertionBuilders = assertionBuilders;
+		return this;
+	}
+	
+	@Override
+	public FunctionExecutionPhaseMoment addAssertionBuilders(Collection<AssertionBuilder> assertionBuilders){
+		if(assertionBuilders!=null && !assertionBuilders.isEmpty()) {
+			Collection<AssertionBuilder> collection = getAssertionBuilders();
+			if(collection == null)
+				setAssertionBuilders(collection = new ArrayList<>());
+			collection.addAll(assertionBuilders);
+		}
+		return this;
+	}
+	
+	@Override
+	public FunctionExecutionPhaseMoment addAssertionBuilders(AssertionBuilder...assertionBuilders){
+		if(assertionBuilders!=null && assertionBuilders.length>0)
+			addAssertionBuilders(Arrays.asList(assertionBuilders));
 		return this;
 	}
 	
@@ -78,6 +172,16 @@ public abstract class AbstractFunctionExecutionPhaseMomentImpl extends AbstractO
 			if(collection == null)
 				setFunctionRunnables(collection = new ArrayList<>());
 			collection.addAll(functionRunnables);
+			
+			for(FunctionRunnable<?> index : functionRunnables)
+				if(index.getFunction() == null)
+					try {
+						//TODO must be integrated in FieldValueSetter
+						MethodUtils.invokeMethod(index, "setFunction", getParent().getParent());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
 		}
 		return this;
 	}
@@ -89,4 +193,19 @@ public abstract class AbstractFunctionExecutionPhaseMomentImpl extends AbstractO
 		return this;
 	}
 	
+	@Override
+	public Boolean getRunned() {
+		return runned;
+	}
+	
+	@Override
+	public FunctionExecutionPhaseMoment setRunned(Boolean runned) {
+		this.runned = runned;
+		return this;
+	}
+	
+	@Override
+	public FunctionExecutionPhase getParent() {
+		return (FunctionExecutionPhase) super.getParent();
+	}
 }

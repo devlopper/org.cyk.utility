@@ -1,17 +1,15 @@
-package org.cyk.utility.server.persistence.jpa;
+package org.cyk.utility.server.persistence;
 
-import org.cyk.utility.__kernel__.test.arquillian.ArchiveBuilder;
 import org.cyk.utility.instance.InstanceHelper;
-import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTest;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class InstanceGetterIntegrationTest extends AbstractPersistenceArquillianIntegrationTest {
+public class UtilityIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram {
 	private static final long serialVersionUID = 1L;
 	
 	@Test
-	public void get(){
+	public void getInstanceMyEntityByBusinessIdentifier(){
 		__createEntity__(new MyEntity().setCode("ee01").setIntegerValue(1));
 		__createEntity__(new MyEntity().setCode("ee02").setIntegerValue(2));
 		__createEntity__(new MyEntity().setCode("ee03").setIntegerValue(1));
@@ -28,11 +26,6 @@ public class InstanceGetterIntegrationTest extends AbstractPersistenceArquillian
 		
 		__deleteEntitiesAll__(MyEntity.class);
 		
-	}
-	
-	@org.jboss.arquillian.container.test.api.Deployment
-	public static WebArchive createArchive(){
-		return new ArchiveBuilder<WebArchive>(WebArchive.class).setBeanXml("org/cyk/utility/server/persistence/jpa/beans.xml").execute(); 
 	}
 	
 }

@@ -23,8 +23,7 @@ public abstract class AbstractSystemFunctionServerImpl extends AbstractSystemFun
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	protected void __afterExecute__() {
-		super.__afterExecute__();
+	protected void __log__() {
 		Object entity = getProperties().getEntity();
 		Collection<FieldName> fieldNames = getLoggedEntityFieldNames();
 		if(__inject__(CollectionHelper.class).isNotEmpty(fieldNames)){
@@ -37,6 +36,7 @@ public abstract class AbstractSystemFunctionServerImpl extends AbstractSystemFun
 					}
 			}
 		}
+		super.__log__();
 	}
 	
 	protected SystemActor getSystemActor(){

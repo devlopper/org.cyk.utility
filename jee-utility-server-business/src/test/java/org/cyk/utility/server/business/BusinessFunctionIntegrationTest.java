@@ -2,15 +2,41 @@ package org.cyk.utility.server.business;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import javax.inject.Inject;
+
+import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillianIntegrationTestWithDefaultDeploymentAsSwram;
+import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
-public class BusinessFunctionReaderIntegrationTest extends AbstractArquillianIntegrationTestWithDefaultDeployment {
+public class BusinessFunctionIntegrationTest extends AbstractBusinessArquillianIntegrationTestWithDefaultDeploymentAsSwram {
 	private static final long serialVersionUID = 1L;
 	
+	@Inject private Business business;
+	
+	/* Create */
+	
 	@Test
-	public void findOneBySystemIdentifierExisting() {
+	public void create() throws Exception{
+		business.create(new MyEntity().setCode(__getRandomCode__()));
+	}
+	
+	@Test
+	public void createOneMyEntity(){
+		MyEntity myEntity = new MyEntity().setCode("mc001").setTimestamp(1l);
+		__inject__(BusinessFunctionCreator.class).setEntity(myEntity).execute();
+		assertThat(myEntity.getIdentifier()).isNotNull();
+		assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(SystemActionCreate.class),MyEntity.class))
+			.assertContainsLastLogEventMessage("identifier="+myEntity.getIdentifier())
+			.assertContainsLastLogEventMessage("code=mc001")
+			;
+	}
+	
+	/* Find */
+	
+	@Test
+	public void findOneMyEntityBySystemIdentifierExisting() {
 		String code = __getRandomCode__();
 		MyEntity myEntity = new MyEntity().setCode(code).setTimestamp(1l);
 		__inject__(BusinessFunctionCreator.class).setEntity(myEntity).execute();
@@ -24,7 +50,7 @@ public class BusinessFunctionReaderIntegrationTest extends AbstractArquillianInt
 	}
 	
 	@Test
-	public void findOneByBusinessIdentifierExisting() {
+	public void findOneMyEntityByBusinessIdentifierExisting() {
 		String code = __getRandomCode__();
 		MyEntity myEntity = new MyEntity().setCode(code).setTimestamp(1l);
 		__inject__(BusinessFunctionCreator.class).setEntity(myEntity).execute();
@@ -38,7 +64,7 @@ public class BusinessFunctionReaderIntegrationTest extends AbstractArquillianInt
 	}
 	/*
 	@Test
-	public void readOneByIdentifierNotExisting() {
+	public void readOneMyEntityByIdentifierNotExisting() {
 		MyEntity myEntity = (MyEntity) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setEntityIdentifier(-1l).execute()
 				.getProperties().getEntity();
 		
@@ -48,7 +74,7 @@ public class BusinessFunctionReaderIntegrationTest extends AbstractArquillianInt
 	}
 	
 	@Test
-	public void readOneByCodeExisting() {
+	public void readOneMyEntityByCodeExisting() {
 		String code = getRandomCode();
 		MyEntity myEntity = new MyEntity().setCode(code);
 		userTransaction.begin();
@@ -66,7 +92,7 @@ public class BusinessFunctionReaderIntegrationTest extends AbstractArquillianInt
 	}
 	
 	@Test
-	public void readOneByCodeNotExisting() {
+	public void readOneMyEntityByCodeNotExisting() {
 		MyEntity myEntity = (MyEntity) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setEntityIdentifier(-1l).execute()
 				.getProperties().getEntity();
 		

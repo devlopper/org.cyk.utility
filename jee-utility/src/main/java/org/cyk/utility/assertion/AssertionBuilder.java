@@ -1,5 +1,6 @@
 package org.cyk.utility.assertion;
 
+import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 
 public interface AssertionBuilder extends FunctionWithPropertiesAsInput<Assertion> {

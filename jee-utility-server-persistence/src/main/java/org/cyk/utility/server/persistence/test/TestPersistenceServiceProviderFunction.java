@@ -26,6 +26,10 @@ public interface TestPersistenceServiceProviderFunction extends TestIntegration 
 	TestPersistenceServiceProviderFunction setObjectIdentifiers(Collection<Object> objectIdentifiers);
 	TestPersistenceServiceProviderFunction addObjectIdentifiers(Object...objectIdentifiers);
 	
+	Collection<Object> getUnexistingObjectIdentifiers();
+	TestPersistenceServiceProviderFunction setUnexistingObjectIdentifiers(Collection<Object> unexistingObjectIdentifiers);
+	TestPersistenceServiceProviderFunction addUnexistingObjectIdentifiers(Object...unexistingObjectIdentifiers);
+	
 	TestPersistenceServiceProviderFunction setExecutionCount(Integer count);
 	Integer getExecutionCount();
 	

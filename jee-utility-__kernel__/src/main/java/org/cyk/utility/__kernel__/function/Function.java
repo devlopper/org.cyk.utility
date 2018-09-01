@@ -21,11 +21,10 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	Boolean getIsCatchThrowable();
 	
 	Function<INPUT,OUTPUT> addChild(Object... child);
-	
 	Function<INPUT,OUTPUT> addChildren(Collection<Object> children);
 	
-	Function<INPUT,OUTPUT> setRunnable(Runnable runnable);
-	Runnable getRunnable();
+	@Deprecated Function<INPUT,OUTPUT> setRunnable(Runnable runnable);
+	@Deprecated Runnable getRunnable();
 	
 	@Deprecated Function<INPUT,OUTPUT> setFinallyRunnablesInTryCatchFinally(Collection<Runnable> runnables);
 	@Deprecated Collection<Runnable> getFinallyRunnablesInTryCatchFinally();
@@ -40,10 +39,16 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	
 	Function<INPUT,OUTPUT> setExecutionPhaseTry(FunctionExecutionPhaseTry executionPhaseTry);
 	FunctionExecutionPhaseTry getExecutionPhaseTry();
+	FunctionExecutionPhaseTry getExecutionPhaseTry(Boolean injectIfNull);
+	FunctionExecutionPhaseTry try_();
 	
 	Function<INPUT,OUTPUT> setExecutionPhaseCatch(FunctionExecutionPhaseCatch executionPhaseCatch);
 	FunctionExecutionPhaseCatch getExecutionPhaseCatch();
+	FunctionExecutionPhaseCatch getExecutionPhaseCatch(Boolean injectIfNull);
+	FunctionExecutionPhaseCatch catch_();
 	
 	Function<INPUT,OUTPUT> setExecutionPhaseFinally(FunctionExecutionPhaseFinally executionPhaseFinally);
 	FunctionExecutionPhaseFinally getExecutionPhaseFinally();
+	FunctionExecutionPhaseFinally getExecutionPhaseFinally(Boolean injectIfNull);
+	FunctionExecutionPhaseFinally finally_();
 }

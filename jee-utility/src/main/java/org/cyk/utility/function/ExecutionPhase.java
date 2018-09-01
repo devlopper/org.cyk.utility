@@ -3,9 +3,9 @@ package org.cyk.utility.function;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.function.FunctionRunnable;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.assertion.Assertion;
 import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 

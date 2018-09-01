@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence.jpa;
+package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
 import java.util.Collection;

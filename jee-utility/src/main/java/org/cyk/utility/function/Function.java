@@ -24,13 +24,13 @@ public interface Function<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.funct
 	Function<INPUT,OUTPUT> setMonitorable(Boolean monitorable);
 	Boolean getMonitorable();
 	
-	ExecutionPhase getPreExecutionPhase();
-	Function<INPUT,OUTPUT> setPreExecutionPhase(ExecutionPhase executionPhase);
+	@Deprecated ExecutionPhase getPreExecutionPhase();
+	@Deprecated Function<INPUT,OUTPUT> setPreExecutionPhase(ExecutionPhase executionPhase);
 	
-	ExecutionPhase getPostExecutionPhase();
-	Function<INPUT,OUTPUT> setPostExecutionPhase(ExecutionPhase executionPhase);
+	@Deprecated ExecutionPhase getPostExecutionPhase();
+	@Deprecated Function<INPUT,OUTPUT> setPostExecutionPhase(ExecutionPhase executionPhase);
 	
-	Function<INPUT, OUTPUT> addExecutionPhaseAssertions(Boolean isPre,AssertionBuilder...assertionBuilders);
-	Function<INPUT, OUTPUT> addExecutionPhaseRunnables(Boolean isPre,Runnable...runnables);
-	Function<INPUT, OUTPUT> addExecutionPhaseFunctionRunnables(Boolean isPre, FunctionRunnable<?>... functionRunnables);
+	@Deprecated Function<INPUT, OUTPUT> addExecutionPhaseAssertions(Boolean isPre,AssertionBuilder...assertionBuilders);
+	@Deprecated Function<INPUT, OUTPUT> addExecutionPhaseRunnables(Boolean isPre,Runnable...runnables);
+	@Deprecated Function<INPUT, OUTPUT> addExecutionPhaseFunctionRunnables(Boolean isPre, FunctionRunnable<?>... functionRunnables);
 }

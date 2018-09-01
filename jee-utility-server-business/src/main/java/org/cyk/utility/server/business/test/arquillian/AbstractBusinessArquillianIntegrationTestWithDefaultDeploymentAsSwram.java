@@ -9,7 +9,7 @@ public abstract class AbstractBusinessArquillianIntegrationTestWithDefaultDeploy
 	@org.jboss.arquillian.container.test.api.Deployment
 	public static WebArchive createArchive(){
 		return new ArchiveBuilder<WebArchive>(WebArchive.class)
-				.setProjectDefaultsYml("project-defaults.yml")
+				//.setProjectDefaultsYml("project-defaults.yml")
 				.execute()
 				; 
 	}

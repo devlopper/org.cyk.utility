@@ -3,6 +3,10 @@ package org.cyk.utility.system;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.function.FunctionExecutionPhase;
+import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMoment;
+import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMomentBegin;
+import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseTry;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
@@ -37,15 +41,17 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		super.__listenPostConstruct__();
 		setMonitorable(Boolean.TRUE).setLoggable(Boolean.TRUE);
 	}
-
-	@Override
-	protected void __beforeExecute__() {
-		super.__beforeExecute__();
-		//we put markers in message to support those logging framework which do not handle markers
-		addLogMessageBuilderParameter(__inject__(StringHelper.class).concatenate(__injectCollectionHelper__().cast(String.class, getLog(Boolean.TRUE).getMarkers())
-				,CharacterConstant.SPACE.toString()));
-	}
 	
+	@Override
+	protected void __executePhaseMoment__(FunctionExecutionPhase executionPhase,Class<? extends FunctionExecutionPhaseMoment> momentClass) {
+		super.__executePhaseMoment__(executionPhase, momentClass);
+		if(executionPhase instanceof FunctionExecutionPhaseTry && FunctionExecutionPhaseMomentBegin.class.equals(momentClass)) {
+			//we put markers in message to support those logging framework which do not handle markers
+			addLogMessageBuilderParameter(__inject__(StringHelper.class).concatenate(__injectCollectionHelper__().cast(String.class, getLog(Boolean.TRUE).getMarkers())
+					,CharacterConstant.SPACE.toString()));
+		}
+	}
+
 	@Override
 	protected void ____execute____() {
 		SystemAction action = getAction();

@@ -203,22 +203,22 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 		return (Test) super.execute();
 	}
 	
-	@Override
+	@Override @Deprecated
 	public Test addExecutionPhaseRunnables(Boolean isPre,Runnable... runnables) {
 		return (Test) super.addExecutionPhaseRunnables(isPre, runnables);
 	}
 	
-	@Override
+	@Override @Deprecated
 	public Test addExecutionPhaseAssertions(Boolean isPre,AssertionBuilder... assertionBuilders) {
 		return (Test) super.addExecutionPhaseAssertions(isPre, assertionBuilders);
 	}
 	
-	@Override
+	@Override @Deprecated
 	public Test addExecutionPhaseFunctionRunnables(Boolean isPre,FunctionRunnable<?>... functionRunnables) {
 		return (Test) super.addExecutionPhaseFunctionRunnables(isPre, functionRunnables);
 	}
 	
-	@Override
+	@Override @Deprecated
 	public Test addFinallyRunnablesInTryCatchFinally(Runnable... runnables) {
 		return (Test) super.addFinallyRunnablesInTryCatchFinally(runnables);
 	}

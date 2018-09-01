@@ -2,6 +2,7 @@ package org.cyk.utility.assertion;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -13,7 +14,7 @@ public abstract class AbstractAssertionBuilderImpl extends AbstractFunctionWithP
 	protected Assertion __execute__() throws Exception {
 		Boolean isAffirmation = __injectValueHelper__().defaultToIfNull(getIsAffirmation(),Boolean.TRUE);
 		
-		Assertion assertion = new Assertion();
+		Assertion assertion = __inject__(Assertion.class);
 		assertion.setValue(__computeValue__(assertion,isAffirmation));
 		if(assertion.getValue() == null)
 			__inject__(ThrowableHelper.class).throwRuntimeException("assertion value is required");

@@ -2,6 +2,7 @@ package org.cyk.utility.assertion;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldValueGetter;
 

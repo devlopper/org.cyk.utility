@@ -1,14 +1,12 @@
 package org.cyk.utility.function;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.function.FunctionRunnable;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.assertion.Assertion;
 import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.clazz.ClassHelper;
@@ -22,97 +20,16 @@ import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.function.AbstractFunctionImpl<INPUT, OUTPUT> implements Function<INPUT,OUTPUT>,Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Override
-	protected void __executeVerifyPreConditions__() {
-		super.__executeVerifyPreConditions__();
-		ExecutionPhase executionPhase = getPreExecutionPhase();
-		if(executionPhase!=null){
-			Collection<Assertion> assertions = executionPhase.getAssertions();	
-			if(__injectCollectionHelper__().isNotEmpty(assertions)){
-				for(Assertion index : assertions){
-					if(Boolean.FALSE.equals(index.getValue()))
-						__injectThrowableHelper__().throwRuntimeException(index.getMessageWhenValueIsNotTrue());
-				}
-			}
-			
-			Collection<Runnable> runnables = executionPhase.getRunnables();
-			if(__injectCollectionHelper__().isNotEmpty(runnables)){
-				for(Runnable index : runnables){
-					index.run();
-				}
-			}
-			
-			Collection<FunctionRunnable<?>> functionRunnables = executionPhase.getFunctionRunnables();
-			if(__injectCollectionHelper__().isNotEmpty(functionRunnables)){
-				for(FunctionRunnable<?> index : functionRunnables){
-					index.getRunnable().run();
-				}
-			}
-		}
 		
-	}
-	
-	@Override
-	protected void __executeVerifyPostConditions__() {
-		super.__executeVerifyPostConditions__();
-		ExecutionPhase executionPhase = getPostExecutionPhase();
-		if(executionPhase!=null){
-			Collection<Assertion> assertions = executionPhase.getAssertions();	
-			if(__injectCollectionHelper__().isNotEmpty(assertions)){
-				for(Assertion index : assertions){
-					if(Boolean.FALSE.equals(index.getValue()))
-						__injectThrowableHelper__().throwRuntimeException(index.getMessageWhenValueIsNotTrue());
-				}
-			}
-			
-			Collection<Runnable> runnables = executionPhase.getRunnables();
-			if(__injectCollectionHelper__().isNotEmpty(runnables)){
-				for(Runnable index : runnables){
-					index.run();
-				}
-			}
-			
-			Collection<FunctionRunnable<?>> functionRunnables = executionPhase.getFunctionRunnables();
-			if(__injectCollectionHelper__().isNotEmpty(functionRunnables)){
-				for(FunctionRunnable<?> index : functionRunnables){
-					index.getRunnable().run();
-				}
-			}
-		}
-	}
-	
-	@Override
-	protected void __finally__() {
-		super.__finally__();
-		ExecutionPhase executionPhase = getPostExecutionPhase();
-		if(executionPhase!=null){
-			Collection<Runnable> runnables = executionPhase.getFinallyRunnables();
-			if(__injectCollectionHelper__().isNotEmpty(runnables)){
-				for(Runnable index : runnables){
-					index.run();
-				}
-			}
-			/*
-			Collection<FunctionRunnable<?>> functionRunnables = executionPhase.getFinallyFunctionRunnables();
-			if(__injectCollectionHelper__().isNotEmpty(functionRunnables)){
-				for(FunctionRunnable<?> index : functionRunnables){
-					index.getRunnable().run();
-				}
-			}
-			*/
-		}
-	}
-	
 	@Override
 	public Function<INPUT, OUTPUT> setInput(INPUT input) {
 		getProperties().setInput(input);
 		return this;
 	}
-
+	
 	@Override
-	protected void afterExecute() {
-		super.afterExecute();
+	protected void __log__() {
+		super.__log__();
 		getLog(Boolean.TRUE).getMessageBuilder(Boolean.TRUE).addParameter("duration", getProperties().getFromPath(Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION));
 		Class<?> callerClass = getCallerClass();
 		if(callerClass !=null)
@@ -221,21 +138,21 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 		return this;
 	}
 	
-	@Override
+	@Override @Deprecated
 	public ExecutionPhase getPreExecutionPhase() {
 		return (ExecutionPhase) getProperties().getFromPath(Properties.EXECUTION,Properties.PRE);
 	}
-	@Override
+	@Override @Deprecated
 	public Function<INPUT, OUTPUT> setPreExecutionPhase(ExecutionPhase executionPhase) {
 		getProperties().setFromPath(new Object[]{Properties.EXECUTION,Properties.PRE}, executionPhase);
 		return this;
 	}
 	
-	@Override
+	@Override @Deprecated
 	public ExecutionPhase getPostExecutionPhase() {
 		return (ExecutionPhase) getProperties().getFromPath(Properties.EXECUTION,Properties.POST);
 	}
-	@Override
+	@Override @Deprecated
 	public Function<INPUT, OUTPUT> setPostExecutionPhase(ExecutionPhase executionPhase) {
 		getProperties().setFromPath(new Object[]{Properties.EXECUTION,Properties.POST}, executionPhase);
 		return this;
@@ -243,7 +160,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	/**/
 	
-	@Override
+	@Override @Deprecated
 	public Function<INPUT, OUTPUT> addExecutionPhaseAssertions(Boolean isPre,AssertionBuilder...assertionBuilders){
 		String pre = Boolean.TRUE.equals(isPre) ? Properties.PRE : Properties.POST;
 		ExecutionPhase executionPhase = (ExecutionPhase) getProperties().getFromPath(Properties.EXECUTION,pre);
@@ -253,7 +170,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 		return this;
 	}
 	
-	@Override
+	@Override @Deprecated
 	public Function<INPUT, OUTPUT> addExecutionPhaseRunnables(Boolean isPre,Runnable...runnables){
 		String pre = Boolean.TRUE.equals(isPre) ? Properties.PRE : Properties.POST;
 		ExecutionPhase executionPhase = (ExecutionPhase) getProperties().getFromPath(Properties.EXECUTION,pre);
@@ -263,7 +180,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 		return this;
 	}
 	
-	@Override
+	@Override @Deprecated
 	public Function<INPUT, OUTPUT> addExecutionPhaseFunctionRunnables(Boolean isPre,FunctionRunnable<?>...functionRunnables){
 		String pre = Boolean.TRUE.equals(isPre) ? Properties.PRE : Properties.POST;
 		ExecutionPhase executionPhase = (ExecutionPhase) getProperties().getFromPath(Properties.EXECUTION,pre);

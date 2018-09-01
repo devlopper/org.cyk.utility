@@ -18,6 +18,8 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends AbstractTestIntegrationImpl implements TestPersistenceServiceProviderFunction {
 	private static final long serialVersionUID = 1L;
 
+	private Collection<Object> unexistingObjectIdentifiers;
+	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
@@ -110,6 +112,28 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 			if(collection == null)
 				setObjectIdentifiers(collection = new ArrayList<Object>());
 			__inject__(CollectionHelper.class).add(collection, objectIdentifiers);
+		}
+		return this;
+	}
+	
+	@Override
+	public Collection<Object> getUnexistingObjectIdentifiers() {
+		return unexistingObjectIdentifiers;
+	}
+	
+	@Override
+	public TestPersistenceServiceProviderFunction setUnexistingObjectIdentifiers(Collection<Object> unexistingObjectIdentifiers) {
+		this.unexistingObjectIdentifiers = unexistingObjectIdentifiers;
+		return this;
+	}
+	
+	@Override
+	public TestPersistenceServiceProviderFunction addUnexistingObjectIdentifiers(Object... unexistingObjectIdentifiers) {
+		if(__inject__(ArrayHelper.class).isNotEmpty(unexistingObjectIdentifiers)){
+			Collection<Object> collection = getUnexistingObjectIdentifiers();
+			if(collection == null)
+				setUnexistingObjectIdentifiers(collection = new ArrayList<Object>());
+			__inject__(CollectionHelper.class).add(collection, unexistingObjectIdentifiers);
 		}
 		return this;
 	}

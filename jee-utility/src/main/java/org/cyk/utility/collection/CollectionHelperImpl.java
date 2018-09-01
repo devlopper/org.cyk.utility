@@ -184,4 +184,8 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 		return collection;
 	}
 	
+	@Override
+	public Boolean contains(Collection<?> collection, Object element) {
+		return collection == null ? Boolean.FALSE : collection.contains(element);
+	}
 }
