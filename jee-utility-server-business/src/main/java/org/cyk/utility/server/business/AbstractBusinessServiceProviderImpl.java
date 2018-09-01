@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.assertion.AssertionBuilderNull;
-import org.cyk.utility.function.ExecutionPhase;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
@@ -148,27 +146,6 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	}
 	
 	protected void ____validateOne____(OBJECT object, SystemAction action) {}
-	
-	@Deprecated
-	protected Properties addExecutionPhaseAssertions(Properties properties,Boolean isPre,AssertionBuilder...assertionBuilders){
-		String pre = Boolean.TRUE.equals(isPre) ? Properties.PRE : Properties.POST;
-		ExecutionPhase executionPhase = (ExecutionPhase) Properties.getFromPath(properties,Properties.EXECUTION,pre);
-		if(executionPhase == null)
-			properties = Properties.setFromPath(properties, new Object[]{Properties.EXECUTION,pre}, executionPhase = new ExecutionPhase());
-		for(AssertionBuilder index : assertionBuilders)
-			executionPhase.addAssertions(index.execute().getOutput());
-		return properties;
-	}
-	
-	@Deprecated
-	protected Properties addExecutionPhaseRunnables(Properties properties,Boolean isPre,Runnable...runnables){
-		String pre = Boolean.TRUE.equals(isPre) ? Properties.PRE : Properties.POST;
-		ExecutionPhase executionPhase = (ExecutionPhase) Properties.getFromPath(properties,Properties.EXECUTION,pre);
-		if(executionPhase == null)
-			properties = Properties.setFromPath(properties, new Object[]{Properties.EXECUTION,pre}, executionPhase = new ExecutionPhase());
-		executionPhase.addRunnables(runnables);
-		return properties;
-	}
 	
 	protected void __configure__(BusinessFunction function, Properties properties) {
 		if(properties != null){
