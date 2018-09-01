@@ -38,7 +38,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		__configure__(function, properties);
 		if(Boolean.TRUE.equals(__isCreateManyOneByOne__())) {
 			//Loop execution
-			function.addExecutionPhaseRunnables(Boolean.TRUE, new Runnable() {
+			function.try_().setIsCodeFromFunctionExecutable(Boolean.FALSE).run().addRunnables(new Runnable() {
 				@Override
 				public void run() {
 					for(OBJECT index : objects) {
@@ -46,7 +46,6 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 					}
 				}
 			});
-			function.getProperties().setFromPath(new Object[]{Properties.IS,Properties.CORE,Properties.EXECUTABLE}, Boolean.FALSE);
 		}else {
 			//Batch execution
 			function.setEntities(objects);
@@ -150,6 +149,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	
 	protected void ____validateOne____(OBJECT object, SystemAction action) {}
 	
+	@Deprecated
 	protected Properties addExecutionPhaseAssertions(Properties properties,Boolean isPre,AssertionBuilder...assertionBuilders){
 		String pre = Boolean.TRUE.equals(isPre) ? Properties.PRE : Properties.POST;
 		ExecutionPhase executionPhase = (ExecutionPhase) Properties.getFromPath(properties,Properties.EXECUTION,pre);
@@ -160,6 +160,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		return properties;
 	}
 	
+	@Deprecated
 	protected Properties addExecutionPhaseRunnables(Properties properties,Boolean isPre,Runnable...runnables){
 		String pre = Boolean.TRUE.equals(isPre) ? Properties.PRE : Properties.POST;
 		ExecutionPhase executionPhase = (ExecutionPhase) Properties.getFromPath(properties,Properties.EXECUTION,pre);
@@ -171,9 +172,9 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	
 	protected void __configure__(BusinessFunction function, Properties properties) {
 		if(properties != null){
-			function.setPreExecutionPhase((ExecutionPhase)properties.getFromPath(Properties.EXECUTION,Properties.PRE));
+			//function.setPreExecutionPhase((ExecutionPhase)properties.getFromPath(Properties.EXECUTION,Properties.PRE));
 			//TODO use getter setter from properties
-			function.getProperties().setFromPath(new Object[]{Properties.IS,Properties.CORE,Properties.EXECUTABLE}, properties.getFromPath(Properties.IS,Properties.CORE,Properties.EXECUTABLE));	
+			//function.getProperties().setFromPath(new Object[]{Properties.IS,Properties.CORE,Properties.EXECUTABLE}, properties.getFromPath(Properties.IS,Properties.CORE,Properties.EXECUTABLE));	
 		}
 	}
 }

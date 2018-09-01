@@ -91,15 +91,15 @@ public class PersistenceFunctionIntegrationTest extends AbstractPersistenceArqui
 		});
 		
 		__inject__(TestPersistenceUpdate.class).addObjectsToBeCreatedArray(new MyEntity().setCode(code))
-			.addExecutionPhaseFunctionRunnables(Boolean.TRUE, functionRunnable)
-			.addExecutionPhaseRunnables(Boolean.FALSE, new Runnable() {
+			.try_().begin().addFunctionRunnables(functionRunnable).getParent().getParentAs(TestPersistenceUpdate.class)
+			.try_().end().addRunnables(new Runnable() {
 				@Override
 				public void run() {
 					MyEntity myEntity = __inject__(MyEntityPersistence.class).readOneByBusinessIdentifier(code);
 					assertionHelper.assertNotNull("object with business identifier <"+code+"> not found",myEntity);
 					assertionHelper.assertEqualsNumber("integerValue("+myEntity.getIntegerValue()+") is not equal to 33", 33, myEntity.getIntegerValue());
 				}
-			})
+			}).getParent().getParent()
 			.execute();
 	}
 	

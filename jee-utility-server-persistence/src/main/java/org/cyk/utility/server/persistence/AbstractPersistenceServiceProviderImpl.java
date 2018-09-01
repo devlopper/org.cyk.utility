@@ -150,7 +150,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		PersistenceFunctionCreator function = __inject__(PersistenceFunctionCreator.class);
 		if(Boolean.TRUE.equals(__isCreateManyOneByOne__())) {
 			//Loop execution
-			function.addExecutionPhaseRunnables(Boolean.TRUE, new Runnable() {
+			function.try_().setIsCodeFromFunctionExecutable(Boolean.FALSE).run().addRunnables(new Runnable() {
 				@Override
 				public void run() {
 					for(OBJECT index : objects) {
@@ -158,7 +158,6 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 					}
 				}
 			});
-			function.getProperties().setFromPath(new Object[]{Properties.IS,Properties.CORE,Properties.EXECUTABLE}, Boolean.FALSE);
 		}else {
 			//Batch execution
 			function.setEntities(objects);

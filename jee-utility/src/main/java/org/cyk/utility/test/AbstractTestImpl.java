@@ -7,8 +7,6 @@ import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 
 import org.cyk.utility.__kernel__.AbstractRunnableImpl;
-import org.cyk.utility.__kernel__.function.FunctionRunnable;
-import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.assertion.AssertionHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
@@ -27,8 +25,7 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		setIsCatchThrowable(Boolean.TRUE);
-		
-		addExecutionPhaseRunnables(Boolean.TRUE, new AbstractRunnableImpl() {
+		try_().begin().addRunnables(new AbstractRunnableImpl() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -38,7 +35,7 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 			}
 		});
 		
-		addFinallyRunnablesInTryCatchFinally(new Runnable() {
+		finally_().begin().addRunnables(new Runnable() {
 			@Override
 			public void run() {
 				System.out.println("Cleaning up test named <"+__getName__(getName())+">");
@@ -203,23 +200,4 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 		return (Test) super.execute();
 	}
 	
-	@Override @Deprecated
-	public Test addExecutionPhaseRunnables(Boolean isPre,Runnable... runnables) {
-		return (Test) super.addExecutionPhaseRunnables(isPre, runnables);
-	}
-	
-	@Override @Deprecated
-	public Test addExecutionPhaseAssertions(Boolean isPre,AssertionBuilder... assertionBuilders) {
-		return (Test) super.addExecutionPhaseAssertions(isPre, assertionBuilders);
-	}
-	
-	@Override @Deprecated
-	public Test addExecutionPhaseFunctionRunnables(Boolean isPre,FunctionRunnable<?>... functionRunnables) {
-		return (Test) super.addExecutionPhaseFunctionRunnables(isPre, functionRunnables);
-	}
-	
-	@Override @Deprecated
-	public Test addFinallyRunnablesInTryCatchFinally(Runnable... runnables) {
-		return (Test) super.addFinallyRunnablesInTryCatchFinally(runnables);
-	}
 }

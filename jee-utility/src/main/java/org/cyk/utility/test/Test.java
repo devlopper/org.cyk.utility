@@ -2,8 +2,6 @@ package org.cyk.utility.test;
 
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.function.FunctionRunnable;
-import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.function.FunctionWithPropertiesAsInputAndVoidAsOutput;
 
 public interface Test extends FunctionWithPropertiesAsInputAndVoidAsOutput {
@@ -55,9 +53,5 @@ public interface Test extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 	/**/
 	
 	@Override Test execute();
-	@Override Test addExecutionPhaseRunnables(Boolean isPre, Runnable... runnables);
-	@Override Test addExecutionPhaseAssertions(Boolean isPre,AssertionBuilder... assertionBuilders);
-	@Override Test addExecutionPhaseFunctionRunnables(Boolean isPre, FunctionRunnable<?>... functionRunnables);
 	
-	@Override Test addFinallyRunnablesInTryCatchFinally(Runnable... runnables);
 }
