@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.enterprise.util.AnnotationLiteral;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.KernelHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,5 +39,11 @@ public abstract class AbstractObject implements Objectable,Serializable {
 			return null;
 		}
 		return DependencyInjection.injectByQualifiersClasses(aClass,annotationLiteralClasses);
+	}
+	
+	/**/
+	
+	protected static KernelHelper __injectKernelHelper__() {
+		return __inject__(KernelHelper.class);
 	}
 }

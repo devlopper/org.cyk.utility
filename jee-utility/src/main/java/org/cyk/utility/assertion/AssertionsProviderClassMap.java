@@ -5,5 +5,7 @@ import org.cyk.utility.__kernel__.object.dynamic.Singleton;
 public interface AssertionsProviderClassMap extends Singleton {
 
 	AssertionsProviderClassMap set(Class<?> domainClass,Class<? extends AssertionsProvider> providerClass);
-	<P extends AssertionsProvider> Class<P> get(Object domain);
+	Class<AssertionsProvider> get(Object domain);
+	
+	AssertionsProvider inject(Object domain);
 }

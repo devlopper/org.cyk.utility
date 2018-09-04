@@ -11,20 +11,30 @@ import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
 import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements BusinessServiceProvider<OBJECT>,Serializable {
-
 	private static final long serialVersionUID = 1L;
 
 	@Override 
 	public BusinessServiceProvider<OBJECT> create(OBJECT object, Properties properties) {
-		BusinessFunctionCreator function = __inject__(BusinessFunctionCreator.class);
-		__configure__(function, properties);
+		BusinessFunctionCreator function = __injectCreatorForOne__();
 		function.setEntity(object);
+		
+		__configure__(function, properties);
+
 		validateOne(object, function.getAction());
+		__listenExecuteCreateOneBefore__(object, properties, function);
 		function.execute();
+		__listenExecuteCreateOneAfter__(object, properties, function);
 		validateOne(object);
 		return this;
 	}
-
+	
+	protected BusinessFunctionCreator __injectCreatorForOne__(){
+		return ____inject____(BusinessFunctionCreator.class);
+	}
+	
+	protected void __listenExecuteCreateOneBefore__(OBJECT object, Properties properties,BusinessFunctionCreator function){}
+	protected void __listenExecuteCreateOneAfter__(OBJECT object, Properties properties,BusinessFunctionCreator function){}
+	
 	@Override 
 	public BusinessServiceProvider<OBJECT> create(OBJECT object) {
 		return create(object, null);
@@ -32,7 +42,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 
 	@Override 
 	public BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects, Properties properties) {
-		BusinessFunctionCreator function = __inject__(BusinessFunctionCreator.class);
+		BusinessFunctionCreator function = __injectCreatorForMany__();
 		__configure__(function, properties);
 		if(Boolean.TRUE.equals(__isCreateManyOneByOne__())) {
 			//Loop execution
@@ -61,6 +71,10 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		}
 		return this;
 	}
+	
+	protected BusinessFunctionCreator __injectCreatorForMany__(){
+		return ____inject____(BusinessFunctionCreator.class);
+	}
 
 	@Override 
 	public BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects) {
@@ -73,14 +87,19 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 
 	@Override 
 	public BusinessServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
-		BusinessFunctionModifier function = __inject__(BusinessFunctionModifier.class);
+		BusinessFunctionModifier function = ____inject____(BusinessFunctionModifier.class);
 		__configure__(function, properties);
 		function.setEntity(object);
 		validateOne(object, function.getAction());
+		__listenExecuteUpdateOneBefore__(object, properties, function);
 		function.execute();
+		__listenExecuteUpdateOneAfter__(object, properties, function);
 		validateOne(object);
 		return this;
 	}
+	
+	protected void __listenExecuteUpdateOneBefore__(OBJECT object, Properties properties,BusinessFunctionModifier function){}
+	protected void __listenExecuteUpdateOneAfter__(OBJECT object, Properties properties,BusinessFunctionModifier function){}
 
 	@Override 
 	public BusinessServiceProvider<OBJECT> update(OBJECT object) {
@@ -101,14 +120,19 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 
 	@Override 
 	public BusinessServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
-		BusinessFunctionRemover function =  __inject__(BusinessFunctionRemover.class);
+		BusinessFunctionRemover function =  ____inject____(BusinessFunctionRemover.class);
 		__configure__(function, properties);
 		function.setEntity(object);
 		validateOne(object, function.getAction());
+		__listenExecuteDeleteOneBefore__(object, properties, function);
 		function.execute();
+		__listenExecuteDeleteOneAfter__(object, properties, function);
 		//object has been remove so it is not more persisted. no validation
 		return this;
 	}
+	
+	protected void __listenExecuteDeleteOneBefore__(OBJECT object, Properties properties,BusinessFunctionRemover function){}
+	protected void __listenExecuteDeleteOneAfter__(OBJECT object, Properties properties,BusinessFunctionRemover function){}
 
 	@Override 
 	public BusinessServiceProvider<OBJECT> delete(OBJECT object) {
@@ -145,13 +169,14 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		____validateOne____((OBJECT) object, action);
 	}
 	
-	protected void ____validateOne____(OBJECT object, SystemAction action) {}
+	protected void ____validateOne____(OBJECT object, SystemAction action) {
+		
+	}
 	
 	protected void __configure__(BusinessFunction function, Properties properties) {
 		if(properties != null){
-			//function.setPreExecutionPhase((ExecutionPhase)properties.getFromPath(Properties.EXECUTION,Properties.PRE));
-			//TODO use getter setter from properties
-			//function.getProperties().setFromPath(new Object[]{Properties.IS,Properties.CORE,Properties.EXECUTABLE}, properties.getFromPath(Properties.IS,Properties.CORE,Properties.EXECUTABLE));	
+			
 		}
 	}
+	
 }

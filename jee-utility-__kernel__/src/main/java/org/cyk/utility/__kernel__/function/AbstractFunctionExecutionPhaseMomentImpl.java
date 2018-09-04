@@ -16,12 +16,29 @@ public abstract class AbstractFunctionExecutionPhaseMomentImpl extends AbstractO
 
 	private Collection<AssertionBuilder> assertionBuilders;
 	private Boolean runned;
+	private Function<?,Collection<Assertion>> assertionsProvider;
+	
+	@Override
+	public Function<?,Collection<Assertion>> getAssertionsProvider() {
+		return assertionsProvider;
+	}
+	
+	@Override
+	public FunctionExecutionPhaseMoment setAssertionsProvider(Function<?,Collection<Assertion>> assertionsProvider) {
+		this.assertionsProvider = assertionsProvider;
+		return this;
+	}
 	
 	@Override
 	public FunctionExecutionPhaseMoment run() {
 		setRunned(Boolean.TRUE);
 		
-		Collection<Assertion> assertions = new ArrayList<>();	
+		Collection<Assertion> assertions = new ArrayList<>();
+		
+		Function<?,Collection<Assertion>> assertionsProvider = getAssertionsProvider();
+		if(assertionsProvider!=null)
+			__injectKernelHelper__().addToCollection(assertions, assertionsProvider.execute().getOutput());
+			
 		Collection<Assertion> __assertions__ = getAssertions();	
 		if(__assertions__!=null) {
 			for(Assertion index : __assertions__) {

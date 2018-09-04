@@ -2,6 +2,7 @@ package org.cyk.utility.__kernel__.function;
 
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.__kernel__.properties.Properties;
 
@@ -22,6 +23,12 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	
 	Function<INPUT,OUTPUT> addChild(Object... child);
 	Function<INPUT,OUTPUT> addChildren(Collection<Object> children);
+	
+	Function<INPUT,OUTPUT> setPreConditionsAssertionsProvider(Function<?, Collection<Assertion>> assertionsProvider);
+	Function<?, Collection<Assertion>> getPreConditionsAssertionsProvider();
+	
+	Function<INPUT,OUTPUT> setPostConditionsAssertionsProvider(Function<?, Collection<Assertion>> assertionsProvider);
+	Function<?, Collection<Assertion>> getPostConditionsAssertionsProvider();
 	
 	@Deprecated Function<INPUT,OUTPUT> setRunnable(Runnable runnable);
 	@Deprecated Runnable getRunnable();

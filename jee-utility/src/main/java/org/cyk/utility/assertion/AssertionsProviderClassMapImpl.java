@@ -25,12 +25,20 @@ public class AssertionsProviderClassMapImpl extends AbstractSingleton implements
 	}
 
 	@Override
-	public <P extends AssertionsProvider> Class<P> get(Object domain) {
-		Class<P> result = null;
+	public Class<AssertionsProvider> get(Object domain) {
+		Class<AssertionsProvider> result = null;
 		if(map!=null) {
-			result = (Class<P>) map.get(domain instanceof Class<?> ? (Class<?>) domain : domain.getClass());
+			result = (Class<AssertionsProvider>) map.get(domain instanceof Class<?> ? (Class<?>) domain : domain.getClass());
 		}
 		return result;
 	}
 
+	@Override
+	public AssertionsProvider inject(Object domain) {
+		AssertionsProvider assertionsProvider = null;
+		Class<AssertionsProvider> aClass = get(domain);
+		if(aClass != null)
+			assertionsProvider = __inject__(aClass);
+		return assertionsProvider;
+	}
 }

@@ -28,4 +28,10 @@ public interface KernelHelper {
 	void copyMap(Map source, Map destination, Object[] keys, Boolean removeNullValue);
 	@SuppressWarnings("rawtypes")
 	void copyMap(Map source, Map destination, Object[] keys);
+	
+	Boolean isEmpty(Collection<?> collection);
+	Boolean isNotEmpty(Collection<?> collection);
+	
+	<T> KernelHelper addToCollection(Collection<T> collection,Collection<T> elements);
+	<T> KernelHelper addToCollection(Collection<T> collection,@SuppressWarnings("unchecked") T...elements);
 }

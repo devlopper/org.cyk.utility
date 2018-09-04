@@ -8,6 +8,9 @@ import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 
 public interface FunctionExecutionPhaseMoment extends Objectable {
 
+	Function<?,Collection<Assertion>> getAssertionsProvider();
+	FunctionExecutionPhaseMoment setAssertionsProvider(Function<?,Collection<Assertion>> assertionsProvider);
+	
 	Collection<Assertion> getAssertions();
 	FunctionExecutionPhaseMoment setAssertions(Collection<Assertion> assertions);
 	FunctionExecutionPhaseMoment addAssertions(Collection<Assertion> assertions);

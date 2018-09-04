@@ -3,6 +3,8 @@ package org.cyk.utility.system;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.util.AnnotationLiteral;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
@@ -72,5 +74,16 @@ public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceP
 	
 	protected SystemAction getSystemAction(Properties properties,Class<? extends SystemAction> aClass){
 		return properties == null || properties.getSystemAction() == null ? __inject__(aClass) : (SystemAction) properties.getSystemAction();
+	}
+	
+	/**/
+	
+	@Override
+	protected <O> O ____inject____(Class<O> aClass, AnnotationLiteral<?>... annotationLiterals) {
+		O o = super.____inject____(aClass, annotationLiterals);
+		if(o instanceof SystemFunction) {
+			((SystemFunction)o).setCallerClass(getClass()).setCallerIdentifier(getIdentifier());
+		}
+		return o;
 	}
 }

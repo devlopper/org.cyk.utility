@@ -12,13 +12,6 @@ public class MyEntityBusinessImpl extends AbstractBusinessEntityImpl<MyEntity,My
 
 	@Override
 	public BusinessServiceProvider<MyEntity> create(MyEntity myEntity, Properties properties) {
-		/*properties = addExecutionPhaseAssertions(properties,Boolean.TRUE, __injectAssertionBuilderNull__(Boolean.FALSE,myEntity,"long1"));
-		addExecutionPhaseRunnables(properties, true, new Runnable(){
-			@Override
-			public void run() {
-				System.out.println("MyEntityBusinessImpl.create(...).new Runnable() {...}.run()");
-			}});
-		*/
 		myEntity.setTimestamp(System.currentTimeMillis());
 		return super.create(myEntity, properties);
 	}

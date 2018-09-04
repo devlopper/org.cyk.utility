@@ -1,6 +1,8 @@
 package org.cyk.utility.function;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -12,6 +14,7 @@ import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.string.StringHelper;
@@ -20,7 +23,9 @@ import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.function.AbstractFunctionImpl<INPUT, OUTPUT> implements Function<INPUT,OUTPUT>,Serializable {
 	private static final long serialVersionUID = 1L;
-		
+	
+	//private Collection<Class<?>> assertionsProvidersDomainsClasses;
+	
 	@Override
 	public Function<INPUT, OUTPUT> setInput(INPUT input) {
 		getProperties().setInput(input);
@@ -30,7 +35,8 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	@Override
 	protected void __log__() {
 		super.__log__();
-		getLog(Boolean.TRUE).getMessageBuilder(Boolean.TRUE).addParameter("duration", getProperties().getFromPath(Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION));
+		getLog(Boolean.TRUE).getMessageBuilder(Boolean.TRUE)
+			.addParameter("duration", getProperties().getFromPath(Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION));
 		Class<?> callerClass = getCallerClass();
 		if(callerClass !=null)
 			getLog(Boolean.TRUE).getMessageBuilder(Boolean.TRUE).addParameter("caller class", callerClass);
@@ -38,6 +44,16 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 		//Object callerIdentifier = getCallerIdentifier();
 		//if(callerIdentifier !=null)
 		//	getLog(Boolean.TRUE).getMessageBuilder(Boolean.TRUE).addParameter("calleridentifier", callerIdentifier);
+		
+		Set<Class<?>> assertionsProviderClasses = new LinkedHashSet<>();
+		if(getExecutionPhaseTry()!=null && getExecutionPhaseTry().getBegin()!=null && getExecutionPhaseTry().getBegin().getAssertionsProvider()!=null)
+			assertionsProviderClasses.add(getExecutionPhaseTry().getBegin().getAssertionsProvider().getClass());
+		if(getExecutionPhaseTry()!=null && getExecutionPhaseTry().getEnd()!=null && getExecutionPhaseTry().getEnd().getAssertionsProvider()!=null)
+			assertionsProviderClasses.add(getExecutionPhaseTry().getEnd().getAssertionsProvider().getClass());
+		
+		if(!assertionsProviderClasses.isEmpty())
+			getLog(Boolean.TRUE).getMessageBuilder(Boolean.TRUE).addParameter("Pre/Post Assertions Provider Classes", assertionsProviderClasses);
+		
 		Log log = getLog();
 		if(log!=null && Boolean.TRUE.equals(getLoggable()))
 			log.execute();
@@ -137,7 +153,18 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 		getProperties().setLoggable(monitorable);
 		return this;
 	}
+	/*
+	@Override
+	public Collection<Class<?>> getAssertionsProvidersDomainsClasses() {
+		return assertionsProvidersDomainsClasses;
+	}
 	
+	@Override
+	public Function<INPUT, OUTPUT> setAssertionsProvidersDomainsClasses(Collection<Class<?>> domainsClasses) {
+		this.assertionsProvidersDomainsClasses = domainsClasses;
+		return this;
+	}
+	*/
 	@Override @Deprecated
 	public ExecutionPhase getPreExecutionPhase() {
 		return (ExecutionPhase) getProperties().getFromPath(Properties.EXECUTION,Properties.PRE);
@@ -205,24 +232,28 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	/**/
 	
-	protected StringHelper __injectStringHelper__(){
+	protected static StringHelper __injectStringHelper__(){
 		return __inject__(StringHelper.class);
 	}
 	
-	protected ValueHelper __injectValueHelper__(){
+	protected static ValueHelper __injectValueHelper__(){
 		return __inject__(ValueHelper.class);
 	}
 	
-	protected CollectionHelper __injectCollectionHelper__(){
+	protected static CollectionHelper __injectCollectionHelper__(){
 		return __inject__(CollectionHelper.class);
 	}
 	
-	protected ClassHelper __injectClassHelper__(){
+	protected static ClassHelper __injectClassHelper__(){
 		return __inject__(ClassHelper.class);
 	}
 	
-	protected FieldHelper __injectFieldHelper__(){
+	protected static FieldHelper __injectFieldHelper__(){
 		return __inject__(FieldHelper.class);
+	}
+	
+	protected static FieldValueGetter __injectFieldValueGetter__(){
+		return __inject__(FieldValueGetter.class);
 	}
 	
 	protected ThrowableHelper __injectThrowableHelper__(){

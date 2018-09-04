@@ -23,7 +23,10 @@ public interface Function<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.funct
 	
 	Function<INPUT,OUTPUT> setMonitorable(Boolean monitorable);
 	Boolean getMonitorable();
-	
+	/*
+	Function<INPUT,OUTPUT> setAssertionsProvidersDomainsClasses(Collection<Class<?>> domainsClasses);
+	Collection<Class<?>> getAssertionsProvidersDomainsClasses();
+	*/
 	@Deprecated ExecutionPhase getPreExecutionPhase();
 	@Deprecated Function<INPUT,OUTPUT> setPreExecutionPhase(ExecutionPhase executionPhase);
 	

@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.KernelHelper;
+import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
 
@@ -16,6 +17,8 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	private FunctionExecutionPhaseTry executionPhaseTry;
 	private FunctionExecutionPhaseCatch executionPhaseCatch;
 	private FunctionExecutionPhaseFinally executionPhaseFinally;
+	private Function<?, Collection<Assertion>> preConditionsAssertionsProvider;
+	private Function<?, Collection<Assertion>> postConditionsAssertionsProvider;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -51,10 +54,17 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	}
 	
 	protected void __try__() throws Exception {
-		FunctionExecutionPhaseTry executionPhaseTry = getExecutionPhaseTry();
-		__executePhaseMoment__(executionPhaseTry, FunctionExecutionPhaseMomentBegin.class);
+		FunctionExecutionPhaseTry executionPhaseTry = getExecutionPhaseTry();		
 		
+		if(executionPhaseTry == null || executionPhaseTry.getBegin()==null || executionPhaseTry.getBegin().getAssertionsProvider()==null)
+			(executionPhaseTry = try_()).begin().setAssertionsProvider(getPreConditionsAssertionsProvider());
+		
+		if(executionPhaseTry == null || executionPhaseTry.getEnd()==null || executionPhaseTry.getEnd().getAssertionsProvider()==null)
+			(executionPhaseTry = try_()).end().setAssertionsProvider(getPostConditionsAssertionsProvider());
+		
+		__executePhaseMoment__(executionPhaseTry, FunctionExecutionPhaseMomentBegin.class);		
 		__executePhaseMoment__(executionPhaseTry, FunctionExecutionPhaseMomentRun.class);
+		
 		Boolean isCodeFromFunctionExecutable = executionPhaseTry == null || executionPhaseTry.getIsCodeFromFunctionExecutable() == null 
 				|| Boolean.TRUE.equals(executionPhaseTry.getIsCodeFromFunctionExecutable());
 		
@@ -320,6 +330,32 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	@Override
 	public FunctionExecutionPhaseFinally finally_() {
 		return getExecutionPhaseFinally(Boolean.TRUE);
+	}
+	
+	protected static KernelHelper __injectKernelHelper__() {
+		return __inject__(KernelHelper.class);
+	}
+	
+	@Override
+	public Function<?, Collection<Assertion>> getPreConditionsAssertionsProvider() {
+		return preConditionsAssertionsProvider;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setPreConditionsAssertionsProvider(Function<?, Collection<Assertion>> assertionsProvider) {
+		this.preConditionsAssertionsProvider = assertionsProvider;
+		return this;
+	}
+	
+	@Override
+	public Function<?, Collection<Assertion>> getPostConditionsAssertionsProvider() {
+		return postConditionsAssertionsProvider;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setPostConditionsAssertionsProvider(Function<?, Collection<Assertion>> assertionsProvider) {
+		this.postConditionsAssertionsProvider = assertionsProvider;
+		return this;
 	}
 	
 	@SuppressWarnings("unchecked")

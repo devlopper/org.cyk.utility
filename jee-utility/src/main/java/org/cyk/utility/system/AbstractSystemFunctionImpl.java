@@ -7,6 +7,7 @@ import org.cyk.utility.__kernel__.function.FunctionExecutionPhase;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMoment;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMomentBegin;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseTry;
+import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
@@ -108,6 +109,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	public SystemFunction setEntityClass(Class<?> aClass) {
 		getProperties().setEntityClass(aClass);
+		
 		return this;
 	}
 	
@@ -141,8 +143,13 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	public SystemFunction setEntity(Object entity) {
 		getProperties().setEntity(entity);
-		if(entity!=null)
+		if(entity!=null) {
 			setEntityClass(entity.getClass());
+			if(getPreConditionsAssertionsProvider()==null)
+				setPreConditionsAssertionsProvider(__inject__(AssertionsProviderClassMap.class).inject(entity));
+			if(getPostConditionsAssertionsProvider()==null)
+				setPostConditionsAssertionsProvider(__inject__(AssertionsProviderClassMap.class).inject(entity));
+		}
 		return this;
 	}
 	

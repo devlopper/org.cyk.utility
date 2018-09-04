@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -133,6 +134,32 @@ public class KernelHelperImpl implements KernelHelper,Serializable {
 	@Override @SuppressWarnings({ "rawtypes" })
 	public void copyMap(Map source, Map destination, Object[] keys) {
 		copyMap(source, destination, keys, Boolean.TRUE);
+	}
+	
+	@Override
+	public Boolean isEmpty(Collection<?> collection) {
+		return collection == null || collection.isEmpty();
+	}
+	
+	@Override
+	public Boolean isNotEmpty(Collection<?> collection) {
+		return !Boolean.TRUE.equals(isEmpty(collection));
+	}
+	
+	@Override
+	public <T> KernelHelper addToCollection(Collection<T> collection, Collection<T> elements) {
+		if(collection!=null && elements!=null) {
+			collection.addAll(elements);
+		}
+		return this;
+	}
+	
+	@Override
+	public <T> KernelHelper addToCollection(Collection<T> collection, @SuppressWarnings("unchecked") T... elements) {
+		if(collection!=null && elements!=null) {
+			addToCollection(collection, Arrays.asList(elements));
+		}
+		return this;
 	}
 	
 	/**/

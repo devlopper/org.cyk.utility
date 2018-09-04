@@ -1,5 +1,6 @@
 package org.cyk.utility.server.business;
 
+import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessEntityIntegrationTestWithDefaultDeploymentAsSwram;
 import org.junit.Test;
 
@@ -18,5 +19,12 @@ public class MyEntityBusinessIntegrationTest extends AbstractBusinessEntityInteg
 		MyEntity myEntity = new MyEntity().setCode("c01").setLong1(1l)/*.setTimestamp(1l)*/;
 		__createEntity__(myEntity);
 		__deleteEntitiesAll__(MyEntity.class);
+	}
+	
+	@Test
+	public void createWithAssertionFail(){
+		__inject__(AssertionsProviderClassMap.class).set(MyEntity.class, MyEntityAssertionsProvider.class);
+		MyEntity myEntity = new MyEntity().setCode("c01").setLong1(-11l);
+		__createEntity__(myEntity);
 	}
 }
