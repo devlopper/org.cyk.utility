@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import org.cyk.utility.log.AbstractLogEventPropertyAccessorImpl;
 import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.string.StringConstant;
 
 @Singleton
 public class LogEventPropertyAccessorJulImpl extends AbstractLogEventPropertyAccessorImpl implements LogEventPropertyAccessorJul, Serializable {
@@ -18,6 +19,8 @@ public class LogEventPropertyAccessorJulImpl extends AbstractLogEventPropertyAcc
 	public String getMessage(Object bean) {
 		if(bean == null)
 			return null;
+		if(((LogRecord)bean).getMessage() == null)
+			return StringConstant.EMPTY;
 		return MessageFormat.format(((LogRecord)bean).getMessage(), ((LogRecord)bean).getParameters());
 	}
 

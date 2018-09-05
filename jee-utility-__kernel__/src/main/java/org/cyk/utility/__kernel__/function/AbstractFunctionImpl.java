@@ -56,10 +56,10 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	protected void __try__() throws Exception {
 		FunctionExecutionPhaseTry executionPhaseTry = getExecutionPhaseTry();		
 		
-		if(executionPhaseTry == null || executionPhaseTry.getBegin()==null || executionPhaseTry.getBegin().getAssertionsProvider()==null)
+		if((executionPhaseTry == null || executionPhaseTry.getBegin()==null || executionPhaseTry.getBegin().getAssertionsProvider()==null) && getPreConditionsAssertionsProvider()!=null)
 			(executionPhaseTry = try_()).begin().setAssertionsProvider(getPreConditionsAssertionsProvider());
 		
-		if(executionPhaseTry == null || executionPhaseTry.getEnd()==null || executionPhaseTry.getEnd().getAssertionsProvider()==null)
+		if((executionPhaseTry == null || executionPhaseTry.getEnd()==null || executionPhaseTry.getEnd().getAssertionsProvider()==null) && getPostConditionsAssertionsProvider()!=null)
 			(executionPhaseTry = try_()).end().setAssertionsProvider(getPostConditionsAssertionsProvider());
 		
 		__executePhaseMoment__(executionPhaseTry, FunctionExecutionPhaseMomentBegin.class);		

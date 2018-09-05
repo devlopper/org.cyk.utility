@@ -23,24 +23,21 @@ public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputI
 		Object object = getObject();
 		Field field = getField();
 		if(object!=null){
-			if(field!=null){
-				Method method = MethodUtils.getAccessibleMethod(object.getClass(), "get"+__inject__(StringHelper.class).applyCase(field.getName(), Case.FIRST_CHARACTER_UPPER));
-				if(method == null){
-					try {
-						value = FieldUtils.readField(field, object, Boolean.TRUE);
-					} catch (IllegalAccessException exception) {
-						__inject__(Log.class).executeThrowable(exception);
-					}	
-				}else {
+			if(field == null) {
+				String methodName = "get"+__inject__(StringHelper.class).applyCase(getFieldName(), Case.FIRST_CHARACTER_UPPER);
+				Method method = MethodUtils.getAccessibleMethod(object.getClass(), methodName);
+				if(method!=null)
 					try {
 						value = method.invoke(object);
 					} catch (Exception exception) {
 						__inject__(Log.class).executeThrowable(exception);
 					}
-				}
-				
-			}else {
-				
+			}else{			
+				try {
+					value = FieldUtils.readField(field, object, Boolean.TRUE);
+				} catch (IllegalAccessException exception) {
+					__inject__(Log.class).executeThrowable(exception);
+				}	
 			}
 		}
 		return value;
@@ -83,13 +80,17 @@ public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputI
 	@Override
 	public FieldValueGetter setField(Field field) {
 		getProperties().setField(field);
+		if(field!=null)
+			setFieldName(field.getName());
 		return this;
 	}
 	
 	@Override
 	public FieldValueGetter setField(Class<?> aClass, Collection<String> names) {
 		if(aClass !=null && __inject__(CollectionHelper.class).isNotEmpty(names)){
-			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldGetter.class).execute(aClass, __inject__(FieldHelper.class).concatenate(names)).getOutput()));
+			String fieldName = __inject__(FieldHelper.class).concatenate(names);
+			setFieldName(fieldName);
+			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldGetter.class).execute(aClass, fieldName).getOutput()));
 		}
 		return this;
 	}

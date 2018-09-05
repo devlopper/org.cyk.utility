@@ -10,4 +10,7 @@ public class MyEntity {
 	private Integer identifier;
 	private String code;
 	
+	public String getIdentifierAndCode() {
+		return identifier+code;
+	}
 }
