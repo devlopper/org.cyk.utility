@@ -74,6 +74,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 				output = _execute_();	
 			getProperties().setOutput(output);	
 		}
+		
 		__executePhaseMoment__(executionPhaseTry, FunctionExecutionPhaseMomentEnd.class);
 	}
 	

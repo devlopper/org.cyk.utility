@@ -29,5 +29,5 @@ public abstract class AbstractBusinessFunctionImpl extends AbstractSystemFunctio
 	protected SystemLayer getSystemLayer() {
 		return __inject__(SystemLayerBusiness.class);
 	}
-
+	
 }

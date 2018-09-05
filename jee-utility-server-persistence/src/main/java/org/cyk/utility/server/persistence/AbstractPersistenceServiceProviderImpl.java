@@ -232,6 +232,12 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		return this;
 	}
 	
+	@Override
+	public PersistenceServiceProvider<OBJECT> clear() {
+		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		return this;
+	}
+	
 	/**/
 	
 	@SuppressWarnings("unchecked")

@@ -3,6 +3,7 @@ package org.cyk.utility.assertion;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.assertion.Assertion;
+import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
@@ -84,7 +85,7 @@ public class AssertionsProviderClassMapUnitTest extends AbstractArquillianUnitTe
 		private static final long serialVersionUID = 1L;
 		
 		@Override
-		protected void ____execute____(Object filter,C01 c01) {
+		protected void ____execute____(Function<?, ?> function,Object filter,C01 c01) {
 			
 		}
 		
@@ -94,7 +95,7 @@ public class AssertionsProviderClassMapUnitTest extends AbstractArquillianUnitTe
 		private static final long serialVersionUID = 1L;
 		
 		@Override
-		protected void ____execute____(Object filter,C02 c02) {
+		protected void ____execute____(Function<?, ?> function,Object filter,C02 c02) {
 			if(filter!=null && getFilter().equals("create")) {
 				__add__(__inject__(Assertion.class));
 			}else if(filter!=null && getFilter().equals("update")) {
@@ -107,7 +108,7 @@ public class AssertionsProviderClassMapUnitTest extends AbstractArquillianUnitTe
 		private static final long serialVersionUID = 1L;
 		
 		@Override
-		protected void ____execute____(Object filter,C03 c03) {
+		protected void ____execute____(Function<?, ?> function,Object filter,C03 c03) {
 			if(filter!=null && getFilter().equals("create")) {
 				__add__(__inject__(Assertion.class));
 			}else if(filter!=null && getFilter().equals("update")) {

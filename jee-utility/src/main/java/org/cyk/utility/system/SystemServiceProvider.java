@@ -11,7 +11,7 @@ public interface SystemServiceProvider extends ServiceProvider {
 	 * Check if object is persisted.
 	 * @param object
 	 * @return
-	 */
+	 */ //TODO write a function for that
 	Boolean isPersisted(Object object);
 	
 	/**
@@ -21,11 +21,15 @@ public interface SystemServiceProvider extends ServiceProvider {
 	 * @param action
 	 * @return
 	 */
+	@Deprecated //Use Function Pre/Post Conditions
 	ServiceProvider validateOne(Object object,SystemAction action);
 	
+	@Deprecated //Use Function Pre/Post Conditions
 	ServiceProvider validateOne(Object object);
 	
+	@Deprecated //Use Function Pre/Post Conditions
 	ServiceProvider validateMany(Collection<?> objects,SystemAction action);
 	
+	@Deprecated //Use Function Pre/Post Conditions
 	ServiceProvider validateMany(Collection<?> objects);
 }

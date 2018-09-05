@@ -7,6 +7,7 @@ import org.cyk.utility.__kernel__.function.FunctionExecutionPhase;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMoment;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMomentBegin;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseTry;
+import org.cyk.utility.assertion.AssertionsProvider;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
@@ -98,6 +99,12 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	public SystemFunction setAction(SystemAction action) {
 		getProperties().setAction(action);
+		if(action!=null) {
+			Object entity = getEntity();
+			if(Boolean.TRUE.equals(__getIsSetConditionsAssertionsProviderFromEntity__(entity))) {
+				__setConditionsAssertionsProvidersIfNull__(entity, action, null);
+			}
+		}
 		return this;
 	}
 	
@@ -109,7 +116,6 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	public SystemFunction setEntityClass(Class<?> aClass) {
 		getProperties().setEntityClass(aClass);
-		
 		return this;
 	}
 	
@@ -145,12 +151,39 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		getProperties().setEntity(entity);
 		if(entity!=null) {
 			setEntityClass(entity.getClass());
-			if(getPreConditionsAssertionsProvider()==null)
-				setPreConditionsAssertionsProvider(__inject__(AssertionsProviderClassMap.class).inject(entity));
-			if(getPostConditionsAssertionsProvider()==null)
-				setPostConditionsAssertionsProvider(__inject__(AssertionsProviderClassMap.class).inject(entity));
+			if(Boolean.TRUE.equals(__getIsSetConditionsAssertionsProviderFromEntity__(entity))) {
+				__setConditionsAssertionsProvidersIfNull__(entity, getAction(), null);
+			}
 		}
 		return this;
+	}
+	
+	protected Boolean __getIsSetConditionsAssertionsProviderFromEntity__(Object entity) {
+		return Boolean.FALSE;
+	}
+	
+	protected void __setConditionsAssertionsProvidersIfNull__(Object entity,Object preFilter,Object postFilter) {
+		AssertionsProvider preConditionsAssertionsProvider = (AssertionsProvider) getPreConditionsAssertionsProvider();
+		if(entity!=null && preConditionsAssertionsProvider==null)
+			setPreConditionsAssertionsProvider(preConditionsAssertionsProvider = __inject__(AssertionsProviderClassMap.class).inject(entity));
+		
+		if(preConditionsAssertionsProvider!=null) {
+			if(preConditionsAssertionsProvider.getFunction() == null)
+				preConditionsAssertionsProvider.setFunction(this);
+			if(preConditionsAssertionsProvider.getFilter() == null)
+				preConditionsAssertionsProvider.setFilter(preFilter);	
+		}
+		
+		AssertionsProvider postConditionsAssertionsProvider = (AssertionsProvider) getPostConditionsAssertionsProvider();
+		if(entity!=null && postConditionsAssertionsProvider==null)
+			setPostConditionsAssertionsProvider(postConditionsAssertionsProvider = __inject__(AssertionsProviderClassMap.class).inject(entity));
+		if(postConditionsAssertionsProvider!=null) {
+			if(postConditionsAssertionsProvider.getFunction() == null)
+				postConditionsAssertionsProvider.setFunction(this);
+			if(postConditionsAssertionsProvider.getFilter() == null)
+				postConditionsAssertionsProvider.setFilter(postFilter);	
+		}
+		
 	}
 	
 	@Override

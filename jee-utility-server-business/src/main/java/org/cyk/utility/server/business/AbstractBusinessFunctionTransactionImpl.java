@@ -29,4 +29,9 @@ public abstract class AbstractBusinessFunctionTransactionImpl extends AbstractBu
 	public BusinessFunctionTransaction setEntities(Collection<?> entities) {
 		return (BusinessFunctionTransaction) super.setEntities(entities);
 	}
+	
+	@Override
+	protected Boolean __getIsSetConditionsAssertionsProviderFromEntity__(Object entity) {
+		return Boolean.TRUE;
+	}
 }
