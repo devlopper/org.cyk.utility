@@ -16,6 +16,8 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 
 	/* Create */
 	
+	@Override PersistenceEntity<ENTITY> create(ENTITY object);
+	
 	/* Read */ 
 	QueryStringBuilderSelect instanciateReadQueryStringBuilder();
 	Collection<ENTITY> read(Properties properties);

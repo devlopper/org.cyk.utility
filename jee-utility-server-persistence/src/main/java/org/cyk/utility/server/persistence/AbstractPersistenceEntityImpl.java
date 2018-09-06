@@ -60,6 +60,13 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	/**/
 	
 	@Override
+	public PersistenceEntity<ENTITY> create(ENTITY object) {
+		return (PersistenceEntity<ENTITY>) super.create(object);
+	}
+	
+	/**/
+	
+	@Override
 	public Collection<ENTITY> read(Properties properties) {
 		return __readMany__(____getQueryParameters____());
 	}

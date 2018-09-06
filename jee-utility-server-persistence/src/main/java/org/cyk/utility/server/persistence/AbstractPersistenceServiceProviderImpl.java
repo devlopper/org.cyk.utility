@@ -133,13 +133,13 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	}
 	
 	@Override
-	public PersistenceServiceProvider<OBJECT> create(Object object,Properties properties) {
+	public PersistenceServiceProvider<OBJECT> create(OBJECT object,Properties properties) {
 		____inject____(PersistenceFunctionCreator.class).setEntity(object).execute();
 		return this;
 	}
 	
 	@Override
-	public PersistenceServiceProvider<OBJECT> create(Object object) {
+	public PersistenceServiceProvider<OBJECT> create(OBJECT object) {
 		return create(object, null);
 	}
 	
@@ -182,13 +182,13 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	}
 	
 	@Override
-	public PersistenceServiceProvider<OBJECT> update(Object object, Properties properties) {
+	public PersistenceServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
 		____inject____(PersistenceFunctionModifier.class).setEntity(object).execute();
 		return this;
 	}
 	
 	@Override
-	public PersistenceServiceProvider<OBJECT> update(Object object) {
+	public PersistenceServiceProvider<OBJECT> update(OBJECT object) {
 		update(object, null);
 		return this;
 	}
@@ -205,13 +205,13 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	}
 
 	@Override
-	public PersistenceServiceProvider<OBJECT> delete(Object object, Properties properties) {
+	public PersistenceServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
 		____inject____(PersistenceFunctionRemover.class).setEntity(object).execute();
 		return this;
 	}
 	
 	@Override
-	public PersistenceServiceProvider<OBJECT> delete(Object object) {
+	public PersistenceServiceProvider<OBJECT> delete(OBJECT object) {
 		return delete(object, null);
 	}
 	
