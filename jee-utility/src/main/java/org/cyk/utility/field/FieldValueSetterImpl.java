@@ -2,14 +2,17 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 
+import org.apache.commons.lang.reflect.MethodUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.log.Log;
+import org.cyk.utility.string.Case;
 import org.cyk.utility.value.ValueConverter;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -22,23 +25,39 @@ public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputA
 		Object value = getValue();
 		Field field = getField();
 		if(object!=null){
-			if(field!=null){
-				Class<?> fieldType = ClassUtils.primitiveToWrapper(__inject__(FieldTypeGetter.class).execute(field).getOutput());
-				try {
-					if(value!=null && !fieldType.equals(value.getClass())) {
-						value = __inject__(ValueConverter.class).execute(value, fieldType).getOutput();
-					}
-					if(Modifier.isFinal(field.getModifiers())) {
-						//TODO log warning
-					}else {
-						FieldUtils.writeField(field, object,value, Boolean.TRUE);	
-					}
-				} catch (IllegalAccessException exception) {
-					__inject__(Log.class).executeThrowable(exception);
-				}
-			}else {
-				
+			Class<?> fieldType = __inject__(FieldTypeGetter.class).execute(field).getOutput();
+			Class<?> fieldTypeWrapper = ClassUtils.primitiveToWrapper(fieldType);
+			if(value!=null && !fieldTypeWrapper.equals(value.getClass())) {
+				value = __inject__(ValueConverter.class).execute(value, fieldTypeWrapper).getOutput();
 			}
+			
+			Method method = null;
+			if(value!=null)
+				method = MethodUtils.getAccessibleMethod(object.getClass(), "set"+__injectStringHelper__().applyCase(field.getName(), Case.FIRST_CHARACTER_UPPER)
+						, fieldType);
+			if(method == null) {
+				if(field!=null){
+					try {
+						
+						if(Modifier.isFinal(field.getModifiers())) {
+							//TODO log warning
+						}else {
+							FieldUtils.writeField(field, object,value, Boolean.TRUE);	
+						}
+					} catch (IllegalAccessException exception) {
+						__inject__(Log.class).executeThrowable(exception);
+					}
+				}else {
+					
+				}	
+			}else {
+				try {
+					method.invoke(object, value);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
 		}
 	}
 	

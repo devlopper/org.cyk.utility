@@ -33,8 +33,7 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 	private Class<ARCHIVE> clazz;
 	private ARCHIVE archive;
 	
-	private String beanXml,projectDefaultsYml,persistenceXml,log4j2Xml,pomXml="pom.xml"
-			,jbossDeploymentStructureXml;
+	private String beanXml,projectDefaultsYml,persistenceXml,log4j2Xml,pomXml,jbossDeploymentStructureXml;
 	
 	public ArchiveBuilder(Class<ARCHIVE> clazz) {
 		this.clazz = clazz;
@@ -50,6 +49,12 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 		if(profile == null){
 			System.out.println("No test profile found under id "+testProfileIdentifier);
 		}
+		
+		if(StringUtils.isBlank(pomXml) && profile!=null)
+			pomXml = profile.getProperty("org.cyk.test.maven.pom.file");
+		if(StringUtils.isBlank(pomXml))
+			pomXml = "pom.xml";
+		System.out.println("Pom : "+pomXml);
 		
 		if(StringUtils.isBlank(beanXml) && profile!=null)
 			beanXml = profile.getProperty("org.cyk.test.cdi.beans.file");

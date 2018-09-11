@@ -34,6 +34,13 @@ public class FieldValueSetterUnitTest extends AbstractArquillianUnitTestWithDefa
 		__inject__(FieldValueSetter.class).execute(instance,"stringField",2);
 		assertThat(instance.getStringField()).isEqualTo("2");
 	}
+
+	@Test
+	public void setLong_2_long(){
+		MyClass01 instance = new MyClass01();
+		__inject__(FieldValueSetter.class).execute(instance,"longValue1",2);
+		assertThat(instance.getLongValue1()).isEqualTo(4l);
+	}
 	
 	/**/
 	
@@ -45,6 +52,11 @@ public class FieldValueSetterUnitTest extends AbstractArquillianUnitTestWithDefa
 		private long longValue1;
 		private Long longValue2;
 		private Date dateField;
+		
+		public MyClass01 setLongValue1(long value) {
+			this.longValue1 = value * 2;
+			return this;
+		}
 	}
 	
 	@Getter @Setter @Accessors(chain=true)

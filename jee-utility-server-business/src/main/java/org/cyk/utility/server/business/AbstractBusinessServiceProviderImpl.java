@@ -13,7 +13,7 @@ import org.cyk.utility.system.action.SystemAction;
 public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements BusinessServiceProvider<OBJECT>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Override 
+	@Override
 	public BusinessServiceProvider<OBJECT> create(OBJECT object, Properties properties) {
 		BusinessFunctionCreator function = __injectCreatorForOne__();
 		function.setEntity(object);
