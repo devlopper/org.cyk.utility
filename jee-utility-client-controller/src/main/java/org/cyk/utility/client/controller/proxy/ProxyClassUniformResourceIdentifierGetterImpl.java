@@ -5,6 +5,7 @@ import java.net.URI;
 
 import org.apache.commons.lang.StringUtils;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.system.SystemHelper;
 
 public class ProxyClassUniformResourceIdentifierGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<URI> implements ProxyClassUniformResourceIdentifierGetter,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -15,9 +16,9 @@ public class ProxyClassUniformResourceIdentifierGetterImpl extends AbstractFunct
 		if(aClass == null)
 			__injectThrowableHelper__().throwRuntimeException(getClass()+" : class is required");
 		String identifier = StringUtils.substringBefore(aClass.getName(), ".server")+".server"+".uri";
-		String uriString = System.getProperty(identifier);
+		String uriString = __inject__(SystemHelper.class).getProperty(identifier,Boolean.TRUE);
 		if(__injectStringHelper__().isBlank(uriString))
-			__injectThrowableHelper__().throwRuntimeException(getClass()+" : uniform resource identifier is required for "+identifier+". It must be defined under system properties");
+			__injectThrowableHelper__().throwRuntimeException(getClass()+" : uniform resource identifier is required for "+identifier+". It must be defined under system properties or environment variable");
 		return URI.create(uriString);
 	}
 	

@@ -32,6 +32,13 @@ public interface BusinessServiceProvider<OBJECT> extends SystemServiceProvider {
 	
 	BusinessServiceProvider<OBJECT> deleteAll();
 	
+	/* Save */
+	BusinessServiceProvider<OBJECT> save(OBJECT object,Properties properties);
+	BusinessServiceProvider<OBJECT> save(OBJECT object);
+	
+	BusinessServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects,Properties properties);
+	BusinessServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects);
+	
 	/* Count */
 	
 	/**/
