@@ -78,7 +78,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		List<ENTITY> entities = (List<ENTITY>) __injectInstanceHelper__().buildMany(getEntityClass(),getBusiness().findMany(/* properties */));
 		if(entities == null)
 			entities = new ArrayList<>();
-		GenericEntity<List<ENTITY>> genericEntity = new GenericEntity<List<ENTITY>>(entities,getCollectionType(List.class, getEntityClass()));
+		GenericEntity<List<ENTITY>> genericEntity = new GenericEntity<List<ENTITY>>(entities,getCollectionType(List.class, getEntityClass())) {/*needs empty body to preserve generic type*/};
 		return Response.status(Response.Status.OK).entity(genericEntity).build();
 	}
 	

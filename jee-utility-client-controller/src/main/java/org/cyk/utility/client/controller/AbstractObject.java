@@ -1,14 +1,15 @@
 package org.cyk.utility.client.controller;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Collection;
 
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.client.controller.proxy.ProxyClassUniformResourceIdentifierGetter;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.instance.InstanceHelper;
+import org.cyk.utility.type.TypeHelper;
 
 public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.dynamic.AbstractObject implements Objectable,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -30,7 +31,11 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.d
 	}
 	
 	protected static String __getUri__(Class<?> aClass) {
-		return __injectProxyClassUniformResourceIdentifierGetter__().execute(aClass).getOutput().toString();
+		String string = null;
+		URI uri = __injectProxyClassUniformResourceIdentifierGetter__(aClass).execute().getOutput();
+		if(uri!=null)
+			string = uri.toString();
+		return string;
 	}
 	
 	/* Proxy */
@@ -39,22 +44,32 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.d
 		return __inject__(ProxyGetter.class);
 	}
 	
-	protected static ProxyGetter __injectProxyGetter__(String uri,Class<?> aClass) {
-		return __injectProxyGetter__().setUri(uri).setClazz(aClass);
+	protected static ProxyGetter __injectProxyGetter__(Object request,String uri,Class<?> aClass) {
+		return __injectProxyGetter__().setRequest(request).setUri(uri).setClazz(aClass);
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected static <T> T __getProxy__(Class<T> aClass,String uri) {
-		return (T) __injectProxyGetter__(uri, aClass).execute().getOutput();
+	protected static <T> T __getProxy__(Class<T> aClass,Object request,String uri) {
+		return (T) __injectProxyGetter__(request,uri, aClass).execute().getOutput();
+	}
+	
+	protected static <T> T __getProxyByUri__(Class<T> aClass,String uri) {
+		return (T) __getProxy__(aClass,null,uri);
+	}
+	
+	protected static <T> T __getProxyByRequest__(Class<T> aClass,Object request) {
+		return (T) __getProxy__(aClass,request,null);
 	}
 	
 	protected static <T> T __getProxy__(Class<T> aClass) {
-		return __getProxy__(aClass,__getUri__(aClass));
+		return __getProxy__(aClass,null,null);
 	}
 	
 	/* Response */
 	
+	@SuppressWarnings("unchecked")
 	protected static <T> Collection<T> __readEntityAsCollection__(Response response,Class<T> aClass) {
-		return response.readEntity(new GenericType<Collection<T>>(){});
+		return (Collection<T>) response.readEntity(__inject__(TypeHelper.class).instanciateGenericCollectionParameterizedTypeForJaxrs(Collection.class,aClass));
 	}
+	
 }

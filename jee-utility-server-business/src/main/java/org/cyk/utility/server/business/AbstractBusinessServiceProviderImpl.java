@@ -3,6 +3,8 @@ package org.cyk.utility.server.business;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.transaction.Transactional;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AssertionBuilderNull;
 import org.cyk.utility.server.persistence.PersistenceEntity;
@@ -13,7 +15,7 @@ import org.cyk.utility.system.action.SystemAction;
 public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements BusinessServiceProvider<OBJECT>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Override
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> create(OBJECT object, Properties properties) {
 		BusinessFunctionCreator function = __injectCreatorForOne__();
 		function.setEntity(object);
@@ -35,12 +37,12 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	protected void __listenExecuteCreateOneBefore__(OBJECT object, Properties properties,BusinessFunctionCreator function){}
 	protected void __listenExecuteCreateOneAfter__(OBJECT object, Properties properties,BusinessFunctionCreator function){}
 	
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> create(OBJECT object) {
 		return create(object, null);
 	}
 
-	@Override 
+	@Override  @Transactional
 	public BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects, Properties properties) {
 		BusinessFunctionCreator function = __injectCreatorForMany__();
 		__configure__(function, properties);
@@ -76,7 +78,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		return ____inject____(BusinessFunctionCreator.class);
 	}
 
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects) {
 		return createMany(objects, null);
 	}
@@ -85,7 +87,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		return Boolean.TRUE;
 	}
 
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
 		BusinessFunctionModifier function = ____inject____(BusinessFunctionModifier.class);
 		__configure__(function, properties);
@@ -101,24 +103,24 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	protected void __listenExecuteUpdateOneBefore__(OBJECT object, Properties properties,BusinessFunctionModifier function){}
 	protected void __listenExecuteUpdateOneAfter__(OBJECT object, Properties properties,BusinessFunctionModifier function){}
 
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> update(OBJECT object) {
 		return update(object, null);
 	}
 
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects, Properties properties) {
 		for(OBJECT index : objects)
 			update(index, properties);
 		return this;
 	}
 
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects) {
 		return updateMany(objects, null);
 	}
 
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
 		BusinessFunctionRemover function =  ____inject____(BusinessFunctionRemover.class);
 		__configure__(function, properties);
@@ -134,26 +136,26 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	protected void __listenExecuteDeleteOneBefore__(OBJECT object, Properties properties,BusinessFunctionRemover function){}
 	protected void __listenExecuteDeleteOneAfter__(OBJECT object, Properties properties,BusinessFunctionRemover function){}
 
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> delete(OBJECT object) {
 		return delete(object, null);
 	}
 
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects, Properties properties) {
 		for(OBJECT index : objects)
 			delete(index, properties);
 		return this;
 	}
 
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects) {
 		return deleteMany(objects, null);
 	}
 	
 	/**/
 	
-	@Override
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> save(OBJECT object, Properties properties) {
 		if(Boolean.TRUE.equals(isPersisted(object)))
 			update(object,properties);
@@ -162,12 +164,12 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		return this;
 	}
 	
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> save(OBJECT object) {
 		return save(object, null);
 	}
 
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects, Properties properties) {
 		if(__injectCollectionHelper__().isNotEmpty(objects))
 			for(OBJECT index : objects)
@@ -175,7 +177,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		return this;
 	}
 	
-	@Override 
+	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects) {
 		return saveMany(objects, null);
 	}

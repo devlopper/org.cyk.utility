@@ -12,14 +12,17 @@ public class ProxyClassUniformResourceIdentifierGetterImpl extends AbstractFunct
 
 	@Override
 	protected URI __execute__() throws Exception {
+		URI uri = null;
 		Class<?> aClass = getClazz();
 		if(aClass == null)
 			__injectThrowableHelper__().throwRuntimeException(getClass()+" : class is required");
 		String identifier = StringUtils.substringBefore(aClass.getName(), ".server")+".server"+".uri";
 		String uriString = __inject__(SystemHelper.class).getProperty(identifier,Boolean.TRUE);
-		if(__injectStringHelper__().isBlank(uriString))
-			__injectThrowableHelper__().throwRuntimeException(getClass()+" : uniform resource identifier is required for "+identifier+". It must be defined under system properties or environment variable");
-		return URI.create(uriString);
+		//if(__injectStringHelper__().isBlank(uriString)) 
+		//	__injectThrowableHelper__().throwRuntimeException(getClass()+" : uniform resource identifier is required for "+identifier+". It must be defined under system properties or environment variable");
+		if(__injectStringHelper__().isNotBlank(uriString)) 
+			uri = URI.create(uriString);
+		return uri;
 	}
 	
 	@Override
@@ -42,6 +45,8 @@ public class ProxyClassUniformResourceIdentifierGetterImpl extends AbstractFunct
 	public ProxyClassUniformResourceIdentifierGetter execute() {
 		return (ProxyClassUniformResourceIdentifierGetter) super.execute();
 	}
+
+	
 
 	
 	

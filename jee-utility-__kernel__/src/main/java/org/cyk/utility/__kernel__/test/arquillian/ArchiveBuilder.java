@@ -33,7 +33,7 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 	private Class<ARCHIVE> clazz;
 	private ARCHIVE archive;
 	
-	private String beanXml,projectDefaultsYml,persistenceXml,log4j2Xml,pomXml,jbossDeploymentStructureXml;
+	private String beanXml,projectDefaultsYml,persistenceXml,log4j2Xml,pomXml,jbossDeploymentStructureXml/*,jbossDatasourcesXml*/;
 	
 	public ArchiveBuilder(Class<ARCHIVE> clazz) {
 		this.clazz = clazz;

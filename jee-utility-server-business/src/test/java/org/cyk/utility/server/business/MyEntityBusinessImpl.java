@@ -16,4 +16,9 @@ public class MyEntityBusinessImpl extends AbstractBusinessEntityImpl<MyEntity,My
 		return super.create(myEntity, properties);
 	}
 
+	@Override
+	protected Class<MyEntity> __getEntityClass__() {
+		return MyEntity.class;
+	}
+	
 }

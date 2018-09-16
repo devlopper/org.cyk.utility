@@ -4188,6 +4188,56 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getHost() {
+		return get(HOST);
+	}
+
+	public Properties setHost(Object host) {
+		set(HOST, host);
+		return this;
+	}
+	
+	public Object getPort() {
+		return get(PORT);
+	}
+
+	public Properties setPort(Object port) {
+		set(PORT, port);
+		return this;
+	}
+	
+	public Object getContext() {
+		return get(CONTEXT);
+	}
+
+	public Properties setContext(Object context) {
+		set(CONTEXT, context);
+		return this;
+	}
+	
+	public Object getScheme() {
+		return get(SCHEME);
+	}
+
+	public Properties setScheme(Object scheme) {
+		set(SCHEME, scheme);
+		return this;
+	}
+	
+	public Object getRequest() {
+		return get(REQUEST);
+	}
+
+	public Properties setRequest(Object request) {
+		set(REQUEST, request);
+		return this;
+	}
+	
+	public static final String REQUEST = "REQUEST";
+	public static final String SCHEME = "SCHEME";
+	public static final String CONTEXT = "CONTEXT";
+	public static final String HOST = "HOST";
+	public static final String PORT = "PORT";
 	public static final String TRY_CATCH_FINALLY = "TRY_CATCH_FINALLY";
 	public static final String FINALLY = "FINALLY";
 	public static final String IDENTIFIERS = "IDENTIFIERS";

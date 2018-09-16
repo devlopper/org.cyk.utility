@@ -13,6 +13,11 @@ public class MyEntityBusinessImpl extends AbstractBusinessEntityImpl<MyEntity,My
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	protected Class<MyEntity> __getEntityClass__() {
+		return MyEntity.class;
+	}
+	
+	@Override
 	public BusinessServiceProvider<MyEntity> create(MyEntity myEntity, Properties properties) {
 		/*properties = addExecutionPhaseAssertions(properties,Boolean.TRUE, __injectAssertionBuilderNull__(Boolean.FALSE,myEntity,"long1"));
 		addExecutionPhaseRunnables(properties, true, new Runnable(){
