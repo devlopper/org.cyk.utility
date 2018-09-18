@@ -12,7 +12,9 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> ENTITY findOne(Class<ENTITY> aClass, Object identifier, Properties properties) {
-		return (ENTITY) __inject__(BusinessFunctionReader.class).setEntityClass(aClass).setEntityIdentifier(identifier).execute().getProperties().getEntity();
+		BusinessFunctionReader function = __inject__(BusinessFunctionReader.class);
+		function.getProperties().copyFrom(properties, Properties.VALUE_USAGE_TYPE);
+		return (ENTITY) function.setEntityClass(aClass).setEntityIdentifier(identifier).execute().getProperties().getEntity();
 	}
 
 	@Override

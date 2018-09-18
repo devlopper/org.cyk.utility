@@ -2,6 +2,8 @@ package org.cyk.utility.server.business;
 
 import java.io.Serializable;
 
+import javax.transaction.Transactional;
+
 import org.cyk.utility.system.action.SystemActionCreate;
 
 public abstract class AbstractBusinessFunctionCreatorImpl extends AbstractBusinessFunctionTransactionImpl implements BusinessFunctionCreator, Serializable {
@@ -13,4 +15,9 @@ public abstract class AbstractBusinessFunctionCreatorImpl extends AbstractBusine
 		setAction(__inject__(SystemActionCreate.class));
 	}
 
+	@Override @Transactional
+	public BusinessFunctionCreator execute() {
+		return (BusinessFunctionCreator) super.execute();
+	}
+	
 }

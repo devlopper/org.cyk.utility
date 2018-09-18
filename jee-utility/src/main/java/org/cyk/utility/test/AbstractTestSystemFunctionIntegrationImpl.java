@@ -1,5 +1,6 @@
-package org.cyk.utility.server.persistence.test;
+package org.cyk.utility.test;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,20 +12,14 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
-import org.cyk.utility.server.persistence.Persistence;
-import org.cyk.utility.test.AbstractTestIntegrationImpl;
 import org.cyk.utility.value.ValueUsageType;
 
-public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends AbstractTestIntegrationImpl implements TestPersistenceServiceProviderFunction {
+public abstract class AbstractTestSystemFunctionIntegrationImpl extends AbstractTestIntegrationImpl implements TestSystemFunctionIntegration,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Collection<Object> unexistingObjectIdentifiers;
-	
-	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		setUserTransaction(__inject__(UserTransaction.class));
-	}
+	private Boolean isTransactional,isContainerManagedTransaction;
+	private UserTransaction __tempUserTransaction__;
 	
 	@Override
 	public UserTransaction getUserTransaction() {
@@ -32,7 +27,7 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction setUserTransaction(UserTransaction userTransaction) {
+	public TestSystemFunctionIntegration setUserTransaction(UserTransaction userTransaction) {
 		getProperties().setFromPath(new Object[]{Properties.USER,Properties.TRANSACTION}, userTransaction);
 		return this;
 	}
@@ -43,7 +38,7 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction setExecutionCount(Integer count) {
+	public TestSystemFunctionIntegration setExecutionCount(Integer count) {
 		getProperties().setFromPath(new Object[]{Properties.EXECUTION,Properties.COUNT}, count);
 		return this;
 	}
@@ -54,25 +49,24 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction setObjectClass(Class<?> aClass) {
+	public TestSystemFunctionIntegration setObjectClass(Class<?> aClass) {
 		getProperties().setClass(aClass);
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Object> getObjects() {
 		return (Collection<Object>) getProperties().getObjects();
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction setObjects(Collection<Object> objects) {
+	public TestSystemFunctionIntegration setObjects(Collection<Object> objects) {
 		getProperties().setObjects(objects);
 		return this;
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction addObjects(Object... objects) {
+	public TestSystemFunctionIntegration addObjects(Object... objects) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(objects)){
 			Collection<Object> collection = getObjects();
 			if(collection == null)
@@ -88,7 +82,7 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction setIdentifierValueUsageType(ValueUsageType valueUsageType) {
+	public TestSystemFunctionIntegration setIdentifierValueUsageType(ValueUsageType valueUsageType) {
 		getProperties().setValueUsageType(valueUsageType);
 		return this;
 	}
@@ -100,13 +94,13 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction setObjectIdentifiers(Collection<Object> objectIdentifiers) {
+	public TestSystemFunctionIntegration setObjectIdentifiers(Collection<Object> objectIdentifiers) {
 		getProperties().setIdentifiers(objectIdentifiers);
 		return this;
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction addObjectIdentifiers(Object... objectIdentifiers) {
+	public TestSystemFunctionIntegration addObjectIdentifiers(Object... objectIdentifiers) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(objectIdentifiers)){
 			Collection<Object> collection = getObjectIdentifiers();
 			if(collection == null)
@@ -122,13 +116,13 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction setUnexistingObjectIdentifiers(Collection<Object> unexistingObjectIdentifiers) {
+	public TestSystemFunctionIntegration setUnexistingObjectIdentifiers(Collection<Object> unexistingObjectIdentifiers) {
 		this.unexistingObjectIdentifiers = unexistingObjectIdentifiers;
 		return this;
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction addUnexistingObjectIdentifiers(Object... unexistingObjectIdentifiers) {
+	public TestSystemFunctionIntegration addUnexistingObjectIdentifiers(Object... unexistingObjectIdentifiers) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(unexistingObjectIdentifiers)){
 			Collection<Object> collection = getUnexistingObjectIdentifiers();
 			if(collection == null)
@@ -139,67 +133,63 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction addObjectsToBeCreatedArray(Object... objects) {
-		return (TestPersistenceServiceProviderFunction) super.addObjectsToBeCreatedArray(objects);
+	public TestSystemFunctionIntegration setIsTransactional(Boolean isTransactional) {
+		this.isTransactional = isTransactional;
+		return this;
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction addObjectsToBeCreatedCollection(Collection<Object> objects) {
-		return (TestPersistenceServiceProviderFunction) super.addObjectsToBeCreatedCollection(objects);
+	public Boolean getIsTransactional() {
+		return isTransactional;
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction setName(String name) {
-		return (TestPersistenceServiceProviderFunction) super.setName(name);
+	public Boolean getIsContainerManagedTransaction() {
+		return isContainerManagedTransaction;
 	}
 	
 	@Override
-	public final TestPersistenceServiceProviderFunction execute() {
-		return (TestPersistenceServiceProviderFunction) super.execute();
+	public TestSystemFunctionIntegration setIsContainerManagedTransaction(Boolean isContainerManagedTransaction) {
+		this.isContainerManagedTransaction = isContainerManagedTransaction;
+		return this;
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction setExpectedThrowableCauseClassIsConstraintViolationException() {
-		return (TestPersistenceServiceProviderFunction) super.setExpectedThrowableCauseClassIsConstraintViolationException();
+	public TestSystemFunctionIntegration addObjectsToBeCreatedArray(Object... objects) {
+		return (TestSystemFunctionIntegration) super.addObjectsToBeCreatedArray(objects);
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction setExpectedThrowableCauseClassIsSqlException() {
-		return (TestPersistenceServiceProviderFunction) setExpectedThrowableCauseClass(SQLException.class);
+	public TestSystemFunctionIntegration addObjectsToBeCreatedCollection(Collection<Object> objects) {
+		return (TestSystemFunctionIntegration) super.addObjectsToBeCreatedCollection(objects);
 	}
 	
 	@Override
-	public TestPersistenceServiceProviderFunction assertThrowableCauseIsInstanceOfSqlException() {
+	public TestSystemFunctionIntegration setName(String name) {
+		return (TestSystemFunctionIntegration) super.setName(name);
+	}
+	
+	@Override
+	public TestSystemFunctionIntegration execute() {
+		return (TestSystemFunctionIntegration) super.execute();
+	}
+	
+	@Override
+	public TestSystemFunctionIntegration setExpectedThrowableCauseClassIsConstraintViolationException() {
+		return (TestSystemFunctionIntegration) super.setExpectedThrowableCauseClassIsConstraintViolationException();
+	}
+	
+	@Override
+	public TestSystemFunctionIntegration setExpectedThrowableCauseClassIsSqlException() {
+		return (TestSystemFunctionIntegration) setExpectedThrowableCauseClass(SQLException.class);
+	}
+	
+	@Override
+	public TestSystemFunctionIntegration assertThrowableCauseIsInstanceOfSqlException() {
 		assertThrowableCauseIsInstanceOf(SQLException.class);
 		return this;
 	}
 
-	@Override
-	protected void __create__(Collection<Object> objects) {
-		for(Object index : objects) {
-			try {
-				getUserTransaction().begin();
-				__inject__(Persistence.class).create(index);
-				getUserTransaction().commit();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	@Override
-	protected void __delete__(Collection<Object> objects) {
-		for(Object index : objects) {
-			try {
-				getUserTransaction().begin();
-				__inject__(Persistence.class).delete(index);
-				getUserTransaction().commit();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
 	/**/
 	
 	@Override
@@ -207,24 +197,21 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 		Collection<Object> objects = __getExecutionObjects__();
 		Integer executionCount = __getExecutionCount__(objects);		
 		__listenExecuteBeforeFor__();
-		Boolean isTransactional = __getIsTransactional__();
 		for(Integer index = 0 ; index < executionCount ; index++){
 			for(Object indexObject : objects){
-				if(Boolean.TRUE.equals(isTransactional))
-					getUserTransaction().begin();
+				__listenExecuteBeforePerform__();
+				if(Boolean.TRUE.equals(getIsTransactional()) && !Boolean.TRUE.equals(getIsContainerManagedTransaction()))
+					__beginTransaction__();
 				__perform__(indexObject);
-				if(Boolean.TRUE.equals(isTransactional))
-					getUserTransaction().commit();
+				if(Boolean.TRUE.equals(getIsTransactional()) && !Boolean.TRUE.equals(getIsContainerManagedTransaction()))
+					__endTransaction__();
+				__listenExecuteAfterPerform__();
 				__assertAfterPerform__(indexObject);
 			}
 		}
 		__listenExecuteAfterFor__();
 	}
-	
-	protected Boolean __getIsTransactional__() {
-		return Boolean.FALSE;
-	}
-	
+
 	protected abstract Collection<Object> __getExecutionObjects__() throws Exception;
 	
 	protected Integer __getExecutionCount__(Collection<Object> objects) throws Exception {
@@ -234,7 +221,24 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 		return executionCount;
 	}
 	
+	protected void __listenExecuteBeforePerform__() throws Exception {}
+	protected void __listenExecuteAfterPerform__() throws Exception {}
+	
 	protected void __listenExecuteBeforeFor__() throws Exception {}
+	
+	protected void __beginTransaction__() throws Exception {
+		__tempUserTransaction__ = getUserTransaction();
+		if(__tempUserTransaction__ == null)
+			__tempUserTransaction__ = __inject__(UserTransaction.class);
+		__tempUserTransaction__.begin();
+	}
+	
+	protected void __endTransaction__() throws Exception {
+		__tempUserTransaction__ = getUserTransaction();
+		if(__tempUserTransaction__ == null)
+			__tempUserTransaction__ = __inject__(UserTransaction.class);
+		__tempUserTransaction__.commit();
+	}
 	
 	protected abstract void __perform__(Object object) throws Exception;
 	
@@ -244,8 +248,9 @@ public abstract class AbstractTestPersistenceServiceProviderFunctionImpl extends
 			__assertBusinessIdentifierIsNotNull__(object);
 			__assertLogEventMessage__(object);		
 		}
-		
 	}
+	
+	protected abstract void __deleteOne__(Object object);
 	
 	protected void __assertSystemIdentifierIsNotNull__(Object object) {
 		assertionHelper.assertNotNull(object, FieldName.IDENTIFIER,ValueUsageType.SYSTEM);

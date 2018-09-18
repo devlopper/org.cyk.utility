@@ -2,13 +2,19 @@ package org.cyk.utility.server.business;
 
 import java.util.Collection;
 
+import javax.transaction.Transactional;
+
 import org.cyk.utility.system.action.SystemAction;
 
 public interface BusinessFunctionTransaction extends BusinessFunction {
 
-	BusinessFunctionTransaction setEntity(Object entity);
+	@Override 
+	@Transactional
+	BusinessFunctionTransaction execute();
 	
-	BusinessFunctionTransaction setEntities(Collection<?> entities);
+	@Override BusinessFunctionTransaction setEntity(Object entity);
 	
-	BusinessFunctionTransaction setAction(SystemAction action);
+	@Override BusinessFunctionTransaction setEntities(Collection<?> entities);
+	
+	@Override BusinessFunctionTransaction setAction(SystemAction action);
 }

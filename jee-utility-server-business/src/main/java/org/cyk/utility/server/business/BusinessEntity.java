@@ -2,6 +2,8 @@ package org.cyk.utility.server.business;
 
 import java.util.Collection;
 
+import javax.transaction.Transactional;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -26,9 +28,18 @@ public interface BusinessEntity<PERSISTENCE_ENTITY> extends BusinessServiceProvi
 	/* Update */
 	
 	/* Delete */
+	@Transactional
 	BusinessEntity<PERSISTENCE_ENTITY> deleteByIdentifier(Object identifier,ValueUsageType valueUsageType);
+	
+	@Transactional
 	BusinessEntity<PERSISTENCE_ENTITY> deleteBySystemIdentifier(Object identifier);
+	
+	@Transactional
 	BusinessEntity<PERSISTENCE_ENTITY> deleteByBusinessIdentifier(Object identifier);
+	
+	@Override
+	@Transactional
+	BusinessEntity<PERSISTENCE_ENTITY> deleteAll();
 	
 	/* Count */
 	Long count(Properties properties);

@@ -11,8 +11,8 @@ public class BusinessFunctionRemoverImpl extends AbstractBusinessFunctionRemover
 	private static final long serialVersionUID = 1L;
 	
 	@Override @Transactional
-	public BusinessFunctionTransaction execute() {
-		return (BusinessFunctionTransaction) super.execute();
+	public BusinessFunctionRemover execute() {
+		return super.execute();
 	}
 	
 	@Override

@@ -6,7 +6,9 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 
+import org.assertj.core.util.Arrays;
 import org.cyk.utility.__kernel__.AbstractRunnableImpl;
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.assertion.AssertionHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
@@ -31,7 +33,11 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 			@Override
 			public void __run__() {
 				System.out.println("Setting up test named <"+__getName__(getName())+">");
-				__setup__();
+				try {
+					__setup__();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		
@@ -39,7 +45,11 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 			@Override
 			public void run() {
 				System.out.println("Cleaning up test named <"+__getName__(getName())+">");
-				__clean__();
+				try {
+					__clean__();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				
 				/* This following is needed */
 				
@@ -134,16 +144,47 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 		return this;
 	}
 		
-	protected void __setup__() {
+	protected void __setup__() throws Exception {
 		Collection<Object> objectsToBeCreated = getObjectsToBeCreated();
 		if(objectsToBeCreated!=null) {
-			__create__(objectsToBeCreated);
+			__beginTransaction__();
+			__createMany__(objectsToBeCreated);
+			__endTransaction__();
 			addGarbagesCollection(objectsToBeCreated);
 		}
 	}
 	
-	protected void __create__(Collection<Object> objects) {
+	protected void __beginTransaction__() throws Exception {}
+	protected void __endTransaction__() throws Exception {}
+	
+	protected void __createOne__(Object object) throws Exception {
 		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+	}
+	
+	protected void __createMany__(Collection<Object> objects) throws Exception {
+		if(__injectCollectionHelper__().isNotEmpty(objects))
+			for(Object index : objects)
+				__createOne__(index);
+	}
+	
+	protected void __createManyByArray__(Object...objects) throws Exception {
+		if(__inject__(ArrayHelper.class).isNotEmpty(objects))
+			__createMany__(Arrays.asList(objects));
+	}
+	
+	protected void __deleteOne__(Object object) throws Exception {
+		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+	}
+	
+	protected void __deleteMany__(Collection<Object> objects) throws Exception {
+		if(__injectCollectionHelper__().isNotEmpty(objects))
+			for(Object index : objects)
+				__deleteOne__(index);
+	}
+	
+	protected void __deleteManyByArray__(Object...objects) throws Exception {
+		if(__inject__(ArrayHelper.class).isNotEmpty(objects))
+			__deleteMany__(Arrays.asList(objects));
 	}
 	
 	@Override
@@ -162,14 +203,13 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 		return setExpectedThrowableCauseClass(ConstraintViolationException.class);
 	}
 
-	protected void __clean__() {
+	protected void __clean__() throws Exception {
 		Collection<Object> garbages = getGarbages();
-		if(garbages!=null)
-			__delete__(garbages);
-	}
-	
-	protected void __delete__(Collection<Object> objects) {
-		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		if(garbages!=null) {
+			__beginTransaction__();
+			__deleteMany__(garbages);
+			__endTransaction__();
+		}
 	}
 	
 	@Override

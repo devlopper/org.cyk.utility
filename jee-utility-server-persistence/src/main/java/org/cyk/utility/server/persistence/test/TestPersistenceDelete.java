@@ -1,6 +1,6 @@
 package org.cyk.utility.server.persistence.test;
 
-public interface TestPersistenceDelete extends TestPersistenceServiceProviderDelete {
+public interface TestPersistenceDelete extends TestPersistenceDeleteIntegration {
 
 	
 }

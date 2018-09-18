@@ -18,6 +18,7 @@ public class MyEntity extends AbstractEntity implements Serializable {
 
 	private Long long1;
 	private Long long2;
+	private Integer integerValue;
 	@NotNull @Column(nullable=false) private Long timestamp;
 	
 	@Override

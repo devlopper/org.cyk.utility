@@ -11,7 +11,7 @@ import org.cyk.utility.system.action.SystemActionCreate;
 
 public class PersistenceFunctionCreatorImpl extends AbstractPersistenceFunctionCreatorImpl implements PersistenceFunctionCreator {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	protected void __executeQuery__(SystemAction action) {
 		Collection<Object> entities = new ArrayList<>();

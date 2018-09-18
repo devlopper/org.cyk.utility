@@ -2,103 +2,102 @@ package org.cyk.utility.server.business;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.server.business.test.TestBusinessCreate;
+import org.cyk.utility.server.business.test.TestBusinessDelete;
+import org.cyk.utility.server.business.test.TestBusinessRead;
+import org.cyk.utility.server.business.test.TestBusinessUpdate;
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillianIntegrationTestWithDefaultDeploymentAsSwram;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.server.persistence.test.FunctionRunnableTest;
+import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
 public class BusinessFunctionIntegrationTest extends AbstractBusinessArquillianIntegrationTestWithDefaultDeploymentAsSwram {
 	private static final long serialVersionUID = 1L;
 	
-	@Inject private Business business;
-	
 	/* Create */
 	
 	@Test
-	public void create() throws Exception{
-		business.create(new MyEntity().setCode(__getRandomCode__()));
+	public void createOneMyEntity() throws Exception{
+		__inject__(TestBusinessCreate.class).addObjects(new MyEntity().setCode("a")).execute();
 	}
 	
 	@Test
-	public void createOneMyEntity(){
-		MyEntity myEntity = new MyEntity().setCode("mc001").setTimestamp(1l);
-		__inject__(BusinessFunctionCreator.class).setEntity(myEntity).execute();
-		assertThat(myEntity.getIdentifier()).isNotNull();
-		assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(SystemActionCreate.class),MyEntity.class))
-			.assertContainsLastLogEventMessage("identifier="+myEntity.getIdentifier())
-			.assertContainsLastLogEventMessage("code=mc001")
-			;
+	public void createManyMyEntity() throws Exception{
+		__inject__(TestBusinessCreate.class).addObjects(new MyEntity().setCode("a"),new MyEntity().setCode("b")).execute();
 	}
 	
 	/* Find */
 	
 	@Test
-	public void findOneMyEntityBySystemIdentifierExisting() {
-		String code = __getRandomCode__();
-		MyEntity myEntity = new MyEntity().setCode(code).setTimestamp(1l);
-		__inject__(BusinessFunctionCreator.class).setEntity(myEntity).execute();
-		myEntity = (MyEntity) __inject__(BusinessFunctionReader.class).setEntityClass(MyEntity.class)
-				.setEntityIdentifier(myEntity.getIdentifier()).execute().getProperties().getEntity();
-		assertThat(myEntity).isNotNull();
-		assertThat(myEntity.getIdentifier()).isNotNull();
-		assertThat(myEntity.getCode()).isEqualTo(code);
-		assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(SystemActionRead.class), MyEntity.class))
-			.assertContainsLastLogEventMessage("identifier="+myEntity.getIdentifier()).assertContainsLastLogEventMessage("code="+code);
+	public void findOneMyEntityExistingByBusinessIdentifier() throws Exception{
+		String identifier = "a";
+		__inject__(TestBusinessRead.class).addObjectsToBeCreatedArray(new MyEntity().setCode(identifier)).setObjectClass(MyEntity.class)
+			.addObjectIdentifiers(identifier).setIdentifierValueUsageType(ValueUsageType.BUSINESS).execute();
 	}
 	
 	@Test
-	public void findOneMyEntityByBusinessIdentifierExisting() {
-		String code = __getRandomCode__();
-		MyEntity myEntity = new MyEntity().setCode(code).setTimestamp(1l);
-		__inject__(BusinessFunctionCreator.class).setEntity(myEntity).execute();
-		myEntity = (MyEntity) __inject__(BusinessFunctionReader.class).setEntityClass(MyEntity.class)
-				.setEntityIdentifier(code).setEntityIdentifierValueUsageType(ValueUsageType.BUSINESS).execute().getProperties().getEntity();
-		assertThat(myEntity).isNotNull();
-		assertThat(myEntity.getIdentifier()).isNotNull();
-		assertThat(myEntity.getCode()).isEqualTo(code);
-		assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(SystemActionRead.class), MyEntity.class))
-			.assertContainsLastLogEventMessage("identifier="+myEntity.getIdentifier()).assertContainsLastLogEventMessage("code="+code);
+	public void findOneMyEntityNonExistingByBusinessIdentifier() throws Exception{
+		__inject__(TestBusinessRead.class).addObjectsToBeCreatedArray(new MyEntity().setCode("a")).setObjectClass(MyEntity.class)
+			.addObjectIdentifiers("b").addUnexistingObjectIdentifiers("b").setIdentifierValueUsageType(ValueUsageType.BUSINESS).execute();
 	}
-	/*
+	
+	/* Update */
+	
 	@Test
-	public void readOneMyEntityByIdentifierNotExisting() {
-		MyEntity myEntity = (MyEntity) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setEntityIdentifier(-1l).execute()
-				.getProperties().getEntity();
+	public void updateOneMyEntity() throws Exception{
+		String code = "a";
+		FunctionRunnableTest functionRunnable = __inject__(FunctionRunnableTest.class);
+		functionRunnable.setRunnable(new Runnable() {
+			@Override
+			public void run() {
+				MyEntity myEntity = __inject__(Business.class).findOne(MyEntity.class, code, new Properties().setValueUsageType(ValueUsageType.BUSINESS));
+				myEntity.setIntegerValue(33);
+				((TestBusinessUpdate)functionRunnable.getFunction()).addObjects(myEntity);
+			}
+		});
 		
-		assertThat(myEntity).isNull();
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Read MyEntity").assertContainsLastLogEventMessage(PersistenceFunctionReader.MESSAGE_NOT_FOUND)
-			.assertContainsLastLogEventMessage("identifier=-1");
+		__inject__(TestBusinessUpdate.class).addObjectsToBeCreatedArray(new MyEntity().setCode(code))
+			.try_().begin().addFunctionRunnables(functionRunnable).getParent().getParentAs(TestBusinessUpdate.class)
+			.try_().end().addRunnables(new Runnable() {
+				@Override
+				public void run() {
+					MyEntity myEntity = __inject__(MyEntityBusiness.class).findOneByBusinessIdentifier(code);
+					assertionHelper.assertNotNull("object with business identifier <"+code+"> not found",myEntity);
+					assertionHelper.assertEqualsNumber("integerValue("+myEntity.getIntegerValue()+") is not equal to 33", 33, myEntity.getIntegerValue());
+				}
+			}).getParent().getParent()
+			.execute();
+	}
+	
+	/* Delete */
+	
+	@Test
+	public void deleteOneMyEntity() throws Exception{
+		MyEntity myEntity = new MyEntity().setCode("a");
+		__inject__(TestBusinessDelete.class).addObjectsToBeCreatedArray(myEntity).addObjects(myEntity).execute();
+	}
+	
+	/* Rules */
+	
+	@Test
+	public void isMyEntityCodeMustBeUnique() throws Exception{
+		String code = "a";
+		__inject__(TestBusinessCreate.class).addObjects(new MyEntity().setCode(code),new MyEntity().setCode(code)).setName("MyEntity.code unicity")
+		.setExpectedThrowableCauseClassIsSqlException().execute();
 	}
 	
 	@Test
-	public void readOneMyEntityByCodeExisting() {
-		String code = getRandomCode();
-		MyEntity myEntity = new MyEntity().setCode(code);
-		userTransaction.begin();
-		__inject__(PersistenceFunctionCreator.class).setEntity(myEntity).execute();
-		userTransaction.commit();
+	public void isMyEntityCodeMustBeNotNull() throws Exception{
+		TestBusinessCreate test = __inject__(TestBusinessCreate.class);
+		test.addObjects(new MyEntity()).setName("MyEntity.code notnull")
+		.setExpectedThrowableCauseClassIsConstraintViolationException().execute();
 		
-		myEntity = (MyEntity) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class)
-				.setEntityIdentifier(code).setEntityIdentifierValueUsageType(ValueUsageType.BUSINESS).execute().getProperties().getEntity();
-		
-		assertThat(myEntity).isNotNull();
-		assertThat(myEntity.getIdentifier()).isNotNull();
-		assertThat(myEntity.getCode()).isEqualTo(code);
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Read MyEntity")
-			.assertContainsLastLogEventMessage("identifier="+myEntity.getIdentifier()).assertContainsLastLogEventMessage("code="+code);
+		assertThat(__inject__(ThrowableHelper.class).getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage())
+			.contains("propertyPath=code");
 	}
 	
-	@Test
-	public void readOneMyEntityByCodeNotExisting() {
-		MyEntity myEntity = (MyEntity) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setEntityIdentifier(-1l).execute()
-				.getProperties().getEntity();
-		
-		assertThat(myEntity).isNull();
-		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Read MyEntity").assertContainsLastLogEventMessage(PersistenceFunctionReader.MESSAGE_NOT_FOUND)
-			.assertContainsLastLogEventMessage("identifier=-1");
-	}
-	*/
 }

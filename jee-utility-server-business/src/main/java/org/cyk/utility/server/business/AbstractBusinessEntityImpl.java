@@ -3,6 +3,8 @@ package org.cyk.utility.server.business;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.transaction.Transactional;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.server.persistence.PersistenceEntity;
@@ -80,27 +82,29 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	
 	/**/
 	
-	@Override
+	@Override @Transactional
 	public BusinessEntity<ENTITY> deleteByIdentifier(Object identifier,ValueUsageType valueUsageType) {
 		delete(getPersistence().readOne(identifier,valueUsageType));
 		return this;
 	}
 	
-	@Override
+	@Override @Transactional
 	public BusinessEntity<ENTITY> deleteBySystemIdentifier(Object identifier) {
 		deleteByIdentifier(identifier,ValueUsageType.SYSTEM);
 		return this;
 	}
 	
-	@Override
+	@Override @Transactional
 	public BusinessEntity<ENTITY> deleteByBusinessIdentifier(Object identifier) {
 		deleteByIdentifier(identifier,ValueUsageType.BUSINESS);
 		return this;
 	}
 	
-	@Override
-	public BusinessServiceProvider<ENTITY> deleteAll() {
-		__inject__(BusinessFunctionRemover.class).setAll(Boolean.TRUE).setEntityClass(getPersistenceEntityClass()).execute();
+	@Override @Transactional
+	public BusinessEntity<ENTITY> deleteAll() {
+		BusinessFunctionRemover function = __inject__(BusinessFunctionRemover.class);
+		function.setAll(Boolean.TRUE).setEntityClass(getPersistenceEntityClass());
+		function.execute();
 		return this;
 	}
 	

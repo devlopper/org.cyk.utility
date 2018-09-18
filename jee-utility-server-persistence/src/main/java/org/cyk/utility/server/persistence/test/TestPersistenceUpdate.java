@@ -1,6 +1,6 @@
 package org.cyk.utility.server.persistence.test;
 
-public interface TestPersistenceUpdate extends TestPersistenceServiceProviderUpdate {
+public interface TestPersistenceUpdate extends TestPersistenceUpdateIntegration {
 
 	
 }

@@ -1,6 +1,6 @@
 package org.cyk.utility.server.persistence.test;
 
-public interface TestPersistenceEntityCreate extends TestPersistenceServiceProviderCreate {
+public interface TestPersistenceEntityCreate extends TestPersistenceCreateIntegration {
 
 	
 }

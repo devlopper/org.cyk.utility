@@ -2,6 +2,8 @@ package org.cyk.utility.server.business;
 
 import java.io.Serializable;
 
+import javax.transaction.Transactional;
+
 import org.cyk.utility.system.action.SystemActionDelete;
 
 public abstract class AbstractBusinessFunctionRemoverImpl extends AbstractBusinessFunctionTransactionImpl implements BusinessFunctionRemover, Serializable {
@@ -11,6 +13,11 @@ public abstract class AbstractBusinessFunctionRemoverImpl extends AbstractBusine
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		setAction(__inject__(SystemActionDelete.class));
+	}
+	
+	@Override @Transactional
+	public BusinessFunctionRemover execute() {
+		return (BusinessFunctionRemover) super.execute();
 	}
 	
 	@Override

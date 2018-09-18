@@ -33,7 +33,7 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 	private Class<ARCHIVE> clazz;
 	private ARCHIVE archive;
 	
-	private String beanXml,projectDefaultsYml,persistenceXml,log4j2Xml,pomXml,jbossDeploymentStructureXml/*,jbossDatasourcesXml*/;
+	private String beanXml,projectDefaultsYml,persistenceXml,log4j2Xml,pomXml,jbossDeploymentStructureXml;
 	
 	public ArchiveBuilder(Class<ARCHIVE> clazz) {
 		this.clazz = clazz;
@@ -134,6 +134,14 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 				index = StringUtils.replace(index, "\\", "/");
 				((WebArchive) archive).addAsResource(index,index);
 			}
+		}
+		
+		if(profile!=null) {
+			String[] files = StringUtils.split(profile.getProperty("org.cyk.test.web.inf.resources"),",");
+			if(files!=null)
+				for(String index : files) {
+					((WebArchive) archive).addAsWebInfResource(index);
+				}
 		}
 		
 		System.out.println("Building archive done.");
