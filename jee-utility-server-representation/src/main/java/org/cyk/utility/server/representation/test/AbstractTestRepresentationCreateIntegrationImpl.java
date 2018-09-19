@@ -14,7 +14,7 @@ public abstract class AbstractTestRepresentationCreateIntegrationImpl extends Ab
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(getUniformResourceIdentifier());
 		@SuppressWarnings("rawtypes")
-		RepresentationEntity proxy = (RepresentationEntity) target.proxy((Class<?>)__getActionableSingleton__(object.getClass()));
+		RepresentationEntity proxy = (RepresentationEntity) target.proxy((Class<?>)__getActionableSingleton__(object));
 		proxy.createOne(object);
 		addGarbagesArray(object);
 	}

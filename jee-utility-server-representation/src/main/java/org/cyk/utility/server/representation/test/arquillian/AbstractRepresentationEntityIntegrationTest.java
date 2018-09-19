@@ -35,7 +35,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	}
 	
 	@Test
-	public void readOneByRepresentationIdentifier() throws Exception{
+	public void readOneByBusinessIdentifier() throws Exception{
 		Object action = null;//__inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);

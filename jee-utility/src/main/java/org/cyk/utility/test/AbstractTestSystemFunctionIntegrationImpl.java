@@ -222,7 +222,7 @@ public abstract class AbstractTestSystemFunctionIntegrationImpl extends Abstract
 		if(map!=null) {
 			Class<?> key;
 			if(object instanceof Class<?>)
-				key = (Class<?>) map.get(object);
+				key = (Class<?>) object;
 			else
 				key = object.getClass();
 			value = map.get(key);

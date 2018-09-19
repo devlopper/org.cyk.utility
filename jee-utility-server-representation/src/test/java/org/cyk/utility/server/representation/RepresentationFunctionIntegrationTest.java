@@ -14,7 +14,7 @@ public class RepresentationFunctionIntegrationTest extends AbstractRepresentatio
 		__inject__(TestRepresentationCreate.class)
 			.setUniformResourceIdentifier(contextPath.toString())
 			.setActionableSingleton(MyEntityDto.class, MyEntityRepresentation.class)
-		.addObjects(new MyEntityDto().setCode("a")).execute();
+		.addObjects(new MyEntityDto().setCode("a")).setIsCatchThrowable(Boolean.FALSE).execute();
 	}
 
 	@Override
