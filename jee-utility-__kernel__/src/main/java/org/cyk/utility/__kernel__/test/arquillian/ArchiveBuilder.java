@@ -140,7 +140,8 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 			String[] files = StringUtils.split(profile.getProperty("org.cyk.test.web.inf.resources"),",");
 			if(files!=null)
 				for(String index : files) {
-					((WebArchive) archive).addAsWebInfResource(index);
+					String name = StringUtils.contains(index, "/") ? StringUtils.substringAfterLast(index, "/") : index;
+					((WebArchive) archive).addAsWebInfResource(index,name);
 				}
 		}
 		
