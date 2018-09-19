@@ -88,6 +88,14 @@
 			<version>1.4.197</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.cyk.jee.utility.server.representation.impl</groupId>
+			<artifactId>jee-utility-server-representation-impl</artifactId>
+			<version>0.0.1</version>
+			<scope>test</scope>
+		</dependency>
+		
 	</dependencies>
 
 	<profiles>
@@ -96,7 +104,7 @@
 			<properties>
 				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/representation/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.jpa.persistence.file>org/cyk/utility/server/representation/persistence.xml</org.cyk.test.jpa.persistence.file>
-				<org.cyk.test.classes>org.cyk.utility.server.representation.MyEntity,org.cyk.utility.server.persistence.impl.DependenceProducer,org.cyk.utility.server.representation.MyRepresentation,org.cyk.utility.server.representation.MyRepresentationImpl,org.cyk.utility.server.representation.RepresentationGeneric,org.cyk.utility.server.representation.MyApplication</org.cyk.test.classes>
+				<org.cyk.test.classes>org.cyk.utility.server.representation.MyEntity,org.cyk.utility.server.persistence.impl.DependenceProducer,org.cyk.utility.server.representation.MyRepresentation,org.cyk.utility.server.representation.MyRepresentationImpl,org.cyk.utility.server.representation.RepresentationGeneric,org.cyk.utility.server.representation.Application</org.cyk.test.classes>
 			</properties>
 		</profile>
 	</profiles>

@@ -13,8 +13,10 @@
 		<module>../jee-utility-__kernel__</module>
 		<module>../jee-utility</module>
 		<module>../jee-utility-server-persistence</module>
+		<module>../jee-utility-server-persistence-impl</module>
 		<module>../jee-utility-server-business</module>
 		<module>../jee-utility-server-representation</module>
+		<module>../jee-utility-server-representation-impl</module>
 	</modules>
 
 </project>

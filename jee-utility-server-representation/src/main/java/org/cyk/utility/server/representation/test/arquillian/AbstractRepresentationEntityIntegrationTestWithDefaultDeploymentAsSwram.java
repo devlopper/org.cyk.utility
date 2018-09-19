@@ -6,7 +6,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 public abstract class AbstractRepresentationEntityIntegrationTestWithDefaultDeploymentAsSwram<ENTITY> extends AbstractRepresentationEntityIntegrationTest<ENTITY> {
 	private static final long serialVersionUID = 1L;
 
-	@org.jboss.arquillian.container.test.api.Deployment(testable=false/* to make it run as client server*/)
+	@org.jboss.arquillian.container.test.api.Deployment(testable=true/* to make it run as client server*/)
 	public static WebArchive createArchive(){
 		return new ArchiveBuilder<WebArchive>(WebArchive.class).execute(); 
 	}
