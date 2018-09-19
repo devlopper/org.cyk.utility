@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.transaction.UserTransaction;
@@ -18,6 +20,7 @@ public abstract class AbstractTestSystemFunctionIntegrationImpl extends Abstract
 	private static final long serialVersionUID = 1L;
 
 	private Collection<Object> unexistingObjectIdentifiers;
+	private Map<Class<?>,Object> actionableSingletonsMap;
 	private Boolean isTransactional,isContainerManagedTransaction;
 	private UserTransaction __tempUserTransaction__;
 	
@@ -122,6 +125,27 @@ public abstract class AbstractTestSystemFunctionIntegrationImpl extends Abstract
 	}
 	
 	@Override
+	public Map<Class<?>,Object> getActionableSingletonsMap() {
+		return actionableSingletonsMap;
+	}
+	
+	@Override
+	public TestSystemFunctionIntegration setActionableSingletonsMap(Map<Class<?>,Object> map) {
+		this.actionableSingletonsMap = map;
+		return this;
+	}
+	
+	@Override
+	public TestSystemFunctionIntegration setActionableSingleton(Class<?> aClass, Object object) {
+		Map<Class<?>,Object> map = getActionableSingletonsMap();
+		if(map == null) {
+			setActionableSingletonsMap(map = new HashMap<>());
+		}
+		map.put(aClass, object);
+		return this;
+	}
+	
+	@Override
 	public TestSystemFunctionIntegration addUnexistingObjectIdentifiers(Object... unexistingObjectIdentifiers) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(unexistingObjectIdentifiers)){
 			Collection<Object> collection = getUnexistingObjectIdentifiers();
@@ -191,6 +215,20 @@ public abstract class AbstractTestSystemFunctionIntegrationImpl extends Abstract
 	}
 
 	/**/
+	
+	protected Object __getActionableSingleton__(Object object) {
+		Map<Class<?>,Object> map = getActionableSingletonsMap();
+		Object value = null;
+		if(map!=null) {
+			Class<?> key;
+			if(object instanceof Class<?>)
+				key = (Class<?>) map.get(object);
+			else
+				key = object.getClass();
+			value = map.get(key);
+		}
+		return value;
+	}
 	
 	@Override
 	protected void ______execute______() throws Exception{

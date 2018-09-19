@@ -1,6 +1,7 @@
 package org.cyk.utility.test;
 
 import java.util.Collection;
+import java.util.Map;
 
 import javax.transaction.UserTransaction;
 
@@ -48,4 +49,8 @@ public interface TestSystemFunctionIntegration extends TestIntegration {
 	
 	TestSystemFunctionIntegration setIsContainerManagedTransaction(Boolean isContainerManagedTransaction);
 	Boolean getIsContainerManagedTransaction();
+	
+	TestSystemFunctionIntegration setActionableSingletonsMap(Map<Class<?>,Object> map);
+	TestSystemFunctionIntegration setActionableSingleton(Class<?> aClass,Object object);
+	Map<Class<?>,Object> getActionableSingletonsMap();
 }

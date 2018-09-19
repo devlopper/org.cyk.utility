@@ -54,7 +54,8 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 			pomXml = profile.getProperty("org.cyk.test.maven.pom.file");
 		if(StringUtils.isBlank(pomXml))
 			pomXml = "pom.xml";
-		System.out.println("Pom : "+pomXml);
+		if(!StringUtils.equalsIgnoreCase("pom.xml", pomXml))
+			System.out.println("Pom : "+pomXml);
 		
 		if(StringUtils.isBlank(beanXml) && profile!=null)
 			beanXml = profile.getProperty("org.cyk.test.cdi.beans.file");
