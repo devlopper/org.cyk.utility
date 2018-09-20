@@ -17,6 +17,7 @@ import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueHelper;
@@ -258,5 +259,9 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	protected ThrowableHelper __injectThrowableHelper__(){
 		return __inject__(ThrowableHelper.class);
+	}
+	
+	protected NumberHelper __injectNumberHelper__(){
+		return __inject__(NumberHelper.class);
 	}
 }

@@ -2,6 +2,7 @@ package org.cyk.utility.server.representation.test;
 
 import java.net.URI;
 
+import org.cyk.utility.server.representation.Representation;
 import org.cyk.utility.test.AbstractTestSystemFunctionIntegrationImpl;
 
 public abstract class AbstractTestRepresentationFunctionIntegrationImpl extends AbstractTestSystemFunctionIntegrationImpl implements TestRepresentationFunctionIntegration {
@@ -28,12 +29,12 @@ public abstract class AbstractTestRepresentationFunctionIntegrationImpl extends 
 	
 	@Override
 	protected void __createOne__(Object object) throws Exception {
-		//__inject__(Representation.class).create(object);
+		__inject__(Representation.class).create(object);
 	}
 	
 	@Override
 	protected void __deleteOne__(Object object) {
-		//__inject__(Representation.class).delete(object);
+		__inject__(Representation.class).delete(object);
 	}
 
 }

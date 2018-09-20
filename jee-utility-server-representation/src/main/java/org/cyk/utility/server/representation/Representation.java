@@ -1,5 +1,7 @@
 package org.cyk.utility.server.representation;
 
+import java.util.Collection;
+
 /**
  * 
  * @author Christian
@@ -9,19 +11,31 @@ public interface Representation extends RepresentationServiceProvider<Object,Obj
 
 	/* Create */
 	
-	/* Find */ 
-	/*<ENTITY> ENTITY findOne(Class<ENTITY> aClass,Object identifier,Properties properties);
-	<ENTITY> ENTITY findOne(Class<ENTITY> aClass,Object identifier);
+	Representation create(Object object);
 	
-	<ENTITY> Collection<ENTITY> findMany(Class<ENTITY> aClass,Properties properties);
-	<ENTITY> Collection<ENTITY> findMany(Class<ENTITY> aClass);
+	Representation createMany(Collection<Object> objects);
+	
+	/* Read */ 
+	/*
+	Object getMany();
+	
+	Object getOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type);
 	*/
 	/* Update */
+	/*
+	Representation updateOne(Object object);
 	
+	Representation updateMany(Collection<Object> objects);
+	*/
 	/* Delete */
 	
+	Representation delete(Object object);
+	
+	Representation deleteMany(Collection<Object> objects);
+	
+	Representation deleteAll();
+	
 	/* Count */
-	/*<ENTITY> Long count(Class<ENTITY> aClass,Properties properties);
-	<ENTITY> Long count(Class<ENTITY> aClass);
-	*/
+	
+	//Long count();
 }

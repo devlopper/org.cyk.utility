@@ -122,12 +122,17 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response deleteOne(String identifier,String type) {
-		ValueUsageType valueUsageType = __getValueUsageType__(type);
+		/*ValueUsageType valueUsageType = __getValueUsageType__(type);
 		if(ValueUsageType.SYSTEM.equals(valueUsageType))
 			getBusiness().deleteBySystemIdentifier(__injectNumberHelper__().getLong(identifier));
 		else if(ValueUsageType.BUSINESS.equals(valueUsageType))
 			getBusiness().deleteByBusinessIdentifier(identifier);
+		
 		return Response.status(Response.Status.OK).build();
+		
+		*/
+		return __inject__(RepresentationFunctionRemover.class).setEntityIdentifier(identifier).setEntityIdentifierValueUsageType(__getValueUsageType__(type))
+			.setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 	
 	//TODO use representation function to get the response to the desired request

@@ -9,6 +9,7 @@ import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
+import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemFunctionServerImpl implements RepresentationFunction, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -38,6 +39,11 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	public RepresentationFunction setResponse(Response response) {
 		getProperties().setResponse(response);
 		return this;
+	}
+	
+	@Override
+	public RepresentationFunction setEntityIdentifierValueUsageType(ValueUsageType valueUsageType) {
+		return (RepresentationFunction) super.setEntityIdentifierValueUsageType(valueUsageType);
 	}
 	
 	@Override

@@ -1,6 +1,7 @@
 package org.cyk.utility.server.representation.test;
 
 import org.cyk.utility.server.representation.RepresentationEntity;
+import org.cyk.utility.server.representation.RepresentationLayer;
 
 public abstract class AbstractTestRepresentationCreateIntegrationImpl extends AbstractTestRepresentationTransactionIntegrationImpl implements TestRepresentationCreateIntegration {
 	private static final long serialVersionUID = 1L;
@@ -9,8 +10,8 @@ public abstract class AbstractTestRepresentationCreateIntegrationImpl extends Ab
 	@Override
 	protected void __perform__(Object object) throws Exception {
 		@SuppressWarnings("rawtypes")
-		Class<RepresentationEntity> aClass = (Class<RepresentationEntity>)__getActionableSingleton__(object);
-		__inject__(aClass).createOne(object);
+		RepresentationEntity representation = __inject__(RepresentationLayer.class).injectInterfaceClassFromEntityClass(object.getClass());
+		representation.createOne(object);
 		addGarbagesArray(object);
 	}
 	

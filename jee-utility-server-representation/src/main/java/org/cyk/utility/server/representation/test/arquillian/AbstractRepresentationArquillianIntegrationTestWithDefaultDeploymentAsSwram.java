@@ -6,7 +6,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 public abstract class AbstractRepresentationArquillianIntegrationTestWithDefaultDeploymentAsSwram extends AbstractRepresentationArquillianIntegrationTest {
 	private static final long serialVersionUID = 1L;
 
-	@org.jboss.arquillian.container.test.api.Deployment(testable=true)
+	@org.jboss.arquillian.container.test.api.Deployment
 	public static WebArchive createArchive(){
 		return new ArchiveBuilder<WebArchive>(WebArchive.class).execute(); 
 	}

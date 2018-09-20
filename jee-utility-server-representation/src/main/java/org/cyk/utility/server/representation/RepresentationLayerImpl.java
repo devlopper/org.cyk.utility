@@ -13,7 +13,7 @@ public class RepresentationLayerImpl extends AbstractSingleton implements Repres
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <ENTITY> RepresentationEntity<ENTITY, ?, ?> injectInterfaceClassFromEntityClass(Class<ENTITY> entityClass) {
+	public <DTO> RepresentationEntity<?, DTO, ?> injectInterfaceClassFromEntityClass(Class<DTO> entityClass) {
 		return __inject__(SystemLayerRepresentation.class).injectInterfaceClassFromEntityClassName(entityClass,RepresentationEntity.class);
 	}
 

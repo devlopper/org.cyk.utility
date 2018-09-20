@@ -114,9 +114,9 @@ public class SystemLayerRepresentationUnitTest extends AbstractSystemLayerUnitTe
 	
 	@Override
 	protected Map<String, String> __getExpectedInterfaceNameFromEntityClassName__() {
-		return __inject__(MapHelper.class).instanciateKeyAsStringValueAsString("representation.entities.MyClass","representation.api.MyClassRepresentation"
-				,"p.representation.entities.MyClass","p.representation.api.MyClassRepresentation"
-				,"p.representation.entities.p1.MyClass","p.representation.api.p1.MyClassRepresentation");
+		return __inject__(MapHelper.class).instanciateKeyAsStringValueAsString("representation.entities.MyClassDto","representation.api.MyClassRepresentation"
+				,"p.representation.entities.MyClassDto","p.representation.api.MyClassRepresentation"
+				,"p.representation.entities.p1.MyClassDto","p.representation.api.p1.MyClassRepresentation");
 	}
 	
 	/* Implementation */
