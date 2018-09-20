@@ -8,6 +8,12 @@ import javax.inject.Singleton;
 public class SystemLayerPersistenceImpl extends AbstractSystemLayerImpl implements SystemLayerPersistence, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		
+	}
+	
 	/*@Override
 	public <T> SystemLayerPersistence addNamedQuery(String name, String query, Class<T> resultClass) {
 		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();

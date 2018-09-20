@@ -6,32 +6,32 @@ import java.util.Map;
 
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.system.layer.SystemLayer;
-import org.cyk.utility.system.layer.SystemLayerPersistence;
+import org.cyk.utility.system.layer.SystemLayerRepresentation;
 
-public class SystemLayerPersistenceUnitTest extends AbstractSystemLayerUnitTestWithDefaultDeployment {
+public class SystemLayerRepresentationUnitTest extends AbstractSystemLayerUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
-	
+
 	/* Entity */
 	
 	@Override
 	protected SystemLayer __injectSystemLayer__() {
-		return __inject__(SystemLayerPersistence.class);
+		return __inject__(SystemLayerRepresentation.class);
 	}
 
 	@Override
 	protected String __getExpectedEntityPackageNameRegularExpression__() {
-		return "[.]{0,1}persistence.entities[.]{0,1}";
+		return "[.]{0,1}representation.entities[.]{0,1}";
 	}
 
 	@Override
 	protected Collection<String> __getEntityTruePackages__() {
-		return Arrays.asList("a.persistence.entities.b","a.persistence.entities","persistence.entities.b","persistence.entities");
+		return Arrays.asList("a.representation.entities.b","a.representation.entities","representation.entities.b","representation.entities");
 	}
 
 	@Override
 	protected Collection<String> __getEntityFalsePackages__() {
-		return Arrays.asList("a.persistence.c.entities.b","a.persistence.c.entities","persistence.c.entities.b","persistence.c.entities",
-				"entities","persistence");
+		return Arrays.asList("a.representation.c.entities.b","a.representation.c.entities","representation.c.entities.b","representation.c.entities",
+				"entities","representation");
 	}
 
 	@Override
@@ -51,24 +51,24 @@ public class SystemLayerPersistenceUnitTest extends AbstractSystemLayerUnitTestW
 
 	@Override
 	protected String __getExpectedEntityClassNameRegularExpression__() {
-		return null;
+		return "representation.entities..+Dto$";
 	}
 	
 	@Override
 	protected Collection<String> __getEntityTrueClasses__() {
-		return null;
+		return Arrays.asList("a.representation.entities.b.MyClassDto","a.representation.entities.MyClassDto","representation.entities.b.MyClassDto","representation.entities.MyClassDto");
 	}
 
 	@Override
 	protected Collection<String> __getEntityFalseClasses__() {
-		return null;
+		return Arrays.asList("a.representation.entitie.MyClassDto","a.representation.entities.Dto","representation.entities.b.MyClassDo","representation.entities.MyClassDtos");
 	}
 
 	/* Interface */
 	
 	@Override
 	protected String __getExpectedInterfacePackageNameRegularExpression__() {
-		return "[.]{0,1}persistence.api[.]{0,1}";
+		return "[.]{0,1}representation.api[.]{0,1}";
 	}
 
 	@Override
@@ -78,18 +78,18 @@ public class SystemLayerPersistenceUnitTest extends AbstractSystemLayerUnitTestW
 
 	@Override
 	protected String __getExpectedInterfaceInterfaceNameRegularExpression__() {
-		return "Persistence$";
+		return "Representation$";
 	}
 
 	@Override
 	protected Collection<String> __getInterfaceTruePackages__() {
-		return Arrays.asList("a.persistence.api.b","a.persistence.api","persistence.api.b","persistence.api");
+		return Arrays.asList("a.representation.api.b","a.representation.api","representation.api.b","representation.api");
 	}
 
 	@Override
 	protected Collection<String> __getInterfaceFalsePackages__() {
-		return Arrays.asList("a.persistence.c.api.b","a.persistence.c.api","persistence.c.api.b","persistence.c.api",
-				"api","persistence");
+		return Arrays.asList("a.representation.c.api.b","a.representation.c.api","representation.c.api.b","representation.c.api",
+				"api","representation");
 	}
 
 	@Override
@@ -114,21 +114,21 @@ public class SystemLayerPersistenceUnitTest extends AbstractSystemLayerUnitTestW
 	
 	@Override
 	protected Map<String, String> __getExpectedInterfaceNameFromEntityClassName__() {
-		return __inject__(MapHelper.class).instanciateKeyAsStringValueAsString("persistence.entities.MyClass","persistence.api.MyClassPersistence"
-				,"p.persistence.entities.MyClass","p.persistence.api.MyClassPersistence"
-				,"p.persistence.entities.p1.MyClass","p.persistence.api.p1.MyClassPersistence");
+		return __inject__(MapHelper.class).instanciateKeyAsStringValueAsString("representation.entities.MyClass","representation.api.MyClassRepresentation"
+				,"p.representation.entities.MyClass","p.representation.api.MyClassRepresentation"
+				,"p.representation.entities.p1.MyClass","p.representation.api.p1.MyClassRepresentation");
 	}
 	
 	/* Implementation */
 
 	@Override
 	protected String __getExpectedImplementationPackageNameRegularExpression__() {
-		return "[.]{0,1}persistence.impl[.]{0,1}";
+		return "[.]{0,1}representation.impl[.]{0,1}";
 	}
 
 	@Override
 	protected String __getExpectedImplementationClassNameRegularExpression__() {
-		return "PersistenceImpl$";
+		return "RepresentationImpl$";
 	}
 
 	@Override
@@ -138,13 +138,13 @@ public class SystemLayerPersistenceUnitTest extends AbstractSystemLayerUnitTestW
 
 	@Override
 	protected Collection<String> __getImplementationTruePackages__() {
-		return Arrays.asList("a.persistence.impl.b","a.persistence.impl","persistence.impl.b","persistence.impl");
+		return Arrays.asList("a.representation.impl.b","a.representation.impl","representation.impl.b","representation.impl");
 	}
 
 	@Override
 	protected Collection<String> __getImplementationFalsePackages__() {
-		return Arrays.asList("a.persistence.c.impl.b","a.persistence.c.impl","persistence.c.impl.b","persistence.c.impl",
-				"impl","persistence");
+		return Arrays.asList("a.representation.c.impl.b","a.representation.c.impl","representation.c.impl.b","representation.c.impl",
+				"impl","representation");
 	}
 
 	@Override

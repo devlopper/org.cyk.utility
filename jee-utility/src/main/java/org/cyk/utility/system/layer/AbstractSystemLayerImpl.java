@@ -4,18 +4,39 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
-import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.collection.CollectionHelper;
 
 public abstract class AbstractSystemLayerImpl extends AbstractSingleton implements SystemLayer, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private SystemSubLayerEntity entityLayer;
+	private SystemSubLayerInterface interfaceLayer;
+	private SystemSubLayerImplementation implementationLayer;
+	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		setEntityPackageNameToken(".entities.");
-		setInterfacePackageNameToken(".api.");
-		setInterfaceNameSuffix((String) getIdentifier());
+
+		setEntityLayer(__inject__(SystemSubLayerEntity.class));
+		getEntityLayer().setPackageNameRegularExpression(StringUtils.replace(getEntityLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression()
+				, SystemSubLayerEntity.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_ENTITIES, getIdentifier().toString().toLowerCase()+"."
+						+SystemSubLayerEntity.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_ENTITIES));
+		
+		setInterfaceLayer(__inject__(SystemSubLayerInterface.class));
+		getInterfaceLayer().setPackageNameRegularExpression(StringUtils.replace(getInterfaceLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression()
+				, SystemSubLayerInterface.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_API, getIdentifier().toString().toLowerCase()+"."
+						+SystemSubLayerInterface.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_API));
+		getInterfaceLayer().setInterfaceNameRegularExpression(getIdentifier()+CharacterConstant.DOLLAR.toString());
+		getInterfaceLayer().getInterfaceNameRegularExpression().getEndTokens(Boolean.TRUE).add(getIdentifier().toString());
+		
+		setImplementationLayer(__inject__(SystemSubLayerImplementation.class));
+		getImplementationLayer().setPackageNameRegularExpression(StringUtils.replace(getImplementationLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression()
+				, SystemSubLayerImplementation.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_IMPL, getIdentifier().toString().toLowerCase()+"."
+						+SystemSubLayerImplementation.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_IMPL));
+		getImplementationLayer().setClassNameRegularExpression(getIdentifier()+"Impl"+CharacterConstant.DOLLAR.toString());
+		getImplementationLayer().getClassNameRegularExpression().getEndTokens(Boolean.TRUE).add(getIdentifier().toString()+"Impl");
 	}
 	
 	@Override
@@ -24,52 +45,46 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 	}
 	
 	@Override
-	public SystemLayer setEntityPackageNameToken(String token) {
-		getProperties().setFromPath(new Object[]{Properties.ENTITY,Properties.PACKAGE,Properties.NAME,Properties.TOKEN}, token);
+	public SystemSubLayerEntity getEntityLayer() {
+		return entityLayer;
+	}
+	
+	@Override
+	public SystemLayer setEntityLayer(SystemSubLayerEntity systemLayerSubLayerEntity) {
+		this.entityLayer = systemLayerSubLayerEntity;
 		return this;
 	}
 	
 	@Override
-	public String getEntityPackageNameToken() {
-		return (String) getProperties().getFromPath(Properties.ENTITY,Properties.PACKAGE,Properties.NAME,Properties.TOKEN);
+	public SystemSubLayerInterface getInterfaceLayer() {
+		return interfaceLayer;
 	}
 	
 	@Override
-	public SystemLayer setLayerPackageNameToken(String token) {
-		getProperties().setFromPath(new Object[]{Properties.LAYER,Properties.PACKAGE,Properties.NAME,Properties.TOKEN}, token);
+	public SystemLayer setInterfaceLayer(SystemSubLayerInterface systemLayerSubLayerInterface) {
+		this.interfaceLayer = systemLayerSubLayerInterface;
 		return this;
 	}
 	
 	@Override
-	public String getLayerPackageNameToken() {
-		return (String) getProperties().getFromPath(Properties.LAYER,Properties.PACKAGE,Properties.NAME,Properties.TOKEN);
+	public SystemSubLayerImplementation getImplementationLayer() {
+		return implementationLayer;
 	}
 	
 	@Override
-	public SystemLayer setInterfacePackageNameToken(String token) {
-		getProperties().setFromPath(new Object[]{Properties.INTERFACE,Properties.PACKAGE,Properties.NAME,Properties.TOKEN}, token);
+	public SystemLayer setImplementationLayer(SystemSubLayerImplementation systemLayerSubLayerImplementation) {
+		this.implementationLayer = systemLayerSubLayerImplementation;
 		return this;
-	}
-
-	@Override
-	public String getInterfacePackageNameToken() {
-		return (String) getProperties().getFromPath(Properties.INTERFACE,Properties.PACKAGE,Properties.NAME,Properties.TOKEN);
-	}
-	
-	@Override
-	public SystemLayer setInterfaceNameSuffix(String suffix) {
-		getProperties().setFromPath(new Object[]{Properties.INTERFACE,Properties.NAME,Properties.SUFFIX}, suffix);
-		return this;
-	}
-	
-	@Override
-	public String getInterfaceNameSuffix() {
-		return (String) getProperties().getFromPath(Properties.INTERFACE,Properties.NAME,Properties.SUFFIX);
 	}
 	
 	@Override
 	public String getInterfaceNameFromEntityClassName(String entityClassName) {
-		return StringUtils.replace(entityClassName, getEntityPackageNameToken(), getInterfacePackageNameToken())+getInterfaceNameSuffix();
+		String string = null;
+		if(getEntityLayer().isPackage(entityClassName)) {
+			string = StringUtils.replace(entityClassName, ".entities.", ".api.")+__inject__(CollectionHelper.class)
+			.getFirst(getInterfaceLayer().getInterfaceNameRegularExpression().getEndTokens().get());
+		}
+		return string;
 	}
 	
 	@Override
