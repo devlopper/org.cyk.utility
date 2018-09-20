@@ -80,10 +80,10 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 	@Override
 	public String getInterfaceNameFromEntityClassName(String entityClassName) {
 		String string = null;
-		if(getEntityLayer().isPackage(entityClassName)) {
+		//if(getEntityLayer().isPackage(entityClassName)) {
 			string = StringUtils.replace(entityClassName, ".entities.", ".api.")+__inject__(CollectionHelper.class)
 			.getFirst(getInterfaceLayer().getInterfaceNameRegularExpression().getEndTokens().get());
-		}
+		//}
 		return string;
 	}
 	
@@ -103,13 +103,13 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 		T object = null;
 		Class<?> interfaceClass = getInterfaceClassFromEntityClassName(entityClass);
 		if(interfaceClass == null){
-			//TODO log warning
+			
 		}else{
 			object = (T) __inject__(interfaceClass);
 		}
 		
 		if(object == null){
-			//TODO log warning
+			System.err.println("Interface not found for entity class name "+entityClass);
 		}
 		
 		return object;

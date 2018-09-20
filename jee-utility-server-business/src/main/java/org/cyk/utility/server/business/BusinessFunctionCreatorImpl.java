@@ -17,8 +17,7 @@ public class BusinessFunctionCreatorImpl extends AbstractBusinessFunctionCreator
 		else if(getEntity()!=null)
 			__inject__(Persistence.class).create(getEntity());
 		else
-			//TODO log warning
-			;
+			System.err.println("No entity to "+action);
 	}
 
 }

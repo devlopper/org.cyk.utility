@@ -17,6 +17,7 @@ import org.cyk.utility.log.Log;
 import org.cyk.utility.method.MethodHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.StringConstant;
+import org.cyk.utility.string.StringHelper;
 
 @Singleton
 public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Serializable {
@@ -144,7 +145,6 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 		return aClass == null ? null : StringUtils.substringBefore(aClass.getSimpleName(),StringConstant.IMPL);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <TYPE> Class<TYPE> getParameterAt(Class<?> aClass, Integer index, Class<TYPE> typeClass) {
 		return __getParameterAt__(aClass, index, typeClass);
@@ -152,12 +152,17 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	
 	@Override
 	public Class<?> getByName(String name) {
-		try {
-			return Class.forName(name);
-		} catch (Exception exception) {
-			__inject__(Log.class).executeThrowable(exception);
-			return null;
+		Class<?> clazz = null;
+		if(__inject__(StringHelper.class).isBlank(name)) {
+			
+		}else {
+			try {
+				clazz = Class.forName(name);
+			} catch (Exception exception) {
+				__inject__(Log.class).executeThrowable(exception);
+			}	
 		}
+		return clazz;
 	}
 	
 	@Override

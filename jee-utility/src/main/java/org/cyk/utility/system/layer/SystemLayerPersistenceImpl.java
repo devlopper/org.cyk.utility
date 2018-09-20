@@ -14,10 +14,4 @@ public class SystemLayerPersistenceImpl extends AbstractSystemLayerImpl implemen
 		
 	}
 	
-	/*@Override
-	public <T> SystemLayerPersistence addNamedQuery(String name, String query, Class<T> resultClass) {
-		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
-		return null;
-	}*/
-	
 }

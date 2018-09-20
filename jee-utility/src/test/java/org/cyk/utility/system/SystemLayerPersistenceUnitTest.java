@@ -116,7 +116,8 @@ public class SystemLayerPersistenceUnitTest extends AbstractSystemLayerUnitTestW
 	protected Map<String, String> __getExpectedInterfaceNameFromEntityClassName__() {
 		return __inject__(MapHelper.class).instanciateKeyAsStringValueAsString("persistence.entities.MyClass","persistence.api.MyClassPersistence"
 				,"p.persistence.entities.MyClass","p.persistence.api.MyClassPersistence"
-				,"p.persistence.entities.p1.MyClass","p.persistence.api.p1.MyClassPersistence");
+				,"p.persistence.entities.p1.MyClass","p.persistence.api.p1.MyClassPersistence"
+				,"MyClass","MyClassPersistence");
 	}
 	
 	/* Implementation */

@@ -1,10 +1,10 @@
 package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.server.business.Business;
@@ -16,14 +16,16 @@ public class RepresentationFunctionCreatorImpl extends AbstractRepresentationFun
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void __execute__(SystemAction action) {
-		Collection<Object> entities = new ArrayList<>();
+		ResponseBuilder responseBuilder;
 		if(getEntities()!=null)
-			entities.addAll(getEntities());
-		if(getEntity()!=null)
-			entities.add(getEntity());
-		entities = (Collection<Object>) __inject__(InstanceHelper.class).buildMany(getPersistenceEntityClass(), entities);
-		__inject__(Business.class).createMany(entities);
-		setResponse(Response.status(Response.Status.CREATED).build());
+			__inject__(Business.class).createMany((Collection<Object>) __inject__(InstanceHelper.class).buildMany(getPersistenceEntityClass(),getEntities()));
+		else if(getEntity()!=null)
+			__inject__(Business.class).create(__inject__(InstanceHelper.class).buildOne(getPersistenceEntityClass(),getEntity()));
+		else {
+			System.err.println("No entity to "+action);
+		}
+		responseBuilder = Response.status(Response.Status.CREATED);
+		setResponse(responseBuilder.build());
 	}
 
 }
