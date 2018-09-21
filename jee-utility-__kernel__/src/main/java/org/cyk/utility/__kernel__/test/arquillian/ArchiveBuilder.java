@@ -2,18 +2,17 @@ package org.cyk.utility.__kernel__.test.arquillian;
 
 import java.io.File;
 import java.io.Serializable;
-import java.io.StringReader;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.KernelHelperImpl;
+import org.cyk.utility.__kernel__.maven.pom.Dependency;
 import org.cyk.utility.__kernel__.maven.pom.Pom;
+import org.cyk.utility.__kernel__.maven.pom.PomBuilderImpl;
 import org.cyk.utility.__kernel__.maven.pom.Profile;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -82,7 +81,7 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 		if(log4j2Xml!=null)
 			addlog4j2Xml(log4j2Xml);
 		if(pomXml!=null)
-			addPomXml(pomXml);
+			addPomXml(pomXml,profile);
 		if(jbossDeploymentStructureXml!=null)
 			addJbossDeploymentStructureXml(jbossDeploymentStructureXml);
 		
@@ -191,17 +190,24 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 		return this;
 	}
 	
-	private ArchiveBuilder<ARCHIVE> addPomXml(String path){
+	private ArchiveBuilder<ARCHIVE> addPomXml(String path,Profile profile){
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Pom.class);
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			String xml = KernelHelperImpl.__getStringFromFile__(System.getProperty("user.dir")+"/"+path);
-			Pom pom = xml == null ? null : (Pom) unmarshaller.unmarshal(new StringReader(xml));
+			path = System.getProperty("user.dir")+"/"+path;
+			Pom pom = PomBuilderImpl.__execute__(path);// xml == null ? null : (Pom) unmarshaller.unmarshal(new StringReader(xml));
 			if(pom == null){
-				System.out.println("Pom no found : "+(System.getProperty("user.dir")+"/"+path));
+				System.out.println("Pom not found : "+path);
 			}else {
 				String version = pom.getVersion() == null ? pom.getParent().getVersion() : pom.getVersion();
-				((WebArchive)archive).addAsLibraries(Maven.resolver().resolve(pom.getGroupId()+":"+pom.getArtifactId()+":"+version).withTransitivity().asFile());
+				//Collection<File> files = new ArrayList<>();
+				File[] dependencies = Maven.resolver().resolve(pom.getGroupId()+":"+pom.getArtifactId()+":"+version).withTransitivity().asFile();
+				Collection<Dependency> profileDependencies = profile.getDependenciesCollection();
+				if(profileDependencies!=null)
+					for(Dependency index : profileDependencies) {
+						dependencies = (File[]) ArrayUtils.add(dependencies, Maven.resolver().resolve(index.getGroupId()+":"+index.getArtifactId()+":"+index.getVersion()).withoutTransitivity().asSingleFile());
+					}
+				//File[] dependencies = Resolvers.use(MavenResolverSystem.class).loadPomFromFile(path).importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
+				
+				((WebArchive)archive).addAsLibraries(dependencies);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

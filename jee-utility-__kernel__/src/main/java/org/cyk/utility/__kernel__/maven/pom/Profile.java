@@ -1,5 +1,6 @@
 package org.cyk.utility.__kernel__.maven.pom;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class Profile {
 
 	private String id;
 	private Activation activation;	
-
+	private Dependencies dependencies;
 	private Map<String, String> properties = new HashMap<>();
 
 	public Boolean getActivationActiveByDefault(){
@@ -30,5 +31,9 @@ public class Profile {
 	
 	public String getProperty(String name){
 		return properties.get(name);
+	}
+	
+	public Collection<Dependency> getDependenciesCollection(){
+		return dependencies == null ? null : dependencies.getCollection();
 	}
 }

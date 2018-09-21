@@ -4,7 +4,8 @@
 	version="2.0">
 
 	<persistence-unit name="persistenceUnit" transaction-type="JTA">
-		<jta-data-source>java:jboss/datasources/testDataSource</jta-data-source>
+		<!--jta-data-source>java:jboss/datasources/testDataSource</jta-data-source-->
+		<jta-data-source>java:global/utility/testDataSource</jta-data-source>
 		<!--class>org.cyk.utility.server.persistence.jpa.MyEntity</class-->
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 	
