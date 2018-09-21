@@ -11,9 +11,7 @@ public class RepresentationFunctionIntegrationTest extends AbstractRepresentatio
 	
 	@Test
 	public void createOneMyEntity() throws Exception{
-		__inject__(TestRepresentationCreate.class)
-			//.setActionableSingleton(MyEntityDto.class, MyEntityRepresentation.class)
-		.addObjects(new MyEntityDto().setCode("a")).setIsCatchThrowable(Boolean.FALSE).execute();
+		__inject__(TestRepresentationCreate.class).addObjects(new MyEntityDto().setCode("a")).execute();
 	}
 
 	@Override

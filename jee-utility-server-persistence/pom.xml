@@ -49,8 +49,7 @@
 				<org.cyk.test.cdi.beans.file>org/cyk/utility/server/persistence/beans.xml</org.cyk.test.cdi.beans.file>
 				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/persistence/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.jpa.persistence.file>org/cyk/utility/server/persistence/jpa/persistence.xml</org.cyk.test.jpa.persistence.file>
-				<org.cyk.test.classes>org.cyk.utility.server.persistence.MyEntity,org.cyk.utility.server.persistence.DataSource</org.cyk.test.classes>
-				<!--org.cyk.test.web.inf.resources>org/cyk/utility/server/persistence/-ds.xml</org.cyk.test.web.inf.resources-->
+				<org.cyk.test.classes>org.cyk.utility.server.persistence.MyEntity,org.cyk.utility.server.persistence.DataSourceDefinition</org.cyk.test.classes>
 			</properties>
 			<dependencies>
 				<dependency>

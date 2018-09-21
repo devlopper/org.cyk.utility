@@ -39,20 +39,6 @@
 		    <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
 		    <scope>compile</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.4.197</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.cyk.jee.utility.server.persistence.impl</groupId>
-			<artifactId>jee-utility-server-persistence-impl</artifactId>
-			<version>0.0.1</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<profiles>
@@ -62,9 +48,21 @@
 				<org.cyk.test.cdi.beans.file>org/cyk/utility/server/business/beans.xml</org.cyk.test.cdi.beans.file>
 				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/business/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.jpa.persistence.file>org/cyk/utility/server/business/persistence.xml</org.cyk.test.jpa.persistence.file>
-				<org.cyk.test.classes>org.cyk.utility.server.business.MyEntity,org.cyk.utility.server.persistence.impl.DependenceProducer</org.cyk.test.classes>
-				<org.cyk.test.web.inf.resources>org/cyk/utility/server/business/-ds.xml</org.cyk.test.web.inf.resources>
+				<org.cyk.test.classes>org.cyk.utility.server.business.MyEntity,org.cyk.utility.server.business.DataSourceDefinition</org.cyk.test.classes>
 			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<version>1.4.197</version>
+				</dependency>
+		
+				<dependency>
+					<groupId>org.cyk.jee.utility.server.persistence.impl</groupId>
+					<artifactId>jee-utility-server-persistence-impl</artifactId>
+					<version>0.0.1</version>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>
 

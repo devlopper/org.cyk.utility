@@ -62,13 +62,6 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.cyk.jee.utility.server.persistence.impl</groupId>
-			<artifactId>jee-utility-server-persistence-impl</artifactId>
-			<version>0.0.1</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-client</artifactId>
 			<version>${org.jboss.resteasy.resteasy-bom.version}</version>
@@ -81,21 +74,6 @@
 		    <version>${org.jboss.resteasy.resteasy-bom.version}</version>
 		    <scope>provided</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.4.197</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.cyk.jee.utility.server.representation.impl</groupId>
-			<artifactId>jee-utility-server-representation-impl</artifactId>
-			<version>0.0.1</version>
-			<scope>test</scope>
-		</dependency>
-		
 	</dependencies>
 
 	<profiles>
@@ -104,8 +82,27 @@
 			<properties>
 				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/representation/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.jpa.persistence.file>org/cyk/utility/server/representation/persistence.xml</org.cyk.test.jpa.persistence.file>
-				<org.cyk.test.classes>org.cyk.utility.server.representation.MyEntity,org.cyk.utility.server.persistence.impl.DependenceProducer,org.cyk.utility.server.representation.MyRepresentation,org.cyk.utility.server.representation.MyRepresentationImpl,org.cyk.utility.server.representation.RepresentationGeneric,org.cyk.utility.server.representation.Application</org.cyk.test.classes>
+				<org.cyk.test.classes>org.cyk.utility.server.representation.MyEntity,org.cyk.utility.server.representation.DataSourceDefinition</org.cyk.test.classes>
 			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<version>1.4.197</version>
+				</dependency>
+		
+				<dependency>
+					<groupId>org.cyk.jee.utility.server.persistence.impl</groupId>
+					<artifactId>jee-utility-server-persistence-impl</artifactId>
+					<version>0.0.1</version>
+				</dependency>
+				
+				<dependency>
+					<groupId>org.cyk.jee.utility.server.representation.impl</groupId>
+					<artifactId>jee-utility-server-representation-impl</artifactId>
+					<version>0.0.1</version>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>
 	
