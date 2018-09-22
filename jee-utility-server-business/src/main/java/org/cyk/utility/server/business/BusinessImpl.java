@@ -56,12 +56,12 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	@Override
 	public BusinessServiceProvider<Object> create(Object object, Properties properties) {
 		@SuppressWarnings("unchecked")
-		Class<BusinessEntity<Object>> interfaceClass = (Class<BusinessEntity<Object>>) __inject__(SystemLayerBusiness.class).getInterfaceClassFromEntityClassName(object.getClass());
-		if(interfaceClass == null){
+		BusinessEntity<Object> interfaceObject = (BusinessEntity<Object>)  __inject__(BusinessLayer.class).injectInterfaceClassFromPersistenceEntityClass(object.getClass());
+		if(interfaceObject == null){
 			__logWarn__("No specific business interface found for persistence entity "+object.getClass());
 			super.create(object, properties);
 		}else{
-			__inject__(interfaceClass).create(object, properties);
+			interfaceObject.create(object, properties);
 		}
 		return this;
 	}
@@ -70,12 +70,12 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	public BusinessServiceProvider<Object> createMany(Collection<Object> objects, Properties properties) {
 		Class<?> aClass = objects.iterator().next().getClass();
 		@SuppressWarnings("unchecked")
-		Class<BusinessEntity<Object>> interfaceClass = (Class<BusinessEntity<Object>>) __inject__(SystemLayerBusiness.class).getInterfaceClassFromEntityClassName(aClass);
-		if(interfaceClass == null){
+		BusinessEntity<Object> interfaceObject = (BusinessEntity<Object>)  __inject__(BusinessLayer.class).injectInterfaceClassFromPersistenceEntityClass(aClass);
+		if(interfaceObject == null){
 			__logWarn__("No specific business interface found for persistence entity "+aClass);
 			super.createMany(objects, properties);
 		}else{
-			__inject__(interfaceClass).createMany(objects, properties);
+			interfaceObject.createMany(objects, properties);
 		}
 		return this;
 	}

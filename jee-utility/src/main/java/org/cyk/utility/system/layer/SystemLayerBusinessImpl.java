@@ -15,9 +15,12 @@ public class SystemLayerBusinessImpl extends AbstractSystemLayerImpl implements 
 	@Override
 	public String getInterfaceNameFromPersistenceEntityClassName(String persistenceEntityClassName) {
 		//TODO DOT should be defined as constant somewhere. maybe in class helper
-		return super.getInterfaceNameFromEntityClassName(StringUtils.replace(persistenceEntityClassName, CharacterConstant.DOT.toString()
+		return getInterfaceNameFromEntityClassName(StringUtils.replace(persistenceEntityClassName, CharacterConstant.DOT.toString()
 				+__inject__(SystemLayerPersistence.class).getIdentifier().toString().toLowerCase()+CharacterConstant.DOT.toString()
 				, CharacterConstant.DOT.toString()+getIdentifier().toString().toLowerCase()+CharacterConstant.DOT.toString()));
+		
+		//String name = StringUtils.replace(persistenceEntityClass.getName(), "persistence", "business");
+		//return __inject__(SystemLayerBusiness.class).injectInterfaceClassFromEntityClassName(name,BusinessEntity.class);
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public class BusinessLayerImpl extends AbstractSingleton implements BusinessLaye
 	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> BusinessEntity<ENTITY> injectInterfaceClassFromPersistenceEntityClass(Class<ENTITY> persistenceEntityClass) {
-		return __inject__(SystemLayerBusiness.class).injectInterfaceClassFromEntityClassName(persistenceEntityClass,BusinessEntity.class);
+		return __inject__(SystemLayerBusiness.class).injectInterfaceClassFromPersistenceEntityClassName(persistenceEntityClass,BusinessEntity.class);
 	}
 
 }

@@ -52,7 +52,7 @@ public abstract class AbstractBusinessArquillianIntegrationTest extends Abstract
 	
 	@Override
 	protected BusinessEntity ____getLayerEntityInterfaceFromClass____(Class<?> aClass) {
-		return __inject__(SystemLayerBusiness.class).injectInterfaceClassFromEntityClassName(aClass,__getLayerEntityInterfaceClass__());
+		return __inject__(SystemLayerBusiness.class).injectInterfaceClassFromPersistenceEntityClassName(aClass,__getLayerEntityInterfaceClass__());
 	}
 
 	@Override

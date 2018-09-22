@@ -14,5 +14,13 @@
 	<packaging>jar</packaging>
 
 	<name>JEE utility server representation for implementation</name>
-
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.cyk.jee.utility</groupId>
+			<artifactId>jee-utility</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+	</dependencies>
+	
 </project>

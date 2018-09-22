@@ -1,4 +1,4 @@
-package org.cyk.utility.server.representation;
+package org.cyk.utility.server.representation.impl;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.ApplicationPath;
