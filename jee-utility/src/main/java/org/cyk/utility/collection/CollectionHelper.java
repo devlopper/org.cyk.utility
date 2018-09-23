@@ -13,7 +13,7 @@ public interface CollectionHelper extends Helper {
 	<ELEMENT> Collection<ELEMENT> concatenate(Collection<Collection<ELEMENT>> collections);
 	<ELEMENT> Collection<ELEMENT> concatenate(Collection<ELEMENT>...collections);
 	Integer getSize(Collection<?> collection);
-	<ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection, Integer index);
+	<ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection, Object index);
 	<ELEMENT> ELEMENT getFirst(Collection<ELEMENT> collection);
 	<ELEMENT> ELEMENT getLast(Collection<ELEMENT> collection);
 	CollectionHelper clear(Collection<?> collection);
@@ -25,7 +25,7 @@ public interface CollectionHelper extends Helper {
 	<ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection, Boolean append, ELEMENT[] elements);
 	<ELEMENT> Collection<ELEMENT> add(Collection<ELEMENT> collection, ELEMENT[] elements);
 	
-	<ELEMENT> Collection<ELEMENT> addElementAt(Collection<ELEMENT> collection,Integer index, ELEMENT element);
+	<ELEMENT> Collection<ELEMENT> addElementAt(Collection<ELEMENT> collection,Object index, ELEMENT element);
 	
 	Boolean contains(Collection<?> collection,Object element);
 }

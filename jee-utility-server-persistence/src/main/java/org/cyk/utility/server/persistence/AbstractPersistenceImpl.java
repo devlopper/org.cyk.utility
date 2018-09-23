@@ -6,7 +6,6 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCount;
-import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
@@ -24,12 +23,11 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 
 	@Override
 	public PersistenceServiceProvider<Object> create(Object object, Properties properties) {
-		@SuppressWarnings("unchecked")
-		Class<PersistenceEntity<Object>> persistenceClass = __getPersistenceEntityClass__((Class<Object>) object.getClass(),__inject__(SystemActionCreate.class));
-		if(persistenceClass == null){
+		PersistenceEntity<Object> persistence = injectInterfaceClassFromEntityClass(object);
+		if(persistence == null){
 			super.create(object, properties);
 		}else{
-			__inject__(persistenceClass).create(object, properties);
+			persistence.create(object, properties);
 		}
 		return this;
 	}
@@ -42,13 +40,13 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		if(identifier == null)
 			__injectThrowableHelper__().throwRuntimeException("identifier is required");
 		ValueUsageType valueUsageType = properties == null ? ValueUsageType.SYSTEM : (ValueUsageType) __inject__(ValueHelper.class).defaultToIfNull(properties.getValueUsageType(),ValueUsageType.SYSTEM);
-		Class<PersistenceEntity<ENTITY>> persistenceClass = __getPersistenceEntityClass__(aClass,__inject__(SystemActionRead.class));
+		PersistenceEntity<ENTITY> persistence = injectInterfaceClassFromEntityClass(aClass);
 		ENTITY entity;
-		if(persistenceClass == null){
+		if(persistence == null){
 			entity = (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).setEntityIdentifier(identifier)
 					.setEntityIdentifierValueUsageType(valueUsageType).execute().getProperties().getEntity();
 		}else{
-			entity = ValueUsageType.SYSTEM.equals(valueUsageType) ? __inject__(persistenceClass).readOne(identifier) : __inject__(persistenceClass).readOneByBusinessIdentifier(identifier);
+			entity = /*ValueUsageType.SYSTEM.equals(valueUsageType) ?*/ persistence.readOne(identifier,valueUsageType) /*: persistence.readOneByBusinessIdentifier(identifier)*/;
 		}
 		return entity;
 	}
@@ -61,12 +59,12 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass, Properties properties) {
-		Class<PersistenceEntity<ENTITY>> persistenceClass = __getPersistenceEntityClass__(aClass,__inject__(SystemActionRead.class));
+		PersistenceEntity<ENTITY> persistence = injectInterfaceClassFromEntityClass(aClass);
 		Collection<ENTITY> entities;
-		if(persistenceClass == null){
+		if(persistence == null){
 			entities = (Collection<ENTITY>) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).execute().getProperties().getEntities();
 		}else{
-			entities =  __inject__(persistenceClass).readMany(properties);
+			entities =  persistence.readMany(properties);
 		}
 		return entities;
 	}
@@ -78,12 +76,12 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public <ENTITY> Long count(Class<ENTITY> aClass, Properties properties) {
-		Class<PersistenceEntity<ENTITY>> persistenceClass = __getPersistenceEntityClass__(aClass,__inject__(SystemActionCount.class));
+		PersistenceEntity<ENTITY> persistence = injectInterfaceClassFromEntityClass(aClass);
 		Long count = null;
-		if(persistenceClass == null){
+		if(persistence == null){
 			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
 		}else{
-			count =  __inject__(persistenceClass).count(properties);
+			count =  persistence.count(properties);
 		}
 		return count;
 	}
@@ -95,35 +93,33 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public PersistenceServiceProvider<Object> update(Object object, Properties properties) {
-		@SuppressWarnings("unchecked")
-		Class<PersistenceEntity<Object>> persistenceClass = __getPersistenceEntityClass__((Class<Object>) object.getClass(),__inject__(SystemActionUpdate.class));
-		if(persistenceClass == null){
+		PersistenceEntity<Object> persistence = injectInterfaceClassFromEntityClass(object);
+		if(persistence == null){
 			super.update(object, properties);
 		}else{
-			__inject__(persistenceClass).update(object, properties);
+			persistence.update(object, properties);
 		}
 		return this;
 	}
 	
 	@Override
 	public PersistenceServiceProvider<Object> delete(Object object, Properties properties) {
-		@SuppressWarnings("unchecked")
-		Class<PersistenceEntity<Object>> persistenceClass = __getPersistenceEntityClass__((Class<Object>) object.getClass(),__inject__(SystemActionDelete.class));
-		if(persistenceClass == null){
+		PersistenceEntity<Object> persistence = injectInterfaceClassFromEntityClass(object);
+		if(persistence == null){
 			super.delete(object, properties);
 		}else{
-			__inject__(persistenceClass).delete(object, properties);
+			persistence.delete(object, properties);
 		}
 		return this;
 	}
 	
 	@Override
 	public <ENTITY> Persistence deleteAll(Class<ENTITY> aClass, Properties properties) {
-		Class<PersistenceEntity<ENTITY>> persistenceClass = __getPersistenceEntityClass__(aClass,__inject__(SystemActionDelete.class));
-		if(persistenceClass == null){
+		PersistenceEntity<ENTITY> persistence = injectInterfaceClassFromEntityClass(aClass);
+		if(persistence == null){
 			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
 		}else{
-			__inject__(persistenceClass).deleteAll();
+			persistence.deleteAll();
 		}
 		return this;
 	}
@@ -135,7 +131,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	/**/
 	
-	protected <ENTITY> Class<PersistenceEntity<ENTITY>> __getPersistenceEntityClass__(Class<ENTITY> aClass,SystemAction action) {
+	/*protected <ENTITY> Class<PersistenceEntity<ENTITY>> __getPersistenceEntityClass__(Class<ENTITY> aClass,SystemAction action) {
 		@SuppressWarnings("unchecked")
 		Class<PersistenceEntity<ENTITY>> persistenceClass = (Class<PersistenceEntity<ENTITY>>) __inject__(SystemLayerPersistence.class).getInterfaceClassFromEntityClassName(aClass);
 		if(persistenceClass == null){
@@ -144,5 +140,5 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 			//__logInfo__("Using <"+persistenceClass+"> to "+action.getIdentifier()+" "+aClass);
 		}
 		return persistenceClass;
-	}
+	}*/
 }

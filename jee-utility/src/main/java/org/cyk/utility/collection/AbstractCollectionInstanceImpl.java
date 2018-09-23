@@ -38,4 +38,18 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 		return this;
 	}
 	
+	@Override
+	public T getAt(Object index) {
+		return __inject__(CollectionHelper.class).getElementAt(collection, index);
+	}
+	
+	@Override
+	public T getFirst() {
+		return __inject__(CollectionHelper.class).getFirst(collection);
+	}
+	
+	@Override
+	public T getLast() {
+		return __inject__(CollectionHelper.class).getLast(collection);
+	}
 }

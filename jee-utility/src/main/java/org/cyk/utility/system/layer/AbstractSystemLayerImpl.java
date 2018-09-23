@@ -7,6 +7,7 @@ import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.string.StringHelper;
 
 public abstract class AbstractSystemLayerImpl extends AbstractSingleton implements SystemLayer, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,19 +20,20 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 
-		setEntityLayer(__inject__(SystemSubLayerEntity.class));
+		setEntityLayer(__inject__(SystemSubLayerEntity.class).setParent(this));
 		getEntityLayer().setPackageNameRegularExpression(StringUtils.replace(getEntityLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression()
 				, SystemSubLayerEntity.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_ENTITIES, getIdentifier().toString().toLowerCase()+"."
 						+SystemSubLayerEntity.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_ENTITIES));
 		
-		setInterfaceLayer(__inject__(SystemSubLayerInterface.class));
+		setInterfaceLayer(__inject__(SystemSubLayerInterface.class).setParent(this));
 		getInterfaceLayer().setPackageNameRegularExpression(StringUtils.replace(getInterfaceLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression()
 				, SystemSubLayerInterface.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_API, getIdentifier().toString().toLowerCase()+"."
 						+SystemSubLayerInterface.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_API));
 		getInterfaceLayer().setInterfaceNameRegularExpression(getIdentifier()+CharacterConstant.DOLLAR.toString());
+		getInterfaceLayer().getPackageNameRegularExpression().getMiddleTokens(Boolean.TRUE).add(getIdentifier().toString().toLowerCase());
 		getInterfaceLayer().getInterfaceNameRegularExpression().getEndTokens(Boolean.TRUE).add(getIdentifier().toString());
 		
-		setImplementationLayer(__inject__(SystemSubLayerImplementation.class));
+		setImplementationLayer(__inject__(SystemSubLayerImplementation.class).setParent(this));
 		getImplementationLayer().setPackageNameRegularExpression(StringUtils.replace(getImplementationLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression()
 				, SystemSubLayerImplementation.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_IMPL, getIdentifier().toString().toLowerCase()+"."
 						+SystemSubLayerImplementation.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_IMPL));
@@ -75,6 +77,36 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 	public SystemLayer setImplementationLayer(SystemSubLayerImplementation systemLayerSubLayerImplementation) {
 		this.implementationLayer = systemLayerSubLayerImplementation;
 		return this;
+	}
+	
+	@Override
+	public String getInterfaceNameFrom(String className, SystemSubLayer systemSubLayer) {
+		String name = getInterfaceLayer().getInterfaceNameFromClassName(className, systemSubLayer);
+		String subString = systemSubLayer!=null && systemSubLayer.getParent()!=null && systemSubLayer.getParent().getIdentifier()!=null 
+				? systemSubLayer.getParent().getIdentifier().toString().toLowerCase() : null;
+		
+		String replacement = getInterfaceLayer()!=null && getInterfaceLayer().getParent()!=null && getInterfaceLayer().getParent().getIdentifier()!=null 
+				? getInterfaceLayer().getParent().getIdentifier().toString().toLowerCase() : null;
+		
+		subString = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(subString, CharacterConstant.DOT);		
+		subString = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(subString, CharacterConstant.DOT);
+		
+		replacement = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(replacement, CharacterConstant.DOT);		
+		replacement = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(replacement, CharacterConstant.DOT);
+		
+		if(StringUtils.contains(name, subString))
+			name = StringUtils.replace(name, subString,replacement);
+		else {
+			subString = subString.substring(1);
+			replacement = replacement.substring(1);
+			if(StringUtils.contains(name, subString))
+				name = StringUtils.replace(name, subString,replacement);
+			else {
+				//TODO log warning
+			}
+		}
+				
+		return name;
 	}
 	
 	@Override

@@ -24,4 +24,8 @@ public interface StringHelper extends Helper {
 	Collection<String> get(Collection<?> collection);
 	Collection<String> getFromArray(Object...array);
 	String getVariableNameFrom(String string);
+	
+	String addToBeginIfDoesNotStartWith(String string,Object prefix);
+	String addToEndIfDoesNotEndWith(String string,Object suffix);
+	
 }

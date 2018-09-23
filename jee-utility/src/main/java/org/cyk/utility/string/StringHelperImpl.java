@@ -117,6 +117,22 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 		return Introspector.decapitalize(string);
 	}
 	
+	@Override
+	public String addToBeginIfDoesNotStartWith(String string, Object prefix) {
+		String prefixString = String.valueOf(prefix);
+		if(!StringUtils.startsWith(string, prefixString))
+			string = prefixString + string;
+		return string;
+	}
+	
+	@Override
+	public String addToEndIfDoesNotEndWith(String string, Object suffix) {
+		String suffixString = String.valueOf(suffix);
+		if(!StringUtils.endsWith(string, suffixString))
+			string = string + suffixString;
+		return string;
+	}
+	
 	/**/
 	
 	public static Boolean __isBlank__(String string) {

@@ -13,8 +13,20 @@ public class BusinessLayerImpl extends AbstractSingleton implements BusinessLaye
 
 	@SuppressWarnings("unchecked")
 	@Override
+	public <ENTITY> Class<BusinessEntity<ENTITY>> getInterfaceClassFromPersistenceEntityClass(Class<ENTITY> persistenceEntityClass) {
+		return (Class<BusinessEntity<ENTITY>>) __inject__(SystemLayerBusiness.class).getInterfaceClassFromPersistenceEntityClassName(persistenceEntityClass);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public <ENTITY> BusinessEntity<ENTITY> injectInterfaceClassFromPersistenceEntityClass(Class<ENTITY> persistenceEntityClass) {
-		return __inject__(SystemLayerBusiness.class).injectInterfaceClassFromPersistenceEntityClassName(persistenceEntityClass,BusinessEntity.class);
+		Class<BusinessEntity<ENTITY>> aClass = getInterfaceClassFromPersistenceEntityClass(persistenceEntityClass);
+		BusinessEntity<ENTITY> business = null;
+		if(aClass == null)
+			System.err.println("No business interface found for persistence entity class "+persistenceEntityClass);
+		else
+			business = __inject__(SystemLayerBusiness.class).injectInterfaceClassFromPersistenceEntityClassName(persistenceEntityClass,BusinessEntity.class);
+		return business;
 	}
 
 }

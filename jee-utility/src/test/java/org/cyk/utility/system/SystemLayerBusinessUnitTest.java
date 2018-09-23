@@ -2,11 +2,14 @@ package org.cyk.utility.system;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerBusiness;
+import org.cyk.utility.system.layer.SystemLayerPersistence;
+import org.cyk.utility.system.layer.SystemSubLayer;
 import org.junit.Test;
 
 public class SystemLayerBusinessUnitTest extends AbstractSystemLayerUnitTestWithDefaultDeployment {
@@ -123,6 +126,17 @@ public class SystemLayerBusinessUnitTest extends AbstractSystemLayerUnitTestWith
 		return __inject__(MapHelper.class).instanciateKeyAsStringValueAsString("business.entities.MyClass","business.api.MyClassBusiness"
 				,"p.business.entities.MyClass","p.business.api.MyClassBusiness"
 				,"p.business.entities.p1.MyClass","p.business.api.p1.MyClassBusiness");
+	}
+	
+	@Override
+	protected Map<SystemSubLayer,Map<String, String>> __getExpectedInterfaceNameFrom__() {
+		Map<SystemSubLayer,Map<String, String>> map = new LinkedHashMap<>();
+		map.put(__inject__(SystemLayerPersistence.class).getEntityLayer(), __inject__(MapHelper.class).instanciateKeyAsStringValueAsString(
+				"persistence.entities.MyClass","business.api.MyClassBusiness"
+				,"p.persistence.entities.MyClass","p.business.api.MyClassBusiness"
+				,"p.persistence.entities.p1.MyClass","p.business.api.p1.MyClassBusiness"
+				,"MyClass","MyClassBusiness"));
+		return map;
 	}
 	
 	/* Implementation */

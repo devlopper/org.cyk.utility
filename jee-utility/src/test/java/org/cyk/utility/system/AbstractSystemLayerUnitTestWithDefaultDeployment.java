@@ -38,6 +38,9 @@ public abstract class AbstractSystemLayerUnitTestWithDefaultDeployment extends A
 	protected abstract Collection<String> __getInterfaceTrueClasses__();
 	protected abstract Collection<String> __getInterfaceFalseClasses__();
 	protected abstract Map<String,String> __getExpectedInterfaceNameFromEntityClassName__();
+	protected Map<SystemSubLayer,Map<String,String>> __getExpectedInterfaceNameFrom__(){
+		return null;
+	}
 	//protected abstract Map<String,String> __getExpectedInterfaceNameFromPersistenceEntityClassName__();
 	
 	/* Implementation */
@@ -151,6 +154,21 @@ public abstract class AbstractSystemLayerUnitTestWithDefaultDeployment extends A
 			for(Map.Entry<String, String> index : map.entrySet()) {
 				assertionHelper.assertEquals(index.getValue(), __injectSystemLayer__().getInterfaceNameFromEntityClassName(index.getKey()));
 			}
+	}
+	
+	@Test
+	public void getInterfaceNameFromClassName() {
+		Map<SystemSubLayer,Map<String,String>> map = __getExpectedInterfaceNameFrom__();
+		if(map!=null) {
+			for(Map.Entry<SystemSubLayer,Map<String,String>> indexEntry : map.entrySet()) {
+				if(indexEntry.getKey()!=null && indexEntry.getValue()!=null) {
+					for(Map.Entry<String, String> indexEntrySystemSubLayer : indexEntry.getValue().entrySet()) {
+						assertionHelper.assertEquals(indexEntrySystemSubLayer.getValue(), __injectSystemLayer__().getInterfaceNameFrom(indexEntrySystemSubLayer.getKey()
+								,indexEntry.getKey()));
+					}
+				}
+			}
+		}
 	}
 	
 	/* Implementation */

@@ -22,4 +22,13 @@ public interface SystemSubLayer extends Objectable {
 	RegularExpressionInstance getClassNameRegularExpression();
 	RegularExpressionInstance getClassNameRegularExpression(Boolean injectIfNull);
 	Boolean isClass(String name);
+	
+	String getInterfaceNameFromClassName(String className,SystemSubLayer systemSubLayer);
+	
+	@Override SystemSubLayer setParent(Object parent);
+	@Override SystemLayer getParent();
+	
+	/**/
+	
+	String PACKAGE_NAME_REGULAR_EXPRESSION_FORMAT = "[.]{0,1}%s[.]{0,1}";
 }

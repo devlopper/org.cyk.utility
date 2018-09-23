@@ -13,6 +13,7 @@ import javax.inject.Singleton;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueHelper;
 
@@ -77,15 +78,16 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	}
 	
 	@Override
-	public <ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection,Integer index){
+	public <ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection,Object index){
+		Integer indexValue = __inject__(NumberHelper.class).getInteger(index);
 		ELEMENT element = null;
-		if(isNotEmpty(collection) && index < getSize(collection)){
+		if(isNotEmpty(collection) && indexValue < getSize(collection)){
 			if(collection instanceof List)
-				element = ((List<ELEMENT>)collection).get(index.intValue());
+				element = ((List<ELEMENT>)collection).get(indexValue.intValue());
 			else {
 				java.util.Iterator<ELEMENT> iterator = collection.iterator();
 				Integer count = 0;
-				while (count++ <= index)
+				while (count++ <= indexValue)
 					element = iterator.next();
 			}
 		}
@@ -174,10 +176,11 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	}
 
 	@Override
-	public <ELEMENT> Collection<ELEMENT> addElementAt(Collection<ELEMENT> collection, Integer index, ELEMENT element) {
-		if( index < getSize(collection) ){
+	public <ELEMENT> Collection<ELEMENT> addElementAt(Collection<ELEMENT> collection, Object index, ELEMENT element) {
+		Integer indexValue = __inject__(NumberHelper.class).getInteger(index);
+		if( indexValue < getSize(collection) ){
 			if(collection instanceof List)
-				((List<ELEMENT>)collection).add(index, element);
+				((List<ELEMENT>)collection).add(indexValue, element);
 			else
 				__inject__(ThrowableHelper.class).throwRuntimeException("cannot insert in collection of type : "+collection.getClass());	
 		}		

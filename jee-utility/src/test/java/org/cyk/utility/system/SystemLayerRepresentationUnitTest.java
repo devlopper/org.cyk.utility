@@ -2,11 +2,14 @@ package org.cyk.utility.system;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.system.layer.SystemLayer;
+import org.cyk.utility.system.layer.SystemLayerPersistence;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
+import org.cyk.utility.system.layer.SystemSubLayer;
 
 public class SystemLayerRepresentationUnitTest extends AbstractSystemLayerUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
@@ -117,6 +120,17 @@ public class SystemLayerRepresentationUnitTest extends AbstractSystemLayerUnitTe
 		return __inject__(MapHelper.class).instanciateKeyAsStringValueAsString("representation.entities.MyClassDto","representation.api.MyClassRepresentation"
 				,"p.representation.entities.MyClassDto","p.representation.api.MyClassRepresentation"
 				,"p.representation.entities.p1.MyClassDto","p.representation.api.p1.MyClassRepresentation");
+	}
+	
+	@Override
+	protected Map<SystemSubLayer,Map<String, String>> __getExpectedInterfaceNameFrom__() {
+		Map<SystemSubLayer,Map<String, String>> map = new LinkedHashMap<>();
+		map.put(__inject__(SystemLayerPersistence.class).getEntityLayer(), __inject__(MapHelper.class).instanciateKeyAsStringValueAsString(
+				"persistence.entities.MyClass","representation.api.MyClassRepresentation"
+				,"p.persistence.entities.MyClass","p.representation.api.MyClassRepresentation"
+				,"p.persistence.entities.p1.MyClass","p.representation.api.p1.MyClassRepresentation"
+				,"MyClass","MyClassRepresentation"));
+		return map;
 	}
 	
 	/* Implementation */

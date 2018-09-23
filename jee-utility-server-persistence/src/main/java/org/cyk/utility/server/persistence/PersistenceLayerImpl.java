@@ -14,7 +14,14 @@ public class PersistenceLayerImpl extends AbstractSingleton implements Persisten
 	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> PersistenceEntity<ENTITY> injectInterfaceClassFromEntityClass(Class<ENTITY> entityClass) {
-		return __inject__(SystemLayerPersistence.class).injectInterfaceClassFromEntityClassName(entityClass,PersistenceEntity.class);
+		Class<PersistenceEntity<ENTITY>> aClass = (Class<PersistenceEntity<ENTITY>>) __inject__(SystemLayerPersistence.class).getInterfaceClassFromEntityClassName(entityClass);
+		PersistenceEntity<ENTITY> persistence = null;
+		if(aClass == null)
+			System.err.println("No persistence interface found for persistence entity class "+entityClass);
+		else
+			persistence = (PersistenceEntity<ENTITY>) __inject__(SystemLayerPersistence.class).injectInterfaceClassFromEntityClassName(entityClass);
+		return persistence;
+		//return __inject__(SystemLayerPersistence.class).injectInterfaceClassFromEntityClassName(entityClass,PersistenceEntity.class);
 	}
 
 }

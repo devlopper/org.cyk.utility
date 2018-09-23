@@ -304,4 +304,14 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		return JpqlQualifier.map(QueryStringBuilderSelect.class).from(tuple);
 	}
 	
+	/**/
+	
+	protected <T> PersistenceEntity<T> injectInterfaceClassFromEntityClass(Class<T> aClass) {
+		return __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(aClass);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <T> PersistenceEntity<T> injectInterfaceClassFromEntityClass(T object) {
+		return object == null ? null : (PersistenceEntity<T>) injectInterfaceClassFromEntityClass(object.getClass());
+	}
 }

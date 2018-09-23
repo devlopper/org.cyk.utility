@@ -8,7 +8,8 @@ public class SystemSubLayerEntityImpl extends AbstractSystemSubLayerImpl impleme
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		getPackageNameRegularExpression(Boolean.TRUE).setExpression("[.]{0,1}"+PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_ENTITIES+"[.]{0,1}");
+		getPackageNameRegularExpression(Boolean.TRUE).setExpression(String.format(PACKAGE_NAME_REGULAR_EXPRESSION_FORMAT, PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_ENTITIES));
+		getPackageNameRegularExpression(Boolean.TRUE).getMiddleTokens(Boolean.TRUE).add(PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_ENTITIES);
 	}
 	
 	@Override
@@ -16,4 +17,8 @@ public class SystemSubLayerEntityImpl extends AbstractSystemSubLayerImpl impleme
 		return (SystemSubLayerEntity) super.setPackageNameRegularExpression(expression);
 	}
 	
+	@Override
+	public SystemSubLayerEntity setParent(Object parent) {
+		return (SystemSubLayerEntity) super.setParent(parent);
+	}
 }

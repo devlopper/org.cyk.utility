@@ -6,6 +6,8 @@ public interface SystemSubLayerImplementation extends SystemSubLayer {
 
 	@Override SystemSubLayerImplementation setClassNameRegularExpression(String expression);
 	
+	@Override SystemSubLayerImplementation setParent(Object parent);
+	
 	/**/
 	
 	String CLASS_NAME_SUFFIX = "Impl";

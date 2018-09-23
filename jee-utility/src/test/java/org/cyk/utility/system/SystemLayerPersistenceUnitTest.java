@@ -2,11 +2,13 @@ package org.cyk.utility.system;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
+import org.cyk.utility.system.layer.SystemSubLayer;
 
 public class SystemLayerPersistenceUnitTest extends AbstractSystemLayerUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
@@ -118,6 +120,17 @@ public class SystemLayerPersistenceUnitTest extends AbstractSystemLayerUnitTestW
 				,"p.persistence.entities.MyClass","p.persistence.api.MyClassPersistence"
 				,"p.persistence.entities.p1.MyClass","p.persistence.api.p1.MyClassPersistence"
 				,"MyClass","MyClassPersistence");
+	}
+	
+	@Override
+	protected Map<SystemSubLayer,Map<String, String>> __getExpectedInterfaceNameFrom__() {
+		Map<SystemSubLayer,Map<String, String>> map = new LinkedHashMap<>();
+		map.put(__inject__(SystemLayerPersistence.class).getEntityLayer(), __inject__(MapHelper.class).instanciateKeyAsStringValueAsString(
+				"persistence.entities.MyClass","persistence.api.MyClassPersistence"
+				,"p.persistence.entities.MyClass","p.persistence.api.MyClassPersistence"
+				,"p.persistence.entities.p1.MyClass","p.persistence.api.p1.MyClassPersistence"
+				,"MyClass","MyClassPersistence"));
+		return map;
 	}
 	
 	/* Implementation */

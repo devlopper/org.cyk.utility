@@ -8,13 +8,19 @@ public class SystemSubLayerImplementationImpl extends AbstractSystemSubLayerImpl
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		getPackageNameRegularExpression(Boolean.TRUE).setExpression("[.]{0,1}impl[.]{0,1}");
-		setClassNameRegularExpression("Impl");
+		getPackageNameRegularExpression(Boolean.TRUE).setExpression(String.format(PACKAGE_NAME_REGULAR_EXPRESSION_FORMAT, PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_IMPL));
+		getPackageNameRegularExpression(Boolean.TRUE).getMiddleTokens(Boolean.TRUE).add(PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_IMPL);
+		setClassNameRegularExpression(CLASS_NAME_SUFFIX);
 	}
 	
 	@Override
 	public SystemSubLayerImplementation setClassNameRegularExpression(String expression) {
 		return (SystemSubLayerImplementation) super.setClassNameRegularExpression(expression);
+	}
+	
+	@Override
+	public SystemSubLayerImplementation setParent(Object parent) {
+		return (SystemSubLayerImplementation) super.setParent(parent);
 	}
 	
 }

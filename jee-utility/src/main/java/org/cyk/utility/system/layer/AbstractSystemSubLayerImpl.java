@@ -2,8 +2,12 @@ package org.cyk.utility.system.layer;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.regularexpression.RegularExpressionInstance;
+import org.cyk.utility.string.StringConstant;
+import org.cyk.utility.string.StringHelper;
 
 public abstract class AbstractSystemSubLayerImpl extends AbstractObject implements SystemSubLayer,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -101,5 +105,48 @@ public abstract class AbstractSystemSubLayerImpl extends AbstractObject implemen
 	public Boolean isInterface(String name) {
 		RegularExpressionInstance regularExpression = getInterfaceNameRegularExpression();
 		return regularExpression == null ? Boolean.FALSE : regularExpression.match(name);
+	}
+	
+	@Override
+	public String getInterfaceNameFromClassName(String className, SystemSubLayer systemSubLayer) {
+		String name = className;
+		if(__inject__(StringHelper.class).isNotBlank(name)) {
+			String subString = systemSubLayer!=null && systemSubLayer.getPackageNameRegularExpression()!=null && systemSubLayer.getPackageNameRegularExpression().getMiddleTokens()!=null 
+					?  systemSubLayer.getPackageNameRegularExpression().getMiddleTokens().getFirst() : null;
+			
+			String replacement = getPackageNameRegularExpression()!=null && getPackageNameRegularExpression().getMiddleTokens()!=null 
+					?  getPackageNameRegularExpression().getMiddleTokens().getFirst() : null;
+			
+			subString = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(subString, CharacterConstant.DOT);		
+			subString = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(subString, CharacterConstant.DOT);
+			
+			replacement = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(replacement, CharacterConstant.DOT);		
+			replacement = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(replacement, CharacterConstant.DOT);
+			
+			if(StringUtils.contains(name, subString))
+				name = StringUtils.replace(name, subString,replacement);
+			else {
+				subString = subString.substring(1);
+				replacement = replacement.substring(1);
+				if(StringUtils.contains(name, subString))
+					name = StringUtils.replace(name, subString,replacement);
+				else {
+					//TODO log warning
+				}
+			}
+			name = name + StringUtils.defaultIfBlank(getInterfaceNameRegularExpression()!=null && getInterfaceNameRegularExpression().getEndTokens()!=null 
+					? getInterfaceNameRegularExpression().getEndTokens().getFirst() : StringConstant.EMPTY,StringConstant.EMPTY);	
+		}
+		return name;
+	}
+	
+	@Override
+	public SystemSubLayer setParent(Object parent) {
+		return (SystemSubLayer) super.setParent(parent);
+	}
+	
+	@Override
+	public SystemLayer getParent() {
+		return (SystemLayer) super.getParent();
 	}
 }
