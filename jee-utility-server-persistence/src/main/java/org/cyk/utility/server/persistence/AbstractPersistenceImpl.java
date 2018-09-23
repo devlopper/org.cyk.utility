@@ -4,12 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCount;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.system.layer.SystemLayerPersistence;
 import org.cyk.utility.value.ValueHelper;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -46,7 +40,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 			entity = (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).setEntityIdentifier(identifier)
 					.setEntityIdentifierValueUsageType(valueUsageType).execute().getProperties().getEntity();
 		}else{
-			entity = /*ValueUsageType.SYSTEM.equals(valueUsageType) ?*/ persistence.readOne(identifier,valueUsageType) /*: persistence.readOneByBusinessIdentifier(identifier)*/;
+			entity = persistence.readOne(identifier,valueUsageType);
 		}
 		return entity;
 	}
@@ -131,14 +125,4 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	/**/
 	
-	/*protected <ENTITY> Class<PersistenceEntity<ENTITY>> __getPersistenceEntityClass__(Class<ENTITY> aClass,SystemAction action) {
-		@SuppressWarnings("unchecked")
-		Class<PersistenceEntity<ENTITY>> persistenceClass = (Class<PersistenceEntity<ENTITY>>) __inject__(SystemLayerPersistence.class).getInterfaceClassFromEntityClassName(aClass);
-		if(persistenceClass == null){
-			__logWarn__("No persistence interface found for entity "+aClass);
-		}else {
-			//__logInfo__("Using <"+persistenceClass+"> to "+action.getIdentifier()+" "+aClass);
-		}
-		return persistenceClass;
-	}*/
 }
