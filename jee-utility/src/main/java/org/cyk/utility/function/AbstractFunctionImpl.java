@@ -21,6 +21,7 @@ import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.type.TypeHelper;
 import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.function.AbstractFunctionImpl<INPUT, OUTPUT> implements Function<INPUT,OUTPUT>,Serializable {
@@ -268,5 +269,9 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	protected InstanceHelper __injectInstanceHelper__(){
 		return __inject__(InstanceHelper.class);
+	}
+	
+	protected TypeHelper __injectTypeHelper__(){
+		return __inject__(TypeHelper.class);
 	}
 }

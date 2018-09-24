@@ -73,13 +73,15 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response getMany() {
-		List<ENTITY> entities = (List<ENTITY>) __injectInstanceHelper__().buildMany(getEntityClass(),getBusiness().findMany(/* properties */));
+		/*List<ENTITY> entities = (List<ENTITY>) __injectInstanceHelper__().buildMany(getEntityClass(),getBusiness().findMany());
 		if(entities == null)
 			entities = new ArrayList<>();
-		GenericEntity<List<ENTITY>> genericEntity = new GenericEntity<List<ENTITY>>(entities,getCollectionType(List.class, getEntityClass())) {/*needs empty body to preserve generic type*/};
+		GenericEntity<List<ENTITY>> genericEntity = new GenericEntity<List<ENTITY>>(entities,getCollectionType(List.class, getEntityClass())) {};
 		RepresentationFunctionReader function = __inject__(RepresentationFunctionReader.class);
 		function.execute().getResponse();
 		return Response.status(Response.Status.OK).entity(genericEntity).build();
+		*/
+		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 	
 	protected ValueUsageType __getValueUsageType__(String string) {
@@ -88,23 +90,10 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return valueUsageType;
 	}
 	
-	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response getOne(String identifier,String type) {
-		/*ResponseBuilder responseBuilder = null;
-		ValueUsageType valueUsageType = __getValueUsageType__(type);
-		ENTITY entity = null;
-		if(ValueUsageType.SYSTEM.equals(valueUsageType))
-			entity =  __injectInstanceHelper__().buildOne(getEntityClass(),getBusiness().findOne(__injectNumberHelper__().getLong(identifier)));
-		else if(ValueUsageType.BUSINESS.equals(valueUsageType))
-			entity = __injectInstanceHelper__().buildOne(getEntityClass(),getBusiness().findOneByBusinessIdentifier(identifier));
-		if(entity == null)
-			responseBuilder = Response.status(Response.Status.NO_CONTENT);
-		else
-			responseBuilder = Response.status(Response.Status.OK).entity(new GenericEntity<ENTITY>(entity, getEntityClass()));
-		return responseBuilder.build();
-		*/
-		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier).setEntityIdentifierValueUsageType(type).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier).setEntityIdentifierValueUsageType(type)
+				.setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 	
 	//TODO use representation function to get the response to the desired request
