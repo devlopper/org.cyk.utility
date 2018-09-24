@@ -15,6 +15,7 @@ import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldValueGetter;
+import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.number.NumberHelper;
@@ -263,5 +264,9 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	protected NumberHelper __injectNumberHelper__(){
 		return __inject__(NumberHelper.class);
+	}
+	
+	protected InstanceHelper __injectInstanceHelper__(){
+		return __inject__(InstanceHelper.class);
 	}
 }

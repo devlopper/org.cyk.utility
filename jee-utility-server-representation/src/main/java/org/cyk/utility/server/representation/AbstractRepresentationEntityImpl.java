@@ -37,6 +37,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	//TODO think about getPersistenceEntityByIdentifier to be make as function
 	
 	//@Override
+	@Deprecated
 	public PERSISTENCE_ENTITY getPersistenceEntityByIdentifier(ENTITY entity) {
 		PERSISTENCE_ENTITY persistenceEntity = getBusiness().findOne(__injectNumberHelper__().getLong(entity.getIdentifier()));
 		
@@ -44,6 +45,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	//@Override
+	@Deprecated
 	public Collection<PERSISTENCE_ENTITY> getPersistenceEntityByIdentifier(Collection<ENTITY> entities) {
 		Collection<PERSISTENCE_ENTITY> persistenceEntites = new ArrayList<>();
 		for(ENTITY index : entities)
@@ -58,18 +60,14 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return __inject__(RepresentationFunctionCreator.class).setEntity(entity).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 	
-	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response createMany(Collection<ENTITY> entities) {
 		return __inject__(RepresentationFunctionCreator.class).setEntities(entities).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
-		
-		//getBusiness().createMany(__injectInstanceHelper__().buildMany(getPersistenceEntityClass(),entities));
-		//return Response.status(Response.Status.CREATED).build();
 	}
 	
 	@Override
 	public Response createMany(ENTITY_COLLECTION entityCollection) {
-		return __inject__(RepresentationFunctionCreator.class).setEntities(__getEntities__(entityCollection)).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+		return createMany(__getEntities__(entityCollection));
 	}
 	
 	//TODO use representation function to get the response to the desired request
@@ -79,6 +77,8 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		if(entities == null)
 			entities = new ArrayList<>();
 		GenericEntity<List<ENTITY>> genericEntity = new GenericEntity<List<ENTITY>>(entities,getCollectionType(List.class, getEntityClass())) {/*needs empty body to preserve generic type*/};
+		RepresentationFunctionReader function = __inject__(RepresentationFunctionReader.class);
+		function.execute().getResponse();
 		return Response.status(Response.Status.OK).entity(genericEntity).build();
 	}
 	
@@ -91,7 +91,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response getOne(String identifier,String type) {
-		ResponseBuilder responseBuilder = null;
+		/*ResponseBuilder responseBuilder = null;
 		ValueUsageType valueUsageType = __getValueUsageType__(type);
 		ENTITY entity = null;
 		if(ValueUsageType.SYSTEM.equals(valueUsageType))
@@ -103,6 +103,8 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		else
 			responseBuilder = Response.status(Response.Status.OK).entity(new GenericEntity<ENTITY>(entity, getEntityClass()));
 		return responseBuilder.build();
+		*/
+		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier).setEntityIdentifierValueUsageType(type).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 	
 	//TODO use representation function to get the response to the desired request

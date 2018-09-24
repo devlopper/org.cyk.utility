@@ -5,11 +5,11 @@ import java.io.Serializable;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.server.business.Business;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemFunctionServerImpl implements RepresentationFunction, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -42,7 +42,7 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	}
 	
 	@Override
-	public RepresentationFunction setEntityIdentifierValueUsageType(ValueUsageType valueUsageType) {
+	public RepresentationFunction setEntityIdentifierValueUsageType(Object valueUsageType) {
 		return (RepresentationFunction) super.setEntityIdentifierValueUsageType(valueUsageType);
 	}
 	
@@ -66,4 +66,7 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 		return __inject__(SystemLayerRepresentation.class);
 	}
 
+	protected Business __injectBusiness__() {
+		return __inject__(Business.class);
+	}
 }

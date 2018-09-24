@@ -11,6 +11,7 @@ import org.cyk.utility.assertion.AssertionsProvider;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
@@ -136,7 +137,9 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	}
 	
 	@Override
-	public SystemFunction setEntityIdentifierValueUsageType(ValueUsageType valueUsageType) {
+	public SystemFunction setEntityIdentifierValueUsageType(Object object) {
+		ValueUsageType valueUsageType = __inject__(EnumGetter.class).setClazz(ValueUsageType.class).setName(object).setIsNameCaseSensitive(Boolean.FALSE).execute()
+				.getOutputAs(ValueUsageType.class);
 		getProperties().setValueUsageType(valueUsageType);
 		return this;
 	}

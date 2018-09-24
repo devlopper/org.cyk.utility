@@ -4,7 +4,6 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.system.SystemFunctionServer;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.value.ValueUsageType;
 
 //TODO execution should follow these steps:
 //1 - process
@@ -16,7 +15,7 @@ public interface RepresentationFunction extends SystemFunctionServer {
 	
 	@Override RepresentationFunction setEntityIdentifier(Object identifier);
 	
-	@Override RepresentationFunction setEntityIdentifierValueUsageType(ValueUsageType valueUsageType);
+	@Override RepresentationFunction setEntityIdentifierValueUsageType(Object valueUsageType);
 	
 	@Override RepresentationFunction setAction(SystemAction action);
 	

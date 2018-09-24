@@ -138,4 +138,8 @@ public abstract class AbstractRepresentationServiceProviderImpl<OBJECT,DTO> exte
 		}
 	}
 	*/
+	
+	protected static RepresentationLayer __injectRepresentationLayer__() {
+		return __inject__(RepresentationLayer.class);
+	}
 }

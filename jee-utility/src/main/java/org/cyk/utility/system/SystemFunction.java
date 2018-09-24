@@ -20,7 +20,7 @@ public interface SystemFunction extends FunctionWithPropertiesAsInputAndVoidAsOu
 	SystemFunction setEntityIdentifier(Object identifier);
 	Object getEntityIdentifier();
 	
-	SystemFunction setEntityIdentifierValueUsageType(ValueUsageType valueUsageType);
+	SystemFunction setEntityIdentifierValueUsageType(Object object);
 	ValueUsageType getEntityIdentifierValueUsageType();
 	
 	Collection<?> getEntities();

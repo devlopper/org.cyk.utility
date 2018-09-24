@@ -17,7 +17,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 
 	@Override
 	public PersistenceServiceProvider<Object> create(Object object, Properties properties) {
-		PersistenceEntity<Object> persistence = injectInterfaceClassFromEntityClass(object);
+		PersistenceEntity<Object> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntity(object);
 		if(persistence == null){
 			super.create(object, properties);
 		}else{
@@ -34,7 +34,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		if(identifier == null)
 			__injectThrowableHelper__().throwRuntimeException("identifier is required");
 		ValueUsageType valueUsageType = properties == null ? ValueUsageType.SYSTEM : (ValueUsageType) __inject__(ValueHelper.class).defaultToIfNull(properties.getValueUsageType(),ValueUsageType.SYSTEM);
-		PersistenceEntity<ENTITY> persistence = injectInterfaceClassFromEntityClass(aClass);
+		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		ENTITY entity;
 		if(persistence == null){
 			entity = (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).setEntityIdentifier(identifier)
@@ -53,7 +53,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	@SuppressWarnings("unchecked")
 	@Override
 	public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass, Properties properties) {
-		PersistenceEntity<ENTITY> persistence = injectInterfaceClassFromEntityClass(aClass);
+		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		Collection<ENTITY> entities;
 		if(persistence == null){
 			entities = (Collection<ENTITY>) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).execute().getProperties().getEntities();
@@ -70,7 +70,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public <ENTITY> Long count(Class<ENTITY> aClass, Properties properties) {
-		PersistenceEntity<ENTITY> persistence = injectInterfaceClassFromEntityClass(aClass);
+		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		Long count = null;
 		if(persistence == null){
 			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
@@ -87,7 +87,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public PersistenceServiceProvider<Object> update(Object object, Properties properties) {
-		PersistenceEntity<Object> persistence = injectInterfaceClassFromEntityClass(object);
+		PersistenceEntity<Object> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntity(object);
 		if(persistence == null){
 			super.update(object, properties);
 		}else{
@@ -98,7 +98,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public PersistenceServiceProvider<Object> delete(Object object, Properties properties) {
-		PersistenceEntity<Object> persistence = injectInterfaceClassFromEntityClass(object);
+		PersistenceEntity<Object> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntity(object);
 		if(persistence == null){
 			super.delete(object, properties);
 		}else{
@@ -109,7 +109,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public <ENTITY> Persistence deleteAll(Class<ENTITY> aClass, Properties properties) {
-		PersistenceEntity<ENTITY> persistence = injectInterfaceClassFromEntityClass(aClass);
+		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		if(persistence == null){
 			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
 		}else{

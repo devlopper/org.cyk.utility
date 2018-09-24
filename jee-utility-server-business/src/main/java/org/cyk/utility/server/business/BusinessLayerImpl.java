@@ -29,4 +29,16 @@ public class BusinessLayerImpl extends AbstractSingleton implements BusinessLaye
 		return business;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public <ENTITY> Class<BusinessEntity<ENTITY>> getInterfaceClassFromPersistenceEntity(ENTITY persistenceEntity) {
+		return persistenceEntity == null ? null : getInterfaceClassFromPersistenceEntityClass((Class<ENTITY>)persistenceEntity.getClass());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <ENTITY> BusinessEntity<ENTITY> injectInterfaceClassFromPersistenceEntity(ENTITY persistenceEntity) {
+		return persistenceEntity == null ? null : (BusinessEntity<ENTITY>) injectInterfaceClassFromPersistenceEntityClass(persistenceEntity.getClass());
+	}
+
 }

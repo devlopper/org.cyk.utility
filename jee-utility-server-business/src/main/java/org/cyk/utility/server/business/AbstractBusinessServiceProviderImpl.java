@@ -210,4 +210,9 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		}
 	}
 	
+	/**/
+	
+	protected static BusinessLayer __injectBusinessLayer__() {
+		return __inject__(BusinessLayer.class);
+	}
 }

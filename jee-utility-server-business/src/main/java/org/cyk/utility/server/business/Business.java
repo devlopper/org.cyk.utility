@@ -2,6 +2,8 @@ package org.cyk.utility.server.business;
 
 import java.util.Collection;
 
+import javax.transaction.Transactional;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 
 /**
@@ -23,6 +25,11 @@ public interface Business extends BusinessServiceProvider<Object> {
 	/* Update */
 	
 	/* Delete */
+	@Transactional
+	Business deleteAll(Collection<Class<?>> classes);
+	
+	@Transactional
+	Business deleteAll(Class<?>...classes);
 	
 	/* Count */
 	<ENTITY> Long count(Class<ENTITY> aClass,Properties properties);

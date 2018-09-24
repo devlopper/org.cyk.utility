@@ -28,9 +28,8 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 	}
 	
 	@Override
-	public RepresentationFunctionReader setEntityIdentifierValueUsageType(ValueUsageType valueUsageType) {
-		getProperties().setValueUsageType(valueUsageType);
-		return this;
+	public RepresentationFunctionReader setEntityIdentifierValueUsageType(Object valueUsageType) {
+		return (RepresentationFunctionReader) super.setEntityIdentifierValueUsageType(valueUsageType);
 	}
 	
 	@Override

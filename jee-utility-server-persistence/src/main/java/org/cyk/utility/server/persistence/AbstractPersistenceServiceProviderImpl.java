@@ -306,12 +306,8 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	/**/
 	
-	protected <T> PersistenceEntity<T> injectInterfaceClassFromEntityClass(Class<T> aClass) {
-		return __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(aClass);
+	protected static PersistenceLayer __injectPersistenceLayer__() {
+		return __inject__(PersistenceLayer.class);
 	}
 	
-	@SuppressWarnings("unchecked")
-	protected <T> PersistenceEntity<T> injectInterfaceClassFromEntityClass(T object) {
-		return object == null ? null : (PersistenceEntity<T>) injectInterfaceClassFromEntityClass(object.getClass());
-	}
 }
