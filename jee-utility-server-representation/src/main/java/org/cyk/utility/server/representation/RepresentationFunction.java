@@ -21,6 +21,8 @@ public interface RepresentationFunction extends SystemFunctionServer {
 	
 	@Override RepresentationFunction setEntityClass(Class<?> aClass);
 	
+	@Override RepresentationFunction setEntity(Object object);
+	
 	RepresentationFunction setResponse(Response response);
 	Response getResponse();
 	

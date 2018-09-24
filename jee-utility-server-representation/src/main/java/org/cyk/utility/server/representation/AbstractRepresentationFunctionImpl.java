@@ -42,6 +42,11 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	}
 	
 	@Override
+	public RepresentationFunction setEntity(Object entity) {
+		return (RepresentationFunction) super.setEntity(entity);
+	}
+	
+	@Override
 	public RepresentationFunction setEntityIdentifierValueUsageType(Object valueUsageType) {
 		return (RepresentationFunction) super.setEntityIdentifierValueUsageType(valueUsageType);
 	}

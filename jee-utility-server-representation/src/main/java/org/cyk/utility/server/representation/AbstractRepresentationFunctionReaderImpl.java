@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractRepresentationFunctionImpl implements RepresentationFunctionReader, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,18 +22,8 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 	}
 	
 	@Override
-	public Object getEntityIdentifier() {
-		return getProperties().getEntityIdentifier();
-	}
-	
-	@Override
 	public RepresentationFunctionReader setEntityIdentifierValueUsageType(Object valueUsageType) {
 		return (RepresentationFunctionReader) super.setEntityIdentifierValueUsageType(valueUsageType);
-	}
-	
-	@Override
-	public ValueUsageType getEntityIdentifierValueUsageType() {
-		return (ValueUsageType) getProperties().getValueUsageType();
 	}
 	
 	@Override

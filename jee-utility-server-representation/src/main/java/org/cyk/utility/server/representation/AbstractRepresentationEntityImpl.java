@@ -1,20 +1,14 @@
 package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.server.business.BusinessLayer;
-import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 
@@ -70,25 +64,12 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return createMany(__getEntities__(entityCollection));
 	}
 	
-	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response getMany() {
-		/*List<ENTITY> entities = (List<ENTITY>) __injectInstanceHelper__().buildMany(getEntityClass(),getBusiness().findMany());
-		if(entities == null)
-			entities = new ArrayList<>();
-		GenericEntity<List<ENTITY>> genericEntity = new GenericEntity<List<ENTITY>>(entities,getCollectionType(List.class, getEntityClass())) {};
-		RepresentationFunctionReader function = __inject__(RepresentationFunctionReader.class);
-		function.execute().getResponse();
-		return Response.status(Response.Status.OK).entity(genericEntity).build();
-		*/
 		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 	
-	protected ValueUsageType __getValueUsageType__(String string) {
-		ValueUsageType valueUsageType = __injectStringHelper__().isBlank(string) || ValueUsageType.SYSTEM.name().equalsIgnoreCase(string) ? ValueUsageType.SYSTEM 
-				: (ValueUsageType.BUSINESS.name().equalsIgnoreCase(string) ? ValueUsageType.BUSINESS : null);
-		return valueUsageType;
-	}
+	
 	
 	@Override
 	public Response getOne(String identifier,String type) {
@@ -96,79 +77,38 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 				.setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 	
-	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response updateOne(ENTITY entity) {
-		getBusiness().update(getPersistenceEntityByIdentifier(entity));
-		return Response.status(Response.Status.OK).build();
+		return __inject__(RepresentationFunctionModifier.class).setPersistenceEntityClass(getPersistenceEntityClass()).setEntity(entity).execute().getResponse();
 	}
 	
-	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response updateMany(Collection<ENTITY> entities) {
-		getBusiness().updateMany(getPersistenceEntityByIdentifier(entities));
-		return Response.status(Response.Status.OK).build();
+		return __inject__(RepresentationFunctionModifier.class).setEntities(entities).execute().getResponse();
 	}
 	
-	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response deleteOne(String identifier,String type) {
-		/*ValueUsageType valueUsageType = __getValueUsageType__(type);
-		if(ValueUsageType.SYSTEM.equals(valueUsageType))
-			getBusiness().deleteBySystemIdentifier(__injectNumberHelper__().getLong(identifier));
-		else if(ValueUsageType.BUSINESS.equals(valueUsageType))
-			getBusiness().deleteByBusinessIdentifier(identifier);
-		
-		return Response.status(Response.Status.OK).build();
-		
-		*/
-		return __inject__(RepresentationFunctionRemover.class).setEntityIdentifier(identifier).setEntityIdentifierValueUsageType(__getValueUsageType__(type))
+		return __inject__(RepresentationFunctionRemover.class).setEntityIdentifier(identifier).setEntityIdentifierValueUsageType(type)
 			.setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 	
-	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response deleteMany() {
-		//TODO get query parameters to build properties
-		
-		return Response.status(Response.Status.OK).build();
+		return __inject__(RepresentationFunctionRemover.class).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 
-	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response deleteAll() {
-		getBusiness().deleteAll();
-		return Response.status(Response.Status.OK).build();
+		return __inject__(RepresentationFunctionRemover.class).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 
-	//TODO use representation function to get the response to the desired request
 	@Override
 	public Response count() {
-		//TODO get query parameters to build properties
-		Long count = getBusiness().count(/* properties */);
-		return Response.status(Response.Status.OK).entity(count).build();
+		return __inject__(RepresentationFunctionCounter.class).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 
 	/**/
-	
-	protected <COLLECTION,ELEMENT> Type getCollectionType(Class<COLLECTION> collectionClass,Class<ELEMENT> elementClass) {
-		return new ParameterizedType() {
-			@Override
-			public Type getRawType() {
-				return collectionClass;
-			}
-			
-			@Override
-			public Type getOwnerType() {
-				return collectionClass;
-			}
-			
-			@Override
-			public Type[] getActualTypeArguments() {
-				return new Type[] { elementClass };
-			}
-		};
-	}
 	
 	@SuppressWarnings("unchecked")
 	protected Collection<ENTITY> __getEntities__(ENTITY_COLLECTION entityCollection) {

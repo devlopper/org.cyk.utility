@@ -30,7 +30,7 @@ public class SystemLayerBusinessImpl extends AbstractSystemLayerImpl implements 
 
 	@Override
 	public Class<?> getInterfaceClassFromPersistenceEntityClassName(Class<?> persistenceEntityClass) {
-		return getInterfaceClassFromPersistenceEntityClassName(persistenceEntityClass.getName());
+		return persistenceEntityClass == null ? null :getInterfaceClassFromPersistenceEntityClassName(persistenceEntityClass.getName());
 	}
 
 	@Override

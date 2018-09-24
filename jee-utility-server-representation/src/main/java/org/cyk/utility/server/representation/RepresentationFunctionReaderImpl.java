@@ -40,8 +40,6 @@ public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunc
 				entities = new ArrayList<>();
 			GenericEntity<List<?>> genericEntity = new GenericEntity<List<?>>(entities,(Type) __injectTypeHelper__()
 					.instanciateGenericCollectionParameterizedTypeForJaxrs(List.class, getEntityClass()));
-			RepresentationFunctionReader function = __inject__(RepresentationFunctionReader.class);
-			function.execute().getResponse();
 			responseBuilder = Response.status(Response.Status.OK).entity(genericEntity);
 			
 		}

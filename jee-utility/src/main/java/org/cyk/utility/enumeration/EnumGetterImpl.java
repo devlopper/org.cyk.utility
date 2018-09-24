@@ -15,22 +15,23 @@ public class EnumGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<En
 	protected Enum<?> __execute__() throws Exception {
 		Class<? extends Enum<?>> clazz = getClazz();
 		Enum<?> enumValue = null;
-		String name = getName().toString();
-		Boolean isNameCaseSensitive = Boolean.TRUE.equals(getIsNameCaseSensitive());
-		for(Enum<?> index : clazz.getEnumConstants())
-			if(index.name().equals(name)) {
-				enumValue = index;
-				break;
-			}
-		
-		if(enumValue == null && !isNameCaseSensitive) {
+		String name = getName() == null ? null : getName().toString();
+		if(__injectStringHelper__().isNotBlank(name)) {
+			Boolean isNameCaseSensitive = Boolean.TRUE.equals(getIsNameCaseSensitive());
 			for(Enum<?> index : clazz.getEnumConstants())
-				if(index.name().equalsIgnoreCase(name)) {
+				if(index.name().equals(name)) {
 					enumValue = index;
 					break;
 				}
+			
+			if(enumValue == null && !isNameCaseSensitive) {
+				for(Enum<?> index : clazz.getEnumConstants())
+					if(index.name().equalsIgnoreCase(name)) {
+						enumValue = index;
+						break;
+					}
+			}
 		}
-		
 		return enumValue;
 	}
 	
