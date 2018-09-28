@@ -50,6 +50,16 @@ public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelp
 		return cause;
 	}
 	
+	/*@Override
+	public Throwable getLastCause(Throwable throwable) {
+		Throwable cause=throwable,index = throwable;
+		while(index!=null){
+			cause = index;
+			index = index.getCause();
+		}
+		return cause;
+	}*/
+	
 	@Override
 	public void throw_(RuntimeException runtimeException) {
 		throw runtimeException;

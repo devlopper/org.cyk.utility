@@ -6,6 +6,8 @@ import java.util.Collection;
 import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.server.persistence.Persistence;
+import org.cyk.utility.value.ValueUsageType;
 
 public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> implements Business,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -95,6 +97,28 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		return count(aClass, null);
 	}
 
+	@Override
+	public BusinessServiceProvider<Object> delete(Object object, Properties properties) {
+		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntity(object);
+		if(business == null){
+			super.delete(object, properties);
+		}else{
+			business.delete(object, properties);
+		}
+		return this;
+	}
+	
+	@Override
+	public BusinessServiceProvider<Object> deleteMany(Collection<Object> objects, Properties properties) {
+		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntity(__injectCollectionHelper__().isEmpty(objects) ? null : objects.iterator().next());
+		if(business == null){
+			super.deleteMany(objects, properties);
+		}else{
+			business.deleteMany(objects, properties);
+		}
+		return this;
+	}
+	
 	@Override @Transactional
 	public Business deleteAll(Collection<Class<?>> classes) {
 		if(__injectCollectionHelper__().isNotEmpty(classes)) {
@@ -123,5 +147,9 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		return deleteAll(classes);
 	}
 
-	
+	@Override @Transactional
+	public <ENTITY> Business deleteByClassByIdentififerByValueUsageType(Class<ENTITY> clazz, Object identifier,ValueUsageType valueUsageType) {
+		delete(__inject__(Persistence.class).readOne(clazz, identifier, valueUsageType));
+		return this;
+	}
 }

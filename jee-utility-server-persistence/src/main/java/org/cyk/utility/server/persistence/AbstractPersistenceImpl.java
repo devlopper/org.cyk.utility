@@ -47,7 +47,12 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public <ENTITY> ENTITY readOne(Class<ENTITY> aClass, Object identifier) {
-		return readOne(aClass, identifier, null);
+		return readOne(aClass, identifier, (Properties)null);
+	}
+	
+	@Override
+	public <ENTITY> ENTITY readOne(Class<ENTITY> aClass, Object identifier,ValueUsageType valueUsageType) {
+		return readOne(aClass, identifier, new Properties().setValueUsageType(valueUsageType));
 	}
 	
 	@SuppressWarnings("unchecked")

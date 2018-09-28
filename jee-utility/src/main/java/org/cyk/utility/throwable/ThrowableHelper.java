@@ -9,6 +9,7 @@ public interface ThrowableHelper extends Helper {
 	Throwable getInstanceOf(Throwable throwable, Class<?> aClass, Class<?>...classes);
 
 	Throwable getFirstCause(Throwable throwable);
+	//Throwable getLastCause(Throwable throwable);
 
 	void throw_(RuntimeException runtimeException);
 	void throwRuntimeException(String message);

@@ -5,6 +5,7 @@ import java.util.Collection;
 import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.value.ValueUsageType;
 
 /**
  * 
@@ -30,6 +31,9 @@ public interface Business extends BusinessServiceProvider<Object> {
 	
 	@Transactional
 	Business deleteAll(Class<?>...classes);
+	
+	@Transactional
+	<ENTITY> Business deleteByClassByIdentififerByValueUsageType(Class<ENTITY> clazz,Object identifier,ValueUsageType valueUsageType);
 	
 	/* Count */
 	<ENTITY> Long count(Class<ENTITY> aClass,Properties properties);

@@ -2,9 +2,16 @@ package org.cyk.utility.server.representation.test.arquillian;
 
 import java.util.Collection;
 
+import javax.ws.rs.core.Response;
+
 import org.cyk.utility.clazz.ClassHelperImpl;
+import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.server.representation.AbstractEntity;
 import org.cyk.utility.server.representation.RepresentationEntity;
+import org.cyk.utility.server.representation.test.ExpectedMessageDto;
+import org.cyk.utility.server.representation.test.TestRepresentationCreate;
+import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
@@ -14,23 +21,43 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	@Test
 	public void createOne() throws Exception{
 		Object object = __instanciateEntity__(null);
-		__createEntity__(object);
-		__deleteEntitiesAll__(object.getClass());
+		__inject__(TestRepresentationCreate.class).addObjects(object)
+		.setExpectedResponseStatusCode(Response.Status.CREATED.getStatusCode())
+			.addExpectedResponseEntityMessages(new ExpectedMessageDto()
+				.setValueContains("a été créé avec succès.")).execute();
+	}
+	
+	@Test
+	public void createOne_businessIdentifierMustNotBeNull() throws Exception{
+		Object object = __instanciateEntity__(null);
+		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, null);
+		__inject__(TestRepresentationCreate.class).addObjects(object)
+		.setExpectedResponseStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+			.addExpectedResponseEntityMessages(new ExpectedMessageDto()
+				.setValueContains("Une erreur est survenue")).execute();
+	}
+	
+	@Test
+	public void createOne_businessIdentifierMustBeUnique() throws Exception{
+		Object object1 = __instanciateEntity__(null);
+		Object object2 = __inject__(InstanceHelper.class).buildOne(object1.getClass(), object1);
+		__inject__(TestRepresentationCreate.class).addObjectsToBeCreatedArray(object1).addObjects(object2)
+		.setExpectedResponseStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()).addExpectedResponseEntityMessages(new ExpectedMessageDto()
+				.setValueContains("Une erreur est survenue")).execute();
 	}
 	
 	@Test
 	public void createMany() throws Exception{
 		Collection<ENTITY> entities = __instanciateEntity__(null,3);
-		__createEntity__(entities);
-		__deleteEntitiesAll__(__getEntityClass__(null));
+		__inject__(TestRepresentationCreate.class).addObjects(entities.toArray()).execute();
 	}
 	
 	@Test
 	public void readOneBySystemIdentifier() throws Exception{
-		Object action = null;//__inject__(SystemActionRead.class);
+		Object action = __inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
-		__readEntity__(__getEntityClass__(action),__getSystemIdentifier__(object),ValueUsageType.SYSTEM);
+		__readEntity__(__getEntityClass__(action),__getFieldValueSystemIdentifier__(object),ValueUsageType.SYSTEM);
 		__deleteEntitiesAll__(object.getClass());
 	}
 	
@@ -39,7 +66,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		Object action = null;//__inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
-		__readEntity__(__getEntityClass__(action),__getBusinessIdentifier__(object), ValueUsageType.BUSINESS);
+		__readEntity__(__getEntityClass__(action),__getFieldValueBusinessIdentifier__(object), ValueUsageType.BUSINESS);
 		__deleteEntitiesAll__(object.getClass());
 	}
 	
@@ -49,8 +76,8 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		Object action = null;//__inject__(SystemActionUpdate.class);
 		ENTITY object = __instanciateEntity__(action);
 		__createEntity__(object);
-		Object identifier = getFieldValueSystemIdentifier(object); //__inject__(FieldHelper.class).getFieldValueSystemIdentifier(object);
-		object = (ENTITY) __getRepresentationEntity__(action).getOne(identifier == null ? null : identifier.toString(),ValueUsageType.SYSTEM.name()).readEntity(object.getClass());
+		Object identifier = __getFieldValueSystemIdentifier__(object); //__inject__(FieldHelper.class).getFieldValueSystemIdentifier(object);
+		object = (ENTITY) __getRepresentationEntity__(action).getOne(identifier == null ? null : identifier.toString(),ValueUsageType.SYSTEM.name()).getEntity();
 		__setEntityFields__(object,action);
 		__updateEntity__(object);
 		__deleteEntitiesAll__(object.getClass());
@@ -61,8 +88,8 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		Object action = null;//__inject__(SystemActionDelete.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
-		Object identifier = getFieldValueSystemIdentifier(object);//__getSystemIdentifier__(object);
-		object = __getRepresentationEntity__(action).getOne(identifier == null ? null : identifier.toString(),ValueUsageType.SYSTEM.name()).readEntity(object.getClass());
+		Object identifier = __getFieldValueSystemIdentifier__(object);//__getSystemIdentifier__(object);
+		object = __getRepresentationEntity__(action).getOne(identifier == null ? null : identifier.toString(),ValueUsageType.SYSTEM.name()).getEntity();
 		__deleteEntity__(object);
 		__deleteEntitiesAll__(object.getClass());
 	}
@@ -70,26 +97,26 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	/**/
 	
 	@Override
-	protected Object getFieldValueSystemIdentifier(Object object) {
+	protected Object __getFieldValueSystemIdentifier__(Object object) {
 		if(object instanceof AbstractEntity)
 			return ((AbstractEntity)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntity)object).getCode(),ValueUsageType.BUSINESS.name())
-					.readEntity(object.getClass())).getIdentifier();
-		return super.getFieldValueSystemIdentifier(object);
+					.getEntity()).getIdentifier();
+		return super.__getFieldValueSystemIdentifier__(object);
 	}
 	
-	@Override
+	/*@Override
 	protected Object __getSystemIdentifier__(Object object) {
 		if(object instanceof AbstractEntity)
 			return ((AbstractEntity)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntity)object).getCode(),ValueUsageType.BUSINESS.name())
-					.readEntity(object.getClass())).getIdentifier();
+					.getEntity()).getIdentifier();
 		return super.__getSystemIdentifier__(object);
-	}
+	}*/
 	
 	@Override
-	protected Object __getBusinessIdentifier__(Object object) {
+	protected Object __getFieldValueBusinessIdentifier__(Object object) {
 		if(object instanceof AbstractEntity)
 			return ((AbstractEntity)object).getCode();
-		return super.__getBusinessIdentifier__(object);
+		return super.__getFieldValueBusinessIdentifier__(object);
 	}
 	
 	@SuppressWarnings("unchecked")

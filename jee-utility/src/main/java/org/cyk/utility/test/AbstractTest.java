@@ -42,16 +42,16 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 		return __inject__(RandomHelper.class).getAlphabetic(3);
 	}
 	
-	protected Object __getSystemIdentifier__(Object object){
+	protected void __setFieldValueBusinessIdentifier__(Object object,Object value){
+		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object,value);
+	}
+	
+	protected Object __getFieldValueSystemIdentifier__(Object object) {
 		return __inject__(FieldHelper.class).getFieldValueSystemIdentifier(object);
 	}
 	
-	protected Object __getBusinessIdentifier__(Object object){
+	protected Object __getFieldValueBusinessIdentifier__(Object object) {
 		return __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(object);
-	}
-	
-	protected void __setBusinessIdentifier__(Object object,Object value){
-		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object,value);
 	}
 	
 	/**/

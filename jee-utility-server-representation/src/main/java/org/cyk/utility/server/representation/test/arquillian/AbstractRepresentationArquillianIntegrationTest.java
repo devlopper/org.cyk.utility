@@ -3,14 +3,11 @@ package org.cyk.utility.server.representation.test.arquillian;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.Serializable;
-import java.net.URL;
 import java.util.Collection;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.random.RandomHelperImpl;
 import org.cyk.utility.server.representation.AbstractEntity;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.RepresentationEntity;
@@ -20,36 +17,11 @@ import org.cyk.utility.system.layer.SystemLayerRepresentation;
 import org.cyk.utility.test.arquillian.AbstractSystemServerArquillianIntegrationTestImpl;
 import org.cyk.utility.test.arquillian.SystemServerIntegrationTest;
 import org.cyk.utility.value.ValueUsageType;
-import org.jboss.arquillian.drone.api.annotation.Drone;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.junit.Assert;
-import org.openqa.selenium.WebDriver;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public abstract class AbstractRepresentationArquillianIntegrationTest extends AbstractSystemServerArquillianIntegrationTestImpl<RepresentationEntity> implements SystemServerIntegrationTest<RepresentationEntity>, Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	/* Global variable */
-	protected static ResteasyClient CLIENT;
-	protected static ResteasyWebTarget TARGET;
-	
-	@Drone protected WebDriver browser;
-	@ArquillianResource protected URL contextPath;
-	
-	@Override
-	protected void __listenBeforeCallCountIsZero__() throws Exception{
-		super.__listenBeforeCallCountIsZero__();
-		CLIENT = new ResteasyClientBuilder().build();
-		TARGET = CLIENT.target(UriBuilder.fromPath(contextPath.toExternalForm()));
-	}
-	
-	@Override
-	protected void __initializeApplicationScopeLifeCycleListener__() {
-		//TODO how to handle CDI
-	}
 	
 	@Override
 	protected <ENTITY> void ____createEntity____(ENTITY entity, RepresentationEntity representation) {
@@ -59,7 +31,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 		if(entity instanceof AbstractEntity) {
 			String businessIdentifier = ((AbstractEntity)entity).getCode();
 			response = representation.getOne(businessIdentifier, ValueUsageType.BUSINESS.name());
-			entity = (ENTITY) response.readEntity(entity.getClass());
+			entity = (ENTITY) response.getEntity();
 			Assert.assertNotNull("Get entity with business identifier <"+businessIdentifier+"> not found", entity);
 			Assert.assertNotNull("Entity <"+entity+"> found under business identifier <"+businessIdentifier+"> has null system identifier", ((AbstractEntity)entity).getIdentifier());
 			response.close();
@@ -77,7 +49,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 			if(index instanceof AbstractEntity) {
 				Object entity = index;
 				response = representation.getOne(((AbstractEntity)entity).getCode(), ValueUsageType.BUSINESS.name());
-				entity = (ENTITY) response.readEntity(entity.getClass());
+				entity = (ENTITY) response.getEntity();
 				assertThat(((AbstractEntity)entity).getIdentifier()).isNotBlank();	
 				response.close();
 			}
@@ -88,8 +60,8 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 
 	@Override
 	protected <ENTITY> ENTITY ____readEntity____(Class<ENTITY> entityClass, Object identifier,ValueUsageType valueUsageType, Properties expectedFieldValues, RepresentationEntity representation) {
-		return (ENTITY) (ValueUsageType.SYSTEM.equals(valueUsageType) ? representation.getOne(identifier.toString(),ValueUsageType.SYSTEM.name()).readEntity(entityClass) 
-				: representation.getOne(identifier.toString(),ValueUsageType.BUSINESS.name()).readEntity(entityClass));
+		return (ENTITY) (ValueUsageType.SYSTEM.equals(valueUsageType) ? representation.getOne(identifier.toString(),ValueUsageType.SYSTEM.name()).getEntity() 
+				: representation.getOne(identifier.toString(),ValueUsageType.BUSINESS.name()).getEntity());
 	}
 
 	@Override
@@ -109,14 +81,14 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	
 	@Override
 	protected <ENTITY> Long ____countEntitiesAll____(Class<ENTITY> entityClass,RepresentationEntity representation) {
-		return representation.count().readEntity(Long.class);
+		return (Long) representation.count().getEntity();
 	}
 	
 	@Override
 	protected RepresentationEntity ____getLayerEntityInterfaceFromClass____(Class<?> aClass) {
 		//if(aClass == null)
 			aClass = __getLayerEntityInterfaceClass__();
-		return (RepresentationEntity) TARGET.proxy(aClass);
+		return (RepresentationEntity) __inject__(aClass);
 	}
 
 	@Override
@@ -124,27 +96,5 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 		return __inject__(SystemLayerRepresentation.class);
 	}
 
-	@Override
-	protected String __getRandomCode__() {
-		return RandomHelperImpl.GENERATOR_NUMERIC.generate(5);
-	}
-	
-	@Override
-	protected <T> T instanciateOne(Class<T> aClass) {
-		try {
-			return aClass.newInstance();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	@Override
-	protected void __setFieldValues__(Object object) {
-		if(object instanceof AbstractEntity) {
-			((AbstractEntity)object).setCode(__getRandomCode__());
-		}
-	}
-	
 	protected abstract <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass);
 }

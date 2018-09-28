@@ -2,11 +2,6 @@ package org.cyk.utility.server.representation.test;
 
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldName;
-import org.cyk.utility.field.FieldValueGetter;
-import org.cyk.utility.server.business.Business;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractTestRepresentationReadIntegrationImpl extends AbstractTestRepresentationFunctionIntegrationImpl implements TestRepresentationReadIntegration {

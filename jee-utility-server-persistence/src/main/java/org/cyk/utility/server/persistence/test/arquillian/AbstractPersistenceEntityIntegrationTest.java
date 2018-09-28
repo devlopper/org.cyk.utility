@@ -39,7 +39,7 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 		Object action = __inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
-		__readEntity__(__getEntityClass__(action),__getSystemIdentifier__(object),ValueUsageType.SYSTEM);
+		__readEntity__(__getEntityClass__(action),__getFieldValueSystemIdentifier__(object),ValueUsageType.SYSTEM);
 		//cleanup
 		__deleteEntitiesAll__(object.getClass());
 	}
@@ -49,7 +49,7 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 		Object action = __inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
-		__readEntity__(__getEntityClass__(action),__getBusinessIdentifier__(object), ValueUsageType.BUSINESS);
+		__readEntity__(__getEntityClass__(action),__getFieldValueBusinessIdentifier__(object), ValueUsageType.BUSINESS);
 		//cleanup
 		__deleteEntitiesAll__(object.getClass());
 	}
@@ -71,7 +71,7 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 		Object action = __inject__(SystemActionDelete.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
-		object = __getPersistenceEntity__(action).readOne(__getSystemIdentifier__(object));
+		object = __getPersistenceEntity__(action).readOne(__getFieldValueSystemIdentifier__(object));
 		__deleteEntity__(object);
 		//cleanup
 		__deleteEntitiesAll__(object.getClass());

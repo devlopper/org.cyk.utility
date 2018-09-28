@@ -38,7 +38,7 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	}
 	
 	protected <ENTITY> void ____assertThatEntityHasBeenPersisted____(ENTITY entity,LAYER_ENTITY_INTERFACE layerEntityInterface) {
-		assertThat(getFieldValueSystemIdentifier(entity)).isNotNull();
+		assertThat(__getFieldValueSystemIdentifier__(entity)).isNotNull();
 	}
 	
 	protected <ENTITY> void ____assertThatLogSaysEntityHasBeen____(Class<? extends SystemAction> systemActionClass,ENTITY entity,LAYER_ENTITY_INTERFACE layerEntityInterface) {
@@ -62,7 +62,7 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	
 	protected <ENTITY> void ____assertThatEntityHasBeenPersisted____(Collection<ENTITY> entities,LAYER_ENTITY_INTERFACE layerEntityInterface) {
 		for(ENTITY index : entities)
-			assertThat(getFieldValueSystemIdentifier(index)).isNotNull();
+			assertThat(__getFieldValueSystemIdentifier__(index)).isNotNull();
 	}
 	
 	protected <ENTITY> void ____assertThatLogSaysEntityHasBeen____(Class<? extends SystemAction> systemActionClass,Collection<ENTITY> entities,LAYER_ENTITY_INTERFACE layerEntityInterface) {}
@@ -196,14 +196,6 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	protected String __getLogMessageStart__(SystemAction systemAction,Class<?> aClass){
 		return __getSystemActor__().getIdentifier().toString()+" "+__getSystemLayer__().getIdentifier().toString()+" "+systemAction.getIdentifier().toString()
 				+" "+aClass.getSimpleName();
-	}
-	
-	protected Object getFieldValueSystemIdentifier(Object object) {
-		return __inject__(FieldHelper.class).getFieldValueSystemIdentifier(object);
-	}
-	
-	protected Object getFieldValueBusinessIdentifier(Object object) {
-		return __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(object);
 	}
 	
 	/**/

@@ -28,4 +28,7 @@ public interface RepresentationFunction extends SystemFunctionServer {
 	
 	RepresentationFunction setPersistenceEntityClass(Class<?> aClass);
 	Class<?> getPersistenceEntityClass();
+	
+	
+	
 }

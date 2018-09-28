@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.value.ValueUsageType;
 
 /**
  * Generic persistence functions provider. It tries , first , to find the specific persistence defined for a specific object class.<br/>
@@ -18,6 +19,8 @@ public interface Persistence extends PersistenceServiceProvider<Object> {
 	/* Read */ 
 	<ENTITY> ENTITY readOne(Class<ENTITY> aClass,Object identifier,Properties properties);
 	<ENTITY> ENTITY readOne(Class<ENTITY> aClass,Object identifier);
+	
+	<ENTITY> ENTITY readOne(Class<ENTITY> aClass,Object identifier,ValueUsageType valueUsageType);
 	
 	<ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass,Properties properties);
 	<ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass);
