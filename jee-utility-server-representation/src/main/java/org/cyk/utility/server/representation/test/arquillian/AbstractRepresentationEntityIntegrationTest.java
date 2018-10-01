@@ -12,6 +12,7 @@ import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.server.representation.test.ExpectedMessageDto;
 import org.cyk.utility.server.representation.test.TestRepresentationCreate;
+import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
@@ -21,34 +22,40 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 
 	@Test
 	public void createOne() throws Exception{
+		ExpectedMessageDto message = __inject__(ExpectedMessageDto.class);
+		message.getHeadExpectedString().getLocationStrings(StringLocation.INSIDE, Boolean.TRUE).add("a été créé avec succès.");
+		
 		Object object = __instanciateEntity__(null);
 		__inject__(TestRepresentationCreate.class).addObjects(object)
 		.setExpectedResponseStatusCode(Response.Status.CREATED.getStatusCode())
 		.setExpectedResponseEntityClass(ResponseEntityDto.class)
-			.addExpectedResponseEntityDtoMessages(new ExpectedMessageDto()
-				.setValueContains("a été créé avec succès.")).execute();
+			.addExpectedResponseEntityDtoMessages(message).execute();
 	}
 	
 	@Test
 	public void createOne_businessIdentifierMustNotBeNull() throws Exception{
+		ExpectedMessageDto message = __inject__(ExpectedMessageDto.class);
+		message.getHeadExpectedString().getLocationStrings(StringLocation.INSIDE, Boolean.TRUE).add("Une erreur est survenue");
+		
 		Object object = __instanciateEntity__(null);
 		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, null);
 		__inject__(TestRepresentationCreate.class).addObjects(object)
 		.setExpectedResponseStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
 		.setExpectedResponseEntityClass(ResponseEntityDto.class)
-			.addExpectedResponseEntityDtoMessages(new ExpectedMessageDto()
-				.setValueContains("Une erreur est survenue")).execute();
+			.addExpectedResponseEntityDtoMessages(message).execute();
 	}
 	
 	@Test
 	public void createOne_businessIdentifierMustBeUnique() throws Exception{
+		ExpectedMessageDto message = __inject__(ExpectedMessageDto.class);
+		message.getHeadExpectedString().getLocationStrings(StringLocation.INSIDE, Boolean.TRUE).add("Une erreur est survenue");
+		
 		Object object1 = __instanciateEntity__(null);
 		Object object2 = __inject__(InstanceHelper.class).buildOne(object1.getClass(), object1);
 		__inject__(TestRepresentationCreate.class).addObjectsToBeCreatedArray(object1).addObjects(object2)
 		.setExpectedResponseStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
 		.setExpectedResponseEntityClass(ResponseEntityDto.class)
-		.addExpectedResponseEntityDtoMessages(new ExpectedMessageDto()
-				.setValueContains("Une erreur est survenue")).execute();
+		.addExpectedResponseEntityDtoMessages(message).execute();
 	}
 	
 	@Test

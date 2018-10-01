@@ -60,14 +60,9 @@ public abstract class AbstractTestRepresentationCreateIntegrationImpl extends Ab
 			if(expectedMessageDtos.size() == 1) {
 				MessageDto message = messages.iterator().next();
 				ExpectedMessageDto expectedMessageDto = expectedMessageDtos.iterator().next();
-				if(message.getCode()!=null)
-					assertThat(message.getCode()).isEqualTo(expectedMessageDto.getCode());
-				if(message.getValue()!=null) {
-					if(expectedMessageDto.getValue()!=null)
-						assertThat(message.getValue()).isEqualTo(expectedMessageDto.getValue());
-					if(expectedMessageDto.getValueContains()!=null)
-						assertThat(message.getValue()).contains(expectedMessageDto.getValueContains());
-				}
+				expectedMessageDto.getCodeExpectedString().evaluate(message.getCode());
+				expectedMessageDto.getHeadExpectedString().evaluate(message.getHead());
+				expectedMessageDto.getBodyExpectedString().evaluate(message.getBody());
 			}
 		}
 	}

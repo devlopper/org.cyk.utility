@@ -52,11 +52,11 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 		MessageDto messageDto = new MessageDto();
 		if(__throwable__==null) {
 			responseEntityDto.setStatus("SUCCESS");
-			messageDto.setValue(getPersistenceEntityClass().getSimpleName()+" a été créé avec succès.");
+			messageDto.setHead(getPersistenceEntityClass().getSimpleName()+" a été créé avec succès.");
 		}else {
 			responseEntityDto.setStatus("FAILURE");
 			Throwable cause = __injectThrowableHelper__().getFirstCause(__throwable__);	
-			messageDto.setValue("Une erreur est survenue lors de "+getAction().getIdentifier()+" de "+getPersistenceEntityClass()+". "+cause.getMessage());
+			messageDto.setHead("Une erreur est survenue lors de "+getAction().getIdentifier()+" de "+getPersistenceEntityClass()+". "+cause.getMessage());
 		}
 		responseEntityDto.addMessage(messageDto);
 		return responseEntityDto;

@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@XmlRootElement @Getter @Setter @Accessors(chain=true)
+/*@XmlRootElement*/ @Getter @Setter @Accessors(chain=true)
 public abstract class AbstractEntityCollection<T> extends AbstractRepresentationObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
