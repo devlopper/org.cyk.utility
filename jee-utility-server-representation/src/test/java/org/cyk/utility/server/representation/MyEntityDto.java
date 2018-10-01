@@ -10,7 +10,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
-public class MyEntityDto extends AbstractDto implements Serializable {
+public class MyEntityDto extends AbstractEntityFromPersistenceEntityDto implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 

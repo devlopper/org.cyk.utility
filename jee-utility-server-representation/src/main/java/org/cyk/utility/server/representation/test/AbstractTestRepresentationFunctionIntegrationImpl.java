@@ -11,8 +11,9 @@ public abstract class AbstractTestRepresentationFunctionIntegrationImpl extends 
 	private static final long serialVersionUID = 1L;
 
 	private URI uri;
+	private Class<?> expectedResponseEntityClass;
 	private Object responseStatusCode,responseEntity;
-	private Collection<ExpectedMessageDto> expectedResponseEntityMessages;
+	private Collection<ExpectedMessageDto> expectedResponseEntityDtoMessages;
 	
 	@Override
 	public URI getUniformResourceIdentifier() {
@@ -43,6 +44,17 @@ public abstract class AbstractTestRepresentationFunctionIntegrationImpl extends 
 	}
 	
 	@Override
+	public Class<?> getExpectedResponseEntityClass() {
+		return expectedResponseEntityClass;
+	}
+	
+	@Override
+	public TestRepresentationFunctionIntegration setExpectedResponseEntityClass(Class<?> expectedResponseEntityClass) {
+		this.expectedResponseEntityClass = expectedResponseEntityClass;
+		return this;
+	}
+	
+	@Override
 	public Object getExpectedResponseEntity() {
 		return responseEntity;
 	}
@@ -54,25 +66,25 @@ public abstract class AbstractTestRepresentationFunctionIntegrationImpl extends 
 	}
 	
 	@Override
-	public TestRepresentationFunctionIntegration setExpectedResponseEntityMessages(Collection<ExpectedMessageDto> messages) {
-		this.expectedResponseEntityMessages = messages;
+	public TestRepresentationFunctionIntegration setExpectedResponseEntityDtoMessages(Collection<ExpectedMessageDto> messages) {
+		this.expectedResponseEntityDtoMessages = messages;
 		return this;
 	}
 	
 	@Override
-	public Collection<ExpectedMessageDto> getExpectedResponseEntityMessages() {
-		return expectedResponseEntityMessages;
+	public Collection<ExpectedMessageDto> getExpectedResponseEntityDtoMessages() {
+		return expectedResponseEntityDtoMessages;
 	}
 	
 	@Override
-	public TestRepresentationFunctionIntegration addExpectedResponseEntityMessages(Collection<ExpectedMessageDto> messages) {
-		expectedResponseEntityMessages = __injectCollectionHelper__().add(ArrayList.class, expectedResponseEntityMessages, Boolean.TRUE, messages);
+	public TestRepresentationFunctionIntegration addExpectedResponseEntityDtoMessages(Collection<ExpectedMessageDto> messages) {
+		expectedResponseEntityDtoMessages = __injectCollectionHelper__().add(ArrayList.class, expectedResponseEntityDtoMessages, Boolean.TRUE, messages);
 		return this;
 	}
 	
 	@Override
-	public TestRepresentationFunctionIntegration addExpectedResponseEntityMessages(ExpectedMessageDto... messages) {
-		addExpectedResponseEntityMessages(__injectCollectionHelper__().instanciate(messages));
+	public TestRepresentationFunctionIntegration addExpectedResponseEntityDtoMessages(ExpectedMessageDto... messages) {
+		addExpectedResponseEntityDtoMessages(__injectCollectionHelper__().instanciate(messages));
 		return this;
 	}
 	

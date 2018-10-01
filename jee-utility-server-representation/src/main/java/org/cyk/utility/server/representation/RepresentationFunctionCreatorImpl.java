@@ -25,19 +25,17 @@ public class RepresentationFunctionCreatorImpl extends AbstractRepresentationFun
 
 	@Override
 	protected Status __computeResponseStatus__() {
-		return javax.ws.rs.core.Response.Status.CREATED;
+		if(__throwable__==null)
+			return javax.ws.rs.core.Response.Status.CREATED;
+		return super.__computeResponseStatus__();
 	}
-	
+	/*
 	@Override
 	protected Object __computeResponseEntity__() {
-		MessageDto message = new MessageDto().setValue(getPersistenceEntityClass().getSimpleName()+" a été créé avec succès.");
-		return message;
+		if(__throwable__==null)
+			return new ResponseEntityDto().addMessage(new MessageDto().setValue(getPersistenceEntityClass().getSimpleName()+" a été créé avec succès."));
+		Throwable throwable = (Throwable) super.__computeResponseEntity__();
+		return new ResponseEntityDto().addMessage(new MessageDto().setValue("Une erreur est survenue lors de la création de "+getPersistenceEntityClass()+". "+throwable.getMessage()));
 	}
-	
-	@Override
-	protected Object __computeResponseEntity__(Throwable throwable) {
-		throwable = (Throwable) super.__computeResponseEntity__(throwable);
-		MessageDto message = new MessageDto().setValue("Une erreur est survenue lors de la création de "+getPersistenceEntityClass()+". "+throwable.getMessage());
-		return message;
-	}
+	*/
 }

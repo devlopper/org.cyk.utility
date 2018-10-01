@@ -7,8 +7,9 @@ import javax.ws.rs.core.Response;
 import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.instance.InstanceHelper;
-import org.cyk.utility.server.representation.AbstractEntity;
+import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity;
 import org.cyk.utility.server.representation.RepresentationEntity;
+import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.server.representation.test.ExpectedMessageDto;
 import org.cyk.utility.server.representation.test.TestRepresentationCreate;
 import org.cyk.utility.system.action.SystemActionRead;
@@ -23,7 +24,8 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		Object object = __instanciateEntity__(null);
 		__inject__(TestRepresentationCreate.class).addObjects(object)
 		.setExpectedResponseStatusCode(Response.Status.CREATED.getStatusCode())
-			.addExpectedResponseEntityMessages(new ExpectedMessageDto()
+		.setExpectedResponseEntityClass(ResponseEntityDto.class)
+			.addExpectedResponseEntityDtoMessages(new ExpectedMessageDto()
 				.setValueContains("a été créé avec succès.")).execute();
 	}
 	
@@ -33,7 +35,8 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, null);
 		__inject__(TestRepresentationCreate.class).addObjects(object)
 		.setExpectedResponseStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-			.addExpectedResponseEntityMessages(new ExpectedMessageDto()
+		.setExpectedResponseEntityClass(ResponseEntityDto.class)
+			.addExpectedResponseEntityDtoMessages(new ExpectedMessageDto()
 				.setValueContains("Une erreur est survenue")).execute();
 	}
 	
@@ -42,7 +45,9 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		Object object1 = __instanciateEntity__(null);
 		Object object2 = __inject__(InstanceHelper.class).buildOne(object1.getClass(), object1);
 		__inject__(TestRepresentationCreate.class).addObjectsToBeCreatedArray(object1).addObjects(object2)
-		.setExpectedResponseStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()).addExpectedResponseEntityMessages(new ExpectedMessageDto()
+		.setExpectedResponseStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+		.setExpectedResponseEntityClass(ResponseEntityDto.class)
+		.addExpectedResponseEntityDtoMessages(new ExpectedMessageDto()
 				.setValueContains("Une erreur est survenue")).execute();
 	}
 	
@@ -98,8 +103,8 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	
 	@Override
 	protected Object __getFieldValueSystemIdentifier__(Object object) {
-		if(object instanceof AbstractEntity)
-			return ((AbstractEntity)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntity)object).getCode(),ValueUsageType.BUSINESS.name())
+		if(object instanceof AbstractEntityFromPersistenceEntity)
+			return ((AbstractEntityFromPersistenceEntity)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntityFromPersistenceEntity)object).getCode(),ValueUsageType.BUSINESS.name())
 					.getEntity()).getIdentifier();
 		return super.__getFieldValueSystemIdentifier__(object);
 	}
@@ -114,8 +119,8 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	
 	@Override
 	protected Object __getFieldValueBusinessIdentifier__(Object object) {
-		if(object instanceof AbstractEntity)
-			return ((AbstractEntity)object).getCode();
+		if(object instanceof AbstractEntityFromPersistenceEntity)
+			return ((AbstractEntityFromPersistenceEntity)object).getCode();
 		return super.__getFieldValueBusinessIdentifier__(object);
 	}
 	

@@ -18,12 +18,15 @@ public interface TestRepresentationFunctionIntegration extends TestSystemFunctio
 	TestRepresentationFunctionIntegration setExpectedResponseStatusCode(Object responseStatusCode);
 	Object getExpectedResponseStatusCode();
 	
+	TestRepresentationFunctionIntegration setExpectedResponseEntityClass(Class<?> expectedResponseEntityClass);
+	Class<?> getExpectedResponseEntityClass();
+	
 	TestRepresentationFunctionIntegration setExpectedResponseEntity(Object responseEntity);
 	Object getExpectedResponseEntity();
 	
-	TestRepresentationFunctionIntegration setExpectedResponseEntityMessages(Collection<ExpectedMessageDto> messages);
-	Collection<ExpectedMessageDto> getExpectedResponseEntityMessages();
-	TestRepresentationFunctionIntegration addExpectedResponseEntityMessages(Collection<ExpectedMessageDto> messages);
-	TestRepresentationFunctionIntegration addExpectedResponseEntityMessages(ExpectedMessageDto...messages);
+	TestRepresentationFunctionIntegration setExpectedResponseEntityDtoMessages(Collection<ExpectedMessageDto> messages);
+	Collection<ExpectedMessageDto> getExpectedResponseEntityDtoMessages();
+	TestRepresentationFunctionIntegration addExpectedResponseEntityDtoMessages(Collection<ExpectedMessageDto> messages);
+	TestRepresentationFunctionIntegration addExpectedResponseEntityDtoMessages(ExpectedMessageDto...messages);
 	
 }

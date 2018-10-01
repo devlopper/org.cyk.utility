@@ -15,16 +15,20 @@ import org.cyk.utility.system.layer.SystemLayerRepresentation;
 public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemFunctionServerImpl implements RepresentationFunction, Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	protected Throwable __throwable__;
+	protected ResponseBuilder __responseBuilder__;
+	
 	@Override
 	protected void __execute__(SystemAction action) {
-		ResponseBuilder responseBuilder = __instanciateResponseBuilder__();
+		__responseBuilder__ = __instanciateResponseBuilder__();
 		try {
 			__executeBusiness__();
-			__processResponseBuilder__(responseBuilder);
 		} catch (Exception exception) {
-			__processResponseBuilder__(responseBuilder,exception);
+			__throwable__ = exception;
+		} finally {
+			__processResponseBuilder__();
 		}
-		setResponse(responseBuilder.build());
+		setResponse(__responseBuilder__.build());
 	}
 	
 	protected abstract void __executeBusiness__();
@@ -33,29 +37,33 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 		return Response.noContent();
 	}
 	
-	protected void __processResponseBuilder__(ResponseBuilder builder) {
-		builder.status(__computeResponseStatus__()).entity(__computeResponseEntity__());
+	protected void __processResponseBuilder__() {
+		__responseBuilder__.status(__computeResponseStatus__()).entity(__computeResponseEntity__());
 	}
 	
 	protected Response.Status __computeResponseStatus__(){
-		return Response.Status.OK;
-	}
-	
-	protected Object __computeResponseEntity__(){
-		return null;
-	}
-	
-	protected void __processResponseBuilder__(ResponseBuilder builder,Throwable throwable) {
-		builder.status(__computeResponseStatus__(throwable)).entity(__computeResponseEntity__(throwable));
-	}
-	
-	protected Response.Status __computeResponseStatus__(Throwable throwable){
+		if(__throwable__==null)
+			return Response.Status.OK;
 		return Response.Status.INTERNAL_SERVER_ERROR;
 	}
 	
-	protected Object __computeResponseEntity__(Throwable throwable){
-		Throwable cause = __injectThrowableHelper__().getFirstCause(throwable);
-		return cause;
+	protected Object __computeResponseEntity__(){
+		ResponseEntityDto responseEntityDto = new ResponseEntityDto();
+		MessageDto messageDto = new MessageDto();
+		if(__throwable__==null) {
+			responseEntityDto.setStatus("SUCCESS");
+			messageDto.setValue(getPersistenceEntityClass().getSimpleName()+" a été créé avec succès.");
+		}else {
+			responseEntityDto.setStatus("FAILURE");
+			Throwable cause = __injectThrowableHelper__().getFirstCause(__throwable__);	
+			messageDto.setValue("Une erreur est survenue lors de "+getAction().getIdentifier()+" de "+getPersistenceEntityClass()+". "+cause.getMessage());
+		}
+		responseEntityDto.addMessage(messageDto);
+		return responseEntityDto;
+	}
+	
+	protected void __processResponseBuilder__(ResponseBuilder builder,Throwable throwable) {
+		builder.status(__computeResponseStatus__()).entity(__computeResponseEntity__());
 	}
 	
 	@Override

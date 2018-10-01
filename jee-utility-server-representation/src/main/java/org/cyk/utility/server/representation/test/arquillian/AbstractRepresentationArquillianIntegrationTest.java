@@ -8,7 +8,7 @@ import java.util.Collection;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.server.representation.AbstractEntity;
+import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.system.action.SystemAction;
@@ -28,12 +28,12 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 		Response response = representation.createOne(entity);
 		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		response.close();
-		if(entity instanceof AbstractEntity) {
-			String businessIdentifier = ((AbstractEntity)entity).getCode();
+		if(entity instanceof AbstractEntityFromPersistenceEntity) {
+			String businessIdentifier = ((AbstractEntityFromPersistenceEntity)entity).getCode();
 			response = representation.getOne(businessIdentifier, ValueUsageType.BUSINESS.name());
 			entity = (ENTITY) response.getEntity();
 			Assert.assertNotNull("Get entity with business identifier <"+businessIdentifier+"> not found", entity);
-			Assert.assertNotNull("Entity <"+entity+"> found under business identifier <"+businessIdentifier+"> has null system identifier", ((AbstractEntity)entity).getIdentifier());
+			Assert.assertNotNull("Entity <"+entity+"> found under business identifier <"+businessIdentifier+"> has null system identifier", ((AbstractEntityFromPersistenceEntity)entity).getIdentifier());
 			response.close();
 		}
 	}
@@ -46,11 +46,11 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		response.close();
 		for(ENTITY index : entities)
-			if(index instanceof AbstractEntity) {
+			if(index instanceof AbstractEntityFromPersistenceEntity) {
 				Object entity = index;
-				response = representation.getOne(((AbstractEntity)entity).getCode(), ValueUsageType.BUSINESS.name());
+				response = representation.getOne(((AbstractEntityFromPersistenceEntity)entity).getCode(), ValueUsageType.BUSINESS.name());
 				entity = (ENTITY) response.getEntity();
-				assertThat(((AbstractEntity)entity).getIdentifier()).isNotBlank();	
+				assertThat(((AbstractEntityFromPersistenceEntity)entity).getIdentifier()).isNotBlank();	
 				response.close();
 			}
 	}
@@ -71,7 +71,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 
 	@Override
 	protected <ENTITY> void ____deleteEntity____(ENTITY entity, RepresentationEntity representation) {
-		representation.deleteOne(((AbstractEntity)entity).getIdentifier(),ValueUsageType.SYSTEM.name());
+		representation.deleteOne(((AbstractEntityFromPersistenceEntity)entity).getIdentifier(),ValueUsageType.SYSTEM.name());
 	}
 	
 	@Override
