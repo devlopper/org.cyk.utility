@@ -5,8 +5,8 @@ import java.util.Collection;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -25,12 +25,12 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	@POST
 	@Path(PATH_ROOT)
 	@Consumes(MediaType.APPLICATION_XML)
-	Response createOne(ENTITY dto);
+	Response createOne(ENTITY entity);
 	
 	@POST
 	@Path(PATH_MANY)
 	@Consumes(MediaType.APPLICATION_XML)
-	Response createMany(Collection<ENTITY> dtos);
+	Response createMany(Collection<ENTITY> entities);
 	
 	@POST
 	@Path(PATH_MANY_COLLECTION)
@@ -49,15 +49,16 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	Response getOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type);
 	
 	/* Update */
-	@PUT
+	/* Using partial */
+	@PATCH
 	@Path(PATH_ROOT)
 	@Consumes(MediaType.APPLICATION_XML)
-	Response updateOne(ENTITY dto);
+	Response updateOne(ENTITY entity,@QueryParam(PARAMETER_FIELDS) String fields);
 	
-	@PUT
+	@PATCH
 	@Path(PATH_MANY)
 	@Consumes(MediaType.APPLICATION_XML)
-	Response updateMany(Collection<ENTITY> dtos);
+	Response updateMany(Collection<ENTITY> entities,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	/* Delete */
 	@DELETE

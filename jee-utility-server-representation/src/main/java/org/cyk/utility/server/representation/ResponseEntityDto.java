@@ -10,9 +10,10 @@ import org.cyk.utility.collection.CollectionHelper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
-@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
+@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor @ToString
 public class ResponseEntityDto extends AbstractEntityDto implements  Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -34,6 +35,10 @@ public class ResponseEntityDto extends AbstractEntityDto implements  Serializabl
 	
 	public Collection<MessageDto> getMessages(){
 		return messageCollection == null ? null : messageCollection.getCollection();
+	}
+	
+	public MessageDto getMessageAt(Integer index) {
+		return __inject__(CollectionHelper.class).getElementAt(getMessages(),index);
 	}
 	
 }

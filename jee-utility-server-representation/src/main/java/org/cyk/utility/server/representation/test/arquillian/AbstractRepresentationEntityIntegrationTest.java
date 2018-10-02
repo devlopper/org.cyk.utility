@@ -6,14 +6,21 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.field.FieldName;
+import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.instance.InstanceHelper;
+import org.cyk.utility.map.MapHelper;
+import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity;
 import org.cyk.utility.server.representation.RepresentationEntity;
+import org.cyk.utility.server.representation.RepresentationLayer;
 import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.server.representation.test.ExpectedMessageDto;
 import org.cyk.utility.server.representation.test.TestRepresentationCreate;
+import org.cyk.utility.server.representation.test.TestRepresentationDelete;
+import org.cyk.utility.server.representation.test.TestRepresentationRead;
+import org.cyk.utility.server.representation.test.TestRepresentationUpdate;
 import org.cyk.utility.string.StringLocation;
-import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
@@ -22,40 +29,31 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 
 	@Test
 	public void createOne() throws Exception{
-		ExpectedMessageDto message = __inject__(ExpectedMessageDto.class);
-		message.getHeadExpectedString().getLocationStrings(StringLocation.INSIDE, Boolean.TRUE).add("a été créé avec succès.");
-		
 		Object object = __instanciateEntity__(null);
 		__inject__(TestRepresentationCreate.class).addObjects(object)
 		.setExpectedResponseStatusCode(Response.Status.CREATED.getStatusCode())
 		.setExpectedResponseEntityClass(ResponseEntityDto.class)
-			.addExpectedResponseEntityDtoMessages(message).execute();
+			.addExpectedResponseEntityDtoMessages(__inject__(ExpectedMessageDto.class).addHeadExpectedStrings(StringLocation.INSIDE,"a été Create avec succès.")).execute();
 	}
 	
 	@Test
 	public void createOne_businessIdentifierMustNotBeNull() throws Exception{
-		ExpectedMessageDto message = __inject__(ExpectedMessageDto.class);
-		message.getHeadExpectedString().getLocationStrings(StringLocation.INSIDE, Boolean.TRUE).add("Une erreur est survenue");
-		
 		Object object = __instanciateEntity__(null);
 		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, null);
 		__inject__(TestRepresentationCreate.class).addObjects(object)
 		.setExpectedResponseStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
 		.setExpectedResponseEntityClass(ResponseEntityDto.class)
-			.addExpectedResponseEntityDtoMessages(message).execute();
+			.addExpectedResponseEntityDtoMessages(__inject__(ExpectedMessageDto.class).addHeadExpectedStrings(StringLocation.INSIDE,"Une erreur est survenue")).execute();
 	}
 	
 	@Test
 	public void createOne_businessIdentifierMustBeUnique() throws Exception{
-		ExpectedMessageDto message = __inject__(ExpectedMessageDto.class);
-		message.getHeadExpectedString().getLocationStrings(StringLocation.INSIDE, Boolean.TRUE).add("Une erreur est survenue");
-		
 		Object object1 = __instanciateEntity__(null);
 		Object object2 = __inject__(InstanceHelper.class).buildOne(object1.getClass(), object1);
 		__inject__(TestRepresentationCreate.class).addObjectsToBeCreatedArray(object1).addObjects(object2)
 		.setExpectedResponseStatusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
 		.setExpectedResponseEntityClass(ResponseEntityDto.class)
-		.addExpectedResponseEntityDtoMessages(message).execute();
+		.addExpectedResponseEntityDtoMessages(__inject__(ExpectedMessageDto.class).addHeadExpectedStrings(StringLocation.INSIDE,"Une erreur est survenue")).execute();
 	}
 	
 	@Test
@@ -66,44 +64,77 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	
 	@Test
 	public void readOneBySystemIdentifier() throws Exception{
-		Object action = __inject__(SystemActionRead.class);
-		Object object = __instanciateEntity__(action);
-		__createEntity__(object);
-		__readEntity__(__getEntityClass__(action),__getFieldValueSystemIdentifier__(object),ValueUsageType.SYSTEM);
-		__deleteEntitiesAll__(object.getClass());
+		Object object = __instanciateEntity__(null);
+		Object businessIdentifier = __getFieldValueBusinessIdentifier__(object);
+		__inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object).createOne(object);
+		object = __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object).getOne(businessIdentifier.toString(), ValueUsageType.BUSINESS.name()).getEntity();
+		Object systemIdentifier = __getFieldValueSystemIdentifier__(object);
+		
+		__inject__(TestRepresentationRead.class).addGarbagesArray(object).addObjectIdentifiers(systemIdentifier).setObjectClass(object.getClass())
+		.setIdentifierValueUsageType(ValueUsageType.SYSTEM)
+		.setExpectedResponseStatusCode(Response.Status.OK.getStatusCode())
+		.setExpectedResponseEntityClass(object.getClass())
+		.execute();
+	}
+	
+	@Test
+	public void readOneBySystemIdentifier_notFound() throws Exception{
+		Object object = __instanciateEntity__(null);
+		Object businessIdentifier = __getFieldValueBusinessIdentifier__(object);
+		__inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object).createOne(object);
+		object = __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object).getOne(businessIdentifier.toString(), ValueUsageType.BUSINESS.name()).getEntity();
+		Object systemIdentifier = __getFieldValueSystemIdentifier__(object).toString()+"1";
+		
+		__inject__(TestRepresentationRead.class).addGarbagesArray(object).addObjectIdentifiers(systemIdentifier).addUnexistingObjectIdentifiers(systemIdentifier).setObjectClass(object.getClass())
+		.setIdentifierValueUsageType(ValueUsageType.SYSTEM)
+		.setExpectedResponseStatusCode(Response.Status.NOT_FOUND.getStatusCode())
+		.setExpectedResponseEntityIsNull(Boolean.TRUE)
+		.execute();
 	}
 	
 	@Test
 	public void readOneByBusinessIdentifier() throws Exception{
-		Object action = null;//__inject__(SystemActionRead.class);
-		Object object = __instanciateEntity__(action);
-		__createEntity__(object);
-		__readEntity__(__getEntityClass__(action),__getFieldValueBusinessIdentifier__(object), ValueUsageType.BUSINESS);
-		__deleteEntitiesAll__(object.getClass());
+		Object object = __instanciateEntity__(null);
+		Object businessIdentifier = __getFieldValueBusinessIdentifier__(object);
+		__inject__(TestRepresentationRead.class).addObjectsToBeCreatedArray(object).addObjectIdentifiers(businessIdentifier).setObjectClass(object.getClass())
+		.setExpectedResponseStatusCode(Response.Status.OK.getStatusCode())
+		.setExpectedResponseEntityClass(object.getClass())
+		.execute();
 	}
 	
 	@Test
-	@SuppressWarnings("unchecked")
+	public void readOneByBusinessIdentifier_notFound() throws Exception{
+		Object object = __instanciateEntity__(null);
+		Object businessIdentifier = __getFieldValueBusinessIdentifier__(object).toString()+"a";
+		__inject__(TestRepresentationRead.class).addObjectsToBeCreatedArray(object).addObjectIdentifiers(businessIdentifier).addUnexistingObjectIdentifiers(businessIdentifier).setObjectClass(object.getClass())
+		.setExpectedResponseStatusCode(Response.Status.NOT_FOUND.getStatusCode())
+		.setExpectedResponseEntityIsNull(Boolean.TRUE)
+		.execute();
+	}
+	
+	@Test
 	public void updateOne() throws Exception{
-		Object action = null;//__inject__(SystemActionUpdate.class);
-		ENTITY object = __instanciateEntity__(action);
-		__createEntity__(object);
-		Object identifier = __getFieldValueSystemIdentifier__(object); //__inject__(FieldHelper.class).getFieldValueSystemIdentifier(object);
-		object = (ENTITY) __getRepresentationEntity__(action).getOne(identifier == null ? null : identifier.toString(),ValueUsageType.SYSTEM.name()).getEntity();
-		__setEntityFields__(object,action);
-		__updateEntity__(object);
-		__deleteEntitiesAll__(object.getClass());
+		Object object = __instanciateEntity__(null);
+		String businessIdentifierFieldName = __inject__(FieldNameGetter.class).execute(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS).execute().getOutput();
+		Object newBusinessIdentifierFieldValue = __inject__(RandomHelper.class).getAlphanumeric(5);
+		
+		__inject__(TestRepresentationUpdate.class).setFieldValuesMap(object, __inject__(MapHelper.class).instanciateKeyAsStringValueAsObject(businessIdentifierFieldName
+				,newBusinessIdentifierFieldValue)).addObjectsToBeCreatedArray(object).addNotGarbagableArray(object).addObjects(object).setObjectClass(object.getClass())
+			.addObjectBusinessIdentifiersToBeDeletedOnCleanArray(object.getClass(), newBusinessIdentifierFieldValue)
+		.setExpectedResponseStatusCode(Response.Status.OK.getStatusCode())
+		.setExpectedResponseEntityClass(ResponseEntityDto.class)
+			.addExpectedResponseEntityDtoMessages(__inject__(ExpectedMessageDto.class).addHeadExpectedStrings(StringLocation.INSIDE,"a été Update avec succès.")).execute();
 	}
 	
 	@Test
 	public void deleteOne() throws Exception{
-		Object action = null;//__inject__(SystemActionDelete.class);
-		Object object = __instanciateEntity__(action);
-		__createEntity__(object);
-		Object identifier = __getFieldValueSystemIdentifier__(object);//__getSystemIdentifier__(object);
-		object = __getRepresentationEntity__(action).getOne(identifier == null ? null : identifier.toString(),ValueUsageType.SYSTEM.name()).getEntity();
-		__deleteEntity__(object);
-		__deleteEntitiesAll__(object.getClass());
+		Object object = __instanciateEntity__(null);
+		Object businessIdentifier = __getFieldValueBusinessIdentifier__(object);
+		__inject__(TestRepresentationDelete.class).addObjectsToBeCreatedArray(object).addNotGarbagableArray(object).addObjects(businessIdentifier).setIdentifierValueUsageType(ValueUsageType.BUSINESS)
+		.setObjectClass(object.getClass())
+		.setExpectedResponseStatusCode(Response.Status.OK.getStatusCode())
+		.setExpectedResponseEntityClass(ResponseEntityDto.class)
+		.execute();
 	}
 	
 	/**/
@@ -115,14 +146,6 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 					.getEntity()).getIdentifier();
 		return super.__getFieldValueSystemIdentifier__(object);
 	}
-	
-	/*@Override
-	protected Object __getSystemIdentifier__(Object object) {
-		if(object instanceof AbstractEntity)
-			return ((AbstractEntity)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntity)object).getCode(),ValueUsageType.BUSINESS.name())
-					.getEntity()).getIdentifier();
-		return super.__getSystemIdentifier__(object);
-	}*/
 	
 	@Override
 	protected Object __getFieldValueBusinessIdentifier__(Object object) {
@@ -148,13 +171,6 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	protected Collection<ENTITY> __instanciateEntity__(Object action,Integer count) throws Exception{
 		return __instanciate__(__getEntityClass__(action), action, count);
 	}
-	
-	/*protected ENTITY __instanciateEntity__(Object action) throws Exception{
-		ENTITY object = __getEntityClass__(action).newInstance();
-		if(object instanceof AbstractEntity)
-			((AbstractEntity)object).setCode(String.valueOf(System.currentTimeMillis()));
-		return object;
-	}*/
 	
 	protected void __setEntityFields__(ENTITY entity,Object action){}
 }

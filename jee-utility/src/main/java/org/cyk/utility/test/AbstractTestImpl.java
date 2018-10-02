@@ -1,7 +1,10 @@
 package org.cyk.utility.test;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
@@ -21,7 +24,9 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	private String name;
 	private Class<? extends Throwable> expectedThrowableCauseClass;
 	private Collection<Object> objectsToBeCreated;
+	private Map<Class<?>,Collection<Object>> objectBusinessIdentifiersToBeDeletedOnClean;
 	private Collection<Object> garbages;
+	private Collection<Object> notGarbagable;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -122,6 +127,37 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	}
 	
 	@Override
+	public Map<Class<?>,Collection<Object>> getObjectBusinessIdentifiersToBeDeletedOnClean(){
+		return objectBusinessIdentifiersToBeDeletedOnClean;
+	}
+	
+	@Override
+	public Test setObjectBusinessIdentifiersToBeDeletedOnClean(Map<Class<?>,Collection<Object>> objectBusinessIdentifiersToBeDeletedOnClean){
+		this.objectBusinessIdentifiersToBeDeletedOnClean = objectBusinessIdentifiersToBeDeletedOnClean;
+		return this;
+	}
+	
+	@Override
+	public Test addObjectBusinessIdentifiersToBeDeletedOnCleanCollection(Class<?> aClass,Collection<Object> identifiers){
+		if(aClass!=null) {
+			Map<Class<?>,Collection<Object>> map = getObjectBusinessIdentifiersToBeDeletedOnClean();
+			if(map == null)
+				setObjectBusinessIdentifiersToBeDeletedOnClean(map = new LinkedHashMap<>());
+			Collection<Object> collection = map.get(aClass);
+			if(collection == null)
+				map.put(aClass, collection = new ArrayList<>());
+			collection.addAll(identifiers);
+		}
+		return this;
+	}
+	
+	@Override
+	public Test addObjectBusinessIdentifiersToBeDeletedOnCleanArray(Class<?> aClass,Object...identifiers){
+		addObjectBusinessIdentifiersToBeDeletedOnCleanCollection(aClass,__inject__(CollectionHelper.class).instanciate(identifiers));
+		return this;
+	}
+	
+	@Override
 	public Collection<Object> getGarbages(){
 		return garbages;
 	}
@@ -143,6 +179,29 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 		addGarbagesCollection(__inject__(CollectionHelper.class).instanciate(objects));
 		return this;
 	}
+	
+	@Override
+	public Collection<Object> getNotGarbagable(){
+		return notGarbagable;
+	}
+	
+	@Override
+	public Test setNotGarbagable(Collection<Object> objects){
+		this.notGarbagable = objects;
+		return this;
+	}
+	
+	@Override
+	public Test addNotGarbagableCollection(Collection<Object> objects){
+		setNotGarbagable(__inject__(CollectionHelper.class).add(getNotGarbagable(), Boolean.TRUE, objects));
+		return this;
+	}
+	
+	@Override
+	public Test addNotGarbagableArray(Object...objects){
+		addNotGarbagableCollection(__inject__(CollectionHelper.class).instanciate(objects));
+		return this;
+	}
 		
 	protected void __setup__() throws Exception {
 		Collection<Object> objectsToBeCreated = getObjectsToBeCreated();
@@ -150,7 +209,13 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 			__beginTransaction__();
 			__createMany__(objectsToBeCreated);
 			__endTransaction__();
-			addGarbagesCollection(objectsToBeCreated);
+			
+			Collection<Object> garbages = new ArrayList<>(objectsToBeCreated);
+			Collection<Object> notGarbagable = getNotGarbagable();
+			if(notGarbagable!=null)
+				garbages.removeAll(notGarbagable);
+				
+			addGarbagesCollection(garbages);
 		}
 	}
 	
@@ -170,6 +235,10 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	protected void __createManyByArray__(Object...objects) throws Exception {
 		if(__inject__(ArrayHelper.class).isNotEmpty(objects))
 			__createMany__(Arrays.asList(objects));
+	}
+	
+	protected Object __readOneByBusinessIdentifier__(Class<?> aClass,Object identifier) {
+		return null;
 	}
 	
 	protected void __deleteOne__(Object object) throws Exception {
@@ -205,7 +274,15 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 
 	protected void __clean__() throws Exception {
 		Collection<Object> garbages = getGarbages();
-		if(garbages!=null) {
+		Map<Class<?>,Collection<Object>> objectBusinessIdentifiersToBeDeletedOnClean = getObjectBusinessIdentifiersToBeDeletedOnClean();
+		if(objectBusinessIdentifiersToBeDeletedOnClean != null && !objectBusinessIdentifiersToBeDeletedOnClean.isEmpty()) {
+			if(garbages == null)
+				garbages = new ArrayList<>();
+			for(Map.Entry<Class<?>,Collection<Object>> indexEntry : objectBusinessIdentifiersToBeDeletedOnClean.entrySet())
+				for(Object index : indexEntry.getValue())
+					garbages.add(__readOneByBusinessIdentifier__(indexEntry.getKey(),index));
+		}
+		if(__injectCollectionHelper__().isNotEmpty(garbages)) {
 			__beginTransaction__();
 			__deleteMany__(garbages);
 			__endTransaction__();
@@ -226,6 +303,8 @@ public abstract class AbstractTestImpl extends AbstractFunctionWithPropertiesAsI
 	@Override
 	public Test assertThrowableIsNull() {
 		Throwable throwable = getThrowable();
+		//if(throwable!=null)
+		//	throwable.printStackTrace();
 		assertionHelper.assertTrue(throwable == null ? null : __inject__(ThrowableHelper.class).getFirstCause(throwable).getMessage(),throwable == null);
 		return this;
 	}

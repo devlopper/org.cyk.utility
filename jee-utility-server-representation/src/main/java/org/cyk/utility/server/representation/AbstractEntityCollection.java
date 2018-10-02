@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepresentationObject;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
-/*@XmlRootElement*/ @Getter @Setter @Accessors(chain=true)
+@Getter @Setter @Accessors(chain=true) @ToString
 public abstract class AbstractEntityCollection<T> extends AbstractRepresentationObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 

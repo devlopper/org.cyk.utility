@@ -6,6 +6,8 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.server.business.BusinessLayer;
@@ -69,8 +71,6 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 	
-	
-	
 	@Override
 	public Response getOne(String identifier,String type) {
 		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier).setEntityIdentifierValueUsageType(type)
@@ -78,12 +78,13 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public Response updateOne(ENTITY entity) {
-		return __inject__(RepresentationFunctionModifier.class).setPersistenceEntityClass(getPersistenceEntityClass()).setEntity(entity).execute().getResponse();
+	public Response updateOne(ENTITY entity,String fields) {
+		return __inject__(RepresentationFunctionModifier.class).setPersistenceEntityClass(getPersistenceEntityClass()).setEntity(entity)
+				.setEntityFieldNames(StringUtils.split(fields,CharacterConstant.COMA.toString())).execute().getResponse();
 	}
 	
 	@Override
-	public Response updateMany(Collection<ENTITY> entities) {
+	public Response updateMany(Collection<ENTITY> entities,String fields) {
 		return __inject__(RepresentationFunctionModifier.class).setEntities(entities).execute().getResponse();
 	}
 	

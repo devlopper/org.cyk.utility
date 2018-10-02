@@ -1,5 +1,7 @@
 package org.cyk.utility.server.representation;
 
+import java.util.Collection;
+
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.system.SystemFunctionServer;
@@ -22,6 +24,10 @@ public interface RepresentationFunction extends SystemFunctionServer {
 	@Override RepresentationFunction setEntityClass(Class<?> aClass);
 	
 	@Override RepresentationFunction setEntity(Object object);
+	
+	@Override RepresentationFunction setEntityFieldNames(String... entityFieldNames);
+	
+	@Override RepresentationFunction addEntityFieldNames(Collection<String> entityFieldNames);
 	
 	RepresentationFunction setResponse(Response response);
 	Response getResponse();

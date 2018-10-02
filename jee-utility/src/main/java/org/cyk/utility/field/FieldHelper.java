@@ -14,6 +14,7 @@ public interface FieldHelper extends Helper {
 	Object getFieldValueSystemIdentifier(Object object);
 	Object getFieldValueBusinessIdentifier(Object object);
 	
+	FieldHelper setFieldValueSystemIdentifier(Object object,Object value);
 	FieldHelper setFieldValueBusinessIdentifier(Object object,Object value);
 	
 	FieldHelper copy(Object source,Object destination);

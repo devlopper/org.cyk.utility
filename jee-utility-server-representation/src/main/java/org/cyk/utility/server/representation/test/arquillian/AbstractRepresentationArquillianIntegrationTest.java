@@ -66,7 +66,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 
 	@Override
 	protected <ENTITY> void ____updateEntity____(ENTITY entity, RepresentationEntity representation) {
-		representation.updateOne(entity);
+		representation.updateOne(entity,null);
 	}
 
 	@Override

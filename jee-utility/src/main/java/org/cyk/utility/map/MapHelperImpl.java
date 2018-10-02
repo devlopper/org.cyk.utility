@@ -60,4 +60,11 @@ public class MapHelperImpl extends AbstractHelper implements MapHelper,Serializa
 		Map map = instanciate(objects);
 		return map;
 	}
+	
+	@Override
+	public Map<String, Object> instanciateKeyAsStringValueAsObject(Object... objects) {
+		@SuppressWarnings("rawtypes")
+		Map map = instanciate(objects);
+		return map;
+	}
 }

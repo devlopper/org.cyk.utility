@@ -2,6 +2,7 @@ package org.cyk.utility.system;
 
 import java.util.Collection;
 
+import org.cyk.utility.collection.CollectionInstanceString;
 import org.cyk.utility.function.FunctionWithPropertiesAsInputAndVoidAsOutput;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.value.ValueUsageType;
@@ -16,6 +17,13 @@ public interface SystemFunction extends FunctionWithPropertiesAsInputAndVoidAsOu
 	
 	Object getEntity();
 	SystemFunction setEntity(Object entity);
+	
+	CollectionInstanceString getEntityFieldNames();
+	SystemFunction setEntityFieldNames(CollectionInstanceString entityFieldNames);
+	SystemFunction setEntityFieldNames(Collection<String> entityFieldNames);
+	SystemFunction setEntityFieldNames(String...entityFieldNames);
+	SystemFunction addEntityFieldNames(Collection<String> entityFieldNames);
+	SystemFunction addEntityFieldNames(String...entityFieldNames);
 	
 	SystemFunction setEntityIdentifier(Object identifier);
 	Object getEntityIdentifier();

@@ -34,6 +34,18 @@ public class RepresentationImpl extends AbstractObject implements Representation
 	}
 
 	@Override
+	public Object getOne(Class<?> aClass, Object identifier, ValueUsageType valueUsageType) {
+		@SuppressWarnings("unchecked")
+		Class<RepresentationEntity<Object,Object,Object>> interfaceClass = (Class<RepresentationEntity<Object,Object,Object>>) __inject__(SystemLayerRepresentation.class).getInterfaceClassFromEntityClassName(aClass);
+		if(interfaceClass == null){
+			System.err.println("No specific representation interface found for class "+aClass);
+			return null;
+		}else{
+			return __inject__(interfaceClass).getOne(identifier.toString(), valueUsageType.name()).getEntity();
+		}
+	}
+	
+	@Override
 	public Representation delete(Object object) {
 		@SuppressWarnings("unchecked")
 		Class<RepresentationEntity<Object,Object,Object>> interfaceClass = (Class<RepresentationEntity<Object,Object,Object>>) __inject__(SystemLayerRepresentation.class).getInterfaceClassFromEntityClassName(object.getClass());

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.inject.Inject;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.test.TestExpectedString;
 
 import lombok.Getter;
@@ -19,6 +20,18 @@ public class ExpectedMessageDto extends AbstractObject implements Serializable {
 	@Inject private TestExpectedString  headExpectedString;
 	@Inject private TestExpectedString  bodyExpectedString;
 	
+	public ExpectedMessageDto addCodeExpectedStrings(StringLocation location,String...strings) {
+		getCodeExpectedString().getLocationStrings(location, Boolean.TRUE).add(strings);
+		return this;
+	}
 	
+	public ExpectedMessageDto addHeadExpectedStrings(StringLocation location,String...strings) {
+		getHeadExpectedString().getLocationStrings(location, Boolean.TRUE).add(strings);
+		return this;
+	}
 	
+	public ExpectedMessageDto addBodyExpectedStrings(StringLocation location,String...strings) {
+		getBodyExpectedString().getLocationStrings(location, Boolean.TRUE).add(strings);
+		return this;
+	}
 }

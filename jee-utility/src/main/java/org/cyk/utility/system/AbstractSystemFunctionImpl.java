@@ -11,6 +11,7 @@ import org.cyk.utility.assertion.AssertionsProvider;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.collection.CollectionInstanceString;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldValueGetter;
@@ -39,6 +40,8 @@ import lombok.experimental.Accessors;
 public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements SystemFunction, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private CollectionInstanceString entityFieldNames;
+	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
@@ -91,6 +94,50 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	}
 	
 	protected abstract void __execute__(SystemAction action);
+	
+	@Override
+	public CollectionInstanceString getEntityFieldNames() {
+		return entityFieldNames;
+	}
+	
+	@Override
+	public SystemFunction setEntityFieldNames(CollectionInstanceString entityFieldNames) {
+		this.entityFieldNames = entityFieldNames;
+		return this;
+	}
+	
+	@Override
+	public SystemFunction setEntityFieldNames(Collection<String> entityFieldNames) {
+		if(__injectCollectionHelper__().isNotEmpty(entityFieldNames)) {
+			CollectionInstanceString collection = getEntityFieldNames();
+			if(collection == null)
+				setEntityFieldNames(collection = __inject__(CollectionInstanceString.class));
+			collection.add(entityFieldNames);
+		}
+		return this;
+	}
+	
+	@Override
+	public SystemFunction setEntityFieldNames(String... entityFieldNames) {
+		return setEntityFieldNames(__injectCollectionHelper__().instanciate(entityFieldNames));
+	}
+	
+	@Override
+	public SystemFunction addEntityFieldNames(Collection<String> entityFieldNames) {
+		if(__injectCollectionHelper__().isNotEmpty(entityFieldNames)) {
+			CollectionInstanceString collection = getEntityFieldNames();
+			if(collection == null)
+				setEntityFieldNames(entityFieldNames);
+			else
+				collection.add(entityFieldNames);
+		}
+		return this;
+	}
+	
+	@Override
+	public SystemFunction addEntityFieldNames(String... entityFieldNames) {
+		return addEntityFieldNames(__injectCollectionHelper__().instanciate(entityFieldNames));
+	}
 	
 	@Override
 	public SystemAction getAction(){

@@ -1,6 +1,7 @@
 package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -49,17 +50,23 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	
 	protected Object __computeResponseEntity__(){
 		ResponseEntityDto responseEntityDto = new ResponseEntityDto();
-		MessageDto messageDto = new MessageDto();
 		if(__throwable__==null) {
-			responseEntityDto.setStatus("SUCCESS");
-			messageDto.setHead(getPersistenceEntityClass().getSimpleName()+" a été créé avec succès.");
+			__computeResponseEntity__(responseEntityDto);
 		}else {
-			responseEntityDto.setStatus("FAILURE");
-			Throwable cause = __injectThrowableHelper__().getFirstCause(__throwable__);	
-			messageDto.setHead("Une erreur est survenue lors de "+getAction().getIdentifier()+" de "+getPersistenceEntityClass()+". "+cause.getMessage());
+			__computeResponseEntity__(responseEntityDto, __throwable__);
 		}
-		responseEntityDto.addMessage(messageDto);
 		return responseEntityDto;
+	}
+	
+	protected void __computeResponseEntity__(ResponseEntityDto responseEntityDto){
+		responseEntityDto.setStatus("SUCCESS");
+		responseEntityDto.addMessage(new MessageDto().setHead(getPersistenceEntityClass().getSimpleName()+" a été "+getAction().getIdentifier()+" avec succès."));
+	}
+	
+	protected void __computeResponseEntity__(ResponseEntityDto responseEntityDto,Throwable throwable){
+		responseEntityDto.setStatus("FAILURE");
+		Throwable cause = __injectThrowableHelper__().getFirstCause(throwable);	
+		responseEntityDto.addMessage(new MessageDto().setHead("Une erreur est survenue lors de "+getAction().getIdentifier()+" de "+getPersistenceEntityClass()+". "+cause.getMessage()));
 	}
 	
 	protected void __processResponseBuilder__(ResponseBuilder builder,Throwable throwable) {
@@ -116,6 +123,16 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	@Override
 	public RepresentationFunction setEntityClass(Class<?> aClass) {
 		return (RepresentationFunction) super.setEntityClass(aClass);
+	}
+	
+	@Override
+	public RepresentationFunction addEntityFieldNames(Collection<String> entityFieldNames) {
+		return (RepresentationFunction) super.addEntityFieldNames(entityFieldNames);
+	}
+	
+	@Override
+	public RepresentationFunction setEntityFieldNames(String... entityFieldNames) {
+		return (RepresentationFunction) super.setEntityFieldNames(entityFieldNames);
 	}
 	
 	@Override

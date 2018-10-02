@@ -1,6 +1,7 @@
 package org.cyk.utility.test;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInputAndVoidAsOutput;
 
@@ -17,7 +18,12 @@ public interface Test extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 	Collection<Object> getObjectsToBeCreated();
 	Test addObjectsToBeCreatedCollection(Collection<Object> objects);
 	Test addObjectsToBeCreatedArray(Object...objects);
-
+	
+	Test setObjectBusinessIdentifiersToBeDeletedOnClean(Map<Class<?>,Collection<Object>> map);
+	Map<Class<?>,Collection<Object>> getObjectBusinessIdentifiersToBeDeletedOnClean();
+	Test addObjectBusinessIdentifiersToBeDeletedOnCleanCollection(Class<?> aClass,Collection<Object> identifiers);
+	Test addObjectBusinessIdentifiersToBeDeletedOnCleanArray(Class<?> aClass,Object...identifiers);
+	
 	/*
 	 * Running
 	 */
@@ -49,6 +55,11 @@ public interface Test extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 	Collection<Object> getGarbages();
 	Test addGarbagesCollection(Collection<Object> objects);
 	Test addGarbagesArray(Object...objects);
+	
+	Test setNotGarbagable(Collection<Object> objects);
+	Collection<Object> getNotGarbagable();
+	Test addNotGarbagableCollection(Collection<Object> objects);
+	Test addNotGarbagableArray(Object...objects);
 	
 	/**/
 	

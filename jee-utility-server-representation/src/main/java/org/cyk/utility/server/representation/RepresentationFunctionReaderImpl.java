@@ -22,7 +22,7 @@ public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunc
 		if(getEntityIdentifier()!=null) {//specific identifiers
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
 			Object identifier = getEntityIdentifier();
-			if(ValueUsageType.SYSTEM.equals(valueUsageType))
+			if(ValueUsageType.SYSTEM.equals(valueUsageType) && !(identifier instanceof Long))
 				identifier = __injectNumberHelper__().getLong(identifier);
 			
 			entity = __injectInstanceHelper__().buildOne(getEntityClass(),__injectBusiness__().findOne(getPersistenceEntityClass(),identifier,new Properties()
@@ -41,16 +41,23 @@ public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunc
 		}
 		return super.__computeResponseStatus__();
 	}
-
+	
 	@Override
 	protected Object __computeResponseEntity__() {
-		if(getEntityIdentifier()!=null) {
-			if(entity != null)
-				return new GenericEntity<Object>(entity, getEntityClass());	
-		}else {
-			if(entities != null)
-				return new GenericEntity<List<?>>(entities,(Type) __injectTypeHelper__().instanciateGenericCollectionParameterizedTypeForJaxrs(List.class, getEntityClass()));	
-		}
-		return null;
+		if(__throwable__ == null) {
+			if(getEntityIdentifier()!=null) {
+				if(entity == null)
+					return null;
+				else
+					return new GenericEntity<Object>(entity, getEntityClass());	
+			}else {
+				if(entities == null)
+					return null;
+				else
+					return new GenericEntity<List<?>>(entities,(Type) __injectTypeHelper__().instanciateGenericCollectionParameterizedTypeForJaxrs(List.class, getEntityClass()));	
+			}	
+		}else
+			return super.__computeResponseEntity__();
 	}
+	
 }

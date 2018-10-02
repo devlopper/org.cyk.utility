@@ -2,6 +2,8 @@ package org.cyk.utility.server.representation;
 
 import java.util.Collection;
 
+import org.cyk.utility.value.ValueUsageType;
+
 /**
  * 
  * @author Christian
@@ -18,9 +20,9 @@ public interface Representation extends RepresentationServiceProvider<Object,Obj
 	/* Read */ 
 	/*
 	Object getMany();
-	
-	Object getOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type);
 	*/
+	Object getOne(Class<?> aClass,Object identifier,ValueUsageType valueUsageType);
+	
 	/* Update */
 	/*
 	Representation updateOne(Object object);
