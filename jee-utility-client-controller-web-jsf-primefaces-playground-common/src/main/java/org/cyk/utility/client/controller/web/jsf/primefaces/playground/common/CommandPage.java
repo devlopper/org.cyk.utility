@@ -8,6 +8,7 @@ import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.Command;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
+import org.cyk.utility.system.action.SystemActionCreate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +27,8 @@ public class CommandPage extends AbstractPageImpl implements Serializable {
 		noServerNoClient.getProperties().setValue("No Server No Client");
 	
 		serverOnlyNoConfirmation.getProperties().setValue("Server Only No Confirmation");
-		serverOnlyNoConfirmation.setFunctionRunnable(new Runnable() {	
+		serverOnlyNoConfirmation.getFunction(Boolean.TRUE).setAction(__inject__(SystemActionCreate.class));
+		serverOnlyNoConfirmation.getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).addRunnables(new Runnable() {	
 			@Override
 			public void run() {
 				System.out.println("Server Only No Confirmation");

@@ -1,9 +1,12 @@
 package org.cyk.utility.server.representation.test.arquillian;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldName;
@@ -11,6 +14,7 @@ import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.random.RandomHelper;
+import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.RepresentationLayer;
@@ -113,6 +117,20 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	}
 	
 	@Test
+	public void readMany() throws Exception{
+		Object object1 = __instanciateEntity__(null);
+		Object object2 = __instanciateEntity__(null);
+		
+		__inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object1).createOne(object1);
+		__inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object2).createOne(object2);
+		
+		@SuppressWarnings("unchecked")
+		Collection<ENTITY> entities = (Collection<ENTITY>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object1).getMany().getEntity();
+		
+		assertThat(entities).asList().hasSize(2);
+	}
+	
+	@Test
 	public void updateOne() throws Exception{
 		Object object = __instanciateEntity__(null);
 		String businessIdentifierFieldName = __inject__(FieldNameGetter.class).execute(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS).execute().getOutput();
@@ -173,4 +191,24 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	}
 	
 	protected void __setEntityFields__(ENTITY entity,Object action){}
+
+	/**/
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Class<? extends RepresentationEntity> __getLayerEntityInterfaceClass__() {
+		return __inject__(RepresentationLayer.class).getInterfaceClassFromEntityClass(__inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected <T> Class<? extends AbstractEntityCollection<T>> __getEntityCollectionClass__(Class<T> aClass) {
+		aClass = (Class<T>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+		try {
+			return (Class<? extends AbstractEntityCollection<T>>) Class.forName(aClass.getName()+"Collection");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}	
 }

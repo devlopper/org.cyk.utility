@@ -53,8 +53,9 @@ public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunc
 			}else {
 				if(entities == null)
 					return null;
-				else
-					return new GenericEntity<List<?>>(entities,(Type) __injectTypeHelper__().instanciateGenericCollectionParameterizedTypeForJaxrs(List.class, getEntityClass()));	
+				else {
+					return new GenericEntity<List<?>>(entities,(Type) __injectTypeHelper__().instanciateCollectionParameterizedType(List.class, getEntityClass()));
+				}
 			}	
 		}else
 			return super.__computeResponseEntity__();

@@ -29,16 +29,5 @@ public class CommandImpl extends AbstractComponentImpl implements Command,Serial
 			setFunction(function = __inject__(CommandFunction.class));
 		return function;
 	}
-
-	@Override
-	public Runnable getFunctionRunnable() {
-		return getFunction(Boolean.TRUE).getRunnable();
-	}
-
-	@Override
-	public Command setFunctionRunnable(Runnable runnable) {
-		getFunction(Boolean.TRUE).setRunnable(runnable);
-		return this;
-	}
 	
 }

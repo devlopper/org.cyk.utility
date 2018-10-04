@@ -15,6 +15,7 @@ import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.type.TypeHelper;
 import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractServiceProviderImpl extends AbstractSingleton implements ServiceProvider, Serializable {
@@ -82,5 +83,9 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	
 	protected NumberHelper __injectNumberHelper__(){
 		return __inject__(NumberHelper.class);
+	}
+	
+	protected TypeHelper __injectTypeHelper__(){
+		return __inject__(TypeHelper.class);
 	}
 }

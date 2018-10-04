@@ -64,10 +64,10 @@ public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAnd
 		Class<?> destinationType = __inject__(FieldTypeGetter.class).execute(destination).getOutput();
 		//System.out.println("FieldValueCopyImpl.__processValue__() "+source+" *** "+sourceType+" *** "+destination+" *** "+destinationType);
 		
-		if(!sourceType.isPrimitive() && !StringUtils.startsWithAny(sourceType.getName(), "java.","javax."))
+		if(!sourceType.isPrimitive() && !sourceType.isEnum() && !StringUtils.startsWithAny(sourceType.getName(), "java.","javax."))
 			value = __injectFieldHelper__().getFieldValueBusinessIdentifier(value);
 		
-		if(!destinationType.isPrimitive() && !StringUtils.startsWithAny(destinationType.getName(), "java.","javax."))
+		if(!destinationType.isPrimitive() && !sourceType.isEnum() && !StringUtils.startsWithAny(destinationType.getName(), "java.","javax."))
 			value = __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, value);
 		return value;
 	}

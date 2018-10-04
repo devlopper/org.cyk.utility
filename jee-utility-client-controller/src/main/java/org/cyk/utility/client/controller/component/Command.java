@@ -6,6 +6,4 @@ public interface Command extends Component {
 	Command setFunction(CommandFunction function);
 	CommandFunction getFunction(Boolean injectIfNull);
 	
-	Runnable getFunctionRunnable();
-	Command setFunctionRunnable(Runnable runnable);
 }

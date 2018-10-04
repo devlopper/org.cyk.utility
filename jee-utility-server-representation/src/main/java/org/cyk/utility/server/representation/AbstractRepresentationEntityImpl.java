@@ -1,7 +1,6 @@
 package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ws.rs.core.Response;
@@ -28,25 +27,6 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		persistenceEntityClass = (Class<PERSISTENCE_ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
 		business = (BUSINESS) __inject__(BusinessLayer.class).injectInterfaceClassFromPersistenceEntityClass(getPersistenceEntityClass());
 		entityClass =  (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 2, AbstractEntityFromPersistenceEntity.class);
-	}
-	
-	//TODO think about getPersistenceEntityByIdentifier to be make as function
-	
-	//@Override
-	@Deprecated
-	public PERSISTENCE_ENTITY getPersistenceEntityByIdentifier(ENTITY entity) {
-		PERSISTENCE_ENTITY persistenceEntity = getBusiness().findOne(__injectNumberHelper__().getLong(entity.getIdentifier()));
-		
-		return persistenceEntity;
-	}
-	
-	//@Override
-	@Deprecated
-	public Collection<PERSISTENCE_ENTITY> getPersistenceEntityByIdentifier(Collection<ENTITY> entities) {
-		Collection<PERSISTENCE_ENTITY> persistenceEntites = new ArrayList<>();
-		for(ENTITY index : entities)
-			persistenceEntites.add(getPersistenceEntityByIdentifier(index));
-		return persistenceEntites;
 	}
 	
 	/* */
