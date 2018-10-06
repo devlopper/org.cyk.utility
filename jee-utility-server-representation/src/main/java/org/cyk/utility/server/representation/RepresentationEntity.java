@@ -23,51 +23,51 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 
 	/* Create */
 	@POST
-	@Path(PATH_ROOT)
+	@Path(PATH_CREATE_ONE)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response createOne(ENTITY entity);
 	
 	@POST
-	@Path(PATH_MANY)
+	@Path(PATH_CREATE_MANY)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response createMany(Collection<ENTITY> entities);
 	
 	@POST
-	@Path(PATH_MANY_COLLECTION)
+	@Path(PATH_CREATE_MANY_COLLECTION)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response createMany(ENTITY_COLLECTION entityCollection);
 	
 	/* Read */ 
 	@GET
-	@Path(PATH_ROOT)
+	@Path(PATH_GET_MANY)
 	@Produces({ MediaType.APPLICATION_XML })
 	Response getMany();
 	
 	@GET
-	@Path(PATH_IDENTIFIER)
+	@Path(PATH_GET_ONE)
 	@Produces({ MediaType.APPLICATION_XML })
 	Response getOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type);
 	
 	/* Update */
 	/* Using partial */
 	@PATCH
-	@Path(PATH_ROOT)
+	@Path(PATH_UPDATE_ONE)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response updateOne(ENTITY entity,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	@PATCH
-	@Path(PATH_MANY)
+	@Path(PATH_UPDATE_MANY)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response updateMany(Collection<ENTITY> entities,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	/* Delete */
 	@DELETE
-	@Path(PATH_IDENTIFIER)
+	@Path(PATH_DELETE_ONE)
 	@Produces(MediaType.APPLICATION_XML)
 	Response deleteOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type);
 	
 	@DELETE
-	@Path(PATH_MANY)
+	@Path(PATH_DELETE_MANY)
 	@Produces(MediaType.APPLICATION_XML)
 	Response deleteMany();
 	

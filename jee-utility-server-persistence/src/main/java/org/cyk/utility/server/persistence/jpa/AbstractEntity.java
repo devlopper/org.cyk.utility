@@ -26,7 +26,7 @@ public abstract class AbstractEntity extends AbstractIdentifiedByLong implements
 	 * Business properties
 	 */
 	@NotNull @Column(nullable=false,unique=true)
-	private String code;
+	protected String code;
 
 	/**/
 	

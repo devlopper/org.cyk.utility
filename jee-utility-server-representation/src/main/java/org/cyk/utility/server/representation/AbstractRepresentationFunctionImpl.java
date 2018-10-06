@@ -66,6 +66,8 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	protected void __computeResponseEntity__(ResponseEntityDto responseEntityDto,Throwable throwable){
 		responseEntityDto.setStatus("FAILURE");
 		Throwable cause = __injectThrowableHelper__().getFirstCause(throwable);	
+		//TODO cause can be null , find the cause which is not null otherwise use throwable itself
+		//throwable.printStackTrace();
 		responseEntityDto.addMessage(new MessageDto().setHead("Une erreur est survenue lors de "+getAction().getIdentifier()+" de "+getPersistenceEntityClass()+". "+cause.getMessage()));
 	}
 	

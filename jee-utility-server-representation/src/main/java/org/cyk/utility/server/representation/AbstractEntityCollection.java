@@ -10,10 +10,9 @@ import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepre
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
-@Getter @Setter @Accessors(chain=true) @ToString
+@Getter @Setter @Accessors(chain=true)
 public abstract class AbstractEntityCollection<T> extends AbstractRepresentationObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -39,5 +38,10 @@ public abstract class AbstractEntityCollection<T> extends AbstractRepresentation
 		for(T index : objects)
 			collection.add(index);
 		return this;
+	}
+	
+	@Override
+	public String toString() {
+		return collection == null ? null : collection.toString();
 	}
 }
