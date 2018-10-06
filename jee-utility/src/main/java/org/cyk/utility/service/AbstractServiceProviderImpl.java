@@ -7,6 +7,9 @@ import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.assertion.AssertionBuilderNull;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.enumeration.EnumCollectionGetter;
+import org.cyk.utility.enumeration.EnumGetter;
+import org.cyk.utility.enumeration.EnumerationHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.instance.InstanceHelper;
@@ -87,5 +90,17 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	
 	protected TypeHelper __injectTypeHelper__(){
 		return __inject__(TypeHelper.class);
+	}
+	
+	protected EnumerationHelper __injectEnumerationHelper__(){
+		return __inject__(EnumerationHelper.class);
+	}
+	
+	protected EnumGetter __injectEnumGetter__(){
+		return __inject__(EnumGetter.class);
+	}
+	
+	protected EnumCollectionGetter __injectEnumCollectionGetter__(){
+		return __inject__(EnumCollectionGetter.class);
 	}
 }

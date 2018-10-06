@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-public class EnumGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Enum<?>> implements EnumGetter,Serializable {
+@SuppressWarnings("rawtypes")
+public class EnumGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Enum> implements EnumGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Object name;

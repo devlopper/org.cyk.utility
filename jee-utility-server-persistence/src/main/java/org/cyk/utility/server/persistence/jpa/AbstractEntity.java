@@ -28,6 +28,11 @@ public abstract class AbstractEntity extends AbstractIdentifiedByLong implements
 	@NotNull @Column(nullable=false,unique=true)
 	protected String code;
 
+	@Override
+	protected String getRuntimeIdentifier() {
+		return getCode();
+	}
+	
 	/**/
 	
 	public static final String FIELD_CODE = "code";

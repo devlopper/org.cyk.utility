@@ -21,7 +21,7 @@ public abstract class AbstractIdentified<IDENTIFIER> extends Common implements I
 	
 	/**/
 	
-	private String getRuntimeIdentifier(){
+	protected String getRuntimeIdentifier(){
 		return //getMemoryAddress()
 				getClass().getSimpleName()
 				+CHARACTER_SLASH+StringUtils.defaultString(identifier==null?null:identifier.toString(),CHARACTER_QUESTION_MARK);
