@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:cyk="http://utility.cyk.org">
+	
+    <h:head>
+        <title>Layout</title>
+    </h:head>
+    <h:body>
+    	<h3>Responsive : Label(1st Column) - Input(2nd Column)</h3>
+    	<cyk:layoutGridResponsive value="#{layoutPage.formResponsive01}">
+    		<ui:define name="content">
+    			<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01Label01}">
+		    		<ui:define name="content">
+		    			<h:outputLabel value="Label 01" />
+		    		</ui:define>
+		    	</cyk:layoutGridResponsiveCell>
+		    	
+		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01Input01}">
+		    		<ui:define name="content">
+		    			<p:inputText value="" />
+		    		</ui:define>
+		    	</cyk:layoutGridResponsiveCell>
+		    	
+		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01Label02}">
+		    		<ui:define name="content">
+		    			<h:outputLabel value="Label 02" />
+		    		</ui:define>
+		    	</cyk:layoutGridResponsiveCell>
+		    	
+		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01Input02}">
+		    		<ui:define name="content">
+		    			<p:inputText value="" />
+		    		</ui:define>
+		    	</cyk:layoutGridResponsiveCell>
+		    	
+		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01Label03}">
+		    		<ui:define name="content">
+		    			<h:outputLabel value="Label 03" />
+		    		</ui:define>
+		    	</cyk:layoutGridResponsiveCell>
+		    	
+		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01Input03}">
+		    		<ui:define name="content">
+		    			<p:inputText value="" />
+		    		</ui:define>
+		    	</cyk:layoutGridResponsiveCell>
+    		</ui:define>
+	    		
+    	</cyk:layoutGridResponsive>    	
+    </h:body>
+</html>

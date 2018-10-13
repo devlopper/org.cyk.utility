@@ -23,16 +23,18 @@ public class GeneratorEclipse implements Serializable {
 	
 	public static final String CYK_WORKSPACE_PATH = "cyk.workspace.path";
 	
+	public static final String PACKAGE = "ci.gouv.dgbf.system";
+	
 	//archetype-jee-server-microservices-jboss-swarm
 	public static final String COMMANDS_SERVER ="%1"+"\r\n"
 			+ " cd %2"+"\r\n"
 			+ " mvn archetype:generate"
 			+ " -DarchetypeGroupId=org.cyk.archetype"
-			+ " -DarchetypeArtifactId=archetype-jee-server-microservices-jboss-swarm"
+			+ " -DarchetypeArtifactId=archetype-jee-server"
 			+ " -DarchetypeVersion=0.0.1"
 			+ " -DarchetypeCatalog=local"
 			+ " -DsystemIdentifier=%3 "
-			+ " -Dpackage=org.cyk.system "
+			+ " -Dpackage="+PACKAGE+" "
 			+ " -DinteractiveMode=false";
 	
 	public static final String COMMANDS_CLIENT ="%1"+"\r\n"
@@ -43,7 +45,7 @@ public class GeneratorEclipse implements Serializable {
 			+ " -DarchetypeVersion=0.0.1"
 			+ " -DarchetypeCatalog=local"
 			+ " -DsystemIdentifier=%3 "
-			+ " -Dpackage=org.cyk.system "
+			+ " -Dpackage="+PACKAGE+" "
 			+ " -DinteractiveMode=false";
 	
 	public static final String ARCHETYPE_GENERATE_COMMAND_FORMAT = 
@@ -59,7 +61,8 @@ public class GeneratorEclipse implements Serializable {
 	private File commandFile;
 	
 	public GeneratorEclipse() throws FileNotFoundException, IOException {
-		properties.put("cyk.workspace.path", "E:\\Workspaces\\Eclipse\\neon\\org\\cyk");
+		//properties.put("cyk.workspace.path", "E:\\Workspaces\\Eclipse\\photon\\org\\cyk");
+		properties.put("cyk.workspace.path", "E:\\Workspaces\\Eclipse\\photon\\ci\\gouv\\dgbf");
 		//properties.load(new FileInputStream(userDir+"/config.properties"));
 		workspaceDirectory = new File(properties.getProperty(CYK_WORKSPACE_PATH));
 		
@@ -113,7 +116,7 @@ public class GeneratorEclipse implements Serializable {
 		System.out.println("System directory : "+systemDirectory);
 		
 		executeSystem(systemDirectory,"server", COMMANDS_SERVER);
-		executeSystem(systemDirectory,"client",COMMANDS_CLIENT);
+		//executeSystem(systemDirectory,"client",COMMANDS_CLIENT);
 		
 		System.out.println("###   Done   ###");
 	}

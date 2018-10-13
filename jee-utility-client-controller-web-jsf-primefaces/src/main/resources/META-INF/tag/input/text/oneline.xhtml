@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://utility.cyk.org">
+	
+	<ui:decorate template="/template.xhtml">
+		<ui:define name="valueIsNotNull">
+			<ui:param name="input" value="#{value}"/>
+			
+			<!-- Label -->
+			<cyk:layoutGridResponsiveCell value="#{input.labelComponent.layoutCellComponent}">
+	    		<ui:define name="content">
+	    			<cyk:outputLabel value="#{input.labelComponent}" />
+	    		</ui:define>
+	    	</cyk:layoutGridResponsiveCell>
+			
+			<!-- Input -->
+			<cyk:layoutGridResponsiveCell value="#{input.layoutCellComponent}">
+	    		<ui:define name="content">
+	    			<p:inputText 
+						id="#{identifier}"
+						value="#{input.value}"
+						required="#{input.properties.required}"
+					>
+					
+					</p:inputText>
+	    		</ui:define>
+	    	</cyk:layoutGridResponsiveCell>
+						
+			<!-- Message -->
+			<cyk:layoutGridResponsiveCell value="#{input.messageComponent.layoutCellComponent}">
+	    		<ui:define name="content">
+	    			<cyk:message value="#{input.messageComponent}" />
+	    		</ui:define>
+	    	</cyk:layoutGridResponsiveCell>
+		</ui:define>
+	</ui:decorate>	
+	
+	
+		
+</ui:composition>

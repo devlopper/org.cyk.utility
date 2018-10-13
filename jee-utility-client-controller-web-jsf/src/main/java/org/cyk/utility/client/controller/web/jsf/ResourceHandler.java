@@ -19,6 +19,7 @@ public class ResourceHandler extends javax.faces.application.ResourceHandlerWrap
 		addPath("/META-INF/contracts");
 		
 		addPath("/META-INF/pages");//web pages
+		addPath("/META-INF/tag");
 	}
 
 	private javax.faces.application.ResourceHandler wrapped;

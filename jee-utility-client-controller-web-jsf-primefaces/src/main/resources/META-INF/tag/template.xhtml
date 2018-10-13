@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+	<ui:param name="identifier" value="#{value == null or value.properties == null or value.properties.identifier == null ? viewHelper.randomHelper.getAlphabetic(3) : value.properties.identifier}"/>
+	
+	<ui:fragment rendered="#{value == null}">
+		<ui:insert name="valueIsNull"/>
+	</ui:fragment>
+	
+	<ui:fragment rendered="#{value != null}">
+		<ui:insert name="valueIsNotNull"/>
+	</ui:fragment>
+
+</ui:composition>
