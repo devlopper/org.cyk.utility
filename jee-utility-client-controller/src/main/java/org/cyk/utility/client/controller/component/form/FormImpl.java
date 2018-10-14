@@ -3,42 +3,42 @@ package org.cyk.utility.client.controller.component.form;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
-import org.cyk.utility.client.controller.component.layout.LayoutCell;
+import org.cyk.utility.client.controller.component.layout.LayoutItem;
 
 public class FormImpl extends AbstractVisibleComponentImpl implements Form, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private LayoutCell headerLayoutCellComponent,bodyLayoutCellComponent,footerLayoutCellComponent;
+	private LayoutItem headerLayoutCellComponent,bodyLayoutCellComponent,footerLayoutCellComponent;
 	
 	@Override
-	public LayoutCell getHeaderLayoutCellComponent() {
+	public LayoutItem getHeaderLayoutCellComponent() {
 		return headerLayoutCellComponent;
 	}
 
 	@Override
-	public Form setHeaderLayoutCellComponent(LayoutCell headerLayoutCellComponent) {
+	public Form setHeaderLayoutCellComponent(LayoutItem headerLayoutCellComponent) {
 		this.headerLayoutCellComponent = headerLayoutCellComponent;
 		return this;
 	}
 
 	@Override
-	public LayoutCell getBodyLayoutCellComponent() {
+	public LayoutItem getBodyLayoutCellComponent() {
 		return bodyLayoutCellComponent;
 	}
 
 	@Override
-	public Form setBodyLayoutCellComponent(LayoutCell bodyLayoutCellComponent) {
+	public Form setBodyLayoutCellComponent(LayoutItem bodyLayoutCellComponent) {
 		this.bodyLayoutCellComponent = bodyLayoutCellComponent;
 		return this;
 	}
 
 	@Override
-	public LayoutCell getFooterLayoutCellComponent() {
+	public LayoutItem getFooterLayoutCellComponent() {
 		return footerLayoutCellComponent;
 	}
 
 	@Override
-	public Form setFooterLayoutCellComponent(LayoutCell footerLayoutCellComponent) {
+	public Form setFooterLayoutCellComponent(LayoutItem footerLayoutCellComponent) {
 		this.footerLayoutCellComponent = footerLayoutCellComponent;
 		return this;
 	}

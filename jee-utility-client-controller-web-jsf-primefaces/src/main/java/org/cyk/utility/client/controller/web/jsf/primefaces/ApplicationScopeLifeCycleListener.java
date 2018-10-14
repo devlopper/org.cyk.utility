@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.client.controller.component.ComponentPostConstructListenerImpl;
 import org.cyk.utility.client.controller.message.MessageRenderImpl;
+import org.cyk.utility.css.StyleClassBuilderWidthImpl;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -17,6 +18,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	protected void __initialize__(Object object) {
 		__inject__(FunctionRunnableMap.class).set(ComponentPostConstructListenerImpl.class, ComponentPostConstructListenerFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(MessageRenderImpl.class, MessageRenderFunctionRunnableImpl.class);
+		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthPrimefacesGridCssFunctionRunnableImpl.class);
 	}
 	
 	@Override

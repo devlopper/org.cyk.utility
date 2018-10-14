@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractInvisibleComponentImpl;
 
-public abstract class AbstractLayoutCellImpl extends AbstractInvisibleComponentImpl implements LayoutCell,Serializable {
+public abstract class AbstractLayoutItemImpl extends AbstractInvisibleComponentImpl implements LayoutItem,Serializable {
 	private static final long serialVersionUID = 1L;
 
 }

@@ -10,6 +10,8 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Singleton;
@@ -160,6 +162,23 @@ public class KernelHelperImpl implements KernelHelper,Serializable {
 			addToCollection(collection, Arrays.asList(elements));
 		}
 		return this;
+	}
+	
+	@Override
+	public <T> T getElementAt(Collection<T> collection, Integer index) {
+		T object = null;
+		if(index!=null && index >=0 &&  collection!=null && index < collection.size()) {
+			if(collection instanceof List)
+				object = ((List<T>)collection).get(index.intValue());
+			else {
+				Iterator<T> iterator = collection.iterator();
+				object = iterator.next();
+				Integer count = 0;
+				while(count++<index)
+					object = iterator.next();
+			}
+		}
+		return object;
 	}
 	
 	/**/

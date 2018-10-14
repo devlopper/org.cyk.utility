@@ -8,8 +8,8 @@ import org.cyk.utility.client.controller.component.ComponentPostConstructListene
 import org.cyk.utility.client.controller.component.form.Form;
 import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.layout.Layout;
-import org.cyk.utility.client.controller.component.layout.LayoutCellResponsive;
-import org.cyk.utility.client.controller.component.layout.LayoutGridResponsive;
+import org.cyk.utility.client.controller.component.layout.LayoutBasedCss;
+import org.cyk.utility.client.controller.component.layout.LayoutItemBasedCss;
 import org.cyk.utility.random.RandomHelper;
 
 public class ComponentPostConstructListenerFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentPostConstructListener> implements Serializable {
@@ -41,18 +41,18 @@ public class ComponentPostConstructListenerFunctionRunnableImpl extends Abstract
 					}
 				}
 				
-				if(component instanceof LayoutGridResponsive) {
+				if(component instanceof LayoutBasedCss) {
 					Layout layout = (Layout) component;
 					layout.getProperties().setClass("ui-g");
 				}
 				
-				if(component instanceof LayoutCellResponsive) {
+				if(component instanceof LayoutItemBasedCss) {
 					//LayoutCell layoutCell = (LayoutCell) component;
 					//layoutCell.getProperties().setClass("ui-g-12 ui-md-6 ui-lg-3");
 				}
 				
 				if(component instanceof Form) {
-					Form form = (Form) component;
+					/*Form form = (Form) component;
 					form.setHeaderLayoutCellComponent(__inject__(LayoutCellResponsive.class));
 					form.getHeaderLayoutCellComponent().getProperties().setClass("ui-g-12 ui-xl-12 ui-lg-12 ui-md-12 ui-sm-12");
 					
@@ -61,6 +61,7 @@ public class ComponentPostConstructListenerFunctionRunnableImpl extends Abstract
 					
 					form.setFooterLayoutCellComponent(__inject__(LayoutCellResponsive.class));
 					form.getFooterLayoutCellComponent().getProperties().setClass("ui-g-12 ui-xl-12 ui-lg-12 ui-md-12 ui-sm-12");
+					*/
 				}
 			}
 		});

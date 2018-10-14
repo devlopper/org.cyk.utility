@@ -15,37 +15,38 @@
     	<h3>Responsive : Label(1st Column) - Input(2nd Column)</h3>
     	<cyk:layoutGridResponsive value="#{layoutPage.formResponsive01}">
     		<ui:define name="content">
-    			<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01Label01}">
+    			
+    			<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01.getChildAt(0)}">
 		    		<ui:define name="content">
 		    			<h:outputLabel value="Label 01" />
 		    		</ui:define>
 		    	</cyk:layoutGridResponsiveCell>
 		    	
-		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01Input01}">
+		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01.getChildAt(1)}">
 		    		<ui:define name="content">
 		    			<p:inputText value="" />
 		    		</ui:define>
 		    	</cyk:layoutGridResponsiveCell>
 		    	
-		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01Label02}">
+		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01.getChildAt(2)}">
 		    		<ui:define name="content">
 		    			<h:outputLabel value="Label 02" />
 		    		</ui:define>
 		    	</cyk:layoutGridResponsiveCell>
 		    	
-		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01Input02}">
+		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01.getChildAt(3)}">
 		    		<ui:define name="content">
 		    			<p:inputText value="" />
 		    		</ui:define>
 		    	</cyk:layoutGridResponsiveCell>
 		    	
-		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01Label03}">
+		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01.getChildAt(4)}">
 		    		<ui:define name="content">
 		    			<h:outputLabel value="Label 03" />
 		    		</ui:define>
 		    	</cyk:layoutGridResponsiveCell>
 		    	
-		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01Input03}">
+		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01.getChildAt(5)}">
 		    		<ui:define name="content">
 		    			<p:inputText value="" />
 		    		</ui:define>

@@ -34,4 +34,6 @@ public interface KernelHelper {
 	
 	<T> KernelHelper addToCollection(Collection<T> collection,Collection<T> elements);
 	<T> KernelHelper addToCollection(Collection<T> collection,@SuppressWarnings("unchecked") T...elements);
+	
+	<T> T getElementAt(Collection<T> collection,Integer index);
 }

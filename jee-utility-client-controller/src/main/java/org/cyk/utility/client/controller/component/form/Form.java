@@ -1,16 +1,16 @@
 package org.cyk.utility.client.controller.component.form;
 
 import org.cyk.utility.client.controller.component.VisibleComponent;
-import org.cyk.utility.client.controller.component.layout.LayoutCell;
+import org.cyk.utility.client.controller.component.layout.LayoutItem;
 
 public interface Form extends VisibleComponent {
 
-	LayoutCell getHeaderLayoutCellComponent();
-	Form setHeaderLayoutCellComponent(LayoutCell headerLayoutCellComponent);
+	LayoutItem getHeaderLayoutCellComponent();
+	Form setHeaderLayoutCellComponent(LayoutItem headerLayoutCellComponent);
 	
-	LayoutCell getBodyLayoutCellComponent();
-	Form setBodyLayoutCellComponent(LayoutCell bodyLayoutCellComponent);
+	LayoutItem getBodyLayoutCellComponent();
+	Form setBodyLayoutCellComponent(LayoutItem bodyLayoutCellComponent);
 	
-	LayoutCell getFooterLayoutCellComponent();
-	Form setFooterLayoutCellComponent(LayoutCell footerLayoutCellComponent);
+	LayoutItem getFooterLayoutCellComponent();
+	Form setFooterLayoutCellComponent(LayoutItem footerLayoutCellComponent);
 }

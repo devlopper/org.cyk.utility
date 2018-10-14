@@ -184,7 +184,11 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 
 	@Override
 	public <I extends Objectable> I getParentAs(Class<I> aClass) {
-		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public Object getChildAt(Integer index) {
 		return null;
 	}
 

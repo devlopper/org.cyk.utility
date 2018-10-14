@@ -1,5 +1,5 @@
 package org.cyk.utility.client.controller.component.layout;
 
-public interface LayoutGridResponsive extends LayoutGrid {
+public interface LayoutItemBasedCss extends LayoutItem {
 
 }

@@ -7,6 +7,7 @@ import java.util.Collection;
 import javax.annotation.PostConstruct;
 
 import org.assertj.core.util.Arrays;
+import org.cyk.utility.__kernel__.KernelHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 
 import lombok.Getter;
@@ -110,5 +111,10 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 			collection.addAll(children);
 		}
 		return this;
+	}
+	
+	@Override
+	public Object getChildAt(Integer index) {
+		return __inject__(KernelHelper.class).getElementAt(getChildren(), index);
 	}
 }

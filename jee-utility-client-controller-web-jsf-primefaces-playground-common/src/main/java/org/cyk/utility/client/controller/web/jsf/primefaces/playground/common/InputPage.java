@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.input.InputText;
-import org.cyk.utility.client.controller.component.layout.LayoutGridResponsive;
+import org.cyk.utility.client.controller.component.layout.Layout;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
 
 import lombok.Getter;
@@ -17,7 +17,7 @@ import lombok.Setter;
 public class InputPage extends AbstractPageImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Inject private LayoutGridResponsive formLayout;
+	@Inject private Layout formLayout;
 	@Inject private InputText inputText;
 	@Inject private InputText inputTextRequired;
 	

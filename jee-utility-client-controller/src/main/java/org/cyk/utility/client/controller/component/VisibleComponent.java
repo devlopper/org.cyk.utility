@@ -1,11 +1,11 @@
 package org.cyk.utility.client.controller.component;
 
-import org.cyk.utility.client.controller.component.layout.LayoutCell;
+import org.cyk.utility.client.controller.component.layout.LayoutItem;
 
 public interface VisibleComponent extends Component {
 
-	LayoutCell getLayoutCellComponent();
-	LayoutCell getLayoutCellComponent(Boolean injectIfNull);
-	VisibleComponent setLayoutCellComponent(LayoutCell layoutCellComponent);
+	LayoutItem getLayoutCellComponent();
+	LayoutItem getLayoutCellComponent(Boolean injectIfNull);
+	VisibleComponent setLayoutCellComponent(LayoutItem layoutCellComponent);
 	
 }
