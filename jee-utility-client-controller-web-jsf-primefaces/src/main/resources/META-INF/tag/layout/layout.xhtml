@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://utility.cyk.org">
+	
+	<div
+		class="#{value.properties.clazz}"
+	>
+		<ui:insert name="content">
+			
+			<ui:param name="item" value="#{value.getChildAt(0)}"/>
+			<cyk:layoutItem value="#{item}">
+	    		<ui:define name="content">
+	    			<ui:insert name="item0">
+	    				<h:outputText value="ITEM 0" title="#{item.properties.clazz}" />
+	    			</ui:insert>
+	    		</ui:define>
+	    	</cyk:layoutItem>
+			
+			<ui:param name="item" value="#{value.getChildAt(1)}"/>
+			<cyk:layoutItem value="#{item}">
+	    		<ui:define name="content">
+	    			<ui:insert name="item1">
+	    				<h:outputText value="ITEM 1" title="#{item.properties.clazz}" />
+	    			</ui:insert>
+	    		</ui:define>
+	    	</cyk:layoutItem>
+			
+			<ui:param name="item" value="#{value.getChildAt(2)}"/>
+			<cyk:layoutItem value="#{item}">
+	    		<ui:define name="content">
+	    			<ui:insert name="item2">
+	    				<h:outputText value="ITEM 2" title="#{item.properties.clazz}" />
+	    			</ui:insert>
+	    		</ui:define>
+	    	</cyk:layoutItem>
+			
+			<ui:param name="item" value="#{value.getChildAt(3)}"/>
+			<cyk:layoutItem value="#{item}">
+	    		<ui:define name="content">
+	    			<ui:insert name="item3">
+	    				<h:outputText value="ITEM 3" title="#{item.properties.clazz}" />
+	    			</ui:insert>
+	    		</ui:define>
+	    	</cyk:layoutItem>
+			
+			<ui:param name="item" value="#{value.getChildAt(4)}"/>
+			<cyk:layoutItem value="#{item}">
+	    		<ui:define name="content">
+	    			<ui:insert name="item4">
+	    				<h:outputText value="ITEM 4" title="#{item.properties.clazz}" />
+	    			</ui:insert>
+	    		</ui:define>
+	    	</cyk:layoutItem>
+			
+			<ui:param name="item" value="#{value.getChildAt(5)}"/>
+			<cyk:layoutItem value="#{item}">
+	    		<ui:define name="content">
+	    			<ui:insert name="item5">
+	    				<h:outputText value="ITEM 5" title="#{item.properties.clazz}" />
+	    			</ui:insert>
+	    		</ui:define>
+	    	</cyk:layoutItem>
+			
+			<ui:param name="item" value="#{value.getChildAt(6)}"/>
+			<cyk:layoutItem value="#{item}">
+	    		<ui:define name="content">
+	    			<ui:insert name="item6">
+	    				<h:outputText value="ITEM 6" title="#{item.properties.clazz}" />
+	    			</ui:insert>
+	    		</ui:define>
+	    	</cyk:layoutItem>
+			
+			<ui:param name="item" value="#{value.getChildAt(7)}"/>
+			<cyk:layoutItem value="#{item}">
+	    		<ui:define name="content">
+	    			<ui:insert name="item7">
+	    				<h:outputText value="ITEM 7" title="#{item.properties.clazz}" />
+	    			</ui:insert>
+	    		</ui:define>
+	    	</cyk:layoutItem>
+			
+			<ui:param name="item" value="#{value.getChildAt(8)}"/>
+			<cyk:layoutItem value="#{item}">
+	    		<ui:define name="content">
+	    			<ui:insert name="item8">
+	    				<h:outputText value="ITEM 8" title="#{item.properties.clazz}" />
+	    			</ui:insert>
+	    		</ui:define>
+	    	</cyk:layoutItem>
+			
+			<ui:param name="item" value="#{value.getChildAt(9)}"/>
+			<cyk:layoutItem value="#{item}">
+	    		<ui:define name="content">
+	    			<ui:insert name="item9">
+	    				<h:outputText value="ITEM 9" title="#{item.properties.clazz}" />
+	    			</ui:insert>
+	    		</ui:define>
+	    	</cyk:layoutItem>
+			
+		</ui:insert>
+	</div>
+
+</ui:composition>

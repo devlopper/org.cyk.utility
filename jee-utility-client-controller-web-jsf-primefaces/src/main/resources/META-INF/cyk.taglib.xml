@@ -50,6 +50,16 @@
         <source>tag/layout/responsive/cell.xhtml</source>
     </tag>
     
+    <tag>
+        <tag-name>layout</tag-name>
+        <source>tag/layout/layout.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>layoutItem</tag-name>
+        <source>tag/layout/item.xhtml</source>
+    </tag>
+    
     <!-- Form -->
     
     <tag>

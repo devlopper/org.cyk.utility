@@ -10,49 +10,30 @@
 	
     <h:head>
         <title>Layout</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
     </h:head>
     <h:body>
+    	<style>
+    		div[class^='ui-g-'], div[class*='ui-g-']{
+			    background: blue;
+    			height: 100%;
+    			border: 1px solid red;
+    			color: white;
+			}
+    	</style>
     	<h3>Responsive : Label(1st Column) - Input(2nd Column)</h3>
-    	<cyk:layoutGridResponsive value="#{layoutPage.formResponsive01}">
-    		<ui:define name="content">
-    			
-    			<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01.getChildAt(0)}">
-		    		<ui:define name="content">
-		    			<h:outputLabel value="Label 01" />
-		    		</ui:define>
-		    	</cyk:layoutGridResponsiveCell>
-		    	
-		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01.getChildAt(1)}">
-		    		<ui:define name="content">
-		    			<p:inputText value="" />
-		    		</ui:define>
-		    	</cyk:layoutGridResponsiveCell>
-		    	
-		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01.getChildAt(2)}">
-		    		<ui:define name="content">
-		    			<h:outputLabel value="Label 02" />
-		    		</ui:define>
-		    	</cyk:layoutGridResponsiveCell>
-		    	
-		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01.getChildAt(3)}">
-		    		<ui:define name="content">
-		    			<p:inputText value="" />
-		    		</ui:define>
-		    	</cyk:layoutGridResponsiveCell>
-		    	
-		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01.getChildAt(4)}">
-		    		<ui:define name="content">
-		    			<h:outputLabel value="Label 03" />
-		    		</ui:define>
-		    	</cyk:layoutGridResponsiveCell>
-		    	
-		    	<cyk:layoutGridResponsiveCell value="#{layoutPage.formResponsive01.getChildAt(5)}">
-		    		<ui:define name="content">
-		    			<p:inputText value="" />
-		    		</ui:define>
-		    	</cyk:layoutGridResponsiveCell>
-    		</ui:define>
-	    		
-    	</cyk:layoutGridResponsive>    	
+    	<p:inputText/>
+    	<cyk:layout value="#{layoutPage.layout01}">
+    		
+    	</cyk:layout>  
+    	
+    	<p:separator/>
+    	
+    	<cyk:layout value="#{layoutPage.layout02}">
+    		
+    	</cyk:layout>    	
     </h:body>
 </html>
