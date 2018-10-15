@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:cyk="http://utility.cyk.org">
+	
+    <h:head>
+        <title>Layout Form</title>
+    </h:head>
+    <h:body>
+    	<style>
+    		div[class^='ui-g-'], div[class*='ui-g-']{
+    			border: 1px solid red;
+    			background: yellow;
+			}
+    	</style>
+    	<h3>Form Layout</h3>
+    	<p:inputText/>
+    	<cyk:formLayout value="#{layoutFormPage.layout}">
+    		<!--
+    		<ui:define name="header">
+    			<h:outputText value="Header of Form"/>
+    		</ui:define>
+    		
+    		<ui:define name="item1">
+    			<h1>Controls</h1><br/>
+    			<p:panel header="MyPanel">
+    				<h:outputText value="Label01"/><p:inputText value="" />
+    				<h:outputText value="Label02"/><p:inputText value="" />
+    				<h:outputText value="Label03"/><p:inputText value="" />
+    				<h:outputText value="Label04"/><p:inputText value="" /><br/>
+    				<h:outputText value="Label05"/><p:inputText value="" />
+    				<h:outputText value="Label06"/><p:inputText value="" />
+    			</p:panel>
+    		</ui:define>
+    		<ui:define name="item2">
+    			<p:commandButton value="Button01" /> <p:commandButton value="Button02" /> <p:commandButton value="Button03" /> <p:commandButton value="Button04" />
+    			<p:commandButton value="Button05" /> <p:commandButton value="Button06" />
+    		</ui:define>
+    		-->
+    	</cyk:formLayout>  
+    	  	
+    </h:body>
+</html>

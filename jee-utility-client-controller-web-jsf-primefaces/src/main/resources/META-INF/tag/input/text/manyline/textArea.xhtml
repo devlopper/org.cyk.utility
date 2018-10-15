@@ -5,19 +5,21 @@
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://utility.cyk.org">
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			
-			<p:outputLabel
+   			<p:inputTextarea 
 				id="#{value.properties.identifier}"
-				for="#{value.properties.for}"
-				value="#{value.properties.value}"
+				value="#{value.value}"
+				required="#{value.properties.required}"
 			>
 			
-			</p:outputLabel>
+			</p:inputTextarea>	
 		</ui:define>
 	</ui:decorate>	
-
+	
+	
+		
 </ui:composition>

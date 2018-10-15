@@ -11,7 +11,12 @@
 	
     <tag>
         <tag-name>inputText</tag-name>
-        <source>tag/input/text/oneline.xhtml</source>
+        <source>tag/input/text/oneline/text.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>inputTextarea</tag-name>
+        <source>tag/input/text/manyline/textArea.xhtml</source>
     </tag>
     
     <!-- Output -->
@@ -19,6 +24,11 @@
     <tag>
         <tag-name>outputLabel</tag-name>
         <source>tag/output/text/label.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>outputText</tag-name>
+        <source>tag/output/text/text.xhtml</source>
     </tag>
     
     <!-- Message -->
@@ -63,7 +73,20 @@
     <!-- Form -->
     
     <tag>
-        <tag-name>form</tag-name>
-        <source>tag/form/default.xhtml</source>
+        <tag-name>formLayout</tag-name>
+        <source>tag/form/layout.xhtml</source>
     </tag>
+    
+    <tag>
+        <tag-name>form</tag-name>
+        <source>tag/form/form.xhtml</source>
+    </tag>
+    
+    <!-- Misc -->
+    
+    <tag>
+        <tag-name>components</tag-name>
+        <source>tag/component/components.xhtml</source>
+    </tag>
+    
 </facelet-taglib>

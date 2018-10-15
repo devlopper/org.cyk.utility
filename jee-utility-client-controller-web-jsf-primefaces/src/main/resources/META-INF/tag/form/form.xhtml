@@ -5,18 +5,22 @@
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://utility.cyk.org">
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			
-			<p:outputLabel
-				id="#{value.properties.identifier}"
-				for="#{value.properties.for}"
-				value="#{value.properties.value}"
+			<h:form
+				id="#{identifier}"
 			>
-			
-			</p:outputLabel>
+				<ui:param name="form" value="#{value}"/>
+    			<cyk:formLayout value="#{form.view.layout}">
+    				<ui:define name="header">
+    					<cyk:outputText value="#{form.view.name}" />
+    				</ui:define>
+    			</cyk:formLayout>
+				    
+			</h:form>
 		</ui:define>
 	</ui:decorate>	
 

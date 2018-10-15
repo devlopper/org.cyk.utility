@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.cyk.utility.client.controller.screen.CollectionInstanceScreen;
 import org.cyk.utility.client.controller.screen.Screen;
-import org.cyk.utility.collection.CollectionInstanceString;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 
 public class LayoutItemCssClassBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements LayoutItemCssClassBuilder,Serializable {
@@ -15,12 +14,6 @@ public class LayoutItemCssClassBuilderImpl extends AbstractFunctionWithPropertie
 	private Integer maximumColumnCount;
 	private CollectionInstanceScreen screens;
 	private Map<Screen, Integer> columnCountMap;
-	
-	@Override
-	protected String __execute__() throws Exception {
-		CollectionInstanceString g;
-		return super.__execute__();
-	}
 	
 	@Override
 	public Integer getMaximumColumnCount() {

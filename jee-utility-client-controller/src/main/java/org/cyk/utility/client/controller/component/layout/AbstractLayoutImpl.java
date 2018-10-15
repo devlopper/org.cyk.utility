@@ -63,67 +63,9 @@ public abstract class AbstractLayoutImpl extends AbstractInvisibleComponentImpl 
 		return addItemFromWidthClassBuilders(styleClassBuilderWidths);
 	}
 	
-	/*
-	private LayoutCell north,center,south,west,east;
-	
 	@Override
-	public LayoutCell getNorth() {
-		// TODO Auto-generated method stub
-		return null;
+	public LayoutItem getChildAt(Integer index) {
+		return (LayoutItem) super.getChildAt(index);
 	}
 	
-	@Override
-	public LayoutGridResponsiveCardinal setNorth(LayoutCell north) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public LayoutCell getCenter() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public LayoutGridResponsiveCardinal setCenter(LayoutCell footer) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public LayoutCell getSouth() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public LayoutGridResponsiveCardinal setSouth(LayoutCell south) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public LayoutCell getWest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public LayoutGridResponsiveCardinal setWest(LayoutCell west) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public LayoutCell getEast() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public LayoutGridResponsiveCardinal setEast(LayoutCell east) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	*/
 }

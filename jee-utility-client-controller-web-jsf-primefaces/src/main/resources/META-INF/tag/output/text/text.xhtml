@@ -9,14 +9,12 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			
-			<p:outputLabel
+			<h:outputText
 				id="#{value.properties.identifier}"
-				for="#{value.properties.for}"
 				value="#{value.properties.value}"
 			>
 			
-			</p:outputLabel>
+			</h:outputText>
 		</ui:define>
 	</ui:decorate>	
 

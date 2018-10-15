@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://utility.cyk.org">
+	
+	<ui:decorate template="/template.xhtml">
+		<ui:define name="valueIsNotNull">
+			
+			<ui:param name="formLayout" value="#{value}"/>
+			<cyk:layout value="#{formLayout}">
+				
+	    		<ui:define name="item0">
+	    			<ui:insert name="header">
+	    				HEADER
+	    			</ui:insert>
+	    		</ui:define>
+	    		
+	    		<ui:define name="item1">
+	    			<ui:insert name="body">
+	    				<h1>BODY</h1>
+	    			</ui:insert>
+	    		</ui:define>
+	    		<ui:define name="item2">
+	    			<ui:insert name="footer">
+	    				FOOTER
+	    			</ui:insert>
+	    		</ui:define>
+	    	</cyk:layout>  
+		</ui:define>
+	</ui:decorate>	
+
+</ui:composition>

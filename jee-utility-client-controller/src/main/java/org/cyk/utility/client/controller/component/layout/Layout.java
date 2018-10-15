@@ -13,24 +13,7 @@ public interface Layout extends InvisibleComponent {
 	Layout addItemFromWidthClassBuilders(Collection<StyleClassBuilderWidth> styleClassBuilderWidths);
 	Layout addItemFromWidthClassBuilders(StyleClassBuilderWidth...styleClassBuilderWidths);
 	Layout addItemFromDeviceClassAndWidths(Object...objects);
-	//Layout addItemFromColumnWidth(Object clazz);
 	
-	/* Cardinal point */
-	/*
-	LayoutCell getNorth();
-	Layout setNorth(LayoutCell north);
-	
-	LayoutCell getCenter();
-	Layout setCenter(LayoutCell footer);
-	
-	LayoutCell getSouth();
-	Layout setSouth(LayoutCell south);
-	
-	LayoutCell getWest();
-	Layout setWest(LayoutCell west);
-	
-	LayoutCell getEast();
-	Layout setEast(LayoutCell east);
-	*/
+	@Override LayoutItem getChildAt(Integer index);
 	
 }

@@ -15,4 +15,11 @@ public interface LayoutBuiler extends FunctionWithPropertiesAsInput<Layout> {
 	
 	Integer getMaximumWidth();
 	LayoutBuiler setMaximumWidth(Integer maximumWidth);
+	
+	Type getType();
+	LayoutBuiler setType(Type type);
+	
+	/**/
+	
+	public static enum Type {FORM}
 }

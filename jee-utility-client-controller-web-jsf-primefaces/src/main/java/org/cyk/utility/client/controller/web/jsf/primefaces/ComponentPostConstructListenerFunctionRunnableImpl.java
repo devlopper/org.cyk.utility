@@ -30,14 +30,14 @@ public class ComponentPostConstructListenerFunctionRunnableImpl extends Abstract
 					
 					if(input.getLabelComponent()!=null) {
 						input.getLabelComponent().getProperties().setFor(input.getProperties().getIdentifier());
-						input.getLabelComponent().getLayoutCellComponent(Boolean.TRUE).getProperties().setClass("ui-g-2 ui-xl-2 ui-lg-2 ui-md-2 ui-sm-12");
+						//input.getLabelComponent().getLayoutItem(Boolean.TRUE).getProperties().setClass("ui-g-2 ui-xl-2 ui-lg-2 ui-md-2 ui-sm-12");
 					}
 					
-					input.getLayoutCellComponent(Boolean.TRUE).getProperties().setClass("ui-g-6 ui-xl-6 ui-lg-6 ui-md-6 ui-sm-12");
+					//input.getLayoutItem(Boolean.TRUE).getProperties().setClass("ui-g-6 ui-xl-6 ui-lg-6 ui-md-6 ui-sm-12");
 					
 					if(input.getMessageComponent()!=null) {
 						input.getMessageComponent().getProperties().setFor(input.getProperties().getIdentifier());
-						input.getMessageComponent().getLayoutCellComponent(Boolean.TRUE).getProperties().setClass("ui-g-4 ui-xl-4 ui-lg-4 ui-md-4 ui-sm-12");
+						//input.getMessageComponent().getLayoutItem(Boolean.TRUE).getProperties().setClass("ui-g-4 ui-xl-4 ui-lg-4 ui-md-4 ui-sm-12");
 					}
 				}
 				

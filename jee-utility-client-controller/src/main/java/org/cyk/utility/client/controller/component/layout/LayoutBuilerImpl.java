@@ -13,11 +13,28 @@ public class LayoutBuilerImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 
 	private LayoutBuilerItems items;
 	private Integer maximumWidth;
+	private Type type;
 	
 	@Override
 	protected Layout __execute__() throws Exception {
 		Layout layout = __inject__(Layout.class);
 		LayoutBuilerItems items = getItems();
+		if(items == null) {
+			Type type = getType();
+			if(Type.FORM.equals(type)) {
+				items = getItems(Boolean.TRUE);
+				Integer maximumWidth = getMaximumWidth();
+				//Header
+				items.add(__inject__(LayoutBuilerItem.class).setWidth(maximumWidth).setWidthForOther(maximumWidth).setWidthForDesktop(maximumWidth)
+						.setWidthForTablet(maximumWidth).setWidthForPhone(maximumWidth));
+				//Body
+				items.add(__inject__(LayoutBuilerItem.class).setWidth(maximumWidth).setWidthForOther(maximumWidth).setWidthForDesktop(maximumWidth)
+						.setWidthForTablet(maximumWidth).setWidthForPhone(maximumWidth));
+				//Footer
+				items.add(__inject__(LayoutBuilerItem.class).setWidth(maximumWidth).setWidthForOther(maximumWidth).setWidthForDesktop(maximumWidth)
+						.setWidthForTablet(maximumWidth).setWidthForPhone(maximumWidth));
+			}
+		}
 		if(items!=null) {
 			Collection<LayoutBuilerItem> collection = items.get();
 			if(collection!=null) {
@@ -89,5 +106,16 @@ public class LayoutBuilerImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 	public LayoutBuiler setMaximumWidth(Integer maximumWidth) {
 		this.maximumWidth = maximumWidth;
 		return this;
+	}
+	
+	@Override
+	public LayoutBuiler setType(Type type) {
+		this.type = type;
+		return this;
+	}
+	
+	@Override
+	public Type getType() {
+		return type;
 	}
 }

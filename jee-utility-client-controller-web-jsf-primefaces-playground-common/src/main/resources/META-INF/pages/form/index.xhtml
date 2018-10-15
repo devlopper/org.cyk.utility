@@ -13,14 +13,25 @@
     </h:head>
     <h:body>
     	<style>
-    		.ui-g > div {
+    		div[class^='ui-g-'], div[class*='ui-g-']{
     			border: 1px solid red;
-    		}
+    			background: yellow;
+			}
     	</style>
+    	<h3>Form</h3>
+    	<p:inputText/>
  
     	<cyk:form value="#{formPage.form01}">
-    		
-	    		
+    		<ui:define name="body">
+    			<div class="ui-fluid">
+	    			<p:panelGrid columns="3" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank">
+	    				<p:outputLabel value="Input 1" for="i1"/> <p:inputText id="i1" value="" /> <p:message for="i1"/>
+	    				<p:outputLabel value="Input 2" for="i2"/> <p:inputText id="i2" value="" /> <p:message for="i2"/>
+	    				<p:outputLabel value="Input 3" for="i3"/> <p:inputText id="i3" value="" /> <p:message for="i3"/>
+	    				<p:outputLabel value="Input 4" for="i4"/> <p:inputText id="i4" value="" /> <p:message for="i4"/>
+	    			</p:panelGrid>
+	    		</div>
+    		</ui:define>	
     	</cyk:form>    	
     	
     </h:body>

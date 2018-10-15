@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"   
       xmlns:f="http://java.sun.com/jsf/core"      
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
@@ -13,17 +14,13 @@
     </h:head>
     <h:body>
     	<style>
-    		.ui-g > div {
+    		div[class^='ui-g-'], div[class*='ui-g-']{
     			border: 1px solid red;
-    		}
+			}
     	</style>
-    	<h:form id="MyForm">
-    		<cyk:layoutGridResponsive value="#{inputPage.formLayout}">
-	    		<ui:define name="content">
-	    			<cyk:inputText value="#{inputPage.inputText}" />
-    				<cyk:inputText value="#{inputPage.inputTextRequired}" />
-	    		</ui:define>
-    		</cyk:layoutGridResponsive>
+    	<h:form id="MyForm" prependId="false">
+    		
+    		<cyk:components value="#{inputPage.components}" layout="#{inputPage.layout01}"/>
     		
     		<p:autoUpdate  />
     		

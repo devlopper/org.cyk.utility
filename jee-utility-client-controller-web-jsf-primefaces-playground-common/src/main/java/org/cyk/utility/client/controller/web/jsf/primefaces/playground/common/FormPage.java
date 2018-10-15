@@ -21,7 +21,7 @@ public class FormPage extends AbstractPageImpl implements Serializable {
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		
+		form01.getView().getName(Boolean.TRUE).getProperties().setValue("Création de localité");
 	}
 	
 }

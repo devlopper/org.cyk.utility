@@ -7,24 +7,24 @@ import org.cyk.utility.client.controller.component.layout.LayoutItem;
 public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl implements VisibleComponent,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private LayoutItem layoutCellComponent;
+	private LayoutItem layoutItem;
 	
 	@Override
-	public LayoutItem getLayoutCellComponent() {
-		return layoutCellComponent;
+	public LayoutItem getLayoutItem() {
+		return layoutItem;
 	}
-	
+	/*
 	@Override
-	public LayoutItem getLayoutCellComponent(Boolean injectIfNull) {
-		LayoutItem layoutCell = getLayoutCellComponent();
-		if(layoutCell == null && Boolean.TRUE.equals(injectIfNull))
-			setLayoutCellComponent(layoutCell = __inject__(LayoutItem.class));
-		return layoutCell;
+	public LayoutItem getLayoutItem(Boolean injectIfNull) {
+		LayoutItem layoutItem = getLayoutItem();
+		if(layoutItem == null && Boolean.TRUE.equals(injectIfNull))
+			setLayoutItem(layoutItem = __inject__(LayoutItem.class));
+		return layoutItem;
 	}
-	
+	*/
 	@Override
-	public VisibleComponent setLayoutCellComponent(LayoutItem layoutCellComponent) {
-		this.layoutCellComponent = layoutCellComponent;
+	public VisibleComponent setLayoutItem(LayoutItem layoutItem) {
+		this.layoutItem = layoutItem;
 		return this;
 	}
 	

@@ -13,12 +13,13 @@
 			<ui:param name="input" value="#{value}"/>
 			
 			<!-- Label -->
+			<!--
 			<cyk:layoutGridResponsiveCell value="#{input.labelComponent.layoutCellComponent}">
 	    		<ui:define name="content">
 	    			<cyk:outputLabel value="#{input.labelComponent}" />
 	    		</ui:define>
 	    	</cyk:layoutGridResponsiveCell>
-			
+			-->
 			<!-- Input -->
 			<cyk:layoutGridResponsiveCell value="#{input.layoutCellComponent}">
 	    		<ui:define name="content">
@@ -28,16 +29,18 @@
 						required="#{input.properties.required}"
 					>
 					
-					</p:inputText>
+					</p:inputText>R : #{input.properties.required}
 	    		</ui:define>
 	    	</cyk:layoutGridResponsiveCell>
 						
 			<!-- Message -->
+			<!--
 			<cyk:layoutGridResponsiveCell value="#{input.messageComponent.layoutCellComponent}">
 	    		<ui:define name="content">
 	    			<cyk:message value="#{input.messageComponent}" />
 	    		</ui:define>
 	    	</cyk:layoutGridResponsiveCell>
+	    	-->
 		</ui:define>
 	</ui:decorate>	
 	
