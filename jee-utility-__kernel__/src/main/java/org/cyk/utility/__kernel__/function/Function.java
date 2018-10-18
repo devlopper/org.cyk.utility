@@ -10,6 +10,7 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 
 	Function<INPUT,OUTPUT> setInput(INPUT input);
 	Function<INPUT,OUTPUT> execute();
+	void executeToReturnVoid();
 	OUTPUT getOutput();
 	<T extends OUTPUT> T getOutputAs(Class<T> aClass);
 	

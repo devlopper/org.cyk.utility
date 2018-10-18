@@ -10,13 +10,16 @@ import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.VisibleComponent;
+import org.cyk.utility.client.controller.component.VisibleComponents;
+import org.cyk.utility.client.controller.component.VisibleComponentsBuilder;
+import org.cyk.utility.client.controller.component.command.CommandButton;
 import org.cyk.utility.client.controller.component.input.Input;
-import org.cyk.utility.client.controller.component.input.InputText;
-import org.cyk.utility.client.controller.component.input.InputTextArea;
-import org.cyk.utility.client.controller.component.layout.Layout;
-import org.cyk.utility.client.controller.component.layout.LayoutBuiler;
+import org.cyk.utility.client.controller.component.input.InputStringLineMany;
+import org.cyk.utility.client.controller.component.input.InputStringLineOne;
+import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilerItem;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
+import org.cyk.utility.system.action.SystemActionCreate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,19 +28,19 @@ import lombok.Setter;
 public class InputPage extends AbstractPageImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Inject private Layout layout01;
-	@Inject private Layout layout02;
-	private List<VisibleComponent> components;
-	@Inject private InputText inputText;
-	@Inject private InputTextArea inputTextArea;
-	@Inject private InputText inputTextRequired;
-	private InputText inputTextNull;
+	private VisibleComponents visibleComponents;
+	@Inject private InputStringLineOne inputText;
+	@Inject private InputStringLineMany inputTextArea;
+	@Inject private InputStringLineOne inputTextRequired;
+	private InputStringLineOne inputTextNull;
+	
+	@Inject private CommandButton commandButton;
 	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		
-		layout01 = __inject__(LayoutBuiler.class)
+		LayoutBuilder layoutBuilder01 = __inject__(LayoutBuilder.class)
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(6).setWidthForDesktop(6).setWidthForTablet(6).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(4).setWidthForDesktop(4).setWidthForTablet(4).setWidthForPhone(12))
@@ -50,10 +53,12 @@ public class InputPage extends AbstractPageImpl implements Serializable {
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(6).setWidthForDesktop(6).setWidthForTablet(6).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(4).setWidthForDesktop(4).setWidthForTablet(4).setWidthForPhone(12))
 				
-				.execute().getOutput()
+				.addItems(__inject__(LayoutBuilerItem.class).setWidth(12).setWidthForDesktop(12).setWidthForTablet(12).setWidthForPhone(12))
+				
+				//.execute().getOutput()
 				;
 		
-		layout02 = __inject__(LayoutBuiler.class)
+		LayoutBuilder layoutBuilder02 = __inject__(LayoutBuilder.class)
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
@@ -65,49 +70,46 @@ public class InputPage extends AbstractPageImpl implements Serializable {
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(6).setWidthForDesktop(6).setWidthForTablet(6).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(4).setWidthForDesktop(4).setWidthForTablet(4).setWidthForPhone(12))
 				
-				.execute().getOutput()
+				.addItems(__inject__(LayoutBuilerItem.class).setWidth(12).setWidthForDesktop(12).setWidthForTablet(12).setWidthForPhone(12))
+				
+				//.execute().getOutput()
 				;
 		
-		components = new ArrayList<>();
+		List<VisibleComponent> components = new ArrayList<>();
 		
-		inputText.setLabelComponentValue("Simple");
-		components.add(inputText.getLabelComponent());
+		//inputText.setLabelComponentValue("Simple");
+		components.add(inputText.getLabel());
 		components.add(inputText);
-		components.add(inputText.getMessageComponent());
+		components.add(inputText.getMessage());
 		
 		inputTextRequired.getProperties().setRequired(Boolean.TRUE);
-		inputTextRequired.setLabelComponentValue("Required");
-		components.add(inputTextRequired.getLabelComponent());
+		//inputTextRequired.setLabelComponentValue("Required");
+		components.add(inputTextRequired.getLabel());
 		components.add(inputTextRequired);
-		components.add(inputTextRequired.getMessageComponent());
+		components.add(inputTextRequired.getMessage());
 		
-		inputTextArea.setLabelComponentValue("TextArea");
+		//inputTextArea.setLabelComponentValue("TextArea");
 		inputTextArea.getProperties().setRequired(Boolean.TRUE);
-		components.add(inputTextArea.getLabelComponent());
+		components.add(inputTextArea.getLabel());
 		components.add(inputTextArea);
-		components.add(inputTextArea.getMessageComponent());
+		components.add(inputTextArea.getMessage());
 		
-		Layout layout = layout02;
+		components.add(commandButton);
 		
-		inputText.getLabelComponent().setLayoutItem(layout.getChildAt(0));
-		inputText.setLayoutItem(layout.getChildAt(1));
-		inputText.getMessageComponent().setLayoutItem(layout.getChildAt(2));
-		
-		inputTextRequired.getLabelComponent().setLayoutItem(layout.getChildAt(3));
-		inputTextRequired.setLayoutItem(layout.getChildAt(4));
-		inputTextRequired.getMessageComponent().setLayoutItem(layout.getChildAt(5));
-		
-		inputTextArea.getLabelComponent().setLayoutItem(layout.getChildAt(6));
-		inputTextArea.setLayoutItem(layout.getChildAt(7));
-		inputTextArea.getMessageComponent().setLayoutItem(layout.getChildAt(8));
-	}
-	
-	public void show() {
-		System.out.println("InputPage.show()");
-		for(Component index : components)
-			if(index instanceof Input) {
-				Input<?> input = (Input<?>) index;
-				System.out.println("Input : "+input.getValue());
+		commandButton.getProperties().setValue("Send data to server");
+		commandButton.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(__inject__(SystemActionCreate.class));
+		commandButton.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).addRunnables(new Runnable() {	
+			@Override
+			public void run() {
+				System.out.println("Receiving data from client.");
+				for(Component index : visibleComponents.get())
+					if(index instanceof Input) {
+						Input<?> input = (Input<?>) index;
+						System.out.println("Input : "+input.getValue());
+					}
 			}
+		});
+		
+		visibleComponents = __inject__(VisibleComponentsBuilder.class).setComponents(components).setLayoutBuilder(layoutBuilder01).execute().getOutput();
 	}
 }

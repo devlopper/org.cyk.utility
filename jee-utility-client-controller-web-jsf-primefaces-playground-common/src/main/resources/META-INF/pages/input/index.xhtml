@@ -18,14 +18,10 @@
     			border: 1px solid red;
 			}
     	</style>
-    	<h:form id="MyForm" prependId="false">
+    	<h:form id="MyForm" prependId="false">    		
+    		<cyk:visibleComponents value="#{inputPage.visibleComponents}"/>
     		
-    		<cyk:components value="#{inputPage.components}" layout="#{inputPage.layout01}"/>
-    		
-    		<p:autoUpdate  />
-    		
-    		<p:commandButton value="OK" action="#{inputPage.show}" />
-    		
+    		<p:autoUpdate  />    		
     	</h:form>
     	
     </h:body>

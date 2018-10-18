@@ -6,7 +6,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.cyk.utility.client.controller.component.Command;
+import org.cyk.utility.client.controller.component.command.Command;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 

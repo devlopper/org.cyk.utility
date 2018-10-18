@@ -20,6 +20,11 @@ public class LayoutBuilerItemImpl extends AbstractObject implements LayoutBuiler
 	public Map<Class<? extends Device>, Integer> getWidthMap() {
 		return widthMap;
 	}
+	
+	@Override
+	public Map<Class<? extends Device>, Integer> getWidthMap(Boolean instanciateIfNull) {
+		return (Map<Class<? extends Device>, Integer>) __getInstanciateIfNull__(FIELD_WIDTH_MAP, instanciateIfNull);
+	}
 
 	@Override
 	public LayoutBuilerItem setWidthMap(Map<Class<? extends Device>, Integer> widthMap) {
@@ -28,15 +33,16 @@ public class LayoutBuilerItemImpl extends AbstractObject implements LayoutBuiler
 	}
 
 	@Override
-	public LayoutBuilerItem setWidth(Integer width, @SuppressWarnings("unchecked") Class<? extends Device>...deviceClasses) {
+	public LayoutBuilerItem setWidth(Integer width, Class<? extends Device>...deviceClasses) {
 		Map<Class<? extends Device>, Integer> widthMap = getWidthMap();
 		if(widthMap == null)
 			setWidthMap(widthMap = new LinkedHashMap<>());
 		if(deviceClasses == null)
 			widthMap.put(null, width);
 		else
-			for(Class<? extends Device> index : deviceClasses)
+			for(Class<? extends Device> index : deviceClasses) {
 				widthMap.put(index, width);
+			}
 		return this;
 	}
 
@@ -45,27 +51,32 @@ public class LayoutBuilerItemImpl extends AbstractObject implements LayoutBuiler
 		return setWidth(width, (Class<? extends Device>[])null);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public LayoutBuilerItem setWidthForOther(Integer width) {
 		return setWidth(width, DeviceTelevision.class);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public LayoutBuilerItem setWidthForDesktop(Integer width) {
 		return setWidth(width, DeviceDesktop.class);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public LayoutBuilerItem setWidthForTablet(Integer width) {
 		return setWidth(width, DeviceTablet.class);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public LayoutBuilerItem setWidthForPhone(Integer width) {
 		return setWidth(width, DevicePhone.class);
 	}
+	
+	@Override
+	public LayoutBuilerItem setWidthForAll(Integer width) {
+		return setWidth(width, null,DevicePhone.class,DeviceTablet.class,DeviceDesktop.class,DeviceTelevision.class);
+	}
+	
+	/**/
+	
+	public static final String FIELD_WIDTH_MAP = "widthMap";
 }

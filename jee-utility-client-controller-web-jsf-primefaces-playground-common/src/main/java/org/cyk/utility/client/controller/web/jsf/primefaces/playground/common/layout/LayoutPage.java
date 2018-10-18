@@ -6,7 +6,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.layout.Layout;
-import org.cyk.utility.client.controller.component.layout.LayoutBuiler;
+import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilerItem;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
 
@@ -24,7 +24,7 @@ public class LayoutPage extends AbstractPageImpl implements Serializable {
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		
-		layout01 = __inject__(LayoutBuiler.class)
+		layout01 = __inject__(LayoutBuilder.class)
 			.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
 			.addItems(__inject__(LayoutBuilerItem.class).setWidth(10).setWidthForDesktop(10).setWidthForTablet(10).setWidthForPhone(12))
 			
@@ -37,7 +37,7 @@ public class LayoutPage extends AbstractPageImpl implements Serializable {
 			.execute().getOutput()
 			;
 		
-		layout02 = __inject__(LayoutBuiler.class)
+		layout02 = __inject__(LayoutBuilder.class)
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(5).setWidthForDesktop(5).setWidthForTablet(5).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(5).setWidthForDesktop(5).setWidthForTablet(5).setWidthForPhone(12))

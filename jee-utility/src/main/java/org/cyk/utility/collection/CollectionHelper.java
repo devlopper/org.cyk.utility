@@ -8,6 +8,8 @@ public interface CollectionHelper extends Helper {
 
 	Boolean isEmpty(Collection<?> collection);
 	Boolean isNotEmpty(Collection<?> collection);
+	Boolean isEmpty(CollectionInstance<?> collectionInstance);
+	Boolean isNotEmpty(CollectionInstance<?> collectionInstance);
 	<COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> instanciate(Class<COLLECTION> collectionClass,ELEMENT...elements);
 	<ELEMENT> Collection<ELEMENT> instanciate(ELEMENT...elements);
 	<ELEMENT> Collection<ELEMENT> concatenate(Collection<Collection<ELEMENT>> collections);
@@ -28,4 +30,6 @@ public interface CollectionHelper extends Helper {
 	<ELEMENT> Collection<ELEMENT> addElementAt(Collection<ELEMENT> collection,Object index, ELEMENT element);
 	
 	Boolean contains(Collection<?> collection,Object element);
+	
+	<ELEMENT> Collection<ELEMENT> removeNullValue(Collection<ELEMENT> collection);
 }

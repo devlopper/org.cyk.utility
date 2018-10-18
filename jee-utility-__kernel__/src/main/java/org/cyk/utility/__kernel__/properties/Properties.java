@@ -334,6 +334,12 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Properties copyNonNullKeysFrom(Properties source){
+		if(source!=null)
+			DependencyInjection.inject(KernelHelper.class).copyMapNonNullKeys(source.map, map);
+		return this;
+	}
+	
 	/* specific getters and setters*/
 	
 	public Object getIdentifier(){

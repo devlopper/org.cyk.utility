@@ -21,6 +21,7 @@ public class ComponentPostConstructListenerFunctionRunnableImpl extends Abstract
 		setRunnable(new Runnable() {
 			@Override
 			public void run() {
+				//TODO to be deleted. use only builders
 				Component component = (Component) getFunction().getObject();
 				component.getProperties().setIdentifier(String.format(IDENTIFIER_FORMAT,component.getClass().getSimpleName(),__inject__(RandomHelper.class).getAlphabetic(3)));
 				component.getProperties().setRendered(Boolean.TRUE);
@@ -28,16 +29,12 @@ public class ComponentPostConstructListenerFunctionRunnableImpl extends Abstract
 				if(component instanceof Input) {
 					Input<?> input = (Input<?>) component;
 					
-					if(input.getLabelComponent()!=null) {
-						input.getLabelComponent().getProperties().setFor(input.getProperties().getIdentifier());
-						//input.getLabelComponent().getLayoutItem(Boolean.TRUE).getProperties().setClass("ui-g-2 ui-xl-2 ui-lg-2 ui-md-2 ui-sm-12");
+					if(input.getLabel()!=null) {
+						input.getLabel().getProperties().setFor(input.getProperties().getIdentifier());
 					}
 					
-					//input.getLayoutItem(Boolean.TRUE).getProperties().setClass("ui-g-6 ui-xl-6 ui-lg-6 ui-md-6 ui-sm-12");
-					
-					if(input.getMessageComponent()!=null) {
-						input.getMessageComponent().getProperties().setFor(input.getProperties().getIdentifier());
-						//input.getMessageComponent().getLayoutItem(Boolean.TRUE).getProperties().setClass("ui-g-4 ui-xl-4 ui-lg-4 ui-md-4 ui-sm-12");
+					if(input.getMessage()!=null) {
+						input.getMessage().getProperties().setFor(input.getProperties().getIdentifier());
 					}
 				}
 				

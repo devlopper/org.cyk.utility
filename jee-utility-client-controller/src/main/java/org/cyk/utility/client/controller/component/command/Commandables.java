@@ -1,0 +1,7 @@
+package org.cyk.utility.client.controller.component.command;
+
+import org.cyk.utility.collection.CollectionInstance;
+
+public interface Commandables extends CollectionInstance<Commandable> {
+
+}

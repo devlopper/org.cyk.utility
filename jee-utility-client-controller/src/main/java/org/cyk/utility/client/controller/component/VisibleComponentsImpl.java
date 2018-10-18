@@ -20,7 +20,5 @@ public class VisibleComponentsImpl extends AbstractCollectionInstanceImpl<Visibl
 		this.layout = layout;
 		return this;
 	}
-
-	
 	
 }

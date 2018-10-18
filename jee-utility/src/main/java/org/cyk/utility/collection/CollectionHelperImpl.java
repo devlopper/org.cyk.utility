@@ -6,7 +6,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Singleton;
 
@@ -29,6 +31,16 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	@Override
 	public Boolean isNotEmpty(Collection<?> collection){
 		return Boolean.FALSE.equals(isEmpty(collection));
+	}
+	
+	@Override
+	public Boolean isEmpty(CollectionInstance<?> collectionInstance){
+		return collectionInstance==null || isEmpty(collectionInstance.get());
+	}
+	
+	@Override
+	public Boolean isNotEmpty(CollectionInstance<?> collectionInstance){
+		return Boolean.FALSE.equals(isEmpty(collectionInstance));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -177,18 +189,28 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 
 	@Override
 	public <ELEMENT> Collection<ELEMENT> addElementAt(Collection<ELEMENT> collection, Object index, ELEMENT element) {
-		Integer indexValue = __inject__(NumberHelper.class).getInteger(index);
-		if( indexValue < getSize(collection) ){
-			if(collection instanceof List)
-				((List<ELEMENT>)collection).add(indexValue, element);
-			else
-				__inject__(ThrowableHelper.class).throwRuntimeException("cannot insert in collection of type : "+collection.getClass());	
-		}		
+		if(collection!=null) {
+			Integer indexValue = __inject__(NumberHelper.class).getInteger(index);
+			if(collection.isEmpty() && indexValue == 0)
+				collection.add(element);
+			else if( indexValue < getSize(collection) ){
+				if(collection instanceof List)
+					((List<ELEMENT>)collection).add(indexValue, element);
+				else
+					__inject__(ThrowableHelper.class).throwRuntimeException("cannot insert in collection of type : "+collection.getClass());	
+			}else
+				__inject__(ThrowableHelper.class).throwRuntimeException("cannot insert at index "+index+" in collection of size "+collection.size());
+		}
 		return collection;
 	}
 	
 	@Override
 	public Boolean contains(Collection<?> collection, Object element) {
 		return collection == null ? Boolean.FALSE : collection.contains(element);
+	}
+	
+	@Override
+	public <ELEMENT> Collection<ELEMENT> removeNullValue(Collection<ELEMENT> collection) {
+		return collection == null ? null : collection.parallelStream().filter(Objects::nonNull).collect(Collectors.toList());
 	}
 }

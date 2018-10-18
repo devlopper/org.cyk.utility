@@ -12,10 +12,9 @@ public interface Input<T> extends InputOutput<T> {
 	T getInitialValue();
 	Input<T> setInitialValue(T initialValue);
 	
-	OutputStringLabel getLabelComponent();
-	Input<T> setLabelComponent(OutputStringLabel labelComponent);
-	Input<T> setLabelComponentValue(Object value);
+	OutputStringLabel getLabel();
+	Input<T> setLabel(OutputStringLabel label);
 	
-	OutputStringMessage getMessageComponent();
-	Input<T> setMessageComponent(OutputStringMessage messageComponent);
+	OutputStringMessage getMessage();
+	Input<T> setMessage(OutputStringMessage message);
 }

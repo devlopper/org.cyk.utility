@@ -3,23 +3,26 @@ package org.cyk.utility.client.controller.view;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
-import org.cyk.utility.client.controller.component.layout.Layout;
+import org.cyk.utility.client.controller.component.VisibleComponents;
+import org.cyk.utility.client.controller.component.command.Commandables;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 
 public class ViewImpl extends AbstractVisibleComponentImpl implements View,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Layout layout;
+	private VisibleComponents visibleComponents;
+	
 	private OutputStringText name;
+	private Commandables processingCommandables;
 
 	@Override
-	public Layout getLayout() {
-		return layout;
+	public VisibleComponents getVisibleComponents() {
+		return visibleComponents;
 	}
-
+	
 	@Override
-	public View setLayout(Layout layout) {
-		this.layout = layout;
+	public View setVisibleComponents(VisibleComponents visibleComponents) {
+		this.visibleComponents = visibleComponents;
 		return this;
 	}
 	
@@ -42,4 +45,14 @@ public class ViewImpl extends AbstractVisibleComponentImpl implements View,Seria
 		return this;
 	}
 	
+	@Override
+	public Commandables getProcessingCommandables() {
+		return processingCommandables;
+	}
+	
+	@Override
+	public View setProcessingCommandables(Commandables processingCommandables) {
+		this.processingCommandables = processingCommandables;
+		return this;
+	}
 }

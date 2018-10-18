@@ -6,7 +6,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.layout.Layout;
-import org.cyk.utility.client.controller.component.layout.LayoutBuiler;
+import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
 
 import lombok.Getter;
@@ -21,6 +21,6 @@ public class LayoutFormPage extends AbstractPageImpl implements Serializable {
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		layout = __inject__(LayoutBuiler.class).setMaximumWidth(12).setType(LayoutBuiler.Type.FORM).execute().getOutput();
+		layout = __inject__(LayoutBuilder.class).setType(LayoutBuilder.Type.FORM).execute().getOutput();
 	}
 }

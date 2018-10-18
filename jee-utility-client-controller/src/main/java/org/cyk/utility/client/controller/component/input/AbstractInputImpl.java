@@ -13,8 +13,8 @@ public abstract class AbstractInputImpl<T> extends AbstractInputOutputImpl<T> im
 
 	protected Object valueObject;
 	protected T initialValue;
-	@Inject protected OutputStringLabel labelComponent;
-	@Inject protected OutputStringMessage messageComponent;
+	@Inject protected OutputStringLabel label;
+	@Inject protected OutputStringMessage message;
 	
 	@Override
 	public Object getValueObject() {
@@ -28,7 +28,7 @@ public abstract class AbstractInputImpl<T> extends AbstractInputOutputImpl<T> im
 	
 	@Override
 	public T getInitialValue() {
-		return value;
+		return initialValue;
 	}
 	
 	@Override
@@ -38,33 +38,24 @@ public abstract class AbstractInputImpl<T> extends AbstractInputOutputImpl<T> im
 	}
 	
 	@Override
-	public OutputStringLabel getLabelComponent() {
-		return labelComponent;
+	public OutputStringLabel getLabel() {
+		return label;
 	}
 	
 	@Override
-	public Input<T> setLabelComponent(OutputStringLabel labelComponent) {
-		this.labelComponent = labelComponent;
+	public Input<T> setLabel(OutputStringLabel label) {
+		this.label = label;
 		return this;
 	}
 	
 	@Override
-	public Input<T> setLabelComponentValue(Object value) {
-		OutputStringLabel labelComponent = getLabelComponent();
-		if(labelComponent == null)
-			setLabelComponent(labelComponent = __inject__(OutputStringLabel.class));
-		labelComponent.getProperties().setValue(value.toString());
-		return this;
+	public OutputStringMessage getMessage() {
+		return message;
 	}
 	
 	@Override
-	public OutputStringMessage getMessageComponent() {
-		return messageComponent;
-	}
-	
-	@Override
-	public Input<T> setMessageComponent(OutputStringMessage messageComponent) {
-		this.messageComponent = messageComponent;
+	public Input<T> setMessage(OutputStringMessage message) {
+		this.message = message;
 		return this;
 	}
 }

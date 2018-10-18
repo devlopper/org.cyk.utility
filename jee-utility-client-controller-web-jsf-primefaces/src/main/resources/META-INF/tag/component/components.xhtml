@@ -11,25 +11,44 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			<c:set var="components" value="#{value}" />
-			<cyk:layout value="#{layout}" >
+			<c:set var="components" value="#{value.get()}" />
+			<cyk:layout value="#{value.layout}" >
 				<ui:define name="content">
 					<c:forEach items="#{components}" var="indexComponent" >
 						<cyk:layoutItem value="#{indexComponent.layoutItem}" >
 							<ui:define name="content">
 								<c:choose>
-									<c:when test="#{viewHelper.isOutputStringLabel(indexComponent)}">
+									
+									<!-- Output -->
+									
+									<c:when test="#{componentHelper.isOutputStringText(indexComponent)}">
+										<cyk:outputText value="#{indexComponent}" />
+									</c:when>
+									
+									<c:when test="#{componentHelper.isOutputStringLabel(indexComponent)}">
 										<cyk:outputLabel value="#{indexComponent}" />
 									</c:when>
-									<c:when test="#{viewHelper.isInputText(indexComponent)}">
+									
+									<!-- Input -->
+									
+									<c:when test="#{componentHelper.isInputText(indexComponent)}">
 										<cyk:inputText value="#{indexComponent}" />
 									</c:when>
-									<c:when test="#{viewHelper.isInputTextArea(indexComponent)}">
+									<c:when test="#{componentHelper.isInputTextArea(indexComponent)}">
 										<cyk:inputTextarea value="#{indexComponent}" />
 									</c:when>
-									<c:when test="#{viewHelper.isOutputStringMessage(indexComponent)}">
+									<c:when test="#{componentHelper.isOutputStringMessage(indexComponent)}">
 										<cyk:message value="#{indexComponent}" />
 									</c:when>
+									
+									<!-- Button -->
+									
+									<c:when test="#{componentHelper.isCommandButton(indexComponent)}">
+										<cyk:commandButton value="#{indexComponent}" />
+									</c:when>
+									
+									<!-- Not found -->
+									
 									<c:otherwise>
 										NO COMPONENT FOUND for #{indexComponent}
 									</c:otherwise>

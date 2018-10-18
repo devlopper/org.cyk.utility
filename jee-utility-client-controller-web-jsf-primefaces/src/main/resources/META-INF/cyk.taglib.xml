@@ -70,6 +70,13 @@
         <source>tag/layout/item.xhtml</source>
     </tag>
     
+    <!-- View -->
+    
+    <tag>
+        <tag-name>view</tag-name>
+        <source>tag/view/view.xhtml</source>
+    </tag>
+    
     <!-- Form -->
     
     <tag>
@@ -82,10 +89,17 @@
         <source>tag/form/form.xhtml</source>
     </tag>
     
+    <!-- Command -->
+    
+    <tag>
+        <tag-name>commandButton</tag-name>
+        <source>tag/command/button.xhtml</source>
+    </tag>
+    
     <!-- Misc -->
     
     <tag>
-        <tag-name>components</tag-name>
+        <tag-name>visibleComponents</tag-name>
         <source>tag/component/components.xhtml</source>
     </tag>
     

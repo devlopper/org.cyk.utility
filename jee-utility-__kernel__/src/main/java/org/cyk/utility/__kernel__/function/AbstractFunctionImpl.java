@@ -53,6 +53,11 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		return this;
 	}
 	
+	@Override
+	public void executeToReturnVoid() {
+		execute();
+	}
+	
 	protected void __try__() throws Exception {
 		FunctionExecutionPhaseTry executionPhaseTry = getExecutionPhaseTry();		
 		
