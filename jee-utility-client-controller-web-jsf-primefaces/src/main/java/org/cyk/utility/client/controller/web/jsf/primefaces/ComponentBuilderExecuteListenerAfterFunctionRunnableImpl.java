@@ -28,8 +28,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 				if(component instanceof OutputStringMessage) {
 					OutputStringMessage outputStringMessage = (OutputStringMessage) component;
 					outputStringMessage.getProperties().setFor( ((OutputStringMessageBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );
-				}
-				
+				}				
 			}
 		});
 	}

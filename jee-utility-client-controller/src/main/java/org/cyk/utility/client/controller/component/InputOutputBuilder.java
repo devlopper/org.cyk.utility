@@ -13,4 +13,10 @@ public interface InputOutputBuilder<INPUT_OUTPUT extends InputOutput<VALUE>,VALU
 	VALUE getValue();
 	InputOutputBuilder<INPUT_OUTPUT, VALUE> setValue(VALUE value);
 	
+	Object getOutputPropertyValue();
+	InputOutputBuilder<INPUT_OUTPUT, VALUE> setOutputPropertyValue(Object value);
+	
+	@Override InputOutputBuilder<INPUT_OUTPUT, VALUE> setOutputProperty(Object key, Object value);
+	@Override InputOutputBuilder<INPUT_OUTPUT, VALUE> setAreaWidthProportions(Integer _default, Integer television,Integer desktop, Integer tablet, Integer phone);
+	@Override InputOutputBuilder<INPUT_OUTPUT, VALUE> setAreaWidthProportionsForNotPhone(Integer width);
 }

@@ -16,5 +16,9 @@ public interface InputBuilder<INPUT extends Input<VALUE>,VALUE> extends InputOut
 	OutputStringMessageBuilder getMessageBuilder();
 	OutputStringMessageBuilder getMessageBuilder(Boolean injectIfNull);
 	InputBuilder<INPUT,VALUE> setMessageBuilder(OutputStringMessageBuilder messageBuilder);
+
+	@Override InputBuilder<INPUT,VALUE> setOutputProperty(Object key, Object value);
 	
+	Object getOutputPropertyRequired();
+	InputBuilder<INPUT,VALUE> setOutputPropertyRequired(Object required);
 }

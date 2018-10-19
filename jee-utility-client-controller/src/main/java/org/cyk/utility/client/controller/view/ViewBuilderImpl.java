@@ -1,27 +1,34 @@
 package org.cyk.utility.client.controller.view;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilders;
 import org.cyk.utility.client.controller.component.VisibleComponents;
 import org.cyk.utility.client.controller.component.VisibleComponentsBuilder;
 import org.cyk.utility.client.controller.component.command.Commandable;
-import org.cyk.utility.client.controller.component.command.Commandables;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
+import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
+import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilerItem;
 import org.cyk.utility.client.controller.component.layout.LayoutWidthGetter;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.system.action.SystemAction;
 
 public class ViewBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<View> implements ViewBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private VisibleComponentsBuilder visibleComponentsBuilder;
 	private OutputStringTextBuilder nameOutputStringTextBuilder;
-	private Commandables processingCommandables;
+	private CommandableBuilders processingCommandableBuilders;
 	private VisibleComponentBuilders componentBuilders;
 	
 	@Override
@@ -40,8 +47,53 @@ public class ViewBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<V
 		}
 		
 		VisibleComponentBuilders componentBuilders = getComponentBuilders();
+		Collection<ComponentBuilder<?>> finalComponentBuilders = null;
 		if(__injectCollectionHelper__().isNotEmpty(componentBuilders)) {
+			finalComponentBuilders = new ArrayList<>();
 			for(ComponentBuilder<?> index : componentBuilders.get()) {
+				if(index!=null) {
+					//Derived builders
+					if(index instanceof InputBuilder<?, ?>) {
+						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) index;
+						if(inputBuilder.getLabelBuilder()!=null) {
+							finalComponentBuilders.add(inputBuilder.getLabelBuilder());
+						}
+					}
+					finalComponentBuilders.add(index);
+					if(index instanceof InputBuilder<?, ?>) {
+						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) index;
+						if(inputBuilder.getMessageBuilder()!=null) {
+							finalComponentBuilders.add(inputBuilder.getMessageBuilder());
+						}
+					}
+					
+					//Width proportions
+					if(index instanceof InputBuilder<?, ?>) {
+						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) index;
+						if(inputBuilder.getLabelBuilder()==null)
+							if(inputBuilder.getMessageBuilder()==null) {
+								//Nothing to do
+							} else {
+								inputBuilder.setAreaWidthProportionsForNotPhone(10);
+								inputBuilder.getMessageBuilder().setAreaWidthProportionsForNotPhone(2);
+							}
+						else {
+							if(inputBuilder.getMessageBuilder()==null) {
+								inputBuilder.getLabelBuilder().setAreaWidthProportionsForNotPhone(2);
+								inputBuilder.setAreaWidthProportionsForNotPhone(10);
+							} else {
+								inputBuilder.getLabelBuilder().setAreaWidthProportionsForNotPhone(2);
+								inputBuilder.setAreaWidthProportionsForNotPhone(8);
+								inputBuilder.getMessageBuilder().setAreaWidthProportionsForNotPhone(2);
+							}
+						}								
+					}
+				}
+			}
+		}
+		
+		if(__injectCollectionHelper__().isNotEmpty(finalComponentBuilders)) {
+			for(ComponentBuilder<?> index : finalComponentBuilders) {				
 				VisibleComponent component = (VisibleComponent) index.execute().getOutput();
 				if(component!=null)
 					visibleComponentsBuilder.addComponents(component);
@@ -49,16 +101,21 @@ public class ViewBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<V
 		}
 		
 		//Processing commandables last
-		Commandables processingCommandables = getProcessingCommandables();
-		if(__injectCollectionHelper__().isNotEmpty(processingCommandables)) {
-			for(Commandable index : processingCommandables.get())
-				visibleComponentsBuilder.getComponents(Boolean.TRUE).add(index);
+		CommandableBuilders processingCommandableBuilders = getProcessingCommandableBuilders();
+		Collection<Commandable> processingCommandables = null;
+		if(__injectCollectionHelper__().isNotEmpty(processingCommandableBuilders)) {
+			processingCommandables = new ArrayList<>();
+			for(CommandableBuilder<?> index : processingCommandableBuilders.get()) {
+				Commandable commandable = index.execute().getOutput();
+				visibleComponentsBuilder.getComponents(Boolean.TRUE).add(commandable);
+				processingCommandables.add(commandable);
+			}
 			//Processing commandables layout item
 			Integer layoutWidth = __inject__(LayoutWidthGetter.class).execute().getOutput().intValue();
-			Integer size = processingCommandables.get().size();
+			Integer size = processingCommandables.size();
 			Integer width = layoutWidth / size;
 			Integer count = 1;
-			for(@SuppressWarnings("unused") Commandable index : processingCommandables.get()) {
+			for(@SuppressWarnings("unused") Commandable index : processingCommandables) {
 				if(count == size )
 					width = width + layoutWidth % size;
 				visibleComponentsBuilder.getLayoutBuilder(Boolean.TRUE).addItems(__inject__(LayoutBuilerItem.class).setWidthForAll(width).setWidthForPhone(layoutWidth));
@@ -89,18 +146,61 @@ public class ViewBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<V
 	}
 	
 	@Override
+	public ViewBuilder setNameOutputPropertyValue(Object value) {
+		getNameOutputStringTextBuilder(Boolean.TRUE).setOutputPropertyValue(value);
+		return this;
+	}
+	/*
+	@Override
+	public ViewBuilder addProcessingCommandable() {
+		CommandButton submitCommandButton = __inject__(CommandButton.class);
+		submitCommandButton.getProperties().setValue("Execute");
+		submitCommandButton.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(__inject__(SystemActionCreate.class));
+		submitCommandButton.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).addRunnables(new Runnable() {	
+			@Override
+			public void run() {
+				System.out.println("Executed");
+			}
+		});
+		return this;
+	}
+	*/
+	@Override
 	public ViewBuilder addInputBuilder(InputBuilder<?,?> inputBuilder) {
 		VisibleComponentBuilders builders = getComponentBuilders(Boolean.TRUE);
 		if(inputBuilder!=null) {
-			if(inputBuilder.getLabelBuilder()!=null)
+			/*if(inputBuilder.getLabelBuilder()!=null)
 				builders.add(inputBuilder.getLabelBuilder());
+			*/
 			builders.add(inputBuilder);
-			if(inputBuilder.getMessageBuilder()!=null)
-				builders.add(inputBuilder.getMessageBuilder());	
+			/*if(inputBuilder.getMessageBuilder()!=null)
+				builders.add(inputBuilder.getMessageBuilder());
+			*/
 		}
 		return this;
 	}
 
+	@Override
+	public <T extends InputBuilder<?, ?>> T addInputBuilder(Class<T> inputBuilderClass,Object outputPropertyRequired,Object labelBuilderOutputPropertyValue) {
+		T inputBuilder = __inject__(inputBuilderClass);
+		if(outputPropertyRequired!=null)
+			inputBuilder.setOutputPropertyRequired(outputPropertyRequired);
+		if(labelBuilderOutputPropertyValue!=null)
+			inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(labelBuilderOutputPropertyValue);
+		addInputBuilder(inputBuilder);
+		return inputBuilder;
+	}
+	
+	@Override
+	public InputStringLineOneBuilder addInputStringLineOneBuilder(Object outputPropertyRequired,Object labelBuilderOutputPropertyValue) {
+		return addInputBuilder(InputStringLineOneBuilder.class, outputPropertyRequired, labelBuilderOutputPropertyValue);
+	}
+	
+	@Override
+	public InputStringLineManyBuilder addInputStringLineManyBuilder(Object outputPropertyRequired,Object labelBuilderOutputPropertyValue) {
+		return addInputBuilder(InputStringLineManyBuilder.class, outputPropertyRequired, labelBuilderOutputPropertyValue);
+	}
+	
 	@Override
 	public VisibleComponentsBuilder getVisibleComponentsBuilder() {
 		return visibleComponentsBuilder;
@@ -134,27 +234,36 @@ public class ViewBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<V
 	}
 	
 	@Override
-	public Commandables getProcessingCommandables() {
-		return processingCommandables;
+	public CommandableBuilders getProcessingCommandableBuilders() {
+		return processingCommandableBuilders;
 	}
 	
 	@Override
-	public Commandables getProcessingCommandables(Boolean injectIfNull) {
-		return (Commandables) __getInjectIfNull__(FIELD_PROCESSING_COMMANDABLES, injectIfNull);
+	public CommandableBuilders getProcessingCommandableBuilders(Boolean injectIfNull) {
+		return (CommandableBuilders) __getInjectIfNull__(FIELD_PROCESSING_COMMANDABLE_BUILDERS, injectIfNull);
 	}
 	
 	@Override
-	public ViewBuilder setProcessingCommandables(Commandables processingCommandables) {
-		this.processingCommandables = processingCommandables;
+	public ViewBuilder setProcessingCommandableBuilders(CommandableBuilders processingCommandableBuilders) {
+		this.processingCommandableBuilders = processingCommandableBuilders;
 		return this;
+	}
+	
+	@Override
+	public <T extends CommandableBuilder<?>> T addProcessingCommandableBuilder(Class<T> aClass,Object commandableOutputPropertyValue,Class<? extends SystemAction> systemActionClass,Runnable runnable) {
+		T commandableBuilder = __inject__(aClass);
+		getProcessingCommandableBuilders(Boolean.TRUE).add(commandableBuilder);
+		commandableBuilder.setOutputProperty(Properties.VALUE, commandableOutputPropertyValue);
+		commandableBuilder.addCommandFunctionTryRunRunnable(runnable);
+		commandableBuilder.setCommandFunctionActionClass(systemActionClass);
+		return commandableBuilder;
 	}
 
 	/**/
 	
 	public static final String FIELD_NAME_OUTPUT_STRING_TEXT_BUILDER = "nameOutputStringTextBuilder";
 	public static final String FIELD_VISIBLE_COMPONENTS_BUILDER = "visibleComponentsBuilder";
-	public static final String FIELD_PROCESSING_COMMANDABLES = "processingCommandables";
+	public static final String FIELD_PROCESSING_COMMANDABLE_BUILDERS = "processingCommandableBuilders";
 	public static final String FIELD_COMPONENT_BUILDERS = "componentBuilders";
 
-	
 }

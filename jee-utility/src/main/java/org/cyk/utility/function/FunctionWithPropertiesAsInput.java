@@ -8,4 +8,6 @@ public interface FunctionWithPropertiesAsInput<OUTPUT> extends Function<Properti
 	Properties getOutputProperties(Boolean injectIfNull);
 	FunctionWithPropertiesAsInput<OUTPUT> setOutputProperties(Properties outputProperties);
 	
+	Object getOutputProperty(Object key);
+	FunctionWithPropertiesAsInput<OUTPUT> setOutputProperty(Object key,Object value);
 }

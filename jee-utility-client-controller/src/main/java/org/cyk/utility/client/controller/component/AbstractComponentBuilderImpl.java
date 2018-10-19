@@ -1,8 +1,11 @@
 package org.cyk.utility.client.controller.component;
 
+import java.io.Serializable;
+
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> extends AbstractFunctionWithPropertiesAsInputImpl<COMPONENT> implements ComponentBuilder<COMPONENT> {
+public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> extends AbstractFunctionWithPropertiesAsInputImpl<COMPONENT> implements ComponentBuilder<COMPONENT> , Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Class<COMPONENT> componentClass;
@@ -40,5 +43,15 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	public ComponentBuilder<COMPONENT> setComponentClass(Class<COMPONENT> componentClass) {
 		this.componentClass = componentClass;
 		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setOutputProperties(Properties outputProperties) {
+		return (ComponentBuilder<COMPONENT>) super.setOutputProperties(outputProperties);
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setOutputProperty(Object key, Object value) {
+		return (ComponentBuilder<COMPONENT>) super.setOutputProperty(key, value);
 	}
 }

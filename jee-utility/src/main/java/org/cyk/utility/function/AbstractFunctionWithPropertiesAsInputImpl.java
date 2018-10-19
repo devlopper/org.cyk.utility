@@ -25,6 +25,17 @@ public abstract class AbstractFunctionWithPropertiesAsInputImpl<OUTPUT> extends 
 		return this;
 	}
 	
+	@Override
+	public Object getOutputProperty(Object key) {
+		return Properties.getFromPath(getOutputProperties(), key);
+	}
+	
+	@Override
+	public FunctionWithPropertiesAsInput<OUTPUT> setOutputProperty(Object key, Object value) {
+		Properties.setFromPath(getOutputProperties(), new Object[] {key},value);
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_OUTPUT_PROPERTIES = "outputProperties";

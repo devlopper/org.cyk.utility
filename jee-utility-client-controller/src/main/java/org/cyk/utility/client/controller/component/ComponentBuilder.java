@@ -7,4 +7,5 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	Class<COMPONENT> getComponentClass();
 	ComponentBuilder<COMPONENT> setComponentClass(Class<COMPONENT> componentClass);
 	
+	ComponentBuilder<COMPONENT> setOutputProperty(Object key,Object value);
 }

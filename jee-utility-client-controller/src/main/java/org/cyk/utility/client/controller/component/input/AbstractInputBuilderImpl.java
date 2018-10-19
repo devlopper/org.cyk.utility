@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.input;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractInputOutputBuilderImpl;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringMessageBuilder;
@@ -73,6 +74,22 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	public InputBuilder<INPUT, VALUE> setMessageBuilder(OutputStringMessageBuilder messageBuilder) {
 		this.messageBuilder = messageBuilder;
 		return this;
+	}
+	
+	@Override
+	public InputBuilder<INPUT, VALUE> setOutputPropertyRequired(Object required) {
+		setOutputProperty(Properties.REQUIRED, required);
+		return this;
+	}
+	
+	@Override
+	public Object getOutputPropertyRequired() {
+		return getOutputProperty(Properties.REQUIRED);
+	}
+	
+	@Override
+	public InputBuilder<INPUT, VALUE> setOutputProperty(Object key, Object value) {
+		return (InputBuilder<INPUT, VALUE>) super.setOutputProperty(key, value);
 	}
 
 	public static final String FIELD_LABEL_BUILDER = "labelBuilder";
