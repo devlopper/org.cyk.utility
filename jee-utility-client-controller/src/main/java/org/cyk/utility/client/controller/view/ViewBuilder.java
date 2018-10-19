@@ -4,6 +4,7 @@ import org.cyk.utility.client.controller.component.VisibleComponentBuilders;
 import org.cyk.utility.client.controller.component.VisibleComponentsBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilders;
+import org.cyk.utility.client.controller.component.command.CommandableButtonBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
@@ -13,6 +14,9 @@ import org.cyk.utility.system.action.SystemAction;
 
 public interface ViewBuilder extends FunctionWithPropertiesAsInput<View> {
 
+	ViewType getType();
+	ViewBuilder setType(ViewType type);
+	
 	VisibleComponentsBuilder getVisibleComponentsBuilder();
 	VisibleComponentsBuilder getVisibleComponentsBuilder(Boolean injectIfNull);
 	ViewBuilder setVisibleComponentsBuilder(VisibleComponentsBuilder visibleComponentsBuilder);
@@ -36,5 +40,11 @@ public interface ViewBuilder extends FunctionWithPropertiesAsInput<View> {
 	ViewBuilder setProcessingCommandableBuilders(CommandableBuilders processingCommandableBuilders);
 	
 	<T extends CommandableBuilder<?>> T addProcessingCommandableBuilder(Class<T> aClass,Object commandableOutputPropertyValue,Class<? extends SystemAction> systemActionClass,Runnable runnable);
+	CommandableButtonBuilder addProcessingCommandableButtonBuilder(Object commandableOutputPropertyValue,Class<? extends SystemAction> systemActionClass,Runnable runnable);
 	
+	Runnable getSubmitRunnable();
+	ViewBuilder setSubmitRunnable(Runnable submitRunnable);
+	
+	Runnable getCloseRunnable();
+	ViewBuilder setCloseRunnable(Runnable closeRunnable);
 }

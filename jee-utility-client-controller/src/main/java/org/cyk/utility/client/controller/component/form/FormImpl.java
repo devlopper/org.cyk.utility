@@ -13,12 +13,6 @@ public class FormImpl extends AbstractVisibleComponentImpl implements Form, Seri
 	@Inject private View view;
 	
 	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		
-	}
-	
-	@Override
 	public View getView() {
 		return view;
 	}
@@ -28,7 +22,5 @@ public class FormImpl extends AbstractVisibleComponentImpl implements Form, Seri
 		this.view = view;
 		return this;
 	}
-
-	
 
 }

@@ -12,7 +12,7 @@ import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.VisibleComponents;
 import org.cyk.utility.client.controller.component.VisibleComponentsBuilder;
-import org.cyk.utility.client.controller.component.command.CommandButton;
+import org.cyk.utility.client.controller.component.command.CommandableButton;
 import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.input.InputStringLineMany;
 import org.cyk.utility.client.controller.component.input.InputStringLineOne;
@@ -34,7 +34,7 @@ public class InputPage extends AbstractPageImpl implements Serializable {
 	@Inject private InputStringLineOne inputTextRequired;
 	private InputStringLineOne inputTextNull;
 	
-	@Inject private CommandButton commandButton;
+	@Inject private CommandableButton commandButton;
 	
 	@Override
 	protected void __listenPostConstruct__() {

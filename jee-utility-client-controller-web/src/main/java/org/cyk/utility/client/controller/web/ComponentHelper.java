@@ -6,7 +6,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
-import org.cyk.utility.client.controller.component.command.CommandButton;
+import org.cyk.utility.client.controller.component.command.CommandableButton;
 import org.cyk.utility.client.controller.component.input.InputStringLineMany;
 import org.cyk.utility.client.controller.component.input.InputStringLineOne;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
@@ -42,7 +42,7 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 		return object instanceof OutputStringMessage;
 	}
 	
-	public Boolean isCommandButton(Object object) {
-		return object instanceof CommandButton;
+	public Boolean isCommandableButton(Object object) {
+		return object instanceof CommandableButton;
 	}
 }

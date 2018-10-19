@@ -11,14 +11,11 @@
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
 			<h:form
-				id="#{identifier}"
+				id="#{value.properties.identifier}"
+				prependId="false"
 			>
-				<ui:param name="form" value="#{value}"/>
-    			<cyk:formLayout value="#{form.view.layout}">
-    				<ui:define name="header">
-    					<cyk:outputText value="#{form.view.name}" />
-    				</ui:define>
-    			</cyk:formLayout>
+				<cyk:view value="#{value.view}" />
+    			<p:autoUpdate/>
 				    
 			</h:form>
 		</ui:define>

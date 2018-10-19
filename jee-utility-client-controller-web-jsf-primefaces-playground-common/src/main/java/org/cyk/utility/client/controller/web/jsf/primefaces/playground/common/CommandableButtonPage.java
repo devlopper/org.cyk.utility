@@ -6,7 +6,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.cyk.utility.client.controller.component.command.CommandButton;
+import org.cyk.utility.client.controller.component.command.CommandableButton;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 
@@ -14,12 +14,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
-public class CommandButtonPage extends AbstractPageImpl implements Serializable {
+public class CommandableButtonPage extends AbstractPageImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Inject private CommandButton noServerNoClient;
-	@Inject private CommandButton serverOnlyNoConfirmation,serverThenClientNoConfirmation;
-	@Inject private CommandButton clientOnlyNoConfirmation,clientThenServerNoConfirmation;
+	@Inject private CommandableButton noServerNoClient;
+	@Inject private CommandableButton serverOnlyNoConfirmation,serverThenClientNoConfirmation;
+	@Inject private CommandableButton clientOnlyNoConfirmation,clientThenServerNoConfirmation;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -37,6 +37,6 @@ public class CommandButtonPage extends AbstractPageImpl implements Serializable 
 	}
 	
 	public void executeCommandSimple() {
-		System.out.println("CommandPage.executeCommandSimple() 0");
+		System.out.println("CommandablePage.executeCommandSimple() 0");
 	}
 }
