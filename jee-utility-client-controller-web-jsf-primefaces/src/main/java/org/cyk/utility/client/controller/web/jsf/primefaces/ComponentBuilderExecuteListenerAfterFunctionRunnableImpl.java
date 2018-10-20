@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerAfter;
+import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
@@ -20,15 +21,21 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 			public void run() {
 				ComponentBuilder<?> componentBuilder = (ComponentBuilder<?>) getFunction().getObject();
 				Component component = getFunction().getComponent();
-				if(component instanceof OutputStringLabel) {
-					OutputStringLabel outputStringLabel = (OutputStringLabel) component;
-					outputStringLabel.getProperties().setFor( ((OutputStringLabelBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );
-				}
 				
-				if(component instanceof OutputStringMessage) {
-					OutputStringMessage outputStringMessage = (OutputStringMessage) component;
-					outputStringMessage.getProperties().setFor( ((OutputStringMessageBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );
-				}				
+				if(component instanceof OutputString) {
+					OutputString outputString = (OutputString) component;
+					outputString.setValue((String)outputString.getPropertyValue());
+					
+					if(outputString instanceof OutputStringLabel) {
+						OutputStringLabel outputStringLabel = (OutputStringLabel) outputString;
+						outputStringLabel.getProperties().setFor( ((OutputStringLabelBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );	
+					}
+					
+					if(outputString instanceof OutputStringMessage) {
+						OutputStringMessage outputStringMessage = (OutputStringMessage) outputString;
+						outputStringMessage.getProperties().setFor( ((OutputStringMessageBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );
+					}		
+				}		
 			}
 		});
 	}

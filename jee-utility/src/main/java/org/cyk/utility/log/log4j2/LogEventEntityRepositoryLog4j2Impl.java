@@ -192,4 +192,14 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 		return null;
 	}
 
+	@Override
+	public Object getProperty(Object key) {
+		return null;
+	}
+
+	@Override
+	public Objectable setProperty(Object key, Object value) {
+		return null;
+	}
+
 }

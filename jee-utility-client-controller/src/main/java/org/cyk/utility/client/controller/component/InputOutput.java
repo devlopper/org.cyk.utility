@@ -13,4 +13,9 @@ public interface InputOutput<T> extends VisibleComponent {
 	T getValue();
 	void setValue(T value);
 	
+	InputOutput<T> setValueFromFieldValue();
+	InputOutput<T> setFieldValueFromValue();
+	
+	Object getPropertyValue();
+	InputOutput<T> setPropertyValue(Object value);
 }

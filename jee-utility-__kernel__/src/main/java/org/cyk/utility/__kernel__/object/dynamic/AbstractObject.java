@@ -45,6 +45,17 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	}
 	
 	@Override
+	public Object getProperty(Object key) {
+		return getProperties().get(key);
+	}
+	
+	@Override
+	public Objectable setProperty(Object key, Object value) {
+		getProperties().set(key, value);
+		return this;
+	}
+	
+	@Override
 	public Object getParent() {
 		return getProperties().getParent();
 	}

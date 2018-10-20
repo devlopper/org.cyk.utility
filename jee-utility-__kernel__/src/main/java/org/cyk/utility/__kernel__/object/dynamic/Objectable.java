@@ -8,6 +8,8 @@ public interface Objectable extends org.cyk.utility.__kernel__.object.Objectable
 
 	Properties getProperties();
 	Objectable setProperties(Properties properties);
+	Object getProperty(Object key);
+	Objectable setProperty(Object key,Object value);
 	
 	Object getParent();
 	<I extends Objectable> I getParentAs(Class<I> aClass);
@@ -24,4 +26,5 @@ public interface Objectable extends org.cyk.utility.__kernel__.object.Objectable
 	Objectable addChild(Object...child);
 	
 	Object getChildAt(Integer index);
+	
 }

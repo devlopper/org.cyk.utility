@@ -3,6 +3,10 @@ package org.cyk.utility.client.controller.component;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.field.FieldValueGetter;
+import org.cyk.utility.field.FieldValueSetter;
+
 public abstract class AbstractInputOutputImpl<T> extends AbstractVisibleComponentImpl implements InputOutput<T>,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -40,5 +44,42 @@ public abstract class AbstractInputOutputImpl<T> extends AbstractVisibleComponen
 	@Override
 	public void setValue(T value) {
 		this.value = value;
+	}
+	
+	@Override
+	public Object getPropertyValue() {
+		return getProperty(Properties.VALUE);
+	}
+	
+	@Override
+	public InputOutput<T> setPropertyValue(Object value) {
+		setProperty(Properties.VALUE, value);
+		return this;
+	}
+	
+	@Override
+	public InputOutput<T> setValueFromFieldValue() {
+		setValue(__getValueToSetValueFromFieldValue__());
+		return this;
+	}
+	
+	protected T __getValueToSetValueFromFieldValue__() {
+		Object object = getObject();
+		Field field = getField();
+		return object==null || field==null ? null : (T) __inject__(FieldValueGetter.class).execute(object, field).getOutput();
+	}
+	
+	@Override
+	public InputOutput<T> setFieldValueFromValue() {
+		Object object = getObject();
+		Field field = getField();
+		if(object!=null && field!=null) {
+			__inject__(FieldValueSetter.class).execute(object, field, __getValueToSetFieldValueFromValue__());
+		}
+		return this;
+	}
+	
+	protected T __getValueToSetFieldValueFromValue__() {
+		return getValue();
 	}
 }

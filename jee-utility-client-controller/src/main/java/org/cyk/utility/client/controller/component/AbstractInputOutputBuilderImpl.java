@@ -2,14 +2,60 @@ package org.cyk.utility.client.controller.component;
 
 import java.lang.reflect.Field;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldValueGetter;
+import org.cyk.utility.string.Strings;
 
 public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputOutput<VALUE>,VALUE> extends AbstractVisibleComponentBuilderImpl<INPUT_OUTPUT> implements InputOutputBuilder<INPUT_OUTPUT, VALUE> {
 	private static final long serialVersionUID = 1L;
 
 	protected Object object;
 	protected Field field;
+	protected Strings fieldNameStrings;
 	protected VALUE value;
+	
+	@Override
+	protected void __execute__(INPUT_OUTPUT component) {
+		super.__execute__(component);
+		Object object = getObject();
+		Field field = getField();
+		//Object value = getValue();
+		if(field == null) {
+			if(object!=null) {
+				String fieldName = null;
+				Strings fieldNameStrings = getFieldNameStrings();
+				if(__injectCollectionHelper__().isNotEmpty(fieldNameStrings))
+					fieldName = __injectFieldHelper__().concatenate(fieldNameStrings.get());
+				if(__injectStringHelper__().isNotBlank(fieldName)) {
+					String objectFieldName = StringUtils.contains(fieldName, CharacterConstant.DOT.toString()) ? StringUtils.substringBeforeLast(fieldName, CharacterConstant.DOT.toString()) : null;
+					fieldName = objectFieldName == null ? fieldName : StringUtils.substringAfterLast(fieldName, CharacterConstant.DOT.toString());
+					if(objectFieldName!=null)
+						object = __inject__(FieldValueGetter.class).execute(object, objectFieldName).getOutput();
+					field = __injectCollectionHelper__().getFirst(__inject__(FieldGetter.class).execute(object.getClass(), fieldName).getOutput());	
+				}
+			}
+		}
+		/*
+		if(value == null) {
+			if(field!=null) {
+				value = __inject__(FieldValueGetter.class).execute(object, field).getOutput();
+			}
+		}
+		*/
+		__execute__(component, object, field/*,__getValue__(object, field, value)*/);
+	}
+	
+	protected abstract VALUE __getValue__(Object object,Field field,Object value);
+	
+	protected void __execute__(INPUT_OUTPUT component,Object object,Field field/*,VALUE value*/) {
+		component.setObject(object);
+		component.setField(field);
+		component.setValueFromFieldValue();
+		//component.setValue(value);
+	}
 	
 	@Override
 	public Object getObject() {
@@ -30,6 +76,22 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 	@Override
 	public InputOutputBuilder<INPUT_OUTPUT,VALUE> setField(Field field) {
 		this.field = field;
+		return this;
+	}
+	
+	@Override
+	public Strings getFieldNameStrings() {
+		return fieldNameStrings;
+	}
+	
+	@Override
+	public Strings getFieldNameStrings(Boolean injectIfNull) {
+		return (Strings) __getInjectIfNull__(FIELD_FIELD_NAME_STRINGS, injectIfNull);
+	}
+	
+	@Override
+	public InputOutputBuilder<INPUT_OUTPUT, VALUE> setFieldNameStrings(Strings fieldNameStrings) {
+		this.fieldNameStrings = fieldNameStrings;
 		return this;
 	}
 	
@@ -68,4 +130,8 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 	public InputOutputBuilder<INPUT_OUTPUT, VALUE> setAreaWidthProportionsForNotPhone(Integer width) {
 		return (InputOutputBuilder<INPUT_OUTPUT, VALUE>) super.setAreaWidthProportionsForNotPhone(width);
 	}
+	
+	/**/
+	
+	public static final String FIELD_FIELD_NAME_STRINGS = "fieldNameStrings";
 }

@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.component.input;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractInputOutputBuilderImpl;
@@ -15,8 +16,13 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	private OutputStringMessageBuilder messageBuilder;
 	
 	@Override
-	protected void __execute__(INPUT input) {
-		super.__execute__(input);
+	protected VALUE __getValue__(Object object, Field field, Object value) {
+		return (VALUE) value;
+	}
+	
+	@Override
+	protected void __execute__(INPUT input, Object object, Field field/*,VALUE value*/) {
+		super.__execute__(input, object, field/*, value*/);
 		OutputStringLabelBuilder labelBuilder = getLabelBuilder();
 		if(labelBuilder!=null) {
 			input.setLabel(labelBuilder.execute().getOutput());
@@ -26,11 +32,6 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 		if(messageBuilder!=null) {
 			input.setMessage(messageBuilder.execute().getOutput());
 		}
-		/*
-		input.getLabel().setWidths(1, 1, 1, 1, 12);
-		input.setWidths(4, 4, 4, 4, 12);
-		input.getMessage().setWidths(1, 1, 1, 1, 12);
-		*/
 	}
 	
 	@Override
