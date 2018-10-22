@@ -23,4 +23,9 @@ public interface View extends VisibleComponent {
 	Commandables getProcessingCommandables();
 	View setProcessingCommandables(Commandables processingCommandables);
 	
+	/**/
+	
+	View setInputOutputValueFromFieldValue();
+	View setInputOutputFieldValueFromValue();
+	
 }

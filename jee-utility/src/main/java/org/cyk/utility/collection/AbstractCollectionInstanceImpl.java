@@ -23,6 +23,26 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	public Collection<T> get() {
 		return collection;
 	}
+	
+	@Override
+	public Collection<T> getIsInstanceOf(Collection<Class<?>> classes) {
+		Collection<T> collection = null;
+		if(__inject__(CollectionHelper.class).isNotEmpty(this.collection)) {
+			for(T index : this.collection) {
+				if(__inject__(ClassHelper.class).isInstanceOfOne(index.getClass(), classes)) {
+					if(collection == null)
+						collection = new ArrayList<>();
+					collection.add(index);
+				}
+			}
+		}
+		return collection;
+	}
+	
+	@Override
+	public Collection<T> getIsInstanceOf(Class<?>... classes) {
+		return getIsInstanceOf(__inject__(CollectionHelper.class).instanciate(classes));
+	}
 
 	@Override
 	public CollectionInstance<T> set(Collection<T> collection) {

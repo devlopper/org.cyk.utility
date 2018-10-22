@@ -55,4 +55,20 @@ public class ViewImpl extends AbstractVisibleComponentImpl implements View,Seria
 		this.processingCommandables = processingCommandables;
 		return this;
 	}
+
+	@Override
+	public View setInputOutputValueFromFieldValue() {
+		VisibleComponents visibleComponents = getVisibleComponents();
+		if(visibleComponents!=null)
+			visibleComponents.setInputOutputValueFromFieldValue();
+		return this;
+	}
+
+	@Override
+	public View setInputOutputFieldValueFromValue() {
+		VisibleComponents visibleComponents = getVisibleComponents();
+		if(visibleComponents!=null)
+			visibleComponents.setInputOutputFieldValueFromValue();
+		return this;
+	}
 }

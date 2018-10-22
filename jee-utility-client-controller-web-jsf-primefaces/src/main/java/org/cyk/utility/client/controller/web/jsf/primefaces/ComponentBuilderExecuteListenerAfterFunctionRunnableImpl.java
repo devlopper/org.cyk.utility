@@ -2,10 +2,13 @@ package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerAfter;
+import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
@@ -35,7 +38,13 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						OutputStringMessage outputStringMessage = (OutputStringMessage) outputString;
 						outputStringMessage.getProperties().setFor( ((OutputStringMessageBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );
 					}		
-				}		
+				}
+				
+				if(component instanceof Input) {
+					Input<?> input = (Input<?>) component;
+					if(input.getField()!=null)
+						input.getProperties().setRequired(input.getField().getAnnotation(NotNull.class)!=null);
+				}
 			}
 		});
 	}

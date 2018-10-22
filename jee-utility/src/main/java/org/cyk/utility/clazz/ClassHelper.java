@@ -40,6 +40,9 @@ public interface ClassHelper extends Helper {
 	String getSimpleName(Class<?> aClass);
 	String getSimpleName(String string);
 	
+	Boolean isInstanceOfOne(Class<?> aClass,Collection<Class<?>> classes);
+	Boolean isInstanceOfOne(Class<?> aClass,Class<?>...classes);
+	
 	/**/
 
 }

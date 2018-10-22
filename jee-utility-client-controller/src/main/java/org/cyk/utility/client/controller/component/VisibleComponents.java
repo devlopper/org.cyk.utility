@@ -8,4 +8,7 @@ public interface VisibleComponents extends CollectionInstance<VisibleComponent> 
 	Layout getLayout();
 	VisibleComponents setLayout(Layout layout);
 	
+	VisibleComponents setInputOutputValueFromFieldValue();
+	VisibleComponents setInputOutputFieldValueFromValue();
+	
 }

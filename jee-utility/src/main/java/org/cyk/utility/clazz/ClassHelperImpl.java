@@ -175,6 +175,20 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 		return StringUtils.contains(string, DOT) ? StringUtils.substringAfterLast(string, DOT) : string;
 	}
 	
+	@Override
+	public Boolean isInstanceOfOne(Class<?> aClass,Collection<Class<?>> classes) {
+		if(classes!=null)
+			for(Class<?> index : classes)
+				if(isInstanceOf(aClass, index))
+					return Boolean.TRUE;
+		return null;
+	}
+	
+	@Override
+	public Boolean isInstanceOfOne(Class<?> aClass, Class<?>... classes) {
+		return isInstanceOfOne(aClass, __inject__(CollectionHelper.class).instanciate(classes));
+	}
+	
 	/**/
 	
 	private static final String DOT = ".";

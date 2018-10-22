@@ -24,6 +24,7 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	protected void __execute__(INPUT input, Object object, Field field/*,VALUE value*/) {
 		super.__execute__(input, object, field/*, value*/);
 		OutputStringLabelBuilder labelBuilder = getLabelBuilder();
+		
 		if(labelBuilder!=null) {
 			input.setLabel(labelBuilder.execute().getOutput());
 		}
