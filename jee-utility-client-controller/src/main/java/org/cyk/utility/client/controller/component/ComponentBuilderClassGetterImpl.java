@@ -3,10 +3,13 @@ package org.cyk.utility.client.controller.component;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.annotation.Annotations;
+import org.cyk.utility.client.controller.component.command.CommandableButtonBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.field.FieldGetter;
@@ -20,6 +23,8 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 	private Class clazz;
 	private Strings fieldNameStrings;
 	private Field field;
+	private String methodName;
+	private Method method;
 	private Annotations annotations;
 	
 	@Override
@@ -47,16 +52,26 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 						annotationCollection.add(index);
 					}
 			}
+			
+			Method method = getMethod();
+			if(method == null) {
+				Class clazz = getClazz();
+				String methodName = getMethodName();
+				if(clazz!=null && __injectStringHelper__().isNotBlank(methodName)) {
+					method = MethodUtils.getMatchingMethod(clazz, methodName);
+				}
+			}
+			
+			if(method!=null) {
+				Annotation[] methodAnnotations = method.getAnnotations();
+				if(methodAnnotations!=null)
+					for(Annotation index : methodAnnotations) {
+						annotationCollection.add(index);
+					}
+			}
 		}
-		org.cyk.utility.client.controller.component.annotation.InputStringLineOne annotationInputStringLineOne =
-				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputStringLineOne.class,annotationCollection);
-		if(annotationInputStringLineOne!=null)
-			builderClass = InputStringLineOneBuilder.class;
 		
-		org.cyk.utility.client.controller.component.annotation.InputStringLineMany annotationInputStringLineMany =
-				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputStringLineMany.class,annotationCollection);
-		if(annotationInputStringLineMany!=null)
-			builderClass = InputStringLineManyBuilder.class;
+		builderClass = __getBuilderClassFromAnnotations__(annotationCollection);
 		
 		return builderClass;
 	}
@@ -73,6 +88,28 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 	}
 	
 	@Override
+	public String getMethodName() {
+		return methodName;
+	}
+	
+	@Override
+	public ComponentBuilderClassGetter setMethodName(String methodName) {
+		this.methodName = methodName;
+		return this;
+	}
+	
+	@Override
+	public Method getMethod() {
+		return method;
+	}
+	
+	@Override
+	public ComponentBuilderClassGetter setMethod(Method method) {
+		this.method = method;
+		return this;
+	}
+	
+	@Override
 	public Annotations getAnnotations() {
 		return annotations;
 	}
@@ -85,6 +122,12 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 	@Override
 	public ComponentBuilderClassGetter setAnnotations(Annotations annotations) {
 		this.annotations = annotations;
+		return this;
+	}
+	
+	@Override
+	public ComponentBuilderClassGetter addAnnotations(Annotation... annotations) {
+		getAnnotations(Boolean.TRUE).add(annotations);
 		return this;
 	}
 	
@@ -115,6 +158,12 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 		return this;
 	}
 	
+	@Override
+	public ComponentBuilderClassGetter addFieldNameStrings(String... fieldNameStrings) {
+		getFieldNameStrings(Boolean.TRUE).add(fieldNameStrings);
+		return this;
+	}
+	
 	/**/
 	
 	protected <T extends Annotation> T __getAnnotation__(Class<T> annotationClass,Collection<? extends Annotation> annotations) {
@@ -125,6 +174,25 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 		return null;
 	}
 
+	protected Class<? extends ComponentBuilder<?>> __getBuilderClassFromAnnotations__(Collection<? extends Annotation> annotations) {
+		org.cyk.utility.client.controller.component.annotation.InputStringLineOne annotationInputStringLineOne =
+				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputStringLineOne.class,annotations);
+		if(annotationInputStringLineOne!=null)
+			return InputStringLineOneBuilder.class;
+		
+		org.cyk.utility.client.controller.component.annotation.InputStringLineMany annotationInputStringLineMany =
+				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputStringLineMany.class,annotations);
+		if(annotationInputStringLineMany!=null)
+			return InputStringLineManyBuilder.class;
+		
+		org.cyk.utility.client.controller.component.annotation.CommandableButton annotationCommandableButton =
+				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.CommandableButton.class,annotations);
+		if(annotationCommandableButton!=null)
+			return CommandableButtonBuilder.class;
+		
+		return null;
+	}
+	
 	/**/
 	
 	public static final String FIELD_ANNOTATIONS = "annotations";

@@ -38,23 +38,16 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 				}
 			}
 		}
-		/*
-		if(value == null) {
-			if(field!=null) {
-				value = __inject__(FieldValueGetter.class).execute(object, field).getOutput();
-			}
-		}
-		*/
-		__execute__(component, object, field/*,__getValue__(object, field, value)*/);
+		
+		__execute__(component, object, field);
 	}
 	
 	protected abstract VALUE __getValue__(Object object,Field field,Object value);
 	
-	protected void __execute__(INPUT_OUTPUT component,Object object,Field field/*,VALUE value*/) {
+	protected void __execute__(INPUT_OUTPUT component,Object object,Field field) {
 		component.setObject(object);
 		component.setField(field);
 		component.setValueFromFieldValue();
-		//component.setValue(value);
 	}
 	
 	@Override

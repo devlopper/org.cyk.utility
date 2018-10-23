@@ -6,6 +6,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
+import org.cyk.utility.client.controller.component.annotation.Commandable;
+import org.cyk.utility.client.controller.component.annotation.CommandableButton;
 import org.cyk.utility.client.controller.component.annotation.Input;
 import org.cyk.utility.client.controller.component.annotation.InputString;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineMany;
@@ -17,6 +19,7 @@ import org.cyk.utility.client.controller.view.View;
 import org.cyk.utility.client.controller.view.ViewBuilder;
 import org.cyk.utility.client.controller.view.ViewTypeForm;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
+import org.cyk.utility.system.action.SystemActionCreate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -48,6 +51,9 @@ public class ViewPage extends AbstractPageImpl implements Serializable {
 		viewBuilder.addComponentBuilderByFieldName(model, "lastNames");
 		viewBuilder.addComponentBuilderByFieldName(model, "otherDetails");
 		
+		viewBuilder.addComponentBuilderByMethodName(model, "submit");
+		viewBuilder.addComponentBuilderByMethodName(model, "close");
+		
 		return viewBuilder.execute().getOutput();
 	}
 	
@@ -69,5 +75,15 @@ public class ViewPage extends AbstractPageImpl implements Serializable {
 		@Input @InputString @InputStringLineMany
 		@NotNull
 		private String otherDetails;
+		
+		@Commandable(systemActionClass=SystemActionCreate.class) @CommandableButton
+		public void submit() {
+			System.out.println("ViewPage.Model.submit() : "+this);
+		}
+		
+		@Commandable(systemActionClass=SystemActionCreate.class) @CommandableButton
+		public void close() {
+			System.out.println("ViewPage.Model.close() : "+this);
+		}
 	}
 }

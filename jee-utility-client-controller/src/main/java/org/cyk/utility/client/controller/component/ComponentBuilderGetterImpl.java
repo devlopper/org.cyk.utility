@@ -2,7 +2,11 @@ package org.cyk.utility.client.controller.component;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
+import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -14,17 +18,26 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 	private ComponentBuilderClassGetter classGetter;
 	private Class<? extends ComponentBuilder<?>> clazz;
 	private Object object;
+	private Method __method__;
 	
 	@Override
 	protected ComponentBuilder __execute__() throws Exception {
 		ComponentBuilder builder = null;
 		Object object = getObject();
 		Field field = getField();
+		Method method = getMethod();
+		if(method == null && object!=null) {
+			String methodName = getMethodName();
+			if(__injectStringHelper__().isNotBlank(methodName))
+				method = MethodUtils.getMatchingAccessibleMethod(object.getClass(), methodName);
+		}
+		__method__ = method;
 		ComponentBuilderClassGetter classGetter = getClassGetter();
 		
 		if(field == null) {
 			if(object!=null) {
-				field = __injectCollectionHelper__().getFirst(
+				if(__injectCollectionHelper__().isNotEmpty(classGetter.getFieldNameStrings()))
+					field = __injectCollectionHelper__().getFirst(
 						__inject__(FieldGetter.class).execute(object.getClass(), __injectFieldHelper__().concatenate(classGetter.getFieldNameStrings().get())).getOutput());
 			}
 		}
@@ -57,6 +70,21 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 					
 					inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getField().getName());
 				}
+			}else if(builder instanceof CommandableBuilder<?>) {
+				org.cyk.utility.client.controller.component.annotation.Commandable commandableAnnotation = __method__.getAnnotation(org.cyk.utility.client.controller.component.annotation.Commandable.class);
+				CommandableBuilder<?> commandableBuilder = (CommandableBuilder<?>) builder;
+				commandableBuilder.setOutputProperty(Properties.VALUE, __method__.getName());
+				commandableBuilder.setCommandFunctionActionClass(commandableAnnotation == null ? null : commandableAnnotation.systemActionClass());
+				commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).addRunnables(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							__method__.invoke(object);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		}
 		
@@ -99,6 +127,30 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 	@Override
 	public ComponentBuilderGetter setField(Field field) {
 		getClassGetter(Boolean.TRUE).setField(field);
+		return this;
+	}
+	
+	@Override
+	public Method getMethod() {
+		ComponentBuilderClassGetter classGetter = getClassGetter();
+		return classGetter == null ? null : classGetter.getMethod();
+	}
+	
+	@Override
+	public ComponentBuilderGetter setMethod(Method method) {
+		getClassGetter(Boolean.TRUE).setMethod(method);
+		return this;
+	}
+	
+	@Override
+	public String getMethodName() {
+		ComponentBuilderClassGetter classGetter = getClassGetter();
+		return classGetter == null ? null : classGetter.getMethodName();
+	}
+	
+	@Override
+	public ComponentBuilderGetter setMethodName(String methodName) {
+		getClassGetter(Boolean.TRUE).setMethodName(methodName);
 		return this;
 	}
 	

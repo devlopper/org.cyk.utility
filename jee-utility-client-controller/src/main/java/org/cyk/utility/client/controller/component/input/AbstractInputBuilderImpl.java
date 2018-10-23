@@ -21,8 +21,8 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	}
 	
 	@Override
-	protected void __execute__(INPUT input, Object object, Field field/*,VALUE value*/) {
-		super.__execute__(input, object, field/*, value*/);
+	protected void __execute__(INPUT input, Object object, Field field) {
+		super.__execute__(input, object, field);
 		OutputStringLabelBuilder labelBuilder = getLabelBuilder();
 		
 		if(labelBuilder!=null) {

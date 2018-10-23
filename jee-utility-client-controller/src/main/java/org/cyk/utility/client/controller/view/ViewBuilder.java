@@ -45,6 +45,8 @@ public interface ViewBuilder extends FunctionWithPropertiesAsInput<View> {
 	ViewBuilder addComponentBuilder(VisibleComponentBuilder<?> componentBuilder);
 	<T extends ComponentBuilder<?>> T addComponentBuilderByFieldName(Class<T> componentBuilderClass,Object object,String...fieldNames);
 	ComponentBuilder<?> addComponentBuilderByFieldName(Object object,String...fieldNames);
+	<T extends ComponentBuilder<?>> T addComponentBuilderByMethodName(Class<T> componentBuilderClass,Object object,String methodName);
+	ComponentBuilder<?> addComponentBuilderByMethodName(Object object,String methodName);
 	
 	CommandableBuilders getProcessingCommandableBuilders();
 	CommandableBuilders getProcessingCommandableBuilders(Boolean injectIfNull);

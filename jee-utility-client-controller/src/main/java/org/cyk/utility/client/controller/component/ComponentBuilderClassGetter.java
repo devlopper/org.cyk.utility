@@ -1,6 +1,8 @@
 package org.cyk.utility.client.controller.component;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import org.cyk.utility.annotation.Annotations;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
@@ -15,12 +17,21 @@ public interface ComponentBuilderClassGetter extends FunctionWithPropertiesAsInp
 	Strings getFieldNameStrings();
 	Strings getFieldNameStrings(Boolean injectIfNull);
 	ComponentBuilderClassGetter setFieldNameStrings(Strings fieldNameStrings);
+	ComponentBuilderClassGetter addFieldNameStrings(String...fieldNameStrings);
 	
 	Field getField();
 	ComponentBuilderClassGetter setField(Field field);
 	
+	Method getMethod();
+	ComponentBuilderClassGetter setMethod(Method method);
+	
+	String getMethodName();
+	ComponentBuilderClassGetter setMethodName(String methodName);
+	
 	Annotations getAnnotations();
 	Annotations getAnnotations(Boolean injectIfNull);
 	ComponentBuilderClassGetter setAnnotations(Annotations annotations);
+	ComponentBuilderClassGetter addAnnotations(Annotation...annotations);
+	
 	
 }
