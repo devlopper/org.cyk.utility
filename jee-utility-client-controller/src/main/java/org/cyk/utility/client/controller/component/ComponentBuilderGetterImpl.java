@@ -68,7 +68,8 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 					//inputBuilder.setFieldNameStrings(__inject__(Strings.class).add(field.getName()));
 					//inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getFieldNameStrings().get().toString());
 					
-					inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getField().getName());
+					//inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getField().getName());
+					inputBuilder.getLabelBuilder(Boolean.TRUE).setValue(inputBuilder.getField().getName());
 				}
 			}else if(builder instanceof CommandableBuilder<?>) {
 				org.cyk.utility.client.controller.component.annotation.Commandable commandableAnnotation = __method__.getAnnotation(org.cyk.utility.client.controller.component.annotation.Commandable.class);
@@ -166,7 +167,7 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 	}
 	
 	@Override
-	public ComponentBuilderGetter addFielNameStrings(String... fieldNameStrings) {
+	public ComponentBuilderGetter addFieldNameStrings(String... fieldNameStrings) {
 		getClassGetter(Boolean.TRUE).getFieldNameStrings(Boolean.TRUE).add(fieldNameStrings);
 		return this;
 	}

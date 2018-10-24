@@ -27,5 +27,5 @@ public interface ComponentBuilderGetter extends FunctionWithPropertiesAsInput<Co
 	Class<? extends ComponentBuilder<?>> getClazz();
 	ComponentBuilderGetter setClazz(Class<? extends ComponentBuilder<?>> clazz);
 	
-	ComponentBuilderGetter addFielNameStrings(String...fieldNameStrings);
+	ComponentBuilderGetter addFieldNameStrings(String...fieldNameStrings);
 }

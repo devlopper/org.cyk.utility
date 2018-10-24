@@ -23,8 +23,12 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	@Override
 	protected void __execute__(INPUT input, Object object, Field field) {
 		super.__execute__(input, object, field);
-		OutputStringLabelBuilder labelBuilder = getLabelBuilder();
 		
+		if(field!=null) {
+			input.getProperties().setRequired(field.getAnnotation(javax.validation.constraints.NotNull.class)!=null);	
+		}
+		
+		OutputStringLabelBuilder labelBuilder = getLabelBuilder();
 		if(labelBuilder!=null) {
 			input.setLabel(labelBuilder.execute().getOutput());
 		}

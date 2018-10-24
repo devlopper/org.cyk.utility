@@ -12,6 +12,7 @@ import org.cyk.utility.annotation.Annotations;
 import org.cyk.utility.client.controller.component.command.CommandableButtonBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
+import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
@@ -184,6 +185,11 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputStringLineMany.class,annotations);
 		if(annotationInputStringLineMany!=null)
 			return InputStringLineManyBuilder.class;
+		
+		org.cyk.utility.client.controller.component.annotation.OutputStringText annotationOutputStringText =
+				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.OutputStringText.class,annotations);
+		if(annotationOutputStringText!=null)
+			return OutputStringTextBuilder.class;
 		
 		org.cyk.utility.client.controller.component.annotation.CommandableButton annotationCommandableButton =
 				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.CommandableButton.class,annotations);

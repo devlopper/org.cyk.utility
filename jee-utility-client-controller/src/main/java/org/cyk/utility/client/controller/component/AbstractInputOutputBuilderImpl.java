@@ -20,6 +20,7 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 	@Override
 	protected void __execute__(INPUT_OUTPUT component) {
 		super.__execute__(component);
+		component.setValue(getValue());
 		Object object = getObject();
 		Field field = getField();
 		//Object value = getValue();
@@ -47,7 +48,8 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 	protected void __execute__(INPUT_OUTPUT component,Object object,Field field) {
 		component.setObject(object);
 		component.setField(field);
-		component.setValueFromFieldValue();
+		if(object!=null && field!=null)
+			component.setValueFromFieldValue();
 	}
 	
 	@Override

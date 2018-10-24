@@ -263,7 +263,7 @@ public class ViewBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<V
 	
 	@Override
 	public <T extends ComponentBuilder<?>> T addComponentBuilderByFieldName(Class<T> componentBuilderClass, Object object,String... fieldNames) {
-		T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).addFielNameStrings(fieldNames).execute().getOutput();
+		T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).addFieldNameStrings(fieldNames).execute().getOutput();
 		addComponentBuilder((VisibleComponentBuilder<?>) builder);
 		return builder;
 	}

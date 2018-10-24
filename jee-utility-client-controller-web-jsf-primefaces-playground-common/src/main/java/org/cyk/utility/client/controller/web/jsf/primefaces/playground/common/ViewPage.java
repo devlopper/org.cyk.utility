@@ -30,22 +30,23 @@ import lombok.experimental.Accessors;
 public class ViewPage extends AbstractPageImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private View view01;
-	private View viewForm01;
+	private View view;
 	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		view01 = createView01();
-	}
-	
-	private View createView01() {
 		Model model = new Model();
-		model.setFirstName("Yao");
+		model.set__title__("Création d'enregistrement dans le système");
+		model.setLastNames("Yao Christian");
 		
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		viewBuilder.setType(__inject__(ViewTypeForm.class));
+		
+		/*
 		viewBuilder.setNameOutputPropertyValue("Mon titre de formulaire");
+		*/
+		
+		viewBuilder.addComponentBuilderByFieldName(model, "__title__");
 		
 		viewBuilder.addComponentBuilderByFieldName(model, "firstName");
 		viewBuilder.addComponentBuilderByFieldName(model, "lastNames");
@@ -54,7 +55,7 @@ public class ViewPage extends AbstractPageImpl implements Serializable {
 		viewBuilder.addComponentBuilderByMethodName(model, "submit");
 		viewBuilder.addComponentBuilderByMethodName(model, "close");
 		
-		return viewBuilder.execute().getOutput();
+		view =  viewBuilder.execute().getOutput();
 	}
 	
 	/**/
