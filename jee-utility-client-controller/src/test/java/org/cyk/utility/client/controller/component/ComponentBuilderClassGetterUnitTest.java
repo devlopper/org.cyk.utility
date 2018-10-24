@@ -81,40 +81,8 @@ public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitT
 	}
 	
 	@Test
-	public void getOutputStringTextBuilder_fromFieldNameStrings_123() {
-		Model model = new Model();
-		model.set__title__("123");
-		OutputStringTextBuilder builder = (OutputStringTextBuilder) __inject__(ComponentBuilderGetter.class).setObject(model).addFieldNameStrings("__title__").execute().getOutput();
-		assertionHelper.assertNotNull(builder);
-		org.cyk.utility.client.controller.component.output.OutputStringText outputStringText = (org.cyk.utility.client.controller.component.output.OutputStringText)
-				builder.execute().getOutput();
-		assertionHelper.assertEquals("123", outputStringText.getValue());
-	}
-	
-	@Test
 	public void getCommandableButtonBuilder_fromMethodName() {
 		assertionHelper.assertEquals(CommandableButtonBuilder.class, __inject__(ComponentBuilderClassGetter.class).setClazz(Model.class).setMethodName("submit").execute().getOutput());
-	}
-	
-	@Test
-	public void getInputStringLineOne_fromFieldNameStrings() {
-		Model model = new Model();
-		InputStringLineOneBuilder builder = (InputStringLineOneBuilder) __inject__(ComponentBuilderGetter.class).setObject(model).addFieldNameStrings("inputText").execute().getOutput();
-		assertionHelper.assertNotNull(builder);
-		org.cyk.utility.client.controller.component.input.InputStringLineOne inputStringLineOne = (org.cyk.utility.client.controller.component.input.InputStringLineOne)
-				builder.execute().getOutput();
-		assertionHelper.assertEquals(null, inputStringLineOne.getValue());
-	}
-	
-	@Test
-	public void getInputStringLineOne_fromFieldNameStrings_123() {
-		Model model = new Model();
-		model.setInputText("123");
-		InputStringLineOneBuilder builder = (InputStringLineOneBuilder) __inject__(ComponentBuilderGetter.class).setObject(model).addFieldNameStrings("inputText").execute().getOutput();
-		assertionHelper.assertNotNull(builder);
-		org.cyk.utility.client.controller.component.input.InputStringLineOne inputStringLineOne = (org.cyk.utility.client.controller.component.input.InputStringLineOne)
-				builder.execute().getOutput();
-		assertionHelper.assertEquals("123", inputStringLineOne.getValue());
 	}
 	
 	/**/

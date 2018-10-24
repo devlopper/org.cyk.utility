@@ -38,6 +38,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						if(outputString instanceof OutputStringMessage) {
 							OutputStringMessage outputStringMessage = (OutputStringMessage) outputString;
 							outputStringMessage.getProperties().setFor( ((OutputStringMessageBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );
+							//outputStringMessage.getProperties().setDisplay("tooltip");
 						}		
 					}
 				}

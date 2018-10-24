@@ -12,6 +12,7 @@ import org.cyk.utility.client.controller.component.input.InputStringLineOne;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
+import org.cyk.utility.client.controller.view.View;
 import org.cyk.utility.random.RandomHelper;
 
 @Singleton @Named
@@ -22,11 +23,11 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 		return __inject__(RandomHelper.class);
 	}
 	
-	public Boolean isInputText(Object object) {
+	public Boolean isInputStringLineOne(Object object) {
 		return object instanceof InputStringLineOne;
 	}
 	
-	public Boolean isInputTextArea(Object object) {
+	public Boolean isInputStringLineMany(Object object) {
 		return object instanceof InputStringLineMany;
 	}
 	
@@ -44,5 +45,9 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	
 	public Boolean isCommandableButton(Object object) {
 		return object instanceof CommandableButton;
+	}
+	
+	public Boolean isView(Object object) {
+		return object instanceof View;
 	}
 }

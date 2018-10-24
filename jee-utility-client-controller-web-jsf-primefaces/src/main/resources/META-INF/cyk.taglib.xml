@@ -70,6 +70,13 @@
         <source>tag/layout/item.xhtml</source>
     </tag>
     
+    <!-- Container -->
+    
+    <tag>
+        <tag-name>container</tag-name>
+        <source>tag/container/container.xhtml</source>
+    </tag>
+    
     <!-- View -->
     
     <tag>

@@ -31,10 +31,10 @@
 									
 									<!-- Input -->
 									
-									<c:when test="#{componentHelper.isInputText(indexComponent)}">
+									<c:when test="#{componentHelper.isInputStringLineOne(indexComponent)}">
 										<cyk:inputText value="#{indexComponent}" />
 									</c:when>
-									<c:when test="#{componentHelper.isInputTextArea(indexComponent)}">
+									<c:when test="#{componentHelper.isInputStringLineMany(indexComponent)}">
 										<cyk:inputTextarea value="#{indexComponent}" />
 									</c:when>
 									<c:when test="#{componentHelper.isOutputStringMessage(indexComponent)}">
@@ -45,6 +45,12 @@
 									
 									<c:when test="#{componentHelper.isCommandableButton(indexComponent)}">
 										<cyk:commandButton value="#{indexComponent}" />
+									</c:when>
+									
+									<!-- View -->
+									
+									<c:when test="#{componentHelper.isView(indexComponent)}">
+										<cyk:view value="#{indexComponent}" />
 									</c:when>
 									
 									<!-- Not found -->

@@ -36,24 +36,29 @@ public class ViewPage extends AbstractPageImpl implements Serializable {
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		Model model = new Model();
-		model.set__title__("Création d'enregistrement dans le système");
+		model.set__title__("Titre");
 		model.setLastNames("Yao Christian");
+		model.getSubModel().set__title__("Sous-titre");
+		model.getSubModel().setPhone1("11223344");
 		
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
-		viewBuilder.setType(__inject__(ViewTypeForm.class));
+		//viewBuilder.setType(__inject__(ViewTypeForm.class));
 		
-		/*
-		viewBuilder.setNameOutputPropertyValue("Mon titre de formulaire");
-		*/
+		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "__title__");
+		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "firstName");
+		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "lastNames");
+		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "otherDetails");
 		
-		viewBuilder.addComponentBuilderByFieldName(model, "__title__");
+		ViewBuilder subViewBuilder = __inject__(ViewBuilder.class);
+		subViewBuilder.setType(__inject__(ViewTypeForm.class));
+		subViewBuilder.addComponentBuilderByObjectByFieldNames(model.getSubModel(), "__title__");
+		subViewBuilder.addComponentBuilderByObjectByFieldNames(model.getSubModel(), "phone1");
+		subViewBuilder.addComponentBuilderByObjectByFieldNames(model.getSubModel(), "phone2");
+		subViewBuilder.addComponentBuilderByObjectByFieldNames(model.getSubModel(), "otherDetails");
+		viewBuilder.addComponentBuilder(subViewBuilder);
 		
-		viewBuilder.addComponentBuilderByFieldName(model, "firstName");
-		viewBuilder.addComponentBuilderByFieldName(model, "lastNames");
-		viewBuilder.addComponentBuilderByFieldName(model, "otherDetails");
-		
-		viewBuilder.addComponentBuilderByMethodName(model, "submit");
-		viewBuilder.addComponentBuilderByMethodName(model, "close");
+		viewBuilder.addComponentBuilderByObjectByMethodName(model, "submit");
+		viewBuilder.addComponentBuilderByObjectByMethodName(model, "close");
 		
 		view =  viewBuilder.execute().getOutput();
 	}
@@ -77,6 +82,8 @@ public class ViewPage extends AbstractPageImpl implements Serializable {
 		@NotNull
 		private String otherDetails;
 		
+		private SubModel subModel = new SubModel();
+		
 		@Commandable(systemActionClass=SystemActionCreate.class) @CommandableButton
 		public void submit() {
 			System.out.println("ViewPage.Model.submit() : "+this);
@@ -86,5 +93,24 @@ public class ViewPage extends AbstractPageImpl implements Serializable {
 		public void close() {
 			System.out.println("ViewPage.Model.close() : "+this);
 		}
+	}
+	
+	@Getter @Setter @Accessors(chain=true) @ToString
+	public static class SubModel {
+		
+		@Output @OutputString @OutputStringText
+		private String __title__;
+		
+		@Input @InputString @InputStringLineOne
+		@NotNull
+		private String phone1;
+		
+		@Input @InputString @InputStringLineOne
+		private String phone2;
+		
+		@Input @InputString @InputStringLineMany
+		@NotNull
+		private String otherDetails;
+		
 	}
 }

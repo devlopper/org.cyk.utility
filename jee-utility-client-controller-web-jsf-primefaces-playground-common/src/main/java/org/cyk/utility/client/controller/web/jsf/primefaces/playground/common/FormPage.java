@@ -25,7 +25,7 @@ public class FormPage extends AbstractPageImpl implements Serializable {
 		super.__listenPostConstruct__();
 		FormBuilder formBuilder = __inject__(FormBuilder.class);
 		
-		formBuilder.getView(Boolean.TRUE).setNameOutputPropertyValue("Mon titre de formulaire");
+		//formBuilder.getView(Boolean.TRUE).setNameOutputPropertyValue("Mon titre de formulaire");
 		formBuilder.getView(Boolean.TRUE).addInputStringLineOneBuilder(Boolean.TRUE,"Firstname");
 		formBuilder.getView(Boolean.TRUE).addInputStringLineOneBuilder(Boolean.FALSE,"Lastnames");
 		formBuilder.getView(Boolean.TRUE).addInputStringLineManyBuilder(Boolean.TRUE,"Other details");

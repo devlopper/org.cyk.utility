@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderClassGetter;
 import org.cyk.utility.client.controller.component.ComponentBuilderGetter;
@@ -22,18 +23,14 @@ import org.cyk.utility.client.controller.component.input.InputStringLineManyBuil
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilerItem;
 import org.cyk.utility.client.controller.component.layout.LayoutWidthGetter;
-import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldGetter;
-import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 
-public class ViewBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<View> implements ViewBuilder,Serializable {
+public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> implements ViewBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private VisibleComponentsBuilder visibleComponentsBuilder;
-	private OutputStringTextBuilder nameOutputStringTextBuilder;
 	private CommandableBuilders processingCommandableBuilders;
 	private VisibleComponentBuilders componentBuilders;
 	private ViewType type;
@@ -45,14 +42,6 @@ public class ViewBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<V
 		VisibleComponentsBuilder visibleComponentsBuilder = getVisibleComponentsBuilder();
 		if(visibleComponentsBuilder == null)
 			visibleComponentsBuilder = __inject__(VisibleComponentsBuilder.class);
-		
-		OutputStringTextBuilder nameOutputStringTextBuilder = getNameOutputStringTextBuilder();
-		if(nameOutputStringTextBuilder!=null) {
-			//Name first
-			__inject__(CollectionHelper.class).addElementAt(visibleComponentsBuilder.getComponents(Boolean.TRUE), 0, nameOutputStringTextBuilder.execute().getOutput());
-			//Name layout item
-			visibleComponentsBuilder.getLayoutBuilder(Boolean.TRUE).getItems(Boolean.TRUE).addAt(__inject__(LayoutBuilerItem.class).setWidthForAll(null),0);
-		}
 		
 		VisibleComponentBuilders componentBuilders = getComponentBuilders();
 		Collection<ComponentBuilder<?>> finalComponentBuilders = null;
@@ -91,8 +80,8 @@ public class ViewBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<V
 								inputBuilder.setAreaWidthProportionsForNotPhone(10);
 							} else {
 								inputBuilder.getLabelBuilder().setAreaWidthProportionsForNotPhone(2);
-								inputBuilder.setAreaWidthProportionsForNotPhone(8);
-								inputBuilder.getMessageBuilder().setAreaWidthProportionsForNotPhone(2);
+								inputBuilder.setAreaWidthProportionsForNotPhone(6);
+								inputBuilder.getMessageBuilder().setAreaWidthProportionsForNotPhone(4);
 							}
 						}								
 					}
@@ -193,28 +182,6 @@ public class ViewBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<V
 	}
 	
 	@Override
-	public OutputStringTextBuilder getNameOutputStringTextBuilder() {
-		return nameOutputStringTextBuilder;
-	}
-	
-	@Override
-	public OutputStringTextBuilder getNameOutputStringTextBuilder(Boolean injectIfNull) {
-		return (OutputStringTextBuilder) __getInjectIfNull__(FIELD_NAME_OUTPUT_STRING_TEXT_BUILDER, injectIfNull);
-	}
-
-	@Override
-	public ViewBuilder setNameOutputStringTextBuilder(OutputStringTextBuilder nameOutputStringTextBuilder) {
-		this.nameOutputStringTextBuilder = nameOutputStringTextBuilder;
-		return this;
-	}
-	
-	@Override
-	public ViewBuilder setNameOutputPropertyValue(Object value) {
-		getNameOutputStringTextBuilder(Boolean.TRUE).setOutputPropertyValue(value);
-		return this;
-	}
-	
-	@Override
 	public ViewBuilder addInputBuilder(InputBuilder<?,?> inputBuilder) {
 		VisibleComponentBuilders builders = getComponentBuilders(Boolean.TRUE);
 		if(inputBuilder!=null) {
@@ -262,30 +229,30 @@ public class ViewBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<V
 	}
 	
 	@Override
-	public <T extends ComponentBuilder<?>> T addComponentBuilderByFieldName(Class<T> componentBuilderClass, Object object,String... fieldNames) {
+	public <T extends ComponentBuilder<?>> T addComponentBuilderByObjectByFieldNames(Class<T> componentBuilderClass, Object object,String... fieldNames) {
 		T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).addFieldNameStrings(fieldNames).execute().getOutput();
 		addComponentBuilder((VisibleComponentBuilder<?>) builder);
 		return builder;
 	}
 	
 	@Override
-	public ComponentBuilder<?> addComponentBuilderByFieldName(Object object, String... fieldNames) {
+	public ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object, String... fieldNames) {
 		Class<? extends ComponentBuilder<?>> builderClass =  __inject__(ComponentBuilderClassGetter.class).setField(__injectCollectionHelper__().getFirst(__inject__(FieldGetter.class)
 				.execute(object.getClass(),  __injectFieldHelper__().concatenate(fieldNames)).getOutput())).execute().getOutput();
-		return addComponentBuilderByFieldName(builderClass, object, fieldNames);
+		return addComponentBuilderByObjectByFieldNames(builderClass, object, fieldNames);
 	}
 	
 	@Override
-	public <T extends ComponentBuilder<?>> T addComponentBuilderByMethodName(Class<T> componentBuilderClass,Object object, String methodName) {
+	public <T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object, String methodName) {
 		T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).setMethodName(methodName).execute().getOutput();
 		addComponentBuilder((VisibleComponentBuilder<?>) builder);
 		return builder;
 	}
 	
 	@Override
-	public ComponentBuilder<?> addComponentBuilderByMethodName(Object object, String methodName) {
+	public ComponentBuilder<?> addComponentBuilderByObjectByMethodName(Object object, String methodName) {
 		Class<? extends ComponentBuilder<?>> builderClass =  __inject__(ComponentBuilderClassGetter.class).setClazz(object.getClass()).setMethodName(methodName).getOutput();
-		return addComponentBuilderByMethodName(builderClass, object, methodName);
+		return addComponentBuilderByObjectByMethodName(builderClass, object, methodName);
 	}
 	
 	@Override

@@ -5,6 +5,7 @@
       xmlns:f="http://java.sun.com/jsf/core"      
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:cyk="http://utility.cyk.org">
 	
@@ -13,14 +14,34 @@
     </h:head>
     <h:body>
     	<style>
-    		div[class^='ui-g-'], div[class*='ui-g-']{
+    		div[class^='ui-g-']{
     			border: 1px solid red;
     			background: yellow;
 			}
+			div[class^='ui-g-'] input{
+    			width: 100%;
+			}
+			div[class^='ui-g-'] textarea{
+    			width: 100%;
+			}
+			
+			div[class*='ui-g-']{
+    			
+			}
+			div[class^='ui-g-'], div[class*='ui-g-']{
+    			
+			}
     	</style>
+    	
     	<h:form prependId="false">
+    		<!--
+    		<p:tooltip hideEvent="none"  />
+    		-->
+    		<!--
+    		<pe:tooltip/>
+    		-->
     		<cyk:view value="#{viewPage.view}" />
-    		<p:autoUpdate/>
+    		<p:autoUpdate />
     	</h:form>
     </h:body>
 </html>

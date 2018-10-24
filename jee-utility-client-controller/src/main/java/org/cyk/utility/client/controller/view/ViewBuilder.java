@@ -10,11 +10,9 @@ import org.cyk.utility.client.controller.component.command.CommandableButtonBuil
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
-import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
-import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.system.action.SystemAction;
 
-public interface ViewBuilder extends FunctionWithPropertiesAsInput<View> {
+public interface ViewBuilder extends VisibleComponentBuilder<View> {
 
 	ViewType getType();
 	ViewBuilder setType(ViewType type);
@@ -22,11 +20,6 @@ public interface ViewBuilder extends FunctionWithPropertiesAsInput<View> {
 	VisibleComponentsBuilder getVisibleComponentsBuilder();
 	VisibleComponentsBuilder getVisibleComponentsBuilder(Boolean injectIfNull);
 	ViewBuilder setVisibleComponentsBuilder(VisibleComponentsBuilder visibleComponentsBuilder);
-	
-	OutputStringTextBuilder getNameOutputStringTextBuilder();
-	OutputStringTextBuilder getNameOutputStringTextBuilder(Boolean injectIfNull);
-	ViewBuilder setNameOutputStringTextBuilder(OutputStringTextBuilder nameOutputStringTextBuilder);
-	ViewBuilder setNameOutputPropertyValue(Object value);
 	
 	VisibleComponentBuilders getComponentBuilders();
 	VisibleComponentBuilders getComponentBuilders(Boolean injectIfNull);
@@ -43,10 +36,10 @@ public interface ViewBuilder extends FunctionWithPropertiesAsInput<View> {
 	InputBuilder<?,?> addInputBuilderByFieldName(Object object,String...fieldNames);
 	
 	ViewBuilder addComponentBuilder(VisibleComponentBuilder<?> componentBuilder);
-	<T extends ComponentBuilder<?>> T addComponentBuilderByFieldName(Class<T> componentBuilderClass,Object object,String...fieldNames);
-	ComponentBuilder<?> addComponentBuilderByFieldName(Object object,String...fieldNames);
-	<T extends ComponentBuilder<?>> T addComponentBuilderByMethodName(Class<T> componentBuilderClass,Object object,String methodName);
-	ComponentBuilder<?> addComponentBuilderByMethodName(Object object,String methodName);
+	<T extends ComponentBuilder<?>> T addComponentBuilderByObjectByFieldNames(Class<T> componentBuilderClass,Object object,String...fieldNames);
+	ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object,String...fieldNames);
+	<T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object,String methodName);
+	ComponentBuilder<?> addComponentBuilderByObjectByMethodName(Object object,String methodName);
 	
 	CommandableBuilders getProcessingCommandableBuilders();
 	CommandableBuilders getProcessingCommandableBuilders(Boolean injectIfNull);

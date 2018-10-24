@@ -4239,6 +4239,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getDisplay() {
+		return get(DISPLAY);
+	}
+
+	public Properties setDisplay(Object display) {
+		set(DISPLAY, display);
+		return this;
+	}
+	
+	public static final String DISPLAY = "DISPLAY";
 	public static final String REQUEST = "REQUEST";
 	public static final String SCHEME = "SCHEME";
 	public static final String CONTEXT = "CONTEXT";
