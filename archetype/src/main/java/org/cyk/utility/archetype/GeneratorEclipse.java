@@ -41,7 +41,7 @@ public class GeneratorEclipse implements Serializable {
 			+ " cd %2"+"\r\n"
 			+ " mvn archetype:generate"
 			+ " -DarchetypeGroupId=org.cyk.archetype"
-			+ " -DarchetypeArtifactId=archetype-jee-client-microservices-jboss-swarm"
+			+ " -DarchetypeArtifactId=archetype-jee-client"
 			+ " -DarchetypeVersion=0.0.1"
 			+ " -DarchetypeCatalog=local"
 			+ " -DsystemIdentifier=%3 "
@@ -115,8 +115,8 @@ public class GeneratorEclipse implements Serializable {
 		File systemDirectory = new File(workspaceDirectory, type.name().toLowerCase());
 		System.out.println("System directory : "+systemDirectory);
 		
-		executeSystem(systemDirectory,"server", COMMANDS_SERVER);
-		//executeSystem(systemDirectory,"client",COMMANDS_CLIENT);
+		//executeSystem(systemDirectory,"server", COMMANDS_SERVER);
+		executeSystem(systemDirectory,"client",COMMANDS_CLIENT);
 		
 		System.out.println("###   Done   ###");
 	}
