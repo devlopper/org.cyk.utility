@@ -12,7 +12,7 @@ import org.cyk.utility.client.controller.component.input.InputStringLineOne;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
-import org.cyk.utility.client.controller.view.View;
+import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.random.RandomHelper;
 
 @Singleton @Named

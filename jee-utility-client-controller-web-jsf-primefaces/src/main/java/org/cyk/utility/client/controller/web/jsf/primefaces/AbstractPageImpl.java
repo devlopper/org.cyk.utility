@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
 
-import org.cyk.utility.client.controller.component.AbstractWindowImpl;
+import org.cyk.utility.client.controller.component.window.AbstractWindowImpl;
 
 public abstract class AbstractPageImpl extends AbstractWindowImpl implements Page,Serializable {
 	private static final long serialVersionUID = 1L;

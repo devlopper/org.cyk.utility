@@ -1,4 +1,4 @@
-package org.cyk.utility.client.controller.view;
+package org.cyk.utility.client.controller.component.view;
 
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.VisibleComponents;

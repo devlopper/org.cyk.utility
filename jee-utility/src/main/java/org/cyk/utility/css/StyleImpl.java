@@ -19,10 +19,7 @@ public class StyleImpl extends AbstractObject implements Style,Serializable {
 	
 	@Override
 	public Strings getClasses(Boolean injectIfNull) {
-		Strings classes = getClasses();
-		if(classes == null && Boolean.TRUE.equals(injectIfNull))
-			setClasses(classes = __inject__(Strings.class));
-		return classes;
+		return (Strings) __getInjectIfNull__(FIELD_CLASSES, injectIfNull);
 	}
 	
 	@Override
@@ -47,10 +44,7 @@ public class StyleImpl extends AbstractObject implements Style,Serializable {
 	
 	@Override
 	public Strings getValues(Boolean injectIfNull) {
-		Strings values = getValues();
-		if(values == null && Boolean.TRUE.equals(injectIfNull))
-			setValues(values = __inject__(Strings.class));
-		return values;
+		return (Strings) __getInjectIfNull__(FIELD_VALUES, injectIfNull);
 	}
 
 	@Override
@@ -67,5 +61,10 @@ public class StyleImpl extends AbstractObject implements Style,Serializable {
 			string = __inject__(StringHelper.class).concatenate(values.get(), CharacterConstant.SEMI_COLON.toString());
 		return string;
 	}
+	
+	/**/
+	
+	public static final String FIELD_CLASSES = "classes";
+	public static final String FIELD_VALUES = "values";
 
 }

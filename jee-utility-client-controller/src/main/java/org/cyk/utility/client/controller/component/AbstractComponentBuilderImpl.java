@@ -18,7 +18,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	}
 	
 	protected Class<COMPONENT> __getComponentClass__(){
-		return (Class<COMPONENT>) __injectClassHelper__().getParameterAt(getClass(), 0, Object.class);
+		return (Class<COMPONENT>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 0, Object.class).getName());
 	}
 	
 	@Override

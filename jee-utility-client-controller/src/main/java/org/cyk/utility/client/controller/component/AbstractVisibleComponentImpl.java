@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.command.Command;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
+import org.cyk.utility.css.Style;
 
 public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl implements VisibleComponent,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -11,6 +12,7 @@ public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl
 	private LayoutItem layoutItem;
 	private Command command;
 	private VisibleComponentArea area;
+	private Style style;
 	
 	@Override
 	public VisibleComponentArea getArea() {
@@ -25,6 +27,22 @@ public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl
 	@Override
 	public VisibleComponent setArea(VisibleComponentArea area) {
 		this.area = area;
+		return this;
+	}
+	
+	@Override
+	public Style getStyle() {
+		return style;
+	}
+
+	@Override
+	public Style getStyle(Boolean injectIfNull) {
+		return (Style) __getInjectIfNull__(FIELD_STYLE, injectIfNull);
+	}
+
+	@Override
+	public VisibleComponent setStyle(Style style) {
+		this.style = style;
 		return this;
 	}
 	
@@ -65,4 +83,5 @@ public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl
 	public static final String FIELD_AREA = "area";
 	public static final String FIELD_COMMAND = "command";
 	public static final String FIELD_LAYOUT_ITEM = "layoutItem";
+	public static final String FIELD_STYLE = "style";
 }

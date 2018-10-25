@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component;
 
 import org.cyk.utility.client.controller.component.command.Command;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
+import org.cyk.utility.css.Style;
 
 public interface VisibleComponent extends Component {
 
@@ -16,4 +17,8 @@ public interface VisibleComponent extends Component {
 	Command getCommand();
 	Command getCommand(Boolean injectIfNull);
 	VisibleComponent setCommand(Command command);
+	
+	Style getStyle();
+	Style getStyle(Boolean injectIfNull);
+	VisibleComponent setStyle(Style style);
 }

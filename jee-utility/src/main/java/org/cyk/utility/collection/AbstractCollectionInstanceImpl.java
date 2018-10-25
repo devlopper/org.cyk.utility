@@ -75,6 +75,13 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	}
 	
 	@Override
+	public CollectionInstance<T> add(CollectionInstance<T> elements) {
+		if(__inject__(CollectionHelper.class).isNotEmpty(elements))
+			add(elements.get());
+		return this;
+	}
+	
+	@Override
 	public CollectionInstance<T> addInstanceOf(Collection<?> collection) {
 		for(Object index : collection)
 			if(clazz.isAssignableFrom(index.getClass()))

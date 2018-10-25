@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.inject.Inject;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
-import org.cyk.utility.client.controller.view.View;
+import org.cyk.utility.client.controller.component.view.View;
 
 public class FormImpl extends AbstractVisibleComponentImpl implements Form, Serializable {
 	private static final long serialVersionUID = 1L;

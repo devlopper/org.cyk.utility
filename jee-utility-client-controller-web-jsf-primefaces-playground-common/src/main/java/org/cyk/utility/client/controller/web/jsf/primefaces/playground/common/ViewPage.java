@@ -15,9 +15,10 @@ import org.cyk.utility.client.controller.component.annotation.InputStringLineOne
 import org.cyk.utility.client.controller.component.annotation.Output;
 import org.cyk.utility.client.controller.component.annotation.OutputString;
 import org.cyk.utility.client.controller.component.annotation.OutputStringText;
-import org.cyk.utility.client.controller.view.View;
-import org.cyk.utility.client.controller.view.ViewBuilder;
-import org.cyk.utility.client.controller.view.ViewTypeForm;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.client.controller.component.view.View;
+import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.component.view.ViewTypeForm;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 
@@ -42,7 +43,6 @@ public class ViewPage extends AbstractPageImpl implements Serializable {
 		model.getSubModel().setPhone1("11223344");
 		
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
-		//viewBuilder.setType(__inject__(ViewTypeForm.class));
 		
 		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "__title__");
 		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "firstName");

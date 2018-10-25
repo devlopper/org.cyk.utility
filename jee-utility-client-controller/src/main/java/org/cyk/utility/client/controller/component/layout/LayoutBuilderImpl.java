@@ -5,18 +5,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import org.cyk.utility.client.controller.component.AbstractInvisibleComponentBuilderImpl;
 import org.cyk.utility.device.Device;
-import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-public class LayoutBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Layout> implements LayoutBuilder,Serializable {
+public class LayoutBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Layout> implements LayoutBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private LayoutBuilerItems items;
 	private Type type;
 	
 	@Override
-	protected Layout __execute__() throws Exception {
-		Layout layout = __inject__(Layout.class);
+	protected void __execute__(Layout layout) {
 		LayoutBuilerItems items = getItems();
 		if(items == null) {
 			Type type = getType();
@@ -65,7 +64,6 @@ public class LayoutBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl
 				}
 			}
 		}
-		return layout;
 	}
 	
 	@Override

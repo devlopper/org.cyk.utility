@@ -7,11 +7,16 @@ import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerAfter;
 import org.cyk.utility.client.controller.component.InputOutput;
+import org.cyk.utility.client.controller.component.InvisibleComponent;
+import org.cyk.utility.client.controller.component.VisibleComponent;
+import org.cyk.utility.client.controller.component.input.Input;
+import org.cyk.utility.client.controller.component.layout.Layout;
 import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringMessageBuilder;
+import org.cyk.utility.css.Style;
 
 public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentBuilderExecuteListenerAfter> implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,23 +28,41 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 				ComponentBuilder<?> componentBuilder = (ComponentBuilder<?>) getFunction().getObject();
 				Component component = getFunction().getComponent();
 				
-				if(component instanceof InputOutput<?>) {
-					InputOutput<?> inputOutput = (InputOutput<?>) component;
-					inputOutput.setPropertyValue(inputOutput.getValue());
+				if(component instanceof VisibleComponent) {
+					//VisibleComponentBuilder<?> visibleComponentBuilder = (VisibleComponentBuilder<?>)componentBuilder;
+					VisibleComponent visibleComponent = (VisibleComponent) component;
+					Style style = visibleComponent.getStyle();
+					if(style!=null) {
+						visibleComponent.getProperties().setStyleClass(style.getClassesAsString());
+						visibleComponent.getProperties().setStyle(style.getValuesAsString());
+					}
 					
-					if(inputOutput instanceof OutputString) {
-						OutputString outputString = (OutputString) inputOutput;
+					if(component instanceof InputOutput<?>) {
+						InputOutput<?> inputOutput = (InputOutput<?>) component;
+						inputOutput.setPropertyValue(inputOutput.getValue());
 						
-						if(outputString instanceof OutputStringLabel) {
-							OutputStringLabel outputStringLabel = (OutputStringLabel) outputString;
-							outputStringLabel.getProperties().setFor( ((OutputStringLabelBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );	
+						if(inputOutput instanceof OutputString) {
+							OutputString outputString = (OutputString) inputOutput;
+							
+							if(outputString instanceof OutputStringLabel) {
+								OutputStringLabel outputStringLabel = (OutputStringLabel) outputString;
+								outputStringLabel.getProperties().setFor( ((OutputStringLabelBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );	
+							}
+							
+							if(outputString instanceof OutputStringMessage) {
+								OutputStringMessage outputStringMessage = (OutputStringMessage) outputString;
+								outputStringMessage.getProperties().setFor( ((OutputStringMessageBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );
+								//outputStringMessage.getProperties().setDisplay("tooltip");
+							}		
 						}
 						
-						if(outputString instanceof OutputStringMessage) {
-							OutputStringMessage outputStringMessage = (OutputStringMessage) outputString;
-							outputStringMessage.getProperties().setFor( ((OutputStringMessageBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );
-							//outputStringMessage.getProperties().setDisplay("tooltip");
-						}		
+						if(inputOutput instanceof Input<?>) {
+							
+						}
+					}
+				}else if(component instanceof InvisibleComponent) {
+					if(component instanceof Layout) {
+						
 					}
 				}
 			}

@@ -3,7 +3,7 @@ package org.cyk.utility.client.controller.component.form;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
-import org.cyk.utility.client.controller.view.ViewBuilder;
+import org.cyk.utility.client.controller.component.view.ViewBuilder;
 
 public class FormBuilderImpl extends AbstractVisibleComponentBuilderImpl<Form> implements FormBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
