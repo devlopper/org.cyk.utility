@@ -7,13 +7,13 @@ import java.util.LinkedHashSet;
 
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.character.CharacterConstant;
-import org.cyk.utility.client.controller.component.AbstractInvisibleComponentImpl;
+import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.css.StyleClassBuilderWidth;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.string.StringHelper;
 
-public abstract class AbstractLayoutImpl extends AbstractInvisibleComponentImpl implements Layout, Serializable {
+public abstract class AbstractLayoutImpl extends AbstractVisibleComponentImpl implements Layout, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Override

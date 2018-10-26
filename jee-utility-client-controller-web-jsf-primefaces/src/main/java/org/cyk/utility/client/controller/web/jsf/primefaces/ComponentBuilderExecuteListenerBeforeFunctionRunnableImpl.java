@@ -39,15 +39,12 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 							inputBuilder.getStyle(Boolean.TRUE).addClasses("cyk_input");
 						}
 					}
-				}
-				
-				if(componentBuilder instanceof InvisibleComponentBuilder<?>) {
-					InvisibleComponentBuilder<?> invisibleComponentBuilder = (InvisibleComponentBuilder<?>) componentBuilder;
 					
-					if(invisibleComponentBuilder instanceof LayoutBuilder) {
+					if(visibleComponentBuilder instanceof LayoutBuilder) {
 						((Layout)component).getProperties().setClass("ui-g");	
 					}
 				}
+				
 			}
 		});
 	}

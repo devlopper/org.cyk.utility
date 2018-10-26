@@ -19,4 +19,7 @@ public interface LayoutBuilerItem extends Objectable {
 	LayoutBuilerItem setWidthForPhone(Integer width);
 	
 	LayoutBuilerItem setWidthForAll(Integer width);
+	
+	Layout getLayout();
+	LayoutBuilerItem setLayout(Layout layout);
 }

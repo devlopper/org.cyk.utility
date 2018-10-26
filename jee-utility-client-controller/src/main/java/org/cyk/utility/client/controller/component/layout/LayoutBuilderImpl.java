@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import org.cyk.utility.client.controller.component.AbstractInvisibleComponentBuilderImpl;
+import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.device.Device;
 
-public class LayoutBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Layout> implements LayoutBuilder,Serializable {
+public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layout> implements LayoutBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private LayoutBuilerItems items;
@@ -61,6 +61,9 @@ public class LayoutBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Lay
 						}
 					}
 					layout.addItemFromDeviceClassAndWidths(deviceClassesAndWidths.toArray());
+					LayoutItem layoutItem = (LayoutItem) __injectCollectionHelper__().getLast(layout.getChildren());
+					if(layoutItem!=null)
+						layoutItem.setLayout(index.getLayout());
 				}
 			}
 		}

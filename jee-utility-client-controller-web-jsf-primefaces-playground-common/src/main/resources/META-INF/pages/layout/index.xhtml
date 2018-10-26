@@ -10,30 +10,30 @@
 	
     <h:head>
         <title>Layout</title>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
     </h:head>
     <h:body>
     	<style>
-    		div[class^='ui-g-'], div[class*='ui-g-']{
-			    background: blue;
+    		div[class^='ui-g-']{
+			    background: yellow;
     			height: 100%;
-    			border: 1px solid red;
-    			color: white;
+    			border: 1px solid black;
+    			color: black;
 			}
     	</style>
-    	<h3>Responsive : Label(1st Column) - Input(2nd Column)</h3>
+    	
     	<p:inputText/>
-    	<cyk:layout value="#{layoutPage.layout01}">
-    		
-    	</cyk:layout>  
     	
+    	<h3>Simple</h3>
     	<p:separator/>
+    	<cyk:layout value="#{layoutPage.layout01}"/>
     	
-    	<cyk:layout value="#{layoutPage.layout02}">
+    	<h3>Complex</h3>
+    	<p:separator/>
+    	<cyk:layout value="#{layoutPage.layout02}"/>
+    	  	
+    	<h3>Nested</h3>
+    	<p:separator/>
+    	<cyk:layout value="#{layoutPage.layout03}"/>
     		
-    	</cyk:layout>    	
     </h:body>
 </html>

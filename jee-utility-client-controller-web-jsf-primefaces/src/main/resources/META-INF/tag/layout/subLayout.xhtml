@@ -10,20 +10,23 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
+			<c:set var="items" value="#{value.getChildren()}" />
 			<div
 				class="#{value.properties.clazz}"
 			>
-				<ui:insert name="layoutContent">
-					<c:forEach items="#{value.getChildren()}" var="indexItem" varStatus="status">
+				<ui:insert name="content">
+					<c:forEach items="#{items}" var="indexItem" varStatus="status">
 						<cyk:layoutItem value="#{indexItem}" >
-							<ui:define name="layoutItemContent">
+							<ui:define name="content">
 								<c:choose>
 									<c:when test="#{indexItem.layout == null}">
 										<h:outputText value="ITEM #{status.count}" title="#{indexItem.properties.clazz}" />
 									</c:when>
 									
 									<c:when test="#{indexItem.layout != null}">
-										<cyk:layout value="#{indexItem.layout}" />										
+										<!--
+										<cyk:layout value="#{indexItem.layout}" />
+										-->
 									</c:when>
 									
 									<c:otherwise>

@@ -2,9 +2,9 @@ package org.cyk.utility.client.controller.component.layout;
 
 import java.util.Collection;
 
-import org.cyk.utility.client.controller.component.InvisibleComponentBuilder;
+import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 
-public interface LayoutBuilder extends InvisibleComponentBuilder<Layout> {
+public interface LayoutBuilder extends VisibleComponentBuilder<Layout> {
 
 	LayoutBuilerItems getItems();
 	LayoutBuilerItems getItems(Boolean injectIfNull);

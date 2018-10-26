@@ -4,4 +4,8 @@ import org.cyk.utility.client.controller.component.InvisibleComponent;
 
 public interface LayoutItem extends InvisibleComponent {
 
+	Layout getLayout();
+	LayoutItem setLayout(Layout layout);
+	
+	@Override Layout getParent();
 }

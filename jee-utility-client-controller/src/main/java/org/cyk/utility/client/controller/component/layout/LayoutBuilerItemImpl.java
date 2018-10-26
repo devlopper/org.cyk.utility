@@ -15,6 +15,7 @@ public class LayoutBuilerItemImpl extends AbstractObject implements LayoutBuiler
 	private static final long serialVersionUID = 1L;
 
 	private Map<Class<? extends Device>, Integer> widthMap;
+	private Layout layout;
 	
 	@Override
 	public Map<Class<? extends Device>, Integer> getWidthMap() {
@@ -74,6 +75,17 @@ public class LayoutBuilerItemImpl extends AbstractObject implements LayoutBuiler
 	@Override
 	public LayoutBuilerItem setWidthForAll(Integer width) {
 		return setWidth(width, null,DevicePhone.class,DeviceTablet.class,DeviceDesktop.class,DeviceTelevision.class);
+	}
+	
+	@Override
+	public Layout getLayout() {
+		return layout;
+	}
+	
+	@Override
+	public LayoutBuilerItem setLayout(Layout layout) {
+		this.layout = layout;
+		return this;
 	}
 	
 	/**/
