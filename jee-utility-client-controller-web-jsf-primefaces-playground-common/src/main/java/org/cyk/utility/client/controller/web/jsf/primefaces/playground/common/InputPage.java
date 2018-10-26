@@ -41,7 +41,7 @@ public class InputPage extends AbstractPageImpl implements Serializable {
 		super.__listenPostConstruct__();
 		
 		LayoutBuilder layoutBuilder01 = __inject__(LayoutBuilder.class)
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
+				/*.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(6).setWidthForDesktop(6).setWidthForTablet(6).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(4).setWidthForDesktop(4).setWidthForTablet(4).setWidthForPhone(12))
 				
@@ -54,12 +54,12 @@ public class InputPage extends AbstractPageImpl implements Serializable {
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(4).setWidthForDesktop(4).setWidthForTablet(4).setWidthForPhone(12))
 				
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(12).setWidthForDesktop(12).setWidthForTablet(12).setWidthForPhone(12))
-				
+				*/
 				//.execute().getOutput()
 				;
 		
 		LayoutBuilder layoutBuilder02 = __inject__(LayoutBuilder.class)
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
+				/*.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
@@ -71,7 +71,7 @@ public class InputPage extends AbstractPageImpl implements Serializable {
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(4).setWidthForDesktop(4).setWidthForTablet(4).setWidthForPhone(12))
 				
 				.addItems(__inject__(LayoutBuilerItem.class).setWidth(12).setWidthForDesktop(12).setWidthForTablet(12).setWidthForPhone(12))
-				
+				*/
 				//.execute().getOutput()
 				;
 		

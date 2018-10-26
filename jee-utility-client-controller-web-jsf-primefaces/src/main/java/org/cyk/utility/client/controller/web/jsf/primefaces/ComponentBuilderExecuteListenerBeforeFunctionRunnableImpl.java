@@ -8,7 +8,6 @@ import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerBefore;
 import org.cyk.utility.client.controller.component.InputOutput;
 import org.cyk.utility.client.controller.component.InputOutputBuilder;
-import org.cyk.utility.client.controller.component.InvisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
@@ -28,7 +27,7 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 				if(component instanceof VisibleComponent) {
 					VisibleComponentBuilder<?> visibleComponentBuilder = (VisibleComponentBuilder<?>)componentBuilder;
 					VisibleComponent visibleComponent = (VisibleComponent) component;
-					visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
+					//visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
 					
 					if(visibleComponent instanceof InputOutput<?>) {
 						InputOutputBuilder<?, ?> inputOutputBuilder = (InputOutputBuilder<?,?>) visibleComponentBuilder;
@@ -41,7 +40,7 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 					}
 					
 					if(visibleComponentBuilder instanceof LayoutBuilder) {
-						((Layout)component).getProperties().setClass("ui-g");	
+						((Layout)component).getProperties().setStyleClass("ui-g");	
 					}
 				}
 				

@@ -2,9 +2,9 @@ package org.cyk.utility.client.controller.component.layout;
 
 import java.io.Serializable;
 
-import org.cyk.utility.client.controller.component.AbstractInvisibleComponentImpl;
+import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
 
-public abstract class AbstractLayoutItemImpl extends AbstractInvisibleComponentImpl implements LayoutItem,Serializable {
+public class LayoutItemImpl extends AbstractVisibleComponentImpl implements LayoutItem,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Layout layout;

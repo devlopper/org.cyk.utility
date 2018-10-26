@@ -13,10 +13,10 @@
 		<ui:define name="valueIsNotNull">
 			<c:set var="components" value="#{value.get()}" />
 			<cyk:layout value="#{value.layout}" >
-				<ui:define name="content">
+				<ui:define name="layoutContent">
 					<c:forEach items="#{components}" var="indexComponent" >
 						<cyk:layoutItem value="#{indexComponent.layoutItem}" >
-							<ui:define name="content">
+							<ui:define name="layoutItemContent">
 								<c:choose>
 									
 									<!-- Output -->

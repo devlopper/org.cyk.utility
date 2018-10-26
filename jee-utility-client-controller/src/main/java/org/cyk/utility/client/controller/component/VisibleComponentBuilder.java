@@ -5,14 +5,16 @@ import java.util.Map;
 
 import org.cyk.utility.css.StyleBuilder;
 import org.cyk.utility.device.Device;
+import org.cyk.utility.device.DeviceScreenArea;
+import org.cyk.utility.device.DeviceScreenDimensionProportions;
 
 public interface VisibleComponentBuilder<COMPONENT extends VisibleComponent> extends ComponentBuilder<COMPONENT> {
 	
-	VisibleComponentArea getArea();
-	VisibleComponentArea getArea(Boolean injectIfNull);
-	VisibleComponentBuilder<COMPONENT> setArea(VisibleComponentArea area);
+	DeviceScreenArea getArea();
+	DeviceScreenArea getArea(Boolean injectIfNull);
+	VisibleComponentBuilder<COMPONENT> setArea(DeviceScreenArea area);
 	
-	VisibleComponentBuilder<COMPONENT> setAreaWidth(VisibleComponentAreaDimension areaWidth);
+	VisibleComponentBuilder<COMPONENT> setAreaWidth(DeviceScreenDimensionProportions areaWidth);
 	
 	VisibleComponentBuilder<COMPONENT> setAreaWidthProportionMap(Map<Class<? extends Device>,Integer> proportionMap);
 	VisibleComponentBuilder<COMPONENT> setAreaWidthProportions(Integer proportion,Collection<Class<? extends Device>> classes);

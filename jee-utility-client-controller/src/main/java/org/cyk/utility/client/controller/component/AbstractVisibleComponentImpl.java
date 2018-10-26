@@ -5,27 +5,28 @@ import java.io.Serializable;
 import org.cyk.utility.client.controller.component.command.Command;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
 import org.cyk.utility.css.Style;
+import org.cyk.utility.device.DeviceScreenArea;
 
 public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl implements VisibleComponent,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private LayoutItem layoutItem;
 	private Command command;
-	private VisibleComponentArea area;
+	private DeviceScreenArea area;
 	private Style style;
 	
 	@Override
-	public VisibleComponentArea getArea() {
+	public DeviceScreenArea getArea() {
 		return area;
 	}
 
 	@Override
-	public VisibleComponentArea getArea(Boolean injectIfNull) {
-		return (VisibleComponentArea) __getInjectIfNull__(FIELD_AREA, injectIfNull);
+	public DeviceScreenArea getArea(Boolean injectIfNull) {
+		return (DeviceScreenArea) __getInjectIfNull__(FIELD_AREA, injectIfNull);
 	}
 
 	@Override
-	public VisibleComponent setArea(VisibleComponentArea area) {
+	public VisibleComponent setArea(DeviceScreenArea area) {
 		this.area = area;
 		return this;
 	}

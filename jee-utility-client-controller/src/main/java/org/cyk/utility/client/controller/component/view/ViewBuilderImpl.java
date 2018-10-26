@@ -21,7 +21,7 @@ import org.cyk.utility.client.controller.component.command.CommandableButtonBuil
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
-import org.cyk.utility.client.controller.component.layout.LayoutBuilerItem;
+import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutWidthGetter;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.string.Strings;
@@ -159,7 +159,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 			for(@SuppressWarnings("unused") Commandable index : processingCommandables) {
 				if(count == size )
 					width = width + layoutWidth % size;
-				visibleComponentsBuilder.getLayoutBuilder(Boolean.TRUE).addItems(__inject__(LayoutBuilerItem.class).setWidthForAll(width).setWidthForPhone(layoutWidth));
+				visibleComponentsBuilder.getLayoutBuilder(Boolean.TRUE).addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsAll(width).setAreaWidthProportionsPhone(layoutWidth));
 				count++;
 			}
 		}

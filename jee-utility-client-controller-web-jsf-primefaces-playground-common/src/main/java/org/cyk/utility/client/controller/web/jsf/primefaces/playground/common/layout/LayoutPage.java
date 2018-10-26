@@ -7,7 +7,7 @@ import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.layout.Layout;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
-import org.cyk.utility.client.controller.component.layout.LayoutBuilerItem;
+import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
 
 import lombok.Getter;
@@ -25,54 +25,48 @@ public class LayoutPage extends AbstractPageImpl implements Serializable {
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		
-		layout01 = createSimple();
+		layout01 = createSimple().execute().getOutput();
 		
-		layout02 = createComplex();
+		layout02 = createComplex().execute().getOutput();
 		
-		layout03 = createNested();
+		layout03 = createNested().execute().getOutput();
 	}
 	
-	private Layout createSimple() {
+	private LayoutBuilder createSimple() {
 		return __inject__(LayoutBuilder.class)
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(10).setWidthForDesktop(10).setWidthForTablet(10).setWidthForPhone(12))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(2))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(10))
 				
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(10).setWidthForDesktop(10).setWidthForTablet(10).setWidthForPhone(12))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(2))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(10))
 				
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(10).setWidthForDesktop(10).setWidthForTablet(10).setWidthForPhone(12))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(2))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(10))
 				
-				.execute().getOutput()
 				;
 	}
 	
-	private Layout createComplex() {
+	private LayoutBuilder createComplex() {
 		return __inject__(LayoutBuilder.class)
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(2).setWidthForDesktop(2).setWidthForTablet(2).setWidthForPhone(12))
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(5).setWidthForDesktop(5).setWidthForTablet(5).setWidthForPhone(12))
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(5).setWidthForDesktop(5).setWidthForTablet(5).setWidthForPhone(12))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(2))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(5))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(5))
 				
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(3).setWidthForDesktop(3).setWidthForTablet(3).setWidthForPhone(12))
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(3).setWidthForDesktop(3).setWidthForTablet(3).setWidthForPhone(12))
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(3).setWidthForDesktop(3).setWidthForTablet(3).setWidthForPhone(12))
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(3).setWidthForDesktop(3).setWidthForTablet(3).setWidthForPhone(12))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(3))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(3))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(3))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(3))
 				
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(6).setWidthForDesktop(6).setWidthForTablet(6).setWidthForPhone(6))
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(6).setWidthForDesktop(6).setWidthForTablet(6).setWidthForPhone(6))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsAll(6))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsAll(6))
 				
-				.execute().getOutput()
 				;
 	}
 	
-	private Layout createNested() {
-		Layout layout = __inject__(LayoutBuilder.class)
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(4).setWidthForDesktop(4).setWidthForTablet(6).setWidthForPhone(12).setLayout(createSimple()))
-				.addItems(__inject__(LayoutBuilerItem.class).setWidth(8).setWidthForDesktop(8).setWidthForTablet(6).setWidthForPhone(12).setLayout(createComplex()))
-				
-				.execute().getOutput();
-		
-		return layout;
+	private LayoutBuilder createNested() {
+		return __inject__(LayoutBuilder.class)
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(4).setAreaWidthProportionsTablet(6).setLayout(createSimple()))
+				.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(8).setAreaWidthProportionsTablet(6).setLayout(createComplex()));
 	}
 	
 }

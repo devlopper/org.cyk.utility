@@ -5,11 +5,13 @@ import java.util.Map;
 
 import org.cyk.utility.css.StyleBuilder;
 import org.cyk.utility.device.Device;
+import org.cyk.utility.device.DeviceScreenArea;
+import org.cyk.utility.device.DeviceScreenDimensionProportions;
 
 public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends VisibleComponent> extends AbstractComponentBuilderImpl<COMPONENT> implements VisibleComponentBuilder<COMPONENT> {
 	private static final long serialVersionUID = 1L;
 
-	private VisibleComponentArea area;
+	private DeviceScreenArea area;
 	private StyleBuilder style;
 	
 	@Override
@@ -18,24 +20,24 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 		StyleBuilder style = getStyle();
 		if(style!=null)
 			component.setStyle(style.execute().getOutput());
-		VisibleComponentArea area = getArea();
+		DeviceScreenArea area = getArea();
 		if(area!=null) {
 			component.setArea(area);
 		}
 	}
 	
 	@Override
-	public VisibleComponentArea getArea() {
+	public DeviceScreenArea getArea() {
 		return area;
 	}
 
 	@Override
-	public VisibleComponentArea getArea(Boolean injectIfNull) {
-		return (VisibleComponentArea) __getInjectIfNull__(FIELD_AREA, injectIfNull);
+	public DeviceScreenArea getArea(Boolean injectIfNull) {
+		return (DeviceScreenArea) __getInjectIfNull__(FIELD_AREA, injectIfNull);
 	}
 
 	@Override
-	public VisibleComponentBuilder<COMPONENT> setArea(VisibleComponentArea area) {
+	public VisibleComponentBuilder<COMPONENT> setArea(DeviceScreenArea area) {
 		this.area = area;
 		return this;
 	}
@@ -57,32 +59,32 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 	}
 	
 	@Override
-	public VisibleComponentBuilder<COMPONENT> setAreaWidth(VisibleComponentAreaDimension areaWidth) {
-		getArea(Boolean.TRUE).setWidth(areaWidth);
+	public VisibleComponentBuilder<COMPONENT> setAreaWidth(DeviceScreenDimensionProportions areaWidth) {
+		getArea(Boolean.TRUE).setWidthProportions(areaWidth);
 		return this;
 	}
 	
 	@Override
 	public VisibleComponentBuilder<COMPONENT> setAreaWidthProportionMap(Map<Class<? extends Device>, Integer> proportionMap) {
-		getArea(Boolean.TRUE).getWidth(Boolean.TRUE).setProportionMap(proportionMap);
+		getArea(Boolean.TRUE).getWidthProportions(Boolean.TRUE).setMap(proportionMap);
 		return this;
 	}
 	
 	@Override
 	public VisibleComponentBuilder<COMPONENT> setAreaWidthProportions(Integer _default, Integer television,Integer desktop, Integer tablet, Integer phone) {
-		getArea(Boolean.TRUE).getWidth(Boolean.TRUE).setProportions(_default, television, desktop, tablet, phone);
+		getArea(Boolean.TRUE).getWidthProportions(Boolean.TRUE).setAllClasses(_default, television, desktop, tablet, phone);
 		return this;
 	}
 	
 	@Override
 	public VisibleComponentBuilder<COMPONENT> setAreaWidthProportions(Integer proportion,Class<? extends Device>... classes) {
-		getArea(Boolean.TRUE).getWidth(Boolean.TRUE).setProportions(proportion, classes);
+		getArea(Boolean.TRUE).getWidthProportions(Boolean.TRUE).setByClasses(proportion, classes);
 		return this;
 	}
 	
 	@Override
 	public VisibleComponentBuilder<COMPONENT> setAreaWidthProportions(Integer proportion,Collection<Class<? extends Device>> classes) {
-		getArea(Boolean.TRUE).getWidth(Boolean.TRUE).setProportions(proportion, classes);
+		getArea(Boolean.TRUE).getWidthProportions(Boolean.TRUE).setByClasses(proportion, classes);
 		return this;
 	}
 	

@@ -115,5 +115,10 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 		return __inject__(CollectionHelper.class).getLast(collection);
 	}
 	
+	@Override
+	public String toString() {
+		return collection == null ? super.toString() : collection.toString();
+	}
+	
 	public static final String FIELD_COLLECTION = "collection";
 }

@@ -7,12 +7,8 @@ import java.util.Map;
 
 import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
-import org.cyk.utility.client.controller.component.layout.LayoutBuilerItem;
+import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
 import org.cyk.utility.device.Device;
-import org.cyk.utility.device.DeviceDesktop;
-import org.cyk.utility.device.DevicePhone;
-import org.cyk.utility.device.DeviceTablet;
-import org.cyk.utility.device.DeviceTelevision;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public class VisibleComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<VisibleComponents> implements VisibleComponentsBuilder,Serializable {
@@ -85,8 +81,8 @@ public class VisibleComponentsBuilderImpl extends AbstractFunctionWithProperties
 			LayoutBuilder layoutBuilder = getLayoutBuilder(Boolean.TRUE);
 			for(VisibleComponent indexComponent : visibleComponents) {
 				Map<Class<? extends Device>,Integer> widthMap = null;
-				if(indexComponent.getArea()!=null && indexComponent.getArea().getWidth()!=null)
-					widthMap = indexComponent.getArea().getWidth().getProportionMap();
+				if(indexComponent.getArea()!=null && indexComponent.getArea().getWidthProportions()!=null)
+					widthMap = indexComponent.getArea().getWidthProportions().getMap();
 				if(widthMap == null) {
 					if(indexComponent instanceof Input<?>) {
 						/*Input<?> input = (Input<?>) indexComponent;
@@ -100,11 +96,7 @@ public class VisibleComponentsBuilderImpl extends AbstractFunctionWithProperties
 						*/
 					}
 				}
-				LayoutBuilerItem layoutBuilerItem = __inject__(LayoutBuilerItem.class).setWidth(widthMap == null ? null : widthMap.get(null));
-				for(Class<?> indexDeviceClass : new Class<?>[] {DeviceTelevision.class,DeviceDesktop.class,DeviceTablet.class,DevicePhone.class}) {
-					layoutBuilerItem.getWidthMap(Boolean.TRUE).put((Class<? extends Device>) indexDeviceClass, widthMap == null ? null : widthMap.get(indexDeviceClass));
-				}
-				layoutBuilder.addItems(layoutBuilerItem);
+				layoutBuilder.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsAll(widthMap == null ? null : widthMap.get(null)));
 			}
 		}
 		return this;

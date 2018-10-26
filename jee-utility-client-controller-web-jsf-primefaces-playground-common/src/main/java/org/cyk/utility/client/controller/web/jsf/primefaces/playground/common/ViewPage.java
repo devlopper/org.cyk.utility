@@ -15,7 +15,6 @@ import org.cyk.utility.client.controller.component.annotation.InputStringLineOne
 import org.cyk.utility.client.controller.component.annotation.Output;
 import org.cyk.utility.client.controller.component.annotation.OutputString;
 import org.cyk.utility.client.controller.component.annotation.OutputStringText;
-import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewTypeForm;

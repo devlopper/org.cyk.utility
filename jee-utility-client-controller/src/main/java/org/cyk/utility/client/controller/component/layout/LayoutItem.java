@@ -1,8 +1,8 @@
 package org.cyk.utility.client.controller.component.layout;
 
-import org.cyk.utility.client.controller.component.InvisibleComponent;
+import org.cyk.utility.client.controller.component.VisibleComponent;
 
-public interface LayoutItem extends InvisibleComponent {
+public interface LayoutItem extends VisibleComponent {
 
 	Layout getLayout();
 	LayoutItem setLayout(Layout layout);

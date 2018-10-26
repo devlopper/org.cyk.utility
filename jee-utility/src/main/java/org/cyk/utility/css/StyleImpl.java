@@ -62,6 +62,11 @@ public class StyleImpl extends AbstractObject implements Style,Serializable {
 		return string;
 	}
 	
+	@Override
+	public String toString() {
+		return "style="+getValues()+" ::: class="+getClasses();
+	}
+	
 	/**/
 	
 	public static final String FIELD_CLASSES = "classes";

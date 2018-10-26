@@ -13,7 +13,7 @@ import org.cyk.utility.css.StyleClassBuilderWidth;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.string.StringHelper;
 
-public abstract class AbstractLayoutImpl extends AbstractVisibleComponentImpl implements Layout, Serializable {
+public class LayoutImpl extends AbstractVisibleComponentImpl implements Layout, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Override

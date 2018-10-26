@@ -11,6 +11,7 @@ import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListen
 import org.cyk.utility.client.controller.component.ComponentBuilderPostConstructListenerImpl;
 import org.cyk.utility.client.controller.component.ComponentPostConstructListenerImpl;
 import org.cyk.utility.client.controller.component.layout.LayoutWidthGetterImpl;
+import org.cyk.utility.client.controller.component.layout.StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl;
 import org.cyk.utility.client.controller.message.MessageRenderImpl;
 import org.cyk.utility.css.StyleClassBuilderWidthImpl;
 
@@ -25,7 +26,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(FunctionRunnableMap.class).set(ComponentBuilderExecuteListenerBeforeImpl.class, ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(ComponentBuilderExecuteListenerAfterImpl.class, ComponentBuilderExecuteListenerAfterFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(MessageRenderImpl.class, MessageRenderFunctionRunnableImpl.class);
-		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthPrimefacesGridCssFunctionRunnableImpl.class);
+		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(LayoutWidthGetterImpl.class, LayoutWidthGetterFunctionRunnableImpl.class);
 	}
 	

@@ -11,7 +11,7 @@
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
 			<div
-				class="#{value.properties.clazz}"
+				class="#{value.properties.styleClass}"
 			>
 				<ui:insert name="layoutContent">
 					<c:forEach items="#{value.getChildren()}" var="indexItem" varStatus="status">
@@ -37,33 +37,5 @@
 			</div>
 		</ui:define>
 	</ui:decorate>	
-	
-	<!--
-	<div
-		class="#{value.properties.clazz}"
-	>
-		<ui:insert name="content">
-		
-			<c:forEach
-				items="#{value.getChildren()}" var="child" varStatus="status"
-			>
-				<cyk:layoutItem value="#{child}">		
-		    		<ui:define name="content">
-		    			<c:choose>
-		    				<c:when test="#{child.layout == null}">
-								<h:outputText value="ITEM #{status.count}" title="#{child.properties.clazz}" />
-							</c:when>
-							<c:when test="#{child.layout != null}">
-								SUB : #{child.layout}
-								<cyk:layout value="#{child.layout}" />
-							</c:when>
-		    			</c:choose>
-		    		</ui:define>
-		    	</cyk:layoutItem>
-			</c:forEach>
-			
-			
-		</ui:insert>
-	</div>
-	-->
+
 </ui:composition>
