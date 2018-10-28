@@ -9,13 +9,14 @@ public interface InputBuilder<INPUT extends Input<VALUE>,VALUE> extends InputOut
 	VALUE getInitialValue();
 	InputBuilder<INPUT,VALUE> setInitialValue(VALUE initialValue);
 	
-	OutputStringLabelBuilder getLabelBuilder();
-	OutputStringLabelBuilder getLabelBuilder(Boolean injectIfNull);
-	InputBuilder<INPUT,VALUE> setLabelBuilder(OutputStringLabelBuilder labelBuilder);
+	OutputStringLabelBuilder getLabel();
+	OutputStringLabelBuilder getLabel(Boolean injectIfNull);
+	InputBuilder<INPUT,VALUE> setLabel(OutputStringLabelBuilder labelBuilder);
+	InputBuilder<INPUT,VALUE> setLabelValue(String value);
 	
-	OutputStringMessageBuilder getMessageBuilder();
-	OutputStringMessageBuilder getMessageBuilder(Boolean injectIfNull);
-	InputBuilder<INPUT,VALUE> setMessageBuilder(OutputStringMessageBuilder messageBuilder);
+	OutputStringMessageBuilder getMessage();
+	OutputStringMessageBuilder getMessage(Boolean injectIfNull);
+	InputBuilder<INPUT,VALUE> setMessage(OutputStringMessageBuilder messageBuilder);
 
 	@Override InputBuilder<INPUT,VALUE> setOutputProperty(Object key, Object value);
 	

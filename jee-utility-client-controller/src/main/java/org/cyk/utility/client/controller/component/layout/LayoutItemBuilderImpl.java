@@ -131,6 +131,11 @@ public class LayoutItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<L
 		return (LayoutItemBuilder) super.setOutputPropertyValue(value);
 	}
 	
+	@Override
+	public LayoutItemBuilder setArea(DeviceScreenArea area) {
+		return (LayoutItemBuilder) super.setArea(area);
+	}
+	
 	/**/
 	
 	private static final Class<?>[] DEVICE_CLASSES = {null,DeviceTelevision.class,DeviceDesktop.class,DeviceTablet.class,DevicePhone.class};

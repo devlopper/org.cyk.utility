@@ -12,8 +12,8 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	private static final long serialVersionUID = 1L;
 
 	private VALUE initialValue;
-	private OutputStringLabelBuilder labelBuilder;
-	private OutputStringMessageBuilder messageBuilder;
+	private OutputStringLabelBuilder label;
+	private OutputStringMessageBuilder message;
 	
 	@Override
 	protected VALUE __getValue__(Object object, Field field, Object value) {
@@ -28,12 +28,12 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 			input.getProperties().setRequired(field.getAnnotation(javax.validation.constraints.NotNull.class)!=null);	
 		}
 		
-		OutputStringLabelBuilder labelBuilder = getLabelBuilder();
+		OutputStringLabelBuilder labelBuilder = getLabel();
 		if(labelBuilder!=null) {
 			input.setLabel(labelBuilder.execute().getOutput());
 		}
 		
-		OutputStringMessageBuilder messageBuilder = getMessageBuilder();
+		OutputStringMessageBuilder messageBuilder = getMessage();
 		if(messageBuilder!=null) {
 			input.setMessage(messageBuilder.execute().getOutput());
 		}
@@ -51,34 +51,34 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	}
 
 	@Override
-	public OutputStringLabelBuilder getLabelBuilder() {
-		return labelBuilder;
+	public OutputStringLabelBuilder getLabel() {
+		return label;
 	}
 
 	@Override
-	public OutputStringLabelBuilder getLabelBuilder(Boolean injectIfNull) {
-		return ((OutputStringLabelBuilder) __getInjectIfNull__(FIELD_LABEL_BUILDER, injectIfNull)).setInputBuilder(this);
+	public OutputStringLabelBuilder getLabel(Boolean injectIfNull) {
+		return ((OutputStringLabelBuilder) __getInjectIfNull__(FIELD_LABEL, injectIfNull)).setInputBuilder(this);
 	}
 
 	@Override
-	public InputBuilder<INPUT, VALUE> setLabelBuilder(OutputStringLabelBuilder labelBuilder) {
-		this.labelBuilder = labelBuilder;
+	public InputBuilder<INPUT, VALUE> setLabel(OutputStringLabelBuilder labelBuilder) {
+		this.label = labelBuilder;
 		return this;
 	}
 
 	@Override
-	public OutputStringMessageBuilder getMessageBuilder() {
-		return messageBuilder;
+	public OutputStringMessageBuilder getMessage() {
+		return message;
 	}
 
 	@Override
-	public OutputStringMessageBuilder getMessageBuilder(Boolean injectIfNull) {
-		return ((OutputStringMessageBuilder) __getInjectIfNull__(FIELD_MESSAGE_BUILDER, injectIfNull)).setInputBuilder(this);
+	public OutputStringMessageBuilder getMessage(Boolean injectIfNull) {
+		return ((OutputStringMessageBuilder) __getInjectIfNull__(FIELD_MESSAGE, injectIfNull)).setInputBuilder(this);
 	}
 
 	@Override
-	public InputBuilder<INPUT, VALUE> setMessageBuilder(OutputStringMessageBuilder messageBuilder) {
-		this.messageBuilder = messageBuilder;
+	public InputBuilder<INPUT, VALUE> setMessage(OutputStringMessageBuilder messageBuilder) {
+		this.message = messageBuilder;
 		return this;
 	}
 	
@@ -98,7 +98,13 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 		return (InputBuilder<INPUT, VALUE>) super.setOutputProperty(key, value);
 	}
 
-	public static final String FIELD_LABEL_BUILDER = "labelBuilder";
-	public static final String FIELD_MESSAGE_BUILDER = "messageBuilder";
+	@Override
+	public InputBuilder<INPUT, VALUE> setLabelValue(String value) {
+		getLabel(Boolean.TRUE).setValue(value);
+		return this;
+	}
+	
+	public static final String FIELD_LABEL = "label";
+	public static final String FIELD_MESSAGE = "message";
 	
 }

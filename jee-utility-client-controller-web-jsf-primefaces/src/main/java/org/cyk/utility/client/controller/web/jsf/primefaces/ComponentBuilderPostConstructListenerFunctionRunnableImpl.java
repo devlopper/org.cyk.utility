@@ -25,7 +25,7 @@ public class ComponentBuilderPostConstructListenerFunctionRunnableImpl extends A
 				
 				if(componentBuilder instanceof InputBuilder<?, ?>) {
 					InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) componentBuilder;
-					inputBuilder.getMessageBuilder(Boolean.TRUE);
+					inputBuilder.getMessage(Boolean.TRUE);
 				}
 			}
 		});

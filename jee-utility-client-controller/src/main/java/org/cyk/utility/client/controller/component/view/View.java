@@ -1,14 +1,14 @@
 package org.cyk.utility.client.controller.component.view;
 
+import org.cyk.utility.client.controller.component.Components;
 import org.cyk.utility.client.controller.component.VisibleComponent;
-import org.cyk.utility.client.controller.component.VisibleComponents;
 import org.cyk.utility.client.controller.component.command.Commandables;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 
 public interface View extends VisibleComponent {
 
-	VisibleComponents getVisibleComponents();
-	View setVisibleComponents(VisibleComponents visibleComponents);
+	Components getComponents();
+	View setComponents(Components components);
 	
 	/* Visible components filter */
 	

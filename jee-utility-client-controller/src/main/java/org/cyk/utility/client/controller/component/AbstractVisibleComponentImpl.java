@@ -3,14 +3,12 @@ package org.cyk.utility.client.controller.component;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.command.Command;
-import org.cyk.utility.client.controller.component.layout.LayoutItem;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.device.DeviceScreenArea;
 
 public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl implements VisibleComponent,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private LayoutItem layoutItem;
 	private Command command;
 	private DeviceScreenArea area;
 	private Style style;
@@ -44,22 +42,6 @@ public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl
 	@Override
 	public VisibleComponent setStyle(Style style) {
 		this.style = style;
-		return this;
-	}
-	
-	@Override
-	public LayoutItem getLayoutItem() {
-		return layoutItem;
-	}
-	
-	@Override
-	public LayoutItem getLayoutItem(Boolean injectIfNull) {
-		return (LayoutItem) __getInjectIfNull__(FIELD_LAYOUT_ITEM, injectIfNull);
-	}
-	
-	@Override
-	public VisibleComponent setLayoutItem(LayoutItem layoutItem) {
-		this.layoutItem = layoutItem;
 		return this;
 	}
 	

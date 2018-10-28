@@ -3,26 +3,26 @@ package org.cyk.utility.client.controller.component.view;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
-import org.cyk.utility.client.controller.component.VisibleComponents;
+import org.cyk.utility.client.controller.component.Components;
 import org.cyk.utility.client.controller.component.command.Commandables;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 
 public class ViewImpl extends AbstractVisibleComponentImpl implements View,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private VisibleComponents visibleComponents;
+	private Components components;
 	
 	private OutputStringText name;
 	private Commandables processingCommandables;
 
 	@Override
-	public VisibleComponents getVisibleComponents() {
-		return visibleComponents;
+	public Components getComponents() {
+		return components;
 	}
 	
 	@Override
-	public View setVisibleComponents(VisibleComponents visibleComponents) {
-		this.visibleComponents = visibleComponents;
+	public View setComponents(Components components) {
+		this.components = components;
 		return this;
 	}
 	
@@ -58,17 +58,17 @@ public class ViewImpl extends AbstractVisibleComponentImpl implements View,Seria
 
 	@Override
 	public View setInputOutputValueFromFieldValue() {
-		VisibleComponents visibleComponents = getVisibleComponents();
-		if(visibleComponents!=null)
-			visibleComponents.setInputOutputValueFromFieldValue();
+		Components components = getComponents();
+		if(components!=null)
+			components.setInputOutputValueFromFieldValue();
 		return this;
 	}
 
 	@Override
 	public View setInputOutputFieldValueFromValue() {
-		VisibleComponents visibleComponents = getVisibleComponents();
-		if(visibleComponents!=null)
-			visibleComponents.setInputOutputFieldValueFromValue();
+		Components components = getComponents();
+		if(components!=null)
+			components.setInputOutputFieldValueFromValue();
 		return this;
 	}
 }

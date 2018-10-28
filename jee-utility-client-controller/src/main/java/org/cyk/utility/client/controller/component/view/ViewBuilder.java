@@ -1,9 +1,8 @@
 package org.cyk.utility.client.controller.component.view;
 
 import org.cyk.utility.client.controller.component.ComponentBuilder;
+import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
-import org.cyk.utility.client.controller.component.VisibleComponentBuilders;
-import org.cyk.utility.client.controller.component.VisibleComponentsBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.command.CommandableButtonBuilder;
@@ -17,13 +16,9 @@ public interface ViewBuilder extends VisibleComponentBuilder<View> {
 	ViewType getType();
 	ViewBuilder setType(ViewType type);
 	
-	VisibleComponentsBuilder getVisibleComponentsBuilder();
-	VisibleComponentsBuilder getVisibleComponentsBuilder(Boolean injectIfNull);
-	ViewBuilder setVisibleComponentsBuilder(VisibleComponentsBuilder visibleComponentsBuilder);
-	
-	VisibleComponentBuilders getComponentBuilders();
-	VisibleComponentBuilders getComponentBuilders(Boolean injectIfNull);
-	ViewBuilder setComponentBuilders(VisibleComponentBuilders componentBuilders);
+	ComponentsBuilder getComponentsBuilder();
+	ComponentsBuilder getComponentsBuilder(Boolean injectIfNull);
+	ViewBuilder setComponentsBuilder(ComponentsBuilder componentsBuilder);
 	
 	//<T extends InputOutputBuilder<?,?>> T addInputOutputBuilder(Class<T> inputOutputBuilderClass);
 	
@@ -35,7 +30,7 @@ public interface ViewBuilder extends VisibleComponentBuilder<View> {
 	<T extends InputBuilder<?,?>> T addInputBuilderByFieldName(Class<T> inputBuilderClass,Object object,String...fieldNames);
 	InputBuilder<?,?> addInputBuilderByFieldName(Object object,String...fieldNames);
 	
-	ViewBuilder addComponentBuilder(VisibleComponentBuilder<?> componentBuilder);
+	ViewBuilder addComponentBuilder(ComponentBuilder<?> componentBuilder);
 	<T extends ComponentBuilder<?>> T addComponentBuilderByObjectByFieldNames(Class<T> componentBuilderClass,Object object,String...fieldNames);
 	ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object,String...fieldNames);
 	<T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object,String methodName);

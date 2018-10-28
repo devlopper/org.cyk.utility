@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.component.layout;
 
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
+import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 
 public interface LayoutItemBuilder extends VisibleComponentBuilder<LayoutItem> {
@@ -22,4 +23,6 @@ public interface LayoutItemBuilder extends VisibleComponentBuilder<LayoutItem> {
 	LayoutItemBuilder setLayout(LayoutBuilder layout);
 	
 	@Override LayoutItemBuilder setOutputPropertyValue(Object value);
+	
+	@Override LayoutItemBuilder setArea(DeviceScreenArea area);
 }

@@ -9,9 +9,9 @@ import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuild
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderClassGetter;
 import org.cyk.utility.client.controller.component.ComponentBuilderGetter;
+import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponent;
-import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
-import org.cyk.utility.client.controller.component.VisibleComponentBuilders;
+
 import org.cyk.utility.client.controller.component.VisibleComponents;
 import org.cyk.utility.client.controller.component.VisibleComponentsBuilder;
 import org.cyk.utility.client.controller.component.command.Commandable;
@@ -32,20 +32,19 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 
 	private VisibleComponentsBuilder visibleComponentsBuilder;
 	private CommandableBuilders processingCommandableBuilders;
-	private VisibleComponentBuilders componentBuilders;
+	private ComponentsBuilder componentsBuilder;
 	private ViewType type;
 	private CommandableBuilder<?> submitCommandableBuilder,closeCommandableBuilder;
 	
 	@Override
 	protected View __execute__() throws Exception {
 		View view = __inject__(View.class);
-		VisibleComponentsBuilder visibleComponentsBuilder = getVisibleComponentsBuilder();
-		if(visibleComponentsBuilder == null)
-			visibleComponentsBuilder = __inject__(VisibleComponentsBuilder.class);
-		
-		VisibleComponentBuilders componentBuilders = getComponentBuilders();
-		Collection<ComponentBuilder<?>> finalComponentBuilders = null;
-		if(__injectCollectionHelper__().isNotEmpty(componentBuilders)) {
+		ComponentsBuilder componentsBuilder = getComponentsBuilder();
+		if(componentsBuilder!=null)
+			view.setComponents(componentsBuilder.execute().getOutput());
+		/*Collection<ComponentBuilder<?>> finalComponentBuilders = null;
+		/*
+		if(__injectCollectionHelper__().isNotEmpty(componentsBuilder)) {
 			finalComponentBuilders = new ArrayList<>();
 			for(ComponentBuilder<?> index : componentBuilders.get()) {
 				if(index!=null) {
@@ -88,7 +87,8 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 				}
 			}
 		}
-		
+		*/
+		/*
 		if(__injectCollectionHelper__().isNotEmpty(finalComponentBuilders)) {
 			for(ComponentBuilder<?> index : finalComponentBuilders) {
 				if(index instanceof CommandableBuilder<?>) {
@@ -111,7 +111,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 					visibleComponentsBuilder.addComponents(component);
 			}
 		}
-		
+		*/
 		ViewType type = getType();
 		if(type instanceof ViewTypeForm) {
 			/*CommandableBuilder<?> submitCommandableBuilder = getSubmitCommandableBuilder(Boolean.TRUE);
@@ -142,6 +142,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		});
 		*/
 		//Processing commandables last
+		/*
 		CommandableBuilders processingCommandableBuilders = getProcessingCommandableBuilders();
 		Collection<Commandable> processingCommandables = null;
 		if(__injectCollectionHelper__().isNotEmpty(processingCommandableBuilders)) {
@@ -163,10 +164,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 				count++;
 			}
 		}
-		
-		VisibleComponents visibleComponents = visibleComponentsBuilder.execute().getOutput();
-
-		view.setVisibleComponents(visibleComponents);
+		*/
 		return view;
 	}
 	
@@ -183,10 +181,10 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ViewBuilder addInputBuilder(InputBuilder<?,?> inputBuilder) {
-		VisibleComponentBuilders builders = getComponentBuilders(Boolean.TRUE);
+		/*VisibleComponentBuilders builders = getComponentBuilders(Boolean.TRUE);
 		if(inputBuilder!=null) {
 			builders.add(inputBuilder);
-		}
+		}*/
 		return this;
 	}
 
@@ -196,7 +194,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		if(outputPropertyRequired!=null)
 			inputBuilder.setOutputPropertyRequired(outputPropertyRequired);
 		if(labelBuilderOutputPropertyValue!=null)
-			inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(labelBuilderOutputPropertyValue);
+			inputBuilder.getLabel(Boolean.TRUE).setOutputPropertyValue(labelBuilderOutputPropertyValue);
 		addInputBuilder(inputBuilder);
 		return inputBuilder;
 	}
@@ -216,7 +214,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		T inputBuilder = __inject__(inputBuilderClass);
 		inputBuilder.setObject(object);
 		inputBuilder.setFieldNameStrings(__inject__(Strings.class).add(fieldNames));
-		inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getFieldNameStrings().get().toString());
+		inputBuilder.getLabel(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getFieldNameStrings().get().toString());
 		addInputBuilder(inputBuilder);
 		return inputBuilder;
 	}
@@ -231,7 +229,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	@Override
 	public <T extends ComponentBuilder<?>> T addComponentBuilderByObjectByFieldNames(Class<T> componentBuilderClass, Object object,String... fieldNames) {
 		T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).addFieldNameStrings(fieldNames).execute().getOutput();
-		addComponentBuilder((VisibleComponentBuilder<?>) builder);
+		addComponentBuilder(builder);
 		return builder;
 	}
 	
@@ -245,7 +243,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	@Override
 	public <T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object, String methodName) {
 		T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).setMethodName(methodName).execute().getOutput();
-		addComponentBuilder((VisibleComponentBuilder<?>) builder);
+		addComponentBuilder(builder);
 		return builder;
 	}
 	
@@ -256,43 +254,24 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	}
 	
 	@Override
-	public ViewBuilder addComponentBuilder(VisibleComponentBuilder<?> componentBuilder) {
-		VisibleComponentBuilders builders = getComponentBuilders(Boolean.TRUE);
-		if(componentBuilder!=null) {
-			builders.add(componentBuilder);
-		}
+	public ViewBuilder addComponentBuilder(ComponentBuilder<?> componentBuilder) {
+		getComponentsBuilder(Boolean.TRUE).getComponents(Boolean.TRUE).add(componentBuilder);
 		return this;
 	}
 	
 	@Override
-	public VisibleComponentsBuilder getVisibleComponentsBuilder() {
-		return visibleComponentsBuilder;
+	public ComponentsBuilder getComponentsBuilder() {
+		return componentsBuilder;
 	}
 
 	@Override
-	public VisibleComponentsBuilder getVisibleComponentsBuilder(Boolean injectIfNull) {
-		return (VisibleComponentsBuilder) __getInjectIfNull__(FIELD_VISIBLE_COMPONENTS_BUILDER, injectIfNull);
+	public ComponentsBuilder getComponentsBuilder(Boolean injectIfNull) {
+		return (ComponentsBuilder) __getInjectIfNull__(FIELD_COMPONENTS_BUILDER, injectIfNull);
 	}
 
 	@Override
-	public ViewBuilder setVisibleComponentsBuilder(VisibleComponentsBuilder visibleComponentsBuilder) {
-		this.visibleComponentsBuilder = visibleComponentsBuilder;
-		return this;
-	}
-
-	@Override
-	public VisibleComponentBuilders getComponentBuilders() {
-		return componentBuilders;
-	}
-
-	@Override
-	public VisibleComponentBuilders getComponentBuilders(Boolean injectIfNull) {
-		return (VisibleComponentBuilders) __getInjectIfNull__(FIELD_COMPONENT_BUILDERS, injectIfNull);
-	}
-
-	@Override
-	public ViewBuilder setComponentBuilders(VisibleComponentBuilders componentBuilders) {
-		this.componentBuilders = componentBuilders;
+	public ViewBuilder setComponentsBuilder(ComponentsBuilder componentsBuilder) {
+		this.componentsBuilder = componentsBuilder;
 		return this;
 	}
 	
@@ -360,9 +339,8 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	/**/
 	
 	public static final String FIELD_NAME_OUTPUT_STRING_TEXT_BUILDER = "nameOutputStringTextBuilder";
-	public static final String FIELD_VISIBLE_COMPONENTS_BUILDER = "visibleComponentsBuilder";
 	public static final String FIELD_PROCESSING_COMMANDABLE_BUILDERS = "processingCommandableBuilders";
 	public static final String FIELD_SUBMIT_COMMANDABLE_BUILDER = "submitCommandableBuilder";
-	public static final String FIELD_COMPONENT_BUILDERS = "componentBuilders";
+	public static final String FIELD_COMPONENTS_BUILDER = "componentsBuilder";
 
 }
