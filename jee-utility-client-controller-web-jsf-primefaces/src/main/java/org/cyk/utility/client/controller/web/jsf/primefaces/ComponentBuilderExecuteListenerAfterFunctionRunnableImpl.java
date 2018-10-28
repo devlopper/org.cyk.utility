@@ -7,10 +7,8 @@ import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerAfter;
 import org.cyk.utility.client.controller.component.InputOutput;
-import org.cyk.utility.client.controller.component.InvisibleComponent;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.input.Input;
-import org.cyk.utility.client.controller.component.layout.Layout;
 import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
@@ -59,10 +57,6 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						if(inputOutput instanceof Input<?>) {
 							
 						}
-					}
-				}else if(component instanceof InvisibleComponent) {
-					if(component instanceof Layout) {
-						
 					}
 				}
 			}

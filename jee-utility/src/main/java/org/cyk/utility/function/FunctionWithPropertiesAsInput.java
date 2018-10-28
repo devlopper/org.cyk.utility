@@ -10,4 +10,10 @@ public interface FunctionWithPropertiesAsInput<OUTPUT> extends Function<Properti
 	
 	Object getOutputProperty(Object key);
 	FunctionWithPropertiesAsInput<OUTPUT> setOutputProperty(Object key,Object value);
+	
+	Object getOutputPropertyName();
+	FunctionWithPropertiesAsInput<OUTPUT> setOutputPropertyName(Object value);
+	
+	Object getOutputPropertyValue();
+	FunctionWithPropertiesAsInput<OUTPUT> setOutputPropertyValue(Object value);
 }

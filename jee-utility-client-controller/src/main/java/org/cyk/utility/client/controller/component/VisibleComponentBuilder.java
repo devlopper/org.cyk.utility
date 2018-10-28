@@ -26,5 +26,7 @@ public interface VisibleComponentBuilder<COMPONENT extends VisibleComponent> ext
 	StyleBuilder getStyle(Boolean injectIfNull);
 	VisibleComponentBuilder<COMPONENT> setStyle(StyleBuilder styleBuilder);
 	
+	VisibleComponentBuilder<COMPONENT> addStyleClasses(String...classes);
+	
 	@Override ComponentBuilder<COMPONENT> setOutputProperty(Object key, Object value);
 }

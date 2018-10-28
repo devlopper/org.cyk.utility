@@ -97,6 +97,12 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 	public VisibleComponentBuilder<COMPONENT> setOutputProperty(Object key, Object value) {
 		return (VisibleComponentBuilder<COMPONENT>) super.setOutputProperty(key, value);
 	}
+	
+	@Override
+	public VisibleComponentBuilder<COMPONENT> addStyleClasses(String... classes) {
+		getStyle(Boolean.TRUE).addClasses(classes);
+		return this;
+	}
 
 	public static final String FIELD_AREA = "area";
 	public static final String FIELD_STYLE = "style";

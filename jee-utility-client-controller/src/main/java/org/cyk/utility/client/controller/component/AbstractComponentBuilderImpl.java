@@ -54,4 +54,14 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	public ComponentBuilder<COMPONENT> setOutputProperty(Object key, Object value) {
 		return (ComponentBuilder<COMPONENT>) super.setOutputProperty(key, value);
 	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setOutputPropertyName(Object value) {
+		return (ComponentBuilder<COMPONENT>) super.setOutputPropertyName(value);
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setOutputPropertyValue(Object value) {
+		return (ComponentBuilder<COMPONENT>) super.setOutputPropertyValue(value);
+	}
 }

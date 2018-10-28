@@ -5,35 +5,33 @@
       xmlns:f="http://java.sun.com/jsf/core"      
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:cyk="http://utility.cyk.org">
 	
     <h:head>
-        <title>View</title>
+        <title>Layout Page</title>
     </h:head>
     <h:body>
-    	
     	<style>
     		.cyk_layout{
     			border: 1px solid black;
     		}
     		
-    		.cyk_layout_title{
+    		.cyk_view_title{
     			background: yellow;
+    			font-weight: bolder;
     		}
+    		
+    		.cyk_view_commands{
+    			background: lime;
+    		}
+    		
     	</style>
     	
-    	<h:outputStylesheet library="org.cyk.utility.client.controller.web" name="css/input.css" />
-    	<h:form prependId="false">
-    		<!--
-    		<p:tooltip hideEvent="none"  />
-    		-->
-    		<!--
-    		<pe:tooltip/>
-    		-->
-    		<cyk:view value="#{viewPage.view}" />
-    		<p:autoUpdate />
-    	</h:form>
+    	<p:inputText/>
+    	
+    	<p:separator/>
+    	<cyk:layout value="#{layoutPageTemplatePage.layout}"/>
+    		
     </h:body>
 </html>

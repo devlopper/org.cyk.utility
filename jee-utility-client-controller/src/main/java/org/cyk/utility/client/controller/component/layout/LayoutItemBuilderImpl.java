@@ -123,8 +123,12 @@ public class LayoutItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<L
 	
 	@Override
 	public LayoutItemBuilder addStyleClasses(String... classes) {
-		getStyle(Boolean.TRUE).addClasses(classes);
-		return this;
+		return (LayoutItemBuilder) super.addStyleClasses(classes);
+	}
+	
+	@Override
+	public LayoutItemBuilder setOutputPropertyValue(Object value) {
+		return (LayoutItemBuilder) super.setOutputPropertyValue(value);
 	}
 	
 	/**/

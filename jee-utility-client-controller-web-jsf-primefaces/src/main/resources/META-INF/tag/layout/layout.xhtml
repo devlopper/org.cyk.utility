@@ -19,7 +19,7 @@
 							<ui:define name="layoutItemContent">
 								<c:choose>
 									<c:when test="#{indexItem.layout == null}">
-										<h:outputText value="ITEM #{status.count}" title="#{indexItem.properties.clazz}" />
+										<h:outputText value="#{empty indexItem.properties.value ? 'ITEM '.concat(status.count) : indexItem.properties.value}" title="#{indexItem.properties.styleClass}" />
 									</c:when>
 									
 									<c:when test="#{indexItem.layout != null}">

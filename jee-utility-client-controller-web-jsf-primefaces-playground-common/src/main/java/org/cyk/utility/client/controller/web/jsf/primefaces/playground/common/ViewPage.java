@@ -6,6 +6,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
+import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.annotation.Commandable;
 import org.cyk.utility.client.controller.component.annotation.CommandableButton;
 import org.cyk.utility.client.controller.component.annotation.Input;
@@ -44,6 +45,7 @@ public class ViewPage extends AbstractPageImpl implements Serializable {
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		
 		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "__title__");
+		//viewBuilder.getVisibleComponentsBuilder().getLayoutBuilder().getItems().getLast().getStyle(Boolean.TRUE).addClasses("cyk_layout_title");
 		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "firstName");
 		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "lastNames");
 		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "otherDetails");
@@ -51,6 +53,8 @@ public class ViewPage extends AbstractPageImpl implements Serializable {
 		ViewBuilder subViewBuilder = __inject__(ViewBuilder.class);
 		subViewBuilder.setType(__inject__(ViewTypeForm.class));
 		subViewBuilder.addComponentBuilderByObjectByFieldNames(model.getSubModel(), "__title__");
+		//subViewBuilder.getVisibleComponentsBuilder().getLayoutBuilder().getItems().getLast().getStyle(Boolean.TRUE).addClasses("cyk_layout_title");
+		
 		subViewBuilder.addComponentBuilderByObjectByFieldNames(model.getSubModel(), "phone1");
 		subViewBuilder.addComponentBuilderByObjectByFieldNames(model.getSubModel(), "phone2");
 		subViewBuilder.addComponentBuilderByObjectByFieldNames(model.getSubModel(), "otherDetails");
@@ -60,6 +64,9 @@ public class ViewPage extends AbstractPageImpl implements Serializable {
 		viewBuilder.addComponentBuilderByObjectByMethodName(model, "close");
 		
 		view =  viewBuilder.execute().getOutput();
+		
+		view.getVisibleComponents().getLayout().getChildAt(0).getProperties()
+			.setStyleClass("cyk_layout_title "+view.getVisibleComponents().getLayout().getChildAt(0).getProperties().getStyleClass());
 	}
 	
 	/**/

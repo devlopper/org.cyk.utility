@@ -21,4 +21,5 @@ public interface LayoutItemBuilder extends VisibleComponentBuilder<LayoutItem> {
 	LayoutBuilder getLayout();
 	LayoutItemBuilder setLayout(LayoutBuilder layout);
 	
+	@Override LayoutItemBuilder setOutputPropertyValue(Object value);
 }

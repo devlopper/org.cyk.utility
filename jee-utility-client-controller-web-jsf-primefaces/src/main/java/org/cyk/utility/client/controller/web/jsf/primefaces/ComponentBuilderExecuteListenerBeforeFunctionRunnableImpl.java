@@ -11,7 +11,6 @@ import org.cyk.utility.client.controller.component.InputOutputBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
-import org.cyk.utility.client.controller.component.layout.Layout;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 
 public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentBuilderExecuteListenerBefore> implements Serializable {
@@ -27,7 +26,7 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 				if(component instanceof VisibleComponent) {
 					VisibleComponentBuilder<?> visibleComponentBuilder = (VisibleComponentBuilder<?>)componentBuilder;
 					VisibleComponent visibleComponent = (VisibleComponent) component;
-					//visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
+					visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
 					
 					if(visibleComponent instanceof InputOutput<?>) {
 						InputOutputBuilder<?, ?> inputOutputBuilder = (InputOutputBuilder<?,?>) visibleComponentBuilder;
@@ -40,7 +39,13 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 					}
 					
 					if(visibleComponentBuilder instanceof LayoutBuilder) {
-						((Layout)component).getProperties().setStyleClass("ui-g");	
+						LayoutBuilder layoutBuilder = (LayoutBuilder) visibleComponentBuilder;
+						layoutBuilder.getStyle(Boolean.TRUE).addClasses("cyk_layout");
+						
+						// TODO ui-g must be get from function
+						layoutBuilder.getStyle(Boolean.TRUE).addClasses("ui-g");
+						
+						//((Layout)component).getProperties().setStyleClass("ui-g");	
 					}
 				}
 				

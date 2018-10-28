@@ -13,6 +13,7 @@ public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layou
 	
 	@Override
 	protected void __execute__(Layout layout) {
+		super.__execute__(layout);
 		LayoutItemBuilders items = getItems();
 		if(__injectCollectionHelper__().isNotEmpty(items)) {
 			for(LayoutItemBuilder index : items.get()) {
@@ -29,6 +30,7 @@ public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layou
 				layout.addItemFromDeviceClassAndWidths(deviceClassesAndWidths.toArray());
 				*/
 				LayoutItem layoutItem = index.execute().getOutput();
+				//System.out.println(layoutItem.getStyle());
 				if(layoutItem!=null)
 					layout.addChild(layoutItem);			
 			}

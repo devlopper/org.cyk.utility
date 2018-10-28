@@ -36,6 +36,30 @@ public abstract class AbstractFunctionWithPropertiesAsInputImpl<OUTPUT> extends 
 		return this;
 	}
 	
+	@Override
+	public FunctionWithPropertiesAsInput<OUTPUT> setOutputPropertyName(Object value) {
+		getOutputProperties(Boolean.TRUE).setName(value);
+		return this;
+	}
+	
+	@Override
+	public Object getOutputPropertyName() {
+		Properties outputProperties = getOutputProperties();
+		return outputProperties == null ? null : outputProperties.getName();
+	}
+	
+	@Override
+	public FunctionWithPropertiesAsInput<OUTPUT> setOutputPropertyValue(Object value) {
+		getOutputProperties(Boolean.TRUE).setValue(value);
+		return this;
+	}
+	
+	@Override
+	public Object getOutputPropertyValue() {
+		Properties outputProperties = getOutputProperties();
+		return outputProperties == null ? null : outputProperties.getValue();
+	}
+	
 	/**/
 	
 	public static final String FIELD_OUTPUT_PROPERTIES = "outputProperties";
