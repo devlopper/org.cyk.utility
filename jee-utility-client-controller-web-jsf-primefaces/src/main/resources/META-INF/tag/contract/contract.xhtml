@@ -9,13 +9,13 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			<ui:insert name="pageContent">
-				<f:view contracts="#{value.properties.contracts}">
-			        <ui:composition template="#{value.properties.template}">
-			            <ui:param name="__page__" value="#{value}"></ui:param>
-			        </ui:composition>
-			    </f:view>
-			</ui:insert>
+			
+			<f:view contracts="#{__contract__.properties.contracts}">
+		        <ui:composition template="#{__contract__.properties.template}">
+		            <ui:param name="__page__" value="#{}"></ui:param>
+		        </ui:composition>
+		    </f:view>
+			
 		</ui:define>
 	</ui:decorate>	
 

@@ -1,8 +1,6 @@
 package org.cyk.utility.client.controller.component.view;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
@@ -10,19 +8,12 @@ import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderClassGetter;
 import org.cyk.utility.client.controller.component.ComponentBuilderGetter;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
-import org.cyk.utility.client.controller.component.VisibleComponent;
-
-import org.cyk.utility.client.controller.component.VisibleComponents;
-import org.cyk.utility.client.controller.component.VisibleComponentsBuilder;
-import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.command.CommandableButtonBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
-import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
-import org.cyk.utility.client.controller.component.layout.LayoutWidthGetter;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
@@ -30,7 +21,6 @@ import org.cyk.utility.system.action.SystemAction;
 public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> implements ViewBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private VisibleComponentsBuilder visibleComponentsBuilder;
 	private CommandableBuilders processingCommandableBuilders;
 	private ComponentsBuilder componentsBuilder;
 	private ViewType type;

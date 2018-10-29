@@ -115,4 +115,14 @@
         <source>tag/component/components.xhtml</source>
     </tag>
     
+    <tag>
+        <tag-name>insert</tag-name>
+        <source>tag/insert/insert.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>page</tag-name>
+        <source>tag/page/page.xhtml</source>
+    </tag>
+    
 </facelet-taglib>

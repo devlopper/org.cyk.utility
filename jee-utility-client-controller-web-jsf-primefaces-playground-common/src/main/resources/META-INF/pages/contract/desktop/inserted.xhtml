@@ -6,9 +6,19 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:cyk="http://utility.cyk.org">
-
+      xmlns:cyk="http://utility.cyk.org"
+      xmlns:jsp="http://java.sun.com/JSP/Page">
+	    
     <cyk:page value="#{contractDesktopDefaultPage}" >
-    
+    	<ui:define name="north">
+            <h1>Menu</h1>
+        </ui:define>
+        <ui:define name="center">
+            <h1>Content</h1>
+        </ui:define>
+        <ui:define name="south">
+            <h1>Footer</h1>
+        </ui:define>
     </cyk:page>
+    
 </html>

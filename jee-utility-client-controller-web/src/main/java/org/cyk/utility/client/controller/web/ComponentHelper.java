@@ -9,6 +9,7 @@ import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.client.controller.component.command.CommandableButton;
 import org.cyk.utility.client.controller.component.input.InputStringLineMany;
 import org.cyk.utility.client.controller.component.input.InputStringLineOne;
+import org.cyk.utility.client.controller.component.layout.Insert;
 import org.cyk.utility.client.controller.component.layout.Layout;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
@@ -59,5 +60,9 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	
 	public Boolean isView(Object object) {
 		return object instanceof View;
+	}
+	
+	public Boolean isInsert(Object object) {
+		return object instanceof Insert;
 	}
 }

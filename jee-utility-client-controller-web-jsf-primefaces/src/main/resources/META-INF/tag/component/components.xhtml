@@ -53,6 +53,12 @@
 										<cyk:view value="#{indexComponent}" />
 									</c:when>
 									
+									<!-- Insert -->
+									
+									<c:when test="#{componentHelper.isInsert(indexComponent)}">
+										<cyk:insert value="#{indexComponent}" />
+									</c:when>
+									
 									<!-- Not found -->
 									
 									<c:otherwise>

@@ -5,6 +5,9 @@ import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
+import org.cyk.utility.client.controller.component.Components;
+import org.cyk.utility.client.controller.component.ComponentsBuilder;
+import org.cyk.utility.client.controller.component.layout.InsertBuilder;
 import org.cyk.utility.client.controller.component.layout.Layout;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
@@ -21,6 +24,7 @@ public class ContractDesktopDefaultPage extends AbstractPageImpl implements Seri
 
 	private OutputStringText __title__;
 	private Layout __layout__;
+	private Components __components__;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -34,6 +38,20 @@ public class ContractDesktopDefaultPage extends AbstractPageImpl implements Seri
 				.execute().getOutput()
 				;
 		
+		__components__ = __inject__(ComponentsBuilder.class)
+				.setLayout(__inject__(LayoutBuilder.class)
+						.addItems(__inject__(LayoutItemBuilder.class).addStyleClasses("cyk_layout_page_north").setOutputPropertyValue("North"))
+						.addItems(__inject__(LayoutItemBuilder.class).addStyleClasses("cyk_layout_page_center").setOutputPropertyValue("Center"))
+						.addItems(__inject__(LayoutItemBuilder.class).addStyleClasses("cyk_layout_page_south").setOutputPropertyValue("South"))
+						)
+				
+				//.addComponents(__inject__(InsertBuilder.class).setName("north"),__inject__(InsertBuilder.class).setName("center"),__inject__(InsertBuilder.class).setName("south"))
+				
+				.execute().getOutput()
+				;
+		
+		getProperties().setContracts("org.cyk.utility.client.controller.web.jsf.primefaces.desktop.default");
+		getProperties().setTemplate("/template/default.xhtml");
 	}
 	
 	private LayoutBuilder __getNorth__() {

@@ -11,15 +11,27 @@
 	    
     <h:head>
     	<ui:insert name="contractHead">
-    		<ui:insert name="contractHeadTitle"><title><h:outputText value="#{__page__.__title__.properties.value}" /></title></ui:insert>
+    		<ui:insert name="contractHeadTitle"><title><h:outputText value="#{__page__.__title__.properties.value}" escape="false" /></title></ui:insert>
     		<h:outputStylesheet library="css" name="layout.css" />
     	</ui:insert>
     </h:head>
     
 	<h:body>
 		<ui:insert name="contractBody">
-			<cyk:layout value="#{__page__.__layout__}" />
-			<h1>Contract Desktop Body Content To Be Defined</h1>
+			<!--
+			<cyk:components value="#{__page__.__components__}" />
+			-->
+			<div class="ui-g cyk_layout_page">
+				<div class="ui-g-12 cyk_layout_page_north">
+					<ui:insert name="north">Contract Desktop - Content of North to Be Inserted</ui:insert>
+				</div>
+				<div class="ui-g-12 cyk_layout_page_center">
+					<ui:insert name="center">Contract Desktop - Content of Center to Be Inserted</ui:insert>
+				</div>
+				<div class="ui-g-12 cyk_layout_page_south">
+					<ui:insert name="south">Contract Desktop - Content of South to Be Inserted</ui:insert>
+				</div>
+			</div>
 		</ui:insert>
     </h:body>
     	

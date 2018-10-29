@@ -2,6 +2,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions"
@@ -9,14 +10,21 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			<ui:insert name="pageContent">
-				<f:view contracts="#{value.properties.contracts}">
-			        <ui:composition template="#{value.properties.template}">
-			            <ui:param name="__page__" value="#{value}"></ui:param>
-			        </ui:composition>
-			    </f:view>
-			</ui:insert>
+			<!--
+			<jsp:invoke fragment="#{value.properties.name}" >
+				CONTENT OF #{value.properties.name} TO BE INSERTED
+			</jsp:invoke>
+			-->
+			<!--
+   			<ui:insert
+   				name="#{value.properties.name}"
+   			>
+   				CONTENT OF #{value.properties.name} TO BE INSERTED
+   			</ui:insert>
+   			-->
 		</ui:define>
 	</ui:decorate>	
-
+	
+	
+		
 </ui:composition>
