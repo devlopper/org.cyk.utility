@@ -7,13 +7,13 @@ import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.layout.Insert;
 import org.cyk.utility.client.controller.component.layout.InsertBuilder;
-import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Named @RequestScoped @Getter @Setter
-public class InsertPage extends AbstractPageImpl implements Serializable {
+public class InsertPage extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Insert insert01;

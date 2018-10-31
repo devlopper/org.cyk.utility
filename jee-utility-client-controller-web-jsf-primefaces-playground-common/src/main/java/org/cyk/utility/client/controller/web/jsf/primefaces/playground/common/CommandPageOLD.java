@@ -7,14 +7,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.command.Command;
-import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
-public class CommandPageOLD extends AbstractPageImpl implements Serializable {
+public class CommandPageOLD extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject private Command noServerNoClient;

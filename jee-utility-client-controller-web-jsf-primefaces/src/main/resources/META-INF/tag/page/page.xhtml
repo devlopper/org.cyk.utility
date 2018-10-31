@@ -10,8 +10,8 @@
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
 			<ui:insert name="pageContent">
-				<f:view contracts="#{value.properties.contracts}">
-			        <ui:composition template="#{value.properties.template}">
+				<f:view contracts="#{value.window.theme.properties.identifier}">
+			        <ui:composition template="#{value.window.theme.template.identifier}">
 			            <ui:param name="__page__" value="#{value}"></ui:param>
 			        </ui:composition>
 			    </f:view>

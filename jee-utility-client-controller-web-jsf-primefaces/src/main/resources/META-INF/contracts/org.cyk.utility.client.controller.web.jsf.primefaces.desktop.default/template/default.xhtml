@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml"   
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"   
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
@@ -11,28 +12,56 @@
 	    
     <h:head>
     	<ui:insert name="contractHead">
-    		<ui:insert name="contractHeadTitle"><title><h:outputText value="#{__page__.__title__.properties.value}" escape="false" /></title></ui:insert>
+    		<ui:insert name="contractHeadTitle"><title><h:outputText value="#{__page__.window.title.properties.value}" escape="false" /></title></ui:insert>
     		<h:outputStylesheet library="css" name="layout.css" />
+    		<h:outputStylesheet library="css" name="input.css" />
     	</ui:insert>
     </h:head>
     
 	<h:body>
-		<ui:insert name="contractBody">
-			<!--
-			<cyk:components value="#{__page__.__components__}" />
-			-->
-			<div class="ui-g cyk_layout_page">
-				<div class="ui-g-12 cyk_layout_page_north">
-					<ui:insert name="north">Contract Desktop - Content of North to Be Inserted</ui:insert>
+		<c:set var="theme" value="#{__page__.window.theme}" />
+		<c:if test="#{theme == null}">
+			<h1>No theme has been set</h1>
+		</c:if>
+		
+		<c:if test="#{theme != null}">
+			<ui:insert name="contractBody">			
+				<div class="ui-g cyk_layout_page">
+					<ui:insert name="north">
+						<c:set var="viewNorth" value="#{theme.viewMap.get('north')}" />
+						<c:if test="#{viewNorth != null}">
+							<div class="ui-g-12 cyk_layout_page_north">
+								<ui:insert name="northView">
+									<cyk:view value="#{viewNorth}" />
+								</ui:insert>
+							</div>
+						</c:if>
+					</ui:insert>
+					
+					<ui:insert name="center">
+						<c:set var="viewCenter" value="#{theme.viewMap.get('center')}" />
+						<c:if test="#{viewCenter != null}">
+							<div class="ui-g-12 cyk_layout_page_center">
+								<ui:insert name="centerView">
+									<cyk:view value="#{viewCenter}" />
+								</ui:insert>
+							</div>
+						</c:if>
+					</ui:insert>
+					
+					<ui:insert name="south">
+						<c:set var="viewSouth" value="#{theme.viewMap.get('south')}" />
+						<c:if test="#{viewSouth != null}">
+							<div class="ui-g-12 cyk_layout_page_south">
+								<ui:insert name="southView">
+									<cyk:view value="#{viewSouth}" />
+								</ui:insert>
+							</div>
+						</c:if>
+					</ui:insert>
 				</div>
-				<div class="ui-g-12 cyk_layout_page_center">
-					<ui:insert name="center">Contract Desktop - Content of Center to Be Inserted</ui:insert>
-				</div>
-				<div class="ui-g-12 cyk_layout_page_south">
-					<ui:insert name="south">Contract Desktop - Content of South to Be Inserted</ui:insert>
-				</div>
-			</div>
-		</ui:insert>
+			</ui:insert>
+		</c:if>
     </h:body>
     	
 </html>

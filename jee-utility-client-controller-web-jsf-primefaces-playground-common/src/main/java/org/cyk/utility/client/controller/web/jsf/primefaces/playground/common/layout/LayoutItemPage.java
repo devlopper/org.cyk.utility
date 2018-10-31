@@ -7,13 +7,13 @@ import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
 import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
-import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Named @RequestScoped @Getter @Setter
-public class LayoutItemPage extends AbstractPageImpl implements Serializable {
+public class LayoutItemPage extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private LayoutItem layoutItem01,layoutItem02,layoutItem03,layoutItem04;

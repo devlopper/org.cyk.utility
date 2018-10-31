@@ -4,69 +4,115 @@ import java.io.Serializable;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import javax.validation.constraints.NotNull;
 
-import org.cyk.utility.client.controller.component.Components;
-import org.cyk.utility.client.controller.component.ComponentsBuilder;
-import org.cyk.utility.client.controller.component.layout.InsertBuilder;
-import org.cyk.utility.client.controller.component.layout.Layout;
-import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
-import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
-import org.cyk.utility.client.controller.component.output.OutputStringText;
-import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
-import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
+import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
+import org.cyk.utility.client.controller.component.annotation.Commandable;
+import org.cyk.utility.client.controller.component.annotation.CommandableButton;
+import org.cyk.utility.client.controller.component.annotation.Input;
+import org.cyk.utility.client.controller.component.annotation.InputString;
+import org.cyk.utility.client.controller.component.annotation.InputStringLineMany;
+import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
+import org.cyk.utility.client.controller.component.annotation.Output;
+import org.cyk.utility.client.controller.component.annotation.OutputString;
+import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.component.view.ViewTypeForm;
+import org.cyk.utility.client.controller.component.window.WindowBuilder;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
+import org.cyk.utility.system.action.SystemActionCreate;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
 @Named @RequestScoped @Getter @Setter
-public class ContractDesktopDefaultPage extends AbstractPageImpl implements Serializable {
+public class ContractDesktopDefaultPage extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private OutputStringText __title__;
-	private Layout __layout__;
-	private Components __components__;
+	@Override
+	protected WindowBuilder __getWindowBuilder__() {
+		return super.__getWindowBuilder__().setTitleValue("Contract Default");
+	}
 	
 	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		__title__ = __inject__(OutputStringTextBuilder.class).setValue("MyPage").execute().getOutput();
-		__layout__ = __inject__(LayoutBuilder.class)
-				.addItems(__inject__(LayoutItemBuilder.class).setLayout(__getNorth__()))
-				.addItems(__inject__(LayoutItemBuilder.class).setLayout(__getCenter__()))
-				.addItems(__inject__(LayoutItemBuilder.class).setLayout(__getSouth__()))
-				
-				.execute().getOutput()
-				;
+	protected ViewBuilder __getViewBuilder__() {
+		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		
-		__components__ = __inject__(ComponentsBuilder.class)
-				.setLayout(__inject__(LayoutBuilder.class)
-						.addItems(__inject__(LayoutItemBuilder.class).addStyleClasses("cyk_layout_page_north").setOutputPropertyValue("North"))
-						.addItems(__inject__(LayoutItemBuilder.class).addStyleClasses("cyk_layout_page_center").setOutputPropertyValue("Center"))
-						.addItems(__inject__(LayoutItemBuilder.class).addStyleClasses("cyk_layout_page_south").setOutputPropertyValue("South"))
-						)
-				
-				//.addComponents(__inject__(InsertBuilder.class).setName("north"),__inject__(InsertBuilder.class).setName("center"),__inject__(InsertBuilder.class).setName("south"))
-				
-				.execute().getOutput()
-				;
+		Model model = new Model();
+		model.set__title__("Titre");
+		model.setLastNames("Yao Christian");
+		model.getSubModel().set__title__("Sous-titre");
+		model.getSubModel().setPhone1("11223344");
 		
-		getProperties().setContracts("org.cyk.utility.client.controller.web.jsf.primefaces.desktop.default");
-		getProperties().setTemplate("/template/default.xhtml");
+		VisibleComponentBuilder<?> visibleComponentBuilder = (VisibleComponentBuilder<?>) viewBuilder.addComponentBuilderByObjectByFieldNames(model, "__title__");
+		visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_title");
+		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "firstName");
+		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "lastNames");
+		viewBuilder.addComponentBuilderByObjectByFieldNames(model, "otherDetails");
+		
+		ViewBuilder subViewBuilder = __inject__(ViewBuilder.class);
+		subViewBuilder.setType(__inject__(ViewTypeForm.class));
+		visibleComponentBuilder = (VisibleComponentBuilder<?>) subViewBuilder.addComponentBuilderByObjectByFieldNames(model.getSubModel(), "__title__");
+		visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_title");
+		
+		subViewBuilder.addComponentBuilderByObjectByFieldNames(model.getSubModel(), "phone1");
+		subViewBuilder.addComponentBuilderByObjectByFieldNames(model.getSubModel(), "phone2");
+		subViewBuilder.addComponentBuilderByObjectByFieldNames(model.getSubModel(), "otherDetails");
+		viewBuilder.addComponentBuilder(subViewBuilder);
+		
+		viewBuilder.addComponentBuilderByObjectByMethodName(model, "submit");
+		viewBuilder.addComponentBuilderByObjectByMethodName(model, "close");
+		
+		return viewBuilder;
+	}
+		
+	@Getter @Setter @Accessors(chain=true) @ToString
+	public static class Model {
+		
+		@Output @OutputString @org.cyk.utility.client.controller.component.annotation.OutputStringText
+		private String __title__;
+		
+		@Input @InputString @InputStringLineOne
+		@NotNull
+		private String firstName;
+		
+		@Input @InputString @InputStringLineOne
+		private String lastNames;
+		
+		@Input @InputString @InputStringLineMany
+		@NotNull
+		private String otherDetails;
+		
+		private SubModel subModel = new SubModel();
+		
+		@Commandable(systemActionClass=SystemActionCreate.class) @CommandableButton
+		public void submit() {
+			System.out.println("ViewPage.Model.submit() : "+this);
+		}
+		
+		@Commandable(systemActionClass=SystemActionCreate.class) @CommandableButton
+		public void close() {
+			System.out.println("ViewPage.Model.close() : "+this);
+		}
 	}
 	
-	private LayoutBuilder __getNorth__() {
-		return __inject__(LayoutBuilder.class).addItems(__inject__(LayoutItemBuilder.class).addStyleClasses("cyk_layout_page_north").setOutputPropertyValue("North"))
-		;
+	@Getter @Setter @Accessors(chain=true) @ToString
+	public static class SubModel {
+		
+		@Output @OutputString @org.cyk.utility.client.controller.component.annotation.OutputStringText
+		private String __title__;
+		
+		@Input @InputString @InputStringLineOne
+		@NotNull
+		private String phone1;
+		
+		@Input @InputString @InputStringLineOne
+		private String phone2;
+		
+		@Input @InputString @InputStringLineMany
+		@NotNull
+		private String otherDetails;
+		
 	}
-	
-	private LayoutBuilder __getCenter__() {
-		return __inject__(LayoutBuilder.class).addItems(__inject__(LayoutItemBuilder.class).addStyleClasses("cyk_layout_page_center").setOutputPropertyValue("Center"))
-		;
-	}
-	
-	private LayoutBuilder __getSouth__() {
-		return __inject__(LayoutBuilder.class).addItems(__inject__(LayoutItemBuilder.class).addStyleClasses("cyk_layout_page_south").setOutputPropertyValue("South"))
-		;
-	}
-	
 }

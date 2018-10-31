@@ -19,7 +19,7 @@ import org.cyk.utility.client.controller.component.annotation.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewTypeForm;
-import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 
 import lombok.Getter;
@@ -28,7 +28,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 @Named @ViewScoped @Getter @Setter
-public class ViewPage extends AbstractPageImpl implements Serializable {
+public class ViewPage extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private View view;
