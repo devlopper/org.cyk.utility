@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.component.InputOutput;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.layout.Insert;
+import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
@@ -58,6 +59,9 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						if(inputOutput instanceof Input<?>) {
 							
 						}
+					}else if(component instanceof Menu) {
+						Menu menu = (Menu) component;
+						menu.getProperties().setModel(__inject__(MenuModelBuilder.class).build(menu.getItems()));
 					}
 				}else if(component instanceof Insert) {
 					((Insert)component).getProperties().setName(((Insert)component).getName());

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://utility.cyk.org">
+	
+	<ui:decorate template="/template.xhtml">
+		<ui:define name="valueIsNotNull">
+			<c:set var="menu" value="#{value}" />
+			<c:set var="renderType" value="#{menu.renderType}" />
+   			<c:choose>
+   				<c:when test="#{componentHelper.isMenuRenderTypeColumnPanel(renderType)}">
+   					<cyk:menuPanel value="#{menu}" />
+   				</c:when>
+   				<c:when test="#{componentHelper.isMenuRenderTypeRowBar(renderType)}">
+   					<cyk:menuBar value="#{menu}" />
+   				</c:when>
+   				<c:otherwise>
+   					NO MENU FOUND FOR TYPE #{renderType}
+   				</c:otherwise>
+   			</c:choose>
+		</ui:define>
+	</ui:decorate>	
+	
+	
+		
+</ui:composition>

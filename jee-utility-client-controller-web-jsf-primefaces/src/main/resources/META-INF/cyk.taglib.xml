@@ -125,4 +125,19 @@
         <source>tag/page/page.xhtml</source>
     </tag>
     
+    <tag>
+        <tag-name>menu</tag-name>
+        <source>tag/menu/menu.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>menuBar</tag-name>
+        <source>tag/menu/menuBar.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>menuPanel</tag-name>
+        <source>tag/menu/menuPanel.xhtml</source>
+    </tag>
+    
 </facelet-taglib>

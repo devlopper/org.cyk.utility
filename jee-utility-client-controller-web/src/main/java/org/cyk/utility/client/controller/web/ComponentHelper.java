@@ -12,6 +12,8 @@ import org.cyk.utility.client.controller.component.input.InputStringLineOne;
 import org.cyk.utility.client.controller.component.layout.Insert;
 import org.cyk.utility.client.controller.component.layout.Layout;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
+import org.cyk.utility.client.controller.component.menu.MenuRenderTypeColumnPanel;
+import org.cyk.utility.client.controller.component.menu.MenuRenderTypeRowBar;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
@@ -64,5 +66,13 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	
 	public Boolean isInsert(Object object) {
 		return object instanceof Insert;
+	}
+	
+	public Boolean isMenuRenderTypeColumnPanel(Object object) {
+		return object instanceof MenuRenderTypeColumnPanel;
+	}
+	
+	public Boolean isMenuRenderTypeRowBar(Object object) {
+		return object instanceof MenuRenderTypeRowBar;
 	}
 }
