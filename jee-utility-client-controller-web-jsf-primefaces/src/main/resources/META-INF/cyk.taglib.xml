@@ -140,4 +140,9 @@
         <source>tag/menu/menuPanel.xhtml</source>
     </tag>
     
+    <tag>
+        <tag-name>dataTable</tag-name>
+        <source>tag/dataTable/dataTable.xhtml</source>
+    </tag>
+    
 </facelet-taglib>

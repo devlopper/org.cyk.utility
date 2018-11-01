@@ -35,11 +35,13 @@ public class ThemeDesktopDefaultImpl extends AbstractThemeImpl implements ThemeD
 	private void __north__(Window window) {
 		//Build view from session menu
 		Menu menu = window.getMenu(ScopeSession.class);
-		menu.setRenderType(__inject__(MenuRenderTypeRowBar.class));
-		ViewBuilder viewBuilder = __inject__(ViewBuilder.class).setComponentsBuilder(__inject__(ComponentsBuilder.class)
-				.setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
-				.addComponents(menu));
-		mapViews("north",viewBuilder.execute().getOutput());
+		if(menu!=null) {
+			menu.setRenderType(__inject__(MenuRenderTypeRowBar.class));
+			ViewBuilder viewBuilder = __inject__(ViewBuilder.class).setComponentsBuilder(__inject__(ComponentsBuilder.class)
+					.setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
+					.addComponents(menu));
+			mapViews("north",viewBuilder.execute().getOutput());	
+		}
 	}
 	
 	private void __center__(Window window) {
