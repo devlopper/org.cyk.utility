@@ -24,4 +24,6 @@ public interface CollectionInstance<T> extends Objectable {
 	T getAt(Object index);
 	T getFirst();
 	T getLast();
+	
+	Integer getSize();
 }

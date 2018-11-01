@@ -34,11 +34,15 @@ public class ComponentsPage extends AbstractPageContainerManagedImpl implements 
 						
 						.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(6))
 						.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(6))
+						
+						.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(6))
+						.addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(6))
 						)
 				
 				.addComponents(__inject__(OutputStringTextBuilder.class).setValue("Label 01"),__inject__(InputStringLineOneBuilder.class).setMessage(null))
 				.addComponents(__inject__(OutputStringTextBuilder.class).setValue("Label 02"),__inject__(InputStringLineOneBuilder.class).setMessage(null))
-				
+				.addComponents(__inject__(OutputStringTextBuilder.class).setValue("Label 03").execute().getOutput()
+						,__inject__(InputStringLineOneBuilder.class).setMessage(null).execute().getOutput())
 				.execute().getOutput()
 				;
 

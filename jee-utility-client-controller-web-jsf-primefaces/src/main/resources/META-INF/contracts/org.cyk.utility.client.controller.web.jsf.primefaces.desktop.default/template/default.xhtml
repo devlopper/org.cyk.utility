@@ -25,41 +25,43 @@
 		</c:if>
 		
 		<c:if test="#{theme != null}">
-			<ui:insert name="contractBody">			
-				<div class="ui-g cyk_layout_page">
-					<ui:insert name="north">
-						<c:set var="viewNorth" value="#{theme.viewMap.get('north')}" />
-						<c:if test="#{viewNorth != null}">
-							<div class="ui-g-12 cyk_layout_page_north">
-								<ui:insert name="northView">
-									<cyk:view value="#{viewNorth}" />
-								</ui:insert>
-							</div>
-						</c:if>
-					</ui:insert>
-					
-					<ui:insert name="center">
-						<c:set var="viewCenter" value="#{theme.viewMap.get('center')}" />
-						<c:if test="#{viewCenter != null}">
-							<div class="ui-g-12 cyk_layout_page_center">
-								<ui:insert name="centerView">
-									<cyk:view value="#{viewCenter}" />
-								</ui:insert>
-							</div>
-						</c:if>
-					</ui:insert>
-					
-					<ui:insert name="south">
-						<c:set var="viewSouth" value="#{theme.viewMap.get('south')}" />
-						<c:if test="#{viewSouth != null}">
-							<div class="ui-g-12 cyk_layout_page_south">
-								<ui:insert name="southView">
-									<cyk:view value="#{viewSouth}" />
-								</ui:insert>
-							</div>
-						</c:if>
-					</ui:insert>
-				</div>
+			<ui:insert name="contractBody">	
+				<h:form>		
+					<div class="ui-g cyk_layout_page">
+						<ui:insert name="north">
+							<c:set var="viewNorth" value="#{theme.viewMap.get('north')}" />
+							<c:if test="#{viewNorth != null}">
+								<div class="ui-g-12 cyk_layout_page_north">
+									<ui:insert name="northView">
+										<cyk:view value="#{viewNorth}" />
+									</ui:insert>
+								</div>
+							</c:if>
+						</ui:insert>
+						
+						<ui:insert name="center">
+							<c:set var="viewCenter" value="#{theme.viewMap.get('center')}" />
+							<c:if test="#{viewCenter != null}">
+								<div class="ui-g-12 cyk_layout_page_center">
+									<ui:insert name="centerView">
+										<cyk:view value="#{viewCenter}" />
+									</ui:insert>
+								</div>
+							</c:if>
+						</ui:insert>
+						
+						<ui:insert name="south">
+							<c:set var="viewSouth" value="#{theme.viewMap.get('south')}" />
+							<c:if test="#{viewSouth != null}">
+								<div class="ui-g-12 cyk_layout_page_south">
+									<ui:insert name="southView">
+										<cyk:view value="#{viewSouth}" />
+									</ui:insert>
+								</div>
+							</c:if>
+						</ui:insert>
+					</div>
+				</h:form>
 			</ui:insert>
 		</c:if>
     </h:body>

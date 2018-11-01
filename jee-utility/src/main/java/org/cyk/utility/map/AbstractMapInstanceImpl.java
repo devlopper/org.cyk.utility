@@ -1,8 +1,10 @@
 package org.cyk.utility.map;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
@@ -15,7 +17,8 @@ public class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject implement
 	@Override
 	public MapInstance<KEY,VALUE> set(Object... keyValues) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(keyValues)) {
-			__map__ = new HashMap<>();
+			if(__map__ == null)
+				__map__ = new HashMap<>();
 			for(Integer index = 0 ; index < keyValues.length ; index = index + 2) {
 				__map__.put((KEY)keyValues[index], (VALUE)keyValues[index+1]);
 			}
@@ -26,6 +29,11 @@ public class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject implement
 	@Override
 	public VALUE get(KEY key) {
 		return __map__ == null ? null : __map__.get(key);
+	}
+	
+	@Override
+	public Collection<Entry<KEY, VALUE>> getEntries() {
+		return __map__ == null ? null : __map__.entrySet();
 	}
 	
 	@Override

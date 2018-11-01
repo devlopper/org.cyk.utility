@@ -18,6 +18,7 @@ public class LayoutItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<L
 	private static final long serialVersionUID = 1L;
 
 	private LayoutBuilder layout;
+	//private Object component;
 	
 	@Override
 	protected void __execute__(LayoutItem layoutItem) {
@@ -26,8 +27,7 @@ public class LayoutItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<L
 		
 		DeviceScreenArea area = getArea();
 		if(area == null) {
-			area = __inject__(DeviceScreenArea.class);
-			
+			area = __inject__(DeviceScreenArea.class);	
 		}
 		
 		if(area!=null) {
@@ -49,6 +49,11 @@ public class LayoutItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<L
 		LayoutBuilder layout = getLayout();
 		if(layout!=null)
 			layoutItem.setLayout(layout.execute().getOutput());
+		/*
+		Object component = getComponent();
+		if(component instanceof Component)
+			((Component)component).setLayoutItem(layoutItem);
+		*/
 	}
 	
 	@Override
@@ -135,6 +140,17 @@ public class LayoutItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<L
 	public LayoutItemBuilder setArea(DeviceScreenArea area) {
 		return (LayoutItemBuilder) super.setArea(area);
 	}
+	
+	/*@Override
+	public Object getComponent() {
+		return component;
+	}
+	
+	@Override
+	public LayoutItemBuilder setComponent(Object component) {
+		this.component = component;
+		return this;
+	}*/
 	
 	/**/
 	

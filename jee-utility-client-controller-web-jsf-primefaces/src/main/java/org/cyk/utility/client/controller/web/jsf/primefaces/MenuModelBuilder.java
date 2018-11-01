@@ -10,6 +10,7 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
+import org.primefaces.model.menu.MenuElement;
 import org.primefaces.model.menu.MenuModel;
 
 public class MenuModelBuilder extends AbstractObject implements Serializable {
@@ -30,20 +31,20 @@ public class MenuModelBuilder extends AbstractObject implements Serializable {
 				Collection<MenuItem> children = __inject__(CollectionHelper.class).cast(MenuItem.class, index.getChildren());
 		        if(__inject__(CollectionHelper.class).isEmpty(children)) {
 		        	DefaultMenuItem item = new DefaultMenuItem(index.getName());
-			        if(parent instanceof MenuModel)
-			        	((MenuModel)parent).addElement(item);
-			        else if(parent instanceof DefaultSubMenu)
-			        	((DefaultSubMenu)parent).addElement(item);	
+		        	addMenuElement(parent, item);	
 		        }else {
 		        	DefaultSubMenu subMenu = new DefaultSubMenu(index.getName());
-		        	 if(parent instanceof MenuModel)
-				        ((MenuModel)parent).addElement(subMenu);
-				     else if(parent instanceof DefaultSubMenu)
-				    	 ((DefaultSubMenu)parent).addElement(subMenu);	
-		        	 
+		        	addMenuElement(parent, subMenu);
 		        	build(subMenu, children);
 		        }
 			}
 		}
+	}
+	
+	private void addMenuElement(Object parent,MenuElement element) {
+		if(parent instanceof MenuModel)
+	        ((MenuModel)parent).addElement(element);
+	     else if(parent instanceof DefaultSubMenu)
+	    	 ((DefaultSubMenu)parent).addElement(element);	
 	}
 }

@@ -5,7 +5,10 @@ import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 
 public interface LayoutItemBuilder extends VisibleComponentBuilder<LayoutItem> {
-
+	/*
+	LayoutItemBuilder setComponent(Object component);
+	Object getComponent();
+	*/
 	DeviceScreenDimensionProportions getAreaWidthProportions();
 	DeviceScreenDimensionProportions getAreaWidthProportions(Boolean injectIfNull);
 	LayoutItemBuilder setAreaWidthProportionsAllClasses(Integer _default,Integer television,Integer desktop,Integer tablet,Integer phone);

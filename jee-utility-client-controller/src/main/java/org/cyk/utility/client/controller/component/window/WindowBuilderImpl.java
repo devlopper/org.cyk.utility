@@ -1,11 +1,16 @@
 package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
+import org.cyk.utility.client.controller.component.menu.MenuBuilder;
+import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
+import org.cyk.utility.client.controller.component.menu.MenuMap;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.scope.Scope;
 
 public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Window> implements WindowBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -13,6 +18,7 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	private OutputStringTextBuilder title;
 	private ViewBuilder view;
 	private Theme theme;
+	private MenuBuilderMap menuMap;
 	
 	@Override
 	protected void __execute__(Window window) {
@@ -24,6 +30,13 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		ViewBuilder view = getView();
 		if(view!=null)
 			window.setView(view.execute().getOutput());
+		
+		MenuBuilderMap menuMap = getMenuMap();
+		if(menuMap!=null) {
+			window.setMenuMap(__inject__(MenuMap.class));
+			for(Map.Entry<Scope,MenuBuilder> entry : menuMap.getEntries())
+				window.getMenuMap().set(entry.getKey(),entry.getValue().execute().getOutput());
+		}
 		
 		Theme theme = getTheme();
 		window.setTheme(theme);
@@ -78,7 +91,24 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		return this;
 	}
 	
+	@Override
+	public MenuBuilderMap getMenuMap() {
+		return menuMap;
+	}
+	
+	@Override
+	public MenuBuilderMap getMenuMap(Boolean injectIfNull) {
+		return (MenuBuilderMap) __getInjectIfNull__(FIELD_MENU_MAP, injectIfNull);
+	}
+	
+	@Override
+	public WindowBuilder setMenuMap(MenuBuilderMap menuMap) {
+		this.menuMap = menuMap;
+		return this;
+	}
+	
 	public static final String FIELD_TITLE = "title";
 	public static final String FIELD_VIEW = "view";
+	public static final String FIELD_MENU_MAP = "menuMap";
 
 }

@@ -15,10 +15,15 @@ import org.cyk.utility.client.controller.component.annotation.InputStringLineMan
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
 import org.cyk.utility.client.controller.component.annotation.Output;
 import org.cyk.utility.client.controller.component.annotation.OutputString;
+import org.cyk.utility.client.controller.component.menu.MenuBuilder;
+import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
+import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
+import org.cyk.utility.client.controller.component.menu.MenuRenderTypeRowBar;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewTypeForm;
 import org.cyk.utility.client.controller.component.window.WindowBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
+import org.cyk.utility.scope.ScopeApplication;
 import org.cyk.utility.system.action.SystemActionCreate;
 
 import lombok.Getter;
@@ -33,6 +38,21 @@ public class ContractDesktopDefaultPage extends AbstractPageContainerManagedImpl
 	@Override
 	protected WindowBuilder __getWindowBuilder__() {
 		return super.__getWindowBuilder__().setTitleValue("Contract Default");
+	}
+	
+	@Override
+	protected MenuBuilderMap __getMenuBuilderMap__() {
+		MenuBuilder menuBuilder = __inject__(MenuBuilder.class).setRenderType(__inject__(MenuRenderTypeRowBar.class));
+		menuBuilder.addItems(
+				__inject__(MenuItemBuilder.class).setName("L1")
+					.addChild(__inject__(MenuItemBuilder.class).setName("L1.1"),__inject__(MenuItemBuilder.class).setName("L1.2"))
+				,__inject__(MenuItemBuilder.class).setName("L2")
+				,__inject__(MenuItemBuilder.class).setName("L3")
+					.addChild(
+							__inject__(MenuItemBuilder.class).setName("L3.1")
+							.addChild(__inject__(MenuItemBuilder.class).setName("L3.1.1"),__inject__(MenuItemBuilder.class).setName("L3.1.2"))
+							,__inject__(MenuItemBuilder.class).setName("L3.2")));
+		return __inject__(MenuBuilderMap.class).set(ScopeApplication.class,menuBuilder);
 	}
 	
 	@Override

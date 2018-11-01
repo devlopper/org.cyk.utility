@@ -10,12 +10,13 @@ import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.instance.Instances;
 
 public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Components> implements ComponentsBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private LayoutBuilder layout;
-	private ComponentBuilders components;
+	private Instances components;
 	
 	@Override
 	protected Components __execute__() throws Exception {
@@ -23,25 +24,26 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 		LayoutBuilder layout = getLayout();
 		if(layout!=null)
 			components.setLayout(layout.execute().getOutput());
-		ComponentBuilders builders = getComponents();
-		Collection<ComponentBuilder<?>> finalBuilders = null;
+		Instances instances = getComponents();
+		Collection<Object> finals = null;
 		
-		if(__injectCollectionHelper__().isNotEmpty(builders)) {
-			finalBuilders = new ArrayList<>();
-			for(ComponentBuilder<?> index : builders.get()) {
-				if(index!=null) {
+		if(__injectCollectionHelper__().isNotEmpty(instances)) {
+			finals = new ArrayList<>();
+			for(Object index : instances.get()) {
+				if(index instanceof ComponentBuilder) {
+					ComponentBuilder<?> componentBuilder = (ComponentBuilder<?>) index;	
 					//Derived builders
 					if(index instanceof InputBuilder<?, ?>) {
 						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) index;
 						if(inputBuilder.getLabel()!=null) {
-							finalBuilders.add(inputBuilder.getLabel());
+							finals.add(inputBuilder.getLabel());
 						}
 					}
-					finalBuilders.add(index);
+					finals.add(componentBuilder);
 					if(index instanceof InputBuilder<?, ?>) {
 						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) index;
 						if(inputBuilder.getMessage()!=null) {
-							finalBuilders.add(inputBuilder.getMessage());
+							finals.add(inputBuilder.getMessage());
 						}
 					}
 					
@@ -66,19 +68,29 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 							}
 						}								
 					}
+				}else if(index instanceof Component) {
+					Component component = (Component) index;
+					finals.add(component);
 				}
 			}
 			
 		}
 		
-		if(__injectCollectionHelper__().isNotEmpty(finalBuilders)) {
+		if(__injectCollectionHelper__().isNotEmpty(finals)) {
 			Map<Component,ComponentBuilder<?>> map = new HashMap<>();
 			//Build components
-			for(@SuppressWarnings("rawtypes") ComponentBuilder indexBuilder : finalBuilders) {
-				Component component = (Component)indexBuilder.execute().getOutput();
+			for(Object indexFinal : finals) {
+				ComponentBuilder<?> componentBuilder = null;
+				Component component = null;
+				if(indexFinal instanceof ComponentBuilder) {
+					componentBuilder = (ComponentBuilder<?>)indexFinal;
+					component = (Component) componentBuilder.execute().getOutput();
+				}else if(indexFinal instanceof Component)
+					component = (Component) indexFinal;
+				
 				if(component!=null) {
 					components.add(component);
-					map.put(component, indexBuilder);
+					map.put(component, componentBuilder);
 				}
 			}
 			//Derive layout
@@ -89,8 +101,10 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 					LayoutItemBuilder layoutItemBuilder = __inject__(LayoutItemBuilder.class);
 					//if(componentBuilder instanceof VisibleComponentBuilder)
 					//	layoutItemBuilder.setStyle(((VisibleComponentBuilder<?>) componentBuilder).getStyle());
-					layoutItemBuilder.setArea(componentBuilder.getArea()).setOutputPropertyValue(index.toString());
-					layoutItemBuilder.setStyle(componentBuilder.getLayoutItemStyle());
+					if(componentBuilder!=null) {
+						layoutItemBuilder.setArea(componentBuilder.getArea()).setOutputPropertyValue(index.toString());
+						layoutItemBuilder.setStyle(componentBuilder.getLayoutItemStyle());
+					}
 					layout.addItems(layoutItemBuilder);
 				}
 				components.setLayout(layout.execute().getOutput());
@@ -105,7 +119,6 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 				}
 			}
 		}
-		
 		
 		return components;
 	}
@@ -127,29 +140,29 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	}
 
 	@Override
-	public ComponentBuilders getComponents() {
+	public Instances getComponents() {
 		return components;
 	}
 	
 	@Override
-	public ComponentBuilders getComponents(Boolean injectIfNull) {
-		return (ComponentBuilders) __getInjectIfNull__(FIELD_COMPONENTS, injectIfNull);
+	public Instances getComponents(Boolean injectIfNull) {
+		return (Instances) __getInjectIfNull__(FIELD_COMPONENTS, injectIfNull);
 	}
 
 	@Override
-	public ComponentsBuilder setComponents(ComponentBuilders components) {
+	public ComponentsBuilder setComponents(Instances components) {
 		this.components = components;
 		return this;
 	}
 	
 	@Override
-	public ComponentsBuilder addComponents(@SuppressWarnings("rawtypes") Collection<ComponentBuilder> components) {
-		getComponents(Boolean.TRUE).add(components);
+	public ComponentsBuilder addComponents(Collection<Object> components) {
+		getComponents(Boolean.TRUE).add((Collection<Object>)components);
 		return this;
 	}
 	
 	@Override
-	public ComponentsBuilder addComponents(@SuppressWarnings("rawtypes") ComponentBuilder...components) {
+	public ComponentsBuilder addComponents(Object...components) {
 		return addComponents(__injectCollectionHelper__().instanciate(components));
 	}
 	

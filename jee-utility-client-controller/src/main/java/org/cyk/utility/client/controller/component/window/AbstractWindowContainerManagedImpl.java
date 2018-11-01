@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.AbstractObject;
+import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.theme.ThemeClassGetter;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
@@ -54,10 +55,14 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	/**/
 	
 	protected WindowBuilder __getWindowBuilder__() {
-		return __injectWindowBuilder__().setView(__getViewBuilder__());
+		return __injectWindowBuilder__().setView(__getViewBuilder__()).setMenuMap(__getMenuBuilderMap__());
 	}
 	
 	protected ViewBuilder __getViewBuilder__() {
+		return null;
+	}
+	
+	protected MenuBuilderMap __getMenuBuilderMap__() {
 		return null;
 	}
 	

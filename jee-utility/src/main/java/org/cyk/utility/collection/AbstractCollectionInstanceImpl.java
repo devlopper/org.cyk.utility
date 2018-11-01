@@ -116,6 +116,11 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	}
 	
 	@Override
+	public Integer getSize() {
+		return __inject__(CollectionHelper.class).getSize(collection);
+	}
+	
+	@Override
 	public String toString() {
 		return collection == null ? super.toString() : collection.toString();
 	}
