@@ -74,8 +74,10 @@ public abstract class AbstractInputOutputImpl<T> extends AbstractVisibleComponen
 	public InputOutput<T> setFieldValueFromValue() {
 		Object object = getObject();
 		Field field = getField();
-		if(object!=null && field!=null)
+		if(object!=null && field!=null) {
+			//System.out.println("AbstractInputOutputImpl.setFieldValueFromValue() "+object+" : "+field+" : "+__getValueToSetFieldValueFromValue__());
 			__inject__(FieldValueSetter.class).execute(object, field, __getValueToSetFieldValueFromValue__());
+		}
 		return this;
 	}
 	

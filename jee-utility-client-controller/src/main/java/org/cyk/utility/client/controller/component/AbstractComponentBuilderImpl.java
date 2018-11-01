@@ -17,6 +17,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private Class<COMPONENT> componentClass;
 	private DeviceScreenArea area;
 	private StyleBuilder layoutItemStyle;
+	private ComponentRoles roles;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -33,6 +34,8 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	protected COMPONENT __execute__() throws Exception {
 		COMPONENT component = __inject__(componentClass);
 		__inject__(ComponentBuilderExecuteListenerBefore.class).setObject(this).setComponent(component).execute();
+		ComponentRoles roles = getRoles();
+		component.setRoles(roles);
 		__execute__(component);
 		__inject__(ComponentBuilderExecuteListenerAfter.class).setObject(this).setComponent(component).execute();
 		return component;
@@ -146,6 +149,35 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		return this;
 	}
 	
+	@Override
+	public ComponentRoles getRoles() {
+		return roles;
+	}
+	
+	@Override
+	public ComponentRoles getRoles(Boolean injectIfNull) {
+		return (ComponentRoles) __getInjectIfNull__(FIELD_ROLES, injectIfNull);
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setRoles(ComponentRoles roles) {
+		this.roles = roles;
+		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> addRoles(Collection<ComponentRole> roles) {
+		getRoles(Boolean.TRUE).add(roles);
+		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> addRoles(ComponentRole... roles) {
+		getRoles(Boolean.TRUE).add(roles);
+		return null;
+	}
+	
 	public static final String FIELD_AREA = "area";
 	public static final String FIELD_LAYOUT_ITEM_STYLE = "layoutItemStyle";
+	public static final String FIELD_ROLES = "roles";
 }

@@ -9,6 +9,7 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	private static final long serialVersionUID = 1L;
 	
 	private LayoutItem layoutItem;
+	private ComponentRoles roles;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -27,4 +28,22 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 		return this;
 	}
 	
+	@Override
+	public ComponentRoles getRoles() {
+		return roles;
+	}
+	@Override
+	public Component setRoles(ComponentRoles roles) {
+		this.roles = roles;
+		return this;
+	}
+	
+	@Override
+	public ComponentRoles getRoles(Boolean injectIfNull) {
+		return (ComponentRoles) __getInjectIfNull__(FIELD_ROLES, injectIfNull);
+	}
+	
+	/**/
+	
+	public static final String FIELD_ROLES = "roles";
 }

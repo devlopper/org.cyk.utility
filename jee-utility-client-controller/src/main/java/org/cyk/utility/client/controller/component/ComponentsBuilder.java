@@ -12,10 +12,13 @@ public interface ComponentsBuilder extends FunctionWithPropertiesAsInput<Compone
 	LayoutBuilder getLayout(Boolean injectIfNull);
 	ComponentsBuilder setLayout(LayoutBuilder layout);
 	
+	ComponentsBuilder setIsCreateLayoutItemOnAddComponent(Boolean isCreateLayoutItemOnAddComponent);
+	Boolean getIsCreateLayoutItemOnAddComponent();
+	
 	Instances getComponents();
 	Instances getComponents(Boolean injectIfNull);
 	ComponentsBuilder setComponents(Instances components);
 	ComponentsBuilder addComponents(Collection<Object> components);
 	ComponentsBuilder addComponents(Object...components);
-	
+
 }

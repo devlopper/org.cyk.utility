@@ -13,6 +13,7 @@ public interface VisibleComponent extends Component {
 	Command getCommand();
 	Command getCommand(Boolean injectIfNull);
 	VisibleComponent setCommand(Command command);
+	VisibleComponent addCommandFunctionTryRunRunnableAt(Runnable runnable,Integer index);
 	
 	Style getStyle();
 	Style getStyle(Boolean injectIfNull);

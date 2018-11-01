@@ -14,5 +14,6 @@ public interface CommandableBuilder<COMPONENT extends Commandable> extends Visib
 	CommandableBuilder<COMPONENT> setCommandFunctionActionClass(Class<? extends SystemAction> systemActionClass);
 	CommandableBuilder<COMPONENT> addCommandFunctionTryRunRunnable(Collection<Runnable> runnables);
 	CommandableBuilder<COMPONENT> addCommandFunctionTryRunRunnable(Runnable...runnables);
+	CommandableBuilder<COMPONENT> addCommandFunctionTryRunRunnableAt(Runnable runnable,Integer index);
 	
 }

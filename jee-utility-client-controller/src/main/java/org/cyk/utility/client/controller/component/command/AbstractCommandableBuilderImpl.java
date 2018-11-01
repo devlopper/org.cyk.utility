@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractCommandableBuilderImpl<COMPONENT extends Commandable> extends AbstractVisibleComponentBuilderImpl<COMPONENT> implements CommandableBuilder<COMPONENT>,Serializable {
@@ -49,6 +50,12 @@ public abstract class AbstractCommandableBuilderImpl<COMPONENT extends Commandab
 	@Override
 	public CommandableBuilder<COMPONENT> setCommandFunctionActionClass(Class<? extends SystemAction> systemActionClass) {
 		getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(__inject__(systemActionClass));
+		return this;
+	}
+	
+	@Override
+	public CommandableBuilder<COMPONENT> addCommandFunctionTryRunRunnableAt(Runnable runnable, Integer index) {
+		__inject__(CollectionHelper.class).addElementAt(getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE), index, runnable);
 		return this;
 	}
 	

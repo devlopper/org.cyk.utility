@@ -22,6 +22,7 @@ public interface FunctionExecutionPhaseMoment extends Objectable {
 	FunctionExecutionPhaseMoment addAssertionBuilders(AssertionBuilder...assertionBuilders);
 	
 	Collection<Runnable> getRunnables();
+	Collection<Runnable> getRunnables(Boolean instanciateIfNull);
 	FunctionExecutionPhaseMoment setRunnables(Collection<Runnable> runnables);
 	FunctionExecutionPhaseMoment addRunnables(Collection<Runnable> runnables);
 	FunctionExecutionPhaseMoment addRunnables(Runnable...runnables);

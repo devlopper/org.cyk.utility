@@ -3,13 +3,9 @@ package org.cyk.utility.client.controller.component.view;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
-import org.cyk.utility.client.controller.component.command.CommandableBuilder;
-import org.cyk.utility.client.controller.component.command.CommandableBuilders;
-import org.cyk.utility.client.controller.component.command.CommandableButtonBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
-import org.cyk.utility.system.action.SystemAction;
 
 public interface ViewBuilder extends VisibleComponentBuilder<View> {
 
@@ -36,17 +32,4 @@ public interface ViewBuilder extends VisibleComponentBuilder<View> {
 	<T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object,String methodName);
 	ComponentBuilder<?> addComponentBuilderByObjectByMethodName(Object object,String methodName);
 	
-	CommandableBuilders getProcessingCommandableBuilders();
-	CommandableBuilders getProcessingCommandableBuilders(Boolean injectIfNull);
-	ViewBuilder setProcessingCommandableBuilders(CommandableBuilders processingCommandableBuilders);
-	
-	<T extends CommandableBuilder<?>> T addProcessingCommandableBuilder(Class<T> aClass,Object commandableOutputPropertyValue,Class<? extends SystemAction> systemActionClass,Runnable...runnables);
-	CommandableButtonBuilder addProcessingCommandableButtonBuilder(Object commandableOutputPropertyValue,Class<? extends SystemAction> systemActionClass,Runnable...runnables);
-	
-	CommandableBuilder<?> getSubmitCommandableBuilder();
-	CommandableBuilder<?> getSubmitCommandableBuilder(Boolean injectIfNull);
-	ViewBuilder setSubmitCommandableBuilder(CommandableBuilder<?> submitCommandableBuilder);
-	
-	CommandableBuilder<?> getCloseCommandableBuilder();
-	ViewBuilder setCloseCommandableBuilder(CommandableBuilder<?> closeCommandableBuilder);
 }

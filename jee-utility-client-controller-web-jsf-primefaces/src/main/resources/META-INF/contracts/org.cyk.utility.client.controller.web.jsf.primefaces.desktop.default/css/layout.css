@@ -9,3 +9,8 @@
 .cyk_layout_page_south{
 	background: gray;
 }
+
+.cyk_layout_view_title{
+	background: yellow;
+	font-weight: bold;
+}

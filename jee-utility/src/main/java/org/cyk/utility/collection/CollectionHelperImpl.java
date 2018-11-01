@@ -210,6 +210,11 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	}
 	
 	@Override
+	public Boolean contains(CollectionInstance<?> collectionInstance, Object element) {
+		return collectionInstance!=null && contains(collectionInstance.get(), element);
+	}
+	
+	@Override
 	public <ELEMENT> Collection<ELEMENT> removeNullValue(Collection<ELEMENT> collection) {
 		return collection == null ? null : collection.parallelStream().filter(Objects::nonNull).collect(Collectors.toList());
 	}

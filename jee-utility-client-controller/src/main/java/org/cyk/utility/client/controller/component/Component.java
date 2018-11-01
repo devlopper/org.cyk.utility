@@ -8,4 +8,8 @@ public interface Component extends Objectable {
 	LayoutItem getLayoutItem();
 	Component setLayoutItem(LayoutItem layoutItem);
 	
+	ComponentRoles getRoles();
+	ComponentRoles getRoles(Boolean injectIfNull);
+	Component setRoles(ComponentRoles roles);
+	
 }

@@ -2,29 +2,25 @@ package org.cyk.utility.client.controller.component.view;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
+import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderClassGetter;
 import org.cyk.utility.client.controller.component.ComponentBuilderGetter;
+import org.cyk.utility.client.controller.component.Components;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
-import org.cyk.utility.client.controller.component.command.CommandableBuilder;
-import org.cyk.utility.client.controller.component.command.CommandableBuilders;
-import org.cyk.utility.client.controller.component.command.CommandableButtonBuilder;
+import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.string.Strings;
-import org.cyk.utility.system.action.SystemAction;
 
 public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> implements ViewBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private CommandableBuilders processingCommandableBuilders;
 	private ComponentsBuilder componentsBuilder;
 	private ViewType type;
-	private CommandableBuilder<?> submitCommandableBuilder,closeCommandableBuilder;
 	
 	@Override
 	protected View __execute__() throws Exception {
@@ -32,6 +28,23 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		ComponentsBuilder componentsBuilder = getComponentsBuilder();
 		if(componentsBuilder!=null)
 			view.setComponents(componentsBuilder.execute().getOutput());
+		
+		Components components = view.getComponents();
+		if(__injectCollectionHelper__().isNotEmpty(components)) {
+			for(Component index : components.get()) {
+				if(index instanceof Commandable) {
+					Commandable commandable = (Commandable) index;
+					commandable.addCommandFunctionTryRunRunnableAt(new Runnable() {
+						@Override
+						public void run() {
+							view.setInputOutputFieldValueFromValue();
+						}
+					},0);
+				}
+			}
+		}
+		
+		
 		/*Collection<ComponentBuilder<?>> finalComponentBuilders = null;
 		/*
 		if(__injectCollectionHelper__().isNotEmpty(componentsBuilder)) {
@@ -265,72 +278,8 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		return this;
 	}
 	
-	@Override
-	public CommandableBuilders getProcessingCommandableBuilders() {
-		return processingCommandableBuilders;
-	}
-	
-	@Override
-	public CommandableBuilders getProcessingCommandableBuilders(Boolean injectIfNull) {
-		return (CommandableBuilders) __getInjectIfNull__(FIELD_PROCESSING_COMMANDABLE_BUILDERS, injectIfNull);
-	}
-	
-	@Override
-	public ViewBuilder setProcessingCommandableBuilders(CommandableBuilders processingCommandableBuilders) {
-		this.processingCommandableBuilders = processingCommandableBuilders;
-		return this;
-	}
-	
-	@Override
-	public <T extends CommandableBuilder<?>> T addProcessingCommandableBuilder(Class<T> aClass,Object commandableOutputPropertyValue,Class<? extends SystemAction> systemActionClass,Runnable...runnables) {
-		T commandableBuilder = __inject__(aClass);
-		getProcessingCommandableBuilders(Boolean.TRUE).add(commandableBuilder);
-		commandableBuilder.setOutputProperty(Properties.VALUE, commandableOutputPropertyValue);
-		commandableBuilder.addCommandFunctionTryRunRunnable(runnables);
-		commandableBuilder.setCommandFunctionActionClass(systemActionClass);
-		return commandableBuilder;
-	}
-	
-	@Override
-	public CommandableButtonBuilder addProcessingCommandableButtonBuilder(Object commandableOutputPropertyValue, Class<? extends SystemAction> systemActionClass, Runnable...runnables) {
-		return addProcessingCommandableBuilder(CommandableButtonBuilder.class, commandableOutputPropertyValue, systemActionClass, runnables);
-	}
-	
-	@Override
-	public CommandableBuilder<?> getSubmitCommandableBuilder() {
-		return submitCommandableBuilder;
-	}
-	
-	@Override
-	public CommandableBuilder<?> getSubmitCommandableBuilder(Boolean injectIfNull) {
-		CommandableBuilder<?> submitCommandableBuilder = getSubmitCommandableBuilder();
-		if(submitCommandableBuilder==null)
-			setSubmitCommandableBuilder(submitCommandableBuilder = __inject__(CommandableButtonBuilder.class));
-		return submitCommandableBuilder;
-	}
-	
-	@Override
-	public ViewBuilder setSubmitCommandableBuilder(CommandableBuilder<?> submitCommandableBuilder) {
-		this.submitCommandableBuilder = (CommandableButtonBuilder) submitCommandableBuilder;
-		return this;
-	}
-	
-	@Override
-	public CommandableBuilder<?> getCloseCommandableBuilder() {
-		return closeCommandableBuilder;
-	}
-	
-	@Override
-	public ViewBuilder setCloseCommandableBuilder(CommandableBuilder<?> closeCommandableBuilder) {
-		this.closeCommandableBuilder = (CommandableButtonBuilder) closeCommandableBuilder;
-		return this;
-	}
-
 	/**/
 	
-	public static final String FIELD_NAME_OUTPUT_STRING_TEXT_BUILDER = "nameOutputStringTextBuilder";
-	public static final String FIELD_PROCESSING_COMMANDABLE_BUILDERS = "processingCommandableBuilders";
-	public static final String FIELD_SUBMIT_COMMANDABLE_BUILDER = "submitCommandableBuilder";
 	public static final String FIELD_COMPONENTS_BUILDER = "componentsBuilder";
 
 }

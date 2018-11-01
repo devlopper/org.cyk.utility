@@ -17,6 +17,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 
 	private LayoutBuilder layout;
 	private Instances components;
+	private Boolean isCreateLayoutItemOnAddComponent;
 	
 	@Override
 	protected Components __execute__() throws Exception {
@@ -157,13 +158,31 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	
 	@Override
 	public ComponentsBuilder addComponents(Collection<Object> components) {
-		getComponents(Boolean.TRUE).add((Collection<Object>)components);
+		if(__injectCollectionHelper__().isNotEmpty(components)) {
+			getComponents(Boolean.TRUE).add((Collection<Object>)components);
+			if(Boolean.TRUE.equals(getIsCreateLayoutItemOnAddComponent())) {
+				for(@SuppressWarnings("unused") Object index : components) {
+					getLayout(Boolean.TRUE).addItems(__inject__(LayoutItemBuilder.class));
+				}
+			}
+		}
 		return this;
 	}
 	
 	@Override
 	public ComponentsBuilder addComponents(Object...components) {
 		return addComponents(__injectCollectionHelper__().instanciate(components));
+	}
+	
+	@Override
+	public Boolean getIsCreateLayoutItemOnAddComponent() {
+		return isCreateLayoutItemOnAddComponent;
+	}
+	
+	@Override
+	public ComponentsBuilder setIsCreateLayoutItemOnAddComponent(Boolean isCreateLayoutItemOnAddComponent) {
+		this.isCreateLayoutItemOnAddComponent = isCreateLayoutItemOnAddComponent;
+		return this;
 	}
 	
 	/**/

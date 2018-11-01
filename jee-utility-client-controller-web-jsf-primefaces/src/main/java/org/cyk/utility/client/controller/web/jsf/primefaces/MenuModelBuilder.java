@@ -6,7 +6,9 @@ import java.util.Collection;
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.menu.MenuItem;
 import org.cyk.utility.client.controller.component.menu.MenuItems;
+import org.cyk.utility.client.controller.navigation.Navigation;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.string.StringHelper;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
@@ -31,6 +33,13 @@ public class MenuModelBuilder extends AbstractObject implements Serializable {
 				Collection<MenuItem> children = __inject__(CollectionHelper.class).cast(MenuItem.class, index.getChildren());
 		        if(__inject__(CollectionHelper.class).isEmpty(children)) {
 		        	DefaultMenuItem item = new DefaultMenuItem(index.getName());
+		        	Navigation navigation = index.getNavigation();
+		        	if(navigation!=null) {
+		        		String outcome = (String) navigation.getIdentifier();
+		        		if(__inject__(StringHelper.class).isNotBlank(outcome))
+		        			item.setOutcome(outcome);
+		        	}
+		        	
 		        	addMenuElement(parent, item);	
 		        }else {
 		        	DefaultSubMenu subMenu = new DefaultSubMenu(index.getName());

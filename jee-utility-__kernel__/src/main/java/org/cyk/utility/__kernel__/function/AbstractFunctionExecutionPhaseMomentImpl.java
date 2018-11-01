@@ -147,6 +147,14 @@ public abstract class AbstractFunctionExecutionPhaseMomentImpl extends AbstractO
 	}
 	
 	@Override
+	public Collection<Runnable> getRunnables(Boolean instanciateIfNull) {
+		Collection<Runnable> runnables = getRunnables();
+		if(runnables == null && Boolean.TRUE.equals(instanciateIfNull))
+			setRunnables(runnables = new ArrayList<>());
+		return runnables;
+	}
+	
+	@Override
 	public FunctionExecutionPhaseMoment setRunnables(Collection<Runnable> runnables){
 		getProperties().setRunnables(runnables);
 		return this;

@@ -3,14 +3,13 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.theme;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
-import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
-import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
 import org.cyk.utility.client.controller.component.menu.Menu;
+import org.cyk.utility.client.controller.component.menu.MenuRenderTypeRowBar;
 import org.cyk.utility.client.controller.component.theme.AbstractThemeImpl;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.window.Window;
-import org.cyk.utility.scope.ScopeApplication;
+import org.cyk.utility.scope.ScopeSession;
 
 public class ThemeDesktopDefaultImpl extends AbstractThemeImpl implements ThemeDesktopDefault,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -34,10 +33,11 @@ public class ThemeDesktopDefaultImpl extends AbstractThemeImpl implements ThemeD
 	}
 	
 	private void __north__(Window window) {
-		//Build view from application menu
-		Menu menu = window.getMenu(ScopeApplication.class);
+		//Build view from session menu
+		Menu menu = window.getMenu(ScopeSession.class);
+		menu.setRenderType(__inject__(MenuRenderTypeRowBar.class));
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class).setComponentsBuilder(__inject__(ComponentsBuilder.class)
-				.setLayout( __inject__(LayoutBuilder.class).addItems(__inject__(LayoutItemBuilder.class)))
+				.setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
 				.addComponents(menu));
 		mapViews("north",viewBuilder.execute().getOutput());
 	}

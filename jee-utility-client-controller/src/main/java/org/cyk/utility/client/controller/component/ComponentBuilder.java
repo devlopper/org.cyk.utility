@@ -34,4 +34,10 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	StyleBuilder getLayoutItemStyle(Boolean injectIfNull);
 	ComponentBuilder<COMPONENT> setLayoutItemStyle(StyleBuilder style);
 	ComponentBuilder<COMPONENT> addLayoutItemStyleClasses(String...classes);
+	
+	ComponentRoles getRoles();
+	ComponentRoles getRoles(Boolean injectIfNull);
+	ComponentBuilder<COMPONENT> setRoles(ComponentRoles roles);
+	ComponentBuilder<COMPONENT> addRoles(Collection<ComponentRole> roles);
+	ComponentBuilder<COMPONENT> addRoles(ComponentRole...roles);
 }
