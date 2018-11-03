@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListen
 import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerBeforeImpl;
 import org.cyk.utility.client.controller.component.ComponentBuilderPostConstructListenerImpl;
 import org.cyk.utility.client.controller.component.ComponentPostConstructListenerImpl;
+import org.cyk.utility.client.controller.component.ComponentRoleStyleClassGetterImpl;
 import org.cyk.utility.client.controller.component.layout.LayoutWidthGetterImpl;
 import org.cyk.utility.client.controller.component.layout.StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.theme.ThemeClassGetterImpl;
@@ -30,6 +31,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(LayoutWidthGetterImpl.class, LayoutWidthGetterFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(ThemeClassGetterImpl.class, ThemeClassGetterFunctionRunnableImpl.class);
+		__inject__(FunctionRunnableMap.class).set(ComponentRoleStyleClassGetterImpl.class, ComponentRoleStyleClassGetterFunctionRunnableImpl.class);
 	}
 	
 	@Override

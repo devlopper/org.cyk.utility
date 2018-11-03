@@ -14,6 +14,9 @@ public interface Layout extends VisibleComponent {
 	Layout addItemFromWidthClassBuilders(StyleClassBuilderWidth...styleClassBuilderWidths);
 	Layout addItemFromDeviceClassAndWidths(Object...objects);
 	
+	LayoutType getType();
+	Layout setType(LayoutType type);
+	
 	@Override LayoutItem getChildAt(Integer index);
 	
 }

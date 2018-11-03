@@ -16,6 +16,8 @@ import org.cyk.utility.string.StringHelper;
 public class LayoutImpl extends AbstractVisibleComponentImpl implements Layout, Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private LayoutType type;
+	
 	@Override
 	public Layout addItemFromClass(Object clazz) {
 		LayoutItem item = __inject__(LayoutItem.class);
@@ -66,6 +68,17 @@ public class LayoutImpl extends AbstractVisibleComponentImpl implements Layout, 
 	@Override
 	public LayoutItem getChildAt(Integer index) {
 		return (LayoutItem) super.getChildAt(index);
+	}
+
+	@Override
+	public LayoutType getType() {
+		return type;
+	}
+
+	@Override
+	public Layout setType(LayoutType type) {
+		this.type = type;
+		return this;
 	}
 	
 }

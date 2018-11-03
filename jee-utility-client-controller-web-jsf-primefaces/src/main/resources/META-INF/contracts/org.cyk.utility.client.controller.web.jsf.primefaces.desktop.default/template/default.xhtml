@@ -4,7 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:cyk="http://utility.cyk.org">
+      xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 
     <f:metadata>
   		<ui:insert name="contractMetadata"/>
@@ -13,6 +13,7 @@
     <h:head>
     	<ui:insert name="contractHead">
     		<ui:insert name="contractHeadTitle"><title><h:outputText value="#{__page__.window.title.properties.value}" escape="false" /></title></ui:insert>
+    		<h:outputStylesheet library="css" name="common.css" />
     		<h:outputStylesheet library="css" name="layout.css" />
     		<h:outputStylesheet library="css" name="input.css" />
     	</ui:insert>

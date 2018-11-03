@@ -32,6 +32,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	
 	@Override
 	protected COMPONENT __execute__() throws Exception {
+		Class<COMPONENT> componentClass = getComponentClass();
 		COMPONENT component = __inject__(componentClass);
 		__inject__(ComponentBuilderExecuteListenerBefore.class).setObject(this).setComponent(component).execute();
 		ComponentRoles roles = getRoles();

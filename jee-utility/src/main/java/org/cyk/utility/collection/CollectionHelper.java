@@ -15,6 +15,7 @@ public interface CollectionHelper extends Helper {
 	<ELEMENT> Collection<ELEMENT> concatenate(Collection<Collection<ELEMENT>> collections);
 	<ELEMENT> Collection<ELEMENT> concatenate(Collection<ELEMENT>...collections);
 	Integer getSize(Collection<?> collection);
+	Integer getSize(CollectionInstance<?> collectionInstance);
 	<ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection, Object index);
 	<ELEMENT> ELEMENT getFirst(Collection<ELEMENT> collection);
 	<ELEMENT> ELEMENT getLast(Collection<ELEMENT> collection);

@@ -13,10 +13,8 @@ public interface LayoutBuilder extends VisibleComponentBuilder<Layout> {
 	LayoutBuilder addItems(Collection<LayoutItemBuilder> items);
 	LayoutBuilder addItems(LayoutItemBuilder...items);
 	
-	Type getType();
-	LayoutBuilder setType(Type type);
+	LayoutType getType();
+	LayoutBuilder setType(LayoutType type);
 	
-	/**/
-	
-	public static enum Type {FORM}
+
 }

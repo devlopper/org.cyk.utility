@@ -1,0 +1,20 @@
+.cyk_title{
+	background: yellow;
+	font-weight: bold;
+}
+
+.cyk_grid{
+	border: 1px solid black;
+}
+
+.cyk_row{
+
+}
+
+.cyk_even{
+	background: teal;
+}
+
+.cyk_odd{
+	background: aqua;
+}

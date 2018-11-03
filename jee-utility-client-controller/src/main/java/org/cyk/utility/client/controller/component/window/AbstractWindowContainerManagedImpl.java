@@ -7,6 +7,7 @@ import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.theme.ThemeClassGetter;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.string.StringHelper;
 
 public abstract class AbstractWindowContainerManagedImpl extends AbstractObject implements WindowContainerManaged,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -54,8 +55,16 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	
 	/**/
 	
+	protected String __getWindowTitleValue__() {
+		return null;
+	}
+	
 	protected WindowBuilder __getWindowBuilder__() {
-		return __injectWindowBuilder__().setView(__getViewBuilder__()).setMenuMap(__getMenuBuilderMap__());
+		WindowBuilder windowBuilder = __injectWindowBuilder__().setView(__getViewBuilder__()).setMenuMap(__getMenuBuilderMap__());
+		String titleValue = __getWindowTitleValue__();
+		if(__inject__(StringHelper.class).isNotBlank(titleValue))
+			windowBuilder.setTitleValue(titleValue);
+		return windowBuilder;
 	}
 	
 	protected ViewBuilder __getViewBuilder__() {

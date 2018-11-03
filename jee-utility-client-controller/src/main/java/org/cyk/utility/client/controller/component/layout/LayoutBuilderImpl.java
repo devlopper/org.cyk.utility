@@ -4,17 +4,62 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
+import org.cyk.utility.client.controller.component.ComponentRole;
+import org.cyk.utility.client.controller.component.ComponentRoles;
 
 public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layout> implements LayoutBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private LayoutItemBuilders items;
-	private Type type;
+	private LayoutType type;
 	
 	@Override
 	protected void __execute__(Layout layout) {
 		super.__execute__(layout);
+		ComponentRoles roles = getRoles();
 		LayoutItemBuilders items = getItems();
+		LayoutType type = getType();
+		layout.setType(type);
+		if(items==null) {
+			if(layout.getType() instanceof LayoutTypeGrid) {
+				if(__injectCollectionHelper__().isEmpty(roles))
+					layout.getRoles(Boolean.TRUE).add(ComponentRole.GRID);
+				LayoutTypeGrid table = (LayoutTypeGrid) layout.getType();
+				items = __inject__(LayoutItemBuilders.class);
+				if(Boolean.TRUE.equals(table.getIsHasHeader()))
+					items.add(__inject__(LayoutItemBuilder.class));
+				Integer orderNumberColumnWidth = 1;
+				Integer commandablesColumnWidth = 1;
+				Boolean isHasOrderNumberColumn = table.getIsHasOrderNumberColumn();
+				Boolean isHasCommandablesColumn = table.getIsHasCommandablesColumn();
+				Integer width = __inject__(LayoutWidthGetter.class).execute().getOutput().intValue();
+				if(Boolean.TRUE.equals(isHasOrderNumberColumn))
+					width = width - orderNumberColumnWidth;
+				if(Boolean.TRUE.equals(isHasCommandablesColumn))
+					width = width - commandablesColumnWidth;
+				Integer columnWidth = width / table.getColumnCount();
+				Integer remainder = width % table.getColumnCount();
+				for(Integer index = 0 ; index < table.getRowCount() ; index++) {
+					Collection<ComponentRole> rowRoles = __injectCollectionHelper__().instanciate(ComponentRole.ROW,index % 2 == 0 ? ComponentRole.EVEN : ComponentRole.ODD);
+					
+					if(Boolean.TRUE.equals(table.getIsHasOrderNumberColumn())) {
+						items.add(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(orderNumberColumnWidth).addRoles(rowRoles));
+					}
+					
+					for(Integer indexColumn = 0 ; indexColumn < table.getColumnCount() ; indexColumn++) {
+						items.add(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(columnWidth + ( indexColumn == table.getColumnCount()-1 ? remainder :0 ))
+								.addRoles(rowRoles));
+					}
+					
+					if(Boolean.TRUE.equals(table.getIsHasCommandablesColumn())) {
+						items.add(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsNotPhone(commandablesColumnWidth).addRoles(rowRoles));
+					}
+				}
+				if(Boolean.TRUE.equals(table.getIsHasFooter()))
+					items.add(__inject__(LayoutItemBuilder.class));
+			}
+		}
+		
 		if(__injectCollectionHelper__().isNotEmpty(items)) {
 			for(LayoutItemBuilder index : items.get()) {
 				/*Collection<Object> deviceClassesAndWidths = new ArrayList<>();
@@ -66,13 +111,13 @@ public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layou
 	}
 
 	@Override
-	public LayoutBuilder setType(Type type) {
+	public LayoutBuilder setType(LayoutType type) {
 		this.type = type;
 		return this;
 	}
 	
 	@Override
-	public Type getType() {
+	public LayoutType getType() {
 		return type;
 	}
 	

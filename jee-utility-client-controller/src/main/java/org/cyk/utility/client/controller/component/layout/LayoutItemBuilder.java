@@ -1,14 +1,17 @@
 package org.cyk.utility.client.controller.component.layout;
 
+import java.util.Collection;
+
+import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 
 public interface LayoutItemBuilder extends VisibleComponentBuilder<LayoutItem> {
-	/*
-	LayoutItemBuilder setComponent(Object component);
-	Object getComponent();
-	*/
+	
+	@Override LayoutItemBuilder addRoles(Collection<ComponentRole> roles);
+	@Override LayoutItemBuilder addRoles(ComponentRole... roles);
+	
 	DeviceScreenDimensionProportions getAreaWidthProportions();
 	DeviceScreenDimensionProportions getAreaWidthProportions(Boolean injectIfNull);
 	LayoutItemBuilder setAreaWidthProportionsAllClasses(Integer _default,Integer television,Integer desktop,Integer tablet,Integer phone);

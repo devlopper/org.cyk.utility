@@ -91,6 +91,17 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 		return this;
 	}
 	
+	@Override
+	public Object getOrderNumber() {
+		return getProperties().get("orderNumber");
+	}
+	
+	@Override
+	public Objectable setOrderNumber(Object orderNumber) {
+		getProperties().set("orderNumber", orderNumber);
+		return this;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Object> getChildren() {

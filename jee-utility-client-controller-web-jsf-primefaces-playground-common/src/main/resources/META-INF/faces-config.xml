@@ -7,6 +7,14 @@
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 		
+		
+		<navigation-case>
+			<from-outcome>gridIndexView</from-outcome>
+			<to-view-id>/grid/index.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		
 		<navigation-case>
 			<from-outcome>myEntityListWindow</from-outcome>
 			<to-view-id>/crud/myentity/list.jsf</to-view-id>

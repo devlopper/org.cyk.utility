@@ -36,6 +36,10 @@ public class ViewPage extends AbstractPageContainerManagedImpl implements Serial
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
+		view =  createView();
+	}
+	
+	public static ViewBuilder createViewBuilder() {
 		Model model = new Model();
 		model.set__title__("Titre");
 		model.setLastNames("Yao Christian");
@@ -63,10 +67,11 @@ public class ViewPage extends AbstractPageContainerManagedImpl implements Serial
 		viewBuilder.addComponentBuilderByObjectByMethodName(model, "submit");
 		viewBuilder.addComponentBuilderByObjectByMethodName(model, "close");
 		
-		view =  viewBuilder.execute().getOutput();
-		
-		//view.getComponents().getLayout().getChildAt(0).getProperties()
-		//	.setStyleClass("cyk_layout_title "+view.getComponents().getLayout().getChildAt(0).getProperties().getStyleClass());
+		return viewBuilder;
+	}
+	
+	public static View createView() {
+		return createViewBuilder().execute().getOutput();
 	}
 	
 	/**/

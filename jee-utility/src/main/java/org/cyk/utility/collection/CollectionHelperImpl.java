@@ -61,7 +61,7 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	}
 	
 	@Override
-	public <ELEMENT> Collection<ELEMENT> instanciate(@SuppressWarnings("unchecked") ELEMENT...elements){
+	public <ELEMENT> Collection<ELEMENT> instanciate(ELEMENT...elements){
 		return instanciate(ArrayList.class, elements);
 	}
 	
@@ -78,7 +78,7 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	}
 	
 	@Override
-	public <ELEMENT> Collection<ELEMENT> concatenate(@SuppressWarnings("unchecked") Collection<ELEMENT>... collections) {
+	public <ELEMENT> Collection<ELEMENT> concatenate(Collection<ELEMENT>... collections) {
 		return concatenate(instanciate(collections));
 	}
 	
@@ -87,6 +87,11 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 		if(isEmpty(collection))
 			return 0;
 		return collection.size();
+	}
+	
+	@Override
+	public Integer getSize(CollectionInstance<?> collectionInstance) {
+		return collectionInstance == null ? 0 : getSize(collectionInstance.get());
 	}
 	
 	@Override

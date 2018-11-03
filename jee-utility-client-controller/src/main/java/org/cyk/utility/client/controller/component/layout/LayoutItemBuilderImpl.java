@@ -1,9 +1,11 @@
 package org.cyk.utility.client.controller.component.layout;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
+import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.css.StyleBuilder;
 import org.cyk.utility.css.StyleClassBuilderWidth;
 import org.cyk.utility.device.Device;
@@ -141,16 +143,15 @@ public class LayoutItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<L
 		return (LayoutItemBuilder) super.setArea(area);
 	}
 	
-	/*@Override
-	public Object getComponent() {
-		return component;
+	@Override
+	public LayoutItemBuilder addRoles(Collection<ComponentRole> roles) {
+		return (LayoutItemBuilder) super.addRoles(roles);
 	}
 	
 	@Override
-	public LayoutItemBuilder setComponent(Object component) {
-		this.component = component;
-		return this;
-	}*/
+	public LayoutItemBuilder addRoles(ComponentRole... roles) {
+		return (LayoutItemBuilder) super.addRoles(roles);
+	}
 	
 	/**/
 	
