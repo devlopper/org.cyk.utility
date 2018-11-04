@@ -14,7 +14,8 @@ import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
 
 import lombok.Getter;
-import lombok.Setter; 
+import lombok.Setter;
+import lombok.experimental.Accessors; 
 
 @Named @RequestScoped @Getter @Setter
 public class GridPage extends AbstractPageContainerManagedImpl implements Serializable {
@@ -29,17 +30,17 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 	protected ViewBuilder __getViewBuilder__() {
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
-		.addComponents(createDataTableBuilder())
+		.addComponents(createDataTableBuilderNoHeadersAndFooters(),createDataTableBuilder())
 		
 		;
 		return viewBuilder;
 	}
 	
-	public static GridBuilder createDataTableBuilder() {
+	public static GridBuilder createDataTableBuilderNoHeadersAndFooters() {
 		GridBuilder gridBuilder = __inject__(GridBuilder.class)
-				.addColumns(__inject__(ColumnBuilder.class)
-						,__inject__(ColumnBuilder.class)
-						,__inject__(ColumnBuilder.class)
+				.addColumns(__inject__(ColumnBuilder.class)//.addFieldNameStrings("f1")
+						,__inject__(ColumnBuilder.class)//.addFieldNameStrings("f2")
+						,__inject__(ColumnBuilder.class)//.addFieldNameStrings("f3")
 						//,__inject__(ColumnBuilder.class)
 						)
 				.addRows(__inject__(RowBuilder.class).addCells(__inject__(CellBuilder.class).setTextValue("v00"),__inject__(CellBuilder.class).setTextValue("v10")
@@ -58,43 +59,37 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 		layoutTypeGrid.setIsHasHeader(Boolean.TRUE).setIsHasFooter(Boolean.TRUE).setIsHasOrderNumberColumn(Boolean.TRUE).setIsHasCommandablesColumn(Boolean.TRUE);
 		return gridBuilder;
 	}
-	/*
-	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		dataTable01 = __inject__(DataTableBuilder.class)
-				.addColumns(__inject__(ColumnBuilder.class)
-						,__inject__(ColumnBuilder.class)
-						,__inject__(ColumnBuilder.class)
-						//,__inject__(ColumnBuilder.class)
+	
+	public static GridBuilder createDataTableBuilder() {
+		GridBuilder gridBuilder = __inject__(GridBuilder.class)
+				.addColumns(__inject__(ColumnBuilder.class).setHeaderTextValue("String").addFieldNameStrings("string")
+						,__inject__(ColumnBuilder.class).setHeaderTextValue("Number").addFieldNameStrings("number")
+						,__inject__(ColumnBuilder.class).setHeaderTextValue("Date").addFieldNameStrings("date")
 						)
-				.addRows(__inject__(RowBuilder.class).addCells(__inject__(CellBuilder.class).setTextValue("v00"),__inject__(CellBuilder.class).setTextValue("v10")
-						,__inject__(CellBuilder.class).setTextValue("v20"))
-						//,__inject__(RowBuilder.class).addCells(__inject__(CellBuilder.class),__inject__(CellBuilder.class),__inject__(CellBuilder.class))
+				
+				.addObjects(new Data().setString("string 01").setNumber("12").setDate("01/02/2001")
+						,new Data().setString("string 02").setNumber("1")
+						,new Data().setString("string 03").setNumber("349")
+						,new Data().setString("string 04").setDate("17/07/2018")
+						,new Data().setString("another string").setNumber("my number").setDate("yesterday")
 						)
-				.execute().getOutput();
+				;
+		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
+		gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);
+		layoutTypeGrid.setIsHasHeader(Boolean.TRUE).setIsHasFooter(Boolean.TRUE).setIsHasOrderNumberColumn(Boolean.TRUE).setIsHasCommandablesColumn(Boolean.TRUE);
+		return gridBuilder;
+	}
+	
+	
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class Data {
 		
-		
-		dataTable02 = __inject__(DataTableBuilder.class)
-				.addColumns(__inject__(ColumnBuilder.class).setHeaderTextValue("Code")
-						,__inject__(ColumnBuilder.class).setHeaderTextValue("Name")
-						,__inject__(ColumnBuilder.class).setHeaderTextValue("Description")
-						,__inject__(ColumnBuilder.class).setHeaderTextValue("Date")
-						)
-				.addRows(__inject__(RowBuilder.class))
-				.execute().getOutput();
-		
-		dataTable03 = __inject__(DataTableBuilder.class)
-				.addColumns(__inject__(ColumnBuilder.class).setHeaderTextValue("Code")
-						,__inject__(ColumnBuilder.class).setHeaderTextValue("Name")
-						,__inject__(ColumnBuilder.class).setHeaderTextValue("Value").setFooterTextValue("Total")
-						)
-				.addRows(__inject__(RowBuilder.class)
-						,__inject__(RowBuilder.class)
-						,__inject__(RowBuilder.class))
-				.execute().getOutput();
+		private String string;
+		private String number;
+		private String date;
 		
 	}
-	*/
 	
 }

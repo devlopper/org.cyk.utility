@@ -6,6 +6,8 @@ import java.util.Collection;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
+import org.cyk.utility.client.controller.component.grid.cell.Cell;
+import org.cyk.utility.client.controller.component.grid.cell.Cells;
 import org.cyk.utility.client.controller.component.grid.column.Column;
 import org.cyk.utility.client.controller.component.grid.column.ColumnBuilder;
 import org.cyk.utility.client.controller.component.grid.column.ColumnBuilders;
@@ -19,6 +21,7 @@ import org.cyk.utility.client.controller.component.layout.LayoutType;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.object.Objects;
 
 public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> implements GridBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -26,10 +29,14 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	private ColumnBuilders columns;
 	private RowBuilders rows;
 	private ViewBuilder view;
+	private Objects objects;
 	
 	@Override
 	protected void __execute__(Grid dataTable) {
 		super.__execute__(dataTable);
+		Objects objects = getObjects();
+		dataTable.setObjects(objects);
+		
 		ColumnBuilders columns = getColumns();
 		if(__injectCollectionHelper__().isNotEmpty(columns)) {
 			dataTable.setColumns(__inject__(Columns.class));
@@ -46,7 +53,14 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 			Integer orderNumber = 0;
 			for(RowBuilder index : rows.get()) {
 				index.setOrderNumber(orderNumber++);
-				dataTable.getRows().add(index.execute().getOutput());
+				Row row = index.execute().getOutput();
+				dataTable.getRows().add(row);
+				Cells cells = row.getCells();
+				if(__injectCollectionHelper__().isNotEmpty(cells)) {
+					for(Cell indexCell : cells.get())
+						indexCell.setColumn(__injectCollectionHelper__().getElementAt(dataTable.getColumns(), (Integer)indexCell.getOrderNumber()));	
+				}
+				
 			}
 		}
 		
@@ -183,7 +197,36 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 		return this;
 	}
 	
+	@Override
+	public Objects getObjects() {
+		return objects;
+	}
+	
+	@Override
+	public Objects getObjects(Boolean injectIfNull) {
+		return (Objects) __getInjectIfNull__(FIELD_OBJECTS, injectIfNull);
+	}
+	
+	@Override
+	public GridBuilder setObjects(Objects objects) {
+		this.objects = objects;
+		return this;
+	}
+	
+	@Override
+	public GridBuilder addObjects(Collection<Object> objects) {
+		getObjects(Boolean.TRUE).add(objects);
+		return this;
+	}
+	
+	@Override
+	public GridBuilder addObjects(Object... objects) {
+		getObjects(Boolean.TRUE).add(objects);
+		return this;
+	}
+	
 	public static final String FIELD_COLUMNS = "columns";
 	public static final String FIELD_ROWS = "rows";
 	public static final String FIELD_VIEW = "view";
+	public static final String FIELD_OBJECTS = "objects";
 }

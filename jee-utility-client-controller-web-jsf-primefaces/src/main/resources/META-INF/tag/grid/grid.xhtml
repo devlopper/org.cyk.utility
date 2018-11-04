@@ -10,7 +10,13 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
+			<!--
 			<cyk:view value="#{value.view}" />
+			
+			<p:separator/>
+			-->
+			<p:dataTable id="dataTable" binding="#{value.targetModel}" />
+			
 		</ui:define>
 	</ui:decorate>	
 	

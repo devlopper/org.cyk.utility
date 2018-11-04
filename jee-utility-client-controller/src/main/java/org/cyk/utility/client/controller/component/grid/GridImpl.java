@@ -11,6 +11,7 @@ import org.cyk.utility.client.controller.component.grid.row.Row;
 import org.cyk.utility.client.controller.component.grid.row.Rows;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.object.Objects;
 
 public class GridImpl extends AbstractVisibleComponentImpl implements Grid,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -18,6 +19,7 @@ public class GridImpl extends AbstractVisibleComponentImpl implements Grid,Seria
 	private Columns columns;
 	private Rows rows;
 	private View view;
+	private Objects objects;
 	
 	@Override
 	public Columns getColumns() {
@@ -65,6 +67,17 @@ public class GridImpl extends AbstractVisibleComponentImpl implements Grid,Seria
 	@Override
 	public Grid setView(View view) {
 		this.view = view;
+		return this;
+	}
+	
+	@Override
+	public Objects getObjects() {
+		return objects;
+	}
+	
+	@Override
+	public Grid setObjects(Objects objects) {
+		this.objects = objects;
 		return this;
 	}
 

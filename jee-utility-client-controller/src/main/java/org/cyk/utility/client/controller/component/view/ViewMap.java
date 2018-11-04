@@ -6,4 +6,9 @@ public interface ViewMap extends MapInstance<String, View> {
 
 	@Override ViewMap set(Object... keyValues);
 	
+	/**/
+	
+	String HEADER = "header";
+	String BODY = "body";
+	String FOOTER = "footer";
 }

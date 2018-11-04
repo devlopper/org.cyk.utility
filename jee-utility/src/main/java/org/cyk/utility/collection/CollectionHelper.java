@@ -17,6 +17,7 @@ public interface CollectionHelper extends Helper {
 	Integer getSize(Collection<?> collection);
 	Integer getSize(CollectionInstance<?> collectionInstance);
 	<ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection, Object index);
+	<ELEMENT> ELEMENT getElementAt(CollectionInstance<ELEMENT> collectionInstance, Object index);
 	<ELEMENT> ELEMENT getFirst(Collection<ELEMENT> collection);
 	<ELEMENT> ELEMENT getLast(Collection<ELEMENT> collection);
 	CollectionHelper clear(Collection<?> collection);

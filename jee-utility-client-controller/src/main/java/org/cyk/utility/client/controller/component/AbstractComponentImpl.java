@@ -10,6 +10,7 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	
 	private LayoutItem layoutItem;
 	private ComponentRoles roles;
+	private Object targetModel;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -41,6 +42,17 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	@Override
 	public ComponentRoles getRoles(Boolean injectIfNull) {
 		return (ComponentRoles) __getInjectIfNull__(FIELD_ROLES, injectIfNull);
+	}
+	
+	@Override
+	public Object getTargetModel() {
+		return targetModel;
+	}
+	
+	@Override
+	public Component setTargetModel(Object targetModel) {
+		this.targetModel = targetModel;
+		return this;
 	}
 	
 	/**/

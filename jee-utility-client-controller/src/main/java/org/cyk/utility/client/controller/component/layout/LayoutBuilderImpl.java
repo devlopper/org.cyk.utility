@@ -62,20 +62,7 @@ public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layou
 		
 		if(__injectCollectionHelper__().isNotEmpty(items)) {
 			for(LayoutItemBuilder index : items.get()) {
-				/*Collection<Object> deviceClassesAndWidths = new ArrayList<>();
-				if(index.getWidthMap()!=null) {
-					for(Map.Entry<Class<? extends Device>, Integer> entry : index.getWidthMap().entrySet()) {
-						deviceClassesAndWidths.add(entry.getKey());
-						Integer width = entry.getValue();
-						if(width == null)
-							width =  __inject__(LayoutWidthGetter.class).setDeviceClass(entry.getKey()).execute().getOutput().intValue();
-						deviceClassesAndWidths.add(width);
-					}
-				}
-				layout.addItemFromDeviceClassAndWidths(deviceClassesAndWidths.toArray());
-				*/
 				LayoutItem layoutItem = index.execute().getOutput();
-				//System.out.println(layoutItem.getStyle());
 				if(layoutItem!=null)
 					layout.addChild(layoutItem);			
 			}
