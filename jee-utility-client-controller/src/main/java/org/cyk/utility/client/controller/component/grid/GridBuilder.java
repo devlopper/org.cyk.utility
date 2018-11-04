@@ -33,4 +33,12 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	GridBuilder setObjects(Objects objects);
 	GridBuilder addObjects(Collection<Object> objects);
 	GridBuilder addObjects(Object...objects);
+	
+	ColumnBuilder getOrderNumberColumn();
+	ColumnBuilder getOrderNumberColumn(Boolean injectIfNull);
+	GridBuilder setOrderNumberColumn(ColumnBuilder orderNumberColumn);
+	
+	ColumnBuilder getCommandablesColumn();
+	ColumnBuilder getCommandablesColumn(Boolean injectIfNull);
+	GridBuilder setCommandablesColumn(ColumnBuilder commandablesColumn);
 }

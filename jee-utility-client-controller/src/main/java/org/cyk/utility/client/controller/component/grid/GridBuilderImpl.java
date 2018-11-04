@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.grid;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
@@ -17,9 +18,7 @@ import org.cyk.utility.client.controller.component.grid.row.RowBuilder;
 import org.cyk.utility.client.controller.component.grid.row.RowBuilders;
 import org.cyk.utility.client.controller.component.grid.row.Rows;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
-import org.cyk.utility.client.controller.component.layout.LayoutType;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
-import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.object.Objects;
 
@@ -30,58 +29,73 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	private RowBuilders rows;
 	private ViewBuilder view;
 	private Objects objects;
+	private ColumnBuilder orderNumberColumn;
+	private ColumnBuilder commandablesColumn;
 	
 	@Override
-	protected void __execute__(Grid dataTable) {
-		super.__execute__(dataTable);
+	protected void __execute__(Grid grid) {
+		super.__execute__(grid);
 		Objects objects = getObjects();
-		dataTable.setObjects(objects);
+		grid.setObjects(objects);
+		if(__injectCollectionHelper__().isNotEmpty(objects)) {
+			Integer orderNumber = 1;
+			for(Object index : objects.get())
+				if(index instanceof Objectable)
+					((Objectable)index).setOrderNumber(orderNumber++);
+		}
+		
+		ViewBuilder view = getView(Boolean.TRUE);
+		ComponentsBuilder componentsBuilder = view.getComponentsBuilder(Boolean.TRUE);
+		LayoutBuilder layout = componentsBuilder.getLayout(Boolean.TRUE);
+		LayoutTypeGrid layoutType = (LayoutTypeGrid) layout.getType();
+		if(layoutType == null)
+			layout.setType(layoutType = __inject__(LayoutTypeGrid.class));
 		
 		ColumnBuilders columns = getColumns();
 		if(__injectCollectionHelper__().isNotEmpty(columns)) {
-			dataTable.setColumns(__inject__(Columns.class));
+			ColumnBuilder orderNumberColumn = getOrderNumberColumn();
+			if(orderNumberColumn == null && Boolean.TRUE.equals(layoutType.getIsHasOrderNumberColumn())) {
+				orderNumberColumn = getOrderNumberColumn(Boolean.TRUE);
+			}
+			if(orderNumberColumn!=null)
+				columns.addAt(orderNumberColumn,0);
+			
+			ColumnBuilder commandablesColumn = getCommandablesColumn();
+			if(commandablesColumn == null && Boolean.TRUE.equals(layoutType.getIsHasCommandablesColumn())) {
+				commandablesColumn = getCommandablesColumn(Boolean.TRUE);
+			}
+			if(commandablesColumn!=null)
+				columns.add(commandablesColumn);
+			
+			grid.setColumns(__inject__(Columns.class));
 			Integer orderNumber = 0;
 			for(ColumnBuilder index : columns.get()) {
 				index.setOrderNumber(orderNumber++);
-				dataTable.getColumns().add(index.execute().getOutput());
+				grid.getColumns().add(index.execute().getOutput());
 			}
 		}
 		
 		RowBuilders rows = getRows();
 		if(__injectCollectionHelper__().isNotEmpty(rows)) {
-			dataTable.setRows(__inject__(Rows.class));
+			grid.setRows(__inject__(Rows.class));
 			Integer orderNumber = 0;
 			for(RowBuilder index : rows.get()) {
 				index.setOrderNumber(orderNumber++);
 				Row row = index.execute().getOutput();
-				dataTable.getRows().add(row);
+				grid.getRows().add(row);
 				Cells cells = row.getCells();
 				if(__injectCollectionHelper__().isNotEmpty(cells)) {
 					for(Cell indexCell : cells.get())
-						indexCell.setColumn(__injectCollectionHelper__().getElementAt(dataTable.getColumns(), (Integer)indexCell.getOrderNumber()));	
+						indexCell.setColumn(__injectCollectionHelper__().getElementAt(grid.getColumns(), (Integer)indexCell.getOrderNumber()));	
 				}
 				
 			}
 		}
 		
-		ViewBuilder view = getView();
-		if(view == null) {
-			view = __inject__(ViewBuilder.class);
-		}
 		
-		ComponentsBuilder componentsBuilder = view.getComponentsBuilder(Boolean.TRUE);
-		LayoutBuilder layout = componentsBuilder.getLayout(Boolean.TRUE);
-		LayoutType layoutType = layout.getType();
-		if(layoutType == null)
-			layout.setType(layoutType = __inject__(LayoutTypeGrid.class));
 				
-		Rows dataTableRows = dataTable.getRows();
-		Columns dataTableColumns = dataTable.getColumns();
-		
-		Boolean isHasHeader = null;
-		Boolean isHasFooter = null;
-		Boolean isHasOrderNumberColumn = null;
-		Boolean isHasCommandablesColumn = null;
+		Rows dataTableRows = grid.getRows();
+		Columns dataTableColumns = grid.getColumns();
 		
 		if(layoutType instanceof LayoutTypeGrid) {
 			LayoutTypeGrid layoutTypeGrid = (LayoutTypeGrid) layoutType;
@@ -94,15 +108,9 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 					.setRowCount(__injectCollectionHelper__().getSize(dataTableRows))
 					.setColumnCount(__injectCollectionHelper__().getSize(dataTableColumns))
 					;
-			isHasHeader = layoutTypeGrid.getIsHasHeader();
-			isHasFooter = layoutTypeGrid.getIsHasFooter();
-			isHasOrderNumberColumn = layoutTypeGrid.getIsHasOrderNumberColumn();
-			isHasCommandablesColumn = layoutTypeGrid.getIsHasCommandablesColumn();
+			
 			layout.addRoles(ComponentRole.GRID);
 		}
-		
-		if(Boolean.TRUE.equals(isHasHeader))
-			componentsBuilder.addComponents(__inject__(OutputStringTextBuilder.class).setValue("En tête de la grille"));
 		
 		//Column Header
 		//for(Column indexColumn : dataTableColumns.get())
@@ -110,19 +118,12 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 		
 		if(__injectCollectionHelper__().isNotEmpty(dataTableRows)) {
 			for(Row indexRow : dataTableRows.get()) {
-				if(Boolean.TRUE.equals(isHasOrderNumberColumn))
-					componentsBuilder.addComponents(__inject__(OutputStringTextBuilder.class).setValue(indexRow.getOrderNumber().toString()));
 				for(Column indexColumn : dataTableColumns.get())
-					componentsBuilder.addComponents(dataTable.getCell(indexColumn, indexRow));
-				if(Boolean.TRUE.equals(isHasCommandablesColumn))
-					componentsBuilder.addComponents(__inject__(OutputStringTextBuilder.class).setValue("ACTIONS"));
+					componentsBuilder.addComponents(grid.getCell(indexColumn, indexRow));
 			}
 		}
-		
-		if(Boolean.TRUE.equals(isHasFooter))
-			componentsBuilder.addComponents(__inject__(OutputStringTextBuilder.class).setValue("Pied de la grille"));
 			
-		dataTable.setView(view.execute().getOutput());
+		grid.setView(view.execute().getOutput());
 	}
 	
 	@Override
@@ -225,8 +226,43 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 		return this;
 	}
 	
+	@Override
+	public ColumnBuilder getOrderNumberColumn() {
+		return orderNumberColumn;
+	}
+
+	@Override
+	public ColumnBuilder getOrderNumberColumn(Boolean injectIfNull) {
+		return ((ColumnBuilder) __getInjectIfNull__(FIELD_ORDER_NUMBER_COLUMN, injectIfNull)).setHeaderTextValue("#").addFieldNameStrings("orderNumber");
+	}
+
+	@Override
+	public GridBuilder setOrderNumberColumn(ColumnBuilder orderNumberColumn) {
+		this.orderNumberColumn = orderNumberColumn;
+		return this;
+	}
+
+	@Override
+	public ColumnBuilder getCommandablesColumn() {
+		return commandablesColumn;
+	}
+
+	@Override
+	public ColumnBuilder getCommandablesColumn(Boolean injectIfNull) {
+		return ((ColumnBuilder) __getInjectIfNull__(FIELD_COMMANDABLES_COLUMN, injectIfNull)).setHeaderTextValue("Actions");
+	}
+
+	@Override
+	public GridBuilder setCommandablesColumn(ColumnBuilder commandablesColumn) {
+		this.commandablesColumn = commandablesColumn;
+		return this;
+	}
+	
 	public static final String FIELD_COLUMNS = "columns";
 	public static final String FIELD_ROWS = "rows";
 	public static final String FIELD_VIEW = "view";
 	public static final String FIELD_OBJECTS = "objects";
+	public static final String FIELD_ORDER_NUMBER_COLUMN = "orderNumberColumn";
+	public static final String FIELD_COMMANDABLES_COLUMN = "commandablesColumn";
+	
 }

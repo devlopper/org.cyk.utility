@@ -7,6 +7,11 @@
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 		
+		<navigation-case>
+			<from-outcome>commandableButtonIndexView</from-outcome>
+			<to-view-id>/commandable/button/index.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
 		
 		<navigation-case>
 			<from-outcome>gridIndexView</from-outcome>

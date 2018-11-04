@@ -18,6 +18,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private DeviceScreenArea area;
 	private StyleBuilder layoutItemStyle;
 	private ComponentRoles roles;
+	private Boolean isTargetModelToBeBuilt;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -176,6 +177,16 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	public ComponentBuilder<COMPONENT> addRoles(ComponentRole... roles) {
 		getRoles(Boolean.TRUE).add(roles);
 		return null;
+	}
+	
+	@Override
+	public Boolean getIsTargetModelToBeBuilt() {
+		return isTargetModelToBeBuilt;
+	}
+	@Override
+	public ComponentBuilder<COMPONENT> setIsTargetModelToBeBuilt(Boolean isTargetModelToBeBuilt) {
+		this.isTargetModelToBeBuilt = isTargetModelToBeBuilt;
+		return this;
 	}
 	
 	public static final String FIELD_AREA = "area";

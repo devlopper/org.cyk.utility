@@ -11,13 +11,26 @@ public abstract class AbstractCommandableBuilderImpl<COMPONENT extends Commandab
 	private static final long serialVersionUID = 1L;
 
 	private CommandBuilder command;
+	private String name;
 	
 	@Override
 	protected void __execute__(COMPONENT commandable) {
 		super.__execute__(commandable);
+		String name = getName();
+		commandable.setName(name);
 		CommandBuilder commandBuilder = getCommand();
 		if(commandBuilder!=null)
 			commandable.setCommand(commandBuilder.execute().getOutput());
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	@Override
+	public CommandableBuilder<COMPONENT> setName(String name) {
+		this.name = name;
+		return this;
 	}
 	
 	@Override

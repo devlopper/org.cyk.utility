@@ -7,13 +7,6 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-    <h:head>
-        <title>Command Button</title>
-    </h:head>
-    <h:body>
-    	<h:form>
-    		<cyk:commandButton value="#{commandButtonPage.noServerNoClient}" />
-    		<cyk:commandButton value="#{commandButtonPage.serverOnlyNoConfirmation}" />
-    	</h:form>
-    </h:body>
+	<cyk:page value="#{commandableButtonPage}" />
+	
 </html>

@@ -19,4 +19,9 @@ public interface LayoutTypeGrid extends LayoutType {
 	
 	Boolean getIsHasCommandablesColumn();
 	LayoutTypeGrid setIsHasCommandablesColumn(Boolean isHasCommandablesColumn);
+	
+	/**/
+	
+	String COLUMN_ORDER_NUMBER = "orderNumber";
+	String COLUMN_COMMANDABLES = "commandables";
 }

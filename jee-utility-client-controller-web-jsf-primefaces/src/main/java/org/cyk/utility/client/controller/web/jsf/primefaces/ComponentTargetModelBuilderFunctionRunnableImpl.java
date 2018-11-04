@@ -1,7 +1,6 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -9,13 +8,13 @@ import java.util.Map;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
-import javax.faces.context.FacesContext;
 import javax.faces.model.ListDataModel;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
 import org.cyk.utility.client.controller.component.Components;
+import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.cell.Cell;
 import org.cyk.utility.client.controller.component.grid.cell.Cells;
@@ -31,10 +30,13 @@ import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.navigation.Navigation;
+import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
+import org.primefaces.component.button.Button;
 import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.outputpanel.OutputPanel;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
@@ -49,29 +51,66 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 			@Override
 			public void run() {
 				Component component = getFunction().getComponent();
-				if(component instanceof OutputStringText) 
-					setOutput(__buildHtmlOutputText__((OutputStringText) component));
-				else if(component instanceof Menu) 
-					setOutput(__buildMenu__((Menu) component));
-				else if(component instanceof Grid)
-					setOutput(__buildDataTable__((Grid) component));
-				else if(component instanceof View)
-					setOutput(__buildComponents__((View) component));
+				setOutput(__build__(component));
 			}
 		});
 	}
 	
-	/* OutputStringText to outputText*/
+	/**********************************************/
+	private Object __build__(Component component) {
+		if(component instanceof View) 
+			return __build__((View) component);
+		
+		if(component instanceof Components) 
+			return __build__((Components) component);
+		
+		if(component instanceof OutputStringText) 
+			return __build__((OutputStringText) component);
+		
+		if(component instanceof Commandable) 
+			return __build__((Commandable) component);
+		
+		if(component instanceof Menu) 
+			return __build__((Menu) component);
+		
+		if(component instanceof Grid) 
+			return __build__((Grid) component);
+		return null;
+	}
 	
-	private HtmlOutputText __buildHtmlOutputText__(OutputStringText outputStringText) {
+	private UIComponent __build__(View view) {
+		return view == null ? null : __build__(view.getComponents());
+	}
+	
+	private UIComponent __build__(Components components) {
+		OutputPanel outputPanel = null;
+		if(__inject__(CollectionHelper.class).isNotEmpty(components)) {
+			outputPanel = new OutputPanel();
+			outputPanel.setStyleClass(components.getLayout().getStyle().getClassesAsString());
+			for(Component index : components.get())
+				outputPanel.getChildren().add((UIComponent) __build__(index));
+		}
+		return outputPanel;
+	}
+	
+	private UIComponent __build__(OutputStringText outputStringText) {
 		HtmlOutputText htmlOutputText = new HtmlOutputText();
 		htmlOutputText.setValue(outputStringText.getValue());
 		return htmlOutputText;
 	}
 	
+	private UIComponent __build__(Commandable commandable) {
+		//CommandButton commandButton = new CommandButton();
+		Button commandButton = new Button();
+		commandButton.setValue(commandable.getProperties().getValue());
+		//ValueExpression valueExpression = __buildValueExpressionString__("alert('Clicked : "+commandButton.getValue()+" "+__formatExpression__("indexRow.orderNumber")+"')");
+		//__setValueExpression__(commandButton, "onclick", valueExpression);
+		return commandButton;
+	}
+	
 	/* Menu to MenuModel */
 	
-	private MenuModel __buildMenu__(Menu menu) {
+	private MenuModel __build__(Menu menu) {
 		MenuItems menuItems = menu.getItems();
 		MenuModel model = null;
 		if(__inject__(CollectionHelper.class).isNotEmpty(menuItems)) {
@@ -113,7 +152,7 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 	
 	/* Grid to DataTable */
 	
-	private DataTable __buildDataTable__(Grid grid) {
+	private DataTable __build__(Grid grid) {
 		DataTable dataTable = new DataTable();
 		dataTable.setVar("indexRow");
 		Objects objects = grid.getObjects();
@@ -157,26 +196,25 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		Columns columns = grid.getColumns();
 		if(__inject__(CollectionHelper.class).isNotEmpty(columns))
 			for(Column index : columns.get())
-				__buildDataTableAddColumn__(dataTable, index);
+				__buildDataTableAddColumn__(dataTable,grid, index);
 		return dataTable;
 	}
 	
-	private void __buildDataTableAddColumn__(DataTable dataTable,Column column) {
+	private void __buildDataTableAddColumn__(DataTable dataTable,Grid grid,Column column) {
 		org.primefaces.component.column.Column __column__ = new org.primefaces.component.column.Column();
-		UIComponent uiComponent = __inject__(CollectionHelper.class).getFirst(__buildComponents__(column.getView(ViewMap.HEADER)));
+		UIComponent uiComponent =__build__(column.getView(ViewMap.HEADER));
 		if(uiComponent!=null)
 			__column__.setHeader(uiComponent);
 		
-		uiComponent = __inject__(CollectionHelper.class).getFirst(__buildComponents__(column.getView(ViewMap.BODY)));
+		uiComponent = __build__(column.getView(ViewMap.BODY));
 		if(uiComponent==null) {
-			String valuePropertyName = column.getValuePropertyName();
+			String valuePropertyName = __inject__(CollectionHelper.class).isEmpty(grid.getObjects()) ? column.getValuePropertyName() : column.getFieldName();
 			if(__inject__(StringHelper.class).isNotBlank(valuePropertyName)) {
 				HtmlOutputText htmlOutputText = new HtmlOutputText();
-				ValueExpression valueExpression = FacesContext.getCurrentInstance().getApplication().getExpressionFactory().createValueExpression(FacesContext.getCurrentInstance().getELContext()
-						, "#{"+dataTable.getVar()+"['"+valuePropertyName+"']}"
-						, String.class);
-				htmlOutputText.setValueExpression("value",valueExpression);
+				__setValueExpression__(htmlOutputText, "value", __buildValueExpressionString__(__formatExpression__(dataTable.getVar()+"['"+valuePropertyName+"']")));
 				uiComponent = htmlOutputText;
+			}else {
+				
 			}
 		}else {
 			
@@ -184,7 +222,7 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		if(uiComponent!=null)
 			__column__.getChildren().add(uiComponent);
 		
-		uiComponent = __inject__(CollectionHelper.class).getFirst(__buildComponents__(column.getView(ViewMap.FOOTER)));
+		uiComponent = __build__(column.getView(ViewMap.FOOTER));
 		if(uiComponent!=null)
 			__column__.setFooter(uiComponent);
 		
@@ -193,7 +231,7 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 	
 	/* View to UIComponent */
 	
-	private Collection<UIComponent> __buildComponents__(View view) {
+	/*private Collection<UIComponent> __buildComponents__(View view) {
 		Collection<UIComponent> uiComponents = null;
 		if(view!=null) {
 			Components components = view.getComponents();
@@ -207,5 +245,33 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 			}
 		}
 		return uiComponents;
+	}*/
+	
+	/**/
+	
+	private void __setAttributes__(UIComponent uiComponent,Component component) {
+		
+	}
+	
+	/**/
+	
+	private static JavaServerFacesHelper __injectJavaServerFacesHelper__() {
+		return __inject__(JavaServerFacesHelper.class);
+	}
+	
+	private static String __formatExpression__(String expression) {
+		return __injectJavaServerFacesHelper__().formatExpression(expression);
+	}
+	
+	private static ValueExpression __buildValueExpression__(String expression,Class<?> returnType) {
+		return __injectJavaServerFacesHelper__().buildValueExpression(expression, returnType);
+	}
+	
+	private static ValueExpression __buildValueExpressionString__(String expression) {
+		return __buildValueExpression__(expression, String.class);
+	}
+	
+	private static void __setValueExpression__(UIComponent uiComponent,String propertyName,ValueExpression valueExpression) {
+		__injectJavaServerFacesHelper__().setValueExpression(uiComponent, propertyName, valueExpression);
 	}
 }

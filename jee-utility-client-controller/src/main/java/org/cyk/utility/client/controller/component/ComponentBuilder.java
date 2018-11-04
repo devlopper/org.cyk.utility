@@ -40,4 +40,7 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	ComponentBuilder<COMPONENT> setRoles(ComponentRoles roles);
 	ComponentBuilder<COMPONENT> addRoles(Collection<ComponentRole> roles);
 	ComponentBuilder<COMPONENT> addRoles(ComponentRole...roles);
+	
+	Boolean getIsTargetModelToBeBuilt();
+	ComponentBuilder<COMPONENT> setIsTargetModelToBeBuilt(Boolean isTargetModelToBeBuilt);
 }

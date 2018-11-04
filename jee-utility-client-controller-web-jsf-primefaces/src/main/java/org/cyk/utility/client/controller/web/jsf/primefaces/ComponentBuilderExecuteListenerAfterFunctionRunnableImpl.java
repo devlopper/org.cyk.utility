@@ -9,6 +9,8 @@ import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListen
 import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
 import org.cyk.utility.client.controller.component.InputOutput;
 import org.cyk.utility.client.controller.component.VisibleComponent;
+import org.cyk.utility.client.controller.component.command.Commandable;
+import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.layout.Insert;
 import org.cyk.utility.client.controller.component.menu.Menu;
@@ -61,13 +63,18 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 							
 						}
 					}else if(component instanceof Menu) {
-						
+						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
+					}else if(component instanceof Grid) {
+						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
+					}else if(component instanceof Commandable) {
+						((Commandable)component).getProperties().setValue(((Commandable)component).getName());
 					}
 				}else if(component instanceof Insert) {
 					((Insert)component).getProperties().setName(((Insert)component).getName());
 				}
 				
-				component.setTargetModel(__inject__(ComponentTargetModelBuilder.class).setComponent(component).execute().getOutput());
+				if(Boolean.TRUE.equals(componentBuilder.getIsTargetModelToBeBuilt()))
+					component.setTargetModel(__inject__(ComponentTargetModelBuilder.class).setComponent(component).execute().getOutput());
 			}
 		});
 	}

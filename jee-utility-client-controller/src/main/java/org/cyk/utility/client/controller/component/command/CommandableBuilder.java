@@ -7,6 +7,9 @@ import org.cyk.utility.system.action.SystemAction;
 
 public interface CommandableBuilder<COMPONENT extends Commandable> extends VisibleComponentBuilder<COMPONENT> {
 
+	String getName();
+	CommandableBuilder<COMPONENT> setName(String name);
+	
 	CommandBuilder getCommand();
 	CommandableBuilder<COMPONENT> setCommand(CommandBuilder command);
 	CommandBuilder getCommand(Boolean injectIfNull);

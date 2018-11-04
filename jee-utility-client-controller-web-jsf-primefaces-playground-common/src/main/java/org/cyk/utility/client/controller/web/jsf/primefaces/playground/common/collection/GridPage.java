@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
+import org.cyk.utility.client.controller.AbstractObject;
+import org.cyk.utility.client.controller.component.command.CommandableButtonBuilder;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.component.grid.cell.CellBuilder;
 import org.cyk.utility.client.controller.component.grid.column.ColumnBuilder;
@@ -30,7 +32,7 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 	protected ViewBuilder __getViewBuilder__() {
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
-		.addComponents(createDataTableBuilderNoHeadersAndFooters(),createDataTableBuilder())
+		.addComponents(/*createDataTableBuilderNoHeadersAndFooters(),*/createDataTableBuilder())
 		
 		;
 		return viewBuilder;
@@ -63,7 +65,7 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 	public static GridBuilder createDataTableBuilder() {
 		GridBuilder gridBuilder = __inject__(GridBuilder.class)
 				.addColumns(__inject__(ColumnBuilder.class).setHeaderTextValue("String").addFieldNameStrings("string")
-						,__inject__(ColumnBuilder.class).setHeaderTextValue("Number").addFieldNameStrings("number")
+						,__inject__(ColumnBuilder.class).setHeaderTextValue("Number").setFooterTextValue("Total : ?").addFieldNameStrings("number")
 						,__inject__(ColumnBuilder.class).setHeaderTextValue("Date").addFieldNameStrings("date")
 						)
 				
@@ -74,6 +76,13 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 						,new Data().setString("another string").setNumber("my number").setDate("yesterday")
 						)
 				;
+		
+		ViewBuilder viewBuilder = gridBuilder.getCommandablesColumn(Boolean.TRUE).getBodyView(Boolean.TRUE);
+		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE);
+		viewBuilder.getComponentsBuilder(Boolean.TRUE).addComponents(__inject__(CommandableButtonBuilder.class).setName("Edit")
+				,__inject__(CommandableButtonBuilder.class).setName("Delete")
+				);
+		
 		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
 		gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);
 		layoutTypeGrid.setIsHasHeader(Boolean.TRUE).setIsHasFooter(Boolean.TRUE).setIsHasOrderNumberColumn(Boolean.TRUE).setIsHasCommandablesColumn(Boolean.TRUE);
@@ -84,7 +93,8 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
-	public static class Data {
+	public static class Data extends AbstractObject {
+		private static final long serialVersionUID = 1L;
 		
 		private String string;
 		private String number;
