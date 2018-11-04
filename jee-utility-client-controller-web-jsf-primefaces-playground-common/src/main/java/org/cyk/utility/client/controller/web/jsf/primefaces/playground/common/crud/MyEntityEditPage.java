@@ -9,6 +9,7 @@ import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.window.WindowBuilder;
 import org.cyk.utility.client.controller.data.Form;
+import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
 
 import lombok.Getter;
 import lombok.Setter;

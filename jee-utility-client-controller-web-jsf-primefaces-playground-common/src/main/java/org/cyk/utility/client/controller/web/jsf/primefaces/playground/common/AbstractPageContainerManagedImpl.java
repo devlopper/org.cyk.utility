@@ -6,7 +6,7 @@ import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeRowBar;
 import org.cyk.utility.scope.ScopeSession;
 
-public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud.AbstractPageContainerManagedImpl {
+public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl {
 	private static final long serialVersionUID = -5590021276559897250L;
 
 	@Override
@@ -21,6 +21,10 @@ public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.c
 							)
 				,__inject__(MenuItemBuilder.class).setName("Grid")
 					.addChild(__inject__(MenuItemBuilder.class).setName("Index").setNavigationIdentifier("gridIndexView")
+							)
+				,__inject__(MenuItemBuilder.class).setName("MyEntity")
+					.addChild(__inject__(MenuItemBuilder.class).setName("Lister").setNavigationIdentifier("myEntityListWindow")
+							,__inject__(MenuItemBuilder.class).setName("Créer").setNavigationIdentifier("myEntityEditWindow")
 							)
 					);
 		//
