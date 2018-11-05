@@ -6,7 +6,9 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
-import org.cyk.utility.client.controller.component.command.CommandableButton;
+import org.cyk.utility.client.controller.component.command.Commandable;
+import org.cyk.utility.client.controller.component.command.CommandableRenderTypeButton;
+import org.cyk.utility.client.controller.component.command.CommandableRenderTypeLink;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.cell.Cell;
 import org.cyk.utility.client.controller.component.input.InputStringLineMany;
@@ -22,11 +24,18 @@ import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.random.RandomHelper;
+import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionUpdate;
 
 @Singleton @Named
 public class ComponentHelper extends AbstractSingleton implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public String getUrlByObjectByAction(Object object,Class<SystemAction> systemActionClass) {
+		return "http://google.com";
+	}
+	
 	public RandomHelper getRandomHelper() {
 		return __inject__(RandomHelper.class);
 	}
@@ -49,10 +58,6 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	
 	public Boolean isOutputStringMessage(Object object) {
 		return object instanceof OutputStringMessage;
-	}
-	
-	public Boolean isCommandableButton(Object object) {
-		return object instanceof CommandableButton;
 	}
 	
 	public Boolean isLayout(Object object) {
@@ -89,6 +94,26 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	
 	public Boolean isCell(Object object) {
 		return object instanceof Cell;
+	}
+	
+	public Boolean isCommandable(Object object) {
+		return object instanceof Commandable;
+	}
+	
+	public Boolean isCommandableRenderTypeButton(Object object) {
+		return object instanceof CommandableRenderTypeButton;
+	}
+	
+	public Boolean isCommandableRenderTypeLink(Object object) {
+		return object instanceof CommandableRenderTypeLink;
+	}
+	
+	public Class<?> getSystemActionUpdateClass(){
+		return SystemActionUpdate.class;
+	}
+	
+	public Class<?> getSystemActionDeleteClass(){
+		return SystemActionDelete.class;
 	}
 	
 }

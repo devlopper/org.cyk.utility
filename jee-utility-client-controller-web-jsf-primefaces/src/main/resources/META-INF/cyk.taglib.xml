@@ -96,11 +96,21 @@
         <source>tag/form/form.xhtml</source>
     </tag>
     
-    <!-- Command -->
+    <!-- Commandable -->
     
     <tag>
-        <tag-name>commandButton</tag-name>
-        <source>tag/command/button.xhtml</source>
+        <tag-name>commandable</tag-name>
+        <source>tag/command/commandable.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>commandableButton</tag-name>
+        <source>tag/command/commandableButton.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>commandableLink</tag-name>
+        <source>tag/command/commandableLink.xhtml</source>
     </tag>
     
     <!-- Misc -->

@@ -7,6 +7,8 @@ import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 
 public interface MapInstance<KEY,VALUE> extends Objectable {
 
+	Map<KEY,VALUE> getMap();
+	
 	MapInstance<KEY,VALUE> set(Object...keyValues);
 	
 	VALUE get(KEY key);

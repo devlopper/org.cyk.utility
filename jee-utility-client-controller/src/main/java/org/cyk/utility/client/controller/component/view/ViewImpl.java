@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
 import org.cyk.utility.client.controller.component.Components;
+import org.cyk.utility.client.controller.component.command.CommandableByClassMap;
 import org.cyk.utility.client.controller.component.command.Commandables;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 
@@ -14,7 +15,8 @@ public class ViewImpl extends AbstractVisibleComponentImpl implements View,Seria
 	
 	private OutputStringText name;
 	private Commandables processingCommandables;
-
+	private CommandableByClassMap commandableByClassMap;
+	
 	@Override
 	public Components getComponents() {
 		return components;
@@ -69,6 +71,19 @@ public class ViewImpl extends AbstractVisibleComponentImpl implements View,Seria
 		Components components = getComponents();
 		if(components!=null)
 			components.setInputOutputFieldValueFromValue();
+		return this;
+	}
+
+	
+	@Override
+	public CommandableByClassMap getCommandableByClassMap() {
+		return commandableByClassMap;
+	}
+
+	
+	@Override
+	public View setCommandableByClassMap(CommandableByClassMap commandableByClassMap) {
+		this.commandableByClassMap = commandableByClassMap;
 		return this;
 	}
 }

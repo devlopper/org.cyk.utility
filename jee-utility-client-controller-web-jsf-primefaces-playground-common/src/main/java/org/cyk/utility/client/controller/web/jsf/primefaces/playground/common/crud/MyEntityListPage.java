@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.utility.client.controller.component.command.CommandableButtonBuilder;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.component.grid.column.ColumnBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
@@ -48,8 +48,8 @@ public class MyEntityListPage extends AbstractPageContainerManagedImpl implement
 		
 		ViewBuilder viewBuilder = gridBuilder.getCommandablesColumn(Boolean.TRUE).getBodyView(Boolean.TRUE);
 		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE);
-		viewBuilder.getComponentsBuilder(Boolean.TRUE).addComponents(__inject__(CommandableButtonBuilder.class).setName("Edit")
-				,__inject__(CommandableButtonBuilder.class).setName("Delete")
+		viewBuilder.getComponentsBuilder(Boolean.TRUE).addComponents(__inject__(CommandableBuilder.class).setName("Edit")
+				,__inject__(CommandableBuilder.class).setName("Delete")
 				);
 		
 		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);

@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.view;
 
 import org.cyk.utility.client.controller.component.Components;
 import org.cyk.utility.client.controller.component.VisibleComponent;
+import org.cyk.utility.client.controller.component.command.CommandableByClassMap;
 import org.cyk.utility.client.controller.component.command.Commandables;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 
@@ -28,4 +29,10 @@ public interface View extends VisibleComponent {
 	View setInputOutputValueFromFieldValue();
 	View setInputOutputFieldValueFromValue();
 	
+	/*
+	 * Commandables map of the view
+	 * */
+	
+	CommandableByClassMap getCommandableByClassMap();
+	View setCommandableByClassMap(CommandableByClassMap commandableByClassMap);
 }

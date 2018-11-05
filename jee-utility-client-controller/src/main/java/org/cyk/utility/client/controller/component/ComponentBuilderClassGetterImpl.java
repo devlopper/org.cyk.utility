@@ -9,7 +9,7 @@ import java.util.HashSet;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.annotation.Annotations;
-import org.cyk.utility.client.controller.component.command.CommandableButtonBuilder;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
@@ -191,10 +191,10 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 		if(annotationOutputStringText!=null)
 			return OutputStringTextBuilder.class;
 		
-		org.cyk.utility.client.controller.component.annotation.CommandableButton annotationCommandableButton =
-				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.CommandableButton.class,annotations);
+		org.cyk.utility.client.controller.component.annotation.Commandable annotationCommandableButton =
+				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.Commandable.class,annotations);
 		if(annotationCommandableButton!=null)
-			return CommandableButtonBuilder.class;
+			return CommandableBuilder.class;
 		
 		return null;
 	}

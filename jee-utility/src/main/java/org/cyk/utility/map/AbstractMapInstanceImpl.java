@@ -15,6 +15,11 @@ public class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject implement
 	private Map<KEY,VALUE> __map__;
 	
 	@Override
+	public Map<KEY, VALUE> getMap() {
+		return __map__;
+	}
+	
+	@Override
 	public MapInstance<KEY,VALUE> set(Object... keyValues) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(keyValues)) {
 			if(__map__ == null)

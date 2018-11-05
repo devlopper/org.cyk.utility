@@ -24,4 +24,5 @@ public interface Grid extends VisibleComponent {
 	
 	Objects getObjects();
 	Grid setObjects(Objects objects);
+	
 }

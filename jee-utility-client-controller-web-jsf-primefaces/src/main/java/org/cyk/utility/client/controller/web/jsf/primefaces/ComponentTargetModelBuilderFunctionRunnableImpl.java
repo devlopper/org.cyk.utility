@@ -34,6 +34,9 @@ import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionUpdate;
 import org.primefaces.component.button.Button;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.outputpanel.OutputPanel;
@@ -103,8 +106,20 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		//CommandButton commandButton = new CommandButton();
 		Button commandButton = new Button();
 		commandButton.setValue(commandable.getProperties().getValue());
-		//ValueExpression valueExpression = __buildValueExpressionString__("alert('Clicked : "+commandButton.getValue()+" "+__formatExpression__("indexRow.orderNumber")+"')");
-		//__setValueExpression__(commandButton, "onclick", valueExpression);
+		SystemAction action = commandable.getCommand().getFunction().getAction();
+		String valueExpressionString = null;
+		if(action instanceof SystemActionUpdate)
+			valueExpressionString = "componentHelper.getUrlByObjectByAction(indexRow,componentHelper.systemActionUpdateClass)";
+		else if(action instanceof SystemActionDelete)
+			valueExpressionString = "componentHelper.getUrlByObjectByAction(indexRow,componentHelper.systemActionDeleteClass)";
+		
+		if(__inject__(StringHelper.class).isNotBlank(valueExpressionString)) {
+			String url = __formatExpression__(valueExpressionString);
+			valueExpressionString = "window.open('"+url+"','_self');return false";
+		}
+		
+		ValueExpression valueExpression = __buildValueExpressionString__(valueExpressionString);
+		__setValueExpression__(commandButton, "onclick", valueExpression);
 		return commandButton;
 	}
 	

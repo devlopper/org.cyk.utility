@@ -12,7 +12,7 @@ import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.VisibleComponents;
 import org.cyk.utility.client.controller.component.VisibleComponentsBuilder;
-import org.cyk.utility.client.controller.component.command.CommandableButton;
+import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.input.InputStringLineMany;
 import org.cyk.utility.client.controller.component.input.InputStringLineOne;
@@ -33,7 +33,7 @@ public class InputPage extends AbstractPageContainerManagedImpl implements Seria
 	@Inject private InputStringLineOne inputTextRequired;
 	private InputStringLineOne inputTextNull;
 	
-	@Inject private CommandableButton commandButton;
+	@Inject private Commandable command;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -93,11 +93,11 @@ public class InputPage extends AbstractPageContainerManagedImpl implements Seria
 		components.add(inputTextArea);
 		components.add(inputTextArea.getMessage());
 		
-		components.add(commandButton);
+		components.add(command);
 		
-		commandButton.getProperties().setValue("Send data to server");
-		commandButton.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(__inject__(SystemActionCreate.class));
-		commandButton.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).addRunnables(new Runnable() {	
+		command.getProperties().setValue("Send data to server");
+		command.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(__inject__(SystemActionCreate.class));
+		command.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).addRunnables(new Runnable() {	
 			@Override
 			public void run() {
 				System.out.println("Receiving data from client.");

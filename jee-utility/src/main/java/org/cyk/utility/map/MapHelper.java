@@ -8,6 +8,7 @@ public interface MapHelper extends Helper {
 
 	Boolean isEmpty(Map<?, ?> map);
 	Boolean isNotEmpty(Map<?, ?> map);
+	Boolean isNotEmpty(MapInstance<?, ?> mapInstance);
 	@SuppressWarnings("rawtypes")
 	void copy(Map source, Map destination, Object[] keys, Boolean removeNullValue);
 	@SuppressWarnings("rawtypes")

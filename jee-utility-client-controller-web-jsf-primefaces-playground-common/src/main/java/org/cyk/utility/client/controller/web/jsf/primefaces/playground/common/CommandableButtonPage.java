@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.utility.client.controller.component.command.CommandableButtonBuilder;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 
 import lombok.Getter;
@@ -24,8 +24,8 @@ public class CommandableButtonPage extends AbstractPageContainerManagedImpl impl
 	protected ViewBuilder __getViewBuilder__() {
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
-		.addComponents(__inject__(CommandableButtonBuilder.class).setName("No Action")
-				,__inject__(CommandableButtonBuilder.class).setName("Server Action,No Confirmation").addCommandFunctionTryRunRunnable(new Runnable() {	
+		.addComponents(__inject__(CommandableBuilder.class).setName("No Action")
+				,__inject__(CommandableBuilder.class).setName("Server Action,No Confirmation").addCommandFunctionTryRunRunnable(new Runnable() {	
 			@Override
 			public void run() {
 				System.out.println("Server Action , No Confirmation Done.");

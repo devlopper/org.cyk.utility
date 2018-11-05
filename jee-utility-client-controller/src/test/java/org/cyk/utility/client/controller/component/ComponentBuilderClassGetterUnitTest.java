@@ -6,7 +6,7 @@ import org.cyk.utility.client.controller.component.annotation.CommandableButton;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineMany;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
 import org.cyk.utility.client.controller.component.annotation.OutputStringText;
-import org.cyk.utility.client.controller.component.command.CommandableButtonBuilder;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
@@ -57,7 +57,7 @@ public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitT
 	
 	@Test
 	public void getCommandableButtonBuilder_fromAnnotation() {
-		assertionHelper.assertEquals(CommandableButtonBuilder.class, __inject__(ComponentBuilderClassGetter.class).addAnnotations(new CommandableButton() {
+		assertionHelper.assertEquals(CommandableBuilder.class, __inject__(ComponentBuilderClassGetter.class).addAnnotations(new CommandableButton() {
 			@Override
 			public Class<? extends Annotation> annotationType() {
 				return CommandableButton.class;
@@ -82,7 +82,7 @@ public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitT
 	
 	@Test
 	public void getCommandableButtonBuilder_fromMethodName() {
-		assertionHelper.assertEquals(CommandableButtonBuilder.class, __inject__(ComponentBuilderClassGetter.class).setClazz(Model.class).setMethodName("submit").execute().getOutput());
+		assertionHelper.assertEquals(CommandableBuilder.class, __inject__(ComponentBuilderClassGetter.class).setClazz(Model.class).setMethodName("submit").execute().getOutput());
 	}
 	
 	/**/

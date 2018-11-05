@@ -24,7 +24,12 @@ public class MapHelperImpl extends AbstractHelper implements MapHelper,Serializa
 	}
 	
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Boolean isNotEmpty(MapInstance<?, ?> mapInstance) {
+		return mapInstance == null ? null : isNotEmpty(mapInstance.getMap());
+	}
+	
+	@Override
+	@SuppressWarnings({ "rawtypes" })
 	public void copy(Map source,Map destination,Object[] keys,Boolean removeNullValue){
 		if(__inject__(ArrayHelper.class).isNotEmpty(keys))
 			for(Object key : keys){

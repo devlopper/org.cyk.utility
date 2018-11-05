@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.grid;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
+import org.cyk.utility.client.controller.component.command.CommandableBuilderByClassMap;
 import org.cyk.utility.client.controller.component.grid.column.ColumnBuilder;
 import org.cyk.utility.client.controller.component.grid.column.ColumnBuilders;
 import org.cyk.utility.client.controller.component.grid.row.RowBuilder;
@@ -41,4 +42,18 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	ColumnBuilder getCommandablesColumn();
 	ColumnBuilder getCommandablesColumn(Boolean injectIfNull);
 	GridBuilder setCommandablesColumn(ColumnBuilder commandablesColumn);
+	
+	ViewBuilder getCommandablesColumnBodyView(Boolean injectIfNull);
+	
+	CommandableBuilderByClassMap getCommandableMap();
+	CommandableBuilderByClassMap getCommandableMap(Boolean injectIfNull);
+	GridBuilder setCommandableMap(CommandableBuilderByClassMap commandableMap);
+	
+	CommandableBuilderByClassMap getCommandablesColumnCommandableMap();
+	CommandableBuilderByClassMap getCommandablesColumnCommandableMap(Boolean injectIfNull);
+	GridBuilder setCommandablesColumnCommandableMap(CommandableBuilderByClassMap commandablesColumnCommandableMap);
+	
+	/**/
+	
+	
 }

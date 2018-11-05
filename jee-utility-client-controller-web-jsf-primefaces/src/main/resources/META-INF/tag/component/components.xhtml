@@ -41,10 +41,10 @@
 										<cyk:message value="#{indexComponent}" />
 									</c:when>
 									
-									<!-- Button -->
+									<!-- Commandable -->
 									
-									<c:when test="#{componentHelper.isCommandableButton(indexComponent)}">
-										<cyk:commandButton value="#{indexComponent}" />
+									<c:when test="#{componentHelper.isCommandable(indexComponent)}">
+										<cyk:commandable value="#{indexComponent}" />
 									</c:when>
 									
 									<!-- Menu -->
