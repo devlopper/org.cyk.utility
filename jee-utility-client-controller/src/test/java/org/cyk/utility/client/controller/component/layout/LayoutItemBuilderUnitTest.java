@@ -13,7 +13,6 @@ public class LayoutItemBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 	protected void __listenBeforeCallCountIsZero__() throws Exception {
 		super.__listenBeforeCallCountIsZero__();
 		__inject__(ApplicationScopeLifeCycleListener.class).initialize(null);
-		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl.class);
 	}
 	
 	@Test
@@ -28,6 +27,7 @@ public class LayoutItemBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 	
 	@Test
 	public void buildWithStyle() {
+		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl.class);
 		LayoutItemBuilder layoutItemBuilder = __inject__(LayoutItemBuilder.class);
 		layoutItemBuilder.getStyle(Boolean.TRUE).addClasses("myclass");
 		LayoutItem layoutItem = layoutItemBuilder.execute().getOutput();
@@ -41,6 +41,7 @@ public class LayoutItemBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 	
 	@Test
 	public void buildWithArea() {
+		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl.class);
 		LayoutItem layoutItem = __inject__(LayoutItemBuilder.class).setAreaWidthProportionsAllClasses(1, 2, 3, 4, 5).execute().getOutput();
 		assertionHelper.assertNotNull(layoutItem);
 		assertionHelper.assertNotNull(layoutItem.getStyle());
@@ -52,6 +53,7 @@ public class LayoutItemBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 	
 	@Test
 	public void buildWithStyleAndArea() {
+		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl.class);
 		LayoutItem layoutItem = __inject__(LayoutItemBuilder.class).setAreaWidthProportionsAllClasses(1, 2, 3, 4, 5).addStyleClasses("myclass").execute().getOutput();
 		assertionHelper.assertNotNull(layoutItem);
 		assertionHelper.assertNotNull(layoutItem.getStyle());

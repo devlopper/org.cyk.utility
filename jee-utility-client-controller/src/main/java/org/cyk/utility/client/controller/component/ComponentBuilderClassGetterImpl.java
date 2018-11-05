@@ -191,9 +191,9 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 		if(annotationOutputStringText!=null)
 			return OutputStringTextBuilder.class;
 		
-		org.cyk.utility.client.controller.component.annotation.Commandable annotationCommandableButton =
+		org.cyk.utility.client.controller.component.annotation.Commandable annotationCommandable =
 				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.Commandable.class,annotations);
-		if(annotationCommandableButton!=null)
+		if(annotationCommandable!=null)
 			return CommandableBuilder.class;
 		
 		return null;

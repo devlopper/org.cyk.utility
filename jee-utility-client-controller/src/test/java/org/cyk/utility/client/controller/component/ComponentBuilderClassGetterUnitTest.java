@@ -2,7 +2,7 @@ package org.cyk.utility.client.controller.component;
 
 import java.lang.annotation.Annotation;
 
-import org.cyk.utility.client.controller.component.annotation.CommandableButton;
+import org.cyk.utility.client.controller.component.annotation.Commandable;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineMany;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
 import org.cyk.utility.client.controller.component.annotation.OutputStringText;
@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
+import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
@@ -57,10 +58,15 @@ public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitT
 	
 	@Test
 	public void getCommandableButtonBuilder_fromAnnotation() {
-		assertionHelper.assertEquals(CommandableBuilder.class, __inject__(ComponentBuilderClassGetter.class).addAnnotations(new CommandableButton() {
+		assertionHelper.assertEquals(CommandableBuilder.class, __inject__(ComponentBuilderClassGetter.class).addAnnotations(new org.cyk.utility.client.controller.component.annotation.Commandable() {
 			@Override
 			public Class<? extends Annotation> annotationType() {
-				return CommandableButton.class;
+				return org.cyk.utility.client.controller.component.annotation.Commandable.class;
+			}
+			
+			@Override
+			public Class<? extends SystemAction> systemActionClass() {
+				return null;
 			}
 		}).execute().getOutput());
 	}
@@ -94,7 +100,7 @@ public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitT
 		@InputStringLineOne private String inputText;
 		@InputStringLineMany private String inputTextArea;
 		
-		@CommandableButton
+		@Commandable(systemActionClass=SystemAction.class)
 		public void submit() {
 			
 		}
