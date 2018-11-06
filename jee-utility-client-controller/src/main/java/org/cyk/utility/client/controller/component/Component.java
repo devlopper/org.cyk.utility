@@ -14,5 +14,5 @@ public interface Component extends Objectable {
 	
 	
 	Object getTargetModel();
-	Component setTargetModel(Object targetModel);
+	void setTargetModel(Object targetModel);//void because of java bean issue
 }

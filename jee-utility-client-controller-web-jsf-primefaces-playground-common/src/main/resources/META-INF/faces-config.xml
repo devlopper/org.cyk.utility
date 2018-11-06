@@ -8,6 +8,24 @@
 		<from-view-id>*</from-view-id>
 		
 		<navigation-case>
+			<from-outcome>navigation01</from-outcome>
+			<to-view-id>/p1/p2/p3.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>navigation02</from-outcome>
+			<to-view-id>/p1/p2/p3/p4/p5.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>navigationIndexView</from-outcome>
+			<to-view-id>/navigation/index.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>commandableButtonIndexView</from-outcome>
 			<to-view-id>/commandable/button/index.jsf</to-view-id>
 			<redirect />

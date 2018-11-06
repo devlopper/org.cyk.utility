@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.command;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
+import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.system.action.SystemAction;
 
 public interface CommandableBuilder extends VisibleComponentBuilder<Commandable> {
@@ -16,6 +17,11 @@ public interface CommandableBuilder extends VisibleComponentBuilder<Commandable>
 	CommandBuilder getCommand();
 	CommandableBuilder setCommand(CommandBuilder command);
 	CommandBuilder getCommand(Boolean injectIfNull);
+	
+	NavigationBuilder getNavigation();
+	NavigationBuilder getNavigation(Boolean injectIfNull);
+	CommandableBuilder setNavigation(NavigationBuilder navigation);
+	CommandableBuilder setNavigationIdentifier(Object identifier);
 	
 	CommandableBuilder setCommandFunctionActionClass(Class<? extends SystemAction> systemActionClass);
 	CommandableBuilder addCommandFunctionTryRunRunnable(Collection<Runnable> runnables);

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
+import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.system.action.SystemAction;
 
@@ -13,6 +14,7 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	private CommandBuilder command;
 	private String name;
 	private CommandableRenderType renderType;
+	private NavigationBuilder navigation;
 	
 	@Override
 	protected void __execute__(Commandable commandable) {
@@ -27,6 +29,11 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		if(renderType == null)
 			renderType = __inject__(CommandableRenderTypeButton.class);
 		commandable.setRenderType(renderType);
+		
+		NavigationBuilder navigation = getNavigation();
+		if(navigation!=null) {
+			commandable.setNavigation(navigation.execute().getOutput());
+		}
 	}
 	
 	@Override
@@ -90,7 +97,30 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		return this;
 	}
 	
+	@Override
+	public NavigationBuilder getNavigation() {
+		return navigation;
+	}
+	
+	@Override
+	public NavigationBuilder getNavigation(Boolean injectIfNull) {
+		return (NavigationBuilder) __getInjectIfNull__(FIELD_NAVIGATION, injectIfNull);
+	}
+	
+	@Override
+	public CommandableBuilder setNavigation(NavigationBuilder navigation) {
+		this.navigation = navigation;
+		return this;
+	}
+	
+	@Override
+	public CommandableBuilder setNavigationIdentifier(Object identifier) {
+		getNavigation(Boolean.TRUE).setIdentifier(identifier);
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_COMMAND = "command";
+	public static final String FIELD_NAVIGATION = "navigation";
 }

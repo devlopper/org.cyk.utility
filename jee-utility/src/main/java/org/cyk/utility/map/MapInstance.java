@@ -14,4 +14,7 @@ public interface MapInstance<KEY,VALUE> extends Objectable {
 	VALUE get(KEY key);
 	
 	Collection<Map.Entry<KEY,VALUE>> getEntries();
+	
+	Boolean getIsOrdered();
+	MapInstance<KEY,VALUE> setIsOrdered(Boolean isOrdered);
 }

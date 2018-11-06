@@ -50,9 +50,9 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	}
 	
 	@Override
-	public Component setTargetModel(Object targetModel) {
+	public void setTargetModel(Object targetModel) {
 		this.targetModel = targetModel;
-		return this;
+		//return this;
 	}
 	
 	/**/

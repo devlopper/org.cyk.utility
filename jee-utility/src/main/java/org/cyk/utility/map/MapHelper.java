@@ -7,6 +7,7 @@ import org.cyk.utility.helper.Helper;
 public interface MapHelper extends Helper {
 
 	Boolean isEmpty(Map<?, ?> map);
+	Boolean isEmpty(MapInstance<?, ?> mapInstance);
 	Boolean isNotEmpty(Map<?, ?> map);
 	Boolean isNotEmpty(MapInstance<?, ?> mapInstance);
 	@SuppressWarnings("rawtypes")

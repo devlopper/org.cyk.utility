@@ -12,6 +12,8 @@ import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.window.WindowBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
+import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionUpdate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -46,11 +48,9 @@ public class MyEntityListPage extends AbstractPageContainerManagedImpl implement
 						)
 				;
 		
-		ViewBuilder viewBuilder = gridBuilder.getCommandablesColumn(Boolean.TRUE).getBodyView(Boolean.TRUE);
-		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE);
-		viewBuilder.getComponentsBuilder(Boolean.TRUE).addComponents(__inject__(CommandableBuilder.class).setName("Edit")
-				,__inject__(CommandableBuilder.class).setName("Delete")
-				);
+		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getCommandableByClassMap(Boolean.TRUE).set(SystemActionUpdate.class,__inject__(CommandableBuilder.class)
+				.setName("Modifier").setNavigationIdentifier("myEntityEditWindow"),SystemActionDelete.class,__inject__(CommandableBuilder.class).setName("Supprimer")
+				.setNavigationIdentifier("myEntityEditWindow"));
 		
 		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
 		gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);

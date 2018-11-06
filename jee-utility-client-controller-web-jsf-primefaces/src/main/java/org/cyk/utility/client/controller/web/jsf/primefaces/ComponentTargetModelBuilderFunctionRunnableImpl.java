@@ -106,20 +106,35 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		//CommandButton commandButton = new CommandButton();
 		Button commandButton = new Button();
 		commandButton.setValue(commandable.getProperties().getValue());
-		SystemAction action = commandable.getCommand().getFunction().getAction();
-		String valueExpressionString = null;
-		if(action instanceof SystemActionUpdate)
-			valueExpressionString = "componentHelper.getUrlByObjectByAction(indexRow,componentHelper.systemActionUpdateClass)";
-		else if(action instanceof SystemActionDelete)
-			valueExpressionString = "componentHelper.getUrlByObjectByAction(indexRow,componentHelper.systemActionDeleteClass)";
-		
-		if(__inject__(StringHelper.class).isNotBlank(valueExpressionString)) {
-			String url = __formatExpression__(valueExpressionString);
-			valueExpressionString = "window.open('"+url+"','_self');return false";
+		String onClickValueExpressionString = null;
+		if(commandable.getNavigation()!=null) {
+			String url = null;
+			if(commandable.getNavigation().getUniformResourceLocator()==null)
+				url = null;
+			else
+				url = commandable.getNavigation().getUniformResourceLocator().toString();
+			
+			if(__inject__(StringHelper.class).isNotBlank(url)) {
+				onClickValueExpressionString = "window.open('"+url+"','_self');return false";
+			}
+		}else {
+			SystemAction action = commandable.getCommand().getFunction().getAction();
+			if(action instanceof SystemActionUpdate)
+				onClickValueExpressionString = "componentHelper.getUrlByObjectByAction(indexRow,componentHelper.systemActionUpdateClass)";
+			else if(action instanceof SystemActionDelete)
+				onClickValueExpressionString = "componentHelper.getUrlByObjectByAction(indexRow,componentHelper.systemActionDeleteClass)";
+			
+			if(__inject__(StringHelper.class).isNotBlank(onClickValueExpressionString)) {
+				String url = __formatExpression__(onClickValueExpressionString);
+				onClickValueExpressionString = "window.open('"+url+"','_self');return false";
+			}
 		}
 		
-		ValueExpression valueExpression = __buildValueExpressionString__(valueExpressionString);
-		__setValueExpression__(commandButton, "onclick", valueExpression);
+		if(__inject__(StringHelper.class).isNotBlank(onClickValueExpressionString)) {
+			ValueExpression valueExpression = __buildValueExpressionString__(onClickValueExpressionString);
+			__setValueExpression__(commandButton, "onclick", valueExpression);	
+		}
+		
 		return commandButton;
 	}
 	

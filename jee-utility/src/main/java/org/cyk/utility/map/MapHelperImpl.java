@@ -19,6 +19,11 @@ public class MapHelperImpl extends AbstractHelper implements MapHelper,Serializa
 	}
 	
 	@Override
+	public Boolean isEmpty(MapInstance<?, ?> mapInstance) {
+		return mapInstance == null || isEmpty(mapInstance.getMap());
+	}
+	
+	@Override
 	public Boolean isNotEmpty(Map<?, ?> map){
 		return Boolean.FALSE.equals(isEmpty(map));
 	}
