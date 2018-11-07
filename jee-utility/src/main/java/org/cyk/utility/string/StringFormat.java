@@ -12,5 +12,7 @@ public interface StringFormat extends Objectable {
 	StringFormat setArgumentMap(ObjectByIntegerMap argumentMap);
 	StringFormat setArguments(Object...arguments);
 	
+	Object getArgument(Integer index);
+	
 	String evaluate();
 }

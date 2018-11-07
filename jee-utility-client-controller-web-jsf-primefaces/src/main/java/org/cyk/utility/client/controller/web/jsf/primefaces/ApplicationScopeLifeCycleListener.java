@@ -18,6 +18,7 @@ import org.cyk.utility.client.controller.component.theme.ThemeClassGetterImpl;
 import org.cyk.utility.client.controller.message.MessageRenderImpl;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapperImpl;
 import org.cyk.utility.css.StyleClassBuilderWidthImpl;
+import org.cyk.utility.request.RequestPropertyValueGetterImpl;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -36,6 +37,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(FunctionRunnableMap.class).set(ComponentRoleStyleClassGetterImpl.class, ComponentRoleStyleClassGetterFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(ComponentTargetModelBuilderImpl.class, ComponentTargetModelBuilderFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(NavigationIdentifierToUrlStringMapperImpl.class, NavigationIdentifierToUrlStringMapperFunctionRunnableImpl.class);
+		__inject__(FunctionRunnableMap.class).set(RequestPropertyValueGetterImpl.class, RequestPropertyValueGetterFunctionRunnableImpl.class);
 	}
 	
 	@Override

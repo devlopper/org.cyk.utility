@@ -50,6 +50,12 @@ public class StringFormatImpl extends AbstractObject implements StringFormat,Ser
 		getArgumentMap().set(arguments);
 		return this;
 	}
+	
+	@Override
+	public Object getArgument(Integer index) {
+		ObjectByIntegerMap map = getArgumentMap();
+		return map == null ? null : map.get(index);
+	}
 
 	@Override
 	public String evaluate() {

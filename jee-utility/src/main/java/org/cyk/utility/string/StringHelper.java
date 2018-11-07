@@ -7,6 +7,8 @@ import org.cyk.utility.helper.Helper;
 
 public interface StringHelper extends Helper {
 
+	String getString(Object object);
+	
 	Number getLength(String string);
 	Boolean isBlank(String string);
 	Boolean isNotBlank(String string);
@@ -27,5 +29,7 @@ public interface StringHelper extends Helper {
 	
 	String addToBeginIfDoesNotStartWith(String string,Object prefix);
 	String addToEndIfDoesNotEndWith(String string,Object suffix);
+	
+	String removeToBeginIfDoesStartWith(String string,Object prefix);
 	
 }

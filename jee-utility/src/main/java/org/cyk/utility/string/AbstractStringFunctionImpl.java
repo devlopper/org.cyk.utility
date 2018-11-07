@@ -9,10 +9,14 @@ public abstract class AbstractStringFunctionImpl extends AbstractFunctionWithPro
 	
 	private StringFormat format;
 	
+	protected StringFormat __getFormat__(StringFormat format) {
+		return format;
+	}
+	
 	@Override
 	protected String __execute__() throws Exception {
 		String string = null;
-		StringFormat format = getFormat();
+		StringFormat format = __getFormat__(getFormat());
 		if(format == null)
 			string = super.__execute__();
 		else

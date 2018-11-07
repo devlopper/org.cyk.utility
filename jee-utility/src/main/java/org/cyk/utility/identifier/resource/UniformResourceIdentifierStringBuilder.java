@@ -11,6 +11,24 @@ public interface UniformResourceIdentifierStringBuilder extends StringFunction {
 
 	UniformResourceIdentifierStringBuilder setFormatArguments(Object...arguments);
 
+	UniformResourceIdentifierStringBuilder setScheme(Object scheme);
+	Object getScheme();
+	
+	UniformResourceIdentifierStringBuilder setHost(Object host);
+	Object getHost();
+	
+	UniformResourceIdentifierStringBuilder setPort(Object port);
+	Object getPort();
+	
+	UniformResourceIdentifierStringBuilder setContext(Object context);
+	Object getContext();
+	
+	UniformResourceIdentifierStringBuilder setPath(Object path);
+	Object getPath();
+	
+	Object getRequest();
+	UniformResourceIdentifierStringBuilder setRequest(Object request);
+	
 	/**/
 	
 	/**

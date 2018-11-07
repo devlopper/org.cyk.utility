@@ -17,6 +17,11 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	public String getString(Object object) {
+		return object == null ? StringConstant.EMPTY : object.toString();
+	}
+	
+	@Override
 	public Number getLength(String string) {
 		return StringUtils.length(string);
 	}
@@ -119,7 +124,7 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	
 	@Override
 	public String addToBeginIfDoesNotStartWith(String string, Object prefix) {
-		String prefixString = String.valueOf(prefix);
+		String prefixString = getString(prefix);
 		if(!StringUtils.startsWith(string, prefixString))
 			string = prefixString + string;
 		return string;
@@ -127,9 +132,17 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	
 	@Override
 	public String addToEndIfDoesNotEndWith(String string, Object suffix) {
-		String suffixString = String.valueOf(suffix);
+		String suffixString = getString(suffix);
 		if(!StringUtils.endsWith(string, suffixString))
 			string = string + suffixString;
+		return string;
+	}
+	
+	@Override
+	public String removeToBeginIfDoesStartWith(String string, Object prefix) {
+		String prefixString = getString(prefix);
+		if(StringUtils.startsWith(string, prefixString))
+			string = string.substring(prefixString.length());
 		return string;
 	}
 	
