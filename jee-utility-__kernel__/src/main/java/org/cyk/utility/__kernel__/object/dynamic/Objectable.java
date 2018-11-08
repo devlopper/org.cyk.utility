@@ -30,4 +30,6 @@ public interface Objectable extends org.cyk.utility.__kernel__.object.Objectable
 	
 	Object getChildAt(Integer index);
 	
+	String getRepresentationAsString();
+	
 }

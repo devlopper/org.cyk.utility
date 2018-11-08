@@ -1,12 +1,17 @@
 package org.cyk.utility.identifier.resource;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.map.MapHelper;
+import org.cyk.utility.object.ObjectByObjectMap;
 import org.cyk.utility.request.RequestProperty;
 import org.cyk.utility.request.RequestPropertyValueGetter;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
+import org.cyk.utility.string.StringByString;
 import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.StringFormat;
 
@@ -15,6 +20,8 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 
 	private Object request;
 	private Object context;
+	private String string;
+	private ObjectByObjectMap parameterMap;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -24,26 +31,26 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 	
 	@Override
 	protected StringFormat __getFormat__(StringFormat format) {
+		String string = getString();
 		String scheme = __injectStringHelper__().getString(getScheme());
-		if(__injectStringHelper__().isBlank(scheme)) {
-			setScheme(scheme = __getRequestProperty__(RequestProperty.SCHEME));
-		}
+		if(__injectStringHelper__().isBlank(scheme))
+			setScheme(scheme = __getRequestProperty__(RequestProperty.SCHEME,string));
 		
 		String host = __injectStringHelper__().getString(getHost());
-		if(__injectStringHelper__().isBlank(host)) {
-			setHost(host = __getRequestProperty__(RequestProperty.HOST));
-		}
+		if(__injectStringHelper__().isBlank(host))
+			setHost(host = __getRequestProperty__(RequestProperty.HOST,string));
 
 		String port = __injectStringHelper__().getString(getPort());
-		if(__injectStringHelper__().isBlank(port)) {
-			setPort(port = __getRequestProperty__(RequestProperty.PORT));
-		}
+		if(__injectStringHelper__().isBlank(port))
+			setPort(port = __getRequestProperty__(RequestProperty.PORT,string));
 		
 		String context = __injectStringHelper__().getString(getContext());
-		if(__injectStringHelper__().isBlank(context)) {
-			setContext(context = __getRequestProperty__(RequestProperty.CONTEXT));
-		}
+		if(__injectStringHelper__().isBlank(context))
+			setContext(context = __getRequestProperty__(RequestProperty.CONTEXT,string));
 		
+		Object pathObject = getPath();
+		if(pathObject == null && __injectStringHelper__().isNotBlank(string))
+			setPath(pathObject = __getRequestProperty__(RequestProperty.PATH,string));
 		String path = __injectValueHelper__().defaultToIfNull(__injectStringHelper__().getString(getPath()), StringConstant.EMPTY) ;
 		
 		if(__injectStringHelper__().isNotBlank(context))
@@ -53,12 +60,52 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 			path = StringUtils.replace((String)path, "//", "/");
 		path = __injectStringHelper__().removeToBeginIfDoesStartWith(path, CharacterConstant.SLASH);
 		
+		ObjectByObjectMap parameterMap = getParameterMap();
+		if(Boolean.TRUE.equals(__inject__(MapHelper.class).isNotEmpty(parameterMap))) {
+			StringByString finalParameterMap = __inject__(StringByString.class).setKeyValueSeparator(CharacterConstant.EQUAL).setEntrySeparator(CharacterConstant.AMPERSTAMP);
+			for(Map.Entry<Object, Object> index : parameterMap.getEntries()) {
+				String name = null;
+				if(index.getKey()!=null)
+					name = index.getKey().toString();
+				
+				if(__injectStringHelper__().isNotBlank(name)) {
+					String value = null;
+					if(index.getValue()!=null)
+						value = index.getValue().toString();
+					
+					finalParameterMap.set(name,value);
+				}
+			}
+			path = path + CharacterConstant.QUESTION_MARK.toString() + finalParameterMap.getRepresentationAsString();
+		}
+		
 		setPath(path);
 		return super.__getFormat__(format);
 	}
 	
+	protected String __getRequestProperty__(RequestProperty property,String string) {
+		String value = null;
+		if(property!=null) {
+			if(__injectStringHelper__().isBlank(string))
+				value = __injectStringHelper__().getString(__inject__(RequestPropertyValueGetter.class).setRequest(getRequest()).setProperty(property).execute().getOutput());
+			else {
+				URI uri = URI.create(string);
+				if(uri!=null) {
+					switch(property) {
+					case SCHEME: value = uri.getScheme(); break;
+					case HOST: value = uri.getHost(); break;
+					case PORT: value = String.valueOf(uri.getPort()); break;
+					case PATH: value = uri.getPath();break;
+					default: value = null;
+					}		
+				}
+			}
+		}
+		return value;
+	}
+	
 	protected String __getRequestProperty__(RequestProperty property) {
-		return __injectStringHelper__().getString(__inject__(RequestPropertyValueGetter.class).setRequest(getRequest()).setProperty(property).execute().getOutput());
+		return __getRequestProperty__(property, null);
 	}
 	
 	@Override
@@ -144,5 +191,39 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 		this.request = request;
 		return this;
 	}
+	
+	@Override
+	public String getString() {
+		return string;
+	}
+	
+	public UniformResourceIdentifierStringBuilder setString(String string) {
+		this.string = string;
+		return this;
+	}
+	
+	@Override
+	public ObjectByObjectMap getParameterMap() {
+		return parameterMap;
+	}
+	
+	@Override
+	public UniformResourceIdentifierStringBuilder setParameterMap(ObjectByObjectMap parameterMap) {
+		this.parameterMap = parameterMap;
+		return this;
+	}
+	
+	@Override
+	public ObjectByObjectMap getParameterMap(Boolean injectIfNull) {
+		return (ObjectByObjectMap) __getInjectIfNull__(FIELD_PARAMETER_MAP, injectIfNull);
+	}
+	
+	@Override
+	public UniformResourceIdentifierStringBuilder setParameters(Object... keyValues) {
+		getParameterMap(Boolean.TRUE).set(keyValues);
+		return this;
+	}
+	
+	public static final String FIELD_PARAMETER_MAP = "parameterMap";
 	
 }

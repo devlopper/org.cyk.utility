@@ -48,9 +48,10 @@ public class MyEntityListPage extends AbstractPageContainerManagedImpl implement
 						)
 				;
 		
-		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getCommandableByClassMap(Boolean.TRUE).set(SystemActionUpdate.class,__inject__(CommandableBuilder.class)
-				.setName("Modifier").setNavigationIdentifier("myEntityEditWindow"),SystemActionDelete.class,__inject__(CommandableBuilder.class).setName("Supprimer")
-				.setNavigationIdentifier("myEntityEditWindow"));
+		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getCommandables(Boolean.TRUE).add(
+				__inject__(CommandableBuilder.class).setName("Modifier").setNavigationIdentifierAndParameters("myEntityEditWindow",null)
+				,__inject__(CommandableBuilder.class).setName("Supprimer").setNavigationIdentifierAndParameters("myEntityEditWindow",new Object[] {"p1","v1"})
+				);
 		
 		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
 		gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);

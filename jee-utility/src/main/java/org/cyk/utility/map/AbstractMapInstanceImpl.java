@@ -1,6 +1,7 @@
 package org.cyk.utility.map;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,12 +10,22 @@ import java.util.TreeMap;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
+import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.string.StringHelper;
 
-public class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject implements MapInstance<KEY,VALUE>,Serializable {
+public abstract class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject implements MapInstance<KEY,VALUE>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Map<KEY,VALUE> __map__;
 	private Boolean isOrdered;
+	private Object keyValueSeparator,entrySeparator;
+	
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		setKeyValueSeparator(CharacterConstant.EQUAL);
+		setEntrySeparator(CharacterConstant.COMA);
+	}
 	
 	@Override
 	public Map<KEY, VALUE> getMap() {
@@ -54,7 +65,45 @@ public class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject implement
 	}
 	
 	@Override
+	public Object getKeyValueSeparator() {
+		return keyValueSeparator;
+	}
+
+	@Override
+	public MapInstance<KEY, VALUE> setKeyValueSeparator(Object keyValueSeparator) {
+		this.keyValueSeparator = keyValueSeparator;
+		return this;
+	}
+
+	@Override
+	public Object getEntrySeparator() {
+		return entrySeparator;
+	}
+
+	@Override
+	public MapInstance<KEY, VALUE> setEntrySeparator(Object entrySeparator) {
+		this.entrySeparator = entrySeparator;
+		return this;
+	}
+	
+	@Override
 	public String toString() {
 		return __map__ == null ? super.toString() : __map__.toString();
 	}
+
+	@Override
+	public String getRepresentationAsString() {
+		Collection<String> strings = new ArrayList<>();
+		Collection<Map.Entry<KEY, VALUE>> entries = getEntries();
+		String entrySeparator = __inject__(StringHelper.class).getString(getEntrySeparator());
+		if(entries!=null) {
+			String keyValueSeparator = __inject__(StringHelper.class).getString(getKeyValueSeparator());
+			for(Map.Entry<KEY, VALUE> index : entries) {
+				strings.add(index.getKey()+keyValueSeparator+index.getValue());
+			}
+		}
+		return __inject__(StringHelper.class).concatenate(strings, entrySeparator);
+	}
+
+	
 }

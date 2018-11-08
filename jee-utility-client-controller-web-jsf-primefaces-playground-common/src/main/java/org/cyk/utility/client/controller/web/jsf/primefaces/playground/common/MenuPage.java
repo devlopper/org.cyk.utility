@@ -33,14 +33,14 @@ public class MenuPage extends AbstractPageContainerManagedImpl implements Serial
 	private MenuBuilder __getMenuBuilder__(MenuRenderType renderType) {
 		MenuBuilder menuBuilder = __inject__(MenuBuilder.class).setRenderType(renderType);
 		menuBuilder.addItems(
-				__inject__(MenuItemBuilder.class).setName("L1")
-					.addChild(__inject__(MenuItemBuilder.class).setName("L1.1"),__inject__(MenuItemBuilder.class).setName("L1.2"))
-				,__inject__(MenuItemBuilder.class).setName("L2")
-				,__inject__(MenuItemBuilder.class).setName("L3")
+				__inject__(MenuItemBuilder.class).setCommandableName("L1")
+					.addChild(__inject__(MenuItemBuilder.class).setCommandableName("L1.1"),__inject__(MenuItemBuilder.class).setCommandableName("L1.2"))
+				,__inject__(MenuItemBuilder.class).setCommandableName("L2")
+				,__inject__(MenuItemBuilder.class).setCommandableName("L3")
 					.addChild(
-							__inject__(MenuItemBuilder.class).setName("L3.1")
-							.addChild(__inject__(MenuItemBuilder.class).setName("L3.1.1"),__inject__(MenuItemBuilder.class).setName("L3.1.2"))
-							,__inject__(MenuItemBuilder.class).setName("L3.2")));
+							__inject__(MenuItemBuilder.class).setCommandableName("L3.1")
+							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("L3.1.1"),__inject__(MenuItemBuilder.class).setCommandableName("L3.1.2"))
+							,__inject__(MenuItemBuilder.class).setCommandableName("L3.2")));
 		return menuBuilder;
 	}
 	

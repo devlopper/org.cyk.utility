@@ -139,4 +139,9 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	public Object getChildAt(Integer index) {
 		return __inject__(KernelHelper.class).getElementAt(getChildren(), index);
 	}
+	
+	@Override
+	public String getRepresentationAsString() {
+		return null;
+	}
 }

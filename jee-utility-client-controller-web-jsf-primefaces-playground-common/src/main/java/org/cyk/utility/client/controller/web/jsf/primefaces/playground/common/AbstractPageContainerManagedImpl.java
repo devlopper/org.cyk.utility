@@ -13,21 +13,21 @@ public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.c
 	protected MenuBuilderMap __getMenuBuilderMap__() {
 		MenuBuilder menuBuilder = __inject__(MenuBuilder.class).setRenderType(__inject__(MenuRenderTypeRowBar.class));
 		menuBuilder.addItems(
-				__inject__(MenuItemBuilder.class).setName("Layout")
-					.addChild(__inject__(MenuItemBuilder.class).setName("Index")
-					,__inject__(MenuItemBuilder.class).setName("Table"))
-				,__inject__(MenuItemBuilder.class).setName("Commandable")
-					.addChild(__inject__(MenuItemBuilder.class).setName("Button Index").setNavigationIdentifier("commandableButtonIndexView")
+				__inject__(MenuItemBuilder.class).setCommandableName("Layout")
+					.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index")
+					,__inject__(MenuItemBuilder.class).setCommandableName("Table"))
+				,__inject__(MenuItemBuilder.class).setCommandableName("Commandable")
+					.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Button Index").setCommandableNavigationIdentifier("commandableButtonIndexView")
 							)
-				,__inject__(MenuItemBuilder.class).setName("Grid")
-					.addChild(__inject__(MenuItemBuilder.class).setName("Index").setNavigationIdentifier("gridIndexView")
+				,__inject__(MenuItemBuilder.class).setCommandableName("Grid")
+					.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index").setCommandableNavigationIdentifier("gridIndexView")
 							)
-				,__inject__(MenuItemBuilder.class).setName("Navigation")
-					.addChild(__inject__(MenuItemBuilder.class).setName("Index").setNavigationIdentifier("navigationIndexView")
+				,__inject__(MenuItemBuilder.class).setCommandableName("Navigation")
+					.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index").setCommandableNavigationIdentifier("navigationIndexView")
 							)
-				,__inject__(MenuItemBuilder.class).setName("MyEntity")
-					.addChild(__inject__(MenuItemBuilder.class).setName("Lister").setNavigationIdentifier("myEntityListWindow")
-							,__inject__(MenuItemBuilder.class).setName("Créer").setNavigationIdentifier("myEntityEditWindow")
+				,__inject__(MenuItemBuilder.class).setCommandableName("MyEntity")
+					.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Lister").setCommandableNavigationIdentifierAndParameters("myEntityListWindow",new Object[] {"p","v","a","b"})
+							,__inject__(MenuItemBuilder.class).setCommandableName("Créer").setCommandableNavigationIdentifier("myEntityEditWindow")
 							)
 					);
 		//

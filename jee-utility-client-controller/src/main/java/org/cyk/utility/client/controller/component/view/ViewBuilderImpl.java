@@ -11,6 +11,7 @@ import org.cyk.utility.client.controller.component.Components;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableBuilderByClassMap;
+import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
@@ -23,6 +24,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	private ComponentsBuilder componentsBuilder;
 	private ViewType type;
 	private CommandableBuilderByClassMap commandableByClassMap;
+	private CommandableBuilders commandables;
 	
 	@Override
 	protected View __execute__() throws Exception {
@@ -296,8 +298,25 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		return this;
 	}
 	
+	@Override
+	public CommandableBuilders getCommandables() {
+		return commandables;
+	}
+	
+	@Override
+	public CommandableBuilders getCommandables(Boolean injectIfNull) {
+		return (CommandableBuilders) __getInjectIfNull__(FIELD_COMMANDABLES, injectIfNull);
+	}
+	
+	@Override
+	public ViewBuilder setCommandables(CommandableBuilders commandables) {
+		this.commandables = commandables;
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_COMPONENTS_BUILDER = "componentsBuilder";
 	public static final String FIELD_COMMANDABLE_BY_CLASS_MAP = "commandableByClassMap";
+	public static final String FIELD_COMMANDABLES = "commandables";
 }

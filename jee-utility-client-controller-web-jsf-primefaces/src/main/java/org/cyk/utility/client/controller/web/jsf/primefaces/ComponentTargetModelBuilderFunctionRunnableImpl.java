@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,7 +30,6 @@ import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
-import org.cyk.utility.client.controller.navigation.Navigation;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
@@ -155,17 +155,23 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 			for(MenuItem index : menuItems) {
 				Collection<MenuItem> children = __inject__(CollectionHelper.class).cast(MenuItem.class, index.getChildren());
 		        if(__inject__(CollectionHelper.class).isEmpty(children)) {
-		        	DefaultMenuItem item = new DefaultMenuItem(index.getName());
-		        	Navigation navigation = index.getNavigation();
-		        	if(navigation!=null) {
-		        		String outcome = (String) navigation.getIdentifier();
-		        		if(__inject__(StringHelper.class).isNotBlank(outcome))
-		        			item.setOutcome(outcome);
+		        	DefaultMenuItem item = new DefaultMenuItem(index.getCommandable().getName());
+		        	if(index.getCommandable().getNavigation() == null) {
+		        		
+		        	}else {
+		        		URL url = index.getCommandable().getNavigation().getUniformResourceLocator();
+		        		if(url == null) {
+		        			//String outcome = (String) navigation.getIdentifier();
+			        		//if(__inject__(StringHelper.class).isNotBlank(outcome))
+			        		//	item.setOutcome(outcome);
+		        		}
+		        		
+		        		if(url!=null)
+		        			item.setUrl(url.toString());	
 		        	}
-		        	
 		        	__buildMenuAddMenuElement__(parent, item);	
 		        }else {
-		        	DefaultSubMenu subMenu = new DefaultSubMenu(index.getName());
+		        	DefaultSubMenu subMenu = new DefaultSubMenu(index.getCommandable().getName());
 		        	__buildMenuAddMenuElement__(parent, subMenu);
 		        	__buildMenuAddItemChildren__(subMenu, children);
 		        }

@@ -4,22 +4,20 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
-import org.cyk.utility.client.controller.navigation.NavigationBuilder;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 
 public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<MenuItem> implements MenuItemBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String name;
-	private NavigationBuilder navigation;
+	private CommandableBuilder commandable;
 	
 	@Override
 	protected void __execute__(MenuItem menuItem) {
 		super.__execute__(menuItem);
-		String name = getName();
-		menuItem.setName(name);
-		NavigationBuilder navigation = getNavigation();
-		if(navigation!=null)
-			menuItem.setNavigation(navigation.execute().getOutput());
+		CommandableBuilder commandable = getCommandable();
+		if(commandable!=null)
+			menuItem.setCommandable(commandable.execute().getOutput());
+		
 		Collection<Object> children = getChildren();
 		if(__injectCollectionHelper__().isNotEmpty(children)) {
 			for(Object index : children) {
@@ -30,35 +28,36 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	}
 	
 	@Override
-	public MenuItemBuilder setName(String name) {
-		this.name = name;
+	public MenuItemBuilder setCommandable(CommandableBuilder commandable) {
+		this.commandable = commandable;
 		return this;
 	}
 	
 	@Override
-	public String getName() {
-		return name;
+	public CommandableBuilder getCommandable() {
+		return commandable;
 	}
 	
 	@Override
-	public NavigationBuilder getNavigation() {
-		return navigation;
+	public CommandableBuilder getCommandable(Boolean injectIfNull) {
+		return (CommandableBuilder) __getInjectIfNull__(FIELD_COMMANDABLE, injectIfNull);
 	}
 	
 	@Override
-	public NavigationBuilder getNavigation(Boolean injectIfNull) {
-		return (NavigationBuilder) __getInjectIfNull__(FIELD_NAVIGATION, injectIfNull);
-	}
-	
-	@Override
-	public MenuItemBuilder setNavigation(NavigationBuilder navigation) {
-		this.navigation = navigation;
+	public MenuItemBuilder setCommandableNavigationIdentifier(Object identifier) {
+		getCommandable(Boolean.TRUE).setNavigationIdentifier(identifier);
 		return this;
 	}
 	
 	@Override
-	public MenuItemBuilder setNavigationIdentifier(Object identifier) {
-		getNavigation(Boolean.TRUE).setIdentifier(identifier);
+	public MenuItemBuilder setCommandableNavigationIdentifierAndParameters(Object identifier,Object[] parameters) {
+		getCommandable(Boolean.TRUE).setNavigationIdentifierAndParameters(identifier,parameters);
+		return this;
+	}
+	
+	@Override
+	public MenuItemBuilder setCommandableName(String name) {
+		getCommandable(Boolean.TRUE).setName(name);
 		return this;
 	}
 	
@@ -79,6 +78,6 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	
 	/**/
 	
-	public static final String FIELD_NAVIGATION = "navigation";
+	public static final String FIELD_COMMANDABLE = "commandable";
 	
 }

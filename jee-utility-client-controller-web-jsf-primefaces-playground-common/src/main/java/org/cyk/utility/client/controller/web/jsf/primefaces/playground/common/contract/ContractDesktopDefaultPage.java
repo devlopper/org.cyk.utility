@@ -44,14 +44,14 @@ public class ContractDesktopDefaultPage extends AbstractPageContainerManagedImpl
 	protected MenuBuilderMap __getMenuBuilderMap__() {
 		MenuBuilder menuBuilder = __inject__(MenuBuilder.class).setRenderType(__inject__(MenuRenderTypeRowBar.class));
 		menuBuilder.addItems(
-				__inject__(MenuItemBuilder.class).setName("L1")
-					.addChild(__inject__(MenuItemBuilder.class).setName("L1.1"),__inject__(MenuItemBuilder.class).setName("L1.2"))
-				,__inject__(MenuItemBuilder.class).setName("L2")
-				,__inject__(MenuItemBuilder.class).setName("L3")
+				__inject__(MenuItemBuilder.class).setCommandableName("L1")
+					.addChild(__inject__(MenuItemBuilder.class).setCommandableName("L1.1"),__inject__(MenuItemBuilder.class).setCommandableName("L1.2"))
+				,__inject__(MenuItemBuilder.class).setCommandableName("L2")
+				,__inject__(MenuItemBuilder.class).setCommandableName("L3")
 					.addChild(
-							__inject__(MenuItemBuilder.class).setName("L3.1")
-							.addChild(__inject__(MenuItemBuilder.class).setName("L3.1.1"),__inject__(MenuItemBuilder.class).setName("L3.1.2"))
-							,__inject__(MenuItemBuilder.class).setName("L3.2")));
+							__inject__(MenuItemBuilder.class).setCommandableName("L3.1")
+							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("L3.1.1"),__inject__(MenuItemBuilder.class).setCommandableName("L3.1.2"))
+							,__inject__(MenuItemBuilder.class).setCommandableName("L3.2")));
 		return __inject__(MenuBuilderMap.class).set(ScopeApplication.class,menuBuilder);
 	}
 	

@@ -119,6 +119,19 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		return this;
 	}
 	
+	@Override
+	public CommandableBuilder setNavigationParameters(Object... keyValues) {
+		getNavigation(Boolean.TRUE).setParameters(keyValues);
+		return this;
+	}
+	
+	@Override
+	public CommandableBuilder setNavigationIdentifierAndParameters(Object identifier, Object[] keyValues) {
+		setNavigationIdentifier(identifier);
+		setNavigationParameters(keyValues);
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_COMMAND = "command";

@@ -30,7 +30,7 @@ public class UniformResourceLocatorStringBuilderImpl extends AbstractStringFunct
 	}
 
 	@Override
-	public UniformResourceLocatorStringBuilder getUniformResourceIdentifierString(UniformResourceIdentifierStringBuilder uniformResourceIdentifierString) {
+	public UniformResourceLocatorStringBuilder setUniformResourceIdentifierString(UniformResourceIdentifierStringBuilder uniformResourceIdentifierString) {
 		this.uniformResourceIdentifierString = uniformResourceIdentifierString;
 		return this;
 	}

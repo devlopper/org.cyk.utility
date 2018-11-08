@@ -7,6 +7,6 @@ public interface UniformResourceLocatorStringBuilder extends StringFunction {
 
 	UniformResourceIdentifierStringBuilder getUniformResourceIdentifierString();
 	UniformResourceIdentifierStringBuilder getUniformResourceIdentifierString(Boolean injectIfNull);
-	UniformResourceLocatorStringBuilder getUniformResourceIdentifierString(UniformResourceIdentifierStringBuilder uniformResourceIdentifierString);
+	UniformResourceLocatorStringBuilder setUniformResourceIdentifierString(UniformResourceIdentifierStringBuilder uniformResourceIdentifierString);
 	
 }

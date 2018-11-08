@@ -1,17 +1,17 @@
 package org.cyk.utility.client.controller.component.menu;
 
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
-import org.cyk.utility.client.controller.navigation.NavigationBuilder;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 
 public interface MenuItemBuilder extends VisibleComponentBuilder<MenuItem> {
 	
-	String getName();
-	MenuItemBuilder setName(String name);
+	CommandableBuilder getCommandable();
+	CommandableBuilder getCommandable(Boolean injectIfNull);
+	MenuItemBuilder setCommandable(CommandableBuilder commandable);
 	
-	NavigationBuilder getNavigation();
-	NavigationBuilder getNavigation(Boolean injectIfNull);
-	MenuItemBuilder setNavigation(NavigationBuilder navigation);
-	MenuItemBuilder setNavigationIdentifier(Object identifier);
+	MenuItemBuilder setCommandableName(String name);
+	MenuItemBuilder setCommandableNavigationIdentifier(Object identifier);
+	MenuItemBuilder setCommandableNavigationIdentifierAndParameters(Object identifier,Object[] parameters);
 	
 	@Override MenuItemBuilder addChild(Object... child);
 	

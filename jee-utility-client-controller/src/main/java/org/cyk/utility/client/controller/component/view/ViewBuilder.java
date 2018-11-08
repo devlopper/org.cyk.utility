@@ -4,6 +4,7 @@ import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilderByClassMap;
+import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
@@ -36,4 +37,8 @@ public interface ViewBuilder extends VisibleComponentBuilder<View> {
 	CommandableBuilderByClassMap getCommandableByClassMap();
 	CommandableBuilderByClassMap getCommandableByClassMap(Boolean injectIfNull);
 	ViewBuilder setCommandableByClassMap(CommandableBuilderByClassMap commandableByClassMap);
+	
+	CommandableBuilders getCommandables();
+	CommandableBuilders getCommandables(Boolean injectIfNull);
+	ViewBuilder setCommandables(CommandableBuilders commandables);
 }

@@ -1,5 +1,6 @@
 package org.cyk.utility.identifier.resource;
 
+import org.cyk.utility.object.ObjectByObjectMap;
 import org.cyk.utility.string.StringFunction;
 
 /**
@@ -26,8 +27,16 @@ public interface UniformResourceIdentifierStringBuilder extends StringFunction {
 	UniformResourceIdentifierStringBuilder setPath(Object path);
 	Object getPath();
 	
+	UniformResourceIdentifierStringBuilder setParameterMap(ObjectByObjectMap parameterMap);
+	ObjectByObjectMap getParameterMap(Boolean injectIfNull);
+	ObjectByObjectMap getParameterMap();
+	UniformResourceIdentifierStringBuilder setParameters(Object...keyValues);
+	
 	Object getRequest();
 	UniformResourceIdentifierStringBuilder setRequest(Object request);
+	
+	String getString();
+	UniformResourceIdentifierStringBuilder setString(String string);
 	
 	/**/
 	

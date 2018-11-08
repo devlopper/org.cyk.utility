@@ -30,6 +30,12 @@ public class UniformResourceIdentifierStringBuilderUnitTest extends AbstractArqu
 	}
 	
 	@Test
+	public void string_http_localhost_8080(){
+		UniformResourceIdentifierStringBuilder builder = __inject__(UniformResourceIdentifierStringBuilder.class);
+		assertionHelper.assertEquals("http://localhost:8080/", builder.setString("http://localhost:8080/").execute().getOutput());
+	}
+	
+	@Test
 	public void format_arguments_http_localhost_8080_slash(){
 		UniformResourceIdentifierStringBuilder builder = __inject__(UniformResourceIdentifierStringBuilder.class);
 		assertionHelper.assertEquals("http://localhost:8080/", builder.setScheme("http").setHost("localhost").setPort(8080).setPath("/").execute().getOutput());
@@ -81,6 +87,18 @@ public class UniformResourceIdentifierStringBuilderUnitTest extends AbstractArqu
 	public void request_ftp_wwwCykDotCom_app_slash_folder(){
 		UniformResourceIdentifierStringBuilder builder = __inject__(UniformResourceIdentifierStringBuilder.class);
 		assertionHelper.assertEquals("ftp://www.cyk.com:80/app/folder", builder.setRequest(new Request("ftp","www.cyk.com","80","app")).setPath("/folder").execute().getOutput());
+	}
+	
+	@Test
+	public void string_ftp_wwwCykDotCom_app_slash_folder(){
+		UniformResourceIdentifierStringBuilder builder = __inject__(UniformResourceIdentifierStringBuilder.class);
+		assertionHelper.assertEquals("ftp://www.cyk.com:80/app/folder", builder.setString("ftp://www.cyk.com:80/app/folder").execute().getOutput());
+	}
+	
+	@Test
+	public void string_ftp_wwwCykDotCom_app_slash_folder_query_p1V1(){
+		UniformResourceIdentifierStringBuilder builder = __inject__(UniformResourceIdentifierStringBuilder.class);
+		assertionHelper.assertEquals("ftp://www.cyk.com:80/app/folder?p1=v1", builder.setString("ftp://www.cyk.com:80/app/folder").setParameters("p1","v1").execute().getOutput());
 	}
 	
 	/**/

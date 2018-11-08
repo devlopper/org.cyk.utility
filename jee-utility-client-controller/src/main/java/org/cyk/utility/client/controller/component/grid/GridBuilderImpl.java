@@ -2,7 +2,6 @@ package org.cyk.utility.client.controller.component.grid;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Map;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
@@ -10,6 +9,7 @@ import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilderByClassMap;
+import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.grid.cell.Cell;
 import org.cyk.utility.client.controller.component.grid.cell.Cells;
 import org.cyk.utility.client.controller.component.grid.column.Column;
@@ -23,9 +23,8 @@ import org.cyk.utility.client.controller.component.grid.row.Rows;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
-import org.cyk.utility.map.MapHelper;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
-import org.cyk.utility.system.action.SystemAction;
 
 public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> implements GridBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -78,6 +77,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 				}
 					
 				if(commandablesColumnView!=null) {
+					/*
 					CommandableBuilderByClassMap commandableByClassMap = commandablesColumnView.getCommandableByClassMap();
 					if(Boolean.TRUE.equals(__inject__(MapHelper.class).isNotEmpty(commandableByClassMap))) {
 						commandablesColumnView.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE);
@@ -85,6 +85,16 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 							CommandableBuilder commandableBuilder = entry.getValue();
 							commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction((SystemAction) __inject__(entry.getKey()));
 							commandablesColumnView.getComponentsBuilder(Boolean.TRUE).addComponents(commandableBuilder);
+						}
+					}
+					*/
+					
+					CommandableBuilders commandables = commandablesColumnView.getCommandables();
+					if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(commandables))) {
+						commandablesColumnView.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE);
+						for(CommandableBuilder index : commandables.get()) {
+							//index.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction((SystemAction) __inject__(entry.getKey()));
+							commandablesColumnView.getComponentsBuilder(Boolean.TRUE).addComponents(index);
 						}
 					}
 				}

@@ -17,4 +17,10 @@ public interface MapInstance<KEY,VALUE> extends Objectable {
 	
 	Boolean getIsOrdered();
 	MapInstance<KEY,VALUE> setIsOrdered(Boolean isOrdered);
+	
+	Object getKeyValueSeparator();
+	MapInstance<KEY,VALUE> setKeyValueSeparator(Object keyValueSeparator);
+	
+	Object getEntrySeparator();
+	MapInstance<KEY,VALUE> setEntrySeparator(Object entrySeparator);
 }

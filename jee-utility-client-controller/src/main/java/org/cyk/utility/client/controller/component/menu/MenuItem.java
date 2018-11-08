@@ -1,15 +1,12 @@
 package org.cyk.utility.client.controller.component.menu;
 
 import org.cyk.utility.client.controller.component.VisibleComponent;
-import org.cyk.utility.client.controller.navigation.Navigation;
+import org.cyk.utility.client.controller.component.command.Commandable;
 
 public interface MenuItem extends VisibleComponent {
 
-	String getName();
-	MenuItem setName(String name);
-	
-	Navigation getNavigation();
-	MenuItem setNavigation(Navigation navigation);
+	Commandable getCommandable();
+	MenuItem setCommandable(Commandable commandable);
 	
 	@Override MenuItem getParent();
 	
