@@ -32,6 +32,18 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>commandableNavigationOutcomeView</from-outcome>
+			<to-view-id>/commandable/navigation/outcome.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>commandableNavigationIndexView</from-outcome>
+			<to-view-id>/commandable/navigation/index.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>gridIndexView</from-outcome>
 			<to-view-id>/grid/index.jsf</to-view-id>
 			<redirect />

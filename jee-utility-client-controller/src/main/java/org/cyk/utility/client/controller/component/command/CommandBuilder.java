@@ -7,5 +7,8 @@ public interface CommandBuilder extends InvisibleComponentBuilder<Command> {
 	CommandFunction getFunction();
 	CommandBuilder setFunction(CommandFunction function);
 	CommandFunction getFunction(Boolean injectIfNull);
-	
+	/*
+	Data getData();
+	CommandBuilder setData(Data data);
+	*/
 }

@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
 import org.cyk.utility.client.controller.component.InputOutput;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
+import org.cyk.utility.client.controller.component.command.CommandableRenderTypeButton;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.layout.Insert;
@@ -67,7 +68,19 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 					}else if(component instanceof Grid) {
 						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
 					}else if(component instanceof Commandable) {
-						((Commandable)component).getProperties().setValue(((Commandable)component).getName());
+						Commandable commandable = (Commandable)component;
+						commandable.getProperties().setValue(((Commandable)component).getName());
+						String type = null;
+						if(commandable.getCommand() == null)
+							type = "button";
+						else
+							type = "submit";
+						commandable.getProperties().setType(type);
+						String onClick = null;
+						if(commandable.getNavigation()!=null) {
+							onClick = "window.open('"+commandable.getNavigation().getUniformResourceLocator()+"','_self');return false";
+						}
+						commandable.getProperties().setOnClick(onClick);
 					}
 				}else if(component instanceof Insert) {
 					((Insert)component).getProperties().setName(((Insert)component).getName());

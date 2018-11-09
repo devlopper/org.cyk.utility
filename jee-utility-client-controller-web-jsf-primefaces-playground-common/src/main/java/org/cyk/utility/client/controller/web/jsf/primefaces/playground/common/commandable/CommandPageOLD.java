@@ -1,4 +1,4 @@
-package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common;
+package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.commandable;
 
 import java.io.Serializable;
 
@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
-public class CommandPage extends AbstractPageContainerManagedImpl implements Serializable {
+public class CommandPageOLD extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject private Command noServerNoClient;

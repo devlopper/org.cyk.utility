@@ -17,6 +17,7 @@
 			<c:if test="#{value.command!=null and value.command.function!=null}">
 				<c:set var="commandable" value="#{value}" />
 				<c:set var="renderType" value="#{commandable.renderType}" />
+	   			
 	   			<c:choose>
 	   				<c:when test="#{componentHelper.isCommandableRenderTypeButton(renderType)}">
 	   					<cyk:commandableButton value="#{commandable}" />

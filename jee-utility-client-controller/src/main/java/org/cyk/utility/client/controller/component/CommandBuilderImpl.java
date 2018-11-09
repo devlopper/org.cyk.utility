@@ -10,6 +10,7 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 	private static final long serialVersionUID = 1L;
 
 	private CommandFunction function;
+	//private Data data;
 	
 	@Override
 	protected void __execute__(Command command) {
