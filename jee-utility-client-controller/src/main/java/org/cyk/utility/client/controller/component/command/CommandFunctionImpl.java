@@ -26,7 +26,6 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 	
 	@Override
 	protected void __execute__(SystemAction action) {
-		System.out.println("CommandFunctionImpl.__execute__() CALLED");
 		Throwable throwable = (Throwable) getProperties().getThrowable();
 		if(throwable != null) {
 			//build notifications from throwable and send it to user interface

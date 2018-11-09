@@ -43,9 +43,7 @@ public class MyEntityListPage extends AbstractPageContainerManagedImpl implement
 						,__inject__(ColumnBuilder.class).setHeaderTextValue("Nom").addFieldNameStrings("name")
 						)
 				
-				.addObjects(__inject__(MyEntityData.class).setCode("C01").setName("N01")
-						,__inject__(MyEntityData.class).setCode("C02").setName("N02")
-						)
+				.addObjects(MyEntityData.COLLECTION.toArray())
 				;
 		
 		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getCommandables(Boolean.TRUE).add(

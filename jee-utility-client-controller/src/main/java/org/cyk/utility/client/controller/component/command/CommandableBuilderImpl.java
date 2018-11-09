@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
+import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.system.action.SystemAction;
@@ -94,6 +95,12 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	@Override
 	public CommandableBuilder addCommandFunctionTryRunRunnableAt(Runnable runnable, Integer index) {
 		__inject__(CollectionHelper.class).addElementAt(getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE), index, runnable);
+		return this;
+	}
+	
+	@Override
+	public CommandableBuilder setCommandFunctionData(Data data) {
+		getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getProperties().setData(data);
 		return this;
 	}
 	

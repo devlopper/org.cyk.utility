@@ -19,7 +19,6 @@ import org.cyk.utility.client.controller.component.annotation.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewTypeForm;
-import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 
 import lombok.Getter;
@@ -31,12 +30,14 @@ import lombok.experimental.Accessors;
 public class ViewPage extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private View view;
+	@Override
+	protected String __getWindowTitleValue__() {
+		return "View";
+	}
 	
 	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		view =  createView();
+	protected ViewBuilder __getViewBuilder__() {
+		return createViewBuilder();
 	}
 	
 	public static ViewBuilder createViewBuilder() {

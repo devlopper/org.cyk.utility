@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.command;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
+import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.system.action.SystemAction;
 
@@ -26,6 +27,9 @@ public interface CommandableBuilder extends VisibleComponentBuilder<Commandable>
 	CommandableBuilder setNavigationIdentifierAndParameters(Object identifier,Object[] keyValues);
 	
 	CommandableBuilder setCommandFunctionActionClass(Class<? extends SystemAction> systemActionClass);
+	
+	CommandableBuilder setCommandFunctionData(Data data);
+	
 	CommandableBuilder addCommandFunctionTryRunRunnable(Collection<Runnable> runnables);
 	CommandableBuilder addCommandFunctionTryRunRunnable(Runnable...runnables);
 	CommandableBuilder addCommandFunctionTryRunRunnableAt(Runnable runnable,Integer index);

@@ -49,6 +49,11 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>viewIndexView</from-outcome>
+			<to-view-id>/view/index.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
 		
 		<navigation-case>
 			<from-outcome>myEntityListWindow</from-outcome>

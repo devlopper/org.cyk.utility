@@ -10,11 +10,13 @@ import org.cyk.utility.client.controller.component.ComponentBuilderGetter;
 import org.cyk.utility.client.controller.component.Components;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.command.Commandable;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilderByClassMap;
 import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
+import org.cyk.utility.client.controller.data.FormData;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.string.Strings;
 
@@ -250,6 +252,11 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	@Override
 	public <T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object, String methodName) {
 		T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).setMethodName(methodName).execute().getOutput();
+		if(builder instanceof CommandableBuilder) {
+			CommandableBuilder commandableBuilder = (CommandableBuilder) builder;
+			Object data = object instanceof FormData ? ((FormData<?>)object).getData() : object;
+			commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getProperties().setData(data);
+		}
 		addComponentBuilder(builder);
 		return builder;
 	}

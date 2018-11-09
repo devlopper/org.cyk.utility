@@ -25,16 +25,9 @@ public class CommandableButtonPage extends AbstractPageContainerManagedImpl impl
 	
 	@Override
 	protected ViewBuilder __getViewBuilder__() {
-		CommandableBuilder commandableBuilder = __inject__(CommandableBuilder.class).setName("Server Action,No Confirmation").setCommandFunctionActionClass(SystemActionCreate.class)
-				.addCommandFunctionTryRunRunnable(new Runnable() {	
-					@Override
-					public void run() {
-						System.out.println("Server Action , No Confirmation Done.");
-					}
-				});
-		
-		commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getProperties().setData(new MyEntityDataImpl());
-		
+		CommandableBuilder commandableBuilder = __inject__(CommandableBuilder.class).setName("Server Action,No Confirmation")
+				.setCommandFunctionActionClass(SystemActionCreate.class).setCommandFunctionData(new MyEntityDataImpl());
+			
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
 		.addComponents(
