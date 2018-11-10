@@ -11,7 +11,6 @@ import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
 import org.cyk.utility.client.controller.message.MessageRenderTypeGrowl;
 import org.cyk.utility.client.controller.message.MessageRenderTypeInline;
-import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +18,11 @@ import lombok.Setter;
 @Named @ViewScoped @Getter @Setter
 public class MessagePage extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	@Override
+	protected String __getWindowTitleValue__() {
+		return "Message";
+	}
 	
 	public void showInformationInline() {
 		__inject__(MessageRender.class).addOneMessage(__instanciateMessage__(FacesMessage.SEVERITY_INFO)).setType(__inject__(MessageRenderTypeInline.class)).execute();

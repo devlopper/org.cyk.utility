@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud.MyEntityDataImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.throwable.ThrowableHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,14 +26,21 @@ public class CommandableButtonPage extends AbstractPageContainerManagedImpl impl
 	
 	@Override
 	protected ViewBuilder __getViewBuilder__() {
-		CommandableBuilder commandableBuilder = __inject__(CommandableBuilder.class).setName("Server Action,No Confirmation")
-				.setCommandFunctionActionClass(SystemActionCreate.class).setCommandFunctionData(new MyEntityDataImpl());
-			
+		
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
 		.addComponents(
 			__inject__(CommandableBuilder.class).setName("No Action")
-			,commandableBuilder)
+			,__inject__(CommandableBuilder.class).setName("Server Action,No Confirmation,Success")
+			.setCommandFunctionActionClass(SystemActionCreate.class).setCommandFunctionData(new MyEntityDataImpl())
+			,__inject__(CommandableBuilder.class).setName("Server Action,No Confirmation,Fail")
+			.setCommandFunctionActionClass(SystemActionCreate.class).addCommandFunctionTryRunRunnable(new Runnable() {
+				@Override
+				public void run() {
+					__inject__(ThrowableHelper.class).throwRuntimeException("STOP!!!");
+				}
+			})
+			)
 		
 		;
 		return viewBuilder;

@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -12,8 +13,6 @@ import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.window.WindowBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionUpdate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,12 +37,14 @@ public class MyEntityListPage extends AbstractPageContainerManagedImpl implement
 	}
 	
 	public static GridBuilder createDataTableBuilder() {
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		GridBuilder gridBuilder = __inject__(GridBuilder.class)
-				.addColumns(__inject__(ColumnBuilder.class).setHeaderTextValue("Code").addFieldNameStrings("code")
-						,__inject__(ColumnBuilder.class).setHeaderTextValue("Nom").addFieldNameStrings("name")
+				.addColumns(__inject__(ColumnBuilder.class).setHeaderTextValue("Code").addFieldNameStrings(MyEntityData.PROPERTY_CODE)
+						,__inject__(ColumnBuilder.class).setHeaderTextValue("Nom").addFieldNameStrings(MyEntityData.PROPERTY_NAME)
+						,__inject__(ColumnBuilder.class).setHeaderTextValue("Description").addFieldNameStrings(MyEntityData.PROPERTY_DESCRIPTION)
 						)
 				
-				.addObjects(MyEntityData.COLLECTION.toArray())
+				.addObjects((Collection)MyEntityData.COLLECTION)
 				;
 		
 		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getCommandables(Boolean.TRUE).add(

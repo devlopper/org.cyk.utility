@@ -30,6 +30,7 @@ import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
+import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
@@ -38,6 +39,7 @@ import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.primefaces.component.button.Button;
+import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.outputpanel.OutputPanel;
 import org.primefaces.model.menu.DefaultMenuItem;
@@ -103,11 +105,12 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 	}
 	
 	private UIComponent __build__(Commandable commandable) {
-		//CommandButton commandButton = new CommandButton();
-		Button commandButton = new Button();
-		commandButton.setValue(commandable.getProperties().getValue());
+		CommandButton commandButton = new CommandButton();
+		//Button commandButton = new Button();
+		commandButton.setValue(commandable.getName());
 		String onClickValueExpressionString = null;
 		if(commandable.getNavigation()!=null) {
+			commandButton.setType("button");
 			String url = null;
 			if(commandable.getNavigation().getUniformResourceLocator()==null)
 				url = null;
@@ -117,7 +120,13 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 			if(__inject__(StringHelper.class).isNotBlank(url)) {
 				onClickValueExpressionString = "window.open('"+url+"','_self');return false";
 			}
-		}else {
+		}else if(commandable.getCommand()!=null) {
+			commandButton.setType("submit");
+			commandButton.setUpdate(__inject__(ComponentHelper.class).getGlobalMessagesTargetInlineComponentIdentifier()
+			+","+__inject__(ComponentHelper.class).getGlobalMessagesTargetGrowlComponentIdentifier()
+			+","+__inject__(ComponentHelper.class).getGlobalMessagesTargetDialogComponentIdentifier());
+			//commandButton.setActionExpression(__inject__(JavaServerFacesHelper.class).buildMethodExpression("value.command.function.executeToReturnVoid", Void.class, new Class<?>[] {}));
+			/*
 			SystemAction action = commandable.getCommand().getFunction().getAction();
 			if(action instanceof SystemActionUpdate)
 				onClickValueExpressionString = "componentHelper.getUrlByObjectByAction(indexRow,componentHelper.systemActionUpdateClass)";
@@ -128,13 +137,15 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 				String url = __formatExpression__(onClickValueExpressionString);
 				onClickValueExpressionString = "window.open('"+url+"','_self');return false";
 			}
+			*/
+		}else {
+			commandButton.setType("button");
 		}
 		
 		if(__inject__(StringHelper.class).isNotBlank(onClickValueExpressionString)) {
 			ValueExpression valueExpression = __buildValueExpressionString__(onClickValueExpressionString);
 			__setValueExpression__(commandButton, "onclick", valueExpression);	
 		}
-		
 		return commandButton;
 	}
 	

@@ -5,8 +5,10 @@ import java.util.Collection;
 
 import org.cyk.utility.client.controller.AbstractControllerFunctionImpl;
 import org.cyk.utility.client.controller.message.MessageRender;
+import org.cyk.utility.client.controller.message.MessageRenderTypeInline;
 import org.cyk.utility.client.controller.message.MessagesBuilder;
 import org.cyk.utility.notification.Notification;
+import org.cyk.utility.notification.NotificationSeverityError;
 import org.cyk.utility.system.action.SystemAction;
 
 public class CommandFunctionImpl extends AbstractControllerFunctionImpl implements CommandFunction,Serializable {
@@ -23,18 +25,31 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 			}
 		});
 	}
+
+	@Override
+	protected void __execute__(SystemAction action) {}
 	
 	@Override
-	protected void __execute__(SystemAction action) {
+	protected void __finally__() {
+		super.__finally__();
+		
+		//build notifications and send it to user interface
+		Collection<Notification> notifications = null;
 		Throwable throwable = (Throwable) getProperties().getThrowable();
-		if(throwable != null) {
-			//build notifications from throwable and send it to user interface
-			System.out.println("TO BE REMOVED ::: CommandFunctionImpl.execute() : ERROR : "+throwable);
-			Collection<Notification> notifications = __injectCollectionHelper__().instanciate(__inject__(Notification.class).setSummary(throwable.toString())
-					.setDetails(throwable.toString()));
-			Collection<Object> messages = __inject__(MessagesBuilder.class).setNotifications(notifications).execute().getOutput();
-			__inject__(MessageRender.class).setMessages(messages).execute();
+		if(throwable == null) {
+			notifications = __injectCollectionHelper__().instanciate(__inject__(Notification.class).setSummary("Opération exécutée.")
+					.setDetails("L'opération a été exécutée avec succès."));
+		}else {
+			//System.out.println("TO BE REMOVED ::: CommandFunctionImpl.execute() : ERROR : "+throwable);
+			notifications = __injectCollectionHelper__().instanciate(__inject__(Notification.class).setSummary(throwable.toString())
+					.setDetails(throwable.toString()).setSeverity(__inject__(NotificationSeverityError.class)));
 		}
+		
+		if(__injectCollectionHelper__().isNotEmpty(notifications)) {
+			Collection<Object> messages = __inject__(MessagesBuilder.class).addNotifications(notifications).execute().getOutput();
+			__inject__(MessageRender.class).setMessages(messages).setType(__inject__(MessageRenderTypeInline.class)).execute();
+		}
+		
 	}
 	
 }

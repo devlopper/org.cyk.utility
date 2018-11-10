@@ -14,8 +14,6 @@ import org.cyk.utility.client.controller.component.grid.row.RowBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionUpdate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -79,8 +77,8 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 						)
 				;
 		
-		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getCommandableByClassMap(Boolean.TRUE).set(SystemActionUpdate.class,__inject__(CommandableBuilder.class)
-				.setName("Modifier"),SystemActionDelete.class,__inject__(CommandableBuilder.class).setName("Supprimer"));
+		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getCommandables(Boolean.TRUE).add(__inject__(CommandableBuilder.class)
+				.setName("Modifier"),__inject__(CommandableBuilder.class).setName("Supprimer"));
 		
 		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
 		gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);

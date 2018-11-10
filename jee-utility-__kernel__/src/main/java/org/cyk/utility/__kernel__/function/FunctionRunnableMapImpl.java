@@ -13,11 +13,20 @@ public class FunctionRunnableMapImpl implements FunctionRunnableMap,Serializable
 	private Map<Class<?>,Class<? extends FunctionRunnable<?>>> map;
 	
 	@Override
-	public FunctionRunnableMap set(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass) {
-		if(map == null)
-			map = new HashMap<>();
-		map.put(aClass, functionRunnableClass);
+	public FunctionRunnableMap set(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass,Boolean isOverridable) {
+		Class<? extends FunctionRunnable<?>> currentFunctionRunnableClass = get(aClass);
+		if(currentFunctionRunnableClass==null || Boolean.TRUE.equals(isOverridable)) {
+			if(map == null)
+				map = new HashMap<>();
+			
+			map.put(aClass, functionRunnableClass);	
+		}
 		return this;
+	}
+	
+	@Override
+	public FunctionRunnableMap set(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass) {
+		return set(aClass, functionRunnableClass, Boolean.FALSE);
 	}
 
 	@Override

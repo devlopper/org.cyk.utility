@@ -6,6 +6,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
+import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeButton;
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeLink;
@@ -115,5 +116,79 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	public Class<?> getSystemActionDeleteClass(){
 		return SystemActionDelete.class;
 	}
+	
+	/**/
+	
+	public String getGlobalFormComponentIdentifier() {
+		return GLOBAL_FORM_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesOwnerInlineComponentIdentifier() {
+		return GLOBAL_MESSAGES_OWNER_INLINE_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesOwnerGrowlComponentIdentifier() {
+		return GLOBAL_MESSAGES_OWNER_GROWL_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesOwnerDialogComponentIdentifier() {
+		return GLOBAL_MESSAGES_OWNER_DIALOG_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesTargetInlineComponentIdentifier() {
+		return GLOBAL_MESSAGES_TARGET_INLINE_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesTargetGrowlComponentIdentifier() {
+		return GLOBAL_MESSAGES_TARGET_GROWL_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesTargetDialogComponentIdentifier() {
+		return GLOBAL_MESSAGES_TARGET_DIALOG_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesOwnerInlineComponentClientIdentifier() {
+		return GLOBAL_MESSAGES_OWNER_INLINE_CLIENT_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesOwnerGrowlComponentClientIdentifier() {
+		return GLOBAL_MESSAGES_OWNER_GROWL_CLIENT_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesOwnerDialogComponentClientIdentifier() {
+		return GLOBAL_MESSAGES_OWNER_DIALOG_CLIENT_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesTargetInlineComponentClientIdentifier() {
+		return GLOBAL_MESSAGES_TARGET_INLINE_CLIENT_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesTargetGrowlComponentClientIdentifier() {
+		return GLOBAL_MESSAGES_TARGET_GROWL_CLIENT_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesTargetDialogComponentClientIdentifier() {
+		return GLOBAL_MESSAGES_TARGET_DIALOG_CLIENT_IDENTIFIER;
+	}
+	
+	/**/
+	
+	public static final String GLOBAL_FORM_IDENTIFIER = "form";
+	
+	public static final String GLOBAL_MESSAGES_OWNER_INLINE_IDENTIFIER = "globalMessagesOwnerInline";
+	public static final String GLOBAL_MESSAGES_OWNER_GROWL_IDENTIFIER = "globalMessagesOwnerGrowl";
+	public static final String GLOBAL_MESSAGES_OWNER_DIALOG_IDENTIFIER = "globalMessagesOwnerDialog";
+	
+	public static final String GLOBAL_MESSAGES_TARGET_INLINE_IDENTIFIER = "globalMessagesTargetInline";
+	public static final String GLOBAL_MESSAGES_TARGET_GROWL_IDENTIFIER = "globalMessagesTargetGrowl";
+	public static final String GLOBAL_MESSAGES_TARGET_DIALOG_IDENTIFIER = "globalMessagesTargetDialog";
+	
+	public static final String GLOBAL_MESSAGES_OWNER_INLINE_CLIENT_IDENTIFIER = GLOBAL_FORM_IDENTIFIER+CharacterConstant.COLON+GLOBAL_MESSAGES_OWNER_INLINE_IDENTIFIER;
+	public static final String GLOBAL_MESSAGES_OWNER_GROWL_CLIENT_IDENTIFIER = GLOBAL_MESSAGES_OWNER_GROWL_IDENTIFIER;
+	public static final String GLOBAL_MESSAGES_OWNER_DIALOG_CLIENT_IDENTIFIER = GLOBAL_FORM_IDENTIFIER+CharacterConstant.COLON+GLOBAL_MESSAGES_OWNER_DIALOG_IDENTIFIER;
+	
+	public static final String GLOBAL_MESSAGES_TARGET_INLINE_CLIENT_IDENTIFIER = GLOBAL_FORM_IDENTIFIER+CharacterConstant.COLON+GLOBAL_MESSAGES_TARGET_INLINE_IDENTIFIER;
+	public static final String GLOBAL_MESSAGES_TARGET_GROWL_CLIENT_IDENTIFIER = GLOBAL_MESSAGES_TARGET_GROWL_IDENTIFIER;
+	public static final String GLOBAL_MESSAGES_TARGET_DIALOG_CLIENT_IDENTIFIER = GLOBAL_FORM_IDENTIFIER+CharacterConstant.COLON+GLOBAL_MESSAGES_TARGET_DIALOG_IDENTIFIER;
 	
 }

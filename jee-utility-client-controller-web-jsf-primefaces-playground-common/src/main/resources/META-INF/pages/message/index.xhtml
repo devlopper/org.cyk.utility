@@ -5,51 +5,41 @@
       xmlns:f="http://java.sun.com/jsf/core"      
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:cyk="http://java.sun.com/jsf/composite/org.cyk.utility.client.controller.web.jsf.primefaces/component">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-    <h:head>
-        <title></title>
-    </h:head>
-    <h:body>
-    	<h2>Message</h2><p:separator/>
-    	<h:form>
-    		<p:autoUpdate >
-    			<p:messages/>
-    		</p:autoUpdate>
-    		
-    		<!--p:autoUpdate >
-    			<p:growl/>
-    		</p:autoUpdate-->
-    		
-    		<p:separator/>
-    		
-    		Inline
-    		<p:separator/>
-    		<p:panelGrid columns="4">	
-    			<p:commandButton value="Info" action="#{messagePage.showInformationInline}" />
-    			<p:commandButton value="Warn" action="#{messagePage.showWarningInline}" />
-    			<p:commandButton value="Error" action="#{messagePage.showErrorInline}" />
-    			<p:commandButton value="Fatal" action="#{messagePage.showFatalInline}" />
-    		</p:panelGrid>
-    		
-    		
-    		Dialog
-    		<p:separator/>
-    		<p:panelGrid columns="4">	
-    			<p:commandButton value="Info" action="#{messagePage.showInformationDialog}" />
-    			<p:commandButton value="Warn" action="#{messagePage.showWarningDialog}" />
-    			<p:commandButton value="Error" action="#{messagePage.showErrorDialog}" />
-    			<p:commandButton value="Fatal" action="#{messagePage.showFatalDialog}" />
-    		</p:panelGrid>
-    		
-    		Growl
-    		<p:separator/>
-    		<p:panelGrid columns="4">	
-    			<p:commandButton value="Info" action="#{messagePage.showInformationGrowl}" />
-    			<p:commandButton value="Warn" action="#{messagePage.showWarningGrowl}" />
-    			<p:commandButton value="Error" action="#{messagePage.showErrorGrowl}" />
-    			<p:commandButton value="Fatal" action="#{messagePage.showFatalGrowl}" />
-    		</p:panelGrid>
-    	</h:form>
-    </h:body>
+	<cyk:page value="#{messagePage}">
+		<ui:define name="centerCenter">
+			<div class="ui-g-12">
+	    		Inline
+	    		<p:separator/>
+	    		<ui:param name="update" value="#{componentHelper.globalMessagesTargetInlineComponentIdentifier},#{componentHelper.globalMessagesTargetGrowlComponentIdentifier},#{componentHelper.globalMessagesTargetDialogComponentIdentifier}"/>
+	    		
+	    		<p:panelGrid columns="4">	
+	    			<p:commandButton value="Info" action="#{messagePage.showInformationInline}" update="#{update}" />
+	    			<p:commandButton value="Warn" action="#{messagePage.showWarningInline}" update="#{update}"/>
+	    			<p:commandButton value="Error" action="#{messagePage.showErrorInline}" update="#{update}"/>
+	    			<p:commandButton value="Fatal" action="#{messagePage.showFatalInline}" update="#{update}"/>
+	    		</p:panelGrid>
+	    		
+	    		Dialog
+	    		<p:separator/>
+	    		<p:panelGrid columns="4">	
+	    			<p:commandButton value="Info" action="#{messagePage.showInformationDialog}" update="#{update}"/>
+	    			<p:commandButton value="Warn" action="#{messagePage.showWarningDialog}" update="#{update}"/>
+	    			<p:commandButton value="Error" action="#{messagePage.showErrorDialog}" update="#{update}"/>
+	    			<p:commandButton value="Fatal" action="#{messagePage.showFatalDialog}" update="#{update}"/>
+	    		</p:panelGrid>
+	    		
+	    		Growl
+	    		<p:separator/>
+	    		<p:panelGrid columns="4">	
+	    			<p:commandButton value="Info" action="#{messagePage.showInformationGrowl}" update="#{update}"/>
+	    			<p:commandButton value="Warn" action="#{messagePage.showWarningGrowl}" update="#{update}"/>
+	    			<p:commandButton value="Error" action="#{messagePage.showErrorGrowl}" update="#{update}"/>
+	    			<p:commandButton value="Fatal" action="#{messagePage.showFatalGrowl}" update="#{update}"/>
+	    		</p:panelGrid>
+    		</div>
+		</ui:define>
+	</cyk:page>
 </html>

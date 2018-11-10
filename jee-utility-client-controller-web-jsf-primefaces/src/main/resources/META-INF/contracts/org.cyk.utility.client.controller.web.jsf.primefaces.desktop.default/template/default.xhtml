@@ -4,6 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 
     <f:metadata>
@@ -27,7 +28,19 @@
 		
 		<c:if test="#{theme != null}">
 			<ui:insert name="contractBody">	
-				<h:form>		
+				<h:form id="#{componentHelper.globalFormComponentIdentifier}">		
+					<p:autoUpdate/>
+					<!-- Messages -->
+		    		
+		    		<h:inputHidden id="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"/>
+		    		<p:growl id="#{componentHelper.globalMessagesTargetGrowlComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"/>
+		    		
+		    		<p:dialog id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}" header="Messages" modal="true" appendTo="@(body)" visible="#{not empty facesContext.messageList}">
+					    <p:repeat var="message" value="#{facesContext.messageList}">
+					    	#{message.severity} - #{message.detail} - #{message.summary}
+					    </p:repeat>
+					</p:dialog>
+					
 					<div class="ui-g cyk_layout_page">
 						<ui:insert name="north">
 							<c:set var="viewNorth" value="#{theme.viewMap.get('north')}" />
@@ -41,14 +54,24 @@
 						</ui:insert>
 						
 						<ui:insert name="center">
-							<c:set var="viewCenter" value="#{theme.viewMap.get('center')}" />
-							<c:if test="#{viewCenter != null}">
-								<div class="ui-g-12 cyk_layout_page_center">
-									<ui:insert name="centerView">
-										<cyk:view value="#{viewCenter}" />
-									</ui:insert>
+							<!-- Message -->
+							<ui:insert name="centerNorth">
+								<div class="ui-g-12">
+									<h:inputHidden id="#{componentHelper.globalMessagesOwnerInlineComponentIdentifier}"/>
+			    					<p:messages id="#{componentHelper.globalMessagesTargetInlineComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerInlineComponentIdentifier}" />
 								</div>
-							</c:if>
+							</ui:insert>
+							
+							<ui:insert name="centerCenter">
+								<c:set var="viewCenter" value="#{theme.viewMap.get('center')}" />
+								<c:if test="#{viewCenter != null}">
+									<div class="ui-g-12 cyk_layout_page_center">
+										<ui:insert name="centerView">
+											<cyk:view value="#{viewCenter}" />
+										</ui:insert>
+									</div>
+								</c:if>
+							</ui:insert>
 						</ui:insert>
 						
 						<ui:insert name="south">

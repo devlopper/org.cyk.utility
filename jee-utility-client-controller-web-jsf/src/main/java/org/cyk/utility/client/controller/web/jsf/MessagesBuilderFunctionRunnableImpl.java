@@ -9,12 +9,14 @@ import javax.faces.application.FacesMessage.Severity;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.message.MessagesBuilder;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.notification.Notification;
 import org.cyk.utility.notification.NotificationSeverity;
 import org.cyk.utility.notification.NotificationSeverityError;
 import org.cyk.utility.notification.NotificationSeverityFatal;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
+import org.cyk.utility.notification.Notifications;
 
 public class MessagesBuilderFunctionRunnableImpl extends AbstractFunctionRunnableImpl<MessagesBuilder> implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -24,15 +26,20 @@ public class MessagesBuilderFunctionRunnableImpl extends AbstractFunctionRunnabl
 			@Override
 			public void run() {
 				Collection<Object> collection = new ArrayList<>();
-				for(Notification  index : getFunction().getNotifications())
-					collection.add(__instanciate__(index));
+				Notifications notifications = getFunction().getNotifications();
+				if(__inject__(CollectionHelper.class).isNotEmpty(notifications))
+					for(Notification  index : notifications.get())
+						collection.add(__instanciate__(index));
 				setOutput(collection);
 			}
 		});
 	}
 	
 	protected FacesMessage __instanciate__(Notification notification) {
-		return new FacesMessage(__getSeverity__(notification.getSeverity()), notification.getSummary(), notification.getDetails());
+		NotificationSeverity severity = notification.getSeverity();
+		if(severity == null)
+			severity = __inject__(NotificationSeverityInformation.class);
+		return new FacesMessage(__getSeverity__(severity), notification.getSummary(), notification.getDetails());
 	}
 	
 	protected Severity __getSeverity__(NotificationSeverity severity) {

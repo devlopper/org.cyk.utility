@@ -5,9 +5,7 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.command.CommandFunction;
 import org.cyk.utility.client.controller.component.command.CommandFunctionExecuteListenerThrough;
-import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
 
 public class CommandFunctionExecuteListenerThroughFunctionRunnableImpl extends AbstractFunctionRunnableImpl<CommandFunctionExecuteListenerThrough> implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,13 +18,6 @@ public class CommandFunctionExecuteListenerThroughFunctionRunnableImpl extends A
 				SystemAction action = function.getAction();
 				Object data = function.getProperties().getData();
 				System.out.println(" Call REST API to "+action.getIdentifier()+" ::: "+data);
-				
-				/*if(action instanceof SystemActionCreate) {					
-					System.out.println("Action : "+action.getIdentifier());
-					if(data instanceof Data) {
-						//Call REST API
-					}
-				}*/
 			}
 		});
 	}

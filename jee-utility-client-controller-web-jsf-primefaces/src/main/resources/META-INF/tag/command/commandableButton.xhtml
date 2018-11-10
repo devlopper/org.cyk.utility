@@ -14,12 +14,36 @@
 			</c:if>
 			
 			<c:if test="#{value.command!=null and value.command.function!=null}">
+				<!--
 				<p:commandButton
 					id="#{value.properties.identifier}"
 					value="#{value.properties.value}"
 					action="#{value.command.function.executeToReturnVoid}"
 					onclick="#{value.properties.onClick}"
 					type="#{value.properties.type}"
+				>
+				
+				</p:commandButton>
+				-->
+				
+				<!--
+				<p:commandButton
+					id="#{value.properties.identifier}"
+					binding="#{value.targetModel}"
+				>
+				
+				</p:commandButton>
+				-->
+				
+				<!-- Because we do not know how to reference value on action expression -->
+				<!-- update="inputGlobalMessages,inputGrowlMessages,#{componentHelper.globalDialogMessagesComponentIdentifier}" -->
+				<p:commandButton
+					id="#{value.properties.identifier}"
+					value="#{value.targetModel.value}"
+					action="#{value.command.function.executeToReturnVoid}"
+					onclick="#{value.targetModel.onclick}"
+					type="#{value.targetModel.type}"
+					update="#{value.targetModel.update}"
 				>
 				
 				</p:commandButton>
