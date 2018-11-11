@@ -15,6 +15,7 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
 import org.cyk.utility.client.controller.component.Components;
+import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.cell.Cell;
@@ -35,10 +36,6 @@ import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionUpdate;
-import org.primefaces.component.button.Button;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.outputpanel.OutputPanel;
@@ -122,9 +119,25 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 			}
 		}else if(commandable.getCommand()!=null) {
 			commandButton.setType("submit");
-			commandButton.setUpdate(__inject__(ComponentHelper.class).getGlobalMessagesTargetInlineComponentIdentifier()
-			+","+__inject__(ComponentHelper.class).getGlobalMessagesTargetGrowlComponentIdentifier()
-			+","+__inject__(ComponentHelper.class).getGlobalMessagesTargetDialogComponentIdentifier());
+			String update = __inject__(ComponentHelper.class).getGlobalMessagesTargetInlineComponentIdentifier()
+					+","+__inject__(ComponentHelper.class).getGlobalMessagesTargetGrowlComponentIdentifier()
+					+","+__inject__(ComponentHelper.class).getGlobalMessagesTargetDialogComponentIdentifier();
+			
+			Objects updatables = commandable.getUpdatables();
+			
+			if(__inject__(CollectionHelper.class).isNotEmpty(updatables))
+				for(Object index : updatables.get()) {
+					String token = null;
+					if(index instanceof VisibleComponent) {
+						token = (String)((VisibleComponent)index).getProperties().getIdentifierAsStyleClass();
+						if(__inject__(StringHelper.class).isNotBlank(token))
+							update = update + " , @(."+token+")";		
+					}else
+						update = update + " , "+index;
+					
+				}
+			commandButton.setUpdate(update);
+			
 			//commandButton.setActionExpression(__inject__(JavaServerFacesHelper.class).buildMethodExpression("value.command.function.executeToReturnVoid", Void.class, new Class<?>[] {}));
 			/*
 			SystemAction action = commandable.getCommand().getFunction().getAction();

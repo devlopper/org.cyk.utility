@@ -9,6 +9,7 @@ import java.util.Map;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
+import org.cyk.utility.css.StyleBuilder;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.instance.Instances;
 
@@ -16,6 +17,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	private static final long serialVersionUID = 1L;
 
 	private LayoutBuilder layout;
+	private StyleBuilder layoutStyle;
 	private Instances components;
 	private Boolean isCreateLayoutItemOnAddComponent;
 	
@@ -97,6 +99,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 			//Derive layout
 			if(components.getLayout() == null) {
 				layout = __inject__(LayoutBuilder.class);
+				layout.setStyle(getLayoutStyle());
 				for(Component index : components.get()) {
 					ComponentBuilder<?> componentBuilder = map.get(index);
 					LayoutItemBuilder layoutItemBuilder = __inject__(LayoutItemBuilder.class);
@@ -185,9 +188,25 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 		return this;
 	}
 	
+	@Override
+	public StyleBuilder getLayoutStyle() {
+		return layoutStyle;
+	}
+	@Override
+	public StyleBuilder getLayoutStyle(Boolean injectIfNull) {
+		return (StyleBuilder) __getInjectIfNull__(FIELD_LAYOUT_STYLE, injectIfNull);
+	}
+	
+	@Override
+	public ComponentsBuilder setLayoutStyle(StyleBuilder layoutStyle) {
+		this.layoutStyle = layoutStyle;
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_LAYOUT = "layout";
+	public static final String FIELD_LAYOUT_STYLE = "layoutStyle";
 	public static final String FIELD_COMPONENTS = "components";
 
 }

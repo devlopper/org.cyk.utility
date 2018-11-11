@@ -10,6 +10,7 @@ import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.object.Objects;
 
 public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> extends AbstractFunctionWithPropertiesAsInputImpl<COMPONENT> implements ComponentBuilder<COMPONENT> , Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,6 +20,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private StyleBuilder layoutItemStyle;
 	private ComponentRoles roles;
 	private Boolean isTargetModelToBeBuilt;
+	private Objects updatables;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -38,6 +40,8 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		__inject__(ComponentBuilderExecuteListenerBefore.class).setObject(this).setComponent(component).execute();
 		ComponentRoles roles = getRoles();
 		component.setRoles(roles);
+		Objects updatables = getUpdatables();
+		component.setUpdatables(updatables);
 		__execute__(component);
 		__inject__(ComponentBuilderExecuteListenerAfter.class).setObject(this).setComponent(component).execute();
 		return component;
@@ -189,7 +193,36 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		return this;
 	}
 	
+	@Override
+	public Objects getUpdatables() {
+		return updatables;
+	}
+	
+	@Override
+	public Objects getUpdatables(Boolean injectIfNull) {
+		return (Objects) __getInjectIfNull__(FIELD_UPDATABLES, injectIfNull);
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setUpdatables(Objects updatables) {
+		this.updatables = updatables;
+		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> addUpdatables(Collection<Object> updatables) {
+		getUpdatables(Boolean.TRUE).add(updatables);
+		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> addUpdatables(Object... updatables) {
+		getUpdatables(Boolean.TRUE).add(updatables);
+		return this;
+	}
+	
 	public static final String FIELD_AREA = "area";
 	public static final String FIELD_LAYOUT_ITEM_STYLE = "layoutItemStyle";
 	public static final String FIELD_ROLES = "roles";
+	public static final String FIELD_UPDATABLES = "updatables";
 }

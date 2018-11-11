@@ -6,7 +6,6 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerAfter;
-import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
 import org.cyk.utility.client.controller.component.InputOutput;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
@@ -88,8 +87,8 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 					((Insert)component).getProperties().setName(((Insert)component).getName());
 				}
 				
-				if(Boolean.TRUE.equals(componentBuilder.getIsTargetModelToBeBuilt()))
-					component.setTargetModel(__inject__(ComponentTargetModelBuilder.class).setComponent(component).execute().getOutput());
+				//if(Boolean.TRUE.equals(componentBuilder.getIsTargetModelToBeBuilt()))
+				//	component.setTargetModel(__inject__(ComponentTargetModelBuilder.class).setComponent(component).execute().getOutput());
 			}
 		});
 	}

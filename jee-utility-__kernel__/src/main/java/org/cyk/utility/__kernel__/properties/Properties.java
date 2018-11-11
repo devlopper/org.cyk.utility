@@ -4248,6 +4248,26 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getDeferred() {
+		return get(DEFERRED);
+	}
+
+	public Properties setDeferred(Object deferred) {
+		set(DEFERRED, deferred);
+		return this;
+	}
+	
+	public Object getDeferredMode() {
+		return get(DEFERRED_MODE);
+	}
+
+	public Properties setDeferredMode(Object deferredMode) {
+		set(DEFERRED_MODE, deferredMode);
+		return this;
+	}
+	
+	public static final String DEFERRED = "DEFERRED";
+	public static final String DEFERRED_MODE = "DEFERRED_MODE";
 	public static final String DISPLAY = "DISPLAY";
 	public static final String REQUEST = "REQUEST";
 	public static final String SCHEME = "SCHEME";

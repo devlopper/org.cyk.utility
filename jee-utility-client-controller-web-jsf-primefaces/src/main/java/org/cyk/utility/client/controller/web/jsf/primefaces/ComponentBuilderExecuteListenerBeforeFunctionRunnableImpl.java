@@ -33,7 +33,16 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 				if(component instanceof VisibleComponent) {
 					VisibleComponentBuilder<?> visibleComponentBuilder = (VisibleComponentBuilder<?>)componentBuilder;
 					VisibleComponent visibleComponent = (VisibleComponent) component;
-					visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
+					//visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
+					
+					//String identifierAsStyleClass = __inject__(RandomHelper.class).
+					//visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
+					
+					String identifierAsStyleClass = visibleComponentBuilder.getOutputProperties().getIdentifier().toString();
+					visibleComponentBuilder.getOutputProperties().setIdentifierAsStyleClass(identifierAsStyleClass);
+					//System.out.println("CID : "+identifierAsStyleClass);
+					visibleComponentBuilder.addStyleClasses(identifierAsStyleClass);
+					//visibleComponentBuilder.addStyleClasses("AZERTY");
 					
 					ComponentRoles roles = visibleComponentBuilder.getRoles();
 					if(__inject__(CollectionHelper.class).isNotEmpty(roles)) {
@@ -44,14 +53,14 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 						}
 					}
 					
-					
+					/*
 					if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.TITLE))
 						visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_view_title");
 					if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.GRID))
 						visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_table");
 					if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.ROW))
 						visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_row");
-					
+					*/
 					if(visibleComponent instanceof InputOutput<?>) {
 						InputOutputBuilder<?, ?> inputOutputBuilder = (InputOutputBuilder<?,?>) visibleComponentBuilder;
 						
@@ -71,6 +80,8 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 						
 						if(__inject__(CollectionHelper.class).contains(layoutBuilder.getRoles(), ComponentRole.GRID))
 							layoutBuilder.addStyleClasses("cyk_layout_grid");
+						
+						layoutBuilder.getOutputProperties().setLayout("block");
 					}
 					
 					if(visibleComponentBuilder instanceof LayoutItemBuilder) {

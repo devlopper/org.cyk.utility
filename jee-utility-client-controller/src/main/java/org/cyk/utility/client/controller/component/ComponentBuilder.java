@@ -8,6 +8,7 @@ import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
+import org.cyk.utility.object.Objects;
 
 public interface ComponentBuilder<COMPONENT extends Component> extends FunctionWithPropertiesAsInput<COMPONENT> {
 	
@@ -43,4 +44,10 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	
 	Boolean getIsTargetModelToBeBuilt();
 	ComponentBuilder<COMPONENT> setIsTargetModelToBeBuilt(Boolean isTargetModelToBeBuilt);
+	
+	Objects getUpdatables();
+	Objects getUpdatables(Boolean injectIfNull);
+	ComponentBuilder<COMPONENT> setUpdatables(Objects updatables);
+	ComponentBuilder<COMPONENT> addUpdatables(Collection<Object> updatables);
+	ComponentBuilder<COMPONENT> addUpdatables(Object...updatables);
 }

@@ -10,8 +10,16 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			<div
-				class="#{value.properties.styleClass}"
+			
+			<p:outputPanel 
+				id="#{value.properties.identifier}" 
+				style="#{value.properties.style}" 
+				styleClass="#{value.properties.styleClass}" 
+				autoUpdate="#{value.properties.autoUpdate}"
+				deferred="#{value.properties.deferred}"
+				deferredMode="#{value.properties.deferredMode}"
+				layout="#{value.properties.layout}"
+				rendered="#{value.properties.rendered}"
 			>
 				<ui:insert name="layoutContent">
 					<c:forEach items="#{value.getChildren()}" var="indexItem" varStatus="status">
@@ -34,7 +42,7 @@
 						</cyk:layoutItem>
 					</c:forEach>
 				</ui:insert>
-			</div>
+			</p:outputPanel>
 		</ui:define>
 	</ui:decorate>	
 

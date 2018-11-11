@@ -3,7 +3,6 @@ package org.cyk.utility.client.controller.web.jsf.primefaces;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.ComponentRoleStyleClassGetter;
 
@@ -43,9 +42,13 @@ public class ComponentRoleStyleClassGetterFunctionRunnableImpl extends AbstractF
 					break;
 				}
 				*/
-				setOutput("cyk"+CharacterConstant.UNDESCORE+role.name().toLowerCase());
+				setOutput(PREFIX+role.name().toLowerCase());
 			}
 		});
 	}
+	
+	/**/
+	
+	private static final String PREFIX = "cyk_";
 	
 }

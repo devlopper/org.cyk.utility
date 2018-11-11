@@ -27,19 +27,25 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	private ViewType type;
 	private CommandableBuilderByClassMap commandableByClassMap;
 	private CommandableBuilders commandables;
-	
+		
 	@Override
-	protected View __execute__() throws Exception {
-		View view = __inject__(View.class);
+	protected void __execute__(View view) {
+		super.__execute__(view);
 		ComponentsBuilder componentsBuilder = getComponentsBuilder();
 		if(componentsBuilder!=null)
 			view.setComponents(componentsBuilder.execute().getOutput());
+		
+		ViewType type = getType();
+		if(type instanceof ViewTypeForm) {
+			//view.getComponents().getLayout().getStyle(Boolean.TRUE).getClasses(Boolean.TRUE).add("AZERTY");
+		}
 		
 		Components components = view.getComponents();
 		if(__injectCollectionHelper__().isNotEmpty(components)) {
 			for(Component index : components.get()) {
 				if(index instanceof Commandable) {
 					Commandable commandable = (Commandable) index;
+					commandable.getUpdatables(Boolean.TRUE).add(view.getComponents().getLayout());
 					commandable.addCommandFunctionTryRunRunnableAt(new Runnable() {
 						@Override
 						public void run() {
@@ -51,130 +57,6 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		}
 		
 		
-		/*Collection<ComponentBuilder<?>> finalComponentBuilders = null;
-		/*
-		if(__injectCollectionHelper__().isNotEmpty(componentsBuilder)) {
-			finalComponentBuilders = new ArrayList<>();
-			for(ComponentBuilder<?> index : componentBuilders.get()) {
-				if(index!=null) {
-					//Derived builders
-					if(index instanceof InputBuilder<?, ?>) {
-						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) index;
-						if(inputBuilder.getLabelBuilder()!=null) {
-							finalComponentBuilders.add(inputBuilder.getLabelBuilder());
-						}
-					}
-					finalComponentBuilders.add(index);
-					if(index instanceof InputBuilder<?, ?>) {
-						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) index;
-						if(inputBuilder.getMessageBuilder()!=null) {
-							finalComponentBuilders.add(inputBuilder.getMessageBuilder());
-						}
-					}
-					
-					//Width proportions
-					if(index instanceof InputBuilder<?, ?>) {
-						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) index;
-						if(inputBuilder.getLabelBuilder()==null)
-							if(inputBuilder.getMessageBuilder()==null) {
-								//Nothing to do
-							} else {
-								inputBuilder.setAreaWidthProportionsForNotPhone(10);
-								inputBuilder.getMessageBuilder().setAreaWidthProportionsForNotPhone(2);
-							}
-						else {
-							if(inputBuilder.getMessageBuilder()==null) {
-								inputBuilder.getLabelBuilder().setAreaWidthProportionsForNotPhone(2);
-								inputBuilder.setAreaWidthProportionsForNotPhone(10);
-							} else {
-								inputBuilder.getLabelBuilder().setAreaWidthProportionsForNotPhone(2);
-								inputBuilder.setAreaWidthProportionsForNotPhone(6);
-								inputBuilder.getMessageBuilder().setAreaWidthProportionsForNotPhone(4);
-							}
-						}								
-					}
-				}
-			}
-		}
-		*/
-		/*
-		if(__injectCollectionHelper__().isNotEmpty(finalComponentBuilders)) {
-			for(ComponentBuilder<?> index : finalComponentBuilders) {
-				if(index instanceof CommandableBuilder<?>) {
-					CommandableBuilder<?> commandableBuilder = (CommandableBuilder<?>) index;
-					
-					Collection<Runnable> runnables = commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).getRunnables();
-					if( runnables == null ) {
-						runnables = new ArrayList<>();
-						commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).setRunnables(runnables);
-					}
-					__injectCollectionHelper__().addElementAt(runnables, 0, new Runnable() {
-						@Override
-						public void run() {
-							view.setInputOutputFieldValueFromValue();
-						}
-					});
-				}
-				VisibleComponent component = (VisibleComponent) index.execute().getOutput();
-				if(component!=null)
-					visibleComponentsBuilder.addComponents(component);
-			}
-		}
-		*/
-		ViewType type = getType();
-		if(type instanceof ViewTypeForm) {
-			/*CommandableBuilder<?> submitCommandableBuilder = getSubmitCommandableBuilder(Boolean.TRUE);
-			submitCommandableBuilder.setOutputProperty(Properties.VALUE, "Submit");
-			submitCommandableBuilder.setCommandFunctionActionClass(SystemActionCreate.class);
-			Collection<Runnable> runnables = submitCommandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).getRunnables();
-			if( runnables == null ) {
-				runnables = new ArrayList<>();
-				submitCommandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).setRunnables(runnables);
-			}
-			__injectCollectionHelper__().addElementAt(runnables, 0, new Runnable() {
-				@Override
-				public void run() {
-					view.setInputOutputFieldValueFromValue();
-				}
-			});
-			
-			getProcessingCommandableBuilders(Boolean.TRUE).add(submitCommandableBuilder);
-			*/
-		}
-		
-		/*
-		addProcessingCommandableButtonBuilder("Close", SystemActionCreate.class, new Runnable() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-			}
-		});
-		*/
-		//Processing commandables last
-		/*
-		CommandableBuilders processingCommandableBuilders = getProcessingCommandableBuilders();
-		Collection<Commandable> processingCommandables = null;
-		if(__injectCollectionHelper__().isNotEmpty(processingCommandableBuilders)) {
-			processingCommandables = new ArrayList<>();
-			for(CommandableBuilder<?> index : processingCommandableBuilders.get()) {
-				Commandable commandable = index.execute().getOutput();
-				visibleComponentsBuilder.getComponents(Boolean.TRUE).add(commandable);
-				processingCommandables.add(commandable);
-			}
-			//Processing commandables layout item
-			Integer layoutWidth = __inject__(LayoutWidthGetter.class).execute().getOutput().intValue();
-			Integer size = processingCommandables.size();
-			Integer width = layoutWidth / size;
-			Integer count = 1;
-			for(@SuppressWarnings("unused") Commandable index : processingCommandables) {
-				if(count == size )
-					width = width + layoutWidth % size;
-				visibleComponentsBuilder.getLayoutBuilder(Boolean.TRUE).addItems(__inject__(LayoutItemBuilder.class).setAreaWidthProportionsAll(width).setAreaWidthProportionsPhone(layoutWidth));
-				count++;
-			}
-		}
-		*/
-		return view;
 	}
 	
 	@Override
