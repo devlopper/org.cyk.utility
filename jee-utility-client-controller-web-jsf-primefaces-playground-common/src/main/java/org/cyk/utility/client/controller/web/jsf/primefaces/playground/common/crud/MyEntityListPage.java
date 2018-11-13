@@ -6,7 +6,6 @@ import java.util.Collection;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.component.grid.column.ColumnBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
@@ -28,18 +27,9 @@ public class MyEntityListPage extends AbstractPageContainerManagedImpl implement
 		return super.__getWindowBuilder__().setTitleValue("Liste de catégorie de fonction");
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected ViewBuilder __getViewBuilder__() {
-		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
-		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
-		.addComponents(createDataTableBuilder())
-		
-		;
-		return viewBuilder;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static GridBuilder createDataTableBuilder() {
 		@SuppressWarnings({ "rawtypes" })
 		GridBuilder gridBuilder = __inject__(GridBuilder.class)
 				.addColumns(__inject__(ColumnBuilder.class).setHeaderTextValue("Code").addFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_CODE)
@@ -56,7 +46,13 @@ public class MyEntityListPage extends AbstractPageContainerManagedImpl implement
 		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
 		gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);
 		layoutTypeGrid.setIsHasHeader(Boolean.TRUE).setIsHasFooter(Boolean.TRUE).setIsHasOrderNumberColumn(Boolean.TRUE).setIsHasCommandablesColumn(Boolean.TRUE);
-		return gridBuilder;
+		
+		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
+		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
+		.addComponents(gridBuilder)
+		
+		;
+		return viewBuilder;
 	}
-	
+
 }

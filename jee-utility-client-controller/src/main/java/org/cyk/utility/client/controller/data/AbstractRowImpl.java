@@ -3,7 +3,6 @@ package org.cyk.utility.client.controller.data;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.AbstractObject;
-import org.cyk.utility.client.controller.navigation.Navigation;
 import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractRowImpl extends AbstractObject implements Row,Serializable {
