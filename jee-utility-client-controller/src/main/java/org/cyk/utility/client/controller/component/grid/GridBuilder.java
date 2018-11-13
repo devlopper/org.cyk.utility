@@ -44,6 +44,8 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	GridBuilder setCommandablesColumn(ColumnBuilder commandablesColumn);
 	
 	ViewBuilder getCommandablesColumnBodyView(Boolean injectIfNull);
+	//GridBuilder addNavigationCommandablesBySystemActionClasses(Collection<Class<? extends SystemAction>> systemActionClasses);
+	//GridBuilder addNavigationCommandablesBySystemActionClasses(Class<? extends SystemAction>...systemActionClasses);
 	
 	CommandableBuilderByClassMap getCommandableMap();
 	CommandableBuilderByClassMap getCommandableMap(Boolean injectIfNull);

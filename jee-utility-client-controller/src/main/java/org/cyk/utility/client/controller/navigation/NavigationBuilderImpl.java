@@ -21,20 +21,22 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	protected Navigation __execute__() throws Exception {
 		Navigation navigation = __inject__(Navigation.class);
 		Object identifier = getIdentifier();
-		navigation.setIdentifier(identifier);
-		UrlBuilder url = getUrl();
-		if(url==null) {
-			url = __inject__(UrlBuilder.class);
+		if(identifier!=null) {
+			navigation.setIdentifier(identifier);
+			UrlBuilder url = getUrl();
+			if(url==null) {
+				url = __inject__(UrlBuilder.class);
+				
+				String urlString = __inject__(NavigationIdentifierToUrlStringMapper.class).setIdentifier(identifier).execute().getOutput();
+				url.getString(Boolean.TRUE).getUniformResourceIdentifierString(Boolean.TRUE).setString(urlString);
+				
+				ObjectByObjectMap parameterMap = getParameterMap();
+				url.getString(Boolean.TRUE).getUniformResourceIdentifierString(Boolean.TRUE).setParameterMap(parameterMap);
+			}
 			
-			String urlString = __inject__(NavigationIdentifierToUrlStringMapper.class).setIdentifier(identifier).execute().getOutput();
-			url.getString(Boolean.TRUE).getUniformResourceIdentifierString(Boolean.TRUE).setString(urlString);
-			
-			ObjectByObjectMap parameterMap = getParameterMap();
-			url.getString(Boolean.TRUE).getUniformResourceIdentifierString(Boolean.TRUE).setParameterMap(parameterMap);
+			if(url!=null)
+				navigation.setUniformResourceLocator(url.execute().getOutput());
 		}
-		
-		if(url!=null)
-			navigation.setUniformResourceLocator(url.execute().getOutput());
 		
 		Objects dynamicParameterNames = getDynamicParameterNames();
 		if(__injectCollectionHelper__().isNotEmpty(dynamicParameterNames)) {

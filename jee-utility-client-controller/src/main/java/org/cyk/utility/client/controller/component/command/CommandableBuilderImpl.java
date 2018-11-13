@@ -20,8 +20,7 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	@Override
 	protected void __execute__(Commandable commandable) {
 		super.__execute__(commandable);
-		String name = getName();
-		commandable.setName(name);
+		
 		CommandBuilder commandBuilder = getCommand();
 		if(commandBuilder!=null)
 			commandable.setCommand(commandBuilder.execute().getOutput());
@@ -35,6 +34,15 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		if(navigation!=null) {
 			commandable.setNavigation(navigation.execute().getOutput());
 		}
+		
+		String name = getName();
+		if(__injectStringHelper__().isBlank(name)) {
+			if(navigation!=null) {
+				if(navigation.getSystemAction()!=null)
+					name = navigation.getSystemAction().getIdentifier().toString();
+			}
+		}
+		commandable.setName(name);
 	}
 	
 	@Override
@@ -107,6 +115,12 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	@Override
 	public NavigationBuilder getNavigation() {
 		return navigation;
+	}
+	
+	@Override
+	public CommandableBuilder injectNavigationIfNull() {
+		getNavigation(Boolean.TRUE);
+		return this;
 	}
 	
 	@Override

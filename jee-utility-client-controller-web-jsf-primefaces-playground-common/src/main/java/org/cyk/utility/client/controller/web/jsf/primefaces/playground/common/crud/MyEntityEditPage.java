@@ -43,7 +43,9 @@ public class MyEntityEditPage extends AbstractPageContainerManagedImpl implement
 		viewBuilder.addComponentBuilderByObjectByFieldNames(form.getData(), MyEntity.PROPERTY_DESCRIPTION);
 		
 		CommandableBuilder commandableBuilder = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, Form.METHOD_SUBMIT);
-		commandableBuilder.setName(action.toString());
+		if(action!=null) {
+			commandableBuilder.setName(action.toString());	
+		}
 		
 		return viewBuilder;
 	}

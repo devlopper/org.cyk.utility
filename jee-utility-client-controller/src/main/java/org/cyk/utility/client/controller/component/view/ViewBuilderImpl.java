@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.component.view;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.Component;
@@ -19,6 +20,7 @@ import org.cyk.utility.client.controller.component.input.InputStringLineOneBuild
 import org.cyk.utility.client.controller.data.FormData;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.string.Strings;
+import org.cyk.utility.system.action.SystemAction;
 
 public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> implements ViewBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -200,6 +202,22 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	@Override
 	public ViewBuilder setCommandables(CommandableBuilders commandables) {
 		this.commandables = commandables;
+		return this;
+	}
+	
+	@Override
+	public ViewBuilder addNavigationCommandablesBySystemActionClasses(Collection<Class<? extends SystemAction>> systemActionClasses) {
+		if(__injectCollectionHelper__().isNotEmpty(systemActionClasses)) {
+			CommandableBuilders commandables = getCommandables(Boolean.TRUE);
+			for(Class<? extends SystemAction> index : systemActionClasses)
+				commandables.add(__inject__(CommandableBuilder.class).setNavigationSystemAction(__inject__(index)));
+		}
+		return this;
+	}
+	
+	@Override
+	public ViewBuilder addNavigationCommandablesBySystemActionClasses(Class<? extends SystemAction>... systemActionClasses) {
+		addNavigationCommandablesBySystemActionClasses(__injectCollectionHelper__().instanciate(systemActionClasses));
 		return this;
 	}
 	

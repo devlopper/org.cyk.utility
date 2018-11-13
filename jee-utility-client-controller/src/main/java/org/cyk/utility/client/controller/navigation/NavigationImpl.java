@@ -49,6 +49,6 @@ public class NavigationImpl extends AbstractObject implements Navigation,Seriali
 
 	@Override
 	public String toString() {
-		return getIdentifier()+":"+getUniformResourceLocator()+":"+getDynamicParameterNames();
+		return getIdentifier()+":"+getUniformResourceLocator()+":"+getDynamicParameterNames()+":"+getSystemAction();
 	}
 }

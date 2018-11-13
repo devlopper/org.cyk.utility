@@ -11,6 +11,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.model.ListDataModel;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
@@ -36,6 +37,7 @@ import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.primefaces.component.commandbutton.CommandButton;
@@ -111,24 +113,31 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		if(commandable.getNavigation()!=null) {
 			commandButton.setType("button");
 			String url = null;
-			if(__inject__(CollectionHelper.class).isEmpty(commandable.getNavigation().getDynamicParameterNames())) {
+			/*if(__inject__(CollectionHelper.class).isEmpty(commandable.getNavigation().getDynamicParameterNames())) {
 				if(commandable.getNavigation().getUniformResourceLocator()==null)
 					url = null;
 				else
 					url = commandable.getNavigation().getUniformResourceLocator().toString();
-			}else {
+			}else {*/
+				SystemAction navigationSystemAction = commandable.getNavigation().getSystemAction();
+				if(navigationSystemAction == null) {
+					if(commandable.getCommand()!=null && commandable.getCommand().getFunction()!=null)
+						navigationSystemAction = commandable.getCommand().getFunction().getAction();
+				}
+				
 				String systemActionClass = null;
-				if(commandable.getNavigation().getSystemAction() instanceof SystemActionUpdate)
+				if(navigationSystemAction instanceof SystemActionUpdate)
 					systemActionClass = "systemActionUpdateClass";
-				else if(commandable.getNavigation().getSystemAction() instanceof SystemActionDelete)
+				else if(navigationSystemAction instanceof SystemActionDelete)
 					systemActionClass = "systemActionDeleteClass";
 				url = "#{indexRow.getUrlBySystemActionClass(componentHelper."+systemActionClass+")}";
 				onClickValueExpressionString = "window.open('"+url+"','_self');return false";
-			}
+			//}
 			
 			if(__inject__(StringHelper.class).isNotBlank(url)) {
 				onClickValueExpressionString = "window.open('"+url+"','_self');return false";
 			}
+			
 		}else if(commandable.getCommand()!=null) {
 			commandButton.setType("submit");
 			String update = __inject__(ComponentHelper.class).getGlobalMessagesTargetInlineComponentIdentifier()

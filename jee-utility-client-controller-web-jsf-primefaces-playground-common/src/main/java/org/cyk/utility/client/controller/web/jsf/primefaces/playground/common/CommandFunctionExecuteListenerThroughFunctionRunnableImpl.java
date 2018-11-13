@@ -6,7 +6,6 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.command.CommandFunction;
 import org.cyk.utility.client.controller.component.command.CommandFunctionExecuteListenerThrough;
 import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud.MyEntity;
-import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud.MyEntityReadRow;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 
@@ -22,7 +21,7 @@ public class CommandFunctionExecuteListenerThroughFunctionRunnableImpl extends A
 				Object data = function.getProperties().getData();
 				if(data instanceof MyEntity) {
 					if(action instanceof SystemActionCreate)
-						MyEntity.ROWS.add(__inject__(MyEntityReadRow.class).setData((MyEntity) data));
+						MyEntity.COLLECTION.add((MyEntity) data);
 				}
 			}
 		});

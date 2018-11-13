@@ -23,6 +23,7 @@ import org.cyk.utility.client.controller.component.grid.row.Rows;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 
@@ -42,12 +43,31 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	protected void __execute__(Grid grid) {
 		super.__execute__(grid);
 		Objects objects = getObjects();
-		grid.setObjects(objects);
 		if(__injectCollectionHelper__().isNotEmpty(objects)) {
+			RowBuilders rows = getRows();
+			Class<? extends org.cyk.utility.client.controller.data.Row> rowClass = null;
+			if(rows!=null)
+				rowClass = rows.getRowClass();
+			grid.setObjects(__inject__(Objects.class));
 			Integer orderNumber = 1;
-			for(Object index : objects.get())
-				if(index instanceof Objectable)
-					((Objectable)index).setOrderNumber(orderNumber++);
+			for(Object index : objects.get()) {
+				Object row = null;
+				if(index instanceof org.cyk.utility.client.controller.data.Data) {
+					if(rowClass!=null) {
+						row = __inject__(rowClass);
+						if(row instanceof org.cyk.utility.client.controller.data.RowData) {
+							((org.cyk.utility.client.controller.data.RowData<Data>)row).setData((Data) index);
+						}
+					}
+				}else {
+					row = index;
+				}
+				
+				if(row instanceof Objectable)
+					((Objectable)row).setOrderNumber(orderNumber++);
+				
+				grid.getObjects().add(row);
+			}
 		}
 		
 		ViewBuilder view = getView(Boolean.TRUE);

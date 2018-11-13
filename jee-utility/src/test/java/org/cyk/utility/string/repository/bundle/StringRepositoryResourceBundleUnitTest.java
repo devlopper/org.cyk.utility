@@ -51,5 +51,14 @@ public class StringRepositoryResourceBundleUnitTest extends AbstractArquillianUn
 		properties.setKey("good");
 		assertionHelper.assertEquals("bon", repository.getOne(properties));
 	}
+	
+	@Test
+	public void isCreerWhenMessage01BundleAddedAndKeyIsCreate(){
+		repository.addBundle("org.cyk.utility.string.repository.bundle.message");
+		Properties properties = new Properties();
+		properties.setResourceBundles(Arrays.asList( new ResourceBundle("org.cyk.utility.string.repository.bundle.message_01") ));
+		properties.setKey("good");
+		assertionHelper.assertEquals("bon", repository.getOne(properties));
+	}
 
 }

@@ -21,6 +21,7 @@ public interface CommandableBuilder extends VisibleComponentBuilder<Commandable>
 	
 	NavigationBuilder getNavigation();
 	NavigationBuilder getNavigation(Boolean injectIfNull);
+	CommandableBuilder injectNavigationIfNull();
 	CommandableBuilder setNavigation(NavigationBuilder navigation);
 	CommandableBuilder setNavigationIdentifier(Object identifier);
 	CommandableBuilder setNavigationParameters(Object...keyValues);

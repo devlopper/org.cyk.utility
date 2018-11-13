@@ -38,21 +38,20 @@ public class MyEntityListPage extends AbstractPageContainerManagedImpl implement
 		return viewBuilder;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static GridBuilder createDataTableBuilder() {
-		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@SuppressWarnings({ "rawtypes" })
 		GridBuilder gridBuilder = __inject__(GridBuilder.class)
 				.addColumns(__inject__(ColumnBuilder.class).setHeaderTextValue("Code").addFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_CODE)
 						,__inject__(ColumnBuilder.class).setHeaderTextValue("Nom").addFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_NAME)
 						,__inject__(ColumnBuilder.class).setHeaderTextValue("Description").addFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_DESCRIPTION)
 						)
 				
-				.addObjects((Collection)MyEntity.ROWS)
+				.addObjects((Collection)MyEntity.COLLECTION)
 				;
 		
-		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getCommandables(Boolean.TRUE).add(
-				__inject__(CommandableBuilder.class).setNavigationSystemAction(__inject__(SystemActionUpdate.class)).setName("Modifier").setNavigationIdentifierAndParameters("myEntityEditView",new Object[] {"action","update"}).addNavigationDynamicParameterNames("identifier")
-				,__inject__(CommandableBuilder.class).setNavigationSystemAction(__inject__(SystemActionDelete.class)).setName("Supprimer").setNavigationIdentifierAndParameters("myEntityEditView",new Object[] {"action","delete"}).addNavigationDynamicParameterNames("identifier")
-				);
+		gridBuilder.getRows(Boolean.TRUE).setRowClass(MyEntityReadRow.class);
+		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandablesBySystemActionClasses(SystemActionUpdate.class,SystemActionDelete.class);
 		
 		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
 		gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);

@@ -1,5 +1,7 @@
 package org.cyk.utility.client.controller.component.view;
 
+import java.util.Collection;
+
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
@@ -8,6 +10,7 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
+import org.cyk.utility.system.action.SystemAction;
 
 public interface ViewBuilder extends VisibleComponentBuilder<View> {
 
@@ -41,4 +44,7 @@ public interface ViewBuilder extends VisibleComponentBuilder<View> {
 	CommandableBuilders getCommandables();
 	CommandableBuilders getCommandables(Boolean injectIfNull);
 	ViewBuilder setCommandables(CommandableBuilders commandables);
+	
+	ViewBuilder addNavigationCommandablesBySystemActionClasses(Collection<Class<? extends SystemAction>> systemActionClasses);
+	ViewBuilder addNavigationCommandablesBySystemActionClasses(Class<? extends SystemAction>...systemActionClasses);
 }
