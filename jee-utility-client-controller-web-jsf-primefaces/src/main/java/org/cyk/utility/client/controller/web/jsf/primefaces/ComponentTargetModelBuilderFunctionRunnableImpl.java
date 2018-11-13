@@ -36,6 +36,8 @@ import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionUpdate;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.outputpanel.OutputPanel;
@@ -109,10 +111,20 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		if(commandable.getNavigation()!=null) {
 			commandButton.setType("button");
 			String url = null;
-			if(commandable.getNavigation().getUniformResourceLocator()==null)
-				url = null;
-			else
-				url = commandable.getNavigation().getUniformResourceLocator().toString();
+			if(__inject__(CollectionHelper.class).isEmpty(commandable.getNavigation().getDynamicParameterNames())) {
+				if(commandable.getNavigation().getUniformResourceLocator()==null)
+					url = null;
+				else
+					url = commandable.getNavigation().getUniformResourceLocator().toString();
+			}else {
+				String systemActionClass = null;
+				if(commandable.getNavigation().getSystemAction() instanceof SystemActionUpdate)
+					systemActionClass = "systemActionUpdateClass";
+				else if(commandable.getNavigation().getSystemAction() instanceof SystemActionDelete)
+					systemActionClass = "systemActionDeleteClass";
+				url = "#{indexRow.getUrlBySystemActionClass(componentHelper."+systemActionClass+")}";
+				onClickValueExpressionString = "window.open('"+url+"','_self');return false";
+			}
 			
 			if(__inject__(StringHelper.class).isNotBlank(url)) {
 				onClickValueExpressionString = "window.open('"+url+"','_self');return false";
@@ -271,7 +283,8 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 			String valuePropertyName = __inject__(CollectionHelper.class).isEmpty(grid.getObjects()) ? column.getValuePropertyName() : column.getFieldName();
 			if(__inject__(StringHelper.class).isNotBlank(valuePropertyName)) {
 				HtmlOutputText htmlOutputText = new HtmlOutputText();
-				__setValueExpression__(htmlOutputText, "value", __buildValueExpressionString__(__formatExpression__(dataTable.getVar()+"['"+valuePropertyName+"']")));
+				//__setValueExpression__(htmlOutputText, "value", __buildValueExpressionString__(__formatExpression__(dataTable.getVar()+"['"+valuePropertyName+"']")));
+				__setValueExpression__(htmlOutputText, "value", __buildValueExpressionString__(__formatExpression__(dataTable.getVar()+"."+valuePropertyName)));
 				uiComponent = htmlOutputText;
 			}else {
 				

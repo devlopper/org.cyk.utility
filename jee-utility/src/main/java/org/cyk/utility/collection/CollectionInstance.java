@@ -26,4 +26,7 @@ public interface CollectionInstance<T> extends Objectable {
 	T getLast();
 	
 	Integer getSize();
+	
+	Class<?> getElementClass();
+	CollectionInstance<T> setElementClass(Class<?> elementClass);
 }

@@ -8,7 +8,7 @@ import javax.inject.Named;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
-import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud.MyEntityDataImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud.MyEntityImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.throwable.ThrowableHelper;
 
@@ -32,7 +32,7 @@ public class CommandableButtonPage extends AbstractPageContainerManagedImpl impl
 		.addComponents(
 			__inject__(CommandableBuilder.class).setName("No Action")
 			,__inject__(CommandableBuilder.class).setName("Server Action,No Confirmation,Success")
-			.setCommandFunctionActionClass(SystemActionCreate.class).setCommandFunctionData(new MyEntityDataImpl())
+			.setCommandFunctionActionClass(SystemActionCreate.class).setCommandFunctionData(new MyEntityImpl())
 			,__inject__(CommandableBuilder.class).setName("Server Action,No Confirmation,Fail")
 			.setCommandFunctionActionClass(SystemActionCreate.class).addCommandFunctionTryRunRunnable(new Runnable() {
 				@Override

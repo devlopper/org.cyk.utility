@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.cyk.utility.client.controller.AbstractControllerFunctionImpl;
 import org.cyk.utility.client.controller.message.MessageRender;
-import org.cyk.utility.client.controller.message.MessageRenderTypeInline;
+import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
 import org.cyk.utility.client.controller.message.MessagesBuilder;
 import org.cyk.utility.notification.Notification;
 import org.cyk.utility.notification.NotificationSeverityError;
@@ -47,7 +47,8 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 		
 		if(__injectCollectionHelper__().isNotEmpty(notifications)) {
 			Collection<Object> messages = __inject__(MessagesBuilder.class).addNotifications(notifications).execute().getOutput();
-			__inject__(MessageRender.class).setMessages(messages).setType(__inject__(MessageRenderTypeInline.class)).execute();
+			//TODO find a way to inline messages
+			__inject__(MessageRender.class).addMessages(messages).setType(__inject__(MessageRenderTypeDialog.class)).execute();
 		}
 		
 	}

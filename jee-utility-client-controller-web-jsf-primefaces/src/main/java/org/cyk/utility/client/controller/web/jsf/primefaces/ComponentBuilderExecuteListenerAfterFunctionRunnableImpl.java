@@ -66,29 +66,11 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 					}else if(component instanceof Grid) {
 						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
 					}else if(component instanceof Commandable) {
-						//Commandable commandable = (Commandable)component;
 						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
-						/*
-						commandable.getProperties().setValue(((Commandable)component).getName());
-						String type = null;
-						if(commandable.getCommand() == null)
-							type = "button";
-						else
-							type = "submit";
-						commandable.getProperties().setType(type);
-						String onClick = null;
-						if(commandable.getNavigation()!=null) {
-							onClick = "window.open('"+commandable.getNavigation().getUniformResourceLocator()+"','_self');return false";
-						}
-						commandable.getProperties().setOnClick(onClick);
-						*/
 					}
 				}else if(component instanceof Insert) {
 					((Insert)component).getProperties().setName(((Insert)component).getName());
 				}
-				
-				//if(Boolean.TRUE.equals(componentBuilder.getIsTargetModelToBeBuilt()))
-				//	component.setTargetModel(__inject__(ComponentTargetModelBuilder.class).setComponent(component).execute().getOutput());
 			}
 		});
 	}

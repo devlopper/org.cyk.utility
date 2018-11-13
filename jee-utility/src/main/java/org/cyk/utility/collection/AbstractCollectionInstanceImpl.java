@@ -10,13 +10,15 @@ import org.cyk.utility.clazz.ClassHelper;
 public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject implements CollectionInstance<T>, Serializable {
 	private static final long serialVersionUID = -1888054558236819369L;
 
+	@Deprecated //use elementClass instead
 	private Class<T> clazz;
+	private Class<?> elementClass;
 	private Collection<T> collection;
 
 	@Override
 	protected void __listenBeforePostConstruct__() {
 		super.__listenBeforePostConstruct__();
-		clazz = (Class<T>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+		setElementClass(clazz = (Class<T>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class));
 	}
 	
 	@Override
@@ -118,6 +120,17 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	@Override
 	public Integer getSize() {
 		return __inject__(CollectionHelper.class).getSize(collection);
+	}
+	
+	@Override
+	public Class<?> getElementClass() {
+		return elementClass;
+	}
+	
+	@Override
+	public CollectionInstance<T> setElementClass(Class<?> elementClass) {
+		this.elementClass = elementClass;
+		return this;
 	}
 	
 	@Override

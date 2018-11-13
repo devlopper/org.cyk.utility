@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.client.controller.data.AbstractFormDataImpl;
 
-public class MyEntityEditFormImpl extends AbstractFormDataImpl<MyEntityData> implements MyEntityEditForm,Serializable {
+public class MyEntityEditFormImpl extends AbstractFormDataImpl<MyEntity> implements MyEntityEditForm,Serializable {
 	private static final long serialVersionUID = 1L;
 
 

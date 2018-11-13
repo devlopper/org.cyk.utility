@@ -17,7 +17,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public class MyEntityDataImpl extends AbstractDataImpl implements MyEntityData,Serializable {
+public class MyEntityImpl extends AbstractDataImpl implements MyEntity,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Input @InputString @InputStringLineOne
@@ -33,8 +33,8 @@ public class MyEntityDataImpl extends AbstractDataImpl implements MyEntityData,S
 	private String description;
 	
 	@Override
-	public String getCode() {
-		return code;
+	public MyEntity setIdentifier(Object identifier) {
+		return (MyEntity) super.setIdentifier(identifier);
 	}
 	
 	@Override
@@ -50,4 +50,10 @@ public class MyEntityDataImpl extends AbstractDataImpl implements MyEntityData,S
 	
 	/**/
 	
+	public static MyEntity getByIdentifier(Object identifier) {
+		for(MyEntityReadRow index : MyEntity.ROWS)
+			if(index.getData().getIdentifier().equals(identifier))
+				return index.getData();
+		return null;
+	}
 }

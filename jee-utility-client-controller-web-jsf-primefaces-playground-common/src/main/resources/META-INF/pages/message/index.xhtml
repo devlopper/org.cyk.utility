@@ -11,34 +11,108 @@
 	<cyk:page value="#{messagePage}">
 		<ui:define name="centerCenter">
 			<div class="ui-g-12">
-	    		Inline
-	    		<p:separator/>
 	    		<ui:param name="update" value="#{componentHelper.globalMessagesTargetInlineComponentIdentifier},#{componentHelper.globalMessagesTargetGrowlComponentIdentifier},#{componentHelper.globalMessagesTargetDialogComponentIdentifier}"/>
 	    		
-	    		<p:panelGrid columns="4">	
-	    			<p:commandButton value="Info" action="#{messagePage.showInformationInline}" update="#{update}" />
-	    			<p:commandButton value="Warn" action="#{messagePage.showWarningInline}" update="#{update}"/>
-	    			<p:commandButton value="Error" action="#{messagePage.showErrorInline}" update="#{update}"/>
-	    			<p:commandButton value="Fatal" action="#{messagePage.showFatalInline}" update="#{update}"/>
-	    		</p:panelGrid>
-	    		
-	    		Dialog
-	    		<p:separator/>
-	    		<p:panelGrid columns="4">	
-	    			<p:commandButton value="Info" action="#{messagePage.showInformationDialog}" update="#{update}"/>
-	    			<p:commandButton value="Warn" action="#{messagePage.showWarningDialog}" update="#{update}"/>
-	    			<p:commandButton value="Error" action="#{messagePage.showErrorDialog}" update="#{update}"/>
-	    			<p:commandButton value="Fatal" action="#{messagePage.showFatalDialog}" update="#{update}"/>
-	    		</p:panelGrid>
-	    		
-	    		Growl
-	    		<p:separator/>
-	    		<p:panelGrid columns="4">	
-	    			<p:commandButton value="Info" action="#{messagePage.showInformationGrowl}" update="#{update}"/>
-	    			<p:commandButton value="Warn" action="#{messagePage.showWarningGrowl}" update="#{update}"/>
-	    			<p:commandButton value="Error" action="#{messagePage.showErrorGrowl}" update="#{update}"/>
-	    			<p:commandButton value="Fatal" action="#{messagePage.showFatalGrowl}" update="#{update}"/>
-	    		</p:panelGrid>
+	    		<div class="ui-g">
+	    			<div class="ui-g-4">
+	    				<h3>One</h3>
+	    				
+	    				Inline
+	    				<p:separator/>
+	    				<p:panelGrid columns="4">	
+			    			<p:commandButton value="Info" action="#{messagePage.showOneInformationInline}" update="#{update}" />
+			    			<p:commandButton value="Warn" action="#{messagePage.showOneWarningInline}" update="#{update}"/>
+			    			<p:commandButton value="Error" action="#{messagePage.showOneErrorInline}" update="#{update}"/>
+			    			<p:commandButton value="Fatal" action="#{messagePage.showOneFatalInline}" update="#{update}"/>
+			    		</p:panelGrid>
+			    		
+			    		Dialog
+			    		<p:separator/>
+			    		<p:panelGrid columns="4">	
+			    			<p:commandButton value="Info" action="#{messagePage.showOneInformationDialog}" update="#{update}"/>
+			    			<p:commandButton value="Warn" action="#{messagePage.showOneWarningDialog}" update="#{update}"/>
+			    			<p:commandButton value="Error" action="#{messagePage.showOneErrorDialog}" update="#{update}"/>
+			    			<p:commandButton value="Fatal" action="#{messagePage.showOneFatalDialog}" update="#{update}"/>
+			    		</p:panelGrid>
+			    		
+			    		Growl
+			    		<p:separator/>
+			    		<p:panelGrid columns="4">	
+			    			<p:commandButton value="Info" action="#{messagePage.showOneInformationGrowl}" update="#{update}"/>
+			    			<p:commandButton value="Warn" action="#{messagePage.showOneWarningGrowl}" update="#{update}"/>
+			    			<p:commandButton value="Error" action="#{messagePage.showOneErrorGrowl}" update="#{update}"/>
+			    			<p:commandButton value="Fatal" action="#{messagePage.showOneFatalGrowl}" update="#{update}"/>
+			    		</p:panelGrid>
+	    			</div>
+	    			
+	    			<div class="ui-g-4">
+	    				<h3>Few</h3>
+	    				
+	    				Inline
+	    				<p:separator/>
+	    				<p:panelGrid columns="5">	
+			    			<p:commandButton value="Info" action="#{messagePage.showFewInformationInline}" update="#{update}" />
+			    			<p:commandButton value="Warn" action="#{messagePage.showFewWarningInline}" update="#{update}"/>
+			    			<p:commandButton value="Error" action="#{messagePage.showFewErrorInline}" update="#{update}"/>
+			    			<p:commandButton value="Fatal" action="#{messagePage.showFewFatalInline}" update="#{update}"/>
+			    			<p:commandButton value="Any" action="#{messagePage.showFewInline}" update="#{update}"/>
+			    		</p:panelGrid>
+			    		
+			    		Dialog
+			    		<p:separator/>
+			    		<p:panelGrid columns="5">	
+			    			<p:commandButton value="Info" action="#{messagePage.showFewInformationDialog}" update="#{update}"/>
+			    			<p:commandButton value="Warn" action="#{messagePage.showFewWarningDialog}" update="#{update}"/>
+			    			<p:commandButton value="Error" action="#{messagePage.showFewErrorDialog}" update="#{update}"/>
+			    			<p:commandButton value="Fatal" action="#{messagePage.showFewFatalDialog}" update="#{update}"/>
+			    			<p:commandButton value="Any" action="#{messagePage.showFewDialog}" update="#{update}"/>
+			    		</p:panelGrid>
+			    		
+			    		Growl
+			    		<p:separator/>
+			    		<p:panelGrid columns="5">	
+			    			<p:commandButton value="Info" action="#{messagePage.showFewInformationGrowl}" update="#{update}"/>
+			    			<p:commandButton value="Warn" action="#{messagePage.showFewWarningGrowl}" update="#{update}"/>
+			    			<p:commandButton value="Error" action="#{messagePage.showFewErrorGrowl}" update="#{update}"/>
+			    			<p:commandButton value="Fatal" action="#{messagePage.showFewFatalGrowl}" update="#{update}"/>
+			    			<p:commandButton value="Any" action="#{messagePage.showFewGrowl}" update="#{update}"/>
+			    		</p:panelGrid>
+	    			</div>
+	    			
+	    			<div class="ui-g-4">
+	    				<h3>Many</h3>
+	    				
+	    				Inline
+	    				<p:separator/>
+	    				<p:panelGrid columns="5">	
+			    			<p:commandButton value="Info" action="#{messagePage.showManyInformationInline}" update="#{update}" />
+			    			<p:commandButton value="Warn" action="#{messagePage.showManyWarningInline}" update="#{update}"/>
+			    			<p:commandButton value="Error" action="#{messagePage.showManyErrorInline}" update="#{update}"/>
+			    			<p:commandButton value="Fatal" action="#{messagePage.showManyFatalInline}" update="#{update}"/>
+			    			<p:commandButton value="Any" action="#{messagePage.showManyInline}" update="#{update}"/>
+			    		</p:panelGrid>
+			    		
+			    		Dialog
+			    		<p:separator/>
+			    		<p:panelGrid columns="5">	
+			    			<p:commandButton value="Info" action="#{messagePage.showManyInformationDialog}" update="#{update}"/>
+			    			<p:commandButton value="Warn" action="#{messagePage.showManyWarningDialog}" update="#{update}"/>
+			    			<p:commandButton value="Error" action="#{messagePage.showManyErrorDialog}" update="#{update}"/>
+			    			<p:commandButton value="Fatal" action="#{messagePage.showManyFatalDialog}" update="#{update}"/>
+			    			<p:commandButton value="Any" action="#{messagePage.showManyDialog}" update="#{update}"/>
+			    		</p:panelGrid>
+			    		
+			    		Growl
+			    		<p:separator/>
+			    		<p:panelGrid columns="5">	
+			    			<p:commandButton value="Info" action="#{messagePage.showManyInformationGrowl}" update="#{update}"/>
+			    			<p:commandButton value="Warn" action="#{messagePage.showManyWarningGrowl}" update="#{update}"/>
+			    			<p:commandButton value="Error" action="#{messagePage.showManyErrorGrowl}" update="#{update}"/>
+			    			<p:commandButton value="Fatal" action="#{messagePage.showManyFatalGrowl}" update="#{update}"/>
+			    			<p:commandButton value="Any" action="#{messagePage.showManyGrowl}" update="#{update}"/>
+			    		</p:panelGrid>
+	    			</div>
+	    		</div>	
     		</div>
 		</ui:define>
 	</cyk:page>

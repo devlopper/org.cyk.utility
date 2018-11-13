@@ -32,8 +32,8 @@ public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.c
 							)
 					
 				,__inject__(MenuItemBuilder.class).setCommandableName("MyEntity")
-					.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Lister").setCommandableNavigationIdentifierAndParameters("myEntityListWindow",new Object[] {"p","v","a","b"})
-							,__inject__(MenuItemBuilder.class).setCommandableName("Créer").setCommandableNavigationIdentifier("myEntityEditWindow")
+					.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Lister").setCommandableNavigationIdentifierAndParameters("myEntityListView",new Object[] {"p","v","a","b"})
+							,__inject__(MenuItemBuilder.class).setCommandableName("Créer").setCommandableNavigationIdentifier("myEntityEditView")
 							)
 					);
 		//

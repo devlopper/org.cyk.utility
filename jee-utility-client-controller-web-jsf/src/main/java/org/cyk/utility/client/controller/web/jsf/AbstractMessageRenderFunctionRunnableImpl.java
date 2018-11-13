@@ -10,6 +10,8 @@ import org.cyk.utility.client.controller.message.MessageRenderType;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
 import org.cyk.utility.client.controller.message.MessageRenderTypeGrowl;
 import org.cyk.utility.client.controller.message.MessageRenderTypeInline;
+import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.object.Objects;
 
 public abstract class AbstractMessageRenderFunctionRunnableImpl extends AbstractFunctionRunnableImpl<MessageRender> implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -18,12 +20,15 @@ public abstract class AbstractMessageRenderFunctionRunnableImpl extends Abstract
 		setRunnable(new Runnable() {
 			@Override
 			public void run() {
-				for(Object  index : getFunction().getMessages()) {
-					FacesMessage facesMessage = (FacesMessage) index;
-					MessageRenderType renderType = getFunction().getType();
-					if(renderType == null)
-						renderType = __inject__(MessageRenderTypeInline.class);
-					__run__(facesMessage, renderType);	
+				Objects messages = getFunction().getMessages();
+				if(__inject__(CollectionHelper.class).isNotEmpty(messages)) {
+					for(Object  index : messages.get()) {
+						FacesMessage facesMessage = (FacesMessage) index;
+						MessageRenderType renderType = getFunction().getType();
+						if(renderType == null)
+							renderType = __inject__(MessageRenderTypeInline.class);
+						__run__(facesMessage, renderType);	
+					}	
 				}
 			}
 		});
@@ -37,6 +42,8 @@ public abstract class AbstractMessageRenderFunctionRunnableImpl extends Abstract
 			facesContext.addMessage(__injectComponentHelper__().getGlobalMessagesOwnerDialogComponentClientIdentifier(), facesMessage);
 		else if(renderType instanceof MessageRenderTypeGrowl)
 			facesContext.addMessage(__injectComponentHelper__().getGlobalMessagesOwnerGrowlComponentClientIdentifier(), facesMessage);
+		
+		//facesContext.addMessage(__injectComponentHelper__().getGlobalMessagesOwnerDialogComponentClientIdentifier(), facesMessage);
 	}
 	
 }

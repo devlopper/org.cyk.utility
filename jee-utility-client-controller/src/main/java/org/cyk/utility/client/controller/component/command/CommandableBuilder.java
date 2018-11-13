@@ -25,6 +25,8 @@ public interface CommandableBuilder extends VisibleComponentBuilder<Commandable>
 	CommandableBuilder setNavigationIdentifier(Object identifier);
 	CommandableBuilder setNavigationParameters(Object...keyValues);
 	CommandableBuilder setNavigationIdentifierAndParameters(Object identifier,Object[] keyValues);
+	CommandableBuilder addNavigationDynamicParameterNames(Object...names);
+	CommandableBuilder setNavigationSystemAction(SystemAction systemAction);
 	
 	CommandableBuilder setCommandFunctionActionClass(Class<? extends SystemAction> systemActionClass);
 	

@@ -25,7 +25,6 @@ import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.random.RandomHelper;
-import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
@@ -33,10 +32,6 @@ import org.cyk.utility.system.action.SystemActionUpdate;
 public class ComponentHelper extends AbstractSingleton implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public String getUrlByObjectByAction(Object object,Class<SystemAction> systemActionClass) {
-		return "http://google.com";
-	}
-	
 	public RandomHelper getRandomHelper() {
 		return __inject__(RandomHelper.class);
 	}

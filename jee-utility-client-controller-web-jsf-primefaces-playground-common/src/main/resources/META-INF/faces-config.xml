@@ -56,13 +56,13 @@
 		</navigation-case>
 		
 		<navigation-case>
-			<from-outcome>myEntityListWindow</from-outcome>
+			<from-outcome>myEntityListView</from-outcome>
 			<to-view-id>/crud/myentity/list.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		
 		<navigation-case>
-			<from-outcome>myEntityEditWindow</from-outcome>
+			<from-outcome>myEntityEditView</from-outcome>
 			<to-view-id>/crud/myentity/edit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>

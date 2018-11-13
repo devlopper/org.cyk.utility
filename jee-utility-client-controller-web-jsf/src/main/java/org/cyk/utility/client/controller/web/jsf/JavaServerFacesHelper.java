@@ -6,11 +6,12 @@ import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.cyk.utility.client.controller.AbstractObject;
 
-@Singleton
+@Singleton @Named
 public class JavaServerFacesHelper extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -47,4 +48,8 @@ public class JavaServerFacesHelper extends AbstractObject implements Serializabl
 	public void setMethodExpression(UIComponent uiComponent,String propertyName,String expression,Class<?> returnType,Class<?>[] parameterTypes) {
 		setMethodExpression(uiComponent, propertyName, buildValueExpression(expression, returnType));
 	}*/
+	
+	public Boolean hasMessages(String clientId) {
+		return FacesContext.getCurrentInstance().getMessages(clientId).hasNext();
+	}
 }

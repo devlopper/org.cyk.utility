@@ -29,18 +29,16 @@
 		<c:if test="#{theme != null}">
 			<ui:insert name="contractBody">	
 				<h:form id="#{componentHelper.globalFormComponentIdentifier}">		
-					<!--
-					<p:autoUpdate/>
-					-->
 					<!-- Messages -->
 		    		
 		    		<h:inputHidden id="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"/>
 		    		<p:growl id="#{componentHelper.globalMessagesTargetGrowlComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"/>
 		    		
-		    		<p:dialog id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}" header="Messages" modal="true" appendTo="@(body)" visible="#{not empty facesContext.messageList}">
-					    <p:repeat var="message" value="#{facesContext.messageList}">
-					    	#{message.severity} - #{message.detail} - #{message.summary}
-					    </p:repeat>
+		    		<p:dialog id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}" header="Messages" modal="true" appendTo="@(body)" visible="#{facesContext.getMessages(componentHelper.globalMessagesOwnerDialogComponentClientIdentifier).hasNext()}">
+					    <h:inputHidden id="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
+			    		<p:scrollPanel style="max-width:700px;max-height:500px">
+			    			<p:messages id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}ID" for="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
+			    		</p:scrollPanel>
 					</p:dialog>
 					
 					<div class="ui-g cyk_layout_page">

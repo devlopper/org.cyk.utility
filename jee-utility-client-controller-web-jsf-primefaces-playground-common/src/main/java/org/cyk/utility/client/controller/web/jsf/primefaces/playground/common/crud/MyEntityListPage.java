@@ -13,6 +13,8 @@ import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.window.WindowBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
+import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionUpdate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,17 +41,17 @@ public class MyEntityListPage extends AbstractPageContainerManagedImpl implement
 	public static GridBuilder createDataTableBuilder() {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		GridBuilder gridBuilder = __inject__(GridBuilder.class)
-				.addColumns(__inject__(ColumnBuilder.class).setHeaderTextValue("Code").addFieldNameStrings(MyEntityData.PROPERTY_CODE)
-						,__inject__(ColumnBuilder.class).setHeaderTextValue("Nom").addFieldNameStrings(MyEntityData.PROPERTY_NAME)
-						,__inject__(ColumnBuilder.class).setHeaderTextValue("Description").addFieldNameStrings(MyEntityData.PROPERTY_DESCRIPTION)
+				.addColumns(__inject__(ColumnBuilder.class).setHeaderTextValue("Code").addFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_CODE)
+						,__inject__(ColumnBuilder.class).setHeaderTextValue("Nom").addFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_NAME)
+						,__inject__(ColumnBuilder.class).setHeaderTextValue("Description").addFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_DESCRIPTION)
 						)
 				
-				.addObjects((Collection)MyEntityData.COLLECTION)
+				.addObjects((Collection)MyEntity.ROWS)
 				;
 		
 		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getCommandables(Boolean.TRUE).add(
-				__inject__(CommandableBuilder.class).setName("Modifier").setNavigationIdentifierAndParameters("myEntityEditWindow",null)
-				,__inject__(CommandableBuilder.class).setName("Supprimer").setNavigationIdentifierAndParameters("myEntityEditWindow",new Object[] {"p1","v1"})
+				__inject__(CommandableBuilder.class).setNavigationSystemAction(__inject__(SystemActionUpdate.class)).setName("Modifier").setNavigationIdentifierAndParameters("myEntityEditView",new Object[] {"action","update"}).addNavigationDynamicParameterNames("identifier")
+				,__inject__(CommandableBuilder.class).setNavigationSystemAction(__inject__(SystemActionDelete.class)).setName("Supprimer").setNavigationIdentifierAndParameters("myEntityEditView",new Object[] {"action","delete"}).addNavigationDynamicParameterNames("identifier")
 				);
 		
 		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);

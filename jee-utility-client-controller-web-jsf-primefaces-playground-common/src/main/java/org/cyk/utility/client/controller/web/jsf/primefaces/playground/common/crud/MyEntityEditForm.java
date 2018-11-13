@@ -2,6 +2,6 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.c
 
 import org.cyk.utility.client.controller.data.FormData;
 
-public interface MyEntityEditForm extends FormData<MyEntityData> {
+public interface MyEntityEditForm extends FormData<MyEntity> {
 
 }

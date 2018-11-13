@@ -139,6 +139,18 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		return this;
 	}
 	
+	@Override
+	public CommandableBuilder addNavigationDynamicParameterNames(Object... names) {
+		getNavigation(Boolean.TRUE).getDynamicParameterNames(Boolean.TRUE).add(names);
+		return this;
+	}
+	
+	@Override
+	public CommandableBuilder setNavigationSystemAction(SystemAction systemAction) {
+		getNavigation(Boolean.TRUE).setSystemAction(systemAction);
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_COMMAND = "command";
