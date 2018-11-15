@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence;
+package org.cyk.utility.server.persistence.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,9 +8,8 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.instance.InstanceGetter;
+import org.cyk.utility.server.persistence.Persistence;
 
-@Deprecated
-//has been moved to implementation
 public class InstanceGetterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<InstanceGetter> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

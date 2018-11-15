@@ -236,6 +236,7 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 	private DataTable __build__(Grid grid) {
 		DataTable dataTable = new DataTable();
 		dataTable.setVar("indexRow");
+		dataTable.setReflow(Boolean.TRUE);
 		Objects objects = grid.getObjects();
 		if(__inject__(CollectionHelper.class).isEmpty(objects)) {
 			Rows rows = grid.getRows();

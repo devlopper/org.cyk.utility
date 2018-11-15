@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 
 public abstract class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject implements MapInstance<KEY,VALUE>,Serializable {
@@ -52,6 +53,26 @@ public abstract class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject 
 	@Override
 	public Collection<Entry<KEY, VALUE>> getEntries() {
 		return __map__ == null ? null : __map__.entrySet();
+	}
+	
+	@Override
+	public Collection<KEY> getKeys(Collection<VALUE> values) {
+		Collection<KEY> keys = null;
+		if(__inject__(CollectionHelper.class).isNotEmpty(values) && __inject__(MapHelper.class).isNotEmpty(this)) {
+			for(Map.Entry<KEY, VALUE> index : getEntries()) {
+				if(__inject__(CollectionHelper.class).contains(values, index.getValue())){
+					if(keys == null)
+						keys = new ArrayList<>();
+					keys.add(index.getKey());
+				}
+			}
+		}
+		return keys;
+	}
+	
+	@Override
+	public Collection<KEY> getKeys(VALUE... values) {
+		return getKeys(__inject__(CollectionHelper.class).instanciate(values));
 	}
 	
 	@Override

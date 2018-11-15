@@ -1,4 +1,4 @@
-package org.cyk.utility.client.controller;
+package org.cyk.utility.server.persistence.impl;
 
 import java.io.Serializable;
 

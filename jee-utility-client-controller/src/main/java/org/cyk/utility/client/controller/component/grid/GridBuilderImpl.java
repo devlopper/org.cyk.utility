@@ -208,6 +208,18 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	}
 	
 	@Override
+	public GridBuilder addColumnByFieldNameStrings(Collection<String> fieldNameStrings) {
+		getColumns(Boolean.TRUE).add(__inject__(ColumnBuilder.class).addFieldNameStrings(fieldNameStrings));
+		return this;
+	}
+	
+	@Override
+	public GridBuilder addColumnByFieldNameStrings(String... fieldNameStrings) {
+		getColumns(Boolean.TRUE).add(__inject__(ColumnBuilder.class).addFieldNameStrings(fieldNameStrings));
+		return this;
+	}
+	
+	@Override
 	public RowBuilders getRows() {
 		return rows;
 	}
@@ -346,6 +358,12 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	@Override
 	public GridBuilder setCommandablesColumnCommandableMap(CommandableBuilderByClassMap commandablesColumnCommandableMap) {
 		this.commandablesColumnCommandableMap = commandablesColumnCommandableMap;
+		return this;
+	}
+	
+	@Override
+	public GridBuilder setRowClass(Class<? extends org.cyk.utility.client.controller.data.Row> rowClass) {
+		getRows(Boolean.TRUE).setRowClass(rowClass);
 		return this;
 	}
 	

@@ -9,6 +9,7 @@ import org.cyk.utility.client.controller.component.grid.column.ColumnBuilders;
 import org.cyk.utility.client.controller.component.grid.row.RowBuilder;
 import org.cyk.utility.client.controller.component.grid.row.RowBuilders;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.object.Objects;
 
 public interface GridBuilder extends VisibleComponentBuilder<Grid> {
@@ -18,6 +19,8 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	GridBuilder setColumns(ColumnBuilders columns);
 	GridBuilder addColumns(Collection<ColumnBuilder> columns);
 	GridBuilder addColumns(ColumnBuilder...columns);
+	GridBuilder addColumnByFieldNameStrings(Collection<String> fieldNameStrings);
+	GridBuilder addColumnByFieldNameStrings(String...fieldNameStrings);
 	
 	RowBuilders getRows();
 	RowBuilders getRows(Boolean injectIfNull);
@@ -54,6 +57,8 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	CommandableBuilderByClassMap getCommandablesColumnCommandableMap();
 	CommandableBuilderByClassMap getCommandablesColumnCommandableMap(Boolean injectIfNull);
 	GridBuilder setCommandablesColumnCommandableMap(CommandableBuilderByClassMap commandablesColumnCommandableMap);
+	
+	GridBuilder setRowClass(Class<? extends Row> rowClass);
 	
 	/**/
 	

@@ -12,6 +12,8 @@ public interface MapInstance<KEY,VALUE> extends Objectable {
 	MapInstance<KEY,VALUE> set(Object...keyValues);
 	
 	VALUE get(KEY key);
+	Collection<KEY> getKeys(Collection<VALUE> values);
+	Collection<KEY> getKeys(VALUE...values);
 	
 	Collection<Map.Entry<KEY,VALUE>> getEntries();
 	

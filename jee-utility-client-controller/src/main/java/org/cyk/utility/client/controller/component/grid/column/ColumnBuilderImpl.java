@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.grid.AbstractDimensionBuilderImpl;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
@@ -11,6 +12,7 @@ import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilderMap;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.string.Strings;
+import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
 
 public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> implements ColumnBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -39,6 +41,15 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 			ViewBuilder headerView = viewMap.get(ViewMap.HEADER);
 			if(headerView == null) {
 				OutputStringTextBuilder headerText = getHeaderText();
+				if(headerText == null) {
+					String valuePropertyName = column.getValuePropertyName();
+					if(StringUtils.contains(valuePropertyName, "."))
+						valuePropertyName = StringUtils.substringAfterLast(valuePropertyName, ".");
+					valuePropertyName = __inject__(StringRepositoryResourceBundle.class).getOne(valuePropertyName);
+					headerText = __inject__(OutputStringTextBuilder.class);
+					headerText.setValue(valuePropertyName);
+				}
+				
 				if(headerText!=null) {
 					headerView = __inject__(ViewBuilder.class).setComponentsBuilder(__inject__(ComponentsBuilder.class).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE));
 					headerView.getComponentsBuilder().addComponents(headerText);

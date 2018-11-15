@@ -1,16 +1,15 @@
-package org.cyk.utility.server.persistence;
+package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
-import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud.MyEntity;
+import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud.MyEntityImpl;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.instance.InstanceGetter;
 
-@Deprecated
-//has been moved to implementation
 public class InstanceGetterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<InstanceGetter> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -18,17 +17,16 @@ public class InstanceGetterFunctionRunnableImpl extends AbstractFunctionRunnable
 		setRunnable(new Runnable() {
 			@Override
 			public void run() {
+				InstanceGetter function = getFunction();
 				if(FieldName.IDENTIFIER.equals(getFunction().getFieldName())) {
-					Object one = __inject__(Persistence.class).readOne(getFunction().getClazz(), getFunction().getValue(), new Properties().setValueUsageType(getFunction().getValueUsageType()));
+					Object one = null;
+					if(function.getClazz().equals(MyEntity.class))
+						one = MyEntityImpl.getByIdentifier(function.getValue().toString());
 					Collection<Object> collection = new ArrayList<>();
-					collection.add(one);
+					if(one!=null)
+						collection.add(one);
 					setOutput(collection);
 				}
-				//setOutput(output);
-				/*if(MyData.class.equals( getFunction().getClazz() )) {
-					if("a001".equals(getFunction().getValue()))
-						setOutput(Arrays.asList(new MyData().setId("159").setNum("a001")));
-				}*/
 			}
 		});
 	}

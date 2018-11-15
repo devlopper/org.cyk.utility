@@ -41,7 +41,10 @@ public abstract class AbstractRowDataImpl<DATA extends Data> extends AbstractRow
 		String identifier = __inject__(NavigationIdentifierStringBuilder.class).setSystemAction(systemAction).execute().getOutput();
 		url = __inject__(NavigationIdentifierToUrlStringMapper.class).setIdentifier(identifier).execute().getOutput();
 		UniformResourceIdentifierStringBuilder uniformResourceIdentifierStringBuilder = __inject__(UniformResourceIdentifierStringBuilder.class);
-		uniformResourceIdentifierStringBuilder.setString(url).setParameters("action",systemAction.getIdentifier().toString().toLowerCase(),"identifier",data.getIdentifier().toString());
+		uniformResourceIdentifierStringBuilder.setString(url).setParameters(
+				"class",dataClass.getSimpleName().toLowerCase()
+				,"action",systemAction.getIdentifier().toString().toLowerCase()
+				,"identifier",data.getIdentifier().toString());
 		url = uniformResourceIdentifierStringBuilder.execute().getOutput();
 		return url;
 	}

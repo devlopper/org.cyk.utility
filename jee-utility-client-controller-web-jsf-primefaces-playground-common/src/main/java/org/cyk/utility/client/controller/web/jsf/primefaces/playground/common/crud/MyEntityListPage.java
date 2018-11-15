@@ -7,7 +7,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
-import org.cyk.utility.client.controller.component.grid.column.ColumnBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.window.WindowBuilder;
@@ -31,16 +30,13 @@ public class MyEntityListPage extends AbstractPageContainerManagedImpl implement
 	@Override
 	protected ViewBuilder __getViewBuilder__() {
 		@SuppressWarnings({ "rawtypes" })
-		GridBuilder gridBuilder = __inject__(GridBuilder.class)
-				.addColumns(__inject__(ColumnBuilder.class).setHeaderTextValue("Code").addFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_CODE)
-						,__inject__(ColumnBuilder.class).setHeaderTextValue("Nom").addFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_NAME)
-						,__inject__(ColumnBuilder.class).setHeaderTextValue("Description").addFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_DESCRIPTION)
-						)
-				
-				.addObjects((Collection)MyEntity.COLLECTION)
-				;
+		GridBuilder gridBuilder = __inject__(GridBuilder.class).setRowClass(MyEntityReadRow.class)
+			.addColumnByFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_CODE)
+			.addColumnByFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_NAME)
+			.addColumnByFieldNameStrings(MyEntityReadRow.PROPERTY_DATA,MyEntity.PROPERTY_DESCRIPTION)
+			.addObjects((Collection)MyEntity.COLLECTION)
+			;
 		
-		gridBuilder.getRows(Boolean.TRUE).setRowClass(MyEntityReadRow.class);
 		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandablesBySystemActionClasses(SystemActionUpdate.class,SystemActionDelete.class);
 		
 		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);

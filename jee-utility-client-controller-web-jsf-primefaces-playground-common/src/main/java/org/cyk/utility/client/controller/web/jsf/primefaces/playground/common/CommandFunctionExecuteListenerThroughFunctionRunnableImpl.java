@@ -6,8 +6,10 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.command.CommandFunction;
 import org.cyk.utility.client.controller.component.command.CommandFunctionExecuteListenerThrough;
 import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud.MyEntity;
+import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemActionDelete;
 
 public class CommandFunctionExecuteListenerThroughFunctionRunnableImpl extends AbstractFunctionRunnableImpl<CommandFunctionExecuteListenerThrough> implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,7 +23,9 @@ public class CommandFunctionExecuteListenerThroughFunctionRunnableImpl extends A
 				Object data = function.getProperties().getData();
 				if(data instanceof MyEntity) {
 					if(action instanceof SystemActionCreate)
-						MyEntity.COLLECTION.add((MyEntity) data);
+						MyEntity.COLLECTION.add( ((MyEntity) data).setIdentifier(__inject__(RandomHelper.class).getNumeric(4).toString()) );
+					else if(action instanceof SystemActionDelete)
+						MyEntity.COLLECTION.remove((MyEntity) data);
 				}
 			}
 		});
