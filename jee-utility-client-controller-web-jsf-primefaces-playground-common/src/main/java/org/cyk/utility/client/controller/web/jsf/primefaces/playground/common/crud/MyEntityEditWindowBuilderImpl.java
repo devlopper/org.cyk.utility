@@ -23,9 +23,10 @@ public class MyEntityEditWindowBuilderImpl extends AbstractWindowContainerManage
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		
-		Class<?> clazz = __inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class);
+		/*
 		SystemAction systemAction = __inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class);
+		Class<?> clazz = __inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class);
+		systemAction.getEntities(Boolean.TRUE).setElementClass(clazz);
 		
 		Object instance = null;
 		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete) {
@@ -35,27 +36,31 @@ public class MyEntityEditWindowBuilderImpl extends AbstractWindowContainerManage
 		}else if(systemAction instanceof SystemActionCreate) {
 			instance = __inject__(clazz);
 		}
-	
+		
+		if(instance!=null && systemAction!=null)
+			systemAction.getEntities(Boolean.TRUE).add(instance);
+		*/
 		//window.setTitleValue("MyEntity CRUD : "+action);
 		
-		MyEntityEditForm form = __inject__(MyEntityEditForm.class);
-		form.setData((MyEntity) instance);
-		form.setTitle(systemAction.getIdentifier().toString()+" "+clazz.getSimpleName());
-		
-		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
-		
-		viewBuilder.addComponentBuilderByObjectByFieldNames(form, Form.PROPERTY_TITLE).addRoles(ComponentRole.TITLE);
-	
-		viewBuilder.addComponentBuilderByObjectByFieldNames(form.getData(), MyEntity.PROPERTY_CODE);
-		viewBuilder.addComponentBuilderByObjectByFieldNames(form.getData(), MyEntity.PROPERTY_NAME);
-		viewBuilder.addComponentBuilderByObjectByFieldNames(form.getData(), MyEntity.PROPERTY_DESCRIPTION);
-		
-		CommandableBuilder commandableBuilder = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, Form.METHOD_SUBMIT);
+		SystemAction systemAction = getSystemAction();
 		if(systemAction!=null) {
-			commandableBuilder.setName(systemAction.getIdentifier().toString());	
-		}
+			MyEntityEditForm form = __inject__(MyEntityEditForm.class);
+			form.setData((MyEntity) systemAction.getEntities().getAt(0));
+			form.setTitle(systemAction.getIdentifier().toString()+" "+systemAction.getEntities().getElementClass().getSimpleName());
+			
+			ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
+			
+			viewBuilder.addComponentBuilderByObjectByFieldNames(form, Form.PROPERTY_TITLE).addRoles(ComponentRole.TITLE);
 		
-		setView(viewBuilder);
+			viewBuilder.addComponentBuilderByObjectByFieldNames(form.getData(), MyEntity.PROPERTY_CODE);
+			viewBuilder.addComponentBuilderByObjectByFieldNames(form.getData(), MyEntity.PROPERTY_NAME);
+			viewBuilder.addComponentBuilderByObjectByFieldNames(form.getData(), MyEntity.PROPERTY_DESCRIPTION);
+			
+			CommandableBuilder commandableBuilder = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, Form.METHOD_SUBMIT);
+			commandableBuilder.setName(systemAction.getIdentifier().toString());	
+				
+			setView(viewBuilder);
+		}
 	}
 	
 }
