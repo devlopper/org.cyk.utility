@@ -53,16 +53,22 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(menuMap == null)
 			menuMap = __inject__(MenuBuilderMapGetter.class).execute().getOutput();
 		window.setMenuMap(menuMap);
-		/*
-		Object identifier = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("identifier");
-		Object action = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("action");
 		
-		window.setTitleValue("TITLE??? : "+action);
-		*/
+		SystemAction systemAction = getSystemAction();
+		if(systemAction == null) {
+			
+		}else {
+			__execute__(systemAction);
+			window.setTitleValue(systemAction.getEntities().getElementClass().getSimpleName()+" "+systemAction.getIdentifier());	
+		}
+		
+		
 		ViewBuilder view = getView();
 		window.setView(view);
 		return window;
 	}
+	
+	protected abstract void __execute__(SystemAction systemAction);
 	
 	@Override
 	public MenuBuilderMap getMenuMap() {
