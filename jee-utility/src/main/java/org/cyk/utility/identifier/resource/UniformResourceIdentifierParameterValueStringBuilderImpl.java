@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionList;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
@@ -29,6 +30,8 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 					_value = "update";
 				else if(clazz.equals(SystemActionDelete.class))
 					_value = "delete";
+				else if(clazz.equals(SystemActionList.class))
+					_value = "list";
 				else
 					_value = clazz.getSimpleName().toLowerCase();
 			}else if(value instanceof Objectable) {

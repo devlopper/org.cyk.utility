@@ -2,6 +2,8 @@ package org.cyk.utility.client.controller.component.window;
 
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.data.Form;
+import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.system.action.SystemAction;
 
@@ -18,4 +20,9 @@ public interface WindowContainerManagedWindowBuilder extends FunctionWithPropert
 	SystemAction getSystemAction();
 	WindowContainerManagedWindowBuilder setSystemAction(SystemAction systemAction);
 	
+	Class<? extends Form> getFormClass();
+	WindowContainerManagedWindowBuilder setFormClass(Class<? extends Form> formClass);
+	
+	Class<? extends Row> getRowClass();
+	WindowContainerManagedWindowBuilder setRowClass(Class<? extends Row> rowClass);
 }

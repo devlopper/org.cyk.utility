@@ -12,6 +12,7 @@ import org.cyk.utility.object.ObjectByStringMap;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionList;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
@@ -55,6 +56,8 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 						value = __inject__(SystemActionUpdate.class);
 					else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionDelete.class).execute().getOutput().equals(parameterValue))
 						value = __inject__(SystemActionDelete.class);
+					else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionList.class).execute().getOutput().equals(parameterValue))
+						value = __inject__(SystemActionList.class);
 				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(FieldName.IDENTIFIER).execute().getOutput().equals(parameterName)) {
 					value = __inject__(NumberHelper.class).getLong(parameterValue);
 				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(Class.class).execute().getOutput().equals(parameterName)) {

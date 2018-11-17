@@ -11,7 +11,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.model.ListDataModel;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
@@ -237,6 +236,8 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		DataTable dataTable = new DataTable();
 		dataTable.setVar("indexRow");
 		dataTable.setReflow(Boolean.TRUE);
+		//dataTable.setHeader();
+		
 		Objects objects = grid.getObjects();
 		if(__inject__(CollectionHelper.class).isEmpty(objects)) {
 			Rows rows = grid.getRows();

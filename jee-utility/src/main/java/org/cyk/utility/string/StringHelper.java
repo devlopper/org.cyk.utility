@@ -12,6 +12,8 @@ public interface StringHelper extends Helper {
 	Number getLength(String string);
 	Boolean isBlank(String string);
 	Boolean isNotBlank(String string);
+	Boolean isEmpty(String string);
+	Boolean isNotEmpty(String string);
 	String replace(String string, String subString, String replacement);
 	String applyCase(String string,Case aCase);
 	String getFromRepositories(Properties properties);

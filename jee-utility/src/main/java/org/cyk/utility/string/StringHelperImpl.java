@@ -37,6 +37,16 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	}
 	
 	@Override
+	public Boolean isEmpty(String string) {
+		return __isEmpty__(string);
+	}
+	
+	@Override
+	public Boolean isNotEmpty(String string) {
+		return Boolean.FALSE.equals(isBlank(string));
+	}
+	
+	@Override
 	public String replace(String string, String subString, String replacement) {
 		return StringUtils.replace(string, subString, replacement);
 	}
@@ -150,6 +160,10 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	
 	public static Boolean __isBlank__(String string) {
 		return StringUtils.isBlank(string);
+	}
+	
+	public static Boolean __isEmpty__(String string) {
+		return StringUtils.isEmpty(string);
 	}
 	
 	public static String __defaultIfBlank__(String string,String defaultString) {
