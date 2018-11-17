@@ -220,6 +220,31 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	}
 	
 	@Override
+	public GridBuilder addColumnsByFieldNames(Collection<String> fieldNames) {
+		if(__injectCollectionHelper__().isNotEmpty(fieldNames)) {
+			for(String index : fieldNames)
+				addColumnByFieldNameStrings(index);
+		}
+		return this;
+	}
+	
+	@Override
+	public GridBuilder addColumnsByFieldNames(String... fieldNames) {
+		return addColumnsByFieldNames(__injectCollectionHelper__().instanciate(fieldNames));
+	}
+	
+	@Override
+	public ColumnBuilder getColumnByFieldNameStrings(Collection<String> fieldNameStrings) {
+		ColumnBuilders columns = getColumns();
+		return columns == null ? null : columns.getByFieldNameStrings(fieldNameStrings);
+	}
+	
+	@Override
+	public ColumnBuilder getColumnByFieldNameStrings(String... fieldNameStrings) {
+		return getColumnByFieldNameStrings(__injectCollectionHelper__().instanciate(fieldNameStrings));
+	}
+	
+	@Override
 	public RowBuilders getRows() {
 		return rows;
 	}

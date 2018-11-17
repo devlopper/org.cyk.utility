@@ -27,7 +27,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 			
 			Strings columnsFieldNames = getGridColumnsFieldNames();
 			if(columnsFieldNames!=null)
-				gridBuilder.addColumnByFieldNameStrings(columnsFieldNames.get());
+				gridBuilder.addColumnsByFieldNames(columnsFieldNames.get());
 			
 			gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandablesBySystemActionClasses(SystemActionUpdate.class,SystemActionDelete.class);
 			

@@ -21,6 +21,11 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	GridBuilder addColumns(ColumnBuilder...columns);
 	GridBuilder addColumnByFieldNameStrings(Collection<String> fieldNameStrings);
 	GridBuilder addColumnByFieldNameStrings(String...fieldNameStrings);
+	GridBuilder addColumnsByFieldNames(Collection<String> fieldNames);
+	GridBuilder addColumnsByFieldNames(String...fieldNames);
+	
+	ColumnBuilder getColumnByFieldNameStrings(Collection<String> fieldNameStrings);
+	ColumnBuilder getColumnByFieldNameStrings(String...fieldNameStrings);
 	
 	RowBuilders getRows();
 	RowBuilders getRows(Boolean injectIfNull);

@@ -13,7 +13,7 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	@Deprecated //use elementClass instead
 	private Class<T> clazz;
 	private Class<?> elementClass;
-	private Collection<T> collection;
+	protected Collection<T> collection;
 
 	@Override
 	protected void __listenBeforePostConstruct__() {
