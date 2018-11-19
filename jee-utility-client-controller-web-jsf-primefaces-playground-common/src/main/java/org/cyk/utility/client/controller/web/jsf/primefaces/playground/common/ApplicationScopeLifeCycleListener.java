@@ -8,7 +8,7 @@ import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.client.controller.component.command.CommandFunctionExecuteListenerThroughImpl;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetterImpl;
-import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud.MyEntity;
+import org.cyk.utility.client.controller.entities.MyEntity;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
 import org.cyk.utility.instance.InstanceGetterImpl;
 

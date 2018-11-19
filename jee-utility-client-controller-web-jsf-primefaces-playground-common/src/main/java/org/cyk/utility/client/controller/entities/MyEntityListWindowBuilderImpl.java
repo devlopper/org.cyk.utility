@@ -1,4 +1,4 @@
-package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud;
+package org.cyk.utility.client.controller.entities;
 
 import java.io.Serializable;
 
@@ -12,7 +12,6 @@ public class MyEntityListWindowBuilderImpl extends AbstractWindowContainerManage
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		setRowClass(MyEntityReadRow.class);
 		addGridColumnsFieldNamesWithPrefix(RowData.PROPERTY_DATA, MyEntity.PROPERTY_CODE,MyEntity.PROPERTY_NAME,MyEntity.PROPERTY_DESCRIPTION);
 		setGridObjects(MyEntity.COLLECTION);
 	}

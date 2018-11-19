@@ -72,4 +72,11 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.d
 		return (Collection<T>) response.readEntity(__inject__(TypeHelper.class).instanciateGenericCollectionParameterizedTypeForJaxrs(Collection.class,aClass));
 	}
 	
+	/**/
+	
+	protected static ControllerLayer __injectControllerLayer__() {
+		return __inject__(ControllerLayer.class);
+	}
+	
+	
 }

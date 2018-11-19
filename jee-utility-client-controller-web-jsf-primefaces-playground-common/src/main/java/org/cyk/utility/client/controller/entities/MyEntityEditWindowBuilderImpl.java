@@ -1,4 +1,4 @@
-package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud;
+package org.cyk.utility.client.controller.entities;
 
 import java.io.Serializable;
 
@@ -9,12 +9,6 @@ import org.cyk.utility.client.controller.data.Form;
 
 public class MyEntityEditWindowBuilderImpl extends AbstractWindowContainerManagedWindowBuilderEditDataImpl implements MyEntityEditWindowBuilder, Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		setFormClass(MyEntityEditForm.class);
-	}
 	
 	@Override
 	protected void __execute__(Form form,Data data,ViewBuilder viewBuilder) {

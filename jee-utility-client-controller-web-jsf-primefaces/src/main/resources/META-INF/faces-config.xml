@@ -4,4 +4,21 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
 	version="2.2">
 	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		
+		<navigation-case>
+			<from-outcome>__entity__ListView</from-outcome>
+			<to-view-id>/private/__entity__/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>__entity__EditView</from-outcome>
+			<to-view-id>/private/__entity__/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+	</navigation-rule>
+	
 </faces-config>

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
-import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud.MyEntity;
-import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud.MyEntityImpl;
+import org.cyk.utility.client.controller.entities.MyEntity;
+import org.cyk.utility.client.controller.entities.MyEntityImpl;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.instance.InstanceGetter;
 

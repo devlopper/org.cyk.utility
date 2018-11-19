@@ -38,8 +38,8 @@ public class MenuBuilderMapGetterFunctionRunnableImpl extends AbstractFunctionRu
 									)
 							
 						,__inject__(MenuItemBuilder.class).setCommandableName("MyEntity")
-							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Lister").setCommandableNavigationIdentifierAndParameters("myEntityListView",new Object[] {"class","myentity","action","list"})
-									,__inject__(MenuItemBuilder.class).setCommandableName("Créer").setCommandableNavigationIdentifierAndParameters("myEntityEditView",new Object[] {"class","myentity","action","create"})
+							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Lister").setCommandableNavigationIdentifierAndParameters("__entity__ListView",new Object[] {"class","myentity","action","list"})
+									,__inject__(MenuItemBuilder.class).setCommandableName("Créer").setCommandableNavigationIdentifierAndParameters("__entity__EditView",new Object[] {"class","myentity","action","create"})
 									)
 							);
 				//

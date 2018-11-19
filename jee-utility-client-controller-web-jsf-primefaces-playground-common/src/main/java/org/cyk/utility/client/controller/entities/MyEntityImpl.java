@@ -1,4 +1,4 @@
-package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.crud;
+package org.cyk.utility.client.controller.entities;
 
 import java.io.Serializable;
 

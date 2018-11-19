@@ -26,15 +26,27 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	private SystemAction systemAction;
 	private Class<? extends Form> formClass;
 	private Class<? extends Row> rowClass;
+	private Class<?> entityClass;
 	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
+		setSystemAction(__inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class));
+		setEntityClass(__inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class));
 		
-		SystemAction systemAction = __inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class);
+		/*
+		SystemAction systemAction = getSystemAction();
+		if(systemAction == null)
+			systemAction = getSystemAction(Boolean.TRUE);
+		
+		Class<?> clazz = getFormClass();
+		if(clazz == null) {
+			clazz = getFormClass(Boolean.TRUE);
+		}
+		
 		if(systemAction!=null) {
-			Class<?> clazz = __inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class);
-			systemAction.getEntities(Boolean.TRUE).setElementClass(clazz);	
+			if(systemAction.getEntities(Boolean.TRUE).getElementClass() == null)
+				systemAction.getEntities(Boolean.TRUE).setElementClass(clazz);	
 		}
 		
 		Object instance = null;
@@ -50,7 +62,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(instance!=null && systemAction!=null)
 			systemAction.getEntities(Boolean.TRUE).add(instance);
 		
-		setSystemAction(systemAction);
+		*/
 	}
 	
 	@Override
@@ -62,11 +74,38 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		window.setMenuMap(menuMap);
 		
 		SystemAction systemAction = getSystemAction();
+		
+		Class<?> clazz = getFormClass();
+		if(clazz == null) {
+			clazz = getRowClass();
+			if(clazz == null) {
+				//TODO log
+			}
+		}
+		
+		if(systemAction!=null) {
+			if(systemAction.getEntities(Boolean.TRUE).getElementClass() == null || systemAction.getEntities(Boolean.TRUE).getElementClass() == Object.class)
+				systemAction.getEntities(Boolean.TRUE).setElementClass(clazz);	
+		}
+		
+		Object instance = null;
+		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete) {
+			Long identifier = __inject__(RequestParameterValueMapper.class).setParameterName(FieldName.IDENTIFIER).execute().getOutputAs(Long.class);
+			instance = __injectCollectionHelper__().getFirst(__inject__(InstanceGetter.class).setClazz(systemAction.getEntities(Boolean.TRUE).getElementClass())
+					.setFieldName(FieldName.IDENTIFIER)
+					.setValueUsageType(ValueUsageType.SYSTEM).setValue(identifier).execute().getOutput());	
+		}else if(systemAction instanceof SystemActionCreate) {
+			instance = __inject__(systemAction.getEntities(Boolean.TRUE).getElementClass());
+		}
+		
+		if(instance!=null && systemAction!=null)
+			systemAction.getEntities(Boolean.TRUE).add(instance);
+		
 		if(systemAction == null) {
 			
 		}else {
+			window.setTitleValue(systemAction.getEntities().getElementClass().getSimpleName()+" "+systemAction.getIdentifier());
 			__execute__(systemAction);
-			window.setTitleValue(systemAction.getEntities().getElementClass().getSimpleName()+" "+systemAction.getIdentifier());	
 		}
 		
 		
@@ -121,6 +160,14 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	}
 	
 	@Override
+	public SystemAction getSystemAction(Boolean getFromRequestIfNull) {
+		SystemAction systemAction = getSystemAction();
+		if(systemAction == null)
+			setSystemAction(systemAction = __inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class));
+		return systemAction;
+	}
+	
+	@Override
 	public Class<? extends Form> getFormClass() {
 		return formClass;
 	}
@@ -132,13 +179,48 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	}
 	
 	@Override
+	public Class<? extends Form> getFormClass(Boolean getFromRequestIfNull) {
+		Class<? extends Form> clazz = getFormClass();
+		//if(clazz == null)
+		//	setFormClass(clazz = __inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class));
+		return clazz;
+	}
+	
+	@Override
 	public Class<? extends Row> getRowClass() {
 		return rowClass;
 	}
 	
 	@Override
+	public Class<? extends Row> getRowClass(Boolean getFromRequestIfNull) {
+		Class<? extends Row> clazz = getRowClass();
+		//if(clazz == null)
+		//	setRowClass(clazz = __inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class));
+		return clazz;
+	}
+	
+	@Override
 	public WindowContainerManagedWindowBuilder setRowClass(Class<? extends Row> rowClass) {
 		this.rowClass = rowClass;
+		return this;
+	}
+	
+	@Override
+	public Class<?> getEntityClass() {
+		return entityClass;
+	}
+	
+	@Override
+	public Class<?> getEntityClass(Boolean getFromRequestIfNull) {
+		Class<?> clazz = getEntityClass();
+		if(clazz == null)
+			setEntityClass(clazz = __inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class));
+		return clazz;
+	}
+	
+	@Override
+	public WindowContainerManagedWindowBuilder setEntityClass(Class<?> entityClass) {
+		this.entityClass = entityClass;
 		return this;
 	}
 	

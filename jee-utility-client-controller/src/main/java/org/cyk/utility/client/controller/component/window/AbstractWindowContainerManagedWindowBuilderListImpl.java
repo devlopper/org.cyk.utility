@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Strings;
 
@@ -12,6 +13,14 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListImpl extend
 	
 	private Strings gridColumnsFieldNames;
 	private Collection<?> gridObjects;
+	
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		Class<?> entityClass = getEntityClass();
+		if(entityClass!=null)
+			setRowClass(__inject__(ControllerLayer.class).getRowClass(entityClass, getSystemAction()));
+	}
 	
 	@Override
 	public Strings getGridColumnsFieldNames() {
