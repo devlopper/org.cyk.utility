@@ -7,8 +7,6 @@ import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.window.WindowBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
-import org.cyk.utility.request.RequestParameterValueMapper;
-import org.cyk.utility.system.action.SystemAction;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,11 +17,7 @@ public class EntityEditPage extends AbstractPageContainerManagedImpl implements 
 
 	@Override
 	protected WindowBuilder __getWindowBuilder__() {
-		SystemAction systemAction = __inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class);
-		return __injectControllerLayer__().injectWindowBuilderClassFromEntityClass(
-				__inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class)
-				, systemAction)
-				.execute().getOutput();
+		return __injectControllerLayer__().injectWindowContainerManagedWindowBuilder().execute().getOutput();
 	}
 	
 }

@@ -8,7 +8,10 @@ import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
 import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeRowBar;
+import org.cyk.utility.client.controller.entities.MyEntity;
 import org.cyk.utility.scope.ScopeSession;
+import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemActionList;
 
 public class MenuBuilderMapGetterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<MenuBuilderMapGetter> implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -38,8 +41,8 @@ public class MenuBuilderMapGetterFunctionRunnableImpl extends AbstractFunctionRu
 									)
 							
 						,__inject__(MenuItemBuilder.class).setCommandableName("MyEntity")
-							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Lister").setCommandableNavigationIdentifierAndParameters("__entity__ListView",new Object[] {"class","myentity","action","list"})
-									,__inject__(MenuItemBuilder.class).setCommandableName("Créer").setCommandableNavigationIdentifierAndParameters("__entity__EditView",new Object[] {"class","myentity","action","create"})
+							.addChild(__inject__(MenuItemBuilder.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(MyEntity.class))
+									,__inject__(MenuItemBuilder.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class).setEntityClass(MyEntity.class))
 									)
 							);
 				//

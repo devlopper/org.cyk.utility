@@ -8,6 +8,7 @@ public interface SystemAction extends Objectable  {
 	Objects getEntities();
 	Objects getEntities(Boolean injectIfNull);
 	SystemAction setEntities(Objects entities);
+	SystemAction setEntityClass(Class<?> entityClass);
 	
 	Boolean getIsBatchProcessing();
 	SystemAction setIsBatchProcessing(Boolean isBatchProcessing);

@@ -3,8 +3,10 @@ package org.cyk.utility.client.controller.component.menu;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.system.action.SystemAction;
 
 public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<MenuItem> implements MenuItemBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -52,6 +54,14 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	@Override
 	public MenuItemBuilder setCommandableNavigationIdentifierAndParameters(Object identifier,Object[] parameters) {
 		getCommandable(Boolean.TRUE).setNavigationIdentifierAndParameters(identifier,parameters);
+		return this;
+	}
+	
+	@Override
+	public MenuItemBuilder setCommandableNavigationIdentifierBuilderSystemAction(SystemAction systemAction,Object... parameters) {
+		getCommandable(Boolean.TRUE).setNavigationIdentifierBuilderSystemAction(systemAction)/*.setNavigationParameters(parameters)*/;
+		if(__inject__(ArrayHelper.class).isNotEmpty(parameters))
+			getCommandable(Boolean.TRUE).setNavigationParameters(parameters);
 		return this;
 	}
 	

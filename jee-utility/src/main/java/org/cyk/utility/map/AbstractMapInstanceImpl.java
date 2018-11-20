@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -18,7 +19,7 @@ public abstract class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject 
 	private static final long serialVersionUID = 1L;
 
 	private Map<KEY,VALUE> __map__;
-	private Boolean isOrdered;
+	private Boolean isOrdered,isSequential;
 	private Object keyValueSeparator,entrySeparator;
 	
 	@Override
@@ -36,8 +37,15 @@ public abstract class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject 
 	@Override
 	public MapInstance<KEY,VALUE> set(Object... keyValues) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(keyValues)) {
-			if(__map__ == null)
-				__map__ = Boolean.TRUE.equals(getIsOrdered()) ? new TreeMap<>() : new HashMap<>();
+			if(__map__ == null) {
+				if(Boolean.TRUE.equals(getIsOrdered()))
+					__map__ = new TreeMap<>();
+				else if(Boolean.TRUE.equals(getIsSequential()))
+					__map__ = new LinkedHashMap<>();
+				else
+					__map__ = new HashMap<>();
+				
+			}
 			for(Integer index = 0 ; index < keyValues.length ; index = index + 2) {
 				__map__.put((KEY)keyValues[index], (VALUE)keyValues[index+1]);
 			}
@@ -79,9 +87,21 @@ public abstract class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject 
 	public Boolean getIsOrdered() {
 		return isOrdered;
 	}
+	
 	@Override
 	public MapInstance<KEY, VALUE> setIsOrdered(Boolean isOrdered) {
 		this.isOrdered = isOrdered;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsSequential() {
+		return isSequential;
+	}
+	
+	@Override
+	public MapInstance<KEY, VALUE> setIsSequential(Boolean isSequential) {
+		this.isSequential = isSequential;
 		return this;
 	}
 	

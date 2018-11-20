@@ -8,6 +8,8 @@ import org.cyk.utility.system.action.SystemAction;
 
 public interface NavigationBuilder extends FunctionWithPropertiesAsInput<Navigation> {
 
+	@Override NavigationBuilder setIdentifier(Object identifier);
+	
 	UrlBuilder getUrl();
 	UrlBuilder getUrl(Boolean injectIfNull);
 	NavigationBuilder setUrl(UrlBuilder url);
@@ -23,4 +25,9 @@ public interface NavigationBuilder extends FunctionWithPropertiesAsInput<Navigat
 	
 	SystemAction getSystemAction();
 	NavigationBuilder setSystemAction(SystemAction systemAction);
+	
+	NavigationBuilder setIdentifierBuilder(NavigationIdentifierStringBuilder identifierBuilder);
+	NavigationIdentifierStringBuilder getIdentifierBuilder();
+	NavigationIdentifierStringBuilder getIdentifierBuilder(Boolean injectIfNull);
+	NavigationBuilder setIdentifierBuilderSystemAction(SystemAction systemAction);
 }

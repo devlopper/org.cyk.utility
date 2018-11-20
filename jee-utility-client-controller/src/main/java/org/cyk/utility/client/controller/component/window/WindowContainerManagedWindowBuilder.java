@@ -21,10 +21,6 @@ public interface WindowContainerManagedWindowBuilder extends FunctionWithPropert
 	SystemAction getSystemAction(Boolean getFromRequestIfNull);
 	WindowContainerManagedWindowBuilder setSystemAction(SystemAction systemAction);
 	
-	Class<?> getEntityClass();
-	Class<?> getEntityClass(Boolean getFromRequestIfNull);
-	WindowContainerManagedWindowBuilder setEntityClass(Class<?> entityClass);
-	
 	Class<? extends Form> getFormClass();
 	Class<? extends Form> getFormClass(Boolean getFromRequestIfNull);
 	WindowContainerManagedWindowBuilder setFormClass(Class<? extends Form> formClass);

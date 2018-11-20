@@ -35,7 +35,7 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 				else
 					_value = clazz.getSimpleName().toLowerCase();
 			}else if(value instanceof Objectable) {
-				_value = ((Objectable)value).getIdentifier() == null ? null : ((Objectable)value).getIdentifier().toString();
+				_value = ((Objectable)value).getIdentifier() == null ? null : ((Objectable)value).getIdentifier().toString().toLowerCase();
 			}
 			
 			if(__injectStringHelper__().isBlank(_value))

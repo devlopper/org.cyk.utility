@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
@@ -16,9 +17,8 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void __execute__(SystemAction systemAction) {
+	protected void __execute__(SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {
 		ViewBuilder viewBuilder = null;
-		Class<? extends Row> rowClass = getRowClass();
 		if(rowClass!=null) {
 			@SuppressWarnings({ "rawtypes" })
 			GridBuilder gridBuilder = __inject__(GridBuilder.class).setRowClass(rowClass)

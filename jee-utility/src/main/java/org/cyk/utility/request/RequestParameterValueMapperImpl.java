@@ -58,6 +58,11 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 						value = __inject__(SystemActionDelete.class);
 					else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionList.class).execute().getOutput().equals(parameterValue))
 						value = __inject__(SystemActionList.class);
+					
+					Class<?> aClass = __inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class);
+					if(aClass!=null)
+						((SystemAction)value).getEntities(Boolean.TRUE).setElementClass(aClass);
+					
 				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(FieldName.IDENTIFIER).execute().getOutput().equals(parameterName)) {
 					value = __inject__(NumberHelper.class).getLong(parameterValue);
 				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(Class.class).execute().getOutput().equals(parameterName)) {

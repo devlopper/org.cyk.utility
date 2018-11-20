@@ -7,6 +7,7 @@ import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.client.controller.component.window.WindowContainerManagedWindowBuilder;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
+import org.cyk.utility.request.RequestParameterValueMapper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -46,7 +47,7 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 	}
 
 	@Override
-	public Class<WindowContainerManagedWindowBuilder> getWindowBuilderClassFromEntityClass(Class<?> entityClass,Class<? extends SystemAction> systemActionClass) {
+	public Class<WindowContainerManagedWindowBuilder> getWindowContainerManagedWindowBuilderClass(Class<?> entityClass,Class<? extends SystemAction> systemActionClass) {
 		Class<WindowContainerManagedWindowBuilder> clazz = null;
 		if(entityClass!=null) {
 			String name = null;
@@ -63,20 +64,27 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 	}
 
 	@Override
-	public Class<WindowContainerManagedWindowBuilder> getWindowBuilderClassFromEntityClass(Class<?> entityClass,SystemAction systemAction) {
-		return getWindowBuilderClassFromEntityClass(entityClass, systemAction == null ? null :systemAction.getClass());
+	public Class<WindowContainerManagedWindowBuilder> getWindowContainerManagedWindowBuilderClass(SystemAction systemAction) {
+		return systemAction == null || systemAction.getEntities() == null ? null 
+				: getWindowContainerManagedWindowBuilderClass(systemAction.getEntities().getElementClass(), systemAction.getClass());
 	}
 	
 	@Override
-	public WindowContainerManagedWindowBuilder injectWindowBuilderClassFromEntityClass(Class<?> entityClass,Class<? extends SystemAction> systemActionClass) {
-		Class<WindowContainerManagedWindowBuilder> clazz = getWindowBuilderClassFromEntityClass(entityClass, systemActionClass);
+	public WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder(Class<?> entityClass,Class<? extends SystemAction> systemActionClass) {
+		Class<WindowContainerManagedWindowBuilder> clazz = getWindowContainerManagedWindowBuilderClass(entityClass, systemActionClass);
 		return clazz == null ? null : __inject__(clazz);
 	}
 	
 	@Override
-	public WindowContainerManagedWindowBuilder injectWindowBuilderClassFromEntityClass(Class<?> entityClass,SystemAction systemAction) {
-		Class<WindowContainerManagedWindowBuilder> clazz = getWindowBuilderClassFromEntityClass(entityClass, systemAction);
-		return clazz == null ? null : __inject__(clazz);
+	public WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder(SystemAction systemAction) {
+		return systemAction == null || systemAction.getEntities() == null ? null 
+				: injectWindowContainerManagedWindowBuilder(systemAction.getEntities().getElementClass(), systemAction.getClass()).setSystemAction(systemAction);
+	}
+	
+	@Override
+	public WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder() {
+		SystemAction systemAction = __inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class);
+		return injectWindowContainerManagedWindowBuilder(systemAction);
 	}
 	
 	@Override

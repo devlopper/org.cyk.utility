@@ -14,11 +14,12 @@ public interface ControllerLayer extends Singleton {
 	<ENTITY> Class<ControllerEntity<ENTITY>> getInterfaceClassFromEntity(ENTITY entity);
 	<ENTITY> ControllerEntity<ENTITY> injectInterfaceClassFromEntity(ENTITY entity);
 	
-	Class<WindowContainerManagedWindowBuilder> getWindowBuilderClassFromEntityClass(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
-	Class<WindowContainerManagedWindowBuilder> getWindowBuilderClassFromEntityClass(Class<?> entityClass,SystemAction systemAction);
+	Class<WindowContainerManagedWindowBuilder> getWindowContainerManagedWindowBuilderClass(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
+	Class<WindowContainerManagedWindowBuilder> getWindowContainerManagedWindowBuilderClass(SystemAction systemAction);
 	
-	WindowContainerManagedWindowBuilder injectWindowBuilderClassFromEntityClass(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
-	WindowContainerManagedWindowBuilder injectWindowBuilderClassFromEntityClass(Class<?> entityClass,SystemAction systemAction);
+	WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
+	WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder(SystemAction systemAction);
+	WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder();
 	
 	Class<Form> getFormClass(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
 	Class<Form> getFormClass(Class<?> entityClass,SystemAction systemAction);

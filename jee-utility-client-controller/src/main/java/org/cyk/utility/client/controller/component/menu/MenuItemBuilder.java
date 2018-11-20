@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.menu;
 
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.system.action.SystemAction;
 
 public interface MenuItemBuilder extends VisibleComponentBuilder<MenuItem> {
 	
@@ -12,6 +13,7 @@ public interface MenuItemBuilder extends VisibleComponentBuilder<MenuItem> {
 	MenuItemBuilder setCommandableName(String name);
 	MenuItemBuilder setCommandableNavigationIdentifier(Object identifier);
 	MenuItemBuilder setCommandableNavigationIdentifierAndParameters(Object identifier,Object[] parameters);
+	MenuItemBuilder setCommandableNavigationIdentifierBuilderSystemAction(SystemAction systemAction,Object...parameters);
 	
 	@Override MenuItemBuilder addChild(Object... child);
 	

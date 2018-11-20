@@ -39,6 +39,12 @@ public abstract class AbstractSystemActionImpl extends AbstractObject implements
 		return (Objects) __getInjectIfNull__(FIELD_ENTITIES, injectIfNull);
 	}
 	
+	@Override
+	public SystemAction setEntityClass(Class<?> entityClass) {
+		getEntities(Boolean.TRUE).setElementClass(entityClass);
+		return this;
+	}
+	
 	public static final String FIELD_ENTITIES = "entities";
 	
 }

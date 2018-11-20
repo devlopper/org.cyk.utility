@@ -21,7 +21,7 @@ public class ControllerLayerUnitTest extends AbstractArquillianUnitTestWithDefau
 	
 	@Test
 	public void getWindowBuilderClassFromEntityClass() {
-		assertionHelper.assertEquals(MyEntityEditWindowBuilder.class, __inject__(ControllerLayer.class).getWindowBuilderClassFromEntityClass(MyEntity.class,SystemActionCreate.class));
+		assertionHelper.assertEquals(MyEntityEditWindowBuilder.class, __inject__(ControllerLayer.class).getWindowContainerManagedWindowBuilderClass(MyEntity.class,SystemActionCreate.class));
 	}
 	
 	@Test

@@ -3,9 +3,7 @@ package org.cyk.utility.client.controller.data;
 import java.io.Serializable;
 
 import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.client.controller.navigation.NavigationIdentifierStringBuilder;
-import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapper;
-import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
+import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractRowDataImpl<DATA extends Data> extends AbstractRowImpl implements RowData<DATA>,Serializable {
@@ -37,15 +35,8 @@ public abstract class AbstractRowDataImpl<DATA extends Data> extends AbstractRow
 		Data data = getData();
 		SystemAction systemAction = __inject__(aClass);
 		systemAction.getEntities(Boolean.TRUE).setElementClass(dataClass);
-		systemAction.getEntities(Boolean.TRUE).add(getData());
-		String identifier = __inject__(NavigationIdentifierStringBuilder.class).setSystemAction(systemAction).execute().getOutput();
-		url = __inject__(NavigationIdentifierToUrlStringMapper.class).setIdentifier(identifier).execute().getOutput();
-		UniformResourceIdentifierStringBuilder uniformResourceIdentifierStringBuilder = __inject__(UniformResourceIdentifierStringBuilder.class);
-		uniformResourceIdentifierStringBuilder.setString(url).setParameters(
-				"class",dataClass.getSimpleName().toLowerCase()
-				,"action",systemAction.getIdentifier().toString().toLowerCase()
-				,"identifier",data.getIdentifier().toString());
-		url = uniformResourceIdentifierStringBuilder.execute().getOutput();
+		systemAction.getEntities(Boolean.TRUE).add(data);
+		url = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemAction).execute().getOutput().getUniformResourceLocator().toString();
 		return url;
 	}
 

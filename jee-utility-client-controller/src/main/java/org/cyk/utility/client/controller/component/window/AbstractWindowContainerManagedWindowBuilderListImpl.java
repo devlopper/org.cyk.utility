@@ -5,21 +5,23 @@ import java.util.Collection;
 
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.client.controller.ControllerLayer;
+import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Strings;
+import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderListImpl extends AbstractWindowContainerManagedWindowBuilderImpl implements WindowContainerManagedWindowBuilderList,Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Strings gridColumnsFieldNames;
 	private Collection<?> gridObjects;
-	
+		
 	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		Class<?> entityClass = getEntityClass();
-		if(entityClass!=null)
-			setRowClass(__inject__(ControllerLayer.class).getRowClass(entityClass, getSystemAction()));
+	protected Class<? extends Row> __getRowClass__(Class<? extends Row> aClass) {
+		SystemAction systemAction = getSystemAction();
+		if(systemAction!=null)
+			aClass = __inject__(ControllerLayer.class).getRowClass(systemAction.getEntities().getElementClass(), systemAction);
+		return aClass;
 	}
 	
 	@Override

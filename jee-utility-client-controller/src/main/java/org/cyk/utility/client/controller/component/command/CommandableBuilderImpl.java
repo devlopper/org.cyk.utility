@@ -38,8 +38,13 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		String name = getName();
 		if(__injectStringHelper__().isBlank(name)) {
 			if(navigation!=null) {
-				if(navigation.getSystemAction()!=null)
-					name = navigation.getSystemAction().getIdentifier().toString();
+				SystemAction systemAction = navigation.getSystemAction();
+				if(systemAction == null && navigation.getIdentifierBuilder()!=null)
+					systemAction = navigation.getIdentifierBuilder().getSystemAction();
+				
+				if(systemAction!=null) {
+					name = systemAction.getIdentifier().toString();
+				}
 			}
 		}
 		commandable.setName(name);
@@ -162,6 +167,12 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	@Override
 	public CommandableBuilder setNavigationSystemAction(SystemAction systemAction) {
 		getNavigation(Boolean.TRUE).setSystemAction(systemAction);
+		return this;
+	}
+	
+	@Override
+	public CommandableBuilder setNavigationIdentifierBuilderSystemAction(SystemAction systemAction) {
+		getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(systemAction);
 		return this;
 	}
 	

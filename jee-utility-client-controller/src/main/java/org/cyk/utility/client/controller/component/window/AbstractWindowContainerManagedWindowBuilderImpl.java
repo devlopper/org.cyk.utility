@@ -26,44 +26,6 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	private SystemAction systemAction;
 	private Class<? extends Form> formClass;
 	private Class<? extends Row> rowClass;
-	private Class<?> entityClass;
-	
-	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		setSystemAction(__inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class));
-		setEntityClass(__inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class));
-		
-		/*
-		SystemAction systemAction = getSystemAction();
-		if(systemAction == null)
-			systemAction = getSystemAction(Boolean.TRUE);
-		
-		Class<?> clazz = getFormClass();
-		if(clazz == null) {
-			clazz = getFormClass(Boolean.TRUE);
-		}
-		
-		if(systemAction!=null) {
-			if(systemAction.getEntities(Boolean.TRUE).getElementClass() == null)
-				systemAction.getEntities(Boolean.TRUE).setElementClass(clazz);	
-		}
-		
-		Object instance = null;
-		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete) {
-			Long identifier = __inject__(RequestParameterValueMapper.class).setParameterName(FieldName.IDENTIFIER).execute().getOutputAs(Long.class);
-			instance = __injectCollectionHelper__().getFirst(__inject__(InstanceGetter.class).setClazz(systemAction.getEntities(Boolean.TRUE).getElementClass())
-					.setFieldName(FieldName.IDENTIFIER)
-					.setValueUsageType(ValueUsageType.SYSTEM).setValue(identifier).execute().getOutput());	
-		}else if(systemAction instanceof SystemActionCreate) {
-			instance = __inject__(systemAction.getEntities(Boolean.TRUE).getElementClass());
-		}
-		
-		if(instance!=null && systemAction!=null)
-			systemAction.getEntities(Boolean.TRUE).add(instance);
-		
-		*/
-	}
 	
 	@Override
 	protected WindowBuilder __execute__() throws Exception {
@@ -75,37 +37,24 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		
 		SystemAction systemAction = getSystemAction();
 		
-		Class<?> clazz = getFormClass();
-		if(clazz == null) {
-			clazz = getRowClass();
-			if(clazz == null) {
-				//TODO log
-			}
-		}
-		
-		if(systemAction!=null) {
-			if(systemAction.getEntities(Boolean.TRUE).getElementClass() == null || systemAction.getEntities(Boolean.TRUE).getElementClass() == Object.class)
-				systemAction.getEntities(Boolean.TRUE).setElementClass(clazz);	
-		}
-		
 		Object instance = null;
 		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete) {
 			Long identifier = __inject__(RequestParameterValueMapper.class).setParameterName(FieldName.IDENTIFIER).execute().getOutputAs(Long.class);
-			instance = __injectCollectionHelper__().getFirst(__inject__(InstanceGetter.class).setClazz(systemAction.getEntities(Boolean.TRUE).getElementClass())
+			instance = __injectCollectionHelper__().getFirst(__inject__(InstanceGetter.class).setClazz(systemAction.getEntities().getElementClass())
 					.setFieldName(FieldName.IDENTIFIER)
 					.setValueUsageType(ValueUsageType.SYSTEM).setValue(identifier).execute().getOutput());	
 		}else if(systemAction instanceof SystemActionCreate) {
-			instance = __inject__(systemAction.getEntities(Boolean.TRUE).getElementClass());
+			instance = __inject__(systemAction.getEntities().getElementClass());
 		}
 		
 		if(instance!=null && systemAction!=null)
-			systemAction.getEntities(Boolean.TRUE).add(instance);
+			systemAction.getEntities().add(instance);
 		
 		if(systemAction == null) {
 			
 		}else {
 			window.setTitleValue(systemAction.getEntities().getElementClass().getSimpleName()+" "+systemAction.getIdentifier());
-			__execute__(systemAction);
+			__execute__(systemAction,__getFormClass__(getFormClass()),__getRowClass__(getRowClass()));
 		}
 		
 		
@@ -114,7 +63,15 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		return window;
 	}
 	
-	protected abstract void __execute__(SystemAction systemAction);
+	protected abstract void __execute__(SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass);
+	
+	protected Class<? extends Form> __getFormClass__(Class<? extends Form> aClass){
+		return aClass;
+	}
+	
+	protected Class<? extends Row> __getRowClass__(Class<? extends Row> aClass){
+		return aClass;
+	}
 	
 	@Override
 	public MenuBuilderMap getMenuMap() {
@@ -204,7 +161,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		this.rowClass = rowClass;
 		return this;
 	}
-	
+	/*
 	@Override
 	public Class<?> getEntityClass() {
 		return entityClass;
@@ -223,7 +180,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		this.entityClass = entityClass;
 		return this;
 	}
-	
+	*/
 	public static final String FIELD_MENU_MAP = "menuMap";
 	public static final String FIELD_VIEW = "view";
 }

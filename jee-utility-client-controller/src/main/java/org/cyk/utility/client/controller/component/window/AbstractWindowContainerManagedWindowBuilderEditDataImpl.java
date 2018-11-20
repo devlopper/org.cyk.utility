@@ -8,14 +8,14 @@ import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.FormData;
+import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl extends AbstractWindowContainerManagedWindowBuilderEditImpl implements WindowContainerManagedWindowBuilderEditData,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void __execute__(SystemAction systemAction) {
-		Class<? extends Form> formClass = getFormClass();
+	protected void __execute__(SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {
 		if(formClass!=null) {
 			Form form = __inject__(formClass);
 			form.setTitle(systemAction.getIdentifier().toString()+" "+systemAction.getEntities().getElementClass().getSimpleName());

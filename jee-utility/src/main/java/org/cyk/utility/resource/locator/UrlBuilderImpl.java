@@ -14,8 +14,10 @@ public class UrlBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<UR
 	protected URL __execute__() throws Exception {
 		URL url = null;
 		UniformResourceLocatorStringBuilder string = getString();
-		if(string!=null)
-			url = new URL(string.execute().getOutput());
+		if(string!=null) {
+			String urlString = string.execute().getOutput();
+			url = __injectStringHelper__().isBlank(urlString) ? null : new URL(urlString);
+		}
 		return url;
 	}
 	

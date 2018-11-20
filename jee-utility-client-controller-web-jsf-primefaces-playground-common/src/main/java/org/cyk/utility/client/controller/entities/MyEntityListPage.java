@@ -20,10 +20,7 @@ public class MyEntityListPage extends AbstractPageContainerManagedImpl implement
 	@Override
 	protected WindowBuilder __getWindowBuilder__() {
 		SystemAction systemAction = __inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class);
-		return __injectControllerLayer__().injectWindowBuilderClassFromEntityClass(
-				__inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class)
-				, systemAction
-				).execute().getOutput();
+		return __injectControllerLayer__().injectWindowContainerManagedWindowBuilder(systemAction).execute().getOutput();
 	}
 
 }

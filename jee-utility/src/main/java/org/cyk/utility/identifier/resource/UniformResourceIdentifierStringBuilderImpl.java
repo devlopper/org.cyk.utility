@@ -11,7 +11,7 @@ import org.cyk.utility.object.ObjectByObjectMap;
 import org.cyk.utility.request.RequestProperty;
 import org.cyk.utility.request.RequestPropertyValueGetter;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
-import org.cyk.utility.string.StringByString;
+import org.cyk.utility.string.StringByStringMap;
 import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.StringFormat;
 
@@ -62,7 +62,8 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 		
 		ObjectByObjectMap parameterMap = getParameterMap();
 		if(Boolean.TRUE.equals(__inject__(MapHelper.class).isNotEmpty(parameterMap))) {
-			StringByString finalParameterMap = __inject__(StringByString.class).setKeyValueSeparator(CharacterConstant.EQUAL).setEntrySeparator(CharacterConstant.AMPERSTAMP);
+			StringByStringMap finalParameterMap = __inject__(StringByStringMap.class).setIsSequential(Boolean.TRUE).setKeyValueSeparator(CharacterConstant.EQUAL)
+					.setEntrySeparator(CharacterConstant.AMPERSTAMP);
 			for(Map.Entry<Object, Object> index : parameterMap.getEntries()) {
 				String name = null;
 				if(index.getKey()!=null)
@@ -86,9 +87,11 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 	protected String __getRequestProperty__(RequestProperty property,String string) {
 		String value = null;
 		if(property!=null) {
-			if(__injectStringHelper__().isBlank(string))
-				value = __injectStringHelper__().getString(__inject__(RequestPropertyValueGetter.class).setRequest(getRequest()).setProperty(property).execute().getOutput());
-			else {
+			if(__injectStringHelper__().isBlank(string)) {
+				Object request = getRequest();
+				if(request!=null)
+					value = __injectStringHelper__().getString(__inject__(RequestPropertyValueGetter.class).setRequest(request).setProperty(property).execute().getOutput());
+			}else {
 				URI uri = URI.create(string);
 				if(uri!=null) {
 					switch(property) {
@@ -215,7 +218,9 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 	
 	@Override
 	public ObjectByObjectMap getParameterMap(Boolean injectIfNull) {
-		return (ObjectByObjectMap) __getInjectIfNull__(FIELD_PARAMETER_MAP, injectIfNull);
+		ObjectByObjectMap map = (ObjectByObjectMap) __getInjectIfNull__(FIELD_PARAMETER_MAP, injectIfNull);
+		map.setIsSequential(Boolean.TRUE);
+		return map;
 	}
 	
 	@Override

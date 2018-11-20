@@ -2,7 +2,10 @@ package org.cyk.utility.client.controller.navigation;
 
 import java.io.Serializable;
 
+import org.cyk.utility.field.FieldName;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNameStringBuilder;
+import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueStringBuilder;
 import org.cyk.utility.object.ObjectByObjectMap;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.resource.locator.UrlBuilder;
@@ -16,24 +19,82 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	private ObjectByObjectMap parameterMap;
 	private Objects dynamicParameterNames;
 	private SystemAction systemAction;
+	private NavigationIdentifierStringBuilder identifierBuilder;
 	
 	@Override
 	protected Navigation __execute__() throws Exception {
 		Navigation navigation = __inject__(Navigation.class);
+		
+		SystemAction systemAction = getSystemAction();
+		if(systemAction == null) {
+			NavigationIdentifierStringBuilder identifierBuilder = getIdentifierBuilder();
+			if(identifierBuilder!=null)
+				systemAction = identifierBuilder.getSystemAction();
+		}
+		navigation.setSystemAction(systemAction);
+		
 		Object identifier = getIdentifier();
+		if(identifier == null) {
+			NavigationIdentifierStringBuilder identifierBuilder = getIdentifierBuilder();
+			if(identifierBuilder!=null)
+				identifier = identifierBuilder.execute().getOutput();
+		}
+		
 		if(identifier!=null) {
-			navigation.setIdentifier(identifier);
+			
 			UrlBuilder url = getUrl();
 			if(url==null) {
 				url = __inject__(UrlBuilder.class);
 				
 				String urlString = __inject__(NavigationIdentifierToUrlStringMapper.class).setIdentifier(identifier).execute().getOutput();
+				if(__injectStringHelper__().isBlank(urlString)) {
+					Class<?> aClass = systemAction.getEntities().getElementClass();
+					systemAction.getEntities().setElementClass(null);
+					String identifier02 = __inject__(NavigationIdentifierStringBuilder.class).setSystemAction(systemAction).execute().getOutput();
+					systemAction.getEntities().setElementClass(aClass);
+					
+					if(__injectStringHelper__().isNotBlank(identifier02)) {
+						urlString = __inject__(NavigationIdentifierToUrlStringMapper.class).setIdentifier(identifier02).execute().getOutput();
+						if(__injectStringHelper__().isNotBlank(urlString)) {
+							identifier = identifier02;
+						}
+					}
+				}
+				
+				if(__injectStringHelper__().isBlank(urlString))
+					__injectThrowableHelper__().throwRuntimeException("url not found for identifier "+identifier);
 				url.getString(Boolean.TRUE).getUniformResourceIdentifierString(Boolean.TRUE).setString(urlString);
 				
 				ObjectByObjectMap parameterMap = getParameterMap();
+				if(parameterMap == null) {
+					NavigationIdentifierStringBuilder identifierBuilder = getIdentifierBuilder();
+					if(identifierBuilder!=null) {
+						if(systemAction!=null) {
+							parameterMap = __inject__(ObjectByObjectMap.class);
+							parameterMap.setIsSequential(Boolean.TRUE);	
+							if(systemAction.getEntities()!=null) {
+								if(systemAction.getEntities().getElementClass()!=null)
+									parameterMap.set(
+											__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(Class.class).execute().getOutput()
+											,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction.getEntities().getElementClass()).execute().getOutput()
+											);
+								if(__injectCollectionHelper__().isNotEmpty(systemAction.getEntities().get()))
+									parameterMap.set(
+											__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(FieldName.IDENTIFIER).execute().getOutput()
+											,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(__injectCollectionHelper__().getFirst(systemAction.getEntities().get())).execute().getOutput()
+											);
+							}
+							parameterMap.set(
+									__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(SystemAction.class).execute().getOutput()
+									,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction).execute().getOutput()
+									);
+						}
+					}
+				}
 				url.getString(Boolean.TRUE).getUniformResourceIdentifierString(Boolean.TRUE).setParameterMap(parameterMap);
 			}
 			
+			navigation.setIdentifier(identifier);
 			if(url!=null)
 				navigation.setUniformResourceLocator(url.execute().getOutput());
 		}
@@ -51,10 +112,30 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 			}
 		}
 		
-		SystemAction systemAction = getSystemAction();
-		navigation.setSystemAction(systemAction);
+		
 		
 		return navigation;
+	}
+	
+	@Override
+	public NavigationIdentifierStringBuilder getIdentifierBuilder() {
+		return identifierBuilder;
+	}
+	@Override
+	public NavigationIdentifierStringBuilder getIdentifierBuilder(Boolean injectIfNull) {
+		return (NavigationIdentifierStringBuilder) __getInjectIfNull__(FIELD_IDENTIFIER_BUILDER, injectIfNull);
+	}
+	
+	@Override
+	public NavigationBuilder setIdentifierBuilder(NavigationIdentifierStringBuilder identifierBuilder) {
+		this.identifierBuilder = identifierBuilder;
+		return this;
+	}
+	
+	@Override
+	public NavigationBuilder setIdentifierBuilderSystemAction(SystemAction systemAction) {
+		getIdentifierBuilder(Boolean.TRUE).setSystemAction(systemAction);
+		return this;
 	}
 	
 	@Override
@@ -97,7 +178,9 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	
 	@Override
 	public ObjectByObjectMap getParameterMap(Boolean injectIfNull) {
-		return (ObjectByObjectMap) __getInjectIfNull__(FIELD_PARAMETER_MAP, injectIfNull);
+		ObjectByObjectMap map = (ObjectByObjectMap) __getInjectIfNull__(FIELD_PARAMETER_MAP, injectIfNull);
+		map.setIsSequential(Boolean.TRUE);
+		return map;
 	}
 	
 	@Override
@@ -122,7 +205,13 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 		return this;
 	}
 	
+	@Override
+	public NavigationBuilder setIdentifier(Object identifier) {
+		return (NavigationBuilder) super.setIdentifier(identifier);
+	}
+	
 	public static final String FIELD_URL = "url";
 	public static final String FIELD_PARAMETER_MAP = "parameterMap";
+	public static final String FIELD_IDENTIFIER_BUILDER = "identifierBuilder";
 	public static final String FIELD_DYNAMIC_PARAMETER_NAMES = "dynamicParameterNames";
 }
