@@ -25,7 +25,7 @@ public abstract class AbstractApplicationScopeLifeCycleListener extends Abstract
 		}
 	}
  
-	protected abstract void __initialize__(Object object);
+	public abstract void __initialize__(Object object);
 	
     public void destroy(@Observes @Destroyed(ApplicationScoped.class) Object object) {
     	if(!DESTROYED.contains(getClass())) {
@@ -35,6 +35,6 @@ public abstract class AbstractApplicationScopeLifeCycleListener extends Abstract
     	}
     }
     
-    protected abstract void __destroy__(Object object);
+    public abstract void __destroy__(Object object);
 	
 }

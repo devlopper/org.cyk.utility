@@ -68,7 +68,8 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 					//inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getFieldNameStrings().get().toString());
 					
 					//inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getField().getName());
-					inputBuilder.getLabel(Boolean.TRUE).setValue(inputBuilder.getField().getName());
+					//inputBuilder.getLabel(Boolean.TRUE).setValue(inputBuilder.getField().getName());
+					inputBuilder.getLabel(Boolean.TRUE).setValueInternalizationIdentifier(inputBuilder.getField().getName());
 				}
 			}else if(builder instanceof CommandableBuilder) {
 				org.cyk.utility.client.controller.component.annotation.Commandable commandableAnnotation = __method__.getAnnotation(org.cyk.utility.client.controller.component.annotation.Commandable.class);

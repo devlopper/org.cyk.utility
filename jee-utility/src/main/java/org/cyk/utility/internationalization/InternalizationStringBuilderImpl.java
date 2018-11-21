@@ -12,10 +12,18 @@ import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
 public class InternalizationStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements InternalizationStringBuilder,Serializable{
 	private static final long serialVersionUID = 1L;
 
+	private InternalizationKeyStringBuilder keyBuilder;
+	private String key;
+	
 	@Override
 	protected String __execute__() throws Exception {
 		String result = null;
 		String key = getKey();
+		if(__injectStringHelper__().isBlank(key)) {
+			InternalizationKeyStringBuilder keyBuilder = getKeyBuilder();
+			if(keyBuilder!=null)
+				key = keyBuilder.execute().getOutput();
+		}
 		if(__injectStringHelper__().isBlank(key)) {
 			result = "##??KEY_NOT_DEF??##";
 		}else {
@@ -41,21 +49,44 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 				result = __inject__(StringRepositoryResourceBundle.class).getOne(properties);
 			
 			//
-			if(__injectStringHelper__().isBlank(result))
+			if(__injectStringHelper__().isBlank(result)) {
 				result = "##??"+key+"??##";
+			}
 			
 		}
 		return result;
 	}
 	
 	@Override
-	public String getKey() {
-		return (String) getProperties().getKey();
+	public InternalizationKeyStringBuilder getKeyBuilder() {
+		return keyBuilder;
 	}
-
+	
+	@Override
+	public InternalizationKeyStringBuilder getKeyBuilder(Boolean injectIfNull) {
+		return (InternalizationKeyStringBuilder) __getInjectIfNull__(FIELD_KEY_BUILDER, injectIfNull);
+	}
+	
+	@Override
+	public InternalizationStringBuilder setKeyBuilder(InternalizationKeyStringBuilder key) {
+		this.keyBuilder = key;
+		return this;
+	}
+	
+	@Override
+	public InternalizationStringBuilder setKeyValue(String key) {
+		getKeyBuilder(Boolean.TRUE).setValue(key);
+		return this;
+	}
+	
+	@Override
+	public String getKey() {
+		return key;
+	}
+	
 	@Override
 	public InternalizationStringBuilder setKey(String key) {
-		getProperties().setKey(key);
+		this.key = key;
 		return this;
 	}
 
@@ -91,5 +122,9 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 		getProperties().setCase(aCase);
 		return this;
 	}
+	
+	/**/
+	
+	public static final String FIELD_KEY_BUILDER = "keyBuilder";
 
 }

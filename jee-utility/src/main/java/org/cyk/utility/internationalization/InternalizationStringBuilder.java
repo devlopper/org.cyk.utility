@@ -8,6 +8,11 @@ import org.cyk.utility.string.Case;
 
 public interface InternalizationStringBuilder extends FunctionWithPropertiesAsInputAndStringAsOutput {
 
+	InternalizationKeyStringBuilder getKeyBuilder();
+	InternalizationKeyStringBuilder getKeyBuilder(Boolean injectIfNull);
+	InternalizationStringBuilder setKeyBuilder(InternalizationKeyStringBuilder key);
+	InternalizationStringBuilder setKeyValue(String key);
+	
 	String getKey();
 	InternalizationStringBuilder setKey(String key);
 	

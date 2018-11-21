@@ -27,34 +27,26 @@ public class NavigationIdentifierToUrlStringMapperFunctionRunnableImpl extends A
 				if(identifier != null) {
 					ConfigurableNavigationHandler configNavHandler = (ConfigurableNavigationHandler)FacesContext.getCurrentInstance().getApplication().getNavigationHandler(); //assumes you already have an instance of FacesContext, named ctxt
 					Map<String,Set<NavigationCase>> map = configNavHandler.getNavigationCases();
-					
-					Boolean found = null;
-					for(Map.Entry<String,Set<NavigationCase>> indexEntry : map.entrySet()) {
-						for(NavigationCase indexNavigationCase : indexEntry.getValue()) {
-							if(indexNavigationCase.getFromOutcome().equals(identifier.toString())) {
-								found= Boolean.TRUE;
-								
-								String url = __inject__(UniformResourceIdentifierStringBuilder.class).setRequest(FacesContext.getCurrentInstance().getExternalContext().getRequest())
-										.setPath(indexNavigationCase.getToViewId(FacesContext.getCurrentInstance()))
-										.execute().getOutput();
-								setOutput(url);	
-								
+					if(map!=null) {
+						Boolean found = null;
+						for(Map.Entry<String,Set<NavigationCase>> indexEntry : map.entrySet()) {
+							for(NavigationCase indexNavigationCase : indexEntry.getValue()) {
+								if(indexNavigationCase.getFromOutcome().equals(identifier.toString())) {
+									found= Boolean.TRUE;
+									
+									String url = __inject__(UniformResourceIdentifierStringBuilder.class).setRequest(FacesContext.getCurrentInstance().getExternalContext().getRequest())
+											.setPath(indexNavigationCase.getToViewId(FacesContext.getCurrentInstance()))
+											.execute().getOutput();
+									setOutput(url);	
+									
+									break;
+								}
+							}
+							if(Boolean.TRUE.equals(found)) {
 								break;
 							}
 						}
-						if(Boolean.TRUE.equals(found)) {
-							break;
-						}
 					}
-					/*
-					NavigationCase navigationCase = configNavHandler.getNavigationCase(FacesContext.getCurrentInstance(),null,identifier.toString());
-					if(navigationCase != null) {
-						String url = __inject__(UniformResourceIdentifierStringBuilder.class).setRequest(FacesContext.getCurrentInstance().getExternalContext().getRequest())
-								.setPath(navigationCase.getToViewId(FacesContext.getCurrentInstance()))
-								.execute().getOutput();
-						setOutput(url);	
-					}
-					*/
 				}
 			}
 		});

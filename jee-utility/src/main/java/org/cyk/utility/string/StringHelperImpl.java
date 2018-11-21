@@ -69,6 +69,18 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	}
 	
 	@Override
+	public Collection<String> applyCase(Collection<String> strings, Case aCase) {
+		Collection<String> result = null;
+		if(__inject__(CollectionHelper.class).isNotEmpty(strings)) {
+			result = new ArrayList<>();
+			for(String index : strings) {
+				result.add(applyCase(index, aCase));
+			}
+		}
+		return result;
+	}
+	
+	@Override
 	public String getFromRepositories(Properties properties) {
 		// TODO Auto-generated method stub
 		return null;
@@ -154,6 +166,11 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 		if(StringUtils.startsWith(string, prefixString))
 			string = string.substring(prefixString.length());
 		return string;
+	}
+	
+	@Override
+	public Collection<String> splitByCharacterTypeCamelCase(String string) {
+		return __inject__(CollectionHelper.class).instanciate(StringUtils.splitByCharacterTypeCamelCase(string)); 
 	}
 	
 	/**/

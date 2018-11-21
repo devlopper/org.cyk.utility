@@ -123,7 +123,7 @@ public class StyleClassBuilderWidthUnitTest extends AbstractArquillianUnitTestWi
 	/**/
 	
 	private void assertClass(Class<?> styleClassBuilderWidthPrimefacesGridCssFunctionRunnableClass,Class<? extends Device> deviceClass,Integer width,String expectedClass) {
-		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, (Class<? extends FunctionRunnable<?>>) styleClassBuilderWidthPrimefacesGridCssFunctionRunnableClass);
+		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, (Class<? extends FunctionRunnable<?>>) styleClassBuilderWidthPrimefacesGridCssFunctionRunnableClass,Boolean.TRUE);
 		StyleClassBuilderWidth builder = __inject__(StyleClassBuilderWidth.class);
 		if(deviceClass!=null)
 			builder.setDevice(__inject__(deviceClass));

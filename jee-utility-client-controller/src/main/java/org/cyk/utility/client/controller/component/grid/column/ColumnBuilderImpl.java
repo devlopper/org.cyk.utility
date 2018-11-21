@@ -11,8 +11,8 @@ import org.cyk.utility.client.controller.component.output.OutputStringTextBuilde
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilderMap;
 import org.cyk.utility.client.controller.component.view.ViewMap;
+import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.string.Strings;
-import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
 
 public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> implements ColumnBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -29,6 +29,7 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 			column.setFieldName(__injectFieldHelper__().concatenate(fieldNameStrings.get()));
 		
 		String fieldName = column.getFieldName();
+		System.out.println("ColumnBuilderImpl.__execute__() FIELDNAME : "+fieldName);
 		if(__injectStringHelper__().isBlank(fieldName))
 			column.setValuePropertyName(column.getIdentifier().toString());
 		else
@@ -45,7 +46,7 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 					String valuePropertyName = column.getValuePropertyName();
 					if(StringUtils.contains(valuePropertyName, "."))
 						valuePropertyName = StringUtils.substringAfterLast(valuePropertyName, ".");
-					valuePropertyName = __inject__(StringRepositoryResourceBundle.class).getOne(valuePropertyName);
+					valuePropertyName = __inject__(InternalizationStringBuilder.class).setKeyValue(valuePropertyName).execute().getOutput();
 					headerText = __inject__(OutputStringTextBuilder.class);
 					headerText.setValue(valuePropertyName);
 				}
