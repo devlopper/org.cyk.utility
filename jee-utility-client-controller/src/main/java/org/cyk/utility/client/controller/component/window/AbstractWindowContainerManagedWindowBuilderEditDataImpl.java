@@ -29,7 +29,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 			viewBuilder.addComponentBuilderByObjectByFieldNames(form, Form.PROPERTY_TITLE).addRoles(ComponentRole.TITLE);			
 			__execute__(form,data,viewBuilder);
 			
-			viewBuilder.addComponentBuilderByObjectByMethodName(form, Form.METHOD_SUBMIT);
+			viewBuilder.addComponentBuilderByObjectByMethodName(form, Form.METHOD_SUBMIT,systemAction);
 				
 			setView(viewBuilder);
 		}

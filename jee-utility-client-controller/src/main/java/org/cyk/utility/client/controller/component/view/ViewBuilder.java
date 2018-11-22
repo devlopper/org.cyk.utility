@@ -34,7 +34,9 @@ public interface ViewBuilder extends VisibleComponentBuilder<View> {
 	ViewBuilder addComponentBuilder(ComponentBuilder<?> componentBuilder);
 	<T extends ComponentBuilder<?>> T addComponentBuilderByObjectByFieldNames(Class<T> componentBuilderClass,Object object,String...fieldNames);
 	ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object,String...fieldNames);
+	<T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object,String methodName,SystemAction systemAction);
 	<T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object,String methodName);
+	ComponentBuilder<?> addComponentBuilderByObjectByMethodName(Object object,String methodName,SystemAction systemAction);
 	ComponentBuilder<?> addComponentBuilderByObjectByMethodName(Object object,String methodName);
 
 	CommandableBuilderByClassMap getCommandableByClassMap();

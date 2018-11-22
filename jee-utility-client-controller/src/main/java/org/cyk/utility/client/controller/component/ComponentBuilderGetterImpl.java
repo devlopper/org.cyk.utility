@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Case;
+import org.cyk.utility.system.action.SystemAction;
 
 @SuppressWarnings("rawtypes")
 public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<ComponentBuilder> implements ComponentBuilderGetter,Serializable {
@@ -19,6 +20,7 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 	private Class<? extends ComponentBuilder<?>> clazz;
 	private Object object;
 	private Method __method__;
+	private SystemAction systemAction;
 	
 	@Override
 	protected ComponentBuilder __execute__() throws Exception {
@@ -76,7 +78,12 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 				org.cyk.utility.client.controller.component.annotation.Commandable commandableAnnotation = __method__.getAnnotation(org.cyk.utility.client.controller.component.annotation.Commandable.class);
 				CommandableBuilder commandableBuilder = (CommandableBuilder) builder;
 				
-				commandableBuilder.setCommandFunctionActionClass(commandableAnnotation == null ? null : commandableAnnotation.systemActionClass());
+				SystemAction systemAction = getSystemAction();
+				if(systemAction == null)
+					commandableBuilder.setCommandFunctionActionClass(commandableAnnotation == null || SystemAction.class.equals(commandableAnnotation.systemActionClass())? null : commandableAnnotation.systemActionClass());
+				else
+					commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(systemAction);
+				
 				commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).addRunnables(new Runnable() {
 					@Override
 					public void run() {
@@ -177,6 +184,17 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 	@Override
 	public ComponentBuilderGetter addFieldNameStrings(String... fieldNameStrings) {
 		getClassGetter(Boolean.TRUE).getFieldNameStrings(Boolean.TRUE).add(fieldNameStrings);
+		return this;
+	}
+	
+	@Override
+	public SystemAction getSystemAction() {
+		return systemAction;
+	}
+	
+	@Override
+	public ComponentBuilderGetter setSystemAction(SystemAction systemAction) {
+		this.systemAction = systemAction;
 		return this;
 	}
 	

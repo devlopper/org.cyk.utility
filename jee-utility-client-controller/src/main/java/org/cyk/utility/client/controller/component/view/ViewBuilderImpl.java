@@ -57,8 +57,6 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 				}
 			}
 		}
-		
-		
 	}
 	
 	@Override
@@ -134,8 +132,8 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	}
 	
 	@Override
-	public <T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object, String methodName) {
-		T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).setMethodName(methodName).execute().getOutput();
+	public <T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object, String methodName,SystemAction systemAction) {
+		T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).setMethodName(methodName).setSystemAction(systemAction).execute().getOutput();
 		if(builder instanceof CommandableBuilder) {
 			CommandableBuilder commandableBuilder = (CommandableBuilder) builder;
 			Object data = object instanceof FormData ? ((FormData<?>)object).getData() : object;
@@ -146,9 +144,20 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	}
 	
 	@Override
+	public <T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object, String methodName) {
+		return addComponentBuilderByObjectByMethodName(componentBuilderClass, object, methodName, null);
+	}
+	
+	@Override
+	public ComponentBuilder<?> addComponentBuilderByObjectByMethodName(Object object, String methodName,SystemAction systemAction) {
+		Class<? extends ComponentBuilder<?>> builderClass =  __inject__(ComponentBuilderClassGetter.class).setClazz(object.getClass()).setMethodName(methodName)
+				.execute().getOutput();
+		return addComponentBuilderByObjectByMethodName(builderClass, object, methodName,systemAction);
+	}
+	
+	@Override
 	public ComponentBuilder<?> addComponentBuilderByObjectByMethodName(Object object, String methodName) {
-		Class<? extends ComponentBuilder<?>> builderClass =  __inject__(ComponentBuilderClassGetter.class).setClazz(object.getClass()).setMethodName(methodName).getOutput();
-		return addComponentBuilderByObjectByMethodName(builderClass, object, methodName);
+		return addComponentBuilderByObjectByMethodName(object, methodName, null);
 	}
 	
 	@Override

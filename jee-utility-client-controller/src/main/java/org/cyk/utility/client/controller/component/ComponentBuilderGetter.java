@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
+import org.cyk.utility.system.action.SystemAction;
 
 @SuppressWarnings("rawtypes")
 public interface ComponentBuilderGetter extends FunctionWithPropertiesAsInput<ComponentBuilder> {
@@ -28,4 +29,7 @@ public interface ComponentBuilderGetter extends FunctionWithPropertiesAsInput<Co
 	ComponentBuilderGetter setClazz(Class<? extends ComponentBuilder<?>> clazz);
 	
 	ComponentBuilderGetter addFieldNameStrings(String...fieldNameStrings);
+	
+	SystemAction getSystemAction();
+	ComponentBuilderGetter setSystemAction(SystemAction systemAction);
 }

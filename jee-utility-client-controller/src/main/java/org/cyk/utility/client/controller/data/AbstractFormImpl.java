@@ -8,7 +8,7 @@ import org.cyk.utility.client.controller.component.annotation.CommandableButton;
 import org.cyk.utility.client.controller.component.annotation.Output;
 import org.cyk.utility.client.controller.component.annotation.OutputString;
 import org.cyk.utility.client.controller.component.annotation.OutputStringText;
-import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractFormImpl extends AbstractObject implements Form,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public abstract class AbstractFormImpl extends AbstractObject implements Form,Se
 		return this;
 	}
 	
-	@Override @Commandable(systemActionClass=SystemActionCreate.class) @CommandableButton
+	@Override @Commandable(systemActionClass=SystemAction.class) @CommandableButton
 	public void submit() {
 		__submit__();
 	}

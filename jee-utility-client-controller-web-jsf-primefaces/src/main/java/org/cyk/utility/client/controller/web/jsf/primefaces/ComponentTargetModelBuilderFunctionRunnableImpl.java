@@ -333,9 +333,9 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 	
 	/**/
 	
-	private void __setAttributes__(UIComponent uiComponent,Component component) {
+	/*private void __setAttributes__(UIComponent uiComponent,Component component) {
 		
-	}
+	}*/
 	
 	/**/
 	
