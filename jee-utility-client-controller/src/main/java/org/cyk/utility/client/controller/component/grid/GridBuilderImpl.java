@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.grid;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
@@ -23,9 +24,12 @@ import org.cyk.utility.client.controller.component.grid.row.Rows;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.component.view.ViewBuilderMap;
+import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.system.action.SystemActionCreate;
 
 public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> implements GridBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -38,6 +42,8 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	private ColumnBuilder commandablesColumn;
 	private CommandableBuilderByClassMap commandableMap;
 	private CommandableBuilderByClassMap commandablesColumnCommandableMap;
+	private ViewBuilderMap viewMap;
+	private CommandableBuilder createRowCommandable;
 	
 	@Override
 	protected void __execute__(Grid grid) {
@@ -177,6 +183,46 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 		}
 			
 		grid.setView(view.execute().getOutput());
+		
+		ViewBuilderMap viewMap = getViewMap();
+		if(viewMap == null)
+			viewMap = __inject__(ViewBuilderMap.class);
+		if(viewMap!=null) {
+			ViewBuilder headerView = viewMap.get(ViewMap.HEADER);
+			if(headerView == null) {
+				CommandableBuilder createRowCommandable = getCreateRowCommandable();
+				if(createRowCommandable == null) {
+					createRowCommandable = getCreateRowCommandable(Boolean.TRUE);
+				}
+				
+				//createRowCommandable.getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class)/*.setEntityClass(MyEntity.class)*/);
+				
+				if(createRowCommandable!=null) {
+					headerView = __inject__(ViewBuilder.class).setComponentsBuilder(__inject__(ComponentsBuilder.class).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE));
+					headerView.getComponentsBuilder().addComponents(createRowCommandable);
+					viewMap.set(ViewMap.HEADER,headerView);
+				}
+			}
+			/*
+			ViewBuilder footerView = viewMap.get(ViewMap.FOOTER);
+			if(footerView == null) {
+				OutputStringTextBuilder footerText = getFooterText();
+				if(footerText!=null) {
+					footerView = __inject__(ViewBuilder.class).setComponentsBuilder(__inject__(ComponentsBuilder.class).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE));
+					footerView.getComponentsBuilder().addComponents(footerText);
+					viewMap.set(ViewMap.FOOTER,footerView);
+				}
+			}
+			*/
+			
+			Collection<Map.Entry<String,ViewBuilder>> entries = viewMap.getEntries();
+			if(__injectCollectionHelper__().isNotEmpty(entries)) {
+				grid.setViewMap(__inject__(ViewMap.class));
+				for(Map.Entry<String,ViewBuilder> index : entries) {
+					grid.getViewMap().set(index.getKey(),index.getValue().execute().getOutput());
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -289,6 +335,34 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	}
 	
 	@Override
+	public ViewBuilderMap getViewMap() {
+		return viewMap;
+	}
+
+	@Override
+	public ViewBuilderMap getViewMap(Boolean injectIfNull) {
+		return (ViewBuilderMap) __getInjectIfNull__(FIELD_VIEW_MAP, injectIfNull);
+	}
+
+	@Override
+	public GridBuilder setViewMap(ViewBuilderMap viewMap) {
+		this.viewMap = viewMap;
+		return this;
+	}
+
+	@Override
+	public GridBuilder setViews(Object... keyValues) {
+		getViewMap(Boolean.TRUE).set(keyValues);
+		return this;
+	}
+	
+	@Override
+	public ViewBuilder getView(String key) {
+		ViewBuilderMap viewMap = getViewMap();
+		return viewMap == null ? null : viewMap.get(key);
+	}
+	
+	@Override
 	public Objects getObjects() {
 		return objects;
 	}
@@ -392,6 +466,24 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 		return this;
 	}
 	
+	@Override
+	public CommandableBuilder getCreateRowCommandable() {
+		return createRowCommandable;
+	}
+	
+	@Override
+	public CommandableBuilder getCreateRowCommandable(Boolean injectIfNull) {
+		CommandableBuilder commandable = (CommandableBuilder) __getInjectIfNull__(FIELD_CREATE_ROW_COMMANDABLE, injectIfNull);
+		
+		return commandable;
+	}
+	
+	@Override
+	public GridBuilder setCreateRowCommandable(CommandableBuilder createRowCommandable) {
+		this.createRowCommandable = createRowCommandable;
+		return this;
+	}
+	
 	public static final String FIELD_COLUMNS = "columns";
 	public static final String FIELD_ROWS = "rows";
 	public static final String FIELD_VIEW = "view";
@@ -400,4 +492,6 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	public static final String FIELD_COMMANDABLES_COLUMN = "commandablesColumn";
 	public static final String FIELD_COMMANDABLE_MAP = "commandableMap";
 	public static final String FIELD_COMMANDABLES_COLUMN_COMMANDABLE_MAP = "commandablesColumnCommandableMap";
+	public static final String FIELD_VIEW_MAP = "viewMap";
+	public static final String FIELD_CREATE_ROW_COMMANDABLE = "createRowCommandable";
 }

@@ -11,6 +11,7 @@ import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetterImpl
 import org.cyk.utility.client.controller.entities.MyEntity;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
 import org.cyk.utility.instance.InstanceGetterImpl;
+import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -23,6 +24,8 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class,Boolean.TRUE);
 		
 		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClass(MyEntity.class);
+		
+		__inject__(StringRepositoryResourceBundle.class).addBundle("org.cyk.utility.client.controller.message");
 	}
 	
 	@Override

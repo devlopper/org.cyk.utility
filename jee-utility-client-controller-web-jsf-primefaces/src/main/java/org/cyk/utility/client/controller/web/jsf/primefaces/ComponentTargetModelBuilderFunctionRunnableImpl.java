@@ -37,7 +37,9 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.datatable.DataTable;
@@ -125,11 +127,19 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 				}
 				
 				String systemActionClass = null;
-				if(navigationSystemAction instanceof SystemActionUpdate)
-					systemActionClass = "systemActionUpdateClass";
-				else if(navigationSystemAction instanceof SystemActionDelete)
-					systemActionClass = "systemActionDeleteClass";
-				url = "#{indexRow.getUrlBySystemActionClass(componentHelper."+systemActionClass+")}";
+				if(navigationSystemAction instanceof SystemActionCreate) {
+					url = commandable.getNavigation().getUniformResourceLocator().toString();
+				}else {
+					if(navigationSystemAction instanceof SystemActionRead)
+						systemActionClass = "systemActionReadClass";
+					else if(navigationSystemAction instanceof SystemActionUpdate)
+						systemActionClass = "systemActionUpdateClass";
+					else if(navigationSystemAction instanceof SystemActionDelete)
+						systemActionClass = "systemActionDeleteClass";
+					
+					url = "#{indexRow.getUrlBySystemActionClass(componentHelper."+systemActionClass+")}";
+				}
+				
 				onClickValueExpressionString = "window.open('"+url+"','_self');return false";
 			//}
 			
@@ -236,7 +246,14 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		DataTable dataTable = new DataTable();
 		dataTable.setVar("indexRow");
 		dataTable.setReflow(Boolean.TRUE);
-		//dataTable.setHeader();
+		
+		UIComponent uiComponent =__build__(grid.getView(ViewMap.HEADER));
+		if(uiComponent!=null) {
+			System.out.println(((CommandButton)uiComponent.getChildren().get(0)).getUpdate());
+			((CommandButton)uiComponent.getChildren().get(0)).setUpdate("");
+			//System.out.println(uiComponent.getChildren().get(0));
+			dataTable.setHeader(uiComponent);
+		}
 		
 		Objects objects = grid.getObjects();
 		if(__inject__(CollectionHelper.class).isEmpty(objects)) {

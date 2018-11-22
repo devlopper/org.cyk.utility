@@ -3,12 +3,14 @@ package org.cyk.utility.client.controller.component.grid;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilderByClassMap;
 import org.cyk.utility.client.controller.component.grid.column.ColumnBuilder;
 import org.cyk.utility.client.controller.component.grid.column.ColumnBuilders;
 import org.cyk.utility.client.controller.component.grid.row.RowBuilder;
 import org.cyk.utility.client.controller.component.grid.row.RowBuilders;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.component.view.ViewBuilderMap;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.object.Objects;
 
@@ -36,6 +38,12 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	ViewBuilder getView();
 	ViewBuilder getView(Boolean injectIfNull);
 	GridBuilder setView(ViewBuilder view);
+	
+	ViewBuilderMap getViewMap();
+	ViewBuilderMap getViewMap(Boolean injectIfNull);
+	GridBuilder setViewMap(ViewBuilderMap viewMap);
+	GridBuilder setViews(Object...keyValues);
+	ViewBuilder getView(String key);
 	
 	Objects getObjects();
 	Objects getObjects(Boolean injectIfNull);
@@ -65,7 +73,9 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	
 	GridBuilder setRowClass(Class<? extends Row> rowClass);
 	
+	CommandableBuilder getCreateRowCommandable();
+	CommandableBuilder getCreateRowCommandable(Boolean injectIfNull);
+	GridBuilder setCreateRowCommandable(CommandableBuilder createRowCommandable);
+	
 	/**/
-	
-	
 }

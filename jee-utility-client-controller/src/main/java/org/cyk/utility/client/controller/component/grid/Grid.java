@@ -7,6 +7,7 @@ import org.cyk.utility.client.controller.component.grid.column.Columns;
 import org.cyk.utility.client.controller.component.grid.row.Row;
 import org.cyk.utility.client.controller.component.grid.row.Rows;
 import org.cyk.utility.client.controller.component.view.View;
+import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.object.Objects;
 
 public interface Grid extends VisibleComponent {
@@ -21,6 +22,10 @@ public interface Grid extends VisibleComponent {
 	
 	View getView();
 	Grid setView(View view);
+	
+	ViewMap getViewMap();
+	Grid setViewMap(ViewMap viewMap);
+	View getView(String key);
 	
 	Objects getObjects();
 	Grid setObjects(Objects objects);

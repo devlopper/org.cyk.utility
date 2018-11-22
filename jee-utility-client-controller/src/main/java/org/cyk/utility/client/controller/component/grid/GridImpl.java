@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.component.grid.column.Columns;
 import org.cyk.utility.client.controller.component.grid.row.Row;
 import org.cyk.utility.client.controller.component.grid.row.Rows;
 import org.cyk.utility.client.controller.component.view.View;
+import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 
@@ -20,6 +21,7 @@ public class GridImpl extends AbstractVisibleComponentImpl implements Grid,Seria
 	private Rows rows;
 	private View view;
 	private Objects objects;
+	private ViewMap viewMap;
 	
 	@Override
 	public Columns getColumns() {
@@ -68,6 +70,23 @@ public class GridImpl extends AbstractVisibleComponentImpl implements Grid,Seria
 	public Grid setView(View view) {
 		this.view = view;
 		return this;
+	}
+	
+	@Override
+	public ViewMap getViewMap() {
+		return viewMap;
+	}
+
+	@Override
+	public Grid setViewMap(ViewMap viewMap) {
+		this.viewMap = viewMap;
+		return this;
+	}
+	
+	@Override
+	public View getView(String key) {
+		ViewMap viewMap = getViewMap();
+		return viewMap == null ? null : viewMap.get(key);
 	}
 	
 	@Override

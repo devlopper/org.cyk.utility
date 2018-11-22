@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
@@ -30,6 +31,12 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 				gridBuilder.addColumnsByFieldNames(columnsFieldNames.get());
 			
 			gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandablesBySystemActionClasses(SystemActionUpdate.class,SystemActionDelete.class);
+			
+			gridBuilder.getCreateRowCommandable(Boolean.TRUE)
+			.setNavigationIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class).setEntityClass(systemAction.getEntities().getElementClass()))
+			;
+			
+			gridBuilder.getCreateRowCommandable(Boolean.TRUE).setCommandFunctionActionClass(SystemActionCreate.class);
 			
 			LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
 			gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);
