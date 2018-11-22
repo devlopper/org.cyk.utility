@@ -17,7 +17,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void __execute__(SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {
+	protected void __execute__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {
 		ViewBuilder viewBuilder = null;
 		if(rowClass!=null) {
 			@SuppressWarnings({ "rawtypes" })

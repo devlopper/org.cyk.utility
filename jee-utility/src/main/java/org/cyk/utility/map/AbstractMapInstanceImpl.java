@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 
@@ -19,12 +20,14 @@ public abstract class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject 
 	private static final long serialVersionUID = 1L;
 
 	private Map<KEY,VALUE> __map__;
+	private Class<VALUE> __valueClass__;
 	private Boolean isOrdered,isSequential;
 	private Object keyValueSeparator,entrySeparator;
 	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
+		__valueClass__ = (Class<VALUE>) __inject__(ClassHelper.class).getParameterAt(getClass(), 1, Object.class);
 		setKeyValueSeparator(CharacterConstant.EQUAL);
 		setEntrySeparator(CharacterConstant.COMA);
 	}
@@ -56,6 +59,16 @@ public abstract class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject 
 	@Override
 	public VALUE get(KEY key) {
 		return __map__ == null ? null : __map__.get(key);
+	}
+	
+	@Override
+	public VALUE get(KEY key, Boolean injectOrCreateIfNull) {
+		VALUE value = get(key);
+		if(value == null && Boolean.TRUE.equals(injectOrCreateIfNull)) {
+			value = __inject__(__valueClass__);
+			set(key,value);
+		}
+		return value;
 	}
 	
 	@Override

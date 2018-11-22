@@ -7,4 +7,7 @@ public interface InternalizationKeyStringBuilder extends StringFunction {
 	Object getValue();
 	InternalizationKeyStringBuilder setValue(Object value);
 	
+	InternalizationKeyStringType getType();
+	InternalizationKeyStringBuilder setType(InternalizationKeyStringType type);
+	
 }

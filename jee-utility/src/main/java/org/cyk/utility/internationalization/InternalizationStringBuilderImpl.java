@@ -74,7 +74,7 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 	}
 	
 	@Override
-	public InternalizationStringBuilder setKeyValue(String key) {
+	public InternalizationStringBuilder setKeyValue(Object key) {
 		getKeyBuilder(Boolean.TRUE).setValue(key);
 		return this;
 	}
@@ -87,6 +87,12 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 	@Override
 	public InternalizationStringBuilder setKey(String key) {
 		this.key = key;
+		return this;
+	}
+	
+	@Override
+	public InternalizationStringBuilder setKeyType(InternalizationKeyStringType type) {
+		getKeyBuilder(Boolean.TRUE).setType(type);
 		return this;
 	}
 

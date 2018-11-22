@@ -1,6 +1,8 @@
 package org.cyk.utility.internationalization;
 
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
+import org.cyk.utility.string.Case;
+import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
@@ -35,12 +37,31 @@ public class InternalizationStringBuilderUnitTest extends AbstractArquillianUnit
 	@Test
 	public void isNom_whenKeyIsFirstName(){
 		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
-		assertionHelper.assertEquals("nom", __inject__(InternalizationStringBuilder.class).setKeyValue("firstName").execute().getOutput());		
+		assertionHelper.assertEquals("nom", __inject__(InternalizationStringBuilder.class).setKeyValue("firstName").execute().getOutput());	
+		assertionHelper.assertEquals("Nom", __inject__(InternalizationStringBuilder.class).setKeyValue("firstName").setCase(Case.FIRST_CHARACTER_UPPER).execute().getOutput());	
 	}
 	
 	@Test
-	public void isPrnoms_whenKeyIsLastName(){
+	public void isPrenoms_whenKeyIsLastName(){
 		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
 		assertionHelper.assertEquals("prénoms", __inject__(InternalizationStringBuilder.class).setKeyValue("lastNames").execute().getOutput());		
+	}
+	
+	@Test
+	public void isCreer_whenKeyIsCreate(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("créer", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionCreate.class).execute().getOutput());		
+	}
+	
+	@Test
+	public void isCreer_whenKeyIsCreateVerb(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("créer", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionCreate.class).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput());		
+	}
+	
+	@Test
+	public void isCreation_whenKeyIsCreateNoun(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("création", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionCreate.class).setKeyType(InternalizationKeyStringType.NOUN).execute().getOutput());		
 	}
 }

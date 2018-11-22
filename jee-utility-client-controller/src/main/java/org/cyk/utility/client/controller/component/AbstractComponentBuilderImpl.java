@@ -10,6 +10,8 @@ import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.internationalization.InternalizationStringBuilder;
+import org.cyk.utility.internationalization.InternalizationStringBuilderByStringMap;
 import org.cyk.utility.object.Objects;
 
 public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> extends AbstractFunctionWithPropertiesAsInputImpl<COMPONENT> implements ComponentBuilder<COMPONENT> , Serializable {
@@ -21,6 +23,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private ComponentRoles roles;
 	private Boolean isTargetModelToBeBuilt;
 	private Objects updatables;
+	private InternalizationStringBuilderByStringMap internalizationStringMap;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -221,8 +224,52 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		return this;
 	}
 	
+	@Override
+	public InternalizationStringBuilderByStringMap getInternalizationStringMap() {
+		return internalizationStringMap;
+	}
+	@Override
+	public ComponentBuilder<COMPONENT> setInternalizationStringMap(InternalizationStringBuilderByStringMap internalizationStringMap) {
+		this.internalizationStringMap = internalizationStringMap;
+		return this;
+	}
+	
+	@Override
+	public InternalizationStringBuilderByStringMap getInternalizationStringMap(Boolean injectIfNull) {
+		return (InternalizationStringBuilderByStringMap) __getInjectIfNull__(FIELD_INTERNALIZATION_STRING_MAP, injectIfNull);
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setInternalizationKeyValue(String key, String value) {
+		getInternalizationStringMap(Boolean.TRUE).setInternalizationKeyValue(key, value);
+		return this;
+	}
+	
+	@Override
+	public InternalizationStringBuilder getNameInternalization() {
+		return getInternalizationStringMap(Boolean.TRUE).get(Properties.NAME);
+	}
+	
+	@Override
+	public InternalizationStringBuilder getNameInternalization(Boolean injectIfNull) {
+		return getInternalizationStringMap(Boolean.TRUE).get(Properties.NAME,injectIfNull);
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setNameInternalization(InternalizationStringBuilder nameInternalization) {
+		getInternalizationStringMap(Boolean.TRUE).set(Properties.NAME,nameInternalization);
+		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setNameInternalizationKeyValue(String nameInternalizationKeyValue) {
+		getNameInternalization(Boolean.TRUE).setKeyValue(nameInternalizationKeyValue);
+		return this;
+	}
+	
 	public static final String FIELD_AREA = "area";
 	public static final String FIELD_LAYOUT_ITEM_STYLE = "layoutItemStyle";
 	public static final String FIELD_ROLES = "roles";
 	public static final String FIELD_UPDATABLES = "updatables";
+	public static final String FIELD_INTERNALIZATION_STRING_MAP = "internalizationStringMap";
 }

@@ -10,7 +10,10 @@ import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.instance.InstanceGetter;
+import org.cyk.utility.internationalization.InternalizationKeyStringType;
+import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.request.RequestParameterValueMapper;
+import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
@@ -53,8 +56,12 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(systemAction == null) {
 			
 		}else {
-			window.setTitleValue(systemAction.getEntities().getElementClass().getSimpleName()+" "+systemAction.getIdentifier());
-			__execute__(systemAction,__getFormClass__(getFormClass()),__getRowClass__(getRowClass()));
+			window.setTitleValue(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER)
+					.setKeyType(InternalizationKeyStringType.NOUN)
+					.execute().getOutput()
+					+" "
+					+__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction.getEntities().getElementClass()).execute().getOutput());
+			__execute__(window,systemAction,__getFormClass__(getFormClass()),__getRowClass__(getRowClass()));
 		}
 		
 		
@@ -63,7 +70,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		return window;
 	}
 	
-	protected abstract void __execute__(SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass);
+	protected abstract void __execute__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass);
 	
 	protected Class<? extends Form> __getFormClass__(Class<? extends Form> aClass){
 		return aClass;

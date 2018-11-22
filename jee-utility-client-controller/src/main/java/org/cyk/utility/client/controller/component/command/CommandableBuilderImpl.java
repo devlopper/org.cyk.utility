@@ -7,6 +7,9 @@ import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuild
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.internationalization.InternalizationKeyStringType;
+import org.cyk.utility.internationalization.InternalizationStringBuilder;
+import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemAction;
 
 public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<Commandable> implements CommandableBuilder,Serializable {
@@ -37,15 +40,22 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		
 		String name = getName();
 		if(__injectStringHelper__().isBlank(name)) {
-			if(navigation!=null) {
-				SystemAction systemAction = navigation.getSystemAction();
-				if(systemAction == null && navigation.getIdentifierBuilder()!=null)
-					systemAction = navigation.getIdentifierBuilder().getSystemAction();
-				
-				if(systemAction!=null) {
-					name = systemAction.getIdentifier().toString();
-				}
-			}
+			InternalizationStringBuilder nameInternalization = getNameInternalization();
+			if(nameInternalization==null) {
+				if(navigation!=null) {
+					SystemAction systemAction = navigation.getSystemAction();
+					if(systemAction == null && navigation.getIdentifierBuilder()!=null)
+						systemAction = navigation.getIdentifierBuilder().getSystemAction();
+					
+					if(systemAction!=null) {
+						name = __inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput();
+					}
+				}	
+			}else
+				name = nameInternalization.execute().getOutput();
+			
+		}else {
+			
 		}
 		commandable.setName(name);
 	}
@@ -59,6 +69,16 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	public CommandableBuilder setName(String name) {
 		this.name = name;
 		return this;
+	}
+	
+	@Override
+	public CommandableBuilder setNameInternalization(InternalizationStringBuilder nameInternalization) {
+		return (CommandableBuilder) super.setNameInternalization(nameInternalization);
+	}
+	
+	@Override
+	public CommandableBuilder setNameInternalizationKeyValue(String nameInternalizationKeyValue) {
+		return (CommandableBuilder) super.setNameInternalizationKeyValue(nameInternalizationKeyValue);
 	}
 	
 	@Override

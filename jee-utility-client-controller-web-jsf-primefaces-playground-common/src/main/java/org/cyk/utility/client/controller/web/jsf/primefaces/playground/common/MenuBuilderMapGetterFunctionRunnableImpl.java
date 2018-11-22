@@ -9,7 +9,9 @@ import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
 import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeRowBar;
 import org.cyk.utility.client.controller.entities.MyEntity;
+import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.scope.ScopeSession;
+import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionList;
 
@@ -40,7 +42,7 @@ public class MenuBuilderMapGetterFunctionRunnableImpl extends AbstractFunctionRu
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index").setCommandableNavigationIdentifier("navigationIndexView")
 									)
 							
-						,__inject__(MenuItemBuilder.class).setCommandableName("MyEntity")
+						,__inject__(MenuItemBuilder.class).setCommandableName(__inject__(InternalizationStringBuilder.class).setKeyValue(MyEntity.class).setCase(Case.FIRST_CHARACTER_UPPER).execute().getOutput())
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(MyEntity.class))
 									,__inject__(MenuItemBuilder.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class).setEntityClass(MyEntity.class))
 									)

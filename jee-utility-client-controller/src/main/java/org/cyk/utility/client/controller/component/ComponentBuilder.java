@@ -8,6 +8,8 @@ import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
+import org.cyk.utility.internationalization.InternalizationStringBuilder;
+import org.cyk.utility.internationalization.InternalizationStringBuilderByStringMap;
 import org.cyk.utility.object.Objects;
 
 public interface ComponentBuilder<COMPONENT extends Component> extends FunctionWithPropertiesAsInput<COMPONENT> {
@@ -50,4 +52,14 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	ComponentBuilder<COMPONENT> setUpdatables(Objects updatables);
 	ComponentBuilder<COMPONENT> addUpdatables(Collection<Object> updatables);
 	ComponentBuilder<COMPONENT> addUpdatables(Object...updatables);
+	
+	InternalizationStringBuilderByStringMap getInternalizationStringMap();
+	InternalizationStringBuilderByStringMap getInternalizationStringMap(Boolean injectIfNull);
+	ComponentBuilder<COMPONENT> setInternalizationStringMap(InternalizationStringBuilderByStringMap internalizationStringMap);
+	ComponentBuilder<COMPONENT> setInternalizationKeyValue(String key,String value);
+	
+	InternalizationStringBuilder getNameInternalization();
+	InternalizationStringBuilder getNameInternalization(Boolean injectIfNull);
+	ComponentBuilder<COMPONENT> setNameInternalization(InternalizationStringBuilder nameInternalization);
+	ComponentBuilder<COMPONENT> setNameInternalizationKeyValue(String nameInternalizationKeyValue);
 }
