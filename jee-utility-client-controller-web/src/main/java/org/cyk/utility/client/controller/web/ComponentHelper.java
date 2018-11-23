@@ -26,6 +26,7 @@ import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
 @Singleton @Named
@@ -102,6 +103,10 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	
 	public Boolean isCommandableRenderTypeLink(Object object) {
 		return object instanceof CommandableRenderTypeLink;
+	}
+	
+	public Class<?> getSystemActionReadClass(){
+		return SystemActionRead.class;
 	}
 	
 	public Class<?> getSystemActionUpdateClass(){

@@ -8,10 +8,9 @@ import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
 import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeRowBar;
-import org.cyk.utility.client.controller.entities.MyEntity;
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
+import org.cyk.utility.client.controller.entities.myentity.MyEntity;
+import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntity;
 import org.cyk.utility.scope.ScopeSession;
-import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionList;
 
@@ -41,8 +40,14 @@ public class MenuBuilderMapGetterFunctionRunnableImpl extends AbstractFunctionRu
 						,__inject__(MenuItemBuilder.class).setCommandableName("Navigation")
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index").setCommandableNavigationIdentifier("navigationIndexView")
 									)
+						
+						,__inject__(MenuItemBuilder.class).setCommandableName("Entités")
+							.addChild(
+									__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(MyEntity.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(MyEntity.class))
+									,__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(VerySimpleEntity.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(VerySimpleEntity.class))
+									)	
 							
-						,__inject__(MenuItemBuilder.class).setCommandableName(__inject__(InternalizationStringBuilder.class).setKeyValue(MyEntity.class).setCase(Case.FIRST_CHARACTER_UPPER).execute().getOutput())
+						,__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(MyEntity.class)
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(MyEntity.class))
 									,__inject__(MenuItemBuilder.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class).setEntityClass(MyEntity.class))
 									)

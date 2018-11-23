@@ -20,7 +20,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListImpl extend
 	protected Class<? extends Row> __getRowClass__(Class<? extends Row> aClass) {
 		SystemAction systemAction = getSystemAction();
 		if(systemAction!=null)
-			aClass = __inject__(ControllerLayer.class).getRowClass(systemAction.getEntities().getElementClass(), systemAction);
+			aClass = __inject__(ControllerLayer.class).getRowClass(systemAction);
 		return aClass;
 	}
 	

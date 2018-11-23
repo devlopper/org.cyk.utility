@@ -10,7 +10,7 @@ import org.cyk.utility.client.controller.data.FormData;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.system.action.SystemAction;
 
-public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl extends AbstractWindowContainerManagedWindowBuilderEditImpl implements WindowContainerManagedWindowBuilderEditData,Serializable {
+public abstract class AbstractWindowContainerManagedWindowBuilderReadDataImpl extends AbstractWindowContainerManagedWindowBuilderReadImpl implements WindowContainerManagedWindowBuilderReadData,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -26,11 +26,10 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 			}
 						
 			ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
-			viewBuilder.addComponentBuilderByObjectByFieldNames(form, Form.PROPERTY_TITLE).addRoles(ComponentRole.TITLE);
-			
+			viewBuilder.addComponentBuilderByObjectByFieldNames(form, Form.PROPERTY_TITLE).addRoles(ComponentRole.TITLE);			
 			__execute__(form,data,viewBuilder);
 			
-			viewBuilder.addComponentBuilderByObjectByMethodName(form, Form.METHOD_SUBMIT,systemAction);
+			//viewBuilder.addComponentBuilderByObjectByMethodName(form, Form.METHOD_SUBMIT,systemAction);
 				
 			setView(viewBuilder);
 		}

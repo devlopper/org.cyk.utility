@@ -22,14 +22,14 @@ public interface ControllerLayer extends Singleton {
 	WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder();
 	
 	Class<Form> getFormClass(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
-	Class<Form> getFormClass(Class<?> entityClass,SystemAction systemAction);
+	Class<Form> getFormClass(SystemAction systemAction);
 	
 	Form injectForm(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
-	Form injectForm(Class<?> entityClass,SystemAction systemAction);
+	Form injectForm(SystemAction systemAction);
 	
 	Class<Row> getRowClass(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
-	Class<Row> getRowClass(Class<?> entityClass,SystemAction systemAction);
+	Class<Row> getRowClass(SystemAction systemAction);
 	
 	Row injectRow(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
-	Row injectRow(Class<?> entityClass,SystemAction systemAction);
+	Row injectRow(SystemAction systemAction);
 }

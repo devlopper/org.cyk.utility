@@ -7,7 +7,7 @@ import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
-import org.cyk.utility.client.controller.entities.MyEntityImpl;
+import org.cyk.utility.client.controller.entities.myentity.MyEntityImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.throwable.ThrowableHelper;

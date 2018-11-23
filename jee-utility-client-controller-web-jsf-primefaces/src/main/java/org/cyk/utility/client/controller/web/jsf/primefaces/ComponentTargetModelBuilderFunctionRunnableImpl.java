@@ -248,12 +248,12 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		dataTable.setReflow(Boolean.TRUE);
 		
 		UIComponent uiComponent =__build__(grid.getView(ViewMap.HEADER));
-		if(uiComponent!=null) {
-			System.out.println(((CommandButton)uiComponent.getChildren().get(0)).getUpdate());
-			((CommandButton)uiComponent.getChildren().get(0)).setUpdate("");
-			//System.out.println(uiComponent.getChildren().get(0));
+		if(uiComponent!=null)
 			dataTable.setHeader(uiComponent);
-		}
+		
+		uiComponent =__build__(grid.getView(ViewMap.FOOTER));
+		if(uiComponent!=null)
+			dataTable.setFooter(uiComponent);
 		
 		Objects objects = grid.getObjects();
 		if(__inject__(CollectionHelper.class).isEmpty(objects)) {

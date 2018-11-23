@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.log.Log;
 import org.cyk.utility.method.MethodHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.StringConstant;
@@ -151,7 +150,7 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	}
 	
 	@Override
-	public Class<?> getByName(String name) {
+	public Class<?> getByName(String name,Boolean isReturnNullIfNotFound) {
 		Class<?> clazz = null;
 		if(__inject__(StringHelper.class).isBlank(name)) {
 			
@@ -159,10 +158,19 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 			try {
 				clazz = Class.forName(name);
 			} catch (Exception exception) {
-				__inject__(Log.class).executeThrowable(exception);
+				if(exception instanceof ClassNotFoundException && Boolean.TRUE.equals(isReturnNullIfNotFound))
+					clazz = null;
+				else
+					throw new RuntimeException(exception);
+				//__inject__(Log.class).executeThrowable(exception);
 			}	
 		}
 		return clazz;
+	}
+	
+	@Override
+	public Class<?> getByName(String name) {
+		return getByName(name, Boolean.TRUE);
 	}
 	
 	@Override

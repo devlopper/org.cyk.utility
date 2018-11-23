@@ -10,8 +10,8 @@ import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl extends AbstractWindowContainerManagedWindowBuilderListImpl implements WindowContainerManagedWindowBuilderListData,Serializable {
@@ -22,7 +22,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 		ViewBuilder viewBuilder = null;
 		if(rowClass!=null) {
 			@SuppressWarnings({ "rawtypes" })
-			GridBuilder gridBuilder = __inject__(GridBuilder.class).setRowClass(rowClass)
+			GridBuilder gridBuilder = __inject__(GridBuilder.class).setRowClass(rowClass).setRowDataClass(systemAction.getEntities().getElementClass())
 				.addObjects((Collection)getGridObjects())
 				;
 			
@@ -30,13 +30,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 			if(columnsFieldNames!=null)
 				gridBuilder.addColumnsByFieldNames(columnsFieldNames.get());
 			
-			gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandablesBySystemActionClasses(SystemActionUpdate.class,SystemActionDelete.class);
-			
-			gridBuilder.getCreateRowCommandable(Boolean.TRUE)
-			.setNavigationIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class).setEntityClass(systemAction.getEntities().getElementClass()))
-			;
-			
-			gridBuilder.getCreateRowCommandable(Boolean.TRUE).setCommandFunctionActionClass(SystemActionCreate.class);
+			gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandablesBySystemActionClasses(SystemActionRead.class,SystemActionUpdate.class,SystemActionDelete.class);
 			
 			LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
 			gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);

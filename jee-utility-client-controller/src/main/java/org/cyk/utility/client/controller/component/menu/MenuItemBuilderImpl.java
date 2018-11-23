@@ -72,6 +72,12 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	}
 	
 	@Override
+	public MenuItemBuilder setCommandableNameInternalizationKeyValue(Object key) {
+		getCommandable(Boolean.TRUE).getNameInternalization(Boolean.TRUE).setKeyValue(key);
+		return this;
+	}
+	
+	@Override
 	public MenuItemBuilder addChild(Object... child) {
 		return (MenuItemBuilder) super.addChild(child);
 	}

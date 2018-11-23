@@ -13,6 +13,7 @@ import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionList;
+import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.system.layer.SystemLayerController;
 
@@ -54,6 +55,8 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 			if(__inject__(SystemLayerController.class).getEntityLayer().isPackage(entityClass.getName())) {
 				if(SystemActionCreate.class.isAssignableFrom(systemActionClass) || SystemActionUpdate.class.isAssignableFrom(systemActionClass) || SystemActionDelete.class.isAssignableFrom(systemActionClass))
 					name = EDIT;
+				else if(SystemActionRead.class.isAssignableFrom(systemActionClass))
+					name = READ;
 				else if(SystemActionList.class.isAssignableFrom(systemActionClass))
 					name = LIST;
 				if(__inject__(StringHelper.class).isNotBlank(name))
@@ -77,8 +80,11 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 	
 	@Override
 	public WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder(SystemAction systemAction) {
-		return systemAction == null || systemAction.getEntities() == null ? null 
-				: injectWindowContainerManagedWindowBuilder(systemAction.getEntities().getElementClass(), systemAction.getClass()).setSystemAction(systemAction);
+		WindowContainerManagedWindowBuilder builder = systemAction == null || systemAction.getEntities() == null ? null 
+				: injectWindowContainerManagedWindowBuilder(systemAction.getEntities().getElementClass(), systemAction.getClass());
+		if(builder!=null)
+			builder.setSystemAction(systemAction);
+		return builder;
 	}
 	
 	@Override
@@ -95,6 +101,8 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 			if(__inject__(SystemLayerController.class).getEntityLayer().isPackage(entityClass.getName())) {
 				if(SystemActionCreate.class.isAssignableFrom(systemActionClass) || SystemActionUpdate.class.isAssignableFrom(systemActionClass) || SystemActionDelete.class.isAssignableFrom(systemActionClass))
 					name = EDIT_FORM;
+				else if(SystemActionRead.class.isAssignableFrom(systemActionClass))
+					name = READ_FORM;
 				if(__inject__(StringHelper.class).isNotBlank(name))
 					clazz = (Class<Form>) __inject__(ClassHelper.class).getByName(entityClass.getName()+name);
 			}
@@ -103,8 +111,8 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 	}
 	
 	@Override
-	public Class<Form> getFormClass(Class<?> entityClass, SystemAction systemAction) {
-		return getFormClass(entityClass, systemAction == null ? null :systemAction.getClass());
+	public Class<Form> getFormClass(SystemAction systemAction) {
+		return systemAction == null  || systemAction.getEntities() == null ? null : getFormClass(systemAction.getEntities().getElementClass(), systemAction.getClass());
 	}
 	
 	@Override
@@ -114,8 +122,8 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 	}
 	
 	@Override
-	public Form injectForm(Class<?> entityClass, SystemAction systemAction) {
-		return injectForm(entityClass, systemAction == null ? null :systemAction.getClass());
+	public Form injectForm(SystemAction systemAction) {
+		return systemAction == null  || systemAction.getEntities() == null ? null : injectForm(systemAction.getEntities().getElementClass(), systemAction.getClass());
 	}
 	
 	@Override
@@ -134,8 +142,8 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 	}
 	
 	@Override
-	public Class<Row> getRowClass(Class<?> entityClass, SystemAction systemAction) {
-		return getRowClass(entityClass, systemAction == null ? null :systemAction.getClass());
+	public Class<Row> getRowClass(SystemAction systemAction) {
+		return systemAction == null || systemAction.getEntities() == null ? null : getRowClass(systemAction.getEntities().getElementClass(), systemAction.getClass());
 	}
 	
 	@Override
@@ -145,8 +153,8 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 	}
 	
 	@Override
-	public Row injectRow(Class<?> entityClass, SystemAction systemAction) {
-		return injectRow(entityClass, systemAction == null ? null :systemAction.getClass());
+	public Row injectRow(SystemAction systemAction) {
+		return systemAction == null || systemAction.getEntities() == null ? null : injectRow(systemAction.getEntities().getElementClass(), systemAction.getClass());
 	}
 	
 	/**/
@@ -158,6 +166,7 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 	private static final String FORM = "Form";
 	private static final String ROW = "Row";
 	private static final String EDIT_FORM = EDIT+FORM;
+	private static final String READ_FORM = READ+FORM;
 	private static final String READ_ROW = READ+ROW;
 	//private static final String FORM_DATA = "FormData";
 }

@@ -72,6 +72,10 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	GridBuilder setCommandablesColumnCommandableMap(CommandableBuilderByClassMap commandablesColumnCommandableMap);
 	
 	GridBuilder setRowClass(Class<? extends Row> rowClass);
+	Class<? extends Row> getRowClass();
+	
+	GridBuilder setRowDataClass(Class<?> rowDataClass);
+	Class<?> getRowDataClass();
 	
 	CommandableBuilder getCreateRowCommandable();
 	CommandableBuilder getCreateRowCommandable(Boolean injectIfNull);

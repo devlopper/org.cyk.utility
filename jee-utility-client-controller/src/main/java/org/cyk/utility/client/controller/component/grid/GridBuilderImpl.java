@@ -44,6 +44,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	private CommandableBuilderByClassMap commandablesColumnCommandableMap;
 	private ViewBuilderMap viewMap;
 	private CommandableBuilder createRowCommandable;
+	private Class<?> rowDataClass;
 	
 	@Override
 	protected void __execute__(Grid grid) {
@@ -192,10 +193,12 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 			if(headerView == null) {
 				CommandableBuilder createRowCommandable = getCreateRowCommandable();
 				if(createRowCommandable == null) {
-					createRowCommandable = getCreateRowCommandable(Boolean.TRUE);
+					Class<?> rowDataClass = getRowDataClass();
+					if(rowDataClass!=null) {
+						createRowCommandable = getCreateRowCommandable(Boolean.TRUE);	
+						createRowCommandable.getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class).setEntityClass(rowDataClass));
+					}
 				}
-				
-				//createRowCommandable.getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class)/*.setEntityClass(MyEntity.class)*/);
 				
 				if(createRowCommandable!=null) {
 					headerView = __inject__(ViewBuilder.class).setComponentsBuilder(__inject__(ComponentsBuilder.class).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE));
@@ -464,6 +467,22 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	public GridBuilder setRowClass(Class<? extends org.cyk.utility.client.controller.data.Row> rowClass) {
 		getRows(Boolean.TRUE).setRowClass(rowClass);
 		return this;
+	}
+	
+	@Override
+	public Class<? extends org.cyk.utility.client.controller.data.Row> getRowClass() {
+		return getRows(Boolean.TRUE).getRowClass();
+	}
+	
+	@Override
+	public GridBuilder setRowDataClass(Class<?> rowDataClass) {
+		this.rowDataClass = rowDataClass;
+		return this;
+	}
+	
+	@Override
+	public Class<?> getRowDataClass() {
+		return rowDataClass;
 	}
 	
 	@Override
