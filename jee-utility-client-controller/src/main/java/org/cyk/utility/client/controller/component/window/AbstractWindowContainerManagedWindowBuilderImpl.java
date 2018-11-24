@@ -39,6 +39,8 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		window.setMenuMap(menuMap);
 		
 		SystemAction systemAction = getSystemAction();
+		if(systemAction == null)
+			systemAction = __inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class);
 		
 		Object instance = null;
 		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete) {
@@ -121,14 +123,6 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	public WindowContainerManagedWindowBuilder setSystemAction(SystemAction systemAction) {
 		this.systemAction = systemAction;
 		return this;
-	}
-	
-	@Override
-	public SystemAction getSystemAction(Boolean getFromRequestIfNull) {
-		SystemAction systemAction = getSystemAction();
-		if(systemAction == null)
-			setSystemAction(systemAction = __inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class));
-		return systemAction;
 	}
 	
 	@Override

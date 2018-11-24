@@ -7,7 +7,6 @@ import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.client.controller.component.window.WindowContainerManagedWindowBuilder;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
-import org.cyk.utility.request.RequestParameterValueMapper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -85,12 +84,6 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 		if(builder!=null)
 			builder.setSystemAction(systemAction);
 		return builder;
-	}
-	
-	@Override
-	public WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder() {
-		SystemAction systemAction = __inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class);
-		return injectWindowContainerManagedWindowBuilder(systemAction);
 	}
 	
 	@Override

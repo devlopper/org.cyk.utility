@@ -19,7 +19,6 @@ public interface ControllerLayer extends Singleton {
 	
 	WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
 	WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder(SystemAction systemAction);
-	WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder();
 	
 	Class<Form> getFormClass(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
 	Class<Form> getFormClass(SystemAction systemAction);

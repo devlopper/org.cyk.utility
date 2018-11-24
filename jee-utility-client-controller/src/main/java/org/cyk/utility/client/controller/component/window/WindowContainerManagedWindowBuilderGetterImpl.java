@@ -5,12 +5,12 @@ import java.io.Serializable;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.request.RequestParameterValueMapper;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.throwable.ThrowableHelper;
 
 public class WindowContainerManagedWindowBuilderGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<WindowContainerManagedWindowBuilder> implements WindowContainerManagedWindowBuilderGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private SystemAction systemAction;
-	//private Boolean isGetSystemActionFromRequestParameters;
 	
 	@Override
 	protected WindowContainerManagedWindowBuilder __execute__() throws Exception {
@@ -20,8 +20,14 @@ public class WindowContainerManagedWindowBuilderGetterImpl extends AbstractFunct
 		}
 		Class<WindowContainerManagedWindowBuilder> windowContainerManagedWindowBuilderClass = __inject__(WindowContainerManagedWindowBuilderClassGetter.class).setSystemAction(systemAction)
 				.execute().getOutput();
-		WindowContainerManagedWindowBuilder windowContainerManagedWindowBuilder = (WindowContainerManagedWindowBuilder) __inject__(windowContainerManagedWindowBuilderClass);
-		windowContainerManagedWindowBuilder.setSystemAction(systemAction);
+		
+		WindowContainerManagedWindowBuilder windowContainerManagedWindowBuilder = null;
+		if(windowContainerManagedWindowBuilderClass==null) {
+			__inject__(ThrowableHelper.class).throwRuntimeException("No WindowContainerManagedWindowBuilder found for "+systemAction.getIdentifier());
+		}else {
+			windowContainerManagedWindowBuilder = (WindowContainerManagedWindowBuilder) __inject__(windowContainerManagedWindowBuilderClass);
+			windowContainerManagedWindowBuilder.setSystemAction(systemAction);	
+		}
 		return windowContainerManagedWindowBuilder;
 	}
 	

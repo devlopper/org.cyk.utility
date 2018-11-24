@@ -13,37 +13,37 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	private static final long serialVersionUID = 1L;
 
 	private Window window;
-	
-	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		WindowBuilder windowBuilder = __getWindowBuilder__();
-		if(windowBuilder!=null)
-			setWindow(windowBuilder.execute().getOutput());
+	private WindowBuilder __windowBuilder__;
 		
-		Window window = getWindow();
-		if(window!=null) {
-			Theme theme = window.getTheme();
-			if(theme == null) {
-				Class<? extends Theme> themeClass = __getThemeClass__();
-				if(themeClass!=null) {
-					theme = __inject__(themeClass);
-					window.setTheme(theme);
-				}
-			}
-			
-			if(theme!=null) {
-				theme.process(window);	
-			}	
-		}
-	}
-	
 	protected <THEME extends Theme> Class<THEME> __getThemeClass__(){
 		return __inject__(ThemeClassGetter.class).execute().getOutput();
 	}
 	
 	@Override
 	public Window getWindow() {
+		if(__windowBuilder__ == null) {
+			try {
+				__windowBuilder__ = __getWindowBuilder__();
+			} catch (Exception exception) {
+				__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).execute().getOutput();
+			}
+			
+			setWindow(__windowBuilder__.execute().getOutput());
+			if(window!=null) {
+				Theme theme = window.getTheme();
+				if(theme == null) {
+					Class<? extends Theme> themeClass = __getThemeClass__();
+					if(themeClass!=null) {
+						theme = __inject__(themeClass);
+						window.setTheme(theme);
+					}
+				}
+				
+				if(theme!=null) {
+					theme.process(window);	
+				}	
+			}
+		}
 		return window;
 	}
 	
@@ -55,16 +55,26 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	
 	/**/
 	
-	protected String __getWindowTitleValue__() {
+	protected WindowBuilder __getWindowBuilder__() {
+		WindowBuilder windowBuilder = null;
+		WindowContainerManagedWindowBuilder windowContainerManagedWindowBuilder = __getWindowContainerManagedWindowBuilder__();
+		if(windowContainerManagedWindowBuilder == null) {
+			windowBuilder = __injectWindowBuilder__().setView(__getViewBuilder__()).setMenuMap(__getMenuBuilderMap__());
+			String titleValue = __getWindowTitleValue__();
+			if(__inject__(StringHelper.class).isNotBlank(titleValue))
+				windowBuilder.setTitleValue(titleValue);	
+		}else {
+			windowBuilder = windowContainerManagedWindowBuilder.execute().getOutput();
+		}
+		return windowBuilder;
+	}
+	
+	protected WindowContainerManagedWindowBuilder __getWindowContainerManagedWindowBuilder__() {
 		return null;
 	}
 	
-	protected WindowBuilder __getWindowBuilder__() {
-		WindowBuilder windowBuilder = __injectWindowBuilder__().setView(__getViewBuilder__()).setMenuMap(__getMenuBuilderMap__());
-		String titleValue = __getWindowTitleValue__();
-		if(__inject__(StringHelper.class).isNotBlank(titleValue))
-			windowBuilder.setTitleValue(titleValue);
-		return windowBuilder;
+	protected String __getWindowTitleValue__() {
+		return null;
 	}
 	
 	protected ViewBuilder __getViewBuilder__() {

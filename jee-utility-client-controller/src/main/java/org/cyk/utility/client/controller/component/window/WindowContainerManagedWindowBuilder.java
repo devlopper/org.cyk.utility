@@ -18,7 +18,6 @@ public interface WindowContainerManagedWindowBuilder extends FunctionWithPropert
 	WindowContainerManagedWindowBuilder setView(ViewBuilder view);
 	
 	SystemAction getSystemAction();
-	SystemAction getSystemAction(Boolean getFromRequestIfNull);
 	WindowContainerManagedWindowBuilder setSystemAction(SystemAction systemAction);
 	
 	Class<? extends Form> getFormClass();

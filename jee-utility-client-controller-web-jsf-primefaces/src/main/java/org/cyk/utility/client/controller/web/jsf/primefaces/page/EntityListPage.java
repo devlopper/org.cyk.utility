@@ -5,7 +5,8 @@ import java.io.Serializable;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.utility.client.controller.component.window.WindowBuilder;
+import org.cyk.utility.client.controller.component.window.WindowContainerManagedWindowBuilder;
+import org.cyk.utility.client.controller.component.window.WindowContainerManagedWindowBuilderGetter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 
 import lombok.Getter;
@@ -16,8 +17,8 @@ public class EntityListPage extends AbstractPageContainerManagedImpl implements 
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected WindowBuilder __getWindowBuilder__() {
-		return __injectControllerLayer__().injectWindowContainerManagedWindowBuilder().execute().getOutput();
+	protected WindowContainerManagedWindowBuilder __getWindowContainerManagedWindowBuilder__() {
+		return __inject__(WindowContainerManagedWindowBuilderGetter.class).execute().getOutput();
 	}
 	
 }
