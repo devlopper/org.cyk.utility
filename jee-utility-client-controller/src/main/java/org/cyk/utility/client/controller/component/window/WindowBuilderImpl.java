@@ -26,18 +26,15 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		OutputStringTextBuilder title = getTitle();
 		if(title!=null)
 			window.setTitle(title.execute().getOutput());
-		
 		ViewBuilder view = getView();
 		if(view!=null)
 			window.setView(view.execute().getOutput());
-		
 		MenuBuilderMap menuMap = getMenuMap();
 		if(menuMap!=null) {
 			window.setMenuMap(__inject__(MenuMap.class));
 			for(Map.Entry<Scope,MenuBuilder> entry : menuMap.getEntries())
 				window.getMenuMap().set(entry.getKey(),entry.getValue().execute().getOutput());
 		}
-		
 		Theme theme = getTheme();
 		window.setTheme(theme);
 	}

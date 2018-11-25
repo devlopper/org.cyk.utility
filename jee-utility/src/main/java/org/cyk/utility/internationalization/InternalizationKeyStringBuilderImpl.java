@@ -1,8 +1,11 @@
 package org.cyk.utility.internationalization;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.Case;
@@ -19,6 +22,10 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 		String string = null;
 		Object key = getValue();
 		if(key!=null) {
+			if(key instanceof String) {
+				
+			}
+			
 			if(key instanceof SystemAction)
 				key = ((SystemAction)key).getClass();
 			
@@ -32,9 +39,20 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 				//if(__injectClassHelper__().isInstanceOf(clazz, AbstractSystemActionImpl.class))
 					key = StringUtils.substringBefore(key.toString(), "Impl");
 			}
-						
-			string = __injectStringHelper__().concatenate(
-					__injectStringHelper__().applyCase(__injectStringHelper__().splitByCharacterTypeCamelCase(key.toString()),Case.LOWER),CharacterConstant.DOT.toString());
+			
+			String[] strings = StringUtils.split(key.toString(),DOT);
+			Collection<String> tokens = null;
+			
+			if(__inject__(ArrayHelper.class).isNotEmpty(strings)) {
+				tokens = new ArrayList<>();
+				for(String index : strings) {
+					tokens.addAll(__injectStringHelper__().splitByCharacterTypeCamelCase(index));
+				}
+				string = __injectStringHelper__().concatenate(tokens,DOT).toLowerCase();
+			}
+			
+			//string = __injectStringHelper__().concatenate(
+			//		__injectStringHelper__().applyCase(__injectStringHelper__().splitByCharacterTypeCamelCase(key.toString()),Case.LOWER),CharacterConstant.DOT.toString());
 			
 			if(__injectStringHelper__().isNotBlank(string)) {
 				InternalizationKeyStringType type = getType();
@@ -66,5 +84,9 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 		this.type = type;
 		return this;
 	}
+	
+	/**/
+	
+	private static final String DOT = CharacterConstant.DOT.toString();
 
 }

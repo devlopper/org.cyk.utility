@@ -11,6 +11,7 @@ import org.cyk.utility.field.FieldName;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.instance.InstanceGetter;
 import org.cyk.utility.internationalization.InternalizationKeyStringType;
+import org.cyk.utility.internationalization.InternalizationPhraseBuilder;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.request.RequestParameterValueMapper;
 import org.cyk.utility.string.Case;
@@ -58,17 +59,18 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(systemAction == null) {
 			
 		}else {
-			window.setTitleValue(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER)
-					.setKeyType(InternalizationKeyStringType.NOUN)
-					.execute().getOutput()
-					+" "
-					+__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction.getEntities().getElementClass()).execute().getOutput());
+			window.setTitleValue(
+				__inject__(InternalizationPhraseBuilder.class).addStringsByKeys(
+					__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.NOUN)
+					,systemAction.getEntities().getElementClass()).execute().getOutput()
+				);
 			__execute__(window,systemAction,__getFormClass__(getFormClass()),__getRowClass__(getRowClass()));
 		}
 		
 		
 		ViewBuilder view = getView();
 		window.setView(view);
+		
 		return window;
 	}
 	

@@ -8,7 +8,7 @@ import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
 import org.cyk.utility.client.controller.message.MessagesBuilder;
 import org.cyk.utility.notification.Notification;
-import org.cyk.utility.notification.NotificationSeverityError;
+import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.system.action.SystemAction;
 
 public class CommandFunctionImpl extends AbstractControllerFunctionImpl implements CommandFunction,Serializable {
@@ -37,12 +37,13 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 		Collection<Notification> notifications = null;
 		Throwable throwable = (Throwable) getProperties().getThrowable();
 		if(throwable == null) {
-			notifications = __injectCollectionHelper__().instanciate(__inject__(Notification.class).setSummary("Opération exécutée.")
-					.setDetails("L'opération a été exécutée avec succès."));
+			notifications = __injectCollectionHelper__().instanciate(__inject__(NotificationBuilder.class)
+					.setSummaryInternalizationStringKeyValue("operation.execution.success.summary")
+					.setDetailsInternalizationStringKeyValue("operation.execution.success.details")
+					.execute().getOutput());
 		}else {
 			//System.out.println("TO BE REMOVED ::: CommandFunctionImpl.execute() : ERROR : "+throwable);
-			notifications = __injectCollectionHelper__().instanciate(__inject__(Notification.class).setSummary(throwable.toString())
-					.setDetails(throwable.toString()).setSeverity(__inject__(NotificationSeverityError.class)));
+			notifications = __injectCollectionHelper__().instanciate(__inject__(NotificationBuilder.class).setThrowable(throwable).execute().getOutput());
 		}
 		
 		if(__injectCollectionHelper__().isNotEmpty(notifications)) {

@@ -64,4 +64,13 @@ public class InternalizationStringBuilderUnitTest extends AbstractArquillianUnit
 		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
 		assertionHelper.assertEquals("création", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionCreate.class).setKeyType(InternalizationKeyStringType.NOUN).execute().getOutput());		
 	}
+	
+	@Test
+	public void is_l_operation_a_ete_executee_avec_succes_whenKeyIsOperationExecutionSuccessSummary(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("l'opération a été exécutée avec succès.", __inject__(InternalizationStringBuilder.class).setKeyValue("operation.execution.success.summary").execute().getOutput());	
+		assertionHelper.assertEquals("L'opération a été exécutée avec succès.", __inject__(InternalizationStringBuilder.class).setKeyValue("operation.execution.success.summary").setCase(Case.FIRST_CHARACTER_UPPER).execute().getOutput());	
+	}
+	
+	
 }

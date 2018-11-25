@@ -57,6 +57,11 @@ public class InternalizationKeyStringBuilderUnitTest extends AbstractArquillianU
 	}
 	
 	@Test
+	public void camel_dot_case(){
+		assertionHelper.assertEquals("camel.case", __inject__(InternalizationKeyStringBuilder.class).setValue("camel.case").execute().getOutput());
+	}
+	
+	@Test
 	public void systemActionCreate(){
 		assertionHelper.assertEquals("create", __inject__(InternalizationKeyStringBuilder.class).setValue(SystemActionCreate.class).execute().getOutput());
 		assertionHelper.assertEquals("create", __inject__(InternalizationKeyStringBuilder.class).setValue(__inject__(SystemActionCreate.class)).execute().getOutput());

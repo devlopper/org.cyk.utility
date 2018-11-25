@@ -8,54 +8,108 @@ import org.cyk.utility.internationalization.InternalizationStringBuilder;
 public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Notification> implements NotificationBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		setSeverity(__inject__(NotificationSeverityInformation.class));
-		setSummaryInternalizationStringBuilder(__inject__(InternalizationStringBuilder.class));
-		setDetailsInternalizationStringBuilder(__inject__(InternalizationStringBuilder.class));
-	}
+	private Throwable throwable;
+	private NotificationSeverity severity;
+	private InternalizationStringBuilder summaryInternalizationString;
+	private InternalizationStringBuilder detailsInternalizationString;
 	
 	@Override
 	protected Notification __execute__() throws Exception {
 		Notification notification = __inject__(Notification.class);
-		notification.setSeverity(getSeverity());
-		notification.setSummary(getSummaryInternalizationStringBuilder().execute().getOutput());
-		notification.setDetails(getDetailsInternalizationStringBuilder().execute().getOutput());
+		Throwable throwable = getThrowable();
+		NotificationSeverity severity = getSeverity();
+		if(severity == null) {
+			if(throwable == null)
+				severity = __inject__(NotificationSeverityInformation.class);
+			else
+				severity = __inject__(NotificationSeverityError.class);
+		}
+		notification.setSeverity(severity);
+		
+		InternalizationStringBuilder summaryInternalizationString = getSummaryInternalizationString();
+		if(summaryInternalizationString==null) {
+			if(throwable!=null)
+				notification.setSummary(throwable.toString());
+		}else
+			notification.setSummary(summaryInternalizationString.execute().getOutput());
+		
+		InternalizationStringBuilder detailsInternalizationString = getDetailsInternalizationString();
+		if(detailsInternalizationString==null) {
+			if(throwable!=null)
+				notification.setDetails(throwable.toString());
+		}else
+			notification.setDetails(detailsInternalizationString.execute().getOutput());
+		
 		return notification;
 	}
 	
 	@Override
+	public Throwable getThrowable() {
+		return throwable;
+	}
+	
+	@Override
+	public NotificationBuilder setThrowable(Throwable throwable) {
+		this.throwable = throwable;
+		return this;
+	}
+	
+	@Override
 	public NotificationSeverity getSeverity() {
-		return (NotificationSeverity) getProperties().getSeverity();
+		return severity;
 	}
 
 	@Override
 	public NotificationBuilder setSeverity(NotificationSeverity severity) {
-		getProperties().setSeverity(severity);
+		this.severity = severity;
 		return this;
 	}
 
 	@Override
-	public InternalizationStringBuilder getSummaryInternalizationStringBuilder() {
-		return (InternalizationStringBuilder) getProperties().get("SummaryInternalizationStringBuilder");
+	public InternalizationStringBuilder getSummaryInternalizationString() {
+		return summaryInternalizationString;
+	}
+	
+	@Override
+	public InternalizationStringBuilder getSummaryInternalizationString(Boolean injectIfNull) {
+		return (InternalizationStringBuilder) __getInjectIfNull__(FIELD_SUMMARY_INTERNALIZATION_STRING, injectIfNull);
 	}
 
 	@Override
-	public NotificationBuilder setSummaryInternalizationStringBuilder(InternalizationStringBuilder summaryInternalizationStringBuilder) {
-		getProperties().set("SummaryInternalizationStringBuilder", summaryInternalizationStringBuilder);
+	public NotificationBuilder setSummaryInternalizationString(InternalizationStringBuilder summaryInternalizationString) {
+		this.summaryInternalizationString = summaryInternalizationString;
+		return this;
+	}
+	
+	@Override
+	public NotificationBuilder setSummaryInternalizationStringKeyValue(Object value) {
+		getSummaryInternalizationString(Boolean.TRUE).setKeyValue(value);
 		return this;
 	}
 
 	@Override
-	public InternalizationStringBuilder getDetailsInternalizationStringBuilder() {
-		return (InternalizationStringBuilder) getProperties().get("DetailsInternalizationStringBuilder");
+	public InternalizationStringBuilder getDetailsInternalizationString() {
+		return detailsInternalizationString;
+	}
+	
+	@Override
+	public InternalizationStringBuilder getDetailsInternalizationString(Boolean injectIfNull) {
+		return (InternalizationStringBuilder) __getInjectIfNull__(FIELD_DETAILS_INTERNALIZATION_STRING, injectIfNull);
 	}
 
 	@Override
-	public NotificationBuilder setDetailsInternalizationStringBuilder(InternalizationStringBuilder detailsInternalizationStringBuilder) {
-		getProperties().set("DetailsInternalizationStringBuilder", detailsInternalizationStringBuilder);
+	public NotificationBuilder setDetailsInternalizationString(InternalizationStringBuilder detailsInternalizationString) {
+		this.detailsInternalizationString = detailsInternalizationString;
 		return this;
 	}
+	
+	@Override
+	public NotificationBuilder setDetailsInternalizationStringKeyValue(Object value) {
+		getDetailsInternalizationString(Boolean.TRUE).setKeyValue(value);
+		return this;
+	}
+	
+	public static final String FIELD_SUMMARY_INTERNALIZATION_STRING = "summaryInternalizationString";
+	public static final String FIELD_DETAILS_INTERNALIZATION_STRING = "detailsInternalizationString";
 
 }

@@ -8,10 +8,16 @@ public interface NotificationBuilder extends FunctionWithPropertiesAsInput<Notif
 	NotificationSeverity getSeverity();
 	NotificationBuilder setSeverity(NotificationSeverity severity);
 	
-	InternalizationStringBuilder getSummaryInternalizationStringBuilder();
-	NotificationBuilder setSummaryInternalizationStringBuilder(InternalizationStringBuilder summaryInternalizationStringBuilder);
+	InternalizationStringBuilder getSummaryInternalizationString();
+	InternalizationStringBuilder getSummaryInternalizationString(Boolean injectIfNull);
+	NotificationBuilder setSummaryInternalizationString(InternalizationStringBuilder summaryInternalizationString);
+	NotificationBuilder setSummaryInternalizationStringKeyValue(Object value);
 	
-	InternalizationStringBuilder getDetailsInternalizationStringBuilder();
-	NotificationBuilder setDetailsInternalizationStringBuilder(InternalizationStringBuilder detailsInternalizationStringBuilder);
+	InternalizationStringBuilder getDetailsInternalizationString();
+	InternalizationStringBuilder getDetailsInternalizationString(Boolean injectIfNull);
+	NotificationBuilder setDetailsInternalizationString(InternalizationStringBuilder detailsInternalizationString);
+	NotificationBuilder setDetailsInternalizationStringKeyValue(Object value);
 	
+	Throwable getThrowable();
+	NotificationBuilder setThrowable(Throwable throwable);
 }

@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.notification.Notification;
+import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.notification.Notifications;
 
 public class MessagesBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Object>> implements MessagesBuilder,Serializable {
@@ -38,6 +39,20 @@ public class MessagesBuilderImpl extends AbstractFunctionWithPropertiesAsInputIm
 	public MessagesBuilder addNotifications(Notification... notifications) {
 		getNotifications(Boolean.TRUE).add(notifications);
 		return this;
+	}
+	
+	@Override
+	public MessagesBuilder addNotificationsFromThrowables(Collection<Throwable> throwables) {
+		if(__injectCollectionHelper__().isNotEmpty(throwables)) {
+			for(Throwable index : throwables)
+				addNotifications(__inject__(NotificationBuilder.class).setThrowable(index).execute().getOutput());
+		}
+		return null;
+	}
+	
+	@Override
+	public MessagesBuilder addNotificationsFromThrowables(Throwable... throwables) {
+		return addNotificationsFromThrowables(__injectCollectionHelper__().instanciate(throwables));
 	}
 
 	/**/

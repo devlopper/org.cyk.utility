@@ -14,4 +14,6 @@ public interface MessagesBuilder extends FunctionWithPropertiesAsInput<Collectio
 	MessagesBuilder addNotifications(Collection<Notification> notifications);
 	MessagesBuilder addNotifications(Notification...notifications);
 	
+	MessagesBuilder addNotificationsFromThrowables(Collection<Throwable> throwables);
+	MessagesBuilder addNotificationsFromThrowables(Throwable...throwables);
 }

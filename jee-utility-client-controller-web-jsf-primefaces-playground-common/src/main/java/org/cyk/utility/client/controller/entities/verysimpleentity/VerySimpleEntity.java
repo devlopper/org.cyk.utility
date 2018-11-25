@@ -25,9 +25,9 @@ public interface VerySimpleEntity extends Data {
 	/**/
 	
 	Collection<VerySimpleEntity> COLLECTION = DependencyInjection.inject(CollectionHelper.class).instanciate(
-			DependencyInjection.inject(VerySimpleEntity.class).setIdentifier("12").setCode("C01").setName("Name01").setDescription("Line0101\nLine0102")
-			,DependencyInjection.inject(VerySimpleEntity.class).setIdentifier("17").setCode("C02").setName("Name02").setDescription("Line0201\nLine0202")
-			,DependencyInjection.inject(VerySimpleEntity.class).setIdentifier("05").setCode("C03").setName("Name03").setDescription("Line0301\nLine0302")
+			DependencyInjection.inject(VerySimpleEntity.class).setIdentifier("1").setCode("C01").setName("Name01").setDescription("Line0101\nLine0102")
+			,DependencyInjection.inject(VerySimpleEntity.class).setIdentifier("2").setCode("C02").setName("Name02").setDescription("Line0201\nLine0202")
+			,DependencyInjection.inject(VerySimpleEntity.class).setIdentifier("3").setCode("C03").setName("Name03").setDescription("Line0301\nLine0302")
 			);
 	
 	

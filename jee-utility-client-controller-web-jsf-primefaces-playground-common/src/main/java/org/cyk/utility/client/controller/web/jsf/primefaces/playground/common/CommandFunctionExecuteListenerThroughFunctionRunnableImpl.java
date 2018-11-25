@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.command.CommandFunction;
 import org.cyk.utility.client.controller.component.command.CommandFunctionExecuteListenerThrough;
 import org.cyk.utility.client.controller.entities.myentity.MyEntity;
+import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntity;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -26,6 +27,11 @@ public class CommandFunctionExecuteListenerThroughFunctionRunnableImpl extends A
 						MyEntity.COLLECTION.add( ((MyEntity) data).setIdentifier(__inject__(RandomHelper.class).getNumeric(4).toString()) );
 					else if(action instanceof SystemActionDelete)
 						MyEntity.COLLECTION.remove((MyEntity) data);
+				}else if(data instanceof VerySimpleEntity) {
+					if(action instanceof SystemActionCreate)
+						VerySimpleEntity.COLLECTION.add( ((VerySimpleEntity) data).setIdentifier(__inject__(RandomHelper.class).getNumeric(4).toString()) );
+					else if(action instanceof SystemActionDelete)
+						VerySimpleEntity.COLLECTION.remove((VerySimpleEntity) data);
 				}
 			}
 		});
