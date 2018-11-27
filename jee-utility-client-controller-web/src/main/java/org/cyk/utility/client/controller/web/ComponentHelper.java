@@ -25,8 +25,11 @@ import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.random.RandomHelper;
+import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
 @Singleton @Named
@@ -105,6 +108,10 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 		return object instanceof CommandableRenderTypeLink;
 	}
 	
+	public Class<?> getSystemActionCreateClass(){
+		return SystemActionCreate.class;
+	}
+	
 	public Class<?> getSystemActionReadClass(){
 		return SystemActionRead.class;
 	}
@@ -115,6 +122,14 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	
 	public Class<?> getSystemActionDeleteClass(){
 		return SystemActionDelete.class;
+	}
+	
+	public Class<?> getSystemActionSelectClass(){
+		return SystemActionSelect.class;
+	}
+	
+	public Class<?> getSystemActionProcessClass(){
+		return SystemActionProcess.class;
 	}
 	
 	/**/

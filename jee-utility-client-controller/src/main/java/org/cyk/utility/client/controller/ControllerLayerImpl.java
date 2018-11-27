@@ -12,7 +12,9 @@ import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionList;
+import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.system.layer.SystemLayerController;
 
@@ -58,6 +60,10 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 					name = READ;
 				else if(SystemActionList.class.isAssignableFrom(systemActionClass))
 					name = LIST;
+				else if(SystemActionSelect.class.isAssignableFrom(systemActionClass))
+					name = SELECT;
+				else if(SystemActionProcess.class.isAssignableFrom(systemActionClass))
+					name = PROCESS;
 				if(__inject__(StringHelper.class).isNotBlank(name))
 					clazz = (Class<WindowContainerManagedWindowBuilder>) __inject__(ClassHelper.class).getByName(entityClass.getName()+name+WINDOW_BUILDER);
 			}
@@ -127,6 +133,8 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 			if(__inject__(SystemLayerController.class).getEntityLayer().isPackage(entityClass.getName())) {
 				if(SystemActionList.class.isAssignableFrom(systemActionClass))
 					name = READ_ROW;
+				else if(SystemActionSelect.class.isAssignableFrom(systemActionClass))
+					name = SELECT_ROW;
 				if(__inject__(StringHelper.class).isNotBlank(name))
 					clazz = (Class<Row>) __inject__(ClassHelper.class).getByName(entityClass.getName()+name);
 			}
@@ -150,16 +158,40 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 		return systemAction == null || systemAction.getEntities() == null ? null : injectRow(systemAction.getEntities().getElementClass(), systemAction.getClass());
 	}
 	
+	@Override
+	public Class<?> getDataTransferClassFromEntityClass(Class<?> entityClass) {
+		return __inject__(SystemLayerController.class).getDataTransferClassFromEntityClass(entityClass);
+	}
+	
+	@Override
+	public Class<?> getDataTransferClassFromEntity(Object entity) {
+		return __inject__(SystemLayerController.class).getDataTransferClassFromEntity(entity);
+	}
+	
+	@Override
+	public Class<?> getDataRepresentationClassFromEntityClass(Class<?> entityClass) {
+		return __inject__(SystemLayerController.class).getRepresentationClassFromEntityClass(entityClass);
+	}
+	
+	@Override
+	public Class<?> getDataRepresentationClassFromEntity(Object entity) {
+		return __inject__(SystemLayerController.class).getRepresentationClassFromEntity(entity);
+	}
+	
+	
 	/**/
 	
 	private static final String EDIT = "Edit";
 	private static final String READ = "Read";
 	private static final String LIST = "List";
+	private static final String SELECT = "Select";
+	private static final String PROCESS = "Process";
 	private static final String WINDOW_BUILDER = "WindowBuilder";
 	private static final String FORM = "Form";
 	private static final String ROW = "Row";
 	private static final String EDIT_FORM = EDIT+FORM;
 	private static final String READ_FORM = READ+FORM;
 	private static final String READ_ROW = READ+ROW;
+	private static final String SELECT_ROW = SELECT+ROW;
 	//private static final String FORM_DATA = "FormData";
 }

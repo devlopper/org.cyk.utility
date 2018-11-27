@@ -47,7 +47,7 @@ public class MessagesBuilderImpl extends AbstractFunctionWithPropertiesAsInputIm
 			for(Throwable index : throwables)
 				addNotifications(__inject__(NotificationBuilder.class).setThrowable(index).execute().getOutput());
 		}
-		return null;
+		return this;
 	}
 	
 	@Override

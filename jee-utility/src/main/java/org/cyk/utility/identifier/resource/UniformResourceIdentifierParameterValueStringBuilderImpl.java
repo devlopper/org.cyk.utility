@@ -7,7 +7,9 @@ import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionList;
+import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
 public class UniformResourceIdentifierParameterValueStringBuilderImpl extends AbstractStringFunctionImpl implements UniformResourceIdentifierParameterValueStringBuilder,Serializable {
@@ -32,6 +34,10 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 					_value = "delete";
 				else if(clazz.equals(SystemActionList.class))
 					_value = "list";
+				else if(clazz.equals(SystemActionSelect.class))
+					_value = "select";
+				else if(clazz.equals(SystemActionProcess.class))
+					_value = "process";
 				else
 					_value = clazz.getSimpleName().toLowerCase();
 			}else if(value instanceof Objectable) {

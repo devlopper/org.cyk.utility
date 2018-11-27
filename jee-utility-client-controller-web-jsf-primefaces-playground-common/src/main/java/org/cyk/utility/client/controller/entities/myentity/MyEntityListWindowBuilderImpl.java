@@ -13,7 +13,6 @@ public class MyEntityListWindowBuilderImpl extends AbstractWindowContainerManage
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		addGridColumnsFieldNamesWithPrefix(RowData.PROPERTY_DATA, MyEntity.PROPERTY_CODE,MyEntity.PROPERTY_NAME,MyEntity.PROPERTY_DESCRIPTION);
-		setGridObjects(MyEntity.COLLECTION);
 	}
 	
 	@Override

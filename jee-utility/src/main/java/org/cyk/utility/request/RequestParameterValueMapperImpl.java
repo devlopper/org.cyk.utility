@@ -13,7 +13,9 @@ import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionList;
+import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
 public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements RequestParameterValueMapper,Serializable {
@@ -58,6 +60,10 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 						value = __inject__(SystemActionDelete.class);
 					else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionList.class).execute().getOutput().equals(parameterValue))
 						value = __inject__(SystemActionList.class);
+					else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionSelect.class).execute().getOutput().equals(parameterValue))
+						value = __inject__(SystemActionSelect.class);
+					else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionProcess.class).execute().getOutput().equals(parameterValue))
+						value = __inject__(SystemActionProcess.class);
 					
 					Class<?> aClass = __inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class);
 					if(aClass!=null)

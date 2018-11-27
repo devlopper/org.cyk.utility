@@ -25,6 +25,12 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>__entity__SelectView</from-outcome>
+			<to-view-id>/private/__entity__/select.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
 	</navigation-rule>
 	
 </faces-config>

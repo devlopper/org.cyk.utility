@@ -39,7 +39,9 @@ import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.datatable.DataTable;
@@ -130,12 +132,18 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 				if(navigationSystemAction instanceof SystemActionCreate) {
 					url = commandable.getNavigation().getUniformResourceLocator().toString();
 				}else {
-					if(navigationSystemAction instanceof SystemActionRead)
+					if(navigationSystemAction instanceof SystemActionCreate)
+						systemActionClass = "systemActionCreateClass";
+					else if(navigationSystemAction instanceof SystemActionRead)
 						systemActionClass = "systemActionReadClass";
 					else if(navigationSystemAction instanceof SystemActionUpdate)
 						systemActionClass = "systemActionUpdateClass";
 					else if(navigationSystemAction instanceof SystemActionDelete)
 						systemActionClass = "systemActionDeleteClass";
+					else if(navigationSystemAction instanceof SystemActionSelect)
+						systemActionClass = "systemActionSelectClass";
+					else if(navigationSystemAction instanceof SystemActionProcess)
+						systemActionClass = "systemActionProcessClass";
 					
 					url = "#{indexRow.getUrlBySystemActionClass(componentHelper."+systemActionClass+")}";
 				}

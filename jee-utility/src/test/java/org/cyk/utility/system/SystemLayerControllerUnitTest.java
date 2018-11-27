@@ -10,6 +10,7 @@ import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerController;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
 import org.cyk.utility.system.layer.SystemSubLayer;
+import org.junit.Test;
 
 public class SystemLayerControllerUnitTest extends AbstractSystemLayerUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
@@ -159,6 +160,22 @@ public class SystemLayerControllerUnitTest extends AbstractSystemLayerUnitTestWi
 	protected Collection<String> __getImplementationFalsePackages__() {
 		return Arrays.asList("a.controller.c.impl.b","a.controller.c.impl","controller.c.impl.b","controller.c.impl",
 				"impl","controller");
+	}
+	
+	@Test
+	public void getDataTransferClassNameFromEntityClassName() {
+		assertionHelper.assertEquals("org.cyk.system.actor.server.representation.entities.MyDataDto"
+				, __inject__(SystemLayerController.class).getDataTransferClassNameFromEntityClassName("org.cyk.system.actor.client.controller.entities.MyData"));
+		assertionHelper.assertEquals("org.cyk.system.actor.server.representation.entities.p01.MyDataDto"
+				, __inject__(SystemLayerController.class).getDataTransferClassNameFromEntityClassName("org.cyk.system.actor.client.controller.entities.p01.MyData"));
+	}
+	
+	@Test
+	public void getRepresentationClassNameFromEntityClassName() {
+		assertionHelper.assertEquals("org.cyk.system.actor.server.representation.api.MyDataRepresentation"
+				, __inject__(SystemLayerController.class).getRepresentationClassNameFromEntityClassName("org.cyk.system.actor.client.controller.entities.MyData"));
+		assertionHelper.assertEquals("org.cyk.system.actor.server.representation.api.p01.MyDataRepresentation"
+				, __inject__(SystemLayerController.class).getRepresentationClassNameFromEntityClassName("org.cyk.system.actor.client.controller.entities.p01.MyData"));
 	}
 
 	@Override

@@ -13,7 +13,6 @@ public class VerySimpleEntityListWindowBuilderImpl extends AbstractWindowContain
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		addGridColumnsFieldNamesWithPrefix(RowData.PROPERTY_DATA, VerySimpleEntity.PROPERTY_CODE,VerySimpleEntity.PROPERTY_NAME,VerySimpleEntity.PROPERTY_DESCRIPTION);
-		setGridObjects(VerySimpleEntity.COLLECTION);
 	}
 	
 	@Override

@@ -50,10 +50,9 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.d
 	}
 	
 	protected static ProxyGetter __injectProxyGetter__(Object request,String uri,Class<?> aClass) {
-		return __injectProxyGetter__().setRequest(request).setUri(uri).setClazz(aClass);
+		return __injectProxyGetter__().setClassUniformResourceIdentifierStringRequest(request).setClazz(aClass);
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected static <T> T __getProxy__(Class<T> aClass,Object request,String uri) {
 		return (T) __injectProxyGetter__(request,uri, aClass).execute().getOutput();
 	}
@@ -72,7 +71,6 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.d
 	
 	/* Response */
 	
-	@SuppressWarnings("unchecked")
 	protected static <T> Collection<T> __readEntityAsCollection__(Response response,Class<T> aClass) {
 		return (Collection<T>) response.readEntity(__inject__(TypeHelper.class).instanciateGenericCollectionParameterizedTypeForJaxrs(Collection.class,aClass));
 	}

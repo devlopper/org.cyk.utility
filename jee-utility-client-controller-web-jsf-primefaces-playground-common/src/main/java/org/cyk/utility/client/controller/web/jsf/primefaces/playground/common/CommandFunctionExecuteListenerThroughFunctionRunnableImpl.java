@@ -23,10 +23,7 @@ public class CommandFunctionExecuteListenerThroughFunctionRunnableImpl extends A
 				SystemAction action = function.getAction();
 				Object data = function.getProperties().getData();
 				if(data instanceof MyEntity) {
-					if(action instanceof SystemActionCreate)
-						MyEntity.COLLECTION.add( ((MyEntity) data).setIdentifier(__inject__(RandomHelper.class).getNumeric(4).toString()) );
-					else if(action instanceof SystemActionDelete)
-						MyEntity.COLLECTION.remove((MyEntity) data);
+					
 				}else if(data instanceof VerySimpleEntity) {
 					if(action instanceof SystemActionCreate)
 						VerySimpleEntity.COLLECTION.add( ((VerySimpleEntity) data).setIdentifier(__inject__(RandomHelper.class).getNumeric(4).toString()) );

@@ -1,0 +1,47 @@
+package org.cyk.utility.client.controller.proxy;
+
+import java.io.Serializable;
+
+import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+
+public class ProxyGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements ProxyGetter,Serializable {
+	private static final long serialVersionUID = 1L;
+
+	private ProxyClassUniformResourceIdentifierStringBuilder classUniformResourceIdentifierString;
+	
+	@Override
+	public ProxyClassUniformResourceIdentifierStringBuilder getClassUniformResourceIdentifierString() {
+		return classUniformResourceIdentifierString;
+	}
+	
+	@Override
+	public ProxyClassUniformResourceIdentifierStringBuilder getClassUniformResourceIdentifierString(Boolean injectIfNull) {
+		return (ProxyClassUniformResourceIdentifierStringBuilder) __getInjectIfNull__(FIELD_CLASS_UNIFORM_RESOURCE_IDENTIFIER_STRING, injectIfNull);
+	}
+	
+	@Override
+	public ProxyGetter setClassUniformResourceIdentifierString(ProxyClassUniformResourceIdentifierStringBuilder classUniformResourceIdentifierString) {
+		this.classUniformResourceIdentifierString = classUniformResourceIdentifierString;
+		return this;
+	}
+	
+	@Override
+	public ProxyGetter setClassUniformResourceIdentifierStringRequest(Object request) {
+		getClassUniformResourceIdentifierString(Boolean.TRUE).setRequest(request);
+		return this;
+	}
+	
+	@Override
+	public Class<?> getClazz() {
+		return (Class<?>) getProperties().getClazz();
+	}
+	
+	@Override
+	public ProxyGetter setClazz(Class<?> aClass) {
+		getProperties().setClass(aClass);
+		return this;
+	}
+	
+	public static final String FIELD_CLASS_UNIFORM_RESOURCE_IDENTIFIER_STRING = "classUniformResourceIdentifierString";
+	
+}

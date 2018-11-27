@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractSystemActionImpl extends AbstractObject implements SystemAction, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -11,6 +12,8 @@ public abstract class AbstractSystemActionImpl extends AbstractObject implements
 	//TODO this one can be a property of CollectionInstance
 	private Boolean isBatchProcessing;
 	private Objects entities;
+	private Objects entitiesIdentifiers;
+	private ValueUsageType entityIdentifierValueUsageType;
 	
 	@Override
 	public Boolean getIsBatchProcessing() {
@@ -45,6 +48,51 @@ public abstract class AbstractSystemActionImpl extends AbstractObject implements
 		return this;
 	}
 	
+	@Override
+	public Class<?> getEntityClass() {
+		Objects objects = getEntities();
+		return objects == null ? null : objects.getElementClass();
+	}
+	
+	@Override
+	public Objects getEntitiesIdentifiers() {
+		return entitiesIdentifiers;
+	}
+	
+	@Override
+	public Objects getEntitiesIdentifiers(Boolean injectIfNull) {
+		return (Objects) __getInjectIfNull__(FIELD_ENTITIES_IDENTIFIERS, injectIfNull);
+	}
+	
+	@Override
+	public Class<?> getEntityIdentifierClass() {
+		return getEntitiesIdentifiers(Boolean.TRUE).getElementClass();
+	}
+	
+	@Override
+	public SystemAction setEntitiesIdentifiers(Objects entitiesIdentifiers) {
+		this.entitiesIdentifiers = entitiesIdentifiers;
+		return this;
+	}
+	
+	@Override
+	public SystemAction setEntityIdentifierClass(Class<?> entityIdentifierClass) {
+		getEntitiesIdentifiers(Boolean.TRUE).setElementClass(entityIdentifierClass);
+		return this;
+	}
+	
+	@Override
+	public SystemAction setEntityIdentifierValueUsageType(ValueUsageType entityIdentifierValueUsageType) {
+		this.entityIdentifierValueUsageType = entityIdentifierValueUsageType;
+		return this;
+	}
+	
+	@Override
+	public ValueUsageType getEntityIdentifierValueUsageType() {
+		return entityIdentifierValueUsageType;
+	}
+	
 	public static final String FIELD_ENTITIES = "entities";
+	public static final String FIELD_ENTITIES_IDENTIFIERS = "entitiesIdentifiers";
 	
 }

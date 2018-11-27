@@ -11,6 +11,13 @@ public interface SystemFunction extends FunctionWithPropertiesAsInputAndVoidAsOu
 
 	SystemAction getAction();
 	SystemFunction setAction(SystemAction action);
+	SystemFunction setActionEntityClass(Class<?> entityClass);
+	SystemFunction addActionEntities(Collection<Object> entities);
+	SystemFunction addActionEntities(Object...entities);
+	
+	SystemFunction setActionEntityIdentifierClass(Class<?> entityIdentifierClass);
+	SystemFunction addActionEntitiesIdentifiers(Collection<Object> entitiesIdentifiers);
+	SystemFunction addActionEntitiesIdentifiers(Object...entitiesIdentifiers);
 	
 	SystemFunction setEntityClass(Class<?> aClass);
 	Class<?> getEntityClass();

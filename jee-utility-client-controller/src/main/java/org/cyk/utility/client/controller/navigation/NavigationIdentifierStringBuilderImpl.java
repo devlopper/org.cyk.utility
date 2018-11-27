@@ -9,7 +9,9 @@ import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionList;
+import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
 public class NavigationIdentifierStringBuilderImpl extends AbstractStringFunctionImpl implements NavigationIdentifierStringBuilder,Serializable {
@@ -38,6 +40,10 @@ public class NavigationIdentifierStringBuilderImpl extends AbstractStringFunctio
 				format.setArguments( FORMAT_ARGUMENT_ACTION,READ);
 			else if(systemAction instanceof SystemActionList)
 				format.setArguments( FORMAT_ARGUMENT_ACTION,LIST);
+			else if(systemAction instanceof SystemActionSelect)
+				format.setArguments( FORMAT_ARGUMENT_ACTION,SELECT);
+			else if(systemAction instanceof SystemActionProcess)
+				format.setArguments( FORMAT_ARGUMENT_ACTION,PROCESS);
 		}
 		return format;
 	}
@@ -58,5 +64,7 @@ public class NavigationIdentifierStringBuilderImpl extends AbstractStringFunctio
 	private static final String EDIT = "Edit";
 	private static final String READ = "Read";
 	private static final String LIST = "List";
+	private static final String SELECT = "Select";
+	private static final String PROCESS = "Process";
 	private static final String __ENTITY__ = "__entity__";
 }

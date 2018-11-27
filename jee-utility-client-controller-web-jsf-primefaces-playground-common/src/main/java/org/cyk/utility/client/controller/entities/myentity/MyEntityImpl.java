@@ -68,11 +68,4 @@ public class MyEntityImpl extends AbstractDataImpl implements MyEntity,Serializa
 	
 	/**/
 	
-	public static MyEntity getByIdentifier(Object identifier) {
-		if(identifier!=null)
-			for(MyEntity index : MyEntity.COLLECTION)
-				if(index.getIdentifier().equals(identifier.toString()))
-					return index;
-		return null;
-	}
 }

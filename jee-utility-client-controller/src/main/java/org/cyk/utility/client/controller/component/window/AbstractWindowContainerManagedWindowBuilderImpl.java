@@ -60,9 +60,9 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 			
 		}else {
 			window.setTitleValue(
-				__inject__(InternalizationPhraseBuilder.class).addStringsByKeys(
-					__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.NOUN)
-					,systemAction.getEntities().getElementClass()).execute().getOutput()
+				__inject__(InternalizationPhraseBuilder.class)
+					.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.NOUN))
+					.addStringsByKeys(systemAction.getEntities().getElementClass()).execute().getOutput()
 				);
 			__execute__(window,systemAction,__getFormClass__(getFormClass()),__getRowClass__(getRowClass()));
 		}

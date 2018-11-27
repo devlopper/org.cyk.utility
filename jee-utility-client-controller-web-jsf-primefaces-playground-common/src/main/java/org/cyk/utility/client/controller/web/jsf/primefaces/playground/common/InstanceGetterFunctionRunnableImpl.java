@@ -6,7 +6,6 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.entities.myentity.MyEntity;
-import org.cyk.utility.client.controller.entities.myentity.MyEntityImpl;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntity;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntityImpl;
 import org.cyk.utility.field.FieldName;
@@ -23,7 +22,7 @@ public class InstanceGetterFunctionRunnableImpl extends AbstractFunctionRunnable
 				if(FieldName.IDENTIFIER.equals(getFunction().getFieldName())) {
 					Object one = null;
 					if(function.getClazz().equals(MyEntity.class))
-						one = MyEntityImpl.getByIdentifier(function.getValue().toString());
+						one = null;//MyEntityImpl.getByIdentifier(function.getValue().toString());
 					else if(function.getClazz().equals(VerySimpleEntity.class))
 						one = VerySimpleEntityImpl.getByIdentifier(function.getValue().toString());
 					Collection<Object> collection = new ArrayList<>();

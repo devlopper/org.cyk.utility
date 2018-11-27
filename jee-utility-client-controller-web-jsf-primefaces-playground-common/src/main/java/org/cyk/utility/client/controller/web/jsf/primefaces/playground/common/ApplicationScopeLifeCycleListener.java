@@ -27,6 +27,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClass(MyEntity.class);
 		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClass(VerySimpleEntity.class);
 		
+		
 		__inject__(StringRepositoryResourceBundle.class).addBundle("org.cyk.utility.client.controller.message");
 	}
 	

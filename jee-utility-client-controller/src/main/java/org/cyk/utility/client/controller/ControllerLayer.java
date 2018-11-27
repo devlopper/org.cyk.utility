@@ -31,4 +31,11 @@ public interface ControllerLayer extends Singleton {
 	
 	Row injectRow(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
 	Row injectRow(SystemAction systemAction);
+	
+	Class<?> getDataTransferClassFromEntityClass(Class<?> entityClass);
+	Class<?> getDataTransferClassFromEntity(Object entity);
+	
+	Class<?> getDataRepresentationClassFromEntityClass(Class<?> entityClass);
+	Class<?> getDataRepresentationClassFromEntity(Object entity);
+	
 }

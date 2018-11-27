@@ -13,6 +13,7 @@ import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEnt
 import org.cyk.utility.scope.ScopeSession;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionList;
+import org.cyk.utility.system.action.SystemActionSelect;
 
 public class MenuBuilderMapGetterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<MenuBuilderMapGetter> implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -43,9 +44,17 @@ public class MenuBuilderMapGetterFunctionRunnableImpl extends AbstractFunctionRu
 						
 						,__inject__(MenuItemBuilder.class).setCommandableName("Entités")
 							.addChild(
+								__inject__(MenuItemBuilder.class).setCommandableName("List").addChild(
 									__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(MyEntity.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(MyEntity.class))
 									,__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(VerySimpleEntity.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(VerySimpleEntity.class))
-									)	
+									)
+								,__inject__(MenuItemBuilder.class).setCommandableName("Selection pour traitement").addChild(
+										__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(MyEntity.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionSelect.class).setEntityClass(MyEntity.class))
+										,__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(VerySimpleEntity.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionSelect.class).setEntityClass(VerySimpleEntity.class))
+										)
+								)
+						
+								
 							
 						,__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(MyEntity.class)
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(MyEntity.class))

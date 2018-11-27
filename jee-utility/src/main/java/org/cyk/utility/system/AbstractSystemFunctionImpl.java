@@ -157,6 +157,51 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	}
 	
 	@Override
+	public SystemFunction setActionEntityClass(Class<?> entityClass) {
+		SystemAction action = getAction();
+		if(action!=null)
+			action.setEntityClass(entityClass);
+		return this;
+	}
+	
+	@Override
+	public SystemFunction addActionEntities(Collection<Object> entities) {
+		SystemAction action = getAction();
+		if(action!=null)
+			action.getEntities(Boolean.TRUE).add(entities);
+		return this;
+	}
+	
+	@Override
+	public SystemFunction addActionEntities(Object... entities) {
+		return addActionEntities(__injectCollectionHelper__().instanciate(entities));
+	}
+	
+	@Override
+	public SystemFunction setActionEntityIdentifierClass(Class<?> entityIdentifierClass) {
+		SystemAction action = getAction();
+		if(action!=null)
+			action.setEntityIdentifierClass(entityIdentifierClass);
+		return this;
+	}
+	
+	@Override
+	public SystemFunction addActionEntitiesIdentifiers(Collection<Object> entitiesIdentifiers) {
+		SystemAction action = getAction();
+		if(action!=null)
+			action.getEntitiesIdentifiers(Boolean.TRUE).add(entitiesIdentifiers);
+		return this;
+	}
+	
+	@Override
+	public SystemFunction addActionEntitiesIdentifiers(Object... entitiesIdentifiers) {
+		SystemAction action = getAction();
+		if(action!=null)
+			action.getEntitiesIdentifiers(Boolean.TRUE).add(entitiesIdentifiers);
+		return this;
+	}
+	
+	@Override
 	public Class<?> getEntityClass() {
 		return (Class<?>) getProperties().getEntityClass();
 	}
