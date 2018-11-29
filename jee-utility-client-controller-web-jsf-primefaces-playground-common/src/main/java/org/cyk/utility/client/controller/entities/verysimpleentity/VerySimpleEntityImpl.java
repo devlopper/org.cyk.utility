@@ -67,12 +67,4 @@ public class VerySimpleEntityImpl extends AbstractDataImpl implements VerySimple
 	public static final String FIELD_DESCRIPTION = "description";
 	
 	/**/
-	
-	public static VerySimpleEntity getByIdentifier(Object identifier) {
-		if(identifier!=null)
-			for(VerySimpleEntity index : VerySimpleEntity.COLLECTION)
-				if(index.getIdentifier().equals(identifier.toString()))
-					return index;
-		return null;
-	}
 }

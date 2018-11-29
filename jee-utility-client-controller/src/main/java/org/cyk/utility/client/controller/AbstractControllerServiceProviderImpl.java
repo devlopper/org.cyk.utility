@@ -24,6 +24,33 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 		return create(object, null);
 	}
 	
+	@Override
+	public ControllerServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
+		____inject____(ControllerFunctionModifier.class).setEntity(object).execute();
+		return this;
+	}
+
+	@Override
+	public ControllerServiceProvider<OBJECT> update(OBJECT object) {
+		return update(object, null);
+	}
+
+	@Override
+	public ControllerServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
+		____inject____(ControllerFunctionRemover.class).setEntity(object).execute();
+		return this;
+	}
+
+	@Override
+	public ControllerServiceProvider<OBJECT> delete(OBJECT object) {
+		return delete(object, null);
+	}
+	
+	@Override
+	public ControllerServiceProvider<OBJECT> deleteAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/**/
 	

@@ -113,7 +113,7 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 	public String getInterfaceNameFromEntityClassName(String entityClassName) {
 		String string = null;
 		//if(getEntityLayer().isPackage(entityClassName)) {
-			string = StringUtils.replace(entityClassName, ".entities.", ".api.")+__inject__(CollectionHelper.class)
+			string = StringUtils.substringBeforeLast(StringUtils.replace(entityClassName, ".entities.", ".api."),"Impl")+__inject__(CollectionHelper.class)
 			.getFirst(getInterfaceLayer().getInterfaceNameRegularExpression().getEndTokens().get());
 		//}
 		return string;

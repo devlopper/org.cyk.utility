@@ -35,14 +35,21 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 	
 	@Override
 	public <ENTITY> ENTITY readOne(Class<ENTITY> aClass, Object identifier, Properties properties) {
-		// TODO Auto-generated method stub
-		return null;
+		ENTITY entity;
+		ControllerEntity<ENTITY> controller = (ControllerEntity<ENTITY>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
+		if(controller == null){
+			ControllerFunctionReader function = __inject__(ControllerFunctionReader.class);
+			function.getProperties().copyFrom(properties, Properties.VALUE_USAGE_TYPE);
+			entity = (ENTITY) function.setEntityClass(aClass).setEntityIdentifier(identifier).execute().getProperties().getEntity();
+		}else{
+			entity = controller.readOne(identifier, properties);
+		}
+		return entity;
 	}
 
 	@Override
 	public <ENTITY> ENTITY readOne(Class<ENTITY> aClass, Object identifier) {
-		// TODO Auto-generated method stub
-		return null;
+		return readOne(aClass, identifier, null);
 	}
 
 	@Override
@@ -63,6 +70,23 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 	public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass) {
 		//TODO handle pagination
 		return readMany(aClass, null);
+	}
+	
+	@Override
+	public ControllerServiceProvider<Object> delete(Object object, Properties properties) {
+		ControllerEntity<Object> controller = (ControllerEntity<Object>)  __injectControllerLayer__().injectInterfaceClassFromEntity(object);
+		if(controller == null){
+			super.delete(object, properties);
+		}else{
+			controller.delete(object, properties);
+		}
+		return this;
+	}
+
+	@Override
+	public ControllerServiceProvider<Object> deleteAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

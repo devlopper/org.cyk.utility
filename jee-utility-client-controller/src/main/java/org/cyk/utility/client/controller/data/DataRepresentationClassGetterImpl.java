@@ -14,8 +14,8 @@ public class DataRepresentationClassGetterImpl extends AbstractClassFunctionImpl
 	@Override
 	protected Class __execute__() throws Exception {
 		Class<?> dataClass = getDataClass();
-		Class<?> transferClass = __inject__(ControllerLayer.class).getDataTransferClassFromEntityClass(dataClass);
-		return transferClass;
+		Class<?> representationClass = __inject__(ControllerLayer.class).getDataRepresentationClassFromEntityClass(dataClass);
+		return representationClass;
 	}
 	
 	@Override

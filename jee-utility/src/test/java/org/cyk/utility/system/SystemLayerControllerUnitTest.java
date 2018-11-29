@@ -120,7 +120,9 @@ public class SystemLayerControllerUnitTest extends AbstractSystemLayerUnitTestWi
 	protected Map<String, String> __getExpectedInterfaceNameFromEntityClassName__() {
 		return __inject__(MapHelper.class).instanciateKeyAsStringValueAsString("controller.entities.MyClass","controller.api.MyClassController"
 				,"p.controller.entities.MyClass","p.controller.api.MyClassController"
-				,"p.controller.entities.p1.MyClass","p.controller.api.p1.MyClassController");
+				,"p.controller.entities.p1.MyClass","p.controller.api.p1.MyClassController"
+				,"p.controller.entities.p1.MyClassImpl","p.controller.api.p1.MyClassController"
+				);
 	}
 	
 	@Override
@@ -174,6 +176,8 @@ public class SystemLayerControllerUnitTest extends AbstractSystemLayerUnitTestWi
 	public void getRepresentationClassNameFromEntityClassName() {
 		assertionHelper.assertEquals("org.cyk.system.actor.server.representation.api.MyDataRepresentation"
 				, __inject__(SystemLayerController.class).getRepresentationClassNameFromEntityClassName("org.cyk.system.actor.client.controller.entities.MyData"));
+		assertionHelper.assertEquals("org.cyk.system.actor.server.representation.api.MyDataRepresentation"
+				, __inject__(SystemLayerController.class).getRepresentationClassNameFromEntityClassName("org.cyk.system.actor.client.controller.entities.MyDataImpl"));
 		assertionHelper.assertEquals("org.cyk.system.actor.server.representation.api.p01.MyDataRepresentation"
 				, __inject__(SystemLayerController.class).getRepresentationClassNameFromEntityClassName("org.cyk.system.actor.client.controller.entities.p01.MyData"));
 	}

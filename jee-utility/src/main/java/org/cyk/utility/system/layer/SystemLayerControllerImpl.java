@@ -51,8 +51,11 @@ public class SystemLayerControllerImpl extends AbstractSystemLayerImpl implement
 	@Override
 	public String getRepresentationClassNameFromEntityClassName(String entityClassName) {
 		String name = null;
-		if(entityClassName!=null)
+		if(entityClassName!=null) {
+			if(StringUtils.endsWith(entityClassName, "Impl"))
+				entityClassName = StringUtils.substringBeforeLast(entityClassName, "Impl");
 			name = StringUtils.replaceOnce(entityClassName, ".client.controller.entities.", ".server.representation.api.")+"Representation";
+		}
 		return name;
 	}
 

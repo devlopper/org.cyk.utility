@@ -18,4 +18,7 @@ public interface ControllerEntity<ENTITY> extends ControllerServiceProvider<ENTI
 	Collection<ENTITY> readMany(Properties properties);
 	Collection<ENTITY> readMany();
 	
+	Class<ENTITY> getEntityClass();
+	ControllerEntity<ENTITY> setEntityClass(Class<ENTITY> entityClass);
+	
 }

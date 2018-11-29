@@ -4,12 +4,16 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.AbstractControllerFunctionImpl;
+import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
 import org.cyk.utility.client.controller.message.MessagesBuilder;
 import org.cyk.utility.notification.Notification;
 import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionUpdate;
 
 public class CommandFunctionImpl extends AbstractControllerFunctionImpl implements CommandFunction,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,7 +25,19 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 		getExecutionPhaseTry(Boolean.TRUE).getRun(Boolean.TRUE).addRunnables(new Runnable() {
 			@Override
 			public void run() {
-				__inject__(CommandFunctionExecuteListenerThrough.class).setObject(CommandFunctionImpl.this).execute();
+				SystemAction action = getAction();
+				if(action instanceof SystemActionCreate) {
+					Object object = __injectCollectionHelper__().getFirst(action.getEntities().get());
+					__inject__(Controller.class).create(object);
+				}else if(action instanceof SystemActionUpdate) {
+					Object object = __injectCollectionHelper__().getFirst(action.getEntities().get());
+					__inject__(Controller.class).update(object);
+				}else if(action instanceof SystemActionDelete) {
+					Object object = __injectCollectionHelper__().getFirst(action.getEntities().get());
+					__inject__(Controller.class).delete(object);
+				}else
+					__injectThrowableHelper__().throwRuntimeException("System action not yet handle : "+action.getIdentifier());
+				//__inject__(CommandFunctionExecuteListenerThrough.class).setObject(CommandFunctionImpl.this).execute();
 			}
 		});
 	}

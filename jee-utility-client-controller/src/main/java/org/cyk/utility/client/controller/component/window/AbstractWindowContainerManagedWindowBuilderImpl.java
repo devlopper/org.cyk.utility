@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
 
+import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
@@ -9,7 +10,6 @@ import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.instance.InstanceGetter;
 import org.cyk.utility.internationalization.InternalizationKeyStringType;
 import org.cyk.utility.internationalization.InternalizationPhraseBuilder;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
@@ -20,7 +20,6 @@ import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<WindowBuilder> implements WindowContainerManagedWindowBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -46,9 +45,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		Object instance = null;
 		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete) {
 			Long identifier = __inject__(RequestParameterValueMapper.class).setParameterName(FieldName.IDENTIFIER).execute().getOutputAs(Long.class);
-			instance = __injectCollectionHelper__().getFirst(__inject__(InstanceGetter.class).setClazz(systemAction.getEntities().getElementClass())
-					.setFieldName(FieldName.IDENTIFIER)
-					.setValueUsageType(ValueUsageType.SYSTEM).setValue(identifier).execute().getOutput());	
+			instance = __inject__(Controller.class).readOne(systemAction.getEntities().getElementClass(), identifier);
 		}else if(systemAction instanceof SystemActionCreate) {
 			instance = __inject__(systemAction.getEntities().getElementClass());
 		}
