@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.navigation;
 
 import java.io.Serializable;
 
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNameStringBuilder;
@@ -20,6 +21,7 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	private Objects dynamicParameterNames;
 	private SystemAction systemAction;
 	private NavigationIdentifierStringBuilder identifierBuilder;
+	private Boolean isDeriveParametersFromSystemAction;
 	
 	@Override
 	protected Navigation __execute__() throws Exception {
@@ -66,29 +68,30 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 				url.getString(Boolean.TRUE).getUniformResourceIdentifierString(Boolean.TRUE).setString(urlString);
 				
 				ObjectByObjectMap parameterMap = getParameterMap();
-				if(parameterMap == null) {
+				Boolean isDeriveParametersFromSystemAction = getIsDeriveParametersFromSystemAction();
+				if((isDeriveParametersFromSystemAction == null || Boolean.TRUE.equals(isDeriveParametersFromSystemAction)) && systemAction!=null) {
 					NavigationIdentifierStringBuilder identifierBuilder = getIdentifierBuilder();
 					if(identifierBuilder!=null) {
-						if(systemAction!=null) {
+						if(parameterMap == null) {
 							parameterMap = __inject__(ObjectByObjectMap.class);
 							parameterMap.setIsSequential(Boolean.TRUE);	
-							if(systemAction.getEntities()!=null) {
-								if(systemAction.getEntities().getElementClass()!=null)
-									parameterMap.set(
-											__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(Class.class).execute().getOutput()
-											,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction.getEntities().getElementClass()).execute().getOutput()
-											);
-								if(__injectCollectionHelper__().isNotEmpty(systemAction.getEntities().get()))
-									parameterMap.set(
-											__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(FieldName.IDENTIFIER).execute().getOutput()
-											,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(__injectCollectionHelper__().getFirst(systemAction.getEntities().get())).execute().getOutput()
-											);
-							}
-							parameterMap.set(
-									__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(SystemAction.class).execute().getOutput()
-									,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction).execute().getOutput()
-									);
 						}
+						if(systemAction.getEntities()!=null) {
+							if(systemAction.getEntities().getElementClass()!=null)
+								parameterMap.set(
+										__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(Class.class).execute().getOutput()
+										,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction.getEntities().getElementClass()).execute().getOutput()
+										);
+							if(__injectCollectionHelper__().isNotEmpty(systemAction.getEntities().get()))
+								parameterMap.set(
+										__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(FieldName.IDENTIFIER).execute().getOutput()
+										,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(__injectCollectionHelper__().getFirst(systemAction.getEntities().get())).execute().getOutput()
+										);
+						}
+						parameterMap.set(
+								__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(SystemAction.class).execute().getOutput()
+								,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction).execute().getOutput()
+								);
 					}
 				}
 				url.getString(Boolean.TRUE).getUniformResourceIdentifierString(Boolean.TRUE).setParameterMap(parameterMap);
@@ -185,7 +188,8 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	
 	@Override
 	public NavigationBuilder setParameters(Object... keyValues) {
-		getParameterMap(Boolean.TRUE).set(keyValues);
+		if(__inject__(ArrayHelper.class).isNotEmpty(keyValues))
+			getParameterMap(Boolean.TRUE).set(keyValues);
 		return this;
 	}
 	
@@ -202,6 +206,17 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	@Override
 	public NavigationBuilder setDynamicParameterNames(Objects dynamicParameterNames) {
 		this.dynamicParameterNames = dynamicParameterNames;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsDeriveParametersFromSystemAction() {
+		return isDeriveParametersFromSystemAction;
+	}
+	
+	@Override
+	public NavigationBuilder setIsDeriveParametersFromSystemAction(Boolean isDeriveParametersFromSystemAction) {
+		this.isDeriveParametersFromSystemAction = isDeriveParametersFromSystemAction;
 		return this;
 	}
 	

@@ -6,13 +6,14 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 
-import org.apache.commons.lang.reflect.MethodUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.string.Case;
+import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueConverter;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -25,16 +26,23 @@ public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputA
 		Object value = getValue();
 		Field field = getField();
 		if(object!=null){
-			Class<?> fieldType = __inject__(FieldTypeGetter.class).execute(field).getOutput();
+			Class<?> fieldType = null;
+			if(field == null) {
+				String getMethodName = "get"+__inject__(StringHelper.class).applyCase(getFieldName(), Case.FIRST_CHARACTER_UPPER);
+				Method getMethod = MethodUtils.getAccessibleMethod(object.getClass(), getMethodName);
+				if(getMethod!=null)
+					fieldType = getMethod.getReturnType();
+			}else {
+				fieldType = __inject__(FieldTypeGetter.class).execute(field).getOutput();
+			}
 			Class<?> fieldTypeWrapper = ClassUtils.primitiveToWrapper(fieldType);
 			if(value!=null && !fieldTypeWrapper.equals(value.getClass())) {
 				value = __inject__(ValueConverter.class).execute(value, fieldTypeWrapper).getOutput();
 			}
 			
-			Method method = null;
-			if(value!=null)
-				method = MethodUtils.getAccessibleMethod(object.getClass(), "set"+__injectStringHelper__().applyCase(field.getName(), Case.FIRST_CHARACTER_UPPER)
-						, fieldType);
+			String methodName = "set"+__inject__(StringHelper.class).applyCase(getFieldName(), Case.FIRST_CHARACTER_UPPER);
+			Method method = MethodUtils.getAccessibleMethod(object.getClass(), methodName,fieldType);
+
 			if(method == null) {
 				if(field!=null){
 					try {
@@ -69,7 +77,7 @@ public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputA
 
 	@Override
 	public FieldValueSetter execute(Object object, String fieldName,Object value) {
-		setObject(object).setField(fieldName).setValue(value).execute();
+		setObject(object).setFieldName(fieldName).setField(fieldName).setValue(value).execute();
 		return this;
 	}
 	
@@ -147,7 +155,8 @@ public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputA
 		if(getObject() == null){
 			//TODO log warning
 		}else{
-			setField(__inject__(FieldNameGetter.class).setClazz(getObject().getClass()).setFieldName(fieldName).setValueUsageType(valueUsageType).execute().getOutput());	
+			setFieldName(__inject__(FieldNameGetter.class).setClazz(getObject().getClass()).setFieldName(fieldName).setValueUsageType(valueUsageType).execute().getOutput());
+			setField(getFieldName());	
 		}
 		return this;
 	}

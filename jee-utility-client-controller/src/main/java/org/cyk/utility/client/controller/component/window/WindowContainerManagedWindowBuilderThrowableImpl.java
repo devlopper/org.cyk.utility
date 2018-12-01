@@ -18,6 +18,7 @@ public class WindowContainerManagedWindowBuilderThrowableImpl extends AbstractWi
 	@Override
 	protected void __execute__(WindowBuilder window, SystemAction systemAction, Class<? extends Form> formClass,Class<? extends Row> rowClass) {
 		Throwable throwable = getThrowable();
+		throwable.printStackTrace();
 		window.setTitleValue("ERROR");
 		Collection<Object> messages = __inject__(MessagesBuilder.class).addNotificationsFromThrowables(throwable).execute().getOutput();
 		__inject__(MessageRender.class).addMessages(messages).setType(__inject__(MessageRenderTypeInline.class)).execute();

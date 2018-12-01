@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.cyk.utility.clazz.AbstractClassFunctionImpl;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionList;
+import org.cyk.utility.system.action.SystemActionSelect;
 
 @SuppressWarnings("rawtypes")
 public class RowClassGetterImpl extends AbstractClassFunctionImpl implements RowClassGetter,Serializable {
@@ -17,15 +19,15 @@ public class RowClassGetterImpl extends AbstractClassFunctionImpl implements Row
 		Class clazz = null;
 		SystemAction systemAction = getSystemAction();
 		clazz = __inject__(ControllerLayer.class).getRowClass(systemAction);
-		/*if(clazz == null) {
-			if(systemAction instanceof SystemActionRead) {
+		if(clazz == null) {
+			if(systemAction instanceof SystemActionSelect) {
 				Class<?> entityClass = null;
 				if(systemAction.getEntities()!=null)
 					entityClass = systemAction.getEntities().getElementClass();
-				systemAction = __inject__(SystemActionCreate.class).setEntityClass(entityClass);
-				clazz = __inject__(ControllerLayer.class).getFormClass(systemAction);
+				systemAction = __inject__(SystemActionList.class).setEntityClass(entityClass);
+				clazz = __inject__(ControllerLayer.class).getRowClass(systemAction);
 			}
-		}*/
+		}
 		return clazz;
 	}
 	

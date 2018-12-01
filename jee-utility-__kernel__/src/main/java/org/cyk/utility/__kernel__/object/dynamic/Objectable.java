@@ -18,7 +18,10 @@ public interface Objectable extends org.cyk.utility.__kernel__.object.Objectable
 	
 	Object getIdentifier();
 	Objectable setIdentifier(Object identifier);
-
+	/*
+	Object getExternalIdentifier();
+	Objectable setExternalIdentifier(Object identifier);
+	*/
 	Object getOrderNumber();
 	Objectable setOrderNumber(Object orderNumber);
 	

@@ -23,4 +23,8 @@ public interface SystemAction extends Objectable  {
 	
 	Boolean getIsBatchProcessing();
 	SystemAction setIsBatchProcessing(Boolean isBatchProcessing);
+	/*
+	Object getSubActionIdentifier();
+	SystemAction setSubActionIdentifier(Object subActionIdentifier);
+	*/
 }

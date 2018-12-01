@@ -23,7 +23,7 @@ public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> 
 	}
 	
 	protected Integer __getNumberOfInitialCount__() {
-		return 100;
+		return 3;
 	}
 	
 	protected ENTITY __instanciateOneRandomly__(Integer index) {
@@ -42,9 +42,10 @@ public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> 
 	
 	@Override
 	public ENTITY readOne(Object identifier, Properties properties) {
-		for(ENTITY index : collection)
-			if(__injectFieldHelper__().getFieldValueSystemIdentifier(index).equals(identifier.toString()))
+		for(ENTITY index : collection) {
+			if(__injectFieldHelper__().getFieldValueSystemIdentifier(index).toString().equals(identifier.toString()))
 				return index;
+		}
 		return null;
 	}
 	

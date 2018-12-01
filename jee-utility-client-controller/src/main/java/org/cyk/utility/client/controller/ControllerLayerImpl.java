@@ -102,6 +102,8 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 					name = EDIT_FORM;
 				else if(SystemActionRead.class.isAssignableFrom(systemActionClass))
 					name = READ_FORM;
+				else if(SystemActionProcess.class.isAssignableFrom(systemActionClass))
+					name = PROCESS_FORM;
 				if(__inject__(StringHelper.class).isNotBlank(name))
 					clazz = (Class<Form>) __inject__(ClassHelper.class).getByName(entityClass.getName()+name);
 			}
@@ -191,6 +193,7 @@ public class ControllerLayerImpl extends AbstractSingleton implements Controller
 	private static final String ROW = "Row";
 	private static final String EDIT_FORM = EDIT+FORM;
 	private static final String READ_FORM = READ+FORM;
+	private static final String PROCESS_FORM = PROCESS+FORM;
 	private static final String READ_ROW = READ+ROW;
 	private static final String SELECT_ROW = SELECT+ROW;
 	//private static final String FORM_DATA = "FormData";

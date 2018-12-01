@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.view;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
@@ -227,6 +228,15 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	@Override
 	public ViewBuilder addNavigationCommandablesBySystemActionClasses(Class<? extends SystemAction>... systemActionClasses) {
 		addNavigationCommandablesBySystemActionClasses(__injectCollectionHelper__().instanciate(systemActionClasses));
+		return this;
+	}
+	
+	@Override
+	public ViewBuilder addNavigationCommandableBySystemActionClass(Class<? extends SystemAction> systemActionClass,Object... parameters) {
+		CommandableBuilder commandable = __inject__(CommandableBuilder.class).setNavigationSystemAction(__inject__(systemActionClass));
+		if(__inject__(ArrayHelper.class).isNotEmpty(parameters))
+			commandable.setNavigationParameters(parameters);
+		getCommandables(Boolean.TRUE).add(commandable);
 		return this;
 	}
 	

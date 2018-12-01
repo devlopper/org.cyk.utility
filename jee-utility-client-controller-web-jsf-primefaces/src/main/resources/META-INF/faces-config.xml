@@ -31,6 +31,12 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>__entity__ProcessView</from-outcome>
+			<to-view-id>/private/__entity__/process.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
 	</navigation-rule>
 	
 </faces-config>

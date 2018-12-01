@@ -3,7 +3,10 @@ package org.cyk.utility.client.controller.data;
 import java.io.Serializable;
 
 import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.client.controller.navigation.Navigation;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
+import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.object.ObjectByClassMap;
 import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractRowDataImpl<DATA extends Data> extends AbstractRowImpl implements RowData<DATA>,Serializable {
@@ -31,12 +34,37 @@ public abstract class AbstractRowDataImpl<DATA extends Data> extends AbstractRow
 	
 	@Override
 	public String getUrlBySystemActionClass(Class<? extends SystemAction> aClass) {
+		RowListeners listeners = getListeners();
+		NavigationBuilder navigationBuilder = null;
+		ObjectByClassMap parametersMap = getNavigationParametersMap();
 		String url = null;
 		Data data = getData();
 		SystemAction systemAction = __inject__(aClass);
 		systemAction.getEntities(Boolean.TRUE).setElementClass(dataClass);
 		systemAction.getEntities(Boolean.TRUE).add(data);
-		url = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemAction).execute().getOutput().getUniformResourceLocator().toString();
+		if(parametersMap!=null) {
+			//Object[] parameters = (Object[]) parametersMap.get(aClass);
+		}
+		if(__inject__(CollectionHelper.class).isNotEmpty(listeners))
+			for(RowListener index : listeners.get())
+				index.listenSystemAction(systemAction);
+		navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemAction);
+		
+		if(parametersMap!=null)
+			navigationBuilder.setParameters((Object[]) parametersMap.get(aClass));
+		
+		if(__inject__(CollectionHelper.class).isNotEmpty(listeners))
+			for(RowListener index : listeners.get()) {
+				index.listenNavigationBuilder(navigationBuilder);
+				System.out.println("AbstractRowDataImpl.getUrlBySystemActionClass() : "+index);
+			}
+		Navigation navigation = navigationBuilder.execute().getOutput();
+		
+		if(__inject__(CollectionHelper.class).isNotEmpty(listeners))
+			for(RowListener index : listeners.get())
+				index.listenNavigation(navigation);
+		
+		url = navigation.getUniformResourceLocator().toString();
 		return url;
 	}
 

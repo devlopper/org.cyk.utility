@@ -12,6 +12,7 @@ import org.cyk.utility.client.controller.component.grid.row.RowBuilders;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilderMap;
 import org.cyk.utility.client.controller.data.Row;
+import org.cyk.utility.object.ObjectByClassMap;
 import org.cyk.utility.object.Objects;
 
 public interface GridBuilder extends VisibleComponentBuilder<Grid> {
@@ -58,6 +59,11 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	ColumnBuilder getCommandablesColumn();
 	ColumnBuilder getCommandablesColumn(Boolean injectIfNull);
 	GridBuilder setCommandablesColumn(ColumnBuilder commandablesColumn);
+	
+	ObjectByClassMap getCommandablesColumnCommandablesNavigationsParametersMap();
+	ObjectByClassMap getCommandablesColumnCommandablesNavigationsParametersMap(Boolean injectIfNull);
+	GridBuilder setCommandablesColumnCommandablesNavigationsParametersMap(ObjectByClassMap commandablesColumnCommandablesNavigationsParametersMap);
+	GridBuilder setCommandablesColumnCommandablesNavigationsParameters(Object...parameters);
 	
 	ViewBuilder getCommandablesColumnBodyView(Boolean injectIfNull);
 	//GridBuilder addNavigationCommandablesBySystemActionClasses(Collection<Class<? extends SystemAction>> systemActionClasses);

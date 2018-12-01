@@ -26,8 +26,12 @@ public interface NavigationBuilder extends FunctionWithPropertiesAsInput<Navigat
 	SystemAction getSystemAction();
 	NavigationBuilder setSystemAction(SystemAction systemAction);
 	
+	Boolean getIsDeriveParametersFromSystemAction();
+	NavigationBuilder setIsDeriveParametersFromSystemAction(Boolean isDeriveParametersFromSystemAction);
+	
 	NavigationBuilder setIdentifierBuilder(NavigationIdentifierStringBuilder identifierBuilder);
 	NavigationIdentifierStringBuilder getIdentifierBuilder();
 	NavigationIdentifierStringBuilder getIdentifierBuilder(Boolean injectIfNull);
 	NavigationBuilder setIdentifierBuilderSystemAction(SystemAction systemAction);
+
 }

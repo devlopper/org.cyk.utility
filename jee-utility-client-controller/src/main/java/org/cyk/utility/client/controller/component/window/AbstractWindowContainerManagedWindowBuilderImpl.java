@@ -18,6 +18,7 @@ import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
@@ -43,7 +44,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 			systemAction = __inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class);
 		
 		Object instance = null;
-		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete) {
+		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete || systemAction instanceof SystemActionProcess) {
 			Long identifier = __inject__(RequestParameterValueMapper.class).setParameterName(FieldName.IDENTIFIER).execute().getOutputAs(Long.class);
 			instance = __inject__(Controller.class).readOne(systemAction.getEntities().getElementClass(), identifier);
 		}else if(systemAction instanceof SystemActionCreate) {

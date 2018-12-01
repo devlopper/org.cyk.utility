@@ -28,6 +28,7 @@ import org.cyk.utility.client.controller.component.view.ViewBuilderMap;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.object.ObjectByClassMap;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.system.action.SystemActionCreate;
 
@@ -45,10 +46,13 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	private ViewBuilderMap viewMap;
 	private CommandableBuilder createRowCommandable;
 	private Class<?> rowDataClass;
+	private ObjectByClassMap commandablesColumnCommandablesNavigationsParametersMap;
 	
 	@Override
 	protected void __execute__(Grid grid) {
 		super.__execute__(grid);
+		ObjectByClassMap commandablesColumnCommandablesNavigationsParametersMap = getCommandablesColumnCommandablesNavigationsParametersMap();
+		
 		Objects objects = getObjects();
 		if(__injectCollectionHelper__().isNotEmpty(objects)) {
 			RowBuilders rows = getRows();
@@ -62,6 +66,10 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 				if(index instanceof org.cyk.utility.client.controller.data.Data) {
 					if(rowClass!=null) {
 						row = __inject__(rowClass);
+						if(row instanceof org.cyk.utility.client.controller.data.Row) {
+							((org.cyk.utility.client.controller.data.Row)row).setListeners(rows.getRowListeners());
+							((org.cyk.utility.client.controller.data.Row)row).setNavigationParametersMap(commandablesColumnCommandablesNavigationsParametersMap);
+						}
 						if(row instanceof org.cyk.utility.client.controller.data.RowData) {
 							((org.cyk.utility.client.controller.data.RowData<Data>)row).setData((Data) index);
 						}
@@ -464,6 +472,28 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	}
 	
 	@Override
+	public ObjectByClassMap getCommandablesColumnCommandablesNavigationsParametersMap() {
+		return commandablesColumnCommandablesNavigationsParametersMap;
+	}
+	
+	@Override
+	public GridBuilder setCommandablesColumnCommandablesNavigationsParametersMap(ObjectByClassMap commandablesColumnCommandablesNavigationsParametersMap) {
+		this.commandablesColumnCommandablesNavigationsParametersMap = commandablesColumnCommandablesNavigationsParametersMap;
+		return this;
+	}
+	
+	@Override
+	public ObjectByClassMap getCommandablesColumnCommandablesNavigationsParametersMap(Boolean injectIfNull) {
+		return (ObjectByClassMap) __getInjectIfNull__(FIELD_COMMANDABLES_COLUMN_COMMANDABLES_NAVIGATIONS_PARAMETERS_MAP, injectIfNull);
+	}
+	
+	@Override
+	public GridBuilder setCommandablesColumnCommandablesNavigationsParameters(Object... parameters) {
+		getCommandablesColumnCommandablesNavigationsParametersMap(Boolean.TRUE).set(parameters);
+		return this;
+	}
+	
+	@Override
 	public GridBuilder setRowClass(Class<? extends org.cyk.utility.client.controller.data.Row> rowClass) {
 		getRows(Boolean.TRUE).setRowClass(rowClass);
 		return this;
@@ -513,4 +543,5 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	public static final String FIELD_COMMANDABLES_COLUMN_COMMANDABLE_MAP = "commandablesColumnCommandableMap";
 	public static final String FIELD_VIEW_MAP = "viewMap";
 	public static final String FIELD_CREATE_ROW_COMMANDABLE = "createRowCommandable";
+	public static final String FIELD_COMMANDABLES_COLUMN_COMMANDABLES_NAVIGATIONS_PARAMETERS_MAP = "commandablesColumnCommandablesNavigationsParametersMap";
 }
