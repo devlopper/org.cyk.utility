@@ -16,10 +16,18 @@ public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> 
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		collection = new ArrayList<>();
+		Collection<ENTITY> initialCollection = __getInitialCollection__();
+		if(initialCollection!=null)
+			collection.addAll(initialCollection);
+	}
+	
+	protected Collection<ENTITY> __getInitialCollection__(){
+		Collection<ENTITY> collection = new ArrayList<>();
 		Integer count = __getNumberOfInitialCount__();
 		if(count!=null && count > 0)
 			for(Integer index = 1 ; index <= count ; index = index + 1)
 				collection.add(__instanciateOneRandomly__(index));
+		return collection;
 	}
 	
 	protected Integer __getNumberOfInitialCount__() {

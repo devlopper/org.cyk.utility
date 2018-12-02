@@ -7,6 +7,10 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemActionList;
+import org.cyk.utility.system.action.SystemActionProcess;
+import org.cyk.utility.system.action.SystemActionSelect;
 
 public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<MenuItem> implements MenuItemBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -78,8 +82,63 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	}
 	
 	@Override
+	public MenuItemBuilder addEntitiesList(Class<?>... classes) {
+		for(Class<?> index : classes)
+			addEntityList(index);
+		return this;
+	}
+	
+	@Override
+	public MenuItemBuilder addEntitiesSelect(Class<?>... classes) {
+		for(Class<?> index : classes)
+			addEntitySelect(index,null);
+		return this;
+	}
+	
+	@Override
+	public MenuItemBuilder addEntityList(Class<?> aClass) {
+		return addChild(__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(aClass)
+				.setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(aClass)));
+	}
+	
+	@Override
+	public MenuItemBuilder addEntitySelect(Class<?> aClass,String processingActionIdentifier) {
+		MenuItemBuilder menuItemBuilder = __inject__(MenuItemBuilder.class);
+		SystemAction process = __inject__(SystemActionProcess.class);
+		if(__injectStringHelper__().isNotBlank(processingActionIdentifier)) {
+			process.setIdentifier(processingActionIdentifier);
+			menuItemBuilder.setCommandableNameInternalizationKeyValue(processingActionIdentifier);
+		}
+		SystemAction action = __inject__(SystemActionSelect.class).setEntityClass(aClass).setNextAction(process);
+		return addChild(menuItemBuilder.setCommandableNavigationIdentifierBuilderSystemAction(action));
+	}
+	
+	@Override
+	public MenuItemBuilder addEntityCreate(Class<?> aClass) {
+		return addChild(__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(aClass)
+				.setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class).setEntityClass(aClass)));
+	}
+	
+	@Override
+	public MenuItemBuilder addEntitiesCreate(Class<?>... classes) {
+		for(Class<?> index : classes)
+			addEntityCreate(index);
+		return this;
+	}
+	
+	@Override
+	public MenuItemBuilder addEntitySelect(Class<?> aClass) {
+		return addEntitySelect(aClass, null);
+	}
+	
+	@Override
 	public MenuItemBuilder addChild(Object... child) {
 		return (MenuItemBuilder) super.addChild(child);
+	}
+	
+	@Override
+	public MenuItemBuilder getLastChild() {
+		return (MenuItemBuilder) super.getLastChild();
 	}
 	
 	@Override

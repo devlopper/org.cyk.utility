@@ -38,6 +38,7 @@ public interface KernelHelper {
 	<T> KernelHelper addToCollection(Collection<T> collection,@SuppressWarnings("unchecked") T...elements);
 	
 	<T> T getElementAt(Collection<T> collection,Integer index);
+	<T> T getElementAtEnd(Collection<T> collection);
 	
 	String getMethodGetterNameFromFieldName(String fieldName);
 	String getMethodSetterNameFromFieldName(String fieldName);

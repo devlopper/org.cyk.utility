@@ -209,6 +209,11 @@ public class KernelHelperImpl implements KernelHelper,Serializable {
 		}
 		return object;
 	}
+	
+	@Override
+	public <T> T getElementAtEnd(Collection<T> collection) {
+		return collection == null || collection.isEmpty() ? null : getElementAt(collection,collection.size()-1);
+	}
 
 	protected String __getMethodNameFromFieldName__(String fieldName,String prefix) {
 		String methodName = null;

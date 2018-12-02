@@ -217,4 +217,9 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 		return null;
 	}
 
+	@Override
+	public Object getLastChild() {
+		return null;
+	}
+
 }
