@@ -2,7 +2,6 @@ package org.cyk.utility.request;
 
 import java.io.Serializable;
 
-import org.cyk.utility.field.FieldName;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNameStringBuilder;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
@@ -49,29 +48,29 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 			}
 			*/
 			if(__injectStringHelper__().isNotBlank(parameterValue)) {
-				if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(SystemAction.class).execute().getOutput().equals(parameterName)) {
-					if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionCreate.class).execute().getOutput().equals(parameterValue))
-						value = __inject__(SystemActionCreate.class);
-					else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionRead.class).execute().getOutput().equals(parameterValue))
-						value = __inject__(SystemActionRead.class);
-					else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionUpdate.class).execute().getOutput().equals(parameterValue))
-						value = __inject__(SystemActionUpdate.class);
-					else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionDelete.class).execute().getOutput().equals(parameterValue))
-						value = __inject__(SystemActionDelete.class);
-					else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionList.class).execute().getOutput().equals(parameterValue))
-						value = __inject__(SystemActionList.class);
-					else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionSelect.class).execute().getOutput().equals(parameterValue))
-						value = __inject__(SystemActionSelect.class);
-					else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionProcess.class).execute().getOutput().equals(parameterValue))
-						value = __inject__(SystemActionProcess.class);
-					
-					Class<?> aClass = __inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class);
-					if(aClass!=null)
-						((SystemAction)value).getEntities(Boolean.TRUE).setElementClass(aClass);
-					
-				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(FieldName.IDENTIFIER).execute().getOutput().equals(parameterName)) {
+				if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsActionClass().execute().getOutput().equals(parameterName)) {
+					value = __getSystemAction__(parameterValue,UniformResourceIdentifierParameterNameStringBuilder.Name.ACTION_IDENTIFIER);					
+					if(value!=null) {
+						SystemAction systemAction = (SystemAction) value;
+						Class<?> aClass = __inject__(RequestParameterValueMapper.class).setParameterNameAsEntityClass().execute().getOutputAs(Class.class);
+						if(aClass!=null) {
+							((SystemAction)value).getEntities(Boolean.TRUE).setElementClass(aClass);
+							Long entityIdentifier = __inject__(RequestParameterValueMapper.class).setParameterNameAsEntityIdentifier().execute().getOutputAs(Long.class);
+							if(entityIdentifier!=null)
+								systemAction.getEntitiesIdentifiers(Boolean.TRUE).add(entityIdentifier);
+						}
+						
+						systemAction.setNextAction(__inject__(RequestParameterValueMapper.class).setParameterNameAsNextActionClass().execute().getOutputAs(SystemAction.class));
+					}
+				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsActionIdentifier().execute().getOutput().equals(parameterName)) {
+					value = parameterValue;
+				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsNextActionClass().execute().getOutput().equals(parameterName)) {
+					value = __getSystemAction__(parameterValue,UniformResourceIdentifierParameterNameStringBuilder.Name.NEXT_ACTION_IDENTIFIER);
+				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsNextActionIdentifier().execute().getOutput().equals(parameterName)) {
+					value = parameterValue;
+				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsEntityIdentifier().execute().getOutput().equals(parameterName)) {
 					value = __inject__(NumberHelper.class).getLong(parameterValue);
-				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(Class.class).execute().getOutput().equals(parameterName)) {
+				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsEntityClass().execute().getOutput().equals(parameterName)) {
 					value = __injectCollectionHelper__().getFirst(__inject__(UniformResourceIdentifierParameterValueMatrix.class).getClassMap().getKeys(parameterValue));
 				}
 				
@@ -80,6 +79,34 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 			}
 		}
 		return value;
+	}
+	
+	protected SystemAction __getSystemAction__(Object parameterValue,Object identifierName) {
+		Class<? extends SystemAction> systemActionClass = null;
+		SystemAction systemAction = null;
+		if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionCreate.class).execute().getOutput().equals(parameterValue))
+			systemActionClass = SystemActionCreate.class;
+		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionRead.class).execute().getOutput().equals(parameterValue))
+			systemActionClass = SystemActionRead.class;
+		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionUpdate.class).execute().getOutput().equals(parameterValue))
+			systemActionClass = SystemActionUpdate.class;
+		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionDelete.class).execute().getOutput().equals(parameterValue))
+			systemActionClass = SystemActionDelete.class;
+		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionList.class).execute().getOutput().equals(parameterValue))
+			systemActionClass = SystemActionList.class;
+		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionSelect.class).execute().getOutput().equals(parameterValue))
+			systemActionClass = SystemActionSelect.class;
+		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionProcess.class).execute().getOutput().equals(parameterValue))
+			systemActionClass = SystemActionProcess.class;
+		
+		if(systemActionClass!=null) {
+			systemAction = __inject__(systemActionClass);
+			Object identifier = __inject__(RequestParameterValueMapper.class).setParameterName(identifierName).execute().getOutput();
+			if(identifier!=null)	
+				systemAction.setIdentifier(identifier);
+		}
+		
+		return systemAction;
 	}
 	
 	@Override
@@ -102,6 +129,36 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 	public RequestParameterValueMapper setParameterValue(String parameterValue) {
 		this.parameterValue = parameterValue;
 		return this;
+	}
+	
+	@Override
+	public RequestParameterValueMapper setParameterNameAsActionClass() {
+		return setParameterName(UniformResourceIdentifierParameterNameStringBuilder.Name.ACTION_CLASS);
+	}
+	
+	@Override
+	public RequestParameterValueMapper setParameterNameAsActionIdentifier() {
+		return setParameterName(UniformResourceIdentifierParameterNameStringBuilder.Name.ACTION_IDENTIFIER);
+	}
+	
+	@Override
+	public RequestParameterValueMapper setParameterNameAsNextActionClass() {
+		return setParameterName(UniformResourceIdentifierParameterNameStringBuilder.Name.NEXT_ACTION_CLASS);
+	}
+	
+	@Override
+	public RequestParameterValueMapper setParameterNameAsNextActionIdentifier() {
+		return setParameterName(UniformResourceIdentifierParameterNameStringBuilder.Name.NEXT_ACTION_IDENTIFIER);
+	}
+	
+	@Override
+	public RequestParameterValueMapper setParameterNameAsEntityClass() {
+		return setParameterName(UniformResourceIdentifierParameterNameStringBuilder.Name.ENTITY_CLASS);
+	}
+	
+	@Override
+	public RequestParameterValueMapper setParameterNameAsEntityIdentifier() {
+		return setParameterName(UniformResourceIdentifierParameterNameStringBuilder.Name.ENTITY_IDENTIFIER);
 	}
 
 	@Override

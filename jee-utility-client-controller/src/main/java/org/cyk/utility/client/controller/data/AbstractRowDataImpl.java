@@ -56,7 +56,6 @@ public abstract class AbstractRowDataImpl<DATA extends Data> extends AbstractRow
 		if(__inject__(CollectionHelper.class).isNotEmpty(listeners))
 			for(RowListener index : listeners.get()) {
 				index.listenNavigationBuilder(navigationBuilder);
-				System.out.println("AbstractRowDataImpl.getUrlBySystemActionClass() : "+index);
 			}
 		Navigation navigation = navigationBuilder.execute().getOutput();
 		

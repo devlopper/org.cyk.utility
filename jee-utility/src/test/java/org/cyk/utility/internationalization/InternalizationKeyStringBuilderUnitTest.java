@@ -3,7 +3,9 @@ package org.cyk.utility.internationalization;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionList;
+import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
@@ -91,6 +93,19 @@ public class InternalizationKeyStringBuilderUnitTest extends AbstractArquillianU
 	public void systemActionList(){
 		assertionHelper.assertEquals("list", __inject__(InternalizationKeyStringBuilder.class).setValue(SystemActionList.class).execute().getOutput());
 		assertionHelper.assertEquals("list", __inject__(InternalizationKeyStringBuilder.class).setValue(__inject__(SystemActionList.class)).execute().getOutput());
+	}
+	
+	@Test
+	public void systemActionSelect(){
+		assertionHelper.assertEquals("select", __inject__(InternalizationKeyStringBuilder.class).setValue(SystemActionSelect.class).execute().getOutput());
+		assertionHelper.assertEquals("select", __inject__(InternalizationKeyStringBuilder.class).setValue(__inject__(SystemActionSelect.class)).execute().getOutput());
+	}
+	
+	@Test
+	public void systemActionProcess(){
+		assertionHelper.assertEquals("process", __inject__(InternalizationKeyStringBuilder.class).setValue(SystemActionProcess.class).execute().getOutput());
+		assertionHelper.assertEquals("process", __inject__(InternalizationKeyStringBuilder.class).setValue(__inject__(SystemActionProcess.class)).execute().getOutput());
+		assertionHelper.assertEquals("validate", __inject__(InternalizationKeyStringBuilder.class).setValue(__inject__(SystemActionProcess.class).setIdentifier("validate")).execute().getOutput());
 	}
 	
 	@Test

@@ -3,6 +3,7 @@ package org.cyk.utility.internationalization;
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
@@ -57,6 +58,30 @@ public class InternalizationStringBuilderUnitTest extends AbstractArquillianUnit
 	public void isCreer_whenKeyIsCreateVerb(){
 		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
 		assertionHelper.assertEquals("créer", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionCreate.class).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput());		
+	}
+	
+	@Test
+	public void isTraitement_whenKeyIsProcessNoun(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("traitement", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionProcess.class).setKeyType(InternalizationKeyStringType.NOUN).execute().getOutput());		
+	}
+	
+	@Test
+	public void isTraiter_whenKeyIsProcessVerb(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("traiter", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionProcess.class).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput());		
+	}
+	
+	@Test
+	public void isValidation_whenKeyIsProcessValidateNoun(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("validation", __inject__(InternalizationStringBuilder.class).setKeyValue(__inject__(SystemActionProcess.class).setIdentifier("validate")).setKeyType(InternalizationKeyStringType.NOUN).execute().getOutput());		
+	}
+	
+	@Test
+	public void isValider_whenKeyIsProcessValidateVerb(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("valider", __inject__(InternalizationStringBuilder.class).setKeyValue(__inject__(SystemActionProcess.class).setIdentifier("validate")).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput());		
 	}
 	
 	@Test

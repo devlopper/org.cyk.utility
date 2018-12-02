@@ -26,9 +26,13 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 				
 			}
 			
-			if(key instanceof SystemAction)
-				key = ((SystemAction)key).getClass();
-			
+			if(key instanceof SystemAction) {
+				//key = ((SystemAction)key).getClass();
+				if(((SystemAction)key).getIdentifier() == null)
+					key = ((SystemAction)key).getClass();
+				else
+					key = ((SystemAction)key).getIdentifier();
+			}
 			if(key instanceof Class) {
 				Class<?> clazz = (Class<?>) key;
 				if(__injectClassHelper__().isInstanceOf(clazz, SystemAction.class))

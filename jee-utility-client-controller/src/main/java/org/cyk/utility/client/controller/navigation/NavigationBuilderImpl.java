@@ -3,7 +3,6 @@ package org.cyk.utility.client.controller.navigation;
 import java.io.Serializable;
 
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.field.FieldName;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNameStringBuilder;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueStringBuilder;
@@ -79,19 +78,36 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 						if(systemAction.getEntities()!=null) {
 							if(systemAction.getEntities().getElementClass()!=null)
 								parameterMap.set(
-										__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(Class.class).execute().getOutput()
-										,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction.getEntities().getElementClass()).execute().getOutput()
+										__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsEntityClass()
+										,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction.getEntities().getElementClass())
 										);
 							if(__injectCollectionHelper__().isNotEmpty(systemAction.getEntities().get()))
 								parameterMap.set(
-										__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(FieldName.IDENTIFIER).execute().getOutput()
-										,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(__injectCollectionHelper__().getFirst(systemAction.getEntities().get())).execute().getOutput()
+										__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsEntityIdentifier()
+										,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(__injectCollectionHelper__().getFirst(systemAction.getEntities().get()))
 										);
 						}
 						parameterMap.set(
-								__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(SystemAction.class).execute().getOutput()
-								,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction).execute().getOutput()
+								__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsActionClass()
+								,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction.getClass())
 								);
+						
+						parameterMap.set(
+								__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsActionIdentifier()
+								,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction)
+								);
+						
+						if(systemAction.getNextAction()!=null) {
+							parameterMap.set(
+									__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsNextActionClass()
+									,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction.getNextAction().getClass())
+									);
+							
+							parameterMap.set(
+									__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsNextActionIdentifier()
+									,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction.getNextAction())
+									);
+						}
 					}
 				}
 				url.getString(Boolean.TRUE).getUniformResourceIdentifierString(Boolean.TRUE).setParameterMap(parameterMap);

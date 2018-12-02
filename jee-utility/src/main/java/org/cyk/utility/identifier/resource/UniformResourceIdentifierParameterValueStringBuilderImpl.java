@@ -24,19 +24,19 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 		if(value!=null) {
 			if(value instanceof Class) {
 				Class<?> clazz = (Class<?>)value;
-				if(clazz.equals(SystemActionCreate.class))
+				if(SystemActionCreate.class.isAssignableFrom(clazz))
 					_value = "create";
-				else if(clazz.equals(SystemActionRead.class))
+				else if(SystemActionRead.class.isAssignableFrom(clazz))
 					_value = "read";
-				else if(clazz.equals(SystemActionUpdate.class))
+				else if(SystemActionUpdate.class.isAssignableFrom(clazz))
 					_value = "update";
-				else if(clazz.equals(SystemActionDelete.class))
+				else if(SystemActionDelete.class.isAssignableFrom(clazz))
 					_value = "delete";
-				else if(clazz.equals(SystemActionList.class))
+				else if(SystemActionList.class.isAssignableFrom(clazz))
 					_value = "list";
-				else if(clazz.equals(SystemActionSelect.class))
+				else if(SystemActionSelect.class.isAssignableFrom(clazz))
 					_value = "select";
-				else if(clazz.equals(SystemActionProcess.class))
+				else if(SystemActionProcess.class.isAssignableFrom(clazz))
 					_value = "process";
 				else
 					_value = clazz.getSimpleName().toLowerCase();

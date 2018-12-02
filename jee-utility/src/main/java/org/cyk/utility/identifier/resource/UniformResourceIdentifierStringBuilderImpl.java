@@ -66,15 +66,24 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 					.setEntrySeparator(CharacterConstant.AMPERSTAMP);
 			for(Map.Entry<Object, Object> index : parameterMap.getEntries()) {
 				String name = null;
-				if(index.getKey()!=null)
-					name = index.getKey().toString();
-				
+				if(index.getKey()!=null) {
+					if(index.getKey() instanceof UniformResourceIdentifierParameterNameStringBuilder)
+						name = ((UniformResourceIdentifierParameterNameStringBuilder)index.getKey()).execute().getOutput();
+					else
+						name = index.getKey().toString();
+				}
 				if(__injectStringHelper__().isNotBlank(name)) {
 					String value = null;
-					if(index.getValue()!=null)
-						value = index.getValue().toString();
+					if(index.getValue()!=null) {
+						if(index.getValue() instanceof UniformResourceIdentifierParameterValueStringBuilder)
+							value = ((UniformResourceIdentifierParameterValueStringBuilder)index.getValue()).execute().getOutput();
+						else
+							value = index.getValue().toString();
+					}
 					
-					finalParameterMap.set(name,value);
+					if(__injectStringHelper__().isNotBlank(value)) {
+						finalParameterMap.set(name,value);	
+					}
 				}
 			}
 			path = path + CharacterConstant.QUESTION_MARK.toString() + finalParameterMap.getRepresentationAsString();

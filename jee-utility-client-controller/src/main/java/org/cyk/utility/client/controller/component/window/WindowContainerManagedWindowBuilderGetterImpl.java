@@ -15,15 +15,15 @@ public class WindowContainerManagedWindowBuilderGetterImpl extends AbstractFunct
 	@Override
 	protected WindowContainerManagedWindowBuilder __execute__() throws Exception {
 		SystemAction systemAction = getSystemAction();
-		if(systemAction == null) {
-			systemAction = __inject__(RequestParameterValueMapper.class).setParameterName(SystemAction.class).execute().getOutputAs(SystemAction.class);
-		}
+		if(systemAction == null)
+			systemAction = __inject__(RequestParameterValueMapper.class).setParameterNameAsActionClass().execute().getOutputAs(SystemAction.class);
+		
 		Class<WindowContainerManagedWindowBuilder> windowContainerManagedWindowBuilderClass = __inject__(WindowContainerManagedWindowBuilderClassGetter.class).setSystemAction(systemAction)
 				.execute().getOutput();
 		
 		WindowContainerManagedWindowBuilder windowContainerManagedWindowBuilder = null;
 		if(windowContainerManagedWindowBuilderClass==null) {
-			__inject__(ThrowableHelper.class).throwRuntimeException("No WindowContainerManagedWindowBuilder found for "+systemAction.getIdentifier());
+			__inject__(ThrowableHelper.class).throwRuntimeException("No WindowContainerManagedWindowBuilder found for "+(systemAction == null ? "UNKNOWN_ACTION" : systemAction.getIdentifier()));
 		}else {
 			windowContainerManagedWindowBuilder = (WindowContainerManagedWindowBuilder) __inject__(windowContainerManagedWindowBuilderClass);
 			windowContainerManagedWindowBuilder.setSystemAction(systemAction);	

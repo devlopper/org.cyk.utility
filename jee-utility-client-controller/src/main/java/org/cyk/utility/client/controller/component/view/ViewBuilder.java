@@ -50,4 +50,5 @@ public interface ViewBuilder extends VisibleComponentBuilder<View> {
 	ViewBuilder addNavigationCommandablesBySystemActionClasses(Collection<Class<? extends SystemAction>> systemActionClasses);
 	ViewBuilder addNavigationCommandablesBySystemActionClasses(Class<? extends SystemAction>...systemActionClasses);
 	ViewBuilder addNavigationCommandableBySystemActionClass(Class<? extends SystemAction> systemActionClass,Object...parameters);
+	ViewBuilder addNavigationCommandableBySystemAction(SystemAction systemAction,Object...parameters);
 }

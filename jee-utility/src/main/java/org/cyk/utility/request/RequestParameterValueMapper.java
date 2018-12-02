@@ -7,6 +7,12 @@ public interface RequestParameterValueMapper extends FunctionWithPropertiesAsInp
 
 	Object getParameterName();
 	RequestParameterValueMapper setParameterName(Object parameterName);
+	RequestParameterValueMapper setParameterNameAsEntityClass();
+	RequestParameterValueMapper setParameterNameAsEntityIdentifier();
+	RequestParameterValueMapper setParameterNameAsActionClass();
+	RequestParameterValueMapper setParameterNameAsActionIdentifier();
+	RequestParameterValueMapper setParameterNameAsNextActionClass();
+	RequestParameterValueMapper setParameterNameAsNextActionIdentifier();
 	
 	String getParameterValue();
 	RequestParameterValueMapper setParameterValue(String parameterValue);

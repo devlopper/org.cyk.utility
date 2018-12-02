@@ -124,6 +124,11 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	}
 	
 	@Override
+	public <ELEMENT> ELEMENT getFirst(CollectionInstance<ELEMENT> collection) {
+		return collection == null ? null : getFirst(collection.get());
+	}
+	
+	@Override
 	public <ELEMENT> ELEMENT getLast(Collection<ELEMENT> collection){
 		if(isEmpty(collection))
 			return null;

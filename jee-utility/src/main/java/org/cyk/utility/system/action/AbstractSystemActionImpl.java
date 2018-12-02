@@ -14,7 +14,12 @@ public abstract class AbstractSystemActionImpl extends AbstractObject implements
 	private Objects entities;
 	private Objects entitiesIdentifiers;
 	private ValueUsageType entityIdentifierValueUsageType;
-	//private Object subActionIdentifier;
+	private SystemAction nextAction;
+	
+	@Override
+	public SystemAction setIdentifier(Object identifier) {
+		return (SystemAction) super.setIdentifier(identifier);
+	}
 	
 	@Override
 	public Boolean getIsBatchProcessing() {
@@ -92,18 +97,18 @@ public abstract class AbstractSystemActionImpl extends AbstractObject implements
 	public ValueUsageType getEntityIdentifierValueUsageType() {
 		return entityIdentifierValueUsageType;
 	}
-	/*
+	
 	@Override
-	public Object getSubActionIdentifier() {
-		return subActionIdentifier;
+	public SystemAction getNextAction() {
+		return nextAction;
 	}
 	
 	@Override
-	public SystemAction setSubActionIdentifier(Object subActionIdentifier) {
-		this.subActionIdentifier = subActionIdentifier;
+	public SystemAction setNextAction(SystemAction nextAction) {
+		this.nextAction = nextAction;
 		return this;
 	}
-	*/
+	
 	public static final String FIELD_ENTITIES = "entities";
 	public static final String FIELD_ENTITIES_IDENTIFIERS = "entitiesIdentifiers";
 	

@@ -232,12 +232,17 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	}
 	
 	@Override
-	public ViewBuilder addNavigationCommandableBySystemActionClass(Class<? extends SystemAction> systemActionClass,Object... parameters) {
-		CommandableBuilder commandable = __inject__(CommandableBuilder.class).setNavigationSystemAction(__inject__(systemActionClass));
+	public ViewBuilder addNavigationCommandableBySystemAction(SystemAction systemAction, Object... parameters) {
+		CommandableBuilder commandable = __inject__(CommandableBuilder.class).setNavigationSystemAction(systemAction);
 		if(__inject__(ArrayHelper.class).isNotEmpty(parameters))
 			commandable.setNavigationParameters(parameters);
 		getCommandables(Boolean.TRUE).add(commandable);
 		return this;
+	}
+	
+	@Override
+	public ViewBuilder addNavigationCommandableBySystemActionClass(Class<? extends SystemAction> systemActionClass,Object... parameters) {
+		return addNavigationCommandableBySystemAction(__inject__(systemActionClass),parameters);
 	}
 	
 	/**/

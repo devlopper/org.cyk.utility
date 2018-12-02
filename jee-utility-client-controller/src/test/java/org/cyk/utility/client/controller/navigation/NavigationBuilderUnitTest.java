@@ -7,6 +7,8 @@ import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionList;
+import org.cyk.utility.system.action.SystemActionProcess;
+import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
@@ -36,7 +38,7 @@ public class NavigationBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 		list.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
 		NavigationBuilder builder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(list);
 		Navigation navigation = builder.execute().getOutput();
-		assertionHelper.assertEquals("http://localhost:8080/myentity/list.jsf?class=myentity&action=list",navigation.getUniformResourceLocator().toString());
+		assertionHelper.assertEquals("http://localhost:8080/myentity/list.jsf?entityclass=myentity&actionclass=list&actionidentifier=list",navigation.getUniformResourceLocator().toString());
 	}
 	
 	@Test
@@ -45,7 +47,36 @@ public class NavigationBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 		list.getEntities(Boolean.TRUE).setElementClass(MyEntity02.class);
 		NavigationBuilder builder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(list);
 		Navigation navigation = builder.execute().getOutput();
-		assertionHelper.assertEquals("http://localhost:8080/list.jsf?class=myentity02&action=list",navigation.getUniformResourceLocator().toString());
+		assertionHelper.assertEquals("http://localhost:8080/list.jsf?entityclass=myentity02&actionclass=list&actionidentifier=list",navigation.getUniformResourceLocator().toString());
+	}
+	
+	@Test
+	public void myentity_select() {
+		SystemAction select = __inject__(SystemActionSelect.class);
+		select.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
+		NavigationBuilder builder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(select);
+		Navigation navigation = builder.execute().getOutput();
+		assertionHelper.assertEquals("http://localhost:8080/select.jsf?entityclass=myentity&actionclass=select&actionidentifier=select",navigation.getUniformResourceLocator().toString());
+	}
+	
+	@Test
+	public void myentity_select_process() {
+		SystemAction select = __inject__(SystemActionSelect.class);
+		select.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
+		select.setNextAction(__inject__(SystemActionProcess.class));
+		NavigationBuilder builder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(select);
+		Navigation navigation = builder.execute().getOutput();
+		assertionHelper.assertEquals("http://localhost:8080/select.jsf?entityclass=myentity&actionclass=select&actionidentifier=select&nextactionclass=process&nextactionidentifier=process",navigation.getUniformResourceLocator().toString());
+	}
+	
+	@Test
+	public void myentity_select_process_validate() {
+		SystemAction select = __inject__(SystemActionSelect.class);
+		select.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
+		select.setNextAction(__inject__(SystemActionProcess.class).setIdentifier("validate"));
+		NavigationBuilder builder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(select);
+		Navigation navigation = builder.execute().getOutput();
+		assertionHelper.assertEquals("http://localhost:8080/select.jsf?entityclass=myentity&actionclass=select&actionidentifier=select&nextactionclass=process&nextactionidentifier=validate",navigation.getUniformResourceLocator().toString());
 	}
 	
 	/*
@@ -90,6 +121,10 @@ public class NavigationBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 						setOutput("http://localhost:8080/edit.jsf");
 					else if("__entity__ListView".equals(identifier))
 						setOutput("http://localhost:8080/list.jsf");
+					else if("__entity__SelectView".equals(identifier))
+						setOutput("http://localhost:8080/select.jsf");
+					else if("__entity__ProcessView".equals(identifier))
+						setOutput("http://localhost:8080/process.jsf");
 					else if("listView".equals(identifier))
 						setOutput("http://localhost:8080/list.jsf");
 					else if("myEntityListView".equals(identifier))

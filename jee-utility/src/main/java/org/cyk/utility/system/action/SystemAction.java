@@ -6,6 +6,8 @@ import org.cyk.utility.value.ValueUsageType;
 
 public interface SystemAction extends Objectable  {
 
+	@Override SystemAction setIdentifier(Object identifier);
+	
 	Objects getEntities();
 	Objects getEntities(Boolean injectIfNull);
 	SystemAction setEntities(Objects entities);
@@ -23,8 +25,8 @@ public interface SystemAction extends Objectable  {
 	
 	Boolean getIsBatchProcessing();
 	SystemAction setIsBatchProcessing(Boolean isBatchProcessing);
-	/*
-	Object getSubActionIdentifier();
-	SystemAction setSubActionIdentifier(Object subActionIdentifier);
-	*/
+	
+	SystemAction getNextAction();
+	SystemAction setNextAction(SystemAction nextAction);
+	
 }

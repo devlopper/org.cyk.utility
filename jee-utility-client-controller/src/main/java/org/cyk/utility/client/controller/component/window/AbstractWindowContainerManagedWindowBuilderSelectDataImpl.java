@@ -33,8 +33,11 @@ public abstract class AbstractWindowContainerManagedWindowBuilderSelectDataImpl 
 			if(columnsFieldNames!=null)
 				gridBuilder.addColumnsByFieldNames(columnsFieldNames.get());
 			
-			gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandableBySystemActionClass(SystemActionProcess.class);
-			gridBuilder.getRows(Boolean.TRUE).addRowListeners(new WindowContainerManagedWindowBuilderSelectDataRowListenerAdapter());
+			if(systemAction.getNextAction() == null)
+				gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandableBySystemActionClass(SystemActionProcess.class);
+			else
+				gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandableBySystemAction(systemAction.getNextAction());
+			gridBuilder.getRows(Boolean.TRUE).addRowListeners(new WindowContainerManagedWindowBuilderSelectDataRowListenerAdapter().setWindowContainerManagedWindowBuilder(this));
 			
 			LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
 			gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);
