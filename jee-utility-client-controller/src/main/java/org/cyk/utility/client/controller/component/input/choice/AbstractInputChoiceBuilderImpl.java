@@ -1,0 +1,99 @@
+package org.cyk.utility.client.controller.component.input.choice;
+
+import java.lang.reflect.Field;
+import java.util.Collection;
+
+import org.cyk.utility.client.controller.Controller;
+import org.cyk.utility.client.controller.component.input.AbstractInputBuilderImpl;
+import org.cyk.utility.field.FieldTypeGetter;
+import org.cyk.utility.object.Objects;
+import org.cyk.utility.system.layer.SystemLayerController;
+
+public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<CHOICE>,CHOICE> extends AbstractInputBuilderImpl<INPUT,CHOICE> implements InputChoiceBuilder<INPUT,CHOICE> {
+	private static final long serialVersionUID = 1L;
+
+	private Objects choices;
+	private Class<? extends ChoicePropertyValueBuilder> choiceLabelBuilderClass;
+	
+	@Override
+	protected void __execute__(INPUT inputChoice, Object object, Field field) {
+		super.__execute__(inputChoice, object, field);
+		org.cyk.utility.client.controller.component.annotation.InputChoice inputChoiceAnnotation = field.getAnnotation(org.cyk.utility.client.controller.component.annotation.InputChoice.class);
+		Objects choices = getChoices();
+		if(choices == null) {
+			choices = getChoices(Boolean.TRUE);
+			Class<?> fieldType = __inject__(FieldTypeGetter.class).execute(field).getOutput();
+			if(fieldType.isEnum()) {
+				for(Object index : fieldType.getEnumConstants()) {
+					choices.add(index);
+				}
+			}else if(__inject__(SystemLayerController.class).getEntityLayer().isPackage(fieldType.getName())) {
+				Collection<?> objects = __inject__(Controller.class).readMany(fieldType);
+				if(__injectCollectionHelper__().isNotEmpty(objects)) {
+					for(Object index : objects) {
+						choices.add(index);
+					}	
+				}
+			}
+		}
+		
+		if(__injectCollectionHelper__().isNotEmpty(choices)) {
+			Class<? extends ChoicePropertyValueBuilder> choiceLabelBuilderClass = getChoiceLabelBuilderClass();
+			if(choiceLabelBuilderClass == null)
+				choiceLabelBuilderClass = inputChoiceAnnotation.labelBuilderClass();
+			if(choiceLabelBuilderClass == null)
+				choiceLabelBuilderClass = ChoicePropertyValueBuilderImpl.class;
+			for(Object index : choices.get()) {
+				ChoiceBuilder builder = __inject__(ChoiceBuilder.class).setValue(index);
+				if(choiceLabelBuilderClass!=null)
+					builder.setLabel(__inject__(choiceLabelBuilderClass).setObject(index).execute().getOutput());
+				Object choice = builder.execute().getOutput();
+				inputChoice.addChoices(choice);
+			}
+		}
+	}
+	
+	@Override
+	public Objects getChoices() {
+		return choices;
+	}
+	
+	@Override
+	public Objects getChoices(Boolean injectIfNull) {
+		return (Objects) __getInjectIfNull__(FIELD_CHOICES, injectIfNull);
+	}
+	
+	@Override
+	public InputChoiceBuilder<INPUT,CHOICE> setChoices(Objects choices) {
+		this.choices = choices;
+		return this;
+	}
+	
+	@Override
+	public InputChoiceBuilder<INPUT,CHOICE> addChoices(Collection<Object> choices) {
+		getChoices(Boolean.TRUE).add(choices);
+		return this;
+	}
+	
+	@Override
+	public InputChoiceBuilder<INPUT,CHOICE> addChoices(Object... choices) {
+		getChoices(Boolean.TRUE).add(choices);
+		return this;
+	}
+	
+	@Override
+	public Class<? extends ChoicePropertyValueBuilder> getChoiceLabelBuilderClass() {
+		return choiceLabelBuilderClass;
+	}
+	
+	@Override
+	public InputChoiceBuilder<INPUT, CHOICE> setChoiceLabelBuilderClass(Class<? extends ChoicePropertyValueBuilder> choiceLabelBuilderClass) {
+		this.choiceLabelBuilderClass = choiceLabelBuilderClass;
+		return this;
+	}
+	
+	/**/
+	
+	public static final String FIELD_CHOICES = "choices";
+	
+}

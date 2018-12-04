@@ -19,6 +19,11 @@
         <source>tag/input/text/manyline/textArea.xhtml</source>
     </tag>
     
+    <tag>
+        <tag-name>selectOneMenu</tag-name>
+        <source>tag/input/choice/one/selectOneMenu.xhtml</source>
+    </tag>
+    
     <!-- Output -->
     
     <tag>

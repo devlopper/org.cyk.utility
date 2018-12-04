@@ -8,4 +8,7 @@ public interface StackTraceHelper extends Singleton {
 
 	StackTraceElement getCurrent();
 
+	String getStackTraceAsString(String packagePrefix);
+	
+	String getStackTraceAsString();
 }

@@ -28,15 +28,20 @@ public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInp
 		
 		InternalizationStringBuilder summaryInternalizationString = getSummaryInternalizationString();
 		if(summaryInternalizationString==null) {
-			if(throwable!=null)
-				notification.setSummary(throwable.toString());
+			if(throwable!=null) {
+				throwable.printStackTrace();//TODO to be removed
+				String summary = throwable.getMessage();// __inject__(StackTraceHelper.class).getStackTraceAsString();
+				notification.setSummary(summary);
+			}
 		}else
 			notification.setSummary(summaryInternalizationString.execute().getOutput());
 		
 		InternalizationStringBuilder detailsInternalizationString = getDetailsInternalizationString();
 		if(detailsInternalizationString==null) {
-			if(throwable!=null)
-				notification.setDetails(throwable.toString());
+			if(throwable!=null) {
+				String details = throwable.getMessage();//__inject__(StackTraceHelper.class).getStackTraceAsString();
+				notification.setDetails(details);
+			}
 		}else
 			notification.setDetails(detailsInternalizationString.execute().getOutput());
 		

@@ -12,6 +12,7 @@ import org.cyk.utility.annotation.Annotations;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneComboBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -176,6 +177,15 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 	}
 
 	protected Class<? extends ComponentBuilder<?>> __getBuilderClassFromAnnotations__(Collection<? extends Annotation> annotations) {
+		/* Output */
+		
+		org.cyk.utility.client.controller.component.annotation.OutputStringText annotationOutputStringText =
+				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.OutputStringText.class,annotations);
+		if(annotationOutputStringText!=null)
+			return OutputStringTextBuilder.class;
+		
+		/* Input */
+		
 		org.cyk.utility.client.controller.component.annotation.InputStringLineOne annotationInputStringLineOne =
 				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputStringLineOne.class,annotations);
 		if(annotationInputStringLineOne!=null)
@@ -186,10 +196,12 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 		if(annotationInputStringLineMany!=null)
 			return InputStringLineManyBuilder.class;
 		
-		org.cyk.utility.client.controller.component.annotation.OutputStringText annotationOutputStringText =
-				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.OutputStringText.class,annotations);
-		if(annotationOutputStringText!=null)
-			return OutputStringTextBuilder.class;
+		org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo annotationInputChoiceOneCombo =
+				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo.class,annotations);
+		if(annotationInputChoiceOneCombo!=null)
+			return InputChoiceOneComboBuilder.class;
+		
+		/* Commandable */
 		
 		org.cyk.utility.client.controller.component.annotation.Commandable annotationCommandable =
 				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.Commandable.class,annotations);

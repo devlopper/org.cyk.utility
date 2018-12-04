@@ -1,9 +1,13 @@
 package org.cyk.utility.__kernel__.stacktrace;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 
 @Singleton
@@ -20,18 +24,23 @@ public class StackTraceHelperImpl extends AbstractSingleton implements StackTrac
 		return getAt(3);
 	}
 	
-	/*public String getStackTraceAsString(String packagePrefix){
+	public String getStackTraceAsString(String packagePrefix){
 		List<String> list = new ArrayList<>();
 		for(StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()){
 			if(packagePrefix==null || stackTraceElement.getClassName().startsWith(packagePrefix))
-				list.add(StringUtils.substringAfterLast(stackTraceElement.getClassName(),Constant.CHARACTER_DOT.toString())+Constant.CHARACTER_DOT+stackTraceElement.getMethodName());
+				list.add(StringUtils.substringAfterLast(stackTraceElement.getClassName(),DOT)+DOT+stackTraceElement.getMethodName());
 		}
 		Collections.reverse(list);
-		return StringHelper.getInstance().concatenate(list, Constant.CHARACTER_GREATER_THAN);
+		return StringUtils.join(list, GREATER_THAN);
 	}
 	
 	public String getStackTraceAsString(){
 		return getStackTraceAsString(null);
-	}*/
+	}
+	
+	/**/
+	
+	private static final String DOT = ".";
+	private static final String GREATER_THAN = ">";
 	
 }

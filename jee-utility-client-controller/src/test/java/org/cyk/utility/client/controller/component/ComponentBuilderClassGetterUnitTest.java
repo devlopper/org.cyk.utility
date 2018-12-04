@@ -3,12 +3,14 @@ package org.cyk.utility.client.controller.component;
 import java.lang.annotation.Annotation;
 
 import org.cyk.utility.client.controller.component.annotation.Commandable;
+import org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineMany;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
 import org.cyk.utility.client.controller.component.annotation.OutputStringText;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneComboBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
@@ -82,6 +84,11 @@ public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitT
 	}
 	
 	@Test
+	public void getInputChoiceOneComboBuilder_fromFieldNameStrings() {
+		assertionHelper.assertEquals(InputChoiceOneComboBuilder.class, __inject__(ComponentBuilderClassGetter.class).setClazz(Model.class).addFieldNameStrings("inputCombo").execute().getOutput());
+	}
+	
+	@Test
 	public void getOutputStringTextBuilder_fromFieldNameStrings() {
 		assertionHelper.assertEquals(OutputStringTextBuilder.class, __inject__(ComponentBuilderClassGetter.class).setClazz(Model.class).addFieldNameStrings("__title__").execute().getOutput());
 	}
@@ -99,6 +106,7 @@ public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitT
 		@OutputStringText private String __title__;
 		@InputStringLineOne private String inputText;
 		@InputStringLineMany private String inputTextArea;
+		@InputChoiceOneCombo private String inputCombo;
 		
 		@Commandable(systemActionClass=SystemAction.class)
 		public void submit() {

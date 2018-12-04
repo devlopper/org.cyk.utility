@@ -11,6 +11,7 @@ import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.input.Input;
+import org.cyk.utility.client.controller.component.input.choice.InputChoice;
 import org.cyk.utility.client.controller.component.layout.Insert;
 import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.output.OutputString;
@@ -18,6 +19,7 @@ import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringMessageBuilder;
+import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.css.Style;
 
 public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentBuilderExecuteListenerAfter> implements Serializable {
@@ -59,7 +61,9 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						}
 						
 						if(inputOutput instanceof Input<?>) {
-							
+							if(component instanceof InputChoice<?>) {
+								component.getProperties().setConverter(__inject__(ObjectConverter.class));
+							}
 						}
 					}else if(component instanceof Menu) {
 						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
