@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<ui:decorate template="/template.xhtml">
+		<ui:define name="valueIsNotNull">
+			<p:dialog 
+				id="#{value.properties.identifier}" 
+				header="#{value.properties.header}" 
+				modal="#{value.properties.modal}" 
+				appendTo="#{value.properties.appendTo}" 
+				visible="#{value.properties.visible}"
+				closable="#{value.properties.closable}"
+				closeOnEscape="#{value.properties.closeOnEscape}"
+				draggable="#{value.properties.draggable}"
+				dynamic="#{value.properties.dynamic}"
+				fitViewport="#{value.properties.fitViewport}"
+				height="#{value.properties.height}"
+				minHeight="#{value.properties.minHeight}"
+				minWidth="#{value.properties.minWidth}"
+				maximizable="#{value.properties.maximizable}"
+				minimizable="#{value.properties.minimizable}"
+				resizable="#{value.properties.resizable}"
+				responsive="#{value.properties.responsive}"
+				showHeader="#{value.properties.showHeader}"
+				styleClass="#{value.properties.styleClass}"
+				width="#{value.properties.width}"
+				widgetVar="#{value.properties.widgetVar}"
+				
+				hideEffect="#{value.properties.hideEffect}"
+				focus="#{value.properties.focus}"
+				onHide="#{value.properties.onHide}"
+				onShow="#{value.properties.onShow}"
+				showEffect="#{value.properties.showEffect}"
+				dir="#{value.properties.dir}"
+				style="#{value.properties.style}"
+				position="#{value.properties.position}"
+				positionType="#{value.properties.positionType}"
+				rendered="#{value.properties.rendered}"
+			>
+				<ui:insert name="dialogContent"/>
+			</p:dialog>	
+		</ui:define>
+	</ui:decorate>	
+	
+	<!-- 
+	
+				
+				
+	footer="#{value.properties.footer}"			
+				
+				
+	
+	 -->
+		
+</ui:composition>

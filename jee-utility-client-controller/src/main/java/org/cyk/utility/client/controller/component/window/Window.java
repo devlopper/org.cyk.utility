@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.component.window;
 
 import org.cyk.utility.client.controller.component.VisibleComponent;
+import org.cyk.utility.client.controller.component.dialog.Dialog;
 import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuMap;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
@@ -22,4 +23,7 @@ public interface Window extends VisibleComponent {
 	
 	Theme getTheme();
 	Window setTheme(Theme theme);
+	
+	Dialog getDialog();
+	Window setDialog(Dialog dialog);
 }

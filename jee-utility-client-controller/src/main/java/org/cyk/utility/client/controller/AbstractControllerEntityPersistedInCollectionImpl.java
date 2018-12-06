@@ -58,6 +58,15 @@ public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> 
 	}
 	
 	@Override
+	public ENTITY readOneByBusinessIdentifier(Object identifier) {
+		for(ENTITY index : collection) {
+			if(__injectFieldHelper__().getFieldValueBusinessIdentifier(index).toString().equals(identifier.toString()))
+				return index;
+		}
+		return null;
+	}
+	
+	@Override
 	public Collection<ENTITY> readMany(Properties properties) {
 		return collection;
 	}

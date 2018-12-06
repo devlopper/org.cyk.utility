@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
+import org.cyk.utility.client.controller.component.dialog.DialogBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.menu.MenuMap;
@@ -19,6 +20,7 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	private ViewBuilder view;
 	private Theme theme;
 	private MenuBuilderMap menuMap;
+	private DialogBuilder dialog;
 	
 	@Override
 	protected void __execute__(Window window) {
@@ -37,6 +39,11 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		}
 		Theme theme = getTheme();
 		window.setTheme(theme);
+		
+		DialogBuilder dialog = getDialog(Boolean.TRUE);
+		
+		if(dialog!=null)
+			window.setDialog(dialog.execute().getOutput());
 	}
 	
 	@Override
@@ -104,8 +111,27 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		return this;
 	}
 	
+	@Override
+	public DialogBuilder getDialog() {
+		return dialog;
+	}
+	
+	@Override
+	public DialogBuilder getDialog(Boolean injectIfNull) {
+		DialogBuilder dialog = (DialogBuilder) __getInjectIfNull__(FIELD_DIALOG, injectIfNull);
+		
+		return dialog;
+	}
+	
+	@Override
+	public WindowBuilder setDialog(DialogBuilder dialog) {
+		this.dialog = dialog;
+		return this;
+	}
+	
 	public static final String FIELD_TITLE = "title";
 	public static final String FIELD_VIEW = "view";
 	public static final String FIELD_MENU_MAP = "menuMap";
+	public static final String FIELD_DIALOG = "dialog";
 
 }

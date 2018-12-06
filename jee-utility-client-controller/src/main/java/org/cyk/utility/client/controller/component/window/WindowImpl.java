@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
+import org.cyk.utility.client.controller.component.dialog.Dialog;
 import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuMap;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
@@ -17,6 +18,7 @@ public class WindowImpl extends AbstractVisibleComponentImpl implements Window,S
 	private View view;
 	private Theme theme;
 	private MenuMap menuMap;
+	private Dialog dialog;
 	
 	@Override
 	public OutputStringText getTitle() {
@@ -59,6 +61,17 @@ public class WindowImpl extends AbstractVisibleComponentImpl implements Window,S
 	@Override
 	public Window setMenuMap(MenuMap menuMap) {
 		this.menuMap = menuMap;
+		return this;
+	}
+	
+	@Override
+	public Dialog getDialog() {
+		return dialog;
+	}
+	
+	@Override
+	public Window setDialog(Dialog dialog) {
+		this.dialog = dialog;
 		return this;
 	}
 	

@@ -1125,12 +1125,30 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getMaxHeight() {
+		return get(MAX_HEIGHT);
+	}
+
+	public Properties setMaxHeight(Object value) {
+		set(MAX_HEIGHT, value);
+		return this;
+	}
+	
 	public Object getMinWidth() {
 		return get(MIN_WIDTH);
 	}
 
 	public Properties setMinWidth(Object value) {
 		set(MIN_WIDTH, value);
+		return this;
+	}
+	
+	public Object getMaxWidth() {
+		return get(MAX_WIDTH);
+	}
+
+	public Properties setMaxWidth(Object value) {
+		set(MAX_WIDTH, value);
 		return this;
 	}
 	
@@ -4638,8 +4656,10 @@ public class Properties implements java.io.Serializable {
 	public static final String FOCUS = "FOCUS";
 	public static final String MAXIMIZABLE = "MAXIMIZABLE";
 	public static final String MIN_HEIGHT = "MIN_HEIGHT";
+	public static final String MAX_HEIGHT = "MAX_HEIGHT";
 	public static final String MINIMIZABLE = "MINIMIZABLE";
 	public static final String MIN_WIDTH = "MIN_WIDTH";
+	public static final String MAX_WIDTH = "MAX_WIDTH";
 	public static final String MODAL = "MODAL";
 	public static final String ON_HIDE = "ON_HIDE";
 	public static final String ON_SHOW = "ON_SHOW";

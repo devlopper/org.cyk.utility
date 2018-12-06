@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.component.window;
 
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
+import org.cyk.utility.client.controller.component.dialog.DialogBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.theme.Theme;
@@ -23,4 +24,8 @@ public interface WindowBuilder extends VisibleComponentBuilder<Window> {
 
 	Theme getTheme();
 	WindowBuilder setTheme(Theme theme);
+	
+	DialogBuilder getDialog();
+	DialogBuilder getDialog(Boolean injectIfNull);
+	WindowBuilder setDialog(DialogBuilder dialog);
 }

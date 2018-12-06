@@ -165,4 +165,9 @@
         <source>tag/cell/cell.xhtml</source>
     </tag>
     
+    <tag>
+        <tag-name>dialog</tag-name>
+        <source>tag/dialog/dialog.xhtml</source>
+    </tag>
+    
 </facelet-taglib>
