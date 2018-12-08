@@ -40,6 +40,9 @@
 									<c:when test="#{componentHelper.isInputChoiceOneCombo(indexComponent)}">
 										<cyk:selectOneMenu value="#{indexComponent}" />
 									</c:when>
+									<c:when test="#{componentHelper.isInputChoiceManyCheckBox(indexComponent)}">
+										<cyk:selectManyCheckbox value="#{indexComponent}" />
+									</c:when>
 									<c:when test="#{componentHelper.isOutputStringMessage(indexComponent)}">
 										<cyk:message value="#{indexComponent}" />
 									</c:when>

@@ -12,9 +12,13 @@ public class VerySimpleEntityEditWindowBuilderImpl extends AbstractWindowContain
 	
 	@Override
 	protected void __execute__(Form form,Data data,ViewBuilder viewBuilder) {
+		((VerySimpleEntity)data).setDetails(__inject__(VerySimpleEntityDetails.class));
 		viewBuilder.addComponentBuilderByObjectByFieldNames(data, VerySimpleEntity.PROPERTY_CODE);
 		viewBuilder.addComponentBuilderByObjectByFieldNames(data, VerySimpleEntity.PROPERTY_NAME);
 		viewBuilder.addComponentBuilderByObjectByFieldNames(data, VerySimpleEntity.PROPERTY_DESCRIPTION);
+		viewBuilder.addComponentBuilderByObjectByFieldNames(data, VerySimpleEntity.PROPERTY_DETAILS,VerySimpleEntityDetails.PROPERTY_ADDRESS);
+		viewBuilder.addComponentBuilderByObjectByFieldNames(data, VerySimpleEntity.PROPERTY_ENUMERATION);
+		viewBuilder.addComponentBuilderByObjectByFieldNames(data, VerySimpleEntity.PROPERTY_ENUMERATIONS);
 	}
 
 }

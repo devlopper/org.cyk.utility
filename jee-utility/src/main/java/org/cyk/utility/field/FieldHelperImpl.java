@@ -1,6 +1,8 @@
 package org.cyk.utility.field;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
 import javax.inject.Singleton;
@@ -15,6 +17,12 @@ import org.cyk.utility.value.ValueUsageType;
 public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Serializable {
 	private static final long serialVersionUID = -5367150176793830358L;
 
+	@Override
+	public <TYPE> Class<TYPE> getParameterAt(Field field, Integer index, Class<TYPE> typeClass) {
+		ParameterizedType type = (ParameterizedType) field.getGenericType();
+		return (Class<TYPE>) type.getActualTypeArguments()[index];
+	}
+	
 	@Override
 	public String concatenate(Collection<String> names) {
 		return __inject__(StringHelper.class).concatenate(names, CharacterConstant.DOT.toString());

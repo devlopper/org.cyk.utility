@@ -23,6 +23,10 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 		if(choices == null) {
 			choices = getChoices(Boolean.TRUE);
 			Class<?> fieldType = __inject__(FieldTypeGetter.class).execute(field).getOutput();
+			if(__injectClassHelper__().isInstanceOf(fieldType, Collection.class)) {
+				fieldType = __injectFieldHelper__().getParameterAt(field, 0, Object.class);
+			}
+			
 			if(fieldType.isEnum()) {
 				for(Object index : fieldType.getEnumConstants()) {
 					choices.add(index);

@@ -12,6 +12,7 @@ import org.cyk.utility.annotation.Annotations;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBoxBuilder;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneComboBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.field.FieldGetter;
@@ -200,6 +201,11 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo.class,annotations);
 		if(annotationInputChoiceOneCombo!=null)
 			return InputChoiceOneComboBuilder.class;
+		
+		org.cyk.utility.client.controller.component.annotation.InputChoiceManyCheckBox annotationInputChoiceManyCheckBox =
+				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceManyCheckBox.class,annotations);
+		if(annotationInputChoiceManyCheckBox!=null)
+			return InputChoiceManyCheckBoxBuilder.class;
 		
 		/* Commandable */
 		

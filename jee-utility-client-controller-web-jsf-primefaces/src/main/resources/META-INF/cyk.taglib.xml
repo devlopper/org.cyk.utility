@@ -24,6 +24,11 @@
         <source>tag/input/choice/one/selectOneMenu.xhtml</source>
     </tag>
     
+    <tag>
+        <tag-name>selectManyCheckbox</tag-name>
+        <source>tag/input/choice/many/selectManyCheckbox.xhtml</source>
+    </tag>
+    
     <!-- Output -->
     
     <tag>

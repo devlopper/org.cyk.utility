@@ -12,20 +12,20 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 
-public class FieldGetUnitTest extends AbstractArquillianUnitTest {
+public class FieldGetterUnitTest extends AbstractArquillianUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test
 	public void getAllFieldOfMyClass01(){
 		Collection<Field> fields = __inject__(FieldGetter.class).execute(MyClass01.class).getOutput();
-		assertThat(fields).isNotEmpty().asList().hasSize(2).contains(FieldUtils.getField(MyClass01.class, "f01",Boolean.TRUE)
+		assertThat(fields).isNotEmpty().asList().hasSize(3).contains(FieldUtils.getField(MyClass01.class, "f01",Boolean.TRUE)
 				,FieldUtils.getField(MyClass01.class, "f02",Boolean.TRUE));
 	}
 	
 	@Test
 	public void getAllFieldOfMyClass01Sub01(){
 		Collection<Field> fields = __inject__(FieldGetter.class).execute(MyClass01Sub01.class).getOutput();
-		assertThat(fields).isNotEmpty().asList().hasSize(4).contains(FieldUtils.getField(MyClass01Sub01.class, "f01",Boolean.TRUE)
+		assertThat(fields).isNotEmpty().asList().hasSize(5).contains(FieldUtils.getField(MyClass01Sub01.class, "f01",Boolean.TRUE)
 				,FieldUtils.getField(MyClass01Sub01.class, "f01Sub01",Boolean.TRUE),FieldUtils.getField(MyClass01.class, "f01",Boolean.TRUE)
 				,FieldUtils.getField(MyClass01.class, "f02",Boolean.TRUE),FieldUtils.getField(MyClass01Sub01.class, "f01Sub02",Boolean.TRUE));
 	}

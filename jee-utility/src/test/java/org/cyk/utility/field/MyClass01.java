@@ -8,4 +8,5 @@ public class MyClass01 {
 
 	private String f01;
 	private Integer f02;
+	private MyClass01Sub01 sub01;
 }
