@@ -52,6 +52,26 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 		return null;
 	}
 
+	@Override
+	public ControllerServiceProvider<OBJECT> select(OBJECT object, Properties properties) {
+		return null;
+	}
+	
+	@Override
+	public ControllerServiceProvider<OBJECT> select(OBJECT object) {
+		return null;
+	}
+	
+	@Override
+	public ControllerServiceProvider<OBJECT> process(OBJECT object, Properties properties) {
+		return null;
+	}
+	
+	@Override
+	public ControllerServiceProvider<OBJECT> process(OBJECT object) {
+		return null;
+	}
+	
 	/**/
 	
 	protected static ControllerLayer __injectPersistenceLayer__() {

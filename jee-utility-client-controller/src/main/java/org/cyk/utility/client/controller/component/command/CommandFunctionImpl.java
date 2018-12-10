@@ -14,6 +14,8 @@ import org.cyk.utility.object.Objects;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionProcess;
+import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
 public class CommandFunctionImpl extends AbstractControllerFunctionImpl implements CommandFunction,Serializable {
@@ -26,6 +28,7 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 		getExecutionPhaseTry(Boolean.TRUE).getRun(Boolean.TRUE).addRunnables(new Runnable() {
 			@Override
 			public void run() {
+				
 				SystemAction action = getAction();
 				if(action!=null) {
 					Objects entities = action.getEntities();
@@ -38,9 +41,17 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 					}else if(action instanceof SystemActionDelete) {
 						Object object = __injectCollectionHelper__().getFirst(entities);
 						__inject__(Controller.class).delete(object);
+					}else if(action instanceof SystemActionSelect) {
+						Object object = __injectCollectionHelper__().getFirst(entities);
+						__inject__(Controller.class).select(object);
+					}else if(action instanceof SystemActionProcess) {
+						Object object = __injectCollectionHelper__().getFirst(entities);
+						__inject__(Controller.class).process(object);
 					}else
 						__injectThrowableHelper__().throwRuntimeException("System action not yet handle : "+action.getIdentifier());	
 				}
+				
+				
 				//__inject__(CommandFunctionExecuteListenerThrough.class).setObject(CommandFunctionImpl.this).execute();
 			}
 		});

@@ -28,7 +28,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderProcessDataImpl
 			ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 			viewBuilder.addComponentBuilderByObjectByFieldNames(form, Form.PROPERTY_TITLE).addRoles(ComponentRole.TITLE);
 			
-			__execute__(form,data,viewBuilder);
+			__execute__(form,data,systemAction,viewBuilder);
 			
 			viewBuilder.addComponentBuilderByObjectByMethodName(form, Form.METHOD_SUBMIT,systemAction);
 				
@@ -36,6 +36,6 @@ public abstract class AbstractWindowContainerManagedWindowBuilderProcessDataImpl
 		}
 	}
 	
-	protected abstract void __execute__(Form form,Data data,ViewBuilder viewBuilder);
+	protected abstract void __execute__(Form form,Data data,SystemAction systemAction,ViewBuilder viewBuilder);
 	
 }
