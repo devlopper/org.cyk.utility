@@ -7,6 +7,8 @@ import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 public interface CollectionInstance<T> extends Objectable {
 
 	Collection<T> get();
+	Collection<T> get(Integer begin,Integer end);
+	Collection<T> get(Integer begin);
 	Collection<T> getIsInstanceOf(Collection<Class<?>> classes);
 	Collection<T> getIsInstanceOf(Class<?>...classes);
 	
@@ -29,4 +31,5 @@ public interface CollectionInstance<T> extends Objectable {
 	
 	Class<?> getElementClass();
 	CollectionInstance<T> setElementClass(Class<?> elementClass);
+	
 }

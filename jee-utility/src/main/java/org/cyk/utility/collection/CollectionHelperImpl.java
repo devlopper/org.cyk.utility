@@ -117,6 +117,25 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	}
 	
 	@Override
+	public <ELEMENT> Collection<ELEMENT> getElementsFromTo(Collection<ELEMENT> collection,Integer begin, Integer end) {
+		if(collection!=null) {
+			if(begin==null)
+				begin = 0;
+			if(end==null)
+				end = collection.size();
+			if(collection instanceof List)
+				return ((List<ELEMENT>)collection).subList(begin, end);
+			__inject__(ThrowableHelper.class).throwRuntimeException("Cannot get from "+begin+" to "+end+" of "+collection.getClass());
+		}
+		return null;
+	}
+	
+	@Override
+	public <ELEMENT> Collection<ELEMENT> getElementsFrom(Collection<ELEMENT> collection,Integer begin) {
+		return getElementsFromTo(collection,begin,null);
+	}
+	
+	@Override
 	public <ELEMENT> ELEMENT getFirst(Collection<ELEMENT> collection){
 		if(isEmpty(collection))
 			return null;

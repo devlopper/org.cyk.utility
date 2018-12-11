@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
@@ -59,6 +60,35 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	public FieldHelper copy(Object source, Object destination) {
 		__inject__(FieldValueCopy.class).setSource(source).setDestination(destination).setIsAutomaticallyDetectFields(Boolean.TRUE).execute();
 		return this;
+	}
+	
+	@Override
+	public Field getField(Class<?> aClass, Collection<String> fieldNames) {
+		//System.out.println("FieldHelperImpl.getField() ::: "+aClass+" ::: "+fieldNames);
+		CollectionHelper collectionHelper = __inject__(CollectionHelper.class);
+		Field field;
+		if(aClass == null || collectionHelper.isEmpty(fieldNames)) {
+			field = null;
+		}else {
+			String fieldName = concatenate(fieldNames);
+			fieldNames = collectionHelper.instanciate(StringUtils.split(fieldName, CharacterConstant.DOT.toString()));
+			field = collectionHelper.getFirst(__inject__(FieldGetter.class).execute(aClass, collectionHelper.getElementAt(fieldNames, 0)).getOutput());
+			if(collectionHelper.getSize(fieldNames) == 1) {
+			
+			}else {
+				aClass = __inject__(FieldTypeGetter.class).execute(field).getOutput();
+				if(Boolean.TRUE.equals(aClass.isInterface()))
+					aClass = __inject__(aClass).getClass();
+				field = getField(aClass, collectionHelper.getElementsFrom(fieldNames, 1));
+			}
+		}
+		
+		return field;
+	}
+	
+	@Override
+	public Field getField(Class<?> aClass, String... fieldNames) {
+		return getField(aClass, __inject__(CollectionHelper.class).instanciate(fieldNames));
 	}
 	
 	/*

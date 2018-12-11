@@ -21,4 +21,8 @@ public interface FieldHelper extends Helper {
 	FieldHelper copy(Object source,Object destination);
 	
 	<TYPE> Class<TYPE> getParameterAt(Field field, Integer index, Class<TYPE> typeClass);
+	
+	Field getField(Class<?> aClass,Collection<String> fieldNames);
+	Field getField(Class<?> aClass,String...fieldNames);
+	
 }

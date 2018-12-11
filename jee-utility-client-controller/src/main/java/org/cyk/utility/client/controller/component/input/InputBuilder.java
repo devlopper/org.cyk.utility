@@ -22,4 +22,7 @@ public interface InputBuilder<INPUT extends Input<VALUE>,VALUE> extends InputOut
 	
 	Object getOutputPropertyRequired();
 	InputBuilder<INPUT,VALUE> setOutputPropertyRequired(Object required);
+	
+	Boolean getIsEditable();
+	InputBuilder<INPUT,VALUE> setIsEditable(Boolean isEditable);
 }

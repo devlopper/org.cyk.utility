@@ -18,10 +18,13 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
+import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.data.FormData;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemActionUpdate;
 
 public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> implements ViewBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -30,6 +33,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	private ViewType type;
 	private CommandableBuilderByClassMap commandableByClassMap;
 	private CommandableBuilders commandables;
+	private SystemAction systemAction;
 		
 	@Override
 	protected void __execute__(View view) {
@@ -126,10 +130,32 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	}
 	
 	@Override
-	public ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object, String... fieldNames) {
-		Class<? extends ComponentBuilder<?>> builderClass =  __inject__(ComponentBuilderClassGetter.class).setField(__injectCollectionHelper__().getFirst(__inject__(FieldGetter.class)
-				.execute(object.getClass(),  __injectFieldHelper__().concatenate(fieldNames)).getOutput())).execute().getOutput();
+	public ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object,Class<?> componentBuilderBaseClass, String... fieldNames) {
+		Class<? extends ComponentBuilder<?>> builderClass =  __inject__(ComponentBuilderClassGetter.class)
+				.setClazz(object.getClass())
+				.addFieldNameStrings(fieldNames).setBaseClass(componentBuilderBaseClass)
+				.execute().getOutput();
+				//.setField(__injectCollectionHelper__().getFirst(__inject__(FieldGetter.class).execute(object.getClass(),  __injectFieldHelper__().concatenate(fieldNames)).getOutput()))
+		
 		return addComponentBuilderByObjectByFieldNames(builderClass, object, fieldNames);
+	}
+	
+	@Override
+	public ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object,String... fieldNames) {
+		return addComponentBuilderByObjectByFieldNames(object,null, fieldNames);
+	}
+	
+	@Override
+	public ComponentBuilder<?> addInputBuilderByObjectByFieldNames(Object object, Boolean isEditable,String... fieldNames) {
+		Class<?> componentBuilderBaseClass = null;
+		if(!Boolean.TRUE.equals(isEditable))
+			componentBuilderBaseClass = OutputBuilder.class;
+		return addComponentBuilderByObjectByFieldNames(object, componentBuilderBaseClass, fieldNames);
+	}
+	
+	@Override
+	public ComponentBuilder<?> addInputBuilderByObjectByFieldNames(Object object, SystemAction systemAction,String... fieldNames) {
+		return addInputBuilderByObjectByFieldNames(object, systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionUpdate, fieldNames);
 	}
 	
 	@Override
@@ -243,6 +269,17 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	@Override
 	public ViewBuilder addNavigationCommandableBySystemActionClass(Class<? extends SystemAction> systemActionClass,Object... parameters) {
 		return addNavigationCommandableBySystemAction(__inject__(systemActionClass),parameters);
+	}
+	
+	@Override
+	public SystemAction getSystemAction() {
+		return systemAction;
+	}
+	
+	@Override
+	public ViewBuilder setSystemAction(SystemAction systemAction) {
+		this.systemAction = systemAction;
+		return this;
 	}
 	
 	/**/

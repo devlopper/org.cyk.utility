@@ -28,6 +28,9 @@ public interface ComponentBuilderClassGetter extends FunctionWithPropertiesAsInp
 	String getMethodName();
 	ComponentBuilderClassGetter setMethodName(String methodName);
 	
+	Class<?> getBaseClass();
+	ComponentBuilderClassGetter setBaseClass(Class<?> baseClass);
+	
 	Annotations getAnnotations();
 	Annotations getAnnotations(Boolean injectIfNull);
 	ComponentBuilderClassGetter setAnnotations(Annotations annotations);

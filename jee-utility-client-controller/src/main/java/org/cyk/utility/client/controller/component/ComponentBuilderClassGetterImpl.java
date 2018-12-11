@@ -10,12 +10,13 @@ import java.util.HashSet;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.annotation.Annotations;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBoxBuilder;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneComboBuilder;
+import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
-import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 
@@ -28,6 +29,7 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 	private Field field;
 	private String methodName;
 	private Method method;
+	private Class<?> baseClass;
 	private Annotations annotations;
 	
 	@Override
@@ -44,8 +46,11 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 				Class clazz = getClazz();
 				Strings fieldNameStrings = getFieldNameStrings();
 				if(clazz!=null && __injectCollectionHelper__().isNotEmpty(fieldNameStrings)) {
+					/*
 					field = __injectCollectionHelper__().getFirst(
 							__inject__(FieldGetter.class).execute(clazz, __injectFieldHelper__().concatenate(fieldNameStrings.get())).getOutput());
+					*/
+					field = __injectFieldHelper__().getField(clazz, fieldNameStrings.get());
 				}
 			}
 			if(field!=null) {
@@ -75,6 +80,13 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 		}
 		
 		builderClass = __getBuilderClassFromAnnotations__(annotationCollection);
+		
+		Class<?> baseClass = getBaseClass();
+		if(builderClass!=null && baseClass!=null && !Boolean.TRUE.equals(__injectClassHelper__().isInstanceOf(builderClass, baseClass))) {
+			if(__injectClassHelper__().isInstanceOf(builderClass, InputBuilder.class))
+				if(__injectClassHelper__().isInstanceOf(baseClass, OutputBuilder.class))
+					builderClass = OutputStringTextBuilder.class;
+		}
 		
 		return builderClass;
 	}
@@ -167,6 +179,17 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 		return this;
 	}
 	
+	@Override
+	public Class<?> getBaseClass() {
+		return baseClass;
+	}
+	
+	@Override
+	public ComponentBuilderClassGetter setBaseClass(Class<?> baseClass) {
+		this.baseClass = baseClass;
+		return this;
+	}
+	
 	/**/
 	
 	protected <T extends Annotation> T __getAnnotation__(Class<T> annotationClass,Collection<? extends Annotation> annotations) {
@@ -178,41 +201,44 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 	}
 
 	protected Class<? extends ComponentBuilder<?>> __getBuilderClassFromAnnotations__(Collection<? extends Annotation> annotations) {
-		/* Output */
 		
-		org.cyk.utility.client.controller.component.annotation.OutputStringText annotationOutputStringText =
-				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.OutputStringText.class,annotations);
-		if(annotationOutputStringText!=null)
-			return OutputStringTextBuilder.class;
-		
-		/* Input */
-		
-		org.cyk.utility.client.controller.component.annotation.InputStringLineOne annotationInputStringLineOne =
-				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputStringLineOne.class,annotations);
-		if(annotationInputStringLineOne!=null)
-			return InputStringLineOneBuilder.class;
-		
-		org.cyk.utility.client.controller.component.annotation.InputStringLineMany annotationInputStringLineMany =
-				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputStringLineMany.class,annotations);
-		if(annotationInputStringLineMany!=null)
-			return InputStringLineManyBuilder.class;
-		
-		org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo annotationInputChoiceOneCombo =
-				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo.class,annotations);
-		if(annotationInputChoiceOneCombo!=null)
-			return InputChoiceOneComboBuilder.class;
-		
-		org.cyk.utility.client.controller.component.annotation.InputChoiceManyCheckBox annotationInputChoiceManyCheckBox =
-				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceManyCheckBox.class,annotations);
-		if(annotationInputChoiceManyCheckBox!=null)
-			return InputChoiceManyCheckBoxBuilder.class;
-		
-		/* Commandable */
-		
-		org.cyk.utility.client.controller.component.annotation.Commandable annotationCommandable =
-				__getAnnotation__(org.cyk.utility.client.controller.component.annotation.Commandable.class,annotations);
-		if(annotationCommandable!=null)
-			return CommandableBuilder.class;
+		//if(org.cyk.utility.client.controller.component.output.Output.class.equals(componentBaseClass)) {
+			/* Output */
+			
+			org.cyk.utility.client.controller.component.annotation.OutputStringText annotationOutputStringText =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.OutputStringText.class,annotations);
+			if(annotationOutputStringText!=null)
+				return OutputStringTextBuilder.class;	
+		//}else if(org.cyk.utility.client.controller.component.input.Input.class.equals(componentBaseClass)) {
+			/* Input */
+			
+			org.cyk.utility.client.controller.component.annotation.InputStringLineOne annotationInputStringLineOne =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputStringLineOne.class,annotations);
+			if(annotationInputStringLineOne!=null)
+				return InputStringLineOneBuilder.class;
+			
+			org.cyk.utility.client.controller.component.annotation.InputStringLineMany annotationInputStringLineMany =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputStringLineMany.class,annotations);
+			if(annotationInputStringLineMany!=null)
+				return InputStringLineManyBuilder.class;
+			
+			org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo annotationInputChoiceOneCombo =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo.class,annotations);
+			if(annotationInputChoiceOneCombo!=null)
+				return InputChoiceOneComboBuilder.class;
+			
+			org.cyk.utility.client.controller.component.annotation.InputChoiceManyCheckBox annotationInputChoiceManyCheckBox =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceManyCheckBox.class,annotations);
+			if(annotationInputChoiceManyCheckBox!=null)
+				return InputChoiceManyCheckBoxBuilder.class;	
+		//}else if(org.cyk.utility.client.controller.component.command.Commandable.class.equals(componentBaseClass)) {
+			/* Commandable */
+			
+			org.cyk.utility.client.controller.component.annotation.Commandable annotationCommandable =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.Commandable.class,annotations);
+			if(annotationCommandable!=null)
+				return CommandableBuilder.class;	
+		//}
 		
 		return null;
 	}

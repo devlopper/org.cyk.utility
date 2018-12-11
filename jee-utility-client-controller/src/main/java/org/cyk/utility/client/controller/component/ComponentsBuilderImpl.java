@@ -9,9 +9,12 @@ import java.util.Map;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
+import org.cyk.utility.client.controller.component.output.OutputBuilder;
+import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.css.StyleBuilder;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.instance.Instances;
+import org.cyk.utility.string.Case;
 
 public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Components> implements ComponentsBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,7 +23,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	private StyleBuilder layoutStyle;
 	private Instances components;
 	private Boolean isCreateLayoutItemOnAddComponent;
-	
+
 	@Override
 	protected Components __execute__() throws Exception {
 		Components components = __inject__(Components.class);
@@ -41,18 +44,11 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 						if(inputBuilder.getLabel()!=null) {
 							finals.add(inputBuilder.getLabel());
 						}
-					}
-					finals.add(componentBuilder);
-					if(index instanceof InputBuilder<?, ?>) {
-						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) index;
+						finals.add(componentBuilder);
 						if(inputBuilder.getMessage()!=null) {
 							finals.add(inputBuilder.getMessage());
 						}
-					}
-					
-					//Width proportions
-					if(index instanceof InputBuilder<?, ?>) {
-						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) index;
+						//Width proportions
 						if(inputBuilder.getLabel()==null)
 							if(inputBuilder.getMessage()==null) {
 								//Nothing to do
@@ -70,7 +66,32 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 								inputBuilder.getMessage().setAreaWidthProportionsForNotPhone(4);
 							}
 						}								
-					}
+					}else if(index instanceof OutputBuilder<?, ?>) {
+						OutputBuilder<?, ?> outputBuilder = (OutputBuilder<?, ?>) index;
+						OutputStringTextBuilder outputStringText = null;
+						if(outputBuilder.getField()!=null) {
+							org.cyk.utility.client.controller.component.annotation.Input inputAnnotation = outputBuilder.getField()
+									.getAnnotation(org.cyk.utility.client.controller.component.annotation.Input.class);
+							if(inputAnnotation!=null) {
+								outputStringText = __inject__(OutputStringTextBuilder.class);
+								outputStringText.setValueInternalizationKeyValue(outputBuilder.getField().getName());
+								outputStringText.getValueInternalization(Boolean.TRUE).setCase(Case.FIRST_CHARACTER_UPPER);
+								finals.add(outputStringText);
+							}
+						}
+						finals.add(componentBuilder);
+						
+						//Width proportions
+						if(outputStringText == null)
+							outputBuilder.setAreaWidthProportionsForNotPhone(12);
+						else {
+							outputStringText.setAreaWidthProportionsForNotPhone(2);
+							outputBuilder.setAreaWidthProportionsForNotPhone(10);
+						}
+						
+					}else
+						finals.add(componentBuilder);
+					
 				}else if(index instanceof Component) {
 					Component component = (Component) index;
 					finals.add(component);

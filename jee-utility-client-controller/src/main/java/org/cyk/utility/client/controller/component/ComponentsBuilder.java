@@ -25,5 +25,5 @@ public interface ComponentsBuilder extends FunctionWithPropertiesAsInput<Compone
 	ComponentsBuilder setComponents(Instances components);
 	ComponentsBuilder addComponents(Collection<Object> components);
 	ComponentsBuilder addComponents(Object...components);
-
+	
 }

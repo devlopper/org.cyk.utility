@@ -27,6 +27,16 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	}
 	
 	@Override
+	public Collection<T> get(Integer begin, Integer end) {
+		return __inject__(CollectionHelper.class).getElementsFromTo(collection, begin, end);
+	}
+	
+	@Override
+	public Collection<T> get(Integer begin) {
+		return get(begin,null);
+	}
+	
+	@Override
 	public Collection<T> getIsInstanceOf(Collection<Class<?>> classes) {
 		Collection<T> collection = null;
 		if(__inject__(CollectionHelper.class).isNotEmpty(this.collection)) {

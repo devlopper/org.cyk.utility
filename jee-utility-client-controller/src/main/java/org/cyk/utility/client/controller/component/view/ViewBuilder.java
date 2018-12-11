@@ -33,7 +33,13 @@ public interface ViewBuilder extends VisibleComponentBuilder<View> {
 	
 	ViewBuilder addComponentBuilder(ComponentBuilder<?> componentBuilder);
 	<T extends ComponentBuilder<?>> T addComponentBuilderByObjectByFieldNames(Class<T> componentBuilderClass,Object object,String...fieldNames);
+	ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object,Class<?> componentBuilderBaseClass,String...fieldNames);
 	ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object,String...fieldNames);
+	
+	ComponentBuilder<?> addInputBuilderByObjectByFieldNames(Object object,Boolean isEditable,String...fieldNames);
+	ComponentBuilder<?> addInputBuilderByObjectByFieldNames(Object object,SystemAction systemAction,String...fieldNames);
+	//ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object,String...fieldNames);
+	
 	<T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object,String methodName,SystemAction systemAction);
 	<T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object,String methodName);
 	ComponentBuilder<?> addComponentBuilderByObjectByMethodName(Object object,String methodName,SystemAction systemAction);
@@ -51,4 +57,7 @@ public interface ViewBuilder extends VisibleComponentBuilder<View> {
 	ViewBuilder addNavigationCommandablesBySystemActionClasses(Class<? extends SystemAction>...systemActionClasses);
 	ViewBuilder addNavigationCommandableBySystemActionClass(Class<? extends SystemAction> systemActionClass,Object...parameters);
 	ViewBuilder addNavigationCommandableBySystemAction(SystemAction systemAction,Object...parameters);
+	
+	SystemAction getSystemAction();
+	ViewBuilder setSystemAction(SystemAction systemAction);
 }

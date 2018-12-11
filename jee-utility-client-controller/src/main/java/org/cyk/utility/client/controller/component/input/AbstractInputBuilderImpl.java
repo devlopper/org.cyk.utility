@@ -14,6 +14,7 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	private VALUE initialValue;
 	private OutputStringLabelBuilder label;
 	private OutputStringMessageBuilder message;
+	private Boolean isEditable;
 	
 	@Override
 	protected VALUE __getValue__(Object object, Field field, Object value) {
@@ -101,6 +102,17 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	@Override
 	public InputBuilder<INPUT, VALUE> setLabelValue(String value) {
 		getLabel(Boolean.TRUE).setValue(value);
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsEditable() {
+		return isEditable;
+	}
+	
+	@Override
+	public InputBuilder<INPUT, VALUE> setIsEditable(Boolean isEditable) {
+		this.isEditable = isEditable;
 		return this;
 	}
 	

@@ -331,6 +331,17 @@ public class FieldHelperUnitTest extends AbstractUnitTest {
 		private Integer f2;
 		private Collection<String> f3;
 		private Collection<Integer> f4;
+		private FieldTypeSub sub;
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class FieldTypeSub {
+		
+		private String sf1;
+		private Integer sf2;
+		private Collection<String> sf3;
+		private Collection<Integer> sf4;
 		
 	}
 	

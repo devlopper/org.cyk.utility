@@ -30,8 +30,9 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<C
 			if(fieldName!=null){
 				ValueUsageType valueUsageType = getValueUsageType();
 				token = __inject__(FieldNameGetter.class).setClazz(aClass).setFieldName(fieldName).setValueUsageType(valueUsageType).execute().getOutput();
-			}
+			}	
 		}
+		
 		StringLocation location = getTokenLocation();
 		if(location == null)
 			location = StringLocation.EXAT;

@@ -24,7 +24,7 @@ public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitT
 	private static final long serialVersionUID = -2849775962912387317L;
 
 	@Test
-	public void get() {
+	public void isNull_whenAnnotaionsAreEmpty() {
 		assertionHelper.assertEquals(null, __inject__(ComponentBuilderClassGetter.class).execute().getOutput());
 	}
 	
@@ -79,6 +79,18 @@ public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitT
 	}
 	
 	@Test
+	public void getOutputStringTextBuilder_fromFieldNameStrings_inputText() {
+		assertionHelper.assertEquals(OutputStringTextBuilder.class, __inject__(ComponentBuilderClassGetter.class).setClazz(Model.class).addFieldNameStrings("inputText")
+				.setBaseClass(OutputStringTextBuilder.class).execute().getOutput());
+	}
+	
+	@Test
+	public void getOutputStringTextBuilder_fromFieldNameStrings_subModel_subInputText() {
+		assertionHelper.assertEquals(OutputStringTextBuilder.class, __inject__(ComponentBuilderClassGetter.class).setClazz(Model.class).addFieldNameStrings("subModel","subInputText")
+				.setBaseClass(OutputStringTextBuilder.class).execute().getOutput());
+	}
+	
+	@Test
 	public void getInputStringLineManyBuilder_fromFieldNameStrings() {
 		assertionHelper.assertEquals(InputStringLineManyBuilder.class, __inject__(ComponentBuilderClassGetter.class).setClazz(Model.class).addFieldNameStrings("inputTextArea").execute().getOutput());
 	}
@@ -107,11 +119,19 @@ public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitT
 		@InputStringLineOne private String inputText;
 		@InputStringLineMany private String inputTextArea;
 		@InputChoiceOneCombo private String inputCombo;
+		private SubModel subModel;
 		
 		@Commandable(systemActionClass=SystemAction.class)
 		public void submit() {
 			
 		}
+		
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class SubModel {
+		
+		@InputStringLineOne private String subInputText;
 		
 	}
 	

@@ -18,6 +18,8 @@ public interface CollectionHelper extends Helper {
 	Integer getSize(CollectionInstance<?> collectionInstance);
 	<ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection, Object index);
 	<ELEMENT> ELEMENT getElementAt(CollectionInstance<ELEMENT> collectionInstance, Object index);
+	<ELEMENT> Collection<ELEMENT> getElementsFromTo(Collection<ELEMENT> collection,Integer begin,Integer end);
+	<ELEMENT> Collection<ELEMENT> getElementsFrom(Collection<ELEMENT> collection,Integer begin);
 	<ELEMENT> ELEMENT getFirst(Collection<ELEMENT> collection);
 	<ELEMENT> ELEMENT getFirst(CollectionInstance<ELEMENT> collection);
 	<ELEMENT> ELEMENT getLast(Collection<ELEMENT> collection);

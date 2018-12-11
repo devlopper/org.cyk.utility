@@ -67,7 +67,11 @@ public abstract class AbstractInputOutputImpl<T> extends AbstractVisibleComponen
 	}
 	
 	protected T __getValueToSetValueFromFieldValue__(Object object,Field field) {
-		return (T) __inject__(FieldValueGetter.class).execute(object, field).getOutput();
+		return (T) ____getValueToSetValueFromFieldValue____(object, field);
+	}
+	
+	protected Object ____getValueToSetValueFromFieldValue____(Object object,Field field) {
+		return __inject__(FieldValueGetter.class).execute(object, field).getOutput();
 	}
 	
 	@Override
