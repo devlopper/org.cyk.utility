@@ -117,6 +117,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 					map.put(component, componentBuilder);
 				}
 			}
+			
 			//Derive layout
 			if(components.getLayout() == null) {
 				layout = __inject__(LayoutBuilder.class);
@@ -134,6 +135,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 				}
 				components.setLayout(layout.execute().getOutput());
 			}
+			
 			//Set layout items
 			if(components.getLayout() != null) {
 				Integer indexLayoutItem = 0;

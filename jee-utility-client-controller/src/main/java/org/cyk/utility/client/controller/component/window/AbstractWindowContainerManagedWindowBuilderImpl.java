@@ -67,7 +67,6 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		
 		ViewBuilder view = getView();
 		window.setView(view);
-		
 		return window;
 	}
 	

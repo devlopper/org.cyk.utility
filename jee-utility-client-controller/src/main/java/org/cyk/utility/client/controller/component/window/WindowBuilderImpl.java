@@ -7,11 +7,11 @@ import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuild
 import org.cyk.utility.client.controller.component.dialog.DialogBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
+import org.cyk.utility.client.controller.component.menu.MenuGetter;
 import org.cyk.utility.client.controller.component.menu.MenuMap;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
-import org.cyk.utility.scope.Scope;
 
 public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Window> implements WindowBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -34,14 +34,13 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		MenuBuilderMap menuMap = getMenuMap();
 		if(menuMap!=null) {
 			window.setMenuMap(__inject__(MenuMap.class));
-			for(Map.Entry<Scope,MenuBuilder> entry : menuMap.getEntries())
-				window.getMenuMap().set(entry.getKey(),entry.getValue().execute().getOutput());
+			for(@SuppressWarnings("rawtypes") Map.Entry<Class,MenuBuilder> entry : menuMap.getEntries())
+				window.getMenuMap().set(entry.getKey(),__inject__(MenuGetter.class).setScopeClass(entry.getKey()).execute().getOutput());
 		}
+		
 		Theme theme = getTheme();
 		window.setTheme(theme);
-		
 		DialogBuilder dialog = getDialog(Boolean.TRUE);
-		
 		if(dialog!=null)
 			window.setDialog(dialog.execute().getOutput());
 	}

@@ -48,7 +48,7 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 				url = __inject__(UrlBuilder.class);
 				
 				String urlString = __inject__(NavigationIdentifierToUrlStringMapper.class).setIdentifier(identifier).execute().getOutput();
-				if(__injectStringHelper__().isBlank(urlString)) {
+				if(__injectStringHelper__().isBlank(urlString) && systemAction!=null) {
 					Class<?> aClass = systemAction.getEntities().getElementClass();
 					systemAction.getEntities().setElementClass(null);
 					String identifier02 = __inject__(NavigationIdentifierStringBuilder.class).setSystemAction(systemAction).execute().getOutput();

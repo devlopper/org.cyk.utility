@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.client.controller.component.input.choice.ChoiceBuilderImpl;
 import org.cyk.utility.client.controller.message.MessagesBuilderImpl;
+import org.cyk.utility.request.RequestGetterImpl;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -17,6 +18,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	public void __initialize__(Object object) {
 		__inject__(FunctionRunnableMap.class).set(MessagesBuilderImpl.class, MessagesBuilderFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(ChoiceBuilderImpl.class, ChoiceBuilderFunctionRunnableImpl.class);
+		__inject__(FunctionRunnableMap.class).set(RequestGetterImpl.class, RequestGetterRunnableImpl.class);
 	}
 	
 	@Override
