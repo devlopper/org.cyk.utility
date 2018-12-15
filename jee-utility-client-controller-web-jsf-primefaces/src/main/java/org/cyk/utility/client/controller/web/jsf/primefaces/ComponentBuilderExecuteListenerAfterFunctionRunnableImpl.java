@@ -16,6 +16,7 @@ import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.dialog.Dialog;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.input.Input;
+import org.cyk.utility.client.controller.component.input.InputBoolean;
 import org.cyk.utility.client.controller.component.input.choice.InputChoice;
 import org.cyk.utility.client.controller.component.layout.Insert;
 import org.cyk.utility.client.controller.component.menu.Menu;
@@ -70,6 +71,10 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						if(inputOutput instanceof Input<?>) {
 							if(component instanceof InputChoice<?>) {
 								component.getProperties().setConverter(__inject__(ObjectConverter.class));
+							}else if(component instanceof InputBoolean) {
+								InputBoolean inputBoolean = (InputBoolean) inputOutput;
+								component.getProperties().setOffLabel(inputBoolean.getFalseValue().getLabel());
+								component.getProperties().setOnLabel(inputBoolean.getTrueValue().getLabel());
 							}
 						}
 					}else if(component instanceof Menu) {

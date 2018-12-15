@@ -10,11 +10,14 @@ import java.util.HashSet;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.annotation.Annotations;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.client.controller.component.input.InputBooleanButtonBuilder;
+import org.cyk.utility.client.controller.component.input.InputBooleanCheckBoxBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBoxBuilder;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneComboBuilder;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneRadioBuilder;
 import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -222,10 +225,25 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 			if(annotationInputStringLineMany!=null)
 				return InputStringLineManyBuilder.class;
 			
+			org.cyk.utility.client.controller.component.annotation.InputBooleanButton annotationInputBooleanButton =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputBooleanButton.class,annotations);
+			if(annotationInputBooleanButton!=null)
+				return InputBooleanButtonBuilder.class;
+			
+			org.cyk.utility.client.controller.component.annotation.InputBooleanCheckBox annotationInputBooleanCheckBox =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputBooleanCheckBox.class,annotations);
+			if(annotationInputBooleanCheckBox!=null)
+				return InputBooleanCheckBoxBuilder.class;
+			
 			org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo annotationInputChoiceOneCombo =
 					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo.class,annotations);
 			if(annotationInputChoiceOneCombo!=null)
 				return InputChoiceOneComboBuilder.class;
+			
+			org.cyk.utility.client.controller.component.annotation.InputChoiceOneRadio annotationInputChoiceOneRadio =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceOneRadio.class,annotations);
+			if(annotationInputChoiceOneRadio!=null)
+				return InputChoiceOneRadioBuilder.class;
 			
 			org.cyk.utility.client.controller.component.annotation.InputChoiceManyCheckBox annotationInputChoiceManyCheckBox =
 					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceManyCheckBox.class,annotations);

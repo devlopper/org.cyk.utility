@@ -19,7 +19,10 @@ public class VerySimpleEntityEditWindowBuilderImpl extends AbstractWindowContain
 		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_NAME);
 		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_DESCRIPTION);
 		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_DETAILS,VerySimpleEntityDetails.PROPERTY_ADDRESS);
+		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_BOOLEAN_VALUE_CHECK_BOX);
+		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_BOOLEAN_VALUE_BUTTON);
 		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_ENUMERATION);
+		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_ENUMERATION_RADIO);
 		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_ENUMERATIONS);
 	}
 

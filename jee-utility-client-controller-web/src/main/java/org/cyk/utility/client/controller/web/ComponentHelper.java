@@ -12,10 +12,13 @@ import org.cyk.utility.client.controller.component.command.CommandableRenderType
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeLink;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.cell.Cell;
+import org.cyk.utility.client.controller.component.input.InputBooleanButton;
+import org.cyk.utility.client.controller.component.input.InputBooleanCheckBox;
 import org.cyk.utility.client.controller.component.input.InputStringLineMany;
 import org.cyk.utility.client.controller.component.input.InputStringLineOne;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBox;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneCombo;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneRadio;
 import org.cyk.utility.client.controller.component.layout.Insert;
 import org.cyk.utility.client.controller.component.layout.Layout;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
@@ -50,8 +53,20 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 		return object instanceof InputStringLineMany;
 	}
 	
+	public Boolean isInputBooleanCheckBox(Object object) {
+		return object instanceof InputBooleanCheckBox;
+	}
+	
+	public Boolean isInputBooleanButton(Object object) {
+		return object instanceof InputBooleanButton;
+	}
+	
 	public Boolean isInputChoiceOneCombo(Object object) {
 		return object instanceof InputChoiceOneCombo;
+	}
+	
+	public Boolean isInputChoiceOneRadio(Object object) {
+		return object instanceof InputChoiceOneRadio;
 	}
 	
 	public Boolean isInputChoiceManyCheckBox(Object object) {

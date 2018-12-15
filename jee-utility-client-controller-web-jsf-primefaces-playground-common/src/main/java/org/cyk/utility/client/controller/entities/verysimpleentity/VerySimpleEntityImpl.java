@@ -8,11 +8,15 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.utility.client.controller.component.annotation.Input;
+import org.cyk.utility.client.controller.component.annotation.InputBoolean;
+import org.cyk.utility.client.controller.component.annotation.InputBooleanButton;
+import org.cyk.utility.client.controller.component.annotation.InputBooleanCheckBox;
 import org.cyk.utility.client.controller.component.annotation.InputChoice;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceMany;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceManyCheckBox;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceOne;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo;
+import org.cyk.utility.client.controller.component.annotation.InputChoiceOneRadio;
 import org.cyk.utility.client.controller.component.annotation.InputString;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineMany;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
@@ -32,8 +36,17 @@ public class VerySimpleEntityImpl extends AbstractDataImpl implements VerySimple
 	@Input @InputChoice @InputChoiceOne @InputChoiceOneCombo @NotNull
 	private VerySimpleEntityEnum enumeration;
 	
+	@Input @InputChoice @InputChoiceOne @InputChoiceOneRadio @NotNull
+	private VerySimpleEntityEnum enumerationRadio;
+	
 	@Input @InputChoice @InputChoiceMany @InputChoiceManyCheckBox @NotNull
 	private Collection<VerySimpleEntityEnum> enumerations;
+	
+	@Input @InputBoolean @InputBooleanButton @NotNull
+	private Boolean booleanValueCheckBox;
+	
+	@Input @InputBoolean @InputBooleanCheckBox @NotNull
+	private Boolean booleanValueButton;
 	
 	@Override
 	public VerySimpleEntity setIdentifier(Object identifier) {
@@ -43,6 +56,28 @@ public class VerySimpleEntityImpl extends AbstractDataImpl implements VerySimple
 	@Override
 	public VerySimpleEntity setCode(String code) {
 		return (VerySimpleEntity) super.setCode(code);
+	}
+	
+	@Override
+	public Boolean getBooleanValueCheckBox() {
+		return booleanValueCheckBox;
+	}
+	
+	@Override
+	public VerySimpleEntity setBooleanValueCheckBox(Boolean booleanValueCheckBox) {
+		this.booleanValueCheckBox = booleanValueCheckBox;
+		return this;
+	}
+	
+	@Override
+	public Boolean getBooleanValueButton() {
+		return booleanValueButton;
+	}
+	
+	@Override
+	public VerySimpleEntity setBooleanValueButton(Boolean booleanValueButton) {
+		this.booleanValueButton = booleanValueButton;
+		return this;
 	}
 	
 	@Override
@@ -86,6 +121,17 @@ public class VerySimpleEntityImpl extends AbstractDataImpl implements VerySimple
 	@Override
 	public VerySimpleEntity setEnumeration(VerySimpleEntityEnum enumeration) {
 		this.enumeration = enumeration;
+		return this;
+	}
+	
+	@Override
+	public VerySimpleEntityEnum getEnumerationRadio() {
+		return enumerationRadio;
+	}
+	
+	@Override
+	public VerySimpleEntity setEnumerationRadio(VerySimpleEntityEnum enumerationRadio) {
+		this.enumerationRadio = enumerationRadio;
 		return this;
 	}
 	
