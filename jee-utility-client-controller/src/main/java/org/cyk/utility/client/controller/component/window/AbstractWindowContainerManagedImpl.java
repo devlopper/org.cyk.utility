@@ -3,11 +3,15 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.AbstractObject;
+import org.cyk.utility.client.controller.component.command.Commandable;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.theme.ThemeClassGetter;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.throwable.ThrowableHelper;
 
 public abstract class AbstractWindowContainerManagedImpl extends AbstractObject implements WindowContainerManaged,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -86,5 +90,20 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	
 	protected WindowBuilder __injectWindowBuilder__() {
 		return __inject__(WindowBuilder.class);
+	}
+	
+	public Commandable getCommandableByIdentifier(Object identifier) {
+		Commandable commandable = getWindow().getView().getComponents().getCommandableByIdentifier(identifier, Boolean.TRUE);
+		if(commandable == null) {
+			CommandableBuilder commandableBuilder = __inject__(CommandableBuilder.class)
+				.setCommandFunctionActionClass(SystemActionCreate.class).addCommandFunctionTryRunRunnable(new Runnable() {
+					@Override
+					public void run() {
+						__inject__(ThrowableHelper.class).throwRuntimeException("Commandable with identifier <<"+identifier+">> not found.");
+					}
+				});
+			commandable = commandableBuilder.execute().getOutput();
+		}
+		return commandable;
 	}
 }

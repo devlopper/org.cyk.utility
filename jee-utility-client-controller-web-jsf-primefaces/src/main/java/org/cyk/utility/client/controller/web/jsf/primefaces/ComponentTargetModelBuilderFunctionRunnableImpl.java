@@ -11,6 +11,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.model.ListDataModel;
 
+import org.codehaus.plexus.util.StringUtils;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
@@ -174,21 +175,13 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 						update = update + " , "+index;
 					
 				}
+			String commandableIdentifier = commandable.getIdentifier().toString();
+			String actionExpressionLanguage = commandable.getCommand().getWindowContainerVariableName()+".getCommandableByIdentifier('"+commandableIdentifier+"').command.function.executeToReturnVoid";
+			commandButton.setActionExpression(__inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {}));
+			update = StringUtils.replace(update, "glo", ":form:glo");
+			
 			commandButton.setUpdate(update);
 			
-			//commandButton.setActionExpression(__inject__(JavaServerFacesHelper.class).buildMethodExpression("value.command.function.executeToReturnVoid", Void.class, new Class<?>[] {}));
-			/*
-			SystemAction action = commandable.getCommand().getFunction().getAction();
-			if(action instanceof SystemActionUpdate)
-				onClickValueExpressionString = "componentHelper.getUrlByObjectByAction(indexRow,componentHelper.systemActionUpdateClass)";
-			else if(action instanceof SystemActionDelete)
-				onClickValueExpressionString = "componentHelper.getUrlByObjectByAction(indexRow,componentHelper.systemActionDeleteClass)";
-			
-			if(__inject__(StringHelper.class).isNotBlank(onClickValueExpressionString)) {
-				String url = __formatExpression__(onClickValueExpressionString);
-				onClickValueExpressionString = "window.open('"+url+"','_self');return false";
-			}
-			*/
 		}else {
 			commandButton.setType("button");
 		}
@@ -197,6 +190,7 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 			ValueExpression valueExpression = __buildValueExpressionString__(onClickValueExpressionString);
 			__setValueExpression__(commandButton, "onclick", valueExpression);	
 		}
+		
 		return commandButton;
 	}
 	

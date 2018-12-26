@@ -7,5 +7,7 @@ public interface Command extends InvisibleComponent {
 	CommandFunction getFunction();
 	Command setFunction(CommandFunction function);
 	CommandFunction getFunction(Boolean injectIfNull);
-	
+
+	String getWindowContainerVariableName();
+	Command setWindowContainerVariableName(String windowContainerVariableName);
 }

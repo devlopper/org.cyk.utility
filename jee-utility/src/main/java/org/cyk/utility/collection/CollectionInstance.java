@@ -11,6 +11,8 @@ public interface CollectionInstance<T> extends Objectable {
 	Collection<T> get(Integer begin);
 	Collection<T> getIsInstanceOf(Collection<Class<?>> classes);
 	Collection<T> getIsInstanceOf(Class<?>...classes);
+	<I> Collection<I> getIsInstanceOfOne(Class<I> aClass);
+	<I> I getIsInstanceOfOneByIdentifier(Class<I> aClass,Object identifier);
 	
 	CollectionInstance<T> set(Collection<T> collection);
 	CollectionInstance<T> add(Collection<T> collection);
@@ -25,6 +27,7 @@ public interface CollectionInstance<T> extends Objectable {
 	
 	T getAt(Object index);
 	T getFirst();
+	<I> I getFirstInstanceOf(Class<I> elementClass);
 	T getLast();
 	
 	Integer getSize();
@@ -32,4 +35,6 @@ public interface CollectionInstance<T> extends Objectable {
 	Class<?> getElementClass();
 	CollectionInstance<T> setElementClass(Class<?> elementClass);
 	
+	T getByIdentifier(Object identifier);
+
 }

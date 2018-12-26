@@ -86,4 +86,5 @@ public class ViewImpl extends AbstractVisibleComponentImpl implements View,Seria
 		this.commandableByClassMap = commandableByClassMap;
 		return this;
 	}
+	
 }

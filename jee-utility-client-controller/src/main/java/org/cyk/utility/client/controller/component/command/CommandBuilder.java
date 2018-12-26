@@ -11,4 +11,7 @@ public interface CommandBuilder extends InvisibleComponentBuilder<Command> {
 	Data getData();
 	CommandBuilder setData(Data data);
 	*/
+	
+	String getWindowContainerVariableName();
+	CommandBuilder setWindowContainerVariableName(String windowContainerVariableName);
 }

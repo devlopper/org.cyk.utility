@@ -10,12 +10,15 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 	private static final long serialVersionUID = 1L;
 
 	private CommandFunction function;
+	private String windowContainerVariableName;
 	//private Data data;
 	
 	@Override
 	protected void __execute__(Command command) {
 		super.__execute__(command);
 		command.setFunction(getFunction());
+		String windowContainerVariableName = getWindowContainerVariableName();
+		command.setWindowContainerVariableName(windowContainerVariableName);
 	}
 	
 	@Override
@@ -34,8 +37,21 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 		return (CommandFunction) __getInjectIfNull__(FIELD_FUNCTION, injectIfNull);
 	}
 	
+	@Override
+	public String getWindowContainerVariableName() {
+		return windowContainerVariableName;
+	}
+
+	@Override
+	public CommandBuilder setWindowContainerVariableName(String windowContainerVariableName) {
+		this.windowContainerVariableName = windowContainerVariableName;
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_FUNCTION = "function";
+
+	
 
 }

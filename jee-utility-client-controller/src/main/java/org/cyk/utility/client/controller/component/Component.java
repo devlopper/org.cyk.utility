@@ -22,4 +22,6 @@ public interface Component extends Objectable {
 	
 	Boolean getIsTargetModelBuilt();
 	Component setIsTargetModelBuilt(Boolean isTargetModelBuilt);
+	
+	
 }

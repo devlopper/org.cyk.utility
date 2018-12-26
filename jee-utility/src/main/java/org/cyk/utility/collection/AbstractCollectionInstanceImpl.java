@@ -41,7 +41,7 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 		Collection<T> collection = null;
 		if(__inject__(CollectionHelper.class).isNotEmpty(this.collection)) {
 			for(T index : this.collection) {
-				if(__inject__(ClassHelper.class).isInstanceOfOne(index.getClass(), classes)) {
+				if(index!=null && Boolean.TRUE.equals(__inject__(ClassHelper.class).isInstanceOfOne(index.getClass(), classes))) {
 					if(collection == null)
 						collection = new ArrayList<>();
 					collection.add(index);
@@ -54,6 +54,27 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	@Override
 	public Collection<T> getIsInstanceOf(Class<?>... classes) {
 		return getIsInstanceOf(__inject__(CollectionHelper.class).instanciate(classes));
+	}
+	
+	@Override
+	public <I> Collection<I> getIsInstanceOfOne(Class<I> aClass) {
+		Collection<I> instances = (Collection<I>) getIsInstanceOf(__inject__(CollectionHelper.class).instanciate(aClass));
+		return instances;
+	}
+	
+	@Override
+	public <I> I getIsInstanceOfOneByIdentifier(Class<I> aClass, Object identifier) {
+		Collection<I> instances = getIsInstanceOfOne(aClass);
+		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(instances))) {
+			for(I index : instances) {
+				Object indexIdentifier = null;
+				if(index instanceof AbstractObject)
+					indexIdentifier = ((AbstractObject)index).getIdentifier();
+				if(indexIdentifier!=null && indexIdentifier.equals(identifier))
+					return index;	
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -141,6 +162,25 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	public CollectionInstance<T> setElementClass(Class<?> elementClass) {
 		this.elementClass = elementClass;
 		return this;
+	}
+	
+	@Override
+	public T getByIdentifier(Object identifier) {
+		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(collection))) {
+			for(T index : collection) {
+				Object indexIdentifier = null;
+				if(index instanceof AbstractObject)
+					indexIdentifier = ((AbstractObject)index).getIdentifier();
+				if(indexIdentifier!=null && indexIdentifier.equals(identifier))
+					return index;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public <I> I getFirstInstanceOf(Class<I> elementClass) {
+		return __inject__(CollectionHelper.class).getFirst(getIsInstanceOfOne(elementClass));
 	}
 	
 	@Override

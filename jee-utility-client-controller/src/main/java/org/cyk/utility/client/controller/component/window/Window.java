@@ -26,4 +26,5 @@ public interface Window extends VisibleComponent {
 	
 	Dialog getDialog();
 	Window setDialog(Dialog dialog);
+	
 }
