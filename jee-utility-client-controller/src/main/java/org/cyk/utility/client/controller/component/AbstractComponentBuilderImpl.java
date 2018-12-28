@@ -18,6 +18,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private static final long serialVersionUID = 1L;
 
 	private Class<COMPONENT> componentClass;
+	private COMPONENT component;
 	private DeviceScreenArea area;
 	private StyleBuilder layoutItemStyle;
 	private ComponentRoles roles;
@@ -40,6 +41,14 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	protected COMPONENT __execute__() throws Exception {
 		Class<COMPONENT> componentClass = getComponentClass();
 		COMPONENT component = __inject__(componentClass);
+		
+		// Bidirectional Linking
+		setComponent(component);
+		component.setBuilder(this);
+		
+		component.setIdentifier(getOutputProperties().getIdentifier());
+		component.getProperties().setIdentifierAsStyleClass(getOutputProperties().getStyleClass());
+		
 		__inject__(ComponentBuilderExecuteListenerBefore.class).setObject(this).setComponent(component).execute();
 		ComponentRoles roles = getRoles();
 		component.setRoles(roles);
@@ -62,6 +71,16 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	@Override
 	public ComponentBuilder<COMPONENT> setComponentClass(Class<COMPONENT> componentClass) {
 		this.componentClass = componentClass;
+		return this;
+	}
+	
+	@Override
+	public COMPONENT getComponent() {
+		return component;
+	}
+	@Override
+	public ComponentBuilder<COMPONENT> setComponent(COMPONENT component) {
+		this.component = component;
 		return this;
 	}
 	

@@ -28,6 +28,7 @@ public interface Grid extends VisibleComponent {
 	View getView(String key);
 	
 	Objects getObjects();
+	Objects getObjects(Boolean injectIfNull);
 	Grid setObjects(Objects objects);
 	
 }

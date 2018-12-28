@@ -5,20 +5,21 @@ import java.io.Serializable;
 import org.cyk.utility.client.controller.component.command.Command;
 import org.cyk.utility.client.controller.component.command.CommandBuilder;
 import org.cyk.utility.client.controller.component.command.CommandFunction;
+import org.cyk.utility.client.controller.component.window.WindowContainerManaged;
 
 public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Command> implements CommandBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private CommandFunction function;
-	private String windowContainerVariableName;
+	private WindowContainerManaged windowContainerManaged;
 	//private Data data;
 	
 	@Override
 	protected void __execute__(Command command) {
 		super.__execute__(command);
 		command.setFunction(getFunction());
-		String windowContainerVariableName = getWindowContainerVariableName();
-		command.setWindowContainerVariableName(windowContainerVariableName);
+		WindowContainerManaged windowContainerManaged = getWindowContainerManaged();
+		command.setWindowContainerManaged(windowContainerManaged);
 	}
 	
 	@Override
@@ -38,13 +39,13 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 	}
 	
 	@Override
-	public String getWindowContainerVariableName() {
-		return windowContainerVariableName;
+	public WindowContainerManaged getWindowContainerManaged() {
+		return windowContainerManaged;
 	}
 
 	@Override
-	public CommandBuilder setWindowContainerVariableName(String windowContainerVariableName) {
-		this.windowContainerVariableName = windowContainerVariableName;
+	public CommandBuilder setWindowContainerManaged(WindowContainerManaged windowContainerManaged) {
+		this.windowContainerManaged = windowContainerManaged;
 		return this;
 	}
 	

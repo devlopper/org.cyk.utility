@@ -3,6 +3,9 @@ package org.cyk.utility.client.controller;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.client.controller.message.MessageRender;
+import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
+import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.system.AbstractSystemFunctionClientImpl;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerController;
@@ -40,4 +43,17 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 		return __inject__(SystemLayerController.class);
 	}
 	
+	@Override
+	protected void __notifyOnSuccess__() {
+		__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class)
+				.setSummaryInternalizationStringKeyValue("operation.execution.success.summary")
+				.setDetailsInternalizationStringKeyValue("operation.execution.success.details")
+				).setType(__inject__(MessageRenderTypeDialog.class)).execute();
+	}
+	
+	@Override
+	protected void __notifyOnThrowable__(Throwable throwable) {
+		__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class).setThrowable(throwable))
+			.setType(__inject__(MessageRenderTypeDialog.class)).execute();
+	}
 }

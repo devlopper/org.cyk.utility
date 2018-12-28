@@ -1,15 +1,9 @@
 package org.cyk.utility.client.controller.component.command;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import org.cyk.utility.client.controller.AbstractControllerFunctionImpl;
 import org.cyk.utility.client.controller.Controller;
-import org.cyk.utility.client.controller.message.MessageRender;
-import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
-import org.cyk.utility.client.controller.message.MessagesBuilder;
-import org.cyk.utility.notification.Notification;
-import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -24,6 +18,9 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
+		setIsNotifyAfterExecutionPhaseFinally(Boolean.TRUE);
+		setIsNotifyOnSuccess(Boolean.TRUE);
+		setIsNotifyOnThrowable(Boolean.TRUE);
 		setIsCatchThrowable(Boolean.TRUE);
 		getExecutionPhaseTry(Boolean.TRUE).getRun(Boolean.TRUE).addRunnables(new Runnable() {
 			@Override
@@ -60,6 +57,7 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 	@Override
 	protected void __execute__(SystemAction action) {}
 	
+	/*
 	@Override
 	protected void __finally__() {
 		super.__finally__();
@@ -84,5 +82,5 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 		}
 		
 	}
-	
+	*/
 }

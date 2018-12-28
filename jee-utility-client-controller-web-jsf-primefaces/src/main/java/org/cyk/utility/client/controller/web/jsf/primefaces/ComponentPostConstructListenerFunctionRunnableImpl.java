@@ -18,7 +18,7 @@ public class ComponentPostConstructListenerFunctionRunnableImpl extends Abstract
 			public void run() {
 				//TODO to be deleted. use only builders
 				Component component = (Component) getFunction().getObject();
-				component.getProperties().setIdentifier(String.format(IDENTIFIER_FORMAT,component.getClass().getSimpleName(),__inject__(RandomHelper.class).getAlphabetic(3)));
+				//component.getProperties().setIdentifier(String.format(IDENTIFIER_FORMAT,component.getClass().getSimpleName(),__inject__(RandomHelper.class).getAlphabetic(3)));
 				//component.getProperties().setRendered(Boolean.TRUE);
 			}
 		});

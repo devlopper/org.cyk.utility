@@ -59,4 +59,14 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	FunctionExecutionPhaseFinally getExecutionPhaseFinally();
 	FunctionExecutionPhaseFinally getExecutionPhaseFinally(Boolean injectIfNull);
 	FunctionExecutionPhaseFinally finally_();
+	
+	Function<INPUT,OUTPUT> setIsNotifyAfterExecutionPhaseFinally(Boolean isNotifyAfterExecutionPhaseFinally);
+	Boolean getIsNotifyAfterExecutionPhaseFinally();
+	
+	Function<INPUT,OUTPUT> setIsNotifyOnSuccess(Boolean isNotifyOnSuccess);
+	Boolean getIsNotifyOnSuccess();
+	
+	Function<INPUT,OUTPUT> setIsNotifyOnThrowable(Boolean isNotifyOnThrowable);
+	Boolean getIsNotifyOnThrowable();
+	
 }

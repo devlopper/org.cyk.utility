@@ -4,13 +4,16 @@ import java.io.Serializable;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
+import org.cyk.utility.string.StringHelper;
 
 public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Notification> implements NotificationBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Throwable throwable;
 	private NotificationSeverity severity;
+	private String summary;
 	private InternalizationStringBuilder summaryInternalizationString;
+	private String details;
 	private InternalizationStringBuilder detailsInternalizationString;
 	
 	@Override
@@ -26,24 +29,30 @@ public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInp
 		}
 		notification.setSeverity(severity);
 		
-		InternalizationStringBuilder summaryInternalizationString = getSummaryInternalizationString();
-		if(summaryInternalizationString==null) {
-			if(throwable!=null) {
-				throwable.printStackTrace();//TODO to be removed
-				String summary = throwable.getMessage();// __inject__(StackTraceHelper.class).getStackTraceAsString();
-				notification.setSummary(summary);
-			}
-		}else
-			notification.setSummary(summaryInternalizationString.execute().getOutput());
+		String summary = getSummary();
+		if(__inject__(StringHelper.class).isBlank(summary)) {
+			InternalizationStringBuilder summaryInternalizationString = getSummaryInternalizationString();
+			if(summaryInternalizationString==null) {
+				if(throwable!=null) {
+					throwable.printStackTrace();//TODO to be removed
+					summary = throwable.getMessage();// __inject__(StackTraceHelper.class).getStackTraceAsString();
+				}
+			}else
+				summary = summaryInternalizationString.execute().getOutput();	
+		}
+		notification.setSummary(summary);
 		
-		InternalizationStringBuilder detailsInternalizationString = getDetailsInternalizationString();
-		if(detailsInternalizationString==null) {
-			if(throwable!=null) {
-				String details = throwable.getMessage();//__inject__(StackTraceHelper.class).getStackTraceAsString();
-				notification.setDetails(details);
-			}
-		}else
-			notification.setDetails(detailsInternalizationString.execute().getOutput());
+		String details = getDetails();
+		if(__inject__(StringHelper.class).isBlank(details)) {
+			InternalizationStringBuilder detailsInternalizationString = getDetailsInternalizationString();
+			if(detailsInternalizationString==null) {
+				if(throwable!=null) {
+					details = throwable.getMessage();//__inject__(StackTraceHelper.class).getStackTraceAsString();
+				}
+			}else
+				details = detailsInternalizationString.execute().getOutput();	
+		}
+		notification.setDetails(details);
 		
 		return notification;
 	}
@@ -111,6 +120,27 @@ public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInp
 	@Override
 	public NotificationBuilder setDetailsInternalizationStringKeyValue(Object value) {
 		getDetailsInternalizationString(Boolean.TRUE).setKeyValue(value);
+		return this;
+	}
+	
+	@Override
+	public String getDetails() {
+		return details;
+	}
+	
+	@Override
+	public NotificationBuilder setDetails(String details) {
+		this.details = details;
+		return this;
+	}
+	@Override
+	public String getSummary() {
+		return summary;
+	}
+	
+	@Override
+	public NotificationBuilder setSummary(String summary) {
+		this.summary = summary;
 		return this;
 	}
 	

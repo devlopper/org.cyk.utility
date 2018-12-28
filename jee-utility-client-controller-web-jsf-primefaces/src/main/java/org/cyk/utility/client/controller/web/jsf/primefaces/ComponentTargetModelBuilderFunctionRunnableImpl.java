@@ -176,8 +176,11 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 					
 				}
 			String commandableIdentifier = commandable.getIdentifier().toString();
-			String actionExpressionLanguage = commandable.getCommand().getWindowContainerVariableName()+".getCommandableByIdentifier('"+commandableIdentifier+"').command.function.executeToReturnVoid";
-			commandButton.setActionExpression(__inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {}));
+			if(commandable.getCommand().getWindowContainerManaged()!=null) {
+				String actionExpressionLanguage = commandable.getCommand().getWindowContainerManaged().getContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').command.function.executeToReturnVoid";
+				commandButton.setActionExpression(__inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {}));	
+			}
+			
 			update = StringUtils.replace(update, "glo", ":form:glo");
 			
 			commandButton.setUpdate(update);
@@ -248,6 +251,8 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		DataTable dataTable = new DataTable();
 		dataTable.setVar("indexRow");
 		dataTable.setReflow(Boolean.TRUE);
+		if(grid.getStyle()!=null)
+			dataTable.setStyleClass(grid.getStyle().getClassesAsString());
 		
 		UIComponent uiComponent =__build__(grid.getView(ViewMap.HEADER));
 		if(uiComponent!=null)

@@ -3,11 +3,12 @@ package org.cyk.utility.client.controller.component.command;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractInvisibleComponentImpl;
+import org.cyk.utility.client.controller.component.window.WindowContainerManaged;
 
 public class CommandImpl extends AbstractInvisibleComponentImpl implements Command,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String windowContainerVariableName;
+	private WindowContainerManaged windowContainerManaged;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -35,13 +36,13 @@ public class CommandImpl extends AbstractInvisibleComponentImpl implements Comma
 	}
 
 	@Override
-	public String getWindowContainerVariableName() {
-		return windowContainerVariableName;
+	public WindowContainerManaged getWindowContainerManaged() {
+		return windowContainerManaged;
 	}
 
 	@Override
-	public Command setWindowContainerVariableName(String windowContainerVariableName) {
-		this.windowContainerVariableName = windowContainerVariableName;
+	public Command setWindowContainerManaged(WindowContainerManaged windowContainerManaged) {
+		this.windowContainerManaged = windowContainerManaged;
 		return this;
 	}
 	

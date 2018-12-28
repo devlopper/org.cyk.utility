@@ -8,6 +8,12 @@ public interface NotificationBuilder extends FunctionWithPropertiesAsInput<Notif
 	NotificationSeverity getSeverity();
 	NotificationBuilder setSeverity(NotificationSeverity severity);
 	
+	String getSummary();
+	NotificationBuilder setSummary(String summary);
+	
+	String getDetails();
+	NotificationBuilder setDetails(String details);
+	
 	InternalizationStringBuilder getSummaryInternalizationString();
 	InternalizationStringBuilder getSummaryInternalizationString(Boolean injectIfNull);
 	NotificationBuilder setSummaryInternalizationString(InternalizationStringBuilder summaryInternalizationString);

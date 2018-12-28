@@ -12,13 +12,25 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	private LayoutItem layoutItem;
 	private ComponentRoles roles;
 	private Object targetModel;
-	Boolean isTargetModelBuilt;
+	private Boolean isTargetModelBuilt;
 	private Objects updatables;
+	private ComponentBuilder<?> builder;
 	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		__inject__(ComponentPostConstructListener.class).setObject(this).execute();
+	}
+	
+	@Override
+	public ComponentBuilder<?> getBuilder() {
+		return builder;
+	}
+	
+	@Override
+	public Component setBuilder(ComponentBuilder<?> builder) {
+		this.builder = builder;
+		return this;
 	}
 	
 	@Override

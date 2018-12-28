@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.component.command;
 
 import org.cyk.utility.client.controller.component.InvisibleComponentBuilder;
+import org.cyk.utility.client.controller.component.window.WindowContainerManaged;
 
 public interface CommandBuilder extends InvisibleComponentBuilder<Command> {
 
@@ -12,6 +13,6 @@ public interface CommandBuilder extends InvisibleComponentBuilder<Command> {
 	CommandBuilder setData(Data data);
 	*/
 	
-	String getWindowContainerVariableName();
-	CommandBuilder setWindowContainerVariableName(String windowContainerVariableName);
+	WindowContainerManaged getWindowContainerManaged();
+	CommandBuilder setWindowContainerManaged(WindowContainerManaged windowContainerManaged);
 }

@@ -51,37 +51,18 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	@Override
 	protected void __execute__(Grid grid) {
 		super.__execute__(grid);
-		ObjectByClassMap commandablesColumnCommandablesNavigationsParametersMap = getCommandablesColumnCommandablesNavigationsParametersMap();
-		
 		Objects objects = getObjects();
 		if(__injectCollectionHelper__().isNotEmpty(objects)) {
-			RowBuilders rows = getRows();
-			Class<? extends org.cyk.utility.client.controller.data.Row> rowClass = null;
-			if(rows!=null)
-				rowClass = rows.getRowClass();
-			grid.setObjects(__inject__(Objects.class));
-			Integer orderNumber = 1;
+			//grid.setObjects(__inject__(Objects.class));
+		
 			for(Object index : objects.get()) {
 				Object row = null;
-				if(index instanceof org.cyk.utility.client.controller.data.Data) {
-					if(rowClass!=null) {
-						row = __inject__(rowClass);
-						if(row instanceof org.cyk.utility.client.controller.data.Row) {
-							((org.cyk.utility.client.controller.data.Row)row).setListeners(rows.getRowListeners());
-							((org.cyk.utility.client.controller.data.Row)row).setNavigationParametersMap(commandablesColumnCommandablesNavigationsParametersMap);
-						}
-						if(row instanceof org.cyk.utility.client.controller.data.RowData) {
-							((org.cyk.utility.client.controller.data.RowData<Data>)row).setData((Data) index);
-						}
-					}
-				}else {
-					row = index;
-				}
+				if(!(index instanceof org.cyk.utility.client.controller.data.Data))
+					__injectThrowableHelper__().throwRuntimeException("La classe "+index.getClass().getName()+" doit implémenter l'interface de Data");
 				
-				if(row instanceof Objectable)
-					((Objectable)row).setOrderNumber(orderNumber++);
-				
-				grid.getObjects().add(row);
+				row = __inject__(org.cyk.utility.client.controller.data.RowBuilder.class).setGrid(this).setData((Data) index).execute().getOutput();			
+				if(row!=null)
+					grid.getObjects(Boolean.TRUE).add(row);
 			}
 		}
 		
@@ -235,6 +216,33 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 			}
 		}
 	}
+	
+	/*@Override
+	public Object buildRow(Object object) {
+		Object row = null;
+		ObjectByClassMap commandablesColumnCommandablesNavigationsParametersMap = getCommandablesColumnCommandablesNavigationsParametersMap();
+		RowBuilders rows = getRows();
+		Class<? extends org.cyk.utility.client.controller.data.Row> rowClass = null;
+		if(rows!=null)
+			rowClass = rows.getRowClass();
+		
+		if(object instanceof org.cyk.utility.client.controller.data.Data) {
+			if(rowClass!=null) {
+				row = __inject__(rowClass);
+				if(row instanceof org.cyk.utility.client.controller.data.Row) {
+					((org.cyk.utility.client.controller.data.Row)row).setListeners(rows.getRowListeners());
+					((org.cyk.utility.client.controller.data.Row)row).setNavigationParametersMap(commandablesColumnCommandablesNavigationsParametersMap);
+				}
+				if(row instanceof org.cyk.utility.client.controller.data.RowData) {
+					((org.cyk.utility.client.controller.data.RowData<Data>)row).setData((Data) object);
+				}
+			}
+		}else {
+			row = object;
+		}
+		
+		return row;
+	}*/
 	
 	@Override
 	public ColumnBuilders getColumns() {

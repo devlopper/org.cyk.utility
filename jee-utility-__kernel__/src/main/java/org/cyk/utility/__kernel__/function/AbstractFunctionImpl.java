@@ -19,6 +19,9 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	private FunctionExecutionPhaseFinally executionPhaseFinally;
 	private Function<?, Collection<Assertion>> preConditionsAssertionsProvider;
 	private Function<?, Collection<Assertion>> postConditionsAssertionsProvider;
+	private Boolean isNotifyOnSuccess;
+	private Boolean isNotifyOnThrowable;
+	private Boolean isNotifyAfterExecutionPhaseFinally;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -42,6 +45,8 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 				Long end = System.currentTimeMillis();
 				getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.END}, end);
 				getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION}, end - start);
+				
+				__notifyAfterExecutionPhaseFinally__();
 				
 				__log__();
 			}
@@ -394,4 +399,57 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		}
 		return this;
 	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setIsNotifyAfterExecutionPhaseFinally(Boolean isNotifyAfterExecutionPhaseFinally) {
+		this.isNotifyAfterExecutionPhaseFinally = isNotifyAfterExecutionPhaseFinally;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsNotifyAfterExecutionPhaseFinally() {
+		return isNotifyAfterExecutionPhaseFinally;
+	}
+	
+	protected void __notifyAfterExecutionPhaseFinally__() {
+		Throwable throwable = (Throwable) getProperties().getThrowable();
+		if(throwable == null) {
+			if(Boolean.TRUE.equals(getIsNotifyOnSuccess()))
+				__notifyOnSuccess__();
+		}else {
+			if(Boolean.TRUE.equals(getIsNotifyOnThrowable()))
+				__notifyOnThrowable__(throwable);
+		}
+	}
+	
+	@Override
+	public Boolean getIsNotifyOnSuccess() {
+		return isNotifyOnSuccess;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setIsNotifyOnSuccess(Boolean isNotifyOnSuccess) {
+		this.isNotifyOnSuccess = isNotifyOnSuccess;
+		return this;
+	}
+	
+	protected void __notifyOnSuccess__() {
+		System.out.println("Success.");
+	}
+	
+	@Override
+	public Boolean getIsNotifyOnThrowable() {
+		return isNotifyOnThrowable;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setIsNotifyOnThrowable(Boolean isNotifyOnThrowable) {
+		this.isNotifyOnThrowable = isNotifyOnThrowable;
+		return this;
+	}
+	
+	protected void __notifyOnThrowable__(Throwable throwable) {
+		System.out.println("Error : "+throwable);
+	}
+	
 }

@@ -21,8 +21,15 @@ public class ComponentBuilderPostConstructListenerFunctionRunnableImpl extends A
 			public void run() {
 				ComponentBuilder<?> componentBuilder = (ComponentBuilder<?>) getFunction().getObject();
 				Properties outputProperties = componentBuilder.getOutputProperties(Boolean.TRUE);
+				
 				outputProperties.setIdentifier(String.format(IDENTIFIER_FORMAT,componentBuilder.getComponentClass().getSimpleName(),__inject__(RandomHelper.class).getAlphabetic(3)));
-				outputProperties.setRendered(Boolean.TRUE);		
+				outputProperties.setIdentifierAsStyleClass(outputProperties.getIdentifier().toString());
+				outputProperties.setRendered(Boolean.TRUE);						
+				
+				if(componentBuilder instanceof VisibleComponentBuilder<?>) {
+					VisibleComponentBuilder<?> visibleComponentBuilder = (VisibleComponentBuilder<?>)componentBuilder;
+					visibleComponentBuilder.addStyleClasses(outputProperties.getIdentifierAsStyleClass().toString());	
+				}
 				
 				if(componentBuilder instanceof VisibleComponentBuilder) {
 					if(componentBuilder instanceof InputBuilder<?, ?>) {

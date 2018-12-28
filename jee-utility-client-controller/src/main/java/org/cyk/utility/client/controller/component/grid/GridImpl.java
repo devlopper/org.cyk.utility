@@ -95,9 +95,18 @@ public class GridImpl extends AbstractVisibleComponentImpl implements Grid,Seria
 	}
 	
 	@Override
+	public Objects getObjects(Boolean injectIfNull) {
+		return (Objects) __getInjectIfNull__(FIELD_OBJECTS, injectIfNull);
+	}
+	
+	@Override
 	public Grid setObjects(Objects objects) {
 		this.objects = objects;
 		return this;
 	}
+	
+	/**/
+	
+	private static final String FIELD_OBJECTS = "objects";
 
 }

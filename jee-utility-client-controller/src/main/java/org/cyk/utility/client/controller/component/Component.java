@@ -6,6 +6,9 @@ import org.cyk.utility.object.Objects;
 
 public interface Component extends Objectable {
 
+	ComponentBuilder<?> getBuilder();
+	Component setBuilder(ComponentBuilder<?> builder);
+	
 	LayoutItem getLayoutItem();
 	Component setLayoutItem(LayoutItem layoutItem);
 	

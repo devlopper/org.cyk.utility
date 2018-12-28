@@ -17,6 +17,9 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	Class<COMPONENT> getComponentClass();
 	ComponentBuilder<COMPONENT> setComponentClass(Class<COMPONENT> componentClass);
 	
+	COMPONENT getComponent();
+	ComponentBuilder<COMPONENT> setComponent(COMPONENT component);
+	
 	ComponentBuilder<COMPONENT> setOutputProperty(Object key,Object value);
 	ComponentBuilder<COMPONENT> setOutputPropertyName(Object value);
 	ComponentBuilder<COMPONENT> setOutputPropertyValue(Object value);

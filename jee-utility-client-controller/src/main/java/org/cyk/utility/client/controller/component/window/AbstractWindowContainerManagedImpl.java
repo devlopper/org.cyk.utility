@@ -18,7 +18,14 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 
 	private Window window;
 	private WindowBuilder __windowBuilder__;
-		
+	private String contextDependencyInjectionBeanName;
+	
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		setContextDependencyInjectionBeanName(__inject__(StringHelper.class).getVariableNameFrom(getClass().getSimpleName()));
+	}
+	
 	protected <THEME extends Theme> Class<THEME> __getThemeClass__(){
 		return __inject__(ThemeClassGetter.class).execute().getOutput();
 	}
@@ -105,5 +112,16 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 			commandable = commandableBuilder.execute().getOutput();
 		}
 		return commandable;
+	}
+	
+	@Override
+	public String getContextDependencyInjectionBeanName() {
+		return contextDependencyInjectionBeanName;
+	}
+	
+	@Override
+	public WindowContainerManaged setContextDependencyInjectionBeanName(String contextDependencyInjectionBeanName) {
+		this.contextDependencyInjectionBeanName = contextDependencyInjectionBeanName;
+		return this;
 	}
 }

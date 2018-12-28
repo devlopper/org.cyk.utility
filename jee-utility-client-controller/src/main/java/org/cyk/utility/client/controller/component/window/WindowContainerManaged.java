@@ -7,4 +7,7 @@ public interface WindowContainerManaged extends Objectable {
 	Window getWindow();
 	WindowContainerManaged setWindow(Window window);
 	
+	String getContextDependencyInjectionBeanName();
+	WindowContainerManaged setContextDependencyInjectionBeanName(String contextDependencyInjectionBeanName);
+	
 }
