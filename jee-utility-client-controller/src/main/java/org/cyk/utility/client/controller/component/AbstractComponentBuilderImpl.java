@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.event.Event;
+import org.cyk.utility.client.controller.event.EventBuilder;
+import org.cyk.utility.client.controller.event.EventBuilders;
 import org.cyk.utility.css.StyleBuilder;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
@@ -25,6 +28,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private Boolean isTargetModelToBeBuilt;
 	private Objects updatables;
 	private InternalizationStringBuilderByStringMap internalizationStringMap;
+	private EventBuilders events;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -54,6 +58,15 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		component.setRoles(roles);
 		Objects updatables = getUpdatables();
 		component.setUpdatables(updatables);
+		
+		EventBuilders events = getEvents();
+		if(__injectCollectionHelper__().isNotEmpty(events)) {
+			for(EventBuilder index : events.get()) {
+				Event event = index.execute().getOutput();
+				component.getEvents(Boolean.TRUE).add(event);
+			}
+		}
+		
 		__execute__(component);
 		__inject__(ComponentBuilderExecuteListenerAfter.class).setObject(this).setComponent(component).execute();
 		return component;
@@ -286,9 +299,37 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		return this;
 	}
 	
+	@Override
+	public EventBuilders getEvents() {
+		return events;
+	}
+	
+	@Override
+	public EventBuilders getEvents(Boolean injectIfNull) {
+		return (EventBuilders) __getInjectIfNull__(FIELD_EVENTS, injectIfNull);
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setEvents(EventBuilders events) {
+		this.events = events;
+		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> addEvents(Collection<EventBuilder> events) {
+		getEvents(Boolean.TRUE).add(events);
+		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> addEvents(EventBuilder... events) {
+		return addEvents(__injectCollectionHelper__().instanciate(events));
+	}
+	
 	public static final String FIELD_AREA = "area";
 	public static final String FIELD_LAYOUT_ITEM_STYLE = "layoutItemStyle";
 	public static final String FIELD_ROLES = "roles";
 	public static final String FIELD_UPDATABLES = "updatables";
+	public static final String FIELD_EVENTS = "events";
 	public static final String FIELD_INTERNALIZATION_STRING_MAP = "internalizationStringMap";
 }

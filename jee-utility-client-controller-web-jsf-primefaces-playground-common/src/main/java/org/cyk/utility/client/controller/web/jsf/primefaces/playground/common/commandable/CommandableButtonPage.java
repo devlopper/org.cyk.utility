@@ -26,7 +26,6 @@ public class CommandableButtonPage extends AbstractPageContainerManagedImpl impl
 	
 	@Override
 	protected ViewBuilder __getViewBuilder__() {
-		
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
 		.addComponents(
@@ -39,11 +38,11 @@ public class CommandableButtonPage extends AbstractPageContainerManagedImpl impl
 				public void run() {
 					__inject__(ThrowableHelper.class).throwRuntimeException("STOP!!!");
 				}
-			})
+			})			
 			)
 		
 		;
 		return viewBuilder;
 	}
-
+	
 }

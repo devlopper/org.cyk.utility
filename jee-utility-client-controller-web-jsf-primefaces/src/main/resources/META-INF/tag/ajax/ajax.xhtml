@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+	
+	<!-- listener="#{value.command.function.executeToReturnVoid}" -->
+	<ui:decorate template="/template.xhtml">
+		<ui:define name="valueIsNotNull">
+			<p:ajax
+				async="#{value.properties.async}"
+				delay="#{value.properties.delay}"
+				disabled="#{value.properties.disabled}"
+				event="#{value.properties.event}"
+				form="#{value.properties.form}"
+				global="#{value.properties.global}"
+				ignoreAutoUpdate="#{value.properties.ignoreAutoUpdate}"
+				immediate="#{value.properties.immediate}"
+				listener="#{value.properties.function.executeWithOneParameterToReturnVoid}"
+				oncomplete="#{value.properties.onComplete}"
+				onerror="#{value.properties.onError}"
+				onstart="#{value.properties.onStart}"
+				onsuccess="#{value.properties.onSuccess}"
+				partialSubmit="#{value.properties.partialSubmit}"
+				partialSubmitFilter="#{value.properties.partialSubmitFilter}"
+				process="#{value.properties.process}"
+				resetValues="#{value.properties.resetValues}"
+				skipChildren="#{value.properties.skipChildren}"
+				update="#{value.properties.update}"
+			>
+			
+			</p:ajax>
+		</ui:define>
+	</ui:decorate>	
+	
+	
+		
+</ui:composition>

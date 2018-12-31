@@ -109,9 +109,13 @@ public class Properties implements java.io.Serializable {
 	
 	/* set */
 	
+	protected Map<Object,Object> __instanciateMap__(){
+		return new java.util.LinkedHashMap<Object, Object>();
+	}
+	
 	public Properties set(Object key,Object value){
 		if(this.map == null)
-			this.map = new java.util.LinkedHashMap<Object, Object>();
+			this.map = __instanciateMap__();
 		this.map.put(key, value);
 		return this;
 	}
@@ -335,8 +339,11 @@ public class Properties implements java.io.Serializable {
 	}
 	
 	public Properties copyNonNullKeysFrom(Properties source){
-		if(source!=null)
+		if(source!=null && source.map != null && !source.map.isEmpty()) {
+			if(map == null)
+				map = __instanciateMap__();
 			DependencyInjection.inject(KernelHelper.class).copyMapNonNullKeys(source.map, map);
+		}
 		return this;
 	}
 	

@@ -52,8 +52,6 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 		super.__execute__(grid);
 		Objects objects = getObjects();
 		if(__injectCollectionHelper__().isNotEmpty(objects)) {
-			//grid.setObjects(__inject__(Objects.class));
-		
 			for(Object index : objects.get()) {
 				Object row = null;
 				if(!(index instanceof org.cyk.utility.client.controller.data.Data))
@@ -215,33 +213,6 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 			}
 		}
 	}
-	
-	/*@Override
-	public Object buildRow(Object object) {
-		Object row = null;
-		ObjectByClassMap commandablesColumnCommandablesNavigationsParametersMap = getCommandablesColumnCommandablesNavigationsParametersMap();
-		RowBuilders rows = getRows();
-		Class<? extends org.cyk.utility.client.controller.data.Row> rowClass = null;
-		if(rows!=null)
-			rowClass = rows.getRowClass();
-		
-		if(object instanceof org.cyk.utility.client.controller.data.Data) {
-			if(rowClass!=null) {
-				row = __inject__(rowClass);
-				if(row instanceof org.cyk.utility.client.controller.data.Row) {
-					((org.cyk.utility.client.controller.data.Row)row).setListeners(rows.getRowListeners());
-					((org.cyk.utility.client.controller.data.Row)row).setNavigationParametersMap(commandablesColumnCommandablesNavigationsParametersMap);
-				}
-				if(row instanceof org.cyk.utility.client.controller.data.RowData) {
-					((org.cyk.utility.client.controller.data.RowData<Data>)row).setData((Data) object);
-				}
-			}
-		}else {
-			row = object;
-		}
-		
-		return row;
-	}*/
 	
 	@Override
 	public ColumnBuilders getColumns() {

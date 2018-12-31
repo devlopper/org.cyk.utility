@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component;
 
 import org.cyk.utility.client.controller.Objectable;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
+import org.cyk.utility.client.controller.event.Events;
 import org.cyk.utility.object.Objects;
 
 public interface Component extends Objectable {
@@ -19,6 +20,10 @@ public interface Component extends Objectable {
 	Objects getUpdatables();
 	Objects getUpdatables(Boolean injectIfNull);
 	Component setUpdatables(Objects updatables);
+	
+	Events getEvents();
+	Events getEvents(Boolean injectIfNull);
+	Component setEvents(Events events);
 	
 	Object getTargetModel();
 	void setTargetModel(Object targetModel);//void because of java bean issue

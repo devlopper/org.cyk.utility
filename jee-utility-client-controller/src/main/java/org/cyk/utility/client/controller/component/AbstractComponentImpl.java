@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
+import org.cyk.utility.client.controller.event.Events;
 import org.cyk.utility.object.Objects;
 
 public abstract class AbstractComponentImpl extends AbstractObject implements Component,Serializable {
@@ -15,6 +16,7 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	private Boolean isTargetModelBuilt;
 	private Objects updatables;
 	private ComponentBuilder<?> builder;
+	private Events events;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -93,6 +95,22 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	}
 	
 	@Override
+	public Events getEvents() {
+		return events;
+	}
+	
+	@Override
+	public Events getEvents(Boolean injectIfNull) {
+		return (Events) __getInjectIfNull__(FIELD_EVENTS, injectIfNull);
+	}
+	
+	@Override
+	public Component setEvents(Events events) {
+		this.events = events;
+		return this;
+	}
+	
+	@Override
 	public Boolean getIsTargetModelBuilt() {
 		return isTargetModelBuilt;
 	}
@@ -107,4 +125,5 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	
 	public static final String FIELD_ROLES = "roles";
 	public static final String FIELD_UPDATABLES = "updatables";
+	public static final String FIELD_EVENTS = "events";
 }

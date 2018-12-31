@@ -3,6 +3,8 @@ package org.cyk.utility.client.controller.component;
 import java.util.Collection;
 import java.util.Map;
 
+import org.cyk.utility.client.controller.event.EventBuilder;
+import org.cyk.utility.client.controller.event.EventBuilders;
 import org.cyk.utility.css.StyleBuilder;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
@@ -65,4 +67,10 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	InternalizationStringBuilder getNameInternalization(Boolean injectIfNull);
 	ComponentBuilder<COMPONENT> setNameInternalization(InternalizationStringBuilder nameInternalization);
 	ComponentBuilder<COMPONENT> setNameInternalizationKeyValue(String nameInternalizationKeyValue);
+	
+	EventBuilders getEvents();
+	EventBuilders getEvents(Boolean injectIfNull);
+	ComponentBuilder<COMPONENT> setEvents(EventBuilders events);
+	ComponentBuilder<COMPONENT> addEvents(Collection<EventBuilder> events);
+	ComponentBuilder<COMPONENT> addEvents(EventBuilder...events);
 }

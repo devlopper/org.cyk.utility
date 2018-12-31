@@ -190,4 +190,9 @@
         <source>tag/dialog/dialog.xhtml</source>
     </tag>
     
+    <tag>
+        <tag-name>ajax</tag-name>
+        <source>tag/ajax/ajax.xhtml</source>
+    </tag>
+    
 </facelet-taglib>

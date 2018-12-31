@@ -63,6 +63,17 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		execute();
 	}
 	
+	@Override
+	public Function<INPUT, OUTPUT> executeWithOneParameter(Object parameter1) {
+		getProperties().setParameter(parameter1);
+		return execute();
+	}
+	
+	@Override
+	public void executeWithOneParameterToReturnVoid(Object parameter1) {
+		executeWithOneParameter(parameter1);
+	}
+	
 	protected void __try__() throws Exception {
 		FunctionExecutionPhaseTry executionPhaseTry = getExecutionPhaseTry();		
 		

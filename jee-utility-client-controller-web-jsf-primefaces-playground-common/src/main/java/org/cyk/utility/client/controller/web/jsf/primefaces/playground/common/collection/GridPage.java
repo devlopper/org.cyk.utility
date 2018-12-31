@@ -69,7 +69,7 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 		
 		gridBuilder.getRows(Boolean.TRUE).setRowClass(Row.class);
 		
-		CommandableBuilder commandableBuilder = __inject__(CommandableBuilder.class).setName("Ajout de ligne")
+		CommandableBuilder commandableBuilder = __inject__(CommandableBuilder.class).setName("Ajouter une ligne")
 				.setCommandFunctionActionClass(SystemActionCreate.class).addCommandFunctionTryRunRunnable(new Runnable() {
 					@Override
 					public void run() {
@@ -100,7 +100,7 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 		
 		/**/
 		
-		commandableBuilder = __inject__(CommandableBuilder.class).setName("Action générant une erreur")
+		commandableBuilder = __inject__(CommandableBuilder.class).setName("Générer une erreur")
 				.setCommandFunctionActionClass(SystemActionCreate.class).addCommandFunctionTryRunRunnable(new Runnable() {
 					@Override
 					public void run() {
