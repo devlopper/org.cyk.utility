@@ -34,6 +34,7 @@ import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
+import org.cyk.utility.client.controller.web.jsf.primefaces.builder.CommandButtonBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
@@ -110,20 +111,20 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 	}
 	
 	private UIComponent __build__(Commandable commandable) {
-		CommandButton commandButton = new CommandButton();
+		/*CommandButton commandButton = new CommandButton();
 		//Button commandButton = new Button();
 		commandButton.setValue(commandable.getName());
 		String onClickValueExpressionString = null;
 		if(commandable.getNavigation()!=null) {
 			commandButton.setType("button");
-			String url = null;
+			String url = null;*/
 			/*if(__inject__(CollectionHelper.class).isEmpty(commandable.getNavigation().getDynamicParameterNames())) {
 				if(commandable.getNavigation().getUniformResourceLocator()==null)
 					url = null;
 				else
 					url = commandable.getNavigation().getUniformResourceLocator().toString();
 			}else {*/
-				SystemAction navigationSystemAction = commandable.getNavigation().getSystemAction();
+				/*SystemAction navigationSystemAction = commandable.getNavigation().getSystemAction();
 				if(navigationSystemAction == null) {
 					if(commandable.getCommand()!=null && commandable.getCommand().getFunction()!=null)
 						navigationSystemAction = commandable.getCommand().getFunction().getAction();
@@ -195,6 +196,8 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		}
 		
 		return commandButton;
+		*/
+		return __inject__(CommandButtonBuilder.class).build(commandable);
 	}
 	
 	/* Menu to MenuModel */
