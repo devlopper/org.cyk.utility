@@ -11,6 +11,7 @@ import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
@@ -35,6 +36,18 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 			if(columnsFieldNames!=null)
 				gridBuilder.addColumnsByFieldNames(columnsFieldNames.get());
 			
+			/* Create new instance */
+			SystemAction systemActionCreate = __inject__(SystemActionCreate.class);
+			
+			/* Create new instance using normal window */
+			gridBuilder.getCreateRowCommandable(Boolean.TRUE).getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(systemActionCreate.setEntityClass(gridBuilder.getRowDataClass()));
+			
+			/* Create new instance using dialog window */
+			/*
+			gridBuilder.getCreateRowCommandable(Boolean.TRUE).setWindowRenderTypeClass(WindowRenderTypeDialog.class);
+			gridBuilder.getCreateRowCommandable(Boolean.TRUE).getCommand(Boolean.TRUE).setWindowContainerManaged(getWindowContainerManaged());
+			gridBuilder.getCreateRowCommandable(Boolean.TRUE).getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(systemActionCreate);
+			*/
 			gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandablesBySystemActionClasses(SystemActionRead.class,SystemActionUpdate.class,SystemActionDelete.class);
 			
 			LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);

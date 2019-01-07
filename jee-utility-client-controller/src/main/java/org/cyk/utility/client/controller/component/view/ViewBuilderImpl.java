@@ -23,6 +23,7 @@ import org.cyk.utility.client.controller.data.FormData;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
@@ -155,7 +156,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ComponentBuilder<?> addInputBuilderByObjectByFieldNames(Object object, SystemAction systemAction,String... fieldNames) {
-		return addInputBuilderByObjectByFieldNames(object, systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionUpdate, fieldNames);
+		return addInputBuilderByObjectByFieldNames(object, systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionAdd, fieldNames);
 	}
 	
 	@Override

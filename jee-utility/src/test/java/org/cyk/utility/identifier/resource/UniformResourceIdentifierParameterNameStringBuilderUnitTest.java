@@ -48,6 +48,11 @@ public class UniformResourceIdentifierParameterNameStringBuilderUnitTest extends
 	}
 	
 	@Test
+	public void parameter_name_class_windowRenderType_instance(){
+		assertionHelper.assertEquals("windowrendertypeclass", __inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsWindowRenderTypeClass().execute().getOutput());
+	}
+	
+	@Test
 	public void parameter_name_field_identifier(){
 		assertionHelper.assertEquals("identifier", __inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setName(FieldName.IDENTIFIER).execute().getOutput());
 	}

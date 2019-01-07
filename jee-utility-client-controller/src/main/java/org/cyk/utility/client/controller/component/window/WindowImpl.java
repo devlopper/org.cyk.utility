@@ -19,6 +19,7 @@ public class WindowImpl extends AbstractVisibleComponentImpl implements Window,S
 	private Theme theme;
 	private MenuMap menuMap;
 	private Dialog dialog;
+	private WindowRenderType renderType;
 	
 	@Override
 	public OutputStringText getTitle() {
@@ -72,6 +73,17 @@ public class WindowImpl extends AbstractVisibleComponentImpl implements Window,S
 	@Override
 	public Window setDialog(Dialog dialog) {
 		this.dialog = dialog;
+		return this;
+	}
+	
+	@Override
+	public WindowRenderType getRenderType() {
+		return renderType;
+	}
+	
+	@Override
+	public Window setRenderType(WindowRenderType renderType) {
+		this.renderType = renderType;
 		return this;
 	}
 	

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
+import org.cyk.utility.client.controller.component.window.WindowRenderType;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.collection.CollectionHelper;
@@ -19,14 +20,15 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	private String name;
 	private CommandableRenderType renderType;
 	private NavigationBuilder navigation;
+	private Class<? extends WindowRenderType> windowRenderTypeClass;
 	
 	@Override
 	protected void __execute__(Commandable commandable) {
 		super.__execute__(commandable);
 		
-		CommandBuilder commandBuilder = getCommand();
-		if(commandBuilder!=null)
-			commandable.setCommand(commandBuilder.execute().getOutput());
+		CommandBuilder command = getCommand();
+		if(command!=null)
+			commandable.setCommand(command.execute().getOutput());
 		
 		CommandableRenderType renderType = getRenderType();
 		if(renderType == null)
@@ -42,6 +44,18 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		if(__injectStringHelper__().isBlank(name)) {
 			InternalizationStringBuilder nameInternalization = getNameInternalization();
 			if(nameInternalization==null) {
+				SystemAction systemAction = null;
+				if(systemAction == null && command!=null)
+					systemAction = command.getFunction().getAction();
+				if(systemAction == null && navigation!=null)
+					systemAction = navigation.getSystemAction();
+				if(systemAction == null && navigation.getIdentifierBuilder()!=null)
+					systemAction = navigation.getIdentifierBuilder().getSystemAction();
+				
+				if(systemAction!=null)
+					name = __inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput();
+				
+				/*
 				if(navigation!=null) {
 					SystemAction systemAction = navigation.getSystemAction();
 					if(systemAction == null && navigation.getIdentifierBuilder()!=null)
@@ -51,6 +65,7 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 						name = __inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput();
 					}
 				}	
+				*/
 			}else
 				name = nameInternalization.execute().getOutput();
 			
@@ -193,6 +208,17 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	@Override
 	public CommandableBuilder setNavigationIdentifierBuilderSystemAction(SystemAction systemAction) {
 		getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(systemAction);
+		return this;
+	}
+	
+	@Override
+	public Class<? extends WindowRenderType> getWindowRenderTypeClass() {
+		return windowRenderTypeClass;
+	}
+	
+	@Override
+	public CommandableBuilder setWindowRenderTypeClass(Class<? extends WindowRenderType> windowRenderTypeClass) {
+		this.windowRenderTypeClass = windowRenderTypeClass;
 		return this;
 	}
 	

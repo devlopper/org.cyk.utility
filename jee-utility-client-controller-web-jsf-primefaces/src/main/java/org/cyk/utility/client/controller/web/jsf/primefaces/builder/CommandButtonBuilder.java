@@ -104,7 +104,7 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 			update = StringUtils.replace(update, "glo", ":form:glo");
 			
 			commandButton.setUpdate(update);
-			
+			//System.out.println("CommandButtonBuilder.build() UPDATE : "+update);
 		}else {
 			commandButton.setType("button");
 		}
@@ -129,6 +129,7 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 				commandButton.addClientBehavior(index.getProperties().getEvent().toString(), behavior);
 			}
 		}
+		
 		return commandButton;
 	}
 	

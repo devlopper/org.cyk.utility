@@ -28,12 +28,9 @@ public class ComponentBuilderPostConstructListenerFunctionRunnableImpl extends A
 				
 				if(componentBuilder instanceof VisibleComponentBuilder<?>) {
 					VisibleComponentBuilder<?> visibleComponentBuilder = (VisibleComponentBuilder<?>)componentBuilder;
-					visibleComponentBuilder.addStyleClasses(outputProperties.getIdentifierAsStyleClass().toString());	
-				}
-				
-				if(componentBuilder instanceof VisibleComponentBuilder) {
-					if(componentBuilder instanceof InputBuilder<?, ?>) {
-						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) componentBuilder;
+					
+					if(visibleComponentBuilder instanceof InputBuilder<?, ?>) {
+						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) visibleComponentBuilder;
 						inputBuilder.getMessage(Boolean.TRUE);
 					}
 				}

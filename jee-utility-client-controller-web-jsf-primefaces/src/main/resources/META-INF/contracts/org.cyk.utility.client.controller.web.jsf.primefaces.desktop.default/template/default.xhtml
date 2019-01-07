@@ -109,6 +109,21 @@
 						</ui:insert>
 					</div>
 				</h:form>
+				
+				<!-- Global Ajax Status -->
+				<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />             
+				<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+				    <table>
+				    	<tr>
+				    		<td>
+				    			<h:outputText value="Traitement en cours..." />
+				    		</td>
+				    		<td>
+				    			<p:graphicImage library="animation" name="processing.gif" width="32" height="32" />	
+				    		</td>
+				    	</tr>
+				    </table>
+				</p:dialog>
 			</ui:insert>
 		</c:if>
     </h:body>

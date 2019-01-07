@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.command;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
+import org.cyk.utility.client.controller.component.window.WindowRenderType;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
@@ -41,5 +42,8 @@ public interface CommandableBuilder extends VisibleComponentBuilder<Commandable>
 	CommandableBuilder addCommandFunctionTryRunRunnable(Collection<Runnable> runnables);
 	CommandableBuilder addCommandFunctionTryRunRunnable(Runnable...runnables);
 	CommandableBuilder addCommandFunctionTryRunRunnableAt(Runnable runnable,Integer index);
+	
+	Class<? extends WindowRenderType> getWindowRenderTypeClass();
+	CommandableBuilder setWindowRenderTypeClass(Class<? extends WindowRenderType> windowRenderTypeClass);
 	
 }

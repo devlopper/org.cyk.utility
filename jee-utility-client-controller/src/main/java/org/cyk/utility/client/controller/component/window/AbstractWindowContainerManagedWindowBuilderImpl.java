@@ -15,6 +15,7 @@ import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.request.RequestParameterValueMapper;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionProcess;
@@ -29,14 +30,24 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	private SystemAction systemAction;
 	private Class<? extends Form> formClass;
 	private Class<? extends Row> rowClass;
+	private WindowContainerManaged windowContainerManaged;
+	private WindowRenderType windowRenderType;
 	
 	@Override
 	protected WindowBuilder __execute__() throws Exception {
 		WindowBuilder window = __inject__(WindowBuilder.class);
-		MenuBuilderMap menuMap = getMenuMap();
-		if(menuMap == null)
-			menuMap = __inject__(MenuBuilderMapGetter.class).execute().getOutput();
-		window.setMenuMap(menuMap);
+		WindowRenderType windowRenderType = getWindowRenderType();
+		if(windowRenderType == null) {
+			Class<?> windowRenderTypeClass = __inject__(RequestParameterValueMapper.class).setParameterNameAsWindowRenderTypeClass().execute().getOutputAs(Class.class);
+			if(windowRenderTypeClass!=null)
+				windowRenderType = (WindowRenderType) __inject__(windowRenderTypeClass);
+		}
+		if(windowRenderType == null || windowRenderType instanceof WindowRenderTypeNormal) {
+			MenuBuilderMap menuMap = getMenuMap();
+			if(menuMap == null)
+				menuMap = __inject__(MenuBuilderMapGetter.class).execute().getOutput();
+			window.setMenuMap(menuMap);	
+		}
 		
 		SystemAction systemAction = getSystemAction();
 		if(systemAction == null)
@@ -46,7 +57,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete || systemAction instanceof SystemActionProcess) {
 			Long identifier = (Long) __injectCollectionHelper__().getFirst(systemAction.getEntitiesIdentifiers());
 			instance = __inject__(Controller.class).readOne(systemAction.getEntities().getElementClass(), identifier);
-		}else if(systemAction instanceof SystemActionCreate) {
+		}else if(systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionAdd) {
 			instance = __inject__(systemAction.getEntities().getElementClass());
 		}
 		
@@ -160,6 +171,29 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		this.rowClass = rowClass;
 		return this;
 	}
+	
+	@Override
+	public WindowContainerManaged getWindowContainerManaged() {
+		return windowContainerManaged;
+	}
+	
+	@Override
+	public WindowContainerManagedWindowBuilder setWindowContainerManaged(WindowContainerManaged windowContainerManaged) {
+		this.windowContainerManaged = windowContainerManaged;
+		return this;
+	}
+	
+	@Override
+	public WindowRenderType getWindowRenderType() {
+		return windowRenderType;
+	}
+	
+	@Override
+	public WindowContainerManagedWindowBuilder setWindowRenderType(WindowRenderType windowRenderType) {
+		this.windowRenderType = windowRenderType;
+		return this;
+	}
+	
 	/*
 	@Override
 	public Class<?> getEntityClass() {

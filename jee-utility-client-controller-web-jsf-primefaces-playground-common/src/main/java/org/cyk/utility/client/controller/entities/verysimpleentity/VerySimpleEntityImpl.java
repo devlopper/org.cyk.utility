@@ -33,6 +33,8 @@ public class VerySimpleEntityImpl extends AbstractDataImpl implements VerySimple
 	
 	private VerySimpleEntityDetails details;
 	
+	private Collection<VerySimpleEntityDetails> detailsCollection;
+	
 	@Input @InputChoice @InputChoiceOne @InputChoiceOneCombo @NotNull
 	private VerySimpleEntityEnum enumeration;
 	
@@ -110,6 +112,17 @@ public class VerySimpleEntityImpl extends AbstractDataImpl implements VerySimple
 	@Override
 	public VerySimpleEntity setDetails(VerySimpleEntityDetails details) {
 		this.details = details;
+		return this;
+	}
+	
+	@Override
+	public Collection<VerySimpleEntityDetails> getDetailsCollection() {
+		return detailsCollection;
+	}
+	
+	@Override
+	public VerySimpleEntity setDetailsCollection(Collection<VerySimpleEntityDetails> detailsCollection) {
+		this.detailsCollection = detailsCollection;
 		return this;
 	}
 	

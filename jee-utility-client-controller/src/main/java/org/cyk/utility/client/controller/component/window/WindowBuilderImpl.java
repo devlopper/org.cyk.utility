@@ -21,21 +21,28 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	private Theme theme;
 	private MenuBuilderMap menuMap;
 	private DialogBuilder dialog;
+	private WindowRenderType renderType;
 	
 	@Override
 	protected void __execute__(Window window) {
 		super.__execute__(window);
+		WindowRenderType renderType = getRenderType();
+		window.setRenderType(renderType);
+		
 		OutputStringTextBuilder title = getTitle();
 		if(title!=null)
 			window.setTitle(title.execute().getOutput());
 		ViewBuilder view = getView();
 		if(view!=null)
 			window.setView(view.execute().getOutput());
-		MenuBuilderMap menuMap = getMenuMap();
-		if(menuMap!=null) {
-			window.setMenuMap(__inject__(MenuMap.class));
-			for(@SuppressWarnings("rawtypes") Map.Entry<Class,MenuBuilder> entry : menuMap.getEntries())
-				window.getMenuMap().set(entry.getKey(),__inject__(MenuGetter.class).setScopeClass(entry.getKey()).execute().getOutput());
+		
+		if(renderType == null || renderType instanceof WindowRenderTypeNormal) {
+			MenuBuilderMap menuMap = getMenuMap();
+			if(menuMap!=null) {
+				window.setMenuMap(__inject__(MenuMap.class));
+				for(@SuppressWarnings("rawtypes") Map.Entry<Class,MenuBuilder> entry : menuMap.getEntries())
+					window.getMenuMap().set(entry.getKey(),__inject__(MenuGetter.class).setScopeClass(entry.getKey()).execute().getOutput());
+			}	
 		}
 		
 		Theme theme = getTheme();
@@ -43,6 +50,8 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		DialogBuilder dialog = getDialog(Boolean.TRUE);
 		if(dialog!=null)
 			window.setDialog(dialog.execute().getOutput());
+		
+		
 	}
 	
 	@Override
@@ -125,6 +134,17 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	@Override
 	public WindowBuilder setDialog(DialogBuilder dialog) {
 		this.dialog = dialog;
+		return this;
+	}
+	
+	@Override
+	public WindowRenderType getRenderType() {
+		return renderType;
+	}
+	
+	@Override
+	public WindowBuilder setRenderType(WindowRenderType renderType) {
+		this.renderType = renderType;
 		return this;
 	}
 	

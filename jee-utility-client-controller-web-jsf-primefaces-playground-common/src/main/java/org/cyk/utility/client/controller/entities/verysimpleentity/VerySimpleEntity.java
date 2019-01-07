@@ -18,6 +18,9 @@ public interface VerySimpleEntity extends Data {
 	VerySimpleEntityDetails getDetails();
 	VerySimpleEntity setDetails(VerySimpleEntityDetails details);
 	
+	Collection<VerySimpleEntityDetails> getDetailsCollection();
+	VerySimpleEntity setDetailsCollection(Collection<VerySimpleEntityDetails> detailsCollection);
+	
 	VerySimpleEntityEnum getEnumeration();
 	VerySimpleEntity setEnumeration(VerySimpleEntityEnum enumeration);
 	
@@ -38,6 +41,7 @@ public interface VerySimpleEntity extends Data {
 	public static final String PROPERTY_NAME = "name";
 	public static final String PROPERTY_DESCRIPTION = "description";
 	public static final String PROPERTY_DETAILS = "details";
+	public static final String PROPERTY_DETAILS_COLLECTION = "detailsCollection";
 	public static final String PROPERTY_BOOLEAN_VALUE_CHECK_BOX = "booleanValueCheckBox";
 	public static final String PROPERTY_BOOLEAN_VALUE_BUTTON = "booleanValueButton";
 	public static final String PROPERTY_ENUMERATION = "enumeration";

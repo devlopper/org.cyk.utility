@@ -20,4 +20,5 @@ public class VerySimpleEntityControllerImpl extends AbstractControllerEntityPers
 				.setDetails(__inject__(VerySimpleEntityDetails.class).setAddress("Near the cross"))
 				.setEnumeration(VerySimpleEntityEnum.V02).setEnumerations(Arrays.asList(VerySimpleEntityEnum.V03,VerySimpleEntityEnum.V05));
 	}
+	
 }

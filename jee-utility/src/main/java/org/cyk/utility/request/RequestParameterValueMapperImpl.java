@@ -9,11 +9,13 @@ import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterVal
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.object.ObjectByStringMap;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionList;
 import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionRemove;
 import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
@@ -72,6 +74,8 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 					value = __inject__(NumberHelper.class).getLong(parameterValue);
 				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsEntityClass().execute().getOutput().equals(parameterName)) {
 					value = __injectCollectionHelper__().getFirst(__inject__(UniformResourceIdentifierParameterValueMatrix.class).getClassMap().getKeys(parameterValue));
+				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsWindowRenderTypeClass().execute().getOutput().equals(parameterName)) {
+					value = __injectCollectionHelper__().getFirst(__inject__(UniformResourceIdentifierParameterValueMatrix.class).getClassMap().getKeys(parameterValue));
 				}
 				
 				if(value == null)
@@ -98,6 +102,10 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 			systemActionClass = SystemActionSelect.class;
 		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionProcess.class).execute().getOutput().equals(parameterValue))
 			systemActionClass = SystemActionProcess.class;
+		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionAdd.class).execute().getOutput().equals(parameterValue))
+			systemActionClass = SystemActionAdd.class;
+		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionRemove.class).execute().getOutput().equals(parameterValue))
+			systemActionClass = SystemActionRemove.class;
 		
 		if(systemActionClass!=null) {
 			systemAction = __inject__(systemActionClass);
@@ -159,6 +167,11 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 	@Override
 	public RequestParameterValueMapper setParameterNameAsEntityIdentifier() {
 		return setParameterName(UniformResourceIdentifierParameterNameStringBuilder.Name.ENTITY_IDENTIFIER);
+	}
+	
+	@Override
+	public RequestParameterValueMapper setParameterNameAsWindowRenderTypeClass() {
+		return setParameterName(UniformResourceIdentifierParameterNameStringBuilder.Name.WINDOW_RENDER_TYPE_CLASS);
 	}
 
 	@Override

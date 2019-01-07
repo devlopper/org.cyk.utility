@@ -39,10 +39,10 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 					//visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
 					
 					//String identifierAsStyleClass = visibleComponentBuilder.getOutputProperties().getIdentifier().toString();
-					//String identifierAsStyleClass = visibleComponentBuilder.getOutputProperties().getIdentifierAsStyleClass().toString();
+					String identifierAsStyleClass = visibleComponentBuilder.getOutputProperties().getIdentifierAsStyleClass().toString();
 					//visibleComponentBuilder.getOutputProperties().setIdentifierAsStyleClass(identifierAsStyleClass);
 					//System.out.println("CID : "+identifierAsStyleClass);
-					//visibleComponentBuilder.addStyleClasses(identifierAsStyleClass);
+					visibleComponentBuilder.addStyleClasses(identifierAsStyleClass);
 					//visibleComponentBuilder.addStyleClasses("AZERTY");
 					
 					ComponentRoles roles = visibleComponentBuilder.getRoles();

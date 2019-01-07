@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.cyk.utility.clazz.AbstractClassFunctionImpl;
 import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionRead;
 
@@ -20,7 +21,7 @@ public class WindowContainerManagedWindowBuilderClassGetterImpl extends Abstract
 		SystemAction systemAction = getSystemAction();
 		clazz = __inject__(ControllerLayer.class).getWindowContainerManagedWindowBuilderClass(systemAction);
 		if(clazz == null) {
-			if(systemAction instanceof SystemActionRead) {
+			if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionAdd) {
 				Class<?> entityClass = null;
 				if(systemAction.getEntities()!=null)
 					entityClass = systemAction.getEntities().getElementClass();

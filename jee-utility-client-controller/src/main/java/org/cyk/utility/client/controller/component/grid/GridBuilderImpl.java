@@ -29,7 +29,7 @@ import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.ObjectByClassMap;
 import org.cyk.utility.object.Objects;
-import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemAction;
 
 public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> implements GridBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -46,6 +46,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	private CommandableBuilder createRowCommandable;
 	private Class<?> rowDataClass;
 	private ObjectByClassMap commandablesColumnCommandablesNavigationsParametersMap;
+	private SystemAction creationWindowSystemAction;
 	
 	@Override
 	protected void __execute__(Grid grid) {
@@ -178,14 +179,18 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 			ViewBuilder headerView = viewMap.get(ViewMap.HEADER);
 			if(headerView == null) {
 				CommandableBuilder createRowCommandable = getCreateRowCommandable();
-				if(createRowCommandable == null) {
+				
+				if(createRowCommandable!=null)
+					__inject__(GridBuilderCommandableBuilderProcessor.class).setGridBuilder(this).setCommandableBuilder(createRowCommandable).execute();
+				
+				/*
+				if(createRowCommandable == null || (createRowCommandable.getCommand()==null && createRowCommandable.getNavigation()==null)) {
 					Class<?> rowDataClass = getRowDataClass();
 					if(rowDataClass!=null) {
-						createRowCommandable = getCreateRowCommandable(Boolean.TRUE);	
-						createRowCommandable.getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class).setEntityClass(rowDataClass));
+						createRowCommandable = __instanciateCreateRowCommandableBuilder__(rowDataClass);
 					}
 				}
-				
+				*/
 				if(createRowCommandable!=null) {
 					headerView = __inject__(ViewBuilder.class).setComponentsBuilder(__inject__(ComponentsBuilder.class).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE));
 					headerView.getComponentsBuilder().addComponents(createRowCommandable);
@@ -508,6 +513,17 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	@Override
 	public GridBuilder setCreateRowCommandable(CommandableBuilder createRowCommandable) {
 		this.createRowCommandable = createRowCommandable;
+		return this;
+	}
+	
+	@Override
+	public SystemAction getCreationWindowSystemAction() {
+		return creationWindowSystemAction;
+	}
+	
+	@Override
+	public GridBuilder setCreationWindowSystemAction(SystemAction creationWindowSystemAction) {
+		this.creationWindowSystemAction = creationWindowSystemAction;
 		return this;
 	}
 	

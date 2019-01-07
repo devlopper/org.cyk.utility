@@ -4,11 +4,13 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
+import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionList;
 import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionRemove;
 import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
@@ -24,6 +26,16 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 		if(value!=null) {
 			if(value instanceof Class) {
 				Class<?> clazz = (Class<?>)value;
+				/*
+				if(SystemAction.class.isAssignableFrom(clazz)) {
+					if(SystemAction.class.equals(clazz))
+						_value = "action";
+					else
+						_value = StringUtils.substringBetween(clazz.getSimpleName(), SystemAction.class.getSimpleName(),"Impl").toLowerCase();
+				}else
+					_value = clazz.getSimpleName().toLowerCase();
+				*/
+				
 				if(SystemActionCreate.class.isAssignableFrom(clazz))
 					_value = "create";
 				else if(SystemActionRead.class.isAssignableFrom(clazz))
@@ -38,8 +50,13 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 					_value = "select";
 				else if(SystemActionProcess.class.isAssignableFrom(clazz))
 					_value = "process";
+				else if(SystemActionAdd.class.isAssignableFrom(clazz))
+					_value = "add";
+				else if(SystemActionRemove.class.isAssignableFrom(clazz))
+					_value = "remove";
 				else
 					_value = clazz.getSimpleName().toLowerCase();
+				
 			}else if(value instanceof Objectable) {
 				_value = ((Objectable)value).getIdentifier() == null ? null : ((Objectable)value).getIdentifier().toString().toLowerCase();
 			}

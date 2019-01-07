@@ -27,4 +27,10 @@ public interface WindowContainerManagedWindowBuilder extends FunctionWithPropert
 	Class<? extends Row> getRowClass();
 	Class<? extends Row> getRowClass(Boolean getFromRequestIfNull);
 	WindowContainerManagedWindowBuilder setRowClass(Class<? extends Row> rowClass);
+	
+	WindowContainerManaged getWindowContainerManaged();
+	WindowContainerManagedWindowBuilder setWindowContainerManaged(WindowContainerManaged windowContainerManaged);
+
+	WindowRenderType getWindowRenderType();
+	WindowContainerManagedWindowBuilder setWindowRenderType(WindowRenderType windowRenderType);
 }

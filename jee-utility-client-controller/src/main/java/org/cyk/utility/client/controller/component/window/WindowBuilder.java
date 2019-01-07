@@ -28,4 +28,7 @@ public interface WindowBuilder extends VisibleComponentBuilder<Window> {
 	DialogBuilder getDialog();
 	DialogBuilder getDialog(Boolean injectIfNull);
 	WindowBuilder setDialog(DialogBuilder dialog);
+	
+	WindowRenderType getRenderType();
+	WindowBuilder setRenderType(WindowRenderType renderType);
 }

@@ -3,14 +3,7 @@ package org.cyk.utility.client.controller.component.command;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.AbstractControllerFunctionImpl;
-import org.cyk.utility.client.controller.Controller;
-import org.cyk.utility.object.Objects;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionProcess;
-import org.cyk.utility.system.action.SystemActionSelect;
-import org.cyk.utility.system.action.SystemActionUpdate;
 
 public class CommandFunctionImpl extends AbstractControllerFunctionImpl implements CommandFunction,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -22,6 +15,7 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 		setIsNotifyOnSuccess(Boolean.TRUE);
 		setIsNotifyOnThrowable(Boolean.TRUE);
 		setIsCatchThrowable(Boolean.TRUE);
+		/*
 		getExecutionPhaseTry(Boolean.TRUE).getRun(Boolean.TRUE).addRunnables(new Runnable() {
 			@Override
 			public void run() {
@@ -44,14 +38,16 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 					}else if(action instanceof SystemActionProcess) {
 						Object object = __injectCollectionHelper__().getFirst(entities);
 						__inject__(Controller.class).process(object);
+					}else if(action instanceof SystemActionAdd) {
+						
 					}else
 						__injectThrowableHelper__().throwRuntimeException("System action not yet handle : "+action.getIdentifier());	
 				}
 				
-				
 				//__inject__(CommandFunctionExecuteListenerThrough.class).setObject(CommandFunctionImpl.this).execute();
 			}
 		});
+		*/
 	}
 
 	@Override

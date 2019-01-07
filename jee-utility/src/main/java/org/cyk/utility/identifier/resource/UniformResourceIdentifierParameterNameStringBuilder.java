@@ -16,6 +16,8 @@ public interface UniformResourceIdentifierParameterNameStringBuilder extends Str
 	UniformResourceIdentifierParameterNameStringBuilder setNameAsNextActionClass();
 	UniformResourceIdentifierParameterNameStringBuilder setNameAsNextActionIdentifier();
 	
+	UniformResourceIdentifierParameterNameStringBuilder setNameAsWindowRenderTypeClass();
+	
 	/**/
 	
 	public static enum Name {
@@ -26,5 +28,7 @@ public interface UniformResourceIdentifierParameterNameStringBuilder extends Str
 		
 		,NEXT_ACTION_CLASS
 		,NEXT_ACTION_IDENTIFIER
+		
+		,WINDOW_RENDER_TYPE_CLASS
 	}
 }

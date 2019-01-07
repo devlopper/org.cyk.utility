@@ -13,6 +13,7 @@ public interface RequestParameterValueMapper extends FunctionWithPropertiesAsInp
 	RequestParameterValueMapper setParameterNameAsActionIdentifier();
 	RequestParameterValueMapper setParameterNameAsNextActionClass();
 	RequestParameterValueMapper setParameterNameAsNextActionIdentifier();
+	RequestParameterValueMapper setParameterNameAsWindowRenderTypeClass();
 	
 	String getParameterValue();
 	RequestParameterValueMapper setParameterValue(String parameterValue);

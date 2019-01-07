@@ -74,7 +74,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 			if(__inject__(StringHelper.class).isNotBlank(titleValue))
 				windowBuilder.setTitleValue(titleValue);	
 		}else {
-			windowBuilder = windowContainerManagedWindowBuilder.execute().getOutput();
+			windowBuilder = windowContainerManagedWindowBuilder.setWindowContainerManaged(this).execute().getOutput();
 		}
 		return windowBuilder;
 	}

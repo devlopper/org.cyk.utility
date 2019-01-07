@@ -93,4 +93,10 @@ public class UniformResourceIdentifierParameterNameStringBuilderImpl extends Abs
 		return this;
 	}
 	
+	@Override
+	public UniformResourceIdentifierParameterNameStringBuilder setNameAsWindowRenderTypeClass() {
+		setName(Name.WINDOW_RENDER_TYPE_CLASS);
+		return this;
+	}
+	
 }
