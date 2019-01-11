@@ -196,6 +196,11 @@
     </tag>
     
     <tag>
+        <tag-name>contractBodyWithThemeInsideFormTagBodyFirst</tag-name>
+        <source>tag/contract/contractBodyWithThemeInsideFormTagBodyFirst.xhtml</source>
+    </tag>
+    
+    <tag>
         <tag-name>contractBodyWithThemeAfterFormTag</tag-name>
         <source>tag/contract/contractBodyWithThemeAfterFormTag.xhtml</source>
     </tag>

@@ -8,25 +8,8 @@
 	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-	<!-- Messages -->
-    <ui:insert name="contractBodyWithThemeInsideFormTagBodyFirst">		
-		<h:inputHidden id="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"/>
-	    <p:growl id="#{componentHelper.globalMessagesTargetGrowlComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"/>
-	    		
-	   	<cyk:dialog value="#{__page__.window.dialog}">
-	   		<ui:define name="dialogContent">
-	   			<h:inputHidden id="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
-		    	<p:messages id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}ID" for="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
-		    	
-		    	<p:separator/>
-		    	<p:outputPanel style="text-align:center">
-			    	<c:forEach var="indexCommandable" items="#{__page__.window.dialog.commandables.get()}" >
-	    				<cyk:commandable value="#{indexCommandable}" />
-	    			</c:forEach>
-		    	</p:outputPanel>
-	   				
-	   		</ui:define>
-	   	</cyk:dialog>
+	<ui:insert name="contractBodyWithThemeInsideFormTagBodyFirst">		
+    	<cyk:contractBodyWithThemeInsideFormTagBodyFirst/>
     </ui:insert>
     
     <ui:insert name="contractBodyWithThemeInsideFormTagBodySecond">

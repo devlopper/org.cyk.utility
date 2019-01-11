@@ -8,6 +8,17 @@
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
    	<ui:insert name="contractHead">
+   		<f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta http-equiv="Cache-control" content="public" />
+            <meta http-equiv="Cache-control" content="max-age=864000" />
+            <meta http-equiv="Cache-control" content="s-maxage=1296000" />
+            
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />            
+        </f:facet>        
+   		
    		<ui:insert name="contractHeadTitle"><title><h:outputText value="#{__page__.window.title.properties.value}" escape="false" /></title></ui:insert>
    		<h:outputStylesheet library="css" name="common.css" />
    		<h:outputStylesheet library="css" name="layout.css" />

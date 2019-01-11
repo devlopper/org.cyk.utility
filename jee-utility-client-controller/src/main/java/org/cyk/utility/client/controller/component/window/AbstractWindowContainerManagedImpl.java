@@ -78,10 +78,6 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		WindowContainerManagedWindowBuilder windowContainerManagedWindowBuilder = __getWindowContainerManagedWindowBuilder__();
 		if(windowContainerManagedWindowBuilder == null) {
 			windowBuilder = __injectWindowBuilder__().setView(__getViewBuilder__()).setMenuMap(__getMenuBuilderMap__());
-			/*String titleValue = __getWindowTitleValue__();
-			if(__inject__(StringHelper.class).isNotBlank(titleValue))
-				windowBuilder.setTitleValue(titleValue);	
-			*/
 		}else {
 			windowBuilder = windowContainerManagedWindowBuilder.setWindowContainerManaged(this).execute().getOutput();
 		}
