@@ -184,6 +184,13 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	}
 	
 	@Override
+	public CollectionInstance<T> removeAll() {
+		if(collection!=null)
+			collection.clear();
+		return this;
+	}
+	
+	@Override
 	public String toString() {
 		return collection == null ? super.toString() : collection.toString();
 	}

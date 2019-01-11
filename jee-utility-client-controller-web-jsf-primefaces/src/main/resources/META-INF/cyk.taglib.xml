@@ -161,6 +161,56 @@
     </tag>
     
     <tag>
+        <tag-name>contractMetadata</tag-name>
+        <source>tag/contract/contractMetadata.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractHead</tag-name>
+        <source>tag/contract/contractHead.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBody</tag-name>
+        <source>tag/contract/contractBody.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyMessages</tag-name>
+        <source>tag/contract/contractBodyMessages.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyWithTheme</tag-name>
+        <source>tag/contract/contractBodyWithTheme.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyWithThemeBeforeFormTag</tag-name>
+        <source>tag/contract/contractBodyWithThemeBeforeFormTag.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyWithThemeInsideFormTag</tag-name>
+        <source>tag/contract/contractBodyWithThemeInsideFormTag.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyWithThemeAfterFormTag</tag-name>
+        <source>tag/contract/contractBodyWithThemeAfterFormTag.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyWithoutTheme</tag-name>
+        <source>tag/contract/contractBodyWithoutTheme.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractBodyAjaxStatus</tag-name>
+        <source>tag/contract/contractBodyAjaxStatus.xhtml</source>
+    </tag>
+    
+    <tag>
         <tag-name>menu</tag-name>
         <source>tag/menu/menu.xhtml</source>
     </tag>

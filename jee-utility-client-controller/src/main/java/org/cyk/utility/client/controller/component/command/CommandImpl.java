@@ -9,6 +9,7 @@ public class CommandImpl extends AbstractInvisibleComponentImpl implements Comma
 	private static final long serialVersionUID = 1L;
 
 	private WindowContainerManaged windowContainerManaged;
+	private String containerContextDependencyInjectionBeanName;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -46,4 +47,14 @@ public class CommandImpl extends AbstractInvisibleComponentImpl implements Comma
 		return this;
 	}
 	
+	@Override
+	public String getContainerContextDependencyInjectionBeanName() {
+		return containerContextDependencyInjectionBeanName;
+	}
+	
+	@Override
+	public Command setContainerContextDependencyInjectionBeanName(String containerContextDependencyInjectionBeanName) {
+		this.containerContextDependencyInjectionBeanName = containerContextDependencyInjectionBeanName;
+		return this;
+	}
 }

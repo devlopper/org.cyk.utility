@@ -8,124 +8,61 @@
       xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 
     <f:metadata>
-  		<ui:insert name="contractMetadata"/>
+  		<cyk:contractMetadata/>
 	</f:metadata>
-	    
+	
     <h:head>
-    	<ui:insert name="contractHead">
-    		<ui:insert name="contractHeadTitle"><title><h:outputText value="#{__page__.window.title.properties.value}" escape="false" /></title></ui:insert>
-    		<h:outputStylesheet library="css" name="common.css" />
-    		<h:outputStylesheet library="css" name="layout.css" />
-    		<h:outputStylesheet library="css" name="input.css" />
-    	</ui:insert>
+    	<cyk:contractHead/>
     </h:head>
     
 	<h:body>
-		<c:set var="theme" value="#{__page__.window.theme}" />
-		<c:if test="#{theme == null}">
-			<h1>No theme has been set</h1>
-		</c:if>
-		
-		<c:if test="#{theme != null}">
-			<ui:insert name="contractBody">	
-				<h:form id="#{componentHelper.globalFormComponentIdentifier}">		
-					<!-- Messages -->
-		    		
-		    		<h:inputHidden id="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"/>
-		    		<p:growl id="#{componentHelper.globalMessagesTargetGrowlComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"/>
-		    		
-		    		<cyk:dialog value="#{__page__.window.dialog}">
-		    			<ui:define name="dialogContent">
-		    				<h:inputHidden id="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
-				    		<!--
-				    		<p:scrollPanel style="min-width:400px;max-width:700px;min-height:100px;max-height:500px;">
-				    		-->	
-				    			<p:messages id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}ID" for="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
-				    		<!--
-				    		</p:scrollPanel>
-				    		-->
-				    		<p:separator/>
-				    		<p:outputPanel style="text-align:center">
-					    		<c:forEach var="indexCommandable" items="#{__page__.window.dialog.commandables.get()}" >
-			    					<cyk:commandable value="#{indexCommandable}" />
-			    				</c:forEach>
-				    		</p:outputPanel>
-		    				
-		    			</ui:define>
-		    		</cyk:dialog>
-		    		<!--
-		    		<ui:include src="dialog.xhtml"/>
-		    		-->
-		    		<!--
-		    		<p:dialog id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}" header="Messages" modal="true" appendTo="@(body)" visible="#{facesContext.getMessages(componentHelper.globalMessagesOwnerDialogComponentClientIdentifier).hasNext()}">
-					    <h:inputHidden id="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
-			    		<p:scrollPanel style="max-width:700px;max-height:500px">
-			    			<p:messages id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}ID" for="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
-			    		</p:scrollPanel>
-					</p:dialog>
-					-->
-					<div class="ui-g cyk_layout_page">
-						<ui:insert name="north">
-							<c:set var="viewNorth" value="#{theme.viewMap.get('north')}" />
-							<c:if test="#{viewNorth != null}">
-								<div class="ui-g-12 cyk_layout_page_north">
-									<ui:insert name="northView">
-										<cyk:view value="#{viewNorth}" />
+		<cyk:contractBody>
+			<ui:define name="contractBodyWithThemeInsideFormTagBodySecond">
+				<div class="ui-g cyk_layout_page">
+					<ui:insert name="north">
+						<c:set var="viewNorth" value="#{theme.viewMap.get('north')}" />
+						<c:if test="#{viewNorth != null}">
+							<div class="ui-g-12 cyk_layout_page_north">
+								<ui:insert name="northView">
+									<cyk:view value="#{viewNorth}" />
+								</ui:insert>
+							</div>
+						</c:if>
+					</ui:insert>
+					
+					<ui:insert name="center">
+						
+						<ui:insert name="centerNorth">
+							<div class="ui-g-12">
+								<cyk:contractBodyMessages/>
+							</div>
+						</ui:insert>
+						
+						<ui:insert name="centerCenter">
+							<c:set var="viewCenter" value="#{theme.viewMap.get('center')}" />
+							<c:if test="#{viewCenter != null}">
+								<div class="ui-g-12 cyk_layout_page_center">
+									<ui:insert name="centerView">
+										<cyk:view value="#{viewCenter}" />
 									</ui:insert>
 								</div>
 							</c:if>
 						</ui:insert>
-						
-						<ui:insert name="center">
-							<!-- Message -->
-							<ui:insert name="centerNorth">
-								<div class="ui-g-12">
-									<h:inputHidden id="#{componentHelper.globalMessagesOwnerInlineComponentIdentifier}"/>
-			    					<p:messages id="#{componentHelper.globalMessagesTargetInlineComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerInlineComponentIdentifier}" />
-								</div>
-							</ui:insert>
-							
-							<ui:insert name="centerCenter">
-								<c:set var="viewCenter" value="#{theme.viewMap.get('center')}" />
-								<c:if test="#{viewCenter != null}">
-									<div class="ui-g-12 cyk_layout_page_center">
-										<ui:insert name="centerView">
-											<cyk:view value="#{viewCenter}" />
-										</ui:insert>
-									</div>
-								</c:if>
-							</ui:insert>
-						</ui:insert>
-						
-						<ui:insert name="south">
-							<c:set var="viewSouth" value="#{theme.viewMap.get('south')}" />
-							<c:if test="#{viewSouth != null}">
-								<div class="ui-g-12 cyk_layout_page_south">
-									<ui:insert name="southView">
-										<cyk:view value="#{viewSouth}" />
-									</ui:insert>
-								</div>
-							</c:if>
-						</ui:insert>
-					</div>
-				</h:form>
-				
-				<!-- Global Ajax Status -->
-				<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />             
-				<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
-				    <table>
-				    	<tr>
-				    		<td>
-				    			<h:outputText value="Traitement en cours..." />
-				    		</td>
-				    		<td>
-				    			<p:graphicImage library="animation" name="processing.gif" width="32" height="32" />	
-				    		</td>
-				    	</tr>
-				    </table>
-				</p:dialog>
-			</ui:insert>
-		</c:if>
+					</ui:insert>
+					
+					<ui:insert name="south">
+						<c:set var="viewSouth" value="#{theme.viewMap.get('south')}" />
+						<c:if test="#{viewSouth != null}">
+							<div class="ui-g-12 cyk_layout_page_south">
+								<ui:insert name="southView">
+									<cyk:view value="#{viewSouth}" />
+								</ui:insert>
+							</div>
+						</c:if>
+					</ui:insert>
+				</div>				
+			</ui:define>
+		</cyk:contractBody>
     </h:body>
     	
 </html>

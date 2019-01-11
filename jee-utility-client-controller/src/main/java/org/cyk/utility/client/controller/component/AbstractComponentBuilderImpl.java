@@ -50,9 +50,11 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		setComponent(component);
 		component.setBuilder(this);
 		
-		component.setIdentifier(getOutputProperties().getIdentifier());
-		component.getProperties().setIdentifierAsStyleClass(getOutputProperties().getStyleClass());
-		
+		Properties outputProperties = getOutputProperties();
+		if(outputProperties!=null) {
+			component.setIdentifier(outputProperties.getIdentifier());
+			component.getProperties().setIdentifierAsStyleClass(outputProperties.getStyleClass());
+		}
 		__inject__(ComponentBuilderExecuteListenerBefore.class).setObject(this).setComponent(component).execute();
 		ComponentRoles roles = getRoles();
 		component.setRoles(roles);

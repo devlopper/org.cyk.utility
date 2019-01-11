@@ -10,8 +10,8 @@
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
 			<ui:insert name="pageContent">
-				<f:view contracts="#{value.window.theme.properties.identifier}">
-			        <ui:composition template="#{value.window.theme.template.identifier}">
+				<f:view contracts="#{empty value.window.theme.properties.identifier ? 'org.cyk.utility.client.controller.web.jsf.primefaces.desktop.default' : value.window.theme.properties.identifier}">
+			        <ui:composition template="#{empty value.window.theme ? '/template/default.xhtml' : value.window.theme.template.identifier}">
 			            <ui:param name="__page__" value="#{value}"></ui:param>
 			        </ui:composition>
 			    </f:view>

@@ -2,8 +2,10 @@ package org.cyk.utility.client.controller.impl.verysimpleentity;
 
 import java.io.Serializable;
 
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.component.grid.column.ColumnBuilder;
+import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.window.AbstractWindowContainerManagedWindowBuilderEditDataImpl;
 import org.cyk.utility.client.controller.component.window.WindowRenderTypeDialog;
@@ -13,10 +15,12 @@ import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEnt
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntityDetails;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntityDetailsReadRow;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntityEditWindowBuilder;
-import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionProcess;
+import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionUpdate;
 
 public class VerySimpleEntityEditWindowBuilderImpl extends AbstractWindowContainerManagedWindowBuilderEditDataImpl implements VerySimpleEntityEditWindowBuilder, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -44,10 +48,6 @@ public class VerySimpleEntityEditWindowBuilderImpl extends AbstractWindowContain
 				,__inject__(ColumnBuilder.class).addFieldNameStrings("data",VerySimpleEntityDetails.PROPERTY_ADDRESS)
 				);
 		
-		gridBuilder.addObjects(
-				__inject__(VerySimpleEntityDetails.class).setCode("det01").setAddress("vers le pont")
-				);
-		
 		/* Create new instance */
 		SystemAction systemActionCreate = __inject__(SystemActionCreate.class);
 		
@@ -55,6 +55,20 @@ public class VerySimpleEntityEditWindowBuilderImpl extends AbstractWindowContain
 		gridBuilder.getCreateRowCommandable(Boolean.TRUE).setWindowRenderTypeClass(WindowRenderTypeDialog.class);
 		gridBuilder.getCreateRowCommandable(Boolean.TRUE).getCommand(Boolean.TRUE).setWindowContainerManaged(getWindowContainerManaged());
 		gridBuilder.getCreateRowCommandable(Boolean.TRUE).getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(systemActionCreate);
+		
+		SystemAction systemActionProcess = __inject__(SystemActionCreate.class);
+		
+		CommandableBuilder commandableBuilder = __inject__(CommandableBuilder.class);
+		commandableBuilder.setName("Ouvrir");
+		commandableBuilder.setWindowRenderTypeClass(WindowRenderTypeDialog.class);
+		commandableBuilder.getCommand(Boolean.TRUE).setContainerContextDependencyInjectionBeanName("indexRow");
+		commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(systemActionProcess);
+		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getCommandables(Boolean.TRUE).add(commandableBuilder);
+		
+		//gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandablesBySystemActionClasses(SystemActionRead.class,SystemActionUpdate.class,SystemActionDelete.class);
+		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
+		gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);
+		layoutTypeGrid.setIsHasHeader(Boolean.TRUE).setIsHasFooter(Boolean.TRUE).setIsHasOrderNumberColumn(Boolean.TRUE).setIsHasCommandablesColumn(Boolean.TRUE);
 		
 		viewBuilder.addComponentBuilder(gridBuilder);
 	}

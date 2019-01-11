@@ -11,7 +11,7 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableRenderType;
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeButton;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
-import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.string.StringConstant;
 
 import lombok.Getter;

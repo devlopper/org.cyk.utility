@@ -12,6 +12,7 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 
 	private CommandFunction function;
 	private WindowContainerManaged windowContainerManaged;
+	private String containerContextDependencyInjectionBeanName;
 	//private Data data;
 	
 	@Override
@@ -19,7 +20,14 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 		super.__execute__(command);
 		command.setFunction(getFunction());
 		WindowContainerManaged windowContainerManaged = getWindowContainerManaged();
-		command.setWindowContainerManaged(windowContainerManaged);
+		command.setWindowContainerManaged(windowContainerManaged);		
+		String containerContextDependencyInjectionBeanName = getContainerContextDependencyInjectionBeanName();
+		if(__injectStringHelper__().isBlank(containerContextDependencyInjectionBeanName)) {
+			if(windowContainerManaged!=null)
+				containerContextDependencyInjectionBeanName = windowContainerManaged.getContextDependencyInjectionBeanName();
+		}
+		command.setContainerContextDependencyInjectionBeanName(containerContextDependencyInjectionBeanName);
+		
 	}
 	
 	@Override
@@ -46,6 +54,17 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 	@Override
 	public CommandBuilder setWindowContainerManaged(WindowContainerManaged windowContainerManaged) {
 		this.windowContainerManaged = windowContainerManaged;
+		return this;
+	}
+	
+	@Override
+	public String getContainerContextDependencyInjectionBeanName() {
+		return containerContextDependencyInjectionBeanName;
+	}
+	
+	@Override
+	public CommandBuilder setContainerContextDependencyInjectionBeanName(String containerContextDependencyInjectionBeanName) {
+		this.containerContextDependencyInjectionBeanName = containerContextDependencyInjectionBeanName;
 		return this;
 	}
 	

@@ -19,6 +19,7 @@ import org.cyk.utility.client.controller.component.annotation.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewTypeForm;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 
 import lombok.Getter;

@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,12 +12,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.model.ListDataModel;
 
-import org.codehaus.plexus.util.StringUtils;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
 import org.cyk.utility.client.controller.component.Components;
-import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.cell.Cell;
@@ -32,20 +31,11 @@ import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
-import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.builder.CommandButtonBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionProcess;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionSelect;
-import org.cyk.utility.system.action.SystemActionUpdate;
-import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.outputpanel.OutputPanel;
 import org.primefaces.model.menu.DefaultMenuItem;
@@ -296,12 +286,16 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 			}
 		}
 		
-		if(__inject__(CollectionHelper.class).isNotEmpty(objects)) {
-			dataTable.setValue(objects.get());
-			ListDataModel<Object> dataModel = new ListDataModel<Object>();
-			dataModel.setWrappedData(objects.get());
-			dataTable.setValue(dataModel);
-		}
+		ListDataModel<Object> dataModel = new ListDataModel<Object>();
+		dataTable.setValue(dataModel);
+		Collection<Object> collection;
+		
+		if(__inject__(CollectionHelper.class).isNotEmpty(objects))
+			collection = objects.get();
+		else
+			collection = new ArrayList<Object>();
+		
+		dataModel.setWrappedData(collection);
 		
 		Columns columns = grid.getColumns();
 		if(__inject__(CollectionHelper.class).isNotEmpty(columns))

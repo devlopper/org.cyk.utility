@@ -34,7 +34,7 @@ public class GridBuilderCommandableBuilderProcessorFunctionRunnableImpl extends 
 	protected void __runWithWindowRenderTypeDialog__(GridBuilder gridBuilder, CommandableBuilder commandableBuilder) {
 		super.__runWithWindowRenderTypeDialog__(gridBuilder, commandableBuilder);
 		SystemAction systemAction = commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getAction();
-		if(systemAction instanceof SystemActionCreate) {
+		if(systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionAdd) {
 			commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnSuccess(Boolean.FALSE);
 			SystemAction creationWindowSystemAction = commandableBuilder.getCommand().getWindowContainerManaged() instanceof EntityListPage ?
 					__inject__(SystemActionCreate.class) : __inject__(SystemActionAdd.class);
@@ -72,7 +72,7 @@ public class GridBuilderCommandableBuilderProcessorFunctionRunnableImpl extends 
 			event.getOutputProperties().setPartialSubmit("true");
 			event.getOutputProperties().setResetValues("true");
 			event.getOutputProperties().setIgnoreAutoUpdate("true");
-			event.getOutputProperties().setImmediate("false");
+			event.getOutputProperties().setImmediate("true");
 			event.getOutputProperties().setSkipChildren("true");
 			event.getOutputProperties().setUpdate("@(."+gridBuilder.getOutputProperties().getIdentifierAsStyleClass()+")");
 			CommandFunction function = __inject__(CommandFunction.class);
@@ -82,7 +82,7 @@ public class GridBuilderCommandableBuilderProcessorFunctionRunnableImpl extends 
 				public void run() {
 					SelectEvent selectEvent = (SelectEvent) function.getProperties().getParameter();
 					Data data = (Data) selectEvent.getObject();
-					
+					data.setIdentifier(100);
 					DataTable dataTable = (DataTable) gridBuilder.getComponent().getTargetModel();
 					ListDataModel<Object> dataModel = (ListDataModel<Object>) dataTable.getValue();
 					Collection<org.cyk.utility.client.controller.data.Row> collection = (Collection<org.cyk.utility.client.controller.data.Row>) dataModel.getWrappedData();

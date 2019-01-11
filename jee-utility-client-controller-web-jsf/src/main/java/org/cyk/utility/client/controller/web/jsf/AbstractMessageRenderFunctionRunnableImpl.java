@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.message.MessageRenderType;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
 import org.cyk.utility.client.controller.message.MessageRenderTypeGrowl;
 import org.cyk.utility.client.controller.message.MessageRenderTypeInline;
+import org.cyk.utility.client.controller.message.MessageRenderTypes;
 import org.cyk.utility.client.controller.message.MessagesBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.notification.NotificationBuilder;
@@ -46,10 +47,14 @@ public abstract class AbstractMessageRenderFunctionRunnableImpl extends Abstract
 				if(__inject__(CollectionHelper.class).isNotEmpty(messages)) {
 					for(Object  index : messages.get()) {
 						FacesMessage facesMessage = (FacesMessage) index;
-						MessageRenderType renderType = getFunction().getType();
-						if(renderType == null)
-							renderType = __inject__(MessageRenderTypeInline.class);
-						__run__(facesMessage, renderType);	
+						MessageRenderTypes renderTypes = getFunction().getTypes();
+						if(__inject__(CollectionHelper.class).isEmpty(renderTypes)) {
+							if(renderTypes == null)
+								renderTypes = __inject__(MessageRenderTypes.class);
+							renderTypes.add(__inject__(MessageRenderTypeDialog.class),__inject__(MessageRenderTypeInline.class));
+						}
+						for(MessageRenderType indexMessageRenderType : renderTypes.get())
+							__run__(facesMessage, indexMessageRenderType);	
 					}	
 				}
 			}

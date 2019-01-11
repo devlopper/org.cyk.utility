@@ -25,7 +25,7 @@ import org.cyk.utility.client.controller.component.window.WindowContainerManaged
 import org.cyk.utility.client.controller.data.AbstractRowDataImpl;
 import org.cyk.utility.client.controller.data.RowBuilder;
 import org.cyk.utility.client.controller.event.EventBuilder;
-import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.primefaces.PrimeFaces;

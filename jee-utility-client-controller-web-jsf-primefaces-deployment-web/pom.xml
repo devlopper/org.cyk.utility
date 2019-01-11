@@ -2,31 +2,25 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>org.cyk.pom.jee.client.jboss</groupId>
 		<artifactId>pom-jee-client-jboss</artifactId>
 		<version>pom.jee.client.jboss.0.0.1</version>
 	</parent>
-	
+
 	<groupId>org.cyk.jee.utility.client.controller.web.jsf.primefaces.deployment.web</groupId>
 	<artifactId>jee-utility-client-controller-web-jsf-primefaces-deployment-web</artifactId>
 	<version>0.0.1</version>
 	<packaging>war</packaging>
 
 	<name>JEE utility client web jsf primefaces deployment web</name>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility.client.controller.web.jsf.primefaces.playground.common</groupId>
 			<artifactId>jee-utility-client-controller-web-jsf-primefaces-playground-common</artifactId>
 			<version>0.0.1</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.primefaces</groupId>
-			<artifactId>primefaces</artifactId>
-			<version>6.2</version>
 		</dependency>
 	</dependencies>
 </project>

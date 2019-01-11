@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 
 import lombok.Getter;
 import lombok.Setter; 

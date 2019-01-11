@@ -46,6 +46,12 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 		getStyle(Boolean.TRUE).addClasses(classes);
 		return this;
 	}
+	
+	@Override
+	public VisibleComponentBuilder<COMPONENT> addStyleValues(String... values) {
+		getStyle(Boolean.TRUE).addValues(values);
+		return this;
+	}
 
 	public static final String FIELD_STYLE = "style";
 }

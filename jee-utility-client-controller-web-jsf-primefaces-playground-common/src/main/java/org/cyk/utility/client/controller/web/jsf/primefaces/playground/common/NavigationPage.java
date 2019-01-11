@@ -9,6 +9,7 @@ import org.cyk.utility.client.controller.component.output.OutputStringTextBuilde
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapper;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -34,8 +35,13 @@ public class NavigationPage extends AbstractPageContainerManagedImpl implements 
 	
 	public static ViewBuilder createViewBuilder() {
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
+		
+		OutputStringTextBuilder outputStringTextBuilder = __inject__(OutputStringTextBuilder.class);
+		outputStringTextBuilder.setValue("Id : navigation01");
+		outputStringTextBuilder.addStyleValues("font-size: 22px !important; color: red !important; font-weight: bold !important;text-transform: uppercase;");
+		
 		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
-		.addComponents(__inject__(OutputStringTextBuilder.class).setValue("Id : navigation01"))
+		.addComponents(outputStringTextBuilder)
 		.addComponents(__inject__(OutputStringTextBuilder.class).setValue("Value : "+__inject__(NavigationIdentifierToUrlStringMapper.class).setIdentifier("navigation01").execute().getOutput()))
 		
 		.addComponents(__inject__(OutputStringTextBuilder.class).setValue("Id : navigation02"))

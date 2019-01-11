@@ -13,7 +13,7 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.event.EventBuilder;
-import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.commandable.CommandableButtonDialogFrameworkDetailsPage.Model;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.primefaces.PrimeFaces;

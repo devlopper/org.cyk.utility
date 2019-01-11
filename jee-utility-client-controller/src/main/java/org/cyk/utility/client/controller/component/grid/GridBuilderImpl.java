@@ -43,10 +43,10 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	private CommandableBuilderByClassMap commandableMap;
 	private CommandableBuilderByClassMap commandablesColumnCommandableMap;
 	private ViewBuilderMap viewMap;
-	private CommandableBuilder createRowCommandable;
+	private CommandableBuilder createRowCommandable,processRowCommandable;
 	private Class<?> rowDataClass;
 	private ObjectByClassMap commandablesColumnCommandablesNavigationsParametersMap;
-	private SystemAction creationWindowSystemAction;
+	private SystemAction creationWindowSystemAction,processingWindowSystemAction;
 	
 	@Override
 	protected void __execute__(Grid grid) {
@@ -108,6 +108,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 						commandablesColumnView.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE);
 						for(CommandableBuilder index : commandables.get()) {
 							//index.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction((SystemAction) __inject__(entry.getKey()));
+							__inject__(GridBuilderCommandableBuilderProcessor.class).setGridBuilder(this).setCommandableBuilder(index).execute();
 							commandablesColumnView.getComponentsBuilder(Boolean.TRUE).addComponents(index);
 						}
 					}
@@ -527,6 +528,35 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 		return this;
 	}
 	
+	@Override
+	public CommandableBuilder getProcessRowCommandable() {
+		return processRowCommandable;
+	}
+	
+	@Override
+	public CommandableBuilder getProcessRowCommandable(Boolean injectIfNull) {
+		CommandableBuilder commandable = (CommandableBuilder) __getInjectIfNull__(FIELD_PROCESS_ROW_COMMANDABLE, injectIfNull);
+		
+		return commandable;
+	}
+	
+	@Override
+	public GridBuilder setProcessRowCommandable(CommandableBuilder processRowCommandable) {
+		this.processRowCommandable = processRowCommandable;
+		return this;
+	}
+	
+	@Override
+	public SystemAction getProcessingWindowSystemAction() {
+		return processingWindowSystemAction;
+	}
+	
+	@Override
+	public GridBuilder setProcessingWindowSystemAction(SystemAction processingWindowSystemAction) {
+		this.processingWindowSystemAction = processingWindowSystemAction;
+		return this;
+	}
+	
 	public static final String FIELD_COLUMNS = "columns";
 	public static final String FIELD_ROWS = "rows";
 	public static final String FIELD_VIEW = "view";
@@ -537,5 +567,6 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	public static final String FIELD_COMMANDABLES_COLUMN_COMMANDABLE_MAP = "commandablesColumnCommandableMap";
 	public static final String FIELD_VIEW_MAP = "viewMap";
 	public static final String FIELD_CREATE_ROW_COMMANDABLE = "createRowCommandable";
+	public static final String FIELD_PROCESS_ROW_COMMANDABLE = "processRowCommandable";
 	public static final String FIELD_COMMANDABLES_COLUMN_COMMANDABLES_NAVIGATIONS_PARAMETERS_MAP = "commandablesColumnCommandablesNavigationsParametersMap";
 }

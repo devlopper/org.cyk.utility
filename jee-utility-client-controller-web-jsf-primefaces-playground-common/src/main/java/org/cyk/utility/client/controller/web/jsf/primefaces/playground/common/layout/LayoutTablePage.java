@@ -9,7 +9,7 @@ import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
-import org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.AbstractPageContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 
 import lombok.Getter;
 import lombok.Setter;

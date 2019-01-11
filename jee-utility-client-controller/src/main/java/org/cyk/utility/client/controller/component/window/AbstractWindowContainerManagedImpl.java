@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
 
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
@@ -9,6 +10,13 @@ import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.theme.ThemeClassGetter;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.message.MessageRender;
+import org.cyk.utility.client.controller.message.MessageRenderType;
+import org.cyk.utility.notification.NotificationBuilder;
+import org.cyk.utility.notification.NotificationSeverity;
+import org.cyk.utility.notification.NotificationSeverityError;
+import org.cyk.utility.notification.NotificationSeverityInformation;
+import org.cyk.utility.notification.NotificationSeverityWarning;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -70,17 +78,26 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		WindowContainerManagedWindowBuilder windowContainerManagedWindowBuilder = __getWindowContainerManagedWindowBuilder__();
 		if(windowContainerManagedWindowBuilder == null) {
 			windowBuilder = __injectWindowBuilder__().setView(__getViewBuilder__()).setMenuMap(__getMenuBuilderMap__());
-			String titleValue = __getWindowTitleValue__();
+			/*String titleValue = __getWindowTitleValue__();
 			if(__inject__(StringHelper.class).isNotBlank(titleValue))
 				windowBuilder.setTitleValue(titleValue);	
+			*/
 		}else {
 			windowBuilder = windowContainerManagedWindowBuilder.setWindowContainerManaged(this).execute().getOutput();
 		}
+		
+		if(windowBuilder!=null) {
+			String titleValue = __getWindowTitleValue__();
+			if(__inject__(StringHelper.class).isNotBlank(titleValue))
+				windowBuilder.setTitleValue(titleValue);
+			
+		}
+		
 		return windowBuilder;
 	}
 	
 	protected WindowContainerManagedWindowBuilder __getWindowContainerManagedWindowBuilder__() {
-		return null;
+		return __inject__(WindowContainerManagedWindowBuilderBlank.class);
 	}
 	
 	protected String __getWindowTitleValue__() {
@@ -123,5 +140,40 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	public WindowContainerManaged setContextDependencyInjectionBeanName(String contextDependencyInjectionBeanName) {
 		this.contextDependencyInjectionBeanName = contextDependencyInjectionBeanName;
 		return this;
+	}
+	
+	/**/
+	
+	protected void __renderMessage__(String summary,String details,Class<? extends NotificationSeverity> notificationSeverityClass,Class<? extends MessageRenderType>...renderTypeClasses) {
+		MessageRender messageRender = __inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class).setSummary(summary).setDetails(details)
+				.setSeverity(__inject__(notificationSeverityClass)));	
+		if(__inject__(ArrayHelper.class).isNotEmpty(renderTypeClasses))
+			for(Class<? extends MessageRenderType> index : renderTypeClasses)
+				messageRender.addTypes(__inject__(index)).execute();
+		messageRender.execute();
+	}
+	
+	protected void __renderMessageInformation__(String summary,String details,Class<? extends MessageRenderType>...renderTypeClasses) {
+		__renderMessage__(summary, details, NotificationSeverityInformation.class, renderTypeClasses);
+	}
+	
+	protected void __renderMessageInformation__(String summary,Class<? extends MessageRenderType>...renderTypeClasses) {
+		__renderMessageInformation__(summary, summary, renderTypeClasses);
+	}
+	
+	protected void __renderMessageWarning__(String summary,String details,Class<? extends MessageRenderType>...renderTypeClasses) {
+		__renderMessage__(summary, details, NotificationSeverityWarning.class, renderTypeClasses);
+	}
+	
+	protected void __renderMessageWarning__(String summary,Class<? extends MessageRenderType>...renderTypeClasses) {
+		__renderMessageWarning__(summary, summary, renderTypeClasses);
+	}
+	
+	protected void __renderMessageError__(String summary,String details,Class<? extends MessageRenderType>...renderTypeClasses) {
+		__renderMessage__(summary, details, NotificationSeverityError.class, renderTypeClasses);
+	}
+	
+	protected void __renderMessageError__(String summary,Class<? extends MessageRenderType>...renderTypeClasses) {
+		__renderMessageError__(summary, summary, renderTypeClasses);
 	}
 }

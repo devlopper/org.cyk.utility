@@ -7,9 +7,11 @@ import org.cyk.utility.client.controller.component.dialog.Dialog;
 import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuMap;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
+import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.scope.Scope;
+import org.cyk.utility.scope.ScopeSession;
 
 public class WindowImpl extends AbstractVisibleComponentImpl implements Window,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,6 +22,7 @@ public class WindowImpl extends AbstractVisibleComponentImpl implements Window,S
 	private MenuMap menuMap;
 	private Dialog dialog;
 	private WindowRenderType renderType;
+	private OutputStringTextMap outputStringTextMap;
 	
 	@Override
 	public OutputStringText getTitle() {
@@ -32,6 +35,23 @@ public class WindowImpl extends AbstractVisibleComponentImpl implements Window,S
 		return this;
 	}
 
+	@Override
+	public OutputStringTextMap getOutputStringTextMap() {
+		return outputStringTextMap;
+	}
+	
+	@Override
+	public Window setOutputStringTextMap(OutputStringTextMap outputStringTextMap) {
+		this.outputStringTextMap = outputStringTextMap;
+		return this;
+	}
+	
+	@Override
+	public OutputStringText getOutputStringText(String key) {
+		OutputStringTextMap outputStringTextMap = getOutputStringTextMap();
+		return outputStringTextMap == null ? null : outputStringTextMap.get(key);
+	}
+	
 	@Override
 	public View getView() {
 		return view;
@@ -91,6 +111,11 @@ public class WindowImpl extends AbstractVisibleComponentImpl implements Window,S
 	public Menu getMenu(Class<? extends Scope> scopeClass) {
 		MenuMap menuMap = getMenuMap();
 		return menuMap == null ? null : menuMap.get(scopeClass);
+	}
+	
+	@Override
+	public Menu getMenuOfScopeSession() {
+		return getMenu(ScopeSession.class);
 	}
 
 }

@@ -91,5 +91,12 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	CommandableBuilder getCreateRowCommandable(Boolean injectIfNull);
 	GridBuilder setCreateRowCommandable(CommandableBuilder createRowCommandable);
 	
+	GridBuilder setProcessingWindowSystemAction(SystemAction processingWindowSystemAction);
+	SystemAction getProcessingWindowSystemAction();
+	
+	CommandableBuilder getProcessRowCommandable();
+	CommandableBuilder getProcessRowCommandable(Boolean injectIfNull);
+	GridBuilder setProcessRowCommandable(CommandableBuilder processRowCommandable);
+	
 	/**/
 }

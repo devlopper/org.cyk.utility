@@ -96,14 +96,16 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 					
 				}
 			String commandableIdentifier = commandable.getIdentifier().toString();
-			if(commandable.getCommand().getWindowContainerManaged()!=null) {
-				String actionExpressionLanguage = commandable.getCommand().getWindowContainerManaged().getContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').command.function.executeToReturnVoid";
+			if(__inject__(StringHelper.class).isNotBlank(commandable.getCommand().getContainerContextDependencyInjectionBeanName())) {
+				String actionExpressionLanguage = commandable.getCommand().getContainerContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').command.function.executeToReturnVoid";
 				commandButton.setActionExpression(__inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {}));	
 			}
 			
 			update = StringUtils.replace(update, "glo", ":form:glo");
 			
 			commandButton.setUpdate(update);
+			
+			//commandButton.setImmediate(Boolean.TRUE);
 			//System.out.println("CommandButtonBuilder.build() UPDATE : "+update);
 		}else {
 			commandButton.setType("button");
@@ -118,7 +120,8 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 		if(__inject__(CollectionHelper.class).isNotEmpty(events)) {
 			String commandableIdentifier = commandable.getIdentifier().toString();
 			for(Event index : events.get()) {
-				String actionExpressionLanguage = commandable.getCommand().getWindowContainerManaged().getContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').events.getAt(0).properties.function.executeWithOneParameterToReturnVoid";
+				//String actionExpressionLanguage = commandable.getCommand().getWindowContainerManaged().getContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').events.getAt(0).properties.function.executeWithOneParameterToReturnVoid";
+				String actionExpressionLanguage = commandable.getCommand().getContainerContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').events.getAt(0).properties.function.executeWithOneParameterToReturnVoid";
 				AjaxBehavior behavior = (AjaxBehavior) FacesContext.getCurrentInstance().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
 				behavior.addAjaxBehaviorListener(new AjaxBehaviorListenerImpl(__inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {})
 						, __inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {Object.class})));

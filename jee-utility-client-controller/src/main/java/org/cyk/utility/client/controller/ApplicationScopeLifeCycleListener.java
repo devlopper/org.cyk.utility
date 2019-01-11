@@ -6,6 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
+import org.cyk.utility.client.controller.application.Application;
 import org.cyk.utility.client.controller.component.command.CommandFunctionFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.command.CommandFunctionImpl;
 import org.cyk.utility.client.controller.component.window.WindowRenderTypeDialog;
@@ -26,6 +27,8 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(FunctionRunnableMap.class).set(ProxyGetterImpl.class, ProxyGetterRestEasyFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(CommandFunctionImpl.class, CommandFunctionFunctionRunnableImpl.class);
 		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClasses(WindowRenderTypeNormal.class,WindowRenderTypeDialog.class);
+		
+		__inject__(Application.class).setName("APP_NAME");
 	}
 	
 	@Override

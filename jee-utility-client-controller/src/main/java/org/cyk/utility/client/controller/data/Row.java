@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.data;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.Objectable;
+import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.object.ObjectByClassMap;
 import org.cyk.utility.system.action.SystemAction;
 
@@ -25,4 +26,6 @@ public interface Row extends Objectable {
 	ObjectByClassMap getNavigationParametersMap(Boolean injectIfNull);
 	Row setNavigationParametersMap(ObjectByClassMap navigationParametersMap);
 	Row setNavigationParameters(Object...navigationParameters);
+	
+	Commandable getCommandableByIdentifier(Object identifier);
 }

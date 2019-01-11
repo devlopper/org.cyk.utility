@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.AbstractObject;
+import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.object.ObjectByClassMap;
 
 public abstract class AbstractRowImpl extends AbstractObject implements Row,Serializable {
@@ -60,6 +61,12 @@ public abstract class AbstractRowImpl extends AbstractObject implements Row,Seri
 	public Row setNavigationParameters(Object... parameters) {
 		getNavigationParametersMap(Boolean.TRUE).set(parameters);
 		return this;
+	}
+	
+	@Override
+	public Commandable getCommandableByIdentifier(Object identifier) {
+		System.out.println("AbstractRowImpl.getCommandableByIdentifier() : "+identifier);
+		return null;
 	}
 	
 	public static final String FIELD_PARAMETERS_MAP = "parametersMap";

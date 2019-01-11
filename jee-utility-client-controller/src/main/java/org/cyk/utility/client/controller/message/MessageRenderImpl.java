@@ -16,6 +16,7 @@ public class MessageRenderImpl extends AbstractFunctionWithPropertiesAsInputAndV
 	private Objects messages;
 	private Notifications notifications;
 	private NotificationBuilders notificationBuilders;
+	private MessageRenderTypes types;
 	
 	@Override
 	public Objects getMessages() {
@@ -102,17 +103,41 @@ public class MessageRenderImpl extends AbstractFunctionWithPropertiesAsInputAndV
 	}
 
 	@Override
-	public MessageRenderType getType() {
-		return (MessageRenderType) getProperties().getType();
+	public MessageRenderTypes getTypes() {
+		return types;
+	}
+	
+	@Override
+	public MessageRenderTypes getTypes(Boolean injectIfNull) {
+		return (MessageRenderTypes) __getInjectIfNull__(FIELD_TYPES, injectIfNull);
+	}
+	
+	@Override
+	public MessageRender setTypes(MessageRenderTypes types) {
+		this.types = types;
+		return this;
+	}
+	
+	@Override
+	public MessageRender addTypes(Collection<MessageRenderType> types) {
+		getTypes(Boolean.TRUE).add(types);
+		return this;
+	}
+	
+	@Override
+	public MessageRender addTypes(MessageRenderType... types) {
+		getTypes(Boolean.TRUE).add(types);
+		return this;
 	}
 
 	@Override
 	public MessageRender setType(MessageRenderType type) {
-		getProperties().setType(type);
+		getTypes(Boolean.TRUE).removeAll().add(type);
 		return this;
 	}
 	
 	public static final String FIELD_MESSAGES = "messages";
 	public static final String FIELD_NOTIFICATIONS = "notifications";
 	public static final String FIELD_NOTIFICATION_BUILDERS = "notificationBuilders";
+	public static final String FIELD_TYPES = "types";
 }

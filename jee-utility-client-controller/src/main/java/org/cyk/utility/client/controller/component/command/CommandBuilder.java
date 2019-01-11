@@ -15,4 +15,7 @@ public interface CommandBuilder extends InvisibleComponentBuilder<Command> {
 	
 	WindowContainerManaged getWindowContainerManaged();
 	CommandBuilder setWindowContainerManaged(WindowContainerManaged windowContainerManaged);
+	
+	String getContainerContextDependencyInjectionBeanName();
+	CommandBuilder setContainerContextDependencyInjectionBeanName(String containerContextDependencyInjectionBeanName);
 }

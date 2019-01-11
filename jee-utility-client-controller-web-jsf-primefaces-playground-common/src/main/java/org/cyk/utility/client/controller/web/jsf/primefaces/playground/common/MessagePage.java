@@ -13,6 +13,7 @@ import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
 import org.cyk.utility.client.controller.message.MessageRenderTypeGrowl;
 import org.cyk.utility.client.controller.message.MessageRenderTypeInline;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.random.RandomHelper;
 
 import lombok.Getter;

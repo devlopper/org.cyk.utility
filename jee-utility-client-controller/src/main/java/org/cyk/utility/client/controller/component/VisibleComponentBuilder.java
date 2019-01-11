@@ -9,6 +9,7 @@ public interface VisibleComponentBuilder<COMPONENT extends VisibleComponent> ext
 	VisibleComponentBuilder<COMPONENT> setStyle(StyleBuilder styleBuilder);
 	
 	VisibleComponentBuilder<COMPONENT> addStyleClasses(String...classes);
+	VisibleComponentBuilder<COMPONENT> addStyleValues(String...values);
 	
 	@Override ComponentBuilder<COMPONENT> setOutputProperty(Object key, Object value);
 }

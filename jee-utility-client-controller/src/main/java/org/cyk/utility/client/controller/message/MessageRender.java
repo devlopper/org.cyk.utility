@@ -23,7 +23,11 @@ public interface MessageRender extends FunctionWithPropertiesAsInputAndVoidAsOut
 	MessageRender addNotificationBuilders(Collection<NotificationBuilder> notificationBuilders);
 	MessageRender addNotificationBuilders(NotificationBuilder...notificationBuilders);
 	
-	MessageRenderType getType();
+	MessageRenderTypes getTypes();
+	MessageRenderTypes getTypes(Boolean injectIfNull);
+	MessageRender setTypes(MessageRenderTypes types);
+	MessageRender addTypes(Collection<MessageRenderType> types);
+	MessageRender addTypes(MessageRenderType...types);
 	MessageRender setType(MessageRenderType type);
 	
 	Objects getMessages();

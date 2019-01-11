@@ -1,0 +1,29 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pa="http://primefaces.org/atlantis">    
+    
+    <div class="layout-sidebar #{guestPreferences.darkMenu ? 'layout-sidebar-dark': ''}">
+        <pa:tabMenu>
+
+            <pa:tab icon="fa fa-database" title="Gestion des Référentiels">
+                <h:form id="menu-form">
+                    <p:cache region="appcache-menu-grb" key="menu-grb" disabled="true">                        
+                        <pa:menu widgetVar="menu-grb-var" id="men-grb-link">
+                            <p:menuitem icon="fa fa-fw fa-caret-right" value="Catégorie Référentiel"/>
+                            <p:menuitem icon="fa fa-fw fa-caret-right" value="Référentiel"/> 
+                            <p:menuitem icon="fa fa-fw fa-caret-right" value="Table Référentiel" />
+                            <p:menuitem icon="fa fa-fw fa-windows" value="Retour au Portail" class="portal-back-link"/>
+                        </pa:menu>
+                    </p:cache>
+                </h:form>
+            </pa:tab>
+
+            
+        </pa:tabMenu>        
+    </div>
+    
+</ui:composition>

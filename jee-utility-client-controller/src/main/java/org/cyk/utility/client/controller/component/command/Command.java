@@ -11,4 +11,7 @@ public interface Command extends InvisibleComponent {
 
 	WindowContainerManaged getWindowContainerManaged();
 	Command setWindowContainerManaged(WindowContainerManaged windowContainerManaged);
+	
+	String getContainerContextDependencyInjectionBeanName();
+	Command setContainerContextDependencyInjectionBeanName(String containerContextDependencyInjectionBeanName);
 }

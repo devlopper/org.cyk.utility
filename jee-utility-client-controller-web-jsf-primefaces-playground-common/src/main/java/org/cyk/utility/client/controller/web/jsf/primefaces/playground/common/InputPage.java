@@ -20,6 +20,7 @@ import org.cyk.utility.client.controller.component.input.choice.InputChoiceBuild
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntity;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.system.action.SystemActionCreate;
 
