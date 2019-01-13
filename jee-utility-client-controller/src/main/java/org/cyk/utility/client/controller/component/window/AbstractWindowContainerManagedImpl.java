@@ -46,7 +46,9 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 			} catch (Exception exception) {
 				__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).execute().getOutput();
 			}
+			
 			setWindow(__windowBuilder__.execute().getOutput());
+			
 			if(window!=null) {
 				Theme theme = window.getTheme();
 				if(theme == null) {
@@ -59,7 +61,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				
 				if(theme!=null) {
 					theme.process(window);	
-				}	
+				}
 			}
 		}
 		return window;
@@ -85,10 +87,8 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		if(windowBuilder!=null) {
 			String titleValue = __getWindowTitleValue__();
 			if(__inject__(StringHelper.class).isNotBlank(titleValue))
-				windowBuilder.setTitleValue(titleValue);
-			
+				windowBuilder.setTitleValue(titleValue);	
 		}
-		
 		return windowBuilder;
 	}
 	

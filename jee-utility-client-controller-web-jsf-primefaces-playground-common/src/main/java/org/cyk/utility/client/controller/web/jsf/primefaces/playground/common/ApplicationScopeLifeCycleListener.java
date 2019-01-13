@@ -8,6 +8,7 @@ import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetterImpl;
 import org.cyk.utility.client.controller.entities.myentity.MyEntity;
+import org.cyk.utility.client.controller.entities.verycomplexentity.VeryComplexEntity;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntity;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntityDetails;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
@@ -26,6 +27,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClass(MyEntity.class);
 		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClass(VerySimpleEntity.class);
 		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClass(VerySimpleEntityDetails.class);
+		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClass(VeryComplexEntity.class);
 		
 		__inject__(StringRepositoryResourceBundle.class).addBundle("org.cyk.utility.client.controller.message");
 	}

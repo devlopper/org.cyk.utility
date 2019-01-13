@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.ComponentRoles;
+import org.cyk.utility.function.FunctionsExecutor;
 
 public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layout> implements LayoutBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -59,12 +60,16 @@ public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layou
 					items.add(__inject__(LayoutItemBuilder.class));
 			}
 		}
-		
+				
 		if(__injectCollectionHelper__().isNotEmpty(items)) {
+			FunctionsExecutor functionsExecutor = __inject__(FunctionsExecutor.class);
+			for(LayoutItemBuilder index : items.get()) 
+					functionsExecutor.addFunctions(index);
+			functionsExecutor.execute();
 			for(LayoutItemBuilder index : items.get()) {
-				LayoutItem layoutItem = index.execute().getOutput();
+				LayoutItem layoutItem = index.getComponent();
 				if(layoutItem!=null)
-					layout.addChild(layoutItem);			
+					layout.addChild(index.getComponent());			
 			}
 		}
 	}

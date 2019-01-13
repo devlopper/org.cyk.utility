@@ -55,6 +55,11 @@
 			<redirect />
 		</navigation-case>
 				
+		<navigation-case>
+			<from-outcome>veryComplexEntityEditView</from-outcome>
+			<to-view-id>/crud/verycomplexentity/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>		
 	</navigation-rule>
 	
 </faces-config>

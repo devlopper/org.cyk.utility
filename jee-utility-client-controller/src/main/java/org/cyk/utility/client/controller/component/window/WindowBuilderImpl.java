@@ -58,8 +58,6 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 			window.setTitle(title.execute().getOutput());
 		}
 		
-		
-		
 		ViewBuilder view = getView();
 		if(view!=null)
 			window.setView(view.execute().getOutput());
@@ -78,7 +76,6 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		DialogBuilder dialog = getDialog(Boolean.TRUE);
 		if(dialog!=null)
 			window.setDialog(dialog.execute().getOutput());
-		
 		
 	}
 	

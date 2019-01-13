@@ -9,6 +9,7 @@ import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
 import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeRowBar;
 import org.cyk.utility.client.controller.entities.myentity.MyEntity;
+import org.cyk.utility.client.controller.entities.verycomplexentity.VeryComplexEntity;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntity;
 import org.cyk.utility.scope.ScopeSession;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -43,7 +44,7 @@ public class MenuBuilderMapGetterFunctionRunnableImpl extends AbstractFunctionRu
 						
 						,__inject__(MenuItemBuilder.class).setCommandableName("Entités")
 							.addChild(
-								__inject__(MenuItemBuilder.class).setCommandableName("List").addEntitiesList(MyEntity.class,VerySimpleEntity.class)	
+								__inject__(MenuItemBuilder.class).setCommandableName("List").addEntitiesList(MyEntity.class,VerySimpleEntity.class,VeryComplexEntity.class)	
 								,__inject__(MenuItemBuilder.class).setCommandableName("Selection pour traitement")
 									.addEntitiesSelect(MyEntity.class,VerySimpleEntity.class)
 									.addEntitySelect(VerySimpleEntity.class,"validate")

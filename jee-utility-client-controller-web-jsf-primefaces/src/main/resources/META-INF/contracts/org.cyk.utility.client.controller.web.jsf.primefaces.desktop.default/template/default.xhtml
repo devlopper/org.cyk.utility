@@ -30,19 +30,19 @@
 						</c:if>
 					</ui:insert>
 					
-					<ui:insert name="center">
+					<ui:insert name="contractBodyWithThemeInsideFormTagBodySecondCenter">
 						
-						<ui:insert name="centerNorth">
+						<ui:insert name="contractBodyWithThemeInsideFormTagBodySecondCenterNorth">
 							<div class="ui-g-12">
 								<cyk:contractBodyMessages/>
 							</div>
 						</ui:insert>
 						
-						<ui:insert name="centerCenter">
+						<ui:insert name="contractBodyWithThemeInsideFormTagBodySecondCenterCenter">
 							<c:set var="viewCenter" value="#{theme.viewMap.get('center')}" />
 							<c:if test="#{viewCenter != null}">
 								<div class="ui-g-12 cyk_layout_page_center">
-									<ui:insert name="centerView">
+									<ui:insert name="contractBodyWithThemeInsideFormTagBodySecondCenterCenterView">
 										<cyk:view value="#{viewCenter}" />
 									</ui:insert>
 								</div>

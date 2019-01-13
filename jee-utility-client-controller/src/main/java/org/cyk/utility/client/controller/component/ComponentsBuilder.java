@@ -9,6 +9,9 @@ import org.cyk.utility.instance.Instances;
 
 public interface ComponentsBuilder extends FunctionWithPropertiesAsInput<Components> {
 
+	ComponentsBuilder setIsHandleLayout(Boolean isHandleLayout);
+	Boolean getIsHandleLayout();
+	
 	LayoutBuilder getLayout();
 	LayoutBuilder getLayout(Boolean injectIfNull);
 	ComponentsBuilder setLayout(LayoutBuilder layout);

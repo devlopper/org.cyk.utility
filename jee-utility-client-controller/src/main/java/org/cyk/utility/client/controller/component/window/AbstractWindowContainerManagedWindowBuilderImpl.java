@@ -35,6 +35,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	
 	@Override
 	protected WindowBuilder __execute__() throws Exception {
+		//DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
 		WindowBuilder window = __inject__(WindowBuilder.class);
 		WindowRenderType windowRenderType = getWindowRenderType();
 		if(windowRenderType == null) {
@@ -78,6 +79,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		
 		ViewBuilder view = getView();
 		window.setView(view);
+		//System.out.println("build window container managed window : "+__inject__(DurationStringBuilder.class).setDuration(durationBuilder.setEndNow().execute().getOutput()).execute().getOutput());
 		return window;
 	}
 	
