@@ -15,6 +15,9 @@ public interface VerySimpleEntity extends Data {
 	String getDescription();
 	VerySimpleEntity setDescription(String description);
 	
+	String getDescription02();
+	VerySimpleEntity setDescription02(String description02);
+	
 	VerySimpleEntityDetails getDetails();
 	VerySimpleEntity setDetails(VerySimpleEntityDetails details);
 	
@@ -40,6 +43,7 @@ public interface VerySimpleEntity extends Data {
 	
 	public static final String PROPERTY_NAME = "name";
 	public static final String PROPERTY_DESCRIPTION = "description";
+	public static final String PROPERTY_DESCRIPTION_02 = "description02";
 	public static final String PROPERTY_DETAILS = "details";
 	public static final String PROPERTY_DETAILS_COLLECTION = "detailsCollection";
 	public static final String PROPERTY_BOOLEAN_VALUE_CHECK_BOX = "booleanValueCheckBox";

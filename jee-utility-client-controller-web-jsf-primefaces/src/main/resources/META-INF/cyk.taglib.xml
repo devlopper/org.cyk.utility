@@ -20,6 +20,11 @@
     </tag>
     
     <tag>
+        <tag-name>inputEditor</tag-name>
+        <source>tag/input/text/editor/editor.xhtml</source>
+    </tag>
+    
+    <tag>
         <tag-name>selectBooleanCheckbox</tag-name>
         <source>tag/input/boolean/selectBooleanCheckbox.xhtml</source>
     </tag>

@@ -18,6 +18,7 @@ import org.cyk.utility.client.controller.component.annotation.InputChoiceOne;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceOneRadio;
 import org.cyk.utility.client.controller.component.annotation.InputString;
+import org.cyk.utility.client.controller.component.annotation.InputStringEditor;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineMany;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
 import org.cyk.utility.client.controller.data.AbstractDataImpl;
@@ -30,6 +31,9 @@ public class VerySimpleEntityImpl extends AbstractDataImpl implements VerySimple
 	
 	@Input @InputString @InputStringLineMany @NotNull
 	private String description;
+	
+	@Input @InputString @InputStringEditor @NotNull
+	private String description02;
 	
 	private VerySimpleEntityDetails details;
 	
@@ -101,6 +105,17 @@ public class VerySimpleEntityImpl extends AbstractDataImpl implements VerySimple
 	@Override
 	public VerySimpleEntity setDescription(String description) {
 		this.description = description;
+		return this;
+	}
+	
+	@Override
+	public String getDescription02() {
+		return description02;
+	}
+	
+	@Override
+	public VerySimpleEntity setDescription02(String description02) {
+		this.description02 = description02;
 		return this;
 	}
 	

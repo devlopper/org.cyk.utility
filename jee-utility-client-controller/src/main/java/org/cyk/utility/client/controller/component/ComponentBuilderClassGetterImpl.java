@@ -13,6 +13,7 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputBooleanButtonBuilder;
 import org.cyk.utility.client.controller.component.input.InputBooleanCheckBoxBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
+import org.cyk.utility.client.controller.component.input.InputStringEditorBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBoxBuilder;
@@ -224,6 +225,11 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputStringLineMany.class,annotations);
 			if(annotationInputStringLineMany!=null)
 				return InputStringLineManyBuilder.class;
+			
+			org.cyk.utility.client.controller.component.annotation.InputStringEditor annotationInputStringEditor =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputStringEditor.class,annotations);
+			if(annotationInputStringEditor!=null)
+				return InputStringEditorBuilder.class;
 			
 			org.cyk.utility.client.controller.component.annotation.InputBooleanButton annotationInputBooleanButton =
 					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputBooleanButton.class,annotations);

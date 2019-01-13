@@ -16,6 +16,7 @@ import org.cyk.utility.client.controller.component.input.InputBooleanButton;
 import org.cyk.utility.client.controller.component.input.InputBooleanCheckBox;
 import org.cyk.utility.client.controller.component.input.InputStringLineMany;
 import org.cyk.utility.client.controller.component.input.InputStringLineOne;
+import org.cyk.utility.client.controller.component.input.InputStringEditor;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBox;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneCombo;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneRadio;
@@ -43,6 +44,10 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 
 	public RandomHelper getRandomHelper() {
 		return __inject__(RandomHelper.class);
+	}
+	
+	public Boolean isInputStringEditor(Object object) {
+		return object instanceof InputStringEditor;
 	}
 	
 	public Boolean isInputStringLineOne(Object object) {
