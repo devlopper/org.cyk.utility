@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.component.window;
 
 import org.cyk.utility.client.controller.Objectable;
+import org.cyk.utility.client.controller.session.SessionUser;
 
 public interface WindowContainerManaged extends Objectable {
 
@@ -9,5 +10,7 @@ public interface WindowContainerManaged extends Objectable {
 	
 	String getContextDependencyInjectionBeanName();
 	WindowContainerManaged setContextDependencyInjectionBeanName(String contextDependencyInjectionBeanName);
-	
+
+	SessionUser getSessionUser();
+	WindowContainerManaged setSessionUser(SessionUser sessionUser);
 }

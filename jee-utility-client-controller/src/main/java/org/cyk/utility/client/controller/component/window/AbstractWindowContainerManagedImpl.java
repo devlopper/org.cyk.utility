@@ -12,6 +12,8 @@ import org.cyk.utility.client.controller.component.theme.ThemeClassGetter;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderType;
+import org.cyk.utility.client.controller.session.SessionUser;
+import org.cyk.utility.client.controller.session.SessionUserGetter;
 import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.notification.NotificationSeverity;
 import org.cyk.utility.notification.NotificationSeverityError;
@@ -27,11 +29,13 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	private Window window;
 	private WindowBuilder __windowBuilder__;
 	private String contextDependencyInjectionBeanName;
+	protected SessionUser sessionUser;
 	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		setContextDependencyInjectionBeanName(__inject__(StringHelper.class).getVariableNameFrom(getClass().getSimpleName()));
+		setSessionUser(__getSessionUser__());
 	}
 	
 	protected <THEME extends Theme> Class<THEME> __getThemeClass__(){
@@ -70,6 +74,17 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	@Override
 	public WindowContainerManaged setWindow(Window window) {
 		this.window = window;
+		return this;
+	}
+	
+	@Override
+	public SessionUser getSessionUser() {
+		return sessionUser;
+	}
+	
+	@Override
+	public WindowContainerManaged setSessionUser(SessionUser sessionUser) {
+		this.sessionUser = sessionUser;
 		return this;
 	}
 	
@@ -138,9 +153,13 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		return this;
 	}
 	
+	protected static SessionUser __getSessionUser__() {
+		return __inject__(SessionUserGetter.class).execute().getOutput();
+	}
+	
 	/**/
 	
-	protected void __renderMessage__(String summary,String details,Class<? extends NotificationSeverity> notificationSeverityClass,Class<? extends MessageRenderType>...renderTypeClasses) {
+	protected static void __renderMessage__(String summary,String details,Class<? extends NotificationSeverity> notificationSeverityClass,Class<? extends MessageRenderType>...renderTypeClasses) {
 		MessageRender messageRender = __inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class).setSummary(summary).setDetails(details)
 				.setSeverity(__inject__(notificationSeverityClass)));	
 		if(__inject__(ArrayHelper.class).isNotEmpty(renderTypeClasses))
@@ -149,27 +168,27 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		messageRender.execute();
 	}
 	
-	protected void __renderMessageInformation__(String summary,String details,Class<? extends MessageRenderType>...renderTypeClasses) {
+	protected static void __renderMessageInformation__(String summary,String details,Class<? extends MessageRenderType>...renderTypeClasses) {
 		__renderMessage__(summary, details, NotificationSeverityInformation.class, renderTypeClasses);
 	}
 	
-	protected void __renderMessageInformation__(String summary,Class<? extends MessageRenderType>...renderTypeClasses) {
+	protected static void __renderMessageInformation__(String summary,Class<? extends MessageRenderType>...renderTypeClasses) {
 		__renderMessageInformation__(summary, summary, renderTypeClasses);
 	}
 	
-	protected void __renderMessageWarning__(String summary,String details,Class<? extends MessageRenderType>...renderTypeClasses) {
+	protected static void __renderMessageWarning__(String summary,String details,Class<? extends MessageRenderType>...renderTypeClasses) {
 		__renderMessage__(summary, details, NotificationSeverityWarning.class, renderTypeClasses);
 	}
 	
-	protected void __renderMessageWarning__(String summary,Class<? extends MessageRenderType>...renderTypeClasses) {
+	protected static void __renderMessageWarning__(String summary,Class<? extends MessageRenderType>...renderTypeClasses) {
 		__renderMessageWarning__(summary, summary, renderTypeClasses);
 	}
 	
-	protected void __renderMessageError__(String summary,String details,Class<? extends MessageRenderType>...renderTypeClasses) {
+	protected static void __renderMessageError__(String summary,String details,Class<? extends MessageRenderType>...renderTypeClasses) {
 		__renderMessage__(summary, details, NotificationSeverityError.class, renderTypeClasses);
 	}
 	
-	protected void __renderMessageError__(String summary,Class<? extends MessageRenderType>...renderTypeClasses) {
+	protected static void __renderMessageError__(String summary,Class<? extends MessageRenderType>...renderTypeClasses) {
 		__renderMessageError__(summary, summary, renderTypeClasses);
 	}
 }
