@@ -244,7 +244,15 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	public SystemFunction setEntity(Object entity) {
 		getProperties().setEntity(entity);
+		SystemAction action = getAction();
+		if(action!=null) {
+			if(action.getEntities()!=null)
+				action.getEntities().removeAll();
+		}
 		if(entity!=null) {
+			if(action!=null) {
+				action.getEntities(Boolean.TRUE).add(entity);
+			}
 			setEntityClass(entity.getClass());
 			if(Boolean.TRUE.equals(__getIsSetConditionsAssertionsProviderFromEntity__(entity))) {
 				__setConditionsAssertionsProvidersIfNull__(entity, getAction(), null);

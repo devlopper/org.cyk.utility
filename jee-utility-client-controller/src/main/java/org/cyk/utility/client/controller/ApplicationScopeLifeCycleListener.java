@@ -15,6 +15,7 @@ import org.cyk.utility.client.controller.proxy.ProxyGetterImpl;
 import org.cyk.utility.client.controller.proxy.ProxyGetterRestEasyFunctionRunnableImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
 import org.cyk.utility.instance.InstanceGetterImpl;
+import org.cyk.utility.string.StringHelper;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -28,7 +29,13 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(FunctionRunnableMap.class).set(CommandFunctionImpl.class, CommandFunctionFunctionRunnableImpl.class);
 		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClasses(WindowRenderTypeNormal.class,WindowRenderTypeDialog.class);
 		
-		__inject__(Application.class).setName("APP_NAME");
+		__initializeApplication__(object);
+	}
+	
+	protected void __initializeApplication__(Object object) {
+		Application application = __inject__(Application.class);
+		if(__inject__(StringHelper.class).isBlank(application.getName()))
+			application.setName("APP_NAME");
 	}
 	
 	@Override
