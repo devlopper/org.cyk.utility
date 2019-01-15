@@ -1,5 +1,15 @@
 package org.cyk.utility.server.persistence;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
+import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.field.FieldName;
+import org.cyk.utility.instance.InstanceGetter;
+import org.cyk.utility.instance.InstanceGetterImpl;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram;
 import org.junit.Assert;
@@ -7,6 +17,10 @@ import org.junit.Test;
 
 public class UtilityIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram {
 	private static final long serialVersionUID = 1L;
+	
+	static {
+		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class);
+	}
 	
 	@Test
 	public void getInstanceMyEntityByBusinessIdentifier(){
@@ -25,6 +39,32 @@ public class UtilityIntegrationTest extends AbstractPersistenceArquillianIntegra
 		Assert.assertEquals(new Integer(2), myEntity.getIntegerValue());
 		
 		__deleteEntitiesAll__(MyEntity.class);
+		
+	}
+	
+	/**/
+	
+	public static class InstanceGetterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<InstanceGetter> implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		public InstanceGetterFunctionRunnableImpl() {
+			setRunnable(new Runnable() {
+				@Override
+				public void run() {
+					if(FieldName.IDENTIFIER.equals(getFunction().getFieldName())) {
+						Object one = __inject__(Persistence.class).readOne(getFunction().getClazz(), getFunction().getValue(), new Properties().setValueUsageType(getFunction().getValueUsageType()));
+						Collection<Object> collection = new ArrayList<>();
+						collection.add(one);
+						setOutput(collection);
+					}
+					//setOutput(output);
+					/*if(MyData.class.equals( getFunction().getClazz() )) {
+						if("a001".equals(getFunction().getValue()))
+							setOutput(Arrays.asList(new MyData().setId("159").setNum("a001")));
+					}*/
+				}
+			});
+		}
 		
 	}
 	

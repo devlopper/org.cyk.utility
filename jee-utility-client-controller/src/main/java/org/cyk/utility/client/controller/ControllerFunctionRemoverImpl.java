@@ -3,10 +3,13 @@ package org.cyk.utility.client.controller;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.ws.rs.core.Response;
+
 import org.cyk.utility.client.controller.data.DataRepresentationClassGetter;
 import org.cyk.utility.client.controller.data.DataTransferObjectClassGetter;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.server.representation.RepresentationEntity;
+import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
@@ -48,6 +51,18 @@ public class ControllerFunctionRemoverImpl extends AbstractControllerFunctionImp
 	@Override
 	public ControllerFunctionRemover setActionEntityClass(Class<?> entityClass) {
 		return (ControllerFunctionRemover) super.setActionEntityClass(entityClass);
+	}
+
+	@Override
+	protected Response __act__(SystemAction action, Object representation, Collection<?> dataTransferObjects) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected ResponseEntityDto getResponseEntityDto(SystemAction action, Object representation, Response response) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

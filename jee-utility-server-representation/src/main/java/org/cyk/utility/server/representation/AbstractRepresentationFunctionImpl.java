@@ -59,12 +59,12 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	}
 	
 	protected void __computeResponseEntity__(ResponseEntityDto responseEntityDto){
-		responseEntityDto.setStatus("SUCCESS");
+		responseEntityDto.setStatusUsingEnumeration(ResponseEntityDto.Status.SUCCESS);
 		responseEntityDto.addMessage(new MessageDto().setHead(getPersistenceEntityClass().getSimpleName()+" a été "+getAction().getIdentifier()+" avec succès."));
 	}
 	
 	protected void __computeResponseEntity__(ResponseEntityDto responseEntityDto,Throwable throwable){
-		responseEntityDto.setStatus("FAILURE");
+		responseEntityDto.setStatusUsingEnumeration(ResponseEntityDto.Status.FAILURE);
 		Throwable cause = __injectThrowableHelper__().getFirstCause(throwable);	
 		//TODO cause can be null , find the cause which is not null otherwise use throwable itself
 		//throwable.printStackTrace();

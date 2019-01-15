@@ -1,8 +1,12 @@
 package org.cyk.utility.client.controller.component.command;
 
 import java.io.Serializable;
+import java.util.Collection;
+
+import javax.ws.rs.core.Response;
 
 import org.cyk.utility.client.controller.AbstractControllerFunctionImpl;
+import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.system.action.SystemAction;
 
 public class CommandFunctionImpl extends AbstractControllerFunctionImpl implements CommandFunction,Serializable {
@@ -52,6 +56,18 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 
 	@Override
 	protected void __execute__(SystemAction action) {}
+
+	@Override
+	protected Response __act__(SystemAction action, Object representation, Collection<?> dataTransferObjects) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected ResponseEntityDto getResponseEntityDto(SystemAction action, Object representation, Response response) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	/*
 	@Override

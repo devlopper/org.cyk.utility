@@ -20,6 +20,10 @@ public class ResponseEntityDto extends AbstractEntityDto implements  Serializabl
 	private String status;
 	private MessageDtoCollection messageCollection;
 	
+	public ResponseEntityDto setStatusUsingEnumeration(Status status) {
+		return setStatus(status == null ? null : status.name());
+	}
+	
 	public ResponseEntityDto addMessage(Collection<MessageDto> messages) {
 		if(__inject__(CollectionHelper.class).isNotEmpty(messages)) {
 			if(this.messageCollection == null)
@@ -39,6 +43,13 @@ public class ResponseEntityDto extends AbstractEntityDto implements  Serializabl
 	
 	public MessageDto getMessageAt(Integer index) {
 		return __inject__(CollectionHelper.class).getElementAt(getMessages(),index);
+	}
+	
+	/**/
+	
+	public static enum Status {
+		SUCCESS
+		,FAILURE
 	}
 	
 }

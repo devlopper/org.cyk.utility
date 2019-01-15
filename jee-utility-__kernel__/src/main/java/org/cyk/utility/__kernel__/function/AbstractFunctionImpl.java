@@ -104,6 +104,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		if(Boolean.TRUE.equals(getIsCatchThrowable())) {
 			//TODO print the className.methodName.lineNumber. Those values can be taken from the stack trace elements array
 			System.err.println(getClass()+" : Caught exception : "+exception);
+			//exception.printStackTrace();
 			getProperties().setThrowable(exception);
 			__executePhaseMoment__(getExecutionPhaseCatch(), FunctionExecutionPhaseMomentEnd.class);
 		}else {
