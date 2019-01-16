@@ -9,6 +9,10 @@ import org.cyk.utility.system.action.SystemAction;
 
 public interface WindowContainerManagedWindowBuilder extends FunctionWithPropertiesAsInput<WindowBuilder> {
 
+	WindowBuilder getWindow();
+	WindowBuilder getWindow(Boolean injectIfNull);
+	WindowContainerManagedWindowBuilder setWindow(WindowBuilder window);
+	
 	MenuBuilderMap getMenuMap();
 	MenuBuilderMap getMenuMap(Boolean injectIfNull);
 	WindowContainerManagedWindowBuilder setMenuMap(MenuBuilderMap menuMap);

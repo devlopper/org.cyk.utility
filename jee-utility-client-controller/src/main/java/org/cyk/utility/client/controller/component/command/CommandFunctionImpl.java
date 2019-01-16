@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.client.controller.AbstractControllerFunctionImpl;
+import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.system.action.SystemAction;
 
@@ -58,8 +59,7 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 	protected void __execute__(SystemAction action) {}
 
 	@Override
-	protected Response __act__(SystemAction action, Object representation, Collection<?> dataTransferObjects) {
-		// TODO Auto-generated method stub
+	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		return null;
 	}
 

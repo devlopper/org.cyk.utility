@@ -5,13 +5,10 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.client.controller.data.DataRepresentationClassGetter;
-import org.cyk.utility.client.controller.data.DataTransferObjectClassGetter;
-import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.value.ValueUsageType;
 
 public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl implements ControllerFunctionReader , Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,7 +18,7 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 		super.__listenPostConstruct__();
 		setAction(__inject__(SystemActionRead.class));
 	}
-	
+	/*
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected void __execute__(SystemAction action) {
@@ -32,7 +29,25 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 		Class<?> dataTransferClass = __inject__(DataTransferObjectClassGetter.class).setDataClass(action.getEntityClass()).execute().getOutput();
 		Collection<?> dataTransferObjects = __injectInstanceHelper__().buildMany(dataTransferClass, action.getEntities().get());
 	}
+	*/
+	@Override
+	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
+		Object identifier = action.getEntitiesIdentifiers().getFirst();
+		ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
+		if(valueUsageType == null)
+			valueUsageType = ValueUsageType.SYSTEM;
+		return representation.getOne(identifier.toString(),valueUsageType.name());
+	}
 	
+	@Override
+	protected Object getResponseEntityDto(SystemAction action, Object representation, Response response) {
+		Class<?> dtoClass = __inject__(ControllerLayer.class).getDataTransferClassFromEntityClass(action.getEntityClass());
+		Object object = response.readEntity(dtoClass);
+		object = __injectInstanceHelper__().buildOne(__inject__(action.getEntityClass()).getClass(), object);
+		setEntity(object);
+		return object;
+	}
+
 	@Override
 	public ControllerFunctionReader setActionEntityIdentifierClass(Class<?> entityIdentifierClass) {
 		return (ControllerFunctionReader) super.setActionEntityIdentifierClass(entityIdentifierClass);
@@ -46,18 +61,6 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 	@Override
 	public ControllerFunctionReader addActionEntitiesIdentifiers(Object... entitiesIdentifiers) {
 		return (ControllerFunctionReader) super.addActionEntitiesIdentifiers(entitiesIdentifiers);
-	}
-
-	@Override
-	protected Response __act__(SystemAction action, Object representation, Collection<?> dataTransferObjects) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected ResponseEntityDto getResponseEntityDto(SystemAction action, Object representation, Response response) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

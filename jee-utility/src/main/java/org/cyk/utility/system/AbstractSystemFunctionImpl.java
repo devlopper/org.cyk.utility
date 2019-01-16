@@ -206,9 +206,10 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		return (Class<?>) getProperties().getEntityClass();
 	}
 	
-	@Override
+	@Override //TODO to be removed
 	public SystemFunction setEntityClass(Class<?> aClass) {
 		getProperties().setEntityClass(aClass);
+		setActionEntityClass(aClass);
 		return this;
 	}
 	
@@ -220,6 +221,8 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	public SystemFunction setEntityIdentifier(Object identifier) {
 		getProperties().setEntityIdentifier(identifier);
+		getAction().getEntitiesIdentifiers(Boolean.TRUE).removeAll();
+		getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifier);
 		return this;
 	}
 	

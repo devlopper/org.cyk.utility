@@ -25,6 +25,7 @@ import org.cyk.utility.system.action.SystemActionUpdate;
 public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<WindowBuilder> implements WindowContainerManagedWindowBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private WindowBuilder window;
 	private MenuBuilderMap menuMap;
 	private ViewBuilder view;
 	private SystemAction systemAction;
@@ -36,7 +37,9 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	@Override
 	protected WindowBuilder __execute__() throws Exception {
 		//DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
-		WindowBuilder window = __inject__(WindowBuilder.class);
+		WindowBuilder window = getWindow();
+		if(window == null)
+			window = __inject__(WindowBuilder.class);
 		WindowRenderType windowRenderType = getWindowRenderType();
 		if(windowRenderType == null) {
 			Class<?> windowRenderTypeClass = __inject__(RequestParameterValueMapper.class).setParameterNameAsWindowRenderTypeClass().execute().getOutputAs(Class.class);
@@ -68,11 +71,12 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(systemAction == null) {
 			
 		}else {
-			window.setTitleValue(
-				__inject__(InternalizationPhraseBuilder.class)
-					.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.NOUN))
-					.addStringsByKeys(systemAction.getEntities().getElementClass()).execute().getOutput()
-				);
+			if(window.getTitle()==null || __injectStringHelper__().isBlank(window.getTitle().getValue()))
+				window.setTitleValue(
+					__inject__(InternalizationPhraseBuilder.class)
+						.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.NOUN))
+						.addStringsByKeys(systemAction.getEntities().getElementClass()).execute().getOutput()
+					);
 			__execute__(window,systemAction,__getFormClass__(getFormClass()),__getRowClass__(getRowClass()));
 		}
 		
@@ -106,6 +110,22 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	@Override
 	public WindowContainerManagedWindowBuilder setMenuMap(MenuBuilderMap menuMap) {
 		this.menuMap = menuMap;
+		return this;
+	}
+	
+	@Override
+	public WindowBuilder getWindow() {
+		return window;
+	}
+	
+	@Override
+	public WindowBuilder getWindow(Boolean injectIfNull) {
+		return (WindowBuilder) __getInjectIfNull__(FIELD_WINDOW, injectIfNull);
+	}
+	
+	@Override
+	public WindowContainerManagedWindowBuilder setWindow(WindowBuilder window) {
+		this.window = window;
 		return this;
 	}
 	
@@ -218,4 +238,5 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	*/
 	public static final String FIELD_MENU_MAP = "menuMap";
 	public static final String FIELD_VIEW = "view";
+	public static final String FIELD_WINDOW = "window";
 }

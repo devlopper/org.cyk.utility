@@ -26,9 +26,8 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 
 	@Override
 	protected void __execute__(SystemAction action) {
-		if(action!=null && __injectCollectionHelper__().isNotEmpty(action.getEntities())) {
-			Class<?> entityClass = action.getEntities().getAt(0).getClass();
-			
+		if(action!=null && (__injectCollectionHelper__().isNotEmpty(action.getEntities()) || __injectCollectionHelper__().isNotEmpty(action.getEntitiesIdentifiers()))) {
+			Class<?> entityClass = action.getEntityClass(); //action.getEntities().getAt(0).getClass();
 			Class<?> dataTransferClass = __inject__(DataTransferObjectClassGetter.class).setDataClass(entityClass).execute().getOutput();
 			if(dataTransferClass == null)
 				__injectThrowableHelper__().throwRuntimeException("Data Transfer Class is required for "+entityClass);
@@ -58,14 +57,11 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 			else {
 				Response.Status.Family responseStatusFamily = Response.Status.Family.familyOf(response.getStatus());
 				if(Response.Status.Family.SUCCESSFUL.equals(responseStatusFamily) || Response.Status.Family.SERVER_ERROR.equals(responseStatusFamily)){
-					ResponseEntityDto responseEntityDto = getResponseEntityDto(action, representation, response);
-					if(responseEntityDto!=null) { 
-						if(Response.Status.Family.SUCCESSFUL.equals(responseStatusFamily))
-							;
-						else if(responseEntityDto.getStatus().equals(ResponseEntityDto.Status.FAILURE.name())) {
-							throw new RuntimeException(responseEntityDto.getMessageCollection().toString());
-						}
-					}	
+					Object responseEntityDto = getResponseEntityDto(action, representation, response);		
+					if(Response.Status.Family.SUCCESSFUL.equals(responseStatusFamily))
+						;
+					else if(responseEntityDto instanceof ResponseEntityDto)
+						throw new RuntimeException( ((ResponseEntityDto)responseEntityDto).getMessageCollection().toString());
 				}else if(Response.Status.Family.CLIENT_ERROR.equals(responseStatusFamily)){
 					String message = null;
 					if(Response.Status.NOT_FOUND.getStatusCode() == response.getStatus())
@@ -92,9 +88,21 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 		}
 	}
 	
-	protected abstract Response __act__(SystemAction action,Object representation,Collection<?> dataTransferObjects);
+	@SuppressWarnings("rawtypes")
+	protected Response __act__(SystemAction action,Object representation,Collection<?> dataTransferObjects) {
+		Response response = null;
+		if(representation instanceof RepresentationEntity) {
+			response = __actWithRepresentationInstanceOfRepresentationEntity__(action, (RepresentationEntity) representation, dataTransferObjects);
+		}else
+			__injectThrowableHelper__().throwRuntimeException("Data Representation of type "+representation.getClass()+" is not an instanceof RepresentationEntity");
+		return response;
+	}
 	
-	protected abstract ResponseEntityDto getResponseEntityDto(SystemAction action,Object representation,Response response);
+	protected abstract Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation,Collection<?> dataTransferObjects);
+	
+	protected Object getResponseEntityDto(SystemAction action,Object representation,Response response) {
+		return response.readEntity(ResponseEntityDto.class);
+	}
 	
 	@Override
 	public ControllerFunction setActionEntityClass(Class<?> entityClass) {

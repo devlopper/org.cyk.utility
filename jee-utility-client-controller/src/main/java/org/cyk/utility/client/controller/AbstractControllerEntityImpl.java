@@ -44,38 +44,39 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	
 	@Override
 	public Collection<ENTITY> read(Properties properties) {
-		// TODO Auto-generated method stub
-		return null;
+		return readMany(properties);
 	}
 	
 	@Override
 	public Collection<ENTITY> read() {
-		// TODO Auto-generated method stub
-		return null;
+		//TODO derive properties
+		return read(null);
 	}
 	
 	@Override
 	public ENTITY readOne(Object identifier, Properties properties) {
-		// TODO Auto-generated method stub
-		return null;
+		ControllerFunctionReader function = ____inject____(ControllerFunctionReader.class);
+		function.setEntityIdentifier(identifier);
+		function.setEntityIdentifierValueUsageType(properties == null ? ValueUsageType.SYSTEM : properties.getValueUsageType());
+		function.setEntityClass(getEntityClass());
+		//function.getAction().getEntities(Boolean.TRUE).add(object);
+		function.execute();
+		return (ENTITY) function.getEntity();
 	}
 	
 	@Override
 	public ENTITY readOne(Object identifier, ValueUsageType valueUsageType) {
-		// TODO Auto-generated method stub
-		return null;
+		return readOne(identifier, new Properties().setValueUsageType(valueUsageType));
 	}
 	
 	@Override
 	public ENTITY readOne(Object identifier) {
-		// TODO Auto-generated method stub
-		return null;
+		return readOne(identifier,ValueUsageType.SYSTEM);
 	}
 	
 	@Override
 	public ENTITY readOneByBusinessIdentifier(Object identifier) {
-		// TODO Auto-generated method stub
-		return null;
+		return readOne(identifier,ValueUsageType.BUSINESS);
 	}
 	
 	@Override
@@ -88,8 +89,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	
 	@Override
 	public Collection<ENTITY> readMany() {
-		// TODO Auto-generated method stub
-		return null;
+		return readMany(null);
 	}
 	
 	/**/

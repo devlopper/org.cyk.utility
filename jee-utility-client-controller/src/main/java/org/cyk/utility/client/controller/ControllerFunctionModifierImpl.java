@@ -53,8 +53,7 @@ public class ControllerFunctionModifierImpl extends AbstractControllerFunctionIm
 	}
 
 	@Override
-	protected Response __act__(SystemAction action, Object representation, Collection<?> dataTransferObjects) {
-		// TODO Auto-generated method stub
+	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		return null;
 	}
 
