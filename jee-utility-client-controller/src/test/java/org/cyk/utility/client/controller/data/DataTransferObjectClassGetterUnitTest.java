@@ -11,7 +11,7 @@ public class DataTransferObjectClassGetterUnitTest extends AbstractArquillianUni
 	private static final long serialVersionUID = -2849775962912387317L;
 	
 	static {
-		__inject__(FunctionRunnableMap.class).set(DataTransferObjectClassGetterImpl.class, DataTransferObjectClassGetterFunctionRunnableImpl.class,Boolean.TRUE);
+		__inject__(FunctionRunnableMap.class).set(DataTransferObjectClassGetterImpl.class, DataTransferObjectClassGetterFunctionRunnableImpl.class,1);
 	}
 	
 	@Test

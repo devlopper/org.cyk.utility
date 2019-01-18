@@ -8,8 +8,12 @@ public interface ProxyGetter extends FunctionWithPropertiesAsInput<Object> {
 	ProxyClassUniformResourceIdentifierStringBuilder getClassUniformResourceIdentifierString(Boolean injectIfNull);
 	ProxyGetter setClassUniformResourceIdentifierString(ProxyClassUniformResourceIdentifierStringBuilder classUniformResourceIdentifierString);
 	ProxyGetter setClassUniformResourceIdentifierStringRequest(Object request);
+	Object getProxyClassUniformResourceIdentifierStringBuilderRequest();
+	ProxyGetter setProxyClassUniformResourceIdentifierStringBuilderRequest(Object proxyClassUniformResourceIdentifierStringBuilderRequest);
 	
 	Class<?> getClazz();
 	ProxyGetter setClazz(Class<?> aClass);
+	
+	
 	
 }

@@ -15,7 +15,7 @@ public class ChoiceBuilderFunctionRunnableImpl extends AbstractFunctionRunnableI
 			@Override
 			public void run() {
 				SelectItem selectItem = new SelectItem();
-				Object value = getFunction().getValue();
+				Object value = getFunction().getValue(); //TODO be careful take the code
 				selectItem.setValue(value);
 				
 				String label = getFunction().getLabel();

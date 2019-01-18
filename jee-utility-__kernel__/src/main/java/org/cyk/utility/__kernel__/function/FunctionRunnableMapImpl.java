@@ -11,22 +11,26 @@ public class FunctionRunnableMapImpl implements FunctionRunnableMap,Serializable
 	private static final long serialVersionUID = 1L;
 
 	private Map<Class<?>,Class<? extends FunctionRunnable<?>>> map;
+	private Map<Class<? extends FunctionRunnable<?>>,Integer> levelMap;
 	
 	@Override
-	public FunctionRunnableMap set(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass,Boolean isOverridable) {
+	public FunctionRunnableMap set(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass,Integer level) {
 		Class<? extends FunctionRunnable<?>> currentFunctionRunnableClass = get(aClass);
-		if(currentFunctionRunnableClass==null || Boolean.TRUE.equals(isOverridable)) {
+		Integer currentFunctionRunnableClassLevel = levelMap == null ? null : levelMap.get(currentFunctionRunnableClass);
+		if(currentFunctionRunnableClass==null || currentFunctionRunnableClassLevel == null || (level!=null && level > currentFunctionRunnableClassLevel)) {
 			if(map == null)
 				map = new HashMap<>();
-			
-			map.put(aClass, functionRunnableClass);	
+			map.put(aClass, functionRunnableClass);
+			if(levelMap == null)
+				levelMap = new HashMap<>();
+			levelMap.put(functionRunnableClass,level);
 		}
 		return this;
 	}
 	
 	@Override
 	public FunctionRunnableMap set(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass) {
-		return set(aClass, functionRunnableClass, Boolean.FALSE);
+		return set(aClass, functionRunnableClass, null);
 	}
 
 	@Override

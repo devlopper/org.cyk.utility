@@ -15,14 +15,14 @@ import org.cyk.utility.map.MapHelper;
 
 public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FieldValueCopy,Serializable {
 	private static final long serialVersionUID = 1L;
-
+/*
 	@Override
 	protected void ____execute____() throws Exception {
-		Boolean isAutomaticallyDetectFields = getIsAutomaticallyDetectFields();
 		FieldValueGetter getterModel = getValueGetter();
 		FieldValueSetter setterModel = getValueSetter();
 		Map<String,String> fieldNameMap = getFieldNameMap();
 		if(fieldNameMap == null) {
+			Boolean isAutomaticallyDetectFields = getIsAutomaticallyDetectFields();
 			if(isAutomaticallyDetectFields == null)
 				isAutomaticallyDetectFields = Boolean.TRUE;
 			if(Boolean.TRUE.equals(isAutomaticallyDetectFields)) {
@@ -64,14 +64,14 @@ public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAnd
 		Class<?> destinationType = __inject__(FieldTypeGetter.class).execute(destination).getOutput();
 		//System.out.println("FieldValueCopyImpl.__processValue__() "+source+" *** "+sourceType+" *** "+destination+" *** "+destinationType);
 		
-		if(!sourceType.isPrimitive() && !sourceType.isEnum() && !StringUtils.startsWithAny(sourceType.getName(), "java.","javax."))
+		if(!sourceType.isPrimitive() && !sourceType.isEnum() && !__injectClassHelper__().isInstanceOf(sourceType, Collection.class) && !StringUtils.startsWithAny(sourceType.getName(), "java.","javax."))
 			value = __injectFieldHelper__().getFieldValueBusinessIdentifier(value);
 		
-		if(!destinationType.isPrimitive() && !sourceType.isEnum() && !StringUtils.startsWithAny(destinationType.getName(), "java.","javax."))
+		if(!destinationType.isPrimitive() && !sourceType.isEnum() && !__injectClassHelper__().isInstanceOf(sourceType, Collection.class) && !StringUtils.startsWithAny(destinationType.getName(), "java.","javax."))
 			value = __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, value);
 		return value;
 	}
-	
+	*/
 	@Override
 	public FieldValueCopy execute(Object source, Object destination, Map<String, String> fieldNameMap) {
 		return (FieldValueCopy) setValueGetter(__inject__(FieldValueGetter.class).setObject(source))

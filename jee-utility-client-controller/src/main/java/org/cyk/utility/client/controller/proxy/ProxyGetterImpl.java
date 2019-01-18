@@ -10,6 +10,18 @@ public class ProxyGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<O
 	private ProxyClassUniformResourceIdentifierStringBuilder classUniformResourceIdentifierString;
 	
 	@Override
+	public Object getProxyClassUniformResourceIdentifierStringBuilderRequest() {
+		ProxyClassUniformResourceIdentifierStringBuilder proxyClassUniformResourceIdentifierStringBuilder = getClassUniformResourceIdentifierString();
+		return proxyClassUniformResourceIdentifierStringBuilder == null ? null : proxyClassUniformResourceIdentifierStringBuilder.getRequest();
+	}
+	
+	@Override
+	public ProxyGetter setProxyClassUniformResourceIdentifierStringBuilderRequest(Object proxyClassUniformResourceIdentifierStringBuilderRequest) {
+		getClassUniformResourceIdentifierString(Boolean.TRUE).setRequest(proxyClassUniformResourceIdentifierStringBuilderRequest);
+		return this;
+	}
+	
+	@Override
 	public ProxyClassUniformResourceIdentifierStringBuilder getClassUniformResourceIdentifierString() {
 		return classUniformResourceIdentifierString;
 	}

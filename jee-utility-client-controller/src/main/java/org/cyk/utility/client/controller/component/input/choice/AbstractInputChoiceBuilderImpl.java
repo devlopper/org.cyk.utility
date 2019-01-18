@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.input.choice;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.component.input.AbstractInputBuilderImpl;
 import org.cyk.utility.field.FieldTypeGetter;
@@ -32,7 +33,9 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 					choices.add(index);
 				}
 			}else if(__inject__(SystemLayerController.class).getEntityLayer().isPackage(fieldType.getName())) {
-				Collection<?> objects = __inject__(Controller.class).readMany(fieldType);
+				Properties properties = new Properties();
+				properties.setRequest(getProperties().getRequest());
+				Collection<?> objects = __inject__(Controller.class).readMany(fieldType,properties);
 				if(__injectCollectionHelper__().isNotEmpty(objects)) {
 					for(Object index : objects) {
 						choices.add(index);
@@ -49,6 +52,7 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 				choiceLabelBuilderClass = ChoicePropertyValueBuilderImpl.class;
 			for(Object index : choices.get()) {
 				ChoiceBuilder builder = __inject__(ChoiceBuilder.class).setValue(index);
+				//builder.setValue(index);
 				if(choiceLabelBuilderClass!=null)
 					builder.setLabel(__inject__(choiceLabelBuilderClass).setObject(index).execute().getOutput());
 				Object choice = builder.execute().getOutput();

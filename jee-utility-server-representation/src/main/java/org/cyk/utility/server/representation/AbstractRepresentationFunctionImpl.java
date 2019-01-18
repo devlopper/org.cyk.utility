@@ -26,6 +26,8 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 			__executeBusiness__();
 		} catch (Exception exception) {
 			__throwable__ = exception;
+			System.out.println("AbstractRepresentationFunctionImpl.__execute__() THROWABLE");
+			exception.printStackTrace();
 		} finally {
 			__processResponseBuilder__();
 		}

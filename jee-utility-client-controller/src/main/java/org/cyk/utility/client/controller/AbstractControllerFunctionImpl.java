@@ -26,7 +26,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 
 	@Override
 	protected void __execute__(SystemAction action) {
-		if(action!=null && (__injectCollectionHelper__().isNotEmpty(action.getEntities()) || __injectCollectionHelper__().isNotEmpty(action.getEntitiesIdentifiers()))) {
+		if(action!=null /*&& (__injectCollectionHelper__().isNotEmpty(action.getEntities()) || __injectCollectionHelper__().isNotEmpty(action.getEntitiesIdentifiers()))*/) {
 			Class<?> entityClass = action.getEntityClass(); //action.getEntities().getAt(0).getClass();
 			Class<?> dataTransferClass = __inject__(DataTransferObjectClassGetter.class).setDataClass(entityClass).execute().getOutput();
 			if(dataTransferClass == null)

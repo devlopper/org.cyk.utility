@@ -26,9 +26,9 @@ public class ControllerFunctionCreatorUnitTest extends AbstractArquillianUnitTes
 	private static final long serialVersionUID = -2849775962912387317L;
 
 	static {
-		__inject__(FunctionRunnableMap.class).set(DataTransferObjectClassGetterImpl.class, DataTransferObjectClassGetterFunctionRunnableImpl.class,Boolean.TRUE);
-		__inject__(FunctionRunnableMap.class).set(DataRepresentationClassGetterImpl.class, DataRepresentationClassGetterFunctionRunnableImpl.class,Boolean.TRUE);
-		__inject__(FunctionRunnableMap.class).set(ProxyGetterImpl.class, ProxyGetterFunctionRunnableImpl.class,Boolean.TRUE);
+		__inject__(FunctionRunnableMap.class).set(DataTransferObjectClassGetterImpl.class, DataTransferObjectClassGetterFunctionRunnableImpl.class,1);
+		__inject__(FunctionRunnableMap.class).set(DataRepresentationClassGetterImpl.class, DataRepresentationClassGetterFunctionRunnableImpl.class,1);
+		__inject__(FunctionRunnableMap.class).set(ProxyGetterImpl.class, ProxyGetterFunctionRunnableImpl.class,1);
 	}
 	
 	@Test

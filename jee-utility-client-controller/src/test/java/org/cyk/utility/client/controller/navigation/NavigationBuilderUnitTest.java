@@ -16,7 +16,7 @@ public class NavigationBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 	private static final long serialVersionUID = 1L;
 
 	static {
-		__inject__(FunctionRunnableMap.class).set(NavigationIdentifierToUrlStringMapperImpl.class, NavigationIdentifierToUrlStringMapperFunctionRunnableImpl.class,Boolean.TRUE);
+		__inject__(FunctionRunnableMap.class).set(NavigationIdentifierToUrlStringMapperImpl.class, NavigationIdentifierToUrlStringMapperFunctionRunnableImpl.class,1);
 	}
 	
 	@Override

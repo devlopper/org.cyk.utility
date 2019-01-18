@@ -6,7 +6,7 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public class InstanceBuilderImpl<INSTANCE> extends AbstractFunctionWithPropertiesAsInputImpl<INSTANCE> implements InstanceBuilder<INSTANCE>,Serializable {
 	private static final long serialVersionUID = 1L;
-
+/*
 	@Override
 	protected INSTANCE __execute__() throws Exception {
 		INSTANCE instance = null;
@@ -19,7 +19,7 @@ public class InstanceBuilderImpl<INSTANCE> extends AbstractFunctionWithPropertie
 		}
 		return instance;
 	}
-
+*/
 	@Override
 	public Class<INSTANCE> getClazz() {
 		return (Class<INSTANCE>) getProperties().getClazz();

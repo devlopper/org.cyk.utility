@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.string.StringConstant;
+import org.cyk.utility.string.StringHelper;
 
 /**
  * Converter Using View Map to store and retrieve object.
@@ -51,8 +52,9 @@ public class ObjectConverter extends AbstractObject implements Converter,Seriali
 
 	@Override
 	public Object getAsObject(FacesContext context, UIComponent c, String identifier) {
-		if (identifier==null || identifier.isEmpty())
+		if (__inject__(StringHelper.class).isEmpty(identifier)) {
 			return null;
+		}
 		return getObjectMap(context).get(identifier);
 	}
 

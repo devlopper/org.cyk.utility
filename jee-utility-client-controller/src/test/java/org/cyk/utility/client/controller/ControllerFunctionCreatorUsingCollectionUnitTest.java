@@ -22,8 +22,8 @@ public class ControllerFunctionCreatorUsingCollectionUnitTest extends AbstractAr
 	private static final long serialVersionUID = -2849775962912387317L;
 
 	static {
-		__inject__(FunctionRunnableMap.class).set(ControllerFunctionCreatorImpl.class, ControllerFunctionCreatorFunctionRunnableImpl.class,Boolean.TRUE);
-		__inject__(FunctionRunnableMap.class).set(ControllerFunctionReaderImpl.class, ControllerFunctionReaderFunctionRunnableImpl.class,Boolean.TRUE);
+		__inject__(FunctionRunnableMap.class).set(ControllerFunctionCreatorImpl.class, ControllerFunctionCreatorFunctionRunnableImpl.class,1);
+		__inject__(FunctionRunnableMap.class).set(ControllerFunctionReaderImpl.class, ControllerFunctionReaderFunctionRunnableImpl.class,1);
 	}
 	
 	@Test

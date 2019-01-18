@@ -18,8 +18,8 @@ public class ProxyClassUniformResourceIdentifierStringBuilderUnitTest extends Ab
 	private static final long serialVersionUID = 1L;
 
 	static {
-		__inject__(FunctionRunnableMap.class).set(RequestGetterImpl.class, RequestGetterFunctionRunnableImpl.class,Boolean.TRUE);
-		__inject__(FunctionRunnableMap.class).set(RequestPropertyValueGetterImpl.class, RequestPropertyValueGetterFunctionRunnableImpl.class,Boolean.TRUE);
+		__inject__(FunctionRunnableMap.class).set(RequestGetterImpl.class, RequestGetterFunctionRunnableImpl.class,1);
+		__inject__(FunctionRunnableMap.class).set(RequestPropertyValueGetterImpl.class, RequestPropertyValueGetterFunctionRunnableImpl.class,1);
 	}
 	
 	@Test

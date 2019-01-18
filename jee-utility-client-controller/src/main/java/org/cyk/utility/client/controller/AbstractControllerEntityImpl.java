@@ -81,10 +81,17 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	
 	@Override
 	public Collection<ENTITY> readMany(Properties properties) {
-		Response response = getRepresentation().getMany();
+		/*Response response = getRepresentation().getMany();
 		Collection<ENTITY> collection = (Collection<ENTITY>) response.readEntity(__inject__(TypeHelper.class)
 				.instanciateGenericCollectionParameterizedTypeForJaxrs(Collection.class,dataTransferClass));
 		return collection;
+		*/
+		
+		ControllerFunctionReader function = ____inject____(ControllerFunctionReader.class);
+		function.setEntityClass(getEntityClass());
+		//function.getAction().getEntities(Boolean.TRUE).add(object);
+		function.execute();
+		return (Collection<ENTITY>) function.getEntities();
 	}
 	
 	@Override

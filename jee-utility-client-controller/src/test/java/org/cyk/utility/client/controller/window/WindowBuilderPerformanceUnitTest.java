@@ -10,7 +10,7 @@ public class WindowBuilderPerformanceUnitTest extends AbstractArquillianUnitTest
 	private static final long serialVersionUID = -2849775962912387317L;
 
 	static {
-		__inject__(FunctionRunnableMap.class).set(MenuBuilderMapGetterImpl.class, MenuBuilderMapGetterFunctionRunnableImpl.class,Boolean.TRUE);
+		__inject__(FunctionRunnableMap.class).set(MenuBuilderMapGetterImpl.class, MenuBuilderMapGetterFunctionRunnableImpl.class,1);
 		__inject__(FunctionRunnableMap.class).set(RequestParameterValueGetterImpl.class, RequestParameterValueGetterFunctionRunnableImpl.class);
 	}
 	
