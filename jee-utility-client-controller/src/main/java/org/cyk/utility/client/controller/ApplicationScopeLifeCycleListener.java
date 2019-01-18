@@ -14,6 +14,7 @@ import org.cyk.utility.client.controller.component.window.WindowRenderTypeNormal
 import org.cyk.utility.client.controller.proxy.ProxyGetterImpl;
 import org.cyk.utility.client.controller.proxy.ProxyGetterRestEasyFunctionRunnableImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
+import org.cyk.utility.instance.InstanceBuilderImpl;
 import org.cyk.utility.instance.InstanceGetterImpl;
 import org.cyk.utility.string.StringHelper;
 
@@ -27,6 +28,8 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(ProxyGetterImpl.class, ProxyGetterRestEasyFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(CommandFunctionImpl.class, CommandFunctionFunctionRunnableImpl.class);
+		__inject__(FunctionRunnableMap.class).set(InstanceBuilderImpl.class, InstanceBuilderFunctionRunnableImpl.class);
+		
 		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClasses(WindowRenderTypeNormal.class,WindowRenderTypeDialog.class);
 		
 		__initializeApplication__(object);
