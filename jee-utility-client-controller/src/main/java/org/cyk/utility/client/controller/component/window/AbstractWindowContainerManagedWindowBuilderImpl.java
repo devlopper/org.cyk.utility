@@ -84,8 +84,10 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		
 		
 		ViewBuilder view = getView();
-		if(view.getRequest() == null)
-			view.setRequest(request);
+		if(view!=null) {
+			if(view.getRequest() == null)
+				view.setRequest(request);	
+		}
 		window.setView(view);
 		//System.out.println("build window container managed window : "+__inject__(DurationStringBuilder.class).setDuration(durationBuilder.setEndNow().execute().getOutput()).execute().getOutput());
 		return window;

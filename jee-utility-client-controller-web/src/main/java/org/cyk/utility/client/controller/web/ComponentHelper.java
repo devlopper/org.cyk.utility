@@ -41,7 +41,9 @@ import org.cyk.utility.system.action.SystemActionUpdate;
 @Singleton @Named
 public class ComponentHelper extends AbstractSingleton implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
+	private String globalMessagesTargetsIdentifiers;
+	
 	public RandomHelper getRandomHelper() {
 		return __inject__(RandomHelper.class);
 	}
@@ -214,6 +216,16 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	
 	public String getGlobalMessagesTargetDialogComponentClientIdentifier() {
 		return GLOBAL_MESSAGES_TARGET_DIALOG_CLIENT_IDENTIFIER;
+	}
+	
+	public String getGlobalMessagesTargetsIdentifiers() {
+		if(globalMessagesTargetsIdentifiers == null) {
+			globalMessagesTargetsIdentifiers = 
+					":form:"+__inject__(ComponentHelper.class).getGlobalMessagesTargetInlineComponentIdentifier()
+					+","+":form:"+__inject__(ComponentHelper.class).getGlobalMessagesTargetGrowlComponentIdentifier()
+					+","+":form:"+__inject__(ComponentHelper.class).getGlobalMessagesTargetDialogComponentIdentifier();
+		}
+		return globalMessagesTargetsIdentifiers;
 	}
 	
 	/**/

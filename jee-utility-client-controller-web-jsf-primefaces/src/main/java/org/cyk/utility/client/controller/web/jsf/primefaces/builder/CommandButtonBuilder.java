@@ -78,9 +78,11 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 			
 		}else if(commandable.getCommand()!=null) {
 			commandButton.setType("submit");
-			String update = __inject__(ComponentHelper.class).getGlobalMessagesTargetInlineComponentIdentifier()
+			/*String update = __inject__(ComponentHelper.class).getGlobalMessagesTargetInlineComponentIdentifier()
 					+","+__inject__(ComponentHelper.class).getGlobalMessagesTargetGrowlComponentIdentifier()
 					+","+__inject__(ComponentHelper.class).getGlobalMessagesTargetDialogComponentIdentifier();
+			*/
+			String update = __inject__(ComponentHelper.class).getGlobalMessagesTargetsIdentifiers();
 			
 			Objects updatables = commandable.getUpdatables();
 			
@@ -101,7 +103,7 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 				commandButton.setActionExpression(__inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {}));	
 			}
 			
-			update = StringUtils.replace(update, "glo", ":form:glo");
+			//update = StringUtils.replace(update, "glo", ":form:glo");
 			
 			commandButton.setUpdate(update);
 			
