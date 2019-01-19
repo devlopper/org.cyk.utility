@@ -19,6 +19,7 @@ import org.cyk.utility.notification.NotificationSeverity;
 import org.cyk.utility.notification.NotificationSeverityError;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
+import org.cyk.utility.request.RequestGetter;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -96,6 +97,8 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		if(windowContainerManagedWindowBuilder == null) {
 			windowBuilder = __injectWindowBuilder__().setView(__getViewBuilder__()).setMenuMap(__getMenuBuilderMap__());
 		}else {
+			if(windowContainerManagedWindowBuilder.getRequest() == null)
+				windowContainerManagedWindowBuilder.setRequest(__getRequest__());
 			windowBuilder = windowContainerManagedWindowBuilder.setWindowContainerManaged(this).execute().getOutput();
 		}
 		
@@ -157,6 +160,10 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		return __inject__(SessionUserGetter.class).execute().getOutput();
 	}
 	
+	protected Object __getRequest__() {
+		return __inject__(RequestGetter.class).execute().getOutput();
+	}
+	
 	/**/
 	
 	protected static void __renderMessage__(String summary,String details,Class<? extends NotificationSeverity> notificationSeverityClass,Class<? extends MessageRenderType>...renderTypeClasses) {
@@ -190,5 +197,11 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	
 	protected static void __renderMessageError__(String summary,Class<? extends MessageRenderType>...renderTypeClasses) {
 		__renderMessageError__(summary, summary, renderTypeClasses);
+	}
+
+	/**/
+	
+	protected <T> T ____getProxy____(Class<T> aClass) {
+		return __getProxyByRequest__(aClass,__getRequest__());
 	}
 }

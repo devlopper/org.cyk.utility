@@ -139,7 +139,7 @@ public class KernelHelperImpl implements KernelHelper,Serializable {
 
 	@Override @SuppressWarnings({ "unchecked", "rawtypes" })
 	public void copyMap(Map source, Map destination, Object[] keys, Boolean removeNullValue) {
-		if(keys!=null && keys.length>0)
+		if(source!=null && destination!=null && keys!=null && keys.length>0)
 			for(Object key : keys){
 				Object value = source.get(key);
 				if(value == null && Boolean.TRUE.equals(removeNullValue))

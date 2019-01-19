@@ -9,7 +9,23 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			<cyk:components value="#{value.components}"/>
+			<!-- Cannot be used because of responsive behaviour handle by layout component -->
+			<!--
+			<p:outputPanel 
+				id="#{value.properties.identifier}" 
+				style="#{value.properties.style}" 
+				styleClass="#{value.properties.styleClass}" 
+				autoUpdate="#{value.properties.autoUpdate}"
+				deferred="#{value.properties.deferred}"
+				deferredMode="#{value.properties.deferredMode}"
+				layout="#{value.properties.layout}"
+				rendered="#{value.properties.rendered}"
+			>
+			-->
+				<cyk:components value="#{value.components}"/>
+			<!--
+			</p:outputPanel>
+			-->
 		</ui:define>
 	</ui:decorate>	
 

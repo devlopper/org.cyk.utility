@@ -73,4 +73,7 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	ComponentBuilder<COMPONENT> setEvents(EventBuilders events);
 	ComponentBuilder<COMPONENT> addEvents(Collection<EventBuilder> events);
 	ComponentBuilder<COMPONENT> addEvents(EventBuilder...events);
+	
+	Object getRequest();
+	ComponentBuilder<COMPONENT> setRequest(Object request);
 }

@@ -328,6 +328,17 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		return addEvents(__injectCollectionHelper__().instanciate(events));
 	}
 	
+	@Override
+	public Object getRequest() {
+		return getProperties().getRequest();
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setRequest(Object request) {
+		getProperties().setRequest(request);
+		return this;
+	}
+	
 	public static final String FIELD_AREA = "area";
 	public static final String FIELD_LAYOUT_ITEM_STYLE = "layoutItemStyle";
 	public static final String FIELD_ROLES = "roles";

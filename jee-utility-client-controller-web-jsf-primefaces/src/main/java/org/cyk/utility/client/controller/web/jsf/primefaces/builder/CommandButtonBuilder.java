@@ -109,6 +109,8 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 			//System.out.println("CommandButtonBuilder.build() UPDATE : "+update);
 		}else {
 			commandButton.setType("button");
+			if(commandable.getProperties().getOnClick()!=null)
+				onClickValueExpressionString = commandable.getProperties().getOnClick().toString();
 		}
 		
 		if(__inject__(StringHelper.class).isNotBlank(onClickValueExpressionString)) {

@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.cyk.utility.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.instance.InstanceGetter;
@@ -21,8 +22,13 @@ import lombok.experimental.Accessors;
 public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 
+	static {
+		__inject__(ApplicationScopeLifeCycleListener.class).initialize(null);
+	}
+	
 	@Test
 	public void one_2_int_string(){
+		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
 		MyClass01 instance01 = new MyClass01().setIntField(2);
 		MyClass02 instance02 = new MyClass02();
 		__inject__(FieldValueCopy.class).execute(instance01,instance02,"intField");
@@ -31,6 +37,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	
 	@Test
 	public void one_5_long_string(){
+		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
 		MyClass01 instance01 = new MyClass01().setLongField1(5l);
 		MyClass02 instance02 = new MyClass02();
 		__inject__(FieldValueCopy.class).execute(instance01,instance02,"longField1");
@@ -39,6 +46,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	
 	@Test
 	public void many_copy_2_int_and_5_long(){
+		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
 		MyClass01 instance01 = new MyClass01().setIntField(2).setLongField1(5l);
 		MyClass02 instance02 = new MyClass02();
 		__inject__(FieldValueCopy.class).setSource(instance01).setDestination(instance02).setFieldName("intField").setFieldName("longField1").execute();
@@ -48,6 +56,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	
 	@Test
 	public void many_copy_all(){
+		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
 		MyClass01 instance01 = new MyClass01().setIntField(2).setLongField1(5l);
 		MyClass02 instance02 = new MyClass02();
 		__inject__(FieldValueCopy.class).setSource(instance01).setDestination(instance02).execute();
@@ -57,6 +66,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	
 	@Test
 	public void one_copy_myData_MyDataToString(){
+		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
 		__inject__(FieldNameValueUsageMap.class).set(MyData.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
 		__inject__(FieldNameValueUsageMap.class).set(MyData.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, "num");
 		
@@ -70,6 +80,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	
 	@Test
 	public void one_copy_myData_StringToMyData(){
+		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
 		MyClass02 instance02 = new MyClass02().setMyData("a001");
 		MyClass01 instance01 = new MyClass01();
 		
@@ -83,6 +94,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	
 	@Test
 	public void one_copy_myData_StringToMyData_null(){
+		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
 		MyClass02 instance02 = new MyClass02();
 		MyClass01 instance01 = new MyClass01();
 		__inject__(FieldValueCopy.class).setSource(instance02).setDestination(instance01).setFieldName("myData").execute();
@@ -91,6 +103,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	
 	@Test
 	public void one_copy_myData_MyDataToString_null(){
+		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
 		MyClass01 instance01 = new MyClass01();
 		MyClass02 instance02 = new MyClass02();
 		__inject__(FieldValueCopy.class).setSource(instance01).setDestination(instance02).setFieldName("myData").execute();

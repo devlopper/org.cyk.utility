@@ -1,77 +1,16 @@
 package org.cyk.utility.field;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
-import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.map.MapHelper;
 
 public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FieldValueCopy,Serializable {
 	private static final long serialVersionUID = 1L;
-/*
-	@Override
-	protected void ____execute____() throws Exception {
-		FieldValueGetter getterModel = getValueGetter();
-		FieldValueSetter setterModel = getValueSetter();
-		Map<String,String> fieldNameMap = getFieldNameMap();
-		if(fieldNameMap == null) {
-			Boolean isAutomaticallyDetectFields = getIsAutomaticallyDetectFields();
-			if(isAutomaticallyDetectFields == null)
-				isAutomaticallyDetectFields = Boolean.TRUE;
-			if(Boolean.TRUE.equals(isAutomaticallyDetectFields)) {
-				Collection<Field> fields = __inject__(FieldGetter.class).setClazz(getterModel.getObject().getClass()).execute().getOutput();
-				if(__injectCollectionHelper__().isNotEmpty(fields))
-					for(Field index : fields) {
-						if(fieldNameMap == null)
-							fieldNameMap = new HashMap<>();
-						if(!Modifier.isStatic(index.getModifiers()) && !Modifier.isFinal(index.getModifiers()))
-							fieldNameMap.put(index.getName(), index.getName());
-					}
-			}
-		}
-		
-		if(fieldNameMap == null) {
-			Object value = getterModel.execute().getOutput();
-			if(setterModel.getField() == null && getterModel.getField()!=null)
-				setterModel.setField(getterModel.getField().getName());
-			setterModel.setValue(value).execute();
-		}else {
-			for(Map.Entry<String, String> entry : fieldNameMap.entrySet()) {
-				FieldValueSetter setter = __inject__(FieldValueSetter.class).setObject(setterModel.getObject()).setField(entry.getValue());
-				if(setter.getField()!=null) {
-					FieldValueGetter getter = __inject__(FieldValueGetter.class).setObject(getterModel.getObject()).setField(entry.getKey());
-					Object value = getter.execute().getOutput();
-					if(value!=null)
-						value = __processValue__(getter.getField(),setter.getField(),value);
-					setter.setValue(value);
-					if(setter.getField() == null)
-						setter.setField(getter.getField().getName());
-					setter.execute();	
-				}
-			}
-		}
-	}
-	
-	protected Object __processValue__(Field source,Field destination,Object value) {
-		Class<?> sourceType = __inject__(FieldTypeGetter.class).execute(source).getOutput();
-		Class<?> destinationType = __inject__(FieldTypeGetter.class).execute(destination).getOutput();
-		//System.out.println("FieldValueCopyImpl.__processValue__() "+source+" *** "+sourceType+" *** "+destination+" *** "+destinationType);
-		
-		if(!sourceType.isPrimitive() && !sourceType.isEnum() && !__injectClassHelper__().isInstanceOf(sourceType, Collection.class) && !StringUtils.startsWithAny(sourceType.getName(), "java.","javax."))
-			value = __injectFieldHelper__().getFieldValueBusinessIdentifier(value);
-		
-		if(!destinationType.isPrimitive() && !sourceType.isEnum() && !__injectClassHelper__().isInstanceOf(sourceType, Collection.class) && !StringUtils.startsWithAny(destinationType.getName(), "java.","javax."))
-			value = __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, value);
-		return value;
-	}
-	*/
+
 	@Override
 	public FieldValueCopy execute(Object source, Object destination, Map<String, String> fieldNameMap) {
 		return (FieldValueCopy) setValueGetter(__inject__(FieldValueGetter.class).setObject(source))

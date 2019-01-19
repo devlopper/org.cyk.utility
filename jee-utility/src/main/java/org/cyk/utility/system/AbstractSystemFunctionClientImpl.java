@@ -18,6 +18,8 @@ import lombok.experimental.Accessors;
 public abstract class AbstractSystemFunctionClientImpl extends AbstractSystemFunctionImpl implements SystemFunctionClient, Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private Class<?> dataTransferClass;
+	
 	@Override
 	public SystemFunctionClient setActionEntityClass(Class<?> entityClass) {
 		return (SystemFunctionClient) super.setActionEntityClass(entityClass);
@@ -28,23 +30,17 @@ public abstract class AbstractSystemFunctionClientImpl extends AbstractSystemFun
 		return (SystemFunctionClient) super.addActionEntities(entities);
 	}
 	
-	/*@Override
-	protected void __afterExecute__() {
-		super.__afterExecute__();
-		Object entity = getProperties().getEntity();
-		Collection<FieldName> fieldNames = getLoggedEntityFieldNames();
-		if(__inject__(CollectionHelper.class).isNotEmpty(fieldNames)){
-			for(FieldName index : fieldNames){
-				Collection<ValueUsageType> valueUsageTypes = getValueUsageTypes(index);
-				if(__inject__(CollectionHelper.class).isNotEmpty(valueUsageTypes))
-					for(ValueUsageType indexValueUsageType : valueUsageTypes){
-						String fieldName = __inject__(FieldNameGetter.class).execute(getEntityClass(), index,indexValueUsageType).getOutput();
-						addLogMessageBuilderParameter(fieldName, getEnityFieldValue(entity,index,indexValueUsageType, fieldName));	
-					}
-			}
-		}
-	}*/
+	@Override
+	public Class<?> getDataTransferClass() {
+		return dataTransferClass;
+	}
 	
+	@Override
+	public SystemFunctionClient setDataTransferClass(Class<?> dataTransferClass) {
+		this.dataTransferClass = dataTransferClass;
+		return this;
+	}
+
 	@Override
 	public SystemFunctionClient setEntityIdentifier(Object identifier) {
 		return (SystemFunctionClient) super.setEntityIdentifier(identifier);

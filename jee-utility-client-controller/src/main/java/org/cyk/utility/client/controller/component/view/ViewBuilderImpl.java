@@ -39,10 +39,24 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	@Override
 	protected void __execute__(View view) {
 		super.__execute__(view);
+		Object request = getRequest();
 		ComponentsBuilder componentsBuilder = getComponentsBuilder();
-		if(componentsBuilder!=null)
-			view.setComponents(componentsBuilder.execute().getOutput());
 		
+		CommandableBuilders commandables = getCommandables();
+		if(__injectCollectionHelper__().isNotEmpty(commandables)) {
+			for(CommandableBuilder index : commandables.get()) {
+				componentsBuilder.addComponents(index);
+			}
+		}
+		
+		if(componentsBuilder!=null && __injectCollectionHelper__().isNotEmpty(componentsBuilder.getComponents())) {
+			for(Object index : componentsBuilder.getComponents().get())
+				if(index instanceof ComponentBuilder<?>) {
+					if( ((ComponentBuilder<?>)index).getRequest() == null )
+						((ComponentBuilder<?>)index).setRequest(request);
+				}
+			view.setComponents(componentsBuilder.execute().getOutput());
+		}
 		ViewType type = getType();
 		if(type instanceof ViewTypeForm) {
 			//view.getComponents().getLayout().getStyle(Boolean.TRUE).getClasses(Boolean.TRUE).add("AZERTY");
@@ -53,13 +67,17 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 			for(Component index : components.get()) {
 				if(index instanceof Commandable) {
 					Commandable commandable = (Commandable) index;
-					commandable.getUpdatables(Boolean.TRUE).add(view.getComponents().getLayout());
-					commandable.addCommandFunctionTryRunRunnableAt(new Runnable() {
-						@Override
-						public void run() {
-							view.setInputOutputFieldValueFromValue();
-						}
-					},0);
+					if(commandable.getCommand()==null) {
+						
+					}else {
+						commandable.getUpdatables(Boolean.TRUE).add(view.getComponents().getLayout());
+						commandable.addCommandFunctionTryRunRunnableAt(new Runnable() {
+							@Override
+							public void run() {
+								view.setInputOutputFieldValueFromValue();
+							}
+						},0);	
+					}
 				}
 			}
 		}
@@ -190,6 +208,8 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ViewBuilder addComponentBuilder(ComponentBuilder<?> componentBuilder) {
+		if(componentBuilder.getRequest() == null)
+			componentBuilder.setRequest(getRequest());
 		getComponentsBuilder(Boolean.TRUE).getComponents(Boolean.TRUE).add(componentBuilder);
 		return this;
 	}

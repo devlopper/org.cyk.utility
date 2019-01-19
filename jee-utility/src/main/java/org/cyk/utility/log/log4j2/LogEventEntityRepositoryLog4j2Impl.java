@@ -222,4 +222,9 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 		return null;
 	}
 
+	@Override
+	public Objectable copyProperty(Object key, Properties properties) {
+		return null;
+	}
+
 }

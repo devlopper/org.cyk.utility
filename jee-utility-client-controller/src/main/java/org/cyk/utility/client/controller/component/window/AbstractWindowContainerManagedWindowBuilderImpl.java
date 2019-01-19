@@ -33,10 +33,12 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	private Class<? extends Row> rowClass;
 	private WindowContainerManaged windowContainerManaged;
 	private WindowRenderType windowRenderType;
+	private Object request;
 	
 	@Override
 	protected WindowBuilder __execute__() throws Exception {
 		//DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
+		Object request = getRequest();
 		WindowBuilder window = getWindow();
 		if(window == null)
 			window = __inject__(WindowBuilder.class);
@@ -82,6 +84,8 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		
 		
 		ViewBuilder view = getView();
+		if(view.getRequest() == null)
+			view.setRequest(request);
 		window.setView(view);
 		//System.out.println("build window container managed window : "+__inject__(DurationStringBuilder.class).setDuration(durationBuilder.setEndNow().execute().getOutput()).execute().getOutput());
 		return window;
@@ -213,6 +217,17 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	@Override
 	public WindowContainerManagedWindowBuilder setWindowRenderType(WindowRenderType windowRenderType) {
 		this.windowRenderType = windowRenderType;
+		return this;
+	}
+	
+	@Override
+	public Object getRequest() {
+		return request;
+	}
+	
+	@Override
+	public WindowContainerManagedWindowBuilder setRequest(Object request) {
+		this.request = request;
 		return this;
 	}
 	

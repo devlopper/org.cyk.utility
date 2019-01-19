@@ -10,5 +10,8 @@ public interface SystemFunctionClient extends SystemFunction {
 	SystemFunctionClient setActionEntityIdentifierClass(Class<?> entityIdentifierClass);
 	SystemFunctionClient addActionEntitiesIdentifiers(Collection<Object> entitiesIdentifiers);
 	SystemFunctionClient addActionEntitiesIdentifiers(Object...entitiesIdentifiers);
+
+	Class<?> getDataTransferClass();
+	SystemFunctionClient setDataTransferClass(Class<?> dataTransferClass);
 	
 }

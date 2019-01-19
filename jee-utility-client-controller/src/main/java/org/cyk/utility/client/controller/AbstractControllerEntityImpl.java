@@ -3,12 +3,9 @@ package org.cyk.utility.client.controller;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.ws.rs.core.Response;
-
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.type.TypeHelper;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractControllerServiceProviderImpl<ENTITY> implements ControllerEntity<ENTITY>,Serializable {
@@ -21,7 +18,15 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	@Override
 	protected void __listenBeforePostConstruct__() {
 		super.__listenBeforePostConstruct__();
-		setEntityClass((Class<ENTITY>) __injectClassHelper__().getParameterAt(getClass(), 0, Object.class));
+		Class<ENTITY> entityClass = __getEntityClass__();
+		if(entityClass == null)
+			System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+getClass()+" : controller entity class cannot be derived <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+		else
+			setEntityClass(entityClass);
+	}
+	
+	protected Class<ENTITY> __getEntityClass__() {
+		return (Class<ENTITY>) __injectClassHelper__().getParameterAt(getClass(), 0, Object.class);
 	}
 	
 	@Override
@@ -89,6 +94,8 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		
 		ControllerFunctionReader function = ____inject____(ControllerFunctionReader.class);
 		function.setEntityClass(getEntityClass());
+		function.setDataTransferClass(dataTransferClass);
+		function.copyProperty(Properties.REQUEST,properties);
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
 		function.execute();
 		return (Collection<ENTITY>) function.getEntities();

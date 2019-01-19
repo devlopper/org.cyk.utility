@@ -1,13 +1,17 @@
 package org.cyk.utility.client.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.instance.InstanceHelper;
+import org.cyk.utility.object.Objects;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.type.TypeHelper;
 import org.cyk.utility.value.ValueUsageType;
 
 public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl implements ControllerFunctionReader , Serializable {
@@ -32,19 +36,37 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 	*/
 	@Override
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
-		Object identifier = action.getEntitiesIdentifiers().getFirst();
-		ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
-		if(valueUsageType == null)
-			valueUsageType = ValueUsageType.SYSTEM;
-		return representation.getOne(identifier.toString(),valueUsageType.name());
+		Response response;
+		Objects identifiers = action.getEntitiesIdentifiers();
+		if(__injectCollectionHelper__().isEmpty(identifiers)) {
+			response = representation.getMany();
+		}else {
+			Object identifier = identifiers.getFirst();
+			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
+			if(valueUsageType == null)
+				valueUsageType = ValueUsageType.SYSTEM;
+			response = representation.getOne(identifier.toString(),valueUsageType.name());
+		}
+		return response;
 	}
 	
 	@Override
 	protected Object getResponseEntityDto(SystemAction action, Object representation, Response response) {
+		Object object;
 		Class<?> dtoClass = __inject__(ControllerLayer.class).getDataTransferClassFromEntityClass(action.getEntityClass());
-		Object object = response.readEntity(dtoClass);
-		object = __injectInstanceHelper__().buildOne(__inject__(action.getEntityClass()).getClass(), object);
-		setEntity(object);
+		Objects identifiers = action.getEntitiesIdentifiers();
+		if(__injectCollectionHelper__().isEmpty(identifiers)) {
+			Collection<?> dtos = (Collection<?>) response.readEntity(__inject__(TypeHelper.class)
+					.instanciateGenericCollectionParameterizedTypeForJaxrs(Collection.class,dtoClass));
+			object = new ArrayList<Object>();
+			for(Object index : dtos)
+				((Collection<Object>)object).add(__inject__(InstanceHelper.class).buildOne(__inject__(action.getEntityClass()).getClass(), index));
+			setEntities((Collection<?>) object);
+		}else {
+			object = response.readEntity(dtoClass);
+			object = __injectInstanceHelper__().buildOne(__inject__(action.getEntityClass()).getClass(), object);
+			setEntity(object);	
+		}
 		return object;
 	}
 

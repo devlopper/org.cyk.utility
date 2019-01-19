@@ -26,7 +26,9 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 				((FormData<Data>)form).setData(data);	
 			}
 						
-			ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
+			ViewBuilder viewBuilder = getView();
+			if(viewBuilder == null)
+				viewBuilder = __inject__(ViewBuilder.class);
 			viewBuilder.addComponentBuilderByObjectByFieldNames(form, Form.PROPERTY_TITLE).addRoles(ComponentRole.TITLE);
 			
 			__execute__(form,systemAction,data,viewBuilder);

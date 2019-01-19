@@ -10,11 +10,7 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			<c:if test="#{value.command==null or value.command.function==null}">
-				#{value.properties.value} : COMMAND and FUNCTION MUST NOT BE NULL
-			</c:if>
 			
-			<c:if test="#{value.command!=null and value.command.function!=null}">
 				<!--
 				<p:commandButton
 					id="#{value.properties.identifier}"
@@ -50,7 +46,7 @@
 						<cyk:ajax value="#{event}" />
 					</c:forEach>
 				</p:commandButton>
-			</c:if>
+			
 		</ui:define>
 	</ui:decorate>	
 

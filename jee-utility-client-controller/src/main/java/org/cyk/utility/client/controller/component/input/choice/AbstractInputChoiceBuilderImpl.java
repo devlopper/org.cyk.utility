@@ -32,9 +32,9 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 				for(Object index : fieldType.getEnumConstants()) {
 					choices.add(index);
 				}
-			}else if(__inject__(SystemLayerController.class).getEntityLayer().isPackage(fieldType.getName())) {
+			}else if(__inject__(SystemLayerController.class).getEntityLayer().isPackage(fieldType.getName())) {				
 				Properties properties = new Properties();
-				properties.setRequest(getProperties().getRequest());
+				properties.copyFrom(getProperties(), Properties.REQUEST);
 				Collection<?> objects = __inject__(Controller.class).readMany(fieldType,properties);
 				if(__injectCollectionHelper__().isNotEmpty(objects)) {
 					for(Object index : objects) {

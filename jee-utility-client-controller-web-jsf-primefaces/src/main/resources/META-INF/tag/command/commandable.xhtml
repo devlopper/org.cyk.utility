@@ -10,26 +10,21 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			<c:if test="#{value.command==null or value.command.function==null}">
-				#{value.properties.value} : COMMAND and FUNCTION MUST NOT BE NULL
-			</c:if>
 			
-			<c:if test="#{value.command!=null and value.command.function!=null}">
-				<c:set var="commandable" value="#{value}" />
-				<c:set var="renderType" value="#{commandable.renderType}" />
-	   			
-	   			<c:choose>
-	   				<c:when test="#{componentHelper.isCommandableRenderTypeButton(renderType)}">
-	   					<cyk:commandableButton value="#{commandable}" />
-	   				</c:when>
-	   				<c:when test="#{componentHelper.isCommandableRenderTypeLink(renderType)}">
-	   					<cyk:commandableLink value="#{commandable}" />
-	   				</c:when>
-	   				<c:otherwise>
-	   					NO COMMANDABLE RENDER FOUND FOR TYPE #{renderType}
-	   				</c:otherwise>
-	   			</c:choose>
-			</c:if>
+			<c:set var="commandable" value="#{value}" />
+			<c:set var="renderType" value="#{commandable.renderType}" />
+   			
+   			<c:choose>
+   				<c:when test="#{componentHelper.isCommandableRenderTypeButton(renderType)}">
+   					<cyk:commandableButton value="#{commandable}" />
+   				</c:when>
+   				<c:when test="#{componentHelper.isCommandableRenderTypeLink(renderType)}">
+   					<cyk:commandableLink value="#{commandable}" />
+   				</c:when>
+   				<c:otherwise>
+   					NO COMMANDABLE RENDER FOUND FOR TYPE #{renderType}
+   				</c:otherwise>
+   			</c:choose>
 			
 		</ui:define>
 	</ui:decorate>	

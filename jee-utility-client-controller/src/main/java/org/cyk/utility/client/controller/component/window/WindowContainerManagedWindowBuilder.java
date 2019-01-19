@@ -37,4 +37,7 @@ public interface WindowContainerManagedWindowBuilder extends FunctionWithPropert
 
 	WindowRenderType getWindowRenderType();
 	WindowContainerManagedWindowBuilder setWindowRenderType(WindowRenderType windowRenderType);
+	
+	Object getRequest();
+	WindowContainerManagedWindowBuilder setRequest(Object request);
 }

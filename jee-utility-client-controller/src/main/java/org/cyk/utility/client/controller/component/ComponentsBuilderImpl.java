@@ -31,7 +31,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 			isHandleLayout = Boolean.TRUE;
 		Components components = __inject__(Components.class);
 		LayoutBuilder layout = getLayout();
-		if(layout!=null)
+		if(layout!=null && __injectCollectionHelper__().isNotEmpty(layout.getChildren()))
 			components.setLayout(layout.execute().getOutput());
 		Instances instances = getComponents();
 		Collection<Object> finals = null;
@@ -127,9 +127,11 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 			if(Boolean.TRUE.equals(isHandleLayout)) {
 				
 				//Derive layout
-				if(components.getLayout() == null) {
-					layout = __inject__(LayoutBuilder.class);
-					layout.setStyle(getLayoutStyle());
+				if(components.getLayout() == null || __injectCollectionHelper__().isEmpty(layout.getItems())) {
+					if(layout == null)
+						layout = __inject__(LayoutBuilder.class);
+					if(layout.getStyle() == null)
+						layout.setStyle(getLayoutStyle());
 					for(Component index : components.get()) {
 						ComponentBuilder<?> componentBuilder = index.getBuilder(); //map.get(index);
 						LayoutItemBuilder layoutItemBuilder = __inject__(LayoutItemBuilder.class);

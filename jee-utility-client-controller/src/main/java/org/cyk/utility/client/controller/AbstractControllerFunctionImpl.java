@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.data.DataRepresentationClassGetter;
 import org.cyk.utility.client.controller.data.DataTransferObjectClassGetter;
 import org.cyk.utility.client.controller.message.MessageRender;
@@ -44,13 +45,13 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	
 	protected void __execute__(SystemAction action,Class<?> dataTransferClass,Class<?> dataRepresentationClass,Collection<?> dataTransferObjects) {
 		if(__injectClassHelper__().isInstanceOf(dataRepresentationClass, RepresentationEntity.class)) {
-			__execute__(action, __inject__(ProxyGetter.class).setClazz(dataRepresentationClass).execute().getOutput(), dataTransferObjects);
+			__execute__(action, __inject__(ProxyGetter.class).setClassUniformResourceIdentifierStringRequest(Properties.getFromPath(getProperties(), Properties.REQUEST))
+					.setClazz(dataRepresentationClass).execute().getOutput(), dataTransferObjects);
 		}
 	}
 	
 	protected void __execute__(SystemAction action,Object representation,Collection<?> dataTransferObjects) {
 		if(representation instanceof RepresentationEntity) {
-			//representation.createMany(dataTransferObjects);
 			Response response = __act__(action, representation, dataTransferObjects);
 			if(response == null)
 				__injectThrowableHelper__().throwRuntimeException("No response for action <<"+action+">>");

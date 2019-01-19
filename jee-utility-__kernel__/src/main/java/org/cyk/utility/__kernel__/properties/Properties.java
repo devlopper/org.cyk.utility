@@ -333,8 +333,12 @@ public class Properties implements java.io.Serializable {
 	}
 	
 	public Properties copyFrom(Properties source,Object...keys){
-		if(source!=null && keys!=null && keys.length>0)
+		if(source!=null && source.map!=null && !source.map.isEmpty() && keys!=null && keys.length>0) {
+			if(map == null)
+				map = __instanciateMap__();
 			DependencyInjection.inject(KernelHelper.class).copyMap(source.map, map, keys);
+		}
+		//TODO check to remove key from keys having null value
 		return this;
 	}
 	
