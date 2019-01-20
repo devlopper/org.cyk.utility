@@ -84,10 +84,16 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 										__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsEntityClass()
 										,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction.getEntities().getElementClass())
 										);
-							if(__injectCollectionHelper__().isNotEmpty(systemAction.getEntities().get()))
+							if(__injectCollectionHelper__().isNotEmpty(systemAction.getEntities()))
 								parameterMap.set(
 										__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsEntityIdentifier()
 										,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(__injectCollectionHelper__().getFirst(systemAction.getEntities().get()))
+										);
+							
+							if(__injectCollectionHelper__().isNotEmpty(systemAction.getEntitiesIdentifiers()))
+								parameterMap.set(
+										__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsEntityIdentifier()
+										,__injectCollectionHelper__().getFirst(systemAction.getEntitiesIdentifiers().get())
 										);
 						}
 						parameterMap.set(

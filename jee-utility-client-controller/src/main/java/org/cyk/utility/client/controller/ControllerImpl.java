@@ -120,6 +120,23 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 		return null;
 	}
 	
+	@Override
+	public <ENTITY> Controller redirect(Class<ENTITY> aClass, Object identifier, Properties properties) {
+		ControllerEntity<Object> controller = (ControllerEntity<Object>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
+		if(controller == null){
+			__injectThrowableHelper__().throwRuntimeException("No controller found for <<"+aClass+">> to do redirect action");
+		}else{
+			controller.redirect(identifier, properties);
+		}
+		return this;
+	}
+	
+	@Override
+	public <ENTITY> Controller redirect(Class<ENTITY> aClass, Object identifier) {
+		Properties properties = new Properties().setValueUsageType(ValueUsageType.BUSINESS);
+		return redirect(aClass, identifier,properties);
+	}
+	
 	/**/
 	
 	protected static ControllerLayer __injectControllerLayer__() {

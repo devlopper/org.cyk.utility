@@ -27,8 +27,11 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 			}
 						
 			ViewBuilder viewBuilder = getView();
-			if(viewBuilder == null)
+			if(viewBuilder == null) {
 				viewBuilder = __inject__(ViewBuilder.class);
+				setView(viewBuilder);
+				
+			}
 			viewBuilder.addComponentBuilderByObjectByFieldNames(form, Form.PROPERTY_TITLE).addRoles(ComponentRole.TITLE);
 			
 			__execute__(form,systemAction,data,viewBuilder);
@@ -37,7 +40,6 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 				viewBuilder.addComponentBuilderByObjectByMethodName(form, Form.METHOD_SUBMIT,systemAction);
 			}
 			
-			setView(viewBuilder);
 		}
 	}
 	

@@ -49,6 +49,13 @@ public class NavigationIdentifierStringBuilderImpl extends AbstractStringFunctio
 	}
 	
 	@Override
+	protected String __execute__() throws Exception {
+		String result = super.__execute__();
+		result = __inject__(NavigationIdentifierStringBuilderExtension.class).setNavigationIdentifier(this).setResult(result).execute().getOutput();
+		return result;
+	}
+	
+	@Override
 	public SystemAction getSystemAction() {
 		return systemAction;
 	}

@@ -8,6 +8,7 @@ import org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionList;
 import org.cyk.utility.system.action.SystemActionProcess;
+import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
@@ -48,6 +49,16 @@ public class NavigationBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 		NavigationBuilder builder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(list);
 		Navigation navigation = builder.execute().getOutput();
 		assertionHelper.assertEquals("http://localhost:8080/list.jsf?entityclass=myentity02&actionclass=list&actionidentifier=list",navigation.getUniformResourceLocator().toString());
+	}
+	
+	@Test
+	public void myentity_read() {
+		SystemAction read = __inject__(SystemActionRead.class);
+		read.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
+		read.getEntitiesIdentifiers(Boolean.TRUE).add(12);
+		NavigationBuilder builder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(read);
+		Navigation navigation = builder.execute().getOutput();
+		assertionHelper.assertEquals("http://localhost:8080/myentity/read.jsf?entityclass=myentity&entityidentifier=12&actionclass=read&actionidentifier=read",navigation.getUniformResourceLocator().toString());
 	}
 	
 	@Test
@@ -129,7 +140,8 @@ public class NavigationBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 						setOutput("http://localhost:8080/list.jsf");
 					else if("myEntityListView".equals(identifier))
 						setOutput("http://localhost:8080/myentity/list.jsf");
-					
+					else if("myEntityReadView".equals(identifier))
+						setOutput("http://localhost:8080/myentity/read.jsf");
 				}
 			});
 		}

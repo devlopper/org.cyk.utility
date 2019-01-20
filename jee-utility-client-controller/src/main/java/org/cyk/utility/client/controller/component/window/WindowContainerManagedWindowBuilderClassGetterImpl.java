@@ -8,6 +8,7 @@ import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionRedirect;
 
 @SuppressWarnings("rawtypes")
 public class WindowContainerManagedWindowBuilderClassGetterImpl extends AbstractClassFunctionImpl implements WindowContainerManagedWindowBuilderClassGetter,Serializable {
@@ -21,7 +22,7 @@ public class WindowContainerManagedWindowBuilderClassGetterImpl extends Abstract
 		SystemAction systemAction = getSystemAction();
 		clazz = __inject__(ControllerLayer.class).getWindowContainerManagedWindowBuilderClass(systemAction);
 		if(clazz == null) {
-			if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionAdd) {
+			if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionAdd || systemAction instanceof SystemActionRedirect) {
 				Class<?> entityClass = null;
 				if(systemAction.getEntities()!=null)
 					entityClass = systemAction.getEntities().getElementClass();

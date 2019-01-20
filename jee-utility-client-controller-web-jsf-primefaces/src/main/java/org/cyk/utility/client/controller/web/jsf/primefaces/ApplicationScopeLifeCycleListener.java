@@ -19,6 +19,7 @@ import org.cyk.utility.client.controller.component.layout.StyleClassBuilderWidth
 import org.cyk.utility.client.controller.component.theme.ThemeClassGetterImpl;
 import org.cyk.utility.client.controller.message.MessageRenderImpl;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapperImpl;
+import org.cyk.utility.client.controller.navigation.NavigationRedirectorImpl;
 import org.cyk.utility.css.StyleClassBuilderWidthImpl;
 import org.cyk.utility.request.RequestParameterValueGetterImpl;
 import org.cyk.utility.request.RequestPropertyValueGetterImpl;
@@ -44,6 +45,9 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(FunctionRunnableMap.class).set(RequestParameterValueGetterImpl.class, RequestParameterValueGetterFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(GridBuilderCommandableBuilderProcessorImpl.class, GridBuilderCommandableBuilderProcessorFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(CommandFunctionImpl.class, CommandFunctionFunctionRunnableImpl.class,5);
+		
+		__inject__(FunctionRunnableMap.class).set(NavigationRedirectorImpl.class, NavigationRedirectorFunctionRunnableImpl.class);
+		
 	}
 	
 	@Override

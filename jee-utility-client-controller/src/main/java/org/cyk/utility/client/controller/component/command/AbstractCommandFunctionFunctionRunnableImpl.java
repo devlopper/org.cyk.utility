@@ -5,12 +5,14 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionProcess;
+import org.cyk.utility.system.action.SystemActionRedirect;
 import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -48,6 +50,9 @@ public abstract class AbstractCommandFunctionFunctionRunnableImpl extends Abstra
 			}else if(action instanceof SystemActionProcess) {
 				Object object = __inject__(CollectionHelper.class).getFirst(entities);
 				__inject__(Controller.class).process(object);
+			}else if(action instanceof SystemActionRedirect) {
+				Object object = __inject__(CollectionHelper.class).getFirst(entities);
+				__inject__(Controller.class).redirect(action.getEntityClass(),__inject__(FieldHelper.class).getFieldValueBusinessIdentifier(object));
 			}else if(action instanceof SystemActionAdd) {
 				/*
 				 * MVC : To add data to local collection

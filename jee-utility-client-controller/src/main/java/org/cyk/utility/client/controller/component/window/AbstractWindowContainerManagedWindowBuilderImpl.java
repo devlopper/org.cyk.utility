@@ -20,6 +20,7 @@ import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionRedirect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<WindowBuilder> implements WindowContainerManagedWindowBuilder,Serializable {
@@ -63,7 +64,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete || systemAction instanceof SystemActionProcess) {
 			Long identifier = (Long) __injectCollectionHelper__().getFirst(systemAction.getEntitiesIdentifiers());
 			instance = __inject__(Controller.class).readOne(systemAction.getEntities().getElementClass(), identifier);
-		}else if(systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionAdd) {
+		}else if(systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionAdd || systemAction instanceof SystemActionRedirect) {
 			instance = __inject__(systemAction.getEntities().getElementClass());
 		}
 		
@@ -84,7 +85,11 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		
 		
 		ViewBuilder view = getView();
-		if(view!=null) {
+		//if(view == null)
+		//	view = __inject__(ViewBuilder.class);
+		if(view == null) {
+			System.out.println(getClass()+" : View is null.");
+		}else {
 			if(view.getRequest() == null)
 				view.setRequest(request);	
 		}

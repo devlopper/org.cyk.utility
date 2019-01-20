@@ -25,6 +25,8 @@ import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemActionFind;
+import org.cyk.utility.system.action.SystemActionRedirect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
 public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> implements ViewBuilder,Serializable {
@@ -174,7 +176,9 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ComponentBuilder<?> addInputBuilderByObjectByFieldNames(Object object, SystemAction systemAction,String... fieldNames) {
-		return addInputBuilderByObjectByFieldNames(object, systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionAdd, fieldNames);
+		Boolean isEditable = systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionAdd 
+				|| systemAction instanceof SystemActionFind || systemAction instanceof SystemActionRedirect;
+		return addInputBuilderByObjectByFieldNames(object, isEditable, fieldNames);
 	}
 	
 	@Override

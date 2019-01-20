@@ -29,4 +29,8 @@ public interface Controller extends ControllerServiceProvider<Object> {
 	<ENTITY> Long count(Class<ENTITY> aClass,Properties properties);
 	<ENTITY> Long count(Class<ENTITY> aClass);
 	
+	/* Redirect */
+	<ENTITY> Controller redirect(Class<ENTITY> aClass,Object identifier,Properties properties);
+	<ENTITY> Controller redirect(Class<ENTITY> aClass,Object identifier);
+	
 }

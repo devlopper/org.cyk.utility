@@ -34,13 +34,15 @@ public interface ControllerServiceProvider<OBJECT> extends SystemServiceProvider
 	
 	/* Count */
 	
-	/* Process */
+	/* Select */
 	ControllerServiceProvider<OBJECT> select(OBJECT object,Properties properties);
 	ControllerServiceProvider<OBJECT> select(OBJECT object);
 	
 	/* Process */
 	ControllerServiceProvider<OBJECT> process(OBJECT object,Properties properties);
 	ControllerServiceProvider<OBJECT> process(OBJECT object);
+	
+	
 	
 	/**/
 

@@ -29,4 +29,6 @@ public interface SystemAction extends Objectable  {
 	SystemAction getNextAction();
 	SystemAction setNextAction(SystemAction nextAction);
 	
+	//Object getNextViewIdentifier();
+	//SystemAction setNextViewIdentifier(Object nextViewIdentifier);
 }

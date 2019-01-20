@@ -23,7 +23,7 @@ public class WindowContainerManagedWindowBuilderGetterImpl extends AbstractFunct
 		
 		WindowContainerManagedWindowBuilder windowContainerManagedWindowBuilder = null;
 		if(windowContainerManagedWindowBuilderClass==null) {
-			__inject__(ThrowableHelper.class).throwRuntimeException("No WindowContainerManagedWindowBuilder found for "+(systemAction == null ? "UNKNOWN_ACTION" : systemAction.getIdentifier()));
+			__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getSimpleName()+" : No WindowContainerManagedWindowBuilder found for "+(systemAction == null ? "UNKNOWN_ACTION" : systemAction.getIdentifier()));
 		}else {
 			windowContainerManagedWindowBuilder = (WindowContainerManagedWindowBuilder) __inject__(windowContainerManagedWindowBuilderClass);
 			windowContainerManagedWindowBuilder.setSystemAction(systemAction);	

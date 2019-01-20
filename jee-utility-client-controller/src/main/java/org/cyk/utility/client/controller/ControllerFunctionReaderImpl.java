@@ -22,18 +22,7 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 		super.__listenPostConstruct__();
 		setAction(__inject__(SystemActionRead.class));
 	}
-	/*
-	@SuppressWarnings("rawtypes")
-	@Override
-	protected void __execute__(SystemAction action) {
-		Class<?> dataRepresentationClass = __inject__(DataRepresentationClassGetter.class).setDataClass(action.getEntityClass()).execute().getOutput();
-		RepresentationEntity representation = (RepresentationEntity) __inject__(ProxyGetter.class).setClazz(dataRepresentationClass).execute().getOutput();	
-		representation.getMany();
-		
-		Class<?> dataTransferClass = __inject__(DataTransferObjectClassGetter.class).setDataClass(action.getEntityClass()).execute().getOutput();
-		Collection<?> dataTransferObjects = __injectInstanceHelper__().buildMany(dataTransferClass, action.getEntities().get());
-	}
-	*/
+
 	@Override
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		Response response;
