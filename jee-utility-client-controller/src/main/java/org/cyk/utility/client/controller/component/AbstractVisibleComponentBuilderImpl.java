@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component;
 
 import org.cyk.utility.css.StyleBuilder;
 import org.cyk.utility.device.DeviceScreenArea;
+import org.cyk.utility.string.StringHelper;
 
 public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends VisibleComponent> extends AbstractComponentBuilderImpl<COMPONENT> implements VisibleComponentBuilder<COMPONENT> {
 	private static final long serialVersionUID = 1L;
@@ -12,8 +13,18 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 	protected void __execute__(COMPONENT component) {
 		super.__execute__(component);
 		StyleBuilder style = getStyle();
-		if(style!=null)
+		if(style!=null) {
+			ComponentRoles roles = component.getRoles();
+			if(__injectCollectionHelper__().isNotEmpty(roles)) {
+				for(ComponentRole index : roles.get()) {
+					String styleClass = __inject__(ComponentRoleStyleClassGetter.class).setRole(index).execute().getOutput();
+					if(__inject__(StringHelper.class).isNotBlank(styleClass))
+						style.addClasses(styleClass);
+				}
+			}	
+			
 			component.setStyle(style.execute().getOutput());
+		}
 		DeviceScreenArea area = getArea();
 		if(area!=null) {
 			component.setArea(area);

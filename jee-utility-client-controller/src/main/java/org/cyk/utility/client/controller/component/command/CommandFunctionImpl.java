@@ -17,8 +17,8 @@ public class CommandFunctionImpl extends AbstractControllerFunctionImpl implemen
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		setIsNotifyAfterExecutionPhaseFinally(Boolean.TRUE);
-		setIsNotifyOnSuccess(Boolean.TRUE);
-		setIsNotifyOnThrowable(Boolean.TRUE);
+		setIsNotifyOnThrowableIsNull(Boolean.TRUE);
+		setIsNotifyOnThrowableIsNotNull(Boolean.TRUE);
 		setIsCatchThrowable(Boolean.TRUE);
 		/*
 		getExecutionPhaseTry(Boolean.TRUE).getRun(Boolean.TRUE).addRunnables(new Runnable() {

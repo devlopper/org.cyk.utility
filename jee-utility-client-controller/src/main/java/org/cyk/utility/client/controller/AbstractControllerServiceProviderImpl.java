@@ -15,6 +15,8 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	
 	@Override
 	public ControllerServiceProvider<OBJECT> create(OBJECT object,Properties properties) {
+		if(properties == null)
+			properties = new Properties();
 		ControllerFunctionCreator function = ____inject____(ControllerFunctionCreator.class);
 		function.setEntity(object);
 		//function.getAction().getEntities(Boolean.TRUE).add(object);

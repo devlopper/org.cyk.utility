@@ -13,5 +13,5 @@ public interface SystemFunctionClient extends SystemFunction {
 
 	Class<?> getDataTransferClass();
 	SystemFunctionClient setDataTransferClass(Class<?> dataTransferClass);
-	
+
 }

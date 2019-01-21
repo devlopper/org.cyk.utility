@@ -176,6 +176,16 @@
     </tag>
     
     <tag>
+        <tag-name>contractHeadJavascript</tag-name>
+        <source>tag/contract/contractHeadJavascript.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>contractHeadCascadeStyleSheet</tag-name>
+        <source>tag/contract/contractHeadCascadeStyleSheet.xhtml</source>
+    </tag>
+    
+    <tag>
         <tag-name>contractBody</tag-name>
         <source>tag/contract/contractBody.xhtml</source>
     </tag>

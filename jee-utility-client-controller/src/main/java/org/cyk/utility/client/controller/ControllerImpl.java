@@ -3,9 +3,12 @@ package org.cyk.utility.client.controller;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.inject.Singleton;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.value.ValueUsageType;
 
+@Singleton
 public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object> implements Controller,Serializable {
 	private static final long serialVersionUID = 1L;
 

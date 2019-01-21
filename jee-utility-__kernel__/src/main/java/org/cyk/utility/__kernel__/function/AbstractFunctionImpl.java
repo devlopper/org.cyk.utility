@@ -19,8 +19,8 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	private FunctionExecutionPhaseFinally executionPhaseFinally;
 	private Function<?, Collection<Assertion>> preConditionsAssertionsProvider;
 	private Function<?, Collection<Assertion>> postConditionsAssertionsProvider;
-	private Boolean isNotifyOnSuccess;
-	private Boolean isNotifyOnThrowable;
+	private Boolean isNotifyOnThrowableIsNull;
+	private Boolean isNotifyOnThrowableIsNotNull;
 	private Boolean isNotifyAfterExecutionPhaseFinally;
 	
 	@Override
@@ -426,41 +426,41 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	protected void __notifyAfterExecutionPhaseFinally__() {
 		Throwable throwable = (Throwable) getProperties().getThrowable();
 		if(throwable == null) {
-			if(Boolean.TRUE.equals(getIsNotifyOnSuccess()))
-				__notifyOnSuccess__();
+			if(Boolean.TRUE.equals(getIsNotifyOnThrowableIsNull()))
+				__notifyOnThrowableIsNull__();
 		}else {
-			if(Boolean.TRUE.equals(getIsNotifyOnThrowable()))
-				__notifyOnThrowable__(throwable);
+			if(Boolean.TRUE.equals(getIsNotifyOnThrowableIsNotNull()))
+				__notifyOnThrowableIsNotNull__(throwable);
 		}
 	}
 	
 	@Override
-	public Boolean getIsNotifyOnSuccess() {
-		return isNotifyOnSuccess;
+	public Boolean getIsNotifyOnThrowableIsNull() {
+		return isNotifyOnThrowableIsNull;
 	}
 	
 	@Override
-	public Function<INPUT, OUTPUT> setIsNotifyOnSuccess(Boolean isNotifyOnSuccess) {
-		this.isNotifyOnSuccess = isNotifyOnSuccess;
+	public Function<INPUT, OUTPUT> setIsNotifyOnThrowableIsNull(Boolean isNotifyOnThrowableIsNull) {
+		this.isNotifyOnThrowableIsNull = isNotifyOnThrowableIsNull;
 		return this;
 	}
 	
-	protected void __notifyOnSuccess__() {
+	protected void __notifyOnThrowableIsNull__() {
 		System.out.println("Success.");
 	}
 	
 	@Override
-	public Boolean getIsNotifyOnThrowable() {
-		return isNotifyOnThrowable;
+	public Boolean getIsNotifyOnThrowableIsNotNull() {
+		return isNotifyOnThrowableIsNotNull;
 	}
 	
 	@Override
-	public Function<INPUT, OUTPUT> setIsNotifyOnThrowable(Boolean isNotifyOnThrowable) {
-		this.isNotifyOnThrowable = isNotifyOnThrowable;
+	public Function<INPUT, OUTPUT> setIsNotifyOnThrowableIsNotNull(Boolean isNotifyOnThrowableIsNotNull) {
+		this.isNotifyOnThrowableIsNotNull = isNotifyOnThrowableIsNotNull;
 		return this;
 	}
 	
-	protected void __notifyOnThrowable__(Throwable throwable) {
+	protected void __notifyOnThrowableIsNotNull__(Throwable throwable) {
 		System.out.println("Error : "+throwable);
 	}
 	

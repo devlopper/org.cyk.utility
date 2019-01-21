@@ -32,7 +32,7 @@ public class RequestStatusPage extends AbstractPageContainerManagedImpl implemen
 						
 					}
 				});
-		commandableBuilderVeryShortRun.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnSuccess(Boolean.FALSE);
+		commandableBuilderVeryShortRun.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnThrowableIsNull(Boolean.FALSE);
 		
 		CommandableBuilder commandableBuilderShortRun = __inject__(CommandableBuilder.class).setName("Short Run(3s)")
 				.setCommandFunctionActionClass(SystemActionCreate.class).addCommandFunctionTryRunRunnable(new Runnable() {
@@ -41,7 +41,7 @@ public class RequestStatusPage extends AbstractPageContainerManagedImpl implemen
 						__inject__(TimeHelper.class).pause(1000l*3);
 					}
 				});
-		commandableBuilderShortRun.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnSuccess(Boolean.FALSE);
+		commandableBuilderShortRun.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnThrowableIsNull(Boolean.FALSE);
 		
 		CommandableBuilder commandableBuilderLongRun = __inject__(CommandableBuilder.class).setName("Long Run(10s)")
 				.setCommandFunctionActionClass(SystemActionCreate.class).addCommandFunctionTryRunRunnable(new Runnable() {
@@ -50,7 +50,7 @@ public class RequestStatusPage extends AbstractPageContainerManagedImpl implemen
 						__inject__(TimeHelper.class).pause(1000l*10);
 					}
 				});
-		commandableBuilderLongRun.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnSuccess(Boolean.FALSE);
+		commandableBuilderLongRun.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnThrowableIsNull(Boolean.FALSE);
 		
 		CommandableBuilder commandableBuilderVeryLongRun = __inject__(CommandableBuilder.class).setName("Very Long Run(20s)")
 				.setCommandFunctionActionClass(SystemActionCreate.class).addCommandFunctionTryRunRunnable(new Runnable() {
@@ -59,7 +59,7 @@ public class RequestStatusPage extends AbstractPageContainerManagedImpl implemen
 						__inject__(TimeHelper.class).pause(1000l*20);
 					}
 				});
-		commandableBuilderVeryLongRun.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnSuccess(Boolean.FALSE);
+		commandableBuilderVeryLongRun.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnThrowableIsNull(Boolean.FALSE);
 		
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)

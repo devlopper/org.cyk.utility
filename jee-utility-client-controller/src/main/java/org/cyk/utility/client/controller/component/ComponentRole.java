@@ -10,4 +10,6 @@ public enum ComponentRole {
 	,FOOTER
 	,GRID
 	,COLUMN
+	,INPUT
+	,OUTPUT
 }

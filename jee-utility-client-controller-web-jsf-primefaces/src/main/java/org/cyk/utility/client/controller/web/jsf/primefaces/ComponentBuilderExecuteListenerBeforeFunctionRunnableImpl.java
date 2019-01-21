@@ -7,8 +7,6 @@ import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerBefore;
 import org.cyk.utility.client.controller.component.ComponentRole;
-import org.cyk.utility.client.controller.component.ComponentRoleStyleClassGetter;
-import org.cyk.utility.client.controller.component.ComponentRoles;
 import org.cyk.utility.client.controller.component.InputOutput;
 import org.cyk.utility.client.controller.component.InputOutputBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponent;
@@ -17,7 +15,6 @@ import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.string.StringHelper;
 
 public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentBuilderExecuteListenerBefore> implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -44,7 +41,7 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 					//System.out.println("CID : "+identifierAsStyleClass);
 					visibleComponentBuilder.addStyleClasses(identifierAsStyleClass);
 					//visibleComponentBuilder.addStyleClasses("AZERTY");
-					
+					/*
 					ComponentRoles roles = visibleComponentBuilder.getRoles();
 					if(__inject__(CollectionHelper.class).isNotEmpty(roles)) {
 						for(ComponentRole index : roles.get()) {
@@ -53,7 +50,7 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 								visibleComponentBuilder.addStyleClasses(styleClass);
 						}
 					}
-					
+					*/
 					/*
 					if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.TITLE))
 						visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_view_title");
@@ -66,9 +63,12 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 						InputOutputBuilder<?, ?> inputOutputBuilder = (InputOutputBuilder<?,?>) visibleComponentBuilder;
 						
 						if(inputOutputBuilder instanceof InputBuilder<?,?>) {
-							InputBuilder<?,?> inputBuilder = (InputBuilder<?,?>)componentBuilder;
-							//Input<?> input = (Input<?>) inputOutput;
-							inputBuilder.getStyle(Boolean.TRUE).addClasses("cyk_input");
+							//InputBuilder<?,?> inputBuilder = (InputBuilder<?,?>)componentBuilder;
+							//inputBuilder.addRoles(ComponentRole.INPUT);
+							
+						}else if(inputOutputBuilder instanceof InputBuilder<?,?>) {
+							//OutputBuilder<?,?> outputBuilder = (OutputBuilder<?,?>)componentBuilder;
+							//outputBuilder.addRoles(ComponentRole.OUTPUT);
 						}
 					}
 					

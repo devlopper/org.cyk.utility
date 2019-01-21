@@ -35,7 +35,7 @@ public class GridBuilderCommandableBuilderProcessorFunctionRunnableImpl extends 
 		super.__runWithWindowRenderTypeDialog__(gridBuilder, commandableBuilder);
 		SystemAction systemAction = commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getAction();
 		if(systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionAdd) {
-			commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnSuccess(Boolean.FALSE);
+			commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnThrowableIsNull(Boolean.FALSE);
 			SystemAction creationWindowSystemAction = commandableBuilder.getCommand().getWindowContainerManaged() instanceof EntityListPage ?
 					__inject__(SystemActionCreate.class) : __inject__(SystemActionAdd.class);
 			commandableBuilder./*setCommandFunctionActionClass(SystemActionCreate.class).*/addCommandFunctionTryRunRunnable(new Runnable() {

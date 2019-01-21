@@ -18,6 +18,8 @@ import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.notification.NotificationBuilders;
+import org.cyk.utility.notification.Notifications;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -41,6 +43,8 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	private static final long serialVersionUID = 1L;
 
 	private CollectionInstanceString entityFieldNames;
+	private NotificationBuilders notificationBuilders;
+	private Notifications notifications;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -325,4 +329,38 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		return __inject__(FieldValueGetter.class).setObject(entity).setField(derivedFieldName).execute().getOutput();
 	}
 
+	@Override
+	public NotificationBuilders getNotificationBuilders() {
+		return notificationBuilders;
+	}
+	
+	@Override
+	public NotificationBuilders getNotificationBuilders(Boolean injectIfNull) {
+		return (NotificationBuilders) __getInjectIfNull__(FIELD_NOTIFICATION_BUILDERS, injectIfNull);
+	}
+	
+	@Override
+	public SystemFunction setNotificationBuilders(NotificationBuilders notificationBuilders) {
+		this.notificationBuilders = notificationBuilders;
+		return this;
+	}
+	
+	@Override
+	public Notifications getNotifications() {
+		return notifications;
+	}
+	
+	@Override
+	public Notifications getNotifications(Boolean injectIfNull) {
+		return (Notifications) __getInjectIfNull__(FIELD_NOTIFICATIONS, injectIfNull);
+	}
+	
+	@Override
+	public SystemFunction setNotifications(Notifications notifications) {
+		this.notifications = notifications;
+		return this;
+	}
+	
+	public static final String FIELD_NOTIFICATION_BUILDERS = "notificationBuilders";
+	public static final String FIELD_NOTIFICATIONS = "notifications";
 }

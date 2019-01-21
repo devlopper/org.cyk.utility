@@ -131,16 +131,6 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 			NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemActionRead);
 			Navigation navigation = navigationBuilder.execute().getOutput();
 			__inject__(NavigationRedirector.class).setNavigation(navigation).execute();
-			
-			/*
-			String url = __inject__(NavigationIdentifierToUrlStringMapper.class).setIdentifier("userAccountsRequestReadByNotConnectedUserView").execute().getOutput()
-					+"?entityidentifier="+userAccountsRequest.getIdentifier();
-			try {
-				FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			*/
 		}
 		return this;
 	}

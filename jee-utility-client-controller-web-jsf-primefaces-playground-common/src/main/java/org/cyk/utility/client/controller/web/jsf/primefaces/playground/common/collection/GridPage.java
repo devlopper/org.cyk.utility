@@ -96,7 +96,7 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 						collection.add(__inject__(RowBuilder.class).setGrid(gridBuilder).setData(data).execute().getOutput());
 					}
 				});
-		commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnSuccess(Boolean.FALSE);
+		commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnThrowableIsNull(Boolean.FALSE);
 		commandableBuilder.getCommand(Boolean.TRUE).setWindowContainerManaged(windowContainerManaged);
 		//commandableBuilder.addUpdatables( gridBuilder.getOutputProperties().getIdentifier());
 		commandableBuilder.addUpdatables("@(."+gridBuilder.getOutputProperties().getIdentifierAsStyleClass()+")");
@@ -113,7 +113,7 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 						__inject__(ThrowableHelper.class).throwRuntimeException("Erreur générée");
 					}
 				});
-		commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnSuccess(Boolean.FALSE);
+		commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnThrowableIsNull(Boolean.FALSE);
 		commandableBuilder.getCommand(Boolean.TRUE).setWindowContainerManaged(windowContainerManaged);
 		//commandableBuilder.addUpdatables( gridBuilder.getOutputProperties().getIdentifier());
 		commandableBuilder.addUpdatables("@(."+gridBuilder.getOutputProperties().getIdentifierAsStyleClass()+")");
@@ -136,7 +136,7 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 					}
 				});
 		commandableBuilder.getCommand(Boolean.TRUE).setWindowContainerManaged(windowContainerManaged);
-		commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnSuccess(Boolean.FALSE);
+		commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnThrowableIsNull(Boolean.FALSE);
 		EventBuilder event = __inject__(EventBuilder.class);
 		event.setOutputProperties(__inject__(Properties.class));
 		event.getOutputProperties().setEvent("dialogReturn");

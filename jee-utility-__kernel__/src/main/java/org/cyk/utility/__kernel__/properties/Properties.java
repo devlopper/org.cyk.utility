@@ -4304,6 +4304,24 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getNotificationBuilders() {
+		return get(NOTIFICATION_BUILDERS);
+	}
+
+	public Properties setNotificationBuilders(Object lang) {
+		set(NOTIFICATION_BUILDERS, lang);
+		return this;
+	}
+	
+	public Object getNotifications() {
+		return get(NOTIFICATIONS);
+	}
+
+	public Properties setNotifications(Object lang) {
+		set(NOTIFICATIONS, lang);
+		return this;
+	}
+	
 	public static final String DEFERRED = "DEFERRED";
 	public static final String DEFERRED_MODE = "DEFERRED_MODE";
 	public static final String DISPLAY = "DISPLAY";
@@ -4773,6 +4791,8 @@ public class Properties implements java.io.Serializable {
 	public static final String FIELD = "FIELD";
 	public static final String AUTO = "AUTO";
 	public static final String DETECT = "DETECT";
+	public static final String NOTIFICATION_BUILDERS = "NOTIFICATION_BUILDERS";
+	public static final String NOTIFICATIONS = "NOTIFICATIONS";
 	
 	public static final String __THIS__ = "__THIS__";
 	/**/

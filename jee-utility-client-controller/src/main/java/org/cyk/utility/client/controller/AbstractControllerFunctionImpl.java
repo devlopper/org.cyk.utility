@@ -15,6 +15,7 @@ import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
+import org.cyk.utility.notification.Notifications;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.system.AbstractSystemFunctionClientImpl;
@@ -136,15 +137,21 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	}
 	
 	@Override
-	protected void __notifyOnSuccess__() {
-		__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class)
+	protected void __notifyOnThrowableIsNull__() {
+		getNotificationBuilders(Boolean.TRUE).addAt(__inject__(NotificationBuilder.class)
 				.setSummaryInternalizationStringKeyValue("operation.execution.success.summary")
-				.setDetailsInternalizationStringKeyValue("operation.execution.success.details")
-				).setType(__inject__(MessageRenderTypeDialog.class)).execute();
+				.setDetailsInternalizationStringKeyValue("operation.execution.success.details"),0);
+		
+		Notifications notifications = __inject__(Notifications.class);
+		if(getProperties().getNotifications() instanceof Notifications)
+			notifications.add( ((Notifications) getProperties().getNotifications()).get() );
+		
+		__inject__(MessageRender.class).addNotificationBuilders().setType(__inject__(MessageRenderTypeDialog.class)).setNotificationBuilders(getNotificationBuilders())
+				.setNotifications(notifications).execute();
 	}
 	
 	@Override
-	protected void __notifyOnThrowable__(Throwable throwable) {
+	protected void __notifyOnThrowableIsNotNull__(Throwable throwable) {
 		__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class).setThrowable(throwable))
 			.setType(__inject__(MessageRenderTypeDialog.class)).execute();
 	}

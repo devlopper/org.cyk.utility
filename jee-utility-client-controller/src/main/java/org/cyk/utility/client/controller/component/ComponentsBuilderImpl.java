@@ -38,6 +38,18 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 		
 		if(__injectCollectionHelper__().isNotEmpty(instances)) {
 			finals = new ArrayList<>();
+			Integer inputLabelWidthProportion = layout == null || layout.getGridRowModel() == null || layout.getGridRowModel().getWidthProportions() == null 
+					|| layout.getGridRowModel().getWidthProportions().get(0) == null
+					? null : layout.getGridRowModel().getWidthProportions().get(0);
+			
+			Integer inputWidthProportion = layout == null || layout.getGridRowModel() == null || layout.getGridRowModel().getWidthProportions() == null 
+					|| layout.getGridRowModel().getWidthProportions().get(1) == null
+					? null : layout.getGridRowModel().getWidthProportions().get(1);
+			
+			Integer inputMessageWidthProportion = layout == null || layout.getGridRowModel() == null || layout.getGridRowModel().getWidthProportions() == null 
+					|| layout.getGridRowModel().getWidthProportions().get(2) == null
+					? null : layout.getGridRowModel().getWidthProportions().get(2);
+					
 			for(Object index : instances.get()) {
 				if(index instanceof ComponentBuilder) {
 					ComponentBuilder<?> componentBuilder = (ComponentBuilder<?>) index;	
@@ -57,17 +69,17 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 								if(inputBuilder.getMessage()==null) {
 									//Nothing to do
 								} else {
-									inputBuilder.setAreaWidthProportionsForNotPhone(10);
-									inputBuilder.getMessage().setAreaWidthProportionsForNotPhone(2);
+									inputBuilder.setAreaWidthProportionsForNotPhone(9);
+									inputBuilder.getMessage().setAreaWidthProportionsForNotPhone(3);
 								}
 							else {
 								if(inputBuilder.getMessage()==null) {
-									inputBuilder.getLabel().setAreaWidthProportionsForNotPhone(2);
-									inputBuilder.setAreaWidthProportionsForNotPhone(10);
+									inputBuilder.getLabel().setAreaWidthProportionsForNotPhone(3);
+									inputBuilder.setAreaWidthProportionsForNotPhone(9);
 								} else {
-									inputBuilder.getLabel().setAreaWidthProportionsForNotPhone(2);
-									inputBuilder.setAreaWidthProportionsForNotPhone(6);
-									inputBuilder.getMessage().setAreaWidthProportionsForNotPhone(4);
+									inputBuilder.getLabel().setAreaWidthProportionsForNotPhone(inputLabelWidthProportion == null ? 3 : inputLabelWidthProportion);
+									inputBuilder.setAreaWidthProportionsForNotPhone(inputWidthProportion == null ? 6 : inputWidthProportion);
+									inputBuilder.getMessage().setAreaWidthProportionsForNotPhone(inputMessageWidthProportion == null ? 3 : inputMessageWidthProportion);
 								}
 							}				
 						}	
@@ -91,8 +103,8 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 							if(outputStringText == null)
 								outputBuilder.setAreaWidthProportionsForNotPhone(12);
 							else {
-								outputStringText.setAreaWidthProportionsForNotPhone(2);
-								outputBuilder.setAreaWidthProportionsForNotPhone(10);
+								outputStringText.setAreaWidthProportionsForNotPhone(inputLabelWidthProportion == null ? 3 : inputLabelWidthProportion);
+								outputBuilder.setAreaWidthProportionsForNotPhone(inputWidthProportion == null ? 9 : inputWidthProportion);
 							}	
 						}
 					}else

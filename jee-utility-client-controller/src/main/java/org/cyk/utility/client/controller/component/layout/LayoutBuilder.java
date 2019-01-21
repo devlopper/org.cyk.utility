@@ -16,5 +16,8 @@ public interface LayoutBuilder extends VisibleComponentBuilder<Layout> {
 	LayoutType getType();
 	LayoutBuilder setType(LayoutType type);
 	
+	LayoutGridRowModel getGridRowModel();
+	LayoutGridRowModel getGridRowModel(Boolean injectIfNull);
+	LayoutBuilder setGridRowModel(LayoutGridRowModel gridRowModel);
 
 }

@@ -13,6 +13,7 @@ public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layou
 
 	private LayoutItemBuilders items;
 	private LayoutType type;
+	private LayoutGridRowModel gridRowModel;
 	
 	@Override
 	protected void __execute__(Layout layout) {
@@ -113,7 +114,24 @@ public class LayoutBuilderImpl extends AbstractVisibleComponentBuilderImpl<Layou
 		return type;
 	}
 	
+	@Override
+	public LayoutGridRowModel getGridRowModel() {
+		return gridRowModel;
+	}
+	
+	@Override
+	public LayoutGridRowModel getGridRowModel(Boolean injectIfNull) {
+		return (LayoutGridRowModel) __getInjectIfNull__(FIELD_GRID_ROW_MODEL, injectIfNull);
+	}
+	
+	@Override
+	public LayoutBuilder setGridRowModel(LayoutGridRowModel gridRowModel) {
+		this.gridRowModel = gridRowModel;
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_ITEMS = "items";
+	public static final String FIELD_GRID_ROW_MODEL = "gridRowModel";
 }

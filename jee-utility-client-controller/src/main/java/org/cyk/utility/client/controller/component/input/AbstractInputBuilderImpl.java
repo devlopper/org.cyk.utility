@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractInputOutputBuilderImpl;
+import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringMessageBuilder;
 
@@ -15,6 +16,10 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	private OutputStringLabelBuilder label;
 	private OutputStringMessageBuilder message;
 	private Boolean isEditable;
+	
+	public AbstractInputBuilderImpl() {
+		addRoles(ComponentRole.INPUT);
+	}
 	
 	@Override
 	protected VALUE __getValue__(Object object, Field field, Object value) {

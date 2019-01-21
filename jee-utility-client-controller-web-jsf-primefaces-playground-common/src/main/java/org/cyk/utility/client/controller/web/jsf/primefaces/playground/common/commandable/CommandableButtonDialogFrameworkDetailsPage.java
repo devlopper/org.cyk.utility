@@ -64,7 +64,7 @@ public class CommandableButtonDialogFrameworkDetailsPage extends AbstractPageCon
 			}
 		});
 		*/
-		commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnSuccess(Boolean.FALSE);
+		commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnThrowableIsNull(Boolean.FALSE);
 		
 		//viewBuilder.getComponentsBuilder(Boolean.TRUE).addComponents(commandable);
 		return viewBuilder;

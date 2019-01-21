@@ -58,6 +58,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		__inject__(ComponentBuilderExecuteListenerBefore.class).setObject(this).setComponent(component).execute();
 		ComponentRoles roles = getRoles();
 		component.setRoles(roles);
+		
 		Objects updatables = getUpdatables();
 		component.setUpdatables(updatables);
 		

@@ -95,16 +95,17 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						dialog.getProperties().setWidgetVar(dialog.getProperties().getIdentifier());
 						dialog.getProperties().setResponsive(Boolean.TRUE);
 						dialog.getProperties().setHeader("Messages");
+						//dialog.getProperties().setHeader(__inject__(Application.class).getName());
 						dialog.getProperties().setShowHeader(Boolean.TRUE);
 						dialog.getProperties().setModal("true");
 						dialog.getProperties().setAppendTo("@(body)");
 						dialog.getProperties().setRendered(Boolean.TRUE);
 						dialog.getProperties().setMinHeight("100");
 						dialog.getProperties().setMinWidth("400");
-						dialog.getProperties().setHeight("110");
-						dialog.getProperties().setWidth("600");
-						dialog.getProperties().setMaxHeight("500");
-						dialog.getProperties().setMaxWidth("700");
+						dialog.getProperties().setHeight("150");
+						dialog.getProperties().setWidth("770");
+						dialog.getProperties().setMaxHeight("550");
+						dialog.getProperties().setMaxWidth("900");
 						dialog.getProperties().setGetter(Properties.VISIBLE, new Properties.Getter() {
 							@Override
 							public Object execute(Properties properties, Object key, Object value, Object nullValue) {

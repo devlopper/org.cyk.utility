@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import org.cyk.utility.collection.CollectionInstanceString;
 import org.cyk.utility.function.FunctionWithPropertiesAsInputAndVoidAsOutput;
+import org.cyk.utility.notification.NotificationBuilders;
+import org.cyk.utility.notification.Notifications;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -42,4 +44,12 @@ public interface SystemFunction extends FunctionWithPropertiesAsInputAndVoidAsOu
 	SystemFunction setEntities(Collection<?> entities);
 	
 	SystemFunction execute();
+	
+	NotificationBuilders getNotificationBuilders();
+	NotificationBuilders getNotificationBuilders(Boolean injectIfNull);
+	SystemFunction setNotificationBuilders(NotificationBuilders notificationBuilders);
+	
+	Notifications getNotifications();
+	Notifications getNotifications(Boolean injectIfNull);
+	SystemFunction setNotifications(Notifications notifications);
 }

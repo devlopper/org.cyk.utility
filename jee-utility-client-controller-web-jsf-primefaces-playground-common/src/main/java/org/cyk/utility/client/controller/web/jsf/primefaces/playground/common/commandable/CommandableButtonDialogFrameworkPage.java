@@ -46,7 +46,7 @@ public class CommandableButtonDialogFrameworkPage extends AbstractPageContainerM
 		        PrimeFaces.current().dialog().openDynamic("dialog", options, null);
 			}
 		});
-		commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnSuccess(Boolean.FALSE);
+		commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setIsNotifyOnThrowableIsNull(Boolean.FALSE);
 		
 		EventBuilder event = __inject__(EventBuilder.class);
 		event.setOutputProperties(__inject__(Properties.class));
