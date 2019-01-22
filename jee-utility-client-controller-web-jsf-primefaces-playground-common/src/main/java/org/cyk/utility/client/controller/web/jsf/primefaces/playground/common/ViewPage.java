@@ -19,6 +19,7 @@ import org.cyk.utility.client.controller.component.annotation.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewTypeForm;
+import org.cyk.utility.client.controller.component.window.WindowContainerManagedWindowBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 
@@ -31,6 +32,11 @@ import lombok.experimental.Accessors;
 public class ViewPage extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected WindowContainerManagedWindowBuilder __getWindowContainerManagedWindowBuilder__() {
+		return null;
+	}
+	
 	@Override
 	protected String __getWindowTitleValue__() {
 		return "View";
@@ -67,7 +73,6 @@ public class ViewPage extends AbstractPageContainerManagedImpl implements Serial
 		viewBuilder.addComponentBuilder(subViewBuilder);
 		
 		viewBuilder.addComponentBuilderByObjectByMethodName(model, "submit");
-		viewBuilder.addComponentBuilderByObjectByMethodName(model, "close");
 		
 		return viewBuilder;
 	}

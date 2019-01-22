@@ -34,4 +34,13 @@ public class StringsImpl extends AbstractCollectionInstanceImpl<String> implemen
 		return addWithPrefix(prefix,__inject__(CollectionHelper.class).instanciate(elements));
 	}
 	
+	@Override
+	public String concatenate(Object separator) {
+		return __inject__(StringHelper.class).concatenate(get(), separator == null ? StringConstant.EMPTY : separator.toString());
+	}
+	
+	@Override
+	public String concatenate() {
+		return concatenate(StringConstant.EMPTY);
+	}
 }

@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.component.window.WindowContainerManagedWindowBuilder;
 import org.cyk.utility.client.controller.entities.myentity.MyEntityImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -19,6 +20,11 @@ import lombok.Setter;
 public class CommandableButtonPage extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected WindowContainerManagedWindowBuilder __getWindowContainerManagedWindowBuilder__() {
+		return null;
+	}
+	
 	@Override
 	protected String __getWindowTitleValue__() {
 		return "Commandable Button";

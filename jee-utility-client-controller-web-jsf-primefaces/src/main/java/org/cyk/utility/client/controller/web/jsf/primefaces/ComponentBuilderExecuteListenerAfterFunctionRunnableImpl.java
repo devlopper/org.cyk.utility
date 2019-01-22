@@ -9,7 +9,6 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerAfter;
-import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
 import org.cyk.utility.client.controller.component.InputOutput;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
@@ -26,10 +25,13 @@ import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringMessageBuilder;
+import org.cyk.utility.client.controller.event.Event;
+import org.cyk.utility.client.controller.event.EventName;
+import org.cyk.utility.client.controller.event.Events;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.css.Style;
-import org.primefaces.component.commandbutton.CommandButton;
+import org.cyk.utility.string.StringHelper;
 
 public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentBuilderExecuteListenerAfter> implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -41,9 +43,20 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 				ComponentBuilder<?> componentBuilder = (ComponentBuilder<?>) getFunction().getObject();
 				Component component = getFunction().getComponent();
 				
+				Events events = component.getEvents();
+				if(events!=null) {
+					for(Event index : events.get()) {
+						String scriptCodeSource = index.getScript().getCodeSource();
+						if(EventName.CLICK.equals(index.getName()) && __inject__(StringHelper.class).isNotBlank(scriptCodeSource))
+							component.getProperties().setOnClick(scriptCodeSource);
+					}
+				}
+				
 				if(component instanceof VisibleComponent) {
 					//VisibleComponentBuilder<?> visibleComponentBuilder = (VisibleComponentBuilder<?>)componentBuilder;
 					VisibleComponent visibleComponent = (VisibleComponent) component;
+					visibleComponent.getProperties().setWidgetVar(componentBuilder.getOutputProperties().getWidgetVar());
+					
 					Style style = visibleComponent.getStyle();
 					if(style!=null) {
 						visibleComponent.getProperties().setStyleClass(style.getClassesAsString());
@@ -92,7 +105,8 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 					}else if(component instanceof Dialog) {
 						Dialog dialog = (Dialog) component;
 						dialog.getProperties().setIdentifier(__inject__(ComponentHelper.class).getGlobalMessagesTargetDialogComponentIdentifier());
-						dialog.getProperties().setWidgetVar(dialog.getProperties().getIdentifier());
+						
+						
 						dialog.getProperties().setResponsive(Boolean.TRUE);
 						dialog.getProperties().setHeader("Messages");
 						//dialog.getProperties().setHeader(__inject__(Application.class).getName());
@@ -113,11 +127,6 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 								return FacesContext.getCurrentInstance().getMessages(clientId).hasNext();
 							}
 						});
-						dialog.getOkCommandable().setTargetModel(__inject__(ComponentTargetModelBuilder.class).setComponent(dialog.getOkCommandable()).execute().getOutput());
-					
-						CommandButton commandButton = (CommandButton) dialog.getOkCommandable().getTargetModel();
-						commandButton.setType("button");
-						commandButton.setOnclick("PF('"+dialog.getProperties().getWidgetVar()+"').hide();");
 					}
 				}else if(component instanceof Insert) {
 					((Insert)component).getProperties().setName(((Insert)component).getName());

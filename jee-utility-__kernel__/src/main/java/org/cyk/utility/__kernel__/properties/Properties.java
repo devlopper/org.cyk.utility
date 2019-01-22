@@ -258,8 +258,9 @@ public class Properties implements java.io.Serializable {
 		KernelHelper kernelHelper = DependencyInjection.inject(KernelHelper.class);
 		if(strings!=null && strings.length>0){
 			for(String string : strings)
-				if(StringUtils.isNotBlank(string))
+				if(StringUtils.isNotBlank(string)) {
 					add(key, (get(key) == null ? kernelHelper.getEmptyString() : separator ) + string, String.class);
+				}
 		}
 		return this;
 	}

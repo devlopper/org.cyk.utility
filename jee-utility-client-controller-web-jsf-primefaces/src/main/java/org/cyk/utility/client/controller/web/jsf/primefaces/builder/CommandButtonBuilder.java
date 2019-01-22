@@ -124,16 +124,18 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 		if(__inject__(CollectionHelper.class).isNotEmpty(events)) {
 			String commandableIdentifier = commandable.getIdentifier().toString();
 			for(Event index : events.get()) {
-				//String actionExpressionLanguage = commandable.getCommand().getWindowContainerManaged().getContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').events.getAt(0).properties.function.executeWithOneParameterToReturnVoid";
-				String actionExpressionLanguage = commandable.getCommand().getContainerContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').events.getAt(0).properties.function.executeWithOneParameterToReturnVoid";
-				AjaxBehavior behavior = (AjaxBehavior) FacesContext.getCurrentInstance().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
-				behavior.addAjaxBehaviorListener(new AjaxBehaviorListenerImpl(__inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {})
-						, __inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {Object.class})));
-				
-				if(index.getProperties().getUpdate()!=null)
-					behavior.setUpdate(index.getProperties().getUpdate().toString());
-				//behavior.setListener(methodExpression);
-				commandButton.addClientBehavior(index.getProperties().getEvent().toString(), behavior);
+				if(index.getScript()==null) {
+					//String actionExpressionLanguage = commandable.getCommand().getWindowContainerManaged().getContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').events.getAt(0).properties.function.executeWithOneParameterToReturnVoid";
+					String actionExpressionLanguage = commandable.getCommand().getContainerContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').events.getAt(0).properties.function.executeWithOneParameterToReturnVoid";
+					AjaxBehavior behavior = (AjaxBehavior) FacesContext.getCurrentInstance().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
+					behavior.addAjaxBehaviorListener(new AjaxBehaviorListenerImpl(__inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {})
+							, __inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {Object.class})));
+					
+					if(index.getProperties().getUpdate()!=null)
+						behavior.setUpdate(index.getProperties().getUpdate().toString());
+					//behavior.setListener(methodExpression);
+					commandButton.addClientBehavior(index.getProperties().getEvent().toString(), behavior);	
+				}
 			}
 		}
 		

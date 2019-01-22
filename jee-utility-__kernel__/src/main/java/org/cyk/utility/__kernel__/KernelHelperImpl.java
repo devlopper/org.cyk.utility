@@ -307,7 +307,7 @@ public class KernelHelperImpl implements KernelHelper,Serializable {
 	}
 	
 	private static final String IMPL = "Impl";
-	private static final String EMPTY_STRING = "Impl";
+	private static final String EMPTY_STRING = "";
 	private static final String UTF_8 = "UTF-8";
 	private static final String METHOD_GETTER_PREFIX = "get";
 	private static final String METHOD_SETTER_PREFIX = "set";

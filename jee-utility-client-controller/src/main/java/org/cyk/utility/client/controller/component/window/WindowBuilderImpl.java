@@ -76,7 +76,6 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		DialogBuilder dialog = getDialog(Boolean.TRUE);
 		if(dialog!=null)
 			window.setDialog(dialog.execute().getOutput());
-		
 	}
 	
 	@Override

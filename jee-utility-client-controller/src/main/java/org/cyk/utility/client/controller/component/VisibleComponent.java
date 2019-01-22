@@ -18,4 +18,5 @@ public interface VisibleComponent extends Component {
 	Style getStyle();
 	Style getStyle(Boolean injectIfNull);
 	VisibleComponent setStyle(Style style);
+	
 }

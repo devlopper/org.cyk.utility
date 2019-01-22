@@ -24,6 +24,7 @@ public class ComponentBuilderPostConstructListenerFunctionRunnableImpl extends A
 				
 				outputProperties.setIdentifier(String.format(IDENTIFIER_FORMAT,componentBuilder.getComponentClass().getSimpleName(),__inject__(RandomHelper.class).getAlphabetic(3)));
 				outputProperties.setIdentifierAsStyleClass(outputProperties.getIdentifier().toString());
+				outputProperties.setWidgetVar(outputProperties.getIdentifier());
 				outputProperties.setRendered(Boolean.TRUE);						
 				
 				if(componentBuilder instanceof VisibleComponentBuilder<?>) {

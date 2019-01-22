@@ -43,7 +43,9 @@
 					update="#{value.targetModel.update}"
 				>
 					<c:forEach items="#{value.events.get()}" var="event" >
-						<cyk:ajax value="#{event}" />
+						<c:if test="#{event.script == null}">
+							<cyk:ajax value="#{event}" />
+						</c:if>
 					</c:forEach>
 				</p:commandButton>
 			

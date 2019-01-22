@@ -7,7 +7,6 @@ import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuild
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
-import org.cyk.utility.system.action.SystemActionCreate;
 
 public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialog> implements DialogBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -49,7 +48,7 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 	@Override
 	public CommandableBuilder getOkCommandable(Boolean injectIfNull) {
 		CommandableBuilder commandable = (CommandableBuilder) __getInjectIfNull__(FIELD_OK_COMMANDABLE, injectIfNull);
-		commandable.setNameInternalizationKeyValue("ok").setCommandFunctionActionClass(SystemActionCreate.class);//TODO use NoAction concept
+		commandable.setNameInternalizationKeyValue("ok");
 		return commandable;
 	}
 	

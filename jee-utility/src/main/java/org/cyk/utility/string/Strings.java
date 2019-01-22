@@ -11,4 +11,7 @@ public interface Strings extends CollectionInstance<String> {
 	
 	Strings addWithPrefix(String prefix,Collection<String> elements);
 	Strings addWithPrefix(String prefix,String...elements);
+	
+	String concatenate(Object separator);
+	String concatenate();
 }
