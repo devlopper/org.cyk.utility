@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.data.DataRepresentationClassGetter;
@@ -14,9 +13,9 @@ import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
 import org.cyk.utility.client.controller.message.MessageRenderTypeInline;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
+import org.cyk.utility.internationalization.InternalizationKeyStringType;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.notification.NotificationBuilder;
-import org.cyk.utility.notification.NotificationSeverityError;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
 import org.cyk.utility.notification.Notifications;
@@ -74,7 +73,8 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 					if(__injectStringHelper__().isBlank(summaryInternalizationStringKey)) {
 						summary = response.readEntity(String.class);
 					}else {
-						summary = __inject__(InternalizationStringBuilder.class).setKey(summaryInternalizationStringKey).execute().getOutput();
+						summary = __inject__(InternalizationStringBuilder.class).setKey(summaryInternalizationStringKey)
+								.setParameters(__getMessageSummaryInternalizationStringBuilderParameters__(action, response)).execute().getOutput();
 					}
 					
 					__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class)
@@ -131,8 +131,9 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 		return null;
 	}
 	
-	protected Object[] __getMessageSummaryInternalizationStringBuilderParameters__(SystemAction systemAction,Response response) {
-		return new Object[] {systemAction.getIdentifier(),systemAction.getEntityClass().getSimpleName()};
+	protected Collection<Object> __getMessageSummaryInternalizationStringBuilderParameters__(SystemAction systemAction,Response response) {
+		return __injectCollectionHelper__().instanciate(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setKeyType(InternalizationKeyStringType.NOUN).execute().getOutput() 
+				,__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction.getEntityClass()).execute().getOutput());
 	}
 	
 	@Override

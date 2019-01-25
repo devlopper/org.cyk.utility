@@ -1,6 +1,7 @@
 package org.cyk.utility.internationalization;
 
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionProcess;
@@ -97,5 +98,10 @@ public class InternalizationStringBuilderUnitTest extends AbstractArquillianUnit
 		assertionHelper.assertEquals("L'opération a été exécutée avec succès.", __inject__(InternalizationStringBuilder.class).setKeyValue("operation.execution.success.summary").setCase(Case.FIRST_CHARACTER_UPPER).execute().getOutput());	
 	}
 	
-	
+	@Test
+	public void is_le_service_de_creation_de_personne_est_introuvable_whenKeyIsServiceOfActNotFound(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("le service de create de person est introuvable", __inject__(InternalizationStringBuilder.class).setKeyValue("service.of.act.not.found")
+				.setParameters(__inject__(CollectionHelper.class).instanciate("create","person")).execute().getOutput());	
+	}
 }

@@ -30,7 +30,9 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 			result = null;
 			Properties properties = new Properties();
 			properties.setKey(key);
-			properties.setParameters(getParameters());
+			Collection<Object> parameters = getParameters();
+			if(parameters!=null)
+				properties.setParameters(parameters.toArray());
 			properties.setLocale(getLocale());
 			properties.setCase(getCase());
 			//1 - cache
