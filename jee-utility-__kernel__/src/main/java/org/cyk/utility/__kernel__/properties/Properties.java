@@ -4323,6 +4323,16 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getFacesContext() {
+		return get(FACES_CONTEXT);
+	}
+
+	public Properties setFacesContext(Object lang) {
+		set(FACES_CONTEXT, lang);
+		return this;
+	}
+	
+	public static final String FACES_CONTEXT = "FACES_CONTEXT";
 	public static final String DEFERRED = "DEFERRED";
 	public static final String DEFERRED_MODE = "DEFERRED_MODE";
 	public static final String DISPLAY = "DISPLAY";

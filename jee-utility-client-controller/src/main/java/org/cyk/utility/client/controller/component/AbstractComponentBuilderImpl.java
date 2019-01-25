@@ -340,6 +340,17 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		return this;
 	}
 	
+	@Override
+	public Object getContext() {
+		return getProperties().getContext();
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setContext(Object context) {
+		getProperties().setContext(context);
+		return this;
+	}
+	
 	public static final String FIELD_AREA = "area";
 	public static final String FIELD_LAYOUT_ITEM_STYLE = "layoutItemStyle";
 	public static final String FIELD_ROLES = "roles";

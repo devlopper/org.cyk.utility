@@ -35,6 +35,8 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 			}else if(__inject__(SystemLayerController.class).getEntityLayer().isPackage(fieldType.getName())) {				
 				Properties properties = new Properties();
 				properties.copyFrom(getProperties(), Properties.REQUEST);
+				properties.copyFrom(getProperties(), Properties.CONTEXT);
+				
 				Collection<?> objects = __inject__(Controller.class).readMany(fieldType,properties);
 				if(__injectCollectionHelper__().isNotEmpty(objects)) {
 					for(Object index : objects) {

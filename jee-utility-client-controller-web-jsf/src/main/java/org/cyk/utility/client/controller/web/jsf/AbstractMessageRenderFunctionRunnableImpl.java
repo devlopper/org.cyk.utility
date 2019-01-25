@@ -62,14 +62,19 @@ public abstract class AbstractMessageRenderFunctionRunnableImpl extends Abstract
 	}
 	
 	protected void __run__(FacesMessage facesMessage,MessageRenderType renderType) {
-		FacesContext facesContext = __injectFacesContext__();
-		if(renderType instanceof MessageRenderTypeInline)
-			facesContext.addMessage(__injectComponentHelper__().getGlobalMessagesOwnerInlineComponentClientIdentifier(), facesMessage);
-		else if(renderType instanceof MessageRenderTypeDialog)
-			facesContext.addMessage(__injectComponentHelper__().getGlobalMessagesOwnerDialogComponentClientIdentifier(), facesMessage);
-		else if(renderType instanceof MessageRenderTypeGrowl)
-			facesContext.addMessage(__injectComponentHelper__().getGlobalMessagesOwnerGrowlComponentClientIdentifier(), facesMessage);
-		
+		FacesContext facesContext = (FacesContext) getFunction().getProperties().getContext();
+		if(facesContext == null)
+			facesContext = __injectFacesContext__();
+		if(facesContext == null) {
+			System.err.println("Cannot render message because facesContext is null");
+		}else {
+			if(renderType instanceof MessageRenderTypeInline)
+				facesContext.addMessage(__injectComponentHelper__().getGlobalMessagesOwnerInlineComponentClientIdentifier(), facesMessage);
+			else if(renderType instanceof MessageRenderTypeDialog)
+				facesContext.addMessage(__injectComponentHelper__().getGlobalMessagesOwnerDialogComponentClientIdentifier(), facesMessage);
+			else if(renderType instanceof MessageRenderTypeGrowl)
+				facesContext.addMessage(__injectComponentHelper__().getGlobalMessagesOwnerGrowlComponentClientIdentifier(), facesMessage);	
+		}
 		//facesContext.addMessage(__injectComponentHelper__().getGlobalMessagesOwnerDialogComponentClientIdentifier(), facesMessage);
 	}
 	

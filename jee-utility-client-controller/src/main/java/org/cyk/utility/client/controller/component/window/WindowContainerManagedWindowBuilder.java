@@ -40,4 +40,7 @@ public interface WindowContainerManagedWindowBuilder extends FunctionWithPropert
 	
 	Object getRequest();
 	WindowContainerManagedWindowBuilder setRequest(Object request);
+	
+	Object getContext();
+	WindowContainerManagedWindowBuilder setContext(Object context);
 }

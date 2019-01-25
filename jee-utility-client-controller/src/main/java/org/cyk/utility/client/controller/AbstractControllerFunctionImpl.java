@@ -3,16 +3,20 @@ package org.cyk.utility.client.controller;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.data.DataRepresentationClassGetter;
 import org.cyk.utility.client.controller.data.DataTransferObjectClassGetter;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
+import org.cyk.utility.client.controller.message.MessageRenderTypeInline;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.notification.NotificationBuilder;
+import org.cyk.utility.notification.NotificationSeverityError;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
 import org.cyk.utility.notification.Notifications;
@@ -65,12 +69,23 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 					else if(responseEntityDto instanceof ResponseEntityDto)
 						throw new RuntimeException( ((ResponseEntityDto)responseEntityDto).getMessageCollection().toString());
 				}else if(Response.Status.Family.CLIENT_ERROR.equals(responseStatusFamily)){
-					String message = null;
-					if(Response.Status.NOT_FOUND.getStatusCode() == response.getStatus())
-						message = __inject__(InternalizationStringBuilder.class).setKey("service.unavailable").execute().getOutput();
-					response.readEntity(String.class);
+					String summary = null;
+					String summaryInternalizationStringKey = __getMessageSummaryInternalizationStringBuilderKey__(action,response);
+					if(__injectStringHelper__().isBlank(summaryInternalizationStringKey)) {
+						summary = response.readEntity(String.class);
+					}else {
+						summary = __inject__(InternalizationStringBuilder.class).setKey(summaryInternalizationStringKey).execute().getOutput();
+					}
 					
-					throw new RuntimeException(message);
+					__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class)
+							.setSummary(summary)
+							.setDetails(summary)
+							.setSeverity(__inject__(NotificationSeverityWarning.class))
+							).addTypes(__inject__(MessageRenderTypeDialog.class),__inject__(MessageRenderTypeInline.class))
+							.copyProperty(Properties.CONTEXT, getProperties())
+							.execute();
+					
+					//throw new RuntimeException(message);
 				}else if(Response.Status.Family.INFORMATIONAL.equals(responseStatusFamily) || Response.Status.Family.OTHER.equals(responseStatusFamily)){
 					String summary = response.readEntity(String.class);
 					__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class)
@@ -94,7 +109,11 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	protected Response __act__(SystemAction action,Object representation,Collection<?> dataTransferObjects) {
 		Response response = null;
 		if(representation instanceof RepresentationEntity) {
-			response = __actWithRepresentationInstanceOfRepresentationEntity__(action, (RepresentationEntity) representation, dataTransferObjects);
+			try {
+				response = __actWithRepresentationInstanceOfRepresentationEntity__(action, (RepresentationEntity) representation, dataTransferObjects);
+			} catch (ProcessingException exception) {
+				response = Response.status(Response.Status.NOT_FOUND).entity(exception.getMessage()).build();
+			}
 		}else
 			__injectThrowableHelper__().throwRuntimeException("Data Representation of type "+representation.getClass()+" is not an instanceof RepresentationEntity");
 		return response;
@@ -104,6 +123,16 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	
 	protected Object getResponseEntityDto(SystemAction action,Object representation,Response response) {
 		return response.readEntity(ResponseEntityDto.class);
+	}
+	
+	protected String __getMessageSummaryInternalizationStringBuilderKey__(SystemAction systemAction,Response response) {
+		if(Response.Status.NOT_FOUND.getStatusCode() == response.getStatus())
+			return "service.of.act.not.found";
+		return null;
+	}
+	
+	protected Object[] __getMessageSummaryInternalizationStringBuilderParameters__(SystemAction systemAction,Response response) {
+		return new Object[] {systemAction.getIdentifier(),systemAction.getEntityClass().getSimpleName()};
 	}
 	
 	@Override

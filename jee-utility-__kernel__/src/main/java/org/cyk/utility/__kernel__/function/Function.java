@@ -71,4 +71,6 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	Function<INPUT,OUTPUT> setIsNotifyOnThrowableIsNotNull(Boolean isNotifyOnThrowableIsNotNull);
 	Boolean getIsNotifyOnThrowableIsNotNull();
 	
+	@Override Function<INPUT,OUTPUT> copyProperty(Object key, Properties properties);
+	
 }

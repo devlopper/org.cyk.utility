@@ -42,6 +42,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	protected void __execute__(View view) {
 		super.__execute__(view);
 		Object request = getRequest();
+		Object context = getContext();
 		ComponentsBuilder componentsBuilder = getComponentsBuilder();
 		
 		CommandableBuilders commandables = getCommandables();
@@ -56,6 +57,8 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 				if(index instanceof ComponentBuilder<?>) {
 					if( ((ComponentBuilder<?>)index).getRequest() == null )
 						((ComponentBuilder<?>)index).setRequest(request);
+					if( ((ComponentBuilder<?>)index).getContext() == null )
+						((ComponentBuilder<?>)index).setContext(context);
 				}
 			view.setComponents(componentsBuilder.execute().getOutput());
 		}
@@ -214,6 +217,8 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	public ViewBuilder addComponentBuilder(ComponentBuilder<?> componentBuilder) {
 		if(componentBuilder.getRequest() == null)
 			componentBuilder.setRequest(getRequest());
+		if(componentBuilder.getContext() == null)
+			componentBuilder.setContext(getContext());
 		getComponentsBuilder(Boolean.TRUE).getComponents(Boolean.TRUE).add(componentBuilder);
 		return this;
 	}

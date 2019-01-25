@@ -460,6 +460,12 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		return this;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Function<INPUT, OUTPUT> copyProperty(Object key, Properties properties) {
+		return (Function<INPUT, OUTPUT>) super.copyProperty(key, properties);
+	}
+	
 	protected void __notifyOnThrowableIsNotNull__(Throwable throwable) {
 		System.out.println("Error : "+throwable);
 	}

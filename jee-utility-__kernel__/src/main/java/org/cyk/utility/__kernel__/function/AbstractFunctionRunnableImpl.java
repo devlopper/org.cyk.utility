@@ -6,7 +6,7 @@ import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
 public abstract class AbstractFunctionRunnableImpl<FUNCTION extends Function<?,?>> extends AbstractObject implements FunctionRunnable<FUNCTION>,Serializable {
 	private static final long serialVersionUID = 1L;
-	
+		
 	@SuppressWarnings("unchecked")
 	@Override
 	public FUNCTION getFunction() {

@@ -100,6 +100,8 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		}else {
 			if(windowContainerManagedWindowBuilder.getRequest() == null)
 				windowContainerManagedWindowBuilder.setRequest(__getRequest__());
+			if(windowContainerManagedWindowBuilder.getContext() == null)
+				windowContainerManagedWindowBuilder.setContext(__getContext__());
 			windowBuilder = windowContainerManagedWindowBuilder.setWindowContainerManaged(this).execute().getOutput();
 		}
 		
@@ -163,6 +165,11 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	
 	protected Object __getRequest__() {
 		return __inject__(RequestGetter.class).execute().getOutput();
+	}
+	
+	protected Object __getContext__() {
+		//TODO write ContextGetter
+		return null;
 	}
 	
 	/**/

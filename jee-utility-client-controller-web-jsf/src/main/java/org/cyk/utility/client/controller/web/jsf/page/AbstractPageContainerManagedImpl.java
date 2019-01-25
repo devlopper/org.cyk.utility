@@ -10,7 +10,12 @@ public abstract class AbstractPageContainerManagedImpl extends AbstractWindowCon
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	protected Object __getContext__() {
+		return FacesContext.getCurrentInstance(); /*TODO we can use injection*/
+	}
+	
+	@Override
 	protected Object __getRequest__() {
-		return FacesContext.getCurrentInstance().getExternalContext().getRequest();/*TODO we can use injection*/
+		return FacesContext.getCurrentInstance().getExternalContext().getRequest(); /*TODO we can use injection*/
 	}
 }

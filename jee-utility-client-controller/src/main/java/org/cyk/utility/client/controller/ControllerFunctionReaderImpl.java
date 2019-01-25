@@ -73,5 +73,15 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 	public ControllerFunctionReader addActionEntitiesIdentifiers(Object... entitiesIdentifiers) {
 		return (ControllerFunctionReader) super.addActionEntitiesIdentifiers(entitiesIdentifiers);
 	}
-
+	/*
+	@Override
+	protected String __getMessageSummaryInternalizationStringBuilderKey__(SystemAction systemAction,Response response) {
+		if(Response.Status.NOT_FOUND.getStatusCode() == response.getStatus()) {
+			if(__injectCollectionHelper__().isEmpty(systemAction.getEntitiesIdentifiers())) {
+				return "list.of.not.found";
+			}
+		}
+		return super.__getMessageSummaryInternalizationStringBuilderKey__(systemAction,response);
+	}
+	*/
 }

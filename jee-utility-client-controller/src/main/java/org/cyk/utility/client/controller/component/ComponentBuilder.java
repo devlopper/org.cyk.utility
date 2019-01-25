@@ -76,4 +76,7 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	
 	Object getRequest();
 	ComponentBuilder<COMPONENT> setRequest(Object request);
+
+	Object getContext();
+	ComponentBuilder<COMPONENT> setContext(Object context);
 }

@@ -103,6 +103,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		function.setEntityClass(getEntityClass());
 		function.setDataTransferClass(dataTransferClass);
 		function.copyProperty(Properties.REQUEST,properties);
+		function.copyProperty(Properties.CONTEXT,properties);
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
 		function.execute();
 		return (Collection<ENTITY>) function.getEntities();
