@@ -18,7 +18,6 @@ import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionRedirect;
 import org.cyk.utility.system.exception.EntityNotFoundException;
-import org.cyk.utility.system.exception.ServiceNotFoundException;
 import org.cyk.utility.type.TypeHelper;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -42,21 +41,15 @@ public class ControllerFunctionRedirectorImpl extends AbstractControllerFunction
 			entity = __inject__(Controller.class).readOne(action.getEntityClass(),identifier,properties);
 			response = (Response) properties.getResponse();
 			if(response != null) {
-				System.out.println(
-						"ControllerFunctionRedirectorImpl.__actWithRepresentationInstanceOfRepresentationEntity__() : "+response.getStatus());
 				Response.Status.Family responseStatusFamily = Response.Status.Family.familyOf(response.getStatus());
 				if(Response.Status.OK.getStatusCode() == response.getStatus()) {
-					if(entity == null) {
-						__injectThrowableHelper__().throwRuntimeException("Le code "+identifier+" n'existe pas.");
-					}else {
-						SystemActionRead systemActionRead = __inject__(SystemActionRead.class);
-						systemActionRead.setEntityClass(getEntityClass());
-						systemActionRead.getEntitiesIdentifiers(Boolean.TRUE).add(__injectFieldHelper__().getFieldValueSystemIdentifier(entity));
-						
-						NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemActionRead);
-						Navigation navigation = navigationBuilder.execute().getOutput();
-						__inject__(NavigationRedirector.class).setNavigation(navigation).execute();
-					}
+					SystemActionRead systemActionRead = __inject__(SystemActionRead.class);
+					systemActionRead.setEntityClass(getEntityClass());
+					systemActionRead.getEntitiesIdentifiers(Boolean.TRUE).add(__injectFieldHelper__().getFieldValueSystemIdentifier(entity));
+					
+					NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemActionRead);
+					Navigation navigation = navigationBuilder.execute().getOutput();
+					__inject__(NavigationRedirector.class).setNavigation(navigation).execute();
 				}else if(Response.Status.Family.CLIENT_ERROR.equals(responseStatusFamily)) {
 					__injectThrowableHelper__().throw_((RuntimeException) __inject__(EntityNotFoundException.class).setSystemAction(action));
 					//setThrowable((Throwable) __inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()) /*new RuntimeException(response.getStatusInfo().toString())*/);

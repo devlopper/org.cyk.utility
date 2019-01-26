@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
+import org.cyk.utility.system.exception.EntityNotFoundException;
 import org.cyk.utility.system.exception.ServiceNotFoundException;
 
 public class InternalizationStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements InternalizationStringBuilder,Serializable{
@@ -39,6 +40,13 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 					parameters.add(__inject__(InternalizationStringBuilder.class).setKeyValue(serviceNotFoundException.getSystemAction())
 							.setKeyType(InternalizationKeyStringType.NOUN).execute().getOutput());
 					parameters.add(__inject__(InternalizationStringBuilder.class).setKeyValue(serviceNotFoundException.getSystemAction().getEntityClass()).execute().getOutput());
+				}else if(keyBuilder.getValue() instanceof EntityNotFoundException) {
+					if(parameters == null)
+						parameters = new ArrayList<Object>();
+					EntityNotFoundException entityNotFoundException = (EntityNotFoundException) keyBuilder.getValue();
+					parameters.add(__inject__(InternalizationStringBuilder.class).setKeyValue(entityNotFoundException.getSystemAction().getEntityClass())
+							.execute().getOutput());
+					parameters.add(entityNotFoundException.getSystemAction().getEntitiesIdentifiers().getFirst());
 				}				
 			}
 		}

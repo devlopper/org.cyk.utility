@@ -8,6 +8,7 @@ import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.exception.EntityNotFoundException;
 import org.cyk.utility.system.exception.ServiceNotFoundException;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
@@ -122,6 +123,18 @@ public class InternalizationStringBuilderUnitTest extends AbstractArquillianUnit
 		ServiceNotFoundException exception = __inject__(ServiceNotFoundException.class);
 		exception.setSystemAction(__inject__(SystemActionRead.class).setEntityClass(Person.class));
 		assertionHelper.assertEquals("le service de lecture de personne est introuvable", __inject__(InternalizationStringBuilder.class).setKeyValue(exception)
+				.execute().getOutput());	
+	}
+	
+	@Test
+	public void is_l_entite_personne_ayant_le_code_abc_n_existe_pas_whenKeyIsThrowableServiceNotFoundException(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		EntityNotFoundException exception = __inject__(EntityNotFoundException.class);
+		SystemActionRead systemActionRead = __inject__(SystemActionRead.class);
+		systemActionRead.setEntityClass(Person.class);
+		systemActionRead.getEntitiesIdentifiers(Boolean.TRUE).add("abc");
+		exception.setSystemAction(systemActionRead);
+		assertionHelper.assertEquals("l'entité personne ayant le code abc n'existe pas", __inject__(InternalizationStringBuilder.class).setKeyValue(exception)
 				.execute().getOutput());	
 	}
 	
