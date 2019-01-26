@@ -4,13 +4,10 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.navigation.Navigation;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.client.controller.navigation.NavigationRedirector;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
-import org.cyk.utility.notification.NotificationBuilder;
-import org.cyk.utility.notification.NotificationSeverityError;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.value.ValueUsageType;
@@ -73,6 +70,9 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		function.setEntityClass(getEntityClass());
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
 		function.execute();
+		if(properties!=null) {
+			properties.setResponse(function.getProperties().getResponse());
+		}
 		return (ENTITY) function.getEntity();
 	}
 	
@@ -93,12 +93,6 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	
 	@Override
 	public Collection<ENTITY> readMany(Properties properties) {
-		/*Response response = getRepresentation().getMany();
-		Collection<ENTITY> collection = (Collection<ENTITY>) response.readEntity(__inject__(TypeHelper.class)
-				.instanciateGenericCollectionParameterizedTypeForJaxrs(Collection.class,dataTransferClass));
-		return collection;
-		*/
-		
 		ControllerFunctionReader function = ____inject____(ControllerFunctionReader.class);
 		function.setEntityClass(getEntityClass());
 		function.setDataTransferClass(dataTransferClass);
@@ -106,6 +100,10 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		function.copyProperty(Properties.CONTEXT,properties);
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
 		function.execute();
+		if(properties!=null) {
+			properties.setResponse(function.getProperties().getResponse());
+			properties.setAction(function.getProperties().getAction());
+		}
 		return (Collection<ENTITY>) function.getEntities();
 	}
 	
@@ -116,7 +114,16 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	
 	@Override
 	public ControllerEntity<ENTITY> redirect(Object identifier, Properties properties) {
-		ENTITY entity = null;
+		ControllerFunctionRedirector function = ____inject____(ControllerFunctionRedirector.class);
+		function.setEntityClass(getEntityClass());
+		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifier);
+		function.setDataTransferClass(dataTransferClass);
+		function.copyProperty(Properties.REQUEST,properties);
+		function.copyProperty(Properties.CONTEXT,properties);
+		//function.getAction().getEntities(Boolean.TRUE).add(object);
+		function.execute();
+		
+		/*ENTITY entity = null;
 		try {
 			entity = readOneByBusinessIdentifier(identifier);
 		} catch (Exception e1) {
@@ -133,6 +140,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 			Navigation navigation = navigationBuilder.execute().getOutput();
 			__inject__(NavigationRedirector.class).setNavigation(navigation).execute();
 		}
+		*/
 		return this;
 	}
 	

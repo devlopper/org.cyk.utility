@@ -3,11 +3,15 @@ package org.cyk.utility.client.controller.component.input.choice;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+import javax.ws.rs.core.Response;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.component.input.AbstractInputBuilderImpl;
 import org.cyk.utility.field.FieldTypeGetter;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.exception.ServiceNotFoundException;
 import org.cyk.utility.system.layer.SystemLayerController;
 
 public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<CHOICE>,CHOICE> extends AbstractInputBuilderImpl<INPUT,CHOICE> implements InputChoiceBuilder<INPUT,CHOICE> {
@@ -33,11 +37,24 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 					choices.add(index);
 				}
 			}else if(__inject__(SystemLayerController.class).getEntityLayer().isPackage(fieldType.getName())) {				
+				//TODO can be move upper
+				Collection<?> objects = null;
 				Properties properties = new Properties();
 				properties.copyFrom(getProperties(), Properties.REQUEST);
 				properties.copyFrom(getProperties(), Properties.CONTEXT);
+				try {
+					objects = __inject__(Controller.class).readMany(fieldType,properties);
+					Response response = (Response) properties.getResponse();
+					if(response != null) {
+						Response.Status.Family responseStatusFamily = Response.Status.Family.familyOf(response.getStatus());
+						if(Response.Status.Family.CLIENT_ERROR.equals(responseStatusFamily)) {
+							setThrowable((Throwable) __inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()) /*new RuntimeException(response.getStatusInfo().toString())*/);
+						}	
+					}
+				}catch(Exception exception) {
+					setThrowable(__injectThrowableHelper__().getFirstCause(exception));	
+				}
 				
-				Collection<?> objects = __inject__(Controller.class).readMany(fieldType,properties);
 				if(__injectCollectionHelper__().isNotEmpty(objects)) {
 					for(Object index : objects) {
 						choices.add(index);

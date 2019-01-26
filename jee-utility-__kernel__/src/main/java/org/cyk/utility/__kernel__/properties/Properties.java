@@ -4309,8 +4309,8 @@ public class Properties implements java.io.Serializable {
 		return get(NOTIFICATION_BUILDERS);
 	}
 
-	public Properties setNotificationBuilders(Object lang) {
-		set(NOTIFICATION_BUILDERS, lang);
+	public Properties setNotificationBuilders(Object notificationBuilders) {
+		set(NOTIFICATION_BUILDERS, notificationBuilders);
 		return this;
 	}
 	
@@ -4318,8 +4318,8 @@ public class Properties implements java.io.Serializable {
 		return get(NOTIFICATIONS);
 	}
 
-	public Properties setNotifications(Object lang) {
-		set(NOTIFICATIONS, lang);
+	public Properties setNotifications(Object notifications) {
+		set(NOTIFICATIONS, notifications);
 		return this;
 	}
 	
@@ -4327,11 +4327,42 @@ public class Properties implements java.io.Serializable {
 		return get(FACES_CONTEXT);
 	}
 
-	public Properties setFacesContext(Object lang) {
-		set(FACES_CONTEXT, lang);
+	public Properties setFacesContext(Object context) {
+		set(FACES_CONTEXT, context);
 		return this;
 	}
 	
+	public Object getRenderMessages() {
+		return get(RENDER_MESSAGES);
+	}
+
+	public Properties setRenderMessages(Object renderMessages) {
+		set(RENDER_MESSAGES, renderMessages);
+		return this;
+	}
+	
+	public Object getThrowThrowable() {
+		return get(THROW_THROWABLE);
+	}
+
+	public Properties setThrowThrowable(Object throwThrowable) {
+		set(THROW_THROWABLE, throwThrowable);
+		return this;
+	}
+	
+	public Object getServiceNotFound() {
+		return get(SERVICE_NOT_FOUND);
+	}
+
+	public Properties setServiceNotFound(Object serviceNotFound) {
+		set(SERVICE_NOT_FOUND, serviceNotFound);
+		return this;
+	}
+	
+	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String SERVICE_NOT_FOUND = "SERVICE_NOT_FOUND";
+	public static final String RENDER_MESSAGES = "RENDER_MESSAGES";
+	public static final String THROW_THROWABLE = "THROW_THROWABLE";
 	public static final String FACES_CONTEXT = "FACES_CONTEXT";
 	public static final String DEFERRED = "DEFERRED";
 	public static final String DEFERRED_MODE = "DEFERRED_MODE";

@@ -1,5 +1,7 @@
 package org.cyk.utility.internationalization;
 
+import java.net.UnknownHostException;
+
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionList;
@@ -112,6 +114,12 @@ public class InternalizationKeyStringBuilderUnitTest extends AbstractArquillianU
 	public void myEntity(){
 		assertionHelper.assertEquals("my.entity", __inject__(InternalizationKeyStringBuilder.class).setValue(MyEntity.class).execute().getOutput());
 		assertionHelper.assertEquals("my.entity", __inject__(InternalizationKeyStringBuilder.class).setValue(MyEntityImpl.class).execute().getOutput());
+	}
+	
+	@Test
+	public void throwableJavaNetUnknownHostException(){
+		UnknownHostException exception = new UnknownHostException("host001");
+		assertionHelper.assertEquals("java.net.unknown.host.exception", __inject__(InternalizationKeyStringBuilder.class).setValue(exception).execute().getOutput());
 	}
 	
 	/**/

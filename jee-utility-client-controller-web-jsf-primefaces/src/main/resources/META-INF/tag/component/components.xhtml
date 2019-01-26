@@ -17,94 +17,102 @@
 					<c:forEach items="#{components}" var="indexComponent" >
 						<cyk:layoutItem value="#{indexComponent.layoutItem}" >
 							<ui:define name="layoutItemContent">
-								<c:choose>
-									
-									<!-- Output -->
-									
-									<c:when test="#{componentHelper.isOutputStringText(indexComponent)}">
-										<cyk:outputText value="#{indexComponent}" />
-									</c:when>
-									
-									<c:when test="#{componentHelper.isOutputStringLabel(indexComponent)}">
-										<cyk:outputLabel value="#{indexComponent}" />
-									</c:when>
-									
-									<!-- Input -->
-									
-									<c:when test="#{componentHelper.isInputStringLineOne(indexComponent)}">
-										<cyk:inputText value="#{indexComponent}" />
-									</c:when>
-									<c:when test="#{componentHelper.isInputStringLineMany(indexComponent)}">
-										<cyk:inputTextarea value="#{indexComponent}" />
-									</c:when>
-									<c:when test="#{componentHelper.isInputStringEditor(indexComponent)}">
-										<cyk:inputEditor value="#{indexComponent}" />
-									</c:when>
-									<c:when test="#{componentHelper.isInputBooleanCheckBox(indexComponent)}">
-										<cyk:selectBooleanCheckbox value="#{indexComponent}" />
-									</c:when>
-									<c:when test="#{componentHelper.isInputBooleanButton(indexComponent)}">
-										<cyk:selectBooleanButton value="#{indexComponent}" />
-									</c:when>
-									<c:when test="#{componentHelper.isInputChoiceOneCombo(indexComponent)}">
-										<cyk:selectOneMenu value="#{indexComponent}" />
-									</c:when>
-									<c:when test="#{componentHelper.isInputChoiceOneRadio(indexComponent)}">
-										<cyk:selectOneRadio value="#{indexComponent}" />
-									</c:when>
-									<c:when test="#{componentHelper.isInputChoiceManyCheckBox(indexComponent)}">
-										<cyk:selectManyCheckbox value="#{indexComponent}" />
-									</c:when>
-									<c:when test="#{componentHelper.isOutputStringMessage(indexComponent)}">
-										<cyk:message value="#{indexComponent}" />
-									</c:when>
-									
-									<!-- Commandable -->
-									
-									<c:when test="#{componentHelper.isCommandable(indexComponent)}">
-										<cyk:commandable value="#{indexComponent}" />
-									</c:when>
-									
-									<!-- Menu -->
-									
-									<c:when test="#{componentHelper.isMenu(indexComponent)}">
-										<cyk:menu value="#{indexComponent}" />
-									</c:when>
-									
-									<!-- View -->
-									
-									<c:when test="#{componentHelper.isView(indexComponent)}">
-										<cyk:view value="#{indexComponent}" />
-									</c:when>
-									
-									<!-- Insert -->
-									
-									<c:when test="#{componentHelper.isInsert(indexComponent)}">
-										<cyk:insert value="#{indexComponent}" />
-									</c:when>
-									
-									<!-- Layout -->
-									
-									<c:when test="#{componentHelper.isLayout(indexComponent)}">
-										<cyk:layout value="#{indexComponent}" />
-									</c:when>
-									
-									<!-- Grid -->
-									
-									<c:when test="#{componentHelper.isGrid(indexComponent)}">
-										<cyk:grid value="#{indexComponent}" />
-									</c:when>
-									
-									<c:when test="#{componentHelper.isCell(indexComponent)}">
-										<cyk:cell value="#{indexComponent}" />
-									</c:when>
-									
-									<!-- Not found -->
-									
-									<c:otherwise>
-										NO COMPONENT FOUND for #{indexComponent}
-									</c:otherwise>
-								</c:choose>
+								<c:if test="#{indexComponent.throwable == null}">
+									<c:choose>
+										
+										<!-- Output -->
+										
+										<c:when test="#{componentHelper.isOutputStringText(indexComponent)}">
+											<cyk:outputText value="#{indexComponent}" />
+										</c:when>
+										
+										<c:when test="#{componentHelper.isOutputStringLabel(indexComponent)}">
+											<cyk:outputLabel value="#{indexComponent}" />
+										</c:when>
+										
+										<!-- Input -->
+										
+										<c:when test="#{componentHelper.isInputStringLineOne(indexComponent)}">
+											<cyk:inputText value="#{indexComponent}" />
+										</c:when>
+										<c:when test="#{componentHelper.isInputStringLineMany(indexComponent)}">
+											<cyk:inputTextarea value="#{indexComponent}" />
+										</c:when>
+										<c:when test="#{componentHelper.isInputStringEditor(indexComponent)}">
+											<cyk:inputEditor value="#{indexComponent}" />
+										</c:when>
+										<c:when test="#{componentHelper.isInputBooleanCheckBox(indexComponent)}">
+											<cyk:selectBooleanCheckbox value="#{indexComponent}" />
+										</c:when>
+										<c:when test="#{componentHelper.isInputBooleanButton(indexComponent)}">
+											<cyk:selectBooleanButton value="#{indexComponent}" />
+										</c:when>
+										<c:when test="#{componentHelper.isInputChoiceOneCombo(indexComponent)}">
+											<cyk:selectOneMenu value="#{indexComponent}" />
+										</c:when>
+										<c:when test="#{componentHelper.isInputChoiceOneRadio(indexComponent)}">
+											<cyk:selectOneRadio value="#{indexComponent}" />
+										</c:when>
+										<c:when test="#{componentHelper.isInputChoiceManyCheckBox(indexComponent)}">
+											<cyk:selectManyCheckbox value="#{indexComponent}" />
+										</c:when>
+										<c:when test="#{componentHelper.isOutputStringMessage(indexComponent)}">
+											<cyk:message value="#{indexComponent}" />
+										</c:when>
+										
+										<!-- Commandable -->
+										
+										<c:when test="#{componentHelper.isCommandable(indexComponent)}">
+											<cyk:commandable value="#{indexComponent}" />
+										</c:when>
+										
+										<!-- Menu -->
+										
+										<c:when test="#{componentHelper.isMenu(indexComponent)}">
+											<cyk:menu value="#{indexComponent}" />
+										</c:when>
+										
+										<!-- View -->
+										
+										<c:when test="#{componentHelper.isView(indexComponent)}">
+											<cyk:view value="#{indexComponent}" />
+										</c:when>
+										
+										<!-- Insert -->
+										
+										<c:when test="#{componentHelper.isInsert(indexComponent)}">
+											<cyk:insert value="#{indexComponent}" />
+										</c:when>
+										
+										<!-- Layout -->
+										
+										<c:when test="#{componentHelper.isLayout(indexComponent)}">
+											<cyk:layout value="#{indexComponent}" />
+										</c:when>
+										
+										<!-- Grid -->
+										
+										<c:when test="#{componentHelper.isGrid(indexComponent)}">
+											<cyk:grid value="#{indexComponent}" />
+										</c:when>
+										
+										<c:when test="#{componentHelper.isCell(indexComponent)}">
+											<cyk:cell value="#{indexComponent}" />
+										</c:when>
+										
+										<!-- Not found -->
+										
+										<c:otherwise>
+											NO COMPONENT FOUND for #{indexComponent}
+										</c:otherwise>
+									</c:choose>
+								</c:if>
+								<c:if test="#{indexComponent.throwable != null}">
+									<p:outputPanel id="#{indexComponent.properties.identifier}" styleClass="ui-message ui-message-error">
+										<span class="ui-message-error-icon"></span>
+										<span class="ui-message-error-detail">#{indexComponent.throwableInternalizationMessage}</span>
+									</p:outputPanel>
+								</c:if>
 							</ui:define>
 						</cyk:layoutItem>
 					</c:forEach>

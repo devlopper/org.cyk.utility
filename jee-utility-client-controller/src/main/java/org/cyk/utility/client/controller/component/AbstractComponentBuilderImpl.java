@@ -29,6 +29,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private Objects updatables;
 	private InternalizationStringBuilderByStringMap internalizationStringMap;
 	private EventBuilders events;
+	private Throwable throwable;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -72,6 +73,11 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		
 		__execute__(component);
 		__inject__(ComponentBuilderExecuteListenerAfter.class).setObject(this).setComponent(component).execute();
+		
+		Throwable throwable = getThrowable();
+		component.setThrowable(throwable);
+		if(component.getThrowable() != null)
+			component.setThrowableInternalizationMessage(__inject__(InternalizationStringBuilder.class).setKeyValue(component.getThrowable()).execute().getOutput());
 		return component;
 	}
 	
@@ -348,6 +354,17 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	@Override
 	public ComponentBuilder<COMPONENT> setContext(Object context) {
 		getProperties().setContext(context);
+		return this;
+	}
+	
+	@Override
+	public Throwable getThrowable() {
+		return throwable;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setThrowable(Throwable throwable) {
+		this.throwable = throwable;
 		return this;
 	}
 	

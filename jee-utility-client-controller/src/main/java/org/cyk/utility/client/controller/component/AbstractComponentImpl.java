@@ -17,6 +17,8 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	private Objects updatables;
 	private ComponentBuilder<?> builder;
 	private Events events;
+	private Throwable throwable;
+	private String throwableInternalizationMessage;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -118,6 +120,28 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	@Override
 	public Component setIsTargetModelBuilt(Boolean isTargetModelBuilt) {
 		this.isTargetModelBuilt = isTargetModelBuilt;
+		return this;
+	}
+	
+	@Override
+	public Throwable getThrowable() {
+		return throwable;
+	}
+	
+	@Override
+	public Component setThrowable(Throwable throwable) {
+		this.throwable = throwable;
+		return this;
+	}
+	
+	@Override
+	public String getThrowableInternalizationMessage() {
+		return throwableInternalizationMessage;
+	}
+	
+	@Override
+	public Component setThrowableInternalizationMessage(String throwableInternalizationMessage) {
+		this.throwableInternalizationMessage = throwableInternalizationMessage;
 		return this;
 	}
 	

@@ -22,6 +22,12 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 		String string = null;
 		Object key = getValue();
 		if(key!=null) {
+			if(key instanceof Throwable) {
+				key = key.getClass().getName();
+				if(StringUtils.endsWith((String)key, "Impl"))
+					key = StringUtils.substringBeforeLast((String)key, "Impl");
+			}
+			
 			if(key instanceof String) {
 				
 			}
@@ -41,7 +47,7 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 					key = __injectStringHelper__().applyCase(clazz.getSimpleName(),Case.FIRST_CHARACTER_LOWER);
 				
 				//if(__injectClassHelper__().isInstanceOf(clazz, AbstractSystemActionImpl.class))
-					key = StringUtils.substringBefore(key.toString(), "Impl");
+					key = StringUtils.substringBeforeLast(key.toString(), "Impl");
 			}
 			
 			String[] strings = StringUtils.split(key.toString(),DOT);

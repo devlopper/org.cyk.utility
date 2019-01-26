@@ -1,6 +1,8 @@
 package org.cyk.utility.internationalization;
 
 import java.io.Serializable;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -8,6 +10,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
+import org.cyk.utility.system.exception.ServiceNotFoundException;
 
 public class InternalizationStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements InternalizationStringBuilder,Serializable{
 	private static final long serialVersionUID = 1L;
@@ -19,10 +22,25 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 	protected String __execute__() throws Exception {
 		String result = null;
 		String key = getKey();
+		Collection<Object> parameters = getParameters();
 		if(__injectStringHelper__().isBlank(key)) {
 			InternalizationKeyStringBuilder keyBuilder = getKeyBuilder();
 			if(keyBuilder!=null)
 				key = keyBuilder.execute().getOutput();
+			if(__injectStringHelper__().isNotBlank(key)) {
+				if(keyBuilder.getValue() instanceof UnknownHostException) {
+					if(parameters == null)
+						parameters = new ArrayList<Object>();
+					parameters.add(((UnknownHostException)keyBuilder.getValue()).getMessage().trim());	
+				}else if(keyBuilder.getValue() instanceof ServiceNotFoundException) {
+					if(parameters == null)
+						parameters = new ArrayList<Object>();
+					ServiceNotFoundException serviceNotFoundException = (ServiceNotFoundException) keyBuilder.getValue();
+					parameters.add(__inject__(InternalizationStringBuilder.class).setKeyValue(serviceNotFoundException.getSystemAction())
+							.setKeyType(InternalizationKeyStringType.NOUN).execute().getOutput());
+					parameters.add(__inject__(InternalizationStringBuilder.class).setKeyValue(serviceNotFoundException.getSystemAction().getEntityClass()).execute().getOutput());
+				}				
+			}
 		}
 		if(__injectStringHelper__().isBlank(key)) {
 			result = "##??KEY_NOT_DEF??##";
@@ -30,7 +48,7 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 			result = null;
 			Properties properties = new Properties();
 			properties.setKey(key);
-			Collection<Object> parameters = getParameters();
+			
 			if(parameters!=null)
 				properties.setParameters(parameters.toArray());
 			properties.setLocale(getLocale());

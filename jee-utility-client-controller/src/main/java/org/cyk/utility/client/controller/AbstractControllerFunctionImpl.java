@@ -57,9 +57,14 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	protected void __execute__(SystemAction action,Object representation,Collection<?> dataTransferObjects) {
 		if(representation instanceof RepresentationEntity) {
 			Response response = __act__(action, representation, dataTransferObjects);
-			if(response == null)
-				__injectThrowableHelper__().throwRuntimeException("No response for action <<"+action+">>");
-			else {
+			getProperties().setResponse(response);
+			getProperties().setAction(action);
+			if(response == null) {
+				if(getProperties().getThrowable() == null) {
+					getProperties().setThrowable(new RuntimeException("No response for action <<"+action+">>")); 
+					//__injectThrowableHelper__().throwRuntimeException(getClass()+" : No response for action <<"+action+">>");
+				}
+			}else {
 				Response.Status.Family responseStatusFamily = Response.Status.Family.familyOf(response.getStatus());
 				if(Response.Status.Family.SUCCESSFUL.equals(responseStatusFamily) || Response.Status.Family.SERVER_ERROR.equals(responseStatusFamily)){
 					Object responseEntityDto = getResponseEntityDto(action, representation, response);		
@@ -68,7 +73,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 					else if(responseEntityDto instanceof ResponseEntityDto)
 						throw new RuntimeException( ((ResponseEntityDto)responseEntityDto).getMessageCollection().toString());
 				}else if(Response.Status.Family.CLIENT_ERROR.equals(responseStatusFamily)){
-					String summary = null;
+					/*String summary = null;
 					String summaryInternalizationStringKey = __getMessageSummaryInternalizationStringBuilderKey__(action,response);
 					if(__injectStringHelper__().isBlank(summaryInternalizationStringKey)) {
 						summary = response.readEntity(String.class);
@@ -84,7 +89,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 							).addTypes(__inject__(MessageRenderTypeDialog.class),__inject__(MessageRenderTypeInline.class))
 							.copyProperty(Properties.CONTEXT, getProperties())
 							.execute();
-					
+					*/
 					//throw new RuntimeException(message);
 				}else if(Response.Status.Family.INFORMATIONAL.equals(responseStatusFamily) || Response.Status.Family.OTHER.equals(responseStatusFamily)){
 					String summary = response.readEntity(String.class);
@@ -109,11 +114,13 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	protected Response __act__(SystemAction action,Object representation,Collection<?> dataTransferObjects) {
 		Response response = null;
 		if(representation instanceof RepresentationEntity) {
-			try {
+			//try {
 				response = __actWithRepresentationInstanceOfRepresentationEntity__(action, (RepresentationEntity) representation, dataTransferObjects);
-			} catch (ProcessingException exception) {
-				response = Response.status(Response.Status.NOT_FOUND).entity(exception.getMessage()).build();
-			}
+			/*} catch (ProcessingException exception) {
+				System.out.println("AbstractControllerFunctionImpl.__act__() : "+exception.getCause());
+				getProperties().setThrowable(exception);
+				//response = Response.status(Response.Status.NOT_FOUND).entity(exception.getMessage()).build();
+			}*/
 		}else
 			__injectThrowableHelper__().throwRuntimeException("Data Representation of type "+representation.getClass()+" is not an instanceof RepresentationEntity");
 		return response;
@@ -182,6 +189,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	
 	@Override
 	protected void __notifyOnThrowableIsNotNull__(Throwable throwable) {
+		throwable = __injectThrowableHelper__().getFirstCause(throwable);
 		__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class).setThrowable(throwable))
 			.setType(__inject__(MessageRenderTypeDialog.class)).execute();
 	}

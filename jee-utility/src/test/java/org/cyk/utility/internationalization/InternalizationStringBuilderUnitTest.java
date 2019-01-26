@@ -1,10 +1,14 @@
 package org.cyk.utility.internationalization;
 
+import java.net.UnknownHostException;
+
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionProcess;
+import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.exception.ServiceNotFoundException;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
@@ -103,5 +107,27 @@ public class InternalizationStringBuilderUnitTest extends AbstractArquillianUnit
 		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
 		assertionHelper.assertEquals("le service de create de person est introuvable", __inject__(InternalizationStringBuilder.class).setKeyValue("service.of.act.not.found")
 				.setParameters(__inject__(CollectionHelper.class).instanciate("create","person")).execute().getOutput());	
+	}
+	
+	@Test
+	public void is_l_hote_host001_est_inconnu_whenKeyIsThrowableJavaNetUnknownHostException(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("l'hôte host001 est inconnu", __inject__(InternalizationStringBuilder.class).setKeyValue(new UnknownHostException("host001"))
+				.execute().getOutput());	
+	}
+	
+	@Test
+	public void is_le_service_de_lecture_de_personne_est_introuvable_whenKeyIsThrowableServiceNotFoundException(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		ServiceNotFoundException exception = __inject__(ServiceNotFoundException.class);
+		exception.setSystemAction(__inject__(SystemActionRead.class).setEntityClass(Person.class));
+		assertionHelper.assertEquals("le service de lecture de personne est introuvable", __inject__(InternalizationStringBuilder.class).setKeyValue(exception)
+				.execute().getOutput());	
+	}
+	
+	/**/
+	
+	public static class Person {
+		
 	}
 }

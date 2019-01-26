@@ -31,5 +31,9 @@ public interface Component extends Objectable {
 	Boolean getIsTargetModelBuilt();
 	Component setIsTargetModelBuilt(Boolean isTargetModelBuilt);
 	
+	Throwable getThrowable();
+	Component setThrowable(Throwable throwable);
 	
+	String getThrowableInternalizationMessage();
+	Component setThrowableInternalizationMessage(String throwableInternalizationMessage);
 }
