@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.system.action.SystemAction;
+
 public abstract class AbstractSystemClientExceptionImpl extends AbstractSystemExceptionImpl implements SystemClientException,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -18,6 +20,11 @@ public abstract class AbstractSystemClientExceptionImpl extends AbstractSystemEx
 	public SystemClientException setResponse(Response response) {
 		this.response = response;
 		return this;
+	}
+	
+	@Override
+	public SystemClientException setSystemAction(SystemAction systemAction) {
+		return (SystemClientException) super.setSystemAction(systemAction);
 	}
 	
 }

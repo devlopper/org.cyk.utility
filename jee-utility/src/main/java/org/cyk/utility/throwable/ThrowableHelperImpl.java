@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.system.exception.SystemException;
 
 @Singleton
 public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelper,Serializable {
@@ -63,6 +64,11 @@ public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelp
 	@Override
 	public void throw_(RuntimeException runtimeException) {
 		throw runtimeException;
+	}
+	
+	@Override
+	public void throw_(SystemException systemException) {
+		throw_((RuntimeException)systemException);
 	}
 	
 	@Override

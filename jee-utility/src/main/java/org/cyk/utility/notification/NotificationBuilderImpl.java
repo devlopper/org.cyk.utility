@@ -34,8 +34,8 @@ public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInp
 			InternalizationStringBuilder summaryInternalizationString = getSummaryInternalizationString();
 			if(summaryInternalizationString==null) {
 				if(throwable!=null) {
-					throwable.printStackTrace();//TODO to be removed
-					summary = throwable.getMessage();// __inject__(StackTraceHelper.class).getStackTraceAsString();
+					throwable.printStackTrace();//TODO to be removed or to be logged to a specific file named notification
+					summary = __inject__(InternalizationStringBuilder.class).setKeyValue(throwable).execute().getOutput();
 				}
 			}else
 				summary = summaryInternalizationString.execute().getOutput();	
@@ -47,6 +47,7 @@ public class NotificationBuilderImpl extends AbstractFunctionWithPropertiesAsInp
 			InternalizationStringBuilder detailsInternalizationString = getDetailsInternalizationString();
 			if(detailsInternalizationString==null) {
 				if(throwable!=null) {
+					//TODO find a way to get the stack trace as lines in order to build the details
 					details = throwable.getMessage();//__inject__(StackTraceHelper.class).getStackTraceAsString();
 				}
 			}else

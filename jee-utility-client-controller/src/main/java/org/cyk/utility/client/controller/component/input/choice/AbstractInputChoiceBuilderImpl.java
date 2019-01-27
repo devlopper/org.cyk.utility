@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.component.input.AbstractInputBuilderImpl;
 import org.cyk.utility.field.FieldTypeGetter;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.exception.ServiceNotFoundException;
 import org.cyk.utility.system.layer.SystemLayerController;
@@ -44,14 +45,11 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 				properties.copyFrom(getProperties(), Properties.CONTEXT);
 				try {
 					objects = __inject__(Controller.class).readMany(fieldType,properties);
-					Response response = (Response) properties.getResponse();
-					if(response != null) {
-						Response.Status.Family responseStatusFamily = Response.Status.Family.familyOf(response.getStatus());
-						if(Response.Status.Family.CLIENT_ERROR.equals(responseStatusFamily)) {
-							setThrowable((Throwable) __inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()) /*new RuntimeException(response.getStatusInfo().toString())*/);
-						}	
-					}
+					Response response = (Response) properties.getResponse();					
+					if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isFamilyClientError(response)))
+						setThrowable((Throwable) __inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()).setResponse(response));
 				}catch(Exception exception) {
+					//Because we do not want to break view building we need to handle exception
 					setThrowable(__injectThrowableHelper__().getFirstCause(exception));	
 				}
 				

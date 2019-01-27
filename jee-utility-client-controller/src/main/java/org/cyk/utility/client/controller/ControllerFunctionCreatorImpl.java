@@ -6,8 +6,10 @@ import java.util.Collection;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.server.representation.RepresentationEntity;
+import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.exception.ServiceNotFoundException;
 
 public class ControllerFunctionCreatorImpl extends AbstractControllerFunctionImpl implements ControllerFunctionCreator , Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,7 +22,12 @@ public class ControllerFunctionCreatorImpl extends AbstractControllerFunctionImp
 	
 	@Override
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
-		return representation.createOne(dataTransferObjects.iterator().next());
+		Response response = null;
+		response = representation.createOne(dataTransferObjects.iterator().next());
+		if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isStatusClientErrorNotFound(response))) {
+			__injectThrowableHelper__().throw_(__inject__(ServiceNotFoundException.class).setSystemAction(action).setResponse(response));
+		}			
+		return response;
 	}
 	
 	@Override

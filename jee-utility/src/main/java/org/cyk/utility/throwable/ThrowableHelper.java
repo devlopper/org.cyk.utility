@@ -1,6 +1,7 @@
 package org.cyk.utility.throwable;
 
 import org.cyk.utility.helper.Helper;
+import org.cyk.utility.system.exception.SystemException;
 
 public interface ThrowableHelper extends Helper {
 
@@ -12,6 +13,7 @@ public interface ThrowableHelper extends Helper {
 	//Throwable getLastCause(Throwable throwable);
 
 	void throw_(RuntimeException runtimeException);
+	void throw_(SystemException systemException);
 	void throwRuntimeException(String message);
 	void throwRuntimeExceptionNotYetImplemented();
 	void throwRuntimeExceptionImplementationOrRunnableRequired(Class<?> aClass);

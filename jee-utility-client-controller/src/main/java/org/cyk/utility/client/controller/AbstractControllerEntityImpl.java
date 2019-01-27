@@ -72,6 +72,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		function.execute();
 		if(properties!=null) {
 			properties.setResponse(function.getProperties().getResponse());
+			properties.setAction(function.getProperties().getAction());
 		}
 		return (ENTITY) function.getEntity();
 	}

@@ -11,9 +11,9 @@ import org.cyk.utility.client.controller.navigation.Navigation;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.client.controller.navigation.NavigationRedirector;
 import org.cyk.utility.instance.InstanceHelper;
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.server.representation.RepresentationEntity;
+import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionRedirect;
@@ -33,32 +33,20 @@ public class ControllerFunctionRedirectorImpl extends AbstractControllerFunction
 	@Override
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		Response response = null;
-		Object identifier = action.getEntitiesIdentifiers().getFirst();
-		Object entity = null;
-		Properties properties = new Properties().setValueUsageType(ValueUsageType.BUSINESS);
-
-		try {
-			entity = __inject__(Controller.class).readOne(action.getEntityClass(),identifier,properties);
-			response = (Response) properties.getResponse();
-			if(response != null) {
-				Response.Status.Family responseStatusFamily = Response.Status.Family.familyOf(response.getStatus());
-				if(Response.Status.OK.getStatusCode() == response.getStatus()) {
-					SystemActionRead systemActionRead = __inject__(SystemActionRead.class);
-					systemActionRead.setEntityClass(getEntityClass());
-					systemActionRead.getEntitiesIdentifiers(Boolean.TRUE).add(__injectFieldHelper__().getFieldValueSystemIdentifier(entity));
-					
-					NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemActionRead);
-					Navigation navigation = navigationBuilder.execute().getOutput();
-					__inject__(NavigationRedirector.class).setNavigation(navigation).execute();
-				}else if(Response.Status.Family.CLIENT_ERROR.equals(responseStatusFamily)) {
-					__injectThrowableHelper__().throw_((RuntimeException) __inject__(EntityNotFoundException.class).setSystemAction(action));
-					//setThrowable((Throwable) __inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()) /*new RuntimeException(response.getStatusInfo().toString())*/);
-				}	
-			}
-		}catch(Exception exception) {
-			__injectThrowableHelper__().throwRuntimeException(__inject__(InternalizationStringBuilder.class)
-					.setKeyValue(__injectThrowableHelper__().getFirstCause(exception)).execute().getOutput());
-		}
+		Properties properties = new Properties().setValueUsageType(ValueUsageType.BUSINESS);		
+		Object entity = __inject__(Controller.class).readOne(action.getEntityClass(),action.getEntitiesIdentifiers().getFirst(),properties);
+		response = (Response) properties.getResponse();			
+		if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isStatusSuccessfulOk(response))) {
+			SystemActionRead systemActionRead = __inject__(SystemActionRead.class);
+			systemActionRead.setEntityClass(getEntityClass());
+			systemActionRead.getEntitiesIdentifiers(Boolean.TRUE).add(__injectFieldHelper__().getFieldValueSystemIdentifier(entity));
+			
+			NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemActionRead);
+			Navigation navigation = navigationBuilder.execute().getOutput();
+			__inject__(NavigationRedirector.class).setNavigation(navigation).execute();
+		}else if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isFamilyClientError(response))) {
+			__injectThrowableHelper__().throw_(__inject__(EntityNotFoundException.class).setSystemAction(action).setResponse(response));
+		}				
 		return response;
 	}
 	

@@ -20,7 +20,13 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 		ControllerFunctionCreator function = ____inject____(ControllerFunctionCreator.class);
 		function.setEntity(object);
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
+		function.copyProperty(Properties.REQUEST,properties);
+		function.copyProperty(Properties.CONTEXT,properties);
 		function.execute();
+		if(properties!=null) {
+			properties.setResponse(function.getProperties().getResponse());
+			properties.setAction(function.getProperties().getAction());
+		}
 		return this;
 	}
 	
