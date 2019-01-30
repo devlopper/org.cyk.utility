@@ -1,6 +1,7 @@
 package org.cyk.utility.internationalization;
 
 import java.io.Serializable;
+import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +34,11 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 					if(parameters == null)
 						parameters = new ArrayList<Object>();
 					parameters.add(((UnknownHostException)keyBuilder.getValue()).getMessage().trim());	
+				}else if(keyBuilder.getValue() instanceof ConnectException) {
+					if(parameters == null)
+						parameters = new ArrayList<Object>();
+					ConnectException connectException = (ConnectException) keyBuilder.getValue();
+					parameters.add(connectException.getMessage().trim());	
 				}else if(keyBuilder.getValue() instanceof ServiceNotFoundException) {
 					if(parameters == null)
 						parameters = new ArrayList<Object>();

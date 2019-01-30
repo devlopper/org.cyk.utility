@@ -27,9 +27,11 @@ public class ProxyClassUniformResourceIdentifierGetterImpl extends AbstractFunct
 				__injectThrowableHelper__().throwRuntimeException(getClass()+" : class is required");
 			String identifier = StringUtils.substringBefore(aClass.getName(), ".server")+".server"+".uri";
 			string = __inject__(SystemHelper.class).getProperty(identifier);
+			System.out.println("ProxyClassUniformResourceIdentifierGetterImpl.__execute__() ID ENV : "+identifier+" ::: "+string);
 			if(__inject__(StringHelper.class).isBlank(string)) {
 				//3 - from operating system properties 
 				string = __inject__(OperatingSystemHelper.class).getProperty(identifier);
+				System.out.println("ProxyClassUniformResourceIdentifierGetterImpl.__execute__() ID PRO : "+identifier+" ::: "+string);
 				if(__inject__(StringHelper.class).isBlank(string)) {
 					//4 - from request
 					ProxyClassUniformResourceIdentifierStringBuilder stringBuilder = getStringBuilder(Boolean.TRUE);

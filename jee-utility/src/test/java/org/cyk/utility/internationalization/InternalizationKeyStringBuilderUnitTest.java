@@ -1,5 +1,6 @@
 package org.cyk.utility.internationalization;
 
+import java.net.ConnectException;
 import java.net.UnknownHostException;
 
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -120,6 +121,12 @@ public class InternalizationKeyStringBuilderUnitTest extends AbstractArquillianU
 	public void throwableJavaNetUnknownHostException(){
 		UnknownHostException exception = new UnknownHostException("host001");
 		assertionHelper.assertEquals("java.net.unknown.host.exception", __inject__(InternalizationKeyStringBuilder.class).setValue(exception).execute().getOutput());
+	}
+	
+	@Test
+	public void throwableJavaNetConnectException(){
+		ConnectException exception = new ConnectException("host001");
+		assertionHelper.assertEquals("java.net.connect.exception", __inject__(InternalizationKeyStringBuilder.class).setValue(exception).execute().getOutput());
 	}
 	
 	/**/

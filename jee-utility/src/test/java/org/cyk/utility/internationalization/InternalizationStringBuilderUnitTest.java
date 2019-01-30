@@ -1,5 +1,6 @@
 package org.cyk.utility.internationalization;
 
+import java.net.ConnectException;
 import java.net.UnknownHostException;
 
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
@@ -114,6 +115,13 @@ public class InternalizationStringBuilderUnitTest extends AbstractArquillianUnit
 	public void is_l_hote_host001_est_inconnu_whenKeyIsThrowableJavaNetUnknownHostException(){
 		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
 		assertionHelper.assertEquals("l'hôte host001 est inconnu", __inject__(InternalizationStringBuilder.class).setKeyValue(new UnknownHostException("host001"))
+				.execute().getOutput());	
+	}
+	
+	@Test
+	public void is_la_connexion_a_ete_refusee_whenKeyIsThrowableJavaNetConnectException(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("la connexion a été refusée", __inject__(InternalizationStringBuilder.class).setKeyValue(new ConnectException("refusé"))
 				.execute().getOutput());	
 	}
 	
