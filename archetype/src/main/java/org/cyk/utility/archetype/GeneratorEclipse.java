@@ -115,7 +115,7 @@ public class GeneratorEclipse implements Serializable {
 		File systemDirectory = new File(workspaceDirectory, type.name().toLowerCase());
 		System.out.println("System directory : "+systemDirectory);
 		
-		//executeSystem(systemDirectory,"server", COMMANDS_SERVER);
+		executeSystem(systemDirectory,"server", COMMANDS_SERVER);
 		executeSystem(systemDirectory,"client",COMMANDS_CLIENT);
 		
 		System.out.println("###   Done   ###");
