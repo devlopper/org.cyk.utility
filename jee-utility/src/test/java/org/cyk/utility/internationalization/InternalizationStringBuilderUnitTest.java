@@ -126,6 +126,13 @@ public class InternalizationStringBuilderUnitTest extends AbstractArquillianUnit
 	}
 	
 	@Test
+	public void is_mon_message_whenKeyIsThrowableJavaLangRuntimeException(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("mon message", __inject__(InternalizationStringBuilder.class).setKeyValue(new RuntimeException("mon message"))
+				.execute().getOutput());	
+	}
+	
+	@Test
 	public void is_le_service_de_lecture_de_personne_est_introuvable_whenKeyIsThrowableServiceNotFoundException(){
 		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
 		ServiceNotFoundException exception = __inject__(ServiceNotFoundException.class);

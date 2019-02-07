@@ -50,6 +50,7 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 						setThrowable((Throwable) __inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()).setResponse(response));
 				}catch(Exception exception) {
 					//Because we do not want to break view building we need to handle exception
+					exception.printStackTrace();
 					setThrowable(__injectThrowableHelper__().getFirstCause(exception));	
 				}
 				

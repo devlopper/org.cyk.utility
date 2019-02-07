@@ -34,13 +34,18 @@ public class ProxyGetterRestEasyFunctionRunnableImpl extends AbstractFunctionRun
 				Object proxy = target.proxy(aClass);
 				setOutput(proxy);
 				*/
+				Class<?> clazz = getFunction().getClazz();
 				URI uri = __inject__(ProxyClassUniformResourceIdentifierGetter.class).setStringBuilder(getFunction().getClassUniformResourceIdentifierString())
-						.setClazz(getFunction().getClazz()).execute().getOutput();
+						.setClazz(clazz).execute().getOutput();
 				ResteasyClient client = new ResteasyClientBuilder().build();
 				ResteasyWebTarget target = client.target(UriBuilder.fromUri(uri));
-				Class<?> aClass = getFunction().getClazz();
-				Object proxy = target.proxy(aClass);
-				setOutput(proxy);
+				try {
+					Object proxy = target.proxy(clazz);
+					setOutput(proxy);
+				} catch (Exception exception) {
+					exception.printStackTrace();
+					throw new RuntimeException("Cannot get proxy for CLASS <<"+clazz+">> at URI <<"+uri+">>");
+				}
 			}
 		});
 	}

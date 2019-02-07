@@ -89,7 +89,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		//if(view == null)
 		//	view = __inject__(ViewBuilder.class);
 		if(view == null) {
-			System.out.println(getClass()+" : View is null.");
+			
 		}else {
 			if(view.getRequest() == null)
 				view.setRequest(request);	

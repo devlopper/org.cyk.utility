@@ -4,12 +4,8 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.client.controller.navigation.Navigation;
-import org.cyk.utility.client.controller.navigation.NavigationBuilder;
-import org.cyk.utility.client.controller.navigation.NavigationRedirector;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractControllerServiceProviderImpl<ENTITY> implements ControllerEntity<ENTITY>,Serializable {

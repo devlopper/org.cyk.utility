@@ -53,6 +53,11 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 					parameters.add(__inject__(InternalizationStringBuilder.class).setKeyValue(entityNotFoundException.getSystemAction().getEntityClass())
 							.execute().getOutput());
 					parameters.add(entityNotFoundException.getSystemAction().getEntitiesIdentifiers().getFirst());
+				}else if(keyBuilder.getValue() instanceof RuntimeException) {
+					if(parameters == null)
+						parameters = new ArrayList<Object>();
+					RuntimeException runtimeException = (RuntimeException) keyBuilder.getValue();
+					parameters.add(runtimeException.getMessage());
 				}				
 			}
 		}
