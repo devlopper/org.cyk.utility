@@ -17,23 +17,6 @@ public class ProxyGetterRestEasyFunctionRunnableImpl extends AbstractFunctionRun
 		setRunnable(new Runnable() {
 			@Override
 			public void run() {
-				/*
-				String uri = null;
-				if(__inject__(StringHelper.class).isBlank(uri)) {
-					uri = __inject__(ProxyClassUniformResourceIdentifierStringProvider.class).execute().getOutput();
-				}
-				
-				if(__inject__(StringHelper.class).isBlank(uri)) {
-					ProxyClassUniformResourceIdentifierStringBuilder classUniformResourceIdentifierStringBuilder = getFunction().getClassUniformResourceIdentifierString(Boolean.TRUE);			
-					uri = classUniformResourceIdentifierStringBuilder.execute().getOutput();
-					uri = System.getenv("ci.gouv.dgbf.system.actor.server.url");
-				}
-				ResteasyClient client = new ResteasyClientBuilder().build();
-				ResteasyWebTarget target = client.target(UriBuilder.fromPath(uri));
-				Class<?> aClass = getFunction().getClazz();
-				Object proxy = target.proxy(aClass);
-				setOutput(proxy);
-				*/
 				Class<?> clazz = getFunction().getClazz();
 				URI uri = __inject__(ProxyClassUniformResourceIdentifierGetter.class).setStringBuilder(getFunction().getClassUniformResourceIdentifierString())
 						.setClazz(clazz).execute().getOutput();
