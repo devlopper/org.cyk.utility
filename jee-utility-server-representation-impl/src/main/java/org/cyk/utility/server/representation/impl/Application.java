@@ -6,6 +6,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.system.node.SystemServer;
+
 @ApplicationPath("/")
 @Path("/")
 @ApplicationScoped
@@ -15,8 +18,7 @@ public class Application extends javax.ws.rs.core.Application {
 	@Path("/")
 	@Produces(javax.ws.rs.core.MediaType.TEXT_PLAIN)
 	public String get() {
-		//TODO this message could come from database
-		return "Your API is running. Time is "+new java.util.Date();
+		return DependencyInjection.inject(SystemServer.class).getName()+" REST API is running. Time is "+new java.util.Date();
 	}
 	
 }

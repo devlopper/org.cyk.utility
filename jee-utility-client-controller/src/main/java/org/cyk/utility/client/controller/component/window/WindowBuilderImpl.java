@@ -3,7 +3,6 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.cyk.utility.client.controller.application.Application;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.dialog.DialogBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;
@@ -16,6 +15,7 @@ import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.system.node.SystemClient;
 
 public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Window> implements WindowBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -88,7 +88,7 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		OutputStringTextBuilder outputStringText = getApplicationName();
 		if(outputStringText == null) {
 			outputStringText = __inject__(OutputStringTextBuilder.class);
-			outputStringText.setValue(__inject__(Application.class).getName());
+			outputStringText.setValue(__inject__(SystemClient.class).getName());
 			outputStringText.addStyleClasses("cyk_component_window_application_name");
 			setOutputStringTexts("applicationName",outputStringText);
 		}

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.inject.Singleton;
 
 @Singleton
-public class SystemClientImpl extends AbstractSystemNodeImpl implements SystemClient,Serializable {
+public class SystemServerImpl extends AbstractSystemNodeImpl implements SystemServer,Serializable {
 	private static final long serialVersionUID = 1L;
 
 }

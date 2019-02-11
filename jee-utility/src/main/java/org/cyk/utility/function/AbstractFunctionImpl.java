@@ -1,6 +1,7 @@
 package org.cyk.utility.function;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.instance.InstanceHelper;
@@ -231,6 +233,28 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 		}
 		
 		return this;
+	}
+	
+	/**/
+	
+	protected void throwRuntimeExceptionIfIsNull(Object object,String name) {
+		if(object == null)
+			__injectThrowableHelper__().throwRuntimeException(name+" must not be null");
+	}
+	
+	protected void throwRuntimeExceptionIfIsBlank(String string,String name) {
+		if(__inject__(StringHelper.class).isBlank(string))
+			__injectThrowableHelper__().throwRuntimeException(name+" must not be blank");
+	}
+	
+	protected void throwRuntimeExceptionIfIsEmpty(Collection<?> collection,String name) {
+		if(__inject__(CollectionHelper.class).isEmpty(collection))
+			__injectThrowableHelper__().throwRuntimeException(name+" must not be empty");
+	}
+	
+	protected void throwRuntimeExceptionIfIsEmpty(CollectionInstance<?> collectionInstance,String name) {
+		if(__inject__(CollectionHelper.class).isEmpty(collectionInstance))
+			__injectThrowableHelper__().throwRuntimeException(name+" must not be empty");
 	}
 	
 	/**/

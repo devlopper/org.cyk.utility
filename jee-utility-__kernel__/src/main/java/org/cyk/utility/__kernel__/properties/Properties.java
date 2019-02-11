@@ -209,6 +209,22 @@ public class Properties implements java.io.Serializable {
 		return null;
 	}
 	
+	public Collection<Object> getWhereKeyIsInstanceOf(Class<?> clazz) {
+		Collection<Object> collection = null;
+		if(map != null && clazz!=null) {
+			for(Map.Entry<Object, Object> entry : map.entrySet()) {
+				if(entry.getKey() != null) {
+					if(clazz.isAssignableFrom(entry.getKey().getClass())){
+						if(collection == null)
+							collection = new ArrayList<Object>();
+						collection.add(entry.getValue());
+					}
+				}
+			}
+		}
+		return collection;
+	}
+	
 	/* add */
 	
 	@SuppressWarnings("unchecked")

@@ -6,7 +6,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
-import org.cyk.utility.client.controller.application.Application;
 import org.cyk.utility.client.controller.component.command.CommandFunctionFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.command.CommandFunctionImpl;
 import org.cyk.utility.client.controller.component.window.WindowRenderTypeDialog;
@@ -19,6 +18,7 @@ import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterVal
 import org.cyk.utility.instance.InstanceBuilderImpl;
 import org.cyk.utility.instance.InstanceGetterImpl;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.system.node.SystemClient;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -39,9 +39,9 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	}
 	
 	protected void __initializeApplication__(Object object) {
-		Application application = __inject__(Application.class);
-		if(__inject__(StringHelper.class).isBlank(application.getName()))
-			application.setName("APP_NAME");
+		SystemClient systemClient = __inject__(SystemClient.class);
+		if(__inject__(StringHelper.class).isBlank(systemClient.getName()))
+			systemClient.setName("CLIENT_APP_NAME");
 	}
 	
 	@Override

@@ -227,4 +227,9 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 		return null;
 	}
 
+	@Override
+	public Collection<Object> getPropertiesWhereKeyIsInstanceOf(Class<?> clazz) {
+		return null;
+	}
+
 }

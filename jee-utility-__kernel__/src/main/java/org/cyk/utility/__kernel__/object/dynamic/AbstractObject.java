@@ -62,6 +62,11 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	}
 	
 	@Override
+	public Collection<Object> getPropertiesWhereKeyIsInstanceOf(Class<?> clazz) {
+		return getProperties().getWhereKeyIsInstanceOf(clazz);
+	}
+	
+	@Override
 	public Object getParent() {
 		return getProperties().getParent();
 	}

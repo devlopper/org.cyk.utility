@@ -1,8 +1,11 @@
 package org.cyk.utility.__kernel__.properties;
 
+import java.util.Collection;
+
 import org.cyk.utility.__kernel__.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Assert;
 import org.junit.Test;
+import static org.assertj.core.api.Assertions.*;
 
 public class PropertiesUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
@@ -110,4 +113,23 @@ public class PropertiesUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 		Assert.assertEquals("MyClass", properties.getFromPath(Properties.ACTION_ON_CLASS,Properties.ACTION) );
 	}
 	
+	@Test
+	public void getPropertiesWhereKeyIsInstanceOfString(){
+		Properties properties = new Properties();
+		properties.set("k01", "v01");
+		properties.set(2, "v02");
+		properties.set("k03", "v03");
+		Collection<Object> collection = properties.getWhereKeyIsInstanceOf(String.class);
+		assertThat(collection).containsExactly("v01","v03");
+	}
+	
+	@Test
+	public void getPropertiesWhereKeyIsInstanceOfInteger(){
+		Properties properties = new Properties();
+		properties.set("k01", "v01");
+		properties.set(2, "v02");
+		properties.set("k03", "v03");
+		Collection<Object> collection = properties.getWhereKeyIsInstanceOf(Integer.class);
+		assertThat(collection).containsExactly("v02");
+	}
 }

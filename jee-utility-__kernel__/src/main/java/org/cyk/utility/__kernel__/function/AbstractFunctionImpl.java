@@ -22,7 +22,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	private Boolean isNotifyOnThrowableIsNull;
 	private Boolean isNotifyOnThrowableIsNotNull;
 	private Boolean isNotifyAfterExecutionPhaseFinally;
-	
+
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
@@ -56,6 +56,18 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 			//TODO log warning not executable
 		}
 		return this;
+	}
+	
+	@Override
+	public void executeAsynchronously() {
+		new Thread(
+			new Runnable() {
+				@Override
+				public void run() {
+					execute();
+				}
+			}
+		).run();
 	}
 	
 	@Override
