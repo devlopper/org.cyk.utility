@@ -67,7 +67,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 					execute();
 				}
 			}
-		).run();
+		).start();
 	}
 	
 	@Override

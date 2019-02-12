@@ -31,7 +31,7 @@ public class SenderMailUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 		sender
 		.setMessage(__inject__(Message.class).setTitle("MyTitle Async").setBody("MyBody"))
 		.addReceivers(__inject__(Receiver.class).setIdentifier("kycdev@gmail.com"))
-		.executeAsynchronously();;
+		.executeAsynchronously();
 	}
 	
 }

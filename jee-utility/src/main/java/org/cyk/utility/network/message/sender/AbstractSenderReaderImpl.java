@@ -24,6 +24,7 @@ public abstract class AbstractSenderReaderImpl extends AbstractFunctionWithPrope
 		if(Boolean.TRUE.equals(protocol.getIsAuthenticationRequired()))
 			throwRuntimeExceptionIfIsNull(protocol.getAuthenticationCredentials(),"credentials");
 		______execute______(protocol);
+		System.out.println("Message sent.");
 	}
 	
 	protected abstract void ______execute______(Protocol protocol) throws Exception;
