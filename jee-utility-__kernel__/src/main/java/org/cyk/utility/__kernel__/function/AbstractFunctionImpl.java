@@ -22,6 +22,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	private Boolean isNotifyOnThrowableIsNull;
 	private Boolean isNotifyOnThrowableIsNotNull;
 	private Boolean isNotifyAfterExecutionPhaseFinally;
+	private Boolean isExecuteAsynchronously;
 
 	@Override
 	protected void __listenPostConstruct__() {
@@ -29,8 +30,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 		setIsExecutable(Boolean.TRUE);
 	}
 	
-	@Override
-	public Function<INPUT,OUTPUT> execute() {
+	protected void __executeCode__() {
 		Boolean executable = __executeGetIsExecutable__(getIsExecutable());
 		if(Boolean.TRUE.equals(executable)){
 			Long start = System.currentTimeMillis();
@@ -55,19 +55,25 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 			System.err.println(getClass()+" is not executable.");
 			//TODO log warning not executable
 		}
-		return this;
 	}
 	
 	@Override
-	public void executeAsynchronously() {
-		new Thread(
-			new Runnable() {
-				@Override
-				public void run() {
-					execute();
-				}
-			}
-		).start();
+	public Function<INPUT,OUTPUT> execute() {
+		Boolean isExecuteAsynchronously = getIsExecuteAsynchronously();
+		if(Boolean.TRUE.equals(isExecuteAsynchronously)) {
+			new Thread(
+					new Runnable() {
+						@Override
+						public void run() {
+							__executeCode__();
+						}
+					}
+				).start();
+		}else {
+			__executeCode__();	
+		}
+		
+		return this;
 	}
 	
 	@Override
@@ -469,6 +475,17 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	@Override
 	public Function<INPUT, OUTPUT> setIsNotifyOnThrowableIsNotNull(Boolean isNotifyOnThrowableIsNotNull) {
 		this.isNotifyOnThrowableIsNotNull = isNotifyOnThrowableIsNotNull;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsExecuteAsynchronously() {
+		return isExecuteAsynchronously;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setIsExecuteAsynchronously(Boolean isExecuteAsynchronously) {
+		this.isExecuteAsynchronously = isExecuteAsynchronously;
 		return this;
 	}
 	

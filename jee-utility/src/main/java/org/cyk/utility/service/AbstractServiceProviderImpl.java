@@ -14,6 +14,7 @@ import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.log.Log;
+import org.cyk.utility.network.MailHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
@@ -103,4 +104,15 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	protected EnumCollectionGetter __injectEnumCollectionGetter__(){
 		return __inject__(EnumCollectionGetter.class);
 	}
+	
+	protected MailHelper __injectMailHelper__(){
+		return __inject__(MailHelper.class);
+	}
+	
+	/**/
+	
+	protected void __sendMail__(String title,String body,Collection<String> receivers,Boolean isExecuteAsynchronously) {
+		__injectMailHelper__().send(title, body, receivers, isExecuteAsynchronously);
+	}
+	
 }

@@ -22,7 +22,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		for(String index : new String[] {"word","phrase","throwable"})
 			__inject__(StringRepositoryResourceBundle.class).addBundle("org.cyk.utility.string.repository."+index);
 	}
-	
+
 	@Override
 	public void __destroy__(Object object) {}
 	

@@ -13,7 +13,6 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	Function<INPUT,OUTPUT> executeWithOneParameter(Object parameter1);
 	void executeWithOneParameterToReturnVoid(Object parameter1);
 	void executeToReturnVoid();
-	void executeAsynchronously();
 	OUTPUT getOutput();
 	<T extends OUTPUT> T getOutputAs(Class<T> aClass);
 	
@@ -71,6 +70,9 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	
 	Function<INPUT,OUTPUT> setIsNotifyOnThrowableIsNotNull(Boolean isNotifyOnThrowableIsNotNull);
 	Boolean getIsNotifyOnThrowableIsNotNull();
+	
+	Function<INPUT,OUTPUT> setIsExecuteAsynchronously(Boolean isExecuteAsynchronously);
+	Boolean getIsExecuteAsynchronously();
 	
 	@Override Function<INPUT,OUTPUT> copyProperty(Object key, Properties properties);
 	
