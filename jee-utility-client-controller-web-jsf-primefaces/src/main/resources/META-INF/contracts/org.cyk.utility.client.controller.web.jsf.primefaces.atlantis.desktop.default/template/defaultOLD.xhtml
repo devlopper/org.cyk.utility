@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"   
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pa="http://primefaces.org/atlantis"
+      xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+
+    <f:metadata>
+  		<ui:insert name="contractMetadata"/>
+	</f:metadata>
+	    
+    <h:head>
+    	<ui:insert name="contractHead">
+    		<ui:insert name="contractHeadTitle"><title><h:outputText value="#{__page__.window.title.properties.value}" escape="false" /></title></ui:insert>
+    		
+    		<f:facet name="first">
+	            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+	            <meta name="apple-mobile-web-app-capable" content="yes" />
+	            <meta name="theme-color" content="#{guestPreferences.themeColors[guestPreferences.layout]}" />
+	            <!----><meta http-equiv="Cache-control" content="public" />
+	            <meta http-equiv="Cache-control" content="max-age=864000" />
+	            <meta http-equiv="Cache-control" content="s-maxage=1296000" />
+	        </f:facet>        
+    		
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+			<link rel="icon" type="image/png" sizes="32x32" href="#{request.contextPath}/resources/image/icons/favicon-32x32-5.png"/>
+        	
+        	<h:outputStylesheet library="css" name="layout.css" />
+        	<h:outputStylesheet library="css" name="colors/layout-blue.css" />
+        	<h:outputStylesheet library="css" name="main.css" />
+        	
+        	<h:outputScript library="js" name="fr_FR.js" />
+        	<h:outputScript library="js" name="nanoscroller.js" />
+        	<h:outputScript library="js" name="layout.js" />
+        	
+        	<script type="text/javascript">        
+	            $("document").ready(function() {                
+	                $("ul.layout-tabmenu-nav li:first-child a").trigger('click');
+	                $('#ul.layout-tabmenu-nav li:first-child').toggleClass('menu-active');
+	            });
+	        </script>
+    	</ui:insert>
+    </h:head>
+    
+	<h:body>
+		<c:set var="theme" value="#{__page__.window.theme}" />
+		<c:if test="#{theme == null}">
+			<h1>No theme has been set</h1>
+		</c:if>
+		
+		<c:if test="#{theme != null}">
+			<ui:insert name="contractBody">		
+	    		<div class="layout-wrapper">
+		            <ui:include src="topbar.xhtml" />
+		            <ui:insert name="menu"/>
+		            
+		            <div class="layout-sidebar">
+           				<pa:tabMenu>
+                			<pa:tab icon="fa fa-users" title="Gestion des acteurs">  
+                				<h:form id="menu-form">
+			                   		<pa:menu model="#{__page__.window.menuOfScopeSession.targetModel}"/>
+			                	</h:form>   	
+			                </pa:tab>                
+           				</pa:tabMenu>        
+       				</div>
+		            
+		            <div class="layout-main layout-main-reduce" id="contenu">
+		                <div class="layout-main-content">
+		                	<h:form id="#{componentHelper.globalFormComponentIdentifier}">	
+		                		
+		                		<!-- Messages -->
+	    		
+					    		<h:inputHidden id="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"/>
+					    		<p:growl id="#{componentHelper.globalMessagesTargetGrowlComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerGrowlComponentIdentifier}"/>
+					    		
+					    		<cyk:dialog value="#{__page__.window.dialog}">
+					    			<ui:define name="dialogContent">
+					    				<h:inputHidden id="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
+							    		<!--
+							    		<p:scrollPanel style="min-width:400px;max-width:700px;min-height:100px;max-height:500px;">
+							    		-->	
+							    			<p:messages id="#{componentHelper.globalMessagesTargetDialogComponentIdentifier}ID" for="#{componentHelper.globalMessagesOwnerDialogComponentIdentifier}" />
+							    		<!--
+							    		</p:scrollPanel>
+							    		-->
+							    		<p:separator/>
+							    		<p:outputPanel style="text-align:center">
+								    		<c:forEach var="indexCommandable" items="#{__page__.window.dialog.commandables.get()}" >
+						    					<cyk:commandable value="#{indexCommandable}" />
+						    				</c:forEach>
+							    		</p:outputPanel>
+					    				
+					    			</ui:define>
+					    		</cyk:dialog>
+		                		
+		                		<ui:insert name="center">
+		                			<!-- Message -->
+									<ui:insert name="centerNorth">
+										<div class="ui-g-12">
+											<h:inputHidden id="#{componentHelper.globalMessagesOwnerInlineComponentIdentifier}"/>
+					    					<p:messages id="#{componentHelper.globalMessagesTargetInlineComponentIdentifier}" for="#{componentHelper.globalMessagesOwnerInlineComponentIdentifier}" />
+										</div>
+									</ui:insert>
+									
+									<ui:insert name="centerCenter">
+										<c:set var="viewCenter" value="#{theme.viewMap.get('center')}" />
+										<c:if test="#{viewCenter != null}">
+											<div class="ui-g-12">
+												<ui:insert name="centerView">
+													<cyk:view value="#{viewCenter}" />
+												</ui:insert>
+											</div>
+										</c:if>
+									</ui:insert>
+		                		</ui:insert>
+		                			
+		                	</h:form>
+		                </div>
+		            </div>
+		        </div>
+
+				<!-- Global Ajax Status -->
+				<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />             
+				<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+				    <table>
+				    	<tr>
+				    		<td>
+				    			<h:outputText value="Traitement en cours..." />
+				    		</td>
+				    		<td>
+				    			<p:graphicImage library="animation" name="processing.gif" width="32" height="32" />	
+				    		</td>
+				    	</tr>
+				    </table>
+				</p:dialog>
+			</ui:insert>
+		</c:if>
+    </h:body>
+    	
+</html>

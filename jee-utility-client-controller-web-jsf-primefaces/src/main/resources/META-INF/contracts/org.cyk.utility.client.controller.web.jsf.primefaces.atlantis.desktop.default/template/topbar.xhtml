@@ -1,0 +1,213 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pa="http://primefaces.org/atlantis"
+    xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+    
+    <ui:define name="meta">
+        <!--<f:metadata>
+            <o:enableRestorableView />
+        </f:metadata>-->
+    </ui:define>
+
+    <!--style="background-image: url(resources/sib/images/ban2.jpg) !important"-->
+    <div class="topbar" >
+        <div class="logo">
+           <p:graphicImage library="image" name="logos/armoirie-logo.png" style="width: 40px; margin-top: 4px" />
+        </div>
+        <div style="position: absolute; left: 60px; top: 8px; z-index: 1;">
+            <cyk:outputText value="#{__page__.window.getOutputStringText('applicationName')}" />
+        </div>
+        
+        <a id="topbar-menu-button" href="#">
+            <i class="fa fa-bars"></i>
+        </a>
+        
+        <ul class="topbar-menu fadeInDown animated">
+            <li class="profile-item">
+                <a href="#" style="text-decoration: none !important">
+                                     
+                    <div class="profile-image">
+                        <!--<p:graphicImage name="images/profile-pictures-rounded.png" library="sib" />
+                        <i class="fa fa-user fa-2x"></i>-->
+                        <div class="user-icon">A</div>
+                    </div>
+                    <div class="profile-info">
+                        <!--<span class="topbar-item-name profile-name">#{user.authUser.firstName} #{user.authUser.lastName}</span>
+                        <span class="topbar-item-name profile-role">#{user.authUserGroup.group.label} </span>-->
+                        <span class="topbar-item-name profile-name">John Doe</span>
+                        <span class="topbar-item-name profile-role">Administrateur </span>
+                    </div>
+                </a>
+                
+                <ul class="animated">
+                    <li role="menuitem">                        
+                        <a href="/scob/protected/pages/updatePassword.xhtml">
+                            <i class="fa fa-fw fa-key"></i>
+                            <span>Modifier mon mot de passe</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">                        
+                        <a href="/scob/protected/pages/updateProfile.xhtml">
+                            <i class="fa fa-fw fa-user"></i>
+                            <span>Modifier mon profil</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#">
+                            <i class="fa fa-fw fa-cog"></i>
+                            <span>Préférences</span>                            
+                        </a>
+                    </li>
+                    <li role="menuitem">
+
+                                             
+                            <div class="color-chooser" style="background: #0078d7; margin-left: 40px">
+                                    <p:commandLink actionListener="#{msvcBacking.giveBlue}"
+                                                   class="color-chooser-link">
+                                        <p:spacer width="20"/>
+                                    </p:commandLink> 
+                                </div>
+                                <div class="color-chooser" style="background: #0f9d58">
+                                    <p:commandLink actionListener="#{msvcBacking.giveGreen}"
+                                                   class="color-chooser-link">
+                                        <p:spacer width="20"/>
+                                    </p:commandLink>
+                                </div>
+                                <div class="color-chooser" style="background: #e08534">
+                                    <p:commandLink actionListener="#{msvcBacking.giveOrange}"
+                                                   class="color-chooser-link">
+                                        <p:spacer width="20"/>
+                                    </p:commandLink>
+                                </div>
+                                
+                       
+                    </li>
+                   
+                    <li role="menuitem">                        
+                                               
+                            <h:commandLink action="#{user.logout}"><i class="fa fa-fw fa-sign-out"></i> Déconnexion</h:commandLink>
+                        
+                    </li>
+                </ul>
+            </li>
+            
+            <li>
+                <a href="#">
+                    <!--<p:graphicImage style="margin-top: -2px; width: 20px" 
+                    name="images/glyphicons-157-show-thumbnails-20.png" 
+                    library="sib" />                   
+                    <i class="topbar-icon material-icons animated swing fa fa-fw fa-th-large" style="font-size: 22px; font-weight: 100"></i> -->
+                    <span class="glyphicon glyphicon-th" style="font-size: 21px; font-weight: 100"></span>
+                </a>    
+                <!--<div class="color-chooser" style="background: #8470ff">
+                                    <p:commandLink actionListener="# {msvcBacking.giveLightBlue()}"
+                                                   class="color-chooser-link">
+                                        <p:spacer width="20"/>
+                                    </p:commandLink>
+                                </div>-->
+                <ul class="animated">
+                    
+                    <li style="margin-left: 13px">                       
+                        <strong>Applications métier</strong>
+                    </li>
+                    <li role="menuitem">                     
+                                             
+                            <p:link href="http://213.136.102.201:8080/e-requete/" target="_blank">
+                                 <p:graphicImage style="width: 30px" 
+                                                 name="images/logos/e-requete-1.jpg" 
+                                                 library="sib" /> E-Requête
+                            </p:link>
+                        
+                    </li>
+                    
+                    <li role="menuitem">                       
+                                                  
+                            <p:link href="http://213.136.104.26:8080/sigdcp" target="_blank">
+                                 <p:graphicImage style="width: 30px" 
+                                                 name="images/logos/sigdcp-1.jpg" 
+                                                 library="sib" /> SIGDCP
+                            </p:link>
+                        
+                    </li>
+                    
+                    <li role="menuitem">                       
+                                                   
+                            <p:link href="http://213.136.108.166:8080/bulletin-solde" target="_blank">
+                                 <p:graphicImage style="width: 30px" 
+                                                 name="images/logos/bulletin-de-solde-1.jpg" 
+                                                 library="sib" /> Bulletin de solde
+                            </p:link>
+                        
+                    </li>                    
+                    
+                    <li role="menuitem">                       
+                                                  
+                            <p:link href="http://213.136.104.25:8888/plan-action-creation-chiffrage/faces/protected/user/pages/activites-de-service.xhtml" target="_blank">
+                                 <p:graphicImage style="width: 30px" 
+                                                 name="images/logos/sigdoc-1.jpg" 
+                                                 library="sib" /> Plan d'action
+                            </p:link>
+                       
+                    </li>
+                    
+                    <li role="menuitem">                       
+                                                  
+                            <p:link href="http://213.136.104.25:8888/grb2gformation-1.0-SNAPSHOT/faces/protected/user/pages/unite-administrative.xhtml" target="_blank">
+                                 <p:graphicImage style="width: 30px" 
+                                                 name="images/logos/sigdoc-1.jpg" 
+                                                 library="sib" /> GRB
+                            </p:link>
+                        
+                    </li>
+                    
+                </ul>
+            </li>
+            
+            <li>
+                <a href="#">
+                    <i class="topbar-icon material-icons animated swing fa fa-fw fa-envelope-o" style="font-size: 22px"></i>
+                    <span class="topbar-badge animated rubberBand">5</span>
+                    <span class="topbar-item-name">Messages</span>
+                </a>
+                <ul class="animated">
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <!--<p:graphicImage name="images/avatar1.png" library="sib" width="35"/>-->
+                            <span>Rappelle moi urgent !</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <!--<p:graphicImage name="images/avatar2.png" library="sib" width="35"/>-->
+                            <span>Etats 05 Avril 2017</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <!--<p:graphicImage name="images/avatar3.png" library="sib" width="35"/>-->
+                            <span>Compte rendu</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="#" class="topbar-message">
+                            <!--<p:graphicImage name="images/avatar2.png" library="sib" width="35"/>-->
+                            <span>Validation facture</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+            <!--
+            <li>
+                <p:spacer width="15"/>
+            </li>  -->          
+            
+
+        </ul>
+    </div>
+
+</ui:composition>
