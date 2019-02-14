@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
@@ -24,25 +25,25 @@ public class MenuBuilderMapGetterFunctionRunnableImpl extends AbstractFunctionRu
 			public void run() {
 				MenuBuilder menuBuilder = __inject__(MenuBuilder.class).setRenderType(__inject__(MenuRenderTypeRowBar.class));
 				menuBuilder.addItems(
-						__inject__(MenuItemBuilder.class).setCommandableName("Layout")
+						__inject__(MenuItemBuilder.class).setCommandableName("Layout").setCommandableOutputProperty(Properties.ICON, "fa fa-child")
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index")
 							,__inject__(MenuItemBuilder.class).setCommandableName("Table"))
-						,__inject__(MenuItemBuilder.class).setCommandableName("Commandable")					
+						,__inject__(MenuItemBuilder.class).setCommandableName("Commandable").setCommandableOutputProperty(Properties.ICON, "fa fa-cube")					
 									.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Button Index").setCommandableNavigationIdentifier("commandableButtonIndexView")
 											,__inject__(MenuItemBuilder.class).setCommandableName("Commandable Navigation Index").setCommandableNavigationIdentifier("commandableNavigationIndexView")
 									)
 									
-						,__inject__(MenuItemBuilder.class).setCommandableName("Grid")
+						,__inject__(MenuItemBuilder.class).setCommandableName("Grid").setCommandableOutputProperty(Properties.ICON, "fa fa-edit")
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index").setCommandableNavigationIdentifier("gridIndexView")
 									)
-						,__inject__(MenuItemBuilder.class).setCommandableName("View")
+						,__inject__(MenuItemBuilder.class).setCommandableName("View").setCommandableOutputProperty(Properties.ICON, "fa fa-car")
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index").setCommandableNavigationIdentifier("viewIndexView")
 									)
-						,__inject__(MenuItemBuilder.class).setCommandableName("Navigation")
+						,__inject__(MenuItemBuilder.class).setCommandableName("Navigation").setCommandableOutputProperty(Properties.ICON, "fa fa-external-link")
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index").setCommandableNavigationIdentifier("navigationIndexView")
 									)
 						
-						,__inject__(MenuItemBuilder.class).setCommandableName("Entités")
+						,__inject__(MenuItemBuilder.class).setCommandableName("Entités").setCommandableOutputProperty(Properties.ICON, "fa fa-database")
 							.addChild(
 								__inject__(MenuItemBuilder.class).setCommandableName("List").addEntitiesList(MyEntity.class,VerySimpleEntity.class,VeryComplexEntity.class)	
 								,__inject__(MenuItemBuilder.class).setCommandableName("Selection pour traitement")
@@ -50,7 +51,7 @@ public class MenuBuilderMapGetterFunctionRunnableImpl extends AbstractFunctionRu
 									.addEntitySelect(VerySimpleEntity.class,"validate")
 									.addEntitySelect(VerySimpleEntity.class,"transfer")
 								)
-						,__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(MyEntity.class)
+						,__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(MyEntity.class).setCommandableOutputProperty(Properties.ICON, "fa fa-camera")
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(MyEntity.class))
 									,__inject__(MenuItemBuilder.class).setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionCreate.class).setEntityClass(MyEntity.class))
 									)

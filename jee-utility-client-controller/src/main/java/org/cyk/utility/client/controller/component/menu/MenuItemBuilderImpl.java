@@ -82,6 +82,12 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	}
 	
 	@Override
+	public MenuItemBuilder setCommandableOutputProperty(Object key, Object value) {
+		getCommandable(Boolean.TRUE).setOutputProperty(key, value);
+		return this;
+	}
+	
+	@Override
 	public MenuItemBuilder addEntitiesList(Class<?>... classes) {
 		for(Class<?> index : classes)
 			addEntityList(index);

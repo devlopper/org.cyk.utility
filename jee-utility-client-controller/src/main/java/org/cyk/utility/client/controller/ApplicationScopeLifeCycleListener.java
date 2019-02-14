@@ -18,7 +18,7 @@ import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterVal
 import org.cyk.utility.instance.InstanceBuilderImpl;
 import org.cyk.utility.instance.InstanceGetterImpl;
 import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.system.node.SystemClient;
+import org.cyk.utility.system.node.SystemNodeClient;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -39,7 +39,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	}
 	
 	protected void __initializeApplication__(Object object) {
-		SystemClient systemClient = __inject__(SystemClient.class);
+		SystemNodeClient systemClient = __inject__(SystemNodeClient.class);
 		if(__inject__(StringHelper.class).isBlank(systemClient.getName()))
 			systemClient.setName("CLIENT_APP_NAME");
 	}

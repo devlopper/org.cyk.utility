@@ -6,7 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.system.node.SystemServer;
+import org.cyk.utility.system.node.SystemNodeServer;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -18,7 +18,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	}
 	
 	protected void __initializeApplication__(Object object) {
-		SystemServer systemServer = __inject__(SystemServer.class);
+		SystemNodeServer systemServer = __inject__(SystemNodeServer.class);
 		if(__inject__(StringHelper.class).isBlank(systemServer.getName()))
 			systemServer.setName("SERVER_APP_NAME");
 	}

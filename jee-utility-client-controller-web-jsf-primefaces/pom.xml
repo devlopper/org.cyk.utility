@@ -29,6 +29,13 @@
 			<version>0.0.1</version>
 			<type>pom</type>
 		</dependency>
+		
+		<dependency>
+            <groupId>org.primefaces.themes</groupId>
+            <artifactId>atlantis</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 
 </project>

@@ -4375,7 +4375,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getMenu() {
+		return get(MENU);
+	}
+
+	public Properties setMenu(Object menu) {
+		set(MENU, menu);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String MENU = "MENU";
 	public static final String SERVICE_NOT_FOUND = "SERVICE_NOT_FOUND";
 	public static final String RENDER_MESSAGES = "RENDER_MESSAGES";
 	public static final String THROW_THROWABLE = "THROW_THROWABLE";

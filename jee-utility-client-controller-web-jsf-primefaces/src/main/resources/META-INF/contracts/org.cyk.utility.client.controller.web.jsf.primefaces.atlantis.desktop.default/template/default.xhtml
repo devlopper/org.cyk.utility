@@ -50,11 +50,13 @@
 				            
 				            <div class="layout-sidebar">
 		           				<pa:tabMenu>
-		                			<pa:tab icon="fa fa-users" title="Identification et demande de compte utilisateur">  
-		                				<h:form id="menu-form">
-					                   		<pa:menu model="#{__page__.window.menuOfScopeSession.targetModel}"/>
-					                	</h:form>   	
-					                </pa:tab>                
+		                			<c:forEach items="#{__page__.window.theme.menuTabs.get()}" var="tab" >
+					                	<pa:tab icon="#{tab.properties.icon}" title="#{tab.properties.name}">  
+			                				<h:form id="menu-form">
+						                   		<pa:menu model="#{tab.properties.menu.targetModel}" widgetVar="menu"/>
+						                	</h:form>   	
+						                </pa:tab>		
+					                </c:forEach>                
 		           				</pa:tabMenu>        
 		       				</div>
 				            

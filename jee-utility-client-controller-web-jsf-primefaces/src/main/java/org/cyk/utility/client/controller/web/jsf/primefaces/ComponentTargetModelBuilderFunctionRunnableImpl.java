@@ -221,6 +221,7 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		        		if(url!=null)
 		        			item.setUrl(url.toString());	
 		        	}
+		        	item.setIcon((String)index.getCommandable().getProperties().getIcon());
 		        	__buildMenuAddMenuElement__(parent, item);	
 		        }else {
 		        	DefaultSubMenu subMenu = new DefaultSubMenu(index.getCommandable().getName());

@@ -15,6 +15,7 @@ public interface MenuItemBuilder extends VisibleComponentBuilder<MenuItem> {
 	MenuItemBuilder setCommandableNavigationIdentifier(Object identifier);
 	MenuItemBuilder setCommandableNavigationIdentifierAndParameters(Object identifier,Object[] parameters);
 	MenuItemBuilder setCommandableNavigationIdentifierBuilderSystemAction(SystemAction systemAction,Object...parameters);
+	MenuItemBuilder setCommandableOutputProperty(Object key,Object value);
 	
 	MenuItemBuilder addEntitiesList(Class<?>...classes);
 	MenuItemBuilder addEntityList(Class<?> aClass);

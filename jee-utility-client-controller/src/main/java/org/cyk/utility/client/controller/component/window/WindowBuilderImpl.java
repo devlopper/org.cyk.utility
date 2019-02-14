@@ -15,7 +15,7 @@ import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.system.node.SystemClient;
+import org.cyk.utility.system.node.SystemNodeClient;
 
 public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Window> implements WindowBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -88,7 +88,7 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		OutputStringTextBuilder outputStringText = getApplicationName();
 		if(outputStringText == null) {
 			outputStringText = __inject__(OutputStringTextBuilder.class);
-			outputStringText.setValue(__inject__(SystemClient.class).getName());
+			outputStringText.setValue(__inject__(SystemNodeClient.class).getName());
 			outputStringText.addStyleClasses("cyk_component_window_application_name");
 			setOutputStringTexts("applicationName",outputStringText);
 		}
