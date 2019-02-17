@@ -56,6 +56,14 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	}
 	
 	@Override
+	public Objectable setPropertyIfNull(Object key, Object value) {
+		Object currentValue = getProperty(key);
+		if(currentValue == null)
+			setProperty(key, value);
+		return this;
+	}
+	
+	@Override
 	public Objectable copyProperty(Object key, Properties properties) {
 		setProperty(key, Properties.getFromPath(properties, key));
 		return this;

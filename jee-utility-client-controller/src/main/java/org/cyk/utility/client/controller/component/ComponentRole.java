@@ -1,5 +1,10 @@
 package org.cyk.utility.client.controller.component;
 
+/**
+ * Role of a component
+ * @author CYK
+ *
+ */
 public enum ComponentRole {
 
 	TITLE
@@ -12,4 +17,9 @@ public enum ComponentRole {
 	,COLUMN
 	,INPUT
 	,OUTPUT
+	,CREATOR
+	,MODIFIER
+	,REMOVER
+	,COLLECTION_PROCESSOR
+	,COLLECTION_ITEM_PROCESSOR
 }

@@ -9,6 +9,7 @@ import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapper;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 
@@ -19,23 +20,40 @@ public class NavigationIdentifierToUrlStringMapperFunctionRunnableImpl extends A
 		setRunnable(new Runnable() {
 			@Override
 			public void run() {
+				@SuppressWarnings("unchecked")
+				Map<String,Set<NavigationCase>> map = (Map<String, Set<NavigationCase>>) Properties.getFromPath(getFunction().getProperties(),Properties.MAP);
+				Object context = Properties.getFromPath(getFunction().getProperties(),Properties.CONTEXT);
+				FacesContext facesContext = null;
+				if(context instanceof FacesContext)
+					facesContext = (FacesContext) context;
 				Object identifier = getFunction().getIdentifier();
 				if(identifier == null) {
 					
 				}
 				
 				if(identifier != null) {
-					ConfigurableNavigationHandler configNavHandler = (ConfigurableNavigationHandler)FacesContext.getCurrentInstance().getApplication().getNavigationHandler(); //assumes you already have an instance of FacesContext, named ctxt
-					Map<String,Set<NavigationCase>> map = configNavHandler.getNavigationCases();
-					if(map!=null) {
+					if(map == null) {
+						if(facesContext == null)
+							facesContext = FacesContext.getCurrentInstance();
+						if(facesContext != null) {
+							ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler)facesContext.getApplication().getNavigationHandler();
+							if(configurableNavigationHandler!=null)
+								map = configurableNavigationHandler.getNavigationCases();
+						}
+					}
+					
+					if(map == null)
+						throw new RuntimeException("No navigation identifier map can be found to derive "+identifier);
+					
+					if(map != null) {	
 						Boolean found = null;
 						for(Map.Entry<String,Set<NavigationCase>> indexEntry : map.entrySet()) {
 							for(NavigationCase indexNavigationCase : indexEntry.getValue()) {
 								if(indexNavigationCase.getFromOutcome().equals(identifier.toString())) {
 									found= Boolean.TRUE;
 									
-									String url = __inject__(UniformResourceIdentifierStringBuilder.class).setRequest(FacesContext.getCurrentInstance().getExternalContext().getRequest())
-											.setPath(indexNavigationCase.getToViewId(FacesContext.getCurrentInstance()))
+									String url = __inject__(UniformResourceIdentifierStringBuilder.class).setRequest(facesContext.getExternalContext().getRequest())
+											.setPath(indexNavigationCase.getToViewId(facesContext))
 											.execute().getOutput();
 									setOutput(url);	
 									

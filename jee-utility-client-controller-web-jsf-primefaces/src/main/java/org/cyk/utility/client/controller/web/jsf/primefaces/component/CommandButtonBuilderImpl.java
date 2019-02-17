@@ -1,78 +1,48 @@
-package org.cyk.utility.client.controller.web.jsf.primefaces.builder;
+package org.cyk.utility.client.controller.web.jsf.primefaces.component;
 
 import java.io.Serializable;
 
-import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.Events;
 import org.cyk.utility.client.controller.web.ComponentHelper;
+import org.cyk.utility.client.controller.web.ValueExpressionMap;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionProcess;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionSelect;
-import org.cyk.utility.system.action.SystemActionUpdate;
 import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.behavior.ajax.AjaxBehaviorListenerImpl;
 import org.primefaces.component.commandbutton.CommandButton;
 
-@Deprecated
-public class CommandButtonBuilder extends AbstractBuilder implements Serializable {
+public class CommandButtonBuilderImpl extends AbstractComponentBuilderImpl<CommandButton,Commandable> implements CommandButtonBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	public CommandButton build(Commandable commandable) {
+
+	@Override
+	protected CommandButton __execute__(Commandable commandable, ValueExpressionMap valueExpressionMap) throws Exception {
 		CommandButton commandButton = new CommandButton();
 		commandButton.setValue(commandable.getName());
-		if(__inject__(CollectionHelper.class).contains(commandable.getRoles(), ComponentRole.CREATOR)) {
-			
-		}
-		String onClickValueExpressionString = null;
+		
 		if(commandable.getNavigation()!=null) {
 			commandButton.setType("button");
 			String url = null;
-			SystemAction action = commandable.getNavigation().getSystemAction();
-			if(action == null) {
-				if(commandable.getCommand()!=null && commandable.getCommand().getFunction()!=null)
-					action = commandable.getCommand().getFunction().getAction();
-			}
-			
-			String systemActionClass = null;
-			if(action instanceof SystemActionCreate) {
+			if(__injectCollectionHelper__().contains(commandable.getRoles(), ComponentRole.COLLECTION_PROCESSOR)) {
 				url = commandable.getNavigation().getUniformResourceLocator().toString();
-			}else {
-				if(action instanceof SystemActionCreate)
-					systemActionClass = "systemActionCreateClass";
-				else if(action instanceof SystemActionRead)
-					systemActionClass = "systemActionReadClass";
-				else if(action instanceof SystemActionUpdate)
-					systemActionClass = "systemActionUpdateClass";
-				else if(action instanceof SystemActionDelete)
-					systemActionClass = "systemActionDeleteClass";
-				else if(action instanceof SystemActionSelect)
-					systemActionClass = "systemActionSelectClass";
-				else if(action instanceof SystemActionProcess)
-					systemActionClass = "systemActionProcessClass";
-				
-				if(systemActionClass!=null)
-					url = "#{indexRow.getUrlBySystemActionClass(componentHelper."+systemActionClass+")}";
+			}else if(__injectCollectionHelper__().contains(commandable.getRoles(), ComponentRole.COLLECTION_ITEM_PROCESSOR)) {
+				SystemAction action = commandable.getNavigation().getSystemAction();	
+				String methodName = __injectStringHelper__().applyCase(StringUtils.substringBefore(action.getClass().getSimpleName(),"Impl")+"Class",Case.FIRST_CHARACTER_LOWER);
+				if(__injectStringHelper__().isNotBlank(methodName))
+					url = "#{indexRow.getUrlBySystemActionClass(componentHelper."+methodName+")}";
 			}
-				
-			
-			
-			if(__inject__(StringHelper.class).isNotBlank(url)) {
-				onClickValueExpressionString = "window.open('"+url+"','_self');return false";
-			}
-			
+			if(__inject__(StringHelper.class).isNotBlank(url))
+				valueExpressionMap.set("onclick",__buildValueExpressionString__("window.open('"+url+"','_self');return false;"));
 		}else if(commandable.getCommand()!=null) {
 			commandButton.setType("submit");
 			/*String update = __inject__(ComponentHelper.class).getGlobalMessagesTargetInlineComponentIdentifier()
@@ -109,13 +79,10 @@ public class CommandButtonBuilder extends AbstractBuilder implements Serializabl
 		}else {
 			commandButton.setType("button");
 			if(commandable.getProperties().getOnClick()!=null)
-				onClickValueExpressionString = commandable.getProperties().getOnClick().toString();
+				valueExpressionMap.set("onclick",__buildValueExpressionString__(commandable.getProperties().getOnClick().toString())) ;
 		}
 		
-		if(__inject__(StringHelper.class).isNotBlank(onClickValueExpressionString)) {
-			ValueExpression valueExpression = __buildValueExpressionString__(onClickValueExpressionString);
-			__setValueExpression__(commandButton, "onclick", valueExpression);	
-		}
+		
 		
 		Events events = commandable.getEvents();
 		if(__inject__(CollectionHelper.class).isNotEmpty(events)) {

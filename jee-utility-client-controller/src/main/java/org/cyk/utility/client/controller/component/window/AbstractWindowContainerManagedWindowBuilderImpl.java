@@ -34,7 +34,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	private Class<? extends Row> rowClass;
 	private WindowContainerManaged windowContainerManaged;
 	private WindowRenderType windowRenderType;
-	private Object request,context;
+	private Object request,context,navigationIdentifierStringMap;
 	
 	@Override
 	protected WindowBuilder __execute__() throws Exception {
@@ -54,7 +54,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 			MenuBuilderMap menuMap = getMenuMap();
 			if(menuMap == null)
 				menuMap = __inject__(MenuBuilderMapGetter.class).execute().getOutput();
-			window.setMenuMap(menuMap);	
+			//window.setMenuMap(menuMap);	
 		}
 		
 		SystemAction systemAction = getSystemAction();
@@ -249,6 +249,17 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	@Override
 	public WindowContainerManagedWindowBuilder setContext(Object context) {
 		this.context = context;
+		return this;
+	}
+	
+	@Override
+	public Object getNavigationIdentifierStringMap() {
+		return navigationIdentifierStringMap;
+	}
+	
+	@Override
+	public WindowContainerManagedWindowBuilder setNavigationIdentifierStringMap(Object navigationIdentifierStringMap) {
+		this.navigationIdentifierStringMap = navigationIdentifierStringMap;
 		return this;
 	}
 	

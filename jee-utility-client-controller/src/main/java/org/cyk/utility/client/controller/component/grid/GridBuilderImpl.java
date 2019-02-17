@@ -51,6 +51,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	@Override
 	protected void __execute__(Grid grid) {
 		super.__execute__(grid);
+		
 		Objects objects = getObjects();
 		if(__injectCollectionHelper__().isNotEmpty(objects)) {
 			for(Object index : objects.get()) {
@@ -82,39 +83,26 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 			
 			ColumnBuilder commandablesColumn = getCommandablesColumn();
 			if(Boolean.TRUE.equals(layoutType.getIsHasCommandablesColumn())) {
-				if(commandablesColumn == null) {
+				if(commandablesColumn == null)
 					commandablesColumn = getCommandablesColumn(Boolean.TRUE);	
-				}
+				
 				ViewBuilder commandablesColumnView = commandablesColumn.getBodyView();
-				if(commandablesColumnView == null) {
+				if(commandablesColumnView == null)
 					commandablesColumnView = commandablesColumn.getBodyView(Boolean.TRUE);
-				}
-					
+				
 				if(commandablesColumnView!=null) {
-					/*
-					CommandableBuilderByClassMap commandableByClassMap = commandablesColumnView.getCommandableByClassMap();
-					if(Boolean.TRUE.equals(__inject__(MapHelper.class).isNotEmpty(commandableByClassMap))) {
-						commandablesColumnView.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE);
-						for(@SuppressWarnings("rawtypes") Map.Entry<Class, CommandableBuilder> entry : commandableByClassMap.getEntries()) {
-							CommandableBuilder commandableBuilder = entry.getValue();
-							commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction((SystemAction) __inject__(entry.getKey()));
-							commandablesColumnView.getComponentsBuilder(Boolean.TRUE).addComponents(commandableBuilder);
-						}
-					}
-					*/
-					
 					CommandableBuilders commandables = commandablesColumnView.getCommandables();
 					if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(commandables))) {
 						commandablesColumnView.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE);
 						for(CommandableBuilder index : commandables.get()) {
-							//index.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction((SystemAction) __inject__(entry.getKey()));
-							__inject__(GridBuilderCommandableBuilderProcessor.class).setGridBuilder(this).setCommandableBuilder(index).execute();
+							//__inject__(GridBuilderCommandableBuilderProcessor.class).setGridBuilder(this).setCommandableBuilder(index).execute();
 							commandablesColumnView.getComponentsBuilder(Boolean.TRUE).addComponents(index);
 						}
 					}
 				}
 			}
-			if(commandablesColumn!=null)
+			if(commandablesColumn!=null && commandablesColumn.getBodyView()!=null && commandablesColumn.getBodyView().getComponentsBuilder()!=null 
+					&& __inject__(CollectionHelper.class).isNotEmpty(commandablesColumn.getBodyView().getComponentsBuilder().getComponents()))
 				columns.add(commandablesColumn);
 			
 			grid.setColumns(__inject__(Columns.class));
@@ -218,6 +206,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 				}
 			}
 		}
+		
 	}
 	
 	@Override

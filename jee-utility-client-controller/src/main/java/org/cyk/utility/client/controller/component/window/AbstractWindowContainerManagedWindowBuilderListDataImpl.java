@@ -4,16 +4,18 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.Controller;
+import org.cyk.utility.client.controller.component.ComponentRole;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl extends AbstractWindowContainerManagedWindowBuilderListImpl implements WindowContainerManagedWindowBuilderListData,Serializable {
@@ -36,19 +38,50 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 			if(columnsFieldNames!=null)
 				gridBuilder.addColumnsByFieldNames(columnsFieldNames.get());
 			
+			gridBuilder.getViewMap(Boolean.TRUE).set(ViewMap.HEADER,__inject__(ViewBuilder.class));
+			
 			/* Create new instance */
-			SystemAction systemActionCreate = __inject__(SystemActionCreate.class);
+			SystemAction systemActionCreate = __inject__(SystemActionCreate.class).setEntityClass(gridBuilder.getRowDataClass());
+			
+			CommandableBuilder commandable = __inject__(CommandableBuilder.class);
+			commandable.addRoles(ComponentRole.COLLECTION_PROCESSOR,ComponentRole.CREATOR);
+			commandable.getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(systemActionCreate);
+			commandable.getNavigation().getProperties().setContext(getContext());
+			commandable.getNavigation().getProperties().setMap(getNavigationIdentifierStringMap());
+			gridBuilder.getViewMap(Boolean.TRUE).get(ViewMap.HEADER).getComponentsBuilder(Boolean.TRUE).addComponents(commandable);
+			
+			SystemAction systemActionUpdate = __inject__(SystemActionUpdate.class).setEntityClass(gridBuilder.getRowDataClass());
+			
+			commandable = __inject__(CommandableBuilder.class);
+			commandable.addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.MODIFIER);
+			commandable.getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(systemActionUpdate);
+			commandable.getNavigation().getProperties().setContext(getContext());
+			commandable.getNavigation().getProperties().setMap(getNavigationIdentifierStringMap());
+			gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).addComponents(commandable);
+			
+			SystemAction systemActionDelete = __inject__(SystemActionDelete.class).setEntityClass(gridBuilder.getRowDataClass());
+			
+			commandable = __inject__(CommandableBuilder.class);
+			commandable.addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.REMOVER);
+			commandable.getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(systemActionDelete);
+			commandable.getNavigation().getProperties().setContext(getContext());
+			commandable.getNavigation().getProperties().setMap(getNavigationIdentifierStringMap());
+			gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).addComponents(commandable);
 			
 			/* Create new instance using normal window */
+			/*
 			gridBuilder.getCreateRowCommandable(Boolean.TRUE).getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(systemActionCreate.setEntityClass(gridBuilder.getRowDataClass()));
 			
+			gridBuilder.getCreateRowCommandable(Boolean.TRUE).getNavigation(Boolean.TRUE).getProperties().setContext(getContext());
+			gridBuilder.getCreateRowCommandable(Boolean.TRUE).getNavigation(Boolean.TRUE).getProperties().setMap(getNavigationIdentifierStringMap());
+			*/
 			/* Create new instance using dialog window */
 			/*
 			gridBuilder.getCreateRowCommandable(Boolean.TRUE).setWindowRenderTypeClass(WindowRenderTypeDialog.class);
 			gridBuilder.getCreateRowCommandable(Boolean.TRUE).getCommand(Boolean.TRUE).setWindowContainerManaged(getWindowContainerManaged());
 			gridBuilder.getCreateRowCommandable(Boolean.TRUE).getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(systemActionCreate);
 			*/
-			gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandablesBySystemActionClasses(SystemActionRead.class,SystemActionUpdate.class,SystemActionDelete.class);
+			//gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandablesBySystemActionClasses(SystemActionRead.class/*,SystemActionUpdate.class,SystemActionDelete.class*/);
 			
 			LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
 			gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);

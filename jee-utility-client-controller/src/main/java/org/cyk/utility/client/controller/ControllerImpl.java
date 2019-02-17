@@ -6,6 +6,8 @@ import java.util.Collection;
 import javax.inject.Singleton;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.data.Data;
+import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.value.ValueUsageType;
 
 @Singleton
@@ -138,6 +140,14 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 	public <ENTITY> Controller redirect(Class<ENTITY> aClass, Object identifier) {
 		Properties properties = new Properties().setValueUsageType(ValueUsageType.BUSINESS);
 		return redirect(aClass, identifier,properties);
+	}
+	
+	/**/
+	
+	@Override
+	public Controller act(SystemAction systemAction, Data data) {
+		// TODO Auto-generated method stub
+		return this;
 	}
 	
 	/**/

@@ -29,12 +29,12 @@ public abstract class AbstractCommandFunctionFunctionRunnableImpl extends Abstra
 				CommandFunction function = (CommandFunction) getFunction();
 				Object data = function.getProperties().getData();
 				SystemAction action = function.getAction();
-				__act__(data,action);
+				__act__(action,data);
 			}
 		});
 	}
 	
-	protected void __act__(Object data,SystemAction action) {
+	protected void __act__(SystemAction action,Object data) {
 		if(action!=null) {
 			Properties properties = new Properties();
 			Objects entities = action.getEntities();

@@ -12,6 +12,7 @@ import org.cyk.utility.internationalization.InternalizationKeyStringType;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionCustom;
 
 public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<Commandable> implements CommandableBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -36,9 +37,8 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		commandable.setRenderType(renderType);
 		
 		NavigationBuilder navigation = getNavigation();
-		if(navigation!=null) {
+		if(navigation!=null) 
 			commandable.setNavigation(navigation.execute().getOutput());
-		}
 		
 		String name = getName();
 		if(__injectStringHelper__().isBlank(name)) {
@@ -141,8 +141,26 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	}
 	
 	@Override
+	public CommandableBuilder setCommandFunctionAction(SystemAction systemAction) {
+		getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(systemAction);
+		return this;
+	}
+	
+	@Override
+	public CommandableBuilder setCommandFunctionActionCustom(Object actionIdentifier) {
+		setCommandFunctionAction(__inject__(SystemActionCustom.class).setIdentifier(actionIdentifier));
+		return this;
+	}
+	
+	@Override
 	public CommandableBuilder addCommandFunctionTryRunRunnableAt(Runnable runnable, Integer index) {
 		__inject__(CollectionHelper.class).addElementAt(getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE), index, runnable);
+		return this;
+	}
+	
+	@Override
+	public CommandableBuilder setCommandFunction(CommandFunction function) {
+		getCommand(Boolean.TRUE).setFunction(function);
 		return this;
 	}
 	

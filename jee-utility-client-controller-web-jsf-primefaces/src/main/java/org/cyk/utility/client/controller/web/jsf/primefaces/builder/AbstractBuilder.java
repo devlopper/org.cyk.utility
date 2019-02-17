@@ -10,7 +10,7 @@ import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 
 public abstract class AbstractBuilder extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	/**/
 	
 	protected static JavaServerFacesHelper __injectJavaServerFacesHelper__() {

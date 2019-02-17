@@ -3,6 +3,8 @@ package org.cyk.utility.client.controller;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.data.Data;
+import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.value.ValueUsageType;
 
 public interface Controller extends ControllerServiceProvider<Object> {
@@ -33,4 +35,7 @@ public interface Controller extends ControllerServiceProvider<Object> {
 	<ENTITY> Controller redirect(Class<ENTITY> aClass,Object identifier,Properties properties);
 	<ENTITY> Controller redirect(Class<ENTITY> aClass,Object identifier);
 	
+	/**/
+	
+	Controller act(SystemAction systemAction,Data data);
 }

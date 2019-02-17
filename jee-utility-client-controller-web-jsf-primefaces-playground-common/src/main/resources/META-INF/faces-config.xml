@@ -50,6 +50,18 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>gridCreateView</from-outcome>
+			<to-view-id>/grid/create.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>gridEditView</from-outcome>
+			<to-view-id>/grid/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>viewIndexView</from-outcome>
 			<to-view-id>/view/index.jsf</to-view-id>
 			<redirect />

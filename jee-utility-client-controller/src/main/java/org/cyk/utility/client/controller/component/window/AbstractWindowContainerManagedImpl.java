@@ -7,6 +7,7 @@ import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
+import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.theme.ThemeClassGetter;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
@@ -102,6 +103,8 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				windowContainerManagedWindowBuilder.setRequest(__getRequest__());
 			if(windowContainerManagedWindowBuilder.getContext() == null)
 				windowContainerManagedWindowBuilder.setContext(__getContext__());
+			if(windowContainerManagedWindowBuilder.getNavigationIdentifierStringMap() == null)
+				windowContainerManagedWindowBuilder.setNavigationIdentifierStringMap(__getNavigationIdentifierStringMap__());
 			windowBuilder = windowContainerManagedWindowBuilder.setWindowContainerManaged(this).execute().getOutput();
 		}
 		
@@ -126,7 +129,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	}
 	
 	protected MenuBuilderMap __getMenuBuilderMap__() {
-		return null;
+		return __inject__(MenuBuilderMapGetter.class).execute().getOutput();
 	}
 	
 	protected WindowBuilder __injectWindowBuilder__() {
@@ -169,6 +172,11 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	
 	protected Object __getContext__() {
 		//TODO write ContextGetter
+		return null;
+	}
+	
+	protected Object __getNavigationIdentifierStringMap__() {
+		//TODO write NavigationIdentifierStringMapGetter
 		return null;
 	}
 	

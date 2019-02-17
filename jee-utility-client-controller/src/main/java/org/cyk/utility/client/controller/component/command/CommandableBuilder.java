@@ -35,6 +35,9 @@ public interface CommandableBuilder extends VisibleComponentBuilder<Commandable>
 	CommandableBuilder setNavigationSystemAction(SystemAction systemAction);
 	CommandableBuilder setNavigationIdentifierBuilderSystemAction(SystemAction systemAction);
 	
+	CommandableBuilder setCommandFunction(CommandFunction function);
+	CommandableBuilder setCommandFunctionAction(SystemAction systemAction);
+	CommandableBuilder setCommandFunctionActionCustom(Object actionIdentifier);
 	CommandableBuilder setCommandFunctionActionClass(Class<? extends SystemAction> systemActionClass);
 	
 	CommandableBuilder setCommandFunctionData(Data data);

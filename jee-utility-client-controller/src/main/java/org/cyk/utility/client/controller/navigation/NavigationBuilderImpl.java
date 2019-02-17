@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.navigation;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNameStringBuilder;
@@ -25,6 +26,8 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	@Override
 	protected Navigation __execute__() throws Exception {
 		Navigation navigation = __inject__(Navigation.class);
+		Object context = Properties.getFromPath(getProperties(),Properties.CONTEXT);
+		Object identifierToUrlStringMap = Properties.getFromPath(getProperties(),Properties.MAP);
 		
 		SystemAction systemAction = getSystemAction();
 		if(systemAction == null) {
@@ -37,8 +40,9 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 		Object identifier = getIdentifier();
 		if(identifier == null) {
 			NavigationIdentifierStringBuilder identifierBuilder = getIdentifierBuilder();
-			if(identifierBuilder!=null)
+			if(identifierBuilder!=null) {
 				identifier = identifierBuilder.execute().getOutput();
+			}
 		}
 		
 		if(identifier!=null) {
@@ -47,7 +51,9 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 			if(url==null) {
 				url = __inject__(UrlBuilder.class);
 				
-				String urlString = __inject__(NavigationIdentifierToUrlStringMapper.class).setIdentifier(identifier).execute().getOutput();
+				NavigationIdentifierToUrlStringMapper identifierToUrlStringMapper = __inject__(NavigationIdentifierToUrlStringMapper.class);
+				__process__(identifierToUrlStringMapper, context, identifierToUrlStringMap);
+				String urlString = identifierToUrlStringMapper.setIdentifier(identifier).execute().getOutput();
 				if(__injectStringHelper__().isBlank(urlString) && systemAction!=null) {
 					Class<?> aClass = systemAction.getEntities() == null ? null : systemAction.getEntities().getElementClass();
 					//Class<?> aClass = systemAction.getEntities(Boolean.TRUE).getElementClass();
@@ -58,7 +64,9 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 						systemAction.getEntities().setElementClass(aClass);
 					
 					if(__injectStringHelper__().isNotBlank(identifier02)) {
-						urlString = __inject__(NavigationIdentifierToUrlStringMapper.class).setIdentifier(identifier02).execute().getOutput();
+						NavigationIdentifierToUrlStringMapper identifierToUrlStringMapper02 = __inject__(NavigationIdentifierToUrlStringMapper.class);
+						__process__(identifierToUrlStringMapper02, context, identifierToUrlStringMap);
+						urlString = identifierToUrlStringMapper02.setIdentifier(identifier02).execute().getOutput();
 						if(__injectStringHelper__().isNotBlank(urlString)) {
 							identifier = identifier02;
 						}
@@ -72,8 +80,8 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 				ObjectByObjectMap parameterMap = getParameterMap();
 				Boolean isDeriveParametersFromSystemAction = getIsDeriveParametersFromSystemAction();
 				if((isDeriveParametersFromSystemAction == null || Boolean.TRUE.equals(isDeriveParametersFromSystemAction)) && systemAction!=null) {
-					NavigationIdentifierStringBuilder identifierBuilder = getIdentifierBuilder();
-					if(identifierBuilder!=null) {
+					//NavigationIdentifierStringBuilder identifierBuilder = getIdentifierBuilder();
+					//if(identifierBuilder!=null) {
 						if(parameterMap == null) {
 							parameterMap = __inject__(ObjectByObjectMap.class);
 							parameterMap.setIsSequential(Boolean.TRUE);	
@@ -117,7 +125,7 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 									,__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(systemAction.getNextAction())
 									);
 						}
-					}
+					//}
 				}
 				url.getString(Boolean.TRUE).getUniformResourceIdentifierString(Boolean.TRUE).setParameterMap(parameterMap);
 			}
@@ -139,10 +147,12 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 					}
 			}
 		}
-		
-		
-		
 		return navigation;
+	}
+	
+	private void __process__(NavigationIdentifierToUrlStringMapper identifierToUrlStringMapper,Object context,Object identifierToUrlStringMap) {
+		identifierToUrlStringMapper.setPropertyIfNull(Properties.CONTEXT,context);
+		identifierToUrlStringMapper.setPropertyIfNull(Properties.MAP,identifierToUrlStringMap);
 	}
 	
 	@Override

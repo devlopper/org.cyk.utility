@@ -34,6 +34,7 @@
 				
 				<!-- Because we do not know how to reference value on action expression -->
 				<!-- update="inputGlobalMessages,inputGrowlMessages,#{componentHelper.globalDialogMessagesComponentIdentifier}" -->
+				
 				<p:commandButton
 					id="#{value.properties.identifier}"
 					value="#{value.targetModel.value}"
@@ -48,7 +49,10 @@
 						</c:if>
 					</c:forEach>
 				</p:commandButton>
-			
+				
+				<!--
+				<p:commandButton binding="#{value.targetModel}" />
+				-->
 		</ui:define>
 	</ui:decorate>	
 
