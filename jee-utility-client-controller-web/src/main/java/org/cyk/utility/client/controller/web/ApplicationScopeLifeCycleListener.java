@@ -16,12 +16,15 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
-		__inject__(FunctionRunnableMap.class).set(SessionAttributeSetterImpl.class, SessionAttributeSetterFunctionRunnableImpl.class);
-		__inject__(FunctionRunnableMap.class).set(SessionAttributeGetterImpl.class, SessionAttributeGetterFunctionRunnableImpl.class);
-		__inject__(FunctionRunnableMap.class).set(SessionUserGetterImpl.class, SessionUserGetterFunctionRunnableImpl.class);
+		__inject__(FunctionRunnableMap.class).set(SessionAttributeSetterImpl.class, SessionAttributeSetterFunctionRunnableImpl.class,LEVEL);
+		__inject__(FunctionRunnableMap.class).set(SessionAttributeGetterImpl.class, SessionAttributeGetterFunctionRunnableImpl.class,LEVEL);
+		__inject__(FunctionRunnableMap.class).set(SessionUserGetterImpl.class, SessionUserGetterFunctionRunnableImpl.class,LEVEL);
 	}
 	
 	@Override
 	public void __destroy__(Object object) {}
 	
+	/**/
+	
+	public static final Integer LEVEL = new Integer(org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener.LEVEL+1);
 }

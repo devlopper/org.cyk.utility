@@ -27,7 +27,7 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	protected Navigation __execute__() throws Exception {
 		Navigation navigation = __inject__(Navigation.class);
 		Object context = Properties.getFromPath(getProperties(),Properties.CONTEXT);
-		Object identifierToUrlStringMap = Properties.getFromPath(getProperties(),Properties.MAP);
+		Object uniformResourceLocatorMap = Properties.getFromPath(getProperties(),Properties.UNIFORM_RESOURCE_LOCATOR_MAP);
 		
 		SystemAction systemAction = getSystemAction();
 		if(systemAction == null) {
@@ -52,7 +52,7 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 				url = __inject__(UrlBuilder.class);
 				
 				NavigationIdentifierToUrlStringMapper identifierToUrlStringMapper = __inject__(NavigationIdentifierToUrlStringMapper.class);
-				__process__(identifierToUrlStringMapper, context, identifierToUrlStringMap);
+				__process__(identifierToUrlStringMapper, context, uniformResourceLocatorMap);
 				String urlString = identifierToUrlStringMapper.setIdentifier(identifier).execute().getOutput();
 				if(__injectStringHelper__().isBlank(urlString) && systemAction!=null) {
 					Class<?> aClass = systemAction.getEntities() == null ? null : systemAction.getEntities().getElementClass();
@@ -65,7 +65,7 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 					
 					if(__injectStringHelper__().isNotBlank(identifier02)) {
 						NavigationIdentifierToUrlStringMapper identifierToUrlStringMapper02 = __inject__(NavigationIdentifierToUrlStringMapper.class);
-						__process__(identifierToUrlStringMapper02, context, identifierToUrlStringMap);
+						__process__(identifierToUrlStringMapper02, context, uniformResourceLocatorMap);
 						urlString = identifierToUrlStringMapper02.setIdentifier(identifier02).execute().getOutput();
 						if(__injectStringHelper__().isNotBlank(urlString)) {
 							identifier = identifier02;
@@ -150,9 +150,9 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 		return navigation;
 	}
 	
-	private void __process__(NavigationIdentifierToUrlStringMapper identifierToUrlStringMapper,Object context,Object identifierToUrlStringMap) {
+	private void __process__(NavigationIdentifierToUrlStringMapper identifierToUrlStringMapper,Object context,Object uniformResourceLocatorMap) {
 		identifierToUrlStringMapper.setPropertyIfNull(Properties.CONTEXT,context);
-		identifierToUrlStringMapper.setPropertyIfNull(Properties.MAP,identifierToUrlStringMap);
+		identifierToUrlStringMapper.setPropertyIfNull(Properties.UNIFORM_RESOURCE_LOCATOR_MAP,uniformResourceLocatorMap);
 	}
 	
 	@Override

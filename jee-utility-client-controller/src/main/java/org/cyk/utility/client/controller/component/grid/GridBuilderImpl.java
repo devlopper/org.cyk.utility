@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
+import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
@@ -202,6 +204,8 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 			if(__injectCollectionHelper__().isNotEmpty(entries)) {
 				grid.setViewMap(__inject__(ViewMap.class));
 				for(Map.Entry<String,ViewBuilder> index : entries) {
+					index.getValue().setPropertyIfNull(Properties.CONTEXT, Properties.getFromPath(getProperties(), Properties.CONTEXT));
+					index.getValue().setPropertyIfNull(Properties.UNIFORM_RESOURCE_LOCATOR_MAP, Properties.getFromPath(getProperties(), Properties.UNIFORM_RESOURCE_LOCATOR_MAP));
 					grid.getViewMap().set(index.getKey(),index.getValue().execute().getOutput());
 				}
 			}
@@ -347,6 +351,25 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	}
 	
 	@Override
+	public ViewBuilder getViewHeader(Boolean injectIfNull) {
+		ViewBuilder view = null;
+		ViewBuilderMap map = getViewMap(injectIfNull);
+		if(map!=null) {
+			view = map.get(ViewMap.HEADER);
+			if(view == null && Boolean.TRUE.equals(injectIfNull))
+				map.set(ViewMap.HEADER,view = __inject__(ViewBuilder.class));
+		}
+		return view;
+	}
+	
+	@Override
+	public GridBuilder addComponentBuildersToViewHeader(ComponentBuilder<?>... components) {
+		for(ComponentBuilder<?> index : components)
+			getViewHeader(Boolean.TRUE).addComponentBuilder(index);
+		return this;
+	}
+	
+	@Override
 	public Objects getObjects() {
 		return objects;
 	}
@@ -410,6 +433,22 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	public ViewBuilder getCommandablesColumnBodyView(Boolean injectIfNull) {
 		ColumnBuilder column = getCommandablesColumn(injectIfNull);
 		return column == null ? null : column.getBodyView(injectIfNull);
+	}
+	
+	@Override
+	public GridBuilder addCommandablesToColumnBodyView(Collection<CommandableBuilder> commandables) {
+		if(__injectCollectionHelper__().isNotEmpty(commandables))
+			for(CommandableBuilder index : commandables) {
+				index.setPropertyIfNull(Properties.CONTEXT, getContext());
+				index.setPropertyIfNull(Properties.UNIFORM_RESOURCE_LOCATOR_MAP, getUniformResourceLocatorMap());
+				getCommandablesColumnBodyView(Boolean.TRUE).addComponentBuilder(index);
+			}
+		return this;
+	}
+	
+	@Override
+	public GridBuilder addCommandablesToColumnBodyView(CommandableBuilder... commandables) {
+		return addCommandablesToColumnBodyView(__injectCollectionHelper__().instanciate(commandables));
 	}
 	
 	@Override

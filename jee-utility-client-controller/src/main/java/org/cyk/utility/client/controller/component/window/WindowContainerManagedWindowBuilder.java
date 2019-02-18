@@ -44,6 +44,6 @@ public interface WindowContainerManagedWindowBuilder extends FunctionWithPropert
 	Object getContext();
 	WindowContainerManagedWindowBuilder setContext(Object context);
 	
-	Object getNavigationIdentifierStringMap();
-	WindowContainerManagedWindowBuilder setNavigationIdentifierStringMap(Object navigationIdentifierStringMap);
+	Object getUniformResourceLocatorMap();
+	WindowContainerManagedWindowBuilder setUniformResourceLocatorMap(Object uniformResourceLocatorMap);
 }

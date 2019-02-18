@@ -62,7 +62,7 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 		commandable.addRoles(ComponentRole.CREATOR);
 		commandable.setNavigationIdentifier("gridCreateView");
 		commandable.getNavigation().getProperties().setContext(__getContext__());
-		commandable.getNavigation().getProperties().setMap(__getNavigationIdentifierStringMap__());
+		commandable.getNavigation().getProperties().setMap(__getUniformResourceLocatorMap__());
 		gridBuilder.getViewMap(Boolean.TRUE).get(ViewMap.HEADER).getComponentsBuilder(Boolean.TRUE).addComponents(commandable);
 		
 		commandable = __inject__(CommandableBuilder.class).setName("Modifier");
@@ -70,7 +70,7 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 		commandable.setNavigationIdentifier("gridEditView");
 		commandable.getNavigation().setSystemAction(__inject__(SystemActionUpdate.class).setEntityClass(Data.class));
 		commandable.getNavigation().getProperties().setContext(__getContext__());
-		commandable.getNavigation().getProperties().setMap(__getNavigationIdentifierStringMap__());
+		commandable.getNavigation().getProperties().setMap(__getUniformResourceLocatorMap__());
 		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).addComponents(commandable);
 		
 		commandable = __inject__(CommandableBuilder.class).setName("Supprimer");

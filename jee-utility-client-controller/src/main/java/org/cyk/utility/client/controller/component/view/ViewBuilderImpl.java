@@ -43,6 +43,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		super.__execute__(view);
 		Object request = getRequest();
 		Object context = getContext();
+		Object uniformResourceLocatorMap = getUniformResourceLocatorMap();
 		ComponentsBuilder componentsBuilder = getComponentsBuilder();
 		
 		CommandableBuilders commandables = getCommandables();
@@ -59,6 +60,8 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 						((ComponentBuilder<?>)index).setRequest(request);
 					if( ((ComponentBuilder<?>)index).getContext() == null )
 						((ComponentBuilder<?>)index).setContext(context);
+					if( ((ComponentBuilder<?>)index).getUniformResourceLocatorMap() == null )
+						((ComponentBuilder<?>)index).setUniformResourceLocatorMap(uniformResourceLocatorMap);
 				}
 			view.setComponents(componentsBuilder.execute().getOutput());
 		}
@@ -219,6 +222,8 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 			componentBuilder.setRequest(getRequest());
 		if(componentBuilder.getContext() == null)
 			componentBuilder.setContext(getContext());
+		if(componentBuilder.getUniformResourceLocatorMap() == null)
+			componentBuilder.setUniformResourceLocatorMap(getUniformResourceLocatorMap());
 		getComponentsBuilder(Boolean.TRUE).getComponents(Boolean.TRUE).add(componentBuilder);
 		return this;
 	}

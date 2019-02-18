@@ -12,6 +12,7 @@ import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListen
 import org.cyk.utility.client.controller.component.InputOutput;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
+import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.dialog.Dialog;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.input.Input;
@@ -28,6 +29,8 @@ import org.cyk.utility.client.controller.component.output.OutputStringMessageBui
 import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.event.Events;
+import org.cyk.utility.client.controller.icon.Icon;
+import org.cyk.utility.client.controller.icon.IconIdentifierGetter;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.css.Style;
@@ -61,6 +64,12 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 					if(style!=null) {
 						visibleComponent.getProperties().setStyleClass(style.getClassesAsString());
 						visibleComponent.getProperties().setStyle(style.getValuesAsString());
+					}
+					
+					if(component instanceof Commandable) {
+						Icon icon = ((CommandableBuilder)componentBuilder).getIcon();
+						if(icon != null)
+							((Commandable)visibleComponent).setProperty(Properties.ICON, __inject__(IconIdentifierGetter.class).setIcon(icon).execute().getOutput());
 					}
 					
 					if(component instanceof InputOutput<?>) {

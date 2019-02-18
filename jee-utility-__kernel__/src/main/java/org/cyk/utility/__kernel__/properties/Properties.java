@@ -4384,7 +4384,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getUniformResourceLocatorMap() {
+		return get(UNIFORM_RESOURCE_LOCATOR_MAP);
+	}
+
+	public Properties setUniformResourceLocatorMap(Object uniformResourceLocatorMap) {
+		set(UNIFORM_RESOURCE_LOCATOR_MAP, uniformResourceLocatorMap);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String UNIFORM_RESOURCE_LOCATOR_MAP = "UNIFORM_RESOURCE_LOCATOR_MAP";
 	public static final String MENU = "MENU";
 	public static final String SERVICE_NOT_FOUND = "SERVICE_NOT_FOUND";
 	public static final String RENDER_MESSAGES = "RENDER_MESSAGES";

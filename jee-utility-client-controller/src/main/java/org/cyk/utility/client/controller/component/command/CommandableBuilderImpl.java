@@ -3,9 +3,12 @@ package org.cyk.utility.client.controller.component.command;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
+import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.window.WindowRenderType;
 import org.cyk.utility.client.controller.data.Data;
+import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.internationalization.InternalizationKeyStringType;
@@ -22,10 +25,12 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	private CommandableRenderType renderType;
 	private NavigationBuilder navigation;
 	private Class<? extends WindowRenderType> windowRenderTypeClass;
+	private Icon icon;
 	
 	@Override
 	protected void __execute__(Commandable commandable) {
 		super.__execute__(commandable);
+		String name = null;
 		
 		CommandBuilder command = getCommand();
 		if(command!=null)
@@ -37,10 +42,20 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		commandable.setRenderType(renderType);
 		
 		NavigationBuilder navigation = getNavigation();
-		if(navigation!=null) 
-			commandable.setNavigation(navigation.execute().getOutput());
+		if(navigation!=null) {
+			navigation.setPropertyIfNull(Properties.CONTEXT, getContext());
+			navigation.setPropertyIfNull(Properties.UNIFORM_RESOURCE_LOCATOR_MAP, getUniformResourceLocatorMap());
+			try {
+				commandable.setNavigation(navigation.execute().getOutput());
+			} catch (Exception exception) {
+				exception.printStackTrace();
+				name = exception.getMessage();
+			}
+		}
 		
-		String name = getName();
+		if(__injectStringHelper__().isBlank(name))
+			name = getName();
+		
 		if(__injectStringHelper__().isBlank(name)) {
 			InternalizationStringBuilder nameInternalization = getNameInternalization();
 			if(nameInternalization==null) {
@@ -76,6 +91,11 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	}
 	
 	@Override
+	public CommandableBuilder addRoles(ComponentRole... roles) {
+		return (CommandableBuilder) super.addRoles(roles);
+	}
+	
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -94,6 +114,16 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	@Override
 	public CommandableBuilder setNameInternalizationKeyValue(String nameInternalizationKeyValue) {
 		return (CommandableBuilder) super.setNameInternalizationKeyValue(nameInternalizationKeyValue);
+	}
+	
+	@Override
+	public Icon getIcon() {
+		return icon;
+	}
+	@Override
+	public CommandableBuilder setIcon(Icon icon) {
+		this.icon = icon;
+		return this;
 	}
 	
 	@Override

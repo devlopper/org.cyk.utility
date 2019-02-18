@@ -2,15 +2,19 @@ package org.cyk.utility.client.controller.component.command;
 
 import java.util.Collection;
 
+import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.window.WindowRenderType;
 import org.cyk.utility.client.controller.data.Data;
+import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.system.action.SystemAction;
 
 public interface CommandableBuilder extends VisibleComponentBuilder<Commandable> {
 
+	@Override CommandableBuilder addRoles(ComponentRole... roles);
+	
 	CommandableRenderType getRenderType();
 	CommandableBuilder setRenderType(CommandableRenderType renderType);
 	
@@ -19,6 +23,9 @@ public interface CommandableBuilder extends VisibleComponentBuilder<Commandable>
 	
 	CommandableBuilder setNameInternalization(InternalizationStringBuilder nameInternalization);
 	CommandableBuilder setNameInternalizationKeyValue(String nameInternalizationKeyValue);
+	
+	Icon getIcon();
+	CommandableBuilder setIcon(Icon icon);
 	
 	CommandBuilder getCommand();
 	CommandableBuilder setCommand(CommandBuilder command);

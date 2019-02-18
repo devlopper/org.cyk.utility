@@ -12,16 +12,22 @@ public abstract class AbstractPageContainerManagedImpl extends AbstractWindowCon
 
 	@Override
 	protected Object __getContext__() {
-		return FacesContext.getCurrentInstance(); /*TODO we can use injection*/
+		return __getFacesContext__();
 	}
 	
 	@Override
-	protected Object __getNavigationIdentifierStringMap__() {
-		return ((ConfigurableNavigationHandler)((FacesContext)__getContext__()).getApplication().getNavigationHandler()).getNavigationCases();
+	protected Object __getUniformResourceLocatorMap__() {
+		return ((ConfigurableNavigationHandler)__getFacesContext__().getApplication().getNavigationHandler()).getNavigationCases();
 	}
 	
 	@Override
 	protected Object __getRequest__() {
-		return FacesContext.getCurrentInstance().getExternalContext().getRequest(); /*TODO we can use injection*/
+		return __getFacesContext__().getExternalContext().getRequest();
+	}
+	
+	/**/
+	
+	protected FacesContext __getFacesContext__() {
+		return FacesContext.getCurrentInstance(); /*TODO we can use injection*/
 	}
 }

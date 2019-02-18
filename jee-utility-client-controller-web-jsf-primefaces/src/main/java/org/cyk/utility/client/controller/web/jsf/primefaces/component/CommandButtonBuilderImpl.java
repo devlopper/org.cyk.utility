@@ -29,6 +29,9 @@ public class CommandButtonBuilderImpl extends AbstractComponentBuilderImpl<Comma
 	protected CommandButton __execute__(Commandable commandable, ValueExpressionMap valueExpressionMap) throws Exception {
 		CommandButton commandButton = new CommandButton();
 		commandButton.setValue(commandable.getName());
+		Object icon = commandable.getProperties().getIcon();
+		if(icon!=null)
+			commandButton.setIcon(icon.toString());
 		
 		if(commandable.getNavigation()!=null) {
 			commandButton.setType("button");

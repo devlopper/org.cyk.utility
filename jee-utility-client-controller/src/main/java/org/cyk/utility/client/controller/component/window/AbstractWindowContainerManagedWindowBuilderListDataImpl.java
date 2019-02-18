@@ -12,6 +12,7 @@ import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
+import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -34,39 +35,31 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 				.addObjects((Collection)objects)
 				;
 			
+			gridBuilder.setContext(getContext());
+			gridBuilder.setUniformResourceLocatorMap(getUniformResourceLocatorMap());
+			
 			Strings columnsFieldNames = getGridColumnsFieldNames();
 			if(columnsFieldNames!=null)
 				gridBuilder.addColumnsByFieldNames(columnsFieldNames.get());
 			
+			
+			
 			gridBuilder.getViewMap(Boolean.TRUE).set(ViewMap.HEADER,__inject__(ViewBuilder.class));
 			
 			/* Create new instance */
-			SystemAction systemActionCreate = __inject__(SystemActionCreate.class).setEntityClass(gridBuilder.getRowDataClass());
+			SystemAction systemActionCreate = __inject__(SystemActionCreate.class).setEntityClass(gridBuilder.getRowDataClass());			
+			gridBuilder.addComponentBuildersToViewHeader(__inject__(CommandableBuilder.class).setIcon(Icon.PLUS).addRoles(ComponentRole.COLLECTION_PROCESSOR,ComponentRole.CREATOR)
+					.setNavigationIdentifierBuilderSystemAction(systemActionCreate));
 			
-			CommandableBuilder commandable = __inject__(CommandableBuilder.class);
-			commandable.addRoles(ComponentRole.COLLECTION_PROCESSOR,ComponentRole.CREATOR);
-			commandable.getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(systemActionCreate);
-			commandable.getNavigation().getProperties().setContext(getContext());
-			commandable.getNavigation().getProperties().setMap(getNavigationIdentifierStringMap());
-			gridBuilder.getViewMap(Boolean.TRUE).get(ViewMap.HEADER).getComponentsBuilder(Boolean.TRUE).addComponents(commandable);
-			
+			/* Update current instance */
 			SystemAction systemActionUpdate = __inject__(SystemActionUpdate.class).setEntityClass(gridBuilder.getRowDataClass());
+			gridBuilder.addCommandablesToColumnBodyView(__inject__(CommandableBuilder.class).setName("").setIcon(Icon.EDIT).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.MODIFIER)
+					.setNavigationIdentifierBuilderSystemAction(systemActionUpdate));
 			
-			commandable = __inject__(CommandableBuilder.class);
-			commandable.addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.MODIFIER);
-			commandable.getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(systemActionUpdate);
-			commandable.getNavigation().getProperties().setContext(getContext());
-			commandable.getNavigation().getProperties().setMap(getNavigationIdentifierStringMap());
-			gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).addComponents(commandable);
-			
+			/* Remove current instance */
 			SystemAction systemActionDelete = __inject__(SystemActionDelete.class).setEntityClass(gridBuilder.getRowDataClass());
-			
-			commandable = __inject__(CommandableBuilder.class);
-			commandable.addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.REMOVER);
-			commandable.getNavigation(Boolean.TRUE).setIdentifierBuilderSystemAction(systemActionDelete);
-			commandable.getNavigation().getProperties().setContext(getContext());
-			commandable.getNavigation().getProperties().setMap(getNavigationIdentifierStringMap());
-			gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).addComponents(commandable);
+			gridBuilder.addCommandablesToColumnBodyView(__inject__(CommandableBuilder.class).setName("n").setIcon(Icon.REMOVE).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.REMOVER)
+					.setNavigationIdentifierBuilderSystemAction(systemActionDelete));
 			
 			/* Create new instance using normal window */
 			/*

@@ -103,8 +103,8 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				windowContainerManagedWindowBuilder.setRequest(__getRequest__());
 			if(windowContainerManagedWindowBuilder.getContext() == null)
 				windowContainerManagedWindowBuilder.setContext(__getContext__());
-			if(windowContainerManagedWindowBuilder.getNavigationIdentifierStringMap() == null)
-				windowContainerManagedWindowBuilder.setNavigationIdentifierStringMap(__getNavigationIdentifierStringMap__());
+			if(windowContainerManagedWindowBuilder.getUniformResourceLocatorMap() == null)
+				windowContainerManagedWindowBuilder.setUniformResourceLocatorMap(__getUniformResourceLocatorMap__());
 			windowBuilder = windowContainerManagedWindowBuilder.setWindowContainerManaged(this).execute().getOutput();
 		}
 		
@@ -175,7 +175,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		return null;
 	}
 	
-	protected Object __getNavigationIdentifierStringMap__() {
+	protected Object __getUniformResourceLocatorMap__() {
 		//TODO write NavigationIdentifierStringMapGetter
 		return null;
 	}

@@ -21,7 +21,7 @@ public class NavigationIdentifierToUrlStringMapperFunctionRunnableImpl extends A
 			@Override
 			public void run() {
 				@SuppressWarnings("unchecked")
-				Map<String,Set<NavigationCase>> map = (Map<String, Set<NavigationCase>>) Properties.getFromPath(getFunction().getProperties(),Properties.MAP);
+				Map<String,Set<NavigationCase>> uniformResourceLocatorMap = (Map<String, Set<NavigationCase>>) Properties.getFromPath(getFunction().getProperties(),Properties.UNIFORM_RESOURCE_LOCATOR_MAP);
 				Object context = Properties.getFromPath(getFunction().getProperties(),Properties.CONTEXT);
 				FacesContext facesContext = null;
 				if(context instanceof FacesContext)
@@ -32,39 +32,42 @@ public class NavigationIdentifierToUrlStringMapperFunctionRunnableImpl extends A
 				}
 				
 				if(identifier != null) {
-					if(map == null) {
+					if(uniformResourceLocatorMap == null) {
 						if(facesContext == null)
 							facesContext = FacesContext.getCurrentInstance();
 						if(facesContext != null) {
 							ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler)facesContext.getApplication().getNavigationHandler();
 							if(configurableNavigationHandler!=null)
-								map = configurableNavigationHandler.getNavigationCases();
+								try {
+									uniformResourceLocatorMap = configurableNavigationHandler.getNavigationCases();
+								} catch (Exception exception) {
+									throw new RuntimeException("something goes wrong when trying to get navigation cases to derive "+identifier);
+								}
 						}
 					}
 					
-					if(map == null)
-						throw new RuntimeException("No navigation identifier map can be found to derive "+identifier);
+					if(uniformResourceLocatorMap == null)
+						throw new RuntimeException("No uniform resource locator map can be found to derive "+identifier);
 					
-					if(map != null) {	
-						Boolean found = null;
-						for(Map.Entry<String,Set<NavigationCase>> indexEntry : map.entrySet()) {
-							for(NavigationCase indexNavigationCase : indexEntry.getValue()) {
-								if(indexNavigationCase.getFromOutcome().equals(identifier.toString())) {
-									found= Boolean.TRUE;
-									
-									String url = __inject__(UniformResourceIdentifierStringBuilder.class).setRequest(facesContext.getExternalContext().getRequest())
-											.setPath(indexNavigationCase.getToViewId(facesContext))
-											.execute().getOutput();
-									setOutput(url);	
-									
-									break;
-								}
-							}
-							if(Boolean.TRUE.equals(found)) {
+					Boolean found = null;
+					for(Map.Entry<String,Set<NavigationCase>> indexEntry : uniformResourceLocatorMap.entrySet()) {
+						for(NavigationCase indexNavigationCase : indexEntry.getValue()) {
+							if(indexNavigationCase.getFromOutcome().equals(identifier.toString())) {
+								found= Boolean.TRUE;
+								
+								String url = __inject__(UniformResourceIdentifierStringBuilder.class).setRequest(facesContext.getExternalContext().getRequest())
+										.setPath(indexNavigationCase.getToViewId(facesContext))
+										.execute().getOutput();
+								setOutput(url);	
+								
 								break;
 							}
 						}
+						if(Boolean.TRUE.equals(found)) {
+							break;
+						}
 					}
+					
 				}
 			}
 		});

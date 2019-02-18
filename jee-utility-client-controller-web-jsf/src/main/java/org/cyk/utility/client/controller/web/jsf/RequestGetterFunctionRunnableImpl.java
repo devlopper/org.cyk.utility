@@ -8,10 +8,10 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.request.RequestGetter;
 import org.cyk.utility.throwable.ThrowableHelper;
 
-public class RequestGetterRunnableImpl extends AbstractFunctionRunnableImpl<RequestGetter> implements Serializable {
+public class RequestGetterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<RequestGetter> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	public RequestGetterRunnableImpl() {
+	public RequestGetterFunctionRunnableImpl() {
 		setRunnable(new Runnable() {
 			@Override
 			public void run() {

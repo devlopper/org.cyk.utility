@@ -34,7 +34,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	private Class<? extends Row> rowClass;
 	private WindowContainerManaged windowContainerManaged;
 	private WindowRenderType windowRenderType;
-	private Object request,context,navigationIdentifierStringMap;
+	private Object request,context,uniformResourceLocatorMap;
 	
 	@Override
 	protected WindowBuilder __execute__() throws Exception {
@@ -253,13 +253,13 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	}
 	
 	@Override
-	public Object getNavigationIdentifierStringMap() {
-		return navigationIdentifierStringMap;
+	public Object getUniformResourceLocatorMap() {
+		return uniformResourceLocatorMap;
 	}
 	
 	@Override
-	public WindowContainerManagedWindowBuilder setNavigationIdentifierStringMap(Object navigationIdentifierStringMap) {
-		this.navigationIdentifierStringMap = navigationIdentifierStringMap;
+	public WindowContainerManagedWindowBuilder setUniformResourceLocatorMap(Object uniformResourceLocatorMap) {
+		this.uniformResourceLocatorMap = uniformResourceLocatorMap;
 		return this;
 	}
 	

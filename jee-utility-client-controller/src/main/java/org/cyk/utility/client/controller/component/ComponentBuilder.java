@@ -80,6 +80,9 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	Object getContext();
 	ComponentBuilder<COMPONENT> setContext(Object context);
 	
+	Object getUniformResourceLocatorMap();
+	ComponentBuilder<COMPONENT> setUniformResourceLocatorMap(Object uniformResourceLocatorMap);
+	
 	Throwable getThrowable();
 	ComponentBuilder<COMPONENT> setThrowable(Throwable throwable);
 }

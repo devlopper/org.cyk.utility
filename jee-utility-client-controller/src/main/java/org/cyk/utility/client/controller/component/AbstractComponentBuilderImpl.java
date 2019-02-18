@@ -224,7 +224,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	@Override
 	public ComponentBuilder<COMPONENT> addRoles(ComponentRole... roles) {
 		getRoles(Boolean.TRUE).add(roles);
-		return null;
+		return this;
 	}
 	
 	@Override
@@ -354,6 +354,17 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	@Override
 	public ComponentBuilder<COMPONENT> setContext(Object context) {
 		getProperties().setContext(context);
+		return this;
+	}
+	
+	@Override
+	public Object getUniformResourceLocatorMap() {
+		return getProperties().getUniformResourceLocatorMap();
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setUniformResourceLocatorMap(Object uniformResourceLocatorMap) {
+		getProperties().setUniformResourceLocatorMap(uniformResourceLocatorMap);
 		return this;
 	}
 	

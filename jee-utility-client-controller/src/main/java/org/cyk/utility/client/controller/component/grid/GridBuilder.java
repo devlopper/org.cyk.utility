@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.grid;
 
 import java.util.Collection;
 
+import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilderByClassMap;
@@ -46,6 +47,7 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	GridBuilder setViewMap(ViewBuilderMap viewMap);
 	GridBuilder setViews(Object...keyValues);
 	ViewBuilder getView(String key);
+	ViewBuilder getViewHeader(Boolean injectIfNull);
 	
 	Objects getObjects();
 	Objects getObjects(Boolean injectIfNull);
@@ -67,8 +69,12 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	GridBuilder setCommandablesColumnCommandablesNavigationsParameters(Object...parameters);
 	
 	ViewBuilder getCommandablesColumnBodyView(Boolean injectIfNull);
+	GridBuilder addCommandablesToColumnBodyView(Collection<CommandableBuilder> commandables);
+	GridBuilder addCommandablesToColumnBodyView(CommandableBuilder...commandables);
 	//GridBuilder addNavigationCommandablesBySystemActionClasses(Collection<Class<? extends SystemAction>> systemActionClasses);
 	//GridBuilder addNavigationCommandablesBySystemActionClasses(Class<? extends SystemAction>...systemActionClasses);
+	
+	GridBuilder addComponentBuildersToViewHeader(ComponentBuilder<?>...components);
 	
 	CommandableBuilderByClassMap getCommandableMap();
 	CommandableBuilderByClassMap getCommandableMap(Boolean injectIfNull);
