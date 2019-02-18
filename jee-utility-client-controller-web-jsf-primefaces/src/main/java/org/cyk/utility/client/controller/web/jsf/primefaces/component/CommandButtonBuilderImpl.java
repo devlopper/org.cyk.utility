@@ -33,6 +33,11 @@ public class CommandButtonBuilderImpl extends AbstractComponentBuilderImpl<Comma
 		if(icon!=null)
 			commandButton.setIcon(icon.toString());
 		
+		Object tooltip = commandable.getTooltip();
+		
+		if(tooltip!=null)
+			commandButton.setTitle(tooltip.toString());
+		
 		if(commandable.getNavigation()!=null) {
 			commandButton.setType("button");
 			String url = null;

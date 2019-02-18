@@ -11,5 +11,10 @@ public interface VisibleComponentBuilder<COMPONENT extends VisibleComponent> ext
 	VisibleComponentBuilder<COMPONENT> addStyleClasses(String...classes);
 	VisibleComponentBuilder<COMPONENT> addStyleValues(String...values);
 	
+	Object getTooltip();
+	VisibleComponentBuilder<COMPONENT> setTooltip(Object tooltip);
+	
 	@Override ComponentBuilder<COMPONENT> setOutputProperty(Object key, Object value);
+	
+	String PROPERTY_TOOLTIP = "tooltip";
 }

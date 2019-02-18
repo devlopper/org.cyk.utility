@@ -13,6 +13,7 @@ public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl
 	private Command command;
 	private DeviceScreenArea area;
 	private Style style;
+	private Object tooltip;
 	
 	@Override
 	public DeviceScreenArea getArea() {
@@ -65,6 +66,17 @@ public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl
 	@Override
 	public VisibleComponent addCommandFunctionTryRunRunnableAt(Runnable runnable, Integer index) {
 		__inject__(CollectionHelper.class).addElementAt(getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE), index, runnable);
+		return this;
+	}
+	
+	@Override
+	public Object getTooltip() {
+		return tooltip;
+	}
+	
+	@Override
+	public VisibleComponent setTooltip(Object tooltip) {
+		this.tooltip = tooltip;
 		return this;
 	}
 	

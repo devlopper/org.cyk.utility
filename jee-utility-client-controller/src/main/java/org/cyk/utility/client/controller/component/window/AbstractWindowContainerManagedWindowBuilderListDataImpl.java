@@ -45,7 +45,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 			
 			/* Create new instance */
 			SystemAction systemActionCreate = __inject__(SystemActionCreate.class).setEntityClass(gridBuilder.getRowDataClass());			
-			gridBuilder.addComponentBuildersToViewHeader(__inject__(CommandableBuilder.class).addRoles(ComponentRole.COLLECTION_PROCESSOR,ComponentRole.CREATOR)
+			gridBuilder.addComponentBuildersToViewHeader(__inject__(CommandableBuilder.class).setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_PROCESSOR,ComponentRole.CREATOR)
 					.setNavigationIdentifierBuilderSystemAction(systemActionCreate));
 			
 			/* Update current instance */

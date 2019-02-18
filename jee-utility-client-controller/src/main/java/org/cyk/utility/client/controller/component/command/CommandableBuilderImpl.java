@@ -31,7 +31,7 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	@Override
 	protected void __execute__(Commandable commandable) {
 		super.__execute__(commandable);
-		String name = null;
+		String name = getName();
 		
 		CommandBuilder command = getCommand();
 		if(command!=null)
@@ -54,41 +54,41 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 			}
 		}
 		
-		if(__injectStringHelper__().isBlank(name) && Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_NAME))) {
-			if(__injectStringHelper__().isBlank(name))
-				name = getName();
-			
-			if(__injectStringHelper__().isBlank(name)) {
-				InternalizationStringBuilder nameInternalization = getNameInternalization();
-				if(nameInternalization==null) {
-					SystemAction systemAction = null;
-					if(systemAction == null && command!=null)
-						systemAction = command.getFunction().getAction();
-					if(systemAction == null && navigation!=null)
-						systemAction = navigation.getSystemAction();
+		String derivedName = null;
+		if(__injectStringHelper__().isBlank(derivedName)) {
+			InternalizationStringBuilder nameInternalization = getNameInternalization();
+			if(nameInternalization==null) {
+				SystemAction systemAction = null;
+				if(systemAction == null && command!=null)
+					systemAction = command.getFunction().getAction();
+				if(systemAction == null && navigation!=null)
+					systemAction = navigation.getSystemAction();
+				if(systemAction == null && navigation!=null && navigation.getIdentifierBuilder()!=null)
+					systemAction = navigation.getIdentifierBuilder().getSystemAction();
+				
+				if(systemAction!=null)
+					derivedName = __inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput();
+				
+				/*
+				if(navigation!=null) {
+					SystemAction systemAction = navigation.getSystemAction();
 					if(systemAction == null && navigation.getIdentifierBuilder()!=null)
 						systemAction = navigation.getIdentifierBuilder().getSystemAction();
 					
-					if(systemAction!=null)
-						name = __inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput();
-					
-					/*
-					if(navigation!=null) {
-						SystemAction systemAction = navigation.getSystemAction();
-						if(systemAction == null && navigation.getIdentifierBuilder()!=null)
-							systemAction = navigation.getIdentifierBuilder().getSystemAction();
-						
-						if(systemAction!=null) {
-							name = __inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput();
-						}
-					}	
-					*/
-				}else
-					name = nameInternalization.execute().getOutput();
-				
-			}else {
-				
-			}	
+					if(systemAction!=null) {
+						builtName = __inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput();
+					}
+				}	
+				*/
+			}else
+				derivedName = nameInternalization.execute().getOutput();
+			
+		}else {
+			
+		}	
+		
+		if(__injectStringHelper__().isBlank(name) && Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_NAME))) {
+			name = derivedName;
 		}
 		commandable.setName(name);
 		
@@ -105,6 +105,15 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 			}
 		}
 		commandable.setIcon(icon);
+		
+		Object tooltip = getTooltip();
+		if(tooltip == null && Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_TOOLTIP))) {
+			if(__injectStringHelper__().isBlank(commandable.getName()))
+				tooltip = derivedName;
+			else
+				tooltip = commandable.getName();
+		}
+		commandable.setTooltip(tooltip);
 	}
 	
 	@Override

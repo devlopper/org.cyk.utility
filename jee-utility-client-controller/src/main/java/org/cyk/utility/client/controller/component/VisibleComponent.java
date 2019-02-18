@@ -19,4 +19,7 @@ public interface VisibleComponent extends Component {
 	Style getStyle(Boolean injectIfNull);
 	VisibleComponent setStyle(Style style);
 	
+	Object getTooltip();
+	VisibleComponent setTooltip(Object tooltip);
+
 }

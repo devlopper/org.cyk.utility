@@ -8,6 +8,7 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 	private static final long serialVersionUID = 1L;
 
 	private StyleBuilder style;
+	private Object tooltip;
 	
 	@Override
 	protected void __execute__(COMPONENT component) {
@@ -28,6 +29,11 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 		DeviceScreenArea area = getArea();
 		if(area!=null) {
 			component.setArea(area);
+		}
+		
+		if(component.getTooltip() == null) {
+			Object tooltip = getTooltip();
+			component.setTooltip(tooltip);
 		}
 	}
 	
@@ -62,6 +68,17 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 	public VisibleComponentBuilder<COMPONENT> addStyleValues(String... values) {
 		getStyle(Boolean.TRUE).addValues(values);
 		return this;
+	}
+	
+	@Override
+	public VisibleComponentBuilder<COMPONENT> setTooltip(Object tooltip) {
+		this.tooltip = tooltip;
+		return this;
+	}
+	
+	@Override
+	public Object getTooltip() {
+		return tooltip;
 	}
 
 	public static final String FIELD_STYLE = "style";
