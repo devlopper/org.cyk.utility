@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
+import org.cyk.utility.client.controller.component.ComponentRoles;
 import org.cyk.utility.client.controller.component.window.WindowRenderType;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.icon.Icon;
@@ -53,41 +54,57 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 			}
 		}
 		
-		if(__injectStringHelper__().isBlank(name))
-			name = getName();
-		
-		if(__injectStringHelper__().isBlank(name)) {
-			InternalizationStringBuilder nameInternalization = getNameInternalization();
-			if(nameInternalization==null) {
-				SystemAction systemAction = null;
-				if(systemAction == null && command!=null)
-					systemAction = command.getFunction().getAction();
-				if(systemAction == null && navigation!=null)
-					systemAction = navigation.getSystemAction();
-				if(systemAction == null && navigation.getIdentifierBuilder()!=null)
-					systemAction = navigation.getIdentifierBuilder().getSystemAction();
-				
-				if(systemAction!=null)
-					name = __inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput();
-				
-				/*
-				if(navigation!=null) {
-					SystemAction systemAction = navigation.getSystemAction();
+		if(__injectStringHelper__().isBlank(name) && Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_NAME))) {
+			if(__injectStringHelper__().isBlank(name))
+				name = getName();
+			
+			if(__injectStringHelper__().isBlank(name)) {
+				InternalizationStringBuilder nameInternalization = getNameInternalization();
+				if(nameInternalization==null) {
+					SystemAction systemAction = null;
+					if(systemAction == null && command!=null)
+						systemAction = command.getFunction().getAction();
+					if(systemAction == null && navigation!=null)
+						systemAction = navigation.getSystemAction();
 					if(systemAction == null && navigation.getIdentifierBuilder()!=null)
 						systemAction = navigation.getIdentifierBuilder().getSystemAction();
 					
-					if(systemAction!=null) {
+					if(systemAction!=null)
 						name = __inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput();
-					}
-				}	
-				*/
-			}else
-				name = nameInternalization.execute().getOutput();
-			
-		}else {
-			
+					
+					/*
+					if(navigation!=null) {
+						SystemAction systemAction = navigation.getSystemAction();
+						if(systemAction == null && navigation.getIdentifierBuilder()!=null)
+							systemAction = navigation.getIdentifierBuilder().getSystemAction();
+						
+						if(systemAction!=null) {
+							name = __inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput();
+						}
+					}	
+					*/
+				}else
+					name = nameInternalization.execute().getOutput();
+				
+			}else {
+				
+			}	
 		}
 		commandable.setName(name);
+		
+		Icon icon = getIcon();
+		if(icon == null && Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_ICON))) {
+			ComponentRoles roles = getRoles();
+			if(__injectCollectionHelper__().isNotEmpty(roles)) {
+				if(__injectCollectionHelper__().contains(roles, ComponentRole.CREATOR))
+					icon = Icon.PLUS;
+				else if(__injectCollectionHelper__().contains(roles, ComponentRole.MODIFIER))
+					icon = Icon.EDIT;
+				else if(__injectCollectionHelper__().contains(roles, ComponentRole.REMOVER))
+					icon = Icon.REMOVE;
+			}
+		}
+		commandable.setIcon(icon);
 	}
 	
 	@Override
@@ -114,6 +131,11 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	@Override
 	public CommandableBuilder setNameInternalizationKeyValue(String nameInternalizationKeyValue) {
 		return (CommandableBuilder) super.setNameInternalizationKeyValue(nameInternalizationKeyValue);
+	}
+	
+	@Override
+	public CommandableBuilder setDerivableFieldNames(Object... values) {
+		return (CommandableBuilder) super.setDerivableFieldNames(values);
 	}
 	
 	@Override

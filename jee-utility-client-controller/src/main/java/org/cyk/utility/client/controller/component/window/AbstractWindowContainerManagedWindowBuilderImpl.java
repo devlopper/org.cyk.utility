@@ -54,7 +54,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 			MenuBuilderMap menuMap = getMenuMap();
 			if(menuMap == null)
 				menuMap = __inject__(MenuBuilderMapGetter.class).execute().getOutput();
-			//window.setMenuMap(menuMap);	
+			window.setMenuMap(menuMap);	
 		}
 		
 		SystemAction systemAction = getSystemAction();

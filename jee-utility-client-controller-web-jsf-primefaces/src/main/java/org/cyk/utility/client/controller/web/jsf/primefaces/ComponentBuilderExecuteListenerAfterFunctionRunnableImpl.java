@@ -12,7 +12,6 @@ import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListen
 import org.cyk.utility.client.controller.component.InputOutput;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
-import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.dialog.Dialog;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.input.Input;
@@ -67,7 +66,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 					}
 					
 					if(component instanceof Commandable) {
-						Icon icon = ((CommandableBuilder)componentBuilder).getIcon();
+						Icon icon = ((Commandable)component).getIcon();
 						if(icon != null)
 							((Commandable)visibleComponent).setProperty(Properties.ICON, __inject__(IconIdentifierGetter.class).setIcon(icon).execute().getOutput());
 					}

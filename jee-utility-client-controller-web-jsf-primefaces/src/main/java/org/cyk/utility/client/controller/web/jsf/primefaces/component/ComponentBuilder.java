@@ -13,5 +13,5 @@ public interface ComponentBuilder<COMPONENT extends UIComponent,MODEL extends Co
 	
 	ValueExpressionMap getValueExpressionMap();
 	ComponentBuilder<COMPONENT,MODEL> setValueExpressionMap(ValueExpressionMap valueExpressionMap);
-	
+
 }

@@ -35,30 +35,27 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 				.addObjects((Collection)objects)
 				;
 			
-			gridBuilder.setContext(getContext());
-			gridBuilder.setUniformResourceLocatorMap(getUniformResourceLocatorMap());
+			gridBuilder.setContext(getContext()).setUniformResourceLocatorMap(getUniformResourceLocatorMap());
 			
 			Strings columnsFieldNames = getGridColumnsFieldNames();
 			if(columnsFieldNames!=null)
 				gridBuilder.addColumnsByFieldNames(columnsFieldNames.get());
 			
-			
-			
 			gridBuilder.getViewMap(Boolean.TRUE).set(ViewMap.HEADER,__inject__(ViewBuilder.class));
 			
 			/* Create new instance */
 			SystemAction systemActionCreate = __inject__(SystemActionCreate.class).setEntityClass(gridBuilder.getRowDataClass());			
-			gridBuilder.addComponentBuildersToViewHeader(__inject__(CommandableBuilder.class).setIcon(Icon.PLUS).addRoles(ComponentRole.COLLECTION_PROCESSOR,ComponentRole.CREATOR)
+			gridBuilder.addComponentBuildersToViewHeader(__inject__(CommandableBuilder.class).addRoles(ComponentRole.COLLECTION_PROCESSOR,ComponentRole.CREATOR)
 					.setNavigationIdentifierBuilderSystemAction(systemActionCreate));
 			
 			/* Update current instance */
 			SystemAction systemActionUpdate = __inject__(SystemActionUpdate.class).setEntityClass(gridBuilder.getRowDataClass());
-			gridBuilder.addCommandablesToColumnBodyView(__inject__(CommandableBuilder.class).setName("").setIcon(Icon.EDIT).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.MODIFIER)
+			gridBuilder.addCommandablesToColumnBodyView(__inject__(CommandableBuilder.class).setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.MODIFIER)
 					.setNavigationIdentifierBuilderSystemAction(systemActionUpdate));
 			
 			/* Remove current instance */
 			SystemAction systemActionDelete = __inject__(SystemActionDelete.class).setEntityClass(gridBuilder.getRowDataClass());
-			gridBuilder.addCommandablesToColumnBodyView(__inject__(CommandableBuilder.class).setName("n").setIcon(Icon.REMOVE).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.REMOVER)
+			gridBuilder.addCommandablesToColumnBodyView(__inject__(CommandableBuilder.class).setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.REMOVER)
 					.setNavigationIdentifierBuilderSystemAction(systemActionDelete));
 			
 			/* Create new instance using normal window */
@@ -81,10 +78,9 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 			layoutTypeGrid.setIsHasHeader(Boolean.TRUE).setIsHasFooter(Boolean.TRUE).setIsHasOrderNumberColumn(Boolean.TRUE).setIsHasCommandablesColumn(Boolean.TRUE);
 			
 			viewBuilder = __inject__(ViewBuilder.class);
-			viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
-			.addComponents(gridBuilder)
-			
-			;
+			viewBuilder.setContext(getContext()).setUniformResourceLocatorMap(getUniformResourceLocatorMap());
+			viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE);
+			viewBuilder.addComponentBuilder(gridBuilder);
 			
 			__execute__(gridBuilder);
 		}

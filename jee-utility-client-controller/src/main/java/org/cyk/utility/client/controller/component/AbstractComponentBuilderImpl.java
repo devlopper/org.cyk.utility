@@ -16,6 +16,7 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.internationalization.InternalizationStringBuilderByStringMap;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.type.BooleanMap;
 
 public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> extends AbstractFunctionWithPropertiesAsInputImpl<COMPONENT> implements ComponentBuilder<COMPONENT> , Serializable {
 	private static final long serialVersionUID = 1L;
@@ -30,6 +31,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private InternalizationStringBuilderByStringMap internalizationStringMap;
 	private EventBuilders events;
 	private Throwable throwable;
+	private BooleanMap derivableFieldNameMap;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -379,10 +381,48 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		return this;
 	}
 	
+	public BooleanMap getDerivableFieldNameMap() {
+		return derivableFieldNameMap;
+	}
+	
+	@Override
+	public BooleanMap getDerivableFieldNameMap(Boolean injectIfNull) {
+		return (BooleanMap) __getInjectIfNull__(FIELD_DERIVABLE_FIELD_NAME_MAP, injectIfNull);
+	}
+	
+	public ComponentBuilder<COMPONENT> setDerivableFieldNameMap(BooleanMap derivableFieldNameMap) {
+		this.derivableFieldNameMap = derivableFieldNameMap;
+		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setDerivableFieldNames(Object... values) {
+		getDerivableFieldNameMap(Boolean.TRUE).set(values);
+		return this;
+	}
+	
+	protected Boolean __getIsFieldNameDerivable__(String fieldName,Boolean defaultIfNull) {
+		Boolean value = null;
+		BooleanMap derivableFieldNameMap = getDerivableFieldNameMap();
+		if(derivableFieldNameMap == null)
+			value = defaultIfNull;
+		else {
+			value = derivableFieldNameMap.get(fieldName);
+			if(value == null)
+				value = defaultIfNull;
+		}
+		return value;
+	}
+	
+	protected Boolean __getIsFieldNameDerivable__(String fieldName) {
+		return __getIsFieldNameDerivable__(fieldName, Boolean.TRUE);
+	}
+	
 	public static final String FIELD_AREA = "area";
 	public static final String FIELD_LAYOUT_ITEM_STYLE = "layoutItemStyle";
 	public static final String FIELD_ROLES = "roles";
 	public static final String FIELD_UPDATABLES = "updatables";
 	public static final String FIELD_EVENTS = "events";
 	public static final String FIELD_INTERNALIZATION_STRING_MAP = "internalizationStringMap";
+	public static final String FIELD_DERIVABLE_FIELD_NAME_MAP = "derivableFieldNameMap";
 }

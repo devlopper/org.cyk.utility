@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.command;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
+import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.client.controller.navigation.Navigation;
 
 public class CommandableImpl extends AbstractVisibleComponentImpl implements Commandable,Serializable {
@@ -11,6 +12,7 @@ public class CommandableImpl extends AbstractVisibleComponentImpl implements Com
 	private String name;
 	private CommandableRenderType renderType;
 	private Navigation navigation;
+	private Icon icon;
 	
 	@Override
 	public String getName() {
@@ -31,6 +33,17 @@ public class CommandableImpl extends AbstractVisibleComponentImpl implements Com
 	@Override
 	public Commandable setRenderType(CommandableRenderType renderType) {
 		this.renderType = renderType;
+		return this;
+	}
+	
+	@Override
+	public Icon getIcon() {
+		return icon;
+	}
+	
+	@Override
+	public Commandable setIcon(Icon icon) {
+		this.icon = icon;
 		return this;
 	}
 

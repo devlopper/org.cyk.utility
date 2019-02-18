@@ -24,6 +24,8 @@ public interface CommandableBuilder extends VisibleComponentBuilder<Commandable>
 	CommandableBuilder setNameInternalization(InternalizationStringBuilder nameInternalization);
 	CommandableBuilder setNameInternalizationKeyValue(String nameInternalizationKeyValue);
 	
+	@Override CommandableBuilder setDerivableFieldNames(Object... values);
+	
 	Icon getIcon();
 	CommandableBuilder setIcon(Icon icon);
 	
@@ -56,4 +58,8 @@ public interface CommandableBuilder extends VisibleComponentBuilder<Commandable>
 	Class<? extends WindowRenderType> getWindowRenderTypeClass();
 	CommandableBuilder setWindowRenderTypeClass(Class<? extends WindowRenderType> windowRenderTypeClass);
 	
+	/**/
+	
+	String PROPERTY_NAME = "name";
+	String PROPERTY_ICON = "icon";
 }

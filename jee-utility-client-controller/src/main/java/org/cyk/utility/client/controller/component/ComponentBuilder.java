@@ -13,6 +13,7 @@ import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.internationalization.InternalizationStringBuilderByStringMap;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.type.BooleanMap;
 
 public interface ComponentBuilder<COMPONENT extends Component> extends FunctionWithPropertiesAsInput<COMPONENT> {
 	
@@ -85,4 +86,9 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	
 	Throwable getThrowable();
 	ComponentBuilder<COMPONENT> setThrowable(Throwable throwable);
+	
+	BooleanMap getDerivableFieldNameMap();
+	BooleanMap getDerivableFieldNameMap(Boolean injectIfNull);
+	ComponentBuilder<COMPONENT> setDerivableFieldNameMap(BooleanMap derivableFieldNameMap);
+	ComponentBuilder<COMPONENT> setDerivableFieldNames(Object...values);
 }
