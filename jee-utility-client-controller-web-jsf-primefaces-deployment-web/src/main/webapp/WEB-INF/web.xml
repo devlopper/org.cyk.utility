@@ -6,5 +6,10 @@
 	
 	<display-name>Utility Client Controller</display-name>
 	
+	<context-param>  
+        <param-name>primefaces.THEME</param-name>  
+        <param-value>atlantis-blue</param-value>  
+    </context-param>
+	
 </web-app>
 

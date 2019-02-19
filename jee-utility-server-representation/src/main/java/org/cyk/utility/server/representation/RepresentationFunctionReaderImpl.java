@@ -2,6 +2,7 @@ package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.core.GenericEntity;
@@ -29,7 +30,8 @@ public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunc
 					.setValueUsageType(valueUsageType)));			
 		}else {// no specific identifiers
 			//TODO handle pagination
-			entities = (List<?>) __injectInstanceHelper__().buildMany(getEntityClass(),__injectBusiness__().findMany(getPersistenceEntityClass()/* properties */));
+			Collection<?> collection = __injectBusiness__().findMany(getPersistenceEntityClass()/* properties */);
+			entities = __injectCollectionHelper__().isEmpty(collection) ? null : (List<?>) __injectInstanceHelper__().buildMany(getEntityClass(),collection);
 		}
 	}
 	

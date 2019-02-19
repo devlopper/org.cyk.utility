@@ -20,7 +20,9 @@
 		<module>../jee-utility-client-controller-web-jsf</module>
 		<module>../jee-utility-client-controller-web-jsf-primefaces</module>
 		<module>../jee-utility-client-controller-web-jsf-primefaces-playground-common</module>
+		<!--
 		<module>../jee-utility-client-controller-web-jsf-primefaces-deployment-web</module>
+		-->
 	</modules>
 
 </project>

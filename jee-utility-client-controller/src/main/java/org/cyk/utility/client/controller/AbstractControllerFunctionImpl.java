@@ -65,7 +65,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 			}else {
 				Response.Status.Family responseStatusFamily = Response.Status.Family.familyOf(response.getStatus());
 				if(Response.Status.Family.SUCCESSFUL.equals(responseStatusFamily) || Response.Status.Family.SERVER_ERROR.equals(responseStatusFamily)){
-					Object responseEntityDto = getResponseEntityDto(action, representation, response);		
+					Object responseEntityDto = Boolean.TRUE.equals(response.hasEntity()) ? getResponseEntityDto(action, representation, response) : null;		
 					if(Response.Status.Family.SUCCESSFUL.equals(responseStatusFamily))
 						;
 					else if(responseEntityDto instanceof ResponseEntityDto)

@@ -3,11 +3,14 @@ package org.cyk.utility.client.controller.component.theme;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.AbstractObject;
+import org.cyk.utility.client.controller.component.image.Image;
+import org.cyk.utility.client.controller.component.image.ImageMap;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 
 public abstract class AbstractThemeImpl extends AbstractObject implements Theme,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private ImageMap imageMap;
 	private ViewMap viewMap;
 	private ThemeTemplate template;
 	
@@ -17,6 +20,14 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 		setIdentifier(__getIdentifier__());
 		setTemplate(__inject__(ThemeTemplate.class));
 		getTemplate().setIdentifier(__getTemplateIdentifier__());
+		
+		getIcon(Boolean.TRUE).getProperties().setContracts(__getIdentifier__());
+		getIcon(Boolean.TRUE).getProperties().setName("icon.png");
+		getIcon(Boolean.TRUE).getProperties().setLibrary("image");
+		
+		getLogo(Boolean.TRUE).getProperties().setContracts(__getIdentifier__());
+		getLogo(Boolean.TRUE).getProperties().setName("logo.png");
+		getLogo(Boolean.TRUE).getProperties().setLibrary("image");
 	}
 	
 	protected abstract String __getIdentifier__();
@@ -54,6 +65,68 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 		this.template = template;
 		return this;
 	}
+	
+	@Override
+	public ImageMap getImageMap() {
+		return imageMap;
+	}
+	
+	@Override
+	public ImageMap getImageMap(Boolean injectIfNull) {
+		return (ImageMap) __getInjectIfNull__(FIELD_IMAGE_MAP, injectIfNull);
+	}
+	
+	@Override
+	public Theme setImageMap(ImageMap imageMap) {
+		this.imageMap = imageMap;
+		return this;
+	}
+	
+	@Override
+	public Theme mapImages(Object... objects) {
+		getImageMap(Boolean.TRUE).set(objects);
+		return this;
+	}
+	
+	@Override
+	public Image getIcon() {
+		ImageMap map = getImageMap();
+		return map == null ? null : map.get(IMAGE_ICON);
+	}
+	
+	@Override
+	public Image getIcon(Boolean injectIfNull) {
+		ImageMap map = getImageMap(injectIfNull);
+		return map == null ? null : map.get(IMAGE_ICON,injectIfNull);
+	}
+	
+	@Override
+	public Theme setIcon(Image icon) {
+		getImageMap(Boolean.TRUE).set(IMAGE_ICON,icon);
+		return this;
+	}
+	
+	@Override
+	public Image getLogo() {
+		ImageMap map = getImageMap();
+		return map == null ? null : map.get(IMAGE_LOGO);
+	}
+	
+	@Override
+	public Image getLogo(Boolean injectIfNull) {
+		ImageMap map = getImageMap(injectIfNull);
+		return map == null ? null : map.get(IMAGE_LOGO,injectIfNull);
+	}
+	
+	@Override
+	public Theme setLogo(Image logo) {
+		getImageMap(Boolean.TRUE).set(IMAGE_LOGO,logo);
+		return this;
+	}
 
 	public static final String FIELD_VIEW_MAP = "viewMap";
+	public static final String FIELD_IMAGE_MAP = "imageMap";
+	
+	private static final String IMAGE_ICON = "icon";
+	private static final String IMAGE_LOGO = "logo";
 }

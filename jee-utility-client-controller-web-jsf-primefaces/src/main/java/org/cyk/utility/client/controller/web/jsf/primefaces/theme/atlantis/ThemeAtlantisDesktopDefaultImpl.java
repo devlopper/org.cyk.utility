@@ -3,7 +3,6 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.theme.atlantis;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.client.controller.component.image.Image;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
 import org.cyk.utility.client.controller.component.menu.MenuItem;
@@ -19,15 +18,11 @@ import org.cyk.utility.scope.ScopeSession;
 public class ThemeAtlantisDesktopDefaultImpl extends AbstractThemeImpl implements ThemeAtlantisDesktopDefault,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Image logo;
 	private Tabs menuTabs;
 	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		getLogo(Boolean.TRUE).getProperties().setContracts(__getIdentifier__());
-		getLogo(Boolean.TRUE).getProperties().setName("logo.png");
-		getLogo(Boolean.TRUE).getProperties().setLibrary("image");
 		
 		MenuBuilder menuBuilder = __inject__(MenuBuilderMapGetter.class).execute().getOutput().get(ScopeSession.class);
 		MenuItemBuilders oldMenuItemBuilders = menuBuilder.getItems();
@@ -61,10 +56,6 @@ public class ThemeAtlantisDesktopDefaultImpl extends AbstractThemeImpl implement
 		return "/template/default.xhtml";
 	}
 	
-	public String getLogoContract() {
-		return "org.cyk.utility.client.controller.web.jsf.primefaces.atlantis.desktop.default";
-	}
-	
 	@Override
 	public Theme process(Window window) {
 		__north__(window);
@@ -86,22 +77,6 @@ public class ThemeAtlantisDesktopDefaultImpl extends AbstractThemeImpl implement
 	}
 	
 	@Override
-	public Image getLogo() {
-		return logo;
-	}
-	
-	@Override
-	public Image getLogo(Boolean injectIfNull) {
-		return (Image) __getInjectIfNull__(FIELD_LOGO, injectIfNull);
-	}
-	
-	@Override
-	public ThemeAtlantisDesktopDefault setLogo(Image logo) {
-		this.logo = logo;
-		return this;
-	}
-	
-	@Override
 	public Tabs getMenuTabs() {
 		return menuTabs;
 	}
@@ -119,7 +94,6 @@ public class ThemeAtlantisDesktopDefaultImpl extends AbstractThemeImpl implement
 
 	/**/
 	
-	public static final String FIELD_LOGO = "logo";
 	public static final String FIELD_MENU_TABS = "menuTabs";
 	
 }
