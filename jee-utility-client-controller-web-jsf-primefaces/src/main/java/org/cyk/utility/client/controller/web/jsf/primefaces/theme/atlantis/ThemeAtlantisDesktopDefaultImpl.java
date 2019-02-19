@@ -2,7 +2,12 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.theme.atlantis;
 
 import java.io.Serializable;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+
+import org.apache.commons.lang.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.component.file.File;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
 import org.cyk.utility.client.controller.component.menu.MenuItem;
@@ -23,6 +28,21 @@ public class ThemeAtlantisDesktopDefaultImpl extends AbstractThemeImpl implement
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
+		
+		File file = __inject__(File.class);
+		file.getProperties().setName("main.css");
+		file.getProperties().setLibrary("css");
+		file.getProperties().setContracts(__getIdentifier__());
+		addCascadeStyleSheetFiles(file);
+		
+		ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+		String color = StringUtils.substringAfter(servletContext.getInitParameter("primefaces.THEME"), "atlantis-");
+	
+		file = __inject__(File.class);
+		file.getProperties().setName("colors/layout-"+color+".css");
+		file.getProperties().setLibrary("css");
+		file.getProperties().setContracts(__getIdentifier__());
+		addCascadeStyleSheetFiles(file);
 		
 		MenuBuilder menuBuilder = __inject__(MenuBuilderMapGetter.class).execute().getOutput().get(ScopeSession.class);
 		MenuItemBuilders oldMenuItemBuilders = menuBuilder.getItems();

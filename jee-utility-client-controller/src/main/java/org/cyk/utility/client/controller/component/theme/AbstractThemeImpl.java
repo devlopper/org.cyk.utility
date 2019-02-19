@@ -1,8 +1,11 @@
 package org.cyk.utility.client.controller.component.theme;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.cyk.utility.client.controller.AbstractObject;
+import org.cyk.utility.client.controller.component.file.File;
+import org.cyk.utility.client.controller.component.file.Files;
 import org.cyk.utility.client.controller.component.image.Image;
 import org.cyk.utility.client.controller.component.image.ImageMap;
 import org.cyk.utility.client.controller.component.view.ViewMap;
@@ -10,6 +13,8 @@ import org.cyk.utility.client.controller.component.view.ViewMap;
 public abstract class AbstractThemeImpl extends AbstractObject implements Theme,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Files cascadeStyleSheetFiles;
+	private Files javaScriptFiles;
 	private ImageMap imageMap;
 	private ViewMap viewMap;
 	private ThemeTemplate template;
@@ -63,6 +68,62 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	@Override
 	public Theme setTemplate(ThemeTemplate template) {
 		this.template = template;
+		return this;
+	}
+	
+	@Override
+	public Files getCascadeStyleSheetFiles() {
+		return cascadeStyleSheetFiles;
+	}
+	
+	@Override
+	public Files getCascadeStyleSheetFiles(Boolean injectIfNull) {
+		return (Files) __getInjectIfNull__(FIELD_CASCADE_STYLE_SHEET_FILES, injectIfNull);
+	}
+	
+	@Override
+	public Theme setCascadeStyleSheetFiles(Files cascadeStyleSheetFiles) {
+		this.cascadeStyleSheetFiles = cascadeStyleSheetFiles;
+		return this;
+	}
+	
+	@Override
+	public Theme addCascadeStyleSheetFiles(Collection<File> cascadeStyleSheetFiles) {
+		getCascadeStyleSheetFiles(Boolean.TRUE).add(cascadeStyleSheetFiles);
+		return this;
+	}
+	
+	@Override
+	public Theme addCascadeStyleSheetFiles(File... cascadeStyleSheetFiles) {
+		getCascadeStyleSheetFiles(Boolean.TRUE).add(cascadeStyleSheetFiles);
+		return this;
+	}
+	
+	@Override
+	public Files getJavaScriptFiles() {
+		return javaScriptFiles;
+	}
+	
+	@Override
+	public Files getJavaScriptFiles(Boolean injectIfNull) {
+		return (Files) __getInjectIfNull__(FIELD_JAVA_SCRIPT_FILES, injectIfNull);
+	}
+	
+	@Override
+	public Theme setJavaScriptFiles(Files javaScriptFiles) {
+		this.javaScriptFiles = javaScriptFiles;
+		return this;
+	}
+	
+	@Override
+	public Theme addJavaScriptFiles(Collection<File> javaScriptFiles) {
+		getJavaScriptFiles(Boolean.TRUE).add(javaScriptFiles);
+		return this;
+	}
+	
+	@Override
+	public Theme addJavaScriptFiles(File... objects) {
+		getJavaScriptFiles(Boolean.TRUE).add(javaScriptFiles);
 		return this;
 	}
 	
@@ -125,6 +186,8 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	}
 
 	public static final String FIELD_VIEW_MAP = "viewMap";
+	public static final String FIELD_CASCADE_STYLE_SHEET_FILES = "cascadeStyleSheetFiles";
+	public static final String FIELD_JAVA_SCRIPT_FILES = "javaScriptFiles";
 	public static final String FIELD_IMAGE_MAP = "imageMap";
 	
 	private static final String IMAGE_ICON = "icon";
