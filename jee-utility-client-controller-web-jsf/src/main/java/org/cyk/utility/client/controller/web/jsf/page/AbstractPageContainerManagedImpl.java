@@ -6,6 +6,7 @@ import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.context.FacesContext;
 
 import org.cyk.utility.client.controller.component.window.AbstractWindowContainerManagedImpl;
+import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 
 public abstract class AbstractPageContainerManagedImpl extends AbstractWindowContainerManagedImpl implements PageContainerManaged,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -29,5 +30,9 @@ public abstract class AbstractPageContainerManagedImpl extends AbstractWindowCon
 	
 	protected FacesContext __getFacesContext__() {
 		return FacesContext.getCurrentInstance(); /*TODO we can use injection*/
+	}
+	
+	protected static final JavaServerFacesHelper __injectJavaServerFacesHelper__() {
+		return __inject__(JavaServerFacesHelper.class);
 	}
 }

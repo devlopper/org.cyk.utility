@@ -31,10 +31,10 @@ public class VerySimpleEntityEditWindowBuilderImpl extends AbstractWindowContain
 			((VerySimpleEntity)data).setDetails(__inject__(VerySimpleEntityDetails.class));
 		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_CODE);
 		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_NAME);
-		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_DESCRIPTION);
+		/*viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_DESCRIPTION);
 		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_DESCRIPTION_02);
 		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_ENUMERATIONS);
-		/*viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_DETAILS,VerySimpleEntityDetails.PROPERTY_ADDRESS);
+		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_DETAILS,VerySimpleEntityDetails.PROPERTY_ADDRESS);
 		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_BOOLEAN_VALUE_CHECK_BOX);
 		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_BOOLEAN_VALUE_BUTTON);
 		viewBuilder.addInputBuilderByObjectByFieldNames(data,systemAction, VerySimpleEntity.PROPERTY_ENUMERATION);
@@ -43,18 +43,18 @@ public class VerySimpleEntityEditWindowBuilderImpl extends AbstractWindowContain
 		*/
 		
 		/**/
-		
+		/*
 		GridBuilder gridBuilder = __inject__(GridBuilder.class).setRowClass(VerySimpleEntityDetailsReadRow.class).setRowDataClass(VerySimpleEntityDetails.class);
 		gridBuilder.addColumns(
 				__inject__(ColumnBuilder.class).addFieldNameStrings("data",VerySimpleEntityDetails.PROPERTY_CODE)
 				,__inject__(ColumnBuilder.class).addFieldNameStrings("data",VerySimpleEntityDetails.PROPERTY_ADDRESS)
 				);
-		
+		*/
 		/* Create new instance */
-		SystemAction systemActionCreate = __inject__(SystemActionCreate.class);
+		//SystemAction systemActionCreate = __inject__(SystemActionCreate.class);
 		
 		/* Create new instance using dialog window */
-		gridBuilder.getCreateRowCommandable(Boolean.TRUE).setWindowRenderTypeClass(WindowRenderTypeDialog.class);
+		/*gridBuilder.getCreateRowCommandable(Boolean.TRUE).setWindowRenderTypeClass(WindowRenderTypeDialog.class);
 		gridBuilder.getCreateRowCommandable(Boolean.TRUE).getCommand(Boolean.TRUE).setWindowContainerManaged(getWindowContainerManaged());
 		gridBuilder.getCreateRowCommandable(Boolean.TRUE).getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(systemActionCreate);
 		
@@ -73,6 +73,7 @@ public class VerySimpleEntityEditWindowBuilderImpl extends AbstractWindowContain
 		layoutTypeGrid.setIsHasHeader(Boolean.TRUE).setIsHasFooter(Boolean.TRUE).setIsHasOrderNumberColumn(Boolean.TRUE).setIsHasCommandablesColumn(Boolean.TRUE);
 		
 		viewBuilder.addComponentBuilder(gridBuilder);
+		*/
 	}
 
 }

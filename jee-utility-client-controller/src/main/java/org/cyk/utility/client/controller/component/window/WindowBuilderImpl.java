@@ -27,6 +27,7 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	private MenuBuilderMap menuMap;
 	private DialogBuilder dialog;
 	private WindowRenderType renderType;
+	private WindowContainerManagedWindowBuilder containerManaged;
 	
 	@Override
 	protected void __execute__(Window window) {
@@ -226,6 +227,17 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	@Override
 	public WindowBuilder setRenderType(WindowRenderType renderType) {
 		this.renderType = renderType;
+		return this;
+	}
+	
+	@Override
+	public WindowContainerManagedWindowBuilder getContainerManaged() {
+		return containerManaged;
+	}
+	
+	@Override
+	public WindowBuilder setContainerManaged(WindowContainerManagedWindowBuilder containerManaged) {
+		this.containerManaged = containerManaged;
 		return this;
 	}
 	

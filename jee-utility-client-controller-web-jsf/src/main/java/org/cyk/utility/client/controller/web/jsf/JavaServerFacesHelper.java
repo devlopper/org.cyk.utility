@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -16,6 +17,18 @@ public class JavaServerFacesHelper extends AbstractObject implements Serializabl
 	private static final long serialVersionUID = 1L;
 	
 	private static final String EXPRESSION_FORMAT = "#{%s}";
+	
+	public Boolean isMessageMaximumSeverityInfo() {
+		return FacesMessage.SEVERITY_INFO.equals(FacesContext.getCurrentInstance().getMaximumSeverity());
+	}
+	
+	public String getScriptInstructionGoToUrl(String url) {
+		return "window.location.href='"+url+"'";
+	}
+	
+	public String getScriptInstructionGoToUrlIfMessageMaximumSeverityIsInfo(String url) {
+		return "if(#{javaServerFacesHelper.isMessageMaximumSeverityInfo()}) "+getScriptInstructionGoToUrl(url);
+	}
 	
 	public String formatExpression(String expression) {
 		return String.format(EXPRESSION_FORMAT, expression);

@@ -43,4 +43,7 @@ public interface WindowBuilder extends VisibleComponentBuilder<Window> {
 	
 	WindowRenderType getRenderType();
 	WindowBuilder setRenderType(WindowRenderType renderType);
+	
+	WindowContainerManagedWindowBuilder getContainerManaged();
+	WindowBuilder setContainerManaged(WindowContainerManagedWindowBuilder containerManaged);
 }
