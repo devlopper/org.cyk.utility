@@ -11,7 +11,6 @@ import org.cyk.utility.assertion.AssertionsProvider;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.collection.CollectionInstanceString;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldValueGetter;
@@ -21,6 +20,7 @@ import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.notification.NotificationBuilders;
 import org.cyk.utility.notification.Notifications;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
@@ -42,7 +42,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements SystemFunction, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private CollectionInstanceString entityFieldNames;
+	private Strings entityFieldNames;
 	private NotificationBuilders notificationBuilders;
 	private Notifications notifications;
 	
@@ -100,12 +100,12 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	protected abstract void __execute__(SystemAction action);
 	
 	@Override
-	public CollectionInstanceString getEntityFieldNames() {
+	public Strings getEntityFieldNames() {
 		return entityFieldNames;
 	}
 	
 	@Override
-	public SystemFunction setEntityFieldNames(CollectionInstanceString entityFieldNames) {
+	public SystemFunction setEntityFieldNames(Strings entityFieldNames) {
 		this.entityFieldNames = entityFieldNames;
 		return this;
 	}
@@ -113,9 +113,9 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	public SystemFunction setEntityFieldNames(Collection<String> entityFieldNames) {
 		if(__injectCollectionHelper__().isNotEmpty(entityFieldNames)) {
-			CollectionInstanceString collection = getEntityFieldNames();
+			Strings collection = getEntityFieldNames();
 			if(collection == null)
-				setEntityFieldNames(collection = __inject__(CollectionInstanceString.class));
+				setEntityFieldNames(collection = __inject__(Strings.class));
 			collection.add(entityFieldNames);
 		}
 		return this;
@@ -129,7 +129,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	public SystemFunction addEntityFieldNames(Collection<String> entityFieldNames) {
 		if(__injectCollectionHelper__().isNotEmpty(entityFieldNames)) {
-			CollectionInstanceString collection = getEntityFieldNames();
+			Strings collection = getEntityFieldNames();
 			if(collection == null)
 				setEntityFieldNames(entityFieldNames);
 			else

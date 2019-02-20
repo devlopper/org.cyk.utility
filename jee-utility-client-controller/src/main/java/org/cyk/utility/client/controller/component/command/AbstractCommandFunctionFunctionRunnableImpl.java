@@ -43,7 +43,8 @@ public abstract class AbstractCommandFunctionFunctionRunnableImpl extends Abstra
 				__inject__(Controller.class).create(object,properties);
 			}else if(action instanceof SystemActionUpdate) {
 				Object object = __inject__(CollectionHelper.class).getFirst(entities);
-				__inject__(Controller.class).update(object);
+				properties.setFields(getFunction().getProperty(Properties.FIELDS));
+				__inject__(Controller.class).update(object,properties);
 			}else if(action instanceof SystemActionDelete) {
 				Object object = __inject__(CollectionHelper.class).getFirst(entities);
 				__inject__(Controller.class).delete(object);

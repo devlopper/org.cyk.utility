@@ -2,8 +2,10 @@ package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
 
-import org.cyk.utility.collection.CollectionInstanceString;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldValueCopy;
+import org.cyk.utility.string.Strings;
+import org.cyk.utility.value.ValueUsageType;
 
 public class RepresentationFunctionModifierImpl extends AbstractRepresentationFunctionModifierImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -14,12 +16,21 @@ public class RepresentationFunctionModifierImpl extends AbstractRepresentationFu
 			;
 		else if(getEntity()!=null) {
 			Object updatedEntity = getEntity();
-			Object currentEntity = __injectBusiness__().findOne(getPersistenceEntityClass(), __injectNumberHelper__().getLong(
-					__injectFieldHelper__().getFieldValueSystemIdentifier(updatedEntity)));
+			Object currentEntity;
+			Object currentEntityIdentifier = __injectFieldHelper__().getFieldValueSystemIdentifier(updatedEntity);
+			ValueUsageType currentEntityIdentifierType;
+			if(currentEntityIdentifier == null) {
+				currentEntityIdentifier = __injectFieldHelper__().getFieldValueBusinessIdentifier(updatedEntity);
+				currentEntityIdentifierType = ValueUsageType.BUSINESS;
+			}else {
+				currentEntityIdentifier = __injectNumberHelper__().getLong(currentEntityIdentifier);
+				currentEntityIdentifierType = ValueUsageType.SYSTEM;
+			}
+			currentEntity = __injectBusiness__().findOne(getPersistenceEntityClass(),currentEntityIdentifier ,new Properties().setValueUsageType(currentEntityIdentifierType));
 			/* Copy field value from updated entity to current entity*/
-			CollectionInstanceString fieldNameCollection = getEntityFieldNames();
-			if(fieldNameCollection!=null && fieldNameCollection.get()!=null) {
-				for(String index : fieldNameCollection.get())
+			Strings fieldNames = getEntityFieldNames();
+			if(__injectCollectionHelper__().isNotEmpty(fieldNames)) {
+				for(String index : fieldNames.get())
 					__inject__(FieldValueCopy.class).execute(updatedEntity, currentEntity, index);
 			}
 			//__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(currentEntity, __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(updatedEntity));

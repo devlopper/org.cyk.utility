@@ -19,6 +19,7 @@ import org.cyk.utility.notification.NotificationSeverityWarning;
 import org.cyk.utility.notification.Notifications;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.ResponseEntityDto;
+import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.AbstractSystemFunctionClientImpl;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
@@ -190,5 +191,11 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 		throwable = __injectThrowableHelper__().getFirstCause(throwable);
 		__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class).setThrowable(throwable))
 			.setType(__inject__(MessageRenderTypeDialog.class)).execute();
+	}
+	
+	/**/
+	
+	public static ResponseHelper __injectResponseHelper__() {
+		return __inject__(ResponseHelper.class);
 	}
 }

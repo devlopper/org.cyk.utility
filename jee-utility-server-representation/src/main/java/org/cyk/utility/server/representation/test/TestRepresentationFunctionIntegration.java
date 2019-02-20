@@ -8,6 +8,8 @@ import org.cyk.utility.value.ValueUsageType;
 
 public interface TestRepresentationFunctionIntegration extends TestSystemFunctionIntegration {
 
+	@Override TestRepresentationFunctionIntegration setIsCatchThrowable(Boolean value);
+	
 	@Override TestRepresentationFunctionIntegration addObjects(Object... objects);
 	@Override TestRepresentationFunctionIntegration addObjectIdentifiers(Object... objectIdentifiers);
 	@Override TestRepresentationFunctionIntegration addUnexistingObjectIdentifiers(Object... unexistingObjectIdentifiers);

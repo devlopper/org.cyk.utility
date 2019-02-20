@@ -22,5 +22,10 @@ public abstract class AbstractTestControllerFunctionIntegrationImpl extends Abst
 	protected Collection<Object> __getExecutionObjects__() throws Exception {
 		return getObjects();
 	}
+	
+	@Override
+	public TestControllerFunctionIntegration setIsCatchThrowable(Boolean value) {
+		return (TestControllerFunctionIntegration) super.setIsCatchThrowable(value);
+	}
 
 }

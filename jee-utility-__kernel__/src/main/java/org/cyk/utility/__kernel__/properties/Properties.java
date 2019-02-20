@@ -3304,6 +3304,15 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getFields() {
+		return get(FIELDS);
+	}
+
+	public Properties setFields(Object value) {
+		set(FIELDS, value);
+		return this;
+	}
+	
 	public Object getKey() {
 		return get(KEY);
 	}
@@ -4877,6 +4886,7 @@ public class Properties implements java.io.Serializable {
 	public static final String CONVERTER = "CONVERTER";
 	public static final String MESSAGE = "MESSAGE";
 	public static final String FIELD = "FIELD";
+	public static final String FIELDS = "FIELDS";
 	public static final String AUTO = "AUTO";
 	public static final String DETECT = "DETECT";
 	public static final String NOTIFICATION_BUILDERS = "NOTIFICATION_BUILDERS";

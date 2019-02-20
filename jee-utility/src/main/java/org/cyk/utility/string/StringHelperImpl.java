@@ -110,7 +110,7 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 
 	@Override
 	public String concatenate(Collection<String> strings,String separator) {
-		return StringUtils.join(strings,separator);
+		return strings == null ? null : StringUtils.join(strings,separator);
 	}
 	
 	@Override

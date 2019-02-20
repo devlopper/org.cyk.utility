@@ -37,7 +37,18 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	
 	@Override
 	public ControllerServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
-		____inject____(ControllerFunctionModifier.class).setEntity(object).execute();
+		if(properties == null)
+			properties = new Properties();
+		ControllerFunctionModifier function = ____inject____(ControllerFunctionModifier.class);
+		function.setEntity(object).execute();
+		function.copyProperty(Properties.REQUEST,properties);
+		function.copyProperty(Properties.CONTEXT,properties);
+		function.copyProperty(Properties.FIELDS,properties);
+		function.execute();
+		if(properties!=null) {
+			properties.setResponse(function.getProperties().getResponse());
+			properties.setAction(function.getProperties().getAction());
+		}
 		return this;
 	}
 

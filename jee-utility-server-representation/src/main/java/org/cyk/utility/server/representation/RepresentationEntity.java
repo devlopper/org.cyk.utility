@@ -5,8 +5,8 @@ import java.util.Collection;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -50,12 +50,14 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	
 	/* Update */
 	/* Using partial */
-	@PATCH
+	//@PATCH FIXME Not working so we will use PUT for the moment
+	@PUT
 	@Path(PATH_UPDATE_ONE)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response updateOne(ENTITY entity,@QueryParam(PARAMETER_FIELDS) String fields);
 	
-	@PATCH
+	//@PATCH FIXME Not working so we will use PUT for the moment
+	@PUT
 	@Path(PATH_UPDATE_MANY)
 	@Consumes(MediaType.APPLICATION_XML)
 	Response updateMany(Collection<ENTITY> entities,@QueryParam(PARAMETER_FIELDS) String fields);

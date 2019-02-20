@@ -216,6 +216,11 @@ public abstract class AbstractTestRepresentationFunctionIntegrationImpl extends 
 	}
 	
 	@Override
+	public TestRepresentationFunctionIntegration setIsCatchThrowable(Boolean value) {
+		return (TestRepresentationFunctionIntegration) super.setIsCatchThrowable(value);
+	}
+	
+	@Override
 	protected void __deleteOne__(Object object) {
 		__inject__(Representation.class).delete(object);
 	}
