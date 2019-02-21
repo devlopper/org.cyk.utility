@@ -43,7 +43,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 			if(!(systemAction instanceof SystemActionRead)) {
 				CommandableBuilder commandable = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, Form.METHOD_SUBMIT,systemAction);
 				/* if it is update action then we need to know which field to process */
-				commandable.getCommand(Boolean.TRUE).setProperty(Properties.FIELDS, __inject__(StringHelper.class).concatenate(__getPersistenceEntityFieldNames__(window, systemAction, formClass)));
+				commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setProperty(Properties.FIELDS, __inject__(StringHelper.class).concatenate(__getPersistenceEntityFieldNames__(window, systemAction, formClass)));
 				
 			}
 			

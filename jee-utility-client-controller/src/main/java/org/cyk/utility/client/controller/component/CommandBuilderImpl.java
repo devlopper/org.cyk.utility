@@ -18,7 +18,8 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 	@Override
 	protected void __execute__(Command command) {
 		super.__execute__(command);
-		command.setFunction(getFunction());
+		CommandFunction function = getFunction();
+		command.setFunction(function);
 		WindowContainerManaged windowContainerManaged = getWindowContainerManaged();
 		command.setWindowContainerManaged(windowContainerManaged);		
 		String containerContextDependencyInjectionBeanName = getContainerContextDependencyInjectionBeanName();
