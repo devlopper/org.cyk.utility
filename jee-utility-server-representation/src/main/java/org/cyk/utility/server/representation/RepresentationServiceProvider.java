@@ -48,6 +48,7 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	String PARAMETER_IDENTIFIER = "identifier";
 	String PARAMETER_TYPE = "type";
 	String PARAMETER_FIELDS = "fields";
+	String PARAMETER_CODE = "code";
 	
 	/* Paths */
 	

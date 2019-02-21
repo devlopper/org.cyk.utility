@@ -233,6 +233,15 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return (Collection<ENTITY>) __getReader__(parameters).execute().getEntities();
 	}
 	
+	protected ENTITY __readOne__(Object...parameters) {
+		@SuppressWarnings("unchecked")
+		Collection<ENTITY> entities = (Collection<ENTITY>) __getReader__(parameters).execute().getEntities();
+		Integer size = __injectCollectionHelper__().getSize(entities);
+		if(size!=null && size > 1)
+			throw new RuntimeException("too much ("+size+") results found");
+		return __injectCollectionHelper__().getFirst(entities);
+	}
+	
 	protected Long __count__(Object...parameters) {
 		return (Long) __inject__(CollectionHelper.class).getFirst(__getReader__(parameters).execute().getEntities());
 	}

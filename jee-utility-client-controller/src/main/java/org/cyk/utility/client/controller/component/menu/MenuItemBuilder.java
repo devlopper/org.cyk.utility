@@ -1,7 +1,9 @@
 package org.cyk.utility.client.controller.component.menu;
 
+import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.system.action.SystemAction;
 
 public interface MenuItemBuilder extends VisibleComponentBuilder<MenuItem> {
@@ -16,6 +18,9 @@ public interface MenuItemBuilder extends VisibleComponentBuilder<MenuItem> {
 	MenuItemBuilder setCommandableNavigationIdentifierAndParameters(Object identifier,Object[] parameters);
 	MenuItemBuilder setCommandableNavigationIdentifierBuilderSystemAction(SystemAction systemAction,Object...parameters);
 	MenuItemBuilder setCommandableOutputProperty(Object key,Object value);
+	MenuItemBuilder setCommandableIcon(Icon icon);
+	
+	MenuItemBuilder addCommandableRoles(ComponentRole...roles);
 	
 	MenuItemBuilder addEntitiesList(Class<?>...classes);
 	MenuItemBuilder addEntityList(Class<?> aClass);

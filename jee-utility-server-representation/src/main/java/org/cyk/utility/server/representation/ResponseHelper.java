@@ -25,4 +25,5 @@ public interface ResponseHelper extends Helper {
 	
 	//Client Error
 	Boolean isStatusClientErrorNotFound(Response response);
+	
 }

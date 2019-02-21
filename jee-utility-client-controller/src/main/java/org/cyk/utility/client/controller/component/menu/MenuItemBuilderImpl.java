@@ -5,7 +5,9 @@ import java.util.Collection;
 
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
+import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionList;
@@ -31,6 +33,12 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 					menuItem.addChild( ((MenuItemBuilder)index).execute().getOutput() );
 			}
 		}
+	}
+	
+	@Override
+	public MenuItemBuilder setCommandableIcon(Icon icon) {
+		getCommandable(Boolean.TRUE).setIcon(icon);
+		return this;
 	}
 	
 	@Override
@@ -84,6 +92,12 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	@Override
 	public MenuItemBuilder setCommandableOutputProperty(Object key, Object value) {
 		getCommandable(Boolean.TRUE).setOutputProperty(key, value);
+		return this;
+	}
+	
+	@Override
+	public MenuItemBuilder addCommandableRoles(ComponentRole... roles) {
+		getCommandable(Boolean.TRUE).addRoles(roles);
 		return this;
 	}
 	
