@@ -71,7 +71,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 
 	@Override
 	protected <ENTITY> void ____deleteEntity____(ENTITY entity, RepresentationEntity representation) {
-		representation.deleteOne(((AbstractEntityFromPersistenceEntity)entity).getIdentifier(),ValueUsageType.SYSTEM.name());
+		representation.deleteOne(((AbstractEntityFromPersistenceEntity)entity));
 	}
 	
 	@Override

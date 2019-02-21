@@ -65,23 +65,24 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	/* Delete */
 	@DELETE
 	@Path(PATH_DELETE_ONE)
-	@Produces(MediaType.APPLICATION_XML)
-	Response deleteOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type);
+	@Consumes(MediaType.APPLICATION_XML)
+	//Response deleteOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type);
+	Response deleteOne(ENTITY entity);
 	
 	@DELETE
 	@Path(PATH_DELETE_MANY)
-	@Produces(MediaType.APPLICATION_XML)
+	//@Consumes(MediaType.APPLICATION_XML)
 	Response deleteMany();
 	
 	@DELETE
 	@Path(PATH_DELETE_ALL)
-	@Produces(MediaType.APPLICATION_XML)
+	//@Consumes(MediaType.APPLICATION_XML)
 	Response deleteAll();
 	
 	/* Count */
 	@GET
 	@Path(PATH_GET_COUNT)
-	@Produces(MediaType.TEXT_PLAIN)
+	//@Produces(MediaType.TEXT_PLAIN)
 	Response count();
 	
 	/**/

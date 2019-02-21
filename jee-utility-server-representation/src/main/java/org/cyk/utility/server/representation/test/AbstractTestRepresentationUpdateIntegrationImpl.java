@@ -22,9 +22,11 @@ public abstract class AbstractTestRepresentationUpdateIntegrationImpl extends Ab
 	protected void ____perform____(Object object) throws Exception {
 		Map<String,Object> map = getFieldValuesMap(object);
 		
+		String identifier = __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(object).toString();
+		String type = ValueUsageType.BUSINESS.name();
 		@SuppressWarnings("rawtypes")
 		RepresentationEntity representation = __inject__(RepresentationLayer.class).injectInterfaceClassFromEntityClass(getObjectClass());
-		object = representation.getOne(__inject__(FieldHelper.class).getFieldValueBusinessIdentifier(object).toString(), ValueUsageType.BUSINESS.name()).getEntity();
+		object = representation.getOne(identifier, type).getEntity();
 		
 		Collection<String> fieldNames = new ArrayList<>();
 		if(map!=null)
@@ -33,6 +35,9 @@ public abstract class AbstractTestRepresentationUpdateIntegrationImpl extends Ab
 				fieldNames.add(index.getKey());
 			}
 		__response__ = representation.updateOne(object,__injectStringHelper__().concatenate(fieldNames, CharacterConstant.COMA.toString()));
+		
+		//Object updated = representation.getOne(identifier, type).getEntity();
+		
 	}
 	
 	@Override

@@ -40,7 +40,7 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 		if(properties == null)
 			properties = new Properties();
 		ControllerFunctionModifier function = ____inject____(ControllerFunctionModifier.class);
-		function.setEntity(object).execute();
+		function.setEntity(object);
 		function.copyProperty(Properties.REQUEST,properties);
 		function.copyProperty(Properties.CONTEXT,properties);
 		function.copyProperty(Properties.FIELDS,properties);
@@ -59,7 +59,19 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 
 	@Override
 	public ControllerServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
-		____inject____(ControllerFunctionRemover.class).setEntity(object).execute();
+		if(properties == null)
+			properties = new Properties();
+		ControllerFunctionRemover function = ____inject____(ControllerFunctionRemover.class);
+		//Object identifier = __injectFieldHelper__().getFieldValueBusinessIdentifier(object);
+		function.setEntity(object);
+		//function.copyProperty(Properties.VALUE_USAGE_TYPE,properties);
+		function.copyProperty(Properties.REQUEST,properties);
+		function.copyProperty(Properties.CONTEXT,properties);
+		function.execute();
+		if(properties!=null) {
+			properties.setResponse(function.getProperties().getResponse());
+			properties.setAction(function.getProperties().getAction());
+		}
 		return this;
 	}
 

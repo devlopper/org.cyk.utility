@@ -6,11 +6,12 @@ import org.cyk.utility.server.representation.RepresentationLayer;
 public abstract class AbstractTestRepresentationDeleteIntegrationImpl extends AbstractTestRepresentationTransactionIntegrationImpl implements TestRepresentationDeleteIntegration {
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void ____perform____(Object object) throws Exception {
 		@SuppressWarnings("rawtypes")
 		RepresentationEntity representation = __inject__(RepresentationLayer.class).injectInterfaceClassFromEntityClass(getObjectClass());
-		__response__ = representation.deleteOne(object.toString(),getIdentifierValueUsageType().name());
+		__response__ = representation.deleteOne(object);
 	}
 	
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.instance.InstanceHelper;
+import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.value.ValueUsageType;
 
 public class RepresentationFunctionRemoverImpl extends AbstractRepresentationFunctionRemoverImpl implements Serializable {
@@ -15,9 +16,12 @@ public class RepresentationFunctionRemoverImpl extends AbstractRepresentationFun
 		if(getEntities()!=null)
 			__injectBusiness__().deleteMany((Collection<Object>) __inject__(InstanceHelper.class).buildMany(getPersistenceEntityClass(),getEntities()));
 		else if(getEntity()!=null) {
-			Object persistenceEntity = __inject__(InstanceHelper.class).buildOne(getPersistenceEntityClass(),getEntity());
+			Object persistenceEntity = __inject__(Persistence.class).readOne(getPersistenceEntityClass(), __injectFieldHelper__().getFieldValueBusinessIdentifier(getEntity())
+					, ValueUsageType.BUSINESS);
+			//__inject__(InstanceHelper.class).buildOne(getPersistenceEntityClass(),getEntity());
 			__injectBusiness__().delete(persistenceEntity);
 		}else if(getEntityIdentifier()!=null) {
+			//TODO avoid this - TO BE REMOVED
 			Object identifier = getEntityIdentifier();
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
 			if(ValueUsageType.SYSTEM.equals(valueUsageType))

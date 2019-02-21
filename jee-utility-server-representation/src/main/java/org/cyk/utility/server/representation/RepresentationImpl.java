@@ -6,7 +6,6 @@ import java.util.Collection;
 import javax.inject.Singleton;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -53,8 +52,7 @@ public class RepresentationImpl extends AbstractObject implements Representation
 			System.err.println("No specific representation interface found for entity "+object.getClass());
 			//super.create(object, properties);
 		}else{
-			__inject__(interfaceClass).deleteOne(String.valueOf(__inject__(FieldHelper.class).getFieldValueBusinessIdentifier(object))
-					, ValueUsageType.BUSINESS.name());
+			__inject__(interfaceClass).deleteOne(object);
 		}
 		return this;
 	}

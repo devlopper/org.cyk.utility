@@ -68,9 +68,17 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		return __inject__(RepresentationFunctionModifier.class).setEntities(entities).execute().getResponse();
 	}
 	
+	/*
 	@Override
 	public Response deleteOne(String identifier,String type) {
+		System.out.println("AbstractRepresentationEntityImpl.deleteOne() DELETEONE "+identifier+" : "+type);
 		return __inject__(RepresentationFunctionRemover.class).setEntityIdentifier(identifier).setEntityIdentifierValueUsageType(type)
+			.setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+	}
+	*/
+	@Override
+	public Response deleteOne(ENTITY entity) {
+		return __inject__(RepresentationFunctionRemover.class).setEntity(entity)
 			.setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 	

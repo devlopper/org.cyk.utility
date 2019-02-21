@@ -23,7 +23,7 @@ public class ControllerFunctionRemoverImpl extends AbstractControllerFunctionImp
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		Response response = null;
 		//Object identifierType = (String) getProperty(Properties.VALUE_USAGE_TYPE);
-		response = representation.deleteOne(__injectFieldHelper__().getFieldValueBusinessIdentifier(dataTransferObjects.iterator().next()).toString(),"business");
+		response = representation.deleteOne(dataTransferObjects.iterator().next());
 		if(Boolean.TRUE.equals(__injectResponseHelper__().isStatusClientErrorNotFound(response))) {
 			__injectThrowableHelper__().throw_(__inject__(ServiceNotFoundException.class).setSystemAction(action).setResponse(response));
 		}			
