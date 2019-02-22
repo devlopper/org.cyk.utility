@@ -18,8 +18,8 @@ public class WindowContainerManagedWindowBuilderGetterImpl extends AbstractFunct
 		if(systemAction == null)
 			systemAction = __inject__(RequestParameterValueMapper.class).setParameterNameAsActionClass().execute().getOutputAs(SystemAction.class);
 		
-		Class<WindowContainerManagedWindowBuilder> windowContainerManagedWindowBuilderClass = __inject__(WindowContainerManagedWindowBuilderClassGetter.class).setSystemAction(systemAction)
-				.execute().getOutput();
+		Class<WindowContainerManagedWindowBuilder> windowContainerManagedWindowBuilderClass = __inject__(WindowHelper.class).
+				getWindowContainerManagedWindowBuilderClass(systemAction);
 		
 		WindowContainerManagedWindowBuilder windowContainerManagedWindowBuilder = null;
 		if(windowContainerManagedWindowBuilderClass==null) {

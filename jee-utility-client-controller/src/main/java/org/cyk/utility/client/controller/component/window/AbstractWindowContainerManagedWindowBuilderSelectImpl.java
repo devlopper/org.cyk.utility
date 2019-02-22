@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.client.controller.data.DataHelper;
 import org.cyk.utility.client.controller.data.Row;
-import org.cyk.utility.client.controller.data.RowClassGetter;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
@@ -20,7 +20,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderSelectImpl exte
 	protected Class<? extends Row> __getRowClass__(Class<? extends Row> aClass) {
 		SystemAction systemAction = getSystemAction();
 		if(systemAction!=null)
-			aClass = __inject__(RowClassGetter.class).setSystemAction(systemAction).execute().getOutput();
+			aClass = __inject__(DataHelper.class).getRowClass(systemAction);
 		return aClass;
 	}
 	
