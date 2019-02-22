@@ -3,6 +3,9 @@ package org.cyk.utility.collection;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.clazz.ClassHelper;
@@ -14,6 +17,7 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	private Class<T> clazz;
 	private Class<?> elementClass;
 	protected Collection<T> collection;
+	private Class<?> collectionClass;
 
 	@Override
 	protected void __listenBeforePostConstruct__() {
@@ -84,8 +88,15 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	}
 	
 	protected Collection<T> __getCollection__(Boolean instanciateIfNull){
-		if(collection == null && Boolean.TRUE.equals(instanciateIfNull))
-			collection = new ArrayList<>();
+		if(collection == null && Boolean.TRUE.equals(instanciateIfNull)) {
+			Class<?> collectionClass = getCollectionClass();
+			if(collectionClass == null)
+				collectionClass = (Class<? extends Collection<?>>) List.class;
+			if(List.class.equals(collectionClass))
+				collection = new ArrayList<>();
+			else if(Set.class.equals(collectionClass))
+				collection = new LinkedHashSet<>();
+		}
 		return collection;
 	}
 
@@ -161,6 +172,16 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	@Override
 	public CollectionInstance<T> setElementClass(Class<?> elementClass) {
 		this.elementClass = elementClass;
+		return this;
+	}
+	
+	@Override
+	public Class<?> getCollectionClass() {
+		return collectionClass;
+	}
+	@Override
+	public CollectionInstance<T> setCollectionClass(Class<?> collectionClass) {
+		this.collectionClass = collectionClass;
 		return this;
 	}
 	

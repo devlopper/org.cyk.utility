@@ -29,6 +29,7 @@ public class SystemActionRelatedClassesNamesGetterImpl extends AbstractStringsFu
 			systemActionName = StringUtils.removeEnd(systemActionName, IMPL);
 		}
 		
+		/*
 		if(entityClass != null && systemActionClass != null) {
 			//xxxx.EntityCreateXXX
 			strings.add(entityClass.getName()+systemActionName+nameSuffix);
@@ -41,11 +42,14 @@ public class SystemActionRelatedClassesNamesGetterImpl extends AbstractStringsFu
 		if(entityClass != null)
 			//xxxx.EntityForm
 			strings.add(entityClass.getName()+nameSuffix);
+		*/
+		__add__(strings, entityClass, systemActionClass, systemActionName, nameSuffix);
 		
 		Class<?> extendedInterface = getExtendedInterface();
 		String defaultSuffix = getDefaultSuffix();
 		if(defaultSuffix == null)
 			defaultSuffix = StringConstant.EMPTY;
+		/*
 		if(extendedInterface!=null && systemActionClass != null) {
 			//xxxx.XXXCreateDefault
 			strings.add(extendedInterface.getName()+systemActionName+defaultSuffix);
@@ -59,8 +63,25 @@ public class SystemActionRelatedClassesNamesGetterImpl extends AbstractStringsFu
 			//xxxx.XXXDefault
 			strings.add(extendedInterface.getName()+defaultSuffix);
 		}
+		*/
+		__add__(strings, extendedInterface, systemActionClass, systemActionName, defaultSuffix);
 		
 		return strings;
+	}
+	
+	private void __add__(Strings strings,Class<?> clazz,Class<?> systemActionClass,String systemActionName,String suffix) {
+		if(clazz != null && systemActionClass != null) {
+			//xxxx.EntityCreateXXX
+			strings.add(clazz.getName()+systemActionName+suffix);
+			
+			if(Boolean.TRUE.equals(__injectClassHelper__().isInstanceOfOne(systemActionClass, EDIT_CLASSES)))
+				//xxxx.EntityEditXXX
+				strings.add(clazz.getName()+EDIT+suffix);
+		}
+		
+		if(clazz != null)
+			//xxxx.EntityForm
+			strings.add(clazz.getName()+suffix);
 	}
 	
 	@Override

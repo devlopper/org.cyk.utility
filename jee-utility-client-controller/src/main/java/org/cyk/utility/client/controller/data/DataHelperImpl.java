@@ -1,10 +1,17 @@
 package org.cyk.utility.client.controller.data;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 
 import javax.inject.Singleton;
 
+import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldValueGetter;
+import org.cyk.utility.field.Fields;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.string.StringLocation;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRelatedClassGetter;
 import org.cyk.utility.system.action.SystemActionRelatedClassesNamesGetter;
@@ -62,5 +69,22 @@ public class DataHelperImpl extends AbstractHelper implements DataHelper,Seriali
 	@Override
 	public Form injectForm(SystemAction systemAction) {
 		return systemAction == null  || systemAction.getEntities() == null ? null : injectForm(systemAction.getEntities().getElementClass(), systemAction.getClass());
+	}
+
+	@Override
+	public Fields getPropertiesFields(Class<?> anInterface) {
+		return __inject__(FieldGetter.class).setClazz(anInterface).setToken("PROPERTY_").setTokenLocation(StringLocation.START).execute().getOutput();
+	}
+	
+	@Override
+	public Strings getPropertiesFieldsNames(Class<?> anInterface) {
+		Strings names = null;
+		Fields fields = getPropertiesFields(anInterface);
+		if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
+			names = __inject__(Strings.class);
+			for(Field index : fields.get())
+				names.add(__inject__(FieldValueGetter.class).setField(index).execute().getOutput().toString());
+		}
+		return names;
 	}
 }

@@ -35,6 +35,9 @@ public interface CollectionInstance<T> extends Objectable {
 	Class<?> getElementClass();
 	CollectionInstance<T> setElementClass(Class<?> elementClass);
 	
+	Class<?> getCollectionClass();
+	CollectionInstance<T> setCollectionClass(Class<?> collectionClass);
+	
 	T getByIdentifier(Object identifier);
 	
 	CollectionInstance<T> removeAll();

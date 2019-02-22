@@ -15,18 +15,18 @@ public class FormClassesNamesGetterUnitTest extends AbstractArquillianUnitTestWi
 	@Test
 	public void myEntity_fromActionInterface() {
 		assertThat(__inject__(SystemActionRelatedClassesNamesGetter.class).setEntityClass(MyEntity.class).setSystemActionClass(SystemActionCreate.class)
-				.setNameSuffix("Form").setExtendedInterface(FormData.class).execute().getOutput().get())
+				.setNameSuffix("Form").setDefaultSuffix("Default").setExtendedInterface(FormData.class).execute().getOutput().get())
 			.asList().containsExactly("org.cyk.utility.client.controller.entities.MyEntityCreateForm","org.cyk.utility.client.controller.entities.MyEntityEditForm"
 					,"org.cyk.utility.client.controller.entities.MyEntityForm","org.cyk.utility.client.controller.data.FormDataCreateDefault"
-					,"org.cyk.utility.client.controller.data.FormDataDefault");
+					,"org.cyk.utility.client.controller.data.FormDataEditDefault","org.cyk.utility.client.controller.data.FormDataDefault");
 	}
 	
 	@Test
 	public void myEntity_fromActionImpl() {
 		assertThat(__inject__(SystemActionRelatedClassesNamesGetter.class).setEntityClass(MyEntity.class).setSystemActionClass(SystemActionCreateImpl.class)
-				.setNameSuffix("Form").setExtendedInterface(FormData.class).execute().getOutput().get())
+				.setNameSuffix("Form").setDefaultSuffix("Default").setExtendedInterface(FormData.class).execute().getOutput().get())
 			.asList().containsExactly("org.cyk.utility.client.controller.entities.MyEntityCreateForm","org.cyk.utility.client.controller.entities.MyEntityEditForm"
 					,"org.cyk.utility.client.controller.entities.MyEntityForm","org.cyk.utility.client.controller.data.FormDataCreateDefault"
-					,"org.cyk.utility.client.controller.data.FormDataDefault");
+					,"org.cyk.utility.client.controller.data.FormDataEditDefault","org.cyk.utility.client.controller.data.FormDataDefault");
 	}
 }

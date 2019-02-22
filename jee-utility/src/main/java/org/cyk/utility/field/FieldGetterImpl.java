@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -16,14 +16,28 @@ import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.value.ValueUsageType;
 
-public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Field>> implements FieldGetter, Serializable {
+public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Fields> implements FieldGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private StringLocation tokenLocation;
+	private Boolean isInheritanceFirst;
+	
 	@Override
-	protected Collection<Field> __execute__() {
-		Collection<Field> collection = null;
+	protected Fields __execute__() {
+		Fields fields = null;
 		Class<?> aClass = getClazz();
-		Collection<Field> fields = FieldUtils.getAllFieldsList(aClass);
+		
+		List<Field> all = new ArrayList<Field>();
+		//Process extends
+	    Class<?> indexClass = aClass;
+	    while (indexClass != null && indexClass != Object.class) {
+	    	__addFields__(all, indexClass.getDeclaredFields());
+	        indexClass = indexClass.getSuperclass();
+	    }
+	    
+		//Process implements
+	    __addFieldsFromInterface__(all, aClass);
+		
 		String token = getToken();
 		if(__inject__(StringHelper.class).isBlank(token)){
 			FieldName fieldName = getFieldName();
@@ -36,18 +50,33 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<C
 		StringLocation location = getTokenLocation();
 		if(location == null)
 			location = StringLocation.EXAT;
-		for(Field index : fields){
+		for(Field index : all){
 			Boolean add = Boolean.TRUE;
 			if(__inject__(StringHelper.class).isNotBlank(token)){
 				add = __inject__(StringHelper.class).isAtLocation(index.getName(), token, location);				
 			}
-			if(Boolean.TRUE.equals(add)){
-				if(collection == null)
-					collection = new ArrayList<>();
-				collection.add(index);
+			if(Boolean.TRUE.equals(add)){ 
+				if(fields == null) {
+					fields = __inject__(Fields.class);
+					fields.setCollectionClass(Set.class);
+				}
+				fields.add(index);
 			}
 		}
-		return collection;
+		return fields;
+	}
+	
+	private void __addFieldsFromInterface__(List<Field> fields,Class<?> aClass) {
+		if(aClass!=null && !aClass.equals(Object.class) && Boolean.TRUE.equals(aClass.isInterface())) {
+			__addFields__(fields, aClass.getDeclaredFields());
+			Class<?>[] interfaces = aClass.getInterfaces();
+		    for(Class<?> index : interfaces)
+		    	__addFieldsFromInterface__(fields, index);
+		}
+	}
+	
+	private void __addFields__(List<Field> fields,Field...values) {
+		fields.addAll(0, __injectCollectionHelper__().instanciate(values));
 	}
 	
 	@Override
@@ -138,17 +167,15 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<C
 
 	@Override
 	public StringLocation getTokenLocation() {
-		getProperties().getTokenLocation();
-		return null;
+		return tokenLocation;
 	}
 
 	@Override
-	public FieldGetter setTokenLocation(StringLocation stringLocation) {
-		getProperties().setTokenLocation(stringLocation);
+	public FieldGetter setTokenLocation(StringLocation tokenLocation) {
+		this.tokenLocation = tokenLocation;
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Set<Integer> getModifiers() {
 		return (Set<Integer>) getProperties().getModifiers();
@@ -236,6 +263,17 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<C
 	@Override
 	public FieldGetter setValueUsageType(ValueUsageType valueUsageType) {
 		getProperties().setValueUsageType(valueUsageType);
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsInheritanceFirst() {
+		return isInheritanceFirst;
+	}
+	
+	@Override
+	public FieldGetter setIsInheritanceFirst(Boolean isInheritanceFirst) {
+		this.isInheritanceFirst = isInheritanceFirst;
 		return this;
 	}
 

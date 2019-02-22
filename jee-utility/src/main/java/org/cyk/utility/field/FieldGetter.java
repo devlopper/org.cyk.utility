@@ -1,6 +1,5 @@
 package org.cyk.utility.field;
 
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Set;
 
@@ -8,10 +7,13 @@ import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.value.ValueUsageType;
 
-public interface FieldGetter extends FunctionWithPropertiesAsInput<Collection<Field>> {
+public interface FieldGetter extends FunctionWithPropertiesAsInput<Fields> {
 
 	Boolean getIsRecursive();
 	FieldGetter setIsRecursive(Boolean value);
+	
+	Boolean getIsInheritanceFirst();
+	FieldGetter setIsInheritanceFirst(Boolean isInheritanceFirst);
 	
 	Class<?> getClazz();
 	FieldGetter setClazz(Class<?> aClass);

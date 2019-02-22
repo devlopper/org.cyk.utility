@@ -34,9 +34,9 @@ public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends Abstrac
 			if(isAutomaticallyDetectFields == null)
 				isAutomaticallyDetectFields = Boolean.TRUE;
 			if(Boolean.TRUE.equals(isAutomaticallyDetectFields)) {
-				Collection<Field> fields = __inject__(FieldGetter.class).setClazz(getterModel.getObject().getClass()).execute().getOutput();
+				Fields fields = __inject__(FieldGetter.class).setClazz(getterModel.getObject().getClass()).execute().getOutput();
 				if(__inject__(CollectionHelper.class).isNotEmpty(fields))
-					for(Field index : fields) {
+					for(Field index : fields.get()) {
 						if(fieldNameMap == null)
 							fieldNameMap = new HashMap<>();
 						if(!Modifier.isStatic(index.getModifiers()) && !Modifier.isFinal(index.getModifiers()))

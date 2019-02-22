@@ -8,6 +8,7 @@ import java.util.Collection;
 import org.apache.commons.lang.StringUtils;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.Fields;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public class PersistenceQueryIdentifierFieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Field>> implements PersistenceQueryIdentifierFieldGetter, Serializable {
@@ -17,10 +18,10 @@ public class PersistenceQueryIdentifierFieldGetterImpl extends AbstractFunctionW
 	
 	@Override
 	protected Collection<Field> __execute__() throws Exception {
-		Collection<Field> classFields = __inject__(FieldGetter.class).execute(getClazz()).getOutput();
+		Fields classFields = __inject__(FieldGetter.class).execute(getClazz()).getOutput();
 		Collection<Field> identifierfields = null;
 		if(__inject__(CollectionHelper.class).isNotEmpty(classFields)){
-			for(Field index : classFields){
+			for(Field index : classFields.get()){
 				if(StringUtils.startsWithAny(index.getName(), PREFIXES)){
 					if(identifierfields == null)
 						identifierfields = new ArrayList<Field>();

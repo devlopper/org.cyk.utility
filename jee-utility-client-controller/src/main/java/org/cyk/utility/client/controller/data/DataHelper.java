@@ -1,6 +1,8 @@
 package org.cyk.utility.client.controller.data;
 
+import org.cyk.utility.field.Fields;
 import org.cyk.utility.helper.Helper;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 
 public interface DataHelper extends Helper {
@@ -16,4 +18,7 @@ public interface DataHelper extends Helper {
 	
 	Form injectForm(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
 	Form injectForm(SystemAction systemAction);
+	
+	Fields getPropertiesFields(Class<?> anInterface);
+	Strings getPropertiesFieldsNames(Class<?> anInterface);
 }

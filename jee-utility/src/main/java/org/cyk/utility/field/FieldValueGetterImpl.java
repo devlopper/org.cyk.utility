@@ -3,6 +3,7 @@ package org.cyk.utility.field;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -22,23 +23,31 @@ public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputI
 		Object value = null;
 		Object object = getObject();
 		Field field = getField();
-		if(object!=null){
-			if(field == null) {
-				String methodName = "get"+__inject__(StringHelper.class).applyCase(getFieldName(), Case.FIRST_CHARACTER_UPPER);
-				Method method = MethodUtils.getAccessibleMethod(object.getClass(), methodName);
-				if(method!=null)
-					try {
-						value = method.invoke(object);
-					} catch (Exception exception) {
-						__inject__(Log.class).executeThrowable(exception);
-					}
-			}else{			
-				try {
-					value = FieldUtils.readField(field, object, Boolean.TRUE);
-				} catch (IllegalAccessException exception) {
-					__inject__(Log.class).executeThrowable(exception);
-				}	
+		if(field!=null && Modifier.isStatic(field.getModifiers())) {
+			try {
+				value = field.get(null);
+			} catch (Exception exception) {
+				__inject__(Log.class).executeThrowable(exception);
 			}
+		}else {
+			if(object!=null){
+				if(field == null) {
+					String methodName = "get"+__inject__(StringHelper.class).applyCase(getFieldName(), Case.FIRST_CHARACTER_UPPER);
+					Method method = MethodUtils.getAccessibleMethod(object.getClass(), methodName);
+					if(method!=null)
+						try {
+							value = method.invoke(object);
+						} catch (Exception exception) {
+							__inject__(Log.class).executeThrowable(exception);
+						}
+				}else{			
+					try {
+						value = FieldUtils.readField(field, object, Boolean.TRUE);
+					} catch (IllegalAccessException exception) {
+						__inject__(Log.class).executeThrowable(exception);
+					}	
+				}
+			}	
 		}
 		return value;
 	}
