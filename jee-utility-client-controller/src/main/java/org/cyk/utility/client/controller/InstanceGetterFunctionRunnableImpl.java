@@ -1,8 +1,11 @@
 package org.cyk.utility.client.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.instance.InstanceGetter;
 
@@ -14,13 +17,11 @@ public class InstanceGetterFunctionRunnableImpl extends AbstractFunctionRunnable
 			@Override
 			public void run() {
 				if(FieldName.IDENTIFIER.equals(getFunction().getFieldName())) {
-					//USe REST API to get Instances
-					/*
-					Object one = __inject__(Persistence.class).readOne(getFunction().getClazz(), getFunction().getValue(), new Properties().setValueUsageType(getFunction().getValueUsageType()));
+					Object one = __inject__(Controller.class).readOne(getFunction().getClazz(), getFunction().getValue(), new Properties().setValueUsageType(getFunction().getValueUsageType()));
 					Collection<Object> collection = new ArrayList<>();
 					collection.add(one);
 					setOutput(collection);
-					*/
+					
 				}
 			}
 		});

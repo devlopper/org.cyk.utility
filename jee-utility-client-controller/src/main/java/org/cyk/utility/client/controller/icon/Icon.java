@@ -12,4 +12,6 @@ public enum Icon {
 	,QUESTION
 	,SEND
 	,USERS
+	,USER
+	,FLASH
 }

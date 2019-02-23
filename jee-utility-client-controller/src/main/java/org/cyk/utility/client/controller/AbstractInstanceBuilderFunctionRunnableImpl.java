@@ -10,6 +10,9 @@ public abstract class AbstractInstanceBuilderFunctionRunnableImpl extends org.cy
 	protected void __copy__(Object source, Object destination) {
 		if(source instanceof AbstractEntityFromPersistenceEntity && destination instanceof Data) {
 			((Data)destination).setIdentifier(((AbstractEntityFromPersistenceEntity)source).getIdentifier());
+		}else if(source instanceof Data && destination instanceof AbstractEntityFromPersistenceEntity) {
+			if(((Data)source).getIdentifier()!=null)
+				((AbstractEntityFromPersistenceEntity)destination).setIdentifier(((Data)source).getIdentifier().toString());
 		}
 		super.__copy__(source, destination);
 	}

@@ -91,7 +91,7 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 		if(collection == null && Boolean.TRUE.equals(instanciateIfNull)) {
 			Class<?> collectionClass = getCollectionClass();
 			if(collectionClass == null)
-				collectionClass = (Class<? extends Collection<?>>) List.class;
+				collectionClass = List.class;
 			if(List.class.equals(collectionClass))
 				collection = new ArrayList<>();
 			else if(Set.class.equals(collectionClass))
