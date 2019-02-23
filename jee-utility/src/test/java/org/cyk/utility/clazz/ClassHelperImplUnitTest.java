@@ -36,4 +36,13 @@ public class ClassHelperImplUnitTest extends AbstractArquillianUnitTestWithDefau
 		assertionHelper.assertEquals(I2.class, __inject__(ClassHelper.class).getInterfaceByClassSimpleName(I2Impl.class));
 	}
 	
+	@Test
+	public void isIsNumberInteger() {
+		assertionHelper.assertTrue(__inject__(ClassHelper.class).isNumber(Integer.class));
+	}
+	
+	@Test
+	public void isIsNumberLong() {
+		assertionHelper.assertTrue(__inject__(ClassHelper.class).isNumber(Long.class));
+	}
 }

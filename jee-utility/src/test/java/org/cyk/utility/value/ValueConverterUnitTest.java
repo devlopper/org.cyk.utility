@@ -13,5 +13,8 @@ public class ValueConverterUnitTest extends AbstractArquillianUnitTestWithDefaul
 		assertThat(__inject__(ValueConverter.class).execute(2, String.class).getOutput()).isInstanceOf(String.class).isEqualTo("2");
 	}
 	
-	
+	@Test
+	public void execute_2_string_to_int() {
+		assertThat(__inject__(ValueConverter.class).execute("2", Integer.class).getOutput()).isInstanceOf(Integer.class).isEqualTo(2);
+	}
 }

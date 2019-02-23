@@ -22,10 +22,15 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 	}
 
 	@Override
+	public <INSTANCE> INSTANCE getByIdentifierSystem(Class<INSTANCE> aClass, Object value) {
+		return __inject__(CollectionHelper.class).getFirst(getByFieldNameByValueUsageType(aClass, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, value));
+	}
+
+	@Override
 	public <INSTANCE> INSTANCE getByIdentifierBusiness(Class<INSTANCE> aClass, Object value) {
 		return __inject__(CollectionHelper.class).getFirst(getByFieldNameByValueUsageType(aClass, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, value));
 	}
-
+	
 	@Override
 	public <INSTANCE> INSTANCE buildOne(Class<INSTANCE> aClass, Object fieldsValuesObject) {
 		return (INSTANCE) __inject__(InstanceBuilder.class).setClazz(aClass).setFieldsValuesObject(fieldsValuesObject).execute().getOutput();

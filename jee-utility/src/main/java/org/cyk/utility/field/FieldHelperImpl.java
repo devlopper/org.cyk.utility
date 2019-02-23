@@ -45,6 +45,14 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	}
 
 	@Override
+	public Object getFieldValueSystemOrBusinessIdentifier(Object object) {
+		Object identifier = getFieldValueSystemIdentifier(object);
+		if(identifier == null)
+			identifier = getFieldValueBusinessIdentifier(object);
+		return identifier;
+	}
+	
+	@Override
 	public FieldHelper setFieldValueSystemIdentifier(Object object, Object value) {
 		__inject__(FieldValueSetter.class).setObject(object).setField(FieldName.IDENTIFIER, ValueUsageType.SYSTEM).setValue(value).execute();
 		return this;

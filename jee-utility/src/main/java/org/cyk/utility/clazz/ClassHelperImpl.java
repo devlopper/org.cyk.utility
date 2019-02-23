@@ -93,7 +93,7 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 
 	@Override
 	public Boolean isNumber(Class<?> aClass) {
-		return isInstanceOf(Number.class, getWrapper(aClass));
+		return isInstanceOf(getWrapper(aClass),Number.class);
 	}
 
 	@Override

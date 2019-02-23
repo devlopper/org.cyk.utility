@@ -3,6 +3,7 @@ package org.cyk.utility.value;
 import java.io.Serializable;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.number.NumberHelper;
 
 public class ValueConverterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements ValueConverter,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -12,9 +13,10 @@ public class ValueConverterImpl extends AbstractFunctionWithPropertiesAsInputImp
 		Object value = getValue();
 		if(value != null) {
 			Class<?> clazz = getClazz();
-			if(String.class.equals(clazz) && !(value instanceof String)) {
+			if(String.class.equals(clazz) && !(value instanceof String))
 				value = value.toString();
-			}
+			else if(__injectClassHelper__().isNumber(clazz))
+				value = __inject__(NumberHelper.class).get(clazz, value);
 		}
 		return value;
 	}
