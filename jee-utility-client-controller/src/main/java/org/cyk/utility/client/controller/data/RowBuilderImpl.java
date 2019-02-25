@@ -12,6 +12,7 @@ public class RowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Ro
 	private static final long serialVersionUID = 1L;
 
 	private Data data;
+	private Class<? extends Data> dataClass;
 	private GridBuilder grid;
 	private Objects rows;
 	//private Class<?> clazz;
@@ -19,6 +20,7 @@ public class RowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Ro
 	@Override
 	protected Row __execute__() throws Exception {
 		Row row = null;
+		Class<? extends Data> dataClass = getDataClass();
 		Data data = getData();
 		GridBuilder grid = getGrid();
 		
@@ -45,6 +47,7 @@ public class RowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Ro
 			}
 			if(row instanceof org.cyk.utility.client.controller.data.RowData) {
 				((org.cyk.utility.client.controller.data.RowData<Data>)row).setData(data);
+				((org.cyk.utility.client.controller.data.RowData<Data>)row).setDataClass((Class<Data>) dataClass);
 			}
 		}
 		
@@ -89,6 +92,17 @@ public class RowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Ro
 	public RowBuilder setRows(Objects rows) {
 		this.rows = rows;
 		return this;
+	}
+	
+	@Override
+	public RowBuilder setDataClass(Class<? extends Data> dataClass) {
+		this.dataClass = dataClass;
+		return this;
+	}
+	
+	@Override
+	public Class<? extends Data> getDataClass() {
+		return dataClass;
 	}
 	
 	/*

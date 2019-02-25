@@ -64,7 +64,12 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		Object instance = null;
 		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete || systemAction instanceof SystemActionProcess) {
 			Long identifier = (Long) __injectCollectionHelper__().getFirst(systemAction.getEntitiesIdentifiers());
-			instance = __inject__(Controller.class).readOne(systemAction.getEntities().getElementClass(), identifier);
+			if(identifier == null) {
+				
+			}else {
+				instance = __inject__(Controller.class).readOne(systemAction.getEntities().getElementClass(), identifier);	
+			}
+			
 		}else if(systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionAdd || systemAction instanceof SystemActionRedirect) {
 			instance = __inject__(systemAction.getEntities().getElementClass());
 		}

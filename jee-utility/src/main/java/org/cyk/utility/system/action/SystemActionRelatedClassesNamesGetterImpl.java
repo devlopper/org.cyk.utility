@@ -144,5 +144,5 @@ public class SystemActionRelatedClassesNamesGetterImpl extends AbstractStringsFu
 	private static final String SYSTEM_ACTION = "SystemAction";
 	private static final String IMPL = "Impl";
 	private static final String EDIT = "Edit";
-	private static final Class<?>[] EDIT_CLASSES = {SystemActionCreate.class,SystemActionUpdate.class,SystemActionDelete.class};
+	private static final Class<?>[] EDIT_CLASSES = {SystemActionCreate.class,SystemActionRead.class,SystemActionUpdate.class,SystemActionDelete.class};
 }

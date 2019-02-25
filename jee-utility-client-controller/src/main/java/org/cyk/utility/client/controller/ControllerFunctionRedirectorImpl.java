@@ -33,7 +33,7 @@ public class ControllerFunctionRedirectorImpl extends AbstractControllerFunction
 	@Override
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		Response response = null;
-		Properties properties = new Properties().setValueUsageType(ValueUsageType.BUSINESS);		
+		Properties properties = new Properties().setValueUsageType(ValueUsageType.BUSINESS);	
 		Object entity = __inject__(Controller.class).readOne(action.getEntityClass(),action.getEntitiesIdentifiers().getFirst(),properties);
 		response = (Response) properties.getResponse();			
 		if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isStatusSuccessfulOk(response))) {

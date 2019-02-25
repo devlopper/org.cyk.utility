@@ -14,6 +14,7 @@ import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionProcess;
+import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionRedirect;
 import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
@@ -41,6 +42,9 @@ public abstract class AbstractCommandFunctionFunctionRunnableImpl extends Abstra
 			if(action instanceof SystemActionCreate) {
 				Object object = __inject__(CollectionHelper.class).getFirst(entities);
 				__inject__(Controller.class).create(object,properties);
+			}else if(action instanceof SystemActionRead) {
+				Object object = __inject__(CollectionHelper.class).getFirst(entities);
+				__inject__(Controller.class).redirect(action.getEntityClass(),__inject__(FieldHelper.class).getFieldValueBusinessIdentifier(object));
 			}else if(action instanceof SystemActionUpdate) {
 				Object object = __inject__(CollectionHelper.class).getFirst(entities);
 				properties.setFields(getFunction().getProperty(Properties.FIELDS));
@@ -55,6 +59,7 @@ public abstract class AbstractCommandFunctionFunctionRunnableImpl extends Abstra
 				Object object = __inject__(CollectionHelper.class).getFirst(entities);
 				__inject__(Controller.class).process(object);
 			}else if(action instanceof SystemActionRedirect) {
+				//TODO not needed anymore
 				Object object = __inject__(CollectionHelper.class).getFirst(entities);
 				__inject__(Controller.class).redirect(action.getEntityClass(),__inject__(FieldHelper.class).getFieldValueBusinessIdentifier(object));
 			}else if(action instanceof SystemActionAdd) {

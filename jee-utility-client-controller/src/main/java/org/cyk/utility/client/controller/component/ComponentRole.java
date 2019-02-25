@@ -18,6 +18,7 @@ public enum ComponentRole {
 	,INPUT
 	,OUTPUT
 	,CREATOR
+	,READER
 	,MODIFIER
 	,REMOVER
 	,COLLECTION_PROCESSOR

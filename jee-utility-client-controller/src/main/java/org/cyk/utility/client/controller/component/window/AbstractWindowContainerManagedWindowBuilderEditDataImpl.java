@@ -24,7 +24,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 			Form form = __inject__(formClass);
 			if(window.getTitle()!=null)
 				form.setTitle(window.getTitle().getValue());
-			Data data = (Data) systemAction.getEntities().getAt(0);
+			Data data = __getData__(window, systemAction, formClass, rowClass);
 			
 			if(form instanceof FormData<?>) {
 				((FormData<Data>)form).setData(data);	
@@ -40,7 +40,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 			
 			__execute__(form,systemAction,data,viewBuilder);
 			
-			if(!(systemAction instanceof SystemActionRead)) {
+			if(Boolean.TRUE.equals(__isAddCommandable__(window, systemAction, formClass, rowClass))) {
 				CommandableBuilder commandable = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, Form.METHOD_SUBMIT,systemAction);
 				/* if it is update action then we need to know which field to process */
 				commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setProperty(Properties.FIELDS, __inject__(StringHelper.class).concatenate(__getPersistenceEntityFieldNames__(window, systemAction, formClass)));
@@ -48,6 +48,14 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 			}
 			
 		}
+	}
+	
+	protected Data __getData__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {
+		return (Data) systemAction.getEntities().getAt(0);
+	}
+	
+	protected Boolean __isAddCommandable__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {
+		return !(systemAction instanceof SystemActionRead);
 	}
 	
 	protected Collection<String> __getPersistenceEntityFieldNames__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass){

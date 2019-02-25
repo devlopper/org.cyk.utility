@@ -39,8 +39,11 @@ public abstract class AbstractRowDataImpl<DATA extends Data> extends AbstractRow
 		ObjectByClassMap parametersMap = getNavigationParametersMap();
 		String url = null;
 		Data data = getData();
-		SystemAction systemAction = __inject__(aClass);
-		systemAction.getEntities(Boolean.TRUE).setElementClass(dataClass);
+		Class<DATA> dataClass = getDataClass();
+		if(dataClass == null)
+			if(data!=null)
+				dataClass = (Class<DATA>) data.getClass();
+		SystemAction systemAction = __inject__(aClass).setEntityClass(dataClass);
 		systemAction.getEntities(Boolean.TRUE).add(data);
 		if(parametersMap!=null) {
 			//Object[] parameters = (Object[]) parametersMap.get(aClass);
@@ -65,6 +68,17 @@ public abstract class AbstractRowDataImpl<DATA extends Data> extends AbstractRow
 		
 		url = navigation.getUniformResourceLocator().toString();
 		return url;
+	}
+	
+	@Override
+	public Class<DATA> getDataClass() {
+		return dataClass;
+	}
+	
+	@Override
+	public RowData<DATA> setDataClass(Class<DATA> dataClass) {
+		this.dataClass = dataClass;
+		return this;
 	}
 
 }

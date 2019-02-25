@@ -14,10 +14,10 @@ public class FunctionRunnableMapImpl implements FunctionRunnableMap,Serializable
 	private Map<Class<? extends FunctionRunnable<?>>,Integer> levelMap;
 	
 	@Override
-	public FunctionRunnableMap set(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass,Integer level) {
+	public FunctionRunnableMap set(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass,Integer level,Boolean overwrite) {
 		Class<? extends FunctionRunnable<?>> currentFunctionRunnableClass = get(aClass);
 		Integer currentFunctionRunnableClassLevel = levelMap == null ? null : levelMap.get(currentFunctionRunnableClass);
-		if(currentFunctionRunnableClass==null || currentFunctionRunnableClassLevel == null || (level!=null && level > currentFunctionRunnableClassLevel)) {
+		if(currentFunctionRunnableClass==null || currentFunctionRunnableClassLevel == null || (level!=null && level > currentFunctionRunnableClassLevel) || Boolean.TRUE.equals(overwrite)) {
 			if(map == null)
 				map = new HashMap<>();
 			map.put(aClass, functionRunnableClass);
@@ -29,8 +29,13 @@ public class FunctionRunnableMapImpl implements FunctionRunnableMap,Serializable
 	}
 	
 	@Override
+	public FunctionRunnableMap set(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass,Integer level) {
+		return set(aClass, functionRunnableClass,level, null);
+	}
+	
+	@Override
 	public FunctionRunnableMap set(Class<?> aClass, Class<? extends FunctionRunnable<?>> functionRunnableClass) {
-		return set(aClass, functionRunnableClass, null);
+		return set(aClass, functionRunnableClass, null,null);
 	}
 
 	@Override

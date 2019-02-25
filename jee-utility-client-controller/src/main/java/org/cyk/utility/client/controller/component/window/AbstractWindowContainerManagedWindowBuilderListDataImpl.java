@@ -10,12 +10,14 @@ import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewMap;
+import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
+import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl extends AbstractWindowContainerManagedWindowBuilderListImpl implements WindowContainerManagedWindowBuilderListData,Serializable {
@@ -30,7 +32,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 				objects = __inject__(Controller.class).readMany(systemAction.getEntities().getElementClass());
 			
 			@SuppressWarnings({ "rawtypes" })
-			GridBuilder gridBuilder = __inject__(GridBuilder.class).setRowClass(rowClass).setRowDataClass(systemAction.getEntities().getElementClass())
+			GridBuilder gridBuilder = __inject__(GridBuilder.class).setRowClass(rowClass).setRowDataClass((Class<? extends Data>) systemAction.getEntities().getElementClass())
 				.addObjects((Collection)objects)
 				;
 			
@@ -46,6 +48,11 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 			SystemAction systemActionCreate = __inject__(SystemActionCreate.class).setEntityClass(gridBuilder.getRowDataClass());			
 			gridBuilder.addComponentBuildersToViewHeader(__inject__(CommandableBuilder.class).setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_PROCESSOR,ComponentRole.CREATOR)
 					.setNavigationIdentifierBuilderSystemAction(systemActionCreate));
+			
+			/* Read current instance */
+			SystemAction systemActionRead = __inject__(SystemActionRead.class).setEntityClass(gridBuilder.getRowDataClass());
+			gridBuilder.addCommandablesToColumnBodyView(__inject__(CommandableBuilder.class).setDerivableFieldNames(CommandableBuilder.PROPERTY_NAME,Boolean.FALSE).addRoles(ComponentRole.COLLECTION_ITEM_PROCESSOR,ComponentRole.READER)
+					.setNavigationIdentifierBuilderSystemAction(systemActionRead));
 			
 			/* Update current instance */
 			SystemAction systemActionUpdate = __inject__(SystemActionUpdate.class).setEntityClass(gridBuilder.getRowDataClass());

@@ -98,6 +98,8 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 			if(__injectCollectionHelper__().isNotEmpty(roles)) {
 				if(__injectCollectionHelper__().contains(roles, ComponentRole.CREATOR))
 					icon = Icon.PLUS;
+				else if(__injectCollectionHelper__().contains(roles, ComponentRole.READER))
+					icon = Icon.EYE;
 				else if(__injectCollectionHelper__().contains(roles, ComponentRole.MODIFIER))
 					icon = Icon.EDIT;
 				else if(__injectCollectionHelper__().contains(roles, ComponentRole.REMOVER))

@@ -46,13 +46,15 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	private CommandableBuilderByClassMap commandablesColumnCommandableMap;
 	private ViewBuilderMap viewMap;
 	private CommandableBuilder createRowCommandable,processRowCommandable;
-	private Class<?> rowDataClass;
+	private Class<? extends Data> rowDataClass;
 	private ObjectByClassMap commandablesColumnCommandablesNavigationsParametersMap;
 	private SystemAction creationWindowSystemAction,processingWindowSystemAction;
 	
 	@Override
 	protected void __execute__(Grid grid) {
 		super.__execute__(grid);
+		
+		Class<? extends Data> rowDataClass = getRowDataClass();
 		
 		Objects objects = getObjects();
 		if(__injectCollectionHelper__().isNotEmpty(objects)) {
@@ -61,7 +63,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 				if(!(index instanceof org.cyk.utility.client.controller.data.Data))
 					__injectThrowableHelper__().throwRuntimeException("La classe "+index.getClass().getName()+" doit implémenter l'interface de Data");
 				
-				row = __inject__(org.cyk.utility.client.controller.data.RowBuilder.class).setGrid(this).setData((Data) index).execute().getOutput();			
+				row = __inject__(org.cyk.utility.client.controller.data.RowBuilder.class).setGrid(this).setDataClass(rowDataClass).setData((Data) index).execute().getOutput();			
 				if(row!=null)
 					grid.getObjects(Boolean.TRUE).add(row);
 			}
@@ -517,13 +519,13 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	}
 	
 	@Override
-	public GridBuilder setRowDataClass(Class<?> rowDataClass) {
+	public GridBuilder setRowDataClass(Class<? extends Data> rowDataClass) {
 		this.rowDataClass = rowDataClass;
 		return this;
 	}
 	
 	@Override
-	public Class<?> getRowDataClass() {
+	public Class<? extends Data> getRowDataClass() {
 		return rowDataClass;
 	}
 	

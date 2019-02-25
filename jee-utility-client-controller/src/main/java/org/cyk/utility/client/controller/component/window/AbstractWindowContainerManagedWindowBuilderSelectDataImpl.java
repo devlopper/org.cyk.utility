@@ -7,6 +7,7 @@ import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.string.Strings;
@@ -25,7 +26,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderSelectDataImpl 
 				objects = __inject__(Controller.class).readMany(systemAction.getEntities().getElementClass());
 			
 			@SuppressWarnings({ "rawtypes" })
-			GridBuilder gridBuilder = __inject__(GridBuilder.class).setRowClass(rowClass).setRowDataClass(systemAction.getEntities().getElementClass())
+			GridBuilder gridBuilder = __inject__(GridBuilder.class).setRowClass(rowClass).setRowDataClass((Class<? extends Data>) systemAction.getEntities().getElementClass())
 				.addObjects((Collection)objects)
 				;
 			

@@ -109,6 +109,11 @@ public abstract class AbstractSystemActionImpl extends AbstractObject implements
 		return this;
 	}
 	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName()+"."+getIdentifier()+":"+getEntityClass()+":"+getEntitiesIdentifiers();
+	}
+	
 	public static final String FIELD_ENTITIES = "entities";
 	public static final String FIELD_ENTITIES_IDENTIFIERS = "entitiesIdentifiers";
 	

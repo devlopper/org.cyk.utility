@@ -5,6 +5,7 @@ public enum Icon {
 	PLUS
 	,REMOVE
 	,EDIT
+	,EYE
 	,GEAR
 	,GEARS
 	,PRINT

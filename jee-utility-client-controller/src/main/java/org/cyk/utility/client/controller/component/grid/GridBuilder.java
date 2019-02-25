@@ -12,6 +12,7 @@ import org.cyk.utility.client.controller.component.grid.row.RowBuilder;
 import org.cyk.utility.client.controller.component.grid.row.RowBuilders;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilderMap;
+import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.object.ObjectByClassMap;
 import org.cyk.utility.object.Objects;
@@ -87,8 +88,8 @@ public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 	GridBuilder setRowClass(Class<? extends Row> rowClass);
 	Class<? extends Row> getRowClass();
 	
-	GridBuilder setRowDataClass(Class<?> rowDataClass);
-	Class<?> getRowDataClass();
+	GridBuilder setRowDataClass(Class<? extends Data> rowDataClass);
+	Class<? extends Data> getRowDataClass();
 	
 	GridBuilder setCreationWindowSystemAction(SystemAction creationWindowSystemAction);
 	SystemAction getCreationWindowSystemAction();
