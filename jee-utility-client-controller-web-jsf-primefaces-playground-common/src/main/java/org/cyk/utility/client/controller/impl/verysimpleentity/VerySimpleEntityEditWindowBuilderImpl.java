@@ -2,25 +2,14 @@ package org.cyk.utility.client.controller.impl.verysimpleentity;
 
 import java.io.Serializable;
 
-import org.cyk.utility.client.controller.component.command.CommandableBuilder;
-import org.cyk.utility.client.controller.component.grid.GridBuilder;
-import org.cyk.utility.client.controller.component.grid.column.ColumnBuilder;
-import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.window.AbstractWindowContainerManagedWindowBuilderEditDataImpl;
-import org.cyk.utility.client.controller.component.window.WindowRenderTypeDialog;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntity;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntityDetails;
-import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntityDetailsReadRow;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntityEditWindowBuilder;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionProcess;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionUpdate;
 
 public class VerySimpleEntityEditWindowBuilderImpl extends AbstractWindowContainerManagedWindowBuilderEditDataImpl implements VerySimpleEntityEditWindowBuilder, Serializable {
 	private static final long serialVersionUID = 1L;

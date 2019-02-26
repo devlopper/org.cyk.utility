@@ -6,14 +6,14 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionInstanceString;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.string.StringLocation;
+import org.cyk.utility.string.Strings;
 
 public class AssertionBuilderStringLocationImpl extends AbstractAssertionBuilderImpl implements AssertionBuilderStringLocation, Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private Map<StringLocation,CollectionInstanceString> locationStringsMap;
+	private Map<StringLocation,Strings> locationStringsMap;
 	
 	@Override
 	protected Boolean __computeValue__(Assertion assertion, Boolean isAffirmation) {	
@@ -24,7 +24,7 @@ public class AssertionBuilderStringLocationImpl extends AbstractAssertionBuilder
 				FieldValueGetter fieldValueGetter = assertionValue.getFieldValueGetter();
 				if(fieldValueGetter != null){
 					//String string = (String) fieldValueGetter.execute().getOutput();
-					//Map<StringLocation,CollectionInstanceString> locationStringsMap = getLocationStringsMap();
+					//Map<StringLocation,Strings> locationStringsMap = getLocationStringsMap();
 					//if(locationStringsMap)
 					//value =  == null;
 				}
@@ -93,38 +93,38 @@ public class AssertionBuilderStringLocationImpl extends AbstractAssertionBuilder
 	}
 	
 	@Override
-	public Map<StringLocation, CollectionInstanceString> getLocationStringsMap() {
+	public Map<StringLocation, Strings> getLocationStringsMap() {
 		return locationStringsMap;
 	}
 	
 	@Override
-	public Map<StringLocation, CollectionInstanceString> getLocationStringsMap(Boolean instanciateIfNull) {
+	public Map<StringLocation, Strings> getLocationStringsMap(Boolean instanciateIfNull) {
 		if(locationStringsMap == null && Boolean.TRUE.equals(instanciateIfNull))
 			locationStringsMap = new LinkedHashMap<>();
 		return locationStringsMap;
 	}
 	
 	@Override
-	public AssertionBuilderStringLocation setLocationStringsMap(Map<StringLocation, CollectionInstanceString> locationStringsMap) {
+	public AssertionBuilderStringLocation setLocationStringsMap(Map<StringLocation, Strings> locationStringsMap) {
 		this.locationStringsMap = locationStringsMap;
 		return this;
 	}
 	
 	@Override
-	public CollectionInstanceString getLocationStrings(StringLocation location) {
+	public Strings getLocationStrings(StringLocation location) {
 		return locationStringsMap == null ? null : locationStringsMap.get(location);
 	}
 	
 	@Override
-	public CollectionInstanceString getLocationStrings(StringLocation location, Boolean injectIfNull) {
-		CollectionInstanceString instance = getLocationStrings(location);
+	public Strings getLocationStrings(StringLocation location, Boolean injectIfNull) {
+		Strings instance = getLocationStrings(location);
 		if(instance == null && Boolean.TRUE.equals(injectIfNull))
-			setLocationStrings(location, instance = __inject__(CollectionInstanceString.class));
+			setLocationStrings(location, instance = __inject__(Strings.class));
 		return instance;
 	}
 	
 	@Override
-	public AssertionBuilderStringLocation setLocationStrings(StringLocation location,CollectionInstanceString strings) {
+	public AssertionBuilderStringLocation setLocationStrings(StringLocation location,Strings strings) {
 		if(location != null && locationStringsMap!=null)
 			locationStringsMap.put(location, strings);
 		return this;

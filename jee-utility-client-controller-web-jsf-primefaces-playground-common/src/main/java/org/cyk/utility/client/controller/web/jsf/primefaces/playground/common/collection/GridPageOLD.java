@@ -77,6 +77,7 @@ public class GridPageOLD extends AbstractPageContainerManagedImpl implements Ser
 		
 		CommandableBuilder commandableBuilder = __inject__(CommandableBuilder.class).setName("Ajouter une ligne")
 				.setCommandFunctionActionClass(SystemActionCreate.class).addCommandFunctionTryRunRunnable(new Runnable() {
+					@SuppressWarnings("unchecked")
 					@Override
 					public void run() {
 						//String gridIdentifier = ((GridPage)windowContainerManaged).getGridIdentifier();
@@ -151,6 +152,7 @@ public class GridPageOLD extends AbstractPageContainerManagedImpl implements Ser
 		event.getOutputProperties().setUpdate("@(."+gridBuilder.getOutputProperties().getIdentifierAsStyleClass()+")");
 		CommandFunction function = __inject__(CommandFunction.class);
 		function.try_().getRun(Boolean.TRUE).addRunnables(new Runnable() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public void run() {
 				SelectEvent selectEvent = (SelectEvent) function.getProperties().getParameter();

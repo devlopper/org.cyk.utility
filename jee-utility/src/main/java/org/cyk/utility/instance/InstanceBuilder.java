@@ -2,15 +2,15 @@ package org.cyk.utility.instance;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 
-public interface InstanceBuilder<INSTANCE> extends FunctionWithPropertiesAsInput<INSTANCE> {
+public interface InstanceBuilder extends FunctionWithPropertiesAsInput<Object> {
 
-	Class<INSTANCE> getClazz();
-	InstanceBuilder<INSTANCE> setClazz(Class<?> aClass);
+	Class<?> getClazz();
+	InstanceBuilder setClazz(Class<?> aClass);
 	
 	Object[] getConstructorParameters();
-	InstanceBuilder<INSTANCE> setConstructorParameters(Object[] parameters);
+	InstanceBuilder setConstructorParameters(Object[] parameters);
 	
 	Object getFieldsValuesObject();
-	InstanceBuilder<INSTANCE> setFieldsValuesObject(Object fieldsValuesObject);
+	InstanceBuilder setFieldsValuesObject(Object fieldsValuesObject);
 	
 }

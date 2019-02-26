@@ -4,7 +4,6 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.field.FieldHelper;
 
-@SuppressWarnings("rawtypes")
 public abstract class AbstractInstanceBuilderFunctionRunnableImpl extends AbstractFunctionRunnableImpl<InstanceBuilder> {
 	private static final long serialVersionUID = 1L;
 

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.regex.Pattern;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.collection.CollectionInstanceString;
+import org.cyk.utility.string.Strings;
 
 public class RegularExpressionInstanceImpl extends AbstractObject implements RegularExpressionInstance,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -12,7 +12,7 @@ public class RegularExpressionInstanceImpl extends AbstractObject implements Reg
 	private String expression;
 	private Pattern pattern;
 	
-	private CollectionInstanceString startTokens,middleTokens,endTokens;
+	private Strings startTokens,middleTokens,endTokens;
 	
 	@Override
 	public String getExpression() {
@@ -34,51 +34,51 @@ public class RegularExpressionInstanceImpl extends AbstractObject implements Reg
 	}
 	
 	@Override
-	public CollectionInstanceString getStartTokens() {
+	public Strings getStartTokens() {
 		return startTokens;
 	}
 	
 	@Override
-	public RegularExpressionInstance setStartTokens(CollectionInstanceString startTokens) {
+	public RegularExpressionInstance setStartTokens(Strings startTokens) {
 		this.startTokens = startTokens;
 		return this;
 	}
 	
 	@Override
-	public CollectionInstanceString getMiddleTokens() {
+	public Strings getMiddleTokens() {
 		return middleTokens;
 	}
 	
 	@Override
-	public RegularExpressionInstance setMiddleTokens(CollectionInstanceString middleTokens) {
+	public RegularExpressionInstance setMiddleTokens(Strings middleTokens) {
 		this.middleTokens = middleTokens;
 		return this;
 	}
 	
 	@Override
-	public CollectionInstanceString getMiddleTokens(Boolean injectIfNull) {
-		CollectionInstanceString collectionInstanceString = getMiddleTokens();
+	public Strings getMiddleTokens(Boolean injectIfNull) {
+		Strings collectionInstanceString = getMiddleTokens();
 		if(collectionInstanceString == null)
-			setMiddleTokens(collectionInstanceString = __inject__(CollectionInstanceString.class));
+			setMiddleTokens(collectionInstanceString = __inject__(Strings.class));
 		return collectionInstanceString;
 	}
 	
 	@Override
-	public CollectionInstanceString getEndTokens() {
+	public Strings getEndTokens() {
 		return endTokens;
 	}
 	
 	@Override
-	public RegularExpressionInstance setEndTokens(CollectionInstanceString endTokens) {
+	public RegularExpressionInstance setEndTokens(Strings endTokens) {
 		this.endTokens = endTokens;
 		return this;
 	}
 	
 	@Override
-	public CollectionInstanceString getEndTokens(Boolean injectIfNull) {
-		CollectionInstanceString collectionInstanceString = getEndTokens();
+	public Strings getEndTokens(Boolean injectIfNull) {
+		Strings collectionInstanceString = getEndTokens();
 		if(collectionInstanceString == null)
-			setEndTokens(collectionInstanceString = __inject__(CollectionInstanceString.class));
+			setEndTokens(collectionInstanceString = __inject__(Strings.class));
 		return collectionInstanceString;
 	}
 	

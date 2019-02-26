@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.Case;
@@ -86,6 +87,16 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 			//4 - bundles
 			if(__injectStringHelper__().isBlank(result))
 				result = __inject__(StringRepositoryResourceBundle.class).getOne(properties);
+			
+			//5 - divide and conquer
+			if(__injectStringHelper__().isBlank(result)) {
+				//xxx.type => type of xxx
+				if(StringUtils.endsWith(key, ".type")) {
+					InternalizationPhraseBuilder phraseBuilder = __inject__(InternalizationPhraseBuilder.class);
+					phraseBuilder.addStringsByKeys("type","of",StringUtils.substringBeforeLast(key, ".type"));
+					result = phraseBuilder.execute().getOutput();
+				}
+			}
 			
 			//
 			if(__injectStringHelper__().isBlank(result)) {

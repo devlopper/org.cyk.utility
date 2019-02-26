@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-public class InstanceBuilderImpl<INSTANCE> extends AbstractFunctionWithPropertiesAsInputImpl<INSTANCE> implements InstanceBuilder<INSTANCE>,Serializable {
+public class InstanceBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements InstanceBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 /*
 	@Override
@@ -21,12 +21,12 @@ public class InstanceBuilderImpl<INSTANCE> extends AbstractFunctionWithPropertie
 	}
 */
 	@Override
-	public Class<INSTANCE> getClazz() {
-		return (Class<INSTANCE>) getProperties().getClazz();
+	public Class<?> getClazz() {
+		return (Class<?>) getProperties().getClazz();
 	}
 
 	@Override
-	public InstanceBuilder<INSTANCE> setClazz(Class<?> aClass) {
+	public InstanceBuilder setClazz(Class<?> aClass) {
 		getProperties().setClass(aClass);
 		return this;
 	}
@@ -37,7 +37,7 @@ public class InstanceBuilderImpl<INSTANCE> extends AbstractFunctionWithPropertie
 	}
 	
 	@Override
-	public InstanceBuilder<INSTANCE> setConstructorParameters(Object[] parameters) {
+	public InstanceBuilder setConstructorParameters(Object[] parameters) {
 		getProperties().setParameters(parameters);
 		return this;
 	}
@@ -48,7 +48,7 @@ public class InstanceBuilderImpl<INSTANCE> extends AbstractFunctionWithPropertie
 	}
 	
 	@Override
-	public InstanceBuilder<INSTANCE> setFieldsValuesObject(Object copy) {
+	public InstanceBuilder setFieldsValuesObject(Object copy) {
 		getProperties().setCopy(copy);
 		return this;
 	}

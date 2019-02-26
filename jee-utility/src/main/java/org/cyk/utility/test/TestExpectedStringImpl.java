@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.assertion.AssertionHelper;
-import org.cyk.utility.collection.CollectionInstanceString;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.StringLocation;
+import org.cyk.utility.string.Strings;
 
 import lombok.ToString;
 
@@ -17,14 +17,14 @@ import lombok.ToString;
 public class TestExpectedStringImpl extends AbstractObject implements TestExpectedString, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Map<StringLocation,CollectionInstanceString> locationStringsMap;
+	private Map<StringLocation,Strings> locationStringsMap;
 	
 	@Override
 	public void evaluate(String string) {
-		Map<StringLocation,CollectionInstanceString> locationStringsMap = getLocationStringsMap();
+		Map<StringLocation,Strings> locationStringsMap = getLocationStringsMap();
 		if(string != null && locationStringsMap!=null) {
 			for(StringLocation indexLocation : StringLocation.values()) {
-				CollectionInstanceString strings = locationStringsMap.get(indexLocation);
+				Strings strings = locationStringsMap.get(indexLocation);
 				if(strings!=null) {
 					for(String indexString : strings.get()) {
 						__inject__(AssertionHelper.class).assertTrue(indexString+"  NOT "+indexLocation+" "+string,__inject__(StringHelper.class).isAtLocation(string, indexString, indexLocation));
@@ -35,44 +35,44 @@ public class TestExpectedStringImpl extends AbstractObject implements TestExpect
 	}
 	
 	@Override
-	public Map<StringLocation, CollectionInstanceString> getLocationStringsMap() {
+	public Map<StringLocation, Strings> getLocationStringsMap() {
 		return locationStringsMap;
 	}
 	
 	@Override
-	public Map<StringLocation, CollectionInstanceString> getLocationStringsMap(Boolean instanciateIfNull) {
-		Map<StringLocation,CollectionInstanceString> locationStringsMap = getLocationStringsMap();
+	public Map<StringLocation, Strings> getLocationStringsMap(Boolean instanciateIfNull) {
+		Map<StringLocation,Strings> locationStringsMap = getLocationStringsMap();
 		if(locationStringsMap == null && Boolean.TRUE.equals(instanciateIfNull))
 			setLocationStringsMap(locationStringsMap = new LinkedHashMap<>());
 		return locationStringsMap;
 	}
 	
 	@Override
-	public TestExpectedString setLocationStringsMap(Map<StringLocation, CollectionInstanceString> locationStringsMap) {
+	public TestExpectedString setLocationStringsMap(Map<StringLocation, Strings> locationStringsMap) {
 		this.locationStringsMap = locationStringsMap;
 		return this;
 	}
 	
 	@Override
-	public CollectionInstanceString getLocationStrings(StringLocation location) {
-		Map<StringLocation,CollectionInstanceString> locationStringsMap = getLocationStringsMap();
+	public Strings getLocationStrings(StringLocation location) {
+		Map<StringLocation,Strings> locationStringsMap = getLocationStringsMap();
 		return locationStringsMap == null ? null : locationStringsMap.get(location);
 	}
 	
 	@Override
-	public CollectionInstanceString getLocationStrings(StringLocation location, Boolean injectIfNull) {
-		CollectionInstanceString instance = getLocationStrings(location);
+	public Strings getLocationStrings(StringLocation location, Boolean injectIfNull) {
+		Strings instance = getLocationStrings(location);
 		if(instance == null && Boolean.TRUE.equals(injectIfNull)) {
 			
-			setLocationStrings(location, instance = __inject__(CollectionInstanceString.class));
+			setLocationStrings(location, instance = __inject__(Strings.class));
 		}
 		return instance;
 	}
 	
 	@Override
-	public TestExpectedString setLocationStrings(StringLocation location,CollectionInstanceString strings) {
+	public TestExpectedString setLocationStrings(StringLocation location,Strings strings) {
 		if(location != null) {
-			Map<StringLocation,CollectionInstanceString> locationStringsMap = getLocationStringsMap();
+			Map<StringLocation,Strings> locationStringsMap = getLocationStringsMap();
 			if(locationStringsMap == null)
 				setLocationStringsMap(locationStringsMap = new HashMap<>());
 			locationStringsMap.put(location, strings);

@@ -1,7 +1,7 @@
 package org.cyk.utility.regularexpression;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.collection.CollectionInstanceString;
+import org.cyk.utility.string.Strings;
 
 public interface RegularExpressionInstance extends Objectable {
 
@@ -11,14 +11,14 @@ public interface RegularExpressionInstance extends Objectable {
 	Boolean match(String string);
 	
 	/**/
-	CollectionInstanceString getStartTokens();
-	RegularExpressionInstance setStartTokens(CollectionInstanceString startTokens);
+	Strings getStartTokens();
+	RegularExpressionInstance setStartTokens(Strings startTokens);
 	
-	CollectionInstanceString getMiddleTokens();
-	CollectionInstanceString getMiddleTokens(Boolean injectIfNull);
-	RegularExpressionInstance setMiddleTokens(CollectionInstanceString middleTokens);
+	Strings getMiddleTokens();
+	Strings getMiddleTokens(Boolean injectIfNull);
+	RegularExpressionInstance setMiddleTokens(Strings middleTokens);
 	
-	CollectionInstanceString getEndTokens();
-	CollectionInstanceString getEndTokens(Boolean injectIfNull);
-	RegularExpressionInstance setEndTokens(CollectionInstanceString endTokens);
+	Strings getEndTokens();
+	Strings getEndTokens(Boolean injectIfNull);
+	RegularExpressionInstance setEndTokens(Strings endTokens);
 }

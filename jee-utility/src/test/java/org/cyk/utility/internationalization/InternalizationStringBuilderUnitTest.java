@@ -29,6 +29,12 @@ public class InternalizationStringBuilderUnitTest extends AbstractArquillianUnit
 	}
 	
 	@Test
+	public void isType_de_xxx_whenKeyXxxDotType(){
+		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
+		assertionHelper.assertEquals("type de ##??xxx??##", __inject__(InternalizationStringBuilder.class).setKey("xxx.type").execute().getOutput());		
+	}
+	
+	@Test
 	public void isSalut_whenKeyIsHi(){
 		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
 		assertionHelper.assertEquals("salut", __inject__(InternalizationStringBuilder.class).setKey("hi").execute().getOutput());	
