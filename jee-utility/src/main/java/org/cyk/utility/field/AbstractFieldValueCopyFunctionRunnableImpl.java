@@ -94,7 +94,7 @@ public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends Abstrac
 					//single value
 					value = __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(value);
 					isUnSet = Boolean.FALSE;
-				}else {
+				}else if(!StringUtils.startsWithAny(destinationType.getName(), "java.","javax.")){
 					//not a single value
 					Object temp = value;
 					value = __inject__(destinationType);

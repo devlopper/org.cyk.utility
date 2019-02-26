@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Data;
-import org.cyk.utility.client.controller.data.DataHelper;
+import org.cyk.utility.client.controller.data.FieldsNamesGetter;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.string.Strings;
@@ -45,7 +45,7 @@ public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends Abst
 		}
 		
 		if(fieldNames == null)
-			fieldNames = __inject__(DataHelper.class).getPropertiesFieldsNames(getSystemAction().getEntityClass());
+			fieldNames = __inject__(FieldsNamesGetter.class).setSystemAction(getSystemAction()).execute().getOutput();
 		
 		if(__injectCollectionHelper__().isNotEmpty(fieldNames))
 			for(String index : fieldNames.get())

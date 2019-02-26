@@ -90,12 +90,10 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 			
 			//5 - divide and conquer
 			if(__injectStringHelper__().isBlank(result)) {
-				//xxx.type => type of xxx
-				if(StringUtils.endsWith(key, ".type")) {
-					InternalizationPhraseBuilder phraseBuilder = __inject__(InternalizationPhraseBuilder.class);
-					phraseBuilder.addStringsByKeys("type","of",StringUtils.substringBeforeLast(key, ".type"));
-					result = phraseBuilder.execute().getOutput();
-				}
+				Collection<Object> keys = __getKeys__(key);
+				InternalizationPhraseBuilder phraseBuilder = __inject__(InternalizationPhraseBuilder.class);
+				phraseBuilder.addStringsByKeys(keys);
+				result = phraseBuilder.execute().getOutput();
 			}
 			
 			//
@@ -105,6 +103,15 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 			
 		}
 		return result;
+	}
+	
+	private Collection<Object> __getKeys__(String key) {
+		//xxx.type => type of xxx
+		if(StringUtils.endsWith(key, ".type")) {
+			return __injectCollectionHelper__().instanciate("type","of",StringUtils.substringBeforeLast(key, ".type"));
+		}
+		System.err.println("We cannot deduce keys from "+key);
+		return null;
 	}
 	
 	@Override
@@ -182,5 +189,7 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 	/**/
 	
 	public static final String FIELD_KEY_BUILDER = "keyBuilder";
+	
+	private static final String[] X_OF_Y = {"type","category"};
 
 }
