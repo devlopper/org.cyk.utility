@@ -5,6 +5,9 @@ import org.cyk.utility.system.action.SystemAction;
 
 public interface WindowContainerManagedWindowBuilderGetter extends FunctionWithPropertiesAsInput<WindowContainerManagedWindowBuilder> {
 
+	WindowContainerManaged getContainerManaged();
+	WindowContainerManagedWindowBuilderGetter setContainerManaged(WindowContainerManaged containerManaged);
+	
 	SystemAction getSystemAction();
 	WindowContainerManagedWindowBuilderGetter setSystemAction(SystemAction systemAction);
 	

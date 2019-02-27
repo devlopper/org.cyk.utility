@@ -43,11 +43,19 @@ public class ControllerFunctionRedirectorImpl extends AbstractControllerFunction
 			
 			NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemActionRead);
 			Navigation navigation = navigationBuilder.execute().getOutput();
+			response.close();
 			__inject__(NavigationRedirector.class).setNavigation(navigation).execute();
+			
 		}else if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isFamilyClientError(response))) {
 			__injectThrowableHelper__().throw_(__inject__(EntityNotFoundException.class).setSystemAction(action).setResponse(response));
 		}				
 		return response;
+	}
+	
+	@Override
+	protected Boolean __isProcessReponse__() {
+		//Response will be close by redirection so no need for further processing
+		return Boolean.FALSE;
 	}
 	
 	@Override

@@ -64,49 +64,55 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 					//__injectThrowableHelper__().throwRuntimeException(getClass()+" : No response for action <<"+action+">>");
 				}
 			}else {
-				Response.Status.Family responseStatusFamily = Response.Status.Family.familyOf(response.getStatus());
-				if(Response.Status.Family.SUCCESSFUL.equals(responseStatusFamily) || Response.Status.Family.SERVER_ERROR.equals(responseStatusFamily)){
-					Object responseEntityDto = Boolean.TRUE.equals(response.hasEntity()) ? getResponseEntityDto(action, representation, response) : null;		
-					if(Response.Status.Family.SUCCESSFUL.equals(responseStatusFamily))
-						;
-					else if(responseEntityDto instanceof ResponseEntityDto)
-						throw new RuntimeException( ((ResponseEntityDto)responseEntityDto).getMessageCollection().toString());
-				}else if(Response.Status.Family.CLIENT_ERROR.equals(responseStatusFamily)){
-					/*String summary = null;
-					String summaryInternalizationStringKey = __getMessageSummaryInternalizationStringBuilderKey__(action,response);
-					if(__injectStringHelper__().isBlank(summaryInternalizationStringKey)) {
-						summary = response.readEntity(String.class);
-					}else {
-						summary = __inject__(InternalizationStringBuilder.class).setKey(summaryInternalizationStringKey)
-								.setParameters(__getMessageSummaryInternalizationStringBuilderParameters__(action, response)).execute().getOutput();
+				if(Boolean.TRUE.equals(__isProcessReponse__())) {
+					Response.Status.Family responseStatusFamily = Response.Status.Family.familyOf(response.getStatus());
+					if(Response.Status.Family.SUCCESSFUL.equals(responseStatusFamily) || Response.Status.Family.SERVER_ERROR.equals(responseStatusFamily)){
+						Object responseEntityDto = Boolean.TRUE.equals(response.hasEntity()) ? getResponseEntityDto(action, representation, response) : null;		
+						if(Response.Status.Family.SUCCESSFUL.equals(responseStatusFamily))
+							;
+						else if(responseEntityDto instanceof ResponseEntityDto)
+							throw new RuntimeException( ((ResponseEntityDto)responseEntityDto).getMessageCollection().toString());
+					}else if(Response.Status.Family.CLIENT_ERROR.equals(responseStatusFamily)){
+						/*String summary = null;
+						String summaryInternalizationStringKey = __getMessageSummaryInternalizationStringBuilderKey__(action,response);
+						if(__injectStringHelper__().isBlank(summaryInternalizationStringKey)) {
+							summary = response.readEntity(String.class);
+						}else {
+							summary = __inject__(InternalizationStringBuilder.class).setKey(summaryInternalizationStringKey)
+									.setParameters(__getMessageSummaryInternalizationStringBuilderParameters__(action, response)).execute().getOutput();
+						}
+						
+						__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class)
+								.setSummary(summary)
+								.setDetails(summary)
+								.setSeverity(__inject__(NotificationSeverityWarning.class))
+								).addTypes(__inject__(MessageRenderTypeDialog.class),__inject__(MessageRenderTypeInline.class))
+								.copyProperty(Properties.CONTEXT, getProperties())
+								.execute();
+						*/
+						//throw new RuntimeException(message);
+					}else if(Response.Status.Family.INFORMATIONAL.equals(responseStatusFamily) || Response.Status.Family.OTHER.equals(responseStatusFamily)){
+						String summary = response.readEntity(String.class);
+						__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class)
+								.setSummary(summary)
+								.setDetails(summary)
+								.setSeverity(__inject__(NotificationSeverityInformation.class))
+								).setType(__inject__(MessageRenderTypeDialog.class)).execute();
+					}else if(Response.Status.Family.REDIRECTION.equals(responseStatusFamily)){
+						String summary = response.readEntity(String.class);
+						__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class)
+								.setSummary(summary)
+								.setDetails(summary)
+								.setSeverity(__inject__(NotificationSeverityWarning.class))
+								).setType(__inject__(MessageRenderTypeDialog.class)).execute();
 					}
-					
-					__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class)
-							.setSummary(summary)
-							.setDetails(summary)
-							.setSeverity(__inject__(NotificationSeverityWarning.class))
-							).addTypes(__inject__(MessageRenderTypeDialog.class),__inject__(MessageRenderTypeInline.class))
-							.copyProperty(Properties.CONTEXT, getProperties())
-							.execute();
-					*/
-					//throw new RuntimeException(message);
-				}else if(Response.Status.Family.INFORMATIONAL.equals(responseStatusFamily) || Response.Status.Family.OTHER.equals(responseStatusFamily)){
-					String summary = response.readEntity(String.class);
-					__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class)
-							.setSummary(summary)
-							.setDetails(summary)
-							.setSeverity(__inject__(NotificationSeverityInformation.class))
-							).setType(__inject__(MessageRenderTypeDialog.class)).execute();
-				}else if(Response.Status.Family.REDIRECTION.equals(responseStatusFamily)){
-					String summary = response.readEntity(String.class);
-					__inject__(MessageRender.class).addNotificationBuilders(__inject__(NotificationBuilder.class)
-							.setSummary(summary)
-							.setDetails(summary)
-							.setSeverity(__inject__(NotificationSeverityWarning.class))
-							).setType(__inject__(MessageRenderTypeDialog.class)).execute();
 				}
 			}
 		}
+	}
+	
+	protected Boolean __isProcessReponse__() {
+		return Boolean.TRUE;
 	}
 	
 	@SuppressWarnings("rawtypes")

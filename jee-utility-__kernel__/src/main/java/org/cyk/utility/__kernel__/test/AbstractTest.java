@@ -27,4 +27,18 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 	protected void __listenBefore__(){}
 	
 	protected void __listenBeforeCallCountIsZero__() throws Exception{}
+	
+	protected static Boolean __isSkippable__(Package aPackage){
+		Boolean isSkippable = null;
+		if(aPackage!=null && "true".equalsIgnoreCase(System.getProperty(aPackage.getName()+".test.skip"))) {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			System.out.println(stackTraceElements[3].getClassName()+"."+stackTraceElements[3].getMethodName()+" Skipped ");//TODO this can vary if not called first
+			isSkippable = Boolean.TRUE;
+		}
+		return isSkippable;
+	}
+	
+	protected static Boolean __isSkippable__(Class<?> aClass){
+		return aClass == null ? Boolean.TRUE : __isSkippable__(aClass.getPackage());
+	}
 }

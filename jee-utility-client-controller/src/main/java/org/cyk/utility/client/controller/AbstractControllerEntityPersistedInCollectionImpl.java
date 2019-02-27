@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.navigation.Navigation;
+import org.cyk.utility.client.controller.navigation.NavigationBuilder;
+import org.cyk.utility.client.controller.navigation.NavigationRedirector;
 import org.cyk.utility.random.RandomHelper;
+import org.cyk.utility.system.action.SystemActionRead;
 
 public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> extends AbstractControllerEntityImpl<ENTITY> implements ControllerEntityPersistedInCollection<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -80,6 +84,23 @@ public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> 
 	@Override
 	public ControllerEntityPersistedInCollection<ENTITY> delete(ENTITY entity, Properties properties) {
 		collection.remove(entity);
+		return this;
+	}
+	
+	@Override
+	public ControllerEntity<ENTITY> redirect(Object identifier, Properties properties) {
+		ENTITY entity = readOneByBusinessIdentifier(identifier);
+		if(entity == null) {
+			__injectThrowableHelper__().throwRuntimeException("Entity with identifier "+identifier+" not found");
+		}else {
+			SystemActionRead systemActionRead = __inject__(SystemActionRead.class);
+			systemActionRead.setEntityClass(getEntityClass());
+			systemActionRead.getEntitiesIdentifiers(Boolean.TRUE).add(__injectFieldHelper__().getFieldValueSystemIdentifier(entity));
+			
+			NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemActionRead);
+			Navigation navigation = navigationBuilder.execute().getOutput();
+			__inject__(NavigationRedirector.class).setNavigation(navigation).execute();	
+		}
 		return this;
 	}
 	

@@ -43,7 +43,8 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		Object context = getContext();
 		WindowBuilder window = getWindow();
 		if(window == null)
-			window = __inject__(WindowBuilder.class);
+			//window = __inject__(WindowBuilder.class);
+			window = __getProperty__(WindowContainerManagedProperty.WINDOW,WindowBuilder.class);
 		WindowRenderType windowRenderType = getWindowRenderType();
 		if(windowRenderType == null) {
 			Class<?> windowRenderTypeClass = __inject__(RequestParameterValueMapper.class).setParameterNameAsWindowRenderTypeClass().execute().getOutputAs(Class.class);
@@ -59,7 +60,9 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		
 		SystemAction systemAction = getSystemAction();
 		if(systemAction == null)
-			systemAction = __inject__(RequestParameterValueMapper.class).setParameterNameAsActionClass().execute().getOutputAs(SystemAction.class);
+			systemAction = __getProperty__(WindowContainerManagedProperty.SYSTEM_ACTION,SystemAction.class);
+		//if(systemAction == null)
+		//	systemAction = __inject__(RequestParameterValueMapper.class).setParameterNameAsActionClass().execute().getOutputAs(SystemAction.class);
 		
 		Object instance = null;
 		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete || systemAction instanceof SystemActionProcess) {
@@ -268,26 +271,14 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		return this;
 	}
 	
-	/*
-	@Override
-	public Class<?> getEntityClass() {
-		return entityClass;
+	/**/
+	
+	protected <T> T __getProperty__(WindowContainerManagedProperty property,Class<T> aClass) {
+		return __inject__(WindowContainerManagedPropertyValueGetter.class).setContainer(this).setProperty(property).execute().getOutputAs(aClass);
 	}
 	
-	@Override
-	public Class<?> getEntityClass(Boolean getFromRequestIfNull) {
-		Class<?> clazz = getEntityClass();
-		if(clazz == null)
-			setEntityClass(clazz = __inject__(RequestParameterValueMapper.class).setParameterName(Class.class).execute().getOutputAs(Class.class));
-		return clazz;
-	}
+	/**/
 	
-	@Override
-	public WindowContainerManagedWindowBuilder setEntityClass(Class<?> entityClass) {
-		this.entityClass = entityClass;
-		return this;
-	}
-	*/
 	public static final String FIELD_MENU_MAP = "menuMap";
 	public static final String FIELD_VIEW = "view";
 	public static final String FIELD_WINDOW = "window";

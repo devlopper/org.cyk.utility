@@ -22,6 +22,7 @@ public class SenderMailUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 	
 	@Test
 	public void pingWaitForTermination(){
+		if(Boolean.TRUE.equals(__isSkippable__(SenderMail.class))) return;
 		SenderMail sender = __inject__(SenderMail.class);
 		sender.getProtocol().setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE).setIsSecuredConnectionRequired(Boolean.TRUE)
 		.setAuthenticationCredentials(__inject__(Credentials.class).setIdentifier("dgbfdtideveloppers").setSecret("dgbf2016dti"));
@@ -34,6 +35,7 @@ public class SenderMailUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 	
 	@Test
 	public void pingDoNotWaitForTermination(){
+		if(Boolean.TRUE.equals(__isSkippable__(SenderMail.class))) return;
 		SenderMail sender = __inject__(SenderMail.class);
 		sender.getProtocol().setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE).setIsSecuredConnectionRequired(Boolean.TRUE)
 		.setAuthenticationCredentials(__inject__(Credentials.class).setIdentifier("dgbfdtideveloppers").setSecret("dgbf2016dti"));
@@ -47,6 +49,7 @@ public class SenderMailUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 	
 	@Test
 	public void pingUsingCdiObserver(){
+		if(Boolean.TRUE.equals(__isSkippable__(SenderMail.class))) return;
 		SenderMail sender = __inject__(SenderMail.class);
 		sender.getProtocol().setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE).setIsSecuredConnectionRequired(Boolean.TRUE)
 		.setAuthenticationCredentials(__inject__(Credentials.class).setIdentifier("dgbfdtideveloppers").setSecret("dgbf2016dti"));
@@ -60,6 +63,7 @@ public class SenderMailUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 	
 	@Test
 	public void pingUsingHelper(){
+		if(Boolean.TRUE.equals(__isSkippable__(SenderMail.class))) return;
 		__inject__(ProtocolDefaults.class).get(ProtocolSimpleMailTransfer.class).setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE).setIsSecuredConnectionRequired(Boolean.TRUE)
 		.setAuthenticationCredentials(__inject__(Credentials.class).setIdentifier("dgbfdtideveloppers").setSecret("dgbf2016dti"));
 		

@@ -22,12 +22,14 @@ import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
 import org.cyk.utility.request.RequestGetter;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.throwable.ThrowableHelper;
 
 public abstract class AbstractWindowContainerManagedImpl extends AbstractObject implements WindowContainerManaged,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private SystemAction systemAction;
 	private Window window;
 	private WindowBuilder __windowBuilder__;
 	private String contextDependencyInjectionBeanName;
@@ -38,6 +40,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		super.__listenPostConstruct__();
 		setContextDependencyInjectionBeanName(__inject__(StringHelper.class).getVariableNameFrom(getClass().getSimpleName()));
 		setSessionUser(__getSessionUser__());
+		setSystemAction(__getProperty__(WindowContainerManagedProperty.SYSTEM_ACTION, SystemAction.class));
 	}
 	
 	protected <THEME extends Theme> Class<THEME> __getThemeClass__(){
@@ -119,7 +122,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	}
 	
 	protected WindowContainerManagedWindowBuilder __getWindowContainerManagedWindowBuilder__() {
-		return __inject__(WindowContainerManagedWindowBuilderBlank.class);
+		return __inject__(WindowContainerManagedWindowBuilderGetter.class).setContainerManaged(this).execute().getOutput();
 	}
 	
 	protected String __getWindowTitleValue__() {
@@ -151,6 +154,17 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 			commandable = commandableBuilder.execute().getOutput();
 		}
 		return commandable;
+	}
+	
+	@Override
+	public SystemAction getSystemAction() {
+		return systemAction;
+	}
+	
+	@Override
+	public WindowContainerManaged setSystemAction(SystemAction systemAction) {
+		this.systemAction = systemAction;
+		return this;
 	}
 	
 	@Override
@@ -218,6 +232,10 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	}
 
 	/**/
+	
+	protected <T> T __getProperty__(WindowContainerManagedProperty property,Class<T> aClass) {
+		return __inject__(WindowContainerManagedPropertyValueGetter.class).setContainerManaged(this).setProperty(property).execute().getOutputAs(aClass);
+	}
 	
 	protected <T> T ____getProxy____(Class<T> aClass) {
 		return __getProxyByRequest__(aClass,__getRequest__());

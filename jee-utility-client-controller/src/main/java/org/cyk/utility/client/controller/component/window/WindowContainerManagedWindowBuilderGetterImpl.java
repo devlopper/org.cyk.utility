@@ -3,20 +3,23 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.request.RequestParameterValueMapper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.throwable.ThrowableHelper;
 
 public class WindowContainerManagedWindowBuilderGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<WindowContainerManagedWindowBuilder> implements WindowContainerManagedWindowBuilderGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private WindowContainerManaged containerManaged;
 	private SystemAction systemAction;
 	
 	@Override
 	protected WindowContainerManagedWindowBuilder __execute__() throws Exception {
+		WindowContainerManaged containerManaged = getContainerManaged();
 		SystemAction systemAction = getSystemAction();
-		if(systemAction == null)
-			systemAction = __inject__(RequestParameterValueMapper.class).setParameterNameAsActionClass().execute().getOutputAs(SystemAction.class);
+		if(systemAction == null) {
+			if(containerManaged!=null)
+				systemAction = containerManaged.getSystemAction();
+		}
 		
 		Class<WindowContainerManagedWindowBuilder> windowContainerManagedWindowBuilderClass = __inject__(WindowHelper.class).
 				getWindowContainerManagedWindowBuilderClass(systemAction);
@@ -39,6 +42,17 @@ public class WindowContainerManagedWindowBuilderGetterImpl extends AbstractFunct
 	@Override
 	public WindowContainerManagedWindowBuilderGetter setSystemAction(SystemAction systemAction) {
 		this.systemAction = systemAction;
+		return this;
+	}
+
+	@Override
+	public WindowContainerManaged getContainerManaged() {
+		return containerManaged;
+	}
+
+	@Override
+	public WindowContainerManagedWindowBuilderGetter setContainerManaged(WindowContainerManaged containerManaged) {
+		this.containerManaged = containerManaged;
 		return this;
 	}
 
