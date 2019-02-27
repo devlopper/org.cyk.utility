@@ -7,7 +7,7 @@ import org.cyk.utility.string.Strings;
 
 public interface InternalizationKeyRelatedStringsBuilder extends FunctionWithPropertiesAsInput<Collection<Strings>> {
 
-	Object getValue();
-	InternalizationKeyRelatedStringsBuilder setValue(Object value);
+	Object getKey();
+	InternalizationKeyRelatedStringsBuilder setKey(Object key);
 	
 }

@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.Case;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
 import org.cyk.utility.system.exception.EntityNotFoundException;
 import org.cyk.utility.system.exception.ServiceNotFoundException;
@@ -88,12 +88,18 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 			if(__injectStringHelper__().isBlank(result))
 				result = __inject__(StringRepositoryResourceBundle.class).getOne(properties);
 			
-			//5 - divide and conquer
+			//5 - derive from related
 			if(__injectStringHelper__().isBlank(result)) {
-				Collection<Object> keys = __getKeys__(key);
-				InternalizationPhraseBuilder phraseBuilder = __inject__(InternalizationPhraseBuilder.class);
-				phraseBuilder.addStringsByKeys(keys);
-				result = phraseBuilder.execute().getOutput();
+				Collection<Strings> related = __inject__(InternalizationKeyRelatedStringsBuilder.class).setKey(key).execute().getOutput();
+				if(__injectCollectionHelper__().isNotEmpty(related)) {
+					for(Strings index : related) {
+						InternalizationPhraseBuilder phraseBuilder = __inject__(InternalizationPhraseBuilder.class);
+						phraseBuilder.addStringsByKeys(__injectCollectionHelper__().cast(Object.class, index.get()));
+						result = phraseBuilder.execute().getOutput();
+						if(__injectStringHelper__().isNotBlank(result))
+							break;
+					}
+				}
 			}
 			
 			//
@@ -103,15 +109,6 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 			
 		}
 		return result;
-	}
-	
-	private Collection<Object> __getKeys__(String key) {
-		//xxx.type => type of xxx
-		if(StringUtils.endsWith(key, ".type")) {
-			return __injectCollectionHelper__().instanciate("type","of",StringUtils.substringBeforeLast(key, ".type"));
-		}
-		System.err.println("We cannot deduce keys from "+key);
-		return null;
 	}
 	
 	@Override
@@ -190,6 +187,4 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 	
 	public static final String FIELD_KEY_BUILDER = "keyBuilder";
 	
-	private static final String[] X_OF_Y = {"type","category"};
-
 }
