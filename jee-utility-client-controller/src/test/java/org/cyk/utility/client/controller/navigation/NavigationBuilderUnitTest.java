@@ -43,6 +43,15 @@ public class NavigationBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 	}
 	
 	@Test
+	public void myentity_identifier_list_asObject_custom() {
+		SystemAction list = __inject__(SystemActionList.class);
+		list.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
+		NavigationBuilder builder = __inject__(NavigationBuilder.class).setIdentifier("customListView").setIdentifierBuilderSystemAction(list);
+		Navigation navigation = builder.execute().getOutput();
+		assertionHelper.assertEquals("http://localhost:8080/customlist.jsf?entityclass=myentity&actionclass=list&actionidentifier=list",navigation.getUniformResourceLocator().toString());
+	}
+	
+	@Test
 	public void myentity02_identifier_list_asObject() {
 		SystemAction list = __inject__(SystemActionList.class);
 		list.getEntities(Boolean.TRUE).setElementClass(MyEntity02.class);
@@ -142,6 +151,8 @@ public class NavigationBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 						setOutput("http://localhost:8080/myentity/list.jsf");
 					else if("myEntityReadView".equals(identifier))
 						setOutput("http://localhost:8080/myentity/read.jsf");
+					else if("customListView".equals(identifier))
+						setOutput("http://localhost:8080/customlist.jsf");
 				}
 			});
 		}

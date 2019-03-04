@@ -10,6 +10,8 @@ import org.cyk.utility.throwable.ThrowableHelper;
 public abstract class AbstractAssertionBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Assertion> implements AssertionBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Boolean IsThrownWhenValueIsNotTrue;
+	
 	@Override
 	protected Assertion __execute__() throws Exception {
 		Boolean isAffirmation = __injectValueHelper__().defaultToIfNull(getIsAffirmation(),Boolean.TRUE);
@@ -82,12 +84,12 @@ public abstract class AbstractAssertionBuilderImpl extends AbstractFunctionWithP
 	
 	@Override
 	public Boolean getIsThrownWhenValueIsNotTrue() {
-		return (Boolean) getProperties().getFromPath(Properties.THROWABLE);
+		return IsThrownWhenValueIsNotTrue;
 	}
 	
 	@Override
-	public AssertionBuilder setIsThrownWhenValueIsNotTrue(Boolean value) {
-		getProperties().setFromPath(new Object[]{Properties.THROWABLE}, value);
+	public AssertionBuilder setIsThrownWhenValueIsNotTrue(Boolean IsThrownWhenValueIsNotTrue) {
+		this.IsThrownWhenValueIsNotTrue = IsThrownWhenValueIsNotTrue;
 		return this;
 	}
 	

@@ -15,7 +15,7 @@ public interface AssertionBuilder extends FunctionWithPropertiesAsInput<Assertio
 	String getMessageWhenValueIsNotTrue();
 	
 	Boolean getIsThrownWhenValueIsNotTrue();
-	AssertionBuilder setIsThrownWhenValueIsNotTrue(Boolean value);
+	AssertionBuilder setIsThrownWhenValueIsNotTrue(Boolean IsThrownWhenValueIsNotTrue);
 	
 	AssertionBuilder setIdentifier(Object identifier);
 	

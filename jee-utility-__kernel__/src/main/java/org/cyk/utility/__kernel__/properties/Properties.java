@@ -4411,7 +4411,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getNavigationIdentifier() {
+		return get(NAVIGATION_IDENTIFIER);
+	}
+
+	public Properties setNavigationIdentifier(Object navigationIdentifier) {
+		set(NAVIGATION_IDENTIFIER, navigationIdentifier);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String NAVIGATION_IDENTIFIER = "NAVIGATION_IDENTIFIER";
 	public static final String TOOLTIP = "TOOLTIP";
 	public static final String UNIFORM_RESOURCE_LOCATOR_MAP = "UNIFORM_RESOURCE_LOCATOR_MAP";
 	public static final String MENU = "MENU";
