@@ -45,6 +45,8 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 		if(controller == null){
 			ControllerFunctionReader function = __inject__(ControllerFunctionReader.class);
 			function.getProperties().copyFrom(properties, Properties.VALUE_USAGE_TYPE);
+			function.copyProperty(Properties.REQUEST,properties);
+			function.copyProperty(Properties.CONTEXT,properties);
 			entity = (ENTITY) function.setEntityClass(aClass).setEntityIdentifier(identifier).execute().getProperties().getEntity();
 		}else{
 			entity = controller.readOne(identifier, properties);
@@ -64,6 +66,8 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 		if(controller == null){
 			ControllerFunctionReader function = __inject__(ControllerFunctionReader.class);
 			function.getProperties().copyFrom(properties, Properties.VALUE_USAGE_TYPE);
+			function.copyProperty(Properties.REQUEST,properties);
+			function.copyProperty(Properties.CONTEXT,properties);
 			entities = (Collection<ENTITY>) function.setActionEntityClass(aClass).execute().getProperties().getEntities();
 		}else{
 			entities = controller.readMany(properties);

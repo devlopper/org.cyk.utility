@@ -64,6 +64,8 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		function.setEntityIdentifier(identifier);
 		function.setEntityIdentifierValueUsageType(properties == null ? ValueUsageType.SYSTEM : properties.getValueUsageType());
 		function.setEntityClass(getEntityClass());
+		function.copyProperty(Properties.REQUEST,properties);
+		function.copyProperty(Properties.CONTEXT,properties);
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
 		function.execute();
 		if(properties!=null) {

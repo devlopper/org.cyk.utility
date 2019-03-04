@@ -12,6 +12,7 @@ import java.util.Set;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.regularexpression.RegularExpressionInstance;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.value.ValueUsageType;
@@ -21,6 +22,7 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 
 	private StringLocation tokenLocation;
 	private Boolean isInheritanceFirst;
+	private RegularExpressionInstance nameRegularExpression;
 	
 	@Override
 	protected Fields __execute__() {
@@ -38,31 +40,35 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		//Process implements
 	    __addFieldsFromInterface__(all, aClass);
 		
-		String token = getToken();
-		if(__inject__(StringHelper.class).isBlank(token)){
-			FieldName fieldName = getFieldName();
-			if(fieldName!=null){
-				ValueUsageType valueUsageType = getValueUsageType();
-				token = __inject__(FieldNameGetter.class).setClazz(aClass).setFieldName(fieldName).setValueUsageType(valueUsageType).execute().getOutput();
-			}	
-		}
-		
-		StringLocation location = getTokenLocation();
-		if(location == null)
-			location = StringLocation.EXAT;
-		for(Field index : all){
-			Boolean add = Boolean.TRUE;
-			if(__inject__(StringHelper.class).isNotBlank(token)){
-				add = __inject__(StringHelper.class).isAtLocation(index.getName(), token, location);				
+	    RegularExpressionInstance nameRegularExpression = getNameRegularExpression();
+	    if(nameRegularExpression == null) {
+	    	String token = getToken();
+			if(__inject__(StringHelper.class).isBlank(token)){
+				FieldName fieldName = getFieldName();
+				if(fieldName!=null){
+					ValueUsageType valueUsageType = getValueUsageType();
+					token = __inject__(FieldNameGetter.class).setClazz(aClass).setFieldName(fieldName).setValueUsageType(valueUsageType).execute().getOutput();
+				}	
 			}
-			if(Boolean.TRUE.equals(add)){ 
-				if(fields == null) {
-					fields = __inject__(Fields.class);
-					fields.setCollectionClass(Set.class);
+			
+			StringLocation location = getTokenLocation();
+			if(location == null)
+				location = StringLocation.EXAT;
+			for(Field index : all){
+				Boolean add = Boolean.TRUE;
+				if(__inject__(StringHelper.class).isNotBlank(token)){
+					add = __inject__(StringHelper.class).isAtLocation(index.getName(), token, location);				
 				}
-				fields.add(index);
+				if(Boolean.TRUE.equals(add))
+					fields = __addField__(fields, index);
 			}
-		}
+	    }else {
+	    	for(Field index : all){
+				if(Boolean.TRUE.equals(nameRegularExpression.match(index.getName())))
+					fields = __addField__(fields, index);
+			}
+	    }
+	    
 		return fields;
 	}
 	
@@ -77,6 +83,15 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 	
 	private void __addFields__(List<Field> fields,Field...values) {
 		fields.addAll(0, __injectCollectionHelper__().instanciate(values));
+	}
+	
+	private Fields __addField__(Fields fields,Field field) {
+		if(fields == null) {
+			fields = __inject__(Fields.class);
+			fields.setCollectionClass(Set.class);
+		}
+		fields.add(field);
+		return fields;
 	}
 	
 	@Override
@@ -151,6 +166,22 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 	@Override
 	public FieldGetter setIsRecursive(Boolean value) {
 		getProperties().setIsRecursive(value);
+		return this;
+	}
+	
+	@Override
+	public RegularExpressionInstance getNameRegularExpression() {
+		return nameRegularExpression;
+	}
+	
+	@Override
+	public RegularExpressionInstance getNameRegularExpression(Boolean injectIfNull) {
+		return (RegularExpressionInstance) __getInjectIfNull__(FIELD_NAME_REGULAR_EXPRESSION, injectIfNull);
+	}
+	
+	@Override
+	public FieldGetter setNameRegularExpression(RegularExpressionInstance nameRegularExpression) {
+		this.nameRegularExpression = nameRegularExpression;
 		return this;
 	}
 
@@ -276,5 +307,7 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		this.isInheritanceFirst = isInheritanceFirst;
 		return this;
 	}
+
+	private static final String FIELD_NAME_REGULAR_EXPRESSION = "nameRegularExpression";
 
 }

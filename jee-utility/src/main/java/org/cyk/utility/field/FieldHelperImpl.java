@@ -8,6 +8,7 @@ import java.util.Collection;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
@@ -65,9 +66,17 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	}
 	
 	@Override
-	public FieldHelper copy(Object source, Object destination) {
-		__inject__(FieldValueCopy.class).setSource(source).setDestination(destination).setIsAutomaticallyDetectFields(Boolean.TRUE).execute();
+	public FieldHelper copy(Object source, Object destination,Properties properties) {
+		FieldValueCopy fieldValueCopy = __inject__(FieldValueCopy.class);
+		fieldValueCopy.copyProperty(Properties.CONTEXT, properties);
+		fieldValueCopy.copyProperty(Properties.REQUEST, properties);
+		fieldValueCopy.setSource(source).setDestination(destination).setIsAutomaticallyDetectFields(Boolean.TRUE).execute();
 		return this;
+	}
+	
+	@Override
+	public FieldHelper copy(Object source, Object destination) {
+		return copy(source, destination, null);
 	}
 	
 	@Override

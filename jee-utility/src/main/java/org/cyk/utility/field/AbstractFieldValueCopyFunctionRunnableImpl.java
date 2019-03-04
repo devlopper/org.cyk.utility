@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
@@ -73,17 +74,20 @@ public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends Abstrac
 		Class<?> destinationType = __inject__(FieldTypeGetter.class).execute(destination).getOutput();
 		//System.out.println("FieldValueCopyImpl.__processValue__() "+source+" *** "+sourceType+" *** "+destination+" *** "+destinationType);
 		Boolean isUnSet = Boolean.TRUE;
+		Properties properties = new Properties();
+		properties.copyFrom(getFunction().getProperties(), Properties.CONTEXT,Properties.REQUEST);
 		if(!sourceType.isPrimitive() && !sourceType.isEnum() && !__inject__(ClassHelper.class).isInstanceOf(sourceType, Collection.class) && !StringUtils.startsWithAny(sourceType.getName(), "java.","javax.")) {
 			//source is a custom object
 			if(Boolean.TRUE.equals(__inject__(ClassInstancesRuntime.class).get(destinationType).getIsPersistable())) {
 				if(destination.isAnnotationPresent(javax.persistence.ManyToOne.class)) {
 					//Find the object to be linked by its identifier (system or business)
 					Object identifier = __inject__(FieldHelper.class).getFieldValueSystemIdentifier(value);
+					
 					if(identifier == null) {
 						identifier = __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(value);
-						value = __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, identifier);
+						value = __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, identifier,properties);
 					}else {
-						value = __inject__(InstanceHelper.class).getByIdentifierSystem(destinationType, identifier);
+						value = __inject__(InstanceHelper.class).getByIdentifierSystem(destinationType, identifier,properties);
 					}	
 					isUnSet = Boolean.FALSE;
 				}
@@ -106,7 +110,7 @@ public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends Abstrac
 		
 		if(Boolean.TRUE.equals(isUnSet)) {
 			if(!destinationType.isPrimitive() && !sourceType.isEnum() && !__inject__(ClassHelper.class).isInstanceOf(sourceType, Collection.class) && !StringUtils.startsWithAny(destinationType.getName(), "java.","javax.")) {
-				value = __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, value);
+				value = __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, value,properties);
 			}	
 		}
 		

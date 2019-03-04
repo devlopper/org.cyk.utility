@@ -17,7 +17,9 @@ public class InstanceGetterFunctionRunnableImpl extends AbstractFunctionRunnable
 			@Override
 			public void run() {
 				if(FieldName.IDENTIFIER.equals(getFunction().getFieldName())) {
-					Object one = __inject__(Controller.class).readOne(getFunction().getClazz(), getFunction().getValue(), new Properties().setValueUsageType(getFunction().getValueUsageType()));
+					Properties properties = new Properties().setValueUsageType(getFunction().getValueUsageType());
+					properties.copyFrom(getFunction().getProperties(),Properties.CONTEXT,Properties.REQUEST);
+					Object one = __inject__(Controller.class).readOne(getFunction().getClazz(), getFunction().getValue(), properties);
 					Collection<Object> collection = new ArrayList<>();
 					collection.add(one);
 					setOutput(collection);
