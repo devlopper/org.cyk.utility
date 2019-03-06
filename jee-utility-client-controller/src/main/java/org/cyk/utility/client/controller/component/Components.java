@@ -12,7 +12,7 @@ public interface Components extends CollectionInstance<Component> {
 	Components setLayout(Layout layout);
 
 	Components setInputOutputValueFromFieldValue();
-	Components setInputOutputFieldValueFromValue();
+	Components setFieldValueFromValue(Class<?>...classes);
 	
 	Collection<Commandable> getCommandables(Boolean isRecursive);
 	Collection<Commandable> getCommandables();

@@ -31,15 +31,18 @@ public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends Abst
 						.setClazz(__inject__(getSystemAction().getEntityClass()).getClass()).execute().getOutput().getFirst();
 				Class<?> fieldType = __inject__(FieldTypeGetter.class).execute(field).getOutput();
 				column.setHeaderTextValue(__inject__(InternalizationStringBuilder.class).setKeyValue(index).execute().getOutput());
-				Fields fields = __inject__(FieldGetter.class).setClazz(fieldType).addNameToken("name").addNameToken(Data.PROPERTY_CODE).execute().getOutput();
-				if(__injectCollectionHelper__().isNotEmpty(fields)) {
-					//TODO according to a list pick up the first matching
-					//index = index + ".name";//TODO get name first else code
-					//index = index + ".code";
-					column.addFieldNameStrings(__injectCollectionHelper__().getFirst(fields).getName());
-				}else {
-					
+				if(!__injectClassHelper__().isBelongsToJavaPackages(fieldType)) {
+					Fields fields = __inject__(FieldGetter.class).setClazz(__inject__(fieldType).getClass()).addNameToken("name").addNameToken(Data.PROPERTY_CODE).execute().getOutput();
+					if(__injectCollectionHelper__().isNotEmpty(fields)) {
+						//TODO according to a list pick up the first matching
+						//index = index + ".name";//TODO get name first else code
+						//index = index + ".code";
+						column.addFieldNameStrings(__injectCollectionHelper__().getFirst(fields).getName());
+					}else {
+						
+					}	
 				}
+				
 				//column.addFieldNameStrings(RowData.PROPERTY_DATA,index);
 				//gridBuilder.addColumnsByFieldNames(__injectFieldHelper__().concatenate(RowData.PROPERTY_DATA,index));
 				gridBuilder.addColumns(column);

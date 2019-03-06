@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.layout.Layout;
@@ -39,12 +40,14 @@ public class ComponentsImpl extends AbstractCollectionInstanceImpl<Component> im
 	}
 
 	@Override
-	public Components setInputOutputFieldValueFromValue() {
+	public Components setFieldValueFromValue(Class<?>...classes) {
 		Collection<Component> collection = get();
 		if(__inject__(CollectionHelper.class).isNotEmpty(collection))
 			for(Component index : collection)
-				if(index instanceof InputOutput<?>)
-					((InputOutput<?>)index).setFieldValueFromValue();
+				if(Boolean.TRUE.equals(__inject__(ClassHelper.class).isInstanceOfOne(index.getClass(), classes))) {
+					if(index instanceof InputOutput)
+						((InputOutput<?>)index).setFieldValueFromValue();
+				}
 		return this;
 	}
 	

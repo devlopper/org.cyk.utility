@@ -27,7 +27,7 @@ public interface View extends VisibleComponent {
 	/**/
 	
 	View setInputOutputValueFromFieldValue();
-	View setInputOutputFieldValueFromValue();
+	View setFieldValueFromValue(Class<?>...classes);
 	
 	/*
 	 * Commandables map of the view

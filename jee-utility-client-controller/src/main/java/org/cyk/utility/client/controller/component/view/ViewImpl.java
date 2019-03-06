@@ -65,12 +65,12 @@ public class ViewImpl extends AbstractVisibleComponentImpl implements View,Seria
 			components.setInputOutputValueFromFieldValue();
 		return this;
 	}
-
+	
 	@Override
-	public View setInputOutputFieldValueFromValue() {
+	public View setFieldValueFromValue(Class<?>...classes) {
 		Components components = getComponents();
 		if(components!=null)
-			components.setInputOutputFieldValueFromValue();
+			components.setFieldValueFromValue(classes);
 		return this;
 	}
 

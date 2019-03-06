@@ -15,6 +15,7 @@ import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilderByClassMap;
 import org.cyk.utility.client.controller.component.command.CommandableBuilders;
+import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
@@ -82,7 +83,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 						commandable.addCommandFunctionTryRunRunnableAt(new Runnable() {
 							@Override
 							public void run() {
-								view.setInputOutputFieldValueFromValue();
+								view.setFieldValueFromValue(Input.class);
 							}
 						},0);	
 					}

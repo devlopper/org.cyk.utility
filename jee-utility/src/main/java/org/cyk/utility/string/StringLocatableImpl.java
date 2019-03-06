@@ -32,4 +32,8 @@ public class StringLocatableImpl extends AbstractObject implements StringLocatab
 		return this;
 	}
 
+	@Override
+	public String toString() {
+		return string+"/"+location;
+	}
 }
