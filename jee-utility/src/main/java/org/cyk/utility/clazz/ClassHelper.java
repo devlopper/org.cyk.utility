@@ -7,15 +7,15 @@ import org.cyk.utility.helper.Helper;
 public interface ClassHelper extends Helper {
 
 	Boolean isInstanceOf(Class<?> aClass, Class<?> baseClass);
-
+	Boolean isInstanceOfCollection(Class<?> aClass);
+	Boolean isInstanceOfNumber(Class<?> aClass);
+	
 	<T> T instanciate(Class<T> aClass, Object[] constructorParameters);
 	<T> T instanciateOne(Class<T> aClass);
 	<T> Collection<T> instanciate(Class<T> aClass,Integer count);
 	<T> T instanciate(Class<T> aClass);
 
 	Boolean areEqual(Class<?> class1, Class<?> class2,Class<?>...classes);
-
-	Boolean isNumber(Class<?> aClass);
 
 	Class<?> getWrapper(Class<?> aClass);
 
@@ -25,6 +25,14 @@ public interface ClassHelper extends Helper {
 
 	Boolean isBoolean(Class<?> aClass);
 
+	Boolean isPrimitive(Class<?> aClass);
+	
+	Boolean isEnum(Class<?> aClass);
+	
+	Boolean isBelongsToJavaPackages(Class<?> aClass);
+	
+	Boolean isNumberOrStringOrEnum(Class<?> aClass);
+	
 	Collection<Class<?>> getInterfaces(Class<?> aClass);
 
 	Class<?> getInterfaceByClassSimpleName(Class<?> aClass);

@@ -21,6 +21,7 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 		InstanceGetter instanceGetter = __inject__(InstanceGetter.class);
 		instanceGetter.copyProperty(Properties.CONTEXT, properties);
 		instanceGetter.copyProperty(Properties.REQUEST, properties);
+		instanceGetter.copyProperty(Properties.FIELDS_NAMES, properties);
 		return (Collection<INSTANCE>) instanceGetter.setClazz(aClass).setFieldName(fieldName).setValueUsageType(valueUsageType).setValue(value)
 				.execute().getOutput();
 	}

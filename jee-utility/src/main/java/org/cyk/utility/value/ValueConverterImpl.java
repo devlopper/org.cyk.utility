@@ -15,7 +15,7 @@ public class ValueConverterImpl extends AbstractFunctionWithPropertiesAsInputImp
 			Class<?> clazz = getClazz();
 			if(String.class.equals(clazz) && !(value instanceof String))
 				value = value.toString();
-			else if(__injectClassHelper__().isNumber(clazz))
+			else if(__injectClassHelper__().isInstanceOfNumber(clazz))
 				value = __inject__(NumberHelper.class).get(clazz, value);
 		}
 		return value;

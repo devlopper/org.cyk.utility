@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.data.DataHelper;
 import org.cyk.utility.client.controller.data.RowData;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.field.FieldTypeGetter;
+import org.cyk.utility.field.Fields;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.string.Strings;
@@ -30,12 +31,12 @@ public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends Abst
 						.setClazz(__inject__(getSystemAction().getEntityClass()).getClass()).execute().getOutput().getFirst();
 				Class<?> fieldType = __inject__(FieldTypeGetter.class).execute(field).getOutput();
 				column.setHeaderTextValue(__inject__(InternalizationStringBuilder.class).setKeyValue(index).execute().getOutput());
-				if(__injectClassHelper__().isInstanceOf(fieldType, Data.class)) {
+				Fields fields = __inject__(FieldGetter.class).setClazz(fieldType).addNameToken("name").addNameToken(Data.PROPERTY_CODE).execute().getOutput();
+				if(__injectCollectionHelper__().isNotEmpty(fields)) {
 					//TODO according to a list pick up the first matching
 					//index = index + ".name";//TODO get name first else code
 					//index = index + ".code";
-					column.addFieldNameStrings(Data.PROPERTY_CODE);
-					//System.out.println("WindowContainerManagedWindowBuilderListDataDefaultImpl.__execute__() : "+fieldType);
+					column.addFieldNameStrings(__injectCollectionHelper__().getFirst(fields).getName());
 				}else {
 					
 				}

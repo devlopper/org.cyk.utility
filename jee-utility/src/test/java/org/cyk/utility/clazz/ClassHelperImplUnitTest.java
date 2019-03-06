@@ -38,11 +38,11 @@ public class ClassHelperImplUnitTest extends AbstractArquillianUnitTestWithDefau
 	
 	@Test
 	public void isIsNumberInteger() {
-		assertionHelper.assertTrue(__inject__(ClassHelper.class).isNumber(Integer.class));
+		assertionHelper.assertTrue(__inject__(ClassHelper.class).isInstanceOfNumber(Integer.class));
 	}
 	
 	@Test
 	public void isIsNumberLong() {
-		assertionHelper.assertTrue(__inject__(ClassHelper.class).isNumber(Long.class));
+		assertionHelper.assertTrue(__inject__(ClassHelper.class).isInstanceOfNumber(Long.class));
 	}
 }

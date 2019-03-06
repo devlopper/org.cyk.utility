@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.regularexpression.RegularExpressionInstance;
+import org.cyk.utility.string.StringLocatable;
+import org.cyk.utility.string.StringLocatables;
 import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -22,6 +24,15 @@ public interface FieldGetter extends FunctionWithPropertiesAsInput<Fields> {
 	RegularExpressionInstance getNameRegularExpression();
 	RegularExpressionInstance getNameRegularExpression(Boolean injectIfNull);
 	FieldGetter setNameRegularExpression(RegularExpressionInstance nameRegularExpression);
+	
+	StringLocatables getNameTokens();
+	StringLocatables getNameTokens(Boolean injectIfNull);
+	FieldGetter setNameTokens(StringLocatables nameTokens);
+	FieldGetter addNameTokens(Collection<StringLocatable> nameTokens);
+	FieldGetter addNameTokens(StringLocatable...nameTokens);
+	FieldGetter addNameToken(String string,StringLocation location);
+	FieldGetter addNameToken(String string);
+	FieldGetter addNameToken(FieldName fieldName,ValueUsageType valueUsageType);
 	
 	String getToken();
 	FieldGetter setToken(String token);

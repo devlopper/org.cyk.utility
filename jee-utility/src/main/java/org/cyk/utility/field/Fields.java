@@ -8,5 +8,7 @@ import org.cyk.utility.string.Strings;
 public interface Fields extends CollectionInstance<Field> {
 
 	Strings getNames();
-	
+	Fields removeModifier(Integer modifier);
+	Fields removeModifierStatic();
+	Fields removeModifierFinal();
 }

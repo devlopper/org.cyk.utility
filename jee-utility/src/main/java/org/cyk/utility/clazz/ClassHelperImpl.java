@@ -28,6 +28,21 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 			return Boolean.FALSE;
 		return baseClass.isAssignableFrom(aClass);
 	}
+	
+	@Override
+	public Boolean isInstanceOfCollection(Class<?> aClass) {
+		return isInstanceOf(aClass, Collection.class);
+	}
+	
+	@Override
+	public Boolean isInstanceOfNumber(Class<?> aClass) {
+		return isInstanceOf(getWrapper(aClass),Number.class);
+	}
+	
+	@Override
+	public Boolean isNumberOrStringOrEnum(Class<?> aClass) {
+		return isInstanceOfNumber(aClass) || isString(aClass) || isEnum(aClass);
+	}
 
 	@Override
 	public <T> T instanciate(Class<T> aClass, Object[] constructorParameters) {
@@ -90,10 +105,20 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	public Class<?> getWrapper(Class<?> aClass) {
 		return ClassUtils.primitiveToWrapper(aClass);
 	}
-
+	
 	@Override
-	public Boolean isNumber(Class<?> aClass) {
-		return isInstanceOf(getWrapper(aClass),Number.class);
+	public Boolean isPrimitive(Class<?> aClass) {
+		return aClass.isPrimitive();
+	}
+	
+	@Override
+	public Boolean isEnum(Class<?> aClass) {
+		return aClass.isEnum();
+	}
+	
+	@Override
+	public Boolean isBelongsToJavaPackages(Class<?> aClass) {
+		return StringUtils.startsWithAny(aClass.getName(), "java.","javax.");
 	}
 
 	@Override

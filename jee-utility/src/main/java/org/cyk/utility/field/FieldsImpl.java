@@ -2,6 +2,9 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.collection.CollectionHelper;
@@ -19,6 +22,29 @@ public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements
 				names.add(index.getName());
 		}
 		return names;
+	}
+
+	@Override
+	public Fields removeModifier(Integer modifier) {
+		Collection<Field> collection = new ArrayList<Field>();
+		if(this.collection!=null) {
+			for(Field index : this.collection)
+				if((Modifier.isStatic(modifier) && Modifier.isStatic(index.getModifiers())) 
+						|| (Modifier.isFinal(modifier) && Modifier.isFinal(index.getModifiers())) )
+					collection.add(index);
+			this.collection.removeAll(collection);
+		}
+		return this;
+	}
+
+	@Override
+	public Fields removeModifierStatic() {
+		return removeModifier(Modifier.STATIC);
+	}
+
+	@Override
+	public Fields removeModifierFinal() {
+		return removeModifier(Modifier.FINAL);
 	}
 
 }

@@ -30,9 +30,11 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 			column.setFieldName(__injectFieldHelper__().concatenate(fieldNameStrings.get()));
 		
 		String fieldName = column.getFieldName();
-		if(__injectStringHelper__().isBlank(fieldName))
+		if(__injectStringHelper__().isBlank(fieldName)) {
+			if(column.getIdentifier() == null)
+				__injectThrowableHelper__().throwRuntimeException(getClass()+" : identifier is required when field name is blank");
 			column.setValuePropertyName(column.getIdentifier().toString());
-		else
+		}else
 			column.setValuePropertyName(fieldName);
 		
 		ViewBuilderMap viewMap = getViewMap();

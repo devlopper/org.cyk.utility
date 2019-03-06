@@ -4420,7 +4420,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getFieldsNames() {
+		return get(FIELDS_NAMES);
+	}
+
+	public Properties setFieldsNames(Object fieldsNames) {
+		set(FIELDS_NAMES, fieldsNames);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String FIELDS_NAMES = "FIELDS_NAMES";
 	public static final String NAVIGATION_IDENTIFIER = "NAVIGATION_IDENTIFIER";
 	public static final String TOOLTIP = "TOOLTIP";
 	public static final String UNIFORM_RESOURCE_LOCATOR_MAP = "UNIFORM_RESOURCE_LOCATOR_MAP";

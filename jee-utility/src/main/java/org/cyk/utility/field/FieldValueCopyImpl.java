@@ -14,7 +14,8 @@ public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAnd
 	@Override
 	public FieldValueCopy execute(Object source, Object destination, Map<String, String> fieldNameMap) {
 		return (FieldValueCopy) setValueGetter(__inject__(FieldValueGetter.class).setObject(source))
-				.setValueSetter(__inject__(FieldValueSetter.class).setObject(destination)).setFieldNameMap(fieldNameMap).execute();
+				.setValueSetter(__inject__(FieldValueSetter.class).setObject(destination)).setFieldNameMap(fieldNameMap)
+				.setIsAutomaticallyDetectFields(fieldNameMap == null).execute();
 	}
 	
 	@Override
@@ -22,6 +23,11 @@ public class FieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAnd
 		@SuppressWarnings("rawtypes")
 		Map map = __inject__(MapHelper.class).instanciate(fieldName,fieldName);
 		return execute(source, destination,map );
+	}
+	
+	@Override
+	public FieldValueCopy execute(Object source, Object destination) {
+		return execute(source, destination,(Map<String, String>)null );
 	}
 	
 	@Override

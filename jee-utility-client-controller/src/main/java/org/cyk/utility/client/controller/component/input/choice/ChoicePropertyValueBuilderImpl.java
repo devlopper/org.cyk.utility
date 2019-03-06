@@ -27,7 +27,7 @@ public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueB
 				field = __injectCollectionHelper__().getFirst(__inject__(FieldGetter.class).execute(object.getClass(), propertyName).getOutput());
 			
 			if(__injectStringHelper__().isBlank(propertyName) || field == null) {
-				for(Object[] index : FIELD_NAME_VALUE_USAGE_TYPE) {
+				/*for(Object[] index : FIELD_NAME_VALUE_USAGE_TYPE) {
 					propertyName = __inject__(FieldNameGetter.class).execute(object.getClass(), (FieldName)index[0], (ValueUsageType)index[1]).getOutput();
 					if(__injectStringHelper__().isNotBlank(propertyName)) {
 						field = __injectCollectionHelper__().getFirst(__inject__(FieldGetter.class).execute(object.getClass(), propertyName).getOutput());
@@ -35,6 +35,11 @@ public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueB
 							break;
 					}
 				}
+				*/
+				FieldGetter fieldGetter = __inject__(FieldGetter.class);
+				for(Object[] index : FIELD_NAME_VALUE_USAGE_TYPE)
+					fieldGetter.addNameToken((FieldName)index[0], (ValueUsageType)index[1]);
+				field = __injectCollectionHelper__().getFirst(fieldGetter.execute().getOutput());
 			}
 			
 			if(field != null) {

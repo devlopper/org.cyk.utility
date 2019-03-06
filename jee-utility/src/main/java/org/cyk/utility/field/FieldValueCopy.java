@@ -8,6 +8,7 @@ public interface FieldValueCopy extends FunctionWithPropertiesAsInputAndVoidAsOu
 
 	FieldValueCopy execute(Object source,Object destination,String fieldName);
 	FieldValueCopy execute(Object source,Object destination,Map<String,String> fieldNameMap);
+	FieldValueCopy execute(Object source,Object destination);
 	
 	FieldValueGetter getValueGetter();
 	FieldValueGetter getValueGetter(Boolean injectIfNull);

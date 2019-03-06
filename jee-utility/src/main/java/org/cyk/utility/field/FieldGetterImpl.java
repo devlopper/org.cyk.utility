@@ -14,6 +14,8 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.regularexpression.RegularExpressionInstance;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.string.StringLocatable;
+import org.cyk.utility.string.StringLocatables;
 import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -23,6 +25,7 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 	private StringLocation tokenLocation;
 	private Boolean isInheritanceFirst;
 	private RegularExpressionInstance nameRegularExpression;
+	private StringLocatables nameTokens;
 	
 	@Override
 	protected Fields __execute__() {
@@ -40,35 +43,49 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		//Process implements
 	    __addFieldsFromInterface__(all, aClass);
 		
-	    RegularExpressionInstance nameRegularExpression = getNameRegularExpression();
-	    if(nameRegularExpression == null) {
-	    	String token = getToken();
-			if(__inject__(StringHelper.class).isBlank(token)){
-				FieldName fieldName = getFieldName();
-				if(fieldName!=null){
-					ValueUsageType valueUsageType = getValueUsageType();
-					token = __inject__(FieldNameGetter.class).setClazz(aClass).setFieldName(fieldName).setValueUsageType(valueUsageType).execute().getOutput();
-				}	
-			}
-			
-			StringLocation location = getTokenLocation();
-			if(location == null)
-				location = StringLocation.EXAT;
-			for(Field index : all){
-				Boolean add = Boolean.TRUE;
-				if(__inject__(StringHelper.class).isNotBlank(token)){
-					add = __inject__(StringHelper.class).isAtLocation(index.getName(), token, location);				
+	    StringLocatables nameTokens = getNameTokens();
+	    if(__injectCollectionHelper__().isEmpty(nameTokens)) {
+	    	RegularExpressionInstance nameRegularExpression = getNameRegularExpression();
+		    if(nameRegularExpression == null) {
+		    	String token = getToken();
+				if(__inject__(StringHelper.class).isBlank(token)){
+					FieldName fieldName = getFieldName();
+					if(fieldName!=null){
+						ValueUsageType valueUsageType = getValueUsageType();
+						token = __inject__(FieldNameGetter.class).setClazz(aClass).setFieldName(fieldName).setValueUsageType(valueUsageType).execute().getOutput();
+					}	
 				}
-				if(Boolean.TRUE.equals(add))
-					fields = __addField__(fields, index);
-			}
+				
+				StringLocation location = getTokenLocation();
+				if(location == null)
+					location = StringLocation.EXAT;
+				for(Field index : all){
+					Boolean add = Boolean.TRUE;
+					if(__inject__(StringHelper.class).isNotBlank(token)){
+						add = __inject__(StringHelper.class).isAtLocation(index.getName(), token, location);				
+					}
+					if(Boolean.TRUE.equals(add))
+						fields = __addField__(fields, index);
+				}
+		    }else {
+		    	for(Field index : all){
+					if(Boolean.TRUE.equals(nameRegularExpression.match(index.getName())))
+						fields = __addField__(fields, index);
+				}
+		    }
 	    }else {
-	    	for(Field index : all){
-				if(Boolean.TRUE.equals(nameRegularExpression.match(index.getName())))
-					fields = __addField__(fields, index);
-			}
+	    	for(StringLocatable indexNameToken : nameTokens.get()) {
+	    		String string = indexNameToken.getString();
+	    		if(__inject__(StringHelper.class).isNotBlank(string)){
+	    			StringLocation location = indexNameToken.getLocation();
+					if(location == null)
+						location = StringLocation.EXAT;
+		    		for(Field indexField : all)
+		    			if(__inject__(StringHelper.class).isAtLocation(indexField.getName(), string, location))
+		    				fields = __addField__(fields, indexField);	
+	    		}
+	    	}
 	    }
-	    
 		return fields;
 	}
 	
@@ -131,6 +148,53 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		
 		return null;
 	}*/
+	
+	@Override
+	public StringLocatables getNameTokens() {
+		return nameTokens;
+	}
+	
+	@Override
+	public FieldGetter setNameTokens(StringLocatables nameTokens) {
+		this.nameTokens = nameTokens;
+		return this;
+	}
+	
+	@Override
+	public StringLocatables getNameTokens(Boolean injectIfNull) {
+		return (StringLocatables) __getInjectIfNull__(FIELD_NAME_TOKENS, injectIfNull);
+	}
+	
+	@Override
+	public FieldGetter addNameTokens(Collection<StringLocatable> nameTokens) {
+		getNameTokens(Boolean.TRUE).add(nameTokens);
+		return this;
+	}
+	
+	@Override
+	public FieldGetter addNameTokens(StringLocatable... names) {
+		getNameTokens(Boolean.TRUE).add(names);
+		return this;
+	}
+	
+	@Override
+	public FieldGetter addNameToken(String string, StringLocation location) {
+		if(__injectStringHelper__().isNotBlank(string))
+			addNameTokens(__inject__(StringLocatable.class).setString(string).setLocation(location));
+		return this;
+	}
+	
+	@Override
+	public FieldGetter addNameToken(String string) {
+		return addNameToken(string, StringLocation.EXAT);
+	}
+	
+	@Override
+	public FieldGetter addNameToken(FieldName fieldName, ValueUsageType valueUsageType) {
+		if(fieldName!=null)
+			addNameToken(__inject__(FieldNameGetter.class).setFieldName(fieldName).setValueUsageType(valueUsageType).execute().getOutput());
+		return this;
+	}
 	
 	public Integer getModifiers(java.lang.reflect.Field field) {
 		return field.getModifiers();
@@ -308,6 +372,7 @@ public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		return this;
 	}
 
+	private static final String FIELD_NAME_TOKENS = "nameTokens";
 	private static final String FIELD_NAME_REGULAR_EXPRESSION = "nameRegularExpression";
 
 }
