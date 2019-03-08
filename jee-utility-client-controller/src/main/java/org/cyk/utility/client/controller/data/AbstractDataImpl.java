@@ -38,4 +38,8 @@ public abstract class AbstractDataImpl extends AbstractObject implements Data,Se
 		return super.equals(object);
 	}
 	
+	@Override
+	public String toString() {
+		return getCode();
+	}
 }

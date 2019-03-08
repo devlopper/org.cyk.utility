@@ -8,6 +8,7 @@ import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Data;
+import org.cyk.utility.client.controller.data.DataFieldsNamesGetter;
 import org.cyk.utility.client.controller.data.DataGetter;
 import org.cyk.utility.client.controller.data.DataMethodsNamesGetter;
 import org.cyk.utility.client.controller.data.Form;
@@ -48,7 +49,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 					//TODO we can write a DataCommandableBuilderGetter
 					CommandableBuilder commandable = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, index ,systemAction);
 					/* if it is update action then we need to know which field to process */
-					commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setProperty(Properties.FIELDS, __inject__(StringHelper.class).concatenate(__getPersistenceEntityFieldNames__(window, systemAction, formClass)));
+					commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setProperty(Properties.FIELDS, __inject__(StringHelper.class).concatenate(__getPersistenceEntityFieldNames__(window, systemAction, formClass),","));
 				}
 			}
 		}
@@ -59,7 +60,8 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 	}
 	
 	protected Collection<String> __getPersistenceEntityFieldNames__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass){
-		return null;
+		Strings fieldNames = __inject__(DataFieldsNamesGetter.class).setSystemAction(systemAction).execute().getOutput();
+		return __injectCollectionHelper__().isEmpty(fieldNames) ? null : fieldNames.get();
 	}
 	
 	protected abstract void __execute__(Form form,SystemAction systemAction,Data data,ViewBuilder viewBuilder);
