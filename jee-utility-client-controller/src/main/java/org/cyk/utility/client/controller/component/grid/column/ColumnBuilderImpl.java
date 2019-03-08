@@ -27,7 +27,7 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 		super.__execute__(column);
 		Strings fieldNameStrings = getFieldNameStrings();
 		if(__injectCollectionHelper__().isNotEmpty(fieldNameStrings))
-			column.setFieldName(__injectFieldHelper__().concatenate(fieldNameStrings.get()));
+			column.setFieldName(__injectFieldHelper__().join(fieldNameStrings.get()));
 		
 		String fieldName = column.getFieldName();
 		if(__injectStringHelper__().isBlank(fieldName)) {

@@ -26,13 +26,16 @@ public class RepresentationFunctionModifierImpl extends AbstractRepresentationFu
 				currentEntityIdentifier = __injectNumberHelper__().getLong(currentEntityIdentifier);
 				currentEntityIdentifierType = ValueUsageType.SYSTEM;
 			}
+			
 			currentEntity = __injectBusiness__().findOne(getPersistenceEntityClass(),currentEntityIdentifier ,new Properties().setValueUsageType(currentEntityIdentifierType));
 			/* Copy field value from updated entity to current entity*/
 			Strings fieldNames = getEntityFieldNames();
 			if(__injectCollectionHelper__().isNotEmpty(fieldNames)) {
-				for(String index : fieldNames.get())
+				for(String index : fieldNames.get()) {
 					__inject__(FieldValueCopy.class).execute(updatedEntity, currentEntity, index);
+				}
 			}
+			
 			//__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(currentEntity, __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(updatedEntity));
 			__injectBusiness__().update(currentEntity);
 		}else {

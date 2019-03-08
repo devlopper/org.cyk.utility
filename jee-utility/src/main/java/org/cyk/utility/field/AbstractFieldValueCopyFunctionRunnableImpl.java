@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
+import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByLong;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
@@ -105,6 +106,15 @@ public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends Abstrac
 							identifier = __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(value);
 							return __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, identifier,properties);
 						}else {
+							Fields fields =  __inject__(FieldGetter.class).setClazz(destinationType).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.SYSTEM)
+									.execute().getOutput();
+							if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
+								Class<?> identifierTypeDestinationType = null;//fields.getFirst().getType();
+								if(__inject__(ClassHelper.class).isInstanceOf(destinationType, AbstractIdentifiedPersistableByLong.class))
+									identifierTypeDestinationType = Long.class;
+								identifier = __inject__(ValueConverter.class).execute(identifier, identifierTypeDestinationType).getOutput();	
+							}
+							
 							return __inject__(InstanceHelper.class).getByIdentifierSystem(destinationType, identifier,properties);
 						}	
 					}
@@ -116,7 +126,7 @@ public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends Abstrac
 				FieldValueCopy fieldValueCopy = __inject__(FieldValueCopy.class).setSource(temp).setDestination(value);
 				if(Boolean.TRUE.equals(classInstancesRuntime.get(sourceType).getIsPersistable()) && 
 						Boolean.TRUE.equals(classInstancesRuntime.get(destinationType).getIsTransferable())) {					
-					fieldValueCopy.setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.SYSTEM).getOutput());
+					//fieldValueCopy.setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.SYSTEM).getOutput());
 					fieldValueCopy.setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.BUSINESS).getOutput());								
 				}else {
 					fieldValueCopy.setIsAutomaticallyDetectFields(Boolean.TRUE);

@@ -29,7 +29,7 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 				String fieldName = null;
 				Strings fieldNameStrings = getFieldNameStrings();
 				if(__injectCollectionHelper__().isNotEmpty(fieldNameStrings))
-					fieldName = __injectFieldHelper__().concatenate(fieldNameStrings.get());
+					fieldName = __injectFieldHelper__().join(fieldNameStrings.get());
 				if(__injectStringHelper__().isNotBlank(fieldName)) {
 					String objectFieldName = StringUtils.contains(fieldName, CharacterConstant.DOT.toString()) ? StringUtils.substringBeforeLast(fieldName, CharacterConstant.DOT.toString()) : null;
 					fieldName = objectFieldName == null ? fieldName : StringUtils.substringAfterLast(fieldName, CharacterConstant.DOT.toString());

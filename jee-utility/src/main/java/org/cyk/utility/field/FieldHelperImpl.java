@@ -13,6 +13,7 @@ import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
 @Singleton
@@ -26,15 +27,28 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	}
 	
 	@Override
-	public String concatenate(Collection<String> names) {
-		return __inject__(StringHelper.class).concatenate(names, CharacterConstant.DOT.toString());
+	public String join(Collection<String> paths) {
+		return __inject__(StringHelper.class).concatenate(paths, DOT);
 	}
 
 	@Override
-	public String concatenate(String... names) {
-		return concatenate(__inject__(CollectionHelper.class).instanciate(names));
+	public String join(String... paths) {
+		return join(__inject__(CollectionHelper.class).instanciate(paths));
 	}
 
+	@Override
+	public Strings disjoin(Collection<String> paths) {
+		String path = join(paths);
+		Strings names = __inject__(Strings.class);
+		names.add(StringUtils.split(path,DOT));
+		return names;
+	}
+	
+	@Override
+	public Strings disjoin(String... paths) {
+		return disjoin(__inject__(CollectionHelper.class).instanciate(paths));
+	}
+	
 	@Override
 	public Object getFieldValueSystemIdentifier(Object object) {
 		return __inject__(FieldValueGetter.class).execute(object, FieldName.IDENTIFIER, ValueUsageType.SYSTEM).execute().getOutput();
@@ -87,8 +101,8 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 		if(aClass == null || collectionHelper.isEmpty(fieldNames)) {
 			field = null;
 		}else {
-			String fieldName = concatenate(fieldNames);
-			fieldNames = collectionHelper.instanciate(StringUtils.split(fieldName, CharacterConstant.DOT.toString()));
+			String fieldName = join(fieldNames);
+			fieldNames = collectionHelper.instanciate(StringUtils.split(fieldName, DOT));
 			field = collectionHelper.getFirst(__inject__(FieldGetter.class).execute(aClass, collectionHelper.getElementAt(fieldNames, 0)).getOutput());
 			if(collectionHelper.getSize(fieldNames) == 1) {
 			
@@ -119,4 +133,8 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 		//__inject__(FieldValueSetter.class).execute(this, FieldName.IDENTIFIER, ValueUsageType.BUSINESS,);
 		return this;
 	}*/
+	
+	/**/
+	
+	private static final String DOT = CharacterConstant.DOT.toString();
 }

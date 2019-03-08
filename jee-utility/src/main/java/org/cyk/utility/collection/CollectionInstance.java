@@ -9,6 +9,8 @@ public interface CollectionInstance<T> extends Objectable {
 	Collection<T> get();
 	Collection<T> get(Integer begin,Integer end);
 	Collection<T> get(Integer begin);
+	Collection<T> getWithoutLast(Integer count);
+	
 	Collection<T> getIsInstanceOf(Collection<Class<?>> classes);
 	Collection<T> getIsInstanceOf(Class<?>...classes);
 	<I> Collection<I> getIsInstanceOfOne(Class<I> aClass);

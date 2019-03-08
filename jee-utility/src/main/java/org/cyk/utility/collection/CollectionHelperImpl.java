@@ -121,11 +121,11 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 		if(collection!=null) {
 			if(begin==null)
 				begin = 0;
-			if(end==null)
+			if(end==null || end < 0)
 				end = collection.size();
 			if(collection instanceof List)
 				return ((List<ELEMENT>)collection).subList(begin, end);
-			__inject__(ThrowableHelper.class).throwRuntimeException("Cannot get from "+begin+" to "+end+" of "+collection.getClass());
+			__inject__(ThrowableHelper.class).throwRuntimeException("Cannot get elements from "+begin+" to "+end+" of "+collection.getClass());
 		}
 		return null;
 	}

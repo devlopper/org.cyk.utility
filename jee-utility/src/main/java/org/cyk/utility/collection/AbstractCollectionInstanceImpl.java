@@ -41,6 +41,12 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	}
 	
 	@Override
+	public Collection<T> getWithoutLast(Integer count) {
+		Integer end = getSize() - (count == null || count < 0 ? 0 : count);
+		return get(0,end);
+	}
+	
+	@Override
 	public Collection<T> getIsInstanceOf(Collection<Class<?>> classes) {
 		Collection<T> collection = null;
 		if(__inject__(CollectionHelper.class).isNotEmpty(this.collection)) {

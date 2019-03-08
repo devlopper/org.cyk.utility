@@ -18,8 +18,8 @@ public class ColumnBuildersImpl extends AbstractCollectionInstanceImpl<ColumnBui
 			for(ColumnBuilder index : this.collection) {
 				Strings indexFieldNameStrings = index.getFieldNameStrings();
 				if(indexFieldNameStrings!=null) {
-					String name = __inject__(FieldHelper.class).concatenate(fieldNameStrings);
-					if(__inject__(StringHelper.class).isNotBlank(name) && name.equals( __inject__(FieldHelper.class).concatenate(indexFieldNameStrings.get())))
+					String name = __inject__(FieldHelper.class).join(fieldNameStrings);
+					if(__inject__(StringHelper.class).isNotBlank(name) && name.equals( __inject__(FieldHelper.class).join(indexFieldNameStrings.get())))
 						return index;
 				}
 			}

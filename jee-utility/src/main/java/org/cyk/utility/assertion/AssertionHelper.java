@@ -10,6 +10,8 @@ public interface AssertionHelper extends Helper {
 
 	AssertionHelper assertNull(String message,Object object);
 	AssertionHelper assertNull(Object object);
+	AssertionHelper assertNullLastLogEvent(String message);
+	AssertionHelper assertNullLastLogEvent();
 	
 	AssertionHelper assertNotNull(String message,Object object);
 	AssertionHelper assertNotNull(Object object);

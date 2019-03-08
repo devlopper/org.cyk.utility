@@ -98,6 +98,30 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	}
 
 	@Override
+	public BusinessServiceProvider<Object> update(Object object, Properties properties) {
+		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntity(object);
+		if(business == null){
+			super.update(object, properties);
+		}else{
+			business.update(object, properties);
+		}
+		return this;
+	}
+	
+	@Override
+	public BusinessServiceProvider<Object> updateMany(Collection<Object> objects, Properties properties) {
+		@SuppressWarnings("unchecked")
+		Class<Object> aClass = (Class<Object>) objects.iterator().next().getClass();
+		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(aClass);
+		if(business == null){
+			super.updateMany(objects, properties);
+		}else{
+			business.updateMany(objects, properties);
+		}
+		return this;
+	}
+	
+	@Override
 	public BusinessServiceProvider<Object> delete(Object object, Properties properties) {
 		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntity(object);
 		if(business == null){

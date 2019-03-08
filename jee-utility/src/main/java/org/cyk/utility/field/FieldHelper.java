@@ -5,13 +5,38 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.helper.Helper;
+import org.cyk.utility.string.Strings;
 
 public interface FieldHelper extends Helper {
 
 	//Object getFieldValue(Object object,FieldName fieldName);
 	
-	String concatenate(Collection<String> names);
-	String concatenate(String...names);
+	/**
+	 * Join many field paths to build a one field path
+	 * Example : f1 + f2.f3 = f1.f2.f3
+	 * @param paths to join
+	 * @return field path
+	 */
+	String join(Collection<String> paths);
+	/**
+	 * {@link #join}
+	 * @param paths to join
+	 * @return
+	 */
+	String join(String...paths);
+	
+	/**
+	 * Disjoin many field paths to a collection of field names
+	 * @param paths to disjoin
+	 * @return
+	 */
+	Strings disjoin(Collection<String> paths);
+	/**
+	 * {@link #disjoin}
+	 * @param paths to disjoin
+	 * @return
+	 */
+	Strings disjoin(String...paths);
 	
 	Object getFieldValueSystemIdentifier(Object object);
 	Object getFieldValueBusinessIdentifier(Object object);
@@ -27,5 +52,6 @@ public interface FieldHelper extends Helper {
 	
 	Field getField(Class<?> aClass,Collection<String> fieldNames);
 	Field getField(Class<?> aClass,String...fieldNames);
+	
 	
 }

@@ -13,6 +13,7 @@ import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.DataFieldsNamesGetter;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldTypeGetter;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
@@ -32,9 +33,9 @@ public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends Abst
 		Strings fieldNames = __inject__(DataFieldsNamesGetter.class).setSystemAction(systemAction).execute().getOutput();
 		if(__injectCollectionHelper__().isNotEmpty(fieldNames))
 			for(String index : fieldNames.get()) {
-				if(isEditable) {
-					viewBuilder.addInputBuilderByObjectByFieldNames(data, isEditable, StringUtils.split(index,CharacterConstant.DOT.toString()));
-				}else {
+				//if(isEditable) {
+					viewBuilder.addInputBuilderByObjectByFieldNames(data, isEditable, __inject__(FieldHelper.class).disjoin(index).get().toArray(new String[] {}));
+				/*}else {
 					String tempIndex = index;
 					Field field = __inject__(FieldGetter.class).setToken(index).setTokenLocation(StringLocation.EXAT)
 							.setClazz(__inject__(getSystemAction().getEntityClass()).getClass()).execute().getOutput().getFirst();
@@ -59,7 +60,7 @@ public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends Abst
 						((InputBuilder<?, ?>)inputOuput).getLabel(Boolean.TRUE).setValue(__inject__(InternalizationStringBuilder.class).setKeyValue(org.apache.commons.lang3.StringUtils.substringAfterLast(tempIndex, ".")).execute().getOutput());
 					else if(inputOuput instanceof OutputStringTextBuilder)
 						((OutputStringTextBuilder)inputOuput).setValue(__inject__(InternalizationStringBuilder.class).setKeyValue(org.apache.commons.lang3.StringUtils.substringAfterLast(tempIndex, ".")).execute().getOutput());
-				}
+				}*/
 				
 			}
 		

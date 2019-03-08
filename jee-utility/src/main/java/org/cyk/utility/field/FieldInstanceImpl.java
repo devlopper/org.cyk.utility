@@ -8,8 +8,32 @@ import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 public class FieldInstanceImpl extends AbstractObject implements FieldInstance,Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private Class<?> clazz;
+	private String path;
 	private Field field;
 	private Class<?> type;
+	
+	@Override
+	public Class<?> getClazz() {
+		return clazz;
+	}
+
+	@Override
+	public FieldInstance setClazz(Class<?> clazz) {
+		this.clazz = clazz;
+		return this;
+	}
+	
+	@Override
+	public String getPath() {
+		return path;
+	}
+
+	@Override
+	public FieldInstance setPath(String path) {
+		this.path = path;
+		return this;
+	}
 	
 	@Override
 	public Field getField() {

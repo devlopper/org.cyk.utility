@@ -37,6 +37,18 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 	}
 
 	@Override
+	public AssertionHelper assertNullLastLogEvent(String message) {
+		if(Boolean.TRUE.equals(getIsLogAssertionEnable()))
+			assertNull(message,__inject__(LogEventEntityRepository.class).getLastMessage());
+		return this;
+	}
+	
+	@Override
+	public AssertionHelper assertNullLastLogEvent() {
+		return assertNullLastLogEvent("Log message has been found");
+	}
+	
+	@Override
 	public AssertionHelper assertEqualsNumber(Object expected, Object actual) {
 		assertEquals(__inject__(NumberHelper.class).getBigDecimal(expected), __inject__(NumberHelper.class).getBigDecimal(actual));
 		return this;

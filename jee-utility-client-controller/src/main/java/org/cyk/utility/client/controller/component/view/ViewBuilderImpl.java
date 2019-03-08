@@ -146,7 +146,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	@Override
 	public InputBuilder<?, ?> addInputBuilderByFieldName(Object object, String... fieldNames) {
 		Class<? extends InputBuilder<?,?>> inputBuilderClass =  __inject__(ComponentBuilderClassGetter.class).setField(__injectCollectionHelper__().getFirst(__inject__(FieldGetter.class)
-				.execute(object.getClass(),  __injectFieldHelper__().concatenate(fieldNames)).getOutput())).execute().getOutput();
+				.execute(object.getClass(),  __injectFieldHelper__().join(fieldNames)).getOutput())).execute().getOutput();
 		return addInputBuilderByFieldName(inputBuilderClass, object, fieldNames);
 	}
 	

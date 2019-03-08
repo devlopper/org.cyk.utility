@@ -23,7 +23,7 @@ public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends Abst
 		Strings fieldNames = __inject__(DataHelper.class).getPropertiesFieldsNames(getSystemAction().getEntityClass());
 		if(__injectCollectionHelper__().isNotEmpty(fieldNames))
 			for(String index : fieldNames.get()) {
-				ColumnBuilder column = __inject__(ColumnBuilder.class); 
+				/*ColumnBuilder column = __inject__(ColumnBuilder.class); 
 				column.addFieldNameStrings(RowData.PROPERTY_DATA,index);
 				//which kind of field index is
 				//TODO build column using ColumnBuilder in order to well set title and field value path
@@ -42,10 +42,11 @@ public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends Abst
 						
 					}	
 				}
-				
-				//column.addFieldNameStrings(RowData.PROPERTY_DATA,index);
-				//gridBuilder.addColumnsByFieldNames(__injectFieldHelper__().concatenate(RowData.PROPERTY_DATA,index));
 				gridBuilder.addColumns(column);
+				*/
+				//column.addFieldNameStrings(RowData.PROPERTY_DATA,index);
+				gridBuilder.addColumnsByFieldNames(__injectFieldHelper__().join(RowData.PROPERTY_DATA,index));
+				
 			}
 	}
 

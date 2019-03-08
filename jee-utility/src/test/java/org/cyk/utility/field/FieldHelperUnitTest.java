@@ -16,6 +16,16 @@ public class FieldHelperUnitTest extends AbstractArquillianUnitTestWithDefaultDe
 	private static final long serialVersionUID = 1L;
 
 	@Test
+	public void join(){
+		assertThat(__inject__(FieldHelper.class).join("f1","f2.f3")).isEqualTo("f1.f2.f3");
+	}	
+	
+	@Test
+	public void disjoin(){
+		assertThat(__inject__(FieldHelper.class).disjoin("f1","f2.f3").get()).containsExactly("f1","f2","f3");
+	}	
+	
+	@Test
 	public void getField_intField(){
 		assertThat(__inject__(FieldHelper.class).getField(MyClass01.class, "intField")).isEqualTo(FieldUtils.getField(MyClass01.class, "intField",Boolean.TRUE));
 	}	

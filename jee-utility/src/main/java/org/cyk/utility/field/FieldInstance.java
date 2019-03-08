@@ -6,6 +6,12 @@ import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 
 public interface FieldInstance extends Objectable {
 
+	Class<?> getClazz();
+	FieldInstance setClazz(Class<?> clazz);
+	
+	String getPath();
+	FieldInstance setPath(String path);
+	
 	Field getField();
 	FieldInstance setField(Field field);
 	

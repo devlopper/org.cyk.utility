@@ -1,6 +1,7 @@
 package org.cyk.utility.clazz;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
@@ -8,6 +9,7 @@ public class ClassInstanceImpl extends AbstractObject implements ClassInstance,S
 	private static final long serialVersionUID = 1L;
 
 	private Class<?> clazz;
+	private Field systemIdentifierField;
 	private Boolean isPersistable;
 	private Boolean isTransferable;
 	
@@ -19,6 +21,17 @@ public class ClassInstanceImpl extends AbstractObject implements ClassInstance,S
 	@Override
 	public ClassInstance setClazz(Class<?> clazz) {
 		this.clazz = clazz;
+		return this;
+	}
+	
+	@Override
+	public Field getSystemIdentifierField() {
+		return systemIdentifierField;
+	}
+	
+	@Override
+	public ClassInstance setSystemIdentifierField(Field systemIdentifierField) {
+		this.systemIdentifierField = systemIdentifierField;
 		return this;
 	}
 	
