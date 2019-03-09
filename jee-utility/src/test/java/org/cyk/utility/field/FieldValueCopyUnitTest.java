@@ -190,7 +190,6 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		assertThat(representation.getParent()).isNotNull();
 		
 		assertThat(representation.getParent()).isNotNull();
-		assertThat(representation.getParent().getId()).isEqualTo("3");
 		assertThat(representation.getParent().getCode()).isEqualTo("l03");
 		assertThat(representation.getParent().getName()).isNull();
 		

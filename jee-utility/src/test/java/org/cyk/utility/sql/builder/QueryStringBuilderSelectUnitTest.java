@@ -1,6 +1,7 @@
 package org.cyk.utility.sql.builder;
 
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
@@ -37,4 +38,27 @@ public class QueryStringBuilderSelectUnitTest extends AbstractArquillianUnitTest
 		assertionHelper.assertEquals("SELECT * FROM Tuple tuple WHERE tuple.column1=@myparam", queryBuilder.execute().getOutput());
 	}
 	
+	@Test
+	public void selectAllAttributeFromTupleWhereColumn1Equal1OrderByIndexAsc(){
+		Tuple tuple = new Tuple().setName("Tuple");
+		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class)
+				.addOperandBuilderByAttributeByParameter("column1",ComparisonOperator.EQ, tuple,"myparam");
+		
+		QueryStringBuilderSelect queryBuilder = __inject__(QueryStringBuilderSelect.class).from(tuple).where(predicateBuilder);
+		queryBuilder.orderBy("index",SortOrder.ASCENDING);
+		
+		assertionHelper.assertEquals("SELECT * FROM Tuple tuple WHERE tuple.column1=@myparam ORDER BY tuple.index ASC", queryBuilder.execute().getOutput());
+	}
+	
+	@Test
+	public void selectAllAttributeFromTupleWhereColumn1Equal1OrderByIndexDesc(){
+		Tuple tuple = new Tuple().setName("Tuple");
+		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class)
+				.addOperandBuilderByAttributeByParameter("column1",ComparisonOperator.EQ, tuple,"myparam");
+		
+		QueryStringBuilderSelect queryBuilder = __inject__(QueryStringBuilderSelect.class).from(tuple).where(predicateBuilder);
+		queryBuilder.orderBy("index",SortOrder.DESCENDING);
+		
+		assertionHelper.assertEquals("SELECT * FROM Tuple tuple WHERE tuple.column1=@myparam ORDER BY tuple.index DESC", queryBuilder.execute().getOutput());
+	}
 }

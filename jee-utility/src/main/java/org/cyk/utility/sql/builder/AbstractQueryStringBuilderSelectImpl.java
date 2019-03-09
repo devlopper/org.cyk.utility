@@ -115,6 +115,7 @@ public abstract class AbstractQueryStringBuilderSelectImpl extends AbstractQuery
 		}else{
 			Tuple tuple = from.getFirstTuple();
 			Attribute attribute = tuple.getAttributeByName(attributeName, Boolean.TRUE);
+			attribute.setSortOrder(sortOrder);
 			orderBy(attribute);
 		}
 		return this;
