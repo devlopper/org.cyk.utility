@@ -61,4 +61,17 @@ public class QueryStringBuilderSelectUnitTest extends AbstractArquillianUnitTest
 		
 		assertionHelper.assertEquals("SELECT * FROM Tuple tuple WHERE tuple.column1=@myparam ORDER BY tuple.index DESC", queryBuilder.execute().getOutput());
 	}
+	
+	@Test
+	public void selectAllAttributeFromTupleWhereColumn1Equal1OrderByIndexDescIndex2Asc(){
+		Tuple tuple = new Tuple().setName("Tuple");
+		QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) __inject__(QueryWherePredicateStringBuilderEqual.class)
+				.addOperandBuilderByAttributeByParameter("column1",ComparisonOperator.EQ, tuple,"myparam");
+		
+		QueryStringBuilderSelect queryBuilder = __inject__(QueryStringBuilderSelect.class).from(tuple).where(predicateBuilder);
+		queryBuilder.orderBy("index",SortOrder.DESCENDING);
+		queryBuilder.orderBy("index2",SortOrder.ASCENDING);
+		
+		assertionHelper.assertEquals("SELECT * FROM Tuple tuple WHERE tuple.column1=@myparam ORDER BY tuple.index DESC,tuple.index2 ASC", queryBuilder.execute().getOutput());
+	}
 }
