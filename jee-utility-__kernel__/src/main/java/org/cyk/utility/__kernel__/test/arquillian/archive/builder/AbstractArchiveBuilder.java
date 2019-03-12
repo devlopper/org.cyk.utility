@@ -1,7 +1,8 @@
-package org.cyk.utility.__kernel__.test.arquillian;
+package org.cyk.utility.__kernel__.test.arquillian.archive.builder;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +18,7 @@ import org.cyk.utility.__kernel__.maven.pom.Profile;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.container.ClassContainer;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
@@ -26,15 +28,17 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable {
+public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Class<ARCHIVE> clazz;
 	private ARCHIVE archive;
 	
 	private String beanXml,projectDefaultsYml,persistenceXml,log4j2Xml,pomXml,jbossDeploymentStructureXml;
+	private Collection<Package> packages;
+	private Collection<Clazz> classes;
 	
-	public ArchiveBuilder(Class<ARCHIVE> clazz) {
+	public AbstractArchiveBuilder(Class<ARCHIVE> clazz) {
 		this.clazz = clazz;
 		//archive = ShrinkWrap.create(this.clazz);
 		//if(archive instanceof JavaArchive)
@@ -145,11 +149,26 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 				}
 		}
 		
+		Collection<Package> packages = getPackages();
+		if(packages!=null) {
+			for(Package index : packages)
+				((ClassContainer<?>)archive).addPackages(index.getIsRecursive(), index.getName());
+		}
+		
+		Collection<Clazz> clazzes = getClasses();
+		if(clazzes!=null) {
+			for(Clazz index : clazzes)
+				if(index.getValue() == null)
+					((ClassContainer<?>)archive).addClass(index.getName());
+				else
+					((ClassContainer<?>)archive).addClass(index.getValue());
+		}
+		
 		System.out.println("Building archive done.");
 		return archive;
 	}
 	
-	private ArchiveBuilder<ARCHIVE> addBeanXml(Object beansXml){
+	private AbstractArchiveBuilder<ARCHIVE> addBeanXml(Object beansXml){
 		if(beansXml == null){
 			if(archive instanceof JavaArchive)
 				((JavaArchive)archive).addAsManifestResource(EmptyAsset.INSTANCE,"beans.xml");
@@ -170,27 +189,27 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 		return this;
 	}
 	
-	private ArchiveBuilder<ARCHIVE> addJbossDeploymentStructureXml(String path){
+	private AbstractArchiveBuilder<ARCHIVE> addJbossDeploymentStructureXml(String path){
 		((WebArchive)archive).addAsWebInfResource(path,"jboss-deployment-structure.xml");
 		return this;
 	}
 	
-	private ArchiveBuilder<ARCHIVE> addPersistenceXml(String path){
+	private AbstractArchiveBuilder<ARCHIVE> addPersistenceXml(String path){
 		((WebArchive)archive).addAsResource(path,"META-INF/persistence.xml");
 		return this;
 	}
 	
-	private ArchiveBuilder<ARCHIVE> addProjectDefaultsYml(String path){
+	private AbstractArchiveBuilder<ARCHIVE> addProjectDefaultsYml(String path){
 		((WebArchive)archive).addAsResource(path,"project-defaults.yml");
 		return this;
 	}
 	
-	private ArchiveBuilder<ARCHIVE> addlog4j2Xml(String path){
+	private AbstractArchiveBuilder<ARCHIVE> addlog4j2Xml(String path){
 		((WebArchive)archive).addAsResource(path,"log4j2.xml");
 		return this;
 	}
 	
-	private ArchiveBuilder<ARCHIVE> addPomXml(String path,Profile profile){
+	private AbstractArchiveBuilder<ARCHIVE> addPomXml(String path,Profile profile){
 		try {
 			path = System.getProperty("user.dir")+"/"+path;
 			Pom pom = PomBuilderImpl.__execute__(path);// xml == null ? null : (Pom) unmarshaller.unmarshal(new StringReader(xml));
@@ -200,18 +219,79 @@ public class ArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable 
 				String version = pom.getVersion() == null ? pom.getParent().getVersion() : pom.getVersion();
 				//Collection<File> files = new ArrayList<>();
 				File[] dependencies = Maven.resolver().resolve(pom.getGroupId()+":"+pom.getArtifactId()+":"+version).withTransitivity().asFile();
-				Collection<Dependency> profileDependencies = profile.getDependenciesCollection();
+				Collection<Dependency> profileDependencies = profile == null ? null : profile.getDependenciesCollection();
 				if(profileDependencies!=null)
 					for(Dependency index : profileDependencies) {
 						dependencies = (File[]) ArrayUtils.add(dependencies, Maven.resolver().resolve(index.getGroupId()+":"+index.getArtifactId()+":"+index.getVersion()).withoutTransitivity().asSingleFile());
 					}
 				//File[] dependencies = Resolvers.use(MavenResolverSystem.class).loadPomFromFile(path).importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
 				
-				((WebArchive)archive).addAsLibraries(dependencies);
+				if(archive instanceof WebArchive)
+					((WebArchive)archive).addAsLibraries(dependencies);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return this;
+	}
+	
+	public AbstractArchiveBuilder<ARCHIVE> addPackages(Collection<Package> packages) {
+		if(packages!=null && !packages.isEmpty()) {
+			if(this.packages == null)
+				this.packages = new ArrayList<Package>();
+			this.packages.addAll(packages);
+		}
+		return this;
+	}
+	
+	public AbstractArchiveBuilder<ARCHIVE> addPackages(Package...packages) {
+		if(packages!=null && packages.length>0) {
+			Collection<Package> collection = new ArrayList<Package>();
+			for(Package index : packages)
+				collection.add(index);
+			addPackages(collection);
+		}
+		return this;
+	}
+	
+	public AbstractArchiveBuilder<ARCHIVE> addPackage(String name,Boolean isRecursive) {
+		addPackages(new Package().setName(name).setIsRecursive(isRecursive));
+		return this;
+	}
+	
+	public AbstractArchiveBuilder<ARCHIVE> addPackage(String name) {
+		addPackage(name,Boolean.FALSE);
+		return this;
+	}
+	
+	/**/
+	
+	public AbstractArchiveBuilder<ARCHIVE> addClasses(Collection<Clazz> classes) {
+		if(classes!=null && !classes.isEmpty()) {
+			if(this.classes == null)
+				this.classes = new ArrayList<Clazz>();
+			this.classes.addAll(classes);
+		}
+		return this;
+	}
+	
+	public AbstractArchiveBuilder<ARCHIVE> addClasses(Clazz...classes) {
+		if(classes!=null && classes.length>0) {
+			Collection<Clazz> collection = new ArrayList<Clazz>();
+			for(Clazz index : classes)
+				collection.add(index);
+			addClasses(collection);
+		}
+		return this;
+	}
+	
+	public AbstractArchiveBuilder<ARCHIVE> addClasses(String name) {
+		addClasses(new Clazz().setName(name));
+		return this;
+	}
+	
+	public AbstractArchiveBuilder<ARCHIVE> addClass(Class<?> aClass) {
+		addClasses(new Clazz().setValue(aClass));
 		return this;
 	}
 	

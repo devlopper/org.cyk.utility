@@ -32,7 +32,7 @@ public abstract class AbstractArquillianTest extends AbstractTest implements Ser
 	protected static <ARCHIVE extends Archive<?>> ARCHIVE createDeployment(Class<ARCHIVE> aClass,Object beansXml){
 		ARCHIVE archive = ShrinkWrap.create(aClass);
 		if(archive instanceof JavaArchive)
-			((JavaArchive)archive).addPackages(Boolean.TRUE,"org.cyk.utility");
+			((JavaArchive)archive).addPackages(Boolean.FALSE,"org.cyk.utility");
 		addBeanXml(archive, beansXml);
 		
 		return archive;

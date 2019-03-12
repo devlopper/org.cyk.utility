@@ -44,66 +44,27 @@ public class KernelHelperImpl implements KernelHelper,Serializable {
 	
 	@Override
 	public Boolean isInstanceOf(Class<?> aClass, Class<?> baseClass) {
-		if (aClass == null || baseClass == null)
-			return Boolean.FALSE;
-		return baseClass.isAssignableFrom(aClass);
+		return __isInstanceOf__(aClass, baseClass);
 	}
 	
 	@Override
 	public <T> T instanciate(Class<T> aClass, Object[] constructorParameters) {
-		Class<?>[] classes = new Class[constructorParameters.length / 2];
-		Object[] arguments = new Object[constructorParameters.length / 2];
-		int j = 0;
-		for (int i = 0; i < constructorParameters.length; i = i + 2) {
-			classes[j] = (Class<?>) constructorParameters[i];
-			arguments[j++] = constructorParameters[i + 1];
-		}
-		try {
-			Constructor<T> constructor = DependencyInjection.inject(KernelHelper.class).getConstructor(aClass, classes);
-			if (constructor == null) {
-				//TODO log error
-				//logError("no constructor found in class % with parameters %", aClass, StringUtils.join(classes, ","));
-				return null;
-			}
-			return constructor.newInstance(arguments);
-		} catch (Exception exception) {
-			exception.printStackTrace();
-			return null;
-		}
+		return __instanciate__(aClass, constructorParameters);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T instanciateOne(Class<T> aClass) {
-		try {
-			if(Map.class.equals(aClass))
-				aClass = (Class<T>) HashMap.class;
-			if(Collection.class.equals(aClass))
-				aClass = (Class<T>) List.class;
-			if(List.class.equals(aClass))
-				aClass = (Class<T>) ArrayList.class;
-			if(Set.class.equals(aClass))
-				aClass = (Class<T>) LinkedHashSet.class;
-			return aClass.newInstance();
-		} catch (Exception exception) {
-			throw new RuntimeException(exception);
-		}
+		return __instanciateOne__(aClass);
 	}
 	
 	@Override
 	public <T> Collection<T> instanciate(Class<T> aClass, Integer count) {
-		Collection<T> collection = null;
-		if(count!=null && count>0){
-			collection = new ArrayList<T>();
-			for(Integer index = 0; index < count; index++)
-				collection.add(instanciateOne(aClass));
-		}
-		return collection;
+		return __instanciate__(aClass, count);
 	}
 
 	@Override
 	public <T> T instanciate(Class<T> aClass) {
-		return instanciateOne(aClass);
+		return __instanciate__(aClass);
 	}
 	
 	@Override
@@ -277,6 +238,12 @@ public class KernelHelperImpl implements KernelHelper,Serializable {
 	
 	/**/
 
+	public static Boolean __isInstanceOf__(Class<?> aClass, Class<?> baseClass) {
+		if (aClass == null || baseClass == null)
+			return Boolean.FALSE;
+		return baseClass.isAssignableFrom(aClass);
+	}
+	
 	public static String __getString__(InputStream inputStream) {
 		try {
 			return IOUtils.toString(inputStream,UTF_8);
@@ -304,6 +271,80 @@ public class KernelHelperImpl implements KernelHelper,Serializable {
 			System.err.println("File "+filePath+" does not exist");
 		}
 		return strings;
+	}
+	
+	public static <T> T __instanciate__(Class<T> aClass, Object[] constructorParameters) {
+		Class<?>[] classes = new Class[constructorParameters.length / 2];
+		Object[] arguments = new Object[constructorParameters.length / 2];
+		int j = 0;
+		for (int i = 0; i < constructorParameters.length; i = i + 2) {
+			classes[j] = (Class<?>) constructorParameters[i];
+			arguments[j++] = constructorParameters[i + 1];
+		}
+		try {
+			Constructor<T> constructor = DependencyInjection.inject(KernelHelper.class).getConstructor(aClass, classes);
+			if (constructor == null) {
+				//TODO log error
+				//logError("no constructor found in class % with parameters %", aClass, StringUtils.join(classes, ","));
+				return null;
+			}
+			return constructor.newInstance(arguments);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			return null;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T __instanciateOne__(Class<T> aClass) {
+		try {
+			if(Map.class.equals(aClass))
+				aClass = (Class<T>) HashMap.class;
+			if(Collection.class.equals(aClass))
+				aClass = (Class<T>) List.class;
+			if(List.class.equals(aClass))
+				aClass = (Class<T>) ArrayList.class;
+			if(Set.class.equals(aClass))
+				aClass = (Class<T>) LinkedHashSet.class;
+			return aClass.newInstance();
+		} catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	public static <T> Collection<T> __instanciate__(Class<T> aClass, Integer count) {
+		Collection<T> collection = null;
+		if(count!=null && count>0){
+			collection = new ArrayList<T>();
+			for(Integer index = 0; index < count; index++)
+				collection.add(__instanciateOne__(aClass));
+		}
+		return collection;
+	}
+
+	public static <T> T __instanciate__(Class<T> aClass) {
+		return __instanciateOne__(aClass);
+	}
+	
+	public static <CLASS> Constructor<CLASS> __getConstructor__(Class<CLASS> aClass, Class<?>[] parameters) {
+		try {
+			return ConstructorUtils.getMatchingAccessibleConstructor(aClass, parameters);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public static Class<?> __getClassByName__(String name,Boolean returnNullIfNotFound) {
+		Class<?> clazz;
+		try {
+			clazz = Class.forName(name);
+		} catch (ClassNotFoundException e) {
+			if(Boolean.TRUE.equals(returnNullIfNotFound))
+				clazz = null;
+			else
+				throw new RuntimeException(e);
+		}
+		return clazz;
 	}
 	
 	private static final String IMPL = "Impl";

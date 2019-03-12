@@ -1,6 +1,7 @@
 package org.cyk.utility.field;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
@@ -24,13 +25,14 @@ public class FieldInstancesRuntimeUnitTest extends AbstractArquillianUnitTestWit
 	
 	@Test
 	public void getC1_f01_many_call_add_field_only_once_to_runtime_collection() {
-		assertionHelper.setIsLogAssertionEnable(Boolean.TRUE);
 		for(Integer index = 0; index < 5; index = index + 1) {
-			assertionHelper.assertEquals(FieldUtils.getDeclaredField(C1.class, "f01", Boolean.TRUE), __inject__(FieldInstancesRuntime.class).get(C1.class,"f01").getField());
+			Integer count = __inject__(CollectionHelper.class).getSize(__inject__(FieldInstancesRuntime.class).getInstances());
 			if(index == 0)
-				assertionHelper.assertStartsWithLastLogEventMessage("field <<class org.cyk.utility.field.FieldInstancesRuntimeUnitTest$C1.f01>> added to runtime collection");
+				assertionHelper.assertEqualsNumber(0, count);
 			else
-				assertionHelper.assertStartsWithLastLogEventMessage("field <<class org.cyk.utility.field.FieldInstancesRuntimeUnitTest$C1.f01>> fetched from runtime collection");
+				assertionHelper.assertNotEqualsNumber(0, count);
+			assertionHelper.assertEquals(FieldUtils.getDeclaredField(C1.class, "f01", Boolean.TRUE), __inject__(FieldInstancesRuntime.class).get(C1.class,"f01").getField());
+			assertionHelper.assertEqualsNumber(1, __inject__(CollectionHelper.class).getSize(__inject__(FieldInstancesRuntime.class).getInstances()));
 		}
 	}
 	
@@ -41,13 +43,14 @@ public class FieldInstancesRuntimeUnitTest extends AbstractArquillianUnitTestWit
 	
 	@Test
 	public void getC1_sub1_f01_from_C01_many_call_add_field_only_once_to_runtime_collection() {
-		assertionHelper.setIsLogAssertionEnable(Boolean.TRUE);
 		for(Integer index = 0; index < 5; index = index + 1) {
-			assertionHelper.assertEquals(FieldUtils.getDeclaredField(C1_Sub1.class, "f01", Boolean.TRUE), __inject__(FieldInstancesRuntime.class).get(C1.class,"sub1.f01").getField());
+			Integer count = __inject__(CollectionHelper.class).getSize(__inject__(FieldInstancesRuntime.class).getInstances());
 			if(index == 0)
-				assertionHelper.assertStartsWithLastLogEventMessage("field <<class org.cyk.utility.field.FieldInstancesRuntimeUnitTest$C1.sub1.f01>> added to runtime collection");
+				assertionHelper.assertEqualsNumber(0, count);
 			else
-				assertionHelper.assertStartsWithLastLogEventMessage("field <<class org.cyk.utility.field.FieldInstancesRuntimeUnitTest$C1.sub1.f01>> fetched from runtime collection");
+				assertionHelper.assertNotEqualsNumber(0, count);
+			assertionHelper.assertEquals(FieldUtils.getDeclaredField(C1_Sub1.class, "f01", Boolean.TRUE), __inject__(FieldInstancesRuntime.class).get(C1.class,"sub1.f01").getField());
+			assertionHelper.assertEqualsNumber(1, __inject__(CollectionHelper.class).getSize(__inject__(FieldInstancesRuntime.class).getInstances()));
 		}
 	}
 	

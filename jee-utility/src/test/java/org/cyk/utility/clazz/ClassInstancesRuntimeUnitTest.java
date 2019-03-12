@@ -1,11 +1,19 @@
 package org.cyk.utility.clazz;
 
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
 public class ClassInstancesRuntimeUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		if(__inject__(ClassInstancesRuntime.class).getInstances()!=null)
+			__inject__(ClassInstancesRuntime.class).getInstances().removeAll();
+	}
+	
 	@Test
 	public void getC1() {
 		assertionHelper.assertEquals(C1.class, __inject__(ClassInstancesRuntime.class).get(C1.class).getClazz());
@@ -13,15 +21,14 @@ public class ClassInstancesRuntimeUnitTest extends AbstractArquillianUnitTestWit
 	
 	@Test
 	public void getC1_many_call_add_class_only_once_to_runtime_collection() {
-		assertionHelper.setIsLogAssertionEnable(Boolean.TRUE);
-		if(__inject__(ClassInstancesRuntime.class).getInstances()!=null)
-			__inject__(ClassInstancesRuntime.class).getInstances().removeAll();
 		for(Integer index = 0; index < 5; index = index + 1) {
-			assertionHelper.assertEquals(C1.class, __inject__(ClassInstancesRuntime.class).get(C1.class).getClazz());
+			Integer count = __inject__(CollectionHelper.class).getSize(__inject__(ClassInstancesRuntime.class).getInstances());
 			if(index == 0)
-				assertionHelper.assertStartsWithLastLogEventMessage("class <<class org.cyk.utility.clazz.ClassInstancesRuntimeUnitTest$C1>> added to runtime collection");
+				assertionHelper.assertEqualsNumber(0, count);
 			else
-				assertionHelper.assertStartsWithLastLogEventMessage("class <<class org.cyk.utility.clazz.ClassInstancesRuntimeUnitTest$C1>> fetched from runtime collection");
+				assertionHelper.assertNotEqualsNumber(0, count);
+			assertionHelper.assertEquals(C1.class, __inject__(ClassInstancesRuntime.class).get(C1.class).getClazz());
+			assertionHelper.assertEqualsNumber(1, __inject__(CollectionHelper.class).getSize(__inject__(ClassInstancesRuntime.class).getInstances()));
 		}
 	}
 	

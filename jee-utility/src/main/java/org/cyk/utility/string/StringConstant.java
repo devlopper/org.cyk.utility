@@ -35,5 +35,5 @@ public interface StringConstant {
 	String LINE_DELIMITER = "\r\n";
 		
 	String IMPL = "Impl";
-	
+
 }

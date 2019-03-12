@@ -35,6 +35,24 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 		assertEquals(message, __inject__(NumberHelper.class).getBigDecimal(expected), __inject__(NumberHelper.class).getBigDecimal(actual));
 		return this;
 	}
+	
+	@Override
+	public AssertionHelper assertEqualsNumber(Object expected, Object actual) {
+		assertEquals(__inject__(NumberHelper.class).getBigDecimal(expected), __inject__(NumberHelper.class).getBigDecimal(actual));
+		return this;
+	}
+	
+	@Override
+	public AssertionHelper assertNotEqualsNumber(String message, Object expected, Object actual) {
+		assertNotEquals(message, __inject__(NumberHelper.class).getBigDecimal(expected), __inject__(NumberHelper.class).getBigDecimal(actual));
+		return this;
+	}
+	
+	@Override
+	public AssertionHelper assertNotEqualsNumber(Object expected, Object actual) {
+		assertNotEquals(__inject__(NumberHelper.class).getBigDecimal(expected), __inject__(NumberHelper.class).getBigDecimal(actual));
+		return this;
+	}
 
 	@Override
 	public AssertionHelper assertNullLastLogEvent(String message) {
@@ -46,12 +64,6 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 	@Override
 	public AssertionHelper assertNullLastLogEvent() {
 		return assertNullLastLogEvent("Log message has been found");
-	}
-	
-	@Override
-	public AssertionHelper assertEqualsNumber(Object expected, Object actual) {
-		assertEquals(__inject__(NumberHelper.class).getBigDecimal(expected), __inject__(NumberHelper.class).getBigDecimal(actual));
-		return this;
 	}
 	
 	@Override

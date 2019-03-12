@@ -52,12 +52,12 @@ public abstract class AbstractObject implements Objectable,Serializable {
 		return DependencyInjection.inject(aClass,annotationLiterals);
 	}
 	
-	protected static <OBJECT> OBJECT __injectByQualifiersClasses__(Class<OBJECT> aClass,@SuppressWarnings("unchecked") Class<? extends AnnotationLiteral<?>>...annotationLiteralClasses){
+	protected static <OBJECT> OBJECT __injectByQualifiersClasses__(Class<OBJECT> aClass,Class<?>...classes){
 		if(aClass == null){
 			//TODO log warning
 			return null;
 		}
-		return DependencyInjection.injectByQualifiersClasses(aClass,annotationLiteralClasses);
+		return DependencyInjection.injectByQualifiersClasses(aClass,classes);
 	}
 	
 	/**/

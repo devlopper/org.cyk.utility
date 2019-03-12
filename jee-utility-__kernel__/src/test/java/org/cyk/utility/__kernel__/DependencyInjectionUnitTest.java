@@ -2,9 +2,6 @@ package org.cyk.utility.__kernel__;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.cyk.utility.__kernel__.test.arquillian.AbstractArquillianUnitTest;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 
 public class DependencyInjectionUnitTest extends AbstractDependencyInjectionUnitTesting {
@@ -17,9 +14,16 @@ public class DependencyInjectionUnitTest extends AbstractDependencyInjectionUnit
 		
 	/* Deployment*/
 	
-	@Deployment
-	public static JavaArchive createDeployment() {
-		return AbstractArquillianUnitTest.createJavaArchiveDeployment();
+	@org.jboss.arquillian.container.test.api.Deployment
+	public static org.jboss.shrinkwrap.api.spec.JavaArchive createDeployment() {
+		return new org.cyk.utility.__kernel__.test.arquillian.archive.builder.JavaArchiveBuilder()
+				.addClass(Class01.class)
+				.addClass(Class02.class)
+				.addClass(Class01FirstVersion.class)
+				.addClass(Class01SecondVersion.class)
+				.addClass(Class02FirstVersion.class)
+				.addClass(MySingleton.class)
+				.execute();
 	}
 	
 }

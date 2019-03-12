@@ -35,6 +35,9 @@ public interface AssertionHelper extends Helper {
 	AssertionHelper assertEqualsNumber(String message,Object expected,Object actual);
 	AssertionHelper assertEqualsNumber(Object expected,Object actual);
 	
+	AssertionHelper assertNotEqualsNumber(String message,Object expected,Object actual);
+	AssertionHelper assertNotEqualsNumber(Object expected,Object actual);
+	
 	AssertionHelper assertEqualsLogEventCount(String message,Object expected);
 	AssertionHelper assertEqualsLogEventCount(Object expected);
 	

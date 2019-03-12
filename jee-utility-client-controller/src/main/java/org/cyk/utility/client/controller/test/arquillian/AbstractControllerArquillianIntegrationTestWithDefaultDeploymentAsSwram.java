@@ -1,6 +1,6 @@
 package org.cyk.utility.client.controller.test.arquillian;
 
-import org.cyk.utility.__kernel__.test.arquillian.ArchiveBuilder;
+import org.cyk.utility.__kernel__.test.arquillian.archive.builder.ArchiveBuilder;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 public abstract class AbstractControllerArquillianIntegrationTestWithDefaultDeploymentAsSwram extends AbstractControllerArquillianIntegrationTest {

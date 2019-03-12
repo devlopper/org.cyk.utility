@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.inject.Singleton;
 
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.throwable.ThrowableHelper;
 
 @Singleton
 public class ValueHelperImpl extends AbstractHelper implements ValueHelper,Serializable {
@@ -20,9 +22,18 @@ public class ValueHelperImpl extends AbstractHelper implements ValueHelper,Seria
 		return value == null ? defaultValue : value;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <FROM, CLASS> CLASS cast(Object object, CLASS aClass) {
 		return (CLASS) object;
+	}
+
+	@Override
+	public <T> T returnOrThrowIfBlank(String name, T value) {
+		Boolean isThrow = value == null;
+		if(!Boolean.TRUE.equals(isThrow))
+			isThrow = (value instanceof String) && __inject__(StringHelper.class).isBlank((String) value);
+		if(Boolean.TRUE.equals(isThrow))
+			__inject__(ThrowableHelper.class).throwRuntimeException(name+" is required.");
+		return value;
 	}
 }

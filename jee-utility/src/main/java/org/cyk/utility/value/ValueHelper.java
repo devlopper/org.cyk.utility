@@ -9,4 +9,5 @@ public interface ValueHelper extends Helper {
 
 	<FROM,CLASS> CLASS cast(Object object,CLASS aClass);
 	
+	<T> T returnOrThrowIfBlank(String name,T value);
 }
