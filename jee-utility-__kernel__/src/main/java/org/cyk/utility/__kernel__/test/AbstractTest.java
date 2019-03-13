@@ -71,4 +71,7 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 	protected static Boolean __isRunnable__(Class<?> aClass){
 		return aClass == null ? Boolean.FALSE : __isRunnable__(aClass.getPackage(),1);
 	}
+
+	/**/
+	
 }

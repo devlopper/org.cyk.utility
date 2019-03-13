@@ -33,6 +33,11 @@ public abstract class AbstractEntity extends AbstractIdentifiedByLong implements
 		return getCode();
 	}
 	
+	@Override
+	public String toString() {
+		return getCode();
+	}
+	
 	/**/
 	
 	public static final String FIELD_CODE = "code";

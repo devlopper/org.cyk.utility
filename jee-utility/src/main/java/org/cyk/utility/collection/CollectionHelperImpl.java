@@ -244,6 +244,17 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	}
 	
 	@Override
+	public Boolean containsAll(Collection<?> collection, Collection<?> elements) {
+		if(Boolean.TRUE.equals(isNotEmpty(collection)) && Boolean.TRUE.equals(isNotEmpty(elements))) {
+			for(Object index : elements)
+				if(!Boolean.TRUE.equals(contains(collection, index)))
+					return Boolean.FALSE;
+			return Boolean.TRUE;
+		}
+		return null;
+	}
+	
+	@Override
 	public Boolean contains(CollectionInstance<?> collectionInstance, Object element) {
 		return collectionInstance!=null && contains(collectionInstance.get(), element);
 	}

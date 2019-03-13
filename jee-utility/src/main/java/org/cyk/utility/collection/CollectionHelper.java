@@ -35,6 +35,7 @@ public interface CollectionHelper extends Helper {
 	<ELEMENT> Collection<ELEMENT> addElementAt(Collection<ELEMENT> collection,Object index, ELEMENT element);
 	
 	Boolean contains(Collection<?> collection,Object element);
+	Boolean containsAll(Collection<?> collection, Collection<?> elements);
 	Boolean contains(CollectionInstance<?> collectionInstance,Object element);
 	
 	<ELEMENT> Collection<ELEMENT> removeNullValue(Collection<ELEMENT> collection);
