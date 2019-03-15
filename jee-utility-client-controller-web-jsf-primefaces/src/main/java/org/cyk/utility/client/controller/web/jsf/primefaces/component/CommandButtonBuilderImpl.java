@@ -22,7 +22,7 @@ import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.behavior.ajax.AjaxBehaviorListenerImpl;
 import org.primefaces.component.commandbutton.CommandButton;
 
-public class CommandButtonBuilderImpl extends AbstractComponentBuilderImpl<CommandButton,Commandable> implements CommandButtonBuilder,Serializable {
+public class CommandButtonBuilderImpl extends AbstractUIComponentBuilderImpl<CommandButton,Commandable> implements CommandButtonBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

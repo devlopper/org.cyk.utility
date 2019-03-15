@@ -183,7 +183,7 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 	}
 
 	@Override
-	public <I extends Objectable> I getParentAs(Class<I> aClass) {
+	public <I> I getParentAs(Class<I> aClass) {
 		return null;
 	}
 	

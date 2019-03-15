@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+	
+    <h:head>
+        <title>Organigram</title>
+    </h:head>
+    <h:body>
+    	<h:form id="form">
+		    <p:organigram id="organigram" value="#{organigramView2.rootNode}" var="node" >
+		 
+		        <p:ajax event="dragdrop" listener="#{organigramView2.nodeDragDropListener}" async="true" />
+		        <p:ajax event="select" process="@this" listener="#{organigramView2.nodeSelectListener}" />
+		        <p:ajax event="contextmenu" process="@this" />
+		        <p:ajax event="collapse" process="@this" listener="#{organigramView2.nodeCollapseListener}" />
+		        <p:ajax event="expand" process="@this" listener="#{organigramView2.nodeExpandListener}" />
+		 
+		        <p:organigramNode type="default">
+		            <h:outputText value="#{node.data}" />
+		        </p:organigramNode>
+		 
+		    </p:organigram>
+
+		</h:form>
+    </h:body>
+</html>

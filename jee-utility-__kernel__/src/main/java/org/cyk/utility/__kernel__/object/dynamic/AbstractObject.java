@@ -81,7 +81,7 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <I extends Objectable> I getParentAs(Class<I> aClass) {
+	public <I> I getParentAs(Class<I> aClass) {
 		return (I) getParent();
 	}
 	

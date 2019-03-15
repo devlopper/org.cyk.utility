@@ -1,7 +1,6 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.component;
 
 import java.io.Serializable;
-import java.util.Map;
 
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
@@ -10,9 +9,8 @@ import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.web.ValueExpressionMap;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.map.MapHelper;
 
-public abstract class AbstractComponentBuilderImpl<COMPONENT extends UIComponent,MODEL extends Component> extends AbstractFunctionWithPropertiesAsInputImpl<COMPONENT> implements ComponentBuilder<COMPONENT,MODEL>,Serializable {
+public abstract class AbstractComponentBuilderImpl<COMPONENT,MODEL extends Component> extends AbstractFunctionWithPropertiesAsInputImpl<COMPONENT> implements ComponentBuilder<COMPONENT,MODEL>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private MODEL model;
@@ -20,20 +18,17 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends UIComponent
 	
 	@Override
 	protected COMPONENT __execute__() throws Exception {
-		MODEL model = getModel();
+		MODEL model = __executeGetModel__(getModel());
 		ValueExpressionMap valueExpressionMap = getValueExpressionMap();
 		if(valueExpressionMap == null)
 			valueExpressionMap = __inject__(ValueExpressionMap.class);
 		COMPONENT component = __execute__(model,valueExpressionMap);
-		if(__inject__(MapHelper.class).isNotEmpty(valueExpressionMap))
-			for(Map.Entry<String, ValueExpression> index : valueExpressionMap.getEntries()) {
-				ValueExpression valueExpression = index.getValue();
-				if(valueExpression!=null)
-					__setValueExpression__(component, index.getKey(), valueExpression);	
-			}
 		return component;
 	}
 	
+	protected MODEL __executeGetModel__(MODEL model) {
+		return model;
+	}
 	protected abstract COMPONENT __execute__(MODEL model,ValueExpressionMap valueExpressionMap) throws Exception;
 	
 	@Override

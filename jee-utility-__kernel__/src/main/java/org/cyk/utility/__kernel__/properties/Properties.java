@@ -487,6 +487,15 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getIconPos(){
+		return get(ICON_POS);
+	}
+	
+	public Properties setIconPos(Object iconPos){
+		set(ICON_POS, iconPos);
+		return this;
+	}
+	
 	public Object getImmediate(){
 		return get(IMMEDIATE);
 	}
@@ -2329,6 +2338,15 @@ public class Properties implements java.io.Serializable {
 
 	public Properties setSkipChildren(Object value) {
 		set(SKIP_CHILDREN, value);
+		return this;
+	}
+	
+	public Object getSkipLeafHandling() {
+		return get(SKIP_LEAF_HANDLING);
+	}
+
+	public Properties setSkipLeafHandling(Object value) {
+		set(SKIP_LEAF_HANDLING, value);
 		return this;
 	}
 	
@@ -4675,6 +4693,7 @@ public class Properties implements java.io.Serializable {
 	public static final String DRAG_MODE = "DRAG_MODE";
 	public static final String DROP_RESTRICT = "DROP_RESTRICT";
 	public static final String SKIP_CHILDREN = "SKIP_CHILDREN";
+	public static final String SKIP_LEAF_HANDLING = "SKIP_LEAF_HANDLING";
 	public static final String SHOW_UNSELECTABLE_CHECKBOX = "SHOW_UNSELECTABLE_CHECKBOX";
 	public static final String FILTER_BY = "FILTER_BY";
 	
@@ -4849,6 +4868,7 @@ public class Properties implements java.io.Serializable {
 	public static final String AJAX = "AJAX";
 	public static final String DISABLED = "DISABLED";
 	public static final String ICON = "ICON";
+	public static final String ICON_POS = "ICON_POS";
 	public static final String IMMEDIATE = "IMMEDIATE";
 	public static final String VALIDATABLE = "VALIDATABLE";
 	public static final String PROCESS = "PROCESS";

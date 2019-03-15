@@ -15,7 +15,7 @@ public interface Objectable extends org.cyk.utility.__kernel__.object.Objectable
 	Collection<Object> getPropertiesWhereKeyIsInstanceOf(Class<?> clazz);
 	
 	Object getParent();
-	<I extends Objectable> I getParentAs(Class<I> aClass);
+	<I> I getParentAs(Class<I> aClass);
 	Objectable setParent(Object parent,Boolean executeAddChild);
 	Objectable setParent(Object parent);
 	
