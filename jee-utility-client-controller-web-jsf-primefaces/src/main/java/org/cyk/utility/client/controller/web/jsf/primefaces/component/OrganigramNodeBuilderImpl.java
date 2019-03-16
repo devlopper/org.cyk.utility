@@ -27,11 +27,12 @@ public class OrganigramNodeBuilderImpl extends AbstractComponentBuilderImpl<Orga
 			node.setType(family);
 		if(model.getIdentifier()!=null)
 			node.setRowKey(model.getIdentifier().toString());
-		node.setCollapsible(Boolean.TRUE.equals(model.getIsCollapsible()));
+		//node.setCollapsible(Boolean.TRUE.equals(model.getIsCollapsible()));
 		node.setDraggable(Boolean.TRUE.equals(model.getIsDraggable()));
 		node.setDroppable(Boolean.TRUE.equals(model.getIsDroppable()));
 		node.setSelectable(Boolean.TRUE.equals(model.getIsSelectable()));
-		node.setExpanded(Boolean.TRUE.equals(model.getIsExpanded()));
+		node.setSelectable(true);
+		//node.setExpanded(Boolean.TRUE.equals(model.getIsExpanded()));
 		Collection<Object> children = model.getChildren();
 		if(__injectCollectionHelper__().isNotEmpty(children)) {
 			for(Object index : children) {
@@ -45,6 +46,7 @@ public class OrganigramNodeBuilderImpl extends AbstractComponentBuilderImpl<Orga
 					__inject__(OrganigramNodeBuilder.class).setParent(node).setModel(indexTreeNode).execute();
 			}
 		}
+		node.setSelectable(true);
 		return node;
 	}
 	

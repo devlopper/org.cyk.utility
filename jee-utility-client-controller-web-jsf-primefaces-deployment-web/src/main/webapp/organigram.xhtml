@@ -4,14 +4,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"      
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
     <h:head>
         <title>Organigram</title>
     </h:head>
     <h:body>
     	<h:form id="form">
- 
 		    <p:growl id="growl" />
 		 
 		    <p:organigram id="organigram"
@@ -24,29 +24,29 @@
 		                   selection="#{organigramView.selection}"
 		                   style="#{organigramView.style}">
 		 
-		        <p:ajax event="dragdrop" process="@this" update="@form:growl" listener="#{organigramView.nodeDragDropListener}" />
-		        <p:ajax event="select" process="@this" update="@form:growl" listener="#{organigramView.nodeSelectListener}" />
-		        <p:ajax event="contextmenu" process="@this" />
-		        <p:ajax event="collapse" process="@this" update="@form:growl" listener="#{organigramView.nodeCollapseListener}" />
-		        <p:ajax event="expand" process="@this" update="@form:growl" listener="#{organigramView.nodeExpandListener}" />
-		 
-		        <p:organigramNode 
-		        	type="default"
-		        	collapsedIcon="#{node.data.properties.collapsedIcon}"
-		        	expandedIcon="#{node.data.properties.expandedIcon}"
-		        	icon="#{node.data.properties.icon}"
-		        	iconPos="#{node.data.properties.iconPos}"
-		        	rendered="#{node.data.properties.rendered}"
-		        	skipLeafHandling="#{node.data.properties.skipLeafHandling}"
-		        	styleClass="#{node.data.properties.styleClass}"
-		        	style="#{node.data.properties.style}"
-		        >
+		        <p:organigramNode>
 		            <h:outputText value="#{node.data}" />
 		        </p:organigramNode>
 		 
+		        <p:organigramNode type="root"
+		                           style="border-radius: 10px;">
+		            <h:outputText value="#{node.data}" />
+		        </p:organigramNode>
+		 
+		        <p:organigramNode type="division"
+		                          styleClass="division"
+		                          icon="pi pi-briefcase"
+		                          iconPos="left">
+		            <h:outputText value="#{node.data}" />
+		        </p:organigramNode>
+		 
+		        <p:organigramNode type="employee"
+		                          styleClass="employee"
+		                          icon="pi pi-user">
+		            <h:outputText value="#{node.data}" />
+		        </p:organigramNode>
 		    </p:organigram>
-		 	
-		 	<!--
+		 
 		    <p:contextMenu for="organigram" nodeType="employee">
 		        <p:menuitem value="fire employee"
 		                    update="organigram"
@@ -78,9 +78,8 @@
 		                         oncomplete="PF('addEmployeeDialog').hide();"/>
 		 
 		    </p:dialog>
-		    -->
 		</h:form>
-		<!-- 
+		 
 		<h:form>
 		    <p:panel header="Options">
 		        <h:panelGrid columns="2">
@@ -109,6 +108,5 @@
 		        </h:panelGrid>
 		    </p:panel>
 		</h:form>
-		-->
     </h:body>
 </html>

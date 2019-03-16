@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.event.EventBuilders;
+import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.css.StyleBuilder;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
@@ -74,6 +75,9 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	ComponentBuilder<COMPONENT> setEvents(EventBuilders events);
 	ComponentBuilder<COMPONENT> addEvents(Collection<EventBuilder> events);
 	ComponentBuilder<COMPONENT> addEvents(EventBuilder...events);
+	EventBuilder getEventByName(EventName name,Boolean injectIfNull);
+	EventBuilder getEventByName(EventName name);
+	ComponentBuilder<COMPONENT> addEvent(EventName name,Runnable runnable);
 	
 	Object getRequest();
 	ComponentBuilder<COMPONENT> setRequest(Object request);

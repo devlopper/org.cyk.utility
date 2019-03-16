@@ -327,6 +327,20 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	}
 	
 	@Override
+	public Function<INPUT, OUTPUT> addTryRunRunnables(Collection<Runnable> runnables) {
+		if(runnables!=null && !runnables.isEmpty())
+			try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE).addAll(runnables);
+		return this;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> addTryRunRunnables(Runnable... runnables) {
+		if(runnables!=null && runnables.length>0)
+			addTryRunRunnables(Arrays.asList(runnables));
+		return this;
+	}
+	
+	@Override
 	public FunctionExecutionPhaseCatch getExecutionPhaseCatch(Boolean injectIfNull) {
 		FunctionExecutionPhaseCatch executionPhaseCatch = getExecutionPhaseCatch();
 		if(executionPhaseCatch == null && Boolean.TRUE.equals(injectIfNull))

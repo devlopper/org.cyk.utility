@@ -126,6 +126,14 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Properties setManyIfNull(Object[] keys,Object value){
+		if(keys!=null && keys.length>0) {
+			for(Object index : keys)
+				setIfNull(index, value);
+		}
+		return this;
+	}
+	
 	public Properties setFromPath(Object[] keys,Object value){
 		if(keys == null || keys.length == 0){
 			//TODO log warning
@@ -4447,7 +4455,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getRoot() {
+		return get(ROOT);
+	}
+
+	public Properties setRoot(Object root) {
+		set(ROOT, root);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String ROOT = "ROOT";
 	public static final String FIELDS_NAMES = "FIELDS_NAMES";
 	public static final String NAVIGATION_IDENTIFIER = "NAVIGATION_IDENTIFIER";
 	public static final String TOOLTIP = "TOOLTIP";

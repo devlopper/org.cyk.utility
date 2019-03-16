@@ -9,6 +9,13 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.client.controller.component.command.CommandFunction;
+import org.cyk.utility.client.controller.component.tree.Tree;
+import org.cyk.utility.client.controller.component.tree.TreeBuilder;
+import org.cyk.utility.client.controller.event.EventBuilder;
+import org.cyk.utility.client.controller.event.EventName;
+import org.cyk.utility.client.controller.web.jsf.primefaces.component.OrganigramNodeBuilder;
+import org.cyk.utility.hierarchy.HierarchyNode;
 import org.primefaces.component.organigram.OrganigramHelper;
 import org.primefaces.event.organigram.OrganigramNodeCollapseEvent;
 import org.primefaces.event.organigram.OrganigramNodeDragDropEvent;
@@ -17,17 +24,22 @@ import org.primefaces.event.organigram.OrganigramNodeSelectEvent;
 import org.primefaces.model.DefaultOrganigramNode;
 import org.primefaces.model.OrganigramNode;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @ManagedBean
 //@ViewScoped
 @SessionScoped
-public class OrganigramView extends AbstractObject implements Serializable {
+public class OrganigramView3 extends AbstractObject implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    private OrganigramNode rootNode;
+    @Getter @Setter private Tree tree;
+    
+	private OrganigramNode rootNode;
     private OrganigramNode selection;
  
     private boolean zoom = false;
-    private String style = "width: 800px";
+    private String style = "width: 1200px";
     private int leafNodeConnectorHeight = 0;
     private boolean autoScrollToSelection = false;
  
@@ -36,46 +48,80 @@ public class OrganigramView extends AbstractObject implements Serializable {
     @PostConstruct
     public void init() {
         selection = new DefaultOrganigramNode(null, "Ridvan Agar", null);
- 
-        rootNode = new DefaultOrganigramNode("root", "CommerceBay GmbH", null);
-        rootNode.setCollapsible(false);
-        rootNode.setDroppable(true);
- 
- 
-        OrganigramNode softwareDevelopment = addDivision(rootNode, "Software Development", "Ridvan Agar");
- 
-        OrganigramNode teamJavaEE = addDivision(softwareDevelopment, "Team JavaEE");
-        addDivision(teamJavaEE, "JSF", "Thomas Andraschko");
-        addDivision(teamJavaEE, "Backend", "Marie Louise");
- 
-        OrganigramNode teamMobile = addDivision(softwareDevelopment, "Team Mobile");
-        addDivision(teamMobile, "Android", "Andy Ruby");
-        addDivision(teamMobile, "iOS", "Stevan Jobs");
- 
-        addDivision(rootNode, "Managed Services", "Thorsten Schultze", "Sandra Becker");
- 
-        OrganigramNode marketing = addDivision(rootNode, "Marketing");
-        addDivision(marketing, "Social Media", "Ali Mente", "Lisa Boehm");
-        addDivision(marketing, "Press", "Michael Gmeiner", "Hans Peter");
- 
-        addDivision(rootNode, "Management", "Hassan El Manfalouty");
-    }
- 
-    protected OrganigramNode addDivision(OrganigramNode parent, String name, String... employees) {
-        OrganigramNode divisionNode = new DefaultOrganigramNode("division", name, parent);
-        divisionNode.setDroppable(true);
-        divisionNode.setDraggable(true);
-        divisionNode.setSelectable(true);
- 
-        if (employees != null) {
-            for (String employee : employees) {
-                OrganigramNode employeeNode = new DefaultOrganigramNode("employee", employee, divisionNode);
-                employeeNode.setDraggable(true);
-                employeeNode.setSelectable(true);
-            }
-        }
- 
-        return divisionNode;
+        
+        HierarchyNode hierarchyNode = __inject__(HierarchyNode.class).setData("CommerceBay GmbH");
+        hierarchyNode.setIsCollapsible(Boolean.FALSE);
+        
+        hierarchyNode
+        	.addNode("Software Development").getLastChild().setIcon("fa fa-briefcase")
+        		.addNode("Ridvan Agar")
+        		.addNode("Team JavaEE").getLastChild()
+        			.addNode("JSF").getLastChild()
+        				.addNode("Thomas Andraschko")
+        				.getParent()
+        			.addNode("Backend").getLastChild()
+        				.addNode("Marie Louise")
+        				.getParent()
+        			.getParent()
+        		.addNode("Team Mobile").getLastChild()
+	        		.addNode("Android").getLastChild()
+						.addNode("Andy Ruby")
+						.getParent()
+					.addNode("iOS").getLastChild()
+						.addNode("Stevan Jobs")
+						.getParent()
+					.getParent()					
+        		.getParent()
+        	.addNode("Managed Services").getLastChild()
+        		.addNode("Thorsten Schultze")
+        		.addNode("Sandra Becker")
+        		.getParent()
+	        .addNode("Marketing").getLastChild()
+    			.addNode("Social Media").getLastChild()
+    				.addNode("Ali Mente")
+    				.addNode("Lisa Boehm")
+    				.getParent()
+    			.addNode("Press").getLastChild()
+    				.addNode("Michael Gmeiner")
+    				.addNode("Hans Peter")
+    				.getParent()
+				.getParent()	
+        	.addNode("Management").getLastChild()
+        		.addNode("Hassan El Manfalouty")
+        		.getParent()
+        	;
+        
+        rootNode = __inject__(OrganigramNodeBuilder.class).setHierarchyNode(hierarchyNode).execute().getOutput();
+        
+        tree = __inject__(TreeBuilder.class)
+        	.addEvent(EventName.COLLAPSE, new Runnable() {
+				@Override
+				public void run() {
+					System.out.println("OrganigramView.init().new Runnable() {...}.run() : COLLAPSED");
+				}
+			})
+        	.addEvent(EventName.SELECT, new Runnable() {
+    			@Override
+    			public void run() {
+    				System.out.println("OrganigramView.init().new Runnable() {...}.run() : SELECTED");
+    			}
+    		})
+        	.addEvent(EventName.EXPAND, new Runnable() {
+    			@Override
+    			public void run() {
+    				System.out.println("OrganigramView.init().new Runnable() {...}.run() : EXPANDED");
+    			}
+    		})
+        	.addEvent(EventName.DRAG_DROP, new Runnable() {
+    			@Override
+    			public void run() {
+    				System.out.println("OrganigramView.init().new Runnable() {...}.run() : DRAG DROP");
+    			}
+    		})
+        	.execute().getOutput();
+         
+        tree.getProperties().setRoot(rootNode);
+        
     }
  
     public void nodeDragDropListener(OrganigramNodeDragDropEvent event) {

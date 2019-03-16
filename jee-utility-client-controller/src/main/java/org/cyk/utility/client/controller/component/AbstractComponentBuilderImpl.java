@@ -5,9 +5,11 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.component.command.CommandFunction;
 import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.event.EventBuilders;
+import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.css.StyleBuilder;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
@@ -335,6 +337,26 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	@Override
 	public ComponentBuilder<COMPONENT> addEvents(EventBuilder... events) {
 		return addEvents(__injectCollectionHelper__().instanciate(events));
+	}
+	
+	@Override
+	public EventBuilder getEventByName(EventName name, Boolean injectIfNull) {
+		EventBuilders events = getEvents(injectIfNull);
+		return events == null ? null : events.getByName(name, injectIfNull);
+	}
+	
+	@Override
+	public EventBuilder getEventByName(EventName name) {
+		return getEventByName(name, null);
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> addEvent(EventName name, Runnable runnable) {
+		EventBuilder event = getEventByName(name, Boolean.TRUE);
+		CommandFunction function = event.getFunction(Boolean.TRUE);
+        function.try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE).add(runnable);
+        addEvents(event);
+		return this;
 	}
 	
 	@Override

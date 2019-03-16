@@ -7,4 +7,10 @@ import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuild
 public class TreeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tree> implements TreeBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __execute__(Tree tree) {
+		super.__execute__(tree);
+		
+	}
+	
 }

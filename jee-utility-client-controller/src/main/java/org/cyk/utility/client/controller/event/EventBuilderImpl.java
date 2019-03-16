@@ -3,6 +3,8 @@ package org.cyk.utility.client.controller.event;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.function.Function;
+import org.cyk.utility.client.controller.component.command.CommandFunction;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.programming.script.ScriptBuilder;
 
@@ -11,6 +13,7 @@ public class EventBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 
 	private EventName name;
 	private ScriptBuilder script;
+	private CommandFunction function;
 	
 	@Override
 	protected Event __execute__() throws Exception {
@@ -21,6 +24,8 @@ public class EventBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 		if(script!=null)
 			event.setScript(script.execute().getOutput());
 		event.getProperties().copyNonNullKeysFrom(getOutputProperties());
+		Function<?, ?> function = getFunction();
+		event.setFunction(function);
 		return event;
 	}
 
@@ -63,7 +68,25 @@ public class EventBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 		return this;
 	}
 	
+	@Override
+	public CommandFunction getFunction() {
+		return function;
+	}
+	
+	@Override
+	public CommandFunction getFunction(Boolean injectIfNull) {
+		return (CommandFunction) __getInjectIfNull__(FIELD_FUNCTION, injectIfNull);
+	}
+
+	@Override
+	public EventBuilder setFunction(CommandFunction function) {
+		this.function = function;
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_SCRIPT = "script";
+	public static final String FIELD_FUNCTION = "function";
+	
 }

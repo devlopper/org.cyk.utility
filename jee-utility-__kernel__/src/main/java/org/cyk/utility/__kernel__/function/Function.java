@@ -51,6 +51,8 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	FunctionExecutionPhaseTry getExecutionPhaseTry();
 	FunctionExecutionPhaseTry getExecutionPhaseTry(Boolean injectIfNull);
 	FunctionExecutionPhaseTry try_();
+	Function<INPUT,OUTPUT> addTryRunRunnables(Collection<Runnable> runnables);
+	Function<INPUT,OUTPUT> addTryRunRunnables(Runnable...runnables);
 	
 	Function<INPUT,OUTPUT> setExecutionPhaseCatch(FunctionExecutionPhaseCatch executionPhaseCatch);
 	FunctionExecutionPhaseCatch getExecutionPhaseCatch();

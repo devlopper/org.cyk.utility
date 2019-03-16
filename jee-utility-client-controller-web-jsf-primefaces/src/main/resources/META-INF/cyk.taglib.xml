@@ -265,4 +265,21 @@
         <source>tag/ajax/ajax.xhtml</source>
     </tag>
     
+    <tag>
+        <tag-name>ajaxs</tag-name>
+        <source>tag/ajax/ajaxs.xhtml</source>
+    </tag>
+    
+    <!-- Hierarchy -->
+    <!-- Organigram -->
+    <tag>
+        <tag-name>organigramNode</tag-name>
+        <source>tag/hierarchy/organigram/node.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>organigram</tag-name>
+        <source>tag/hierarchy/organigram/organigram.xhtml</source>
+    </tag>
+    
 </facelet-taglib>

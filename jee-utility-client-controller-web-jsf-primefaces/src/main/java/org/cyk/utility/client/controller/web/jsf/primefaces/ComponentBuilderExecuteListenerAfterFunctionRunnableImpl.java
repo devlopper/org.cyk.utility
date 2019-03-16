@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.Component;
@@ -48,7 +49,14 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 				Events events = component.getEvents();
 				if(events!=null) {
 					for(Event index : events.get()) {
-						String scriptCodeSource = index.getScript().getCodeSource();
+						index.getProperties().setManyIfNull(new Object[] {Properties.IMMEDIATE,Properties.ASYNC,Properties.DISABLED,Properties.PARTIAL_SUBMIT
+								,Properties.RESET_VALUES,Properties.IGNORE_AUTO_UPDATE}, Boolean.FALSE);
+						index.getProperties().setManyIfNull(new Object[] {Properties.GLOBAL,Properties.SKIP_CHILDREN}, Boolean.TRUE);
+						index.getProperties().setIfNull(Properties.EVENT,StringUtils.removeAll(index.getName().name().toLowerCase(), "_") );
+						
+						index.getProperties().setIfNull(Properties.FUNCTION,index.getFunction());
+						
+						String scriptCodeSource = index.getScript() == null ? null :index.getScript().getCodeSource();
 						if(EventName.CLICK.equals(index.getName()) && __inject__(StringHelper.class).isNotBlank(scriptCodeSource))
 							component.getProperties().setOnClick(scriptCodeSource);
 					}
