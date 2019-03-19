@@ -13,7 +13,7 @@
 			<p:organigram
 				id="#{value.properties.identifier}"
 				widgetVar="#{value.properties.widgetVar}" 
-		    	value="#{value.properties.root}"
+		    	value="#{value.targetModel}"
 		        var="node"
 		        selection="#{value.runtimeSelection}"
 		        styleClass="#{value.properties.styleClass}"
@@ -24,6 +24,23 @@
 		 			<cyk:ajaxs value="#{value.events.get()}" />
 		 		</c:if>
 		 		
+		 		<c:forEach items = "#{value.nodeFamilies.get()}" var="nodetype">
+			 		<p:organigramNode 
+			        	type="#{nodetype}"
+			        	collapsedIcon="#{node.data.properties.collapsedIcon}"
+			        	expandedIcon="#{node.data.properties.expandedIcon}"
+			        	icon="#{node.data.properties.icon}"
+			        	iconPos="#{node.data.properties.iconPos}"
+			        	rendered="#{node.data.properties.rendered}"
+			        	skipLeafHandling="#{node.data.properties.skipLeafHandling}"
+			        	styleClass="#{node.data.properties.styleClass}"
+			        	style="#{node.data.properties.style}"
+			        >
+			            <h:outputText value="#{node.data}" />
+			        </p:organigramNode>
+		 		</c:forEach>
+		 		
+		 		<!--
 		        <p:organigramNode 
 		        	type="default"
 		        	collapsedIcon="#{node.data.properties.collapsedIcon}"
@@ -37,11 +54,16 @@
 		        >
 		            <h:outputText value="#{node.data}" />
 		        </p:organigramNode>
-		 		
+		 		-->
 		 		<!--
 		 		<cyk:organigramNode value="#{node}" />
 		 		-->
 		    </p:organigram>
+		    
+		    <c:if test="#{value.menu != null}">
+		    	<cyk:menu value="#{value.menu}" />
+		    </c:if>
+		    
 		</ui:define>
 	</ui:decorate>	
 		

@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.component.tree;
 
 import org.cyk.utility.client.controller.component.VisibleComponent;
+import org.cyk.utility.hierarchy.HierarchyNode;
 
 public interface TreeNode extends VisibleComponent {
 
@@ -8,6 +9,9 @@ public interface TreeNode extends VisibleComponent {
 	@Override TreeNode addChild(Object... child);
 	
 	TreeNode addChild(String family,Object data);
+	
+	HierarchyNode getHierarchyNode();
+	TreeNode setHierarchyNode(HierarchyNode hierarchyNode);
 	
 	String getFamily();
 	TreeNode setFamily(String family);

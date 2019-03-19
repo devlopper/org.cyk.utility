@@ -1,15 +1,18 @@
 package org.cyk.utility.hierarchy;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.object.Objects;
 
 public class HierarchyNodeImpl extends AbstractObject implements HierarchyNode,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private HierarchyNodeData data;
 	private Boolean isCollapsible;
-	private Object icon;
+	private Object icon,family;
 	
 	@Override
 	public HierarchyNode setParent(Object parent) {
@@ -70,5 +73,28 @@ public class HierarchyNodeImpl extends AbstractObject implements HierarchyNode,S
 	@Override
 	public Object getIcon() {
 		return icon;
+	}
+	
+	@Override
+	public Object getFamily() {
+		return family;
+	}
+	
+	@Override
+	public HierarchyNode setFamily(Object family) {
+		this.family = family;
+		return this;
+	}
+	
+	@Override
+	public Objects getFamilies() {
+		Objects objects = __inject__(Objects.class);
+		objects.add(getFamily());
+		Collection<HierarchyNode> children = getChildrenInstanceOf(HierarchyNode.class);
+		if(__inject__(CollectionHelper.class).isNotEmpty(children)) {
+			for(HierarchyNode index : children)
+				objects.add(index.getFamilies());
+		}
+		return objects;
 	}
 }

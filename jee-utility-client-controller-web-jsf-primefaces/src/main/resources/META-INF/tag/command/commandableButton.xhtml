@@ -42,6 +42,7 @@
 					onclick="#{value.targetModel.onclick}"
 					type="#{value.targetModel.type}"
 					update="#{value.targetModel.update}"
+					oncomplete="#{value.targetModel.oncomplete}"
 				>
 					<c:forEach items="#{value.events.get()}" var="event" >
 						<c:if test="#{event.script == null}">

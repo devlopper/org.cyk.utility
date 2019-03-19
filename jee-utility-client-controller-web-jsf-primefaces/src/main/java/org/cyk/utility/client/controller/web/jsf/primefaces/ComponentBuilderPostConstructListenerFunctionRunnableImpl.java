@@ -8,6 +8,7 @@ import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderPostConstructListener;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
+import org.cyk.utility.client.controller.component.tree.TreeBuilder;
 import org.cyk.utility.random.RandomHelper;
 
 public class ComponentBuilderPostConstructListenerFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentBuilderPostConstructListener> implements Serializable {
@@ -33,6 +34,11 @@ public class ComponentBuilderPostConstructListenerFunctionRunnableImpl extends A
 					if(visibleComponentBuilder instanceof InputBuilder<?, ?>) {
 						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) visibleComponentBuilder;
 						inputBuilder.getMessage(Boolean.TRUE);
+					}
+					
+					if(visibleComponentBuilder instanceof TreeBuilder) {
+						TreeBuilder treeBuilder = (TreeBuilder) visibleComponentBuilder;
+						treeBuilder.getDefaultNodeFamilies(Boolean.TRUE).add("default");
 					}
 				}
 			}

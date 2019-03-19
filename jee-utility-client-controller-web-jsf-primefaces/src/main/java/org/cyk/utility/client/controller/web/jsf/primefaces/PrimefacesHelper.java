@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.client.controller.component.Component;
+import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
@@ -28,9 +29,15 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 		Objects updatables = component.getUpdatables();
 		if(__inject__(CollectionHelper.class).isNotEmpty(updatables))
 			for(Object index : updatables.get()) {
-				String token = null;
-				if(index instanceof VisibleComponent) {
-					token = (String)((VisibleComponent)index).getProperties().getIdentifierAsStyleClass();
+				Component indexComponent = null;
+				if(index instanceof Component)
+					indexComponent = (Component) index;
+				else if(index instanceof ComponentBuilder<?>)
+					indexComponent = ((ComponentBuilder<?>)index).getComponent();
+				
+				if(indexComponent instanceof VisibleComponent) {
+					String token = null;
+					token = (String)((VisibleComponent)indexComponent).getProperties().getIdentifierAsStyleClass();
 					if(__inject__(StringHelper.class).isNotBlank(token))
 						strings.add("@(."+token+")");		
 				}else

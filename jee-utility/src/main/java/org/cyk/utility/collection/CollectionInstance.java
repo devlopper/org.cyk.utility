@@ -27,6 +27,9 @@ public interface CollectionInstance<T> extends Objectable {
 	CollectionInstance<T> addInstanceOf(Collection<?> collection);
 	CollectionInstance<T> addInstanceOfArray(Object...elements);
 	
+	CollectionInstance<T> setIsDoNotAddNull(Boolean isDoNotAddNull);
+	Boolean getIsDoNotAddNull();
+	
 	T getAt(Object index);
 	T getFirst();
 	<I> I getFirstInstanceOf(Class<I> elementClass);

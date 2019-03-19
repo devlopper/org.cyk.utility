@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.tree;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
+import org.cyk.utility.hierarchy.HierarchyNode;
 
 public class TreeNodeImpl extends AbstractVisibleComponentImpl implements TreeNode,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -10,6 +11,7 @@ public class TreeNodeImpl extends AbstractVisibleComponentImpl implements TreeNo
 	private String family;
 	private Object data;
 	private Boolean isCollapsible,isDroppable,isDraggable,isSelectable,isExpanded;
+	private HierarchyNode hierarchyNode;
 	
 	@Override
 	public TreeNode setParent(Object parent) {
@@ -24,6 +26,17 @@ public class TreeNodeImpl extends AbstractVisibleComponentImpl implements TreeNo
 	@Override
 	public TreeNode addChild(String family, Object data) {
 		addChild(__inject__(TreeNode.class).setFamily(family).setData(data));
+		return this;
+	}
+	
+	@Override
+	public HierarchyNode getHierarchyNode() {
+		return hierarchyNode;
+	}
+	
+	@Override
+	public TreeNode setHierarchyNode(HierarchyNode hierarchyNode) {
+		this.hierarchyNode = hierarchyNode;
 		return this;
 	}
 	

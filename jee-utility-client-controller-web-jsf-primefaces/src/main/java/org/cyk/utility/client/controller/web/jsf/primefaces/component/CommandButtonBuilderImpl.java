@@ -32,9 +32,12 @@ public class CommandButtonBuilderImpl extends AbstractUIComponentBuilderImpl<Com
 			commandButton.setIcon(icon.toString());
 		
 		Object tooltip = commandable.getTooltip();
-		
 		if(tooltip!=null)
 			commandButton.setTitle(tooltip.toString());
+		
+		Object onComplete = commandable.getProperties().getOnComplete();
+		if(onComplete!=null)
+			commandButton.setOncomplete(onComplete.toString());
 		
 		if(commandable.getNavigation()!=null) {
 			commandButton.setType("button");
@@ -52,7 +55,7 @@ public class CommandButtonBuilderImpl extends AbstractUIComponentBuilderImpl<Com
 		}else if(commandable.getCommand()!=null) {
 			commandButton.setType("submit");
 			
-			String update = __injectPrimefacesHelper__().computeAttributeUpdate(commandable,__inject__(ComponentHelper.class).getGlobalMessagesTargetsIdentifiers());
+			String update = __injectPrimefacesHelper__().computeAttributeUpdate(commandable/*,__inject__(ComponentHelper.class).getGlobalMessagesTargetsIdentifiers()*/);
 			
 			String commandableIdentifier = commandable.getIdentifier().toString();
 			if(__inject__(StringHelper.class).isNotBlank(commandable.getCommand().getContainerContextDependencyInjectionBeanName())) {

@@ -18,6 +18,7 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	private Class<?> elementClass;
 	protected Collection<T> collection;
 	private Class<?> collectionClass;
+	private Boolean isDoNotAddNull;
 
 	@Override
 	protected void __listenBeforePostConstruct__() {
@@ -115,7 +116,13 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	}
 	
 	protected void  __add__(Collection<T> collection) {
-		__getCollection__(Boolean.TRUE).addAll(collection);
+		Collection<T> __collection__ = __getCollection__(Boolean.TRUE);
+		Boolean isDoNotAddNull = getIsDoNotAddNull();
+		if(isDoNotAddNull == null)
+			isDoNotAddNull = Boolean.TRUE;
+		for(T index : collection)
+			if(index != null || Boolean.FALSE.equals(isDoNotAddNull))
+				__collection__.add(index);
 	}
 
 	@Override
@@ -147,6 +154,17 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	@Override
 	public CollectionInstance<T> addAt(T element, Integer index) {
 		__inject__(CollectionHelper.class).addElementAt(__getCollection__(Boolean.TRUE), index, element);
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsDoNotAddNull() {
+		return isDoNotAddNull;
+	}
+	
+	@Override
+	public CollectionInstance<T> setIsDoNotAddNull(Boolean isDoNotAddNull) {
+		this.isDoNotAddNull = isDoNotAddNull;
 		return this;
 	}
 	

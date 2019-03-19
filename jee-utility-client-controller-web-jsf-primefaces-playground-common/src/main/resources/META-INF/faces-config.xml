@@ -62,6 +62,13 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>hierarchyOrganigramView</from-outcome>
+			<to-view-id>/hierarchy/organigram.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		
+		<navigation-case>
 			<from-outcome>viewIndexView</from-outcome>
 			<to-view-id>/view/index.jsf</to-view-id>
 			<redirect />

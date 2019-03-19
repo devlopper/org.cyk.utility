@@ -26,11 +26,13 @@ import org.cyk.utility.client.controller.component.grid.row.Rows;
 import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
+import org.cyk.utility.client.controller.component.tree.Tree;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.CommandButtonBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.MenuBuilder;
+import org.cyk.utility.client.controller.web.jsf.primefaces.component.OrganigramNodeBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
@@ -68,6 +70,9 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		if(component instanceof Menu) 
 			return __build__((Menu) component);
 		
+		if(component instanceof Tree) 
+			return __build__((Tree) component);
+		
 		if(component instanceof Grid) 
 			return __build__((Grid) component);
 		return null;
@@ -100,6 +105,10 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 	
 	private MenuModel __build__(Menu menu) {
 		return __inject__(MenuBuilder.class).setModel(menu).execute().getOutput();
+	}
+	
+	private Object __build__(Tree tree) {
+		return __inject__(OrganigramNodeBuilder.class).setHierarchyNode(tree.getRoot().getHierarchyNode()).execute().getOutput();
 	}
 	
 	/* Grid to DataTable */

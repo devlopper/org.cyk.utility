@@ -27,7 +27,7 @@ public class TreeNodeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tre
 					data.getProperties().setIconPos("left");
 			}
 			node.setData(data);
-			node.setFamily((String) hierarchyNode.getProperty(TreeNode.PROPERTY_FAMILY));
+			node.setFamily((String) hierarchyNode.getFamily());
 			
 			node.setIsCollapsible(hierarchyNode.getIsCollapsible());
 			node.setIsDraggable((Boolean) hierarchyNode.getProperty(TreeNode.PROPERTY_IS_DRAGGABLE));

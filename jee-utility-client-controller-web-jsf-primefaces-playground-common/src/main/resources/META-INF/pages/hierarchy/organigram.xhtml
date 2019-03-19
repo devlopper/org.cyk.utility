@@ -5,26 +5,24 @@
       xmlns:f="http://java.sun.com/jsf/core"      
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
-    <h:head>
-        <title>Organigram</title>
-    </h:head>
-    <h:body>
-    	<h:form id="form">
- 
-		    <p:growl id="growl" />
-		 	
-		 	<cyk:organigram value="#{organigramView3.tree}" />
+   <cyk:page value="#{organigramPage}">
+   	<ui:define name="centerCenter">
+   			<h:outputText value="_" />
+   			
+   			<cyk:organigram value="#{organigramPage.tree}" />
 		 	
 		    <p:dialog id="addDialog" widgetVar="addDialog" header="Add" styleClass="addDialog">
 		 
-		        <p:inputText value="#{organigramView3.name}" />
+		        <p:inputText value="#{organigramPage.name}" />
 		 		
-		 		<cyk:commandable value="#{organigramView3.commandable}" />
+		 		<cyk:commandable value="#{organigramPage.tree.addNodeCommandable}" />
 		 		
-		    </p:dialog>
-		    
-		</h:form>
-    </h:body>
+		    </p:dialog>	
+   	</ui:define>
+   </cyk:page>
+    
 </html>

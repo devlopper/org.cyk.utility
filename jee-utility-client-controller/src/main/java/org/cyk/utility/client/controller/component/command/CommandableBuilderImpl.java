@@ -188,7 +188,7 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	
 	@Override
 	public CommandableBuilder addCommandFunctionTryRunRunnable(Collection<Runnable> runnables) {
-		getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).addRunnables(runnables);
+		getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).addTryRunRunnables(runnables);
 		return this;
 	}
 	

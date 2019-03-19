@@ -1,8 +1,7 @@
-package org.cyk.utility.client.controller.web.jsf.primefaces.deployment.web;
+package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.hierachy;
 
 import java.io.Serializable;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -12,6 +11,8 @@ import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
 import org.cyk.utility.client.controller.component.tree.Tree;
 import org.cyk.utility.client.controller.component.tree.TreeBuilder;
+import org.cyk.utility.client.controller.component.window.WindowContainerManagedWindowBuilder;
+import org.cyk.utility.client.controller.component.window.WindowContainerManagedWindowBuilderBlank;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
@@ -27,16 +28,20 @@ import lombok.Setter;
 //@ViewScoped
 @SessionScoped
 @Getter @Setter
-public class OrganigramView3 extends AbstractPageContainerManagedImpl implements Serializable {
+public class OrganigramPage extends AbstractPageContainerManagedImpl implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private Tree tree;
     private String name;
-    private Menu menu;
-    private Commandable commandable;
-	
-    @PostConstruct
-    public void init() {
+    
+    @Override
+    protected WindowContainerManagedWindowBuilder __getWindowContainerManagedWindowBuilder__() {
+    	return __inject__(WindowContainerManagedWindowBuilderBlank.class);
+    }
+    
+    @Override
+    protected void __listenPostConstruct__() {
+    	super.__listenPostConstruct__();
     	TreeBuilder treeBuilder = __inject__(TreeBuilder.class);
     	
     	treeBuilder.getRoot(Boolean.TRUE).getHierarchyNode(Boolean.TRUE).setData("CommerceBay GmbH");
@@ -123,27 +128,25 @@ public class OrganigramView3 extends AbstractPageContainerManagedImpl implements
 				System.out.println("OrganigramView3.init().new Runnable() {...}.run() DELETE");
 				// re-evaluate selection - might be a differenct object instance if viewstate serialization is enabled
 		    	OrganigramNode selection = (OrganigramNode) tree.getRuntimeSelection();
-		    	OrganigramNode currentSelection = OrganigramHelper.findTreeNode((OrganigramNode) tree.getProperties().getRoot(), selection);
+		    	OrganigramNode currentSelection = OrganigramHelper.findTreeNode((OrganigramNode) tree.getTargetModel(), selection);
 		        currentSelection.getParent().getChildren().remove(currentSelection);
 			}
 		});
-        removeMenuItemBuilder.getCommandable().setGetByIdentifierExpressionLanguageFormat("organigramView3.tree.menu.getCommandableByIdentifier('%s')");
+        removeMenuItemBuilder.getCommandable().setGetByIdentifierExpressionLanguageFormat("organigramPage.tree.menu.getCommandableByIdentifier('%s')");
         removeMenuItemBuilder.getCommandable().addUpdatables(treeBuilder);
         
         treeBuilder.getMenu(Boolean.TRUE).addItems(addMenuItemBuilder,removeMenuItemBuilder);
 
-        tree = treeBuilder.execute().getOutput();
-        
         //tree.getRoot().setTargetModel(__inject__(OrganigramNodeBuilder.class).setHierarchyNode(treeBuilder.getRoot().getHierarchyNode()).execute().getOutput());
         
-        commandable = __inject__(CommandableBuilder.class).setName("Ajouter").setIcon(Icon.PLUS)
+        treeBuilder.getAddNodeCommandable(Boolean.TRUE).setName("Ajouter").setIcon(Icon.PLUS)
         		.addCommandFunctionTryRunRunnable(new Runnable() {
 					
 					@Override
 					public void run() {
 						// re-evaluate selection - might be a differenct object instance if viewstate serialization is enabled
 				    	OrganigramNode selection = (OrganigramNode) tree.getRuntimeSelection();
-				        OrganigramNode currentSelection = OrganigramHelper.findTreeNode((OrganigramNode) tree.getProperties().getRoot(), selection);
+				        OrganigramNode currentSelection = OrganigramHelper.findTreeNode((OrganigramNode) tree.getTargetModel(), selection);
 				 
 				        __inject__(OrganigramNodeBuilder.class).setHierarchyNode(__inject__(HierarchyNode.class).setData(name)).setParent(currentSelection).execute().getOutput();
 				        name = null;
@@ -151,11 +154,11 @@ public class OrganigramView3 extends AbstractPageContainerManagedImpl implements
 						
 					}
 				})
-        		.addUpdatables(tree,"@(.addDialog)")
+        		.addEvent(EventName.COMPLETE, "PF('addDialog').hide();")
+        		.addUpdatables(treeBuilder,"@(.addDialog)")
         		.execute().getOutput();
         
-        commandable.getProperties().setOnComplete("PF('addDialog').hide();");
-        
+        tree = treeBuilder.execute().getOutput();
     }
   
 }

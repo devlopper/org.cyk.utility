@@ -59,8 +59,11 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						index.getProperties().setIfNull(Properties.FUNCTION,index.getFunction());
 						
 						String scriptCodeSource = index.getScript() == null ? null :index.getScript().getCodeSource();
-						if(EventName.CLICK.equals(index.getName()) && __inject__(StringHelper.class).isNotBlank(scriptCodeSource)) {
-							component.getProperties().setOnClick(scriptCodeSource);
+						if(__inject__(StringHelper.class).isNotBlank(scriptCodeSource)) {
+							if(EventName.CLICK.equals(index.getName()))
+								component.getProperties().setOnClick(scriptCodeSource);
+							else if(EventName.COMPLETE.equals(index.getName()))
+								component.getProperties().setOnComplete(scriptCodeSource);
 						}
 					}
 				}
@@ -127,6 +130,8 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 								menu.getProperties().setNodeType("default");
 							}
 						}
+					}else if(component instanceof Tree) {
+						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
 					}else if(component instanceof Grid) {
 						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
 					}else if(component instanceof Commandable) {
