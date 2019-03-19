@@ -7,6 +7,7 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -98,6 +99,12 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	@Override
 	public MenuItemBuilder addCommandableRoles(ComponentRole... roles) {
 		getCommandable(Boolean.TRUE).addRoles(roles);
+		return this;
+	}
+	
+	@Override
+	public MenuItemBuilder addCommandableEvent(EventName name, String... scriptInstructions) {
+		getCommandable(Boolean.TRUE).addEvent(name, scriptInstructions);
 		return this;
 	}
 	

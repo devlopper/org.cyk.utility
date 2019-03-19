@@ -237,4 +237,19 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 		return null;
 	}
 
+	@Override
+	public Boolean isHasChildren() {
+		return null;
+	}
+
+	@Override
+	public Boolean isHasChildrenInstanceOf(Class<?> aClass) {
+		return null;
+	}
+
+	@Override
+	public <T> Collection<T> getChildrenInstanceOf(Class<T> aClass) {
+		return null;
+	}
+
 }

@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper=false,of="value")
 public class HierarchyNodeDataImpl extends AbstractObject implements HierarchyNodeData,Serializable {
 	private static final long serialVersionUID = 1L;
 

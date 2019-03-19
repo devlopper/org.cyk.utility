@@ -22,8 +22,36 @@ public class MethodGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 	protected Collection<Method> __execute__() {
 		Collection<Method> collection = null;
 		Class<?> aClass = getClazz();
-		Collection<Method> methods = MethodUtils.getMethodsListWithAnnotation(aClass, (Class<? extends Annotation>) __inject__(CollectionHelper.class)
-				.getFirst(getAnnotationClasses()));
+		Collection<Class<?>> annotationsClasses = getAnnotationClasses();
+		Collection<Method> methods = new ArrayList<Method>();
+		String token = getToken();
+		//Get all
+		Class<?> indexClass = aClass;
+		while (indexClass != null) {
+			for (Method index : aClass.getDeclaredMethods()) {
+				Boolean overridden = Boolean.FALSE;
+				for (Method indexFound : methods) {
+					if (indexFound.getName().equals(index.getName()) && Arrays.deepEquals(index.getParameterTypes(), indexFound.getParameterTypes())) {
+						overridden = Boolean.TRUE;
+						break;
+					}
+				}
+				if(!overridden) {
+					//index.geta
+					if(__injectStringHelper__().isBlank(token) || index.getName().equals(token))
+						methods.add(index);
+				}
+			}
+			indexClass = indexClass.getSuperclass();
+		}
+		
+		if(__injectCollectionHelper__().isEmpty(annotationsClasses)) {
+			
+		}else {
+			methods = MethodUtils.getMethodsListWithAnnotation(aClass, (Class<? extends Annotation>) __inject__(CollectionHelper.class)
+					.getFirst(getAnnotationClasses()));	
+		}
+		
 		/*String token = getToken();
 		if(__inject__(StringHelper.class).isBlank(token)){
 			FieldName fieldName = getFieldName();
@@ -110,7 +138,6 @@ public class MethodGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Set<Integer> getModifiers() {
 		return (Set<Integer>) getProperties().getModifiers();

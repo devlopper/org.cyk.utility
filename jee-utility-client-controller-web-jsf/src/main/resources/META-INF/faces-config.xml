@@ -6,6 +6,9 @@
 	
 	<application>
 		<resource-handler>org.cyk.utility.client.controller.web.jsf.ResourceHandler</resource-handler>
+		<!--
+		<el-resolver>org.cyk.utility.client.controller.web.jsf.BeanELResolver</el-resolver>
+		-->
 	</application>
 
 	<locale-config>

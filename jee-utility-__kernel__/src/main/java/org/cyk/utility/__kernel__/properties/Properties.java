@@ -4464,7 +4464,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getNodeType() {
+		return get(NODE_TYPE);
+	}
+
+	public Properties setNodeType(Object nodeType) {
+		set(NODE_TYPE, nodeType);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String NODE_TYPE = "NODE_TYPE";
 	public static final String ROOT = "ROOT";
 	public static final String FIELDS_NAMES = "FIELDS_NAMES";
 	public static final String NAVIGATION_IDENTIFIER = "NAVIGATION_IDENTIFIER";

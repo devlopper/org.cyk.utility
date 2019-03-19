@@ -31,8 +31,11 @@ import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
+import org.cyk.utility.client.controller.navigation.Navigation;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.CommandButtonBuilder;
+import org.cyk.utility.client.controller.web.jsf.primefaces.component.MenuBuilder;
+import org.cyk.utility.client.controller.web.jsf.primefaces.component.MenuItemBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
@@ -113,6 +116,9 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 			model = new DefaultMenuModel();	
 			__buildMenuAddItemChildren__(model, menuItems.get());
 		}
+		
+		model = __inject__(MenuBuilder.class).setModel(menu).execute().getOutput();
+		
 		return model;
 	}
 	
@@ -121,22 +127,7 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 			for(MenuItem index : menuItems) {
 				Collection<MenuItem> children = __inject__(CollectionHelper.class).cast(MenuItem.class, index.getChildren());
 		        if(__inject__(CollectionHelper.class).isEmpty(children)) {
-		        	DefaultMenuItem item = new DefaultMenuItem(index.getCommandable().getName());
-		        	if(index.getCommandable().getNavigation() == null) {
-		        		
-		        	}else {
-		        		URL url = index.getCommandable().getNavigation().getUniformResourceLocator();
-		        		if(url == null) {
-		        			//String outcome = (String) navigation.getIdentifier();
-			        		//if(__inject__(StringHelper.class).isNotBlank(outcome))
-			        		//	item.setOutcome(outcome);
-		        		}
-		        		
-		        		if(url!=null)
-		        			item.setUrl(url.toString());	
-		        	}
-		        	item.setIcon((String)index.getCommandable().getProperties().getIcon());
-		        	__buildMenuAddMenuElement__(parent, item);	
+		        	__inject__(MenuItemBuilder.class).setParent(parent).setModel(index).execute().getOutput();
 		        }else {
 		        	DefaultSubMenu subMenu = new DefaultSubMenu(index.getCommandable().getName());
 		        	__buildMenuAddMenuElement__(parent, subMenu);

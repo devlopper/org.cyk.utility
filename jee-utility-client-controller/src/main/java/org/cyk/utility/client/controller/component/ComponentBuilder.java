@@ -78,6 +78,7 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	EventBuilder getEventByName(EventName name,Boolean injectIfNull);
 	EventBuilder getEventByName(EventName name);
 	ComponentBuilder<COMPONENT> addEvent(EventName name,Runnable runnable);
+	ComponentBuilder<COMPONENT> addEvent(EventName name,String...scriptInstructions);
 	
 	Object getRequest();
 	ComponentBuilder<COMPONENT> setRequest(Object request);
@@ -95,4 +96,7 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	BooleanMap getDerivableFieldNameMap(Boolean injectIfNull);
 	ComponentBuilder<COMPONENT> setDerivableFieldNameMap(BooleanMap derivableFieldNameMap);
 	ComponentBuilder<COMPONENT> setDerivableFieldNames(Object...values);
+	
+	String getGetByIdentifierExpressionLanguageFormat();
+	ComponentBuilder<COMPONENT> setGetByIdentifierExpressionLanguageFormat(String getByIdentifierExpressionLanguageFormat);
 }

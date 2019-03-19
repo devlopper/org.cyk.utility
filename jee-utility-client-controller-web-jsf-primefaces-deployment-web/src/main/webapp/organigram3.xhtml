@@ -16,6 +16,36 @@
 		    <p:growl id="growl" />
 		 	
 		 	<cyk:organigram value="#{organigramView3.tree}" />
+		 	
+		 	<cyk:menu value="#{organigramView3.menu}" />
+		 	<!--
+		 	<p:contextMenu for="organigram" nodeType="default" >
+		        <p:menuitem 
+		        	value="Ajouter"
+		            update="organigram"
+		            onclick="PF('addDialog').show(); return false;"
+		      	/>
+		      	
+		      	<p:menuitem 
+		      		value="Supprimer"
+		            update="organigram @form:growl"
+		            action="#{organigramView3.remove()}" />
+		    </p:contextMenu>
+		    -->
+		    <p:dialog id="addDialog"
+		              widgetVar="addDialog"
+		              header="Add">
+		 
+		        <p:inputText value="#{organigramView3.name}" />
+		 
+		        <p:commandButton process="@parent"
+		                         update=":form:organigram"
+		                         value="Add"
+		                         action="#{organigramView3.add()}"
+		                         oncomplete="PF('addDialog').hide();"/>
+		 
+		    </p:dialog>
+		    
 		</h:form>
     </h:body>
 </html>

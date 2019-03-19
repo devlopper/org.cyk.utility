@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.hierarchy.HierarchyNode;
 import org.cyk.utility.hierarchy.HierarchyNodeData;
+import org.cyk.utility.random.RandomHelper;
 
 public class TreeNodeBuilderImpl extends AbstractVisibleComponentBuilderImpl<TreeNode> implements TreeNodeBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -54,6 +55,9 @@ public class TreeNodeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tre
 					node.addChild(child);
 			}
 		}
+		
+		if(node.getIdentifier() == null)
+			node.setIdentifier(__inject__(RandomHelper.class).getAlphabetic(10));
 		
 		if(node.getIsCollapsible() == null)
 			node.setIsCollapsible(isHasChild);

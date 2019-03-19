@@ -19,6 +19,7 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	private Events events;
 	private Throwable throwable;
 	private String throwableInternalizationMessage;
+	private String getByIdentifierExpressionLanguageFormat;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -142,6 +143,17 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	@Override
 	public Component setThrowableInternalizationMessage(String throwableInternalizationMessage) {
 		this.throwableInternalizationMessage = throwableInternalizationMessage;
+		return this;
+	}
+	
+	@Override
+	public String getGetByIdentifierExpressionLanguageFormat() {
+		return getByIdentifierExpressionLanguageFormat;
+	}
+	
+	@Override
+	public Component setGetByIdentifierExpressionLanguageFormat(String getByIdentifierExpressionLanguageFormat) {
+		this.getByIdentifierExpressionLanguageFormat = getByIdentifierExpressionLanguageFormat;
 		return this;
 	}
 	

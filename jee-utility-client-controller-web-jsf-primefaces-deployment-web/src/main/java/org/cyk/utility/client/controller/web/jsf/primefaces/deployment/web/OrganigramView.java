@@ -113,7 +113,8 @@ public class OrganigramView extends AbstractObject implements Serializable {
     public void removeDivision() {
         // re-evaluate selection - might be a differenct object instance if viewstate serialization is enabled
         OrganigramNode currentSelection = OrganigramHelper.findTreeNode(rootNode, selection);
-        setMessage(currentSelection.getData() + " will entfernt werden.", FacesMessage.SEVERITY_INFO);
+        currentSelection.getParent().getChildren().remove(currentSelection);
+        //setMessage(currentSelection.getData() + " will entfernt werden.", FacesMessage.SEVERITY_INFO);
     }
  
     public void removeEmployee() {

@@ -23,7 +23,13 @@
 		                   zoom="#{organigramView.zoom}"
 		                   selection="#{organigramView.selection}"
 		                   style="#{organigramView.style}">
-		 
+		 		
+		 		<p:ajax event="dragdrop" process="@this" update="@form:growl" listener="#{organigramView.nodeDragDropListener}" />
+		        <p:ajax event="select" process="@this" update="@form:growl" listener="#{organigramView.nodeSelectListener}" />
+		        <p:ajax event="contextmenu" process="@this" />
+		        <p:ajax event="collapse" process="@this" update="@form:growl" listener="#{organigramView.nodeCollapseListener}" />
+		        <p:ajax event="expand" process="@this" update="@form:growl" listener="#{organigramView.nodeExpandListener}" />
+		 				
 		        <p:organigramNode>
 		            <h:outputText value="#{node.data}" />
 		        </p:organigramNode>
@@ -58,7 +64,8 @@
 		        <p:menuitem value="Add employee"
 		                    ajax="false"
 		                    icon="pi pi-plus"
-		                    onclick="PF('addEmployeeDialog').show(); return false;" />
+		                    onclick="PF('addEmployeeDialog').show(); return false;" 
+		                    />
 		        <p:menuitem value="Remove division"
 		                    update="organigram @form:growl"
 		                    icon="pi pi-times"

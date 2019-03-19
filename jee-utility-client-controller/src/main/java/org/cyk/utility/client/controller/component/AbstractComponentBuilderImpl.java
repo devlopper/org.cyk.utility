@@ -34,6 +34,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private EventBuilders events;
 	private Throwable throwable;
 	private BooleanMap derivableFieldNameMap;
+	private String getByIdentifierExpressionLanguageFormat;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -54,6 +55,8 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		// Bidirectional Linking
 		setComponent(component);
 		component.setBuilder(this);
+		
+		component.setGetByIdentifierExpressionLanguageFormat(getGetByIdentifierExpressionLanguageFormat());
 		
 		Properties outputProperties = getOutputProperties();
 		if(outputProperties!=null) {
@@ -360,6 +363,14 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	}
 	
 	@Override
+	public ComponentBuilder<COMPONENT> addEvent(EventName name, String...scriptInstructions) {
+		EventBuilder event = getEventByName(name, Boolean.TRUE);
+		event.getScript(Boolean.TRUE).getInstructions(Boolean.TRUE).add(scriptInstructions);
+        addEvents(event);
+		return this;
+	}
+	
+	@Override
 	public Object getRequest() {
 		return getProperties().getRequest();
 	}
@@ -420,6 +431,17 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	@Override
 	public ComponentBuilder<COMPONENT> setDerivableFieldNames(Object... values) {
 		getDerivableFieldNameMap(Boolean.TRUE).set(values);
+		return this;
+	}
+	
+	@Override
+	public String getGetByIdentifierExpressionLanguageFormat() {
+		return getByIdentifierExpressionLanguageFormat;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setGetByIdentifierExpressionLanguageFormat(String getByIdentifierExpressionLanguageFormat) {
+		this.getByIdentifierExpressionLanguageFormat = getByIdentifierExpressionLanguageFormat;
 		return this;
 	}
 	

@@ -36,4 +36,7 @@ public interface Component extends Objectable {
 	
 	String getThrowableInternalizationMessage();
 	Component setThrowableInternalizationMessage(String throwableInternalizationMessage);
+	
+	String getGetByIdentifierExpressionLanguageFormat();
+	Component setGetByIdentifierExpressionLanguageFormat(String getByIdentifierExpressionLanguageFormat);
 }

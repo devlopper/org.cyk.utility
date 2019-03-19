@@ -128,9 +128,39 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	}
 	
 	@Override
+	public Boolean isHasChildren() {
+		Collection<Object> children = getChildren();
+		return children == null ? null : !children.isEmpty();
+	}
+	
+	@Override
+	public Boolean isHasChildrenInstanceOf(Class<?> aClass) {
+		if(Boolean.TRUE.equals(isHasChildren()))
+			for(Object index : getChildren())
+				if(Boolean.TRUE.equals(____inject____(KernelHelper.class).isInstanceOf(index.getClass(), aClass)))
+					return Boolean.TRUE;
+		return null;
+	}
+	
+	@Override
 	public Objectable setChildren(Collection<Object> children) {
 		getProperties().setChildren(children);
 		return this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> Collection<T> getChildrenInstanceOf(Class<T> aClass) {
+		Collection<T> collection = null;
+		if(Boolean.TRUE.equals(isHasChildrenInstanceOf(aClass))) {
+			for(Object index : getChildren())
+				if(Boolean.TRUE.equals(____inject____(KernelHelper.class).isInstanceOf(index.getClass(), aClass))) {
+					if(collection == null)
+						collection = new ArrayList<T>();
+					collection.add((T) index);
+				}
+		}
+		return collection;
 	}
 	
 	@Override

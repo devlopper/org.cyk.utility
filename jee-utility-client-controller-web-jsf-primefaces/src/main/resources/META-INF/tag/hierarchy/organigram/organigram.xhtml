@@ -10,21 +10,13 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			<p:organigram 
+			<p:organigram
+				id="#{value.properties.identifier}"
+				widgetVar="#{value.properties.widgetVar}" 
 		    	value="#{value.properties.root}"
 		        var="node"
 		        selection="#{value.runtimeSelection}"
 		    >
-		 		<!--
-		 		<p:ajax event="collapse" process="@this" update="@form:growl" listener="#{value.listenCollapseFunction.executeWithOneParameterToReturnVoid}" />
-		 		-->	
-		 		<!--
-		        <p:ajax event="dragdrop" process="@this" update="@form:growl" listener="#{organigramView.nodeDragDropListener}" />
-		        <p:ajax event="select" process="@this" update="@form:growl" listener="#{organigramView.nodeSelectListener}" />
-		        <p:ajax event="contextmenu" process="@this" />
-		        <p:ajax event="collapse" process="@this" update="@form:growl" listener="#{organigramView.nodeCollapseListener}" />
-		        <p:ajax event="expand" process="@this" update="@form:growl" listener="#{organigramView.nodeExpandListener}" />
-		 		-->
 		 		
 		 		<c:if test="#{value.events != null}">
 		 			<cyk:ajaxs value="#{value.events.get()}" />

@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.menu;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.system.action.SystemAction;
 
@@ -19,6 +20,7 @@ public interface MenuItemBuilder extends VisibleComponentBuilder<MenuItem> {
 	MenuItemBuilder setCommandableNavigationIdentifierBuilderSystemAction(SystemAction systemAction,Object...parameters);
 	MenuItemBuilder setCommandableOutputProperty(Object key,Object value);
 	MenuItemBuilder setCommandableIcon(Icon icon);
+	MenuItemBuilder addCommandableEvent(EventName name,String...scriptInstructions);
 	
 	MenuItemBuilder addCommandableRoles(ComponentRole...roles);
 	

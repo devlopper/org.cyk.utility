@@ -246,6 +246,11 @@
     </tag>
     
     <tag>
+        <tag-name>menuContext</tag-name>
+        <source>tag/menu/menuContext.xhtml</source>
+    </tag>
+    
+    <tag>
         <tag-name>grid</tag-name>
         <source>tag/grid/grid.xhtml</source>
     </tag>

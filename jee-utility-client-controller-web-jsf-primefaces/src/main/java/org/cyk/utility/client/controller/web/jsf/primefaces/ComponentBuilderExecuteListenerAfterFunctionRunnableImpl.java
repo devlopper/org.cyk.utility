@@ -57,8 +57,9 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						index.getProperties().setIfNull(Properties.FUNCTION,index.getFunction());
 						
 						String scriptCodeSource = index.getScript() == null ? null :index.getScript().getCodeSource();
-						if(EventName.CLICK.equals(index.getName()) && __inject__(StringHelper.class).isNotBlank(scriptCodeSource))
+						if(EventName.CLICK.equals(index.getName()) && __inject__(StringHelper.class).isNotBlank(scriptCodeSource)) {
 							component.getProperties().setOnClick(scriptCodeSource);
+						}
 					}
 				}
 				

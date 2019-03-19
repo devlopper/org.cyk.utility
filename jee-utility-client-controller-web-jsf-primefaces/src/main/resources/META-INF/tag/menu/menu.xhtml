@@ -20,6 +20,9 @@
    				<c:when test="#{componentHelper.isMenuRenderTypeRowBar(renderType)}">
    					<cyk:menuBar value="#{menu}" />
    				</c:when>
+   				<c:when test="#{componentHelper.isMenuRenderTypeColumnContext(renderType)}">
+   					<cyk:menuContext value="#{menu}" />
+   				</c:when>
    				<c:otherwise>
    					NO MENU FOUND FOR TYPE #{renderType}
    				</c:otherwise>
