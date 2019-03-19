@@ -11,12 +11,15 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.cyk.utility.client.controller.AbstractObject;
+import org.cyk.utility.client.controller.component.Component;
+import org.cyk.utility.string.StringHelper;
 
 @Singleton @Named
 public class JavaServerFacesHelper extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private static final String EXPRESSION_FORMAT = "#{%s}";
+	private static final String COMMAND_FUNCTION_CALL_EXPRESSION_FORMAT = "%s.command.function.executeToReturnVoid";
 	
 	public Boolean isMessageMaximumSeverityInfo() {
 		return FacesMessage.SEVERITY_INFO.equals(FacesContext.getCurrentInstance().getMaximumSeverity());
@@ -53,6 +56,16 @@ public class JavaServerFacesHelper extends AbstractObject implements Serializabl
 		return FacesContext.getCurrentInstance().getApplication().getExpressionFactory().createMethodExpression(
 				FacesContext.getCurrentInstance().getELContext(), formatExpression(expression), returnType,parameterTypes);
 	}
+	
+	public String getCommandFunctionCallExpressionLanguage(Component component) {
+		String expressionLanguage = null;
+		String format = component.getGetByIdentifierExpressionLanguageFormat();
+		if(__inject__(StringHelper.class).isNotBlank(format)) {
+			expressionLanguage = formatExpression(String.format(COMMAND_FUNCTION_CALL_EXPRESSION_FORMAT, String.format(format, component.getIdentifier().toString()))); 
+		}
+		return expressionLanguage;
+	}
+	
 	/*
 	public void setMethodExpression(UIComponent uiComponent,String propertyName,MethodExpression valueExpression) {
 		uiComponent.setMethodExpression(propertyName,valueExpression);
@@ -65,4 +78,6 @@ public class JavaServerFacesHelper extends AbstractObject implements Serializabl
 	public Boolean hasMessages(String clientId) {
 		return FacesContext.getCurrentInstance().getMessages(clientId).hasNext();
 	}
+	
+	
 }

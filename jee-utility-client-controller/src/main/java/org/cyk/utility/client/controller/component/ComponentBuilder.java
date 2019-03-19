@@ -99,4 +99,7 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	
 	String getGetByIdentifierExpressionLanguageFormat();
 	ComponentBuilder<COMPONENT> setGetByIdentifierExpressionLanguageFormat(String getByIdentifierExpressionLanguageFormat);
+	
+	Object getLinkedTo();
+	ComponentBuilder<COMPONENT> setLinkedTo(Object linkedTo);
 }

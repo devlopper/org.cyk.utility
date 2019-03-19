@@ -39,4 +39,7 @@ public interface Component extends Objectable {
 	
 	String getGetByIdentifierExpressionLanguageFormat();
 	Component setGetByIdentifierExpressionLanguageFormat(String getByIdentifierExpressionLanguageFormat);
+	
+	Object getLinkedTo();
+	Component setLinkedTo(Object linkedTo);
 }

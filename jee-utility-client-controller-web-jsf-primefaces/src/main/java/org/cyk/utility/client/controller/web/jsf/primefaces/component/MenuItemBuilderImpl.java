@@ -23,11 +23,8 @@ public class MenuItemBuilderImpl extends AbstractComponentBuilderImpl<org.primef
     	}
     	
     	if(model.getCommandable().getCommand()!=null) {
-    		String format = model.getCommandable().getGetByIdentifierExpressionLanguageFormat();
-			String actionExpressionLanguage = String.format(format, model.getCommandable().getIdentifier().toString()); 
-			actionExpressionLanguage = actionExpressionLanguage+".command.function.executeToReturnVoid";
-			item.setCommand("#{"+actionExpressionLanguage+"}");
-			item.setUpdate("organigram");
+    		item.setCommand(__injectJavaServerFacesHelper__().getCommandFunctionCallExpressionLanguage(model.getCommandable()));
+			item.setUpdate(__injectPrimefacesHelper__().computeAttributeUpdate(model.getCommandable()));
     	}
     	item.setIcon((String)model.getProperties().getIcon());
     	if(__inject__(StringHelper.class).isBlank(item.getIcon()))

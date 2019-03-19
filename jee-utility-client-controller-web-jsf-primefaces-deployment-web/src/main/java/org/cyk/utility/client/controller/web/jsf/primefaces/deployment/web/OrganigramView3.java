@@ -129,25 +129,20 @@ public class OrganigramView3 extends AbstractPageContainerManagedImpl implements
 			@Override
 			public void run() {
 				System.out.println("OrganigramView3.init().new Runnable() {...}.run() DELETE");
-				remove();
+				// re-evaluate selection - might be a differenct object instance if viewstate serialization is enabled
+		    	OrganigramNode selection = (OrganigramNode) tree.getRuntimeSelection();
+		    	OrganigramNode currentSelection = OrganigramHelper.findTreeNode((OrganigramNode) tree.getProperties().getRoot(), selection);
+		        currentSelection.getParent().getChildren().remove(currentSelection);
 			}
 		});
         removeMenuItemBuilder.getCommandable().setGetByIdentifierExpressionLanguageFormat("organigramView3.menu.getCommandableByIdentifier('%s')");
-        //removeMenuItemBuilder.getCommandable().setu
+        removeMenuItemBuilder.getCommandable().addUpdatables(tree);
         
         menu = __inject__(MenuBuilder.class).addItems(addMenuItemBuilder,removeMenuItemBuilder)
-        		.setRenderType(__inject__(MenuRenderTypeColumnContext.class)).execute().getOutput();
-        menu.getProperties().setFor("organigram");
-        menu.getProperties().setNodeType("default");
+        		.setRenderType(__inject__(MenuRenderTypeColumnContext.class)).setLinkedTo(tree).execute().getOutput();
+
     }
   
-    public void remove() {
-        // re-evaluate selection - might be a differenct object instance if viewstate serialization is enabled
-    	OrganigramNode selection = (OrganigramNode) tree.getRuntimeSelection();
-    	OrganigramNode currentSelection = OrganigramHelper.findTreeNode((OrganigramNode) tree.getProperties().getRoot(), selection);
-        currentSelection.getParent().getChildren().remove(currentSelection);
-    }
- 
     public void add() {
         // re-evaluate selection - might be a differenct object instance if viewstate serialization is enabled
     	OrganigramNode selection = (OrganigramNode) tree.getRuntimeSelection();

@@ -35,6 +35,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private Throwable throwable;
 	private BooleanMap derivableFieldNameMap;
 	private String getByIdentifierExpressionLanguageFormat;
+	private Object linkedTo;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -57,6 +58,10 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		component.setBuilder(this);
 		
 		component.setGetByIdentifierExpressionLanguageFormat(getGetByIdentifierExpressionLanguageFormat());
+		Object linkedTo = getLinkedTo();
+		if(linkedTo instanceof ComponentBuilder<?>)
+			linkedTo = ((ComponentBuilder<?>)linkedTo).getComponent();
+		component.setLinkedTo(linkedTo);
 		
 		Properties outputProperties = getOutputProperties();
 		if(outputProperties!=null) {
@@ -443,6 +448,17 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	public ComponentBuilder<COMPONENT> setGetByIdentifierExpressionLanguageFormat(String getByIdentifierExpressionLanguageFormat) {
 		this.getByIdentifierExpressionLanguageFormat = getByIdentifierExpressionLanguageFormat;
 		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setLinkedTo(Object linkedTo) {
+		this.linkedTo = linkedTo;
+		return this;
+	}
+	
+	@Override
+	public Object getLinkedTo() {
+		return linkedTo;
 	}
 	
 	protected Boolean __getIsFieldNameDerivable__(String fieldName,Boolean defaultIfNull) {

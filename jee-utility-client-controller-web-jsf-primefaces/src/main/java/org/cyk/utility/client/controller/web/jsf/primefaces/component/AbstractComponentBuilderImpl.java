@@ -8,6 +8,7 @@ import javax.faces.component.UIComponent;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.web.ValueExpressionMap;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
+import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
 public abstract class AbstractComponentBuilderImpl<COMPONENT,MODEL extends Component> extends AbstractFunctionWithPropertiesAsInputImpl<COMPONENT> implements ComponentBuilder<COMPONENT,MODEL>,Serializable {
@@ -54,6 +55,10 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT,MODEL extends Compo
 	}
 	
 	/**/
+	
+	protected static PrimefacesHelper __injectPrimefacesHelper__() {
+		return __inject__(PrimefacesHelper.class);
+	}
 	
 	protected static JavaServerFacesHelper __injectJavaServerFacesHelper__() {
 		return __inject__(JavaServerFacesHelper.class);

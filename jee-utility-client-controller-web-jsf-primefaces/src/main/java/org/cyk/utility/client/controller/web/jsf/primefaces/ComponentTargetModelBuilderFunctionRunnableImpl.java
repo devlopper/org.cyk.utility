@@ -1,7 +1,6 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -25,26 +24,18 @@ import org.cyk.utility.client.controller.component.grid.column.Columns;
 import org.cyk.utility.client.controller.component.grid.row.Row;
 import org.cyk.utility.client.controller.component.grid.row.Rows;
 import org.cyk.utility.client.controller.component.menu.Menu;
-import org.cyk.utility.client.controller.component.menu.MenuItem;
-import org.cyk.utility.client.controller.component.menu.MenuItems;
 import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
-import org.cyk.utility.client.controller.navigation.Navigation;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.CommandButtonBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.MenuBuilder;
-import org.cyk.utility.client.controller.web.jsf.primefaces.component.MenuItemBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.outputpanel.OutputPanel;
-import org.primefaces.model.menu.DefaultMenuItem;
-import org.primefaces.model.menu.DefaultMenuModel;
-import org.primefaces.model.menu.DefaultSubMenu;
-import org.primefaces.model.menu.MenuElement;
 import org.primefaces.model.menu.MenuModel;
 
 public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentTargetModelBuilder> implements Serializable {
@@ -107,41 +98,8 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		return __inject__(CommandButtonBuilder.class).setModel(commandable).execute().getOutput();
 	}
 	
-	/* Menu to MenuModel */
-	
 	private MenuModel __build__(Menu menu) {
-		MenuItems menuItems = menu.getItems();
-		MenuModel model = null;
-		if(__inject__(CollectionHelper.class).isNotEmpty(menuItems)) {
-			model = new DefaultMenuModel();	
-			__buildMenuAddItemChildren__(model, menuItems.get());
-		}
-		
-		model = __inject__(MenuBuilder.class).setModel(menu).execute().getOutput();
-		
-		return model;
-	}
-	
-	private void __buildMenuAddItemChildren__(Object parent,Collection<MenuItem> menuItems) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(menuItems)) {
-			for(MenuItem index : menuItems) {
-				Collection<MenuItem> children = __inject__(CollectionHelper.class).cast(MenuItem.class, index.getChildren());
-		        if(__inject__(CollectionHelper.class).isEmpty(children)) {
-		        	__inject__(MenuItemBuilder.class).setParent(parent).setModel(index).execute().getOutput();
-		        }else {
-		        	DefaultSubMenu subMenu = new DefaultSubMenu(index.getCommandable().getName());
-		        	__buildMenuAddMenuElement__(parent, subMenu);
-		        	__buildMenuAddItemChildren__(subMenu, children);
-		        }
-			}
-		}
-	}
-	
-	private void __buildMenuAddMenuElement__(Object parent,MenuElement element) {
-		if(parent instanceof MenuModel)
-	        ((MenuModel)parent).addElement(element);
-	     else if(parent instanceof DefaultSubMenu)
-	    	 ((DefaultSubMenu)parent).addElement(element);	
+		return __inject__(MenuBuilder.class).setModel(menu).execute().getOutput();
 	}
 	
 	/* Grid to DataTable */

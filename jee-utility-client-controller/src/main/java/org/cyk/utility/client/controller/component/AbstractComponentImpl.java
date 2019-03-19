@@ -20,6 +20,7 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	private Throwable throwable;
 	private String throwableInternalizationMessage;
 	private String getByIdentifierExpressionLanguageFormat;
+	private Object linkedTo;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -154,6 +155,17 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	@Override
 	public Component setGetByIdentifierExpressionLanguageFormat(String getByIdentifierExpressionLanguageFormat) {
 		this.getByIdentifierExpressionLanguageFormat = getByIdentifierExpressionLanguageFormat;
+		return this;
+	}
+	
+	@Override
+	public Object getLinkedTo() {
+		return linkedTo;
+	}
+	
+	@Override
+	public Component setLinkedTo(Object linkedTo) {
+		this.linkedTo = linkedTo;
 		return this;
 	}
 	

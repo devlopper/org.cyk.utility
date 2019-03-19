@@ -21,11 +21,13 @@ import org.cyk.utility.client.controller.component.input.choice.InputChoice;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBox;
 import org.cyk.utility.client.controller.component.layout.Insert;
 import org.cyk.utility.client.controller.component.menu.Menu;
+import org.cyk.utility.client.controller.component.menu.MenuRenderTypeColumnContext;
 import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringMessageBuilder;
+import org.cyk.utility.client.controller.component.tree.Tree;
 import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.event.Events;
@@ -114,7 +116,17 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 							}
 						}
 					}else if(component instanceof Menu) {
+						Menu menu = (Menu) component;
 						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
+						Object linkedTo = menu.getLinkedTo();
+						if(linkedTo instanceof Component) {
+							menu.getProperties().setFor(((Component)linkedTo).getIdentifier());	
+						}
+						if(menu.getRenderType() instanceof MenuRenderTypeColumnContext) {
+							if(linkedTo instanceof Tree) {
+								menu.getProperties().setNodeType("default");
+							}
+						}
 					}else if(component instanceof Grid) {
 						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
 					}else if(component instanceof Commandable) {
