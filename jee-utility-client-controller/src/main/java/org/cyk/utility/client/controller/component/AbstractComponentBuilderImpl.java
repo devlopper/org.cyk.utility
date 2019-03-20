@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.clazz.Classes;
 import org.cyk.utility.client.controller.component.command.CommandFunction;
 import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.EventBuilder;
@@ -24,6 +25,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private static final long serialVersionUID = 1L;
 
 	private Class<COMPONENT> componentClass;
+	private Classes qualifiers;
 	private COMPONENT component;
 	private DeviceScreenArea area;
 	private StyleBuilder layoutItemStyle;
@@ -51,7 +53,12 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	@Override
 	protected COMPONENT __execute__() throws Exception {
 		Class<COMPONENT> componentClass = getComponentClass();
-		COMPONENT component = __inject__(componentClass);
+		Classes qualifiers = getQualifiers();
+		COMPONENT component = null;
+		if(__injectCollectionHelper__().isEmpty(qualifiers))
+			component = __inject__(componentClass);
+		else
+			component = __injectByQualifiersClasses__(componentClass, qualifiers.get().toArray(new Class[] {}));
 		
 		// Bidirectional Linking
 		setComponent(component);
@@ -106,6 +113,34 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	public ComponentBuilder<COMPONENT> setComponentClass(Class<COMPONENT> componentClass) {
 		this.componentClass = componentClass;
 		return this;
+	}
+	
+	@Override
+	public Classes getQualifiers() {
+		return qualifiers;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setQualifiers(Classes qualifiers) {
+		this.qualifiers = qualifiers;
+		return this;
+	}
+	
+	@Override
+	public Classes getQualifiers(Boolean injectIfNull) {
+		return (Classes) __getInjectIfNull__(FIELD_QUALIFIERS, injectIfNull);
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> addQualifiers(@SuppressWarnings("rawtypes") Collection<Class> qualifiers) {
+		if(__injectCollectionHelper__().isNotEmpty(qualifiers))
+			getQualifiers(Boolean.TRUE).add(qualifiers);
+		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> addQualifiers(@SuppressWarnings("rawtypes") Class... qualifiers) {
+		return addQualifiers(__injectCollectionHelper__().instanciate(qualifiers));
 	}
 	
 	@Override
@@ -479,6 +514,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	}
 	
 	public static final String FIELD_AREA = "area";
+	public static final String FIELD_QUALIFIERS = "qualifiers";
 	public static final String FIELD_LAYOUT_ITEM_STYLE = "layoutItemStyle";
 	public static final String FIELD_ROLES = "roles";
 	public static final String FIELD_UPDATABLES = "updatables";

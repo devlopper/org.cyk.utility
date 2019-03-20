@@ -55,7 +55,7 @@ public class CommandButtonBuilderImpl extends AbstractUIComponentBuilderImpl<Com
 		}else if(commandable.getCommand()!=null) {
 			commandButton.setType("submit");
 			
-			String update = __injectPrimefacesHelper__().computeAttributeUpdate(commandable/*,__inject__(ComponentHelper.class).getGlobalMessagesTargetsIdentifiers()*/);
+			String update = __injectPrimefacesHelper__().computeAttributeUpdate(commandable,__inject__(ComponentHelper.class).getGlobalMessagesTargetsIdentifiers());
 			
 			String commandableIdentifier = commandable.getIdentifier().toString();
 			if(__inject__(StringHelper.class).isNotBlank(commandable.getCommand().getContainerContextDependencyInjectionBeanName())) {

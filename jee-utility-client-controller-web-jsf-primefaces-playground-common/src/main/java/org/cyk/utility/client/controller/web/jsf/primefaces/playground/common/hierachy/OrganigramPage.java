@@ -5,9 +5,6 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-import org.cyk.utility.client.controller.component.command.Commandable;
-import org.cyk.utility.client.controller.component.command.CommandableBuilder;
-import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
 import org.cyk.utility.client.controller.component.tree.Tree;
 import org.cyk.utility.client.controller.component.tree.TreeBuilder;
@@ -16,10 +13,6 @@ import org.cyk.utility.client.controller.component.window.WindowContainerManaged
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
-import org.cyk.utility.client.controller.web.jsf.primefaces.component.OrganigramNodeBuilder;
-import org.cyk.utility.hierarchy.HierarchyNode;
-import org.primefaces.component.organigram.OrganigramHelper;
-import org.primefaces.model.OrganigramNode;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -126,10 +119,7 @@ public class OrganigramPage extends AbstractPageContainerManagedImpl implements 
 			@Override
 			public void run() {
 				System.out.println("OrganigramView3.init().new Runnable() {...}.run() DELETE");
-				// re-evaluate selection - might be a differenct object instance if viewstate serialization is enabled
-		    	OrganigramNode selection = (OrganigramNode) tree.getRuntimeSelection();
-		    	OrganigramNode currentSelection = OrganigramHelper.findTreeNode((OrganigramNode) tree.getTargetModel(), selection);
-		        currentSelection.getParent().getChildren().remove(currentSelection);
+				tree.removeData();
 			}
 		});
         removeMenuItemBuilder.getCommandable().setGetByIdentifierExpressionLanguageFormat("organigramPage.tree.menu.getCommandableByIdentifier('%s')");
@@ -144,11 +134,7 @@ public class OrganigramPage extends AbstractPageContainerManagedImpl implements 
 					
 					@Override
 					public void run() {
-						// re-evaluate selection - might be a differenct object instance if viewstate serialization is enabled
-				    	OrganigramNode selection = (OrganigramNode) tree.getRuntimeSelection();
-				        OrganigramNode currentSelection = OrganigramHelper.findTreeNode((OrganigramNode) tree.getTargetModel(), selection);
-				 
-				        __inject__(OrganigramNodeBuilder.class).setHierarchyNode(__inject__(HierarchyNode.class).setData(name)).setParent(currentSelection).execute().getOutput();
+						tree.addData(name);
 				        name = null;
 				        System.out.println("OrganigramView3.add() : "+name+" ADDED");
 						

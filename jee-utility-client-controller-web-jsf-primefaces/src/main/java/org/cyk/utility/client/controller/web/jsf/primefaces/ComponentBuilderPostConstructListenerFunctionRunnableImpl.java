@@ -9,6 +9,7 @@ import org.cyk.utility.client.controller.component.ComponentBuilderPostConstruct
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.tree.TreeBuilder;
+import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
 import org.cyk.utility.random.RandomHelper;
 
 public class ComponentBuilderPostConstructListenerFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentBuilderPostConstructListener> implements Serializable {
@@ -39,6 +40,7 @@ public class ComponentBuilderPostConstructListenerFunctionRunnableImpl extends A
 					if(visibleComponentBuilder instanceof TreeBuilder) {
 						TreeBuilder treeBuilder = (TreeBuilder) visibleComponentBuilder;
 						treeBuilder.getDefaultNodeFamilies(Boolean.TRUE).add("default");
+						treeBuilder.addQualifiers(Primefaces.class);
 					}
 				}
 			}

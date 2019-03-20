@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component;
 import java.util.Collection;
 import java.util.Map;
 
+import org.cyk.utility.clazz.Classes;
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.event.EventBuilders;
 import org.cyk.utility.client.controller.event.EventName;
@@ -20,6 +21,12 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	
 	Class<COMPONENT> getComponentClass();
 	ComponentBuilder<COMPONENT> setComponentClass(Class<COMPONENT> componentClass);
+	
+	Classes getQualifiers();
+	Classes getQualifiers(Boolean injectIfNull);
+	ComponentBuilder<COMPONENT> setQualifiers(Classes qualifiers);
+	ComponentBuilder<COMPONENT> addQualifiers(@SuppressWarnings("rawtypes") Collection<Class> qualifiers);
+	ComponentBuilder<COMPONENT> addQualifiers(@SuppressWarnings("rawtypes") Class...qualifiers);
 	
 	COMPONENT getComponent();
 	ComponentBuilder<COMPONENT> setComponent(COMPONENT component);

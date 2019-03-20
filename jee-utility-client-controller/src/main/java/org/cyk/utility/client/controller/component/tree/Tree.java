@@ -28,4 +28,8 @@ public interface Tree extends VisibleComponent {
 	
 	Commandable getRemoveNodeCommandable();
 	Tree setRemoveNodeCommandable(Commandable removeNodeCommandable);
+	
+	Tree addData(Object data);
+	Tree removeData(Object data);
+	Tree removeData();
 }
