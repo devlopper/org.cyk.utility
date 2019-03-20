@@ -22,6 +22,7 @@ public class TreeImpl extends AbstractTreeImpl implements Serializable {
 	@Getter @Setter private Object __selection__;
 	
 	@SuppressWarnings("unchecked")
+	@Override
 	public <T> T getSelectedNodeAs(Class<T> aClass) {
 		T node = null;
 		if(OrganigramNode.class.equals(aClass))
@@ -32,6 +33,7 @@ public class TreeImpl extends AbstractTreeImpl implements Serializable {
 		return node;
 	}
 	
+	@Override
 	public Object getSelectedNodeDataValue() {
 		Object value = null;
 		OrganigramNode node = getSelectedNodeAs(OrganigramNode.class);
@@ -47,10 +49,11 @@ public class TreeImpl extends AbstractTreeImpl implements Serializable {
 	@Override
 	public Tree addData(Object data) {
 		TreeRenderType renderType = getRenderType();
-		if(renderType instanceof TreeRenderTypeOrganigram) {
+		if(renderType instanceof TreeRenderTypeOrganigram) {			
 			OrganigramNode selection = getSelectedNodeAs(OrganigramNode.class);
 	        __inject__(OrganigramNodeBuilder.class).setHierarchyNode(__inject__(HierarchyNode.class).setData(data)).setParent(selection).execute().getOutput();
-		}
+		}else
+			System.err.println("adding tree node for render type "+renderType+" not yet handled");
 		return this;
 	}
 	

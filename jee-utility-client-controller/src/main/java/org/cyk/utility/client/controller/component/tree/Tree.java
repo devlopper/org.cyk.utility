@@ -32,4 +32,7 @@ public interface Tree extends VisibleComponent {
 	Tree addData(Object data);
 	Tree removeData(Object data);
 	Tree removeData();
+	
+	<T> T getSelectedNodeAs(Class<T> aClass);
+	Object getSelectedNodeDataValue();
 }

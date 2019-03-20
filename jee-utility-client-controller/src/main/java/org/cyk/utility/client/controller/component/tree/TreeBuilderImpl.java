@@ -22,7 +22,8 @@ public class TreeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tree> i
 		super.__execute__(tree);
 		TreeRenderType renderType = getRenderType();
 		if(renderType == null)
-			tree.setRenderType(__inject__(TreeRenderTypeDefault.class));
+			renderType = __inject__(TreeRenderTypeDefault.class);
+		tree.setRenderType(renderType);
 		TreeNodeBuilder root = getRoot();
 		if(root!=null) {
 			tree.setRoot(__inject__(TreeNode.class).setHierarchyNode(root.getHierarchyNode()));

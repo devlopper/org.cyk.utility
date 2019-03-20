@@ -116,9 +116,23 @@ public abstract class AbstractTreeImpl extends AbstractVisibleComponentImpl impl
 		return removeData(null);
 	}
 	
+	@Override
+	public <T> T getSelectedNodeAs(Class<T> aClass) {
+		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
+		return null;
+	}
+
+	@Override
+	public Object getSelectedNodeDataValue() {
+		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
+		return null;
+	}
+	
 	/**/
 	
 	public static final String FIELD_NODE_FAMILIES = "nodeFamilies";
+
+	
 
 	
 }

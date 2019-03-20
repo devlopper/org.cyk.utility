@@ -8,6 +8,7 @@ import javax.faces.bean.SessionScoped;
 import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
 import org.cyk.utility.client.controller.component.tree.Tree;
 import org.cyk.utility.client.controller.component.tree.TreeBuilder;
+import org.cyk.utility.client.controller.component.tree.TreeRenderTypeOrganigram;
 import org.cyk.utility.client.controller.component.window.WindowContainerManagedWindowBuilder;
 import org.cyk.utility.client.controller.component.window.WindowContainerManagedWindowBuilderBlank;
 import org.cyk.utility.client.controller.event.EventName;
@@ -36,7 +37,7 @@ public class OrganigramPage extends AbstractPageContainerManagedImpl implements 
     protected void __listenPostConstruct__() {
     	super.__listenPostConstruct__();
     	TreeBuilder treeBuilder = __inject__(TreeBuilder.class);
-    	
+    	treeBuilder.setRenderType(__inject__(TreeRenderTypeOrganigram.class));
     	treeBuilder.getRoot(Boolean.TRUE).getHierarchyNode(Boolean.TRUE).setData("CommerceBay GmbH");
     	
     	treeBuilder.getRoot(Boolean.TRUE).getHierarchyNode(Boolean.TRUE)
@@ -78,35 +79,10 @@ public class OrganigramPage extends AbstractPageContainerManagedImpl implements 
         		.getParent()
         	;
         
-        treeBuilder.addEvent(EventName.COLLAPSE, new Runnable() {
-				@Override
-				public void run() {
-					System.out.println("OrganigramView.init().new Runnable() {...}.run() : COLLAPSED");
-				}
-			})
-        	.addEvent(EventName.SELECT, new Runnable() {
-    			@Override
-    			public void run() {
-    				System.out.println("OrganigramView.init().new Runnable() {...}.run() : SELECTED");
-    			}
-    		})
-        	.addEvent(EventName.EXPAND, new Runnable() {
-    			@Override
-    			public void run() {
-    				System.out.println("OrganigramView.init().new Runnable() {...}.run() : EXPANDED");
-    			}
-    		})
-        	.addEvent(EventName.DRAG_DROP, new Runnable() {
-    			@Override
-    			public void run() {
-    				System.out.println("OrganigramView.init().new Runnable() {...}.run() : DRAG DROP");
-    			}
-    		})
+        treeBuilder
         	.addEvent(EventName.CONTEXT_MENU, new Runnable() {
     			@Override
-    			public void run() {
-    				System.out.println("OrganigramView.init().new Runnable() {...}.run() : CONTEXT MENU");
-    			}
+    			public void run() {}
     		})
         	;
          
@@ -118,7 +94,6 @@ public class OrganigramPage extends AbstractPageContainerManagedImpl implements 
         removeMenuItemBuilder.getCommandable().getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).addTryRunRunnables(new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("OrganigramView3.init().new Runnable() {...}.run() DELETE");
 				tree.removeData();
 			}
 		});
@@ -136,8 +111,6 @@ public class OrganigramPage extends AbstractPageContainerManagedImpl implements 
 					public void run() {
 						tree.addData(name);
 				        name = null;
-				        System.out.println("OrganigramView3.add() : "+name+" ADDED");
-						
 					}
 				})
         		.addEvent(EventName.COMPLETE, "PF('addDialog').hide();")
