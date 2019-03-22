@@ -23,7 +23,6 @@ public class ArrayHelperImpl extends AbstractHelper implements ArrayHelper,Seria
 		return Boolean.FALSE.equals(isEmpty(objects));
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <ELEMENT> ELEMENT[] instanciate(Class<ELEMENT> aClass,Collection<ELEMENT> collection) {
 		ELEMENT[] array = null;
