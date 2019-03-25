@@ -7,6 +7,7 @@ import java.util.Collection;
 import javax.inject.Singleton;
 
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.helper.AbstractHelper;
 
 @Singleton
@@ -23,8 +24,7 @@ public class ArrayHelperImpl extends AbstractHelper implements ArrayHelper,Seria
 		return Boolean.FALSE.equals(isEmpty(objects));
 	}
 	
-	@Override
-	public <ELEMENT> ELEMENT[] instanciate(Class<ELEMENT> aClass,Collection<ELEMENT> collection) {
+	private <ELEMENT> ELEMENT[] __instanciate__(Class<ELEMENT> aClass,Collection<ELEMENT> collection) {
 		ELEMENT[] array = null;
 		if(__inject__(CollectionHelper.class).isNotEmpty(collection)){
 			array = (ELEMENT[]) Array.newInstance(aClass, __inject__(CollectionHelper.class).getSize(collection));
@@ -33,6 +33,16 @@ public class ArrayHelperImpl extends AbstractHelper implements ArrayHelper,Seria
 				array[index++] = element;
 		}
 		return array;
+	}
+	
+	@Override
+	public <ELEMENT> ELEMENT[] instanciate(Class<ELEMENT> aClass,Collection<ELEMENT> collection) {
+		return __instanciate__(aClass, collection);
+	}
+	
+	@Override
+	public <ELEMENT> ELEMENT[] instanciate(Class<ELEMENT> aClass, CollectionInstance<ELEMENT> collectionInstance) {
+		return __instanciate__(aClass,__inject__(CollectionHelper.class).isEmpty(collectionInstance) ? null : collectionInstance.get());
 	}
 	
 	@Override

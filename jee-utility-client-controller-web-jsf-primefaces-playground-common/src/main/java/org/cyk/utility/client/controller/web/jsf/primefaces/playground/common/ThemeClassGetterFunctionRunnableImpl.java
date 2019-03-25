@@ -14,6 +14,7 @@ public class ThemeClassGetterFunctionRunnableImpl extends AbstractFunctionRunnab
 			@Override
 			public void run() {
 				setOutput(ThemeAtlantisDesktopDefault.class);
+				//setOutput(ThemeDesktopDefault.class);
 			}
 		});
 	}

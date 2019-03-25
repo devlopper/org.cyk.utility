@@ -54,7 +54,7 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 	}
 	
 	/**********************************************/
-	private Object __build__(Component component) {
+	public static Object __build__(Component component) {
 		if(component instanceof View) 
 			return __build__((View) component);
 		
@@ -78,11 +78,11 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		return null;
 	}
 	
-	private UIComponent __build__(View view) {
+	public static UIComponent __build__(View view) {
 		return view == null ? null : __build__(view.getComponents());
 	}
 	
-	private UIComponent __build__(Components components) {
+	public static UIComponent __build__(Components components) {
 		OutputPanel outputPanel = null;
 		if(__inject__(CollectionHelper.class).isNotEmpty(components)) {
 			outputPanel = new OutputPanel();
@@ -93,27 +93,27 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		return outputPanel;
 	}
 	
-	private UIComponent __build__(OutputStringText outputStringText) {
+	public static UIComponent __build__(OutputStringText outputStringText) {
 		HtmlOutputText htmlOutputText = new HtmlOutputText();
 		htmlOutputText.setValue(outputStringText.getValue());
 		return htmlOutputText;
 	}
 	
-	private UIComponent __build__(Commandable commandable) {
+	public static UIComponent __build__(Commandable commandable) {
 		return __inject__(CommandButtonBuilder.class).setModel(commandable).execute().getOutput();
 	}
 	
-	private MenuModel __build__(Menu menu) {
+	public static MenuModel __build__(Menu menu) {
 		return __inject__(MenuBuilder.class).setModel(menu).execute().getOutput();
 	}
 	
-	private Object __build__(Tree tree) {
+	public static Object __build__(Tree tree) {
 		return __inject__(OrganigramNodeBuilder.class).setHierarchyNode(tree.getRoot().getHierarchyNode()).execute().getOutput();
 	}
 	
 	/* Grid to DataTable */
 	
-	private DataTable __build__(Grid grid) {
+	public static DataTable __build__(Grid grid) {
 		DataTable dataTable = new DataTable();
 		dataTable.setVar("indexRow");
 		dataTable.setReflow(Boolean.TRUE);
@@ -177,7 +177,7 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		return dataTable;
 	}
 	
-	private void __buildDataTableAddColumn__(DataTable dataTable,Grid grid,Column column) {
+	public static void __buildDataTableAddColumn__(DataTable dataTable,Grid grid,Column column) {
 		org.primefaces.component.column.Column __column__ = new org.primefaces.component.column.Column();
 		UIComponent uiComponent =__build__(column.getView(ViewMap.HEADER));
 		if(uiComponent!=null)

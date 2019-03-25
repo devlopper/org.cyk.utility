@@ -15,6 +15,7 @@ import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.internationalization.InternalizationStringBuilderByStringMap;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.type.BooleanMap;
 
 public interface ComponentBuilder<COMPONENT extends Component> extends FunctionWithPropertiesAsInput<COMPONENT> {
@@ -58,8 +59,16 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	ComponentBuilder<COMPONENT> addRoles(Collection<ComponentRole> roles);
 	ComponentBuilder<COMPONENT> addRoles(ComponentRole...roles);
 	
+	@Deprecated
 	Boolean getIsTargetModelToBeBuilt();
+	@Deprecated
 	ComponentBuilder<COMPONENT> setIsTargetModelToBeBuilt(Boolean isTargetModelToBeBuilt);
+	
+	Strings getDerivableProperties();
+	Strings getDerivableProperties(Boolean injectIfNull);
+	ComponentBuilder<COMPONENT> setDerivableProperties(Strings derivableProperties);
+	ComponentBuilder<COMPONENT> addDerivableProperties(Collection<String> derivableProperties);
+	ComponentBuilder<COMPONENT> addDerivableProperties(String...derivableProperties);
 	
 	Objects getUpdatables();
 	Objects getUpdatables(Boolean injectIfNull);

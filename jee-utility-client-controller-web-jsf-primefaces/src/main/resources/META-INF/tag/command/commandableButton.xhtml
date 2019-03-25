@@ -32,17 +32,14 @@
 				</p:commandButton>
 				-->
 				
-				<!-- Because we do not know how to reference value on action expression -->
-				<!-- update="inputGlobalMessages,inputGrowlMessages,#{componentHelper.globalDialogMessagesComponentIdentifier}" -->
-				
 				<p:commandButton
 					id="#{value.properties.identifier}"
-					value="#{value.targetModel.value}"
+					value="#{value.targetBindingValue.value}"
 					action="#{value.command.function.executeToReturnVoid}"
-					onclick="#{value.targetModel.onclick}"
-					type="#{value.targetModel.type}"
-					update="#{value.targetModel.update}"
-					oncomplete="#{value.targetModel.oncomplete}"
+					onclick="#{value.targetBindingValue.onclick}"
+					type="#{value.targetBindingValue.type}"
+					update="#{value.targetBindingValue.update}"
+					oncomplete="#{value.targetBindingValue.oncomplete}"
 				>
 					<c:forEach items="#{value.events.get()}" var="event" >
 						<c:if test="#{event.script == null}">
@@ -52,7 +49,7 @@
 				</p:commandButton>
 				
 				<!--
-				<p:commandButton binding="#{value.targetModel}" />
+				<p:commandButton binding="#{value.targetBindingValue}" />
 				-->
 		</ui:define>
 	</ui:decorate>	

@@ -19,6 +19,7 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.internationalization.InternalizationStringBuilderByStringMap;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.type.BooleanMap;
 
 public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> extends AbstractFunctionWithPropertiesAsInputImpl<COMPONENT> implements ComponentBuilder<COMPONENT> , Serializable {
@@ -37,6 +38,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private Throwable throwable;
 	private BooleanMap derivableFieldNameMap;
 	private String getByIdentifierExpressionLanguageFormat;
+	private Strings derivableProperties;
 	private Object linkedTo;
 	
 	@Override
@@ -496,6 +498,33 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		return linkedTo;
 	}
 	
+	@Override
+	public Strings getDerivableProperties() {
+		return derivableProperties;
+	}
+	
+	@Override
+	public Strings getDerivableProperties(Boolean injectIfNull) {
+		return (Strings) __getInjectIfNull__(FIELD_DERIVABLE_PROPERTIES, injectIfNull);
+	}
+	@Override
+	public ComponentBuilder<COMPONENT> setDerivableProperties(Strings derivableProperties) {
+		this.derivableProperties = derivableProperties;
+		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> addDerivableProperties(Collection<String> derivableProperties) {
+		getDerivableProperties(Boolean.TRUE).add(derivableProperties);
+		return this;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> addDerivableProperties(String... derivableProperties) {
+		getDerivableProperties(Boolean.TRUE).add(derivableProperties);
+		return this;
+	}
+	
 	protected Boolean __getIsFieldNameDerivable__(String fieldName,Boolean defaultIfNull) {
 		Boolean value = null;
 		BooleanMap derivableFieldNameMap = getDerivableFieldNameMap();
@@ -514,6 +543,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	}
 	
 	public static final String FIELD_AREA = "area";
+	public static final String FIELD_DERIVABLE_PROPERTIES = "derivableProperties";
 	public static final String FIELD_QUALIFIERS = "qualifiers";
 	public static final String FIELD_LAYOUT_ITEM_STYLE = "layoutItemStyle";
 	public static final String FIELD_ROLES = "roles";

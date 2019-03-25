@@ -1,5 +1,6 @@
 package org.cyk.utility.client.controller.component;
 
+import org.cyk.utility.bean.Property;
 import org.cyk.utility.client.controller.Objectable;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
 import org.cyk.utility.client.controller.event.Events;
@@ -25,11 +26,15 @@ public interface Component extends Objectable {
 	Events getEvents(Boolean injectIfNull);
 	Component setEvents(Events events);
 	
-	Object getTargetModel();
-	void setTargetModel(Object targetModel);//void because of java bean issue
+	Property getTargetModel();
+	Property getTargetModel(Boolean injectIfNull);
+	Component setTargetModel(Property targetModel);
+	Object getTargetModelValue();
 	
-	Boolean getIsTargetModelBuilt();
-	Component setIsTargetModelBuilt(Boolean isTargetModelBuilt);
+	Property getTargetBinding();
+	Property getTargetBinding(Boolean injectIfNull);
+	Component setTargetBinding(Property targetBinding);
+	Object getTargetBindingValue();
 	
 	Throwable getThrowable();
 	Component setThrowable(Throwable throwable);

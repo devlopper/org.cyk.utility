@@ -59,7 +59,7 @@
 		                			<c:forEach items="#{__page__.window.theme.menuTabs.get()}" var="tab" >
 					                	<pa:tab icon="#{tab.properties.icon}" title="#{tab.properties.name}">  
 			                				<h:form id="menu-form">
-						                   		<pa:menu model="#{tab.properties.menu.targetModel}" widgetVar="menu"/>
+						                   		<pa:menu model="#{tab.properties.menu.targetModelValue}" widgetVar="menu"/>
 						                	</h:form>   	
 						                </pa:tab>		
 					                </c:forEach>                

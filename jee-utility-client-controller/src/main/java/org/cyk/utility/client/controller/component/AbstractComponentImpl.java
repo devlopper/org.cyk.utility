@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component;
 
 import java.io.Serializable;
 
+import org.cyk.utility.bean.Property;
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
 import org.cyk.utility.client.controller.event.Events;
@@ -12,8 +13,6 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	
 	private LayoutItem layoutItem;
 	private ComponentRoles roles;
-	private Object targetModel;
-	private Boolean isTargetModelBuilt;
 	private Objects updatables;
 	private ComponentBuilder<?> builder;
 	private Events events;
@@ -21,6 +20,7 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	private String throwableInternalizationMessage;
 	private String getByIdentifierExpressionLanguageFormat;
 	private Object linkedTo;
+	private Property targetBinding,targetModel;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -66,20 +66,47 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	}
 	
 	@Override
-	public Object getTargetModel() {
-		if(targetModel == null) {
-			if(!Boolean.TRUE.equals(getIsTargetModelBuilt())) {
-				setTargetModel(__inject__(ComponentTargetModelBuilder.class).setComponent(this).execute().getOutput());
-				setIsTargetModelBuilt(Boolean.TRUE);
-			}	
-		}
+	public Property getTargetModel() {
 		return targetModel;
 	}
 	
 	@Override
-	public void setTargetModel(Object targetModel) {
+	public Component setTargetModel(Property targetModel) {
 		this.targetModel = targetModel;
-		//return this;
+		return this;
+	}
+	
+	@Override
+	public Property getTargetModel(Boolean injectIfNull) {
+		return (Property) __getInjectIfNull__(FIELD_TARGET_MODEL, injectIfNull);
+	}
+	
+	@Override
+	public Object getTargetModelValue() {
+		Property property = getTargetModel();
+		return property == null ? null : property.read();
+	}
+	
+	@Override
+	public Property getTargetBinding() {
+		return targetBinding;
+	}
+	
+	@Override
+	public Component setTargetBinding(Property targetBinding) {
+		this.targetBinding = targetBinding;
+		return this;
+	}
+	
+	@Override
+	public Property getTargetBinding(Boolean injectIfNull) {
+		return (Property) __getInjectIfNull__(FIELD_TARGET_BINDING, injectIfNull);
+	}
+	
+	@Override
+	public Object getTargetBindingValue() {
+		Property property = getTargetBinding();
+		return property == null ? null : property.read();
 	}
 	
 	@Override
@@ -111,17 +138,6 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	@Override
 	public Component setEvents(Events events) {
 		this.events = events;
-		return this;
-	}
-	
-	@Override
-	public Boolean getIsTargetModelBuilt() {
-		return isTargetModelBuilt;
-	}
-	
-	@Override
-	public Component setIsTargetModelBuilt(Boolean isTargetModelBuilt) {
-		this.isTargetModelBuilt = isTargetModelBuilt;
 		return this;
 	}
 	
@@ -174,4 +190,6 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	public static final String FIELD_ROLES = "roles";
 	public static final String FIELD_UPDATABLES = "updatables";
 	public static final String FIELD_EVENTS = "events";
+	public static final String FIELD_TARGET_MODEL = "targetModel";
+	public static final String FIELD_TARGET_BINDING = "targetBinding";
 }

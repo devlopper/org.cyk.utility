@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.annotation.Default;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.Component;
@@ -120,7 +121,8 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						}
 					}else if(component instanceof Menu) {
 						Menu menu = (Menu) component;
-						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
+						setTargetModelIsDerivable(component);
+						
 						Object linkedTo = menu.getLinkedTo();
 						if(linkedTo instanceof Component) {
 							menu.getProperties().setFor(((Component)linkedTo).getIdentifier());	
@@ -131,11 +133,11 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 							}
 						}
 					}else if(component instanceof Tree) {
-						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
+						setTargetModelIsDerivable(component);
 					}else if(component instanceof Grid) {
-						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
+						setTargetBindingIsDerivable(component);
 					}else if(component instanceof Commandable) {
-						componentBuilder.setIsTargetModelToBeBuilt(Boolean.TRUE);
+						setTargetBindingIsDerivable(component);
 					}else if(component instanceof Dialog) {
 						Dialog dialog = (Dialog) component;
 						dialog.getProperties().setIdentifier(__inject__(ComponentHelper.class).getGlobalMessagesTargetDialogComponentIdentifier());
@@ -167,6 +169,14 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 				}
 			}
 		});
+	}
+	
+	private static void setTargetModelIsDerivable(Component component) {
+		component.getTargetModel(Boolean.TRUE).setIsDerivable(Boolean.TRUE).addValueGetterClassQualifiers(Default.class).setValue(component);
+	}
+	
+	private static void setTargetBindingIsDerivable(Component component) {
+		component.getTargetBinding(Boolean.TRUE).setIsDerivable(Boolean.TRUE).addValueGetterClassQualifiers(Default.class).setValue(component);
 	}
 	
 }

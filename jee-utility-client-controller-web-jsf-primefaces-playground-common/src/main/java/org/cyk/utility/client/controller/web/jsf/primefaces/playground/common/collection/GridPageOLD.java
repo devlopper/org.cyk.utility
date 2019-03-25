@@ -91,7 +91,7 @@ public class GridPageOLD extends AbstractPageContainerManagedImpl implements Ser
 						
 						data.setString("NEW").setNumber("0000").setDate("dd/MM/yyyy");
 						
-						DataTable dataTable = (DataTable) gridBuilder.getComponent().getTargetModel();
+						DataTable dataTable = (DataTable) null;//gridBuilder.getComponent().getTargetModel();
 						ListDataModel<Object> dataModel = (ListDataModel<Object>) dataTable.getValue();
 						Collection<org.cyk.utility.client.controller.data.Row> collection = (Collection<org.cyk.utility.client.controller.data.Row>) dataModel.getWrappedData();
 						collection.add(__inject__(RowBuilder.class).setGrid(gridBuilder).setData(data).execute().getOutput());
@@ -158,7 +158,7 @@ public class GridPageOLD extends AbstractPageContainerManagedImpl implements Ser
 				SelectEvent selectEvent = (SelectEvent) function.getProperties().getParameter();
 				Data data = (Data) selectEvent.getObject();
 				
-				DataTable dataTable = (DataTable) gridBuilder.getComponent().getTargetModel();
+				DataTable dataTable = null;//(DataTable) gridBuilder.getComponent().getTargetModel();
 				ListDataModel<Object> dataModel = (ListDataModel<Object>) dataTable.getValue();
 				Collection<org.cyk.utility.client.controller.data.Row> collection = (Collection<org.cyk.utility.client.controller.data.Row>) dataModel.getWrappedData();
 				collection.add(__inject__(RowBuilder.class).setGrid(gridBuilder).setData(data).execute().getOutput());

@@ -83,7 +83,7 @@ public class GridBuilderCommandableBuilderProcessorFunctionRunnableImpl extends 
 					SelectEvent selectEvent = (SelectEvent) function.getProperties().getParameter();
 					Data data = (Data) selectEvent.getObject();
 					data.setIdentifier(100);
-					DataTable dataTable = (DataTable) gridBuilder.getComponent().getTargetModel();
+					DataTable dataTable = null;//(DataTable) gridBuilder.getComponent().getTargetModel();
 					ListDataModel<Object> dataModel = (ListDataModel<Object>) dataTable.getValue();
 					Collection<org.cyk.utility.client.controller.data.Row> collection = (Collection<org.cyk.utility.client.controller.data.Row>) dataModel.getWrappedData();
 					collection.add(__inject__(org.cyk.utility.client.controller.data.RowBuilder.class).setGrid(gridBuilder).setData(data).execute().getOutput());
