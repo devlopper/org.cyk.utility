@@ -1,4 +1,4 @@
-package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common;
+package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.input;
 
 import java.io.Serializable;
 
@@ -17,7 +17,6 @@ import org.cyk.utility.client.controller.component.annotation.InputStringLineOne
 import org.cyk.utility.client.controller.component.input.choice.AbstractChoicePropertyValueBuilderImpl;
 import org.cyk.utility.client.controller.component.input.choice.ChoicePropertyValueBuilder;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceBuilder;
-import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntity;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
@@ -40,15 +39,6 @@ public class InputPage extends AbstractPageContainerManagedImpl implements Seria
 	
 	@Override
 	protected ViewBuilder __getViewBuilder__() {
-		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
-		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
-		.addComponents(createViewBuilder())
-		
-		;
-		return viewBuilder;
-	}
-	
-	public static ViewBuilder createViewBuilder() {
 		Entity entity = new Entity();
 		
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
@@ -64,10 +54,6 @@ public class InputPage extends AbstractPageContainerManagedImpl implements Seria
 		viewBuilder.addComponentBuilderByObjectByMethodName(entity, "submit");
 		
 		return viewBuilder;
-	}
-	
-	public static View createView() {
-		return createViewBuilder().execute().getOutput();
 	}
 	
 	@Getter @Setter @Accessors(chain=true) @ToString

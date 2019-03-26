@@ -115,6 +115,10 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 			String titleValue = __getWindowTitleValue__();
 			if(__inject__(StringHelper.class).isNotBlank(titleValue))
 				windowBuilder.setTitleValue(titleValue);	
+			
+			ViewBuilder view = __getViewBuilder__();
+			if(view!=null)
+				windowBuilder.setView(view);
 		}
 		if(windowBuilder.getContainerManaged() == null)
 			windowBuilder.setContainerManaged(windowContainerManagedWindowBuilder);

@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
 
+import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -23,6 +24,11 @@ public class WindowContainerManagedWindowBuilderGetterImpl extends AbstractFunct
 		
 		Class<WindowContainerManagedWindowBuilder> windowContainerManagedWindowBuilderClass = __inject__(WindowHelper.class).
 				getWindowContainerManagedWindowBuilderClass(systemAction);
+		
+		if(windowContainerManagedWindowBuilderClass == null) {
+			if(systemAction == null)
+				windowContainerManagedWindowBuilderClass = (Class<WindowContainerManagedWindowBuilder>) __inject__(ClassHelper.class).getByName(WindowContainerManagedWindowBuilderBlank.class.getName());
+		}
 		
 		WindowContainerManagedWindowBuilder windowContainerManagedWindowBuilder = null;
 		if(windowContainerManagedWindowBuilderClass==null) {

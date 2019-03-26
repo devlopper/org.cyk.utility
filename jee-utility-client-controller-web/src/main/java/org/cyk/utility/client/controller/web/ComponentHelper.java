@@ -14,9 +14,10 @@ import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.cell.Cell;
 import org.cyk.utility.client.controller.component.input.InputBooleanButton;
 import org.cyk.utility.client.controller.component.input.InputBooleanCheckBox;
+import org.cyk.utility.client.controller.component.input.InputFile;
+import org.cyk.utility.client.controller.component.input.InputStringEditor;
 import org.cyk.utility.client.controller.component.input.InputStringLineMany;
 import org.cyk.utility.client.controller.component.input.InputStringLineOne;
-import org.cyk.utility.client.controller.component.input.InputStringEditor;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBox;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneCombo;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneRadio;
@@ -79,6 +80,10 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	
 	public Boolean isInputChoiceManyCheckBox(Object object) {
 		return object instanceof InputChoiceManyCheckBox;
+	}
+	
+	public Boolean isInputFile(Object object) {
+		return object instanceof InputFile;
 	}
 	
 	public Boolean isOutputStringText(Object object) {

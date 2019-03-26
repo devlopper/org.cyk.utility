@@ -25,6 +25,11 @@
     </tag>
     
     <tag>
+        <tag-name>inputFile</tag-name>
+        <source>tag/input/file/fileUpload.xhtml</source>
+    </tag>
+    
+    <tag>
         <tag-name>selectBooleanCheckbox</tag-name>
         <source>tag/input/boolean/selectBooleanCheckbox.xhtml</source>
     </tag>

@@ -18,6 +18,7 @@ import org.cyk.utility.client.controller.component.dialog.Dialog;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.input.InputBoolean;
+import org.cyk.utility.client.controller.component.input.InputFile;
 import org.cyk.utility.client.controller.component.input.choice.InputChoice;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBox;
 import org.cyk.utility.client.controller.component.layout.Insert;
@@ -117,6 +118,9 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 								InputBoolean inputBoolean = (InputBoolean) inputOutput;
 								component.getProperties().setOffLabel(inputBoolean.getFalseValue().getLabel());
 								component.getProperties().setOnLabel(inputBoolean.getTrueValue().getLabel());
+							}else if(component instanceof InputFile) {
+								InputFile inputFile = (InputFile) inputOutput;
+								inputFile.getProperties().setMode("simple");
 							}
 						}
 					}else if(component instanceof Menu) {

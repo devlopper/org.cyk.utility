@@ -72,8 +72,9 @@ public class CommandButtonBuilderImpl extends AbstractUIComponentBuilderImpl<Com
 			if(commandable.getProperties().getOnClick()!=null)
 				valueExpressionMap.set("onclick",__buildValueExpressionString__(commandable.getProperties().getOnClick().toString())) ;
 		}
-		
-		
+		Object ajax = commandable.getProperties().getAjax();
+		if(ajax!=null)
+			commandButton.setAjax((Boolean) ajax);
 		
 		Events events = commandable.getEvents();
 		if(__inject__(CollectionHelper.class).isNotEmpty(events)) {

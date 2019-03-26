@@ -13,6 +13,7 @@ import org.cyk.utility.client.controller.entities.entitynoform.EntityNoForm;
 import org.cyk.utility.client.controller.entities.myentity.MyEntity;
 import org.cyk.utility.client.controller.entities.verycomplexentity.VeryComplexEntity;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntity;
+import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.scope.ScopeSession;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionList;
@@ -29,14 +30,22 @@ public class MenuBuilderMapGetterFunctionRunnableImpl extends AbstractFunctionRu
 						__inject__(MenuItemBuilder.class).setCommandableName("Layout").setCommandableOutputProperty(Properties.ICON, "fa fa-child")
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index")
 							,__inject__(MenuItemBuilder.class).setCommandableName("Table"))
+						,__inject__(MenuItemBuilder.class).setCommandableName("Page").setCommandableIcon(Icon.FILE)
+							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index").setCommandableNavigationIdentifier("pageIndexView")
+							,__inject__(MenuItemBuilder.class).setCommandableName("Custom").setCommandableNavigationIdentifier("pageCustomView")
+							,__inject__(MenuItemBuilder.class).setCommandableName("No Theme").setCommandableNavigationIdentifier("pageNoThemeView"))
 						,__inject__(MenuItemBuilder.class).setCommandableName("Commandable").setCommandableOutputProperty(Properties.ICON, "fa fa-cube")					
-									.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Button Index").setCommandableNavigationIdentifier("commandableButtonIndexView")
-											,__inject__(MenuItemBuilder.class).setCommandableName("Commandable Navigation Index").setCommandableNavigationIdentifier("commandableNavigationIndexView")
-									)
-									
+								.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Button Index").setCommandableNavigationIdentifier("commandableButtonIndexView")
+										,__inject__(MenuItemBuilder.class).setCommandableName("Commandable Navigation Index").setCommandableNavigationIdentifier("commandableNavigationIndexView")
+								)									
 						,__inject__(MenuItemBuilder.class).setCommandableName("Grid").setCommandableOutputProperty(Properties.ICON, "fa fa-edit")
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index").setCommandableNavigationIdentifier("gridIndexView")
 									)
+						,__inject__(MenuItemBuilder.class).setCommandableName("Input")
+							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index").setCommandableNavigationIdentifier("inputIndexView")
+									,__inject__(MenuItemBuilder.class).setCommandableName("Text").setCommandableNavigationIdentifier("inputTextView")
+									,__inject__(MenuItemBuilder.class).setCommandableName("File").setCommandableNavigationIdentifier("inputFileView")
+									)	
 						,__inject__(MenuItemBuilder.class).setCommandableName("Hierarchy").setCommandableOutputProperty(Properties.ICON, "fa fa-tree")
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Organigram").setCommandableNavigationIdentifier("hierarchyOrganigramView")
 									)

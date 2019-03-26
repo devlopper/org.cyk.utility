@@ -8,6 +8,42 @@
 		<from-view-id>*</from-view-id>
 		
 		<navigation-case>
+			<from-outcome>pageIndexView</from-outcome>
+			<to-view-id>/page/index.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>pageCustomView</from-outcome>
+			<to-view-id>/page/custom.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>pageNoThemeView</from-outcome>
+			<to-view-id>/page/notheme.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>inputIndexView</from-outcome>
+			<to-view-id>/input/index.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>inputTextView</from-outcome>
+			<to-view-id>/input/text.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>inputFileView</from-outcome>
+			<to-view-id>/input/file.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>navigation01</from-outcome>
 			<to-view-id>/p1/p2/p3.jsf</to-view-id>
 			<redirect />
@@ -66,8 +102,7 @@
 			<to-view-id>/hierarchy/organigram.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
-		
-		
+				
 		<navigation-case>
 			<from-outcome>viewIndexView</from-outcome>
 			<to-view-id>/view/index.jsf</to-view-id>

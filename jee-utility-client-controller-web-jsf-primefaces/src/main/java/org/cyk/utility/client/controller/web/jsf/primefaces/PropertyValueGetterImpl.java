@@ -30,6 +30,7 @@ public class PropertyValueGetterImpl extends AbstractPropertyValueGetterImpl imp
 				// TODO : we must decide based on node type
 				return __inject__(OrganigramNodeBuilder.class).setHierarchyNode(((Tree)property.getValue()).getRoot().getHierarchyNode()).execute().getOutput();
 			if(property.getValue() instanceof Grid)
+				//TODO : we must write a builder for it
 				return ComponentTargetModelBuilderFunctionRunnableImpl.__build__( (Grid)property.getValue() );
 			__inject__(ThrowableHelper.class).throwRuntimeException("Derivation of component "+property.getValue()+" not yet handled.");
 		}
