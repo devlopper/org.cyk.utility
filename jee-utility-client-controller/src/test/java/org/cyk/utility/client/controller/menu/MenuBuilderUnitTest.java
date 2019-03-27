@@ -7,6 +7,8 @@ import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeRowBar;
+import org.cyk.utility.client.controller.navigation.NavigationIdentifierStringBuilderExtensionFunctionRunnableImpl;
+import org.cyk.utility.client.controller.navigation.NavigationIdentifierStringBuilderExtensionImpl;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapper;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapperImpl;
 import org.cyk.utility.request.RequestParameterValueGetterImpl;
@@ -26,23 +28,40 @@ public class MenuBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDe
 		__inject__(FunctionRunnableMap.class).set(NavigationIdentifierToUrlStringMapperImpl.class, NavigationIdentifierToUrlStringMapperFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(RequestPropertyValueGetterImpl.class, RequestPropertyValueGetterFunctionRunnableImpl.class);
 		__inject__(FunctionRunnableMap.class).set(RequestParameterValueGetterImpl.class, RequestParameterValueGetterFunctionRunnableImpl.class);
+		__inject__(FunctionRunnableMap.class).set(NavigationIdentifierStringBuilderExtensionImpl.class, NavigationIdentifierStringBuilderExtensionFunctionRunnableImpl.class,1);
 	}
 	
-	@Test
+	//@Test
 	public void build_01() {
 		build(1);
 	}
 	
-	@Test
+	//@Test
 	public void build_02() {		
 		build(2);
 	}
-	/*
+	
 	@Test
-	public void build_03() {		
-		build(3);
+	public void getMenuBuilder_durationIsLessThan1Second_when_1Item_1Level() {		
+		getMenuBuilder(1,1,1000);
 	}
 	
+	@Test
+	public void executeMenuBuilder_durationIsLessThan1Second_when_1Item_1Level() {		
+		executeMenuBuilder(1,1,1000);
+	}
+	
+	@Test
+	public void getMenuBuilder_durationIsLessThan1Second_when_10Item_1Level() {		
+		getMenuBuilder(10,1,1000);
+	}
+	
+	@Test
+	public void executeMenuBuilder_durationIsLessThan1Second_when_10Item_1Level() {		
+		executeMenuBuilder(10,1,1000);
+	}
+	
+	/*
 	@Test
 	public void build_10() {		
 		build(10);
@@ -98,6 +117,26 @@ public class MenuBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDe
 		return menuBuilder;
 	}
 	
+	public static MenuBuilder getMenuBuilder(Integer numberOfItem,Integer numberOfLevel) {
+		MenuBuilder menuBuilder = __inject__(MenuBuilder.class).setRenderType(__inject__(MenuRenderTypeRowBar.class));
+		if(numberOfItem!=null && numberOfItem>0) {
+			for(Integer index = 0 ; index < numberOfItem ; index = index + 1)
+				menuBuilder.addItems(getMenuItemBuilder(numberOfItem, numberOfLevel));
+		}
+		return menuBuilder;
+	}
+	
+	public static MenuItemBuilder getMenuItemBuilder(Integer numberOfItem,Integer numberOfLevel) {
+		MenuItemBuilder item = __inject__(MenuItemBuilder.class);
+		if(numberOfLevel!=null && numberOfLevel>0) {
+			if(numberOfItem!=null && numberOfItem>0) {
+				for(Integer index = 0 ; index < numberOfItem ; index = index + 1)
+					item.addChild(getMenuItemBuilder(numberOfItem, numberOfLevel-1));
+			}
+		}
+		return item;
+	}
+	
 	public static void build(Integer count) {		
 		for(int i = 1 ; i <= count ; i = i + 1) {
 			DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
@@ -106,9 +145,26 @@ public class MenuBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDe
 		}
 	}
 	
+	public void getMenuBuilder(Integer numberOfItem,Integer numberOfLevel,Integer expectedMaximumNumberOfMillisecond) {	
+		Long t = System.currentTimeMillis();
+		getMenuBuilder(numberOfItem,numberOfLevel);
+		Long durationInMillisecond = System.currentTimeMillis() - t;
+		DurationStringBuilder durationStringBuilder = __inject__(DurationStringBuilder.class);
+		durationStringBuilder.getDurationBuilder(Boolean.TRUE).setNumberOfMillisecond(durationInMillisecond);
+		assertionHelper.assertTrue("Too much time taken to get menu : "+durationStringBuilder.execute().getOutput(),durationInMillisecond<=expectedMaximumNumberOfMillisecond);	
+	}
+	
+	public void executeMenuBuilder(Integer numberOfItem,Integer numberOfLevel,Integer expectedMaximumNumberOfMillisecond) {	
+		Long t = System.currentTimeMillis();
+		getMenuBuilder(numberOfItem,numberOfLevel).execute();
+		Long durationInMillisecond = System.currentTimeMillis() - t;
+		DurationStringBuilder durationStringBuilder = __inject__(DurationStringBuilder.class);
+		durationStringBuilder.getDurationBuilder(Boolean.TRUE).setNumberOfMillisecond(durationInMillisecond);
+		assertionHelper.assertTrue("Too much time taken to build menu : "+durationStringBuilder.execute().getOutput(),durationInMillisecond<=expectedMaximumNumberOfMillisecond);	
+	}
+	
 	public static class NavigationIdentifierToUrlStringMapperFunctionRunnableImpl extends AbstractFunctionRunnableImpl<NavigationIdentifierToUrlStringMapper> implements Serializable {
 		private static final long serialVersionUID = 1L;
-		
 		public NavigationIdentifierToUrlStringMapperFunctionRunnableImpl() {
 			setRunnable(new Runnable() {
 				@Override
@@ -119,8 +175,7 @@ public class MenuBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDe
 					setOutput("http://localhost:8080/");
 				}
 			});
-		}
-		
+		}	
 	}
 	
 }

@@ -13,6 +13,9 @@ import org.cyk.utility.client.controller.component.theme.ThemeClassGetter;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderType;
+import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
+import org.cyk.utility.client.controller.session.SessionAttributeGetter;
+import org.cyk.utility.client.controller.session.SessionAttributeSetter;
 import org.cyk.utility.client.controller.session.SessionUser;
 import org.cyk.utility.client.controller.session.SessionUserGetter;
 import org.cyk.utility.notification.NotificationBuilder;
@@ -56,15 +59,14 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).execute().getOutput();
 				exception.printStackTrace();
 			}
-			
-			setWindow(__windowBuilder__.execute().getOutput());
-			
+			Window window = __windowBuilder__.execute().getOutput();
 			if(window!=null) {
 				Theme theme = window.getTheme();
 				if(theme == null) {
 					Class<? extends Theme> themeClass = __getThemeClass__();
 					if(themeClass!=null) {
 						theme = __inject__(themeClass);
+						setSessionAttribute(SessionAttributeEnumeration.THEME, theme);
 						window.setTheme(theme);
 					}
 				}
@@ -73,6 +75,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 					theme.process(window);	
 				}
 			}
+			setWindow(window);
 		}
 		return window;
 	}
@@ -108,6 +111,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				windowContainerManagedWindowBuilder.setContext(__getContext__());
 			if(windowContainerManagedWindowBuilder.getUniformResourceLocatorMap() == null)
 				windowContainerManagedWindowBuilder.setUniformResourceLocatorMap(__getUniformResourceLocatorMap__());
+			
 			windowBuilder = windowContainerManagedWindowBuilder.setWindowContainerManaged(this).execute().getOutput();
 		}
 		
@@ -122,6 +126,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		}
 		if(windowBuilder.getContainerManaged() == null)
 			windowBuilder.setContainerManaged(windowContainerManagedWindowBuilder);
+		
 		return windowBuilder;
 	}
 	
@@ -243,5 +248,15 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	
 	protected <T> T ____getProxy____(Class<T> aClass) {
 		return __getProxyByRequest__(aClass,__getRequest__());
+	}
+	
+	/**/
+	
+	protected static void setSessionAttribute(SessionAttributeEnumeration attribute,Object value) {
+		__inject__(SessionAttributeSetter.class).setAttribute(attribute).setValue(value).execute();
+	}
+	
+	protected static Object getSessionAttribute(SessionAttributeEnumeration attribute) {
+		return __inject__(SessionAttributeGetter.class).setAttribute(attribute).execute().getOutput();
 	}
 }

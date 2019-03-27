@@ -10,6 +10,7 @@ import org.cyk.utility.client.controller.proxy.ProxyClassUniformResourceIdentifi
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
+import org.cyk.utility.log.Log;
 import org.cyk.utility.type.TypeHelper;
 
 public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.dynamic.AbstractObject implements Objectable,Serializable {
@@ -81,5 +82,7 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.d
 		return __inject__(ControllerLayer.class);
 	}
 	
-	
+	protected static Log __injectLog__() {
+		return __inject__(Log.class);
+	}
 }

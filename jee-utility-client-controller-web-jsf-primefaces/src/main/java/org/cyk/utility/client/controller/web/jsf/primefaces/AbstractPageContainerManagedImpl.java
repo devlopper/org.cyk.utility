@@ -2,6 +2,8 @@ package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.window.WindowBuilder;
 import org.cyk.utility.client.controller.event.EventBuilder;
@@ -40,7 +42,11 @@ public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.c
 	}
 	
 	protected String __processWindowDialogOkCommandableGetUrl__(WindowBuilder window,CommandableBuilder commandable) {
-		return null;
+		String url = null;
+		Object request = __getRequest__();
+		if(request instanceof HttpServletRequest)
+			url = ((HttpServletRequest)request).getRequestURL().toString();
+		return url;
 	}
 	
 	/**/

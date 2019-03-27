@@ -11,6 +11,8 @@ public interface Log extends Function<LogMessage,Void> {
 	LogMessageBuilder getMessageBuilder();
 	LogMessageBuilder getMessageBuilder(Boolean instanciateIfNull);
 	Log setMessageBuilder(LogMessageBuilder builder);
+	Log addMessageParameter(Object parameter);
+	Log addMessageParameter(Object key,Object value);
 	
 	LogMessage getMessage();
 	Log setMessage(LogMessage message);

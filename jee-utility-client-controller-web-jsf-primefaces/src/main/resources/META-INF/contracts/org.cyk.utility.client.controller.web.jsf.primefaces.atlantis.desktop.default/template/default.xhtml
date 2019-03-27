@@ -59,8 +59,8 @@
 		                			<c:forEach items="#{__page__.window.theme.menuTabs.get()}" var="tab" >
 					                	<pa:tab icon="#{tab.properties.icon}" title="#{tab.properties.name}">  
 			                				<h:form id="menu-form">
-						                   		<pa:menu model="#{tab.properties.menu.targetModelValue}" widgetVar="menu"/>
-						                	</h:form>   	
+			                					<pa:menu model="#{tab.properties.menu.targetModelValue}" widgetVar="menu"/>
+						                	</h:form>
 						                </pa:tab>		
 					                </c:forEach>                
 		           				</pa:tabMenu>        
@@ -68,29 +68,30 @@
 				            
 				            <div class="layout-main layout-main-reduce" id="contenu">
 				                <div class="layout-main-content">
-				                	<h:form id="#{componentHelper.globalFormComponentIdentifier}" enctype="multipart/form-data">	
-				                		
-				                		<cyk:contractBodyWithThemeInsideFormTagBodyFirst/>
-				                	
-				                		<ui:insert name="center">
-											<ui:insert name="centerNorth">
-												<div class="ui-g-12">
-													<cyk:contractBodyMessages/>
-												</div>
-											</ui:insert>
-											
-											<ui:insert name="centerCenter">
-												<c:set var="viewCenter" value="#{theme.viewMap.get('center')}" />
-												<c:if test="#{viewCenter != null}">
+				                	<cyk:form value="#{__page__.window.theme.tagMap.get('content.form')}">
+				                		<ui:define name="formContent">
+					                		<cyk:contractBodyWithThemeInsideFormTagBodyFirst/>
+					                	
+					                		<ui:insert name="center">
+												<ui:insert name="centerNorth">
 													<div class="ui-g-12">
-														<ui:insert name="centerView">
-															<cyk:view value="#{viewCenter}" />
-														</ui:insert>
+														<cyk:contractBodyMessages/>
 													</div>
-												</c:if>
-											</ui:insert>
-				                		</ui:insert>		                			
-				                	</h:form>
+												</ui:insert>
+												
+												<ui:insert name="centerCenter">
+													<c:set var="viewCenter" value="#{theme.viewMap.get('center')}" />
+													<c:if test="#{viewCenter != null}">
+														<div class="ui-g-12">
+															<ui:insert name="centerView">
+																<cyk:view value="#{viewCenter}" />
+															</ui:insert>
+														</div>
+													</c:if>
+												</ui:insert>
+					                		</ui:insert>
+				                		</ui:define>
+				                	</cyk:form>		                			
 				                </div>
 				            </div>
 				        </div>

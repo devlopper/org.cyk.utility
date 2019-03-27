@@ -8,6 +8,9 @@ import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
+import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
+import org.cyk.utility.client.controller.session.SessionAttributeGetter;
+import org.cyk.utility.client.controller.session.SessionAttributeSetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.internationalization.InternalizationKeyStringType;
 import org.cyk.utility.internationalization.InternalizationPhraseBuilder;
@@ -36,25 +39,31 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	private WindowRenderType windowRenderType;
 	private Object request,context,uniformResourceLocatorMap;
 	
+	//TODO improve build logic to reduce build time
 	@Override
 	protected WindowBuilder __execute__() throws Exception {
-		//DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
 		Object request = getRequest();
 		Object context = getContext();
 		WindowBuilder window = getWindow();
 		if(window == null)
 			//window = __inject__(WindowBuilder.class);
 			window = __getProperty__(WindowContainerManagedProperty.WINDOW,WindowBuilder.class);
+		
 		WindowRenderType windowRenderType = getWindowRenderType();
 		if(windowRenderType == null) {
 			Class<?> windowRenderTypeClass = __inject__(RequestParameterValueMapper.class).setParameterNameAsWindowRenderTypeClass().execute().getOutputAs(Class.class);
 			if(windowRenderTypeClass!=null)
 				windowRenderType = (WindowRenderType) __inject__(windowRenderTypeClass);
 		}
+		
 		if(windowRenderType == null || windowRenderType instanceof WindowRenderTypeNormal) {
 			MenuBuilderMap menuMap = getMenuMap();
 			if(menuMap == null)
+				menuMap = (MenuBuilderMap) __inject__(SessionAttributeGetter.class).setAttribute(SessionAttributeEnumeration.MENU_BUILDER_MAP).execute().getOutput();
+			if(menuMap == null) {
 				menuMap = __inject__(MenuBuilderMapGetter.class).execute().getOutput();
+				__inject__(SessionAttributeSetter.class).setAttribute(SessionAttributeEnumeration.MENU_BUILDER_MAP).setValue(menuMap).execute();
+			}
 			window.setMenuMap(menuMap);	
 		}
 		
@@ -92,7 +101,6 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 			__execute__(window,systemAction,__getFormClass__(getFormClass()),__getRowClass__(getRowClass()));
 		}
 		
-		
 		ViewBuilder view = getView();
 		//if(view == null)
 		//	view = __inject__(ViewBuilder.class);
@@ -105,7 +113,6 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 				view.setContext(context);	
 		}
 		window.setView(view);
-		//System.out.println("build window container managed window : "+__inject__(DurationStringBuilder.class).setDuration(durationBuilder.setEndNow().execute().getOutput()).execute().getOutput());
 		return window;
 	}
 	

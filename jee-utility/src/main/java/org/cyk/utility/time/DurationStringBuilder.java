@@ -7,4 +7,7 @@ public interface DurationStringBuilder extends StringFunction {
 	Duration getDuration();
 	DurationStringBuilder setDuration(Duration duration);
 	
+	DurationBuilder getDurationBuilder();
+	DurationBuilder getDurationBuilder(Boolean injectIfNull);
+	DurationStringBuilder setDurationBuilder(DurationBuilder durationBuilder);
 }

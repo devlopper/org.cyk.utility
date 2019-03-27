@@ -12,11 +12,10 @@
 		<ui:define name="valueIsNotNull">
 			<h:form
 				id="#{value.properties.identifier}"
-				enctype="#{value.properties.enctype}"
+				prependId="false"
 			>
-				<ui:insert name="formContent">
-					<h1>FORM CONTENT</h1>
-				</ui:insert>
+				<cyk:view value="#{value.view}" />
+    			<p:autoUpdate/>
 				    
 			</h:form>
 		</ui:define>

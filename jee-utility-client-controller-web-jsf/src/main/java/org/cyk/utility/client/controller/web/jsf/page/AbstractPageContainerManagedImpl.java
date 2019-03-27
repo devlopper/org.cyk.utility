@@ -5,10 +5,9 @@ import java.io.Serializable;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.context.FacesContext;
 
-import org.cyk.utility.client.controller.component.window.AbstractWindowContainerManagedImpl;
 import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
 
-public abstract class AbstractPageContainerManagedImpl extends AbstractWindowContainerManagedImpl implements PageContainerManaged,Serializable {
+public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.client.controller.web.page.AbstractPageContainerManagedImpl implements PageContainerManaged,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

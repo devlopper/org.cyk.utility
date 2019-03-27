@@ -9,6 +9,7 @@ import org.cyk.utility.client.controller.component.file.Files;
 import org.cyk.utility.client.controller.component.image.Image;
 import org.cyk.utility.client.controller.component.image.ImageMap;
 import org.cyk.utility.client.controller.component.view.ViewMap;
+import org.cyk.utility.client.controller.tag.TagMap;
 
 public abstract class AbstractThemeImpl extends AbstractObject implements Theme,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -18,6 +19,7 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	private ImageMap imageMap;
 	private ViewMap viewMap;
 	private ThemeTemplate template;
+	private TagMap tagMap;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -184,12 +186,38 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 		getImageMap(Boolean.TRUE).set(IMAGE_LOGO,logo);
 		return this;
 	}
+	
+	@Override
+	public TagMap getTagMap() {
+		return tagMap;
+	}
+	
+	@Override
+	public TagMap getTagMap(Boolean injectIfNull) {
+		return (TagMap) __getInjectIfNull__(FIELD_TAG_MAP, injectIfNull);
+	}
+	
+	@Override
+	public Theme setTagMap(TagMap tagMap) {
+		this.tagMap = tagMap;
+		return this;
+	}
+	
+	@Override
+	public Theme mapTags(Object... keyValues) {
+		getTagMap(Boolean.TRUE).set(keyValues);
+		return this;
+	}
+	
+	/**/
 
 	public static final String FIELD_VIEW_MAP = "viewMap";
 	public static final String FIELD_CASCADE_STYLE_SHEET_FILES = "cascadeStyleSheetFiles";
 	public static final String FIELD_JAVA_SCRIPT_FILES = "javaScriptFiles";
 	public static final String FIELD_IMAGE_MAP = "imageMap";
+	public static final String FIELD_TAG_MAP = "tagMap";
 	
 	private static final String IMAGE_ICON = "icon";
 	private static final String IMAGE_LOGO = "logo";
+	
 }

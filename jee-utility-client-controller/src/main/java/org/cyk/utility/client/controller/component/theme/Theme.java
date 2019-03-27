@@ -9,6 +9,7 @@ import org.cyk.utility.client.controller.component.image.Image;
 import org.cyk.utility.client.controller.component.image.ImageMap;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.component.window.Window;
+import org.cyk.utility.client.controller.tag.TagMap;
 
 public interface Theme extends Objectable {
 
@@ -48,6 +49,15 @@ public interface Theme extends Objectable {
 	Image getLogo();
 	Image getLogo(Boolean injectIfNull);
 	Theme setLogo(Image logo);
+	
+	/*_________________________________ Tags ____________________________*/
+	
+	TagMap getTagMap();
+	TagMap getTagMap(Boolean injectIfNull);
+	Theme setTagMap(TagMap tagMap);
+	Theme mapTags(Object...keyValues);
+	
+	/**/
 	
 	Theme process(Window window);
 }

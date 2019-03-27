@@ -12,10 +12,16 @@ public class DurationStringBuilderImpl extends AbstractStringFunctionImpl implem
 	private static final long serialVersionUID = 1L;
 
 	private Duration duration;
+	private DurationBuilder durationBuilder;
 	
 	@Override
 	protected String __execute__() throws Exception {
 		Duration duration = getDuration();
+		if(duration == null) {
+			DurationBuilder durationBuilder = getDurationBuilder();
+			if(durationBuilder!=null)
+				duration = durationBuilder.execute().getOutput();
+		}
 		Collection<String> strings = null;
 		if(duration == null) {
 			
@@ -43,4 +49,23 @@ public class DurationStringBuilderImpl extends AbstractStringFunctionImpl implem
 		return this;
 	}
 	
+	@Override
+	public DurationBuilder getDurationBuilder() {
+		return durationBuilder;
+	}
+	
+	@Override
+	public DurationStringBuilder setDurationBuilder(DurationBuilder durationBuilder) {
+		this.durationBuilder = durationBuilder;
+		return this;
+	}
+	
+	@Override
+	public DurationBuilder getDurationBuilder(Boolean injectIfNull) {
+		return (DurationBuilder) __getInjectIfNull__(FIELD_DURATION_BUILDER, injectIfNull);
+	}
+	
+	/**/
+	
+	public static final String FIELD_DURATION_BUILDER = "durationBuilder";
 }

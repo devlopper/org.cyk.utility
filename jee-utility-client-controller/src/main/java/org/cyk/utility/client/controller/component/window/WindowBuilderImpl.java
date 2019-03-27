@@ -14,6 +14,8 @@ import org.cyk.utility.client.controller.component.output.OutputStringTextBuilde
 import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
+import org.cyk.utility.client.controller.session.SessionAttributeGetter;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.node.SystemNodeClient;
 
@@ -29,6 +31,7 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	private WindowRenderType renderType;
 	private WindowContainerManagedWindowBuilder containerManaged;
 	
+	//TODO improve build logic to reduce build time
 	@Override
 	protected void __execute__(Window window) {
 		super.__execute__(window);
@@ -73,7 +76,10 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		}
 		
 		Theme theme = getTheme();
+		if(theme == null)
+			theme = (Theme) __inject__(SessionAttributeGetter.class).setAttribute(SessionAttributeEnumeration.THEME).execute().getOutput();
 		window.setTheme(theme);
+		
 		DialogBuilder dialog = getDialog(Boolean.TRUE);
 		if(dialog!=null)
 			window.setDialog(dialog.execute().getOutput());

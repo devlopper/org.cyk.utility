@@ -11,6 +11,7 @@ public class MenuBuilderImpl extends AbstractVisibleComponentBuilderImpl<Menu> i
 	private MenuItemBuilders items;
 	private MenuRenderType renderType;
 	
+	//TODO improve build logic to reduce build time
 	@Override
 	protected void __execute__(Menu menu) {
 		super.__execute__(menu);

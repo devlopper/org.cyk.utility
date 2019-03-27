@@ -18,6 +18,9 @@ import org.cyk.utility.client.controller.component.tab.Tabs;
 import org.cyk.utility.client.controller.component.theme.AbstractThemeImpl;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.window.Window;
+import org.cyk.utility.client.controller.tag.Tag;
+import org.cyk.utility.client.controller.tag.TagForm;
+import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.scope.ScopeSession;
 
 public class ThemeAtlantisDesktopDefaultImpl extends AbstractThemeImpl implements ThemeAtlantisDesktopDefault,Serializable {
@@ -44,6 +47,16 @@ public class ThemeAtlantisDesktopDefaultImpl extends AbstractThemeImpl implement
 		file.getProperties().setContracts(__getIdentifier__());
 		addCascadeStyleSheetFiles(file);
 		
+		Tag tag = __inject__(TagForm.class);
+		tag.setIdentifier(__inject__(ComponentHelper.class).getGlobalFormComponentIdentifier());
+		tag.getProperties().setEnctype("multipart/form-data");
+		mapTags("content.form",tag);
+		
+		tag = __inject__(TagForm.class);
+		tag.setIdentifier("menu-form");
+		mapTags("menu.form",tag);
+		
+		//TODO reduce build time to maximum 1 second
 		MenuBuilder menuBuilder = __inject__(MenuBuilderMapGetter.class).execute().getOutput().get(ScopeSession.class);
 		MenuItemBuilders oldMenuItemBuilders = menuBuilder.getItems();
 		for(MenuItemBuilder index : oldMenuItemBuilders.get()) {

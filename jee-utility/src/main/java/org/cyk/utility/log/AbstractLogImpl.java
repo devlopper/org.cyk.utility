@@ -86,6 +86,18 @@ public abstract class AbstractLogImpl<LEVEL> extends AbstractFunctionImpl<LogMes
 		return this;
 	}
 	
+	@Override
+	public Log addMessageParameter(Object parameter) {
+		getMessageBuilder(Boolean.TRUE).addParameter(parameter);
+		return this;
+	}
+	
+	@Override
+	public Log addMessageParameter(Object key, Object value) {
+		getMessageBuilder(Boolean.TRUE).addParameter(key, value);
+		return this;
+	}
+	
 	protected abstract LEVEL __getLevel__(LogLevel level);
 	protected abstract Object __getMarker__(Collection<Object> markers);
 	
