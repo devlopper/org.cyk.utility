@@ -66,6 +66,11 @@
         <source>tag/output/text/text.xhtml</source>
     </tag>
     
+    <tag>
+        <tag-name>outputFile</tag-name>
+        <source>tag/output/file/file.xhtml</source>
+    </tag>
+    
     <!-- Message -->
     
     <tag>

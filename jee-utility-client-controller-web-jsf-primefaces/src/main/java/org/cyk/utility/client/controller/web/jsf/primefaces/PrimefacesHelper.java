@@ -1,5 +1,6 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces;
 
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 
 import javax.inject.Named;
@@ -11,9 +12,12 @@ import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.file.File;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 @Singleton @Named
 public class PrimefacesHelper extends AbstractObject implements Serializable {
@@ -53,6 +57,10 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	
 	public String computeAttributeUpdate(Component component) {
 		return computeAttributeUpdate(component,__inject__(Strings.class));
+	}
+	
+	public StreamedContent computeStreamedContent(File file) {
+		return new DefaultStreamedContent(new ByteArrayInputStream(file.getBytes()), file.getMimeType());
 	}
 	
 	/**/

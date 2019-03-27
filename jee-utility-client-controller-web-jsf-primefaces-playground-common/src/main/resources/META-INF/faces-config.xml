@@ -44,6 +44,18 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>outputTextView</from-outcome>
+			<to-view-id>/output/text.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>outputFileView</from-outcome>
+			<to-view-id>/output/file.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>navigation01</from-outcome>
 			<to-view-id>/p1/p2/p3.jsf</to-view-id>
 			<redirect />

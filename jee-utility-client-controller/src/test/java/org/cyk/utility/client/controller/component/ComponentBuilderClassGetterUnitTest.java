@@ -4,14 +4,19 @@ import java.lang.annotation.Annotation;
 
 import org.cyk.utility.client.controller.component.annotation.Commandable;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo;
+import org.cyk.utility.client.controller.component.annotation.InputFile;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineMany;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
 import org.cyk.utility.client.controller.component.annotation.OutputStringText;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.client.controller.component.input.InputFileBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneComboBuilder;
+import org.cyk.utility.client.controller.component.output.OutputBuilder;
+import org.cyk.utility.client.controller.component.output.OutputFileBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
+import org.cyk.utility.file.File;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
@@ -110,6 +115,17 @@ public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitT
 		assertionHelper.assertEquals(CommandableBuilder.class, __inject__(ComponentBuilderClassGetter.class).setClazz(Model.class).setMethodName("submit").execute().getOutput());
 	}
 	
+	@Test
+	public void getInputFileBuilder_fromFieldNameStrings() {
+		assertionHelper.assertEquals(InputFileBuilder.class, __inject__(ComponentBuilderClassGetter.class).setClazz(Model.class).addFieldNameStrings("inputFile").execute().getOutput());
+	}
+	
+	@Test
+	public void getOutputFileBuilder_fromFieldNameStrings_inputText() {
+		assertionHelper.assertEquals(OutputFileBuilder.class, __inject__(ComponentBuilderClassGetter.class).setClazz(Model.class).addFieldNameStrings("inputFile")
+				.setBaseClass(OutputBuilder.class).execute().getOutput());
+	}
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
@@ -119,6 +135,7 @@ public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitT
 		@InputStringLineOne private String inputText;
 		@InputStringLineMany private String inputTextArea;
 		@InputChoiceOneCombo private String inputCombo;
+		@InputFile private File inputFile;
 		private SubModel subModel;
 		
 		@Commandable(systemActionClass=SystemAction.class)

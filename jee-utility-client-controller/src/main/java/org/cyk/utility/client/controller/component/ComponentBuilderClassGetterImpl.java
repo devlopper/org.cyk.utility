@@ -21,6 +21,7 @@ import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyC
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneComboBuilder;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneRadioBuilder;
 import org.cyk.utility.client.controller.component.output.OutputBuilder;
+import org.cyk.utility.client.controller.component.output.OutputFileBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
@@ -88,9 +89,17 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 		
 		Class<?> baseClass = getBaseClass();
 		if(builderClass!=null && baseClass!=null && !Boolean.TRUE.equals(__injectClassHelper__().isInstanceOf(builderClass, baseClass))) {
-			if(__injectClassHelper__().isInstanceOf(builderClass, InputBuilder.class))
-				if(__injectClassHelper__().isInstanceOf(baseClass, OutputBuilder.class))
+			if(__injectClassHelper__().isInstanceOf(builderClass, InputBuilder.class)) {
+				if(baseClass.equals(OutputBuilder.class))
+					if(InputFileBuilder.class.equals(builderClass))
+						baseClass = OutputFileBuilder.class;
+					
+				if(__injectClassHelper__().isInstanceOf(baseClass, OutputFileBuilder.class))
+					builderClass = OutputFileBuilder.class;
+				else if(__injectClassHelper__().isInstanceOf(baseClass, OutputBuilder.class))
 					builderClass = OutputStringTextBuilder.class;
+			}
+					
 		}
 		
 		return builderClass;

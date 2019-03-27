@@ -30,6 +30,10 @@
 											<cyk:outputLabel value="#{indexComponent}" />
 										</c:when>
 										
+										<c:when test="#{componentHelper.isOutputFile(indexComponent)}">
+											<cyk:outputFile value="#{indexComponent}" />
+										</c:when>
+										
 										<!-- Input -->
 										
 										<c:when test="#{componentHelper.isInputStringLineOne(indexComponent)}">
@@ -58,9 +62,6 @@
 										</c:when>
 										<c:when test="#{componentHelper.isInputFile(indexComponent)}">
 											<cyk:inputFile value="#{indexComponent}" />
-										</c:when>
-										<c:when test="#{componentHelper.isOutputStringMessage(indexComponent)}">
-											<cyk:message value="#{indexComponent}" />
 										</c:when>
 										
 										<!-- Commandable -->
@@ -101,6 +102,11 @@
 										
 										<c:when test="#{componentHelper.isCell(indexComponent)}">
 											<cyk:cell value="#{indexComponent}" />
+										</c:when>
+										
+										<!-- Message -->
+										<c:when test="#{componentHelper.isOutputStringMessage(indexComponent)}">
+											<cyk:message value="#{indexComponent}" />
 										</c:when>
 										
 										<!-- Not found -->
