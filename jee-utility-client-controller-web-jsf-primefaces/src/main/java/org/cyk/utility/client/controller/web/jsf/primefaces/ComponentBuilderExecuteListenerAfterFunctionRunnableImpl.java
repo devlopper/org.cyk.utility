@@ -1,9 +1,12 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.annotation.Default;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
@@ -16,6 +19,7 @@ import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.dialog.Dialog;
 import org.cyk.utility.client.controller.component.grid.Grid;
+import org.cyk.utility.client.controller.component.image.Image;
 import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.input.InputBoolean;
 import org.cyk.utility.client.controller.component.input.InputFile;
@@ -24,6 +28,8 @@ import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyC
 import org.cyk.utility.client.controller.component.layout.Insert;
 import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeColumnContext;
+import org.cyk.utility.client.controller.component.output.Output;
+import org.cyk.utility.client.controller.component.output.OutputFile;
 import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
@@ -39,6 +45,7 @@ import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.string.StringHelper;
+import org.primefaces.model.DefaultStreamedContent;
 
 public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentBuilderExecuteListenerAfter> implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -91,19 +98,43 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						InputOutput<?> inputOutput = (InputOutput<?>) component;
 						inputOutput.setPropertyValue(inputOutput.getValue());
 						
-						if(inputOutput instanceof OutputString) {
-							OutputString outputString = (OutputString) inputOutput;
-							
-							if(outputString instanceof OutputStringLabel) {
-								OutputStringLabel outputStringLabel = (OutputStringLabel) outputString;
-								outputStringLabel.getProperties().setFor( ((OutputStringLabelBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );	
+						if(inputOutput instanceof Output<?>) {
+							if(inputOutput instanceof OutputString) {
+								OutputString outputString = (OutputString) inputOutput;
+								
+								if(outputString instanceof OutputStringLabel) {
+									OutputStringLabel outputStringLabel = (OutputStringLabel) outputString;
+									outputStringLabel.getProperties().setFor( ((OutputStringLabelBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );	
+								}
+								
+								if(outputString instanceof OutputStringMessage) {
+									OutputStringMessage outputStringMessage = (OutputStringMessage) outputString;
+									outputStringMessage.getProperties().setFor( ((OutputStringMessageBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );
+									//outputStringMessage.getProperties().setDisplay("tooltip");
+								}		
+							}else if(inputOutput instanceof OutputFile) {
+								Image image = null;
+								OutputFile outputFile = (OutputFile) inputOutput;
+								if(Boolean.TRUE.equals(outputFile.getValue().isImage())) {
+									image = __inject__(Image.class);
+									//TODO if image has an identifier then get it from sevlet otherwise get it from streamed base64 content
+									image.getProperties().setValue(new DefaultStreamedContent(new ByteArrayInputStream(outputFile.getValue().getBytes())
+											, outputFile.getValue().getMimeType()));
+									image.getProperties().setStream(Boolean.FALSE);
+								}else {
+									//We will use a thumbnail or icon as possible
+									image = __inject__(Image.class);
+									try {
+										image.getProperties().setValue(new DefaultStreamedContent(new ByteArrayInputStream(IOUtils.toByteArray(getClass().getResourceAsStream("icontext.png")))
+												, "image/png"));
+									} catch (IOException e) {
+										System.out.println(e);
+										e.printStackTrace();
+									}
+									image.getProperties().setStream(Boolean.FALSE);
+								}
+								outputFile.getProperties().setImage(image);
 							}
-							
-							if(outputString instanceof OutputStringMessage) {
-								OutputStringMessage outputStringMessage = (OutputStringMessage) outputString;
-								outputStringMessage.getProperties().setFor( ((OutputStringMessageBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );
-								//outputStringMessage.getProperties().setDisplay("tooltip");
-							}		
 						}
 						
 						if(inputOutput instanceof Input<?>) {

@@ -19,4 +19,5 @@ public interface File extends Objectable {
 	byte[] getBytes();
 	File setBytes(byte[] bytes);
 	
+	Boolean isImage();
 }

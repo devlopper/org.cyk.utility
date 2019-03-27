@@ -2,6 +2,7 @@ package org.cyk.utility.file;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
 public class FileImpl extends AbstractObject implements File,Serializable {
@@ -64,6 +65,11 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	public File setSize(Long size) {
 		this.size = size;
 		return this;
+	}
+	
+	@Override
+	public Boolean isImage() {
+		return StringUtils.startsWithIgnoreCase(getMimeType(), "image/");
 	}
 	
 	@Override

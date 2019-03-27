@@ -12,6 +12,7 @@ import org.cyk.utility.client.controller.component.command.CommandableRenderType
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeLink;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.cell.Cell;
+import org.cyk.utility.client.controller.component.image.Image;
 import org.cyk.utility.client.controller.component.input.InputBooleanButton;
 import org.cyk.utility.client.controller.component.input.InputBooleanCheckBox;
 import org.cyk.utility.client.controller.component.input.InputFile;
@@ -101,6 +102,10 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	
 	public Boolean isOutputFile(Object object) {
 		return object instanceof OutputFile;
+	}
+	
+	public Boolean isImage(Object object) {
+		return object instanceof Image;
 	}
 	
 	public Boolean isLayout(Object object) {

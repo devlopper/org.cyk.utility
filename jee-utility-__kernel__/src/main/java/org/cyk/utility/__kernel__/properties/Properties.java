@@ -4473,7 +4473,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getImage() {
+		return get(IMAGE);
+	}
+
+	public Properties setImage(Object image) {
+		set(IMAGE, image);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String IMAGE = "IMAGE";
 	public static final String NODE_TYPE = "NODE_TYPE";
 	public static final String ROOT = "ROOT";
 	public static final String FIELDS_NAMES = "FIELDS_NAMES";

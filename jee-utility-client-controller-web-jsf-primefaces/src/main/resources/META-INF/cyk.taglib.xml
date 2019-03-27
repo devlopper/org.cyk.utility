@@ -297,4 +297,9 @@
         <source>tag/hierarchy/organigram/organigram.xhtml</source>
     </tag>
     
+    <!-- Image -->
+    <tag>
+        <tag-name>image</tag-name>
+        <source>tag/image/graphicImage.xhtml</source>
+    </tag>
 </facelet-taglib>
