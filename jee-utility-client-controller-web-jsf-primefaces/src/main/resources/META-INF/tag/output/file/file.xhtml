@@ -20,40 +20,6 @@
 			<c:if test="#{value.properties.thumbnail != null}">
 				<cyk:image value="#{value.properties.thumbnail}" />
 			</c:if>
-			
-			<!--
-			<c:set var="isImage" value="#{value.properties.value.mimeType.startsWith('image')}" />
-			<c:if test="#{isImage}">
-				<cyk:image value="#{value.properties.image}" />
-			</c:if>
-			<c:if test="#{not isImage}">
-				SHOW FILE INFOS
-				<cyk:image value="#{value.properties.image}" />
-			</c:if>
-			-->
-			<!--
-			#{value.properties.value.name}
-			<p:graphicImage value="#{primefacesHelper.computeStreamedContent(value.properties.value)}" stream="false"/>
-			-->
-			<!--
-			<cyk:image value="#{value.properties.value}" />
-			-->
-			<!--
-			<h:outputText
-				id="#{value.properties.identifier}"
-				value="#{value.properties.value}"
-				converter="#{value.properties.converter}"
-				dir="#{value.properties.dir}"
-				escape="#{value.properties.escape}"
-				lang="#{value.properties.lang}"
-				rendered="#{value.properties.rendered}"
-				title="#{value.properties.title}"
-				styleClass="#{value.properties.styleClass}"
-				style="#{value.properties.style}"
-			>
-			
-			</h:outputText>
-			-->
 		</ui:define>
 	</ui:decorate>	
 

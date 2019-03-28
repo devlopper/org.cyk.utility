@@ -33,7 +33,8 @@ public class FileServlet extends org.omnifaces.servlet.FileServlet implements Se
 		
         if(__file__!=null) {
         	try {
-				file = new File(__file__.getName()+"."+__file__.getExtension()); //File.createTempFile("img"+path, null);
+				//file = new File(__file__.getName()+"."+__file__.getExtension()); //File.createTempFile("img"+path, null);
+        		file = File.createTempFile("image"+System.currentTimeMillis(), null);
 				FileUtils.writeByteArrayToFile(file, __file__.getBytes());
 			} catch (IOException e) {
 				e.printStackTrace();

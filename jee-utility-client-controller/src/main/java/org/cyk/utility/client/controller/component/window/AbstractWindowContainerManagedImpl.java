@@ -59,7 +59,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).execute().getOutput();
 				exception.printStackTrace();
 			}
-			
+			//TODO you won't be able to customize a page with a specific theme one it has been set to session. how to make it possible then ???
 			Theme theme = (Theme) __inject__(SessionAttributeGetter.class).setAttribute(SessionAttributeEnumeration.THEME).execute().getOutput();
 			if(theme == null) {
 				Class<? extends Theme> themeClass = __getThemeClass__();
