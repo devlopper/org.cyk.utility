@@ -4,6 +4,8 @@ import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 
 public interface File extends Objectable {
 
+	@Override File setIdentifier(Object identifier);
+	
 	String getName();
 	File setName(String name);
 	

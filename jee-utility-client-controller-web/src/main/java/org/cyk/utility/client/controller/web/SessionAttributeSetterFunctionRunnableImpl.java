@@ -18,8 +18,10 @@ public class SessionAttributeSetterFunctionRunnableImpl extends AbstractFunction
 			public void run() {
 				HttpServletRequest request = (HttpServletRequest) __inject__(RequestGetter.class).execute().getOutput();
 				HttpSession session = request.getSession();
-				if(session!=null)
-					session.setAttribute(getFunction().getAttribute().name(), getFunction().getValue());
+				if(session!=null) {
+					Object attribute = getFunction().getAttribute();
+					session.setAttribute(attribute.toString(), getFunction().getValue());
+				}
 			}
 		});
 	}

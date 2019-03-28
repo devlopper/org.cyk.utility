@@ -13,6 +13,11 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	private Long size;
 	
 	@Override
+	public File setIdentifier(Object identifier) {
+		return (File) super.setIdentifier(identifier);
+	}
+	
+	@Override
 	public byte[] getBytes() {
 		return bytes;
 	}

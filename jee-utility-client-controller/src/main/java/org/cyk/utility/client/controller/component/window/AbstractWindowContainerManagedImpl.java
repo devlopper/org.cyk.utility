@@ -103,7 +103,8 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		WindowBuilder windowBuilder = null;
 		WindowContainerManagedWindowBuilder windowContainerManagedWindowBuilder = __getWindowContainerManagedWindowBuilder__();
 		if(windowContainerManagedWindowBuilder == null) {
-			windowBuilder = __injectWindowBuilder__().setView(__getViewBuilder__()).setMenuMap(__getMenuBuilderMap__());
+			ViewBuilder viewBuilder = __getViewBuilder__();			
+			windowBuilder = __injectWindowBuilder__().setView(viewBuilder).setMenuMap(__getMenuBuilderMap__());
 		}else {
 			if(windowContainerManagedWindowBuilder.getRequest() == null)
 				windowContainerManagedWindowBuilder.setRequest(__getRequest__());
@@ -121,8 +122,15 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				windowBuilder.setTitleValue(titleValue);	
 			
 			ViewBuilder view = __getViewBuilder__();
-			if(view!=null)
+			if(view!=null) {
+				if(view.getRequest() == null)
+					view.setRequest(__getRequest__());
+				if(view.getContext() == null)
+					view.setContext(__getContext__());
+				if(view.getUniformResourceLocatorMap() == null)
+					view.setUniformResourceLocatorMap(__getUniformResourceLocatorMap__());
 				windowBuilder.setView(view);
+			}
 		}
 		if(windowBuilder.getContainerManaged() == null)
 			windowBuilder.setContainerManaged(windowContainerManagedWindowBuilder);

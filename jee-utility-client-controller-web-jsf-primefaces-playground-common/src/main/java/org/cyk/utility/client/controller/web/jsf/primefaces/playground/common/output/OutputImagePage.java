@@ -1,12 +1,10 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.output;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.apache.commons.io.IOUtils;
 import org.cyk.utility.client.controller.component.annotation.Input;
 import org.cyk.utility.client.controller.component.annotation.InputFile;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
@@ -33,17 +31,8 @@ public class OutputImagePage extends AbstractPageContainerManagedImpl implements
 	protected ViewBuilder __getViewBuilder__() {
 		Form form = __inject__(Form.class);
 		form.setData(__inject__(Data.class));
-		form.getData().setFile(__inject__(File.class));
-		try {
-			form.getData().getFile().setName("Image01");
-			form.getData().getFile().setExtension("png");
-			form.getData().getFile().setMimeType("image/png");
-			form.getData().getFile().setSize(1000l);
-			form.getData().getFile().setBytes(IOUtils.toByteArray(getClass().getResourceAsStream("image01.png")));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//form.getData().setFile(__inject__(FileBuilder.class).setClassLoader(getClass().getClassLoader()).setName("image01.png").execute().getOutput());
+		
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "file");

@@ -4,8 +4,8 @@ import org.cyk.utility.function.FunctionWithPropertiesAsInputAndVoidAsOutput;
 
 public interface SessionAttributeSetter extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 	
-	SessionAttributeEnumeration getAttribute();
-	SessionAttributeSetter setAttribute(SessionAttributeEnumeration attribute);
+	Object getAttribute();
+	SessionAttributeSetter setAttribute(Object attribute);
 	
 	Object getValue();
 	SessionAttributeSetter setValue(Object value);

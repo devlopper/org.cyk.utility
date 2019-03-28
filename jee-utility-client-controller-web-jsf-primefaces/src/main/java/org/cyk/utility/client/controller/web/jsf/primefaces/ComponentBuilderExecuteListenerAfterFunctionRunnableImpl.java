@@ -1,12 +1,10 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.annotation.Default;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
@@ -42,8 +40,10 @@ import org.cyk.utility.client.controller.event.Events;
 import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.client.controller.icon.IconIdentifierGetter;
 import org.cyk.utility.client.controller.web.ComponentHelper;
+import org.cyk.utility.client.controller.web.WebHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.css.Style;
+import org.cyk.utility.file.File;
 import org.cyk.utility.string.StringHelper;
 import org.primefaces.model.DefaultStreamedContent;
 
@@ -115,23 +115,30 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 							}else if(inputOutput instanceof OutputFile) {
 								Image image = null;
 								OutputFile outputFile = (OutputFile) inputOutput;
-								if(Boolean.TRUE.equals(outputFile.getValue().isImage())) {
+								File file = outputFile.getValue();
+								if(Boolean.TRUE.equals(file.isImage())) {
 									image = __inject__(Image.class);
-									//TODO if image has an identifier then get it from sevlet otherwise get it from streamed base64 content
-									image.getProperties().setValue(new DefaultStreamedContent(new ByteArrayInputStream(outputFile.getValue().getBytes())
-											, outputFile.getValue().getMimeType()));
-									image.getProperties().setStream(Boolean.FALSE);
+									byte[] bytes = file.getBytes();
+									if(bytes == null) {
+										//no data to be embbeded , browser will handle it by doing get using url
+										image.getProperties().setUrl(__inject__(WebHelper.class).buildFileUrl(outputFile, componentBuilder.getRequest()));
+									}else {
+										//data to be streamed using base64 encoding
+										image.getProperties().setValue(new DefaultStreamedContent(new ByteArrayInputStream(bytes), file.getMimeType()));
+										image.getProperties().setStream(Boolean.FALSE);	
+									}
+									image.getProperties().setWidth("40");
+									image.getProperties().setHeight("40");
 								}else {
 									//We will use a thumbnail or icon as possible
-									image = __inject__(Image.class);
-									try {
-										image.getProperties().setValue(new DefaultStreamedContent(new ByteArrayInputStream(IOUtils.toByteArray(getClass().getResourceAsStream("icontext.png")))
-												, "image/png"));
-									} catch (IOException e) {
-										System.out.println(e);
-										e.printStackTrace();
-									}
-									image.getProperties().setStream(Boolean.FALSE);
+									image = __inject__(Image.class);									
+									image.getProperties().setLibrary("org.cyk.utility.client.controller.web.jsf.primefaces.atlantis.desktop.default");
+									image.getProperties().setName("image/icon.png");
+											
+								}
+								if(image!=null) {
+									image.getProperties().setAlt("My alternative message");
+									
 								}
 								outputFile.getProperties().setImage(image);
 							}
