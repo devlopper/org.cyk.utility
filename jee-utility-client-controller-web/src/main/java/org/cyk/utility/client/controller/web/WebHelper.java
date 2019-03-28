@@ -33,7 +33,7 @@ public class WebHelper extends AbstractHelper implements Serializable {
 	public String buildFileUrl(OutputFile outputFile,Object request) {
 		String url = null;
 		File file = outputFile.getValue();
-		if(file!=null)
+		if(file!=null && file.getIdentifier()!=null)
 			url = buildFileUrl(__inject__(StringHelper.class).getString(file.getIdentifier()), outputFile.getRepositoryType(), request);
 		return url;
 	}

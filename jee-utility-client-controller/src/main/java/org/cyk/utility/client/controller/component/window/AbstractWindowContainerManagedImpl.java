@@ -59,18 +59,19 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).execute().getOutput();
 				exception.printStackTrace();
 			}
+			
+			Theme theme = (Theme) __inject__(SessionAttributeGetter.class).setAttribute(SessionAttributeEnumeration.THEME).execute().getOutput();
+			if(theme == null) {
+				Class<? extends Theme> themeClass = __getThemeClass__();
+				if(themeClass!=null) {
+					theme = __inject__(themeClass);
+					setSessionAttribute(SessionAttributeEnumeration.THEME, theme);
+					__windowBuilder__.setTheme(theme);
+				}
+			}
+			
 			Window window = __windowBuilder__.execute().getOutput();
 			if(window!=null) {
-				Theme theme = window.getTheme();
-				if(theme == null) {
-					Class<? extends Theme> themeClass = __getThemeClass__();
-					if(themeClass!=null) {
-						theme = __inject__(themeClass);
-						setSessionAttribute(SessionAttributeEnumeration.THEME, theme);
-						window.setTheme(theme);
-					}
-				}
-				
 				if(theme!=null) {
 					theme.process(window);	
 				}

@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.annotation.Default;
@@ -33,12 +35,14 @@ import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringMessageBuilder;
+import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.tree.Tree;
 import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.event.Events;
 import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.client.controller.icon.IconIdentifierGetter;
+import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
 import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.WebHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
@@ -113,34 +117,41 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 									//outputStringMessage.getProperties().setDisplay("tooltip");
 								}		
 							}else if(inputOutput instanceof OutputFile) {
-								Image image = null;
 								OutputFile outputFile = (OutputFile) inputOutput;
+								//Link
+								outputFile.getProperties().setUrl(__inject__(WebHelper.class).buildFileUrl(outputFile, componentBuilder.getRequest()));
+								//Thumbnail
+								Image thumbnail = null;
 								File file = outputFile.getValue();
-								if(Boolean.TRUE.equals(file.isImage())) {
-									image = __inject__(Image.class);
-									byte[] bytes = file.getBytes();
+								byte[] bytes = file.getBytes();
+								if(Boolean.TRUE.equals(file.isImage()) && (bytes!=null || outputFile.getProperties().getUrl()!=null)) {
+									//Thumbnail will be image itself
+									thumbnail = __inject__(Image.class);
 									if(bytes == null) {
 										//no data to be embbeded , browser will handle it by doing get using url
-										image.getProperties().setUrl(__inject__(WebHelper.class).buildFileUrl(outputFile, componentBuilder.getRequest()));
+										thumbnail.getProperties().setUrl(outputFile.getProperties().getUrl());
 									}else {
 										//data to be streamed using base64 encoding
-										image.getProperties().setValue(new DefaultStreamedContent(new ByteArrayInputStream(bytes), file.getMimeType()));
-										image.getProperties().setStream(Boolean.FALSE);	
-									}
-									image.getProperties().setWidth("40");
-									image.getProperties().setHeight("40");
+										thumbnail.getProperties().setValue(new DefaultStreamedContent(new ByteArrayInputStream(bytes), file.getMimeType()));
+										thumbnail.getProperties().setStream(Boolean.FALSE);	
+									}									
 								}else {
-									//We will use a thumbnail or icon as possible
-									image = __inject__(Image.class);									
-									image.getProperties().setLibrary("org.cyk.utility.client.controller.web.jsf.primefaces.atlantis.desktop.default");
-									image.getProperties().setName("image/icon.png");
-											
+									//Thumbnail will be an icon based on mime type
+									thumbnail = __inject__(Image.class);
+									HttpSession session = ((HttpServletRequest) componentBuilder.getRequest()).getSession();
+									Theme theme = (Theme) session.getAttribute(SessionAttributeEnumeration.THEME.name());
+									thumbnail.getProperties().setLibrary(theme == null 
+											? "org.cyk.utility.client.controller.web.jsf.primefaces.desktop.default"
+													: theme.getIdentifier());
+									thumbnail.getProperties().setName("image/icon/"+StringUtils.substringBefore(file.getMimeType(),"/")+".png");											
 								}
-								if(image!=null) {
-									image.getProperties().setAlt("My alternative message");
-									
+								if(thumbnail!=null) {
+									thumbnail.getProperties().setAlt(StringUtils.substringBefore(file.getMimeType(),"/"));
+									thumbnail.getProperties().setTitle(StringUtils.substringBefore(file.getMimeType(),"/"));
+									thumbnail.getProperties().setWidth("40");
+									thumbnail.getProperties().setHeight("40");
 								}
-								outputFile.getProperties().setImage(image);
+								outputFile.getProperties().setThumbnail(thumbnail);
 							}
 						}
 						

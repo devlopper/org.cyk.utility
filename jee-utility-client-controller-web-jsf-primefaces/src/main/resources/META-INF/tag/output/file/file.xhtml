@@ -11,6 +11,17 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
+			<!-- it has an url. this way we make the file to be accessible by user -->
+			<c:if test="#{not empty value.properties.url}">
+				<h:outputLink value="#{value.properties.url}" >LINK</h:outputLink>
+			</c:if>
+			
+			<!-- visual representation of the file : thumbnail as image -->
+			<c:if test="#{value.properties.thumbnail != null}">
+				<cyk:image value="#{value.properties.thumbnail}" />
+			</c:if>
+			
+			<!--
 			<c:set var="isImage" value="#{value.properties.value.mimeType.startsWith('image')}" />
 			<c:if test="#{isImage}">
 				<cyk:image value="#{value.properties.image}" />
@@ -19,6 +30,7 @@
 				SHOW FILE INFOS
 				<cyk:image value="#{value.properties.image}" />
 			</c:if>
+			-->
 			<!--
 			#{value.properties.value.name}
 			<p:graphicImage value="#{primefacesHelper.computeStreamedContent(value.properties.value)}" stream="false"/>

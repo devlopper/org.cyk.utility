@@ -36,25 +36,41 @@ public class OutputFilePage extends AbstractPageContainerManagedImpl implements 
 		Form form = __inject__(Form.class);
 		form.setData(__inject__(Data.class));
 		form.getData().setImageStreamed(__inject__(FileBuilder.class).setClazz(getClass()).setName("image01.png").execute().getOutput());
-		form.getData().setImageInSession(__inject__(FileBuilder.class).setName("image02.png").execute().getOutput().setIdentifier(729));
 		
-		__inject__(SessionAttributeSetter.class)
-			.setAttribute(form.getData().getImageInSession().getIdentifier())
-			.setValue(__inject__(FileBuilder.class).setClazz(getClass()).setName("image02.png").execute().getOutput())
-			.execute();
+		form.getData().setImageInSession(setFileInSessionAttribute("image02.png",729));
+		form.getData().setText(setFileInSessionAttribute("text.txt",1));
+		form.getData().setAudio(setFileInSessionAttribute("audio.txt",11).setMimeType("audio/audio"));
+		form.getData().setVideo(setFileInSessionAttribute("video.txt",12).setMimeType("video/video"));
+		form.getData().setApplication(setFileInSessionAttribute("application.txt",13).setMimeType("application/application"));
+		
+		form.getData().setImage(__inject__(File.class).setMimeType("image/png"));
 		
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
-		//viewBuilder.setRequest(__getRequest__());
+		
 		
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageStreamed");
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInSession");
 		//viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInDatabase");
 		//viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInFolder");
+		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "text");
+		//viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "image");
+		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "audio");
+		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "video");
+		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "application");
 		
 		//ComponentBuilder<?> componentBuilder = viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "file03");
 		//componentBuilder.setRequest(__getRequest__());
 		
 		return viewBuilder;
+	}
+	
+	private File setFileInSessionAttribute(String name,Object identifier) {
+		File file = __inject__(FileBuilder.class).setName(name).execute().getOutput().setIdentifier(identifier);
+		
+		__inject__(SessionAttributeSetter.class).setAttribute(file.getIdentifier())
+			.setValue(__inject__(FileBuilder.class).setClazz(getClass()).setName(name).execute().getOutput())
+			.execute();
+		return file;
 	}
 	
 	@Getter @Setter @Accessors(chain=true) @ToString
@@ -75,6 +91,18 @@ public class OutputFilePage extends AbstractPageContainerManagedImpl implements 
 		
 		@Input @InputFile
 		private File text;
+		
+		@Input @InputFile
+		private File image;
+		
+		@Input @InputFile
+		private File audio;
+		
+		@Input @InputFile
+		private File video;
+		
+		@Input @InputFile
+		private File application;
 	}
 	
 	@Getter @Setter @Accessors(chain=true) @ToString
