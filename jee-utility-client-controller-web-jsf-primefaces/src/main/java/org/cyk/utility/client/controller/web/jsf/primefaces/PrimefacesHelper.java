@@ -6,6 +6,7 @@ import java.io.Serializable;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.client.controller.component.Component;
@@ -61,6 +62,17 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	
 	public StreamedContent computeStreamedContent(File file) {
 		return new DefaultStreamedContent(new ByteArrayInputStream(file.getBytes()), file.getMimeType());
+	}
+	
+	public String getMediaPlayerFromMimeType(String mimeType) {
+		String player = null;
+		if(StringUtils.endsWithIgnoreCase(mimeType, "/pdf"))
+			player = "pdf";
+		else if(StringUtils.startsWithIgnoreCase(mimeType, "audio/"))
+			player = "quicktime";
+		else if(StringUtils.startsWithIgnoreCase(mimeType, "video/"))
+			player = "quicktime";
+		return player;
 	}
 	
 	/**/

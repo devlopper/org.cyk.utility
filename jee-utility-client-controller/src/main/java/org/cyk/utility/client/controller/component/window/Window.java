@@ -6,7 +6,6 @@ import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuMap;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
-import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.scope.Scope;
 
@@ -26,9 +25,6 @@ public interface Window extends VisibleComponent {
 	
 	View getView();
 	Window setView(View view);
-	
-	Theme getTheme();
-	Window setTheme(Theme theme);
 	
 	Dialog getDialog();
 	Window setDialog(Dialog dialog);

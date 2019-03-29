@@ -16,7 +16,9 @@ public class SessionAttributeGetterFunctionRunnableImpl extends AbstractFunction
 		setRunnable(new Runnable() {
 			@Override
 			public void run() {
-				HttpServletRequest request = (HttpServletRequest) __inject__(RequestGetter.class).execute().getOutput();
+				HttpServletRequest request = (HttpServletRequest) getFunction().getRequest();
+				if(request == null)
+					request = (HttpServletRequest) __inject__(RequestGetter.class).execute().getOutput();
 				HttpSession session = request.getSession();
 				if(session!=null)
 					setOutput(session.getAttribute(getFunction().getAttribute().name()));

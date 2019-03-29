@@ -1,5 +1,6 @@
 package org.cyk.utility.client.controller.component;
 
+import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.css.StyleBuilder;
 
 public interface VisibleComponentBuilder<COMPONENT extends VisibleComponent> extends ComponentBuilder<COMPONENT> {
@@ -13,6 +14,9 @@ public interface VisibleComponentBuilder<COMPONENT extends VisibleComponent> ext
 	
 	Object getTooltip();
 	VisibleComponentBuilder<COMPONENT> setTooltip(Object tooltip);
+	
+	Theme getTheme();
+	VisibleComponentBuilder<COMPONENT> setTheme(Theme theme);
 	
 	@Override ComponentBuilder<COMPONENT> setOutputProperty(Object key, Object value);
 	

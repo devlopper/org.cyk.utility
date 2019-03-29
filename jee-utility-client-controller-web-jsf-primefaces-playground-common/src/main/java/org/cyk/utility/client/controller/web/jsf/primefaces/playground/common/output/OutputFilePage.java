@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import org.cyk.utility.client.controller.component.annotation.Input;
 import org.cyk.utility.client.controller.component.annotation.InputFile;
+import org.cyk.utility.client.controller.component.output.OutputFileBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.AbstractDataImpl;
 import org.cyk.utility.client.controller.data.AbstractFormDataImpl;
@@ -41,21 +42,21 @@ public class OutputFilePage extends AbstractPageContainerManagedImpl implements 
 		form.getData().setVideo(setFileInSessionAttribute("video.txt",12).setMimeType("video/video"));
 		form.getData().setApplication(setFileInSessionAttribute("application.txt",13).setMimeType("application/application"));
 		
-		form.getData().setImage(__inject__(File.class).setMimeType("image/png"));
+		form.getData().setImageNotRenderedHere(setFileInSessionAttribute("image02.png",14));
 		
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		
 		
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageStreamed");
-		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInSession");
+		/*viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInSession");
 		//viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInDatabase");
 		//viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInFolder");
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "text");
-		//viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "image");
+		OutputFileBuilder outputFileBuilder = (OutputFileBuilder) viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageNotRenderedHere");
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "audio");
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "video");
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "application");
-		
+		*/
 		//ComponentBuilder<?> componentBuilder = viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "file03");
 		//componentBuilder.setRequest(__getRequest__());
 		
@@ -88,10 +89,10 @@ public class OutputFilePage extends AbstractPageContainerManagedImpl implements 
 		private File imageInFolder;
 		
 		@Input @InputFile
-		private File text;
+		private File imageNotRenderedHere;
 		
 		@Input @InputFile
-		private File image;
+		private File text;
 		
 		@Input @InputFile
 		private File audio;

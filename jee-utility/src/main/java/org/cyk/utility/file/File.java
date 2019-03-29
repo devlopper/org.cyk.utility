@@ -6,6 +6,9 @@ public interface File extends Objectable {
 
 	@Override File setIdentifier(Object identifier);
 	
+	String getPath();
+	File setPath(String path);
+	
 	String getName();
 	File setName(String name);
 	
@@ -20,6 +23,11 @@ public interface File extends Objectable {
 	
 	byte[] getBytes();
 	File setBytes(byte[] bytes);
+	
+	String getUniformResourceLocator();
+	File setUniformResourceLocator(String uniformResourceLocator);
+	
+	/**/
 	
 	Boolean isImage();
 }

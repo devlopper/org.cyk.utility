@@ -4482,7 +4482,27 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getLink() {
+		return get(LINK);
+	}
+
+	public Properties setLink(Object link) {
+		set(LINK, link);
+		return this;
+	}
+	
+	public Object getHref() {
+		return get(HREF);
+	}
+
+	public Properties setHref(Object href) {
+		set(HREF, href);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String HREF = "HREF";
+	public static final String LINK = "LINK";
 	public static final String IMAGE = "IMAGE";
 	public static final String NODE_TYPE = "NODE_TYPE";
 	public static final String ROOT = "ROOT";

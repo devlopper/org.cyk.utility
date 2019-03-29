@@ -99,6 +99,13 @@ public class NavigationBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 		assertionHelper.assertEquals("http://localhost:8080/select.jsf?entityclass=myentity&actionclass=select&actionidentifier=select&nextactionclass=process&nextactionidentifier=validate",navigation.getUniformResourceLocator().toString());
 	}
 	
+	@Test
+	public void get_file() {
+		NavigationBuilder builder = __inject__(NavigationBuilder.class).setIdentifier("__getfile__").setParameters("identifier","1","location","session");
+		Navigation navigation = builder.execute().getOutput();
+		assertionHelper.assertEquals("http://localhost:8080/__file__/?identifier=1&location=session",navigation.getUniformResourceLocator().toString());
+	}
+	
 	/*
 	@Test
 	public void identifier_list_asSystemAction_class_myentity_action_list() {
@@ -153,6 +160,8 @@ public class NavigationBuilderUnitTest extends AbstractArquillianUnitTestWithDef
 						setOutput("http://localhost:8080/myentity/read.jsf");
 					else if("customListView".equals(identifier))
 						setOutput("http://localhost:8080/customlist.jsf");
+					else if("__getfile__".equals(identifier))
+						setOutput("http://localhost:8080/__file__/");
 				}
 			});
 		}

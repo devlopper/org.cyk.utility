@@ -9,9 +9,24 @@ public interface FileBuilder extends FunctionWithPropertiesAsInput<File> {
 	InputStream getInputStream();
 	FileBuilder setInputStream(InputStream inputStream);
 	
+	byte[] getBytes();
+	FileBuilder setBytes(byte[] bytes);
+	
 	Class<?> getClazz();
 	FileBuilder setClazz(Class<?> clazz);
 	
+	String getPath();
+	FileBuilder setPath(String path);
+	
 	String getName();
 	FileBuilder setName(String name);
+	
+	String getExtension();
+	FileBuilder setExtension(String extension);
+	
+	String getMimeType();
+	FileBuilder setMimeType(String mimeType);
+	
+	String getUniformResourceLocator();
+	FileBuilder setUniformResourceLocator(String uniformResourceLocator);
 }

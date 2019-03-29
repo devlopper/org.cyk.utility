@@ -7,9 +7,21 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOu
 public class SessionAttributeSetterImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements SessionAttributeSetter,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Object request;
 	private Object attribute;
 	private Object value;
 
+	@Override
+	public Object getRequest() {
+		return request;
+	}
+	
+	@Override
+	public SessionAttributeSetter setRequest(Object request) {
+		this.request = request;
+		return this;
+	}
+	
 	@Override
 	public Object getAttribute() {
 		return attribute;

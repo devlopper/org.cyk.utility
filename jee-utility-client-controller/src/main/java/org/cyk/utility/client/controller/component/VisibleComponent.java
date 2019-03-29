@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.component;
 
 import org.cyk.utility.client.controller.component.command.Command;
+import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.device.DeviceScreenArea;
 
@@ -22,4 +23,6 @@ public interface VisibleComponent extends Component {
 	Object getTooltip();
 	VisibleComponent setTooltip(Object tooltip);
 
+	Theme getTheme();
+	VisibleComponent setTheme(Theme theme);
 }

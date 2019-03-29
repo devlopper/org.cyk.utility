@@ -4,8 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.annotation.Default;
@@ -18,6 +16,7 @@ import org.cyk.utility.client.controller.component.InputOutput;
 import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.dialog.Dialog;
+import org.cyk.utility.client.controller.component.file.File;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.image.Image;
 import org.cyk.utility.client.controller.component.input.Input;
@@ -35,19 +34,15 @@ import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringMessageBuilder;
-import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.tree.Tree;
 import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.event.Events;
 import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.client.controller.icon.IconIdentifierGetter;
-import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
 import org.cyk.utility.client.controller.web.ComponentHelper;
-import org.cyk.utility.client.controller.web.WebHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.css.Style;
-import org.cyk.utility.file.File;
 import org.cyk.utility.string.StringHelper;
 import org.primefaces.model.DefaultStreamedContent;
 
@@ -118,18 +113,27 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 								}		
 							}else if(inputOutput instanceof OutputFile) {
 								OutputFile outputFile = (OutputFile) inputOutput;
+								/*
 								//Link
-								outputFile.getProperties().setUrl(__inject__(WebHelper.class).buildFileUrl(outputFile, componentBuilder.getRequest()));
+								String url = __inject__(WebHelper.class).buildFileUrl(outputFile, componentBuilder.getRequest());
+								Link link = null;
+								if(__inject__(StringHelper.class).isNotBlank(url)) {
+									link = __inject__(LinkBuilder.class).execute().getOutput();
+									link.getProperties().setValue("LINK");
+									link.getProperties().setHref(url);
+									outputFile.getProperties().setLink(link);
+								}
+								
 								//Thumbnail
 								Image thumbnail = null;
 								File file = outputFile.getValue();
 								byte[] bytes = file.getBytes();
-								if(Boolean.TRUE.equals(file.isImage()) && (bytes!=null || outputFile.getProperties().getUrl()!=null)) {
+								if(Boolean.TRUE.equals(file.isImage()) && (bytes!=null || __inject__(StringHelper.class).isNotBlank(url))) {
 									//Thumbnail will be image itself
 									thumbnail = __inject__(Image.class);
 									if(bytes == null) {
 										//no data to be embbeded , browser will handle it by doing get using url
-										thumbnail.getProperties().setUrl(outputFile.getProperties().getUrl());
+										thumbnail.getProperties().setUrl(url);
 									}else {
 										//data to be streamed using base64 encoding
 										thumbnail.getProperties().setValue(new DefaultStreamedContent(new ByteArrayInputStream(bytes), file.getMimeType()));
@@ -145,6 +149,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 													: theme.getIdentifier());
 									thumbnail.getProperties().setName("image/icon/"+StringUtils.substringBefore(file.getMimeType(),"/")+".png");											
 								}
+								
 								if(thumbnail!=null) {
 									thumbnail.getProperties().setAlt(StringUtils.substringBefore(file.getMimeType(),"/"));
 									thumbnail.getProperties().setTitle(StringUtils.substringBefore(file.getMimeType(),"/"));
@@ -152,6 +157,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 									thumbnail.getProperties().setHeight("40");
 								}
 								outputFile.getProperties().setThumbnail(thumbnail);
+								*/
 							}
 						}
 						
@@ -216,6 +222,21 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 								return FacesContext.getCurrentInstance().getMessages(clientId).hasNext();
 							}
 						});
+					}else if(component instanceof File) {
+						File file = (File) component;
+						org.cyk.utility.file.File __file__ = file.getValue();
+						if(Boolean.TRUE.equals(file.getIsEmbbeded())) {
+							byte[] bytes = __file__.getBytes();
+							if(bytes == null) {
+								
+							}else{
+								file.getProperties().setValue(new DefaultStreamedContent(new ByteArrayInputStream(bytes), __file__.getMimeType()));
+							}
+						}else {
+							file.getProperties().setUniformResourceLocator(__file__.getUniformResourceLocator());
+						}
+					}else if(component instanceof Image) {
+						
 					}
 				}else if(component instanceof Insert) {
 					((Insert)component).getProperties().setName(((Insert)component).getName());

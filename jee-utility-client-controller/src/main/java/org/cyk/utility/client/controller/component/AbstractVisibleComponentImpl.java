@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.command.Command;
+import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.device.DeviceScreenArea;
@@ -14,6 +15,7 @@ public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl
 	private DeviceScreenArea area;
 	private Style style;
 	private Object tooltip;
+	private Theme theme;
 	
 	@Override
 	public DeviceScreenArea getArea() {
@@ -77,6 +79,17 @@ public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl
 	@Override
 	public VisibleComponent setTooltip(Object tooltip) {
 		this.tooltip = tooltip;
+		return this;
+	}
+	
+	@Override
+	public Theme getTheme() {
+		return theme;
+	}
+	
+	@Override
+	public VisibleComponent setTheme(Theme theme) {
+		this.theme = theme;
 		return this;
 	}
 	

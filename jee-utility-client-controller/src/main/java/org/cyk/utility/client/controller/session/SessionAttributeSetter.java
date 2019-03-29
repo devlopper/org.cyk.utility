@@ -4,6 +4,9 @@ import org.cyk.utility.function.FunctionWithPropertiesAsInputAndVoidAsOutput;
 
 public interface SessionAttributeSetter extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 	
+	Object getRequest();
+	SessionAttributeSetter setRequest(Object request);
+	
 	Object getAttribute();
 	SessionAttributeSetter setAttribute(Object attribute);
 	

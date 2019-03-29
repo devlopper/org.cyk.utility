@@ -43,6 +43,12 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>__file__GetFunction</from-outcome>
+			<to-view-id>/private/__file__/</to-view-id>
+			<redirect />
+		</navigation-case>
+		
 	</navigation-rule>
 	
 </faces-config>

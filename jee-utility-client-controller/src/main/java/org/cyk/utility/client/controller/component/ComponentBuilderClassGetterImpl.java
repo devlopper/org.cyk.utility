@@ -22,6 +22,7 @@ import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneCo
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneRadioBuilder;
 import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.component.output.OutputFileBuilder;
+import org.cyk.utility.client.controller.component.output.OutputStringLinkBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
@@ -96,6 +97,8 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 					
 				if(__injectClassHelper__().isInstanceOf(baseClass, OutputFileBuilder.class))
 					builderClass = OutputFileBuilder.class;
+				else if(__injectClassHelper__().isInstanceOf(baseClass, OutputStringLinkBuilder.class))
+					builderClass = OutputStringLinkBuilder.class;
 				else if(__injectClassHelper__().isInstanceOf(baseClass, OutputBuilder.class))
 					builderClass = OutputStringTextBuilder.class;
 			}

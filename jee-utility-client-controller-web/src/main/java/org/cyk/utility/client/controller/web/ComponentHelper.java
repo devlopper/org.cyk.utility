@@ -10,6 +10,7 @@ import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeButton;
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeLink;
+import org.cyk.utility.client.controller.component.file.File;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.cell.Cell;
 import org.cyk.utility.client.controller.component.image.Image;
@@ -25,12 +26,14 @@ import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneRa
 import org.cyk.utility.client.controller.component.layout.Insert;
 import org.cyk.utility.client.controller.component.layout.Layout;
 import org.cyk.utility.client.controller.component.layout.LayoutItem;
+import org.cyk.utility.client.controller.component.link.Link;
 import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeColumnContext;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeColumnPanel;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeRowBar;
 import org.cyk.utility.client.controller.component.output.OutputFile;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
+import org.cyk.utility.client.controller.component.output.OutputStringLink;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
@@ -100,12 +103,24 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 		return object instanceof OutputStringMessage;
 	}
 	
+	public Boolean isOutputStringLink(Object object) {
+		return object instanceof OutputStringLink;
+	}
+	
 	public Boolean isOutputFile(Object object) {
 		return object instanceof OutputFile;
 	}
 	
+	public Boolean isFile(Object object) {
+		return object instanceof File;
+	}
+	
 	public Boolean isImage(Object object) {
 		return object instanceof Image;
+	}
+	
+	public Boolean isLink(Object object) {
+		return object instanceof Link;
 	}
 	
 	public Boolean isLayout(Object object) {

@@ -11,9 +11,9 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			<!-- it has an url. this way we make the file to be accessible by user -->
-			<c:if test="#{not empty value.properties.url}">
-				<h:outputLink value="#{value.properties.url}" >LINK</h:outputLink>
+			<!-- it has a link. this way we make the file accessible to the user -->
+			<c:if test="#{value.properties.link != null}">
+				<cyk:outputLink value="#{value.properties.link}"/>
 			</c:if>
 			
 			<!-- visual representation of the file : thumbnail as image -->

@@ -9,7 +9,7 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private byte[] bytes;
-	private String name,extension,mimeType;
+	private String path,name,extension,mimeType,uniformResourceLocator;
 	private Long size;
 	
 	@Override
@@ -28,6 +28,17 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 		return this;
 	}
 
+	@Override
+	public String getPath() {
+		return path;
+	}
+
+	@Override
+	public File setPath(String path) {
+		this.path = path;
+		return this;
+	}
+	
 	@Override
 	public String getName() {
 		return name;
@@ -69,6 +80,17 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	@Override
 	public File setSize(Long size) {
 		this.size = size;
+		return this;
+	}
+	
+	@Override
+	public String getUniformResourceLocator() {
+		return uniformResourceLocator;
+	}
+	
+	@Override
+	public File setUniformResourceLocator(String uniformResourceLocator) {
+		this.uniformResourceLocator = uniformResourceLocator;
 		return this;
 	}
 	

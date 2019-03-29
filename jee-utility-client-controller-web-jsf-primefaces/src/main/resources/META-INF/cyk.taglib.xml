@@ -67,6 +67,11 @@
     </tag>
     
     <tag>
+        <tag-name>outputLink</tag-name>
+        <source>tag/output/text/link.xhtml</source>
+    </tag>
+    
+    <tag>
         <tag-name>outputFile</tag-name>
         <source>tag/output/file/file.xhtml</source>
     </tag>
@@ -297,9 +302,21 @@
         <source>tag/hierarchy/organigram/organigram.xhtml</source>
     </tag>
     
+    <!-- File -->
+    <tag>
+        <tag-name>file</tag-name>
+        <source>tag/file/file.xhtml</source>
+    </tag>
+    
     <!-- Image -->
     <tag>
         <tag-name>image</tag-name>
         <source>tag/image/graphicImage.xhtml</source>
+    </tag>
+    
+    <!-- Link -->
+    <tag>
+        <tag-name>link</tag-name>
+        <source>tag/link/link.xhtml</source>
     </tag>
 </facelet-taglib>

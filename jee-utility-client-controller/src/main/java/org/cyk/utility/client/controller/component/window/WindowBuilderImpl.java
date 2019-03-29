@@ -12,10 +12,7 @@ import org.cyk.utility.client.controller.component.menu.MenuMap;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilderMap;
 import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
-import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
-import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
-import org.cyk.utility.client.controller.session.SessionAttributeGetter;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.node.SystemNodeClient;
 
@@ -25,7 +22,6 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	private OutputStringTextBuilder title;
 	private OutputStringTextBuilderMap outputStringTextMap;
 	private ViewBuilder view;
-	private Theme theme;
 	private MenuBuilderMap menuMap;
 	private DialogBuilder dialog;
 	private WindowRenderType renderType;
@@ -74,12 +70,12 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 					window.getMenuMap().set(entry.getKey(),__inject__(MenuGetter.class).setScopeClass(entry.getKey()).execute().getOutput());
 			}	
 		}
-		
+		/*
 		Theme theme = getTheme();
 		if(theme == null)
 			theme = (Theme) __inject__(SessionAttributeGetter.class).setAttribute(SessionAttributeEnumeration.THEME).execute().getOutput();
 		window.setTheme(theme);
-		
+		*/
 		DialogBuilder dialog = getDialog(Boolean.TRUE);
 		if(dialog!=null)
 			window.setDialog(dialog.execute().getOutput());
@@ -177,17 +173,6 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	@Override
 	public WindowBuilder setView(ViewBuilder view) {
 		this.view = view;
-		return this;
-	}
-	
-	@Override
-	public Theme getTheme() {
-		return theme;
-	}
-	
-	@Override
-	public WindowBuilder setTheme(Theme theme) {
-		this.theme = theme;
 		return this;
 	}
 	

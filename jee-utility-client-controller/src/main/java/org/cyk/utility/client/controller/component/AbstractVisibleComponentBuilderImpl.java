@@ -1,5 +1,8 @@
 package org.cyk.utility.client.controller.component;
 
+import org.cyk.utility.client.controller.component.theme.Theme;
+import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
+import org.cyk.utility.client.controller.session.SessionAttributeGetter;
 import org.cyk.utility.css.StyleBuilder;
 import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.string.StringHelper;
@@ -9,6 +12,7 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 
 	private StyleBuilder style;
 	private Object tooltip;
+	private Theme theme;
 	
 	@Override
 	protected void __execute__(COMPONENT component) {
@@ -35,6 +39,11 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 			Object tooltip = getTooltip();
 			component.setTooltip(tooltip);
 		}
+		
+		Theme theme = getTheme();
+		if(theme == null)
+			theme = (Theme) __inject__(SessionAttributeGetter.class).setRequest(getRequest()).setAttribute(SessionAttributeEnumeration.THEME).execute().getOutput();
+		component.setTheme(theme);
 	}
 	
 	@Override
@@ -79,6 +88,17 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 	@Override
 	public Object getTooltip() {
 		return tooltip;
+	}
+	
+	@Override
+	public Theme getTheme() {
+		return theme;
+	}
+	
+	@Override
+	public VisibleComponentBuilder<COMPONENT> setTheme(Theme theme) {
+		this.theme = theme;
+		return this;
 	}
 
 	public static final String FIELD_STYLE = "style";

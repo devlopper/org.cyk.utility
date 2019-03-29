@@ -50,6 +50,12 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>outputLinkView</from-outcome>
+			<to-view-id>/output/link.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>outputFileView</from-outcome>
 			<to-view-id>/output/file.jsf</to-view-id>
 			<redirect />

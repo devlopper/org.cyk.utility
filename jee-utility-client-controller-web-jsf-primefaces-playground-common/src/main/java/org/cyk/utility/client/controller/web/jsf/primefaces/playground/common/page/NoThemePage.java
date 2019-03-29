@@ -17,7 +17,7 @@ public class NoThemePage extends AbstractPageContainerManagedImpl implements Ser
 
 	@Override
 	public Window getWindow() {
-		return super.getWindow().setTheme(null);
+		return (Window) super.getWindow().setTheme(null);
 	}
 	
 }

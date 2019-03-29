@@ -8,7 +8,6 @@ import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuMap;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
-import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.scope.Scope;
 import org.cyk.utility.scope.ScopeSession;
@@ -18,7 +17,6 @@ public class WindowImpl extends AbstractVisibleComponentImpl implements Window,S
 
 	private OutputStringText title;
 	private View view;
-	private Theme theme;
 	private MenuMap menuMap;
 	private Dialog dialog;
 	private WindowRenderType renderType;
@@ -60,17 +58,6 @@ public class WindowImpl extends AbstractVisibleComponentImpl implements Window,S
 	@Override
 	public Window setView(View view) {
 		this.view = view;
-		return this;
-	}
-	
-	@Override
-	public Theme getTheme() {
-		return theme;
-	}
-	
-	@Override
-	public Window setTheme(Theme theme) {
-		this.theme = theme;
 		return this;
 	}
 	

@@ -12,15 +12,33 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 
 	private InputStream inputStream;
 	private Class<?> clazz;
-	private String name;
+	private String path,name,uniformResourceLocator,mimeType,extension;
+	private byte[] bytes;
 	
 	@Override
-	protected File __execute__() throws Exception {
+ 	protected File __execute__() throws Exception {
 		File file = __inject__(File.class);
+		String uniformResourceLocator = getUniformResourceLocator();
+		file.setUniformResourceLocator(uniformResourceLocator);
+		
+		String path = getPath();
+		file.setPath(path);
+		
 		String name = getName();
 		file.setName(FilenameUtils.getBaseName(name));
-		file.setExtension(FilenameUtils.getExtension(name));
-		file.setMimeType(__inject__(MimeTypeGetter.class).setExtension(file.getExtension()).execute().getOutput());
+		
+		String extension = getExtension();
+		if(__injectStringHelper__().isBlank(extension))
+			extension = FilenameUtils.getExtension(name);
+		file.setExtension(extension);
+		
+		String mimeType = getMimeType();
+		if(__injectStringHelper__().isBlank(mimeType))
+			mimeType = __inject__(MimeTypeGetter.class).setExtension(file.getExtension()).execute().getOutput();
+		file.setMimeType(mimeType);
+		
+		byte[] bytes = getBytes();
+		file.setBytes(bytes);
 		
 		if(file.getBytes() == null) {
 			InputStream inputStream = getInputStream();
@@ -73,5 +91,56 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		this.name = name;
 		return this;
 	}
+	
+	@Override
+	public String getUniformResourceLocator() {
+		return uniformResourceLocator;
+	}
+	@Override
+	public FileBuilder setUniformResourceLocator(String uniformResourceLocator) {
+		this.uniformResourceLocator = uniformResourceLocator;
+		return this;
+	}
 
+	@Override
+	public byte[] getBytes() {
+		return bytes;
+	}
+	@Override
+	public FileBuilder setBytes(byte[] bytes) {
+		this.bytes = bytes;
+		return this;
+	}
+	
+	@Override
+	public String getMimeType() {
+		return mimeType;
+	}
+	@Override
+	public FileBuilder setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+		return this;
+	}
+	
+	@Override
+	public String getPath() {
+		return path;
+	}
+	
+	@Override
+	public FileBuilder setPath(String path) {
+		this.path = path;
+		return this;
+	}
+	
+	@Override
+	public String getExtension() {
+		return extension;
+	}
+	
+	@Override
+	public FileBuilder setExtension(String extension) {
+		this.extension = extension;
+		return this;
+	}
 }
