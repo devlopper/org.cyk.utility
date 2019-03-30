@@ -30,4 +30,5 @@ public interface File extends Objectable {
 	/**/
 	
 	Boolean isImage();
+	Boolean isText();
 }

@@ -17,26 +17,41 @@
 				<c:if test="#{not empty value.properties.uniformResourceLocator}">
 					<c:if test="#{value.value.mimeType.startsWith('image/')}">
 						<p:graphicImage url="#{value.properties.uniformResourceLocator}" />
+						<c:set var="rendered" value="true"/>
 					</c:if>
 					<c:if test="#{value.value.mimeType.startsWith('audio/') or value.value.mimeType.startsWith('video/') or value.value.mimeType.endsWith('/pdf')}">
 						<p:media value="#{value.properties.uniformResourceLocator}" player="#{primefacesHelper.getMediaPlayerFromMimeType(value.value.mimeType)}"/>
+						<c:set var="rendered" value="true"/>
+					</c:if>
+					<c:if test="#{value.value.mimeType.startsWith('text/')}">
+						<iframe src="#{value.properties.uniformResourceLocator}"/>
+						<c:set var="rendered" value="true"/>
 					</c:if>
 				</c:if>
-				<c:if test="#{empty value.properties.uniformResourceLocator}">
-					URL IS EMPTY 
+				
+				<c:if test="#{not rendered}">
+					<c:if test="#{empty value.properties.uniformResourceLocator}">
+						URL IS EMPTY 
+					</c:if>
+					
+					<c:if test="#{not empty value.properties.uniformResourceLocator}">
+						streaming of mime type #{value.value.mimeType} not yet handled
+					</c:if>
 				</c:if>
 			</c:if>
 			
 			<!-- Embbeded content -->
 			<c:if test="#{value.isEmbbeded}">
+				<c:if test="#{value.value.mimeType.startsWith('text/')}">
+					<h:outputText value="#{value.properties.value}" escape="false" />
+					<c:set var="rendered" value="true"/>
+				</c:if>
 				<c:if test="#{value.value.mimeType.startsWith('image/')}">
 					<p:graphicImage value="#{value.properties.value}" stream="false" />
+					<c:set var="rendered" value="true"/>
 				</c:if>
-				<c:if test="#{value.value.mimeType.startsWith('text/')}">
-					EMBBEDED TEXT FILE NOT YET HANDLED
-				</c:if>
-				<c:if test="#{value.value.mimeType.startsWith('audio/')}">
-					EMBBEDED AUDIO FILE NOT YET HANDLED
+				<c:if test="#{not rendered}">
+					embedding of mime type #{value.value.mimeType} not yet handled
 				</c:if>
 			</c:if>
 			

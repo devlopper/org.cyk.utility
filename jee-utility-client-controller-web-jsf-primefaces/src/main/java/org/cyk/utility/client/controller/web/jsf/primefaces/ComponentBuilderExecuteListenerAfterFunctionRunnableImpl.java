@@ -230,7 +230,12 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 							if(bytes == null) {
 								
 							}else{
-								file.getProperties().setValue(new DefaultStreamedContent(new ByteArrayInputStream(bytes), __file__.getMimeType()));
+								Object value = null;
+								if(Boolean.TRUE.equals(__file__.isImage()))
+									value = new DefaultStreamedContent(new ByteArrayInputStream(bytes), __file__.getMimeType());
+								else if(Boolean.TRUE.equals(__file__.isText()))
+									value = new String(bytes);
+								file.getProperties().setValue(value);
 							}
 						}else {
 							file.getProperties().setUniformResourceLocator(__file__.getUniformResourceLocator());

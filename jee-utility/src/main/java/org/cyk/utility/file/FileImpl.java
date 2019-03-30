@@ -100,6 +100,11 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	}
 	
 	@Override
+	public Boolean isText() {
+		return StringUtils.startsWithIgnoreCase(getMimeType(), "text/");
+	}
+	
+	@Override
 	public String toString() {
 		return getName()+"."+getExtension()+","+getMimeType()+"|"+getSize();
 	}

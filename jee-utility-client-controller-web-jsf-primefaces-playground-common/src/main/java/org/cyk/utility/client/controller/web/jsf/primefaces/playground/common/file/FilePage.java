@@ -26,11 +26,20 @@ public class FilePage extends AbstractPageContainerManagedImpl implements Serial
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		
 		FileBuilder fileBuilder = __inject__(FileBuilder.class);
-		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("image01.png");
+		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("imageStreamed.png");
 		viewBuilder.addComponentBuilder(fileBuilder);
 		
 		fileBuilder = __inject__(FileBuilder.class);
-		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("image01.png");
+		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("imageEmbedded.png");
+		fileBuilder.setIsEmbeddable(Boolean.TRUE);
+		viewBuilder.addComponentBuilder(fileBuilder);
+		
+		fileBuilder = __inject__(FileBuilder.class);
+		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("textStreamed.txt");
+		viewBuilder.addComponentBuilder(fileBuilder);
+		
+		fileBuilder = __inject__(FileBuilder.class);
+		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("textEmbedded.txt");
 		fileBuilder.setIsEmbeddable(Boolean.TRUE);
 		viewBuilder.addComponentBuilder(fileBuilder);
 		
