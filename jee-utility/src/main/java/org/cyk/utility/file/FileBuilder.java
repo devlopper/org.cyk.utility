@@ -12,6 +12,9 @@ public interface FileBuilder extends FunctionWithPropertiesAsInput<File> {
 	byte[] getBytes();
 	FileBuilder setBytes(byte[] bytes);
 	
+	Long getSize();
+	FileBuilder setSize(Long size);
+	
 	Class<?> getClazz();
 	FileBuilder setClazz(Class<?> clazz);
 	

@@ -1,22 +1,28 @@
-package org.cyk.utility.client.controller.component.image;
+package org.cyk.utility.client.controller.component.file;
 
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
-import org.cyk.utility.client.controller.component.file.FileBuilder;
 
-public class ImageBuilderImpl extends AbstractVisibleComponentBuilderImpl<Image> implements ImageBuilder,Serializable {
+public class FileImageBuilderImpl extends AbstractVisibleComponentBuilderImpl<FileImage> implements FileImageBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private FileBuilder file;
 	private Integer width,height;
 	
 	@Override
-	protected void __execute__(Image image) {
+	protected void __execute__(FileImage image) {
 		super.__execute__(image);
 		FileBuilder file = getFile();
-		if(file != null)
+		if(file != null) {
+			if(file.getContext()==null)
+				file.setContext(getContext());
+			if(file.getUniformResourceLocatorMap()==null)
+				file.setUniformResourceLocatorMap(getUniformResourceLocatorMap());
+			if(file.getRequest()==null)
+				file.setRequest(getRequest());
 			image.setFile(file.execute().getOutput());
+		}
 		
 		Integer width = getWidth();
 		image.setWidth(width);
@@ -36,7 +42,7 @@ public class ImageBuilderImpl extends AbstractVisibleComponentBuilderImpl<Image>
 	}
 
 	@Override
-	public ImageBuilder setFile(FileBuilder file) {
+	public FileImageBuilder setFile(FileBuilder file) {
 		this.file = file;
 		return this;
 	}
@@ -47,7 +53,7 @@ public class ImageBuilderImpl extends AbstractVisibleComponentBuilderImpl<Image>
 	}
 	
 	@Override
-	public ImageBuilder setWidth(Integer width) {
+	public FileImageBuilder setWidth(Integer width) {
 		this.width = width;
 		return this;
 	}
@@ -58,7 +64,7 @@ public class ImageBuilderImpl extends AbstractVisibleComponentBuilderImpl<Image>
 	}
 	
 	@Override
-	public ImageBuilder setHeight(Integer height) {
+	public FileImageBuilder setHeight(Integer height) {
 		this.height = height;
 		return this;
 	}

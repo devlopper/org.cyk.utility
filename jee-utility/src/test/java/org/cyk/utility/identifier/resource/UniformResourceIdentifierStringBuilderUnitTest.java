@@ -36,6 +36,24 @@ public class UniformResourceIdentifierStringBuilderUnitTest extends AbstractArqu
 	}
 	
 	@Test
+	public void string_http_localhost(){
+		UniformResourceIdentifierStringBuilder builder = __inject__(UniformResourceIdentifierStringBuilder.class);
+		assertionHelper.assertEquals("http://localhost/", builder.setString("http://localhost/").execute().getOutput());
+	}
+	
+	@Test
+	public void string_http_localhost_query_a_equal_b(){
+		UniformResourceIdentifierStringBuilder builder = __inject__(UniformResourceIdentifierStringBuilder.class);
+		assertionHelper.assertEquals("http://localhost/?a=b", builder.setString("http://localhost/?a=b").execute().getOutput());
+	}
+	
+	@Test
+	public void string_https_www_google_com(){
+		UniformResourceIdentifierStringBuilder builder = __inject__(UniformResourceIdentifierStringBuilder.class);
+		assertionHelper.assertEquals("https://www.google.com/", builder.setString("https://www.google.com/").execute().getOutput());
+	}
+	
+	@Test
 	public void format_arguments_http_localhost_8080_slash(){
 		UniformResourceIdentifierStringBuilder builder = __inject__(UniformResourceIdentifierStringBuilder.class);
 		assertionHelper.assertEquals("http://localhost:8080/", builder.setScheme("http").setHost("localhost").setPort(8080).setPath("/").execute().getOutput());

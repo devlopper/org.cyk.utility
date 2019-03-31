@@ -1,14 +1,18 @@
 package org.cyk.utility.client.controller.component.output;
 
-import org.cyk.utility.client.controller.component.image.ImageBuilder;
+import org.cyk.utility.client.controller.component.file.FileBuilder;
+import org.cyk.utility.client.controller.component.file.FileImageBuilder;
 import org.cyk.utility.client.controller.component.link.LinkBuilder;
-import org.cyk.utility.file.File;
 import org.cyk.utility.repository.RepositoryType;
 
-public interface OutputFileBuilder extends OutputBuilder<OutputFile,File> {
+public interface OutputFileBuilder extends OutputBuilder<OutputFile,org.cyk.utility.file.File> {
 	
 	RepositoryType getRepositoryType();
 	OutputFileBuilder setRepositoryType(RepositoryType repositoryType);
+	
+	FileBuilder getFile();
+	FileBuilder getFile(Boolean injectIfNull);
+	OutputFileBuilder setFile(FileBuilder file);
 	
 	LinkBuilder getLink();
 	LinkBuilder getLink(Boolean injectIfNull);
@@ -17,9 +21,9 @@ public interface OutputFileBuilder extends OutputBuilder<OutputFile,File> {
 	Boolean getIsLinkDerivable();
 	OutputFileBuilder setIsLinkDerivable(Boolean isLinkDerivable);
 	
-	ImageBuilder getThumbnail();
-	ImageBuilder getThumbnail(Boolean injectIfNull);
-	OutputFileBuilder setThumbnail(ImageBuilder thumbnail);
+	FileImageBuilder getThumbnail();
+	FileImageBuilder getThumbnail(Boolean injectIfNull);
+	OutputFileBuilder setThumbnail(FileImageBuilder thumbnail);
 	
 	Boolean getIsThumbnailDerivable();
 	OutputFileBuilder setIsThumbnailDerivable(Boolean isThumbnailDerivable);
@@ -27,4 +31,8 @@ public interface OutputFileBuilder extends OutputBuilder<OutputFile,File> {
 	Boolean getIsThumbnailDerivableFromFile();
 	OutputFileBuilder setIsThumbnailDerivableFromFile(Boolean isThumbnailDerivableFromFile);
 	
+	/**/
+	
+	String PROPERTY_FILE = "file";
+	String PROPERTY_LINK = "link";
 }

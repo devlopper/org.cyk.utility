@@ -13,7 +13,7 @@
 		<ui:define name="valueIsNotNull">
 			
 			<!-- Streamed content -->
-			<c:if test="#{not value.isEmbbeded}">
+			<c:if test="#{not value.isEmbedded}">
 				<c:if test="#{not empty value.properties.uniformResourceLocator}">
 					<c:if test="#{value.value.mimeType.startsWith('image/')}">
 						<p:graphicImage url="#{value.properties.uniformResourceLocator}" />
@@ -25,6 +25,12 @@
 					</c:if>
 					<c:if test="#{value.value.mimeType.startsWith('text/')}">
 						<iframe src="#{value.properties.uniformResourceLocator}"/>
+						<c:set var="rendered" value="true"/>
+					</c:if>
+				</c:if>
+				<c:if test="#{empty value.properties.uniformResourceLocator}">
+					<c:if test="#{value.value.mimeType.startsWith('image/')}">
+						<p:graphicImage library="#{value.theme.identifier}" name="#{value.value.getPathAndNameAndExtension()}" />
 						<c:set var="rendered" value="true"/>
 					</c:if>
 				</c:if>
@@ -40,8 +46,8 @@
 				</c:if>
 			</c:if>
 			
-			<!-- Embbeded content -->
-			<c:if test="#{value.isEmbbeded}">
+			<!-- Embedded content -->
+			<c:if test="#{value.isEmbedded}">
 				<c:if test="#{value.value.mimeType.startsWith('text/')}">
 					<h:outputText value="#{value.properties.value}" escape="false" />
 					<c:set var="rendered" value="true"/>

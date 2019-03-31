@@ -27,6 +27,9 @@ public interface UniformResourceIdentifierStringBuilder extends StringFunction {
 	UniformResourceIdentifierStringBuilder setPath(Object path);
 	Object getPath();
 	
+	UniformResourceIdentifierStringBuilder setQuery(Object path);
+	Object getQuery();
+	
 	UniformResourceIdentifierStringBuilder setParameterMap(ObjectByObjectMap parameterMap);
 	ObjectByObjectMap getParameterMap(Boolean injectIfNull);
 	ObjectByObjectMap getParameterMap();
@@ -43,10 +46,13 @@ public interface UniformResourceIdentifierStringBuilder extends StringFunction {
 	/**
 	 * scheme://host:port/path
 	 */
-	String FORMAT = "%s://%s:%s/%s";
+	String FORMAT = "%s://%s%s%s/%s%s%s";
 	
 	Integer FORMAT_ARGUMENT_SCHEME = 0;
 	Integer FORMAT_ARGUMENT_HOST = 1;
-	Integer FORMAT_ARGUMENT_PORT = 2;
-	Integer FORMAT_ARGUMENT_PATH = 3;
+	Integer FORMAT_ARGUMENT_HOST_PORT_SEPARATOR = 2;
+	Integer FORMAT_ARGUMENT_PORT = 3;
+	Integer FORMAT_ARGUMENT_PATH = 4;
+	Integer FORMAT_ARGUMENT_PATH_QUERY_SEPARATOR = 5;
+	Integer FORMAT_ARGUMENT_QUERY = 6;
 }

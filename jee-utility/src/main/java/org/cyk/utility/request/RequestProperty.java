@@ -7,5 +7,6 @@ public enum RequestProperty {
 	,PORT
 	,CONTEXT
 	,PATH
+	,QUERY
 	
 }

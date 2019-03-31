@@ -10,4 +10,12 @@ public interface FileBuilder extends VisibleComponentBuilder<File> {
 	
 	Boolean getIsEmbbedable();
 	FileBuilder setIsEmbeddable(Boolean isEmbeddable);
+	
+	Boolean getIsIdentifiable();
+	FileBuilder setIsIdentifiable(Boolean isIdentifiable);
+	
+	FileBuilder setValuePath(String path);
+	FileBuilder setValueName(String name);
+	FileBuilder setValueClazz(Class<?> clazz);
+	FileBuilder setValueBytes(byte[] bytes);
 }

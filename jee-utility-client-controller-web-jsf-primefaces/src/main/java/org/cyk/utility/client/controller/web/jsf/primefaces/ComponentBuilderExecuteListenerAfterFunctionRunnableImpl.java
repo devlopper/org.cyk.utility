@@ -17,14 +17,15 @@ import org.cyk.utility.client.controller.component.VisibleComponent;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.dialog.Dialog;
 import org.cyk.utility.client.controller.component.file.File;
+import org.cyk.utility.client.controller.component.file.FileImage;
 import org.cyk.utility.client.controller.component.grid.Grid;
-import org.cyk.utility.client.controller.component.image.Image;
 import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.input.InputBoolean;
 import org.cyk.utility.client.controller.component.input.InputFile;
 import org.cyk.utility.client.controller.component.input.choice.InputChoice;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBox;
 import org.cyk.utility.client.controller.component.layout.Insert;
+import org.cyk.utility.client.controller.component.link.Link;
 import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeColumnContext;
 import org.cyk.utility.client.controller.component.output.Output;
@@ -34,6 +35,7 @@ import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringMessageBuilder;
+import org.cyk.utility.client.controller.component.text.Text;
 import org.cyk.utility.client.controller.component.tree.Tree;
 import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.EventName;
@@ -132,7 +134,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 									//Thumbnail will be image itself
 									thumbnail = __inject__(Image.class);
 									if(bytes == null) {
-										//no data to be embbeded , browser will handle it by doing get using url
+										//no data to be embedded , browser will handle it by doing get using url
 										thumbnail.getProperties().setUrl(url);
 									}else {
 										//data to be streamed using base64 encoding
@@ -225,7 +227,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 					}else if(component instanceof File) {
 						File file = (File) component;
 						org.cyk.utility.file.File __file__ = file.getValue();
-						if(Boolean.TRUE.equals(file.getIsEmbbeded())) {
+						if(Boolean.TRUE.equals(file.getIsEmbedded())) {
 							byte[] bytes = __file__.getBytes();
 							if(bytes == null) {
 								
@@ -240,8 +242,18 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						}else {
 							file.getProperties().setUniformResourceLocator(__file__.getUniformResourceLocator());
 						}
-					}else if(component instanceof Image) {
+					}else if(component instanceof FileImage) {
 						
+					}else if(component instanceof Text) {
+						Text text = (Text) component;
+						String characters = text.getCharacters();
+						//TODO some processing must be donne for web
+						characters = StringUtils.replaceAll(characters, "\r\n", "<br/>");
+						characters = StringUtils.replaceAll(characters, "\n", "<br/>");
+						text.getProperties().setValue(characters);
+					}else if(component instanceof Link) {
+						Link link = (Link) component;
+						link.getProperties().setHref(link.getUniformResourceLocator());
 					}
 				}else if(component instanceof Insert) {
 					((Insert)component).getProperties().setName(((Insert)component).getName());

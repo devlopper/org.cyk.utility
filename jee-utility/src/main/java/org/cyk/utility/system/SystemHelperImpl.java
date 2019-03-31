@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.inject.Singleton;
 
-import org.cyk.utility.__kernel__.NullConstant;
+import org.cyk.utility.__kernel__.ConstantNull;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueHelper;
@@ -23,7 +23,7 @@ public class SystemHelperImpl extends AbstractHelper implements SystemHelper, Se
 	
 	@Override
 	public String getProperty(String name) {
-		return getProperty(name,NullConstant.STRING);
+		return getProperty(name,ConstantNull.STRING);
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package org.cyk.utility.__kernel__;
 
-public interface NullConstant {
+public interface ConstantNull {
 
 	String STRING = null;
 	

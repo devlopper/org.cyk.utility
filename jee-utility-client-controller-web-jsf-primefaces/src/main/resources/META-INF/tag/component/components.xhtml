@@ -74,10 +74,20 @@
 											<cyk:commandable value="#{indexComponent}" />
 										</c:when>
 										
+										<!-- Text -->
+										
+										<c:when test="#{componentHelper.isText(indexComponent)}">
+											<cyk:text value="#{indexComponent}" />
+										</c:when>
+										
 										<!-- File -->
 										
 										<c:when test="#{componentHelper.isFile(indexComponent)}">
 											<cyk:file value="#{indexComponent}" />
+										</c:when>
+										
+										<c:when test="#{componentHelper.isFileImage(indexComponent)}">
+											<cyk:image value="#{indexComponent}" />
 										</c:when>
 										
 										<!-- Link -->

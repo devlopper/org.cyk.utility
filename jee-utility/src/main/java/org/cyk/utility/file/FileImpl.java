@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.string.StringHelper;
 
 public class FileImpl extends AbstractObject implements File,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -105,8 +106,26 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	}
 	
 	@Override
+	public String getNameAndExtension() {
+		String nameAndExtension = getName();
+		String extension = getExtension();
+		if(__inject__(StringHelper.class).isNotBlank(extension))
+			nameAndExtension = nameAndExtension + "." + extension;
+		return nameAndExtension;
+	}
+	
+	@Override
+	public String getPathAndNameAndExtension() {
+		String pathNameAndExtension = getNameAndExtension();
+		String path = getPath();
+		if(__inject__(StringHelper.class).isNotBlank(path))
+			pathNameAndExtension = path + "/" + pathNameAndExtension;
+		return pathNameAndExtension;
+	}
+	
+	@Override
 	public String toString() {
-		return getName()+"."+getExtension()+","+getMimeType()+"|"+getSize();
+		return getNameAndExtension()+","+getMimeType()+"|"+getSize();
 	}
 
 }

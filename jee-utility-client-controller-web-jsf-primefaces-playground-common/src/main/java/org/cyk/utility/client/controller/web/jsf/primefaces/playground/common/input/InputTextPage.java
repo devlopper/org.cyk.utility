@@ -38,7 +38,7 @@ public class InputTextPage extends AbstractPageContainerManagedImpl implements S
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.TRUE, "name");
-		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(), Boolean.TRUE,"details");
+		/*viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(), Boolean.TRUE,"details");
 		
 		CommandableBuilder commandable = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, "submit");
 		commandable.addCommandFunctionTryRunRunnable(new Runnable() {
@@ -48,7 +48,7 @@ public class InputTextPage extends AbstractPageContainerManagedImpl implements S
 				__inject__(MessageRender.class).addNotifications(__inject__(Notification.class).setSummary(message)).execute();
 			}
 		});
-		
+		*/
 		return viewBuilder;
 	}
 	

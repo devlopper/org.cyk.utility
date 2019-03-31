@@ -1,11 +1,10 @@
-package org.cyk.utility.client.controller.component.image;
+package org.cyk.utility.client.controller.component.file;
 
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
-import org.cyk.utility.client.controller.component.file.File;
 
-public class ImageImpl extends AbstractVisibleComponentImpl implements Image,Serializable {
+public class FileImageImpl extends AbstractVisibleComponentImpl implements FileImage,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private File file;
@@ -17,13 +16,13 @@ public class ImageImpl extends AbstractVisibleComponentImpl implements Image,Ser
 	}
 
 	@Override
-	public Image setFile(File file) {
+	public FileImage setFile(File file) {
 		this.file = file;
 		return this;
 	}
 
 	@Override
-	public Image setWidth(Integer width) {
+	public FileImage setWidth(Integer width) {
 		this.width = width;
 		return this;
 	}
@@ -34,7 +33,7 @@ public class ImageImpl extends AbstractVisibleComponentImpl implements Image,Ser
 	}
 
 	@Override
-	public Image setHeight(Integer height) {
+	public FileImage setHeight(Integer height) {
 		this.height = height;
 		return this;
 	}

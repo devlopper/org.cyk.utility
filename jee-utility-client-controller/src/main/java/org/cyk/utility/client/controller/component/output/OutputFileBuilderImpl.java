@@ -4,28 +4,137 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.client.controller.component.image.ImageBuilder;
+import org.cyk.utility.client.controller.component.file.File;
+import org.cyk.utility.client.controller.component.file.FileBuilder;
+import org.cyk.utility.client.controller.component.file.FileImageBuilder;
 import org.cyk.utility.client.controller.component.link.LinkBuilder;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.client.controller.session.SessionAttributeSetter;
-import org.cyk.utility.file.File;
+import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.repository.RepositoryType;
 import org.cyk.utility.repository.RepositoryTypeDatabase;
 import org.cyk.utility.repository.RepositoryTypeSession;
+import org.cyk.utility.resource.locator.UniformResourceLocatorStringBuilder;
 import org.cyk.utility.string.StringHelper;
 
-public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,File> implements OutputFileBuilder,Serializable {
+public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,org.cyk.utility.file.File> implements OutputFileBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private FileBuilder file;
 	private RepositoryType repositoryType;
 	private LinkBuilder link;
-	private ImageBuilder thumbnail;
+	private FileImageBuilder thumbnail;
 	private Boolean isThumbnailDerivableFromFile,isThumbnailDerivable,isLinkDerivable;
 	
 	@Override
 	protected void __execute__(OutputFile outputFile, Object object, Field field) {
 		super.__execute__(outputFile, object, field);
+		FileBuilder file = getFile();
+		org.cyk.utility.file.File __file__ = outputFile.getValue();
+		if(file == null && __file__!=null) {
+			file = __inject__(FileBuilder.class);
+		}
+		
+		if(file!=null) {
+			if(Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_FILE))) {
+				if(file.getValue(Boolean.TRUE).getPath() == null)
+					file.getValue(Boolean.TRUE).setPath(__file__.getPath());
+				if(file.getValue(Boolean.TRUE).getName() == null)
+					file.getValue(Boolean.TRUE).setName(__file__.getName());
+				if(file.getValue(Boolean.TRUE).getExtension() == null)
+					file.getValue(Boolean.TRUE).setExtension(__file__.getExtension());
+				if(file.getValue(Boolean.TRUE).getMimeType() == null)
+					file.getValue(Boolean.TRUE).setMimeType(__file__.getMimeType());
+				if(file.getValue(Boolean.TRUE).getBytes() == null)
+					file.getValue(Boolean.TRUE).setBytes(__file__.getBytes());
+				if(file.getValue(Boolean.TRUE).getSize() == null)
+					file.getValue(Boolean.TRUE).setSize(__file__.getSize());
+				if(file.getValue(Boolean.TRUE).getUniformResourceLocator() == null)
+					file.getValue(Boolean.TRUE).setUniformResourceLocator(__file__.getUniformResourceLocator());
+			}
+			if(file.getRequest() == null)
+				file.setRequest(getRequest());
+			if(file.getContext() == null)
+				file.setContext(getContext());
+			if(file.getUniformResourceLocatorMap() == null)
+				file.setUniformResourceLocatorMap(getUniformResourceLocatorMap());
+			outputFile.setFile(file.execute().getOutput());
+			__file__ = outputFile.getFile().getValue();
+			outputFile.setValue(__file__);
+			//Link
+			LinkBuilder link = getLink();
+			if(link == null /*&& Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_LINK))*/) {			
+				if(__injectStringHelper__().isNotBlank(__file__.getUniformResourceLocator())) {
+					link = __inject__(LinkBuilder.class);
+					link.setTextCharacters(__file__.getName());
+					link.setUniformResourceLocator(__inject__(UniformResourceLocatorStringBuilder.class)
+							.setUniformResourceIdentifierString(__inject__(UniformResourceIdentifierStringBuilder.class).setString(__file__.getUniformResourceLocator())));	
+				}
+			}
+			
+			if(link!=null) {
+				if(link.getRequest() == null)
+					link.setRequest(getRequest());
+				if(link.getContext() == null)
+					link.setContext(getContext());
+				if(link.getUniformResourceLocatorMap() == null)
+					link.setUniformResourceLocatorMap(getUniformResourceLocatorMap());
+				outputFile.setLink(link.execute().getOutput());
+			}
+			
+			//Thumbnail
+			FileImageBuilder thumbnail = getThumbnail();
+			if(thumbnail == null) {
+				Boolean isThumbnailDerivableFromFile = getIsThumbnailDerivableFromFile();
+				if(isThumbnailDerivableFromFile == null && file!=null)
+					isThumbnailDerivableFromFile = __file__.isImage();
+				if(Boolean.TRUE.equals(isThumbnailDerivableFromFile)) {
+					thumbnail = __inject__(FileImageBuilder.class);
+					thumbnail.getFile(Boolean.TRUE).setValueName(__file__.getName()).setValueBytes(__file__.getBytes());
+					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setExtension(__file__.getExtension());
+					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setMimeType(__file__.getMimeType());
+					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setUniformResourceLocator(__file__.getUniformResourceLocator());
+					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setSize(__file__.getSize());
+					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setPath(__file__.getPath());
+					/*
+					byte[] bytes = file.getBytes();
+					if(Boolean.TRUE.equals(__file__.isImage()) && (bytes!=null || __inject__(StringHelper.class).isNotBlank(uniformResourceLocator))) {
+						//Thumbnail will be image itself
+						if(bytes == null) {
+							//no data to be embedded , browser will handle it by doing get request
+							thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setUniformResourceLocator(uniformResourceLocator);
+						}else {
+							//data to be embedded using base64 encoding
+							thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setBytes(bytes).setMimeType(file.getMimeType());
+						}									
+					}else {
+						//Thumbnail will be an icon based on mime type
+						thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setPath("image/icon");
+						thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setName(StringUtils.substringBefore(file.getMimeType(),"/")).setExtension("png");	
+					}
+					*/
+				}else {
+					System.err.println("derive thumbnail from file not handle in this case 02");
+				}	
+			}
+			
+			if(thumbnail!=null) {
+				if(thumbnail.getRequest() == null)
+					thumbnail.setRequest(getRequest());
+				if(thumbnail.getContext() == null)
+					thumbnail.setContext(getContext());
+				if(thumbnail.getUniformResourceLocatorMap() == null)
+					thumbnail.setUniformResourceLocatorMap(getUniformResourceLocatorMap());
+				//thumbnail.getProperties().setAlt(StringUtils.substringBefore(file.getMimeType(),"/"));
+				thumbnail.setTooltip(StringUtils.substringBefore(__file__.getMimeType(),"/"));
+				thumbnail.setWidth(40);
+				thumbnail.setHeight(40);
+				outputFile.setThumbnail(thumbnail.execute().getOutput());
+			}
+		}
+
+		/*
 		RepositoryType repositoryType = getRepositoryType();
 		if(repositoryType == null) {
 			File file = getValue();
@@ -36,50 +145,12 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 		}
 		
 		File file = outputFile.getValue();
-		
-		LinkBuilder link = getLink();
-		if(link == null) {
-			Boolean isLinkDerivable = getIsLinkDerivable();
-			if(Boolean.TRUE.equals(isLinkDerivable)) {
-				String url = file.getUniformResourceLocator();
-				if(__injectStringHelper__().isBlank(url)) {
-					String identifier = null;
-					String location = null;
-					if(file.getIdentifier() == null) {
-						//file content is not persisted so it will be put in user session
-						identifier = "file_identifier_"+__inject__(RandomHelper.class).getAlphanumeric(10);
-						__inject__(SessionAttributeSetter.class).setRequest(getRequest()).setAttribute(identifier).setValue(file).execute();
-						location = "session";
-					}else {
-						//file content is persisted durable in database
-						identifier = file.getIdentifier().toString();
-						location = "database";
-					}
-					
-					NavigationBuilder navigation = __inject__(NavigationBuilder.class).setIdentifier("__file__GetFunction").setParameters("identifier",identifier,"location",location);					
-					url = navigation.execute().getOutput().getUniformResourceLocator().toString();	
-				}
 				
-				if(__inject__(StringHelper.class).isNotBlank(url)) {
-					link = __inject__(LinkBuilder.class);
-					link.getText(Boolean.TRUE).setCharacters("LINK");
-					link.getUniformResourceLocator(Boolean.TRUE).getUniformResourceIdentifierString(Boolean.TRUE).setString(url);
-				}
-			}
-		}
-		
-		String uniformResourceLocator = null;
-		
-		if(link!=null) {
-			outputFile.setLink(link.execute().getOutput());
-			uniformResourceLocator = outputFile.getLink().getUniformResourceLocator();
-		}
-		
-		ImageBuilder thumbnail = getThumbnail();
+		FileImageBuilder thumbnail = getThumbnail();
 		if(thumbnail == null) {
 			Boolean isThumbnailDerivable = __injectValueHelper__().defaultToIfNull(getIsThumbnailDerivable(), Boolean.TRUE);
 			if(Boolean.TRUE.equals(isThumbnailDerivable)) {
-				thumbnail = __inject__(ImageBuilder.class);
+				thumbnail = __inject__(FileImageBuilder.class);
 				Boolean isThumbnailDerivableFromFile = getIsThumbnailDerivableFromFile();
 				if(isThumbnailDerivableFromFile == null && file!=null)
 					isThumbnailDerivableFromFile = file.isImage();
@@ -88,10 +159,10 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 					if(Boolean.TRUE.equals(file.isImage()) && (bytes!=null || __inject__(StringHelper.class).isNotBlank(uniformResourceLocator))) {
 						//Thumbnail will be image itself
 						if(bytes == null) {
-							//no data to be embbeded , browser will handle it by doing get request
+							//no data to be embedded , browser will handle it by doing get request
 							thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setUniformResourceLocator(uniformResourceLocator);
 						}else {
-							//data to be embbeded using base64 encoding
+							//data to be embedded using base64 encoding
 							thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setBytes(bytes).setMimeType(file.getMimeType());
 						}									
 					}else {
@@ -111,11 +182,28 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 			thumbnail.setWidth(40);
 			thumbnail.setHeight(40);
 		}
+		*/
 	}
 	
 	@Override
-	protected File __getValue__(Object object, Field field, Object value) {
-		return (File) value;
+	protected org.cyk.utility.file.File __getValue__(Object object, Field field, Object value) {
+		return (org.cyk.utility.file.File) value;
+	}
+	
+	@Override
+	public FileBuilder getFile() {
+		return file;
+	}
+	
+	@Override
+	public FileBuilder getFile(Boolean injectIfNull) {
+		return (FileBuilder) __getInjectIfNull__(FIELD_FILE, injectIfNull);
+	}
+	
+	@Override
+	public OutputFileBuilder setFile(FileBuilder file) {
+		this.file = file;
+		return this;
 	}
 
 	@Override
@@ -179,23 +267,24 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 	}
 	
 	@Override
-	public ImageBuilder getThumbnail() {
+	public FileImageBuilder getThumbnail() {
 		return thumbnail;
 	}
 	
 	@Override
-	public ImageBuilder getThumbnail(Boolean injectIfNull) {
-		return (ImageBuilder) __getInjectIfNull__(FIELD_THUMBNAIL, injectIfNull);
+	public FileImageBuilder getThumbnail(Boolean injectIfNull) {
+		return (FileImageBuilder) __getInjectIfNull__(FIELD_THUMBNAIL, injectIfNull);
 	}
 	
 	@Override
-	public OutputFileBuilder setThumbnail(ImageBuilder thumbnail) {
+	public OutputFileBuilder setThumbnail(FileImageBuilder thumbnail) {
 		this.thumbnail = thumbnail;
 		return this;
 	}
 	
 	/**/
 	
+	private static final String FIELD_FILE = "file";
 	private static final String FIELD_LINK = "link";
 	private static final String FIELD_THUMBNAIL = "thumbnail";
 }

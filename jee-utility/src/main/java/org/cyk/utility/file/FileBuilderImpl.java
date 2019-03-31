@@ -14,6 +14,7 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 	private Class<?> clazz;
 	private String path,name,uniformResourceLocator,mimeType,extension;
 	private byte[] bytes;
+	private Long size;
 	
 	@Override
  	protected File __execute__() throws Exception {
@@ -141,6 +142,17 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 	@Override
 	public FileBuilder setExtension(String extension) {
 		this.extension = extension;
+		return this;
+	}
+	
+	@Override
+	public Long getSize() {
+		return size;
+	}
+	
+	@Override
+	public FileBuilder setSize(Long size) {
+		this.size = size;
 		return this;
 	}
 }

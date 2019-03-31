@@ -11,48 +11,52 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			<!-- Rendering base on url -->
-			<c:if test="#{not empty value.properties.url}">
+		
+			<!-- Streamed -->
+			<c:if test="#{not value.file.isEmbedded}">
+				<!-- Rendering based on library and name -->
+				<c:if test="#{empty value.file.properties.uniformResourceLocator}">
+					<p:graphicImage 
+						library="#{value.theme.identifier}"
+						name="#{value.file.value.getPathAndNameAndExtension()}"
+						
+						alt="#{value.properties.alt}"
+						width="#{value.properties.width}"
+						height="#{value.properties.height}"
+						title="#{value.properties.title}"
+					/>
+					<c:set var="rendered" value="true" />	
+				</c:if>
+				
+				<!-- Rendering based on url -->
+				<c:if test="#{not empty value.file.properties.uniformResourceLocator}">
+					<p:graphicImage 
+						url="#{value.file.properties.uniformResourceLocator}"
+						
+						alt="#{value.properties.alt}"
+						width="#{value.properties.width}"
+						height="#{value.properties.height}"
+						title="#{value.properties.title}"
+					/>
+					<c:set var="rendered" value="true" />	
+				</c:if>				
+			</c:if>
+			
+			<!-- Embedded -->
+			<c:if test="#{value.file.isEmbedded}">
 				<p:graphicImage 
-					url="#{value.properties.url}"
+					value="#{value.file.properties.value}"
+					stream="false"
 					
 					alt="#{value.properties.alt}"
 					width="#{value.properties.width}"
 					height="#{value.properties.height}"
 					title="#{value.properties.title}"
 				/>
-				<c:set var="isImageHasBeenRendered" value="true" />
+				<c:set var="rendered" value="true" />
 			</c:if>
 			
-			<!-- Rendering based on value -->
-			<c:if test="#{value.properties.value!=null}">
-				<p:graphicImage 
-					value="#{value.properties.value}"
-					stream="#{value.properties.stream}"
-					
-					alt="#{value.properties.alt}"
-					width="#{value.properties.width}"
-					height="#{value.properties.height}"
-					title="#{value.properties.title}"
-				/>
-				<c:set var="isImageHasBeenRendered" value="true" />
-			</c:if>
-			
-			<!-- Rendering based on library and name -->
-			<c:if test="#{not empty value.properties.library and not empty value.properties.name}">
-				<p:graphicImage 
-					library="#{value.properties.library}"
-					name="#{value.properties.name}"
-					
-					alt="#{value.properties.alt}"
-					width="#{value.properties.width}"
-					height="#{value.properties.height}"
-					title="#{value.properties.title}"
-				/>
-				<c:set var="isImageHasBeenRendered" value="true" />
-			</c:if>
-			
-			<c:if test="#{not isImageHasBeenRendered}">
+			<c:if test="#{not rendered}">
 				CANNOT RENDER IMAGE
 			</c:if>
 		</ui:define>

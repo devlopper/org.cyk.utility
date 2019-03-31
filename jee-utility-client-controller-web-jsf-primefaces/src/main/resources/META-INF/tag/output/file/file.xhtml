@@ -11,14 +11,19 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
+			<!-- it has a file. -->
+			<c:if test="#{value.file != null}">
+				<cyk:file value="#{value.file}"/>
+			</c:if>
+			
 			<!-- it has a link. this way we make the file accessible to the user -->
-			<c:if test="#{value.properties.link != null}">
-				<cyk:outputLink value="#{value.properties.link}"/>
+			<c:if test="#{value.link != null}">
+				<cyk:link value="#{value.link}"/>
 			</c:if>
 			
 			<!-- visual representation of the file : thumbnail as image -->
-			<c:if test="#{value.properties.thumbnail != null}">
-				<cyk:image value="#{value.properties.thumbnail}" />
+			<c:if test="#{value.thumbnail != null}">
+				<cyk:image value="#{value.thumbnail}" />
 			</c:if>
 		</ui:define>
 	</ui:decorate>	

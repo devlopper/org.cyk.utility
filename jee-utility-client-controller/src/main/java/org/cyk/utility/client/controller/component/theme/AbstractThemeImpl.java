@@ -6,8 +6,8 @@ import java.util.Collection;
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.file.File;
 import org.cyk.utility.client.controller.component.file.Files;
-import org.cyk.utility.client.controller.component.image.Image;
-import org.cyk.utility.client.controller.component.image.ImageMap;
+import org.cyk.utility.client.controller.component.file.FileImage;
+import org.cyk.utility.client.controller.component.file.FileImageMap;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.tag.TagMap;
 
@@ -16,7 +16,7 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 
 	private Files cascadeStyleSheetFiles;
 	private Files javaScriptFiles;
-	private ImageMap imageMap;
+	private FileImageMap imageMap;
 	private ViewMap viewMap;
 	private ThemeTemplate template;
 	private TagMap tagMap;
@@ -130,17 +130,17 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	}
 	
 	@Override
-	public ImageMap getImageMap() {
+	public FileImageMap getImageMap() {
 		return imageMap;
 	}
 	
 	@Override
-	public ImageMap getImageMap(Boolean injectIfNull) {
-		return (ImageMap) __getInjectIfNull__(FIELD_IMAGE_MAP, injectIfNull);
+	public FileImageMap getImageMap(Boolean injectIfNull) {
+		return (FileImageMap) __getInjectIfNull__(FIELD_IMAGE_MAP, injectIfNull);
 	}
 	
 	@Override
-	public Theme setImageMap(ImageMap imageMap) {
+	public Theme setImageMap(FileImageMap imageMap) {
 		this.imageMap = imageMap;
 		return this;
 	}
@@ -152,37 +152,37 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	}
 	
 	@Override
-	public Image getIcon() {
-		ImageMap map = getImageMap();
+	public FileImage getIcon() {
+		FileImageMap map = getImageMap();
 		return map == null ? null : map.get(IMAGE_ICON);
 	}
 	
 	@Override
-	public Image getIcon(Boolean injectIfNull) {
-		ImageMap map = getImageMap(injectIfNull);
+	public FileImage getIcon(Boolean injectIfNull) {
+		FileImageMap map = getImageMap(injectIfNull);
 		return map == null ? null : map.get(IMAGE_ICON,injectIfNull);
 	}
 	
 	@Override
-	public Theme setIcon(Image icon) {
+	public Theme setIcon(FileImage icon) {
 		getImageMap(Boolean.TRUE).set(IMAGE_ICON,icon);
 		return this;
 	}
 	
 	@Override
-	public Image getLogo() {
-		ImageMap map = getImageMap();
+	public FileImage getLogo() {
+		FileImageMap map = getImageMap();
 		return map == null ? null : map.get(IMAGE_LOGO);
 	}
 	
 	@Override
-	public Image getLogo(Boolean injectIfNull) {
-		ImageMap map = getImageMap(injectIfNull);
+	public FileImage getLogo(Boolean injectIfNull) {
+		FileImageMap map = getImageMap(injectIfNull);
 		return map == null ? null : map.get(IMAGE_LOGO,injectIfNull);
 	}
 	
 	@Override
-	public Theme setLogo(Image logo) {
+	public Theme setLogo(FileImage logo) {
 		getImageMap(Boolean.TRUE).set(IMAGE_LOGO,logo);
 		return this;
 	}

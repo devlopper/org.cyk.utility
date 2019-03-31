@@ -34,22 +34,27 @@ public class OutputFilePage extends AbstractPageContainerManagedImpl implements 
 	protected ViewBuilder __getViewBuilder__() {
 		Form form = __inject__(Form.class);
 		form.setData(__inject__(Data.class));
-		form.getData().setImageStreamed(__inject__(FileBuilder.class).setClazz(getClass()).setName("image01.png").execute().getOutput());
 		
-		form.getData().setImageInSession(setFileInSessionAttribute("image02.png",729));
+		form.getData().setImageStreamed(__inject__(FileBuilder.class).setClazz(getClass()).setName("imageStreamed.png").execute().getOutput());
+		form.getData().setImageEmbedded(__inject__(FileBuilder.class).setClazz(getClass()).setName("imageEmbedded.png").execute().getOutput());
+		form.getData().setImageInLibrary(__inject__(FileBuilder.class).setPath("image").setName("icon.png").execute().getOutput());
+		
+		/*form.getData().setImageInSession(setFileInSessionAttribute("image02.png",729));
 		form.getData().setText(setFileInSessionAttribute("text.txt",1));
 		form.getData().setAudio(setFileInSessionAttribute("audio.txt",11).setMimeType("audio/audio"));
 		form.getData().setVideo(setFileInSessionAttribute("video.txt",12).setMimeType("video/video"));
 		form.getData().setApplication(setFileInSessionAttribute("application.txt",13).setMimeType("application/application"));
 		
 		form.getData().setImageNotRenderedHere(setFileInSessionAttribute("image02.png",14));
-		
+		*/
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		
-		
-		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageStreamed");
-		/*viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInSession");
-		//viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInDatabase");
+		OutputFileBuilder outputFileBuilder = null;
+		outputFileBuilder = (OutputFileBuilder) viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageStreamed");
+		outputFileBuilder = (OutputFileBuilder) viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageEmbedded");
+		outputFileBuilder.getFile(Boolean.TRUE).setIsEmbeddable(Boolean.TRUE);
+		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInLibrary");
+		/*//viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInDatabase");
 		//viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInFolder");
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "text");
 		OutputFileBuilder outputFileBuilder = (OutputFileBuilder) viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageNotRenderedHere");
@@ -63,15 +68,6 @@ public class OutputFilePage extends AbstractPageContainerManagedImpl implements 
 		return viewBuilder;
 	}
 	
-	private File setFileInSessionAttribute(String name,Object identifier) {
-		File file = __inject__(FileBuilder.class).setName(name).execute().getOutput().setIdentifier(identifier);
-		
-		__inject__(SessionAttributeSetter.class).setAttribute(file.getIdentifier())
-			.setValue(__inject__(FileBuilder.class).setClazz(getClass()).setName(name).execute().getOutput())
-			.execute();
-		return file;
-	}
-	
 	@Getter @Setter @Accessors(chain=true) @ToString
 	public static class Data extends AbstractDataImpl implements Serializable {
 		private static final long serialVersionUID = 1L;
@@ -80,10 +76,10 @@ public class OutputFilePage extends AbstractPageContainerManagedImpl implements 
 		private File imageStreamed;
 		
 		@Input @InputFile
-		private File imageInSession;
+		private File imageEmbedded;
 		
 		@Input @InputFile
-		private File imageInDatabase;
+		private File imageInLibrary;
 		
 		@Input @InputFile
 		private File imageInFolder;

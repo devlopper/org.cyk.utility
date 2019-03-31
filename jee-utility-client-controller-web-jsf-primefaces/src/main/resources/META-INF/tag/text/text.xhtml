@@ -9,23 +9,22 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			<!-- outcome="#{value.properties.outcome}" -->
-			<p:link
+			<h:outputText
 				id="#{value.properties.identifier}"
-				value="#{value.text.properties.value}"
+				value="#{value.properties.value}"
 				
 				dir="#{value.properties.dir}"
 				escape="#{value.properties.escape}"
 				rendered="#{value.properties.rendered}"
 				title="#{value.properties.title}"
-				href="#{value.properties.href}"
+				
 				onclick="#{value.properties.onClick}"
 				
 				styleClass="#{value.properties.styleClass}"
 				style="#{value.properties.style}"
 			>
-				
-			</p:link>
+			
+			</h:outputText>
 		</ui:define>
 	</ui:decorate>	
 

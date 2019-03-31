@@ -41,8 +41,11 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 		}
 		
 		Theme theme = getTheme();
-		if(theme == null)
-			theme = (Theme) __inject__(SessionAttributeGetter.class).setRequest(getRequest()).setAttribute(SessionAttributeEnumeration.THEME).execute().getOutput();
+		if(theme == null) {
+			Object request = getRequest();
+			if(request!=null)
+				theme = (Theme) __inject__(SessionAttributeGetter.class).setRequest(request).setAttribute(SessionAttributeEnumeration.THEME).execute().getOutput();
+		}
 		component.setTheme(theme);
 	}
 	

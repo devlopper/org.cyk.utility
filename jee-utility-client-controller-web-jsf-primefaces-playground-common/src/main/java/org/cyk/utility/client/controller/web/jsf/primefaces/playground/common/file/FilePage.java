@@ -25,35 +25,21 @@ public class FilePage extends AbstractPageContainerManagedImpl implements Serial
 	protected ViewBuilder __getViewBuilder__() {
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		
-		FileBuilder fileBuilder = __inject__(FileBuilder.class);
-		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("imageStreamed.png");
-		viewBuilder.addComponentBuilder(fileBuilder);
+		viewBuilder.addComponentBuilder(__inject__(FileBuilder.class).setValueClazz(getClass()).setValueName("imageStreamed.png"));
 		
-		fileBuilder = __inject__(FileBuilder.class);
-		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("imageEmbedded.png");
-		fileBuilder.setIsEmbeddable(Boolean.TRUE);
-		viewBuilder.addComponentBuilder(fileBuilder);
+		viewBuilder.addComponentBuilder(__inject__(FileBuilder.class).setValueClazz(getClass()).setValueName("imageEmbedded.png").setIsEmbeddable(Boolean.TRUE));
 		
-		fileBuilder = __inject__(FileBuilder.class);
-		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("textStreamed.txt");
-		viewBuilder.addComponentBuilder(fileBuilder);
+		viewBuilder.addComponentBuilder(__inject__(FileBuilder.class).setValuePath("image").setValueName("icon.png"));
 		
-		fileBuilder = __inject__(FileBuilder.class);
-		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("textEmbedded.txt");
-		fileBuilder.setIsEmbeddable(Boolean.TRUE);
-		viewBuilder.addComponentBuilder(fileBuilder);
+		viewBuilder.addComponentBuilder(__inject__(FileBuilder.class).setValueClazz(getClass()).setValueName("textStreamed.txt"));
 		
-		fileBuilder = __inject__(FileBuilder.class);
-		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("pdf01.pdf");
-		viewBuilder.addComponentBuilder(fileBuilder);
+		viewBuilder.addComponentBuilder(__inject__(FileBuilder.class).setValueClazz(getClass()).setValueName("textEmbedded.txt").setIsEmbeddable(Boolean.TRUE));
 		
-		fileBuilder = __inject__(FileBuilder.class);
-		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("audio01.mp3");
-		viewBuilder.addComponentBuilder(fileBuilder);
+		viewBuilder.addComponentBuilder(__inject__(FileBuilder.class).setValueClazz(getClass()).setValueName("pdf01.pdf"));
 		
-		fileBuilder = __inject__(FileBuilder.class);
-		fileBuilder.getValue(Boolean.TRUE).setClazz(getClass()).setName("video01.mp4");
-		viewBuilder.addComponentBuilder(fileBuilder);
+		viewBuilder.addComponentBuilder(__inject__(FileBuilder.class).setValueClazz(getClass()).setValueName("audio01.mp3"));
+		
+		viewBuilder.addComponentBuilder(__inject__(FileBuilder.class).setValueClazz(getClass()).setValueName("video01.mp4"));
 		
 		return viewBuilder;
 	}

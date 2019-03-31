@@ -31,4 +31,9 @@ public interface File extends Objectable {
 	
 	Boolean isImage();
 	Boolean isText();
+	
+	/**/
+	
+	String getNameAndExtension();
+	String getPathAndNameAndExtension();
 }

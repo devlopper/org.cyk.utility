@@ -7,7 +7,7 @@ public interface File extends VisibleComponent {
 	org.cyk.utility.file.File getValue();
 	File setValue(org.cyk.utility.file.File value);
 	
-	Boolean getIsEmbbeded();
+	Boolean getIsEmbedded();
 	File setIsEmbedded(Boolean isEmbedded);
 	
 }

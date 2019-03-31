@@ -542,6 +542,15 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		return __getIsFieldNameDerivable__(fieldName, Boolean.TRUE);
 	}
 	
+	protected void __setRequestAndContextAndUniformResourceLocatorMapOf__(ComponentBuilder<?> component) {
+		if(component.getRequest() == null)
+			component.setRequest(getRequest());
+		if(component.getContext() == null)
+			component.setContext(getContext());
+		if(component.getUniformResourceLocatorMap() == null)
+			component.setUniformResourceLocatorMap(getUniformResourceLocatorMap());
+	}
+	
 	public static final String FIELD_AREA = "area";
 	public static final String FIELD_DERIVABLE_PROPERTIES = "derivableProperties";
 	public static final String FIELD_QUALIFIERS = "qualifiers";

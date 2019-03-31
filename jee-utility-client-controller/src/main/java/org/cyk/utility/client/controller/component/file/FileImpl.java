@@ -19,10 +19,10 @@ public class FileImpl extends AbstractVisibleComponentImpl implements File,Seria
 	public File setValue(org.cyk.utility.file.File value) {
 		this.value = value;
 		return this;
-	}
+	} 
 
 	@Override
-	public Boolean getIsEmbbeded() {
+	public Boolean getIsEmbedded() {
 		return isEmbedded;
 	}
 

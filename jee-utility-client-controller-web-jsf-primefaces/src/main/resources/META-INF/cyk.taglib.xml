@@ -319,4 +319,10 @@
         <tag-name>link</tag-name>
         <source>tag/link/link.xhtml</source>
     </tag>
+    
+    <!-- Text -->
+    <tag>
+        <tag-name>text</tag-name>
+        <source>tag/text/text.xhtml</source>
+    </tag>
 </facelet-taglib>

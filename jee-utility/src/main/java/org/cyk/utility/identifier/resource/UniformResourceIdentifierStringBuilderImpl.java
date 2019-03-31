@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.ConstantEmpty;
 import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.object.ObjectByObjectMap;
@@ -43,6 +44,8 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 		String port = __injectStringHelper__().getString(getPort());
 		if(__injectStringHelper__().isBlank(port))
 			setPort(port = __getRequestProperty__(RequestProperty.PORT,string));
+		
+		setFormatArguments(FORMAT_ARGUMENT_HOST_PORT_SEPARATOR,port == null ? ConstantEmpty.STRING : CharacterConstant.COLON);
 		
 		String context = __injectStringHelper__().getString(getContext());
 		if(__injectStringHelper__().isBlank(context))
@@ -90,6 +93,13 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 		}
 		
 		setPath(path);
+		
+		String query = __injectStringHelper__().getString(getQuery());
+		if(__injectStringHelper__().isBlank(query))
+			setQuery(query = __injectValueHelper__().defaultToIfNull(__getRequestProperty__(RequestProperty.QUERY,string),ConstantEmpty.STRING));
+		
+		setFormatArguments(FORMAT_ARGUMENT_PATH_QUERY_SEPARATOR,Boolean.TRUE.equals(__injectStringHelper__().isBlank(query)) ? ConstantEmpty.STRING : CharacterConstant.QUESTION_MARK);
+		
 		return super.__getFormat__(format);
 	}
 	
@@ -106,8 +116,15 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 					switch(property) {
 					case SCHEME: value = uri.getScheme(); break;
 					case HOST: value = uri.getHost(); break;
-					case PORT: value = String.valueOf(uri.getPort()); break;
+					case PORT: 
+						Integer port = uri.getPort();
+						value = port == -1 ? null : String.valueOf(port);
+						break;
 					case PATH: value = uri.getPath();break;
+					case QUERY: 
+						String query = uri.getQuery();
+						value = __injectStringHelper__().isBlank(query) ? ConstantEmpty.STRING : query;
+						break;
 					default: value = null;
 					}		
 				}
@@ -156,7 +173,7 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 
 	@Override
 	public UniformResourceIdentifierStringBuilder setPort(Object port) {
-		setFormatArguments(FORMAT_ARGUMENT_PORT,port);
+		setFormatArguments(FORMAT_ARGUMENT_PORT,port == null ? ConstantEmpty.STRING : port);
 		return this;
 	}
 	
@@ -166,6 +183,20 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 		if(stringFormat!=null)
 			return stringFormat.getArgument(FORMAT_ARGUMENT_PORT);
 		return null;
+	}
+	
+	@Override
+	public Object getQuery() {
+		StringFormat stringFormat = getFormat();
+		if(stringFormat!=null)
+			return stringFormat.getArgument(FORMAT_ARGUMENT_QUERY);
+		return null;
+	}
+	
+	@Override
+	public UniformResourceIdentifierStringBuilder setQuery(Object query) {
+		setFormatArguments(FORMAT_ARGUMENT_QUERY,query);
+		return this;
 	}
 
 	@Override

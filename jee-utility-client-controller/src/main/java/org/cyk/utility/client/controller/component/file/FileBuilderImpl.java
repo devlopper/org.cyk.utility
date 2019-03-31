@@ -12,7 +12,7 @@ public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> i
 	private static final long serialVersionUID = 1L;
 
 	private org.cyk.utility.file.FileBuilder value;
-	private Boolean isEmbeddable;
+	private Boolean isEmbeddable,isIdentifiable;
 	
 	@Override
 	protected void __execute__(File file) {
@@ -20,29 +20,33 @@ public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> i
 		org.cyk.utility.file.FileBuilder value = getValue();
 		if(value != null) {
 			Boolean isEmbeddable = __injectValueHelper__().defaultToIfNull(getIsEmbbedable(),Boolean.FALSE);
+			Boolean isIdentifiable = __injectValueHelper__().defaultToIfNull(getIsIdentifiable(),__injectStringHelper__().isBlank(value.getPath()));
 			file.setIsEmbedded(isEmbeddable);
 			Object sessionAttributeIdentifier = null;
 			if(Boolean.FALSE.equals(isEmbeddable) || (value.getBytes() == null && value.getInputStream()==null && value.getClazz()==null)) {
 				//content is not embeddable
-				String url = value.getUniformResourceLocator();
-				if(__injectStringHelper__().isBlank(url)) {
-					String identifier = null;
-					String location = null;
-					if(value.getIdentifier() == null) {
-						//file content is not persisted so it will be put in user session
-						sessionAttributeIdentifier = identifier = "file_identifier_"+__inject__(RandomHelper.class).getAlphanumeric(10);
-						location = "session";
-					}else {
-						//file content is persisted durable in database
-						identifier = value.getIdentifier().toString();
-						location = "database";
-					}
-					
-					NavigationBuilder navigation = __inject__(NavigationBuilder.class).setIdentifier("__file__GetFunction").setParameters("identifier",identifier,"location",location);					
-					navigation.setProperty(Properties.UNIFORM_RESOURCE_LOCATOR_MAP, getUniformResourceLocatorMap());
-					navigation.setProperty(Properties.CONTEXT, getContext());
-					url = navigation.execute().getOutput().getUniformResourceLocator().toString();	
-					value.setUniformResourceLocator(url);	
+				if(Boolean.TRUE.equals(isIdentifiable)) {
+					//content will be identified by a derived uniform resource locator
+					String url = value.getUniformResourceLocator();
+					if(__injectStringHelper__().isBlank(url)) {
+						String identifier = null;
+						String location = null;
+						if(value.getIdentifier() == null) {
+							//file content is not persisted so it will be put in user session
+							sessionAttributeIdentifier = identifier = "file_identifier_"+__inject__(RandomHelper.class).getAlphanumeric(10);
+							location = "session";
+						}else {
+							//file content is persisted durable in database
+							identifier = value.getIdentifier().toString();
+							location = "database";
+						}
+						
+						NavigationBuilder navigation = __inject__(NavigationBuilder.class).setIdentifier("__file__GetFunction").setParameters("identifier",identifier,"location",location);					
+						navigation.setProperty(Properties.UNIFORM_RESOURCE_LOCATOR_MAP, getUniformResourceLocatorMap());
+						navigation.setProperty(Properties.CONTEXT, getContext());
+						url = navigation.execute().getOutput().getUniformResourceLocator().toString();	
+						value.setUniformResourceLocator(url);	
+					}	
 				}
 			}
 			file.setValue(value.execute().getOutput());
@@ -77,7 +81,42 @@ public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> i
 		this.isEmbeddable = isEmbeddable;
 		return this;
 	}
+	
+	@Override
+	public Boolean getIsIdentifiable() {
+		return isIdentifiable;
+	}
+	
+	@Override
+	public FileBuilder setIsIdentifiable(Boolean isIdentifiable) {
+		this.isIdentifiable = isIdentifiable;
+		return this;
+	}
+	
+	@Override
+	public FileBuilder setValuePath(String path) {
+		getValue(Boolean.TRUE).setPath(path);
+		return this;
+	}
+	
+	@Override
+	public FileBuilder setValueName(String name) {
+		getValue(Boolean.TRUE).setName(name);
+		return this;
+	}
+	
+	@Override
+	public FileBuilder setValueClazz(Class<?> clazz) {
+		getValue(Boolean.TRUE).setClazz(clazz);
+		return this;
+	}
 
+	@Override
+	public FileBuilder setValueBytes(byte[] bytes) {
+		getValue(Boolean.TRUE).setBytes(bytes);
+		return this;
+	}
+	
 	/**/
 	
 	private static final String FIELD_VALUE = "value";

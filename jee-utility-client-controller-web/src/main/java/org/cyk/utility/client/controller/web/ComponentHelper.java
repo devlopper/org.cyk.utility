@@ -11,9 +11,9 @@ import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeButton;
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeLink;
 import org.cyk.utility.client.controller.component.file.File;
+import org.cyk.utility.client.controller.component.file.FileImage;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.cell.Cell;
-import org.cyk.utility.client.controller.component.image.Image;
 import org.cyk.utility.client.controller.component.input.InputBooleanButton;
 import org.cyk.utility.client.controller.component.input.InputBooleanCheckBox;
 import org.cyk.utility.client.controller.component.input.InputFile;
@@ -36,6 +36,7 @@ import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringLink;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
+import org.cyk.utility.client.controller.component.text.Text;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -111,12 +112,21 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 		return object instanceof OutputFile;
 	}
 	
+	public Boolean isText(Object object) {
+		return object instanceof Text;
+	}
+	
 	public Boolean isFile(Object object) {
 		return object instanceof File;
 	}
 	
+	public Boolean isFileImage(Object object) {
+		return object instanceof FileImage;
+	}
+	
+	@Deprecated
 	public Boolean isImage(Object object) {
-		return object instanceof Image;
+		return object instanceof FileImage;
 	}
 	
 	public Boolean isLink(Object object) {

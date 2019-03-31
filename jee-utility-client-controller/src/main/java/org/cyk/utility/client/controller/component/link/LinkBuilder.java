@@ -9,6 +9,7 @@ public interface LinkBuilder extends VisibleComponentBuilder<Link> {
 	TextBuilder getText();
 	TextBuilder getText(Boolean injectIfNull);
 	LinkBuilder setText(TextBuilder text);
+	LinkBuilder setTextCharacters(String characters);
 	
 	UniformResourceLocatorStringBuilder getUniformResourceLocator();
 	UniformResourceLocatorStringBuilder getUniformResourceLocator(Boolean injectIfNull);

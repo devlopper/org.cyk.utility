@@ -34,14 +34,16 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 			input.getProperties().setRequired(field.getAnnotation(javax.validation.constraints.NotNull.class)!=null);	
 		}
 		
-		OutputStringLabelBuilder labelBuilder = getLabel();
-		if(labelBuilder!=null) {
-			input.setLabel(labelBuilder.execute().getOutput());
+		OutputStringLabelBuilder label = getLabel();
+		if(label!=null) {
+			__setRequestAndContextAndUniformResourceLocatorMapOf__(label);
+			input.setLabel(label.execute().getOutput());
 		}
 		
-		OutputStringMessageBuilder messageBuilder = getMessage();
-		if(messageBuilder!=null) {
-			input.setMessage(messageBuilder.execute().getOutput());
+		OutputStringMessageBuilder message = getMessage();
+		if(message!=null) {
+			__setRequestAndContextAndUniformResourceLocatorMapOf__(message);
+			input.setMessage(message.execute().getOutput());
 		}
 	}
 	
