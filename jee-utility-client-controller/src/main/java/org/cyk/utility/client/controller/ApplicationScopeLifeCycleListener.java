@@ -52,4 +52,5 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	/**/
 	
 	public static final Integer LEVEL = new Integer(org.cyk.utility.ApplicationScopeLifeCycleListener.LEVEL+1);
+	
 }

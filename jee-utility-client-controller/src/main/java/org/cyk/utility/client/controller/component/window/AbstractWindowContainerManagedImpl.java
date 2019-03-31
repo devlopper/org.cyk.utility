@@ -59,12 +59,15 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).execute().getOutput();
 				exception.printStackTrace();
 			}
+			if(__windowBuilder__.getRequest() == null)
+				__windowBuilder__.setRequest(__getRequest__());
 			//TODO you won't be able to customize a page with a specific theme one it has been set to session. how to make it possible then ???
-			Theme theme = (Theme) __inject__(SessionAttributeGetter.class).setAttribute(SessionAttributeEnumeration.THEME).execute().getOutput();
+			Theme theme = (Theme) getSessionAttribute(SessionAttributeEnumeration.THEME);
 			if(theme == null) {
 				Class<? extends Theme> themeClass = __getThemeClass__();
 				if(themeClass!=null) {
 					theme = __inject__(themeClass);
+					theme.setRequest(__getRequest__()).build();
 					setSessionAttribute(SessionAttributeEnumeration.THEME, theme);
 					__windowBuilder__.setTheme(theme);
 				}
@@ -261,11 +264,11 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	
 	/**/
 	
-	protected static void setSessionAttribute(SessionAttributeEnumeration attribute,Object value) {
-		__inject__(SessionAttributeSetter.class).setAttribute(attribute).setValue(value).execute();
+	protected void setSessionAttribute(Object attribute,Object value) {
+		__inject__(SessionAttributeSetter.class).setRequest(__getRequest__()).setAttribute(attribute).setValue(value).execute();
 	}
 	
-	protected static Object getSessionAttribute(SessionAttributeEnumeration attribute) {
-		return __inject__(SessionAttributeGetter.class).setAttribute(attribute).execute().getOutput();
+	protected Object getSessionAttribute(Object attribute) {
+		return __inject__(SessionAttributeGetter.class).setRequest(__getRequest__()).setAttribute(attribute).execute().getOutput();
 	}
 }

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.enterprise.inject.Produces;
 
+import org.cyk.utility.__kernel__.annotation.Default;
 import org.junit.Test;
 
 public class DependencyInjectionWithProducerUnitTest extends AbstractDependencyInjectionUnitTesting {
@@ -29,6 +30,19 @@ public class DependencyInjectionWithProducerUnitTest extends AbstractDependencyI
 		assertThat(__inject__(T.class).getClass()).isEqualTo(T2Impl.class);
 	}
 	
+	@Test
+	public void isMyDefaultClassWhenMyClassInterfaceInjected() {
+		DependencyInjection.setQualifierClass(MyClassInterface.class, null);
+		assertThat(__inject__(MyClassInterface.class).getClass()).isEqualTo(MyDefaultClass.class);
+	}
+	
+	@Test
+	public void isMyCustomDefaultClassWhenMyClassInterfaceInjectedAndQualifierSet() {
+		DependencyInjection.setQualifierClass(MyClassInterface.class, Default.class);
+		assertThat(__inject__(MyClassInterface.class).getClass()).isEqualTo(MyCustomDefaultClass.class);
+		DependencyInjection.setQualifierClass(MyClassInterface.class, null);
+	}
+	
 	/* Deployment*/
 	
 	@org.jboss.arquillian.container.test.api.Deployment
@@ -50,6 +64,9 @@ public class DependencyInjectionWithProducerUnitTest extends AbstractDependencyI
 				.addClass(T1Impl.class)
 				.addClass(T2.class)
 				.addClass(T2Impl.class)
+				.addClass(MyClassInterface.class)
+				.addClass(MyDefaultClass.class)
+				.addClass(MyCustomDefaultClass.class)
 				.execute();
 	}
 	

@@ -13,6 +13,9 @@ import org.cyk.utility.client.controller.tag.TagMap;
 
 public interface Theme extends Objectable {
 
+	Object getRequest();
+	Theme setRequest(Object request);
+	
 	ViewMap getViewMap();
 	ViewMap getViewMap(Boolean injectIfNull);
 	Theme setViewMap(ViewMap viewMap);
@@ -58,6 +61,8 @@ public interface Theme extends Objectable {
 	Theme mapTags(Object...keyValues);
 	
 	/**/
+	
+	Theme build();
 	
 	Theme process(Window window);
 }

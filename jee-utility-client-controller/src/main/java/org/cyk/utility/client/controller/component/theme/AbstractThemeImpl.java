@@ -5,9 +5,9 @@ import java.util.Collection;
 
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.file.File;
-import org.cyk.utility.client.controller.component.file.Files;
 import org.cyk.utility.client.controller.component.file.FileImage;
 import org.cyk.utility.client.controller.component.file.FileImageMap;
+import org.cyk.utility.client.controller.component.file.Files;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.tag.TagMap;
 
@@ -20,10 +20,10 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	private ViewMap viewMap;
 	private ThemeTemplate template;
 	private TagMap tagMap;
+	private Object request;
 	
 	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
+	public Theme build() {
 		setIdentifier(__getIdentifier__());
 		setTemplate(__inject__(ThemeTemplate.class));
 		getTemplate().setIdentifier(__getTemplateIdentifier__());
@@ -35,10 +35,22 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 		getLogo(Boolean.TRUE).getProperties().setContracts(__getIdentifier__());
 		getLogo(Boolean.TRUE).getProperties().setName("logo.png");
 		getLogo(Boolean.TRUE).getProperties().setLibrary("image");
+		return this;
 	}
 	
 	protected abstract String __getIdentifier__();
 	protected abstract String __getTemplateIdentifier__();
+	
+	@Override
+	public Object getRequest() {
+		return request;
+	}
+	
+	@Override
+	public Theme setRequest(Object request) {
+		this.request = request;
+		return this;
+	}
 	
 	@Override
 	public ViewMap getViewMap() {

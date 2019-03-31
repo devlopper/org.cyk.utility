@@ -24,14 +24,19 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	protected void __execute__(MenuItem menuItem) {
 		super.__execute__(menuItem);
 		CommandableBuilder commandable = getCommandable();
-		if(commandable!=null)
+		if(commandable!=null) {
+			if(commandable.getRequest() == null)
+				commandable.setRequest(getRequest());
 			menuItem.setCommandable(commandable.execute().getOutput());
-		
+		}
 		Collection<Object> children = getChildren();
 		if(__injectCollectionHelper__().isNotEmpty(children)) {
 			for(Object index : children) {
-				if(index instanceof MenuItemBuilder)
+				if(index instanceof MenuItemBuilder) {
+					if(((MenuItemBuilder)index).getRequest() == null)
+						((MenuItemBuilder)index).setRequest(getRequest());
 					menuItem.addChild( ((MenuItemBuilder)index).execute().getOutput() );
+				}
 			}
 		}
 	}

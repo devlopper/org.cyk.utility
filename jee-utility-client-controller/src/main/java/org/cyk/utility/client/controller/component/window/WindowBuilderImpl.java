@@ -31,6 +31,7 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	@Override
 	protected void __execute__(Window window) {
 		super.__execute__(window);
+		Object request = getRequest();
 		OutputStringTextBuilder applicationNameOutputStringText = getOutputStringTextMap(Boolean.TRUE).get("applicationName");
 		if(applicationNameOutputStringText == null) {
 			applicationNameOutputStringText = getApplicationName(Boolean.TRUE);
@@ -44,6 +45,8 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		if(outputStringTextMap!=null) {
 			window.setOutputStringTextMap(__inject__(OutputStringTextMap.class));
 			for(Map.Entry<String,OutputStringTextBuilder> entry : outputStringTextMap.getEntries()) {
+				if(entry.getValue().getRequest() == null)
+					entry.getValue().setRequest(getRequest());
 				window.getOutputStringTextMap().set(entry.getKey(),entry.getValue().execute().getOutput());
 			}
 		}	
@@ -55,19 +58,22 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		if(title!=null) {
 			if(__inject__(StringHelper.class).isNotBlank(applicationName))
 				title.setValue(applicationName+"|"+title.getValue());
+			__setRequestAndContextAndUniformResourceLocatorMapOf__(title);
 			window.setTitle(title.execute().getOutput());
 		}
 		
 		ViewBuilder view = getView();
-		if(view!=null)
+		if(view!=null) {
+			__setRequestAndContextAndUniformResourceLocatorMapOf__(view);
 			window.setView(view.execute().getOutput());
+		}
 		
 		if(renderType == null || renderType instanceof WindowRenderTypeNormal) {
 			MenuBuilderMap menuMap = getMenuMap();
 			if(menuMap!=null) {
 				window.setMenuMap(__inject__(MenuMap.class));
 				for(@SuppressWarnings("rawtypes") Map.Entry<Class,MenuBuilder> entry : menuMap.getEntries())
-					window.getMenuMap().set(entry.getKey(),__inject__(MenuGetter.class).setScopeClass(entry.getKey()).execute().getOutput());
+					window.getMenuMap().set(entry.getKey(),__inject__(MenuGetter.class).setRequest(request).setScopeClass(entry.getKey()).execute().getOutput());
 			}	
 		}
 		/*
@@ -77,8 +83,10 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		window.setTheme(theme);
 		*/
 		DialogBuilder dialog = getDialog(Boolean.TRUE);
-		if(dialog!=null)
+		if(dialog!=null) {
+			__setRequestAndContextAndUniformResourceLocatorMapOf__(dialog);
 			window.setDialog(dialog.execute().getOutput());
+		}
 	}
 	
 	@Override

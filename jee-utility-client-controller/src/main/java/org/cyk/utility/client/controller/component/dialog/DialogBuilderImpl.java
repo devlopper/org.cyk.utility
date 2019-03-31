@@ -18,6 +18,7 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 	@Override
 	protected void __execute__(Dialog dialog) {
 		OutputStringTextBuilder title = getTitle(Boolean.TRUE);
+		__setRequestAndContextAndUniformResourceLocatorMapOf__(title);
 		dialog.setTitle(title.execute().getOutput());
 		CommandableBuilders commandables = getCommandables();
 		
@@ -28,6 +29,7 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 					commandables = getCommandables(Boolean.TRUE);
 				commandables.add(commandable);
 				*/
+				__setRequestAndContextAndUniformResourceLocatorMapOf__(commandable);
 				dialog.setOkCommandable(commandable.execute().getOutput());
 				dialog.addCommandables(dialog.getOkCommandable());
 			}
@@ -35,6 +37,7 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 		
 		if(__injectCollectionHelper__().isNotEmpty(commandables)) {
 			for(CommandableBuilder index : commandables.get()) {
+				__setRequestAndContextAndUniformResourceLocatorMapOf__(index);
 				dialog.addCommandables(index.execute().getOutput());
 			}
 		}

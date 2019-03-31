@@ -2,34 +2,16 @@ package org.cyk.utility.client.controller.session;
 
 import java.io.Serializable;
 
-import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import javax.enterprise.inject.Default;
 
-public class SessionAttributeGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements SessionAttributeGetter,Serializable {
+@Default
+public class SessionAttributeGetterImpl extends AbstractSessionAttributeGetterImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Object request;
-	private SessionAttributeEnumeration attribute;
-
 	@Override
-	public Object getRequest() {
-		return request;
-	}
-	
-	@Override
-	public SessionAttributeGetter setRequest(Object request) {
-		this.request = request;
-		return this;
-	}
-	
-	@Override
-	public SessionAttributeEnumeration getAttribute() {
-		return attribute;
+	protected Object __execute__(Object attribute,Object request) {
+		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented(getClass().getName());
+		return null;
 	}
 
-	@Override
-	public SessionAttributeGetter setAttribute(SessionAttributeEnumeration attribute) {
-		this.attribute = attribute;
-		return this;
-	}
-	
 }

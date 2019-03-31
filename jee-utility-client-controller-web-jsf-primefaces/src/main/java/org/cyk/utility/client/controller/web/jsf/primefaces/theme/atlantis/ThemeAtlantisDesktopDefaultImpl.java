@@ -29,9 +29,9 @@ public class ThemeAtlantisDesktopDefaultImpl extends AbstractThemeImpl implement
 	private Tabs menuTabs;
 	
 	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		
+	public Theme build() {
+		Theme theme = super.build();
+		Object request = getRequest();
 		File file = __inject__(File.class);
 		file.getProperties().setName("main.css");
 		file.getProperties().setLibrary("css");
@@ -68,15 +68,18 @@ public class ThemeAtlantisDesktopDefaultImpl extends AbstractThemeImpl implement
 						items.add((MenuItemBuilder)indexChild);
 				index.getChildren().clear();
 			}
+			if(index.getRequest() == null)
+				index.setRequest(request);
 			MenuItem item = index.execute().getOutput();
 			
 			Tab tab = __inject__(Tab.class);
 			tab.setProperty(Properties.NAME, item.getCommandable().getName());
 			tab.setProperty(Properties.ICON, item.getCommandable().getProperties().getIcon());
 			if(items != null)
-				tab.setProperty(Properties.MENU,__inject__(MenuBuilder.class).setItems(items).execute().getOutput());
+				tab.setProperty(Properties.MENU,__inject__(MenuBuilder.class).setItems(items).setRequest(request).execute().getOutput());
 			getMenuTabs(Boolean.TRUE).add(tab);
 		}
+		return theme;
 	}
 	
 	@Override

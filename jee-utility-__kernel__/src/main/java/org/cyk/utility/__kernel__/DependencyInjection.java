@@ -3,6 +3,9 @@ package org.cyk.utility.__kernel__;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.enterprise.inject.spi.CDI;
@@ -67,6 +70,11 @@ public class DependencyInjection implements Serializable {
 		return inject(aClass, annotationLiterals == null ? null : annotationLiterals.toArray(new AnnotationLiteral<?>[]{}));
 	}
 	
+	public static <OBJECT> OBJECT inject(Class<OBJECT> aClass){
+		Set<Class<?>> qualifierClasses = getQualifierClasses(aClass);
+		return injectByQualifiersClasses(aClass, qualifierClasses == null || qualifierClasses.size() == 0 ? null : qualifierClasses.toArray(new Class<?>[] {}));
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static <OBJECT> Set<OBJECT> injectAll(Class<OBJECT> aClass){
 		if(aClass == null){
@@ -75,5 +83,21 @@ public class DependencyInjection implements Serializable {
 		}
 		return (Set<OBJECT>) CDI.current().getBeanManager().getBeans(aClass);
 	}
+	
+	/**/
+	
+	public static void setQualifierClass(Class<?> clazz,Class<?> qualifierClass) {
+		Set<Class<?>> classes = new HashSet<>();
+		classes.add(qualifierClass);
+		QUALIFIER_CLASSES.put(clazz, classes);
+	}
+	
+	public static Set<Class<?>> getQualifierClasses(Class<?> clazz) {
+		return QUALIFIER_CLASSES.get(clazz);
+	}
+	
+	/**/
+	
+	private static final Map<Class<?>,Set<Class<?>>> QUALIFIER_CLASSES = new HashMap<>();
 	
 }

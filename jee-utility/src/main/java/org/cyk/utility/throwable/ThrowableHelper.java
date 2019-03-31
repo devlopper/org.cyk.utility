@@ -15,6 +15,7 @@ public interface ThrowableHelper extends Helper {
 	void throw_(RuntimeException runtimeException);
 	void throw_(SystemException systemException);
 	void throwRuntimeException(String message);
+	void throwRuntimeExceptionNotYetImplemented(String name);
 	void throwRuntimeExceptionNotYetImplemented();
 	void throwRuntimeExceptionImplementationOrRunnableRequired(Class<?> aClass);
 	/**/

@@ -60,6 +60,10 @@ public abstract class AbstractObject implements Objectable,Serializable {
 		return DependencyInjection.injectByQualifiersClasses(aClass,classes);
 	}
 	
+	protected static <OBJECT> OBJECT __inject__(Class<OBJECT> aClass){
+		return DependencyInjection.inject(aClass);
+	}
+	
 	/**/
 	
 	protected static KernelHelper __injectKernelHelper__() {

@@ -19,6 +19,8 @@ public class MenuBuilderImpl extends AbstractVisibleComponentBuilderImpl<Menu> i
 		if(__injectCollectionHelper__().isNotEmpty(items)) {
 			menu.setItems(__inject__(MenuItems.class));
 			for(MenuItemBuilder index : items.get()) {
+				if(index.getRequest() == null)
+					index.setRequest(getRequest());
 				menu.getItems().add(index.execute().getOutput());
 			}
 		}

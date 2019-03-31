@@ -7,7 +7,7 @@ public interface SessionAttributeGetter extends FunctionWithPropertiesAsInput<Ob
 	Object getRequest();
 	SessionAttributeGetter setRequest(Object request);
 	
-	SessionAttributeEnumeration getAttribute();
-	SessionAttributeGetter setAttribute(SessionAttributeEnumeration attribute);
+	Object getAttribute();
+	SessionAttributeGetter setAttribute(Object attribute);
 	
 }

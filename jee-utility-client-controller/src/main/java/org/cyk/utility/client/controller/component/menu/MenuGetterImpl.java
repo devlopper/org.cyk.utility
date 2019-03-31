@@ -14,13 +14,15 @@ public class MenuGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Me
 	private static final long serialVersionUID = 1L;
 
 	private Class<? extends Scope> scopeClass;
+	private Object request;
 	
 	@Override
 	protected Menu __execute__() throws Exception {
+		Object request = getRequest();
 		Menu menu = null;
 		Class<? extends Scope> scopeClass = getScopeClass();
 		if(__injectClassHelper__().isInstanceOf(scopeClass, ScopeSession.class)) {
-			menu = __inject__(SessionAttributeGetter.class).setAttribute(SessionAttributeEnumeration.MENU).execute().getOutputAs(Menu.class);
+			menu = __inject__(SessionAttributeGetter.class).setRequest(request).setAttribute(SessionAttributeEnumeration.MENU).execute().getOutputAs(Menu.class);
 		}
 		if(menu == null) {
 			MenuBuilderMap map = __inject__(MenuBuilderMapGetter.class).execute().getOutput();
@@ -31,12 +33,15 @@ public class MenuGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Me
 						builder = entry.getValue();
 						break;
 					}
-				if(builder!=null)
+				if(builder!=null) {
+					if(builder.getRequest() == null)
+						builder.setRequest(request);
 					menu = builder.execute().getOutput();
+				}
 			}
 			
 			if(__injectClassHelper__().isInstanceOf(scopeClass, ScopeSession.class)) {
-				__inject__(SessionAttributeSetter.class).setAttribute(SessionAttributeEnumeration.MENU).setValue(menu).execute();
+				__inject__(SessionAttributeSetter.class).setRequest(request).setAttribute(SessionAttributeEnumeration.MENU).setValue(menu).execute();
 			}
 		}
 		
@@ -54,4 +59,14 @@ public class MenuGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Me
 		return this;
 	}
 
+	@Override
+	public Object getRequest() {
+		return request;
+	}
+	
+	@Override
+	public MenuGetter setRequest(Object request) {
+		this.request = request;
+		return this;
+	}
 }

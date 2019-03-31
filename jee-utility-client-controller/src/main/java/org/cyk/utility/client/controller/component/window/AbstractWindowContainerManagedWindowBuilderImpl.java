@@ -59,10 +59,10 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(windowRenderType == null || windowRenderType instanceof WindowRenderTypeNormal) {
 			MenuBuilderMap menuMap = getMenuMap();
 			if(menuMap == null)
-				menuMap = (MenuBuilderMap) __inject__(SessionAttributeGetter.class).setAttribute(SessionAttributeEnumeration.MENU_BUILDER_MAP).execute().getOutput();
+				menuMap = (MenuBuilderMap) __inject__(SessionAttributeGetter.class).setRequest(getRequest()).setAttribute(SessionAttributeEnumeration.MENU_BUILDER_MAP).execute().getOutput();
 			if(menuMap == null) {
 				menuMap = __inject__(MenuBuilderMapGetter.class).execute().getOutput();
-				__inject__(SessionAttributeSetter.class).setAttribute(SessionAttributeEnumeration.MENU_BUILDER_MAP).setValue(menuMap).execute();
+				__inject__(SessionAttributeSetter.class).setRequest(getRequest()).setAttribute(SessionAttributeEnumeration.MENU_BUILDER_MAP).setValue(menuMap).execute();
 			}
 			window.setMenuMap(menuMap);	
 		}

@@ -17,6 +17,7 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 	@Override
 	protected void __execute__(COMPONENT component) {
 		super.__execute__(component);
+		Object request = getRequest();
 		StyleBuilder style = getStyle();
 		if(style!=null) {
 			ComponentRoles roles = component.getRoles();
@@ -42,8 +43,7 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 		
 		Theme theme = getTheme();
 		if(theme == null) {
-			Object request = getRequest();
-			if(request!=null)
+			if(request != null)
 				theme = (Theme) __inject__(SessionAttributeGetter.class).setRequest(request).setAttribute(SessionAttributeEnumeration.THEME).execute().getOutput();
 		}
 		component.setTheme(theme);

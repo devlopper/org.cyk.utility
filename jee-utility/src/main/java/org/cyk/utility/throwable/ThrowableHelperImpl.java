@@ -77,6 +77,11 @@ public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelp
 	}
 
 	@Override
+	public void throwRuntimeExceptionNotYetImplemented(String name) {
+		throwRuntimeException(name+" : Not yet implemented");
+	}
+	
+	@Override
 	public void throwRuntimeExceptionNotYetImplemented() {
 		throwRuntimeException("Not yet implemented");
 	}
