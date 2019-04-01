@@ -23,6 +23,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	private Instances components;
 	private Boolean isHandleLayout;
 	private Boolean isCreateLayoutItemOnAddComponent;
+	private Object request;
 
 	@Override
 	protected Components __execute__() throws Exception {
@@ -155,6 +156,8 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 						}
 						layout.addItems(layoutItemBuilder);
 					}
+					if(layout.getRequest() == null)
+						layout.setRequest(getRequest());
 					components.setLayout(layout.execute().getOutput());					
 				}
 				
@@ -256,6 +259,17 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	@Override
 	public ComponentsBuilder setIsHandleLayout(Boolean isHandleLayout) {
 		this.isHandleLayout = isHandleLayout;
+		return this;
+	}
+	
+	@Override
+	public Object getRequest() {
+		return request;
+	}
+	
+	@Override
+	public ComponentsBuilder setRequest(Object request) {
+		this.request = request;
 		return this;
 	}
 	

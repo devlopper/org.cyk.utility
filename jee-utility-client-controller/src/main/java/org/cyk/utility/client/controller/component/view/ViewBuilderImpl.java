@@ -64,6 +64,8 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 					if( ((ComponentBuilder<?>)index).getUniformResourceLocatorMap() == null )
 						((ComponentBuilder<?>)index).setUniformResourceLocatorMap(uniformResourceLocatorMap);
 				}
+			if(componentsBuilder.getRequest() == null)
+				componentsBuilder.setRequest(request);
 			view.setComponents(componentsBuilder.execute().getOutput());
 		}
 		ViewType type = getType();

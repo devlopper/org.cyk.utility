@@ -243,7 +243,9 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 							file.getProperties().setUniformResourceLocator(__file__.getUniformResourceLocator());
 						}
 					}else if(component instanceof FileImage) {
-						
+						FileImage image = (FileImage) component;
+						image.getProperties().setWidth(image.getWidth());
+						image.getProperties().setHeight(image.getHeight());
 					}else if(component instanceof Text) {
 						Text text = (Text) component;
 						String characters = text.getCharacters();

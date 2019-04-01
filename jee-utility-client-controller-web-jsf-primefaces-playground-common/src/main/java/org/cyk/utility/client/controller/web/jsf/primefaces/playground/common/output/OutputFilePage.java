@@ -11,7 +11,6 @@ import org.cyk.utility.client.controller.component.output.OutputFileBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.AbstractDataImpl;
 import org.cyk.utility.client.controller.data.AbstractFormDataImpl;
-import org.cyk.utility.client.controller.session.SessionAttributeSetter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.file.File;
 import org.cyk.utility.file.FileBuilder;
@@ -39,6 +38,8 @@ public class OutputFilePage extends AbstractPageContainerManagedImpl implements 
 		form.getData().setImageEmbedded(__inject__(FileBuilder.class).setClazz(getClass()).setName("imageEmbedded.png").execute().getOutput());
 		form.getData().setImageInLibrary(__inject__(FileBuilder.class).setPath("image").setName("icon.png").execute().getOutput());
 		
+		form.getData().setApplicationPdfStreamed(__inject__(FileBuilder.class).setClazz(getClass()).setName("applicationPdfStreamed.pdf").execute().getOutput());
+		
 		/*form.getData().setImageInSession(setFileInSessionAttribute("image02.png",729));
 		form.getData().setText(setFileInSessionAttribute("text.txt",1));
 		form.getData().setAudio(setFileInSessionAttribute("audio.txt",11).setMimeType("audio/audio"));
@@ -54,6 +55,7 @@ public class OutputFilePage extends AbstractPageContainerManagedImpl implements 
 		outputFileBuilder = (OutputFileBuilder) viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageEmbedded");
 		outputFileBuilder.getFile(Boolean.TRUE).setIsEmbeddable(Boolean.TRUE);
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInLibrary");
+		outputFileBuilder = (OutputFileBuilder) viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "applicationPdfStreamed");
 		/*//viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInDatabase");
 		//viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "imageInFolder");
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.FALSE, "text");
@@ -97,7 +99,7 @@ public class OutputFilePage extends AbstractPageContainerManagedImpl implements 
 		private File video;
 		
 		@Input @InputFile
-		private File application;
+		private File applicationPdfStreamed;
 	}
 	
 	@Getter @Setter @Accessors(chain=true) @ToString

@@ -52,6 +52,8 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 					file.getValue(Boolean.TRUE).setSize(__file__.getSize());
 				if(file.getValue(Boolean.TRUE).getUniformResourceLocator() == null)
 					file.getValue(Boolean.TRUE).setUniformResourceLocator(__file__.getUniformResourceLocator());
+				if(file.getValue(Boolean.TRUE).getIdentifier() == null)
+					file.getValue(Boolean.TRUE).setIdentifier(__file__.getIdentifier());
 			}
 			if(file.getRequest() == null)
 				file.setRequest(getRequest());
@@ -67,7 +69,8 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 			if(link == null /*&& Boolean.TRUE.equals(__getIsFieldNameDerivable__(PROPERTY_LINK))*/) {			
 				if(__injectStringHelper__().isNotBlank(__file__.getUniformResourceLocator())) {
 					link = __inject__(LinkBuilder.class);
-					link.setTextCharacters(__file__.getName());
+					//link.setTextCharacters(__file__.getName());
+					link.setTextCharacters("cliquer ici pour voir le fichier.");
 					link.setUniformResourceLocator(__inject__(UniformResourceLocatorStringBuilder.class)
 							.setUniformResourceIdentifierString(__inject__(UniformResourceIdentifierStringBuilder.class).setString(__file__.getUniformResourceLocator())));	
 				}
@@ -86,37 +89,12 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 			//Thumbnail
 			FileImageBuilder thumbnail = getThumbnail();
 			if(thumbnail == null) {
-				Boolean isThumbnailDerivableFromFile = getIsThumbnailDerivableFromFile();
-				if(isThumbnailDerivableFromFile == null && file!=null)
-					isThumbnailDerivableFromFile = __file__.isImage();
-				if(Boolean.TRUE.equals(isThumbnailDerivableFromFile)) {
+				if(__injectStringHelper__().isNotBlank(__file__.getUniformResourceLocator())) {
+					//Thumbnail will be an icon based on mime type
 					thumbnail = __inject__(FileImageBuilder.class);
-					thumbnail.getFile(Boolean.TRUE).setValueName(__file__.getName()).setValueBytes(__file__.getBytes());
-					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setExtension(__file__.getExtension());
-					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setMimeType(__file__.getMimeType());
-					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setUniformResourceLocator(__file__.getUniformResourceLocator());
-					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setSize(__file__.getSize());
-					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setPath(__file__.getPath());
-					/*
-					byte[] bytes = file.getBytes();
-					if(Boolean.TRUE.equals(__file__.isImage()) && (bytes!=null || __inject__(StringHelper.class).isNotBlank(uniformResourceLocator))) {
-						//Thumbnail will be image itself
-						if(bytes == null) {
-							//no data to be embedded , browser will handle it by doing get request
-							thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setUniformResourceLocator(uniformResourceLocator);
-						}else {
-							//data to be embedded using base64 encoding
-							thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setBytes(bytes).setMimeType(file.getMimeType());
-						}									
-					}else {
-						//Thumbnail will be an icon based on mime type
-						thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setPath("image/icon");
-						thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setName(StringUtils.substringBefore(file.getMimeType(),"/")).setExtension("png");	
-					}
-					*/
-				}else {
-					System.err.println("derive thumbnail from file not handle in this case 02");
-				}	
+					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setPath("image/icon");
+					thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setName(StringUtils.substringBefore(__file__.getMimeType(),"/")).setExtension("png");	
+				}
 			}
 			
 			if(thumbnail!=null) {
@@ -133,56 +111,6 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 				outputFile.setThumbnail(thumbnail.execute().getOutput());
 			}
 		}
-
-		/*
-		RepositoryType repositoryType = getRepositoryType();
-		if(repositoryType == null) {
-			File file = getValue();
-			if(file == null || file.getIdentifier() == null)
-				repositoryType = __inject__(RepositoryTypeSession.class);
-			else
-				repositoryType = __inject__(RepositoryTypeDatabase.class);
-		}
-		
-		File file = outputFile.getValue();
-				
-		FileImageBuilder thumbnail = getThumbnail();
-		if(thumbnail == null) {
-			Boolean isThumbnailDerivable = __injectValueHelper__().defaultToIfNull(getIsThumbnailDerivable(), Boolean.TRUE);
-			if(Boolean.TRUE.equals(isThumbnailDerivable)) {
-				thumbnail = __inject__(FileImageBuilder.class);
-				Boolean isThumbnailDerivableFromFile = getIsThumbnailDerivableFromFile();
-				if(isThumbnailDerivableFromFile == null && file!=null)
-					isThumbnailDerivableFromFile = file.isImage();
-				if(Boolean.TRUE.equals(isThumbnailDerivableFromFile)) {
-					byte[] bytes = file.getBytes();
-					if(Boolean.TRUE.equals(file.isImage()) && (bytes!=null || __inject__(StringHelper.class).isNotBlank(uniformResourceLocator))) {
-						//Thumbnail will be image itself
-						if(bytes == null) {
-							//no data to be embedded , browser will handle it by doing get request
-							thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setUniformResourceLocator(uniformResourceLocator);
-						}else {
-							//data to be embedded using base64 encoding
-							thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setBytes(bytes).setMimeType(file.getMimeType());
-						}									
-					}else {
-						//Thumbnail will be an icon based on mime type
-						thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setPath("image/icon");
-						thumbnail.getFile(Boolean.TRUE).getValue(Boolean.TRUE).setName(StringUtils.substringBefore(file.getMimeType(),"/")).setExtension("png");	
-					}
-				}else {
-					System.err.println("derive thumbnail from file not handle in this case 02");
-				}
-			}
-		}
-		
-		if(thumbnail!=null) {
-			//thumbnail.getProperties().setAlt(StringUtils.substringBefore(file.getMimeType(),"/"));
-			thumbnail.setTooltip(StringUtils.substringBefore(file.getMimeType(),"/"));
-			thumbnail.setWidth(40);
-			thumbnail.setHeight(40);
-		}
-		*/
 	}
 	
 	@Override
