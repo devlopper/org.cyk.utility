@@ -10,4 +10,6 @@ public interface SystemHelper extends Helper {
 	
 	String getPropertyThrowIfBlank(String name);
 	String getPropertyThrowIfBlank(String name,Boolean defaultOnOperatingSystemIfBlank);
+	
+	SystemHelper executeCommand(String command);
 }

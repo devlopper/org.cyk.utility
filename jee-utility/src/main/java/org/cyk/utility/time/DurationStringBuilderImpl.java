@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 
@@ -34,7 +34,7 @@ public class DurationStringBuilderImpl extends AbstractStringFunctionImpl implem
 			if(__inject__(NumberHelper.class).isGreaterThanZero(duration.getNumberOfMillisecond()))
 				strings.add(duration.getNumberOfMillisecond()+"");
 		}
-		String string = __injectStringHelper__().concatenate(strings,CharacterConstant.COMA.toString());
+		String string = __injectStringHelper__().concatenate(strings,ConstantCharacter.COMA.toString());
 		return string;
 	}
 

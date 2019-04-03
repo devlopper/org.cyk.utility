@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
@@ -28,8 +28,8 @@ public abstract class AbstractMapInstanceImpl<KEY,VALUE> extends AbstractObject 
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		__valueClass__ = (Class<VALUE>) __inject__(ClassHelper.class).getParameterAt(getClass(), 1, Object.class);
-		setKeyValueSeparator(CharacterConstant.EQUAL);
-		setEntrySeparator(CharacterConstant.COMA);
+		setKeyValueSeparator(ConstantCharacter.EQUAL);
+		setEntrySeparator(ConstantCharacter.COMA);
 	}
 	
 	@Override

@@ -3,7 +3,7 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.client.controller.data.DataHelper;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.collection.CollectionHelper;
@@ -54,7 +54,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderSelectImpl exte
 	
 	@Override
 	public WindowContainerManagedWindowBuilderSelect addGridColumnsFieldNamesWithPrefix(String prefix,Collection<String> gridColumnsFieldNames) {
-		getGridColumnsFieldNames(Boolean.TRUE).addWithPrefix(__injectStringHelper__().addToEndIfDoesNotEndWith(prefix, CharacterConstant.DOT), gridColumnsFieldNames);
+		getGridColumnsFieldNames(Boolean.TRUE).addWithPrefix(__injectStringHelper__().addToEndIfDoesNotEndWith(prefix, ConstantCharacter.DOT), gridColumnsFieldNames);
 		return this;
 	}
 	

@@ -3,8 +3,8 @@ package org.cyk.utility.system.layer;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
@@ -29,7 +29,7 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 		getInterfaceLayer().setPackageNameRegularExpression(StringUtils.replace(getInterfaceLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression()
 				, SystemSubLayerInterface.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_API, getIdentifier().toString().toLowerCase()+"."
 						+SystemSubLayerInterface.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_API));
-		getInterfaceLayer().setInterfaceNameRegularExpression(getIdentifier()+CharacterConstant.DOLLAR.toString());
+		getInterfaceLayer().setInterfaceNameRegularExpression(getIdentifier()+ConstantCharacter.DOLLAR.toString());
 		getInterfaceLayer().getPackageNameRegularExpression().getMiddleTokens(Boolean.TRUE).add(getIdentifier().toString().toLowerCase());
 		getInterfaceLayer().getInterfaceNameRegularExpression().getEndTokens(Boolean.TRUE).add(getIdentifier().toString());
 		
@@ -37,7 +37,7 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 		getImplementationLayer().setPackageNameRegularExpression(StringUtils.replace(getImplementationLayer().getPackageNameRegularExpression(Boolean.TRUE).getExpression()
 				, SystemSubLayerImplementation.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_IMPL, getIdentifier().toString().toLowerCase()+"."
 						+SystemSubLayerImplementation.PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_IMPL));
-		getImplementationLayer().setClassNameRegularExpression(getIdentifier()+"Impl"+CharacterConstant.DOLLAR.toString());
+		getImplementationLayer().setClassNameRegularExpression(getIdentifier()+"Impl"+ConstantCharacter.DOLLAR.toString());
 		getImplementationLayer().getClassNameRegularExpression().getEndTokens(Boolean.TRUE).add(getIdentifier().toString()+"Impl");
 	}
 	
@@ -88,11 +88,11 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 		String replacement = getInterfaceLayer()!=null && getInterfaceLayer().getParent()!=null && getInterfaceLayer().getParent().getIdentifier()!=null 
 				? getInterfaceLayer().getParent().getIdentifier().toString().toLowerCase() : null;
 		
-		subString = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(subString, CharacterConstant.DOT);		
-		subString = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(subString, CharacterConstant.DOT);
+		subString = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(subString, ConstantCharacter.DOT);		
+		subString = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(subString, ConstantCharacter.DOT);
 		
-		replacement = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(replacement, CharacterConstant.DOT);		
-		replacement = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(replacement, CharacterConstant.DOT);
+		replacement = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(replacement, ConstantCharacter.DOT);		
+		replacement = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(replacement, ConstantCharacter.DOT);
 		
 		if(StringUtils.contains(name, subString))
 			name = StringUtils.replace(name, subString,replacement);

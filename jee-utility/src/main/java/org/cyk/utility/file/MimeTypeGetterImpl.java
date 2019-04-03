@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import javax.activation.MimetypesFileTypeMap;
 import javax.ws.rs.core.MediaType;
 
-import org.cyk.utility.__kernel__.ConstantSeparator;
+import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.StringHelper;
 

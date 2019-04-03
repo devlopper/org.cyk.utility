@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import org.codehaus.plexus.util.StringUtils;
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.client.controller.component.InputOutputBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;

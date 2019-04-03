@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemAction;
@@ -97,6 +97,6 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 	
 	/**/
 	
-	private static final String DOT = CharacterConstant.DOT.toString();
+	private static final String DOT = ConstantCharacter.DOT.toString();
 
 }

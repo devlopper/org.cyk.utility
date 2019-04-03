@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.server.representation.RepresentationEntity;
@@ -34,7 +34,7 @@ public abstract class AbstractTestRepresentationUpdateIntegrationImpl extends Ab
 				__inject__(FieldValueSetter.class).execute(object, index.getKey(), index.getValue());
 				fieldNames.add(index.getKey());
 			}
-		__response__ = representation.updateOne(object,__injectStringHelper__().concatenate(fieldNames, CharacterConstant.COMA.toString()));
+		__response__ = representation.updateOne(object,__injectStringHelper__().concatenate(fieldNames, ConstantCharacter.COMA.toString()));
 		
 		//Object updated = representation.getOne(identifier, type).getEntity();
 		

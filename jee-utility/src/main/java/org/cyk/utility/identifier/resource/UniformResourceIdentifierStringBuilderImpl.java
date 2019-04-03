@@ -5,8 +5,8 @@ import java.net.URI;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.ConstantEmpty;
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.object.ObjectByObjectMap;
 import org.cyk.utility.request.RequestProperty;
@@ -45,7 +45,7 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 		if(__injectStringHelper__().isBlank(port))
 			setPort(port = __getRequestProperty__(RequestProperty.PORT,string));
 		
-		setFormatArguments(FORMAT_ARGUMENT_HOST_PORT_SEPARATOR,port == null ? ConstantEmpty.STRING : CharacterConstant.COLON);
+		setFormatArguments(FORMAT_ARGUMENT_HOST_PORT_SEPARATOR,port == null ? ConstantEmpty.STRING : ConstantCharacter.COLON);
 		
 		String context = __injectStringHelper__().getString(getContext());
 		if(__injectStringHelper__().isBlank(context))
@@ -57,16 +57,16 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 		String path = __injectValueHelper__().defaultToIfNull(__injectStringHelper__().getString(getPath()), StringConstant.EMPTY) ;
 		
 		if(__injectStringHelper__().isNotBlank(context))
-			path = context + CharacterConstant.SLASH + path;
+			path = context + ConstantCharacter.SLASH + path;
 		
 		while(StringUtils.contains(path, "//"))
 			path = StringUtils.replace((String)path, "//", "/");
-		path = __injectStringHelper__().removeToBeginIfDoesStartWith(path, CharacterConstant.SLASH);
+		path = __injectStringHelper__().removeToBeginIfDoesStartWith(path, ConstantCharacter.SLASH);
 		
 		ObjectByObjectMap parameterMap = getParameterMap();
 		if(Boolean.TRUE.equals(__inject__(MapHelper.class).isNotEmpty(parameterMap))) {
-			StringByStringMap finalParameterMap = __inject__(StringByStringMap.class).setIsSequential(Boolean.TRUE).setKeyValueSeparator(CharacterConstant.EQUAL)
-					.setEntrySeparator(CharacterConstant.AMPERSTAMP);
+			StringByStringMap finalParameterMap = __inject__(StringByStringMap.class).setIsSequential(Boolean.TRUE).setKeyValueSeparator(ConstantCharacter.EQUAL)
+					.setEntrySeparator(ConstantCharacter.AMPERSTAMP);
 			for(Map.Entry<Object, Object> index : parameterMap.getEntries()) {
 				String name = null;
 				if(index.getKey()!=null) {
@@ -89,7 +89,7 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 					}
 				}
 			}
-			path = path + CharacterConstant.QUESTION_MARK.toString() + finalParameterMap.getRepresentationAsString();
+			path = path + ConstantCharacter.QUESTION_MARK.toString() + finalParameterMap.getRepresentationAsString();
 		}
 		
 		setPath(path);
@@ -98,7 +98,7 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 		if(__injectStringHelper__().isBlank(query))
 			setQuery(query = __injectValueHelper__().defaultToIfNull(__getRequestProperty__(RequestProperty.QUERY,string),ConstantEmpty.STRING));
 		
-		setFormatArguments(FORMAT_ARGUMENT_PATH_QUERY_SEPARATOR,Boolean.TRUE.equals(__injectStringHelper__().isBlank(query)) ? ConstantEmpty.STRING : CharacterConstant.QUESTION_MARK);
+		setFormatArguments(FORMAT_ARGUMENT_PATH_QUERY_SEPARATOR,Boolean.TRUE.equals(__injectStringHelper__().isBlank(query)) ? ConstantEmpty.STRING : ConstantCharacter.QUESTION_MARK);
 		
 		return super.__getFormat__(format);
 	}

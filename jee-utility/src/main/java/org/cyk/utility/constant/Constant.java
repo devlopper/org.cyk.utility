@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.string.StringConstant;
 
 public interface Constant {
@@ -144,7 +144,7 @@ public interface Constant {
 		public static String SEPARATOR = StringConstant.EMPTY;
 		
 		public static String generateFromString(String string){
-			return StringUtils.remove(string, CharacterConstant.SPACE);
+			return StringUtils.remove(string, ConstantCharacter.SPACE);
 		}
 		
 		public static String generate(Object[] objects,Object separator){

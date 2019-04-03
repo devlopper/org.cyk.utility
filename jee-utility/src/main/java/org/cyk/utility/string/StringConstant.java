@@ -1,6 +1,6 @@
 package org.cyk.utility.string;
 
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 
 public interface StringConstant {
 
@@ -18,10 +18,10 @@ public interface StringConstant {
 	
 	String JAVA_STRING_FORMAT_MARKER_S = "%s";
 	
-	String JNDI_NAMESPACE_GLOBAL = WORD_JAVA+CharacterConstant.COLON+WORD_GLOBAL;
-	String JNDI_NAMESPACE_APP = WORD_JAVA+CharacterConstant.COLON+WORD_APP;
+	String JNDI_NAMESPACE_GLOBAL = WORD_JAVA+ConstantCharacter.COLON+WORD_GLOBAL;
+	String JNDI_NAMESPACE_APP = WORD_JAVA+ConstantCharacter.COLON+WORD_APP;
 	
-	String PREFIX_PACKAGE_JAVAX = WORD_JAVAX+CharacterConstant.DOT;	
+	String PREFIX_PACKAGE_JAVAX = WORD_JAVAX+ConstantCharacter.DOT;	
 	String PREFIX_PACKAGE_BEAN_VALIDATION = PREFIX_PACKAGE_JAVAX+WORD_VALIDATION;
 	String PREFIX_PACKAGE_ORG_CYK = "org.cyk.";	
 	String PREFIX_PACKAGE_ORG_CYK_SYSTEM = PREFIX_PACKAGE_ORG_CYK+"system.";		

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.inject.Singleton;
 
-import org.cyk.utility.__kernel__.ConstantNull;
+import org.cyk.utility.__kernel__.constant.ConstantNull;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueHelper;
@@ -45,6 +45,17 @@ public class SystemHelperImpl extends AbstractHelper implements SystemHelper, Se
 	public String getPropertyThrowIfBlank(String name, Boolean defaultOnOperatingSystemIfBlank) {
 		String value = getProperty(name,defaultOnOperatingSystemIfBlank);
 		return __inject__(ValueHelper.class).returnOrThrowIfBlank(name, value);
+	}
+	
+	@Override
+	public SystemHelper executeCommand(String command) {
+		if(__inject__(StringHelper.class).isNotBlank(command))
+			try {
+				Runtime.getRuntime().exec(command);
+			} catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		return this;
 	}
 	
 }

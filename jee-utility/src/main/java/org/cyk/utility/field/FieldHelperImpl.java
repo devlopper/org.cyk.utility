@@ -8,8 +8,8 @@ import java.util.Collection;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelper;
@@ -136,5 +136,5 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	
 	/**/
 	
-	private static final String DOT = CharacterConstant.DOT.toString();
+	private static final String DOT = ConstantCharacter.DOT.toString();
 }

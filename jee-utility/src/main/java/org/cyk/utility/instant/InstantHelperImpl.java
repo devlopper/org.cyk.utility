@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import javax.inject.Singleton;
 
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.locale.LocaleHelper;
 import org.cyk.utility.value.ValueHelper;
@@ -50,17 +50,17 @@ public class InstantHelperImpl extends AbstractHelper implements InstantHelper,S
 		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_ONLY, ValueLength.LONG, longDateOnlyPattern));
 		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.TIME_ONLY, ValueLength.SHORT, shortTimeOnlyPattern));
 		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.TIME_ONLY, ValueLength.LONG, longTimeOnlyPattern));
-		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME, ValueLength.SHORT, shortDateOnlyPattern+CharacterConstant.SPACE+shortTimeOnlyPattern));
-		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME, ValueLength.LONG, longDateOnlyPattern+CharacterConstant.SPACE+longTimeOnlyPattern));
+		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME, ValueLength.SHORT, shortDateOnlyPattern+ConstantCharacter.SPACE+shortTimeOnlyPattern));
+		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME, ValueLength.LONG, longDateOnlyPattern+ConstantCharacter.SPACE+longTimeOnlyPattern));
 		
-		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE, ValueLength.SHORT, shortDateOnlyPattern+CharacterConstant.SPACE+shortTimeOnlyHourMinutePattern));
-		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE, ValueLength.LONG, longDateOnlyPattern+CharacterConstant.SPACE+shortTimeOnlyHourMinutePattern));
+		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE, ValueLength.SHORT, shortDateOnlyPattern+ConstantCharacter.SPACE+shortTimeOnlyHourMinutePattern));
+		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE, ValueLength.LONG, longDateOnlyPattern+ConstantCharacter.SPACE+shortTimeOnlyHourMinutePattern));
 		
-		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND, ValueLength.SHORT, shortDateOnlyPattern+CharacterConstant.SPACE+shortTimeOnlyHourMinuteSecondPattern));
-		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND, ValueLength.LONG, longDateOnlyPattern+CharacterConstant.SPACE+shortTimeOnlyHourMinuteSecondPattern));
+		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND, ValueLength.SHORT, shortDateOnlyPattern+ConstantCharacter.SPACE+shortTimeOnlyHourMinuteSecondPattern));
+		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND, ValueLength.LONG, longDateOnlyPattern+ConstantCharacter.SPACE+shortTimeOnlyHourMinuteSecondPattern));
 		
-		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND_MILLISECOND, ValueLength.SHORT, shortDateOnlyPattern+CharacterConstant.SPACE+shortTimeOnlyHourMinuteSecondMillisecondPattern));
-		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND_MILLISECOND, ValueLength.LONG, longDateOnlyPattern+CharacterConstant.SPACE+shortTimeOnlyHourMinuteSecondMillisecondPattern));
+		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND_MILLISECOND, ValueLength.SHORT, shortDateOnlyPattern+ConstantCharacter.SPACE+shortTimeOnlyHourMinuteSecondMillisecondPattern));
+		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_AND_TIME_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND_MILLISECOND, ValueLength.LONG, longDateOnlyPattern+ConstantCharacter.SPACE+shortTimeOnlyHourMinuteSecondMillisecondPattern));
 		
 		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_YEAR_ONLY, ValueLength.SHORT, dateYearOnlyPattern));
 		INSTANT_PATTERNS.add(new InstantPattern(locale, InstantPart.DATE_YEAR_ONLY, ValueLength.LONG, dateYearOnlyPattern));

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.array.ArrayHelper;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.css.StyleClassBuilderWidth;
@@ -28,7 +28,7 @@ public class LayoutImpl extends AbstractVisibleComponentImpl implements Layout, 
 	
 	@Override
 	public Layout addItemFromClasses(Collection<String> classes) {
-		return addItemFromClass(__inject__(StringHelper.class).concatenate(classes,CharacterConstant.SPACE.toString()));
+		return addItemFromClass(__inject__(StringHelper.class).concatenate(classes,ConstantCharacter.SPACE.toString()));
 	}
 	
 	@Override

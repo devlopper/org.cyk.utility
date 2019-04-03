@@ -7,8 +7,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponent;
@@ -49,7 +49,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 					strings.add(index.toString());
 				
 			}
-		return strings.concatenate(CharacterConstant.COMA);
+		return strings.concatenate(ConstantCharacter.COMA);
 	}
 	
 	public String computeAttributeUpdate(Component component,String...strings) {

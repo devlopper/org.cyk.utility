@@ -4,19 +4,12 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.client.controller.component.file.File;
 import org.cyk.utility.client.controller.component.file.FileBuilder;
 import org.cyk.utility.client.controller.component.file.FileImageBuilder;
 import org.cyk.utility.client.controller.component.link.LinkBuilder;
-import org.cyk.utility.client.controller.navigation.NavigationBuilder;
-import org.cyk.utility.client.controller.session.SessionAttributeSetter;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
-import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.repository.RepositoryType;
-import org.cyk.utility.repository.RepositoryTypeDatabase;
-import org.cyk.utility.repository.RepositoryTypeSession;
 import org.cyk.utility.resource.locator.UniformResourceLocatorStringBuilder;
-import org.cyk.utility.string.StringHelper;
 
 public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,org.cyk.utility.file.File> implements OutputFileBuilder,Serializable {
 	private static final long serialVersionUID = 1L;

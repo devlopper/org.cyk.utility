@@ -6,7 +6,7 @@ import java.util.Collection;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.server.business.BusinessLayer;
@@ -60,7 +60,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	@Override
 	public Response updateOne(ENTITY entity,String fields) {
 		return __inject__(RepresentationFunctionModifier.class).setPersistenceEntityClass(getPersistenceEntityClass()).setEntity(entity)
-				.setEntityFieldNames(StringUtils.split(fields,CharacterConstant.COMA.toString())).execute().getResponse();
+				.setEntityFieldNames(StringUtils.split(fields,ConstantCharacter.COMA.toString())).execute().getResponse();
 	}
 	
 	@Override

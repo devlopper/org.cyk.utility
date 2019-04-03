@@ -3,8 +3,8 @@ package org.cyk.utility.client.controller.component;
 import java.lang.reflect.Field;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.string.Strings;
@@ -31,8 +31,8 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 				if(__injectCollectionHelper__().isNotEmpty(fieldNameStrings))
 					fieldName = __injectFieldHelper__().join(fieldNameStrings.get());
 				if(__injectStringHelper__().isNotBlank(fieldName)) {
-					String objectFieldName = StringUtils.contains(fieldName, CharacterConstant.DOT.toString()) ? StringUtils.substringBeforeLast(fieldName, CharacterConstant.DOT.toString()) : null;
-					fieldName = objectFieldName == null ? fieldName : StringUtils.substringAfterLast(fieldName, CharacterConstant.DOT.toString());
+					String objectFieldName = StringUtils.contains(fieldName, ConstantCharacter.DOT.toString()) ? StringUtils.substringBeforeLast(fieldName, ConstantCharacter.DOT.toString()) : null;
+					fieldName = objectFieldName == null ? fieldName : StringUtils.substringAfterLast(fieldName, ConstantCharacter.DOT.toString());
 					if(objectFieldName!=null)
 						object = __inject__(FieldValueGetter.class).execute(object, objectFieldName).getOutput();
 					field = __injectCollectionHelper__().getFirst(__inject__(FieldGetter.class).execute(object.getClass(), fieldName).getOutput());	

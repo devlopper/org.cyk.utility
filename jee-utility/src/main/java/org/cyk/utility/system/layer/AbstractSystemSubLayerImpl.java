@@ -3,8 +3,8 @@ package org.cyk.utility.system.layer;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.regularexpression.RegularExpressionInstance;
 import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.StringHelper;
@@ -117,11 +117,11 @@ public abstract class AbstractSystemSubLayerImpl extends AbstractObject implemen
 			String replacement = getPackageNameRegularExpression()!=null && getPackageNameRegularExpression().getMiddleTokens()!=null 
 					?  getPackageNameRegularExpression().getMiddleTokens().getFirst() : null;
 			
-			subString = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(subString, CharacterConstant.DOT);		
-			subString = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(subString, CharacterConstant.DOT);
+			subString = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(subString, ConstantCharacter.DOT);		
+			subString = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(subString, ConstantCharacter.DOT);
 			
-			replacement = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(replacement, CharacterConstant.DOT);		
-			replacement = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(replacement, CharacterConstant.DOT);
+			replacement = __inject__(StringHelper.class).addToBeginIfDoesNotStartWith(replacement, ConstantCharacter.DOT);		
+			replacement = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(replacement, ConstantCharacter.DOT);
 			
 			if(StringUtils.contains(name, subString))
 				name = StringUtils.replace(name, subString,replacement);

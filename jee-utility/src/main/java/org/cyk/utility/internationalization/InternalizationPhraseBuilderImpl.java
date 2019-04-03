@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringHelper;
@@ -97,6 +97,6 @@ public class InternalizationPhraseBuilderImpl extends AbstractStringFunctionImpl
 	
 	public static final String FIELD_STRINGS = "strings";
 	
-	private static final String SEPARATOR = CharacterConstant.SPACE.toString();
+	private static final String SEPARATOR = ConstantCharacter.SPACE.toString();
 	
 }

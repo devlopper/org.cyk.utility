@@ -5,8 +5,8 @@ import java.io.Serializable;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeButton;
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeLink;
@@ -285,12 +285,12 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	public static final String GLOBAL_MESSAGES_TARGET_GROWL_IDENTIFIER = "globalMessagesTargetGrowl";
 	public static final String GLOBAL_MESSAGES_TARGET_DIALOG_IDENTIFIER = "globalMessagesTargetDialog";
 	
-	public static final String GLOBAL_MESSAGES_OWNER_INLINE_CLIENT_IDENTIFIER = GLOBAL_FORM_IDENTIFIER+CharacterConstant.COLON+GLOBAL_MESSAGES_OWNER_INLINE_IDENTIFIER;
+	public static final String GLOBAL_MESSAGES_OWNER_INLINE_CLIENT_IDENTIFIER = GLOBAL_FORM_IDENTIFIER+ConstantCharacter.COLON+GLOBAL_MESSAGES_OWNER_INLINE_IDENTIFIER;
 	public static final String GLOBAL_MESSAGES_OWNER_GROWL_CLIENT_IDENTIFIER = GLOBAL_MESSAGES_OWNER_GROWL_IDENTIFIER;
-	public static final String GLOBAL_MESSAGES_OWNER_DIALOG_CLIENT_IDENTIFIER = GLOBAL_FORM_IDENTIFIER+CharacterConstant.COLON+GLOBAL_MESSAGES_OWNER_DIALOG_IDENTIFIER;
+	public static final String GLOBAL_MESSAGES_OWNER_DIALOG_CLIENT_IDENTIFIER = GLOBAL_FORM_IDENTIFIER+ConstantCharacter.COLON+GLOBAL_MESSAGES_OWNER_DIALOG_IDENTIFIER;
 	
-	public static final String GLOBAL_MESSAGES_TARGET_INLINE_CLIENT_IDENTIFIER = GLOBAL_FORM_IDENTIFIER+CharacterConstant.COLON+GLOBAL_MESSAGES_TARGET_INLINE_IDENTIFIER;
+	public static final String GLOBAL_MESSAGES_TARGET_INLINE_CLIENT_IDENTIFIER = GLOBAL_FORM_IDENTIFIER+ConstantCharacter.COLON+GLOBAL_MESSAGES_TARGET_INLINE_IDENTIFIER;
 	public static final String GLOBAL_MESSAGES_TARGET_GROWL_CLIENT_IDENTIFIER = GLOBAL_MESSAGES_TARGET_GROWL_IDENTIFIER;
-	public static final String GLOBAL_MESSAGES_TARGET_DIALOG_CLIENT_IDENTIFIER = GLOBAL_FORM_IDENTIFIER+CharacterConstant.COLON+GLOBAL_MESSAGES_TARGET_DIALOG_IDENTIFIER;
+	public static final String GLOBAL_MESSAGES_TARGET_DIALOG_CLIENT_IDENTIFIER = GLOBAL_FORM_IDENTIFIER+ConstantCharacter.COLON+GLOBAL_MESSAGES_TARGET_DIALOG_IDENTIFIER;
 	
 }

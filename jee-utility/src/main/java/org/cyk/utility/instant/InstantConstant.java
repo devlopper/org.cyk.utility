@@ -1,6 +1,6 @@
 package org.cyk.utility.instant;
 
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 
 public interface InstantConstant {
 	
@@ -8,7 +8,7 @@ public interface InstantConstant {
 	String HOUR_MINUTE_SECOND_PATTERN_FORMAT = HOUR_MINUTE_PATTERN_FORMAT+":%s";
 	String HOUR_MINUTE_SECOND_MILLISECOND_PATTERN_FORMAT = HOUR_MINUTE_SECOND_PATTERN_FORMAT+":%s";
 	String DAY_MONTH_YEAR_PATTERN_FORMAT = "%s/%s/%s";
-	String DATE_TIME_PATTERN_FORMAT = "%s"+CharacterConstant.SPACE+"%s";
+	String DATE_TIME_PATTERN_FORMAT = "%s"+ConstantCharacter.SPACE+"%s";
 	
 	String DAY_MONTH_YEAR_PATTERN = String.format(DAY_MONTH_YEAR_PATTERN_FORMAT, "dd","MM","yyyy");
 	String HOUR_MINUTE_PATTERN = String.format(HOUR_MINUTE_PATTERN_FORMAT, "HH","mm");

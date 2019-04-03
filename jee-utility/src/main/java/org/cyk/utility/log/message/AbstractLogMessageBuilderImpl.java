@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.log.Log;
@@ -31,7 +31,7 @@ public abstract class AbstractLogMessageBuilderImpl extends AbstractFunctionWith
 			Integer index = 0;
 			for(Object parameter : parameters){
 				if(templateStringBuilder.length()>0)
-					templateStringBuilder.append(__inject__(ValueHelper.class).defaultToIfNull(getProperties().getParameterSeparator(),CharacterConstant.SPACE));
+					templateStringBuilder.append(__inject__(ValueHelper.class).defaultToIfNull(getProperties().getParameterSeparator(),ConstantCharacter.SPACE));
 				if(parameter instanceof Object[]){
 					templateStringBuilder.append(formatParameter((String)getProperties().getParameterFormat(),index++, ((Object[])parameter)[0]));
 					if(message.getArguments()==null)

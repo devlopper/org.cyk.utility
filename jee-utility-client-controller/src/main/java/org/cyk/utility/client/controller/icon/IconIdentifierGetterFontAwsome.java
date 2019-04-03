@@ -3,7 +3,7 @@ package org.cyk.utility.client.controller.icon;
 import java.io.Serializable;
 
 import org.codehaus.plexus.util.StringUtils;
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 
 public class IconIdentifierGetterFontAwsome extends AbstractIconIdentifierGetterFunctionRunnableImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -18,6 +18,6 @@ public class IconIdentifierGetterFontAwsome extends AbstractIconIdentifierGetter
 	}
 	
 	private static final String FORMAT = "fa fa-%s";
-	private static final String UNDESCORE = CharacterConstant.UNDESCORE.toString();
-	private static final String MINUS = CharacterConstant.MINUS.toString();
+	private static final String UNDESCORE = ConstantCharacter.UNDESCORE.toString();
+	private static final String MINUS = ConstantCharacter.MINUS.toString();
 }

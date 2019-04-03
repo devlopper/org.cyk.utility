@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.StringHelper;
@@ -43,7 +43,7 @@ public abstract class AbstractQueryClauseStringBuilderImpl extends AbstractFunct
 	}
 	
 	protected String __execute__(String format,String keyword,Collection<String> arguments) throws Exception {
-		return String.format(format, keyword,__inject__(StringHelper.class).concatenate(arguments, CharacterConstant.COMA.toString()));
+		return String.format(format, keyword,__inject__(StringHelper.class).concatenate(arguments, ConstantCharacter.COMA.toString()));
 	}
 	
 	@Override

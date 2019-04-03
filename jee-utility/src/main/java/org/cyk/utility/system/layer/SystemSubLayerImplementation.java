@@ -1,6 +1,6 @@
 package org.cyk.utility.system.layer;
 
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 
 public interface SystemSubLayerImplementation extends SystemSubLayer {
 
@@ -14,6 +14,6 @@ public interface SystemSubLayerImplementation extends SystemSubLayer {
 	
 	String PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_IMPL = CLASS_NAME_SUFFIX.toLowerCase();
 	
-	String PACKAGE_NAME_SUB_STRING_AS_IDENTIFIER = CharacterConstant.DOT+PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_IMPL+CharacterConstant.DOT;
+	String PACKAGE_NAME_SUB_STRING_AS_IDENTIFIER = ConstantCharacter.DOT+PACKAGE_NAME_REGULAR_EXPRESSION_TOKEN_IMPL+ConstantCharacter.DOT;
 	
 }

@@ -2,7 +2,7 @@ package org.cyk.utility.programming.script;
 
 import java.io.Serializable;
 
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 
@@ -16,7 +16,7 @@ public class ScriptBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl
 		Script script = __inject__(Script.class);
 		Strings instructions = getInstructions();
 		if(instructions!=null)
-			script.setCodeSource(instructions.concatenate(CharacterConstant.SEMI_COLON));
+			script.setCodeSource(instructions.concatenate(ConstantCharacter.SEMI_COLON));
 		return script;
 	}
 	

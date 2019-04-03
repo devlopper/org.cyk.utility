@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
@@ -22,10 +22,10 @@ public class InternalizationKeyRelatedStringsBuilderImpl extends AbstractFunctio
 		if(key != null) {
 			String keyAsString = __inject__(InternalizationKeyStringBuilder.class).setValue(key).execute().getOutput();
 			if(__inject__(StringHelper.class).isNotBlank(keyAsString)) {
-				if(StringUtils.contains(keyAsString, CharacterConstant.DOT)) {
+				if(StringUtils.contains(keyAsString, ConstantCharacter.DOT)) {
 					//y.x => x of y
 					for(String index : X_OF_Y) {
-						String dotIndex = CharacterConstant.DOT + index;
+						String dotIndex = ConstantCharacter.DOT + index;
 						if(StringUtils.endsWith(keyAsString, dotIndex)) {							
 							collection = __add__(collection,__inject__(Strings.class).add(index,OF,StringUtils.substringBeforeLast(keyAsString, dotIndex)));
 							break;

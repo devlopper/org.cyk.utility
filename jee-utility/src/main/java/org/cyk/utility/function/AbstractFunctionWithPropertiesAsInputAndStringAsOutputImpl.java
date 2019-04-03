@@ -6,8 +6,8 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.StringHelper;
@@ -23,7 +23,7 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 		Collection<Object> children = getChildren();
 		if(__inject__(CollectionHelper.class).isNotEmpty(children)){
 			if(Boolean.TRUE.equals(getIsSurroundedWithParentheses())){
-				__inject__(CollectionHelper.class).addElementAt(children, 0, CharacterConstant.LEFT_PARENTHESIS);
+				__inject__(CollectionHelper.class).addElementAt(children, 0, ConstantCharacter.LEFT_PARENTHESIS);
 				rp();
 			}
 			Collection<String> strings = new ArrayList<>();
@@ -37,11 +37,11 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 					else
 						string = index.toString();
 				if(__inject__(StringHelper.class).isNotBlank(string)){
-					strings.add(string +( __executeIsAppendSpaceToChildString__(index, string) ? CharacterConstant.SPACE : StringConstant.EMPTY) );
+					strings.add(string +( __executeIsAppendSpaceToChildString__(index, string) ? ConstantCharacter.SPACE : StringConstant.EMPTY) );
 				}
 			}
 			String string = __inject__(StringHelper.class).concatenate(strings);
-			if(StringUtils.endsWith(string, CharacterConstant.SPACE.toString())){
+			if(StringUtils.endsWith(string, ConstantCharacter.SPACE.toString())){
 				string = string.substring(0, string.length()-1);
 			}
 			return string;
@@ -160,7 +160,7 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 
 	@Override
 	public FunctionWithPropertiesAsInputAndStringAsOutput lp() {
-		addChild(CharacterConstant.LEFT_PARENTHESIS);
+		addChild(ConstantCharacter.LEFT_PARENTHESIS);
 		return this;
 	}
 	
@@ -180,7 +180,7 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 
 	@Override
 	public FunctionWithPropertiesAsInputAndStringAsOutput rp() {
-		addChild(CharacterConstant.RIGHT_PARENTHESIS);
+		addChild(ConstantCharacter.RIGHT_PARENTHESIS);
 		return this;
 	}
 

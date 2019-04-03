@@ -2,8 +2,8 @@ package org.cyk.utility.css;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
 
@@ -27,7 +27,7 @@ public class StyleImpl extends AbstractObject implements Style,Serializable {
 		String string = null;
 		Strings classes = getClasses();
 		if(classes!=null)
-			string = __inject__(StringHelper.class).concatenate(classes.get(), CharacterConstant.SPACE.toString());
+			string = __inject__(StringHelper.class).concatenate(classes.get(), ConstantCharacter.SPACE.toString());
 		return string;
 	}
 
@@ -58,7 +58,7 @@ public class StyleImpl extends AbstractObject implements Style,Serializable {
 		String string = null;
 		Strings values = getValues();
 		if(values!=null)
-			string = __inject__(StringHelper.class).concatenate(values.get(), CharacterConstant.SEMI_COLON.toString());
+			string = __inject__(StringHelper.class).concatenate(values.get(), ConstantCharacter.SEMI_COLON.toString());
 		return string;
 	}
 	

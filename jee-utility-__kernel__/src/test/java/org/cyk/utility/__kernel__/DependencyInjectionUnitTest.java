@@ -11,7 +11,12 @@ public class DependencyInjectionUnitTest extends AbstractDependencyInjectionUnit
 	public void isClass01FirstVersionWhenClass01FirstVersionInjected() {
 		assertThat(__inject__(Class01.class).getClass()).isEqualTo(Class01FirstVersion.class);
 	}
-		
+	
+	//@Test
+	public void isMyCustomDefaultClassWhenMyClassInterfaceInjectedAndQualifierSet() {
+		assertThat(__inject__(MyInterfaceWithPriority.class).getClass()).isEqualTo(MyInterfaceImplWithPriority02.class);
+	}
+	
 	/* Deployment*/
 	
 	@org.jboss.arquillian.container.test.api.Deployment
@@ -23,6 +28,9 @@ public class DependencyInjectionUnitTest extends AbstractDependencyInjectionUnit
 				.addClass(Class01SecondVersion.class)
 				.addClass(Class02FirstVersion.class)
 				.addClass(MySingleton.class)
+				.addClass(MyInterfaceWithPriority.class)
+				.addClass(MyInterfaceImplWithPriority01.class)
+				.addClass(MyInterfaceImplWithPriority02.class)
 				.execute();
 	}
 	

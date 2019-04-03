@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.inject.Singleton;
 
 import org.codehaus.plexus.util.StringUtils;
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.clazz.ClassHelper;
 
 @Singleton
@@ -15,9 +15,9 @@ public class SystemLayerBusinessImpl extends AbstractSystemLayerImpl implements 
 	@Override
 	public String getInterfaceNameFromPersistenceEntityClassName(String persistenceEntityClassName) {
 		//TODO DOT should be defined as constant somewhere. maybe in class helper
-		return getInterfaceNameFromEntityClassName(StringUtils.replace(persistenceEntityClassName, CharacterConstant.DOT.toString()
-				+__inject__(SystemLayerPersistence.class).getIdentifier().toString().toLowerCase()+CharacterConstant.DOT.toString()
-				, CharacterConstant.DOT.toString()+getIdentifier().toString().toLowerCase()+CharacterConstant.DOT.toString()));
+		return getInterfaceNameFromEntityClassName(StringUtils.replace(persistenceEntityClassName, ConstantCharacter.DOT.toString()
+				+__inject__(SystemLayerPersistence.class).getIdentifier().toString().toLowerCase()+ConstantCharacter.DOT.toString()
+				, ConstantCharacter.DOT.toString()+getIdentifier().toString().toLowerCase()+ConstantCharacter.DOT.toString()));
 		
 		//String name = StringUtils.replace(persistenceEntityClass.getName(), "persistence", "business");
 		//return __inject__(SystemLayerBusiness.class).injectInterfaceClassFromEntityClassName(name,BusinessEntity.class);

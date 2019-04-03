@@ -3,13 +3,13 @@ package org.cyk.utility.system;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhase;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMoment;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMomentBegin;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseTry;
 import org.cyk.utility.assertion.AssertionsProvider;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
-import org.cyk.utility.character.CharacterConstant;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.field.FieldName;
@@ -58,7 +58,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		if(executionPhase instanceof FunctionExecutionPhaseTry && FunctionExecutionPhaseMomentBegin.class.equals(momentClass)) {
 			//we put markers in message to support those logging framework which do not handle markers
 			addLogMessageBuilderParameter(__inject__(StringHelper.class).concatenate(__injectCollectionHelper__().cast(String.class, getLog(Boolean.TRUE).getMarkers())
-					,CharacterConstant.SPACE.toString()));
+					,ConstantCharacter.SPACE.toString()));
 		}
 	}
 
@@ -82,11 +82,11 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 			log.setLevel(LogLevel.INFO);
 		if(action!=null) {
 			log.addMarkers(action.getIdentifier().toString());
-			log.setSourceMethodName(log.getSourceMethodName()+CharacterConstant.DOT+action.getIdentifier());
+			log.setSourceMethodName(log.getSourceMethodName()+ConstantCharacter.DOT+action.getIdentifier());
 		}
 		Class<?> entityClass = getEntityClass();
 		if(entityClass!=null) {
-			log.setSourceClassName(log.getSourceClassName()+CharacterConstant.DOT+entityClass.getSimpleName());
+			log.setSourceClassName(log.getSourceClassName()+ConstantCharacter.DOT+entityClass.getSimpleName());
 			log.addMarkers(entityClass.getSimpleName());
 		}
 		return log;

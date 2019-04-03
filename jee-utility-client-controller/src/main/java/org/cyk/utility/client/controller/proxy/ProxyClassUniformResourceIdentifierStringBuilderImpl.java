@@ -3,7 +3,7 @@ package org.cyk.utility.client.controller.proxy;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.character.CharacterConstant;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 import org.cyk.utility.request.RequestGetter;
 import org.cyk.utility.request.RequestProperty;
@@ -25,8 +25,8 @@ public class ProxyClassUniformResourceIdentifierStringBuilderImpl extends Abstra
 			if(request == null)
 				request = __inject__(RequestGetter.class).execute().getOutput();
 			String context = (String) __inject__(RequestPropertyValueGetter.class).setRequest(request).setProperty(RequestProperty.CONTEXT).execute().getOutput();
-			context = __injectStringHelper__().addToBeginIfDoesNotStartWith(context, CharacterConstant.SLASH.toString());
-			context = __injectStringHelper__().addToEndIfDoesNotEndWith(context, CharacterConstant.SLASH.toString());
+			context = __injectStringHelper__().addToBeginIfDoesNotStartWith(context, ConstantCharacter.SLASH.toString());
+			context = __injectStringHelper__().addToEndIfDoesNotEndWith(context, ConstantCharacter.SLASH.toString());
 			
 			if(StringUtils.endsWith(context, CLIENT))
 				context = StringUtils.replace(context, CLIENT, SERVER);
