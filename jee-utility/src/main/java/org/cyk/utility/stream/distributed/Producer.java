@@ -1,13 +1,12 @@
 package org.cyk.utility.stream.distributed;
 
-import org.cyk.utility.function.FunctionWithPropertiesAsInputAndVoidAsOutput;
+public interface Producer extends ProducerConsumer {
 
-public interface Producer extends FunctionWithPropertiesAsInputAndVoidAsOutput {
-
-	String getTopic();
-	Producer setTopic(String topic);
+	Message getMessage();
+	Message getMessage(Boolean injectIfNull);
+	Producer setMessage(Message message);
+	Producer setMessage(Object key,Object value);
+	Producer setMessageValue(Object value);
 	
-	Object getMessage();
-	Producer setMessage(Object message);
-	
+	@Override Producer addTopics(String... topics);
 }

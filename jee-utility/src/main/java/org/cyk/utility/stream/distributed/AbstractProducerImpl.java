@@ -2,42 +2,60 @@ package org.cyk.utility.stream.distributed;
 
 import java.io.Serializable;
 
-import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
+import org.cyk.utility.string.Strings;
 
-public abstract class AbstractProducerImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements Producer,Serializable {
+public abstract class AbstractProducerImpl extends AbstractProducerConsumerImpl implements Producer,Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private String topic;
-	private Object message;
+	private Message message;
 	
 	@Override
-	protected void ____execute____() throws Exception {
-		String topic = __injectValueHelper__().returnOrThrowIfBlank("topic", getTopic());
-		Object message = __injectValueHelper__().returnOrThrowIfBlank("message", getMessage());
-		__execute__(topic,message);
+	protected void __execute__(Strings topics) throws Exception {
+		Message message = __injectValueHelper__().returnOrThrowIfBlank("produced message", getMessage());
+		__prepare__(topics);
+		for(String index : topics.get())
+			__send__(index,message);
+		__close__();
 	}
 	
-	@Override
-	public String getTopic() {
-		return topic;
-	}
-	@Override
-	public Producer setTopic(String topic) {
-		this.topic = topic;
-		return this;
-	}
-	
-	protected abstract void __execute__(String topic,Object message) throws Exception;
+	protected abstract void __send__(String topic,Message message);
 	
 	@Override
-	public Object getMessage() {
+	public Message getMessage() {
 		return message;
+	}
+	
+	@Override
+	public Message getMessage(Boolean injectIfNull) {
+		return (Message) __getInjectIfNull__(FIELD_MESSAGE, injectIfNull);
 	}
 
 	@Override
-	public Producer setMessage(Object message) {
+	public Producer setMessage(Message message) {
 		this.message = message;
 		return this;
 	}
+	
+	@Override
+	public Producer setMessage(Object key, Object value) {
+		getMessage(Boolean.TRUE).setKey(key);
+		getMessage(Boolean.TRUE).setValue(value);
+		return this;
+	}
+	
+	@Override
+	public Producer setMessageValue(Object value) {
+		getMessage(Boolean.TRUE).setValue(value);
+		return this;
+	}
+	
+	@Override
+	public Producer addTopics(String... topics) {
+		return (Producer) super.addTopics(topics);
+	}
+	
+	/**/
+	
+	private static final String FIELD_MESSAGE = "message";
 
 }

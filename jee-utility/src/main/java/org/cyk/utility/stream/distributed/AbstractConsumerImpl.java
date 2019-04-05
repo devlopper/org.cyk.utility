@@ -1,33 +1,65 @@
 package org.cyk.utility.stream.distributed;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
+import org.cyk.utility.string.Strings;
 
-public abstract class AbstractConsumerImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements Consumer,Serializable {
+public abstract class AbstractConsumerImpl extends AbstractProducerConsumerImpl implements Consumer,Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private String topic;
 	private Class<? extends ConsumerMessageProcessor> messageProcessorClass;
+	private Long numberOfPollRequest,numberOfMessages;
+	private Messages messages;
+	private Boolean isKeepMessages;
 	
 	@Override
-	protected void ____execute____() throws Exception {
-		String topic = __injectValueHelper__().returnOrThrowIfBlank("topic",getTopic());
+	protected void __execute__(Strings topics) throws Exception {
 		Class<? extends ConsumerMessageProcessor> messageProcessorClass = __injectValueHelper__().returnOrThrowIfBlank("consumer message processor",getMessageProcessorClass());
-		__execute__(topic,messageProcessorClass);
+		__prepare__(topics);
+		
+		Boolean isKeepMessages = __injectValueHelper__().defaultToIfNull(getIsKeepMessages(), Boolean.FALSE);	
+		Long numberOfPollRequest = getNumberOfPollRequest();
+		Long numberOfMessages = getNumberOfMessages();
+		
+		while( (numberOfMessages == null || numberOfMessages > 0) && (numberOfPollRequest == null || numberOfPollRequest > 0)) {
+			Iterable<?> iterable = __poll__(100l);
+			if(numberOfPollRequest != null)
+				numberOfPollRequest--;
+			if(iterable.iterator().hasNext()) {
+				Collection<Message> messages = new ArrayList<>();
+				for (Object index : iterable) {
+					Message message = __inject__(Message.class).setKey(__getMessageKey__(index)).setValue(__getMessageValue__(index));
+					__inject__(messageProcessorClass).setMessage(message).execute();
+					if(numberOfMessages != null)
+						numberOfMessages--;
+					messages.add(message);
+				}
+				__commit__();
+				if(Boolean.TRUE.equals(isKeepMessages))
+					addMessages(messages);
+			}
+		}
+		__close__();
 	}
 	
-	protected abstract void __execute__(String topic,Class<? extends ConsumerMessageProcessor> messageProcessorClass);
-	
 	@Override
-	public String getTopic() {
-		return topic;
+	protected void __prepare__(Strings topics) {
+		__subscribe__(topics);
 	}
 	
+	protected abstract void __subscribe__(Strings topics);
+	protected abstract Iterable<?> __poll__(Long millisecond);
+	protected abstract Object __getMessageKey__(Object record);
+	protected abstract Object __getMessageValue__(Object record);
+	protected abstract void __commit__();
+	
+	//protected abstract void __execute__(Strings topics,Class<? extends ConsumerMessageProcessor> messageProcessorClass,Boolean isKeepMessages);
+	
 	@Override
-	public Consumer setTopic(String topic) {
-		this.topic = topic;
-		return this;
+	public Consumer addTopics(String...topics) {
+		return (Consumer) super.addTopics(topics);
 	}
 	
 	@Override
@@ -40,5 +72,74 @@ public abstract class AbstractConsumerImpl extends AbstractFunctionWithPropertie
 		this.messageProcessorClass = messageProcessorClass;
 		return this;
 	}
+	
+	@Override
+	public Long getNumberOfPollRequest() {
+		return numberOfPollRequest;
+	}
+	
+	@Override
+	public Consumer setNumberOfPollRequest(Long numberOfPollRequest) {
+		this.numberOfPollRequest = numberOfPollRequest;
+		return this;
+	}
+	@Override
+	public Long getNumberOfMessages() {
+		return numberOfMessages;
+	}
+	
+	@Override
+	public Consumer setNumberOfMessages(Long numberOfMessages) {
+		this.numberOfMessages = numberOfMessages;
+		return this;
+	}
+	
+	@Override
+	public Messages getMessages() {
+		return messages;
+	}
+	
+	@Override
+	public Messages getMessages(Boolean injectIfNull) {
+		return (Messages) __getInjectIfNull__(FIELD_MESSAGES, injectIfNull);
+	}
 
+	@Override
+	public Consumer setMessages(Messages messages) {
+		this.messages = messages;
+		return this;
+	}
+	
+	@Override
+	public Consumer addMessages(Collection<Message> messages) {
+		getMessages(Boolean.TRUE).add(messages);
+		return this;
+	}
+	
+	@Override
+	public Consumer addMessages(Message... messages) {
+		getMessages(Boolean.TRUE).add(messages);
+		return this;
+	}
+	
+	@Override
+	public Consumer addMessage(Object key, Object value) {
+		addMessages(__inject__(Message.class).setKey(key).setValue(value));
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsKeepMessages() {
+		return isKeepMessages;
+	}
+	
+	@Override
+	public Consumer setIsKeepMessages(Boolean isKeepMessages) {
+		this.isKeepMessages = isKeepMessages;
+		return this;
+	}
+	
+	/**/
+	
+	private static final String FIELD_MESSAGES = "messages";
 }

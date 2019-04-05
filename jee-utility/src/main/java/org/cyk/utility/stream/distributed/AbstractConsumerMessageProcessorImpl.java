@@ -7,23 +7,23 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOu
 public abstract class AbstractConsumerMessageProcessorImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements ConsumerMessageProcessor,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Object message;
+	private Message message;
 	
 	@Override
 	protected void ____execute____() throws Exception {
-		Object message = __injectValueHelper__().returnOrThrowIfBlank("message", getMessage());
+		Message message = __injectValueHelper__().returnOrThrowIfBlank("consumed message", getMessage());
 		__process__(message);
 	}
 	
-	protected abstract void __process__(Object message);
+	protected abstract void __process__(Message message);
 	
 	@Override
-	public Object getMessage() {
+	public Message getMessage() {
 		return message;
 	}
 	
 	@Override
-	public ConsumerMessageProcessor setMessage(Object message) {
+	public ConsumerMessageProcessor setMessage(Message message) {
 		this.message = message;
 		return this;
 	}

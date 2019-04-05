@@ -47,6 +47,17 @@ public class Properties implements java.io.Serializable {
 		return map;
 	}
 	
+	public java.util.Properties buildJavaUtilProperties() {
+		java.util.Properties properties = null;
+		java.util.Map<Object,Object> map = __getMap__();
+		if(map!=null && !map.isEmpty()) {
+			properties = new java.util.Properties();
+			for(Map.Entry<Object, Object> index : map.entrySet())
+				properties.put(index.getKey(), index.getValue());
+		}
+		return properties;
+	}
+	
 	/**/
 		
 	public static void setDefaultValues(Class<?> aClass,Properties properties){
