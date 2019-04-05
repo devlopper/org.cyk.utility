@@ -8,17 +8,19 @@ public abstract class AbstractProducerImpl extends AbstractProducerConsumerImpl 
 	private static final long serialVersionUID = 1L;
 	
 	private Message message;
+	private Class<? extends ProducerCallback> callbackClass;
 	
 	@Override
 	protected void __execute__(Strings topics) throws Exception {
 		Message message = __injectValueHelper__().returnOrThrowIfBlank("produced message", getMessage());
+		Class<? extends ProducerCallback> callbackClass = getCallbackClass();
 		__prepare__(topics);
 		for(String index : topics.get())
-			__send__(index,message);
+			__send__(index,message,callbackClass);
 		__close__();
 	}
 	
-	protected abstract void __send__(String topic,Message message);
+	protected abstract void __send__(String topic,Message message,Class<? extends ProducerCallback> callbackClass);
 	
 	@Override
 	public Message getMessage() {
@@ -52,6 +54,17 @@ public abstract class AbstractProducerImpl extends AbstractProducerConsumerImpl 
 	@Override
 	public Producer addTopics(String... topics) {
 		return (Producer) super.addTopics(topics);
+	}
+	
+	@Override
+	public Class<? extends ProducerCallback> getCallbackClass() {
+		return callbackClass;
+	}
+	
+	@Override
+	public Producer setCallbackClass(Class<? extends ProducerCallback> callbackClass) {
+		this.callbackClass = callbackClass;
+		return this;
 	}
 	
 	/**/

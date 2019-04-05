@@ -9,6 +9,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.cyk.utility.stream.distributed.AbstractProducerImpl;
 import org.cyk.utility.stream.distributed.Message;
+import org.cyk.utility.stream.distributed.ProducerCallback;
 import org.cyk.utility.string.Strings;
 
 public class ProducerImpl extends AbstractProducerImpl implements Serializable {
@@ -22,15 +23,12 @@ public class ProducerImpl extends AbstractProducerImpl implements Serializable {
 	}
 	
 	@Override
-	protected void __send__(String topic, Message message) {
+	protected void __send__(String topic, Message message,Class<? extends ProducerCallback> callbackClass) {
 		kafkaProducer.send(new ProducerRecord<Object, Object>(topic,message.getKey() ,message.getValue()), new Callback() {
 			@Override
 			public void onCompletion(RecordMetadata recordMetadata, Exception exception) {
-				if (exception == null) {
-					System.out.println("Message sent to topic <<"+recordMetadata.topic()+">>");
-				} else {
-					System.out.println(exception);
-				}
+				if(callbackClass!=null)
+					__inject__(callbackClass).setTopic(topic).setMessage(message).setThrowable(exception).execute();
 			}
 		});
 	}

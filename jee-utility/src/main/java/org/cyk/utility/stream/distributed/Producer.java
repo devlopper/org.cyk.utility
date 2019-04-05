@@ -8,5 +8,8 @@ public interface Producer extends ProducerConsumer {
 	Producer setMessage(Object key,Object value);
 	Producer setMessageValue(Object value);
 	
+	Producer setCallbackClass(Class<? extends ProducerCallback> callbackClass);
+	Class<? extends ProducerCallback> getCallbackClass();
+	
 	@Override Producer addTopics(String... topics);
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.stream.distributed.AbstractConsumerMessageProcessorImpl;
+import org.cyk.utility.stream.distributed.AbstractProducerCallbackImpl;
 import org.cyk.utility.stream.distributed.Consumer;
 import org.cyk.utility.stream.distributed.Message;
 import org.cyk.utility.stream.distributed.Messages;
@@ -21,14 +22,13 @@ public class ProducerConsumerUnitTest extends AbstractArquillianUnitTestWithDefa
 
 	@Test
 	public void produceAndConsume() {
-		stopServers();
 		startServers();
 
 		Object messageKey = __inject__(RandomHelper.class).getAlphabetic(5);
 		Object messageValue = "Time is "+new Date();
 		
 		Producer producer = __inject__(Producer.class);
-		producer.addTopics("test").setMessage(messageKey,messageValue);
+		producer.addTopics("test").setMessage(messageKey,messageValue).setCallbackClass(ProducerCallbackImpl.class);
 		producer.setProperty("bootstrap.servers", "localhost:9092");
 		producer.setProperty("acks", "all");
 		producer.setProperty("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
@@ -62,6 +62,8 @@ public class ProducerConsumerUnitTest extends AbstractArquillianUnitTestWithDefa
 	}
 	
 	protected static void startServers() {
+		stopServers();
+		
 		System.out.println("Starting servers");
 		startZookeeper();
 		startKafka();
@@ -119,6 +121,13 @@ public class ProducerConsumerUnitTest extends AbstractArquillianUnitTestWithDefa
 		operatingSystemCommandExecutor.setIsExecuteAsynchronously(Boolean.TRUE).execute();
 		__inject__(TimeHelper.class).pause(1000l * 12);
 		System.out.println("OK");
+	}
+	
+	/**/
+	
+	public static class ProducerCallbackImpl extends AbstractProducerCallbackImpl implements Serializable {
+		private static final long serialVersionUID = 1L;
+
 	}
 	
 	public static class ConsumerMessageProcessorImpl extends AbstractConsumerMessageProcessorImpl implements Serializable {
