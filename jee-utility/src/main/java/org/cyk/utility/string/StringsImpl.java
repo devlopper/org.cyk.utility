@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.collection.CollectionHelper;
 
@@ -36,11 +37,11 @@ public class StringsImpl extends AbstractCollectionInstanceImpl<String> implemen
 	
 	@Override
 	public String concatenate(Object separator) {
-		return __inject__(StringHelper.class).concatenate(get(), separator == null ? StringConstant.EMPTY : separator.toString());
+		return __inject__(StringHelper.class).concatenate(get(), separator == null ? ConstantEmpty.STRING : separator.toString());
 	}
 	
 	@Override
 	public String concatenate() {
-		return concatenate(StringConstant.EMPTY);
+		return concatenate(ConstantEmpty.STRING);
 	}
 }

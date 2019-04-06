@@ -11,11 +11,11 @@ import javax.inject.Singleton;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.constant.ConstantString;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.method.MethodHelper;
 import org.cyk.utility.number.NumberHelper;
-import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.StringHelper;
 
 @Singleton
@@ -161,12 +161,12 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	
 	@Override
 	public String getImplementationClassSimpleName(Class<?> interfaceClass) {
-		return interfaceClass == null ? null : interfaceClass.getSimpleName()+StringConstant.IMPL;
+		return interfaceClass == null ? null : interfaceClass.getSimpleName()+ConstantString.IMPL;
 	}
 	
 	@Override
 	public String getInterfaceSimpleName(Class<?> aClass) {
-		return aClass == null ? null : StringUtils.substringBefore(aClass.getSimpleName(),StringConstant.IMPL);
+		return aClass == null ? null : StringUtils.substringBefore(aClass.getSimpleName(),ConstantString.IMPL);
 	}
 	
 	@Override

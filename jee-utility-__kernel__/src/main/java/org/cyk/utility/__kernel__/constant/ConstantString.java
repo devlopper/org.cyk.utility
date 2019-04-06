@@ -1,11 +1,7 @@
-package org.cyk.utility.string;
+package org.cyk.utility.__kernel__.constant;
 
-import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+public interface ConstantString {
 
-public interface StringConstant {
-
-	String EMPTY = "";
-	
 	String CYK = "CYK";
 	
 	String WORD_JAVA = "java";
@@ -31,8 +27,6 @@ public interface StringConstant {
 	String VARIABLE_RESULT = "result";
 	
 	String ENCODING_UTF8 = "UTF-8";
-	
-	String LINE_DELIMITER = "\r\n";
 		
 	String IMPL = "Impl";
 

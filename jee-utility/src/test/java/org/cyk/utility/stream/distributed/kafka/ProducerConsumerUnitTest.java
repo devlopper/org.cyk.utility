@@ -10,11 +10,7 @@ import org.cyk.utility.stream.distributed.Consumer;
 import org.cyk.utility.stream.distributed.Message;
 import org.cyk.utility.stream.distributed.Messages;
 import org.cyk.utility.stream.distributed.Producer;
-import org.cyk.utility.system.OperatingSystemCommandExecutor;
-import org.cyk.utility.system.SystemHelper;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.cyk.utility.time.TimeHelper;
-import org.cyk.utility.value.ValueHelper;
 import org.junit.Test;
 
 public class ProducerConsumerUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
@@ -22,7 +18,7 @@ public class ProducerConsumerUnitTest extends AbstractArquillianUnitTestWithDefa
 
 	@Test
 	public void produceAndConsume() {
-		startServers();
+		startServersZookeeperAndKafka();
 
 		Object messageKey = __inject__(RandomHelper.class).getAlphabetic(5);
 		Object messageValue = "Time is "+new Date();
@@ -51,76 +47,7 @@ public class ProducerConsumerUnitTest extends AbstractArquillianUnitTestWithDefa
 		assertionHelper.assertEquals(messageKey, consumer.getMessages().getLast().getKey());
 		assertionHelper.assertEquals(messageValue, consumer.getMessages().getLast().getValue());
 		
-		stopServers();
-	}
-	
-	protected static void stopServers() {
-		System.out.println("Stopping servers");
-		stopKafka();
-		stopZookeeper();
-		System.out.println("Servers stopped");
-	}
-	
-	protected static void startServers() {
-		stopServers();
-		
-		System.out.println("Starting servers");
-		startZookeeper();
-		startKafka();
-		System.out.println("Servers started");
-	}
-
-	protected static void stopZookeeper() {
-		System.out.print("Stopping zookeeper...");
-		OperatingSystemCommandExecutor operatingSystemCommandExecutor = __inject__(OperatingSystemCommandExecutor.class);
-		operatingSystemCommandExecutor.getCommand(Boolean.TRUE).setCommand("zookeeper-server-stop.bat")
-			//.setIsTerminalStartable(Boolean.TRUE)
-			//.setIsTerminalShowable(Boolean.FALSE)
-			//.setWorkingDirectory("target")
-			;
-		operatingSystemCommandExecutor.execute();
-		System.out.println("OK");
-	}
-	
-	protected static void startZookeeper() {
-		String workingDirectory = __inject__(ValueHelper.class).returnOrThrowIfBlank("Zookeeper home", __inject__(SystemHelper.class).getProperty("zookeeper.home",Boolean.TRUE));
-		System.out.print("Starting zookeeper("+workingDirectory+")...");
-		OperatingSystemCommandExecutor operatingSystemCommandExecutor = __inject__(OperatingSystemCommandExecutor.class);
-		operatingSystemCommandExecutor.getCommand(Boolean.TRUE).setCommand("zkserver").setIsTerminalStartable(Boolean.TRUE)
-			.setIsTerminalShowable(Boolean.FALSE)
-			.setTerminalTitle("Zookeeper")
-			.setWorkingDirectory(workingDirectory)
-			;
-		operatingSystemCommandExecutor.setIsExecuteAsynchronously(Boolean.TRUE).execute();
-		__inject__(TimeHelper.class).pause(1000l * 10);
-		System.out.println("OK");
-	}
-	
-	protected static void stopKafka() {
-		System.out.print("Stopping kafka...");
-		OperatingSystemCommandExecutor operatingSystemCommandExecutor = __inject__(OperatingSystemCommandExecutor.class);
-		operatingSystemCommandExecutor.getCommand(Boolean.TRUE).setCommand("kafka-server-stop.bat")
-			//.setIsTerminalStartable(Boolean.TRUE)
-			//.setIsTerminalShowable(Boolean.FALSE)
-			//.setWorkingDirectory("target")
-			;
-		operatingSystemCommandExecutor.execute();
-		System.out.println("OK");
-	}
-	
-	protected static void startKafka() {
-		String homeDirectory = __inject__(ValueHelper.class).returnOrThrowIfBlank("Kafka home", __inject__(SystemHelper.class).getProperty("kafka.home",Boolean.TRUE));
-		System.out.print("Starting kafka("+homeDirectory+")...");
-		OperatingSystemCommandExecutor operatingSystemCommandExecutor = __inject__(OperatingSystemCommandExecutor.class);
-		operatingSystemCommandExecutor.getCommand(Boolean.TRUE).setCommand("kafka-server-start.bat "+homeDirectory+"\\config\\server.properties")
-			.setIsTerminalStartable(Boolean.TRUE)
-			.setIsTerminalShowable(Boolean.FALSE)
-			.setTerminalTitle("Kafka")
-			.setWorkingDirectory(homeDirectory)
-			;
-		operatingSystemCommandExecutor.setIsExecuteAsynchronously(Boolean.TRUE).execute();
-		__inject__(TimeHelper.class).pause(1000l * 12);
-		System.out.println("OK");
+		stopServersKafkaAndZookeeper();
 	}
 	
 	/**/

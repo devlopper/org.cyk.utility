@@ -3,9 +3,9 @@ package org.cyk.utility.client.controller.component.input.choice;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.field.FieldName;
-import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.value.ValueUsageType;
 
 public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueBuilderImpl implements ChoicePropertyValueBuilder,Serializable {
@@ -35,7 +35,7 @@ public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueB
 			if(field != null) {
 				Object value = __injectFieldValueGetter__().execute(object, field).getOutput();
 				if(value == null)
-					result = StringConstant.EMPTY;
+					result = ConstantEmpty.STRING;
 				else
 					result = value.toString();
 			}else

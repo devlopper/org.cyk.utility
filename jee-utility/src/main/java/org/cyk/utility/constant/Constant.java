@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
-import org.cyk.utility.string.StringConstant;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 
 public interface Constant {
 	
@@ -103,7 +103,7 @@ public interface Constant {
 		public static final String PROPERTY_FORMAT = "mail."+SMTP+"%s.%s";
 		
 		public static String getProperty(String name,Boolean secured){
-			return String.format(PROPERTY_FORMAT, Boolean.TRUE.equals(secured) ? "s" : StringConstant.EMPTY,name);
+			return String.format(PROPERTY_FORMAT, Boolean.TRUE.equals(secured) ? "s" : ConstantEmpty.STRING,name);
 		}
 		public static String getProperty(String name){
 			return getProperty(name, Boolean.FALSE);
@@ -141,7 +141,7 @@ public interface Constant {
 	public static class Code implements Serializable {
 		private static final long serialVersionUID = 1L;
 		
-		public static String SEPARATOR = StringConstant.EMPTY;
+		public static String SEPARATOR = ConstantEmpty.STRING;
 		
 		public static String generateFromString(String string){
 			return StringUtils.remove(string, ConstantCharacter.SPACE);

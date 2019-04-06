@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.client.controller.component.annotation.Commandable;
 import org.cyk.utility.client.controller.component.annotation.CommandableButton;
 import org.cyk.utility.client.controller.component.annotation.Input;
@@ -20,7 +21,6 @@ import org.cyk.utility.client.controller.component.input.choice.InputChoiceBuild
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntity;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
-import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.system.action.SystemActionCreate;
 
 import lombok.Getter;
@@ -99,7 +99,7 @@ public class InputPage extends AbstractPageContainerManagedImpl implements Seria
 		@Override
 		protected String __execute__() throws Exception {
 			VerySimpleEntity verySimpleEntity = (VerySimpleEntity) getObject();
-			return verySimpleEntity == null ? StringConstant.EMPTY : verySimpleEntity.getName();
+			return verySimpleEntity == null ? ConstantEmpty.STRING : verySimpleEntity.getName();
 		}
 		
 	}
@@ -110,7 +110,7 @@ public class InputPage extends AbstractPageContainerManagedImpl implements Seria
 		@Override
 		protected String __execute__() throws Exception {
 			VerySimpleEntity verySimpleEntity = (VerySimpleEntity) getObject();
-			return verySimpleEntity == null ? StringConstant.EMPTY : verySimpleEntity.getCode()+":::"+verySimpleEntity.getName();
+			return verySimpleEntity == null ? ConstantEmpty.STRING : verySimpleEntity.getCode()+":::"+verySimpleEntity.getName();
 		}
 		
 	}

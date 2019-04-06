@@ -8,6 +8,7 @@ import java.util.Collection;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
@@ -18,7 +19,7 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 
 	@Override
 	public String getString(Object object) {
-		return object == null ? StringConstant.EMPTY : object.toString();
+		return object == null ? ConstantEmpty.STRING : object.toString();
 	}
 	
 	@Override
@@ -115,7 +116,7 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	
 	@Override
 	public String concatenate(Collection<String> strings) {
-		return concatenate(strings, StringConstant.EMPTY);
+		return concatenate(strings, ConstantEmpty.STRING);
 	}
 
 	@Override

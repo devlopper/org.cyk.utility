@@ -3,8 +3,8 @@ package org.cyk.utility.system.action;
 import java.io.Serializable;
 
 import org.apache.commons.lang.StringUtils;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.string.AbstractStringsFunctionImpl;
-import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.Strings;
 
 public class SystemActionRelatedClassesNamesGetterImpl extends AbstractStringsFunctionImpl implements SystemActionRelatedClassesNamesGetter,Serializable {
@@ -48,7 +48,7 @@ public class SystemActionRelatedClassesNamesGetterImpl extends AbstractStringsFu
 		Class<?> extendedInterface = getExtendedInterface();
 		String defaultSuffix = getDefaultSuffix();
 		if(defaultSuffix == null)
-			defaultSuffix = StringConstant.EMPTY;
+			defaultSuffix = ConstantEmpty.STRING;
 		/*
 		if(extendedInterface!=null && systemActionClass != null) {
 			//xxxx.XXXCreateDefault

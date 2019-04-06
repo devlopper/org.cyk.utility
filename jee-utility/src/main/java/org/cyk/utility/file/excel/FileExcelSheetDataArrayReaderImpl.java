@@ -15,10 +15,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.number.Interval;
-import org.cyk.utility.string.StringConstant;
 
 public class FileExcelSheetDataArrayReaderImpl extends AbstractFunctionWithPropertiesAsInputImpl<ArrayInstanceTwoDimensionString> implements FileExcelSheetDataArrayReader,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -73,16 +73,16 @@ public class FileExcelSheetDataArrayReaderImpl extends AbstractFunctionWithPrope
             	for (int j=0; j<columnCount; j++) {
                     Cell cell = row.getCell(j+fromColumnIndex);
                     if(cell==null)
-                    	arrayInstance.set(i,j, StringConstant.EMPTY);
+                    	arrayInstance.set(i,j, ConstantEmpty.STRING);
                     else{
                     	CellValue cellValue = formulaEvaluator.evaluate(cell);
                     	String stringValue;
                     	if(cellValue==null)
-                    		stringValue = StringConstant.EMPTY;
+                    		stringValue = ConstantEmpty.STRING;
                     	else switch(cellValue.getCellType()){
 	    	                case Cell.CELL_TYPE_FORMULA : 
 	    	                	throw new RuntimeException("Must never happen! Cannot process a formula. Please change field to result of formula.("+i+","+j+")");
-	    	                case Cell.CELL_TYPE_BLANK: stringValue = StringConstant.EMPTY; break;
+	    	                case Cell.CELL_TYPE_BLANK: stringValue = ConstantEmpty.STRING; break;
 	    	                case Cell.CELL_TYPE_NUMERIC: 
 	    	                	if(DateUtil.isCellDateFormatted(cell))
 	                        		stringValue = cell.getDateCellValue().toString(); //Constant.DATE_TIME_FORMATTER.format(cell.getDateCellValue());
@@ -94,7 +94,7 @@ public class FileExcelSheetDataArrayReaderImpl extends AbstractFunctionWithPrope
 	    	                	stringValue = StringUtils.trim(cellValue.getStringValue());
 	    	                	break;
 	    	                }
-                    	arrayInstance.set(i,j,StringUtils.defaultIfBlank(stringValue,StringConstant.EMPTY));
+                    	arrayInstance.set(i,j,StringUtils.defaultIfBlank(stringValue,ConstantEmpty.STRING));
                     }
                 }
             }

@@ -7,14 +7,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import org.cyk.utility.string.StringConstant;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 public @interface Query {
 
-	String identifier() default StringConstant.EMPTY;
-	String value() default StringConstant.EMPTY;
+	String identifier() default ConstantEmpty.STRING;
+	String value() default ConstantEmpty.STRING;
 	Class<?> resultClass() default Void.class;
 	
 	/**/

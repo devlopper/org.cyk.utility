@@ -1,7 +1,7 @@
 package org.cyk.utility.client.controller.component.input;
 
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.client.controller.component.input.choice.ChoicePropertyValueBuilder;
-import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
@@ -19,12 +19,12 @@ public class ChoicePropertyValueBuilderUnitTest extends AbstractArquillianUnitTe
 	
 	@Test
 	public void isEmpty_propertyIsNull_objectIsNotNull_allFieldsAreNull() {
-		assertionHelper.assertEquals(StringConstant.EMPTY,__inject__(ChoicePropertyValueBuilder.class).setObject(new MyClass()).execute().getOutput());
+		assertionHelper.assertEquals(ConstantEmpty.STRING,__inject__(ChoicePropertyValueBuilder.class).setObject(new MyClass()).execute().getOutput());
 	}
 	
 	@Test
 	public void isEmpty_propertyIsNull_objectIsNotNull_identifierIs1() {
-		assertionHelper.assertEquals(StringConstant.EMPTY,__inject__(ChoicePropertyValueBuilder.class).setObject(new MyClass().setIdentifier("1")).execute().getOutput());
+		assertionHelper.assertEquals(ConstantEmpty.STRING,__inject__(ChoicePropertyValueBuilder.class).setObject(new MyClass().setIdentifier("1")).execute().getOutput());
 	}
 	
 	@Test
@@ -34,7 +34,7 @@ public class ChoicePropertyValueBuilderUnitTest extends AbstractArquillianUnitTe
 	
 	@Test
 	public void isEmpty_propertyIsNull_objectIsNotNull_codeIsC1() {
-		assertionHelper.assertEquals(StringConstant.EMPTY,__inject__(ChoicePropertyValueBuilder.class).setObject(new MyClass().setCode("C1")).execute().getOutput());
+		assertionHelper.assertEquals(ConstantEmpty.STRING,__inject__(ChoicePropertyValueBuilder.class).setObject(new MyClass().setCode("C1")).execute().getOutput());
 	}
 	
 	@Test

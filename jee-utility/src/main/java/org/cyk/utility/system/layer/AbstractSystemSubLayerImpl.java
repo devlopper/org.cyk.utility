@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.regularexpression.RegularExpressionInstance;
-import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.StringHelper;
 
 public abstract class AbstractSystemSubLayerImpl extends AbstractObject implements SystemSubLayer,Serializable {
@@ -135,7 +135,7 @@ public abstract class AbstractSystemSubLayerImpl extends AbstractObject implemen
 				}
 			}
 			name = name + StringUtils.defaultIfBlank(getInterfaceNameRegularExpression()!=null && getInterfaceNameRegularExpression().getEndTokens()!=null 
-					? getInterfaceNameRegularExpression().getEndTokens().getFirst() : StringConstant.EMPTY,StringConstant.EMPTY);	
+					? getInterfaceNameRegularExpression().getEndTokens().getFirst() : ConstantEmpty.STRING,ConstantEmpty.STRING);	
 		}
 		return name;
 	}

@@ -66,35 +66,4 @@
 		
 	</dependencies>
 
-	<profiles>
-		<!-- Arquillian JEE managed profile -->
-		<profile>
-			<id>test</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			
-			<dependencies>
-				<dependency>
-					<groupId>org.jboss.arquillian.container</groupId>
-					<artifactId>arquillian-weld-ee-embedded-1.1</artifactId>
-					<version>1.0.0.Final</version>
-					<scope>test</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.jboss.weld</groupId>
-					<artifactId>weld-core</artifactId>
-					<version>2.2.5.Final</version>
-					<scope>test</scope>
-				</dependency>
-				
-				<dependency>
-				    <groupId>org.apache.logging.log4j</groupId>
-				    <artifactId>log4j-slf4j-impl</artifactId>
-				    <version>${log4j-slf4j-impl.version}</version>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
-
 </project>

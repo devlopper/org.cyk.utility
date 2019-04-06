@@ -5,9 +5,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.number.NumberHelper;
-import org.cyk.utility.string.StringConstant;
 
 public class NumberConverter extends AbstractObject implements Converter,Serializable {
 	private static final long serialVersionUID = -1615078449226502960L;
@@ -26,6 +26,6 @@ public class NumberConverter extends AbstractObject implements Converter,Seriali
 	@Override
 	public String getAsString(FacesContext context, UIComponent c, Object number) {
 		//return __inject__(NumberHelper.class). getInstance().stringify((Number)number);
-		return number == null ? StringConstant.EMPTY : number.toString();
+		return number == null ? ConstantEmpty.STRING : number.toString();
 	}
 }

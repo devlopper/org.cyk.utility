@@ -3,9 +3,9 @@ package org.cyk.utility.sql.builder;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
-import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.throwable.ThrowableHelper;
 
 public abstract class AbstractQueryAttributeNameBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
@@ -16,7 +16,7 @@ public abstract class AbstractQueryAttributeNameBuilderImpl extends AbstractFunc
 	@Override
 	protected String __execute__() throws Exception {
 		Attribute attribute = getAttribute();
-		String prefix = StringConstant.EMPTY;
+		String prefix = ConstantEmpty.STRING;
 		Boolean isPrefixedWithTuple = getIsPrefixedWithTuple();
 		if(isPrefixedWithTuple == null)
 			isPrefixedWithTuple = attribute.getIsPrefixedWithTuple();

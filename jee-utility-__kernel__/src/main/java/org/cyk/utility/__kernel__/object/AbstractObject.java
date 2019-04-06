@@ -1,6 +1,8 @@
 package org.cyk.utility.__kernel__.object;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.enterprise.util.AnnotationLiteral;
 
@@ -68,5 +70,51 @@ public abstract class AbstractObject implements Objectable,Serializable {
 	
 	protected static KernelHelper __injectKernelHelper__() {
 		return __inject__(KernelHelper.class);
+	}
+	
+	/* Logging */
+	
+	protected void __log__(String message,Level level) {
+		Logger.getLogger(getClass().getName()).log(level, message);
+	}
+	
+	protected void __logFinest__(String message) {
+		__log__(message, Level.FINEST);
+	}
+	
+	protected void __logFiner__(String message) {
+		__log__(message, Level.FINER);
+	}
+	
+	protected void __logFine__(String message) {
+		__log__(message, Level.FINE);
+	}
+
+	protected void __logInfo__(String message) {
+		__log__(message, Level.INFO);
+	}
+	
+	protected void __logWarning__(String message) {
+		__log__(message, Level.WARNING);
+	}
+	
+	protected void __logSevere__(String message) {
+		__log__(message, Level.SEVERE);
+	}
+	
+	protected void __logAll__(String message) {
+		__log__(message, Level.ALL);
+	}
+	
+	protected void __logConfig__(String message) {
+		__log__(message, Level.CONFIG);
+	}
+	
+	protected void __logOff__(String message) {
+		__log__(message, Level.OFF);
+	}
+	
+	protected void __log__(Throwable throwable) {
+		__logSevere__(throwable.toString());
 	}
 }

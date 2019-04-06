@@ -11,6 +11,10 @@ import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.log.LogEventEntityRepository;
 import org.cyk.utility.random.RandomHelper;
+import org.cyk.utility.system.OperatingSystemCommandExecutor;
+import org.cyk.utility.system.SystemHelper;
+import org.cyk.utility.time.TimeHelper;
+import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.AbstractTest implements Serializable {
 	private static final long serialVersionUID = -4375668358714913342L;
@@ -68,5 +72,76 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 		}else{
 			System.out.println("File <<"+file+">>does not exist.");
 		}
+	}
+	
+	/* Server */
+	
+	protected static void stopServersKafkaAndZookeeper() {
+		System.out.println("Stopping servers");
+		stopServerKafka();
+		stopServerZookeeper();
+		System.out.println("Servers stopped");
+	}
+	
+	protected static void startServersZookeeperAndKafka() {
+		stopServersKafkaAndZookeeper();
+		
+		System.out.println("Starting servers");
+		startServerZookeeper();
+		startServerKafka();
+		System.out.println("Servers started");
+	}
+
+	protected static void stopServerZookeeper() {
+		System.out.print("Stopping zookeeper...");
+		OperatingSystemCommandExecutor operatingSystemCommandExecutor = __inject__(OperatingSystemCommandExecutor.class);
+		operatingSystemCommandExecutor.getCommand(Boolean.TRUE).setCommand("zookeeper-server-stop.bat")
+			//.setIsTerminalStartable(Boolean.TRUE)
+			//.setIsTerminalShowable(Boolean.FALSE)
+			//.setWorkingDirectory("target")
+			;
+		operatingSystemCommandExecutor.execute();
+		System.out.println("OK");
+	}
+	
+	protected static void startServerZookeeper() {
+		String workingDirectory = __inject__(ValueHelper.class).returnOrThrowIfBlank("Zookeeper home", __inject__(SystemHelper.class).getProperty("zookeeper.home",Boolean.TRUE));
+		System.out.print("Starting zookeeper("+workingDirectory+")...");
+		OperatingSystemCommandExecutor operatingSystemCommandExecutor = __inject__(OperatingSystemCommandExecutor.class);
+		operatingSystemCommandExecutor.getCommand(Boolean.TRUE).setCommand("zkserver").setIsTerminalStartable(Boolean.TRUE)
+			.setIsTerminalShowable(Boolean.FALSE)
+			.setTerminalTitle("Zookeeper")
+			.setWorkingDirectory(workingDirectory)
+			;
+		operatingSystemCommandExecutor.setIsExecuteAsynchronously(Boolean.TRUE).execute();
+		__inject__(TimeHelper.class).pause(1000l * 10);
+		System.out.println("OK");
+	}
+	
+	protected static void stopServerKafka() {
+		System.out.print("Stopping kafka...");
+		OperatingSystemCommandExecutor operatingSystemCommandExecutor = __inject__(OperatingSystemCommandExecutor.class);
+		operatingSystemCommandExecutor.getCommand(Boolean.TRUE).setCommand("kafka-server-stop.bat")
+			//.setIsTerminalStartable(Boolean.TRUE)
+			//.setIsTerminalShowable(Boolean.FALSE)
+			//.setWorkingDirectory("target")
+			;
+		operatingSystemCommandExecutor.execute();
+		System.out.println("OK");
+	}
+	
+	protected static void startServerKafka() {
+		String homeDirectory = __inject__(ValueHelper.class).returnOrThrowIfBlank("Kafka home", __inject__(SystemHelper.class).getProperty("kafka.home",Boolean.TRUE));
+		System.out.print("Starting kafka("+homeDirectory+")...");
+		OperatingSystemCommandExecutor operatingSystemCommandExecutor = __inject__(OperatingSystemCommandExecutor.class);
+		operatingSystemCommandExecutor.getCommand(Boolean.TRUE).setCommand("kafka-server-start.bat "+homeDirectory+"\\config\\server.properties")
+			.setIsTerminalStartable(Boolean.TRUE)
+			.setIsTerminalShowable(Boolean.FALSE)
+			.setTerminalTitle("Kafka")
+			.setWorkingDirectory(homeDirectory)
+			;
+		operatingSystemCommandExecutor.setIsExecuteAsynchronously(Boolean.TRUE).execute();
+		__inject__(TimeHelper.class).pause(1000l * 12);
+		System.out.println("OK");
 	}
 }

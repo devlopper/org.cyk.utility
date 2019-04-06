@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.StringHelper;
 
 public class Tuple extends AbstractObject implements Serializable {
@@ -109,6 +109,6 @@ public class Tuple extends AbstractObject implements Serializable {
 	@Override
 	public String toString() {
 		Collection<Attribute> attributes = getAttributes();
-		return getName()+(attributes == null ? StringConstant.EMPTY : attributes);
+		return getName()+(attributes == null ? ConstantEmpty.STRING : attributes);
 	}
 }

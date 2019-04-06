@@ -13,7 +13,6 @@ import org.cyk.utility.request.RequestProperty;
 import org.cyk.utility.request.RequestPropertyValueGetter;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.StringByStringMap;
-import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.StringFormat;
 
 public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFunctionImpl implements UniformResourceIdentifierStringBuilder,Serializable {
@@ -54,7 +53,7 @@ public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFu
 		Object pathObject = getPath();
 		if(pathObject == null && __injectStringHelper__().isNotBlank(string))
 			setPath(pathObject = __getRequestProperty__(RequestProperty.PATH,string));
-		String path = __injectValueHelper__().defaultToIfNull(__injectStringHelper__().getString(getPath()), StringConstant.EMPTY) ;
+		String path = __injectValueHelper__().defaultToIfNull(__injectStringHelper__().getString(getPath()), ConstantEmpty.STRING) ;
 		
 		if(__injectStringHelper__().isNotBlank(context))
 			path = context + ConstantCharacter.SLASH + path;

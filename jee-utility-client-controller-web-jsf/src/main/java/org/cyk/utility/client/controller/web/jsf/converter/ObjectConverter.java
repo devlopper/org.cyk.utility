@@ -9,9 +9,9 @@ import javax.faces.convert.Converter;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.random.RandomHelper;
-import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.StringHelper;
 
 /**
@@ -26,7 +26,7 @@ public class ObjectConverter extends AbstractObject implements Converter,Seriali
 	
 	private static final String OBJECT_MAP_KEY = ObjectConverter.class.getSimpleName();
 	
-	private static final String NULL_STRING_VALUE = StringConstant.EMPTY;
+	private static final String NULL_STRING_VALUE = ConstantEmpty.STRING;
 	
 	private Map<String, Object> getObjectMap(FacesContext context) {
 		Map<String, Object> viewMap = context.getViewRoot().getViewMap();

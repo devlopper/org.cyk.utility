@@ -6,13 +6,13 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableRenderType;
 import org.cyk.utility.client.controller.component.command.CommandableRenderTypeButton;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
-import org.cyk.utility.string.StringConstant;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -45,7 +45,7 @@ public class CommandableNavigationPage extends AbstractPageContainerManagedImpl 
 	}
 	
 	private CommandableBuilder createCommandableBuilderNavigateToIdentifier(Object identifier,Object[] parameters,CommandableRenderType commandableRenderType) {
-		String parametersAsString = __inject__(ArrayHelper.class).isEmpty(parameters) ? StringConstant.EMPTY : (" : "+StringUtils.join(parameters,","));
+		String parametersAsString = __inject__(ArrayHelper.class).isEmpty(parameters) ? ConstantEmpty.STRING : (" : "+StringUtils.join(parameters,","));
 		return __inject__(CommandableBuilder.class).setRenderType(commandableRenderType).setName("Navigate to "+identifier+parametersAsString)
 				.setNavigationIdentifierAndParameters(identifier,parameters);
 	}

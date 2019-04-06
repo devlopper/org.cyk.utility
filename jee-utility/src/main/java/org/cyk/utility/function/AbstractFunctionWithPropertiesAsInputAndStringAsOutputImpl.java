@@ -7,9 +7,9 @@ import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.string.StringConstant;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 
@@ -37,7 +37,7 @@ public abstract class AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl
 					else
 						string = index.toString();
 				if(__inject__(StringHelper.class).isNotBlank(string)){
-					strings.add(string +( __executeIsAppendSpaceToChildString__(index, string) ? ConstantCharacter.SPACE : StringConstant.EMPTY) );
+					strings.add(string +( __executeIsAppendSpaceToChildString__(index, string) ? ConstantCharacter.SPACE : ConstantEmpty.STRING) );
 				}
 			}
 			String string = __inject__(StringHelper.class).concatenate(strings);

@@ -15,6 +15,7 @@ import org.cyk.utility.__kernel__.maven.pom.Dependency;
 import org.cyk.utility.__kernel__.maven.pom.Pom;
 import org.cyk.utility.__kernel__.maven.pom.PomBuilderImpl;
 import org.cyk.utility.__kernel__.maven.pom.Profile;
+import org.cyk.utility.__kernel__.object.AbstractObject;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -28,7 +29,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> implements Serializable {
+public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Class<ARCHIVE> clazz;
@@ -46,11 +47,11 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> implements Seria
 	}
 	
 	public ARCHIVE execute(){
-		System.out.println("Building archive starts");
+		__logFinest__("Building archive starts");
 		String testProfileIdentifier = "org.cyk.test";
 		Profile profile = Pom.INSTANCE.getProfile(testProfileIdentifier);
 		if(profile == null){
-			System.out.println("No test profile found under id "+testProfileIdentifier);
+			__logFinest__("No test profile found under id "+testProfileIdentifier);
 		}
 		
 		if(StringUtils.isBlank(pomXml) && profile!=null)
@@ -58,7 +59,7 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> implements Seria
 		if(StringUtils.isBlank(pomXml))
 			pomXml = "pom.xml";
 		if(!StringUtils.equalsIgnoreCase("pom.xml", pomXml))
-			System.out.println("Pom : "+pomXml);
+			__logFinest__("Pom : "+pomXml);
 		
 		if(StringUtils.isBlank(beanXml) && profile!=null)
 			beanXml = profile.getProperty("org.cyk.test.cdi.beans.file");
@@ -72,9 +73,6 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> implements Seria
 		String _package = profile == null ? null : profile.getProperty("org.cyk.test.package");
 		String[] classesArray = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.classes")) ? null : profile.getProperty("org.cyk.test.classes").split(",");
 		String[] resourcesFoldersArray = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.resources.folders")) ? null : profile.getProperty("org.cyk.test.resources.folders").split(",");
-		
-		//System.out.println("Swarm project defaults file : "+projectDefaultsYml);
-		//System.out.println("JPA persistence file : "+persistenceXml);
 		
 		archive = ShrinkWrap.create(this.clazz);
 		addBeanXml(beanXml);
@@ -117,7 +115,7 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> implements Seria
 			}
 		
 		if(classes!=null && !classes.isEmpty()) {
-			System.out.println("#classes derived : "+classes.size());
+			__logFinest__("#classes derived : "+classes.size());
 			if(archive instanceof WebArchive)
 				((WebArchive)archive).addClasses(classes.toArray(new Class<?>[] {}));
 		}
@@ -133,7 +131,7 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> implements Seria
 			}
 		}
 		if(resources!=null && !resources.isEmpty()) {
-			System.out.println("#resources derived : "+resources.size());
+			__logFinest__("#resources derived : "+resources.size());
 			for(String index : resources) {
 				index = StringUtils.replace(index, "\\", "/");
 				((WebArchive) archive).addAsResource(index,index);
@@ -164,7 +162,7 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> implements Seria
 					((ClassContainer<?>)archive).addClass(index.getValue());
 		}
 		
-		System.out.println("Building archive done.");
+		__logFinest__("Building archive done.");
 		return archive;
 	}
 	
@@ -214,7 +212,7 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> implements Seria
 			path = System.getProperty("user.dir")+"/"+path;
 			Pom pom = PomBuilderImpl.__execute__(path);// xml == null ? null : (Pom) unmarshaller.unmarshal(new StringReader(xml));
 			if(pom == null){
-				System.out.println("Pom not found : "+path);
+				__logWarning__("Pom not found : "+path);
 			}else {
 				String version = pom.getVersion() == null ? pom.getParent().getVersion() : pom.getVersion();
 				//Collection<File> files = new ArrayList<>();
