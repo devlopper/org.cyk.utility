@@ -67,6 +67,16 @@ public abstract class AbstractProducerImpl extends AbstractProducerConsumerImpl 
 		return this;
 	}
 	
+	@Override
+	public Producer setKeySerialisationClass(Class<?> keySerialisationClass) {
+		return (Producer) super.setKeySerialisationClass(keySerialisationClass);
+	}
+	
+	@Override
+	public Producer setValueSerialisationClass(Class<?> valueSerialisationClass) {
+		return (Producer) super.setValueSerialisationClass(valueSerialisationClass);
+	}
+	
 	/**/
 	
 	private static final String FIELD_MESSAGE = "message";

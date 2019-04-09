@@ -13,6 +13,7 @@ public abstract class AbstractConsumerImpl extends AbstractProducerConsumerImpl 
 	private Long numberOfPollRequest,numberOfMessages;
 	private Messages messages;
 	private Boolean isKeepMessages;
+	private Object groupIdentifier;
 	
 	@Override
 	protected void __execute__(Strings topics) throws Exception {
@@ -60,6 +61,17 @@ public abstract class AbstractConsumerImpl extends AbstractProducerConsumerImpl 
 	@Override
 	public Consumer addTopics(String...topics) {
 		return (Consumer) super.addTopics(topics);
+	}
+	
+	@Override
+	public Object getGroupIdentifier() {
+		return groupIdentifier;
+	}
+	
+	@Override
+	public Consumer setGroupIdentifier(Object groupIdentifier) {
+		this.groupIdentifier = groupIdentifier;
+		return this;
 	}
 	
 	@Override

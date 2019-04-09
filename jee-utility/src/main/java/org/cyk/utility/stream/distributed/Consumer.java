@@ -4,6 +4,9 @@ import java.util.Collection;
 
 public interface Consumer extends ProducerConsumer {
 
+	Object getGroupIdentifier();
+	Consumer setGroupIdentifier(Object groupIdentifier);
+	
 	Class<? extends ConsumerMessageProcessor> getMessageProcessorClass();
 	Consumer setMessageProcessorClass(Class<? extends ConsumerMessageProcessor> messageProcessorClass);
 	

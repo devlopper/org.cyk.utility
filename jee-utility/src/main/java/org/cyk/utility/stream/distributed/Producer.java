@@ -12,4 +12,7 @@ public interface Producer extends ProducerConsumer {
 	Class<? extends ProducerCallback> getCallbackClass();
 	
 	@Override Producer addTopics(String... topics);
+	
+	@Override Producer setKeySerialisationClass(Class<?> keySerialisationClass);
+	@Override Producer setValueSerialisationClass(Class<?> valueSerialisationClass);
 }

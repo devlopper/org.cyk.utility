@@ -11,6 +11,8 @@ public abstract class AbstractProducerConsumerImpl extends AbstractFunctionWithP
 	private static final long serialVersionUID = 1L;
 	
 	private Strings topics;
+	private Class<?> keySerialisationClass;
+	private Class<?> valueSerialisationClass;
 	
 	@Override
 	protected void ____execute____() throws Exception {
@@ -50,6 +52,28 @@ public abstract class AbstractProducerConsumerImpl extends AbstractFunctionWithP
 	@Override
 	public ProducerConsumer addTopics(String... topics) {
 		getTopics(Boolean.TRUE).add(topics);
+		return this;
+	}
+	
+	@Override
+	public Class<?> getValueSerialisationClass() {
+		return valueSerialisationClass;
+	}
+	
+	@Override
+	public ProducerConsumer setValueSerialisationClass(Class<?> valueSerialisationClass) {
+		this.valueSerialisationClass = valueSerialisationClass;
+		return this;
+	}
+	
+	@Override
+	public Class<?> getKeySerialisationClass() {
+		return keySerialisationClass;
+	}
+	
+	@Override
+	public ProducerConsumer setKeySerialisationClass(Class<?> keySerialisationClass) {
+		this.keySerialisationClass = keySerialisationClass;
 		return this;
 	}
 	

@@ -16,10 +16,14 @@ public class ConsumerImpl extends AbstractConsumerImpl implements Serializable {
 		
 	@Override
 	protected void __subscribe__(Strings topics) {
+		getProperties().setIfNull("group.id", __injectValueHelper__().defaultToIfNull(getGroupIdentifier(),"consumer"));
 		getProperties().setIfNull("enable.auto.commit", "false");
 		getProperties().setIfNull("bootstrap.servers", "localhost:9092");
-		getProperties().setIfNull("key.deserializer", StringDeserializer.class);
-		getProperties().setIfNull("value.deserializer", StringDeserializer.class);
+		
+		Class<?> keySerialisationClass = getKeySerialisationClass();
+		Class<?> valueSerialisationClass = getValueSerialisationClass();
+		getProperties().setIfNull("key.deserializer", __injectValueHelper__().defaultToIfNull(keySerialisationClass, StringDeserializer.class));
+		getProperties().setIfNull("value.deserializer", __injectValueHelper__().defaultToIfNull(valueSerialisationClass, StringDeserializer.class));
 		kafkaConsumer = new KafkaConsumer<>(getProperties().buildJavaUtilProperties());
 		kafkaConsumer.subscribe(topics.get());
 	}

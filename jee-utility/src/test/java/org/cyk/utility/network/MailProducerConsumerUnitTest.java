@@ -1,20 +1,18 @@
 package org.cyk.utility.network;
 
-import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 
-import org.cyk.utility.network.message.sender.SenderMail;
 import org.cyk.utility.network.protocol.ProtocolDefaults;
 import org.cyk.utility.security.Credentials;
-import org.cyk.utility.stream.distributed.AbstractConsumerMessageProcessorImpl;
-import org.cyk.utility.stream.distributed.AbstractProducerCallbackImpl;
 import org.cyk.utility.stream.distributed.Consumer;
-import org.cyk.utility.stream.distributed.Message;
+import org.cyk.utility.stream.distributed.ConsumerBuilder;
 import org.cyk.utility.stream.distributed.Messages;
 import org.cyk.utility.stream.distributed.Producer;
-import org.cyk.utility.stream.distributed.kafka.NetworkMessageDeserializer;
-import org.cyk.utility.stream.distributed.kafka.NetworkMessageSerializer;
+import org.cyk.utility.stream.distributed.ProducerBuilder;
+import org.cyk.utility.stream.distributed.Topic;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.time.TimeHelper;
 import org.junit.Test;
 
 public class MailProducerConsumerUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
@@ -32,20 +30,27 @@ public class MailProducerConsumerUnitTest extends AbstractArquillianUnitTestWith
 	public void produceAndConsume() {
 		startServersZookeeperAndKafka();
 		
-		org.cyk.utility.network.message.Message mail = __inject__(org.cyk.utility.network.message.Message.class);
-		mail.setTitle("Hi from distributed!").setBody("This is a hi from distributed stream.").addReceiversByIdentifiers("kycdev@gmail.com");
+		Consumer consumer = __inject__(ConsumerBuilder.class).setTopic(Topic.MAIL).execute().getOutput();
 		
-		Producer producer = __inject__(Producer.class);
-		producer.addTopics("test").setMessage(UUID.randomUUID().toString(),mail).setCallbackClass(ProducerCallbackImpl.class);
-		producer.setProperty("value.serializer", NetworkMessageSerializer.class);
+		//Testing purpose
+		consumer.setIsKeepMessages(Boolean.TRUE).setNumberOfMessages(1l).setIsExecuteAsynchronously(Boolean.TRUE);
+		Thread thread = (Thread) consumer.execute().getProperties().getThread();
+		
+		System.out.println("Mail consumer has started. we are waiting some times before producing...");
+		__inject__(TimeHelper.class).pause(1000l * 5);
+		
+		org.cyk.utility.network.message.Message mail = __inject__(org.cyk.utility.network.message.Message.class);
+		mail.setTitle("Hi from distributed! Time was "+new Date()).setBody("This is a hi from distributed stream.").addReceiversByIdentifiers("kycdev@gmail.com");
+		
+		Producer producer = __inject__(ProducerBuilder.class).setTopic(Topic.MAIL).execute().getOutput();
+		producer.setMessage(UUID.randomUUID().toString(),mail);		
 		producer.execute();
 		
-		Consumer consumer = __inject__(Consumer.class);
-		consumer.setIsKeepMessages(Boolean.TRUE);
-		consumer.addTopics("test").setMessageProcessorClass(ConsumerMessageProcessorImpl.class).setNumberOfMessages(1l);
-		consumer.setProperty("group.id", "test");
-		consumer.setProperty("value.deserializer", NetworkMessageDeserializer.class);
-		consumer.execute();
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		Messages messages = consumer.getMessages();
 		assertionHelper.assertNotNull("messages is null",messages);
@@ -56,23 +61,4 @@ public class MailProducerConsumerUnitTest extends AbstractArquillianUnitTestWith
 		stopServersKafkaAndZookeeper();
 	}
 	
-	/**/
-	
-	public static class ProducerCallbackImpl extends AbstractProducerCallbackImpl implements Serializable {
-		private static final long serialVersionUID = 1L;
-
-	}
-	
-	public static class ConsumerMessageProcessorImpl extends AbstractConsumerMessageProcessorImpl implements Serializable {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void __process__(Message message) {
-			//if(Boolean.TRUE.equals(__isRunnable__(SenderMail.class))) {
-				__inject__(SenderMail.class).setMessage((org.cyk.utility.network.message.Message) message.getValue()).execute();	
-			//}
-			
-		}
-		
-	}
 }

@@ -1,4 +1,4 @@
-package org.cyk.utility.stream.distributed.kafka;
+package org.cyk.utility.stream.distributed.kafka.network;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -8,7 +8,7 @@ import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.object.ObjectToStringBuilder;
 
-public class NetworkMessageSerializer extends AbstractObject implements org.apache.kafka.common.serialization.Serializer<org.cyk.utility.network.message.Message>,Objectable,Serializable {
+public class MessageSerializer extends AbstractObject implements org.apache.kafka.common.serialization.Serializer<org.cyk.utility.network.message.Message>,Objectable,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

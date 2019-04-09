@@ -4,8 +4,13 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.annotation.Json;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.object.dynamic.Objectable;
+import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.field.FieldInstanceValue;
 import org.cyk.utility.field.FieldInstanceValues;
+import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.throwable.ThrowableHelper;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -40,7 +45,7 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 	
 	public static class Serializer extends StdSerializer<Object> {
 	    private static final long serialVersionUID = 1L;
-
+	    
 		public Serializer() {
 	        this(null);
 	    }
@@ -57,12 +62,32 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 				if(index.getValue() != null) {
 					if(index.getValue() instanceof String)
 						generator.writeStringField(index.getFieldInstance().getPath(), (String) index.getValue());
-					else
+					else if(index.getValue() instanceof CollectionInstance<?>) {
+						Strings strings = __inject__(Strings.class);
+						for(Object indexCollectionInstance : ((CollectionInstance<?>)index.getValue()).get()) {
+							String string = null;
+							if(indexCollectionInstance instanceof Objectable) {
+								Object identifier = ((Objectable)indexCollectionInstance).getIdentifier();
+								if(identifier!=null)
+									string = identifier.toString();
+							}else {
+								if(indexCollectionInstance!=null)
+									string = indexCollectionInstance.toString();
+							} 
+							if(string == null)
+								__inject__(ThrowableHelper.class).throwRuntimeException("collection value cannot be deduced to string");
+							strings.add(string);
+						}
+						String string = __inject__(StringHelper.class).concatenate(strings.get(), COMA);
+						generator.writeStringField(index.getFieldInstance().getPath(), string );
+					}else
 						__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("jsonify field of type "+index.getFieldInstance().getType());	
 				}
 			}
 	        generator.writeEndObject();
 	    }
+	    
+	    public static final String COMA = ConstantCharacter.COMA.toString();
 	}
 	
 }

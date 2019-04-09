@@ -61,14 +61,16 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	public Function<INPUT,OUTPUT> execute() {
 		Boolean isExecuteAsynchronously = getIsExecuteAsynchronously();
 		if(Boolean.TRUE.equals(isExecuteAsynchronously)) {
-			new Thread(
+			Thread thread = new Thread(
 					new Runnable() {
 						@Override
 						public void run() {
 							__executeCode__();
 						}
 					}
-				).start();
+				);
+			getProperties().setThread(thread);
+			thread.start();
 		}else {
 			__executeCode__();	
 		}

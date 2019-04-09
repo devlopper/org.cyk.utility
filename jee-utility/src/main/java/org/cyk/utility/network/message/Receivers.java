@@ -4,4 +4,6 @@ import org.cyk.utility.collection.CollectionInstance;
 
 public interface Receivers extends CollectionInstance<Receiver> {
 
+	@Override Receivers add(Receiver...receivers);
+	
 }

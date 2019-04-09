@@ -1,8 +1,9 @@
 package org.cyk.utility.object;
 
-import java.util.Arrays;
-
+import static org.assertj.core.api.Assertions.*;
 import org.cyk.utility.__kernel__.annotation.Json;
+import org.cyk.utility.network.message.Receivers;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
@@ -27,6 +28,22 @@ public class ObjectFromStringBuilderUnitTest extends AbstractArquillianUnitTestW
 		Class object = buildObjectFromStringUsingJson("{\"field01\":\"1\"}", Class.class,"field01");
 		assertionHelper.assertNotNull(object);
 		assertionHelper.assertEquals("1",object.getField01());
+	}
+	
+	@Test
+	public void objectField01IsNotNull_json_stringField04Is1_abc_4(){
+		Class object = buildObjectFromStringUsingJson("{\"field04\":\"1,abc,4\"}", Class.class,"field04");
+		assertionHelper.assertNotNull(object);
+		assertThat(object.getField04().get()).containsExactly("1","abc","4");
+	}
+	
+	@Test
+	public void objectField01IsNotNull_json_receiverField05Is1_abc_4(){
+		Class object = buildObjectFromStringUsingJson("{\"field05\":\"1,abc,4\"}", Class.class,"field05");
+		assertionHelper.assertNotNull(object);
+		assertThat(object.getField05().getAt(0).getIdentifier()).isEqualTo("1");
+		assertThat(object.getField05().getAt(1).getIdentifier()).isEqualTo("abc");
+		assertThat(object.getField05().getAt(2).getIdentifier()).isEqualTo("4");
 	}
 	
 	/*
@@ -58,5 +75,7 @@ public class ObjectFromStringBuilderUnitTest extends AbstractArquillianUnitTestW
 		private String field01;
 		private String field02;
 		private String field03;
+		private Strings field04;
+		private Receivers field05;
 	}
 }

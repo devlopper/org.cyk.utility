@@ -1,6 +1,9 @@
 package org.cyk.utility.object;
 
 import org.cyk.utility.__kernel__.annotation.Json;
+import org.cyk.utility.network.message.Receiver;
+import org.cyk.utility.network.message.Receivers;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
 
@@ -27,6 +30,19 @@ public class ObjectToStringBuilderUnitTest extends AbstractArquillianUnitTestWit
 				, "field01","field02"));
 	}
 	
+	@Test
+	public void stringify_json_field04IsNotNull(){
+		assertionHelper.assertEquals("{\"field04\":\"abc,2,hello world\"}",buildStringFromObjectUsingJson(new Class()
+				.setField04(__inject__(Strings.class).add("abc","2","hello world")), "field04"));
+	}
+	
+	@Test
+	public void stringify_json_field05IsNotNull(){
+		assertionHelper.assertEquals("{\"field05\":\"r01,k@mail.com\"}",buildStringFromObjectUsingJson(new Class()
+				.setField05(__inject__(Receivers.class).add(__inject__(Receiver.class).setIdentifier("r01")
+						,__inject__(Receiver.class).setIdentifier("k@mail.com"))), "field05"));
+	}
+	
 	/**/
 	
 	private static String buildStringFromObjectUsingJson(Object object,String...fieldNamesStrings) {
@@ -43,5 +59,9 @@ public class ObjectToStringBuilderUnitTest extends AbstractArquillianUnitTestWit
 		private String field01;
 		private String field02;
 		private String field03;
+		private Strings field04;
+		private Receivers field05;
 	}
+	
+	
 }

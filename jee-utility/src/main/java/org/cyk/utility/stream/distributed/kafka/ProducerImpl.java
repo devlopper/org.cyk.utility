@@ -22,8 +22,10 @@ public class ProducerImpl extends AbstractProducerImpl implements Serializable {
 	protected void __prepare__(Strings topics) {
 		getProperties().setIfNull("bootstrap.servers", "localhost:9092");
 		getProperties().setIfNull("acks", "all");
-		getProperties().setIfNull("key.serializer", StringSerializer.class);
-		getProperties().setIfNull("value.serializer", StringSerializer.class);
+		Class<?> keySerialisationClass = getKeySerialisationClass();
+		Class<?> valueSerialisationClass = getValueSerialisationClass();
+		getProperties().setIfNull("key.serializer", __injectValueHelper__().defaultToIfNull(keySerialisationClass, StringSerializer.class));
+		getProperties().setIfNull("value.serializer", __injectValueHelper__().defaultToIfNull(valueSerialisationClass, StringSerializer.class));
 		kafkaProducer = new KafkaProducer<>(getProperties().buildJavaUtilProperties());
 	}
 	

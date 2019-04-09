@@ -13,4 +13,9 @@ public interface ProducerConsumer extends FunctionWithPropertiesAsInputAndVoidAs
 	ProducerConsumer addTopics(Collection<String> topics);
 	ProducerConsumer addTopics(String...topics);
 
+	Class<?> getKeySerialisationClass();
+	ProducerConsumer setKeySerialisationClass(Class<?> keySerialisationClass);
+	
+	Class<?> getValueSerialisationClass();
+	ProducerConsumer setValueSerialisationClass(Class<?> valueSerialisationClass);
 }

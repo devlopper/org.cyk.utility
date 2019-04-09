@@ -4511,7 +4511,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getThread() {
+		return get(THREAD);
+	}
+
+	public Properties setThread(Object thread) {
+		set(THREAD, thread);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String THREAD = "THREAD";
 	public static final String HREF = "HREF";
 	public static final String LINK = "LINK";
 	public static final String IMAGE = "IMAGE";
