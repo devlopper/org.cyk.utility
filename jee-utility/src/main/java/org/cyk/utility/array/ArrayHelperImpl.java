@@ -16,7 +16,7 @@ public class ArrayHelperImpl extends AbstractHelper implements ArrayHelper,Seria
 
 	@Override
 	public Boolean isEmpty(Object[] objects) {
-		return objects == null ? Boolean.TRUE : objects.length == 0;
+		return objects == null || objects.length == 0;
 	}
 	
 	@Override

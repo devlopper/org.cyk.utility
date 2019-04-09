@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 
 public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject implements CollectionInstance<T>, Serializable {
@@ -127,7 +128,8 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 
 	@Override
 	public CollectionInstance<T> add(T... elements) {
-		add(__inject__(CollectionHelper.class).instanciate(elements));
+		if(__inject__(ArrayHelper.class).isNotEmpty(elements))
+			add(__inject__(CollectionHelper.class).instanciate(elements));
 		return this;
 	}
 	

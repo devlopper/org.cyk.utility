@@ -1,7 +1,6 @@
 package org.cyk.utility.network.message.sender;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import org.cyk.utility.network.message.Message;
 import org.cyk.utility.network.protocol.Protocol;
@@ -10,12 +9,13 @@ public abstract class AbstractSenderImpl extends AbstractSenderReaderImpl implem
 	private static final long serialVersionUID = 6428760240698553361L;
 
 	private Message message;
-	private Receivers receivers;
+	//private Receivers receivers;
 	
 	@Override
 	protected void ______execute______(Protocol protocol) throws Exception {
 		Message message = getMessage();
 		throwRuntimeExceptionIfIsNull(message,"message");
+		throwRuntimeExceptionIfIsEmpty(message.getReceivers(), "receivers");
 		________execute________(protocol,message);
 	}
 	
@@ -31,7 +31,7 @@ public abstract class AbstractSenderImpl extends AbstractSenderReaderImpl implem
 		this.message = message;
 		return this;
 	}
-	
+	/*
 	@Override
 	public Receivers getReceivers() {
 		return receivers;
@@ -59,8 +59,8 @@ public abstract class AbstractSenderImpl extends AbstractSenderReaderImpl implem
 		getReceivers(Boolean.TRUE).add(receivers);
 		return this;
 	}
-	
+	*/
 	/**/
 	
-	public static final String FIELD_RECEIVERS = "receivers";
+	//public static final String FIELD_RECEIVERS = "receivers";
 }

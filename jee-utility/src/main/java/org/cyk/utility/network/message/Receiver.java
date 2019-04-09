@@ -1,4 +1,4 @@
-package org.cyk.utility.network.message.sender;
+package org.cyk.utility.network.message;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 

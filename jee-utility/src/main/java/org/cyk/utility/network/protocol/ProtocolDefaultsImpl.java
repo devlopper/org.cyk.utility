@@ -14,8 +14,19 @@ public class ProtocolDefaultsImpl extends AbstractMapInstanceImpl<Class, Protoco
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		set(ProtocolSimpleMailTransfer.class,__inject__(ProtocolSimpleMailTransfer.class));
+		setSimpleMailTransfer(__inject__(ProtocolSimpleMailTransfer.class));
 		
+	}
+
+	@Override
+	public ProtocolSimpleMailTransfer getSimpleMailTransfer() {
+		return (ProtocolSimpleMailTransfer) get(ProtocolSimpleMailTransfer.class);
+	}
+
+	@Override
+	public ProtocolDefaults setSimpleMailTransfer(ProtocolSimpleMailTransfer simpleMailTransfer) {
+		set(ProtocolSimpleMailTransfer.class,simpleMailTransfer);
+		return this;
 	}
 	
 }

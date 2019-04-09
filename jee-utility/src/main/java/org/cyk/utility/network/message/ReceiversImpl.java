@@ -1,4 +1,4 @@
-package org.cyk.utility.network.message.sender;
+package org.cyk.utility.network.message;
 
 import java.io.Serializable;
 

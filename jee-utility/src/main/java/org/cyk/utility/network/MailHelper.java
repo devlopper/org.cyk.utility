@@ -6,6 +6,6 @@ import org.cyk.utility.helper.Helper;
 
 public interface MailHelper extends Helper {
 
-	MailHelper send(String title,String body,Collection<String> receivers,Boolean isExecuteAsynchronously);
+	MailHelper send(String title,String body,Collection<Object> receiversIdentifiers,Boolean isExecuteAsynchronously);
 	
 }

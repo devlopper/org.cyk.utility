@@ -5,6 +5,7 @@ import java.time.Duration;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.cyk.utility.stream.distributed.AbstractConsumerImpl;
 import org.cyk.utility.string.Strings;
 
@@ -15,6 +16,10 @@ public class ConsumerImpl extends AbstractConsumerImpl implements Serializable {
 		
 	@Override
 	protected void __subscribe__(Strings topics) {
+		getProperties().setIfNull("enable.auto.commit", "false");
+		getProperties().setIfNull("bootstrap.servers", "localhost:9092");
+		getProperties().setIfNull("key.deserializer", StringDeserializer.class);
+		getProperties().setIfNull("value.deserializer", StringDeserializer.class);
 		kafkaConsumer = new KafkaConsumer<>(getProperties().buildJavaUtilProperties());
 		kafkaConsumer.subscribe(topics.get());
 	}

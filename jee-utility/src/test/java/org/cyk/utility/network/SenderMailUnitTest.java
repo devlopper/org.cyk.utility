@@ -6,8 +6,8 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import org.cyk.utility.network.message.Message;
+import org.cyk.utility.network.message.Receiver;
 import org.cyk.utility.network.message.SenderReader;
-import org.cyk.utility.network.message.sender.Receiver;
 import org.cyk.utility.network.message.sender.SenderMail;
 import org.cyk.utility.network.protocol.ProtocolDefaults;
 import org.cyk.utility.network.protocol.ProtocolSimpleMailTransfer;
@@ -24,12 +24,11 @@ public class SenderMailUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 	public void pingWaitForTermination(){
 		if(Boolean.TRUE.equals(__isRunnable__(SenderMail.class))) {
 			SenderMail sender = __inject__(SenderMail.class);
-			sender.getProtocol().setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE).setIsSecuredConnectionRequired(Boolean.TRUE)
+			sender.getProtocol(Boolean.TRUE).setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE).setIsSecuredConnectionRequired(Boolean.TRUE)
 			.setAuthenticationCredentials(__inject__(Credentials.class).setIdentifier("dgbfdtideveloppers").setSecret("dgbf2016dti"));
 			
 			sender
-			.setMessage(__inject__(Message.class).setTitle("MyTitle Sync").setBody("MyBody"))
-			.addReceivers(__inject__(Receiver.class).setIdentifier("kycdev@gmail.com"))
+			.setMessage(__inject__(Message.class).setTitle("MyTitle Sync").setBody("MyBody").addReceivers(__inject__(Receiver.class).setIdentifier("kycdev@gmail.com")))
 			.execute();	
 		}
 	}
@@ -38,12 +37,11 @@ public class SenderMailUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 	public void pingDoNotWaitForTermination(){
 		if(Boolean.TRUE.equals(__isRunnable__(SenderMail.class))) {
 			SenderMail sender = __inject__(SenderMail.class);
-			sender.getProtocol().setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE).setIsSecuredConnectionRequired(Boolean.TRUE)
+			sender.getProtocol(Boolean.TRUE).setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE).setIsSecuredConnectionRequired(Boolean.TRUE)
 			.setAuthenticationCredentials(__inject__(Credentials.class).setIdentifier("dgbfdtideveloppers").setSecret("dgbf2016dti"));
 			
 			sender
-			.setMessage(__inject__(Message.class).setTitle("MyTitle Async").setBody("MyBody"))
-			.addReceivers(__inject__(Receiver.class).setIdentifier("kycdev@gmail.com"))
+			.setMessage(__inject__(Message.class).setTitle("MyTitle Async").setBody("MyBody").addReceivers(__inject__(Receiver.class).setIdentifier("kycdev@gmail.com")))
 			.setIsExecuteAsynchronously(Boolean.TRUE)
 			.execute();	
 		}
@@ -53,12 +51,11 @@ public class SenderMailUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 	public void pingUsingCdiObserver(){
 		if(Boolean.TRUE.equals(__isRunnable__(SenderMail.class))) {
 			SenderMail sender = __inject__(SenderMail.class);
-			sender.getProtocol().setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE).setIsSecuredConnectionRequired(Boolean.TRUE)
+			sender.getProtocol(Boolean.TRUE).setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE).setIsSecuredConnectionRequired(Boolean.TRUE)
 			.setAuthenticationCredentials(__inject__(Credentials.class).setIdentifier("dgbfdtideveloppers").setSecret("dgbf2016dti"));
 			
 			sender
-			.setMessage(__inject__(Message.class).setTitle("MyTitle CDI Observer").setBody("MyBody"))
-			.addReceivers(__inject__(Receiver.class).setIdentifier("kycdev@gmail.com"))
+			.setMessage(__inject__(Message.class).setTitle("MyTitle CDI Observer").setBody("MyBody").addReceivers(__inject__(Receiver.class).setIdentifier("kycdev@gmail.com")))
 			;
 			senderReaderEvent.fire(sender);
 		}
@@ -72,6 +69,20 @@ public class SenderMailUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 			.setAuthenticationCredentials(__inject__(Credentials.class).setIdentifier("dgbfdtideveloppers").setSecret("dgbf2016dti"));
 			
 			__inject__(MailHelper.class).send("MyTitle CDI Helper", "MyBody", Arrays.asList("kycdev@gmail.com"), Boolean.FALSE);
+		}
+	}
+	
+	@Test
+	public void pingUsingDefault(){
+		if(Boolean.TRUE.equals(__isRunnable__(SenderMail.class))) {
+			__inject__(ProtocolDefaults.class).getSimpleMailTransfer().setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE).setIsSecuredConnectionRequired(Boolean.TRUE)
+			.setAuthenticationCredentials(__inject__(Credentials.class).setIdentifier("dgbfdtideveloppers").setSecret("dgbf2016dti"));
+			
+			SenderMail sender = __inject__(SenderMail.class);
+		
+			sender
+			.setMessage(__inject__(Message.class).setTitle("MyTitle Sync").setBody("MyBody").addReceivers(__inject__(Receiver.class).setIdentifier("kycdev@gmail.com")))
+			.execute();	
 		}
 	}
 }
