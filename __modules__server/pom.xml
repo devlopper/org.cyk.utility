@@ -17,6 +17,7 @@
 		<module>../jee-utility-server-business</module>
 		<module>../jee-utility-server-representation</module>
 		<module>../jee-utility-server-representation-impl</module>
+		<module>../jee-utility-server-deployment</module>
 	</modules>
 
 </project>
