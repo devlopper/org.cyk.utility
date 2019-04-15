@@ -20,6 +20,10 @@ public abstract class AbstractPersistenceFunctionTransactionImpl extends Abstrac
 		return Boolean.TRUE;
 	}
 	
+	protected void __act__(Object entity) {
+		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented(getAction()+" entity");
+	}
+	
 	@Override
 	public PersistenceFunctionTransaction setEntity(Object entity) {
 		return (PersistenceFunctionTransaction) super.setEntity(entity);

@@ -17,6 +17,7 @@ import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.value.ValueUsageType;
 
+@Deprecated
 public class PersistenceFunctionCreatorImpl extends AbstractPersistenceFunctionCreatorImpl implements PersistenceFunctionCreator {
 	private static final long serialVersionUID = 1L;
 	

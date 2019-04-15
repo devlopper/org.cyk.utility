@@ -33,6 +33,11 @@ public class PersistenceFunctionIntegrationTest extends AbstractPersistenceArqui
 		__inject__(TestPersistenceCreate.class).addObjects(new MyEntity().setCode("a"),new MyEntity().setCode("b")).execute();
 	}
 	
+	@Test
+	public void createOneMyEntityIdentifiedByString() throws Exception{
+		__inject__(TestPersistenceCreate.class).addObjects(new MyEntityIdentifiedByString()).execute();
+	}
+	
 	/* Read */
 	
 	@Test

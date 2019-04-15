@@ -2,6 +2,7 @@ package org.cyk.utility.test;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -41,6 +42,18 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 	}
 	
 	protected void __setFieldValues__(Object object) {}
+	
+	protected UUID __getRandomUuid__(){
+		return UUID.randomUUID();
+	}
+	
+	protected String __getRandomUuidAsString__(){
+		return __getRandomUuid__().toString();
+	}
+	
+	protected String __getRandomIdentifier__(){
+		return __getRandomUuidAsString__();
+	}
 	
 	protected String __getRandomCode__(){
 		return __inject__(RandomHelper.class).getAlphabetic(3);
