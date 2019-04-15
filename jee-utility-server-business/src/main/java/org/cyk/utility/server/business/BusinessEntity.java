@@ -21,6 +21,7 @@ public interface BusinessEntity<PERSISTENCE_ENTITY> extends BusinessServiceProvi
 	PERSISTENCE_ENTITY findOne(Object identifier,ValueUsageType valueUsageType);
 	PERSISTENCE_ENTITY findOne(Object identifier);
 	PERSISTENCE_ENTITY findOneByBusinessIdentifier(Object identifier);
+	PERSISTENCE_ENTITY findOneBySystemIdentifier(Object identifier);
 	
 	Collection<PERSISTENCE_ENTITY> findMany(Properties properties);
 	Collection<PERSISTENCE_ENTITY> findMany();

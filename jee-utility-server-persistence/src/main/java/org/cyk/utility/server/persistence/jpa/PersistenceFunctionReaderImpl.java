@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence;
+package org.cyk.utility.server.persistence.jpa;
 
 import java.util.Collection;
 import java.util.Map;
@@ -11,6 +11,8 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
+import org.cyk.utility.server.persistence.AbstractPersistenceFunctionReaderImpl;
+import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.sql.builder.QueryWherePredicateStringBuilder;
 import org.cyk.utility.sql.builder.Tuple;

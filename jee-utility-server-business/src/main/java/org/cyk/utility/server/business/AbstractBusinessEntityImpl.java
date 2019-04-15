@@ -57,6 +57,11 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	public ENTITY findOneByBusinessIdentifier(Object identifier) {
 		return findOne(identifier, ValueUsageType.BUSINESS);
 	}
+	
+	@Override
+	public ENTITY findOneBySystemIdentifier(Object identifier) {
+		return findOne(identifier, ValueUsageType.SYSTEM);
+	}
 
 	@Override
 	public Collection<ENTITY> findMany(Properties properties) {

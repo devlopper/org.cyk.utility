@@ -1,6 +1,9 @@
-package org.cyk.utility.server.persistence;
+package org.cyk.utility.server.persistence.jpa;
 
 import javax.persistence.EntityManager;
+
+import org.cyk.utility.server.persistence.AbstractPersistenceFunctionCreatorImpl;
+import org.cyk.utility.server.persistence.PersistenceFunctionCreator;
 /**
  * Default implementation will use Java Persistence Api (JPA)
  * @author CYK

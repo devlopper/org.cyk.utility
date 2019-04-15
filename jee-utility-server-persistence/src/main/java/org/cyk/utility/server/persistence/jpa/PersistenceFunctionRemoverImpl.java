@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence;
+package org.cyk.utility.server.persistence.jpa;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.server.persistence.AbstractPersistenceFunctionRemoverImpl;
+import org.cyk.utility.server.persistence.PersistenceFunctionRemover;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.system.action.SystemAction;
 
