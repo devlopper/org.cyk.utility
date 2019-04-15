@@ -10,9 +10,10 @@ import javax.persistence.Query;
 import org.cyk.utility.instance.InstanceRepository;
 import org.cyk.utility.server.persistence.query.AbstractPersistenceQueryRepositoryImpl;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
+import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 
 @Singleton
-public class PersistenceQueryRepositoryJpaImpl extends AbstractPersistenceQueryRepositoryImpl implements PersistenceQueryRepositoryJpa, Serializable {
+public class PersistenceQueryRepositoryImpl extends AbstractPersistenceQueryRepositoryImpl implements PersistenceQueryRepository, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

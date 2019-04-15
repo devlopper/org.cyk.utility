@@ -131,6 +131,12 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 		return getField(aClass, __inject__(CollectionHelper.class).instanciate(fieldNames));
 	}
 	
+	@Override
+	public Field getField(Class<?> klass, FieldName fieldName, ValueUsageType valueUsageType) {
+		String name = __inject__(FieldNameGetter.class).execute(klass, fieldName,valueUsageType).getOutput();
+		return __inject__(CollectionHelper.class).getFirst(__inject__(FieldGetter.class).execute(klass, name).getOutput());
+	}
+	
 	/*
 	public FieldHelper __set__(Object source,Object destination){
 		for(FieldName indexFieldName : new FieldName[] {FieldName.IDENTIFIER})

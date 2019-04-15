@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.number.NumberHelper;
-import org.cyk.utility.server.persistence.jpa.Persistence;
+import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;

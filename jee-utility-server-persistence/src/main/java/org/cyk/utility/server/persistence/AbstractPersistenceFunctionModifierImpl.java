@@ -5,10 +5,17 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractPersistenceFunctionModifierImpl extends AbstractPersistenceFunctionTransactionImpl implements PersistenceFunctionModifier, Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		setAction(__inject__(SystemActionUpdate.class));
+	}
 	
 	@Override
 	public PersistenceFunctionModifier setEntity(Object entity) {

@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence.jpa;
+package org.cyk.utility.server.persistence;
 
 import java.util.Collection;
 import java.util.Map;
@@ -11,7 +11,6 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
-import org.cyk.utility.server.persistence.AbstractPersistenceFunctionReaderImpl;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.sql.builder.QueryWherePredicateStringBuilder;
 import org.cyk.utility.sql.builder.Tuple;
@@ -27,6 +26,7 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 
 	@Override
 	protected void __executeQuery__(SystemAction action) {
+		EntityManager entityManager = __inject__(EntityManager.class);
 		Class<?> aClass = getEntityClass();
 		Object entityIdentifier = getEntityIdentifier();
 		ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
@@ -35,7 +35,7 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 		String identifierFieldName = __inject__(FieldNameGetter.class).execute(aClass, FieldName.IDENTIFIER, valueUsageType).getOutput();
 		Object entity;
 		if(ValueUsageType.SYSTEM.equals(valueUsageType))
-			entity = getEntityManager().find(aClass,entityIdentifier);
+			entity = entityManager.find(aClass,entityIdentifier);
 		else{
 			Tuple tuple = new Tuple().setName(aClass.getSimpleName());
 			QueryWherePredicateStringBuilder predicateBuilder = (QueryWherePredicateStringBuilder) JpqlQualifier.inject(QueryWherePredicateStringBuilderEqualJpql.class)
@@ -43,7 +43,7 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 			
 			QueryStringBuilderSelectJpql queryBuilder = JpqlQualifier.inject(QueryStringBuilderSelectJpql.class).from(tuple).where(predicateBuilder);
 			
-			Collection<?> objects = getEntityManager().createQuery(queryBuilder.execute().getOutput(), aClass).setParameter(identifierFieldName, entityIdentifier).getResultList();
+			Collection<?> objects = entityManager.createQuery(queryBuilder.execute().getOutput(), aClass).setParameter(identifierFieldName, entityIdentifier).getResultList();
 			entity = __inject__(CollectionHelper.class).getFirst(objects);
 		}
 		getProperties().setEntity(entity);
@@ -53,9 +53,9 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 	
 	@Override
 	protected void __executeQuery__(SystemAction action, PersistenceQuery persistenceQuery) {
+		EntityManager entityManager = __inject__(EntityManager.class);
 		String identifier = persistenceQuery.getIdentifier() == null ? null : persistenceQuery.getIdentifier().toString();
 		Class<?> resultClass = persistenceQuery.getResultClass();
-		EntityManager entityManager = getEntityManager();
 		TypedQuery<?> typedQuery = __injectStringHelper__().isBlank(identifier) ? entityManager.createQuery(persistenceQuery.getValue(), resultClass) 
 				: entityManager.createNamedQuery(identifier, resultClass);
 		//TODO handle Paging
@@ -80,14 +80,4 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 		super.__listenPostConstruct__();
 	}
 	
-	@Override
-	public EntityManager getEntityManager() {
-		return (EntityManager) getProperties().getEntityManager();
-	}
-	
-	@Override
-	public PersistenceFunctionReader setEntityManager(EntityManager entityManager) {
-		getProperties().setEntityManager(entityManager);
-		return this;
-	}
 }

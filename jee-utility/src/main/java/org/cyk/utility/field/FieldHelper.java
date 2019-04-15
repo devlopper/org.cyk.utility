@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.helper.Helper;
 import org.cyk.utility.string.Strings;
+import org.cyk.utility.value.ValueUsageType;
 
 public interface FieldHelper extends Helper {
 
@@ -53,5 +54,5 @@ public interface FieldHelper extends Helper {
 	Field getField(Class<?> aClass,Collection<String> fieldNames);
 	Field getField(Class<?> aClass,String...fieldNames);
 	
-	
+	Field getField(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType);
 }

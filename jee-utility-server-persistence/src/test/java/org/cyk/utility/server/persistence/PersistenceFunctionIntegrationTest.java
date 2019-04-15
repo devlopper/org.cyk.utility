@@ -7,7 +7,6 @@ import javax.validation.ConstraintViolationException;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.PersistenceFunctionCreator;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
-import org.cyk.utility.server.persistence.jpa.Persistence;
 import org.cyk.utility.server.persistence.test.FunctionRunnableTest;
 import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
 import org.cyk.utility.server.persistence.test.TestPersistenceDelete;

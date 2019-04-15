@@ -1,27 +1,28 @@
-package org.cyk.utility.server.persistence.jpa;
+package org.cyk.utility.server.persistence;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.server.persistence.AbstractPersistenceFunctionModifierImpl;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionUpdate;
 
-public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunctionModifierImpl implements PersistenceFunctionModifier {
+public class PersistenceFunctionRemoverImpl extends AbstractPersistenceFunctionRemoverImpl implements PersistenceFunctionRemover,Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
 	protected void __executeQuery__(SystemAction action) {
-		getEntityManager().merge(getEntity());		
+		EntityManager entityManager = __inject__(EntityManager.class);
+		entityManager.remove(entityManager.merge(getEntity()));		
 	}
 	
 	@Override
 	protected void __executeQuery__(SystemAction action, PersistenceQuery persistenceQuery) {
-		EntityManager entityManager = getEntityManager();
+		EntityManager entityManager = __inject__(EntityManager.class);
+		
 		//Instantiate query
 		Query query = entityManager.createNamedQuery(persistenceQuery.getIdentifier().toString());
 		
@@ -39,21 +40,5 @@ public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunction
 		//This is required when doing batch processing
 		entityManager.clear();
 	}
-	
-	@Override
-	protected void __listenPostConstruct__() {
-		setEntityManager(__inject__(EntityManager.class)).setAction(__inject__(SystemActionUpdate.class));
-		super.__listenPostConstruct__();
-	}
-	
-	@Override
-	public EntityManager getEntityManager() {
-		return (EntityManager) getProperties().getEntityManager();
-	}
-	
-	@Override
-	public PersistenceFunctionModifier setEntityManager(EntityManager entityManager) {
-		getProperties().setEntityManager(entityManager);
-		return this;
-	}
+
 }

@@ -50,8 +50,11 @@ public abstract class AbstractPersistenceFunctionCreatorImpl extends AbstractPer
 				}	
 			}
 			
-			__act__(index);	
+			__create__(index);	
 		}
 	}
 
+	protected void __create__(Object entity) {
+		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented(getAction()+" entity");
+	}
 }

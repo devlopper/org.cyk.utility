@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence.jpa;
+package org.cyk.utility.server.persistence;
 
 import java.util.Map;
 
@@ -6,23 +6,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.server.persistence.AbstractPersistenceFunctionRemoverImpl;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionDelete;
 
-public class PersistenceFunctionRemoverImpl extends AbstractPersistenceFunctionRemoverImpl implements PersistenceFunctionRemover {
+public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunctionModifierImpl implements PersistenceFunctionModifier {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	protected void __executeQuery__(SystemAction action) {
-		getEntityManager().remove(getEntityManager().merge(getEntity()));		
+		__inject__(EntityManager.class).merge(getEntity());		
 	}
 	
 	@Override
 	protected void __executeQuery__(SystemAction action, PersistenceQuery persistenceQuery) {
-		EntityManager entityManager = getEntityManager();
-		
+		EntityManager entityManager = __inject__(EntityManager.class);
 		//Instantiate query
 		Query query = entityManager.createNamedQuery(persistenceQuery.getIdentifier().toString());
 		
@@ -41,20 +38,5 @@ public class PersistenceFunctionRemoverImpl extends AbstractPersistenceFunctionR
 		entityManager.clear();
 	}
 	
-	@Override
-	protected void __listenPostConstruct__() {
-		setEntityManager(__inject__(EntityManager.class)).setAction(__inject__(SystemActionDelete.class));
-		super.__listenPostConstruct__();
-	}
 	
-	@Override
-	public EntityManager getEntityManager() {
-		return (EntityManager) getProperties().getEntityManager();
-	}
-	
-	@Override
-	public PersistenceFunctionRemover setEntityManager(EntityManager entityManager) {
-		getProperties().setEntityManager(entityManager);
-		return this;
-	}
 }

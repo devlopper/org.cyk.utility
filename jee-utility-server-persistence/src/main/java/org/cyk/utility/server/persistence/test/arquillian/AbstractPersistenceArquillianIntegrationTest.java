@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import javax.transaction.UserTransaction;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.server.persistence.PersistenceEntity;
-import org.cyk.utility.server.persistence.jpa.Persistence;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
 import org.cyk.utility.test.arquillian.AbstractSystemServerArquillianIntegrationTestImpl;

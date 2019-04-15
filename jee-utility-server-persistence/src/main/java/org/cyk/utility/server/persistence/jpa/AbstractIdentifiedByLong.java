@@ -40,7 +40,7 @@ public abstract class AbstractIdentifiedByLong extends AbstractIdentifiedPersist
 	/**/
 	
 	protected <T> T __getFromBusinessIdentifier__(Class<T> aClass,Object identifier){
-		return identifier == null ? null : __inject__(Persistence.class).readOne(aClass,identifier,new Properties().setValueUsageType(ValueUsageType.BUSINESS));
+		return identifier == null ? null : __inject__(org.cyk.utility.server.persistence.Persistence.class).readOne(aClass,identifier,new Properties().setValueUsageType(ValueUsageType.BUSINESS));
 	}
 	
 	public AbstractIdentifiedByLong setFromBusinessIdentifier(Field field,Object identifier){
