@@ -18,4 +18,6 @@ public interface FieldInstance extends Objectable {
 	Class<?> getType();
 	FieldInstance setType(Class<?> type);
 	
+	Boolean getIsGeneratable();
+	FieldInstance setIsGeneratable(Boolean isGeneratable);
 }

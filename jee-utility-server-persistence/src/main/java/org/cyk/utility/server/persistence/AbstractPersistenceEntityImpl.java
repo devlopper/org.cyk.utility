@@ -100,6 +100,11 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	@Override
+	public ENTITY readOneBySystemIdentifier(Object identifier) {
+		return readOne(identifier, ValueUsageType.SYSTEM);
+	}
+	
+	@Override
 	public Collection<ENTITY> readMany(Properties properties) {
 		return read(properties);
 	}

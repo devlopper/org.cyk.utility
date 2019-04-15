@@ -23,17 +23,17 @@ public class MyEntityFunctionIntegrationTest extends AbstractRepresentationArqui
 		MyEntity persistence = new MyEntity().setCode(code).setName("n01ToEdit");
 		__inject__(MyEntityBusiness.class).create(persistence);
 		
-		MyEntityDto dto = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(code, "business").getEntity();
+		MyEntityDto dto = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(code, "business",null).getEntity();
 		assertionHelper.assertEquals("n01ToEdit", dto.getName());
 		
 		dto.setName("n01");
 		__inject__(MyEntityRepresentation.class).updateOne(dto, null);
-		MyEntityDto updatedDto = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(code, "business").getEntity();
+		MyEntityDto updatedDto = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(code, "business",null).getEntity();
 		assertionHelper.assertEquals("n01ToEdit", updatedDto.getName());
 		
 		dto.setName("n01");
 		__inject__(MyEntityRepresentation.class).updateOne(dto, "name");
-		updatedDto = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(code, "business").getEntity();
+		updatedDto = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(code, "business",null).getEntity();
 		assertionHelper.assertEquals("n01", updatedDto.getName());
 		
 		//__inject__(TestRepresentationUpdate.class).setFieldValuesMap(dto, __inject__(MapHelper.class).instanciateKeyAsStringValueAsObject("name","n02"))
@@ -45,19 +45,19 @@ public class MyEntityFunctionIntegrationTest extends AbstractRepresentationArqui
 		String code01 = __inject__(RandomHelper.class).getAlphabetic(3);
 		String code02 = __inject__(RandomHelper.class).getAlphabetic(3);
 		
-		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code01,"business").getEntity());
-		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code02,"business").getEntity());
+		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code01,"business",null).getEntity());
+		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code02,"business",null).getEntity());
 		
 		__inject__(MyEntityBusiness.class).create(new MyEntity().setCode(code01));
 		__inject__(MyEntityBusiness.class).create(new MyEntity().setCode(code02));
 		
-		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code01,"business").getEntity());
-		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code02,"business").getEntity());
+		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code01,"business",null).getEntity());
+		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code02,"business",null).getEntity());
 		
 		__inject__(MyEntityRepresentation.class).deleteOne(new MyEntityDto().setCode(code01));
 		
-		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code01,"business").getEntity());
-		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code02,"business").getEntity());
+		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code01,"business",null).getEntity());
+		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code02,"business",null).getEntity());
 		
 	}
 	

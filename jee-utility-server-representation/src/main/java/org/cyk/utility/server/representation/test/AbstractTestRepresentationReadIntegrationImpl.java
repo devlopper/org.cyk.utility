@@ -29,7 +29,7 @@ public abstract class AbstractTestRepresentationReadIntegrationImpl extends Abst
 		ValueUsageType valueUsageType = getIdentifierValueUsageType();
 		@SuppressWarnings("rawtypes")
 		RepresentationEntity representation = __inject__(RepresentationLayer.class).injectInterfaceClassFromEntityClass(getObjectClass());
-		__response__ = representation.getOne(object.toString(), valueUsageType.name());
+		__response__ = representation.getOne(object.toString(), valueUsageType.name(),null);
 		
 		Object one = __response__.getEntity();
 		

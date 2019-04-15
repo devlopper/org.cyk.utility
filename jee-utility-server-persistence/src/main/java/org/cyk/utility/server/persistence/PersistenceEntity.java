@@ -27,6 +27,7 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 	ENTITY readOne(Object identifier,ValueUsageType valueUsageType);
 	ENTITY readOne(Object identifier);
 	ENTITY readOneByBusinessIdentifier(Object identifier);
+	ENTITY readOneBySystemIdentifier(Object identifier);
 	
 	Collection<ENTITY> readMany(Properties properties);
 	Collection<ENTITY> readMany();

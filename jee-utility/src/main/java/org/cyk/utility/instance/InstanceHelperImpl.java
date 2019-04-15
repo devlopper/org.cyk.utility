@@ -56,6 +56,7 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 		InstanceBuilder instanceBuilder = __inject__(InstanceBuilder.class);
 		instanceBuilder.copyProperty(Properties.CONTEXT, properties);
 		instanceBuilder.copyProperty(Properties.REQUEST, properties);
+		instanceBuilder.copyProperty(Properties.FIELDS, properties);
 		return (INSTANCE) instanceBuilder.setClazz(aClass).setFieldsValuesObject(fieldsValuesObject).execute().getOutput();
 	}
 	
@@ -70,7 +71,7 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 		if(__inject__(CollectionHelper.class).isNotEmpty(fieldsValuesObjects)) {
 			instances = new ArrayList<>();
 			for(Object index : fieldsValuesObjects)
-				instances.add(buildOne(aClass, index));
+				instances.add(buildOne(aClass, index,properties));
 		}
 		return instances;
 	}

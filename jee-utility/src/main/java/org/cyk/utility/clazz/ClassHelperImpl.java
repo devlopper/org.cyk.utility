@@ -118,7 +118,7 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	
 	@Override
 	public Boolean isBelongsToJavaPackages(Class<?> aClass) {
-		return StringUtils.startsWithAny(aClass.getName(), "java.","javax.");
+		return aClass.isArray() || StringUtils.startsWithAny(aClass.getName(), "java.","javax.");
 	}
 
 	@Override

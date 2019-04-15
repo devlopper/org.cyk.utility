@@ -47,20 +47,21 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public Response getMany() {
-		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+	public Response getMany(String fields) {
+		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass())
+				.setEntityFieldNames(__getFieldNames__(fields)).execute().getResponse();
 	}
 	
 	@Override
-	public Response getOne(String identifier,String type) {
+	public Response getOne(String identifier,String type,String fields) {
 		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier).setEntityIdentifierValueUsageType(type)
-				.setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+				.setPersistenceEntityClass(getPersistenceEntityClass()).setEntityFieldNames(__getFieldNames__(fields)).execute().getResponse();
 	}
 	
 	@Override
 	public Response updateOne(ENTITY entity,String fields) {
 		return __inject__(RepresentationFunctionModifier.class).setPersistenceEntityClass(getPersistenceEntityClass()).setEntity(entity)
-				.setEntityFieldNames(StringUtils.split(fields,ConstantCharacter.COMA.toString())).execute().getResponse();
+				.setEntityFieldNames(__getFieldNames__(fields)).execute().getResponse();
 	}
 	
 	@Override
@@ -104,5 +105,11 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 		if(entityCollection instanceof AbstractEntityCollection<?>)
 			return (Collection<ENTITY>) ((AbstractEntityCollection<?>)entityCollection).getCollection();
 		return null;
+	}
+	
+	/**/
+	
+	protected static String[] __getFieldNames__(String string) {
+		return StringUtils.isBlank(string) ? null : StringUtils.split(string,ConstantCharacter.COMA.toString());
 	}
 }

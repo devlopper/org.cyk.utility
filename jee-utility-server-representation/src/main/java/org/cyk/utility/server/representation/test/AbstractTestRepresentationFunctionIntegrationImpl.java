@@ -212,7 +212,7 @@ public abstract class AbstractTestRepresentationFunctionIntegrationImpl extends 
 	
 	@Override
 	protected Object __readOneByBusinessIdentifier__(Class<?> aClass, Object identifier) {
-		return __inject__(Representation.class).getOne(aClass, identifier, ValueUsageType.BUSINESS);
+		return __inject__(Representation.class).getOne(aClass, identifier, ValueUsageType.BUSINESS,null);
 	}
 	
 	@Override

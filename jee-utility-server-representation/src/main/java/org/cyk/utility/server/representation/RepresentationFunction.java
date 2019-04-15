@@ -34,7 +34,11 @@ public interface RepresentationFunction extends SystemFunctionServer {
 	
 	RepresentationFunction setPersistenceEntityClass(Class<?> aClass);
 	Class<?> getPersistenceEntityClass();
-	
-	
-	
+	/*
+	Strings getFieldNamesStrings();
+	Strings getFieldNamesStrings(Boolean injectIfNull);
+	RepresentationFunction setFieldNamesStrings(Strings fieldNamesStrings);
+	RepresentationFunction addFieldNamesStrings(Collection<String> fieldNamesStrings);
+	RepresentationFunction addFieldNamesStrings(String...fieldNamesStrings);
+	*/
 }

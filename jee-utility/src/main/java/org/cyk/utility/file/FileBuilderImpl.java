@@ -3,7 +3,6 @@ package org.cyk.utility.file;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
@@ -26,16 +25,16 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		file.setPath(path);
 		
 		String name = getName();
-		file.setName(FilenameUtils.getBaseName(name));
+		file.setName(__inject__(FileHelper.class).getName(name));
 		
 		String extension = getExtension();
 		if(__injectStringHelper__().isBlank(extension))
-			extension = FilenameUtils.getExtension(name);
+			extension = __inject__(FileHelper.class).getExtension(name);
 		file.setExtension(extension);
 		
 		String mimeType = getMimeType();
 		if(__injectStringHelper__().isBlank(mimeType))
-			mimeType = __inject__(MimeTypeGetter.class).setExtension(file.getExtension()).execute().getOutput();
+			mimeType = __inject__(FileHelper.class).getMimeTypeByExtension(file.getExtension());
 		file.setMimeType(mimeType);
 		
 		byte[] bytes = getBytes();

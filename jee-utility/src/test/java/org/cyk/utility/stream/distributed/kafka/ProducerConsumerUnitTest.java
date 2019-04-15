@@ -21,7 +21,7 @@ public class ProducerConsumerUnitTest extends AbstractArquillianUnitTestWithDefa
 	public void produceAndConsume() {
 		startServersZookeeperAndKafka();
 
-		String topic = "mail";
+		String topic = "mytopic";
 		String group = "mygroup";
 		
 		Object messageKey = __inject__(RandomHelper.class).getAlphabetic(5);

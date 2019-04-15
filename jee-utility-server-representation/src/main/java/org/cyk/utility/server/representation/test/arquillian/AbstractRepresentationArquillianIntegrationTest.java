@@ -30,7 +30,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 		response.close();
 		if(entity instanceof AbstractEntityFromPersistenceEntity) {
 			String businessIdentifier = ((AbstractEntityFromPersistenceEntity)entity).getCode();
-			response = representation.getOne(businessIdentifier, ValueUsageType.BUSINESS.name());
+			response = representation.getOne(businessIdentifier, ValueUsageType.BUSINESS.name(),null);
 			entity = (ENTITY) response.getEntity();
 			Assert.assertNotNull("Get entity with business identifier <"+businessIdentifier+"> not found", entity);
 			Assert.assertNotNull("Entity <"+entity+"> found under business identifier <"+businessIdentifier+"> has null system identifier", ((AbstractEntityFromPersistenceEntity)entity).getIdentifier());
@@ -48,7 +48,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 		for(ENTITY index : entities)
 			if(index instanceof AbstractEntityFromPersistenceEntity) {
 				Object entity = index;
-				response = representation.getOne(((AbstractEntityFromPersistenceEntity)entity).getCode(), ValueUsageType.BUSINESS.name());
+				response = representation.getOne(((AbstractEntityFromPersistenceEntity)entity).getCode(), ValueUsageType.BUSINESS.name(),null);
 				entity = (ENTITY) response.getEntity();
 				assertThat(((AbstractEntityFromPersistenceEntity)entity).getIdentifier()).isNotBlank();	
 				response.close();
@@ -60,8 +60,8 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 
 	@Override
 	protected <ENTITY> ENTITY ____readEntity____(Class<ENTITY> entityClass, Object identifier,ValueUsageType valueUsageType, Properties expectedFieldValues, RepresentationEntity representation) {
-		return (ENTITY) (ValueUsageType.SYSTEM.equals(valueUsageType) ? representation.getOne(identifier.toString(),ValueUsageType.SYSTEM.name()).getEntity() 
-				: representation.getOne(identifier.toString(),ValueUsageType.BUSINESS.name()).getEntity());
+		return (ENTITY) (ValueUsageType.SYSTEM.equals(valueUsageType) ? representation.getOne(identifier.toString(),ValueUsageType.SYSTEM.name(),null).getEntity() 
+				: representation.getOne(identifier.toString(),ValueUsageType.BUSINESS.name(),null).getEntity());
 	}
 
 	@Override

@@ -18,12 +18,9 @@ import org.junit.Test;
 public class UtilityIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram {
 	private static final long serialVersionUID = 1L;
 	
-	static {
-		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class);
-	}
-	
 	@Test
 	public void getInstanceMyEntityByBusinessIdentifier(){
+		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class,100,Boolean.TRUE);
 		__createEntity__(new MyEntity().setCode("ee01").setIntegerValue(1));
 		__createEntity__(new MyEntity().setCode("ee02").setIntegerValue(2));
 		__createEntity__(new MyEntity().setCode("ee03").setIntegerValue(1));

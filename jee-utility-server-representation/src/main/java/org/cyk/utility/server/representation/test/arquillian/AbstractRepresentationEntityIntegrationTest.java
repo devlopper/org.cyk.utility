@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.constant.ConstantNull;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.field.FieldHelper;
@@ -71,7 +72,8 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		Object object = __instanciateEntity__(null);
 		Object businessIdentifier = __getFieldValueBusinessIdentifier__(object);
 		__inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object).createOne(object);
-		object = __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object).getOne(businessIdentifier.toString(), ValueUsageType.BUSINESS.name()).getEntity();
+		object = __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object).getOne(businessIdentifier.toString()
+				, ValueUsageType.BUSINESS.name(),null).getEntity();
 		Object systemIdentifier = __getFieldValueSystemIdentifier__(object);
 		
 		__inject__(TestRepresentationRead.class).addGarbagesArray(object).addObjectIdentifiers(systemIdentifier).setObjectClass(object.getClass())
@@ -86,7 +88,8 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		Object object = __instanciateEntity__(null);
 		Object businessIdentifier = __getFieldValueBusinessIdentifier__(object);
 		__inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object).createOne(object);
-		object = __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object).getOne(businessIdentifier.toString(), ValueUsageType.BUSINESS.name()).getEntity();
+		object = __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object).getOne(businessIdentifier.toString()
+				, ValueUsageType.BUSINESS.name(),null).getEntity();
 		Object systemIdentifier = __getFieldValueSystemIdentifier__(object).toString()+"1";
 		
 		__inject__(TestRepresentationRead.class).addGarbagesArray(object).addObjectIdentifiers(systemIdentifier).addUnexistingObjectIdentifiers(systemIdentifier).setObjectClass(object.getClass())
@@ -125,7 +128,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object2).createOne(object2);
 		
 		@SuppressWarnings("unchecked")
-		Collection<ENTITY> entities = (Collection<ENTITY>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object1).getMany().getEntity();
+		Collection<ENTITY> entities = (Collection<ENTITY>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object1).getMany(ConstantNull.STRING).getEntity();
 		
 		assertThat(entities).asList().hasSize(2);
 	}
@@ -160,7 +163,8 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	@Override
 	protected Object __getFieldValueSystemIdentifier__(Object object) {
 		if(object instanceof AbstractEntityFromPersistenceEntity)
-			return ((AbstractEntityFromPersistenceEntity)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntityFromPersistenceEntity)object).getCode(),ValueUsageType.BUSINESS.name())
+			return ((AbstractEntityFromPersistenceEntity)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntityFromPersistenceEntity)object).getCode()
+					,ValueUsageType.BUSINESS.name(),null)
 					.getEntity()).getIdentifier();
 		return super.__getFieldValueSystemIdentifier__(object);
 	}

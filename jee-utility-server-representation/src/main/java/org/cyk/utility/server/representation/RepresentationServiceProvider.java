@@ -1,5 +1,7 @@
 package org.cyk.utility.server.representation;
 
+import org.cyk.utility.__kernel__.constant.ConstantString;
+
 /*
  * All method must be annotated with HTTP method and return a Response object
  */
@@ -34,21 +36,21 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	/**/
 	
 	String __SLASH__ = "/";
-	String __MANY__ = "many";
-	String __COLLECTION__ = "collection";
-	String __ALL__ = "all";
-	String __CREATE__ = "create";
-	String __UPDATE__ = "update";
-	String __DELETE__ = "delete";
-	String __GET__ = "get";
-	String __GOUNT__ = "count";
+	String __MANY__ = ConstantString.MANY;
+	String __COLLECTION__ = ConstantString.COLLECTION;
+	String __ALL__ = ConstantString.ALL;
+	String __CREATE__ = ConstantString.CREATE;
+	String __UPDATE__ = ConstantString.UPDATE;
+	String __DELETE__ = ConstantString.DELETE;
+	String __GET__ = ConstantString.GET;
+	String __COUNT__ = ConstantString.COUNT;
 	
 	/* Parameter */
 	
-	String PARAMETER_IDENTIFIER = "identifier";
-	String PARAMETER_TYPE = "type";
-	String PARAMETER_FIELDS = "fields";
-	String PARAMETER_CODE = "code";
+	String PARAMETER_IDENTIFIER = ConstantString.IDENTIFIER;
+	String PARAMETER_TYPE = ConstantString.TYPE;
+	String PARAMETER_FIELDS = ConstantString.FIELDS;
+	String PARAMETER_CODE = ConstantString.CODE;
 	
 	/* Paths */
 	
@@ -65,7 +67,8 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	String PATH_GET = PATH_ROOT+__GET__+__SLASH__;
 	String PATH_GET_ONE = PATH_IDENTIFIER;
 	String PATH_GET_MANY = __SLASH__;
-	String PATH_GET_COUNT = PATH_GET+__GOUNT__+__SLASH__;
+	//String PATH_GET_MANY_BY_FIELDS = __SLASH__+ConstantString.FIELDS+__SLASH__;
+	String PATH_GET_COUNT = PATH_GET+__COUNT__+__SLASH__;
 	
 	String PATH_UPDATE_ONE = __UPDATE__;
 	String PATH_UPDATE_MANY = __UPDATE__+__SLASH__+__MANY__;

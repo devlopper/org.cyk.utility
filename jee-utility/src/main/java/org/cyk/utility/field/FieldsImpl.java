@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Predicate;
 
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.collection.CollectionHelper;
@@ -24,6 +25,23 @@ public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements
 		return names;
 	}
 
+	@Override
+	public Fields removeByNames(Collection<String> names) {
+		if(this.collection!=null)
+			this.collection.removeIf(new Predicate<Field>() {
+				@Override
+				public boolean test(Field field) {
+					return names.contains(field.getName());
+				}
+			});
+		return this;
+	}
+	
+	@Override
+	public Fields removeByNames(String... names) {
+		return removeByNames(__inject__(CollectionHelper.class).instanciate(names));
+	}
+	
 	@Override
 	public Fields removeModifier(Integer modifier) {
 		Collection<Field> collection = new ArrayList<Field>();

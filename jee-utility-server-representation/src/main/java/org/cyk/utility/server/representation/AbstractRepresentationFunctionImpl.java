@@ -18,6 +18,7 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	
 	protected Throwable __throwable__;
 	protected ResponseBuilder __responseBuilder__;
+	//protected Strings fieldNamesStrings;
 	
 	@Override
 	protected void __execute__(SystemAction action) {
@@ -147,4 +148,38 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	protected Business __injectBusiness__() {
 		return __inject__(Business.class);
 	}
+	/*
+	@Override
+	public Strings getFieldNamesStrings() {
+		return fieldNamesStrings;
+	}
+	
+	@Override
+	public Strings getFieldNamesStrings(Boolean injectIfNull) {
+		return (Strings) __getInjectIfNull__(FIELD_FIELD_NAMES_STRINGS, injectIfNull);
+	}
+	
+	@Override
+	public RepresentationFunction setFieldNamesStrings(Strings fieldNamesStrings) {
+		this.fieldNamesStrings = fieldNamesStrings;
+		return this;
+	}
+	
+	@Override
+	public RepresentationFunction addFieldNamesStrings(Collection<String> fieldNamesStrings) {
+		getFieldNamesStrings(Boolean.TRUE).add(fieldNamesStrings);
+		return this;
+	}
+	
+	@Override
+	public RepresentationFunction addFieldNamesStrings(String... fieldNamesStrings) {
+		getFieldNamesStrings(Boolean.TRUE).add(fieldNamesStrings);
+		return this;
+	}
+	*/
+	
+	
+	/**/
+	
+	//public static final String FIELD_FIELD_NAMES_STRINGS = "fieldNamesStrings";
 }

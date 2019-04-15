@@ -2,6 +2,7 @@ package org.cyk.utility.server.representation;
 
 import java.util.Collection;
 
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
 /**
@@ -21,7 +22,7 @@ public interface Representation extends RepresentationServiceProvider<Object,Obj
 	/*
 	Object getMany();
 	*/
-	Object getOne(Class<?> aClass,Object identifier,ValueUsageType valueUsageType);
+	Object getOne(Class<?> aClass,Object identifier,ValueUsageType valueUsageType,Strings fieldNames);
 	
 	/* Update */
 	/*

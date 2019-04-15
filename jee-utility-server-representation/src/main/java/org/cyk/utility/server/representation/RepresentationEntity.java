@@ -24,48 +24,53 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	/* Create */
 	@POST
 	@Path(PATH_CREATE_ONE)
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	Response createOne(ENTITY entity);
 	
 	@POST
 	@Path(PATH_CREATE_MANY)
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	Response createMany(Collection<ENTITY> entities);
 	
 	@POST
 	@Path(PATH_CREATE_MANY_COLLECTION)
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	Response createMany(ENTITY_COLLECTION entityCollection);
 	
 	/* Read */ 
-	@GET
+	/*@GET
 	@Path(PATH_GET_MANY)
 	@Produces({ MediaType.APPLICATION_XML })
 	Response getMany();
+	*/
+	@GET
+	@Path(PATH_GET_MANY)
+	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
+	Response getMany(@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	@GET
 	@Path(PATH_GET_ONE)
-	@Produces({ MediaType.APPLICATION_XML })
-	Response getOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type);
+	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
+	Response getOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	/* Update */
 	/* Using partial */
 	//@PATCH FIXME Not working so we will use PUT for the moment
 	@PUT
 	@Path(PATH_UPDATE_ONE)
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	Response updateOne(ENTITY entity,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	//@PATCH FIXME Not working so we will use PUT for the moment
 	@PUT
 	@Path(PATH_UPDATE_MANY)
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	Response updateMany(Collection<ENTITY> entities,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	/* Delete */
 	@DELETE
 	@Path(PATH_DELETE_ONE)
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	//Response deleteOne(@PathParam(PARAMETER_IDENTIFIER) String identifier,@QueryParam(PARAMETER_TYPE) String type);
 	Response deleteOne(ENTITY entity);
 	

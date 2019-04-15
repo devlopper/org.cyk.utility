@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.constant.ConstantNull;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.object.Objects;
@@ -29,13 +30,13 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 		Response response;
 		Objects identifiers = action.getEntitiesIdentifiers();
 		if(__injectCollectionHelper__().isEmpty(identifiers)) {
-			response = representation.getMany();
+			response = representation.getMany(ConstantNull.STRING);
 		}else {
 			Object identifier = identifiers.getFirst();
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
 			if(valueUsageType == null)
 				valueUsageType = ValueUsageType.SYSTEM;
-			response = representation.getOne(identifier.toString(),valueUsageType.name());
+			response = representation.getOne(identifier.toString(),valueUsageType.name(),ConstantNull.STRING);
 		}
 		return response;
 	}

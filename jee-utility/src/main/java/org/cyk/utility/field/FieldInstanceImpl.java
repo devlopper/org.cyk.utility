@@ -12,6 +12,7 @@ public class FieldInstanceImpl extends AbstractObject implements FieldInstance,S
 	private String path;
 	private Field field;
 	private Class<?> type;
+	private Boolean isGeneratable;
 	
 	@Override
 	public Class<?> getClazz() {
@@ -57,4 +58,14 @@ public class FieldInstanceImpl extends AbstractObject implements FieldInstance,S
 		return this;
 	}
 
+	@Override
+	public Boolean getIsGeneratable() {
+		return isGeneratable;
+	}
+	
+	@Override
+	public FieldInstance setIsGeneratable(Boolean isValueGeneratable) {
+		this.isGeneratable = isValueGeneratable;
+		return this;
+	}
 }

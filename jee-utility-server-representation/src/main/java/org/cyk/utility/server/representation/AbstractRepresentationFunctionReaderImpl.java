@@ -40,4 +40,9 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 	public RepresentationFunctionReader setEntities(Collection<?> entities) {
 		return (RepresentationFunctionReader) super.setEntities(entities);
 	}
+	
+	@Override
+	public RepresentationFunctionReader addEntityFieldNames(String... entityFieldNames) {
+		return (RepresentationFunctionReader) super.addEntityFieldNames(entityFieldNames);
+	}
 }

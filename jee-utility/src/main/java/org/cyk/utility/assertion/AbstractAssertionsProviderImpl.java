@@ -77,4 +77,7 @@ public abstract class AbstractAssertionsProviderImpl extends AbstractFunctionWit
 		return __inject__(AssertionBuilderComparison.class);
 	}
 	
+	protected static AssertionBuilderNull __injectAssertionBuilderNull__() {
+		return __inject__(AssertionBuilderNull.class);
+	}
 }

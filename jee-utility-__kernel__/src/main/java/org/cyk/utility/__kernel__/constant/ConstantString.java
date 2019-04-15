@@ -29,5 +29,18 @@ public interface ConstantString {
 	String ENCODING_UTF8 = "UTF-8";
 		
 	String IMPL = "Impl";
+	
+	String MANY = "many";
+	String COLLECTION = "collection";
+	String ALL = "all";
+	String CREATE = "create";
+	String UPDATE = "update";
+	String DELETE = "delete";
+	String GET = "get";
+	String COUNT = "count";
+	String IDENTIFIER = "identifier";
+	String TYPE = "type";
+	String FIELDS = "fields";
+	String CODE = "code";
 
 }

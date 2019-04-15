@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.inject.Singleton;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -33,14 +34,14 @@ public class RepresentationImpl extends AbstractObject implements Representation
 	}
 
 	@Override
-	public Object getOne(Class<?> aClass, Object identifier, ValueUsageType valueUsageType) {
+	public Object getOne(Class<?> aClass, Object identifier, ValueUsageType valueUsageType,Strings fieldNames) {
 		@SuppressWarnings("unchecked")
 		Class<RepresentationEntity<Object,Object,Object>> interfaceClass = (Class<RepresentationEntity<Object,Object,Object>>) __inject__(SystemLayerRepresentation.class).getInterfaceClassFromEntityClassName(aClass);
 		if(interfaceClass == null){
 			System.err.println("No specific representation interface found for class "+aClass);
 			return null;
 		}else{
-			return __inject__(interfaceClass).getOne(identifier.toString(), valueUsageType.name()).getEntity();
+			return __inject__(interfaceClass).getOne(identifier.toString(), valueUsageType.name(),fieldNames == null ? null : fieldNames.concatenate(",")).getEntity();
 		}
 	}
 	

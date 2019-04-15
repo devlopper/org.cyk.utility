@@ -27,7 +27,7 @@ public abstract class AbstractInstanceBuilderFunctionRunnableImpl extends Abstra
 	
 	protected void __copy__(Object source,Object destination) {
 		Properties properties = new Properties();
-		properties.copyFrom(getFunction().getProperties(), Properties.CONTEXT,Properties.REQUEST);
+		properties.copyFrom(getFunction().getProperties(), Properties.CONTEXT,Properties.REQUEST,Properties.FIELDS);
 		__inject__(FieldHelper.class).copy(source, destination,properties);
 	}
 	

@@ -84,7 +84,16 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 		FieldValueCopy fieldValueCopy = __inject__(FieldValueCopy.class);
 		fieldValueCopy.copyProperty(Properties.CONTEXT, properties);
 		fieldValueCopy.copyProperty(Properties.REQUEST, properties);
-		fieldValueCopy.setSource(source).setDestination(destination).setIsAutomaticallyDetectFields(Boolean.TRUE).execute();
+		Boolean isAutomaticallyDetectFields = null;
+		Object fields = properties.getFields();
+		if(fields instanceof Collection && __inject__(CollectionHelper.class).isNotEmpty((Collection<?>) fields)) {
+			for(String index : ((Collection<String>)fields))
+				fieldValueCopy.setFieldName(index);
+			isAutomaticallyDetectFields = Boolean.FALSE;
+		}else {
+			isAutomaticallyDetectFields = Boolean.TRUE;
+		}
+		fieldValueCopy.setSource(source).setDestination(destination).setIsAutomaticallyDetectFields(isAutomaticallyDetectFields).execute();
 		return this;
 	}
 	

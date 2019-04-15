@@ -16,4 +16,6 @@ public interface RepresentationFunctionReader extends RepresentationFunction {
 	
 	RepresentationFunctionReader setAction(SystemAction action);
 	
+	@Override RepresentationFunctionReader addEntityFieldNames(String... entityFieldNames);
+	
 }

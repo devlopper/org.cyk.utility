@@ -26,7 +26,7 @@ public abstract class AbstractTestRepresentationUpdateIntegrationImpl extends Ab
 		String type = ValueUsageType.BUSINESS.name();
 		@SuppressWarnings("rawtypes")
 		RepresentationEntity representation = __inject__(RepresentationLayer.class).injectInterfaceClassFromEntityClass(getObjectClass());
-		object = representation.getOne(identifier, type).getEntity();
+		object = representation.getOne(identifier, type,null).getEntity();
 		
 		Collection<String> fieldNames = new ArrayList<>();
 		if(map!=null)

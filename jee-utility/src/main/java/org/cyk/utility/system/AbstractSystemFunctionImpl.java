@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMomentBegin;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseTry;
 import org.cyk.utility.assertion.AssertionsProvider;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
+import org.cyk.utility.assertion.AssertionsProviderFor;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.field.FieldName;
@@ -282,6 +283,8 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 				preConditionsAssertionsProvider.setFunction(this);
 			if(preConditionsAssertionsProvider.getFilter() == null)
 				preConditionsAssertionsProvider.setFilter(preFilter);	
+			if(preConditionsAssertionsProvider instanceof AssertionsProviderFor<?> && ((AssertionsProviderFor<?>)preConditionsAssertionsProvider).getFor() == null)
+				((AssertionsProviderFor<Object>)preConditionsAssertionsProvider).setFor(entity);	
 		}
 		
 		AssertionsProvider postConditionsAssertionsProvider = (AssertionsProvider) getPostConditionsAssertionsProvider();
@@ -292,6 +295,8 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 				postConditionsAssertionsProvider.setFunction(this);
 			if(postConditionsAssertionsProvider.getFilter() == null)
 				postConditionsAssertionsProvider.setFilter(postFilter);	
+			if(postConditionsAssertionsProvider instanceof AssertionsProviderFor<?> && ((AssertionsProviderFor<?>)postConditionsAssertionsProvider).getFor() == null)
+				((AssertionsProviderFor<Object>)postConditionsAssertionsProvider).setFor(entity);
 		}
 		
 	}

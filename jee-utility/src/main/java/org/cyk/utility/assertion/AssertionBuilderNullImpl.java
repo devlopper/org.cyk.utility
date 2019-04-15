@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldValueGetter;
+import org.cyk.utility.internationalization.InternalizationStringBuilder;
 
 public class AssertionBuilderNullImpl extends AbstractAssertionBuilderImpl implements AssertionBuilderNull, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -26,7 +27,24 @@ public class AssertionBuilderNullImpl extends AbstractAssertionBuilderImpl imple
 	
 	@Override
 	protected String __computeMessageWhenValueIsNotTrue__(Assertion assertion,Boolean isAffirmation) {
-		String message = Boolean.TRUE.equals(isAffirmation) ? "la valeur doit être nulle" : "la valeur ne doit pas être nulle";
+		String valueName = getValueName();
+		if(__injectStringHelper__().isBlank(valueName)) {
+			InternalizationStringBuilder valueNameInternalizationStringBuilder = __inject__(InternalizationStringBuilder.class);
+			AssertionValue assertionValue = getAssertedValue();
+			if(assertionValue!=null){
+				FieldValueGetter fieldValueGetter = assertionValue.getFieldValueGetter();
+				if(fieldValueGetter != null){
+					if(fieldValueGetter.getField() == null)
+						valueNameInternalizationStringBuilder.setKey(fieldValueGetter.getFieldName());
+					else
+						valueNameInternalizationStringBuilder.setKey(fieldValueGetter.getField().getName());
+				}
+			}
+			valueName = valueNameInternalizationStringBuilder.execute().getOutput();	
+		}else
+			valueName = "????";
+		//TODO message format must be from i18n file
+		String message = "la valeur de <<"+valueName+">> "+(Boolean.TRUE.equals(isAffirmation) ? "doit être nulle" : "ne doit pas être nulle");
 		return message;
 	}
 	

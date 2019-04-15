@@ -67,7 +67,7 @@ public class PersistenceFunctionIntegrationTest extends AbstractPersistenceArqui
 	
 	@Test
 	public void readOneByIdentifierNotExisting() throws Exception{
-		MyEntity myEntity = (MyEntity) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setEntityIdentifier(-1l).execute()
+		MyEntity myEntity = (MyEntity) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setEntityIdentifier("azerty").execute()
 				.getProperties().getEntity();
 		
 		assertThat(myEntity).isNull();

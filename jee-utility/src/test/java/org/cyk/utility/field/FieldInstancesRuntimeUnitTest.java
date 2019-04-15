@@ -1,5 +1,7 @@
 package org.cyk.utility.field;
 
+import javax.persistence.GeneratedValue;
+
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
@@ -21,6 +23,16 @@ public class FieldInstancesRuntimeUnitTest extends AbstractArquillianUnitTestWit
 	@Test
 	public void getC1_f01_from_C01() {
 		assertionHelper.assertEquals(FieldUtils.getDeclaredField(C1.class, "f01", Boolean.TRUE), __inject__(FieldInstancesRuntime.class).get(C1.class,"f01").getField());
+	}
+	
+	@Test
+	public void getC1_generatable_isGeneratable() {
+		assertionHelper.assertEquals(Boolean.TRUE, __inject__(FieldInstancesRuntime.class).get(C1.class,"generatable").getIsGeneratable());
+	}
+	
+	@Test
+	public void getC1_notGeneratable_isNotGeneratable() {
+		assertionHelper.assertEquals(Boolean.FALSE, __inject__(FieldInstancesRuntime.class).get(C1.class,"notGeneratable").getIsGeneratable());
 	}
 	
 	@Test
@@ -81,6 +93,9 @@ public class FieldInstancesRuntimeUnitTest extends AbstractArquillianUnitTestWit
 	public static class C1 {
 		private String f01;
 		private C1_Sub1 sub1;
+		@GeneratedValue
+		private Object generatable;
+		private Object notGeneratable;
 	}
 	
 	@Getter @Setter

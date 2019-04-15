@@ -7,7 +7,7 @@ import javax.persistence.AccessType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
-import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentified;
+import org.cyk.utility.__kernel__.annotation.Generatable;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByString;
 
 import lombok.Getter;
@@ -18,15 +18,15 @@ import lombok.experimental.Accessors;
 public abstract class AbstractIdentifiedByString extends AbstractIdentifiedPersistableByString implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Access(AccessType.PROPERTY) @Id
+	@Access(AccessType.PROPERTY) @Id @Generatable
 	@Override
 	public String getIdentifier() {
 		return super.getIdentifier();
 	}
 	
 	@Override
-	public AbstractIdentified<String> setIdentifier(String identifier) {
-		return super.setIdentifier(identifier);
+	public AbstractIdentifiedByString setIdentifier(String identifier) {
+		return (AbstractIdentifiedByString) super.setIdentifier(identifier);
 	}
 	
 }

@@ -23,7 +23,7 @@ public class GeneratorEclipse implements Serializable {
 	
 	public static final String CYK_WORKSPACE_PATH = "cyk.workspace.path";
 	
-	public static final String PACKAGE = "ci.gouv.dgbf.system";
+	public static final String PACKAGE = "org.cyk.system";
 	
 	//archetype-jee-server-microservices-jboss-swarm
 	public static final String COMMANDS_SERVER ="%1"+"\r\n"
@@ -61,8 +61,8 @@ public class GeneratorEclipse implements Serializable {
 	private File commandFile;
 	
 	public GeneratorEclipse() throws FileNotFoundException, IOException {
-		//properties.put("cyk.workspace.path", "E:\\Workspaces\\Eclipse\\photon\\org\\cyk");
-		properties.put("cyk.workspace.path", "E:\\Workspaces\\Eclipse\\photon\\ci\\gouv\\dgbf");
+		properties.put("cyk.workspace.path", "E:\\Workspaces\\Eclipse\\photon\\org\\cyk");
+		//properties.put("cyk.workspace.path", "E:\\Workspaces\\Eclipse\\photon\\ci\\gouv\\dgbf");
 		//properties.load(new FileInputStream(userDir+"/config.properties"));
 		workspaceDirectory = new File(properties.getProperty(CYK_WORKSPACE_PATH));
 		

@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.annotation.Default;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.instance.InstanceGetter;
@@ -72,6 +74,16 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	}
 	
 	@Test
+	public void bytes_to_bytes(){
+		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
+		MyClass01 instance01 = new MyClass01().setBytes("Hello".getBytes());
+		MyClass02 instance02 = new MyClass02();
+		__inject__(FieldValueCopy.class).execute(instance01,instance02,"bytes");
+		assertThat(instance02.getBytes()).isNotNull();
+		assertThat(new String(instance02.getBytes())).isEqualTo("Hello");
+	}
+	
+	@Test
 	public void all(){
 		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
 		MyClass01 instance01 = new MyClass01().setIntField(2).setLongField1(5l);
@@ -79,6 +91,18 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		__inject__(FieldValueCopy.class).setSource(instance01).setDestination(instance02).execute();
 		assertThat(instance02.getIntField()).isEqualTo("2");
 		assertThat(instance02.getLongField1()).isEqualTo("5");
+	}
+	
+	@Test
+	public void allWithCustomFieldsGetter(){
+		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
+		DependencyInjection.setQualifierClass(FieldValueCopyFieldsGetter.class, Default.class);
+		MyClass01 instance01 = new MyClass01().setIntField(2).setLongField1(5l);
+		MyClass02 instance02 = new MyClass02();
+		__inject__(FieldValueCopy.class).setSource(instance01).setDestination(instance02).execute();
+		assertThat(instance02.getIntField()).isNull();
+		assertThat(instance02.getLongField1()).isEqualTo("5");
+		DependencyInjection.setQualifierClass(FieldValueCopyFieldsGetter.class, null);
 	}
 	
 	@Test
@@ -128,6 +152,23 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	}
 	
 	@Test
+	public void persistence_to_dto_as_object(){
+		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
+		MyPersistence instance01 = new MyPersistence().setId(2l).setCode("p01").setName("my persistence 01")
+				.setType(new MyPersistenceType().setId(5l).setCode("mpt01").setName("my persistence type 01"))
+				.setBytes("Hello".getBytes());
+		MyDataTransferObject instance02 = new MyDataTransferObject();
+		__inject__(FieldValueCopy.class).execute(instance01,instance02,"code");
+		__inject__(FieldValueCopy.class).execute(instance01,instance02,"name");
+		__inject__(FieldValueCopy.class).execute(instance01,instance02,"bytes");
+		assertThat(instance02).isNotNull();
+		assertThat(instance02.getCode()).isEqualTo("p01");
+		assertThat(instance02.getName()).isEqualTo("my persistence 01");
+		assertThat(instance02.getBytes()).isNotNull();
+		assertThat(new String(instance02.getBytes())).isEqualTo("Hello");
+	}
+	
+	@Test
 	public void persistenceType_to_dtoType_as_object(){
 		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
 		MyPersistence instance01 = new MyPersistence().setId(2l).setCode("p01").setName("my persistence 01")
@@ -143,12 +184,17 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	@Test
 	public void dtoType_to_persistenceType_with_system_identifier(){
 		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
-		MyDataTransferObject instance01 = new MyDataTransferObject().setId("2").setCode("p01").setName("my persistence 01").setType(new MyDataTransferObjectType().setId("17"));
+		MyDataTransferObject instance01 = new MyDataTransferObject().setId("2").setCode("p01").setName("my persistence 01")
+				.setType(new MyDataTransferObjectType().setId("17")).setBytes("Hello".getBytes());
 		MyPersistence instance02 = new MyPersistence();
 		__inject__(FieldValueCopy.class).execute(instance01,instance02,"type");
 		assertThat(instance02.getType()).isNotNull();
 		assertThat(instance02.getType().getId()).isEqualTo(17l);
-		assertThat(instance02.getType().getCode()).isEqualTo("mpt01");	
+		assertThat(instance02.getType().getCode()).isEqualTo("mpt01");
+		
+		__inject__(FieldValueCopy.class).execute(instance01,instance02,"bytes");
+		assertThat(instance02.getBytes()).isNotNull();
+		assertThat(new String(instance02.getBytes())).isEqualTo("Hello");
 	}
 	
 	@Test
@@ -171,8 +217,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		__inject__(FieldValueCopy.class).execute(instance01,instance02,"type");
 		assertThat(instance02.getType()).isEqualTo("mpt01");
 	}
-	
-	
+		
 	@Test
 	public void one_persistenceReflexive_to_dtoReflexive_as_object(){
 		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
@@ -236,6 +281,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		private Long longField2;
 		private Date dateField;
 		private MyData myData;
+		private byte[] bytes;
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
@@ -249,6 +295,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		private String longField2;
 		private String dateField;
 		private String myData;
+		private byte[] bytes;
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
@@ -276,6 +323,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		private Long id;
 		private String code;
 		private String name;
+		private byte[] bytes;
 		@ManyToOne private MyPersistenceType type;
 		
 	}
@@ -287,7 +335,6 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		private String id;
 		private String code;
 		private String name;
-		
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
@@ -297,6 +344,7 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		private String id;
 		private String code;
 		private String name;
+		private byte[] bytes;
 		private MyDataTransferObjectType type;
 	}
 	
@@ -355,6 +403,21 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		}
 		
 	}
+	
+	@Default
+	public static class FieldValueCopyFieldsGetterImpl extends AbstractFieldValueCopyFieldsGetterImpl implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected Fields __execute__() throws Exception {
+			Fields fields = super.__execute__();
+			if(MyClass01.class.equals(getSourceClass()))
+				fields.removeByNames("intField");
+			return fields;
+		}
+		
+	}
+
 	
 	/*@ApplicationScoped
 	public static class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {

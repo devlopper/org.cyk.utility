@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
 public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunctionReaderImpl implements Serializable {
@@ -20,18 +21,22 @@ public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunc
 	
 	@Override
 	protected void __executeBusiness__() {
+		Strings entityFieldNames = getEntityFieldNames();
 		if(getEntityIdentifier()!=null) {//specific identifiers
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
 			Object identifier = getEntityIdentifier();
-			if(ValueUsageType.SYSTEM.equals(valueUsageType) && !(identifier instanceof Long))
-				identifier = __injectNumberHelper__().getLong(identifier);
-			
+			if(ValueUsageType.SYSTEM.equals(valueUsageType) /*&& !(identifier instanceof Long)*/) {
+				//TODO should depend on identifier field type
+				//identifier = __injectNumberHelper__().getLong(identifier);
+			}
+				
 			entity = __injectInstanceHelper__().buildOne(getEntityClass(),__injectBusiness__().findOne(getPersistenceEntityClass(),identifier,new Properties()
-					.setValueUsageType(valueUsageType)));			
+					.setValueUsageType(valueUsageType)),new Properties().setFields(entityFieldNames == null ? null : entityFieldNames.get()));			
 		}else {// no specific identifiers
 			//TODO handle pagination
 			Collection<?> collection = __injectBusiness__().findMany(getPersistenceEntityClass()/* properties */);
-			entities = __injectCollectionHelper__().isEmpty(collection) ? null : (List<?>) __injectInstanceHelper__().buildMany(getEntityClass(),collection);
+			entities = __injectCollectionHelper__().isEmpty(collection) ? null : (List<?>) __injectInstanceHelper__().buildMany(getEntityClass(),collection,
+					new Properties().setFields(entityFieldNames == null ? null : entityFieldNames.get()));
 		}
 	}
 	

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import javax.inject.Singleton;
+import javax.persistence.GeneratedValue;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
@@ -41,6 +42,7 @@ public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldIn
 				}
 				instance.setField(__inject__(FieldGetter.class).execute(aClass, fieldNames.getLast()).getOutput().getFirst());
 				instance.setType(__inject__(FieldTypeGetter.class).execute(instance.getField()).getOutput());
+				instance.setIsGeneratable(instance.getField().isAnnotationPresent(GeneratedValue.class));
 				getInstances(Boolean.TRUE).add(instance);
 				log.getMessageBuilder(Boolean.TRUE).addParameter("field <<"+instance.getClazz()+"."+path+">> added to runtime collection");
 			}else {
