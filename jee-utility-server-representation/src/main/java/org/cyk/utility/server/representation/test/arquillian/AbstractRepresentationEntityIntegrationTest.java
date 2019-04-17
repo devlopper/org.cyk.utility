@@ -128,7 +128,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object2).createOne(object2);
 		
 		@SuppressWarnings("unchecked")
-		Collection<ENTITY> entities = (Collection<ENTITY>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object1).getMany(ConstantNull.STRING).getEntity();
+		Collection<ENTITY> entities = (Collection<ENTITY>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object1).getMany(null,null,ConstantNull.STRING).getEntity();
 		
 		assertThat(entities).asList().hasSize(2);
 	}
@@ -150,11 +150,13 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	@Test
 	public void deleteOne() throws Exception{
 		Object object = __instanciateEntity__(null);
-		Object businessIdentifier = __getFieldValueBusinessIdentifier__(object);
-		__inject__(TestRepresentationDelete.class).addObjectsToBeCreatedArray(object).addNotGarbagableArray(object).addObjects(businessIdentifier).setIdentifierValueUsageType(ValueUsageType.BUSINESS)
+		//Object identifier = __getFieldValueSystemIdentifier__(object);
+		__inject__(TestRepresentationDelete.class).addObjectsToBeCreatedArray(object).addNotGarbagableArray(object).addObjects(object)
+		//.setIdentifierValueUsageType(ValueUsageType.SYSTEM)
 		.setObjectClass(object.getClass())
 		.setExpectedResponseStatusCode(Response.Status.OK.getStatusCode())
 		.setExpectedResponseEntityClass(ResponseEntityDto.class)
+		.setIsCatchThrowable(Boolean.FALSE)
 		.execute();
 	}
 	
@@ -162,10 +164,13 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	
 	@Override
 	protected Object __getFieldValueSystemIdentifier__(Object object) {
-		if(object instanceof AbstractEntityFromPersistenceEntity)
+		/*if(object instanceof AbstractEntityFromPersistenceEntity)
 			return ((AbstractEntityFromPersistenceEntity)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntityFromPersistenceEntity)object).getCode()
-					,ValueUsageType.BUSINESS.name(),null)
+					,ValueUsageType.SYSTEM.name(),null)
 					.getEntity()).getIdentifier();
+		*/
+		if(object instanceof AbstractEntityFromPersistenceEntity)
+			return ((AbstractEntityFromPersistenceEntity)object).getIdentifier();
 		return super.__getFieldValueSystemIdentifier__(object);
 	}
 	

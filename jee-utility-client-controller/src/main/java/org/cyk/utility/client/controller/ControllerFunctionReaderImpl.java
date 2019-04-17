@@ -30,7 +30,8 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 		Response response;
 		Objects identifiers = action.getEntitiesIdentifiers();
 		if(__injectCollectionHelper__().isEmpty(identifiers)) {
-			response = representation.getMany(ConstantNull.STRING);
+			//TODO handle pagination
+			response = representation.getMany(null,null,ConstantNull.STRING);
 		}else {
 			Object identifier = identifiers.getFirst();
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();

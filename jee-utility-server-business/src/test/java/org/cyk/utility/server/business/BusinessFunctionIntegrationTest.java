@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import javax.validation.ConstraintViolationException;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.business.test.TestBusinessCreate;
 import org.cyk.utility.server.business.test.TestBusinessDelete;
 import org.cyk.utility.server.business.test.TestBusinessRead;
@@ -98,6 +99,47 @@ public class BusinessFunctionIntegrationTest extends AbstractBusinessArquillianI
 		
 		assertThat(__inject__(ThrowableHelper.class).getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage())
 			.contains("propertyPath=code");
+	}
+	
+	@Test
+	public void findManyByPage() throws Exception{
+		for(Integer index = 0 ; index < 10 ; index = index + 1)
+			__inject__(MyEntityBusiness.class).create(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()));
+		
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).findMany()))
+			.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).findMany(null)))
+		.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		Properties properties = new Properties();
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).findMany(properties)))
+			.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		properties = new Properties();
+		properties.setQueryFirstTupleIndex(0);
+		properties.setQueryNumberOfTuple(1);
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).findMany(properties)))
+			.containsExactly("0");
+		
+		properties = new Properties();
+		properties.setQueryFirstTupleIndex(1);
+		properties.setQueryNumberOfTuple(1);
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).findMany(properties)))
+			.containsExactly("1");
+		
+		properties = new Properties();
+		properties.setQueryFirstTupleIndex(0);
+		properties.setQueryNumberOfTuple(3);
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).findMany(properties)))
+			.containsExactly("0","1","2");
+		
+		properties = new Properties();
+		properties.setQueryFirstTupleIndex(4);
+		properties.setQueryNumberOfTuple(3);
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).findMany(properties)))
+			.containsExactly("4","5","6");
 	}
 	
 }

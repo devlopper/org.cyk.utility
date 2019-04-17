@@ -23,7 +23,8 @@ public class RepresentationFunctionModifierImpl extends AbstractRepresentationFu
 				currentEntityIdentifier = __injectFieldHelper__().getFieldValueBusinessIdentifier(updatedEntity);
 				currentEntityIdentifierType = ValueUsageType.BUSINESS;
 			}else {
-				currentEntityIdentifier = __injectNumberHelper__().getLong(currentEntityIdentifier);
+				//TODO convert base on field type
+				//currentEntityIdentifier = __injectNumberHelper__().getLong(currentEntityIdentifier);
 				currentEntityIdentifierType = ValueUsageType.SYSTEM;
 			}
 			

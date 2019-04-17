@@ -42,5 +42,6 @@ public interface ConstantString {
 	String TYPE = "type";
 	String FIELDS = "fields";
 	String CODE = "code";
+	String FROM = "from";
 
 }

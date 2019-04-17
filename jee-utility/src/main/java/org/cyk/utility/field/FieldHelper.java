@@ -55,4 +55,7 @@ public interface FieldHelper extends Helper {
 	Field getField(Class<?> aClass,String...fieldNames);
 	
 	Field getField(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType);
+	
+	<T> Collection<T> getSystemIdentifiers(Class<T> identifierClass,Collection<?> objects);
+	<T> Collection<T> getBusinessIdentifiers(Class<T> identifierClass,Collection<?> objects);
 }

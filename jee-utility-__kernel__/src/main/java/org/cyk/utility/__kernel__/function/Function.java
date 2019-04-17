@@ -51,8 +51,12 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	FunctionExecutionPhaseTry getExecutionPhaseTry();
 	FunctionExecutionPhaseTry getExecutionPhaseTry(Boolean injectIfNull);
 	FunctionExecutionPhaseTry try_();
+	Function<INPUT,OUTPUT> addTryBeginRunnables(Collection<Runnable> runnables);
+	Function<INPUT,OUTPUT> addTryBeginRunnables(Runnable...runnables);
 	Function<INPUT,OUTPUT> addTryRunRunnables(Collection<Runnable> runnables);
 	Function<INPUT,OUTPUT> addTryRunRunnables(Runnable...runnables);
+	Function<INPUT,OUTPUT> addTryEndRunnables(Collection<Runnable> runnables);
+	Function<INPUT,OUTPUT> addTryEndRunnables(Runnable...runnables);
 	
 	Function<INPUT,OUTPUT> setExecutionPhaseCatch(FunctionExecutionPhaseCatch executionPhaseCatch);
 	FunctionExecutionPhaseCatch getExecutionPhaseCatch();
@@ -77,5 +81,7 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	Boolean getIsExecuteAsynchronously();
 	
 	@Override Function<INPUT,OUTPUT> copyProperty(Object key, Properties properties);
+	
+	@Override Function<INPUT,OUTPUT> setProperty(Object key, Object value);
 	
 }

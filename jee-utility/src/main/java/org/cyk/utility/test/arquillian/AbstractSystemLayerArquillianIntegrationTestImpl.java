@@ -203,6 +203,7 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	@Override
 	protected void __setFieldValues__(Object object) {
 		super.__setFieldValues__(object);
+		__inject__(FieldHelper.class).setFieldValueSystemIdentifier(object, __getRandomIdentifier__());
 		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, __getRandomCode__());
 	}
 	

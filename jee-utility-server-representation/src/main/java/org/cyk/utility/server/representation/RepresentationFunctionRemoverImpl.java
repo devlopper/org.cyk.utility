@@ -24,8 +24,10 @@ public class RepresentationFunctionRemoverImpl extends AbstractRepresentationFun
 			//TODO avoid this - TO BE REMOVED
 			Object identifier = getEntityIdentifier();
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
-			if(ValueUsageType.SYSTEM.equals(valueUsageType))
-				identifier = __injectNumberHelper__().getLong(identifier);
+			if(ValueUsageType.SYSTEM.equals(valueUsageType)) {
+				//TODO convert base on field type
+				//identifier = __injectNumberHelper__().getLong(identifier);
+			}
 			__injectBusiness__().deleteByClassByIdentififerByValueUsageType(getPersistenceEntityClass(),identifier,getEntityIdentifierValueUsageType());
 		}else {
 			/*Object identifier = getEntityIdentifier();

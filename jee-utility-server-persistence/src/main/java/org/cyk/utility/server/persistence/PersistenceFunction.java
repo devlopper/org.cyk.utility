@@ -22,4 +22,10 @@ public interface PersistenceFunction extends SystemFunctionServer {
 	
 	PersistenceFunction setQueryResultClass(Class<?> aClass);
 	Class<?> getQueryResultClass();
+	
+	Long getQueryFirstTupleIndex();
+	PersistenceFunction setQueryFirstTupleIndex(Long queryFirstTupleIndex);
+	
+	Long getQueryNumberOfTuple();
+	PersistenceFunction setQueryNumberOfTuple(Long queryNumberOfTuple);
 }

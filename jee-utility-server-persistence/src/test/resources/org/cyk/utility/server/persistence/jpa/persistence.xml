@@ -5,13 +5,16 @@
 
 	<persistence-unit name="persistenceUnit" transaction-type="JTA">
 		<jta-data-source>java:global/utility/persistence/testDataSource</jta-data-source>
-		<!--class>org.cyk.utility.server.persistence.jpa.MyEntity</class-->
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+		<mapping-file>META-INF/orm.xml</mapping-file>
 	
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="create" />
 			<property name="hibernate.show_sql" value="false" />
-			<property name="hibernate.format_sql" value="true" />			
+			<property name="hibernate.format_sql" value="true" />	
+			<!--
+			<property name="hibernate.ejb.use_class_enhancer" value="true" />	
+			-->	
 		</properties>
 	</persistence-unit>
 

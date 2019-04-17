@@ -34,6 +34,8 @@ public interface RepresentationFunction extends SystemFunctionServer {
 	
 	RepresentationFunction setPersistenceEntityClass(Class<?> aClass);
 	Class<?> getPersistenceEntityClass();
+	
+	@Override RepresentationFunction setProperty(Object key, Object value);
 	/*
 	Strings getFieldNamesStrings();
 	Strings getFieldNamesStrings(Boolean injectIfNull);

@@ -3,6 +3,7 @@ package org.cyk.utility.field;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Singleton;
@@ -135,6 +136,28 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	public Field getField(Class<?> klass, FieldName fieldName, ValueUsageType valueUsageType) {
 		String name = __inject__(FieldNameGetter.class).execute(klass, fieldName,valueUsageType).getOutput();
 		return __inject__(CollectionHelper.class).getFirst(__inject__(FieldGetter.class).execute(klass, name).getOutput());
+	}
+	
+	@Override
+	public <T> Collection<T> getSystemIdentifiers(Class<T> identifierClass,Collection<?> objects) {
+		Collection<T> collection = null;
+		if(__inject__(CollectionHelper.class).isNotEmpty(objects)) {
+			collection = new ArrayList<T>();
+			for(Object index : objects)
+				collection.add((T) getFieldValueSystemIdentifier(index));
+		}
+		return collection;
+	}
+	
+	@Override
+	public <T> Collection<T> getBusinessIdentifiers(Class<T> identifierClass,Collection<?> objects) {
+		Collection<T> collection = null;
+		if(__inject__(CollectionHelper.class).isNotEmpty(objects)) {
+			collection = new ArrayList<T>();
+			for(Object index : objects)
+				collection.add((T) getFieldValueBusinessIdentifier(index));
+		}
+		return collection;
 	}
 	
 	/*

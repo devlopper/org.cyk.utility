@@ -22,6 +22,7 @@ public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunc
 	@Override
 	protected void __executeBusiness__() {
 		Strings entityFieldNames = getEntityFieldNames();
+		Properties properties = new Properties().setFields(entityFieldNames);
 		if(getEntityIdentifier()!=null) {//specific identifiers
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
 			Object identifier = getEntityIdentifier();
@@ -29,12 +30,12 @@ public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunc
 				//TODO should depend on identifier field type
 				//identifier = __injectNumberHelper__().getLong(identifier);
 			}
-				
-			entity = __injectInstanceHelper__().buildOne(getEntityClass(),__injectBusiness__().findOne(getPersistenceEntityClass(),identifier,new Properties()
-					.setValueUsageType(valueUsageType)),new Properties().setFields(entityFieldNames == null ? null : entityFieldNames.get()));			
+			
+			properties.setValueUsageType(valueUsageType);
+			entity = __injectInstanceHelper__().buildOne(getEntityClass(),__injectBusiness__().findOne(getPersistenceEntityClass(),identifier,properties),new Properties().setFields(entityFieldNames == null ? null : entityFieldNames.get()));			
 		}else {// no specific identifiers
-			//TODO handle pagination
-			Collection<?> collection = __injectBusiness__().findMany(getPersistenceEntityClass()/* properties */);
+			properties.copyFrom(getProperties(), Properties.QUERY_FIRST_TUPLE_INDEX,Properties.QUERY_NUMBER_OF_TUPLE);
+			Collection<?> collection = __injectBusiness__().findMany(getPersistenceEntityClass(), properties);
 			entities = __injectCollectionHelper__().isEmpty(collection) ? null : (List<?>) __injectInstanceHelper__().buildMany(getEntityClass(),collection,
 					new Properties().setFields(entityFieldNames == null ? null : entityFieldNames.get()));
 		}

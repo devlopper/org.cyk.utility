@@ -4520,7 +4520,27 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getQueryFirstTupleIndex() {
+		return get(QUERY_FIRST_TUPLE_INDEX);
+	}
+
+	public Properties setQueryFirstTupleIndex(Object queryFirstTupleIndex) {
+		set(QUERY_FIRST_TUPLE_INDEX, queryFirstTupleIndex);
+		return this;
+	}
+	
+	public Object getQueryNumberOfTuple() {
+		return get(QUERY_NUMBER_OF_TUPLE);
+	}
+
+	public Properties setQueryNumberOfTuple(Object queryNumberOfTuple) {
+		set(QUERY_NUMBER_OF_TUPLE, queryNumberOfTuple);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String QUERY_FIRST_TUPLE_INDEX = "QUERY_FIRST_TUPLE_INDEX";
+	public static final String QUERY_NUMBER_OF_TUPLE = "QUERY_NUMBER_OF_TUPLE";
 	public static final String THREAD = "THREAD";
 	public static final String HREF = "HREF";
 	public static final String LINK = "LINK";

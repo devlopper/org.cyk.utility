@@ -11,11 +11,11 @@ import org.cyk.utility.field.FieldName;
 import org.cyk.utility.instance.InstanceGetter;
 import org.cyk.utility.instance.InstanceGetterImpl;
 import org.cyk.utility.instance.InstanceHelper;
-import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram;
+import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class UtilityIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram {
+public class UtilityIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 	
 	@Test

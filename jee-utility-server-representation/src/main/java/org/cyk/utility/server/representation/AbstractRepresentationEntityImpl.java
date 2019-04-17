@@ -7,6 +7,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.server.business.BusinessLayer;
@@ -47,9 +48,12 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public Response getMany(String fields) {
+	public Response getMany(Long from,Long count,String fields) {
 		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass())
-				.setEntityFieldNames(__getFieldNames__(fields)).execute().getResponse();
+				.setEntityFieldNames(__getFieldNames__(fields))
+				.setProperty(Properties.QUERY_FIRST_TUPLE_INDEX, from)
+				.setProperty(Properties.QUERY_NUMBER_OF_TUPLE, count)
+				.execute().getResponse();
 	}
 	
 	@Override

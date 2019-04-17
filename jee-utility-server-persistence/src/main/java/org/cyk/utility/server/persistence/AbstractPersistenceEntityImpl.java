@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.persistence.Entity;
 
+import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.array.ArrayHelper;
@@ -68,7 +69,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@Override
 	public Collection<ENTITY> read(Properties properties) {
-		return __readMany__(____getQueryParameters____());
+		return __readMany__(properties,____getQueryParameters____());
 	}
 	
 	@Override
@@ -219,8 +220,11 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 				.setQueryParameters(Properties.instanciate(__inject__(MapHelper.class).instanciate(parameters)));
 	}
 	
-	protected PersistenceFunctionReader __getReader__(Object...parameters) {
-		return __getFunction__(PersistenceFunctionReader.class, parameters);
+	protected PersistenceFunctionReader __getReader__(Properties properties,Object...parameters) {
+		PersistenceFunctionReader reader = __getFunction__(PersistenceFunctionReader.class, parameters);
+		reader.setQueryFirstTupleIndex(__injectNumberHelper__().getLong(Properties.getFromPath(properties, Properties.QUERY_FIRST_TUPLE_INDEX)));
+		reader.setQueryNumberOfTuple(__injectNumberHelper__().getLong(Properties.getFromPath(properties, Properties.QUERY_NUMBER_OF_TUPLE)));
+		return reader;
 	}
 	
 	protected PersistenceFunctionModifier __getModifier__(Object...parameters) {
@@ -234,13 +238,13 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	/**/
 	
 	@SuppressWarnings("unchecked")
-	protected Collection<ENTITY> __readMany__(Object...parameters) {
-		return (Collection<ENTITY>) __getReader__(parameters).execute().getEntities();
+	protected Collection<ENTITY> __readMany__(Properties properties,Object...parameters) {
+		return (Collection<ENTITY>) __getReader__(properties,parameters).execute().getEntities();
 	}
 	
 	protected ENTITY __readOne__(Object...parameters) {
 		@SuppressWarnings("unchecked")
-		Collection<ENTITY> entities = (Collection<ENTITY>) __getReader__(parameters).execute().getEntities();
+		Collection<ENTITY> entities = (Collection<ENTITY>) __getReader__(null,parameters).execute().getEntities();
 		Integer size = __injectCollectionHelper__().getSize(entities);
 		if(size!=null && size > 1)
 			throw new RuntimeException("too much ("+size+") results found");
@@ -248,7 +252,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected Long __count__(Object...parameters) {
-		return (Long) __inject__(CollectionHelper.class).getFirst(__getReader__(parameters).execute().getEntities());
+		return (Long) __inject__(CollectionHelper.class).getFirst(__getReader__(null,parameters).execute().getEntities());
 	}
 	
 	protected Long __modify__(Object...parameters) {
@@ -283,5 +287,10 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected QueryStringBuilderSelect __instanciateQuerySelect__(){
 		return __instanciateQuerySelect__(getEntityClass());
+	}
+	
+	protected QueryStringBuilderSelect __instanciateQueryReadBy__(String fieldName){
+		return __instanciateQuerySelect__().getWherePredicateBuilderAsEqual().addOperandBuilderByAttribute(fieldName,ComparisonOperator.EQ)
+				.getParentAsWhereClause().getParentAs(QueryStringBuilderSelect.class);
 	}
 }

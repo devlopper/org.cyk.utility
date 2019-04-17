@@ -1,7 +1,11 @@
 package org.cyk.utility.server.representation;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Collection;
+
+import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.random.RandomHelper;
-import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.test.TestRepresentationCreate;
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeploymentAsSwram;
 import org.junit.Test;
@@ -18,24 +22,25 @@ public class MyEntityFunctionIntegrationTest extends AbstractRepresentationArqui
 	
 	@Test
 	public void updateOneMyEntity() throws Exception{
-		String code = __inject__(RandomHelper.class).getAlphabetic(3);
+		String identifier = __getRandomIdentifier__();
 		
-		MyEntity persistence = new MyEntity().setCode(code).setName("n01ToEdit");
+		MyEntity persistence = new MyEntity().setIdentifier(identifier).setCode(__getRandomCode__()).setName("n01ToEdit");
 		__inject__(MyEntityBusiness.class).create(persistence);
 		
-		MyEntityDto dto = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(code, "business",null).getEntity();
+		MyEntityDto dto = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(identifier, "system",null).getEntity();
 		assertionHelper.assertEquals("n01ToEdit", dto.getName());
 		
 		dto.setName("n01");
 		__inject__(MyEntityRepresentation.class).updateOne(dto, null);
-		MyEntityDto updatedDto = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(code, "business",null).getEntity();
+		MyEntityDto updatedDto = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(identifier, "system",null).getEntity();
 		assertionHelper.assertEquals("n01ToEdit", updatedDto.getName());
 		
 		dto.setName("n01");
 		__inject__(MyEntityRepresentation.class).updateOne(dto, "name");
-		updatedDto = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(code, "business",null).getEntity();
+		updatedDto = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(identifier, "system",null).getEntity();
 		assertionHelper.assertEquals("n01", updatedDto.getName());
 		
+		__inject__(MyEntityBusiness.class).deleteBySystemIdentifier(identifier);
 		//__inject__(TestRepresentationUpdate.class).setFieldValuesMap(dto, __inject__(MapHelper.class).instanciateKeyAsStringValueAsObject("name","n02"))
 		//	.addObjects(dto).execute();
 	}
@@ -59,6 +64,29 @@ public class MyEntityFunctionIntegrationTest extends AbstractRepresentationArqui
 		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code01,"business",null).getEntity());
 		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code02,"business",null).getEntity());
 		
+		__inject__(MyEntityRepresentation.class).deleteOne(new MyEntityDto().setCode(code02));
+		
+	}
+	
+	@Test
+	public void getManyByPage() throws Exception{
+		for(Integer index = 0 ; index < 10 ; index = index + 1)
+			__inject__(MyEntityBusiness.class).create(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()));
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(null,null,null).getEntity()))
+			.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(0l,1l,null).getEntity()))
+			.containsExactly("0");
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(1l,1l,null).getEntity()))
+			.containsExactly("1");
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(0l,3l,null).getEntity()))
+			.containsExactly("0","1","2");
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(4l,3l,null).getEntity()))
+			.containsExactly("4","5","6");
 	}
 	
 	@Override

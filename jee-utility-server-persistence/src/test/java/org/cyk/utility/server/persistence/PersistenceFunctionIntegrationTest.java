@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import javax.validation.ConstraintViolationException;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.persistence.PersistenceFunctionCreator;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.test.FunctionRunnableTest;
@@ -12,12 +13,12 @@ import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
 import org.cyk.utility.server.persistence.test.TestPersistenceDelete;
 import org.cyk.utility.server.persistence.test.TestPersistenceRead;
 import org.cyk.utility.server.persistence.test.TestPersistenceUpdate;
-import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram;
+import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
-public class PersistenceFunctionIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeploymentAsSwram {
+public class PersistenceFunctionIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 	
 	/* Create */
@@ -54,7 +55,8 @@ public class PersistenceFunctionIntegrationTest extends AbstractPersistenceArqui
 	
 	@Test
 	public void readOneByIdentifierExisting() throws Exception{
-		MyEntity myEntity = new MyEntity().setCode("mc001");
+		String code = __getRandomCode__();
+		MyEntity myEntity = new MyEntity().setCode(code);
 		userTransaction.begin();
 		__inject__(PersistenceFunctionCreator.class).setEntity(myEntity).execute();
 		userTransaction.commit();
@@ -64,7 +66,7 @@ public class PersistenceFunctionIntegrationTest extends AbstractPersistenceArqui
 		
 		assertThat(myEntity).isNotNull();
 		assertThat(myEntity.getIdentifier()).isNotNull();
-		assertThat(myEntity.getCode()).isEqualTo("mc001");
+		assertThat(myEntity.getCode()).isEqualTo(code);
 		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Read MyEntity")
 			.assertContainsLastLogEventMessage("identifier="+myEntity.getIdentifier()).assertContainsLastLogEventMessage("code=mc001");
 	}
@@ -77,6 +79,58 @@ public class PersistenceFunctionIntegrationTest extends AbstractPersistenceArqui
 		assertThat(myEntity).isNull();
 		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Read MyEntity").assertContainsLastLogEventMessage(PersistenceFunctionReader.MESSAGE_NOT_FOUND)
 			.assertContainsLastLogEventMessage("identifier=-1");
+	}
+	
+	@Test
+	public void readManyByPage() throws Exception{
+		userTransaction.begin();
+		for(Integer index = 0 ; index < 10 ; index = index + 1)
+			__inject__(MyEntityPersistence.class).create(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()));
+		userTransaction.commit();
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany()))
+			.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(null)))
+		.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read()))
+		.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(null)))
+		.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		Properties properties = new Properties();
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+			.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		properties = new Properties();
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
+			.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		properties = new Properties();
+		properties.setQueryFirstTupleIndex(0);
+		properties.setQueryNumberOfTuple(1);
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+			.containsExactly("0");
+		
+		properties = new Properties();
+		properties.setQueryFirstTupleIndex(1);
+		properties.setQueryNumberOfTuple(1);
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+			.containsExactly("1");
+		
+		properties = new Properties();
+		properties.setQueryFirstTupleIndex(0);
+		properties.setQueryNumberOfTuple(3);
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+			.containsExactly("0","1","2");
+		
+		properties = new Properties();
+		properties.setQueryFirstTupleIndex(4);
+		properties.setQueryNumberOfTuple(3);
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+			.containsExactly("4","5","6");
 	}
 	
 	/* Update */
@@ -132,5 +186,20 @@ public class PersistenceFunctionIntegrationTest extends AbstractPersistenceArqui
 		
 		assertThat(__inject__(ThrowableHelper.class).getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage())
 			.contains("propertyPath=code");
+	}
+	
+	@Test
+	public void isMyEntityFieldIntegerValueValueNotLoaded() throws Exception{
+		String identifier = __getRandomIdentifier__();
+		String code = __getRandomCode__();
+		MyEntity myEntity = new MyEntity().setIdentifier(identifier).setCode(code).setIntegerValue(159);
+		userTransaction.begin();
+		__inject__(PersistenceFunctionCreator.class).setEntity(myEntity).execute();
+		userTransaction.commit();
+		
+		myEntity = (MyEntity) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class)
+				.setEntityIdentifier(myEntity.getIdentifier()).execute().getProperties().getEntity();
+		
+		//assertionHelper.assertNull("field integer value has been loaded", myEntity.getIntegerValue());
 	}
 }

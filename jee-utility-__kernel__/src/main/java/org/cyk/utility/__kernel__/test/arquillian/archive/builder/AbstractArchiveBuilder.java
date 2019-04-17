@@ -35,7 +35,7 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 	private Class<ARCHIVE> clazz;
 	private ARCHIVE archive;
 	
-	private String beanXml,projectDefaultsYml,persistenceXml,log4j2Xml,pomXml,jbossDeploymentStructureXml;
+	private String beanXml,projectDefaultsYml,persistenceXml,ormXml,log4j2Xml,pomXml,jbossDeploymentStructureXml;
 	private Collection<Package> packages;
 	private Collection<Clazz> classes;
 	
@@ -70,6 +70,9 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 		if(StringUtils.isBlank(persistenceXml) && profile!=null)
 			persistenceXml = profile.getProperty("org.cyk.test.jpa.persistence.file");
 		
+		if(StringUtils.isBlank(ormXml) && profile!=null)
+			ormXml = profile.getProperty("org.cyk.test.jpa.orm.file");
+		
 		String _package = profile == null ? null : profile.getProperty("org.cyk.test.package");
 		String[] classesArray = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.classes")) ? null : profile.getProperty("org.cyk.test.classes").split(",");
 		String[] resourcesFoldersArray = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.resources.folders")) ? null : profile.getProperty("org.cyk.test.resources.folders").split(",");
@@ -80,6 +83,8 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 			addProjectDefaultsYml(projectDefaultsYml);
 		if(persistenceXml!=null)
 			addPersistenceXml(persistenceXml);
+		if(ormXml!=null)
+			addOrmXml(ormXml);
 		if(log4j2Xml!=null)
 			addlog4j2Xml(log4j2Xml);
 		if(pomXml!=null)
@@ -194,6 +199,11 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 	
 	private AbstractArchiveBuilder<ARCHIVE> addPersistenceXml(String path){
 		((WebArchive)archive).addAsResource(path,"META-INF/persistence.xml");
+		return this;
+	}
+	
+	private AbstractArchiveBuilder<ARCHIVE> addOrmXml(String path){
+		((WebArchive)archive).addAsResource(path,"META-INF/orm.xml");
 		return this;
 	}
 	

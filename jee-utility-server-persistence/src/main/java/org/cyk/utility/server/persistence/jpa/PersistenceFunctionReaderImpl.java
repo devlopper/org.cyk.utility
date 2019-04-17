@@ -1,5 +1,6 @@
 package org.cyk.utility.server.persistence.jpa;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.value.ValueUsageType;
 
-public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionReaderImpl implements PersistenceFunctionReader {
+public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionReaderImpl implements PersistenceFunctionReader,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -60,13 +61,21 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 		Class<?> resultClass = persistenceQuery.getResultClass();
 		TypedQuery<?> typedQuery = __injectStringHelper__().isBlank(identifier) ? entityManager.createQuery(persistenceQuery.getValue(), resultClass) 
 				: entityManager.createNamedQuery(identifier, resultClass);
-		//TODO handle Paging
 		
 		//Parameters
 		Properties parameters = getQueryParameters();
 		if(parameters != null && parameters.__getMap__()!=null)
 			for(Map.Entry<Object, Object> entry : parameters.__getMap__().entrySet())
 				typedQuery.setParameter(entry.getKey().toString(), entry.getValue());
+		
+		//Paging
+		Long queryFirstTupleIndex = getQueryFirstTupleIndex();
+		if(queryFirstTupleIndex!=null)
+			typedQuery.setFirstResult(queryFirstTupleIndex.intValue());
+		
+		Long queryNumberOfTuple = getQueryNumberOfTuple();
+		if(queryNumberOfTuple!=null)
+			typedQuery.setMaxResults(queryNumberOfTuple.intValue());
 		
 		Collection<?> objects = typedQuery.getResultList();
 		

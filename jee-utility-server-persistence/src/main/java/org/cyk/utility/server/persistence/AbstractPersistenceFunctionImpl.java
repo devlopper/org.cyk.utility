@@ -15,6 +15,8 @@ import org.cyk.utility.throwable.ThrowableHelper;
 public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunctionServerImpl implements PersistenceFunction, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Long queryFirstTupleIndex,queryNumberOfTuple;
+	
 	@Override
 	protected final void __execute__(SystemAction action) {
 		String queryIdentifier = (String) getQueryIdentifier();
@@ -117,6 +119,28 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 	@Override
 	public PersistenceFunction setQueryResultClass(Class<?> aClass) {
 		getProperties().setFromPath(new Object[]{Properties.QUERY,Properties.RESULT,Properties.CLASS}, aClass);
+		return this;
+	}
+
+	@Override
+	public Long getQueryFirstTupleIndex() {
+		return queryFirstTupleIndex;
+	}
+	
+	@Override
+	public PersistenceFunction setQueryFirstTupleIndex(Long queryFirstTupleIndex) {
+		this.queryFirstTupleIndex = queryFirstTupleIndex;
+		return this;
+	}
+	
+	@Override
+	public Long getQueryNumberOfTuple() {
+		return queryNumberOfTuple;
+	}
+	
+	@Override
+	public PersistenceFunction setQueryNumberOfTuple(Long queryNumberOfTuple) {
+		this.queryNumberOfTuple = queryNumberOfTuple;
 		return this;
 	}
 }

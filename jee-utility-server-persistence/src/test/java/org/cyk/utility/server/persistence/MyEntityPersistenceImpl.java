@@ -38,7 +38,7 @@ public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEnt
 	@Override 
 	//@Query(value="SELECT r FROM MyEntity r WHERE r.integerValue = :"+MyEntity.FIELD_INTEGER_VALUE,resultClass=MyEntity.class)
 	public Collection<MyEntity> readByIntegerValue(Integer value) {
-		return __readMany__(____getQueryParameters____(value));
+		return __readMany__(null,____getQueryParameters____(value));
 	}
 	
 	@Override 

@@ -46,7 +46,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	@GET
 	@Path(PATH_GET_MANY)
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
-	Response getMany(@QueryParam(PARAMETER_FIELDS) String fields);
+	Response getMany(@QueryParam(PARAMETER_FROM) Long from,@QueryParam(PARAMETER_COUNT) Long count,@QueryParam(PARAMETER_FIELDS) String fields);
 	
 	@GET
 	@Path(PATH_GET_ONE)

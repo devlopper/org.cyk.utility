@@ -148,6 +148,12 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	protected Business __injectBusiness__() {
 		return __inject__(Business.class);
 	}
+	
+	@Override
+	public RepresentationFunction setProperty(Object key, Object value) {
+		return (RepresentationFunction) super.setProperty(key, value);
+	}
+	
 	/*
 	@Override
 	public Strings getFieldNamesStrings() {

@@ -329,6 +329,20 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	}
 	
 	@Override
+	public Function<INPUT, OUTPUT> addTryBeginRunnables(Collection<Runnable> runnables) {
+		if(runnables!=null && !runnables.isEmpty())
+			try_().getBegin(Boolean.TRUE).getRunnables(Boolean.TRUE).addAll(runnables);
+		return this;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> addTryBeginRunnables(Runnable... runnables) {
+		if(runnables!=null && runnables.length>0)
+			addTryBeginRunnables(Arrays.asList(runnables));
+		return this;
+	}
+	
+	@Override
 	public Function<INPUT, OUTPUT> addTryRunRunnables(Collection<Runnable> runnables) {
 		if(runnables!=null && !runnables.isEmpty())
 			try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE).addAll(runnables);
@@ -339,6 +353,20 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	public Function<INPUT, OUTPUT> addTryRunRunnables(Runnable... runnables) {
 		if(runnables!=null && runnables.length>0)
 			addTryRunRunnables(Arrays.asList(runnables));
+		return this;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> addTryEndRunnables(Collection<Runnable> runnables) {
+		if(runnables!=null && !runnables.isEmpty())
+			try_().getEnd(Boolean.TRUE).getRunnables(Boolean.TRUE).addAll(runnables);
+		return this;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> addTryEndRunnables(Runnable... runnables) {
+		if(runnables!=null && runnables.length>0)
+			addTryEndRunnables(Arrays.asList(runnables));
 		return this;
 	}
 	
@@ -503,6 +531,12 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	public Function<INPUT, OUTPUT> setIsExecuteAsynchronously(Boolean isExecuteAsynchronously) {
 		this.isExecuteAsynchronously = isExecuteAsynchronously;
 		return this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Function<INPUT, OUTPUT> setProperty(Object key, Object value) {
+		return (Function<INPUT, OUTPUT>) super.setProperty(key, value);
 	}
 	
 	@SuppressWarnings("unchecked")
