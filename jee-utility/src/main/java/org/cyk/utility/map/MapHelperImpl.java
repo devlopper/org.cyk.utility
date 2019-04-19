@@ -77,4 +77,9 @@ public class MapHelperImpl extends AbstractHelper implements MapHelper,Serializa
 		Map map = instanciate(objects);
 		return map;
 	}
+
+	@Override
+	public <T> T get(@SuppressWarnings("rawtypes") Map map,Class<T> klass, Object key) {
+		return map == null ? null : (T) map.get(key);
+	}
 }

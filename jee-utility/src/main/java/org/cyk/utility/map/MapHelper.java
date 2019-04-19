@@ -18,4 +18,6 @@ public interface MapHelper extends Helper {
 	Map<Object,Object> instanciate(Object...objects);
 	Map<String,String> instanciateKeyAsStringValueAsString(Object...objects);
 	Map<String,Object> instanciateKeyAsStringValueAsObject(Object...objects);
+	
+	<T> T get(@SuppressWarnings("rawtypes") Map map,Class<T> klass,Object key);
 }

@@ -53,6 +53,7 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	String PARAMETER_FROM = ConstantString.FROM;
 	String PARAMETER_COUNT = ConstantString.COUNT;
 	String PARAMETER_CODE = ConstantString.CODE;
+	String PARAMETER_IS_INLINE = ConstantString.IS_INLINE;
 	
 	/* Paths */
 	

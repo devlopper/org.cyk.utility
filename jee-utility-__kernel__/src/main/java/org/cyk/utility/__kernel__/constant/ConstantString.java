@@ -43,5 +43,12 @@ public interface ConstantString {
 	String FIELDS = "fields";
 	String CODE = "code";
 	String FROM = "from";
+	String UPLOAD = "upload";
+	String DOWNLOAD = "download";
+	String FILENAME = "filename";
+	String IS = "is";
+	String INLINE = "inline";
+	String ATTACHMENT = "attachment";
+	String IS_INLINE = IS+INLINE;
 
 }
