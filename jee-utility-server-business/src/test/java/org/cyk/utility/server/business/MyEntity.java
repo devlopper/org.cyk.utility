@@ -6,14 +6,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
-import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndBusinessCode;
+import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCoded;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Entity @Getter @Setter @Accessors(chain=true)
-public class MyEntity extends AbstractIdentifiedByStringAndBusinessCode implements Serializable {
+public class MyEntity extends AbstractIdentifiedByStringAndCoded implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long long1;

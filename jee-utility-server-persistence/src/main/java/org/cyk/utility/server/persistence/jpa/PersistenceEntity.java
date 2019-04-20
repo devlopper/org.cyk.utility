@@ -1,7 +1,7 @@
 package org.cyk.utility.server.persistence.jpa;
 
 @Deprecated
-public interface PersistenceEntity<ENTITY extends AbstractIdentifiedByStringAndBusinessCode> extends org.cyk.utility.server.persistence.PersistenceEntity<ENTITY> {
+public interface PersistenceEntity<ENTITY extends AbstractIdentifiedByStringAndCoded> extends org.cyk.utility.server.persistence.PersistenceEntity<ENTITY> {
 
 	ENTITY readByCode(String code);
 	

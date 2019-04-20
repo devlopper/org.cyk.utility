@@ -13,21 +13,10 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true) @MappedSuperclass @Access(AccessType.FIELD)
-//@Deprecated
-//Declare needed properties in each entity
-public abstract class AbstractIdentifiedByStringAndBusinessCode extends AbstractIdentifiedByString implements Serializable {
+public abstract class AbstractIdentifiedByStringAndCoded extends AbstractIdentifiedByString implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	/*
-	 * System properties
-	 */
-	
-	//private String code;
-	
-	/*
-	 * Business properties
-	 */
-	@NotNull @Column(nullable=false,unique=true)
+	@NotNull @Column(name=COLUMN_CODE,nullable=false,unique=true)
 	protected String code;
 
 	@Override
@@ -43,4 +32,6 @@ public abstract class AbstractIdentifiedByStringAndBusinessCode extends Abstract
 	/**/
 	
 	public static final String FIELD_CODE = "code";
+	
+	public static final String COLUMN_CODE = FIELD_CODE;
 }

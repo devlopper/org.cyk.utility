@@ -19,48 +19,50 @@ public class ProducerConsumerUnitTest extends AbstractArquillianUnitTestWithDefa
 
 	@Test
 	public void produceAndConsume() {
-		startServersZookeeperAndKafka();
+		if(Boolean.TRUE.equals(__isRunnable__(Producer.class))) {
+			startServersZookeeperAndKafka();
 
-		String topic = "mytopic";
-		String group = "mygroup";
-		
-		Object messageKey = __inject__(RandomHelper.class).getAlphabetic(5);
-		Object messageValue = "Time is "+new Date();
-		
-		Consumer consumer = __inject__(Consumer.class);
-		consumer.setIsKeepMessages(Boolean.TRUE);
-		consumer.addTopics(topic).setMessageProcessorClass(ConsumerMessageProcessorImpl.class).setNumberOfMessages(1l);
-		consumer.setProperty("bootstrap.servers", "localhost:9092");
-		consumer.setProperty("group.id", group);
-		consumer.setProperty("enable.auto.commit", "false");
-		consumer.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-		consumer.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-		Thread thread = (Thread) consumer.setIsExecuteAsynchronously(Boolean.TRUE).execute().getProperties().getThread();
-		
-		System.out.println("Consumer has started. we are waiting some times before producing...");
-		__inject__(TimeHelper.class).pause(1000l * 5);
-		
-		Producer producer = __inject__(Producer.class);
-		producer.addTopics(topic).setMessage(messageKey,messageValue).setCallbackClass(ProducerCallbackImpl.class);
-		producer.setProperty("bootstrap.servers", "localhost:9092");
-		producer.setProperty("acks", "all");
-		producer.setProperty("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-		producer.setProperty("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-		producer.execute();
-		
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+			String topic = "mytopic";
+			String group = "mygroup";
+			
+			Object messageKey = __inject__(RandomHelper.class).getAlphabetic(5);
+			Object messageValue = "Time is "+new Date();
+			
+			Consumer consumer = __inject__(Consumer.class);
+			consumer.setIsKeepMessages(Boolean.TRUE);
+			consumer.addTopics(topic).setMessageProcessorClass(ConsumerMessageProcessorImpl.class).setNumberOfMessages(1l);
+			consumer.setProperty("bootstrap.servers", "localhost:9092");
+			consumer.setProperty("group.id", group);
+			consumer.setProperty("enable.auto.commit", "false");
+			consumer.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+			consumer.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+			Thread thread = (Thread) consumer.setIsExecuteAsynchronously(Boolean.TRUE).execute().getProperties().getThread();
+			
+			System.out.println("Consumer has started. we are waiting some times before producing...");
+			__inject__(TimeHelper.class).pause(1000l * 5);
+			
+			Producer producer = __inject__(Producer.class);
+			producer.addTopics(topic).setMessage(messageKey,messageValue).setCallbackClass(ProducerCallbackImpl.class);
+			producer.setProperty("bootstrap.servers", "localhost:9092");
+			producer.setProperty("acks", "all");
+			producer.setProperty("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+			producer.setProperty("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+			producer.execute();
+			
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			Messages messages = consumer.getMessages();
+			assertionHelper.assertNotNull("messages is null",messages);
+			assertionHelper.assertTrue("no message has been read",messages.getSize()>0);
+			assertionHelper.assertEquals(messageKey, consumer.getMessages().getLast().getKey());
+			assertionHelper.assertEquals(messageValue, consumer.getMessages().getLast().getValue());
+			
+			stopServersKafkaAndZookeeper();	
 		}
-		
-		Messages messages = consumer.getMessages();
-		assertionHelper.assertNotNull("messages is null",messages);
-		assertionHelper.assertTrue("no message has been read",messages.getSize()>0);
-		assertionHelper.assertEquals(messageKey, consumer.getMessages().getLast().getKey());
-		assertionHelper.assertEquals(messageValue, consumer.getMessages().getLast().getValue());
-		
-		stopServersKafkaAndZookeeper();
 	}
 	
 	/**/

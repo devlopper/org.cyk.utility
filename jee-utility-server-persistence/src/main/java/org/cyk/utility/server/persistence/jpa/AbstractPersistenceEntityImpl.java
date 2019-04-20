@@ -3,7 +3,7 @@ package org.cyk.utility.server.persistence.jpa;
 import java.io.Serializable;
 
 @Deprecated
-public abstract class AbstractPersistenceEntityImpl<ENTITY extends AbstractIdentifiedByStringAndBusinessCode> extends org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
+public abstract class AbstractPersistenceEntityImpl<ENTITY extends AbstractIdentifiedByStringAndCoded> extends org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

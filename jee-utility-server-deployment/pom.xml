@@ -17,8 +17,8 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>org.cyk.jee.utility</groupId>
-			<artifactId>jee-utility</artifactId>
+			<groupId>org.cyk.jee.utility.server.representation.impl</groupId>
+			<artifactId>jee-utility-server-representation-impl</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		

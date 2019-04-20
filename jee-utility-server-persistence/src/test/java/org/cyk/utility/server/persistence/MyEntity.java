@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
-import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndBusinessCode;
+import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCoded;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 
 @Entity @Getter @Setter @Accessors(chain=true)
 @Access(AccessType.FIELD)
-public class MyEntity extends AbstractIdentifiedByStringAndBusinessCode implements Serializable {
+public class MyEntity extends AbstractIdentifiedByStringAndCoded implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Basic(fetch=FetchType.LAZY)
