@@ -1,5 +1,6 @@
 package org.cyk.utility.identifier.resource;
 
+import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionList;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
@@ -42,4 +43,18 @@ public class UniformResourceIdentifierParameterValueStringBuilderUnitTest extend
 				.execute().getOutput());
 	}
 	
+	@Test
+	public void parameter_value_identifier_MyId(){
+		assertionHelper.assertEquals("MyId", __inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(__inject__(Klass.class).setIdentifier("MyId"))
+				.execute().getOutput());
+	}
+	
+	/**/
+	
+	public static class Klass extends AbstractObject {
+		private static final long serialVersionUID = 1L;
+		
+		
+		
+	}
 }

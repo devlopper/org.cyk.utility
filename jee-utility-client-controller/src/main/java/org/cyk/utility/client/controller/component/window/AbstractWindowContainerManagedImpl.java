@@ -56,7 +56,8 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 			try {
 				__windowBuilder__ = __getWindowBuilder__();
 			} catch (Exception exception) {
-				__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).execute().getOutput();
+				__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).setRequest(__getRequest__())
+						.setContext(__getContext__()).execute().getOutput();
 				exception.printStackTrace();
 			}
 			if(__windowBuilder__.getRequest() == null)

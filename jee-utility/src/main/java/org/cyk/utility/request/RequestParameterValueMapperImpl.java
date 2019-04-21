@@ -6,7 +6,6 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterNameStringBuilder;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueStringBuilder;
-import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.object.ObjectByStringMap;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;
@@ -57,9 +56,12 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 						Class<?> aClass = __inject__(RequestParameterValueMapper.class).setParameterNameAsEntityClass().execute().getOutputAs(Class.class);
 						if(aClass!=null) {
 							((SystemAction)value).getEntities(Boolean.TRUE).setElementClass(aClass);
-							Long entityIdentifier = __inject__(RequestParameterValueMapper.class).setParameterNameAsEntityIdentifier().execute().getOutputAs(Long.class);
-							if(entityIdentifier!=null)
+							String entityIdentifier = __inject__(RequestParameterValueMapper.class).setParameterNameAsEntityIdentifier().execute().getOutputAs(String.class);
+							if(entityIdentifier!=null) {
+								//TODO Is it a Number ? a String ? ... How to find out the target identifier field type ?
+								//For now we will use string
 								systemAction.getEntitiesIdentifiers(Boolean.TRUE).add(entityIdentifier);
+							}
 						}
 						
 						systemAction.setNextAction(__inject__(RequestParameterValueMapper.class).setParameterNameAsNextActionClass().execute().getOutputAs(SystemAction.class));
@@ -71,7 +73,10 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsNextActionIdentifier().execute().getOutput().equals(parameterName)) {
 					value = parameterValue;
 				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsEntityIdentifier().execute().getOutput().equals(parameterName)) {
-					value = __inject__(NumberHelper.class).getLong(parameterValue);
+					//TODO Is it a Number ? a String ? ... How to find out the target identifier field type ?
+					//value = __inject__(NumberHelper.class).getLong(parameterValue);
+					//For now we will use string
+					value = parameterValue;
 				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsEntityClass().execute().getOutput().equals(parameterName)) {
 					value = __injectCollectionHelper__().getFirst(__inject__(UniformResourceIdentifierParameterValueMatrix.class).getClassMap().getKeys(parameterValue));
 				}else if(__inject__(UniformResourceIdentifierParameterNameStringBuilder.class).setNameAsWindowRenderTypeClass().execute().getOutput().equals(parameterName)) {

@@ -42,7 +42,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	//TODO improve build logic to reduce build time
 	@Override
 	protected WindowBuilder __execute__() throws Exception {
-		Object request = getRequest();
+		Object request = __injectValueHelper__().returnOrThrowIfBlank("request for "+getClass(), getRequest());
 		Object context = getContext();
 		WindowBuilder window = getWindow();
 		if(window == null)
@@ -59,10 +59,10 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(windowRenderType == null || windowRenderType instanceof WindowRenderTypeNormal) {
 			MenuBuilderMap menuMap = getMenuMap();
 			if(menuMap == null)
-				menuMap = (MenuBuilderMap) __inject__(SessionAttributeGetter.class).setRequest(getRequest()).setAttribute(SessionAttributeEnumeration.MENU_BUILDER_MAP).execute().getOutput();
+				menuMap = (MenuBuilderMap) __inject__(SessionAttributeGetter.class).setRequest(request).setAttribute(SessionAttributeEnumeration.MENU_BUILDER_MAP).execute().getOutput();
 			if(menuMap == null) {
 				menuMap = __inject__(MenuBuilderMapGetter.class).execute().getOutput();
-				__inject__(SessionAttributeSetter.class).setRequest(getRequest()).setAttribute(SessionAttributeEnumeration.MENU_BUILDER_MAP).setValue(menuMap).execute();
+				__inject__(SessionAttributeSetter.class).setRequest(request).setAttribute(SessionAttributeEnumeration.MENU_BUILDER_MAP).setValue(menuMap).execute();
 			}
 			window.setMenuMap(menuMap);	
 		}
@@ -75,7 +75,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		
 		Object instance = null;
 		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete || systemAction instanceof SystemActionProcess) {
-			Long identifier = (Long) __injectCollectionHelper__().getFirst(systemAction.getEntitiesIdentifiers());
+			Object identifier = __injectCollectionHelper__().getFirst(systemAction.getEntitiesIdentifiers());
 			if(identifier == null) {
 				
 			}else {

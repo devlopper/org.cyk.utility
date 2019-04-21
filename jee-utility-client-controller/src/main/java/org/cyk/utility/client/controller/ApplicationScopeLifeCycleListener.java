@@ -38,6 +38,8 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClasses(WindowRenderTypeNormal.class,WindowRenderTypeDialog.class);
 		
 		__initializeApplication__(object);
+		
+		__inject__(org.cyk.utility.ApplicationScopeLifeCycleListener.class).initialize(null);
 	}
 	
 	protected void __initializeApplication__(Object object) {

@@ -13,10 +13,10 @@ public abstract class AbstractSessionAttributeGetterImpl extends AbstractFunctio
 	@Override
 	protected Object __execute__() throws Exception {
 		Object attribute = __injectValueHelper__().returnOrThrowIfBlank("user session attribute", getAttribute());
-		Object request = __injectValueHelper__().returnOrThrowIfBlank("request", getRequest());
-		
 		if(attribute instanceof SessionAttributeEnumeration)
 			attribute = ((SessionAttributeEnumeration)attribute).name();
+		
+		Object request = __injectValueHelper__().returnOrThrowIfBlank("request to get attribute <<"+attribute+">>", getRequest());
 		
 		return __execute__(attribute,request);
 	}

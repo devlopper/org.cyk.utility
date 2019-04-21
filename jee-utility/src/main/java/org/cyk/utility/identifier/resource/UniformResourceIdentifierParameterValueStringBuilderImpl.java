@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
+import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
@@ -58,7 +59,11 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 					_value = clazz.getSimpleName().toLowerCase();
 				
 			}else if(value instanceof Objectable) {
-				_value = ((Objectable)value).getIdentifier() == null ? null : ((Objectable)value).getIdentifier().toString().toLowerCase();
+				_value = ((Objectable)value).getIdentifier() == null ? null : ((Objectable)value).getIdentifier().toString()
+						//.toLowerCase()
+						;
+				if(value instanceof SystemAction)
+					_value = _value.toLowerCase();
 			}
 			
 			if(__injectStringHelper__().isBlank(_value))
