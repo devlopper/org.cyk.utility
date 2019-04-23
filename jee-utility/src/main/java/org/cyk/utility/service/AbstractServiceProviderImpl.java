@@ -115,4 +115,7 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 		__injectMailHelper__().send(title, body, receiversIdentifiers, isExecuteAsynchronously);
 	}
 	
+	protected void __produceMail__(String title,String body,Collection<String> receiversIdentifiers) {
+		__injectMailHelper__().produce(title, body, receiversIdentifiers);
+	}
 }

@@ -1,9 +1,8 @@
-package org.cyk.utility.network.message.sender;
+package org.cyk.utility.network.message;
 
 import java.io.Serializable;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
-import org.cyk.utility.network.message.SenderReader;
 import org.cyk.utility.network.protocol.Protocol;
 import org.cyk.utility.network.protocol.ProtocolDefaults;
 
@@ -27,7 +26,6 @@ public abstract class AbstractSenderReaderImpl extends AbstractFunctionWithPrope
 		if(Boolean.TRUE.equals(protocol.getIsAuthenticationRequired()))
 			throwRuntimeExceptionIfIsNull(protocol.getAuthenticationCredentials(),"credentials");
 		______execute______(protocol);
-		System.out.println("Message sent.");
 	}
 	
 	protected abstract void ______execute______(Protocol protocol) throws Exception;

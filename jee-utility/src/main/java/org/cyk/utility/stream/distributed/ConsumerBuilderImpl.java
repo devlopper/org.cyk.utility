@@ -2,7 +2,6 @@ package org.cyk.utility.stream.distributed;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.constant.ConstantTopic;
 import org.cyk.utility.stream.distributed.kafka.network.ConsumerMessageProcessorImpl;
 import org.cyk.utility.stream.distributed.kafka.network.MessageDeserializer;
 
@@ -12,8 +11,8 @@ public class ConsumerBuilderImpl extends AbstractProducerConsumerBuilderImpl<Con
 	@Override
 	protected Consumer __execute__(Topic topic) throws Exception {
 		Consumer consumer = __inject__(Consumer.class);
+		consumer.addTopics(topic.getIdentifier());
 		if(Topic.MAIL.equals(topic)) {
-			consumer.addTopics(ConstantTopic.MAIL);
 			consumer.setMessageProcessorClass(ConsumerMessageProcessorImpl.class);
 			consumer.setValueSerialisationClass(MessageDeserializer.class);	
 		}

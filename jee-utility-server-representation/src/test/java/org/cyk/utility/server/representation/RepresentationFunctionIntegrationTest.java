@@ -1,10 +1,10 @@
 package org.cyk.utility.server.representation;
 
 import org.cyk.utility.server.representation.test.TestRepresentationCreate;
-import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeploymentAsSwram;
+import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment;
 import org.junit.Test;
 
-public class RepresentationFunctionIntegrationTest extends AbstractRepresentationArquillianIntegrationTestWithDefaultDeploymentAsSwram {
+public class RepresentationFunctionIntegrationTest extends AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 	
 	/* Create */

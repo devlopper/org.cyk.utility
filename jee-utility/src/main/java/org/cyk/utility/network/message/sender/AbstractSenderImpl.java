@@ -2,6 +2,7 @@ package org.cyk.utility.network.message.sender;
 
 import java.io.Serializable;
 
+import org.cyk.utility.network.message.AbstractSenderReaderImpl;
 import org.cyk.utility.network.message.Message;
 import org.cyk.utility.network.protocol.Protocol;
 
@@ -17,6 +18,7 @@ public abstract class AbstractSenderImpl extends AbstractSenderReaderImpl implem
 		throwRuntimeExceptionIfIsNull(message,"message");
 		throwRuntimeExceptionIfIsEmpty(message.getReceivers(), "receivers");
 		________execute________(protocol,message);
+		System.out.println("Message sent.");
 	}
 	
 	protected abstract void ________execute________(Protocol protocol,Message message) throws Exception;

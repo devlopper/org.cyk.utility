@@ -18,7 +18,7 @@ import org.junit.Test;
 public class MailProducerConsumerUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 	
-	@Test
+	//@Test
 	public void produceAndConsume() {
 		if(Boolean.TRUE.equals(__isRunnable__(Producer.class))) {
 			__inject__(ProtocolDefaults.class).getSimpleMailTransfer().setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE)
@@ -54,6 +54,37 @@ public class MailProducerConsumerUnitTest extends AbstractArquillianUnitTestWith
 			assertionHelper.assertTrue("no message has been read",messages.getSize()>0);
 			assertionHelper.assertEquals(mail.getTitle(), ((org.cyk.utility.network.message.Message)consumer.getMessages().getLast().getValue()).getTitle());
 			assertionHelper.assertEquals(mail.getBody(), ((org.cyk.utility.network.message.Message)consumer.getMessages().getLast().getValue()).getBody());
+			
+			stopServersKafkaAndZookeeper();	
+		}
+	}
+	
+	@Test
+	public void produceAndMailShouldHaveBeenSent() {
+		if(Boolean.TRUE.equals(__isRunnable__(Producer.class))) {
+			__inject__(ProtocolDefaults.class).getSimpleMailTransfer().setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE)
+			.setIsSecuredConnectionRequired(Boolean.TRUE)
+			.setAuthenticationCredentials(__inject__(Credentials.class).setIdentifier("dgbfdtideveloppers").setSecret("dgbf2016dti"));
+			
+			startServersZookeeperAndKafka();
+			
+			Topic.MAIL.startConsumer();
+			
+			System.out.println("Mail consumer has started. we are waiting some times before producing...");
+			__inject__(TimeHelper.class).pause(1000l * 5);
+			
+			__inject__(MailHelper.class).produce("Hi from distributed stream! Time was "+new Date(), "This is a hi from distributed stream.", "kycdev@gmail.com");
+		
+			//Get message from POP
+			/*
+			Messages messages = consumer.getMessages();
+			assertionHelper.assertNotNull("messages is null",messages);
+			assertionHelper.assertTrue("no message has been read",messages.getSize()>0);
+			assertionHelper.assertEquals(mail.getTitle(), ((org.cyk.utility.network.message.Message)consumer.getMessages().getLast().getValue()).getTitle());
+			assertionHelper.assertEquals(mail.getBody(), ((org.cyk.utility.network.message.Message)consumer.getMessages().getLast().getValue()).getBody());
+			*/
+			
+			__inject__(TimeHelper.class).pause(1000l * 15);
 			
 			stopServersKafkaAndZookeeper();	
 		}

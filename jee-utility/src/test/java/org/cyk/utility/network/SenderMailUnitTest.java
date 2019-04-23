@@ -30,6 +30,28 @@ public class SenderMailUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 			sender
 			.setMessage(__inject__(Message.class).setTitle("MyTitle Sync").setBody("MyBody").addReceivers(__inject__(Receiver.class).setIdentifier("kycdev@gmail.com")))
 			.execute();	
+			/*
+			ReaderMail reader = __inject__(ReaderMail.class);
+			reader.getProtocol(Boolean.TRUE).setHost("smtp.gmail.com").setPort(587).setIsAuthenticationRequired(Boolean.TRUE).setIsSecuredConnectionRequired(Boolean.TRUE)
+			.setAuthenticationCredentials(__inject__(Credentials.class).setIdentifier("kycdev").setSecret("P@sSw0rd@2O18"));
+			reader.setSearchTerm(new SearchTerm() {
+			    private static final long serialVersionUID = 1L;
+
+				public boolean match(javax.mail.Message message) {
+			        try {
+			        	System.out.println(message.getSubject()+" ::: "+message.getSubject().contains("MyTitle Sync"));
+			            if (message.getSubject().contains("MyTitle Sync")) {
+			                return true;
+			            }
+			        } catch (MessagingException exception) {
+			            exception.printStackTrace();
+			        }
+			        return false;
+			    }
+			});
+			reader.execute();
+			assertionHelper.assertEquals("MyTitle Sync", __inject__(CollectionHelper.class).getFirst(reader.getMessages()).getTitle());
+			*/
 		}
 	}
 	

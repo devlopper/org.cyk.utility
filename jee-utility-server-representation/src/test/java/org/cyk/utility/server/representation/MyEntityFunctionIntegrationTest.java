@@ -7,10 +7,10 @@ import java.util.Collection;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.server.representation.test.TestRepresentationCreate;
-import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeploymentAsSwram;
+import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment;
 import org.junit.Test;
 
-public class MyEntityFunctionIntegrationTest extends AbstractRepresentationArquillianIntegrationTestWithDefaultDeploymentAsSwram {
+public class MyEntityFunctionIntegrationTest extends AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 	
 	@Test

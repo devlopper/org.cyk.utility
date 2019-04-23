@@ -92,6 +92,12 @@ public class DependencyInjection implements Serializable {
 		QUALIFIER_CLASSES.put(clazz, classes);
 	}
 	
+	public static void setQualifierClassTo(Class<?> qualifierClass,Class<?>...classes) {
+		if(classes!=null)
+			for(Class<?> index : classes)
+				setQualifierClass(index, qualifierClass);
+	}
+	
 	public static Set<Class<?>> getQualifierClasses(Class<?> clazz) {
 		return QUALIFIER_CLASSES.get(clazz);
 	}

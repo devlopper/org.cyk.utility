@@ -10,13 +10,13 @@ import org.cyk.utility.server.business.test.TestBusinessCreate;
 import org.cyk.utility.server.business.test.TestBusinessDelete;
 import org.cyk.utility.server.business.test.TestBusinessRead;
 import org.cyk.utility.server.business.test.TestBusinessUpdate;
-import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillianIntegrationTestWithDefaultDeploymentAsSwram;
+import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.server.persistence.test.FunctionRunnableTest;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
-public class BusinessFunctionIntegrationTest extends AbstractBusinessArquillianIntegrationTestWithDefaultDeploymentAsSwram {
+public class BusinessFunctionIntegrationTest extends AbstractBusinessArquillianIntegrationTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 	
 	/* Create */

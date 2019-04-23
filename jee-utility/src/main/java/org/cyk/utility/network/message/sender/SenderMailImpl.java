@@ -58,6 +58,7 @@ public class SenderMailImpl extends AbstractSenderImpl implements SenderMail,Ser
 			mimeMessage.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress((String) index.getIdentifier()));
 
 		Transport.send(mimeMessage);
+		__logFine__("Mail has been sent.");
 	}
 	
 }

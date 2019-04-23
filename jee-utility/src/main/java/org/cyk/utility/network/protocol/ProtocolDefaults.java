@@ -8,4 +8,6 @@ public interface ProtocolDefaults extends MapInstance<Class, Protocol> {
 	ProtocolSimpleMailTransfer getSimpleMailTransfer();
 	ProtocolDefaults setSimpleMailTransfer(ProtocolSimpleMailTransfer simpleMailTransfer);
 	
+	ProtocolInteractiveMailAccess getInteractiveMailAccess();
+	ProtocolDefaults setInteractiveMailAccess(ProtocolInteractiveMailAccess interactiveMailAccess);
 }

@@ -37,4 +37,9 @@ public abstract class AbstractApplicationScopeLifeCycleListener extends Abstract
     
     public abstract void __destroy__(Object object);
 	
+    /**/
+    
+    protected static void __setQualifierClassTo__(Class<?> qualifierClass,Class<?>...classes) {
+    	DependencyInjection.setQualifierClassTo(qualifierClass, classes);
+    }
 }

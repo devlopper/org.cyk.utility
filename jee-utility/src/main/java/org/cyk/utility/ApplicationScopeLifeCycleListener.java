@@ -28,6 +28,10 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	
 	/**/
 	
+	
+	
+	/**/
+	
 	public static final Integer LEVEL = new Integer("0");
 	
 }

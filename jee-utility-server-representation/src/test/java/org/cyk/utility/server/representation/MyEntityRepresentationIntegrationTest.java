@@ -1,8 +1,8 @@
 package org.cyk.utility.server.representation;
 
-import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationEntityIntegrationTestWithDefaultDeploymentAsSwram;
+import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationEntityIntegrationTestWithDefaultDeployment;
 
-public class MyEntityRepresentationIntegrationTest extends AbstractRepresentationEntityIntegrationTestWithDefaultDeploymentAsSwram<MyEntityDto> {
+public class MyEntityRepresentationIntegrationTest extends AbstractRepresentationEntityIntegrationTestWithDefaultDeployment<MyEntityDto> {
 	private static final long serialVersionUID = 1L;
 	
 	@SuppressWarnings("rawtypes")

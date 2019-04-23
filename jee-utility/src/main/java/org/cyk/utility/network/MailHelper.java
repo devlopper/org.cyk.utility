@@ -8,4 +8,6 @@ public interface MailHelper extends Helper {
 
 	MailHelper send(String title,String body,Collection<Object> receiversIdentifiers,Boolean isExecuteAsynchronously);
 	
+	MailHelper produce(String title,String body,Collection<String> receiversIdentifiers);
+	MailHelper produce(String title,String body,String...receiversIdentifiers);
 }

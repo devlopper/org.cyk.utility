@@ -1,10 +1,10 @@
 package org.cyk.utility.server.business;
 
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
-import org.cyk.utility.server.business.test.arquillian.AbstractBusinessEntityIntegrationTestWithDefaultDeploymentAsSwram;
+import org.cyk.utility.server.business.test.arquillian.AbstractBusinessEntityIntegrationTestWithDefaultDeployment;
 import org.junit.Test;
 
-public class MyEntityBusinessIntegrationTest extends AbstractBusinessEntityIntegrationTestWithDefaultDeploymentAsSwram<MyEntity> {
+public class MyEntityBusinessIntegrationTest extends AbstractBusinessEntityIntegrationTestWithDefaultDeployment<MyEntity> {
 	private static final long serialVersionUID = 1L;
 	
 	@Override
