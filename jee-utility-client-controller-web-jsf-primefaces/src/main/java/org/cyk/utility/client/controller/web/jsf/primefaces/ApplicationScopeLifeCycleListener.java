@@ -47,6 +47,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(FunctionRunnableMap.class).set(CommandFunctionImpl.class, CommandFunctionFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(NavigationRedirectorImpl.class, NavigationRedirectorFunctionRunnableImpl.class,LEVEL);
 		
+		__inject__(org.cyk.utility.client.controller.web.jsf.ApplicationScopeLifeCycleListener.class).initialize(null);
 	}
 	
 	@Override

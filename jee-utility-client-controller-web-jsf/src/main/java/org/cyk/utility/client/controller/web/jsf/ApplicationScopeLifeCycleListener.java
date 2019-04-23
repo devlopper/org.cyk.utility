@@ -21,6 +21,8 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(FunctionRunnableMap.class).set(ChoiceBuilderImpl.class, ChoiceBuilderFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(RequestGetterImpl.class, RequestGetterFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(ContextPropertyValueGetterImpl.class,ContextPropertyValueGetterFunctionRunnableImpl.class,LEVEL);
+		
+		__inject__(org.cyk.utility.client.controller.web.ApplicationScopeLifeCycleListener.class).initialize(null);
 	}
 	
 	@Override

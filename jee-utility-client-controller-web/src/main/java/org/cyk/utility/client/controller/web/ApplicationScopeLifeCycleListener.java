@@ -15,6 +15,8 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	@Override
 	public void __initialize__(Object object) {
 		__inject__(FunctionRunnableMap.class).set(SessionUserGetterImpl.class, SessionUserGetterFunctionRunnableImpl.class,LEVEL);
+		
+		__inject__(org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener.class).initialize(null);
 	}
 	
 	@Override
