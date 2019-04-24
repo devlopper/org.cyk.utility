@@ -66,6 +66,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		function.setEntityClass(getEntityClass());
 		function.copyProperty(Properties.REQUEST,properties);
 		function.copyProperty(Properties.CONTEXT,properties);
+		function.copyProperty(Properties.FIELDS,properties);
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
 		function.execute();
 		if(properties!=null) {
@@ -88,6 +89,11 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	@Override
 	public ENTITY readOneByBusinessIdentifier(Object identifier) {
 		return readOne(identifier,ValueUsageType.BUSINESS);
+	}
+	
+	@Override
+	public ENTITY readOneBySystemIdentifier(Object identifier) {
+		return readOne(identifier,ValueUsageType.SYSTEM);
 	}
 	
 	@Override

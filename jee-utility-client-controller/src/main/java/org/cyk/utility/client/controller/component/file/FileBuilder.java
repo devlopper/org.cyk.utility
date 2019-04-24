@@ -18,4 +18,6 @@ public interface FileBuilder extends VisibleComponentBuilder<File> {
 	FileBuilder setValueName(String name);
 	FileBuilder setValueClazz(Class<?> clazz);
 	FileBuilder setValueBytes(byte[] bytes);
+	FileBuilder setValueUniformResourceLocator(String uniformResourceLocator);
+	FileBuilder setValueMimeType(String mimeType);
 }

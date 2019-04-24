@@ -17,6 +17,7 @@ import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionRemove;
 import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
+import org.cyk.utility.system.action.SystemActionView;
 
 public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements RequestParameterValueMapper,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -111,6 +112,8 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 			systemActionClass = SystemActionAdd.class;
 		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionRemove.class).execute().getOutput().equals(parameterValue))
 			systemActionClass = SystemActionRemove.class;
+		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionView.class).execute().getOutput().equals(parameterValue))
+			systemActionClass = SystemActionView.class;
 		
 		if(systemActionClass!=null) {
 			systemAction = __inject__(systemActionClass);

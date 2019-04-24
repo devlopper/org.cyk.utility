@@ -14,6 +14,7 @@ import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionRemove;
 import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
+import org.cyk.utility.system.action.SystemActionView;
 
 public class UniformResourceIdentifierParameterValueStringBuilderImpl extends AbstractStringFunctionImpl implements UniformResourceIdentifierParameterValueStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -36,7 +37,7 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 				}else
 					_value = clazz.getSimpleName().toLowerCase();
 				*/
-				
+				//TODO make it more better by using reflection to get value
 				if(SystemActionCreate.class.isAssignableFrom(clazz))
 					_value = "create";
 				else if(SystemActionRead.class.isAssignableFrom(clazz))
@@ -55,6 +56,8 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 					_value = "add";
 				else if(SystemActionRemove.class.isAssignableFrom(clazz))
 					_value = "remove";
+				else if(SystemActionView.class.isAssignableFrom(clazz))
+					_value = "view";
 				else
 					_value = clazz.getSimpleName().toLowerCase();
 				

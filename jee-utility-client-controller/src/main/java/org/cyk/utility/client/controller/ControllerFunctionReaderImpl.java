@@ -29,15 +29,16 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		Response response;
 		Objects identifiers = action.getEntitiesIdentifiers();
+		String fields = (String)getProperties().getFields();
 		if(__injectCollectionHelper__().isEmpty(identifiers)) {
 			//TODO handle pagination
-			response = representation.getMany(null,null,ConstantNull.STRING);
+			response = representation.getMany(null,null,fields);
 		}else {
 			Object identifier = identifiers.getFirst();
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
 			if(valueUsageType == null)
 				valueUsageType = ValueUsageType.SYSTEM;
-			response = representation.getOne(identifier.toString(),valueUsageType.name(),ConstantNull.STRING);
+			response = representation.getOne(identifier.toString(),valueUsageType.name(),fields);
 		}
 		return response;
 	}

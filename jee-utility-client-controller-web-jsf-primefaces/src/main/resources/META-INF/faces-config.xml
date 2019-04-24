@@ -26,6 +26,12 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>__entity__ViewView</from-outcome>
+			<to-view-id>/private/__entity__/view.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>__entity__EditView</from-outcome>
 			<to-view-id>/private/__entity__/edit.jsf</to-view-id>
 			<redirect />

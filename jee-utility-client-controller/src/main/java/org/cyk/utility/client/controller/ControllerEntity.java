@@ -13,6 +13,7 @@ public interface ControllerEntity<ENTITY> extends ControllerServiceProvider<ENTI
 	ENTITY readOne(Object identifier,Properties properties);
 	ENTITY readOne(Object identifier,ValueUsageType valueUsageType);
 	ENTITY readOne(Object identifier);
+	ENTITY readOneBySystemIdentifier(Object identifier);
 	ENTITY readOneByBusinessIdentifier(Object identifier);
 	
 	Collection<ENTITY> readMany(Properties properties);

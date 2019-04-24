@@ -19,7 +19,7 @@ public class WindowContainerManagedPropertyValueGetterImpl extends AbstractFunct
 	@Override
 	protected Object __execute__() throws Exception {
 		Object value = null;
-		WindowContainerManaged containerManaged = getContainerManaged();
+		//WindowContainerManaged containerManaged = getContainerManaged();
 		WindowContainerManagedWindowBuilder container = getContainer();
 		WindowContainerManagedProperty property = getProperty();
 		if(property == null)

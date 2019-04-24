@@ -117,6 +117,18 @@ public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> i
 		return this;
 	}
 	
+	@Override
+	public FileBuilder setValueUniformResourceLocator(String uniformResourceLocator) {
+		getValue(Boolean.TRUE).setUniformResourceLocator(uniformResourceLocator);
+		return this;
+	}
+	
+	@Override
+	public FileBuilder setValueMimeType(String mimeType) {
+		getValue(Boolean.TRUE).setMimeType(mimeType);
+		return this;
+	}
+	
 	/**/
 	
 	private static final String FIELD_VALUE = "value";

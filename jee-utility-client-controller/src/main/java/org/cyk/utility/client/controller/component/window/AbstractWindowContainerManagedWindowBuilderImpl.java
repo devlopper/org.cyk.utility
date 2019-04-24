@@ -25,6 +25,7 @@ import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionRedirect;
 import org.cyk.utility.system.action.SystemActionUpdate;
+import org.cyk.utility.system.action.SystemActionView;
 
 public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<WindowBuilder> implements WindowContainerManagedWindowBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -74,7 +75,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		//	systemAction = __inject__(RequestParameterValueMapper.class).setParameterNameAsActionClass().execute().getOutputAs(SystemAction.class);
 		
 		Object instance = null;
-		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete || systemAction instanceof SystemActionProcess) {
+		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete || systemAction instanceof SystemActionProcess || systemAction instanceof SystemActionView) {
 			Object identifier = __injectCollectionHelper__().getFirst(systemAction.getEntitiesIdentifiers());
 			if(identifier == null) {
 				
