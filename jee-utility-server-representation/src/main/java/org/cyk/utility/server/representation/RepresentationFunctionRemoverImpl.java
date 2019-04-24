@@ -16,8 +16,15 @@ public class RepresentationFunctionRemoverImpl extends AbstractRepresentationFun
 		if(getEntities()!=null)
 			__injectBusiness__().deleteMany((Collection<Object>) __inject__(InstanceHelper.class).buildMany(getPersistenceEntityClass(),getEntities()));
 		else if(getEntity()!=null) {
-			Object persistenceEntity = __inject__(Persistence.class).readOne(getPersistenceEntityClass(), __injectFieldHelper__().getFieldValueBusinessIdentifier(getEntity())
-					, ValueUsageType.BUSINESS);
+			ValueUsageType valueUsageType = null;
+			Object identifier = __injectFieldHelper__().getFieldValueBusinessIdentifier(getEntity());
+			if(identifier == null) {
+				identifier = __injectFieldHelper__().getFieldValueSystemIdentifier(getEntity());
+				valueUsageType = ValueUsageType.SYSTEM;
+			}else
+				valueUsageType = ValueUsageType.BUSINESS;
+			
+			Object persistenceEntity = __inject__(Persistence.class).readOne(getPersistenceEntityClass(), identifier,valueUsageType);
 			//__inject__(InstanceHelper.class).buildOne(getPersistenceEntityClass(),getEntity());
 			__injectBusiness__().delete(persistenceEntity);
 		}else if(getEntityIdentifier()!=null) {
