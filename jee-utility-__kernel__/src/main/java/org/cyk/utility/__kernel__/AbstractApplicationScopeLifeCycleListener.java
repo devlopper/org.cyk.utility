@@ -1,6 +1,7 @@
 package org.cyk.utility.__kernel__;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -38,6 +39,14 @@ public abstract class AbstractApplicationScopeLifeCycleListener extends Abstract
     public abstract void __destroy__(Object object);
 	
     /**/
+    
+    protected static void __setQualifiersClasses__(Class<?> clazz,Collection<Class<?>> qualifiersClasses) {
+		DependencyInjection.setQualifiersClasses(clazz, qualifiersClasses);	
+	}
+	
+    protected static void __setQualifiersClasses__(Class<?> clazz,Class<?>...qualifiersClasses) {
+		DependencyInjection.setQualifiersClasses(clazz, qualifiersClasses);	
+	}
     
     protected static void __setQualifierClassTo__(Class<?> qualifierClass,Class<?>...classes) {
     	DependencyInjection.setQualifierClassTo(qualifierClass, classes);
