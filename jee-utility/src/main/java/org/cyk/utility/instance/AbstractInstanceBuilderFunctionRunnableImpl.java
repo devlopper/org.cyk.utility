@@ -5,6 +5,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.field.FieldHelper;
 
+@Deprecated
 public abstract class AbstractInstanceBuilderFunctionRunnableImpl extends AbstractFunctionRunnableImpl<InstanceBuilder> {
 	private static final long serialVersionUID = 1L;
 

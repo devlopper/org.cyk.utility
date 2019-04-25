@@ -7,8 +7,6 @@ import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.field.FieldValueCopyFunctionRunnableImpl;
 import org.cyk.utility.field.FieldValueCopyImpl;
-import org.cyk.utility.instance.InstanceBuilderFunctionRunnableImpl;
-import org.cyk.utility.instance.InstanceBuilderImpl;
 import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
 
 @ApplicationScoped
@@ -18,7 +16,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	@Override
 	public void __initialize__(Object object) {
 		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(InstanceBuilderImpl.class, InstanceBuilderFunctionRunnableImpl.class,LEVEL);
+		//__inject__(FunctionRunnableMap.class).set(InstanceBuilderImpl.class, InstanceBuilderFunctionRunnableImpl.class,LEVEL);
 		for(String index : new String[] {"word","phrase","throwable"})
 			__inject__(StringRepositoryResourceBundle.class).addBundle("org.cyk.utility.string.repository."+index);
 	}
