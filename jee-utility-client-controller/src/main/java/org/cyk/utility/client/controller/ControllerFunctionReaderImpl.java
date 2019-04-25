@@ -6,7 +6,6 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.__kernel__.constant.ConstantNull;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.object.Objects;
