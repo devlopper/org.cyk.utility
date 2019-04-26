@@ -10,9 +10,9 @@ import org.cyk.utility.client.controller.component.annotation.Input;
 import org.cyk.utility.client.controller.component.annotation.InputString;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineMany;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
-import org.cyk.utility.client.controller.data.AbstractDataImpl;
+import org.cyk.utility.client.controller.data.AbstractDataIdentifiedByStringAndCodedImpl;
 
-public class MyEntityImpl extends AbstractDataImpl implements MyEntity,Serializable {
+public class MyEntityImpl extends AbstractDataIdentifiedByStringAndCodedImpl implements MyEntity,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Input @InputString @InputStringLineOne

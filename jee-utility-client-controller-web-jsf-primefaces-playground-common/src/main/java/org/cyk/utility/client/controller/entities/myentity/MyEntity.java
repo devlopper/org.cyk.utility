@@ -1,8 +1,8 @@
 package org.cyk.utility.client.controller.entities.myentity;
 
-import org.cyk.utility.client.controller.data.Data;
+import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
 
-public interface MyEntity extends Data {
+public interface MyEntity extends DataIdentifiedByStringAndCoded {
 
 	@Override MyEntity setIdentifier(Object identifier);
 	@Override MyEntity setCode(String code);

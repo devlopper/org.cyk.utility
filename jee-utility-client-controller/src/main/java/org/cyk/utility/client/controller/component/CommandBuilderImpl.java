@@ -13,6 +13,7 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 	private CommandFunction function;
 	private WindowContainerManaged windowContainerManaged;
 	private String containerContextDependencyInjectionBeanName;
+	private Boolean isSynchronous;
 	//private Data data;
 	
 	@Override
@@ -28,7 +29,8 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 				containerContextDependencyInjectionBeanName = windowContainerManaged.getContextDependencyInjectionBeanName();
 		}
 		command.setContainerContextDependencyInjectionBeanName(containerContextDependencyInjectionBeanName);
-		
+		Boolean isSynchronous = __injectValueHelper__().defaultToIfNull(getIsSynchronous(),Boolean.FALSE);
+		command.setIsSynchronous(isSynchronous);
 	}
 	
 	@Override
@@ -68,6 +70,18 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 		this.containerContextDependencyInjectionBeanName = containerContextDependencyInjectionBeanName;
 		return this;
 	}
+	
+	@Override
+	public Boolean getIsSynchronous() {
+		return isSynchronous;
+	}
+	
+	@Override
+	public CommandBuilder setIsSynchronous(Boolean isSynchronous) {
+		this.isSynchronous = isSynchronous;
+		return this;
+	}
+	
 	
 	/**/
 	

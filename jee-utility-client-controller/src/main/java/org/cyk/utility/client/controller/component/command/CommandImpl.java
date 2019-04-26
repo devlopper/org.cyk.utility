@@ -10,6 +10,7 @@ public class CommandImpl extends AbstractInvisibleComponentImpl implements Comma
 
 	private WindowContainerManaged windowContainerManaged;
 	private String containerContextDependencyInjectionBeanName;
+	private Boolean isSynchronous;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -55,6 +56,17 @@ public class CommandImpl extends AbstractInvisibleComponentImpl implements Comma
 	@Override
 	public Command setContainerContextDependencyInjectionBeanName(String containerContextDependencyInjectionBeanName) {
 		this.containerContextDependencyInjectionBeanName = containerContextDependencyInjectionBeanName;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsSynchronous() {
+		return isSynchronous;
+	}
+	
+	@Override
+	public Command setIsSynchronous(Boolean isSynchronous) {
+		this.isSynchronous = isSynchronous;
 		return this;
 	}
 }

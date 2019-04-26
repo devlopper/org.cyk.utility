@@ -1,8 +1,8 @@
 package org.cyk.utility.client.controller.component.window;
 
-import org.cyk.utility.client.controller.data.Data;
+import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
 
-public interface VerySimpleEntityDetails extends Data {
+public interface VerySimpleEntityDetails extends DataIdentifiedByStringAndCoded {
 
 	@Override VerySimpleEntityDetails setIdentifier(Object identifier);
 	@Override VerySimpleEntityDetails setCode(String code);

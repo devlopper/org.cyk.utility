@@ -18,4 +18,7 @@ public interface CommandBuilder extends InvisibleComponentBuilder<Command> {
 	
 	String getContainerContextDependencyInjectionBeanName();
 	CommandBuilder setContainerContextDependencyInjectionBeanName(String containerContextDependencyInjectionBeanName);
+	
+	Boolean getIsSynchronous();
+	CommandBuilder setIsSynchronous(Boolean isSynchronous);
 }

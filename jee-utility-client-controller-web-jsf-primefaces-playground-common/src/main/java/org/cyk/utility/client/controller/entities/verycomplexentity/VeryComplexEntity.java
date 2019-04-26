@@ -2,9 +2,9 @@ package org.cyk.utility.client.controller.entities.verycomplexentity;
 
 import java.util.Collection;
 
-import org.cyk.utility.client.controller.data.Data;
+import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
 
-public interface VeryComplexEntity extends Data {
+public interface VeryComplexEntity extends DataIdentifiedByStringAndCoded {
 
 	@Override VeryComplexEntity setIdentifier(Object identifier);
 	@Override VeryComplexEntity setCode(String code);

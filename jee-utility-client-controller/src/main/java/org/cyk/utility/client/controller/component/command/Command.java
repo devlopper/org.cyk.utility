@@ -14,4 +14,7 @@ public interface Command extends InvisibleComponent {
 	
 	String getContainerContextDependencyInjectionBeanName();
 	Command setContainerContextDependencyInjectionBeanName(String containerContextDependencyInjectionBeanName);
+	
+	Boolean getIsSynchronous();
+	Command setIsSynchronous(Boolean isSynchronous);
 }

@@ -198,4 +198,22 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	public String getRepresentationAsString() {
 		return null;
 	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if(object instanceof Objectable && object.getClass().equals(getClass()) ) {
+			Object identifier01 = getIdentifier();
+			Object identifier02 = ((Objectable)object).getIdentifier();
+			return identifier01!=null && identifier02!=null && identifier01.equals(identifier02);
+		}
+		return super.equals(object);
+	}
+	
+	@Override
+	public int hashCode() {
+		Object identifier = getIdentifier();
+		if(identifier!=null)
+			return identifier.hashCode();
+		return super.hashCode();
+	}
 }

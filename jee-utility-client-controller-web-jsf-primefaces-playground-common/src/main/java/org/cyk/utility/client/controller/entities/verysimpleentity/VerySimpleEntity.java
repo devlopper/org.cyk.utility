@@ -2,9 +2,9 @@ package org.cyk.utility.client.controller.entities.verysimpleentity;
 
 import java.util.Collection;
 
-import org.cyk.utility.client.controller.data.Data;
+import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
 
-public interface VerySimpleEntity extends Data {
+public interface VerySimpleEntity extends DataIdentifiedByStringAndCoded {
 
 	@Override VerySimpleEntity setIdentifier(Object identifier);
 	@Override VerySimpleEntity setCode(String code);

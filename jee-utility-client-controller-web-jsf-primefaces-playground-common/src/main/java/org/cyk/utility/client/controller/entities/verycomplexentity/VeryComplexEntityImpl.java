@@ -20,9 +20,9 @@ import org.cyk.utility.client.controller.component.annotation.InputChoiceOneRadi
 import org.cyk.utility.client.controller.component.annotation.InputString;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineMany;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
-import org.cyk.utility.client.controller.data.AbstractDataImpl;
+import org.cyk.utility.client.controller.data.AbstractDataIdentifiedByStringAndCodedImpl;
 
-public class VeryComplexEntityImpl extends AbstractDataImpl implements VeryComplexEntity,Serializable {
+public class VeryComplexEntityImpl extends AbstractDataIdentifiedByStringAndCodedImpl implements VeryComplexEntity,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Input @InputString @InputStringLineOne @NotNull

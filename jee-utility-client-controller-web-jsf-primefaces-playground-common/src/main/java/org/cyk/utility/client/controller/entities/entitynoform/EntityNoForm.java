@@ -1,8 +1,8 @@
 package org.cyk.utility.client.controller.entities.entitynoform;
 
-import org.cyk.utility.client.controller.data.Data;
+import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
 
-public interface EntityNoForm extends Data {
+public interface EntityNoForm extends DataIdentifiedByStringAndCoded {
 
 	@Override EntityNoForm setIdentifier(Object identifier);
 	@Override EntityNoForm setCode(String code);

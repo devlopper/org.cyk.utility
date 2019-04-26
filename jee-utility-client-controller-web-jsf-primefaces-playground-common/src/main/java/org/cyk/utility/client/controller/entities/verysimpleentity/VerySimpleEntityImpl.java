@@ -21,9 +21,9 @@ import org.cyk.utility.client.controller.component.annotation.InputString;
 import org.cyk.utility.client.controller.component.annotation.InputStringEditor;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineMany;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
-import org.cyk.utility.client.controller.data.AbstractDataImpl;
+import org.cyk.utility.client.controller.data.AbstractDataIdentifiedByStringAndCodedImpl;
 
-public class VerySimpleEntityImpl extends AbstractDataImpl implements VerySimpleEntity,Serializable {
+public class VerySimpleEntityImpl extends AbstractDataIdentifiedByStringAndCodedImpl implements VerySimpleEntity,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Input @InputString @InputStringLineOne @NotNull
