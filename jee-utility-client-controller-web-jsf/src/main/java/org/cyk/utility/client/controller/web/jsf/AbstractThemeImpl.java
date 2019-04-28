@@ -9,6 +9,12 @@ import org.cyk.utility.string.StringHelper;
 public abstract class AbstractThemeImpl extends org.cyk.utility.client.controller.web.AbstractThemeImpl implements Theme,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __addFavicon__(Object request,String rel, String folder,String fileNameAndExtension, String mimeType,String size) {
+		// We will get our favicons from resources
+		__addTagLinkResource__(rel, mimeType, request, fileNameAndExtension,folder, size);
+	}
+	
 	protected String __getResourceRelativeUrl__(Object request,String name,String library,String contract) {
 		if(__inject__(StringHelper.class).isBlank(contract))
 			contract = __getIdentifier__();

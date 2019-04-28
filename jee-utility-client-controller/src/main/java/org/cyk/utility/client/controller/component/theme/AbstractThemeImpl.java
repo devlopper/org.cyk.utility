@@ -40,35 +40,6 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 		setTemplate(__inject__(ThemeTemplate.class));
 		getTemplate().setIdentifier(__getTemplateIdentifier__());
 		
-		getTagMetas(Boolean.TRUE)
-			.addByHttpEquivByContent("X-UA-Compatible", "IE=edge")
-			.addByHttpEquivByContent("Content-Type","text/html; charset=UTF-8" )
-			.addByHttpEquivByContent("Cache-control", "public")
-			.addByHttpEquivByContent("Cache-control", "max-age=864000")
-			.addByHttpEquivByContent("Cache-control", "s-maxage=1296000")
-			
-			.addByNameByContent("viewport", "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0")
-			.addByNameByContent("mobile-web-app-capable", "yes")
-			.addByNameByContent("apple-mobile-web-app-capable", "yes")
-			
-			//.addByNameByContent("theme-color", "#444")
-			
-			;
-		
-		//"#{request.contextPath}/javax.faces.resource/#{indexFile.properties.name}.jsf?ln=#{indexFile.properties.library}&amp;con=#{indexFile.properties.contracts}"
-		
-		getTagLinks(Boolean.TRUE)
-			//.add("shortcut icon","image/x-icon","#{resource['favicon/favicon.ico']}")
-			//.add("manifest","text/json","manifest.json")
-			;
-		/*
-		<link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon.ico']}"/>
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-16x16.png']}" sizes="16x16"/>
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-32x32.png']}" sizes="32x32"/>
-        <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-96x96.png']}" sizes="96x96"/>
-        
-        */
-		
 		getIcon(Boolean.TRUE).getProperties().setContracts(__getIdentifier__());
 		getIcon(Boolean.TRUE).getProperties().setName("icon.png");
 		getIcon(Boolean.TRUE).getProperties().setLibrary("image");
@@ -81,6 +52,8 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	
 	protected abstract String __getIdentifier__();
 	protected abstract String __getTemplateIdentifier__();
+	protected abstract Object __getContext__(Object request);
+	protected abstract String __getContextParameter__(Object request,String name,String defaultValueIfNull);
 	
 	@Override
 	public Object getRequest() {

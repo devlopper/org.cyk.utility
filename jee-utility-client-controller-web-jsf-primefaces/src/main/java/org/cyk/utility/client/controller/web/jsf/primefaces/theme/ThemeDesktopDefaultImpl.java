@@ -5,10 +5,10 @@ import java.io.Serializable;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeRowBar;
-import org.cyk.utility.client.controller.component.theme.AbstractThemeImpl;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.window.Window;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractThemeImpl;
 import org.cyk.utility.scope.ScopeSession;
 
 public class ThemeDesktopDefaultImpl extends AbstractThemeImpl implements ThemeDesktopDefault,Serializable {

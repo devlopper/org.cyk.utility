@@ -15,12 +15,12 @@ import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuItemBuilders;
 import org.cyk.utility.client.controller.component.tab.Tab;
 import org.cyk.utility.client.controller.component.tab.Tabs;
-import org.cyk.utility.client.controller.component.theme.AbstractThemeImpl;
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.component.window.Window;
 import org.cyk.utility.client.controller.tag.Tag;
 import org.cyk.utility.client.controller.tag.TagForm;
 import org.cyk.utility.client.controller.web.ComponentHelper;
+import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractThemeImpl;
 import org.cyk.utility.scope.ScopeSession;
 
 public class ThemeAtlantisDesktopDefaultImpl extends AbstractThemeImpl implements ThemeAtlantisDesktopDefault,Serializable {
