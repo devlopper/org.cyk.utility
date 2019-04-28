@@ -7,4 +7,9 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 public class MenuBuilderMapGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<MenuBuilderMap> implements MenuBuilderMapGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	
+	@Override
+	protected MenuBuilderMap __execute__() throws Exception {
+		return null;
+	}
 }

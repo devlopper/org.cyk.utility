@@ -8,18 +8,30 @@ import org.cyk.utility.client.controller.component.file.File;
 import org.cyk.utility.client.controller.component.file.FileImage;
 import org.cyk.utility.client.controller.component.file.FileImageMap;
 import org.cyk.utility.client.controller.component.file.Files;
+import org.cyk.utility.client.controller.component.script.Script;
+import org.cyk.utility.client.controller.component.script.Scripts;
 import org.cyk.utility.client.controller.component.view.ViewMap;
+import org.cyk.utility.client.controller.tag.TagLink;
+import org.cyk.utility.client.controller.tag.TagLinks;
 import org.cyk.utility.client.controller.tag.TagMap;
+import org.cyk.utility.client.controller.tag.TagMeta;
+import org.cyk.utility.client.controller.tag.TagMetas;
+import org.cyk.utility.client.controller.tag.TagScript;
+import org.cyk.utility.client.controller.tag.TagScripts;
 
 public abstract class AbstractThemeImpl extends AbstractObject implements Theme,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private TagMetas tagMetas;
+	private TagLinks tagLinks;
+	private TagScripts tagScripts;
 	private Files cascadeStyleSheetFiles;
 	private Files javaScriptFiles;
 	private FileImageMap imageMap;
 	private ViewMap viewMap;
 	private ThemeTemplate template;
 	private TagMap tagMap;
+	private Scripts scripts;
 	private Object request;
 	
 	@Override
@@ -27,6 +39,35 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 		setIdentifier(__getIdentifier__());
 		setTemplate(__inject__(ThemeTemplate.class));
 		getTemplate().setIdentifier(__getTemplateIdentifier__());
+		
+		getTagMetas(Boolean.TRUE)
+			.addByHttpEquivByContent("X-UA-Compatible", "IE=edge")
+			.addByHttpEquivByContent("Content-Type","text/html; charset=UTF-8" )
+			.addByHttpEquivByContent("Cache-control", "public")
+			.addByHttpEquivByContent("Cache-control", "max-age=864000")
+			.addByHttpEquivByContent("Cache-control", "s-maxage=1296000")
+			
+			.addByNameByContent("viewport", "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0")
+			.addByNameByContent("mobile-web-app-capable", "yes")
+			.addByNameByContent("apple-mobile-web-app-capable", "yes")
+			
+			//.addByNameByContent("theme-color", "#444")
+			
+			;
+		
+		//"#{request.contextPath}/javax.faces.resource/#{indexFile.properties.name}.jsf?ln=#{indexFile.properties.library}&amp;con=#{indexFile.properties.contracts}"
+		
+		getTagLinks(Boolean.TRUE)
+			//.add("shortcut icon","image/x-icon","#{resource['favicon/favicon.ico']}")
+			//.add("manifest","text/json","manifest.json")
+			;
+		/*
+		<link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon.ico']}"/>
+        <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-16x16.png']}" sizes="16x16"/>
+        <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-32x32.png']}" sizes="32x32"/>
+        <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon/favicon-96x96.png']}" sizes="96x96"/>
+        
+        */
 		
 		getIcon(Boolean.TRUE).getProperties().setContracts(__getIdentifier__());
 		getIcon(Boolean.TRUE).getProperties().setName("icon.png");
@@ -221,8 +262,124 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 		return this;
 	}
 	
+	@Override
+	public TagLinks getTagLinks() {
+		return tagLinks;
+	}
+	
+	@Override
+	public TagLinks getTagLinks(Boolean injectIfNull) {
+		return (TagLinks) __getInjectIfNull__(FIELD_TAG_LINKS, injectIfNull);
+	}
+	
+	@Override
+	public Theme setTagLinks(TagLinks tagLinks) {
+		this.tagLinks = tagLinks;
+		return this;
+	}
+	
+	@Override
+	public Theme addTagLinks(Collection<TagLink> tagLinks) {
+		getTagLinks(Boolean.TRUE).add(tagLinks);
+		return this;
+	}
+	
+	@Override
+	public Theme addTagLinks(TagLink... tagLinks) {
+		getTagLinks(Boolean.TRUE).add(tagLinks);
+		return this;
+	}
+	
+	@Override
+	public TagMetas getTagMetas() {
+		return tagMetas;
+	}
+	
+	@Override
+	public TagMetas getTagMetas(Boolean injectIfNull) {
+		return (TagMetas) __getInjectIfNull__(FIELD_TAG_METAS, injectIfNull);
+	}
+	
+	@Override
+	public Theme setTagMetas(TagMetas tagMetas) {
+		this.tagMetas = tagMetas;
+		return this;
+	}
+	
+	@Override
+	public Theme addTagMetas(Collection<TagMeta> tagMetas) {
+		getTagMetas(Boolean.TRUE).add(tagMetas);
+		return this;
+	}
+	
+	@Override
+	public Theme addTagMetas(TagMeta... tagMetas) {
+		getTagMetas(Boolean.TRUE).add(tagMetas);
+		return this;
+	}
+	
+	@Override
+	public TagScripts getTagScripts() {
+		return tagScripts;
+	}
+	
+	@Override
+	public TagScripts getTagScripts(Boolean injectIfNull) {
+		return (TagScripts) __getInjectIfNull__(FIELD_TAG_SCRIPTS, injectIfNull);
+	}
+	
+	@Override
+	public Theme setTagScripts(TagScripts tagScripts) {
+		this.tagScripts = tagScripts;
+		return this;
+	}
+	
+	@Override
+	public Theme addTagScripts(Collection<TagScript> tagScripts) {
+		getTagScripts(Boolean.TRUE).add(tagScripts);
+		return this;
+	}
+	
+	@Override
+	public Theme addTagScripts(TagScript... tagScripts) {
+		getTagScripts(Boolean.TRUE).add(tagScripts);
+		return this;
+	}
+	
+	@Override
+	public Scripts getScripts() {
+		return scripts;
+	}
+	
+	@Override
+	public Scripts getScripts(Boolean injectIfNull) {
+		return (Scripts) __getInjectIfNull__(FIELD_SCRIPTS, injectIfNull);
+	}
+	
+	@Override
+	public Theme setScripts(Scripts scripts) {
+		this.scripts = scripts;
+		return this;
+	}
+	
+	@Override
+	public Theme addScripts(Collection<Script> scripts) {
+		getScripts(Boolean.TRUE).add(scripts);
+		return this;
+	}
+	
+	@Override
+	public Theme addScripts(Script... scripts) {
+		getScripts(Boolean.TRUE).add(scripts);
+		return this;
+	}
+	
 	/**/
 
+	public static final String FIELD_SCRIPTS = "scripts";
+	public static final String FIELD_TAG_SCRIPTS = "tagScripts";
+	public static final String FIELD_TAG_LINKS = "tagLinks";
+	public static final String FIELD_TAG_METAS = "tagMetas";
 	public static final String FIELD_VIEW_MAP = "viewMap";
 	public static final String FIELD_CASCADE_STYLE_SHEET_FILES = "cascadeStyleSheetFiles";
 	public static final String FIELD_JAVA_SCRIPT_FILES = "javaScriptFiles";

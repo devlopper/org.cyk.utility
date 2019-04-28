@@ -325,4 +325,9 @@
         <tag-name>text</tag-name>
         <source>tag/text/text.xhtml</source>
     </tag>
+    
+    <tag>
+        <tag-name>script</tag-name>
+        <source>tag/script/script.xhtml</source>
+    </tag>
 </facelet-taglib>

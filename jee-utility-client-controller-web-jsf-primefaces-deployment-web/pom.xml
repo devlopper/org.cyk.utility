@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.cyk.pom.jee.client.jboss</groupId>
-		<artifactId>pom-jee-client-jboss</artifactId>
-		<version>pom.jee.client.jboss.0.0.1</version>
+		<groupId>org.cyk.pom.jee.client</groupId>
+		<artifactId>pom-jee-client</artifactId>
+		<version>pom.jee.client.0.0.1</version>
 	</parent>
 
 	<groupId>org.cyk.jee.utility.client.controller.web.jsf.primefaces.deployment.web</groupId>
@@ -21,6 +21,7 @@
 			<groupId>org.cyk.jee.utility.client.controller.web.jsf.primefaces.playground.common</groupId>
 			<artifactId>jee-utility-client-controller-web-jsf-primefaces-playground-common</artifactId>
 			<version>0.0.1</version>
+			
 		</dependency>
 	</dependencies>
 </project>

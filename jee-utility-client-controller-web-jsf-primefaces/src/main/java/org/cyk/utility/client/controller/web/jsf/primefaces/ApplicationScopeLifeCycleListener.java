@@ -16,7 +16,6 @@ import org.cyk.utility.client.controller.component.command.CommandFunctionImpl;
 import org.cyk.utility.client.controller.component.grid.GridBuilderCommandableBuilderProcessorImpl;
 import org.cyk.utility.client.controller.component.layout.LayoutWidthGetterImpl;
 import org.cyk.utility.client.controller.component.layout.StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl;
-import org.cyk.utility.client.controller.component.theme.ThemeClassGetterImpl;
 import org.cyk.utility.client.controller.message.MessageRenderImpl;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapperImpl;
 import org.cyk.utility.client.controller.navigation.NavigationRedirectorImpl;
@@ -37,7 +36,6 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(FunctionRunnableMap.class).set(MessageRenderImpl.class, MessageRenderFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(LayoutWidthGetterImpl.class, LayoutWidthGetterFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(ThemeClassGetterImpl.class, ThemeClassGetterFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(ComponentRoleStyleClassGetterImpl.class, ComponentRoleStyleClassGetterFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(ComponentTargetModelBuilderImpl.class, ComponentTargetModelBuilderFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(NavigationIdentifierToUrlStringMapperImpl.class, NavigationIdentifierToUrlStringMapperFunctionRunnableImpl.class,LEVEL);

@@ -2,7 +2,8 @@
 <web-fragment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xmlns:webfragment="http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-
+	
+	<!--
 	<mime-mapping>
 		<extension>jrxml</extension>
 		<mime-type>text/plain</mime-type>
@@ -31,7 +32,7 @@
 		<extension>svg</extension>
 		<mime-type>image/svg+xml</mime-type>
 	</mime-mapping>
-
+	-->
   	<session-config>
     	<cookie-config>
     		<http-only>true</http-only>
