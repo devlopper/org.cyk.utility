@@ -5,7 +5,9 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
+import org.cyk.utility.__kernel__.annotation.JavaServerFaces;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
+import org.cyk.utility.client.controller.component.file.FileImageBuilder;
 import org.cyk.utility.client.controller.component.input.choice.ChoiceBuilderImpl;
 import org.cyk.utility.client.controller.context.ContextPropertyValueGetterImpl;
 import org.cyk.utility.client.controller.message.MessagesBuilderImpl;
@@ -23,6 +25,8 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		__inject__(FunctionRunnableMap.class).set(ContextPropertyValueGetterImpl.class,ContextPropertyValueGetterFunctionRunnableImpl.class,LEVEL);
 		
 		__inject__(org.cyk.utility.client.controller.web.ApplicationScopeLifeCycleListener.class).initialize(null);
+		
+		__setQualifiersClasses__(FileImageBuilder.class, JavaServerFaces.class);
 	}
 	
 	@Override

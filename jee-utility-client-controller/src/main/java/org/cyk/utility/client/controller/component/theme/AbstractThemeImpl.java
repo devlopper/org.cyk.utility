@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.client.controller.AbstractObject;
+import org.cyk.utility.client.controller.Constant;
 import org.cyk.utility.client.controller.component.file.File;
 import org.cyk.utility.client.controller.component.file.FileImage;
+import org.cyk.utility.client.controller.component.file.FileImageBuilder;
 import org.cyk.utility.client.controller.component.file.FileImageMap;
 import org.cyk.utility.client.controller.component.file.Files;
 import org.cyk.utility.client.controller.component.script.Script;
@@ -18,6 +20,8 @@ import org.cyk.utility.client.controller.tag.TagMeta;
 import org.cyk.utility.client.controller.tag.TagMetas;
 import org.cyk.utility.client.controller.tag.TagScript;
 import org.cyk.utility.client.controller.tag.TagScripts;
+import org.cyk.utility.file.FileHelper;
+import org.cyk.utility.string.StringHelper;
 
 public abstract class AbstractThemeImpl extends AbstractObject implements Theme,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -40,20 +44,25 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 		setTemplate(__inject__(ThemeTemplate.class));
 		getTemplate().setIdentifier(__getTemplateIdentifier__());
 		
-		getIcon(Boolean.TRUE).getProperties().setContracts(__getIdentifier__());
-		getIcon(Boolean.TRUE).getProperties().setName("icon.png");
-		getIcon(Boolean.TRUE).getProperties().setLibrary("image");
+		String logoFileName = __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME,null);
+		if(__inject__(StringHelper.class).isBlank(logoFileName))
+			logoFileName = __inject__(FileHelper.class).concatenateNameAndExtension(__getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME_PREFIX,"logo")
+					, __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_NAME_EXTENSION,"png"));
+		FileImageBuilder fileImageBuilder = __inject__(FileImageBuilder.class);
 		
-		getLogo(Boolean.TRUE).getProperties().setContracts(__getIdentifier__());
-		getLogo(Boolean.TRUE).getProperties().setName("logo.png");
-		getLogo(Boolean.TRUE).getProperties().setLibrary("image");
+		fileImageBuilder.setRequest(getRequest());
+		fileImageBuilder.setResourcesFolderName(__getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_RESOURCES_FOLDER,null));
+		fileImageBuilder.getFile(Boolean.TRUE)
+		.setValuePath(__getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_LOGO_FILE_FOLDER,"image"))
+		.setValueName(logoFileName);
+		setLogo(fileImageBuilder.execute().getOutput());
+		
 		return this;
 	}
 	
 	protected abstract String __getIdentifier__();
 	protected abstract String __getTemplateIdentifier__();
 	protected abstract Object __getContext__(Object request);
-	protected abstract String __getContextParameter__(Object request,String name,String defaultValueIfNull);
 	
 	@Override
 	public Object getRequest() {
@@ -345,6 +354,13 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	public Theme addScripts(Script... scripts) {
 		getScripts(Boolean.TRUE).add(scripts);
 		return this;
+	}
+	
+	/**/
+	
+	protected String __getConfigurationParameterValue__(String name,String nullValue) {
+		Object request = getRequest();
+		return Constant.getConfigurationParameterValue(name, __getContext__(request), request, nullValue);
 	}
 	
 	/**/

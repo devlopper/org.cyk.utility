@@ -3,7 +3,7 @@ package org.cyk.utility.object;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.annotation.Json;
+import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.collection.CollectionInstance;
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-@Json
+@JavaScriptObjectNotation
 public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilderImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

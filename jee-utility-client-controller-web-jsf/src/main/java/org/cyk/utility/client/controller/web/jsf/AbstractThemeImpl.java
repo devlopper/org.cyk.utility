@@ -1,10 +1,8 @@
 package org.cyk.utility.client.controller.web.jsf;
 
-import java.io.Serializable;
+import static org.cyk.utility.client.controller.web.jsf.Constant.formatResourceRelativeUrl;
 
-import org.cyk.utility.request.RequestProperty;
-import org.cyk.utility.request.RequestPropertyValueGetter;
-import org.cyk.utility.string.StringHelper;
+import java.io.Serializable;
 
 public abstract class AbstractThemeImpl extends org.cyk.utility.client.controller.web.AbstractThemeImpl implements Theme,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -15,19 +13,12 @@ public abstract class AbstractThemeImpl extends org.cyk.utility.client.controlle
 		__addTagLinkResource__(rel, mimeType, request, fileNameAndExtension,folder, size);
 	}
 	
-	protected String __getResourceRelativeUrl__(Object request,String name,String library,String contract) {
-		if(__inject__(StringHelper.class).isBlank(contract))
-			contract = __getIdentifier__();
-		return String.format(RESOURCE_RELATIVE_URL_FORMAT, __inject__(RequestPropertyValueGetter.class).setRequest(request).setProperty(RequestProperty.CONTEXT).execute()
-				.getOutput(),name,library,contract);
-	}
-	
 	protected String __getResourceRelativeUrl__(Object request,String name,String library) {
-		return __getResourceRelativeUrl__(request, name, library, __getIdentifier__());
+		return formatResourceRelativeUrl(request, name, library, __getIdentifier__());
 	}
 	
 	protected void __addTagLinkResource__(String rel,String type,Object request,String name,String library,String sizes,String contract) {
-		__addTagLink__(rel, type, __getResourceRelativeUrl__(request,name,library,contract),sizes);
+		__addTagLink__(rel, type, formatResourceRelativeUrl(request,name,library,contract),sizes);
 	}
 	
 	protected void __addTagLinkResource__(String rel,String type,Object request,String name,String library,String sizes) {
@@ -38,7 +29,14 @@ public abstract class AbstractThemeImpl extends org.cyk.utility.client.controlle
 		__addTagLinkResource__(rel, type, request, name, library, null);
 	}
 	
+	protected void __addTagLinkResourceStyleSheet__(Object request,String name,String library) {
+		__addTagLinkResource__("stylesheet", "text/css", request, name, library);
+	}
+	
+	protected void __addTagScriptResource__(Object request,String name,String library) {
+		getTagScripts(Boolean.TRUE).addBySrc(__getResourceRelativeUrl__(request, name,library));	
+	}
+
 	/**/
 	
-	private static final String RESOURCE_RELATIVE_URL_FORMAT = "%s/javax.faces.resource/%s.jsf?ln=%s&con=%s";
 }

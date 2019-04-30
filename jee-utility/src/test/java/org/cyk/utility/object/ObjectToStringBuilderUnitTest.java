@@ -1,6 +1,6 @@
 package org.cyk.utility.object;
 
-import org.cyk.utility.__kernel__.annotation.Json;
+import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.network.message.Receiver;
 import org.cyk.utility.network.message.Receivers;
 import org.cyk.utility.string.Strings;
@@ -46,7 +46,7 @@ public class ObjectToStringBuilderUnitTest extends AbstractArquillianUnitTestWit
 	/**/
 	
 	private static String buildStringFromObjectUsingJson(Object object,String...fieldNamesStrings) {
-		ObjectToStringBuilder objectToStringBuilder = __injectByQualifiersClasses__(ObjectToStringBuilder.class,Json.Class.class);
+		ObjectToStringBuilder objectToStringBuilder = __injectByQualifiersClasses__(ObjectToStringBuilder.class,JavaScriptObjectNotation.Class.class);
 		objectToStringBuilder.setObject(object);
 		objectToStringBuilder.addFieldNamesStrings(fieldNamesStrings);
 		return objectToStringBuilder.execute().getOutput();

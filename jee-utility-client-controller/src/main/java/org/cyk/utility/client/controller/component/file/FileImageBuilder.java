@@ -8,6 +8,9 @@ public interface FileImageBuilder extends VisibleComponentBuilder<FileImage> {
 	FileBuilder getFile(Boolean injectIfNull);
 	FileImageBuilder setFile(FileBuilder file);
 	
+	FileImageBuilder setResourcesFolderName(String resourcesFolderName);
+	String getResourcesFolderName();
+	
 	FileImageBuilder setWidth(Integer width);
 	Integer getWidth();
 	

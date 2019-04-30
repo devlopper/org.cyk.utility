@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.string.StringHelper;
 
 @Singleton
 public class FileHelperImpl extends AbstractHelper implements FileHelper,Serializable {
@@ -30,5 +31,13 @@ public class FileHelperImpl extends AbstractHelper implements FileHelper,Seriali
 	@Override
 	public String getMimeTypeByNameAndExtension(String nameAndExtension) {
 		return getMimeTypeByExtension(getExtension(nameAndExtension));
+	}
+	
+	@Override
+	public String concatenateNameAndExtension(String name, String extension) {
+		String nameAndExtension = StringUtils.defaultIfBlank(name,"");
+		if(__inject__(StringHelper.class).isNotBlank(extension))
+			nameAndExtension += "."+extension;
+		return nameAndExtension;
 	}
 }

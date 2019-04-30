@@ -1,7 +1,7 @@
 package org.cyk.utility.object;
 
 import static org.assertj.core.api.Assertions.*;
-import org.cyk.utility.__kernel__.annotation.Json;
+import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.network.message.Receivers;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
@@ -61,7 +61,7 @@ public class ObjectFromStringBuilderUnitTest extends AbstractArquillianUnitTestW
 	/**/
 	
 	private static <T> T buildObjectFromStringUsingJson(String string,java.lang.Class<T> klass,String...fieldNamesStrings) {
-		ObjectFromStringBuilder objectFromStringBuilder = __injectByQualifiersClasses__(ObjectFromStringBuilder.class,Json.Class.class);
+		ObjectFromStringBuilder objectFromStringBuilder = __injectByQualifiersClasses__(ObjectFromStringBuilder.class,JavaScriptObjectNotation.Class.class);
 		objectFromStringBuilder.setString(string);
 		objectFromStringBuilder.setKlass(klass);
 		objectFromStringBuilder.addFieldNamesStrings(fieldNamesStrings);

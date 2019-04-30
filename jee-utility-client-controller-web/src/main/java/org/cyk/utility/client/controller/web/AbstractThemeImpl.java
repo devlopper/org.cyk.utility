@@ -2,13 +2,10 @@ package org.cyk.utility.client.controller.web;
 
 import java.io.Serializable;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.file.MimeTypeGetter;
 import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractThemeImpl extends org.cyk.utility.client.controller.component.theme.AbstractThemeImpl implements Theme,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -85,11 +82,11 @@ public abstract class AbstractThemeImpl extends org.cyk.utility.client.controlle
 	}
 	
 	protected String __getFaviconFileExtension__(Object request,Integer width,Integer height) {
-		return __getContextParameter__(request, "web.context.parameter.theme.favicon.file.name.extension", "png");
+		return __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_FAVICON_FILE_NAME_EXTENSION, "png");
 	}
 	
 	protected String __getFaviconFileNamePrefix__(Object request,Integer width,Integer height) {
-		return __getContextParameter__(request, "web.context.parameter.theme.favicon.file.name.prefix", "favicon");
+		return __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_FAVICON_FILE_NAME_PREFIX, "favicon");
 	}
 	
 	protected String __getFaviconFileName__(Object request,Integer width,Integer height) {
@@ -97,7 +94,7 @@ public abstract class AbstractThemeImpl extends org.cyk.utility.client.controlle
 	}
 	
 	protected String __getImageFolder__(Object request) {
-		return __getContextParameter__(request, "web.context.parameter.theme.favicon.file.folder", "image");
+		return __getConfigurationParameterValue__(Constant.CONTEXT_PARAMETER_NAME_THEME_FAVICON_FILE_FOLDER, "image");
 	}
 	
 	protected void __addTagMetaByHttpEquivByContent__(String httpEquiv, String content) {
@@ -126,12 +123,6 @@ public abstract class AbstractThemeImpl extends org.cyk.utility.client.controlle
 		return httpServletRequest == null ? null : httpServletRequest.getServletContext();
 	}
 	
-	@Override
-	protected String __getContextParameter__(Object request,String name,String defaultValueIfNull) {
-		ServletContext servletContext = (ServletContext) __getContext__(request);
-		String value = servletContext == null ? null : __inject__(ValueHelper.class).defaultToIfNull(servletContext.getInitParameter(name),defaultValueIfNull);
-		if(StringUtils.startsWith(value, "${"))
-			value = defaultValueIfNull;
-		return value;
-	}
+	/**/
+	
 }

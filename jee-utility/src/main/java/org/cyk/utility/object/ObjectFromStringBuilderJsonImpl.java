@@ -3,7 +3,7 @@ package org.cyk.utility.object;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.annotation.Json;
+import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.field.FieldInstance;
@@ -26,7 +26,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Json
+@JavaScriptObjectNotation
 public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBuilderImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

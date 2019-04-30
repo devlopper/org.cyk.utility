@@ -20,4 +20,19 @@ public class FileHelperUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 	public void isTxt_whenTxt() {
 		assertionHelper.assertEquals(null, __inject__(FileHelper.class).getExtension("txt"));
 	}
+	
+	@Test
+	public void isNameDotTxt_whenNameIsNameAndExtensionIsTxt() {
+		assertionHelper.assertEquals("name.txt", __inject__(FileHelper.class).concatenateNameAndExtension("name", "txt"));
+	}
+	
+	@Test
+	public void isDotTxt_whenExtensionIsTxt() {
+		assertionHelper.assertEquals(".txt", __inject__(FileHelper.class).concatenateNameAndExtension(null, "txt"));
+	}
+	
+	@Test
+	public void isName_whenNameIsName() {
+		assertionHelper.assertEquals("name", __inject__(FileHelper.class).concatenateNameAndExtension("name", null));
+	}
 }

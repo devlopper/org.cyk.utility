@@ -28,6 +28,8 @@ public abstract class AbstractThemeClassGetterImpl extends AbstractFunctionWithP
 		return klass;
 	}
 	
+	/**/
+	
 	public static Class<?> CLASS;
 	public static String CLASS_NAME;
 }

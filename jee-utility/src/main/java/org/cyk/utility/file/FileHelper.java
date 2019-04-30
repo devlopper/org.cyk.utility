@@ -8,4 +8,6 @@ public interface FileHelper extends Helper {
 	String getExtension(String string);
 	String getMimeTypeByNameAndExtension(String nameAndExtension);
 	String getMimeTypeByExtension(String extension);
+	
+	String concatenateNameAndExtension(String name,String extension);
 }

@@ -40,5 +40,12 @@ public class WebHelper extends AbstractHelper implements Serializable {
 	
 	/**/
 	
+	public static WebHelper getInstance() {
+		return __inject__(WebHelper.class);
+	}
+	
+	/**/
+	
 	private static final String FILE_URL_PATH_FORMAT = Constant.FILE_URL_PATTERN_PREFIX + "?identifier=%s&location=%s";
+	
 }
