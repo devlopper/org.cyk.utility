@@ -35,9 +35,8 @@ public class FunctionUnitTest extends AbstractArquillianUnitTest {
 		Assert.assertNotNull(function.try_().getBegin());
 		Assert.assertNull(function.try_().getEnd());
 		Assert.assertTrue(function.try_().getBegin().getRunned());
-		
-		Assert.assertEquals(function, function.getExecutionPhaseTry().getParent());
-		Assert.assertEquals(function.getExecutionPhaseTry(), function.getExecutionPhaseTry().getBegin().getParent());
+		Assert.assertTrue(function == function.getExecutionPhaseTry().getParent());
+		Assert.assertTrue(function.getExecutionPhaseTry() == function.getExecutionPhaseTry().getBegin().getParent());
 	}
 	
 	@Test

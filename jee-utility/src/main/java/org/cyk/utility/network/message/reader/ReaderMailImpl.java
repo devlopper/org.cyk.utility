@@ -55,7 +55,7 @@ public class ReaderMailImpl extends AbstractReadderImpl implements ReaderMail,Se
 		if(numberOfMessageToRead == null)
 			numberOfMessageToRead = 1l;
       
-		Long lastMessageIndex = firstMessageIndex + numberOfMessageToRead;
+		//Long lastMessageIndex = firstMessageIndex + numberOfMessageToRead;
       
 		//Message[] messages = folder.getMessages(firstMessageIndex.intValue(), lastMessageIndex.intValue());
 		

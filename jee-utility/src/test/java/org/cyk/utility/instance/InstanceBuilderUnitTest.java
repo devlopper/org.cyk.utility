@@ -15,21 +15,18 @@ public class InstanceBuilderUnitTest extends AbstractArquillianUnitTestWithDefau
 
 	@Test
 	public void build_isNotNull(){
-		__inject__(FunctionRunnableMap.class).set(InstanceBuilderImpl.class, InstanceBuilderFunctionRunnableImpl.class);
 		assertionHelper.assertNotNull(__inject__(InstanceBuilder.class).setClazz(MyClass02.class).setFieldsValuesObject(new MyClass01()).execute().getOutput());
 	}
 	
 	@Test
 	public void build_isNull(){
 		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
-		__inject__(FunctionRunnableMap.class).set(InstanceBuilderImpl.class, InstanceBuilderFunctionRunnableImpl.class);
 		assertionHelper.assertNull(__inject__(InstanceBuilder.class).setClazz(MyClass02.class).setFieldsValuesObject(null).execute().getOutput());
 	}
 	
 	@Test
 	public void fieldWithSameName(){
 		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class);
-		__inject__(FunctionRunnableMap.class).set(InstanceBuilderImpl.class, InstanceBuilderFunctionRunnableImpl.class);
 		MyClass01 o1 = new MyClass01().setCode("c01");
 		MyClass02 o2 = (MyClass02) __inject__(InstanceBuilder.class).setClazz(MyClass02.class).setFieldsValuesObject(o1).execute().getOutput();
 		assertionHelper.assertEquals("c01", o2.getCode());
