@@ -53,11 +53,14 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	String PARAMETER_FROM = ConstantString.FROM;
 	String PARAMETER_COUNT = ConstantString.COUNT;
 	String PARAMETER_CODE = ConstantString.CODE;
+	String PARAMETER_DIRECTORY = ConstantString.DIRECTORY;
+	String PARAMETER_DIRECTORIES = ConstantString.DIRECTORIES;
 	String PARAMETER_IS_INLINE = ConstantString.IS_INLINE;
 	
 	/* Format */
 	
 	String FORMAT_PARAMETER_IDENTIFIER = "{"+PARAMETER_IDENTIFIER+"}";
+	String FORMAT_PARAMETER_DIRECTORY = "{"+PARAMETER_DIRECTORY+"}";
 	
 	/* Paths */
 	
@@ -66,6 +69,7 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	String PATH_MANY_COLLECTION = PATH_MANY+__COLLECTION__+__SLASH__;
 	
 	String PATH_IDENTIFIER = PATH_ROOT+FORMAT_PARAMETER_IDENTIFIER;
+	String PATH_DIRECTORY = PATH_ROOT+FORMAT_PARAMETER_DIRECTORY;
 	
 	String PATH_CREATE_ONE = __CREATE__;
 	String PATH_CREATE_MANY = __CREATE__+__SLASH__+__MANY__;

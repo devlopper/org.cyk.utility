@@ -64,7 +64,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						index.getProperties().setManyIfNull(new Object[] {Properties.IMMEDIATE,Properties.ASYNC,Properties.DISABLED,Properties.PARTIAL_SUBMIT
 								,Properties.RESET_VALUES,Properties.IGNORE_AUTO_UPDATE}, Boolean.FALSE);
 						index.getProperties().setManyIfNull(new Object[] {Properties.GLOBAL,Properties.SKIP_CHILDREN}, Boolean.TRUE);
-						index.getProperties().setIfNull(Properties.EVENT,StringUtils.removeAll(index.getName().name().toLowerCase(), "_") );
+						index.getProperties().setIfNull(Properties.EVENT,StringUtils.remove(index.getName().name().toLowerCase(), "_") );
 						
 						index.getProperties().setIfNull(Properties.FUNCTION,index.getFunction());
 						
@@ -114,52 +114,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 									//outputStringMessage.getProperties().setDisplay("tooltip");
 								}		
 							}else if(inputOutput instanceof OutputFile) {
-								OutputFile outputFile = (OutputFile) inputOutput;
-								/*
-								//Link
-								String url = __inject__(WebHelper.class).buildFileUrl(outputFile, componentBuilder.getRequest());
-								Link link = null;
-								if(__inject__(StringHelper.class).isNotBlank(url)) {
-									link = __inject__(LinkBuilder.class).execute().getOutput();
-									link.getProperties().setValue("LINK");
-									link.getProperties().setHref(url);
-									outputFile.getProperties().setLink(link);
-								}
 								
-								//Thumbnail
-								Image thumbnail = null;
-								File file = outputFile.getValue();
-								byte[] bytes = file.getBytes();
-								if(Boolean.TRUE.equals(file.isImage()) && (bytes!=null || __inject__(StringHelper.class).isNotBlank(url))) {
-									//Thumbnail will be image itself
-									thumbnail = __inject__(Image.class);
-									if(bytes == null) {
-										//no data to be embedded , browser will handle it by doing get using url
-										thumbnail.getProperties().setUrl(url);
-									}else {
-										//data to be streamed using base64 encoding
-										thumbnail.getProperties().setValue(new DefaultStreamedContent(new ByteArrayInputStream(bytes), file.getMimeType()));
-										thumbnail.getProperties().setStream(Boolean.FALSE);	
-									}									
-								}else {
-									//Thumbnail will be an icon based on mime type
-									thumbnail = __inject__(Image.class);
-									HttpSession session = ((HttpServletRequest) componentBuilder.getRequest()).getSession();
-									Theme theme = (Theme) session.getAttribute(SessionAttributeEnumeration.THEME.name());
-									thumbnail.getProperties().setLibrary(theme == null 
-											? "org.cyk.utility.client.controller.web.jsf.primefaces.desktop.default"
-													: theme.getIdentifier());
-									thumbnail.getProperties().setName("image/icon/"+StringUtils.substringBefore(file.getMimeType(),"/")+".png");											
-								}
-								
-								if(thumbnail!=null) {
-									thumbnail.getProperties().setAlt(StringUtils.substringBefore(file.getMimeType(),"/"));
-									thumbnail.getProperties().setTitle(StringUtils.substringBefore(file.getMimeType(),"/"));
-									thumbnail.getProperties().setWidth("40");
-									thumbnail.getProperties().setHeight("40");
-								}
-								outputFile.getProperties().setThumbnail(thumbnail);
-								*/
 							}
 						}
 						
@@ -250,8 +205,8 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						Text text = (Text) component;
 						String characters = text.getCharacters();
 						//TODO some processing must be donne for web
-						characters = StringUtils.replaceAll(characters, "\r\n", "<br/>");
-						characters = StringUtils.replaceAll(characters, "\n", "<br/>");
+						characters = StringUtils.replace(characters, "\r\n", "<br/>");
+						characters = StringUtils.replace(characters, "\n", "<br/>");
 						text.getProperties().setValue(characters);
 					}else if(component instanceof Link) {
 						Link link = (Link) component;

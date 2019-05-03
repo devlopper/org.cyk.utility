@@ -1,23 +1,12 @@
 package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 
-import org.codehaus.plexus.util.StringUtils;
-import org.cyk.utility.__kernel__.constant.ConstantCharacter;
-import org.cyk.utility.client.controller.component.InputOutputBuilder;
-import org.cyk.utility.client.controller.component.input.InputBuilder;
-import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.DataFieldsNamesGetter;
 import org.cyk.utility.client.controller.data.Form;
-import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.field.FieldTypeGetter;
-import org.cyk.utility.field.Fields;
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
-import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;

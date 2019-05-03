@@ -27,6 +27,9 @@ public interface File extends Objectable {
 	String getUniformResourceLocator();
 	File setUniformResourceLocator(String uniformResourceLocator);
 	
+	String getChecksum();
+	File setChecksum(String checksum);
+	
 	/**/
 	
 	Boolean isImage();

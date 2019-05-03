@@ -3,6 +3,7 @@ package org.cyk.utility.file;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.string.StringHelper;
 
@@ -10,7 +11,7 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private byte[] bytes;
-	private String path,name,extension,mimeType,uniformResourceLocator;
+	private String path,name,extension,mimeType,uniformResourceLocator,checksum;
 	private Long size;
 	
 	@Override
@@ -96,6 +97,17 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	}
 	
 	@Override
+	public String getChecksum() {
+		return checksum;
+	}
+	
+	@Override
+	public File setChecksum(String checksum) {
+		this.checksum = checksum;
+		return this;
+	}
+	
+	@Override
 	public Boolean isImage() {
 		return StringUtils.startsWithIgnoreCase(getMimeType(), "image/");
 	}
@@ -118,14 +130,16 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	public String getPathAndNameAndExtension() {
 		String pathNameAndExtension = getNameAndExtension();
 		String path = getPath();
-		if(__inject__(StringHelper.class).isNotBlank(path))
-			pathNameAndExtension = path + "/" + pathNameAndExtension;
+		if(__inject__(StringHelper.class).isNotBlank(path)) {
+			path = __inject__(StringHelper.class).addToEndIfDoesNotEndWith(path, "/");
+			pathNameAndExtension = path + pathNameAndExtension;
+		}
 		return pathNameAndExtension;
 	}
 	
 	@Override
 	public String toString() {
-		return getNameAndExtension()+","+getMimeType()+"|"+getSize();
+		return StringUtils.defaultIfBlank(getPath(),ConstantEmpty.STRING)+getNameAndExtension()+","+getMimeType()+"|"+getSize();
 	}
 
 }

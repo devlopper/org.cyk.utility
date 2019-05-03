@@ -58,8 +58,8 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 			addOperandStringBuilderParameterName(fieldNameAsString);
 		}
 		String string = super.__execute__();
-		string = StringUtils.replaceAll(string, "\\( ", "(");
-		string = StringUtils.replaceAll(string, " \\)", ")");
+		string = StringUtils.replace(string, "( ", "(");
+		string = StringUtils.replace(string, " )", ")");
 		return string;
 	}
 	

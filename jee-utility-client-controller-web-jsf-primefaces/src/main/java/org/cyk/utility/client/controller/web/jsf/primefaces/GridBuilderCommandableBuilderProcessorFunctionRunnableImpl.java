@@ -1,12 +1,9 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.faces.model.ListDataModel;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.command.CommandFunction;
@@ -14,7 +11,6 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.grid.AbstractGridBuilderCommandableBuilderProcessorFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.component.window.WindowRenderTypeDialog;
-import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.page.EntityListPage;
 import org.cyk.utility.collection.CollectionHelper;
@@ -24,8 +20,6 @@ import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.primefaces.PrimeFaces;
-import org.primefaces.component.datatable.DataTable;
-import org.primefaces.event.SelectEvent;
 
 public class GridBuilderCommandableBuilderProcessorFunctionRunnableImpl extends AbstractGridBuilderCommandableBuilderProcessorFunctionRunnableImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -77,16 +71,16 @@ public class GridBuilderCommandableBuilderProcessorFunctionRunnableImpl extends 
 			event.getOutputProperties().setUpdate("@(."+gridBuilder.getOutputProperties().getIdentifierAsStyleClass()+")");
 			CommandFunction function = __inject__(CommandFunction.class);
 			function.try_().getRun(Boolean.TRUE).addRunnables(new Runnable() {
-				@SuppressWarnings("unchecked")
 				@Override
 				public void run() {
-					SelectEvent selectEvent = (SelectEvent) function.getProperties().getParameter();
+					/*SelectEvent selectEvent = (SelectEvent) function.getProperties().getParameter();
 					Data data = (Data) selectEvent.getObject();
 					data.setIdentifier(100);
 					DataTable dataTable = null;//(DataTable) gridBuilder.getComponent().getTargetModel();
 					ListDataModel<Object> dataModel = (ListDataModel<Object>) dataTable.getValue();
 					Collection<org.cyk.utility.client.controller.data.Row> collection = (Collection<org.cyk.utility.client.controller.data.Row>) dataModel.getWrappedData();
 					collection.add(__inject__(org.cyk.utility.client.controller.data.RowBuilder.class).setGrid(gridBuilder).setData(data).execute().getOutput());
+					*/
 				}
 			});
 			event.getOutputProperties().setFunction(function);

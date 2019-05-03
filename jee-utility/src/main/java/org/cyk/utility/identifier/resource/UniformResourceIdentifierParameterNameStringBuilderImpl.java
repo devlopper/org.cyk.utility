@@ -31,7 +31,7 @@ public class UniformResourceIdentifierParameterNameStringBuilderImpl extends Abs
 			}
 			
 			if(__injectStringHelper__().isNotBlank(value)) {
-				value = StringUtils.removeAll(value, "_");
+				value = StringUtils.remove(value, "_");
 			}
 				
 			if(__injectStringHelper__().isBlank(value))

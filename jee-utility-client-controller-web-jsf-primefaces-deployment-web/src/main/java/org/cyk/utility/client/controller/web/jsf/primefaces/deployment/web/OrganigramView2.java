@@ -7,7 +7,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.random.RandomHelper;
@@ -23,7 +22,11 @@ import org.primefaces.model.OrganigramNode;
 @SessionScoped
 public class OrganigramView2 implements Serializable {
  
-    private OrganigramNode rootNode;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private OrganigramNode rootNode;
     private OrganigramNode selection;
  
     private boolean zoom = false;

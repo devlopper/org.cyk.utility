@@ -41,7 +41,7 @@ public class ControllerFunctionRedirectorImpl extends AbstractControllerFunction
 			systemActionRead.setEntityClass(getEntityClass());
 			systemActionRead.getEntitiesIdentifiers(Boolean.TRUE).add(__injectFieldHelper__().getFieldValueSystemIdentifier(entity));
 			
-			Object navigationIdentifier = getProperty(Properties.NAVIGATION_IDENTIFIER);
+			//Object navigationIdentifier = getProperty(Properties.NAVIGATION_IDENTIFIER);
 			NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemActionRead);
 			
 			Navigation navigation = navigationBuilder.execute().getOutput();

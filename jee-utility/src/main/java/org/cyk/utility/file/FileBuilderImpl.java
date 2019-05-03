@@ -2,6 +2,7 @@ package org.cyk.utility.file;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.security.MessageDigest;
 
 import org.apache.commons.io.IOUtils;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -11,9 +12,10 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 
 	private InputStream inputStream;
 	private Class<?> clazz;
-	private String path,name,uniformResourceLocator,mimeType,extension;
+	private String path,name,uniformResourceLocator,mimeType,extension,checksum;
 	private byte[] bytes;
 	private Long size;
+	private Boolean isChecksumComputable;
 	
 	@Override
  	protected File __execute__() throws Exception {
@@ -22,6 +24,9 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		file.setUniformResourceLocator(uniformResourceLocator);
 		
 		String path = getPath();
+		if(__injectStringHelper__().isNotBlank(path)) {
+			path = __injectStringHelper__().addToEndIfDoesNotEndWith(path, "/");
+		}
 		file.setPath(path);
 		
 		String name = getName();
@@ -56,6 +61,21 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 				file.setSize(new Long(file.getBytes().length));
 		}
 		
+		String checksum = getChecksum();
+		if(__injectStringHelper__().isBlank(checksum)) {
+			Boolean isChecksumComputable = getIsChecksumComputable();
+			if(Boolean.TRUE.equals(isChecksumComputable)) {
+				if(file.getBytes()!=null && file.getBytes().length>0) {
+					final MessageDigest messageDigest = MessageDigest.getInstance("SHA1");
+					messageDigest.update(file.getBytes());
+					byte[] checksumBytes = messageDigest.digest();
+					if(checksumBytes!=null && checksumBytes.length>0)
+						checksum = new String(checksumBytes);
+				}	
+			}	
+		}
+		if(__injectStringHelper__().isNotBlank(checksum))
+			file.setChecksum(new String(checksum));		
 		return file;
 	}
 	
@@ -152,6 +172,28 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 	@Override
 	public FileBuilder setSize(Long size) {
 		this.size = size;
+		return this;
+	}
+	
+	@Override
+	public String getChecksum() {
+		return checksum;
+	}
+	
+	@Override
+	public FileBuilder setChecksum(String checksum) {
+		this.checksum = checksum;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsChecksumComputable() {
+		return isChecksumComputable;
+	}
+	
+	@Override
+	public FileBuilder setIsChecksumComputable(Boolean isChecksumComputable) {
+		this.isChecksumComputable = isChecksumComputable;
 		return this;
 	}
 }

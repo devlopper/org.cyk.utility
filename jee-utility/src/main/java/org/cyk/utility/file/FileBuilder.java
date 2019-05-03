@@ -32,4 +32,10 @@ public interface FileBuilder extends FunctionWithPropertiesAsInput<File> {
 	
 	String getUniformResourceLocator();
 	FileBuilder setUniformResourceLocator(String uniformResourceLocator);
+	
+	String getChecksum();
+	FileBuilder setChecksum(String checksum);
+	
+	Boolean getIsChecksumComputable();
+	FileBuilder setIsChecksumComputable(Boolean isChecksumComputable);
 }

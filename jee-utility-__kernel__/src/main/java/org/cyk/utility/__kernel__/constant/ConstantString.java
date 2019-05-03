@@ -45,6 +45,8 @@ public interface ConstantString {
 	String FROM = "from";
 	String UPLOAD = "upload";
 	String DOWNLOAD = "download";
+	String DIRECTORY = "directory";
+	String DIRECTORIES = "directories";
 	String FILENAME = "filename";
 	String IS = "is";
 	String INLINE = "inline";

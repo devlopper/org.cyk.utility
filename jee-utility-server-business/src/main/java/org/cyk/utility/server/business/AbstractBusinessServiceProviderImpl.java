@@ -52,7 +52,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 				@Override
 				public void run() {
 					for(OBJECT index : objects) {
-						create(index);
+						create(index,properties);
 					}
 				}
 			});

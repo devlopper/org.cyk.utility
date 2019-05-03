@@ -132,13 +132,6 @@ public class OrganigramView extends AbstractObject implements Serializable {
         employee.setSelectable(true);
     }
  
-    private void setMessage(String msg, FacesMessage.Severity severity) {
-        FacesMessage message = new FacesMessage();
-        message.setSummary(msg);
-        message.setSeverity(severity);
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
- 
     public OrganigramNode getRootNode() {
         return rootNode;
     }

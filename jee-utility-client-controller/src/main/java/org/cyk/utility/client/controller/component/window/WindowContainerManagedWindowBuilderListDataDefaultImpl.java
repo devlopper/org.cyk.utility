@@ -1,18 +1,10 @@
 package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
-import org.cyk.utility.client.controller.component.grid.column.ColumnBuilder;
-import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.DataHelper;
 import org.cyk.utility.client.controller.data.RowData;
-import org.cyk.utility.field.FieldGetter;
-import org.cyk.utility.field.FieldTypeGetter;
-import org.cyk.utility.field.Fields;
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
-import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.string.Strings;
 
 public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends AbstractWindowContainerManagedWindowBuilderListDataImpl implements WindowContainerManagedWindowBuilderListDataDefault,Serializable {

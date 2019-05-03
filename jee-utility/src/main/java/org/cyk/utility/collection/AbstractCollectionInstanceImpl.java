@@ -123,7 +123,11 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 			isDoNotAddNull = Boolean.TRUE;
 		for(T index : collection)
 			if(index != null || Boolean.FALSE.equals(isDoNotAddNull))
-				__collection__.add(index);
+				____add____(__collection__,index);
+	}
+	
+	protected void ____add____(Collection<T> __collection__,T item) {
+		__collection__.add(item);
 	}
 
 	@Override
