@@ -16,6 +16,8 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	OUTPUT getOutput();
 	<T extends OUTPUT> T getOutputAs(Class<T> aClass);
 	
+	@Override Function<INPUT,OUTPUT> setParent(Object parent);
+	
 	Function<INPUT,OUTPUT> setProperties(Properties properties);
 	
 	Function<INPUT,OUTPUT> setIsExecutable(Boolean value);

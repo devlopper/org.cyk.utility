@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.string.StringHelper;
@@ -40,6 +41,11 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 	
 	protected void __executeQuery__(SystemAction action,PersistenceQuery persistenceQuery){
 		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
+	}
+	
+	@Override
+	protected LogLevel __getLogLevel__() {
+		return LogLevel.TRACE;
 	}
 	
 	@Override

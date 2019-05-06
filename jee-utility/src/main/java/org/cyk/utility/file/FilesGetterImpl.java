@@ -37,26 +37,89 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 								files.add(__inject__(FilesGetter.class).addDirectories(path.toString()).setIsFileChecksumComputable(isFileChecksumComputable)
 										.execute().getOutput());
 							}else {
-								FileBuilder fileBuilder = __inject__(FileBuilder.class).setPath(path.getParent().toString()).setName(path.getFileName().toString());
+								FileBuilder fileBuilder = __inject__(FileBuilder.class).setPath(path.getParent().toString()).setName(path.getFileName().toString())
+										.setSize(path.toFile().length());
+								
 								if(Boolean.TRUE.equals(isFileChecksumComputable)) {
 									try {
 										fileBuilder.setChecksum(new String(new DigestUtils(MessageDigestAlgorithms.SHA_1).digestAsHex(path.toFile())));
-									} catch (IOException exception) {
+									} catch (Exception exception) {
 										exception.printStackTrace();
 									}
 								}
 								files.add(fileBuilder.execute().getOutput());	
 							}
 						}
-					});;
+					});
 				} catch (IOException exception) {
 					exception.printStackTrace();
 				}
 			}
-		});;
+		});
 		return files;
 	}
+	
+	/*
+	@Override
+	protected Files __execute__() throws Exception {
+		Boolean isFilterByFileChecksum = __injectValueHelper__().defaultToIfNull(getIsFilterByFileChecksum(),Boolean.FALSE);
+		Files filesAll =  __inject__(Files.class);
+		Strings directories = __injectValueHelper__().returnOrThrowIfBlank("file directories", getDirectories());
+		Boolean isFileChecksumComputable = getIsFileChecksumComputable();
+		
+		//get all files
+		System.out.println("Getting all files");
+		directories.get().forEach(new Consumer<String>() {
+			@Override
+			public void accept(String directory) {
+				try {
+					java.nio.file.Files.newDirectoryStream(Paths.get(directory),path -> path.toFile().isDirectory() || path.toFile().isFile()).forEach(new Consumer<Path>() {
+						@Override
+						public void accept(Path path) {
+							if(Boolean.TRUE.equals(path.toFile().isDirectory())) {
+								filesAll.add(__inject__(FilesGetter.class).addDirectories(path.toString()).setParent(this).execute().getOutput());
+							}else {
+								FileBuilder fileBuilder = __inject__(FileBuilder.class).setPath(path.getParent().toString()).setName(path.getFileName().toString())
+										.setSize(path.toFile().length());
+								filesAll.add(fileBuilder.execute().getOutput());	
+							}
+						}
+					});
+				} catch (IOException exception) {
+					exception.printStackTrace();
+				}
+			}
+		});
+		
+		//compute checksum
+		Boolean isChecksumComputable = Boolean.TRUE.equals(isFileChecksumComputable) && getParent() == null && __injectCollectionHelper__().isNotEmpty(filesAll);
+		if(isChecksumComputable) {
+			System.out.println("Computing checksums");
+			filesAll.get().stream().forEach(new Consumer<File>() {
 
+				@Override
+				public void accept(File file) {
+					try {
+						file.setChecksum(new String(new DigestUtils(MessageDigestAlgorithms.SHA_1).digestAsHex(new java.io.File(file.getPathAndNameAndExtension()))));
+					} catch (Exception exception) {
+						exception.printStackTrace();
+					}
+				}
+			});
+		}
+		
+		//filter
+		Files files =  __inject__(Files.class);
+		if(isChecksumComputable) {
+			System.out.println("Filtering");
+			files.setIsDuplicateChecksumAllowed(Boolean.FALSE);
+		}
+		files.add(filesAll);
+		System.out.println(files.get());
+		return files;
+		
+	}
+	*/
 	@Override
 	public Strings getDirectories() {
 		return directories;

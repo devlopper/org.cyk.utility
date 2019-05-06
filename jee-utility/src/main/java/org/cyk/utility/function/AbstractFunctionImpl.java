@@ -89,7 +89,11 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	protected Log __injectLog__() {
 		return ____inject____(Log.class).setLevel(LogLevel.TRACE).setSourceClassName(StringUtils.substringBefore(getClass().getName(),ConstantCharacter.DOLLAR.toString()))
-				.setSourceMethodName("execute");
+				.setSourceMethodName("execute").setLevel(__getLogLevel__());
+	}
+	
+	protected LogLevel __getLogLevel__() {
+		return LogLevel.TRACE;
 	}
 	
 	@Override

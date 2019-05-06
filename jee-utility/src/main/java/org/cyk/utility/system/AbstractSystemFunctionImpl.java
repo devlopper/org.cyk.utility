@@ -79,8 +79,9 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		log.addMarkers(getSystemActor().getIdentifier().toString(),getSystemLayer().getIdentifier().toString());
 		SystemAction action = getAction();
 		//info action that might modify system state
-		if(action instanceof SystemActionCreate || action instanceof SystemActionUpdate || action instanceof SystemActionDelete)
+		/*if(action instanceof SystemActionCreate || action instanceof SystemActionUpdate || action instanceof SystemActionDelete)
 			log.setLevel(LogLevel.INFO);
+		*/
 		if(action!=null) {
 			log.addMarkers(action.getIdentifier().toString());
 			log.setSourceMethodName(log.getSourceMethodName()+ConstantCharacter.DOT+action.getIdentifier());
@@ -91,6 +92,15 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 			log.addMarkers(entityClass.getSimpleName());
 		}
 		return log;
+	}
+	
+	@Override
+	protected LogLevel __getLogLevel__() {
+		SystemAction action = getAction();
+		//info action that might modify system state
+		if(action instanceof SystemActionCreate || action instanceof SystemActionUpdate || action instanceof SystemActionDelete)
+			return LogLevel.INFO;
+		return super.__getLogLevel__();
 	}
 	
 	@Override

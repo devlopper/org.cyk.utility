@@ -37,6 +37,7 @@ public interface PersistenceServiceProvider<OBJECT> extends SystemServiceProvide
 	/* Count */
 	
 	PersistenceServiceProvider<OBJECT> clear();
+	PersistenceServiceProvider<OBJECT> flush();
 	
 	/**/
 	

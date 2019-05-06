@@ -17,5 +17,11 @@ public class PersistenceImpl extends AbstractPersistenceImpl implements Serializ
 		__inject__(EntityManager.class).clear();
 		return this;
 	}
+	
+	@Override
+	public PersistenceServiceProvider<Object> flush() {
+		__inject__(EntityManager.class).flush();
+		return this;
+	}
 
 }

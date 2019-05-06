@@ -37,6 +37,11 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	
 	protected abstract void __executeBusiness__();
 	
+	/*@Override
+	protected LogLevel __getLogLevel__() {
+		return LogLevel.INFO;
+	}*/
+	
 	protected ResponseBuilder __instanciateResponseBuilder__() {
 		return Response.noContent();
 	}

@@ -56,10 +56,12 @@ public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 				file.setBytes(IOUtils.toByteArray(inputStream));
 		}
 		
-		if(file.getSize() == null) {
+		Long size = getSize();
+		if(size == null) {
 			if(file.getBytes()!=null)
-				file.setSize(new Long(file.getBytes().length));
+				size = new Long(file.getBytes().length);
 		}
+		file.setSize(size);
 		
 		String checksum = getChecksum();
 		if(__injectStringHelper__().isBlank(checksum)) {

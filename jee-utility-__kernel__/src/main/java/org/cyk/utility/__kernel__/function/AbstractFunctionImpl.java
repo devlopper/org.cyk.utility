@@ -226,6 +226,12 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	public Function<INPUT,OUTPUT> setParent(Object parent) {
+		return (Function<INPUT, OUTPUT>) super.setParent(parent);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public Function<INPUT,OUTPUT> setProperties(Properties properties) {
 		return (Function<INPUT,OUTPUT>) super.setProperties(properties);
 	}
