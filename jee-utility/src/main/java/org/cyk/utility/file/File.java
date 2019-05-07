@@ -29,6 +29,7 @@ public interface File extends Objectable {
 	
 	String getChecksum();
 	File setChecksum(String checksum);
+	String computeChecksum();
 	
 	/**/
 	

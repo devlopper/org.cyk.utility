@@ -21,6 +21,7 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 	
 	@Override
 	protected Files __execute__() throws Exception {
+		/*
 		Boolean isFilterByFileChecksum = __injectValueHelper__().defaultToIfNull(getIsFilterByFileChecksum(),Boolean.FALSE);
 		Files files =  __inject__(Files.class).setIsDuplicateChecksumAllowed(!isFilterByFileChecksum);
 		Strings directories = __injectValueHelper__().returnOrThrowIfBlank("file directories", getDirectories());
@@ -56,6 +57,39 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 				}
 			}
 		});
+		return files;
+		*/
+		
+		
+		Files files =  __inject__(Files.class);
+		Strings directories = __injectValueHelper__().returnOrThrowIfBlank("file directories", getDirectories());
+		directories.get().forEach(new Consumer<String>() {
+			@Override
+			public void accept(String directory) {
+				try {
+					java.nio.file.Files.newDirectoryStream(Paths.get(directory),path -> path.toFile().isDirectory() || path.toFile().isFile()).forEach(new Consumer<Path>() {
+						@Override
+						public void accept(Path path) {
+							if(Boolean.TRUE.equals(path.toFile().isDirectory())) {
+								files.add(__inject__(FilesGetter.class).addDirectories(path.toString()).execute().getOutput());
+							}else {
+								FileBuilder fileBuilder = __inject__(FileBuilder.class).setPath(path.getParent().toString()).setName(path.getFileName().toString())
+										.setSize(path.toFile().length());
+								files.add(fileBuilder.execute().getOutput());	
+							}
+						}
+					});
+				} catch (IOException exception) {
+					exception.printStackTrace();
+				}
+			}
+		});
+		Boolean isFileChecksumComputable = getIsFileChecksumComputable();
+		if(Boolean.TRUE.equals(isFileChecksumComputable))
+			files.computeChecksum(Boolean.TRUE);
+		Boolean isFilterByFileChecksum = __injectValueHelper__().defaultToIfNull(getIsFilterByFileChecksum(),Boolean.FALSE);
+		if(Boolean.TRUE.equals(isFilterByFileChecksum))
+			files.removeDuplicateByChecksum();
 		return files;
 	}
 	

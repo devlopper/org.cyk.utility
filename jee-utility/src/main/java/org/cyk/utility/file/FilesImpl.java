@@ -2,9 +2,14 @@ package org.cyk.utility.file;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
+import org.cyk.utility.thread.ExecutorServiceBuilder;
 
 public class FilesImpl extends AbstractCollectionInstanceImpl<File> implements Files,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -29,5 +34,51 @@ public class FilesImpl extends AbstractCollectionInstanceImpl<File> implements F
 		this.isDuplicateChecksumAllowed = isDuplicateChecksumAllowed;
 		return this;
 	}
+	
+	@Override
+	public Files computeChecksum(Boolean isOverridable) {
+		if(collection!=null) {
+			/*
+			collection.stream().forEach(new Consumer<File>() {
+				@Override
+				public void accept(File file) {
+					if(file.getChecksum() == null || Boolean.TRUE.equals(isOverridable))
+						file.computeChecksum();
+				}
+			});
+			*/
+			
+			ExecutorServiceBuilder executorServiceBuilder = __inject__(ExecutorServiceBuilder.class);
+			executorServiceBuilder.setCorePoolSize(20).setMaximumPoolSize(100).setQueue(new ArrayBlockingQueue<Runnable>(collection.size()));
+			ExecutorService executorService = executorServiceBuilder.execute().getOutput();
+			collection.stream().forEach(new Consumer<File>() {
+				@Override
+				public void accept(File file) {
+					if(file.getChecksum() == null || Boolean.TRUE.equals(isOverridable))
+						executorService.execute(new Runnable() {
+							@Override
+							public void run() {
+								file.computeChecksum();
+							}
+						});				
+				}
+			});
+			executorService.shutdown();
+			try {
+				executorService.awaitTermination(1, TimeUnit.MINUTES);
+			} catch (InterruptedException exception) {
+				exception.printStackTrace();
+			}
+		}
+		return this;
+	}
+	
+	@Override
+	public Files removeDuplicateByChecksum() {
+		computeChecksum(Boolean.FALSE);
+		removeDuplicate(File::getChecksum);
+		return this;
+	}
+	
 	
 }

@@ -7,4 +7,6 @@ public interface Files extends CollectionInstance<File> {
 	Boolean getIsDuplicateChecksumAllowed();
 	Files setIsDuplicateChecksumAllowed(Boolean isDuplicateChecksumAllowed);
 	
+	Files computeChecksum(Boolean isOverridable);
+	Files removeDuplicateByChecksum();
 }

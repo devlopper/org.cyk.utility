@@ -1,7 +1,17 @@
 package org.cyk.utility.file;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.codec.digest.MessageDigestAlgorithms;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
@@ -105,6 +115,59 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	public File setChecksum(String checksum) {
 		this.checksum = checksum;
 		return this;
+	}
+	
+	@Override
+	public String computeChecksum() {
+		String checksum = null;
+		/*
+		try {
+			checksum = new DigestUtils(MessageDigestAlgorithms.SHA_1).digestAsHex(new java.io.File(getPathAndNameAndExtension()));
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		*/
+		
+		try {
+			checksum = calcSHA1(new java.io.File(getPathAndNameAndExtension()));
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		
+		setChecksum(checksum);
+		return checksum;
+	}
+	
+	/**
+	 * Read the file and calculate the SHA-1 checksum
+	 * 
+	 * @param file
+	 *            the file to read
+	 * @return the hex representation of the SHA-1 using uppercase chars
+	 * @throws FileNotFoundException
+	 *             if the file does not exist, is a directory rather than a
+	 *             regular file, or for some other reason cannot be opened for
+	 *             reading
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 * @throws NoSuchAlgorithmException
+	 *             should never happen
+	 */
+	private static String calcSHA1(java.io.File file) throws FileNotFoundException, IOException, NoSuchAlgorithmException {
+
+	    MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
+	    try (InputStream input = new FileInputStream(file)) {
+
+	        byte[] buffer = new byte[8192];
+	        int len = input.read(buffer);
+
+	        while (len != -1) {
+	            sha1.update(buffer, 0, len);
+	            len = input.read(buffer);
+	        }
+
+	        return new HexBinaryAdapter().marshal(sha1.digest());
+	    }
 	}
 	
 	@Override

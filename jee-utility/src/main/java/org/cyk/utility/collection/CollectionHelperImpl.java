@@ -8,6 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.inject.Singleton;
@@ -18,6 +19,8 @@ import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueHelper;
+
+import one.util.streamex.StreamEx;
 
 @Singleton
 public class CollectionHelperImpl extends AbstractHelper implements CollectionHelper,Serializable {
@@ -262,5 +265,10 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	@Override
 	public <ELEMENT> Collection<ELEMENT> removeNullValue(Collection<ELEMENT> collection) {
 		return collection == null ? null : collection.parallelStream().filter(Objects::nonNull).collect(Collectors.toList());
+	}
+	
+	@Override
+	public <ELEMENT> Collection<ELEMENT> removeDuplicate(Collection<ELEMENT> collection,Function<? super ELEMENT, ?> function) {
+		return StreamEx.of(collection).distinct(function).toList();
 	}
 }

@@ -39,4 +39,6 @@ public interface CollectionHelper extends Helper {
 	Boolean contains(CollectionInstance<?> collectionInstance,Object element);
 	
 	<ELEMENT> Collection<ELEMENT> removeNullValue(Collection<ELEMENT> collection);
+	
+	<ELEMENT> Collection<ELEMENT> removeDuplicate(Collection<ELEMENT> collection,java.util.function.Function<? super ELEMENT, ?> function);
 }

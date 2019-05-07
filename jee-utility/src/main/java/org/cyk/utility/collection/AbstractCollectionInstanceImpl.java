@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
@@ -238,6 +239,12 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	public CollectionInstance<T> removeAll() {
 		if(collection!=null)
 			collection.clear();
+		return this;
+	}
+	
+	@Override
+	public CollectionInstance<T> removeDuplicate(Function<? super T, ?> function) {
+		collection = __inject__(CollectionHelper.class).removeDuplicate(collection, function);
 		return this;
 	}
 	
