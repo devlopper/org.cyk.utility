@@ -10,4 +10,6 @@ public interface FileHelper extends Helper {
 	String getMimeTypeByExtension(String extension);
 	
 	String concatenateNameAndExtension(String name,String extension);
+	
+	byte[] getBytes(java.io.File file);
 }

@@ -1,23 +1,16 @@
 package org.cyk.utility.file;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.function.Consumer;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.codec.digest.MessageDigestAlgorithms;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.string.Strings;
 
 public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Files> implements FilesGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Strings directories;
-	private Boolean isFileChecksumComputable,isFilterByFileChecksum;
+	private PathsGetter pathsGetter;
+	private Boolean isFileChecksumComputable,isFilterByFileChecksum,isFileBytesComputable;
 	
 	@Override
 	protected Files __execute__() throws Exception {
@@ -60,14 +53,49 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		return files;
 		*/
 		
+		PathsGetter pathsGetter = __injectValueHelper__().returnOrThrowIfBlank("files getter paths getter", getPathsGetter());
+		Files files = __inject__(Files.class);
+		//get files paths
+		Paths paths = pathsGetter.execute().getOutput();
+		//build files
+		if(__injectCollectionHelper__().isNotEmpty(paths)) {
+			
+			paths.get().forEach(new Consumer<Path>() {
+				@Override
+				public void accept(Path path) {
+					FileBuilder fileBuilder = __inject__(FileBuilder.class).setPath(path.getParent().toString()).setName(path.getFileName().toString())
+							.setSize(path.toFile().length());
+					files.add(fileBuilder.execute().getOutput());				
+				}
+			});
+			
+			//compute files bytes
+			Boolean isFileBytesComputable = getIsFileBytesComputable();
+			if(Boolean.TRUE.equals(isFileBytesComputable)) {
+				files.computeBytes(Boolean.TRUE);
+			}
+			
+			//compute files checksums
+			Boolean isFileChecksumComputable = getIsFileChecksumComputable();
+			if(Boolean.TRUE.equals(isFileChecksumComputable))
+				files.computeChecksum(Boolean.TRUE);
+			
+			//filter files by checksum
+			Boolean isFilterByFileChecksum = __injectValueHelper__().defaultToIfNull(getIsFilterByFileChecksum(),Boolean.FALSE);
+			if(Boolean.TRUE.equals(isFilterByFileChecksum))
+				files.removeDuplicateByChecksum();
+		}
 		
+		return files;
+		
+		/*
 		Files files =  __inject__(Files.class);
 		Strings directories = __injectValueHelper__().returnOrThrowIfBlank("file directories", getDirectories());
 		directories.get().forEach(new Consumer<String>() {
 			@Override
 			public void accept(String directory) {
 				try {
-					java.nio.file.Files.newDirectoryStream(Paths.get(directory),path -> path.toFile().isDirectory() || path.toFile().isFile()).forEach(new Consumer<Path>() {
+					java.nio.file.Files.newDirectoryStream(java.nio.file.Paths.get(directory),path -> path.toFile().isDirectory() || path.toFile().isFile()).forEach(new Consumer<Path>() {
 						@Override
 						public void accept(Path path) {
 							if(Boolean.TRUE.equals(path.toFile().isDirectory())) {
@@ -91,6 +119,7 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		if(Boolean.TRUE.equals(isFilterByFileChecksum))
 			files.removeDuplicateByChecksum();
 		return files;
+		*/
 	}
 	
 	/*
@@ -154,56 +183,21 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		
 	}
 	*/
+	
 	@Override
-	public Strings getDirectories() {
-		return directories;
-	}
-
-	@Override
-	public Strings getDirectories(Boolean injectIfNull) {
-		return (Strings) __getInjectIfNull__(FIELD_DIRECTORIES, injectIfNull);
-	}
-
-	@Override
-	public FilesGetter setDirectories(Strings directories) {
-		this.directories = directories;
-		return this;
-	}
-
-	@Override
-	public FilesGetter addDirectories(Collection<String> directories) {
-		getDirectories(Boolean.TRUE).add(directories);
-		return this;
-	}
-
-	@Override
-	public FilesGetter addDirectories(String... directories) {
-		getDirectories(Boolean.TRUE).add(directories);
-		return this;
+	public PathsGetter getPathsGetter() {
+		return pathsGetter;
 	}
 	
 	@Override
-	public FilesGetter addDirectories(Strings directories) {
-		getDirectories(Boolean.TRUE).add(directories);
-		return this;
+	public PathsGetter getPathsGetter(Boolean injectIfNull) {
+		return ((PathsGetter) __getInjectIfNull__(FIELD_PATHS_GETTER, injectIfNull)).setIsDirectoryGettable(Boolean.FALSE).setIsFileGettable(Boolean.TRUE);
 	}
 	
 	@Override
-	public FilesGetter addDirectoriesByJavaFiles(Collection<java.io.File> files) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(files))
-			files.forEach(new Consumer<java.io.File>() {
-				@Override
-				public void accept(java.io.File file) {
-					if(file.isDirectory())
-						addDirectories(file.getPath());
-				}
-			});
+	public FilesGetter setPathsGetter(PathsGetter pathsGetter) {
+		this.pathsGetter = pathsGetter;
 		return this;
-	}
-	
-	@Override
-	public FilesGetter addDirectoriesByJavaFiles(java.io.File... files) {
-		return addDirectoriesByJavaFiles(__inject__(CollectionHelper.class).instanciate(files));
 	}
 	
 	@Override
@@ -228,6 +222,17 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		return this;
 	}
 	
-	public static final String FIELD_DIRECTORIES = "directories";
+	@Override
+	public FilesGetter setIsFileBytesComputable(Boolean isFileBytesComputable) {
+		this.isFileBytesComputable = isFileBytesComputable;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsFileBytesComputable() {
+		return isFileBytesComputable;
+	}
+	
+	public static final String FIELD_PATHS_GETTER = "pathsGetter";
 	
 }

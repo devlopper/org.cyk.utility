@@ -1,20 +1,14 @@
 package org.cyk.utility.file;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.codec.digest.MessageDigestAlgorithms;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.byte_.HashFunction;
 import org.cyk.utility.string.StringHelper;
 
 public class FileImpl extends AbstractObject implements File,Serializable {
@@ -38,6 +32,36 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 	public File setBytes(byte[] bytes) {
 		this.bytes = bytes;
 		return this;
+	}
+	
+	@Override
+	public byte[] computeBytes() {
+		String pathAndNameAndExtension = getPathAndNameAndExtension();
+		byte[] buffer = new byte[1024 * 8];
+		byte[] bytes = null;
+		try {
+			try (InputStream inputStream = java.nio.file.Files.newInputStream(java.nio.file.Paths.get(pathAndNameAndExtension))) {
+		        int numberOfBytesRead = inputStream.read(buffer);
+		        if(numberOfBytesRead > -1) {
+		        	if (numberOfBytesRead < buffer.length) {
+			        	bytes = Arrays.copyOf(buffer, numberOfBytesRead);
+			        }else {
+			        	ByteArrayOutputStream outputStream = new ByteArrayOutputStream(1024 * 16);
+				        while (numberOfBytesRead != -1) {
+				        	outputStream.write(buffer, 0, numberOfBytesRead);
+				        	numberOfBytesRead = inputStream.read(buffer);
+				        }
+				        bytes = outputStream.toByteArray();
+				        outputStream.close();
+			        }	
+		        }		        
+		    }
+		    buffer = null;    
+		} catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	    setBytes(bytes);
+		return bytes;
 	}
 
 	@Override
@@ -127,47 +151,23 @@ public class FileImpl extends AbstractObject implements File,Serializable {
 			exception.printStackTrace();
 		}
 		*/
-		
+		/*
 		try {
 			checksum = calcSHA1(new java.io.File(getPathAndNameAndExtension()));
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
-		
+		*/
+		byte[] bytes = getBytes();
+		if(bytes == null) {
+			String pathAndNameAndExtension = getPathAndNameAndExtension();
+			if(__inject__(StringHelper.class).isNotBlank(pathAndNameAndExtension))
+				bytes = __inject__(FileHelper.class).getBytes(new java.io.File(pathAndNameAndExtension));
+		}
+		if(bytes != null)
+			checksum = __inject__(HashFunction.class).setBytes(bytes).setAlgorithm("SHA-1").execute().getOutput();
 		setChecksum(checksum);
 		return checksum;
-	}
-	
-	/**
-	 * Read the file and calculate the SHA-1 checksum
-	 * 
-	 * @param file
-	 *            the file to read
-	 * @return the hex representation of the SHA-1 using uppercase chars
-	 * @throws FileNotFoundException
-	 *             if the file does not exist, is a directory rather than a
-	 *             regular file, or for some other reason cannot be opened for
-	 *             reading
-	 * @throws IOException
-	 *             if an I/O error occurs
-	 * @throws NoSuchAlgorithmException
-	 *             should never happen
-	 */
-	private static String calcSHA1(java.io.File file) throws FileNotFoundException, IOException, NoSuchAlgorithmException {
-
-	    MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
-	    try (InputStream input = new FileInputStream(file)) {
-
-	        byte[] buffer = new byte[8192];
-	        int len = input.read(buffer);
-
-	        while (len != -1) {
-	            sha1.update(buffer, 0, len);
-	            len = input.read(buffer);
-	        }
-
-	        return new HexBinaryAdapter().marshal(sha1.digest());
-	    }
 	}
 	
 	@Override

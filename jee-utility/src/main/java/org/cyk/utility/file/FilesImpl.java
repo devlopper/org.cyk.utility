@@ -36,6 +36,34 @@ public class FilesImpl extends AbstractCollectionInstanceImpl<File> implements F
 	}
 	
 	@Override
+	public Files computeBytes(Boolean isOverridable) {
+		if(collection!=null) {
+			ExecutorServiceBuilder executorServiceBuilder = __inject__(ExecutorServiceBuilder.class);
+			executorServiceBuilder.setCorePoolSize(20).setMaximumPoolSize(100).setQueue(new ArrayBlockingQueue<Runnable>(collection.size()));
+			ExecutorService executorService = executorServiceBuilder.execute().getOutput();
+			collection.stream().forEach(new Consumer<File>() {
+				@Override
+				public void accept(File file) {
+					if(file.getChecksum() == null || Boolean.TRUE.equals(isOverridable))
+						executorService.execute(new Runnable() {
+							@Override
+							public void run() {
+								file.computeBytes();
+							}
+						});				
+				}
+			});
+			executorService.shutdown();
+			try {
+				executorService.awaitTermination(1, TimeUnit.MINUTES);
+			} catch (InterruptedException exception) {
+				exception.printStackTrace();
+			}
+		}
+		return this;
+	}
+	
+	@Override
 	public Files computeChecksum(Boolean isOverridable) {
 		if(collection!=null) {
 			/*

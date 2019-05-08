@@ -1,11 +1,13 @@
 package org.cyk.utility.__kernel__.object;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.enterprise.util.AnnotationLiteral;
 
+import org.apache.commons.io.IOUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.KernelHelper;
 
@@ -70,6 +72,16 @@ public abstract class AbstractObject implements Objectable,Serializable {
 	
 	protected static KernelHelper __injectKernelHelper__() {
 		return __inject__(KernelHelper.class);
+	}
+	
+	/**/
+	
+	protected byte[] __getResourceAsBytes__(String name) {
+		try {
+			return IOUtils.toByteArray(getClass().getResourceAsStream(name));
+		} catch (IOException exception) {
+			throw new RuntimeException(exception);
+		}
 	}
 	
 	/* Logging */

@@ -23,6 +23,7 @@ public interface File extends Objectable {
 	
 	byte[] getBytes();
 	File setBytes(byte[] bytes);
+	byte[] computeBytes();
 	
 	String getUniformResourceLocator();
 	File setUniformResourceLocator(String uniformResourceLocator);
