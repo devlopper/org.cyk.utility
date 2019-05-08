@@ -10,6 +10,7 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 	private static final long serialVersionUID = 1L;
 
 	private PathsGetter pathsGetter;
+	private Paths paths;
 	private Boolean isFileChecksumComputable,isFilterByFileChecksum,isFileBytesComputable;
 	
 	@Override
@@ -53,13 +54,15 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		return files;
 		*/
 		
-		PathsGetter pathsGetter = __injectValueHelper__().returnOrThrowIfBlank("files getter paths getter", getPathsGetter());
-		Files files = __inject__(Files.class);
 		//get files paths
-		Paths paths = pathsGetter.execute().getOutput();
+		Paths paths = getPaths();
+		if(paths == null) {
+			PathsGetter pathsGetter = __injectValueHelper__().returnOrThrowIfBlank("files getter paths getter", getPathsGetter());
+			paths = pathsGetter.execute().getOutput();
+		}
+		Files files = __inject__(Files.class);
 		//build files
-		if(__injectCollectionHelper__().isNotEmpty(paths)) {
-			
+		if(__injectCollectionHelper__().isNotEmpty(paths)) {			
 			paths.get().forEach(new Consumer<Path>() {
 				@Override
 				public void accept(Path path) {
@@ -201,6 +204,22 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 	}
 	
 	@Override
+	public Paths getPaths() {
+		return paths;
+	}
+	
+	@Override
+	public Paths getPaths(Boolean injectIfNull) {
+		return ((Paths) __getInjectIfNull__(FIELD_PATHS, injectIfNull));
+	}
+	
+	@Override
+	public FilesGetter setPaths(Paths paths) {
+		this.paths = paths;
+		return this;
+	}
+	
+	@Override
 	public Boolean getIsFileChecksumComputable() {
 		return isFileChecksumComputable;
 	}
@@ -233,6 +252,9 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		return isFileBytesComputable;
 	}
 	
+	/**/
+	
+	public static final String FIELD_PATHS = "paths";
 	public static final String FIELD_PATHS_GETTER = "pathsGetter";
 	
 }

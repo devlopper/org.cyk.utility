@@ -2,6 +2,9 @@ package org.cyk.utility.file;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.nio.file.Path;
+import java.util.List;
+
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
@@ -103,14 +106,38 @@ public class FilesGetterUnitTest extends AbstractArquillianUnitTestWithDefaultDe
 		String directory = System.getProperty("org.cyk.utility.file.FilesGetterUnitTest.performance.directory");
 		if(__inject__(StringHelper.class).isNotBlank(directory)) {
 			System.out.println("Performance(Compute checksum) testing with directory : "+directory);
+			Paths paths = __inject__(PathsGetter.class).addDirectories(directory).setIsDirectoryGettable(Boolean.FALSE).setIsFileGettable(Boolean.TRUE).execute().getOutput();
+			System.out.println("Number of files : "+paths.getSize());
+			Integer batchSize = 500;
+			Integer numberOfPages = paths.getSize() / batchSize + (paths.getSize() % batchSize == 0 ? 0 : 1);
+			System.out.println("Page size : "+batchSize+" , number of pages : "+numberOfPages);
+			for(Integer index = 0; index < numberOfPages; index = index + 1) {
+				Integer from = index * batchSize;
+				Integer to = from + batchSize - 1;
+				if(to>paths.getSize())
+					to = paths.getSize()-1;
+				System.out.println("Page from "+from+" to "+to);
+				FilesGetter filesGetter = __inject__(FilesGetter.class);
+				filesGetter.getPaths(Boolean.TRUE).add( ((List<Path>)paths.get()).subList(from, to+1) );
+				filesGetter.setIsFileChecksumComputable(Boolean.TRUE).setIsFilterByFileChecksum(Boolean.TRUE).setIsFileBytesComputable(Boolean.TRUE);
+				Files files = filesGetter.execute().getOutput();
+				
+				assertThat(files).withFailMessage("No file found").isNotNull();
+				assertThat(files.get()).withFailMessage("No file found").isNotEmpty();
+				assertThat(files.getFirst().getBytes()).withFailMessage("Bytes not found").isNotNull();
+				System.out.println("Number of file read for performance testing : "+__inject__(CollectionHelper.class).getSize(files));
+			}
+			/*
 			FilesGetter filesGetter = __inject__(FilesGetter.class);
-			filesGetter.getPathsGetter(Boolean.TRUE).addDirectories(directory).setMaximalNumberOfPath(800);
-			filesGetter.setIsFileChecksumComputable(Boolean.TRUE).setIsFilterByFileChecksum(Boolean.TRUE).setIsFileBytesComputable(Boolean.TRUE);
+			filesGetter.getPathsGetter(Boolean.TRUE).addDirectories(directory);
+			//filesGetter.setIsFileChecksumComputable(Boolean.TRUE).setIsFilterByFileChecksum(Boolean.TRUE).setIsFileBytesComputable(Boolean.TRUE);
 			Files files = filesGetter.execute().getOutput();
+			
 			assertThat(files).withFailMessage("No file found").isNotNull();
 			assertThat(files.get()).withFailMessage("No file found").isNotEmpty();
 			assertThat(files.getFirst().getBytes()).withFailMessage("Bytes not found").isNotNull();
 			System.out.println("Number of file read for performance testing : "+__inject__(CollectionHelper.class).getSize(files));
+			*/
 		}else {
 			System.out.println("No performance testing done for FilesGetter");
 		}

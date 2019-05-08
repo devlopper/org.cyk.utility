@@ -8,6 +8,10 @@ public interface FilesGetter extends FunctionWithPropertiesAsInput<Files> {
 	PathsGetter getPathsGetter(Boolean injectIfNull);
 	FilesGetter setPathsGetter(PathsGetter pathsGetter);
 	
+	Paths getPaths();
+	Paths getPaths(Boolean injectIfNull);
+	FilesGetter setPaths(Paths paths);
+	
 	Boolean getIsFileBytesComputable();
 	FilesGetter setIsFileBytesComputable(Boolean isFileBytesComputable);
 	
