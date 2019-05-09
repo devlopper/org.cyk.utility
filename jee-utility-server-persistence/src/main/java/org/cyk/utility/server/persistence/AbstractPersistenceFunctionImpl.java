@@ -17,6 +17,7 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 	private static final long serialVersionUID = 1L;
 
 	private Long queryFirstTupleIndex,queryNumberOfTuple;
+	private Boolean isQueryResultPaginated;
 	
 	@Override
 	protected final void __execute__(SystemAction action) {
@@ -128,6 +129,17 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 		return this;
 	}
 
+	@Override
+	public Boolean getIsQueryResultPaginated() {
+		return isQueryResultPaginated;
+	}
+	
+	@Override
+	public PersistenceFunction setIsQueryResultPaginated(Boolean isQueryResultPaginated) {
+		this.isQueryResultPaginated = isQueryResultPaginated;
+		return this;
+	}
+	
 	@Override
 	public Long getQueryFirstTupleIndex() {
 		return queryFirstTupleIndex;

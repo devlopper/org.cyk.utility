@@ -23,6 +23,9 @@ public interface PersistenceFunction extends SystemFunctionServer {
 	PersistenceFunction setQueryResultClass(Class<?> aClass);
 	Class<?> getQueryResultClass();
 	
+	Boolean getIsQueryResultPaginated();
+	PersistenceFunction setIsQueryResultPaginated(Boolean isQueryResultPaginated);
+	
 	Long getQueryFirstTupleIndex();
 	PersistenceFunction setQueryFirstTupleIndex(Long queryFirstTupleIndex);
 	

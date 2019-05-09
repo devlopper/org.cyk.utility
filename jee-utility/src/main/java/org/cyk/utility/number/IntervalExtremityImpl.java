@@ -2,6 +2,7 @@ package org.cyk.utility.number;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.constant.ConstantString;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.throwable.ThrowableHelper;
 
@@ -37,10 +38,19 @@ public class IntervalExtremityImpl extends AbstractObject implements IntervalExt
 	public <T extends Number> T getPreparedValueAs(Class<T> aClass) {
 		Number value = getValue();
 		T result = null;
-		if(Integer.class.equals(aClass))
-			result = (T) new Integer(value.intValue());
-		else
-			__inject__(ThrowableHelper.class).throwRuntimeException(getClass()+" : get prepared value as "+aClass+" not yet handled");
+		if(value !=null ) {
+			if(Integer.class.equals(aClass))
+				result = (T) new Integer(value.intValue());
+			else if(Double.class.equals(aClass))
+				result = (T) new Double(value.doubleValue());
+			else
+				__inject__(ThrowableHelper.class).throwRuntimeException(getClass()+" : get prepared value as "+aClass+" not yet handled");
+		}
 		return result;
+	}
+	
+	@Override
+	public String toString() {
+		return value == null ? ConstantString.INFINITE : value.toString();
 	}
 }

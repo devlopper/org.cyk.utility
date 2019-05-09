@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
@@ -250,7 +251,7 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	
 	@Override
 	public String toString() {
-		return collection == null ? super.toString() : collection.toString();
+		return collection == null ? ConstantEmpty.STRING : collection.toString();
 	}
 	
 	public static final String FIELD_COLLECTION = "collection";

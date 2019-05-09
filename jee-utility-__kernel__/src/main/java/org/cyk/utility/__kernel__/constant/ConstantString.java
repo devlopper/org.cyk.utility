@@ -30,6 +30,7 @@ public interface ConstantString {
 		
 	String IMPL = "Impl";
 	
+	String INFINITE = "infini";
 	String MANY = "many";
 	String COLLECTION = "collection";
 	String ALL = "all";
@@ -46,6 +47,11 @@ public interface ConstantString {
 	String UPLOAD = "upload";
 	String DOWNLOAD = "download";
 	String DIRECTORY = "directory";
+	String EXTENSION = "extension";
+	String INTERVAL = "interval";
+	String BATCH = "batch";
+	String SIZE = "size";
+	String BATCH_SIZE = BATCH+SIZE;
 	String DIRECTORIES = "directories";
 	String FILENAME = "filename";
 	String IS = "is";

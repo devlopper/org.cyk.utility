@@ -4538,7 +4538,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getIsQueryResultPaginated() {
+		return get(IS_QUERY_RESULT_PAGINATED);
+	}
+
+	public Properties setIsQueryResultPaginated(Object isQueryResultPaginated) {
+		set(IS_QUERY_RESULT_PAGINATED, isQueryResultPaginated);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String IS_QUERY_RESULT_PAGINATED = "IS_QUERY_RESULT_PAGINATED";
 	public static final String QUERY_FIRST_TUPLE_INDEX = "QUERY_FIRST_TUPLE_INDEX";
 	public static final String QUERY_NUMBER_OF_TUPLE = "QUERY_NUMBER_OF_TUPLE";
 	public static final String THREAD = "THREAD";

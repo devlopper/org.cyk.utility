@@ -16,6 +16,7 @@ import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
+import org.cyk.utility.type.BooleanHelper;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
@@ -222,6 +223,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected PersistenceFunctionReader __getReader__(Properties properties,Object...parameters) {
 		PersistenceFunctionReader reader = __getFunction__(PersistenceFunctionReader.class, parameters);
+		reader.setIsQueryResultPaginated(__inject__(BooleanHelper.class).get(Properties.getFromPath(properties, Properties.IS_QUERY_RESULT_PAGINATED)));
 		reader.setQueryFirstTupleIndex(__injectNumberHelper__().getLong(Properties.getFromPath(properties, Properties.QUERY_FIRST_TUPLE_INDEX)));
 		reader.setQueryNumberOfTuple(__injectNumberHelper__().getLong(Properties.getFromPath(properties, Properties.QUERY_NUMBER_OF_TUPLE)));
 		return reader;

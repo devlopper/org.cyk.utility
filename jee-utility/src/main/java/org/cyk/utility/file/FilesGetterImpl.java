@@ -2,58 +2,25 @@ package org.cyk.utility.file;
 
 import java.io.Serializable;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.number.Interval;
+import org.cyk.utility.number.Intervals;
+import org.cyk.utility.string.Strings;
 
 public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Files> implements FilesGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private PathsGetter pathsGetter;
 	private Paths paths;
+	private Strings fileExtensions;
+	private Intervals fileSizeIntervals;
 	private Boolean isFileChecksumComputable,isFilterByFileChecksum,isFileBytesComputable;
 	
 	@Override
 	protected Files __execute__() throws Exception {
-		/*
-		Boolean isFilterByFileChecksum = __injectValueHelper__().defaultToIfNull(getIsFilterByFileChecksum(),Boolean.FALSE);
-		Files files =  __inject__(Files.class).setIsDuplicateChecksumAllowed(!isFilterByFileChecksum);
-		Strings directories = __injectValueHelper__().returnOrThrowIfBlank("file directories", getDirectories());
-		Boolean isFileChecksumComputable = getIsFileChecksumComputable();
-		
-		directories.get().forEach(new Consumer<String>() {
-			@Override
-			public void accept(String directory) {
-				try {
-					java.nio.file.Files.newDirectoryStream(Paths.get(directory),path -> path.toFile().isDirectory() || path.toFile().isFile()).forEach(new Consumer<Path>() {
-						@Override
-						public void accept(Path path) {
-							if(Boolean.TRUE.equals(path.toFile().isDirectory())) {
-								files.add(__inject__(FilesGetter.class).addDirectories(path.toString()).setIsFileChecksumComputable(isFileChecksumComputable)
-										.execute().getOutput());
-							}else {
-								FileBuilder fileBuilder = __inject__(FileBuilder.class).setPath(path.getParent().toString()).setName(path.getFileName().toString())
-										.setSize(path.toFile().length());
-								
-								if(Boolean.TRUE.equals(isFileChecksumComputable)) {
-									try {
-										fileBuilder.setChecksum(new String(new DigestUtils(MessageDigestAlgorithms.SHA_1).digestAsHex(path.toFile())));
-									} catch (Exception exception) {
-										exception.printStackTrace();
-									}
-								}
-								files.add(fileBuilder.execute().getOutput());	
-							}
-						}
-					});
-				} catch (IOException exception) {
-					exception.printStackTrace();
-				}
-			}
-		});
-		return files;
-		*/
-		
 		//get files paths
 		Paths paths = getPaths();
 		if(paths == null) {
@@ -61,14 +28,25 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 			paths = pathsGetter.execute().getOutput();
 		}
 		Files files = __inject__(Files.class);
+		Strings fileExtensions = getFileExtensions();
+		Intervals fileSizeIntervals = getFileSizeIntervals();
 		//build files
 		if(__injectCollectionHelper__().isNotEmpty(paths)) {			
 			paths.get().forEach(new Consumer<Path>() {
 				@Override
 				public void accept(Path path) {
-					FileBuilder fileBuilder = __inject__(FileBuilder.class).setPath(path.getParent().toString()).setName(path.getFileName().toString())
-							.setSize(path.toFile().length());
-					files.add(fileBuilder.execute().getOutput());				
+					java.io.File javaFile = path.toFile();
+					Boolean isAddable = Boolean.TRUE;
+					if(Boolean.TRUE.equals(isAddable) && __injectCollectionHelper__().isNotEmpty(fileExtensions))
+						isAddable = __injectCollectionHelper__().contains(fileExtensions, __inject__(FileHelper.class).getExtension(javaFile.getName()).toLowerCase());
+					if(Boolean.TRUE.equals(isAddable) && __injectCollectionHelper__().isNotEmpty(fileSizeIntervals))
+						isAddable = fileSizeIntervals.contains(javaFile.length());
+					
+					if(Boolean.TRUE.equals(isAddable)) {
+						FileBuilder fileBuilder = __inject__(FileBuilder.class).setPath(path.getParent().toString()).setName(path.getFileName().toString())
+								.setSize(path.toFile().length());
+						files.add(fileBuilder.execute().getOutput());		
+					}
 				}
 			});
 			
@@ -252,9 +230,67 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 		return isFileBytesComputable;
 	}
 	
+	@Override
+	public Strings getFileExtensions() {
+		return fileExtensions;
+	}
+	
+	@Override
+	public Strings getFileExtensions(Boolean injectIfNull) {
+		return (Strings) __getInjectIfNull__(FIELD_FILE_EXTENSIONS, injectIfNull);
+	}
+	
+	@Override
+	public FilesGetter setFileExtensions(Strings fileExtensions) {
+		this.fileExtensions = fileExtensions;
+		return this;
+	}
+	
+	@Override
+	public FilesGetter addFileExtensions(Collection<String> fileExtensions) {
+		getFileExtensions(Boolean.TRUE).add(fileExtensions);
+		return this;
+	}
+	
+	@Override
+	public FilesGetter addFileExtensions(String... fileExtensions) {
+		getFileExtensions(Boolean.TRUE).add(fileExtensions);
+		return this;
+	}
+	
+	@Override
+	public Intervals getFileSizeIntervals() {
+		return fileSizeIntervals;
+	}
+	
+	@Override
+	public Intervals getFileSizeIntervals(Boolean injectIfNull) {
+		return (Intervals) __getInjectIfNull__(FIELD_FILE_SIZE_INTERVALS, injectIfNull);
+	}
+	
+	@Override
+	public FilesGetter setFileSizeIntervals(Intervals fileSizeIntervals) {
+		this.fileSizeIntervals = fileSizeIntervals;
+		return this;
+	}
+	
+	@Override
+	public FilesGetter addFileSizeIntervals(Collection<Interval> fileSizeIntervals) {
+		getFileSizeIntervals(Boolean.TRUE).add(fileSizeIntervals);
+		return this;
+	}
+	
+	@Override
+	public FilesGetter addFileSizeIntervals(Interval... fileSizeIntervals) {
+		getFileSizeIntervals(Boolean.TRUE).add(fileSizeIntervals);
+		return this;
+	}
+	
 	/**/
 	
 	public static final String FIELD_PATHS = "paths";
 	public static final String FIELD_PATHS_GETTER = "pathsGetter";
+	public static final String FIELD_FILE_EXTENSIONS = "fileExtensions";
+	public static final String FIELD_FILE_SIZE_INTERVALS = "fileSizeIntervals";
 	
 }

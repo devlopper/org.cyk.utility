@@ -69,11 +69,19 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 				typedQuery.setParameter(entry.getKey().toString(), entry.getValue());
 		
 		//Paging
+		Boolean isQueryResultPaginated = getIsQueryResultPaginated();
+		
 		Long queryFirstTupleIndex = getQueryFirstTupleIndex();
+		if(queryFirstTupleIndex == null && Boolean.TRUE.equals(isQueryResultPaginated)) {
+			queryFirstTupleIndex = 0l;
+		}
 		if(queryFirstTupleIndex!=null)
 			typedQuery.setFirstResult(queryFirstTupleIndex.intValue());
 		
 		Long queryNumberOfTuple = getQueryNumberOfTuple();
+		if(queryNumberOfTuple == null && Boolean.TRUE.equals(isQueryResultPaginated)) {
+			queryNumberOfTuple = 5l;
+		}
 		if(queryNumberOfTuple!=null)
 			typedQuery.setMaxResults(queryNumberOfTuple.intValue());
 		

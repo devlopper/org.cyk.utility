@@ -1,6 +1,11 @@
 package org.cyk.utility.file;
 
+import java.util.Collection;
+
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
+import org.cyk.utility.number.Interval;
+import org.cyk.utility.number.Intervals;
+import org.cyk.utility.string.Strings;
 
 public interface FilesGetter extends FunctionWithPropertiesAsInput<Files> {
 
@@ -21,6 +26,17 @@ public interface FilesGetter extends FunctionWithPropertiesAsInput<Files> {
 	Boolean getIsFilterByFileChecksum();
 	FilesGetter setIsFilterByFileChecksum(Boolean isFilterByFileChecksum);
 	
+	Strings getFileExtensions();
+	Strings getFileExtensions(Boolean injectIfNull);
+	FilesGetter setFileExtensions(Strings fileExtensions);
+	FilesGetter addFileExtensions(Collection<String> fileExtensions);
+	FilesGetter addFileExtensions(String...fileExtensions);
+	
+	Intervals getFileSizeIntervals();
+	Intervals getFileSizeIntervals(Boolean injectIfNull);
+	FilesGetter setFileSizeIntervals(Intervals fileSizeIntervals);
+	FilesGetter addFileSizeIntervals(Collection<Interval> fileSizeIntervals);
+	FilesGetter addFileSizeIntervals(Interval...fileSizeIntervals);
 }
 
 

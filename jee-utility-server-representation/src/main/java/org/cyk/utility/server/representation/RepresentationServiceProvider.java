@@ -54,6 +54,10 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	String PARAMETER_COUNT = ConstantString.COUNT;
 	String PARAMETER_CODE = ConstantString.CODE;
 	String PARAMETER_DIRECTORY = ConstantString.DIRECTORY;
+	String PARAMETER_EXTENSION = ConstantString.EXTENSION;
+	String PARAMETER_BATCH = ConstantString.BATCH;
+	String PARAMETER_SIZE = ConstantString.SIZE;
+	String PARAMETER_BATCH_SIZE = ConstantString.BATCH_SIZE;
 	String PARAMETER_DIRECTORIES = ConstantString.DIRECTORIES;
 	String PARAMETER_IS_INLINE = ConstantString.IS_INLINE;
 	

@@ -269,6 +269,6 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	
 	@Override
 	public <ELEMENT> Collection<ELEMENT> removeDuplicate(Collection<ELEMENT> collection,Function<? super ELEMENT, ?> function) {
-		return StreamEx.of(collection).distinct(function).toList();
+		return Boolean.TRUE.equals(isEmpty(collection)) ? collection : StreamEx.of(collection).distinct(function).toList();
 	}
 }
