@@ -73,19 +73,19 @@ public class MyEntityFunctionIntegrationTest extends AbstractRepresentationArqui
 		for(Integer index = 0 ; index < 10 ; index = index + 1)
 			__inject__(MyEntityBusiness.class).create(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()));
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(null,null,null).getEntity()))
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(null,null,null,null).getEntity()))
 			.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(0l,1l,null).getEntity()))
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(0l,1l,null,null).getEntity()))
 			.containsExactly("0");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(1l,1l,null).getEntity()))
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(1l,1l,null,null).getEntity()))
 			.containsExactly("1");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(0l,3l,null).getEntity()))
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(0l,3l,null,null).getEntity()))
 			.containsExactly("0","1","2");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(4l,3l,null).getEntity()))
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, (Collection<?>)__inject__(MyEntityRepresentation.class).getMany(4l,3l,null,null).getEntity()))
 			.containsExactly("4","5","6");
 	}
 	

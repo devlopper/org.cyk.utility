@@ -41,6 +41,7 @@ public interface ConstantString {
 	String COUNT = "count";
 	String IDENTIFIER = "identifier";
 	String TYPE = "type";
+	String FILTER = "filter";
 	String FIELDS = "fields";
 	String CODE = "code";
 	String FROM = "from";

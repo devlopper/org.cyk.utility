@@ -101,7 +101,7 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		}
 	}
 	
-	protected Object[] __getQueryParameters__(String queryIdentifier,Object...objects){
+	protected Object[] __getQueryParameters__(String queryIdentifier,Properties properties,Object...objects){
 		return null;
 	}
 	/*

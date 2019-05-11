@@ -31,7 +31,7 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 		String fields = (String)getProperties().getFields();
 		if(__injectCollectionHelper__().isEmpty(identifiers)) {
 			//TODO handle pagination
-			response = representation.getMany(null,null,fields);
+			response = representation.getMany(null,null,fields,null);
 		}else {
 			Object identifier = identifiers.getFirst();
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();

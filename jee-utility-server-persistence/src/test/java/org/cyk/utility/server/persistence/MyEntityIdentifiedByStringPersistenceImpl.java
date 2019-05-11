@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.inject.Singleton;
 
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.sql.builder.QueryParameterNameBuilder;
@@ -37,21 +38,21 @@ public class MyEntityIdentifiedByStringPersistenceImpl extends AbstractPersisten
 	@Override 
 	//@Query(value="SELECT r FROM MyEntity r WHERE r.integerValue = :"+MyEntity.FIELD_INTEGER_VALUE,resultClass=MyEntity.class)
 	public Collection<MyEntityIdentifiedByString> readByIntegerValue(Integer value) {
-		return __readMany__(null,____getQueryParameters____(value));
+		return __readMany__(null,____getQueryParameters____(null,value));
 	}
 	
 	@Override 
 	//@Query(value="SELECT COUNT(r) FROM MyEntity r WHERE r.integerValue = :"+MyEntity.FIELD_INTEGER_VALUE,resultClass=Long.class)
 	public Long countByIntegerValue(Integer value) {
-		return __count__(____getQueryParameters____(value));
+		return __count__(____getQueryParameters____(null,value));
 	}
 	
 	@Override
 	public Long executeIncrementIntegerValue(Integer value) {
-		return __modify__(____getQueryParameters____(value));
+		return __modify__(____getQueryParameters____(null,value));
 	}
 	
-	protected Object[] __getQueryParameters__(String queryIdentifier,Object...objects){
+	protected Object[] __getQueryParameters__(String queryIdentifier,Properties properties,Object...objects){
 		PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
 		if(persistenceQuery == null)
 			__inject__(ThrowableHelper.class).throwRuntimeException("persistence query with identifier "+queryIdentifier+" not found.");
@@ -60,7 +61,7 @@ public class MyEntityIdentifiedByStringPersistenceImpl extends AbstractPersisten
 		if(executeIncrementIntegerValue.equals(queryIdentifier))
 			return new Object[]{QueryParameterNameBuilder.VALUE,objects[0]};
 		
-		return super.__getQueryParameters__(queryIdentifier, objects);
+		return super.__getQueryParameters__(queryIdentifier,properties, objects);
 	}
 	
 	

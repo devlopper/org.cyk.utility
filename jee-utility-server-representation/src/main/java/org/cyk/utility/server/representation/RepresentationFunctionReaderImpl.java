@@ -35,7 +35,8 @@ public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunc
 			entity = __injectInstanceHelper__().buildOne(getEntityClass(),__injectBusiness__().findOne(getPersistenceEntityClass(),identifier,properties),new Properties().setFields(entityFieldNames == null ? null : entityFieldNames.get()));			
 		}else {// no specific identifiers
 			//In order to take less execution time and data size , we will set default values if not set by caller.
-			properties.copyFrom(getProperties(), Properties.IS_QUERY_RESULT_PAGINATED, Properties.QUERY_FIRST_TUPLE_INDEX,Properties.QUERY_NUMBER_OF_TUPLE);
+			properties.copyFrom(getProperties(), Properties.IS_QUERY_RESULT_PAGINATED, Properties.QUERY_FIRST_TUPLE_INDEX,Properties.QUERY_NUMBER_OF_TUPLE
+					,Properties.QUERY_FILTERS);
 			if(properties.getIsQueryResultPaginated() == null)
 				properties.setIsQueryResultPaginated(Boolean.TRUE); //yes we paginate
 			if(properties.getQueryFirstTupleIndex() == null)

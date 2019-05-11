@@ -39,11 +39,11 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		}
 	}
 	
-	protected Object[] __getQueryParameters__(String queryIdentifier,Object...objects){
+	protected Object[] __getQueryParameters__(String queryIdentifier,Properties properties,Object...objects){
 		PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
 		if(persistenceQuery.isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(read,queryIdentifier))
 			return null;
-		return super.__getQueryParameters__(queryIdentifier, objects);
+		return super.__getQueryParameters__(queryIdentifier,properties, objects);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -70,8 +70,17 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@Override
 	public Collection<ENTITY> read(Properties properties) {
-		return __readMany__(properties,____getQueryParameters____());
+		if(properties == null)
+			properties = new Properties();
+		if(properties!=null) {
+			properties.setQueryIdentifier(__injectValueHelper__().defaultToIfNull(__getQueryIdentifier__(PersistenceFunctionReader.class, properties),read));
+		}
+		return __readMany__(properties,____getQueryParameters____(properties));
 	}
+	
+	/*protected Object[] __getReadQueryParameters__(Properties properties) {
+		return null;
+	}*/
 	
 	@Override
 	public Collection<ENTITY> read() {
@@ -83,7 +92,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@Override
 	public ENTITY readOne(Object identifier, Properties properties) {
 		return (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier)
-				.setEntityIdentifierValueUsageType(properties == null ? null : (ValueUsageType)properties.getValueUsageType()).execute().getProperties().getEntity();
+				.setEntityIdentifierValueUsageType(Properties.getFromPath(properties, Properties.VALUE_USAGE_TYPE)).execute().getProperties().getEntity();
 	}
 	
 	@Override
@@ -118,7 +127,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@Override
 	public Long count(Properties properties) {
-		return __count__(____getQueryParameters____());
+		return __count__(____getQueryParameters____(properties));
 	}
 	
 	@Override
@@ -207,22 +216,31 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return this;
 	}
 	
-	protected String __buildQueryStringIdentifierFromCurrentCall__(){
+	protected String __getQueryIdentifier__(Class<?> functionClass,Properties properties,Object...parameters){
+		return null;
+	}
+	
+	protected String __buildQueryStringIdentifierFromCurrentCall__(Integer stackTraceMethodAt){
 		return __inject__(PersistenceQueryIdentifierStringBuilder.class).setClassSimpleName(getEntityClass())
-				.setName(__inject__(StackTraceHelper.class).getAt(6/* TODO index vary on deep. it must be provided as param*/).getMethodName()).execute().getOutput();
+				.setName(__inject__(StackTraceHelper.class).getAt(stackTraceMethodAt/* TODO index vary on deep. it must be provided as param*/).getMethodName()).execute().getOutput();
 	}
 	
 	/**/
 	
 	@SuppressWarnings("unchecked")
-	protected <FUNCTION extends PersistenceFunction> FUNCTION __getFunction__(Class<FUNCTION> aClass,Object...parameters) {
+	protected <FUNCTION extends PersistenceFunction> FUNCTION __getFunction__(Class<FUNCTION> aClass,Properties properties,Object...parameters) {
+		String queryIdentifier = (String) Properties.getFromPath(properties, Properties.QUERY_IDENTIFIER);
+		if(__injectStringHelper__().isBlank(queryIdentifier))
+			queryIdentifier = __getQueryIdentifier__(aClass, properties, parameters);
+		if(__injectStringHelper__().isBlank(queryIdentifier))
+			queryIdentifier = __buildQueryStringIdentifierFromCurrentCall__(6);
 		return (FUNCTION) __inject__(aClass)
-				.setQueryIdentifier(__buildQueryStringIdentifierFromCurrentCall__())
+				.setQueryIdentifier(queryIdentifier)
 				.setQueryParameters(Properties.instanciate(__inject__(MapHelper.class).instanciate(parameters)));
 	}
 	
 	protected PersistenceFunctionReader __getReader__(Properties properties,Object...parameters) {
-		PersistenceFunctionReader reader = __getFunction__(PersistenceFunctionReader.class, parameters);
+		PersistenceFunctionReader reader = __getFunction__(PersistenceFunctionReader.class,properties, parameters);
 		reader.setIsQueryResultPaginated(__inject__(BooleanHelper.class).get(Properties.getFromPath(properties, Properties.IS_QUERY_RESULT_PAGINATED)));
 		reader.setQueryFirstTupleIndex(__injectNumberHelper__().getLong(Properties.getFromPath(properties, Properties.QUERY_FIRST_TUPLE_INDEX)));
 		reader.setQueryNumberOfTuple(__injectNumberHelper__().getLong(Properties.getFromPath(properties, Properties.QUERY_NUMBER_OF_TUPLE)));
@@ -230,11 +248,11 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected PersistenceFunctionModifier __getModifier__(Object...parameters) {
-		return __getFunction__(PersistenceFunctionModifier.class, parameters);
+		return __getFunction__(PersistenceFunctionModifier.class,null, parameters);
 	}
 	
 	protected PersistenceFunctionRemover __getRemover__(Object...parameters) {
-		return __getFunction__(PersistenceFunctionRemover.class, parameters);
+		return __getFunction__(PersistenceFunctionRemover.class,null, parameters);
 	}
 	
 	/**/
@@ -267,10 +285,13 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return null;
 	}
 	
-	protected Object[] ____getQueryParameters____(Object...objects){
-		String queryIdentifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setClassSimpleName(getEntityClass())
-				.setName(__inject__(StackTraceHelper.class).getAt(3).getMethodName()).execute().getOutput();
-		Object[] parameters = __getQueryParameters__(queryIdentifier, objects);
+	protected Object[] ____getQueryParameters____(Properties properties,Object...objects){
+		String queryIdentifier = (String) Properties.getFromPath(properties, Properties.QUERY_IDENTIFIER);
+		if(__injectStringHelper__().isBlank(queryIdentifier))
+			queryIdentifier = __buildQueryStringIdentifierFromCurrentCall__(4);
+		Object[] parameters = (Object[]) Properties.getFromPath(properties, Properties.QUERY_PARAMETERS);
+		if(parameters == null)
+			parameters = __getQueryParameters__(queryIdentifier,properties, objects);
 		if(__inject__(ArrayHelper.class).isEmpty(parameters)){
 			//Query can have no parameters
 			//TODO base on query string structure you can know the expected parameters and decide to throw exception
@@ -279,12 +300,12 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return parameters;
 	}
 	
-	protected Object[] __getCollectInstancesQueryParameters__(Object...objects){
-		return ____getQueryParameters____(objects);
+	protected Object[] __getCollectInstancesQueryParameters__(Properties properties,Object...objects){
+		return ____getQueryParameters____(properties,objects);
 	}
 	
-	protected Object[] __getCountInstancesQueryParameters__(Object...objects){
-		return ____getQueryParameters____(objects);
+	protected Object[] __getCountInstancesQueryParameters__(Properties properties,Object...objects){
+		return ____getQueryParameters____(properties,objects);
 	}
 	
 	protected QueryStringBuilderSelect __instanciateQuerySelect__(){

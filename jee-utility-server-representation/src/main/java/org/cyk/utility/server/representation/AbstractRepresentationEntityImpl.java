@@ -2,6 +2,7 @@ package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.ws.rs.core.Response;
 
@@ -48,11 +49,12 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public Response getMany(Long from,Long count,String fields) {
+	public Response getMany(Long from,Long count,String fields,List<String> filters) {
 		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass())
 				.setEntityFieldNames(__getFieldNames__(fields))
 				.setProperty(Properties.QUERY_FIRST_TUPLE_INDEX, from)
 				.setProperty(Properties.QUERY_NUMBER_OF_TUPLE, count)
+				.setProperty(Properties.QUERY_FILTERS, filters)
 				.execute().getResponse();
 	}
 	

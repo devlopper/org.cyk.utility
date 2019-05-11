@@ -4547,10 +4547,40 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getQueryFilters() {
+		return get(QUERY_FILTERS);
+	}
+
+	public Properties setQueryFilters(Object queryFilters) {
+		set(QUERY_FILTERS, queryFilters);
+		return this;
+	}
+	
+	public Object getQueryIdentifier() {
+		return get(QUERY_IDENTIFIER);
+	}
+
+	public Properties setQueryIdentifier(Object queryIdentifier) {
+		set(QUERY_IDENTIFIER, queryIdentifier);
+		return this;
+	}
+	
+	public Object getQueryParameters() {
+		return get(QUERY_PARAMETERS);
+	}
+
+	public Properties setQueryParameters(Object queryParameters) {
+		set(QUERY_PARAMETERS, queryParameters);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String QUERY_IDENTIFIER = "QUERY_IDENTIFIER";
+	public static final String QUERY_PARAMETERS = "QUERY_PARAMETERS";
 	public static final String IS_QUERY_RESULT_PAGINATED = "IS_QUERY_RESULT_PAGINATED";
 	public static final String QUERY_FIRST_TUPLE_INDEX = "QUERY_FIRST_TUPLE_INDEX";
 	public static final String QUERY_NUMBER_OF_TUPLE = "QUERY_NUMBER_OF_TUPLE";
+	public static final String QUERY_FILTERS = "QUERY_FILTERS";
 	public static final String THREAD = "THREAD";
 	public static final String HREF = "HREF";
 	public static final String LINK = "LINK";

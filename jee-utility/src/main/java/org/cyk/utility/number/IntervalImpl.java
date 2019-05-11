@@ -101,8 +101,8 @@ public class IntervalImpl extends AbstractObject implements Interval,Serializabl
 		return (low == null || Boolean.TRUE.equals(low.getIsExcluded()) ? "]" : "[")
 			+ (low == null ? ConstantString.INFINITE : low.toString())
 			+";"
-			+ (high == null || Boolean.TRUE.equals(high.getIsExcluded()) ? "[" : "]")
 			+ (high == null ? ConstantString.INFINITE : high.toString())
+			+ (high == null || Boolean.TRUE.equals(high.getIsExcluded()) ? "[" : "]")
 			;
 	}
 	

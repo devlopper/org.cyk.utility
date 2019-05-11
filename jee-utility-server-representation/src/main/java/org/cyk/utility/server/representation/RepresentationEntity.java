@@ -1,6 +1,7 @@
 package org.cyk.utility.server.representation;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -46,7 +47,8 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	@GET
 	@Path(PATH_GET_MANY)
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
-	Response getMany(@QueryParam(PARAMETER_FROM) Long from,@QueryParam(PARAMETER_COUNT) Long count,@QueryParam(PARAMETER_FIELDS) String fields);
+	Response getMany(@QueryParam(PARAMETER_FROM) Long from,@QueryParam(PARAMETER_COUNT) Long count,@QueryParam(PARAMETER_FIELDS) String fields
+			,@QueryParam(PARAMETER_FILTER) List<String> filters);
 	
 	@GET
 	@Path(PATH_GET_ONE)
