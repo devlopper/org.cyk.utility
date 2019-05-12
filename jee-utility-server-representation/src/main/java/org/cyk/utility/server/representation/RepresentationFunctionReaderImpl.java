@@ -47,6 +47,7 @@ public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunc
 			entities = __injectCollectionHelper__().isEmpty(collection) ? null : (List<?>) __injectInstanceHelper__().buildMany(getEntityClass(),collection,
 					new Properties().setFields(entityFieldNames == null ? null : entityFieldNames.get()));
 			
+			properties.setQueryIdentifier(null);
 			__responseBuilder__.header("X-Total-Count", __injectBusiness__().count(getPersistenceEntityClass(), properties));
 			/*
 			HttpServletRequest request = __inject__(HttpServletRequest.class);

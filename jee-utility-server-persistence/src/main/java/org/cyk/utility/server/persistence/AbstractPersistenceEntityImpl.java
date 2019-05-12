@@ -1,6 +1,7 @@
 package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.persistence.Entity;
@@ -73,7 +74,8 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		if(properties == null)
 			properties = new Properties();
 		if(properties!=null) {
-			properties.setQueryIdentifier(__injectValueHelper__().defaultToIfNull(__getQueryIdentifier__(PersistenceFunctionReader.class, properties),read));
+			if(properties.getQueryIdentifier() == null)
+				properties.setQueryIdentifier(__injectValueHelper__().defaultToIfNull(__getQueryIdentifier__(PersistenceFunctionReader.class, properties),read));
 		}
 		return __readMany__(properties,____getQueryParameters____(properties));
 	}
@@ -127,7 +129,19 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@Override
 	public Long count(Properties properties) {
-		return __count__(____getQueryParameters____(properties));
+		if(properties == null)
+			properties = new Properties();
+		if(properties!=null) {
+			if(properties.getQueryIdentifier() == null) {
+				String queryIdentifier = __injectValueHelper__().defaultToIfNull(__getQueryIdentifier__(PersistenceFunctionReader.class, properties),read);
+				if(__injectStringHelper__().isNotBlank(queryIdentifier))
+					queryIdentifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setIsDerivedFromQueryIdentifier(Boolean.TRUE)
+						.setDerivedFromQueryIdentifier(queryIdentifier).setIsCountInstances(Boolean.TRUE)
+						.execute().getOutput();
+				properties.setQueryIdentifier(queryIdentifier);
+			}
+		}
+		return __count__(properties,____getQueryParameters____(properties));
 	}
 	
 	@Override
@@ -271,8 +285,8 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return __injectCollectionHelper__().getFirst(entities);
 	}
 	
-	protected Long __count__(Object...parameters) {
-		return (Long) __inject__(CollectionHelper.class).getFirst(__getReader__(null,parameters).execute().getEntities());
+	protected Long __count__(Properties properties,Object...parameters) {
+		return (Long) __inject__(CollectionHelper.class).getFirst(__getReader__(properties,parameters).execute().getEntities());
 	}
 	
 	protected Long __modify__(Object...parameters) {

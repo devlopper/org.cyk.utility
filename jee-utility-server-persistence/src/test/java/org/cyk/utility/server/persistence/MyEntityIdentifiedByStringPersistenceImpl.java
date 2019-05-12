@@ -44,7 +44,7 @@ public class MyEntityIdentifiedByStringPersistenceImpl extends AbstractPersisten
 	@Override 
 	//@Query(value="SELECT COUNT(r) FROM MyEntity r WHERE r.integerValue = :"+MyEntity.FIELD_INTEGER_VALUE,resultClass=Long.class)
 	public Long countByIntegerValue(Integer value) {
-		return __count__(____getQueryParameters____(null,value));
+		return __count__(null,____getQueryParameters____(null,value));
 	}
 	
 	@Override
