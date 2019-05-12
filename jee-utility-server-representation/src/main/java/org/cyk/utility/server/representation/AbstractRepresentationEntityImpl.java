@@ -54,7 +54,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 				.setEntityFieldNames(__getFieldNames__(fields))
 				.setProperty(Properties.QUERY_FIRST_TUPLE_INDEX, from)
 				.setProperty(Properties.QUERY_NUMBER_OF_TUPLE, count)
-				.setProperty(Properties.QUERY_FILTERS, filters)
+				.setProperty(Properties.QUERY_FILTERS, __injectCollectionHelper__().isEmpty(filters) ? null : filters)
 				.execute().getResponse();
 	}
 	
