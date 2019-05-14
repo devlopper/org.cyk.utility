@@ -3,7 +3,11 @@ package org.cyk.utility.server.persistence.test.arquillian;
 import java.util.Collection;
 
 import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.field.FieldName;
+import org.cyk.utility.field.Fields;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -48,10 +52,13 @@ public abstract class AbstractPersistenceEntityIntegrationTest<ENTITY> extends A
 	public void readOneByBusinessIdentifier() throws Exception{
 		Object action = __inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
-		__createEntity__(object);
-		__readEntity__(__getEntityClass__(action),__getFieldValueBusinessIdentifier__(object), ValueUsageType.BUSINESS);
-		//cleanup
-		__deleteEntitiesAll__(object.getClass());
+		Fields fields = __inject__(FieldGetter.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.BUSINESS).setClazz(object.getClass()).execute().getOutput();
+		if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
+			__createEntity__(object);
+			__readEntity__(__getEntityClass__(action),__getFieldValueBusinessIdentifier__(object), ValueUsageType.BUSINESS);
+			//cleanup
+			__deleteEntitiesAll__(object.getClass());	
+		}
 	}
 	
 	@Test

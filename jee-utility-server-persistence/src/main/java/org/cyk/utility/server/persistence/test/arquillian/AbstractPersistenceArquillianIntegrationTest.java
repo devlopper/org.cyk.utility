@@ -97,4 +97,8 @@ public abstract class AbstractPersistenceArquillianIntegrationTest extends Abstr
 	protected <T> T __readByBusinessIdentifier__(Class<T> aClass,Object identifier){
 		return identifier == null ? null : __inject__(Persistence.class).readOne(aClass,identifier,new Properties().setValueUsageType(ValueUsageType.BUSINESS));
 	}
+	
+	protected <T> T __readBySystemIdentifier__(Class<T> aClass,Object identifier){
+		return identifier == null ? null : __inject__(Persistence.class).readOne(aClass,identifier,new Properties().setValueUsageType(ValueUsageType.SYSTEM));
+	}
 }

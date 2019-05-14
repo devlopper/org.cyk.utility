@@ -45,6 +45,8 @@ public interface SystemLayerIntegrationTest<LAYER_ENTITY_INTERFACE> {
 	
 	<ENTITY> void __deleteEntityByBusinessIdentifier__(Class<ENTITY> entityClass,Object identifier);
 	
+	<ENTITY> void __deleteEntityBySystemIdentifier__(Class<ENTITY> entityClass,Object identifier);
+	
 	<ENTITY> void __deleteEntitiesAll__(Class<ENTITY> entityClass,LAYER_ENTITY_INTERFACE layerEntityInterface);
 	
 	<ENTITY> void __deleteEntitiesAll__(Class<ENTITY> entityClass);

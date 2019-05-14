@@ -8,9 +8,12 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelperImpl;
+import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldValueGetter;
+import org.cyk.utility.field.Fields;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
@@ -142,6 +145,11 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 		__deleteEntity__(entityClass, identifier, ValueUsageType.BUSINESS);
 	}
 	
+	@Override
+	public <ENTITY> void __deleteEntityBySystemIdentifier__(Class<ENTITY> entityClass, Object identifier) {
+		__deleteEntity__(entityClass, identifier, ValueUsageType.SYSTEM);
+	}
+	
 	/* Delete all entities */
 	
 	protected abstract <ENTITY> void ____deleteEntityAll____(Class<ENTITY> entityClass,LAYER_ENTITY_INTERFACE layerEntityInterface);
@@ -203,8 +211,13 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	@Override
 	protected void __setFieldValues__(Object object) {
 		super.__setFieldValues__(object);
-		__inject__(FieldHelper.class).setFieldValueSystemIdentifier(object, __getRandomIdentifier__());
-		__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, __getRandomCode__());
+		if(object != null) {
+			__inject__(FieldHelper.class).setFieldValueSystemIdentifier(object, __getRandomIdentifier__());
+			
+			Fields fields = __inject__(FieldGetter.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.BUSINESS).setClazz(object.getClass()).execute().getOutput();
+			if(__inject__(CollectionHelper.class).isNotEmpty(fields))
+				__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, __getRandomCode__());
+		}
 	}
 	
 	protected <T> T __instanciate__(Class<T> aClass,Object action) throws Exception{

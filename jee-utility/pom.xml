@@ -14,7 +14,20 @@
 	<packaging>jar</packaging>
 
 	<name>JEE utility</name>
-
+	
+	<properties>
+		<org.apache.commons.commons-text.version>1.4</org.apache.commons.commons-text.version>
+		<org.apache.poi.poi.version>3.14</org.apache.poi.poi.version>
+		<org.apache.poi.poi-ooxml.version>3.14</org.apache.poi.poi-ooxml.version>
+		<org.apache.kafka.kafka-clients.version>2.2.0</org.apache.kafka.kafka-clients.version>
+		<com.fasterxml.jackson.core.jackson-core.version>2.9.8</com.fasterxml.jackson.core.jackson-core.version>
+		<com.fasterxml.jackson.core.jackson-databind.version>2.9.8</com.fasterxml.jackson.core.jackson-databind.version>
+		<commons-codec.commons-codec.version>1.12</commons-codec.commons-codec.version>
+		<net.sf.barcode4j.barcode4j.version>2.1</net.sf.barcode4j.barcode4j.version>
+		<com.google.zxing.core.version>3.3.3</com.google.zxing.core.version>
+		<com.google.zxing.javase.version>3.3.3</com.google.zxing.javase.version>
+	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility.__kernel__</groupId>
@@ -43,46 +56,62 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-text</artifactId>
-			<version>1.4</version>
+			<version>${org.apache.commons.commons-text.version}</version>
 		</dependency>
 		
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi</artifactId>
-		    <version>3.14</version>
+		    <version>${org.apache.poi.poi.version}</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>3.14</version>
+			<version>${org.apache.poi.poi-ooxml.version}</version>
 		</dependency>
 		
 		<dependency>
 		    <groupId>org.apache.kafka</groupId>
 		    <artifactId>kafka-clients</artifactId>	    
-		    <version>2.2.0</version>
+		    <version>${org.apache.kafka.kafka-clients.version}</version>
 		</dependency>
 		
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-core</artifactId>
-		    <version>2.9.8</version>
+		    <version>${com.fasterxml.jackson.core.jackson-core.version}</version>
 		</dependency>
 		
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
-		    <version>2.9.8</version>
+		    <version>${com.fasterxml.jackson.core.jackson-databind.version}</version>
 		</dependency>
 		
 		<dependency>
 		    <groupId>commons-codec</groupId>
 		    <artifactId>commons-codec</artifactId>
-		    <version>1.12</version>
+		    <version>${commons-codec.commons-codec.version}</version>
 		</dependency>
 		
+		<dependency>
+		    <groupId>net.sf.barcode4j</groupId>
+		    <artifactId>barcode4j</artifactId>
+		    <version>${net.sf.barcode4j.barcode4j.version}</version>
+		</dependency>
 		
+		<dependency>
+		    <groupId>com.google.zxing</groupId>
+		    <artifactId>core</artifactId>
+		    <version>${com.google.zxing.core.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.google.zxing</groupId>
+		    <artifactId>javase</artifactId>
+		    <version>${com.google.zxing.javase.version}</version>
+		</dependency>
 	</dependencies>
 
 </project>

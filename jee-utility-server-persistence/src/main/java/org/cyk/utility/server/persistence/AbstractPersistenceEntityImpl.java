@@ -1,7 +1,6 @@
 package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 
 import javax.persistence.Entity;
