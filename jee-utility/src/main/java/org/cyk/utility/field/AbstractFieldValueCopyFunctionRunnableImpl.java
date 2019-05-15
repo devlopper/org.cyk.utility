@@ -125,9 +125,10 @@ public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends Abstrac
 				value = __inject__(destinationType);
 				FieldValueCopy fieldValueCopy = __inject__(FieldValueCopy.class).setSource(temp).setDestination(value);
 				if(Boolean.TRUE.equals(classInstancesRuntime.get(sourceType).getIsPersistable()) && 
-						Boolean.TRUE.equals(classInstancesRuntime.get(destinationType).getIsTransferable())) {					
-					//fieldValueCopy.setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.SYSTEM).getOutput());
-					fieldValueCopy.setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.BUSINESS).getOutput());								
+						Boolean.TRUE.equals(classInstancesRuntime.get(destinationType).getIsTransferable())) {
+					//TODO if business identifier is there take it first otherwise take system identifier
+					fieldValueCopy.setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.SYSTEM).getOutput());
+					//fieldValueCopy.setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.BUSINESS).getOutput());								
 				}else {
 					fieldValueCopy.setIsAutomaticallyDetectFields(Boolean.TRUE);
 				}

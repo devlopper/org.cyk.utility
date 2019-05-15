@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
 
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.DataFieldsNamesGetter;
@@ -23,7 +24,13 @@ public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends Abst
 		if(__injectCollectionHelper__().isNotEmpty(fieldNames))
 			for(String index : fieldNames.get()) {
 				//if(isEditable) {
-					viewBuilder.addInputBuilderByObjectByFieldNames(data, isEditable, __inject__(FieldHelper.class).disjoin(index).get().toArray(new String[] {}));
+					if(__injectStringHelper__().isNotBlank(index)) {
+						String[] strings = __inject__(FieldHelper.class).disjoin(index).get().toArray(new String[] {});
+						if(__inject__(ArrayHelper.class).isNotEmpty(strings)) {
+							viewBuilder.addInputBuilderByObjectByFieldNames(data, isEditable, strings);
+						}
+					}
+					
 				/*}else {
 					String tempIndex = index;
 					Field field = __inject__(FieldGetter.class).setToken(index).setTokenLocation(StringLocation.EXAT)
