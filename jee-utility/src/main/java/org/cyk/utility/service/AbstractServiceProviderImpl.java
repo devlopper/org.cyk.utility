@@ -16,6 +16,7 @@ import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.network.MailHelper;
 import org.cyk.utility.number.NumberHelper;
+import org.cyk.utility.stream.distributed.Topic;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -116,6 +117,14 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	}
 	
 	protected void __produceMail__(String title,String body,Collection<String> receiversIdentifiers) {
-		__injectMailHelper__().produce(title, body, receiversIdentifiers);
+		if(Boolean.TRUE.equals(Topic.MAIL.getIsConsumerStarted()))
+			__injectMailHelper__().produce(title, body, receiversIdentifiers);
+		else {
+			try {
+				__sendMail__(title, body, __inject__(CollectionHelper.class).cast(Object.class, receiversIdentifiers), Boolean.FALSE);
+			} catch (Exception exception) {
+				exception.printStackTrace();
+			}
+		}
 	}
 }

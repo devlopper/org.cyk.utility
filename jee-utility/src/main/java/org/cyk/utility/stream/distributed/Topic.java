@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.system.SystemHelper;
+import org.cyk.utility.type.BooleanHelper;
 import org.cyk.utility.value.ValueHelper;
 
 import lombok.Getter;
@@ -19,6 +20,7 @@ public enum Topic {
 	
 	@Getter private String identifier;
 	@Getter @Setter Class<? extends ConsumerMessageProcessor> messageProcessorClass;
+	@Getter private Boolean isConsumerStarted;
 	
 	private Topic() {
 		initialise();
@@ -33,9 +35,22 @@ public enum Topic {
 	}
 	
 	public void startConsumer() {
-		Consumer consumer = DependencyInjection.inject(ConsumerBuilder.class).setTopic(this).execute().getOutput();
-		consumer.setIsExecuteAsynchronously(Boolean.TRUE).execute();
-		System.out.println("Distributed stream consumer for <<"+this+">> started.");
+		if(Boolean.TRUE.equals(isConsumerStarted))
+			return;
+		Boolean isStartable = DependencyInjection.inject(BooleanHelper.class).get(DependencyInjection.inject(SystemHelper.class)
+				.getProperty(String.format(IS_STARTABLE_FORMAT, name().toLowerCase()),Boolean.TRUE));
+		if(Boolean.TRUE.equals(isStartable)) {
+			Consumer consumer = DependencyInjection.inject(ConsumerBuilder.class).setTopic(this).execute().getOutput();
+			consumer.setIsExecuteAsynchronously(Boolean.TRUE).execute();
+			isConsumerStarted = Boolean.TRUE;
+			System.out.println("Distributed stream consumer for <<"+this+">> started.");	
+		}
+	}
+	
+	public void stopConsumer() {
+		
+		isConsumerStarted = Boolean.FALSE;
+		System.out.println("Distributed stream consumer for <<"+this+">> stopped.");
 	}
 	
 	@Override
@@ -67,4 +82,5 @@ public enum Topic {
 	/**/
 	
 	private static final String SYSTEM_PROPERTY_NAME_FORMAT = "stream.distributed.topic.%s";
+	private static final String IS_STARTABLE_FORMAT = "topic.%s.is.startable";
 }

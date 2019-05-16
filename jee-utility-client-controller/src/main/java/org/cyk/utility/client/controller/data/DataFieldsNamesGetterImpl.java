@@ -29,6 +29,9 @@ public class DataFieldsNamesGetterImpl extends AbstractStringsFunctionImpl imple
 				}else {
 					names = __inject__(DataHelper.class).getPropertiesFieldsNames(systemAction.getEntityClass());	
 				}
+				
+				if(data instanceof DataIdentifiedByStringAndCoded && names != null && names.getSize() > 1)
+					names.remove(DataIdentifiedByStringAndCoded.PROPERTY_IDENTIFIER);
 			}
 		}
 		return names;

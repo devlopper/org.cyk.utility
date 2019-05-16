@@ -23,9 +23,12 @@ public abstract class AbstractRepresentationFunctionCreatorImpl extends Abstract
 	protected void __executeBusiness__() {
 		if(getEntities()!=null)
 			__inject__(Business.class).createMany((Collection<Object>) __inject__(InstanceHelper.class).buildMany(getPersistenceEntityClass(),getEntities()));
-		else if(getEntity()!=null)
-			__inject__(Business.class).create(__inject__(InstanceHelper.class).buildOne(getPersistenceEntityClass(),getEntity()));
-		else {
+		else if(getEntity()!=null) {
+			Object representation = getEntity();
+			Object persistence = __inject__(InstanceHelper.class).buildOne(getPersistenceEntityClass(),representation);
+			__inject__(Business.class).create(persistence);
+			__injectFieldHelper__().setFieldValueSystemIdentifier(representation, __injectFieldHelper__().getFieldValueSystemIdentifier(persistence));
+		}else {
 			__injectThrowableHelper__().throwRuntimeException("No entity to "+getAction());
 		}	
 	}

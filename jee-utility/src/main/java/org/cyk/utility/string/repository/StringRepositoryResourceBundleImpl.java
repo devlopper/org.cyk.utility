@@ -30,24 +30,39 @@ public class StringRepositoryResourceBundleImpl extends AbstractStringRepository
 	}*/
 	
 	@Override
-	public StringRepositoryResourceBundle addBundle(String baseName, ClassLoader classLoader) {
+	public StringRepositoryResourceBundle addBundleAt(String baseName, ClassLoader classLoader,Integer index) {
 		Collection<ResourceBundle> bundles = (Collection<ResourceBundle>) getProperties().getResourceBundles();
 		if(bundles == null)
 			getProperties().setResourceBundles(bundles = new ArrayList<ResourceBundle>());
 		Boolean found = Boolean.FALSE;
-		for(ResourceBundle index : bundles)
-			if(index.getName().equals(baseName) && index.getClassLoader().equals(classLoader)) {
+		for(ResourceBundle indexResourceBundle : bundles)
+			if(indexResourceBundle.getName().equals(baseName) && indexResourceBundle.getClassLoader().equals(classLoader)) {
 				found = Boolean.TRUE;
 				break;
 			}
-		if(Boolean.FALSE.equals(found))
-			bundles.add(new ResourceBundle(baseName, classLoader));
+		if(Boolean.FALSE.equals(found)) {
+			ResourceBundle bundle = new ResourceBundle(baseName, classLoader);
+			if(index == null)
+				bundles.add(bundle);
+			else if(index > -1)
+				__inject__(CollectionHelper.class).addElementAt(bundles, index, bundle);
+		}
 		return this;
 	}
 	
 	@Override
+	public StringRepositoryResourceBundle addBundle(String baseName, ClassLoader classLoader) {
+		return addBundleAt(baseName, classLoader, null);
+	}
+	
+	@Override
+	public StringRepositoryResourceBundle addBundleAt(String baseName,Integer index) {
+		return addBundleAt(baseName, StringRepositoryResourceBundleImpl.class.getClassLoader(),index);
+	}
+	
+	@Override
 	public StringRepositoryResourceBundle addBundle(String baseName) {
-		return addBundle(baseName, StringRepositoryResourceBundleImpl.class.getClassLoader());
+		return addBundleAt(baseName, null);
 	}
 	
 	@Override

@@ -45,6 +45,7 @@ public interface CollectionInstance<T> extends Objectable {
 	
 	T getByIdentifier(Object identifier);
 	
+	CollectionInstance<T> remove(T element);
 	CollectionInstance<T> removeAll();
 	CollectionInstance<T> removeDuplicate(java.util.function.Function<? super T, ?> function);
 
