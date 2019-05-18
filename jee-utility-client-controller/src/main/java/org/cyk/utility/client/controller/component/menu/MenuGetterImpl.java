@@ -25,7 +25,7 @@ public class MenuGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Me
 			menu = __inject__(SessionAttributeGetter.class).setRequest(request).setAttribute(SessionAttributeEnumeration.MENU).execute().getOutputAs(Menu.class);
 		}
 		if(menu == null) {
-			MenuBuilderMap map = __inject__(MenuBuilderMapGetter.class).execute().getOutput();
+			MenuBuilderMap map = __inject__(MenuBuilderMapGetter.class).setRequest(request).execute().getOutput();
 			if(map!=null) {
 				MenuBuilder builder = null;
 				for(@SuppressWarnings("rawtypes") Map.Entry<Class,MenuBuilder> entry : map.getEntries())

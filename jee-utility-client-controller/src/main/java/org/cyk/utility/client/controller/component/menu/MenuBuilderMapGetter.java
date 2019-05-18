@@ -4,4 +4,7 @@ import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 
 public interface MenuBuilderMapGetter extends FunctionWithPropertiesAsInput<MenuBuilderMap> {
 
+	Object getRequest();
+	MenuBuilderMapGetter setRequest(Object request);
+	
 }

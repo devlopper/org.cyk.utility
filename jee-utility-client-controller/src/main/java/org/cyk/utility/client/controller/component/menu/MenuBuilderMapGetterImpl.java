@@ -1,15 +1,20 @@
 package org.cyk.utility.client.controller.component.menu;
 
 import java.io.Serializable;
+import java.security.Principal;
 
-import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-
-public class MenuBuilderMapGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<MenuBuilderMap> implements MenuBuilderMapGetter,Serializable {
+public class MenuBuilderMapGetterImpl extends AbstractMenuBuilderMapGetterImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	
 	@Override
-	protected MenuBuilderMap __execute__() throws Exception {
-		return null;
+	protected void ____executePrincipalIsNull____(MenuBuilder sessionMenuBuilder,Object request) throws Exception {
+		
 	}
+
+	@Override
+	protected void ____executePrincipalIsNotNull____(MenuBuilder sessionMenuBuilder,Object request, Principal principal) throws Exception {
+		
+	}
+	
+	
 }

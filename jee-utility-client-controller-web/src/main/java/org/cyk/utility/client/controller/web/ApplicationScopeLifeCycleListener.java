@@ -9,6 +9,7 @@ import org.cyk.utility.__kernel__.annotation.Web;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.client.controller.session.SessionUserGetterImpl;
 import org.cyk.utility.context.ContextParameterValueGetter;
+import org.cyk.utility.request.RequestPrincipalGetter;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -17,6 +18,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	@Override
 	public void __initialize__(Object object) {
 		__setQualifiersClasses__(ContextParameterValueGetter.class, Web.class);
+		__setQualifiersClasses__(RequestPrincipalGetter.class, Web.class);
 		__inject__(FunctionRunnableMap.class).set(SessionUserGetterImpl.class, SessionUserGetterFunctionRunnableImpl.class,LEVEL);
 		
 		__inject__(org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener.class).initialize(null);

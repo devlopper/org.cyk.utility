@@ -1,0 +1,13 @@
+{
+  "realm": "Test",
+  "auth-server-url": "http://localhost:8230/auth",
+  "ssl-required": "external",
+  "resource": "utilityclientcontroller",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "4f152a12-3d74-4505-b164-c8b66086d6e2"
+  },
+  "use-resource-role-mappings": false,
+  "confidential-port": 0,
+  "policy-enforcer": {}
+}

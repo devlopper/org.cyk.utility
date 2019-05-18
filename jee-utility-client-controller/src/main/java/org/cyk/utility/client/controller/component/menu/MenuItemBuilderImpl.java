@@ -28,6 +28,10 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 			if(commandable.getRequest() == null)
 				commandable.setRequest(getRequest());
 			menuItem.setCommandable(commandable.execute().getOutput());
+			/*if(menuItem.getCommandable()!=null && menuItem.getCommandable().getNavigation()!=null && menuItem.getCommandable().getNavigation().getSystemAction()!=null) {
+				__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClasses(menuItem.getCommandable().getNavigation().getSystemAction().getEntityClass());
+			}
+			*/
 		}
 		Collection<Object> children = getChildren();
 		if(__injectCollectionHelper__().isNotEmpty(children)) {

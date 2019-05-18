@@ -57,7 +57,7 @@ public class ThemeAtlantisDesktopDefaultImpl extends AbstractThemeImpl implement
 		mapTags("menu.form",tag);
 		
 		//TODO reduce build time to maximum 1 second
-		MenuBuilder menuBuilder = __inject__(MenuBuilderMapGetter.class).execute().getOutput().get(ScopeSession.class);
+		MenuBuilder menuBuilder =  __inject__(MenuBuilderMapGetter.class).execute().getOutput().get(ScopeSession.class);
 		MenuItemBuilders oldMenuItemBuilders = menuBuilder.getItems();
 		for(MenuItemBuilder index : oldMenuItemBuilders.get()) {
 			MenuItemBuilders items = null;

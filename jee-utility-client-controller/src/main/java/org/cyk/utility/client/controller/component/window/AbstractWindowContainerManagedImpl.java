@@ -156,7 +156,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	}
 	
 	protected MenuBuilderMap __getMenuBuilderMap__() {
-		return __inject__(MenuBuilderMapGetter.class).execute().getOutput();
+		return __inject__(MenuBuilderMapGetter.class).setRequest(__getRequest__()).execute().getOutput();
 	}
 	
 	protected WindowBuilder __injectWindowBuilder__() {
