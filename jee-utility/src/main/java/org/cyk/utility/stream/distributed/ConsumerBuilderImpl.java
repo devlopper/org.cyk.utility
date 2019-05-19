@@ -15,6 +15,9 @@ public class ConsumerBuilderImpl extends AbstractProducerConsumerBuilderImpl<Con
 		if(Topic.MAIL.equals(topic)) {
 			consumer.setMessageProcessorClass(ConsumerMessageProcessorImpl.class);
 			consumer.setValueSerialisationClass(MessageDeserializer.class);	
+		}else if(Topic.FUNCTION.equals(topic)) {
+			consumer.setMessageProcessorClass(org.cyk.utility.stream.distributed.kafka.function.ConsumerMessageProcessorImpl.class);
+			consumer.setValueSerialisationClass(org.cyk.utility.stream.distributed.kafka.function.MessageDeserializer.class);	
 		}
 		return consumer;
 	}

@@ -19,6 +19,6 @@ public interface ClassesGetter extends FunctionWithPropertiesAsInput<Classes> {
 	ClassesGetter addBasesClasses(@SuppressWarnings("rawtypes") Collection<Class> basesClasses);
 	ClassesGetter addBasesClasses(@SuppressWarnings("rawtypes") Class...basesClasses);
 	
-	Integer getModifiers();
-	ClassesGetter setModifiers(Integer modifiers);
+	Boolean getIsInterface();
+	ClassesGetter setIsInterface(Boolean isInterface);
 }

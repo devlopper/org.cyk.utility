@@ -1,6 +1,9 @@
 package org.cyk.utility.object;
 
+import java.util.Map;
+
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
+import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.network.message.Receiver;
 import org.cyk.utility.network.message.Receivers;
 import org.cyk.utility.string.Strings;
@@ -43,6 +46,16 @@ public class ObjectToStringBuilderUnitTest extends AbstractArquillianUnitTestWit
 						,__inject__(Receiver.class).setIdentifier("k@mail.com"))), "field05"));
 	}
 	
+	@Test
+	public void stringify_json_field06IsNull(){
+		assertionHelper.assertEquals("{}",buildStringFromObjectUsingJson(new Class(), "field06"));
+	}
+	
+	@Test
+	public void stringify_json_field06IsNotNull(){
+		assertionHelper.assertEquals("{\"field06\":\"{\\\"k01\\\":\\\"v01\\\"}\"}",buildStringFromObjectUsingJson(new Class().setField06(__inject__(MapHelper.class).instanciateKeyAsStringValueAsString("k01","v01")), "field06"));
+	}
+	
 	/**/
 	
 	private static String buildStringFromObjectUsingJson(Object object,String...fieldNamesStrings) {
@@ -61,6 +74,7 @@ public class ObjectToStringBuilderUnitTest extends AbstractArquillianUnitTestWit
 		private String field03;
 		private Strings field04;
 		private Receivers field05;
+		private Map<String,String> field06;
 	}
 	
 	

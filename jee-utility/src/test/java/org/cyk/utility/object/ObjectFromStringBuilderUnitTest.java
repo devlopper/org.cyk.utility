@@ -1,6 +1,9 @@
 package org.cyk.utility.object;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Map;
+
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.network.message.Receivers;
 import org.cyk.utility.string.Strings;
@@ -46,6 +49,13 @@ public class ObjectFromStringBuilderUnitTest extends AbstractArquillianUnitTestW
 		assertThat(object.getField05().getAt(2).getIdentifier()).isEqualTo("4");
 	}
 	
+	@Test
+	public void objectField01IsNotNull_json_stringField06Isk01_v01(){
+		Class object = buildObjectFromStringUsingJson("{\"field06\":\"{\\\"k01\\\":\\\"v01\\\"}\"}", Class.class,"field06");
+		assertionHelper.assertNotNull(object);
+		assertThat(object.getField06()).containsKeys("k01").containsValues("v01");
+	}
+	
 	/*
 	@Test
 	public void stringify_json_field01IsNotNull(){
@@ -77,5 +87,6 @@ public class ObjectFromStringBuilderUnitTest extends AbstractArquillianUnitTestW
 		private String field03;
 		private Strings field04;
 		private Receivers field05;
+		private Map<String,String> field06;
 	}
 }

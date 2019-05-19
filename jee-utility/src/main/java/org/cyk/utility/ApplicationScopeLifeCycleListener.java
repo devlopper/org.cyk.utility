@@ -24,7 +24,9 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	}
 
 	@Override
-	public void __destroy__(Object object) {}
+	public void __destroy__(Object object) {
+		Topic.stopAllConsumers();
+	}
 	
 	/**/
 	

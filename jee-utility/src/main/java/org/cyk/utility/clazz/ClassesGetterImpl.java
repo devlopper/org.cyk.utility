@@ -1,6 +1,7 @@
 package org.cyk.utility.clazz;
 
 import java.io.Serializable;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -14,13 +15,13 @@ public class ClassesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 
 	private Strings packageNames;
 	private Classes basesClasses;
-	private Integer modifiers;
+	private Boolean isInterface;
 	
 	@Override
 	protected Classes __execute__() throws Exception {
 		Strings packageNames = __injectValueHelper__().returnOrThrowIfBlank("classes packages names", getPackageNames());
 		Classes basesClasses = __injectValueHelper__().returnOrThrowIfBlank("classes bases", getBasesClasses());
-		Integer modifiers = getModifiers();
+		Boolean isInterface = getIsInterface();
 		Classes classes = __inject__(Classes.class);
 		SubTypesScanner subTypesScanner = new SubTypesScanner(false);
 		for(@SuppressWarnings("rawtypes") Class indexBaseClass : basesClasses.get()) {
@@ -35,15 +36,17 @@ public class ClassesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 			@SuppressWarnings("rawtypes")
 			Collection<Class> result = new Reflections(configurationBuilder).getSubTypesOf(indexBaseClass);
 			if(__injectCollectionHelper__().isNotEmpty(result)) {
-				for(Class index : result) {
-					//TODO handle modifiers
-					//for()
-					//if(Modifier.isInterface(modifiers) && index.getModifiers()
+				for(@SuppressWarnings("rawtypes") Class index : result) {
+					Boolean isAddable = Boolean.TRUE;
+					if(Boolean.TRUE.equals(isAddable) && isInterface!=null && 
+							(Boolean.TRUE.equals(isInterface) && !Modifier.isInterface(index.getModifiers()) || Boolean.FALSE.equals(isInterface) && Modifier.isInterface(index.getModifiers()))
+							)
+						isAddable = Boolean.FALSE;	
+					
+					if(Boolean.TRUE.equals(isAddable))
+						classes.add(index);
 				}
 			}
-			
-			classes.add(result);
-			
 		}
 		
 		return classes;
@@ -106,13 +109,13 @@ public class ClassesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 	}
 	
 	@Override
-	public Integer getModifiers() {
-		return modifiers;
+	public Boolean getIsInterface() {
+		return isInterface;
 	}
 	
 	@Override
-	public ClassesGetter setModifiers(Integer modifiers) {
-		this.modifiers = modifiers;
+	public ClassesGetter setIsInterface(Boolean isInterface) {
+		this.isInterface = isInterface;
 		return this;
 	}
 

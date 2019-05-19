@@ -2,6 +2,7 @@ package org.cyk.utility.object;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Map;
 
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.clazz.ClassHelper;
@@ -80,6 +81,8 @@ public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBui
 								__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("objectfy field of type " + index.getType());
 							}
 						}						
+					}else if (Boolean.TRUE.equals(__inject__(ClassHelper.class).isInstanceOf(index.getType(), Map.class))) {
+						value = new ObjectMapper().readValue(fieldNode.asText(), Map.class);
 					}else
 						__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("objectfy field of type " + index.getType());
 					

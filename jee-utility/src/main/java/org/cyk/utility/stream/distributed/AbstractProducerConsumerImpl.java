@@ -10,14 +10,20 @@ import org.cyk.utility.string.Strings;
 public abstract class AbstractProducerConsumerImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements ProducerConsumer,Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	public static Boolean IS_ABLE = null;
+	
 	private Strings topics;
 	private Class<?> keySerialisationClass;
 	private Class<?> valueSerialisationClass;
 	
 	@Override
 	protected void ____execute____() throws Exception {
-		Strings topics = __injectValueHelper__().returnOrThrowIfBlank("topics", getTopics());
-		__execute__(topics);
+		if(Boolean.TRUE.equals(__inject__(StreamDistributedHelper.class).getIsEnable())) {
+			Strings topics = __injectValueHelper__().returnOrThrowIfBlank("topics", getTopics());
+			__execute__(topics);	
+		}else {
+			__logWarning__(getClass().getSimpleName()+" : Cannot produce and consume because distributed stream functionnality is not enable.");
+		}
 	}
 	
 	protected abstract void __execute__(Strings topics) throws Exception;

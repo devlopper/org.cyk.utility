@@ -2,6 +2,7 @@ package org.cyk.utility.object;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Map;
 
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
@@ -80,6 +81,8 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 						}
 						String string = __inject__(StringHelper.class).concatenate(strings.get(), COMA);
 						generator.writeStringField(index.getFieldInstance().getPath(), string );
+					}else if(index.getValue() instanceof Map<?, ?>) {
+						generator.writeStringField(index.getFieldInstance().getPath(), new ObjectMapper().writeValueAsString(index.getValue()) );
 					}else
 						__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("jsonify field of type "+index.getFieldInstance().getType());	
 				}

@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 
 import org.cyk.utility.field.FieldGetter;
@@ -19,6 +20,8 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractPersistenceFunctionCreatorImpl extends AbstractPersistenceFunctionTransactionImpl implements PersistenceFunctionCreator, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Collection<Object> entitiesIdentifiers;
+	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
@@ -51,7 +54,17 @@ public abstract class AbstractPersistenceFunctionCreatorImpl extends AbstractPer
 			}
 			
 			__create__(index);	
+			if(entitiesIdentifiers == null)
+				entitiesIdentifiers = new ArrayList<Object>();
+			entitiesIdentifiers.add(__injectFieldHelper__().getFieldValueSystemIdentifier(index));
 		}
+	}
+	
+	@Override
+	protected Map<String, String> __getProduceFunctionOutputs__() {
+		return __injectMapHelper__().instanciateKeyAsStringValueAsString(
+				"entities.identifiers",entitiesIdentifiers
+				);
 	}
 
 	protected void __create__(Object entity) {

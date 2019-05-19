@@ -1,6 +1,7 @@
 package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.log.LogLevel;
@@ -11,6 +12,7 @@ import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
+import org.cyk.utility.system.node.SystemNodeServer;
 import org.cyk.utility.throwable.ThrowableHelper;
 
 public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunctionServerImpl implements PersistenceFunction, Serializable {
@@ -34,6 +36,22 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 			}
 			__executeQuery__(action, persistenceQuery);
 		}
+		
+		Class<?> entityClass = action.getEntityClass();
+		String entityName = entityClass == null ? "??????" : entityClass.getSimpleName();
+		
+		__produceFunction__(entityName+"."+action.getIdentifier()
+		, __injectMapHelper__().instanciateKeyAsStringValueAsString(
+				"system.identifier",__inject__(SystemNodeServer.class).getIdentifier()
+				,"action.identifier",action.getIdentifier()
+				,"entity.name",entityName
+				)
+		, __getProduceFunctionOutputs__()
+		);
+	}
+	
+	protected Map<String,String> __getProduceFunctionOutputs__() {
+		return null;
 	}
 	
 	protected void __executeQuery__(SystemAction action){

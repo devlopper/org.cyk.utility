@@ -14,8 +14,14 @@ import lombok.Setter;
 
 public enum Topic {
 
+	/**
+	 * Operations : send
+	 */
 	MAIL
-	
+	/**
+	 * Operations : create , read , update , delete
+	 */
+	,FUNCTION
 	;
 	
 	@Getter private String identifier;
@@ -27,24 +33,42 @@ public enum Topic {
 	}
 	
 	public Topic initialise() {
-		String suffix = name().toLowerCase();
-		String systemPropertyName = String.format(SYSTEM_PROPERTY_NAME_FORMAT, suffix);
-		identifier = DependencyInjection.inject(ValueHelper.class).defaultToIfNull(
-				DependencyInjection.inject(SystemHelper.class).getProperty(systemPropertyName,Boolean.TRUE),suffix);
+		if(Boolean.TRUE.equals(DependencyInjection.inject(StreamDistributedHelper.class).getIsEnable())) {
+			String suffix = name().toLowerCase();
+			String systemPropertyName = String.format(SYSTEM_PROPERTY_NAME_FORMAT, suffix);
+			identifier = DependencyInjection.inject(ValueHelper.class).defaultToIfNull(
+					DependencyInjection.inject(SystemHelper.class).getProperty(systemPropertyName,Boolean.TRUE),suffix);	
+		}else {
+			
+		}
 		return this;
 	}
 	
-	public void startConsumer() {
-		if(Boolean.TRUE.equals(isConsumerStarted))
-			return;
-		Boolean isStartable = DependencyInjection.inject(BooleanHelper.class).get(DependencyInjection.inject(SystemHelper.class)
-				.getProperty(String.format(IS_STARTABLE_FORMAT, name().toLowerCase()),Boolean.TRUE));
-		if(Boolean.TRUE.equals(isStartable)) {
-			Consumer consumer = DependencyInjection.inject(ConsumerBuilder.class).setTopic(this).execute().getOutput();
-			consumer.setIsExecuteAsynchronously(Boolean.TRUE).execute();
-			isConsumerStarted = Boolean.TRUE;
-			System.out.println("Distributed stream consumer for <<"+this+">> started.");	
+	public void startConsumer(Boolean isStartable) {
+		if(Boolean.TRUE.equals(DependencyInjection.inject(StreamDistributedHelper.class).getIsEnable())) {
+			if(Boolean.TRUE.equals(isConsumerStarted)) {
+				System.out.println("Distributed stream consumer for <<"+this+">> already started.");	
+				return;
+			}
+			if(isStartable == null)
+				isStartable = DependencyInjection.inject(BooleanHelper.class).get(DependencyInjection.inject(SystemHelper.class)
+					.getProperty(String.format(IS_STARTABLE_FORMAT, name().toLowerCase()),Boolean.TRUE));
+			if(Boolean.TRUE.equals(isStartable)) {
+				Consumer consumer = DependencyInjection.inject(ConsumerBuilder.class).setTopic(this).execute().getOutput();
+				consumer.setIsExecuteAsynchronously(Boolean.TRUE).execute();
+				isConsumerStarted = Boolean.TRUE;
+				System.out.println("Distributed stream consumer for <<"+this+">> started.");	
+			}else {
+				
+			}	
+		}else {
+			System.out.println("Cannot start stream consumer for << "+this+">> because distributed stream functionnality is not enable.");
 		}
+		
+	}
+	
+	public void startConsumer() {
+		startConsumer(null);
 	}
 	
 	public void stopConsumer() {
@@ -55,19 +79,22 @@ public enum Topic {
 	
 	@Override
 	public String toString() {
-		return identifier;
+		return identifier == null ? super.toString() : identifier;
 	}
 	
 	/**/
 	
 	public static void startConsumers(Collection<Topic> topics) {
-		if(topics!=null)
-			topics.forEach(new java.util.function.Consumer<Topic>() {
-				@Override
-				public void accept(Topic topic) {
-					topic.startConsumer();
-				}
-			});
+		if(Boolean.TRUE.equals(DependencyInjection.inject(StreamDistributedHelper.class).getIsEnable())) {
+			if(topics!=null)
+				topics.forEach(new java.util.function.Consumer<Topic>() {
+					@Override
+					public void accept(Topic topic) {
+						topic.startConsumer();
+					}
+				});
+		}else
+			System.out.println("Cannot start consumers for topics<<"+topics+">> because distributed stream functionnality is not enable.");
 	}
 	
 	public static void startConsumers(Topic...topics) {
@@ -77,6 +104,26 @@ public enum Topic {
 	
 	public static void startAllConsumers() {
 		startConsumers(values());
+	}
+	
+	public static void stopConsumers(Collection<Topic> topics) {
+		if(topics!=null)
+			topics.forEach(new java.util.function.Consumer<Topic>() {
+				@Override
+				public void accept(Topic topic) {
+					if(Boolean.TRUE.equals(topic.isConsumerStarted))
+						topic.stopConsumer();
+				}
+			});
+	}
+	
+	public static void stopConsumers(Topic...topics) {
+		if(DependencyInjection.inject(ArrayHelper.class).isNotEmpty(topics))
+			stopConsumers(DependencyInjection.inject(CollectionHelper.class).instanciate(topics));
+	}
+	
+	public static void stopAllConsumers() {
+		stopConsumers(values());
 	}
 	
 	/**/

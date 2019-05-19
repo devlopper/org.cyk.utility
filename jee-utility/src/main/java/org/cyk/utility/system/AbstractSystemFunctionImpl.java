@@ -2,6 +2,7 @@ package org.cyk.utility.system;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhase;
@@ -16,6 +17,7 @@ import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
+import org.cyk.utility.function.FunctionHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.notification.NotificationBuilders;
@@ -375,6 +377,14 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		this.notifications = notifications;
 		return this;
 	}
+	
+	/**/
+	
+	protected void __produceFunction__(String function,Map<String,String> inputs,Map<String,String> outputs) {
+		__inject__(FunctionHelper.class).produce(function, inputs, outputs);
+	}
+	
+	/**/
 	
 	public static final String FIELD_NOTIFICATION_BUILDERS = "notificationBuilders";
 	public static final String FIELD_NOTIFICATIONS = "notifications";
