@@ -17,7 +17,6 @@ public abstract class AbstractEntityFromPersistenceEntity extends AbstractEntity
 	private static final long serialVersionUID = 1L;
 
 	private String identifier;
-	private String code;
 	
 	protected <T> T __getFromBusinessIdentifier__(Class<T> aClass,Object identifier){
 		return identifier == null ? null : __inject__(Persistence.class).readOne(aClass,identifier,new Properties().setValueUsageType(ValueUsageType.BUSINESS));
@@ -29,11 +28,10 @@ public abstract class AbstractEntityFromPersistenceEntity extends AbstractEntity
 	
 	@Override
 	public String toString() {
-		return FIELD_IDENTIFIER+"="+identifier+" , "+FIELD_CODE+"="+code;
+		return identifier;
 	}
 	
 	/**/
 	
 	public static final String FIELD_IDENTIFIER = "identifier";
-	public static final String FIELD_CODE = "code";
 }

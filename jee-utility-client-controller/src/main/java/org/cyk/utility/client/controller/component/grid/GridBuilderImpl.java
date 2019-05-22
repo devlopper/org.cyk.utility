@@ -61,7 +61,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 			for(Object index : objects.get()) {
 				Object row = null;
 				if(!(index instanceof org.cyk.utility.client.controller.data.Data))
-					__injectThrowableHelper__().throwRuntimeException("La classe "+index.getClass().getName()+" doit implémenter l'interface de Data");
+					__injectThrowableHelper__().throwRuntimeException("class "+index.getClass().getName()+" must implement Data interface");
 				
 				row = __inject__(org.cyk.utility.client.controller.data.RowBuilder.class).setGrid(this).setDataClass(rowDataClass).setData((Data) index).execute().getOutput();			
 				if(row!=null)

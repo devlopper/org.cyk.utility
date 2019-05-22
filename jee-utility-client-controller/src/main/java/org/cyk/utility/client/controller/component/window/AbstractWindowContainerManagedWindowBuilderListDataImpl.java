@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
@@ -28,8 +29,11 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListDataImpl ex
 		ViewBuilder viewBuilder = null;
 		if(rowClass!=null) {
 			Collection<?> objects = getGridObjects();
-			if(objects == null)
-				objects = __inject__(Controller.class).readMany(systemAction.getEntities().getElementClass());
+			if(objects == null) {
+				Properties properties = new Properties();
+				properties.setIsPageable(Boolean.FALSE);//TODO how to handle pagination ???		
+				objects = __inject__(Controller.class).readMany(systemAction.getEntities().getElementClass(),properties);
+			}
 			
 			@SuppressWarnings({ "rawtypes" })
 			GridBuilder gridBuilder = __inject__(GridBuilder.class).setRowClass(rowClass).setRowDataClass((Class<? extends Data>) systemAction.getEntities().getElementClass())

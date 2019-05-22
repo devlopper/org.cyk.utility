@@ -16,7 +16,6 @@ import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
-import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.RepresentationLayer;
 import org.cyk.utility.server.representation.ResponseEntityDto;
@@ -128,7 +127,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 		__inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object2).createOne(object2);
 		
 		@SuppressWarnings("unchecked")
-		Collection<ENTITY> entities = (Collection<ENTITY>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object1).getMany(null,null,ConstantNull.STRING,null).getEntity();
+		Collection<ENTITY> entities = (Collection<ENTITY>) __inject__(RepresentationLayer.class).injectInterfaceClassFromEntity(object1).getMany(Boolean.FALSE,null,null,ConstantNull.STRING,null).getEntity();
 		
 		assertThat(entities).asList().hasSize(2);
 	}
@@ -161,26 +160,7 @@ public abstract class AbstractRepresentationEntityIntegrationTest<ENTITY> extend
 	}
 	
 	/**/
-	
-	@Override
-	protected Object __getFieldValueSystemIdentifier__(Object object) {
-		/*if(object instanceof AbstractEntityFromPersistenceEntity)
-			return ((AbstractEntityFromPersistenceEntity)__getLayerEntityInterfaceFromObject__(object).getOne(((AbstractEntityFromPersistenceEntity)object).getCode()
-					,ValueUsageType.SYSTEM.name(),null)
-					.getEntity()).getIdentifier();
-		*/
-		if(object instanceof AbstractEntityFromPersistenceEntity)
-			return ((AbstractEntityFromPersistenceEntity)object).getIdentifier();
-		return super.__getFieldValueSystemIdentifier__(object);
-	}
-	
-	@Override
-	protected Object __getFieldValueBusinessIdentifier__(Object object) {
-		if(object instanceof AbstractEntityFromPersistenceEntity)
-			return ((AbstractEntityFromPersistenceEntity)object).getCode();
-		return super.__getFieldValueBusinessIdentifier__(object);
-	}
-	
+		
 	@SuppressWarnings("unchecked")
 	protected Class<ENTITY> __getEntityClass__(Object action){
 		return (Class<ENTITY>) ClassHelperImpl.__getParameterAt__(getClass(), 0, Object.class);

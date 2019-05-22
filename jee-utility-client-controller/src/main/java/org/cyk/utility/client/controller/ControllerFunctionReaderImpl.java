@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.ws.rs.core.Response;
 
@@ -12,6 +13,7 @@ import org.cyk.utility.object.Objects;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.type.BooleanHelper;
 import org.cyk.utility.type.TypeHelper;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -28,10 +30,14 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		Response response;
 		Objects identifiers = action.getEntitiesIdentifiers();
-		String fields = (String)getProperties().getFields();
+		Properties properties = getProperties();
+		String fields = (String) Properties.getFromPath(properties, Properties.FIELDS);
 		if(__injectCollectionHelper__().isEmpty(identifiers)) {
-			//TODO handle pagination
-			response = representation.getMany(null,null,fields,null);
+			Boolean isPageable = __inject__(BooleanHelper.class).get(Properties.getFromPath(getProperties(),Properties.IS_PAGEABLE));
+			Long from = __injectNumberHelper__().getLong(Properties.getFromPath(getProperties(),Properties.FROM));
+			Long count = __injectNumberHelper__().getLong(Properties.getFromPath(getProperties(),Properties.COUNT));
+			List<String> filters = (List<String>) Properties.getFromPath(getProperties(),Properties.FILTERS);
+			response = representation.getMany(isPageable,from,count,fields,filters);
 		}else {
 			Object identifier = identifiers.getFirst();
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();

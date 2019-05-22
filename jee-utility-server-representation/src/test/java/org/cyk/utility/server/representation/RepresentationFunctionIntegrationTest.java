@@ -1,7 +1,5 @@
 package org.cyk.utility.server.representation;
 
-import javax.ws.rs.core.Response;
-
 import org.cyk.utility.server.representation.test.TestRepresentationCreate;
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment;
 import org.junit.Test;
@@ -23,7 +21,7 @@ public class RepresentationFunctionIntegrationTest extends AbstractRepresentatio
 		__inject__(MyEntityRepresentation.class).createOne(new MyEntityDto().setCode("c"));
 		__inject__(MyEntityRepresentation.class).createOne(new MyEntityDto().setCode("d"));
 		__inject__(MyEntityRepresentation.class).createOne(new MyEntityDto().setCode("e"));
-		Response response = __inject__(MyEntityRepresentation.class).getMany(null, null, null,null);
+		/*Response response = */__inject__(MyEntityRepresentation.class).getMany(null,null, null, null,null);
 		//System.out.println(response.getHeaders());
 		__inject__(MyEntityRepresentation.class).deleteAll();
 	}

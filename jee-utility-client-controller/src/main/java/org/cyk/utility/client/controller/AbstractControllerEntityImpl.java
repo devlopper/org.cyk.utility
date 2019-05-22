@@ -103,6 +103,11 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		function.setDataTransferClass(dataTransferClass);
 		function.copyProperty(Properties.REQUEST,properties);
 		function.copyProperty(Properties.CONTEXT,properties);
+		function.copyProperty(Properties.IS_PAGEABLE,properties);
+		function.copyProperty(Properties.FROM,properties);
+		function.copyProperty(Properties.COUNT,properties);
+		function.copyProperty(Properties.FILTERS,properties);
+		function.copyProperty(Properties.FIELDS,properties);
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
 		function.execute();
 		if(properties!=null) {

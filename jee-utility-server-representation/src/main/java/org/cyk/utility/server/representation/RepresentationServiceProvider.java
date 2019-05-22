@@ -61,6 +61,7 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	String PARAMETER_BATCH_SIZE = ConstantString.BATCH_SIZE;
 	String PARAMETER_DIRECTORIES = ConstantString.DIRECTORIES;
 	String PARAMETER_IS_INLINE = ConstantString.IS_INLINE;
+	String PARAMETER_IS_PAGEABLE = ConstantString.IS_PAGEABLE;
 	
 	/* Format */
 	

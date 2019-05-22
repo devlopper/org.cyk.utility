@@ -68,6 +68,7 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 			function.getProperties().copyFrom(properties, Properties.VALUE_USAGE_TYPE);
 			function.copyProperty(Properties.REQUEST,properties);
 			function.copyProperty(Properties.CONTEXT,properties);
+			//TODO paging should be handled like ControllerEntity
 			entities = (Collection<ENTITY>) function.setActionEntityClass(aClass).execute().getProperties().getEntities();
 		}else{
 			entities = controller.readMany(properties);

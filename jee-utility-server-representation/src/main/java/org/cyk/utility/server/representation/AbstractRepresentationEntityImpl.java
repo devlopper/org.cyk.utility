@@ -49,9 +49,10 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public Response getMany(Long from,Long count,String fields,List<String> filters) {
+	public Response getMany(Boolean isPageable,Long from,Long count,String fields,List<String> filters) {
 		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass())
 				.setEntityFieldNames(__getFieldNames__(fields))
+				.setProperty(Properties.IS_QUERY_RESULT_PAGINATED, isPageable == null ? Boolean.TRUE : isPageable)
 				.setProperty(Properties.QUERY_FIRST_TUPLE_INDEX, from)
 				.setProperty(Properties.QUERY_NUMBER_OF_TUPLE, count)
 				.setProperty(Properties.QUERY_FILTERS, __injectCollectionHelper__().isEmpty(filters) ? null : filters)

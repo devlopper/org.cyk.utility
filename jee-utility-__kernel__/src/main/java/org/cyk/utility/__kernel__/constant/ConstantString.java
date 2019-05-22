@@ -59,5 +59,8 @@ public interface ConstantString {
 	String INLINE = "inline";
 	String ATTACHMENT = "attachment";
 	String IS_INLINE = IS+INLINE;
+	String PAGEABLE = "pageable";
+	String IS_PAGEABLE = IS+PAGEABLE;
+	String MESSAGE = "message";
 
 }

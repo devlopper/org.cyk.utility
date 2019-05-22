@@ -4574,7 +4574,27 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getFilters() {
+		return get(FILTERS);
+	}
+
+	public Properties setFilters(Object filters) {
+		set(FILTERS, filters);
+		return this;
+	}
+	
+	public Object getIsPageable() {
+		return get(IS_PAGEABLE);
+	}
+
+	public Properties setIsPageable(Object isPageable) {
+		set(IS_PAGEABLE, isPageable);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String IS_PAGEABLE = "IS_PAGEABLE";
+	public static final String FILTERS = "FILTERS";
 	public static final String QUERY_IDENTIFIER = "QUERY_IDENTIFIER";
 	public static final String QUERY_PARAMETERS = "QUERY_PARAMETERS";
 	public static final String IS_QUERY_RESULT_PAGINATED = "IS_QUERY_RESULT_PAGINATED";

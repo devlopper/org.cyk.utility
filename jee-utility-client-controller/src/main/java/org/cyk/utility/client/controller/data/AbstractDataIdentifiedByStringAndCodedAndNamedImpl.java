@@ -8,27 +8,27 @@ import org.cyk.utility.client.controller.component.annotation.Input;
 import org.cyk.utility.client.controller.component.annotation.InputString;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
 
-public abstract class AbstractDataIdentifiedByStringAndCodedImpl extends AbstractDataIdentifiedByStringImpl implements DataIdentifiedByStringAndCoded,Serializable {
+public abstract class AbstractDataIdentifiedByStringAndCodedAndNamedImpl extends AbstractDataIdentifiedByStringAndCodedImpl implements DataIdentifiedByStringAndCodedAndNamed,Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Input @InputString @InputStringLineOne
 	@NotNull
-	private String code;
+	private String name;
 	
 	@Override
-	public DataIdentifiedByStringAndCoded setCode(String code) {
-		this.code = code;
+	public DataIdentifiedByStringAndCodedAndNamed setName(String name) {
+		this.name = name;
 		return this;
 	}
 	
 	@Override
-	public String getCode() {
-		return code;
+	public String getName() {
+		return name;
 	}
 	
 	@Override
 	public String toString() {
-		return getCode();
+		return getName();
 	}
 	
 }

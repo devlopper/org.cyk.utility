@@ -43,6 +43,8 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 				Properties properties = new Properties();
 				properties.copyFrom(getProperties(), Properties.REQUEST);
 				properties.copyFrom(getProperties(), Properties.CONTEXT);
+				//properties.copyFrom(getProperties(), Properties.IS_PAGEABLE);
+				properties.setIsPageable(Boolean.FALSE);//TODO how to handle paging ???
 				try {
 					objects = __inject__(Controller.class).readMany(fieldType,properties);
 					Response response = (Response) properties.getResponse();					

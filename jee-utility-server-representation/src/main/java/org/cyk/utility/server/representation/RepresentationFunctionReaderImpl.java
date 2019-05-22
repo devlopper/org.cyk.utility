@@ -39,10 +39,13 @@ public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunc
 					,Properties.QUERY_FILTERS);
 			if(properties.getIsQueryResultPaginated() == null)
 				properties.setIsQueryResultPaginated(Boolean.TRUE); //yes we paginate
-			if(properties.getQueryFirstTupleIndex() == null)
-				properties.setQueryFirstTupleIndex(0); // first page
-			if(properties.getQueryNumberOfTuple() == null)
-				properties.setQueryNumberOfTuple(5); // 5 results
+			if(Boolean.TRUE.equals(properties.getIsQueryResultPaginated())) {
+				if(properties.getQueryFirstTupleIndex() == null)
+					properties.setQueryFirstTupleIndex(0); // first page
+				if(properties.getQueryNumberOfTuple() == null)
+					properties.setQueryNumberOfTuple(5); // 5 results	
+			}
+			
 			Collection<?> collection = __injectBusiness__().findMany(getPersistenceEntityClass(), properties);
 			entities = __injectCollectionHelper__().isEmpty(collection) ? null : (List<?>) __injectInstanceHelper__().buildMany(getEntityClass(),collection,
 					new Properties().setFields(entityFieldNames == null ? null : entityFieldNames.get()));
