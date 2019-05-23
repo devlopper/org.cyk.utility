@@ -30,7 +30,7 @@ public class RunnablesExecutorImpl extends AbstractFunctionWithPropertiesAsInput
 			executorService.shutdown();
 			Long timeOut = getTimeOut();
 			if(timeOut == null)
-				timeOut = 10l;
+				timeOut = 60l * 2;
 			TimeUnit timeOutUnit = getTimeOutUnit();
 			if(timeOutUnit == null)
 				timeOutUnit = TimeUnit.SECONDS;

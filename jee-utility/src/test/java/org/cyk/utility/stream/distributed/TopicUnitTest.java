@@ -8,14 +8,18 @@ public class TopicUnitTest extends AbstractArquillianUnitTestWithDefaultDeployme
 
 	@Test
 	public void isIdentifierEqualToMail_whenTopicIsMailAndNoSystemPropertySet() {
-		System.setProperty("stream.distributed.topic.mail", "");
-		assertionHelper.assertEquals("mail", Topic.MAIL.initialise().getIdentifier());
+		if(Boolean.TRUE.equals(__inject__(StreamDistributedHelper.class).getIsEnable())) {
+			System.setProperty("stream.distributed.topic.mail", "");
+			assertionHelper.assertEquals("mail", Topic.MAIL.initialise().getIdentifier());
+		}
 	}
 	
 	@Test
 	public void isIdentifierEqualToCustom_whenTopicIsMailAndSystemPropertySetToCustom() {
-		System.setProperty("stream.distributed.topic.mail", "custom");
-		assertionHelper.assertEquals("custom", Topic.MAIL.initialise().getIdentifier());
+		if(Boolean.TRUE.equals(__inject__(StreamDistributedHelper.class).getIsEnable())) {
+			System.setProperty("stream.distributed.topic.mail", "custom");
+			assertionHelper.assertEquals("custom", Topic.MAIL.initialise().getIdentifier());
+		}
 	}
 	
 }

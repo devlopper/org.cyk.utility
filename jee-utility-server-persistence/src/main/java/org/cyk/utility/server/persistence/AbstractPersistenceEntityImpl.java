@@ -272,7 +272,21 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@SuppressWarnings("unchecked")
 	protected Collection<ENTITY> __readMany__(Properties properties,Object...parameters) {
-		return (Collection<ENTITY>) __getReader__(properties,parameters).execute().getEntities();
+		Collection<ENTITY> entities = (Collection<ENTITY>) __getReader__(properties,parameters).execute().getEntities();
+		if(__injectCollectionHelper__().isNotEmpty(entities))
+			__listenReadManyAfter__(entities);
+		return entities;
+	}
+	
+	protected void __listenReadManyAfter__(Collection<ENTITY> entities) {
+		if(__injectCollectionHelper__().isNotEmpty(entities)) {
+			for(ENTITY index : entities)
+				__processAfterRead__(index);	
+		}
+	}
+	
+	protected void __processAfterRead__(ENTITY entity) {
+		
 	}
 	
 	protected ENTITY __readOne__(Object...parameters) {
@@ -281,7 +295,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		Integer size = __injectCollectionHelper__().getSize(entities);
 		if(size!=null && size > 1)
 			throw new RuntimeException("too much ("+size+") results found");
-		return __injectCollectionHelper__().getFirst(entities);
+		ENTITY entity = __injectCollectionHelper__().getFirst(entities);
+		__processAfterRead__(entity);
+		return entity;
 	}
 	
 	protected Long __count__(Properties properties,Object...parameters) {

@@ -2,6 +2,8 @@ package org.cyk.utility.test.arquillian;
 
 import java.io.Serializable;
 
+import org.cyk.utility.ApplicationScopeLifeCycleListener;
+
 public abstract class AbstractArquillianUnitTestWithDefaultDeployment extends AbstractArquillianUnitTest implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -20,7 +22,7 @@ public abstract class AbstractArquillianUnitTestWithDefaultDeployment extends Ab
 	@org.jboss.arquillian.container.test.api.Deployment
 	public static org.jboss.shrinkwrap.api.spec.JavaArchive createDeployment() {
 		return new org.cyk.utility.__kernel__.test.arquillian.archive.builder.JavaArchiveBuilder()
-				.addPackage("org.cyk.utility",Boolean.TRUE)
+				.addPackage(ApplicationScopeLifeCycleListener.class.getPackage().getName(),Boolean.TRUE)
 				.execute();
 	}
 }

@@ -21,6 +21,13 @@ import org.cyk.utility.value.ValueHelper;
 public class StringRepositoryResourceBundleImpl extends AbstractStringRepositoryImpl implements StringRepositoryResourceBundle,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		for(String index : new String[] {"word","phrase","throwable"})
+			addBundle("org.cyk.utility.string.repository."+index);
+	}
+	
 	//private final Map<String,ClassLoader> map = new LinkedHashMap<>();
 	
 	/*

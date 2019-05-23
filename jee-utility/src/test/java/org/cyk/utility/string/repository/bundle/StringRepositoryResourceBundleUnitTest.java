@@ -23,6 +23,12 @@ public class StringRepositoryResourceBundleUnitTest extends AbstractArquillianUn
 	}
 	
 	@Test
+	public void isYesWhenKeyIsOui(){
+		assertionHelper.assertEquals("oui", repository.getOne("yes"));
+	}
+	
+	
+	@Test
 	public void isSalutWhenKeyIsHi(){
 		repository.addBundle("org.cyk.utility.string.repository.bundle.message");
 		assertionHelper.assertEquals("salut", repository.getOne("hi"));

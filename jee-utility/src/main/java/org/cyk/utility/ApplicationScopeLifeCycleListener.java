@@ -2,13 +2,13 @@ package org.cyk.utility;
 import java.io.Serializable;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.client.Client;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
-import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
-import org.cyk.utility.field.FieldValueCopyFunctionRunnableImpl;
-import org.cyk.utility.field.FieldValueCopyImpl;
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.request.RequestHelper;
+import org.cyk.utility.stream.distributed.StreamDistributedHelper;
 import org.cyk.utility.stream.distributed.Topic;
-import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
 
 @ApplicationScoped
 public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeLifeCycleListener implements Serializable {
@@ -16,16 +16,20 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
-		__inject__(FunctionRunnableMap.class).set(FieldValueCopyImpl.class, FieldValueCopyFunctionRunnableImpl.class,LEVEL);
-		for(String index : new String[] {"word","phrase","throwable"})
-			__inject__(StringRepositoryResourceBundle.class).addBundle("org.cyk.utility.string.repository."+index);
-		
-		Topic.startAllConsumers();
+		if(Boolean.TRUE.equals(DependencyInjection.inject(StreamDistributedHelper.class).getIsEnable())) {
+			Topic.startAllConsumers();
+		}
 	}
 
 	@Override
 	public void __destroy__(Object object) {
-		Topic.stopAllConsumers();
+		if(Boolean.TRUE.equals(DependencyInjection.inject(StreamDistributedHelper.class).getIsEnable())) {
+			Topic.stopAllConsumers();
+		}
+
+		Client client = __inject__(RequestHelper.class).getClient();
+		if(client != null)
+			client.close();
 	}
 	
 	/**/

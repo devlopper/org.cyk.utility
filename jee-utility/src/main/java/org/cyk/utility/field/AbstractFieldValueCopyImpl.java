@@ -1,40 +1,35 @@
 package org.cyk.utility.field;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByLong;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.instance.InstanceHelper;
+import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.value.ValueConverter;
 import org.cyk.utility.value.ValueUsageType;
 
-@Deprecated
-public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends AbstractFunctionRunnableImpl<FieldValueCopy> {
+public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FieldValueCopy,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public AbstractFieldValueCopyFunctionRunnableImpl() {
-		setRunnable(new Runnable() {
-			@Override
-			public void run() {
-				__process__();
-			}
-		});
-	}
+	private Boolean isOverridable;
 	
-	protected void __process__() {
-		FieldValueCopy fieldValueCopy = getFunction();
-		FieldValueGetter getterModel = fieldValueCopy.getValueGetter();
-		FieldValueSetter setterModel = fieldValueCopy.getValueSetter();
-		Map<String,String> fieldNameMap = fieldValueCopy.getFieldNameMap();
+	@Override
+	protected void ____execute____() throws Exception {
+		FieldValueGetter getterModel = getValueGetter();
+		FieldValueSetter setterModel = getValueSetter();
+		Map<String,String> fieldNameMap = getFieldNameMap();
+		Boolean isOverridable = getIsOverridable();
 		if(fieldNameMap == null) {
-			Boolean isAutomaticallyDetectFields = fieldValueCopy.getIsAutomaticallyDetectFields();
+			Boolean isAutomaticallyDetectFields = getIsAutomaticallyDetectFields();
 			if(isAutomaticallyDetectFields == null)
 				isAutomaticallyDetectFields = Boolean.TRUE;
 			if(Boolean.TRUE.equals(isAutomaticallyDetectFields)) {
@@ -59,6 +54,11 @@ public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends Abstrac
 			for(Map.Entry<String, String> entry : fieldNameMap.entrySet()) {
 				FieldValueSetter setter = __inject__(FieldValueSetter.class).setObject(setterModel.getObject()).setField(entry.getValue());
 				if(setter.getField()!=null) {
+					if(Boolean.FALSE.equals(isOverridable)) {
+						Object setterFieldValue = __inject__(FieldValueGetter.class).execute(setter.getObject(), setter.getField()).getOutput();
+						if(setterFieldValue != null)
+							continue;
+					}
 					FieldValueGetter getter = __inject__(FieldValueGetter.class).setObject(getterModel.getObject()).setField(entry.getKey());
 					Object value = getter.execute().getOutput();
 					if(value!=null)
@@ -78,7 +78,7 @@ public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends Abstrac
 		Class<?> sourceType = __inject__(FieldTypeGetter.class).execute(source).getOutput();
 		Class<?> destinationType = __inject__(FieldTypeGetter.class).execute(destination).getOutput();
 		Properties properties = new Properties();
-		properties.copyFrom(getFunction().getProperties(), Properties.CONTEXT,Properties.REQUEST);
+		properties.copyFrom(getProperties(), Properties.CONTEXT,Properties.REQUEST);
 		
 		//Primitive or string or enum
 		if(classHelper.isNumberOrStringOrEnum(sourceType)) {
@@ -129,7 +129,7 @@ public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends Abstrac
 						Boolean.TRUE.equals(classInstancesRuntime.get(destinationType).getIsTransferable())) {
 					//TODO if business identifier is there take it first otherwise take system identifier
 					fieldValueCopy.setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.SYSTEM).getOutput());
-					//fieldValueCopy.setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.BUSINESS).getOutput());								
+					//setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.BUSINESS).getOutput());								
 				}else {
 					fieldValueCopy.setIsAutomaticallyDetectFields(Boolean.TRUE);
 				}
@@ -172,14 +172,14 @@ public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends Abstrac
 					Object temp = value;
 					value = __inject__(destinationType);
 					FieldValueCopy fieldValueCopy = __inject__(FieldValueCopy.class).setSource(temp).setDestination(value);
-					fieldValueCopy.getProperties().setCaller(getFunction());
+					getProperties().setCaller(getFunction());
 					if(getFunction().getProperties().getCaller() == null) {
-						fieldValueCopy.setIsAutomaticallyDetectFields(Boolean.TRUE);		
+						setIsAutomaticallyDetectFields(Boolean.TRUE);		
 					}else {
-						fieldValueCopy.setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.SYSTEM).getOutput());
-						fieldValueCopy.setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.BUSINESS).getOutput());
+						setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.SYSTEM).getOutput());
+						setFieldName(__inject__(FieldNameGetter.class).execute(sourceType, FieldName.IDENTIFIER, ValueUsageType.BUSINESS).getOutput());
 					}
-					fieldValueCopy.execute();
+					execute();
 					isUnSet = Boolean.FALSE;
 				}	
 			}
@@ -194,4 +194,119 @@ public abstract class AbstractFieldValueCopyFunctionRunnableImpl extends Abstrac
 		return value;
 	}
 	
+	@Override
+	public FieldValueCopy execute(Object source, Object destination, Map<String, String> fieldNameMap) {
+		return (FieldValueCopy) setValueGetter(__inject__(FieldValueGetter.class).setObject(source))
+				.setValueSetter(__inject__(FieldValueSetter.class).setObject(destination)).setFieldNameMap(fieldNameMap)
+				.setIsAutomaticallyDetectFields(fieldNameMap == null).execute();
+	}
+	
+	@Override
+	public FieldValueCopy execute(Object source, Object destination, String fieldName) {
+		@SuppressWarnings("rawtypes")
+		Map map = __inject__(MapHelper.class).instanciate(fieldName,fieldName);
+		return execute(source, destination,map );
+	}
+	
+	@Override
+	public FieldValueCopy execute(Object source, Object destination) {
+		return execute(source, destination,(Map<String, String>)null );
+	}
+	
+	@Override
+	public FieldValueGetter getValueGetter() {
+		return (FieldValueGetter) getProperties().getFromPath(Properties.VALUE,Properties.GETTER);
+	}
+
+	@Override
+	public FieldValueCopy setValueGetter(FieldValueGetter valueGetter) {
+		getProperties().setFromPath(new Object[] {Properties.VALUE,Properties.GETTER},valueGetter);
+		return this;
+	}
+	
+	@Override
+	public FieldValueGetter getValueGetter(Boolean injectIfNull) {
+		FieldValueGetter getter = getValueGetter();
+		if(getter == null && Boolean.TRUE.equals(injectIfNull))
+			setValueGetter(getter = __inject__(FieldValueGetter.class));
+		return getter;
+	}
+
+	@Override
+	public FieldValueSetter getValueSetter() {
+		return (FieldValueSetter) getProperties().getFromPath(Properties.VALUE,Properties.SETTER);
+	}
+
+	@Override
+	public FieldValueCopy setValueSetter(FieldValueSetter valueSetter) {
+		getProperties().setFromPath(new Object[] {Properties.VALUE,Properties.SETTER},valueSetter);
+		return this;
+	}
+	
+	@Override
+	public FieldValueSetter getValueSetter(Boolean injectIfNull) {
+		FieldValueSetter setter = getValueSetter();
+		if(setter == null && Boolean.TRUE.equals(injectIfNull))
+			setValueSetter(setter = __inject__(FieldValueSetter.class));
+		return setter;
+	}
+	
+	@Override
+	public Map<String, String> getFieldNameMap() {
+		return (Map<String, String>) getProperties().getFromPath(Properties.MAP,Properties.FIELD_NAME);
+	}
+	
+	@Override
+	public FieldValueCopy setFieldNameMap(Map<String, String> fieldNameMap) {
+		getProperties().setFromPath(new Object[] {Properties.MAP,Properties.FIELD_NAME},fieldNameMap);
+		return this;
+	}
+	
+	@Override
+	public FieldValueCopy setFieldName(String source, String destination) {
+		Map<String,String> map = getFieldNameMap();
+		if(map == null)
+			setFieldNameMap(map = new HashMap<>());
+		map.put(source, destination);
+		return this;
+	}
+	
+	@Override
+	public FieldValueCopy setFieldName(String fieldName) {
+		return setFieldName(fieldName, fieldName);
+	}
+	
+	@Override
+	public FieldValueCopy setSource(Object source) {
+		getValueGetter(Boolean.TRUE).setObject(source);
+		return this;
+	}
+	
+	@Override
+	public FieldValueCopy setDestination(Object destination) {
+		getValueSetter(Boolean.TRUE).setObject(destination);
+		return this;
+	}
+
+	@Override
+	public FieldValueCopy setIsAutomaticallyDetectFields(Boolean value) {
+		getProperties().setFromPath(new String[] {Properties.IS,Properties.DETECT,Properties.FIELD},value);
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsAutomaticallyDetectFields() {
+		return (Boolean) getProperties().getFromPath(Properties.IS,Properties.DETECT,Properties.FIELD);
+	}
+
+	@Override
+	public Boolean getIsOverridable() {
+		return isOverridable;
+	}
+	
+	@Override
+	public FieldValueCopy setIsOverridable(Boolean isOverridable) {
+		this.isOverridable = isOverridable;
+		return this;
+	}
 }

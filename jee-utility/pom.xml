@@ -28,6 +28,7 @@
 		<com.google.zxing.core.version>3.3.3</com.google.zxing.core.version>
 		<com.google.zxing.javase.version>3.3.3</com.google.zxing.javase.version>
 		<org.reflections.reflections.version>0.9.10</org.reflections.reflections.version>
+		<org.jboss.resteasy.resteasy-jaxrs.version>3.7.0.Final</org.jboss.resteasy.resteasy-jaxrs.version>
 	</properties>
 	
 	<dependencies>
@@ -121,6 +122,26 @@
 		    <version>${org.reflections.reflections.version}</version>
 		</dependency>
 		
+		<dependency>
+		    <groupId>org.glassfish.jersey.core</groupId>
+		    <artifactId>jersey-client</artifactId>
+		    <version>2.26</version>
+		    <scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.glassfish.jersey.inject</groupId>
+		    <artifactId>jersey-hk2</artifactId>
+		    <version>2.26</version>
+		    <scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.glassfish.jersey.media</groupId>
+		    <artifactId>jersey-media-json-jackson</artifactId>
+		    <version>2.26</version>
+		    <scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 </project>

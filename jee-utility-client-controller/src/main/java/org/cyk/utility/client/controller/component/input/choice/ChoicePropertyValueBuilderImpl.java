@@ -19,6 +19,7 @@ public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueB
 	protected String __execute__() throws Exception {
 		String result = null;
 		Object object = getObject();
+		String fieldName = null;
 		if(object!=null) {
 			String propertyName = getPropertyName();
 			Field field = null;
@@ -33,6 +34,7 @@ public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueB
 			}
 			
 			if(field != null) {
+				fieldName = field.getName();
 				Object value = __injectFieldValueGetter__().execute(object, field).getOutput();
 				if(value == null)
 					result = ConstantEmpty.STRING;
@@ -40,6 +42,9 @@ public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueB
 					result = value.toString();
 			}else
 				result = object.toString();
+		}
+		if(__injectStringHelper__().isBlank(result)) {
+			System.out.println("blank result has been found for Object : "+object+" , and field : "+fieldName);
 		}
 		return result;
 	}
