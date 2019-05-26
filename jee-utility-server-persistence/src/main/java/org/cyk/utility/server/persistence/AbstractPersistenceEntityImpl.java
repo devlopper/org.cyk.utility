@@ -12,10 +12,12 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.map.MapHelper;
+import org.cyk.utility.request.RequestProcessor;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.type.BooleanHelper;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -286,7 +288,15 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected void __processAfterRead__(ENTITY entity) {
-		
+		Strings uniformResourceIdentifierStringFormats = __getReadOneUniformResourceIdentifierFormats__();
+		if(__injectCollectionHelper__().isNotEmpty(uniformResourceIdentifierStringFormats)) {
+			for(String index : uniformResourceIdentifierStringFormats.get())
+				__inject__(RequestProcessor.class).setUniformResourceIdentifierStringFormat(index).setResponseEntity(entity).execute();		
+		}
+	}
+	
+	protected Strings __getReadOneUniformResourceIdentifierFormats__() {
+		return null;
 	}
 	
 	protected ENTITY __readOne__(Object...parameters) {

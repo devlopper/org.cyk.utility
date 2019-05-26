@@ -10,34 +10,28 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-   			<p:selectOneMenu
+			<p:autoComplete
    				id="#{value.properties.identifier}"
    				value="#{value.value}"
+				completeMethod="#{value.getChoicesByQuery}"
+				maxResults="#{value.properties.maxResults}"
+				cache="#{value.properties.cache}"
+				cacheTimeout="#{value.properties.cacheTimeout}"
+				forceSelection="#{value.properties.forceSelection}"
+				dropdown="#{value.properties.dropDown}"
+				dropdownMode="#{value.properties.dropDownMode}"
 				required="#{value.properties.required}"
+				var="choice"
+				itemLabel="#{value.getChoiceLabel(choice)}"
+				itemValue="#{choice}"
+				multiple="#{value.properties.multiple}"
 				styleClass="#{value.properties.styleClass}"
 				style="#{value.properties.style}"
-				converter="#{value.properties.converter}"
-				filter="#{value.properties.filter}"
-				filterMatchMode="#{value.properties.filterMatchMode}"
-				dynamic="#{value.properties.dynamic}"
-				
+				converter="#{value.properties.converter}"				
    			>
-   				<f:selectItems
-   					var="item" 
-   					value="#{value.choices.get()}"
-   					itemLabel="#{value.getChoiceLabel(item)}"
-   					itemValue="#{item}"
-   				/>
-   			</p:selectOneMenu>
+   				
+   			</p:autoComplete>
 		</ui:define>
 	</ui:decorate>	
-	
-	<!--
-		itemLabel="#{item.label}"
-		itemValue="#{item.value}"
-   		itemDescription="#{item.description}"
-   		itemDisabled="#{item.disabled}"
-   		itemLabelEscaped="#{item.escape}"
-	-->
 		
 </ui:composition>

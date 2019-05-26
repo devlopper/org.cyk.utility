@@ -4,6 +4,9 @@ import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 
 public interface ChoicePropertyValueBuilder extends FunctionWithPropertiesAsInput<String> {
 
+	ChoiceProperty getProperty();
+	ChoicePropertyValueBuilder setProperty(ChoiceProperty property);
+	
 	String getPropertyName();
 	ChoicePropertyValueBuilder setPropertyName(String propertyName);
 	

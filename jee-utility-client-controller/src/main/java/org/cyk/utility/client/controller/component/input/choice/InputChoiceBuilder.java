@@ -13,7 +13,13 @@ public interface InputChoiceBuilder<INPUT extends InputChoice<CHOICE>,CHOICE> ex
 	InputChoiceBuilder<INPUT,CHOICE> addChoices(Collection<Object> choices);
 	InputChoiceBuilder<INPUT,CHOICE> addChoices(Object...choices);
 	
-	Class<? extends ChoicePropertyValueBuilder> getChoiceLabelBuilderClass();
-	InputChoiceBuilder<INPUT,CHOICE> setChoiceLabelBuilderClass(Class<? extends ChoicePropertyValueBuilder> choiceLabelBuilderClass);
+	Class<? extends ChoicesGetter> getChoicesGetterClass();
+	InputChoiceBuilder<INPUT,CHOICE> setChoicesGetterClass(Class<? extends ChoicesGetter> choicesGetterClass);
+	
+	Integer getMaximumNumberOfChoice();
+	InputChoiceBuilder<INPUT,CHOICE> setMaximumNumberOfChoice(Integer maximumNumberOfChoice);
+	
+	Class<? extends ChoicePropertyValueBuilder> getChoicePropertyValueBuilderClass();
+	InputChoiceBuilder<INPUT,CHOICE> setChoicePropertyValueBuilderClass(Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass);
 	
 }

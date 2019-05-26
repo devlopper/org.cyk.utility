@@ -12,5 +12,5 @@ import org.cyk.utility.client.controller.component.input.choice.ChoicePropertyVa
 @Target(value={ElementType.FIELD})
 public @interface InputChoice {
 	
-	Class<? extends ChoicePropertyValueBuilder> labelBuilderClass() default ChoicePropertyValueBuilderImpl.class;
+	Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass() default ChoicePropertyValueBuilderImpl.class;
 }

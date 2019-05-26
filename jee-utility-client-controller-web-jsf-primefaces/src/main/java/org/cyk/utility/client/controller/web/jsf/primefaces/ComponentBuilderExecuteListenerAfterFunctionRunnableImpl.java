@@ -23,7 +23,11 @@ import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.input.InputBoolean;
 import org.cyk.utility.client.controller.component.input.InputFile;
 import org.cyk.utility.client.controller.component.input.choice.InputChoice;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceMany;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyAutoComplete;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBox;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceOne;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneAutoComplete;
 import org.cyk.utility.client.controller.component.layout.Insert;
 import org.cyk.utility.client.controller.component.link.Link;
 import org.cyk.utility.client.controller.component.menu.Menu;
@@ -121,11 +125,38 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						if(inputOutput instanceof Input<?>) {
 							if(component instanceof InputChoice<?>) {
 								component.getProperties().setConverter(__inject__(ObjectConverter.class));
-								if(component instanceof InputChoiceManyCheckBox) {
-									component.getProperties().setLayout("responsive");
-									component.getProperties().setColumns(3);
-								}
-									
+								component.getProperties().setFilter("true");
+								component.getProperties().setFilterMatchMode("contains");
+								component.getProperties().setDynamic(Boolean.FALSE);
+								
+								if(component instanceof InputChoiceOne) {
+									if(component instanceof InputChoiceOneAutoComplete) {
+										component.getProperties().setMultiple("false");
+										Integer maximumNumberOfChoice = ((InputChoice<?>)inputOutput).getMaximumNumberOfChoice();
+										if(maximumNumberOfChoice != null && maximumNumberOfChoice>0)
+											component.getProperties().setMaxResults(maximumNumberOfChoice);
+										component.getProperties().setCache(Boolean.TRUE);
+										component.getProperties().setCacheTimeout(300000);// 5 minutes
+										component.getProperties().setForceSelection(Boolean.TRUE);
+										component.getProperties().setDropDown(Boolean.TRUE);
+										component.getProperties().setDropDownMode("blank");
+									}
+								}else if(component instanceof InputChoiceMany) {
+									if(component instanceof InputChoiceManyCheckBox) {
+										component.getProperties().setLayout("responsive");
+										component.getProperties().setColumns(3);
+									}else if(component instanceof InputChoiceManyAutoComplete) {
+										component.getProperties().setMultiple("true");
+										Integer maximumNumberOfChoice = ((InputChoice<?>)inputOutput).getMaximumNumberOfChoice();
+										if(maximumNumberOfChoice != null && maximumNumberOfChoice>0)
+											component.getProperties().setMaxResults(maximumNumberOfChoice);
+										component.getProperties().setCache(Boolean.TRUE);
+										component.getProperties().setCacheTimeout(300000);// 5 minutes
+										component.getProperties().setForceSelection(Boolean.TRUE);
+										component.getProperties().setDropDown(Boolean.TRUE);
+										component.getProperties().setDropDownMode("blank");
+									}
+								}				
 							}else if(component instanceof InputBoolean) {
 								InputBoolean inputBoolean = (InputBoolean) inputOutput;
 								component.getProperties().setOffLabel(inputBoolean.getFalseValue().getLabel());

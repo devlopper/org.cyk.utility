@@ -45,6 +45,11 @@
     </tag>
     
     <tag>
+        <tag-name>autoComplete</tag-name>
+        <source>tag/input/choice/autoComplete.xhtml</source>
+    </tag>
+    
+    <tag>
         <tag-name>selectOneRadio</tag-name>
         <source>tag/input/choice/one/selectOneRadio.xhtml</source>
     </tag>

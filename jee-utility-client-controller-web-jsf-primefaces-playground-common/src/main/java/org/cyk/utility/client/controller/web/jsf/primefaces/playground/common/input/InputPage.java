@@ -48,7 +48,7 @@ public class InputPage extends AbstractPageContainerManagedImpl implements Seria
 		viewBuilder.addComponentBuilderByObjectByFieldNames(entity, "enumeration01");
 		viewBuilder.addComponentBuilderByObjectByFieldNames(entity, "verySimpleEntity01");
 		InputChoiceBuilder<?, ?> inputChoiceBuilder = (InputChoiceBuilder<?, ?>) viewBuilder.addComponentBuilderByObjectByFieldNames(entity, "verySimpleEntity02");
-		inputChoiceBuilder.setChoiceLabelBuilderClass(ChoiceLabelBuilderImpl01.class);
+		inputChoiceBuilder.setChoicePropertyValueBuilderClass(ChoiceLabelBuilderImpl01.class);
 		viewBuilder.addComponentBuilderByObjectByFieldNames(entity, "verySimpleEntity03");
 		
 		viewBuilder.addComponentBuilderByObjectByMethodName(entity, "submit");
@@ -74,7 +74,7 @@ public class InputPage extends AbstractPageContainerManagedImpl implements Seria
 		@Input @InputChoice @InputChoiceOne @InputChoiceOneCombo
 		private VerySimpleEntity verySimpleEntity02;
 		
-		@Input @InputChoice(labelBuilderClass=ChoiceLabelBuilderImpl02.class) @InputChoiceOne @InputChoiceOneCombo
+		@Input @InputChoice(choicePropertyValueBuilderClass=ChoiceLabelBuilderImpl02.class) @InputChoiceOne @InputChoiceOneCombo
 		private VerySimpleEntity verySimpleEntity03;
 		
 		@Commandable(systemActionClass=SystemActionCreate.class) @CommandableButton

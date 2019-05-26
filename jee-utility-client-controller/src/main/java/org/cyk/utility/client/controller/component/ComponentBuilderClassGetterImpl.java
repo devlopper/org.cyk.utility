@@ -17,7 +17,9 @@ import org.cyk.utility.client.controller.component.input.InputFileBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringEditorBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyAutoCompleteBuilder;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBoxBuilder;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneAutoCompleteBuilder;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneComboBuilder;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneRadioBuilder;
 import org.cyk.utility.client.controller.component.output.OutputBuilder;
@@ -264,10 +266,20 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 			if(annotationInputChoiceOneRadio!=null)
 				return InputChoiceOneRadioBuilder.class;
 			
+			org.cyk.utility.client.controller.component.annotation.InputChoiceOneAutoComplete annotationInputChoiceOneAutoComplete =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceOneAutoComplete.class,annotations);
+			if(annotationInputChoiceOneAutoComplete!=null)
+				return InputChoiceOneAutoCompleteBuilder.class;
+			
 			org.cyk.utility.client.controller.component.annotation.InputChoiceManyCheckBox annotationInputChoiceManyCheckBox =
 					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceManyCheckBox.class,annotations);
 			if(annotationInputChoiceManyCheckBox!=null)
 				return InputChoiceManyCheckBoxBuilder.class;	
+			
+			org.cyk.utility.client.controller.component.annotation.InputChoiceManyAutoComplete annotationInputChoiceManyAutoComplete =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputChoiceManyAutoComplete.class,annotations);
+			if(annotationInputChoiceManyAutoComplete!=null)
+				return InputChoiceManyAutoCompleteBuilder.class;
 			
 			org.cyk.utility.client.controller.component.annotation.InputFile annotationInputFile =
 					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputFile.class,annotations);

@@ -44,6 +44,12 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>inputChoiceView</from-outcome>
+			<to-view-id>/input/choice.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>outputTextView</from-outcome>
 			<to-view-id>/output/text.jsf</to-view-id>
 			<redirect />

@@ -22,6 +22,13 @@ public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueB
 		String fieldName = null;
 		if(object!=null) {
 			String propertyName = getPropertyName();
+			if(__injectStringHelper__().isBlank(propertyName) ) {
+				ChoiceProperty property = getProperty();
+				if(property != null) {
+					//TODO derive property name
+				}	
+			}
+			
 			Field field = null;
 			if(__injectStringHelper__().isNotBlank(propertyName) )
 				field = __injectCollectionHelper__().getFirst(__inject__(FieldGetter.class).execute(object.getClass(), propertyName).getOutput());

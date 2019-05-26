@@ -61,8 +61,14 @@
 										<c:when test="#{componentHelper.isInputChoiceOneRadio(indexComponent)}">
 											<cyk:selectOneRadio value="#{indexComponent}" />
 										</c:when>
+										<c:when test="#{componentHelper.isInputChoiceOneAutoComplete(indexComponent)}">
+											<cyk:autoComplete value="#{indexComponent}" />
+										</c:when>
 										<c:when test="#{componentHelper.isInputChoiceManyCheckBox(indexComponent)}">
 											<cyk:selectManyCheckbox value="#{indexComponent}" />
+										</c:when>
+										<c:when test="#{componentHelper.isInputChoiceManyAutoComplete(indexComponent)}">
+											<cyk:autoComplete value="#{indexComponent}" />
 										</c:when>
 										<c:when test="#{componentHelper.isInputFile(indexComponent)}">
 											<cyk:inputFile value="#{indexComponent}" />

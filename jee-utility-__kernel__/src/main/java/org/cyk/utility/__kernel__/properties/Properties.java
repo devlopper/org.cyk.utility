@@ -4592,7 +4592,57 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getMaxResults() {
+		return get(MAX_RESULTS);
+	}
+
+	public Properties setMaxResults(Object maxResults) {
+		set(MAX_RESULTS, maxResults);
+		return this;
+	}
+	
+	public Object getCacheTimeout() {
+		return get(CACHE_TIMEOUT);
+	}
+
+	public Properties setCacheTimeout(Object cacheTimeout) {
+		set(CACHE_TIMEOUT, cacheTimeout);
+		return this;
+	}
+	
+	public Object getForceSelection() {
+		return get(FORCE_SELECTION);
+	}
+
+	public Properties setForceSelection(Object forceSelection) {
+		set(FORCE_SELECTION, forceSelection);
+		return this;
+	}
+	
+	public Object getDropDown() {
+		return get(DROP_DOWN);
+	}
+
+	public Properties setDropDown(Object dropDown) {
+		set(DROP_DOWN, dropDown);
+		return this;
+	}
+	
+	public Object getDropDownMode() {
+		return get(DROP_DOWN_MODE);
+	}
+
+	public Properties setDropDownMode(Object dropDownMode) {
+		set(DROP_DOWN_MODE, dropDownMode);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String FORCE_SELECTION = "FORCE_SELECTION";
+	public static final String DROP_DOWN = "DROP_DOWN";
+	public static final String DROP_DOWN_MODE = "DROP_DOWN_MODE";
+	public static final String CACHE_TIMEOUT = "CACHE_TIMEOUT";
+	public static final String MAX_RESULTS = "MAX_RESULTS";
 	public static final String IS_PAGEABLE = "IS_PAGEABLE";
 	public static final String FILTERS = "FILTERS";
 	public static final String QUERY_IDENTIFIER = "QUERY_IDENTIFIER";

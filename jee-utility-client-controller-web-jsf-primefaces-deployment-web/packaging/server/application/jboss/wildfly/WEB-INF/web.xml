@@ -56,7 +56,7 @@
 		<param-name>cyk.context.parameter.theme.logo.file.name.extension</param-name>
 		<param-value>${cyk.context.parameter.theme.logo.file.name.extension}</param-value>
 	</context-param>
-	
+	<!--
 	<security-role>
 		<role-name>*</role-name>
 	</security-role>	
@@ -73,5 +73,5 @@
 	<login-config>
 		<auth-method>KEYCLOAK</auth-method>
 	</login-config>
-		
+	-->	
 </web-app>

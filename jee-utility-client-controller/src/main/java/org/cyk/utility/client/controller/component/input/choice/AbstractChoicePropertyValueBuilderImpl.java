@@ -7,8 +7,20 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 public abstract class AbstractChoicePropertyValueBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements ChoicePropertyValueBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private ChoiceProperty property;
 	private String propertyName;
 	private Object object;
+	
+	@Override
+	public ChoiceProperty getProperty() {
+		return property;
+	}
+	
+	@Override
+	public ChoicePropertyValueBuilder setProperty(ChoiceProperty property) {
+		this.property = property;
+		return this;
+	}
 	
 	@Override
 	public String getPropertyName() {

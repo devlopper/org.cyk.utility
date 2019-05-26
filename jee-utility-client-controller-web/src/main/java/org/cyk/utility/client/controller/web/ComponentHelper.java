@@ -20,7 +20,9 @@ import org.cyk.utility.client.controller.component.input.InputFile;
 import org.cyk.utility.client.controller.component.input.InputStringEditor;
 import org.cyk.utility.client.controller.component.input.InputStringLineMany;
 import org.cyk.utility.client.controller.component.input.InputStringLineOne;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyAutoComplete;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyCheckBox;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneAutoComplete;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneCombo;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneRadio;
 import org.cyk.utility.client.controller.component.layout.Insert;
@@ -84,8 +86,16 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 		return object instanceof InputChoiceOneRadio;
 	}
 	
+	public Boolean isInputChoiceOneAutoComplete(Object object) {
+		return object instanceof InputChoiceOneAutoComplete;
+	}
+	
 	public Boolean isInputChoiceManyCheckBox(Object object) {
 		return object instanceof InputChoiceManyCheckBox;
+	}
+	
+	public Boolean isInputChoiceManyAutoComplete(Object object) {
+		return object instanceof InputChoiceManyAutoComplete;
 	}
 	
 	public Boolean isInputFile(Object object) {

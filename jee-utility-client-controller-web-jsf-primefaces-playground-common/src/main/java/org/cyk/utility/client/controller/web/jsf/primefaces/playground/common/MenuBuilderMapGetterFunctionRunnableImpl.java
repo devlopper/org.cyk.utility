@@ -45,6 +45,7 @@ public class MenuBuilderMapGetterFunctionRunnableImpl extends AbstractFunctionRu
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Index").setCommandableNavigationIdentifier("inputIndexView")
 									,__inject__(MenuItemBuilder.class).setCommandableName("Text").setCommandableNavigationIdentifier("inputTextView")
 									,__inject__(MenuItemBuilder.class).setCommandableName("File").setCommandableNavigationIdentifier("inputFileView")
+									,__inject__(MenuItemBuilder.class).setCommandableName("Choice").setCommandableNavigationIdentifier("inputChoiceView")
 									)	
 						,__inject__(MenuItemBuilder.class).setCommandableName("Output").setCommandableOutputProperty(Properties.ICON, "fa-image")
 							.addChild(__inject__(MenuItemBuilder.class).setCommandableName("Text").setCommandableNavigationIdentifier("outputTextView")

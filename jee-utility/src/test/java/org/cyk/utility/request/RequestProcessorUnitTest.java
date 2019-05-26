@@ -20,7 +20,8 @@ public class RequestProcessorUnitTest extends AbstractArquillianUnitTestWithDefa
 		String response = (String) __inject__(RequestProcessor.class)
 				.setUniformResourceIdentifierString("http://10.3.4.20:32202/sib/classification-par-programme/api/v1/programmes/code/22060")
 				.execute().getOutput();
-		assertThat(response).contains("\"uuid\":\"2521444c-0058-4ab7-b18e-c5d27f785da3\"","\"code\":\"22060\"","\"libelleCourt\":\"TRANSPORT TERRESTRE\"");
+		org.assertj.core.api.Assertions.assertThat(response)
+			.contains("\"uuid\":\"2521444c-0058-4ab7-b18e-c5d27f785da3\"","\"code\":\"22060\"","\"libelleCourt\":\"TRANSPORT TERRESTRE\"");
 		*/
 	}
 	
