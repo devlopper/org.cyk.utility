@@ -27,7 +27,7 @@ public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueB
 				ChoiceProperty property = getProperty();
 				if(property != null) {
 					//TODO derive property name
-					System.out.println("Property name should be derived from "+property);
+					//System.out.println("Property name should be derived from "+property);
 				}	
 			}
 			
@@ -50,7 +50,6 @@ public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueB
 							}
 						}	
 					}
-					//field = __injectCollectionHelper__().getFirst(fields);	
 				}
 			}
 			

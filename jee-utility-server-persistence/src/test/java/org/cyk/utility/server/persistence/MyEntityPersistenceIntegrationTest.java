@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceEntityIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.sql.builder.Attribute;
@@ -40,6 +41,30 @@ public class MyEntityPersistenceIntegrationTest extends AbstractPersistenceEntit
 		
 		Collection<MyEntity> c3 = (Collection<MyEntity>) __inject__(MyEntityPersistence.class).read();
 		Assert.assertEquals(5, c3.size());
+		
+		__deleteEntitiesAll__(MyEntity.class);
+		
+	}
+	
+	@Test
+	public void readIdentifierContains(){
+		__createEntity__(new MyEntity().setIdentifier("123").setCode(__getRandomCode__()).setIntegerValue(1));
+		__createEntity__(new MyEntity().setIdentifier("133").setCode(__getRandomCode__()).setIntegerValue(2));
+		__createEntity__(new MyEntity().setIdentifier("144").setCode(__getRandomCode__()).setIntegerValue(1));
+		__createEntity__(new MyEntity().setIdentifier("150").setCode(__getRandomCode__()).setIntegerValue(2));
+		__createEntity__(new MyEntity().setIdentifier("623").setCode(__getRandomCode__()).setIntegerValue(2));
+		
+		Collection<MyEntity> entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(__inject__(CollectionHelper.class).instanciate("123")));
+		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
+		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123");
+		
+		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(__inject__(CollectionHelper.class).instanciate("23")));
+		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
+		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123","623");
+		
+		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(__inject__(CollectionHelper.class).instanciate("3")));
+		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
+		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123","133","623");
 		
 		__deleteEntitiesAll__(MyEntity.class);
 		

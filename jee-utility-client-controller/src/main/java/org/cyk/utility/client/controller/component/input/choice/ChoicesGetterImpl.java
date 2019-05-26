@@ -30,7 +30,7 @@ public class ChoicesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 		Field field = __injectValueHelper__().returnOrThrowIfBlank("choices getter field", getField());
 		Object request = getRequest();
 		Object context = getContext();
-		String query = org.apache.commons.lang3.StringUtils.trimToEmpty(getQuery());
+		String query = StringUtils.trimToEmpty(getQuery());
 		Integer maximumNumberOfChoice = getMaximumNumberOfChoice();
 		Objects objects = __inject__(Objects.class);
 		Class<?> fieldType = __inject__(FieldTypeGetter.class).execute(field).getOutput();
@@ -51,7 +51,7 @@ public class ChoicesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 			Properties properties = new Properties();
 			properties.setRequest(request);
 			properties.setContext(context);
-			properties.setQueryFilters(query);
+			properties.setFilters(__injectCollectionHelper__().instanciate(query));
 			properties.setCount(maximumNumberOfChoice);
 			if(properties.getCount() == null) {
 				properties.setIsPageable(Boolean.FALSE);	

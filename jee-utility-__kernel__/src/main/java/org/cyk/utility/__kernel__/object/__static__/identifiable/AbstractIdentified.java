@@ -45,6 +45,7 @@ public abstract class AbstractIdentified<IDENTIFIER> extends Common implements I
 	
 	/**/
 	
+	public static final String FIELD_IDENTIFIER = "identifier";
 	private static final String CHARACTER_SLASH = "/";
 	private static final String CHARACTER_QUESTION_MARK = "?";
 }

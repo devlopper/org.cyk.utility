@@ -2,10 +2,9 @@ package org.cyk.utility.server.persistence;
 
 import java.util.Collection;
 
-import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 
-public interface MyEntityPersistence extends PersistenceEntity<MyEntity> {
+public interface MyEntityPersistence extends PersistenceEntityIdentifiedByString<MyEntity> {
 
 	QueryStringBuilderSelect instanciateReadByIntegerValueQueryStringBuilder();
 	Collection<MyEntity> readByIntegerValue(Integer value);

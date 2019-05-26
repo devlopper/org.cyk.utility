@@ -7,7 +7,6 @@ import javax.inject.Singleton;
 
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.sql.builder.QueryParameterNameBuilder;
@@ -15,7 +14,7 @@ import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.throwable.ThrowableHelper;
 
 @Singleton
-public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEntity> implements MyEntityPersistence,Serializable {
+public class MyEntityPersistenceImpl extends AbstractPersistenceEntityIdentifiedByStringImpl<MyEntity> implements MyEntityPersistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String readByIntegerValue,executeIncrementIntegerValue;
