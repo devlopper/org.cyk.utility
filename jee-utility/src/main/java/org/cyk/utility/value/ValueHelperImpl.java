@@ -29,9 +29,41 @@ public class ValueHelperImpl extends AbstractHelper implements ValueHelper,Seria
 	public <FROM, CLASS> CLASS cast(Object object, CLASS aClass) {
 		return (CLASS) object;
 	}
+	
+	@Override
+	public Boolean isEmpty(Object value) {
+		Boolean isEmpty = value == null;
+		if(!Boolean.TRUE.equals(isEmpty))
+			isEmpty = (value instanceof String) && __inject__(StringHelper.class).isEmpty((String) value);
+		if(!Boolean.TRUE.equals(isEmpty))
+			isEmpty = (value instanceof Collection) && __inject__(CollectionHelper.class).isEmpty((Collection<?>)value);
+		if(!Boolean.TRUE.equals(isEmpty))
+			isEmpty = (value instanceof CollectionInstance<?>) && __inject__(CollectionHelper.class).isEmpty((CollectionInstance<?>)value);
+		
+		return Boolean.TRUE.equals(isEmpty);
+	}
+	
+	@Override
+	public Boolean isNotEmpty(Object value) {
+		return !Boolean.TRUE.equals(isEmpty(value));
+	}
+	
+	@Override
+	public Boolean isBlank(Object value) {
+		Boolean isBlank = isEmpty(value);
+		if(!Boolean.TRUE.equals(isBlank))
+			isBlank = (value instanceof String) && __inject__(StringHelper.class).isBlank((String) value);
+		return Boolean.TRUE.equals(isBlank);
+	}
 
 	@Override
+	public Boolean isNotBlank(Object value) {
+		return !Boolean.TRUE.equals(isBlank(value));
+	}
+	
+	@Override
 	public <T> T returnOrThrowIfBlank(String name, T value) {
+		//TODO use isBlank method
 		Boolean isThrow = value == null;
 		if(!Boolean.TRUE.equals(isThrow))
 			isThrow = (value instanceof String) && __inject__(StringHelper.class).isBlank((String) value);

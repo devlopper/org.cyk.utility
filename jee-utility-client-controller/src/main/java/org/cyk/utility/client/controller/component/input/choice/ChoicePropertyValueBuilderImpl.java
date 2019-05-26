@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.field.FieldName;
+import org.cyk.utility.field.Fields;
 import org.cyk.utility.value.ValueUsageType;
 
 public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueBuilderImpl implements ChoicePropertyValueBuilder,Serializable {
@@ -26,6 +27,7 @@ public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueB
 				ChoiceProperty property = getProperty();
 				if(property != null) {
 					//TODO derive property name
+					System.out.println("Property name should be derived from "+property);
 				}	
 			}
 			
@@ -34,10 +36,22 @@ public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueB
 				field = __injectCollectionHelper__().getFirst(__inject__(FieldGetter.class).execute(object.getClass(), propertyName).getOutput());
 			
 			if(__injectStringHelper__().isBlank(propertyName) || field == null) {
-				FieldGetter fieldGetter = __inject__(FieldGetter.class).setClazz(object.getClass());
-				for(Object[] index : FIELD_NAME_VALUE_USAGE_TYPE)
-					fieldGetter.addNameToken((FieldName)index[0], (ValueUsageType)index[1]);
-				field = __injectCollectionHelper__().getFirst(fieldGetter.execute().getOutput());
+				if(field == null) {
+					FieldGetter fieldGetter = __inject__(FieldGetter.class).setClazz(object.getClass());
+					for(Object[] index : FIELD_NAME_VALUE_USAGE_TYPE)
+						fieldGetter.addNameToken((FieldName)index[0], (ValueUsageType)index[1]);
+					Fields fields = fieldGetter.execute().getOutput();
+					if(__injectCollectionHelper__().isNotEmpty(fields)) {
+						for(Field indexField : fields.get()) {
+							Object fieldValue = __injectFieldValueGetter__().execute(object, indexField).getOutput();
+							if(Boolean.TRUE.equals(__injectValueHelper__().isNotEmpty(fieldValue))) {
+								field = indexField;
+								break;
+							}
+						}	
+					}
+					//field = __injectCollectionHelper__().getFirst(fields);	
+				}
 			}
 			
 			if(field != null) {
@@ -50,7 +64,8 @@ public class ChoicePropertyValueBuilderImpl extends AbstractChoicePropertyValueB
 			}else
 				result = object.toString();
 		}
-		if(__injectStringHelper__().isBlank(result)) {
+	
+		if(object != null && __injectStringHelper__().isBlank(result)) {
 			System.out.println("blank result has been found for Object : "+object+" , and field : "+fieldName);
 		}
 		return result;
