@@ -35,6 +35,7 @@ public interface Component extends Objectable {
 	Property getTargetBinding(Boolean injectIfNull);
 	Component setTargetBinding(Property targetBinding);
 	Object getTargetBindingValue();
+	void setTargetBindingValue(Object targetBindingValue);
 	
 	Throwable getThrowable();
 	Component setThrowable(Throwable throwable);

@@ -48,6 +48,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	private Strings entityFieldNames;
 	private NotificationBuilders notificationBuilders;
 	private Notifications notifications;
+	private Long entitiesCount;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -323,6 +324,17 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		getProperties().setEntities(entities);
 		if(__inject__(CollectionHelper.class).isNotEmpty(entities))
 			setEntityClass(entities.iterator().next().getClass());
+		return this;
+	}
+	
+	@Override
+	public Long getEntitiesCount() {
+		return entitiesCount;
+	}
+	
+	@Override
+	public SystemFunction setEntitiesCount(Long entitiesCount) {
+		this.entitiesCount = entitiesCount;
 		return this;
 	}
 	

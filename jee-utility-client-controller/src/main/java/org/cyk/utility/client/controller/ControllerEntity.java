@@ -19,6 +19,9 @@ public interface ControllerEntity<ENTITY> extends ControllerServiceProvider<ENTI
 	Collection<ENTITY> readMany(Properties properties);
 	Collection<ENTITY> readMany();
 	
+	Long count(Properties properties);
+	Long count();
+	
 	/* Find */
 	ControllerEntity<ENTITY> redirect(Object identifier,Properties properties);
 	ControllerEntity<ENTITY> redirect(Object identifier);

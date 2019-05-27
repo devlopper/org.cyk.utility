@@ -101,13 +101,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		ControllerFunctionReader function = ____inject____(ControllerFunctionReader.class);
 		function.setEntityClass(getEntityClass());
 		function.setDataTransferClass(dataTransferClass);
-		function.copyProperty(Properties.REQUEST,properties);
-		function.copyProperty(Properties.CONTEXT,properties);
-		function.copyProperty(Properties.IS_PAGEABLE,properties);
-		function.copyProperty(Properties.FROM,properties);
-		function.copyProperty(Properties.COUNT,properties);
-		function.copyProperty(Properties.FILTERS,properties);
-		function.copyProperty(Properties.FIELDS,properties);
+		__copyReadProperties__(function, properties);
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
 		function.execute();
 		if(properties!=null) {
@@ -120,6 +114,25 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	@Override
 	public Collection<ENTITY> readMany() {
 		return readMany(null);
+	}
+	
+	@Override
+	public Long count(Properties properties) {
+		ControllerFunctionCounter function = ____inject____(ControllerFunctionCounter.class);
+		function.setEntityClass(getEntityClass());
+		function.setDataTransferClass(dataTransferClass);
+		__copyCountProperties__(function, properties);
+		function.execute();
+		if(properties!=null) {
+			properties.setResponse(function.getProperties().getResponse());
+			properties.setAction(function.getProperties().getAction());
+		}
+		return (Long) function.getEntitiesCount();
+	}
+	
+	@Override
+	public Long count() {
+		return count(null);
 	}
 	
 	@Override

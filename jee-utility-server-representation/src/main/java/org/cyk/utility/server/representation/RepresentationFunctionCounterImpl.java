@@ -2,6 +2,8 @@ package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.properties.Properties;
+
 public class RepresentationFunctionCounterImpl extends AbstractRepresentationFunctionCounterImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -9,7 +11,9 @@ public class RepresentationFunctionCounterImpl extends AbstractRepresentationFun
 	
 	@Override
 	protected void __executeBusiness__() {
-		count = __injectBusiness__().count(getPersistenceEntityClass()/*, properties*/);
+		Properties properties = new Properties();
+		properties.copyFrom(getProperties(),Properties.QUERY_FILTERS);
+		count = __injectBusiness__().count(getPersistenceEntityClass(), properties);
 	}
 	
 	@Override

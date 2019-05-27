@@ -15,6 +15,7 @@ public class RowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Ro
 	private Class<? extends Data> dataClass;
 	private GridBuilder grid;
 	private Objects rows;
+	private Integer orderNumberOffset;
 	//private Class<?> clazz;
 	
 	@Override
@@ -57,7 +58,7 @@ public class RowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Ro
 				rows = getGrid().getComponent().getObjects();
 		}
 		
-		row.setOrderNumber(__inject__(CollectionHelper.class).getSize(rows)+1);
+		row.setOrderNumber((orderNumberOffset == null ? 0 : orderNumberOffset)+ __inject__(CollectionHelper.class).getSize(rows)+1);
 		
 		return row;
 	}
@@ -103,6 +104,17 @@ public class RowBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Ro
 	@Override
 	public Class<? extends Data> getDataClass() {
 		return dataClass;
+	}
+	
+	@Override
+	public Integer getOrderNumberOffset() {
+		return orderNumberOffset;
+	}
+	
+	@Override
+	public RowBuilder setOrderNumberOffset(Integer orderNumberOffset) {
+		this.orderNumberOffset = orderNumberOffset;
+		return this;
 	}
 	
 	/*

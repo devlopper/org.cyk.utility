@@ -65,10 +65,7 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 		ControllerEntity<ENTITY> controller = (ControllerEntity<ENTITY>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
 		if(controller == null){
 			ControllerFunctionReader function = __inject__(ControllerFunctionReader.class);
-			function.getProperties().copyFrom(properties, Properties.VALUE_USAGE_TYPE);
-			function.copyProperty(Properties.REQUEST,properties);
-			function.copyProperty(Properties.CONTEXT,properties);
-			//TODO paging should be handled like ControllerEntity
+			__copyReadProperties__(function, properties);
 			entities = (Collection<ENTITY>) function.setActionEntityClass(aClass).execute().getProperties().getEntities();
 		}else{
 			entities = controller.readMany(properties);
@@ -78,7 +75,6 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 
 	@Override
 	public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass) {
-		//TODO handle pagination
 		return readMany(aClass, null);
 	}
 	
@@ -120,14 +116,21 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 
 	@Override
 	public <ENTITY> Long count(Class<ENTITY> aClass, Properties properties) {
-		// TODO Auto-generated method stub
-		return null;
+		Long count = null;
+		ControllerEntity<ENTITY> controller = (ControllerEntity<ENTITY>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
+		if(controller == null){
+			ControllerFunctionCounter function = __inject__(ControllerFunctionCounter.class);
+			__copyCountProperties__(function, properties);
+			count = (Long) function.setActionEntityClass(aClass).execute().getProperties().getCount();
+		}else{
+			count = controller.count(properties);
+		}
+		return count;
 	}
 
 	@Override
 	public <ENTITY> Long count(Class<ENTITY> aClass) {
-		// TODO Auto-generated method stub
-		return null;
+		return count(aClass, null);
 	}
 	
 	@Override

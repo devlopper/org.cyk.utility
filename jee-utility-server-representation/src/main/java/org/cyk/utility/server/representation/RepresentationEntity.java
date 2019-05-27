@@ -78,19 +78,16 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	
 	@DELETE
 	@Path(PATH_DELETE_MANY)
-	//@Consumes(MediaType.APPLICATION_XML)
 	Response deleteMany();
 	
 	@DELETE
 	@Path(PATH_DELETE_ALL)
-	//@Consumes(MediaType.APPLICATION_XML)
 	Response deleteAll();
 	
 	/* Count */
 	@GET
 	@Path(PATH_GET_COUNT)
-	//@Produces(MediaType.TEXT_PLAIN)
-	Response count();
+	Response count(@QueryParam(PARAMETER_FILTER) List<String> filters);
 	
 	/**/
 

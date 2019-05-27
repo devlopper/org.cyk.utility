@@ -18,4 +18,8 @@ public class EntityNoFormControllerImpl extends AbstractControllerEntityPersiste
 				;
 	}
 	
+	@Override
+	protected Integer __getNumberOfInitialCount__() {
+		return 100;
+	}
 }

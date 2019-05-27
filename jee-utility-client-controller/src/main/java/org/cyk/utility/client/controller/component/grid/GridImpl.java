@@ -22,6 +22,18 @@ public class GridImpl extends AbstractVisibleComponentImpl implements Grid,Seria
 	private View view;
 	private Objects objects;
 	private ViewMap viewMap;
+	private Boolean isLazyLoadable;
+	
+	@Override
+	public Boolean getIsLazyLoadable() {
+		return isLazyLoadable;
+	}
+	
+	@Override
+	public Grid setIsLazyLoadable(Boolean isLazyLoadable) {
+		this.isLazyLoadable = isLazyLoadable;
+		return this;
+	}
 	
 	@Override
 	public Columns getColumns() {

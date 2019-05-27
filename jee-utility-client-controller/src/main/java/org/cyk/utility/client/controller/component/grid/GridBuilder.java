@@ -20,6 +20,9 @@ import org.cyk.utility.system.action.SystemAction;
 
 public interface GridBuilder extends VisibleComponentBuilder<Grid> {
 
+	Boolean getIsLazyLoadable();
+	GridBuilder setIsLazyLoadable(Boolean isLazyLoadable);
+	
 	ColumnBuilders getColumns();
 	ColumnBuilders getColumns(Boolean injectIfNull);
 	GridBuilder setColumns(ColumnBuilders columns);

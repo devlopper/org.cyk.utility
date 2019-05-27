@@ -110,6 +110,11 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	}
 	
 	@Override
+	public void setTargetBindingValue(Object targetBindingValue) {
+		getTargetBinding(Boolean.TRUE).setValue(targetBindingValue);
+	}
+	
+	@Override
 	public Objects getUpdatables() {
 		return updatables;
 	}

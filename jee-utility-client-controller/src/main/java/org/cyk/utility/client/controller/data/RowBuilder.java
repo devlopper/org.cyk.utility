@@ -18,6 +18,9 @@ public interface RowBuilder extends FunctionWithPropertiesAsInput<Row> {
 	RowBuilder setRows(Objects rows);
 	Objects getRows();
 	
+	Integer getOrderNumberOffset();
+	RowBuilder setOrderNumberOffset(Integer orderNumberOffset);
+	
 	/*
 	RowBuilder setClazz(Class<?> clazz);
 	Class<?> getClazz();

@@ -43,6 +43,9 @@ public interface SystemFunction extends FunctionWithPropertiesAsInputAndVoidAsOu
 	Collection<?> getEntities();
 	SystemFunction setEntities(Collection<?> entities);
 	
+	Long getEntitiesCount();
+	SystemFunction setEntitiesCount(Long entitiesCount);
+	
 	SystemFunction execute();
 	
 	NotificationBuilders getNotificationBuilders();

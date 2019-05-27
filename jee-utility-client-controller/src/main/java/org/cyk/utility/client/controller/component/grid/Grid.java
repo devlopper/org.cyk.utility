@@ -31,4 +31,7 @@ public interface Grid extends VisibleComponent {
 	Objects getObjects(Boolean injectIfNull);
 	Grid setObjects(Objects objects);
 	
+	Boolean getIsLazyLoadable();
+	Grid setIsLazyLoadable(Boolean isLazyLoadable);
+	
 }

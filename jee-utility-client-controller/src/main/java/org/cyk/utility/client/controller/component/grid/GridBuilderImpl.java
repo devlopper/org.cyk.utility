@@ -49,10 +49,13 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	private Class<? extends Data> rowDataClass;
 	private ObjectByClassMap commandablesColumnCommandablesNavigationsParametersMap;
 	private SystemAction creationWindowSystemAction,processingWindowSystemAction;
+	private Boolean isLazyLoadable;
 	
 	@Override
 	protected void __execute__(Grid grid) {
 		super.__execute__(grid);
+		Boolean isLazyLoadable = getIsLazyLoadable();
+		grid.setIsLazyLoadable(isLazyLoadable);
 		
 		Class<? extends Data> rowDataClass = getRowDataClass();
 		
@@ -584,6 +587,17 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	@Override
 	public GridBuilder setProcessingWindowSystemAction(SystemAction processingWindowSystemAction) {
 		this.processingWindowSystemAction = processingWindowSystemAction;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsLazyLoadable() {
+		return isLazyLoadable;
+	}
+	
+	@Override
+	public GridBuilder setIsLazyLoadable(Boolean isLazyLoadable) {
+		this.isLazyLoadable = isLazyLoadable;
 		return this;
 	}
 	

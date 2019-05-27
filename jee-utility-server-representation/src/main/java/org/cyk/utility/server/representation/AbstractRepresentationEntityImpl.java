@@ -101,8 +101,10 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 
 	@Override
-	public Response count() {
-		return __inject__(RepresentationFunctionCounter.class).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+	public Response count(List<String> filters) {
+		return __inject__(RepresentationFunctionCounter.class).setPersistenceEntityClass(getPersistenceEntityClass())
+				.setProperty(Properties.QUERY_FILTERS, __injectCollectionHelper__().isEmpty(filters) ? null : filters)
+				.execute().getResponse();
 	}
 
 	/**/
