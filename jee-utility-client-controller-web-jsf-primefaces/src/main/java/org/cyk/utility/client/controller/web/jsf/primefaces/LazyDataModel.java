@@ -68,7 +68,7 @@ public class LazyDataModel<OBJECT> extends org.primefaces.model.LazyDataModel<OB
 			exception.printStackTrace();
 			//getProperties().setThrowable(__injectThrowableHelper__().getFirstCause(exception));	
 		}
-		//System.out.println("LOAD : "+first+"|"+pageSize+" : count = "+__count__+" / "+__count__);
+		//System.out.println("LOAD : "+first+"|"+pageSize+" : count = "+__count__+" :::: "+(grid.getObjects() == null ? null : grid.getObjects().get()));
 		return (List<OBJECT>) (grid.getObjects() == null ? null : grid.getObjects().get());
 	}
 	

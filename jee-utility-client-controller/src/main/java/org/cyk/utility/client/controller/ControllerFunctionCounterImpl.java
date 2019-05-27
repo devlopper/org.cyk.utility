@@ -25,7 +25,8 @@ public class ControllerFunctionCounterImpl extends AbstractControllerFunctionImp
 		Response response;
 		List<String> filters = (List<String>) Properties.getFromPath(getProperties(),Properties.FILTERS);
 		response = representation.count(filters);
-		System.out.println("ControllerFunctionCounterImpl.__actWithRepresentationInstanceOfRepresentationEntity__() ::: "+response.getEntity());
+		if(response!=null)
+			setEntitiesCount(response.readEntity(Long.class));
 		return response;
 	}
 	
