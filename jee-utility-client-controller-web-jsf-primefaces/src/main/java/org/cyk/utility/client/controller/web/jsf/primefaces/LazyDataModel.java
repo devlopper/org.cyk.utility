@@ -15,6 +15,7 @@ import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.primefaces.model.SortOrder;
 
@@ -33,8 +34,6 @@ public class LazyDataModel<OBJECT> extends org.primefaces.model.LazyDataModel<OB
 	public List<OBJECT> load(int first, int pageSize, String sortField, SortOrder sortOrder,Map<String, Object> filters) {
 		Collection<Object> objects = null;
 		grid.getObjects(Boolean.TRUE).removeAll();
-		if(grid.getRows() != null)
-			grid.getRows().removeAll();
 		GridBuilder builder = (GridBuilder) grid.getBuilder();
 		Class<Object> klass = (Class<Object>) DependencyInjection.inject(ClassHelper.class).getByName(builder.getRowDataClass().getName());
 		Properties properties = new Properties();
@@ -49,20 +48,25 @@ public class LazyDataModel<OBJECT> extends org.primefaces.model.LazyDataModel<OB
 			Controller controller = DependencyInjection.inject(Controller.class);
 			objects = controller.readMany(klass,properties);
 			Response response = (Response) properties.getResponse();					
-			if(Boolean.TRUE.equals(DependencyInjection.inject(ResponseHelper.class).isFamilyClientError(response)))
+			if(Boolean.TRUE.equals(DependencyInjection.inject(ResponseHelper.class).isFamilyClientError(response))) {
 				;//getProperties().setThrowable(__inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()).setResponse(response));
-			
-			if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(objects)) {
-				for(Object index : objects) {
-					Object row = DependencyInjection.inject(org.cyk.utility.client.controller.data.RowBuilder.class).setGrid(builder)
-							.setDataClass((Class<? extends Data>) DependencyInjection.inject(ClassHelper.class).getByName(klass.getName()))
-							.setData((Data) index).setOrderNumberOffset(first)
-							.execute().getOutput();			
-					//((Objectable)row).setOrderNumber(rows.size()+1);
-					grid.getObjects(Boolean.TRUE).add(row);						
+			}else {
+				if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(objects)) {
+					for(Object index : objects) {
+						Object row = DependencyInjection.inject(org.cyk.utility.client.controller.data.RowBuilder.class).setGrid(builder)
+								.setDataClass((Class<? extends Data>) DependencyInjection.inject(ClassHelper.class).getByName(klass.getName()))
+								.setData((Data) index).setOrderNumberOffset(first)
+								.execute().getOutput();			
+						grid.getObjects(Boolean.TRUE).add(row);						
+					}
 				}
+				if(response!=null) {
+					__count__ = DependencyInjection.inject(NumberHelper.class).getLong(response.getHeaderString("X-Total-Count"), null);
+				}
+				
+				if(__count__ == null)
+					__count__ = controller.count(klass, properties);	
 			}
-			__count__ = controller.count(klass, properties);
 		}catch(Exception exception) {
 			//Because we do not want to break view building we need to handle exception
 			exception.printStackTrace();

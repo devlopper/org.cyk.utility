@@ -133,6 +133,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		if(properties == null)
 			properties = new Properties();
 		if(properties!=null) {
+			properties.setIsQueryResultPaginated(null);
+			properties.setQueryFirstTupleIndex(null);
+			properties.setQueryNumberOfTuple(null);
 			if(properties.getQueryIdentifier() == null) {
 				String queryIdentifier = __injectValueHelper__().defaultToIfNull(__getQueryIdentifier__(PersistenceFunctionReader.class, properties),read);
 				if(__injectStringHelper__().isNotBlank(queryIdentifier))

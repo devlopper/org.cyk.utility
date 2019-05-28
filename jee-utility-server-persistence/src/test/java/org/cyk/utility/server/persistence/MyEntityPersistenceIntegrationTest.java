@@ -71,6 +71,35 @@ public class MyEntityPersistenceIntegrationTest extends AbstractPersistenceEntit
 	}
 	
 	@Test
+	public void count(){
+		__createEntity__(new MyEntity().setIdentifier("123").setCode(__getRandomCode__()).setIntegerValue(1));
+		__createEntity__(new MyEntity().setIdentifier("133").setCode(__getRandomCode__()).setIntegerValue(2));
+		__createEntity__(new MyEntity().setIdentifier("144").setCode(__getRandomCode__()).setIntegerValue(1));
+		__createEntity__(new MyEntity().setIdentifier("150").setCode(__getRandomCode__()).setIntegerValue(2));
+		__createEntity__(new MyEntity().setIdentifier("623").setCode(__getRandomCode__()).setIntegerValue(2));
+		
+		Long count = __inject__(MyEntityPersistence.class).count();
+		org.assertj.core.api.Assertions.assertThat(count).isEqualTo(5);
+		
+		__deleteEntitiesAll__(MyEntity.class);
+		
+	}
+	
+	@Test
+	public void countWithProperties(){
+		for(Integer index = 0 ; index < 16 ; index = index + 1)
+			__createEntity__(new MyEntity().setCode(__getRandomCode__()).setIntegerValue(1));
+		
+		Properties properties = new Properties();
+		properties.setFilters(null).setIsQueryResultPaginated(Boolean.TRUE).setQueryFirstTupleIndex(5).setQueryNumberOfTuple(5).setQueryIdentifier(null);
+		Long count = __inject__(MyEntityPersistence.class).count(properties);
+		org.assertj.core.api.Assertions.assertThat(count).isEqualTo(16);
+		
+		__deleteEntitiesAll__(MyEntity.class);
+		
+	}
+	
+	@Test
 	public void readByIntegerValue(){
 		__createEntity__(new MyEntity().setCode("e01").setIntegerValue(1));
 		__createEntity__(new MyEntity().setCode("e02").setIntegerValue(2));
