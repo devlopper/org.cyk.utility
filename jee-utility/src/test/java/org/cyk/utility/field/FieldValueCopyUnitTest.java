@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -370,6 +371,17 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 		private static final long serialVersionUID = 1L;
 		
 		private String id;
+		private String code;
+		private String name;
+		private String type;
+		private MyDataTransferObjectReflexive parent;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class MyCollections implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private Collection<Object> objects;
 		private String code;
 		private String name;
 		private String type;
