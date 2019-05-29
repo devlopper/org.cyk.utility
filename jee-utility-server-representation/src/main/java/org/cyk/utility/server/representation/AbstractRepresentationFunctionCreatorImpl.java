@@ -27,7 +27,9 @@ public abstract class AbstractRepresentationFunctionCreatorImpl extends Abstract
 			Object representation = getEntity();
 			Object persistence = __inject__(InstanceHelper.class).buildOne(getPersistenceEntityClass(),representation);
 			__inject__(Business.class).create(persistence);
-			__injectFieldHelper__().setFieldValueSystemIdentifier(representation, __injectFieldHelper__().getFieldValueSystemIdentifier(persistence));
+			Object identifier = __injectFieldHelper__().getFieldValueSystemIdentifier(persistence);
+			__responseBuilder__.header("entity-identifier", identifier);
+			__injectFieldHelper__().setFieldValueSystemIdentifier(representation,identifier);
 		}else {
 			__injectThrowableHelper__().throwRuntimeException("No entity to "+getAction());
 		}	

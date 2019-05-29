@@ -39,8 +39,10 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	@SuppressWarnings("unchecked")
 	@Override
 	public ENTITY findOne(Object identifier, Properties properties) {
-		return (ENTITY) __inject__(BusinessFunctionReader.class).setEntityClass(getPersistenceEntityClass()).setEntityIdentifier(identifier)
+		ENTITY entity = (ENTITY) __inject__(BusinessFunctionReader.class).setEntityClass(getPersistenceEntityClass()).setEntityIdentifier(identifier)
 				.setEntityIdentifierValueUsageType(properties == null ? ValueUsageType.SYSTEM: (ValueUsageType) properties.getValueUsageType()).execute().getProperties().getEntity();
+		__listenFindOneAfter__(entity, properties);
+		return entity;
 	}
 
 	@Override
@@ -65,7 +67,9 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 
 	@Override
 	public Collection<ENTITY> findMany(Properties properties) {
-		return getPersistence().readMany(properties);
+		Collection<ENTITY> entities = getPersistence().readMany(properties);
+		__listenFindManyAfter__(entities,properties);
+		return entities;
 	}
 
 	@Override
@@ -74,6 +78,22 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		return findMany(null);
 	}
 
+	protected void __listenFindManyAfter__(Collection<ENTITY> entities,Properties properties) {
+		if(__injectCollectionHelper__().isNotEmpty(entities)) {
+			for(ENTITY index : entities)
+				__processAfterRead__(index,properties);	
+		}
+	}
+	
+	protected void __listenFindOneAfter__(ENTITY entity,Properties properties) {
+		if(entity != null)
+			__processAfterRead__(entity, properties);
+	}
+	
+	protected void __processAfterRead__(ENTITY entity,Properties properties) {
+		
+	}
+	
 	@Override
 	public Long count(Properties properties) {
 		return getPersistence().count(properties);
@@ -113,4 +133,13 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		return this;
 	}
 	
+	/**/
+	
+	protected void __create__(Object object) {
+		__inject__(Business.class).create(object);
+	}
+	
+	protected void __createIfSystemIdentifierIsBlank__(Object object) {
+		__inject__(Business.class).create(object,new Properties().setIsCreateIfSystemIdentifierIsBlank(Boolean.TRUE));	
+	}
 }

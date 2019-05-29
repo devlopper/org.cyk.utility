@@ -26,7 +26,10 @@ public class ControllerFunctionCreatorImpl extends AbstractControllerFunctionImp
 		response = representation.createOne(dataTransferObjects.iterator().next());
 		if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isStatusClientErrorNotFound(response))) {
 			__injectThrowableHelper__().throw_(__inject__(ServiceNotFoundException.class).setSystemAction(action).setResponse(response));
-		}			
+		}
+		Object identifier = response.getHeaderString("entity-identifier");
+		//TODO identifier should converted to its corresponding type before setting
+		__injectFieldHelper__().setFieldValueSystemIdentifier(action.getEntities().get().iterator().next(), identifier); 
 		return response;
 	}
 	

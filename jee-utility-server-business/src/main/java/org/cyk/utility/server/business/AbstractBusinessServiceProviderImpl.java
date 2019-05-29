@@ -11,22 +11,39 @@ import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.type.BooleanHelper;
 
 public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements BusinessServiceProvider<OBJECT>,Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> create(OBJECT object, Properties properties) {
-		BusinessFunctionCreator function = __injectCreatorForOne__();
-		function.setEntity(object);
-		
-		__configure__(function, properties);
+		if(object == null) {
+			throw new RuntimeException("cannot create null instance. properties are : "+properties);
+		}else {
+			Boolean create = Boolean.FALSE;
+			Object isCreateIfSystemIdentifierIsBlank = Properties.getFromPath(properties, Properties.IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK);
+			if(isCreateIfSystemIdentifierIsBlank == null) {
+				create = Boolean.TRUE;
+			}else {
+				if(Boolean.TRUE.equals(__inject__(BooleanHelper.class).get(isCreateIfSystemIdentifierIsBlank))) {
+					Object identifier = __injectFieldHelper__().getFieldValueSystemIdentifier(object);
+					create = Boolean.TRUE.equals(__injectValueHelper__().isBlank(identifier));	
+				}
+			}
+			if(Boolean.TRUE.equals(create)) {
+				BusinessFunctionCreator function = __injectCreatorForOne__();
+				function.setEntity(object);
+				
+				__configure__(function, properties);
 
-		validateOne(object, function.getAction());
-		__listenExecuteCreateOneBefore__(object, properties, function);
-		function.execute();
-		__listenExecuteCreateOneAfter__(object, properties, function);
-		validateOne(object);
+				validateOne(object, function.getAction());
+				__listenExecuteCreateOneBefore__(object, properties, function);
+				function.execute();
+				__listenExecuteCreateOneAfter__(object, properties, function);
+				validateOne(object);	
+			}
+		}
 		return this;
 	}
 	

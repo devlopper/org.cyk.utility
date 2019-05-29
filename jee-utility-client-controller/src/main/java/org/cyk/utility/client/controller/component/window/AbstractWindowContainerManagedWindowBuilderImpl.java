@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetter;
@@ -74,18 +75,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		//if(systemAction == null)
 		//	systemAction = __inject__(RequestParameterValueMapper.class).setParameterNameAsActionClass().execute().getOutputAs(SystemAction.class);
 		
-		Object instance = null;
-		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete || systemAction instanceof SystemActionProcess || systemAction instanceof SystemActionView) {
-			Object identifier = __injectCollectionHelper__().getFirst(systemAction.getEntitiesIdentifiers());
-			if(identifier == null) {
-				
-			}else {
-				instance = __inject__(Controller.class).readOne(systemAction.getEntities().getElementClass(), identifier);	
-			}
-			
-		}else if(systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionAdd || systemAction instanceof SystemActionRedirect) {
-			instance = __inject__(systemAction.getEntities().getElementClass());
-		}
+		Object instance = __getEntity__(systemAction);
 		
 		if(instance!=null && systemAction!=null)
 			systemAction.getEntities().add(instance);
@@ -115,6 +105,27 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		}
 		window.setView(view);
 		return window;
+	}
+	
+	protected Object __getEntity__(SystemAction systemAction) {
+		Object entity = null;
+		if(systemAction instanceof SystemActionRead || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete 
+				|| systemAction instanceof SystemActionProcess || systemAction instanceof SystemActionView) {
+			Object identifier = __injectCollectionHelper__().getFirst(systemAction.getEntitiesIdentifiers());
+			if(identifier == null) {
+				
+			}else {
+				entity = __readOne__(systemAction.getEntities().getElementClass(), identifier,null);	
+			}
+			
+		}else if(systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionAdd || systemAction instanceof SystemActionRedirect) {
+			entity = __inject__(systemAction.getEntities().getElementClass());
+		}
+		return entity;
+	}
+	
+	protected Object __readOne__(Class<?> klass,Object identifier,Properties properties) {
+		return __inject__(Controller.class).readOne(klass, identifier,properties);	
 	}
 	
 	protected abstract void __execute__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass);

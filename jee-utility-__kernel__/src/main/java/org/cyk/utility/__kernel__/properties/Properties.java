@@ -4637,7 +4637,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getIsCreateIfSystemIdentifierIsBlank() {
+		return get(IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK);
+	}
+
+	public Properties setIsCreateIfSystemIdentifierIsBlank(Object isCreateIfSystemIdentifierIsBlank) {
+		set(IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK, isCreateIfSystemIdentifierIsBlank);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK = "IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK";
 	public static final String FORCE_SELECTION = "FORCE_SELECTION";
 	public static final String DROP_DOWN = "DROP_DOWN";
 	public static final String DROP_DOWN_MODE = "DROP_DOWN_MODE";
