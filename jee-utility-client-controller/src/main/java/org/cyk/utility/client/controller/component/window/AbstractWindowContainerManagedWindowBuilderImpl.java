@@ -115,7 +115,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 			if(identifier == null) {
 				
 			}else {
-				entity = __readOne__(systemAction.getEntities().getElementClass(), identifier,null);	
+				entity = __readOne__(systemAction,systemAction.getEntities().getElementClass(), identifier,null);	
 			}
 			
 		}else if(systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionAdd || systemAction instanceof SystemActionRedirect) {
@@ -124,7 +124,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		return entity;
 	}
 	
-	protected Object __readOne__(Class<?> klass,Object identifier,Properties properties) {
+	protected Object __readOne__(SystemAction systemAction,Class<?> klass,Object identifier,Properties properties) {
 		return __inject__(Controller.class).readOne(klass, identifier,properties);	
 	}
 	

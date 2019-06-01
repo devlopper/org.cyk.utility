@@ -166,6 +166,22 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 		return redirect(aClass, identifier,properties);
 	}
 	
+	@Override
+	public ControllerServiceProvider<Object> process(Object object, Properties properties) {
+		ControllerEntity<Object> controller = (ControllerEntity<Object>)  __injectControllerLayer__().injectInterfaceClassFromEntity(object);
+		if(controller == null){
+			super.process(object, properties);
+		}else{
+			controller.process(object, properties);
+		}
+		return this;
+	}
+	
+	@Override
+	public ControllerServiceProvider<Object> process(Object object) {
+		return process(object,null);
+	}
+	
 	/**/
 	
 	@Override

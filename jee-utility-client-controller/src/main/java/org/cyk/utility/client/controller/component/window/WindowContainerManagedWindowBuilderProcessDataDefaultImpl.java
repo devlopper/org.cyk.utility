@@ -11,11 +11,11 @@ import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 
-public class WindowContainerManagedWindowBuilderProcessDataDefaultImpl extends AbstractWindowContainerManagedWindowBuilderSelectDataImpl implements WindowContainerManagedWindowBuilderProcessDataDefault,Serializable {
+public class WindowContainerManagedWindowBuilderProcessDataDefaultImpl extends AbstractWindowContainerManagedWindowBuilderProcessDataImpl implements WindowContainerManagedWindowBuilderProcessDataDefault,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void __execute__(Form form, SystemAction systemAction, Data data, ViewBuilder viewBuilder) {
+	protected void __execute__(Form form, Data data, SystemAction systemAction, ViewBuilder viewBuilder) {
 		Strings fieldNames = __inject__(DataFieldsNamesGetter.class).setSystemAction(systemAction).execute().getOutput();
 		if(__injectCollectionHelper__().isNotEmpty(fieldNames)) {
 			for(String index : fieldNames.get()) {

@@ -35,7 +35,7 @@ public abstract class AbstractControllerFunctionRedirectorImpl extends AbstractC
 	@Override
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		Response response = null;
-		Properties properties = new Properties().setValueUsageType(ValueUsageType.BUSINESS);	
+		Properties properties = new Properties().setValueUsageType(ValueUsageType.SYSTEM);	
 		//TODO is it necessary ?
 		Object entity = __inject__(Controller.class).readOne(action.getEntityClass(),action.getEntitiesIdentifiers().getFirst(),properties);
 		response = (Response) properties.getResponse();			
