@@ -21,7 +21,7 @@ import org.cyk.utility.system.exception.EntityNotFoundException;
 import org.cyk.utility.type.TypeHelper;
 import org.cyk.utility.value.ValueUsageType;
 
-public class ControllerFunctionRedirectorImpl extends AbstractControllerFunctionImpl implements ControllerFunctionRedirector , Serializable {
+public class ControllerFunctionRedirectorImpl extends AbstractControllerFunctionRedirectorImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

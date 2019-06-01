@@ -6,19 +6,20 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
+import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerAfterImpl;
 import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerBeforeImpl;
 import org.cyk.utility.client.controller.component.ComponentBuilderPostConstructListenerImpl;
 import org.cyk.utility.client.controller.component.ComponentPostConstructListenerImpl;
 import org.cyk.utility.client.controller.component.ComponentRoleStyleClassGetterImpl;
 import org.cyk.utility.client.controller.component.ComponentTargetModelBuilderImpl;
-import org.cyk.utility.client.controller.component.command.CommandFunctionImpl;
 import org.cyk.utility.client.controller.component.grid.GridBuilderCommandableBuilderProcessorImpl;
 import org.cyk.utility.client.controller.component.layout.LayoutWidthGetterImpl;
 import org.cyk.utility.client.controller.component.layout.StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl;
 import org.cyk.utility.client.controller.message.MessageRenderImpl;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapperImpl;
 import org.cyk.utility.client.controller.navigation.NavigationRedirectorImpl;
+import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
 import org.cyk.utility.css.StyleClassBuilderWidthImpl;
 import org.cyk.utility.request.RequestParameterValueGetterImpl;
 
@@ -41,10 +42,12 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		//__inject__(FunctionRunnableMap.class).set(RequestPropertyValueGetterImpl.class, RequestPropertyValueGetterFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(RequestParameterValueGetterImpl.class, RequestParameterValueGetterFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(GridBuilderCommandableBuilderProcessorImpl.class, GridBuilderCommandableBuilderProcessorFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(CommandFunctionImpl.class, CommandFunctionFunctionRunnableImpl.class,LEVEL);
+		//__inject__(FunctionRunnableMap.class).set(CommandFunctionImpl.class, CommandFunctionFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(NavigationRedirectorImpl.class, NavigationRedirectorFunctionRunnableImpl.class,LEVEL);
 		
 		__inject__(org.cyk.utility.client.controller.web.jsf.ApplicationScopeLifeCycleListener.class).initialize(null);
+		
+		__setQualifierClassTo__(Primefaces.class, CommandFunction.class);
 	}
 	
 	@Override

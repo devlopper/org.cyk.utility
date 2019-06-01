@@ -1,4 +1,4 @@
-package org.cyk.utility.client.controller.component.command;
+package org.cyk.utility.client.controller.command;
 
 import org.cyk.utility.client.controller.ControllerFunction;
 

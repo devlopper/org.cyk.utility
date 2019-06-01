@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.command;
 
 import java.util.Collection;
 
+import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.window.WindowRenderType;

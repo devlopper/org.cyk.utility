@@ -75,8 +75,8 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 	protected Object __processValue__(Field source,Field destination,Object value) {
 		ClassHelper classHelper = __inject__(ClassHelper.class);
 		ClassInstancesRuntime classInstancesRuntime = __inject__(ClassInstancesRuntime.class);
-		Class<?> sourceType = __inject__(FieldTypeGetter.class).execute(source).getOutput();
-		Class<?> destinationType = __inject__(FieldTypeGetter.class).execute(destination).getOutput();
+		Class<?> sourceType = __inject__(FieldTypeGetter.class).execute(source).getOutput().getType();
+		Class<?> destinationType = __inject__(FieldTypeGetter.class).execute(destination).getOutput().getType();
 		Properties properties = new Properties();
 		properties.copyFrom(getProperties(), Properties.CONTEXT,Properties.REQUEST);
 		

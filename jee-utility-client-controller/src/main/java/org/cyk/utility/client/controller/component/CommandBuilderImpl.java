@@ -2,9 +2,9 @@ package org.cyk.utility.client.controller.component;
 
 import java.io.Serializable;
 
+import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.command.Command;
 import org.cyk.utility.client.controller.component.command.CommandBuilder;
-import org.cyk.utility.client.controller.component.command.CommandFunction;
 import org.cyk.utility.client.controller.component.window.WindowContainerManaged;
 
 public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Command> implements CommandBuilder,Serializable {

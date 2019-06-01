@@ -9,11 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
 import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCodedAndNamed;
-import org.cyk.utility.client.controller.navigation.Navigation;
-import org.cyk.utility.client.controller.navigation.NavigationBuilder;
-import org.cyk.utility.client.controller.navigation.NavigationRedirector;
 import org.cyk.utility.random.RandomHelper;
-import org.cyk.utility.system.action.SystemActionRead;
 
 public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> extends AbstractControllerEntityImpl<ENTITY> implements ControllerEntityPersistedInCollection<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -97,30 +93,13 @@ public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> 
 		return count == null ? null : new Long(count);
 	}
 	
-	@Override
-	public ControllerEntity<ENTITY> redirect(Object identifier, Properties properties) {
-		ENTITY entity = readOneByBusinessIdentifier(identifier);
-		if(entity == null) {
-			__injectThrowableHelper__().throwRuntimeException("Entity with identifier "+identifier+" not found");
-		}else {
-			SystemActionRead systemActionRead = __inject__(SystemActionRead.class);
-			systemActionRead.setEntityClass(getEntityClass());
-			systemActionRead.getEntitiesIdentifiers(Boolean.TRUE).add(__injectFieldHelper__().getFieldValueSystemIdentifier(entity));
-			
-			NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(systemActionRead);
-			Navigation navigation = navigationBuilder.execute().getOutput();
-			__inject__(NavigationRedirector.class).setNavigation(navigation).execute();	
-		}
-		return this;
-	}
-	
 	protected Collection<ENTITY> __filter__(Collection<ENTITY> entities,Properties properties,Boolean counting) {
 		Collection<ENTITY> result = null;
-		Integer from = counting ? null : (Integer) properties.getFrom();
-		Integer count = counting ? null :(Integer) properties.getCount();
+		Integer from = counting ? null : (Integer) Properties.getFromPath(properties,Properties.FROM);
+		Integer count = counting ? null :(Integer) Properties.getFromPath(properties,Properties.COUNT);
 		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(entities))) {
 			result = new ArrayList<ENTITY>();
-			String query = __injectCollectionHelper__().getFirst((List<String>) properties.getFilters());
+			String query = __injectCollectionHelper__().getFirst((List<String>) Properties.getFromPath(properties,Properties.FILTERS));
 			for(ENTITY index : entities) {
 				if( StringUtils.isEmpty(query)
 						|| (index instanceof DataIdentifiedByStringAndCoded && StringUtils.contains(((DataIdentifiedByStringAndCoded)index).getCode(), query))

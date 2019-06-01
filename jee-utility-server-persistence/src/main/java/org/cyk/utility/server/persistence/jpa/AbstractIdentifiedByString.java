@@ -43,7 +43,7 @@ public abstract class AbstractIdentifiedByString extends AbstractIdentifiedPersi
 	}
 	
 	public AbstractIdentifiedByString setFromIdentifier(Field field,Object identifier,ValueUsageType valueUsageType){
-		Class<?> type = __inject__(FieldTypeGetter.class).execute(field).getOutput();
+		Class<?> type = __inject__(FieldTypeGetter.class).execute(field).getOutput().getType();
 		__inject__(FieldValueSetter.class).setObject(this).setField(field).setValue(__getFromIdentifier__(type, identifier,valueUsageType)).execute();
 		return this;
 	}

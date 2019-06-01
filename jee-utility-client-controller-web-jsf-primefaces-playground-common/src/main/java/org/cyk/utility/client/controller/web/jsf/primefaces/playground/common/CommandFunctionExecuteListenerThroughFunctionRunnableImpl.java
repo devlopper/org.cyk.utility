@@ -3,7 +3,7 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
-import org.cyk.utility.client.controller.component.command.CommandFunction;
+import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.command.CommandFunctionExecuteListenerThrough;
 import org.cyk.utility.client.controller.entities.myentity.MyEntity;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntity;

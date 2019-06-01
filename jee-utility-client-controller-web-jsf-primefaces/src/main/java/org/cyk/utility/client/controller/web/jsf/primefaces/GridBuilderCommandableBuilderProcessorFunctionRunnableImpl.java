@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.client.controller.component.command.CommandFunction;
+import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.grid.AbstractGridBuilderCommandableBuilderProcessorFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;

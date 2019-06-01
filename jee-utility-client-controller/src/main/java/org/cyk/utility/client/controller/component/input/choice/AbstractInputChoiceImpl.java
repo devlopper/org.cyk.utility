@@ -124,7 +124,7 @@ public abstract class AbstractInputChoiceImpl<CHOICE> extends AbstractInputImpl<
 		}
 		InputChoiceBuilder<?,?> builder =  (InputChoiceBuilder<?,?>) getBuilder();
 		ChoicesGetter choicesGetter = __inject__(__inject__(ValueHelper.class).defaultToIfNull(builder.getChoicesGetterClass(),ChoicesGetter.class));
-		choices = choicesGetter.setField(builder.getField()).setRequest(builder.getProperties().getRequest()).setContext(builder.getProperties().getContext()).setQuery(query)
+		choices = choicesGetter.setFieldDeclaringClass(object.getClass()).setField(builder.getField()).setRequest(builder.getProperties().getRequest()).setContext(builder.getProperties().getContext()).setQuery(query)
 				.setMaximumNumberOfChoice(__maximumNumberOfChoice__+1).execute().getOutput();
 		return choices == null ? null : (List<Object>) choices.get();
 		

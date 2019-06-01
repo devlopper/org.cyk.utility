@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.Classes;
-import org.cyk.utility.client.controller.component.command.CommandFunction;
+import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.event.EventBuilders;

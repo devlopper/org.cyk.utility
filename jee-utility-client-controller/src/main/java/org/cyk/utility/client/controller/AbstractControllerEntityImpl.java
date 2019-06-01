@@ -5,7 +5,9 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.server.representation.RepresentationEntity;
+import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractControllerServiceProviderImpl<ENTITY> implements ControllerEntity<ENTITY>,Serializable {
@@ -136,13 +138,25 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	}
 	
 	@Override
+	public ControllerEntity<ENTITY> select(Collection<Object> identifiers, Properties properties) {
+		return redirect(__inject__(CollectionHelper.class).getFirst(identifiers), properties);
+	}
+	
+	@Override
+	public ControllerEntity<ENTITY> select(Collection<Object> identifiers) {
+		return select(identifiers,null);
+	}
+	
+	@Override
 	public ControllerEntity<ENTITY> redirect(Object identifier, Properties properties) {
-		ControllerFunctionRedirector function = ____inject____(ControllerFunctionRedirector.class);
+		ControllerFunctionRedirector function = __inject__(ControllerFunctionRedirector.class)
+				.setTargetSystemAction((SystemAction) Properties.getFromPath(properties, Properties.SYSTEM_ACTION));
 		function.setEntityClass(getEntityClass());
 		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifier);
 		function.setDataTransferClass(dataTransferClass);
 		function.copyProperty(Properties.REQUEST,properties);
 		function.copyProperty(Properties.CONTEXT,properties);
+		function.copyProperty(Properties.SYSTEM_ACTION,properties);
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
 		function.execute();
 		

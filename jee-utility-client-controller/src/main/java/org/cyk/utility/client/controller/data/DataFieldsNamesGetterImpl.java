@@ -27,7 +27,8 @@ public class DataFieldsNamesGetterImpl extends AbstractStringsFunctionImpl imple
 				if(dataIdentifier == null && Boolean.TRUE.equals(__injectClassHelper__().isInstanceOfOne(systemAction.getClass(), SystemActionRead.class,SystemActionUpdate.class,SystemActionDelete.class))) {
 					names = __inject__(Strings.class).add("code");
 				}else {
-					names = __inject__(DataHelper.class).getPropertiesFieldsNames(systemAction.getEntityClass());	
+					Class<?> klass = __inject__(DataHelper.class).getDataClass(systemAction);
+					names = __inject__(DataHelper.class).getPropertiesFieldsNames(klass);	
 				}
 				
 				if(data instanceof DataIdentifiedByStringAndCoded && names != null && names.getSize() > 1)

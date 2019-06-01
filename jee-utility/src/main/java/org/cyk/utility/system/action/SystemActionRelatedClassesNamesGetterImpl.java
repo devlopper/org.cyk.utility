@@ -21,7 +21,7 @@ public class SystemActionRelatedClassesNamesGetterImpl extends AbstractStringsFu
 		Strings strings = __inject__(Strings.class);
 		Class<?> entityClass = getEntityClass();
 		Class<? extends SystemAction> systemActionClass = getSystemActionClass();
-		String nameSuffix = getNameSuffix();
+		String nameSuffix = __injectValueHelper__().defaultToIfNull(getNameSuffix(),ConstantEmpty.STRING);
 		
 		String systemActionName = null;
 		if(systemActionClass != null) {
@@ -29,41 +29,13 @@ public class SystemActionRelatedClassesNamesGetterImpl extends AbstractStringsFu
 			systemActionName = StringUtils.removeEnd(systemActionName, IMPL);
 		}
 		
-		/*
-		if(entityClass != null && systemActionClass != null) {
-			//xxxx.EntityCreateXXX
-			strings.add(entityClass.getName()+systemActionName+nameSuffix);
-			
-			if(Boolean.TRUE.equals(__injectClassHelper__().isInstanceOfOne(systemActionClass, EDIT_CLASSES)))
-				//xxxx.EntityEditXXX
-				strings.add(entityClass.getName()+EDIT+nameSuffix);
-		}
-		
-		if(entityClass != null)
-			//xxxx.EntityForm
-			strings.add(entityClass.getName()+nameSuffix);
-		*/
 		__add__(strings, entityClass, systemActionClass, systemActionName, nameSuffix);
 		
 		Class<?> extendedInterface = getExtendedInterface();
 		String defaultSuffix = getDefaultSuffix();
 		if(defaultSuffix == null)
 			defaultSuffix = ConstantEmpty.STRING;
-		/*
-		if(extendedInterface!=null && systemActionClass != null) {
-			//xxxx.XXXCreateDefault
-			strings.add(extendedInterface.getName()+systemActionName+defaultSuffix);
-			
-			if(Boolean.TRUE.equals(__injectClassHelper__().isInstanceOfOne(systemActionClass, EDIT_CLASSES)))
-				//xxxx.EntityEditXXX
-				strings.add(extendedInterface.getName()+EDIT+defaultSuffix);
-		}
 		
-		if(extendedInterface!=null) {
-			//xxxx.XXXDefault
-			strings.add(extendedInterface.getName()+defaultSuffix);
-		}
-		*/
 		__add__(strings, extendedInterface, systemActionClass, systemActionName, defaultSuffix);
 		
 		return strings;

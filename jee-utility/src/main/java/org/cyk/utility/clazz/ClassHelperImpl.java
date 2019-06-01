@@ -230,7 +230,7 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	
 	public static <TYPE> Class<TYPE> __getParameterAt__(Class<?> aClass, Integer index, Class<TYPE> typeClass) {
 		Class<TYPE> parameter = null;
-		if(aClass.getGenericSuperclass() instanceof ParameterizedType){
+		if(aClass != null && index != null && typeClass != null && aClass.getGenericSuperclass() instanceof ParameterizedType){
 			parameter = (Class<TYPE>) ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments()[index];
 		}
 		return parameter;

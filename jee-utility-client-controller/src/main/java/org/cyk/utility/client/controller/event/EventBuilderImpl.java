@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.function.Function;
-import org.cyk.utility.client.controller.component.command.CommandFunction;
+import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.programming.script.ScriptBuilder;
 

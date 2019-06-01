@@ -44,7 +44,7 @@ public abstract class AbstractIdentifiedByLong extends AbstractIdentifiedPersist
 	}
 	
 	public AbstractIdentifiedByLong setFromBusinessIdentifier(Field field,Object identifier){
-		Class<?> type = __inject__(FieldTypeGetter.class).execute(field).getOutput();
+		Class<?> type = __inject__(FieldTypeGetter.class).execute(field).getOutput().getType();
 		__inject__(FieldValueSetter.class).setObject(this).setField(field).setValue(__getFromBusinessIdentifier__(type, identifier)).execute();
 		return this;
 	}

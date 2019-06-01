@@ -7,6 +7,9 @@ import org.cyk.utility.object.Objects;
 
 public interface ChoicesGetter extends FunctionWithPropertiesAsInput<Objects> {
 
+	Class<?> getFieldDeclaringClass();
+	ChoicesGetter setFieldDeclaringClass(Class<?> fieldDeclaringClass);
+	
 	Field getField();
 	ChoicesGetter setField(Field field);
 	

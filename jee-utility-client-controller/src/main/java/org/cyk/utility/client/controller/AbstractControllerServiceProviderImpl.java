@@ -87,16 +87,6 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	}
 
 	@Override
-	public ControllerServiceProvider<OBJECT> select(OBJECT object, Properties properties) {
-		return null;
-	}
-	
-	@Override
-	public ControllerServiceProvider<OBJECT> select(OBJECT object) {
-		return null;
-	}
-	
-	@Override
 	public ControllerServiceProvider<OBJECT> process(OBJECT object, Properties properties) {
 		return null;
 	}

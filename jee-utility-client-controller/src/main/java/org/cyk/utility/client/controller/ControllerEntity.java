@@ -26,6 +26,10 @@ public interface ControllerEntity<ENTITY> extends ControllerServiceProvider<ENTI
 	ControllerEntity<ENTITY> redirect(Object identifier,Properties properties);
 	ControllerEntity<ENTITY> redirect(Object identifier);
 	
+	/* Select */
+	ControllerEntity<ENTITY> select(Collection<Object> identifiers,Properties properties);
+	ControllerEntity<ENTITY> select(Collection<Object> identifiers);
+	
 	Class<ENTITY> getEntityClass();
 	ControllerEntity<ENTITY> setEntityClass(Class<ENTITY> entityClass);
 	

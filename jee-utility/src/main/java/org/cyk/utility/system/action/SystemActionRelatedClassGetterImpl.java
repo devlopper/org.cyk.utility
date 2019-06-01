@@ -11,14 +11,18 @@ public class SystemActionRelatedClassGetterImpl extends AbstractClassFunctionImp
 	private static final long serialVersionUID = 1L;
 
 	private SystemActionRelatedClassesNamesGetter namesGetter;
+	private Strings names;
 	
 	@Override
 	protected Class __execute__() throws Exception {
 		Class clazz = null;
-		Strings names = null;
-		SystemActionRelatedClassesNamesGetter namesGetter = getNamesGetter();
-		if(namesGetter!=null)
-			names = namesGetter.execute().getOutput();
+		Strings names = getNames();
+		if(names == null) {
+			SystemActionRelatedClassesNamesGetter namesGetter = getNamesGetter();
+			if(namesGetter!=null)
+				names = namesGetter.execute().getOutput();	
+		}
+		
 		if(__injectCollectionHelper__().isNotEmpty(names))
 			for(String index : names.get()) {
 				clazz = (Class<?>) __inject__(ClassHelper.class).getByName(index);
@@ -36,6 +40,16 @@ public class SystemActionRelatedClassGetterImpl extends AbstractClassFunctionImp
 	@Override
 	public SystemActionRelatedClassGetter setNamesGetter(SystemActionRelatedClassesNamesGetter namesGetter) {
 		this.namesGetter = namesGetter;
+		return this;
+	}
+	
+	public Strings getNames() {
+		return names;
+	}
+	
+	@Override
+	public SystemActionRelatedClassGetter setNames(Strings names) {
+		this.names = names;
 		return this;
 	}
 

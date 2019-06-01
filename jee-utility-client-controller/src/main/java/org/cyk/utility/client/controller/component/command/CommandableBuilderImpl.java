@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.ComponentRoles;

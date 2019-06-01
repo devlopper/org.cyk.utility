@@ -117,7 +117,7 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 			if(collectionHelper.getSize(fieldNames) == 1) {
 			
 			}else {
-				aClass = __inject__(FieldTypeGetter.class).execute(field).getOutput();
+				aClass = __inject__(FieldTypeGetter.class).execute(field).getOutput().getType();
 				if(Boolean.TRUE.equals(aClass.isInterface()))
 					aClass = __inject__(aClass).getClass();
 				field = getField(aClass, collectionHelper.getElementsFrom(fieldNames, 1));

@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.client.controller.data.DataHelper;
-import org.cyk.utility.client.controller.data.Row;
+import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
@@ -15,14 +15,22 @@ public abstract class AbstractWindowContainerManagedWindowBuilderSelectImpl exte
 	
 	private Strings gridColumnsFieldNames;
 	private Collection<?> gridObjects;
-		
+	
 	@Override
+	protected Class<? extends Form> __getFormClass__(Class<? extends Form> aClass) {
+		SystemAction systemAction = getSystemAction();
+		if(systemAction!=null)
+			aClass = __inject__(DataHelper.class).getFormClass(systemAction);
+		return aClass;
+	}
+	
+	/*@Override
 	protected Class<? extends Row> __getRowClass__(Class<? extends Row> aClass) {
 		SystemAction systemAction = getSystemAction();
 		if(systemAction!=null)
 			aClass = __inject__(DataHelper.class).getRowClass(systemAction);
 		return aClass;
-	}
+	}*/
 	
 	@Override
 	public Strings getGridColumnsFieldNames() {

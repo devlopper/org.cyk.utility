@@ -28,7 +28,7 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 		Objects choices = getChoices();
 		if(choices == null) {
 			ChoicesGetter choicesGetter = __inject__(choicesGetterClass);
-			choices = choicesGetter.setField(field).setRequest(getProperties().getRequest()).setContext(getProperties().getContext())
+			choices = choicesGetter.setFieldDeclaringClass(object.getClass()).setField(field).setRequest(getProperties().getRequest()).setContext(getProperties().getContext())
 				.setMaximumNumberOfChoice(maximumNumberOfChoice)
 				.execute().getOutput();
 		}

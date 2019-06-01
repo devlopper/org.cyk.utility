@@ -8,7 +8,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.client.controller.component.command.CommandFunction;
+import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;

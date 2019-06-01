@@ -6,6 +6,7 @@ import org.cyk.utility.client.controller.entities.MyEntityCreateForm;
 import org.cyk.utility.client.controller.entities.MyEntityCustomForm;
 import org.cyk.utility.client.controller.entities.MyEntityDeleteForm;
 import org.cyk.utility.client.controller.entities.MyEntityReadForm;
+import org.cyk.utility.client.controller.entities.MyEntitySelectForm;
 import org.cyk.utility.client.controller.entities.MyEntityUpdateForm;
 import org.cyk.utility.client.controller.entities.VerySimpleEntity;
 import org.cyk.utility.client.controller.entities.VerySimpleEntityForm;
@@ -13,6 +14,7 @@ import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionCustom;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
 import org.junit.Test;
@@ -46,6 +48,12 @@ public class DataHelperUnitTest extends AbstractArquillianUnitTestWithDefaultDep
 	@Test
 	public void isMyEntityDeleteForm_when_Delete_MyEntity() {
 		assertionHelper.assertEquals(MyEntityDeleteForm.class, __inject__(DataHelper.class).getFormClass(__inject__(SystemActionDelete.class)
+				.setEntityClass(MyEntity.class)));
+	}
+	
+	@Test
+	public void isMyEntitySelectForm_when_Select_MyEntity() {
+		assertionHelper.assertEquals(MyEntitySelectForm.class, __inject__(DataHelper.class).getFormClass(__inject__(SystemActionSelect.class)
 				.setEntityClass(MyEntity.class)));
 	}
 	

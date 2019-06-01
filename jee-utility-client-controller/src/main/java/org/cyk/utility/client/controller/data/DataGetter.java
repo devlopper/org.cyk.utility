@@ -8,4 +8,10 @@ public interface DataGetter extends FunctionWithPropertiesAsInput<Data> {
 	SystemAction getSystemAction();
 	DataGetter setSystemAction(SystemAction systemAction);
 	
+	Boolean getIsInjectIfNull();
+	DataGetter setIsInjectIfNull(Boolean isInjectIfNull);
+	
+	Class<?> getKlass();
+	DataGetter setKlass(Class<?> klass);
+	
 }

@@ -6,9 +6,12 @@ import java.util.Collection;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.value.ValueUsageType;
 
-@SuppressWarnings("rawtypes") // <?> has been removed to solve WELD-001125: Illegal bean type
-public interface FieldTypeGetter extends FunctionWithPropertiesAsInput<Class> {
+public interface FieldTypeGetter extends FunctionWithPropertiesAsInput<FieldType> {
 
+	FieldGetter getFieldGetter();
+	FieldGetter getFieldGetter(Boolean injectIfNull);
+	FieldTypeGetter setFieldGetter(FieldGetter fieldGetter);
+	
 	Class<?> getClazz();
 	FieldTypeGetter setClazz(Class<?> aClass);
 	

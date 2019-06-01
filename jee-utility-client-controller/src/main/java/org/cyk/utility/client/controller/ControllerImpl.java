@@ -134,6 +134,22 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 	}
 	
 	@Override
+	public <ENTITY> Controller select(Class<ENTITY> aClass, Collection<Object> identifiers, Properties properties) {
+		ControllerEntity<Object> controller = (ControllerEntity<Object>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
+		if(controller == null){
+			__injectThrowableHelper__().throwRuntimeException("No controller found for <<"+aClass+">> to do select action");
+		}else{
+			controller.select(identifiers, properties);
+		}
+		return this;
+	}
+	
+	@Override
+	public <ENTITY> Controller select(Class<ENTITY> aClass, Collection<Object> identifiers) {
+		return select(aClass, identifiers, null);
+	}
+	
+	@Override
 	public <ENTITY> Controller redirect(Class<ENTITY> aClass, Object identifier, Properties properties) {
 		ControllerEntity<Object> controller = (ControllerEntity<Object>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
 		if(controller == null){

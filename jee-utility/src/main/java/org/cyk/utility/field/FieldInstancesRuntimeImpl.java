@@ -41,7 +41,7 @@ public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldIn
 						aClass = FieldUtils.getDeclaredField(aClass, index, Boolean.TRUE).getType();
 				}
 				instance.setField(__inject__(FieldGetter.class).execute(aClass, fieldNames.getLast()).getOutput().getFirst());
-				instance.setType(__inject__(FieldTypeGetter.class).execute(instance.getField()).getOutput());
+				instance.setType(__inject__(FieldTypeGetter.class).execute(instance.getField()).getOutput().getType());
 				instance.setIsGeneratable(instance.getField().isAnnotationPresent(GeneratedValue.class));
 				getInstances(Boolean.TRUE).add(instance);
 				log.getMessageBuilder(Boolean.TRUE).addParameter("field <<"+instance.getClazz()+"."+path+">> added to runtime collection");

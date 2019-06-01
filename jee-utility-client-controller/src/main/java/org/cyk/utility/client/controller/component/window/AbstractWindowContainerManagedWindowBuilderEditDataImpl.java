@@ -50,7 +50,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 				for(String index : methodsNames.get()) {
 					//TODO we can write a DataCommandableBuilderGetter
 					CommandableBuilder commandable = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, index ,systemAction);
-					/* if it is update action then we need to know which field to process */
+					/* TODO if it is update action then we need to know which field to process : we can write a getter for it */
 					commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setProperty(Properties.FIELDS, __inject__(StringHelper.class).concatenate(__getPersistenceEntityFieldNames__(window, systemAction, formClass),","));
 					
 					Boolean isHasInputFile = __injectCollectionHelper__().isNotEmpty(viewBuilder.getComponentsBuilder(Boolean.TRUE).getComponents(Boolean.TRUE)

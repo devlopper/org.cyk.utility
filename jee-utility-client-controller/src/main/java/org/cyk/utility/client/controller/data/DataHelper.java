@@ -7,6 +7,12 @@ import org.cyk.utility.system.action.SystemAction;
 
 public interface DataHelper extends Helper {
 
+	Class<Data> getDataClass(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
+	Class<Data> getDataClass(SystemAction systemAction);
+	
+	Data injectData(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
+	Data injectData(SystemAction systemAction);
+	
 	Class<Row> getRowClass(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
 	Class<Row> getRowClass(SystemAction systemAction);
 	

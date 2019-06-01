@@ -21,6 +21,31 @@ public class DataHelperImpl extends AbstractHelper implements DataHelper,Seriali
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	public Class<Data> getDataClass(Class<?> entityClass, Class<? extends SystemAction> systemActionClass) {
+		Strings names = __inject__(SystemActionRelatedClassesNamesGetter.class).setEntityClass(entityClass).setSystemActionClass(systemActionClass).setExtendedInterface(Data.class)
+				.setDefaultSuffix("Default").execute().getOutput();
+		__inject__(CollectionHelper.class).swap(names, 1, 2);
+		Class<Data> clazz = __inject__(SystemActionRelatedClassGetter.class).setNames(names).execute().getOutput();
+		return clazz;
+	}
+	
+	@Override
+	public Class<Data> getDataClass(SystemAction systemAction) {
+		return systemAction == null || systemAction.getEntities() == null ? null : getDataClass(systemAction.getEntities().getElementClass(), systemAction.getClass());
+	}
+	
+	@Override
+	public Data injectData(Class<?> entityClass, Class<? extends SystemAction> systemActionClass) {
+		Class<?> clazz = getDataClass(entityClass, systemActionClass);
+		return clazz == null ? null : (Data)__inject__(clazz);
+	}
+	
+	@Override
+	public Data injectData(SystemAction systemAction) {
+		return systemAction == null || systemAction.getEntities() == null ? null : injectData(systemAction.getEntities().getElementClass(), systemAction.getClass());
+	}
+	
+	@Override
 	public Class<Row> getRowClass(Class<?> entityClass, Class<? extends SystemAction> systemActionClass) {
 		Class<Row> clazz = __inject__(SystemActionRelatedClassGetter.class).setNamesGetter(
 				__inject__(SystemActionRelatedClassesNamesGetter.class).setEntityClass(entityClass).setSystemActionClass(systemActionClass).setNameSuffix("Row")

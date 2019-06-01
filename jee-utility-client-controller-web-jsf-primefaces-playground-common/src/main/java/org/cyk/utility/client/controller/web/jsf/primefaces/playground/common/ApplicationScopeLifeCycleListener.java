@@ -5,8 +5,10 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
+import org.cyk.utility.__kernel__.annotation.Default;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
-import org.cyk.utility.client.controller.component.command.CommandFunctionImpl;
+import org.cyk.utility.client.controller.ControllerFunctionRedirector;
+import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetterImpl;
 import org.cyk.utility.client.controller.entities.entitynoform.EntityNoForm;
 import org.cyk.utility.client.controller.entities.myentity.MyEntity;
@@ -23,9 +25,10 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
-		__inject__(FunctionRunnableMap.class).set(CommandFunctionImpl.class, CommandFunctionFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(MenuBuilderMapGetterImpl.class, MenuBuilderMapGetterFunctionRunnableImpl.class,LEVEL);
-		//__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class,Boolean.TRUE);
+		
+		__setQualifiersClasses__(CommandFunction.class, Default.class);
+		__setQualifiersClasses__(ControllerFunctionRedirector.class, Default.class);
 		
 		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClass(EntityNoForm.class);
 		__inject__(UniformResourceIdentifierParameterValueMatrix.class).setClass(MyEntity.class);

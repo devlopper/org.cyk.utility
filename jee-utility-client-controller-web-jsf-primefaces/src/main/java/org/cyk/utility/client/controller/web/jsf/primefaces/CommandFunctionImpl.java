@@ -2,11 +2,13 @@ package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
 
+import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;
 import org.primefaces.PrimeFaces;
 
-public abstract class AbstractCommandFunctionFunctionRunnableImpl extends org.cyk.utility.client.controller.component.command.AbstractCommandFunctionFunctionRunnableImpl implements Serializable {
+@Primefaces
+public class CommandFunctionImpl extends AbstractCommandFunctionImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

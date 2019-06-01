@@ -35,6 +35,10 @@ public interface Controller extends ControllerServiceProvider<Object> {
 	<ENTITY> Controller redirect(Class<ENTITY> aClass,Object identifier,Properties properties);
 	<ENTITY> Controller redirect(Class<ENTITY> aClass,Object identifier);
 	
+	/* Select */
+	<ENTITY> Controller select(Class<ENTITY> aClass,Collection<Object> identifiers,Properties properties);
+	<ENTITY> Controller select(Class<ENTITY> aClass,Collection<Object> identifiers);
+	
 	/**/
 	
 	Controller act(SystemAction systemAction,Data data);

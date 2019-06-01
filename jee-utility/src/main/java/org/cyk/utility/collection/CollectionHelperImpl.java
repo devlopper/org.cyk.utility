@@ -98,6 +98,26 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	}
 	
 	@Override
+	public <ELEMENT> CollectionHelper setElementAt(Collection<ELEMENT> collection, Object index, ELEMENT value) {
+		Integer indexValue = __inject__(NumberHelper.class).getInteger(index);
+		if(isNotEmpty(collection) && indexValue < getSize(collection)){
+			if(collection instanceof List)
+				((List<ELEMENT>)collection).set(indexValue.intValue(),value);
+			else {
+				__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("collection helper set at");
+			}
+		}
+		return this;
+	}
+	
+	@Override
+	public <ELEMENT> CollectionHelper setElementAt(CollectionInstance<ELEMENT> collectionInstance, Object index,ELEMENT value) {
+		if(Boolean.TRUE.equals(isNotEmpty(collectionInstance)))
+			setElementAt(collectionInstance.get(),index,value);
+		return this;
+	}
+	
+	@Override
 	public <ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection,Object index){
 		Integer indexValue = __inject__(NumberHelper.class).getInteger(index);
 		ELEMENT element = null;
@@ -270,5 +290,23 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	@Override
 	public <ELEMENT> Collection<ELEMENT> removeDuplicate(Collection<ELEMENT> collection,Function<? super ELEMENT, ?> function) {
 		return Boolean.TRUE.equals(isEmpty(collection)) ? collection : StreamEx.of(collection).distinct(function).toList();
+	}
+	
+	@Override
+	public <ELEMENT> CollectionHelper swap(Collection<ELEMENT> collection, Object index01, Object index02) {
+		if(Boolean.TRUE.equals(isNotEmpty(collection))) {
+			ELEMENT object01 = getElementAt(collection, index01);
+			ELEMENT object02 = getElementAt(collection, index02);
+			setElementAt(collection, index01, object02);
+			setElementAt(collection, index02, object01);
+		}
+		return this;
+	}
+	
+	@Override
+	public <ELEMENT> CollectionHelper swap(CollectionInstance<ELEMENT> collection, Object index01, Object index02) {
+		if(Boolean.TRUE.equals(isNotEmpty(collection)))
+			swap(collection.get(), index01, index02);
+		return	this; 
 	}
 }

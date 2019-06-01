@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.Controller;
+import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.system.action.SystemAction;

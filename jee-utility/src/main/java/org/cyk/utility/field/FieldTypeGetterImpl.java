@@ -2,24 +2,72 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Collection;
 
+import org.cyk.utility.array.ArrayHelper;
+import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.value.ValueUsageType;
 
-@SuppressWarnings("rawtypes")
-public class FieldTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class> implements FieldTypeGetter, Serializable {
+public class FieldTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<FieldType> implements FieldTypeGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private FieldGetter fieldGetter;
+	
 	@Override
-	protected Class<?> __execute__() {
-		Class<?> value = null;
+	protected FieldType __execute__() {
+		FieldType fieldType = null;
+		FieldGetter fieldGetter = getFieldGetter();
+		
+		Class<?> klass = getClazz();
+		
+		if(klass == null && fieldGetter != null)
+			klass = fieldGetter.getClazz();
+		
 		Field field = getField();
-		if(field!=null){
-			value = field.getType();
+		if(field == null) {
+			if(fieldGetter != null)
+				field = __injectCollectionHelper__().getFirst(fieldGetter.execute().getOutput());
 		}
-		return value;
+		
+		if(field!=null){
+			if(klass == null)
+				klass = field.getDeclaringClass();
+			
+			fieldType = __inject__(FieldType.class).setField(field);
+			if(field.getType().equals(field.getGenericType())) {
+				fieldType.setType(field.getType());
+			}else {
+				if(field.getGenericType() instanceof ParameterizedType) {
+					ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+					if(__inject__(ArrayHelper.class).isEmpty(parameterizedType.getActualTypeArguments())) {
+							
+					}else {
+						fieldType.setType(field.getType());
+						for(Integer index = 0 ; index < parameterizedType.getActualTypeArguments().length ; index = index + 1) {
+							Type type = parameterizedType.getActualTypeArguments()[index];
+							Class<?> argumentClass = null;
+							if(type instanceof TypeVariable) {
+								argumentClass = __inject__(ClassHelper.class).getParameterAt(klass, index, Object.class);
+							}else
+								argumentClass = (Class<?>) type;
+							fieldType.getParameterizedClasses(Boolean.TRUE).set(index,argumentClass);
+						}
+					}
+				}else {
+					fieldType.setType(__inject__(ClassHelper.class).getParameterAt(klass, 0, Object.class));
+				}
+			}
+			
+			if(fieldType.getType() == null)
+				fieldType.setType(Object.class);
+		}
+		
+		return fieldType;
 	}
 	
 	@Override
@@ -39,7 +87,23 @@ public class FieldTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputIm
 		setClazz(aClass).setField(fieldName,valueUsageType).execute();
 		return this;
 	}
-
+	
+	@Override
+	public FieldGetter getFieldGetter() {
+		return fieldGetter;
+	}
+	
+	@Override
+	public FieldGetter getFieldGetter(Boolean injectIfNull) {
+		return (FieldGetter) __getInjectIfNull__(FIELD_FIELD_GETTER, injectIfNull);
+	}
+	
+	@Override
+	public FieldTypeGetter setFieldGetter(FieldGetter fieldGetter) {
+		this.fieldGetter = fieldGetter;
+		return this;
+	}
+	
 	@Override
 	public Class<?> getClazz() {
 		return (Class<?>) getProperties().getClazz();
@@ -108,7 +172,9 @@ public class FieldTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputIm
 		getProperties().setFieldName(fieldName);
 		return this;
 	}
+	
 
+	/**/
 
-
+	private static final String FIELD_FIELD_GETTER ="fieldGetter";
 }

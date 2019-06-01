@@ -1,5 +1,6 @@
 package org.cyk.utility.client.controller.component.command;
 
+import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.component.InvisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.window.WindowContainerManaged;
 
