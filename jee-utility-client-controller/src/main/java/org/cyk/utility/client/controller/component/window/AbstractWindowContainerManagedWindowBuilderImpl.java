@@ -83,12 +83,16 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(systemAction == null) {
 			
 		}else {
-			if(window.getTitle()==null || __injectStringHelper__().isBlank(window.getTitle().getValue()))
-				window.setTitleValue(
-					__inject__(InternalizationPhraseBuilder.class)
-						.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.NOUN))
-						.addStringsByKeys(systemAction.getEntities().getElementClass()).execute().getOutput()
-					);
+			if(window.getTitle()==null || __injectStringHelper__().isBlank(window.getTitle().getValue())) {
+				InternalizationPhraseBuilder windowTitleInternalizationPhraseBuilder = __getWindowTitleInternalizationPhraseBuilder__(systemAction);
+				if(windowTitleInternalizationPhraseBuilder == null) {
+					windowTitleInternalizationPhraseBuilder = __inject__(InternalizationPhraseBuilder.class)
+							.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.NOUN))
+							.addStringsByKeys(systemAction.getEntities().getElementClass());
+				}
+				if(windowTitleInternalizationPhraseBuilder != null)
+					window.setTitleValue(windowTitleInternalizationPhraseBuilder.execute().getOutput());
+			}
 			__execute__(window,systemAction,__getFormClass__(getFormClass()),__getRowClass__(getRowClass()));
 		}
 		
@@ -105,6 +109,20 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		}
 		window.setView(view);
 		return window;
+	}
+	
+	public InternalizationPhraseBuilder __getWindowTitleInternalizationPhraseBuilder__(SystemAction systemAction) {
+		InternalizationPhraseBuilder internalizationPhraseBuilder = __inject__(InternalizationPhraseBuilder.class)
+				.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER)
+						.setKeyType(InternalizationKeyStringType.NOUN))
+				.addStrings(__inject__(InternalizationStringBuilder.class).setKey("of"))
+				.addStringsByKeys(systemAction.getEntities().getElementClass());
+		if(systemAction.getNextAction() != null) {
+			internalizationPhraseBuilder
+			.addStrings(__inject__(InternalizationStringBuilder.class).setKey("for"))
+			.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction.getNextAction()).setKeyType(InternalizationKeyStringType.NOUN));	
+		}
+		return internalizationPhraseBuilder;
 	}
 	
 	protected Object __getEntity__(SystemAction systemAction) {

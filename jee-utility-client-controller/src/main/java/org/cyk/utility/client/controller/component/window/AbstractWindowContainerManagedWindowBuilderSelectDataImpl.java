@@ -21,45 +21,6 @@ public abstract class AbstractWindowContainerManagedWindowBuilderSelectDataImpl 
 
 	@Override
 	protected void __execute__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass) {
-		/*
-		if(rowClass!=null) {
-			Collection<?> objects = getGridObjects();
-			if(objects == null)
-				objects = __inject__(Controller.class).readMany(systemAction.getEntities().getElementClass());
-			
-			@SuppressWarnings({ "rawtypes" })
-			GridBuilder gridBuilder = __inject__(GridBuilder.class).setRowClass(rowClass).setRowDataClass((Class<? extends Data>) systemAction.getEntities().getElementClass())
-				.addObjects((Collection)objects)
-				;
-			
-			Strings columnsFieldNames = getGridColumnsFieldNames();
-			if(columnsFieldNames!=null)
-				gridBuilder.addColumnsByFieldNames(columnsFieldNames.get());
-			
-			if(systemAction.getNextAction() == null)
-				gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandableBySystemActionClass(SystemActionProcess.class);
-			else
-				gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandableBySystemAction(systemAction.getNextAction());
-			gridBuilder.getRows(Boolean.TRUE).addRowListeners(new WindowContainerManagedWindowBuilderSelectDataRowListenerAdapter().setWindowContainerManagedWindowBuilder(this));
-			
-			LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
-			gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);
-			layoutTypeGrid.setIsHasHeader(Boolean.TRUE).setIsHasFooter(Boolean.TRUE).setIsHasOrderNumberColumn(Boolean.TRUE).setIsHasCommandablesColumn(Boolean.TRUE);
-			
-			viewBuilder = __inject__(ViewBuilder.class);
-			viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE)
-			.addComponents(gridBuilder)
-			
-			;
-			
-			__execute__(gridBuilder);
-			
-			
-		}else {
-			
-		}
-		*/
-		
 		if(formClass!=null) {
 			Form form = __inject__(formClass);
 			if(window.getTitle()!=null)
@@ -86,6 +47,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderSelectDataImpl 
 				for(String index : methodsNames.get()) {
 					//TODO we can write a DataCommandableBuilderGetter
 					CommandableBuilder commandable = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, index ,systemAction);
+
 					Boolean isHasInputFile = __injectCollectionHelper__().isNotEmpty(viewBuilder.getComponentsBuilder(Boolean.TRUE).getComponents(Boolean.TRUE)
 							.getIsInstanceOf(InputFileBuilder.class,InputFile.class));
 					commandable.getCommand(Boolean.TRUE).setIsSynchronous(Boolean.TRUE.equals(isHasInputFile));

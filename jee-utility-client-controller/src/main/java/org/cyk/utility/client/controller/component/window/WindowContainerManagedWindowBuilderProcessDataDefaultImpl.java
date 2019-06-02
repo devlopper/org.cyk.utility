@@ -15,7 +15,7 @@ public class WindowContainerManagedWindowBuilderProcessDataDefaultImpl extends A
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void __execute__(Form form, Data data, SystemAction systemAction, ViewBuilder viewBuilder) {
+	protected void __execute__(Form form, SystemAction systemAction, Data data, ViewBuilder viewBuilder) {
 		Strings fieldNames = __inject__(DataFieldsNamesGetter.class).setSystemAction(systemAction).execute().getOutput();
 		if(__injectCollectionHelper__().isNotEmpty(fieldNames)) {
 			for(String index : fieldNames.get()) {

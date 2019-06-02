@@ -9,6 +9,7 @@ import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.icon.Icon;
+import org.cyk.utility.internationalization.InternalizationKeyStringType;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionList;
@@ -144,6 +145,8 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 		if(__injectStringHelper__().isNotBlank(processingActionIdentifier)) {
 			process.setIdentifier(processingActionIdentifier);
 			menuItemBuilder.setCommandableNameInternalizationKeyValue(processingActionIdentifier);
+			menuItemBuilder.getCommandable(Boolean.TRUE).getNameInternalization(Boolean.TRUE).getKeyBuilder(Boolean.TRUE).setType(InternalizationKeyStringType.VERB);
+			//__inject__(InternalizationKeyStringBuilder.class).setValue(SystemActionCreate.class).setType(InternalizationKeyStringType.VERB).execute().getOutput()
 		}
 		SystemAction action = __inject__(SystemActionSelect.class).setEntityClass(aClass).setNextAction(process);
 		return addChild(menuItemBuilder.setCommandableNavigationIdentifierBuilderSystemAction(action));

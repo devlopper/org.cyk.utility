@@ -221,13 +221,15 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ViewBuilder addComponentBuilder(ComponentBuilder<?> componentBuilder) {
-		if(componentBuilder.getRequest() == null)
-			componentBuilder.setRequest(getRequest());
-		if(componentBuilder.getContext() == null)
-			componentBuilder.setContext(getContext());
-		if(componentBuilder.getUniformResourceLocatorMap() == null)
-			componentBuilder.setUniformResourceLocatorMap(getUniformResourceLocatorMap());
-		getComponentsBuilder(Boolean.TRUE).getComponents(Boolean.TRUE).add(componentBuilder);
+		if(componentBuilder != null) {
+			if(componentBuilder.getRequest() == null)
+				componentBuilder.setRequest(getRequest());
+			if(componentBuilder.getContext() == null)
+				componentBuilder.setContext(getContext());
+			if(componentBuilder.getUniformResourceLocatorMap() == null)
+				componentBuilder.setUniformResourceLocatorMap(getUniformResourceLocatorMap());
+			getComponentsBuilder(Boolean.TRUE).getComponents(Boolean.TRUE).add(componentBuilder);	
+		}
 		return this;
 	}
 	

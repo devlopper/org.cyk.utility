@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import org.cyk.utility.client.controller.component.annotation.Input;
 import org.cyk.utility.client.controller.component.annotation.InputString;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
+import org.cyk.utility.string.StringHelper;
 
 public abstract class AbstractDataIdentifiedByStringImpl extends AbstractDataImpl implements DataIdentifiedByString,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -29,6 +30,9 @@ public abstract class AbstractDataIdentifiedByStringImpl extends AbstractDataImp
 
 	@Override
 	public String toString() {
-		return getIdentifier();
+		String string = getIdentifier();
+		if(__inject__(StringHelper.class).isBlank(string))
+			string = super.toString();
+		return string;
 	}
 }

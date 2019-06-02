@@ -25,4 +25,7 @@ public interface InputBuilder<INPUT extends Input<VALUE>,VALUE> extends InputOut
 	
 	Boolean getIsEditable();
 	InputBuilder<INPUT,VALUE> setIsEditable(Boolean isEditable);
+	
+	Boolean getIsNullable();
+	InputBuilder<INPUT,VALUE> setIsNullable(Boolean isNullable);
 }

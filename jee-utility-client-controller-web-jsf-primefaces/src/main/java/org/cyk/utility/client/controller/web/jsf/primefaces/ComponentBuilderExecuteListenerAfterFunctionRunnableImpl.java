@@ -123,6 +123,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						}
 						
 						if(inputOutput instanceof Input<?>) {
+							component.getProperties().setRequired(Boolean.FALSE.equals(((Input<?>)inputOutput).getIsNullable()));	
 							if(component instanceof InputChoice<?>) {
 								component.getProperties().setConverter(__inject__(ObjectConverter.class));
 								component.getProperties().setFilter("true");

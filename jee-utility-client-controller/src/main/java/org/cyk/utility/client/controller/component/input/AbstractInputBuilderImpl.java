@@ -15,7 +15,7 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	private VALUE initialValue;
 	private OutputStringLabelBuilder label;
 	private OutputStringMessageBuilder message;
-	private Boolean isEditable;
+	private Boolean isEditable,isNullable;
 	
 	public AbstractInputBuilderImpl() {
 		addRoles(ComponentRole.INPUT);
@@ -30,9 +30,10 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	protected void __execute__(INPUT input, Object object, Field field) {
 		super.__execute__(input, object, field);
 		
-		if(field!=null) {
-			input.getProperties().setRequired(field.getAnnotation(javax.validation.constraints.NotNull.class)!=null);	
-		}
+		Boolean isNullable = getIsNullable();
+		if(isNullable == null && field != null)
+			isNullable = field.getAnnotation(javax.validation.constraints.NotNull.class) == null;
+		input.setIsNullable(isNullable);
 		
 		OutputStringLabelBuilder label = getLabel();
 		if(label!=null) {
@@ -120,6 +121,17 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	@Override
 	public InputBuilder<INPUT, VALUE> setIsEditable(Boolean isEditable) {
 		this.isEditable = isEditable;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsNullable() {
+		return isNullable;
+	}
+	
+	@Override
+	public InputBuilder<INPUT, VALUE> setIsNullable(Boolean isNullable) {
+		this.isNullable = isNullable;
 		return this;
 	}
 	

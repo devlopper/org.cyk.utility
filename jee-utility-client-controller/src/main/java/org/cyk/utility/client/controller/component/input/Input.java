@@ -17,4 +17,7 @@ public interface Input<T> extends InputOutput<T> {
 	
 	OutputStringMessage getMessage();
 	Input<T> setMessage(OutputStringMessage message);
+	
+	Boolean getIsNullable();
+	Input<T> setIsNullable(Boolean isNullable);
 }

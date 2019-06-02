@@ -10,6 +10,8 @@ public enum InternalizationKeyStringType {
 	,GENDER
 	,MASCULINE
 	,FEMININE
+	,SINGULAR
+	,PLURAL
 	;
 	
 	private String format;

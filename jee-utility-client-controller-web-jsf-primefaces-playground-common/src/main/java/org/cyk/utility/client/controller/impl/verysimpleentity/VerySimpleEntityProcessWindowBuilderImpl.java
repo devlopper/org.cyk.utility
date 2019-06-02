@@ -14,7 +14,7 @@ public class VerySimpleEntityProcessWindowBuilderImpl extends AbstractWindowCont
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void __execute__(Form form, Data data,SystemAction systemAction, ViewBuilder viewBuilder) {
+	protected void __execute__(Form form,SystemAction systemAction, Data data, ViewBuilder viewBuilder) {
 		viewBuilder.addComponentBuilderByObjectByFieldNames(data, VerySimpleEntity.PROPERTY_CODE);
 		viewBuilder.addComponentBuilderByObjectByFieldNames(data, VerySimpleEntity.PROPERTY_NAME);
 	}

@@ -11,6 +11,7 @@ import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.internationalization.InternalizationKeyStringType;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemAction;
 
@@ -115,6 +116,7 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 					commandableBuilder.setName(__method__.getName());
 				}else {
 					commandableBuilder.getNameInternalization(Boolean.TRUE).setKeyValue(commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getAction());
+					commandableBuilder.getNameInternalization(Boolean.TRUE).getKeyBuilder(Boolean.TRUE).setType(InternalizationKeyStringType.VERB);
 					commandableBuilder.getNameInternalization(Boolean.TRUE).setCase(Case.FIRST_CHARACTER_UPPER);
 				}
 			}

@@ -13,6 +13,7 @@ public abstract class AbstractInputImpl<T> extends AbstractInputOutputImpl<T> im
 
 	protected Object valueObject;
 	protected T initialValue;
+	private Boolean isNullable;
 	@Inject protected OutputStringLabel label;
 	@Inject protected OutputStringMessage message;
 	
@@ -56,6 +57,17 @@ public abstract class AbstractInputImpl<T> extends AbstractInputOutputImpl<T> im
 	@Override
 	public Input<T> setMessage(OutputStringMessage message) {
 		this.message = message;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsNullable() {
+		return isNullable;
+	}
+	
+	@Override
+	public Input<T> setIsNullable(Boolean isNullable) {
+		this.isNullable = isNullable;
 		return this;
 	}
 }
