@@ -37,6 +37,7 @@ import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueHelper;
 import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.outputpanel.OutputPanel;
 import org.primefaces.model.menu.MenuModel;
 
@@ -117,13 +118,19 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		DataTable dataTable = new DataTable();
 		dataTable.setVar("indexRow");
 		dataTable.setReflow(Boolean.TRUE);
+		dataTable.setWidgetVar((String) grid.getProperties().getWidgetVar());
 		if(grid.getStyle()!=null)
 			dataTable.setStyleClass(grid.getStyle().getClassesAsString());
 		
 		UIComponent uiComponent =__build__(grid.getView(ViewMap.HEADER));
-		if(uiComponent!=null)
+		if(uiComponent!=null) {
+			InputText inputText = new InputText();
+			inputText.setId("globalFilter");
+			inputText.setOnchange("PF('"+grid.getProperties().getWidgetVar()+"').filter();");
+			inputText.setPlaceholder("Rechercher...");
+			//((OutputPanel)uiComponent).getChildren().add(inputText);
 			dataTable.setHeader(uiComponent);
-		
+		}
 		uiComponent =__build__(grid.getView(ViewMap.FOOTER));
 		if(uiComponent!=null)
 			dataTable.setFooter(uiComponent);

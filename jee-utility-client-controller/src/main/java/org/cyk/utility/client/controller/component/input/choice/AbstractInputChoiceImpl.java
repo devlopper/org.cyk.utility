@@ -70,12 +70,13 @@ public abstract class AbstractInputChoiceImpl<CHOICE> extends AbstractInputImpl<
 				}
 			}
 			if(choicePropertyValueBuilderClass == null)
-				choicePropertyValueBuilderClass = ChoicePropertyValueBuilderImpl.class;		
+				choicePropertyValueBuilderClass = ChoicePropertyValueBuilder.class;		
 			
 			if(choicePropertyValueBuilderClass != null) {
 				__choicePropertyValueBuilderClass__ = choicePropertyValueBuilderClass;
 			}	
 		}
+		
 		return __choicePropertyValueBuilderClass__ == null ? null : __inject__(__choicePropertyValueBuilderClass__).setObject(choice).setProperty(property).execute().getOutput();
 	}
 	

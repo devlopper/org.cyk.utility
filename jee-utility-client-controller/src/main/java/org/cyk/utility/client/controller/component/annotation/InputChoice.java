@@ -6,11 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.cyk.utility.client.controller.component.input.choice.ChoicePropertyValueBuilder;
-import org.cyk.utility.client.controller.component.input.choice.ChoicePropertyValueBuilderImpl;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value={ElementType.FIELD})
 public @interface InputChoice {
 	
-	Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass() default ChoicePropertyValueBuilderImpl.class;
+	Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass() default ChoicePropertyValueBuilder.class;
 }

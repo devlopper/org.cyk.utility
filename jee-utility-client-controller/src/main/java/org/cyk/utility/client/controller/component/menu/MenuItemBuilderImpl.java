@@ -139,17 +139,25 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	}
 	
 	@Override
-	public MenuItemBuilder addEntitySelect(Class<?> aClass,String processingActionIdentifier) {
+	public MenuItemBuilder addEntitySelect(Class<?> aClass,Class<? extends SystemAction> processingActionClass,String processingActionIdentifier) {
 		MenuItemBuilder menuItemBuilder = __inject__(MenuItemBuilder.class);
-		SystemAction process = __inject__(SystemActionProcess.class);
-		if(__injectStringHelper__().isNotBlank(processingActionIdentifier)) {
+		if(processingActionClass == null)
+			processingActionClass = SystemActionProcess.class;
+		SystemAction process = __inject__(processingActionClass);
+		if(__injectStringHelper__().isBlank(processingActionIdentifier))
+			processingActionIdentifier = (String) process.getIdentifier();
+		else
 			process.setIdentifier(processingActionIdentifier);
-			menuItemBuilder.setCommandableNameInternalizationKeyValue(processingActionIdentifier);
-			menuItemBuilder.getCommandable(Boolean.TRUE).getNameInternalization(Boolean.TRUE).getKeyBuilder(Boolean.TRUE).setType(InternalizationKeyStringType.VERB);
-			//__inject__(InternalizationKeyStringBuilder.class).setValue(SystemActionCreate.class).setType(InternalizationKeyStringType.VERB).execute().getOutput()
-		}
+		
+		menuItemBuilder.setCommandableNameInternalizationKeyValue(processingActionIdentifier);
+		menuItemBuilder.getCommandable(Boolean.TRUE).getNameInternalization(Boolean.TRUE).getKeyBuilder(Boolean.TRUE).setType(InternalizationKeyStringType.VERB);
 		SystemAction action = __inject__(SystemActionSelect.class).setEntityClass(aClass).setNextAction(process);
 		return addChild(menuItemBuilder.setCommandableNavigationIdentifierBuilderSystemAction(action));
+	}
+	
+	@Override
+	public MenuItemBuilder addEntitySelect(Class<?> aClass,String processingActionIdentifier) {
+		return addEntitySelect(aClass,SystemActionProcess.class,processingActionIdentifier);
 	}
 	
 	@Override

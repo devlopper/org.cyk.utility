@@ -32,6 +32,7 @@ public class LazyDataModel<OBJECT> extends org.primefaces.model.LazyDataModel<OB
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<OBJECT> load(int first, int pageSize, String sortField, SortOrder sortOrder,Map<String, Object> filters) {
+		//System.out.println("LazyDataModel.load() filters : "+filters);
 		Collection<Object> objects = null;
 		grid.getObjects(Boolean.TRUE).removeAll();
 		GridBuilder builder = (GridBuilder) grid.getBuilder();

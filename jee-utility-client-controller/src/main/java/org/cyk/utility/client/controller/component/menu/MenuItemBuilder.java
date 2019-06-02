@@ -28,6 +28,7 @@ public interface MenuItemBuilder extends VisibleComponentBuilder<MenuItem> {
 	MenuItemBuilder addEntityList(Class<?> aClass);
 	
 	MenuItemBuilder addEntitiesSelect(Class<?>...classes);
+	MenuItemBuilder addEntitySelect(Class<?> aClass,Class<? extends SystemAction> processingActionClass,String processingActionIdentifier);
 	MenuItemBuilder addEntitySelect(Class<?> aClass,String processingActionIdentifier);
 	MenuItemBuilder addEntitySelect(Class<?> aClass);
 	
