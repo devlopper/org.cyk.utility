@@ -20,4 +20,6 @@ public interface InstanceHelper extends Helper {
 	<INSTANCE> INSTANCE buildOne(Class<INSTANCE> aClass,Object fieldsValuesObject);
 	<INSTANCE> Collection<INSTANCE> buildMany(Class<INSTANCE> aClass,Collection<?> fieldsValuesObjects,Properties properties);
 	<INSTANCE> Collection<INSTANCE> buildMany(Class<INSTANCE> aClass,Collection<?> fieldsValuesObjects);
+	
+	Boolean isPersisted(Object instance);
 }

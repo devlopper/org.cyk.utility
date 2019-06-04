@@ -1,12 +1,18 @@
 package org.cyk.utility.server.business;
 
+import java.io.InputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.file.excel.FileExcelSheetDataArrayReader;
+import org.cyk.utility.map.MapInstanceIntegerToString;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.value.ValueUsageType;
@@ -34,6 +40,48 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	@SuppressWarnings("unchecked")
 	protected Class<ENTITY> __getPersistenceEntityClass__(){
 		return (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+	}
+	
+	//TODO : an idea is to transform array content to json format and transform it java object
+	@Override
+	public BusinessEntity<ENTITY> saveFromArray(ArrayInstanceTwoDimensionString arrayInstanceTwoDimensionString,MapInstanceIntegerToString columnIndexFieldNameMap, Properties properties) {
+		__throwRuntimeExceptionIfEmpty__(arrayInstanceTwoDimensionString, "save from array : array instance");
+		Collection<ENTITY> entities = null;
+		for(Integer index  = 0; index < arrayInstanceTwoDimensionString.getFirstDimensionElementCount(); index = index + 1) {
+			ENTITY entitiy = __injectClassHelper__().instanciate(getPersistenceEntityClass());
+			for(Map.Entry<Integer, String> indexEntry : columnIndexFieldNameMap.getEntries()) {
+				__injectFieldValueSetter__().execute(entitiy, indexEntry.getValue(), arrayInstanceTwoDimensionString.get(index, indexEntry.getKey()));
+			}
+			if(entities == null)
+				entities = new ArrayList<ENTITY>();
+			entities.add(entitiy);
+		}
+		if(__injectCollectionHelper__().isNotEmpty(entities)) {
+			__logInfo__("Saving "+entities.size()+" "+getPersistenceEntityClass().getSimpleName());
+			saveMany(entities);		
+		}
+		return this;
+	}
+	
+	@Override
+	public BusinessEntity<ENTITY> saveFromFileExcelSheet(FileExcelSheetDataArrayReader fileExcelSheetDataArrayReader,MapInstanceIntegerToString columnIndexFieldNameMap, Properties properties) {
+		saveFromArray(fileExcelSheetDataArrayReader.execute().getOutput(), columnIndexFieldNameMap, properties);
+		return this;
+	}
+	
+	//TODO : an idea is to transform excel content to json format and transform it java object
+	@Override
+	public BusinessEntity<ENTITY> saveFromFileExcelSheet(InputStream workbookInputStream,String sheetName,MapInstanceIntegerToString columnIndexFieldNameMap,Properties properties) {
+		__throwRuntimeExceptionIfBlank__(workbookInputStream, "save many from file excel sheet : workbook input stream");
+		__throwRuntimeExceptionIfBlank__(sheetName, "save many from file excel sheet : sheet name");
+		__throwRuntimeExceptionIfEmpty__(columnIndexFieldNameMap, "create many from file excel sheet : column index and field name mapping");
+		
+		FileExcelSheetDataArrayReader reader = __inject__(FileExcelSheetDataArrayReader.class);
+		reader.setWorkbookInputStream(workbookInputStream).setSheetName(sheetName);
+		reader.getRowInterval(Boolean.TRUE).getLow(Boolean.TRUE).setValue(1);
+		
+		saveFromFileExcelSheet(reader, columnIndexFieldNameMap, properties);		
+		return this;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -127,9 +175,16 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	
 	@Override @Transactional
 	public BusinessEntity<ENTITY> deleteAll() {
-		BusinessFunctionRemover function = __inject__(BusinessFunctionRemover.class);
-		function.setAll(Boolean.TRUE).setEntityClass(getPersistenceEntityClass());
+		/*BusinessFunctionRemover function = __inject__(BusinessFunctionRemover.class);
+		function.setEntities(findMany());
+		function.setEntityClass(getPersistenceEntityClass());		
+		//function.setAll(Boolean.TRUE).setEntityClass(getPersistenceEntityClass());
 		function.execute();
+		*/
+		Collection<ENTITY> entities = findMany();
+		if(__injectCollectionHelper__().isNotEmpty(entities))
+			for(ENTITY index : entities)
+				delete(index);
 		return this;
 	}
 	

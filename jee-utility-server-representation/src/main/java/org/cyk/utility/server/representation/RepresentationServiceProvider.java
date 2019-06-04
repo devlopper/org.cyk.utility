@@ -37,12 +37,17 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	
 	String __SLASH__ = "/";
 	String __MANY__ = ConstantString.MANY;
+	String __FILE__ = ConstantString.FILE;
+	String __FROM__ = ConstantString.FROM;
+	String __EXCEL__ = ConstantString.EXCEL;
+	String __SHEET__ = ConstantString.SHEET;
 	String __COLLECTION__ = ConstantString.COLLECTION;
 	String __ALL__ = ConstantString.ALL;
 	String __CREATE__ = ConstantString.CREATE;
 	String __UPDATE__ = ConstantString.UPDATE;
 	String __DELETE__ = ConstantString.DELETE;
 	String __GET__ = ConstantString.GET;
+	String __SAVE__ = ConstantString.SAVE;
 	String __COUNT__ = ConstantString.COUNT;
 	
 	/* Parameter */
@@ -62,6 +67,9 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	String PARAMETER_DIRECTORIES = ConstantString.DIRECTORIES;
 	String PARAMETER_IS_INLINE = ConstantString.IS_INLINE;
 	String PARAMETER_IS_PAGEABLE = ConstantString.IS_PAGEABLE;
+	String PARAMETER_WORKBOOK_NAME = ConstantString.WORKBOOK_NAME;
+	String PARAMETER_SHEET_NAME = ConstantString.SHEET_NAME;
+	String PARAMETER_COLUMN_INDEX_FIELD_NAME = ConstantString.COLUMN_INDEX_FIELD_NAME;
 	
 	/* Format */
 	
@@ -93,6 +101,8 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	String PATH_DELETE_ONE = __DELETE__;
 	String PATH_DELETE_MANY = __DELETE__+__SLASH__+__MANY__;
 	String PATH_DELETE_ALL = __DELETE__+__SLASH__+__ALL__;
+	
+	String PATH_SAVE_FROM_FILE_EXCEL_SHEET = __SAVE__+__SLASH__+__FROM__+__SLASH__+__FILE__+__SLASH__+__EXCEL__+__SLASH__+__SHEET__;
 	
 	/**/
 	

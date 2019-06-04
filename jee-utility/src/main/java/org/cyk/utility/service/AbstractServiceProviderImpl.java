@@ -12,6 +12,7 @@ import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.enumeration.EnumerationHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldValueGetter;
+import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.network.MailHelper;
@@ -74,6 +75,10 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 		return __inject__(FieldValueGetter.class);
 	}
 	
+	protected FieldValueSetter __injectFieldValueSetter__(){
+		return __inject__(FieldValueSetter.class);
+	}
+	
 	protected FieldHelper __injectFieldHelper__(){
 		return __inject__(FieldHelper.class);
 	}
@@ -127,4 +132,17 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 			}
 		}
 	}
+	
+	protected void __throwRuntimeExceptionIfNull__(Object value, String message) {
+		__injectThrowableHelper__().throwRuntimeExceptionIfNull(value, message);
+	}
+	
+	protected void __throwRuntimeExceptionIfEmpty__(Object value, String message) {
+		__injectThrowableHelper__().throwRuntimeExceptionIfEmpty(value, message);
+	}
+	
+	protected void __throwRuntimeExceptionIfBlank__(Object value, String message) {
+		__injectThrowableHelper__().throwRuntimeExceptionIfBlank(value, message);
+	}
+
 }

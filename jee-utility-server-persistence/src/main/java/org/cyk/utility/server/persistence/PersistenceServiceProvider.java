@@ -34,6 +34,13 @@ public interface PersistenceServiceProvider<OBJECT> extends SystemServiceProvide
 	
 	PersistenceServiceProvider<OBJECT> deleteAll();
 	
+	/* Save */
+	PersistenceServiceProvider<OBJECT> save(OBJECT object,Properties properties);
+	PersistenceServiceProvider<OBJECT> save(OBJECT object);
+	
+	PersistenceServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects,Properties properties);
+	PersistenceServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects);
+	
 	/* Count */
 	
 	PersistenceServiceProvider<OBJECT> clear();

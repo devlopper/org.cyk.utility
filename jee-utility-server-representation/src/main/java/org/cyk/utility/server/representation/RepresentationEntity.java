@@ -84,6 +84,13 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	@Path(PATH_DELETE_ALL)
 	Response deleteAll();
 	
+	/* Save */
+	
+	@POST
+	@Path(PATH_SAVE_FROM_FILE_EXCEL_SHEET)
+	Response saveFromFileExcelSheet(@QueryParam(PARAMETER_WORKBOOK_NAME) String workbookName,@QueryParam(PARAMETER_SHEET_NAME) String sheetName
+			,@QueryParam(PARAMETER_COLUMN_INDEX_FIELD_NAME) List<String> columnIndexFieldNames);
+	
 	/* Count */
 	@GET
 	@Path(PATH_GET_COUNT)

@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.map.MapInstanceIntegerToString;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.server.business.BusinessLayer;
 
@@ -98,6 +99,20 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	@Override
 	public Response deleteAll() {
 		return __inject__(RepresentationFunctionRemover.class).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+	}
+	
+	@Override
+	public Response saveFromFileExcelSheet(String workbookName, String sheetName,List<String> columnIndexFieldNames) {
+		if(__injectCollectionHelper__().isNotEmpty(columnIndexFieldNames)) {
+			Properties properties = new Properties();
+			MapInstanceIntegerToString columnIndexFieldNameMap = __inject__(MapInstanceIntegerToString.class);
+			for(String index : columnIndexFieldNames) {
+				String[] strings = StringUtils.split(index, ",");
+				columnIndexFieldNameMap.set(strings[0],strings[1]);
+			}
+			//getBusiness().saveFromFileExcelSheet(workbookName, sheetName, columnIndexFieldNameMap, properties);
+		}
+		return Response.ok().build();
 	}
 
 	@Override

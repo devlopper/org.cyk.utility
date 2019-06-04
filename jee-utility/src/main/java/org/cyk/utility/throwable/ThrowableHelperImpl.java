@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.system.exception.SystemException;
+import org.cyk.utility.value.ValueHelper;
 
 @Singleton
 public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelper,Serializable {
@@ -89,5 +90,23 @@ public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelp
 	@Override
 	public void throwRuntimeExceptionImplementationOrRunnableRequired(Class<?> aClass) {
 		throwRuntimeException(aClass+" : Implementation or runnable required");
+	}
+
+	@Override
+	public void throwRuntimeExceptionIfNull(Object value, String message) {
+		if(value == null)
+			throwRuntimeException(message);
+	}
+
+	@Override
+	public void throwRuntimeExceptionIfEmpty(Object value, String message) {
+		if(Boolean.TRUE.equals(__inject__(ValueHelper.class).isEmpty(value)))
+			throwRuntimeException(message);
+	}
+
+	@Override
+	public void throwRuntimeExceptionIfBlank(Object value, String message) {
+		if(Boolean.TRUE.equals(__inject__(ValueHelper.class).isBlank(value)))
+			throwRuntimeException(message);
 	}
 }

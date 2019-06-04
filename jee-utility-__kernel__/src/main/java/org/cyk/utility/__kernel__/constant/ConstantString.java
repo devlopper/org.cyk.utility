@@ -39,12 +39,16 @@ public interface ConstantString {
 	String DELETE = "delete";
 	String GET = "get";
 	String COUNT = "count";
+	String SAVE = "save";
 	String IDENTIFIER = "identifier";
 	String TYPE = "type";
 	String FILTER = "filter";
 	String FIELDS = "fields";
 	String CODE = "code";
 	String FROM = "from";
+	String FILE = "file";
+	String EXCEL = "excel";
+	String SHEET = "sheet";
 	String UPLOAD = "upload";
 	String DOWNLOAD = "download";
 	String DIRECTORY = "directory";
@@ -52,6 +56,11 @@ public interface ConstantString {
 	String INTERVAL = "interval";
 	String BATCH = "batch";
 	String SIZE = "size";
+	String WORKBOOK = "workbook";
+	String NAME = "name";
+	String COLUMN = "column";
+	String INDEX = "index";
+	String FIELD = "field";
 	String BATCH_SIZE = BATCH+SIZE;
 	String DIRECTORIES = "directories";
 	String FILENAME = "filename";
@@ -62,5 +71,8 @@ public interface ConstantString {
 	String PAGEABLE = "pageable";
 	String IS_PAGEABLE = IS+PAGEABLE;
 	String MESSAGE = "message";
+	String WORKBOOK_NAME = WORKBOOK+NAME;
+	String SHEET_NAME = SHEET+NAME;
+	String COLUMN_INDEX_FIELD_NAME =COLUMN+INDEX+FIELD+NAME;
 
 }

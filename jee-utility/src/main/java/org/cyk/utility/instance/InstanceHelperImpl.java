@@ -8,8 +8,10 @@ import javax.inject.Singleton;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.value.ValueHelper;
 import org.cyk.utility.value.ValueUsageType;
 
 @Singleton
@@ -79,6 +81,11 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 	@Override
 	public <INSTANCE> Collection<INSTANCE> buildMany(Class<INSTANCE> aClass, Collection<?> fieldsValuesObjects) {
 		return buildMany(aClass, fieldsValuesObjects, null);
+	}
+	
+	@Override
+	public Boolean isPersisted(Object instance) {
+		return Boolean.TRUE.equals(__inject__(ValueHelper.class).isNotBlank(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(instance)));
 	}
 
 }

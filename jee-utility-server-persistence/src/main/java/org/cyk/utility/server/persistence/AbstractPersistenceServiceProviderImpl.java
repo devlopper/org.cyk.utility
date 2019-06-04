@@ -233,6 +233,35 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	}
 	
 	@Override
+	public PersistenceServiceProvider<OBJECT> save(OBJECT object,Properties properties) {
+		if(Boolean.TRUE.equals(isPersisted(object)))
+			update(object, properties);
+		else
+			create(object, properties);
+		return this;
+	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> save(OBJECT object) {
+		return save(object, null);
+	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects,Properties properties) {
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+			for(OBJECT index : objects) {
+				save(index, properties);
+			}
+		}
+		return this;
+	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects) {
+		return saveMany(objects, null);
+	}
+	
+	@Override
 	public PersistenceServiceProvider<OBJECT> clear() {
 		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
 		return this;

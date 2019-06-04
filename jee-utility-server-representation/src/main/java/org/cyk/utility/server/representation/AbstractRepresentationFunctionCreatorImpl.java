@@ -5,9 +5,12 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.field.FieldName;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.server.business.Business;
 import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractRepresentationFunctionCreatorImpl extends AbstractRepresentationFunctionTransactionImpl implements RepresentationFunctionCreator, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,9 +30,17 @@ public abstract class AbstractRepresentationFunctionCreatorImpl extends Abstract
 			Object representation = getEntity();
 			Object persistence = __inject__(InstanceHelper.class).buildOne(getPersistenceEntityClass(),representation);
 			__inject__(Business.class).create(persistence);
-			Object identifier = __injectFieldHelper__().getFieldValueSystemIdentifier(persistence);
-			__responseBuilder__.header("entity-identifier", identifier);
-			__injectFieldHelper__().setFieldValueSystemIdentifier(representation,identifier);
+			Object identifierSystem = __injectFieldHelper__().getFieldValueSystemIdentifier(persistence);
+			__responseBuilder__.header("entity-identifier-system", identifierSystem);
+			__injectFieldHelper__().setFieldValueSystemIdentifier(representation,identifierSystem);
+			
+			if(__inject__(FieldHelper.class).getField(persistence.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS)!=null && 
+					__inject__(FieldHelper.class).getField(representation.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS)!=null) {
+				Object identifierBusiness = __injectFieldHelper__().getFieldValueBusinessIdentifier(persistence);
+				__responseBuilder__.header("entity-identifier-business", identifierBusiness);
+				__injectFieldHelper__().setFieldValueBusinessIdentifier(representation,identifierBusiness);
+			}
+			
 		}else {
 			__injectThrowableHelper__().throwRuntimeException("No entity to "+getAction());
 		}	

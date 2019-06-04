@@ -6,19 +6,16 @@ import java.util.Collection;
 import javax.enterprise.util.AnnotationLiteral;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldName;
-import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.service.AbstractServiceProviderImpl;
 import org.cyk.utility.service.ServiceProvider;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceProviderImpl implements SystemServiceProvider, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	public Boolean isPersisted(Object object) {
-		return __injectStringHelper__().isNotBlank(__inject__(FieldNameGetter.class).execute(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.SYSTEM).getOutput());
+		return Boolean.TRUE.equals(__injectInstanceHelper__().isPersisted(object));
 	}
 	
 	@Override

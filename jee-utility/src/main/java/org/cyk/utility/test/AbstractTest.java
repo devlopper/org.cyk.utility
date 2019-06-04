@@ -63,6 +63,10 @@ public abstract class AbstractTest extends org.cyk.utility.__kernel__.test.Abstr
 		return __inject__(RandomHelper.class).getAlphabetic(3);
 	}
 	
+	protected String __getRandomElectronicMailAddress__(){
+		return __inject__(RandomHelper.class).getAlphabetic(3)+"@mail.com";
+	}
+	
 	protected String __getRandomString__(){
 		return __inject__(RandomHelper.class).getAlphabetic(3);
 	}

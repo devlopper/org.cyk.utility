@@ -18,6 +18,11 @@ public interface ThrowableHelper extends Helper {
 	void throwRuntimeExceptionNotYetImplemented(String name);
 	void throwRuntimeExceptionNotYetImplemented();
 	void throwRuntimeExceptionImplementationOrRunnableRequired(Class<?> aClass);
+	
+	void throwRuntimeExceptionIfNull(Object value,String message);
+	void throwRuntimeExceptionIfEmpty(Object value,String message);
+	void throwRuntimeExceptionIfBlank(Object value,String message);
+	
 	/**/
 	
 	RuntimeException IMPLEMENTATION_OR_RUNNABLE_REQUIRED = new RuntimeException("Implementation or runnable required");
