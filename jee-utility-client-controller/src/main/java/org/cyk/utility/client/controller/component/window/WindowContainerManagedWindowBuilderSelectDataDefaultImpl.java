@@ -29,10 +29,9 @@ public class WindowContainerManagedWindowBuilderSelectDataDefaultImpl extends Ab
 				if(__injectStringHelper__().isNotBlank(index)) {
 					String[] strings = __inject__(FieldHelper.class).disjoin(index).get().toArray(new String[] {});
 					if(__inject__(ArrayHelper.class).isNotEmpty(strings)) {
-						InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) viewBuilder.addInputBuilderByObjectByFieldNames(data, Boolean.TRUE, strings);
-						if(Arrays.equals(strings, new String[] {DataSelect.PROPERTY_ONE}) || Arrays.equals(strings, new String[] {DataSelect.PROPERTY_MANY})) {
-							
-							inputBuilder.setLabelValue(__inject__(InternalizationStringBuilder.class).setKeyValue(StringUtils.substringBefore(data.getClass().getSimpleName()
+						InputBuilder<?, ?> input = (InputBuilder<?, ?>) viewBuilder.addInputBuilderByObjectByFieldNames(data, Boolean.TRUE, strings);
+						if(Arrays.equals(strings, new String[] {DataSelect.PROPERTY_ONE}) || Arrays.equals(strings, new String[] {DataSelect.PROPERTY_MANY})) {							
+							input.setLabelValue(__inject__(InternalizationStringBuilder.class).setKeyValue(StringUtils.substringBefore(data.getClass().getSimpleName()
 									,"Select")).setKeyType(Arrays.equals(strings, new String[] {DataSelect.PROPERTY_ONE}) ? null
 											: InternalizationKeyStringType.PLURAL).execute().getOutput());
 						}
