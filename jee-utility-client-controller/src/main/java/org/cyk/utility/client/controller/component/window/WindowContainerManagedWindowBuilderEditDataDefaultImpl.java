@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 
 import org.cyk.utility.array.ArrayHelper;
+import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Data;
@@ -28,8 +29,11 @@ public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends Abst
 				if(__injectStringHelper__().isNotBlank(index.getName())) {
 					String[] strings = __inject__(FieldHelper.class).disjoin(index.getName()).get().toArray(new String[] {});
 					if(__inject__(ArrayHelper.class).isNotEmpty(strings)) {
-						InputBuilder<?, ?> input = (InputBuilder<?, ?>) viewBuilder.addInputBuilderByObjectByFieldNames(data, isEditable, strings);
-						input.setIsNullable(index.getIsNullable());
+						ComponentBuilder<?> component = viewBuilder.addInputBuilderByObjectByFieldNames(data, isEditable, strings);
+						if(component instanceof InputBuilder<?, ?>) {
+							InputBuilder<?, ?> input = (InputBuilder<?, ?>) component;
+							input.setIsNullable(index.getIsNullable());	
+						}						
 					}
 				}		
 			}
