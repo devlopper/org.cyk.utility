@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
@@ -25,7 +26,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractIdentifiedByString extends AbstractIdentifiedPersistableByString implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Access(AccessType.PROPERTY) @Id @Generatable
+	@Access(AccessType.PROPERTY) @Id @Generatable @Column(name=COLUMN_IDENTIFIER)
 	@Override
 	public String getIdentifier() {
 		return super.getIdentifier();
@@ -77,4 +78,8 @@ public abstract class AbstractIdentifiedByString extends AbstractIdentifiedPersi
 	public AbstractIdentifiedByString setFromSystemIdentifier(String fieldName,Object identifier){
 		return setFromIdentifier(fieldName, identifier, ValueUsageType.SYSTEM);
 	}
+	
+	/**/
+	
+	public static final String COLUMN_IDENTIFIER = FIELD_IDENTIFIER;
 }

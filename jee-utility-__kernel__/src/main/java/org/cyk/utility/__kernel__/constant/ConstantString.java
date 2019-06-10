@@ -30,6 +30,7 @@ public interface ConstantString {
 		
 	String IMPL = "Impl";
 	
+	String SYSTEM = "system";
 	String INFINITE = "infini";
 	String MANY = "many";
 	String COLLECTION = "collection";

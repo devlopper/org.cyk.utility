@@ -5,7 +5,9 @@ import java.io.Serializable;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.data.DataHelper;
 import org.cyk.utility.client.controller.data.DataIdentifiedByString;
+import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
 import org.cyk.utility.client.controller.data.RowData;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Strings;
 
 public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends AbstractWindowContainerManagedWindowBuilderListDataImpl implements WindowContainerManagedWindowBuilderListDataDefault,Serializable {
@@ -15,8 +17,10 @@ public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends Abst
 	protected void __execute__(GridBuilder gridBuilder) {
 		Strings fieldNames = __inject__(DataHelper.class).getPropertiesFieldsNames(getSystemAction().getEntityClass());
 		if(__injectCollectionHelper__().isNotEmpty(fieldNames)) {
-			if(fieldNames.getSize() > 1)
-				fieldNames.remove(DataIdentifiedByString.PROPERTY_IDENTIFIER);
+			if(fieldNames.getSize() > 1) {
+				if(__inject__(CollectionHelper.class).contains(fieldNames, DataIdentifiedByStringAndCoded.PROPERTY_CODE))
+					fieldNames.remove(DataIdentifiedByString.PROPERTY_IDENTIFIER);
+			}
 			for(String index : fieldNames.get()) {
 				/*ColumnBuilder column = __inject__(ColumnBuilder.class); 
 				column.addFieldNameStrings(RowData.PROPERTY_DATA,index);

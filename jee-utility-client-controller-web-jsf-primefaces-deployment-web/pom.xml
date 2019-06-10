@@ -21,7 +21,12 @@
 			<groupId>org.cyk.jee.utility.client.controller.web.jsf.primefaces.playground.common</groupId>
 			<artifactId>jee-utility-client-controller-web-jsf-primefaces-playground-common</artifactId>
 			<version>0.0.1</version>
-			
+		</dependency>
+		
+		<dependency>
+			<groupId>org.cyk.jee.utility.client.deployment</groupId>
+			<artifactId>jee-utility-client-deployment</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 </project>

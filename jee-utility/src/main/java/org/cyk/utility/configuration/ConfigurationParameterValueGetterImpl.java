@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.context.ContextGetter;
 import org.cyk.utility.context.ContextParameterValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.log.Log;
@@ -36,6 +37,8 @@ public class ConfigurationParameterValueGetterImpl extends AbstractFunctionWithP
 			value = __inject__(SystemHelper.class).getProperty(name);
 			if(value == null) {
 				Object context = getContext();
+				if(context == null)
+					context = __inject__(ContextGetter.class).execute().getOutput();
 				if(context!=null)
 					value = __inject__(ContextParameterValueGetter.class).setContext(context).setName(name).execute().getOutput();
 				if(value == null) {
