@@ -15,7 +15,7 @@
 	<packaging>war</packaging>
 
 	<name>JEE utility client web jsf primefaces deployment web</name>
-
+		
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility.client.controller.web.jsf.primefaces.playground.common</groupId>

@@ -16,29 +16,35 @@ public class ProxyClassUniformResourceIdentifierGetterImpl extends AbstractFunct
 	
 	@Override
 	protected URI __execute__() throws Exception {
-		URI uri = null;
-		Class<?> aClass = getClazz();
-		//1 - from application
-		String string = __inject__(ProxyClassUniformResourceIdentifierStringProvider.class).setClazz(aClass).execute().getOutput();
-		
-		if(__inject__(StringHelper.class).isBlank(string)) {
-			//2 - from server properties
-			if(aClass == null)
-				__injectThrowableHelper__().throwRuntimeException(getClass()+" : class is required");
-			String identifier = StringUtils.substringBefore(aClass.getName(), ".server")+".server"+".uri";
-			string = __inject__(SystemHelper.class).getProperty(identifier);
+		URI uri = UNIFORM_RESOURCE_IDENTIFIER;
+		if(uri == null) {
+			Class<?> aClass = getClazz();
+			String string = null;		
 			if(__inject__(StringHelper.class).isBlank(string)) {
-				//3 - from operating system properties 
-				string = __inject__(OperatingSystemHelper.class).getProperty(identifier);
+				//1 - from application
+				string = __inject__(ProxyClassUniformResourceIdentifierStringProvider.class).setClazz(aClass).execute().getOutput();
+				
 				if(__inject__(StringHelper.class).isBlank(string)) {
-					//4 - from request
-					ProxyClassUniformResourceIdentifierStringBuilder stringBuilder = getStringBuilder(Boolean.TRUE);
-					string = stringBuilder.execute().getOutput();
-				}
+					//2 - from server properties
+					if(aClass == null)
+						__injectThrowableHelper__().throwRuntimeException(getClass()+" : class is required");
+					String identifier = StringUtils.substringBefore(aClass.getName(), ".server")+".server"+".uri";
+					string = __inject__(SystemHelper.class).getProperty(identifier);
+					if(__inject__(StringHelper.class).isBlank(string)) {
+						//3 - from operating system properties 
+						string = __inject__(OperatingSystemHelper.class).getProperty(identifier);
+						if(__inject__(StringHelper.class).isBlank(string)) {
+							//4 - from request
+							ProxyClassUniformResourceIdentifierStringBuilder stringBuilder = getStringBuilder(Boolean.TRUE);
+							string = stringBuilder.execute().getOutput();
+						}
+					}
+				}	
 			}
+			
+			if(__injectStringHelper__().isNotBlank(string)) 
+				uri = URI.create(string);	
 		}
-		if(__injectStringHelper__().isNotBlank(string)) 
-			uri = URI.create(string);
 		
 		/*
 		Class<?> aClass = getClazz();
@@ -93,4 +99,7 @@ public class ProxyClassUniformResourceIdentifierGetterImpl extends AbstractFunct
 	}
 	
 	public static final String FIELD_STRING_BUILDER = "stringBuilder";
+	
+	public static URI UNIFORM_RESOURCE_IDENTIFIER = null;
+	
 }

@@ -20,6 +20,7 @@ public interface ConstantParameterName {
 	String SYSTEM_NAME = formatCykParameterName("system.name");
 	String SYSTEM_NODE_CLIENT_NAME = formatCykParameterName("system.node.client.name");
 	String SYSTEM_NODE_SERVER_NAME = formatCykParameterName("system.node.server.name");
+	
 	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_IS_ENABLE = formatCykParameterNameProtocolDefaultsSimpleMailTransfer("is.enable");
 	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_HOST = formatCykParameterNameProtocolDefaultsSimpleMailTransfer("host");
 	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_PORT = formatCykParameterNameProtocolDefaultsSimpleMailTransfer("port");
@@ -27,6 +28,8 @@ public interface ConstantParameterName {
 	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_IS_SECURED_CONNECTION_REQUIRED = formatCykParameterNameProtocolDefaultsSimpleMailTransfer("is.secured.connection.required");
 	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_IDENTIFIER = formatCykParameterNameProtocolDefaultsSimpleMailTransfer("authentication.credentials.user.identifier");
 	String PROTOCOL_DEFAULTS_SIMPLE_MAIL_TRANSFER_AUTHENTICATION_CREDENTIALS_USER_SECRET = formatCykParameterNameProtocolDefaultsSimpleMailTransfer("authentication.credentials.user.secret");
+	
+	String PROXY_UNIFORM_RESOURCE_IDENTIFIER = formatCykParameterName("proxy.uniform.resource.identifier");
 	
 	/* Data */
 	
@@ -42,7 +45,7 @@ public interface ConstantParameterName {
 	/**/
 	
 	static String get(String name,Object context,Object request) {
-		return get(name, context, request, "SYSTEM NAME");
+		return get(name, context, request, null);
 	}
 	
 	static String get(String name,Object context) {

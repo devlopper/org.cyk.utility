@@ -1,6 +1,6 @@
 package org.cyk.utility.array;
 
-public interface ArrayInstanceTwoDimension<T> extends ArrayInstance<T[][]> {
+public interface ArrayInstanceTwoDimension<T> extends ArrayInstance<T> {
 
 	ArrayInstanceTwoDimension<T> setFirstDimensionElementCount(Integer firstDimensionElementCount);
 	Integer getFirstDimensionElementCount();

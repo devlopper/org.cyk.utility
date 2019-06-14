@@ -5,14 +5,14 @@ import java.lang.reflect.Array;
 
 import org.cyk.utility.value.ValueHelper;
 
-public abstract class AbstractArrayInstanceTwoDimensionImpl<T> extends AbstractArrayInstanceImpl<T[][]> implements ArrayInstanceTwoDimension<T>,Serializable {
+public abstract class AbstractArrayInstanceTwoDimensionImpl<T> extends AbstractArrayInstanceImpl<T> implements ArrayInstanceTwoDimension<T>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer firstDimensionElementCount,secondDimensionElementCount;
 	
 	@Override
 	public ArrayInstanceTwoDimension<T> set(Integer firstDimensionIndex, Integer secondDimensionIndex, T value) {
-		T[][] array = getArray();
+		T[][] array = (T[][]) getArray();
 		if(array == null) {
 			Class<?> elementClass = __inject__(ValueHelper.class).returnOrThrowIfBlank("array element class", getElementClass());
 			Integer firstDimensionElementCount = __inject__(ValueHelper.class).returnOrThrowIfBlank("array first dimension element count", getFirstDimensionElementCount());
@@ -25,7 +25,7 @@ public abstract class AbstractArrayInstanceTwoDimensionImpl<T> extends AbstractA
 	
 	@Override
 	public T get(Integer firstDimensionIndex, Integer secondDimensionIndex) {
-		T[][] array = getArray();
+		T[][] array = (T[][]) getArray();
 		return array == null ? null : array[firstDimensionIndex][secondDimensionIndex];
 	}
 	

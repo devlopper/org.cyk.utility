@@ -4,19 +4,19 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
-public abstract class AbstractArrayInstanceImpl<ARRAY> extends AbstractObject implements ArrayInstance<ARRAY>,Serializable {
+public abstract class AbstractArrayInstanceImpl<T> extends AbstractObject implements ArrayInstance<T>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private ARRAY array;
+	private Object array;
 	private Class<?> elementClass;
 	
 	@Override
-	public ARRAY getArray() {
+	public Object getArray() {
 		return array;
 	}
 	
 	@Override
-	public ArrayInstance<ARRAY> setArray(ARRAY array) {
+	public ArrayInstance<T> setArray(Object array) {
 		this.array = array;
 		return this;
 	}
@@ -27,7 +27,7 @@ public abstract class AbstractArrayInstanceImpl<ARRAY> extends AbstractObject im
 	}
 	
 	@Override
-	public ArrayInstance<ARRAY> setElementClass(Class<?> elementClass) {
+	public ArrayInstance<T> setElementClass(Class<?> elementClass) {
 		this.elementClass = elementClass;
 		return this;
 	}

@@ -44,8 +44,7 @@ public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends Abst
 				gridBuilder.addColumns(column);
 				*/
 				//column.addFieldNameStrings(RowData.PROPERTY_DATA,index);
-				gridBuilder.addColumnsByFieldNames(__injectFieldHelper__().join(RowData.PROPERTY_DATA,index));
-				
+				gridBuilder.addColumnsByFieldNames(__injectFieldHelper__().join(RowData.PROPERTY_DATA,index));				
 			}
 		}
 	}

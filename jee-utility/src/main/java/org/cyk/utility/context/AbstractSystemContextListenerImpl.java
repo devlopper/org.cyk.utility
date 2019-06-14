@@ -7,7 +7,7 @@ import org.cyk.utility.configuration.ConstantParameterName;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.type.BooleanHelper;
 
-public abstract class AbstractSystemContextListener<CONTEXT> extends AbstractObject implements SystemContextListener<CONTEXT>,Serializable {
+public abstract class AbstractSystemContextListenerImpl<CONTEXT> extends AbstractObject implements SystemContextListener<CONTEXT>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

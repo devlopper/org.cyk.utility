@@ -2,12 +2,12 @@ package org.cyk.utility.array;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 
-public interface ArrayInstance<ARRAY> extends Objectable {
+public interface ArrayInstance<T> extends Objectable {
 
-	ARRAY getArray();
-	ArrayInstance<ARRAY> setArray(ARRAY array);
+	Object getArray();
+	ArrayInstance<T> setArray(Object array);
 	
 	Class<?> getElementClass();
-	ArrayInstance<ARRAY> setElementClass(Class<?> elementClass);
+	ArrayInstance<T> setElementClass(Class<?> elementClass);
 	
 }
