@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.inject.Singleton;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.clazz.ClassHelper;
 

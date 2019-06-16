@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.field.Fields;

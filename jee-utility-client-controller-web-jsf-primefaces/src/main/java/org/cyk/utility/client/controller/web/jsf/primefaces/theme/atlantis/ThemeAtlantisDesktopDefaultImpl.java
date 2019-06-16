@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.file.File;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;

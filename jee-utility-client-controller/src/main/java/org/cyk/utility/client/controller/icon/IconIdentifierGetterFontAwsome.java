@@ -2,7 +2,7 @@ package org.cyk.utility.client.controller.icon;
 
 import java.io.Serializable;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 
 public class IconIdentifierGetterFontAwsome extends AbstractIconIdentifierGetterFunctionRunnableImpl implements Serializable {

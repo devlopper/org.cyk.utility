@@ -2,7 +2,7 @@ package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 

@@ -16,7 +16,7 @@ public class FileExcelSheetToStringUnitTest extends AbstractArquillianUnitTestWi
 		reader.setWorkbookInputStream(inputStream);
 		reader.setSheetName("mysheet01");
 		ArrayInstanceTwoDimensionString arrayInstance = reader.execute().getOutput();
-		assertionHelper.assertEquals("Column01", arrayInstance.get(0, 0));
+		assertionHelper.assertEquals("f01", arrayInstance.get(0, 0));
 	}
 	
 	

@@ -21,25 +21,6 @@
 			<artifactId>jee-utility-client-controller-web-jsf-primefaces</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-		
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jboss.arquillian.junit</groupId>
-			<artifactId>arquillian-junit-container</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.jboss.shrinkwrap.resolver</groupId>
-		    <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-		    <scope>compile</scope>
-		</dependency>
-		
 	</dependencies>
 	
 	<profiles>

@@ -2,11 +2,11 @@ package org.cyk.utility.__kernel__.object.dynamic;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 
-import org.assertj.core.util.Arrays;
 import org.cyk.utility.__kernel__.KernelHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 

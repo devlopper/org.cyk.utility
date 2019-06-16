@@ -3,7 +3,7 @@ package org.cyk.utility.client.controller.proxy;
 import java.io.Serializable;
 import java.net.URI;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.OperatingSystemHelper;
