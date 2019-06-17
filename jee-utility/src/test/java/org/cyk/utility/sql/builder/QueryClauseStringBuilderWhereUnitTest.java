@@ -4,10 +4,10 @@ import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.criteria.Criteria;
 import org.cyk.utility.filter.Filter;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class QueryClauseStringBuilderWhereUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class QueryClauseStringBuilderWhereUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	private Tuple tuple;

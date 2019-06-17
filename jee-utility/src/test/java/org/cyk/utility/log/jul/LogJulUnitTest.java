@@ -3,10 +3,10 @@ package org.cyk.utility.log.jul;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class LogJulUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class LogJulUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

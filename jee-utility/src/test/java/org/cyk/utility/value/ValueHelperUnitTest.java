@@ -1,19 +1,21 @@
 package org.cyk.utility.value;
 
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ValueHelperUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
+
+public class ValueHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
-	@Test(expected=RuntimeException.class)
+	@Test
 	public void returnOrThrowIfBlank_throwWhenNull() {
-		__inject__(ValueHelper.class).returnOrThrowIfBlank("myval", null);
+		assertThrows(RuntimeException.class, () -> {__inject__(ValueHelper.class).returnOrThrowIfBlank("myval", null);}); 
 	}
 	
-	@Test(expected=RuntimeException.class)
+	@Test
 	public void returnOrThrowIfBlank_throwWhenBlankString() {
-		__inject__(ValueHelper.class).returnOrThrowIfBlank("myval", "");
+		assertThrows(RuntimeException.class, () -> {__inject__(ValueHelper.class).returnOrThrowIfBlank("myval", "");});
 	}
 	
 	@Test

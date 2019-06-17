@@ -2,11 +2,10 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 
-import javax.enterprise.inject.Alternative;
-
+import org.cyk.utility.__kernel__.annotation.Test;
 import org.cyk.utility.value.ValueUsageType;
 
-@Alternative
+@Test
 public class FieldGetNameTestImpl extends FieldNameGetterImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

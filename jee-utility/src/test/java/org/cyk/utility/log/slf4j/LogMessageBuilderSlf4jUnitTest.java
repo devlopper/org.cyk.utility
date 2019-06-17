@@ -2,11 +2,10 @@ package org.cyk.utility.log.slf4j;
 
 import org.cyk.utility.log.message.LogMessageBuilder;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTest;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
+@Disabled
 public class LogMessageBuilderSlf4jUnitTest extends AbstractArquillianUnitTest {
 	private static final long serialVersionUID = 1L;
 
@@ -37,11 +36,4 @@ public class LogMessageBuilderSlf4jUnitTest extends AbstractArquillianUnitTest {
 				.addParameter("p1", "v1").addParameter("p2", "v2").execute().getOutput().getTemplate());
 	}
 	
-	/* Deployment */
-
-	@Deployment
-	public static JavaArchive createDeployment() {
-		return AbstractArquillianUnitTestWithDefaultDeployment.createJavaArchiveDeployment("org/cyk/utility/log/slf4j/beans.xml");
-	}
-
 }

@@ -15,38 +15,11 @@
 
 	<name>JEE utility server representation</name>
 
-	<properties>
-		<org.jboss.resteasy.resteasy-bom.version>3.5.1.Final</org.jboss.resteasy.resteasy-bom.version>
-		<graphene-webdriver.version>2.3.2</graphene-webdriver.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.cyk.jee.utility.server.business</groupId>
 			<artifactId>jee-utility-server-business</artifactId>
 			<version>0.0.1</version>
-		</dependency>
-				
-		<dependency>
-			<groupId>org.jboss.arquillian.graphene</groupId>
-			<artifactId>graphene-webdriver</artifactId>
-			<version>${graphene-webdriver.version}</version>
-			<scope>provided</scope>
-			<type>pom</type>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-client</artifactId>
-			<version>${org.jboss.resteasy.resteasy-bom.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.jboss.resteasy</groupId>
-		    <artifactId>resteasy-jaxb-provider</artifactId>
-		    <version>${org.jboss.resteasy.resteasy-bom.version}</version>
-		    <scope>provided</scope>
 		</dependency>
 	</dependencies>
 

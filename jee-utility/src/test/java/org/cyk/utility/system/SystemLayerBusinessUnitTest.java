@@ -10,7 +10,7 @@ import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerBusiness;
 import org.cyk.utility.system.layer.SystemLayerPersistence;
 import org.cyk.utility.system.layer.SystemSubLayer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SystemLayerBusinessUnitTest extends AbstractSystemLayerUnitTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;

@@ -1,7 +1,7 @@
 package org.cyk.utility.client.controller.component.input;
 
 import org.cyk.utility.client.controller.component.input.choice.ChoicePropertyValueBuilder;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-public class ChoicePropertyValueBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class ChoicePropertyValueBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

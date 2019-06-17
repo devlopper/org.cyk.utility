@@ -10,10 +10,10 @@ import org.cyk.utility.device.DeviceDesktop;
 import org.cyk.utility.device.DevicePhone;
 import org.cyk.utility.device.DeviceTablet;
 import org.cyk.utility.device.DeviceTelevision;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class StyleClassBuilderWidthUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class StyleClassBuilderWidthUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	/* Primefaces Grid Css */

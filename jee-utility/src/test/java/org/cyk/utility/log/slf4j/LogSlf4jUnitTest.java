@@ -4,11 +4,10 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.test.arquillian.AbstractArquillianUnitTest;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
+@Disabled
 public class LogSlf4jUnitTest extends AbstractArquillianUnitTest {
 	private static final long serialVersionUID = 1L;
 
@@ -72,11 +71,4 @@ public class LogSlf4jUnitTest extends AbstractArquillianUnitTest {
 		assertionHelper.assertEqualsLastLogEventProperties(new Properties().setLogLevel(LogLevel.DEBUG).setMessage("this a debug"));
 	}
 	
-	/* Deployment */
-
-	@Deployment
-	public static JavaArchive createDeployment() {
-		return AbstractArquillianUnitTestWithDefaultDeployment.createJavaArchiveDeployment("org/cyk/utility/log/slf4j/beans.xml");
-	}
-
 }

@@ -1,20 +1,21 @@
 package org.cyk.utility.__kernel__.function;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.test.arquillian.AbstractArquillianUnitTest;
-import org.junit.Assert;
-import org.junit.Test;
+import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class FunctionUnitTest extends AbstractArquillianUnitTest {
+public class FunctionUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 	
 	@Test
 	public void execute(){
 		MyFunction function = __inject__(MyFunction.class);
 		function.execute();
-		Assert.assertNull(function.try_().getBegin());
-		Assert.assertNull(function.try_().getEnd());
+		assertThat(function.try_().getBegin()).isNull();
+		assertThat(function.try_().getEnd()).isNull();
 		/*
 		Assert.assertFalse(function.try_().begin().getRunned());
 		Assert.assertFalse(function.try_().end().getRunned());
@@ -32,11 +33,11 @@ public class FunctionUnitTest extends AbstractArquillianUnitTest {
 			public void run() {}
 		});
 		function.execute();
-		Assert.assertNotNull(function.try_().getBegin());
-		Assert.assertNull(function.try_().getEnd());
-		Assert.assertTrue(function.try_().getBegin().getRunned());
-		Assert.assertTrue(function == function.getExecutionPhaseTry().getParent());
-		Assert.assertTrue(function.getExecutionPhaseTry() == function.getExecutionPhaseTry().getBegin().getParent());
+		assertThat(function.try_().getBegin()).isNotNull();
+		assertThat(function.try_().getEnd()).isNull();
+		assertThat(function.try_().getBegin().getRunned()).isTrue();
+		assertThat(function == function.getExecutionPhaseTry().getParent()).isTrue();
+		assertThat(function.getExecutionPhaseTry() == function.getExecutionPhaseTry().getBegin().getParent()).isTrue();
 	}
 	
 	@Test
@@ -47,9 +48,9 @@ public class FunctionUnitTest extends AbstractArquillianUnitTest {
 			public void run() {}
 		});
 		function.execute();
-		Assert.assertNull(function.try_().getBegin());
-		Assert.assertNotNull(function.try_().getEnd());
-		Assert.assertTrue(function.try_().getEnd().getRunned());
+		assertThat(function.try_().getBegin()).isNull();
+		assertThat(function.try_().getEnd()).isNotNull();
+		assertThat(function.try_().getEnd().getRunned()).isTrue();
 	}
 	
 	@Test
@@ -64,17 +65,17 @@ public class FunctionUnitTest extends AbstractArquillianUnitTest {
 			public void run() {}
 		});
 		function.execute();
-		Assert.assertNotNull(function.try_().getBegin());
-		Assert.assertNotNull(function.try_().getEnd());
-		Assert.assertTrue(function.try_().getBegin().getRunned());
-		Assert.assertTrue(function.try_().getEnd().getRunned());
+		assertThat(function.try_().getBegin()).isNotNull();
+		assertThat(function.try_().getEnd()).isNotNull();
+		assertThat(function.try_().getBegin().getRunned()).isTrue();
+		assertThat(function.try_().getEnd().getRunned()).isTrue();
 	}
 	
 	@Test
 	public void execute_output_is_myOutput(){
 		MyFunction function = __inject__(MyFunction.class);
 		function.execute();
-		Assert.assertEquals("myOutput",function.getOutput());
+		assertThat(function.getOutput()).isEqualTo("myOutput");
 	}
 	
 	@Test
@@ -90,7 +91,7 @@ public class FunctionUnitTest extends AbstractArquillianUnitTest {
 		function.try_().run().addFunctionRunnables(myFunctionRunnable);
 		function.try_().setIsCodeFromFunctionExecutable(Boolean.FALSE);
 		function.execute();
-		Assert.assertEquals("hello",function.getOutput());
+		assertThat(function.getOutput()).isEqualTo("hello");
 	}
 	
 	/**/
@@ -105,17 +106,7 @@ public class FunctionUnitTest extends AbstractArquillianUnitTest {
 	
 	public static class MyFunctionRunnable extends AbstractFunctionRunnableImpl<MyFunction> implements Serializable {
 		private static final long serialVersionUID = 1L;
-		
-		
-		
+			
 	}
 	
-	/* Deployment*/
-	
-	@org.jboss.arquillian.container.test.api.Deployment
-	public static org.jboss.shrinkwrap.api.spec.JavaArchive createDeployment() {
-		return new org.cyk.utility.__kernel__.test.arquillian.archive.builder.JavaArchiveBuilder()
-				.addPackage("org.cyk.utility.__kernel__").addPackage("org.cyk.utility.__kernel__.function")
-				.execute();
-	}
 }

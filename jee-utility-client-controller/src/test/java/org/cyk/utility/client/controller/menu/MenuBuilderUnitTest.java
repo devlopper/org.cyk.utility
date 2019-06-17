@@ -15,12 +15,12 @@ import org.cyk.utility.request.RequestParameterValueGetterImpl;
 import org.cyk.utility.request.RequestPropertyValueGetterImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionList;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.time.DurationBuilder;
 import org.cyk.utility.time.DurationStringBuilder;
 import org.junit.Test;
 
-public class MenuBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class MenuBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	static {

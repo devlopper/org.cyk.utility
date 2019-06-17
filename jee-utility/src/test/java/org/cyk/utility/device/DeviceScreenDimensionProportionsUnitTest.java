@@ -2,10 +2,10 @@ package org.cyk.utility.device;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class DeviceScreenDimensionProportionsUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class DeviceScreenDimensionProportionsUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

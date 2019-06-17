@@ -2,13 +2,13 @@ package org.cyk.utility.field;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.value.ValueUsageType;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-public class FieldGetNameUnitTest extends AbstractArquillianUnitTest {
+@Disabled
+public class FieldGetNameUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 	
 	@Test
@@ -53,11 +53,10 @@ public class FieldGetNameUnitTest extends AbstractArquillianUnitTest {
 			.isEqualTo("matricule");
 	}
 	
-	/* Deployment */
-	
+	/*
 	@Deployment
 	public static JavaArchive createDeployment() {
 		return AbstractArquillianUnitTest.createJavaArchiveDeployment("org/cyk/utility/field/beans-with-alternatives.xml");
 	}
-	
+	*/
 }

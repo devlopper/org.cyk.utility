@@ -10,10 +10,10 @@ import org.cyk.utility.system.action.SystemActionList;
 import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionSelect;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
-public class NavigationBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class NavigationBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	static {

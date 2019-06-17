@@ -7,14 +7,14 @@ import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.network.message.Receiver;
 import org.cyk.utility.network.message.Receivers;
 import org.cyk.utility.string.Strings;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class ObjectToStringBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class ObjectToStringBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

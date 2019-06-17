@@ -2,10 +2,10 @@ package org.cyk.utility.sql.jpql.builder;
 
 import org.cyk.utility.sql.jpql.JpqlQualifier;
 import org.cyk.utility.sql.jpql.builder.QueryClauseStringBuilderSelectJpql;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class QueryClauseStringBuilderSelectJpqlUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class QueryClauseStringBuilderSelectJpqlUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

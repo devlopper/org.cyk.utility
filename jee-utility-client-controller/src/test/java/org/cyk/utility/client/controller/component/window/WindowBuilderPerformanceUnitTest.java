@@ -3,10 +3,10 @@ package org.cyk.utility.client.controller.component.window;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMapGetterImpl;
 import org.cyk.utility.request.RequestParameterValueGetterImpl;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
-public class WindowBuilderPerformanceUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class WindowBuilderPerformanceUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = -2849775962912387317L;
 
 	static {

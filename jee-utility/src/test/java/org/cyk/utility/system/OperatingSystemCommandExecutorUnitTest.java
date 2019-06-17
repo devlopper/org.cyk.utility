@@ -1,10 +1,10 @@
 package org.cyk.utility.system;
 
 import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class OperatingSystemCommandExecutorUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class OperatingSystemCommandExecutorUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

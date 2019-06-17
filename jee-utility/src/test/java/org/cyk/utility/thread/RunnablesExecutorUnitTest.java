@@ -3,11 +3,11 @@ package org.cyk.utility.thread;
 import java.util.concurrent.TimeUnit;
 
 import org.cyk.utility.runnable.RunnablesExecutor;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.time.TimeHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class RunnablesExecutorUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class RunnablesExecutorUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

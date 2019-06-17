@@ -1,10 +1,10 @@
 package org.cyk.utility.sql.builder;
 
 import org.cyk.utility.sql.builder.QueryClauseStringBuilderSelect;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class QueryClauseStringBuilderSelectUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class QueryClauseStringBuilderSelectUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

@@ -6,19 +6,24 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.string.StringLocation;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.value.ValueUsageType;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class FieldGetterUnitTest extends AbstractArquillianUnitTest {
+public class FieldGetterUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		DependencyInjection.setQualifierClass(FieldNameGetter.class, org.cyk.utility.__kernel__.annotation.Test.class);
+	}
+	
 	@Test
 	public void getAllFieldOfMyClass01(){
 		Collection<Field> fields = __inject__(FieldGetter.class).execute(MyClass01.class).getOutput().get();
@@ -176,11 +181,10 @@ public class FieldGetterUnitTest extends AbstractArquillianUnitTest {
 		String NOT_PROPERTY_F02 = "notproperty";
 	}
 	
-	/* Deployment */
-	
+	/*
 	@Deployment
 	public static JavaArchive createDeployment01() {
 		return AbstractArquillianUnitTest.createJavaArchiveDeployment("org/cyk/utility/field/beans-with-alternatives.xml");
 	}
-	
+	*/
 }

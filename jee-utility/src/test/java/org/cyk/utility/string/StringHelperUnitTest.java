@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.string.repository.StringRepository;
 import org.cyk.utility.string.repository.StringRepositoryMapUser;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class StringHelperUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class StringHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test 

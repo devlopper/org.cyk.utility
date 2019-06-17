@@ -6,7 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Destroyed;
+import javax.enterprise.context.BeforeDestroyed;
 import javax.enterprise.context.Initialized;
 import javax.enterprise.event.Observes;
 
@@ -28,7 +28,7 @@ public abstract class AbstractApplicationScopeLifeCycleListener extends Abstract
  
 	public abstract void __initialize__(Object object);
 	
-    public void destroy(@Observes @Destroyed(ApplicationScoped.class) Object object) {
+    public void destroy(@Observes @BeforeDestroyed(ApplicationScoped.class) Object object) {
     	if(!DESTROYED.contains(getClass())) {
     		__destroy__(object);
         	System.out.println(getClass()+" destroyed : OK");	

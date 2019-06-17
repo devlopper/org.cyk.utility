@@ -1,9 +1,9 @@
 package org.cyk.utility.clazz;
 
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class ClassesGetterUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class ClassesGetterUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

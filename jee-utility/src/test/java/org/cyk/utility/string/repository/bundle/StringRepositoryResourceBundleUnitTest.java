@@ -7,10 +7,10 @@ import javax.inject.Inject;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.string.repository.ResourceBundle;
 import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class StringRepositoryResourceBundleUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class StringRepositoryResourceBundleUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Inject private StringRepositoryResourceBundle repository;

@@ -2,7 +2,7 @@ package org.cyk.utility.__kernel__;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DependencyInjectionUnitTest extends AbstractDependencyInjectionUnitTesting {
 	private static final long serialVersionUID = 1L;
@@ -15,23 +15,6 @@ public class DependencyInjectionUnitTest extends AbstractDependencyInjectionUnit
 	//@Test
 	public void isMyCustomDefaultClassWhenMyClassInterfaceInjectedAndQualifierSet() {
 		assertThat(__inject__(MyInterfaceWithPriority.class).getClass()).isEqualTo(MyInterfaceImplWithPriority02.class);
-	}
-	
-	/* Deployment*/
-	
-	@org.jboss.arquillian.container.test.api.Deployment
-	public static org.jboss.shrinkwrap.api.spec.JavaArchive createDeployment() {
-		return new org.cyk.utility.__kernel__.test.arquillian.archive.builder.JavaArchiveBuilder()
-				.addClass(Class01.class)
-				.addClass(Class02.class)
-				.addClass(Class01FirstVersion.class)
-				.addClass(Class01SecondVersion.class)
-				.addClass(Class02FirstVersion.class)
-				.addClass(MySingleton.class)
-				.addClass(MyInterfaceWithPriority.class)
-				.addClass(MyInterfaceImplWithPriority01.class)
-				.addClass(MyInterfaceImplWithPriority02.class)
-				.execute();
 	}
 	
 }

@@ -3,10 +3,10 @@ package org.cyk.utility.file.excel;
 import java.io.InputStream;
 
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class FileExcelSheetToStringUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class FileExcelSheetToStringUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

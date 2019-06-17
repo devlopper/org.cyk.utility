@@ -3,10 +3,10 @@ package org.cyk.utility.identifier.resource;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionList;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class UniformResourceIdentifierParameterValueStringBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class UniformResourceIdentifierParameterValueStringBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

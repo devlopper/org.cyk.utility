@@ -18,14 +18,14 @@ import org.cyk.utility.client.controller.component.output.OutputFileBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.file.File;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class ComponentBuilderClassGetterUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class ComponentBuilderClassGetterUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = -2849775962912387317L;
 
 	@Test

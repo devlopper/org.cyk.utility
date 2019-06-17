@@ -19,7 +19,12 @@ public class DependencyInjection implements Serializable {
 			//TODO log a warning
 			return null;
 		}
-		return CDI.current().select(aClass,annotationLiterals).get();
+		CDI<Object> cdi = CDI.current();
+		if(cdi == null){
+			//TODO log a warning
+			return null;
+		}
+		return annotationLiterals == null || annotationLiterals.length == 0 ? cdi.select(aClass).get() : cdi.select(aClass,annotationLiterals).get();
 	}
 	
 	/*@SafeVarargs

@@ -1,9 +1,11 @@
 package org.cyk.utility.test;
 
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TestUnitUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
+
+public class TestUnitUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test
@@ -14,9 +16,9 @@ public class TestUnitUnitTest extends AbstractArquillianUnitTestWithDefaultDeplo
 		//assertionHelper.assertEquals(ThrowableHelper.IMPLEMENTATION_OR_RUNNABLE_REQUIRED, __inject__(ThrowableHelper.class).getFirstCause(throwable));
 	}
 	
-	@Test(expected=RuntimeException.class)
+	@Test
 	public void isThrowableNotCaught(){
-		__inject__(TestUnit.class).setIsCatchThrowable(Boolean.FALSE).execute();
+		assertThrows(RuntimeException.class, () -> {__inject__(TestUnit.class).setIsCatchThrowable(Boolean.FALSE).execute();}); 
 	}
 	
 }

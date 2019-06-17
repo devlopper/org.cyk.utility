@@ -3,10 +3,10 @@ package org.cyk.utility.sql.builder;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class QueryStringBuilderSelectUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class QueryStringBuilderSelectUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

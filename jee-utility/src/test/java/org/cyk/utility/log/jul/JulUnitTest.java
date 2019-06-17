@@ -3,7 +3,7 @@ package org.cyk.utility.log.jul;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JulUnitTest {
 	

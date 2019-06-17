@@ -4,13 +4,13 @@ import javax.persistence.GeneratedValue;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class FieldInstancesRuntimeUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class FieldInstancesRuntimeUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Override

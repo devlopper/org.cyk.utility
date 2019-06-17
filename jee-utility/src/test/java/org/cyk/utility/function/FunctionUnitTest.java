@@ -1,9 +1,9 @@
 package org.cyk.utility.function;
 
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class FunctionUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class FunctionUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

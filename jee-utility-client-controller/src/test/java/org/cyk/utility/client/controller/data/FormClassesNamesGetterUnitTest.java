@@ -6,10 +6,10 @@ import org.cyk.utility.client.controller.entities.MyEntity;
 import org.cyk.utility.system.action.SystemActionRelatedClassesNamesGetter;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionCreateImpl;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
-public class FormClassesNamesGetterUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class FormClassesNamesGetterUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = -2849775962912387317L;
 	
 	@Test

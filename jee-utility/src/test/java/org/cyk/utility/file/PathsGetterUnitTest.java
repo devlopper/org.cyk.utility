@@ -2,10 +2,10 @@ package org.cyk.utility.file;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class PathsGetterUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class PathsGetterUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

@@ -3,10 +3,10 @@ package org.cyk.utility.client.controller.component.layout;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.css.StyleClassBuilderWidthImpl;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
-public class LayoutBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class LayoutBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Override

@@ -16,10 +16,10 @@ import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
-public class DataHelperUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class DataHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = -2849775962912387317L;
 	
 	@Test

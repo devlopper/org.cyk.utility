@@ -4,14 +4,14 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractTest extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = -4375668358714913342L;
 	
 	protected static Integer LISTEN_BEFORE_CALL_COUNT = 0;
 	
-	@Before
+	@BeforeEach
 	public void listenBefore() {
 		__listenBefore__();
 		
@@ -74,4 +74,6 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 
 	/**/
 	
+	
+	/**/
 }

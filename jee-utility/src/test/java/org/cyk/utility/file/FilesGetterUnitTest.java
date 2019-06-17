@@ -7,11 +7,11 @@ import java.util.List;
 
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.time.DurationStringBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class FilesGetterUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class FilesGetterUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

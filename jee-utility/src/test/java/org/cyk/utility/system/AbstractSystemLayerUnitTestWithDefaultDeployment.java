@@ -6,10 +6,10 @@ import java.util.Map;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemSubLayer;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public abstract class AbstractSystemLayerUnitTestWithDefaultDeployment extends AbstractArquillianUnitTestWithDefaultDeployment {
+public abstract class AbstractSystemLayerUnitTestWithDefaultDeployment extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	protected abstract SystemLayer __injectSystemLayer__();

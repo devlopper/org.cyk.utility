@@ -18,29 +18,31 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.instance.InstanceGetter;
 import org.cyk.utility.instance.InstanceGetterImpl;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.value.ValueUsageType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class FieldValueCopyUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
-	static {
-		//__inject__(ApplicationScopeLifeCycleListener.class).initialize(null);
-		__inject__(FieldNameValueUsageMap.class).set(MyPersistenceType.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-		__inject__(FieldNameValueUsageMap.class).set(MyDataTransferObjectType.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-		__inject__(FieldNameValueUsageMap.class).set(MyPersistenceReflexive.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-		__inject__(FieldNameValueUsageMap.class).set(MyDataTransferObjectReflexive.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-	}
-	
 	@Override
 	protected void __listenBeforeCallCountIsZero__() throws Exception {
 		super.__listenBeforeCallCountIsZero__();
 		__inject__(ApplicationScopeLifeCycleListener.class).initialize(null);
+	}
+	
+	@Override
+	protected void __listenBefore__()  {
+		super.__listenBefore__();
+		__inject__(FieldNameValueUsageMap.class).set(MyPersistenceType.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		__inject__(FieldNameValueUsageMap.class).set(MyDataTransferObjectType.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		__inject__(FieldNameValueUsageMap.class).set(MyPersistenceReflexive.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		__inject__(FieldNameValueUsageMap.class).set(MyDataTransferObjectReflexive.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class);
 	}
 	
 	@Test
@@ -118,9 +120,6 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	public void myData_to_string(){
 		__inject__(FieldNameValueUsageMap.class).set(MyData.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
 		__inject__(FieldNameValueUsageMap.class).set(MyData.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, "num");
-		
-		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class);
-		
 		MyClass01 instance01 = new MyClass01().setMyData(new MyData().setId("159").setNum("a001"));
 		MyClass02 instance02 = new MyClass02();
 		__inject__(FieldValueCopy.class).setSource(instance01).setDestination(instance02).setFieldName("myData").execute();
@@ -131,9 +130,6 @@ public class FieldValueCopyUnitTest extends AbstractArquillianUnitTestWithDefaul
 	public void string_to_myData(){
 		MyClass02 instance02 = new MyClass02().setMyData("a001");
 		MyClass01 instance01 = new MyClass01();
-		
-		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class);
-		
 		__inject__(FieldValueCopy.class).setSource(instance02).setDestination(instance01).setFieldName("myData").execute();
 		assertThat(instance01.getMyData()).isNotNull();
 		assertThat(instance01.getMyData().getId()).isEqualTo("159");

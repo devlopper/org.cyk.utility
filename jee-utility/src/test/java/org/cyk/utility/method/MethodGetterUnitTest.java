@@ -3,10 +3,10 @@ package org.cyk.utility.method;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringLocation;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class MethodGetterUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class MethodGetterUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

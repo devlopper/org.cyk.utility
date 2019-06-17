@@ -3,11 +3,11 @@ package org.cyk.utility.sql.builder;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.criteria.Criteria;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.value.ValueUsageType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	private Tuple tuple;

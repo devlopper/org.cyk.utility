@@ -15,14 +15,14 @@ import org.cyk.utility.client.controller.data.DataTransferObjectClassGetterImpl;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.client.controller.proxy.ProxyGetterImpl;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class ControllerFunctionCreatorUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class ControllerFunctionCreatorUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = -2849775962912387317L;
 
 	static {

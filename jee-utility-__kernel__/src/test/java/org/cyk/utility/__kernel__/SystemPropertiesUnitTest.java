@@ -1,17 +1,19 @@
 package org.cyk.utility.__kernel__;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.cyk.utility.__kernel__.maven.pom.Pom;
-import org.junit.Assert;
-import org.junit.Test;
+import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class SystemPropertiesUnitTest {
-	
+public class SystemPropertiesUnitTest extends AbstractWeldUnitTest {
+	private static final long serialVersionUID = 1L;
+
 	static {
-		Assert.assertEquals("value01", Pom.INSTANCE.getMavenSurefirePluginConfigurationSystemProperty("unittest.property.01"));
+		assertThat(Pom.INSTANCE.getMavenSurefirePluginConfigurationSystemProperty("unittest.property.01")).isEqualTo("value01");
 	}
 	
 	@Test
 	public void getUserDir(){
-		Assert.assertEquals("value01", Pom.INSTANCE.getMavenSurefirePluginConfigurationSystemProperty("unittest.property.01"));
+		assertThat(Pom.INSTANCE.getMavenSurefirePluginConfigurationSystemProperty("unittest.property.01")).isEqualTo("value01");
 	}
 }

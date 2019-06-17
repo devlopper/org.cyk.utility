@@ -1,7 +1,10 @@
 package org.cyk.utility.__kernel__.test.arquillian.archive.builder;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -35,6 +38,7 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 	private Class<ARCHIVE> clazz;
 	private ARCHIVE archive;
 	
+	private Boolean isBeanXmlAddable = Boolean.TRUE;
 	private String beanXml,projectDefaultsYml,persistenceXml,ormXml,log4j2Xml,pomXml,jbossDeploymentStructureXml;
 	private Collection<Package> packages;
 	private Collection<Clazz> classes;
@@ -78,7 +82,11 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 		String[] resourcesFoldersArray = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.resources.folders")) ? null : profile.getProperty("org.cyk.test.resources.folders").split(",");
 		
 		archive = ShrinkWrap.create(this.clazz);
-		addBeanXml(beanXml);
+		if(Boolean.TRUE.equals(isBeanXmlAddable)) {
+			if(beanXml == null || beanXml.isEmpty())
+				beanXml = String.format(BEAN_XML_EMPTY_FORMAT,"all");
+			addBeanXml(beanXml);
+		}
 		if(projectDefaultsYml!=null)
 			addProjectDefaultsYml(projectDefaultsYml);
 		if(persistenceXml!=null)
@@ -181,9 +189,19 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 			}
 		}else{
 			if(beansXml instanceof String)
-				if(archive instanceof JavaArchive)
-					((JavaArchive)archive).addAsManifestResource((String) beansXml,"beans.xml");
-				else if(archive instanceof WebArchive){
+				if(archive instanceof JavaArchive) {
+					if(((String) beansXml).endsWith(".xml"))
+						((JavaArchive)archive).addAsManifestResource((String) beansXml,"beans.xml");
+					else {
+						try {
+							File file = File.createTempFile("beanXml", null);
+							Files.write(file.toPath(), ((String)beansXml).getBytes(), StandardOpenOption.APPEND);
+							((JavaArchive)archive).addAsManifestResource(file,"beans.xml");
+						} catch (IOException exception) {
+							exception.printStackTrace();
+						}
+					}
+				} else if(archive instanceof WebArchive){
 					((WebArchive)archive).addAsManifestResource((String) beansXml,"beans.xml");
 					((WebArchive)archive).addAsWebInfResource((String) beansXml,"beans.xml");
 					//((WebArchive)archive).addAsResource((String) beansXml,"META-INF/beans.xml");
@@ -302,5 +320,15 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 		addClasses(new Clazz().setValue(aClass));
 		return this;
 	}
+	
+	/**/
+	
+	//private static final String BEAN_XML_EMPTY_FORMAT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
+	//		"<beans version=\"1.1\" bean-discovery-mode=\"%s\"></beans>";
+	
+	private static final String BEAN_XML_EMPTY_FORMAT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
+			"<beans xmlns=\"http://java.sun.com/xml/ns/javaee\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n" + 
+			"	xsi:schemaLocation=\"http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_1.xsd\" version=\"1.1\" bean-discovery-mode=\"%s\">\r\n" + 
+			"</beans> ";
 	
 }

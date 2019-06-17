@@ -3,10 +3,10 @@ package org.cyk.utility.test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.cyk.utility.string.StringLocation;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class TestExpectedStringUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class TestExpectedStringUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

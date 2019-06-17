@@ -6,10 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionRelatedClassesNamesGetter;
 import org.cyk.utility.system.action.SystemActionSelect;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class SystemActionRelatedClassesNamesGetterUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class SystemActionRelatedClassesNamesGetterUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

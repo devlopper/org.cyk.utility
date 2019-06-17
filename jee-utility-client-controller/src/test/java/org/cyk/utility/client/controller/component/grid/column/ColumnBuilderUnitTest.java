@@ -3,14 +3,14 @@ package org.cyk.utility.client.controller.component.grid.column;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class ColumnBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class ColumnBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

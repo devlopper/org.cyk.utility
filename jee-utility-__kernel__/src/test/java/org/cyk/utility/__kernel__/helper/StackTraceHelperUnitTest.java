@@ -1,26 +1,18 @@
 package org.cyk.utility.__kernel__.helper;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
-import org.cyk.utility.__kernel__.test.arquillian.AbstractArquillianUnitTest;
-import org.junit.Assert;
-import org.junit.Test;
+import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class StackTraceHelperUnitTest extends AbstractArquillianUnitTest {
+public class StackTraceHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test
 	public void getCurrent(){
 		StackTraceElement stackTraceElement = __inject__(StackTraceHelper.class).getCurrent();
-		Assert.assertEquals("org.cyk.utility.__kernel__.helper.StackTraceHelperUnitTest", stackTraceElement.getClassName());
-		Assert.assertEquals("getCurrent", stackTraceElement.getMethodName());
+		assertThat(stackTraceElement.getClassName()).isEqualTo("org.cyk.utility.__kernel__.helper.StackTraceHelperUnitTest");
+		assertThat(stackTraceElement.getMethodName()).isEqualTo("getCurrent");
 	}
 	
-	/* Deployment*/
-	
-	@org.jboss.arquillian.container.test.api.Deployment
-	public static org.jboss.shrinkwrap.api.spec.JavaArchive createDeployment() {
-		return new org.cyk.utility.__kernel__.test.arquillian.archive.builder.JavaArchiveBuilder()
-				.addPackage("org.cyk.utility.__kernel__").addPackage("org.cyk.utility.__kernel__.stacktrace")
-				.execute();
-	}
 }

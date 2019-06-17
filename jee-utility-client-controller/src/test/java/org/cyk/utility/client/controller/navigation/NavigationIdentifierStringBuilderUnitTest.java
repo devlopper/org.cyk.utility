@@ -6,10 +6,10 @@ import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionList;
 import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
-public class NavigationIdentifierStringBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class NavigationIdentifierStringBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Override

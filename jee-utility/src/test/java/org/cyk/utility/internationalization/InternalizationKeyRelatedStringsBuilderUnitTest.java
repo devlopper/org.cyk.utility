@@ -4,11 +4,11 @@ import java.util.Collection;
 
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Strings;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
-public class InternalizationKeyRelatedStringsBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class InternalizationKeyRelatedStringsBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

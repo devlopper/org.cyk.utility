@@ -3,10 +3,10 @@ package org.cyk.utility.time;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.cyk.utility.number.NumberHelper;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class DurationBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class DurationBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

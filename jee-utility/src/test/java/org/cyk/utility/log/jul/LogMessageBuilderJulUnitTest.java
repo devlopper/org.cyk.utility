@@ -1,13 +1,10 @@
 package org.cyk.utility.log.jul;
 
 import org.cyk.utility.log.message.LogMessageBuilder;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTest;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class LogMessageBuilderJulUnitTest extends AbstractArquillianUnitTest {
+public class LogMessageBuilderJulUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test
@@ -35,13 +32,6 @@ public class LogMessageBuilderJulUnitTest extends AbstractArquillianUnitTest {
 	public void buildTemplateWithTwoParameters(){
 		assertionHelper.assertEquals("p1 {0} , p2 {1}", __inject__(LogMessageBuilder.class).setParameterFormat("%s {%s}").setParameterSeparator(" , ")
 				.addParameter("p1", "v1").addParameter("p2", "v2").execute().getOutput().getTemplate());
-	}
-	
-	/* Deployment */
-
-	@Deployment
-	public static JavaArchive createDeployment() {
-		return AbstractArquillianUnitTestWithDefaultDeployment.createJavaArchiveDeployment();
 	}
 	
 }

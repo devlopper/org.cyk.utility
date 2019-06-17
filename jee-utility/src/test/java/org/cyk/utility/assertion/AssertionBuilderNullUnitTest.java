@@ -2,10 +2,10 @@ package org.cyk.utility.assertion;
 
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.field.FieldValueGetter;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class AssertionBuilderNullUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class AssertionBuilderNullUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

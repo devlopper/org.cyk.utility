@@ -3,14 +3,14 @@ package org.cyk.utility.bean;
 import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.annotation.Default;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class PropertyUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class PropertyUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

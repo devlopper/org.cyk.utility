@@ -5,10 +5,10 @@ import org.cyk.utility.client.controller.api.MyEntityController;
 import org.cyk.utility.client.controller.entities.MyEntity;
 import org.cyk.utility.client.controller.entities.MyEntityImpl;
 import org.cyk.utility.server.representation.entities.MyEntityDto;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
-public class ControllerLayerUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class ControllerLayerUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = -2849775962912387317L;
 	
 	@Test

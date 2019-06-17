@@ -7,8 +7,8 @@ import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.request.RequestProperty;
 import org.cyk.utility.request.RequestPropertyValueGetter;
 import org.cyk.utility.request.RequestPropertyValueGetterImpl;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,13 +16,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class UniformResourceIdentifierStringBuilderUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class UniformResourceIdentifierStringBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
-
-	static {
+	
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
 		__inject__(FunctionRunnableMap.class).set(RequestPropertyValueGetterImpl.class, RequestPropertyValueGetterFunctionRunnableImpl.class);
 	}
-
+	
 	@Test
 	public void format_arguments_http_localhost_8080(){
 		UniformResourceIdentifierStringBuilder builder = __inject__(UniformResourceIdentifierStringBuilder.class);

@@ -12,11 +12,11 @@ import org.cyk.utility.stream.distributed.Messages;
 import org.cyk.utility.stream.distributed.Producer;
 import org.cyk.utility.stream.distributed.ProducerBuilder;
 import org.cyk.utility.stream.distributed.Topic;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.time.TimeHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class FunctionExecutionMessageProducerConsumerUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class FunctionExecutionMessageProducerConsumerUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 	
 	@Test

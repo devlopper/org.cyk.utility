@@ -1,13 +1,14 @@
 package org.cyk.utility.__kernel__.properties;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.Assert;
-import org.junit.Test;
-import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
-public class PropertiesUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class PropertiesUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

@@ -9,10 +9,10 @@ import org.cyk.utility.client.controller.session.SessionAttributeSetterImpl;
 import org.cyk.utility.request.RequestParameterValueGetterImpl;
 import org.cyk.utility.request.RequestPropertyValueGetterImpl;
 import org.cyk.utility.scope.ScopeSession;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
-public class MenuGetterUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class MenuGetterUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	static {

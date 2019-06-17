@@ -10,14 +10,14 @@ import org.cyk.utility.request.RequestGetterImpl;
 import org.cyk.utility.request.RequestProperty;
 import org.cyk.utility.request.RequestPropertyValueGetter;
 import org.cyk.utility.request.RequestPropertyValueGetterImpl;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.Test;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class ProxyClassUniformResourceIdentifierGetterUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class ProxyClassUniformResourceIdentifierGetterUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	static {

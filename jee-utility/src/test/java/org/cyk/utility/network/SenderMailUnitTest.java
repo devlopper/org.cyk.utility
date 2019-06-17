@@ -12,10 +12,10 @@ import org.cyk.utility.network.message.sender.SenderMail;
 import org.cyk.utility.network.protocol.ProtocolDefaults;
 import org.cyk.utility.network.protocol.ProtocolSimpleMailTransfer;
 import org.cyk.utility.security.Credentials;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTestWithDefaultDeployment;
-import org.junit.Test;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Test;
 
-public class SenderMailUnitTest extends AbstractArquillianUnitTestWithDefaultDeployment {
+public class SenderMailUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Inject private Event<SenderReader> senderReaderEvent;
