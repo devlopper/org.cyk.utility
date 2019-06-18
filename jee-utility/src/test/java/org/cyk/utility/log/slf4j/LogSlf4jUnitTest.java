@@ -3,12 +3,12 @@ package org.cyk.utility.log.slf4j;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 @Disabled
-public class LogSlf4jUnitTest extends AbstractArquillianUnitTest {
+public class LogSlf4jUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	static {

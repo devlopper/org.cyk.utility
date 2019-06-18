@@ -20,6 +20,16 @@
 			<groupId>org.cyk.jee.utility</groupId>
 			<artifactId>jee-utility</artifactId>
 			<version>0.0.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.jupiter</groupId>
+					<artifactId>junit-jupiter-engine</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jboss.weld</groupId>
+					<artifactId>weld-junit5</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>		
 	</dependencies>
 	<!--

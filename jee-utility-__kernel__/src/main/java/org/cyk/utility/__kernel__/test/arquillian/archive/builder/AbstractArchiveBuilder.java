@@ -83,8 +83,8 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 		
 		archive = ShrinkWrap.create(this.clazz);
 		if(Boolean.TRUE.equals(isBeanXmlAddable)) {
-			if(beanXml == null || beanXml.isEmpty())
-				beanXml = String.format(BEAN_XML_EMPTY_FORMAT,"all");
+			//if(beanXml == null || beanXml.isEmpty())
+			//	beanXml = String.format(BEAN_XML_EMPTY_FORMAT,"all");
 			addBeanXml(beanXml);
 		}
 		if(projectDefaultsYml!=null)
@@ -326,9 +326,9 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 	//private static final String BEAN_XML_EMPTY_FORMAT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
 	//		"<beans version=\"1.1\" bean-discovery-mode=\"%s\"></beans>";
 	
-	private static final String BEAN_XML_EMPTY_FORMAT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
-			"<beans xmlns=\"http://java.sun.com/xml/ns/javaee\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n" + 
-			"	xsi:schemaLocation=\"http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_1.xsd\" version=\"1.1\" bean-discovery-mode=\"%s\">\r\n" + 
-			"</beans> ";
+	//private static final String BEAN_XML_EMPTY_FORMAT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
+	//		"<beans xmlns=\"http://java.sun.com/xml/ns/javaee\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n" + 
+	//		"	xsi:schemaLocation=\"http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_1.xsd\" version=\"1.1\" bean-discovery-mode=\"%s\">\r\n" + 
+	//		"</beans> ";
 	
 }

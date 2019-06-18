@@ -1,12 +1,12 @@
 package org.cyk.utility.log.log4j2;
 
 import org.cyk.utility.log.message.LogMessageBuilder;
-import org.cyk.utility.test.arquillian.AbstractArquillianUnitTest;
+import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 @Disabled
-public class LogMessageBuilderUnitTest extends AbstractArquillianUnitTest {
+public class LogMessageBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test

@@ -33,6 +33,7 @@ public class PersistenceQueryIntegrationTest extends AbstractPersistenceArquilli
 	
 	@Test
 	public void executeQueryReadMyEntityAllFromRepository() throws Exception{
+		__inject__(MyEntityPersistence.class).read();//to trigger initialisation
 		userTransaction.begin();
 		__inject__(PersistenceFunctionCreator.class).setEntity(new MyEntity().setCode("mc001")).execute();
 		__inject__(PersistenceFunctionCreator.class).setEntity(new MyEntity().setCode("mc002")).execute();
@@ -40,7 +41,7 @@ public class PersistenceQueryIntegrationTest extends AbstractPersistenceArquilli
 		userTransaction.commit();
 		
 		@SuppressWarnings("unchecked")
-		List<MyEntity> results = (List<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setQueryIdentifier("MyEntity.readAll")
+		List<MyEntity> results = (List<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setQueryIdentifier("MyEntity.read")
 				.execute().getProperties().getEntities();
 		
 		Assert.assertEquals(3, results.size());
