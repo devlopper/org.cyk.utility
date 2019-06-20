@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.GeneratedValue;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -15,7 +15,7 @@ import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
 
-@Singleton
+@ApplicationScoped
 public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldInstancesRuntime,Serializable {
 	private static final long serialVersionUID = 1L;
 

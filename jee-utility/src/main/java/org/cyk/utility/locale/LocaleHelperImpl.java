@@ -3,12 +3,12 @@ package org.cyk.utility.locale;
 import java.io.Serializable;
 import java.util.Locale;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.value.ValueHelper;
 
-@Singleton
+@ApplicationScoped
 public class LocaleHelperImpl extends AbstractHelper implements LocaleHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

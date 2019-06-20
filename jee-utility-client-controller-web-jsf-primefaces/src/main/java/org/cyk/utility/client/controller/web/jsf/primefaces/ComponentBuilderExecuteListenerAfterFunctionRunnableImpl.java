@@ -2,6 +2,11 @@ package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.faces.context.FacesContext;
 
@@ -21,6 +26,8 @@ import org.cyk.utility.client.controller.component.file.FileImage;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.input.InputBoolean;
+import org.cyk.utility.client.controller.component.input.InputDate;
+import org.cyk.utility.client.controller.component.input.InputDateTime;
 import org.cyk.utility.client.controller.component.input.InputFile;
 import org.cyk.utility.client.controller.component.input.choice.InputChoice;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceMany;
@@ -47,6 +54,7 @@ import org.cyk.utility.client.controller.event.Events;
 import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.client.controller.icon.IconIdentifierGetter;
 import org.cyk.utility.client.controller.web.ComponentHelper;
+import org.cyk.utility.client.controller.web.jsf.converter.DateConverter;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.string.StringHelper;
@@ -165,6 +173,18 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 							}else if(component instanceof InputFile) {
 								InputFile inputFile = (InputFile) inputOutput;
 								inputFile.getProperties().setMode("simple");
+							}else if(component instanceof InputDate) {
+								InputDate inputDate = (InputDate) inputOutput;
+								inputDate.getProperties().setPattern("d/M/y");								
+								inputDate.getProperties().setConverter(__inject__(DateConverter.class));
+								inputDate.getProperties().setLocale(Locale.FRENCH);
+								inputDate.getProperties().setTimeZone(TimeZone.getDefault());
+							}else if(component instanceof InputDateTime) {
+								InputDateTime inputDateTime = (InputDateTime) inputOutput;
+								inputDateTime.getProperties().setPattern("d/M/y H:m");
+								inputDateTime.getProperties().setConverter(__inject__(DateConverter.class));
+								inputDateTime.getProperties().setLocale(Locale.FRENCH);
+								inputDateTime.getProperties().setTimeZone(TimeZone.getDefault());
 							}
 						}
 					}else if(component instanceof Menu) {

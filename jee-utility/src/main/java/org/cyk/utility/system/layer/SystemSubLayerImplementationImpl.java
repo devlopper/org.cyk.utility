@@ -2,6 +2,9 @@ package org.cyk.utility.system.layer;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
+@Dependent
 public class SystemSubLayerImplementationImpl extends AbstractSystemSubLayerImpl implements SystemSubLayerImplementation, Serializable {
 	private static final long serialVersionUID = 1L;
 

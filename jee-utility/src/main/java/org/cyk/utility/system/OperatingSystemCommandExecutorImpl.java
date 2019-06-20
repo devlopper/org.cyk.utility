@@ -6,10 +6,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.time.TimeHelper;
 
+@Dependent
 public class OperatingSystemCommandExecutorImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements OperatingSystemCommandExecutor,Serializable {
 	private static final long serialVersionUID = 1L;
 	

@@ -1,18 +1,25 @@
 package org.cyk.utility.log.slf4j;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.log.message.LogMessageBuilder;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-@Disabled
 public class LogSlf4jUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	static {
 		setLog4j2ConfigurationFile("org/cyk/utility/log/slf4j/log4j2.xml");
+	}
+	
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		DependencyInjection.setQualifierClass(Log.class, Slf4j.class);
+		DependencyInjection.setQualifierClass(LogMessageBuilder.class, Slf4j.class);
 	}
 	
 	@Test

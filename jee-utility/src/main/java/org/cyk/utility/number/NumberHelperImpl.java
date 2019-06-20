@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.clazz.ClassHelper;
@@ -12,7 +12,7 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelper;
 
-@Singleton
+@ApplicationScoped
 public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -2,11 +2,14 @@ package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldValueCopy;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
+@Dependent
 public class RepresentationFunctionModifierImpl extends AbstractRepresentationFunctionModifierImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

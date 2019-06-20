@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -17,6 +19,7 @@ import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueConverter;
 import org.cyk.utility.value.ValueUsageType;
 
+@Dependent
 public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FieldValueSetter, Serializable {
 	private static final long serialVersionUID = 1L;
 

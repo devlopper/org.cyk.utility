@@ -2,8 +2,11 @@ package org.cyk.utility.number;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 
+@Dependent
 public class IntervalsImpl extends AbstractCollectionInstanceImpl<Interval> implements Intervals,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -6,8 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.inject.Singleton;
-
+import javax.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
@@ -18,7 +17,7 @@ import org.cyk.utility.method.MethodHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.StringHelper;
 
-@Singleton
+@ApplicationScoped
 public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Serializable {
 	private static final long serialVersionUID = 1L;
 

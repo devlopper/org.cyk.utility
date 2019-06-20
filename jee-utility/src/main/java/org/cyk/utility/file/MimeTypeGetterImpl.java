@@ -7,12 +7,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javax.activation.MimetypesFileTypeMap;
+import javax.enterprise.context.Dependent;
 import javax.ws.rs.core.MediaType;
 
 import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.StringHelper;
 
+@Dependent
 public class MimeTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements MimeTypeGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

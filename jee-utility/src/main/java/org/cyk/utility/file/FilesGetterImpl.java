@@ -5,11 +5,14 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.function.Consumer;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.number.Interval;
 import org.cyk.utility.number.Intervals;
 import org.cyk.utility.string.Strings;
 
+@Dependent
 public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Files> implements FilesGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

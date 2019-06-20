@@ -2,8 +2,11 @@ package org.cyk.utility.string;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.map.AbstractMapInstanceImpl;
 
+@Dependent
 public class StringByStringMapImpl extends AbstractMapInstanceImpl<String, String> implements StringByStringMap,Serializable {
 	private static final long serialVersionUID = 1L;
 

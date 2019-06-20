@@ -5,12 +5,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.StringHelper;
 
+@Dependent
 public class PersistenceQueryIdentifierStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements PersistenceQueryIdentifierStringBuilder, Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -20,7 +24,13 @@ public class PersistenceQueryIdentifierStringBuilderImpl extends AbstractFunctio
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		getProperties().setFromPath(new Object[]{Properties.IS,Properties.FORMAT,Properties.REQUIRED}, Boolean.TRUE);
-		setFormat("%s.%s");//classSimpleName.fieldName
+		setFormat("%s.%s");//classSimpleName.name(fieldName or methodName or otherName)
+	}
+	
+	@Override
+	public Function<Properties, String> execute() {
+		Function<Properties, String> function = super.execute();
+		return function;
 	}
 	
 	@Override

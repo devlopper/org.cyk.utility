@@ -2,11 +2,14 @@ package org.cyk.utility.assertion;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.number.NumberHelper;
 
+@Dependent
 public class AssertionBuilderComparisonImpl extends AbstractAssertionBuilderImpl implements AssertionBuilderComparison, Serializable {
 	private static final long serialVersionUID = 1L;
 	

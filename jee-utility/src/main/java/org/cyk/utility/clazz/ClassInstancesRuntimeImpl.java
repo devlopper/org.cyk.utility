@@ -3,8 +3,7 @@ package org.cyk.utility.clazz;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.inject.Singleton;
-
+import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldGetter;
@@ -14,7 +13,7 @@ import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.value.ValueUsageType;
 
-@Singleton
+@ApplicationScoped
 public class ClassInstancesRuntimeImpl extends AbstractObject implements ClassInstancesRuntime,Serializable {
 	private static final long serialVersionUID = 1L;
 

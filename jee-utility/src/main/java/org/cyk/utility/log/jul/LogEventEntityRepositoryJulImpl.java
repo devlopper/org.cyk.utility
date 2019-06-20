@@ -2,11 +2,11 @@ package org.cyk.utility.log.jul;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.log.AbstractLogEventEntityRepositoryImpl;
 
-@Singleton
+@ApplicationScoped
 public class LogEventEntityRepositoryJulImpl extends AbstractLogEventEntityRepositoryImpl implements LogEventEntityRepositoryJul, Serializable {
 	private static final long serialVersionUID = 1L;
 

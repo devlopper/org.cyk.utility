@@ -2,11 +2,13 @@ package org.cyk.utility.system.action;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.clazz.AbstractClassFunctionImpl;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.string.Strings;
 
-@SuppressWarnings("rawtypes")
+@Dependent @SuppressWarnings("rawtypes")
 public class SystemActionRelatedClassGetterImpl extends AbstractClassFunctionImpl implements SystemActionRelatedClassGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

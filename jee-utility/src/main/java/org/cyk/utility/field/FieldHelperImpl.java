@@ -6,7 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
@@ -17,7 +17,7 @@ import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
-@Singleton
+@ApplicationScoped
 public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Serializable {
 	private static final long serialVersionUID = -5367150176793830358L;
 

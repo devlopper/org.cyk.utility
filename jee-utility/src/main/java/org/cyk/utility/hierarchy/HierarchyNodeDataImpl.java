@@ -2,11 +2,13 @@ package org.cyk.utility.hierarchy;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper=false,of="value")
+@Dependent @EqualsAndHashCode(callSuper=false,of="value")
 public class HierarchyNodeDataImpl extends AbstractObject implements HierarchyNodeData,Serializable {
 	private static final long serialVersionUID = 1L;
 

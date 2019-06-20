@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.helper.AbstractHelper;
@@ -13,7 +13,7 @@ import org.cyk.utility.locale.LocaleHelper;
 import org.cyk.utility.value.ValueHelper;
 import org.cyk.utility.value.ValueLength;
 
-@Singleton
+@ApplicationScoped
 public class InstantHelperImpl extends AbstractHelper implements InstantHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

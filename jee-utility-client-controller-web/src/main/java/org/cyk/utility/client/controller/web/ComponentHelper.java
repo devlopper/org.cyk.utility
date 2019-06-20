@@ -16,6 +16,8 @@ import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.cell.Cell;
 import org.cyk.utility.client.controller.component.input.InputBooleanButton;
 import org.cyk.utility.client.controller.component.input.InputBooleanCheckBox;
+import org.cyk.utility.client.controller.component.input.InputDate;
+import org.cyk.utility.client.controller.component.input.InputDateTime;
 import org.cyk.utility.client.controller.component.input.InputFile;
 import org.cyk.utility.client.controller.component.input.InputStringEditor;
 import org.cyk.utility.client.controller.component.input.InputStringLineMany;
@@ -100,6 +102,14 @@ public class ComponentHelper extends AbstractSingleton implements Serializable {
 	
 	public Boolean isInputFile(Object object) {
 		return object instanceof InputFile;
+	}
+	
+	public Boolean isInputDate(Object object) {
+		return object instanceof InputDate;
+	}
+	
+	public Boolean isInputDateTime(Object object) {
+		return object instanceof InputDateTime;
 	}
 	
 	public Boolean isOutputStringText(Object object) {

@@ -2,14 +2,14 @@ package org.cyk.utility.system;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.constant.ConstantNull;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueHelper;
 
-@Singleton
+@ApplicationScoped
 public class SystemHelperImpl extends AbstractHelper implements SystemHelper, Serializable {
 	private static final long serialVersionUID = 1L;
 

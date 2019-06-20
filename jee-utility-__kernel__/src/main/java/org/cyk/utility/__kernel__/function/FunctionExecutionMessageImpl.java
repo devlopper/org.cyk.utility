@@ -3,9 +3,12 @@ package org.cyk.utility.__kernel__.function;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
+@Dependent
 public class FunctionExecutionMessageImpl extends AbstractObject implements FunctionExecutionMessage,Serializable {
 	private static final long serialVersionUID = 1L;
 

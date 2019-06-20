@@ -2,12 +2,12 @@ package org.cyk.utility.system.layer;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.clazz.ClassHelper;
 
-@Singleton
+@ApplicationScoped
 public class SystemLayerControllerImpl extends AbstractSystemLayerImpl implements SystemLayerController, Serializable {
 	private static final long serialVersionUID = 1L;
 

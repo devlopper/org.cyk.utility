@@ -2,8 +2,11 @@ package org.cyk.utility.clazz;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Dependent
 public class ClassNameGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements ClassNameGetter , Serializable {
 	private static final long serialVersionUID = 1L;
 

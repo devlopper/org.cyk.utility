@@ -2,9 +2,9 @@ package org.cyk.utility.system.node;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
-@Singleton
+@ApplicationScoped
 public class SystemNodeServerImpl extends AbstractSystemNodeImpl implements SystemNodeServer,Serializable {
 	private static final long serialVersionUID = 1L;
 

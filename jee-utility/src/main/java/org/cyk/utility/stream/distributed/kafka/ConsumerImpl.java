@@ -3,12 +3,15 @@ package org.cyk.utility.stream.distributed.kafka;
 import java.io.Serializable;
 import java.time.Duration;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.cyk.utility.stream.distributed.AbstractConsumerImpl;
 import org.cyk.utility.string.Strings;
 
+@Dependent
 public class ConsumerImpl extends AbstractConsumerImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

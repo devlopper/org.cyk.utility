@@ -12,6 +12,7 @@ import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.field.FieldDescription;
 import org.cyk.utility.field.FieldDescriptions;
 import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -33,6 +34,9 @@ public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends Abst
 						if(component instanceof InputBuilder<?, ?>) {
 							InputBuilder<?, ?> input = (InputBuilder<?, ?>) component;
 							input.setIsNullable(index.getIsNullable());	
+							String name = index.getName();
+							if(__inject__(StringHelper.class).isNotBlank(name))
+								input.getLabel(Boolean.TRUE).setValue(name);
 						}						
 					}
 				}		

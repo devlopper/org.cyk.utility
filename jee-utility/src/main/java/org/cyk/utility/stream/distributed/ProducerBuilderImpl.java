@@ -2,9 +2,12 @@ package org.cyk.utility.stream.distributed;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.stream.distributed.kafka.network.MessageSerializer;
 import org.cyk.utility.stream.distributed.kafka.network.ProducerCallbackImpl;
 
+@Dependent
 public class ProducerBuilderImpl extends AbstractProducerConsumerBuilderImpl<Producer> implements ProducerBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

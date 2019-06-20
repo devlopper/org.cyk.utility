@@ -3,9 +3,12 @@ package org.cyk.utility.server.business;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.system.action.SystemAction;
 
+@Dependent
 public class BusinessFunctionCreatorImpl extends AbstractBusinessFunctionCreatorImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

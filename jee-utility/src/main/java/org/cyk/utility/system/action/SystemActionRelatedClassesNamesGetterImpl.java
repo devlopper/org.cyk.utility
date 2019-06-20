@@ -2,11 +2,14 @@ package org.cyk.utility.system.action;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.string.AbstractStringsFunctionImpl;
 import org.cyk.utility.string.Strings;
 
+@Dependent
 public class SystemActionRelatedClassesNamesGetterImpl extends AbstractStringsFunctionImpl implements SystemActionRelatedClassesNamesGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 	

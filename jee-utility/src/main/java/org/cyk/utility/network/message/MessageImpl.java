@@ -3,10 +3,13 @@ package org.cyk.utility.network.message;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.collection.CollectionHelper;
 
+@Dependent
 public class MessageImpl extends AbstractObject implements Message , Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -3,9 +3,12 @@ package org.cyk.utility.regularexpression;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.string.Strings;
 
+@Dependent
 public class RegularExpressionInstanceImpl extends AbstractObject implements RegularExpressionInstance,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
@@ -20,6 +22,7 @@ import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.number.Interval;
 
+@Dependent
 public class FileExcelSheetDataArrayReaderImpl extends AbstractFunctionWithPropertiesAsInputImpl<ArrayInstanceTwoDimensionString> implements FileExcelSheetDataArrayReader,Serializable {
 	private static final long serialVersionUID = 1L;
 

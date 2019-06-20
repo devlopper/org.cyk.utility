@@ -3,13 +3,13 @@ package org.cyk.utility.identifier.resource;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.map.AbstractMapInstanceImpl;
 import org.cyk.utility.object.ObjectByStringMap;
 
-@Singleton
+@ApplicationScoped
 public class UniformResourceIdentifierParameterValueMatrixImpl extends AbstractMapInstanceImpl<String, ObjectByStringMap> implements UniformResourceIdentifierParameterValueMatrix,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -3,7 +3,7 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -13,11 +13,11 @@ import org.cyk.utility.sql.builder.QueryParameterNameBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.throwable.ThrowableHelper;
 
-@Singleton
+@ApplicationScoped
 public class MyEntityPersistenceImpl extends AbstractPersistenceEntityIdentifiedByStringImpl<MyEntity> implements MyEntityPersistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String readByIntegerValue,executeIncrementIntegerValue;
+	private String readByIntegerValue,countByIntegerValue,executeIncrementIntegerValue;
 	
 	@Override
 	public QueryStringBuilderSelect instanciateReadByIntegerValueQueryStringBuilder() {
@@ -38,18 +38,21 @@ public class MyEntityPersistenceImpl extends AbstractPersistenceEntityIdentified
 	@Override 
 	//@Query(value="SELECT r FROM MyEntity r WHERE r.integerValue = :"+MyEntity.FIELD_INTEGER_VALUE,resultClass=MyEntity.class)
 	public Collection<MyEntity> readByIntegerValue(Integer value) {
-		return __readMany__(null,____getQueryParameters____(null,value));
+		Properties properties = new Properties().setQueryIdentifier(readByIntegerValue);
+		return __readMany__(properties,____getQueryParameters____(properties,value));
 	}
 	
 	@Override 
 	//@Query(value="SELECT COUNT(r) FROM MyEntity r WHERE r.integerValue = :"+MyEntity.FIELD_INTEGER_VALUE,resultClass=Long.class)
 	public Long countByIntegerValue(Integer value) {
-		return __count__(null,____getQueryParameters____(null,value));
+		Properties properties = new Properties().setQueryIdentifier(countByIntegerValue);
+		return __count__(properties,____getQueryParameters____(properties,value));
 	}
 	
 	@Override
 	public Long executeIncrementIntegerValue(Integer value) {
-		return __modify__(____getQueryParameters____(null,value));
+		Properties properties = new Properties().setQueryIdentifier(executeIncrementIntegerValue);
+		return __modify__(properties,____getQueryParameters____(properties,value));
 	}
 	
 	protected Object[] __getQueryParameters__(String queryIdentifier,Properties properties,Object...objects){

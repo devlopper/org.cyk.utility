@@ -5,18 +5,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 
-@Singleton
+@ApplicationScoped
 public class StackTraceHelperImpl extends AbstractSingleton implements StackTraceHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	public StackTraceElement getAt(Integer index){
-		return Thread.currentThread().getStackTrace()[index];
+		StackTraceElement stackTraceElement = null;
+		if(index != null && index > -1) {
+			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+			if(index < stackTraceElements.length)
+				stackTraceElement = stackTraceElements[index];
+		}
+		return stackTraceElement;
 	}
 	
 	@Override
@@ -36,6 +42,19 @@ public class StackTraceHelperImpl extends AbstractSingleton implements StackTrac
 	
 	public String getStackTraceAsString(){
 		return getStackTraceAsString(null);
+	}
+	
+	@Override
+	public String getCallerMethodName(Integer offset) {
+		if(offset == null)
+			offset = 0;
+		StackTraceElement stackTraceElement = getAt(4 + offset);
+		return stackTraceElement == null ? null : stackTraceElement.getMethodName();
+	}
+	
+	@Override
+	public String getCallerMethodName() {
+		return getCallerMethodName(1);
 	}
 	
 	/**/

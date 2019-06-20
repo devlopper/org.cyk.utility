@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.collection.CollectionHelper;
@@ -15,6 +17,7 @@ import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueUsageType;
 
+@Dependent
 public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements FieldValueGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 

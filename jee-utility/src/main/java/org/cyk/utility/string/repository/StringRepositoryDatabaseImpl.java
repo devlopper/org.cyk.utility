@@ -2,11 +2,11 @@ package org.cyk.utility.string.repository;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 
-@Singleton
+@ApplicationScoped
 public class StringRepositoryDatabaseImpl extends AbstractStringRepositoryImpl implements StringRepositoryDatabase,Serializable {
 	private static final long serialVersionUID = 1L;
 

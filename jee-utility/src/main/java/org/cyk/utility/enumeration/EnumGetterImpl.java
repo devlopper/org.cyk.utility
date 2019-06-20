@@ -2,9 +2,11 @@ package org.cyk.utility.enumeration;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-@SuppressWarnings("rawtypes")
+@Dependent @SuppressWarnings("rawtypes")
 public class EnumGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Enum> implements EnumGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

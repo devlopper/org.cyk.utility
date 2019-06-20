@@ -265,12 +265,12 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return reader;
 	}
 	
-	protected PersistenceFunctionModifier __getModifier__(Object...parameters) {
-		return __getFunction__(PersistenceFunctionModifier.class,null, parameters);
+	protected PersistenceFunctionModifier __getModifier__(Properties properties,Object...parameters) {
+		return __getFunction__(PersistenceFunctionModifier.class,properties, parameters);
 	}
 	
-	protected PersistenceFunctionRemover __getRemover__(Object...parameters) {
-		return __getFunction__(PersistenceFunctionRemover.class,null, parameters);
+	protected PersistenceFunctionRemover __getRemover__(Properties properties,Object...parameters) {
+		return __getFunction__(PersistenceFunctionRemover.class,properties, parameters);
 	}
 	
 	/**/
@@ -317,13 +317,13 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return (Long) __inject__(CollectionHelper.class).getFirst(__getReader__(properties,parameters).execute().getEntities());
 	}
 	
-	protected Long __modify__(Object...parameters) {
-		__getModifier__(parameters).execute();//TODO we should get the number of entities modified
+	protected Long __modify__(Properties properties,Object...parameters) {
+		__getModifier__(properties,parameters).execute();//TODO we should get the number of entities modified
 		return null;
 	}
 	
-	protected Long __delete__(Object...parameters) {
-		__getRemover__(parameters).execute();//TODO we should get the number of entities deleted
+	protected Long __delete__(Properties properties,Object...parameters) {
+		__getRemover__(properties,parameters).execute();//TODO we should get the number of entities deleted
 		return null;
 	}
 	
@@ -357,5 +357,10 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	protected QueryStringBuilderSelect __instanciateQueryReadBy__(String fieldName){
 		return __instanciateQuerySelect__().getWherePredicateBuilderAsEqual().addOperandBuilderByAttribute(fieldName,ComparisonOperator.EQ)
 				.getParentAsWhereClause().getParentAs(QueryStringBuilderSelect.class);
+	}
+	
+	@Override
+	protected PersistenceQueryIdentifierStringBuilder __injectPersistenceQueryIdentifierStringBuilder__() {
+		return super.__injectPersistenceQueryIdentifierStringBuilder__().setClassSimpleName(getEntityClass());
 	}
 }

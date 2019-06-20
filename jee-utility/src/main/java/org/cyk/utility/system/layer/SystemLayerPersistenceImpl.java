@@ -2,16 +2,10 @@ package org.cyk.utility.system.layer;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
-@Singleton
+@ApplicationScoped
 public class SystemLayerPersistenceImpl extends AbstractSystemLayerImpl implements SystemLayerPersistence, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		
-	}
-	
 }

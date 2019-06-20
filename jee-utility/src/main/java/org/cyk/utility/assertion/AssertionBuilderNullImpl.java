@@ -2,11 +2,14 @@ package org.cyk.utility.assertion;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 
+@Dependent
 public class AssertionBuilderNullImpl extends AbstractAssertionBuilderImpl implements AssertionBuilderNull, Serializable {
 	private static final long serialVersionUID = 1L;
 	

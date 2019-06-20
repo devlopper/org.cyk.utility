@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionInstance;
@@ -27,7 +29,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@JavaScriptObjectNotation
+@Dependent @JavaScriptObjectNotation
 public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBuilderImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -1,18 +1,23 @@
 package org.cyk.utility.log.log4j2;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-@Disabled
 public class LogLog4j2UnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	static {
 		setLog4j2ConfigurationFile("org/cyk/utility/log/log4j2/log4j2.xml");
+	}
+	
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		DependencyInjection.setQualifierClass(Log.class, Log4j2.class);
 	}
 	
 	@Test

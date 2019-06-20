@@ -4,11 +4,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Singleton;
-
+import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 
-@Singleton
+@ApplicationScoped
 public class AssertionsProviderClassMapImpl extends AbstractSingleton implements AssertionsProviderClassMap, Serializable {
 	private static final long serialVersionUID = 1L;
 

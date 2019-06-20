@@ -88,6 +88,16 @@ public class FieldValueCopyUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void date_to_date(){
+		Date date = new Date();
+		MyClass01 instance01 = new MyClass01().setDate(date);
+		MyClass02 instance02 = new MyClass02();
+		__inject__(FieldValueCopy.class).execute(instance01,instance02,"date");
+		assertThat(instance02.getDate()).isNotNull();
+		assertThat(instance02.getDate()).isEqualTo(date);
+	}
+	
+	@Test
 	public void all(){
 		MyClass01 instance01 = new MyClass01().setIntField(2).setLongField1(5l);
 		MyClass02 instance02 = new MyClass02().setIntField("a").setLongField1("b");
@@ -276,6 +286,7 @@ public class FieldValueCopyUnitTest extends AbstractWeldUnitTest {
 		private Date dateField;
 		private MyData myData;
 		private byte[] bytes;
+		private Date date;
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
@@ -290,6 +301,7 @@ public class FieldValueCopyUnitTest extends AbstractWeldUnitTest {
 		private String dateField;
 		private String myData;
 		private byte[] bytes;
+		private Date date;
 	}
 	
 	@Getter @Setter @Accessors(chain=true)

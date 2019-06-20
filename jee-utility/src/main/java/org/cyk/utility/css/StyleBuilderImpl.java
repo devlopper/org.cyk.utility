@@ -2,9 +2,12 @@ package org.cyk.utility.css;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 
+@Dependent
 public class StyleBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Style> implements StyleBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

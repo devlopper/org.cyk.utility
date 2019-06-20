@@ -9,12 +9,15 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.StringLocation;
 
+@Dependent
 public class MethodGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Method>> implements MethodGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 

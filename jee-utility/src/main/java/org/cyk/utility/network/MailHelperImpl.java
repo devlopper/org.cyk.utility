@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.collection.CollectionHelper;
@@ -18,7 +18,7 @@ import org.cyk.utility.stream.distributed.Producer;
 import org.cyk.utility.stream.distributed.ProducerBuilder;
 import org.cyk.utility.stream.distributed.Topic;
 
-@Singleton
+@ApplicationScoped
 public class MailHelperImpl extends AbstractHelper implements MailHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

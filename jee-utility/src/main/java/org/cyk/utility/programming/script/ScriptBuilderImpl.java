@@ -2,10 +2,13 @@ package org.cyk.utility.programming.script;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 
+@Dependent
 public class ScriptBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Script> implements ScriptBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

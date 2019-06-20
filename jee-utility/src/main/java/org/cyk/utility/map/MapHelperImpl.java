@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.helper.AbstractHelper;
 
-@Singleton
+@ApplicationScoped
 public class MapHelperImpl extends AbstractHelper implements MapHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

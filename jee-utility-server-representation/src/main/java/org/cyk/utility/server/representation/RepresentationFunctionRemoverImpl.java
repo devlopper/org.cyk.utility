@@ -3,10 +3,13 @@ package org.cyk.utility.server.representation;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.value.ValueUsageType;
 
+@Dependent
 public class RepresentationFunctionRemoverImpl extends AbstractRepresentationFunctionRemoverImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ConfigurationBuilder;
 
+@Dependent
 public class ClassesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Classes> implements ClassesGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

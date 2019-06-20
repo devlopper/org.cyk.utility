@@ -3,10 +3,13 @@ package org.cyk.utility.instance;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.value.ValueUsageType;
 
+@Dependent
 public class InstanceGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Object>> implements InstanceGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

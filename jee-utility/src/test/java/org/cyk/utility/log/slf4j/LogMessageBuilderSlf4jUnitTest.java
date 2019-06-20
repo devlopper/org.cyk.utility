@@ -1,14 +1,19 @@
 package org.cyk.utility.log.slf4j;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.log.message.LogMessageBuilder;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-@Disabled
 public class LogMessageBuilderSlf4jUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		DependencyInjection.setQualifierClass(LogMessageBuilder.class, Slf4j.class);
+	}
+	
 	@Test
 	public void buildTemplateWithoutParameters(){
 		assertionHelper.assertEquals("this a log without parameters", __inject__(LogMessageBuilder.class).setTemplateFormat("this a log without parameters")

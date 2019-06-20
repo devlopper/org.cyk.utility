@@ -2,12 +2,12 @@ package org.cyk.utility.server.business;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.system.layer.SystemLayerBusiness;
 
-@Singleton
+@ApplicationScoped
 public class BusinessLayerImpl extends AbstractSingleton implements BusinessLayer, Serializable {
 	private static final long serialVersionUID = 1L;
 

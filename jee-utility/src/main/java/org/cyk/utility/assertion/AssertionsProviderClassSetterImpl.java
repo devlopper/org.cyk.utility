@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 
+@Dependent
 public class AssertionsProviderClassSetterImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements AssertionsProviderClassSetter, Serializable {
 	private static final long serialVersionUID = 1L;
 

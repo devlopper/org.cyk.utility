@@ -2,11 +2,13 @@ package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Dependent
 public class ResponseBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Response> implements ResponseBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

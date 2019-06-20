@@ -2,9 +2,12 @@ package org.cyk.utility.instance;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Dependent
 public class InstanceByBusinessIdentifierGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements InstanceByBusinessIdentifierGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

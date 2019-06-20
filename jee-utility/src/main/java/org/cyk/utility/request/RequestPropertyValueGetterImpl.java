@@ -2,10 +2,12 @@ package org.cyk.utility.request;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Dependent
 public class RequestPropertyValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements RequestPropertyValueGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

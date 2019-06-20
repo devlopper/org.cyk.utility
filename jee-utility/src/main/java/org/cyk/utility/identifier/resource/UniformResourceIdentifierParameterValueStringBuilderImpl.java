@@ -2,6 +2,8 @@ package org.cyk.utility.identifier.resource;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.system.action.SystemAction;
@@ -16,6 +18,7 @@ import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.system.action.SystemActionView;
 
+@Dependent
 public class UniformResourceIdentifierParameterValueStringBuilderImpl extends AbstractStringFunctionImpl implements UniformResourceIdentifierParameterValueStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

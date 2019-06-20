@@ -8,6 +8,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.enterprise.context.Dependent;
+
 import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -15,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.KernelHelper;
 
+@Dependent
 public class Properties implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -4646,7 +4650,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getTimeZone() {
+		return get(TIME_ZONE);
+	}
+
+	public Properties setTimeZone(Object timeZone) {
+		set(TIME_ZONE, timeZone);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String TIME_ZONE = "TIME_ZONE";
 	public static final String IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK = "IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK";
 	public static final String FORCE_SELECTION = "FORCE_SELECTION";
 	public static final String DROP_DOWN = "DROP_DOWN";

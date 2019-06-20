@@ -3,6 +3,7 @@ package org.cyk.utility.request;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.enterprise.context.Dependent;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Invocation;
 
@@ -13,6 +14,7 @@ import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.object.ObjectByObjectMap;
 import org.cyk.utility.string.StringHelper;
 
+@Dependent
 public class RequestProcessorImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements RequestProcessor,Serializable {
 	private static final long serialVersionUID = 1L;
 

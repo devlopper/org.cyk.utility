@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
-@Singleton
+@ApplicationScoped
 public class FunctionRunnableMapImpl implements FunctionRunnableMap,Serializable {
 	private static final long serialVersionUID = 1L;
 

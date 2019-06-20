@@ -1,9 +1,12 @@
 package org.cyk.utility.__kernel__.assertion;
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
 
+@Dependent
 public class AssertionImpl extends AbstractObject implements Assertion,Serializable {
 	private static final long serialVersionUID = 1L;
 

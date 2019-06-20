@@ -5,12 +5,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Dependent
 public class PersistenceQueryIdentifierFieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Field>> implements PersistenceQueryIdentifierFieldGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 

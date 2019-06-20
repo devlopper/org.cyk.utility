@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -17,7 +17,7 @@ import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueHelper;
 
-@Singleton
+@ApplicationScoped
 public class StringRepositoryResourceBundleImpl extends AbstractStringRepositoryImpl implements StringRepositoryResourceBundle,Serializable {
 	private static final long serialVersionUID = 1L;
 

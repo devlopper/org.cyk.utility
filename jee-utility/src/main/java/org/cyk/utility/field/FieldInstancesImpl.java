@@ -3,10 +3,13 @@ package org.cyk.utility.field;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
 
+@Dependent
 public class FieldInstancesImpl extends AbstractCollectionInstanceImpl<FieldInstance> implements FieldInstances,Serializable {
 	private static final long serialVersionUID = 1L;
 

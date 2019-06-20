@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.core.GenericType;
 
 import org.cyk.utility.helper.AbstractHelper;
 
-@Singleton
+@ApplicationScoped
 public class TypeHelperImpl extends AbstractHelper implements TypeHelper, Serializable {
 	private static final long serialVersionUID = 1L;
 

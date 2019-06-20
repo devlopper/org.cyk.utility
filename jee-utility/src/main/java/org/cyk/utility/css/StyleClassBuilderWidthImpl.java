@@ -2,8 +2,11 @@ package org.cyk.utility.css;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.device.Device;
 
+@Dependent
 public class StyleClassBuilderWidthImpl extends AbstractStyleClassBuilderImpl implements StyleClassBuilderWidth,Serializable {
 	private static final long serialVersionUID = -2220084599379512598L;
 

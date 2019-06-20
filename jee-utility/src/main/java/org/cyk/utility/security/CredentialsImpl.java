@@ -2,8 +2,11 @@ package org.cyk.utility.security;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
+@Dependent
 public class CredentialsImpl extends AbstractObject implements Credentials,Serializable {
 	private static final long serialVersionUID = 1L;
 

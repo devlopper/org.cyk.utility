@@ -2,6 +2,9 @@ package org.cyk.utility.context;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
+@Dependent
 public class ContextGetterImpl extends AbstractContextGetterImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

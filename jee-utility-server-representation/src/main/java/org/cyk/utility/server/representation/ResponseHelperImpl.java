@@ -2,14 +2,14 @@ package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.cyk.utility.helper.AbstractHelper;
 
-@Singleton
+@ApplicationScoped
 public class ResponseHelperImpl extends AbstractHelper implements ResponseHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

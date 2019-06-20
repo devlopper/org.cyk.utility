@@ -2,9 +2,12 @@ package org.cyk.utility.value;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.number.NumberHelper;
 
+@Dependent
 public class ValueConverterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements ValueConverter,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -4,11 +4,14 @@ import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.thread.ExecutorServiceBuilder;
 
+@Dependent
 public class RunnablesExecutorImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements RunnablesExecutor,Objectable {
 	private static final long serialVersionUID = 1L;
 

@@ -6,14 +6,14 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelper;
 
-@Singleton
+@ApplicationScoped
 public class FileHelperImpl extends AbstractHelper implements FileHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

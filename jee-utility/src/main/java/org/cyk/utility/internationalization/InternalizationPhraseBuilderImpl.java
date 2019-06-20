@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringHelper;
 
+@Dependent
 public class InternalizationPhraseBuilderImpl extends AbstractStringFunctionImpl implements InternalizationPhraseBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

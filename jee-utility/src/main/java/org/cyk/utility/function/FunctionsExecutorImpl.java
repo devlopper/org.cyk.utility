@@ -3,8 +3,11 @@ package org.cyk.utility.function;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.runnable.RunnablesExecutor;
 
+@Dependent
 public class FunctionsExecutorImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FunctionsExecutor,Serializable {
 	private static final long serialVersionUID = 1L;
 	

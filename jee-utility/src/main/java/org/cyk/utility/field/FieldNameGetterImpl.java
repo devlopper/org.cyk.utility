@@ -2,9 +2,12 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.value.ValueUsageType;
 
+@Dependent
 public class FieldNameGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements FieldNameGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 

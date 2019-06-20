@@ -2,11 +2,13 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper=false,of= {"sourceClass","destinationClass"})
+@Dependent @EqualsAndHashCode(callSuper=false,of= {"sourceClass","destinationClass"})
 public class FieldValueCopyDefinitionKeyImpl extends AbstractObject implements FieldValueCopyDefinitionKey,Serializable{
 	private static final long serialVersionUID = 1L;
 

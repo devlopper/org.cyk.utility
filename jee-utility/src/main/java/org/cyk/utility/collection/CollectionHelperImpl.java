@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
@@ -22,7 +22,7 @@ import org.cyk.utility.value.ValueHelper;
 
 import one.util.streamex.StreamEx;
 
-@Singleton
+@ApplicationScoped
 public class CollectionHelperImpl extends AbstractHelper implements CollectionHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

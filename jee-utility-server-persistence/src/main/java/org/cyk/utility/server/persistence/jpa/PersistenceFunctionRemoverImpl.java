@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence.jpa;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -12,6 +13,7 @@ import org.cyk.utility.server.persistence.PersistenceFunctionRemover;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.system.action.SystemAction;
 
+@Dependent
 public class PersistenceFunctionRemoverImpl extends AbstractPersistenceFunctionRemoverImpl implements PersistenceFunctionRemover,Serializable {
 	private static final long serialVersionUID = 1L;
 

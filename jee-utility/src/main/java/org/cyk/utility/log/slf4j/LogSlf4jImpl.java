@@ -3,7 +3,7 @@ package org.cyk.utility.log.slf4j;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.enterprise.inject.Alternative;
+import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.array.ArrayHelper;
@@ -18,7 +18,7 @@ import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import org.slf4j.event.Level;
 
-@Alternative
+@Dependent @Slf4j
 public class LogSlf4jImpl extends AbstractLogImpl<Level> implements LogSlf4j, Serializable {
 	private static final long serialVersionUID = 1L;
 

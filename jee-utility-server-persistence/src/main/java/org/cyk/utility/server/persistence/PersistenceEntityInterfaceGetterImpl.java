@@ -2,11 +2,13 @@ package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-@SuppressWarnings("rawtypes")
+@Dependent @SuppressWarnings("rawtypes")
 public class PersistenceEntityInterfaceGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class> implements PersistenceEntityInterfaceGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

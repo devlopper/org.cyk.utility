@@ -3,8 +3,11 @@ package org.cyk.utility.filter;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
+@Dependent
 public class FilterImpl extends AbstractObject implements Filter, Serializable {
 	private static final long serialVersionUID = 1L;
 	

@@ -3,6 +3,7 @@ package org.cyk.utility.sql.jpql.builder;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.util.AnnotationLiteral;
 
 import org.cyk.utility.collection.CollectionHelper;
@@ -11,7 +12,7 @@ import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.sql.jpql.Jpql;
 import org.cyk.utility.sql.jpql.JpqlQualifier;
 
-@Jpql
+@Dependent @Jpql
 public class QueryClauseStringBuilderSelectJpqlImpl extends AbstractQueryClauseStringBuilderSelectImpl implements QueryClauseStringBuilderSelectJpql, Serializable {
 	private static final long serialVersionUID = 1L;
 

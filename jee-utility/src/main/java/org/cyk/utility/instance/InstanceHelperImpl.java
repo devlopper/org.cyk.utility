@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
@@ -14,7 +14,7 @@ import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.value.ValueHelper;
 import org.cyk.utility.value.ValueUsageType;
 
-@Singleton
+@ApplicationScoped
 public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

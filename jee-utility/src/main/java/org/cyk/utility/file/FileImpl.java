@@ -5,12 +5,15 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.byte_.HashFunction;
 import org.cyk.utility.string.StringHelper;
 
+@Dependent
 public class FileImpl extends AbstractObject implements File,Serializable {
 	private static final long serialVersionUID = 1L;
 

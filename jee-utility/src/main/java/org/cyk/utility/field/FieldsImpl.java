@@ -7,10 +7,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Predicate;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Strings;
 
+@Dependent
 public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements Fields,Serializable {
 	private static final long serialVersionUID = 1L;
 

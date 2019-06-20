@@ -10,8 +10,11 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Dependent
 public class ExecutorServiceBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<ExecutorService> implements ExecutorServiceBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

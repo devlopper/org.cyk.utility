@@ -2,10 +2,13 @@ package org.cyk.utility.number;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.constant.ConstantString;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.throwable.ThrowableHelper;
 
+@Dependent
 public class IntervalExtremityImpl extends AbstractObject implements IntervalExtremity,Serializable {
 	private static final long serialVersionUID = 1L;
 

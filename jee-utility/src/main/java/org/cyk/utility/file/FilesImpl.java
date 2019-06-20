@@ -8,9 +8,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.thread.ExecutorServiceBuilder;
 
+@Dependent
 public class FilesImpl extends AbstractCollectionInstanceImpl<File> implements Files,Serializable {
 	private static final long serialVersionUID = 1L;
 

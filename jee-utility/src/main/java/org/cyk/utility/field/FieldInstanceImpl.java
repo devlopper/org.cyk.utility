@@ -3,8 +3,11 @@ package org.cyk.utility.field;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
+@Dependent
 public class FieldInstanceImpl extends AbstractObject implements FieldInstance,Serializable {
 	private static final long serialVersionUID = 1L;
 	

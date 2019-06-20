@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
+import javax.enterprise.context.Dependent;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -13,6 +14,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
+@Dependent
 public class RepresentationFunctionReaderImpl extends AbstractRepresentationFunctionReaderImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

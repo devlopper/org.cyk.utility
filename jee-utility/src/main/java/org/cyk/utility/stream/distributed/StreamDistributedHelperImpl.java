@@ -2,13 +2,13 @@ package org.cyk.utility.stream.distributed;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.system.SystemHelper;
 import org.cyk.utility.type.BooleanHelper;
 
-@Singleton
+@ApplicationScoped
 public class StreamDistributedHelperImpl extends AbstractHelper implements StreamDistributedHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

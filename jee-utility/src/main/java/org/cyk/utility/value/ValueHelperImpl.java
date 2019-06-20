@@ -3,7 +3,7 @@ package org.cyk.utility.value;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.collection.CollectionInstance;
@@ -11,7 +11,7 @@ import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 
-@Singleton
+@ApplicationScoped
 public class ValueHelperImpl extends AbstractHelper implements ValueHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

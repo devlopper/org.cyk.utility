@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
 
+@Dependent
 public class InternalizationKeyRelatedStringsBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Strings>> implements InternalizationKeyRelatedStringsBuilder, Serializable {
 	private static final long serialVersionUID = 1L;
 

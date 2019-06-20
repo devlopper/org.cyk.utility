@@ -3,10 +3,12 @@ package org.cyk.utility.byte_;
 import java.io.Serializable;
 import java.security.MessageDigest;
 
+import javax.enterprise.context.Dependent;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Dependent
 public class HashFunctionImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements HashFunction,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -9,6 +9,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -19,6 +21,7 @@ import org.cyk.utility.string.StringLocatables;
 import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.value.ValueUsageType;
 
+@Dependent
 public class FieldGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Fields> implements FieldGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 

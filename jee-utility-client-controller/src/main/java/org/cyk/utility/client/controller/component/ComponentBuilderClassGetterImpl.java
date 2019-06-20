@@ -13,6 +13,8 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputBooleanButtonBuilder;
 import org.cyk.utility.client.controller.component.input.InputBooleanCheckBoxBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
+import org.cyk.utility.client.controller.component.input.InputDateBuilder;
+import org.cyk.utility.client.controller.component.input.InputDateTimeBuilder;
 import org.cyk.utility.client.controller.component.input.InputFileBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringEditorBuilder;
 import org.cyk.utility.client.controller.component.input.InputStringLineManyBuilder;
@@ -285,6 +287,17 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputFile.class,annotations);
 			if(annotationInputFile!=null)
 				return InputFileBuilder.class;	
+			
+			org.cyk.utility.client.controller.component.annotation.InputDate annotationInputDate =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputDate.class,annotations);
+			if(annotationInputDate!=null)
+				return InputDateBuilder.class;	
+			
+			org.cyk.utility.client.controller.component.annotation.InputDateTime annotationInputDateTime =
+					__getAnnotation__(org.cyk.utility.client.controller.component.annotation.InputDateTime.class,annotations);
+			if(annotationInputDateTime!=null)
+				return InputDateTimeBuilder.class;	
+			
 		//}else if(org.cyk.utility.client.controller.component.command.Commandable.class.equals(componentBaseClass)) {
 			/* Commandable */
 			

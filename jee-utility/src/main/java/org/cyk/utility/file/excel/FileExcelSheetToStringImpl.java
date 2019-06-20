@@ -2,18 +2,15 @@ package org.cyk.utility.file.excel;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Dependent
 public class FileExcelSheetToStringImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements FileExcelSheetToString,Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private FileExcelSheetDataArrayReader dataArrayReader;
-	
-	@Override
-	protected String __execute__() throws Exception {
-		// TODO Auto-generated method stub
-		return super.__execute__();
-	}
 	
 	@Override
 	public FileExcelSheetDataArrayReader getDataArrayReader() {

@@ -3,11 +3,11 @@ package org.cyk.utility.regularexpression;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.helper.AbstractHelper;
 
-@Singleton
+@ApplicationScoped
 public class RegularExpressionHelperImpl extends AbstractHelper implements RegularExpressionHelper, Serializable {
 	private static final long serialVersionUID = 1L;
 

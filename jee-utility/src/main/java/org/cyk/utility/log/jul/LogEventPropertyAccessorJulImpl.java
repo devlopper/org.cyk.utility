@@ -5,13 +5,13 @@ import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.log.AbstractLogEventPropertyAccessorImpl;
 import org.cyk.utility.log.LogLevel;
 
-@Singleton
+@ApplicationScoped
 public class LogEventPropertyAccessorJulImpl extends AbstractLogEventPropertyAccessorImpl implements LogEventPropertyAccessorJul, Serializable {
 	private static final long serialVersionUID = 1L;
 

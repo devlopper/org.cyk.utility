@@ -8,6 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.log.AbstractLogImpl;
 import org.cyk.utility.log.LogEventEntityBuilder;
@@ -16,6 +18,7 @@ import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.log.message.LogMessage;
 import org.cyk.utility.value.ValueHelper;
 
+@Dependent
 public class LogJulImpl extends AbstractLogImpl<Level> implements LogJul, Serializable {
 	private static final long serialVersionUID = 1L;
 

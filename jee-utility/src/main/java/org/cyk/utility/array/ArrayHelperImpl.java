@@ -4,13 +4,12 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Collection;
 
-import javax.inject.Singleton;
-
+import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.helper.AbstractHelper;
 
-@Singleton
+@ApplicationScoped
 public class ArrayHelperImpl extends AbstractHelper implements ArrayHelper,Serializable  {
 	private static final long serialVersionUID = 1L;
 

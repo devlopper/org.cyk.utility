@@ -3,8 +3,11 @@ package org.cyk.utility.log;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
+@Dependent
 public class LogEventEntityImpl extends AbstractObject implements LogEventEntity,Serializable {
 	private static final long serialVersionUID = 1L;
 

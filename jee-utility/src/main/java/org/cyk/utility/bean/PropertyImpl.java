@@ -3,10 +3,13 @@ package org.cyk.utility.bean;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.Classes;
 
+@Dependent
 public class PropertyImpl extends AbstractObject implements Property,Serializable {
 	private static final long serialVersionUID = 1L;
 

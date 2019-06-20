@@ -2,9 +2,12 @@ package org.cyk.utility.resource.locator;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 
+@Dependent
 public class UniformResourceLocatorStringBuilderImpl extends AbstractStringFunctionImpl implements UniformResourceLocatorStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

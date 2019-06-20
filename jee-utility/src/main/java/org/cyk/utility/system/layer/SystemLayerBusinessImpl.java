@@ -2,13 +2,13 @@ package org.cyk.utility.system.layer;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.clazz.ClassHelper;
 
-@Singleton
+@ApplicationScoped
 public class SystemLayerBusinessImpl extends AbstractSystemLayerImpl implements SystemLayerBusiness, Serializable {
 	private static final long serialVersionUID = 1L;
 

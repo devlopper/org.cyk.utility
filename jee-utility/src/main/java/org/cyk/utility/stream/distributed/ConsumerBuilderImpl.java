@@ -2,9 +2,12 @@ package org.cyk.utility.stream.distributed;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.stream.distributed.kafka.network.ConsumerMessageProcessorImpl;
 import org.cyk.utility.stream.distributed.kafka.network.MessageDeserializer;
 
+@Dependent
 public class ConsumerBuilderImpl extends AbstractProducerConsumerBuilderImpl<Consumer> implements ConsumerBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -4,9 +4,12 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.security.MessageDigest;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.io.IOUtils;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Dependent
 public class FileBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<File> implements FileBuilder,Serializable{
 	private static final long serialVersionUID = 1L;
 

@@ -30,6 +30,16 @@
     </tag>
     
     <tag>
+        <tag-name>inputDate</tag-name>
+        <source>tag/input/date/calendar.xhtml</source>
+    </tag>
+    
+    <tag>
+        <tag-name>inputDateTime</tag-name>
+        <source>tag/input/date/calendar.xhtml</source>
+    </tag>
+    
+    <tag>
         <tag-name>selectBooleanCheckbox</tag-name>
         <source>tag/input/boolean/selectBooleanCheckbox.xhtml</source>
     </tag>

@@ -2,9 +2,12 @@ package org.cyk.utility.clazz;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.collection.CollectionHelper;
 
+@Dependent
 public class ClassInstancesImpl extends AbstractCollectionInstanceImpl<ClassInstance> implements ClassInstances,Serializable {
 	private static final long serialVersionUID = 1L;
 

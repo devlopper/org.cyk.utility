@@ -3,11 +3,14 @@ package org.cyk.utility.criteria;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.value.ValueUsageType;
 
+@Dependent
 public class CriteriaImpl extends AbstractObject implements Criteria,Serializable {
 	private static final long serialVersionUID = 1L;
 

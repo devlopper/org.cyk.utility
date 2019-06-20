@@ -2,11 +2,11 @@ package org.cyk.utility.enumeration;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.helper.AbstractHelper;
 
-@Singleton
+@ApplicationScoped
 public class EnumerationHelperImpl extends AbstractHelper implements EnumerationHelper, Serializable {
 	private static final long serialVersionUID = 1L;
 

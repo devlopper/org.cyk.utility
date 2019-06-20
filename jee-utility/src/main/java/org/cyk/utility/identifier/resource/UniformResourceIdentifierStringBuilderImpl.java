@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.Map;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
@@ -15,6 +17,7 @@ import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.StringByStringMap;
 import org.cyk.utility.string.StringFormat;
 
+@Dependent
 public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFunctionImpl implements UniformResourceIdentifierStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

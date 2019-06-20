@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.function.FunctionExecutionMessage;
 import org.cyk.utility.helper.AbstractHelper;
@@ -13,7 +13,7 @@ import org.cyk.utility.stream.distributed.ProducerBuilder;
 import org.cyk.utility.stream.distributed.StreamDistributedHelper;
 import org.cyk.utility.stream.distributed.Topic;
 
-@Singleton
+@ApplicationScoped
 public class FunctionHelperImpl extends AbstractHelper implements FunctionHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

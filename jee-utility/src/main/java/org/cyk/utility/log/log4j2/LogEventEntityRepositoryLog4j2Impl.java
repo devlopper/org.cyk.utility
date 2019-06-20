@@ -6,8 +6,8 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
-import javax.inject.Singleton;
 
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
@@ -26,7 +26,7 @@ import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.repository.Repository;
 
 @Plugin(name = "CustomAppender", category = "Core", elementType = "apender", printObject = true) @Alternative
-@Singleton
+@ApplicationScoped
 public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender implements LogEventEntityRepositoryLog4j2, Serializable {
     private static final long serialVersionUID = 1L;
     

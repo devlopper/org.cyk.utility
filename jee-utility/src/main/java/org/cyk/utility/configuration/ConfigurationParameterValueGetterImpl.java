@@ -2,6 +2,8 @@ package org.cyk.utility.configuration;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.context.ContextGetter;
@@ -14,6 +16,7 @@ import org.cyk.utility.system.OperatingSystemHelper;
 import org.cyk.utility.system.SystemHelper;
 import org.cyk.utility.value.IsNullChecker;
 
+@Dependent
 public class ConfigurationParameterValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements ConfigurationParameterValueGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

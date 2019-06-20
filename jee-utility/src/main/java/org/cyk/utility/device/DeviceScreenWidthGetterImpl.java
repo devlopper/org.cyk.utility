@@ -2,8 +2,11 @@ package org.cyk.utility.device;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Dependent
 public class DeviceScreenWidthGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Number> implements DeviceScreenWidthGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

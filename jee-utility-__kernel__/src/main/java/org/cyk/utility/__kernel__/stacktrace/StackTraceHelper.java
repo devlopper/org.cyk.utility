@@ -11,4 +11,8 @@ public interface StackTraceHelper extends Singleton {
 	String getStackTraceAsString(String packagePrefix);
 	
 	String getStackTraceAsString();
+	
+	String getCallerMethodName(Integer offset);
+	
+	String getCallerMethodName();
 }

@@ -2,10 +2,12 @@ package org.cyk.utility.configuration;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.annotation.Configuration;
 import org.cyk.utility.value.AbstractIsNullCheckerImpl;
 
-@Configuration
+@Dependent @Configuration
 public class IsNullCheckerImpl extends AbstractIsNullCheckerImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -2,6 +2,7 @@ package org.cyk.utility.__kernel__.maven.pom;
 
 import java.io.StringReader;
 
+import javax.enterprise.context.Dependent;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -9,6 +10,7 @@ import javax.xml.bind.Unmarshaller;
 import org.cyk.utility.__kernel__.KernelHelperImpl;
 import org.cyk.utility.__kernel__.properties.Properties;
 
+@Dependent
 public class PomBuilderImpl implements PomBuilder {
 
 	/**/

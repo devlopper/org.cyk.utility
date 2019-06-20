@@ -2,6 +2,8 @@ package org.cyk.utility.stream.distributed.kafka;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -13,6 +15,7 @@ import org.cyk.utility.stream.distributed.Message;
 import org.cyk.utility.stream.distributed.ProducerCallback;
 import org.cyk.utility.string.Strings;
 
+@Dependent
 public class ProducerImpl extends AbstractProducerImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

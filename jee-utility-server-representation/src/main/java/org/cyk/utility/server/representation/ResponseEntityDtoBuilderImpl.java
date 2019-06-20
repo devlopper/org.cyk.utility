@@ -2,9 +2,12 @@ package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.system.action.SystemAction;
 
+@Dependent
 public class ResponseEntityDtoBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<ResponseEntityDto> implements ResponseEntityDtoBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

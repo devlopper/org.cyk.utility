@@ -3,15 +3,14 @@ package org.cyk.utility.assertion.junit;
 import java.io.Serializable;
 import java.util.Map;
 
-import javax.inject.Singleton;
-
+import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AbstractAssertionHelperImpl;
 import org.cyk.utility.assertion.AssertionHelper;
 import org.cyk.utility.field.FieldValueGetter;
 import org.junit.Assert;
 
-@Singleton
+@ApplicationScoped
 public class AssertionHelperJunitImpl extends AbstractAssertionHelperImpl implements AssertionHelperJunit,Serializable {
 	private static final long serialVersionUID = 1L;
 	

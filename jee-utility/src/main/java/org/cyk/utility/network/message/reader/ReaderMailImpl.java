@@ -2,6 +2,7 @@ package org.cyk.utility.network.message.reader;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
 import javax.mail.Authenticator;
 import javax.mail.Flags;
 import javax.mail.Folder;
@@ -16,6 +17,7 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.network.protocol.Protocol;
 import org.cyk.utility.network.protocol.ProtocolInteractiveMailAccess;
 
+@Dependent
 public class ReaderMailImpl extends AbstractReadderImpl implements ReaderMail,Serializable {
 	private static final long serialVersionUID = 1L;
 

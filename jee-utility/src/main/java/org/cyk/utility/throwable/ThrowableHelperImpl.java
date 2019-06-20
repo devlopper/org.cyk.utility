@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.system.exception.SystemException;
 import org.cyk.utility.value.ValueHelper;
 
-@Singleton
+@ApplicationScoped
 public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

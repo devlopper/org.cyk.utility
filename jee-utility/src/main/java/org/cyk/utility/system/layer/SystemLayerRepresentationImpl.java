@@ -2,11 +2,11 @@ package org.cyk.utility.system.layer;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
 
-@Singleton
+@ApplicationScoped
 public class SystemLayerRepresentationImpl extends AbstractSystemLayerImpl implements SystemLayerRepresentation, Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
 import javax.imageio.ImageIO;
 
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -15,6 +16,7 @@ import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 
+@Dependent
 public class BytesOfBarCodeToStringImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements BytesOfBarCodeToString,Serializable {
 	private static final long serialVersionUID = 1L;
 	

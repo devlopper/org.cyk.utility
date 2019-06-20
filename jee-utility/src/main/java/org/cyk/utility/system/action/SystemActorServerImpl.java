@@ -2,9 +2,9 @@ package org.cyk.utility.system.action;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
-@Singleton
+@ApplicationScoped
 public class SystemActorServerImpl extends AbstractSystemActorImpl implements SystemActorServer, Serializable {
 	private static final long serialVersionUID = 1L;
 

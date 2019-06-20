@@ -3,7 +3,7 @@ package org.cyk.utility.server.persistence.jpa;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -12,7 +12,7 @@ import org.cyk.utility.server.persistence.query.AbstractPersistenceQueryReposito
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 
-@Singleton
+@ApplicationScoped
 public class PersistenceQueryRepositoryImpl extends AbstractPersistenceQueryRepositoryImpl implements PersistenceQueryRepository, Serializable {
 	private static final long serialVersionUID = 1L;
 

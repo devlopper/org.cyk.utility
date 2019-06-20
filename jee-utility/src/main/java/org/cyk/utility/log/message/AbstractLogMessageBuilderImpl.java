@@ -21,7 +21,6 @@ public abstract class AbstractLogMessageBuilderImpl extends AbstractFunctionWith
 		getProperties().setParameterFormat("%s="+getParameterFormatRightSide());
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected LogMessage __execute__() {
 		LogMessage message = new LogMessage();
@@ -90,7 +89,6 @@ public abstract class AbstractLogMessageBuilderImpl extends AbstractFunctionWith
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Object> getParameters() {
 		return (Collection<Object>) getProperties().getParameters();

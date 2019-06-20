@@ -3,8 +3,11 @@ package org.cyk.utility.resource.locator;
 import java.io.Serializable;
 import java.net.URL;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Dependent
 public class UrlBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<URL> implements UrlBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

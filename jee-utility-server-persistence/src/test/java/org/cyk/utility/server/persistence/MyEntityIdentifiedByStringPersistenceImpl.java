@@ -49,7 +49,7 @@ public class MyEntityIdentifiedByStringPersistenceImpl extends AbstractPersisten
 	
 	@Override
 	public Long executeIncrementIntegerValue(Integer value) {
-		return __modify__(____getQueryParameters____(null,value));
+		return __modify__(null,____getQueryParameters____(null,value));
 	}
 	
 	protected Object[] __getQueryParameters__(String queryIdentifier,Properties properties,Object...objects){

@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.object.ObjectByIntegerMap;
 
+@Dependent
 public class StringFormatImpl extends AbstractObject implements StringFormat,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-@SuppressWarnings("rawtypes")
+@Dependent @SuppressWarnings("rawtypes")
 public class EnumCollectionGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection> implements EnumCollectionGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

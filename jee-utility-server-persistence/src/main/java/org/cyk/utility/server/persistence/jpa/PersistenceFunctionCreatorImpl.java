@@ -1,5 +1,6 @@
 package org.cyk.utility.server.persistence.jpa;
 
+import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 
 import org.cyk.utility.server.persistence.AbstractPersistenceFunctionCreatorImpl;
@@ -9,6 +10,7 @@ import org.cyk.utility.server.persistence.PersistenceFunctionCreator;
  * @author CYK
  *
  */
+@Dependent
 public class PersistenceFunctionCreatorImpl extends AbstractPersistenceFunctionCreatorImpl implements PersistenceFunctionCreator {
 	private static final long serialVersionUID = 1L;
 	

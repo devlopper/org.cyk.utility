@@ -3,12 +3,14 @@ package org.cyk.utility.server.business;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.value.ValueUsageType;
 
+@ApplicationScoped
 public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> implements Business,Serializable {
 	private static final long serialVersionUID = 1L;
 

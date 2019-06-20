@@ -73,6 +73,12 @@
 										<c:when test="#{componentHelper.isInputFile(indexComponent)}">
 											<cyk:inputFile value="#{indexComponent}" />
 										</c:when>
+										<c:when test="#{componentHelper.isInputDate(indexComponent)}">
+											<cyk:inputDate value="#{indexComponent}" />
+										</c:when>
+										<c:when test="#{componentHelper.isInputDateTime(indexComponent)}">
+											<cyk:inputDateTime value="#{indexComponent}" />
+										</c:when>
 										
 										<!-- Commandable -->
 										

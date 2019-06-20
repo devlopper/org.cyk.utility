@@ -3,13 +3,13 @@ package org.cyk.utility.random;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.text.CharacterPredicate;
 import org.apache.commons.text.RandomStringGenerator;
 import org.cyk.utility.helper.AbstractHelper;
 
-@Singleton
+@ApplicationScoped
 public class RandomHelperImpl extends AbstractHelper implements RandomHelper, Serializable {
 	private static final long serialVersionUID = 1L;
 

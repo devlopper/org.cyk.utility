@@ -8,6 +8,7 @@ import java.util.HashSet;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.method.MethodGetter;
@@ -343,6 +344,14 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	protected static PersistenceLayer __injectPersistenceLayer__() {
 		return __inject__(PersistenceLayer.class);
+	}
+	
+	protected PersistenceQueryIdentifierStringBuilder __injectPersistenceQueryIdentifierStringBuilder__() {
+		return __inject__(PersistenceQueryIdentifierStringBuilder.class);
+	}
+	
+	protected static String __getStackTraceCallerMethodName__() {
+		return __inject__(StackTraceHelper.class).getCallerMethodName(1);
 	}
 	
 }

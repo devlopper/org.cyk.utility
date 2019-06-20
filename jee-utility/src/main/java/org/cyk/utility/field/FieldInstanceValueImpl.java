@@ -2,8 +2,11 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
+@Dependent
 public class FieldInstanceValueImpl extends AbstractObject implements FieldInstanceValue,Serializable {
 	private static final long serialVersionUID = 1L;
 	

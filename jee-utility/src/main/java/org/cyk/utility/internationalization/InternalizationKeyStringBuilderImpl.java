@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.enterprise.context.Dependent;
+
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.array.ArrayHelper;
@@ -11,6 +13,7 @@ import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemAction;
 
+@Dependent
 public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionImpl implements InternalizationKeyStringBuilder, Serializable {
 	private static final long serialVersionUID = 1L;
 

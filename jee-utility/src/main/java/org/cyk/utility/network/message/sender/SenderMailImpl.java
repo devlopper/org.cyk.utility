@@ -2,6 +2,7 @@ package org.cyk.utility.network.message.sender;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -15,6 +16,7 @@ import org.cyk.utility.network.message.Receivers;
 import org.cyk.utility.network.protocol.Protocol;
 import org.cyk.utility.network.protocol.ProtocolSimpleMailTransfer;
 
+@Dependent
 public class SenderMailImpl extends AbstractSenderImpl implements SenderMail,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -3,14 +3,14 @@ package org.cyk.utility.server.representation;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
 import org.cyk.utility.value.ValueUsageType;
 
-@Singleton
+@ApplicationScoped
 public class RepresentationImpl extends AbstractObject implements Representation, Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -2,6 +2,7 @@ package org.cyk.utility.server.persistence.jpa;
 
 import java.util.Map;
 
+import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -11,6 +12,7 @@ import org.cyk.utility.server.persistence.PersistenceFunctionModifier;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.system.action.SystemAction;
 
+@Dependent
 public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunctionModifierImpl implements PersistenceFunctionModifier {
 	private static final long serialVersionUID = 1L;
 	

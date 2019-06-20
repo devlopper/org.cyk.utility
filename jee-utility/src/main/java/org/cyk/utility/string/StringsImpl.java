@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.collection.CollectionHelper;
 
+@Dependent
 public class StringsImpl extends AbstractCollectionInstanceImpl<String> implements Strings,Serializable {
 	private static final long serialVersionUID = 1L;
 

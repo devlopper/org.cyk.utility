@@ -2,9 +2,11 @@ package org.cyk.utility.clazz;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-@SuppressWarnings("rawtypes") // <?> has been removed to solve WELD-001125: Illegal bean type
+@Dependent @SuppressWarnings("rawtypes") // <?> has been removed to solve WELD-001125: Illegal bean type
 public class ClassLocatorImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class> implements ClassLocator , Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -2,12 +2,12 @@ package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
 
-@Singleton
+@ApplicationScoped
 public class RepresentationLayerImpl extends AbstractSingleton implements RepresentationLayer, Serializable {
 	private static final long serialVersionUID = 1L;
 
