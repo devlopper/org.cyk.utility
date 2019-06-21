@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -236,6 +237,16 @@ public class KernelHelperImpl implements KernelHelper,Serializable {
 		return clazz;
 	}
 	
+	@Override
+	public <TYPE> Class<TYPE> getParameterAt(Class<?> aClass, Integer index, Class<TYPE> typeClass) {
+		return __getParameterAt__(aClass, index, typeClass);
+	}
+	
+	@Override
+	public Collection<String> splitByCharacterTypeCamelCase(String string) {
+		return __splitByCharacterTypeCamelCase__(string);
+	}
+	
 	/**/
 
 	public static Boolean __isInstanceOf__(Class<?> aClass, Class<?> baseClass) {
@@ -345,6 +356,20 @@ public class KernelHelperImpl implements KernelHelper,Serializable {
 				throw new RuntimeException(e);
 		}
 		return clazz;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <TYPE> Class<TYPE> __getParameterAt__(Class<?> aClass, Integer index, Class<TYPE> typeClass) {
+		Class<TYPE> parameter = null;
+		if(aClass != null && index != null && typeClass != null && aClass.getGenericSuperclass() instanceof ParameterizedType){
+			parameter = (Class<TYPE>) ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments()[index];
+		}
+		return parameter;
+	}
+	
+	public static Collection<String> __splitByCharacterTypeCamelCase__(String string) {
+		String[] strings =	StringUtils.splitByCharacterTypeCamelCase(string);
+		return strings == null || strings.length == 0 ? null : Arrays.asList(strings);
 	}
 	
 	private static final String IMPL = "Impl";

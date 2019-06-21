@@ -3,6 +3,11 @@ package org.cyk.utility.__kernel__.object.__static__.representation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.StringWriter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,6 +17,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -197,6 +203,118 @@ public class RepresentationBasedJaxbUnitTest {
 		}
 	}
 	
+	@Test
+	public void marshal_localDate() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Dates.class);
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			StringWriter writer = new StringWriter();
+			marshaller.marshal(new Dates().setLocalDate(LocalDate.of(2000, 3, 1)), writer);
+			String string = writer.toString();
+			assertThat(string).contains("<localDate>2000-03-01</localDate>");
+		} catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Test
+	public void unmarshal_localDate() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Dates.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			Dates dates = (Dates) unmarshaller.unmarshal(getClass().getResourceAsStream("dates.xml"));
+			Assert.assertTrue(dates.getLocalDate().equals(LocalDate.of(2005, 10, 17)));
+		} catch(Exception exception) {
+			exception.printStackTrace();
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Test
+	public void marshal_localDateTime() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Dates.class);
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			StringWriter writer = new StringWriter();
+			marshaller.marshal(new Dates().setLocalDateTime(LocalDateTime.of(2000, 3, 1,10,15)), writer);
+			String string = writer.toString();
+			assertThat(string).contains("<localDateTime>2000-03-01T10:15:00</localDateTime>");
+		} catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Test
+	public void unmarshal_localDateTime() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Dates.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			Dates dates = (Dates) unmarshaller.unmarshal(getClass().getResourceAsStream("dates.xml"));
+			Assert.assertTrue(dates.getLocalDateTime().equals(LocalDateTime.of(2010, 11, 25,23,18,13)));
+		} catch(Exception exception) {
+			exception.printStackTrace();
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Test
+	public void marshal_localTime() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Dates.class);
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			StringWriter writer = new StringWriter();
+			marshaller.marshal(new Dates().setLocalTime(LocalTime.of(10,15)), writer);
+			String string = writer.toString();
+			assertThat(string).contains("<localTime>10:15:00</localTime>");
+		} catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Test
+	public void unmarshal_localTime() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Dates.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			Dates dates = (Dates) unmarshaller.unmarshal(getClass().getResourceAsStream("dates.xml"));
+			Assert.assertTrue(dates.getLocalTime().equals(LocalTime.of(12,15)));
+		} catch(Exception exception) {
+			exception.printStackTrace();
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Test
+	public void marshal_zonedDateTime() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Dates.class);
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			StringWriter writer = new StringWriter();
+			marshaller.marshal(new Dates().setZonedDateTime(ZonedDateTime.of(2000, 3, 1,10,15,0,0,ZoneId.of("Z"))), writer);
+			String string = writer.toString();
+			assertThat(string).contains("<zonedDateTime>2000-03-01T10:15:00Z</zonedDateTime>");
+		} catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Test
+	public void unmarshal_zonedDateTime() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Dates.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			Dates dates = (Dates) unmarshaller.unmarshal(getClass().getResourceAsStream("dates.xml"));
+			Assert.assertTrue(dates.getZonedDateTime().equals(ZonedDateTime.of(2000, 3, 1,10,15,14,0,ZoneId.of("Z"))));
+		} catch(Exception exception) {
+			exception.printStackTrace();
+			throw new RuntimeException(exception);
+		}
+	}
+	
 	/**/
 	
 	@XmlRootElement @Getter @Setter @Accessors(chain=true)
@@ -241,5 +359,33 @@ public class RepresentationBasedJaxbUnitTest {
 	public static class Two {
 		private String f1;
 		private String f2;
+	}
+	
+	@XmlRootElement @Getter @Setter @Accessors(chain=true)
+	public static class Dates {
+		private LocalDate localDate;
+		private LocalTime localTime;
+		private LocalDateTime localDateTime;
+		private ZonedDateTime zonedDateTime;
+		
+		@XmlJavaTypeAdapter(LocalDateAdapter.class)
+		public LocalDate getLocalDate() {
+			return localDate;
+		}
+		
+		@XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+		public LocalDateTime getLocalDateTime() {
+			return localDateTime;
+		}
+		
+		@XmlJavaTypeAdapter(LocalTimeAdapter.class)
+		public LocalTime getLocalTime() {
+			return localTime;
+		}
+		
+		@XmlJavaTypeAdapter(ZonedDateTimeAdapter.class)
+		public ZonedDateTime getZonedDateTime() {
+			return zonedDateTime;
+		}
 	}
 }

@@ -46,4 +46,8 @@ public interface KernelHelper {
 	void executeMethodSetter(Object object,String fieldName,Object value);
 
 	Class<?> getFieldType(Class<?> aClass, String fieldName);
+	
+	<TYPE> Class<TYPE> getParameterAt(Class<?> aClass, Integer index, Class<TYPE> typeClass);
+
+	Collection<String> splitByCharacterTypeCamelCase(String string);
 }
