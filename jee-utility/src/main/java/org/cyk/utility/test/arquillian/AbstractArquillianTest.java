@@ -9,6 +9,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
@@ -16,6 +17,12 @@ public abstract class AbstractArquillianTest extends AbstractTest implements Ser
 	private static final long serialVersionUID = 1L;
 
 	/**/
+	
+	@Before //This to suppot junit4 because of arquillian.
+	@Override
+	public void listenBefore() {
+		super.listenBefore();
+	}
 	
 	protected static <ARCHIVE extends Archive<?>> ARCHIVE addBeanXml(ARCHIVE archive,Object beansXml){
 		if(beansXml == null){

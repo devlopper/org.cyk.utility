@@ -11,7 +11,7 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 	
 	protected static Integer LISTEN_BEFORE_CALL_COUNT = 0;
 	
-	@BeforeEach
+	@BeforeEach 
 	public void listenBefore() {
 		__listenBefore__();
 		
