@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
+import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.model.ListDataModel;
 
@@ -22,19 +22,19 @@ import org.cyk.utility.client.controller.component.grid.column.Column;
 import org.cyk.utility.client.controller.component.grid.column.Columns;
 import org.cyk.utility.client.controller.component.grid.row.Row;
 import org.cyk.utility.client.controller.component.grid.row.Rows;
+import org.cyk.utility.client.controller.component.input.InputStringLineOne;
 import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.output.OutputString;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.tree.Tree;
 import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
-import org.cyk.utility.client.controller.web.jsf.JavaServerFacesHelper;
+import org.cyk.utility.client.controller.web.jsf.primefaces.component.ColumnBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.CommandButtonBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.MenuBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.OrganigramNodeBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
-import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueHelper;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.inputtext.InputText;
@@ -76,7 +76,14 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		
 		if(component instanceof Grid) 
 			return __build__((Grid) component);
+		
+		if(component instanceof InputStringLineOne) 
+			return __build__((InputStringLineOne) component);
 		return null;
+	}
+	
+	public static UIComponent __build__(InputStringLineOne inputStringLineOne) {
+		return new HtmlInputText();
 	}
 	
 	public static UIComponent __build__(View view) {
@@ -88,8 +95,11 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		if(__inject__(CollectionHelper.class).isNotEmpty(components)) {
 			outputPanel = new OutputPanel();
 			outputPanel.setStyleClass(components.getLayout().getStyle().getClassesAsString());
-			for(Component index : components.get())
-				outputPanel.getChildren().add((UIComponent) __build__(index));
+			for(Component index : components.get()) {
+				UIComponent uiComponent = (UIComponent) __build__(index);
+				if(uiComponent != null)
+					outputPanel.getChildren().add(uiComponent);
+			}
 		}
 		return outputPanel;
 	}
@@ -184,84 +194,11 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 		
 		Columns columns = grid.getColumns();
 		if(__inject__(CollectionHelper.class).isNotEmpty(columns))
-			for(Column index : columns.get())
-				__buildDataTableAddColumn__(dataTable,grid, index);
+			for(Column index : columns.get()) {
+				org.primefaces.component.column.Column __column__ = __inject__(ColumnBuilder.class).setDataTable(dataTable).setGrid(grid).setModel(index).execute().getOutput();
+				dataTable.getColumns().add(__column__);
+			}
 		return dataTable;
 	}
-	
-	public static void __buildDataTableAddColumn__(DataTable dataTable,Grid grid,Column column) {
-		org.primefaces.component.column.Column __column__ = new org.primefaces.component.column.Column();
-		UIComponent uiComponent =__build__(column.getView(ViewMap.HEADER));
-		if(uiComponent!=null)
-			__column__.setHeader(uiComponent);
-		
-		uiComponent = __build__(column.getView(ViewMap.BODY));
-		if(uiComponent==null) {
-			String valuePropertyName = __inject__(CollectionHelper.class).isEmpty(grid.getObjects()) ? column.getValuePropertyName() : column.getFieldName();
-			if(__inject__(StringHelper.class).isNotBlank(valuePropertyName)) {
-				HtmlOutputText htmlOutputText = new HtmlOutputText();
-				//__setValueExpression__(htmlOutputText, "value", __buildValueExpressionString__(__formatExpression__(dataTable.getVar()+"['"+valuePropertyName+"']")));
-				__setValueExpression__(htmlOutputText, "value", __buildValueExpressionString__(__formatExpression__(dataTable.getVar()+"."+valuePropertyName)));
-				uiComponent = htmlOutputText;
-			}else {
-				
-			}
-		}else {
-			
-		}
-		if(uiComponent!=null)
-			__column__.getChildren().add(uiComponent);
-		
-		uiComponent = __build__(column.getView(ViewMap.FOOTER));
-		if(uiComponent!=null)
-			__column__.setFooter(uiComponent);
-		
-		dataTable.getColumns().add(__column__);
-	}
-	
-	/* View to UIComponent */
-	
-	/*private Collection<UIComponent> __buildComponents__(View view) {
-		Collection<UIComponent> uiComponents = null;
-		if(view!=null) {
-			Components components = view.getComponents();
-			if(__inject__(CollectionHelper.class).isNotEmpty(components)) {
-				uiComponents = new ArrayList<>();
-				for(Component index : components.get()) {
-					UIComponent uiComponent = (UIComponent) __inject__(ComponentTargetModelBuilder.class).setComponent(index).execute().getOutput();
-					if(uiComponent!=null)
-						uiComponents.add(uiComponent);
-				}
-			}
-		}
-		return uiComponents;
-	}*/
-	
-	/**/
-	
-	/*private void __setAttributes__(UIComponent uiComponent,Component component) {
-		
-	}*/
-	
-	/**/
-	
-	private static JavaServerFacesHelper __injectJavaServerFacesHelper__() {
-		return __inject__(JavaServerFacesHelper.class);
-	}
-	
-	private static String __formatExpression__(String expression) {
-		return __injectJavaServerFacesHelper__().formatExpression(expression);
-	}
-	
-	private static ValueExpression __buildValueExpression__(String expression,Class<?> returnType) {
-		return __injectJavaServerFacesHelper__().buildValueExpression(expression, returnType);
-	}
-	
-	private static ValueExpression __buildValueExpressionString__(String expression) {
-		return __buildValueExpression__(expression, String.class);
-	}
-	
-	private static void __setValueExpression__(UIComponent uiComponent,String propertyName,ValueExpression valueExpression) {
-		__injectJavaServerFacesHelper__().setValueExpression(uiComponent, propertyName, valueExpression);
-	}
+
 }

@@ -26,6 +26,9 @@ public class Data extends AbstractDataImpl {
 	private String number;
 	private String date;
 	
+	@Input @InputString @InputStringLineOne @NotNull
+	private String inputText;
+	
 	@Override
 	public Data setOrderNumber(Object orderNumber) {
 		return (Data) super.setOrderNumber(orderNumber);

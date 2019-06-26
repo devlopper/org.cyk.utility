@@ -56,14 +56,13 @@ public class CommandButtonBuilderImpl extends AbstractUIComponentBuilderImpl<Com
 			commandButton.setType("submit");
 			
 			String update = __injectPrimefacesHelper__().computeAttributeUpdate(commandable,__inject__(ComponentHelper.class).getGlobalMessagesTargetsIdentifiers());
+			commandButton.setUpdate(update);
 			
 			String commandableIdentifier = commandable.getIdentifier().toString();
 			if(__inject__(StringHelper.class).isNotBlank(commandable.getCommand().getContainerContextDependencyInjectionBeanName())) {
 				String actionExpressionLanguage = commandable.getCommand().getContainerContextDependencyInjectionBeanName()+".getCommandableByIdentifier('"+commandableIdentifier+"').command.function.executeToReturnVoid";
 				commandButton.setActionExpression(__inject__(JavaServerFacesHelper.class).buildMethodExpression(actionExpressionLanguage, Void.class,new Class<?>[] {}));	
 			}
-		
-			commandButton.setUpdate(update);
 			
 			//commandButton.setImmediate(Boolean.TRUE);
 			//System.out.println("CommandButtonBuilder.build() UPDATE : "+update);

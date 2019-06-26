@@ -2,17 +2,14 @@ package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.c
 
 import java.io.Serializable;
 
-import javax.faces.application.ConfigurableNavigationHandler;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.cyk.utility.client.controller.AbstractObject;
-import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.annotation.CommandableButton;
-import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.component.grid.column.ColumnBuilder;
+import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutTypeGrid;
 import org.cyk.utility.client.controller.component.menu.MenuBuilderMap;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
@@ -21,8 +18,6 @@ import org.cyk.utility.client.controller.component.window.WindowContainerManaged
 import org.cyk.utility.client.controller.data.AbstractRowDataImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionUpdate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -35,54 +30,36 @@ public class GridPage extends AbstractPageContainerManagedImpl implements Serial
 	@Override
 	protected ViewBuilder __getViewBuilder__() {
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
-		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
-		layoutTypeGrid.setIsHasHeader(Boolean.TRUE).setIsHasFooter(Boolean.TRUE).setIsHasOrderNumberColumn(Boolean.TRUE).setIsHasCommandablesColumn(Boolean.TRUE);
-		GridBuilder gridBuilder = __inject__(GridBuilder.class)
+		viewBuilder.setContext(__getRequest__()).setUniformResourceLocatorMap(__getUniformResourceLocatorMap__());
+		viewBuilder.getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE);
+		
+		ColumnBuilder inputTextColumn = __inject__(ColumnBuilder.class).setHeaderTextValue("InputText").addFieldNameStrings("data","inputText");
+		InputStringLineOneBuilder inputStringLineOneBuilder = __inject__(InputStringLineOneBuilder.class);
+		
+		inputTextColumn.getViewMap(Boolean.TRUE).get(ViewMap.BODY,Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).setIsCreateLayoutItemOnAddComponent(Boolean.TRUE);
+		inputTextColumn.getViewMap(Boolean.TRUE).get(ViewMap.BODY,Boolean.TRUE).addComponentBuilder(inputStringLineOneBuilder);
+		
+		GridBuilder gridBuilder = __inject__(GridBuilder.class).setRowClass(Row.class).setRowDataClass(Data.class)
 				.addColumns(__inject__(ColumnBuilder.class).setHeaderTextValue("String").addFieldNameStrings("data","string")
 						,__inject__(ColumnBuilder.class).setHeaderTextValue("Number").setFooterTextValue("Total : ?").addFieldNameStrings("data","number")
 						,__inject__(ColumnBuilder.class).setHeaderTextValue("Date").addFieldNameStrings("data","date")
+						,inputTextColumn
 						)
-				
-				.addObjects(new Data().setString("string 01").setNumber("12").setDate("01/02/2001")
+				.addObjects(new Data().setString("string 01").setNumber("12").setDate("01/02/2001").setInputText("i01")
 						,new Data().setString("string 02").setNumber("1")
 						,new Data().setString("string 03").setNumber("349")
 						,new Data().setString("string 041").setDate("17/07/2018")
 						,new Data().setString("another string").setNumber("my number").setDate("yesterday")
 						)
-				.setRowDataClass(Data.class)
-				;
-
+			.setIsLazyLoadable(Boolean.FALSE)
+			;
+		
+		gridBuilder.setContext(__getRequest__()).setUniformResourceLocatorMap(__getUniformResourceLocatorMap__());
+		
+		LayoutTypeGrid layoutTypeGrid = __inject__(LayoutTypeGrid.class);
+		layoutTypeGrid.setIsHasHeader(Boolean.TRUE).setIsHasFooter(Boolean.TRUE).setIsHasOrderNumberColumn(Boolean.TRUE).setIsHasCommandablesColumn(Boolean.TRUE);
 		gridBuilder.getView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).getLayout(Boolean.TRUE).setType(layoutTypeGrid);
-		
-		gridBuilder.getRows(Boolean.TRUE).setRowClass(Row.class);
-		
-		gridBuilder.getViewMap(Boolean.TRUE).set(ViewMap.HEADER,__inject__(ViewBuilder.class));
-		
-		CommandableBuilder commandable = __inject__(CommandableBuilder.class).setName("Créer");
-		commandable.addRoles(ComponentRole.CREATOR);
-		commandable.setNavigationIdentifier("gridCreateView");
-		commandable.getNavigation().getProperties().setContext(__getContext__());
-		commandable.getNavigation().getProperties().setMap(__getUniformResourceLocatorMap__());
-		gridBuilder.getViewMap(Boolean.TRUE).get(ViewMap.HEADER).getComponentsBuilder(Boolean.TRUE).addComponents(commandable);
-		
-		commandable = __inject__(CommandableBuilder.class).setName("Modifier");
-		commandable.addRoles(ComponentRole.MODIFIER);
-		commandable.setNavigationIdentifier("gridEditView");
-		commandable.getNavigation().setSystemAction(__inject__(SystemActionUpdate.class).setEntityClass(Data.class));
-		commandable.getNavigation().getProperties().setContext(__getContext__());
-		commandable.getNavigation().getProperties().setMap(__getUniformResourceLocatorMap__());
-		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).addComponents(commandable);
-		
-		commandable = __inject__(CommandableBuilder.class).setName("Supprimer");
-		commandable.addRoles(ComponentRole.MODIFIER);
-		commandable.setNavigationIdentifier("gridEditView");
-		commandable.getNavigation().setSystemAction(__inject__(SystemActionDelete.class));
-		commandable.getNavigation().getProperties().setContext(__getContext__());
-		commandable.getNavigation().getProperties().setMap( ((ConfigurableNavigationHandler)((FacesContext)__getContext__()).getApplication().getNavigationHandler()).getNavigationCases() );
-		gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).getComponentsBuilder(Boolean.TRUE).addComponents(commandable);
-		
-		//gridBuilder.getCommandablesColumnBodyView(Boolean.TRUE).addNavigationCommandablesBySystemActionClasses(SystemActionRead.class/*,SystemActionUpdate.class,SystemActionDelete.class*/);
-		
+						
 		viewBuilder.addComponentBuilder(gridBuilder);
 		
 		return viewBuilder;

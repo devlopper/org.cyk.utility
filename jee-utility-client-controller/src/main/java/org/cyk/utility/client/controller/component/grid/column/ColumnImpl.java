@@ -11,6 +11,7 @@ public class ColumnImpl extends AbstractDimensionImpl implements Column,Serializ
 
 	private ViewMap viewMap;
 	private String fieldName,valuePropertyName;
+	private Object width;
 	
 	@Override
 	public ViewMap getViewMap() {
@@ -48,6 +49,17 @@ public class ColumnImpl extends AbstractDimensionImpl implements Column,Serializ
 	@Override
 	public Column setValuePropertyName(String valuePropertyName) {
 		this.valuePropertyName = valuePropertyName;
+		return this;
+	}
+	
+	@Override
+	public Object getWidth() {
+		return width;
+	}
+	
+	@Override
+	public Column setWidth(Object width) {
+		this.width = width;
 		return this;
 	}
 }

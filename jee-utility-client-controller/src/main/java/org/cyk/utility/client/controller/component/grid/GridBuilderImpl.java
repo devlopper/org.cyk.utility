@@ -409,7 +409,8 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 
 	@Override
 	public ColumnBuilder getOrderNumberColumn(Boolean injectIfNull) {
-		return ((ColumnBuilder) __getInjectIfNull__(FIELD_ORDER_NUMBER_COLUMN, injectIfNull)).setHeaderTextValue("#").addFieldNameStrings("orderNumber");
+		return ((ColumnBuilder) __getInjectIfNull__(FIELD_ORDER_NUMBER_COLUMN, injectIfNull)).setHeaderTextValue("#").addFieldNameStrings("orderNumber")
+				.setWidth("15");
 	}
 
 	@Override

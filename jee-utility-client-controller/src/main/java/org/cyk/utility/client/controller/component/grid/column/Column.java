@@ -16,4 +16,7 @@ public interface Column extends Dimension {
 	Column setViewMap(ViewMap viewMap);
 	View getView(String key);
 	
+	Object getWidth();
+	Column setWidth(Object width);
+	
 }

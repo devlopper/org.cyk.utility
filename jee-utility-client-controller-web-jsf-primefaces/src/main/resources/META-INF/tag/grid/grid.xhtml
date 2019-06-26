@@ -9,8 +9,8 @@
 	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
 	<ui:decorate template="/template.xhtml">
-		<ui:define name="valueIsNotNull">
-			<p:dataTable id="dataTable" binding="#{value.targetBindingValue}" widgetVar="#{value.properties.widgetVar}"/>
+		<ui:define name="valueIsNotNull">			
+			<p:dataTable id="dataTable" binding="#{value.targetBindingValue}"/>
 		</ui:define>
 	</ui:decorate>	
 	

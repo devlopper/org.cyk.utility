@@ -36,4 +36,8 @@ public interface ColumnBuilder extends DimensionBuilder<Column> {
 	ColumnBuilder setFooterText(OutputStringTextBuilder footerText);
 	ColumnBuilder setFooterTextValue(String footerTextValue);
 	
+	Object getWidth();
+	ColumnBuilder setWidth(Object width);
+	
+	
 }

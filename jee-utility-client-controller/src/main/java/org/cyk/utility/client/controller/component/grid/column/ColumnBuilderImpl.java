@@ -21,6 +21,7 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 	private ViewBuilderMap viewMap;
 	private OutputStringTextBuilder headerText,footerText;
 	private Strings fieldNameStrings;
+	private Object width;
 	
 	@Override
 	protected void __execute__(Column column) {
@@ -78,6 +79,21 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 				}
 			}
 		}
+		
+		Object width = getWidth();
+		if(width != null)
+			column.setWidth(width);
+	}
+	
+	@Override
+	public ColumnBuilder setWidth(Object width) {
+		this.width = width;
+		return this;
+	}
+	
+	@Override
+	public Object getWidth() {
+		return width;
 	}
 	
 	@Override
