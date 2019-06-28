@@ -23,7 +23,7 @@ public class ControllerFunctionModifierImpl extends AbstractControllerFunctionIm
 	@Override
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		Response response = null;
-		String fields = (String) getProperty(Properties.FIELDS);
+		String fields = (String) getProperty(Properties.FIELDS);//TODO get logic from centralized function
 		response = representation.updateOne(dataTransferObjects.iterator().next(),fields);
 		if(Boolean.TRUE.equals(__injectResponseHelper__().isStatusClientErrorNotFound(response))) {
 			__injectThrowableHelper__().throw_(__inject__(ServiceNotFoundException.class).setSystemAction(action).setResponse(response));

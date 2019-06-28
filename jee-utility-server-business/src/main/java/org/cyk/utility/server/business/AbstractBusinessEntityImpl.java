@@ -11,6 +11,8 @@ import javax.transaction.Transactional;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.file.excel.FileExcelSheetDataArrayReader;
 import org.cyk.utility.map.MapInstanceIntegerToString;
 import org.cyk.utility.server.persistence.PersistenceEntity;
@@ -190,11 +192,98 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	
 	/**/
 	
-	protected void __create__(Object object) {
-		__inject__(Business.class).create(object);
+	protected static void __create__(Object object) {
+		if(object != null)
+			__inject__(Business.class).create(object);
 	}
 	
-	protected void __createIfSystemIdentifierIsBlank__(Object object) {
-		__inject__(Business.class).create(object,new Properties().setIsCreateIfSystemIdentifierIsBlank(Boolean.TRUE));	
+	@SuppressWarnings("unchecked")
+	protected static void __createMany__(Collection<?> objects) {
+		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(objects)))
+			__inject__(Business.class).createMany((Collection<Object>) objects);
 	}
+	
+	protected static void __createIfSystemIdentifierIsBlank__(Object object) {
+		if(object != null)
+			__inject__(Business.class).create(object,new Properties().setIsCreateIfSystemIdentifierIsBlank(Boolean.TRUE));	
+	}
+	
+	protected static void __update__(Object object) {
+		if(object != null)
+			__inject__(Business.class).update(object);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected static void __updateMany__(Collection<?> objects) {
+		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(objects)))
+			__inject__(Business.class).updateMany((Collection<Object>) objects);
+	}
+	
+	protected static void __save__(Object object) {
+		if(object != null)
+			__inject__(Business.class).save(object);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected static void __saveMany__(Collection<?> objects) {
+		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(objects)))
+			__inject__(Business.class).saveMany((Collection<Object>) objects);
+	}
+	
+	protected static void __delete__(Object object) {
+		if(object != null)
+			__inject__(Business.class).delete(object);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected static void __deleteMany__(Collection<?> objects) {
+		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(objects)))
+			__inject__(Business.class).deleteMany((Collection<Object>) objects);
+	}
+	
+	protected <T> Collection<T> __getDeletableInstances__(CollectionInstance<?> finalInstances,Collection<T> persistedInstances,String fieldName) {
+		Collection<T> collection = null;
+		if(__injectCollectionHelper__().isNotEmpty(persistedInstances))
+			for(T index : persistedInstances) {
+				if(!Boolean.TRUE.equals(__injectCollectionHelper__().contains(finalInstances, __injectFieldValueGetter__().execute(index, fieldName).getOutput()))) {
+					if(collection == null)
+						collection = new ArrayList<>();
+					collection.add(index);
+				}
+			}
+		return collection;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <T> void __delete__(CollectionInstance<?> finalInstances,Collection<T> persistedInstances,String fieldName) {
+		Collection<T> collection = __getDeletableInstances__(finalInstances, persistedInstances, fieldName);
+		if(__injectCollectionHelper__().isNotEmpty(collection))
+			__inject__(Business.class).deleteMany((Collection<Object>) collection);
+	}
+	
+	protected <M,D> Collection<D> __getSavableInstances__(Class<D> klass,CollectionInstance<M> finalInstances,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {
+		Collection<D> collection = null;
+		if(__injectCollectionHelper__().isNotEmpty(finalInstances)) {
+			for(Object index : finalInstances.get()) {
+				//check if not yet created
+				if(!Boolean.TRUE.equals(__injectCollectionHelper__().contains(persistedInstances, index))) {
+					if(collection == null)
+						collection = new ArrayList<>();
+					D instance = __injectClassHelper__().instanciateOne(klass);
+					__injectFieldValueSetter__().execute(instance, masterFieldName, master);
+					__injectFieldValueSetter__().execute(instance, fieldName, index);
+					collection.add(instance);	
+				}
+			}
+		}
+		return collection;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected <M,D> void __save__(Class<D> klass,CollectionInstance<M> finalInstances,Collection<M> persistedInstances,String fieldName,Object master,String masterFieldName) {
+		Collection<D> collection = __getSavableInstances__(klass, finalInstances, persistedInstances, fieldName, master, masterFieldName);
+		if(__injectCollectionHelper__().isNotEmpty(collection))
+			__inject__(Business.class).saveMany((Collection<Object>) collection);
+	}
+	
 }

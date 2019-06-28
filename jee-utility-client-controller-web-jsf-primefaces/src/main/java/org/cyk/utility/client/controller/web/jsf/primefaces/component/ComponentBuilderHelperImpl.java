@@ -42,8 +42,8 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 		if(component instanceof OutputStringText) 
 			return (Class<? extends ComponentBuilder<?, COMPONENT>>) __inject__(ClassHelper.class).getByName(OutputTextBuilder.class.getName());
 		
-		//if(component instanceof OutputStringMessage) 
-		//	return (Class<? extends ComponentBuilder<?, COMPONENT>>) __inject__(ClassHelper.class).getByName(MessageBuilder.class.getName());
+		if(component instanceof OutputStringMessage) 
+			return (Class<? extends ComponentBuilder<?, COMPONENT>>) __inject__(ClassHelper.class).getByName(MessageBuilder.class.getName());
 		
 		/* Command */
 		

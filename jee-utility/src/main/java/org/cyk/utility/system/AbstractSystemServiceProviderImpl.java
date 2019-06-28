@@ -5,9 +5,12 @@ import java.util.Collection;
 
 import javax.enterprise.util.AnnotationLiteral;
 
+import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.service.AbstractServiceProviderImpl;
 import org.cyk.utility.service.ServiceProvider;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 
 public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceProviderImpl implements SystemServiceProvider, Serializable {
@@ -74,6 +77,21 @@ public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceP
 	}
 	
 	/**/
+	
+	protected Strings __getFieldsFromProperties__(Properties properties) {
+		Strings fields = null;
+		if(properties != null) {
+			Object fieldsObject = Properties.getFromPath(properties, Properties.FIELDS);
+			if(fieldsObject instanceof Strings) {
+				fields = (Strings) fieldsObject;
+			}else if(fieldsObject instanceof Collection) {
+				fields = __inject__(Strings.class).add((Collection<String>) fieldsObject);
+			}else if(fieldsObject instanceof String) {
+				fields = __inject__(Strings.class).add(StringUtils.split((String) fieldsObject,ConstantCharacter.COMA.toString()));
+			}	
+		}
+		return fields;
+	}
 	
 	@Override
 	protected <O> O ____inject____(Class<O> aClass, AnnotationLiteral<?>... annotationLiterals) {
