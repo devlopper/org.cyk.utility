@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.component.input;
 
 import org.cyk.utility.client.controller.component.InputOutput;
+import org.cyk.utility.client.controller.component.command.Command;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 
@@ -20,4 +21,8 @@ public interface Input<T> extends InputOutput<T> {
 	
 	Boolean getIsNullable();
 	Input<T> setIsNullable(Boolean isNullable);
+	
+	Command getListenValueChangeCommand();
+	Input<T> setListenValueChangeCommand(Command listenValueChangeCommand);
+	
 }

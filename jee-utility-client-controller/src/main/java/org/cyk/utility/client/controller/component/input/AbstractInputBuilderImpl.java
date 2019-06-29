@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractInputOutputBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
+import org.cyk.utility.client.controller.component.command.CommandBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringMessageBuilder;
 
@@ -16,6 +17,7 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	private OutputStringLabelBuilder label;
 	private OutputStringMessageBuilder message;
 	private Boolean isEditable,isNullable;
+	private CommandBuilder listenValueChangeCommand;
 	
 	public AbstractInputBuilderImpl() {
 		addRoles(ComponentRole.INPUT);
@@ -46,6 +48,13 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 			__setRequestAndContextAndUniformResourceLocatorMapOf__(message);
 			input.setMessage(message.execute().getOutput());
 		}
+		
+		CommandBuilder listenValueChangeCommand = getListenValueChangeCommand();
+		if(listenValueChangeCommand == null) {
+			
+		}
+		if(listenValueChangeCommand!=null)
+			input.setListenValueChangeCommand(listenValueChangeCommand.execute().getOutput());
 	}
 	
 	@Override
@@ -135,7 +144,24 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 		return this;
 	}
 	
+	@Override
+	public CommandBuilder getListenValueChangeCommand() {
+		return listenValueChangeCommand;
+	}
+	
+	@Override
+	public CommandBuilder getListenValueChangeCommand(Boolean injectIfNull) {
+		return (CommandBuilder) __getInjectIfNull__(FIELD_LISTEN_VALUE_CHANGE_COMMAND, injectIfNull);
+	}
+	
+	@Override
+	public InputBuilder<INPUT, VALUE> setListenValueChangeCommand(CommandBuilder listenValueChangeCommand) {
+		this.listenValueChangeCommand = listenValueChangeCommand;
+		return this;
+	}
+	
 	public static final String FIELD_LABEL = "label";
 	public static final String FIELD_MESSAGE = "message";
+	public static final String FIELD_LISTEN_VALUE_CHANGE_COMMAND = "listenValueChangeCommand";
 	
 }

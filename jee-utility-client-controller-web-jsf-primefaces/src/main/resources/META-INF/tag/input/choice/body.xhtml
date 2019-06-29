@@ -1,0 +1,23 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"	
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
+    
+    <f:selectItems
+		var="item" 
+		value="#{value.choices.get()}"
+		itemLabel="#{value.getChoiceLabel(item)}"
+		itemValue="#{item}"
+	/>
+   				
+   	<c:forEach items="#{value.events.get()}" var="event" >
+		<c:if test="#{event.script == null}">
+			<cyk:ajax value="#{event}" />
+		</c:if>
+	</c:forEach>
+
+</ui:composition>

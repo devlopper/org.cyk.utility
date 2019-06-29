@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.inject.Inject;
 
 import org.cyk.utility.client.controller.component.AbstractInputOutputImpl;
+import org.cyk.utility.client.controller.component.command.Command;
 import org.cyk.utility.client.controller.component.output.OutputStringLabel;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 
@@ -16,6 +17,7 @@ public abstract class AbstractInputImpl<T> extends AbstractInputOutputImpl<T> im
 	private Boolean isNullable;
 	@Inject protected OutputStringLabel label;
 	@Inject protected OutputStringMessage message;
+	private Command listenValueChangeCommand;
 	
 	@Override
 	public Object getValueObject() {
@@ -68,6 +70,17 @@ public abstract class AbstractInputImpl<T> extends AbstractInputOutputImpl<T> im
 	@Override
 	public Input<T> setIsNullable(Boolean isNullable) {
 		this.isNullable = isNullable;
+		return this;
+	}
+	
+	@Override
+	public Command getListenValueChangeCommand() {
+		return listenValueChangeCommand;
+	}
+	
+	@Override
+	public Input<T> setListenValueChangeCommand(Command listenValueChangeCommand) {
+		this.listenValueChangeCommand = listenValueChangeCommand;
 		return this;
 	}
 }

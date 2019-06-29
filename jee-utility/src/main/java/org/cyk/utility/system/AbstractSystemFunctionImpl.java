@@ -49,6 +49,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	private NotificationBuilders notificationBuilders;
 	private Notifications notifications;
 	private Long entitiesCount;
+	private Boolean isActionRequired;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -69,9 +70,10 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	protected void ____execute____() {
 		SystemAction action = getAction();
-		if(action == null){
+		Boolean isActionRequired = __injectValueHelper__().defaultToIfNull(getIsActionRequired(),Boolean.TRUE);
+		if(action == null && Boolean.TRUE.equals(isActionRequired)) {			
 			__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getSimpleName()+" : action must not be null");
-		}else{
+		} else {
 			__execute__(action);	
 		}
 	}
@@ -112,6 +114,17 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	}
 	
 	protected abstract void __execute__(SystemAction action);
+	
+	@Override
+	public Boolean getIsActionRequired() {
+		return isActionRequired;
+	}
+	
+	@Override
+	public SystemFunction setIsActionRequired(Boolean isActionRequired) {
+		this.isActionRequired = isActionRequired;
+		return this;
+	}
 	
 	@Override
 	public Strings getEntityFieldNames() {

@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.component.input;
 
 import org.cyk.utility.client.controller.component.InputOutputBuilder;
+import org.cyk.utility.client.controller.component.command.CommandBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringLabelBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringMessageBuilder;
 
@@ -28,4 +29,8 @@ public interface InputBuilder<INPUT extends Input<VALUE>,VALUE> extends InputOut
 	
 	Boolean getIsNullable();
 	InputBuilder<INPUT,VALUE> setIsNullable(Boolean isNullable);
+	
+	CommandBuilder getListenValueChangeCommand();
+	CommandBuilder getListenValueChangeCommand(Boolean injectIfNull);
+	InputBuilder<INPUT,VALUE> setListenValueChangeCommand(CommandBuilder listenValueChangeCommand);
 }

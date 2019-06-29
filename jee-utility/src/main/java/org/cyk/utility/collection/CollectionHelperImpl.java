@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.apache.commons.collections4.ListUtils;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.helper.AbstractHelper;
@@ -308,5 +309,13 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 		if(Boolean.TRUE.equals(isNotEmpty(collection)))
 			swap(collection.get(), index01, index02);
 		return	this; 
+	}
+	
+	@Override
+	public <ELEMENT> List<List<ELEMENT>> getBatches(List<ELEMENT> collection, Object size) {
+		Integer __size__  = __inject__(NumberHelper.class).getInteger(size);
+		if(__size__!= null && __size__ > 0)
+			return ListUtils.partition(collection, __size__);
+		return null;
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
+import org.cyk.utility.object.Objects;
 import org.cyk.utility.programming.script.ScriptBuilder;
 
 public interface EventBuilder extends FunctionWithPropertiesAsInput<Event> {
@@ -21,4 +22,10 @@ public interface EventBuilder extends FunctionWithPropertiesAsInput<Event> {
 	CommandFunction getFunction();
 	CommandFunction getFunction(Boolean injectIfNull);
 	EventBuilder setFunction(CommandFunction function);
+	
+	Objects getUpdatables();
+	Objects getUpdatables(Boolean injectIfNull);
+	EventBuilder setUpdatables(Objects updatables);
+	EventBuilder addUpdatables(Collection<Object> updatables);
+	EventBuilder addUpdatables(Object...updatables);
 }

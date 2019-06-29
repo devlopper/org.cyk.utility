@@ -11,6 +11,9 @@ import org.cyk.utility.value.ValueUsageType;
 
 public interface SystemFunction extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 
+	Boolean getIsActionRequired();
+	SystemFunction setIsActionRequired(Boolean isActionRequired);
+	
 	SystemAction getAction();
 	SystemFunction setAction(SystemAction action);
 	SystemFunction setActionEntityClass(Class<?> entityClass);

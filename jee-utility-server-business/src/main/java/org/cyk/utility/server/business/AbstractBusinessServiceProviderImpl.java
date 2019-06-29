@@ -2,6 +2,7 @@ package org.cyk.utility.server.business;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -199,6 +200,25 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		return saveMany(objects, null);
 	}
 
+	@Override
+	public BusinessServiceProvider<OBJECT> saveManyByBatch(Collection<OBJECT> objects, Object batchSize,Properties properties) {
+		if(__injectCollectionHelper__().isNotEmpty(objects)) {
+			List<List<OBJECT>> lists = __injectCollectionHelper__().getBatches((List<OBJECT>) objects, batchSize);	
+			if(__injectCollectionHelper__().isNotEmpty(lists)) {
+				for(List<OBJECT> index : lists) {
+					saveMany(index,properties);
+				}
+			}
+		}
+		return this;
+	}
+	
+	@Override
+	public BusinessServiceProvider<OBJECT> saveManyByBatch(Collection<OBJECT> objects, Object batchSize) {
+		saveManyByBatch(objects, batchSize, null);
+		return this;
+	}
+	
 	/**/
 	
 	protected PersistenceEntity<?> __injectPersistenceFromClass__(Class<?> entityClass){

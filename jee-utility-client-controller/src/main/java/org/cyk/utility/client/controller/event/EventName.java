@@ -9,4 +9,5 @@ public enum EventName {
 	,SELECT
 	,CONTEXT_MENU
 	,DRAG_DROP
+	,CHANGE
 }

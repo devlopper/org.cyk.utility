@@ -4,7 +4,7 @@ import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessEntityIntegrationTestWithDefaultDeployment;
 import org.junit.Test;
 
-public class MyEntityBusinessIntegrationTest extends AbstractBusinessEntityIntegrationTestWithDefaultDeployment<MyEntity> {
+public class MyEntityBusinessIntegrationTestToBeMoved extends AbstractBusinessEntityIntegrationTestWithDefaultDeployment<MyEntity> {
 	private static final long serialVersionUID = 1L;
 	
 	@Override

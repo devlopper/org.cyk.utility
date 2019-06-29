@@ -29,6 +29,8 @@ import org.cyk.utility.client.controller.component.input.InputBoolean;
 import org.cyk.utility.client.controller.component.input.InputDate;
 import org.cyk.utility.client.controller.component.input.InputDateTime;
 import org.cyk.utility.client.controller.component.input.InputFile;
+import org.cyk.utility.client.controller.component.input.choice.ChoicesLayout;
+import org.cyk.utility.client.controller.component.input.choice.ChoicesLayoutResponsive;
 import org.cyk.utility.client.controller.component.input.choice.InputChoice;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceMany;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyAutoComplete;
@@ -58,6 +60,7 @@ import org.cyk.utility.client.controller.web.jsf.converter.DateConverter;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.value.ValueHelper;
 import org.primefaces.model.DefaultStreamedContent;
 
 public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentBuilderExecuteListenerAfter> implements Serializable {
@@ -133,6 +136,7 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 						if(inputOutput instanceof Input<?>) {
 							component.getProperties().setRequired(Boolean.FALSE.equals(((Input<?>)inputOutput).getIsNullable()));	
 							if(component instanceof InputChoice<?>) {
+								ChoicesLayout choicesLayout = ((InputChoice<?>)component).getChoicesLayout();
 								component.getProperties().setConverter(__inject__(ObjectConverter.class));
 								component.getProperties().setFilter("true");
 								component.getProperties().setFilterMatchMode("contains");
@@ -152,8 +156,15 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 									}
 								}else if(component instanceof InputChoiceMany) {
 									if(component instanceof InputChoiceManyCheckBox) {
-										component.getProperties().setLayout("responsive");
-										component.getProperties().setColumns(3);
+										if(choicesLayout == null)
+											choicesLayout = __inject__(ChoicesLayoutResponsive.class).setNumberOfColumns(3);
+										if(choicesLayout instanceof ChoicesLayoutResponsive) {
+											component.getProperties().setLayout("responsive");
+											component.getProperties().setColumns( __inject__(ValueHelper.class).defaultToIfNull(((ChoicesLayoutResponsive)choicesLayout).getNumberOfColumns(),3));
+										}else {
+											component.getProperties().setLayout("responsive");
+											component.getProperties().setColumns(3);
+										}
 									}else if(component instanceof InputChoiceManyAutoComplete) {
 										component.getProperties().setMultiple("true");
 										Integer maximumNumberOfChoice = ((InputChoice<?>)inputOutput).getMaximumNumberOfChoice();

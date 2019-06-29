@@ -30,5 +30,8 @@ public interface InputChoice<CHOICE> extends Input<CHOICE> {
 	Integer getMaximumNumberOfChoice();
 	InputChoice<CHOICE> setMaximumNumberOfChoice(Integer maximumNumberOfChoice);
 	
+	ChoicesLayout getChoicesLayout();
+	InputChoice<CHOICE> setChoicesLayout(ChoicesLayout choicesLayout);
+	
 	Integer MAXIMUM_NUMBER_OF_CHOICES_BY_QUERY = 10;
 }

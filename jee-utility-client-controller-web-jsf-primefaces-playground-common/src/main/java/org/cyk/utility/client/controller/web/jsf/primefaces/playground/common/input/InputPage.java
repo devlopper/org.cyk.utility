@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.cyk.utility.__kernel__.annotation.Default;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.client.controller.component.annotation.Commandable;
 import org.cyk.utility.client.controller.component.annotation.CommandableButton;
@@ -93,6 +94,7 @@ public class InputPage extends AbstractPageContainerManagedImpl implements Seria
 		,V05
 	}
 	
+	@Default
 	public static class ChoiceLabelBuilderImpl01 extends AbstractChoicePropertyValueBuilderImpl implements ChoicePropertyValueBuilder,Serializable {
 		private static final long serialVersionUID = 1L;
 		
@@ -104,6 +106,7 @@ public class InputPage extends AbstractPageContainerManagedImpl implements Seria
 		
 	}
 	
+	@Default
 	public static class ChoiceLabelBuilderImpl02 extends AbstractChoicePropertyValueBuilderImpl implements ChoicePropertyValueBuilder,Serializable {
 		private static final long serialVersionUID = 1L;
 		

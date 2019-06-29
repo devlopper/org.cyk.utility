@@ -2,9 +2,13 @@ package org.cyk.utility.server.business;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.ConstraintViolationException;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.business.test.TestBusinessCreate;
 import org.cyk.utility.server.business.test.TestBusinessDelete;
@@ -16,7 +20,7 @@ import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
 
-public class BusinessFunctionIntegrationTest extends AbstractBusinessArquillianIntegrationTestWithDefaultDeployment {
+public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrationTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 	
 	/* Create */
@@ -102,11 +106,10 @@ public class BusinessFunctionIntegrationTest extends AbstractBusinessArquillianI
 	}
 	
 	@Test
-	public void findManyByPage() throws Exception{
+	public void findManyByPage() {
 		for(Integer index = 0 ; index < 10 ; index = index + 1)
 			__inject__(MyEntityBusiness.class).create(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()));
-		
-		
+				
 		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).findMany()))
 			.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
@@ -140,6 +143,53 @@ public class BusinessFunctionIntegrationTest extends AbstractBusinessArquillianI
 		properties.setQueryNumberOfTuple(3);
 		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).findMany(properties)))
 			.containsExactly("4","5","6");
+		
+		__inject__(MyEntityBusiness.class).deleteAll();
 	}
 	
+	@Test
+	public void save_many() {
+		List<MyEntity> list = (List<MyEntity>) __inject__(CollectionHelper.class).instanciate(List.class,new MyEntity().setCode("a").setTimestamp(1l));
+		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(0);
+		__inject__(MyEntityBusiness.class).saveMany(list);
+		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(1);
+		__inject__(MyEntityBusiness.class).deleteAll();
+	}
+	
+	@Test
+	public void save_many_twice() {
+		List<MyEntity> list = (List<MyEntity>) __inject__(CollectionHelper.class).instanciate(List.class,new MyEntity().setCode("a").setTimestamp(1l));
+		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(0);
+		__inject__(MyEntityBusiness.class).saveMany(list);
+		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(1);
+		__inject__(MyEntityBusiness.class).saveMany(list);
+		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(1);
+		__inject__(MyEntityBusiness.class).deleteAll();
+	}
+	
+	@Test
+	public void save_many_bybatch() {
+		List<MyEntity> list = new ArrayList<>();
+		for(Integer index = 0 ; index < 100 ; index = index + 1) {
+			list.add(new MyEntity().setCode(index.toString()).setTimestamp(index.longValue()));
+		}
+		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(0);
+		__inject__(MyEntityBusiness.class).saveManyByBatch(list, 3);
+		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(100);
+		__inject__(MyEntityBusiness.class).deleteAll();
+	}
+	
+	@Test
+	public void save_many_bybatch_twice() {
+		List<MyEntity> list = new ArrayList<>();
+		for(Integer index = 0 ; index < 10 ; index = index + 1) {
+			list.add(new MyEntity().setCode(index.toString()).setTimestamp(index.longValue()));
+		}
+		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(0);
+		__inject__(MyEntityBusiness.class).saveManyByBatch(list, 3);
+		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(10);
+		__inject__(MyEntityBusiness.class).saveManyByBatch(list, 3);
+		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(10);
+		__inject__(MyEntityBusiness.class).deleteAll();
+	}
 }

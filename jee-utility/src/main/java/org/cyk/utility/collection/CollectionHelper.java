@@ -1,6 +1,7 @@
 package org.cyk.utility.collection;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.cyk.utility.helper.Helper;
 
@@ -47,4 +48,6 @@ public interface CollectionHelper extends Helper {
 	<ELEMENT> Collection<ELEMENT> removeNullValue(Collection<ELEMENT> collection);
 	
 	<ELEMENT> Collection<ELEMENT> removeDuplicate(Collection<ELEMENT> collection,java.util.function.Function<? super ELEMENT, ?> function);
+	
+	<ELEMENT> List<List<ELEMENT>> getBatches(List<ELEMENT> collection,Object size);
 }

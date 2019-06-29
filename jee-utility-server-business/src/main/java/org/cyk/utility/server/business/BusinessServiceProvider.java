@@ -58,6 +58,9 @@ public interface BusinessServiceProvider<OBJECT> extends SystemServiceProvider {
 	@Transactional
 	BusinessServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects);
 	
+	BusinessServiceProvider<OBJECT> saveManyByBatch(Collection<OBJECT> objects,Object batchSize,Properties properties);
+	BusinessServiceProvider<OBJECT> saveManyByBatch(Collection<OBJECT> objects,Object batchSize);
+	
 	/* Count */
 	
 	/**/

@@ -1,6 +1,8 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.playground.common.input;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.faces.view.ViewScoped;
@@ -10,16 +12,25 @@ import org.cyk.utility.client.controller.component.annotation.Input;
 import org.cyk.utility.client.controller.component.annotation.InputChoice;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceMany;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceManyAutoComplete;
+import org.cyk.utility.client.controller.component.annotation.InputChoiceManyCheckBox;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceOne;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceOneAutoComplete;
 import org.cyk.utility.client.controller.component.annotation.InputChoiceOneCombo;
+import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
+import org.cyk.utility.client.controller.component.input.choice.ChoicesLayoutResponsive;
+import org.cyk.utility.client.controller.component.input.choice.InputChoiceBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
+import org.cyk.utility.client.controller.component.window.WindowBuilder;
 import org.cyk.utility.client.controller.data.AbstractDataImpl;
 import org.cyk.utility.client.controller.data.AbstractFormDataImpl;
+import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.notification.Notification;
+import org.primefaces.PrimeFaces;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -36,14 +47,46 @@ public class InputChoicePage extends AbstractPageContainerManagedImpl implements
 	}
 	
 	@Override
+	protected String __processWindowDialogOkCommandableGetUrl__(WindowBuilder window, CommandableBuilder commandable) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	protected ViewBuilder __getViewBuilder__() {
 		Form form = __inject__(Form.class);
 		form.setData(__inject__(Data.class));
 		//form.getData().setFile(__inject__(File.class));
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		
-		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.TRUE, "selectOneCombo");
+		InputStringLineOneBuilder text = (InputStringLineOneBuilder) viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.TRUE, "text");
+		InputChoiceBuilder<?, ?> selectOneCombo = (InputChoiceBuilder<?, ?>) viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.TRUE, "selectOneCombo");
+		InputChoiceBuilder<?, ?> selectOneComboDependent = (InputChoiceBuilder<?, ?>) viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.TRUE, "selectOneComboDependent");
+		selectOneComboDependent.setIsGetChoices(Boolean.FALSE);
+		
+		selectOneCombo.addEvent(EventName.CHANGE, new Runnable() {
+			@Override
+			public void run() {
+				Value value = (Value) selectOneCombo.getComponent().getValue();
+				System.out.println("InputChoicePage.__getViewBuilder__().new Runnable() {...}.run() : "+value);
+				selectOneComboDependent.getComponent().addChoices(__inject__(CollectionHelper.class).cast(Object.class, Arrays.asList(value)));
+				text.getComponent().setValue(value.toString());
+				PrimeFaces.current().ajax().update("form:"+text.getComponent().getIdentifier());
+				PrimeFaces.current().ajax().update("form:"+selectOneComboDependent.getComponent().getIdentifier());
+				//PrimeFaces.current().ajax().update("form:"+viewBuilder.getComponent().getComponents().getLayout().getIdentifier());
+				//System.out.println("InputChoicePage.__getViewBuilder__().new Runnable() {...}.run() update : "+"form:"+text.getComponent().getIdentifier());
+				//ValueChangeEvent valueChangeEvent = (ValueChangeEvent) inputChoiceBuilder.getComponent().getListenValueChangeCommand().getFunction().getProperties().getParameter();
+				//System.out.println("InputChoicePage.__getViewBuilder__().new Runnable() {...}.run() : "+valueChangeEvent.getOldValue()+" / "+valueChangeEvent.getNewValue());
+			}
+		});
+		
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.TRUE, "selectOneAutoComplete");
+		InputChoiceBuilder<?, ?> selectManyAutoCheckBox = (InputChoiceBuilder<?, ?>) viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.TRUE, "selectManyAutoCheckBox");
+		selectManyAutoCheckBox.setChoicesLayout(__inject__(ChoicesLayoutResponsive.class).setNumberOfColumns(5));
+		
+		InputChoiceBuilder<?, ?> selectManyAutoCheckBoxDependent = (InputChoiceBuilder<?, ?>) viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.TRUE, "selectManyAutoCheckBoxDependent");
+		selectManyAutoCheckBoxDependent.setIsGetChoices(Boolean.FALSE);
+		
 		viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.TRUE, "selectManyAutoComplete");
 		
 		CommandableBuilder commandable = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, "submit");
@@ -51,11 +94,21 @@ public class InputChoicePage extends AbstractPageContainerManagedImpl implements
 			@Override
 			public void run() {
 				String message = "selectOneCombo : "+form.getData().getSelectOneCombo()+"\r\nselectOneAutoComplete : "+form.getData().getSelectOneAutoComplete()
-						+"\r\nselectManyAutoComplete : "+form.getData().selectManyAutoComplete;
+						+"\r\nselectManyAutoCheckBox : "+form.getData().selectManyAutoCheckBox+"\r\nselectManyAutoComplete : "+form.getData().selectManyAutoComplete;
 				__inject__(MessageRender.class).addNotifications(__inject__(Notification.class).setSummary(message)).execute();
 			}
 		});
 		commandable.getOutputProperties(Boolean.TRUE).setAjax(Boolean.FALSE);
+		
+		selectManyAutoCheckBox.addEvent(EventName.CHANGE, new Runnable() {
+			@Override
+			public void run() {
+				@SuppressWarnings("unchecked")
+				Collection<Value> values = (Collection<Value>) selectManyAutoCheckBox.getComponent().getValue();
+				selectManyAutoCheckBoxDependent.getComponent().addChoices(__inject__(CollectionHelper.class).cast(Object.class, values));
+			}
+		},selectManyAutoCheckBoxDependent);
+		
 		return viewBuilder;
 	}
 	
@@ -63,11 +116,23 @@ public class InputChoicePage extends AbstractPageContainerManagedImpl implements
 	public static class Data extends AbstractDataImpl implements Serializable {
 		private static final long serialVersionUID = 1L;
 
+		@Input @InputStringLineOne
+		private String text;
+		
 		@Input @InputChoice @InputChoiceOne @InputChoiceOneCombo
 		private Value selectOneCombo;
 		
+		@Input @InputChoice @InputChoiceOne @InputChoiceOneCombo
+		private Value selectOneComboDependent;
+		
 		@Input @InputChoice @InputChoiceOne @InputChoiceOneAutoComplete
 		private Value selectOneAutoComplete;
+		
+		@Input @InputChoice @InputChoiceMany @InputChoiceManyCheckBox
+		private List<Value> selectManyAutoCheckBox;
+		
+		@Input @InputChoice @InputChoiceMany @InputChoiceManyCheckBox
+		private List<Value> selectManyAutoCheckBoxDependent;
 		
 		@Input @InputChoice @InputChoiceMany @InputChoiceManyAutoComplete
 		private List<Value> selectManyAutoComplete;
@@ -87,5 +152,17 @@ public class InputChoicePage extends AbstractPageContainerManagedImpl implements
 		,V41,V42,V43,V44,V45,V46,V47,V48,V49,V50
 		,V51,V52,V53,V54,V55,V56,V57,V58,V59,V60
 	}
+	
+	/*@Default
+	public static class ChoiceLabelBuilderImpl extends AbstractChoicePropertyValueBuilderImpl implements ChoicePropertyValueBuilder,Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		@Override
+		protected String __execute__() throws Exception {
+			VerySimpleEntity verySimpleEntity = (VerySimpleEntity) getObject();
+			return verySimpleEntity == null ? ConstantEmpty.STRING : verySimpleEntity.getName();
+		}
+		
+	}*/
 	
 }

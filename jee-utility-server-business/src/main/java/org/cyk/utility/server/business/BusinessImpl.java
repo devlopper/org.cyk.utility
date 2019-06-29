@@ -178,4 +178,17 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		delete(__inject__(Persistence.class).readOne(clazz, identifier, valueUsageType));
 		return this;
 	}
+	
+	@Override
+	public BusinessServiceProvider<Object> saveManyByBatch(Collection<Object> objects, Object batchSize,
+			Properties properties) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public BusinessServiceProvider<Object> saveManyByBatch(Collection<Object> objects, Object batchSize) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

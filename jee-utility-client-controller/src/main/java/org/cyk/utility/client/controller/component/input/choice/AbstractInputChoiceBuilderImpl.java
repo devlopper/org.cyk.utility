@@ -13,6 +13,8 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 	private Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass;
 	private Class<? extends ChoicesGetter> choicesGetterClass;
 	private Integer maximumNumberOfChoice;
+	private Boolean isGetChoices;
+	private ChoicesLayout choicesLayout;
 	
 	@Override
 	protected void __execute__(INPUT inputChoice, Object object, Field field) {
@@ -27,12 +29,19 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 		
 		Objects choices = getChoices();
 		if(choices == null) {
-			ChoicesGetter choicesGetter = __inject__(choicesGetterClass);
-			choices = choicesGetter.setFieldDeclaringClass(object.getClass()).setField(field).setRequest(getProperties().getRequest()).setContext(getProperties().getContext())
-				.setMaximumNumberOfChoice(maximumNumberOfChoice)
-				.execute().getOutput();
+			Boolean isGetChoices = __injectValueHelper__().defaultToIfNull(getIsGetChoices(),Boolean.TRUE);
+			if(Boolean.TRUE.equals(isGetChoices)) {
+				ChoicesGetter choicesGetter = __inject__(choicesGetterClass);
+				choices = choicesGetter.setFieldDeclaringClass(object.getClass()).setField(field).setRequest(getProperties().getRequest()).setContext(getProperties().getContext())
+					.setMaximumNumberOfChoice(maximumNumberOfChoice)
+					.execute().getOutput();
+			}
 		}
-		inputChoice.addChoices(choices.get());
+		if(__injectCollectionHelper__().isNotEmpty(choices))
+			inputChoice.addChoices(choices.get());
+		
+		ChoicesLayout choicesLayout = getChoicesLayout();
+		inputChoice.setChoicesLayout(choicesLayout);
 	}
 	
 	@Override
@@ -93,6 +102,28 @@ public abstract class AbstractInputChoiceBuilderImpl<INPUT extends InputChoice<C
 	@Override
 	public InputChoiceBuilder<INPUT,CHOICE> setMaximumNumberOfChoice(Integer maximumNumberOfChoice) {
 		this.maximumNumberOfChoice = maximumNumberOfChoice;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsGetChoices() {
+		return isGetChoices;
+	}
+	
+	@Override
+	public InputChoiceBuilder<INPUT, CHOICE> setIsGetChoices(Boolean isGetChoices) {
+		this.isGetChoices = isGetChoices;
+		return this;
+	}
+	
+	@Override
+	public ChoicesLayout getChoicesLayout() {
+		return choicesLayout;
+	}
+	
+	@Override
+	public InputChoiceBuilder<INPUT, CHOICE> setChoicesLayout(ChoicesLayout choicesLayout) {
+		this.choicesLayout = choicesLayout;
 		return this;
 	}
 	

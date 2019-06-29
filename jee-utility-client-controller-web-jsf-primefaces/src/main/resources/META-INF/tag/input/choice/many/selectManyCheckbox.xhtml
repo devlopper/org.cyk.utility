@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
@@ -10,6 +11,7 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
+			
    			<p:selectManyCheckbox
    				id="#{value.properties.identifier}"
    				value="#{value.value}"
@@ -19,20 +21,32 @@
 				styleClass="#{value.properties.styleClass}"
 				style="#{value.properties.style}"
 				converter="#{value.properties.converter}"
+				
    			>
+   				
    				<f:selectItems
    					var="item" 
    					value="#{value.choices.get()}"
-   					itemLabel="#{item.label}"
-   					itemValue="#{item.value}"
-   					itemDescription="#{item.description}"
-   					itemDisabled="#{item.disabled}"
-   					itemLabelEscaped="#{item.escape}"
+   					itemLabel="#{value.getChoiceLabel(item)}"
+   					itemValue="#{item}"
    				/>
+   				
+   				<c:forEach items="#{value.events.get()}" var="event" >
+					<c:if test="#{event.script == null}">
+						<cyk:ajax value="#{event}" />
+					</c:if>
+				</c:forEach>
+				
    			</p:selectManyCheckbox>
 		</ui:define>
 	</ui:decorate>	
 	
+	<!-- 
 	
+	itemDescription="#{item.description}"
+   					itemDisabled="#{item.disabled}"
+   					itemLabelEscaped="#{item.escape}"
+	
+	 -->
 		
 </ui:composition>

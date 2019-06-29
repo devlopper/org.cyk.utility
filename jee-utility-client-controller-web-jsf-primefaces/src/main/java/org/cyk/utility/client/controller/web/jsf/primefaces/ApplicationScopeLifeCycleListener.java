@@ -16,6 +16,7 @@ import org.cyk.utility.client.controller.component.ComponentTargetModelBuilderIm
 import org.cyk.utility.client.controller.component.grid.GridBuilderCommandableBuilderProcessorImpl;
 import org.cyk.utility.client.controller.component.layout.LayoutWidthGetterImpl;
 import org.cyk.utility.client.controller.component.layout.StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl;
+import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.message.MessageRenderImpl;
 import org.cyk.utility.client.controller.navigation.NavigationIdentifierToUrlStringMapperImpl;
 import org.cyk.utility.client.controller.navigation.NavigationRedirectorImpl;
@@ -47,7 +48,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		
 		__inject__(org.cyk.utility.client.controller.web.jsf.ApplicationScopeLifeCycleListener.class).initialize(null);
 		
-		__setQualifierClassTo__(Primefaces.class, CommandFunction.class);
+		__setQualifierClassTo__(Primefaces.class, CommandFunction.class,EventBuilder.class);
 	}
 	
 	@Override

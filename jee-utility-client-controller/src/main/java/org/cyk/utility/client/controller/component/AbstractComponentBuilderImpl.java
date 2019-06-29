@@ -396,10 +396,13 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	}
 	
 	@Override
-	public ComponentBuilder<COMPONENT> addEvent(EventName name, Runnable runnable) {
+	public ComponentBuilder<COMPONENT> addEvent(EventName name, Runnable runnable,Object...updatables) {
 		EventBuilder event = getEventByName(name, Boolean.TRUE);
+		event.addUpdatables(updatables);
 		CommandFunction function = event.getFunction(Boolean.TRUE);
-        function.try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE).add(runnable);
+		function.setIsActionRequired(Boolean.FALSE);
+		function.setIsNotifyOnThrowableIsNull(Boolean.FALSE);
+		function.try_().getRun(Boolean.TRUE).getRunnables(Boolean.TRUE).add(runnable);
         addEvents(event);
 		return this;
 	}

@@ -22,4 +22,10 @@ public interface InputChoiceBuilder<INPUT extends InputChoice<CHOICE>,CHOICE> ex
 	Class<? extends ChoicePropertyValueBuilder> getChoicePropertyValueBuilderClass();
 	InputChoiceBuilder<INPUT,CHOICE> setChoicePropertyValueBuilderClass(Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass);
 	
+	Boolean getIsGetChoices();
+	InputChoiceBuilder<INPUT,CHOICE> setIsGetChoices(Boolean isGetChoices);
+	
+	ChoicesLayout getChoicesLayout();
+	InputChoiceBuilder<INPUT,CHOICE> setChoicesLayout(ChoicesLayout choicesLayout);
+	
 }

@@ -93,7 +93,7 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	ComponentBuilder<COMPONENT> addEvents(EventBuilder...events);
 	EventBuilder getEventByName(EventName name,Boolean injectIfNull);
 	EventBuilder getEventByName(EventName name);
-	ComponentBuilder<COMPONENT> addEvent(EventName name,Runnable runnable);
+	ComponentBuilder<COMPONENT> addEvent(EventName name,Runnable runnable,Object...updatables);
 	ComponentBuilder<COMPONENT> addEvent(EventName name,String...scriptInstructions);
 	
 	Object getRequest();

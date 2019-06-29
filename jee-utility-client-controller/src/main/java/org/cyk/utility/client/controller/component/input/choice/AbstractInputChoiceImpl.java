@@ -15,6 +15,7 @@ public abstract class AbstractInputChoiceImpl<CHOICE> extends AbstractInputImpl<
 	private Objects choices;
 	private Class<? extends ChoicePropertyValueBuilder> choicePropertyValueBuilderClass,__choicePropertyValueBuilderClass__;
 	private Integer maximumNumberOfChoice,__maximumNumberOfChoice__;
+	private ChoicesLayout choicesLayout;
 	
 	@Override
 	public Objects getChoices() {
@@ -113,6 +114,17 @@ public abstract class AbstractInputChoiceImpl<CHOICE> extends AbstractInputImpl<
 	@Override
 	public InputChoice<CHOICE> setMaximumNumberOfChoice(Integer maximumNumberOfChoice) {
 		this.maximumNumberOfChoice = maximumNumberOfChoice;
+		return this;
+	}
+	
+	@Override
+	public ChoicesLayout getChoicesLayout() {
+		return choicesLayout;
+	}
+	
+	@Override
+	public InputChoice<CHOICE> setChoicesLayout(ChoicesLayout choicesLayout) {
+		this.choicesLayout = choicesLayout;
 		return this;
 	}
 	
