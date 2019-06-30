@@ -102,9 +102,17 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		}
 	}
 	
-	protected Object[] __getQueryParameters__(String queryIdentifier,Properties properties,Object...objects){
+	protected final Object[] __getQueryParameters__(String queryIdentifier,Properties properties,Object...objects){
+		PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
+		if(persistenceQuery == null)
+			__inject__(ThrowableHelper.class).throwRuntimeException("persistence query with identifier "+queryIdentifier+" not found.");
+		return __getQueryParameters__(persistenceQuery, properties, objects);
+	}
+	
+	protected Object[] __getQueryParameters__(PersistenceQuery query,Properties properties,Object...objects){
 		return null;
 	}
+	
 	/*
 	protected void addDerivedQueryIdentifier(Object from,Object value){
 		if(__inject__(StringHelper.class).isNotBlank((String)from) && __inject__(StringHelper.class).isNotBlank((String)value)){

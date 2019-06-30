@@ -56,6 +56,23 @@ public class ObjectFromStringBuilderUnitTest extends AbstractWeldUnitTest {
 		assertThat(object.getField06()).containsKeys("k01").containsValues("v01");
 	}
 	
+	@Test
+	public void map_simple() throws Exception{
+		String string = "{\"key01\":\"v01\"}";
+		Map<String,String> map = buildObjectFromStringUsingJson(string, Map.class);
+		assertionHelper.assertNotNull(map);
+		assertThat(map).containsKeys("key01").containsValues("v01");
+	}
+	
+	@Test
+	public void map_nested() throws Exception{
+		String string = "{\"key01\":\"v01\" , \"key02\":{\"key0201\":\"v02\"}}";
+		Map<String,Object> map = buildObjectFromStringUsingJson(string, Map.class);
+		assertionHelper.assertNotNull(map);
+		assertThat(map).containsKeys("key01","key02").containsValues("v01");
+		assertThat((Map<String,String>)map.get("key02")).containsKeys("key0201").containsValues("v02");
+	}
+	
 	/*
 	@Test
 	public void stringify_json_field01IsNotNull(){

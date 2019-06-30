@@ -35,11 +35,17 @@ public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBui
 
 	@Override
 	protected Object __execute__(String string, Class<?> klass,FieldInstances fieldInstances) throws Exception {
+		Object object;
 		ObjectMapper objectMapper = new ObjectMapper();
-		SimpleModule module = new SimpleModule();
-		module.addDeserializer(Object.class, new Deserializer().setKlass(klass).setFieldInstances(fieldInstances));
-		objectMapper.registerModule(module);
-		return objectMapper.readValue(string, Object.class);
+		if(Boolean.TRUE.equals(__inject__(ClassHelper.class).isBelongsToJavaPackages(klass))) {
+			object = objectMapper.readValue(string, klass);
+		}else {
+			SimpleModule module = new SimpleModule();
+			module.addDeserializer(Object.class, new Deserializer().setKlass(klass).setFieldInstances(fieldInstances));
+			objectMapper.registerModule(module);
+			object =  objectMapper.readValue(string, Object.class);	
+		}
+		return object;
 	}
 
 	/**/

@@ -14,7 +14,6 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.request.RequestProcessor;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
-import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.string.Strings;
@@ -41,11 +40,10 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		}
 	}
 	
-	protected Object[] __getQueryParameters__(String queryIdentifier,Properties properties,Object...objects){
-		PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
-		if(persistenceQuery.isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(read,queryIdentifier))
+	protected Object[] __getQueryParameters__(PersistenceQuery query,Properties properties,Object...objects){
+		if(query.isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(read))
 			return null;
-		return super.__getQueryParameters__(queryIdentifier,properties, objects);
+		return super.__getQueryParameters__(query,properties, objects);
 	}
 	
 	@SuppressWarnings("unchecked")

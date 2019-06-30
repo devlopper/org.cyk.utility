@@ -13,7 +13,7 @@ public abstract class AbstractObjectToOrFromStringBuilderImpl<OUTPUT> extends Ab
 	
 	@Override
 	protected OUTPUT __execute__() throws Exception {
-		Strings fieldNamesStrings = __injectValueHelper__().returnOrThrowIfBlank("field names", getFieldNamesStrings());
+		Strings fieldNamesStrings = getFieldNamesStrings();
 		return __execute__(fieldNamesStrings);
 	}
 	

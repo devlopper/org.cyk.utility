@@ -30,15 +30,14 @@ public abstract class AbstractPersistenceEntityIdentifiedByStringImpl<ENTITY> ex
 		return super.__getQueryIdentifier__(functionClass, properties, parameters);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	protected Object[] __getQueryParameters__(String queryIdentifier,Properties properties,Object...objects){
-		PersistenceQuery persistenceQuery = __inject__(PersistenceQueryRepository.class).getBySystemIdentifier(queryIdentifier);
-		if(persistenceQuery.isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readWhereIdentifierContains,queryIdentifier)) {
+	protected Object[] __getQueryParameters__(PersistenceQuery query, Properties properties, Object... objects) {
+		if(query.isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readWhereIdentifierContains)) {
 			if(Boolean.TRUE.equals(__inject__(ArrayHelper.class).isEmpty(objects)))
 				objects = new Object[] {__injectCollectionHelper__().getFirst((Collection<String>) Properties.getFromPath(properties,Properties.QUERY_FILTERS))};
 			return new Object[]{AbstractIdentified.FIELD_IDENTIFIER, "%"+objects[0]+"%"};
 		}
-		return super.__getQueryParameters__(queryIdentifier,properties, objects);
+		return super.__getQueryParameters__(query, properties, objects);
 	}
+	
 }

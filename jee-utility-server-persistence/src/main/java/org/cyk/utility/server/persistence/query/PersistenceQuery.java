@@ -56,9 +56,16 @@ public class PersistenceQuery extends AbstractObject implements Serializable {
 		return getQueryDerivedFromQuery()!=null && getQueryDerivedFromQuery().getIdentifier().equals(identifer);
 	}
 	
+	public Boolean isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(Object value){
+		Object identifier = getIdentifier();
+		return identifier!=null && (identifier.equals(value) || isQueryDerivedFromQueryIdentifierEqualsTo(value));
+	}
+	
+	/*
 	public Boolean isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(Object queryIdentifier,Object value){
 		return queryIdentifier.equals(value) || isQueryDerivedFromQueryIdentifierEqualsTo(queryIdentifier);
 	}
+	*/
 	
 	@Override
 	public int hashCode() {
