@@ -56,6 +56,11 @@ public class ObjectToStringBuilderUnitTest extends AbstractWeldUnitTest {
 		assertionHelper.assertEquals("{\"field06\":\"{\\\"k01\\\":\\\"v01\\\"}\"}",buildStringFromObjectUsingJson(new Class().setField06(__inject__(MapHelper.class).instanciateKeyAsStringValueAsString("k01","v01")), "field06"));
 	}
 	
+	@Test
+	public void stringify_json_map_simple(){
+		assertionHelper.assertEquals("{\"k01\":\"v01\"}",buildStringFromObjectUsingJson(__inject__(MapHelper.class).instanciateKeyAsStringValueAsObject("k01","v01")));
+	}
+	
 	/**/
 	
 	private static String buildStringFromObjectUsingJson(Object object,String...fieldNamesStrings) {

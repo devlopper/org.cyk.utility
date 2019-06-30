@@ -55,6 +55,7 @@ public interface RepresentationServiceProvider<OBJECT,DTO> {
 	String PARAMETER_IDENTIFIER = ConstantString.IDENTIFIER;
 	String PARAMETER_TYPE = ConstantString.TYPE;
 	String PARAMETER_FILTER = ConstantString.FILTER;
+	String PARAMETER_FILTERS = ConstantString.FILTERS;
 	String PARAMETER_FIELDS = ConstantString.FIELDS;
 	String PARAMETER_FROM = ConstantString.FROM;
 	String PARAMETER_COUNT = ConstantString.COUNT;

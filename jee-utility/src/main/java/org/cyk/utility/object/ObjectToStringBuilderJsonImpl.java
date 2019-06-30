@@ -9,6 +9,7 @@ import javax.enterprise.context.Dependent;
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
+import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.field.FieldInstanceValue;
 import org.cyk.utility.field.FieldInstanceValues;
@@ -29,18 +30,21 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 
 	@Override
 	protected String __execute__(Object object, FieldInstanceValues fieldInstanceValues) throws Exception {
-		if(__injectCollectionHelper__().isEmpty(fieldInstanceValues)) {
-			__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("jsonify object without specified fields");
-			return null;
+		ObjectMapper mapper = new ObjectMapper();
+		if(Boolean.TRUE.equals(__inject__(ClassHelper.class).isBelongsToJavaPackages(object.getClass()))) {
+			return mapper.writeValueAsString(object);
 		}else {
-			ObjectMapper mapper = new ObjectMapper();
-			 
-			SimpleModule module = new SimpleModule();
-			module.addSerializer(Object.class,new Serializer());
-			mapper.registerModule(module);
-			 
-			String serialized = mapper.writeValueAsString(fieldInstanceValues);
-			return serialized;
+			if(__injectCollectionHelper__().isEmpty(fieldInstanceValues)) {
+				__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("jsonify object without specified fields");
+				return null;
+			}else { 
+				SimpleModule module = new SimpleModule();
+				module.addSerializer(Object.class,new Serializer());
+				mapper.registerModule(module);
+				 
+				String serialized = mapper.writeValueAsString(fieldInstanceValues);
+				return serialized;
+			}
 		}
 	}
 	

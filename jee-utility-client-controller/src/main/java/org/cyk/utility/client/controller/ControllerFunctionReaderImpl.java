@@ -3,12 +3,13 @@ package org.cyk.utility.client.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.instance.InstanceHelper;
+import org.cyk.utility.object.ObjectToStringBuilder;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.system.action.SystemAction;
@@ -36,8 +37,9 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 			Boolean isPageable = __inject__(BooleanHelper.class).get(Properties.getFromPath(properties,Properties.IS_PAGEABLE));
 			Long from = __injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.FROM));
 			Long count = __injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.COUNT));
-			List<String> filters = (List<String>) Properties.getFromPath(properties,Properties.FILTERS);
-			response = representation.getMany(isPageable,from,count,fields,filters);
+			Object filters = Properties.getFromPath(properties,Properties.FILTERS);
+			response = representation.getMany(isPageable,from,count,fields,filters instanceof String? (String)filters 
+					: __injectByQualifiersClasses__(ObjectToStringBuilder.class,JavaScriptObjectNotation.Class.class).setObject(filters).execute().getOutput());
 		}else {
 			Object identifier = identifiers.getFirst();
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();

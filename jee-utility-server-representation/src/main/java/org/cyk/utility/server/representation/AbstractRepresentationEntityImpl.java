@@ -3,14 +3,17 @@ package org.cyk.utility.server.representation;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.map.MapInstanceIntegerToString;
+import org.cyk.utility.object.ObjectFromStringBuilder;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.server.business.BusinessLayer;
 
@@ -50,13 +53,19 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public Response getMany(Boolean isPageable,Long from,Long count,String fields,List<String> filters) {
+	public Response getMany(Boolean isPageable,Long from,Long count,String fields,String filters) {
+		/*
+		 * Convert filters from json to Map object
+		 */
+		@SuppressWarnings("unchecked")
+		Map<String,Object> __filters__ = (Map<String, Object>) __injectByQualifiersClasses__(ObjectFromStringBuilder.class,JavaScriptObjectNotation.Class.class)
+			.setString(filters).setKlass(Map.class).execute().getOutput();;
 		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass())
 				.setEntityFieldNames(__getFieldNames__(fields))
 				.setProperty(Properties.IS_QUERY_RESULT_PAGINATED, isPageable == null ? Boolean.TRUE : isPageable)
 				.setProperty(Properties.QUERY_FIRST_TUPLE_INDEX, from)
 				.setProperty(Properties.QUERY_NUMBER_OF_TUPLE, count)
-				.setProperty(Properties.QUERY_FILTERS, __injectCollectionHelper__().isEmpty(filters) ? null : filters)
+				.setProperty(Properties.QUERY_FILTERS, __filters__)
 				.execute().getResponse();
 	}
 	

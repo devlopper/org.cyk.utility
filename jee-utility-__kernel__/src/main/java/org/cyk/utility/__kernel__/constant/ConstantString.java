@@ -44,6 +44,7 @@ public interface ConstantString {
 	String IDENTIFIER = "identifier";
 	String TYPE = "type";
 	String FILTER = "filter";
+	String FILTERS = "filters";
 	String FIELDS = "fields";
 	String CODE = "code";
 	String FROM = "from";
