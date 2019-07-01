@@ -54,19 +54,16 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	
 	@Override
 	public Response getMany(Boolean isPageable,Long from,Long count,String fields,String filters) {
-		/*
-		 * Convert filters from json to Map object
-		 */
-		@SuppressWarnings("unchecked")
-		Map<String,Object> __filters__ = (Map<String, Object>) __injectByQualifiersClasses__(ObjectFromStringBuilder.class,JavaScriptObjectNotation.Class.class)
-			.setString(filters).setKlass(Map.class).execute().getOutput();;
-		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass())
+		RepresentationFunctionReader function = __inject__(RepresentationFunctionReader.class);
+		function.setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass())
 				.setEntityFieldNames(__getFieldNames__(fields))
 				.setProperty(Properties.IS_QUERY_RESULT_PAGINATED, isPageable == null ? Boolean.TRUE : isPageable)
 				.setProperty(Properties.QUERY_FIRST_TUPLE_INDEX, from)
-				.setProperty(Properties.QUERY_NUMBER_OF_TUPLE, count)
-				.setProperty(Properties.QUERY_FILTERS, __filters__)
-				.execute().getResponse();
+				.setProperty(Properties.QUERY_NUMBER_OF_TUPLE, count);
+		Map<String,Object> __filters__ = __getFiltersMap__(filters);
+		if(__filters__ != null)
+			function.setProperty(Properties.QUERY_FILTERS, __filters__);
+		return function.execute().getResponse();
 	}
 	
 	@Override
@@ -125,10 +122,13 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 
 	@Override
-	public Response count(List<String> filters) {
-		return __inject__(RepresentationFunctionCounter.class).setPersistenceEntityClass(getPersistenceEntityClass())
-				.setProperty(Properties.QUERY_FILTERS, __injectCollectionHelper__().isEmpty(filters) ? null : filters)
-				.execute().getResponse();
+	public Response count(String filters) {
+		RepresentationFunctionCounter function = __inject__(RepresentationFunctionCounter.class);
+		function.setPersistenceEntityClass(getPersistenceEntityClass());
+		Map<String,Object> map = __getFiltersMap__(filters);
+		if(map != null)
+			function.setProperty(Properties.QUERY_FILTERS,map);
+		return function.execute().getResponse();
 	}
 
 	/**/
@@ -144,5 +144,18 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	
 	protected static String[] __getFieldNames__(String string) {
 		return StringUtils.isBlank(string) ? null : StringUtils.split(string,ConstantCharacter.COMA.toString());
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected Map<String,Object> __getFiltersMap__(String filters) {
+		Map<String,Object> __filters__ = null;
+		if(__injectStringHelper__().isNotBlank(filters)) {
+			/*
+			 * Convert filters from json to map
+			 */
+			__filters__ = (Map<String, Object>) __injectByQualifiersClasses__(ObjectFromStringBuilder.class,JavaScriptObjectNotation.Class.class)
+				.setString(filters).setKlass(Map.class).execute().getOutput();
+		}
+		return __filters__;
 	}
 }

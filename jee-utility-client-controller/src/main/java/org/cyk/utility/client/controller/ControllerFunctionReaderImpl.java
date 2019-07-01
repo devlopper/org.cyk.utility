@@ -38,8 +38,14 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 			Long from = __injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.FROM));
 			Long count = __injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.COUNT));
 			Object filters = Properties.getFromPath(properties,Properties.FILTERS);
-			response = representation.getMany(isPageable,from,count,fields,filters instanceof String? (String)filters 
-					: __injectByQualifiersClasses__(ObjectToStringBuilder.class,JavaScriptObjectNotation.Class.class).setObject(filters).execute().getOutput());
+			String filtersAsString = null;
+			if(Boolean.TRUE.equals(__injectValueHelper__().isNotBlank(filters))) {
+				if(filters instanceof String)
+					filtersAsString = (String) filters;
+				else
+					filtersAsString = __injectByQualifiersClasses__(ObjectToStringBuilder.class,JavaScriptObjectNotation.Class.class).setObject(filters).execute().getOutput();
+			}
+			response = representation.getMany(isPageable,from,count,fields,filtersAsString);
 		}else {
 			Object identifier = identifiers.getFirst();
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();

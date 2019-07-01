@@ -22,7 +22,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	private Boolean isNotifyOnThrowableIsNull;
 	private Boolean isNotifyOnThrowableIsNotNull;
 	private Boolean isNotifyAfterExecutionPhaseFinally;
-	private Boolean isExecuteAsynchronously;
+	private Boolean isExecuteAsynchronously,isDoTry,isDoCatch,isDoFinally,isDoMonitoring;
 
 	@Override
 	protected void __listenPostConstruct__() {
@@ -33,22 +33,35 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	protected void __executeCode__() {
 		Boolean executable = __executeGetIsExecutable__(getIsExecutable());
 		if(Boolean.TRUE.equals(executable)){
-			Long start = System.currentTimeMillis();
-			getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.START}, start);
+			Boolean isDoMonitoring = getIsDoMonitoring();
+			Long start = null;
+			if(isDoMonitoring == null || isDoMonitoring) {
+				start = System.currentTimeMillis();
+				getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.START}, start);	
+			}
 			try {
-				__try__();
+				Boolean isDoTry = getIsDoTry();
+				if(isDoTry == null || isDoTry) {
+					__try__();
+				}
 			} catch (Exception exception) {
-				__catch__(exception);
+				Boolean isDoCatch = getIsDoCatch();
+				if(isDoCatch == null || isDoCatch) {
+					__catch__(exception);	
+				}
 			} finally {
-				__finally__();
-				
-				Long end = System.currentTimeMillis();
-				getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.END}, end);
-				getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION}, end - start);
-				
-				__notifyAfterExecutionPhaseFinally__();
-				
-				__log__();
+				Boolean isDoFinally = getIsDoFinally();
+				if(isDoFinally == null || isDoFinally) {
+					__finally__();
+					
+					Long end = System.currentTimeMillis();
+					getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.END}, end);
+					getProperties().setFromPath(new Object[]{Properties.FUNCTION,Properties.EXECUTION,Properties.DURATION}, end - start);
+					
+					__notifyAfterExecutionPhaseFinally__();
+					
+					__log__();
+				}
 			}
 		}else {
 			//throw new RuntimeException(getClass()+" is not executable.");
@@ -536,6 +549,50 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	@Override
 	public Function<INPUT, OUTPUT> setIsExecuteAsynchronously(Boolean isExecuteAsynchronously) {
 		this.isExecuteAsynchronously = isExecuteAsynchronously;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsDoCatch() {
+		return isDoCatch;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setIsDoCatch(Boolean isDoCatch) {
+		this.isDoCatch = isDoCatch;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsDoFinally() {
+		return isDoFinally;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setIsDoFinally(Boolean isDoFinally) {
+		this.isDoFinally = isDoFinally;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsDoTry() {
+		return isDoTry;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setIsDoTry(Boolean isDoTry) {
+		this.isDoTry = isDoTry;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsDoMonitoring() {
+		return isDoMonitoring;
+	}
+	
+	@Override
+	public Function<INPUT, OUTPUT> setIsDoMonitoring(Boolean isDoMonitoring) {
+		this.isDoMonitoring = isDoMonitoring;
 		return this;
 	}
 	

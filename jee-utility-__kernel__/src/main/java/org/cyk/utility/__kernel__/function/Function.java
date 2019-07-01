@@ -86,4 +86,15 @@ public interface Function<INPUT,OUTPUT> extends Objectable {
 	
 	@Override Function<INPUT,OUTPUT> setProperty(Object key, Object value);
 	
+	Boolean getIsDoTry();
+	Function<INPUT,OUTPUT> setIsDoTry(Boolean isDoTry);
+	
+	Boolean getIsDoCatch();
+	Function<INPUT,OUTPUT> setIsDoCatch(Boolean isDoCatch);
+	
+	Boolean getIsDoFinally();
+	Function<INPUT,OUTPUT> setIsDoFinally(Boolean isDoFinally);
+	
+	Boolean getIsDoMonitoring();
+	Function<INPUT,OUTPUT> setIsDoMonitoring(Boolean isDoMonitoring);
 }

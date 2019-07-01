@@ -2,7 +2,6 @@ package org.cyk.utility.client.controller;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
 import javax.ws.rs.core.Response;
 
@@ -23,8 +22,11 @@ public class ControllerFunctionCounterImpl extends AbstractControllerFunctionImp
 	@Override
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		Response response;
-		List<String> filters = (List<String>) Properties.getFromPath(getProperties(),Properties.FILTERS);
-		response = representation.count(filters);
+		Object filters = Properties.getFromPath(getProperties(),Properties.FILTERS);
+		String filtersAsString = null;
+		if(filters instanceof String)
+			filtersAsString = (String) filters;
+		response = representation.count(filtersAsString);
 		if(response!=null)
 			setEntitiesCount(response.readEntity(Long.class));
 		return response;

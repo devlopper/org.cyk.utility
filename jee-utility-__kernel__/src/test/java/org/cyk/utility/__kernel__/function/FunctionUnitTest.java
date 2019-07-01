@@ -94,6 +94,24 @@ public class FunctionUnitTest extends AbstractWeldUnitTest {
 		assertThat(function.getOutput()).isEqualTo("hello");
 	}
 	
+	//@Test
+	public void execute_MyFunctionAll_1000000(){
+		for(int index = 0 ; index < 10000000 ; index = index + 1)
+			__inject__(MyFunctionAll.class).execute();
+	}
+	
+	//@Test
+	public void execute_MyFunctionAll_1000000_tryOnly(){
+		for(int index = 0 ; index < 10000000 ; index = index + 1)
+			__inject__(MyFunctionAll.class).setIsDoMonitoring(Boolean.FALSE).setIsDoTry(Boolean.TRUE).setIsDoCatch(Boolean.TRUE).setIsDoFinally(Boolean.FALSE).execute();
+	}
+	
+	//@Test
+	public void execute_mySimpleMethod_1000000(){
+		for(int index = 0 ; index < 10000000 ; index = index + 1)
+			mySimpleMethod();
+	}
+	
 	/**/
 	
 	public static class MyFunction extends AbstractFunctionImpl<Object, Object> implements Serializable {
@@ -107,6 +125,18 @@ public class FunctionUnitTest extends AbstractWeldUnitTest {
 	public static class MyFunctionRunnable extends AbstractFunctionRunnableImpl<MyFunction> implements Serializable {
 		private static final long serialVersionUID = 1L;
 			
+	}
+	
+	public static class MyFunctionAll extends AbstractFunctionImpl<Object, Object> implements Serializable {
+		private static final long serialVersionUID = 1L;
+		@Override
+		protected Object __execute__() throws Exception {
+			return "myOutput";
+		}
+	}
+	
+	public static void mySimpleMethod() {
+		
 	}
 	
 }

@@ -59,7 +59,7 @@ public class ChoicesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 			Properties properties = new Properties();
 			properties.setRequest(request);
 			properties.setContext(context);
-			properties.setFilters(__injectCollectionHelper__().instanciate(query));
+			properties.setFilters(__injectMapHelper__().instanciateKeyAsStringValueAsObject("__global_query__",query));
 			properties.setCount(maximumNumberOfChoice);
 			if(properties.getCount() == null) {
 				properties.setIsPageable(Boolean.FALSE);	

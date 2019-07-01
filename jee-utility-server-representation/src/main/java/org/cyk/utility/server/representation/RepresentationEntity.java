@@ -94,7 +94,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	/* Count */
 	@GET
 	@Path(PATH_GET_COUNT)
-	Response count(@QueryParam(PARAMETER_FILTER) List<String> filters);
+	Response count(@QueryParam(PARAMETER_FILTERS) String filters);
 	
 	/**/
 
