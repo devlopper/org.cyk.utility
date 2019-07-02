@@ -50,4 +50,7 @@ public interface CollectionHelper extends Helper {
 	<ELEMENT> Collection<ELEMENT> removeDuplicate(Collection<ELEMENT> collection,java.util.function.Function<? super ELEMENT, ?> function);
 	
 	<ELEMENT> List<List<ELEMENT>> getBatches(List<ELEMENT> collection,Object size);
+	
+	Collection<?> getCollectionFromObject(Object object,Boolean instanciateIfNotInstanceOfCollection);
+	
 }

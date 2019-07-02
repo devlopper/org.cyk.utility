@@ -318,4 +318,13 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 			return ListUtils.partition(collection, __size__);
 		return null;
 	}
+	
+	@Override
+	public Collection<?> getCollectionFromObject(Object object, Boolean instanciateIfNotInstanceOfCollection) {
+		if(object instanceof Collection)
+			return (Collection<?>) object;
+		if(Boolean.TRUE.equals(instanciateIfNotInstanceOfCollection))
+			return __inject__(CollectionHelper.class).instanciate(object);
+		return (Collection<?>) object; // this will throw an exception. this has been written to avoid throwing it ourselves
+	}
 }

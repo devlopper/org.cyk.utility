@@ -2,6 +2,7 @@ package org.cyk.utility.object;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
@@ -54,6 +55,14 @@ public class ObjectFromStringBuilderUnitTest extends AbstractWeldUnitTest {
 		Class object = buildObjectFromStringUsingJson("{\"field06\":\"{\\\"k01\\\":\\\"v01\\\"}\"}", Class.class,"field06");
 		assertionHelper.assertNotNull(object);
 		assertThat(object.getField06()).containsKeys("k01").containsValues("v01");
+	}
+	
+	@Test
+	public void list_simple() throws Exception{
+		String string = "[\"key01\",\"v01\"]";
+		List<String> list = buildObjectFromStringUsingJson(string, List.class);
+		assertionHelper.assertNotNull(list);
+		assertThat(list).containsExactly("key01","v01");
 	}
 	
 	@Test

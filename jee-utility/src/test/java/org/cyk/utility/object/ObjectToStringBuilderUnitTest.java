@@ -3,6 +3,7 @@ package org.cyk.utility.object;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.network.message.Receiver;
 import org.cyk.utility.network.message.Receivers;
@@ -59,6 +60,11 @@ public class ObjectToStringBuilderUnitTest extends AbstractWeldUnitTest {
 	@Test
 	public void stringify_json_map_simple(){
 		assertionHelper.assertEquals("{\"k01\":\"v01\"}",buildStringFromObjectUsingJson(__inject__(MapHelper.class).instanciateKeyAsStringValueAsObject("k01","v01")));
+	}
+	
+	@Test
+	public void stringify_json_list_simple(){
+		assertionHelper.assertEquals("[\"i01\",\"i02\"]",buildStringFromObjectUsingJson(__inject__(CollectionHelper.class).instanciate("i01","i02")));
 	}
 	
 	/**/

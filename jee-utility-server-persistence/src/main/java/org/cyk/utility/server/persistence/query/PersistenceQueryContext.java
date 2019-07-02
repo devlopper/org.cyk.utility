@@ -17,4 +17,5 @@ public interface PersistenceQueryContext extends Objectable {
 	
 	Boolean isFilterByKeys(String...keys);
 	Object getFilterByKeysValue(String...keys);
+	
 }

@@ -41,7 +41,7 @@ public class RepresentationFunctionModifierImpl extends AbstractRepresentationFu
 			}
 			
 			//__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(currentEntity, __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(updatedEntity));
-			__injectBusiness__().update(currentEntity);
+			__injectBusiness__().update(currentEntity,new Properties().setFields(fieldNames));
 		}else {
 			
 		}

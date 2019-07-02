@@ -48,6 +48,9 @@ public abstract class AbstractWindowContainerManagedWindowBuilderProcessDataImpl
 				for(String index : methodsNames.get()) {
 					//TODO we can write a DataCommandableBuilderGetter
 					CommandableBuilder commandable = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, index ,systemAction);
+					/* TODO if it is update action then we need to know which field to process : we can write a getter for it */
+					//commandable.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setProperty(Properties.FIELDS, __inject__(StringHelper.class).concatenate(__getPersistenceEntityFieldNames__(window, systemAction, formClass),","));
+					
 					commandable.addDerivableProperties(Properties.NAME);
 					Boolean isHasInputFile = __injectCollectionHelper__().isNotEmpty(viewBuilder.getComponentsBuilder(Boolean.TRUE).getComponents(Boolean.TRUE)
 							.getIsInstanceOf(InputFileBuilder.class,InputFile.class));
@@ -64,5 +67,10 @@ public abstract class AbstractWindowContainerManagedWindowBuilderProcessDataImpl
 	protected void __execute__(Form form,SystemAction systemAction,Data data,ViewBuilder viewBuilder) {
 		
 	}
-	
+	/*
+	protected Collection<String> __getPersistenceEntityFieldNames__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass){
+		Strings fieldNames = __inject__(DataFieldsNamesGetter.class).setSystemAction(systemAction).execute().getOutput();
+		return __injectCollectionHelper__().isEmpty(fieldNames) ? null : fieldNames.get();
+	}
+	*/
 }
