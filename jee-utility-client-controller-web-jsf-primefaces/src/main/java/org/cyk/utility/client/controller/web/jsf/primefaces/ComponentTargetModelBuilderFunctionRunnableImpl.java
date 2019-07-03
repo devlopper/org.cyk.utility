@@ -31,16 +31,20 @@ import org.cyk.utility.client.controller.component.view.View;
 import org.cyk.utility.client.controller.component.view.ViewMap;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.ColumnBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.CommandButtonBuilder;
+import org.cyk.utility.client.controller.web.jsf.primefaces.component.DataTableBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.MenuBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.component.OrganigramNodeBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.time.DurationBuilder;
+import org.cyk.utility.time.DurationStringBuilder;
 import org.cyk.utility.value.ValueHelper;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.outputpanel.OutputPanel;
 import org.primefaces.model.menu.MenuModel;
 
+@Deprecated
 public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentTargetModelBuilder> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -49,7 +53,10 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 			@Override
 			public void run() {
 				Component component = getFunction().getComponent();
-				setOutput(__build__(component));
+				DurationBuilder durationBuilder = __inject__(DurationBuilder.class);
+				Object target = __build__(component);
+				__logInfo__("Component : <<"+target.getClass().getSimpleName()+">>. Duration : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder).execute().getOutput());
+				setOutput(target);				
 			}
 		});
 	}
@@ -125,6 +132,8 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 	/* Grid to DataTable */
 	
 	public static DataTable __build__(Grid grid) {
+		return __inject__(DataTableBuilder.class).setModel(grid).execute().getOutput();
+		/*
 		DataTable dataTable = new DataTable();
 		dataTable.setVar("indexRow");
 		dataTable.setReflow(Boolean.TRUE);
@@ -199,6 +208,7 @@ public class ComponentTargetModelBuilderFunctionRunnableImpl extends AbstractFun
 				dataTable.getColumns().add(__column__);
 			}
 		return dataTable;
+		*/
 	}
 
 }

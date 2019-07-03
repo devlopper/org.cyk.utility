@@ -6,7 +6,6 @@ import java.util.Collection;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.Classes;
 
 @Dependent
@@ -19,8 +18,7 @@ public class PropertyImpl extends AbstractObject implements Property,Serializabl
 	
 	@Override
 	public Object read() {
-		return  __injectByQualifiersClasses__(PropertyValueGetter.class, __inject__(ArrayHelper.class).instanciate(Class.class, getValueGetterClassQualifiers()))
-				.setObject(getParent()).setProperty(this).execute().getOutput();
+		return  __inject__(PropertyValueGetter.class).setObject(getParent()).setProperty(this).execute().getOutput();
 	}
 	
 	@Override

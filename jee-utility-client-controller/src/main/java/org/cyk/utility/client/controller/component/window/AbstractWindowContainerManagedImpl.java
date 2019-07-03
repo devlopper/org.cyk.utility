@@ -28,6 +28,8 @@ import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.time.DurationBuilder;
+import org.cyk.utility.time.DurationStringBuilder;
 
 public abstract class AbstractWindowContainerManagedImpl extends AbstractObject implements WindowContainerManaged,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -53,6 +55,8 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	@Override
 	public Window getWindow() {
 		if(__windowBuilder__ == null) {
+			DurationBuilder durationBuilder = __inject__(DurationBuilder.class);
+			durationBuilder.setBeginToNow();
 			try {
 				__windowBuilder__ = __getWindowBuilder__();
 			} catch (Exception exception) {
@@ -81,6 +85,12 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				}
 			}
 			setWindow(window);
+			durationBuilder.setEndNow();
+			String title = __getWindowTitleValue__();
+			if(title == null && window!=null && window.getTitle()!=null)
+				title = window.getTitle().getValue();
+			
+			__logInfo__("Window : <<"+title+">>. Duration : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder).execute().getOutput());
 		}
 		return window;
 	}

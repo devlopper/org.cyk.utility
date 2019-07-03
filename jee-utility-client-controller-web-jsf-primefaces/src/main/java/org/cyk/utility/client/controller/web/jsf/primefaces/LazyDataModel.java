@@ -32,6 +32,7 @@ public class LazyDataModel<OBJECT> extends org.primefaces.model.LazyDataModel<OB
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<OBJECT> load(int first, int pageSize, String sortField, SortOrder sortOrder,Map<String, Object> filters) {
+		//DurationBuilder durationBuilder = DependencyInjection.inject(DurationBuilder.class).setBeginToNow();
 		//System.out.println("LazyDataModel.load() filters : "+filters);
 		Collection<Object> objects = null;
 		grid.getObjects(Boolean.TRUE).removeAll();
@@ -74,6 +75,8 @@ public class LazyDataModel<OBJECT> extends org.primefaces.model.LazyDataModel<OB
 			//getProperties().setThrowable(__injectThrowableHelper__().getFirstCause(exception));	
 		}
 		//System.out.println("LOAD : "+first+"|"+pageSize+" : count = "+__count__+" :::: "+(grid.getObjects() == null ? null : grid.getObjects().get()));
+		
+		//System.out.println("Lazy load Duration : "+DependencyInjection.inject(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndNow()).execute().getOutput());
 		return (List<OBJECT>) (grid.getObjects() == null ? null : grid.getObjects().get());
 	}
 	

@@ -7,7 +7,9 @@ import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.command.Commandable;
+import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.input.InputStringLineOne;
+import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.view.View;
@@ -53,6 +55,14 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 		/* Panel */
 		if(component instanceof View) 
 			return (Class<? extends ComponentBuilder<?, COMPONENT>>) __inject__(ClassHelper.class).getByName(OutputPanelFromViewBuilder.class.getName());
+		
+		/* Grid */
+		if(component instanceof Grid) 
+			return (Class<? extends ComponentBuilder<?, COMPONENT>>) __inject__(ClassHelper.class).getByName(DataTableBuilder.class.getName());
+		
+		/* Grid */
+		if(component instanceof Menu) 
+			return (Class<? extends ComponentBuilder<?, COMPONENT>>) __inject__(ClassHelper.class).getByName(MenuBuilder.class.getName());
 		
 		return null;
 	}

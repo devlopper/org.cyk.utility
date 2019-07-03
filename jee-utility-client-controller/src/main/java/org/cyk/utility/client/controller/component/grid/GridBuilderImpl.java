@@ -426,7 +426,7 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 
 	@Override
 	public ColumnBuilder getCommandablesColumn(Boolean injectIfNull) {
-		return ((ColumnBuilder) __getInjectIfNull__(FIELD_COMMANDABLES_COLUMN, injectIfNull)).setHeaderTextValue("Actions");
+		return ((ColumnBuilder) __getInjectIfNull__(FIELD_COMMANDABLES_COLUMN, injectIfNull)).setHeaderTextValue("Actions").setWidth("120");
 	}
 
 	@Override
