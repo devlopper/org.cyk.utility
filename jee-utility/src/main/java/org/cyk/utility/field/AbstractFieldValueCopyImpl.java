@@ -20,7 +20,10 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FieldValueCopy,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Boolean isOverridable;
+	private Boolean isOverridable,isAutomaticallyDetectFields;
+	private FieldValueGetter valueGetter;
+	private FieldValueSetter valueSetter;
+	private Map<String, String> fieldNameMap;
 	
 	@Override
 	protected void ____execute____() throws Exception {
@@ -61,8 +64,9 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 					}
 					FieldValueGetter getter = __inject__(FieldValueGetter.class).setObject(getterModel.getObject()).setField(entry.getKey());
 					Object value = getter.execute().getOutput();
-					if(value!=null)
+					if(value!=null) {
 						value = __processValue__(getter.getField(),setter.getField(),value);
+					}
 					setter.setValue(value);
 					if(setter.getField() == null)
 						setter.setField(getter.getField().getName());
@@ -107,7 +111,7 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 							identifier = __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(value);
 							return __inject__(InstanceHelper.class).getByIdentifierBusiness(destinationType, identifier,properties);
 						}else {
-							Fields fields =  __inject__(FieldGetter.class).setClazz(destinationType).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.SYSTEM)
+							Fields fields =  __inject__(FieldsGetter.class).setClazz(destinationType).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.SYSTEM)
 									.execute().getOutput();
 							if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
 								Class<?> identifierTypeDestinationType = null;//fields.getFirst().getType();
@@ -215,12 +219,12 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 	
 	@Override
 	public FieldValueGetter getValueGetter() {
-		return (FieldValueGetter) getProperties().getFromPath(Properties.VALUE,Properties.GETTER);
+		return valueGetter;
 	}
 
 	@Override
 	public FieldValueCopy setValueGetter(FieldValueGetter valueGetter) {
-		getProperties().setFromPath(new Object[] {Properties.VALUE,Properties.GETTER},valueGetter);
+		this.valueGetter = valueGetter;
 		return this;
 	}
 	
@@ -234,12 +238,12 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 
 	@Override
 	public FieldValueSetter getValueSetter() {
-		return (FieldValueSetter) getProperties().getFromPath(Properties.VALUE,Properties.SETTER);
+		return valueSetter;
 	}
 
 	@Override
 	public FieldValueCopy setValueSetter(FieldValueSetter valueSetter) {
-		getProperties().setFromPath(new Object[] {Properties.VALUE,Properties.SETTER},valueSetter);
+		this.valueSetter = valueSetter;
 		return this;
 	}
 	
@@ -253,12 +257,12 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 	
 	@Override
 	public Map<String, String> getFieldNameMap() {
-		return (Map<String, String>) getProperties().getFromPath(Properties.MAP,Properties.FIELD_NAME);
+		return fieldNameMap;
 	}
 	
 	@Override
 	public FieldValueCopy setFieldNameMap(Map<String, String> fieldNameMap) {
-		getProperties().setFromPath(new Object[] {Properties.MAP,Properties.FIELD_NAME},fieldNameMap);
+		this.fieldNameMap = fieldNameMap;
 		return this;
 	}
 	
@@ -289,14 +293,14 @@ public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPro
 	}
 
 	@Override
-	public FieldValueCopy setIsAutomaticallyDetectFields(Boolean value) {
-		getProperties().setFromPath(new String[] {Properties.IS,Properties.DETECT,Properties.FIELD},value);
+	public FieldValueCopy setIsAutomaticallyDetectFields(Boolean isAutomaticallyDetectFields) {
+		this.isAutomaticallyDetectFields = isAutomaticallyDetectFields;
 		return this;
 	}
 	
 	@Override
 	public Boolean getIsAutomaticallyDetectFields() {
-		return (Boolean) getProperties().getFromPath(Properties.IS,Properties.DETECT,Properties.FIELD);
+		return isAutomaticallyDetectFields;
 	}
 
 	@Override

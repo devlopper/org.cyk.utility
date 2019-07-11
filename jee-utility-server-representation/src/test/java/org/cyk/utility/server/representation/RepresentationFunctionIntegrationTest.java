@@ -1,5 +1,7 @@
 package org.cyk.utility.server.representation;
 
+import org.cyk.utility.server.representation.api.MyEntityRepresentation;
+import org.cyk.utility.server.representation.entities.MyEntityDto;
 import org.cyk.utility.server.representation.test.TestRepresentationCreate;
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment;
 import org.junit.Test;

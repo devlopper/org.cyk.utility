@@ -58,4 +58,6 @@ public interface FieldHelper extends Helper {
 	
 	<T> Collection<T> getSystemIdentifiers(Class<T> identifierClass,Collection<?> objects);
 	<T> Collection<T> getBusinessIdentifiers(Class<T> identifierClass,Collection<?> objects);
+	Object readFieldValue(Object object, Field field);
+	Object readFieldValue(Object object, String fieldName);
 }

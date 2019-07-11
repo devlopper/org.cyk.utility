@@ -29,6 +29,8 @@ import org.cyk.utility.throwable.ThrowableHelper;
 public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements PersistenceServiceProvider<OBJECT>, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static Boolean IS_CREATE_ONE_BY_ONE = Boolean.FALSE;
+	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
@@ -149,12 +151,14 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	/**/
 	
 	protected Boolean __isCreateManyOneByOne__() {
-		return Boolean.TRUE;
+		return Boolean.TRUE.equals(IS_CREATE_ONE_BY_ONE);
 	}
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> create(OBJECT object,Properties properties) {
-		____inject____(PersistenceFunctionCreator.class).setEntity(object).execute();
+		PersistenceFunctionCreator function = __inject__(PersistenceFunctionCreator.class);
+		__copyCommonProperties__(function, properties);
+		function.setEntity(object).execute();
 		return this;
 	}
 	
@@ -166,7 +170,9 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	@Override
 	public PersistenceServiceProvider<OBJECT> createMany(Collection<OBJECT> objects,Properties properties) {
 		PersistenceFunctionCreator function = __inject__(PersistenceFunctionCreator.class);
-		if(Boolean.TRUE.equals(__isCreateManyOneByOne__())) {
+		__copyCommonProperties__(function, properties);
+		Boolean __isCreateManyOneByOne__ = Boolean.TRUE.equals(__isCreateManyOneByOne__());
+		if(__isCreateManyOneByOne__) {
 			//Loop execution
 			function.try_().setIsCodeFromFunctionExecutable(Boolean.FALSE).run().addRunnables(new Runnable() {
 				@Override
@@ -180,20 +186,14 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 			//Batch execution
 			function.setEntities(objects);
 		}
-		
 		function.execute();
 		
-		if(Boolean.TRUE.equals(__isCreateManyOneByOne__())) {
+		if(__isCreateManyOneByOne__) {
 			//Loop execution
-			
 		}else {
 			//Batch execution
-			
 		}
 		return this;
-		
-		//__inject__(PersistenceFunctionCreator.class).setEntities(objects).execute();
-		//return this;
 	}
 	
 	@Override
@@ -203,7 +203,9 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
-		____inject____(PersistenceFunctionModifier.class).setEntity(object).execute();
+		PersistenceFunctionModifier function = ____inject____(PersistenceFunctionModifier.class);
+		__copyCommonProperties__(function, properties);
+		function.setEntity(object).execute();
 		return this;
 	}
 	
@@ -215,7 +217,9 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects,Properties properties) {
-		____inject____(PersistenceFunctionModifier.class).setEntities(objects).execute();
+		PersistenceFunctionModifier function = ____inject____(PersistenceFunctionModifier.class);
+		__copyCommonProperties__(function, properties);
+		function.setEntities(objects).execute();
 		return this;
 	}
 	
@@ -226,7 +230,9 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 
 	@Override
 	public PersistenceServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
-		____inject____(PersistenceFunctionRemover.class).setEntity(object).execute();
+		PersistenceFunctionRemover function = ____inject____(PersistenceFunctionRemover.class);
+		__copyCommonProperties__(function, properties);
+		function.setEntity(object).execute();
 		return this;
 	}
 	
@@ -237,7 +243,9 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects, Properties properties) {
-		____inject____(PersistenceFunctionRemover.class).setEntities(objects).execute();
+		PersistenceFunctionRemover function = ____inject____(PersistenceFunctionRemover.class);
+		__copyCommonProperties__(function, properties);
+		function.setEntities(objects).execute();
 		return this;
 	}
 	
@@ -247,8 +255,14 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	}
 	
 	@Override
-	public PersistenceServiceProvider<OBJECT> deleteAll() {
+	public PersistenceServiceProvider<OBJECT> deleteAll(Properties properties) {
 		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		return this;
+	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> deleteAll() {
+		deleteAll(null);
 		return this;
 	}
 	

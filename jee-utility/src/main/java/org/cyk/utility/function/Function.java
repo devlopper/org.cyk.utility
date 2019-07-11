@@ -4,6 +4,7 @@ import org.cyk.utility.__kernel__.function.FunctionRunnable;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.log.Log;
+import org.cyk.utility.log.LogLevel;
 
 public interface Function<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.function.Function<INPUT, OUTPUT> {
 
@@ -23,6 +24,10 @@ public interface Function<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.funct
 	
 	Function<INPUT,OUTPUT> setMonitorable(Boolean monitorable);
 	Boolean getMonitorable();
+	
+	Function<INPUT,OUTPUT> setLogLevel(LogLevel logLevel);
+	LogLevel getLogLevel();
+	
 	/*
 	Function<INPUT,OUTPUT> setAssertionsProvidersDomainsClasses(Collection<Class<?>> domainsClasses);
 	Collection<Class<?>> getAssertionsProvidersDomainsClasses();

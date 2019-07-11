@@ -24,7 +24,7 @@ public interface FieldValueCopy extends FunctionWithPropertiesAsInputAndVoidAsOu
 	FieldValueCopy setFieldName(String fieldName);
 	
 	Boolean getIsAutomaticallyDetectFields();
-	FieldValueCopy setIsAutomaticallyDetectFields(Boolean value);
+	FieldValueCopy setIsAutomaticallyDetectFields(Boolean isAutomaticallyDetectFields);
 	
 	Boolean getIsOverridable();
 	FieldValueCopy setIsOverridable(Boolean isOverridable);

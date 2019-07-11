@@ -31,12 +31,12 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	@POST
 	@Path(PATH_CREATE_MANY)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	Response createMany(Collection<ENTITY> entities);
+	Response createMany(Collection<ENTITY> entities,@QueryParam(PARAMETER_PROPERTIES) String properties);
 	
 	@POST
 	@Path(PATH_CREATE_MANY_COLLECTION)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	Response createMany(ENTITY_COLLECTION entityCollection);
+	Response createMany(ENTITY_COLLECTION entityCollection,@QueryParam(PARAMETER_PROPERTIES) String properties);
 	
 	/* Read */ 
 	/*@GET
@@ -79,6 +79,10 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	@DELETE
 	@Path(PATH_DELETE_MANY)
 	Response deleteMany();
+	
+	@DELETE
+	@Path(PATH_DELETE_IDENTIFIERS)
+	Response deleteByIdentifiers(@QueryParam(PARAMETER_IDENTIFIER) List<String> identifiers,@QueryParam(PARAMETER_TYPE) String type);
 	
 	@DELETE
 	@Path(PATH_DELETE_ALL)

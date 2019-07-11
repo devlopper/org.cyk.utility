@@ -167,16 +167,58 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	}
 	
 	@Override @Transactional
-	public BusinessServiceProvider<Object> deleteAll() {
+	public BusinessServiceProvider<Object> deleteAll(Properties properties) {
 		// TODO Find class hierarchy and delete from leaf to root
 		Collection<Class<?>> classes = null;
 		return deleteAll(classes);
+	}
+	
+	@Override
+	public BusinessServiceProvider<Object> deleteAll() {
+		return deleteAll((Properties)null);
 	}
 
 	@Override @Transactional
 	public <ENTITY> Business deleteByClassByIdentififerByValueUsageType(Class<ENTITY> clazz, Object identifier,ValueUsageType valueUsageType) {
 		delete(__inject__(Persistence.class).readOne(clazz, identifier, valueUsageType));
 		return this;
+	}
+	
+	@Override @Transactional
+	public Business deleteByIdentifiers(Class<?> klass, Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
+		@SuppressWarnings("unchecked")
+		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(klass);
+		if(business == null){
+			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		}else{
+			business.deleteManyByIdentifiers(identifiers, valueUsageType,properties);
+		}
+		return this;
+	}
+	
+	@Override @Transactional
+	public Business deleteByIdentifiers(Class<?> klass, Collection<Object> identifiers, ValueUsageType valueUsageType) {
+		return deleteByIdentifiers(klass, identifiers, valueUsageType, null);
+	}
+	
+	@Override @Transactional
+	public Business deleteBySystemIdentifiers(Class<?> klass, Collection<Object> identifiers, Properties properties) {
+		return deleteByIdentifiers(klass, identifiers,ValueUsageType.SYSTEM, properties);
+	}
+	
+	@Override @Transactional
+	public Business deleteBySystemIdentifiers(Class<?> klass, Collection<Object> identifiers) {
+		return deleteBySystemIdentifiers(klass, identifiers, null);
+	}
+	
+	@Override @Transactional
+	public Business deleteByBusinessIdentifiers(Class<?> klass, Collection<Object> identifiers, Properties properties) {
+		return deleteByIdentifiers(klass, identifiers,ValueUsageType.BUSINESS, properties);
+	}
+	
+	@Override @Transactional
+	public Business deleteByBusinessIdentifiers(Class<?> klass, Collection<Object> identifiers) {
+		return deleteByBusinessIdentifiers(klass, identifiers, null);
 	}
 	
 	@Override

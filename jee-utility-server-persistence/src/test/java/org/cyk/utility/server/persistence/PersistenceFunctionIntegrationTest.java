@@ -24,31 +24,31 @@ public class PersistenceFunctionIntegrationTest extends AbstractPersistenceArqui
 	/* Create */
 	
 	@Test
-	public void createOneMyEntity() throws Exception{
+	public void createOneMyEntity() {
 		__inject__(TestPersistenceCreate.class).addObjects(new MyEntity().setCode("a")).execute();
 	}
 	
 	@Test
-	public void createManyMyEntity() throws Exception{
+	public void createManyMyEntity() {
 		__inject__(TestPersistenceCreate.class).addObjects(new MyEntity().setCode("a"),new MyEntity().setCode("b")).execute();
 	}
 	
 	@Test
-	public void createOneMyEntityIdentifiedByString() throws Exception{
-		__inject__(TestPersistenceCreate.class).addObjects(new MyEntityIdentifiedByString()).execute();
+	public void createOneMyEntityIdentifiedByString() {
+		__inject__(TestPersistenceCreate.class).addObjects(new MyEntityIdentifiedByString()).setIsCatchThrowable(Boolean.FALSE).execute();
 	}
 	
 	/* Read */
 	
 	@Test
-	public void readOneMyEntityExistingByBusinessIdentifier() throws Exception{
+	public void readOneMyEntityExistingByBusinessIdentifier() {
 		String identifier = "a";
 		__inject__(TestPersistenceRead.class).addObjectsToBeCreatedArray(new MyEntity().setCode(identifier)).setObjectClass(MyEntity.class)
 			.addObjectIdentifiers(identifier).setIdentifierValueUsageType(ValueUsageType.BUSINESS).execute();
 	}
 	
 	@Test
-	public void readOneMyEntityNonExistingByBusinessIdentifier() throws Exception{
+	public void readOneMyEntityNonExistingByBusinessIdentifier() {
 		__inject__(TestPersistenceRead.class).addObjectsToBeCreatedArray(new MyEntity().setCode("a")).setObjectClass(MyEntity.class)
 			.addObjectIdentifiers("b").addUnexistingObjectIdentifiers("b").setIdentifierValueUsageType(ValueUsageType.BUSINESS).execute();
 	}

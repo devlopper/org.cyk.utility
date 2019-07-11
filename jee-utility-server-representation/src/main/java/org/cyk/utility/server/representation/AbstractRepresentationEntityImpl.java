@@ -16,6 +16,7 @@ import org.cyk.utility.map.MapInstanceIntegerToString;
 import org.cyk.utility.object.ObjectFromStringBuilder;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.server.business.BusinessLayer;
+import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 
@@ -43,18 +44,26 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public Response createMany(Collection<ENTITY> entities) {
-		return __inject__(RepresentationFunctionCreator.class).setEntities(entities).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+	public Response createMany(Collection<ENTITY> entities,String properties) {
+		Map<String,Object> map = __buildMapFromString__(properties);
+		RepresentationFunctionCreator function = __inject__(RepresentationFunctionCreator.class);
+		function.setEntities(entities).setPersistenceEntityClass(getPersistenceEntityClass());
+		if(map != null) {
+			function.getProperties().setIsBatchable(map.get(Properties.IS_BATCHABLE));
+			function.getProperties().setBatchSize(map.get(Properties.BATCH_SIZE));	
+		}
+		return function.execute().getResponse();
 	}
 	
 	@Override
-	public Response createMany(ENTITY_COLLECTION entityCollection) {
-		return createMany(__getEntities__(entityCollection));
+	public Response createMany(ENTITY_COLLECTION entityCollection,String properties) {
+		return createMany(__getEntities__(entityCollection),properties);
 	}
 	
 	@Override
 	public Response getMany(Boolean isPageable,Long from,Long count,String fields,String filters) {
 		RepresentationFunctionReader function = __inject__(RepresentationFunctionReader.class);
+		function.setIsCollectionable(Boolean.TRUE);
 		function.setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass())
 				.setEntityFieldNames(__getFieldNames__(fields))
 				.setProperty(Properties.IS_QUERY_RESULT_PAGINATED, isPageable == null ? Boolean.TRUE : isPageable)
@@ -68,8 +77,9 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	
 	@Override
 	public Response getOne(String identifier,String type,String fields) {
-		return __inject__(RepresentationFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier).setEntityIdentifierValueUsageType(type)
-				.setPersistenceEntityClass(getPersistenceEntityClass()).setEntityFieldNames(__getFieldNames__(fields)).execute().getResponse();
+		return __inject__(RepresentationFunctionReader.class).setIsCollectionable(Boolean.FALSE).setEntityClass(getEntityClass()).setEntityIdentifier(identifier)
+				.setEntityIdentifierValueUsageType(type).setPersistenceEntityClass(getPersistenceEntityClass()).setEntityFieldNames(__getFieldNames__(fields))
+				.execute().getResponse();
 	}
 	
 	@Override
@@ -93,13 +103,21 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	*/
 	@Override
 	public Response deleteOne(ENTITY entity) {
-		return __inject__(RepresentationFunctionRemover.class).setEntity(entity)
-			.setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+		return __inject__(RepresentationFunctionRemover.class).setEntity(entity).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
 	}
 	
 	@Override
 	public Response deleteMany() {
 		return __inject__(RepresentationFunctionRemover.class).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+	}
+	
+	@Override
+	public Response deleteByIdentifiers(List<String> identifiers, String type) {
+		ValueUsageType valueUsageType = ValueUsageType.BUSINESS.name().equalsIgnoreCase(type) ? ValueUsageType.BUSINESS : ValueUsageType.SYSTEM;
+		RepresentationFunctionRemover function = __inject__(RepresentationFunctionRemover.class);
+		function.setPersistenceEntityClass(getPersistenceEntityClass()).setEntityIdentifierValueUsageType(valueUsageType);
+		function.addActionEntitiesIdentifiers(__injectCollectionHelper__().cast(Object.class, identifiers));
+		return function.execute().getResponse();
 	}
 
 	@Override
@@ -157,5 +175,18 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 				.setString(filters).setKlass(Map.class).execute().getOutput();
 		}
 		return __filters__;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected Map<String,Object> __buildMapFromString__(String string) {
+		Map<String,Object> map = null;
+		if(__injectStringHelper__().isNotBlank(string)) {
+			/*
+			 * Convert string from json to map
+			 */
+			map = (Map<String, Object>) __injectByQualifiersClasses__(ObjectFromStringBuilder.class,JavaScriptObjectNotation.Class.class)
+				.setString(string).setKlass(Map.class).execute().getOutput();
+		}
+		return map;
 	}
 }

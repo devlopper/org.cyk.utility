@@ -2,6 +2,7 @@ package org.cyk.utility.server.business;
 
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessEntityIntegrationTestWithDefaultDeployment;
+import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.junit.Test;
 
 public class MyEntityBusinessIntegrationTestToBeMoved extends AbstractBusinessEntityIntegrationTestWithDefaultDeployment<MyEntity> {

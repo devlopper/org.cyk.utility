@@ -9,7 +9,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldValueGetter;
@@ -214,7 +214,7 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 		if(object != null) {
 			__inject__(FieldHelper.class).setFieldValueSystemIdentifier(object, __getRandomIdentifier__());
 			
-			Fields fields = __inject__(FieldGetter.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.BUSINESS).setClazz(object.getClass()).execute().getOutput();
+			Fields fields = __inject__(FieldsGetter.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.BUSINESS).setClazz(object.getClass()).execute().getOutput();
 			if(__inject__(CollectionHelper.class).isNotEmpty(fields))
 				__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(object, __getRandomCode__());
 		}

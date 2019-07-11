@@ -18,8 +18,16 @@ import org.cyk.utility.throwable.ThrowableHelper;
 public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunctionServerImpl implements PersistenceFunction, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static LogLevel LOG_LEVEL = LogLevel.TRACE;
+	
 	private Long queryFirstTupleIndex,queryNumberOfTuple;
 	private Boolean isQueryResultPaginated;
+	
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		setLogLevel(LOG_LEVEL);
+	}
 	
 	@Override
 	protected final void __execute__(SystemAction action) {
@@ -60,11 +68,6 @@ public abstract class AbstractPersistenceFunctionImpl extends AbstractSystemFunc
 	
 	protected void __executeQuery__(SystemAction action,PersistenceQuery persistenceQuery){
 		__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented();
-	}
-	
-	@Override
-	protected LogLevel __getLogLevel__() {
-		return LogLevel.TRACE;
 	}
 	
 	@Override

@@ -21,7 +21,7 @@ import org.cyk.utility.client.controller.component.input.InputStringLineManyBuil
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.data.FormData;
-import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;
@@ -147,7 +147,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public InputBuilder<?, ?> addInputBuilderByFieldName(Object object, String... fieldNames) {
-		Class<? extends InputBuilder<?,?>> inputBuilderClass =  __inject__(ComponentBuilderClassGetter.class).setField(__injectCollectionHelper__().getFirst(__inject__(FieldGetter.class)
+		Class<? extends InputBuilder<?,?>> inputBuilderClass =  __inject__(ComponentBuilderClassGetter.class).setField(__injectCollectionHelper__().getFirst(__inject__(FieldsGetter.class)
 				.execute(object.getClass(),  __injectFieldHelper__().join(fieldNames)).getOutput())).execute().getOutput();
 		return addInputBuilderByFieldName(inputBuilderClass, object, fieldNames);
 	}

@@ -1,7 +1,9 @@
 package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.action.SystemAction;
@@ -10,6 +12,8 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractPersistenceFunctionTransactionImpl extends AbstractPersistenceFunctionImpl implements PersistenceFunctionTransaction, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Collection<Object> entitiesIdentifiers;
+	
 	@Override
 	protected Boolean __executeGetIsExecutable__(Boolean value) {
 		/*Object queryIdentifier = getQueryIdentifier();
@@ -18,6 +22,44 @@ public abstract class AbstractPersistenceFunctionTransactionImpl extends Abstrac
 		
 		//return getQueryIdentifier()!=null || getEntities()!=null || getEntity()!=null;
 		return Boolean.TRUE;
+	}
+	
+	@Override
+	protected void __executeQuery__(SystemAction action) {
+		Collection<Object> entities = __getEntities__();
+		Integer batchSize = __getBatchSize__();
+		__execute__(entities,batchSize);
+		if(entitiesIdentifiers == null)
+			entitiesIdentifiers = new ArrayList<Object>();
+		for(Object index : entities) {
+			entitiesIdentifiers.add(__injectFieldHelper__().getFieldValueSystemIdentifier(index));
+		}
+	}
+	
+	protected abstract void __execute__(Collection<Object> entities,Integer batchSize);
+	
+	protected Collection<Object> __getEntities__() {
+		Collection<Object> entities = new ArrayList<>();
+		if(getEntities()!=null)
+			entities.addAll(getEntities());
+		if(getEntity()!=null)
+			entities.add(getEntity());
+		addLogMessageBuilderParameter("count", entities.size());
+		return entities;
+	}
+	
+	protected Integer __getBatchSize__() {
+		Integer size = __injectNumberHelper__().getInteger(getProperty(Properties.BATCH_SIZE), null);
+		if(size == null)
+			size = 30;
+		return size;
+	}
+	
+	@Override
+	protected Map<String, String> __getProduceFunctionOutputs__() {
+		return __injectMapHelper__().instanciateKeyAsStringValueAsString(
+				"entities.identifiers",entitiesIdentifiers
+				);
 	}
 	
 	@Override

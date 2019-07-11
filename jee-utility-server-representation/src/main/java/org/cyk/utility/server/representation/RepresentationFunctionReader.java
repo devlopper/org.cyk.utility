@@ -18,4 +18,7 @@ public interface RepresentationFunctionReader extends RepresentationFunction {
 	
 	@Override RepresentationFunctionReader addEntityFieldNames(String... entityFieldNames);
 	
+	Boolean getIsCollectionable();
+	RepresentationFunctionReader setIsCollectionable(Boolean isCollectionable);
+	
 }

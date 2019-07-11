@@ -58,4 +58,5 @@ public interface SystemFunction extends FunctionWithPropertiesAsInputAndVoidAsOu
 	Notifications getNotifications();
 	Notifications getNotifications(Boolean injectIfNull);
 	SystemFunction setNotifications(Notifications notifications);
+	
 }

@@ -127,7 +127,7 @@ public abstract class AbstractSystemLayerImpl extends AbstractSingleton implemen
 	
 	@Override
 	public Class<?> getInterfaceClassFromEntityClassName(Class<?> entityClass) {
-		return getInterfaceClassFromEntityClassName(entityClass.getName());
+		return entityClass == null ? null : getInterfaceClassFromEntityClassName(entityClass.getName());
 	}
 	
 	@Override

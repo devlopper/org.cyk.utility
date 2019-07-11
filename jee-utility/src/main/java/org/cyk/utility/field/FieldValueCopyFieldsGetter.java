@@ -10,9 +10,9 @@ public interface FieldValueCopyFieldsGetter extends FunctionWithPropertiesAsInpu
 	Class<?> getDestinationClass();
 	FieldValueCopyFieldsGetter setDestinationClass(Class<?> destinationClass);
 	
-	FieldGetter getFieldGetter();
-	FieldGetter getFieldGetter(Boolean injectIfNull);
-	FieldValueCopyFieldsGetter setFieldGetter(FieldGetter fieldGetter);
+	FieldsGetter getFieldGetter();
+	FieldsGetter getFieldGetter(Boolean injectIfNull);
+	FieldValueCopyFieldsGetter setFieldGetter(FieldsGetter fieldGetter);
 	
 	FieldInstanceValue getSource();
 	FieldValueCopyFieldsGetter setSource(FieldInstanceValue source);

@@ -1,38 +1,131 @@
 package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.clazz.ClassInstancesRuntime;
+import org.cyk.utility.field.FieldValueSetter;
+import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.server.business.Business;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
+import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemFunctionServerImpl implements RepresentationFunction, Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	public static LogLevel LOG_LEVEL = LogLevel.INFO;
+	
 	protected Throwable __throwable__;
 	protected ResponseBuilder __responseBuilder__;
 	//protected Strings fieldNamesStrings;
+	protected Class<?> __persistenceEntityClass__;
+	protected Collection<Object> __entities__,__entitiesSystemIdentifiers__,__entitiesBusinessIdentifiers__,__persistenceEntities__;
+	protected Field __entityClassSystemIdentifierField__,__entityClassBusinessIdentifierField__;
+	protected ValueUsageType __entityIdentifierValueUsageType__;
+	
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		setLogLevel(LOG_LEVEL);
+	}
 	
 	@Override
 	protected void __execute__(SystemAction action) {
+		if(getEntityClass() != null) {
+			__entityClassSystemIdentifierField__ = __inject__(ClassInstancesRuntime.class).get(getEntityClass()).getSystemIdentifierField();
+			__entityClassBusinessIdentifierField__ = __inject__(ClassInstancesRuntime.class).get(getEntityClass()).getBusinessIdentifierField();	
+		}
+		
+		__entityIdentifierValueUsageType__ = getEntityIdentifierValueUsageType();
+		if(__entityIdentifierValueUsageType__ == null)
+			__entityIdentifierValueUsageType__ = ValueUsageType.SYSTEM;
+		
+		__entities__ = __getEntities__();
+		__persistenceEntityClass__ = getPersistenceEntityClass();
+		if(__persistenceEntityClass__ == null) {
+			Class<?> klass = null;
+			if(getEntityClass()==null) {
+				if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entities__)))
+					klass = __entities__.iterator().next().getClass();	
+			}else {
+				klass = getEntityClass();
+			}
+			
+			if(klass != null) {
+				String className = klass.getName();
+				className = StringUtils.replaceOnce(className, ".representation.", ".persistence.");
+				className = StringUtils.removeEnd(className, "Dto");
+				__persistenceEntityClass__ = __injectClassHelper__().getByName(className);	
+			}
+		}
+		__initialiseEntitiesIdentifiers__();
+		
+		Integer numberOfProcessedElement = null;
+		if(__injectCollectionHelper__().isNotEmpty(__entities__))
+			numberOfProcessedElement = __entities__.size();
+		else { 
+			numberOfProcessedElement = __injectCollectionHelper__().getSize(__entitiesSystemIdentifiers__) + __injectCollectionHelper__().getSize(__entitiesBusinessIdentifiers__);
+		}
+		
+		if(numberOfProcessedElement != null)
+			addLogMessageBuilderParameter("count", numberOfProcessedElement);
+		
 		__responseBuilder__ = __instanciateResponseBuilder__();
 		try {
 			__executeBusiness__();
+			
+			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__persistenceEntities__))) {
+				Collection<String> identifiersSystem = new ArrayList<String>();
+				Collection<String> identifiersBusiness = new ArrayList<String>();
+				
+				Field persistenceSystemIdentifierField = __inject__(ClassInstancesRuntime.class).get(__persistenceEntityClass__).getSystemIdentifierField();
+				Field persistenceBusinessIdentifierField = __inject__(ClassInstancesRuntime.class).get(__persistenceEntityClass__).getSystemIdentifierField();
+				
+				Integer count = 0;
+				for(Object index : __persistenceEntities__) {
+					Object dto = __injectCollectionHelper__().getElementAt(__entities__, count);
+					Object identifier = __injectFieldValueGetter__().execute(index, persistenceSystemIdentifierField).getOutput();
+					if(identifier != null) {
+						identifiersSystem.add(identifier.toString());
+						if(__entityClassSystemIdentifierField__ != null)
+							__inject__(FieldValueSetter.class).execute(dto, __entityClassSystemIdentifierField__, identifier.toString());
+					}
+					
+					identifier = __injectFieldValueGetter__().execute(index, persistenceBusinessIdentifierField).getOutput();
+					if(identifier != null) {
+						identifiersBusiness.add(identifier.toString());
+						if(__entityClassBusinessIdentifierField__ != null)
+							__inject__(FieldValueSetter.class).execute(dto, __entityClassBusinessIdentifierField__, identifier.toString());
+					}
+				
+					count++;
+				}
+				
+				if(__injectCollectionHelper__().isNotEmpty(identifiersSystem))
+					__responseBuilder__.header("entity-identifier-system", __injectStringHelper__().concatenate(identifiersSystem, ","));
+				if(__injectCollectionHelper__().isNotEmpty(identifiersBusiness))
+					__responseBuilder__.header("entity-identifier-business", __injectStringHelper__().concatenate(identifiersBusiness, ","));	
+			}
 		} catch (Exception exception) {
 			__throwable__ = exception;
 			System.out.println("AbstractRepresentationFunctionImpl.__execute__() THROWABLE");
 			exception.printStackTrace();
+			//__log__(exception);
 		} finally {
 			__processResponseBuilder__();
 		}
 		setResponse(__responseBuilder__.build());
+		//System.out.println("AbstractRepresentationFunctionImpl.__execute__() : "+getClass().getSimpleName()+" : "+(System.currentTimeMillis() - t));
 	}
 	
 	protected abstract void __executeBusiness__();
@@ -68,7 +161,7 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	
 	protected void __computeResponseEntity__(ResponseEntityDto responseEntityDto){
 		responseEntityDto.setStatusUsingEnumeration(ResponseEntityDto.Status.SUCCESS);
-		responseEntityDto.addMessage(new MessageDto().setHead(getPersistenceEntityClass().getSimpleName()+" a été "+getAction().getIdentifier()+" avec succès."));
+		responseEntityDto.addMessage(new MessageDto().setHead(__persistenceEntityClass__.getSimpleName()+" a été "+getAction().getIdentifier()+" avec succès."));
 	}
 	
 	protected void __computeResponseEntity__(ResponseEntityDto responseEntityDto,Throwable throwable){
@@ -86,6 +179,63 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	@Override
 	public RepresentationFunction execute() {
 		return (RepresentationFunction) super.execute();
+	}
+	
+	protected Collection<Object> __getEntities__() {
+		Collection<Object> entities = null;
+		if(getEntities() != null) {
+			if(entities == null)
+				entities = new ArrayList<>();
+			entities.addAll(getEntities());
+		}
+		if(getEntity() != null) {
+			if(entities == null)
+				entities = new ArrayList<>();
+			entities.add(getEntity());
+		}
+		return entities;
+	}
+	
+	protected Collection<Object> __getEntitiesIdentifiers__(ValueUsageType valueUsageType) {
+		Collection<Object> identifiers = null;
+		
+		if(__injectCollectionHelper__().isNotEmpty(__entities__)) {
+			if(identifiers == null)
+				identifiers = new ArrayList<>();
+			
+			Object identifier = null;
+			for(Object index : __entities__) {
+				if(ValueUsageType.SYSTEM.equals(valueUsageType) && __entityClassSystemIdentifierField__ != null)
+					identifier = __injectFieldValueGetter__().execute(index, __entityClassSystemIdentifierField__).getOutput();
+				
+				if(identifier == null && ValueUsageType.BUSINESS.equals(valueUsageType) && __entityClassBusinessIdentifierField__ != null)
+					identifier = __injectFieldValueGetter__().execute(index, __entityClassBusinessIdentifierField__).getOutput();
+				
+				if(identifier != null)
+					identifiers.add(identifier);
+			}			
+		}
+		
+		if(__entityIdentifierValueUsageType__.equals(valueUsageType)) {
+			if(getEntityIdentifier() != null) {
+				if(identifiers == null)
+					identifiers = new ArrayList<>();
+				identifiers.add(getEntityIdentifier());
+			}	
+			
+			if(__injectCollectionHelper__().isNotEmpty(getAction().getEntitiesIdentifiers())) {
+				if(identifiers == null)
+					identifiers = new ArrayList<>();
+				identifiers.addAll(getAction().getEntitiesIdentifiers().get());
+			}
+		}
+		
+		return identifiers;
+	}
+	
+	protected void __initialiseEntitiesIdentifiers__() {
+		__entitiesSystemIdentifiers__ = __getEntitiesIdentifiers__(ValueUsageType.SYSTEM);
+		__entitiesBusinessIdentifiers__ = __getEntitiesIdentifiers__(ValueUsageType.BUSINESS);
 	}
 	
 	@Override

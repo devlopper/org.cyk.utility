@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.field.FieldValueGetter;
@@ -22,7 +22,7 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 	@Override
 	public AssertionHelper assertNotNull(String message, Object object,FieldName fieldName, ValueUsageType valueUsageType) {
 		String name = __inject__(FieldNameGetter.class).execute(object.getClass(), fieldName, valueUsageType).getOutput();
-		if(__inject__(StringHelper.class).isNotBlank(name) && __inject__(CollectionHelper.class).isNotEmpty(__inject__(FieldGetter.class).execute(object.getClass(), name).getOutput()))
+		if(__inject__(StringHelper.class).isNotBlank(name) && __inject__(CollectionHelper.class).isNotEmpty(__inject__(FieldsGetter.class).execute(object.getClass(), name).getOutput()))
 			assertNotNull(message, __inject__(FieldValueGetter.class).execute(object, name).getOutput());
 		return this;
 	}

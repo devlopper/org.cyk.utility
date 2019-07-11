@@ -4659,7 +4659,27 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getBatchSize() {
+		return get(BATCH_SIZE);
+	}
+
+	public Properties setBatchSize(Object batchSize) {
+		set(BATCH_SIZE, batchSize);
+		return this;
+	}
+	
+	public Object getIsBatchable() {
+		return get(IS_BATCHABLE);
+	}
+
+	public Properties setIsBatchable(Object isBatchable) {
+		set(IS_BATCHABLE, isBatchable);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String IS_BATCHABLE = "IS_BATCHABLE";
+	public static final String BATCH_SIZE = "BATCH_SIZE";
 	public static final String TIME_ZONE = "TIME_ZONE";
 	public static final String IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK = "IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK";
 	public static final String FORCE_SELECTION = "FORCE_SELECTION";

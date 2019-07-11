@@ -8,7 +8,7 @@ import java.util.Collection;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
-import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.internationalization.InternalizationKeyStringType;
@@ -45,13 +45,13 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 					Collection<String> fieldNames = classGetter.getFieldNameStrings().get();
 					Integer size = __injectCollectionHelper__().getSize(fieldNames);
 					if(size == 1) {
-						field = __injectCollectionHelper__().getFirst(__inject__(FieldGetter.class).execute(object.getClass(), __injectCollectionHelper__()
+						field = __injectCollectionHelper__().getFirst(__inject__(FieldsGetter.class).execute(object.getClass(), __injectCollectionHelper__()
 								.getElementAt(fieldNames, 0)).getOutput());
 					}else {
 						for(Integer index = 0 ; index < size - 1 ; index = index + 1) {
 							String fieldName = __injectCollectionHelper__().getElementAt(fieldNames, index);
 							object =  __inject__(FieldValueGetter.class).execute(object, fieldName).getOutput();
-							field = __injectCollectionHelper__().getFirst(__inject__(FieldGetter.class).execute(object.getClass(), __injectCollectionHelper__()
+							field = __injectCollectionHelper__().getFirst(__inject__(FieldsGetter.class).execute(object.getClass(), __injectCollectionHelper__()
 									.getElementAt(fieldNames, index+1)).getOutput());
 							classGetter.setField(field);
 						}	

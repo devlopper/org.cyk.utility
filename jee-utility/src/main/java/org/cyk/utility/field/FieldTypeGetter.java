@@ -8,9 +8,9 @@ import org.cyk.utility.value.ValueUsageType;
 
 public interface FieldTypeGetter extends FunctionWithPropertiesAsInput<FieldType> {
 
-	FieldGetter getFieldGetter();
-	FieldGetter getFieldGetter(Boolean injectIfNull);
-	FieldTypeGetter setFieldGetter(FieldGetter fieldGetter);
+	FieldsGetter getFieldGetter();
+	FieldsGetter getFieldGetter(Boolean injectIfNull);
+	FieldTypeGetter setFieldGetter(FieldsGetter fieldGetter);
 	
 	Class<?> getClazz();
 	FieldTypeGetter setClazz(Class<?> aClass);

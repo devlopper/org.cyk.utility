@@ -8,13 +8,16 @@ import java.util.List;
 import javax.validation.ConstraintViolationException;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.server.business.api.MyEntityBusiness;
 import org.cyk.utility.server.business.test.TestBusinessCreate;
 import org.cyk.utility.server.business.test.TestBusinessDelete;
 import org.cyk.utility.server.business.test.TestBusinessRead;
 import org.cyk.utility.server.business.test.TestBusinessUpdate;
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillianIntegrationTestWithDefaultDeployment;
+import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.test.FunctionRunnableTest;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueUsageType;
@@ -24,6 +27,12 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 	private static final long serialVersionUID = 1L;
 	
 	/* Create */
+	
+	@Override
+	protected void __listenBeforeCallCountIsZero__() throws Exception {
+		super.__listenBeforeCallCountIsZero__();
+		__inject__(AssertionsProviderClassMap.class).set(MyEntity.class, MyEntityAssertionsProvider.class);
+	}
 	
 	@Test
 	public void createOneMyEntity() throws Exception{

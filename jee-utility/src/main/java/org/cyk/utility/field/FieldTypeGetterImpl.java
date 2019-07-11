@@ -19,12 +19,12 @@ import org.cyk.utility.value.ValueUsageType;
 public class FieldTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<FieldType> implements FieldTypeGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private FieldGetter fieldGetter;
+	private FieldsGetter fieldGetter;
 	
 	@Override
 	protected FieldType __execute__() {
 		FieldType fieldType = null;
-		FieldGetter fieldGetter = getFieldGetter();
+		FieldsGetter fieldGetter = getFieldGetter();
 		
 		Class<?> klass = getClazz();
 		
@@ -92,17 +92,17 @@ public class FieldTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputIm
 	}
 	
 	@Override
-	public FieldGetter getFieldGetter() {
+	public FieldsGetter getFieldGetter() {
 		return fieldGetter;
 	}
 	
 	@Override
-	public FieldGetter getFieldGetter(Boolean injectIfNull) {
-		return (FieldGetter) __getInjectIfNull__(FIELD_FIELD_GETTER, injectIfNull);
+	public FieldsGetter getFieldGetter(Boolean injectIfNull) {
+		return (FieldsGetter) __getInjectIfNull__(FIELD_FIELD_GETTER, injectIfNull);
 	}
 	
 	@Override
-	public FieldTypeGetter setFieldGetter(FieldGetter fieldGetter) {
+	public FieldTypeGetter setFieldGetter(FieldsGetter fieldGetter) {
 		this.fieldGetter = fieldGetter;
 		return this;
 	}
@@ -132,7 +132,7 @@ public class FieldTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputIm
 	@Override
 	public FieldTypeGetter setField(Class<?> aClass, Collection<String> names) {
 		if(aClass !=null && __inject__(CollectionHelper.class).isNotEmpty(names)){
-			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldGetter.class).execute(aClass, __inject__(FieldHelper.class).join(names)).getOutput()));
+			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldsGetter.class).execute(aClass, __inject__(FieldHelper.class).join(names)).getOutput()));
 		}
 		return this;
 	}

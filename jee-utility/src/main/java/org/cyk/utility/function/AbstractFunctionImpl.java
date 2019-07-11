@@ -31,6 +31,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	private static final long serialVersionUID = 1L;
 	
 	//private Collection<Class<?>> assertionsProvidersDomainsClasses;
+	private LogLevel logLevel;
 	
 	@Override
 	public Function<INPUT, OUTPUT> setInput(INPUT input) {
@@ -90,11 +91,11 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	protected Log __injectLog__() {
 		return ____inject____(Log.class).setLevel(LogLevel.TRACE).setSourceClassName(StringUtils.substringBefore(getClass().getName(),ConstantCharacter.DOLLAR.toString()))
-				.setSourceMethodName("execute").setLevel(__getLogLevel__());
+				.setSourceMethodName("execute").setLevel(__getLogLevel__(getLogLevel()));
 	}
 	
-	protected LogLevel __getLogLevel__() {
-		return LogLevel.TRACE;
+	protected LogLevel __getLogLevel__(LogLevel logLevel) {
+		return logLevel == null ? LogLevel.TRACE : logLevel;
 	}
 	
 	@Override
@@ -163,6 +164,18 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 		getProperties().setLoggable(monitorable);
 		return this;
 	}
+	
+	@Override
+	public Function<INPUT,OUTPUT> setLogLevel(LogLevel logLevel) {
+		this.logLevel = logLevel;
+		return this;
+	}
+	
+	@Override
+	public LogLevel getLogLevel() {
+		return logLevel;
+	}
+	
 	/*
 	@Override
 	public Collection<Class<?>> getAssertionsProvidersDomainsClasses() {

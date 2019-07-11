@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.Controller;
-import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.field.FieldType;
 import org.cyk.utility.field.FieldTypeGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -39,7 +39,7 @@ public class ChoicesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 		String query = StringUtils.trimToEmpty(getQuery());
 		Integer maximumNumberOfChoice = getMaximumNumberOfChoice();
 		Objects objects = __inject__(Objects.class);
-		FieldType fieldType = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldGetter.class).setClazz(fieldDeclaringClass).setToken(field.getName())).execute()
+		FieldType fieldType = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldsGetter.class).setClazz(fieldDeclaringClass).setToken(field.getName())).execute()
 				.getOutput();
 		Class<?> choiceClass = fieldType.getType();
 		if(__injectClassHelper__().isInstanceOf(choiceClass, Collection.class)) {

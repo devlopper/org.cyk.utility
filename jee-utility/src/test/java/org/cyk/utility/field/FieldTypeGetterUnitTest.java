@@ -31,14 +31,14 @@ public class FieldTypeGetterUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void get_String_classIsMyClass_fieldIsF02(){
-		FieldType fieldType = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldGetter.class).setClazz(MyClassString.class).setToken("f02")).execute().getOutput();
+		FieldType fieldType = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldsGetter.class).setClazz(MyClassString.class).setToken("f02")).execute().getOutput();
 		assertThat(fieldType.getType()).isEqualTo(String.class);
 		assertThat(fieldType.getParameterizedClasses()).isNull();
 	}
 	
 	@Test
 	public void get_String_classIsMyClassString_fieldIsF03(){
-		FieldType fieldType = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldGetter.class).setClazz(MyClassString.class).setToken("f03")).execute().getOutput();
+		FieldType fieldType = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldsGetter.class).setClazz(MyClassString.class).setToken("f03")).execute().getOutput();
 		assertThat(fieldType.getType()).isEqualTo(Collection.class);
 		assertThat(fieldType.getParameterizedClasses()).isNotNull();
 		assertThat(fieldType.getParameterizedClasses().getMap()).isNotNull();
@@ -70,7 +70,7 @@ public class FieldTypeGetterUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void get_Long_classIsMyClassLong_fieldIsF03(){
-		FieldType fieldType = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldGetter.class).setClazz(MyClassLong.class).setToken("f03")).execute().getOutput();
+		FieldType fieldType = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldsGetter.class).setClazz(MyClassLong.class).setToken("f03")).execute().getOutput();
 		assertThat(fieldType.getType()).isEqualTo(Collection.class);
 		assertThat(fieldType.getParameterizedClasses()).isNotNull();
 		assertThat(fieldType.getParameterizedClasses().getMap()).isNotNull();

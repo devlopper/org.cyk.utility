@@ -5,12 +5,10 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.field.FieldName;
-import org.cyk.utility.instance.InstanceHelper;
+import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.server.business.Business;
 import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.type.BooleanHelper;
 
 public abstract class AbstractRepresentationFunctionCreatorImpl extends AbstractRepresentationFunctionTransactionImpl implements RepresentationFunctionCreator, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -24,28 +22,18 @@ public abstract class AbstractRepresentationFunctionCreatorImpl extends Abstract
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void __executeBusiness__() {
-		if(getEntities()!=null)
-			__inject__(Business.class).createMany((Collection<Object>) __inject__(InstanceHelper.class).buildMany(getPersistenceEntityClass(),getEntities()));
-		else if(getEntity()!=null) {
-			Object representation = getEntity();
-			Object persistence = __inject__(InstanceHelper.class).buildOne(getPersistenceEntityClass(),representation);
-			__inject__(Business.class).create(persistence);
-			Object identifierSystem = __injectFieldHelper__().getFieldValueSystemIdentifier(persistence);
-			__responseBuilder__.header("entity-identifier-system", identifierSystem);
-			__injectFieldHelper__().setFieldValueSystemIdentifier(representation,identifierSystem);
-			
-			if(__inject__(FieldHelper.class).getField(persistence.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS)!=null && 
-					__inject__(FieldHelper.class).getField(representation.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS)!=null) {
-				Object identifierBusiness = __injectFieldHelper__().getFieldValueBusinessIdentifier(persistence);
-				__responseBuilder__.header("entity-identifier-business", identifierBusiness);
-				__injectFieldHelper__().setFieldValueBusinessIdentifier(representation,identifierBusiness);
-			}
-			
-		}else {
-			__injectThrowableHelper__().throwRuntimeException("No entity to "+getAction());
-		}	
+		if(__injectCollectionHelper__().isNotEmpty(__entities__)) {
+			__persistenceEntities__ = (Collection<Object>) __inject__(MappingHelper.class).getDestinations(__entities__, __persistenceEntityClass__);
+			Boolean isBatchable = __inject__(BooleanHelper.class).get(getProperties().getIsBatchable());
+			if(Boolean.TRUE.equals(isBatchable)) {
+				Integer batchSize = __injectNumberHelper__().getInteger(getProperties().getBatchSize());
+				__inject__(Business.class).createManyByBatch(__persistenceEntities__, batchSize);
+			}else {
+				__inject__(Business.class).createMany(__persistenceEntities__);	
+			}					
+		}
 	}
-
+	
 	@Override
 	protected Status __computeResponseStatus__() {
 		if(__throwable__==null)

@@ -3,9 +3,15 @@ package org.cyk.utility.__kernel__.function;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.Serializable;
+import java.util.Collection;
 
+import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 public class FunctionUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
@@ -94,6 +100,24 @@ public class FunctionUnitTest extends AbstractWeldUnitTest {
 		assertThat(function.getOutput()).isEqualTo("hello");
 	}
 	
+	@Test
+	public void assert_preconditions(){
+		MyFunction function = __inject__(MyFunction.class);
+		function.try_().run().addRunnables(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("FunctionUnitTest.assert_preconditions().new Runnable() {...}.run()");
+			}
+		});
+		MyAssertionsProvider preAssertionsProvider = __inject__(MyAssertionsProvider.class);
+		MyAssertionsProvider postAssertionsProvider = __inject__(MyAssertionsProvider.class);
+		function.setPreConditionsAssertionsProvider(preAssertionsProvider);
+		function.setPostConditionsAssertionsProvider(postAssertionsProvider);
+		function.execute();
+		assertThat(preAssertionsProvider.getCalled()).isEqualTo(Boolean.TRUE);
+		assertThat(postAssertionsProvider.getCalled()).isEqualTo(Boolean.TRUE);
+	}
+	
 	//@Test
 	public void execute_MyFunctionAll_1000000(){
 		for(int index = 0 ; index < 10000000 ; index = index + 1)
@@ -139,4 +163,14 @@ public class FunctionUnitTest extends AbstractWeldUnitTest {
 		
 	}
 	
+	@Getter @Setter @Accessors(chain=true)
+	public static class MyAssertionsProvider extends AbstractFunctionImpl<Object, Collection<Assertion>> implements Serializable {
+		private static final long serialVersionUID = 1L;
+		private Boolean called;
+		@Override
+		protected Collection<Assertion> __execute__() throws Exception {
+			called = Boolean.TRUE;
+			return null;
+		}
+	}
 }

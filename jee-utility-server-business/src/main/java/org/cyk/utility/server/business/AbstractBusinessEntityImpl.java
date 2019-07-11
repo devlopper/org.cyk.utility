@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.assertj.core.util.Arrays;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.clazz.ClassHelper;
@@ -159,7 +160,16 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	
 	@Override @Transactional
 	public BusinessEntity<ENTITY> deleteByIdentifier(Object identifier,ValueUsageType valueUsageType) {
-		delete(getPersistence().readOne(identifier,valueUsageType));
+		//getPersistence().deleteByIdentifier(identifier, valueUsageType);
+		//delete(getPersistence().readOne(identifier,valueUsageType));
+		//deleteManyByIdentifiers((Collection<Object>)Arrays.asList(identifier), valueUsageType);
+		
+		BusinessFunctionRemover function = __inject__(BusinessFunctionRemover.class);
+		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifier);
+		function.setEntityClass(getPersistenceEntityClass());
+		function.setEntityIdentifierValueUsageType(valueUsageType);
+		//__copyCommonProperties__(function, properties);
+		function.execute();
 		return this;
 	}
 	
@@ -176,7 +186,44 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	}
 	
 	@Override @Transactional
-	public BusinessEntity<ENTITY> deleteAll() {
+	public BusinessEntity<ENTITY> deleteManyByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
+		BusinessFunctionRemover function = __inject__(BusinessFunctionRemover.class);
+		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifiers);
+		function.setEntityClass(getPersistenceEntityClass());
+		function.setEntityIdentifierValueUsageType(valueUsageType);
+		__copyCommonProperties__(function, properties);
+		function.execute();
+		return this;
+	}
+	
+	@Override @Transactional
+	public BusinessEntity<ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers, Properties properties) {
+		return deleteManyByIdentifiers(identifiers, ValueUsageType.SYSTEM, properties);
+	}
+	
+	@Override @Transactional
+	public BusinessEntity<ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers) {
+		return deleteManyBySystemIdentifiers(identifiers, null);
+	}
+	
+	@Override @Transactional
+	public BusinessEntity<ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers,Properties properties) {
+		return deleteManyByIdentifiers(identifiers, ValueUsageType.BUSINESS, properties);
+	}
+	
+	@Override @Transactional
+	public BusinessEntity<ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers) {
+		return deleteManyByBusinessIdentifiers(identifiers, null);
+	}
+	
+	@Override @Transactional
+	public BusinessEntity<ENTITY> deleteManyByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType) {
+		deleteManyByIdentifiers(identifiers, valueUsageType, null);
+		return this;
+	}
+	
+	@Override @Transactional
+	public BusinessEntity<ENTITY> deleteAll(Properties properties) {
 		/*BusinessFunctionRemover function = __inject__(BusinessFunctionRemover.class);
 		function.setEntities(findMany());
 		function.setEntityClass(getPersistenceEntityClass());		
@@ -186,7 +233,13 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		Collection<ENTITY> entities = findMany();
 		if(__injectCollectionHelper__().isNotEmpty(entities))
 			for(ENTITY index : entities)
-				delete(index);
+				delete(index,properties);
+		return this;
+	}
+	
+	@Override @Transactional
+	public BusinessEntity<ENTITY> deleteAll() {
+		deleteAll(null);
 		return this;
 	}
 	

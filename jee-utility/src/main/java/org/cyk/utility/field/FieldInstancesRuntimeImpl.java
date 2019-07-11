@@ -40,7 +40,7 @@ public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldIn
 					for(String index : fieldContainerNames)
 						aClass = FieldUtils.getDeclaredField(aClass, index, Boolean.TRUE).getType();
 				}
-				instance.setField(__inject__(FieldGetter.class).execute(aClass, fieldNames.getLast()).getOutput().getFirst());
+				instance.setField(__inject__(FieldsGetter.class).execute(aClass, fieldNames.getLast()).getOutput().getFirst());
 				instance.setType(__inject__(FieldTypeGetter.class).execute(instance.getField()).getOutput().getType());
 				instance.setIsGeneratable(instance.getField().isAnnotationPresent(GeneratedValue.class));
 				getInstances(Boolean.TRUE).add(instance);

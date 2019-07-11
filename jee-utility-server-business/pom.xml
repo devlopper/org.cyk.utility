@@ -30,7 +30,7 @@
 				<org.cyk.test.cdi.beans.file>org/cyk/utility/server/business/beans.xml</org.cyk.test.cdi.beans.file>
 				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/business/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.jpa.persistence.file>org/cyk/utility/server/business/persistence.xml</org.cyk.test.jpa.persistence.file>
-				<org.cyk.test.classes>org.cyk.utility.server.business.MyEntity,org.cyk.utility.server.business.DataSourceDefinition</org.cyk.test.classes>
+				<org.cyk.test.classes>org.cyk.utility.server.persistence.entities.MyEntity,org.cyk.utility.server.persistence.api.MyEntityPersistence,org.cyk.utility.server.persistence.impl.MyEntityPersistenceImpl,org.cyk.utility.server.business.api.MyEntityBusiness,org.cyk.utility.server.business.impl.MyEntityBusinessImpl,org.cyk.utility.server.business.DataSourceDefinition,org.cyk.utility.server.business.MyEntityAssertionsProvider,org.cyk.utility.server.business.MyEntityAssertionsProviderImpl</org.cyk.test.classes>
 			</properties>
 			<dependencies>
 				<dependency>

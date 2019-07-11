@@ -9,7 +9,7 @@ public abstract class AbstractFieldValueCopyFieldsGetterImpl extends AbstractFun
 	private static final long serialVersionUID = 1L;
 
 	private Class<?> sourceClass,destinationClass;
-	private FieldGetter fieldGetter;
+	private FieldsGetter fieldGetter;
 	private FieldInstanceValue source,destination;
 	
 	@Override
@@ -17,7 +17,7 @@ public abstract class AbstractFieldValueCopyFieldsGetterImpl extends AbstractFun
 		Fields fields = null;
 		Class<?> sourceClass = getSourceClass();
 		//Class<?> destinationClass = getSourceClass();
-		FieldGetter fieldGetter = getFieldGetter(Boolean.TRUE);
+		FieldsGetter fieldGetter = getFieldGetter(Boolean.TRUE);
 		if(fieldGetter.getClazz() == null)
 			fieldGetter.setClazz(sourceClass);		
 		fields = fieldGetter.execute().getOutput();
@@ -51,17 +51,17 @@ public abstract class AbstractFieldValueCopyFieldsGetterImpl extends AbstractFun
 	}
 	
 	@Override
-	public FieldGetter getFieldGetter() {
+	public FieldsGetter getFieldGetter() {
 		return fieldGetter;
 	}
 	
 	@Override
-	public FieldGetter getFieldGetter(Boolean injectIfNull) {
-		return (FieldGetter) __getInjectIfNull__(FIELD_FIELD_GETTER, injectIfNull);
+	public FieldsGetter getFieldGetter(Boolean injectIfNull) {
+		return (FieldsGetter) __getInjectIfNull__(FIELD_FIELD_GETTER, injectIfNull);
 	}
 	
 	@Override
-	public FieldValueCopyFieldsGetter setFieldGetter(FieldGetter fieldGetter) {
+	public FieldValueCopyFieldsGetter setFieldGetter(FieldsGetter fieldGetter) {
 		this.fieldGetter = fieldGetter;
 		return this;
 	}

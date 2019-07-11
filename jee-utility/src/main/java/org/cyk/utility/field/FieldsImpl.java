@@ -12,6 +12,7 @@ import javax.enterprise.context.Dependent;
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Strings;
+import org.cyk.utility.value.ValueUsageType;
 
 @Dependent
 public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements Fields,Serializable {
@@ -26,6 +27,24 @@ public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements
 				names.add(index.getName());
 		}
 		return names;
+	}
+	
+	@Override
+	public Field getByName(String name) {
+		Field field = null;
+		if(__inject__(CollectionHelper.class).isNotEmpty(collection)) {
+			for(Field index : collection)
+				if(index.getName().equals(name)) {
+					field = index;
+					break;
+				}
+		}
+		return field;
+	}
+	
+	@Override
+	public Field getByName(Class<?> klass,FieldName fieldName, ValueUsageType valueUsageType) {
+		return getByName(__inject__(FieldNameGetter.class).execute(klass, fieldName, valueUsageType).execute().getOutput());
 	}
 
 	@Override

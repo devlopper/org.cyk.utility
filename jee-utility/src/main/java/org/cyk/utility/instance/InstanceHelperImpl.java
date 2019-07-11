@@ -3,6 +3,7 @@ package org.cyk.utility.instance;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -11,6 +12,7 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.runnable.RunnablesExecutor;
 import org.cyk.utility.value.ValueHelper;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -69,11 +71,26 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 	
 	@Override
 	public <INSTANCE> Collection<INSTANCE> buildMany(Class<INSTANCE> aClass, Collection<?> fieldsValuesObjects,Properties properties) {
-		Collection<INSTANCE> instances = null;
+		Collection<INSTANCE> instances = Collections.synchronizedList(new ArrayList<>());
 		if(__inject__(CollectionHelper.class).isNotEmpty(fieldsValuesObjects)) {
-			instances = new ArrayList<>();
-			for(Object index : fieldsValuesObjects)
+			//instances = new ArrayList<>();
+			for(Object index : fieldsValuesObjects) {
 				instances.add(buildOne(aClass, index,properties));
+			}
+			/*
+			RunnablesExecutor runnablesExecutor = __inject__(RunnablesExecutor.class);
+			runnablesExecutor.getExecutorServiceBuilder(Boolean.TRUE).setCorePoolSize(10);
+			runnablesExecutor.getExecutorServiceBuilder(Boolean.TRUE).setMaximumPoolSize(15);
+			for(Object index : fieldsValuesObjects) {
+				runnablesExecutor.addRunnables(new Runnable() {
+					@Override
+					public void run() {
+						instances.add(buildOne(aClass, index,properties));
+					}
+				});	
+			}
+			runnablesExecutor.execute();
+			*/
 		}
 		return instances;
 	}

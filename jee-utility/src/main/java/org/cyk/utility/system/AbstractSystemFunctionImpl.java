@@ -50,7 +50,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	private Notifications notifications;
 	private Long entitiesCount;
 	private Boolean isActionRequired;
-	
+
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
@@ -100,12 +100,14 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	}
 	
 	@Override
-	protected LogLevel __getLogLevel__() {
-		SystemAction action = getAction();
-		//info action that might modify system state
-		if(action instanceof SystemActionCreate || action instanceof SystemActionUpdate || action instanceof SystemActionDelete)
-			return LogLevel.INFO;
-		return super.__getLogLevel__();
+	protected LogLevel __getLogLevel__(LogLevel logLevel) {
+		if(logLevel == null) {
+			SystemAction action = getAction();
+			//info action that might modify system state
+			if(action instanceof SystemActionCreate || action instanceof SystemActionUpdate || action instanceof SystemActionDelete)
+				logLevel = LogLevel.INFO;	
+		}
+		return super.__getLogLevel__(logLevel);
 	}
 	
 	@Override
@@ -359,7 +361,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	/* following can be more upper*/
 	
-	protected Collection<FieldName> getLoggedEntityFieldNames(){
+	protected Collection<FieldName> __getLoggedEntityFieldNames__(){
 		return __inject__(CollectionHelper.class).instanciate(FieldName.IDENTIFIER);
 	}
 	
@@ -403,11 +405,15 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		return this;
 	}
 	
+	
+	
 	/**/
 	
 	protected void __produceFunction__(String function,Map<String,String> inputs,Map<String,String> outputs) {
 		__inject__(FunctionHelper.class).produce(function, inputs, outputs);
 	}
+	
+	/**/
 	
 	/**/
 	

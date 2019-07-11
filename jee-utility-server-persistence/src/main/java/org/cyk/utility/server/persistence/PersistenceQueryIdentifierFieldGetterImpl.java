@@ -9,7 +9,7 @@ import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
@@ -21,7 +21,7 @@ public class PersistenceQueryIdentifierFieldGetterImpl extends AbstractFunctionW
 	
 	@Override
 	protected Collection<Field> __execute__() throws Exception {
-		Fields classFields = __inject__(FieldGetter.class).execute(getClazz()).getOutput();
+		Fields classFields = __inject__(FieldsGetter.class).execute(getClazz()).getOutput();
 		Collection<Field> identifierfields = null;
 		if(__inject__(CollectionHelper.class).isNotEmpty(classFields)){
 			for(Field index : classFields.get()){

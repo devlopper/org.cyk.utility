@@ -126,7 +126,7 @@ public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputA
 	@Override
 	public FieldValueSetter setField(Class<?> aClass, Collection<String> names) {
 		if(aClass !=null && __inject__(CollectionHelper.class).isNotEmpty(names)){
-			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldGetter.class).execute(aClass, __inject__(FieldHelper.class).join(names)).getOutput()));
+			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldsGetter.class).execute(aClass, __inject__(FieldHelper.class).join(names)).getOutput()));
 		}
 		return this;
 	}

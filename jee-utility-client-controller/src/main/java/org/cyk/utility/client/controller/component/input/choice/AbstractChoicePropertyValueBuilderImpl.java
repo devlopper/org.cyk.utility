@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
-import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -38,11 +38,11 @@ public abstract class AbstractChoicePropertyValueBuilderImpl extends AbstractFun
 			
 			Field field = null;
 			if(__injectStringHelper__().isNotBlank(propertyName) )
-				field = __injectCollectionHelper__().getFirst(__inject__(FieldGetter.class).execute(object.getClass(), propertyName).getOutput());
+				field = __injectCollectionHelper__().getFirst(__inject__(FieldsGetter.class).execute(object.getClass(), propertyName).getOutput());
 			
 			if(__injectStringHelper__().isBlank(propertyName) || field == null) {
 				if(field == null) {
-					FieldGetter fieldGetter = __inject__(FieldGetter.class).setClazz(object.getClass());
+					FieldsGetter fieldGetter = __inject__(FieldsGetter.class).setClazz(object.getClass());
 					for(Object[] index : FIELD_NAME_VALUE_USAGE_TYPE)
 						fieldGetter.addNameToken((FieldName)index[0], (ValueUsageType)index[1]);
 					Fields fields = fieldGetter.execute().getOutput();

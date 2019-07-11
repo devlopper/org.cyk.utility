@@ -42,6 +42,7 @@ public interface ConstantString {
 	String COUNT = "count";
 	String SAVE = "save";
 	String IDENTIFIER = "identifier";
+	String IDENTIFIERS = "identifiers";
 	String TYPE = "type";
 	String FILTER = "filter";
 	String FILTERS = "filters";
@@ -71,10 +72,13 @@ public interface ConstantString {
 	String ATTACHMENT = "attachment";
 	String IS_INLINE = IS+INLINE;
 	String PAGEABLE = "pageable";
+	String BATCHABLE = "batchable";
 	String IS_PAGEABLE = IS+PAGEABLE;
+	String IS_BATCHABLE = IS+BATCHABLE;
 	String MESSAGE = "message";
 	String WORKBOOK_NAME = WORKBOOK+NAME;
 	String SHEET_NAME = SHEET+NAME;
 	String COLUMN_INDEX_FIELD_NAME =COLUMN+INDEX+FIELD+NAME;
+	String PROPERTIES = "properties";
 
 }

@@ -102,7 +102,7 @@ public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputI
 		if(aClass !=null && __inject__(CollectionHelper.class).isNotEmpty(names)){
 			String fieldName = __inject__(FieldHelper.class).join(names);
 			setFieldName(fieldName);
-			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldGetter.class).execute(aClass, fieldName).getOutput()));
+			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldsGetter.class).execute(aClass, fieldName).getOutput()));
 		}
 		return this;
 	}

@@ -10,6 +10,10 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 public abstract class AbstractInstanceBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements InstanceBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private Object fieldsValuesObject;
+	private Class<?> klass;
+	private Object[] constructorParameters;
+	
 	@Override
 	protected Object __execute__() throws Exception {
 		Object instance = null;
@@ -35,34 +39,34 @@ public abstract class AbstractInstanceBuilderImpl extends AbstractFunctionWithPr
 	
 	@Override
 	public Class<?> getClazz() {
-		return (Class<?>) getProperties().getClazz();
+		return klass;
 	}
 
 	@Override
-	public InstanceBuilder setClazz(Class<?> aClass) {
-		getProperties().setClass(aClass);
+	public InstanceBuilder setClazz(Class<?> klass) {
+		this.klass = klass;
 		return this;
 	}
 	
 	@Override
 	public Object[] getConstructorParameters() {
-		return (Object[]) getProperties().getParameters();
+		return constructorParameters;
 	}
 	
 	@Override
-	public InstanceBuilder setConstructorParameters(Object[] parameters) {
-		getProperties().setParameters(parameters);
+	public InstanceBuilder setConstructorParameters(Object[] constructorParameters) {
+		this.constructorParameters = constructorParameters;
 		return this;
 	}
 	
 	@Override
 	public Object getFieldsValuesObject() {
-		return getProperties().getCopy();
+		return fieldsValuesObject;
 	}
 	
 	@Override
-	public InstanceBuilder setFieldsValuesObject(Object copy) {
-		getProperties().setCopy(copy);
+	public InstanceBuilder setFieldsValuesObject(Object fieldsValuesObject) {
+		this.fieldsValuesObject = fieldsValuesObject;
 		return this;
 	}
 }

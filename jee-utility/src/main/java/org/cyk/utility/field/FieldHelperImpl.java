@@ -9,6 +9,7 @@ import java.util.Collection;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
@@ -113,7 +114,7 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 		}else {
 			String fieldName = join(fieldNames);
 			fieldNames = collectionHelper.instanciate(StringUtils.split(fieldName, DOT));
-			field = collectionHelper.getFirst(__inject__(FieldGetter.class).execute(aClass, collectionHelper.getElementAt(fieldNames, 0)).getOutput());
+			field = collectionHelper.getFirst(__inject__(FieldsGetter.class).execute(aClass, collectionHelper.getElementAt(fieldNames, 0)).getOutput());
 			if(collectionHelper.getSize(fieldNames) == 1) {
 			
 			}else {
@@ -135,7 +136,7 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	@Override
 	public Field getField(Class<?> klass, FieldName fieldName, ValueUsageType valueUsageType) {
 		String name = __inject__(FieldNameGetter.class).execute(klass, fieldName,valueUsageType).getOutput();
-		return __inject__(CollectionHelper.class).getFirst(__inject__(FieldGetter.class).execute(klass, name).getOutput());
+		return __inject__(CollectionHelper.class).getFirst(__inject__(FieldsGetter.class).execute(klass, name).getOutput());
 	}
 	
 	@Override
@@ -158,6 +159,24 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 				collection.add((T) getFieldValueBusinessIdentifier(index));
 		}
 		return collection;
+	}
+	
+	@Override
+	public Object readFieldValue(Object object,Field field) {
+		try {
+			return FieldUtils.readField(field,object, Boolean.TRUE);
+		} catch (IllegalAccessException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Override
+	public Object readFieldValue(Object object,String fieldName) {
+		try {
+			return FieldUtils.readField(object, fieldName, Boolean.TRUE);
+		} catch (IllegalAccessException exception) {
+			throw new RuntimeException(exception);
+		}
 	}
 	
 	/*

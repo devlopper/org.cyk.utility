@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.assertion.AbstractAssertionsProviderForImpl;
 import org.cyk.utility.assertion.AssertionBuilderComparison;
+import org.cyk.utility.server.persistence.entities.MyEntity;
 
 public class MyEntityAssertionsProviderImpl extends AbstractAssertionsProviderForImpl<MyEntity> implements MyEntityAssertionsProvider,Serializable {
 	private static final long serialVersionUID = 1L;

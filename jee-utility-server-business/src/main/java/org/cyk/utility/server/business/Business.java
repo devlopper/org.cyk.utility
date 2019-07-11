@@ -33,6 +33,21 @@ public interface Business extends BusinessServiceProvider<Object> {
 	Business deleteAll(Class<?>...classes);
 	
 	@Transactional
+	Business deleteByIdentifiers(Class<?> klass,Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
+	@Transactional
+	Business deleteByIdentifiers(Class<?> klass,Collection<Object> identifiers,ValueUsageType valueUsageType);
+	
+	@Transactional
+	Business deleteBySystemIdentifiers(Class<?> klass,Collection<Object> identifiers,Properties properties);
+	@Transactional
+	Business deleteBySystemIdentifiers(Class<?> klass,Collection<Object> identifiers);
+	
+	@Transactional
+	Business deleteByBusinessIdentifiers(Class<?> klass,Collection<Object> identifiers,Properties properties);
+	@Transactional
+	Business deleteByBusinessIdentifiers(Class<?> klass,Collection<Object> identifiers);
+	
+	@Transactional
 	<ENTITY> Business deleteByClassByIdentififerByValueUsageType(Class<ENTITY> clazz,Object identifier,ValueUsageType valueUsageType);
 	
 	/* Count */

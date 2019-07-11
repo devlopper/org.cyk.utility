@@ -42,6 +42,7 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 	private String beanXml,projectDefaultsYml,persistenceXml,ormXml,log4j2Xml,pomXml,jbossDeploymentStructureXml;
 	private Collection<Package> packages;
 	private Collection<Clazz> classes;
+	private String mavenPomProfileIdentifier;
 	
 	public AbstractArchiveBuilder(Class<ARCHIVE> clazz) {
 		this.clazz = clazz;
@@ -52,10 +53,11 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 	
 	public ARCHIVE execute(){
 		__logFinest__("Building archive starts");
-		String testProfileIdentifier = "org.cyk.test";
-		Profile profile = Pom.INSTANCE.getProfile(testProfileIdentifier);
+		if(StringUtils.isBlank(mavenPomProfileIdentifier))
+			mavenPomProfileIdentifier = "org.cyk.test";
+		Profile profile = Pom.INSTANCE.getProfile(mavenPomProfileIdentifier);
 		if(profile == null){
-			__logFinest__("No test profile found under id "+testProfileIdentifier);
+			__logFinest__("No test profile found under id "+mavenPomProfileIdentifier);
 		}
 		
 		if(StringUtils.isBlank(pomXml) && profile!=null)
@@ -106,6 +108,7 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 		}
 		
 		String[] suffixes = {"Persistence","PersistenceImpl","Business","BusinessImpl","Representation","RepresentationImpl","Impl","Dto","DtoCollection"
+				,"Mapper","DtoMapper","MapperImpl","DtoMapperImpl"
 				,"AssertionsProvider","AssertionsProviderImpl"};
 		Set<Class<?>> classes = new HashSet<>();
 		if(classesArray!=null)

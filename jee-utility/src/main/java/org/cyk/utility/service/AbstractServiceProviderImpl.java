@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AssertionBuilderNull;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
@@ -15,10 +16,12 @@ import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.log.Log;
+import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.network.MailHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.stream.distributed.Topic;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.system.SystemFunction;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.type.TypeHelper;
@@ -143,6 +146,14 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	
 	protected void __throwRuntimeExceptionIfBlank__(Object value, String message) {
 		__injectThrowableHelper__().throwRuntimeExceptionIfBlank(value, message);
+	}
+	
+	/**/
+	
+	protected static void __copyCommonProperties__(SystemFunction function,Properties properties) {
+		LogLevel logLevel = (LogLevel) Properties.getFromPath(properties, Properties.LOG_LEVEL);
+		if(logLevel != null)
+			function.getLog(Boolean.TRUE).setLevel(logLevel);
 	}
 
 }

@@ -48,7 +48,10 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 			
 			QueryStringBuilderSelectJpql queryBuilder = JpqlQualifier.inject(QueryStringBuilderSelectJpql.class).from(tuple).where(predicateBuilder);
 			
-			Collection<?> objects = entityManager.createQuery(queryBuilder.execute().getOutput(), aClass).setParameter(identifierFieldName, entityIdentifier).getResultList();
+			Collection<?> objects = entityManager.createQuery(queryBuilder.execute().getOutput(), aClass).setParameter(identifierFieldName, entityIdentifier)
+					//TODO should be take from parameters
+					.setHint("org.hibernate.readOnly", true)
+					.getResultList();
 			entity = __inject__(CollectionHelper.class).getFirst(objects);
 		}
 		getProperties().setEntity(entity);

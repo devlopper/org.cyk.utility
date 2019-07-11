@@ -28,6 +28,15 @@ public interface Persistence extends PersistenceServiceProvider<Object> {
 	/* Update */
 	
 	/* Delete */
+	<ENTITY> Persistence deleteByIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
+	<ENTITY> Persistence deleteByIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,ValueUsageType valueUsageType);
+	
+	<ENTITY> Persistence deleteBySystemIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,Properties properties);
+	<ENTITY> Persistence deleteBySystemIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers);
+	
+	<ENTITY> Persistence deleteByBusinessIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,Properties properties);
+	<ENTITY> Persistence deleteByBusinessIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers);
+	
 	<ENTITY> Persistence deleteAll(Class<ENTITY> aClass,Properties properties);
 	<ENTITY> Persistence deleteAll(Class<ENTITY> aClass);
 	

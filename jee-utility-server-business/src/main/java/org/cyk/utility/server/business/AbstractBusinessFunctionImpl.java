@@ -11,9 +11,12 @@ import org.cyk.utility.system.layer.SystemLayerBusiness;
 public abstract class AbstractBusinessFunctionImpl extends AbstractSystemFunctionServerImpl implements BusinessFunction, Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	public static LogLevel LOG_LEVEL = LogLevel.TRACE;
+	
 	@Override
-	protected LogLevel __getLogLevel__() {
-		return LogLevel.TRACE;
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		setLogLevel(LOG_LEVEL);
 	}
 	
 	@Override

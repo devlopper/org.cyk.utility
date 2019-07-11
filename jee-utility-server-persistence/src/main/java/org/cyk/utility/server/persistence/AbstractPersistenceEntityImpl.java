@@ -11,6 +11,9 @@ import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldsGetter;
+import org.cyk.utility.field.FieldName;
+import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.request.RequestProcessor;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
@@ -23,7 +26,7 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected String read,deleteAll;
+	protected String read,deleteBySystemIdentifiers,deleteByBusinessIdentifiers,deleteAll;
 	
 	@Override
 	public QueryStringBuilderSelect instanciateReadQueryStringBuilder() {
@@ -33,9 +36,18 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@Override
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
+		String systemIdentifierFieldName =__inject__(FieldNameGetter.class).execute(getEntityClass(), FieldName.IDENTIFIER, ValueUsageType.SYSTEM).getOutput();
+		String businessIdentifierFieldName =__inject__(FieldNameGetter.class).execute(getEntityClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS).getOutput();
+		
 		if(Boolean.TRUE.equals(getIsPhysicallyMapped())) {
 			//TODO even not physically mapped we should be able to read
 			addQueryCollectInstances(read, instanciateReadQueryStringBuilder());
+			if(Boolean.TRUE.equals(__injectStringHelper__().isNotBlank(systemIdentifierFieldName)) && Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__inject__(FieldsGetter.class).execute(getEntityClass(), systemIdentifierFieldName).getOutput())))
+				addQuery(deleteBySystemIdentifiers, String.format("DELETE FROM %s tuple WHERE tuple.%s IN :identifiers", getEntityClass().getSimpleName(),systemIdentifierFieldName),null);	
+			
+			if(Boolean.TRUE.equals(__injectStringHelper__().isNotBlank(businessIdentifierFieldName)) && Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__inject__(FieldsGetter.class).execute(getEntityClass(), businessIdentifierFieldName).getOutput())))
+				addQuery(deleteByBusinessIdentifiers, String.format("DELETE FROM %s tuple WHERE tuple.%s IN :identifiers", getEntityClass().getSimpleName(),businessIdentifierFieldName),null);
+				
 			addQuery(deleteAll, "DELETE FROM "+getEntityClass().getSimpleName()+" tuple",null);	
 		}
 	}
@@ -180,6 +192,50 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@Override
 	public PersistenceEntity<ENTITY> deleteByBusinessIdentifier(Object identifier) {
 		return deleteByBusinessIdentifier(identifier, null);
+	}
+	
+	
+	@Override
+	public PersistenceEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType, Properties properties) {
+		PersistenceFunctionRemover function = __inject__(PersistenceFunctionRemover.class);
+		function.setQueryIdentifier(ValueUsageType.BUSINESS.equals(valueUsageType) ? deleteByBusinessIdentifiers : deleteBySystemIdentifiers);
+		function.setQueryParameters(new Properties().set("identifiers",identifiers));
+		__copyCommonProperties__(function, properties);
+		function.execute();
+		return this;
+	}
+	
+	@Override
+	public PersistenceEntity<ENTITY> deleteManyByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType) {
+		return deleteByIdentifiers(identifiers, valueUsageType, null);
+	}
+	
+	@Override
+	public PersistenceEntity<ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers,Properties properties) {
+		return deleteByIdentifiers(identifiers, ValueUsageType.SYSTEM, properties);
+	}
+	
+	@Override
+	public PersistenceEntity<ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers) {
+		return deleteManyBySystemIdentifiers(identifiers, null);
+	}
+	
+	@Override
+	public PersistenceEntity<ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers,Properties properties) {
+		return deleteByIdentifiers(identifiers, ValueUsageType.BUSINESS, properties);
+	}
+	
+	@Override
+	public PersistenceEntity<ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers) {
+		return deleteManyByBusinessIdentifiers(identifiers, null);
+	}
+	
+	@Override
+	public PersistenceServiceProvider<ENTITY> deleteAll(Properties properties) {
+		PersistenceFunctionRemover function = __inject__(PersistenceFunctionRemover.class);
+		__copyCommonProperties__(function, properties);
+		function.setQueryIdentifier(deleteAll).execute();
+		return this;
 	}
 	
 	@Override

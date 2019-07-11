@@ -1,6 +1,7 @@
 package org.cyk.utility.server.persistence.jpa;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.enterprise.context.Dependent;
@@ -18,14 +19,24 @@ public class PersistenceFunctionRemoverImpl extends AbstractPersistenceFunctionR
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void __executeQuery__(SystemAction action) {
-		EntityManager entityManager = __inject__(EntityManager.class);
-		entityManager.remove(entityManager.merge(getEntity()));		
+	protected void __execute__(Collection<Object> entities,Integer batchSize) {
+		EntityManager entityManager = __getEntityManager__();
+		Integer count = 0;
+		for(Object index : entities) {
+			entityManager.remove(entityManager.merge(index));
+			if(batchSize != null) {
+				count++;
+				if(count % batchSize == 0) {
+					entityManager.flush();
+					entityManager.clear();
+				}
+			}
+		}
 	}
 	
 	@Override
 	protected void __executeQuery__(SystemAction action, PersistenceQuery persistenceQuery) {
-		EntityManager entityManager = __inject__(EntityManager.class);
+		EntityManager entityManager = __getEntityManager__();
 		
 		//Instantiate query
 		Query query = entityManager.createNamedQuery(persistenceQuery.getIdentifier().toString());
@@ -43,6 +54,13 @@ public class PersistenceFunctionRemoverImpl extends AbstractPersistenceFunctionR
 		
 		//This is required when doing batch processing
 		entityManager.clear();
+	}
+	
+	private EntityManager __getEntityManager__() {
+		EntityManager entityManager = (EntityManager) getProperty(Properties.ENTITY_MANAGER);
+		if(entityManager == null)
+			entityManager = __inject__(EntityManager.class);
+		return entityManager;
 	}
 
 }

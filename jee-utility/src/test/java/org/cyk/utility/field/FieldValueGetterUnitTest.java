@@ -32,4 +32,5 @@ public class FieldValueGetterUnitTest extends AbstractWeldUnitTest {
 	public static interface I01 {
 		String F01 = "v01";
 	}
+	
 }

@@ -5,10 +5,14 @@ import java.util.Collection;
 
 import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.string.Strings;
+import org.cyk.utility.value.ValueUsageType;
 
 public interface Fields extends CollectionInstance<Field> {
 
 	Strings getNames();
+	Field getByName(String name);
+	Field getByName(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType);
+	
 	Fields removeByNames(Collection<String> names);
 	Fields removeByNames(String...names);
 	Fields removeModifier(Integer modifier);

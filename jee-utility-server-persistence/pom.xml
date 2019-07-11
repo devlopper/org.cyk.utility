@@ -30,33 +30,9 @@
 					<artifactId>weld-junit5</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>		
+		</dependency>	
 	</dependencies>
-	<!--
-	<build>
-	    <plugins>
-	        <plugin>
-	            <groupId>org.hibernate.orm.tooling</groupId>
-	            <artifactId>hibernate-enhance-maven-plugin</artifactId>
-	            <version>5.4.2.Final</version>
-	            <executions>
-	                <execution>
-	                    <configuration>
-	                        <failOnError>true</failOnError>
-	                        <enableLazyInitialization>true</enableLazyInitialization>
-	                        <enableDirtyTracking>true</enableDirtyTracking>
-	                        <enableAssociationManagement>true</enableAssociationManagement>
-	                        <enableExtendedEnhancement>false</enableExtendedEnhancement>
-	                    </configuration>
-	                    <goals>
-	                        <goal>enhance</goal>
-	                    </goals>
-	                </execution>
-	            </executions>
-	        </plugin>
-	    </plugins>
-	</build>
-	-->
+	
 	<profiles>
 		<profile>
 			<id>org.cyk.test</id>
@@ -65,6 +41,28 @@
 				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/persistence/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
 				<org.cyk.test.jpa.persistence.file>org/cyk/utility/server/persistence/jpa/persistence.xml</org.cyk.test.jpa.persistence.file>
 				<org.cyk.test.jpa.orm.file>org/cyk/utility/server/persistence/jpa/orm.xml</org.cyk.test.jpa.orm.file>
+				<org.cyk.test.classes>org.cyk.utility.server.persistence.MyEntity,org.cyk.utility.server.persistence.MyEntityDetail,org.cyk.utility.server.persistence.MyEntityIdentifiedByString,org.cyk.utility.server.persistence.DataSourceDefinition</org.cyk.test.classes>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.cyk.jee.utility.server.persistence.impl</groupId>
+					<artifactId>jee-utility-server-persistence-impl</artifactId>
+					<version>0.0.1</version>
+				</dependency>
+		
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<version>1.4.197</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>org.cyk.test.performance</id>
+			<properties>
+				<org.cyk.test.cdi.beans.file>org/cyk/utility/server/persistence/beans.xml</org.cyk.test.cdi.beans.file>
+				<org.cyk.test.swarm.project.defaults.file>org/cyk/utility/server/persistence/project-defaults.yml</org.cyk.test.swarm.project.defaults.file>
+				<org.cyk.test.jpa.persistence.file>org/cyk/utility/server/persistence/jpa/persistence_performance.xml</org.cyk.test.jpa.persistence.file>
 				<org.cyk.test.classes>org.cyk.utility.server.persistence.MyEntity,org.cyk.utility.server.persistence.MyEntityDetail,org.cyk.utility.server.persistence.MyEntityIdentifiedByString,org.cyk.utility.server.persistence.DataSourceDefinition</org.cyk.test.classes>
 			</properties>
 			<dependencies>

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
+
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldGetter;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.log.Log;
@@ -27,8 +27,12 @@ public class ClassInstancesRuntimeImpl extends AbstractObject implements ClassIn
 			instance = __inject__(ClassInstance.class).setClazz(aClass);
 			instance.setIsPersistable(aClass.isAnnotationPresent(javax.persistence.Entity.class));
 			instance.setIsTransferable(aClass.isAnnotationPresent(javax.xml.bind.annotation.XmlRootElement.class));
-			Fields systemIdentifiersFields = __inject__(FieldGetter.class).setClazz(aClass).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.SYSTEM).execute().getOutput();
-			instance.setSystemIdentifierField(__inject__(CollectionHelper.class).getFirst(systemIdentifiersFields));
+			//TODO loading can be deffered at demand
+			Fields fields = instance.getFields(Boolean.TRUE);
+			if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
+				instance.setSystemIdentifierField(fields.getByName(aClass,FieldName.IDENTIFIER,ValueUsageType.SYSTEM));
+				instance.setBusinessIdentifierField(fields.getByName(aClass,FieldName.IDENTIFIER,ValueUsageType.BUSINESS));
+			}
 			getInstances(Boolean.TRUE).add(instance);
 			log.getMessageBuilder(Boolean.TRUE).addParameter("class <<"+aClass+">> added to runtime collection");
 		}else {

@@ -113,6 +113,44 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	}
 	
 	@Override
+	public <ENTITY> Persistence deleteByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType, Properties properties) {
+		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
+		if(persistence == null){
+			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		}else{
+			persistence.deleteByIdentifiers(identifiers, valueUsageType, properties);
+		}
+		return this;
+	}
+	
+	@Override
+	public <ENTITY> Persistence deleteByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType) {
+		return deleteByIdentifiers(aClass, identifiers, valueUsageType, null);
+	}
+	
+	@Override
+	public <ENTITY> Persistence deleteBySystemIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,Properties properties) {
+		deleteByIdentifiers(aClass, identifiers, ValueUsageType.SYSTEM, properties);
+		return this;
+	}
+	
+	@Override
+	public <ENTITY> Persistence deleteBySystemIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers) {
+		return deleteBySystemIdentifiers(aClass, identifiers, null);
+	}
+
+	@Override
+	public <ENTITY> Persistence deleteByBusinessIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,Properties properties) {
+		deleteByIdentifiers(aClass, identifiers, ValueUsageType.BUSINESS, properties);
+		return this;
+	}
+	
+	@Override
+	public <ENTITY> Persistence deleteByBusinessIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers) {
+		return deleteByBusinessIdentifiers(aClass, identifiers, null);
+	}
+	
+	@Override
 	public <ENTITY> Persistence deleteAll(Class<ENTITY> aClass, Properties properties) {
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		if(persistence == null){

@@ -25,17 +25,19 @@ public abstract class AbstractSystemFunctionServerImpl extends AbstractSystemFun
 	@Override
 	protected void __log__() {
 		Object entity = getProperties().getEntity();
-		Collection<FieldName> fieldNames = getLoggedEntityFieldNames();
-		if(__inject__(CollectionHelper.class).isNotEmpty(fieldNames)){
-			for(FieldName index : fieldNames){
-				Collection<ValueUsageType> valueUsageTypes = getValueUsageTypes(index);
-				if(__inject__(CollectionHelper.class).isNotEmpty(valueUsageTypes))
-					for(ValueUsageType indexValueUsageType : valueUsageTypes){
-						Field field = __injectFieldHelper__().getField(getEntityClass(), index, indexValueUsageType);
-						if(field!=null)
-							addLogMessageBuilderParameter(field.getName(), getEnityFieldValue(entity,index,indexValueUsageType, field.getName()));	
-					}
-			}
+		if(entity != null) {
+			Collection<FieldName> fieldNames = __getLoggedEntityFieldNames__();
+			if(__inject__(CollectionHelper.class).isNotEmpty(fieldNames)){
+				for(FieldName index : fieldNames){
+					Collection<ValueUsageType> valueUsageTypes = getValueUsageTypes(index);
+					if(__inject__(CollectionHelper.class).isNotEmpty(valueUsageTypes))
+						for(ValueUsageType indexValueUsageType : valueUsageTypes){
+							Field field = __injectFieldHelper__().getField(getEntityClass(), index, indexValueUsageType);
+							if(field!=null)
+								addLogMessageBuilderParameter(field.getName(), getEnityFieldValue(entity,index,indexValueUsageType, field.getName()));	
+						}
+				}
+			}	
 		}
 		super.__log__();
 	}

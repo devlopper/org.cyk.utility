@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import javax.inject.Singleton;
 
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.helper.AbstractHelper;
@@ -98,7 +98,7 @@ public class DataHelperImpl extends AbstractHelper implements DataHelper,Seriali
 
 	@Override
 	public Fields getPropertiesFields(Class<?> anInterface) {
-		return __inject__(FieldGetter.class).setClazz(anInterface).setToken("PROPERTY_").setTokenLocation(StringLocation.START).execute().getOutput();
+		return __inject__(FieldsGetter.class).setClazz(anInterface).setToken("PROPERTY_").setTokenLocation(StringLocation.START).execute().getOutput();
 	}
 	
 	@Override

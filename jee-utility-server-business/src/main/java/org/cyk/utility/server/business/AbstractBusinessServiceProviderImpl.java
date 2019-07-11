@@ -12,17 +12,18 @@ import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.type.BooleanHelper;
 
 public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements BusinessServiceProvider<OBJECT>,Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public static Boolean IS_CREATE_ONE_BY_ONE = Boolean.FALSE;
 	
 	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> create(OBJECT object, Properties properties) {
 		if(object == null) {
 			throw new RuntimeException("cannot create null instance. properties are : "+properties);
 		}else {
-			Boolean create = Boolean.FALSE;
+			/*Boolean create = Boolean.FALSE;
 			Object isCreateIfSystemIdentifierIsBlank = Properties.getFromPath(properties, Properties.IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK);
 			if(isCreateIfSystemIdentifierIsBlank == null) {
 				create = Boolean.TRUE;
@@ -42,8 +43,15 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 				__listenExecuteCreateOneBefore__(object, properties, function);
 				function.execute();
 				__listenExecuteCreateOneAfter__(object, properties, function);
-				validateOne(object);	
-			}
+				validateOne(object);
+			}*/
+			
+			BusinessFunctionCreator function = __injectCreatorForOne__();
+			__copyCommonProperties__(function, properties);
+			function.setEntity(object);
+			__listenExecuteCreateOneBefore__(object, properties, function);
+			function.execute();
+			__listenExecuteCreateOneAfter__(object, properties, function);
 		}
 		return this;
 	}
@@ -63,7 +71,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	@Override  @Transactional
 	public BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects, Properties properties) {
 		BusinessFunctionCreator function = __injectCreatorForMany__();
-		__configure__(function, properties);
+		__copyCommonProperties__(function, properties);
 		if(Boolean.TRUE.equals(__isCreateManyOneByOne__())) {
 			//Loop execution
 			function.try_().setIsCodeFromFunctionExecutable(Boolean.FALSE).run().addRunnables(new Runnable() {
@@ -102,13 +110,32 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	}
 	
 	protected Boolean __isCreateManyOneByOne__() {
-		return Boolean.TRUE;
+		return IS_CREATE_ONE_BY_ONE;
+	}
+	
+	@Override
+	public BusinessServiceProvider<OBJECT> createManyByBatch(Collection<OBJECT> objects, Object batchSize,Properties properties) {
+		if(__injectCollectionHelper__().isNotEmpty(objects)) {
+			List<List<OBJECT>> lists = __injectCollectionHelper__().getBatches((List<OBJECT>) objects, batchSize);	
+			if(__injectCollectionHelper__().isNotEmpty(lists)) {
+				for(List<OBJECT> index : lists) {
+					createMany(index,properties);
+				}
+			}
+		}
+		return this;
+	}
+	
+	@Override
+	public BusinessServiceProvider<OBJECT> createManyByBatch(Collection<OBJECT> objects, Object batchSize) {
+		createManyByBatch(objects, batchSize, null);
+		return this;
 	}
 
 	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
 		BusinessFunctionModifier function = ____inject____(BusinessFunctionModifier.class);
-		__configure__(function, properties);
+		__copyCommonProperties__(function, properties);
 		function.setEntity(object);
 		validateOne(object, function.getAction());
 		__listenExecuteUpdateOneBefore__(object, properties, function);
@@ -141,7 +168,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
 		BusinessFunctionRemover function =  ____inject____(BusinessFunctionRemover.class);
-		__configure__(function, properties);
+		__copyCommonProperties__(function, properties);
 		function.setEntity(object);
 		validateOne(object, function.getAction());
 		__listenExecuteDeleteOneBefore__(object, properties, function);
@@ -240,13 +267,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	protected void ____validateOne____(OBJECT object, SystemAction action) {
 		
 	}
-	
-	protected void __configure__(BusinessFunction function, Properties properties) {
-		if(properties != null){
-			
-		}
-	}
-	
+
 	/**/
 	
 	protected static BusinessLayer __injectBusinessLayer__() {

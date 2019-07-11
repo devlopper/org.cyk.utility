@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.string.Strings;
 
@@ -35,7 +35,7 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 					fieldName = objectFieldName == null ? fieldName : StringUtils.substringAfterLast(fieldName, ConstantCharacter.DOT.toString());
 					if(objectFieldName!=null)
 						object = __inject__(FieldValueGetter.class).execute(object, objectFieldName).getOutput();
-					field = __injectCollectionHelper__().getFirst(__inject__(FieldGetter.class).execute(object.getClass(), fieldName).getOutput());	
+					field = __injectCollectionHelper__().getFirst(__inject__(FieldsGetter.class).execute(object.getClass(), fieldName).getOutput());	
 				}
 			}
 		}

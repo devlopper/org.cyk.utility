@@ -45,6 +45,15 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 	PersistenceEntity<ENTITY> deleteByBusinessIdentifier(Object identifier,Properties properties);
 	PersistenceEntity<ENTITY> deleteByBusinessIdentifier(Object identifier);
 	
+	PersistenceEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
+	PersistenceEntity<ENTITY> deleteManyByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType);
+	
+	PersistenceEntity<ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers,Properties properties);
+	PersistenceEntity<ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers);
+	
+	PersistenceEntity<ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers,Properties properties);
+	PersistenceEntity<ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers);
+	
 	/* Count */
 	Long count(Properties properties);
 	Long count();

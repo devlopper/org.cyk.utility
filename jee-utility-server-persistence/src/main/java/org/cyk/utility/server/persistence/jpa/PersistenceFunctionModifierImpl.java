@@ -1,5 +1,6 @@
 package org.cyk.utility.server.persistence.jpa;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.enterprise.context.Dependent;
@@ -19,6 +20,22 @@ public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunction
 	@Override
 	protected void __executeQuery__(SystemAction action) {
 		__inject__(EntityManager.class).merge(getEntity());		
+	}
+	
+	@Override
+	protected void __execute__(Collection<Object> entities,Integer batchSize) {
+		EntityManager entityManager = __getEntityManager__();
+		Integer count = 0;
+		for(Object index : entities) {
+			entityManager.merge(index);
+			if(batchSize != null) {
+				count++;
+				if(count % batchSize == 0) {
+					entityManager.flush();
+					entityManager.clear();
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -42,5 +59,10 @@ public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunction
 		entityManager.clear();
 	}
 	
-	
+	private EntityManager __getEntityManager__() {
+		EntityManager entityManager = (EntityManager) getProperty(Properties.ENTITY_MANAGER);
+		if(entityManager == null)
+			entityManager = __inject__(EntityManager.class);
+		return entityManager;
+	}
 }

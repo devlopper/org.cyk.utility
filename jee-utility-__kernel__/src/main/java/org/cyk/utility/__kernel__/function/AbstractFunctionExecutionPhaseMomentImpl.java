@@ -57,7 +57,7 @@ public abstract class AbstractFunctionExecutionPhaseMomentImpl extends AbstractO
 			}
 		}
 		
-		if(assertions!=null){
+		if(assertions!=null && !assertions.isEmpty()){
 			for(Assertion index : assertions){
 				if(Boolean.FALSE.equals(index.getValue()))
 					throw new RuntimeException(index.getMessageWhenValueIsNotTrue());

@@ -20,6 +20,9 @@ public interface BusinessServiceProvider<OBJECT> extends SystemServiceProvider {
 	@Transactional
 	BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects);
 	
+	BusinessServiceProvider<OBJECT> createManyByBatch(Collection<OBJECT> objects,Object batchSize,Properties properties);
+	BusinessServiceProvider<OBJECT> createManyByBatch(Collection<OBJECT> objects,Object batchSize);
+	
 	/* Read */ 
 	
 	/* Update */
@@ -43,6 +46,9 @@ public interface BusinessServiceProvider<OBJECT> extends SystemServiceProvider {
 	BusinessServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects,Properties properties);
 	@Transactional
 	BusinessServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects);
+	
+	@Transactional
+	BusinessServiceProvider<OBJECT> deleteAll(Properties properties);
 	
 	@Transactional
 	BusinessServiceProvider<OBJECT> deleteAll();

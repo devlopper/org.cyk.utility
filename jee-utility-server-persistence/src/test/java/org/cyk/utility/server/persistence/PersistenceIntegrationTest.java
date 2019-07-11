@@ -1,0 +1,66 @@
+package org.cyk.utility.server.persistence;
+
+import java.util.List;
+
+import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.server.persistence.query.PersistenceQuery;
+import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
+import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment;
+import org.junit.Assert;
+import org.junit.Test;
+
+public class PersistenceIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment {
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	protected void __listenBeforeCallCountIsZero__() throws Exception {
+		super.__listenBeforeCallCountIsZero__();
+		__inject__(PersistenceQueryRepository.class).add(new PersistenceQuery().setIdentifier("MyEntity.readAll").setValue("SELECT r FROM MyEntity r")
+				.setResultClass(MyEntity.class));
+	}
+	
+	@Test
+	public void buildQueryIdentifierStringFromName(){
+		Assert.assertEquals("MyEntity.readByValue", __inject__(PersistenceQueryIdentifierStringBuilder.class)
+				.setClassSimpleName("MyEntity").setName("readByValue").execute().getOutput());
+	}
+	
+	@Test
+	public void buildQueryIdentifierStringFromDerivedFromQueryIdentifier(){
+		Assert.assertEquals("MyEntity.countByValue", __inject__(PersistenceQueryIdentifierStringBuilder.class)
+				.setIsDerivedFromQueryIdentifier(Boolean.TRUE).setDerivedFromQueryIdentifier("MyEntity.readByValue")
+				.setIsCountInstances(Boolean.TRUE).execute().getOutput());
+	}
+	
+	@Test
+	public void executeQueryReadMyEntityAllFromRepository() throws Exception{
+		__inject__(MyEntityPersistence.class).read();//to trigger initialisation
+		userTransaction.begin();
+		__inject__(PersistenceFunctionCreator.class).setEntity(new MyEntity().setCode("mc001")).execute();
+		__inject__(PersistenceFunctionCreator.class).setEntity(new MyEntity().setCode("mc002")).execute();
+		__inject__(PersistenceFunctionCreator.class).setEntity(new MyEntity().setCode("mc003")).execute();
+		userTransaction.commit();
+		
+		@SuppressWarnings("unchecked")
+		List<MyEntity> results = (List<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setQueryIdentifier("MyEntity.read")
+				.execute().getProperties().getEntities();
+		
+		Assert.assertEquals(3, results.size());
+		//System.out.println(results);
+		/*
+		myEntity = (MyEntity) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class)
+				.setEntityIdentifier(myEntity.getIdentifier()).execute().getProperties().getEntity();
+		
+		assertThat(myEntity).isNotNull();
+		assertThat(myEntity.getIdentifier()).isNotNull();
+		assertThat(myEntity.getCode()).isEqualTo("mc001");
+		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Read MyEntity")
+			.assertContainsLastLogEventMessage("identifier="+myEntity.getIdentifier()).assertContainsLastLogEventMessage("code=mc001");
+		*/
+		
+		AbstractPersistenceFunctionImpl.LOG_LEVEL = LogLevel.TRACE;
+		userTransaction.begin();
+		__inject__(MyEntityPersistence.class).deleteAll();
+		userTransaction.commit();
+	}
+}

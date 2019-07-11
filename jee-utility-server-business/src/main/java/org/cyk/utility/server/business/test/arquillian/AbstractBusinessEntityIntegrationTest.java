@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldGetter;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.Fields;
@@ -49,7 +49,7 @@ public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends Abst
 	public void readOneByBusinessIdentifier() throws Exception{
 		Object action = __inject__(SystemActionRead.class);
 		Object object = __instanciateEntity__(action);
-		Fields fields = __inject__(FieldGetter.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.BUSINESS).setClazz(object.getClass()).execute().getOutput();
+		Fields fields = __inject__(FieldsGetter.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.BUSINESS).setClazz(object.getClass()).execute().getOutput();
 		if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
 			__createEntity__(object);
 			__readEntity__(__getEntityClass__(action),__getFieldValueBusinessIdentifier__(object), ValueUsageType.BUSINESS);
