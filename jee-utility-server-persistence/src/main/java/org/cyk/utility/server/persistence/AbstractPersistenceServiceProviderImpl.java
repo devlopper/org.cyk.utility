@@ -395,4 +395,8 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	protected static Boolean __isFilterByKeys__(Properties properties,String... keys) {
 		return properties == null ? null :__isFilterByKeys__((Map<String, Object>) properties.getQueryFilters(), keys);
 	}
+	
+	protected static String __getTupleName__(Class<?> klass) {
+		return klass == null ? null : klass.getSimpleName();
+	}
 }

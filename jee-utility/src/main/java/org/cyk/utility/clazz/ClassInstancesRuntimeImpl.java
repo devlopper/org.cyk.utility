@@ -20,23 +20,24 @@ public class ClassInstancesRuntimeImpl extends AbstractObject implements ClassIn
 	private ClassInstances instances;
 	
 	@Override
-	public ClassInstance get(Class<?> aClass) {
+	public ClassInstance get(Class<?> klass) {
 		Log log = __inject__(Log.class).setLevel(LogLevel.TRACE);
-		ClassInstance instance = aClass == null ? null : getInstances(Boolean.TRUE).get(aClass);
+		ClassInstance instance = klass == null ? null : getInstances(Boolean.TRUE).get(klass);
 		if(instance == null) {
-			instance = __inject__(ClassInstance.class).setClazz(aClass);
-			instance.setIsPersistable(aClass.isAnnotationPresent(javax.persistence.Entity.class));
-			instance.setIsTransferable(aClass.isAnnotationPresent(javax.xml.bind.annotation.XmlRootElement.class));
+			instance = __inject__(ClassInstance.class).setClazz(klass);
+			instance.setIsPersistable(klass.isAnnotationPresent(javax.persistence.Entity.class));
+			instance.setTupleName(klass.getSimpleName());
+			instance.setIsTransferable(klass.isAnnotationPresent(javax.xml.bind.annotation.XmlRootElement.class));
 			//TODO loading can be deffered at demand
 			Fields fields = instance.getFields(Boolean.TRUE);
 			if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
-				instance.setSystemIdentifierField(fields.getByName(aClass,FieldName.IDENTIFIER,ValueUsageType.SYSTEM));
-				instance.setBusinessIdentifierField(fields.getByName(aClass,FieldName.IDENTIFIER,ValueUsageType.BUSINESS));
+				instance.setSystemIdentifierField(fields.getByName(klass,FieldName.IDENTIFIER,ValueUsageType.SYSTEM));
+				instance.setBusinessIdentifierField(fields.getByName(klass,FieldName.IDENTIFIER,ValueUsageType.BUSINESS));
 			}
 			getInstances(Boolean.TRUE).add(instance);
-			log.getMessageBuilder(Boolean.TRUE).addParameter("class <<"+aClass+">> added to runtime collection");
+			log.getMessageBuilder(Boolean.TRUE).addParameter("class <<"+klass+">> added to runtime collection");
 		}else {
-			log.getMessageBuilder(Boolean.TRUE).addParameter("class <<"+aClass+">> fetched from runtime collection");
+			log.getMessageBuilder(Boolean.TRUE).addParameter("class <<"+klass+">> fetched from runtime collection");
 		}
 		log.execute();
 		return instance;

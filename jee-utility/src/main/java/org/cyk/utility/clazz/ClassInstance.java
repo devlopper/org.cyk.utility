@@ -26,4 +26,7 @@ public interface ClassInstance extends Objectable {
 	Boolean getIsTransferable();
 	ClassInstance setIsTransferable(Boolean isTransferable);
 	
+	String getTupleName();
+	ClassInstance setTupleName(String tutpleName);
+	
 }

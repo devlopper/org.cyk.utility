@@ -50,7 +50,7 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 			
 			Collection<?> objects = entityManager.createQuery(queryBuilder.execute().getOutput(), aClass).setParameter(identifierFieldName, entityIdentifier)
 					//TODO should be take from parameters
-					.setHint("org.hibernate.readOnly", true)
+					//.setHint("org.hibernate.readOnly", true)
 					.getResultList();
 			entity = __inject__(CollectionHelper.class).getFirst(objects);
 		}

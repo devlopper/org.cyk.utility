@@ -20,6 +20,7 @@ public class ClassInstanceImpl extends AbstractObject implements ClassInstance,S
 	private Boolean isPersistable;
 	private Boolean isTransferable;
 	private Fields fields;
+	private String tutpleName;
 	
 	@Override
 	public Class<?> getClazz() {
@@ -93,6 +94,17 @@ public class ClassInstanceImpl extends AbstractObject implements ClassInstance,S
 	@Override
 	public ClassInstance setIsTransferable(Boolean isTransferable) {
 		this.isTransferable = isTransferable;
+		return this;
+	}
+	
+	@Override
+	public String getTupleName() {
+		return tutpleName;
+	}
+	
+	@Override
+	public ClassInstance setTupleName(String tutpleName) {
+		this.tutpleName = tutpleName;
 		return this;
 	}
 	

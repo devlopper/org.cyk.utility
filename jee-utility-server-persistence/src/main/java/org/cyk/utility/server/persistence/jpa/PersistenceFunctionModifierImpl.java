@@ -19,7 +19,11 @@ public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunction
 	
 	@Override
 	protected void __executeQuery__(SystemAction action) {
-		__inject__(EntityManager.class).merge(getEntity());		
+		if(getEntity() != null)
+			__inject__(EntityManager.class).merge(getEntity());	
+		else if(getEntities() != null)
+			for(Object index : getEntities())
+				__inject__(EntityManager.class).merge(index);	
 	}
 	
 	@Override

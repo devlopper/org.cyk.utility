@@ -32,6 +32,15 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 	Collection<ENTITY> readMany(Properties properties);
 	Collection<ENTITY> readMany();
 	
+	Collection<Object> readIdentifiers(ValueUsageType valueUsageType,Properties properties);
+	Collection<Object> readIdentifiers(ValueUsageType valueUsageType);
+	
+	Collection<Object> readSystemIdentifiers(Properties properties);
+	Collection<Object> readSystemIdentifiers();
+	
+	Collection<Object> readBusinessIdentifiers(Properties properties);
+	Collection<Object> readBusinessIdentifiers();
+	
 	/* Update */
 	
 	/* Delete */

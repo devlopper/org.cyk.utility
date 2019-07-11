@@ -228,13 +228,6 @@ public class RepresentationIntegrationTestPerformance extends AbstractRepresenta
 		function.setEntities(collection);
 		function.execute();
 		
-		RepresentationFunctionReader reader = __inject__(RepresentationFunctionReader.class);
-		reader.setEntityClass(MyEntityDto.class);
-		reader.getProperties().setIsQueryResultPaginated(Boolean.FALSE);
-		reader.execute();
-		@SuppressWarnings("unchecked")
-		Collection<MyEntityDto> dtos = (Collection<MyEntityDto>) reader.getResponse().getEntity();
-		
 		RepresentationFunctionRemover remover = __inject__(RepresentationFunctionRemover.class);
 		remover.setEntityClass(MyEntityDto.class);
 		remover.execute();
