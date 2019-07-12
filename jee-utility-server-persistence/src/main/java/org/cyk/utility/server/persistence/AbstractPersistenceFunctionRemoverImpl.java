@@ -13,9 +13,4 @@ public abstract class AbstractPersistenceFunctionRemoverImpl extends AbstractPer
 		setAction(__inject__(SystemActionDelete.class));
 	}
 	
-	@Override
-	protected Integer __getBatchSize__() {
-		return null;
-	}
-	
 }

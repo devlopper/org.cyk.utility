@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence;
+package org.cyk.utility.server.persistence.impl;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -7,6 +7,9 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.server.persistence.AbstractPersistenceEntityIdentifiedByStringImpl;
+import org.cyk.utility.server.persistence.api.MyEntityPersistence;
+import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.sql.builder.QueryParameterNameBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;

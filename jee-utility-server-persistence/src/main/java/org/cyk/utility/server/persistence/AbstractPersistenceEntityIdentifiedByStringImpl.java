@@ -7,7 +7,6 @@ import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentif
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
-import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
 
 public abstract class AbstractPersistenceEntityIdentifiedByStringImpl<ENTITY> extends AbstractPersistenceEntityImpl<ENTITY> implements PersistenceEntityIdentifiedByString<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -30,6 +29,7 @@ public abstract class AbstractPersistenceEntityIdentifiedByStringImpl<ENTITY> ex
 		return super.__getQueryIdentifier__(functionClass, properties, parameters);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object[] __getQueryParameters__(PersistenceQuery query, Properties properties, Object... objects) {
 		if(query.isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readWhereIdentifierContains)) {

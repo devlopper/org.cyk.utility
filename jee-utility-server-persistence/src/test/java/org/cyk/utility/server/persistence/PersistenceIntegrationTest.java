@@ -1,15 +1,33 @@
 package org.cyk.utility.server.persistence;
 
-import java.util.Arrays;
-import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManager;
+import javax.validation.ConstraintViolationException;
+
+import org.cyk.utility.__kernel__.computation.SortOrder;
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.server.persistence.api.MyEntityPersistence;
+import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
+import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment;
+import org.cyk.utility.sql.builder.Attribute;
+import org.cyk.utility.sql.builder.Tuple;
+import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Assert;
 import org.junit.Test;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class PersistenceIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
@@ -73,7 +91,12 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		MyEntity myEntity = new MyEntity().setCode(code1);
 		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
 		userTransaction.begin();
-		__inject__(MyEntityPersistence.class).create(myEntity);
+		try {
+			__inject__(MyEntityPersistence.class).create(myEntity);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		userTransaction.commit();
 		assertionHelper.assertEquals(1l, __inject__(MyEntityPersistence.class).count());
 		myEntity = __inject__(MyEntityPersistence.class).readOne(code1, ValueUsageType.BUSINESS);
@@ -84,6 +107,8 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
 		myEntity = __inject__(MyEntityPersistence.class).readOne(code1, ValueUsageType.BUSINESS);
 		assertionHelper.assertNull(myEntity);
+		
+		__deleteEntitiesAll__(MyEntity.class);
 	}
 	
 	@Test
@@ -344,4 +369,248 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
 	}
+
+	/* page */
+
+	@Test
+	public void readManyByPage() throws Exception{
+		userTransaction.begin();
+		for(Integer index = 0 ; index < 10 ; index = index + 1)
+			__inject__(MyEntityPersistence.class).create(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()));
+		userTransaction.commit();
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany()))
+			.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(null)))
+		.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read()))
+		.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(null)))
+		.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		Properties properties = new Properties();
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+			.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		properties = new Properties();
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
+			.containsExactly("0","1","2","3","4","5","6","7","8","9");
+		
+		properties = new Properties();
+		properties.setQueryFirstTupleIndex(0);
+		properties.setQueryNumberOfTuple(1);
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+			.containsExactly("0");
+		
+		properties = new Properties();
+		properties.setQueryFirstTupleIndex(1);
+		properties.setQueryNumberOfTuple(1);
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+			.containsExactly("1");
+		
+		properties = new Properties();
+		properties.setQueryFirstTupleIndex(0);
+		properties.setQueryNumberOfTuple(3);
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+			.containsExactly("0","1","2");
+		
+		properties = new Properties();
+		properties.setQueryFirstTupleIndex(4);
+		properties.setQueryNumberOfTuple(3);
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+			.containsExactly("4","5","6");
+		
+		__deleteEntitiesAll__(MyEntity.class);
+	}
+	
+	/* query */
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void readByIntegerValueUsingCustom(){
+		__createEntity__(new MyEntity().setCode("ee01").setIntegerValue(1));
+		__createEntity__(new MyEntity().setCode("ee02").setIntegerValue(2));
+		__createEntity__(new MyEntity().setCode("ee03").setIntegerValue(1));
+		__createEntity__(new MyEntity().setCode("ee04").setIntegerValue(2));
+		__createEntity__(new MyEntity().setCode("ee05").setIntegerValue(2));
+		
+		String query = __inject__(MyEntityPersistence.class).instanciateReadByIntegerValueQueryStringBuilder()
+				.orderBy("code")
+				.execute().getOutput();
+
+		Collection<MyEntity> c1 = (Collection<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setQueryValue(query)
+				.setQueryParameters(new Properties().set("integerValue", 2)).execute().getEntities();
+		Assert.assertEquals(3, c1.size());
+		
+		query = __inject__(MyEntityPersistence.class).instanciateReadByIntegerValueQueryStringBuilder()
+				.orderBy(new Attribute().setName("code").setTuple(new Tuple().setName("MyEntity")).setSortOrder(SortOrder.DESCENDING))
+				.execute().getOutput();
+		Collection<MyEntity> c2 = (Collection<MyEntity>) __inject__(PersistenceFunctionReader.class).setEntityClass(MyEntity.class).setQueryValue(query)
+				.setQueryParameters(new Properties().set("integerValue", 2)).execute().getEntities();
+		Assert.assertEquals(3, c2.size());
+		
+		Collection<MyEntity> c3 = (Collection<MyEntity>) __inject__(MyEntityPersistence.class).read();
+		Assert.assertEquals(5, c3.size());
+		
+		__deleteEntitiesAll__(MyEntity.class);
+		
+	}
+	
+	@Test
+	public void readIdentifierContains(){
+		__createEntity__(new MyEntity().setIdentifier("123").setCode(__getRandomCode__()).setIntegerValue(1));
+		__createEntity__(new MyEntity().setIdentifier("133").setCode(__getRandomCode__()).setIntegerValue(2));
+		__createEntity__(new MyEntity().setIdentifier("144").setCode(__getRandomCode__()).setIntegerValue(1));
+		__createEntity__(new MyEntity().setIdentifier("150").setCode(__getRandomCode__()).setIntegerValue(2));
+		__createEntity__(new MyEntity().setIdentifier("623").setCode(__getRandomCode__()).setIntegerValue(2));
+		
+		Collection<MyEntity> entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(__inject__(CollectionHelper.class).instanciate("123")));
+		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
+		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123");
+		
+		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(__inject__(CollectionHelper.class).instanciate("23")));
+		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
+		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123","623");
+		
+		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(__inject__(CollectionHelper.class).instanciate("3")));
+		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
+		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123","133","623");
+		
+		__deleteEntitiesAll__(MyEntity.class);
+		
+	}
+	
+	@Test
+	public void count(){
+		__createEntity__(new MyEntity().setIdentifier("123").setCode(__getRandomCode__()).setIntegerValue(1));
+		__createEntity__(new MyEntity().setIdentifier("133").setCode(__getRandomCode__()).setIntegerValue(2));
+		__createEntity__(new MyEntity().setIdentifier("144").setCode(__getRandomCode__()).setIntegerValue(1));
+		__createEntity__(new MyEntity().setIdentifier("150").setCode(__getRandomCode__()).setIntegerValue(2));
+		__createEntity__(new MyEntity().setIdentifier("623").setCode(__getRandomCode__()).setIntegerValue(2));
+		
+		Long count = __inject__(MyEntityPersistence.class).count();
+		org.assertj.core.api.Assertions.assertThat(count).isEqualTo(5);
+		
+		__deleteEntitiesAll__(MyEntity.class);
+		
+	}
+	
+	@Test
+	public void countWithProperties(){
+		for(Integer index = 0 ; index < 16 ; index = index + 1)
+			__createEntity__(new MyEntity().setCode(__getRandomCode__()).setIntegerValue(1));
+		
+		Properties properties = new Properties();
+		properties.setFilters(null).setIsQueryResultPaginated(Boolean.TRUE).setQueryFirstTupleIndex(5).setQueryNumberOfTuple(5).setQueryIdentifier(null);
+		Long count = __inject__(MyEntityPersistence.class).count(properties);
+		org.assertj.core.api.Assertions.assertThat(count).isEqualTo(16);
+		
+		__deleteEntitiesAll__(MyEntity.class);
+		
+	}
+	
+	@Test
+	public void readByIntegerValue(){
+		__createEntity__(new MyEntity().setCode("e01").setIntegerValue(1));
+		__createEntity__(new MyEntity().setCode("e02").setIntegerValue(2));
+		__createEntity__(new MyEntity().setCode("e03").setIntegerValue(1));
+		__createEntity__(new MyEntity().setCode("e04").setIntegerValue(2));
+		__createEntity__(new MyEntity().setCode("e05").setIntegerValue(2));
+		
+		Collection<MyEntity> collection = ____inject____(MyEntityPersistence.class).readByIntegerValue(2);
+		Assert.assertNotNull(collection);
+		Assert.assertEquals(3, collection.size());
+		Assert.assertEquals(new Long(3), ____inject____(MyEntityPersistence.class).countByIntegerValue(2));
+		
+		__deleteEntitiesAll__(MyEntity.class);
+	}
+	
+	@Test
+	public void executeIncrementIntegerValue(){
+		__createEntity__(new MyEntity().setCode("e01A").setIntegerValue(10));
+		__createEntity__(new MyEntity().setCode("e02B").setIntegerValue(20));
+		__createEntity__(new MyEntity().setCode("e03C").setIntegerValue(10));
+		__createEntity__(new MyEntity().setCode("e04D").setIntegerValue(20));
+		__createEntity__(new MyEntity().setCode("e05E").setIntegerValue(20));
+		
+		try {
+			userTransaction.begin();
+			____inject____(MyEntityPersistence.class).executeIncrementIntegerValue(7);
+			userTransaction.commit();	
+		}catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+		
+		MyEntity myEntity = ____inject____(MyEntityPersistence.class).readOneByBusinessIdentifier("e02B");
+		Assert.assertEquals(new Integer(27), myEntity.getIntegerValue());
+		
+		__deleteEntitiesAll__(MyEntity.class);
+		
+	}
+	
+	/* graph */
+	
+	//@Test
+	public void find_graph_myEntityFieldIntegerValueValueNotLoaded() throws Exception{
+		EntityManager entityManager = __inject__(EntityManager.class);
+		String identifier = __getRandomIdentifier__();
+		MyEntity myEntity = new MyEntity().setIdentifier(identifier).setCode("mc001").setIntegerValue(159).setPhones(Arrays.asList("1","2","3","4","5"));
+		userTransaction.begin();
+		entityManager.persist(myEntity);
+		userTransaction.commit();
+		
+		myEntity = entityManager.find(MyEntity.class, identifier);
+		assertionHelper.assertNotNull("entity is null", myEntity);
+		assertionHelper.assertEquals("mc001", myEntity.getCode());
+		assertionHelper.assertEquals(159, myEntity.getIntegerValue());
+		//assertionHelper.assertEquals(null, myEntity.getPhones());
+		
+		EntityGraph<MyEntity> entityGraph = entityManager.createEntityGraph(MyEntity.class);
+		entityGraph.addAttributeNodes("code");
+		entityGraph.addAttributeNodes("integerValue");
+		entityGraph.addAttributeNodes("phones");		
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("javax.persistence.fetchgraph", entityGraph);
+		myEntity = entityManager.find(MyEntity.class, identifier,properties);
+		assertionHelper.assertNotNull("entity is null", myEntity);
+		assertionHelper.assertEquals("mc001", myEntity.getCode());
+		assertionHelper.assertEquals(159, myEntity.getIntegerValue());
+		assertThat(myEntity.getPhones()).containsExactly("1","2","3","4","5");
+		
+		entityGraph = entityManager.createEntityGraph(MyEntity.class);
+		entityGraph.addAttributeNodes("code");
+		properties = new HashMap<>();
+		properties.put("javax.persistence.fetchgraph", entityGraph);
+		myEntity = entityManager.find(MyEntity.class, identifier,properties);
+		assertionHelper.assertNotNull("entity is null", myEntity);
+		assertionHelper.assertEquals("mc001", myEntity.getCode());
+		//assertionHelper.assertEquals(null, myEntity.getIntegerValue());
+		//assertionHelper.assertEquals(null, myEntity.getPhones());
+		
+		//assertionHelper.assertNull("field integer value has been loaded", myEntity.getIntegerValue());
+		
+		__deleteEntitiesAll__(MyEntity.class);
+	}
+	
+	/* Rules */
+	
+	@Test
+	public void is_myEntityCodeMustBeUnique() throws Exception{
+		TestPersistenceCreate test = __inject__(TestPersistenceCreate.class);
+		String code = "a";
+		test.addObjects(new MyEntity().setCode(code),new MyEntity().setCode(code)).setName("MyEntity.code unicity").setExpectedThrowableCauseClassIsSqlException().execute();
+		__deleteEntitiesAll__(MyEntity.class);
+	}
+	
+	@Test
+	public void is_myEntityCodeMustBeNotNull() throws Exception{
+		TestPersistenceCreate test = __inject__(TestPersistenceCreate.class);
+		test.addObjects(new MyEntity()).setName("MyEntity.code notnull").setExpectedThrowableCauseClassIsConstraintViolationException().execute();
+		assertThat(__inject__(ThrowableHelper.class).getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage()).contains("propertyPath=code");
+		__deleteEntitiesAll__(MyEntity.class);
+	}
+	
 }

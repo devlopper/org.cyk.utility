@@ -20,7 +20,7 @@ public class PersistenceFunctionRemoverImpl extends AbstractPersistenceFunctionR
 
 	@Override
 	protected void __execute__(Collection<Object> entities,Integer batchSize) {
-		EntityManager entityManager = __getEntityManager__();
+		EntityManager entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
 		Integer count = 0;
 		for(Object index : entities) {
 			entityManager.remove(entityManager.merge(index));
@@ -36,31 +36,19 @@ public class PersistenceFunctionRemoverImpl extends AbstractPersistenceFunctionR
 	
 	@Override
 	protected void __executeQuery__(SystemAction action, PersistenceQuery persistenceQuery) {
-		EntityManager entityManager = __getEntityManager__();
-		
+		EntityManager entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
 		//Instantiate query
 		Query query = entityManager.createNamedQuery(persistenceQuery.getIdentifier().toString());
-		
 		//Set query parameters
 		Properties parameters = getQueryParameters();
 		if(parameters != null && parameters.__getMap__()!=null)
 			for(Map.Entry<Object, Object> entry : parameters.__getMap__().entrySet())
 				query.setParameter(entry.getKey().toString(), entry.getValue());
-		
 		//Execute query statement
 		Integer count = query.executeUpdate();
-		
 		getProperties().setCount(count);
-		
 		//This is required when doing batch processing
 		entityManager.clear();
 	}
 	
-	private EntityManager __getEntityManager__() {
-		EntityManager entityManager = (EntityManager) getProperty(Properties.ENTITY_MANAGER);
-		if(entityManager == null)
-			entityManager = __inject__(EntityManager.class);
-		return entityManager;
-	}
-
 }

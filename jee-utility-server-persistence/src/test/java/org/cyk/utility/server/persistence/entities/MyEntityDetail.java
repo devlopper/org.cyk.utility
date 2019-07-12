@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence;
+package org.cyk.utility.server.persistence.entities;
 
 import java.io.Serializable;
 import java.util.List;

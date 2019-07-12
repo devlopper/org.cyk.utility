@@ -1,6 +1,8 @@
 package org.cyk.utility.system;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -9,9 +11,12 @@ import org.cyk.utility.__kernel__.function.FunctionExecutionPhase;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMoment;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseMomentBegin;
 import org.cyk.utility.__kernel__.function.FunctionExecutionPhaseTry;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AssertionsProvider;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.assertion.AssertionsProviderFor;
+import org.cyk.utility.clazz.ClassInstance;
+import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.field.FieldName;
@@ -31,6 +36,8 @@ import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.system.action.SystemActor;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.type.BooleanHelper;
+import org.cyk.utility.value.ValueHelper;
 import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
@@ -50,7 +57,17 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	private Notifications notifications;
 	private Long entitiesCount;
 	private Boolean isActionRequired;
-
+	
+	/* Working variables */
+	protected SystemAction __action__;
+	protected ClassInstance __classInstance__;
+	protected Throwable __throwable__;
+	protected Collection<Object> __entities__,__entitiesSystemIdentifiers__,__entitiesBusinessIdentifiers__;
+	protected Field __entityClassSystemIdentifierField__,__entityClassBusinessIdentifierField__;
+	protected ValueUsageType __entityIdentifierValueUsageType__;
+	protected Boolean __isBatchable__;
+	protected Integer __batchSize__;
+	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
@@ -69,12 +86,45 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 
 	@Override
 	protected void ____execute____() {
-		SystemAction action = getAction();
+		__action__ = getAction();
 		Boolean isActionRequired = __injectValueHelper__().defaultToIfNull(getIsActionRequired(),Boolean.TRUE);
-		if(action == null && Boolean.TRUE.equals(isActionRequired)) {			
+		if(__action__ == null && Boolean.TRUE.equals(isActionRequired)) {			
 			__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getSimpleName()+" : action must not be null");
 		} else {
-			__execute__(action);	
+			__initialiseWorkingVariables__();
+			__execute__(__action__);	
+		}
+	}
+	
+	protected void __initialiseWorkingVariables__() {
+		if(getEntityClass() != null) {
+			__classInstance__ = __inject__(ClassInstancesRuntime.class).get(getEntityClass());
+			__entityClassSystemIdentifierField__ = __classInstance__.getSystemIdentifierField();
+			__entityClassBusinessIdentifierField__ = __classInstance__.getBusinessIdentifierField();	
+		}
+		
+		__entityIdentifierValueUsageType__ = getEntityIdentifierValueUsageType();
+		if(__entityIdentifierValueUsageType__ == null)
+			__entityIdentifierValueUsageType__ = ValueUsageType.SYSTEM;
+		
+		__entities__ = __getEntities__();
+		
+		__initialiseEntitiesIdentifiers__();
+		
+		Integer numberOfProcessedElement = null;
+		if(__injectCollectionHelper__().isNotEmpty(__entities__))
+			numberOfProcessedElement = __entities__.size();
+		else { 
+			numberOfProcessedElement = __injectCollectionHelper__().getSize(__entitiesSystemIdentifiers__) + __injectCollectionHelper__().getSize(__entitiesBusinessIdentifiers__);
+		}
+		
+		if(numberOfProcessedElement != null)
+			addLogMessageBuilderParameter("count", numberOfProcessedElement);
+		
+		__isBatchable__ = __inject__(ValueHelper.class).defaultToIfNull(__inject__(BooleanHelper.class).get(getProperty(Properties.IS_BATCHABLE)),Boolean.FALSE);
+		if(Boolean.TRUE.equals(__isBatchable__)) {
+			__batchSize__ = __injectNumberHelper__().getInteger(getProperty(Properties.BATCH_SIZE), 30);
+			addLogMessageBuilderParameter("batch", __batchSize__);
 		}
 	}
 	
@@ -116,6 +166,63 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	}
 	
 	protected abstract void __execute__(SystemAction action);
+	
+	protected Collection<Object> __getEntities__() {
+		Collection<Object> entities = null;
+		if(getEntities() != null) {
+			if(entities == null)
+				entities = new ArrayList<>();
+			entities.addAll(getEntities());
+		}
+		if(getEntity() != null) {
+			if(entities == null)
+				entities = new ArrayList<>();
+			entities.add(getEntity());
+		}
+		return entities;
+	}
+	
+	protected Collection<Object> __getEntitiesIdentifiers__(ValueUsageType valueUsageType) {
+		Collection<Object> identifiers = null;
+		
+		if(__injectCollectionHelper__().isNotEmpty(__entities__)) {
+			if(identifiers == null)
+				identifiers = new ArrayList<>();
+			
+			Object identifier = null;
+			for(Object index : __entities__) {
+				if(ValueUsageType.SYSTEM.equals(valueUsageType) && __entityClassSystemIdentifierField__ != null)
+					identifier = __injectFieldValueGetter__().execute(index, __entityClassSystemIdentifierField__).getOutput();
+				
+				if(identifier == null && ValueUsageType.BUSINESS.equals(valueUsageType) && __entityClassBusinessIdentifierField__ != null)
+					identifier = __injectFieldValueGetter__().execute(index, __entityClassBusinessIdentifierField__).getOutput();
+				
+				if(identifier != null)
+					identifiers.add(identifier);
+			}			
+		}
+		
+		if(__entityIdentifierValueUsageType__.equals(valueUsageType)) {
+			if(getEntityIdentifier() != null) {
+				if(identifiers == null)
+					identifiers = new ArrayList<>();
+				identifiers.add(getEntityIdentifier());
+			}	
+			
+			if(__injectCollectionHelper__().isNotEmpty(getAction().getEntitiesIdentifiers())) {
+				if(identifiers == null)
+					identifiers = new ArrayList<>();
+				identifiers.addAll(getAction().getEntitiesIdentifiers().get());
+			}
+		}
+		
+		return identifiers;
+	}
+	
+	protected void __initialiseEntitiesIdentifiers__() {
+		__entitiesSystemIdentifiers__ = __getEntitiesIdentifiers__(ValueUsageType.SYSTEM);
+		__entitiesBusinessIdentifiers__ = __getEntitiesIdentifiers__(ValueUsageType.BUSINESS);
+	}
 	
 	@Override
 	public Boolean getIsActionRequired() {
@@ -405,8 +512,6 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		return this;
 	}
 	
-	
-	
 	/**/
 	
 	protected void __produceFunction__(String function,Map<String,String> inputs,Map<String,String> outputs) {
@@ -419,4 +524,5 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	public static final String FIELD_NOTIFICATION_BUILDERS = "notificationBuilders";
 	public static final String FIELD_NOTIFICATIONS = "notifications";
+	public static final String FIELD_ENTITY_FIELD_NAMES = "entityFieldNames";
 }

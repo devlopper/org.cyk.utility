@@ -1,7 +1,10 @@
 package org.cyk.utility.system.action;
 
+import java.util.Collection;
+
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
 public interface SystemAction extends Objectable  {
@@ -23,8 +26,17 @@ public interface SystemAction extends Objectable  {
 	ValueUsageType getEntityIdentifierValueUsageType();
 	SystemAction setEntityIdentifierValueUsageType(ValueUsageType entityIdentifierValueUsageType);
 	
-	Boolean getIsBatchProcessing();
-	SystemAction setIsBatchProcessing(Boolean isBatchProcessing);
+	Strings getEntitiesFieldsNames();
+	Strings getEntitiesFieldsNames(Boolean injectIfNull);
+	SystemAction setEntitiesFieldsNames(Strings entitiesFieldsNames);
+	SystemAction addEntitiesFieldsNames(Collection<String> entitiesFieldsNames);
+	SystemAction addEntitiesFieldsNames(String...entitiesFieldsNames);
+	
+	Boolean getIsBatchable();
+	SystemAction setIsBatchable(Boolean isBatchable);
+	
+	Integer getBatchSize();
+	SystemAction setBatchSize(Integer batchSize);
 	
 	SystemAction getNextAction();
 	SystemAction setNextAction(SystemAction nextAction);

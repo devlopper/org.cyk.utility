@@ -18,17 +18,8 @@ public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunction
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	protected void __executeQuery__(SystemAction action) {
-		if(getEntity() != null)
-			__inject__(EntityManager.class).merge(getEntity());	
-		else if(getEntities() != null)
-			for(Object index : getEntities())
-				__inject__(EntityManager.class).merge(index);	
-	}
-	
-	@Override
 	protected void __execute__(Collection<Object> entities,Integer batchSize) {
-		EntityManager entityManager = __getEntityManager__();
+		EntityManager entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
 		Integer count = 0;
 		for(Object index : entities) {
 			entityManager.merge(index);
@@ -44,7 +35,7 @@ public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunction
 	
 	@Override
 	protected void __executeQuery__(SystemAction action, PersistenceQuery persistenceQuery) {
-		EntityManager entityManager = __inject__(EntityManager.class);
+		EntityManager entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
 		//Instantiate query
 		Query query = entityManager.createNamedQuery(persistenceQuery.getIdentifier().toString());
 		
@@ -63,10 +54,4 @@ public class PersistenceFunctionModifierImpl extends AbstractPersistenceFunction
 		entityManager.clear();
 	}
 	
-	private EntityManager __getEntityManager__() {
-		EntityManager entityManager = (EntityManager) getProperty(Properties.ENTITY_MANAGER);
-		if(entityManager == null)
-			entityManager = __inject__(EntityManager.class);
-		return entityManager;
-	}
 }

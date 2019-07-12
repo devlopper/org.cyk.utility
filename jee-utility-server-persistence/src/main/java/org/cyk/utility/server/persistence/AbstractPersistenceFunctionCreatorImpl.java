@@ -4,15 +4,12 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.UUID;
 
-import org.cyk.utility.field.FieldsGetter;
-import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
-import org.cyk.utility.field.FieldName;
-import org.cyk.utility.field.Fields;
+import org.cyk.utility.field.FieldValueGetter;
+import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString;
 import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractPersistenceFunctionCreatorImpl extends AbstractPersistenceFunctionTransactionImpl implements PersistenceFunctionCreator, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -28,21 +25,20 @@ public abstract class AbstractPersistenceFunctionCreatorImpl extends AbstractPer
 		Collection<Object> entities = super.__getEntities__();
 		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(entities))) {
 			for(Object index : entities) {
-				if(index instanceof AbstractIdentifiedByString) {
-					if(((AbstractIdentifiedByString)index).getIdentifier() == null)
-						((AbstractIdentifiedByString)index).setIdentifier(UUID.randomUUID().toString());
-				}else {
-					Object identifierSystemValue = __inject__(FieldHelper.class).getFieldValueSystemIdentifier(index);
-					if(identifierSystemValue == null) {
-						Fields fields = __inject__(FieldsGetter.class).setValueUsageType(ValueUsageType.SYSTEM).setFieldName(FieldName.IDENTIFIER).execute().getOutput();
-						FieldInstance identifierSystemFieldInstance = __inject__(FieldInstancesRuntime.class).get(index.getClass(), fields.getFirst().getName());
-						if(Boolean.TRUE.equals(identifierSystemFieldInstance.getIsGeneratable())) {
-							if(String.class.equals(identifierSystemFieldInstance.getType()))
-								identifierSystemValue = UUID.randomUUID().toString();
+				if(__entityClassSystemIdentifierField__ != null) {
+					//Generate value if needed
+					Object value = __inject__(FieldValueGetter.class).execute(index, __entityClassSystemIdentifierField__).getOutput();
+					if(value == null) {
+						FieldInstance fieldInstance = __inject__(FieldInstancesRuntime.class).get(index.getClass(), __entityClassSystemIdentifierField__.getName());
+						if(Boolean.TRUE.equals(fieldInstance.getIsGeneratable())) {
+							if(String.class.equals(fieldInstance.getType()) || index instanceof AbstractIdentifiedByString)
+								value = UUID.randomUUID().toString();
 							else
-								__injectThrowableHelper__().throwRuntimeException("cannot generate value of type "+identifierSystemFieldInstance.getType());
-						}	
-					}
+								__injectThrowableHelper__().throwRuntimeException("cannot generate value of type "+fieldInstance.getType());
+						}
+						if(value != null)
+							__inject__(FieldValueSetter.class).execute(index, __entityClassSystemIdentifierField__, value);
+					}	
 				}
 			}
 		}

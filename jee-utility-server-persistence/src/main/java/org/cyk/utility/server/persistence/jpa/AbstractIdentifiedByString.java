@@ -9,13 +9,12 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
-import org.cyk.utility.__kernel__.annotation.Generatable;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByString;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.field.FieldTypeGetter;
 import org.cyk.utility.field.FieldValueSetter;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
@@ -26,7 +25,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractIdentifiedByString extends AbstractIdentifiedPersistableByString implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Access(AccessType.PROPERTY) @Id @Generatable @Column(name=COLUMN_IDENTIFIER)
+	@Access(AccessType.PROPERTY) @Id @Column(name=COLUMN_IDENTIFIER)
 	@Override
 	public String getIdentifier() {
 		return super.getIdentifier();

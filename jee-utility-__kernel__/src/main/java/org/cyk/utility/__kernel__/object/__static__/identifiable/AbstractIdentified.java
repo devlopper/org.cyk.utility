@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.cyk.utility.__kernel__.annotation.Generatable;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractIdentified<IDENTIFIER> extends Common implements Identified<IDENTIFIER>,Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@Generatable
 	protected IDENTIFIER identifier;
 	
 	//protected java.util.Map<String, Boolean> fieldValueComputedByUserMap;

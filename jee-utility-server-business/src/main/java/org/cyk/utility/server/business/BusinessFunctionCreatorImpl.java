@@ -8,6 +8,7 @@ import javax.enterprise.context.Dependent;
 import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.type.BooleanHelper;
@@ -46,7 +47,33 @@ public class BusinessFunctionCreatorImpl extends AbstractBusinessFunctionCreator
 		*/
 	}
 	
-	private Collection<Object> __getEntities__() {
+	@Override
+	protected Collection<Object> __getEntities__() {
+		Collection<Object> collection = super.__getEntities__();
+		Collection<Object> entities = null;
+		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(collection)))
+			for(Object index : collection) {
+				Object isCreateIfSystemIdentifierIsBlank = Properties.getFromPath(getProperties(), Properties.IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK);
+				if(isCreateIfSystemIdentifierIsBlank == null) {
+					if(entities == null)
+						entities = new ArrayList<>();
+					entities.add(index);
+				}else {
+					if(Boolean.TRUE.equals(__inject__(BooleanHelper.class).get(isCreateIfSystemIdentifierIsBlank))) {
+						Object identifier = __injectFieldHelper__().getFieldValueSystemIdentifier(index);
+						if(Boolean.TRUE.equals(__injectValueHelper__().isBlank(identifier))) {
+							if(entities == null)
+								entities = new ArrayList<>();
+							entities.add(index);
+						}
+					}
+				}	
+			}
+		return entities;
+	}
+	
+	/*
+	protected Collection<Object> __getEntities__() {
 		Collection<Object> entities = new ArrayList<>();
 		Collection<Object> collection = new ArrayList<>();
 		if(getEntities()!=null)
@@ -67,6 +94,7 @@ public class BusinessFunctionCreatorImpl extends AbstractBusinessFunctionCreator
 		}
 		return entities;
 	}
+	*/
 	
 	private void __listenBeforePersistenceCreate__(Collection<Object> entities,Properties properties) {
 		//TODO validation

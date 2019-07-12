@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.GeneratedValue;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.cyk.utility.__kernel__.annotation.Generatable;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.Log;
@@ -22,27 +22,27 @@ public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldIn
 	private FieldInstances instances;
 	
 	@Override
-	public FieldInstance get(Class<?> aClass,Collection<String> paths) {
+	public FieldInstance get(Class<?> klass,Collection<String> paths) {
 		Log log = __inject__(Log.class).setLevel(LogLevel.TRACE);
 		FieldInstance instance = null;
 		String path = __inject__(FieldHelper.class).join(paths);
-		if(aClass!=null && __inject__(StringHelper.class).isNotBlank(path)) {
+		if(klass!=null && __inject__(StringHelper.class).isNotBlank(path)) {
 			Strings fieldNames = __inject__(FieldHelper.class).disjoin(path);
-			instance = getInstances(Boolean.TRUE).get(aClass,path);
+			instance = getInstances(Boolean.TRUE).get(klass,path);
 			if(instance == null) {
 				instance = __inject__(FieldInstance.class);
-				instance.setClazz(aClass);
+				instance.setClazz(klass);
 				instance.setPath(path);
 				Collection<String> fieldContainerNames = fieldNames.getWithoutLast(1);
 				if(__inject__(CollectionHelper.class).isEmpty(fieldContainerNames)) {
 					
 				}else {
 					for(String index : fieldContainerNames)
-						aClass = FieldUtils.getDeclaredField(aClass, index, Boolean.TRUE).getType();
+						klass = FieldUtils.getDeclaredField(klass, index, Boolean.TRUE).getType();
 				}
-				instance.setField(__inject__(FieldsGetter.class).execute(aClass, fieldNames.getLast()).getOutput().getFirst());
+				instance.setField(__inject__(FieldsGetter.class).execute(klass, fieldNames.getLast()).getOutput().getFirst());
 				instance.setType(__inject__(FieldTypeGetter.class).execute(instance.getField()).getOutput().getType());
-				instance.setIsGeneratable(instance.getField().isAnnotationPresent(GeneratedValue.class));
+				instance.setIsGeneratable(instance.getField().isAnnotationPresent(Generatable.class));
 				getInstances(Boolean.TRUE).add(instance);
 				log.getMessageBuilder(Boolean.TRUE).addParameter("field <<"+instance.getClazz()+"."+path+">> added to runtime collection");
 			}else {

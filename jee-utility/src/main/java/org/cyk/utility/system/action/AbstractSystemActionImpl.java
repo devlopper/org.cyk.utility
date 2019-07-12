@@ -1,9 +1,11 @@
 package org.cyk.utility.system.action;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractSystemActionImpl extends AbstractObject implements SystemAction, Serializable {
@@ -11,8 +13,10 @@ public abstract class AbstractSystemActionImpl extends AbstractObject implements
 
 	//TODO this one can be a property of CollectionInstance
 	private Boolean isBatchProcessing;
+	private Integer batchSize;
 	private Objects entities;
 	private Objects entitiesIdentifiers;
+	private Strings entitiesFieldsNames;
 	private ValueUsageType entityIdentifierValueUsageType;
 	private SystemAction nextAction;
 	
@@ -22,12 +26,12 @@ public abstract class AbstractSystemActionImpl extends AbstractObject implements
 	}
 	
 	@Override
-	public Boolean getIsBatchProcessing() {
+	public Boolean getIsBatchable() {
 		return isBatchProcessing;
 	}
 	
 	@Override
-	public SystemAction setIsBatchProcessing(Boolean isBatchProcessing) {
+	public SystemAction setIsBatchable(Boolean isBatchProcessing) {
 		this.isBatchProcessing = isBatchProcessing;
 		return this;
 	}
@@ -110,11 +114,51 @@ public abstract class AbstractSystemActionImpl extends AbstractObject implements
 	}
 	
 	@Override
+	public Strings getEntitiesFieldsNames() {
+		return entitiesFieldsNames;
+	}
+	
+	@Override
+	public Strings getEntitiesFieldsNames(Boolean injectIfNull) {
+		return (Strings) __getInjectIfNull__(FIELD_ENTITIES_FIELDS_NAMES, injectIfNull);
+	}
+	
+	@Override
+	public SystemAction setEntitiesFieldsNames(Strings entitiesFieldsNames) {
+		this.entitiesFieldsNames = entitiesFieldsNames;
+		return this;
+	}
+	
+	@Override
+	public SystemAction addEntitiesFieldsNames(Collection<String> entitiesFieldsNames) {
+		getEntitiesFieldsNames(Boolean.TRUE).add(entitiesFieldsNames);
+		return this;
+	}
+	
+	@Override
+	public SystemAction addEntitiesFieldsNames(String... entitiesFieldsNames) {
+		getEntitiesFieldsNames(Boolean.TRUE).add(entitiesFieldsNames);
+		return this;
+	}
+	
+	@Override
+	public Integer getBatchSize() {
+		return batchSize;
+	}
+	
+	@Override
+	public SystemAction setBatchSize(Integer batchSize) {
+		this.batchSize = batchSize;
+		return this;
+	}
+	
+	@Override
 	public String toString() {
 		return getClass().getSimpleName()+"."+getIdentifier()+":"+getEntityClass()+":"+getEntitiesIdentifiers();
 	}
 	
 	public static final String FIELD_ENTITIES = "entities";
 	public static final String FIELD_ENTITIES_IDENTIFIERS = "entitiesIdentifiers";
+	public static final String FIELD_ENTITIES_FIELDS_NAMES = "entitiesFieldsNames";
 	
 }
