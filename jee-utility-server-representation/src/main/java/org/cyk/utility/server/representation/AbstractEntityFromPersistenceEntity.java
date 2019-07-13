@@ -19,7 +19,7 @@ public abstract class AbstractEntityFromPersistenceEntity extends AbstractEntity
 	private String identifier;
 	
 	protected <T> T __getFromBusinessIdentifier__(Class<T> aClass,Object identifier){
-		return identifier == null ? null : __inject__(Persistence.class).readOne(aClass,identifier,new Properties().setValueUsageType(ValueUsageType.BUSINESS));
+		return identifier == null ? null : __inject__(Persistence.class).readByIdentifier(aClass,identifier,new Properties().setValueUsageType(ValueUsageType.BUSINESS));
 	}
 	
 	protected Integer __getIntegerFrom__(Object object) {

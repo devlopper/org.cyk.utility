@@ -1,10 +1,17 @@
 package org.cyk.utility.server.business;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.transaction.Transactional;
 
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.server.persistence.Persistence;
+import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.type.BooleanHelper;
 
 public abstract class AbstractBusinessFunctionCreatorImpl extends AbstractBusinessFunctionTransactionImpl implements BusinessFunctionCreator, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -15,6 +22,38 @@ public abstract class AbstractBusinessFunctionCreatorImpl extends AbstractBusine
 		setAction(__inject__(SystemActionCreate.class));
 	}
 
+	@Override
+	protected void __execute__(SystemAction action) {
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entities__))) {
+			__inject__(Persistence.class).createMany(__entities__);
+		}
+	}
+	
+	@Override
+	protected Collection<Object> __getEntities__() {
+		Collection<Object> collection = super.__getEntities__();
+		Collection<Object> entities = null;
+		if(Boolean.TRUE.equals(__inject__(CollectionHelper.class).isNotEmpty(collection)))
+			for(Object index : collection) {
+				Object isCreateIfSystemIdentifierIsBlank = Properties.getFromPath(getProperties(), Properties.IS_CREATE_IF_SYSTEM_IDENTIFIER_IS_BLANK);
+				if(isCreateIfSystemIdentifierIsBlank == null) {
+					if(entities == null)
+						entities = new ArrayList<>();
+					entities.add(index);
+				}else {
+					if(Boolean.TRUE.equals(__inject__(BooleanHelper.class).get(isCreateIfSystemIdentifierIsBlank))) {
+						Object identifier = __injectFieldHelper__().getFieldValueSystemIdentifier(index);
+						if(Boolean.TRUE.equals(__injectValueHelper__().isBlank(identifier))) {
+							if(entities == null)
+								entities = new ArrayList<>();
+							entities.add(index);
+						}
+					}
+				}	
+			}
+		return entities;
+	}
+	
 	@Override @Transactional
 	public BusinessFunctionCreator execute() {
 		return (BusinessFunctionCreator) super.execute();

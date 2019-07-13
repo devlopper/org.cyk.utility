@@ -21,7 +21,7 @@ public class InstanceGetterFunctionRunnableImpl extends AbstractFunctionRunnable
 			@Override
 			public void run() {
 				if(FieldName.IDENTIFIER.equals(getFunction().getFieldName())) {
-					Object one = __inject__(Persistence.class).readOne(getFunction().getClazz(), getFunction().getValue(), new Properties().setValueUsageType(getFunction().getValueUsageType()));
+					Object one = __inject__(Persistence.class).readByIdentifier(getFunction().getClazz(), getFunction().getValue(), new Properties().setValueUsageType(getFunction().getValueUsageType()));
 					Collection<Object> collection = new ArrayList<>();
 					collection.add(one);
 					setOutput(collection);

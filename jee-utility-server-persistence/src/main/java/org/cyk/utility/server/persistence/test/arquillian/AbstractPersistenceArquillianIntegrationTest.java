@@ -43,7 +43,7 @@ public abstract class AbstractPersistenceArquillianIntegrationTest extends Abstr
 	}
 	
 	public <ENTITY> ENTITY ____readEntity____(Class<ENTITY> entityClass,Object identifier,ValueUsageType valueUsageType,Properties expectedFieldValues,PersistenceEntity persistence){
-		return (ENTITY) persistence.readOne(identifier,valueUsageType);
+		return (ENTITY) persistence.readByIdentifier(identifier,valueUsageType);
 	}
 	
 	public <ENTITY> void ____updateEntity____(ENTITY entity,PersistenceEntity persistence) {
@@ -95,10 +95,10 @@ public abstract class AbstractPersistenceArquillianIntegrationTest extends Abstr
 	/**/
 	
 	protected <T> T __readByBusinessIdentifier__(Class<T> aClass,Object identifier){
-		return identifier == null ? null : __inject__(Persistence.class).readOne(aClass,identifier,new Properties().setValueUsageType(ValueUsageType.BUSINESS));
+		return identifier == null ? null : __inject__(Persistence.class).readByIdentifier(aClass,identifier,new Properties().setValueUsageType(ValueUsageType.BUSINESS));
 	}
 	
 	protected <T> T __readBySystemIdentifier__(Class<T> aClass,Object identifier){
-		return identifier == null ? null : __inject__(Persistence.class).readOne(aClass,identifier,new Properties().setValueUsageType(ValueUsageType.SYSTEM));
+		return identifier == null ? null : __inject__(Persistence.class).readByIdentifier(aClass,identifier,new Properties().setValueUsageType(ValueUsageType.SYSTEM));
 	}
 }

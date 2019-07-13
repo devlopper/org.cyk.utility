@@ -15,12 +15,15 @@ public class MyEntityAssertionsProviderImpl extends AbstractAssertionsProviderFo
 	protected void ____execute____(Function<?, ?> function,Object filter, MyEntity myEntity) {
 		if(function instanceof BusinessFunction) {
 			if(filter==null) {
-				//assert long1 > -1
-				__injectAssertionBuilderComparison__()
-				.getAssertedValue1(Boolean.TRUE).setFieldValueGetter(__injectFieldValueGetter__().setObject(myEntity).setField("long1")).getParentAs(AssertionBuilderComparison.class)
-				.getAssertedValue2(Boolean.TRUE).setValue(-1).getParentAs(AssertionBuilderComparison.class).setOperator(ComparisonOperator.GT).setIsThrownWhenValueIsNotTrue(Boolean.TRUE)
-				//.execute()
-				;	
+				if(myEntity.getLong1() != null) {
+					//assert long1 > -1
+					__injectAssertionBuilderComparison__()
+					.getAssertedValue1(Boolean.TRUE).setFieldValueGetter(__injectFieldValueGetter__().setObject(myEntity).setField("long1")).getParentAs(AssertionBuilderComparison.class)
+					.getAssertedValue2(Boolean.TRUE).setValue(-1).getParentAs(AssertionBuilderComparison.class).setOperator(ComparisonOperator.GT).setIsThrownWhenValueIsNotTrue(Boolean.TRUE)
+					.execute()
+					;
+				}
+				
 			}
 		}
 	}

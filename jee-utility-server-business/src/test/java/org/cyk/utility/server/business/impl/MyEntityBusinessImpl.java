@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.business.AbstractBusinessEntityImpl;
-import org.cyk.utility.server.business.BusinessServiceProvider;
+import org.cyk.utility.server.business.BusinessFunctionCreator;
 import org.cyk.utility.server.business.api.MyEntityBusiness;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
 import org.cyk.utility.server.persistence.entities.MyEntity;
@@ -13,9 +13,9 @@ public class MyEntityBusinessImpl extends AbstractBusinessEntityImpl<MyEntity,My
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public BusinessServiceProvider<MyEntity> create(MyEntity myEntity, Properties properties) {
+	protected void __listenExecuteCreateBefore__(MyEntity myEntity, Properties properties,BusinessFunctionCreator function) {
+		super.__listenExecuteCreateBefore__(myEntity, properties, function);
 		myEntity.setTimestamp(System.currentTimeMillis());
-		return super.create(myEntity, properties);
 	}
 
 	@Override

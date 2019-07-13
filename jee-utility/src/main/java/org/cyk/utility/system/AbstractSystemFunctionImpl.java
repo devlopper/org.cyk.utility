@@ -118,7 +118,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 			numberOfProcessedElement = __injectCollectionHelper__().getSize(__entitiesSystemIdentifiers__) + __injectCollectionHelper__().getSize(__entitiesBusinessIdentifiers__);
 		}
 		
-		if(numberOfProcessedElement != null)
+		if(numberOfProcessedElement != null && numberOfProcessedElement > 0)
 			addLogMessageBuilderParameter("count", numberOfProcessedElement);
 		
 		__isBatchable__ = __inject__(ValueHelper.class).defaultToIfNull(__inject__(BooleanHelper.class).get(getProperty(Properties.IS_BATCHABLE)),Boolean.FALSE);

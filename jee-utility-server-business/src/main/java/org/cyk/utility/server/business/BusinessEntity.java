@@ -21,41 +21,55 @@ public interface BusinessEntity<PERSISTENCE_ENTITY> extends BusinessServiceProvi
 	/* Create */
 	
 	/* Read */ 
-	PERSISTENCE_ENTITY findOne(Object identifier,Properties properties);
-	PERSISTENCE_ENTITY findOne(Object identifier,ValueUsageType valueUsageType);
-	PERSISTENCE_ENTITY findOne(Object identifier);
-	PERSISTENCE_ENTITY findOneByBusinessIdentifier(Object identifier);
-	PERSISTENCE_ENTITY findOneBySystemIdentifier(Object identifier);
+	Collection<PERSISTENCE_ENTITY> findByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
+	Collection<PERSISTENCE_ENTITY> findByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType);
+	Collection<PERSISTENCE_ENTITY> findByIdentifiers(Collection<Object> identifiers);
+	Collection<PERSISTENCE_ENTITY> findByBusinessIdentifiers(Collection<Object> identifiers,Properties properties);
+	Collection<PERSISTENCE_ENTITY> findByBusinessIdentifiers(Collection<Object> identifiers);
+	Collection<PERSISTENCE_ENTITY> findBySystemIdentifiers(Collection<Object> identifiers,Properties properties);
+	Collection<PERSISTENCE_ENTITY> findBySystemIdentifiers(Collection<Object> identifiers);
 	
-	Collection<PERSISTENCE_ENTITY> findMany(Properties properties);
-	Collection<PERSISTENCE_ENTITY> findMany();
+	PERSISTENCE_ENTITY findByIdentifier(Object identifier,ValueUsageType valueUsageType,Properties properties);
+	PERSISTENCE_ENTITY findByIdentifier(Object identifier,ValueUsageType valueUsageType);
+	PERSISTENCE_ENTITY findByIdentifier(Object identifier);
+	PERSISTENCE_ENTITY findByBusinessIdentifier(Object identifier,Properties properties);
+	PERSISTENCE_ENTITY findByBusinessIdentifier(Object identifier);
+	PERSISTENCE_ENTITY findBySystemIdentifier(Object identifier,Properties properties);
+	PERSISTENCE_ENTITY findBySystemIdentifier(Object identifier);
+	
+	Collection<PERSISTENCE_ENTITY> find(Properties properties);
+	Collection<PERSISTENCE_ENTITY> find();
+	
+	Collection<Object> findIdentifiers(ValueUsageType valueUsageType,Properties properties);
+	Collection<Object> findIdentifiers(ValueUsageType valueUsageType);
+	
+	Collection<Object> findSystemIdentifiers(Properties properties);
+	Collection<Object> findSystemIdentifiers();
+	
+	Collection<Object> findBusinessIdentifiers(Properties properties);
+	Collection<Object> findBusinessIdentifiers();
 	
 	/* Update */
 	
 	/* Delete */
 	@Transactional
 	BusinessEntity<PERSISTENCE_ENTITY> deleteByIdentifier(Object identifier,ValueUsageType valueUsageType);
-	
 	@Transactional
 	BusinessEntity<PERSISTENCE_ENTITY> deleteBySystemIdentifier(Object identifier);
-	
 	@Transactional
 	BusinessEntity<PERSISTENCE_ENTITY> deleteByBusinessIdentifier(Object identifier);
-	
 	@Transactional
-	BusinessEntity<PERSISTENCE_ENTITY> deleteManyByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
+	BusinessEntity<PERSISTENCE_ENTITY> deleteByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
 	@Transactional
-	BusinessEntity<PERSISTENCE_ENTITY> deleteManyByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType);
-	
+	BusinessEntity<PERSISTENCE_ENTITY> deleteByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType);
 	@Transactional
-	BusinessEntity<PERSISTENCE_ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers,Properties properties);
+	BusinessEntity<PERSISTENCE_ENTITY> deleteBySystemIdentifiers(Collection<Object> identifiers,Properties properties);
 	@Transactional
-	BusinessEntity<PERSISTENCE_ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers);
-	
+	BusinessEntity<PERSISTENCE_ENTITY> deleteBySystemIdentifiers(Collection<Object> identifiers);
 	@Transactional
-	BusinessEntity<PERSISTENCE_ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers,Properties properties);
+	BusinessEntity<PERSISTENCE_ENTITY> deleteByBusinessIdentifiers(Collection<Object> identifiers,Properties properties);
 	@Transactional
-	BusinessEntity<PERSISTENCE_ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers);
+	BusinessEntity<PERSISTENCE_ENTITY> deleteByBusinessIdentifiers(Collection<Object> identifiers);
 	
 	@Override
 	@Transactional

@@ -14,14 +14,12 @@ public interface BusinessServiceProvider<OBJECT> extends SystemServiceProvider {
 	BusinessServiceProvider<OBJECT> create(OBJECT object,Properties properties);
 	@Transactional
 	BusinessServiceProvider<OBJECT> create(OBJECT object);
-	
 	@Transactional
 	BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects,Properties properties);
 	@Transactional
 	BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects);
-	
-	BusinessServiceProvider<OBJECT> createManyByBatch(Collection<OBJECT> objects,Object batchSize,Properties properties);
-	BusinessServiceProvider<OBJECT> createManyByBatch(Collection<OBJECT> objects,Object batchSize);
+	BusinessServiceProvider<OBJECT> createByBatch(Collection<OBJECT> objects,Object batchSize,Properties properties);
+	BusinessServiceProvider<OBJECT> createByBatch(Collection<OBJECT> objects,Object batchSize);
 	
 	/* Read */ 
 	
@@ -30,27 +28,25 @@ public interface BusinessServiceProvider<OBJECT> extends SystemServiceProvider {
 	BusinessServiceProvider<OBJECT> update(OBJECT object,Properties properties);
 	@Transactional
 	BusinessServiceProvider<OBJECT> update(OBJECT object);
-	
 	@Transactional
 	BusinessServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects,Properties properties);
 	@Transactional
 	BusinessServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects);
+	BusinessServiceProvider<OBJECT> updateByBatch(Collection<OBJECT> objects,Object batchSize,Properties properties);
+	BusinessServiceProvider<OBJECT> updateByBatch(Collection<OBJECT> objects,Object batchSize);
 	
 	/* Delete */
 	@Transactional
 	BusinessServiceProvider<OBJECT> delete(OBJECT object,Properties properties);
 	@Transactional
 	BusinessServiceProvider<OBJECT> delete(OBJECT object);
-	
 	@Transactional
 	BusinessServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects,Properties properties);
 	@Transactional
 	BusinessServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects);
-	
-	@Transactional
+	BusinessServiceProvider<OBJECT> deleteByBatch(Collection<OBJECT> objects,Object batchSize,Properties properties);
+	BusinessServiceProvider<OBJECT> deleteByBatch(Collection<OBJECT> objects,Object batchSize);
 	BusinessServiceProvider<OBJECT> deleteAll(Properties properties);
-	
-	@Transactional
 	BusinessServiceProvider<OBJECT> deleteAll();
 	
 	/* Save */ 
@@ -58,14 +54,12 @@ public interface BusinessServiceProvider<OBJECT> extends SystemServiceProvider {
 	BusinessServiceProvider<OBJECT> save(OBJECT object,Properties properties);
 	@Transactional
 	BusinessServiceProvider<OBJECT> save(OBJECT object);
-	
 	@Transactional
 	BusinessServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects,Properties properties);
 	@Transactional
 	BusinessServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects);
-	
-	BusinessServiceProvider<OBJECT> saveManyByBatch(Collection<OBJECT> objects,Object batchSize,Properties properties);
-	BusinessServiceProvider<OBJECT> saveManyByBatch(Collection<OBJECT> objects,Object batchSize);
+	BusinessServiceProvider<OBJECT> saveByBatch(Collection<OBJECT> objects,Object batchSize,Properties properties);
+	BusinessServiceProvider<OBJECT> saveByBatch(Collection<OBJECT> objects,Object batchSize);
 	
 	/* Count */
 	

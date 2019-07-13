@@ -33,7 +33,7 @@ public abstract class AbstractRepresentationFunctionModifierImpl extends Abstrac
 				persistenceEntityIdentifierType = ValueUsageType.SYSTEM;
 			}
 			
-			persistenceEntity = __injectBusiness__().findOne(getPersistenceEntityClass(),persistenceEntityIdentifier ,new Properties().setValueUsageType(persistenceEntityIdentifierType));
+			persistenceEntity = __injectBusiness__().findByIdentifier(getPersistenceEntityClass(),persistenceEntityIdentifier,persistenceEntityIdentifierType ,new Properties().setValueUsageType(persistenceEntityIdentifierType));
 			/* Copy field value from updated entity to current entity*/
 			Strings fieldNames = getEntityFieldNames();
 			if(__injectCollectionHelper__().isNotEmpty(fieldNames)) {

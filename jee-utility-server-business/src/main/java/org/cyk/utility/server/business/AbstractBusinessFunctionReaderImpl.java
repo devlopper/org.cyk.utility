@@ -1,8 +1,10 @@
 package org.cyk.utility.server.business;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.value.ValueUsageType;
@@ -14,6 +16,26 @@ public abstract class AbstractBusinessFunctionReaderImpl extends AbstractBusines
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		setAction(__inject__(SystemActionRead.class));
+	}
+	
+	@Override
+	protected void __execute__(SystemAction action) {
+		Collection<Object> entities = null;
+		entities = __execute__(__entitiesSystemIdentifiers__,ValueUsageType.SYSTEM,entities);
+		entities = __execute__(__entitiesBusinessIdentifiers__,ValueUsageType.BUSINESS,entities);
+		getProperties().setEntities(entities);
+	}
+	
+	private Collection<Object> __execute__(Collection<Object> identifiers,ValueUsageType valueUsageType,Collection<Object> entities) {
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(identifiers))) {
+			Collection<?> collection = __inject__(Persistence.class).readByIdentifiers(getEntityClass(),identifiers,valueUsageType);
+			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(collection))) {
+				if(entities == null)
+					entities = new ArrayList<>();
+				entities.addAll(collection);
+			}
+		}
+		return entities;
 	}
 	
 	@Override

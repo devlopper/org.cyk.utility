@@ -60,14 +60,21 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		return ____inject____(BusinessFunctionCreator.class);
 	}
 	
-	protected void __listenExecuteCreateOneBefore__(OBJECT object, Properties properties,BusinessFunctionCreator function){}
-	protected void __listenExecuteCreateOneAfter__(OBJECT object, Properties properties,BusinessFunctionCreator function){}
-	
 	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> create(OBJECT object) {
 		return create(object, null);
 	}
 
+	protected void __listenExecuteCreateBefore__(OBJECT object, Properties properties,BusinessFunctionCreator function){}
+	protected void __listenExecuteCreateAfter__(OBJECT object, Properties properties,BusinessFunctionCreator function){}
+	
+	protected void __listenExecuteCreateOneBefore__(OBJECT object, Properties properties,BusinessFunctionCreator function){
+		__listenExecuteCreateBefore__(object, properties, function);
+	}
+	protected void __listenExecuteCreateOneAfter__(OBJECT object, Properties properties,BusinessFunctionCreator function){
+		__listenExecuteCreateAfter__(object, properties, function);
+	}
+	
 	@Override  @Transactional
 	public BusinessServiceProvider<OBJECT> createMany(Collection<OBJECT> objects, Properties properties) {
 		BusinessFunctionCreator function = __injectCreatorForMany__();
@@ -87,9 +94,10 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 			function.setEntities(objects);
 			validateMany(objects, function.getAction());
 		}
-		
+		__listenExecuteCreateManyBefore__(objects, properties, function);
 		function.execute();
-		
+		__listenExecuteCreateManyAfter__(objects, properties, function);
+		/*
 		if(Boolean.TRUE.equals(__isCreateManyOneByOne__())) {
 			//Loop execution
 			
@@ -97,6 +105,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 			//Batch execution
 			validateMany(objects);
 		}
+		*/
 		return this;
 	}
 	
@@ -114,7 +123,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	}
 	
 	@Override
-	public BusinessServiceProvider<OBJECT> createManyByBatch(Collection<OBJECT> objects, Object batchSize,Properties properties) {
+	public BusinessServiceProvider<OBJECT> createByBatch(Collection<OBJECT> objects, Object batchSize,Properties properties) {
 		if(__injectCollectionHelper__().isNotEmpty(objects)) {
 			List<List<OBJECT>> lists = __injectCollectionHelper__().getBatches((List<OBJECT>) objects, batchSize);	
 			if(__injectCollectionHelper__().isNotEmpty(lists)) {
@@ -127,11 +136,22 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	}
 	
 	@Override
-	public BusinessServiceProvider<OBJECT> createManyByBatch(Collection<OBJECT> objects, Object batchSize) {
-		createManyByBatch(objects, batchSize, null);
+	public BusinessServiceProvider<OBJECT> createByBatch(Collection<OBJECT> objects, Object batchSize) {
+		createByBatch(objects, batchSize, null);
 		return this;
 	}
 
+	protected void __listenExecuteCreateManyBefore__(Collection<OBJECT> objects, Properties properties,BusinessFunctionCreator function){
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+			for(OBJECT index : objects)
+				__listenExecuteCreateBefore__(index, properties, function);
+	}
+	protected void __listenExecuteCreateManyAfter__(Collection<OBJECT> objects, Properties properties,BusinessFunctionCreator function){
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+			for(OBJECT index : objects)
+				__listenExecuteCreateAfter__(index, properties, function);
+	}
+	
 	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
 		BusinessFunctionModifier function = ____inject____(BusinessFunctionModifier.class);
@@ -165,6 +185,25 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		return updateMany(objects, null);
 	}
 
+	@Override
+	public BusinessServiceProvider<OBJECT> updateByBatch(Collection<OBJECT> objects, Object batchSize,Properties properties) {
+		if(__injectCollectionHelper__().isNotEmpty(objects)) {
+			List<List<OBJECT>> lists = __injectCollectionHelper__().getBatches((List<OBJECT>) objects, batchSize);	
+			if(__injectCollectionHelper__().isNotEmpty(lists)) {
+				for(List<OBJECT> index : lists) {
+					updateMany(index,properties);
+				}
+			}
+		}
+		return this;
+	}
+	
+	@Override
+	public BusinessServiceProvider<OBJECT> updateByBatch(Collection<OBJECT> objects, Object batchSize) {
+		updateByBatch(objects, batchSize, null);
+		return this;
+	}
+	
 	@Override @Transactional
 	public BusinessServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
 		BusinessFunctionRemover function =  ____inject____(BusinessFunctionRemover.class);
@@ -198,6 +237,25 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 		return deleteMany(objects, null);
 	}
 	
+	@Override
+	public BusinessServiceProvider<OBJECT> deleteByBatch(Collection<OBJECT> objects, Object batchSize,Properties properties) {
+		if(__injectCollectionHelper__().isNotEmpty(objects)) {
+			List<List<OBJECT>> lists = __injectCollectionHelper__().getBatches((List<OBJECT>) objects, batchSize);	
+			if(__injectCollectionHelper__().isNotEmpty(lists)) {
+				for(List<OBJECT> index : lists) {
+					deleteMany(index,properties);
+				}
+			}
+		}
+		return this;
+	}
+	
+	@Override
+	public BusinessServiceProvider<OBJECT> deleteByBatch(Collection<OBJECT> objects, Object batchSize) {
+		deleteByBatch(objects, batchSize, null);
+		return this;
+	}
+	
 	/**/
 	
 	@Override @Transactional
@@ -228,7 +286,7 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	}
 
 	@Override
-	public BusinessServiceProvider<OBJECT> saveManyByBatch(Collection<OBJECT> objects, Object batchSize,Properties properties) {
+	public BusinessServiceProvider<OBJECT> saveByBatch(Collection<OBJECT> objects, Object batchSize,Properties properties) {
 		if(__injectCollectionHelper__().isNotEmpty(objects)) {
 			List<List<OBJECT>> lists = __injectCollectionHelper__().getBatches((List<OBJECT>) objects, batchSize);	
 			if(__injectCollectionHelper__().isNotEmpty(lists)) {
@@ -241,8 +299,8 @@ public abstract class AbstractBusinessServiceProviderImpl<OBJECT> extends Abstra
 	}
 	
 	@Override
-	public BusinessServiceProvider<OBJECT> saveManyByBatch(Collection<OBJECT> objects, Object batchSize) {
-		saveManyByBatch(objects, batchSize, null);
+	public BusinessServiceProvider<OBJECT> saveByBatch(Collection<OBJECT> objects, Object batchSize) {
+		saveByBatch(objects, batchSize, null);
 		return this;
 	}
 	

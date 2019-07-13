@@ -295,18 +295,6 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		return saveMany(objects, null);
 	}
 	
-	@Override
-	public PersistenceServiceProvider<OBJECT> clear() {
-		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
-		return this;
-	}
-	
-	@Override
-	public PersistenceServiceProvider<OBJECT> flush() {
-		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
-		return this;
-	}
-	
 	/**/
 	
 	@SuppressWarnings("unchecked")

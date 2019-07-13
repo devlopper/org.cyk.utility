@@ -17,13 +17,15 @@ public interface Persistence extends PersistenceServiceProvider<Object> {
 	/* Create */
 	
 	/* Read */ 
-	<ENTITY> ENTITY readOne(Class<ENTITY> aClass,Object identifier,Properties properties);
-	<ENTITY> ENTITY readOne(Class<ENTITY> aClass,Object identifier);
+	<ENTITY> Collection<ENTITY> readByIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
+	<ENTITY> Collection<ENTITY> readByIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,ValueUsageType valueUsageType);
 	
-	<ENTITY> ENTITY readOne(Class<ENTITY> aClass,Object identifier,ValueUsageType valueUsageType);
+	<ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass,Object identifier,Properties properties);
+	<ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass,Object identifier);
+	<ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass,Object identifier,ValueUsageType valueUsageType);
 	
-	<ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass,Properties properties);
-	<ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass);
+	<ENTITY> Collection<ENTITY> read(Class<ENTITY> aClass,Properties properties);
+	<ENTITY> Collection<ENTITY> read(Class<ENTITY> aClass);
 	
 	/* Update */
 	
@@ -37,8 +39,8 @@ public interface Persistence extends PersistenceServiceProvider<Object> {
 	<ENTITY> Persistence deleteByBusinessIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,Properties properties);
 	<ENTITY> Persistence deleteByBusinessIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers);
 	
-	<ENTITY> Persistence deleteAll(Class<ENTITY> aClass,Properties properties);
-	<ENTITY> Persistence deleteAll(Class<ENTITY> aClass);
+	<ENTITY> Persistence deleteByEntityClass(Class<ENTITY> aClass,Properties properties);
+	<ENTITY> Persistence deleteByEntityClass(Class<ENTITY> aClass);
 	
 	/* Count */
 	<ENTITY> Long count(Class<ENTITY> aClass,Properties properties);

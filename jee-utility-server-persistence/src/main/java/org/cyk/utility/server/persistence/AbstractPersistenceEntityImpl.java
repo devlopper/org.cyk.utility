@@ -102,10 +102,6 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return __readMany__(properties,____getQueryParameters____(properties));
 	}
 	
-	/*protected Object[] __getReadQueryParameters__(Properties properties) {
-		return null;
-	}*/
-	
 	@Override
 	public Collection<ENTITY> read() {
 		// TODO user default settings like pagination
@@ -114,7 +110,42 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public ENTITY readOne(Object identifier, Properties properties) {
+	public Collection<ENTITY> readByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
+		PersistenceFunctionReader function = __inject__(PersistenceFunctionReader.class);
+		function.setQueryIdentifier(ValueUsageType.BUSINESS.equals(valueUsageType) ? readByBusinessIdentifiers : readBySystemIdentifiers);
+		function.setQueryParameters(new Properties().set("identifiers",identifiers));
+		__copyCommonProperties__(function, properties);
+		function.execute();
+		return (Collection<ENTITY>) function.getEntities();
+	}
+	
+	@Override
+	public Collection<ENTITY> readByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType) {
+		return readByIdentifiers(identifiers, valueUsageType, null);
+	}
+	
+	@Override
+	public Collection<ENTITY> readBySystemIdentifiers(Collection<Object> identifiers, Properties properties) {
+		return readByIdentifiers(identifiers, ValueUsageType.SYSTEM, properties);
+	}
+	
+	@Override
+	public Collection<ENTITY> readBySystemIdentifiers(Collection<Object> identifiers) {
+		return readBySystemIdentifiers(identifiers, null);
+	}
+	
+	@Override
+	public Collection<ENTITY> readByBusinessIdentifiers(Collection<Object> identifiers, Properties properties) {
+		return readByIdentifiers(identifiers, ValueUsageType.BUSINESS, properties);
+	}
+	
+	@Override
+	public Collection<ENTITY> readByBusinessIdentifiers(Collection<Object> identifiers) {
+		return readByBusinessIdentifiers(identifiers, null);
+	}
+	
+	@Override
+	public ENTITY readByIdentifier(Object identifier,ValueUsageType valueUsageType, Properties properties) {
 		/*
 		if(properties == null)
 			properties = new Properties();
@@ -127,13 +158,13 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		}
 		return __readOne__(properties,____getQueryParameters____(properties));
 		*/
-		PersistenceFunctionReader function = __inject__(PersistenceFunctionReader.class);
+		/*PersistenceFunctionReader function = __inject__(PersistenceFunctionReader.class);
 		function.setQueryIdentifier(ValueUsageType.BUSINESS.equals(properties.getValueUsageType()) ? readByBusinessIdentifiers : readBySystemIdentifiers);
 		function.setQueryParameters(new Properties().set("identifiers",Arrays.asList(identifier)));
 		__copyCommonProperties__(function, properties);
 		function.execute();
-		
-		return (ENTITY) __injectCollectionHelper__().getFirst(function.getEntities());
+		*/
+		return (ENTITY) __injectCollectionHelper__().getFirst(readByIdentifiers(Arrays.asList(identifier),valueUsageType, properties));
 		/*
 		return (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier)
 				.setEntityIdentifierValueUsageType(Properties.getFromPath(properties, Properties.VALUE_USAGE_TYPE)).execute().getProperties().getEntity();
@@ -141,33 +172,33 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	@Override
-	public ENTITY readOne(Object identifier) {
-		return readOne(identifier, (Properties)null);
+	public ENTITY readByIdentifier(Object identifier,ValueUsageType valueUsageType) {
+		return readByIdentifier(identifier, valueUsageType, null);
 	}
 	
 	@Override
-	public ENTITY readOne(Object identifier, ValueUsageType valueUsageType) {
-		return readOne(identifier, new Properties().setValueUsageType(valueUsageType));
+	public ENTITY readByIdentifier(Object identifier) {
+		return readByIdentifier(identifier, ValueUsageType.SYSTEM);
 	}
 	
 	@Override
-	public ENTITY readOneByBusinessIdentifier(Object identifier) {
-		return readOne(identifier, ValueUsageType.BUSINESS);
+	public ENTITY readByBusinessIdentifier(Object identifier,Properties properties) {
+		return readByIdentifier(identifier, ValueUsageType.BUSINESS,properties);
 	}
 	
 	@Override
-	public ENTITY readOneBySystemIdentifier(Object identifier) {
-		return readOne(identifier, ValueUsageType.SYSTEM);
+	public ENTITY readByBusinessIdentifier(Object identifier) {
+		return readByBusinessIdentifier(identifier,null);
 	}
 	
 	@Override
-	public Collection<ENTITY> readMany(Properties properties) {
-		return read(properties);
+	public ENTITY readBySystemIdentifier(Object identifier,Properties properties) {
+		return readByIdentifier(identifier, ValueUsageType.SYSTEM,properties);
 	}
 	
 	@Override
-	public Collection<ENTITY> readMany() {
-		return readMany(null);
+	public ENTITY readBySystemIdentifier(Object identifier) {
+		return readBySystemIdentifier(identifier, null);
 	}
 	
 	@Override
@@ -240,8 +271,8 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@Override
 	public PersistenceEntity<ENTITY> deleteByIdentifier(Object identifier, ValueUsageType valueUsageType,Properties properties) {
-		delete(readOne(identifier, valueUsageType), properties);
-		return this;
+		//delete(readByIdentifier(identifier, valueUsageType), properties);
+		return deleteByIdentifiers(Arrays.asList(identifier), valueUsageType, properties);
 	}
 	
 	@Override
@@ -281,28 +312,28 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	@Override
-	public PersistenceEntity<ENTITY> deleteManyByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType) {
+	public PersistenceEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType) {
 		return deleteByIdentifiers(identifiers, valueUsageType, null);
 	}
 	
 	@Override
-	public PersistenceEntity<ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers,Properties properties) {
+	public PersistenceEntity<ENTITY> deleteBySystemIdentifiers(Collection<Object> identifiers,Properties properties) {
 		return deleteByIdentifiers(identifiers, ValueUsageType.SYSTEM, properties);
 	}
 	
 	@Override
-	public PersistenceEntity<ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers) {
-		return deleteManyBySystemIdentifiers(identifiers, null);
+	public PersistenceEntity<ENTITY> deleteBySystemIdentifiers(Collection<Object> identifiers) {
+		return deleteBySystemIdentifiers(identifiers, null);
 	}
 	
 	@Override
-	public PersistenceEntity<ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers,Properties properties) {
+	public PersistenceEntity<ENTITY> deleteByBusinessIdentifiers(Collection<Object> identifiers,Properties properties) {
 		return deleteByIdentifiers(identifiers, ValueUsageType.BUSINESS, properties);
 	}
 	
 	@Override
-	public PersistenceEntity<ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers) {
-		return deleteManyByBusinessIdentifiers(identifiers, null);
+	public PersistenceEntity<ENTITY> deleteByBusinessIdentifiers(Collection<Object> identifiers) {
+		return deleteByBusinessIdentifiers(identifiers, null);
 	}
 	
 	@Override

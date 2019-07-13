@@ -27,7 +27,7 @@ public abstract class AbstractTestBusinessReadIntegrationImpl extends AbstractTe
 	protected void __perform__(Object object) throws Exception {
 		Boolean mustUnexist =  Boolean.TRUE.equals(__inject__(CollectionHelper.class).contains(getUnexistingObjectIdentifiers(), object));
 		ValueUsageType valueUsageType = getIdentifierValueUsageType();
-		Object one = __inject__(Business.class).findOne(getObjectClass(),object,new Properties().setValueUsageType(valueUsageType));
+		Object one = __inject__(Business.class).findByIdentifier(getObjectClass(),object,valueUsageType,new Properties().setValueUsageType(valueUsageType));
 		assertionHelper.assertEquals(getObjectClass()+" with "+valueUsageType+" identifier <"+object+">"+(mustUnexist ? "" : " not")+" found", !mustUnexist,one!=null);
 		if(mustUnexist) {
 			

@@ -39,7 +39,7 @@ public abstract class AbstractIdentifiedByString extends AbstractIdentifiedPersi
 	/**/
 	
 	protected <T> T __getFromIdentifier__(Class<T> aClass,Object identifier,ValueUsageType valueUsageType){
-		return identifier == null ? null : __inject__(org.cyk.utility.server.persistence.Persistence.class).readOne(aClass,identifier,new Properties().setValueUsageType(valueUsageType));
+		return identifier == null ? null : __inject__(org.cyk.utility.server.persistence.Persistence.class).readByIdentifier(aClass,identifier,new Properties().setValueUsageType(valueUsageType));
 	}
 	
 	public AbstractIdentifiedByString setFromIdentifier(Field field,Object identifier,ValueUsageType valueUsageType){

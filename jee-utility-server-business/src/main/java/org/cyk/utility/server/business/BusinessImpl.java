@@ -40,7 +40,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <ENTITY> ENTITY findOne(Class<ENTITY> aClass, Object identifier, Properties properties) {
+	public <ENTITY> ENTITY findByIdentifier(Class<ENTITY> aClass, Object identifier,ValueUsageType valueUsageType, Properties properties) {
 		ENTITY entity;
 		BusinessEntity<ENTITY> business = (BusinessEntity<ENTITY>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(aClass);
 		if(business == null){
@@ -48,19 +48,19 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 			function.getProperties().copyFrom(properties, Properties.VALUE_USAGE_TYPE);
 			entity = (ENTITY) function.setEntityClass(aClass).setEntityIdentifier(identifier).execute().getProperties().getEntity();
 		}else{
-			entity = business.findOne(identifier, properties);
+			entity = business.findByIdentifier(identifier,valueUsageType, properties);
 		}
 		return entity;
 	}
 
 	@Override
-	public <ENTITY> ENTITY findOne(Class<ENTITY> aClass, Object identifier) {
-		return findOne(aClass, identifier, null);
+	public <ENTITY> ENTITY findByIdentifier(Class<ENTITY> aClass, Object identifier,ValueUsageType valueUsageType) {
+		return findByIdentifier(aClass, identifier,valueUsageType, null);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <ENTITY> Collection<ENTITY> findMany(Class<ENTITY> aClass, Properties properties) {
+	public <ENTITY> Collection<ENTITY> find(Class<ENTITY> aClass, Properties properties) {
 		Collection<ENTITY> entities;
 		BusinessEntity<ENTITY> business = (BusinessEntity<ENTITY>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(aClass);
 		if(business == null){
@@ -68,15 +68,15 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 			function.getProperties().copyFrom(properties, Properties.VALUE_USAGE_TYPE);
 			entities = (Collection<ENTITY>) function.setEntityClass(aClass).execute().getProperties().getEntities();
 		}else{
-			entities = business.findMany(properties);
+			entities = business.find(properties);
 		}
 		return entities;
 	}
 
 	@Override
-	public <ENTITY> Collection<ENTITY> findMany(Class<ENTITY> aClass) {
+	public <ENTITY> Collection<ENTITY> find(Class<ENTITY> aClass) {
 		//TODO handle pagination
-		return findMany(aClass, null);
+		return find(aClass, null);
 	}
 
 	@Override
@@ -180,7 +180,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 
 	@Override @Transactional
 	public <ENTITY> Business deleteByClassByIdentififerByValueUsageType(Class<ENTITY> clazz, Object identifier,ValueUsageType valueUsageType) {
-		delete(__inject__(Persistence.class).readOne(clazz, identifier, valueUsageType));
+		delete(__inject__(Persistence.class).readByIdentifier(clazz, identifier, valueUsageType));
 		return this;
 	}
 	
@@ -191,7 +191,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		if(business == null){
 			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
 		}else{
-			business.deleteManyByIdentifiers(identifiers, valueUsageType,properties);
+			business.deleteByIdentifiers(identifiers, valueUsageType,properties);
 		}
 		return this;
 	}
@@ -222,14 +222,14 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	}
 	
 	@Override
-	public BusinessServiceProvider<Object> saveManyByBatch(Collection<Object> objects, Object batchSize,
+	public BusinessServiceProvider<Object> saveByBatch(Collection<Object> objects, Object batchSize,
 			Properties properties) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public BusinessServiceProvider<Object> saveManyByBatch(Collection<Object> objects, Object batchSize) {
+	public BusinessServiceProvider<Object> saveByBatch(Collection<Object> objects, Object batchSize) {
 		// TODO Auto-generated method stub
 		return null;
 	}

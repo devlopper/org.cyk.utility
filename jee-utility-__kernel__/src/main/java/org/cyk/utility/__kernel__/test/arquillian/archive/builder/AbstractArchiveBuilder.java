@@ -39,7 +39,7 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 	private ARCHIVE archive;
 	
 	private Boolean isBeanXmlAddable = Boolean.TRUE;
-	private String beanXml,projectDefaultsYml,persistenceXml,ormXml,log4j2Xml,pomXml,jbossDeploymentStructureXml;
+	private String beanXml,projectDefaultsYml,persistenceXml,ormXml,log4j2Xml,log4jProperties,pomXml,jbossDeploymentStructureXml;
 	private Collection<Package> packages;
 	private Collection<Clazz> classes;
 	private String mavenPomProfileIdentifier;
@@ -76,6 +76,9 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 		if(StringUtils.isBlank(persistenceXml) && profile!=null)
 			persistenceXml = profile.getProperty("org.cyk.test.jpa.persistence.file");
 		
+		if(StringUtils.isBlank(persistenceXml) && profile!=null)
+			log4jProperties = profile.getProperty("org.cyk.test.logging.log4j.file");
+		
 		if(StringUtils.isBlank(ormXml) && profile!=null)
 			ormXml = profile.getProperty("org.cyk.test.jpa.orm.file");
 		
@@ -97,6 +100,8 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 			addOrmXml(ormXml);
 		if(log4j2Xml!=null)
 			addlog4j2Xml(log4j2Xml);
+		if(log4jProperties!=null)
+			addlog4jProperties(log4jProperties);
 		if(pomXml!=null)
 			addPomXml(pomXml,profile);
 		if(jbossDeploymentStructureXml!=null)
@@ -235,6 +240,11 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 	
 	private AbstractArchiveBuilder<ARCHIVE> addlog4j2Xml(String path){
 		((WebArchive)archive).addAsResource(path,"log4j2.xml");
+		return this;
+	}
+	
+	private AbstractArchiveBuilder<ARCHIVE> addlog4jProperties(String path){
+		((WebArchive)archive).addAsResource(path,"log4j.properties");
 		return this;
 	}
 	

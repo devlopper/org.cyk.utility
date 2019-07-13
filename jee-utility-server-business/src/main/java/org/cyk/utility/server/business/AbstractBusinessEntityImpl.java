@@ -3,12 +3,12 @@ package org.cyk.utility.server.business;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import org.assertj.core.util.Arrays;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.clazz.ClassHelper;
@@ -87,46 +87,125 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		return this;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public ENTITY findOne(Object identifier, Properties properties) {
-		ENTITY entity = (ENTITY) __inject__(BusinessFunctionReader.class).setEntityClass(getPersistenceEntityClass()).setEntityIdentifier(identifier)
-				.setEntityIdentifierValueUsageType(properties == null ? ValueUsageType.SYSTEM: (ValueUsageType) properties.getValueUsageType()).execute().getProperties().getEntity();
-		__listenFindOneAfter__(entity, properties);
-		return entity;
-	}
-
-	@Override
-	public ENTITY findOne(Object identifier, ValueUsageType valueUsageType) {
-		return findOne(identifier,new Properties().setValueUsageType(valueUsageType));
-	}
-
-	@Override
-	public ENTITY findOne(Object identifier) {
-		return findOne(identifier,(Properties)null);
-	}
-
-	@Override
-	public ENTITY findOneByBusinessIdentifier(Object identifier) {
-		return findOne(identifier, ValueUsageType.BUSINESS);
+	public Collection<ENTITY> findByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
+		BusinessFunctionReader function = __inject__(BusinessFunctionReader.class);
+		function.setEntityClass(getPersistenceEntityClass());
+		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifiers);
+		function.setEntityIdentifierValueUsageType(valueUsageType);
+		__copyCommonProperties__(function, properties);
+		@SuppressWarnings("unchecked")
+		Collection<ENTITY> entities = (Collection<ENTITY>) function.execute().getEntities();
+		__listenFindManyAfter__(entities, properties);
+		return entities;
 	}
 	
 	@Override
-	public ENTITY findOneBySystemIdentifier(Object identifier) {
-		return findOne(identifier, ValueUsageType.SYSTEM);
+	public Collection<ENTITY> findByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType) {
+		return findByIdentifiers(identifiers, valueUsageType, null);
+	}
+	
+	@Override
+	public Collection<ENTITY> findByIdentifiers(Collection<Object> identifiers) {
+		return findByIdentifiers(identifiers, ValueUsageType.SYSTEM);
+	}
+	
+	@Override
+	public Collection<ENTITY> findBySystemIdentifiers(Collection<Object> identifiers, Properties properties) {
+		return findByIdentifiers(identifiers, ValueUsageType.SYSTEM);
+	}
+	
+	@Override
+	public Collection<ENTITY> findBySystemIdentifiers(Collection<Object> identifiers) {
+		return findBySystemIdentifiers(identifiers, null);
+	}
+	
+	@Override
+	public Collection<ENTITY> findByBusinessIdentifiers(Collection<Object> identifiers, Properties properties) {
+		return findByIdentifiers(identifiers, ValueUsageType.BUSINESS);
+	}
+	
+	@Override
+	public Collection<ENTITY> findByBusinessIdentifiers(Collection<Object> identifiers) {
+		return findByBusinessIdentifiers(identifiers, null);
+	}
+	
+	@Override
+	public ENTITY findByIdentifier(Object identifier,ValueUsageType valueUsageType, Properties properties) {
+		return __injectCollectionHelper__().getFirst(findByIdentifiers(Arrays.asList(identifier), valueUsageType, properties));
 	}
 
 	@Override
-	public Collection<ENTITY> findMany(Properties properties) {
-		Collection<ENTITY> entities = getPersistence().readMany(properties);
+	public ENTITY findByIdentifier(Object identifier, ValueUsageType valueUsageType) {
+		return findByIdentifier(identifier,valueUsageType,null);
+	}
+
+	@Override
+	public ENTITY findByIdentifier(Object identifier) {
+		return findByIdentifier(identifier,ValueUsageType.SYSTEM);
+	}
+
+	@Override
+	public ENTITY findByBusinessIdentifier(Object identifier, Properties properties) {
+		return findByIdentifier(identifier, ValueUsageType.BUSINESS,properties);
+	}
+	
+	@Override
+	public ENTITY findByBusinessIdentifier(Object identifier) {
+		return findByBusinessIdentifier(identifier, null);
+	}
+	
+	@Override
+	public ENTITY findBySystemIdentifier(Object identifier, Properties properties) {
+		return findByIdentifier(identifier, ValueUsageType.SYSTEM,properties);
+	}
+	
+	@Override
+	public ENTITY findBySystemIdentifier(Object identifier) {
+		return findBySystemIdentifier(identifier, null);
+	}
+
+	@Override
+	public Collection<ENTITY> find(Properties properties) {
+		Collection<ENTITY> entities = getPersistence().read(properties);
 		__listenFindManyAfter__(entities,properties);
 		return entities;
 	}
 
 	@Override
-	public Collection<ENTITY> findMany() {
+	public Collection<ENTITY> find() {
 		//TODO use default settings like pagination and sorting
-		return findMany(null);
+		return find(null);
+	}
+	
+	@Override
+	public Collection<Object> findIdentifiers(ValueUsageType valueUsageType, Properties properties) {
+		return getPersistence().readIdentifiers(valueUsageType, properties);
+	}
+	
+	@Override
+	public Collection<Object> findIdentifiers(ValueUsageType valueUsageType) {
+		return findIdentifiers(valueUsageType, null);
+	}
+	
+	@Override
+	public Collection<Object> findSystemIdentifiers(Properties properties) {
+		return findIdentifiers(ValueUsageType.SYSTEM, properties);
+	}
+	
+	@Override
+	public Collection<Object> findSystemIdentifiers() {
+		return findSystemIdentifiers(null);
+	}
+	
+	@Override
+	public Collection<Object> findBusinessIdentifiers(Properties properties) {
+		return findIdentifiers(ValueUsageType.BUSINESS, properties);
+	}
+	
+	@Override
+	public Collection<Object> findBusinessIdentifiers() {
+		return findBusinessIdentifiers(null);
 	}
 
 	protected void __listenFindManyAfter__(Collection<ENTITY> entities,Properties properties) {
@@ -186,7 +265,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	}
 	
 	@Override @Transactional
-	public BusinessEntity<ENTITY> deleteManyByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
+	public BusinessEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
 		BusinessFunctionRemover function = __inject__(BusinessFunctionRemover.class);
 		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifiers);
 		function.setEntityClass(getPersistenceEntityClass());
@@ -197,28 +276,28 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	}
 	
 	@Override @Transactional
-	public BusinessEntity<ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers, Properties properties) {
-		return deleteManyByIdentifiers(identifiers, ValueUsageType.SYSTEM, properties);
+	public BusinessEntity<ENTITY> deleteBySystemIdentifiers(Collection<Object> identifiers, Properties properties) {
+		return deleteByIdentifiers(identifiers, ValueUsageType.SYSTEM, properties);
 	}
 	
 	@Override @Transactional
-	public BusinessEntity<ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers) {
-		return deleteManyBySystemIdentifiers(identifiers, null);
+	public BusinessEntity<ENTITY> deleteBySystemIdentifiers(Collection<Object> identifiers) {
+		return deleteBySystemIdentifiers(identifiers, null);
 	}
 	
 	@Override @Transactional
-	public BusinessEntity<ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers,Properties properties) {
-		return deleteManyByIdentifiers(identifiers, ValueUsageType.BUSINESS, properties);
+	public BusinessEntity<ENTITY> deleteByBusinessIdentifiers(Collection<Object> identifiers,Properties properties) {
+		return deleteByIdentifiers(identifiers, ValueUsageType.BUSINESS, properties);
 	}
 	
 	@Override @Transactional
-	public BusinessEntity<ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers) {
-		return deleteManyByBusinessIdentifiers(identifiers, null);
+	public BusinessEntity<ENTITY> deleteByBusinessIdentifiers(Collection<Object> identifiers) {
+		return deleteByBusinessIdentifiers(identifiers, null);
 	}
 	
 	@Override @Transactional
-	public BusinessEntity<ENTITY> deleteManyByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType) {
-		deleteManyByIdentifiers(identifiers, valueUsageType, null);
+	public BusinessEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType) {
+		deleteByIdentifiers(identifiers, valueUsageType, null);
 		return this;
 	}
 	
@@ -230,7 +309,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		//function.setAll(Boolean.TRUE).setEntityClass(getPersistenceEntityClass());
 		function.execute();
 		*/
-		Collection<ENTITY> entities = findMany();
+		Collection<ENTITY> entities = find();
 		if(__injectCollectionHelper__().isNotEmpty(entities))
 			for(ENTITY index : entities)
 				delete(index,properties);

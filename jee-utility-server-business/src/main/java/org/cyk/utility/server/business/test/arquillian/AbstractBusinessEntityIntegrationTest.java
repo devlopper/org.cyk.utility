@@ -62,7 +62,7 @@ public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends Abst
 		Object action = __inject__(SystemActionUpdate.class);
 		ENTITY object = __instanciateEntity__(action);
 		__createEntity__(object);
-		object = (ENTITY) __getBusinessEntity__(action).findOne(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(object));
+		object = (ENTITY) __getBusinessEntity__(action).findByIdentifier(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(object));
 		__setEntityFields__(object,action);
 		__updateEntity__(object);
 		__deleteEntitiesAll__(object.getClass());
@@ -73,7 +73,7 @@ public abstract class AbstractBusinessEntityIntegrationTest<ENTITY> extends Abst
 		Object action = __inject__(SystemActionDelete.class);
 		Object object = __instanciateEntity__(action);
 		__createEntity__(object);
-		object = __getBusinessEntity__(action).findOne(__getFieldValueSystemIdentifier__(object));
+		object = __getBusinessEntity__(action).findByIdentifier(__getFieldValueSystemIdentifier__(object));
 		__deleteEntity__(object);
 		__deleteEntitiesAll__(object.getClass());
 	}

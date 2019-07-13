@@ -8,7 +8,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY extends AbstractIdent
 
 	@Override
 	public ENTITY readByCode(String code) {
-		return readOneByBusinessIdentifier(code);
+		return readByBusinessIdentifier(code);
 	}
 
 	@Override

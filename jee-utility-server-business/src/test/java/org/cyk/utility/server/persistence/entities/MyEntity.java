@@ -2,6 +2,8 @@ package org.cyk.utility.server.persistence.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
@@ -12,7 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Entity @Getter @Setter @Accessors(chain=true)
+@Entity @Getter @Setter @Accessors(chain=true) @Access(AccessType.FIELD)
 public class MyEntity extends AbstractIdentifiedByStringAndCoded implements Serializable {
 	private static final long serialVersionUID = 1L;
 

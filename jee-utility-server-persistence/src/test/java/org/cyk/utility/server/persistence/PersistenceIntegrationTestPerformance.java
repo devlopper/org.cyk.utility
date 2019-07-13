@@ -38,7 +38,7 @@ public class PersistenceIntegrationTestPerformance extends AbstractPersistenceAr
 		userTransaction.begin();
 		PersistenceFunctionRemover remover = __inject__(PersistenceFunctionRemover.class);
 		remover.addLogMessageBuilderParameter("function remove");
-		remover.setEntities(__inject__(MyEntityPersistence.class).readMany());
+		remover.setEntities(__inject__(MyEntityPersistence.class).read());
 		remover.getLog(Boolean.TRUE).setLevel(LogLevel.INFO);
 		remover.execute();
 		userTransaction.commit();
@@ -57,7 +57,7 @@ public class PersistenceIntegrationTestPerformance extends AbstractPersistenceAr
 		remover.addLogMessageBuilderParameter("function remove by query 1");
 		remover.getLog(Boolean.TRUE).setLevel(LogLevel.INFO);
 		remover.setQueryIdentifier("MyEntity.deleteByIdentifier");
-		remover.setQueryParameters(new Properties().set("identifiers",__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier).collect(Collectors.toList())));
+		remover.setQueryParameters(new Properties().set("identifiers",__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier).collect(Collectors.toList())));
 		remover.execute();
 		userTransaction.commit();
 	}
@@ -79,7 +79,7 @@ public class PersistenceIntegrationTestPerformance extends AbstractPersistenceAr
 		userTransaction.begin();
 		PersistenceFunctionRemover remover = __inject__(PersistenceFunctionRemover.class);
 		remover.addLogMessageBuilderParameter("function");
-		remover.setEntities(__inject__(MyEntityPersistence.class).readMany());
+		remover.setEntities(__inject__(MyEntityPersistence.class).read());
 		remover.getLog(Boolean.TRUE).setLevel(LogLevel.INFO);
 		remover.execute();
 		userTransaction.commit();
@@ -102,7 +102,7 @@ public class PersistenceIntegrationTestPerformance extends AbstractPersistenceAr
 		remover.addLogMessageBuilderParameter("function remove by query 10");
 		remover.getLog(Boolean.TRUE).setLevel(LogLevel.INFO);
 		remover.setQueryIdentifier("MyEntity.deleteByIdentifier");
-		remover.setQueryParameters(new Properties().set("identifiers",__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier).collect(Collectors.toList())));
+		remover.setQueryParameters(new Properties().set("identifiers",__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier).collect(Collectors.toList())));
 		remover.execute();
 		userTransaction.commit();
 	}
@@ -124,7 +124,7 @@ public class PersistenceIntegrationTestPerformance extends AbstractPersistenceAr
 		userTransaction.begin();
 		PersistenceFunctionRemover remover = __inject__(PersistenceFunctionRemover.class);
 		remover.addLogMessageBuilderParameter("function remove");
-		remover.setEntities(__inject__(MyEntityPersistence.class).readMany());
+		remover.setEntities(__inject__(MyEntityPersistence.class).read());
 		remover.getLog(Boolean.TRUE).setLevel(LogLevel.INFO);
 		remover.execute();
 		userTransaction.commit();
@@ -147,7 +147,7 @@ public class PersistenceIntegrationTestPerformance extends AbstractPersistenceAr
 		remover.addLogMessageBuilderParameter("function remove by query 1000");
 		remover.getLog(Boolean.TRUE).setLevel(LogLevel.INFO);
 		remover.setQueryIdentifier("MyEntity.deleteByIdentifier");
-		remover.setQueryParameters(new Properties().set("identifiers",__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier).collect(Collectors.toList())));
+		remover.setQueryParameters(new Properties().set("identifiers",__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier).collect(Collectors.toList())));
 		remover.execute();
 		userTransaction.commit();
 	}
@@ -159,7 +159,7 @@ public class PersistenceIntegrationTestPerformance extends AbstractPersistenceAr
 		userTransaction.commit();
 		
 		userTransaction.begin();
-		__inject__(MyEntityPersistence.class).deleteManyBySystemIdentifiers(__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier)
+		__inject__(MyEntityPersistence.class).deleteBySystemIdentifiers(__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier)
 				.collect(Collectors.toList()),new Properties().setLogLevel(LogLevel.INFO));
 		userTransaction.commit();
 	}
@@ -174,7 +174,7 @@ public class PersistenceIntegrationTestPerformance extends AbstractPersistenceAr
 		userTransaction.commit();
 		
 		userTransaction.begin();
-		__inject__(MyEntityPersistence.class).deleteManyBySystemIdentifiers(__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier)
+		__inject__(MyEntityPersistence.class).deleteBySystemIdentifiers(__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier)
 				.collect(Collectors.toList()),new Properties().setLogLevel(LogLevel.INFO));
 		userTransaction.commit();
 	}
@@ -189,7 +189,7 @@ public class PersistenceIntegrationTestPerformance extends AbstractPersistenceAr
 		userTransaction.commit();
 		
 		userTransaction.begin();
-		__inject__(MyEntityPersistence.class).deleteManyBySystemIdentifiers(__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier)
+		__inject__(MyEntityPersistence.class).deleteBySystemIdentifiers(__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier)
 				.collect(Collectors.toList()),new Properties().setLogLevel(LogLevel.INFO));
 		userTransaction.commit();
 	}
@@ -219,7 +219,7 @@ public class PersistenceIntegrationTestPerformance extends AbstractPersistenceAr
 		assertionHelper.assertEquals(1l, __inject__(MyEntityPersistence.class).count());
 		
 		userTransaction.begin();
-		__inject__(MyEntityPersistence.class).deleteManyBySystemIdentifiers(__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier)
+		__inject__(MyEntityPersistence.class).deleteBySystemIdentifiers(__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier)
 				.collect(Collectors.toList()),new Properties().setLogLevel(LogLevel.INFO));
 		userTransaction.commit();
 	}

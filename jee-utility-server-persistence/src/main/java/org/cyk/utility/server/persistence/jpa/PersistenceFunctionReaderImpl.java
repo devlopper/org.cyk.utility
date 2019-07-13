@@ -64,7 +64,7 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 		if(entity == null)
 			addLogMessageBuilderParameter(MESSAGE_NOT_FOUND);
 		
-		__logWarning__("############### better to write a named query for select operation ###############");
+		//__logWarning__("############### better to write a named query for select operation ###############");
 	}
 	
 	@Override

@@ -22,7 +22,7 @@ public class BusinessIntegrationTestPerformance extends AbstractBusinessArquilli
 		function.getLog(Boolean.TRUE).setLevel(LogLevel.INFO);
 		function.setEntity(new MyEntity().setCode(__getRandomUuidAsString__()).setTimestamp(1l));
 		function.execute();
-		__inject__(MyEntityBusiness.class).deleteManyBySystemIdentifiers(__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier)
+		__inject__(MyEntityBusiness.class).deleteBySystemIdentifiers(__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier)
 				.collect(Collectors.toList()),new Properties().setLogLevel(LogLevel.INFO));
 	}
 	
@@ -36,7 +36,7 @@ public class BusinessIntegrationTestPerformance extends AbstractBusinessArquilli
 		function.setEntities(collection);
 		function.getLog(Boolean.TRUE).setLevel(LogLevel.INFO);
 		function.execute();
-		__inject__(MyEntityBusiness.class).deleteManyBySystemIdentifiers(__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier)
+		__inject__(MyEntityBusiness.class).deleteBySystemIdentifiers(__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier)
 					.collect(Collectors.toList()),new Properties().setLogLevel(LogLevel.INFO));
 	}
 	
@@ -50,14 +50,14 @@ public class BusinessIntegrationTestPerformance extends AbstractBusinessArquilli
 		function.setEntities(collection);
 		function.getLog(Boolean.TRUE).setLevel(LogLevel.INFO);
 		function.execute();
-		__inject__(MyEntityBusiness.class).deleteManyBySystemIdentifiers(__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier)
+		__inject__(MyEntityBusiness.class).deleteBySystemIdentifiers(__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier)
 				.collect(Collectors.toList()),new Properties().setLogLevel(LogLevel.INFO));
 	}
 	
 	@Test
 	public void create_MyEntity_one_provider() throws Exception{
 		__inject__(MyEntityBusiness.class).create(new MyEntity().setCode(__getRandomUuidAsString__()).setTimestamp(1l),new Properties().setLogLevel(LogLevel.INFO));
-		__inject__(MyEntityBusiness.class).deleteManyBySystemIdentifiers(__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier)
+		__inject__(MyEntityBusiness.class).deleteBySystemIdentifiers(__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier)
 				.collect(Collectors.toList()),new Properties().setLogLevel(LogLevel.INFO));
 	}
 	
@@ -67,7 +67,7 @@ public class BusinessIntegrationTestPerformance extends AbstractBusinessArquilli
 		for(Integer index = 0 ; index < 10 ; index = index + 1)
 			collection.add(new MyEntity().setCode(__getRandomUuidAsString__()).setTimestamp(1l));
 		__inject__(MyEntityBusiness.class).createMany(collection,new Properties().setLogLevel(LogLevel.INFO));
-		__inject__(MyEntityBusiness.class).deleteManyBySystemIdentifiers(__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier)
+		__inject__(MyEntityBusiness.class).deleteBySystemIdentifiers(__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier)
 				.collect(Collectors.toList()),new Properties().setLogLevel(LogLevel.INFO));
 	}
 	
@@ -77,7 +77,7 @@ public class BusinessIntegrationTestPerformance extends AbstractBusinessArquilli
 		for(Integer index = 0 ; index < 100 ; index = index + 1)
 			collection.add(new MyEntity().setCode(__getRandomUuidAsString__()).setTimestamp(1l));
 		__inject__(MyEntityBusiness.class).createMany(collection,new Properties().setLogLevel(LogLevel.INFO));
-		__inject__(MyEntityBusiness.class).deleteManyBySystemIdentifiers(__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier)
+		__inject__(MyEntityBusiness.class).deleteBySystemIdentifiers(__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier)
 				.collect(Collectors.toList()),new Properties().setLogLevel(LogLevel.INFO));
 	}
 	
@@ -99,7 +99,7 @@ public class BusinessIntegrationTestPerformance extends AbstractBusinessArquilli
 		
 		assertionHelper.assertEquals(1l, __inject__(MyEntityPersistence.class).count());
 		
-		__inject__(MyEntityBusiness.class).deleteManyBySystemIdentifiers(__inject__(MyEntityPersistence.class).readMany().stream().map(MyEntity::getIdentifier)
+		__inject__(MyEntityBusiness.class).deleteBySystemIdentifiers(__inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier)
 				.collect(Collectors.toList()),new Properties().setLogLevel(LogLevel.INFO));
 	}
 }

@@ -60,7 +60,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 				if(properties.getQueryFilters()!=null)
 					addLogMessageBuilderParameter("filters", properties.getQueryFilters());
 				
-				Collection<?> collection = __injectBusiness__().findMany(__persistenceEntityClass__, properties);
+				Collection<?> collection = __injectBusiness__().find(__persistenceEntityClass__, properties);
 				if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(collection))) {
 					if(__entities__ == null)
 						__entities__ = new ArrayList<>();
@@ -81,7 +81,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 			Object identifier = __injectCollectionHelper__().getFirst(ValueUsageType.SYSTEM.equals(__entityIdentifierValueUsageType__) ? __entitiesSystemIdentifiers__ : __entitiesBusinessIdentifiers__);
 			if(identifier != null) {
 				properties.setValueUsageType(__entityIdentifierValueUsageType__);
-				Object entity = __injectBusiness__().findOne(__persistenceEntityClass__,identifier,properties);
+				Object entity = __injectBusiness__().findByIdentifier(__persistenceEntityClass__,identifier,__entityIdentifierValueUsageType__,properties);
 				if(entity != null) {
 					if(__entities__ == null)
 						__entities__ = new ArrayList<>();

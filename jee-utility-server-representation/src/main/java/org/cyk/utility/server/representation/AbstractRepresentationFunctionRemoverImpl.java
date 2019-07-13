@@ -32,7 +32,7 @@ public abstract class AbstractRepresentationFunctionRemoverImpl extends Abstract
 		if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entitiesSystemIdentifiers__)) && 
 				Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entitiesBusinessIdentifiers__))) {
 			//Remove all
-			__entitiesSystemIdentifiers__ = __injectBusiness__().findMany(__persistenceEntityClass__).stream().map(x -> ((AbstractIdentifiedByString)x).getIdentifier())
+			__entitiesSystemIdentifiers__ = __injectBusiness__().find(__persistenceEntityClass__).stream().map(x -> ((AbstractIdentifiedByString)x).getIdentifier())
 					.collect(Collectors.toList());
 		}
 	}

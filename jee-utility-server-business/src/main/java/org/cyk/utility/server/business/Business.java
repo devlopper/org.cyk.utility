@@ -17,11 +17,11 @@ public interface Business extends BusinessServiceProvider<Object> {
 	/* Create */
 	
 	/* Find */ 
-	<ENTITY> ENTITY findOne(Class<ENTITY> aClass,Object identifier,Properties properties);
-	<ENTITY> ENTITY findOne(Class<ENTITY> aClass,Object identifier);
+	<ENTITY> ENTITY findByIdentifier(Class<ENTITY> aClass,Object identifier,ValueUsageType valueUsageType,Properties properties);
+	<ENTITY> ENTITY findByIdentifier(Class<ENTITY> aClass,Object identifier,ValueUsageType valueUsageType);
 	
-	<ENTITY> Collection<ENTITY> findMany(Class<ENTITY> aClass,Properties properties);
-	<ENTITY> Collection<ENTITY> findMany(Class<ENTITY> aClass);
+	<ENTITY> Collection<ENTITY> find(Class<ENTITY> aClass,Properties properties);
+	<ENTITY> Collection<ENTITY> find(Class<ENTITY> aClass);
 	
 	/* Update */
 	

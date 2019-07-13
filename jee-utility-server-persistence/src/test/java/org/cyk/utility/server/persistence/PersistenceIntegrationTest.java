@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -92,13 +93,13 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		__inject__(MyEntityPersistence.class).create(myEntity);
 		userTransaction.commit();
 		assertionHelper.assertEquals(1l, __inject__(MyEntityPersistence.class).count());
-		myEntity = __inject__(MyEntityPersistence.class).readOne(code1, ValueUsageType.BUSINESS);
+		myEntity = __inject__(MyEntityPersistence.class).readByIdentifier(code1, ValueUsageType.BUSINESS);
 		assertionHelper.assertNotNull(myEntity);
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).deleteByIdentifier(code1, ValueUsageType.BUSINESS);
 		userTransaction.commit();
 		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
-		myEntity = __inject__(MyEntityPersistence.class).readOne(code1, ValueUsageType.BUSINESS);
+		myEntity = __inject__(MyEntityPersistence.class).readByIdentifier(code1, ValueUsageType.BUSINESS);
 		assertionHelper.assertNull(myEntity);
 		
 		__deleteEntitiesAll__(MyEntity.class);
@@ -113,25 +114,25 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		__inject__(MyEntityPersistence.class).create(new MyEntity().setCode(code1));
 		userTransaction.commit();
 		assertionHelper.assertEquals(1l, __inject__(MyEntityPersistence.class).count());
-		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readOne(code1, ValueUsageType.BUSINESS));
+		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readByIdentifier(code1, ValueUsageType.BUSINESS));
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).create(new MyEntity().setCode(code2));
 		userTransaction.commit();
 		assertionHelper.assertEquals(2l, __inject__(MyEntityPersistence.class).count());
-		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readOne(code1, ValueUsageType.BUSINESS));
-		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readOne(code2, ValueUsageType.BUSINESS));
+		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readByIdentifier(code1, ValueUsageType.BUSINESS));
+		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readByIdentifier(code2, ValueUsageType.BUSINESS));
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).deleteByIdentifier(code1, ValueUsageType.BUSINESS);
 		userTransaction.commit();
 		assertionHelper.assertEquals(1l, __inject__(MyEntityPersistence.class).count());
-		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readOne(code1, ValueUsageType.BUSINESS));
-		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readOne(code2, ValueUsageType.BUSINESS));
+		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readByIdentifier(code1, ValueUsageType.BUSINESS));
+		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readByIdentifier(code2, ValueUsageType.BUSINESS));
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).deleteByIdentifier(code2, ValueUsageType.BUSINESS);
 		userTransaction.commit();
 		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
-		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readOne(code1, ValueUsageType.BUSINESS));
-		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readOne(code2, ValueUsageType.BUSINESS));
+		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readByIdentifier(code1, ValueUsageType.BUSINESS));
+		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readByIdentifier(code2, ValueUsageType.BUSINESS));
 	}
 	
 	@Test
@@ -143,21 +144,21 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		__inject__(MyEntityPersistence.class).createMany(Arrays.asList(new MyEntity().setCode(code1),new MyEntity().setCode(code2)));
 		userTransaction.commit();
 		assertionHelper.assertEquals(2l, __inject__(MyEntityPersistence.class).count());
-		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readOne(code1, ValueUsageType.BUSINESS));
-		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readOne(code2, ValueUsageType.BUSINESS));
+		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readByIdentifier(code1, ValueUsageType.BUSINESS));
+		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readByIdentifier(code2, ValueUsageType.BUSINESS));
 		
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).deleteByIdentifier(code1, ValueUsageType.BUSINESS);
 		userTransaction.commit();
 		assertionHelper.assertEquals(1l, __inject__(MyEntityPersistence.class).count());
-		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readOne(code1, ValueUsageType.BUSINESS));
-		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readOne(code2, ValueUsageType.BUSINESS));
+		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readByIdentifier(code1, ValueUsageType.BUSINESS));
+		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readByIdentifier(code2, ValueUsageType.BUSINESS));
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).deleteByIdentifier(code2, ValueUsageType.BUSINESS);
 		userTransaction.commit();
 		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
-		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readOne(code1, ValueUsageType.BUSINESS));
-		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readOne(code2, ValueUsageType.BUSINESS));
+		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readByIdentifier(code1, ValueUsageType.BUSINESS));
+		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readByIdentifier(code2, ValueUsageType.BUSINESS));
 	}
 	
 	/* Read */
@@ -168,8 +169,8 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).create(myEntity);
 		userTransaction.commit();
-		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readOne(myEntity.getIdentifier(), ValueUsageType.SYSTEM));
-		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readOne(myEntity.getIdentifier(), ValueUsageType.BUSINESS));
+		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readByIdentifier(myEntity.getIdentifier(), ValueUsageType.SYSTEM));
+		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readByIdentifier(myEntity.getIdentifier(), ValueUsageType.BUSINESS));
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).delete(myEntity);
 		userTransaction.commit();
@@ -183,8 +184,8 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).create(myEntity);
 		userTransaction.commit();
-		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readOne(myEntity.getCode() ,ValueUsageType.SYSTEM));
-		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readOne(myEntity.getCode(), ValueUsageType.BUSINESS));
+		assertionHelper.assertNull(__inject__(MyEntityPersistence.class).readByIdentifier(myEntity.getCode() ,ValueUsageType.SYSTEM));
+		assertionHelper.assertNotNull(__inject__(MyEntityPersistence.class).readByIdentifier(myEntity.getCode(), ValueUsageType.BUSINESS));
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).delete(myEntity);
 		userTransaction.commit();
@@ -203,9 +204,12 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		__inject__(MyEntityPersistence.class).createMany(Arrays.asList(new MyEntity().setIdentifier(id1).setCode(code1),new MyEntity().setIdentifier(id2).setCode(code2)
 				,new MyEntity().setIdentifier(id3).setCode(code3)));
 		userTransaction.commit();
-		assertThat(__inject__(MyEntityPersistence.class).readSystemIdentifiers()).containsOnly(id1,id2,id3);
+		Collection<Object> identifiers = __inject__(MyEntityPersistence.class).readSystemIdentifiers();
+		assertThat(identifiers).containsOnly(id1,id2,id3);
+		assertThat(__inject__(MyEntityPersistence.class).readBySystemIdentifiers(identifiers).stream().map(MyEntity::getCode).collect(Collectors.toList()))
+			.containsOnly(code1,code2,code3);
 		userTransaction.begin();
-		__inject__(MyEntityPersistence.class).deleteManyBySystemIdentifiers(Arrays.asList(id1,id2,id3));
+		__inject__(MyEntityPersistence.class).deleteBySystemIdentifiers(Arrays.asList(id1,id2,id3));
 		userTransaction.commit();
 	}
 	
@@ -222,9 +226,12 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		__inject__(MyEntityPersistence.class).createMany(Arrays.asList(new MyEntity().setIdentifier(id1).setCode(code1),new MyEntity().setIdentifier(id2).setCode(code2)
 				,new MyEntity().setIdentifier(id3).setCode(code3)));
 		userTransaction.commit();
-		assertThat(__inject__(MyEntityPersistence.class).readBusinessIdentifiers()).containsOnly(code1,code2,code3);
+		Collection<Object> identifiers = __inject__(MyEntityPersistence.class).readBusinessIdentifiers();
+		assertThat(identifiers).containsOnly(code1,code2,code3);
+		assertThat(__inject__(MyEntityPersistence.class).readByBusinessIdentifiers(identifiers).stream().map(MyEntity::getIdentifier).collect(Collectors.toList()))
+			.containsOnly(id1,id2,id3);
 		userTransaction.begin();
-		__inject__(MyEntityPersistence.class).deleteManyByBusinessIdentifiers(Arrays.asList(code1,code2,code3));
+		__inject__(MyEntityPersistence.class).deleteByBusinessIdentifiers(Arrays.asList(code1,code2,code3));
 		userTransaction.commit();
 	}
 	
@@ -237,13 +244,13 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).create(myEntity);
 		userTransaction.commit();
-		assertionHelper.assertEquals(123, __inject__(MyEntityPersistence.class).readOneByBusinessIdentifier(code).getIntegerValue());
-		myEntity = __inject__(MyEntityPersistence.class).readOne(code, ValueUsageType.BUSINESS);
+		assertionHelper.assertEquals(123, __inject__(MyEntityPersistence.class).readByBusinessIdentifier(code).getIntegerValue());
+		myEntity = __inject__(MyEntityPersistence.class).readByIdentifier(code, ValueUsageType.BUSINESS);
 		myEntity.setIntegerValue(789);
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).update(myEntity);
 		userTransaction.commit();
-		assertionHelper.assertEquals(789, __inject__(MyEntityPersistence.class).readOneByBusinessIdentifier(code).getIntegerValue());		
+		assertionHelper.assertEquals(789, __inject__(MyEntityPersistence.class).readByBusinessIdentifier(code).getIntegerValue());		
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).delete(myEntity);
 		userTransaction.commit();
@@ -256,17 +263,17 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).createMany(Arrays.asList(myEntity01,myEntity02));
 		userTransaction.commit();
-		assertionHelper.assertEquals(123, __inject__(MyEntityPersistence.class).readOneByBusinessIdentifier(myEntity01.getCode()).getIntegerValue());
-		assertionHelper.assertEquals(456, __inject__(MyEntityPersistence.class).readOneByBusinessIdentifier(myEntity02.getCode()).getIntegerValue());
-		myEntity01 = __inject__(MyEntityPersistence.class).readOne(myEntity01.getCode(), ValueUsageType.BUSINESS);
-		myEntity02 = __inject__(MyEntityPersistence.class).readOne(myEntity02.getCode(), ValueUsageType.BUSINESS);
+		assertionHelper.assertEquals(123, __inject__(MyEntityPersistence.class).readByBusinessIdentifier(myEntity01.getCode()).getIntegerValue());
+		assertionHelper.assertEquals(456, __inject__(MyEntityPersistence.class).readByBusinessIdentifier(myEntity02.getCode()).getIntegerValue());
+		myEntity01 = __inject__(MyEntityPersistence.class).readByIdentifier(myEntity01.getCode(), ValueUsageType.BUSINESS);
+		myEntity02 = __inject__(MyEntityPersistence.class).readByIdentifier(myEntity02.getCode(), ValueUsageType.BUSINESS);
 		myEntity01.setIntegerValue(26);
 		myEntity02.setIntegerValue(48);
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).updateMany(Arrays.asList(myEntity01,myEntity02));
 		userTransaction.commit();
-		assertionHelper.assertEquals(26, __inject__(MyEntityPersistence.class).readOneByBusinessIdentifier(myEntity01.getCode()).getIntegerValue());
-		assertionHelper.assertEquals(48, __inject__(MyEntityPersistence.class).readOneByBusinessIdentifier(myEntity02.getCode()).getIntegerValue());
+		assertionHelper.assertEquals(26, __inject__(MyEntityPersistence.class).readByBusinessIdentifier(myEntity01.getCode()).getIntegerValue());
+		assertionHelper.assertEquals(48, __inject__(MyEntityPersistence.class).readByBusinessIdentifier(myEntity02.getCode()).getIntegerValue());
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).deleteMany(Arrays.asList(myEntity01,myEntity02));
 		userTransaction.commit();
@@ -327,7 +334,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 		assertionHelper.assertEquals(2l, __inject__(MyEntityPersistence.class).count());
 		userTransaction.begin();
-		__inject__(MyEntityPersistence.class).deleteManyBySystemIdentifiers(Arrays.asList(myEntity01.getIdentifier(),myEntity02.getIdentifier()));
+		__inject__(MyEntityPersistence.class).deleteBySystemIdentifiers(Arrays.asList(myEntity01.getIdentifier(),myEntity02.getIdentifier()));
 		userTransaction.commit();
 		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
 	}
@@ -356,7 +363,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 		assertionHelper.assertEquals(2l, __inject__(MyEntityPersistence.class).count());
 		userTransaction.begin();
-		__inject__(MyEntityPersistence.class).deleteManyByBusinessIdentifiers(Arrays.asList(myEntity01.getCode(),myEntity02.getCode()));
+		__inject__(MyEntityPersistence.class).deleteByBusinessIdentifiers(Arrays.asList(myEntity01.getCode(),myEntity02.getCode()));
 		userTransaction.commit();
 		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
 	}
@@ -370,10 +377,10 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 			__inject__(MyEntityPersistence.class).create(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()));
 		userTransaction.commit();
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany()))
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read()))
 			.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(null)))
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(null)))
 		.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
 		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read()))
@@ -383,7 +390,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
 		Properties properties = new Properties();
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
 			.containsExactly("0","1","2","3","4","5","6","7","8","9");
 		
 		properties = new Properties();
@@ -393,25 +400,25 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		properties = new Properties();
 		properties.setQueryFirstTupleIndex(0);
 		properties.setQueryNumberOfTuple(1);
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
 			.containsExactly("0");
 		
 		properties = new Properties();
 		properties.setQueryFirstTupleIndex(1);
 		properties.setQueryNumberOfTuple(1);
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
 			.containsExactly("1");
 		
 		properties = new Properties();
 		properties.setQueryFirstTupleIndex(0);
 		properties.setQueryNumberOfTuple(3);
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
 			.containsExactly("0","1","2");
 		
 		properties = new Properties();
 		properties.setQueryFirstTupleIndex(4);
 		properties.setQueryNumberOfTuple(3);
-		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).readMany(properties)))
+		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
 			.containsExactly("4","5","6");
 		
 		__deleteEntitiesAll__(MyEntity.class);
@@ -529,7 +536,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.begin();
 		____inject____(MyEntityPersistence.class).executeIncrementIntegerValue(7);
 		userTransaction.commit();	
-		MyEntity myEntity = ____inject____(MyEntityPersistence.class).readOneByBusinessIdentifier("e02B");
+		MyEntity myEntity = ____inject____(MyEntityPersistence.class).readByBusinessIdentifier("e02B");
 		Assert.assertEquals(new Integer(27), myEntity.getIntegerValue());
 		
 		__deleteEntitiesAll__(MyEntity.class);

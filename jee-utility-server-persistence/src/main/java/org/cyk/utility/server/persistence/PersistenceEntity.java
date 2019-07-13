@@ -23,14 +23,20 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 	Collection<ENTITY> read(Properties properties);
 	Collection<ENTITY> read();
 	
-	ENTITY readOne(Object identifier,Properties properties);
-	ENTITY readOne(Object identifier,ValueUsageType valueUsageType);
-	ENTITY readOne(Object identifier);
-	ENTITY readOneByBusinessIdentifier(Object identifier);
-	ENTITY readOneBySystemIdentifier(Object identifier);
+	Collection<ENTITY> readByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
+	Collection<ENTITY> readByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType);
+	Collection<ENTITY> readBySystemIdentifiers(Collection<Object> identifiers,Properties properties);
+	Collection<ENTITY> readBySystemIdentifiers(Collection<Object> identifiers);
+	Collection<ENTITY> readByBusinessIdentifiers(Collection<Object> identifiers,Properties properties);
+	Collection<ENTITY> readByBusinessIdentifiers(Collection<Object> identifiers);
 	
-	Collection<ENTITY> readMany(Properties properties);
-	Collection<ENTITY> readMany();
+	ENTITY readByIdentifier(Object identifier,ValueUsageType valueUsageType,Properties properties);
+	ENTITY readByIdentifier(Object identifier,ValueUsageType valueUsageType);
+	ENTITY readByIdentifier(Object identifier);
+	ENTITY readByBusinessIdentifier(Object identifier,Properties properties);
+	ENTITY readByBusinessIdentifier(Object identifier);
+	ENTITY readBySystemIdentifier(Object identifier,Properties properties);
+	ENTITY readBySystemIdentifier(Object identifier);
 	
 	Collection<Object> readIdentifiers(ValueUsageType valueUsageType,Properties properties);
 	Collection<Object> readIdentifiers(ValueUsageType valueUsageType);
@@ -55,13 +61,13 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 	PersistenceEntity<ENTITY> deleteByBusinessIdentifier(Object identifier);
 	
 	PersistenceEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
-	PersistenceEntity<ENTITY> deleteManyByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType);
+	PersistenceEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType);
 	
-	PersistenceEntity<ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers,Properties properties);
-	PersistenceEntity<ENTITY> deleteManyBySystemIdentifiers(Collection<Object> identifiers);
+	PersistenceEntity<ENTITY> deleteBySystemIdentifiers(Collection<Object> identifiers,Properties properties);
+	PersistenceEntity<ENTITY> deleteBySystemIdentifiers(Collection<Object> identifiers);
 	
-	PersistenceEntity<ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers,Properties properties);
-	PersistenceEntity<ENTITY> deleteManyByBusinessIdentifiers(Collection<Object> identifiers);
+	PersistenceEntity<ENTITY> deleteByBusinessIdentifiers(Collection<Object> identifiers,Properties properties);
+	PersistenceEntity<ENTITY> deleteByBusinessIdentifiers(Collection<Object> identifiers);
 	
 	/* Count */
 	Long count(Properties properties);

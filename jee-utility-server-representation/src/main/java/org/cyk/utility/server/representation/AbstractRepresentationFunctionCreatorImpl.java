@@ -27,7 +27,7 @@ public abstract class AbstractRepresentationFunctionCreatorImpl extends Abstract
 			Boolean isBatchable = __inject__(BooleanHelper.class).get(getProperties().getIsBatchable());
 			if(Boolean.TRUE.equals(isBatchable)) {
 				Integer batchSize = __injectNumberHelper__().getInteger(getProperties().getBatchSize());
-				__inject__(Business.class).createManyByBatch(__persistenceEntities__, batchSize);
+				__inject__(Business.class).createByBatch(__persistenceEntities__, batchSize);
 			}else {
 				__inject__(Business.class).createMany(__persistenceEntities__);	
 			}					

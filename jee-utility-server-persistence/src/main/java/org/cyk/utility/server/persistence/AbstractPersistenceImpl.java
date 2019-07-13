@@ -28,7 +28,35 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <ENTITY> ENTITY readOne(Class<ENTITY> aClass, Object identifier,Properties properties) {
+	public <ENTITY> Collection<ENTITY> readByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType, Properties properties) {
+		if(aClass == null)
+			__injectThrowableHelper__().throwRuntimeException("class is required");
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(identifiers)))
+			__injectThrowableHelper__().throwRuntimeException("identifiers are required");
+		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
+		Collection<ENTITY> entities;
+		if(persistence == null){
+			PersistenceFunctionReader function = __inject__(PersistenceFunctionReader.class);
+			function.setEntityClass(aClass);
+			function.setEntityIdentifierValueUsageType(valueUsageType);
+			function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifiers);
+			__copyCommonProperties__(function, properties);
+			function.execute();
+			entities = (Collection<ENTITY>) function.getEntities();
+		}else{
+			entities = persistence.readByIdentifiers(identifiers, valueUsageType, properties);
+		}
+		return entities;
+	}
+	
+	@Override
+	public <ENTITY> Collection<ENTITY> readByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType) {
+		return readByIdentifiers(aClass, identifiers, valueUsageType, null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass, Object identifier,Properties properties) {
 		if(aClass == null)
 			__injectThrowableHelper__().throwRuntimeException("class is required");
 		if(identifier == null)
@@ -40,37 +68,37 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 			entity = (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).setEntityIdentifier(identifier)
 					.setEntityIdentifierValueUsageType(valueUsageType).execute().getProperties().getEntity();
 		}else{
-			entity = persistence.readOne(identifier,valueUsageType);
+			entity = persistence.readByIdentifier(identifier,valueUsageType);
 		}
 		return entity;
 	}
 	
 	@Override
-	public <ENTITY> ENTITY readOne(Class<ENTITY> aClass, Object identifier) {
-		return readOne(aClass, identifier, (Properties)null);
+	public <ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass, Object identifier) {
+		return readByIdentifier(aClass, identifier, (Properties)null);
 	}
 	
 	@Override
-	public <ENTITY> ENTITY readOne(Class<ENTITY> aClass, Object identifier,ValueUsageType valueUsageType) {
-		return readOne(aClass, identifier, new Properties().setValueUsageType(valueUsageType));
+	public <ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass, Object identifier,ValueUsageType valueUsageType) {
+		return readByIdentifier(aClass, identifier, new Properties().setValueUsageType(valueUsageType));
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass, Properties properties) {
+	public <ENTITY> Collection<ENTITY> read(Class<ENTITY> aClass, Properties properties) {
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		Collection<ENTITY> entities;
 		if(persistence == null){
 			entities = (Collection<ENTITY>) __inject__(PersistenceFunctionReader.class).setEntityClass(aClass).execute().getProperties().getEntities();
 		}else{
-			entities =  persistence.readMany(properties);
+			entities =  persistence.read(properties);
 		}
 		return entities;
 	}
 	
 	@Override
-	public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass) {
-		return readMany(aClass,null);
+	public <ENTITY> Collection<ENTITY> read(Class<ENTITY> aClass) {
+		return read(aClass,null);
 	}
 	
 	@Override
@@ -151,7 +179,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	}
 	
 	@Override
-	public <ENTITY> Persistence deleteAll(Class<ENTITY> aClass, Properties properties) {
+	public <ENTITY> Persistence deleteByEntityClass(Class<ENTITY> aClass, Properties properties) {
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
 		if(persistence == null){
 			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
@@ -162,8 +190,8 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	}
 	
 	@Override
-	public <ENTITY> Persistence deleteAll(Class<ENTITY> aClass) {
-		return deleteAll(aClass, null);
+	public <ENTITY> Persistence deleteByEntityClass(Class<ENTITY> aClass) {
+		return deleteByEntityClass(aClass, null);
 	}
 	
 	/**/

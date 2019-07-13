@@ -27,7 +27,7 @@ public abstract class AbstractBusinessArquillianIntegrationTest extends Abstract
 
 	@Override
 	protected <ENTITY> ENTITY ____readEntity____(Class<ENTITY> entityClass, Object identifier,ValueUsageType valueUsageType, Properties expectedFieldValues, BusinessEntity business) {
-		return (ENTITY) business.findOne(identifier, valueUsageType);
+		return (ENTITY) business.findByIdentifier(identifier, valueUsageType);
 	}
 
 	@Override
