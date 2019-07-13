@@ -1,6 +1,8 @@
 package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.persistence.Entity;
@@ -26,7 +28,8 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	private static final long serialVersionUID = 1L;
 
 	protected String __tutpleName__;
-	protected String read,readSystemIdentifiers,readBusinessIdentifiers,deleteBySystemIdentifiers,deleteByBusinessIdentifiers,deleteAll;
+	protected String read,readSystemIdentifiers,readBusinessIdentifiers,readBySystemIdentifiers,readByBusinessIdentifiers
+		,deleteBySystemIdentifiers,deleteByBusinessIdentifiers,deleteAll;
 		
 	@Override
 	public QueryStringBuilderSelect instanciateReadQueryStringBuilder() {
@@ -45,17 +48,18 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		if(Boolean.TRUE.equals(getIsPhysicallyMapped())) {
 			//TODO even not physically mapped we should be able to read
 			addQueryCollectInstances(read, instanciateReadQueryStringBuilder());
-			if(classInstance.getSystemIdentifierField() != null) {
-				String columnName = classInstance.getSystemIdentifierField().getName();
-				addQuery(readSystemIdentifiers, String.format("SELECT tuple.%s FROM %s tuple", columnName,tupleName),null);
-				addQuery(deleteBySystemIdentifiers, String.format("DELETE FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName),null);	
-			}
-			if(classInstance.getBusinessIdentifierField() != null) {
-				String columnName = classInstance.getBusinessIdentifierField().getName();
-				addQuery(readBusinessIdentifiers, String.format("SELECT tuple.%s FROM %s tuple", columnName,tupleName),null);
-				addQuery(deleteByBusinessIdentifiers, String.format("DELETE FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName),null);
-			}
+			addQueriesByIdentifierField(classInstance.getSystemIdentifierField(), tupleName, readSystemIdentifiers, readBySystemIdentifiers, deleteBySystemIdentifiers);
+			addQueriesByIdentifierField(classInstance.getBusinessIdentifierField(), tupleName, readBusinessIdentifiers, readByBusinessIdentifiers, deleteByBusinessIdentifiers);
 			addQuery(deleteAll, "DELETE FROM "+__getTupleName__()+" tuple",null);	
+		}
+	}
+	
+	protected void addQueriesByIdentifierField(Field field,String tupleName,String readIdentifiers,String readByIdentifiers,String deleteByIdentifiers) {
+		if(field != null) {
+			String columnName = field.getName();
+			addQuery(readIdentifiers, String.format("SELECT tuple.%s FROM %s tuple", columnName,tupleName),null);
+			addQuery(readByIdentifiers, String.format("SELECT tuple FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName),null);
+			addQuery(deleteByIdentifiers, String.format("DELETE FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName),null);	
 		}
 	}
 	
@@ -111,8 +115,29 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@SuppressWarnings("unchecked")
 	@Override
 	public ENTITY readOne(Object identifier, Properties properties) {
+		/*
+		if(properties == null)
+			properties = new Properties();
+		if(properties!=null) {
+			if(properties.getQueryIdentifier() == null)
+				properties.setQueryIdentifier(__injectValueHelper__().defaultToIfNull(__getQueryIdentifier__(PersistenceFunctionReader.class, properties)
+						,ValueUsageType.BUSINESS.equals(properties.getValueUsageType()) ? readByBusinessIdentifiers : readBySystemIdentifiers));
+			if(properties.getParameter() == null)
+				properties.setParameters(new Properties().set("identifiers",Arrays.asList(identifier)));
+		}
+		return __readOne__(properties,____getQueryParameters____(properties));
+		*/
+		PersistenceFunctionReader function = __inject__(PersistenceFunctionReader.class);
+		function.setQueryIdentifier(ValueUsageType.BUSINESS.equals(properties.getValueUsageType()) ? readByBusinessIdentifiers : readBySystemIdentifiers);
+		function.setQueryParameters(new Properties().set("identifiers",Arrays.asList(identifier)));
+		__copyCommonProperties__(function, properties);
+		function.execute();
+		
+		return (ENTITY) __injectCollectionHelper__().getFirst(function.getEntities());
+		/*
 		return (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier)
 				.setEntityIdentifierValueUsageType(Properties.getFromPath(properties, Properties.VALUE_USAGE_TYPE)).execute().getProperties().getEntity();
+		*/
 	}
 	
 	@Override
@@ -406,9 +431,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return null;
 	}
 	
-	protected ENTITY __readOne__(Object...parameters) {
+	protected ENTITY __readOne__(Properties properties,Object...parameters) {
 		@SuppressWarnings("unchecked")
-		Collection<ENTITY> entities = (Collection<ENTITY>) __getReader__(null,parameters).execute().getEntities();
+		Collection<ENTITY> entities = (Collection<ENTITY>) __getReader__(properties,parameters).execute().getEntities();
 		Integer size = __injectCollectionHelper__().getSize(entities);
 		if(size!=null && size > 1)
 			throw new RuntimeException("too much ("+size+") results found");

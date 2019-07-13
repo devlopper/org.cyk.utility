@@ -78,9 +78,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 			.assertContainsLastLogEventMessage("identifier="+myEntity.getIdentifier()).assertContainsLastLogEventMessage("code=mc001");
 		*/
 		
-		userTransaction.begin();
-		__inject__(MyEntityPersistence.class).deleteAll();
-		userTransaction.commit();
+		__deleteEntitiesAll__(MyEntity.class);
 	}
 	
 	/* Create */
@@ -91,12 +89,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		MyEntity myEntity = new MyEntity().setCode(code1);
 		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
 		userTransaction.begin();
-		try {
-			__inject__(MyEntityPersistence.class).create(myEntity);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		__inject__(MyEntityPersistence.class).create(myEntity);
 		userTransaction.commit();
 		assertionHelper.assertEquals(1l, __inject__(MyEntityPersistence.class).count());
 		myEntity = __inject__(MyEntityPersistence.class).readOne(code1, ValueUsageType.BUSINESS);
@@ -182,6 +175,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 	}
 	
+	
 	@Test
 	public void read_myEntity_one_by_identifier_business() throws Exception{
 		String code = __getRandomCode__();
@@ -195,6 +189,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		__inject__(MyEntityPersistence.class).delete(myEntity);
 		userTransaction.commit();
 	}
+	
 	
 	@Test
 	public void read_myEntity_many_by_identifier_system() throws Exception{
@@ -213,6 +208,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		__inject__(MyEntityPersistence.class).deleteManyBySystemIdentifiers(Arrays.asList(id1,id2,id3));
 		userTransaction.commit();
 	}
+	
 	
 	@Test
 	public void read_myEntity_many_by_identifier_business() throws Exception{
@@ -267,12 +263,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		myEntity01.setIntegerValue(26);
 		myEntity02.setIntegerValue(48);
 		userTransaction.begin();
-		try {
-			__inject__(MyEntityPersistence.class).updateMany(Arrays.asList(myEntity01,myEntity02));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		__inject__(MyEntityPersistence.class).updateMany(Arrays.asList(myEntity01,myEntity02));
 		userTransaction.commit();
 		assertionHelper.assertEquals(26, __inject__(MyEntityPersistence.class).readOneByBusinessIdentifier(myEntity01.getCode()).getIntegerValue());
 		assertionHelper.assertEquals(48, __inject__(MyEntityPersistence.class).readOneByBusinessIdentifier(myEntity02.getCode()).getIntegerValue());
@@ -369,7 +360,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
 	}
-
+	
 	/* page */
 
 	@Test
@@ -529,26 +520,19 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	}
 	
 	@Test
-	public void executeIncrementIntegerValue(){
+	public void executeIncrementIntegerValue() throws Exception{
 		__createEntity__(new MyEntity().setCode("e01A").setIntegerValue(10));
 		__createEntity__(new MyEntity().setCode("e02B").setIntegerValue(20));
 		__createEntity__(new MyEntity().setCode("e03C").setIntegerValue(10));
 		__createEntity__(new MyEntity().setCode("e04D").setIntegerValue(20));
 		__createEntity__(new MyEntity().setCode("e05E").setIntegerValue(20));
-		
-		try {
-			userTransaction.begin();
-			____inject____(MyEntityPersistence.class).executeIncrementIntegerValue(7);
-			userTransaction.commit();	
-		}catch(Exception exception) {
-			throw new RuntimeException(exception);
-		}
-		
+		userTransaction.begin();
+		____inject____(MyEntityPersistence.class).executeIncrementIntegerValue(7);
+		userTransaction.commit();	
 		MyEntity myEntity = ____inject____(MyEntityPersistence.class).readOneByBusinessIdentifier("e02B");
 		Assert.assertEquals(new Integer(27), myEntity.getIntegerValue());
 		
 		__deleteEntitiesAll__(MyEntity.class);
-		
 	}
 	
 	/* graph */

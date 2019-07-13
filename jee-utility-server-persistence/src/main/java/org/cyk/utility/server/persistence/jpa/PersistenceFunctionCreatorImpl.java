@@ -1,7 +1,5 @@
 package org.cyk.utility.server.persistence.jpa;
 
-import java.util.Collection;
-
 import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 
@@ -16,20 +14,26 @@ import org.cyk.utility.server.persistence.PersistenceFunctionCreator;
 public class PersistenceFunctionCreatorImpl extends AbstractPersistenceFunctionCreatorImpl implements PersistenceFunctionCreator {
 	private static final long serialVersionUID = 1L;
 	
+	private EntityManager entityManager;
+	
 	@Override
-	protected void __execute__(Collection<Object> entities,Integer batchSize) {
-		EntityManager entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
-		Integer count = 0;
-		for(Object index : entities) {
-			entityManager.persist(index);
-			if(batchSize != null) {
-				count++;
-				if(count % batchSize == 0) {
-					entityManager.flush();
-					entityManager.clear();
-				}
-			}
-		}
+	protected void __initialiseWorkingVariables__() {
+		super.__initialiseWorkingVariables__();
+		entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
 	}
 	
+	@Override
+	protected void __executeWithEntity__(Object object) {
+		entityManager.persist(object);
+	}
+	
+	@Override
+	protected void __flush__() {
+		entityManager.flush();
+	}
+	
+	@Override
+	protected void __clear__() {
+		entityManager.clear();
+	}
 }

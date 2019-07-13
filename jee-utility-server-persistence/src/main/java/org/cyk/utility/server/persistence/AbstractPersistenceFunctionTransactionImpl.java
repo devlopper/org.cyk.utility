@@ -12,18 +12,13 @@ public abstract class AbstractPersistenceFunctionTransactionImpl extends Abstrac
 
 	@Override
 	protected Boolean __executeGetIsExecutable__(Boolean value) {
-		/*Object queryIdentifier = getQueryIdentifier();
-		return queryIdentifier == null ? getEntity() != null : Boolean.TRUE;
-		*/
-		
-		//return getQueryIdentifier()!=null || getEntities()!=null || getEntity()!=null;
 		return Boolean.TRUE;
 	}
 	
 	@Override
 	protected void __executeQuery__(SystemAction action) {
 		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entities__))) {
-			__execute__(__entities__,__batchSize__);
+			__executeQueryWithEntities__(__entities__);
 			//TODO integration with distributed stream
 			/*if(__en == null)
 				entitiesIdentifiers = new ArrayList<Object>();
@@ -33,7 +28,23 @@ public abstract class AbstractPersistenceFunctionTransactionImpl extends Abstrac
 		}
 	}
 	
-	protected abstract void __execute__(Collection<Object> entities,Integer batchSize);
+	protected void __executeQueryWithEntities__(Collection<Object> entities) {
+		Integer count = 0;
+		for(Object index : entities) {
+			__executeWithEntity__(index);
+			if(__batchSize__ != null) {
+				count++;
+				if(count % __batchSize__ == 0) {
+					__flush__();
+					__clear__();
+				}
+			}
+		}
+	}
+	
+	protected abstract void __executeWithEntity__(Object object);
+	protected abstract void __flush__();
+	protected abstract void __clear__();
 	
 	/*@Override
 	protected Map<String, String> __getProduceFunctionOutputs__() {

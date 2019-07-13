@@ -1,14 +1,10 @@
 package org.cyk.utility.server.persistence.jpa;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Map;
 
 import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.AbstractPersistenceFunctionRemoverImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionRemover;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
@@ -18,37 +14,32 @@ import org.cyk.utility.system.action.SystemAction;
 public class PersistenceFunctionRemoverImpl extends AbstractPersistenceFunctionRemoverImpl implements PersistenceFunctionRemover,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private EntityManager __entityManager__;
+	
 	@Override
-	protected void __execute__(Collection<Object> entities,Integer batchSize) {
-		EntityManager entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
-		Integer count = 0;
-		for(Object index : entities) {
-			entityManager.remove(entityManager.merge(index));
-			if(batchSize != null) {
-				count++;
-				if(count % batchSize == 0) {
-					entityManager.flush();
-					entityManager.clear();
-				}
-			}
-		}
+	protected void __initialiseWorkingVariables__() {
+		super.__initialiseWorkingVariables__();
+		__entityManager__ = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
+	}
+	
+	@Override
+	protected void __executeWithEntity__(Object object) {
+		__entityManager__.remove(__entityManager__.merge(object));
+	}
+	
+	@Override
+	protected void __flush__() {
+		__entityManager__.flush();
+	}
+	
+	@Override
+	protected void __clear__() {
+		__entityManager__.clear();
 	}
 	
 	@Override
 	protected void __executeQuery__(SystemAction action, PersistenceQuery persistenceQuery) {
-		EntityManager entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
-		//Instantiate query
-		Query query = entityManager.createNamedQuery(persistenceQuery.getIdentifier().toString());
-		//Set query parameters
-		Properties parameters = getQueryParameters();
-		if(parameters != null && parameters.__getMap__()!=null)
-			for(Map.Entry<Object, Object> entry : parameters.__getMap__().entrySet())
-				query.setParameter(entry.getKey().toString(), entry.getValue());
-		//Execute query statement
-		Integer count = query.executeUpdate();
-		getProperties().setCount(count);
-		//This is required when doing batch processing
-		entityManager.clear();
+		__inject__(JavaPersistenceApiHelper.class).executeQuery(persistenceQuery, getProperties());
 	}
 	
 }

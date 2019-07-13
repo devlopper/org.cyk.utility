@@ -30,8 +30,14 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 	private static final long serialVersionUID = 1L;
 
 	@Override
+	protected void __listenPostConstruct__() {
+		setAction(__inject__(SystemActionRead.class));
+		super.__listenPostConstruct__();
+	}
+	
+	@Override
 	protected void __executeQuery__(SystemAction action) {
-		EntityManager entityManager = __inject__(EntityManager.class);
+		EntityManager entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
 		Class<?> aClass = getEntityClass();
 		Object entityIdentifier = getEntityIdentifier();
 		ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
@@ -57,11 +63,13 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 		getProperties().setEntity(entity);
 		if(entity == null)
 			addLogMessageBuilderParameter(MESSAGE_NOT_FOUND);
+		
+		__logWarning__("############### better to write a named query for select operation ###############");
 	}
 	
 	@Override
 	protected void __executeQuery__(SystemAction action, PersistenceQuery persistenceQuery) {
-		EntityManager entityManager = __inject__(EntityManager.class);
+		EntityManager entityManager = __inject__(JavaPersistenceApiHelper.class).getEntityManager(getProperties());
 		String identifier = persistenceQuery.getIdentifier() == null ? null : persistenceQuery.getIdentifier().toString();
 		Class<?> resultClass = persistenceQuery.getResultClass();
 		TypedQuery<?> typedQuery = __injectStringHelper__().isBlank(identifier) ? entityManager.createQuery(persistenceQuery.getValue(), resultClass) 
@@ -96,12 +104,6 @@ public class PersistenceFunctionReaderImpl extends AbstractPersistenceFunctionRe
 		if(__inject__(CollectionHelper.class).isEmpty(objects)){
 			//TODO log not found
 		}	
-	}
-	
-	@Override
-	protected void __listenPostConstruct__() {
-		getProperties().setEntityManager(__inject__(EntityManager.class)).setAction(__inject__(SystemActionRead.class));
-		super.__listenPostConstruct__();
 	}
 	
 }
