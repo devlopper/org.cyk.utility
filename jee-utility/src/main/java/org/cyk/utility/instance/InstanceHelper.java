@@ -16,6 +16,8 @@ public interface InstanceHelper extends Helper {
 	<INSTANCE> INSTANCE getByIdentifierSystem(Class<INSTANCE> aClass,Object value,Properties properties);
 	<INSTANCE> INSTANCE getByIdentifierSystem(Class<INSTANCE> aClass,Object value);
 	
+	<INSTANCE> INSTANCE getBySystemIdentifierOrBusinessIdentifier(INSTANCE instance);
+	
 	<INSTANCE> INSTANCE buildOne(Class<INSTANCE> aClass,Object fieldsValuesObject,Properties properties);
 	<INSTANCE> INSTANCE buildOne(Class<INSTANCE> aClass,Object fieldsValuesObject);
 	<INSTANCE> Collection<INSTANCE> buildMany(Class<INSTANCE> aClass,Collection<?> fieldsValuesObjects,Properties properties);

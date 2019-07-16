@@ -67,7 +67,7 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 				Collection<String> identifiersBusiness = new ArrayList<String>();
 				
 				Field persistenceSystemIdentifierField = __inject__(ClassInstancesRuntime.class).get(__persistenceEntityClass__).getSystemIdentifierField();
-				Field persistenceBusinessIdentifierField = __inject__(ClassInstancesRuntime.class).get(__persistenceEntityClass__).getSystemIdentifierField();
+				Field persistenceBusinessIdentifierField = __inject__(ClassInstancesRuntime.class).get(__persistenceEntityClass__).getBusinessIdentifierField();
 				
 				Integer count = 0;
 				for(Object index : __persistenceEntities__) {
@@ -75,15 +75,17 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 					Object identifier = __injectFieldValueGetter__().execute(index, persistenceSystemIdentifierField).getOutput();
 					if(identifier != null) {
 						identifiersSystem.add(identifier.toString());
-						if(__entityClassSystemIdentifierField__ != null)
+						if(__entityClassSystemIdentifierField__ != null) {
 							__inject__(FieldValueSetter.class).execute(dto, __entityClassSystemIdentifierField__, identifier.toString());
+						}
 					}
 					
 					identifier = __injectFieldValueGetter__().execute(index, persistenceBusinessIdentifierField).getOutput();
 					if(identifier != null) {
 						identifiersBusiness.add(identifier.toString());
-						if(__entityClassBusinessIdentifierField__ != null)
+						if(__entityClassBusinessIdentifierField__ != null) {
 							__inject__(FieldValueSetter.class).execute(dto, __entityClassBusinessIdentifierField__, identifier.toString());
+						}
 					}
 				
 					count++;

@@ -12,7 +12,6 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.runnable.RunnablesExecutor;
 import org.cyk.utility.value.ValueHelper;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -53,6 +52,22 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 	@Override
 	public <INSTANCE> INSTANCE getByIdentifierBusiness(Class<INSTANCE> aClass, Object value) {
 		return getByIdentifierBusiness(aClass, value, null);
+	}
+	
+	@Override
+	public <INSTANCE> INSTANCE getBySystemIdentifierOrBusinessIdentifier(INSTANCE instance) {
+		INSTANCE result = null;
+		if(instance != null) {
+			Object identifier = __inject__(FieldHelper.class).getFieldValueSystemIdentifier(instance);
+			if(identifier == null) {
+				identifier = __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(instance);
+				if(identifier != null)
+					result = (INSTANCE) getByIdentifierBusiness(instance.getClass(), identifier);
+			}else {
+				result = (INSTANCE) getByIdentifierSystem(instance.getClass(), identifier);
+			}
+		}
+		return result;
 	}
 	
 	@Override

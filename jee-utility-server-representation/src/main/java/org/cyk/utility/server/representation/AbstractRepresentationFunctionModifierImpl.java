@@ -65,6 +65,7 @@ public abstract class AbstractRepresentationFunctionModifierImpl extends Abstrac
 			for(Object index : entities) {
 				Object representationSystemIdentifier = null;
 				Object representationBusinessIdentifier = null;
+				
 				if(__entityClassSystemIdentifierField__ != null) {
 					representationSystemIdentifier = __injectFieldHelper__().getFieldValueSystemIdentifier(index);
 					if(representationSystemIdentifier != null && persistenceSystemIdentifier!=null && representationSystemIdentifier.equals(persistenceSystemIdentifier)) {
@@ -74,7 +75,7 @@ public abstract class AbstractRepresentationFunctionModifierImpl extends Abstrac
 				}
 				
 				if(__entityClassBusinessIdentifierField__ != null) {
-					representationBusinessIdentifier = __injectFieldHelper__().getFieldValueSystemIdentifier(index);
+					representationBusinessIdentifier = __injectFieldHelper__().getFieldValueBusinessIdentifier(index);
 					if(representationBusinessIdentifier != null && persistenceBusinessIdentifier!=null && representationBusinessIdentifier.equals(persistenceBusinessIdentifier)) {
 						entity = index;
 						break;
@@ -82,7 +83,7 @@ public abstract class AbstractRepresentationFunctionModifierImpl extends Abstrac
 				}
 			}
 		if(entity == null)
-			__logWarning__(String.format("Representation entity not found for persistence entity %s", persistenceEntity));
+			__logWarning__(String.format("Representation entity not found for persistence entity %s | %s", persistenceEntity,entities));
 		return entity;		
 	}
 }
