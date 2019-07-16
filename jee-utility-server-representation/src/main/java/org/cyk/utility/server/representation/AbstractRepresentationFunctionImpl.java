@@ -24,14 +24,10 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	
 	public static LogLevel LOG_LEVEL = LogLevel.INFO;
 	
-	//protected Throwable __throwable__;
 	protected ResponseBuilder __responseBuilder__;
-	//protected Strings fieldNamesStrings;
 	protected Class<?> __persistenceEntityClass__;
-	protected Collection<Object> /*__entities__,__entitiesSystemIdentifiers__,__entitiesBusinessIdentifiers__,*/__persistenceEntities__;
-	/*protected Field __entityClassSystemIdentifierField__,__entityClassBusinessIdentifierField__;
-	protected ValueUsageType __entityIdentifierValueUsageType__;
-	*/
+	protected Collection<Object> __persistenceEntities__;
+	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();

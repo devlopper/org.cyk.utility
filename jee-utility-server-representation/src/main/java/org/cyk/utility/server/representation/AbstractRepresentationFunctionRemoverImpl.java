@@ -1,9 +1,7 @@
 package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
-import java.util.stream.Collectors;
 
-import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -18,7 +16,6 @@ public abstract class AbstractRepresentationFunctionRemoverImpl extends Abstract
 	
 	@Override
 	protected void __executeBusiness__() {
-		//TODO be carefull. identifier value must be converted to persistence entity identifier type
 		if(__injectCollectionHelper__().isNotEmpty(__entitiesSystemIdentifiers__))
 			__injectBusiness__().deleteByIdentifiers(__persistenceEntityClass__, __entitiesSystemIdentifiers__,ValueUsageType.SYSTEM);
 		
@@ -27,13 +24,12 @@ public abstract class AbstractRepresentationFunctionRemoverImpl extends Abstract
 	}
 	
 	@Override
-	protected void __initialiseEntitiesIdentifiers__() {
-		super.__initialiseEntitiesIdentifiers__();
+	protected void __initialiseWorkingVariables__() {
+		super.__initialiseWorkingVariables__();
 		if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entitiesSystemIdentifiers__)) && 
 				Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entitiesBusinessIdentifiers__))) {
 			//Remove all
-			__entitiesSystemIdentifiers__ = __injectBusiness__().find(__persistenceEntityClass__).stream().map(x -> ((AbstractIdentifiedByString)x).getIdentifier())
-					.collect(Collectors.toList());
+			__entitiesSystemIdentifiers__ = __injectBusiness__().findIdentifiers(__persistenceEntityClass__, ValueUsageType.SYSTEM);
 		}
 	}
 }

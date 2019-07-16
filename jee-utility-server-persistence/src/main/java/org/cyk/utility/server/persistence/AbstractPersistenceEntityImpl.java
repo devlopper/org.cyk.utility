@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.persistence.Entity;
 
@@ -18,6 +19,7 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.request.RequestProcessor;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
+import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.string.Strings;
@@ -27,10 +29,10 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected String __tutpleName__;
 	protected String read,readSystemIdentifiers,readBusinessIdentifiers,readBySystemIdentifiers,readByBusinessIdentifiers
 		,deleteBySystemIdentifiers,deleteByBusinessIdentifiers,deleteAll;
-		
+	protected ClassInstance __classInstance__;
+	
 	@Override
 	public QueryStringBuilderSelect instanciateReadQueryStringBuilder() {
 		return __instanciateQuerySelect__();
@@ -40,16 +42,16 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
 		Class<ENTITY> entityClass = getEntityClass();
-		ClassInstance classInstance = __inject__(ClassInstancesRuntime.class).get(entityClass);
-		String tupleName = classInstance.getTupleName();
+		__classInstance__ = __inject__(ClassInstancesRuntime.class).get(entityClass);
+		String tupleName = __classInstance__.getTupleName();
 		//String systemIdentifierFieldName =__inject__(FieldNameGetter.class).execute(entityClass, FieldName.IDENTIFIER, ValueUsageType.SYSTEM).getOutput();
 		//String businessIdentifierFieldName =__inject__(FieldNameGetter.class).execute(entityClass, FieldName.IDENTIFIER, ValueUsageType.BUSINESS).getOutput();
 		
 		if(Boolean.TRUE.equals(getIsPhysicallyMapped())) {
 			//TODO even not physically mapped we should be able to read
 			addQueryCollectInstances(read, instanciateReadQueryStringBuilder());
-			addQueriesByIdentifierField(classInstance.getSystemIdentifierField(), tupleName, readSystemIdentifiers, readBySystemIdentifiers, deleteBySystemIdentifiers);
-			addQueriesByIdentifierField(classInstance.getBusinessIdentifierField(), tupleName, readBusinessIdentifiers, readByBusinessIdentifiers, deleteByBusinessIdentifiers);
+			addQueriesByIdentifierField(__classInstance__.getSystemIdentifierField(), tupleName, readSystemIdentifiers, readBySystemIdentifiers, deleteBySystemIdentifiers);
+			addQueriesByIdentifierField(__classInstance__.getBusinessIdentifierField(), tupleName, readBusinessIdentifiers, readByBusinessIdentifiers, deleteByBusinessIdentifiers);
 			addQuery(deleteAll, "DELETE FROM "+__getTupleName__()+" tuple",null);	
 		}
 	}
@@ -58,7 +60,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		if(field != null) {
 			String columnName = field.getName();
 			addQuery(readIdentifiers, String.format("SELECT tuple.%s FROM %s tuple", columnName,tupleName),null);
-			addQuery(readByIdentifiers, String.format("SELECT tuple FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName),null);
+			addQueryCollectInstances(readByIdentifiers, String.format("SELECT tuple FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName));
 			addQuery(deleteByIdentifiers, String.format("DELETE FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName),null);	
 		}
 	}
@@ -82,14 +84,14 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return getEntityClass().getSimpleName();
 	}
 	
-	/**/
+	/* Create */
 	
 	@Override
 	public PersistenceEntity<ENTITY> create(ENTITY object) {
 		return (PersistenceEntity<ENTITY>) super.create(object);
 	}
 	
-	/**/
+	/* Read */
 	
 	@Override
 	public Collection<ENTITY> read(Properties properties) {
@@ -269,6 +271,8 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		return count(null);
 	}
 	
+	/* Delete */
+	
 	@Override
 	public PersistenceEntity<ENTITY> deleteByIdentifier(Object identifier, ValueUsageType valueUsageType,Properties properties) {
 		//delete(readByIdentifier(identifier, valueUsageType), properties);
@@ -299,8 +303,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	public PersistenceEntity<ENTITY> deleteByBusinessIdentifier(Object identifier) {
 		return deleteByBusinessIdentifier(identifier, null);
 	}
-	
-	
+		
 	@Override
 	public PersistenceEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType, Properties properties) {
 		PersistenceFunctionRemover function = __inject__(PersistenceFunctionRemover.class);
@@ -395,7 +398,35 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected String __getQueryIdentifier__(Class<?> functionClass,Properties properties,Object...parameters){
+		Map<String, Object> filters = __getFiltersFromProperties__(properties);
+		if(filters != null) {
+			if(__classInstance__ != null) {
+				if(filters.containsKey(__classInstance__.getSystemIdentifierField().getName())) {
+					Object identifiers = filters.get(__classInstance__.getSystemIdentifierField().getName());
+					if(identifiers instanceof Collection)
+						return readBySystemIdentifiers;		
+				}else if(filters.containsKey(__classInstance__.getBusinessIdentifierField().getName())) {
+					Object identifiers = filters.get(__classInstance__.getBusinessIdentifierField().getName());
+					if(identifiers instanceof Collection)
+						return readByBusinessIdentifiers;		
+				}
+			}
+		}
 		return null;
+	}
+	
+	@Override
+	protected Object[] __getQueryParameters__(PersistenceQueryContext queryContext, Properties properties,Object... objects) {
+		if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readBySystemIdentifiers)) {
+			if(Boolean.TRUE.equals(__inject__(ArrayHelper.class).isEmpty(objects)))
+				objects = new Object[] {queryContext.getFilterByKeysValue(__classInstance__.getSystemIdentifierField().getName())};
+			return new Object[]{"identifiers", objects[0]};
+		}else if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByBusinessIdentifiers)) {
+			if(Boolean.TRUE.equals(__inject__(ArrayHelper.class).isEmpty(objects)))
+				objects = new Object[] {queryContext.getFilterByKeysValue(__classInstance__.getBusinessIdentifierField().getName())};
+			return new Object[]{"identifiers", objects[0]};
+		}
+		return super.__getQueryParameters__(queryContext, properties, objects);
 	}
 	
 	protected String __buildQueryStringIdentifierFromCurrentCall__(Integer stackTraceMethodAt){

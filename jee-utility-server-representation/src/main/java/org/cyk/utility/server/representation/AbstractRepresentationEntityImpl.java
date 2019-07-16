@@ -90,7 +90,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	
 	@Override
 	public Response updateMany(Collection<ENTITY> entities,String fields) {
-		return __inject__(RepresentationFunctionModifier.class).setEntities(entities).execute().getResponse();
+		return __inject__(RepresentationFunctionModifier.class).setEntities(entities).setEntityFieldNames(__getFieldNames__(fields)).execute().getResponse();
 	}
 	
 	/*
@@ -128,7 +128,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	@Override
 	public Response saveFromFileExcelSheet(String workbookName, String sheetName,List<String> columnIndexFieldNames) {
 		if(__injectCollectionHelper__().isNotEmpty(columnIndexFieldNames)) {
-			Properties properties = new Properties();
+			//Properties properties = new Properties();
 			MapInstanceIntegerToString columnIndexFieldNameMap = __inject__(MapInstanceIntegerToString.class);
 			for(String index : columnIndexFieldNames) {
 				String[] strings = StringUtils.split(index, ",");

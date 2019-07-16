@@ -27,6 +27,9 @@ public interface Persistence extends PersistenceServiceProvider<Object> {
 	<ENTITY> Collection<ENTITY> read(Class<ENTITY> aClass,Properties properties);
 	<ENTITY> Collection<ENTITY> read(Class<ENTITY> aClass);
 	
+	<ENTITY> Collection<Object> readIdentifiers(Class<ENTITY> aClass,ValueUsageType valueUsageType,Properties properties);
+	<ENTITY> Collection<Object> readIdentifiers(Class<ENTITY> aClass,ValueUsageType valueUsageType);
+	
 	/* Update */
 	
 	/* Delete */

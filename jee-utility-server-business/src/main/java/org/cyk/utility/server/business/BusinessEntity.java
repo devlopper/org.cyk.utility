@@ -53,9 +53,15 @@ public interface BusinessEntity<PERSISTENCE_ENTITY> extends BusinessServiceProvi
 	
 	/* Delete */
 	@Transactional
+	BusinessEntity<PERSISTENCE_ENTITY> deleteByIdentifier(Object identifier,ValueUsageType valueUsageType,Properties properties);
+	@Transactional
 	BusinessEntity<PERSISTENCE_ENTITY> deleteByIdentifier(Object identifier,ValueUsageType valueUsageType);
 	@Transactional
+	BusinessEntity<PERSISTENCE_ENTITY> deleteBySystemIdentifier(Object identifier,Properties properties);
+	@Transactional
 	BusinessEntity<PERSISTENCE_ENTITY> deleteBySystemIdentifier(Object identifier);
+	@Transactional
+	BusinessEntity<PERSISTENCE_ENTITY> deleteByBusinessIdentifier(Object identifier,Properties properties);
 	@Transactional
 	BusinessEntity<PERSISTENCE_ENTITY> deleteByBusinessIdentifier(Object identifier);
 	@Transactional

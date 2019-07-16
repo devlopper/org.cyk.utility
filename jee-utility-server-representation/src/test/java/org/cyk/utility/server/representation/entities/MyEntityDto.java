@@ -15,6 +15,8 @@ import lombok.experimental.Accessors;
 public class MyEntityDto extends AbstractEntityFromPersistenceEntityCodedAndNamed implements Serializable {	
 	private static final long serialVersionUID = 1L;
 
+	private Integer integerValue;
+	
 	@Override
 	public MyEntityDto setIdentifier(String identifier) {
 		return (MyEntityDto) super.setIdentifier(identifier);

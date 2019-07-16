@@ -134,7 +134,22 @@ public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputI
 		if(getObject() == null){
 			//TODO log warning
 		}else{
-			setField(__inject__(FieldNameGetter.class).setClazz(getObject().getClass()).setFieldName(fieldName).setValueUsageType(valueUsageType).execute().getOutput());	
+			//TODO handle it by using ClassInstanceRunctime to get already loaded field like system or business identifier
+			/*Field field = null;
+			if(FieldName.IDENTIFIER.equals(fieldName) && (ValueUsageType.SYSTEM.equals(valueUsageType) || ValueUsageType.BUSINESS.equals(valueUsageType))) {
+				ClassInstance classInstance = __inject__(ClassInstancesRuntime.class).get(getObject().getClass());
+				if(classInstance != null) {
+					if(ValueUsageType.SYSTEM.equals(valueUsageType))
+						field = classInstance.getSystemIdentifierField();
+					else if(ValueUsageType.BUSINESS.equals(valueUsageType))						
+						field = classInstance.getBusinessIdentifierField();	
+				}
+			}
+			if(field == null) {*/
+				setField(__inject__(FieldNameGetter.class).setClazz(getObject().getClass()).setFieldName(fieldName).setValueUsageType(valueUsageType).execute().getOutput());
+			/*}else
+				setField(field);
+			*/
 		}
 		return this;
 	}

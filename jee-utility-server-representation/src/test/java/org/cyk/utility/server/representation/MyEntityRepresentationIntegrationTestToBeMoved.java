@@ -5,7 +5,7 @@ import org.cyk.utility.server.representation.entities.MyEntityDto;
 import org.cyk.utility.server.representation.entities.MyEntityDtoCollection;
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationEntityIntegrationTestWithDefaultDeployment;
 
-public class MyEntityRepresentationIntegrationTest extends AbstractRepresentationEntityIntegrationTestWithDefaultDeployment<MyEntityDto> {
+public class MyEntityRepresentationIntegrationTestToBeMoved extends AbstractRepresentationEntityIntegrationTestWithDefaultDeployment<MyEntityDto> {
 	private static final long serialVersionUID = 1L;
 	
 	@SuppressWarnings("rawtypes")

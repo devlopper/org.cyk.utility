@@ -18,9 +18,4 @@ public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEnt
 		return this;
 	}
 	
-	@Override
-	protected Boolean __isCreateManyOneByOne__() {
-		return Boolean.FALSE;
-	}
-	
 }

@@ -5,7 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolationException;
@@ -96,7 +98,9 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		TestBusinessCreate test = __inject__(TestBusinessCreate.class);
 		test.addObjects(new MyEntity().setCode("c01").setLong1(-11l))
 			.setExpectedThrowableCauseClass(RuntimeException.class)
-			.execute();
+			//.setIsCatchThrowable(Boolean.FALSE)
+			;
+		test.execute();
 	}
 	
 	/* Find */
@@ -159,6 +163,104 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		assertThat(identifiers).containsOnly(code1,code2,code3);
 		assertThat(__inject__(MyEntityBusiness.class).findByBusinessIdentifiers(identifiers).stream().map(MyEntity::getIdentifier).collect(Collectors.toList()))
 			.containsOnly(id1,id2,id3);
+		__inject__(MyEntityBusiness.class).deleteByBusinessIdentifiers(Arrays.asList(code1,code2,code3));
+	}
+	
+	@Test
+	public void find_myEntity_many_by_identifier_system_filter() throws Exception{
+		String code1 = __getRandomCode__(); 
+		String code2 = __getRandomCode__();
+		String code3 = __getRandomCode__();
+		String id1 = __getRandomIdentifier__(); 
+		String id2 = __getRandomIdentifier__();
+		String id3 = __getRandomIdentifier__();
+		__inject__(MyEntityBusiness.class).createMany(Arrays.asList(new MyEntity().setIdentifier(id1).setCode(code1),new MyEntity().setIdentifier(id2).setCode(code2)
+				,new MyEntity().setIdentifier(id3).setCode(code3)));
+		Collection<Object> identifiers = __inject__(MyEntityBusiness.class).find().stream().map(MyEntity::getIdentifier).collect(Collectors.toList());
+		assertThat(identifiers).containsOnly(id1,id2,id3);
+		Map<String,Object> filters = new HashMap<>();
+		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id1));
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
+		assertThat(identifiers).containsOnly(id1);
+		
+		filters = new HashMap<>();
+		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id2));
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
+		assertThat(identifiers).containsOnly(id2);
+		
+		filters = new HashMap<>();
+		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id3));
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
+		assertThat(identifiers).containsOnly(id3);
+		
+		filters = new HashMap<>();
+		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id1,id3));
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
+		assertThat(identifiers).containsOnly(id1,id3);
+		
+		filters = new HashMap<>();
+		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList());
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
+		assertThat(identifiers).isEmpty();
+		
+		filters = new HashMap<>();
+		filters.put(MyEntity.FIELD_IDENTIFIER, null);
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
+		assertThat(identifiers).containsOnly(id1,id2,id3);
+		
+		filters = new HashMap<>();
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
+		assertThat(identifiers).containsOnly(id1,id2,id3);
+		
+		__inject__(MyEntityBusiness.class).deleteBySystemIdentifiers(Arrays.asList(id1,id2,id3));
+	}
+	
+	@Test
+	public void find_myEntity_many_by_identifier_business_filter() throws Exception{
+		String code1 = __getRandomCode__(); 
+		String code2 = __getRandomCode__();
+		String code3 = __getRandomCode__();
+		String id1 = __getRandomIdentifier__(); 
+		String id2 = __getRandomIdentifier__();
+		String id3 = __getRandomIdentifier__();
+		__inject__(MyEntityBusiness.class).createMany(Arrays.asList(new MyEntity().setIdentifier(id1).setCode(code1),new MyEntity().setIdentifier(id2).setCode(code2)
+				,new MyEntity().setIdentifier(id3).setCode(code3)));
+		Collection<Object> identifiers = __inject__(MyEntityBusiness.class).find().stream().map(MyEntity::getCode).collect(Collectors.toList());
+		assertThat(identifiers).containsOnly(code1,code2,code3);
+		Map<String,Object> filters = new HashMap<>();
+		filters.put(MyEntity.FIELD_CODE, Arrays.asList(code1));
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
+		assertThat(identifiers).containsOnly(code1);
+		
+		filters = new HashMap<>();
+		filters.put(MyEntity.FIELD_CODE, Arrays.asList(code2));
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
+		assertThat(identifiers).containsOnly(code2);
+		
+		filters = new HashMap<>();
+		filters.put(MyEntity.FIELD_CODE, Arrays.asList(code3));
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
+		assertThat(identifiers).containsOnly(code3);
+		
+		filters = new HashMap<>();
+		filters.put(MyEntity.FIELD_CODE, Arrays.asList(code1,code3));
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
+		assertThat(identifiers).containsOnly(code1,code3);
+		
+		filters = new HashMap<>();
+		filters.put(MyEntity.FIELD_CODE, Arrays.asList());
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
+		assertThat(identifiers).isEmpty();
+		
+		filters = new HashMap<>();
+		filters.put(MyEntity.FIELD_CODE, null);
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
+		assertThat(identifiers).containsOnly(code1,code2,code3);
+		
+		filters = new HashMap<>();
+		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
+		assertThat(identifiers).containsOnly(code1,code2,code3);
+		
 		__inject__(MyEntityBusiness.class).deleteByBusinessIdentifiers(Arrays.asList(code1,code2,code3));
 	}
 	
@@ -256,6 +358,28 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		__inject__(MyEntityBusiness.class).createMany(Arrays.asList(myEntity01,myEntity02));
 		assertionHelper.assertEquals(2l, __inject__(MyEntityBusiness.class).count());
 		__inject__(MyEntityBusiness.class).deleteByBusinessIdentifiers(Arrays.asList(myEntity01.getCode(),myEntity02.getCode()));
+		assertionHelper.assertEquals(0l, __inject__(MyEntityBusiness.class).count());
+	}
+	
+	@Test
+	public void delete_myEntity_all_specific() throws Exception{
+		assertionHelper.assertEquals(0l, __inject__(MyEntityBusiness.class).count());
+		MyEntity myEntity01 = new MyEntity().setCode(__getRandomCode__());
+		MyEntity myEntity02 = new MyEntity().setCode(__getRandomCode__());
+		__inject__(MyEntityBusiness.class).createMany(Arrays.asList(myEntity01,myEntity02));
+		assertionHelper.assertEquals(2l, __inject__(MyEntityBusiness.class).count());
+		__inject__(MyEntityBusiness.class).deleteAll();
+		assertionHelper.assertEquals(0l, __inject__(MyEntityBusiness.class).count());
+	}
+	
+	@Test
+	public void delete_myEntity_all_generic() throws Exception{
+		assertionHelper.assertEquals(0l, __inject__(MyEntityBusiness.class).count());
+		MyEntity myEntity01 = new MyEntity().setCode(__getRandomCode__());
+		MyEntity myEntity02 = new MyEntity().setCode(__getRandomCode__());
+		__inject__(MyEntityBusiness.class).createMany(Arrays.asList(myEntity01,myEntity02));
+		assertionHelper.assertEquals(2l, __inject__(MyEntityBusiness.class).count());
+		__inject__(Business.class).deleteByClasses(MyEntity.class);
 		assertionHelper.assertEquals(0l, __inject__(MyEntityBusiness.class).count());
 	}
 	

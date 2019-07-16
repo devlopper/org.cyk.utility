@@ -235,44 +235,67 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		return count(null);
 	}
 	
-	/**/
+	/* Delete */
 	
-	@Override @Transactional
-	public BusinessEntity<ENTITY> deleteByIdentifier(Object identifier,ValueUsageType valueUsageType) {
-		//getPersistence().deleteByIdentifier(identifier, valueUsageType);
-		//delete(getPersistence().readOne(identifier,valueUsageType));
-		//deleteManyByIdentifiers((Collection<Object>)Arrays.asList(identifier), valueUsageType);
-		
-		BusinessFunctionRemover function = __inject__(BusinessFunctionRemover.class);
-		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifier);
-		function.setEntityClass(getPersistenceEntityClass());
-		function.setEntityIdentifierValueUsageType(valueUsageType);
-		//__copyCommonProperties__(function, properties);
-		function.execute();
-		return this;
-	}
-	
-	@Override @Transactional
-	public BusinessEntity<ENTITY> deleteBySystemIdentifier(Object identifier) {
-		deleteByIdentifier(identifier,ValueUsageType.SYSTEM);
-		return this;
-	}
-	
-	@Override @Transactional
-	public BusinessEntity<ENTITY> deleteByBusinessIdentifier(Object identifier) {
-		deleteByIdentifier(identifier,ValueUsageType.BUSINESS);
-		return this;
+	protected Boolean __isCallDeleteByInstanceOnDeleteByIdentifier__() {
+		return Boolean.FALSE;
 	}
 	
 	@Override @Transactional
 	public BusinessEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
-		BusinessFunctionRemover function = __inject__(BusinessFunctionRemover.class);
-		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifiers);
-		function.setEntityClass(getPersistenceEntityClass());
-		function.setEntityIdentifierValueUsageType(valueUsageType);
-		__copyCommonProperties__(function, properties);
-		function.execute();
+		if(Boolean.TRUE.equals(__isCallDeleteByInstanceOnDeleteByIdentifier__())) {
+			Collection<ENTITY> entities = getPersistence().readByIdentifiers(identifiers, valueUsageType, properties);
+			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(entities))) {
+				deleteMany(entities, properties);
+			}
+		}else {
+			BusinessFunctionRemover function = __inject__(BusinessFunctionRemover.class);
+			function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifiers);
+			function.setEntityClass(getPersistenceEntityClass());
+			function.setEntityIdentifierValueUsageType(valueUsageType);
+			__copyCommonProperties__(function, properties);
+			function.execute();	
+		}
 		return this;
+	}
+	
+	@Override @Transactional
+	public BusinessEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType) {
+		deleteByIdentifiers(identifiers, valueUsageType, null);
+		return this;
+	}
+	
+	@Override @Transactional
+	public BusinessEntity<ENTITY> deleteByIdentifier(Object identifier,ValueUsageType valueUsageType,Properties properties) {
+		deleteByIdentifiers(Arrays.asList(identifier), valueUsageType, properties);
+		return this;
+	}
+	
+	@Override
+	public BusinessEntity<ENTITY> deleteByIdentifier(Object identifier, ValueUsageType valueUsageType) {
+		return deleteByIdentifier(identifier, valueUsageType, null);
+	}
+	
+	@Override @Transactional
+	public BusinessEntity<ENTITY> deleteBySystemIdentifier(Object identifier,Properties properties) {
+		deleteByIdentifier(identifier,ValueUsageType.SYSTEM,properties);
+		return this;
+	}
+	
+	@Override
+	public BusinessEntity<ENTITY> deleteBySystemIdentifier(Object identifier) {
+		return deleteBySystemIdentifier(identifier, null);
+	}
+	
+	@Override @Transactional
+	public BusinessEntity<ENTITY> deleteByBusinessIdentifier(Object identifier,Properties properties) {
+		deleteByIdentifier(identifier,ValueUsageType.BUSINESS,properties);
+		return this;
+	}
+	
+	@Override
+	public BusinessEntity<ENTITY> deleteByBusinessIdentifier(Object identifier) {
+		return deleteByBusinessIdentifier(identifier, null);
 	}
 	
 	@Override @Transactional
@@ -296,23 +319,10 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	}
 	
 	@Override @Transactional
-	public BusinessEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType) {
-		deleteByIdentifiers(identifiers, valueUsageType, null);
-		return this;
-	}
-	
-	@Override @Transactional
 	public BusinessEntity<ENTITY> deleteAll(Properties properties) {
-		/*BusinessFunctionRemover function = __inject__(BusinessFunctionRemover.class);
-		function.setEntities(findMany());
-		function.setEntityClass(getPersistenceEntityClass());		
-		//function.setAll(Boolean.TRUE).setEntityClass(getPersistenceEntityClass());
-		function.execute();
-		*/
 		Collection<ENTITY> entities = find();
 		if(__injectCollectionHelper__().isNotEmpty(entities))
-			for(ENTITY index : entities)
-				delete(index,properties);
+			deleteMany(entities,properties);
 		return this;
 	}
 	

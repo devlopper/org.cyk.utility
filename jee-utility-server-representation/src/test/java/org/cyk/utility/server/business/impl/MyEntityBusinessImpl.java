@@ -18,9 +18,4 @@ public class MyEntityBusinessImpl extends AbstractBusinessEntityImpl<MyEntity,My
 		return MyEntity.class;
 	}
 	
-	@Override
-	protected Boolean __isCreateManyOneByOne__() {
-		return Boolean.FALSE;
-	}
-
 }

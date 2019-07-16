@@ -1,11 +1,9 @@
-package org.cyk.utility.server.business;
+package org.cyk.utility.server.business.impl;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.assertion.AbstractAssertionsProviderForImpl;
-import org.cyk.utility.assertion.AssertionBuilderComparison;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 
 public class MyEntityAssertionsProviderImpl extends AbstractAssertionsProviderForImpl<MyEntity> implements MyEntityAssertionsProvider,Serializable {
@@ -13,7 +11,7 @@ public class MyEntityAssertionsProviderImpl extends AbstractAssertionsProviderFo
 	
 	@Override
 	protected void ____execute____(Function<?, ?> function,Object filter, MyEntity myEntity) {
-		if(function instanceof BusinessFunctionCreator) {
+		/*if(function instanceof BusinessFunction) {
 			if(filter==null) {
 				if(myEntity.getLong1() != null) {
 					//assert long1 > -1
@@ -25,7 +23,7 @@ public class MyEntityAssertionsProviderImpl extends AbstractAssertionsProviderFo
 				}
 				
 			}
-		}
+		}*/
 	}
 
 }

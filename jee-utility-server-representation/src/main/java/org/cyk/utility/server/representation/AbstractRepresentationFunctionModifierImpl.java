@@ -1,6 +1,8 @@
 package org.cyk.utility.server.representation;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldValueCopy;
@@ -20,30 +22,67 @@ public abstract class AbstractRepresentationFunctionModifierImpl extends Abstrac
 	@Override
 	protected void __executeBusiness__() {
 		if(__injectCollectionHelper__().isNotEmpty(__entities__)) {
-			Object representationEntity = __injectCollectionHelper__().getFirst(__entities__);
-			Object persistenceEntity;
-			Object persistenceEntityIdentifier = __injectFieldHelper__().getFieldValueSystemIdentifier(representationEntity);
-			ValueUsageType persistenceEntityIdentifierType;
-			if(persistenceEntityIdentifier == null) {
-				persistenceEntityIdentifier = __injectFieldHelper__().getFieldValueBusinessIdentifier(representationEntity);
-				persistenceEntityIdentifierType = ValueUsageType.BUSINESS;
-			}else {
-				//TODO convert base on field type
-				//currentEntityIdentifier = __injectNumberHelper__().getLong(currentEntityIdentifier);
-				persistenceEntityIdentifierType = ValueUsageType.SYSTEM;
+			Collection<Object> persistenceEnities = null;
+			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entitiesSystemIdentifiers__))) {
+				Collection<?> collection = __injectBusiness__().findByIdentifiers(__persistenceEntityClass__, __entitiesSystemIdentifiers__, ValueUsageType.SYSTEM);
+				if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(collection))) {
+					if(persistenceEnities == null)
+						persistenceEnities = new ArrayList<>();
+					persistenceEnities.addAll(collection);
+				}
 			}
-			
-			persistenceEntity = __injectBusiness__().findByIdentifier(getPersistenceEntityClass(),persistenceEntityIdentifier,persistenceEntityIdentifierType ,new Properties().setValueUsageType(persistenceEntityIdentifierType));
-			/* Copy field value from updated entity to current entity*/
-			Strings fieldNames = getEntityFieldNames();
-			if(__injectCollectionHelper__().isNotEmpty(fieldNames)) {
-				for(String index : fieldNames.get()) {
-					__inject__(FieldValueCopy.class).execute(representationEntity, persistenceEntity, index);
+			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entitiesBusinessIdentifiers__))) {
+				Collection<?> collection = __injectBusiness__().findByIdentifiers(__persistenceEntityClass__, __entitiesBusinessIdentifiers__, ValueUsageType.BUSINESS);
+				if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(collection))) {
+					if(persistenceEnities == null)
+						persistenceEnities = new ArrayList<>();
+					persistenceEnities.addAll(collection);
 				}
 			}
 			
-			//__inject__(FieldHelper.class).setFieldValueBusinessIdentifier(currentEntity, __inject__(FieldHelper.class).getFieldValueBusinessIdentifier(updatedEntity));
-			__injectBusiness__().update(persistenceEntity,new Properties().setFields(fieldNames));
+			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(persistenceEnities))) {
+				Strings fieldNames = getEntityFieldNames();
+				if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(fieldNames))) {
+					for(Object index : persistenceEnities) {
+						Object entity = __getEntity__(__entities__, index);
+						if(entity != null) {
+							/* Copy field value from representation entity to persistence entity*/
+							for(String indexFieldNameString : fieldNames.get())
+								__inject__(FieldValueCopy.class).execute(entity, index, indexFieldNameString);					
+						}
+					}
+					__injectBusiness__().updateMany(persistenceEnities,new Properties().setFields(fieldNames));		
+				}
+			}
 		}
+	}
+	
+	private Object __getEntity__(Collection<?> entities,Object persistenceEntity) {
+		Object entity = null;
+		Object persistenceSystemIdentifier = __injectFieldHelper__().getFieldValueSystemIdentifier(persistenceEntity);
+		Object persistenceBusinessIdentifier = __injectFieldHelper__().getFieldValueBusinessIdentifier(persistenceEntity);
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(entities)))
+			for(Object index : entities) {
+				Object representationSystemIdentifier = null;
+				Object representationBusinessIdentifier = null;
+				if(__entityClassSystemIdentifierField__ != null) {
+					representationSystemIdentifier = __injectFieldHelper__().getFieldValueSystemIdentifier(index);
+					if(representationSystemIdentifier != null && persistenceSystemIdentifier!=null && representationSystemIdentifier.equals(persistenceSystemIdentifier)) {
+						entity = index;
+						break;
+					}
+				}
+				
+				if(__entityClassBusinessIdentifierField__ != null) {
+					representationBusinessIdentifier = __injectFieldHelper__().getFieldValueSystemIdentifier(index);
+					if(representationBusinessIdentifier != null && persistenceBusinessIdentifier!=null && representationBusinessIdentifier.equals(persistenceBusinessIdentifier)) {
+						entity = index;
+						break;
+					}
+				}
+			}
+		if(entity == null)
+			__logWarning__(String.format("Representation entity not found for persistence entity %s", persistenceEntity));
+		return entity;		
 	}
 }

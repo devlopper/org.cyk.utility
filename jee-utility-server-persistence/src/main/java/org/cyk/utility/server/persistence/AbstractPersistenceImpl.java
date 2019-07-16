@@ -15,16 +15,23 @@ import lombok.experimental.Accessors;
 public abstract class AbstractPersistenceImpl extends AbstractPersistenceServiceProviderImpl<Object> implements Persistence,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/* Create */
+	
 	@Override
-	public PersistenceServiceProvider<Object> create(Object object, Properties properties) {
-		PersistenceEntity<Object> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntity(object);
-		if(persistence == null){
-			super.create(object, properties);
-		}else{
-			persistence.create(object, properties);
+	public PersistenceServiceProvider<Object> createMany(Collection<Object> objects, Properties properties) {
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+			PersistenceEntity<Object> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntity(objects.iterator().next());
+			if(persistence == null){
+				super.createMany(objects, properties);
+			}else{
+				persistence.createMany(objects, properties);
+			}	
 		}
 		return this;
 	}
+	
+	/* Read */
+	
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -49,10 +56,12 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		return entities;
 	}
 	
+	
 	@Override
 	public <ENTITY> Collection<ENTITY> readByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType) {
 		return readByIdentifiers(aClass, identifiers, valueUsageType, null);
 	}
+	
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -78,6 +87,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		return readByIdentifier(aClass, identifier, (Properties)null);
 	}
 	
+	
 	@Override
 	public <ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass, Object identifier,ValueUsageType valueUsageType) {
 		return readByIdentifier(aClass, identifier, new Properties().setValueUsageType(valueUsageType));
@@ -101,6 +111,25 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		return read(aClass,null);
 	}
 	
+	
+	@Override
+	public <ENTITY> Collection<Object> readIdentifiers(Class<ENTITY> aClass, ValueUsageType valueUsageType,Properties properties) {
+		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
+		Collection<Object> identifiers = null;
+		if(persistence == null){
+			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		}else{
+			identifiers =  persistence.readIdentifiers(valueUsageType,properties);
+		}
+		return identifiers;
+	}
+	
+	@Override
+	public <ENTITY> Collection<Object> readIdentifiers(Class<ENTITY> aClass, ValueUsageType valueUsageType) {
+		return readIdentifiers(aClass, valueUsageType, null);
+	}
+	
+	
 	@Override
 	public <ENTITY> Long count(Class<ENTITY> aClass, Properties properties) {
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
@@ -118,13 +147,18 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		return count(aClass,null);
 	}
 	
+	
+	/* Update */
+	
 	@Override
-	public PersistenceServiceProvider<Object> update(Object object, Properties properties) {
-		PersistenceEntity<Object> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntity(object);
-		if(persistence == null){
-			super.update(object, properties);
-		}else{
-			persistence.update(object, properties);
+	public PersistenceServiceProvider<Object> updateMany(Collection<Object> objects, Properties properties) {
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+			PersistenceEntity<Object> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntity(objects.iterator().next());
+			if(persistence == null){
+				super.updateMany(objects, properties);
+			}else{
+				persistence.updateMany(objects, properties);
+			}	
 		}
 		return this;
 	}
@@ -136,6 +170,22 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 			super.delete(object, properties);
 		}else{
 			persistence.delete(object, properties);
+		}
+		return this;
+	}
+	
+	
+	/* Delete */
+	
+	@Override
+	public PersistenceServiceProvider<Object> deleteMany(Collection<Object> objects, Properties properties) {
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+			PersistenceEntity<Object> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntity(objects.iterator().next());
+			if(persistence == null){
+				super.deleteMany(objects, properties);
+			}else{
+				persistence.deleteMany(objects, properties);
+			}	
 		}
 		return this;
 	}
@@ -156,6 +206,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		return deleteByIdentifiers(aClass, identifiers, valueUsageType, null);
 	}
 	
+	
 	@Override
 	public <ENTITY> Persistence deleteBySystemIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,Properties properties) {
 		deleteByIdentifiers(aClass, identifiers, ValueUsageType.SYSTEM, properties);
@@ -167,6 +218,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		return deleteBySystemIdentifiers(aClass, identifiers, null);
 	}
 
+	
 	@Override
 	public <ENTITY> Persistence deleteByBusinessIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,Properties properties) {
 		deleteByIdentifiers(aClass, identifiers, ValueUsageType.BUSINESS, properties);
@@ -178,6 +230,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		return deleteByBusinessIdentifiers(aClass, identifiers, null);
 	}
 	
+	
 	@Override
 	public <ENTITY> Persistence deleteByEntityClass(Class<ENTITY> aClass, Properties properties) {
 		PersistenceEntity<ENTITY> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntityClass(aClass);
@@ -188,6 +241,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		}
 		return this;
 	}
+	
 	
 	@Override
 	public <ENTITY> Persistence deleteByEntityClass(Class<ENTITY> aClass) {

@@ -27,6 +27,7 @@ import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.notification.NotificationBuilders;
 import org.cyk.utility.notification.Notifications;
+import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
@@ -83,10 +84,18 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 					,ConstantCharacter.SPACE.toString()));
 		}
 	}
+	
+	@Override
+	protected void __try__() throws Exception {
+		__action__ = getAction();
+		if(Boolean.TRUE.equals(__getIsSetConditionsAssertionsProviderFromEntity__())) {
+			__setConditionsAssertionsProvidersIfNull__((Collection<Object>) getEntities(), __action__, null);
+		}
+		super.__try__();
+	}
 
 	@Override
 	protected void ____execute____() {
-		__action__ = getAction();
 		Boolean isActionRequired = __injectValueHelper__().defaultToIfNull(getIsActionRequired(),Boolean.TRUE);
 		if(__action__ == null && Boolean.TRUE.equals(isActionRequired)) {			
 			__inject__(ThrowableHelper.class).throwRuntimeException(getClass().getSimpleName()+" : action must not be null");
@@ -287,12 +296,6 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	public SystemFunction setAction(SystemAction action) {
 		getProperties().setAction(action);
-		if(action!=null) {
-			Object entity = getEntity();
-			if(Boolean.TRUE.equals(__getIsSetConditionsAssertionsProviderFromEntity__(entity))) {
-				__setConditionsAssertionsProvidersIfNull__(entity, action, null);
-			}
-		}
 		return this;
 	}
 	
@@ -397,41 +400,39 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 				action.getEntities(Boolean.TRUE).add(entity);
 			}
 			setEntityClass(entity.getClass());
-			if(Boolean.TRUE.equals(__getIsSetConditionsAssertionsProviderFromEntity__(entity))) {
-				__setConditionsAssertionsProvidersIfNull__(entity, getAction(), null);
-			}
 		}
 		return this;
 	}
 	
-	protected Boolean __getIsSetConditionsAssertionsProviderFromEntity__(Object entity) {
+	protected Boolean __getIsSetConditionsAssertionsProviderFromEntity__() {
 		return Boolean.FALSE;
 	}
 	
-	protected void __setConditionsAssertionsProvidersIfNull__(Object entity,Object preFilter,Object postFilter) {
+	protected void __setConditionsAssertionsProvidersIfNull__(Collection<Object> entities,Object preFilter,Object postFilter) {
 		AssertionsProvider preConditionsAssertionsProvider = (AssertionsProvider) getPreConditionsAssertionsProvider();
-		if(entity!=null && preConditionsAssertionsProvider==null)
-			setPreConditionsAssertionsProvider(preConditionsAssertionsProvider = __inject__(AssertionsProviderClassMap.class).inject(entity));
+		Boolean areEntitiesNotEmpty = Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(entities));
+		if(preConditionsAssertionsProvider==null && areEntitiesNotEmpty)
+			setPreConditionsAssertionsProvider(preConditionsAssertionsProvider = __inject__(AssertionsProviderClassMap.class).inject(entities.iterator().next()));
 		
 		if(preConditionsAssertionsProvider!=null) {
 			if(preConditionsAssertionsProvider.getFunction() == null)
 				preConditionsAssertionsProvider.setFunction(this);
 			if(preConditionsAssertionsProvider.getFilter() == null)
 				preConditionsAssertionsProvider.setFilter(preFilter);	
-			if(preConditionsAssertionsProvider instanceof AssertionsProviderFor<?> && ((AssertionsProviderFor<?>)preConditionsAssertionsProvider).getFor() == null)
-				((AssertionsProviderFor<Object>)preConditionsAssertionsProvider).setFor(entity);	
+			if(preConditionsAssertionsProvider instanceof AssertionsProviderFor<?> && ((AssertionsProviderFor<?>)preConditionsAssertionsProvider).getFors() == null)
+				((AssertionsProviderFor<Object>)preConditionsAssertionsProvider).setFors(__inject__(Objects.class).add(entities));	
 		}
 		
 		AssertionsProvider postConditionsAssertionsProvider = (AssertionsProvider) getPostConditionsAssertionsProvider();
-		if(entity!=null && postConditionsAssertionsProvider==null)
-			setPostConditionsAssertionsProvider(postConditionsAssertionsProvider = __inject__(AssertionsProviderClassMap.class).inject(entity));
+		if(postConditionsAssertionsProvider==null && areEntitiesNotEmpty)
+			setPostConditionsAssertionsProvider(postConditionsAssertionsProvider = __inject__(AssertionsProviderClassMap.class).inject(entities.iterator().next()));
 		if(postConditionsAssertionsProvider!=null) {
 			if(postConditionsAssertionsProvider.getFunction() == null)
 				postConditionsAssertionsProvider.setFunction(this);
 			if(postConditionsAssertionsProvider.getFilter() == null)
 				postConditionsAssertionsProvider.setFilter(postFilter);	
-			if(postConditionsAssertionsProvider instanceof AssertionsProviderFor<?> && ((AssertionsProviderFor<?>)postConditionsAssertionsProvider).getFor() == null)
-				((AssertionsProviderFor<Object>)postConditionsAssertionsProvider).setFor(entity);
+			if(postConditionsAssertionsProvider instanceof AssertionsProviderFor<?> && ((AssertionsProviderFor<?>)postConditionsAssertionsProvider).getFors() == null)
+				((AssertionsProviderFor<Object>)postConditionsAssertionsProvider).setFors(__inject__(Objects.class).add(entities));
 		}
 		
 	}

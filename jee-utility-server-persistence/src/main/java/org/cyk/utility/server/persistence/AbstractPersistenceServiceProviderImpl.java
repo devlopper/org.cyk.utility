@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -29,8 +30,6 @@ import org.cyk.utility.throwable.ThrowableHelper;
 public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends AbstractSystemServiceProviderImpl implements PersistenceServiceProvider<OBJECT>, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public static Boolean IS_CREATE_ONE_BY_ONE = Boolean.FALSE;
-	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
@@ -150,49 +149,16 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	*/
 	/**/
 	
-	protected Boolean __isCreateManyOneByOne__() {
-		return Boolean.TRUE.equals(IS_CREATE_ONE_BY_ONE);
-	}
-	
-	@Override
-	public PersistenceServiceProvider<OBJECT> create(OBJECT object,Properties properties) {
-		PersistenceFunctionCreator function = __inject__(PersistenceFunctionCreator.class);
-		__copyCommonProperties__(function, properties);
-		function.setEntity(object).execute();
-		return this;
-	}
-	
-	@Override
-	public PersistenceServiceProvider<OBJECT> create(OBJECT object) {
-		return create(object, null);
-	}
+	/* Create */
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> createMany(Collection<OBJECT> objects,Properties properties) {
 		PersistenceFunctionCreator function = __inject__(PersistenceFunctionCreator.class);
 		__copyCommonProperties__(function, properties);
-		Boolean __isCreateManyOneByOne__ = Boolean.TRUE.equals(__isCreateManyOneByOne__());
-		if(__isCreateManyOneByOne__) {
-			//Loop execution
-			function.try_().setIsCodeFromFunctionExecutable(Boolean.FALSE).run().addRunnables(new Runnable() {
-				@Override
-				public void run() {
-					for(OBJECT index : objects) {
-						create(index);
-					}
-				}
-			});
-		}else {
-			//Batch execution
-			function.setEntities(objects);
-		}
+		function.setEntities(objects);
+		__listenExecuteCreateBefore__(objects, properties, function);
 		function.execute();
-		
-		if(__isCreateManyOneByOne__) {
-			//Loop execution
-		}else {
-			//Batch execution
-		}
+		__listenExecuteCreateAfter__(objects, properties, function);
 		return this;
 	}
 	
@@ -202,11 +168,53 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	}
 	
 	@Override
-	public PersistenceServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
+	public PersistenceServiceProvider<OBJECT> create(OBJECT object,Properties properties) {
+		createMany((Collection<OBJECT>) Arrays.asList(object), properties);
+		return this;
+	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> create(OBJECT object) {
+		return create(object, null);
+	}
+	
+	protected void __listenExecuteCreateBefore__(Collection<OBJECT> objects, Properties properties,PersistenceFunctionCreator function){
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+			for(OBJECT index : objects)
+				__listenExecuteCreateBefore__(index, properties, function);
+	}
+	
+	protected void __listenExecuteCreateAfter__(Collection<OBJECT> objects, Properties properties,PersistenceFunctionCreator function){
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+			for(OBJECT index : objects)
+				__listenExecuteCreateAfter__(index, properties, function);
+	}
+	
+	protected void __listenExecuteCreateBefore__(OBJECT object, Properties properties,PersistenceFunctionCreator function){}
+	
+	protected void __listenExecuteCreateAfter__(OBJECT object, Properties properties,PersistenceFunctionCreator function){}
+	
+	/* Update */
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects,Properties properties) {
 		PersistenceFunctionModifier function = ____inject____(PersistenceFunctionModifier.class);
 		__copyCommonProperties__(function, properties);
-		function.setEntity(object).execute();
+		function.setEntities(objects);
+		__listenExecuteUpdateBefore__(objects, properties, function);
+		function.execute();
+		__listenExecuteUpdateAfter__(objects, properties, function);
 		return this;
+	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects) {
+		return updateMany(objects, null);
+	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> update(OBJECT object, Properties properties) {
+		return updateMany(Arrays.asList(object),properties);
 	}
 	
 	@Override
@@ -215,43 +223,48 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		return this;
 	}
 	
-	@Override
-	public PersistenceServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects,Properties properties) {
-		PersistenceFunctionModifier function = ____inject____(PersistenceFunctionModifier.class);
-		__copyCommonProperties__(function, properties);
-		function.setEntities(objects).execute();
-		return this;
+	protected void __listenExecuteUpdateBefore__(Collection<OBJECT> objects, Properties properties,PersistenceFunctionModifier function){
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+			for(OBJECT index : objects)
+				__listenExecuteUpdateBefore__(index, properties, function);
 	}
 	
-	@Override
-	public PersistenceServiceProvider<OBJECT> updateMany(Collection<OBJECT> objects) {
-		return updateMany(objects, null);
+	protected void __listenExecuteUpdateAfter__(Collection<OBJECT> objects, Properties properties,PersistenceFunctionModifier function){
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+			for(OBJECT index : objects)
+				__listenExecuteUpdateAfter__(index, properties, function);
 	}
+	
+	protected void __listenExecuteUpdateBefore__(OBJECT object, Properties properties,PersistenceFunctionModifier function){}
+	
+	protected void __listenExecuteUpdateAfter__(OBJECT object, Properties properties,PersistenceFunctionModifier function){}
+	
+	/* Delete */
 
-	@Override
-	public PersistenceServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
-		PersistenceFunctionRemover function = ____inject____(PersistenceFunctionRemover.class);
-		__copyCommonProperties__(function, properties);
-		function.setEntity(object).execute();
-		return this;
-	}
-	
-	@Override
-	public PersistenceServiceProvider<OBJECT> delete(OBJECT object) {
-		return delete(object, null);
-	}
-	
 	@Override
 	public PersistenceServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects, Properties properties) {
 		PersistenceFunctionRemover function = ____inject____(PersistenceFunctionRemover.class);
 		__copyCommonProperties__(function, properties);
-		function.setEntities(objects).execute();
+		function.setEntities(objects);
+		__listenExecuteDeleteBefore__(objects, properties, function);
+		function.execute();
+		__listenExecuteDeleteAfter__(objects, properties, function);
 		return this;
 	}
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects) {
 		return deleteMany(objects, null);
+	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> delete(OBJECT object, Properties properties) {
+		return deleteMany(Arrays.asList(object),properties);
+	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> delete(OBJECT object) {
+		return delete(object, null);
 	}
 	
 	@Override
@@ -266,25 +279,32 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		return this;
 	}
 	
-	@Override
-	public PersistenceServiceProvider<OBJECT> save(OBJECT object,Properties properties) {
-		if(Boolean.TRUE.equals(isPersisted(object)))
-			update(object, properties);
-		else
-			create(object, properties);
-		return this;
+	protected void __listenExecuteDeleteBefore__(Collection<OBJECT> objects, Properties properties,PersistenceFunctionRemover function){
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+			for(OBJECT index : objects)
+				__listenExecuteDeleteBefore__(index, properties, function);
 	}
 	
-	@Override
-	public PersistenceServiceProvider<OBJECT> save(OBJECT object) {
-		return save(object, null);
+	protected void __listenExecuteDeleteAfter__(Collection<OBJECT> objects, Properties properties,PersistenceFunctionRemover function){
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects)))
+			for(OBJECT index : objects)
+				__listenExecuteDeleteAfter__(index, properties, function);
 	}
+	
+	protected void __listenExecuteDeleteBefore__(OBJECT object, Properties properties,PersistenceFunctionRemover function){}
+	
+	protected void __listenExecuteDeleteAfter__(OBJECT object, Properties properties,PersistenceFunctionRemover function){}
+	
+	/* Save */
 	
 	@Override
 	public PersistenceServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects,Properties properties) {
 		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
 			for(OBJECT index : objects) {
-				save(index, properties);
+				if(Boolean.TRUE.equals(isPersisted(index)))
+					update(index, properties);
+				else
+					create(index, properties);
 			}
 		}
 		return this;
@@ -293,6 +313,16 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 	@Override
 	public PersistenceServiceProvider<OBJECT> saveMany(Collection<OBJECT> objects) {
 		return saveMany(objects, null);
+	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> save(OBJECT object,Properties properties) {
+		return saveMany(Arrays.asList(object),properties);
+	}
+	
+	@Override
+	public PersistenceServiceProvider<OBJECT> save(OBJECT object) {
+		return save(object, null);
 	}
 	
 	/**/

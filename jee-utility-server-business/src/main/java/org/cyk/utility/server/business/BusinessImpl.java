@@ -7,35 +7,48 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.server.persistence.Persistence;
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.value.ValueUsageType;
 
 @ApplicationScoped
 public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> implements Business,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	/* Create */
+	
 	@Override
-	public BusinessServiceProvider<Object> create(Object object, Properties properties) {
-		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntity(object);
-		if(business == null){
-			super.create(object, properties);
-		}else{
-			business.create(object, properties);
+	public BusinessServiceProvider<Object> createMany(Collection<Object> objects, Properties properties) {
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(objects))) {
+			@SuppressWarnings("unchecked")
+			Class<Object> aClass = (Class<Object>) objects.iterator().next().getClass();
+			BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(aClass);
+			if(business == null){
+				super.createMany(objects, properties);
+			}else{
+				business.createMany(objects, properties);
+			}
 		}
 		return this;
 	}
 	
+	/* Find */
+	
+	@SuppressWarnings("unchecked")
 	@Override
-	public BusinessServiceProvider<Object> createMany(Collection<Object> objects, Properties properties) {
-		@SuppressWarnings("unchecked")
-		Class<Object> aClass = (Class<Object>) objects.iterator().next().getClass();
+	public <ENTITY> Collection<ENTITY> findByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType, Properties properties) {
+		Collection<Object> entities = null;
 		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(aClass);
 		if(business == null){
-			super.createMany(objects, properties);
+			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
 		}else{
-			business.createMany(objects, properties);
+			entities = business.findByIdentifiers(identifiers, valueUsageType, properties);
 		}
-		return this;
+		return (Collection<ENTITY>) entities;
+	}
+	
+	@Override
+	public <ENTITY> Collection<ENTITY> findByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType) {
+		return findByIdentifiers(aClass, identifiers, valueUsageType, null);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -78,6 +91,23 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		//TODO handle pagination
 		return find(aClass, null);
 	}
+	
+	@Override
+	public <ENTITY> Collection<Object> findIdentifiers(Class<ENTITY> aClass, ValueUsageType valueUsageType,Properties properties) {
+		Collection<Object> identifiers = null;
+		BusinessEntity<ENTITY> business = (BusinessEntity<ENTITY>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(aClass);
+		if(business == null){
+			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		}else{
+			identifiers = business.findIdentifiers(valueUsageType, properties);
+		}
+		return identifiers;
+	}
+	
+	@Override
+	public <ENTITY> Collection<Object> findIdentifiers(Class<ENTITY> aClass, ValueUsageType valueUsageType) {
+		return findIdentifiers(aClass, valueUsageType, null);
+	}
 
 	@Override
 	public <ENTITY> Long count(Class<ENTITY> aClass, Properties properties) {
@@ -99,16 +129,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		return count(aClass, null);
 	}
 
-	@Override
-	public BusinessServiceProvider<Object> update(Object object, Properties properties) {
-		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntity(object);
-		if(business == null){
-			super.update(object, properties);
-		}else{
-			business.update(object, properties);
-		}
-		return this;
-	}
+	/* Update */
 	
 	@Override
 	public BusinessServiceProvider<Object> updateMany(Collection<Object> objects, Properties properties) {
@@ -123,16 +144,7 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		return this;
 	}
 	
-	@Override
-	public BusinessServiceProvider<Object> delete(Object object, Properties properties) {
-		BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntity(object);
-		if(business == null){
-			super.delete(object, properties);
-		}else{
-			business.delete(object, properties);
-		}
-		return this;
-	}
+	/* Delete */
 	
 	@Override
 	public BusinessServiceProvider<Object> deleteMany(Collection<Object> objects, Properties properties) {
@@ -144,15 +156,15 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 		}
 		return this;
 	}
-	
+
 	@Override @Transactional
-	public Business deleteAll(Collection<Class<?>> classes) {
+	public Business deleteByClasses(Collection<Class<?>> classes) {
 		if(__injectCollectionHelper__().isNotEmpty(classes)) {
 			for(Class<?> index : classes) {
 				@SuppressWarnings("unchecked")
 				BusinessEntity<Object> business = (BusinessEntity<Object>)  __injectBusinessLayer__().injectInterfaceClassFromPersistenceEntityClass(index);
 				if(business == null){
-					//TODO to be implemented
+					__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
 				}else{
 					business.deleteAll();
 				}
@@ -162,26 +174,22 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	}
 	
 	@Override @Transactional
-	public Business deleteAll(Class<?>... classes) {
-		return deleteAll(__injectCollectionHelper__().instanciate(classes));
+	public Business deleteByClasses(Class<?>... classes) {
+		if(__inject__(ArrayHelper.class).isNotEmpty(classes))
+			deleteByClasses(__injectCollectionHelper__().instanciate(classes));
+		return this;
 	}
 	
 	@Override @Transactional
-	public BusinessServiceProvider<Object> deleteAll(Properties properties) {
+	public Business deleteAll(Properties properties) {
 		// TODO Find class hierarchy and delete from leaf to root
 		Collection<Class<?>> classes = null;
-		return deleteAll(classes);
+		return deleteByClasses(classes);
 	}
 	
 	@Override
-	public BusinessServiceProvider<Object> deleteAll() {
-		return deleteAll((Properties)null);
-	}
-
-	@Override @Transactional
-	public <ENTITY> Business deleteByClassByIdentififerByValueUsageType(Class<ENTITY> clazz, Object identifier,ValueUsageType valueUsageType) {
-		delete(__inject__(Persistence.class).readByIdentifier(clazz, identifier, valueUsageType));
-		return this;
+	public Business deleteAll() {
+		return deleteAll(null);
 	}
 	
 	@Override @Transactional
@@ -220,6 +228,8 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	public Business deleteByBusinessIdentifiers(Class<?> klass, Collection<Object> identifiers) {
 		return deleteByBusinessIdentifiers(klass, identifiers, null);
 	}
+	
+	/* Save */
 	
 	@Override
 	public BusinessServiceProvider<Object> saveByBatch(Collection<Object> objects, Object batchSize,

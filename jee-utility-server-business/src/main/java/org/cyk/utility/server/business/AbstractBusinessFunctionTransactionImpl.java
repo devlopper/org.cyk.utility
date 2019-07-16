@@ -31,7 +31,7 @@ public abstract class AbstractBusinessFunctionTransactionImpl extends AbstractBu
 	}
 	
 	@Override
-	protected Boolean __getIsSetConditionsAssertionsProviderFromEntity__(Object entity) {
+	protected Boolean __getIsSetConditionsAssertionsProviderFromEntity__() {
 		return Boolean.TRUE;
 	}
 }

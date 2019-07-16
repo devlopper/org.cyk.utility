@@ -17,21 +17,21 @@ public interface Business extends BusinessServiceProvider<Object> {
 	/* Create */
 	
 	/* Find */ 
+	<ENTITY> Collection<ENTITY> findByIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
+	<ENTITY> Collection<ENTITY> findByIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,ValueUsageType valueUsageType);
+	
 	<ENTITY> ENTITY findByIdentifier(Class<ENTITY> aClass,Object identifier,ValueUsageType valueUsageType,Properties properties);
 	<ENTITY> ENTITY findByIdentifier(Class<ENTITY> aClass,Object identifier,ValueUsageType valueUsageType);
 	
 	<ENTITY> Collection<ENTITY> find(Class<ENTITY> aClass,Properties properties);
 	<ENTITY> Collection<ENTITY> find(Class<ENTITY> aClass);
 	
+	<ENTITY> Collection<Object> findIdentifiers(Class<ENTITY> aClass,ValueUsageType valueUsageType,Properties properties);
+	<ENTITY> Collection<Object> findIdentifiers(Class<ENTITY> aClass,ValueUsageType valueUsageType);
+	
 	/* Update */
 	
 	/* Delete */
-	@Transactional
-	Business deleteAll(Collection<Class<?>> classes);
-	
-	@Transactional
-	Business deleteAll(Class<?>...classes);
-	
 	@Transactional
 	Business deleteByIdentifiers(Class<?> klass,Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
 	@Transactional
@@ -48,7 +48,16 @@ public interface Business extends BusinessServiceProvider<Object> {
 	Business deleteByBusinessIdentifiers(Class<?> klass,Collection<Object> identifiers);
 	
 	@Transactional
-	<ENTITY> Business deleteByClassByIdentififerByValueUsageType(Class<ENTITY> clazz,Object identifier,ValueUsageType valueUsageType);
+	Business deleteByClasses(Collection<Class<?>> classes);
+	
+	@Transactional
+	Business deleteByClasses(Class<?>...classes);
+	
+	@Transactional
+	Business deleteAll(Properties properties);
+	
+	@Transactional
+	Business deleteAll();
 	
 	/* Count */
 	<ENTITY> Long count(Class<ENTITY> aClass,Properties properties);

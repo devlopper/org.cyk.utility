@@ -2,6 +2,7 @@ package org.cyk.utility.system;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.enterprise.util.AnnotationLiteral;
 
@@ -91,6 +92,21 @@ public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceP
 			}	
 		}
 		return fields;
+	}
+	
+	protected Map<String,Object> __getFiltersFromProperties__(Properties properties) {
+		Map<String,Object> filters = null;
+		if(properties != null) {
+			Object filtersObject = properties.getQueryFilters();
+			if(filtersObject instanceof Strings) {
+				
+			}else if(filtersObject instanceof Collection) {
+				
+			}else if(filtersObject instanceof Map) {
+				filters = (Map<String, Object>) filtersObject;
+			}	
+		}
+		return filters;
 	}
 	
 	@Override
