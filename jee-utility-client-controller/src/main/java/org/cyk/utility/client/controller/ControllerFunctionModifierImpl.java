@@ -1,13 +1,9 @@
 package org.cyk.utility.client.controller;
 
 import java.io.Serializable;
-import java.util.Collection;
-
-import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
 public class ControllerFunctionModifierImpl extends AbstractControllerFunctionImpl implements ControllerFunctionModifier , Serializable {
@@ -20,12 +16,11 @@ public class ControllerFunctionModifierImpl extends AbstractControllerFunctionIm
 	}
 	
 	@Override
-	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
-		Response response = null;
+	protected void __executeRepresentation__() {
 		String fields = (String) getProperty(Properties.FIELDS);//TODO get logic from centralized function
-		System.out.println("ControllerFunctionModifierImpl.__actWithRepresentationInstanceOfRepresentationEntity__() : "+dataTransferObjects.iterator().next());
-		response = representation.updateOne(dataTransferObjects.iterator().next(),fields);		
-		return response;
+		if(__representation__ instanceof RepresentationEntity<?, ?, ?>) {
+			__response__ = ((RepresentationEntity<?,Object,?>)__representation__).updateMany(__representationEntities__,fields);			
+		}
 	}
 	
 	@Override

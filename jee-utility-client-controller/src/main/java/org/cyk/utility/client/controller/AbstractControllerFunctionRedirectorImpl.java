@@ -12,7 +12,6 @@ import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.client.controller.navigation.NavigationRedirector;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.object.Objects;
-import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
@@ -33,11 +32,11 @@ public abstract class AbstractControllerFunctionRedirectorImpl extends AbstractC
 	}
 
 	@Override
-	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
+	protected void __executeRepresentation__() {
 		Response response = null;
 		Properties properties = new Properties().setValueUsageType(ValueUsageType.SYSTEM);	
 		//TODO is it necessary ?
-		Object entity = __inject__(Controller.class).readOne(action.getEntityClass(),action.getEntitiesIdentifiers().getFirst(),properties);
+		Object entity = __inject__(Controller.class).readOne(__action__.getEntityClass(),__action__.getEntitiesIdentifiers().getFirst(),properties);
 		response = (Response) properties.getResponse();			
 		if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isStatusSuccessfulOk(response))) {
 			/*
@@ -52,7 +51,7 @@ public abstract class AbstractControllerFunctionRedirectorImpl extends AbstractC
 			}
 			
 			targetSystemAction.setEntityClass(getEntityClass());
-			targetSystemAction.getEntitiesIdentifiers(Boolean.TRUE).add(action.getEntitiesIdentifiers().getFirst());
+			targetSystemAction.getEntitiesIdentifiers(Boolean.TRUE).add(__action__.getEntitiesIdentifiers().getFirst());
 			
 			//Object navigationIdentifier = getProperty(Properties.NAVIGATION_IDENTIFIER);
 			NavigationBuilder navigationBuilder = __inject__(NavigationBuilder.class).setIdentifierBuilderSystemAction(targetSystemAction);
@@ -62,9 +61,8 @@ public abstract class AbstractControllerFunctionRedirectorImpl extends AbstractC
 			__inject__(NavigationRedirector.class).setNavigation(navigation).execute();
 			
 		}else if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isFamilyClientError(response))) {
-			__injectThrowableHelper__().throw_(__inject__(EntityNotFoundException.class).setSystemAction(action).setResponse(response));
+			__injectThrowableHelper__().throw_(__inject__(EntityNotFoundException.class).setSystemAction(__action__).setResponse(response));
 		}				
-		return response;
 	}
 	
 	@Override

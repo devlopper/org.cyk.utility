@@ -28,9 +28,8 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 	}
 
 	@Override
-	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
-		Response response;
-		Objects identifiers = action.getEntitiesIdentifiers();
+	protected void __executeRepresentation__() {
+		Objects identifiers = __action__.getEntitiesIdentifiers();
 		Properties properties = getProperties();
 		String fields = (String) Properties.getFromPath(properties, Properties.FIELDS);
 		if(__injectCollectionHelper__().isEmpty(identifiers)) {
@@ -45,15 +44,19 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 				else
 					filtersAsString = __injectByQualifiersClasses__(ObjectToStringBuilder.class,JavaScriptObjectNotation.Class.class).setObject(filters).execute().getOutput();
 			}
-			response = representation.getMany(isPageable,from,count,fields,filtersAsString);
+			if(__representation__ instanceof RepresentationEntity<?, ?, ?>) {
+				__response__ = ((RepresentationEntity<?,Object,?>)__representation__).getMany(isPageable,from,count,fields,filtersAsString);	
+			}
+			
 		}else {
 			Object identifier = identifiers.getFirst();
 			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
 			if(valueUsageType == null)
 				valueUsageType = ValueUsageType.SYSTEM;
-			response = representation.getOne(identifier.toString(),valueUsageType.name(),fields);
+			if(__representation__ instanceof RepresentationEntity<?, ?, ?>) {
+				__response__ = ((RepresentationEntity<?,Object,?>)__representation__).getOne(identifier.toString(),valueUsageType.name(),fields);	
+			}
 		}
-		return response;
 	}
 	
 	@Override

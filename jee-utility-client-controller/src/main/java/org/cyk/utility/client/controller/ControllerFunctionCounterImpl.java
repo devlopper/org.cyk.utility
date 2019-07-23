@@ -3,11 +3,8 @@ package org.cyk.utility.client.controller;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.ws.rs.core.Response;
-
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
 
 public class ControllerFunctionCounterImpl extends AbstractControllerFunctionImpl implements ControllerFunctionCounter , Serializable {
@@ -20,16 +17,16 @@ public class ControllerFunctionCounterImpl extends AbstractControllerFunctionImp
 	}
 
 	@Override
-	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
-		Response response;
+	protected void __executeRepresentation__() {
 		Object filters = Properties.getFromPath(getProperties(),Properties.FILTERS);
 		String filtersAsString = null;
 		if(filters instanceof String)
 			filtersAsString = (String) filters;
-		response = representation.count(filtersAsString);
-		if(response!=null)
-			setEntitiesCount(response.readEntity(Long.class));
-		return response;
+		if(__representation__ instanceof RepresentationEntity<?, ?, ?>) {
+			__response__ = ((RepresentationEntity<?,?,?>)__representation__).count(filtersAsString);	
+		}
+		if(__response__!=null)
+			setEntitiesCount(__response__.readEntity(Long.class));
 	}
 	
 	@Override

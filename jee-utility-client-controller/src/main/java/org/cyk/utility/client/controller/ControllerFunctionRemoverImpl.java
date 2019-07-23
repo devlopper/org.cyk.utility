@@ -1,14 +1,12 @@
 package org.cyk.utility.client.controller;
 
 import java.io.Serializable;
-import java.util.Collection;
-
-import javax.ws.rs.core.Response;
+import java.util.stream.Collectors;
 
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.type.BooleanHelper;
+import org.cyk.utility.value.ValueUsageType;
 
 public class ControllerFunctionRemoverImpl extends AbstractControllerFunctionImpl implements ControllerFunctionRemover , Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,18 +18,25 @@ public class ControllerFunctionRemoverImpl extends AbstractControllerFunctionImp
 	}
 	
 	@Override
-	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
+	protected void __executeRepresentation__() {
 		Boolean isAll = getProperties().getAll() == null ? Boolean.FALSE : __inject__(BooleanHelper.class).get(getProperties().getAll());
-		Response response = null;
-		if(Boolean.TRUE.equals(isAll))
-			response = representation.deleteAll();
-		else
-			response = representation.deleteOne(dataTransferObjects.iterator().next());
+		if(Boolean.TRUE.equals(isAll)) {
+			if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
+				__response__ = ((RepresentationEntity<?,?,?>)__representation__).deleteAll();
+		}else {
+			if(__representation__ instanceof RepresentationEntity<?, ?, ?>) {
+				if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entitiesSystemIdentifiers__)))
+					__response__ = ((RepresentationEntity<?,Object,?>)__representation__).deleteByIdentifiers(
+							__entitiesSystemIdentifiers__.stream().map(x -> x.toString()).collect(Collectors.toList()), ValueUsageType.SYSTEM.name());
+				else if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entitiesBusinessIdentifiers__)))
+					__response__ = ((RepresentationEntity<?,Object,?>)__representation__).deleteByIdentifiers(
+							__entitiesBusinessIdentifiers__.stream().map(x -> x.toString()).collect(Collectors.toList()), ValueUsageType.BUSINESS.name());
+				//__response__ = ((RepresentationEntity<?,Object,?>)__representation__).deleteOne(__representationEntities__.iterator().next());
+			}
+		}
 		//Object identifierType = (String) getProperty(Properties.VALUE_USAGE_TYPE);
 		//if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entities__)))
 		//	;
-		
-		return response;
 	}
 	
 	@Override

@@ -13,7 +13,6 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.notification.NotificationBuilders;
 import org.cyk.utility.object.Objects;
-import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;
@@ -45,8 +44,7 @@ public abstract class AbstractCommandFunctionImpl extends AbstractControllerFunc
 	}
 
 	@Override
-	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
-		return null;
+	protected void __executeRepresentation__() {
 	}
 
 	@Override

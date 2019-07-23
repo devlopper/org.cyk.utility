@@ -1,6 +1,9 @@
 package org.cyk.utility.server.representation;
 
+import java.util.Collection;
+
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 
@@ -25,5 +28,15 @@ public interface ResponseHelper extends Helper {
 	
 	//Client Error
 	Boolean isStatusClientErrorNotFound(Response response);
+
+	/**/
 	
+	String join(Collection<String> strings);
+	Collection<String> disjoin(String value);
+	
+	ResponseHelper addHeader(ResponseBuilder response,String name,Object value);
+	ResponseHelper addHeader(ResponseBuilder response,String name,Collection<String> strings);
+	
+	String getHeader(Response response,String name);
+	Collection<String> getHeaderAndDisjoin(Response response,String name);
 }

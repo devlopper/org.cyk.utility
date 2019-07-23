@@ -90,11 +90,14 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 				
 					count++;
 				}
-				
+				__injectResponseHelper__().addHeader(__responseBuilder__, Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_SYSTEM, identifiersSystem);
+				__injectResponseHelper__().addHeader(__responseBuilder__, Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_BUSINESS, identifiersBusiness);
+				/*
 				if(__injectCollectionHelper__().isNotEmpty(identifiersSystem))
-					__responseBuilder__.header(Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_SYSTEM, __injectStringHelper__().concatenate(identifiersSystem, ","));
+					__responseBuilder__.header(Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_SYSTEM, Constant.joinHeaderValues(identifiersSystem));
 				if(__injectCollectionHelper__().isNotEmpty(identifiersBusiness))
-					__responseBuilder__.header(Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_BUSINESS, __injectStringHelper__().concatenate(identifiersBusiness, ","));	
+					__responseBuilder__.header(Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_BUSINESS, Constant.joinHeaderValues(identifiersBusiness));	
+				*/
 			}
 		} catch (Exception exception) {
 			__throwable__ = exception;
@@ -230,6 +233,10 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 	@Override
 	public RepresentationFunction setProperty(Object key, Object value) {
 		return (RepresentationFunction) super.setProperty(key, value);
+	}
+	
+	protected static ResponseHelper __injectResponseHelper__() {
+		return __inject__(ResponseHelper.class);
 	}
 	
 	/*

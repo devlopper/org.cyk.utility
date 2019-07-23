@@ -35,7 +35,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	protected Response __response__;
 	protected Class<?> __representationEntityClass__;
 	protected Class<?> __representationClass__;
-	protected Object representation;
+	protected Object __representation__;
 	protected Collection<Object> __representationEntities__;
 	
 	@Override
@@ -52,7 +52,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 		__representationClass__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Representation Class of %s", __entityClass__.getName()),
 				__inject__(DataRepresentationClassGetter.class).setDataClass(__entityClass__).execute().getOutput());
 		
-		representation = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Representation of %s", __entityClass__.getName())
+		__representation__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Representation of %s", __entityClass__.getName())
 				,__inject__(ProxyGetter.class).setClassUniformResourceIdentifierStringRequest(Properties.getFromPath(getProperties(), Properties.REQUEST))
 				.setClazz(__representationClass__).execute().getOutput())
 				;
@@ -60,18 +60,10 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	
 	@Override
 	protected void __execute__(SystemAction action) {
-		if(action!=null /*&& (__injectCollectionHelper__().isNotEmpty(action.getEntities()) || __injectCollectionHelper__().isNotEmpty(action.getEntitiesIdentifiers()))*/) {
-			//Class<?> entityClass = action.getEntityClass(); //action.getEntities().getAt(0).getClass();
-			//Class<?> dataTransferClass = __inject__(DataTransferObjectClassGetter.class).setDataClass(entityClass).execute().getOutput();
-			//if(dataTransferClass == null)
-			//	__injectThrowableHelper__().throwRuntimeException("Data Transfer Class is required for "+entityClass);
-			
-			//Class<?> dataRepresentationClass = __inject__(DataRepresentationClassGetter.class).setDataClass(entityClass).execute().getOutput();
-			//if(dataRepresentationClass == null)
-			//	__injectThrowableHelper__().throwRuntimeException("Data Representation Class is required for "+entityClass);
-			
+		if(__action__!=null) {
 			if(__injectClassHelper__().isInstanceOf(__representationClass__, RepresentationEntity.class)) {
-				__execute__(action, __representationEntityClass__,__representationClass__,__injectInstanceHelper__().buildMany(__representationEntityClass__, action.getEntities().get()));
+				__representationEntities__ = (Collection<Object>) __injectInstanceHelper__().buildMany(__representationEntityClass__, __action__.getEntities().get());
+				__execute__(__action__, __representationEntityClass__,__representationClass__,__representationEntities__);
 			}else
 				__injectThrowableHelper__().throwRuntimeException("Data Representation Class of type "+__representationClass__+" is not an instanceof RepresentationEntity");
 		}
@@ -146,11 +138,10 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 		return Boolean.TRUE;
 	}
 	
-	@SuppressWarnings("rawtypes")
 	protected Response __act__(SystemAction action,Object representation,Collection<?> dataTransferObjects) {
 		if(representation instanceof RepresentationEntity) {
 			//try {
-				__response__ = __actWithRepresentationInstanceOfRepresentationEntity__(action, (RepresentationEntity) representation, dataTransferObjects);
+				__executeRepresentation__();
 				if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isStatusClientErrorNotFound(__response__)))
 					__listenExecuteThrowServiceNotFoundException__();
 				else
@@ -165,7 +156,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 		return __response__;
 	}
 	
-	protected abstract Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation,Collection<?> dataTransferObjects);
+	protected abstract void __executeRepresentation__();
 	
 	protected void __listenExecuteThrowServiceNotFoundException__() {
 		__injectThrowableHelper__().throw_(__inject__(ServiceNotFoundException.class).setSystemAction(__action__).setResponse(__response__));
