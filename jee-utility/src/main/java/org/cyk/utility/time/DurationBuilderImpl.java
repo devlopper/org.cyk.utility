@@ -61,7 +61,7 @@ public class DurationBuilderImpl extends AbstractFunctionWithPropertiesAsInputIm
 	}
 	
 	@Override
-	public DurationBuilder setEndNow() {
+	public DurationBuilder setEndToNow() {
 		return setEnd(System.currentTimeMillis());
 	}
 	

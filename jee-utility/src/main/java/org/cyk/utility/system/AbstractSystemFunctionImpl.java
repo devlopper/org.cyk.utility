@@ -53,6 +53,9 @@ import lombok.experimental.Accessors;
 public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements SystemFunction, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static Boolean MONITORABLE = Boolean.TRUE;
+	public static Boolean LOGGABLE = Boolean.TRUE;
+	
 	private Strings entityFieldNames;
 	private NotificationBuilders notificationBuilders;
 	private Notifications notifications;
@@ -60,6 +63,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	private Boolean isActionRequired;
 	
 	/* Working variables */
+	protected Class<?> __entityClass__;
 	protected SystemAction __action__;
 	protected ClassInstance __classInstance__;
 	protected Throwable __throwable__;
@@ -72,7 +76,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		setMonitorable(Boolean.TRUE).setLoggable(Boolean.TRUE);
+		setMonitorable(MONITORABLE).setLoggable(LOGGABLE);
 	}
 	
 	@Override
@@ -88,6 +92,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	@Override
 	protected void __try__() throws Exception {
 		__action__ = getAction();
+		__entityClass__ = __action__.getEntityClass();
 		if(Boolean.TRUE.equals(__getIsSetConditionsAssertionsProviderFromEntity__())) {
 			__setConditionsAssertionsProvidersIfNull__((Collection<Object>) getEntities(), __action__, null);
 		}

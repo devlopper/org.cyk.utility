@@ -5,14 +5,12 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.field.FieldName;
+import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.field.FieldValueSetter;
+import org.cyk.utility.server.representation.Constant;
 import org.cyk.utility.server.representation.RepresentationEntity;
-import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.exception.ServiceNotFoundException;
-import org.cyk.utility.value.ValueUsageType;
 
 public class ControllerFunctionCreatorImpl extends AbstractControllerFunctionImpl implements ControllerFunctionCreator , Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,16 +25,24 @@ public class ControllerFunctionCreatorImpl extends AbstractControllerFunctionImp
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		Response response = null;
 		response = representation.createOne(dataTransferObjects.iterator().next());
-		if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isStatusClientErrorNotFound(response))) {
-			__injectThrowableHelper__().throw_(__inject__(ServiceNotFoundException.class).setSystemAction(action).setResponse(response));
-		}
-		//TODO identifier should converted to its corresponding type before setting
-		__injectFieldHelper__().setFieldValueSystemIdentifier(action.getEntities().get().iterator().next(), response.getHeaderString("entity-identifier-system"));
-		if(__inject__(FieldHelper.class).getField(action.getEntityClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS) != null) {
-			//TODO identifier should converted to its corresponding type before setting
-			__injectFieldHelper__().setFieldValueBusinessIdentifier(action.getEntities().get().iterator().next(), response.getHeaderString("entity-identifier-business"));
-		}
 		return response;
+	}
+	
+	@Override
+	protected void __listenExecuteServiceFound__() {
+		super.__listenExecuteServiceFound__();
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entities__))) {
+			String[] systemIdentifiers = StringUtils.split(__response__.getHeaderString(Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_SYSTEM),",");
+			String[] businessIdentifiers = StringUtils.split(__response__.getHeaderString(Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_BUSINESS),",");
+			Integer count = 0;
+			for(Object index : __entities__) {
+				if(__entityClassSystemIdentifierField__ != null)
+					__inject__(FieldValueSetter.class).execute(index, __entityClassSystemIdentifierField__, systemIdentifiers[count]);
+				if(__entityClassBusinessIdentifierField__ != null)
+					__inject__(FieldValueSetter.class).execute(index, __entityClassBusinessIdentifierField__, businessIdentifiers[count]);
+				count++;
+			}	
+		}
 	}
 	
 	@Override
@@ -48,7 +54,5 @@ public class ControllerFunctionCreatorImpl extends AbstractControllerFunctionImp
 	public ControllerFunctionCreator setActionEntityClass(Class<?> entityClass) {
 		return (ControllerFunctionCreator) super.setActionEntityClass(entityClass);
 	}
-
-	
 
 }

@@ -22,7 +22,7 @@ import org.cyk.utility.system.layer.SystemLayerRepresentation;
 public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemFunctionServerImpl implements RepresentationFunction, Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	public static LogLevel LOG_LEVEL = LogLevel.INFO;
+	public static LogLevel LOG_LEVEL = LogLevel.TRACE;
 	
 	protected ResponseBuilder __responseBuilder__;
 	protected Class<?> __persistenceEntityClass__;
@@ -92,9 +92,9 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 				}
 				
 				if(__injectCollectionHelper__().isNotEmpty(identifiersSystem))
-					__responseBuilder__.header("entity-identifier-system", __injectStringHelper__().concatenate(identifiersSystem, ","));
+					__responseBuilder__.header(Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_SYSTEM, __injectStringHelper__().concatenate(identifiersSystem, ","));
 				if(__injectCollectionHelper__().isNotEmpty(identifiersBusiness))
-					__responseBuilder__.header("entity-identifier-business", __injectStringHelper__().concatenate(identifiersBusiness, ","));	
+					__responseBuilder__.header(Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_BUSINESS, __injectStringHelper__().concatenate(identifiersBusiness, ","));	
 			}
 		} catch (Exception exception) {
 			__throwable__ = exception;

@@ -21,12 +21,17 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
+		try {
+			__listenBeforeCallCountIs__(LISTEN_BEFORE_CALL_COUNT);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		LISTEN_BEFORE_CALL_COUNT++;
 	}
 	
 	protected void __listenBefore__(){}
 	
+	protected void __listenBeforeCallCountIs__(Integer count) throws Exception{}
 	protected void __listenBeforeCallCountIsZero__() throws Exception{}
 	
 	protected void __listenBeforeInitialiseProperties__(){

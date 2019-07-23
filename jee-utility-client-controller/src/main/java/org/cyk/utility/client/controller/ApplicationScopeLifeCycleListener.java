@@ -17,7 +17,7 @@ import org.cyk.utility.client.controller.proxy.ProxyGetterImpl;
 import org.cyk.utility.client.controller.proxy.ProxyGetterRestEasyFunctionRunnableImpl;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
 import org.cyk.utility.instance.InstanceBuilder;
-import org.cyk.utility.instance.InstanceGetterImpl;
+import org.cyk.utility.instance.InstanceGetter;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.node.SystemNodeClient;
 
@@ -27,8 +27,8 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
+		__setQualifierClassTo__(Controller.class, InstanceGetter.class);
 		__inject__(FunctionRunnableMap.class).set(IconIdentifierGetterImpl.class, IconIdentifierGetterFontAwsome.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(ProxyGetterImpl.class, ProxyGetterRestEasyFunctionRunnableImpl.class,LEVEL);
 		
 		__setQualifierClassTo__(Controller.class, InstanceBuilder.class);

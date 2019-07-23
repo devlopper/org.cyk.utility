@@ -141,7 +141,7 @@ public class MenuBuilderUnitTest extends AbstractWeldUnitTest {
 		for(int i = 1 ; i <= count ; i = i + 1) {
 			DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
 			getMenuBuilder().execute();
-			System.out.println("MenuBuilderUnitTest.build() DURATION : "+__inject__(DurationStringBuilder.class).setDuration(durationBuilder.setEndNow().execute().getOutput()).execute().getOutput());
+			System.out.println("MenuBuilderUnitTest.build() DURATION : "+__inject__(DurationStringBuilder.class).setDuration(durationBuilder.setEndToNow().execute().getOutput()).execute().getOutput());
 		}
 	}
 	

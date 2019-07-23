@@ -81,9 +81,14 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	}
 	
 	@Override
-	public ControllerServiceProvider<OBJECT> deleteAll() {
-		// TODO Auto-generated method stub
+	public ControllerServiceProvider<OBJECT> deleteAll(Properties properties) {
+		__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
 		return null;
+	}
+	
+	@Override
+	public ControllerServiceProvider<OBJECT> deleteAll() {
+		return deleteAll(null);
 	}
 
 	@Override

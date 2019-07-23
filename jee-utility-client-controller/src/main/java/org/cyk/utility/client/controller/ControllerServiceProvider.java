@@ -30,6 +30,7 @@ public interface ControllerServiceProvider<OBJECT> extends SystemServiceProvider
 	ControllerServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects,Properties properties);
 	ControllerServiceProvider<OBJECT> deleteMany(Collection<OBJECT> objects);
 	*/
+	ControllerServiceProvider<OBJECT> deleteAll(Properties properties);
 	ControllerServiceProvider<OBJECT> deleteAll();
 	
 	/* Count */

@@ -9,7 +9,6 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.system.exception.ServiceNotFoundException;
 
 public class ControllerFunctionModifierImpl extends AbstractControllerFunctionImpl implements ControllerFunctionModifier , Serializable {
 	private static final long serialVersionUID = 1L;
@@ -24,13 +23,10 @@ public class ControllerFunctionModifierImpl extends AbstractControllerFunctionIm
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
 		Response response = null;
 		String fields = (String) getProperty(Properties.FIELDS);//TODO get logic from centralized function
-		response = representation.updateOne(dataTransferObjects.iterator().next(),fields);
-		if(Boolean.TRUE.equals(__injectResponseHelper__().isStatusClientErrorNotFound(response))) {
-			__injectThrowableHelper__().throw_(__inject__(ServiceNotFoundException.class).setSystemAction(action).setResponse(response));
-		}			
+		System.out.println("ControllerFunctionModifierImpl.__actWithRepresentationInstanceOfRepresentationEntity__() : "+dataTransferObjects.iterator().next());
+		response = representation.updateOne(dataTransferObjects.iterator().next(),fields);		
 		return response;
 	}
-	
 	
 	@Override
 	public ControllerFunctionModifier addActionEntities(Object... entities) {

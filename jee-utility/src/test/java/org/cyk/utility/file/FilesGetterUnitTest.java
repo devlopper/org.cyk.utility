@@ -75,7 +75,7 @@ public class FilesGetterUnitTest extends AbstractWeldUnitTest {
 			DurationStringBuilder durationStringBuilder = __inject__(DurationStringBuilder.class);
 			durationStringBuilder.getDurationBuilder(Boolean.TRUE).setBeginToNow();
 			files.computeChecksum(Boolean.TRUE);
-			durationStringBuilder.getDurationBuilder(Boolean.TRUE).setEndNow();
+			durationStringBuilder.getDurationBuilder(Boolean.TRUE).setEndToNow();
 			System.out.println("Checksum computed : "+durationStringBuilder.execute().getOutput());
 			files.removeDuplicateByChecksum();
 			System.out.println("Number of file read for performance testing 02 : "+__inject__(CollectionHelper.class).getSize(files));

@@ -138,6 +138,24 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	}
 	
 	@Override
+	public ControllerServiceProvider<ENTITY> deleteAll(Properties properties) {
+		if(properties == null)
+			properties = new Properties();
+		
+		ControllerFunctionRemover function = ____inject____(ControllerFunctionRemover.class);
+		function.setProperty(Properties.ALL, Boolean.TRUE);
+		function.getAction().setEntityClass(getEntityClass());
+		function.copyProperty(Properties.REQUEST,properties);
+		function.copyProperty(Properties.CONTEXT,properties);
+		function.execute();	
+		if(properties!=null) {
+			properties.setResponse(function.getProperties().getResponse());
+			properties.setAction(function.getProperties().getAction());
+		}
+		return this;
+	}
+	
+	@Override
 	public ControllerEntity<ENTITY> select(Collection<Object> identifiers, Properties properties) {
 		return redirect(__inject__(CollectionHelper.class).getFirst(identifiers), properties);
 	}

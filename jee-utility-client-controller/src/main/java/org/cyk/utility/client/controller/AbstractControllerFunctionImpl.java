@@ -13,6 +13,7 @@ import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.internationalization.InternalizationKeyStringType;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
+import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
@@ -22,27 +23,57 @@ import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.AbstractSystemFunctionClientImpl;
 import org.cyk.utility.system.action.SystemAction;
+import org.cyk.utility.system.exception.ServiceNotFoundException;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerController;
 
 public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunctionClientImpl implements ControllerFunction,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static LogLevel LOG_LEVEL = LogLevel.TRACE;
+	
+	protected Response __response__;
+	protected Class<?> __representationEntityClass__;
+	protected Class<?> __representationClass__;
+	protected Object representation;
+	protected Collection<Object> __representationEntities__;
+	
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		setLogLevel(LOG_LEVEL);
+	}
+	
+	@Override
+	protected void __initialiseWorkingVariables__() {
+		super.__initialiseWorkingVariables__();
+		__representationEntityClass__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Transfer Class of %s", __entityClass__.getName())
+				, __inject__(DataTransferObjectClassGetter.class).setDataClass(__entityClass__).execute().getOutput());
+		__representationClass__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Representation Class of %s", __entityClass__.getName()),
+				__inject__(DataRepresentationClassGetter.class).setDataClass(__entityClass__).execute().getOutput());
+		
+		representation = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Representation of %s", __entityClass__.getName())
+				,__inject__(ProxyGetter.class).setClassUniformResourceIdentifierStringRequest(Properties.getFromPath(getProperties(), Properties.REQUEST))
+				.setClazz(__representationClass__).execute().getOutput())
+				;
+	}
+	
 	@Override
 	protected void __execute__(SystemAction action) {
 		if(action!=null /*&& (__injectCollectionHelper__().isNotEmpty(action.getEntities()) || __injectCollectionHelper__().isNotEmpty(action.getEntitiesIdentifiers()))*/) {
-			Class<?> entityClass = action.getEntityClass(); //action.getEntities().getAt(0).getClass();
-			Class<?> dataTransferClass = __inject__(DataTransferObjectClassGetter.class).setDataClass(entityClass).execute().getOutput();
-			if(dataTransferClass == null)
-				__injectThrowableHelper__().throwRuntimeException("Data Transfer Class is required for "+entityClass);
-			Class<?> dataRepresentationClass = __inject__(DataRepresentationClassGetter.class).setDataClass(entityClass).execute().getOutput();
-			if(dataRepresentationClass == null)
-				__injectThrowableHelper__().throwRuntimeException("Data Representation Class is required for "+entityClass);
+			//Class<?> entityClass = action.getEntityClass(); //action.getEntities().getAt(0).getClass();
+			//Class<?> dataTransferClass = __inject__(DataTransferObjectClassGetter.class).setDataClass(entityClass).execute().getOutput();
+			//if(dataTransferClass == null)
+			//	__injectThrowableHelper__().throwRuntimeException("Data Transfer Class is required for "+entityClass);
 			
-			if(__injectClassHelper__().isInstanceOf(dataRepresentationClass, RepresentationEntity.class)) {
-				__execute__(action, dataTransferClass,dataRepresentationClass,__injectInstanceHelper__().buildMany(dataTransferClass, action.getEntities().get()));
+			//Class<?> dataRepresentationClass = __inject__(DataRepresentationClassGetter.class).setDataClass(entityClass).execute().getOutput();
+			//if(dataRepresentationClass == null)
+			//	__injectThrowableHelper__().throwRuntimeException("Data Representation Class is required for "+entityClass);
+			
+			if(__injectClassHelper__().isInstanceOf(__representationClass__, RepresentationEntity.class)) {
+				__execute__(action, __representationEntityClass__,__representationClass__,__injectInstanceHelper__().buildMany(__representationEntityClass__, action.getEntities().get()));
 			}else
-				__injectThrowableHelper__().throwRuntimeException("Data Representation Class of type "+dataRepresentationClass+" is not an instanceof RepresentationEntity");
+				__injectThrowableHelper__().throwRuntimeException("Data Representation Class of type "+__representationClass__+" is not an instanceof RepresentationEntity");
 		}
 	}
 	
@@ -117,10 +148,13 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	
 	@SuppressWarnings("rawtypes")
 	protected Response __act__(SystemAction action,Object representation,Collection<?> dataTransferObjects) {
-		Response response = null;
 		if(representation instanceof RepresentationEntity) {
 			//try {
-				response = __actWithRepresentationInstanceOfRepresentationEntity__(action, (RepresentationEntity) representation, dataTransferObjects);
+				__response__ = __actWithRepresentationInstanceOfRepresentationEntity__(action, (RepresentationEntity) representation, dataTransferObjects);
+				if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isStatusClientErrorNotFound(__response__)))
+					__listenExecuteThrowServiceNotFoundException__();
+				else
+					__listenExecuteServiceFound__();
 			/*} catch (ProcessingException exception) {
 				System.out.println("AbstractControllerFunctionImpl.__act__() : "+exception.getCause());
 				getProperties().setThrowable(exception);
@@ -128,10 +162,16 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 			}*/
 		}else
 			__injectThrowableHelper__().throwRuntimeException("Data Representation of type "+representation.getClass()+" is not an instanceof RepresentationEntity");
-		return response;
+		return __response__;
 	}
 	
 	protected abstract Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation,Collection<?> dataTransferObjects);
+	
+	protected void __listenExecuteThrowServiceNotFoundException__() {
+		__injectThrowableHelper__().throw_(__inject__(ServiceNotFoundException.class).setSystemAction(__action__).setResponse(__response__));
+	}
+	
+	protected void __listenExecuteServiceFound__() {}
 	
 	protected Object getResponseEntityDto(SystemAction action,Object representation,Response response) {
 		return response.readEntity(ResponseEntityDto.class);

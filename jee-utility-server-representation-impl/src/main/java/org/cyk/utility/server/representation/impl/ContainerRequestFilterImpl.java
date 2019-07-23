@@ -2,8 +2,6 @@ package org.cyk.utility.server.representation.impl;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.enterprise.context.Dependent;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -17,12 +15,9 @@ import org.cyk.utility.time.DurationBuilder;
 public class ContainerRequestFilterImpl extends AbstractContainerFilter implements ContainerRequestFilter,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public static final Map<ContainerRequestContext,DurationBuilder> DURATION_BUILDER_MAP = new HashMap<>();
-	
 	public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-		DURATION_BUILDER_MAP.put(containerRequestContext, __inject__(DurationBuilder.class).setBeginToNow());
+		containerRequestContext.setProperty(DurationBuilder.class.getName(), __inject__(DurationBuilder.class).setBeginToNow());
 		Log log = __injectLog__(containerRequestContext,"filter","Request");
-		
 		log.execute();
 	}
 	

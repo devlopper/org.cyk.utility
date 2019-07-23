@@ -10,7 +10,7 @@ public interface DurationBuilder extends FunctionWithPropertiesAsInput<Duration>
 	
 	Long getEnd();
 	DurationBuilder setEnd(Long end);
-	DurationBuilder setEndNow();
+	DurationBuilder setEndToNow();
 	
 	Long getNumberOfMillisecond();
 	DurationBuilder setNumberOfMillisecond(Long numberOfMillisecond);

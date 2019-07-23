@@ -85,7 +85,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 				}
 			}
 			setWindow(window);
-			durationBuilder.setEndNow();
+			durationBuilder.setEndToNow();
 			String title = __getWindowTitleValue__();
 			if(title == null && window!=null && window.getTitle()!=null)
 				title = window.getTitle().getValue();

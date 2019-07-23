@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.exception.ServiceNotFoundException;
+import org.cyk.utility.type.BooleanHelper;
 
 public class ControllerFunctionRemoverImpl extends AbstractControllerFunctionImpl implements ControllerFunctionRemover , Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,12 +21,16 @@ public class ControllerFunctionRemoverImpl extends AbstractControllerFunctionImp
 	
 	@Override
 	protected Response __actWithRepresentationInstanceOfRepresentationEntity__(SystemAction action,@SuppressWarnings("rawtypes") RepresentationEntity representation, Collection<?> dataTransferObjects) {
+		Boolean isAll = getProperties().getAll() == null ? Boolean.FALSE : __inject__(BooleanHelper.class).get(getProperties().getAll());
 		Response response = null;
+		if(Boolean.TRUE.equals(isAll))
+			response = representation.deleteAll();
+		else
+			response = representation.deleteOne(dataTransferObjects.iterator().next());
 		//Object identifierType = (String) getProperty(Properties.VALUE_USAGE_TYPE);
-		response = representation.deleteOne(dataTransferObjects.iterator().next());
-		if(Boolean.TRUE.equals(__injectResponseHelper__().isStatusClientErrorNotFound(response))) {
-			__injectThrowableHelper__().throw_(__inject__(ServiceNotFoundException.class).setSystemAction(action).setResponse(response));
-		}			
+		//if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entities__)))
+		//	;
+		
 		return response;
 	}
 	
