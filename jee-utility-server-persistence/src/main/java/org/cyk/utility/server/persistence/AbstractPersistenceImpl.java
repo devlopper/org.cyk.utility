@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.clazz.Classes;
 import org.cyk.utility.value.ValueHelper;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -163,6 +164,8 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		return this;
 	}
 	
+	/* Delete */
+	
 	@Override
 	public PersistenceServiceProvider<Object> delete(Object object, Properties properties) {
 		PersistenceEntity<Object> persistence = __injectPersistenceLayer__().injectInterfaceClassFromEntity(object);
@@ -173,9 +176,6 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		}
 		return this;
 	}
-	
-	
-	/* Delete */
 	
 	@Override
 	public PersistenceServiceProvider<Object> deleteMany(Collection<Object> objects, Properties properties) {
@@ -205,8 +205,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	public <ENTITY> Persistence deleteByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType) {
 		return deleteByIdentifiers(aClass, identifiers, valueUsageType, null);
 	}
-	
-	
+		
 	@Override
 	public <ENTITY> Persistence deleteBySystemIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,Properties properties) {
 		deleteByIdentifiers(aClass, identifiers, ValueUsageType.SYSTEM, properties);
@@ -218,7 +217,6 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		return deleteBySystemIdentifiers(aClass, identifiers, null);
 	}
 
-	
 	@Override
 	public <ENTITY> Persistence deleteByBusinessIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,Properties properties) {
 		deleteByIdentifiers(aClass, identifiers, ValueUsageType.BUSINESS, properties);
@@ -229,7 +227,6 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	public <ENTITY> Persistence deleteByBusinessIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers) {
 		return deleteByBusinessIdentifiers(aClass, identifiers, null);
 	}
-	
 	
 	@Override
 	public <ENTITY> Persistence deleteByEntityClass(Class<ENTITY> aClass, Properties properties) {
@@ -242,10 +239,19 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 		return this;
 	}
 	
-	
 	@Override
 	public <ENTITY> Persistence deleteByEntityClass(Class<ENTITY> aClass) {
 		return deleteByEntityClass(aClass, null);
+	}
+	
+	@Override
+	public PersistenceServiceProvider<Object> deleteAll(Properties properties) {
+		Classes classes = __inject__(EntityClassesGetter.class).execute().getOutput();
+		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(classes))) {
+			for(Class<?> index : classes.get())
+				deleteByEntityClass(index, properties);
+		}
+		return this;
 	}
 	
 	/**/

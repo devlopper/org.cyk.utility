@@ -13,6 +13,7 @@ import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldHelper;
@@ -38,6 +39,19 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		__inject__(PersistenceQueryRepository.class).add(new PersistenceQuery().setIdentifier("MyEntity.readAll").setValue("SELECT r FROM MyEntity r")
 				.setResultClass(MyEntity.class));
 		__inject__(MyEntityPersistence.class).read();//to trigger initialisation
+	}
+	
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		DependencyInjection.setQualifierClass(EntityClassesGetter.class, org.cyk.utility.__kernel__.annotation.Test.Class.class);
+		try {
+			userTransaction.begin();
+			__inject__(Persistence.class).deleteAll();
+			userTransaction.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
@@ -77,8 +91,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Read MyEntity")
 			.assertContainsLastLogEventMessage("identifier="+myEntity.getIdentifier()).assertContainsLastLogEventMessage("code=mc001");
 		*/
-		
-		__deleteEntitiesAll__(MyEntity.class);
 	}
 	
 	/* Create */
@@ -100,8 +112,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
 		myEntity = __inject__(MyEntityPersistence.class).readByIdentifier(code1, ValueUsageType.BUSINESS);
 		assertionHelper.assertNull(myEntity);
-		
-		__deleteEntitiesAll__(MyEntity.class);
 	}
 	
 	@Test
@@ -502,6 +512,22 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
 	}
 	
+	@Test
+	public void delete_myEntity_all_generic() throws Exception{
+		//DependencyInjection.setQualifierClass(EntityClassesGetter.class, org.cyk.utility.__kernel__.annotation.Test.Class.class);
+		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
+		MyEntity myEntity01 = new MyEntity().setCode(__getRandomCode__());
+		MyEntity myEntity02 = new MyEntity().setCode(__getRandomCode__());
+		userTransaction.begin();
+		__inject__(MyEntityPersistence.class).createMany(Arrays.asList(myEntity01,myEntity02));
+		userTransaction.commit();
+		assertionHelper.assertEquals(2l, __inject__(MyEntityPersistence.class).count());
+		userTransaction.begin();
+		__inject__(Persistence.class).deleteAll();
+		userTransaction.commit();
+		assertionHelper.assertEquals(0l, __inject__(MyEntityPersistence.class).count());
+	}
+	
 	/* page */
 
 	@Test
@@ -554,8 +580,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		properties.setQueryNumberOfTuple(3);
 		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityPersistence.class).read(properties)))
 			.containsExactly("4","5","6");
-		
-		__deleteEntitiesAll__(MyEntity.class);
 	}
 	
 	/* query */
@@ -585,10 +609,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Assert.assertEquals(3, c2.size());
 		
 		Collection<MyEntity> c3 = (Collection<MyEntity>) __inject__(MyEntityPersistence.class).read();
-		Assert.assertEquals(5, c3.size());
-		
-		__deleteEntitiesAll__(MyEntity.class);
-		
+		Assert.assertEquals(5, c3.size());		
 	}
 	
 	@Test
@@ -617,9 +638,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
 		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
 		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123","133","623");
-		
-		__deleteEntitiesAll__(MyEntity.class);
-		
 	}
 	
 	@Test
@@ -632,9 +650,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		
 		Long count = __inject__(MyEntityPersistence.class).count();
 		org.assertj.core.api.Assertions.assertThat(count).isEqualTo(5);
-		
-		__deleteEntitiesAll__(MyEntity.class);
-		
 	}
 	
 	@Test
@@ -646,9 +661,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		properties.setFilters(null).setIsQueryResultPaginated(Boolean.TRUE).setQueryFirstTupleIndex(5).setQueryNumberOfTuple(5).setQueryIdentifier(null);
 		Long count = __inject__(MyEntityPersistence.class).count(properties);
 		org.assertj.core.api.Assertions.assertThat(count).isEqualTo(16);
-		
-		__deleteEntitiesAll__(MyEntity.class);
-		
 	}
 	
 	@Test
@@ -663,8 +675,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Assert.assertNotNull(collection);
 		Assert.assertEquals(3, collection.size());
 		Assert.assertEquals(new Long(3), ____inject____(MyEntityPersistence.class).countByIntegerValue(2));
-		
-		__deleteEntitiesAll__(MyEntity.class);
 	}
 	
 	@Test
@@ -679,8 +689,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();	
 		MyEntity myEntity = ____inject____(MyEntityPersistence.class).readByBusinessIdentifier("e02B");
 		Assert.assertEquals(new Integer(27), myEntity.getIntegerValue());
-		
-		__deleteEntitiesAll__(MyEntity.class);
 	}
 	
 	/* graph */
@@ -723,8 +731,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		//assertionHelper.assertEquals(null, myEntity.getPhones());
 		
 		//assertionHelper.assertNull("field integer value has been loaded", myEntity.getIntegerValue());
-		
-		__deleteEntitiesAll__(MyEntity.class);
 	}
 	
 	/* Rules */
@@ -735,7 +741,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		String code = "a";
 		test.addObjects(new MyEntity().setCode(code),new MyEntity().setCode(code)).setName("MyEntity.code unicity").setExpectedThrowableCauseClassIsSqlException();
 		test.execute();			
-		__deleteEntitiesAll__(MyEntity.class);
 	}
 	
 	@Test
@@ -743,7 +748,9 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		TestPersistenceCreate test = __inject__(TestPersistenceCreate.class);
 		test.addObjects(new MyEntity()).setName("MyEntity.code notnull").setExpectedThrowableCauseClassIsConstraintViolationException().execute();
 		assertThat(__inject__(ThrowableHelper.class).getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage()).contains("propertyPath=code");
-		__deleteEntitiesAll__(MyEntity.class);
 	}
+	
+	/**/
+	
 	
 }

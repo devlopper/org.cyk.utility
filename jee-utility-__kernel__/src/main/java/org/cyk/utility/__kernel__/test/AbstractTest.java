@@ -14,13 +14,9 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 	@BeforeEach 
 	public void listenBefore() {
 		__listenBefore__();
-		
-		if(LISTEN_BEFORE_CALL_COUNT == 0)
-			try {
-				__listenBeforeCallCountIsZero__();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	}
+	
+	protected void __listenBefore__(){
 		try {
 			__listenBeforeCallCountIs__(LISTEN_BEFORE_CALL_COUNT);
 		} catch (Exception e) {
@@ -29,9 +25,12 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 		LISTEN_BEFORE_CALL_COUNT++;
 	}
 	
-	protected void __listenBefore__(){}
+	protected void __listenBeforeCallCountIs__(Integer count) throws Exception{
+		if(count != null && count == 0)
+			__listenBeforeCallCountIsZero__();
+			
+	}
 	
-	protected void __listenBeforeCallCountIs__(Integer count) throws Exception{}
 	protected void __listenBeforeCallCountIsZero__() throws Exception{}
 	
 	protected void __listenBeforeInitialiseProperties__(){

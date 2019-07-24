@@ -2,6 +2,7 @@ package org.cyk.utility.mapping;
 
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.Mapper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,8 @@ public class MapperGetterUnitTest extends AbstractWeldUnitTest {
 
 	@Test
 	public void get_source_destination() {
-		MapperSourceDestination<Source, Destination> mapper = __inject__(MapperSourceDestinationGetter.class).setSourceClass(Source.class).setDestinationClass(Destination.class).execute().getOutput();
+		//MapperSourceDestination<Source, Destination> mapper = 
+		__inject__(MapperSourceDestinationGetter.class).setSourceClass(Source.class).setDestinationClass(Destination.class).execute().getOutput();
 		//System.out.println("MapperGetterUnitTest.get_source_destination() ::: "+mapper);
 		//Destination destination = SourceDestinationMapper.MAPPER.mapFromType1(new Source().setString01("s01").setInteger01(12));
 		//assertThat(destination.getString01()).isEqualTo("s01");
@@ -36,4 +38,11 @@ public class MapperGetterUnitTest extends AbstractWeldUnitTest {
 		private String integer01;
 		
 	}
+	
+	@Mapper
+	public static abstract class SourceMapper extends AbstractMapperSourceDestinationImpl<Source, Destination> {
+		private static final long serialVersionUID = 1L;
+
+	}
+	
 }

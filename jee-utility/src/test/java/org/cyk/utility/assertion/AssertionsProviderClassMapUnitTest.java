@@ -18,6 +18,7 @@ public class AssertionsProviderClassMapUnitTest extends AbstractWeldUnitTest {
 		assertionHelper.assertEquals(C01Assertions.class,assertionsProviderClass);
 		AssertionsProvider assertionsProvider = __inject__(assertionsProviderClass);
 		assertionHelper.assertNotNull(assertionsProvider);
+		((AssertionsProviderFor<?>)assertionsProvider).addFors(new C01());
 		Collection<Assertion> assertions = assertionsProvider.execute().getOutput();
 		assertionHelper.assertNull(assertions);
 	}
@@ -30,18 +31,23 @@ public class AssertionsProviderClassMapUnitTest extends AbstractWeldUnitTest {
 		assertionHelper.assertEquals(C02Assertions.class,assertionsProviderClass);
 		AssertionsProvider assertionsProvider = __inject__(assertionsProviderClass);
 		assertionHelper.assertNotNull(assertionsProvider);
+		((AssertionsProviderFor<C02>)assertionsProvider).addFors(new C02());
 		Collection<Assertion> assertions = assertionsProvider.execute().getOutput();
 		assertionHelper.assertNull(assertions);
 		
 		assertionsProvider = __inject__(assertionsProviderClass);
 		assertionHelper.assertNotNull(assertionsProvider);
-		assertions = assertionsProvider.setFilter("create").execute().getOutput();
+		assertionsProvider.setFilter("create");
+		((AssertionsProviderFor<C02>)assertionsProvider).addFors(new C02());
+		assertions = assertionsProvider.execute().getOutput();
 		assertionHelper.assertNotNull(assertions);
 		assertionHelper.assertEquals(1, assertions.size());
 		
 		assertionsProvider = __inject__(assertionsProviderClass);
 		assertionHelper.assertNotNull(assertionsProvider);
-		assertions = assertionsProvider.setFilter("update").execute().getOutput();
+		assertionsProvider.setFilter("update");
+		((AssertionsProviderFor<C02>)assertionsProvider).addFors(new C02());
+		assertions = assertionsProvider.execute().getOutput();
 		assertionHelper.assertNotNull(assertions);
 		assertionHelper.assertEquals(2, assertions.size());
 	}
@@ -56,18 +62,21 @@ public class AssertionsProviderClassMapUnitTest extends AbstractWeldUnitTest {
 		assertionHelper.assertNotNull(assertionsProvider);
 		assertionsProvider =  __inject__(AssertionsProviderClassMap.class).inject(C03.class);
 		assertionHelper.assertNotNull(assertionsProvider);
+		((AssertionsProviderFor<?>)assertionsProvider).addFors(new C03());
 		Collection<Assertion> assertions = assertionsProvider.execute().getOutput();
 		assertionHelper.assertNotNull(assertions);
 		assertionHelper.assertEquals(5, assertions.size());
 		
 		assertionsProvider = __inject__(assertionsProviderClass);
 		assertionHelper.assertNotNull(assertionsProvider);
+		((AssertionsProviderFor<?>)assertionsProvider).addFors(new C03());
 		assertions = assertionsProvider.setFilter("create").execute().getOutput();
 		assertionHelper.assertNotNull(assertions);
 		assertionHelper.assertEquals(1, assertions.size());
 		
 		assertionsProvider = __inject__(assertionsProviderClass);
 		assertionHelper.assertNotNull(assertionsProvider);
+		((AssertionsProviderFor<?>)assertionsProvider).addFors(new C03());
 		assertions = assertionsProvider.setFilter("update").execute().getOutput();
 		assertionHelper.assertNotNull(assertions);
 		assertionHelper.assertEquals(2, assertions.size());
@@ -96,7 +105,7 @@ public class AssertionsProviderClassMapUnitTest extends AbstractWeldUnitTest {
 		
 		@Override
 		protected void ____execute____(Function<?, ?> function,Object filter,C02 c02) {
-			if(filter!=null && getFilter().equals("create")) {
+			if(filter!=null && filter.equals("create")) {
 				__add__(__inject__(Assertion.class));
 			}else if(filter!=null && getFilter().equals("update")) {
 				__add__(__inject__(Assertion.class),__inject__(Assertion.class));

@@ -13,9 +13,8 @@ public abstract class AbstractAssertionsProviderForImpl<T> extends AbstractAsser
 	
 	@Override
 	protected void ____execute____(Function<?, ?> function,Object filter) {
-		Objects fors = getFors();
-		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(fors)))
-			____execute____(function,filter,(Collection<T>) fors.get());
+		Objects fors = __injectValueHelper__().returnOrThrowIfBlank("assertions provider fors", getFors());	
+		____execute____(function,filter,(Collection<T>) fors.get());
 	}
 	
 	protected void ____execute____(Function<?, ?> function,Object filter,Collection<T> fors) {

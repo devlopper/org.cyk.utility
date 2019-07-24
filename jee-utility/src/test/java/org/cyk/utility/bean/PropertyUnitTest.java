@@ -2,7 +2,7 @@ package org.cyk.utility.bean;
 
 import java.io.Serializable;
 
-import org.cyk.utility.__kernel__.annotation.Default;
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
@@ -15,11 +15,13 @@ public class PropertyUnitTest extends AbstractWeldUnitTest {
 
 	@Test
 	public void whenValueIsNull_whenDerivableIsNull_whenDerivedIsNull_resultIsNull() {
+		DependencyInjection.setQualifierClass(PropertyValueGetter.class, org.cyk.utility.__kernel__.annotation.Test.Class.class);
 		assertionHelper.assertEquals(null,__inject__(Property.class).read());
 	}
 	
 	@Test
 	public void whenValueIs12_whenDerivableIsNull_whenDerivedIsNull_resultIsNull() {
+		DependencyInjection.setQualifierClass(PropertyValueGetter.class, org.cyk.utility.__kernel__.annotation.Test.Class.class);
 		Property property = __inject__(Property.class);
 		property.setValue(12);
 		assertionHelper.assertEquals(null,__inject__(PropertyValueGetter.class).setProperty(property).execute().getOutput());
@@ -27,6 +29,7 @@ public class PropertyUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void whenValueIs12_whenDerivableIsTrue_whenDerivedIsNull_resultIsNull() {
+		DependencyInjection.setQualifierClass(PropertyValueGetter.class, org.cyk.utility.__kernel__.annotation.Test.Class.class);
 		Property property = __inject__(Property.class);
 		property.setIsDerivable(Boolean.TRUE).setValue(12);
 		assertionHelper.assertEquals(12,__inject__(PropertyValueGetter.class).setProperty(property).execute().getOutput());
@@ -34,6 +37,7 @@ public class PropertyUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void whenC1_P01Is3_whenDerivableIsTrue_whenDerivedIsNull_resultIs3() {
+		DependencyInjection.setQualifierClass(PropertyValueGetter.class, org.cyk.utility.__kernel__.annotation.Test.Class.class);
 		C1 c1 = __inject__(C1.class);
 		Property property = __inject__(Property.class);
 		property.setIsDerivable(Boolean.TRUE).setValue(3);
@@ -43,10 +47,10 @@ public class PropertyUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void whenC2_P01Is3_whenDerivableIsTrue_whenDerivedIsNull_resultIs6() {
+		DependencyInjection.setQualifierClass(PropertyValueGetter.class, org.cyk.utility.__kernel__.annotation.Test.Class.class);
 		Property property = __inject__(Property.class);
 		property.setParent(__inject__(C2.class));
 		property.setIsDerivable(Boolean.TRUE).setValue(3);
-		property.addValueGetterClassQualifiers(Default.class);
 		assertionHelper.assertEquals(6,property.read());
 	}
 	
@@ -66,7 +70,7 @@ public class PropertyUnitTest extends AbstractWeldUnitTest {
 		
 	}
 	
-	@Default
+	@org.cyk.utility.__kernel__.annotation.Test
 	public static class PropertyValueGetterImpl extends AbstractPropertyValueGetterImpl implements Serializable {
 		private static final long serialVersionUID = 1L;
 
