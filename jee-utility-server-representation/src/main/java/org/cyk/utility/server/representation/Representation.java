@@ -2,6 +2,10 @@ package org.cyk.utility.server.representation;
 
 import java.util.Collection;
 
+import javax.ws.rs.DELETE;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.Response;
+
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -10,7 +14,8 @@ import org.cyk.utility.value.ValueUsageType;
  * @author Christian
  *
  */
-public interface Representation extends RepresentationServiceProvider<Object,Object> {
+@Path(Representation.PATH)
+public interface Representation extends RepresentationServiceProvider {
 
 	/* Create */
 	
@@ -30,15 +35,18 @@ public interface Representation extends RepresentationServiceProvider<Object,Obj
 	
 	Representation updateMany(Collection<Object> objects);
 	*/
+	
 	/* Delete */
 	
 	Representation delete(Object object);
 	
 	Representation deleteMany(Collection<Object> objects);
 	
-	Representation deleteAll();
+	@DELETE
+	@Path(PATH_DELETE_ALL)
+	Response deleteAll();
 	
-	/* Count */
+	/**/
 	
-	//Long count();
+	String PATH = "__service__";
 }

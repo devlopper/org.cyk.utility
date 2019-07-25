@@ -246,7 +246,7 @@ public abstract class AbstractPersistenceImpl extends AbstractPersistenceService
 	
 	@Override
 	public PersistenceServiceProvider<Object> deleteAll(Properties properties) {
-		Classes classes = __inject__(EntityClassesGetter.class).execute().getOutput();
+		Classes classes = __inject__(PersistableClassesGetter.class).execute().getOutput();
 		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(classes))) {
 			for(Class<?> index : classes.get())
 				deleteByEntityClass(index, properties);

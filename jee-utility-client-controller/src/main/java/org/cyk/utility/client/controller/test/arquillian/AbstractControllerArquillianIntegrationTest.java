@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.ControllerEntity;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerController;
@@ -15,6 +16,12 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractControllerArquillianIntegrationTest extends AbstractSystemClientArquillianIntegrationTestImpl<ControllerEntity> implements SystemClientIntegrationTest<ControllerEntity>, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		__inject__(Controller.class).deleteAll();
+	}
+	
 	@Override
 	protected <ENTITY> void ____createEntity____(ENTITY entity, ControllerEntity controller) {
 		controller.create(entity);

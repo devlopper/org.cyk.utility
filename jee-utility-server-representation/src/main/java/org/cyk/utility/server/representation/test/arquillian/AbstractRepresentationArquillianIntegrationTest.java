@@ -11,6 +11,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity;
+import org.cyk.utility.server.representation.Representation;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
@@ -23,6 +24,12 @@ import org.junit.Assert;
 @SuppressWarnings({"rawtypes","unchecked"})
 public abstract class AbstractRepresentationArquillianIntegrationTest extends AbstractSystemServerArquillianIntegrationTestImpl<RepresentationEntity> implements SystemServerIntegrationTest<RepresentationEntity>, Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		__inject__(Representation.class).deleteAll();
+	}
 	
 	@Override
 	protected <ENTITY> void ____createEntity____(ENTITY entity, RepresentationEntity representation) {

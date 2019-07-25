@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.server.business.Business;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
 import org.cyk.utility.value.ValueUsageType;
@@ -63,11 +65,13 @@ public class RepresentationImpl extends AbstractObject implements Representation
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	/* Delete */
+	
 	@Override
-	public Representation deleteAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public Response deleteAll() {
+		__inject__(Business.class).deleteAll();
+		return Response.ok().build();
 	}
 
 	

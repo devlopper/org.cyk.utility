@@ -21,9 +21,6 @@ public interface Controller extends ControllerServiceProvider<Object> {
 	/* Update */
 	
 	/* Delete */
-	Controller deleteAll(Collection<Class<?>> classes);
-	
-	Controller deleteAll(Class<?>...classes);
 	
 	<ENTITY> Controller deleteByClassByIdentififerByValueUsageType(Class<ENTITY> clazz,Object identifier,ValueUsageType valueUsageType);
 	

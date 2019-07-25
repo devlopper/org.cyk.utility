@@ -5,36 +5,8 @@ import org.cyk.utility.__kernel__.constant.ConstantString;
 /*
  * All method must be annotated with HTTP method and return a Response object
  */
-public interface RepresentationServiceProvider<OBJECT,DTO> {
+public interface RepresentationServiceProvider {
 
-	/* Create */
-	/*
-	RepresentationServiceProvider<OBJECT,DTO> create(OBJECT object,Properties properties);
-	RepresentationServiceProvider<OBJECT,DTO> create(OBJECT object);
-	
-	RepresentationServiceProvider<OBJECT,DTO> createMany(Collection<OBJECT> objects,Properties properties);
-	RepresentationServiceProvider<OBJECT,DTO> createMany(Collection<OBJECT> objects);
-	*/
-	/* Read */ 
-	
-	/* Update */
-	/*RepresentationServiceProvider<OBJECT,DTO> update(OBJECT object,Properties properties);
-	RepresentationServiceProvider<OBJECT,DTO> update(OBJECT object);
-	
-	RepresentationServiceProvider<OBJECT,DTO> updateMany(Collection<OBJECT> objects,Properties properties);
-	RepresentationServiceProvider<OBJECT,DTO> updateMany(Collection<OBJECT> objects);
-	*/
-	/* Delete */
-	/*RepresentationServiceProvider<OBJECT,DTO> delete(OBJECT object,Properties properties);
-	RepresentationServiceProvider<OBJECT,DTO> delete(OBJECT object);
-	
-	RepresentationServiceProvider<OBJECT,DTO> deleteMany(Collection<OBJECT> objects,Properties properties);
-	RepresentationServiceProvider<OBJECT,DTO> deleteMany(Collection<OBJECT> objects);
-	*/
-	/* Count */
-	
-	/**/
-	
 	String __SLASH__ = "/";
 	String __MANY__ = ConstantString.MANY;
 	String __IDENTIFIERS__ = ConstantString.IDENTIFIERS;

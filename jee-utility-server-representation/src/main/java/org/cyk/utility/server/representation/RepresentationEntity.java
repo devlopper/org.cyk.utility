@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
  * @author Christian
  *
  */
-public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION> extends RepresentationServiceProvider<PERSISTENCE_ENTITY,ENTITY> {
+public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION> extends RepresentationServiceProvider {
 
 	/* Create */
 	@POST

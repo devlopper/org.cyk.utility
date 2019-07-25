@@ -20,7 +20,7 @@ import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
 
-public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINESS extends BusinessEntity<PERSISTENCE_ENTITY>,ENTITY extends AbstractEntityFromPersistenceEntity,ENTITY_COLLECTION> extends AbstractRepresentationServiceProviderImpl<PERSISTENCE_ENTITY,ENTITY> implements RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION>,Serializable {
+public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINESS extends BusinessEntity<PERSISTENCE_ENTITY>,ENTITY extends AbstractEntityFromPersistenceEntity,ENTITY_COLLECTION> extends AbstractRepresentationServiceProviderImpl implements RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Getter private Class<ENTITY> entityClass;

@@ -13,7 +13,6 @@ import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldHelper;
@@ -43,15 +42,8 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	
 	@Override
 	protected void __listenBefore__() {
+		//DependencyInjection.setQualifierClass(PersistableClassesGetter.class, org.cyk.utility.__kernel__.annotation.Test.Class.class);
 		super.__listenBefore__();
-		DependencyInjection.setQualifierClass(EntityClassesGetter.class, org.cyk.utility.__kernel__.annotation.Test.Class.class);
-		try {
-			userTransaction.begin();
-			__inject__(Persistence.class).deleteAll();
-			userTransaction.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	@Test

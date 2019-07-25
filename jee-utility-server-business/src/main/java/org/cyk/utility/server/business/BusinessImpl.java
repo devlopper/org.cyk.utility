@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
+import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.value.ValueUsageType;
 
 @ApplicationScoped
@@ -182,12 +183,11 @@ public class BusinessImpl extends AbstractBusinessServiceProviderImpl<Object> im
 	
 	@Override @Transactional
 	public Business deleteAll(Properties properties) {
-		// TODO Find class hierarchy and delete from leaf to root
-		Collection<Class<?>> classes = null;
-		return deleteByClasses(classes);
+		__inject__(Persistence.class).deleteAll();
+		return this;
 	}
 	
-	@Override
+	@Override @Transactional
 	public Business deleteAll() {
 		return deleteAll(null);
 	}

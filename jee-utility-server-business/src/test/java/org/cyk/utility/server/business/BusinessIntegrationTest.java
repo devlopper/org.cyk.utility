@@ -32,10 +32,15 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 	
 	@Override
 	protected void __listenBeforeCallCountIsZero__() throws Exception {
-		super.__listenBeforeCallCountIsZero__();
-		__inject__(AssertionsProviderClassMap.class).set(MyEntity.class, MyEntityAssertionsProvider.class);
+		super.__listenBeforeCallCountIsZero__();		
 		//AbstractPersistenceFunctionImpl.LOG_LEVEL = LogLevel.INFO;
 		//AbstractBusinessFunctionImpl.LOG_LEVEL = LogLevel.INFO;
+	}
+	
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		__inject__(AssertionsProviderClassMap.class).set(MyEntity.class, MyEntityAssertionsProvider.class);
 	}
 	
 	@Test
@@ -85,12 +90,10 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		assertionHelper.assertNull(__inject__(MyEntityBusiness.class).findByIdentifier(code2, ValueUsageType.BUSINESS));
 	}
 	
-	
 	@Test
 	public void create_myEntity_WithLong1Null(){
 		MyEntity myEntity = new MyEntity().setCode("c01").setLong1(1l);
 		__inject__(MyEntityBusiness.class).create(myEntity);
-		__deleteEntitiesAll__(MyEntity.class);
 	}
 	
 	@Test
@@ -147,7 +150,6 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 			.containsOnly(code1,code2,code3);
 		__inject__(MyEntityBusiness.class).deleteBySystemIdentifiers(Arrays.asList(id1,id2,id3));
 	}
-	
 	
 	@Test
 	public void find_myEntity_many_by_identifier_business() throws Exception{
@@ -373,13 +375,24 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 	}
 	
 	@Test
-	public void delete_myEntity_all_generic() throws Exception{
+	public void delete_myEntity_all_generic_byClass() throws Exception{
 		assertionHelper.assertEquals(0l, __inject__(MyEntityBusiness.class).count());
 		MyEntity myEntity01 = new MyEntity().setCode(__getRandomCode__());
 		MyEntity myEntity02 = new MyEntity().setCode(__getRandomCode__());
 		__inject__(MyEntityBusiness.class).createMany(Arrays.asList(myEntity01,myEntity02));
 		assertionHelper.assertEquals(2l, __inject__(MyEntityBusiness.class).count());
 		__inject__(Business.class).deleteByClasses(MyEntity.class);
+		assertionHelper.assertEquals(0l, __inject__(MyEntityBusiness.class).count());
+	}
+	
+	@Test
+	public void delete_myEntity_all_generic() throws Exception{
+		assertionHelper.assertEquals(0l, __inject__(MyEntityBusiness.class).count());
+		MyEntity myEntity01 = new MyEntity().setCode(__getRandomCode__());
+		MyEntity myEntity02 = new MyEntity().setCode(__getRandomCode__());
+		__inject__(MyEntityBusiness.class).createMany(Arrays.asList(myEntity01,myEntity02));
+		assertionHelper.assertEquals(2l, __inject__(MyEntityBusiness.class).count());
+		__inject__(Business.class).deleteAll();
 		assertionHelper.assertEquals(0l, __inject__(MyEntityBusiness.class).count());
 	}
 	
@@ -423,8 +436,6 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		properties.setQueryNumberOfTuple(3);
 		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, __inject__(MyEntityBusiness.class).find(properties)))
 			.containsExactly("4","5","6");
-		
-		__inject__(MyEntityBusiness.class).deleteAll();
 	}
 	
 	/* Save */
@@ -435,7 +446,6 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(0);
 		__inject__(MyEntityBusiness.class).saveMany(list);
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(1);
-		__inject__(MyEntityBusiness.class).deleteAll();
 	}
 	
 	@Test
@@ -446,7 +456,6 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(1);
 		__inject__(MyEntityBusiness.class).saveMany(list);
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(1);
-		__inject__(MyEntityBusiness.class).deleteAll();
 	}
 	
 	@Test
@@ -458,7 +467,6 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(0);
 		__inject__(MyEntityBusiness.class).saveByBatch(list, 3);
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(100);
-		__inject__(MyEntityBusiness.class).deleteAll();
 	}
 	
 	@Test
@@ -472,7 +480,6 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(10);
 		__inject__(MyEntityBusiness.class).saveByBatch(list, 3);
 		assertThat(__inject__(MyEntityBusiness.class).count()).isEqualTo(10);
-		__inject__(MyEntityBusiness.class).deleteAll();
 	}
 	
 	/* Rules */

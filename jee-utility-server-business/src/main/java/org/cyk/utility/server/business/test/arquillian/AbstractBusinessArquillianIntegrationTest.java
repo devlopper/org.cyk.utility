@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.server.business.Business;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerBusiness;
@@ -15,6 +16,12 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractBusinessArquillianIntegrationTest extends AbstractSystemServerArquillianIntegrationTestImpl<BusinessEntity> implements SystemServerIntegrationTest<BusinessEntity>, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		__inject__(Business.class).deleteAll();
+	}
+	
 	@Override
 	protected <ENTITY> void ____createEntity____(ENTITY entity, BusinessEntity business) {
 		business.create(entity);

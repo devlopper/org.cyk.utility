@@ -21,6 +21,18 @@ public abstract class AbstractPersistenceArquillianIntegrationTest extends Abstr
 
 	@Inject protected UserTransaction userTransaction;
 	
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		try {
+			userTransaction.begin();
+			__inject__(Persistence.class).deleteAll();
+			userTransaction.commit();
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+	}
+	
 	public <ENTITY> void ____createEntity____(ENTITY entity,PersistenceEntity persistence){
 		try {
 			userTransaction.begin();

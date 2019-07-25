@@ -182,7 +182,6 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		__inject__(MyEntityRepresentation.class).deleteByIdentifiers(Arrays.asList(id1,id2,id3),null);
 	}
 	
-	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void find_myEntity_many_by_identifier_business() throws Exception{
@@ -364,14 +363,23 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		MyEntityDto myEntity02 = new MyEntityDto().setCode(code2);
 		__inject__(MyEntityRepresentation.class).createMany(Arrays.asList(myEntity01,myEntity02),null);
 		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
-		try {
-			__inject__(MyEntityRepresentation.class).deleteAll();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		__inject__(MyEntityRepresentation.class).deleteAll();
 		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
 	}
+	
+	@Test
+	public void delete_myEntity_all_generic() {
+		String code1 = __getRandomCode__();
+		String code2 = __getRandomCode__();
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		MyEntityDto myEntity01 = new MyEntityDto().setCode(code1);
+		MyEntityDto myEntity02 = new MyEntityDto().setCode(code2);
+		__inject__(MyEntityRepresentation.class).createMany(Arrays.asList(myEntity01,myEntity02),null);
+		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		__inject__(Representation.class).deleteAll();
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+	}
+	
 	/*
 	/* Page */
 	
@@ -397,8 +405,6 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		
 		dtos = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(Boolean.TRUE, 4l, 3l, null, null).getEntity();
 		assertThat(__inject__(FieldHelper.class).getSystemIdentifiers(String.class, dtos)).containsExactly("4","5","6");
-		
-		__inject__(MyEntityRepresentation.class).deleteAll();
 	}
 	
 	/* Save */

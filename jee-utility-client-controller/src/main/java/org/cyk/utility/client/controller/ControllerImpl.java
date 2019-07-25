@@ -7,6 +7,8 @@ import javax.inject.Singleton;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.data.Data;
+import org.cyk.utility.client.controller.proxy.ProxyGetter;
+import org.cyk.utility.server.representation.Representation;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -90,21 +92,11 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 	}
 
 	@Override
-	public ControllerServiceProvider<Object> deleteAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Controller deleteAll(Collection<Class<?>> classes) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Controller deleteAll(Class<?>... classes) {
-		// TODO Auto-generated method stub
-		return null;
+	public Controller deleteAll(Properties properties) {
+		Representation representation =  (Representation) __inject__(ProxyGetter.class).setClassUniformResourceIdentifierStringRequest(Properties.getFromPath(properties, Properties.REQUEST))
+		.setClazz(Representation.class).execute().getOutput();
+		representation.deleteAll();
+		return this;
 	}
 
 	@Override
