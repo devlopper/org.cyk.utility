@@ -18,7 +18,7 @@ public class InstanceGetterImpl extends AbstractInstanceGetterImpl implements Se
 		if(FieldName.IDENTIFIER.equals(getFieldName())) {
 			Properties properties = new Properties().setValueUsageType(getValueUsageType());
 			properties.copyFrom(getProperties(),Properties.CONTEXT,Properties.REQUEST);
-			Object one = __inject__(Controller.class).readOne(getClazz(), getValue(), properties);
+			Object one = __inject__(Controller.class).readByIdentifier(getClazz(), getValue(),getValueUsageType(), properties);
 			collection = new ArrayList<>();
 			collection.add(one);
 		}		

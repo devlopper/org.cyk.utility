@@ -71,7 +71,7 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	@Override
 	public <T> T instanciateOne(Class<T> aClass) {
 		try {
-			return aClass.newInstance();
+			return aClass == null ? null : (aClass.isInterface() ? __inject__(aClass) : aClass.newInstance());
 		} catch (Exception exception) {
 			throw new RuntimeException(exception);
 		}

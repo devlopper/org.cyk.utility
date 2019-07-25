@@ -40,12 +40,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		__inject__(MyEntityPersistence.class).read();//to trigger initialisation
 	}
 	
-	@Override
-	protected void __listenBefore__() {
-		//DependencyInjection.setQualifierClass(PersistableClassesGetter.class, org.cyk.utility.__kernel__.annotation.Test.Class.class);
-		super.__listenBefore__();
-	}
-	
 	@Test
 	public void buildQueryIdentifierStringFromName(){
 		Assert.assertEquals("MyEntity.readByValue", __inject__(PersistenceQueryIdentifierStringBuilder.class)

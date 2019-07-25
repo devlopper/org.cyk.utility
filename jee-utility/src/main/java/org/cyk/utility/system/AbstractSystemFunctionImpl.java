@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
@@ -70,7 +71,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	protected Collection<Object> __entities__,__entitiesSystemIdentifiers__,__entitiesBusinessIdentifiers__;
 	protected Field __entityClassSystemIdentifierField__,__entityClassBusinessIdentifierField__;
 	protected ValueUsageType __entityIdentifierValueUsageType__;
-	protected Boolean __isBatchable__;
+	protected Boolean __isBatchable__,__isMany__;
 	protected Integer __batchSize__;
 	
 	@Override
@@ -93,6 +94,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	protected void __try__() throws Exception {
 		__action__ = getAction();
 		__entityClass__ = __action__.getEntityClass();
+		__isMany__ = (Boolean) Properties.getFromPath(getProperties(),Properties.IS_MANY);
 		if(Boolean.TRUE.equals(__getIsSetConditionsAssertionsProviderFromEntity__())) {
 			__setConditionsAssertionsProvidersIfNull__((Collection<Object>) getEntities(), __action__, null);
 		}
@@ -201,7 +203,7 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		
 		if(__injectCollectionHelper__().isNotEmpty(__entities__)) {
 			if(identifiers == null)
-				identifiers = new ArrayList<>();
+				identifiers = new LinkedHashSet<>();
 			
 			Object identifier = null;
 			for(Object index : __entities__) {
@@ -219,13 +221,13 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		if(__entityIdentifierValueUsageType__.equals(valueUsageType)) {
 			if(getEntityIdentifier() != null) {
 				if(identifiers == null)
-					identifiers = new ArrayList<>();
+					identifiers = new LinkedHashSet<>();
 				identifiers.add(getEntityIdentifier());
 			}	
 			
 			if(__injectCollectionHelper__().isNotEmpty(getAction().getEntitiesIdentifiers())) {
 				if(identifiers == null)
-					identifiers = new ArrayList<>();
+					identifiers = new LinkedHashSet<>();
 				identifiers.addAll(getAction().getEntitiesIdentifiers().get());
 			}
 		}

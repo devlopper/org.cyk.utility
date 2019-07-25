@@ -8,9 +8,8 @@ import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.instance.InstanceHelper;
+import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.object.ObjectToStringBuilder;
-import org.cyk.utility.object.Objects;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
@@ -29,10 +28,10 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 
 	@Override
 	protected void __executeRepresentation__() {
-		Objects identifiers = __action__.getEntitiesIdentifiers();
+		//Objects identifiers = __action__.getEntitiesIdentifiers();
 		Properties properties = getProperties();
 		String fields = (String) Properties.getFromPath(properties, Properties.FIELDS);
-		if(__injectCollectionHelper__().isEmpty(identifiers)) {
+		if(__isMany__ == null || __isMany__) {
 			Boolean isPageable = __inject__(BooleanHelper.class).get(Properties.getFromPath(properties,Properties.IS_PAGEABLE));
 			Long from = __injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.FROM));
 			Long count = __injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.COUNT));
@@ -44,39 +43,46 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 				else
 					filtersAsString = __injectByQualifiersClasses__(ObjectToStringBuilder.class,JavaScriptObjectNotation.Class.class).setObject(filters).execute().getOutput();
 			}
-			if(__representation__ instanceof RepresentationEntity<?, ?, ?>) {
+			if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
 				__response__ = ((RepresentationEntity<?,Object,?>)__representation__).getMany(isPageable,from,count,fields,filtersAsString);	
-			}
-			
 		}else {
-			Object identifier = identifiers.getFirst();
-			ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
-			if(valueUsageType == null)
-				valueUsageType = ValueUsageType.SYSTEM;
-			if(__representation__ instanceof RepresentationEntity<?, ?, ?>) {
-				__response__ = ((RepresentationEntity<?,Object,?>)__representation__).getOne(identifier.toString(),valueUsageType.name(),fields);	
+			//Object identifier = identifiers.getFirst();
+			//ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();
+			//if(valueUsageType == null)
+			//	valueUsageType = ValueUsageType.SYSTEM;
+			if(__injectCollectionHelper__().getSize(__entitiesSystemIdentifiers__) == 1) {
+				if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
+					__response__ = ((RepresentationEntity<?,Object,?>)__representation__).getOne(__entitiesSystemIdentifiers__.iterator().next().toString(),ValueUsageType.SYSTEM.name(),fields);
+			}else if(__injectCollectionHelper__().getSize(__entitiesBusinessIdentifiers__) == 1) {
+				if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
+					__response__ = ((RepresentationEntity<?,Object,?>)__representation__).getOne(__entitiesBusinessIdentifiers__.iterator().next().toString(),ValueUsageType.BUSINESS.name(),fields);
+			}else {
+				
 			}
+				
 		}
 	}
 	
 	@Override
 	protected Object getResponseEntityDto(SystemAction action, Object representation, Response response) {
-		Object object;
+		Object object = null;
 		Class<?> dtoClass = __inject__(ControllerLayer.class).getDataTransferClassFromEntityClass(action.getEntityClass());
-		Objects identifiers = action.getEntitiesIdentifiers();
+		//Objects identifiers = action.getEntitiesIdentifiers();
 		Properties properties = new Properties();
 		properties.copyFrom(getProperties(), Properties.CONTEXT,Properties.REQUEST);
-		if(__injectCollectionHelper__().isEmpty(identifiers)) {
-			Collection<?> dtos = (Collection<?>) response.readEntity(__inject__(TypeHelper.class)
-					.instanciateGenericCollectionParameterizedTypeForJaxrs(Collection.class,dtoClass));
-			object = new ArrayList<Object>();
-			for(Object index : dtos)
-				((Collection<Object>)object).add(__inject__(InstanceHelper.class).buildOne(__inject__(action.getEntityClass()).getClass(), index,properties));
-			setEntities((Collection<?>) object);
+		if(__isMany__ == null || __isMany__) {
+			Collection<?> dtos = (Collection<?>) response.readEntity(__inject__(TypeHelper.class).instanciateGenericCollectionParameterizedTypeForJaxrs(Collection.class,dtoClass));
+			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(dtos))) {
+				object = new ArrayList<Object>();
+				((Collection<Object>)object).addAll(__inject__(MappingHelper.class).getSources(dtos,__inject__(__entityClass__).getClass()));
+				setEntities((Collection<?>) object);	
+			}
 		}else {
 			object = response.readEntity(dtoClass);
-			object = __injectInstanceHelper__().buildOne(__inject__(action.getEntityClass()).getClass(), object,properties);
-			setEntity(object);	
+			if(object != null) {
+				object = __inject__(MappingHelper.class).getSource(object,__inject__(__entityClass__).getClass());
+				setEntity(object);	
+			}
 		}
 		return object;
 	}

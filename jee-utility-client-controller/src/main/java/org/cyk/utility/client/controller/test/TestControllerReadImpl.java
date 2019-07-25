@@ -1,6 +1,5 @@
 package org.cyk.utility.client.controller.test;
 
-import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
@@ -14,7 +13,7 @@ public class TestControllerReadImpl extends AbstractTestControllerFunctionIntegr
 	protected void __perform__(Object object) throws Exception {
 		Boolean mustUnexist =  Boolean.TRUE.equals(__inject__(CollectionHelper.class).contains(getUnexistingObjectIdentifiers(), object));
 		ValueUsageType valueUsageType = getIdentifierValueUsageType();
-		Object one = __inject__(Controller.class).readOne(getObjectClass(),object,new Properties().setValueUsageType(valueUsageType));
+		Object one = __inject__(Controller.class).readByIdentifier(getObjectClass(),object,valueUsageType);
 		assertionHelper.assertEquals(getObjectClass()+" with "+valueUsageType+" identifier <"+object+">"+(mustUnexist ? "" : " not")+" found", !mustUnexist,one!=null);
 		if(mustUnexist) {
 			

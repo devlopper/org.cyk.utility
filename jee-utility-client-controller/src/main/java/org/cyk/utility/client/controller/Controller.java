@@ -12,11 +12,27 @@ public interface Controller extends ControllerServiceProvider<Object> {
 	/* Create */
 	
 	/* Read */ 
-	<ENTITY> ENTITY readOne(Class<ENTITY> aClass,Object identifier,Properties properties);
-	<ENTITY> ENTITY readOne(Class<ENTITY> aClass,Object identifier);
 	
-	<ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass,Properties properties);
-	<ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass);
+	<ENTITY> Collection<ENTITY> read(Class<ENTITY> aClass, Properties properties);
+	<ENTITY> Collection<ENTITY> read(Class<ENTITY> aClass);
+	
+	<ENTITY> Collection<ENTITY> readByIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
+	<ENTITY> Collection<ENTITY> readByIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,ValueUsageType valueUsageType);
+	
+	<ENTITY> Collection<ENTITY> readBySystemIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,Properties properties);
+	<ENTITY> Collection<ENTITY> readBySystemIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers);
+	
+	<ENTITY> Collection<ENTITY> readByBusinessIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers,Properties properties);
+	<ENTITY> Collection<ENTITY> readByBusinessIdentifiers(Class<ENTITY> aClass,Collection<Object> identifiers);
+	
+	<ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass,Object identifier,ValueUsageType valueUsageType,Properties properties);
+	<ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass,Object identifier,ValueUsageType valueUsageType);
+	
+	<ENTITY> ENTITY readBySystemIdentifier(Class<ENTITY> aClass,Object identifier,Properties properties);
+	<ENTITY> ENTITY readBySystemIdentifier(Class<ENTITY> aClass,Object identifier);
+	
+	<ENTITY> ENTITY readByBusinessIdentifier(Class<ENTITY> aClass,Object identifier,Properties properties);
+	<ENTITY> ENTITY readByBusinessIdentifier(Class<ENTITY> aClass,Object identifier);
 	
 	/* Update */
 	

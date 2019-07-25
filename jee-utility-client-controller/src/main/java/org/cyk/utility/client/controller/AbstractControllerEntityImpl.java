@@ -51,56 +51,8 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	
 	@Override
 	public Collection<ENTITY> read(Properties properties) {
-		return readMany(properties);
-	}
-	
-	@Override
-	public Collection<ENTITY> read() {
-		//TODO derive properties
-		return read(null);
-	}
-	
-	@Override
-	public ENTITY readOne(Object identifier, Properties properties) {
 		ControllerFunctionReader function = ____inject____(ControllerFunctionReader.class);
-		function.setEntityIdentifier(identifier);
-		function.setEntityIdentifierValueUsageType(properties == null ? ValueUsageType.SYSTEM : properties.getValueUsageType());
-		function.setEntityClass(getEntityClass());
-		function.copyProperty(Properties.REQUEST,properties);
-		function.copyProperty(Properties.CONTEXT,properties);
-		function.copyProperty(Properties.FIELDS,properties);
-		//function.getAction().getEntities(Boolean.TRUE).add(object);
-		function.execute();
-		if(properties!=null) {
-			properties.setResponse(function.getProperties().getResponse());
-			properties.setAction(function.getProperties().getAction());
-		}
-		return (ENTITY) function.getEntity();
-	}
-	
-	@Override
-	public ENTITY readOne(Object identifier, ValueUsageType valueUsageType) {
-		return readOne(identifier, new Properties().setValueUsageType(valueUsageType));
-	}
-	
-	@Override
-	public ENTITY readOne(Object identifier) {
-		return readOne(identifier,ValueUsageType.SYSTEM);
-	}
-	
-	@Override
-	public ENTITY readOneByBusinessIdentifier(Object identifier) {
-		return readOne(identifier,ValueUsageType.BUSINESS);
-	}
-	
-	@Override
-	public ENTITY readOneBySystemIdentifier(Object identifier) {
-		return readOne(identifier,ValueUsageType.SYSTEM);
-	}
-	
-	@Override
-	public Collection<ENTITY> readMany(Properties properties) {
-		ControllerFunctionReader function = ____inject____(ControllerFunctionReader.class);
+		function.setProperty(Properties.IS_MANY, Boolean.TRUE);
 		function.setEntityClass(getEntityClass());
 		function.setDataTransferClass(dataTransferClass);
 		__copyReadProperties__(function, properties);
@@ -114,8 +66,94 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	}
 	
 	@Override
-	public Collection<ENTITY> readMany() {
-		return readMany(null);
+	public Collection<ENTITY> read() {
+		return read(null);
+	}
+	
+	@Override
+	public Collection<ENTITY> readByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
+		ControllerFunctionReader function = ____inject____(ControllerFunctionReader.class);
+		function.setProperty(Properties.IS_MANY, Boolean.TRUE);
+		function.setEntityClass(getEntityClass());
+		function.setDataTransferClass(dataTransferClass);
+		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifiers);
+		__copyReadProperties__(function, properties);
+		function.setEntityIdentifierValueUsageType(valueUsageType);
+		//function.getAction().getEntities(Boolean.TRUE).add(object);
+		function.execute();
+		if(properties!=null) {
+			properties.setResponse(function.getProperties().getResponse());
+			properties.setAction(function.getProperties().getAction());
+		}
+		return (Collection<ENTITY>) function.getEntities();
+	}
+	
+	@Override
+	public Collection<ENTITY> readByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType) {
+		return readByIdentifiers(identifiers, valueUsageType, null);
+	}
+	
+	@Override
+	public Collection<ENTITY> readBySystemIdentifiers(Collection<Object> identifiers, Properties properties) {
+		return readByIdentifiers(identifiers, ValueUsageType.SYSTEM, properties);
+	}
+	
+	@Override
+	public Collection<ENTITY> readBySystemIdentifiers(Collection<Object> identifiers) {
+		return readBySystemIdentifiers(identifiers, null);
+	}
+	
+	@Override
+	public Collection<ENTITY> readByBusinessIdentifiers(Collection<Object> identifiers, Properties properties) {
+		return readByIdentifiers(identifiers, ValueUsageType.BUSINESS, properties);
+	}
+	
+	@Override
+	public Collection<ENTITY> readByBusinessIdentifiers(Collection<Object> identifiers) {
+		return readByBusinessIdentifiers(identifiers, null);
+	}
+	
+	@Override
+	public ENTITY readByIdentifier(Object identifier, ValueUsageType valueUsageType, Properties properties) {
+		ControllerFunctionReader function = ____inject____(ControllerFunctionReader.class);
+		function.setProperty(Properties.IS_MANY, Boolean.FALSE);
+		function.setEntityClass(getEntityClass());
+		function.setDataTransferClass(dataTransferClass);
+		function.setEntityIdentifier(identifier);// getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifier);
+		__copyReadProperties__(function, properties);
+		function.setEntityIdentifierValueUsageType(valueUsageType);
+		//function.getAction().getEntities(Boolean.TRUE).add(object);
+		function.execute();
+		if(properties!=null) {
+			properties.setResponse(function.getProperties().getResponse());
+			properties.setAction(function.getProperties().getAction());
+		}
+		return (ENTITY) function.getEntity();
+	}
+	
+	@Override
+	public ENTITY readByIdentifier(Object identifier, ValueUsageType valueUsageType) {
+		return readByIdentifier(identifier, valueUsageType, null);
+	}
+	
+	@Override
+	public ENTITY readBySystemIdentifier(Object identifier, Properties properties) {
+		return readByIdentifier(identifier, ValueUsageType.SYSTEM, properties);
+	}
+	
+	@Override
+	public ENTITY readBySystemIdentifier(Object identifier) {
+		return readBySystemIdentifier(identifier, null);
+	}
+	
+	@Override
+	public ENTITY readByBusinessIdentifier(Object identifier, Properties properties) {
+		return readByIdentifier(identifier, ValueUsageType.BUSINESS, properties);
+	}
+	
+	@Override
+	public ENTITY readByBusinessIdentifier(Object identifier) {
+		return readByBusinessIdentifier(identifier, null);
 	}
 	
 	@Override

@@ -7,17 +7,28 @@ import org.cyk.utility.value.ValueUsageType;
 
 public interface ControllerEntity<ENTITY> extends ControllerServiceProvider<ENTITY> {
 
+	/* Read */
+	
 	Collection<ENTITY> read(Properties properties);
 	Collection<ENTITY> read();
 	
-	ENTITY readOne(Object identifier,Properties properties);
-	ENTITY readOne(Object identifier,ValueUsageType valueUsageType);
-	ENTITY readOne(Object identifier);
-	ENTITY readOneBySystemIdentifier(Object identifier);
-	ENTITY readOneByBusinessIdentifier(Object identifier);
+	Collection<ENTITY> readByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType,Properties properties);
+	Collection<ENTITY> readByIdentifiers(Collection<Object> identifiers,ValueUsageType valueUsageType);
 	
-	Collection<ENTITY> readMany(Properties properties);
-	Collection<ENTITY> readMany();
+	Collection<ENTITY> readBySystemIdentifiers(Collection<Object> identifiers,Properties properties);
+	Collection<ENTITY> readBySystemIdentifiers(Collection<Object> identifiers);
+	
+	Collection<ENTITY> readByBusinessIdentifiers(Collection<Object> identifiers,Properties properties);
+	Collection<ENTITY> readByBusinessIdentifiers(Collection<Object> identifiers);
+	
+	ENTITY readByIdentifier(Object identifier,ValueUsageType valueUsageType,Properties properties);
+	ENTITY readByIdentifier(Object identifier,ValueUsageType valueUsageType);
+	
+	ENTITY readBySystemIdentifier(Object identifier,Properties properties);
+	ENTITY readBySystemIdentifier(Object identifier);
+	
+	ENTITY readByBusinessIdentifier(Object identifier,Properties properties);
+	ENTITY readByBusinessIdentifier(Object identifier);
 	
 	Long count(Properties properties);
 	Long count();

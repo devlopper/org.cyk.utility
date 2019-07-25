@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
@@ -17,10 +18,44 @@ import org.cyk.utility.instance.InstanceHelper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.ObjectFactory;
 
 public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> extends AbstractMapperImpl implements MapperSourceDestination<SOURCE,DESTINATION>,Serializable {
 	private static final long serialVersionUID = 1L;
-
+	/*
+	protected Class<SOURCE> sourceClass;
+	protected Class<DESTINATION> destinationClass;
+	
+	protected Class<SOURCE> __getSourceClass__() {
+		return sourceClass == null ? sourceClass = (Class<SOURCE>) DependencyInjection.inject(ClassHelper.class).getParameterAt(getClass(), 0, Object.class) : sourceClass;
+	}
+	
+	protected Class<DESTINATION> __getDestinationClass__() {
+		return destinationClass == null ? destinationClass = (Class<DESTINATION>) DependencyInjection.inject(ClassHelper.class).getParameterAt(getClass(), 1, Object.class) : destinationClass;
+	}
+	*/
+	/*
+	@ObjectFactory
+	public SOURCE instantiateSource(DESTINATION destination) {
+		return DependencyInjection.inject(ClassHelper.class).instanciateOne(__getSourceClass__());
+	}
+	*/
+	/*
+	protected SOURCE __instantiateSource__(DESTINATION destination) {
+		return DependencyInjection.inject(ClassHelper.class).instanciateOne(sourceClass);
+	}
+	*/
+	/*
+	@ObjectFactory
+	public DESTINATION instantiateDestination(SOURCE source) {
+		return DependencyInjection.inject(ClassHelper.class).instanciateOne(__getDestinationClass__());
+	}
+	*/
+	/*
+	protected DESTINATION __instantiateDestination__(SOURCE source) {
+		return DependencyInjection.inject(ClassHelper.class).instanciateOne(destinationClass);
+	}
+	*/
 	@BeforeMapping
 	protected void listenGetDestinationBefore(SOURCE source,@MappingTarget DESTINATION destination) {
 		__listenGetDestinationBefore__(source, destination);

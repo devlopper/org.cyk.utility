@@ -4677,7 +4677,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getIsMany() {
+		return get(IS_MANY);
+	}
+
+	public Properties setIsMany(Object isMany) {
+		set(IS_MANY, isMany);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String IS_MANY = "IS_MANY";
 	public static final String IS_BATCHABLE = "IS_BATCHABLE";
 	public static final String BATCH_SIZE = "BATCH_SIZE";
 	public static final String TIME_ZONE = "TIME_ZONE";

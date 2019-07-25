@@ -7,4 +7,6 @@ public interface MapperSourceDestinationClassNameGetter extends FunctionWithProp
 	Class<?> getKlass();
 	MapperSourceDestinationClassNameGetter setKlass(Class<?> klass);
 	
+	String getClassName();
+	MapperSourceDestinationClassNameGetter setClassName(String className);
 }

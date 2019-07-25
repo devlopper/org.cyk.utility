@@ -48,7 +48,7 @@ public class LazyDataModel<OBJECT> extends org.primefaces.model.LazyDataModel<OB
 
 		try {
 			Controller controller = DependencyInjection.inject(Controller.class);
-			objects = controller.readMany(klass,properties);
+			objects = controller.read(klass,properties);
 			Response response = (Response) properties.getResponse();					
 			if(Boolean.TRUE.equals(DependencyInjection.inject(ResponseHelper.class).isFamilyClientError(response))) {
 				;//getProperties().setThrowable(__inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()).setResponse(response));

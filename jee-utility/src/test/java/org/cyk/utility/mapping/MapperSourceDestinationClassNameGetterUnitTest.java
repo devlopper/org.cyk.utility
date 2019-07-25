@@ -13,8 +13,13 @@ public class MapperSourceDestinationClassNameGetterUnitTest extends AbstractWeld
 	private static final long serialVersionUID = 1L;
 
 	@Test
-	public void get_name() {
+	public void get_name_byClass() {
 		assertThat(__inject__(MapperSourceDestinationClassNameGetter.class).setKlass(Class.class).execute().getOutput()).isEqualTo(ClassMapper.class.getName());
+	}
+	
+	@Test
+	public void get_name_byClassName() {
+		assertThat(__inject__(MapperSourceDestinationClassNameGetter.class).setClassName(Class.class.getName()).execute().getOutput()).isEqualTo(ClassMapper.class.getName());
 	}
 	
 	/**/
@@ -23,8 +28,14 @@ public class MapperSourceDestinationClassNameGetterUnitTest extends AbstractWeld
 	public static class Class {
 		
 	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class ClassImpl {
+		
+	}
  
 	public static interface ClassMapper {
 		
 	}
+	
 }

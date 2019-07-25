@@ -14,6 +14,7 @@ import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.internationalization.InternalizationKeyStringType;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.notification.NotificationBuilder;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
@@ -62,7 +63,9 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	protected void __execute__(SystemAction action) {
 		if(__action__!=null) {
 			if(__injectClassHelper__().isInstanceOf(__representationClass__, RepresentationEntity.class)) {
-				__representationEntities__ = (Collection<Object>) __injectInstanceHelper__().buildMany(__representationEntityClass__, __action__.getEntities().get());
+				//__representationEntities__ = (Collection<Object>) __injectInstanceHelper__().buildMany(__representationEntityClass__, __action__.getEntities().get());
+				if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entities__)))
+					__representationEntities__ = (Collection<Object>) __inject__(MappingHelper.class).getDestinations(__entities__, __representationEntityClass__);
 				__execute__(__action__, __representationEntityClass__,__representationClass__,__representationEntities__);
 			}else
 				__injectThrowableHelper__().throwRuntimeException("Data Representation Class of type "+__representationClass__+" is not an instanceof RepresentationEntity");

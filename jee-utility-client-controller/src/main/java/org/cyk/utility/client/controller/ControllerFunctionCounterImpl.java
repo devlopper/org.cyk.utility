@@ -22,9 +22,8 @@ public class ControllerFunctionCounterImpl extends AbstractControllerFunctionImp
 		String filtersAsString = null;
 		if(filters instanceof String)
 			filtersAsString = (String) filters;
-		if(__representation__ instanceof RepresentationEntity<?, ?, ?>) {
+		if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
 			__response__ = ((RepresentationEntity<?,?,?>)__representation__).count(filtersAsString);	
-		}
 		if(__response__!=null)
 			setEntitiesCount(__response__.readEntity(Long.class));
 	}

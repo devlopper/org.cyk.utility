@@ -8,11 +8,17 @@ public class MapperSourceDestinationClassNameGetterImpl extends AbstractFunction
 	private static final long serialVersionUID = 1L;
 	
 	private Class<?> klass;
+	private String className;
 	
 	@Override
 	protected String __execute__() throws Exception {
-		Class<?> klass = __injectValueHelper__().returnOrThrowIfBlank("class", getKlass());
-		String name = String.format("%sMapper", klass.getName());
+		String className = getClassName();
+		if(Boolean.TRUE.equals(__injectStringHelper__().isBlank(className))) {
+			Class<?> klass = getKlass();
+			if(klass != null)
+				className = klass.getName();
+		}
+		String name = String.format("%sMapper", __injectValueHelper__().returnOrThrowIfBlank("class name", className));
 		return name;
 	}
 	
@@ -27,4 +33,14 @@ public class MapperSourceDestinationClassNameGetterImpl extends AbstractFunction
 		return this;
 	}
 	
+	@Override
+	public String getClassName() {
+		return className;
+	}
+	
+	@Override
+	public MapperSourceDestinationClassNameGetter setClassName(String className) {
+		this.className = className;
+		return this;
+	}
 }

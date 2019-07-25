@@ -143,7 +143,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	}
 	
 	protected Object __readOne__(SystemAction systemAction,Class<?> klass,Object identifier,Properties properties) {
-		return __inject__(Controller.class).readOne(klass, identifier,properties);	
+		return __inject__(Controller.class).readBySystemIdentifier(klass, identifier,properties);	
 	}
 	
 	protected abstract void __execute__(WindowBuilder window,SystemAction systemAction,Class<? extends Form> formClass,Class<? extends Row> rowClass);

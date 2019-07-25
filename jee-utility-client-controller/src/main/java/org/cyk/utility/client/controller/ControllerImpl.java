@@ -40,29 +40,10 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 		return this;
 	}*/
 	
+	/* Delete */
+	
 	@Override
-	public <ENTITY> ENTITY readOne(Class<ENTITY> aClass, Object identifier, Properties properties) {
-		ENTITY entity;
-		ControllerEntity<ENTITY> controller = (ControllerEntity<ENTITY>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
-		if(controller == null){
-			ControllerFunctionReader function = __inject__(ControllerFunctionReader.class);
-			function.getProperties().copyFrom(properties, Properties.VALUE_USAGE_TYPE);
-			function.copyProperty(Properties.REQUEST,properties);
-			function.copyProperty(Properties.CONTEXT,properties);
-			entity = (ENTITY) function.setEntityClass(aClass).setEntityIdentifier(identifier).execute().getProperties().getEntity();
-		}else{
-			entity = controller.readOne(identifier, properties);
-		}
-		return entity;
-	}
-
-	@Override
-	public <ENTITY> ENTITY readOne(Class<ENTITY> aClass, Object identifier) {
-		return readOne(aClass, identifier, null);
-	}
-
-	@Override
-	public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass, Properties properties) {
+	public <ENTITY> Collection<ENTITY> read(Class<ENTITY> aClass, Properties properties) {
 		Collection<ENTITY> entities;
 		ControllerEntity<ENTITY> controller = (ControllerEntity<ENTITY>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
 		if(controller == null){
@@ -70,15 +51,110 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 			__copyReadProperties__(function, properties);
 			entities = (Collection<ENTITY>) function.setActionEntityClass(aClass).execute().getProperties().getEntities();
 		}else{
-			entities = controller.readMany(properties);
+			entities = controller.read(properties);
 		}
 		return entities;
 	}
 
 	@Override
-	public <ENTITY> Collection<ENTITY> readMany(Class<ENTITY> aClass) {
-		return readMany(aClass, null);
+	public <ENTITY> Collection<ENTITY> read(Class<ENTITY> aClass) {
+		return read(aClass, null);
 	}
+	
+	@Override
+	public <ENTITY> Collection<ENTITY> readByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType, Properties properties) {
+		Collection<ENTITY> entities = null;
+		ControllerEntity<ENTITY> controller = (ControllerEntity<ENTITY>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
+		if(controller == null){
+			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		}else{
+			entities = controller.readByIdentifiers(identifiers, valueUsageType, properties);
+		}
+		return entities;
+	}
+	
+	@Override
+	public <ENTITY> Collection<ENTITY> readByIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,ValueUsageType valueUsageType) {
+		return readByIdentifiers(aClass, identifiers, valueUsageType, null);
+	}
+	
+	@Override
+	public <ENTITY> Collection<ENTITY> readBySystemIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,Properties properties) {
+		return readByIdentifiers(aClass, identifiers, ValueUsageType.SYSTEM, properties);
+	}
+	
+	@Override
+	public <ENTITY> Collection<ENTITY> readBySystemIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers) {
+		return readBySystemIdentifiers(aClass, identifiers,null);
+	}
+	
+	@Override
+	public <ENTITY> Collection<ENTITY> readByBusinessIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers,Properties properties) {
+		return readByIdentifiers(aClass, identifiers, ValueUsageType.BUSINESS, properties);
+	}
+	
+	@Override
+	public <ENTITY> Collection<ENTITY> readByBusinessIdentifiers(Class<ENTITY> aClass, Collection<Object> identifiers) {
+		return readByBusinessIdentifiers(aClass, identifiers,null);
+	}
+	
+	@Override
+	public <ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass, Object identifier, ValueUsageType valueUsageType,Properties properties) {
+		ENTITY entity = null;
+		ControllerEntity<ENTITY> controller = (ControllerEntity<ENTITY>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
+		if(controller == null){
+			__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented();
+		}else{
+			entity = controller.readByIdentifier(identifier, valueUsageType, properties);
+		}
+		return entity;
+	}
+	
+	@Override
+	public <ENTITY> ENTITY readByIdentifier(Class<ENTITY> aClass, Object identifier, ValueUsageType valueUsageType) {
+		return readByIdentifier(aClass, identifier, valueUsageType, null);
+	}
+	
+	@Override
+	public <ENTITY> ENTITY readBySystemIdentifier(Class<ENTITY> aClass, Object identifier, Properties properties) {
+		return readByIdentifier(aClass, identifier, ValueUsageType.SYSTEM, properties);
+	}
+	
+	@Override
+	public <ENTITY> ENTITY readBySystemIdentifier(Class<ENTITY> aClass, Object identifier) {
+		return readBySystemIdentifier(aClass, identifier, null);
+	}
+	
+	@Override
+	public <ENTITY> ENTITY readByBusinessIdentifier(Class<ENTITY> aClass, Object identifier, Properties properties) {
+		return readByIdentifier(aClass, identifier, ValueUsageType.BUSINESS, properties);
+	}
+	
+	@Override
+	public <ENTITY> ENTITY readByBusinessIdentifier(Class<ENTITY> aClass, Object identifier) {
+		return readByBusinessIdentifier(aClass, identifier, null);
+	}
+	
+	@Override
+	public <ENTITY> Long count(Class<ENTITY> aClass, Properties properties) {
+		Long count = null;
+		ControllerEntity<ENTITY> controller = (ControllerEntity<ENTITY>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
+		if(controller == null){
+			ControllerFunctionCounter function = __inject__(ControllerFunctionCounter.class);
+			__copyCountProperties__(function, properties);
+			count = (Long) function.setActionEntityClass(aClass).execute().getProperties().getCount();
+		}else{
+			count = controller.count(properties);
+		}
+		return count;
+	}
+
+	@Override
+	public <ENTITY> Long count(Class<ENTITY> aClass) {
+		return count(aClass, null);
+	}
+	
+	/* Delete */
 	
 	@Override
 	public ControllerServiceProvider<Object> delete(Object object, Properties properties) {
@@ -106,25 +182,6 @@ public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object
 		return null;
 	}
 
-	@Override
-	public <ENTITY> Long count(Class<ENTITY> aClass, Properties properties) {
-		Long count = null;
-		ControllerEntity<ENTITY> controller = (ControllerEntity<ENTITY>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);
-		if(controller == null){
-			ControllerFunctionCounter function = __inject__(ControllerFunctionCounter.class);
-			__copyCountProperties__(function, properties);
-			count = (Long) function.setActionEntityClass(aClass).execute().getProperties().getCount();
-		}else{
-			count = controller.count(properties);
-		}
-		return count;
-	}
-
-	@Override
-	public <ENTITY> Long count(Class<ENTITY> aClass) {
-		return count(aClass, null);
-	}
-	
 	@Override
 	public <ENTITY> Controller select(Class<ENTITY> aClass, Collection<Object> identifiers, Properties properties) {
 		ControllerEntity<Object> controller = (ControllerEntity<Object>)  __injectControllerLayer__().injectInterfaceClassFromEntityClass(aClass);

@@ -10,7 +10,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.navigation.Navigation;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.client.controller.navigation.NavigationRedirector;
-import org.cyk.utility.instance.InstanceHelper;
+import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.action.SystemAction;
@@ -36,7 +36,7 @@ public abstract class AbstractControllerFunctionRedirectorImpl extends AbstractC
 		Response response = null;
 		Properties properties = new Properties().setValueUsageType(ValueUsageType.SYSTEM);	
 		//TODO is it necessary ?
-		Object entity = __inject__(Controller.class).readOne(__action__.getEntityClass(),__action__.getEntitiesIdentifiers().getFirst(),properties);
+		//Object entity = __inject__(Controller.class).readBySystemIdentifier(__action__.getEntityClass(),__action__.getEntitiesIdentifiers().getFirst(),properties);
 		response = (Response) properties.getResponse();			
 		if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isStatusSuccessfulOk(response))) {
 			/*
@@ -67,25 +67,25 @@ public abstract class AbstractControllerFunctionRedirectorImpl extends AbstractC
 	
 	@Override
 	protected Boolean __isProcessReponse__() {
-		//Response will be close by redirection so no need for further processing
+		//Response will be closed by redirection so no need for further processing
 		return Boolean.FALSE;
 	}
 	
 	@Override
 	protected Object getResponseEntityDto(SystemAction action, Object representation, Response response) {
-		Object object;
+		//TODO tis code should be removed because it is like a duplicated one in Reader
+		Object object = null;
 		Class<?> dtoClass = __inject__(ControllerLayer.class).getDataTransferClassFromEntityClass(action.getEntityClass());
 		Objects identifiers = action.getEntitiesIdentifiers();
 		if(__injectCollectionHelper__().isEmpty(identifiers)) {
 			Collection<?> dtos = (Collection<?>) response.readEntity(__inject__(TypeHelper.class)
 					.instanciateGenericCollectionParameterizedTypeForJaxrs(Collection.class,dtoClass));
 			object = new ArrayList<Object>();
-			for(Object index : dtos)
-				((Collection<Object>)object).add(__inject__(InstanceHelper.class).buildOne(__inject__(action.getEntityClass()).getClass(), index));
+			((Collection<Object>)object).addAll(__inject__(MappingHelper.class).getSources(dtos,__inject__(__entityClass__).getClass()));
 			setEntities((Collection<?>) object);
 		}else {
 			object = response.readEntity(dtoClass);
-			object = __injectInstanceHelper__().buildOne(__inject__(action.getEntityClass()).getClass(), object);
+			object = __inject__(MappingHelper.class).getSource(object,__inject__(__entityClass__).getClass());
 			setEntity(object);	
 		}
 		return object;

@@ -69,7 +69,7 @@ public class ChoicesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 			}
 			
 			try {
-				_objects_ = __inject__(Controller.class).readMany(choiceClass,properties);
+				_objects_ = __inject__(Controller.class).read(choiceClass,properties);
 				Response response = (Response) properties.getResponse();					
 				if(Boolean.TRUE.equals(__inject__(ResponseHelper.class).isFamilyClientError(response)))
 					getProperties().setThrowable(__inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()).setResponse(response));

@@ -108,6 +108,7 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	}
 	
 	protected static void __copyReadProperties__(ControllerFunction function,Properties properties) {
+		__copyCommonProperties__(function, properties);
 		function.copyProperty(Properties.REQUEST,properties);
 		function.copyProperty(Properties.CONTEXT,properties);
 		

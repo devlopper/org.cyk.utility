@@ -10,6 +10,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
 import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCodedAndNamed;
 import org.cyk.utility.random.RandomHelper;
+import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> extends AbstractControllerEntityImpl<ENTITY> implements ControllerEntityPersistedInCollection<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -53,26 +54,22 @@ public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> 
 	}
 	
 	@Override
-	public ENTITY readOne(Object identifier, Properties properties) {
-		for(ENTITY index : collection) {
-			if(__injectFieldHelper__().getFieldValueSystemIdentifier(index).toString().equals(identifier.toString()))
-				return index;
-		}
-		return null;
-	}
-	
-	@Override
-	public ENTITY readOneByBusinessIdentifier(Object identifier) {
-		for(ENTITY index : collection) {
-			if(__injectFieldHelper__().getFieldValueBusinessIdentifier(index).toString().equals(identifier.toString()))
-				return index;
-		}
-		return null;
-	}
-	
-	@Override
-	public Collection<ENTITY> readMany(Properties properties) {
+	public Collection<ENTITY> readByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
 		return __filter__(collection, properties,Boolean.FALSE);
+	}
+	
+	@Override
+	public ENTITY readByIdentifier(Object identifier, ValueUsageType valueUsageType, Properties properties) {
+		for(ENTITY index : collection) {
+			if(ValueUsageType.BUSINESS.equals(valueUsageType)) {
+				if(__injectFieldHelper__().getFieldValueBusinessIdentifier(index).toString().equals(identifier.toString()))
+					return index;
+			}else {
+				if(__injectFieldHelper__().getFieldValueSystemIdentifier(index).toString().equals(identifier.toString()))
+					return index;
+			}
+		}
+		return null;
 	}
 	
 	@Override
