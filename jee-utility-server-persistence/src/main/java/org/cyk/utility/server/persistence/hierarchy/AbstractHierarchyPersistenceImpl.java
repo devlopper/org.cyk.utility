@@ -9,7 +9,7 @@ import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 
-public abstract class AbstractHierarchyPersistenceImpl<ENTITY extends AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy<?,?>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends HierarchyCollectionInstance<ENTITY, HIERARCHY>> extends AbstractPersistenceEntityImpl<HIERARCHY> implements HierarchyPersistence<ENTITY, HIERARCHY, HIERARCHIES>,Serializable {
+public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical<?,?>,HIERARCHIES extends HierarchyCollectionInstance<ENTITY, HIERARCHY>> extends AbstractPersistenceEntityImpl<HIERARCHY> implements HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String readByParentsCodes,readByChildrenCodes;
@@ -37,7 +37,7 @@ public abstract class AbstractHierarchyPersistenceImpl<ENTITY extends AbstractId
 	@Override
 	public HIERARCHIES readByParents(Collection<ENTITY> parents) {
 		if(__injectCollectionHelper__().isNotEmpty(parents))
-			return readByParentsCodes(parents.stream().map(AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy::getCode).collect(Collectors.toList()));
+			return readByParentsCodes(parents.stream().map(AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical::getCode).collect(Collectors.toList()));
 		return null;
 	}
 	
@@ -62,7 +62,7 @@ public abstract class AbstractHierarchyPersistenceImpl<ENTITY extends AbstractId
 	@Override
 	public HIERARCHIES readByChildren(Collection<ENTITY> children) {
 		if(__injectCollectionHelper__().isNotEmpty(children))
-			return readByChildrenCodes(children.stream().map(AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy::getCode).collect(Collectors.toList()));
+			return readByChildrenCodes(children.stream().map(AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical::getCode).collect(Collectors.toList()));
 		return null;
 	}
 	
@@ -75,12 +75,12 @@ public abstract class AbstractHierarchyPersistenceImpl<ENTITY extends AbstractId
 	protected Object[] __getQueryParameters__(PersistenceQueryContext queryContext, Properties properties,Object... objects) {
 		if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByParentsCodes)) {
 			if(__inject__(ArrayHelper.class).isEmpty(objects)) {
-				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy.FIELD_CHILDREN)};
+				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical.FIELD_CHILDREN)};
 			}
 			return new Object[]{"parentsCodes",objects[0]};
 		}else if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByChildrenCodes)) {
 			if(__inject__(ArrayHelper.class).isEmpty(objects)) {
-				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy.FIELD_PARENTS)};
+				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical.FIELD_PARENTS)};
 			}
 			return new Object[]{"childrenCodes",objects[0]};
 		}
@@ -90,9 +90,9 @@ public abstract class AbstractHierarchyPersistenceImpl<ENTITY extends AbstractId
 	@Override
 	protected String __getQueryIdentifier__(Class<?> functionClass, Properties properties, Object... parameters) {
 		if(PersistenceFunctionReader.class.equals(functionClass)) {
-			if(Boolean.TRUE.equals(__isFilterByKeys__(properties, AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy.FIELD_PARENTS)))
+			if(Boolean.TRUE.equals(__isFilterByKeys__(properties, AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical.FIELD_PARENTS)))
 				return readByParentsCodes;
-			else if(Boolean.TRUE.equals(__isFilterByKeys__(properties, AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy.FIELD_CHILDREN)))
+			else if(Boolean.TRUE.equals(__isFilterByKeys__(properties, AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical.FIELD_CHILDREN)))
 				return readByChildrenCodes;
 		}
 		return super.__getQueryIdentifier__(functionClass, properties, parameters);

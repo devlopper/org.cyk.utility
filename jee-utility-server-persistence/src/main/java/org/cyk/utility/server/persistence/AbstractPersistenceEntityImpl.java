@@ -32,6 +32,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	protected String read,readSystemIdentifiers,readBusinessIdentifiers,readBySystemIdentifiers,readByBusinessIdentifiers
 		,deleteBySystemIdentifiers,deleteByBusinessIdentifiers,deleteAll;
 	protected ClassInstance __classInstance__;
+	protected Class<ENTITY> entityClass;
 	
 	@Override
 	public QueryStringBuilderSelect instanciateReadQueryStringBuilder() {
@@ -360,15 +361,14 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	/**/
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Class<ENTITY> getEntityClass() {
-		return (Class<ENTITY>) getProperties().getEntityClass();
+		return entityClass;
 	}
 	
 	@Override
 	public PersistenceEntity<ENTITY> setEntityClass(Class<ENTITY> aClass) {
-		getProperties().setEntityClass(aClass);
+		this.entityClass = aClass;
 		return this;
 	}
 	

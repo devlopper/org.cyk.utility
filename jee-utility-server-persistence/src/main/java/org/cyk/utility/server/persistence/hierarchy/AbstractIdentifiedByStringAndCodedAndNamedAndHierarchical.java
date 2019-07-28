@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 @SuppressWarnings("rawtypes")
 @Getter @Setter @Accessors(chain=true) @Access(AccessType.FIELD) @ToString
 @MappedSuperclass
-public abstract class AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy<ENTITY,COLLECTION extends CollectionInstance<ENTITY>> extends AbstractIdentifiedByStringAndCodedAndNamed implements Serializable {
+public abstract class AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical<ENTITY,COLLECTION extends CollectionInstance<ENTITY>> extends AbstractIdentifiedByStringAndCodedAndNamed implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Transient protected COLLECTION parents;
@@ -36,12 +36,12 @@ public abstract class AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy<ENT
 		return parents;
 	}
 	
-	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy addParents(Collection<ENTITY> children) {
+	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical addParents(Collection<ENTITY> children) {
 		getParents(Boolean.TRUE).add(children);
 		return this;
 	}
 	
-	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy addParents(@SuppressWarnings("unchecked") ENTITY...parents) {
+	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical addParents(@SuppressWarnings("unchecked") ENTITY...parents) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(parents))
 			addParents(__inject__(CollectionHelper.class).instanciate(parents));
 		return this;
@@ -54,12 +54,12 @@ public abstract class AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy<ENT
 		return children;
 	}
 	
-	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy addChildren(Collection<ENTITY> children) {
+	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical addChildren(Collection<ENTITY> children) {
 		getChildren(Boolean.TRUE).add(children);
 		return this;
 	}
 	
-	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy addChildren(@SuppressWarnings("unchecked") ENTITY...children) {
+	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical addChildren(@SuppressWarnings("unchecked") ENTITY...children) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(children))
 			addChildren(__inject__(CollectionHelper.class).instanciate(children));
 		return this;

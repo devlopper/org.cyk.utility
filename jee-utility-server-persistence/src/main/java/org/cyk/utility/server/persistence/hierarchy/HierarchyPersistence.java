@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.cyk.utility.server.persistence.PersistenceEntity;
 
-public interface HierarchyPersistence<ENTITY extends AbstractIdentifiedByStringAndCodedAndNamedAndHierarchy<?,?>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends HierarchyCollectionInstance<ENTITY, HIERARCHY>> extends PersistenceEntity<HIERARCHY> {
+public interface HierarchyPersistence<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical<?,?>,HIERARCHIES extends HierarchyCollectionInstance<ENTITY, HIERARCHY>> extends PersistenceEntity<HIERARCHY> {
 
 	HIERARCHIES readByParentsCodes(Collection<String> parentsCodes);
 	HIERARCHIES readByParentsCodes(String...parentsCodes);
