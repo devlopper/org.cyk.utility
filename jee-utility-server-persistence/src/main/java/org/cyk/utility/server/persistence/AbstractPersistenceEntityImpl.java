@@ -118,7 +118,10 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		function.setQueryParameters(new Properties().set("identifiers",identifiers));
 		__copyCommonProperties__(function, properties);
 		function.execute();
-		return (Collection<ENTITY>) function.getEntities();
+		Collection<ENTITY> entities = (Collection<ENTITY>) function.getEntities();
+		if(__injectCollectionHelper__().isNotEmpty(entities))
+			__listenExecuteReadAfter__(entities,properties);
+		return entities;
 	}
 	
 	@Override
@@ -148,29 +151,12 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@Override
 	public ENTITY readByIdentifier(Object identifier,ValueUsageType valueUsageType, Properties properties) {
-		/*
-		if(properties == null)
-			properties = new Properties();
-		if(properties!=null) {
-			if(properties.getQueryIdentifier() == null)
-				properties.setQueryIdentifier(__injectValueHelper__().defaultToIfNull(__getQueryIdentifier__(PersistenceFunctionReader.class, properties)
-						,ValueUsageType.BUSINESS.equals(properties.getValueUsageType()) ? readByBusinessIdentifiers : readBySystemIdentifiers));
-			if(properties.getParameter() == null)
-				properties.setParameters(new Properties().set("identifiers",Arrays.asList(identifier)));
-		}
-		return __readOne__(properties,____getQueryParameters____(properties));
-		*/
-		/*PersistenceFunctionReader function = __inject__(PersistenceFunctionReader.class);
-		function.setQueryIdentifier(ValueUsageType.BUSINESS.equals(properties.getValueUsageType()) ? readByBusinessIdentifiers : readBySystemIdentifiers);
-		function.setQueryParameters(new Properties().set("identifiers",Arrays.asList(identifier)));
-		__copyCommonProperties__(function, properties);
-		function.execute();
-		*/
-		return (ENTITY) __injectCollectionHelper__().getFirst(readByIdentifiers(Arrays.asList(identifier),valueUsageType, properties));
-		/*
-		return (ENTITY) __inject__(PersistenceFunctionReader.class).setEntityClass(getEntityClass()).setEntityIdentifier(identifier)
-				.setEntityIdentifierValueUsageType(Properties.getFromPath(properties, Properties.VALUE_USAGE_TYPE)).execute().getProperties().getEntity();
-		*/
+		Collection<ENTITY> entities = (Collection<ENTITY>) readByIdentifiers(Arrays.asList(identifier),valueUsageType, properties);
+		Integer size = __injectCollectionHelper__().getSize(entities);
+		if(size!=null && size > 1)
+			throw new RuntimeException("too much ("+size+") results found");
+		ENTITY entity = __injectCollectionHelper__().getFirst(entities);
+		return entity;
 	}
 	
 	@Override
@@ -470,18 +456,18 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	protected Collection<ENTITY> __readMany__(Properties properties,Object...parameters) {
 		Collection<ENTITY> entities = (Collection<ENTITY>) __getReader__(properties,parameters).execute().getEntities();
 		if(__injectCollectionHelper__().isNotEmpty(entities))
-			__listenReadManyAfter__(entities);
+			__listenExecuteReadAfter__(entities,properties);
 		return entities;
 	}
 	
-	protected void __listenReadManyAfter__(Collection<ENTITY> entities) {
+	protected void __listenExecuteReadAfter__(Collection<ENTITY> entities,Properties properties) {
 		if(__injectCollectionHelper__().isNotEmpty(entities)) {
 			for(ENTITY index : entities)
-				__processAfterRead__(index);	
+				__listenExecuteReadAfter__(index,properties);	
 		}
 	}
 	
-	protected void __processAfterRead__(ENTITY entity) {
+	protected void __listenExecuteReadAfter__(ENTITY entity,Properties properties) {
 		Strings uniformResourceIdentifierStringFormats = __getReadOneUniformResourceIdentifierFormats__();
 		if(__injectCollectionHelper__().isNotEmpty(uniformResourceIdentifierStringFormats)) {
 			for(String index : uniformResourceIdentifierStringFormats.get())
@@ -500,7 +486,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		if(size!=null && size > 1)
 			throw new RuntimeException("too much ("+size+") results found");
 		ENTITY entity = __injectCollectionHelper__().getFirst(entities);
-		__processAfterRead__(entity);
+		__listenExecuteReadAfter__(entity,properties);
 		return entity;
 	}
 	
