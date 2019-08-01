@@ -1,16 +1,15 @@
 package org.cyk.utility.server.persistence.query;
 
 import java.io.Serializable;
-import java.util.Map;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.array.ArrayHelper;
+import org.cyk.utility.server.persistence.query.filter.Filter;
 
 public class PersistenceQueryContextImpl extends AbstractObject implements PersistenceQueryContext,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private PersistenceQuery query;
-	private Map<String, Object> filters;
+	private Filter filter;
 	private Object[] parameters;
 	
 	@Override
@@ -23,15 +22,15 @@ public class PersistenceQueryContextImpl extends AbstractObject implements Persi
 		this.query = query;
 		return this;
 	}
-
+	
 	@Override
-	public Map<String, Object> getFilters() {
-		return filters;
+	public Filter getFilter() {
+		return filter;
 	}
-
+	
 	@Override
-	public PersistenceQueryContext setFilters(Map<String, Object> filters) {
-		this.filters = filters;
+	public PersistenceQueryContext setFilter(Filter filter) {
+		this.filter = filter;
 		return this;
 	}
 
@@ -45,37 +44,24 @@ public class PersistenceQueryContextImpl extends AbstractObject implements Persi
 		this.parameters = parameters;
 		return this;
 	}
-
+	
+	
 	@Override
 	public Boolean isFilterByKeys(String... keys) {
-		return isFilterByKeys(getFilters(),keys);
+		Filter filter = getFilter();
+		return filter == null ? Boolean.FALSE : filter.hasFieldWithPath(keys); //isFilterByKeys(getFilters(),keys);
 	}
 	
 	@Override
 	public Object getFilterByKeysValue(String... keys) {
-		if(Boolean.TRUE.equals(__inject__(ArrayHelper.class).isNotEmpty(keys))) {
-			Map<String, Object> filters = getFilters();
-			if(filters != null) {
-				for(String index : keys) {
-					return filters.get(index);
-				}
-			}
-		}
-		return null;
+		Filter filter = getFilter();
+		return filter == null ? Boolean.FALSE : filter.getFieldValueByPath(keys);
 	}
 	
 	/**/
 	
-	public static Boolean isFilterByKeys(Map<String,Object> filters,String... keys) {
-		Boolean isFilterByKeys = null;
-		if(filters != null && Boolean.TRUE.equals(__inject__(ArrayHelper.class).isNotEmpty(keys))) {
-			for(String index : keys) {
-				if(filters.containsKey(index)) {
-					isFilterByKeys = Boolean.TRUE;
-					break;
-				}
-			}
-		}
-		return Boolean.TRUE.equals(isFilterByKeys);
+	public static Boolean isFilterByKeys(Filter filter,String... keys) {
+		return filter == null ? Boolean.FALSE : filter.hasFieldWithPath(keys);
 	}
+	
 }

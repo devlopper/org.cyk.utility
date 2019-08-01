@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence.hierarchy;
+package org.cyk.utility.server.persistence.jpa.hierarchy;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -12,7 +12,6 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.collection.CollectionInstance;
-import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCodedAndNamed;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +21,7 @@ import lombok.experimental.Accessors;
 @SuppressWarnings("rawtypes")
 @Getter @Setter @Accessors(chain=true) @Access(AccessType.FIELD) @ToString
 @MappedSuperclass
-public abstract class AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical<ENTITY,COLLECTION extends CollectionInstance<ENTITY>> extends AbstractIdentifiedByStringAndCodedAndNamed implements Serializable {
+public abstract class AbstractIdentifiedByString<ENTITY,COLLECTION extends CollectionInstance<ENTITY>> extends org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByString implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Transient protected COLLECTION parents;
@@ -36,12 +35,12 @@ public abstract class AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical<
 		return parents;
 	}
 	
-	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical addParents(Collection<ENTITY> children) {
+	public AbstractIdentifiedByString addParents(Collection<ENTITY> children) {
 		getParents(Boolean.TRUE).add(children);
 		return this;
 	}
 	
-	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical addParents(@SuppressWarnings("unchecked") ENTITY...parents) {
+	public AbstractIdentifiedByString addParents(@SuppressWarnings("unchecked") ENTITY...parents) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(parents))
 			addParents(__inject__(CollectionHelper.class).instanciate(parents));
 		return this;
@@ -54,12 +53,12 @@ public abstract class AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical<
 		return children;
 	}
 	
-	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical addChildren(Collection<ENTITY> children) {
+	public AbstractIdentifiedByString addChildren(Collection<ENTITY> children) {
 		getChildren(Boolean.TRUE).add(children);
 		return this;
 	}
 	
-	public AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical addChildren(@SuppressWarnings("unchecked") ENTITY...children) {
+	public AbstractIdentifiedByString addChildren(@SuppressWarnings("unchecked") ENTITY...children) {
 		if(__inject__(ArrayHelper.class).isNotEmpty(children))
 			addChildren(__inject__(CollectionHelper.class).instanciate(children));
 		return this;

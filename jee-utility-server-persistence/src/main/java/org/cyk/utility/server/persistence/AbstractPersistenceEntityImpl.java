@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Entity;
 
+import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
@@ -16,10 +18,13 @@ import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldInstance;
+import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.request.RequestProcessor;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
+import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.string.Strings;
@@ -29,10 +34,12 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPersistenceServiceProviderImpl<ENTITY> implements PersistenceEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected String read,readSystemIdentifiers,readBusinessIdentifiers,readBySystemIdentifiers,readByBusinessIdentifiers
+	protected String read
+		,readSystemIdentifiers,readBusinessIdentifiers,readBySystemIdentifiers,readByBusinessIdentifiers,readWhereSystemIdentifierContains,readWhereBusinessIdentifierContains
 		,deleteBySystemIdentifiers,deleteByBusinessIdentifiers,deleteAll;
 	protected ClassInstance __classInstance__;
 	protected Class<ENTITY> entityClass;
+	final protected Map<ValueUsageType,Map<ArithmeticOperator,String>> __queryIdentifierReadByIdentifiersByArithmeticOperator__ = new HashMap<>();
 	
 	@Override
 	public QueryStringBuilderSelect instanciateReadQueryStringBuilder() {
@@ -44,25 +51,32 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		super.__listenPostConstructPersistenceQueries__();
 		Class<ENTITY> entityClass = getEntityClass();
 		__classInstance__ = __inject__(ClassInstancesRuntime.class).get(entityClass);
-		String tupleName = __classInstance__.getTupleName();
-		//String systemIdentifierFieldName =__inject__(FieldNameGetter.class).execute(entityClass, FieldName.IDENTIFIER, ValueUsageType.SYSTEM).getOutput();
-		//String businessIdentifierFieldName =__inject__(FieldNameGetter.class).execute(entityClass, FieldName.IDENTIFIER, ValueUsageType.BUSINESS).getOutput();
+		String tupleName = __getTupleName__();
 		
 		if(Boolean.TRUE.equals(getIsPhysicallyMapped())) {
 			//TODO even not physically mapped we should be able to read
 			addQueryCollectInstances(read, instanciateReadQueryStringBuilder());
-			addQueriesByIdentifierField(__classInstance__.getSystemIdentifierField(), tupleName, readSystemIdentifiers, readBySystemIdentifiers, deleteBySystemIdentifiers);
-			addQueriesByIdentifierField(__classInstance__.getBusinessIdentifierField(), tupleName, readBusinessIdentifiers, readByBusinessIdentifiers, deleteByBusinessIdentifiers);
+			addQueriesByIdentifierField(ValueUsageType.SYSTEM, tupleName, readSystemIdentifiers, readBySystemIdentifiers,readWhereSystemIdentifierContains, deleteBySystemIdentifiers);
+			addQueriesByIdentifierField(ValueUsageType.BUSINESS, tupleName, readBusinessIdentifiers, readByBusinessIdentifiers,readWhereBusinessIdentifierContains, deleteByBusinessIdentifiers);
 			addQuery(deleteAll, "DELETE FROM "+__getTupleName__()+" tuple",null);	
 		}
 	}
 	
-	protected void addQueriesByIdentifierField(Field field,String tupleName,String readIdentifiers,String readByIdentifiers,String deleteByIdentifiers) {
+	protected void addQueriesByIdentifierField(ValueUsageType valueUsageType,String tupleName,String readIdentifiers,String readByIdentifiers,String readWhereIdentifierContains,String deleteByIdentifiers) {
+		Field field = ValueUsageType.BUSINESS.equals(valueUsageType) ? __classInstance__.getBusinessIdentifierField() : __classInstance__.getSystemIdentifierField(); 
 		if(field != null) {
 			String columnName = field.getName();
 			addQuery(readIdentifiers, String.format("SELECT tuple.%s FROM %s tuple", columnName,tupleName),null);
 			addQueryCollectInstances(readByIdentifiers, String.format("SELECT tuple FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName));
+			FieldInstance fieldInstance = __inject__(FieldInstancesRuntime.class).get(getEntityClass(), field.getName());
+			if(fieldInstance != null && String.class.equals(fieldInstance.getType())) {
+				addQueryCollectInstances(readWhereIdentifierContains, String.format("SELECT tuple FROM %s tuple WHERE lower(tuple.%s) LIKE lower(:identifier)", tupleName,columnName));
+			}
 			addQuery(deleteByIdentifiers, String.format("DELETE FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName),null);	
+			Map<ArithmeticOperator,String> map = new HashMap<>();
+			map.put(ArithmeticOperator.IN, readByIdentifiers);
+			map.put(ArithmeticOperator.LIKE, readWhereIdentifierContains);
+			__queryIdentifierReadByIdentifiersByArithmeticOperator__.put(valueUsageType, map);
 		}
 	}
 	
@@ -384,21 +398,42 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected String __getQueryIdentifier__(Class<?> functionClass,Properties properties,Object...parameters){
-		Map<String, Object> filters = __getFiltersFromProperties__(properties);
+		Filter filters = (Filter) Properties.getFromPath(properties, Properties.QUERY_FILTERS);
 		if(filters != null) {
 			if(__classInstance__ != null) {
-				if(filters.containsKey(__classInstance__.getSystemIdentifierField().getName())) {
-					Object identifiers = filters.get(__classInstance__.getSystemIdentifierField().getName());
-					if(identifiers instanceof Collection)
-						return readBySystemIdentifiers;		
-				}else if(filters.containsKey(__classInstance__.getBusinessIdentifierField().getName())) {
-					Object identifiers = filters.get(__classInstance__.getBusinessIdentifierField().getName());
-					if(identifiers instanceof Collection)
-						return readByBusinessIdentifiers;		
-				}
+				String identifier = __getQueryIdentifierByIdentifierField__(ValueUsageType.SYSTEM, read, filters);
+				if(identifier == null)
+					identifier = __getQueryIdentifierByIdentifierField__(ValueUsageType.BUSINESS, read, filters);
+				return identifier;
 			}
 		}
 		return null;
+	}
+	
+	protected String __getQueryIdentifierByIdentifierField__(ValueUsageType valueUsageType,String defaultQueryIdentifier,Filter filters){
+		String identifier = null;
+		Field identifierField = ValueUsageType.BUSINESS.equals(valueUsageType) ? __classInstance__.getBusinessIdentifierField() : __classInstance__.getSystemIdentifierField();
+		org.cyk.utility.server.persistence.query.filter.Field field = filters.getFieldByPath(identifierField.getName());
+		if(field != null) {
+			Object identifiers = field.getValue();
+			ArithmeticOperator arithmeticOperator = field.getArithmeticOperator();
+			if(arithmeticOperator == null) {
+				if(identifiers instanceof Collection)
+					arithmeticOperator = ArithmeticOperator.IN;
+				else if(identifiers instanceof String)
+					arithmeticOperator = ArithmeticOperator.LIKE;
+			}
+			if(identifiers == null)
+				identifier =  defaultQueryIdentifier;
+			else {
+				Map<ArithmeticOperator,String> map = __queryIdentifierReadByIdentifiersByArithmeticOperator__.get(valueUsageType);
+				if(map != null)
+					identifier = map.get(arithmeticOperator);
+			}
+			if(identifier == null)
+				__injectThrowableHelper__().throwRuntimeExceptionNotYetImplemented(String.format("filter by identifiers with operator %s and values %s",arithmeticOperator,identifiers));
+		}
+		return identifier;
 	}
 	
 	@Override
@@ -411,6 +446,14 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 			if(Boolean.TRUE.equals(__inject__(ArrayHelper.class).isEmpty(objects)))
 				objects = new Object[] {queryContext.getFilterByKeysValue(__classInstance__.getBusinessIdentifierField().getName())};
 			return new Object[]{"identifiers", objects[0]};
+		}else if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readWhereSystemIdentifierContains)) {
+			if(Boolean.TRUE.equals(__inject__(ArrayHelper.class).isEmpty(objects)))
+				objects = new Object[] {queryContext.getFilterByKeysValue(__classInstance__.getSystemIdentifierField().getName())};
+			return new Object[]{"identifier", "%"+objects[0]+"%"};
+		}else if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readWhereBusinessIdentifierContains)) {
+			if(Boolean.TRUE.equals(__inject__(ArrayHelper.class).isEmpty(objects)))
+				objects = new Object[] {queryContext.getFilterByKeysValue(__classInstance__.getBusinessIdentifierField().getName())};
+			return new Object[]{"identifier", "%"+objects[0]+"%"};
 		}
 		return super.__getQueryParameters__(queryContext, properties, objects);
 	}
@@ -542,6 +585,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected String __getTupleName__() {
-		return __getTupleName__(getEntityClass());
+		return __classInstance__ == null ? __getTupleName__(getEntityClass()) : __classInstance__.getTupleName() ;
 	}
+	
 }

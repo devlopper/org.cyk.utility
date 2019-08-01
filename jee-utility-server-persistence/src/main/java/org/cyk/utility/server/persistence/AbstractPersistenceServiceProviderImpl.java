@@ -6,11 +6,12 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.__kernel__.stacktrace.StackTraceHelper;
+import org.cyk.utility.clazz.ClassInstance;
+import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.method.MethodGetter;
@@ -19,6 +20,7 @@ import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContextImpl;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
+import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.sql.builder.QueryStringBuilder;
 import org.cyk.utility.sql.builder.QueryStringBuilderSelect;
 import org.cyk.utility.sql.builder.Tuple;
@@ -113,11 +115,11 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		return __getQueryParameters__(persistenceQuery, properties, objects);
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected Object[] __getQueryParameters__(PersistenceQuery query,Properties properties,Object...objects){
 		PersistenceQueryContext queryContext = __inject__(PersistenceQueryContext.class).setQuery(query).setParameters(objects);
-		if(properties!=null && properties.getQueryFilters() instanceof Map)
-			queryContext.setFilters((Map<String, Object>) properties.getQueryFilters());
+		if(properties!=null && properties.getQueryFilters() instanceof Filter)
+			queryContext.setFilter((Filter) properties.getQueryFilters());
+			//queryContext.setFilters((Map<String, Object>) properties.getQueryFilters());
 		return __getQueryParameters__(queryContext, properties, objects);
 	}
 	
@@ -405,16 +407,26 @@ public abstract class AbstractPersistenceServiceProviderImpl<OBJECT> extends Abs
 		return __inject__(StackTraceHelper.class).getCallerMethodName(1);
 	}
 	
-	protected static Boolean __isFilterByKeys__(Map<String,Object> filters,String... keys) {
-		return PersistenceQueryContextImpl.isFilterByKeys(filters, keys);
+	protected static Boolean __isFilterByKeys__(Filter filter,String... keys) {
+		return PersistenceQueryContextImpl.isFilterByKeys(filter, keys);
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected static Boolean __isFilterByKeys__(Properties properties,String... keys) {
-		return properties == null ? null :__isFilterByKeys__((Map<String, Object>) properties.getQueryFilters(), keys);
+		return properties == null ? null :__isFilterByKeys__((Filter) properties.getQueryFilters(), keys);
 	}
 	
 	protected static String __getTupleName__(Class<?> klass) {
-		return klass == null ? null : klass.getSimpleName();
+		String name = null;
+		if(klass != null) {
+			ClassInstance classInstance = __inject__(ClassInstancesRuntime.class).get(klass);
+			if(classInstance != null) {
+				name = classInstance.getTupleName();
+			}
+			
+			if(__inject__(StringHelper.class).isBlank(name))
+				name = klass.getSimpleName();
+		}
+		return name;
 	}
+
 }

@@ -18,8 +18,7 @@ public class MyEntityBusinessImpl extends AbstractBusinessEntityImpl<MyEntity,My
 		myEntity.setTimestamp(System.currentTimeMillis());
 	}
 
-	@Override
-	protected Class<MyEntity> __getPersistenceEntityClass__() {
+	public Class<MyEntity> getPersistenceEntityClass() {
 		return MyEntity.class;
 	}
 	

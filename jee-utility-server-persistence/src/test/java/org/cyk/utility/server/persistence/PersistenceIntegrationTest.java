@@ -13,13 +13,20 @@ import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
+import org.cyk.utility.server.persistence.api.NodeHierarchyPersistence;
+import org.cyk.utility.server.persistence.api.NodePersistence;
 import org.cyk.utility.server.persistence.entities.MyEntity;
+import org.cyk.utility.server.persistence.entities.Node;
+import org.cyk.utility.server.persistence.entities.NodeHierarchy;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
+import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.sql.builder.Attribute;
@@ -32,6 +39,13 @@ import org.junit.Test;
 public class PersistenceIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		DependencyInjection.setQualifierClassTo(org.cyk.utility.__kernel__.annotation.Test.Class.class, PersistableClassesGetter.class);
+		__inject__(ApplicationScopeLifeCycleListenerEntities.class).initialize(null);
+	}
+	
 	@Override
 	protected void __listenBeforeCallCountIsZero__() throws Exception {
 		super.__listenBeforeCallCountIsZero__();
@@ -243,37 +257,37 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 		Collection<Object> identifiers = __inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier).collect(Collectors.toList());
 		assertThat(identifiers).containsOnly(id1,id2,id3);
-		Map<String,Object> filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id1));
+		Filter filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER,Arrays.asList(id1));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id1);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id2));
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id2));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id2);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id3));
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id3));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id3);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id1,id3));
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id1,id3));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id1,id3);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList());
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList());
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).isEmpty();
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, null);
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, null);
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id1,id2,id3);
 		
-		filters = new HashMap<>();
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id1,id2,id3);
 		
@@ -296,43 +310,113 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 		Collection<Object> identifiers = __inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getCode).collect(Collectors.toList());
 		assertThat(identifiers).containsOnly(code1,code2,code3);
-		Map<String,Object> filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_CODE, Arrays.asList(code1));
+		Filter filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, Arrays.asList(code1));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code1);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_CODE, Arrays.asList(code2));
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, Arrays.asList(code2));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code2);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_CODE, Arrays.asList(code3));
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, Arrays.asList(code3));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code3);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_CODE, Arrays.asList(code1,code3));
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, Arrays.asList(code1,code3));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code1,code3);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_CODE, Arrays.asList());
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, Arrays.asList());
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).isEmpty();
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_CODE, null);
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, null);
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code1,code2,code3);
 		
-		filters = new HashMap<>();
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code1,code2,code3);
 		
 		userTransaction.begin();
 		__inject__(MyEntityPersistence.class).deleteByBusinessIdentifiers(Arrays.asList(code1,code2,code3));
 		userTransaction.commit();
+	}
+	
+	@Test
+	public void read_myEntity_by_identifier_system_contains() throws Exception{
+		userTransaction.begin();
+		__inject__(MyEntityPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+				new MyEntity().setIdentifier("123").setCode(__getRandomCode__()).setIntegerValue(1)
+				,new MyEntity().setIdentifier("133").setCode(__getRandomCode__()).setIntegerValue(2)
+				,new MyEntity().setIdentifier("144").setCode(__getRandomCode__()).setIntegerValue(1)
+				,new MyEntity().setIdentifier("150").setCode(__getRandomCode__()).setIntegerValue(2)
+				,new MyEntity().setIdentifier("623").setCode(__getRandomCode__()).setIntegerValue(2)
+				));
+		userTransaction.commit();
+		
+		Filter filters = null;
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, "123");
+		Collection<MyEntity> entities = null;
+		try {
+			entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
+		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123");
+		
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, "23");
+		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
+		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
+		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123","623");
+		
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, "3");
+		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
+		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
+		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123","133","623");
+	}
+	
+	@Test
+	public void read_myEntity_by_identifier_business_contains() throws Exception{
+		userTransaction.begin();
+		__inject__(MyEntityPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+				new MyEntity().setCode("123").setIntegerValue(1)
+				,new MyEntity().setCode("133").setIntegerValue(2)
+				,new MyEntity().setCode("144").setIntegerValue(1)
+				,new MyEntity().setCode("150").setIntegerValue(2)
+				,new MyEntity().setCode("623").setIntegerValue(2)
+				));
+		userTransaction.commit();
+		
+		Filter filters = null;
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, "123");
+		Collection<MyEntity> entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
+		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
+		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getCode)).containsExactly("123");
+		
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, "23");
+		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
+		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
+		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getCode)).containsExactly("123","623");
+		
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, "3");
+		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
+		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
+		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getCode)).containsExactly("123","133","623");
 	}
 	
 	/* Update */
@@ -598,33 +682,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Assert.assertEquals(5, c3.size());		
 	}
 	
-	@Test
-	public void readIdentifierContains(){
-		__createEntity__(new MyEntity().setIdentifier("123").setCode(__getRandomCode__()).setIntegerValue(1));
-		__createEntity__(new MyEntity().setIdentifier("133").setCode(__getRandomCode__()).setIntegerValue(2));
-		__createEntity__(new MyEntity().setIdentifier("144").setCode(__getRandomCode__()).setIntegerValue(1));
-		__createEntity__(new MyEntity().setIdentifier("150").setCode(__getRandomCode__()).setIntegerValue(2));
-		__createEntity__(new MyEntity().setIdentifier("623").setCode(__getRandomCode__()).setIntegerValue(2));
-		
-		Map<String,Object> filters = null;
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, "123");
-		Collection<MyEntity> entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
-		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
-		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123");
-		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, "23");
-		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
-		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
-		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123","623");
-		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, "3");
-		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
-		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
-		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123","133","623");
-	}
+	/* count */
 	
 	@Test
 	public void count(){
@@ -736,7 +794,78 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertThat(__inject__(ThrowableHelper.class).getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage()).contains("propertyPath=code");
 	}
 	
-	/**/
+	/* Hierarchy */
 	
+	@Test
+	public void create_node() throws Exception{
+		userTransaction.begin();
+		Node nodeModule = new Node().setCode("module").setName(__getRandomName__());
+		Node nodeService = new Node().setCode("service").setName(__getRandomName__()).addParents(nodeModule);
+		Node nodeMenu = new Node().setCode("menu").setName(__getRandomName__()).addParents(nodeService);
+		Node nodeAction = new Node().setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
+		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+				,nodeAction));
+		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
+				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
+				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
+				));
+		userTransaction.commit();
+		Node node;
+		node = __inject__(NodePersistence.class).readByBusinessIdentifier("module");
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodePersistence.class).readByBusinessIdentifier("module",new Properties().setFields(Node.FIELD_PARENTS));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodePersistence.class).readByBusinessIdentifier("module",new Properties().setFields(Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNotNull();
+		assertThat(node.getChildren().get()).isNotEmpty();
+		assertThat(node.getChildren().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
+		node = __inject__(NodePersistence.class).readByBusinessIdentifier("module",new Properties().setFields(Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNotNull();
+		assertThat(node.getChildren().get()).isNotEmpty();
+		assertThat(node.getChildren().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
+		
+		node = __inject__(NodePersistence.class).readByBusinessIdentifier("service");
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodePersistence.class).readByBusinessIdentifier("service",new Properties().setFields(Node.FIELD_PARENTS));
+		assertThat(node.getParents()).isNotNull();
+		assertThat(node.getParents().get()).isNotEmpty();
+		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("module");
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodePersistence.class).readByBusinessIdentifier("service",new Properties().setFields(Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNotNull();
+		assertThat(node.getChildren().get()).isNotEmpty();
+		assertThat(node.getChildren().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
+		node = __inject__(NodePersistence.class).readByBusinessIdentifier("service",new Properties().setFields(Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNotNull();
+		assertThat(node.getParents().get()).isNotEmpty();
+		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("module");
+		assertThat(node.getChildren()).isNotNull();
+		assertThat(node.getChildren().get()).isNotEmpty();
+		assertThat(node.getChildren().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
+		
+		node = __inject__(NodePersistence.class).readByBusinessIdentifier("action");
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodePersistence.class).readByBusinessIdentifier("action",new Properties().setFields(Node.FIELD_PARENTS));
+		assertThat(node.getParents()).isNotNull();
+		assertThat(node.getParents().get()).isNotEmpty();
+		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodePersistence.class).readByBusinessIdentifier("action",new Properties().setFields(Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodePersistence.class).readByBusinessIdentifier("action",new Properties().setFields(Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNotNull();
+		assertThat(node.getParents().get()).isNotEmpty();
+		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
+		assertThat(node.getChildren()).isNull();
+	}
 	
 }

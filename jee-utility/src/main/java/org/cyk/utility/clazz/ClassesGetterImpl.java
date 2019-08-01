@@ -42,7 +42,8 @@ public class ClassesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 				for(@SuppressWarnings("rawtypes") Class index : result) {
 					Boolean isAddable = Boolean.TRUE;
 					if(Boolean.TRUE.equals(isAddable) && isInterface!=null && 
-							(Boolean.TRUE.equals(isInterface) && !Modifier.isInterface(index.getModifiers()) || Boolean.FALSE.equals(isInterface) && Modifier.isInterface(index.getModifiers()))
+							(Boolean.TRUE.equals(isInterface) && !Modifier.isInterface(index.getModifiers()) || Boolean.FALSE.equals(isInterface) 
+									&& Modifier.isInterface(index.getModifiers()))
 							)
 						isAddable = Boolean.FALSE;	
 					

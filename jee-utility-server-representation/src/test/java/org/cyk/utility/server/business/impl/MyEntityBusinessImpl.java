@@ -14,7 +14,7 @@ public class MyEntityBusinessImpl extends AbstractBusinessEntityImpl<MyEntity,My
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected Class<MyEntity> __getPersistenceEntityClass__() {
+	public Class<MyEntity> getPersistenceEntityClass() {
 		return MyEntity.class;
 	}
 	

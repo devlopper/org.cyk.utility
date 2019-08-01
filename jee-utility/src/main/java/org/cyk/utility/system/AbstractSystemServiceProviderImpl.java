@@ -2,7 +2,6 @@ package org.cyk.utility.system;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Map;
 
 import javax.enterprise.util.AnnotationLiteral;
 
@@ -93,7 +92,7 @@ public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceP
 		}
 		return fields;
 	}
-	
+	/*
 	protected Map<String,Object> __getFiltersFromProperties__(Properties properties) {
 		Map<String,Object> filters = null;
 		if(properties != null) {
@@ -108,7 +107,7 @@ public abstract class AbstractSystemServiceProviderImpl extends AbstractServiceP
 		}
 		return filters;
 	}
-	
+	*/
 	@Override
 	protected <O> O ____inject____(Class<O> aClass, AnnotationLiteral<?>... annotationLiterals) {
 		O o = super.____inject____(aClass, annotationLiterals);

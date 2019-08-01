@@ -91,6 +91,8 @@ public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBui
 						}						
 					}else if (Boolean.TRUE.equals(__inject__(ClassHelper.class).isInstanceOf(index.getType(), Map.class))) {
 						value = new ObjectMapper().readValue(fieldNode.asText(), Map.class);
+					}else if (Boolean.TRUE.equals(__inject__(ClassHelper.class).isInstanceOf(index.getType(), Enum.class))) {
+						value = new ObjectMapper().readValue(fieldNode.asText(), index.getType());
 					}else
 						__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("objectfy field of type " + index.getType());
 					

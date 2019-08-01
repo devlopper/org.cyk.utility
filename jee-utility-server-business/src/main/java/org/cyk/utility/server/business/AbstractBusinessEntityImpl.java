@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
-import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.file.excel.FileExcelSheetDataArrayReader;
@@ -25,24 +24,27 @@ import lombok.Getter;
 public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends PersistenceEntity<ENTITY>> extends AbstractBusinessServiceProviderImpl<ENTITY> implements BusinessEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Getter private Class<ENTITY> persistenceEntityClass;
+	private Class<ENTITY> __persistenceEntityClass__;
 	@Getter private PERSISTENCE persistence;
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		persistenceEntityClass = __getPersistenceEntityClass__();
-		if(persistenceEntityClass == null) {
+		__persistenceEntityClass__ = getPersistenceEntityClass();
+		if(__persistenceEntityClass__ == null) {
 			System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+getClass()+" : persistence entity class cannot be derived <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 		}else {
-			persistence = (PERSISTENCE) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(getPersistenceEntityClass());	
+			persistence = (PERSISTENCE) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(__persistenceEntityClass__);	
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected Class<ENTITY> __getPersistenceEntityClass__(){
-		return (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+	@Override
+	public Class<ENTITY> getPersistenceEntityClass() {
+		if(__persistenceEntityClass__ == null)
+			__persistenceEntityClass__ = (Class<ENTITY>) __injectClassHelper__().getParameterAt(getClass(), 0, Object.class);
+		return __persistenceEntityClass__;
 	}
 	
 	//TODO : an idea is to transform array content to json format and transform it java object

@@ -1,4 +1,4 @@
-package org.cyk.utility.server.persistence.hierarchy;
+package org.cyk.utility.server.persistence.jpa.hierarchy;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.collection.CollectionHelper;
 
-public abstract class AbstractHierarchyCollectionInstanceImpl<ENTITY extends AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical<?,?>,HIERARCHY extends AbstractHierarchy<ENTITY>> extends AbstractCollectionInstanceImpl<HIERARCHY> implements HierarchyCollectionInstance<ENTITY,HIERARCHY>,Serializable {
+public abstract class AbstractHierarchiesImpl<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?,?>> extends AbstractCollectionInstanceImpl<HIERARCHY> implements Hierarchies<HIERARCHY,ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override

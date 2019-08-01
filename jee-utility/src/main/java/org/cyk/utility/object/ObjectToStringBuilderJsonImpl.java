@@ -89,6 +89,8 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 						generator.writeStringField(index.getFieldInstance().getPath(), string );
 					}else if(index.getValue() instanceof Map<?, ?>) {
 						generator.writeStringField(index.getFieldInstance().getPath(), new ObjectMapper().writeValueAsString(index.getValue()) );
+					}else if(index.getValue() instanceof Enum<?>) {
+						generator.writeStringField(index.getFieldInstance().getPath(), new ObjectMapper().writeValueAsString(index.getValue()) );
 					}else
 						__inject__(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("jsonify field of type "+index.getFieldInstance().getType());	
 				}

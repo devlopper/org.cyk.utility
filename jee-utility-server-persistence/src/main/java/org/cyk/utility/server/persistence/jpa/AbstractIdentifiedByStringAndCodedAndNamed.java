@@ -13,8 +13,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true) @MappedSuperclass @Access(AccessType.FIELD)
-//@Deprecated
-//Declare needed properties in each entity
 public abstract class AbstractIdentifiedByStringAndCodedAndNamed extends AbstractIdentifiedByStringAndCoded implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

@@ -118,6 +118,25 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 		Set<Class<?>> classes = new HashSet<>();
 		if(classesArray!=null)
 			for(String index : classesArray){
+				if(index.contains(".persistence.entities.")) {
+					if(index.endsWith("y")) {
+						__addClass__(StringUtils.substringBeforeLast(index, "y")+"ies", classes);
+						__addClass__(StringUtils.substringBeforeLast(index, "y")+"iesImpl", classes);
+					}else {
+						__addClass__(index+"s", classes);
+						__addClass__(index+"sImpl", classes);	
+					}
+					
+					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".persistence.api.")+"Persistence", classes);
+					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".persistence.impl.")+"PersistenceImpl", classes);
+					
+					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".business.api.")+"Business", classes);
+					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".business.impl.")+"BusinessImpl", classes);
+					
+					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".representation.api.")+"Representation", classes);
+					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".representation.impl.")+"RepresentationImpl", classes);
+				}
+				
 				try {
 					Class<?> aClass = Class.forName(index);
 					classes.add(aClass);
@@ -185,6 +204,13 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 		
 		__logFinest__("Building archive done.");
 		return archive;
+	}
+	
+	private void __addClass__(String name,Collection<Class<?>> classes) {
+		try {
+			Class<?> klass = Class.forName(name);
+			classes.add(klass);
+		} catch (Exception e) {}
 	}
 	
 	private AbstractArchiveBuilder<ARCHIVE> addBeanXml(Object beansXml){

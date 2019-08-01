@@ -10,4 +10,8 @@ public interface FieldInstanceValue extends Objectable {
 	Object getValue();
 	FieldInstanceValue setValue(Object value);
 	
+	/**/
+	
+	String PROPERTY_FIELD_INSTANCE = "fieldInstance";
+	String PROPERTY_VALUE = "value";
 }

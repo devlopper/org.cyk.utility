@@ -1,10 +1,8 @@
-package org.cyk.utility.server.persistence.hierarchy;
+package org.cyk.utility.server.persistence.jpa.hierarchy;
 
 import java.util.Collection;
 
-import org.cyk.utility.server.persistence.PersistenceEntity;
-
-public interface PersistenceIdentifiedByStringAndCodedAndNamedAndHierarchical<ENTITY extends AbstractIdentifiedByStringAndCodedAndNamedAndHierarchical<?,?>> extends PersistenceEntity<ENTITY> {
+public interface PersistenceIdentifiedByStringAndCoded<ENTITY extends AbstractIdentifiedByStringAndCoded<?,?>> extends PersistenceIdentifiedByString<ENTITY> {
 
 	Collection<ENTITY> readByParentsCodes(Collection<String> parentsCodes);
 	Collection<ENTITY> readByParentsCodes(String...parentsCodes);
