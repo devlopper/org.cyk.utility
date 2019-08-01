@@ -11,7 +11,9 @@ import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
+import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.string.Case;
+import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?,?>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>> extends AbstractPersistenceEntityImpl<HIERARCHY> implements HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -60,7 +62,7 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	@SuppressWarnings("unchecked")
 	@Override
 	public HIERARCHIES readByParentsBusinessIdentifiers(Collection<Object> parentsBusinessIdentifiers) {
-		Properties properties = new Properties().setQueryIdentifier(parentsBusinessIdentifiers);
+		Properties properties = new Properties().setQueryIdentifier(readByParentsBusinessIdentifiers);
 		Collection<HIERARCHY> hierarchies = __readMany__(properties,____getQueryParameters____(properties,parentsBusinessIdentifiers));
 		return __injectCollectionHelper__().isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
 	}
@@ -127,6 +129,11 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByString.FIELD_CHILDREN)};
 			}
 			return new Object[]{"parentIdentifiers",objects[0]};
+		}else if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByParentsBusinessIdentifiers)) {
+			if(__inject__(ArrayHelper.class).isEmpty(objects)) {
+				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByString.FIELD_CHILDREN)};
+			}
+			return new Object[]{"parentCodes",objects[0]};
 		}else if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByChildrenIdentifiers)) {
 			if(__inject__(ArrayHelper.class).isEmpty(objects)) {
 				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByString.FIELD_PARENTS)};
@@ -138,11 +145,22 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	
 	@Override
 	protected String __getQueryIdentifier__(Class<?> functionClass, Properties properties, Object... parameters) {
+		Filter filter = (Filter) Properties.getFromPath(properties,Properties.QUERY_FILTERS);
 		if(PersistenceFunctionReader.class.equals(functionClass)) {
-			if(Boolean.TRUE.equals(__isFilterByKeys__(properties, AbstractIdentifiedByString.FIELD_PARENTS)))
-				return readByParentsIdentifiers;
-			else if(Boolean.TRUE.equals(__isFilterByKeys__(properties, AbstractIdentifiedByString.FIELD_CHILDREN)))
-				return readByChildrenIdentifiers;
+			org.cyk.utility.server.persistence.query.filter.Field field = filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
+			if(field != null) {
+				if(ValueUsageType.BUSINESS.equals(field.getValueUsageType()))
+					return readByParentsBusinessIdentifiers;
+				else
+					return readByParentsIdentifiers;
+			}
+			field = filter.getFieldByPath(AbstractIdentifiedByString.FIELD_CHILDREN);
+			if(field != null) {
+				if(ValueUsageType.BUSINESS.equals(field.getValueUsageType()))
+					return readByChildrenBusinessIdentifiers;
+				else
+					return readByChildrenIdentifiers;
+			}
 		}
 		return super.__getQueryIdentifier__(functionClass, properties, parameters);
 	}

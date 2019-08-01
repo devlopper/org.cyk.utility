@@ -1,4 +1,4 @@
-package org.cyk.utility.server.business;
+package org.cyk.utility.server.business.api;
 
 import java.io.Serializable;
 
@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.assertion.AbstractAssertionsProviderForImpl;
 import org.cyk.utility.assertion.AssertionBuilderComparison;
+import org.cyk.utility.server.business.BusinessFunctionCreator;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 
 public class MyEntityAssertionsProviderImpl extends AbstractAssertionsProviderForImpl<MyEntity> implements MyEntityAssertionsProvider,Serializable {

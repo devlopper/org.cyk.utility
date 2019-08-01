@@ -5,9 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolationException;
@@ -16,11 +14,17 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
 import org.cyk.utility.server.business.api.MyEntityBusiness;
+import org.cyk.utility.server.business.api.NodeBusiness;
+import org.cyk.utility.server.business.api.NodeHierarchyBusiness;
 import org.cyk.utility.server.business.test.TestBusinessCreate;
 import org.cyk.utility.server.business.test.TestBusinessRead;
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.server.persistence.entities.MyEntity;
+import org.cyk.utility.server.persistence.entities.Node;
+import org.cyk.utility.server.persistence.entities.NodeHierarchy;
+import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
@@ -180,37 +184,37 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 				,new MyEntity().setIdentifier(id3).setCode(code3)));
 		Collection<Object> identifiers = __inject__(MyEntityBusiness.class).find().stream().map(MyEntity::getIdentifier).collect(Collectors.toList());
 		assertThat(identifiers).containsOnly(id1,id2,id3);
-		Map<String,Object> filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id1));
+		Filter filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id1));
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id1);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id2));
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id2));
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id2);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id3));
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id3));
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id3);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id1,id3));
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id1,id3));
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id1,id3);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, Arrays.asList());
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList());
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).isEmpty();
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_IDENTIFIER, null);
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_IDENTIFIER, null);
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id1,id2,id3);
 		
-		filters = new HashMap<>();
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id1,id2,id3);
 		
@@ -229,37 +233,37 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 				,new MyEntity().setIdentifier(id3).setCode(code3)));
 		Collection<Object> identifiers = __inject__(MyEntityBusiness.class).find().stream().map(MyEntity::getCode).collect(Collectors.toList());
 		assertThat(identifiers).containsOnly(code1,code2,code3);
-		Map<String,Object> filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_CODE, Arrays.asList(code1));
+		Filter filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, Arrays.asList(code1));
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code1);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_CODE, Arrays.asList(code2));
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, Arrays.asList(code2));
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code2);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_CODE, Arrays.asList(code3));
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, Arrays.asList(code3));
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code3);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_CODE, Arrays.asList(code1,code3));
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, Arrays.asList(code1,code3));
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code1,code3);
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_CODE, Arrays.asList());
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, Arrays.asList());
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).isEmpty();
 		
-		filters = new HashMap<>();
-		filters.put(MyEntity.FIELD_CODE, null);
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters.addField(MyEntity.FIELD_CODE, null);
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code1,code2,code3);
 		
-		filters = new HashMap<>();
+		filters = __inject__(Filter.class).setKlass(MyEntity.class);
 		identifiers = __inject__(MyEntityBusiness.class).find(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code1,code2,code3);
 		
@@ -499,6 +503,118 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		
 		assertThat(__inject__(ThrowableHelper.class).getInstanceOf(test.getThrowable(), ConstraintViolationException.class).getMessage())
 			.contains("propertyPath=code");
+	}
+	
+	/* Hierarchy */
+	
+	@Test
+	public void create_node() throws Exception{
+		Node nodeModule = new Node().setCode("module").setName(__getRandomName__());
+		Node nodeService = new Node().setCode("service").setName(__getRandomName__()).addParents(nodeModule);
+		Node nodeMenu = new Node().setCode("menu").setName(__getRandomName__()).addParents(nodeService);
+		Node nodeAction = new Node().setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
+		__inject__(NodeBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+				,nodeAction));
+		__inject__(NodeHierarchyBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(
+				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
+				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
+				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
+				));
+		Node node;
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("module");
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("module",new Properties().setFields(Node.FIELD_PARENTS));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("module",new Properties().setFields(Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNotNull();
+		assertThat(node.getChildren().get()).isNotEmpty();
+		assertThat(node.getChildren().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("module",new Properties().setFields(Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNotNull();
+		assertThat(node.getChildren().get()).isNotEmpty();
+		assertThat(node.getChildren().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
+		
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("service");
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("service",new Properties().setFields(Node.FIELD_PARENTS));
+		assertThat(node.getParents()).isNotNull();
+		assertThat(node.getParents().get()).isNotEmpty();
+		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("module");
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("service",new Properties().setFields(Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNotNull();
+		assertThat(node.getChildren().get()).isNotEmpty();
+		assertThat(node.getChildren().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("service",new Properties().setFields(Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNotNull();
+		assertThat(node.getParents().get()).isNotEmpty();
+		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("module");
+		assertThat(node.getChildren()).isNotNull();
+		assertThat(node.getChildren().get()).isNotEmpty();
+		assertThat(node.getChildren().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
+		
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("action");
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("action",new Properties().setFields(Node.FIELD_PARENTS));
+		assertThat(node.getParents()).isNotNull();
+		assertThat(node.getParents().get()).isNotEmpty();
+		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("action",new Properties().setFields(Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("action",new Properties().setFields(Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNotNull();
+		assertThat(node.getParents().get()).isNotEmpty();
+		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
+		assertThat(node.getChildren()).isNull();
+	}
+	
+	@Test
+	public void read_node_filter_byParent_identifier_business() throws Exception{
+		Node nodeModule = new Node().setIdentifier("MO").setCode("module").setName(__getRandomName__());
+		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
+		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
+		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
+		__inject__(NodeBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+				,nodeAction));
+		__inject__(NodeHierarchyBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(
+				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
+				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
+				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
+				));
+		Filter filters = __inject__(Filter.class).setKlass(Node.class);
+		filters.addField(Node.FIELD_PARENTS, Arrays.asList("module"));
+		Collection<Node> nodes = __inject__(NodeBusiness.class).find(new Properties().setQueryFilters(filters));
+		assertThat(nodes).isNotEmpty();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
+	}
+	
+	@Test
+	public void read_node_filter_byParent_identifier_system() throws Exception{
+		Node nodeModule = new Node().setIdentifier("MO").setCode("module").setName(__getRandomName__());
+		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
+		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
+		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
+		__inject__(NodeBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+				,nodeAction));
+		__inject__(NodeHierarchyBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(
+				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
+				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
+				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
+				));
+		Filter filters = __inject__(Filter.class).setKlass(Node.class);
+		filters.addField(Node.FIELD_PARENTS, Arrays.asList("MO"),ValueUsageType.SYSTEM);
+		Collection<Node> nodes = __inject__(NodeBusiness.class).find(new Properties().setQueryFilters(filters));
+		assertThat(nodes).isNotEmpty();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
 	}
 	
 }

@@ -95,6 +95,9 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		function.setEntityClass(getPersistenceEntityClass());
 		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifiers);
 		function.setEntityIdentifierValueUsageType(valueUsageType);
+		if(properties != null) {
+			function.getProperties().setFields(properties.getFields());
+		}
 		__copyCommonProperties__(function, properties);
 		@SuppressWarnings("unchecked")
 		Collection<ENTITY> entities = (Collection<ENTITY>) function.execute().getEntities();

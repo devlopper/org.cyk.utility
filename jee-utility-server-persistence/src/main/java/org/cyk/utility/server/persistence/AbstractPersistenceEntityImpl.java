@@ -116,6 +116,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 			if(properties.getQueryIdentifier() == null)
 				properties.setQueryIdentifier(__injectValueHelper__().defaultToIfNull(__getQueryIdentifier__(PersistenceFunctionReader.class, properties),read));
 		}
+		//System.out.println("AbstractPersistenceEntityImpl.read() QID : "+properties.getQueryIdentifier());
 		return __readMany__(properties,____getQueryParameters____(properties));
 	}
 	

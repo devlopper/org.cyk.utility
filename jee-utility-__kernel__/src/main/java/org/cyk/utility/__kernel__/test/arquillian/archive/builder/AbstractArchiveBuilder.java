@@ -133,6 +133,9 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".business.api.")+"Business", classes);
 					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".business.impl.")+"BusinessImpl", classes);
 					
+					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".business.api.")+"AssertionsProvider", classes);
+					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".business.api.")+"AssertionsProviderImpl", classes);
+					
 					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".representation.api.")+"Representation", classes);
 					__addClass__(StringUtils.replaceOnce(index, ".persistence.entities.", ".representation.impl.")+"RepresentationImpl", classes);
 				}

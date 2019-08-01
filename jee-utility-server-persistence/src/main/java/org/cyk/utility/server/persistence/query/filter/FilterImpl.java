@@ -8,6 +8,7 @@ import javax.enterprise.context.Dependent;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.field.FieldInstancesRuntime;
+import org.cyk.utility.value.ValueUsageType;
 
 @Dependent
 public class FilterImpl extends AbstractObject implements Filter,Serializable {
@@ -72,10 +73,15 @@ public class FilterImpl extends AbstractObject implements Filter,Serializable {
 	}
 
 	@Override
-	public Filter addField(String fieldName,Object fieldValue,ArithmeticOperator arithmeticOperator) {
+	public Filter addField(String fieldName,Object fieldValue,ValueUsageType valueUsageType,ArithmeticOperator arithmeticOperator) {
 		Class<?> klass = getKlass();
-		Field field = __inject__(Field.class).setInstance(__inject__(FieldInstancesRuntime.class).get(klass, fieldName)).setValue(fieldValue).setArithmeticOperator(arithmeticOperator);
+		Field field = __inject__(Field.class).setInstance(__inject__(FieldInstancesRuntime.class).get(klass, fieldName)).setValue(fieldValue)
+				.setValueUsageType(valueUsageType).setArithmeticOperator(arithmeticOperator);
 		return addFields(field);
+	}
+	
+	public Filter addField(String fieldName,Object fieldValue,ValueUsageType valueUsageType) {
+		return addField(fieldName, fieldValue, valueUsageType, null);
 	}
 	
 	@Override

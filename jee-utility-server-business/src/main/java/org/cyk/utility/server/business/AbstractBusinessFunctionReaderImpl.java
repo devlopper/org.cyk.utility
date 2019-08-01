@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
@@ -28,7 +29,9 @@ public abstract class AbstractBusinessFunctionReaderImpl extends AbstractBusines
 	
 	private Collection<Object> __execute__(Collection<Object> identifiers,ValueUsageType valueUsageType,Collection<Object> entities) {
 		if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(identifiers))) {
-			Collection<?> collection = __inject__(Persistence.class).readByIdentifiers(getEntityClass(),identifiers,valueUsageType);
+			Properties properties = new Properties();
+			properties.copyFrom(getProperties(), Properties.FIELDS);
+			Collection<?> collection = __inject__(Persistence.class).readByIdentifiers(getEntityClass(),identifiers,valueUsageType,properties);
 			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(collection))) {
 				if(entities == null)
 					entities = new ArrayList<>();
