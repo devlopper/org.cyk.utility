@@ -1,4 +1,4 @@
-package org.cyk.utility.server.business.impl;
+package org.cyk.utility.server.business.api;
 
 import java.io.Serializable;
 
