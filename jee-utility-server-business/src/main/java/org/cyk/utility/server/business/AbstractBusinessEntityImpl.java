@@ -95,9 +95,6 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		function.setEntityClass(getPersistenceEntityClass());
 		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifiers);
 		function.setEntityIdentifierValueUsageType(valueUsageType);
-		if(properties != null) {
-			function.getProperties().setFields(properties.getFields());
-		}
 		__copyCommonProperties__(function, properties);
 		@SuppressWarnings("unchecked")
 		Collection<ENTITY> entities = (Collection<ENTITY>) function.execute().getEntities();
@@ -137,6 +134,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	
 	@Override
 	public ENTITY findByIdentifier(Object identifier,ValueUsageType valueUsageType, Properties properties) {
+		//TODO add logic to confirm that only one result has been found otherwise throw an exception
 		return __injectCollectionHelper__().getFirst(findByIdentifiers(Arrays.asList(identifier), valueUsageType, properties));
 	}
 

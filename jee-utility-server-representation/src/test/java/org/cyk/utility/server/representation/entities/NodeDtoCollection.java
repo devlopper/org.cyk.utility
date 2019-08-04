@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
-import org.cyk.utility.server.representation.AbstractEntityCollection;
+import org.cyk.utility.server.representation.hierarchy.AbstractEntityCollection;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

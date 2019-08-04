@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolationException;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.collection.CollectionHelper;
@@ -21,6 +22,8 @@ import org.cyk.utility.server.business.api.NodeHierarchyBusiness;
 import org.cyk.utility.server.business.test.TestBusinessCreate;
 import org.cyk.utility.server.business.test.TestBusinessRead;
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillianIntegrationTestWithDefaultDeployment;
+import org.cyk.utility.server.business.ApplicationScopeLifeCycleListenerEntities;
+import org.cyk.utility.server.persistence.PersistableClassesGetter;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.entities.Node;
 import org.cyk.utility.server.persistence.entities.NodeHierarchy;
@@ -35,16 +38,11 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 	/* Create */
 	
 	@Override
-	protected void __listenBeforeCallCountIsZero__() throws Exception {
-		super.__listenBeforeCallCountIsZero__();		
-		//AbstractPersistenceFunctionImpl.LOG_LEVEL = LogLevel.INFO;
-		//AbstractBusinessFunctionImpl.LOG_LEVEL = LogLevel.INFO;
-	}
-	
-	@Override
 	protected void __listenBefore__() {
 		super.__listenBefore__();
 		__inject__(AssertionsProviderClassMap.class).set(MyEntity.class, MyEntityAssertionsProvider.class);
+		DependencyInjection.setQualifierClassTo(org.cyk.utility.__kernel__.annotation.Test.Class.class, PersistableClassesGetter.class);
+		__inject__(ApplicationScopeLifeCycleListenerEntities.class).initialize(null);
 	}
 	
 	@Test

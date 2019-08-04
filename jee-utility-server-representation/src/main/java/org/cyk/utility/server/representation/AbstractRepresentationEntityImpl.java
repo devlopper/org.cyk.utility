@@ -16,6 +16,7 @@ import org.cyk.utility.map.MapInstanceIntegerToString;
 import org.cyk.utility.object.ObjectFromStringBuilder;
 import org.cyk.utility.server.business.BusinessEntity;
 import org.cyk.utility.server.business.BusinessLayer;
+import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.value.ValueUsageType;
 
 import lombok.Getter;
@@ -61,17 +62,15 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public Response getMany(Boolean isPageable,Long from,Long count,String fields,String filters) {
+	public Response getMany(Boolean isPageable,Long from,Long count,String fields,FilterDto filter) {
 		RepresentationFunctionReader function = __inject__(RepresentationFunctionReader.class);
 		function.setIsCollectionable(Boolean.TRUE);
 		function.setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass())
 				.setEntityFieldNames(__getFieldNames__(fields))
 				.setProperty(Properties.IS_QUERY_RESULT_PAGINATED, isPageable == null ? Boolean.TRUE : isPageable)
 				.setProperty(Properties.QUERY_FIRST_TUPLE_INDEX, from)
-				.setProperty(Properties.QUERY_NUMBER_OF_TUPLE, count);
-		Map<String,Object> __filters__ = __getFiltersMap__(filters);
-		if(__filters__ != null)
-			function.setProperty(Properties.QUERY_FILTERS, __filters__);
+				.setProperty(Properties.QUERY_NUMBER_OF_TUPLE, count)
+				.setProperty(Properties.QUERY_FILTERS, filter);
 		return function.execute().getResponse();
 	}
 	

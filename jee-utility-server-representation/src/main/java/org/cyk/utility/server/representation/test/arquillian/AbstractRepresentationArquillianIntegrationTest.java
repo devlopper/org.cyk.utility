@@ -7,8 +7,10 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.object.ObjectToStringBuilder;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity;
 import org.cyk.utility.server.representation.Representation;
@@ -106,6 +108,10 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	@Override
 	public SystemLayer __getSystemLayer__() {
 		return __inject__(SystemLayerRepresentation.class);
+	}
+	
+	protected String getJavaScriptObjectNotation(Object object) {
+		 return object == null ? null : __injectByQualifiersClasses__(ObjectToStringBuilder.class, JavaScriptObjectNotation.Class.class).setObject(object).execute().getOutput();
 	}
 
 	protected abstract <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass);

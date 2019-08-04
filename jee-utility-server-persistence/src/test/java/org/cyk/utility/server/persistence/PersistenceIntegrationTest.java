@@ -14,10 +14,13 @@ import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.SortOrder;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.field.FieldInstancesRuntime;
+import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.server.persistence.api.MyEntityPersistence;
 import org.cyk.utility.server.persistence.api.NodeHierarchyPersistence;
 import org.cyk.utility.server.persistence.api.NodePersistence;
@@ -26,15 +29,26 @@ import org.cyk.utility.server.persistence.entities.Node;
 import org.cyk.utility.server.persistence.entities.NodeHierarchy;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
+import org.cyk.utility.server.persistence.query.filter.Field;
+import org.cyk.utility.server.persistence.query.filter.FieldDto;
 import org.cyk.utility.server.persistence.query.filter.Filter;
+import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.persistence.test.TestPersistenceCreate;
 import org.cyk.utility.server.persistence.test.arquillian.AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.sql.builder.Attribute;
 import org.cyk.utility.sql.builder.Tuple;
 import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.value.ValueDto;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 
 public class PersistenceIntegrationTest extends AbstractPersistenceArquillianIntegrationTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
@@ -912,6 +926,176 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters));
 		assertThat(nodes).isNotEmpty();
 		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
+	}
+	
+	/* Filter mapping */
+	
+	@Test
+	public void map_filter_field_to_dto_string() throws Exception{
+		Field field = __inject__(Field.class).setInstance(__inject__(FieldInstancesRuntime.class).get(Class.class, "f01")).setValue("12")
+				.setValueUsageType(ValueUsageType.BUSINESS).setArithmeticOperator(ArithmeticOperator.LIKE);
+		FieldDto fieldDto = __inject__(MappingHelper.class).getSource(field, FieldDto.class);
+		assertThat(fieldDto).isNotNull();
+		assertThat(fieldDto.getArithmeticOperator()).isEqualTo(ArithmeticOperator.LIKE);
+		assertThat(fieldDto.getField()).isNotNull();
+		assertThat(fieldDto.getField().getKlass()).isEqualTo(Class.class.getSimpleName());
+		assertThat(fieldDto.getField().getPath()).isEqualTo("f01");
+		assertThat(fieldDto.getField().getType()).isEqualTo(org.cyk.utility.field.FieldDto.Type.STRING);
+		assertThat(fieldDto.getValue()).isNotNull();
+		assertThat(fieldDto.getValue().getValue()).isEqualTo("12");
+		assertThat(fieldDto.getValue().getContainer()).isEqualTo(ValueDto.Container.NONE);
+		assertThat(fieldDto.getValue().getType()).isEqualTo(ValueDto.Type.STRING);
+		assertThat(fieldDto.getValue().getUsageType()).isEqualTo(ValueUsageType.BUSINESS);
+	}
+	
+	@Test
+	public void map_filter_field_dto_to_field_string() throws Exception{
+		FieldDto fieldDto = new FieldDto();
+		fieldDto.setArithmeticOperator(ArithmeticOperator.LIKE);
+		fieldDto.setField(new org.cyk.utility.field.FieldDto().setKlass(Class.class.getName()).setPath("f01").setType(org.cyk.utility.field.FieldDto.Type.STRING));
+		fieldDto.setValue(new ValueDto().setContainer(ValueDto.Container.NONE).setType(ValueDto.Type.STRING).setUsageType(ValueUsageType.BUSINESS).setValue("hello"));
+		
+		Field field = __inject__(MappingHelper.class).getDestination(fieldDto, Field.class);
+		assertThat(field).isNotNull();
+		assertThat(field.getArithmeticOperator()).isEqualTo(ArithmeticOperator.LIKE);
+		assertThat(field.getInstance()).isNotNull();
+		assertThat(field.getInstance().getClazz()).isEqualTo(Class.class);
+		assertThat(field.getInstance().getPath()).isEqualTo("f01");
+		assertThat(field.getInstance().getType()).isEqualTo(String.class);
+		assertThat(field.getValue()).isNotNull();
+		assertThat(field.getValue().getClass()).isEqualTo(String.class);
+		assertThat(field.getValue()).isEqualTo("hello");
+		assertThat(field.getValueUsageType()).isEqualTo(ValueUsageType.BUSINESS);
+	}
+	
+	@Test
+	public void map_filter_field_to_dto_collection_string() throws Exception{
+		Field field = __inject__(Field.class).setInstance(__inject__(FieldInstancesRuntime.class).get(Class.class, "f01")).setValue(Arrays.asList("12","a"))
+				.setValueUsageType(ValueUsageType.BUSINESS).setArithmeticOperator(ArithmeticOperator.IN);
+		FieldDto fieldDto = __inject__(MappingHelper.class).getSource(field, FieldDto.class);
+		assertThat(fieldDto).isNotNull();
+		assertThat(fieldDto.getArithmeticOperator()).isEqualTo(ArithmeticOperator.IN);
+		assertThat(fieldDto.getField()).isNotNull();
+		assertThat(fieldDto.getField().getKlass()).isEqualTo(Class.class.getSimpleName());
+		assertThat(fieldDto.getField().getPath()).isEqualTo("f01");
+		assertThat(fieldDto.getField().getType()).isEqualTo(org.cyk.utility.field.FieldDto.Type.STRING);
+		assertThat(fieldDto.getValue()).isNotNull();
+		assertThat(fieldDto.getValue().getValue()).isEqualTo("[\"12\",\"a\"]");
+		assertThat(fieldDto.getValue().getContainer()).isEqualTo(ValueDto.Container.COLLECTION);
+		assertThat(fieldDto.getValue().getType()).isEqualTo(ValueDto.Type.STRING);
+		assertThat(fieldDto.getValue().getUsageType()).isEqualTo(ValueUsageType.BUSINESS);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void map_filter_dto_to_field_collection_string() throws Exception{
+		FieldDto fieldDto = new FieldDto();
+		fieldDto.setArithmeticOperator(ArithmeticOperator.IN);
+		fieldDto.setField(new org.cyk.utility.field.FieldDto().setKlass(Class.class.getName()).setPath("f01").setType(org.cyk.utility.field.FieldDto.Type.STRING));
+		fieldDto.setValue(new ValueDto().setContainer(ValueDto.Container.COLLECTION).setType(ValueDto.Type.STRING).setUsageType(ValueUsageType.BUSINESS).setValue("[\"12\",\"a\"]"));
+		
+		Field field = __inject__(MappingHelper.class).getDestination(fieldDto, Field.class);
+		assertThat(field).isNotNull();
+		assertThat(field.getArithmeticOperator()).isEqualTo(ArithmeticOperator.IN);
+		assertThat(field.getInstance()).isNotNull();
+		assertThat(field.getInstance().getClazz()).isEqualTo(Class.class);
+		assertThat(field.getInstance().getPath()).isEqualTo("f01");
+		assertThat(field.getInstance().getType()).isEqualTo(String.class);
+		assertThat(field.getValue()).isNotNull();
+		assertThat(field.getValue()).isInstanceOf(Collection.class);
+		assertThat((Collection<String>)field.getValue()).containsOnly("12","a");
+		assertThat(field.getValueUsageType()).isEqualTo(ValueUsageType.BUSINESS);
+	}
+	
+	@Test
+	public void map_filter_field_to_dto_collection_integer() throws Exception{
+		Field field = __inject__(Field.class).setInstance(__inject__(FieldInstancesRuntime.class).get(Class.class, "f01")).setValue(Arrays.asList(12,27))
+				.setValueUsageType(ValueUsageType.BUSINESS).setArithmeticOperator(ArithmeticOperator.IN);
+		FieldDto fieldDto = __inject__(MappingHelper.class).getSource(field, FieldDto.class);
+		assertThat(fieldDto).isNotNull();
+		assertThat(fieldDto.getArithmeticOperator()).isEqualTo(ArithmeticOperator.IN);
+		assertThat(fieldDto.getField()).isNotNull();
+		assertThat(fieldDto.getField().getKlass()).isEqualTo(Class.class.getSimpleName());
+		assertThat(fieldDto.getField().getPath()).isEqualTo("f01");
+		assertThat(fieldDto.getField().getType()).isEqualTo(org.cyk.utility.field.FieldDto.Type.STRING);
+		assertThat(fieldDto.getValue()).isNotNull();
+		assertThat(fieldDto.getValue().getValue()).isEqualTo("[12,27]");
+		assertThat(fieldDto.getValue().getContainer()).isEqualTo(ValueDto.Container.COLLECTION);
+		assertThat(fieldDto.getValue().getType()).isEqualTo(ValueDto.Type.INTEGER);
+		assertThat(fieldDto.getValue().getUsageType()).isEqualTo(ValueUsageType.BUSINESS);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void map_filter_dto_to_field_collection_integer() throws Exception{
+		FieldDto fieldDto = new FieldDto();
+		fieldDto.setArithmeticOperator(ArithmeticOperator.IN);
+		fieldDto.setField(new org.cyk.utility.field.FieldDto().setKlass(Class.class.getName()).setPath("f01").setType(org.cyk.utility.field.FieldDto.Type.STRING));
+		fieldDto.setValue(new ValueDto().setContainer(ValueDto.Container.COLLECTION).setType(ValueDto.Type.INTEGER).setUsageType(ValueUsageType.BUSINESS).setValue("[12,7]"));
+		
+		Field field = __inject__(MappingHelper.class).getDestination(fieldDto, Field.class);
+		assertThat(field).isNotNull();
+		assertThat(field.getArithmeticOperator()).isEqualTo(ArithmeticOperator.IN);
+		assertThat(field.getInstance()).isNotNull();
+		assertThat(field.getInstance().getClazz()).isEqualTo(Class.class);
+		assertThat(field.getInstance().getPath()).isEqualTo("f01");
+		assertThat(field.getInstance().getType()).isEqualTo(String.class);
+		assertThat(field.getValue()).isNotNull();
+		assertThat(field.getValue()).isInstanceOf(Collection.class);
+		assertThat((Collection<Integer>)field.getValue()).containsOnly(12,7);
+		assertThat(field.getValueUsageType()).isEqualTo(ValueUsageType.BUSINESS);
+	}
+	
+	@Test
+	public void map_filter_dto_to_field_string() throws Exception{
+		FilterDto filterDto = new FilterDto().setKlass(Class.class);
+		filterDto.addField("f01", "hello", org.cyk.utility.field.FieldDto.Type.STRING, ValueDto.Container.NONE, ValueDto.Type.STRING, ValueUsageType.BUSINESS, ArithmeticOperator.LIKE);
+		Filter filter = __inject__(MappingHelper.class).getDestination(filterDto, Filter.class);
+		assertThat(filter).isNotNull();
+		assertThat(filter.getFields()).isNotNull();
+		assertThat(filter.getFields().get()).hasSize(1);
+		Field field = filter.getFields().getFirst();
+		assertThat(field).isNotNull();
+		assertThat(field.getArithmeticOperator()).isEqualTo(ArithmeticOperator.LIKE);
+		assertThat(field.getInstance()).isNotNull();
+		assertThat(field.getInstance().getClazz()).isEqualTo(Class.class);
+		assertThat(field.getInstance().getPath()).isEqualTo("f01");
+		assertThat(field.getInstance().getType()).isEqualTo(String.class);
+		assertThat(field.getValue()).isNotNull();
+		assertThat(field.getValue().getClass()).isEqualTo(String.class);
+		assertThat(field.getValue()).isEqualTo("hello");
+		assertThat(field.getValueUsageType()).isEqualTo(ValueUsageType.BUSINESS);
+	}
+	
+	@Test
+	public void stringfy_filterDto() throws Exception{
+		FilterDto filterDto = new FilterDto().setKlass(Class.class);
+		filterDto.addField("f01", "hello", org.cyk.utility.field.FieldDto.Type.STRING, ValueDto.Container.NONE, ValueDto.Type.STRING, ValueUsageType.BUSINESS, ArithmeticOperator.LIKE);
+		ObjectMapper objectMapper = new ObjectMapper();
+		String string = objectMapper.writeValueAsString(filterDto);
+		filterDto = objectMapper.readValue(string, FilterDto.class);
+		Filter filter = __inject__(MappingHelper.class).getDestination(filterDto, Filter.class);
+		assertThat(filter).isNotNull();
+		assertThat(filter.getFields()).isNotNull();
+		assertThat(filter.getFields().get()).hasSize(1);
+		Field field = filter.getFields().getFirst();
+		assertThat(field).isNotNull();
+		assertThat(field.getArithmeticOperator()).isEqualTo(ArithmeticOperator.LIKE);
+		assertThat(field.getInstance()).isNotNull();
+		assertThat(field.getInstance().getClazz()).isEqualTo(Class.class);
+		assertThat(field.getInstance().getPath()).isEqualTo("f01");
+		assertThat(field.getInstance().getType()).isEqualTo(String.class);
+		assertThat(field.getValue()).isNotNull();
+		assertThat(field.getValue().getClass()).isEqualTo(String.class);
+		assertThat(field.getValue()).isEqualTo("hello");
+		assertThat(field.getValueUsageType()).isEqualTo(ValueUsageType.BUSINESS);
+	}
+	
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true) @ToString
+	public static class Class {
+		private String f01;
 	}
 	
 }

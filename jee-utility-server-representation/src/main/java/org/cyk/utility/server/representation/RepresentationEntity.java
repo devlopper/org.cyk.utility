@@ -15,6 +15,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.cyk.utility.server.persistence.query.filter.FilterDto;
+
 /**
  * 
  * @author Christian
@@ -47,8 +49,9 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	@GET
 	@Path(PATH_GET_MANY)
 	@Produces({ MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML })
+	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
 	Response getMany(@QueryParam(PARAMETER_IS_PAGEABLE) Boolean isPageable,@QueryParam(PARAMETER_FROM) Long from,@QueryParam(PARAMETER_COUNT) Long count,@QueryParam(PARAMETER_FIELDS) String fields
-			,@QueryParam(PARAMETER_FILTERS) String filters);
+			,@QueryParam(PARAMETER_FILTER) FilterDto filter);
 	
 	@GET
 	@Path(PATH_GET_ONE)

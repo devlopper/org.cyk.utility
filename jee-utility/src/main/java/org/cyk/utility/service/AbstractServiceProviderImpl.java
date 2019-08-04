@@ -154,8 +154,9 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 		LogLevel logLevel = (LogLevel) Properties.getFromPath(properties, Properties.LOG_LEVEL);
 		if(logLevel != null)
 			function.getLog(Boolean.TRUE).setLevel(logLevel);
-		if(properties != null)
-			function.getProperties().setFields(properties.getValue());
+		if(properties != null) {
+			function.getProperties().setFields(properties.getFields());
+		}
 	}
 
 }

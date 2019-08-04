@@ -13,6 +13,8 @@ import javax.ws.rs.core.Response.Status;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.mapping.MappingHelper;
+import org.cyk.utility.server.persistence.query.filter.Filter;
+import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
@@ -43,9 +45,13 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 		Properties properties = new Properties().setFields(entityFieldNames);
 		if(Boolean.TRUE.equals(__isCollectionable__)) {
 			if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entitiesSystemIdentifiers__)) && Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entitiesBusinessIdentifiers__))) {
+				FilterDto filterDto = (FilterDto) getProperty(Properties.QUERY_FILTERS);
+				if(filterDto != null) {
+					properties.setQueryFilters(__inject__(MappingHelper.class).getDestination(filterDto, Filter.class));
+				}
 				// no specific identifiers
 				//In order to take less execution time and data size , we will set default values if not set by caller.
-				properties.copyFrom(getProperties(), Properties.IS_QUERY_RESULT_PAGINATED, Properties.QUERY_FIRST_TUPLE_INDEX,Properties.QUERY_NUMBER_OF_TUPLE,Properties.QUERY_FILTERS);
+				properties.copyFrom(getProperties(), Properties.IS_QUERY_RESULT_PAGINATED, Properties.QUERY_FIRST_TUPLE_INDEX,Properties.QUERY_NUMBER_OF_TUPLE);
 				if(properties.getIsQueryResultPaginated() == null)
 					properties.setIsQueryResultPaginated(Boolean.TRUE); //yes we paginate
 				addLogMessageBuilderParameter("query paginated", properties.getIsQueryResultPaginated());
@@ -58,7 +64,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 					addLogMessageBuilderParameter("count", properties.getQueryNumberOfTuple());
 				}
 				if(properties.getQueryFilters()!=null)
-					addLogMessageBuilderParameter("filters", properties.getQueryFilters());
+					addLogMessageBuilderParameter("filter", properties.getQueryFilters());
 				
 				Collection<?> collection = __injectBusiness__().find(__persistenceEntityClass__, properties);
 				if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(collection))) {
