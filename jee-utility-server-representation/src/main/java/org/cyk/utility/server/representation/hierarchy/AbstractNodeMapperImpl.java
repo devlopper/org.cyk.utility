@@ -4,6 +4,8 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
 
@@ -37,9 +39,22 @@ public abstract class AbstractNodeMapperImpl<SOURCE,DESTINATION,SOURCE_COLLECTIO
         		AbstractEntityCollection<SOURCE> sourceCollectionInstance = (AbstractEntityCollection<SOURCE>) sourceCollection;
         		if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(sourceCollectionInstance.getCollection())) {
         			destinationCollection = DependencyInjection.inject(__getDestinationCollectionClass__());
+        			Class<DESTINATION> destinationClass = __getDestinationClass__();
             		for(SOURCE index : sourceCollectionInstance.getCollection())
-            			if(destinationCollection instanceof CollectionInstance)
-            				((CollectionInstance<DESTINATION>)destinationCollection).add(getDestination(index));
+            			if(destinationCollection instanceof CollectionInstance) {
+            				DESTINATION destination = null;
+            				Object identifier = DependencyInjection.inject(FieldHelper.class).getFieldValueSystemIdentifier(index);
+            				if(identifier == null) {
+            					identifier = DependencyInjection.inject(FieldHelper.class).getFieldValueBusinessIdentifier(index);
+            					if(identifier != null)
+            						destination = DependencyInjection.inject(InstanceHelper.class).getByIdentifierBusiness(destinationClass, identifier);
+            				}else
+            					destination = DependencyInjection.inject(InstanceHelper.class).getByIdentifierSystem(destinationClass, identifier);
+            				//if(destination == null)
+            				//	destination = getDestination(index);
+            				if(destination != null)
+            					((CollectionInstance<DESTINATION>)destinationCollection).add(destination);
+            			}
             	}
         	}
     	}
@@ -48,4 +63,5 @@ public abstract class AbstractNodeMapperImpl<SOURCE,DESTINATION,SOURCE_COLLECTIO
     
     protected abstract Class<SOURCE_COLLECTION> __getSourceCollectionClass__();
     protected abstract Class<DESTINATION_COLLECTION> __getDestinationCollectionClass__();
+    protected abstract Class<DESTINATION> __getDestinationClass__();
 }

@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
-import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
 import org.cyk.utility.server.persistence.PersistableClassesGetter;
@@ -17,11 +16,9 @@ import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.entities.Node;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.api.MyEntityRepresentation;
-import org.cyk.utility.server.representation.api.NodeHierarchyRepresentation;
 import org.cyk.utility.server.representation.api.NodeRepresentation;
 import org.cyk.utility.server.representation.entities.MyEntityDto;
 import org.cyk.utility.server.representation.entities.NodeDto;
-import org.cyk.utility.server.representation.entities.NodeHierarchyDto;
 import org.cyk.utility.server.representation.test.TestRepresentationCreate;
 import org.cyk.utility.server.representation.test.TestRepresentationRead;
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment;
@@ -406,48 +403,46 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 	@Test
 	public void create_node() throws Exception{
 		NodeDto nodeModule = new NodeDto().setCode("module").setName(__getRandomName__());
-		NodeDto nodeService = new NodeDto().setCode("service").setName(__getRandomName__()).addParents(nodeModule);
-		NodeDto nodeMenu = new NodeDto().setCode("menu").setName(__getRandomName__()).addParents(nodeService);
-		NodeDto nodeAction = new NodeDto().setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodeRepresentation.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
-				,nodeAction),null);
-		__inject__(NodeHierarchyRepresentation.class).createMany(__inject__(CollectionHelper.class).instanciate(
-				new NodeHierarchyDto().setParent(nodeModule).setChild(nodeService)
-				,new NodeHierarchyDto().setParent(nodeService).setChild(nodeMenu)
-				,new NodeHierarchyDto().setParent(nodeMenu).setChild(nodeAction)
-				),null);
+		__inject__(NodeRepresentation.class).createOne(nodeModule);
+		NodeDto nodeService = new NodeDto().setCode("service").setName(__getRandomName__()).addParents(new NodeDto().setCode("module"));
+		__inject__(NodeRepresentation.class).createOne(nodeService);
+		NodeDto nodeMenu = new NodeDto().setCode("menu").setName(__getRandomName__()).addParents(new NodeDto().setCode("service"));
+		__inject__(NodeRepresentation.class).createOne(nodeMenu);
+		NodeDto nodeAction = new NodeDto().setCode("action").setName(__getRandomName__()).addParents(new NodeDto().setCode("menu"));
+		__inject__(NodeRepresentation.class).createOne(nodeAction);
 		NodeDto node;
-		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("module","business",null).getEntity();
+		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("module","BUSINESS",null).getEntity();
+		assertThat(node).as("node with code module not found").isNotNull();
 		assertThat(node.getParents()).isNull();
 		assertThat(node.getChildren()).isNull();
-		node = (NodeDto)  __inject__(NodeRepresentation.class).getOne("module","business",Node.FIELD_PARENTS).getEntity();
+		node = (NodeDto)  __inject__(NodeRepresentation.class).getOne("module","BUSINESS",Node.FIELD_PARENTS).getEntity();
 		assertThat(node.getParents()).isNull();
 		assertThat(node.getChildren()).isNull();
-		node = (NodeDto)  __inject__(NodeRepresentation.class).getOne("module","business",Node.FIELD_CHILDREN).getEntity();
+		node = (NodeDto)  __inject__(NodeRepresentation.class).getOne("module","BUSINESS",Node.FIELD_CHILDREN).getEntity();
 		assertThat(node.getParents()).isNull();
 		assertThat(node.getChildren()).isNotNull();
 		assertThat(node.getChildren().getCollection()).isNotEmpty();
 		assertThat(node.getChildren().getCollection().stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("service");
-		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("module","business",Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN).getEntity();
+		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("module","BUSINESS",Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN).getEntity();
 		assertThat(node.getParents()).isNull();
 		assertThat(node.getChildren()).isNotNull();
 		assertThat(node.getChildren().getCollection()).isNotEmpty();
 		assertThat(node.getChildren().getCollection().stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("service");
 		
-		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("service","business",null).getEntity();
+		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("service","BUSINESS",null).getEntity();
 		assertThat(node.getParents()).isNull();
 		assertThat(node.getChildren()).isNull();
-		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("service","business",Node.FIELD_PARENTS).getEntity();
+		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("service","BUSINESS",Node.FIELD_PARENTS).getEntity();
 		assertThat(node.getParents()).isNotNull();
 		assertThat(node.getParents().getCollection()).isNotEmpty();
 		assertThat(node.getParents().getCollection().stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("module");
 		assertThat(node.getChildren()).isNull();
-		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("service","business",Node.FIELD_CHILDREN).getEntity();
+		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("service","BUSINESS",Node.FIELD_CHILDREN).getEntity();
 		assertThat(node.getParents()).isNull();
 		assertThat(node.getChildren()).isNotNull();
 		assertThat(node.getChildren().getCollection()).isNotEmpty();
 		assertThat(node.getChildren().getCollection().stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("menu");
-		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("service","business",Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN).getEntity();
+		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("service","BUSINESS",Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN).getEntity();
 		assertThat(node.getParents()).isNotNull();
 		assertThat(node.getParents().getCollection()).isNotEmpty();
 		assertThat(node.getParents().getCollection().stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("module");
@@ -455,18 +450,18 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		assertThat(node.getChildren().getCollection()).isNotEmpty();
 		assertThat(node.getChildren().getCollection().stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("menu");
 		
-		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("action","business",null).getEntity();
+		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("action","BUSINESS",null).getEntity();
 		assertThat(node.getParents()).isNull();
 		assertThat(node.getChildren()).isNull();
-		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("action","business",Node.FIELD_PARENTS).getEntity();
+		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("action","BUSINESS",Node.FIELD_PARENTS).getEntity();
 		assertThat(node.getParents()).isNotNull();
 		assertThat(node.getParents().getCollection()).isNotEmpty();
 		assertThat(node.getParents().getCollection().stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("menu");
 		assertThat(node.getChildren()).isNull();
-		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("action","business",Node.FIELD_CHILDREN).getEntity();
+		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("action","BUSINESS",Node.FIELD_CHILDREN).getEntity();
 		assertThat(node.getParents()).isNull();
 		assertThat(node.getChildren()).isNull();
-		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("action","business",Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN).getEntity();
+		node = (NodeDto) __inject__(NodeRepresentation.class).getOne("action","BUSINESS",Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN).getEntity();
 		assertThat(node.getParents()).isNotNull();
 		assertThat(node.getParents().getCollection()).isNotEmpty();
 		assertThat(node.getParents().getCollection().stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("menu");
@@ -476,16 +471,14 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 	@Test
 	public void read_node_filter_byParent_identifier_business() throws Exception{
 		NodeDto nodeModule = new NodeDto().setIdentifier("MO").setCode("module").setName(__getRandomName__());
-		NodeDto nodeService = new NodeDto().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
-		NodeDto nodeMenu = new NodeDto().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
-		NodeDto nodeAction = new NodeDto().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodeRepresentation.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
-				,nodeAction),null);
-		__inject__(NodeHierarchyRepresentation.class).createMany(__inject__(CollectionHelper.class).instanciate(
-				new NodeHierarchyDto().setParent(nodeModule).setChild(nodeService)
-				,new NodeHierarchyDto().setParent(nodeService).setChild(nodeMenu)
-				,new NodeHierarchyDto().setParent(nodeMenu).setChild(nodeAction)
-				),null);
+		__inject__(NodeRepresentation.class).createOne(nodeModule);
+		NodeDto nodeService = new NodeDto().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(new NodeDto().setCode("module"));
+		__inject__(NodeRepresentation.class).createOne(nodeService);
+		NodeDto nodeMenu = new NodeDto().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(new NodeDto().setCode("service"));
+		__inject__(NodeRepresentation.class).createOne(nodeMenu);
+		NodeDto nodeAction = new NodeDto().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(new NodeDto().setCode("menu"));
+		__inject__(NodeRepresentation.class).createOne(nodeAction);
+		
 		FilterDto filters = __inject__(FilterDto.class).setKlass(Node.class);
 		filters.addField(Node.FIELD_PARENTS, Arrays.asList("module"));
 		@SuppressWarnings("unchecked")
@@ -497,16 +490,14 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 	@Test
 	public void read_node_filter_byParent_identifier_system() throws Exception{
 		NodeDto nodeModule = new NodeDto().setIdentifier("MO").setCode("module").setName(__getRandomName__());
-		NodeDto nodeService = new NodeDto().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
-		NodeDto nodeMenu = new NodeDto().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
-		NodeDto nodeAction = new NodeDto().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
-		__inject__(NodeRepresentation.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
-				,nodeAction),null);
-		__inject__(NodeHierarchyRepresentation.class).createMany(__inject__(CollectionHelper.class).instanciate(
-				new NodeHierarchyDto().setParent(nodeModule).setChild(nodeService)
-				,new NodeHierarchyDto().setParent(nodeService).setChild(nodeMenu)
-				,new NodeHierarchyDto().setParent(nodeMenu).setChild(nodeAction)
-				),null);
+		__inject__(NodeRepresentation.class).createOne(nodeModule);
+		NodeDto nodeService = new NodeDto().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(new NodeDto().setIdentifier("MO"));
+		__inject__(NodeRepresentation.class).createOne(nodeService);
+		NodeDto nodeMenu = new NodeDto().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(new NodeDto().setIdentifier("S"));
+		__inject__(NodeRepresentation.class).createOne(nodeMenu);
+		NodeDto nodeAction = new NodeDto().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(new NodeDto().setIdentifier("ME"));
+		__inject__(NodeRepresentation.class).createOne(nodeAction);
+		
 		FilterDto filters = __inject__(FilterDto.class).setKlass(Node.class);
 		filters.addField(Node.FIELD_PARENTS, Arrays.asList("MO"),ValueUsageType.SYSTEM);
 		@SuppressWarnings("unchecked")

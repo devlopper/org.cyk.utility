@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
 import org.cyk.utility.collection.CollectionHelper;
@@ -24,27 +25,24 @@ import lombok.Getter;
 public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends PersistenceEntity<ENTITY>> extends AbstractBusinessServiceProviderImpl<ENTITY> implements BusinessEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Class<ENTITY> __persistenceEntityClass__;
+	protected Class<ENTITY> __persistenceEntityClass__;
 	@Getter private PERSISTENCE persistence;
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		__persistenceEntityClass__ = getPersistenceEntityClass();
+		if(__persistenceEntityClass__ == null) {
+			String name = StringUtils.substringBefore(getClass().getName() , "BusinessImpl");
+			name = StringUtils.replaceOnce(name, ".business.", ".persistence.");
+			name = StringUtils.replaceOnce(name, ".impl.", ".entities.");
+			__persistenceEntityClass__ = (Class<ENTITY>) __injectClassHelper__().getByName(name);
+		}
 		if(__persistenceEntityClass__ == null) {
 			System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+getClass()+" : persistence entity class cannot be derived <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 		}else {
 			persistence = (PERSISTENCE) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(__persistenceEntityClass__);	
 		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public Class<ENTITY> getPersistenceEntityClass() {
-		if(__persistenceEntityClass__ == null)
-			__persistenceEntityClass__ = (Class<ENTITY>) __injectClassHelper__().getParameterAt(getClass(), 0, Object.class);
-		return __persistenceEntityClass__;
 	}
 	
 	//TODO : an idea is to transform array content to json format and transform it java object
@@ -53,7 +51,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		__throwRuntimeExceptionIfEmpty__(arrayInstanceTwoDimensionString, "save from array : array instance");
 		Collection<ENTITY> entities = null;
 		for(Integer index  = 0; index < arrayInstanceTwoDimensionString.getFirstDimensionElementCount(); index = index + 1) {
-			ENTITY entitiy = __injectClassHelper__().instanciate(getPersistenceEntityClass());
+			ENTITY entitiy = __injectClassHelper__().instanciate(__persistenceEntityClass__);
 			for(Map.Entry<Integer, String> indexEntry : columnIndexFieldNameMap.getEntries()) {
 				__injectFieldValueSetter__().execute(entitiy, indexEntry.getValue(), arrayInstanceTwoDimensionString.get(index, indexEntry.getKey()));
 			}
@@ -62,7 +60,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 			entities.add(entitiy);
 		}
 		if(__injectCollectionHelper__().isNotEmpty(entities)) {
-			__logInfo__("Saving "+entities.size()+" "+getPersistenceEntityClass().getSimpleName());
+			__logInfo__("Saving "+entities.size()+" "+__persistenceEntityClass__.getSimpleName());
 			saveMany(entities);		
 		}
 		return this;
@@ -92,7 +90,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	@Override
 	public Collection<ENTITY> findByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
 		BusinessFunctionReader function = __inject__(BusinessFunctionReader.class);
-		function.setEntityClass(getPersistenceEntityClass());
+		function.setEntityClass(__persistenceEntityClass__);
 		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifiers);
 		function.setEntityIdentifierValueUsageType(valueUsageType);
 		__copyCommonProperties__(function, properties);
@@ -254,7 +252,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 		}else {
 			BusinessFunctionRemover function = __inject__(BusinessFunctionRemover.class);
 			function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifiers);
-			function.setEntityClass(getPersistenceEntityClass());
+			function.setEntityClass(__persistenceEntityClass__);
 			function.setEntityIdentifierValueUsageType(valueUsageType);
 			__copyCommonProperties__(function, properties);
 			function.execute();	

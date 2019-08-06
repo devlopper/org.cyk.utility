@@ -19,4 +19,9 @@ public abstract class NodeDtoMapper extends AbstractNodeMapperImpl<NodeDto, Node
 		return Nodes.class;
 	}
 	
+	@Override
+	protected Class<Node> __getDestinationClass__() {
+		return Node.class;
+	}
+	
 }

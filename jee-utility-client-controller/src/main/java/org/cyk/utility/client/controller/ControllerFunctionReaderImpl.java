@@ -6,10 +6,9 @@ import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
-import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.mapping.MappingHelper;
-import org.cyk.utility.object.ObjectToStringBuilder;
+import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRead;
@@ -35,16 +34,16 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 			Boolean isPageable = __inject__(BooleanHelper.class).get(Properties.getFromPath(properties,Properties.IS_PAGEABLE));
 			Long from = __injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.FROM));
 			Long count = __injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.COUNT));
-			Object filters = Properties.getFromPath(properties,Properties.FILTERS);
-			String filtersAsString = null;
+			FilterDto filters = (FilterDto) Properties.getFromPath(properties,Properties.FILTERS);
+			/*String filtersAsString = null;
 			if(Boolean.TRUE.equals(__injectValueHelper__().isNotBlank(filters))) {
 				if(filters instanceof String)
 					filtersAsString = (String) filters;
 				else
 					filtersAsString = __injectByQualifiersClasses__(ObjectToStringBuilder.class,JavaScriptObjectNotation.Class.class).setObject(filters).execute().getOutput();
-			}
+			}*/
 			if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
-				__response__ = ((RepresentationEntity<?,Object,?>)__representation__).getMany(isPageable,from,count,fields,filtersAsString);	
+				__response__ = ((RepresentationEntity<?,Object,?>)__representation__).getMany(isPageable,from,count,fields,filters);	
 		}else {
 			//Object identifier = identifiers.getFirst();
 			//ValueUsageType valueUsageType = getEntityIdentifierValueUsageType();

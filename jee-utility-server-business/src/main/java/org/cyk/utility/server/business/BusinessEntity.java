@@ -93,8 +93,4 @@ public interface BusinessEntity<PERSISTENCE_ENTITY> extends BusinessServiceProvi
 	
 	/**/
 	
-	Class<PERSISTENCE_ENTITY> getPersistenceEntityClass();
-	
-	/**/
-	
 }
