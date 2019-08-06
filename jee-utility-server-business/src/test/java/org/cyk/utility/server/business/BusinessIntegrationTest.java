@@ -18,15 +18,12 @@ import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
 import org.cyk.utility.server.business.api.MyEntityBusiness;
 import org.cyk.utility.server.business.api.NodeBusiness;
-import org.cyk.utility.server.business.api.NodeHierarchyBusiness;
 import org.cyk.utility.server.business.test.TestBusinessCreate;
 import org.cyk.utility.server.business.test.TestBusinessRead;
 import org.cyk.utility.server.business.test.arquillian.AbstractBusinessArquillianIntegrationTestWithDefaultDeployment;
-import org.cyk.utility.server.business.ApplicationScopeLifeCycleListenerEntities;
 import org.cyk.utility.server.persistence.PersistableClassesGetter;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.entities.Node;
-import org.cyk.utility.server.persistence.entities.NodeHierarchy;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueUsageType;
@@ -513,11 +510,71 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		Node nodeAction = new Node().setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
 		__inject__(NodeBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
 				,nodeAction));
-		__inject__(NodeHierarchyBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(
-				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
-				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
-				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
-				));
+		Node node;
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("module");
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("module",new Properties().setFields(Node.FIELD_PARENTS));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("module",new Properties().setFields(Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNotNull();
+		assertThat(node.getChildren().get()).isNotEmpty();
+		assertThat(node.getChildren().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("module",new Properties().setFields(Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNotNull();
+		assertThat(node.getChildren().get()).isNotEmpty();
+		assertThat(node.getChildren().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
+		
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("service");
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("service",new Properties().setFields(Node.FIELD_PARENTS));
+		assertThat(node.getParents()).isNotNull();
+		assertThat(node.getParents().get()).isNotEmpty();
+		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("module");
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("service",new Properties().setFields(Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNotNull();
+		assertThat(node.getChildren().get()).isNotEmpty();
+		assertThat(node.getChildren().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("service",new Properties().setFields(Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNotNull();
+		assertThat(node.getParents().get()).isNotEmpty();
+		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("module");
+		assertThat(node.getChildren()).isNotNull();
+		assertThat(node.getChildren().get()).isNotEmpty();
+		assertThat(node.getChildren().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
+		
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("action");
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("action",new Properties().setFields(Node.FIELD_PARENTS));
+		assertThat(node.getParents()).isNotNull();
+		assertThat(node.getParents().get()).isNotEmpty();
+		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("action",new Properties().setFields(Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNull();
+		assertThat(node.getChildren()).isNull();
+		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("action",new Properties().setFields(Node.FIELD_PARENTS+","+Node.FIELD_CHILDREN));
+		assertThat(node.getParents()).isNotNull();
+		assertThat(node.getParents().get()).isNotEmpty();
+		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
+		assertThat(node.getChildren()).isNull();
+	}
+	
+	@Test
+	public void update_node() throws Exception{
+		Node nodeModule = new Node().setCode("module").setName(__getRandomName__());
+		Node nodeService = new Node().setCode("service").setName(__getRandomName__()).addParents(nodeModule);
+		Node nodeMenu = new Node().setCode("menu").setName(__getRandomName__()).addParents(nodeService);
+		Node nodeAction = new Node().setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
+		__inject__(NodeBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+				,nodeAction));
 		Node node;
 		node = __inject__(NodeBusiness.class).findByBusinessIdentifier("module");
 		assertThat(node.getParents()).isNull();
@@ -583,11 +640,6 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
 		__inject__(NodeBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
 				,nodeAction));
-		__inject__(NodeHierarchyBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(
-				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
-				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
-				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
-				));
 		Filter filters = __inject__(Filter.class).setKlass(Node.class);
 		filters.addField(Node.FIELD_PARENTS, Arrays.asList("module"));
 		Collection<Node> nodes = __inject__(NodeBusiness.class).find(new Properties().setQueryFilters(filters));
@@ -603,11 +655,6 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
 		__inject__(NodeBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
 				,nodeAction));
-		__inject__(NodeHierarchyBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(
-				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
-				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
-				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
-				));
 		Filter filters = __inject__(Filter.class).setKlass(Node.class);
 		filters.addField(Node.FIELD_PARENTS, Arrays.asList("MO"),ValueUsageType.SYSTEM);
 		Collection<Node> nodes = __inject__(NodeBusiness.class).find(new Properties().setQueryFilters(filters));

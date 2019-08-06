@@ -9,6 +9,9 @@ public interface HierarchyPersistence<HIERARCHY extends AbstractHierarchy<ENTITY
 	HIERARCHIES readByParentsIdentifiers(Collection<String> parentsIdentifiers);
 	HIERARCHIES readByParentsIdentifiers(String...parentsIdentifiers);
 	
+	//HIERARCHIES readByParentsIdentifiersByChildrenIdentifiers(Collection<String> parentsIdentifiers,Collection<String> childrenIdentifiers);
+	//HIERARCHIES readByParentsByChildren(Collection<ENTITY> parents,Collection<ENTITY> children);
+	
 	HIERARCHIES readByParentsBusinessIdentifiers(Collection<Object> parentsBusinessIdentifiers);
 	HIERARCHIES readByParentsBusinessIdentifiers(Object...parentsBusinessIdentifiers);
 	
@@ -23,4 +26,10 @@ public interface HierarchyPersistence<HIERARCHY extends AbstractHierarchy<ENTITY
 	
 	HIERARCHIES readByChildren(Collection<ENTITY> children);
 	HIERARCHIES readByChildren(@SuppressWarnings("unchecked") ENTITY...children);
+	
+	HIERARCHIES readWhereIsParentOrChildIdentifiers(Collection<String> identifiers);
+	HIERARCHIES readWhereIsParentOrChildIdentifiers(String...identifiers);
+	HIERARCHIES readWhereIsParentOrChild(Collection<ENTITY> entities);
+	HIERARCHIES readWhereIsParentOrChild(@SuppressWarnings("unchecked") ENTITY...entities);
+	
 }
