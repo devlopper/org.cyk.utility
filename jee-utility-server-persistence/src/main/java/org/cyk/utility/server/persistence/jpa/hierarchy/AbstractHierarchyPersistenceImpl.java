@@ -31,7 +31,7 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 		if(classInstance != null) {
 			addQueryCollectInstancesReadByParentsOrChildren(readByParentsIdentifiers,readByChildrenIdentifiers,classInstance.getSystemIdentifierField());			
 			addQueryCollectInstancesReadByParentsOrChildren(readByParentsBusinessIdentifiers,readByChildrenBusinessIdentifiers,classInstance.getBusinessIdentifierField());
-			addQueryCollectInstances(readWhereIsParentOrChildIdentifiers, String.format("SELECT tuple FROM %s tuple WHERE tuple.parent.identifier IN :parents AND tuple.child.identifier IN :children"
+			addQueryCollectInstances(readWhereIsParentOrChildIdentifiers, String.format("SELECT tuple FROM %s tuple WHERE tuple.parent.identifier IN :identifiers OR tuple.child.identifier IN :identifiers"
 					, __getTupleName__()));
 		}
 	}
@@ -168,6 +168,11 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByString.FIELD_PARENTS)};
 			}
 			return new Object[]{"childIdentifiers",objects[0]};
+		}else if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readWhereIsParentOrChildIdentifiers)) {
+			/*if(__inject__(ArrayHelper.class).isEmpty(objects)) {
+				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByString.FIELD_PARENTS)};
+			}*/
+			return new Object[]{"identifiers",objects[0]};
 		}
 		return super.__getQueryParameters__(queryContext, properties, objects);
 	}
@@ -176,14 +181,14 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	protected String __getQueryIdentifier__(Class<?> functionClass, Properties properties, Object... parameters) {
 		Filter filter = (Filter) Properties.getFromPath(properties,Properties.QUERY_FILTERS);
 		if(PersistenceFunctionReader.class.equals(functionClass)) {
-			org.cyk.utility.server.persistence.query.filter.Field field = filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
+			org.cyk.utility.server.persistence.query.filter.Field field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
 			if(field != null) {
 				if(ValueUsageType.BUSINESS.equals(field.getValueUsageType()))
 					return readByParentsBusinessIdentifiers;
 				else
 					return readByParentsIdentifiers;
 			}
-			field = filter.getFieldByPath(AbstractIdentifiedByString.FIELD_CHILDREN);
+			field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_CHILDREN);
 			if(field != null) {
 				if(ValueUsageType.BUSINESS.equals(field.getValueUsageType()))
 					return readByChildrenBusinessIdentifiers;

@@ -26,6 +26,7 @@ import org.cyk.utility.server.persistence.api.NodeHierarchyPersistence;
 import org.cyk.utility.server.persistence.api.NodePersistence;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.entities.Node;
+import org.cyk.utility.server.persistence.entities.NodeHierarchies;
 import org.cyk.utility.server.persistence.entities.NodeHierarchy;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryRepository;
@@ -880,6 +881,14 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertThat(node.getParents().get()).isNotEmpty();
 		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
 		assertThat(node.getChildren()).isNull();
+		
+		NodeHierarchies hierarchies = null;
+		hierarchies = __inject__(NodeHierarchyPersistence.class).readWhereIsParentOrChild(nodeModule);
+		assertThat(hierarchies).isNotNull();
+		assertThat(hierarchies.get()).hasSize(1);
+		hierarchies = __inject__(NodeHierarchyPersistence.class).readWhereIsParentOrChild(nodeService);
+		assertThat(hierarchies).isNotNull();
+		assertThat(hierarchies.get()).hasSize(2);
 	}
 	
 	@Test

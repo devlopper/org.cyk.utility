@@ -73,6 +73,7 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 			Collection<?> dtos = (Collection<?>) response.readEntity(__inject__(TypeHelper.class).instanciateGenericCollectionParameterizedTypeForJaxrs(Collection.class,dtoClass));
 			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(dtos))) {
 				object = new ArrayList<Object>();
+				//((Collection<Object>)object).addAll(__inject__(MappingHelper.class).getSources(dtos,__entityClass__));
 				((Collection<Object>)object).addAll(__inject__(MappingHelper.class).getSources(dtos,__inject__(__entityClass__).getClass()));
 				setEntities((Collection<?>) object);	
 			}

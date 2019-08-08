@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
 import org.cyk.utility.collection.CollectionHelper;
@@ -13,48 +14,34 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractControllerServiceProviderImpl<ENTITY> implements ControllerEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Class<ENTITY> entityClass;
-	private Class<?> representationClass;
-	private Class<?> dataTransferClass;
+	protected Class<ENTITY> __entityClass__;
+	protected Class<?> __representationClass__;
+	protected Class<?> __dataTransferClass__;
 	
 	@Override
 	protected void __listenBeforePostConstruct__() {
 		super.__listenBeforePostConstruct__();
-		Class<ENTITY> entityClass = __getEntityClass__();
-		if(entityClass == null)
-			System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+getClass()+" : controller entity class cannot be derived <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-		else
-			setEntityClass(entityClass);
-	}
-	
-	protected Class<ENTITY> __getEntityClass__() {
-		return (Class<ENTITY>) __injectClassHelper__().getParameterAt(getClass(), 0, Object.class);
-	}
-	
-	@Override
-	public Class<ENTITY> getEntityClass() {
-		return entityClass;
-	}
-	
-	@Override
-	public ControllerEntity<ENTITY> setEntityClass(Class<ENTITY> entityClass) {
-		this.entityClass = entityClass;
-		if(this.entityClass == null) {
-			representationClass = null;
-			dataTransferClass = null;
-		}else {
-			representationClass = __inject__(ControllerLayer.class).getDataRepresentationClassFromEntityClass(this.entityClass);
-			dataTransferClass = __inject__(ControllerLayer.class).getDataTransferClassFromEntityClass(this.entityClass);
+		if(__entityClass__ == null) {
+			String name = StringUtils.substringBefore(getClass().getName() , "ControllerImpl");
+			name = StringUtils.replaceOnce(name, ".api.", ".entities.");
+			__entityClass__ = (Class<ENTITY>) __injectClassHelper__().getByName(name);
 		}
-		return this;
+		if(__entityClass__ == null)
+			System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+getClass()+" : controller entity class cannot be derived <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+		else {
+			if(__representationClass__ == null)
+				__representationClass__ = __inject__(ControllerLayer.class).getDataRepresentationClassFromEntityClass(__entityClass__);
+			if(__dataTransferClass__ == null)
+				__dataTransferClass__ = __inject__(ControllerLayer.class).getDataTransferClassFromEntityClass(__entityClass__);
+		}
 	}
 	
 	@Override
 	public Collection<ENTITY> read(Properties properties) {
 		ControllerFunctionReader function = ____inject____(ControllerFunctionReader.class);
 		function.setProperty(Properties.IS_MANY, Boolean.TRUE);
-		function.setEntityClass(getEntityClass());
-		function.setDataTransferClass(dataTransferClass);
+		function.setEntityClass(__entityClass__);
+		function.setDataTransferClass(__dataTransferClass__);
 		__copyReadProperties__(function, properties);
 		//function.getAction().getEntities(Boolean.TRUE).add(object);
 		function.execute();
@@ -74,8 +61,8 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	public Collection<ENTITY> readByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
 		ControllerFunctionReader function = ____inject____(ControllerFunctionReader.class);
 		function.setProperty(Properties.IS_MANY, Boolean.TRUE);
-		function.setEntityClass(getEntityClass());
-		function.setDataTransferClass(dataTransferClass);
+		function.setEntityClass(__entityClass__);
+		function.setDataTransferClass(__dataTransferClass__);
 		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifiers);
 		__copyReadProperties__(function, properties);
 		function.setEntityIdentifierValueUsageType(valueUsageType);
@@ -117,8 +104,8 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	public ENTITY readByIdentifier(Object identifier, ValueUsageType valueUsageType, Properties properties) {
 		ControllerFunctionReader function = ____inject____(ControllerFunctionReader.class);
 		function.setProperty(Properties.IS_MANY, Boolean.FALSE);
-		function.setEntityClass(getEntityClass());
-		function.setDataTransferClass(dataTransferClass);
+		function.setEntityClass(__entityClass__);
+		function.setDataTransferClass(__dataTransferClass__);
 		function.setEntityIdentifier(identifier);// getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifier);
 		__copyReadProperties__(function, properties);
 		function.setEntityIdentifierValueUsageType(valueUsageType);
@@ -159,8 +146,8 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	@Override
 	public Long count(Properties properties) {
 		ControllerFunctionCounter function = ____inject____(ControllerFunctionCounter.class);
-		function.setEntityClass(getEntityClass());
-		function.setDataTransferClass(dataTransferClass);
+		function.setEntityClass(__entityClass__);
+		function.setDataTransferClass(__dataTransferClass__);
 		__copyCountProperties__(function, properties);
 		function.execute();
 		if(properties!=null) {
@@ -182,7 +169,7 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 		
 		ControllerFunctionRemover function = ____inject____(ControllerFunctionRemover.class);
 		function.setProperty(Properties.ALL, Boolean.TRUE);
-		function.getAction().setEntityClass(getEntityClass());
+		function.getAction().setEntityClass(__entityClass__);
 		function.copyProperty(Properties.REQUEST,properties);
 		function.copyProperty(Properties.CONTEXT,properties);
 		function.execute();	
@@ -207,9 +194,9 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	public ControllerEntity<ENTITY> redirect(Object identifier, Properties properties) {
 		ControllerFunctionRedirector function = __inject__(ControllerFunctionRedirector.class)
 				.setTargetSystemAction((SystemAction) Properties.getFromPath(properties, Properties.SYSTEM_ACTION));
-		function.setEntityClass(getEntityClass());
+		function.setEntityClass(__entityClass__);
 		function.getAction().getEntitiesIdentifiers(Boolean.TRUE).add(identifier);
-		function.setDataTransferClass(dataTransferClass);
+		function.setDataTransferClass(__dataTransferClass__);
 		function.copyProperty(Properties.REQUEST,properties);
 		function.copyProperty(Properties.CONTEXT,properties);
 		function.copyProperty(Properties.SYSTEM_ACTION,properties);
@@ -247,10 +234,10 @@ public abstract class AbstractControllerEntityImpl<ENTITY> extends AbstractContr
 	
 	protected RepresentationEntity<?, ?, ?> getRepresentation(){
 		RepresentationEntity<?, ?, ?> representation = null;
-		if(representationClass == null) {
-			__injectThrowableHelper__().throwRuntimeException("No representation class found for "+getEntityClass());
+		if(__representationClass__ == null) {
+			__injectThrowableHelper__().throwRuntimeException("No representation class found for "+__entityClass__);
 		}else {
-			representation = (RepresentationEntity<?, ?, ?>) __inject__(ProxyGetter.class).setClazz(representationClass).execute().getOutput();
+			representation = (RepresentationEntity<?, ?, ?>) __inject__(ProxyGetter.class).setClazz(__representationClass__).execute().getOutput();
 		}
 		return representation;
 	}

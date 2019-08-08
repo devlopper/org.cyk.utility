@@ -14,6 +14,7 @@ import org.cyk.utility.field.FieldType;
 import org.cyk.utility.field.FieldTypeGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.exception.ServiceNotFoundException;
@@ -59,7 +60,8 @@ public class ChoicesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 			Properties properties = new Properties();
 			properties.setRequest(request);
 			properties.setContext(context);
-			properties.setFilters(__injectMapHelper__().instanciateKeyAsStringValueAsObject("__global_query__",query));
+			FilterDto filter = new FilterDto();
+			//properties.setFilters(__injectMapHelper__().instanciateKeyAsStringValueAsObject("__global_query__",query));
 			properties.setCount(maximumNumberOfChoice);
 			if(properties.getCount() == null) {
 				properties.setIsPageable(Boolean.FALSE);	

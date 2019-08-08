@@ -111,9 +111,11 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 	@Override
 	public Collection<ENTITY> read(Properties properties) {
 		Filter filter = (Filter) Properties.getFromPath(properties,Properties.QUERY_FILTERS);
-		Field field = filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
-		if(field != null)
-			return __readByFilterParents__(properties,filter,field);
+		if(filter != null) {
+			Field field = filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
+			if(field != null)
+				return __readByFilterParents__(properties,filter,field);	
+		}
 		return super.read(properties);
 	}
 	

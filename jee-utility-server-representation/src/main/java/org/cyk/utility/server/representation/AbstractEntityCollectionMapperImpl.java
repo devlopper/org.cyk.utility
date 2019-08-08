@@ -1,7 +1,12 @@
 package org.cyk.utility.server.representation;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.cyk.utility.__kernel__.DependencyInjection.inject;
+
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.collection.CollectionInstance;
@@ -67,7 +72,10 @@ public abstract class AbstractEntityCollectionMapperImpl<SOURCE,SOURCE_ITEM,DEST
     		    			
     		    			if(destinationItem == null)
     		    				destinationItem = inject(MappingHelper.class).getDestination(index,destinationItemClass);
-    		    			destinationCollection.add(destinationItem);
+    		    			
+    		    			if(destinationItem != null) {
+    		    				destinationCollection.add(Arrays.asList(destinationItem));
+    		    			}
     		    		}	
     				}else
     					inject(ThrowableHelper.class).throwRuntimeExceptionNotYetImplemented("Destination of type "+destinationClass);

@@ -40,7 +40,7 @@ public abstract class AbstractControllerEntityPersistedInCollectionImpl<ENTITY> 
 	}
 	
 	protected ENTITY __instanciateOneRandomly__(Integer index) {
-		ENTITY entity = __inject__(getEntityClass());
+		ENTITY entity = __inject__(__entityClass__);
 		__injectFieldHelper__().setFieldValueSystemIdentifier(entity, index);
 		__injectFieldHelper__().setFieldValueBusinessIdentifier(entity, __inject__(RandomHelper.class).getAlphanumeric(4));
 		return entity;

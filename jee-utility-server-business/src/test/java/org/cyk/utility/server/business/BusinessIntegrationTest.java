@@ -566,6 +566,8 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		assertThat(node.getParents().get()).isNotEmpty();
 		assertThat(node.getParents().get().stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("menu");
 		assertThat(node.getChildren()).isNull();
+		
+		__inject__(NodeBusiness.class).delete(nodeModule);
 	}
 	
 	@Test @Ignore

@@ -41,7 +41,4 @@ public interface ControllerEntity<ENTITY> extends ControllerServiceProvider<ENTI
 	ControllerEntity<ENTITY> select(Collection<Object> identifiers,Properties properties);
 	ControllerEntity<ENTITY> select(Collection<Object> identifiers);
 	
-	Class<ENTITY> getEntityClass();
-	ControllerEntity<ENTITY> setEntityClass(Class<ENTITY> entityClass);
-	
 }
