@@ -8,8 +8,10 @@ import java.util.logging.Logger;
 import javax.enterprise.util.AnnotationLiteral;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.KernelHelper;
+import org.cyk.utility.__kernel__.constant.ConstantString;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +41,20 @@ public abstract class AbstractObject implements Objectable,Serializable {
 	}
 	
 	protected Object __getInjectIfNull__(String fieldName,Boolean injectIfNull) {
+		System.out.println("AbstractObject.__getInjectIfNull__() 1 : "+Thread.currentThread() .getStackTrace()[1] .getMethodName());
+		System.out.println("AbstractObject.__getInjectIfNull__() 2 : "+Thread.currentThread() .getStackTrace()[2] .getMethodName());
+		return __getInjectOrInstanciateIfNull__(fieldName, injectIfNull, null);
+	}
+	
+	protected Object __getInjectIfNull__(Boolean injectIfNull) {
+		String fieldName = StringUtils.substringAfter(Thread.currentThread() .getStackTrace()[2] .getMethodName(),ConstantString.GET);
+		Integer length = fieldName.length();
+		if(length > 0) {
+			if(length == 1)
+				fieldName = fieldName.toLowerCase();	
+			else
+				fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
+		}
 		return __getInjectOrInstanciateIfNull__(fieldName, injectIfNull, null);
 	}
 	

@@ -3,7 +3,7 @@ package org.cyk.utility.clazz;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
-public class ClassHelperImplUnitTest extends AbstractWeldUnitTest {
+public class ClassHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test
@@ -45,4 +45,5 @@ public class ClassHelperImplUnitTest extends AbstractWeldUnitTest {
 	public void isIsNumberLong() {
 		assertionHelper.assertTrue(__inject__(ClassHelper.class).isInstanceOfNumber(Long.class));
 	}
+	
 }

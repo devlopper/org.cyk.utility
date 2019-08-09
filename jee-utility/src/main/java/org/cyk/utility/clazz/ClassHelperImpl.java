@@ -221,6 +221,15 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 		return isInstanceOfOne(aClass, __inject__(CollectionHelper.class).instanciate(classes));
 	}
 	
+	@Override
+	public String buildNameFrom(String simpleName, String packageName, String sourceNode, String sourceLayer,String sourceLayerSub,String destinationNode, String destinationLayer,String destinationLayerSub) {
+		String name = StringUtils.replaceOnce(packageName, sourceNode, destinationNode);
+		name = StringUtils.replaceOnce(name, sourceLayer, destinationLayer);
+		name = StringUtils.replaceOnce(name, sourceLayerSub, destinationLayerSub);
+		name = name + simpleName;
+		return name;
+	}
+	
 	/**/
 	
 	private static final String DOT = ".";

@@ -35,7 +35,10 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 	}
 	
 	protected Class<?>[] __getUniformResourceIdentifierParameterValueMatrixClassesBasesClasses__() {
-		return new Class<?>[] {DataIdentifiedByString.class,DataIdentifiedByStringAndCoded.class,DataIdentifiedByStringAndCodedAndNamed.class};
+		return new Class<?>[] {DataIdentifiedByString.class,DataIdentifiedByStringAndCoded.class,DataIdentifiedByStringAndCodedAndNamed.class
+			,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.class
+			,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByStringAndCoded.class
+			,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByStringAndCodedAndNamed.class};
 	}
 	
 }

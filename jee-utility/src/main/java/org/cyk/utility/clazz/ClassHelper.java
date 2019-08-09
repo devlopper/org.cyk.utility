@@ -53,5 +53,9 @@ public interface ClassHelper extends Helper {
 	Boolean isInstanceOfOne(Class<?> aClass,Class<?>...classes);
 	
 	/**/
+	
+	String buildNameFrom(String simpleName,String packageName,String sourceNode,String sourceLayer,String sourceLayerSub,String destinationNode,String destinationLayer,String destinationLayerSub);
+	
+	/**/
 
 }

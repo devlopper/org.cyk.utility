@@ -11,6 +11,7 @@ public interface ConstantString {
 	String WORD_VALIDATION = "validation";
 	String WORD_MAIL = "mail";
 	String WORD_NAME = "name";
+	String WORD_GET = "get";
 	
 	String JAVA_STRING_FORMAT_MARKER_S = "%s";
 	
