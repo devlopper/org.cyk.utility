@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepresentationObjectCollection;
+import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueDto;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -52,16 +53,18 @@ public class FieldDtoCollection extends AbstractRepresentationObjectCollection<F
 			}else if(value instanceof String) {
 				type = org.cyk.utility.field.FieldDto.Type.STRING;
 				valueType = ValueDto.Type.STRING;
+				valueAsString = (String) value;
 			}else if(value instanceof Integer) {
 				type = org.cyk.utility.field.FieldDto.Type.INTEGER;
 				valueType = ValueDto.Type.INTEGER;
 			}
 			//valueAsString = __injectByQualifiersClasses__(ObjectToStringBuilder.class, JavaScriptObjectNotation.Class.class).setObject(value).execute().getOutput();
-			try {
-				valueAsString = new ObjectMapper().writeValueAsString(value);
-			} catch (Exception exception) {
-				throw new RuntimeException(exception);
-			}
+			if(__inject__(StringHelper.class).isBlank(valueAsString))
+				try {
+					valueAsString = new ObjectMapper().writeValueAsString(value);
+				} catch (Exception exception) {
+					throw new RuntimeException(exception);
+				}
 		}
 		return add(klass,path, valueAsString,type,valueContainer,valueType, valueUsageType);
 	}

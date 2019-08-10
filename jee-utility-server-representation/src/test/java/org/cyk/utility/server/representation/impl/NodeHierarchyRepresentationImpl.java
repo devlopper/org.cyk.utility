@@ -15,9 +15,4 @@ import org.cyk.utility.server.representation.entities.NodeHierarchyDtoCollection
 public class NodeHierarchyRepresentationImpl extends AbstractRepresentationEntityImpl<NodeHierarchy,NodeHierarchyBusiness,NodeHierarchyDto,NodeHierarchyDtoCollection> implements NodeHierarchyRepresentation,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public Class<NodeHierarchy> getPersistenceEntityClass() {
-		return NodeHierarchy.class;
-	}
-	
 }

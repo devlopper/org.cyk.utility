@@ -9,26 +9,20 @@
 		<version>pom.jee.0.0.1</version>
 	</parent>
 	
-	<groupId>org.cyk.jee.utility.server.representation.deployment</groupId>
-	<artifactId>utility-server-representation-deployment-web</artifactId>
+	<groupId>org.cyk.jee.utility.server.playground</groupId>
+	<artifactId>utility-server-playground</artifactId>
 	<version>0.0.1</version>
 	<packaging>war</packaging>
 
-	<name>Deployment based on JEE</name>
+	<name>Server playground</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.cyk.jee.utility.server.representation</groupId>
-			<artifactId>jee-utility-server-representation</artifactId>
+			<groupId>org.cyk.jee.utility.server.deployment</groupId>
+			<artifactId>jee-utility-server-deployment</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.cyk.jee.utility.server.representation.impl</groupId>
-			<artifactId>jee-utility-server-representation-impl</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		
 		<dependency>
 			<groupId>org.cyk.jee.utility.server.persistence.impl</groupId>
 			<artifactId>jee-utility-server-persistence-impl</artifactId>

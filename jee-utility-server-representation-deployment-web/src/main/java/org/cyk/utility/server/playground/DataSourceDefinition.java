@@ -1,4 +1,4 @@
-package org.cyk.utility.server.representation.deployment.web;
+package org.cyk.utility.server.playground;
 
 @javax.annotation.sql.DataSourceDefinition(
 		name="java:global/utility/representation/deployment/testDataSource",

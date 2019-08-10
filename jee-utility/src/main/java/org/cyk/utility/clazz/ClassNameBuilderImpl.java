@@ -14,6 +14,52 @@ public class ClassNameBuilderImpl extends AbstractFunctionWithPropertiesAsInputI
 
 	private NamingModel sourceNamingModel,destinationNamingModel;
 	private String packageName,simpleName;
+	private Class<?> klass;
+
+	@Override
+	protected String __execute__() {
+		String name = null;
+		Class<?> klass = getKlass();
+		String packageName = getPackageName();
+		if(__injectStringHelper__().isBlank(packageName))
+			packageName = klass.getPackage().getName();
+		String simpleName = getSimpleName();
+		if(__injectStringHelper__().isBlank(simpleName)) {
+			simpleName = StringUtils.substringBeforeLast(klass.getSimpleName(),"$Proxy$_$$_WeldSubclass");
+		}
+		
+		NamingModel sourceNamingModel = getSourceNamingModel();
+		NamingModel destinationNamingModel = getDestinationNamingModel();
+		if(sourceNamingModel!=null && destinationNamingModel!=null) {
+			name = StringUtils.replaceOnce(packageName, sourceNamingModel.getNode(), destinationNamingModel.getNode());
+			name = StringUtils.replaceOnce(name, sourceNamingModel.getLayer(), destinationNamingModel.getLayer());
+			name = StringUtils.replaceOnce(name, sourceNamingModel.getSubLayer(), destinationNamingModel.getSubLayer());
+			if(!name.endsWith("."))
+				name = name + ".";
+			
+			if(StringUtils.isNotBlank(sourceNamingModel.getSuffix()))
+				simpleName = StringUtils.replaceOnce(simpleName, sourceNamingModel.getSuffix(), "");
+			String suffix = destinationNamingModel.getSuffix();
+			if(__injectStringHelper__().isBlank(suffix)) {
+				Boolean isSuffixedByLayer = destinationNamingModel.getIsSuffixedByLayer();
+				if(isSuffixedByLayer == null || isSuffixedByLayer) {
+					if("representation".equals(destinationNamingModel.getLayer()) && "entities".equals(destinationNamingModel.getSubLayer()))
+						suffix = "Dto";
+					else if(("persistence".equals(destinationNamingModel.getLayer()) || "controller".equals(destinationNamingModel.getLayer())) 
+							&& "entities".equals(destinationNamingModel.getSubLayer()))
+						suffix = "";
+					else if("impl".equals(destinationNamingModel.getSubLayer()))
+						suffix = __injectStringHelper__().applyCase(destinationNamingModel.getLayer(),Case.FIRST_CHARACTER_UPPER)+"Impl";
+					else
+						suffix = __injectStringHelper__().applyCase(destinationNamingModel.getLayer(),Case.FIRST_CHARACTER_UPPER);
+				}
+			}
+			if(__injectStringHelper__().isNotBlank(suffix))
+				simpleName = simpleName + suffix;
+			name = name + simpleName;
+		}
+		return name;
+	}
 	
 	@Override
 	public String getPackageName() {
@@ -34,6 +80,17 @@ public class ClassNameBuilderImpl extends AbstractFunctionWithPropertiesAsInputI
 	@Override
 	public ClassNameBuilder setSimpleName(String simpleName) {
 		this.simpleName = simpleName;
+		return this;
+	}
+	
+	@Override
+	public Class<?> getKlass() {
+		return klass;
+	}
+	
+	@Override
+	public ClassNameBuilder setKlass(Class<?> klass) {
+		this.klass = klass;
 		return this;
 	}
 	
@@ -65,43 +122,6 @@ public class ClassNameBuilderImpl extends AbstractFunctionWithPropertiesAsInputI
 	public ClassNameBuilder setDestinationNamingModel(NamingModel destinationNamingModel) {
 		this.destinationNamingModel = destinationNamingModel;
 		return this;
-	}
-
-	@Override
-	protected String __execute__() {
-		String name = null;
-		String packageName = getPackageName();
-		NamingModel sourceNamingModel = getSourceNamingModel();
-		NamingModel destinationNamingModel = getDestinationNamingModel();
-		if(sourceNamingModel!=null && destinationNamingModel!=null) {
-			name = StringUtils.replaceOnce(packageName, sourceNamingModel.getNode(), destinationNamingModel.getNode());
-			name = StringUtils.replaceOnce(name, sourceNamingModel.getLayer(), destinationNamingModel.getLayer());
-			name = StringUtils.replaceOnce(name, sourceNamingModel.getSubLayer(), destinationNamingModel.getSubLayer());
-			if(!name.endsWith("."))
-				name = name + ".";
-			String simpleName = getSimpleName();
-			if(StringUtils.isNotBlank(sourceNamingModel.getSuffix()))
-					simpleName = StringUtils.replaceOnce(simpleName, sourceNamingModel.getSuffix(), "");
-			String suffix = destinationNamingModel.getSuffix();
-			if(__injectStringHelper__().isBlank(suffix)) {
-				Boolean isSuffixedByLayer = destinationNamingModel.getIsSuffixedByLayer();
-				if(isSuffixedByLayer == null || isSuffixedByLayer) {
-					if("representation".equals(destinationNamingModel.getLayer()) && "entities".equals(destinationNamingModel.getSubLayer()))
-						suffix = "Dto";
-					else if(("persistence".equals(destinationNamingModel.getLayer()) || "controller".equals(destinationNamingModel.getLayer())) 
-							&& "entities".equals(destinationNamingModel.getSubLayer()))
-						suffix = "";
-					else if("impl".equals(destinationNamingModel.getSubLayer()))
-						suffix = __injectStringHelper__().applyCase(destinationNamingModel.getLayer(),Case.FIRST_CHARACTER_UPPER)+"Impl";
-					else
-						suffix = __injectStringHelper__().applyCase(destinationNamingModel.getLayer(),Case.FIRST_CHARACTER_UPPER);
-				}
-			}
-			if(__injectStringHelper__().isNotBlank(suffix))
-				simpleName = simpleName + suffix;
-			name = name + simpleName;
-		}
-		return name;
 	}
 
 }

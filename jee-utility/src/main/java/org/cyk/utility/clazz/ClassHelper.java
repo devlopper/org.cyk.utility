@@ -45,6 +45,7 @@ public interface ClassHelper extends Helper {
 	
 	Class<?> getByName(String name,Boolean isReturnNullIfNotFound);
 	Class<?> getByName(String name);
+	Class<?> getByName(ClassNameBuilder nameBuilder);
 	
 	String getSimpleName(Class<?> aClass);
 	String getSimpleName(String string);

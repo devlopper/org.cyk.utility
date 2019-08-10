@@ -1,4 +1,4 @@
-package org.cyk.utility.server.representation.deployment.web;
+package org.cyk.utility.server.persistence.entities;
 
 import java.io.Serializable;
 

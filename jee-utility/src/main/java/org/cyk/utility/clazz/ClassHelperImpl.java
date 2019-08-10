@@ -198,6 +198,11 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	}
 	
 	@Override
+	public Class<?> getByName(ClassNameBuilder nameBuilder) {
+		return nameBuilder == null ? null : getByName(nameBuilder.execute().getOutput());
+	}
+	
+	@Override
 	public String getSimpleName(Class<?> aClass) {
 		return aClass == null ? null : aClass.getSimpleName();
 	}

@@ -9,9 +9,9 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayInstanceTwoDimensionString;
+import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.file.excel.FileExcelSheetDataArrayReader;
@@ -20,29 +20,24 @@ import org.cyk.utility.server.persistence.PersistenceEntity;
 import org.cyk.utility.server.persistence.PersistenceLayer;
 import org.cyk.utility.value.ValueUsageType;
 
-import lombok.Getter;
-
 public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends PersistenceEntity<ENTITY>> extends AbstractBusinessServiceProviderImpl<ENTITY> implements BusinessEntity<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	protected Class<ENTITY> __persistenceEntityClass__;
-	@Getter private PERSISTENCE persistence;
+	protected PERSISTENCE __persistence__;
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
 		if(__persistenceEntityClass__ == null) {
-			String name = StringUtils.substringBefore(getClass().getName() , "BusinessImpl");
-			name = StringUtils.replaceOnce(name, ".business.", ".persistence.");
-			name = StringUtils.replaceOnce(name, ".impl.", ".entities.");
-			__persistenceEntityClass__ = (Class<ENTITY>) __injectClassHelper__().getByName(name);
+			ClassNameBuilder classNameBuilder = __inject__(ClassNameBuilder.class).setKlass(getClass());
+			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().business().impl().suffix();
+			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().persistence().entities();
+			__persistenceEntityClass__ = __injectValueHelper__().returnOrThrowIfBlank("persistence entity class",(Class<ENTITY>) __injectClassHelper__().getByName(classNameBuilder));
 		}
-		if(__persistenceEntityClass__ == null) {
-			System.err.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+getClass()+" : persistence entity class cannot be derived <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-		}else {
-			persistence = (PERSISTENCE) __inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(__persistenceEntityClass__);	
-		}
+		if(__persistence__ == null)
+			__persistence__ = (PERSISTENCE) __injectValueHelper__().returnOrThrowIfBlank("persistence",__inject__(PersistenceLayer.class).injectInterfaceClassFromEntityClass(__persistenceEntityClass__));	
 	}
 	
 	//TODO : an idea is to transform array content to json format and transform it java object
@@ -168,7 +163,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 
 	@Override
 	public Collection<ENTITY> find(Properties properties) {
-		Collection<ENTITY> entities = getPersistence().read(properties);
+		Collection<ENTITY> entities = __persistence__.read(properties);
 		__listenFindManyAfter__(entities,properties);
 		return entities;
 	}
@@ -181,7 +176,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	
 	@Override
 	public Collection<Object> findIdentifiers(ValueUsageType valueUsageType, Properties properties) {
-		return getPersistence().readIdentifiers(valueUsageType, properties);
+		return __persistence__.readIdentifiers(valueUsageType, properties);
 	}
 	
 	@Override
@@ -227,7 +222,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	
 	@Override
 	public Long count(Properties properties) {
-		return getPersistence().count(properties);
+		return __persistence__.count(properties);
 	}
 
 	@Override
@@ -245,7 +240,7 @@ public abstract class AbstractBusinessEntityImpl<ENTITY,PERSISTENCE extends Pers
 	@Override @Transactional
 	public BusinessEntity<ENTITY> deleteByIdentifiers(Collection<Object> identifiers, ValueUsageType valueUsageType,Properties properties) {
 		if(Boolean.TRUE.equals(__isCallDeleteByInstanceOnDeleteByIdentifier__())) {
-			Collection<ENTITY> entities = getPersistence().readByIdentifiers(identifiers, valueUsageType, properties);
+			Collection<ENTITY> entities = __persistence__.readByIdentifiers(identifiers, valueUsageType, properties);
 			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(entities))) {
 				deleteMany(entities, properties);
 			}

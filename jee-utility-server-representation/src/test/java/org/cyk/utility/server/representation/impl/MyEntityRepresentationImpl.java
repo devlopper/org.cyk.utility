@@ -14,10 +14,5 @@ import org.cyk.utility.server.representation.entities.MyEntityDtoCollection;
 @ApplicationScoped
 public class MyEntityRepresentationImpl extends AbstractRepresentationEntityImpl<MyEntity,MyEntityBusiness,MyEntityDto,MyEntityDtoCollection> implements MyEntityRepresentation,Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Override
-	public Class<MyEntity> getPersistenceEntityClass() {
-		return MyEntity.class;
-	}
 	
 }

@@ -11,44 +11,51 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.map.MapInstanceIntegerToString;
 import org.cyk.utility.object.ObjectFromStringBuilder;
 import org.cyk.utility.server.business.BusinessEntity;
-import org.cyk.utility.server.business.BusinessLayer;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.value.ValueUsageType;
-
-import lombok.Getter;
 
 public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINESS extends BusinessEntity<PERSISTENCE_ENTITY>,ENTITY extends AbstractEntityFromPersistenceEntity,ENTITY_COLLECTION> extends AbstractRepresentationServiceProviderImpl implements RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTION>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Getter private Class<ENTITY> entityClass;
-	@Getter private Class<PERSISTENCE_ENTITY> persistenceEntityClass;
-	@Getter private BUSINESS business;
+	private Class<ENTITY> __entityClass__;
+	private Class<PERSISTENCE_ENTITY> __persistenceEntityClass__;
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		persistenceEntityClass = (Class<PERSISTENCE_ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
-		business = (BUSINESS) __inject__(BusinessLayer.class).injectInterfaceClassFromPersistenceEntityClass(getPersistenceEntityClass());
-		entityClass =  (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 2, AbstractEntityFromPersistenceEntity.class);
+		if(__entityClass__ == null) {
+			ClassNameBuilder classNameBuilder = __inject__(ClassNameBuilder.class).setKlass(getClass());
+			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().representation().impl().suffix();
+			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().representation().entities().suffix();
+			__entityClass__ = __injectValueHelper__().returnOrThrowIfBlank("entity class",(Class<ENTITY>) __injectClassHelper__().getByName(classNameBuilder));
+		}
+		
+		if(__persistenceEntityClass__ == null) {
+			ClassNameBuilder classNameBuilder = __inject__(ClassNameBuilder.class).setKlass(getClass());
+			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().representation().impl().suffix();
+			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().persistence().entities();
+			__persistenceEntityClass__ = __injectValueHelper__().returnOrThrowIfBlank("persistence entity class",(Class<PERSISTENCE_ENTITY>) __injectClassHelper__().getByName(classNameBuilder));
+		}
+		
 	}
 	
 	/* */
 	
 	@Override
 	public Response createOne(ENTITY entity) {
-		return __inject__(RepresentationFunctionCreator.class).setEntity(entity).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+		return __inject__(RepresentationFunctionCreator.class).setEntity(entity).setPersistenceEntityClass(__persistenceEntityClass__).execute().getResponse();
 	}
 	
 	@Override
 	public Response createMany(Collection<ENTITY> entities,String properties) {
 		Map<String,Object> map = __buildMapFromString__(properties);
 		RepresentationFunctionCreator function = __inject__(RepresentationFunctionCreator.class);
-		function.setEntities(entities).setPersistenceEntityClass(getPersistenceEntityClass());
+		function.setEntities(entities).setPersistenceEntityClass(__persistenceEntityClass__);
 		if(map != null) {
 			function.getProperties().setIsBatchable(map.get(Properties.IS_BATCHABLE));
 			function.getProperties().setBatchSize(map.get(Properties.BATCH_SIZE));	
@@ -65,7 +72,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	public Response getMany(Boolean isPageable,Long from,Long count,String fields,FilterDto filter) {
 		RepresentationFunctionReader function = __inject__(RepresentationFunctionReader.class);
 		function.setIsCollectionable(Boolean.TRUE);
-		function.setEntityClass(getEntityClass()).setPersistenceEntityClass(getPersistenceEntityClass())
+		function.setEntityClass(__entityClass__).setPersistenceEntityClass(__persistenceEntityClass__)
 				.setEntityFieldNames(__getFieldNames__(fields))
 				.setProperty(Properties.IS_QUERY_RESULT_PAGINATED, isPageable == null ? Boolean.TRUE : isPageable)
 				.setProperty(Properties.QUERY_FIRST_TUPLE_INDEX, from)
@@ -76,14 +83,14 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	
 	@Override
 	public Response getOne(String identifier,String type,String fields) {
-		return __inject__(RepresentationFunctionReader.class).setIsCollectionable(Boolean.FALSE).setEntityClass(getEntityClass()).setEntityIdentifier(identifier)
-				.setEntityIdentifierValueUsageType(type).setPersistenceEntityClass(getPersistenceEntityClass()).setEntityFieldNames(__getFieldNames__(fields))
+		return __inject__(RepresentationFunctionReader.class).setIsCollectionable(Boolean.FALSE).setEntityClass(__entityClass__).setEntityIdentifier(identifier)
+				.setEntityIdentifierValueUsageType(type).setPersistenceEntityClass(__persistenceEntityClass__).setEntityFieldNames(__getFieldNames__(fields))
 				.execute().getResponse();
 	}
 	
 	@Override
 	public Response updateOne(ENTITY entity,String fields) {
-		return __inject__(RepresentationFunctionModifier.class).setPersistenceEntityClass(getPersistenceEntityClass()).setEntity(entity)
+		return __inject__(RepresentationFunctionModifier.class).setPersistenceEntityClass(__persistenceEntityClass__).setEntity(entity)
 				.setEntityFieldNames(__getFieldNames__(fields)).execute().getResponse();
 	}
 	
@@ -97,31 +104,31 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	public Response deleteOne(String identifier,String type) {
 		System.out.println("AbstractRepresentationEntityImpl.deleteOne() DELETEONE "+identifier+" : "+type);
 		return __inject__(RepresentationFunctionRemover.class).setEntityIdentifier(identifier).setEntityIdentifierValueUsageType(type)
-			.setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+			.setPersistenceEntityClass(persistenceEntityClass).execute().getResponse();
 	}
 	*/
 	@Override
 	public Response deleteOne(ENTITY entity) {
-		return __inject__(RepresentationFunctionRemover.class).setEntity(entity).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+		return __inject__(RepresentationFunctionRemover.class).setEntity(entity).setPersistenceEntityClass(__persistenceEntityClass__).execute().getResponse();
 	}
 	
 	@Override
 	public Response deleteMany() {
-		return __inject__(RepresentationFunctionRemover.class).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+		return __inject__(RepresentationFunctionRemover.class).setPersistenceEntityClass(__persistenceEntityClass__).execute().getResponse();
 	}
 	
 	@Override
 	public Response deleteByIdentifiers(List<String> identifiers, String type) {
 		ValueUsageType valueUsageType = ValueUsageType.BUSINESS.name().equalsIgnoreCase(type) ? ValueUsageType.BUSINESS : ValueUsageType.SYSTEM;
 		RepresentationFunctionRemover function = __inject__(RepresentationFunctionRemover.class);
-		function.setPersistenceEntityClass(getPersistenceEntityClass()).setEntityIdentifierValueUsageType(valueUsageType);
+		function.setPersistenceEntityClass(__persistenceEntityClass__).setEntityIdentifierValueUsageType(valueUsageType);
 		function.addActionEntitiesIdentifiers(__injectCollectionHelper__().cast(Object.class, identifiers));
 		return function.execute().getResponse();
 	}
 
 	@Override
 	public Response deleteAll() {
-		return __inject__(RepresentationFunctionRemover.class).setPersistenceEntityClass(getPersistenceEntityClass()).execute().getResponse();
+		return __inject__(RepresentationFunctionRemover.class).setPersistenceEntityClass(__persistenceEntityClass__).execute().getResponse();
 	}
 	
 	@Override
@@ -141,7 +148,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	@Override
 	public Response count(String filters) {
 		RepresentationFunctionCounter function = __inject__(RepresentationFunctionCounter.class);
-		function.setPersistenceEntityClass(getPersistenceEntityClass());
+		function.setPersistenceEntityClass(__persistenceEntityClass__);
 		Map<String,Object> map = __getFiltersMap__(filters);
 		if(map != null)
 			function.setProperty(Properties.QUERY_FILTERS,map);

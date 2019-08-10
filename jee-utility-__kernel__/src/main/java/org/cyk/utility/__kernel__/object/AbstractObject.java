@@ -41,8 +41,6 @@ public abstract class AbstractObject implements Objectable,Serializable {
 	}
 	
 	protected Object __getInjectIfNull__(String fieldName,Boolean injectIfNull) {
-		System.out.println("AbstractObject.__getInjectIfNull__() 1 : "+Thread.currentThread() .getStackTrace()[1] .getMethodName());
-		System.out.println("AbstractObject.__getInjectIfNull__() 2 : "+Thread.currentThread() .getStackTrace()[2] .getMethodName());
 		return __getInjectOrInstanciateIfNull__(fieldName, injectIfNull, null);
 	}
 	

@@ -1,10 +1,12 @@
-package org.cyk.utility.server.representation.deployment.web;
+package org.cyk.utility.server.persistence.impl;
 
 import java.io.Serializable;
 
 import javax.inject.Singleton;
 
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
+import org.cyk.utility.server.persistence.api.MyEntityPersistence;
+import org.cyk.utility.server.persistence.entities.MyEntity;
 
 @Singleton
 public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEntity> implements MyEntityPersistence,Serializable {

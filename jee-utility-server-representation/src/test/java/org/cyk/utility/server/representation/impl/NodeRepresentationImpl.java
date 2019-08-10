@@ -14,10 +14,5 @@ import org.cyk.utility.server.representation.entities.NodeDtoCollection;
 @ApplicationScoped
 public class NodeRepresentationImpl extends AbstractRepresentationEntityImpl<Node,NodeBusiness,NodeDto,NodeDtoCollection> implements NodeRepresentation,Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Override
-	public Class<Node> getPersistenceEntityClass() {
-		return Node.class;
-	}
 	
 }

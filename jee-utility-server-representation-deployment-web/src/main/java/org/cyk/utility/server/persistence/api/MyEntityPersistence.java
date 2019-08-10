@@ -1,6 +1,7 @@
-package org.cyk.utility.server.representation.deployment.web;
+package org.cyk.utility.server.persistence.api;
 
 import org.cyk.utility.server.persistence.PersistenceEntity;
+import org.cyk.utility.server.persistence.entities.MyEntity;
 
 public interface MyEntityPersistence extends PersistenceEntity<MyEntity> {
 

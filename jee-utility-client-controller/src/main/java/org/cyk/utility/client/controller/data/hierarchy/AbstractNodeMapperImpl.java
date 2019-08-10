@@ -64,16 +64,14 @@ public abstract class AbstractNodeMapperImpl<SOURCE,DESTINATION,SOURCE_COLLECTIO
     	return destinationCollection;
     }
     
-    protected abstract Class<SOURCE_COLLECTION> __getSourceCollectionClass__();
     protected abstract Class<DESTINATION_COLLECTION> __getDestinationCollectionClass__();
     protected abstract Class<DESTINATION> __getDestinationClass__();
     
-    @Override
 	protected Class<SOURCE_COLLECTION> __getSourceCollectionClass__() {
-		return Collection.class;
+		return (Class<SOURCE_COLLECTION>) Collection.class;
 	}
 	
-	@Override
+	/*@Override
 	protected Class<DESTINATION_COLLECTION> __getDestinationCollectionClass__() {
 		return PrivilegeDtoCollection.class;
 	}
@@ -81,6 +79,6 @@ public abstract class AbstractNodeMapperImpl<SOURCE,DESTINATION,SOURCE_COLLECTIO
 	@Override
 	protected Class<DESTINATION> __getDestinationClass__() {
 		return PrivilegeDto.class;
-	}
+	}*/
 	
 }
