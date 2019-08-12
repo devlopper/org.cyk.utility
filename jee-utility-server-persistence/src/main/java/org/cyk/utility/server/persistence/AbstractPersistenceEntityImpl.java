@@ -2,12 +2,14 @@ package org.cyk.utility.server.persistence;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
@@ -512,12 +514,29 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected void __listenExecuteReadAfter__(ENTITY entity,Properties properties) {
+		Strings fields = __getFieldsFromProperties__(properties);
+		if(__injectCollectionHelper__().isNotEmpty(fields) && __injectCollectionHelper__().isNotEmpty(__classInstance__.getFields())) {
+			for(Field index : __classInstance__.getFields().get()) {
+				String indexName = index.getName();
+				if(!Modifier.isStatic(index.getModifiers()) && !Modifier.isFinal(index.getModifiers()) 
+						&& !__classInstance__.getSystemIdentifierField().getName().equals(indexName) && !fields.contains(indexName))
+					__listenExecuteReadAfterSetFieldValueToNull__(entity, index,properties);
+				else if(index.getAnnotation(Transient.class)!=null)
+					__listenExecuteReadAfterSetFieldValue__(entity, index,properties);
+			}
+		}
 		Strings uniformResourceIdentifierStringFormats = __getReadOneUniformResourceIdentifierFormats__();
 		if(__injectCollectionHelper__().isNotEmpty(uniformResourceIdentifierStringFormats)) {
 			for(String index : uniformResourceIdentifierStringFormats.get())
 				__inject__(RequestProcessor.class).setUniformResourceIdentifierStringFormat(index).setResponseEntity(entity).execute();		
 		}
 	}
+	
+	protected void __listenExecuteReadAfterSetFieldValueToNull__(ENTITY entity,Field field,Properties properties) {
+		__injectFieldValueSetter__().execute(entity, field, null);
+	}
+	
+	protected void __listenExecuteReadAfterSetFieldValue__(ENTITY entity,Field field,Properties properties) {}
 	
 	protected Strings __getReadOneUniformResourceIdentifierFormats__() {
 		return null;

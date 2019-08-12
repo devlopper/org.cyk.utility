@@ -257,6 +257,11 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	}
 	
 	@Override
+	public Boolean contains(T element) {
+		return collection!=null && collection.contains(element);
+	}
+	
+	@Override
 	public String toString() {
 		return collection == null ? ConstantEmpty.STRING : collection.toString();
 	}

@@ -30,6 +30,8 @@ public interface CollectionInstance<T> extends Objectable {
 	CollectionInstance<T> setIsDoNotAddNull(Boolean isDoNotAddNull);
 	Boolean getIsDoNotAddNull();
 	
+	Boolean contains(T element);
+	
 	T getAt(Object index);
 	T getFirst();
 	<I> I getFirstInstanceOf(Class<I> elementClass);

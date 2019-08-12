@@ -10,6 +10,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -309,6 +310,83 @@ public class RepresentationBasedJaxbUnitTest {
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			Dates dates = (Dates) unmarshaller.unmarshal(getClass().getResourceAsStream("dates.xml"));
 			Assert.assertTrue(dates.getZonedDateTime().equals(ZonedDateTime.of(2000, 3, 1,10,15,14,0,ZoneId.of("Z"))));
+		} catch(Exception exception) {
+			exception.printStackTrace();
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Test
+	public void marshal_action() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Action.class);
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			StringWriter writer = new StringWriter();
+			marshaller.marshal(new Action().setIdentifier("download").setUniformResourceLocator("/file/1/isinline=true").setMethod("get"), writer);
+			String string = writer.toString();
+			assertThat(string).contains("<link");
+			assertThat(string).contains("rel=\"download\"");
+			assertThat(string).contains("method=\"get\"");
+			assertThat(string).contains("href=\"/file/1/isinline=true\"");
+		} catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Test
+	public void unmarshal_action() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Action.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			Action action = (Action) unmarshaller.unmarshal(getClass().getResourceAsStream("action.xml"));
+			Assert.assertTrue(action.getIdentifier().equals("download"));
+			Assert.assertTrue(action.getUniformResourceLocator().equals("http://localhost:8080/file/01/download?isinline=true"));
+			Assert.assertTrue(action.getMethod().equals("GET"));
+		} catch(Exception exception) {
+			exception.printStackTrace();
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Test
+	public void marshal_actions() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Actions.class);
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			StringWriter writer = new StringWriter();
+			marshaller.marshal(new Actions().add("download","/file/1/isinline=true","get"), writer);
+			String string = writer.toString();
+			assertThat(string).contains("<links");
+			assertThat(string).contains("<link");
+			assertThat(string).contains("rel=\"download\"");
+			assertThat(string).contains("method=\"get\"");
+			assertThat(string).contains("href=\"/file/1/isinline=true\"");
+		} catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Test
+	public void unmarshal_actions() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Actions.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			Actions actions = (Actions) unmarshaller.unmarshal(getClass().getResourceAsStream("actions.xml"));
+			Iterator<Action> iterator = actions.getCollection().iterator();
+			Action action = iterator.next();
+			Assert.assertTrue(action.getIdentifier().equals("update"));
+			Assert.assertTrue(action.getUniformResourceLocator().equals("http://localhost:8080/file/01"));
+			Assert.assertTrue(action.getMethod().equals("PUT"));
+			action = iterator.next();
+			Assert.assertTrue(action.getIdentifier().equals("delete"));
+			Assert.assertTrue(action.getUniformResourceLocator().equals("http://localhost:8080/file/01"));
+			Assert.assertTrue(action.getMethod().equals("DELETE"));
+			action = iterator.next();
+			Assert.assertTrue(action.getIdentifier().equals("download"));
+			Assert.assertTrue(action.getUniformResourceLocator().equals("http://localhost:8080/file/01/download?isinline=true"));
+			Assert.assertTrue(action.getMethod().equals("GET"));
 		} catch(Exception exception) {
 			exception.printStackTrace();
 			throw new RuntimeException(exception);
