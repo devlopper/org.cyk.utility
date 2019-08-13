@@ -416,7 +416,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	protected String __getQueryIdentifierByIdentifierField__(ValueUsageType valueUsageType,String defaultQueryIdentifier,Filter filters){
 		String identifier = null;
 		Field identifierField = ValueUsageType.BUSINESS.equals(valueUsageType) ? __classInstance__.getBusinessIdentifierField() : __classInstance__.getSystemIdentifierField();
-		org.cyk.utility.server.persistence.query.filter.Field field = filters.getFieldByPath(identifierField.getName());
+		org.cyk.utility.server.persistence.query.filter.Field field = null;
+		if(filters != null)
+			field = filters.getFieldByPath(identifierField.getName());
 		if(field != null) {
 			Object identifiers = field.getValue();
 			ArithmeticOperator arithmeticOperator = field.getArithmeticOperator();

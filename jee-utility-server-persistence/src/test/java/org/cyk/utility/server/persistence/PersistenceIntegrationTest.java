@@ -44,6 +44,7 @@ import org.cyk.utility.value.ValueUsageType;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
@@ -1098,6 +1099,21 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertThat(field.getValue().getClass()).isEqualTo(String.class);
 		assertThat(field.getValue()).isEqualTo("hello");
 		assertThat(field.getValueUsageType()).isEqualTo(ValueUsageType.BUSINESS);
+	}
+	
+	@Test
+	public void stringfy_filterDto_veryLight() throws Exception{
+		FilterDto filterDto = new FilterDto().setValue("hello");
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setSerializationInclusion(Include.NON_EMPTY);
+		String string = objectMapper.writeValueAsString(filterDto);
+		System.out.println("PersistenceIntegrationTest.stringfy_filterDto_veryLight() ::: "+string);
+		filterDto = objectMapper.readValue(string, FilterDto.class);
+		Filter filter = __inject__(MappingHelper.class).getDestination(filterDto, Filter.class);
+		assertThat(filter).isNotNull();
+		assertThat(filter.getKlass()).isNull();
+		assertThat(filter.getFields()).isNull();
+		assertThat(filter.getValue()).isEqualTo("hello");
 	}
 	
 	/**/

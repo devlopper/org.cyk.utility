@@ -4,6 +4,7 @@ import javax.ws.rs.ext.ParamConverter;
 
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class FilterDtoConverter implements ParamConverter<FilterDto> {
@@ -20,7 +21,7 @@ public class FilterDtoConverter implements ParamConverter<FilterDto> {
 	@Override
 	public String toString(FilterDto filterDto) {
 		try {
-			return new ObjectMapper().writeValueAsString(filterDto);
+			return new ObjectMapper().setSerializationInclusion(Include.NON_EMPTY).writeValueAsString(filterDto);
 		} catch (Exception exception) {
 			throw new RuntimeException(exception);
 		}

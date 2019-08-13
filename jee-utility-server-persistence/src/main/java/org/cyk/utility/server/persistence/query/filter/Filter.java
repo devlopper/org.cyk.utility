@@ -20,6 +20,12 @@ public interface Filter extends Objectable {
 	Filter addField(String fieldName, Object fieldValue,ValueUsageType valueUsageType);
 	Filter addField(String fieldName, Object fieldValue);
 	
+	/**
+	 * Global filtering value
+	 */
+	String getValue();
+	Filter setValue(String value);
+	
 	Boolean hasFieldWithPath(String...paths);
 	
 	Field getFieldByPath(String...paths);

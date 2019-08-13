@@ -10,6 +10,7 @@ import org.cyk.utility.value.ValueDto;
 import org.cyk.utility.value.ValueUsageType;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,8 @@ public class FilterDto extends AbstractRepresentationObject implements Serializa
 	private String klass;
 	@JsonIgnoreProperties(value="size")
 	private FieldDtoCollection fields;
+
+	private String value;
 	
 	public FilterDto setKlass(Class<?> klass) {
 		if(klass != null)

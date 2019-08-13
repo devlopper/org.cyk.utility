@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,7 +72,7 @@ public abstract class AbstractRepresentationObject extends org.cyk.utility.__ker
 	@Override
 	public String toString() {
 		try {
-			return new ObjectMapper().writeValueAsString(this);
+			return new ObjectMapper().setSerializationInclusion(Include.NON_EMPTY).writeValueAsString(this);
 		} catch (JsonProcessingException exception) {
 			exception.printStackTrace();
 			return super.toString();

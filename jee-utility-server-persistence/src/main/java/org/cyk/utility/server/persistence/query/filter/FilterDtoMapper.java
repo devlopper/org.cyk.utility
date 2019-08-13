@@ -12,7 +12,7 @@ public abstract class FilterDtoMapper extends AbstractMapperSourceDestinationImp
 	private static final long serialVersionUID = 1L;
 	
 	public Class<?> getKlass(String name) {
-		return DependencyInjection.inject(ClassHelper.class).getByName(name);
+		return name == null ? null : DependencyInjection.inject(ClassHelper.class).getByName(name);
 	}
 	
 	public String getClassName(Class<?> klass) {

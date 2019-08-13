@@ -16,6 +16,7 @@ public class FilterImpl extends AbstractObject implements Filter,Serializable {
 
 	private Class<?> klass;
 	private Fields fields;
+	private String value;
 	
 	@Override
 	public Class<?> getKlass() {
@@ -88,5 +89,16 @@ public class FilterImpl extends AbstractObject implements Filter,Serializable {
 	@Override
 	public Filter addField(String fieldName, Object fieldValue) {
 		return addField(fieldName, fieldValue, null);
+	}
+	
+	@Override
+	public String getValue() {
+		return value;
+	}
+	
+	@Override
+	public Filter setValue(String value) {
+		this.value = value;
+		return this;
 	}
 }
