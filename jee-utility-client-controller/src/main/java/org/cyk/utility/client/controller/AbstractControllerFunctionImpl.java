@@ -99,6 +99,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 						else if(responseEntityDto instanceof ResponseEntityDto)
 							throw new RuntimeException( ((ResponseEntityDto)responseEntityDto).getMessageCollection().toString());
 					}else if(Response.Status.Family.CLIENT_ERROR.equals(responseStatusFamily)){
+						System.out.println("AbstractControllerFunctionImpl.__execute__() CLIENT ERROR : "+response.getStatusInfo()+" : "+response.readEntity(String.class));
 						/*String summary = null;
 						String summaryInternalizationStringKey = __getMessageSummaryInternalizationStringBuilderKey__(action,response);
 						if(__injectStringHelper__().isBlank(summaryInternalizationStringKey)) {

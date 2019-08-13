@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<representation>
+    <links>
+        <link rel="download" method="GET" href="http://localhost:8080/file/01/download?isinline=true"/>
+    </links>
+</representation>

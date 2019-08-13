@@ -1,9 +1,13 @@
 package org.cyk.utility.__kernel__.object.__static__.representation;
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +20,8 @@ public abstract class AbstractRepresentationObject extends org.cyk.utility.__ker
 	@JsonProperty(value=__ATTRIBUTE___ACTIONS____)
 	private Actions __actions__;
 	
-	@XmlAttribute(name=__ATTRIBUTE___ACTIONS____)
+	//@XmlTransient
+	@XmlElement(name=__ATTRIBUTE___ACTIONS____)
 	public Actions get__actions__() {
 		return __actions__;
 	}
@@ -49,12 +54,28 @@ public abstract class AbstractRepresentationObject extends org.cyk.utility.__ker
 	}
 	
 	public AbstractRepresentationObject add__download__(String uniformResourceLocator, String method) {
-		add__action__(Action.DOWNLOAD, uniformResourceLocator,method);
+		add__action__(Action.IDENTIFIER_DOWNLOAD, uniformResourceLocator,method);
 		return this;
 	}
 	
+	/**/
+	
+	@JsonIgnore
+	@XmlTransient
 	public String get__downloadUniformResourceLocator__() {
-		return get__actionUniformResourceLocator__byIdentifier(Action.DOWNLOAD);
+		return get__actionUniformResourceLocator__byIdentifier(Action.IDENTIFIER_DOWNLOAD);
+	}
+	
+	/**/
+	
+	@Override
+	public String toString() {
+		try {
+			return new ObjectMapper().writeValueAsString(this);
+		} catch (JsonProcessingException exception) {
+			exception.printStackTrace();
+			return super.toString();
+		}
 	}
 	
 	private static final String __ATTRIBUTE___ACTIONS____ = Actions.__ROOT_NAME__;

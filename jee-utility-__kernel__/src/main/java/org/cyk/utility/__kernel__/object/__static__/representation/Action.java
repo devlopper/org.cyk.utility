@@ -54,13 +54,19 @@ public class Action implements Serializable {
 	
 	/**/
 	
-	public static final String CREATE = "create";
-	public static final String READ = "read";
-	public static final String UPDATE = "update";
-	public static final String DELETE = "delete";
-	public static final String DOWNLOAD = "download";
-	public static final String UPLOAD = "upload";
-	public static final String LOAD = "load";
-	public static final String EXPORT = "export";
-	public static final String IMPORT = "import";
+	public static final String IDENTIFIER_CREATE = "create";
+	public static final String IDENTIFIER_READ = "read";
+	public static final String IDENTIFIER_UPDATE = "update";
+	public static final String IDENTIFIER_DELETE = "delete";
+	public static final String IDENTIFIER_DOWNLOAD = "download";
+	public static final String IDENTIFIER_UPLOAD = "upload";
+	public static final String IDENTIFIER_LOAD = "load";
+	public static final String IDENTIFIER_EXPORT = "export";
+	public static final String IDENTIFIER_IMPORT = "import";
+	
+	public static final String METHOD_GET = "GET";
+	public static final String METHOD_POST = "POST";
+	public static final String METHOD_PUT = "PUT";
+	public static final String METHOD_DELETE = "DELETE";
+	public static final String METHOD_PATCH = "PATCH";
 }

@@ -393,6 +393,45 @@ public class RepresentationBasedJaxbUnitTest {
 		}
 	}
 	
+	//@Test
+	public void marshal_representation() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Representation.class);
+			Marshaller marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			StringWriter writer = new StringWriter();
+			//marshaller.marshal(new Representation().add__download__("/file/1/isinline=true","get"), writer);
+			String string = writer.toString();
+			assertThat(string).contains("<representation>");
+			assertThat(string).contains("</representation>");
+			assertThat(string).contains("<links");
+			assertThat(string).contains("<link");
+			assertThat(string).contains("rel=\"download\"");
+			assertThat(string).contains("method=\"get\"");
+			assertThat(string).contains("href=\"/file/1/isinline=true\"");
+			System.out.println(string);
+		} catch(Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	@Test
+	public void unmarshal_representation() {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Representation.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			Representation representation = (Representation) unmarshaller.unmarshal(getClass().getResourceAsStream("representation.xml"));
+			Iterator<Action> iterator = representation.get__actions__().getCollection().iterator();
+			Action action = iterator.next();
+			Assert.assertTrue(action.getIdentifier().equals("download"));
+			Assert.assertTrue(action.getUniformResourceLocator().equals("http://localhost:8080/file/01/download?isinline=true"));
+			Assert.assertTrue(action.getMethod().equals("GET"));
+		} catch(Exception exception) {
+			exception.printStackTrace();
+			throw new RuntimeException(exception);
+		}
+	}
+	
 	/**/
 	
 	@XmlRootElement @Getter @Setter @Accessors(chain=true)
@@ -465,5 +504,11 @@ public class RepresentationBasedJaxbUnitTest {
 		public ZonedDateTime getZonedDateTime() {
 			return zonedDateTime;
 		}
+	}
+	
+	@XmlRootElement @Getter @Setter @Accessors(chain=true)
+	public static class Representation extends AbstractRepresentationObject {
+		private static final long serialVersionUID = 1L;
+		
 	}
 }

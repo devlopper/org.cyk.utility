@@ -3,11 +3,13 @@ package org.cyk.utility.server.representation.impl;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
 import javax.ws.rs.ext.Provider;
 
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
+import org.cyk.utility.server.representation.RepresentationEntity;
 
 @Provider
 public class ParameterConverterProvider  implements ParamConverterProvider {
@@ -18,7 +20,13 @@ public class ParameterConverterProvider  implements ParamConverterProvider {
 	@Override
 	public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
 		if(FilterDto.class.equals(rawType))
-			return (ParamConverter<T>) FILTER_DTO_CONVERTER;
+			return (ParamConverter<T>) FILTER_DTO_CONVERTER;	
+		if(annotations!=null && annotations.length==1 && annotations[0] instanceof QueryParam) {
+			QueryParam queryParam = (QueryParam) annotations[0];
+			if(queryParam != null && RepresentationEntity.PARAMETER_FILTERS.equals(queryParam.value())) {
+				return (ParamConverter<T>) FILTER_DTO_CONVERTER;
+			}
+		}
 		return null;
 	}
 

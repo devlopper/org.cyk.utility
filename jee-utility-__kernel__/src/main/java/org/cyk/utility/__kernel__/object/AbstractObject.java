@@ -143,4 +143,7 @@ public abstract class AbstractObject implements Objectable,Serializable {
 	protected void __log__(Throwable throwable) {
 		__logSevere__(throwable.toString());
 	}
+
+	/**/
+	
 }
