@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
 public class NodeDto extends AbstractNodeCodedAndNamed<NodeDto,NodeDtoCollection> implements Serializable {	
 	private static final long serialVersionUID = 1L;
-
+ 
 	@Override
 	public NodeDto setIdentifier(String identifier) {
 		return (NodeDto) super.setIdentifier(identifier);
@@ -30,13 +30,4 @@ public class NodeDto extends AbstractNodeCodedAndNamed<NodeDto,NodeDtoCollection
 		return (NodeDto) super.setName(name);
 	}
 	
-	@Override
-	public NodeDto addParents(NodeDto... parents) {
-		return (NodeDto) super.addParents(parents);
-	}
-	
-	@Override
-	public NodeDto addChildren(NodeDto... children) {
-		return (NodeDto) super.addChildren(children);
-	}
 }

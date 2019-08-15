@@ -12,7 +12,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
-public abstract class AbstractHierarchy<ENTITY extends AbstractEntityFromPersistenceEntityCodedAndNamed<ENTITY,?>> extends AbstractEntityFromPersistenceEntity implements Serializable {	
+public abstract class AbstractHierarchy<ENTITY extends AbstractNodeCodedAndNamed<ENTITY,?>> extends AbstractEntityFromPersistenceEntity implements Serializable {	
 	private static final long serialVersionUID = 1L;
 
 	private ENTITY parent;

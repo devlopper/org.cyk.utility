@@ -10,6 +10,6 @@ import org.cyk.utility.server.representation.entities.MyEntityDtoCollection;
 @Path(MyEntityRepresentation.PATH)
 public interface MyEntityRepresentation extends RepresentationEntity<MyEntity,MyEntityDto,MyEntityDtoCollection> {
 	
-	String PATH = "/myentities";
+	String PATH = "/myentity";
 	
 }

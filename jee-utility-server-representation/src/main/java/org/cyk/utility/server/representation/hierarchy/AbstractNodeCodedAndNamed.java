@@ -9,11 +9,10 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
-public abstract class AbstractEntityFromPersistenceEntityCodedAndNamed<ENTITY extends AbstractEntityFromPersistenceEntityCodedAndNamed<ENTITY,?>,COLLECTION extends AbstractEntityCollection<ENTITY>> extends org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntityCodedAndNamed implements Serializable {	
+public abstract class AbstractNodeCodedAndNamed<ENTITY extends AbstractNodeCodedAndNamed<ENTITY,?>,COLLECTION extends AbstractNodeCollection<ENTITY>> extends org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntityCodedAndNamed implements Serializable {	
 	private static final long serialVersionUID = 1L;
 
 	private COLLECTION parents;
-	
 	private COLLECTION children;
 	
 	@SuppressWarnings("unchecked")
@@ -23,7 +22,7 @@ public abstract class AbstractEntityFromPersistenceEntityCodedAndNamed<ENTITY ex
 		return parents;			
 	}
 	
-	public AbstractEntityFromPersistenceEntityCodedAndNamed<ENTITY,COLLECTION> addParents(@SuppressWarnings("unchecked") ENTITY...parents) {
+	public AbstractNodeCodedAndNamed<ENTITY,COLLECTION> addParents(@SuppressWarnings("unchecked") ENTITY...parents) {
 		getParents(Boolean.TRUE).add(parents);
 		return this;
 	}
@@ -35,7 +34,7 @@ public abstract class AbstractEntityFromPersistenceEntityCodedAndNamed<ENTITY ex
 		return children;			
 	}
 	
-	public AbstractEntityFromPersistenceEntityCodedAndNamed<ENTITY,COLLECTION> addChildren(@SuppressWarnings("unchecked") ENTITY...children) {
+	public AbstractNodeCodedAndNamed<ENTITY,COLLECTION> addChildren(@SuppressWarnings("unchecked") ENTITY...children) {
 		getChildren(Boolean.TRUE).add(children);
 		return this;
 	}

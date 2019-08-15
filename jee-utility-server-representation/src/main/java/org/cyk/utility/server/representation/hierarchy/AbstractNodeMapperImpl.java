@@ -6,8 +6,8 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.instance.InstanceHelper;
-import org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
+import org.cyk.utility.server.representation.AbstractMapperSourceDestinationImpl;
 
 public abstract class AbstractNodeMapperImpl<SOURCE,DESTINATION,SOURCE_COLLECTION,DESTINATION_COLLECTION> extends AbstractMapperSourceDestinationImpl<SOURCE, DESTINATION> {
 	private static final long serialVersionUID = 1L;

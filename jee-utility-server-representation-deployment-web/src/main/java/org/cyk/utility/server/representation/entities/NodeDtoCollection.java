@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
-@XmlSeeAlso(NodeDto.class)
+@Getter @Setter @Accessors(chain=true) @NoArgsConstructor
+@XmlRootElement @XmlSeeAlso(NodeDto.class)
 public class NodeDtoCollection extends AbstractNodeCollection<NodeDto> implements Serializable {
 	private static final long serialVersionUID = 1L;
 

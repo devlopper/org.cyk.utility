@@ -58,6 +58,7 @@ public class Action implements Serializable {
 	public static final String IDENTIFIER_READ = "read";
 	public static final String IDENTIFIER_UPDATE = "update";
 	public static final String IDENTIFIER_DELETE = "delete";
+	public static final String IDENTIFIER_DELETE_BY_IDENTIFIERS = "delete.by.identifiers";
 	public static final String IDENTIFIER_DOWNLOAD = "download";
 	public static final String IDENTIFIER_UPLOAD = "upload";
 	public static final String IDENTIFIER_LOAD = "load";

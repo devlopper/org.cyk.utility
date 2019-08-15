@@ -4,17 +4,16 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 
-import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCoded;
+import org.cyk.utility.server.persistence.jpa.AbstractIdentifiedByStringAndCodedAndNamed;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Entity @Getter @Setter @Accessors(chain=true)
-public class MyEntity extends AbstractIdentifiedByStringAndCoded implements Serializable {
+public class MyEntity extends AbstractIdentifiedByStringAndCodedAndNamed implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String name;
 	private Long long1;
 	private Long long2;
 	

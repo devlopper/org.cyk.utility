@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.object.__static__.representation.Action;
 import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
@@ -19,7 +20,6 @@ import org.cyk.utility.server.representation.api.MyEntityRepresentation;
 import org.cyk.utility.server.representation.api.NodeRepresentation;
 import org.cyk.utility.server.representation.entities.MyEntityDto;
 import org.cyk.utility.server.representation.entities.NodeDto;
-import org.cyk.utility.server.representation.test.TestRepresentationCreate;
 import org.cyk.utility.server.representation.test.TestRepresentationRead;
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.value.ValueUsageType;
@@ -38,7 +38,24 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 	
 	@Test
 	public void create_myEntity_one() throws Exception{
-		__inject__(TestRepresentationCreate.class).addObjects(new MyEntityDto().setCode("a")).execute();
+		MyEntityDto entity = new MyEntityDto().setCode("a");
+		assertThat(entity.getIdentifier()).isBlank();
+		__inject__(MyEntityRepresentation.class).createOne(entity);
+		assertThat(entity.getIdentifier()).isNotBlank();
+		entity = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(entity.getIdentifier(), "system", null).getEntity();
+		assertThat(entity).isNotNull();
+		Action action = null;
+		action = entity.get__action__byIdentifier(Action.IDENTIFIER_READ);
+		assertThat(action).isNotNull();
+		assertThat(action.getMethod()).isEqualTo(Action.METHOD_GET);
+		assertThat(action.getUniformResourceLocator()).endsWith("/"+entity.getIdentifier());
+		action = entity.get__action__byIdentifier(Action.IDENTIFIER_UPDATE);
+		assertThat(action).isNotNull();
+		assertThat(action.getMethod()).isEqualTo(Action.METHOD_PUT);
+		action = entity.get__action__byIdentifier(Action.IDENTIFIER_DELETE);
+		assertThat(action).isNotNull();
+		assertThat(action.getMethod()).isEqualTo(Action.METHOD_DELETE);
+		assertThat(action.getUniformResourceLocator()).endsWith("/delete/identifiers?identifier="+entity.getIdentifier());
 	}
 	
 	@Test

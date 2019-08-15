@@ -10,7 +10,6 @@ import org.cyk.utility.value.ValueDto;
 import org.cyk.utility.value.ValueUsageType;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
