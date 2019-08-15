@@ -61,16 +61,20 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	}
 	
 	protected Object[] __getPathFormatParameters__(String actionIdentifier,HttpServletRequest request,DESTINATION destination, SOURCE source) {
-		String context = StringUtils.substringAfter(request.getRequestURI(), request.getContextPath());
-		context = StringUtils.removeStart(context, "/");
-		context = StringUtils.substringBefore(context,"/");
-		if(Action.IDENTIFIER_READ.equals(actionIdentifier) || Action.IDENTIFIER_DELETE.equals(actionIdentifier)) {
-			if(source instanceof AbstractEntityFromPersistenceEntity)
-				return new Object[] {context,((AbstractEntityFromPersistenceEntity)source).getIdentifier()};
-		}
-		return new Object[] {context};
+		String resourcePath = StringUtils.substringAfter(request.getRequestURI(), request.getContextPath());
+		resourcePath = StringUtils.removeStart(resourcePath, "/");
+		resourcePath = StringUtils.substringBefore(resourcePath,"/");
+		return __getPathFormatParameters__(actionIdentifier, request, resourcePath, destination, source);
 	}
 	
+	protected Object[] __getPathFormatParameters__(String actionIdentifier,HttpServletRequest request,String resourcePath,DESTINATION destination, SOURCE source) {
+		if(Action.IDENTIFIER_READ.equals(actionIdentifier) || Action.IDENTIFIER_DELETE.equals(actionIdentifier)) {
+			if(source instanceof AbstractEntityFromPersistenceEntity)
+				return new Object[] {resourcePath,((AbstractEntityFromPersistenceEntity)source).getIdentifier()};
+		}
+		return new Object[] {resourcePath};
+	}
+
 	protected String __getActionMethod__(String actionIdentifier,DESTINATION destination, SOURCE source) {
 		if(Action.IDENTIFIER_READ.equals(actionIdentifier))
 			return Action.METHOD_GET;
