@@ -2,6 +2,8 @@ package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -19,6 +21,7 @@ import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
 import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 
 @Singleton @Named
@@ -89,6 +92,28 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 		else if(StringUtils.startsWithIgnoreCase(mimeType, "video/"))
 			player = "quicktime";
 		return player;
+	}
+	
+	public <T> DualListModel<T> buildDualList(Collection<T> available,Collection<T> selected) {
+		DualListModel<T> dualListModel = new DualListModel<T>(new ArrayList<>(), new ArrayList<>());
+		if(__inject__(CollectionHelper.class).isNotEmpty(available)) {
+			for(T index : available) {
+				Boolean isSelected = null;
+				if(__inject__(CollectionHelper.class).isNotEmpty(selected)) {
+					for(T indexSub : selected) {
+						if(index.equals(indexSub)) {
+							isSelected = Boolean.TRUE;
+							break;
+						}
+					}
+				}
+				if(Boolean.TRUE.equals(isSelected))
+					dualListModel.getTarget().add(index);
+				else
+					dualListModel.getSource().add(index);
+			}
+		}
+		return dualListModel;
 	}
 	
 	/**/
