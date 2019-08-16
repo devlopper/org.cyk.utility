@@ -3,6 +3,7 @@ package org.cyk.utility.client.controller.component.window;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.dialog.DialogBuilder;
 import org.cyk.utility.client.controller.component.menu.MenuBuilder;
@@ -57,7 +58,7 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		OutputStringTextBuilder title = getTitle();
 		if(title!=null) {
 			if(__inject__(StringHelper.class).isNotBlank(applicationName))
-				title.setValue(applicationName+"|"+title.getValue());
+				title.setValue((Boolean.TRUE.equals(IS_TITLE_PREFIXED_WITH_APPLICATION_NAME) ? applicationName+"|" : ConstantEmpty.STRING) +title.getValue());
 			__setRequestAndContextAndUniformResourceLocatorMapOf__(title);
 			window.setTitle(title.execute().getOutput());
 		}
@@ -246,4 +247,7 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	public static final String FIELD_MENU_MAP = "menuMap";
 	public static final String FIELD_DIALOG = "dialog";
 
+	/**/
+	
+	public static Boolean IS_TITLE_PREFIXED_WITH_APPLICATION_NAME = Boolean.FALSE;
 }

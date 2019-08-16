@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -517,16 +518,23 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected void __listenExecuteReadAfter__(ENTITY entity,Properties properties) {
 		Strings fields = __getFieldsFromProperties__(properties);
+		Collection<Field> fieldsToBeSet = new ArrayList<>();
+		Collection<Field> fieldsToBeSetToNull = new ArrayList<>();
 		if(__injectCollectionHelper__().isNotEmpty(fields) && __injectCollectionHelper__().isNotEmpty(__classInstance__.getFields())) {
 			for(Field index : __classInstance__.getFields().get()) {
 				String indexName = index.getName();
 				if(!Modifier.isStatic(index.getModifiers()) && !Modifier.isFinal(index.getModifiers()) 
 						&& !__classInstance__.getSystemIdentifierField().getName().equals(indexName) && !fields.contains(indexName))
-					__listenExecuteReadAfterSetFieldValueToNull__(entity, index,properties);
+					fieldsToBeSetToNull.add(index);
 				else if(index.getAnnotation(Transient.class)!=null)
-					__listenExecuteReadAfterSetFieldValue__(entity, index,properties);
+					fieldsToBeSet.add(index);
 			}
 		}
+		for(Field index : fieldsToBeSet)
+			__listenExecuteReadAfterSetFieldValue__(entity, index,properties);
+		for(Field index : fieldsToBeSetToNull)
+			__listenExecuteReadAfterSetFieldValueToNull__(entity, index,properties);	
+		
 		Strings uniformResourceIdentifierStringFormats = __getReadOneUniformResourceIdentifierFormats__();
 		if(__injectCollectionHelper__().isNotEmpty(uniformResourceIdentifierStringFormats)) {
 			for(String index : uniformResourceIdentifierStringFormats.get())
@@ -535,7 +543,8 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected void __listenExecuteReadAfterSetFieldValueToNull__(ENTITY entity,Field field,Properties properties) {
-		__injectFieldValueSetter__().execute(entity, field, null);
+		//TODO not working well because of jpa entitymanager that tracks any changes to fields in context
+		//__injectFieldValueSetter__().execute(entity, field, null);
 	}
 	
 	protected void __listenExecuteReadAfterSetFieldValue__(ENTITY entity,Field field,Properties properties) {}

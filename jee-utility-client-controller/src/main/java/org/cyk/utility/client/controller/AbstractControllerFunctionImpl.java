@@ -48,15 +48,17 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	@Override
 	protected void __initialiseWorkingVariables__() {
 		super.__initialiseWorkingVariables__();
-		__representationEntityClass__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Transfer Class of %s", __entityClass__.getName())
-				, __inject__(DataTransferObjectClassGetter.class).setDataClass(__entityClass__).execute().getOutput());
-		__representationClass__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Representation Class of %s", __entityClass__.getName()),
-				__inject__(DataRepresentationClassGetter.class).setDataClass(__entityClass__).execute().getOutput());
-		
-		__representation__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Representation of %s", __entityClass__.getName())
-				,__inject__(ProxyGetter.class).setClassUniformResourceIdentifierStringRequest(Properties.getFromPath(getProperties(), Properties.REQUEST))
-				.setClazz(__representationClass__).execute().getOutput())
-				;
+		if(__entityClass__ != null) {
+			__representationEntityClass__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Transfer Class of %s", __entityClass__.getName())
+					, __inject__(DataTransferObjectClassGetter.class).setDataClass(__entityClass__).execute().getOutput());
+			__representationClass__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Representation Class of %s", __entityClass__.getName()),
+					__inject__(DataRepresentationClassGetter.class).setDataClass(__entityClass__).execute().getOutput());
+			
+			__representation__ = __injectValueHelper__().returnOrThrowIfBlank(String.format("Data Representation of %s", __entityClass__.getName())
+					,__inject__(ProxyGetter.class).setClassUniformResourceIdentifierStringRequest(Properties.getFromPath(getProperties(), Properties.REQUEST))
+					.setClazz(__representationClass__).execute().getOutput())
+					;	
+		}
 	}
 	
 	@Override
@@ -163,6 +165,7 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	protected abstract void __executeRepresentation__();
 	
 	protected void __listenExecuteThrowServiceNotFoundException__() {
+		System.out.println("AbstractControllerFunctionImpl.__listenExecuteThrowServiceNotFoundException__() : "+__response__.readEntity(String.class));
 		__injectThrowableHelper__().throw_(__inject__(ServiceNotFoundException.class).setSystemAction(__action__).setResponse(__response__));
 	}
 	

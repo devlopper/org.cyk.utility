@@ -17,6 +17,7 @@ import org.cyk.utility.server.representation.ResponseEntityDto;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;
 import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemActionCustom;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
@@ -54,6 +55,10 @@ public abstract class AbstractCommandFunctionImpl extends AbstractControllerFunc
 	}
 	
 	protected void __act__(SystemAction action,Object data) {
+		//clear all previous notifications
+		getNotificationBuilders(Boolean.TRUE).removeAll();
+		getNotifications(Boolean.TRUE).removeAll();
+		
 		if(action!=null) {
 			Properties properties = new Properties();
 			Objects entities = action.getEntities();
@@ -87,6 +92,8 @@ public abstract class AbstractCommandFunctionImpl extends AbstractControllerFunc
 				/*
 				 * MVC : To add data to local collection
 				 */
+			}else if(action instanceof SystemActionCustom) {
+				/* Nothing to do */
 			}else
 				__inject__(ThrowableHelper.class).throwRuntimeException("System action not yet handle : "+action.getIdentifier());	
 			
