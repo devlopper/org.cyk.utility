@@ -9,6 +9,18 @@
 	
 	<!-- Input -->
 	
+	<tag>
+        <tag-name>inputTree</tag-name>
+        <source>tag/input/tree/inputTree.xhtml</source>
+        <attribute>
+        	<description>input tree</description>
+            <name>value</name>
+            <required>true</required>
+            <type>org.cyk.utility.client.controller.web.jsf.primefaces.tag.InputTree</type>
+        </attribute>
+        
+    </tag>
+	
     <tag>
         <tag-name>inputText</tag-name>
         <source>tag/input/text/oneline/text.xhtml</source>
