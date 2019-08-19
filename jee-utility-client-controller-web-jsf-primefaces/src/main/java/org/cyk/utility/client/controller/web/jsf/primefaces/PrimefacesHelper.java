@@ -203,7 +203,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 		return treeNode;
 	}
 	
-	public Collection<TreeNode> getTreeNodeChildren(TreeNode treeNode,Integer depth) {
+	public <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> Collection<TreeNode> getTreeNodeChildren(TreeNode treeNode,Integer depth,Collection<NODE> datas) {
 		Collection<TreeNode> children = new ArrayList<>();
 		if(treeNode != null) {
 			if(depth == null)
@@ -213,15 +213,26 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 			Integer index = 0;
 			Collection<TreeNode> parents = Arrays.asList(treeNode);
 			Collection<TreeNode> directChildren;
+			Boolean datasIsEmpty = __inject__(CollectionHelper.class).isEmpty(datas);
 			while (index < depth && __inject__(CollectionHelper.class).isNotEmpty(parents)) {
 				directChildren = new ArrayList<>();
+				Collection<TreeNode> nextParents = new ArrayList<>();
 				for(TreeNode parent : parents) {
-					if(__inject__(CollectionHelper.class).isNotEmpty(parent.getChildren()))
-						directChildren.addAll(parent.getChildren());		
+					if(__inject__(CollectionHelper.class).isNotEmpty(parent.getChildren())) {
+						if(datasIsEmpty)
+							directChildren.addAll(parent.getChildren());
+						else {
+							for(TreeNode indexDirectChildren : parent.getChildren()) {
+								if(datas.contains(indexDirectChildren.getData()))
+									directChildren.add(indexDirectChildren);
+							}
+						}
+						nextParents.addAll(parent.getChildren());
+					}
 				}
 				children.addAll(directChildren);
 				index = index + 1;
-				parents = new ArrayList<>(directChildren);
+				parents = __inject__(CollectionHelper.class).isEmpty(nextParents) ? null : new ArrayList<>(nextParents);
 			}			
 		}
 		return children;
@@ -229,14 +240,14 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	
 	public <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> PrimefacesHelper setTreeNodesSelected(TreeNode treeNode,Collection<NODE> nodes,Boolean selected) {
 		if(treeNode!=null && __inject__(CollectionHelper.class).isNotEmpty(nodes)) {
-			Collection<TreeNode> children = getTreeNodeChildren(treeNode, null);
+			Collection<TreeNode> children = getTreeNodeChildren(treeNode, null,null);
 			for(TreeNode index : children) {
 				if(nodes.contains(index.getData()))
 					index.setSelected(selected);
 				if(Boolean.TRUE.equals(selected))
 					setTreeNodesParentsExpanded(index,Boolean.TRUE);
-				else if(!index.getParent().isSelected())
-					setTreeNodesParentsExpanded(index,Boolean.FALSE);
+				//else if(!index.getParent().isSelected())
+				//	setTreeNodesParentsExpanded(index,Boolean.FALSE);
 			}
 		}
 		return this;
