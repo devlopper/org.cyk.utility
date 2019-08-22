@@ -7,9 +7,9 @@
 		<jta-data-source>java:global/utility/representation/deployment/testDataSource</jta-data-source>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		
-		<class>org.cyk.utility.server.persistence.entities.MyEntity</class>
-		<class>org.cyk.utility.server.persistence.entities.Node</class>
-		<class>org.cyk.utility.server.persistence.entities.NodeHierarchy</class>
+		<class>org.cyk.utility.playground.server.persistence.entities.MyEntity</class>
+		<class>org.cyk.utility.playground.server.persistence.entities.Node</class>
+		<class>org.cyk.utility.playground.server.persistence.entities.NodeHierarchy</class>
 		
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="${hibernate.hbm2ddl.auto}" />

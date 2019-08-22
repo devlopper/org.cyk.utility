@@ -1,0 +1,12 @@
+{
+  "realm": "${env.keycloak.realm}",
+  "auth-server-url": "${env.keycloak.auth-server-url}",
+  "ssl-required": "external",
+  "resource": "${env.keycloak.resource}",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "${env.keycloak.secret}"
+  },
+  "confidential-port": 0,
+  "policy-enforcer": {}
+}

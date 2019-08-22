@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-		<groupId>org.cyk.pom.jee</groupId>
-		<artifactId>pom-jee</artifactId>
-		<version>pom.jee.0.0.1</version>
+		<groupId>org.cyk.pom.jee.client</groupId>
+		<artifactId>pom-jee-client</artifactId>
+		<version>pom.jee.client.0.0.1</version>
 	</parent>
 	
 	<groupId>org.cyk.jee.utility.client.playground</groupId>
@@ -22,6 +22,28 @@
 			<artifactId>jee-utility-client-deployment</artifactId>
 			<version>0.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.cyk.jee.utility.server.playground</groupId>
+			<artifactId>jee-utility-server-playground</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
-
+	
+	<profiles>
+		<profile>
+			<id>deployment.common</id>
+			<properties>
+				<cyk.parameter.system.name>Playground</cyk.parameter.system.name>
+				<cyk.context.parameter.theme.primefaces>atlantis-blue</cyk.context.parameter.theme.primefaces>
+			</properties>
+		</profile>
+		
+		<profile>
+			<id>deployment.wildfly.local</id>
+			<properties>
+				<cyk.parameter.proxy.uniform.resource.identifier>http://localhost:8080/playground/server</cyk.parameter.proxy.uniform.resource.identifier>
+			</properties>
+		</profile>
+	</profiles>
+	
 </project>

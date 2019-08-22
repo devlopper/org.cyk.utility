@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+	
+	<display-name>usermanagement Client</display-name>
+	
+	<context-param>
+		<param-name>cyk.parameter.system.name</param-name>
+		<param-value>${cyk.parameter.system.name}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>cyk.parameter.proxy.uniform.resource.identifier</param-name>
+		<param-value>${cyk.parameter.proxy.uniform.resource.identifier}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>cyk.context.parameter.theme.class.name</param-name>
+		<param-value>${cyk.context.parameter.theme.class.name}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>${cyk.context.parameter.theme.primefaces}</param-value>
+	</context-param>
+	
+	<!-- Static resources -->
+	
+	<!-- Favicon -->
+
+	<context-param>
+		<param-name>cyk.context.parameter.theme.favicon.file.folder</param-name>
+		<param-value>${cyk.context.parameter.theme.favicon.file.folder}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>cyk.context.parameter.theme.favicon.file.name.prefix</param-name>
+		<param-value>${cyk.context.parameter.theme.favicon.file.name.prefix}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>cyk.context.parameter.theme.favicon.file.name.extension</param-name>
+		<param-value>${cyk.context.parameter.theme.favicon.file.name.extension}</param-value>
+	</context-param>
+	
+	<!-- Logo -->
+	
+	<context-param>
+		<param-name>cyk.context.parameter.theme.logo.file.resources.folder</param-name>
+		<param-value>${cyk.context.parameter.theme.logo.file.resources.folder}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>cyk.context.parameter.theme.logo.file.folder</param-name>
+		<param-value>${cyk.context.parameter.theme.logo.file.folder}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>cyk.context.parameter.theme.logo.file.name.prefix</param-name>
+		<param-value>${cyk.context.parameter.theme.logo.file.name.prefix}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>cyk.context.parameter.theme.logo.file.name.extension</param-name>
+		<param-value>${cyk.context.parameter.theme.logo.file.name.extension}</param-value>
+	</context-param>
+	
+	<!-- Security -->
+	<!--
+	<security-role>
+		<role-name>*</role-name>
+	</security-role>	
+	
+	<security-constraint>
+		<web-resource-collection>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>*</role-name>
+		</auth-constraint>
+	</security-constraint>
+	
+	<login-config>
+		<auth-method>KEYCLOAK</auth-method>
+	</login-config>
+	-->	
+		
+</web-app>
