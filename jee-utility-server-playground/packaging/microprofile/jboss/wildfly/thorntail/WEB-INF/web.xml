@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+	
+	<display-name>usermanagement Server</display-name>
+	
+	<context-param>
+		<param-name>cyk.parameter.system.name</param-name>
+		<param-value>${cyk.parameter.system.name}</param-value>
+	</context-param>
+	
+	<!-- keycloak -->
+	<context-param>
+		<param-name>keycloak.server.url</param-name>
+		<param-value>${keycloak.server.url}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>keycloak.realm.name</param-name>
+		<param-value>${keycloak.realm.name}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>keycloak.client.identifier</param-name>
+		<param-value>${keycloak.client.identifier}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>keycloak.client.secret</param-name>
+		<param-value>${keycloak.client.secret}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>keycloak.credential.username</param-name>
+		<param-value>${keycloak.credential.username}</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>keycloak.credential.password</param-name>
+		<param-value>${keycloak.credential.password}</param-value>
+	</context-param>
+		
+</web-app>

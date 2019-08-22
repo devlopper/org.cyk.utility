@@ -1,10 +1,9 @@
-package org.cyk.utility.playground.client;
+package org.cyk.utility.playground.client.controller.impl;
 import java.io.Serializable;
 
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebListener;
 
-import org.cyk.utility.client.controller.web.jsf.primefaces.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.client.deployment.AbstractServletContextListener;
 
 @WebListener

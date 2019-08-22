@@ -1,4 +1,4 @@
-package org.cyk.utility.playground.client;
+package org.cyk.utility.playground.client.controller.impl;
 
 import java.io.Serializable;
 import java.security.Principal;
