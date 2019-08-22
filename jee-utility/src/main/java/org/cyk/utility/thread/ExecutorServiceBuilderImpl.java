@@ -18,7 +18,7 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 public class ExecutorServiceBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<ExecutorService> implements ExecutorServiceBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Integer corePoolSize,maximumPoolSize;
+	private Integer corePoolSize,maximumPoolSize,queueSize;
 	private Long keepAliveTime;
 	private TimeUnit keepAliveTimeUnit;
 	private BlockingQueue<Runnable> queue;
@@ -32,7 +32,7 @@ public class ExecutorServiceBuilderImpl extends AbstractFunctionWithPropertiesAs
 			corePoolSize = 2;
 		Integer maximumPoolSize = getMaximumPoolSize();
 		if(maximumPoolSize == null)
-			maximumPoolSize = 6;
+			maximumPoolSize = corePoolSize * 3;
 		Long keepAliveTime = getKeepAliveTime();
 		if(keepAliveTime == null)
 			keepAliveTime = 1l;
@@ -40,8 +40,11 @@ public class ExecutorServiceBuilderImpl extends AbstractFunctionWithPropertiesAs
 		if(keepAliveTimeUnit == null)
 			keepAliveTimeUnit = TimeUnit.SECONDS;
 		BlockingQueue<Runnable> queue = getQueue();
-		if(queue == null)
-			queue = new ArrayBlockingQueue<Runnable>(10);
+		if(queue == null) {
+			if(queueSize == null)
+				queueSize = maximumPoolSize * 5;
+			queue = new ArrayBlockingQueue<Runnable>(queueSize);
+		}
 		ThreadFactory threadFactory = getThreadFactory();
 		if(threadFactory == null)
 			threadFactory = Executors.defaultThreadFactory();
@@ -104,6 +107,17 @@ public class ExecutorServiceBuilderImpl extends AbstractFunctionWithPropertiesAs
 	@Override
 	public ExecutorServiceBuilder setQueue(BlockingQueue<Runnable> queue) {
 		this.queue = queue;
+		return this;
+	}
+	
+	@Override
+	public Integer getQueueSize() {
+		return queueSize;
+	}
+
+	@Override
+	public ExecutorServiceBuilder setQueueSize(Integer queueSize) {
+		this.queueSize = queueSize;
 		return this;
 	}
 

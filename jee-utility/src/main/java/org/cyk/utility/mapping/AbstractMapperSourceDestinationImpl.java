@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
@@ -14,46 +16,20 @@ import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.instance.InstanceHelper;
+import org.cyk.utility.runnable.RunnablesExecutor;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.MappingTarget;
 
 public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> extends AbstractMapperImpl implements MapperSourceDestination<SOURCE,DESTINATION>,Serializable {
 	private static final long serialVersionUID = 1L;
-	/*
-	protected Class<SOURCE> sourceClass;
-	protected Class<DESTINATION> destinationClass;
 	
-	protected Class<SOURCE> __getSourceClass__() {
-		return sourceClass == null ? sourceClass = (Class<SOURCE>) DependencyInjection.inject(ClassHelper.class).getParameterAt(getClass(), 0, Object.class) : sourceClass;
-	}
+	public static Integer EXECUTOR_CORE_POOL_SIZE = null;
+	public static Integer EXECUTOR_QUEUE_SIZE = null;
 	
-	protected Class<DESTINATION> __getDestinationClass__() {
-		return destinationClass == null ? destinationClass = (Class<DESTINATION>) DependencyInjection.inject(ClassHelper.class).getParameterAt(getClass(), 1, Object.class) : destinationClass;
-	}
-	*/
-	/*
-	@ObjectFactory
-	public SOURCE instantiateSource(DESTINATION destination) {
-		return DependencyInjection.inject(ClassHelper.class).instanciateOne(__getSourceClass__());
-	}
-	*/
-	/*
-	protected SOURCE __instantiateSource__(DESTINATION destination) {
-		return DependencyInjection.inject(ClassHelper.class).instanciateOne(sourceClass);
-	}
-	*/
-	/*
-	@ObjectFactory
-	public DESTINATION instantiateDestination(SOURCE source) {
-		return DependencyInjection.inject(ClassHelper.class).instanciateOne(__getDestinationClass__());
-	}
-	*/
-	/*
-	protected DESTINATION __instantiateDestination__(SOURCE source) {
-		return DependencyInjection.inject(ClassHelper.class).instanciateOne(destinationClass);
-	}
-	*/
+	protected Class<SOURCE> __sourceClass__;
+	protected Class<DESTINATION> __destinationClass__;
+	
 	@BeforeMapping
 	protected void listenGetDestinationBefore(SOURCE source,@MappingTarget DESTINATION destination) {
 		__listenGetDestinationBefore__(source, destination);
@@ -97,6 +73,50 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 		}
 	}
 	
+	/* Source */
+		
+	@Override
+	public SOURCE getSource(DESTINATION destination, Properties properties) {
+		SOURCE source = getSource(destination);
+		__listenGetSourceAfter__(destination, source, properties);
+		return source;
+	}
+	
+	@Override
+	public Collection<SOURCE> getSources(Collection<DESTINATION> destinations, Properties properties) {
+		final Collection<SOURCE> sources = new ArrayList<>();
+		if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(destinations)) {
+			Integer executorCorePoolSize = EXECUTOR_CORE_POOL_SIZE;
+			if(executorCorePoolSize!=null && executorCorePoolSize>0) {
+				//Parrallel processing
+				RunnablesExecutor runner = DependencyInjection.inject(RunnablesExecutor.class);
+				runner.getExecutorServiceBuilder(Boolean.TRUE).setCorePoolSize(executorCorePoolSize);
+				runner.getExecutorServiceBuilder(Boolean.TRUE).setQueueSize(destinations.size());
+				runner.setTimeOut(1l).setTimeOutUnit(TimeUnit.SECONDS);
+				for(DESTINATION destination : destinations) {
+					runner.addRunnables(new Runnable() {
+						@Override
+						public void run() {
+							sources.add(getSource(destination, properties));
+						}
+					});
+				}
+				runner.execute();
+			}else {
+				//Serial processing
+				for(DESTINATION destination : destinations) {
+					sources.add(getSource(destination, properties));
+				}
+			}
+		}
+		return sources;
+	}
+	
+	@Override
+	public Collection<SOURCE> getSources(Collection<DESTINATION> destinations) {
+		return getSources(destinations, null);
+	}
+	
 	@BeforeMapping
 	protected void listenGetSourceBefore(DESTINATION destination,@MappingTarget SOURCE source) {
 		__listenGetSourceBefore__(destination, source);
@@ -115,4 +135,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 		
 	}
 	
+	protected void __listenGetSourceAfter__(DESTINATION destination,SOURCE source, Properties properties) {
+		
+	}
 }

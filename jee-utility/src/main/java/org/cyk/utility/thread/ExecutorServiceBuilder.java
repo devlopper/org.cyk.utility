@@ -25,6 +25,9 @@ public interface ExecutorServiceBuilder extends FunctionWithPropertiesAsInput<Ex
 	BlockingQueue<Runnable> getQueue();
 	ExecutorServiceBuilder setQueue(BlockingQueue<Runnable> queue);
 	
+	Integer getQueueSize();
+	ExecutorServiceBuilder setQueueSize(Integer queueSize);
+	
 	ThreadFactory getThreadFactory();
 	ExecutorServiceBuilder setThreadFactory(ThreadFactory threadFactory);
 	

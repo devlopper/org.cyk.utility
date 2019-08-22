@@ -18,7 +18,7 @@ import org.cyk.utility.value.ValueUsageType;
 public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?,?>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>> extends AbstractPersistenceEntityImpl<HIERARCHY> implements HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private String readByParentsIdentifiers,readByParentsBusinessIdentifiers,readByChildrenIdentifiers,readByChildrenBusinessIdentifiers,readWhereIsParentOrChildIdentifiers
+	private String readWhereParentDoesNotHaveParent,readByParentsIdentifiers,readByParentsBusinessIdentifiers,readByChildrenIdentifiers,readByChildrenBusinessIdentifiers,readWhereIsParentOrChildIdentifiers
 		//,readWhereIsParentOrChildBusinessIdentifiers
 		;
 	
@@ -29,6 +29,8 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 		Class<ENTITY> entityClass = (Class<ENTITY>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 1, Object.class).getName());
 		ClassInstance classInstance = __inject__(ClassInstancesRuntime.class).get(entityClass);
 		if(classInstance != null) {
+			addQueryCollectInstances(readWhereParentDoesNotHaveParent, String.format("SELECT tuple FROM %1$s tuple WHERE NOT EXISTS( "
+					+ "SELECT subTuple FROM %1$s subTuple WHERE subTuple.child = tuple.parent)",__getTupleName__()));
 			addQueryCollectInstancesReadByParentsOrChildren(readByParentsIdentifiers,readByChildrenIdentifiers,classInstance.getSystemIdentifierField());			
 			addQueryCollectInstancesReadByParentsOrChildren(readByParentsBusinessIdentifiers,readByChildrenBusinessIdentifiers,classInstance.getBusinessIdentifierField());
 			addQueryCollectInstances(readWhereIsParentOrChildIdentifiers, String.format("SELECT tuple FROM %s tuple WHERE tuple.parent.identifier IN :identifiers OR tuple.child.identifier IN :identifiers"
@@ -86,6 +88,21 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	@Override
 	public HIERARCHIES readByParents(@SuppressWarnings("unchecked") ENTITY... parents) {
 		return readByParents(__injectCollectionHelper__().instanciate(parents));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public HIERARCHIES readWhereParentDoesNotHaveParent(Properties properties) {
+		if(properties == null)
+			properties = new Properties();
+		properties.setIfNull(Properties.QUERY_IDENTIFIER,readWhereParentDoesNotHaveParent);
+		Collection<HIERARCHY> hierarchies = __readMany__(properties,____getQueryParameters____(properties));
+		return __injectCollectionHelper__().isEmpty(hierarchies) ? null : (HIERARCHIES) __inject__(__getCollectionInstanceClass__()).add(hierarchies);
+	}
+	
+	@Override
+	public HIERARCHIES readWhereParentDoesNotHaveParent() {
+		return readWhereParentDoesNotHaveParent(null);
 	}
 	
 	@SuppressWarnings("unchecked")

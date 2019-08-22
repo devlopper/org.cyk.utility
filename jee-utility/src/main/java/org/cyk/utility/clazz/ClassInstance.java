@@ -29,4 +29,9 @@ public interface ClassInstance extends Objectable {
 	String getTupleName();
 	ClassInstance setTupleName(String tutpleName);
 	
+	Boolean getIsActionable();
+	ClassInstance setIsActionable(Boolean isProjectionable);
+	
+	Boolean getIsProjectionable();
+	ClassInstance setIsProjectionable(Boolean isProjectionable);
 }

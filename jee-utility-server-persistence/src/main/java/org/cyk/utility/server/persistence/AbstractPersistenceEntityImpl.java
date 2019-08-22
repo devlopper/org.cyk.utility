@@ -58,11 +58,15 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		
 		if(Boolean.TRUE.equals(getIsPhysicallyMapped())) {
 			//TODO even not physically mapped we should be able to read
-			addQueryCollectInstances(read, instanciateReadQueryStringBuilder());
+			__addReadQueryCollectInstances__();
 			addQueriesByIdentifierField(ValueUsageType.SYSTEM, tupleName, readSystemIdentifiers, readBySystemIdentifiers,readWhereSystemIdentifierContains, deleteBySystemIdentifiers);
 			addQueriesByIdentifierField(ValueUsageType.BUSINESS, tupleName, readBusinessIdentifiers, readByBusinessIdentifiers,readWhereBusinessIdentifierContains, deleteByBusinessIdentifiers);
 			addQuery(deleteAll, "DELETE FROM "+__getTupleName__()+" tuple",null);	
 		}
+	}
+	
+	protected void __addReadQueryCollectInstances__() {
+		addQueryCollectInstances(read, instanciateReadQueryStringBuilder());
 	}
 	
 	protected void addQueriesByIdentifierField(ValueUsageType valueUsageType,String tupleName,String readIdentifiers,String readByIdentifiers,String readWhereIdentifierContains,String deleteByIdentifiers) {

@@ -24,6 +24,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 	private static final long serialVersionUID = 1L;
 	
 	public static LogLevel LOG_LEVEL = LogLevel.TRACE;
+	public static Integer QUERY_NUMBER_OF_TUPLE = 25;
 	
 	private Boolean isCollectionable,__isCollectionable__;
 	
@@ -59,7 +60,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 					if(properties.getQueryFirstTupleIndex() == null)
 						properties.setQueryFirstTupleIndex(0); // first page
 					if(properties.getQueryNumberOfTuple() == null)
-						properties.setQueryNumberOfTuple(5); // 5 results	
+						properties.setQueryNumberOfTuple(QUERY_NUMBER_OF_TUPLE == null ? 25 : QUERY_NUMBER_OF_TUPLE); // 5 results	
 					addLogMessageBuilderParameter("first", properties.getQueryFirstTupleIndex());
 					addLogMessageBuilderParameter("count", properties.getQueryNumberOfTuple());
 				}
@@ -70,8 +71,9 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 				if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(collection))) {
 					if(__entities__ == null)
 						__entities__ = new ArrayList<>();
-					__entities__.addAll(__inject__(MappingHelper.class).getSources(collection, getEntityClass()));
+					__entities__.addAll(__inject__(MappingHelper.class).getSources(collection, __entityClass__,properties));
 				}
+				
 				properties.setQueryIdentifier(null);
 				__responseBuilder__.header("X-Total-Count", __injectBusiness__().count(__persistenceEntityClass__, properties));
 				/*
@@ -91,7 +93,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 				if(entity != null) {
 					if(__entities__ == null)
 						__entities__ = new ArrayList<>();
-					__entities__.add(__inject__(MappingHelper.class).getSource(entity, getEntityClass()));	
+					__entities__.add(__inject__(MappingHelper.class).getSource(entity, __entityClass__,properties));	
 				}
 				
 			}
@@ -113,12 +115,12 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 				if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entities__)))
 					return null;
 				else
-					return new GenericEntity<List<?>>((List<?>) __entities__,(Type) __injectTypeHelper__().instanciateCollectionParameterizedType(List.class, getEntityClass()));
+					return new GenericEntity<List<?>>((List<?>) __entities__,(Type) __injectTypeHelper__().instanciateCollectionParameterizedType(List.class, __entityClass__));
 			}else {
 				if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entities__)))
 					return null;
 				else
-					return new GenericEntity<Object>(__entities__.iterator().next(), getEntityClass());	
+					return new GenericEntity<Object>(__entities__.iterator().next(), __entityClass__);	
 			}
 		}else
 			return super.__computeResponseEntity__();

@@ -60,4 +60,9 @@ public interface FieldHelper extends Helper {
 	<T> Collection<T> getBusinessIdentifiers(Class<T> identifierClass,Collection<?> objects);
 	Object readFieldValue(Object object, Field field);
 	Object readFieldValue(Object object, String fieldName);
+	
+	FieldHelper nullify(Object object,Collection<String> fieldsNames,Boolean isEqual);
+	FieldHelper nullify(Object object,Strings fieldsNames,Boolean isEqual);
+	FieldHelper nullify(Object object,Boolean isEqual,String...fieldsNames);
+	
 }

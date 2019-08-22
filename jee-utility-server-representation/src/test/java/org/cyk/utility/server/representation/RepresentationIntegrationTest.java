@@ -251,6 +251,29 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		__inject__(MyEntityRepresentation.class).deleteByIdentifiers(Arrays.asList(code1,code2,code3),ValueUsageType.BUSINESS.name());
 	}
 	
+	@Test
+	public void find_myEntity_project() throws Exception{
+		String code1 = __getRandomCode__(); 
+		String code2 = __getRandomCode__();
+		String code3 = __getRandomCode__();
+		String id1 = __getRandomIdentifier__(); 
+		String id2 = __getRandomIdentifier__();
+		String id3 = __getRandomIdentifier__();
+		__inject__(MyEntityRepresentation.class).createMany(Arrays.asList(
+				new MyEntityDto().setIdentifier(id1).setCode(code1).setName("a").setLong1(15l).setLong2(20l).setIntegerValue(7)
+				,new MyEntityDto().setIdentifier(id2).setCode(code2).setName("c")
+				,new MyEntityDto().setIdentifier(id3).setCode(code3).setName("b")
+				),null);
+		__assertReadMyEntity__(id1, null, Boolean.TRUE, "a", 15l, 20l, 7);
+		__assertReadMyEntity__(id1, "name", Boolean.TRUE, "a", null, null, null);
+		__assertReadMyEntity__(id1, "long1", Boolean.TRUE, null, 15l, null, null);
+		__assertReadMyEntity__(id1, "long2", Boolean.TRUE, null, null, 20l, null);
+		__assertReadMyEntity__(id1, "integerValue", Boolean.TRUE, null, null, null, 7);
+		__assertReadMyEntity__(id1, "name,long1", Boolean.TRUE, "a", 15l, null, null);
+		__assertReadMyEntity__(id1, "name,long2", Boolean.TRUE, "a", null, 20l, null);
+		__assertReadMyEntity__(id1, "long1,long2", Boolean.TRUE, null, 15l, 20l, null);
+	}
+	
 	/* Update */
 	
 	@Test
@@ -590,6 +613,34 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 			.contains("propertyPath=code");
 	}
 	*/
+	
+	@SuppressWarnings("unchecked")
+	private void __assertReadMyEntity__(String identifier,String fields,Boolean expectedIsNotNull,String expectedName,Long expectedLong1,Long expectedLong2,Integer expectedIntegerValue) {
+		MyEntityDto myEntity = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(identifier, "system", fields).getEntity();
+		if(expectedIsNotNull != null && expectedIsNotNull) {
+			assertThat(myEntity).as(String.format("myEntity with identifier %s does not exist",identifier)).isNotNull();
+			__assertReadMyEntity__(myEntity, fields, expectedIsNotNull, expectedName, expectedLong1, expectedLong2, expectedIntegerValue);
+			
+			if(fields != null)
+				fields = fields + ",identifier";
+			for(MyEntityDto index : (Collection<MyEntityDto>)__inject__(MyEntityRepresentation.class).getMany(Boolean.TRUE, null, null, fields, null).getEntity()) {
+				if(index.getIdentifier().equals(identifier)) {
+					myEntity = index;
+					break;
+				}
+			}
+			__assertReadMyEntity__(myEntity, fields, expectedIsNotNull, expectedName, expectedLong1, expectedLong2, expectedIntegerValue);
+		}else
+			assertThat(myEntity).as(String.format("myEntity with identifier %s exists",identifier)).isNull();
+	}
+	
+	private void __assertReadMyEntity__(MyEntityDto myEntity,String fields,Boolean expectedIsNotNull,String expectedName,Long expectedLong1,Long expectedLong2,Integer expectedIntegerValue) {
+		assertThat(myEntity.getName()).as("name does not match").isEqualTo(expectedName);
+		assertThat(myEntity.getLong1()).as("long1 does not match").isEqualTo(expectedLong1);
+		assertThat(myEntity.getLong2()).as("long2 not match").isEqualTo(expectedLong2);
+		assertThat(myEntity.getIntegerValue()).as("integer value does not match").isEqualTo(expectedIntegerValue);		
+	}
+	
 	@Override
 	protected <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass) {
 		return null;

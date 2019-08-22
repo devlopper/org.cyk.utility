@@ -2,6 +2,7 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.array.ArrayHelper;
+import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelper;
@@ -177,6 +180,45 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 		} catch (IllegalAccessException exception) {
 			throw new RuntimeException(exception);
 		}
+	}
+	
+	@Override
+	public FieldHelper nullify(Object object, Collection<String> fieldsNames,Boolean isEqual) {
+		Collection<String> collection = null;
+		if(Boolean.TRUE.equals(isEqual)) {
+			collection = fieldsNames;
+		}else {
+			Fields fields = __inject__(ClassInstancesRuntime.class).get(object.getClass()).getFields();
+			if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
+				collection = new ArrayList<>();
+				for(Field index : fields.get()) {
+					String fieldName = index.getName();
+					if(!Modifier.isFinal(index.getModifiers()) && !Modifier.isStatic(index.getModifiers()) && !fieldsNames.contains(fieldName))
+						collection.add(fieldName);
+				}	
+			}
+		}
+		if(__inject__(CollectionHelper.class).isNotEmpty(collection)) {
+			for(String index : collection)
+				__inject__(FieldValueSetter.class).execute(object, index, null);
+		}
+		return this;
+	}
+	
+	@Override
+	public FieldHelper nullify(Object object, Strings fieldsNames,Boolean isEqual) {
+		if(__inject__(CollectionHelper.class).isNotEmpty(fieldsNames)) {
+			nullify(object, fieldsNames.get(),isEqual);
+		}
+		return this;
+	}
+	
+	@Override
+	public FieldHelper nullify(Object object,Boolean isEqual, String...fieldsNames) {
+		if(__inject__(ArrayHelper.class).isNotEmpty(fieldsNames)) {
+			nullify(object, __inject__(CollectionHelper.class).instanciate(fieldsNames),isEqual);
+		}
+		return this;
 	}
 	
 	/*

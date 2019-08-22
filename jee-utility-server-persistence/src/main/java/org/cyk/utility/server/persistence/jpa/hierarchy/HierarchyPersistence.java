@@ -2,6 +2,7 @@ package org.cyk.utility.server.persistence.jpa.hierarchy;
 
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.PersistenceEntity;
 
 public interface HierarchyPersistence<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?,?>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>> extends PersistenceEntity<HIERARCHY> {
@@ -17,6 +18,9 @@ public interface HierarchyPersistence<HIERARCHY extends AbstractHierarchy<ENTITY
 	
 	HIERARCHIES readByParents(Collection<ENTITY> parents);
 	HIERARCHIES readByParents(@SuppressWarnings("unchecked") ENTITY...parents);
+	
+	HIERARCHIES readWhereParentDoesNotHaveParent(Properties properties);
+	HIERARCHIES readWhereParentDoesNotHaveParent();
 	
 	HIERARCHIES readByChildrenIdentifiers(Collection<String> childrenIdentifiers);
 	HIERARCHIES readByChildrenIdentifiers(String...childrenIdentifiers);

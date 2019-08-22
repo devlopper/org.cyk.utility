@@ -18,7 +18,7 @@ public class ClassInstanceImpl extends AbstractObject implements ClassInstance,S
 	private Class<?> clazz;
 	private Field systemIdentifierField,businessIdentifierField;
 	private Boolean isPersistable;
-	private Boolean isTransferable;
+	private Boolean isTransferable,isActionable,isProjectionable;
 	private Fields fields;
 	private String tutpleName;
 	
@@ -94,6 +94,28 @@ public class ClassInstanceImpl extends AbstractObject implements ClassInstance,S
 	@Override
 	public ClassInstance setIsTransferable(Boolean isTransferable) {
 		this.isTransferable = isTransferable;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsActionable() {
+		return isActionable;
+	}
+	
+	@Override
+	public ClassInstance setIsActionable(Boolean isActionable) {
+		this.isActionable = isActionable;
+		return this;
+	}
+	
+	@Override
+	public Boolean getIsProjectionable() {
+		return isProjectionable;
+	}
+	
+	@Override
+	public ClassInstance setIsProjectionable(Boolean isProjectionable) {
+		this.isProjectionable = isProjectionable;
 		return this;
 	}
 	

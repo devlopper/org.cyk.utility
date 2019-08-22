@@ -893,6 +893,29 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	}
 	
 	@Test
+	public void read_node_filter_where_noParent() throws Exception{
+		userTransaction.begin();
+		Node nodeModule = new Node().setIdentifier("MO").setCode("module").setName(__getRandomName__());
+		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
+		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
+		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
+		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+				,nodeAction));
+		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
+				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
+				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
+				));
+		userTransaction.commit();
+		
+		Filter filters = __inject__(Filter.class).setKlass(Node.class);
+		filters.addField(Node.FIELD_PARENTS, null);
+		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters));
+		assertThat(nodes).isNotEmpty();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("module");
+	}
+	
+	@Test
 	public void read_node_filter_byParent_identifier_business() throws Exception{
 		userTransaction.begin();
 		Node nodeModule = new Node().setIdentifier("MO").setCode("module").setName(__getRandomName__());

@@ -21,7 +21,6 @@ public abstract class AbstractRepresentationObject extends org.cyk.utility.__ker
 	@JsonProperty(value=__ATTRIBUTE___ACTIONS____)
 	private Actions __actions__;
 	
-	//@XmlTransient
 	@XmlElement(name=__ATTRIBUTE___ACTIONS____)
 	public Actions get__actions__() {
 		return __actions__;

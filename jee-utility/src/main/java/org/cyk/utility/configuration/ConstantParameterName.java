@@ -32,8 +32,16 @@ public interface ConstantParameterName {
 	String PROXY_UNIFORM_RESOURCE_IDENTIFIER = formatCykParameterName("proxy.uniform.resource.identifier");
 	
 	/* Data */
-	
+
 	String DATA_IS_LOADABLE = formatCykParameterName("data.is.loadable");
+	
+	/* Security */
+
+	String SECURITY_DELEGATE_SYSTEM_IS_ENABLE = formatCykParameterName("security.delegate.system.is.enable");
+	
+	/* Stream Distributed*/
+	
+	String STREAM_DISTRIBUTED_DELEGATE_SYSTEM_IS_ENABLE = formatCykParameterName("stream.distributed.delegate.system.is.enable");
 	
 	/**/
 	

@@ -66,6 +66,17 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 	}
 	
 	@Override
+	public Collection<ENTITY> readWhereNotHavingParent(Properties properties) {
+		HIERARCHIES hierarchies = __inject__(__hierarchyPersistenceClass__).readWhereParentDoesNotHaveParent(properties);
+		return hierarchies == null ? null : hierarchies.getHierarchyParents();	
+	}
+	
+	@Override
+	public Collection<ENTITY> readWhereNotHavingParent() {
+		return readWhereNotHavingParent(null);
+	}
+	
+	@Override
 	public Collection<ENTITY> readByChildrenIdentifiers(Collection<String> childrenIdentifiers,Properties properties) {
 		HIERARCHIES hierarchies = __inject__(__hierarchyPersistenceClass__).readByChildrenIdentifiers(childrenIdentifiers);
 		return hierarchies == null ? null : hierarchies.getHierarchyParents();	
@@ -113,8 +124,12 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 		Filter filter = (Filter) Properties.getFromPath(properties,Properties.QUERY_FILTERS);
 		if(filter != null) {
 			Field field = filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
-			if(field != null)
-				return __readByFilterParents__(properties,filter,field);	
+			if(field != null) {
+				if(field.getValue() == null)
+					return __readByFilterNoParent__(properties);
+				else
+					return __readByFilterParents__(properties,filter,field);
+			}
 		}
 		return super.read(properties);
 	}
@@ -122,6 +137,10 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 	@SuppressWarnings("unchecked")
 	public Collection<ENTITY> __readByFilterParents__(Properties properties,Filter filter,Field field) {
 		return readByParentsIdentifiers((Collection<String>) field.getValue());
+	}
+	
+	public Collection<ENTITY> __readByFilterNoParent__(Properties properties) {
+		return readWhereNotHavingParent(properties);
 	}
 	
 	@Override

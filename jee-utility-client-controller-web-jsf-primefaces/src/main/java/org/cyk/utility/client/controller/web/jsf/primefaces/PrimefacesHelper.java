@@ -9,11 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -23,7 +22,7 @@ import org.cyk.utility.client.controller.ControllerLayer;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponent;
-import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
+import org.cyk.utility.client.controller.data.hierarchy.TreeNodeListener;
 import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.data.hierarchy.Hierarchy;
 import org.cyk.utility.client.controller.event.Event;
@@ -40,7 +39,7 @@ import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
 
-@Singleton @Named
+@ApplicationScoped @Named
 public class PrimefacesHelper extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -133,7 +132,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	}
 	
 	public PrimefacesHelper openDialog(String outcome,Map<String,Object> options,Map<String,List<String>> parameters) {
-        PrimeFaces.current().dialog().openDynamic("identifier", options, parameters);
+        PrimeFaces.current().dialog().openDynamic(outcome, options, parameters);
         return this;
 	}
 	
@@ -146,7 +145,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
         options.put("contentHeight", "100%");
         
         Map<String,List<String>> parameters = new HashMap<>();
-        parameters.put("profile", Arrays.asList(identifier));
+        parameters.put("identifier", Arrays.asList(identifier));
         
 		return openDialog(outcome, options, parameters);
 	}
@@ -178,12 +177,14 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	
 	private <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> void buildTreeNode(NODE node,Collection<NODE> nodes,Collection<HIERARCHY> hierarchies,Collection<NODE> selectedNodes,TreeNodeListener<NODE,HIERARCHY> listener,TreeNode root) {
 		//Find children
-		for(NODE index : nodes) {
-			for(HIERARCHY hierarchy : hierarchies) {
-				if(hierarchy.getParent().getIdentifier().equals(node.getIdentifier()) && hierarchy.getChild().getIdentifier().equals(index.getIdentifier())) {
-					TreeNode treeNode = instantiateTreeNode(index,selectedNodes,listener, root);		
-					buildTreeNode(index,nodes,hierarchies,selectedNodes,listener,treeNode);
-					break;
+		if(__inject__(CollectionHelper.class).isNotEmpty(nodes) && __inject__(CollectionHelper.class).isNotEmpty(hierarchies)) {
+			for(NODE index : nodes) {
+				for(HIERARCHY hierarchy : hierarchies) {
+					if(hierarchy.getParent().getIdentifier().equals(node.getIdentifier()) && hierarchy.getChild().getIdentifier().equals(index.getIdentifier())) {
+						TreeNode treeNode = instantiateTreeNode(index,selectedNodes,listener, root);		
+						buildTreeNode(index,nodes,hierarchies,selectedNodes,listener,treeNode);
+						break;
+					}
 				}
 			}
 		}
@@ -191,8 +192,7 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	
 	private <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> TreeNode instantiateTreeNode(NODE node,Collection<NODE> selectedNodes,TreeNodeListener<NODE,HIERARCHY> listener,TreeNode parent) {
 		TreeNode treeNode = new DefaultTreeNode(listener.getType(node),listener.getData(node),parent);
-		//treeNode.setParent(parent);
-		//listener.listenInstantiated(node, treeNode);
+		//TreeNode treeNode = new org.cyk.utility.client.controller.web.jsf.primefaces.DefaultTreeNode<NODE>(node,listener,parent);
 		//mark as selected if it belongs to 
 		if(__inject__(CollectionHelper.class).isNotEmpty(selectedNodes)) {
 			treeNode.setSelected(selectedNodes.contains(node));
@@ -288,28 +288,6 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 		Collection<NODE> selectedNodes = (Collection<NODE>) __inject__(FieldValueGetter.class).execute(master, __inject__(StringHelper.class)
 				.getVariableNameFrom(klass.getSimpleName())+"s").getOutput();
 		return buildTreeNode(klass, selectedNodes);
-	}
-	
-	public static interface TreeNodeListener<NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> {
-		default void listenInstantiated(NODE node,TreeNode treeNode) {
-			treeNode.setType(getType(node));
-			if(treeNode instanceof DefaultTreeNode)
-				((DefaultTreeNode)treeNode).setData(getData(node));
-		}
-		
-		default Object getData(NODE node) {
-			return node;
-		}
-		
-		default String getType(NODE node) {
-			Object value = DependencyInjection.inject(FieldValueGetter.class).execute(node, "type").getOutput();
-			if(value instanceof DataIdentifiedByStringAndCoded)
-				value = ((DataIdentifiedByStringAndCoded)value).getCode();
-			else if(value instanceof org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByStringAndCoded)
-				value = ((org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByStringAndCoded)value).getCode();
-			return value == null ? null : value.toString();
-		}
-		
 	}
 	
 	/**/

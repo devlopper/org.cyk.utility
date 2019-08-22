@@ -16,6 +16,45 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test
+	public void nullify(){
+		MyClass01 object = new MyClass01().setIntegerField(1).setStringField("a").setLongValue2(2l);
+		assertThat(object.getIntegerField()).isEqualTo(1);
+		assertThat(object.getStringField()).isEqualTo("a");
+		assertThat(object.getLongValue2()).isEqualTo(2l);
+		
+		object = new MyClass01().setIntegerField(1).setStringField("a").setLongValue2(2l);
+		__inject__(FieldHelper.class).nullify(object,Boolean.TRUE, "integerField");
+		assertThat(object.getIntegerField()).isNull();
+		assertThat(object.getStringField()).isEqualTo("a");
+		assertThat(object.getLongValue2()).isEqualTo(2l);
+		
+		object = new MyClass01().setIntegerField(1).setStringField("a").setLongValue2(2l);
+		__inject__(FieldHelper.class).nullify(object,Boolean.TRUE, "stringField");
+		assertThat(object.getIntegerField()).isEqualTo(1);
+		assertThat(object.getStringField()).isNull();
+		assertThat(object.getLongValue2()).isEqualTo(2l);
+		
+		object = new MyClass01().setIntegerField(1).setStringField("a").setLongValue2(2l);
+		__inject__(FieldHelper.class).nullify(object,Boolean.TRUE, "longValue2");
+		assertThat(object.getIntegerField()).isEqualTo(1);
+		assertThat(object.getStringField()).isEqualTo("a");
+		assertThat(object.getLongValue2()).isNull();
+		
+		object = new MyClass01().setIntegerField(1).setStringField("a").setLongValue2(2l);
+		__inject__(FieldHelper.class).nullify(object,Boolean.TRUE, "longValue2","stringField");
+		assertThat(object.getIntegerField()).isEqualTo(1);
+		assertThat(object.getStringField()).isNull();
+		assertThat(object.getLongValue2()).isNull();
+		
+		object = new MyClass01().setIntegerField(1).setStringField("a").setLongValue2(2l).setIntField(1489);
+		__inject__(FieldHelper.class).nullify(object,Boolean.FALSE, "intField");
+		assertThat(object.getIntField()).isEqualTo(1489);
+		assertThat(object.getIntegerField()).isNull();
+		assertThat(object.getStringField()).isNull();
+		assertThat(object.getLongValue2()).isNull();
+	}	
+	
+	@Test
 	public void join(){
 		assertThat(__inject__(FieldHelper.class).join("f1","f2.f3")).isEqualTo("f1.f2.f3");
 	}	

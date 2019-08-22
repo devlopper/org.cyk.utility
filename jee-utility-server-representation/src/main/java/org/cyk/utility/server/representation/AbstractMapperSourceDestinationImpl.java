@@ -1,5 +1,6 @@
 package org.cyk.utility.server.representation;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -7,26 +8,76 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepresentationObject;
 import org.cyk.utility.__kernel__.object.__static__.representation.Action;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
+import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
+import org.cyk.utility.clazz.ClassNameBuilder;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierStringBuilder;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
+import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> extends org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> {
 	private static final long serialVersionUID = 1L;
 
+	protected Boolean __isDestinationActionable__;
+	protected Boolean __isDestinationPersistable__;
+	protected Boolean __isDestinationProjectionable__;
+	protected Strings __actionsIdentifiers__;
+	protected String __resourcePath__;
+	
+	@SuppressWarnings("unchecked")
+	@PostConstruct
+    public void __listenPostConstruct__() {
+		if(__destinationClass__ == null) {
+			ClassNameBuilder classNameBuilder = DependencyInjection.inject(ClassNameBuilder.class).setKlass(getClass());
+			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().representation().entities().setSuffix("DtoMapperImpl");
+			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().persistence().entities().suffix();
+			__destinationClass__ = DependencyInjection.inject(ValueHelper.class).returnOrThrowIfBlank("persistence entity class"
+					,(Class<DESTINATION>) DependencyInjection.inject(ClassHelper.class).getByName(classNameBuilder));
+		}
+		
+		ClassInstance classInstance = DependencyInjection.inject(ClassInstancesRuntime.class).get(__destinationClass__);
+		__isDestinationPersistable__ = Boolean.TRUE.equals(classInstance.getIsPersistable());
+		__isDestinationProjectionable__ = Boolean.TRUE.equals(DependencyInjection.inject(ValueHelper.class).defaultToIfNull(classInstance.getIsProjectionable(),Boolean.TRUE));
+		__isDestinationActionable__ = Boolean.TRUE.equals(DependencyInjection.inject(ValueHelper.class).defaultToIfNull(classInstance.getIsActionable(),Boolean.TRUE));
+		if(Boolean.TRUE.equals(__isDestinationActionable__)) {			
+			if(__isDestinationPersistable__) {
+				__actionsIdentifiers__ = DependencyInjection.inject(Strings.class);
+				__actionsIdentifiers__.add(Action.IDENTIFIER_READ,Action.IDENTIFIER_UPDATE,Action.IDENTIFIER_DELETE);
+			}
+			HttpServletRequest request = DependencyInjection.inject(HttpServletRequest.class);
+			__resourcePath__ = StringUtils.substringAfter(request.getRequestURI(), request.getContextPath());
+			__resourcePath__ = StringUtils.removeStart(__resourcePath__, "/");
+			__resourcePath__ = StringUtils.substringBefore(__resourcePath__,"/");	
+		}
+    }
+	
 	@Override
-	protected void __listenGetSourceAfter__(DESTINATION destination, SOURCE source) {
+	protected void __listenGetSourceAfter__(DESTINATION destination, SOURCE source,Properties properties) {
 		super.__listenGetSourceAfter__(destination, source);
+		if(Boolean.TRUE.equals(__isDestinationActionable__)) {
+			__addActions__(destination, source);	
+		}
+		
+		if(Boolean.TRUE.equals(__isDestinationProjectionable__)) {
+			Strings fieldsNames = (Strings) properties.getFields();
+			__project__(destination, source, fieldsNames);
+		}
+	}
+	
+	protected void __addActions__(DESTINATION destination, SOURCE source) {
 		if(source instanceof AbstractRepresentationObject) {
 			AbstractRepresentationObject representationObject = (AbstractRepresentationObject) source;
 			Strings actionsIdentifiers = __getActionsIdentifiers__(destination,source);
 			if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(actionsIdentifiers)) {
 				for(String actionIdentifier : actionsIdentifiers.get()) {
 					String pathFormat = __getPathFormat__(actionIdentifier,destination,source);
+					//TODO is it necessary to get the request. required information can be set once in post construct
 					HttpServletRequest request = DependencyInjection.inject(HttpServletRequest.class);
 					Object[] pathFormatParameters = __getPathFormatParameters__(actionIdentifier,request,destination, source);
 					String path = DependencyInjection.inject(ArrayHelper.class).isEmpty(pathFormatParameters) ? pathFormat : String.format(pathFormat, pathFormatParameters);
@@ -38,16 +89,11 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 					}
 				}
 			}
-		}
+		}			
 	}
 	
 	protected Strings __getActionsIdentifiers__(DESTINATION destination, SOURCE source) {
-		Strings identifiers = DependencyInjection.inject(Strings.class);
-		ClassInstance classInstance = DependencyInjection.inject(ClassInstancesRuntime.class).get(destination.getClass());
-		if(Boolean.TRUE.equals(classInstance.getIsPersistable())) {
-			identifiers.add(Action.IDENTIFIER_READ,Action.IDENTIFIER_UPDATE,Action.IDENTIFIER_DELETE);
-		}
-		return identifiers;
+		return __actionsIdentifiers__;
 	}
 	
 	protected String __getPathFormat__(String actionIdentifier,DESTINATION destination, SOURCE source) {
@@ -61,18 +107,11 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	}
 	
 	protected Object[] __getPathFormatParameters__(String actionIdentifier,HttpServletRequest request,DESTINATION destination, SOURCE source) {
-		String resourcePath = StringUtils.substringAfter(request.getRequestURI(), request.getContextPath());
-		resourcePath = StringUtils.removeStart(resourcePath, "/");
-		resourcePath = StringUtils.substringBefore(resourcePath,"/");
-		return __getPathFormatParameters__(actionIdentifier, request, resourcePath, destination, source);
-	}
-	
-	protected Object[] __getPathFormatParameters__(String actionIdentifier,HttpServletRequest request,String resourcePath,DESTINATION destination, SOURCE source) {
 		if(Action.IDENTIFIER_READ.equals(actionIdentifier) || Action.IDENTIFIER_DELETE.equals(actionIdentifier)) {
 			if(source instanceof AbstractEntityFromPersistenceEntity)
-				return new Object[] {resourcePath,((AbstractEntityFromPersistenceEntity)source).getIdentifier()};
+				return new Object[] {__resourcePath__,((AbstractEntityFromPersistenceEntity)source).getIdentifier()};
 		}
-		return new Object[] {resourcePath};
+		return new Object[] {__resourcePath__};
 	}
 
 	protected String __getActionMethod__(String actionIdentifier,DESTINATION destination, SOURCE source) {
@@ -83,6 +122,13 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 		if(Action.IDENTIFIER_DELETE.equals(actionIdentifier))
 			return Action.METHOD_DELETE;
 		return Action.METHOD_GET;
+	}
+	
+	/**/
+	
+	protected void __project__(DESTINATION destination, SOURCE source,Strings fieldsNames) {
+		if( DependencyInjection.inject(CollectionHelper.class).isNotEmpty(fieldsNames) )
+			DependencyInjection.inject(FieldHelper.class).nullify(source, fieldsNames,Boolean.FALSE);
 	}
 	
 	/**/

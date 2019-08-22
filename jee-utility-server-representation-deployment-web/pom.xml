@@ -10,7 +10,7 @@
 	</parent>
 	
 	<groupId>org.cyk.jee.utility.server.playground</groupId>
-	<artifactId>utility-server-playground</artifactId>
+	<artifactId>jee-utility-server-playground</artifactId>
 	<version>0.0.1</version>
 	<packaging>war</packaging>
 

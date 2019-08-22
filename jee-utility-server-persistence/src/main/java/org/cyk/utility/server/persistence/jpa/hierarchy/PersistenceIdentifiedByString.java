@@ -17,6 +17,9 @@ public interface PersistenceIdentifiedByString<ENTITY extends AbstractIdentified
 	Collection<ENTITY> readByParents(Properties properties,@SuppressWarnings("unchecked") ENTITY...parents);
 	Collection<ENTITY> readByParents(@SuppressWarnings("unchecked") ENTITY...parents);
 	
+	Collection<ENTITY> readWhereNotHavingParent(Properties properties);
+	Collection<ENTITY> readWhereNotHavingParent();
+	
 	Collection<ENTITY> readByChildrenIdentifiers(Collection<String> childrenIdentifiers,Properties properties);
 	Collection<ENTITY> readByChildrenIdentifiers(Collection<String> childrenIdentifiers);
 	Collection<ENTITY> readByChildrenIdentifiers(Properties properties,String...childrenIdentifiers);
