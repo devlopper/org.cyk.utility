@@ -5,7 +5,7 @@ import org.cyk.utility.playground.client.controller.entities.MyEntity;
 
 public interface MyEntity extends DataIdentifiedByStringAndCodedAndNamed {
 
-	@Override MyEntity setIdentifier(Object identifier);
+	@Override MyEntity setIdentifier(String identifier);
 	@Override MyEntity setCode(String code);
 	@Override MyEntity setName(String name);
 }

@@ -7,5 +7,7 @@ public interface Constant {
 	String RESPONSE_HEADER_VALUES_SEPARATOR = ConstantCharacter.COMA.toString();
 	String RESPONSE_HEADER_ENTITY_IDENTIFIER_SYSTEM = "entity-identifier-system";
 	String RESPONSE_HEADER_ENTITY_IDENTIFIER_BUSINESS = "entity-identifier-business";
+	
+	String RESPONSE_HEADER_X_TOTAL_COUNT = "X-Total-Count";
 
 }

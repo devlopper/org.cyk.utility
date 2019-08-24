@@ -39,4 +39,6 @@ public interface ResponseHelper extends Helper {
 	
 	String getHeader(Response response,String name);
 	Collection<String> getHeaderAndDisjoin(Response response,String name);
+	
+	Long getHeaderXTotalCount(Response response);
 }

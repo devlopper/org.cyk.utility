@@ -8,7 +8,10 @@ import org.cyk.utility.server.persistence.PersistenceEntity;
 public interface HierarchyPersistence<HIERARCHY extends AbstractHierarchy<ENTITY>,ENTITY extends AbstractIdentifiedByString<?,?>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>> extends PersistenceEntity<HIERARCHY> {
 
 	HIERARCHIES readByParentsIdentifiers(Collection<String> parentsIdentifiers);
+	Long countByParentsIdentifiers(Collection<String> parentsIdentifiers,Properties properties);
+	Long countByParentsIdentifiers(Collection<String> parentsIdentifiers);
 	HIERARCHIES readByParentsIdentifiers(String...parentsIdentifiers);
+	Long countByParentsIdentifiers(String...parentsIdentifiers);
 	
 	//HIERARCHIES readByParentsIdentifiersByChildrenIdentifiers(Collection<String> parentsIdentifiers,Collection<String> childrenIdentifiers);
 	//HIERARCHIES readByParentsByChildren(Collection<ENTITY> parents,Collection<ENTITY> children);
@@ -20,7 +23,9 @@ public interface HierarchyPersistence<HIERARCHY extends AbstractHierarchy<ENTITY
 	HIERARCHIES readByParents(@SuppressWarnings("unchecked") ENTITY...parents);
 	
 	HIERARCHIES readWhereParentDoesNotHaveParent(Properties properties);
+	Long countWhereParentDoesNotHaveParent(Properties properties);
 	HIERARCHIES readWhereParentDoesNotHaveParent();
+	Long countWhereParentDoesNotHaveParent();
 	
 	HIERARCHIES readByChildrenIdentifiers(Collection<String> childrenIdentifiers);
 	HIERARCHIES readByChildrenIdentifiers(String...childrenIdentifiers);

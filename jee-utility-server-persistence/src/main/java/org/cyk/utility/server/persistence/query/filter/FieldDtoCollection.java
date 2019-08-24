@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepresentationObjectCollection;
 import org.cyk.utility.string.StringHelper;
@@ -27,7 +28,10 @@ public class FieldDtoCollection extends AbstractRepresentationObjectCollection<F
 	public FieldDtoCollection add(String klass,String path,String value,org.cyk.utility.field.FieldDto.Type type,ValueDto.Container valueContainer,ValueDto.Type valueType,ValueUsageType valueUsageType,ArithmeticOperator arithmeticOperator) {
 		FieldDto fieldDto = new FieldDto();
 		fieldDto.setArithmeticOperator(arithmeticOperator);
-		fieldDto.setField(new org.cyk.utility.field.FieldDto().setKlass(klass).setPath(path).setType(type));
+		if(StringUtils.isBlank(klass))
+			fieldDto.setName(path);
+		else
+			fieldDto.setField(new org.cyk.utility.field.FieldDto().setKlass(klass).setPath(path).setType(type));
 		fieldDto.setValue(new ValueDto().setContainer(valueContainer).setType(valueType).setUsageType(valueUsageType).setValue(value));
 		return (FieldDtoCollection) add(fieldDto);
 	}

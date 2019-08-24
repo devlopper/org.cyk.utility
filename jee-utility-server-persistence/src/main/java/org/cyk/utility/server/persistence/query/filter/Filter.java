@@ -8,6 +8,8 @@ import org.cyk.utility.value.ValueUsageType;
 
 public interface Filter extends Objectable {
 
+	Filter normalize(Class<?> klass);
+	
 	Class<?> getKlass();
 	Filter setKlass(Class<?> klass);
 	

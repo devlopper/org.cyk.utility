@@ -41,7 +41,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		,readSystemIdentifiers,readBusinessIdentifiers,readBySystemIdentifiers,readByBusinessIdentifiers,readWhereSystemIdentifierContains,readWhereBusinessIdentifierContains
 		,deleteBySystemIdentifiers,deleteByBusinessIdentifiers,deleteAll;
 	protected ClassInstance __classInstance__;
-	protected Class<ENTITY> entityClass;
+	protected Class<ENTITY> __entityClass__;
 	final protected Map<ValueUsageType,Map<ArithmeticOperator,String>> __queryIdentifierReadByIdentifiersByArithmeticOperator__ = new HashMap<>();
 	
 	@Override
@@ -52,8 +52,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@Override
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
-		Class<ENTITY> entityClass = getEntityClass();
-		__classInstance__ = __inject__(ClassInstancesRuntime.class).get(entityClass);
+		__classInstance__ = __inject__(ClassInstancesRuntime.class).get(__entityClass__);
 		String tupleName = __getTupleName__();
 		
 		if(Boolean.TRUE.equals(getIsPhysicallyMapped())) {
@@ -75,7 +74,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 			String columnName = field.getName();
 			addQuery(readIdentifiers, String.format("SELECT tuple.%s FROM %s tuple", columnName,tupleName),null);
 			addQueryCollectInstances(readByIdentifiers, String.format("SELECT tuple FROM %s tuple WHERE tuple.%s IN :identifiers", tupleName,columnName));
-			FieldInstance fieldInstance = __inject__(FieldInstancesRuntime.class).get(getEntityClass(), field.getName());
+			FieldInstance fieldInstance = __inject__(FieldInstancesRuntime.class).get(__entityClass__, field.getName());
 			if(fieldInstance != null && String.class.equals(fieldInstance.getType())) {
 				addQueryCollectInstances(readWhereIdentifierContains, String.format("SELECT tuple FROM %s tuple WHERE lower(tuple.%s) LIKE lower(:identifier)", tupleName,columnName));
 			}
@@ -97,13 +96,13 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	@Override
 	protected void __listenBeforePostConstruct__() {
 		super.__listenBeforePostConstruct__();
-		setEntityClass((Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class));
-		setIsPhysicallyMapped(getEntityClass().getAnnotation(Entity.class)!=null);
+		__entityClass__ = (Class<ENTITY>) __inject__(ClassHelper.class).getParameterAt(getClass(), 0, Object.class);
+		setIsPhysicallyMapped(__entityClass__.getAnnotation(Entity.class)!=null);
 	}
 
 	@Override
 	protected String __getQueryIdentifierStringBuilderClassSimpleClassNameProperty__(Object object) {
-		return getEntityClass().getSimpleName();
+		return __entityClass__.getSimpleName();
 	}
 	
 	/* Create */
@@ -120,6 +119,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		if(properties == null)
 			properties = new Properties();
 		if(properties!=null) {
+			Filter filter = (Filter) properties.getQueryFilters();
+			if(filter != null)
+				filter.normalize(__entityClass__);
 			if(properties.getQueryIdentifier() == null)
 				properties.setQueryIdentifier(__injectValueHelper__().defaultToIfNull(__getQueryIdentifier__(PersistenceFunctionReader.class, properties),read));
 		}
@@ -260,6 +262,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		if(properties == null)
 			properties = new Properties();
 		if(properties!=null) {
+			Filter filter = (Filter) properties.getQueryFilters();
+			if(filter != null)
+				filter.normalize(__entityClass__);
 			properties.setIsQueryResultPaginated(null);
 			properties.setQueryFirstTupleIndex(null);
 			properties.setQueryNumberOfTuple(null);
@@ -366,13 +371,13 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@Override
 	public PersistenceEntity<ENTITY> addQuery(Object identifier, String value) {
-		addQuery(identifier, value,getEntityClass());
+		addQuery(identifier, value,__entityClass__);
 		return this;
 	}
 	
 	@Override
 	public PersistenceEntity<ENTITY> addQueryCollectInstances(Object identifier, String value) {
-		addQueryCollectInstances(identifier, value, getEntityClass());
+		addQueryCollectInstances(identifier, value, __entityClass__);
 		return this;
 	}
 	
@@ -382,17 +387,6 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	/**/
-	
-	@Override
-	public Class<ENTITY> getEntityClass() {
-		return entityClass;
-	}
-	
-	@Override
-	public PersistenceEntity<ENTITY> setEntityClass(Class<ENTITY> aClass) {
-		this.entityClass = aClass;
-		return this;
-	}
 	
 	@Override
 	public Boolean getIsPhysicallyMapped() {
@@ -469,7 +463,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected String __buildQueryStringIdentifierFromCurrentCall__(Integer stackTraceMethodAt){
-		return __inject__(PersistenceQueryIdentifierStringBuilder.class).setClassSimpleName(getEntityClass())
+		return __inject__(PersistenceQueryIdentifierStringBuilder.class).setClassSimpleName(__entityClass__)
 				.setName(__inject__(StackTraceHelper.class).getAt(stackTraceMethodAt/* TODO index vary on deep. it must be provided as param*/).getMethodName()).execute().getOutput();
 	}
 	
@@ -606,7 +600,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected QueryStringBuilderSelect __instanciateQuerySelect__(){
-		return __instanciateQuerySelect__(getEntityClass());
+		return __instanciateQuerySelect__(__entityClass__);
 	}
 	
 	protected QueryStringBuilderSelect __instanciateQueryReadBy__(String fieldName){
@@ -616,11 +610,11 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	@Override
 	protected PersistenceQueryIdentifierStringBuilder __injectPersistenceQueryIdentifierStringBuilder__() {
-		return super.__injectPersistenceQueryIdentifierStringBuilder__().setClassSimpleName(getEntityClass());
+		return super.__injectPersistenceQueryIdentifierStringBuilder__().setClassSimpleName(__entityClass__);
 	}
 	
 	protected String __getTupleName__() {
-		return __classInstance__ == null ? __getTupleName__(getEntityClass()) : __classInstance__.getTupleName() ;
+		return __classInstance__ == null ? __getTupleName__(__entityClass__) : __classInstance__.getTupleName() ;
 	}
 	
 }

@@ -18,8 +18,4 @@ public class MyEntityPersistenceImpl extends AbstractPersistenceEntityImpl<MyEnt
 		return this;
 	}
 	
-	@Override
-	public Class<MyEntity> getEntityClass() {
-		return MyEntity.class;
-	}
 }

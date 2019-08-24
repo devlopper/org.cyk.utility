@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
+import org.cyk.utility.server.persistence.PersistenceQueryIdentifierStringBuilder;
 import org.cyk.utility.server.persistence.query.filter.Field;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.string.Strings;
@@ -13,13 +14,27 @@ import org.cyk.utility.string.Strings;
 public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends AbstractIdentifiedByString<ENTITY,?>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>> extends AbstractPersistenceEntityImpl<ENTITY> implements PersistenceIdentifiedByString<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	protected String readWhereNotHavingParent;
+	protected Class<HIERARCHY> __hierarchyClass__;
 	protected Class<HIERARCHY_PERSISTENCE> __hierarchyPersistenceClass__;
+	
+	public static final String READ_WHERE_NOT_HAVING_PARENT_FORMAT = 
+			"SELECT node FROM %1$s node "
+			+ "WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.parent = node AND NOT EXISTS(SELECT subTuple FROM %2$s subTuple WHERE subTuple.child = tuple.parent))"
+					;
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
+	protected void __listenBeforePostConstruct__() {
+		super.__listenBeforePostConstruct__();
+		__hierarchyClass__ = (Class<HIERARCHY>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 1, Object.class).getName());
 		__hierarchyPersistenceClass__ = (Class<HIERARCHY_PERSISTENCE>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 3, Object.class).getName());
+	}
+	
+	@Override
+	protected void __listenPostConstructPersistenceQueries__() {
+		super.__listenPostConstructPersistenceQueries__();
+		addQueryCollectInstances(readWhereNotHavingParent, String.format(READ_WHERE_NOT_HAVING_PARENT_FORMAT,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
 	}
 	
 	@Override
@@ -29,8 +44,18 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 	}
 	
 	@Override
+	public Long countByParentsIdentifiers(Collection<String> parentsIdentifiers, Properties properties) {
+		return __inject__(__hierarchyPersistenceClass__).countByParentsIdentifiers(parentsIdentifiers,properties);
+	}
+	
+	@Override
 	public Collection<ENTITY> readByParentsIdentifiers(Collection<String> parentsIdentifiers) {
 		return readByParentsIdentifiers(parentsIdentifiers,null);	
+	}
+	
+	@Override
+	public Long countByParentsIdentifiers(Collection<String> parentsIdentifiers) {
+		return countByParentsIdentifiers(parentsIdentifiers, null);
 	}
 	
 	@Override
@@ -67,13 +92,36 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 	
 	@Override
 	public Collection<ENTITY> readWhereNotHavingParent(Properties properties) {
-		HIERARCHIES hierarchies = __inject__(__hierarchyPersistenceClass__).readWhereParentDoesNotHaveParent(properties);
-		return hierarchies == null ? null : hierarchies.getHierarchyParents();	
+		if(properties == null)
+			properties = new Properties();
+		properties.setIfNull(Properties.QUERY_IDENTIFIER,readWhereNotHavingParent);
+		return __readMany__(properties,____getQueryParameters____(properties));
+	}
+	
+	@Override
+	public Long countWhereNotHavingParent(Properties properties) {
+		if(properties == null)
+			properties = new Properties();
+		properties.setIsQueryResultPaginated(null);
+		properties.setQueryFirstTupleIndex(null);
+		properties.setQueryNumberOfTuple(null);
+		if(properties.getQueryIdentifier() == null) {
+			String queryIdentifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setIsDerivedFromQueryIdentifier(Boolean.TRUE)
+					.setDerivedFromQueryIdentifier(readWhereNotHavingParent).setIsCountInstances(Boolean.TRUE)
+					.execute().getOutput();
+			properties.setQueryIdentifier(queryIdentifier);
+		}
+		return __count__(properties,____getQueryParameters____(properties));
 	}
 	
 	@Override
 	public Collection<ENTITY> readWhereNotHavingParent() {
 		return readWhereNotHavingParent(null);
+	}
+	
+	@Override
+	public Long countWhereNotHavingParent() {
+		return countWhereNotHavingParent(null);
 	}
 	
 	@Override
@@ -141,6 +189,30 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 	
 	public Collection<ENTITY> __readByFilterNoParent__(Properties properties) {
 		return readWhereNotHavingParent(properties);
+	}
+	
+	@Override
+	public Long count(Properties properties) {
+		Filter filter = (Filter) Properties.getFromPath(properties,Properties.QUERY_FILTERS);
+		if(filter != null) {
+			Field field = filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
+			if(field != null) {
+				if(field.getValue() == null)
+					return __countByFilterNoParent__(properties);
+				else
+					return __countByFilterParents__(properties,filter,field);
+			}
+		}
+		return super.count(properties);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Long __countByFilterParents__(Properties properties,Filter filter,Field field) {
+		return countByParentsIdentifiers((Collection<String>) field.getValue());
+	}
+	
+	public Long __countByFilterNoParent__(Properties properties) {
+		return countWhereNotHavingParent(properties);
 	}
 	
 	@Override

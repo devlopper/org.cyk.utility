@@ -8,8 +8,10 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
 import org.cyk.utility.server.persistence.PersistenceFunctionReader;
+import org.cyk.utility.server.persistence.PersistenceQueryIdentifierStringBuilder;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.string.Case;
@@ -22,6 +24,9 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 		//,readWhereIsParentOrChildBusinessIdentifiers
 		;
 	
+	public static final String READ_WHERE_PARENT_DOES_NOT_HAVE_PARENT_FORMAT = 
+			"SELECT tuple FROM %1$s tuple WHERE NOT EXISTS (SELECT subTuple FROM %1$s subTuple WHERE subTuple.child = tuple.parent)";
+	
 	@Override
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
@@ -29,8 +34,7 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 		Class<ENTITY> entityClass = (Class<ENTITY>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 1, Object.class).getName());
 		ClassInstance classInstance = __inject__(ClassInstancesRuntime.class).get(entityClass);
 		if(classInstance != null) {
-			addQueryCollectInstances(readWhereParentDoesNotHaveParent, String.format("SELECT tuple FROM %1$s tuple WHERE NOT EXISTS( "
-					+ "SELECT subTuple FROM %1$s subTuple WHERE subTuple.child = tuple.parent)",__getTupleName__()));
+			addQueryCollectInstances(readWhereParentDoesNotHaveParent, String.format(READ_WHERE_PARENT_DOES_NOT_HAVE_PARENT_FORMAT,__getTupleName__()));
 			addQueryCollectInstancesReadByParentsOrChildren(readByParentsIdentifiers,readByChildrenIdentifiers,classInstance.getSystemIdentifierField());			
 			addQueryCollectInstancesReadByParentsOrChildren(readByParentsBusinessIdentifiers,readByChildrenBusinessIdentifiers,classInstance.getBusinessIdentifierField());
 			addQueryCollectInstances(readWhereIsParentOrChildIdentifiers, String.format("SELECT tuple FROM %s tuple WHERE tuple.parent.identifier IN :identifiers OR tuple.child.identifier IN :identifiers"
@@ -61,8 +65,34 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	}
 	
 	@Override
+	public Long countByParentsIdentifiers(Collection<String> parentsIdentifiers,Properties properties) {
+		if(properties == null)
+			properties = new Properties();
+		properties.setIsQueryResultPaginated(null);
+		properties.setQueryFirstTupleIndex(null);
+		properties.setQueryNumberOfTuple(null);
+		if(properties.getQueryIdentifier() == null) {
+			String queryIdentifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setIsDerivedFromQueryIdentifier(Boolean.TRUE)
+					.setDerivedFromQueryIdentifier(readByParentsIdentifiers).setIsCountInstances(Boolean.TRUE)
+					.execute().getOutput();
+			properties.setQueryIdentifier(queryIdentifier);
+		}
+		return __count__(properties,____getQueryParameters____(properties,parentsIdentifiers));
+	}
+	
+	@Override
+	public Long countByParentsIdentifiers(Collection<String> parentsIdentifiers) {
+		return countByParentsIdentifiers(parentsIdentifiers, null);
+	}
+	
+	@Override
 	public HIERARCHIES readByParentsIdentifiers(String... parentsIdentifiers) {
 		return readByParentsIdentifiers(__injectCollectionHelper__().instanciate(parentsIdentifiers));
+	}
+	
+	@Override
+	public Long countByParentsIdentifiers(String... parentsIdentifiers) {
+		return countByParentsIdentifiers(__inject__(CollectionHelper.class).instanciate(parentsIdentifiers), null);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -101,8 +131,30 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	}
 	
 	@Override
+	public Long countWhereParentDoesNotHaveParent(Properties properties) {
+		if(properties == null)
+			properties = new Properties();
+		properties.setIsQueryResultPaginated(null);
+		properties.setQueryFirstTupleIndex(null);
+		properties.setQueryNumberOfTuple(null);
+		if(properties.getQueryIdentifier() == null) {
+			String queryIdentifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setIsDerivedFromQueryIdentifier(Boolean.TRUE)
+					.setDerivedFromQueryIdentifier(readWhereParentDoesNotHaveParent).setIsCountInstances(Boolean.TRUE)
+					.execute().getOutput();
+			properties.setQueryIdentifier(queryIdentifier);
+		}
+		//properties.setIfNull(Properties.QUERY_IDENTIFIER,readWhereParentDoesNotHaveParent);
+		return __count__(properties,____getQueryParameters____(properties));
+	}
+	
+	@Override
 	public HIERARCHIES readWhereParentDoesNotHaveParent() {
 		return readWhereParentDoesNotHaveParent(null);
+	}
+	
+	@Override
+	public Long countWhereParentDoesNotHaveParent() {
+		return countWhereParentDoesNotHaveParent(null);
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -15,7 +15,6 @@ import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.grid.GridBuilder;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.primefaces.model.SortOrder;
 
@@ -63,7 +62,7 @@ public class LazyDataModel<OBJECT> extends org.primefaces.model.LazyDataModel<OB
 					}
 				}
 				if(response!=null) {
-					__count__ = DependencyInjection.inject(NumberHelper.class).getLong(response.getHeaderString("X-Total-Count"), null);
+					__count__ = DependencyInjection.inject(ResponseHelper.class).getHeaderXTotalCount(response);
 				}
 				
 				if(__count__ == null)

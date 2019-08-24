@@ -201,7 +201,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 	}
 	
-	
 	@Test
 	public void read_myEntity_one_by_identifier_business() throws Exception{
 		String code = __getRandomCode__();
@@ -215,7 +214,6 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		__inject__(MyEntityPersistence.class).delete(myEntity);
 		userTransaction.commit();
 	}
-	
 	
 	@Test
 	public void read_myEntity_many_by_identifier_system() throws Exception{
@@ -273,37 +271,36 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 		Collection<Object> identifiers = __inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getIdentifier).collect(Collectors.toList());
 		assertThat(identifiers).containsOnly(id1,id2,id3);
-		Filter filters = __inject__(Filter.class).setKlass(MyEntity.class);
-		filters.addField(MyEntity.FIELD_IDENTIFIER,Arrays.asList(id1));
+		Filter filters = __inject__(Filter.class).addField(MyEntity.FIELD_IDENTIFIER,Arrays.asList(id1));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id1);
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id2));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id2);
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id3));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id3);
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList(id1,id3));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id1,id3);
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_IDENTIFIER, Arrays.asList());
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).isEmpty();
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_IDENTIFIER, null);
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id1,id2,id3);
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getIdentifier).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(id1,id2,id3);
 		
@@ -326,37 +323,37 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 		Collection<Object> identifiers = __inject__(MyEntityPersistence.class).read().stream().map(MyEntity::getCode).collect(Collectors.toList());
 		assertThat(identifiers).containsOnly(code1,code2,code3);
-		Filter filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		Filter filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_CODE, Arrays.asList(code1));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code1);
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_CODE, Arrays.asList(code2));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code2);
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_CODE, Arrays.asList(code3));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code3);
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_CODE, Arrays.asList(code1,code3));
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code1,code3);
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_CODE, Arrays.asList());
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).isEmpty();
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_CODE, null);
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code1,code2,code3);
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		identifiers = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters)).stream().map(MyEntity::getCode).collect(Collectors.toList());		
 		assertThat(identifiers).containsOnly(code1,code2,code3);
 		
@@ -378,7 +375,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 		
 		Filter filters = null;
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_IDENTIFIER, "123");
 		Collection<MyEntity> entities = null;
 		try {
@@ -390,13 +387,13 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
 		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123");
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_IDENTIFIER, "23");
 		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
 		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
 		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getIdentifier)).containsExactly("123","623");
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_IDENTIFIER, "3");
 		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
 		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
@@ -416,19 +413,19 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 		
 		Filter filters = null;
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_CODE, "123");
 		Collection<MyEntity> entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
 		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
 		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getCode)).containsExactly("123");
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_CODE, "23");
 		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
 		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
 		org.assertj.core.api.Assertions.assertThat(entities.stream().map(MyEntity::getCode)).containsExactly("123","623");
 		
-		filters = __inject__(Filter.class).setKlass(MyEntity.class);
+		filters = __inject__(Filter.class);
 		filters.addField(MyEntity.FIELD_CODE, "3");
 		entities = __inject__(MyEntityPersistence.class).read(new Properties().setQueryFilters(filters));
 		org.assertj.core.api.Assertions.assertThat(entities).isNotEmpty();
@@ -895,6 +892,29 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 	@Test
 	public void read_node_filter_where_noParent() throws Exception{
 		userTransaction.begin();
+		Node node0 = new Node().setIdentifier("0").setCode(__getRandomCode__()).setName(__getRandomName__());
+		Node node0_0 = new Node().setIdentifier("0.0").setCode(__getRandomCode__()).setName(__getRandomName__()).addParents(node0);
+		Node node0_1 = new Node().setIdentifier("0.1").setCode(__getRandomCode__()).setName(__getRandomName__()).addParents(node0);
+		Node node_0_0_0 = new Node().setIdentifier("0.0.0").setCode(__getRandomCode__()).setName(__getRandomName__()).addParents(node0_0);
+		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(node0,node0_0,node0_1
+				,node_0_0_0));
+		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+				new NodeHierarchy().setParent(node0).setChild(node0_0)
+				,new NodeHierarchy().setParent(node0).setChild(node0_1)
+				,new NodeHierarchy().setParent(node0_0).setChild(node_0_0_0)
+				));
+		userTransaction.commit();
+		
+		Filter filters = __inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, null);
+		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters));
+		assertThat(nodes).isNotEmpty();
+		assertThat(nodes).hasSize(1);
+		assertThat(nodes.stream().map(Node::getIdentifier).collect(Collectors.toList())).containsOnly("0");
+	}
+	
+	@Test
+	public void count_node_filter_where_noParent() throws Exception{
+		userTransaction.begin();
 		Node nodeModule = new Node().setIdentifier("MO").setCode("module").setName(__getRandomName__());
 		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
 		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
@@ -908,11 +928,9 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 				));
 		userTransaction.commit();
 		
-		Filter filters = __inject__(Filter.class).setKlass(Node.class);
-		filters.addField(Node.FIELD_PARENTS, null);
-		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters));
-		assertThat(nodes).isNotEmpty();
-		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("module");
+		Filter filters = __inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, null);
+		Long count = __inject__(NodePersistence.class).count(new Properties().setQueryFilters(filters));
+		assertThat(count).isEqualTo(1l);
 	}
 	
 	@Test
@@ -959,6 +977,43 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters));
 		assertThat(nodes).isNotEmpty();
 		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
+	}
+	
+	@Test
+	public void count_node_filter_byParent_identifier_system() throws Exception{
+		userTransaction.begin();
+		Node nodeModule = new Node().setIdentifier("MO").setCode("module").setName(__getRandomName__());
+		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
+		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
+		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
+		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+				,nodeAction));
+		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
+				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
+				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
+				));
+		userTransaction.commit();
+		
+		Filter filters = __inject__(Filter.class).setKlass(Node.class);
+		filters.addField(Node.FIELD_PARENTS, Arrays.asList("MO"),ValueUsageType.SYSTEM);
+		Long count = __inject__(NodePersistence.class).count(new Properties().setQueryFilters(filters));
+		assertThat(count).isEqualTo(1l);
+		
+		filters = __inject__(Filter.class).setKlass(Node.class);
+		filters.addField(Node.FIELD_PARENTS, Arrays.asList("S"),ValueUsageType.SYSTEM);
+		count = __inject__(NodePersistence.class).count(new Properties().setQueryFilters(filters));
+		assertThat(count).isEqualTo(1l);
+		
+		filters = __inject__(Filter.class).setKlass(Node.class);
+		filters.addField(Node.FIELD_PARENTS, Arrays.asList("ME"),ValueUsageType.SYSTEM);
+		count = __inject__(NodePersistence.class).count(new Properties().setQueryFilters(filters));
+		assertThat(count).isEqualTo(1l);
+		
+		filters = __inject__(Filter.class).setKlass(Node.class);
+		filters.addField(Node.FIELD_PARENTS, Arrays.asList("A"),ValueUsageType.SYSTEM);
+		count = __inject__(NodePersistence.class).count(new Properties().setQueryFilters(filters));
+		assertThat(count).isEqualTo(0l);
 	}
 	
 	/* Filter mapping */

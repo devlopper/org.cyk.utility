@@ -24,6 +24,7 @@ import org.cyk.utility.value.ValueHelper;
 public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> extends org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> {
 	private static final long serialVersionUID = 1L;
 
+	/* working variables : must be accessible from outside*/
 	protected Boolean __isDestinationActionable__;
 	protected Boolean __isDestinationPersistable__;
 	protected Boolean __isDestinationProjectionable__;
@@ -65,7 +66,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 		}
 		
 		if(Boolean.TRUE.equals(__isDestinationProjectionable__)) {
-			Strings fieldsNames = (Strings) properties.getFields();
+			Strings fieldsNames = (Strings) Properties.getFromPath(properties, Properties.FIELDS);
 			__project__(destination, source, fieldsNames);
 		}
 	}

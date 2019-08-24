@@ -19,6 +19,10 @@ import org.cyk.utility.value.ValueUsageType;
 public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl implements ControllerFunctionReader , Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static Boolean IS_PAGEABLE = Boolean.TRUE;
+	public static Long FROM = 0l;
+	public static Long COUNT = 25l;
+	
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
@@ -31,9 +35,9 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 		Properties properties = getProperties();
 		String fields = (String) Properties.getFromPath(properties, Properties.FIELDS);
 		if(__isMany__ == null || __isMany__) {
-			Boolean isPageable = __inject__(BooleanHelper.class).get(Properties.getFromPath(properties,Properties.IS_PAGEABLE));
-			Long from = __injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.FROM));
-			Long count = __injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.COUNT));
+			Boolean isPageable = __injectValueHelper__().defaultToIfNull(__inject__(BooleanHelper.class).get(Properties.getFromPath(properties,Properties.IS_PAGEABLE)),IS_PAGEABLE);
+			Long from = __injectValueHelper__().defaultToIfNull(__injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.FROM)),FROM);
+			Long count = __injectValueHelper__().defaultToIfNull(__injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.COUNT)),COUNT);
 			FilterDto filters = (FilterDto) Properties.getFromPath(properties,Properties.FILTERS);
 			/*String filtersAsString = null;
 			if(Boolean.TRUE.equals(__injectValueHelper__().isNotBlank(filters))) {

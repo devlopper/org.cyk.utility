@@ -28,6 +28,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	@Override
 	public void __initialize__(Object object) {
 		__setQualifierClassTo__(Controller.class, InstanceGetter.class);
+		//TODO remove FunctionRunnableImpl
 		__inject__(FunctionRunnableMap.class).set(IconIdentifierGetterImpl.class, IconIdentifierGetterFontAwsome.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(ProxyGetterImpl.class, ProxyGetterRestEasyFunctionRunnableImpl.class,LEVEL);
 		

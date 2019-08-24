@@ -7,6 +7,9 @@ import org.cyk.utility.value.ValueUsageType;
 
 public interface Field extends Objectable {
 
+	String getName();
+	Field setName(String name);
+	
 	FieldInstance getInstance();
 	Field setInstance(FieldInstance instance);
 	

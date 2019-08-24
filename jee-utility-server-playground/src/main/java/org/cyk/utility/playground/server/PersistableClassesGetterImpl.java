@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
-import org.cyk.utility.__kernel__.annotation.Test;
 import org.cyk.utility.clazz.Classes;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.playground.server.persistence.entities.MyEntity;
@@ -12,7 +11,7 @@ import org.cyk.utility.playground.server.persistence.entities.Node;
 import org.cyk.utility.playground.server.persistence.entities.NodeHierarchy;
 import org.cyk.utility.server.persistence.PersistableClassesGetter;
 
-@Dependent @Test
+@Dependent @System
 public class PersistableClassesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Classes> implements PersistableClassesGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response.Status.Family;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.StringHelper;
 
 @ApplicationScoped
@@ -108,5 +109,10 @@ public class ResponseHelperImpl extends AbstractHelper implements ResponseHelper
 		if(Boolean.TRUE.equals(__inject__(StringHelper.class).isNotBlank(value)))
 			strings = disjoin(value);
 		return strings;
+	}
+	
+	@Override
+	public Long getHeaderXTotalCount(Response response) {
+		return __inject__(NumberHelper.class).getLong(getHeader(response, Constant.RESPONSE_HEADER_X_TOTAL_COUNT), null);
 	}
 }

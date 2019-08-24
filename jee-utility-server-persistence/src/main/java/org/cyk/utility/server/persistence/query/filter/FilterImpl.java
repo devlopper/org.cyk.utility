@@ -7,7 +7,9 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.computation.ArithmeticOperator;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstancesRuntime;
+import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueUsageType;
 
 @Dependent
@@ -17,6 +19,21 @@ public class FilterImpl extends AbstractObject implements Filter,Serializable {
 	private Class<?> klass;
 	private Fields fields;
 	private String value;
+	
+	@Override
+	public Filter normalize(Class<?> klass) {
+		if(this.klass == null)
+			this.klass = klass;
+		Fields fields = getFields();
+		if(__inject__(CollectionHelper.class).isNotEmpty(fields))
+			for(Field index : fields.get()) {
+				if(index.getInstance() == null) {
+					if(__inject__(StringHelper.class).isNotBlank(index.getName()))
+						index.setInstance(__inject__(FieldInstancesRuntime.class).get(this.klass, index.getName()));
+				}
+			}
+		return this;
+	}
 	
 	@Override
 	public Class<?> getKlass() {
@@ -75,9 +92,13 @@ public class FilterImpl extends AbstractObject implements Filter,Serializable {
 
 	@Override
 	public Filter addField(String fieldName,Object fieldValue,ValueUsageType valueUsageType,ArithmeticOperator arithmeticOperator) {
+		Field field = __inject__(Field.class);
 		Class<?> klass = getKlass();
-		Field field = __inject__(Field.class).setInstance(__inject__(FieldInstancesRuntime.class).get(klass, fieldName)).setValue(fieldValue)
-				.setValueUsageType(valueUsageType).setArithmeticOperator(arithmeticOperator);
+		if(klass == null)
+			field.setName(fieldName);
+		else
+			field.setInstance(__inject__(FieldInstancesRuntime.class).get(klass, fieldName));
+		field.setValue(fieldValue).setValueUsageType(valueUsageType).setArithmeticOperator(arithmeticOperator);
 		return addFields(field);
 	}
 	

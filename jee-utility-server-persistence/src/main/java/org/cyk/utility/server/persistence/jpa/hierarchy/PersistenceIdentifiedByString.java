@@ -8,7 +8,9 @@ import org.cyk.utility.server.persistence.PersistenceEntity;
 public interface PersistenceIdentifiedByString<ENTITY extends AbstractIdentifiedByString<?,?>> extends PersistenceEntity<ENTITY> {
 
 	Collection<ENTITY> readByParentsIdentifiers(Collection<String> parentsIdentifiers,Properties properties);
+	Long countByParentsIdentifiers(Collection<String> parentsIdentifiers,Properties properties);
 	Collection<ENTITY> readByParentsIdentifiers(Collection<String> parentsIdentifiers);
+	Long countByParentsIdentifiers(Collection<String> parentsIdentifiers);
 	Collection<ENTITY> readByParentsIdentifiers(Properties properties,String...parentsIdentifiers);
 	Collection<ENTITY> readByParentsIdentifiers(String...parentsIdentifiers);
 	
@@ -18,7 +20,9 @@ public interface PersistenceIdentifiedByString<ENTITY extends AbstractIdentified
 	Collection<ENTITY> readByParents(@SuppressWarnings("unchecked") ENTITY...parents);
 	
 	Collection<ENTITY> readWhereNotHavingParent(Properties properties);
+	Long countWhereNotHavingParent(Properties properties);
 	Collection<ENTITY> readWhereNotHavingParent();
+	Long countWhereNotHavingParent();
 	
 	Collection<ENTITY> readByChildrenIdentifiers(Collection<String> childrenIdentifiers,Properties properties);
 	Collection<ENTITY> readByChildrenIdentifiers(Collection<String> childrenIdentifiers);

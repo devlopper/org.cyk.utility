@@ -146,12 +146,10 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 
 	@Override
-	public Response count(String filters) {
+	public Response count(FilterDto filter) {
 		RepresentationFunctionCounter function = __inject__(RepresentationFunctionCounter.class);
 		function.setPersistenceEntityClass(__persistenceEntityClass__);
-		Map<String,Object> map = __getFiltersMap__(filters);
-		if(map != null)
-			function.setProperty(Properties.QUERY_FILTERS,map);
+		function.setProperty(Properties.QUERY_FILTERS,filter);
 		return function.execute().getResponse();
 	}
 

@@ -1,5 +1,7 @@
 package org.cyk.utility.client.controller;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.AbstractSystemServiceProviderImpl;
@@ -14,8 +16,30 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 	}
 	
 	@Override
-	public ControllerServiceProvider<OBJECT> create(OBJECT object,Properties properties) {
+	public ControllerServiceProvider<OBJECT> createMany(Collection<OBJECT> objects, Properties properties) {
 		if(properties == null)
+			properties = new Properties();
+		ControllerFunctionCreator function = ____inject____(ControllerFunctionCreator.class);
+		function.setEntities(objects);
+		//function.getAction().getEntities(Boolean.TRUE).add(object);
+		function.copyProperty(Properties.REQUEST,properties);
+		function.copyProperty(Properties.CONTEXT,properties);
+		function.execute();
+		if(properties!=null) {
+			properties.setResponse(function.getProperties().getResponse());
+			properties.setAction(function.getProperties().getAction());
+		}
+		return this;
+	}
+	
+	@Override
+	public ControllerServiceProvider<OBJECT> createMany(Collection<OBJECT> objects) {
+		return createMany(objects, null);
+	}
+	
+	@Override
+	public ControllerServiceProvider<OBJECT> create(OBJECT object,Properties properties) {
+		/*if(properties == null)
 			properties = new Properties();
 		ControllerFunctionCreator function = ____inject____(ControllerFunctionCreator.class);
 		function.setEntity(object);
@@ -27,6 +51,8 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 			properties.setResponse(function.getProperties().getResponse());
 			properties.setAction(function.getProperties().getAction());
 		}
+		*/
+		createMany(Arrays.asList(object), properties);
 		return this;
 	}
 	

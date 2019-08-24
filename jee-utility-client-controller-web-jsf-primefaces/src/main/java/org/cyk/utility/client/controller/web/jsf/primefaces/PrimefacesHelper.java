@@ -152,6 +152,18 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 	
 	/**/
 	
+	public <NODE extends DataIdentifiedByString> TreeNode buildTreeNode(Collection<NODE> nodes,Collection<NODE> selectedNodes,org.cyk.utility.client.controller.data.TreeNodeListener<NODE> listener) {
+		TreeNode root = new DefaultTreeNode();
+		root.setExpanded(Boolean.TRUE);
+		if(__inject__(CollectionHelper.class).isNotEmpty(nodes))
+			for(NODE index : nodes) {
+				TreeNode node = new org.cyk.utility.client.controller.web.jsf.primefaces.DefaultTreeNode<NODE>(index, listener, root);
+				//TreeNode node = instantiateTreeNode(index,selectedNodes,listener, root);
+				//buildTreeNode(index,nodes,hierarchies,selectedNodes,listener,node);
+			}
+		return root;
+	}
+	
 	public <NODE extends DataIdentifiedByString,HIERARCHY extends Hierarchy<NODE>> TreeNode buildTreeNode(Collection<NODE> nodes,Collection<HIERARCHY> hierarchies,Collection<NODE> selectedNodes,TreeNodeListener<NODE,HIERARCHY> listener) {
 		TreeNode root = new DefaultTreeNode();
 		root.setExpanded(Boolean.TRUE);

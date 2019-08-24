@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.system.action.SystemActionRead;
 
@@ -18,12 +19,9 @@ public class ControllerFunctionCounterImpl extends AbstractControllerFunctionImp
 
 	@Override
 	protected void __executeRepresentation__() {
-		Object filters = Properties.getFromPath(getProperties(),Properties.FILTERS);
-		String filtersAsString = null;
-		if(filters instanceof String)
-			filtersAsString = (String) filters;
+		FilterDto filters = (FilterDto) Properties.getFromPath(getProperties(),Properties.FILTERS);
 		if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
-			__response__ = ((RepresentationEntity<?,?,?>)__representation__).count(filtersAsString);	
+			__response__ = ((RepresentationEntity<?,?,?>)__representation__).count(filters);	
 		if(__response__!=null)
 			setEntitiesCount(__response__.readEntity(Long.class));
 	}

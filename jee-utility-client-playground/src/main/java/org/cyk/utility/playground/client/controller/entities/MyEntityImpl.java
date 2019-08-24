@@ -3,13 +3,12 @@ package org.cyk.utility.playground.client.controller.entities;
 import java.io.Serializable;
 
 import org.cyk.utility.client.controller.data.AbstractDataIdentifiedByStringAndCodedAndNamedImpl;
-import org.cyk.utility.playground.client.controller.entities.MyEntity;
 
 public class MyEntityImpl extends AbstractDataIdentifiedByStringAndCodedAndNamedImpl implements MyEntity,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public MyEntity setIdentifier(Object identifier) {
+	public MyEntity setIdentifier(String identifier) {
 		return (MyEntity) super.setIdentifier(identifier);
 	}
 	

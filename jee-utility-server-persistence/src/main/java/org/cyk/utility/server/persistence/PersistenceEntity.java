@@ -74,10 +74,7 @@ public interface PersistenceEntity<ENTITY> extends PersistenceServiceProvider<EN
 	Long count();
 	
 	/**/
-	
-	PersistenceEntity<ENTITY> setEntityClass(Class<ENTITY> aClass);
-	Class<ENTITY> getEntityClass();
-	
+
 	PersistenceEntity<ENTITY> setIsPhysicallyMapped(Boolean isPhysicallyMapped);
 	Boolean getIsPhysicallyMapped();
 	

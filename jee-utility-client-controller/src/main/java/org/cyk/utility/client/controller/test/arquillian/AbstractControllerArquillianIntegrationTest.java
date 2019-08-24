@@ -1,11 +1,14 @@
 package org.cyk.utility.client.controller.test.arquillian;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.ControllerEntity;
+import org.cyk.utility.client.controller.proxy.ProxyClassUniformResourceIdentifierGetterImpl;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerController;
 import org.cyk.utility.test.arquillian.AbstractSystemClientArquillianIntegrationTestImpl;
@@ -18,6 +21,9 @@ public abstract class AbstractControllerArquillianIntegrationTest extends Abstra
 
 	@Override
 	protected void __listenBefore__() {
+		String systemIdentifier = __getSystemIdentifier__();
+		if(StringUtils.isNotBlank(systemIdentifier))
+			ProxyClassUniformResourceIdentifierGetterImpl.UNIFORM_RESOURCE_IDENTIFIER = URI.create(String.format("http://localhost:8080/%s/server/",systemIdentifier));
 		super.__listenBefore__();
 		__inject__(Controller.class).deleteAll();
 	}
@@ -65,5 +71,12 @@ public abstract class AbstractControllerArquillianIntegrationTest extends Abstra
 	@Override
 	public SystemLayer __getSystemLayer__() {
 		return __inject__(SystemLayerController.class);
+	}
+	
+	protected String __getSystemIdentifier__() {
+		String identifier = getClass().getPackage().getName();
+		identifier = StringUtils.substringBefore(identifier, ".client.");
+		identifier = StringUtils.substringAfterLast(identifier, ".");
+		return identifier;
 	}
 }

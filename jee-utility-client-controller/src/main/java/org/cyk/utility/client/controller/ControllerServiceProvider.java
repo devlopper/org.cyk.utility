@@ -1,5 +1,7 @@
 package org.cyk.utility.client.controller;
 
+import java.util.Collection;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.SystemServiceProvider;
 
@@ -8,10 +10,10 @@ public interface ControllerServiceProvider<OBJECT> extends SystemServiceProvider
 	/* Create */
 	ControllerServiceProvider<OBJECT> create(OBJECT object,Properties properties);
 	ControllerServiceProvider<OBJECT> create(OBJECT object);
-	/*
+	
 	ControllerServiceProvider<OBJECT> createMany(Collection<OBJECT> objects,Properties properties);
 	ControllerServiceProvider<OBJECT> createMany(Collection<OBJECT> objects);
-	*/
+	
 	/* Read */ 
 	
 	/* Update */

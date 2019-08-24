@@ -10,10 +10,22 @@ import org.cyk.utility.value.ValueUsageType;
 public class FieldImpl extends AbstractObject implements Field,Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private String name;
 	private FieldInstance instance;
 	private Object value;
 	private ValueUsageType valueUsageType;
 	private ArithmeticOperator arithmeticOperator;
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public Field setName(String name) {
+		this.name = name;
+		return this;
+	}
 	
 	@Override
 	public FieldInstance getInstance() {

@@ -24,6 +24,9 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 	private static final long serialVersionUID = 1L;
 	
 	public static LogLevel LOG_LEVEL = LogLevel.TRACE;
+	
+	public static Boolean IS_QUERY_RESULT_PAGINATED = Boolean.TRUE;
+	public static Integer QUERY_FIRST_TUPLE_INDEX = 0;
 	public static Integer QUERY_NUMBER_OF_TUPLE = 25;
 	
 	private Boolean isCollectionable,__isCollectionable__;
@@ -48,19 +51,20 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 			if(Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entitiesSystemIdentifiers__)) && Boolean.TRUE.equals(__injectCollectionHelper__().isEmpty(__entitiesBusinessIdentifiers__))) {
 				FilterDto filterDto = (FilterDto) getProperty(Properties.QUERY_FILTERS);
 				if(filterDto != null) {
-					properties.setQueryFilters(__inject__(MappingHelper.class).getDestination(filterDto, Filter.class));
+					Filter filter = __inject__(MappingHelper.class).getDestination(filterDto, Filter.class).normalize(__persistenceEntityClass__);
+					properties.setQueryFilters(filter);
 				}
 				// no specific identifiers
 				//In order to take less execution time and data size , we will set default values if not set by caller.
 				properties.copyFrom(getProperties(), Properties.IS_QUERY_RESULT_PAGINATED, Properties.QUERY_FIRST_TUPLE_INDEX,Properties.QUERY_NUMBER_OF_TUPLE);
 				if(properties.getIsQueryResultPaginated() == null)
-					properties.setIsQueryResultPaginated(Boolean.TRUE); //yes we paginate
+					properties.setIsQueryResultPaginated(IS_QUERY_RESULT_PAGINATED == null ? Boolean.TRUE : IS_QUERY_RESULT_PAGINATED); //yes we paginate
 				addLogMessageBuilderParameter("query paginated", properties.getIsQueryResultPaginated());
 				if(Boolean.TRUE.equals(properties.getIsQueryResultPaginated())) {
 					if(properties.getQueryFirstTupleIndex() == null)
-						properties.setQueryFirstTupleIndex(0); // first page
+						properties.setQueryFirstTupleIndex(QUERY_FIRST_TUPLE_INDEX == null ? 0 : QUERY_FIRST_TUPLE_INDEX); // first page
 					if(properties.getQueryNumberOfTuple() == null)
-						properties.setQueryNumberOfTuple(QUERY_NUMBER_OF_TUPLE == null ? 25 : QUERY_NUMBER_OF_TUPLE); // 5 results	
+						properties.setQueryNumberOfTuple(QUERY_NUMBER_OF_TUPLE == null ? 25 : QUERY_NUMBER_OF_TUPLE);
 					addLogMessageBuilderParameter("first", properties.getQueryFirstTupleIndex());
 					addLogMessageBuilderParameter("count", properties.getQueryNumberOfTuple());
 				}
@@ -75,7 +79,7 @@ public abstract class AbstractRepresentationFunctionReaderImpl extends AbstractR
 				}
 				
 				properties.setQueryIdentifier(null);
-				__responseBuilder__.header("X-Total-Count", __injectBusiness__().count(__persistenceEntityClass__, properties));
+				__responseBuilder__.header(Constant.RESPONSE_HEADER_X_TOTAL_COUNT, __injectBusiness__().count(__persistenceEntityClass__, properties));
 				/*
 				HttpServletRequest request = __inject__(HttpServletRequest.class);
 				String uri = __inject__(UniformResourceIdentifierStringBuilder.class).setRequest(request).execute().getOutput();
