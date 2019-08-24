@@ -13,6 +13,7 @@ import org.cyk.utility.assertion.AssertionsProviderClassMap;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
+import org.cyk.utility.server.business.api.MyEntityBusiness;
 import org.cyk.utility.server.persistence.PersistableClassesGetter;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.entities.Node;
@@ -253,7 +254,7 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 	}
 	
 	@Test
-	public void find_myEntity_project() throws Exception{
+	public void find_myEntity_use_projection() throws Exception{
 		String code1 = __getRandomCode__(); 
 		String code2 = __getRandomCode__();
 		String code3 = __getRandomCode__();
@@ -273,6 +274,22 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		__assertReadMyEntity__(id1, "name,long1", Boolean.TRUE, "a", 15l, null, null);
 		__assertReadMyEntity__(id1, "name,long2", Boolean.TRUE, "a", null, 20l, null);
 		__assertReadMyEntity__(id1, "long1,long2", Boolean.TRUE, null, 15l, 20l, null);
+	}
+	
+	/* Count */
+	
+	@Test
+	public void count_myEntity_filter_identifier_system() throws Exception{
+		Integer numberOfEntities = 50;
+		Collection<MyEntity> collection = new ArrayList<>();
+		for(Integer index = 0 ; index < numberOfEntities ; index = index + 1)
+			collection.add(new MyEntity().setIdentifier(index.toString()).setCode(index.toString()).setName(__getRandomName__()));
+		__inject__(MyEntityBusiness.class).createMany(collection);
+		
+		assertThat( __inject__(MyEntityRepresentation.class).count(new FilterDto().addField("identifier", Arrays.asList("0"), ValueUsageType.SYSTEM))
+				.getEntity()).isEqualTo(1l);
+		assertThat( __inject__(MyEntityRepresentation.class).count(new FilterDto().addField("identifier", Arrays.asList("0","10","21"), ValueUsageType.SYSTEM))
+				.getEntity()).isEqualTo(3l);
 	}
 	
 	/* Update */

@@ -23,7 +23,7 @@ public class RepresentationFunctionCounterImpl extends AbstractRepresentationFun
 			Filter filter = __inject__(MappingHelper.class).getDestination(filterDto, Filter.class).normalize(__persistenceEntityClass__);
 			properties.setQueryFilters(filter);
 		}
-		count = __injectBusiness__().count(getPersistenceEntityClass(), properties);
+		count = __injectBusiness__().count(__persistenceEntityClass__, properties);
 	}
 	
 	@Override

@@ -150,6 +150,8 @@ public abstract class AbstractControllerServiceProviderImpl<OBJECT> extends Abst
 		function.copyProperty(Properties.REQUEST,properties);
 		function.copyProperty(Properties.CONTEXT,properties);
 		
+		function.copyProperty(Properties.VALUE_USAGE_TYPE,properties);
+		function.copyProperty(Properties.FILTERS,properties);
 		function.copyProperty(Properties.FIELDS,properties);
 	}
 }

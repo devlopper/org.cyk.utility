@@ -32,6 +32,28 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY e
 	}
 	
 	@Override
+	public Long countByParentsCodes(Collection<String> parentsCodes, Properties properties) {
+		return __inject__(__hierarchyPersistenceClass__).countByParentsBusinessIdentifiers(__injectCollectionHelper__().cast(Object.class, parentsCodes));
+	}
+	
+	@Override
+	public Long countByParentsCodes(Collection<String> parentsCodes) {
+		return countByParentsCodes(parentsCodes,null);
+	}
+	
+	@Override
+	public Long countByParentsCodes(Properties properties, String... parentsCodes) {
+		return countByParentsCodes(__injectCollectionHelper__().instanciate(parentsCodes),properties);
+	}
+	
+	@Override
+	public Long countByParentsCodes(String... parentsCodes) {
+		return countByParentsCodes(parentsCodes);
+	}
+	
+	/* children */
+	
+	@Override
 	public Collection<ENTITY> readByChildrenCodes(Collection<String> childrenCodes,Properties properties) {
 		HIERARCHIES hierarchies = __inject__(__hierarchyPersistenceClass__).readByChildrenBusinessIdentifiers(__injectCollectionHelper__().cast(Object.class, childrenCodes));
 		return hierarchies == null ? null : hierarchies.getHierarchyParents();	
@@ -60,4 +82,11 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY e
 		return readByParentsCodes((Collection<String>) field.getValue(),properties);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Long __countByFilterParents__(Properties properties, Filter filter, Field field) {
+		if(ValueUsageType.SYSTEM.equals(field.getValueUsageType()))
+			return super.__countByFilterParents__(properties, filter, field);
+		return countByParentsCodes((Collection<String>) field.getValue(),properties);
+	}
 }

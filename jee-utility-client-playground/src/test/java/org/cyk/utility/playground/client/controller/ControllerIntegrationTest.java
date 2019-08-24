@@ -13,10 +13,12 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.ControllerFunctionReaderImpl;
 import org.cyk.utility.client.controller.test.arquillian.AbstractControllerArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.playground.client.controller.api.MyEntityController;
+import org.cyk.utility.playground.client.controller.api.NodeController;
+import org.cyk.utility.playground.client.controller.api.NodeHierarchyController;
 import org.cyk.utility.playground.client.controller.entities.MyEntity;
+import org.cyk.utility.playground.client.controller.entities.Node;
 import org.cyk.utility.playground.client.controller.impl.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
-import org.cyk.utility.server.representation.RepresentationFunctionReaderImpl;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
@@ -31,7 +33,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 	}
 	
 	@Test
-	public void create_myEntity() throws Exception{
+	public void create_myEntity() {
 		String identifier = __getRandomIdentifier__();
 		String code = __getRandomCode__();
 		MyEntity myEntity = __inject__(MyEntity.class).setIdentifier(identifier).setCode(code).setName(__getRandomName__());
@@ -43,7 +45,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 	}
 	
 	@Test
-	public void create_myEntity_many() throws Exception{
+	public void create_myEntity_many() {
 		String identifier = __getRandomIdentifier__();
 		String code = __getRandomCode__();
 		MyEntity myEntity = __inject__(MyEntity.class).setIdentifier(identifier).setCode(code).setName(__getRandomName__());
@@ -55,7 +57,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 	}
 	
 	@Test
-	public void read_myEntity() throws Exception{
+	public void read_myEntity() {
 		Integer numberOfEntities = 50;
 		Collection<MyEntity> collection = new ArrayList<>();
 		for(Integer index = 0 ; index < numberOfEntities ; index = index + 1)
@@ -84,7 +86,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 	}
 	
 	@Test
-	public void count_myEntity() throws Exception{
+	public void count_myEntity() {
 		assertThat(__inject__(MyEntityController.class).count()).isEqualTo(0l);
 		Properties properties = new Properties();
 		__inject__(MyEntityController.class).createMany(Arrays.asList(
@@ -103,7 +105,7 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 	}
 	
 	@Test
-	public void read_myEntity_filter_identifier_system() throws Exception{
+	public void read_myEntity_filter_identifier_system() {
 		Integer numberOfEntities = 50;
 		Collection<MyEntity> collection = new ArrayList<>();
 		for(Integer index = 0 ; index < numberOfEntities ; index = index + 1)
@@ -119,29 +121,98 @@ public class ControllerIntegrationTest extends AbstractControllerArquillianInteg
 		assertThat(collection).hasSize(1);
 		assertThat(collection.stream().map(MyEntity::getIdentifier).collect(Collectors.toList())).containsOnly("0");
 		assertThat(__inject__(ResponseHelper.class).getHeaderXTotalCount(response)).isEqualTo(1l);
+		
+		properties = new Properties().setFilters(new FilterDto().addField("identifier", Arrays.asList("0","10","21"), ValueUsageType.SYSTEM));
+		collection = __inject__(MyEntityController.class).read(properties);
+		response = (Response) properties.getResponse();
+		assertThat(response).isNotNull();
+		assertThat(collection).isNotNull();
+		assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+		assertThat(collection).hasSize(3);
+		assertThat(collection.stream().map(MyEntity::getIdentifier).collect(Collectors.toList())).containsOnly("0","10","21");
+		assertThat(__inject__(ResponseHelper.class).getHeaderXTotalCount(response)).isEqualTo(3l);
 	}
 	
-	//@Test
-	public void count_myEntity_filter() throws Exception{
-		assertThat(__inject__(MyEntityController.class).count()).isEqualTo(0l);
-		Properties properties = new Properties();
-		__inject__(MyEntityController.class).createMany(Arrays.asList(
-				__inject__(MyEntity.class).setIdentifier("abc").setCode("012").setName(__getRandomName__())
-				),properties);
-		assertThat(__inject__(MyEntityController.class).count()).isEqualTo(1l);
-		__inject__(MyEntityController.class).createMany(Arrays.asList(
-				__inject__(MyEntity.class).setIdentifier("bcd").setCode("123").setName(__getRandomName__())
-				),properties);
-		assertThat(__inject__(MyEntityController.class).count()).isEqualTo(2l);
-		__inject__(MyEntityController.class).createMany(Arrays.asList(
-				__inject__(MyEntity.class).setIdentifier("cde").setCode("345").setName(__getRandomName__())
-				,__inject__(MyEntity.class).setIdentifier("abcdef").setCode("0123456").setName(__getRandomName__())
-				),properties);
-		assertThat(__inject__(MyEntityController.class).count()).isEqualTo(4l);
+	@Test
+	public void count_myEntity_filter_identifier_system() {
+		Integer numberOfEntities = 50;
+		Collection<MyEntity> collection = new ArrayList<>();
+		for(Integer index = 0 ; index < numberOfEntities ; index = index + 1)
+			collection.add(__inject__(MyEntity.class).setIdentifier(index.toString()).setCode(index.toString()).setName(__getRandomName__()));
+		__inject__(MyEntityController.class).createMany(collection);
 		
-		FilterDto filter = new FilterDto().setKlass(org.cyk.utility.playground.server.persistence.entities.MyEntity.class)
-				.addField(org.cyk.utility.playground.server.persistence.entities.MyEntity.FIELD_IDENTIFIER, Arrays.asList("abc"));
+		Properties properties = new Properties().setFilters(new FilterDto().addField("identifier", Arrays.asList("0"), ValueUsageType.SYSTEM));
+		assertThat( __inject__(MyEntityController.class).count(properties)).isEqualTo(1l);
 		
+		properties = new Properties().setFilters(new FilterDto().addField("identifier", Arrays.asList("0","10","21"), ValueUsageType.SYSTEM));
+		assertThat( __inject__(MyEntityController.class).count(properties)).isEqualTo(3l);
+	}
+	
+	/* Node */
+	
+	@Test
+	public void create_nodes() {
+		assertThat( __inject__(NodeController.class).count().intValue()).isEqualTo(0);
+		assertThat( __inject__(NodeHierarchyController.class).count().intValue()).isEqualTo(0);
+		Integer numberOfNodesLevel0 = 4;
+		Integer numberOfNodesLevel1 = 3;
+		Integer numberOfNodesLevel2 = 2;
+		for(Integer indexNumberOfNodesLevel0 = 0 ; indexNumberOfNodesLevel0 < numberOfNodesLevel0 ; indexNumberOfNodesLevel0 = indexNumberOfNodesLevel0 + 1) {
+			Node nodeLevel0 = __inject__(Node.class).setCode(indexNumberOfNodesLevel0.toString()).setName(__getRandomName__());
+			__inject__(NodeController.class).create(nodeLevel0);
+			for(Integer indexNumberOfNodesLevel1 = 0 ; indexNumberOfNodesLevel1 < numberOfNodesLevel1 ; indexNumberOfNodesLevel1 = indexNumberOfNodesLevel1 + 1) {
+				Node nodeLevel1 = __inject__(Node.class).setCode(nodeLevel0.getCode()+"."+indexNumberOfNodesLevel1.toString()).setName(__getRandomName__()).add__parents__(nodeLevel0);
+				__inject__(NodeController.class).create(nodeLevel1);
+				for(Integer indexNumberOfNodesLevel2 = 0 ; indexNumberOfNodesLevel2 < numberOfNodesLevel2 ; indexNumberOfNodesLevel2 = indexNumberOfNodesLevel2 + 1) {
+					Node nodeLevel2 = __inject__(Node.class).setCode(nodeLevel1.getCode()+"."+indexNumberOfNodesLevel2.toString()).setName(__getRandomName__()).add__parents__(nodeLevel1);
+					__inject__(NodeController.class).create(nodeLevel2);
+				}	
+			}	
+		}
+		Integer count = numberOfNodesLevel0 + (numberOfNodesLevel0 * numberOfNodesLevel1) + (numberOfNodesLevel0 * numberOfNodesLevel1 * numberOfNodesLevel2);
+		assertThat( __inject__(NodeController.class).count().intValue()).isEqualTo(count);
+		assertThat( __inject__(NodeHierarchyController.class).count().intValue()).isEqualTo((numberOfNodesLevel0 * numberOfNodesLevel1) + (numberOfNodesLevel0 * numberOfNodesLevel1 * numberOfNodesLevel2));
+	}
+	
+	@Test
+	public void read_nodes() {
+		Integer numberOfNodesLevel0 = 4;
+		Integer numberOfNodesLevel1 = 3;
+		Integer numberOfNodesLevel2 = 2;
+		for(Integer indexNumberOfNodesLevel0 = 0 ; indexNumberOfNodesLevel0 < numberOfNodesLevel0 ; indexNumberOfNodesLevel0 = indexNumberOfNodesLevel0 + 1) {
+			Node nodeLevel0 = __inject__(Node.class).setCode(indexNumberOfNodesLevel0.toString()).setName(__getRandomName__());
+			__inject__(NodeController.class).create(nodeLevel0);
+			for(Integer indexNumberOfNodesLevel1 = 0 ; indexNumberOfNodesLevel1 < numberOfNodesLevel1 ; indexNumberOfNodesLevel1 = indexNumberOfNodesLevel1 + 1) {
+				Node nodeLevel1 = __inject__(Node.class).setCode(nodeLevel0.getCode()+"."+indexNumberOfNodesLevel1.toString()).setName(__getRandomName__()).add__parents__(nodeLevel0);
+				__inject__(NodeController.class).create(nodeLevel1);
+				for(Integer indexNumberOfNodesLevel2 = 0 ; indexNumberOfNodesLevel2 < numberOfNodesLevel2 ; indexNumberOfNodesLevel2 = indexNumberOfNodesLevel2 + 1) {
+					Node nodeLevel2 = __inject__(Node.class).setCode(nodeLevel1.getCode()+"."+indexNumberOfNodesLevel2.toString()).setName(__getRandomName__()).add__parents__(nodeLevel1);
+					__inject__(NodeController.class).create(nodeLevel2);
+				}	
+			}	
+		}
+		Collection<Node> nodes = __inject__(NodeController.class).read(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, null)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("0","1","2","3");
+		assertThat(__inject__(NodeController.class).count(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, null)))).isEqualTo(4l);
+		
+		nodes = __inject__(NodeController.class).read(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, Arrays.asList("0"),ValueUsageType.BUSINESS)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("0.0","0.1","0.2");
+		assertThat(__inject__(NodeController.class).count(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, Arrays.asList("0"))))).isEqualTo(3l);
+		
+		nodes = __inject__(NodeController.class).read(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, Arrays.asList("0.0"),ValueUsageType.BUSINESS)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("0.0.0","0.0.1");
+		assertThat(__inject__(NodeController.class).count(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, Arrays.asList("0.0"))))).isEqualTo(2l);
+		
+		nodes = __inject__(NodeController.class).read(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, Arrays.asList("1"),ValueUsageType.BUSINESS)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("1.0","1.1","1.2");
+		
+		nodes = __inject__(NodeController.class).read(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, Arrays.asList("1.1"),ValueUsageType.BUSINESS)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("1.1.0","1.1.1");
 	}
 	
 	/**/

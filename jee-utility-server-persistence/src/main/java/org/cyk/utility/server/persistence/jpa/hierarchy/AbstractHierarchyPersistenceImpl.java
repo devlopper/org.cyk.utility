@@ -109,6 +109,28 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	}
 	
 	@Override
+	public Long countByParentsBusinessIdentifiers(Collection<Object> parentsBusinessIdentifiers) {
+		Properties properties = null;
+		if(properties == null)
+			properties = new Properties();
+		properties.setIsQueryResultPaginated(null);
+		properties.setQueryFirstTupleIndex(null);
+		properties.setQueryNumberOfTuple(null);
+		if(properties.getQueryIdentifier() == null) {
+			String queryIdentifier = __inject__(PersistenceQueryIdentifierStringBuilder.class).setIsDerivedFromQueryIdentifier(Boolean.TRUE)
+					.setDerivedFromQueryIdentifier(readByParentsBusinessIdentifiers).setIsCountInstances(Boolean.TRUE)
+					.execute().getOutput();
+			properties.setQueryIdentifier(queryIdentifier);
+		}
+		return __count__(properties,____getQueryParameters____(properties,parentsBusinessIdentifiers));
+	}
+	
+	@Override
+	public Long countByParentsBusinessIdentifiers(Object... parentsBusinessIdentifiers) {
+		return countByParentsBusinessIdentifiers(__injectCollectionHelper__().instanciate(parentsBusinessIdentifiers));
+	}
+	
+	@Override
 	public HIERARCHIES readByParents(Collection<ENTITY> parents) {
 		if(__injectCollectionHelper__().isNotEmpty(parents))
 			return readByParentsIdentifiers(parents.stream().map(AbstractIdentifiedByString::getIdentifier).collect(Collectors.toList()));

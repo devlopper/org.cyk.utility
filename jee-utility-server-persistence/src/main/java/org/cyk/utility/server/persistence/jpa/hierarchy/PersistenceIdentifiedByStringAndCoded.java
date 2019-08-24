@@ -11,6 +11,11 @@ public interface PersistenceIdentifiedByStringAndCoded<ENTITY extends AbstractId
 	Collection<ENTITY> readByParentsCodes(Properties properties,String...parentsCodes);
 	Collection<ENTITY> readByParentsCodes(String...parentsCodes);
 	
+	Long countByParentsCodes(Collection<String> parentsCodes,Properties properties);
+	Long countByParentsCodes(Collection<String> parentsCodes);
+	Long countByParentsCodes(Properties properties,String...parentsCodes);
+	Long countByParentsCodes(String...parentsCodes);
+	
 	Collection<ENTITY> readByChildrenCodes(Collection<String> childrenCodes,Properties properties);
 	Collection<ENTITY> readByChildrenCodes(Collection<String> childrenCodes);
 	Collection<ENTITY> readByChildrenCodes(Properties properties,String...childrenCodes);

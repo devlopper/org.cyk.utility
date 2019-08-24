@@ -2,21 +2,55 @@ package org.cyk.utility.client.controller.data.hierarchy;
 
 import java.util.Collection;
 
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.collection.CollectionInstance;
-import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.instance.InstanceHelper;
-import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.AbstractMapperSourceDestinationImpl;
+import org.cyk.utility.server.representation.hierarchy.AbstractNodeCodedAndNamed;
 
-public abstract class AbstractNodeMapperImpl<SOURCE,DESTINATION,SOURCE_COLLECTION,DESTINATION_COLLECTION> extends AbstractMapperSourceDestinationImpl<SOURCE, DESTINATION> {
+public abstract class AbstractNodeMapperImpl<SOURCE extends DataIdentifiedByString<SOURCE>,DESTINATION extends AbstractNodeCodedAndNamed<DESTINATION,?>,DESTINATION_COLLECTION> extends AbstractMapperSourceDestinationImpl<SOURCE, DESTINATION> {
 	private static final long serialVersionUID = 1L;
  
+	@Override
+	protected void __listenGetDestinationAfter__(SOURCE source, DESTINATION destination) {
+		super.__listenGetDestinationAfter__(source, destination);
+		Collection<SOURCE> parents = source.get__parents__();
+		if(parents != null && !parents.isEmpty()) {
+			for(SOURCE index : parents) {
+				destination.addParents(getDestination(index));
+			}
+		}
+	}
+	
+	/*private Class<DESTINATION_COLLECTION>
+	
 	@SuppressWarnings("unchecked")
-	public SOURCE_COLLECTION getNodesSources(DESTINATION_COLLECTION destinationCollection) {
-    	SOURCE_COLLECTION sourceCollection = null;
+	@PostConstruct
+    public void __listenPostConstruct__() {
+		if(__destinationClass__ == null) {
+			ClassNameBuilder classNameBuilder = DependencyInjection.inject(ClassNameBuilder.class).setKlass(getClass());
+			classNameBuilder.getSourceNamingModel(Boolean.TRUE).server().representation().entities().setSuffix("DtoMapperImpl");
+			classNameBuilder.getDestinationNamingModel(Boolean.TRUE).server().persistence().entities().suffix();
+			__destinationClass__ = DependencyInjection.inject(ValueHelper.class).returnOrThrowIfBlank("persistence entity class"
+					,(Class<DESTINATION>) DependencyInjection.inject(ClassHelper.class).getByName(classNameBuilder));
+		}
+		
+		ClassInstance classInstance = DependencyInjection.inject(ClassInstancesRuntime.class).get(__destinationClass__);
+		__isDestinationPersistable__ = Boolean.TRUE.equals(classInstance.getIsPersistable());
+		__isDestinationProjectionable__ = Boolean.TRUE.equals(DependencyInjection.inject(ValueHelper.class).defaultToIfNull(classInstance.getIsProjectionable(),Boolean.TRUE));
+		__isDestinationActionable__ = Boolean.TRUE.equals(DependencyInjection.inject(ValueHelper.class).defaultToIfNull(classInstance.getIsActionable(),Boolean.TRUE));
+		if(Boolean.TRUE.equals(__isDestinationActionable__)) {			
+			if(__isDestinationPersistable__) {
+				__actionsIdentifiers__ = DependencyInjection.inject(Strings.class);
+				__actionsIdentifiers__.add(Action.IDENTIFIER_READ,Action.IDENTIFIER_UPDATE,Action.IDENTIFIER_DELETE);
+			}
+			HttpServletRequest request = DependencyInjection.inject(HttpServletRequest.class);
+			__resourcePath__ = StringUtils.substringAfter(request.getRequestURI(), request.getContextPath());
+			__resourcePath__ = StringUtils.removeStart(__resourcePath__, "/");
+			__resourcePath__ = StringUtils.substringBefore(__resourcePath__,"/");	
+		}
+    }*/
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Object> getNodesSources(DESTINATION_COLLECTION destinationCollection) {
+		Collection<Object> sourceCollection = null;
     	/*if(destinationCollection != null) {
     		Class<DESTINATION_COLLECTION> destinationCollectionClass = __getDestinationCollectionClass__();
         	if(DependencyInjection.inject(ClassHelper.class).isInstanceOf(destinationCollectionClass, CollectionInstance.class)) {
@@ -64,13 +98,9 @@ public abstract class AbstractNodeMapperImpl<SOURCE,DESTINATION,SOURCE_COLLECTIO
     	return destinationCollection;
     }
     
-    protected abstract Class<DESTINATION_COLLECTION> __getDestinationCollectionClass__();
-    protected abstract Class<DESTINATION> __getDestinationClass__();
+    //protected abstract Class<DESTINATION_COLLECTION> __getDestinationCollectionClass__();
+    //protected abstract Class<DESTINATION> __getDestinationClass__();
     
-	protected Class<SOURCE_COLLECTION> __getSourceCollectionClass__() {
-		return (Class<SOURCE_COLLECTION>) Collection.class;
-	}
-	
 	/*@Override
 	protected Class<DESTINATION_COLLECTION> __getDestinationCollectionClass__() {
 		return PrivilegeDtoCollection.class;

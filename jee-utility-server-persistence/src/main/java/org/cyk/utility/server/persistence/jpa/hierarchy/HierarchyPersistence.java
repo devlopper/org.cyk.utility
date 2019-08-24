@@ -17,7 +17,9 @@ public interface HierarchyPersistence<HIERARCHY extends AbstractHierarchy<ENTITY
 	//HIERARCHIES readByParentsByChildren(Collection<ENTITY> parents,Collection<ENTITY> children);
 	
 	HIERARCHIES readByParentsBusinessIdentifiers(Collection<Object> parentsBusinessIdentifiers);
+	Long countByParentsBusinessIdentifiers(Collection<Object> parentsBusinessIdentifiers);
 	HIERARCHIES readByParentsBusinessIdentifiers(Object...parentsBusinessIdentifiers);
+	Long countByParentsBusinessIdentifiers(Object...parentsBusinessIdentifiers);
 	
 	HIERARCHIES readByParents(Collection<ENTITY> parents);
 	HIERARCHIES readByParents(@SuppressWarnings("unchecked") ENTITY...parents);

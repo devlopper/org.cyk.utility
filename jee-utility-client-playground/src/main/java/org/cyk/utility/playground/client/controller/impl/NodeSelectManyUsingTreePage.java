@@ -18,6 +18,7 @@ import org.cyk.utility.playground.client.controller.api.NodeController;
 import org.cyk.utility.playground.client.controller.entities.Node;
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.value.ValueUsageType;
+import org.primefaces.event.NodeExpandEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -35,13 +36,17 @@ public class NodeSelectManyUsingTreePage extends AbstractPageContainerManagedImp
 		super.__listenPostConstruct__();
 		root = new DefaultTreeNode();
 		root.setExpanded(Boolean.TRUE);
-		FilterDto filter = new FilterDto();
-		filter.setKlass(org.cyk.utility.playground.server.persistence.entities.Node.class);
-		filter.addField(org.cyk.utility.playground.server.persistence.entities.Node.FIELD_PARENTS, null);
-		Collection<Node> nodes = __inject__(NodeController.class).read(new Properties().setFilters(filter).setIsPageable(Boolean.FALSE));
+		Collection<Node> nodes = __inject__(NodeController.class).read(new Properties().setFilters(new FilterDto().addField(Node.PROPERTY_PARENTS, null))
+				.setIsPageable(Boolean.FALSE));
 		if(__inject__(CollectionHelper.class).isNotEmpty(nodes))
 			for(Node index : nodes) {
-				new MyDefaultTreeNode("T", index, root);
+				new DefaultTreeNode("T", index, root) {
+					@Override
+					public boolean isLeaf() {
+						return __inject__(NodeController.class).count(new Properties().setFilters(new FilterDto().addField("parents"
+								, Arrays.asList(index.getIdentifier()),ValueUsageType.SYSTEM))) == 0;
+					}
+				};
 				/*TreeNode node = new org.cyk.utility.client.controller.web.jsf.primefaces.DefaultTreeNode<Node>(index, new TreeNodeListener<Node>() {
 					
 					@Override
@@ -81,6 +86,22 @@ public class NodeSelectManyUsingTreePage extends AbstractPageContainerManagedImp
 		//__injectPrimefacesHelper__().buildTreeNode(nodes, hierarchies, selectedNodes, listener)
 	}
 	
+	public void listenExpand(NodeExpandEvent event) {
+		Node node = (Node) event.getTreeNode().getData();
+		Collection<Node> children = __inject__(NodeController.class).read(new Properties().setFilters(new FilterDto().addField("parents"
+				, Arrays.asList(node.getIdentifier()),ValueUsageType.SYSTEM)));
+		if(children != null) {
+			for(Node index : children) {
+				new DefaultTreeNode("T", index, event.getTreeNode()) {
+					@Override
+					public boolean isLeaf() {
+						return __inject__(NodeController.class).count(new Properties().setFilters(new FilterDto().addField("parents"
+								, Arrays.asList(index.getIdentifier()),ValueUsageType.SYSTEM))) == 0;
+					}
+				};
+			}
+		}
+    }
 	
 	@Override
 	protected String __getWindowTitleValue__() {

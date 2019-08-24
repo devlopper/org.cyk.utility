@@ -9,7 +9,7 @@ import org.cyk.utility.client.controller.component.annotation.InputString;
 import org.cyk.utility.client.controller.component.annotation.InputStringLineOne;
 import org.cyk.utility.string.StringHelper;
 
-public abstract class AbstractDataIdentifiedByStringAndCodedAndNamedImpl extends AbstractDataIdentifiedByStringAndCodedImpl implements DataIdentifiedByStringAndCodedAndNamed,Serializable {
+public abstract class AbstractDataIdentifiedByStringAndCodedAndNamedImpl<NODE> extends AbstractDataIdentifiedByStringAndCodedImpl<NODE> implements DataIdentifiedByStringAndCodedAndNamed<NODE>,Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Input @InputString @InputStringLineOne
@@ -17,7 +17,7 @@ public abstract class AbstractDataIdentifiedByStringAndCodedAndNamedImpl extends
 	private String name;
 	
 	@Override
-	public DataIdentifiedByStringAndCodedAndNamed setName(String name) {
+	public DataIdentifiedByStringAndCodedAndNamed<NODE> setName(String name) {
 		this.name = name;
 		return this;
 	}
