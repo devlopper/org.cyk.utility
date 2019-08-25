@@ -1,12 +1,16 @@
 package org.cyk.utility.server.persistence.jpa.hierarchy;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.server.persistence.AbstractPersistenceEntityImpl;
+import org.cyk.utility.server.persistence.PersistenceFunctionReader;
 import org.cyk.utility.server.persistence.PersistenceQueryIdentifierStringBuilder;
+import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
 import org.cyk.utility.server.persistence.query.filter.Field;
 import org.cyk.utility.server.persistence.query.filter.Filter;
 import org.cyk.utility.string.Strings;
@@ -14,14 +18,16 @@ import org.cyk.utility.string.Strings;
 public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends AbstractIdentifiedByString<ENTITY,?>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>> extends AbstractPersistenceEntityImpl<ENTITY> implements PersistenceIdentifiedByString<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected String readWhereNotHavingParent;
+	protected String readWhereNotHavingParent,readByParentsIdentifiers;
 	protected Class<HIERARCHY> __hierarchyClass__;
 	protected Class<HIERARCHY_PERSISTENCE> __hierarchyPersistenceClass__;
 	
 	public static final String READ_WHERE_NOT_HAVING_PARENT_FORMAT = 
 			"SELECT node FROM %1$s node "
-			+ "WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.parent = node AND NOT EXISTS(SELECT subTuple FROM %2$s subTuple WHERE subTuple.child = tuple.parent))"
-					;
+			+ "WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.parent = node AND NOT EXISTS(SELECT subTuple FROM %2$s subTuple WHERE subTuple.child = tuple.parent))";
+	
+	public static final String READ_BY_PARENTS_IDENTIFIERS_FORMAT = 
+			"SELECT node FROM %1$s node WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.child = node AND tuple.parent.identifier IN :parentsIdentifiers))";
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -35,6 +41,7 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
 		addQueryCollectInstances(readWhereNotHavingParent, String.format(READ_WHERE_NOT_HAVING_PARENT_FORMAT,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
+		addQueryCollectInstances(readByParentsIdentifiers, String.format(READ_BY_PARENTS_IDENTIFIERS_FORMAT,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
 	}
 	
 	@Override
@@ -166,7 +173,7 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 	public Collection<ENTITY> readByChildren(@SuppressWarnings("unchecked") ENTITY... children) {
 		return readByChildren(null,children);
 	}
-	
+	/*
 	@Override
 	public Collection<ENTITY> read(Properties properties) {
 		Filter filter = (Filter) Properties.getFromPath(properties,Properties.QUERY_FILTERS);
@@ -181,10 +188,10 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 		}
 		return super.read(properties);
 	}
-	
+	*/
 	@SuppressWarnings("unchecked")
 	public Collection<ENTITY> __readByFilterParents__(Properties properties,Filter filter,Field field) {
-		return readByParentsIdentifiers((Collection<String>) field.getValue());
+		return readByParentsIdentifiers((Collection<String>) field.getValue(),properties);
 	}
 	
 	public Collection<ENTITY> __readByFilterNoParent__(Properties properties) {
@@ -232,9 +239,37 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 						Collection<ENTITY> children = readByParents(entity);
 						if(__injectCollectionHelper__().isNotEmpty(children))
 							entity.getChildren(Boolean.TRUE).add(children);
+					}else if(AbstractIdentifiedByString.FIELD_NUMBER_OF_CHILDREN.equals(field)) {
+						entity.setNumberOfChildren(countByParentsIdentifiers(Arrays.asList(entity.getIdentifier())));
 					}
 				}
 			});
+	}
+	
+	@Override
+	protected String __getQueryIdentifier__(Class<?> functionClass, Properties properties, Object... parameters) {
+		Filter filter = (Filter) Properties.getFromPath(properties,Properties.QUERY_FILTERS);
+		if(PersistenceFunctionReader.class.equals(functionClass)) {
+			org.cyk.utility.server.persistence.query.filter.Field field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
+			if(field != null) {
+				if(field.getValue() == null)
+					return readWhereNotHavingParent;
+				else
+					return readByParentsIdentifiers;
+			}
+		}
+		return super.__getQueryIdentifier__(functionClass, properties, parameters);
+	}
+	
+	@Override
+	protected Object[] __getQueryParameters__(PersistenceQueryContext queryContext, Properties properties,Object... objects) {
+		if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByParentsIdentifiers)) {
+			if(__inject__(ArrayHelper.class).isEmpty(objects)) {
+				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByString.FIELD_PARENTS)};
+			}
+			return new Object[]{"parentsIdentifiers",objects[0]};
+		}
+		return super.__getQueryParameters__(queryContext, properties, objects);
 	}
 
 }

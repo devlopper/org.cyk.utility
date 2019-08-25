@@ -243,6 +243,28 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 	}
 	
 	@Override
+	protected String __getQueryIdentifier__(Class<?> functionClass, Properties properties, Object... parameters) {
+		Filter filter = (Filter) Properties.getFromPath(properties,Properties.QUERY_FILTERS);
+		if(PersistenceFunctionReader.class.equals(functionClass)) {
+			org.cyk.utility.server.persistence.query.filter.Field field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
+			if(field != null) {
+				if(ValueUsageType.BUSINESS.equals(field.getValueUsageType()))
+					return readByParentsBusinessIdentifiers;
+				else
+					return readByParentsIdentifiers;
+			}
+			field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_CHILDREN);
+			if(field != null) {
+				if(ValueUsageType.BUSINESS.equals(field.getValueUsageType()))
+					return readByChildrenBusinessIdentifiers;
+				else
+					return readByChildrenIdentifiers;
+			}
+		}
+		return super.__getQueryIdentifier__(functionClass, properties, parameters);
+	}
+	
+	@Override
 	protected Object[] __getQueryParameters__(PersistenceQueryContext queryContext, Properties properties,Object... objects) {
 		if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByParentsIdentifiers)) {
 			if(__inject__(ArrayHelper.class).isEmpty(objects)) {
@@ -266,28 +288,6 @@ public abstract class AbstractHierarchyPersistenceImpl<HIERARCHY extends Abstrac
 			return new Object[]{"identifiers",objects[0]};
 		}
 		return super.__getQueryParameters__(queryContext, properties, objects);
-	}
-	
-	@Override
-	protected String __getQueryIdentifier__(Class<?> functionClass, Properties properties, Object... parameters) {
-		Filter filter = (Filter) Properties.getFromPath(properties,Properties.QUERY_FILTERS);
-		if(PersistenceFunctionReader.class.equals(functionClass)) {
-			org.cyk.utility.server.persistence.query.filter.Field field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_PARENTS);
-			if(field != null) {
-				if(ValueUsageType.BUSINESS.equals(field.getValueUsageType()))
-					return readByParentsBusinessIdentifiers;
-				else
-					return readByParentsIdentifiers;
-			}
-			field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_CHILDREN);
-			if(field != null) {
-				if(ValueUsageType.BUSINESS.equals(field.getValueUsageType()))
-					return readByChildrenBusinessIdentifiers;
-				else
-					return readByChildrenIdentifiers;
-			}
-		}
-		return super.__getQueryIdentifier__(functionClass, properties, parameters);
 	}
 	
 	@SuppressWarnings("unchecked")

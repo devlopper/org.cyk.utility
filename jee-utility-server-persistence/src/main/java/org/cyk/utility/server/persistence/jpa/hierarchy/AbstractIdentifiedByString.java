@@ -25,8 +25,10 @@ public abstract class AbstractIdentifiedByString<ENTITY,COLLECTION extends Colle
 	private static final long serialVersionUID = 1L;
 
 	@Transient protected COLLECTION parents;
+	@Transient protected Long numberOfParents;
 	
 	@Transient protected COLLECTION children;
+	@Transient protected Long numberOfChildren;
 	
 	@SuppressWarnings("unchecked")
 	public COLLECTION getParents(Boolean injectIfNull) {
@@ -69,7 +71,9 @@ public abstract class AbstractIdentifiedByString<ENTITY,COLLECTION extends Colle
 	/**/
 	
 	public static final String FIELD_PARENTS = "parents";
+	public static final String FIELD_NUMBER_OF_PARENTS = "numberOfParents";
 	public static final String FIELD_CHILDREN = "children";
+	public static final String FIELD_NUMBER_OF_CHILDREN = "numberOfChildren";
 	
 	/**/
 	

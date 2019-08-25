@@ -13,7 +13,9 @@ public abstract class AbstractNodeCodedAndNamed<ENTITY extends AbstractNodeCoded
 	private static final long serialVersionUID = 1L;
 
 	private COLLECTION parents;
+	private Long numberOfParents;
 	private COLLECTION children;
+	private Long numberOfChildren;
 	
 	@SuppressWarnings("unchecked")
 	public COLLECTION getParents(Boolean injectIfNull) {

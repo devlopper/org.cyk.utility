@@ -906,10 +906,11 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 		
 		Filter filters = __inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, null);
-		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters));
+		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters).setFields("numberOfChildren"));
 		assertThat(nodes).isNotEmpty();
 		assertThat(nodes).hasSize(1);
 		assertThat(nodes.stream().map(Node::getIdentifier).collect(Collectors.toList())).containsOnly("0");
+		assertThat(nodes.stream().map(Node::getNumberOfChildren).collect(Collectors.toList())).containsOnly(2l);
 	}
 	
 	@Test
@@ -950,10 +951,18 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		userTransaction.commit();
 		
 		Filter filters = __inject__(Filter.class).setKlass(Node.class);
-		filters.addField(Node.FIELD_PARENTS, Arrays.asList("module"));
-		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters));
+		filters.addField(Node.FIELD_PARENTS, Arrays.asList("module"),ValueUsageType.BUSINESS);
+		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters).setFields("numberOfChildren"));
 		assertThat(nodes).isNotEmpty();
 		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
+		assertThat(nodes.stream().map(Node::getNumberOfChildren).collect(Collectors.toList())).containsOnly(1l);
+		
+		filters = __inject__(Filter.class).setKlass(Node.class);
+		filters.addField(Node.FIELD_PARENTS, Arrays.asList("menu"),ValueUsageType.BUSINESS);
+		nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters).setFields("numberOfChildren"));
+		assertThat(nodes).isNotEmpty();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("action");
+		assertThat(nodes.stream().map(Node::getNumberOfChildren).collect(Collectors.toList())).containsOnly(0l);
 	}
 	
 	@Test
@@ -1011,9 +1020,10 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		
 		Filter filters = __inject__(Filter.class).setKlass(Node.class);
 		filters.addField(Node.FIELD_PARENTS, Arrays.asList("MO"),ValueUsageType.SYSTEM);
-		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters));
+		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters).setFields("numberOfChildren"));
 		assertThat(nodes).isNotEmpty();
 		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
+		assertThat(nodes.stream().map(Node::getNumberOfChildren).collect(Collectors.toList())).containsOnly(1l);
 	}
 	
 	@Test

@@ -10,6 +10,30 @@ public abstract class AbstractDataIdentifiedByStringImpl<NODE> extends org.cyk.u
 	private static final long serialVersionUID = 1L;
 	
 	private Collection<NODE> __parents__;
+	private Long numberOfParents;
+	private Long numberOfChildren;
+	
+	@Override
+	public Long getNumberOfParents() {
+		return numberOfParents;
+	}
+	
+	@Override
+	public DataIdentifiedByString<NODE> setNumberOfParents(Long numberOfParents) {
+		this.numberOfParents = numberOfParents;
+		return this;
+	}
+	
+	@Override
+	public Long getNumberOfChildren() {
+		return numberOfChildren;
+	}
+	
+	@Override
+	public DataIdentifiedByString<NODE> setNumberOfChildren(Long numberOfChildren) {
+		this.numberOfChildren = numberOfChildren;
+		return this;
+	}
 	
 	@Override
 	public Collection<NODE> get__parents__() {
