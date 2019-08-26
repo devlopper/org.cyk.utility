@@ -302,6 +302,21 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 		return buildTreeNode(klass, selectedNodes);
 	}
 	
+	public TreeNode getTreeNodeOf(TreeNode root,Object node) {
+		org.primefaces.model.TreeNode treeNode = null;
+		if(root != null && node != null) {
+			for(org.primefaces.model.TreeNode index : root.getChildren()) {
+				if(index.getData().equals(node)) {
+					treeNode = index;
+				}else
+					treeNode = getTreeNodeOf(index, node);
+				if(treeNode != null)
+					break;
+			}
+		}
+		return treeNode;
+	}
+	
 	/**/
 	
 	private static final String SCRIPT_INSTRUCTION_COMPONENT_METHOD_CALL_FORMAT = "PF('%s').%s();";

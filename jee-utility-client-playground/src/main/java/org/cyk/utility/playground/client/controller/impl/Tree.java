@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.playground.client.controller.api.NodeController;
 import org.cyk.utility.playground.client.controller.entities.Node;
@@ -40,18 +41,51 @@ public class Tree extends AbstractObject implements Serializable {
 		selection = new DefaultTreeNode();
 	}
 	
+	private void __select__(Node node,org.primefaces.model.TreeNode root,Boolean isConsiderTreeNodeNumberOfChildren,Boolean isConsiderTreeNodeNumberOfLoadedChildren) {
+		if(root != null) {
+			org.primefaces.model.TreeNode destinationRoot = null;
+			TreeNode treeNode = (TreeNode) node.getProperties().getTreeNode();
+			org.primefaces.model.TreeNode parent = treeNode.getParent();
+			treeNode.removeFromParent(isConsiderTreeNodeNumberOfChildren,isConsiderTreeNodeNumberOfLoadedChildren);	
+			if(parent != null) {
+				List<Object> nodesToBeCreated = new ArrayList<>();
+				org.primefaces.model.TreeNode indexDestinationRoot = parent;
+				while(destinationRoot == null && indexDestinationRoot!=null && indexDestinationRoot.getData()!=null) {
+					destinationRoot = __inject__(PrimefacesHelper.class).getTreeNodeOf(root, indexDestinationRoot.getData());
+					if(destinationRoot == null) {
+						nodesToBeCreated.add(indexDestinationRoot.getData());
+						indexDestinationRoot = indexDestinationRoot.getParent();	
+					}
+				}
+				
+				if(destinationRoot == null) {
+					destinationRoot = root;
+				}else {
+					
+				}
+				
+				Collections.reverse(nodesToBeCreated);
+				for(Object index : nodesToBeCreated) {
+					destinationRoot = new TreeNode(type, index, destinationRoot);
+					destinationRoot.setExpanded(Boolean.TRUE);
+				}
+				destinationRoot = new TreeNode(type, node,null, destinationRoot);
+			}
+		}
+	}
+	
 	public void select(Node node) {
-		if(selection != null) {
+		__select__(node, selection, Boolean.TRUE, Boolean.FALSE);
+		/*if(selection != null) {
 			org.primefaces.model.TreeNode destinationRoot = null;
 			TreeNode treeNode = (TreeNode) node.getProperties().getTreeNode();
 			org.primefaces.model.TreeNode parent = treeNode.getParent();
 			treeNode.removeFromParent();	
 			if(parent != null) {
-				//Are all the parents of node in destination ?
 				List<Object> nodesToBeCreated = new ArrayList<>();
 				org.primefaces.model.TreeNode indexDestinationRoot = parent;
 				while(destinationRoot == null && indexDestinationRoot!=null && indexDestinationRoot.getData()!=null) {
-					destinationRoot = getTreeNodeOf(selection, indexDestinationRoot.getData());
+					destinationRoot = __inject__(PrimefacesHelper.class).getTreeNodeOf(selection, indexDestinationRoot.getData());
 					if(destinationRoot == null) {
 						nodesToBeCreated.add(indexDestinationRoot.getData());
 						indexDestinationRoot = indexDestinationRoot.getParent();	
@@ -60,6 +94,8 @@ public class Tree extends AbstractObject implements Serializable {
 				
 				if(destinationRoot == null) {
 					destinationRoot = selection;
+				}else {
+					
 				}
 				
 				Collections.reverse(nodesToBeCreated);
@@ -67,9 +103,43 @@ public class Tree extends AbstractObject implements Serializable {
 					destinationRoot = new TreeNode(type, index, destinationRoot);
 					destinationRoot.setExpanded(Boolean.TRUE);
 				}
-				destinationRoot = new TreeNode(type, node, destinationRoot);
+				destinationRoot = new TreeNode(type, node,null, destinationRoot);
 			}
+		}*/
+		
+	}
+	
+	public void deselect(Node node) {
+		__select__(node, root, Boolean.FALSE, Boolean.TRUE);
+		/*org.primefaces.model.TreeNode destinationRoot = null;
+		TreeNode treeNode = (TreeNode) node.getProperties().getTreeNode();
+		org.primefaces.model.TreeNode parent = treeNode.getParent();
+		treeNode.removeFromParent(Boolean.FALSE,Boolean.TRUE);
+		if(parent != null) {
+			List<Object> nodesToBeCreated = new ArrayList<>();
+			org.primefaces.model.TreeNode indexDestinationRoot = parent;
+			while(destinationRoot == null && indexDestinationRoot!=null && indexDestinationRoot.getData()!=null) {
+				destinationRoot = __inject__(PrimefacesHelper.class).getTreeNodeOf(root, indexDestinationRoot.getData());
+				if(destinationRoot == null) {
+					nodesToBeCreated.add(indexDestinationRoot.getData());
+					indexDestinationRoot = indexDestinationRoot.getParent();	
+				}
+			}
+			
+			if(destinationRoot == null) {
+				destinationRoot = root;
+			}else {
+				
+			}
+			
+			Collections.reverse(nodesToBeCreated);
+			for(Object index : nodesToBeCreated) {
+				destinationRoot = new TreeNode(type, index, destinationRoot);
+				destinationRoot.setExpanded(Boolean.TRUE);
+			}
+			destinationRoot = new TreeNode(type, node, destinationRoot);
 		}
+		*/
 	}
 	
 	public void listenExpand(NodeExpandEvent event) {
@@ -81,18 +151,4 @@ public class Tree extends AbstractObject implements Serializable {
 				new TreeNode(type, index, event.getTreeNode());
     }
 	
-	public static org.primefaces.model.TreeNode getTreeNodeOf(org.primefaces.model.TreeNode root,Object node) {
-		org.primefaces.model.TreeNode treeNode = null;
-		if(root != null && node != null) {
-			for(org.primefaces.model.TreeNode index : root.getChildren()) {
-				if(index.getData().equals(node)) {
-					treeNode = index;
-				}else
-					treeNode = getTreeNodeOf(index, node);
-				if(treeNode != null)
-					break;
-			}
-		}
-		return treeNode;
-	}
 }

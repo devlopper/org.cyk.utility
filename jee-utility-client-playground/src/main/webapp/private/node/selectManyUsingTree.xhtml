@@ -15,7 +15,7 @@
     				<p:tree id="tree1" value="#{nodeSelectManyUsingTreePage.sourceTree.root}" var="node" dynamic="true">
 		    			<p:treeNode>
 			            	<h:outputText value="#{node.code} - #{node.name}"/>
-			            	<p:commandButton value="Selectionner" action="#{nodeSelectManyUsingTreePage.sourceTree.select(node)}" update="tree1,:form:tree2" />
+			            	<p:commandButton value="Ajouter" action="#{nodeSelectManyUsingTreePage.sourceTree.select(node)}" update="tree1,:form:tree2" />
 			        	</p:treeNode>	
 			        	<p:ajax event="expand" listener="#{nodeSelectManyUsingTreePage.sourceTree.listenExpand}" />
 		    		</p:tree>
@@ -24,6 +24,7 @@
     				<p:tree id="tree2" value="#{nodeSelectManyUsingTreePage.sourceTree.selection}" var="node" dynamic="true">
 		    			<p:treeNode>
 			            	<h:outputText value="#{node.code} - #{node.name}"/>
+			            	<p:commandButton value="Supprimer" action="#{nodeSelectManyUsingTreePage.sourceTree.deselect(node)}" update=":form:tree1,tree2" />
 			        	</p:treeNode>	
 			        	<p:ajax event="expand" listener="#{nodeSelectManyUsingTreePage.sourceTree.listenExpand}" />
 		    		</p:tree>
