@@ -165,7 +165,8 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	protected abstract void __executeRepresentation__();
 	
 	protected void __listenExecuteThrowServiceNotFoundException__() {
-		System.out.println("AbstractControllerFunctionImpl.__listenExecuteThrowServiceNotFoundException__() : "+__response__.readEntity(String.class));
+		System.out.println("AbstractControllerFunctionImpl.__listenExecuteThrowServiceNotFoundException__() : "+__response__.readEntity(String.class)
+		+" : "+__response__.getStatusInfo());
 		__injectThrowableHelper__().throw_(__inject__(ServiceNotFoundException.class).setSystemAction(__action__).setResponse(__response__));
 	}
 	
