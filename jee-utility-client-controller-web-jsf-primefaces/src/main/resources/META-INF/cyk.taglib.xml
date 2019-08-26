@@ -7,6 +7,18 @@
 >
     <namespace>http://primefaces.jsf.web.utility.cyk.org</namespace>
 	
+	<tag>
+        <tag-name>tree</tag-name>
+        <source>tag/tree/tree.xhtml</source>
+        <attribute>
+        	<description>tree</description>
+            <name>value</name>
+            <required>true</required>
+            <type>org.cyk.utility.client.controller.web.jsf.primefaces.tag.Tree</type>
+        </attribute>
+        
+    </tag>
+	
 	<!-- Input -->
 	
 	<tag>

@@ -1,4 +1,4 @@
-package org.cyk.utility.playground.client.controller.impl;
+package org.cyk.utility.client.controller.web.jsf.primefaces.tag;
 
 import java.io.Serializable;
 

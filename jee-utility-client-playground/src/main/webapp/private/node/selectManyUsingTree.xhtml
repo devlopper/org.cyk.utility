@@ -10,26 +10,39 @@
 	
     <cyk:page value="#{nodeSelectManyUsingTreePage}" >
     	<ui:define name="centerCenter">
-    		<p:panelGrid columns="2">
+    		<cyk:tree value="#{nodeSelectManyUsingTreePage.tree}" />
+    		<!--
+    		<p:panelGrid columns="2" columnClasses="columnAvailable,columnSelection">
     			<p:fieldset legend="Available">
-    				<p:tree id="tree1" value="#{nodeSelectManyUsingTreePage.sourceTree.root}" var="node" dynamic="true">
+    				<p:tree id="tree1" value="#{nodeSelectManyUsingTreePage.tree.root}" var="node" dynamic="true">
 		    			<p:treeNode>
 			            	<h:outputText value="#{node.code} - #{node.name}"/>
-			            	<p:commandButton value="Ajouter" action="#{nodeSelectManyUsingTreePage.sourceTree.select(node)}" update="tree1,:form:tree2" />
+			            	<p:commandButton icon="fa fa-arrow-right" title="Ajouter" action="#{nodeSelectManyUsingTreePage.tree.select(node)}" update="tree1,:form:tree2" />
 			        	</p:treeNode>	
-			        	<p:ajax event="expand" listener="#{nodeSelectManyUsingTreePage.sourceTree.listenExpand}" />
+			        	<p:ajax event="expand" listener="#{nodeSelectManyUsingTreePage.tree.listenExpand}" />
 		    		</p:tree>
     			</p:fieldset>
     			<p:fieldset id="fieldset2" legend="Selected">
-    				<p:tree id="tree2" value="#{nodeSelectManyUsingTreePage.sourceTree.selection}" var="node" dynamic="true">
+    				<p:tree id="tree2" value="#{nodeSelectManyUsingTreePage.tree.selection}" var="node" dynamic="true">
 		    			<p:treeNode>
 			            	<h:outputText value="#{node.code} - #{node.name}"/>
-			            	<p:commandButton value="Supprimer" action="#{nodeSelectManyUsingTreePage.sourceTree.deselect(node)}" update=":form:tree1,tree2" />
+			            	<p:commandButton icon="fa fa-arrow-left" title="Supprimer" action="#{nodeSelectManyUsingTreePage.tree.deselect(node)}" update=":form:tree1,tree2" />
 			        	</p:treeNode>	
-			        	<p:ajax event="expand" listener="#{nodeSelectManyUsingTreePage.sourceTree.listenExpand}" />
+			        	<p:ajax event="expand" listener="#{nodeSelectManyUsingTreePage.tree.listenExpand}" />
 		    		</p:tree>
     			</p:fieldset>
     		</p:panelGrid>
+    		
+    		<style>
+    			.columnAvailable {
+    				vertical-align: top;
+    			}
+    			
+    			.columnSelection {
+    				vertical-align: top;
+    			}
+    		</style>
+    		-->
     	</ui:define>
     </cyk:page>
     

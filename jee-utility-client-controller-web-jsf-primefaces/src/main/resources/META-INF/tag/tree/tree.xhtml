@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	
+	<ui:decorate template="/template.xhtml">
+		<ui:define name="valueIsNotNull">
+			<ui:fragment rendered="#{value.selectable}">
+				<p:panelGrid columns="2" columnClasses="columnAvailable,columnSelection">
+	    			<p:fieldset legend="#{value.rootLabel}">
+	    				<p:tree id="tree1" value="#{value.root}" var="node" dynamic="true">
+			    			<p:treeNode>
+				            	<h:outputText value="#{node.code} - #{node.name}"/>
+				            	<p:commandButton icon="fa fa-arrow-right" title="Ajouter" action="#{value.select(node)}" update="tree1,:form:tree2" />
+				        	</p:treeNode>	
+				        	<p:ajax event="expand" listener="#{value.listenExpand}" />
+			    		</p:tree>
+	    			</p:fieldset>
+	    			<p:fieldset id="fieldset2" legend="#{value.selectionLabel}">
+	    				<p:tree id="tree2" value="#{value.selection}" var="node" dynamic="true">
+			    			<p:treeNode>
+				            	<h:outputText value="#{node.code} - #{node.name}"/>
+				            	<p:commandButton icon="fa fa-arrow-left" title="Supprimer" action="#{value.deselect(node)}" update=":form:tree1,tree2" />
+				        	</p:treeNode>	
+				        	<p:ajax event="expand" listener="#{value.listenExpand}" />
+			    		</p:tree>
+	    			</p:fieldset>
+	    		</p:panelGrid>
+	    		
+	    		<style>
+	    			.columnAvailable {
+	    				vertical-align: top;
+	    			}
+	    			
+	    			.columnSelection {
+	    				vertical-align: top;
+	    			}
+	    		</style>		
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{not value.selectable}">
+				<p:tree id="tree" value="#{value.root}" var="node" dynamic="true">
+	    			<p:treeNode>
+		            	<h:outputText value="#{node.code} - #{node.name}"/>
+		        	</p:treeNode>	
+		        	<p:ajax event="expand" listener="#{value.listenExpand}" />
+	    		</p:tree>
+			</ui:fragment>
+		</ui:define>
+	</ui:decorate>	
+
+</ui:composition>
