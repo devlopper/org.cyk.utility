@@ -9,6 +9,7 @@ import org.cyk.utility.client.controller.component.menu.MenuItemBuilder;
 import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.playground.client.controller.entities.MyEntity;
 import org.cyk.utility.playground.client.controller.entities.Node;
+import org.cyk.utility.playground.client.controller.entities.SelectedNode;
 
 @org.cyk.utility.playground.server.System
 public class MenuBuilderMapGetterImpl extends AbstractMenuBuilderMapGetterImpl implements Serializable {
@@ -26,7 +27,7 @@ public class MenuBuilderMapGetterImpl extends AbstractMenuBuilderMapGetterImpl i
 		}//else {
 		sessionMenuBuilder.addItems(
 				__inject__(MenuItemBuilder.class).setCommandableName("Non hierarchique").setCommandableIcon(Icon.QUESTION)
-					.addEntitiesList(MyEntity.class)
+					.addEntitiesList(MyEntity.class,SelectedNode.class)
 				,__inject__(MenuItemBuilder.class).setCommandableName("Hierarchique").setCommandableIcon(Icon.FILE)
 					.addEntitiesList(Node.class)
 				);	

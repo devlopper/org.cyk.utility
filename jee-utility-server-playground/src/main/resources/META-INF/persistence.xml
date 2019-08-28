@@ -8,6 +8,7 @@
 		<class>org.cyk.utility.playground.server.persistence.entities.MyEntity</class>
 		<class>org.cyk.utility.playground.server.persistence.entities.Node</class>
 		<class>org.cyk.utility.playground.server.persistence.entities.NodeHierarchy</class>
+		<class>org.cyk.utility.playground.server.persistence.entities.SelectedNode</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		
 		<properties>

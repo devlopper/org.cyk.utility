@@ -18,16 +18,9 @@ import org.cyk.utility.string.Strings;
 public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends AbstractIdentifiedByString<ENTITY,?>,HIERARCHY extends AbstractHierarchy<ENTITY>,HIERARCHIES extends Hierarchies<HIERARCHY,ENTITY>,HIERARCHY_PERSISTENCE extends HierarchyPersistence<HIERARCHY,ENTITY, HIERARCHIES>> extends AbstractPersistenceEntityImpl<ENTITY> implements PersistenceIdentifiedByString<ENTITY>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected String readWhereNotHavingParent,readByParentsIdentifiers;
+	protected String readWhereNotHavingParent,readWhereNotHavingChild,readByParentsIdentifiers,readByChildrenIdentifiers;
 	protected Class<HIERARCHY> __hierarchyClass__;
 	protected Class<HIERARCHY_PERSISTENCE> __hierarchyPersistenceClass__;
-	
-	public static final String READ_WHERE_NOT_HAVING_PARENT_FORMAT = 
-			"SELECT node FROM %1$s node "
-			+ "WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.parent = node AND NOT EXISTS(SELECT subTuple FROM %2$s subTuple WHERE subTuple.child = tuple.parent))";
-	
-	public static final String READ_BY_PARENTS_IDENTIFIERS_FORMAT = 
-			"SELECT node FROM %1$s node WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.child = node AND tuple.parent.identifier IN :parentsIdentifiers))";
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -40,8 +33,24 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 	@Override
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
-		addQueryCollectInstances(readWhereNotHavingParent, String.format(READ_WHERE_NOT_HAVING_PARENT_FORMAT,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
-		addQueryCollectInstances(readByParentsIdentifiers, String.format(READ_BY_PARENTS_IDENTIFIERS_FORMAT,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
+		addQueryCollectInstances(readWhereNotHavingParent, String.format("SELECT node FROM %1$s node "
+				+ "WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.parent = node AND NOT EXISTS(SELECT subTuple FROM %2$s subTuple WHERE subTuple.child = tuple.parent))"
+				,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
+		addQueryCollectInstances(readByParentsIdentifiers, String.format("SELECT node FROM %1$s node WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.child = node "
+				+ "AND tuple.parent.identifier IN :parentsIdentifiers))",__getTupleName__(),__getTupleName__(__hierarchyClass__)));
+		
+		//TODO it has been copy paste , think and do the necessary
+		addQueryCollectInstances(readWhereNotHavingChild, String.format("SELECT node FROM %1$s node "
+				+ "WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.parent = node AND NOT EXISTS(SELECT subTuple FROM %2$s subTuple WHERE subTuple.child = tuple.parent))"
+				,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
+		
+		addQueryCollectInstances(readByChildrenIdentifiers, String.format(
+				"SELECT node FROM %1$s node WHERE EXISTS("
+				+ "SELECT tuple FROM %2$s tuple WHERE tuple.parent = node AND tuple.child.identifier IN :childrenIdentifiers"
+				+ ")"
+				//Arguments
+				,__getTupleName__(),__getTupleName__(__hierarchyClass__)
+				));
 	}
 	
 	@Override
@@ -256,6 +265,14 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 					return readWhereNotHavingParent;
 				else
 					return readByParentsIdentifiers;
+			}else {
+				field = filter == null? null : filter.getFieldByPath(AbstractIdentifiedByString.FIELD_CHILDREN);
+				if(field != null) {
+					if(field.getValue() == null)
+						return readWhereNotHavingChild;
+					else
+						return readByChildrenIdentifiers;
+				}
 			}
 		}
 		return super.__getQueryIdentifier__(functionClass, properties, parameters);
@@ -268,6 +285,11 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByString.FIELD_PARENTS)};
 			}
 			return new Object[]{"parentsIdentifiers",objects[0]};
+		}else if(queryContext.getQuery().isIdentifierEqualsToOrQueryDerivedFromQueryIdentifierEqualsTo(readByChildrenIdentifiers)) {
+			if(__inject__(ArrayHelper.class).isEmpty(objects)) {
+				objects = new Object[] {queryContext.getFilterByKeysValue(AbstractIdentifiedByString.FIELD_CHILDREN)};
+			}
+			return new Object[]{"childrenIdentifiers",objects[0]};
 		}
 		return super.__getQueryParameters__(queryContext, properties, objects);
 	}

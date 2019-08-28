@@ -317,6 +317,23 @@ public class PrimefacesHelper extends AbstractObject implements Serializable {
 		return treeNode;
 	}
 	
+	public Collection<Object> getDatas(org.primefaces.model.TreeNode root,Integer isHavingNumberOfChildren) {
+		Collection<Object> datas = new ArrayList<>();
+		__addDatas__(root,datas,isHavingNumberOfChildren);
+		return datas;
+	}
+	
+	private void __addDatas__(org.primefaces.model.TreeNode root,Collection<Object> datas,Integer isHavingNumberOfChildren) {
+		Object data = root.getData();
+		if(data != null) {
+			if(isHavingNumberOfChildren == null || root.getChildCount() == isHavingNumberOfChildren)
+				datas.add(data);
+		}
+		if(root.getChildCount() > 0)
+			for(org.primefaces.model.TreeNode index : root.getChildren())
+				__addDatas__(index, datas,isHavingNumberOfChildren);
+	}
+	
 	/**/
 	
 	private static final String SCRIPT_INSTRUCTION_COMPONENT_METHOD_CALL_FORMAT = "PF('%s').%s();";

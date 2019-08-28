@@ -1063,6 +1063,50 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertThat(count).isEqualTo(0l);
 	}
 	
+	@Test
+	public void read_node_parents_by_identifier_system() throws Exception{
+		userTransaction.begin();
+		Node nodeModule = new Node().setIdentifier("MO").setCode("module").setName(__getRandomName__());
+		Node nodeService = new Node().setIdentifier("S").setCode("service").setName(__getRandomName__()).addParents(nodeModule);
+		Node nodeMenu = new Node().setIdentifier("ME").setCode("menu").setName(__getRandomName__()).addParents(nodeService);
+		Node nodeAction = new Node().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(nodeMenu);
+		__inject__(NodePersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
+				,nodeAction));
+		__inject__(NodeHierarchyPersistence.class).createMany(__inject__(CollectionHelper.class).instanciate(
+				new NodeHierarchy().setParent(nodeModule).setChild(nodeService)
+				,new NodeHierarchy().setParent(nodeService).setChild(nodeMenu)
+				,new NodeHierarchy().setParent(nodeMenu).setChild(nodeAction)
+				));
+		userTransaction.commit();
+		
+		Filter filters = __inject__(Filter.class);
+		filters.addField(Node.FIELD_CHILDREN, Arrays.asList("MO"),ValueUsageType.SYSTEM);
+		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters).setFields("numberOfParents"));
+		assertThat(nodes).isEmpty();
+		
+		filters = __inject__(Filter.class);
+		filters.addField(Node.FIELD_CHILDREN, Arrays.asList("S"),ValueUsageType.SYSTEM);
+		nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters).setFields("numberOfParents"));
+		assertThat(nodes).isNotEmpty();
+		assertThat(nodes.stream().map(Node::getIdentifier).collect(Collectors.toList())).containsOnly("MO");
+		//assertThat(nodes.stream().map(Node::getNumberOfParents).collect(Collectors.toList())).containsOnly(1l);
+		/*
+		filters = __inject__(Filter.class);
+		filters.addField(Node.FIELD_CHILDREN, Arrays.asList("ME"),ValueUsageType.SYSTEM);
+		nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters).setFields("numberOfParents"));
+		assertThat(nodes).isNotEmpty();
+		assertThat(nodes.stream().map(Node::getIdentifier).collect(Collectors.toList())).containsOnly("MO","S");
+		//assertThat(nodes.stream().map(Node::getNumberOfParents).collect(Collectors.toList())).containsOnly(2l);
+		
+		filters = __inject__(Filter.class);
+		filters.addField(Node.FIELD_CHILDREN, Arrays.asList("A"),ValueUsageType.SYSTEM);
+		nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(filters).setFields("numberOfParents"));
+		assertThat(nodes).isNotEmpty();
+		assertThat(nodes.stream().map(Node::getIdentifier).collect(Collectors.toList())).containsOnly("MO","S","ME");
+		//assertThat(nodes.stream().map(Node::getNumberOfParents).collect(Collectors.toList())).containsOnly(3l);
+		*/
+	}
+	
 	/* Filter mapping */
 	
 	@Test

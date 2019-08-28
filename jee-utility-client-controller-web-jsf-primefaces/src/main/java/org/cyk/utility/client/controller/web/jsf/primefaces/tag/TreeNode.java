@@ -1,9 +1,13 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces.tag;
 
 import java.io.Serializable;
+import java.util.Collection;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
+import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
+import org.cyk.utility.collection.CollectionHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +42,10 @@ public class TreeNode extends org.primefaces.model.DefaultTreeNode implements Se
 	
 	public TreeNode(String type, Object data, org.primefaces.model.TreeNode parent) {
 		this(type,data,null, parent);
+	}
+	
+	public TreeNode() {
+		this(null,null,null);
 	}
 
 	public TreeNode incrementNumberOfChildren() {
@@ -98,6 +106,35 @@ public class TreeNode extends org.primefaces.model.DefaultTreeNode implements Se
 	@Override
 	public boolean isLeaf() {
 		return numberOfChildren == 0;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> Collection<T> getDatas(Integer isHavingNumberOfChildren,Class<T> klass) {
+		return (Collection<T>) DependencyInjection.inject(PrimefacesHelper.class).getDatas(this,isHavingNumberOfChildren);
+	}
+	
+	public Collection<Object> getDatas(Integer isHavingNumberOfChildren) {
+		return getDatas(isHavingNumberOfChildren,Object.class);
+	}
+	
+	public TreeNode getChildByData(Object data) {
+		for(org.primefaces.model.TreeNode index : getChildren())
+			if(data.equals(index.getData()))
+				return (TreeNode) index;
+		return null;
+	}
+	
+	public Boolean isParentOfOneOrMoreData(Collection<?> datas) {
+		Boolean value = null;
+		if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(datas)) {
+			for(Object index : datas) {
+				if(getChildByData(index) != null) {
+					value = Boolean.TRUE;
+					break;
+				}
+			}
+		}
+		return Boolean.TRUE.equals(value);
 	}
 	
 	/**/
