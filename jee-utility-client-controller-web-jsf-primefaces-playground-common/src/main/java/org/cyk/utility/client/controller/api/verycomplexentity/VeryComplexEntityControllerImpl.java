@@ -3,14 +3,14 @@ package org.cyk.utility.client.controller.api.verycomplexentity;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.client.controller.AbstractControllerEntityPersistedInCollectionImpl;
 import org.cyk.utility.client.controller.entities.verycomplexentity.VeryComplexEntity;
 import org.cyk.utility.client.controller.entities.verycomplexentity.VeryComplexEntityEnum01;
 import org.cyk.utility.random.RandomHelper;
 
-@Singleton
+@ApplicationScoped
 public class VeryComplexEntityControllerImpl extends AbstractControllerEntityPersistedInCollectionImpl<VeryComplexEntity> implements VeryComplexEntityController,Serializable {
 	private static final long serialVersionUID = 1L;
 

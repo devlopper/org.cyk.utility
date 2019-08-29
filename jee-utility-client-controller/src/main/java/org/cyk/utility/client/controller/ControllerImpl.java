@@ -3,7 +3,7 @@ package org.cyk.utility.client.controller;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.data.Data;
@@ -12,7 +12,7 @@ import org.cyk.utility.server.representation.Representation;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.value.ValueUsageType;
 
-@Singleton
+@ApplicationScoped
 public class ControllerImpl extends AbstractControllerServiceProviderImpl<Object> implements Controller,Serializable {
 	private static final long serialVersionUID = 1L;
 

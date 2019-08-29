@@ -11,4 +11,6 @@ public interface WindowHelper extends Helper {
 	WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder(Class<?> entityClass,Class<? extends SystemAction> systemActionClass);
 	WindowContainerManagedWindowBuilder injectWindowContainerManagedWindowBuilder(SystemAction systemAction);
 	
+	//String getCacheIdentifier(String defaultIfNull);
+	
 }

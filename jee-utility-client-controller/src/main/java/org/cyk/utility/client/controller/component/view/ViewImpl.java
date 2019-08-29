@@ -2,6 +2,8 @@ package org.cyk.utility.client.controller.component.view;
 
 import java.io.Serializable;
 
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.cache.Cache;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
 import org.cyk.utility.client.controller.component.Components;
 import org.cyk.utility.client.controller.component.command.CommandableByClassMap;
@@ -87,4 +89,11 @@ public class ViewImpl extends AbstractVisibleComponentImpl implements View,Seria
 		return this;
 	}
 	
+	@Override
+	public Boolean isCacheDisabled() {
+		Cache cache = (Cache) getProperty(Properties.CACHE);
+		if(cache == null)
+			return Boolean.TRUE;
+		return cache.isDisabled();
+	}
 }

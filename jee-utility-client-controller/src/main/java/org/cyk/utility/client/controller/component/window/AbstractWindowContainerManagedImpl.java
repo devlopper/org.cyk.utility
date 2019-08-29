@@ -90,7 +90,8 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 			if(title == null && window!=null && window.getTitle()!=null)
 				title = window.getTitle().getValue();
 			
-			__logInfo__("Window : <<"+title+">>. Duration : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder).execute().getOutput());
+			__logInfo__(String.format("Window title=%s duration=%s. view cached=%s", title
+					,__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder).execute().getOutput(),window.isViewCached()));
 		}
 		return window;
 	}

@@ -10,13 +10,13 @@
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
 			<ui:fragment rendered="#{value.selectable}">
-				<p:panelGrid columns="2" columnClasses="columnAvailable,columnSelection">
+				<p:panelGrid styleClass="tree-panelGrid" columns="2" columnClasses="columnAvailable,columnSelection">
 	    			<p:fieldset legend="#{value.rootLabel}">
 	    				<p:tree id="tree1" value="#{value.root}" var="node" dynamic="true">
 			    			<p:treeNode styleClass="node">
 			    				<p:panelGrid styleClass="pg" columns="2" columnClasses="column-left,column-right">
 				            		<h:outputText value="#{node.name}"/>
-				            		<p:commandButton styleClass="add-remove-button" icon="fa fa-arrow-right" title="Ajouter" action="#{value.select(node)}" update="tree1,:form:tree2" />
+				            		<p:commandButton styleClass="add-remove-button" icon="fa fa-arrow-right" title="Ajouter" action="#{value.selectOne(node)}" update="tree1,:form:tree2" />
 				        		</p:panelGrid>
 				        	</p:treeNode>	
 				        	<p:ajax event="expand" listener="#{value.listenExpand}" />
@@ -27,7 +27,7 @@
 			    			<p:treeNode styleClass="node">
 			    				<p:panelGrid styleClass="pg" columns="2" columnClasses="column-left,column-right">
 			    					<h:outputText value="#{node.name}"/>
-				            		<p:commandButton styleClass="add-remove-button" icon="fa fa-arrow-left" title="Supprimer" action="#{value.deselect(node)}" update=":form:tree1,tree2" />	
+				            		<p:commandButton styleClass="add-remove-button" icon="fa fa-arrow-left" title="Supprimer" action="#{value.deselectOne(node)}" update=":form:tree1,tree2" />	
 			    				</p:panelGrid>				            	
 				        	</p:treeNode>	
 				        	<p:ajax event="expand" listener="#{value.listenExpand}" />
@@ -36,6 +36,10 @@
 	    		</p:panelGrid>
 	    		
 	    		<style>
+	    			.tree-panelGrid {
+	    				width: 100%;
+	    			}
+	    			
 	    			.columnAvailable {
 	    				vertical-align: top;
 	    			}
@@ -44,7 +48,13 @@
 	    				vertical-align: top;
 	    			}
 	    			
+	    			.ui-tree {
+	    				width: 100%;
+	    			}
 	    			
+	    			.ui-tree-container {
+	    			
+	    			}
 	    			
 	    			.column-left {
 	    				

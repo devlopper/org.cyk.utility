@@ -2,12 +2,12 @@ package org.cyk.utility.client.controller.api.myentity;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.client.controller.AbstractControllerEntityPersistedInCollectionImpl;
 import org.cyk.utility.client.controller.entities.myentity.MyEntity;
 
-@Singleton
+@ApplicationScoped
 public class MyEntityControllerImpl extends AbstractControllerEntityPersistedInCollectionImpl<MyEntity> implements MyEntityController,Serializable {
 	private static final long serialVersionUID = 1L;
 

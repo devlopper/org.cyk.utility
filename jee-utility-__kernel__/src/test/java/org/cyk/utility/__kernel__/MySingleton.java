@@ -1,8 +1,8 @@
 package org.cyk.utility.__kernel__;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
-@Singleton
+@ApplicationScoped
 public class MySingleton {
 
 }

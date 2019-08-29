@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ClassUtils;
@@ -29,7 +29,7 @@ import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
-@Singleton
+@ApplicationScoped
 public class KernelHelperImpl implements KernelHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

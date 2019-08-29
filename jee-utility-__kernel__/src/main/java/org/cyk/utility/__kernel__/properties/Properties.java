@@ -4695,7 +4695,17 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getRegion() {
+		return get(REGION);
+	}
+
+	public Properties setRegion(Object region) {
+		set(REGION, region);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String REGION = "REGION";
 	public static final String TREE_NODE = "TREE_NODE";
 	public static final String IS_MANY = "IS_MANY";
 	public static final String IS_BATCHABLE = "IS_BATCHABLE";

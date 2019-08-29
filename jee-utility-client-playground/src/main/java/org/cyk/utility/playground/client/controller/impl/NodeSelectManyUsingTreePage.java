@@ -43,7 +43,7 @@ public class NodeSelectManyUsingTreePage extends AbstractPageContainerManagedImp
 		tree.setNodeClass(Node.class);
 		tree.setRootLabel("Disponilbe");
 		tree.setSelectionLabel("Selectionnés");
-		tree.setSelectedNodes(selectedNodes);
+		tree.setInitialSelectedNodes(selectedNodes);
 		tree.setSelectable(Boolean.TRUE);
 		tree.setSelectionMode(TreeSelectionMode.REMOVE_ADD);
 		tree.initialise();

@@ -4,17 +4,17 @@ import java.io.Serializable;
 
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import org.cyk.utility.client.controller.AbstractObject;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.string.StringHelper;
 
-@Singleton @Named
+@ApplicationScoped @Named
 public class JavaServerFacesHelper extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

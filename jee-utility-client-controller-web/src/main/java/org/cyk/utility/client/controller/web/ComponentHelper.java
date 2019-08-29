@@ -2,8 +2,8 @@ package org.cyk.utility.client.controller.web;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
@@ -50,7 +50,7 @@ import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
-@Singleton @Named
+@ApplicationScoped @Named
 public class ComponentHelper extends AbstractSingleton implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

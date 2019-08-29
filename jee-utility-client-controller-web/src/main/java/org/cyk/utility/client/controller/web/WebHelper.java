@@ -2,7 +2,7 @@ package org.cyk.utility.client.controller.web;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.client.controller.component.output.OutputFile;
 import org.cyk.utility.file.File;
@@ -14,7 +14,7 @@ import org.cyk.utility.repository.RepositoryTypeFolder;
 import org.cyk.utility.repository.RepositoryTypeSession;
 import org.cyk.utility.string.StringHelper;
 
-@Singleton
+@ApplicationScoped
 public class WebHelper extends AbstractHelper implements Serializable {
 	private static final long serialVersionUID = 1L;
 

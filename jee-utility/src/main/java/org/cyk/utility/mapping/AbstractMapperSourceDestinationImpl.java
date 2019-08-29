@@ -45,7 +45,44 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	}
 	
 	protected void __listenGetDestinationAfter__(SOURCE source,DESTINATION destination) {
-		//Find all persistable fields
+		Collection<Field> fields = null;
+		/*ClassInstance classInstance = DependencyInjection.inject(ClassInstancesRuntime.class).get(destination.getClass());
+		if(classInstance.getFields() != null) {
+			for(Field index : classInstance.getFields().get()) {
+				FieldInstance fieldInstance = DependencyInjection.inject(FieldInstancesRuntime.class).get(destination.getClass(), index.getName());
+				if(Boolean.TRUE.equals(DependencyInjection.inject(ClassInstancesRuntime.class).get(fieldInstance.getType()).getIsPersistable()) && 
+						fieldInstance.getField().isAnnotationPresent(javax.persistence.ManyToOne.class)) {
+					if(fields == null)
+						fields = new ArrayList<>();
+					fields.add(index);
+				}
+			}
+		}
+		*/
+		fields = __getPersistableFields__(source, destination);
+		
+		//
+		/*if(Boolean.TRUE.equals(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(fields))) {
+			for(Field index : fields) {
+				Object value = DependencyInjection.inject(FieldValueGetter.class).execute(destination, index).getOutput();
+				if(value != null) {
+					Object persisted = DependencyInjection.inject(InstanceHelper.class).getBySystemIdentifierOrBusinessIdentifier(value);
+					if(persisted != null)
+						DependencyInjection.inject(FieldValueSetter.class).execute(destination, index, persisted);
+				}
+			}
+		}
+		*/
+		__processPersistableFields__(source, destination, fields);
+	}
+	
+	/**
+	 * Find all persistable fields
+	 * @param source
+	 * @param destination
+	 * @return
+	 */
+	protected Collection<Field> __getPersistableFields__(SOURCE source,DESTINATION destination) {
 		Collection<Field> fields = null;
 		ClassInstance classInstance = DependencyInjection.inject(ClassInstancesRuntime.class).get(destination.getClass());
 		if(classInstance.getFields() != null) {
@@ -59,8 +96,17 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 				}
 			}
 		}
-		
-		//Set all persistable fields with their corresponding persisted value
+		return fields;
+	}
+	
+	/**
+	 * Set all persistable fields with their corresponding persisted value
+	 * @param source
+	 * @param destination
+	 * @param fields
+	 * @return
+	 */
+	protected void __processPersistableFields__(SOURCE source,DESTINATION destination,Collection<Field> fields) {
 		if(Boolean.TRUE.equals(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(fields))) {
 			for(Field index : fields) {
 				Object value = DependencyInjection.inject(FieldValueGetter.class).execute(destination, index).getOutput();

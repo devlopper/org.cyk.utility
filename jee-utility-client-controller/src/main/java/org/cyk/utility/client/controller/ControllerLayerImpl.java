@@ -2,12 +2,12 @@ package org.cyk.utility.client.controller;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.system.layer.SystemLayerController;
 
-@Singleton
+@ApplicationScoped
 public class ControllerLayerImpl extends AbstractSingleton implements ControllerLayer,Serializable {
 	private static final long serialVersionUID = 1L;
 

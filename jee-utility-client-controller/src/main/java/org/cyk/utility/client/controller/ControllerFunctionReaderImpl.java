@@ -36,8 +36,10 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 		String fields = (String) Properties.getFromPath(properties, Properties.FIELDS);
 		if(__isMany__ == null || __isMany__) {
 			Boolean isPageable = __injectValueHelper__().defaultToIfNull(__inject__(BooleanHelper.class).get(Properties.getFromPath(properties,Properties.IS_PAGEABLE)),IS_PAGEABLE);
-			Long from = __injectValueHelper__().defaultToIfNull(__injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.FROM)),FROM);
-			Long count = __injectValueHelper__().defaultToIfNull(__injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.COUNT)),COUNT);
+			Long from = __injectValueHelper__().defaultToIfNull(__injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.FROM))
+					,Boolean.TRUE.equals(isPageable) ? FROM : null);
+			Long count = __injectValueHelper__().defaultToIfNull(__injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.COUNT))
+					,Boolean.TRUE.equals(isPageable) ? COUNT : null);
 			FilterDto filters = (FilterDto) Properties.getFromPath(properties,Properties.FILTERS);
 			/*String filtersAsString = null;
 			if(Boolean.TRUE.equals(__injectValueHelper__().isNotBlank(filters))) {

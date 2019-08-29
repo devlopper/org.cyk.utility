@@ -31,4 +31,6 @@ public interface Window extends VisibleComponent {
 
 	WindowRenderType getRenderType();
 	Window setRenderType(WindowRenderType renderType);
+	
+	Boolean isViewCached();
 }

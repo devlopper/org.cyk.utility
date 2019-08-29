@@ -36,7 +36,7 @@ public class Tree<NODE extends DataIdentifiedByString<NODE>> extends AbstractObj
 	private String selectionLabel = "Selected";
 	
 	private Class<NODE> nodeClass;
-	private Collection<NODE> nodesNotHavingParent,selectedNodes;
+	private Collection<NODE> nodesNotHavingParent,initialSelectedNodes;
 	private ControllerEntity<NODE> controller;
 	private String fields = "identifier,code,name,numberOfChildren";
 	private String type;
@@ -61,9 +61,9 @@ public class Tree<NODE extends DataIdentifiedByString<NODE>> extends AbstractObj
 			
 			if(TreeSelectionMode.REMOVE_ADD.equals(selectionMode)) {
 				selection = new TreeNode();
-				if(__inject__(CollectionHelper.class).isNotEmpty(selectedNodes)) {
+				if(__inject__(CollectionHelper.class).isNotEmpty(initialSelectedNodes)) {
 					//Expand nodes
-					Collection<NODE> expandables = new ArrayList<>(selectedNodes);
+					Collection<NODE> expandables = new ArrayList<>(initialSelectedNodes);
 					do {
 						Collection<TreeNode> treeNodes = new ArrayList<>();
 						for(NODE index : expandables) {
@@ -78,9 +78,9 @@ public class Tree<NODE extends DataIdentifiedByString<NODE>> extends AbstractObj
 							expandables.remove(index.getData());
 					}while(!expandables.isEmpty());
 					//Select leaves nodes
-					for(NODE index : selectedNodes) {
+					for(NODE index : initialSelectedNodes) {
 						TreeNode treeNode = (TreeNode) DependencyInjection.inject(PrimefacesHelper.class).getTreeNodeOf(root, index);
-						if(treeNode != null && !treeNode.isParentOfOneOrMoreData(selectedNodes) /*&& treeNode.getChildCount() == 0*/) {		
+						if(treeNode != null && !treeNode.isParentOfOneOrMoreData(initialSelectedNodes) /*&& treeNode.getChildCount() == 0*/) {		
 							select((NODE) treeNode.getData());
 						}
 					}
@@ -108,45 +108,77 @@ public class Tree<NODE extends DataIdentifiedByString<NODE>> extends AbstractObj
 		return getSelectedNodes(null);
 	}
 	
-	private void __select__(NODE node,org.primefaces.model.TreeNode root,Boolean isConsiderTreeNodeNumberOfChildren,Boolean isConsiderTreeNodeNumberOfLoadedChildren) {
-		if(root != null) {
-			org.primefaces.model.TreeNode destinationRoot = null;
-			TreeNode treeNode = (TreeNode) node.getProperties().getTreeNode();
-			org.primefaces.model.TreeNode parent = treeNode.getParent();
-			treeNode.removeFromParent(isConsiderTreeNodeNumberOfChildren,isConsiderTreeNodeNumberOfLoadedChildren);	
-			if(parent != null) {
-				List<Object> nodesToBeCreated = new ArrayList<>();
-				org.primefaces.model.TreeNode indexDestinationRoot = parent;
-				while(destinationRoot == null && indexDestinationRoot!=null && indexDestinationRoot.getData()!=null) {
-					destinationRoot = __inject__(PrimefacesHelper.class).getTreeNodeOf(root, indexDestinationRoot.getData());
-					if(destinationRoot == null) {
-						nodesToBeCreated.add(indexDestinationRoot.getData());
-						indexDestinationRoot = indexDestinationRoot.getParent();	
-					}
-				}
-				
+	@SuppressWarnings("unchecked")
+	private void __select__(NODE node,org.primefaces.model.TreeNode source,org.primefaces.model.TreeNode destination,Boolean isConsiderTreeNodeNumberOfChildren,Boolean isConsiderTreeNodeNumberOfLoadedChildren) {
+		if(source == null || destination == null) {
+			__logWarning__("Tree source and destination must be not null");
+			return;
+		}
+		//What is the tree node associated to this data(node)
+		TreeNode treeNode = (TreeNode) __inject__(PrimefacesHelper.class).getTreeNodeOf(source, node);
+		if(treeNode == null) {
+			__logWarning__(String.format("Tree node not found for data %s",node));
+			return;
+		}
+		node = (NODE) treeNode.getData();	
+		org.primefaces.model.TreeNode destinationRoot = null;
+		org.primefaces.model.TreeNode parent = treeNode.getParent();
+		treeNode.removeFromParent(isConsiderTreeNodeNumberOfChildren,isConsiderTreeNodeNumberOfLoadedChildren);	
+		if(parent != null) {
+			List<Object> nodesToBeCreated = new ArrayList<>();
+			org.primefaces.model.TreeNode indexDestinationRoot = parent;
+			while(destinationRoot == null && indexDestinationRoot!=null && indexDestinationRoot.getData()!=null) {
+				destinationRoot = __inject__(PrimefacesHelper.class).getTreeNodeOf(destination, indexDestinationRoot.getData());
 				if(destinationRoot == null) {
-					destinationRoot = root;
-				}else {
-					
+					nodesToBeCreated.add(indexDestinationRoot.getData());
+					indexDestinationRoot = indexDestinationRoot.getParent();	
 				}
-				
-				Collections.reverse(nodesToBeCreated);
-				for(Object index : nodesToBeCreated) {
-					destinationRoot = new TreeNode(type, index, destinationRoot);
-					destinationRoot.setExpanded(Boolean.TRUE);
-				}
-				destinationRoot = new TreeNode(type, node,null, destinationRoot);
 			}
+			
+			if(destinationRoot == null) {
+				destinationRoot = destination;
+			}else {
+				
+			}
+			
+			Collections.reverse(nodesToBeCreated);
+			for(Object index : nodesToBeCreated) {
+				destinationRoot = new TreeNode(type, index, destinationRoot);
+				destinationRoot.setExpanded(Boolean.TRUE);
+			}
+			destinationRoot = new TreeNode(type, node,null, destinationRoot);
+		}
+		
+	}
+	
+	public void select(Collection<NODE> nodes) {
+		for(NODE index : nodes) {
+			__select__(index, root,selection, Boolean.TRUE, Boolean.FALSE);
+		}
+	}
+
+	public void select(@SuppressWarnings("unchecked") NODE...nodes) {
+		select(__inject__(CollectionHelper.class).instanciate(nodes));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void selectOne(NODE node) {
+		select(node);
+	}
+	
+	public void deselect(Collection<NODE> nodes) {
+		for(NODE index : nodes) {
+			__select__(index, selection,root, Boolean.FALSE, Boolean.TRUE);	
 		}
 	}
 	
-	public void select(NODE node) {
-		__select__(node, selection, Boolean.TRUE, Boolean.FALSE);		
+	public void deselect(@SuppressWarnings("unchecked") NODE...nodes) {
+		deselect(__inject__(CollectionHelper.class).instanciate(nodes));
 	}
 	
-	public void deselect(NODE node) {
-		__select__(node, root, Boolean.FALSE, Boolean.TRUE);
+	@SuppressWarnings("unchecked")
+	public void deselectOne(NODE node) {
+		deselect(node);
 	}
 	
 	/* Event */

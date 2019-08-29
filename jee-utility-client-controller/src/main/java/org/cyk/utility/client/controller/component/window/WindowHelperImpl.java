@@ -2,14 +2,14 @@ package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionRelatedClassGetter;
 import org.cyk.utility.system.action.SystemActionRelatedClassesNamesGetter;
 
-@Singleton
+@ApplicationScoped
 public class WindowHelperImpl extends AbstractHelper implements WindowHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 

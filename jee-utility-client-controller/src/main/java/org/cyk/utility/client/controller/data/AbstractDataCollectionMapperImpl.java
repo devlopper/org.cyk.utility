@@ -40,7 +40,7 @@ public abstract class AbstractDataCollectionMapperImpl<SOURCE,SOURCE_ITEM,DESTIN
     				if(Boolean.TRUE.equals(inject(CollectionHelper.class).isNotEmpty(destinationCollection.getCollection()))) {
     					source = (SOURCE) new ArrayList<SOURCE_ITEM>();
         				Collection<SOURCE_ITEM> sourceCollection = (Collection<SOURCE_ITEM>) source;
-        				inject(MappingHelper.class).getSources(destinationCollection.getCollection(), sourceItemClass);
+        				//inject(MappingHelper.class).getSources(destinationCollection.getCollection(), sourceItemClass);
         				sourceCollection.addAll(inject(MappingHelper.class).getSources(destinationCollection.getCollection(), sourceItemClass));	
     				}
         		}else

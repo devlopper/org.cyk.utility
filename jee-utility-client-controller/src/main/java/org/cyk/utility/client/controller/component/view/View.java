@@ -36,4 +36,5 @@ public interface View extends VisibleComponent {
 	CommandableByClassMap getCommandableByClassMap();
 	View setCommandableByClassMap(CommandableByClassMap commandableByClassMap);
 	
+	Boolean isCacheDisabled();
 }

@@ -21,4 +21,8 @@ public class SessionUserImpl extends AbstractObject implements SessionUser,Seria
 		return this;
 	}
 	
+	@Override
+	public SessionUser setIdentifier(Object identifier) {
+		return (SessionUser) super.setIdentifier(identifier);
+	}
 }

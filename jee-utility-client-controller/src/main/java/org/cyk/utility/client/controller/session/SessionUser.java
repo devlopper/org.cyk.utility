@@ -9,4 +9,5 @@ public interface SessionUser extends Objectable {
 	Principal getPrincipal();
 	SessionUser setPrincipal(Principal principal);
 	
+	@Override SessionUser setIdentifier(Object identifier);
 }

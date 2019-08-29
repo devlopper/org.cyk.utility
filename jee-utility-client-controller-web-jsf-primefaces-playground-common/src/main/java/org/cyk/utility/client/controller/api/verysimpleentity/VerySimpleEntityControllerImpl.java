@@ -3,14 +3,14 @@ package org.cyk.utility.client.controller.api.verysimpleentity;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.client.controller.AbstractControllerEntityPersistedInCollectionImpl;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntity;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntityDetails;
 import org.cyk.utility.client.controller.entities.verysimpleentity.VerySimpleEntityEnum;
 
-@Singleton
+@ApplicationScoped
 public class VerySimpleEntityControllerImpl extends AbstractControllerEntityPersistedInCollectionImpl<VerySimpleEntity> implements VerySimpleEntityController,Serializable {
 	private static final long serialVersionUID = 1L;
 

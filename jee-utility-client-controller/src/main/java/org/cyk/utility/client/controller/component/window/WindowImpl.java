@@ -104,5 +104,13 @@ public class WindowImpl extends AbstractVisibleComponentImpl implements Window,S
 	public Menu getMenuOfScopeSession() {
 		return getMenu(ScopeSession.class);
 	}
+	
+	@Override
+	public Boolean isViewCached() {
+		View view = getView();
+		if(view == null)
+			return Boolean.FALSE;
+		return !view.isCacheDisabled();
+	}
 
 }

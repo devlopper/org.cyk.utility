@@ -3,11 +3,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
@@ -20,7 +20,7 @@ import org.cyk.utility.string.StringHelper;
  * @author christian yao komenan
  *
  */
-@Named @Singleton 
+@Named @ApplicationScoped 
 public class ObjectConverter extends AbstractObject implements Converter,Serializable {
 	private static final long serialVersionUID = -1615078449226502960L;
 	
