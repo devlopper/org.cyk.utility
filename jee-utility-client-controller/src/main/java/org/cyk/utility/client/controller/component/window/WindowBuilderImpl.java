@@ -27,6 +27,7 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	private DialogBuilder dialog;
 	private WindowRenderType renderType;
 	private WindowContainerManagedWindowBuilder containerManaged;
+	private Boolean isViewLazyLoadable;
 	
 	//TODO improve build logic to reduce build time
 	@Override
@@ -65,8 +66,14 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		
 		ViewBuilder view = getView();
 		if(view!=null) {
+			//view.setLogLevel(LogLevel.INFO).setLoggable(Boolean.TRUE).addLogMessageBuilderParameter("Window view");
 			__setRequestAndContextAndUniformResourceLocatorMapOf__(view);
-			window.setView(view.execute().getOutput());
+			Boolean isViewLazyLoadable = getIsViewLazyLoadable();
+			if(Boolean.TRUE.equals(isViewLazyLoadable)) {
+				window.setViewBuilder(view);
+			}else {
+				window.setView(view.execute().getOutput());	
+			}	
 		}
 		
 		if(renderType == null || renderType instanceof WindowRenderTypeNormal) {
@@ -238,6 +245,16 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	@Override
 	public WindowBuilder setContainerManaged(WindowContainerManagedWindowBuilder containerManaged) {
 		this.containerManaged = containerManaged;
+		return this;
+	}
+	@Override
+	public Boolean getIsViewLazyLoadable() {
+		return isViewLazyLoadable;
+	}
+	
+	@Override
+	public WindowBuilder setIsViewLazyLoadable(Boolean isViewLazyLoadable) {
+		this.isViewLazyLoadable = isViewLazyLoadable;
 		return this;
 	}
 	

@@ -9,6 +9,16 @@ import org.cyk.utility.client.controller.component.view.ViewBuilder;
 
 public interface WindowBuilder extends VisibleComponentBuilder<Window> {
 
+	/*
+	 *  Window structure can be very complex and so impact its rendering time.
+	 *  Hence the idea here will be to initialise some component at demand and not at the window build.
+	 *  The following component will be initialise at demand : view
+	 *  
+	 *  FIXME : For now the thechnique will use to implement component initialisation at demand will be to keep its
+	 *  corresponding builder into the window and run the build at demand.
+	 *  LATER try to build the component itself and run the initialise method at demand
+	 */
+	
 	OutputStringTextBuilderMap getOutputStringTextMap();
 	OutputStringTextBuilderMap getOutputStringTextMap(Boolean injectIfNull);
 	WindowBuilder setOutputStringTextMap(OutputStringTextBuilderMap outputStringTextMap);
@@ -32,6 +42,9 @@ public interface WindowBuilder extends VisibleComponentBuilder<Window> {
 	ViewBuilder getView();
 	ViewBuilder getView(Boolean injectIfNull);
 	WindowBuilder setView(ViewBuilder view);
+	
+	Boolean getIsViewLazyLoadable();
+	WindowBuilder setIsViewLazyLoadable(Boolean isViewLazyLoadable);
 
 	DialogBuilder getDialog();
 	DialogBuilder getDialog(Boolean injectIfNull);

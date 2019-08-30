@@ -4,10 +4,15 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.annotation.Annotations;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputBooleanButtonBuilder;
@@ -35,6 +40,9 @@ import org.cyk.utility.string.Strings;
 public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class> implements ComponentBuilderClassGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static final Map<String,Collection<Annotation>> ANNOTATIONS_MAP = new HashMap<>();
+	//private static final Map<String,Class<? extends ComponentBuilder<?>> > CLASSES_MAP = new HashMap<>();
+	
 	private Class clazz;
 	private Strings fieldNameStrings;
 	private Field field;
@@ -46,53 +54,56 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 	@Override
 	protected Class __execute__() throws Exception {
 		Class<? extends ComponentBuilder<?>> builderClass = null;
+		Class<?> baseClass = getBaseClass();
 		Annotations annotations = getAnnotations();
 		Collection<Annotation> annotationCollection = new HashSet<>();
+		String key = ConstantEmpty.STRING;
 		if(__injectCollectionHelper__().isNotEmpty(annotations))
 			annotationCollection.addAll(annotations.get());
 		
 		if(__injectCollectionHelper__().isEmpty(annotationCollection)) {
+			Class clazz = getClazz();
 			Field field = getField();
 			if(field == null) {
-				Class clazz = getClazz();
 				Strings fieldNameStrings = getFieldNameStrings();
 				if(clazz!=null && __injectCollectionHelper__().isNotEmpty(fieldNameStrings)) {
-					/*
-					field = __injectCollectionHelper__().getFirst(
-							__inject__(FieldGetter.class).execute(clazz, __injectFieldHelper__().concatenate(fieldNameStrings.get())).getOutput());
-					*/
 					field = __injectFieldHelper__().getField(clazz, fieldNameStrings.get());
 				}
 			}
-			if(field!=null) {
-				Annotation[] fieldAnnotations = field.getAnnotations();
-				if(fieldAnnotations!=null)
-					for(Annotation index : fieldAnnotations) {
-						annotationCollection.add(index);
-					}
-			}
-			
 			Method method = getMethod();
 			if(method == null) {
-				Class clazz = getClazz();
 				String methodName = getMethodName();
 				if(clazz!=null && __injectStringHelper__().isNotBlank(methodName)) {
 					method = MethodUtils.getMatchingMethod(clazz, methodName);
 				}
 			}
-			
-			if(method!=null) {
-				Annotation[] methodAnnotations = method.getAnnotations();
-				if(methodAnnotations!=null)
-					for(Annotation index : methodAnnotations) {
-						annotationCollection.add(index);
-					}
-			}
+			key = clazz.getName()+ConstantCharacter.UNDESCORE+(field == null ? ConstantEmpty.STRING : field.getName())
+					+ConstantCharacter.UNDESCORE+(method == null ? ConstantEmpty.STRING : method.getName())
+					;
+						
+			annotationCollection = ANNOTATIONS_MAP.get(key);
+			if(annotationCollection == null) {
+				annotationCollection = new ArrayList<>();
+				if(field!=null) {
+					Annotation[] fieldAnnotations = field.getAnnotations();
+					if(fieldAnnotations!=null)
+						for(Annotation index : fieldAnnotations) {
+							annotationCollection.add(index);
+						}
+				}
+				
+				if(method!=null) {
+					Annotation[] methodAnnotations = method.getAnnotations();
+					if(methodAnnotations!=null)
+						for(Annotation index : methodAnnotations) {
+							annotationCollection.add(index);
+						}
+				}
+				ANNOTATIONS_MAP.put(key, annotationCollection);
+			}		
 		}
 		
 		builderClass = __getBuilderClassFromAnnotations__(annotationCollection);
-		
-		Class<?> baseClass = getBaseClass();
 		if(builderClass!=null && baseClass!=null && !Boolean.TRUE.equals(__injectClassHelper__().isInstanceOf(builderClass, baseClass))) {
 			if(__injectClassHelper__().isInstanceOf(builderClass, InputBuilder.class)) {
 				if(baseClass.equals(OutputBuilder.class))
@@ -105,10 +116,9 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 					builderClass = OutputStringLinkBuilder.class;
 				else if(__injectClassHelper__().isInstanceOf(baseClass, OutputBuilder.class))
 					builderClass = OutputStringTextBuilder.class;
-			}
-					
+			}						
+			
 		}
-		
 		return builderClass;
 	}
 	

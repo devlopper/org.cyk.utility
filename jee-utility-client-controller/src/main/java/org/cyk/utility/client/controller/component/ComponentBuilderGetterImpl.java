@@ -3,13 +3,10 @@ package org.cyk.utility.client.controller.component;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Collection;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
-import org.cyk.utility.field.FieldsGetter;
-import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.internationalization.InternalizationKeyStringType;
 import org.cyk.utility.string.Case;
@@ -42,6 +39,9 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 		if(field == null) {
 			if(object!=null) {
 				if(__injectCollectionHelper__().isNotEmpty(classGetter.getFieldNameStrings())) {
+					field = __injectFieldHelper__().getField(object.getClass(), classGetter.getFieldNameStrings().get());
+					classGetter.setField(field);
+					/*
 					Collection<String> fieldNames = classGetter.getFieldNameStrings().get();
 					Integer size = __injectCollectionHelper__().getSize(fieldNames);
 					if(size == 1) {
@@ -56,6 +56,8 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 							classGetter.setField(field);
 						}	
 					}
+					System.out.println("ComponentBuilderGetterImpl.__execute__() 0");
+					*/
 				}
 			}
 		}

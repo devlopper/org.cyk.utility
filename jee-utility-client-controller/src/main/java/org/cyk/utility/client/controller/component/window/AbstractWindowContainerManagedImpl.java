@@ -66,6 +66,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 			}
 			if(__windowBuilder__.getRequest() == null)
 				__windowBuilder__.setRequest(__getRequest__());
+			
 			//TODO you won't be able to customize a page with a specific theme one it has been set to session. how to make it possible then ???
 			Theme theme = (Theme) getSessionAttribute(SessionAttributeEnumeration.THEME);
 			if(theme == null) {
@@ -76,21 +77,25 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 					setSessionAttribute(SessionAttributeEnumeration.THEME, theme);
 					__windowBuilder__.setTheme(theme);
 				}
-			}
-			
+			}			
+			//__windowBuilder__.setLogLevel(LogLevel.INFO).setLoggable(Boolean.TRUE).addLogMessageBuilderParameter("Window build");
 			Window window = __windowBuilder__.execute().getOutput();
 			if(window!=null) {
 				if(theme!=null) {
 					theme.process(window);	
 				}
 			}
+			
 			setWindow(window);
 			durationBuilder.setEndToNow();
 			String title = __getWindowTitleValue__();
 			if(title == null && window!=null && window.getTitle()!=null)
 				title = window.getTitle().getValue();
 			
-			__logInfo__(String.format("Window title=%s duration=%s. view cached=%s", title
+			//__windowBuilder__.addLogMessageBuilderParameter("title", title);
+			//__windowBuilder__.addLogMessageBuilderParameter("view cached", window.isViewCached());
+			
+			__logInfo__(String.format("Window container built. title=%s duration=%s. view cached=%s", title
 					,__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder).execute().getOutput(),window.isViewCached()));
 		}
 		return window;
@@ -150,7 +155,6 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		}
 		if(windowBuilder.getContainerManaged() == null)
 			windowBuilder.setContainerManaged(windowContainerManagedWindowBuilder);
-		
 		return windowBuilder;
 	}
 	

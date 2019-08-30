@@ -9,6 +9,7 @@ import org.cyk.utility.client.controller.component.menu.MenuMap;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
 import org.cyk.utility.client.controller.component.view.View;
+import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.scope.Scope;
 import org.cyk.utility.scope.ScopeSession;
 
@@ -21,6 +22,17 @@ public class WindowImpl extends AbstractVisibleComponentImpl implements Window,S
 	private Dialog dialog;
 	private WindowRenderType renderType;
 	private OutputStringTextMap outputStringTextMap;
+	
+	private ViewBuilder viewBuilder;
+	
+	@Override
+	protected void __initialise__() {
+		super.__initialise__();
+		if(view == null && viewBuilder != null) {
+			view = viewBuilder.execute().getOutput();
+			viewBuilder = null;
+		}
+	}
 	
 	@Override
 	public OutputStringText getTitle() {
@@ -113,4 +125,14 @@ public class WindowImpl extends AbstractVisibleComponentImpl implements Window,S
 		return !view.isCacheDisabled();
 	}
 
+	@Override
+	public ViewBuilder getViewBuilder() {
+		return viewBuilder;
+	}
+	
+	@Override
+	public Window setViewBuilder(ViewBuilder viewBuilder) {
+		this.viewBuilder = viewBuilder;
+		return this;
+	}
 }

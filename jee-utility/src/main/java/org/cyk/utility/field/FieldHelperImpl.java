@@ -6,6 +6,8 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -25,8 +27,12 @@ import org.cyk.utility.value.ValueUsageType;
 public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Serializable {
 	private static final long serialVersionUID = -5367150176793830358L;
 
+	public static Boolean IS_FIELD_CACHABLE = Boolean.TRUE;
+	private static final Map<String,Field> FIELDS_MAP = new HashMap<>();
+	
 	@Override
 	public <TYPE> Class<TYPE> getParameterAt(Field field, Integer index, Class<TYPE> typeClass) {
+		//TODO : cache result
 		ParameterizedType type = (ParameterizedType) field.getGenericType();
 		return (Class<TYPE>) type.getActualTypeArguments()[index];
 	}
@@ -109,22 +115,30 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	
 	@Override
 	public Field getField(Class<?> aClass, Collection<String> fieldNames) {
-		//System.out.println("FieldHelperImpl.getField() ::: "+aClass+" ::: "+fieldNames);
 		CollectionHelper collectionHelper = __inject__(CollectionHelper.class);
-		Field field;
+		Field field = null;
 		if(aClass == null || collectionHelper.isEmpty(fieldNames)) {
 			field = null;
 		}else {
 			String fieldName = join(fieldNames);
-			fieldNames = collectionHelper.instanciate(StringUtils.split(fieldName, DOT));
-			field = collectionHelper.getFirst(__inject__(FieldsGetter.class).execute(aClass, collectionHelper.getElementAt(fieldNames, 0)).getOutput());
-			if(collectionHelper.getSize(fieldNames) == 1) {
-			
-			}else {
-				aClass = __inject__(FieldTypeGetter.class).execute(field).getOutput().getType();
-				if(Boolean.TRUE.equals(aClass.isInterface()))
-					aClass = __inject__(aClass).getClass();
-				field = getField(aClass, collectionHelper.getElementsFrom(fieldNames, 1));
+			String key = aClass.getName()+DOT+fieldName;
+			if(Boolean.TRUE.equals(IS_FIELD_CACHABLE)) {
+				field = FIELDS_MAP.get(key);	
+			}
+			if(field == null) {
+				fieldNames = collectionHelper.instanciate(StringUtils.split(fieldName, DOT));
+				field = collectionHelper.getFirst(__inject__(FieldsGetter.class).execute(aClass, collectionHelper.getElementAt(fieldNames, 0)).getOutput());
+				if(collectionHelper.getSize(fieldNames) == 1) {
+				
+				}else {
+					aClass = __inject__(FieldTypeGetter.class).execute(field).getOutput().getType();
+					if(Boolean.TRUE.equals(aClass.isInterface()))
+						aClass = __inject__(aClass).getClass();
+					field = getField(aClass, collectionHelper.getElementsFrom(fieldNames, 1));
+				}	
+			}
+			if(Boolean.TRUE.equals(IS_FIELD_CACHABLE)) {
+				FIELDS_MAP.put(key, field);
 			}
 		}
 		

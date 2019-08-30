@@ -7,6 +7,7 @@ import org.cyk.utility.client.controller.component.menu.MenuMap;
 import org.cyk.utility.client.controller.component.output.OutputStringText;
 import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
 import org.cyk.utility.client.controller.component.view.View;
+import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.scope.Scope;
 
 public interface Window extends VisibleComponent {
@@ -23,14 +24,19 @@ public interface Window extends VisibleComponent {
 	Menu getMenu(Class<? extends Scope> scopeClass);
 	Menu getMenuOfScopeSession();
 	
-	View getView();
-	Window setView(View view);
-	
 	Dialog getDialog();
 	Window setDialog(Dialog dialog);
 
 	WindowRenderType getRenderType();
 	Window setRenderType(WindowRenderType renderType);
 	
+	/* Component buildable at demand */
+	View getView();
+	Window setView(View view);
 	Boolean isViewCached();
+	
+	//FIXME : This technique is used for now but later try to call initialise method from view itself
+	ViewBuilder getViewBuilder();
+	Window setViewBuilder(ViewBuilder viewBuilder);
+		
 }

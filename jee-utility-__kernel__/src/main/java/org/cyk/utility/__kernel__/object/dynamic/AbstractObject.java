@@ -10,22 +10,30 @@ import javax.annotation.PostConstruct;
 import org.cyk.utility.__kernel__.KernelHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
-@Getter @Setter @Accessors(chain=true)
 public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractObject implements Objectable, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Properties properties;
+	private Boolean __initialised__;
+	protected Boolean __isCallInitialiseMethodOnPostConstruct__;
 	
 	@PostConstruct
 	private void listenPostConstruct(){
 		__listenBeforePostConstruct__();
 		__listenPostConstruct__();
 		__listenAfterPostConstruct__();
+		if(Boolean.TRUE.equals(__isCallInitialiseMethodOnPostConstruct__))
+			initialise();
 	}
+	
+	public void initialise() {
+		if(Boolean.TRUE.equals(__initialised__))
+			return;
+		__initialised__ = Boolean.TRUE;
+		__initialise__();
+	}
+	
+	protected void __initialise__(){}
 	
 	protected void __listenBeforePostConstruct__(){}
 	protected void __listenPostConstruct__(){}

@@ -2,6 +2,8 @@ package org.cyk.utility.client.controller.component.view;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
@@ -21,6 +23,7 @@ import org.cyk.utility.client.controller.component.input.InputStringLineManyBuil
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.data.FormData;
+import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
@@ -33,6 +36,8 @@ import org.cyk.utility.system.action.SystemActionUpdate;
 public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> implements ViewBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static final Map<String,Class<? extends ComponentBuilder<?>>> BUILDERS_CLASSES_MAP = new HashMap<>();
+	
 	private ComponentsBuilder componentsBuilder;
 	private ViewType type;
 	private CommandableBuilderByClassMap commandableByClassMap;
@@ -154,6 +159,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public <T extends ComponentBuilder<?>> T addComponentBuilderByObjectByFieldNames(Class<T> componentBuilderClass, Object object,String... fieldNames) {
+		//TODO : collect all add in collection and use parrallel procssing technique to gain speed
 		T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).addFieldNameStrings(fieldNames).execute().getOutput();
 		addComponentBuilder(builder);
 		return builder;
@@ -161,12 +167,13 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object,Class<?> componentBuilderBaseClass, String... fieldNames) {
-		Class<? extends ComponentBuilder<?>> builderClass =  __inject__(ComponentBuilderClassGetter.class)
-				.setClazz(object.getClass())
-				.addFieldNameStrings(fieldNames).setBaseClass(componentBuilderBaseClass)
+		String key = object.getClass().getName()+"."+(componentBuilderBaseClass == null ? "" : componentBuilderBaseClass.getName())+"."+__inject__(FieldHelper.class).join(fieldNames);
+		Class<? extends ComponentBuilder<?>> builderClass =  BUILDERS_CLASSES_MAP.get(key);
+		if(builderClass == null) {
+			builderClass = __inject__(ComponentBuilderClassGetter.class).setClazz(object.getClass()).addFieldNameStrings(fieldNames).setBaseClass(componentBuilderBaseClass)
 				.execute().getOutput();
-				//.setField(__injectCollectionHelper__().getFirst(__inject__(FieldGetter.class).execute(object.getClass(),  __injectFieldHelper__().concatenate(fieldNames)).getOutput()))
-		
+			BUILDERS_CLASSES_MAP.put(key, builderClass);
+		}
 		return addComponentBuilderByObjectByFieldNames(builderClass, object, fieldNames);
 	}
 	
