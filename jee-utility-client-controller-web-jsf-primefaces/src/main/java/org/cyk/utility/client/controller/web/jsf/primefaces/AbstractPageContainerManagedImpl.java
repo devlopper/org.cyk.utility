@@ -9,10 +9,25 @@ import org.cyk.utility.client.controller.component.window.WindowBuilder;
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
+import org.cyk.utility.client.controller.web.jsf.primefaces.tag.BlockUI;
 import org.cyk.utility.string.StringHelper;
+
+import lombok.Getter;
+import lombok.Setter;
 
 public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.client.controller.web.jsf.page.AbstractPageContainerManagedImpl implements PageContainerManaged,Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	@Getter @Setter protected BlockUI blockUI;
+	
+	@Override
+	protected void __listenPostConstruct__() {
+		super.__listenPostConstruct__();
+		blockUI = new BlockUI();
+		blockUI.getProperties().setBlock("outputPanel");
+		blockUI.getProperties().setTrigger("initialisePageContent");
+		blockUI.getProperties().setBlocked(Boolean.TRUE);
+	}
 	
 	@Override
 	protected WindowBuilder __getWindowBuilder__() {

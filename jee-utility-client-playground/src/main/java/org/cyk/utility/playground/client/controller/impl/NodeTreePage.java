@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContainerManagedImpl;
 import org.cyk.utility.client.controller.web.jsf.primefaces.tag.Tree;
 import org.cyk.utility.playground.client.controller.entities.Node;
@@ -22,9 +21,7 @@ public class NodeTreePage extends AbstractPageContainerManagedImpl implements Se
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		tree = new Tree();
-		tree.setNodeClass(Node.class);
-		//tree.initialise();
+		tree = new Tree(Node.class);
 	}
 	
 	@Override

@@ -5,7 +5,8 @@
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cyk="http://primefaces.jsf.web.utility.cyk.org">
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
@@ -20,8 +21,14 @@
 					            		<p:commandButton styleClass="add-remove-button" icon="fa fa-arrow-right" title="Ajouter" action="#{value.selectOne(node)}" update="tree1,:form:tree2" />
 					        		</p:panelGrid>
 					        	</p:treeNode>	
+					        	<!--
 					        	<p:ajax event="expand" listener="#{value.listenExpand}" />
+					        	-->
+					        	<p:ajax event="expand" listener="#{value.listenExpand}" global="false" 
+			        				onstart="PF('#{value.rootBlockUI.properties.widgetVar}').show();" 
+			        				oncomplete="PF('#{value.rootBlockUI.properties.widgetVar}').hide();"/>
 				    		</p:tree>
+				    		<cyk:blockUI value="#{value.rootBlockUI}" />
 		    			</p:fieldset>
 		    			<p:fieldset id="fieldset2" legend="#{value.selectionLabel}">
 		    				<p:tree id="tree2" value="#{value.selection}" var="node" dynamic="true">
@@ -74,13 +81,19 @@
 		    			<p:treeNode>
 			            	<h:outputText value="#{node.name}"/>
 			        	</p:treeNode>	
-			        	<p:ajax event="expand" listener="#{value.listenExpand}" />
+			        	<!--
+			        	<cyk:ajax value="#{value.properties.expanded}" />	
+			        	-->
+			        	<p:ajax event="expand" listener="#{value.listenExpand}" global="false" 
+			        		onstart="PF('#{value.rootBlockUI.properties.widgetVar}').show();" 
+			        		oncomplete="PF('#{value.rootBlockUI.properties.widgetVar}').hide();"/>
+			        		
 		    		</p:tree>
+		    		<cyk:blockUI value="#{value.rootBlockUI}" />	
 				</ui:fragment>
 			</p:outputPanel>
-			
 			<p:remoteCommand id="initialise" autoRun="true" action="#{value.initialise}" update="outputPanel" />
-	    	<p:blockUI block="outputPanel" blocked="true" trigger="initialise" />
+	    	<cyk:blockUI value="#{value.blockUI}" />
 		</ui:define>
 	</ui:decorate>	
 

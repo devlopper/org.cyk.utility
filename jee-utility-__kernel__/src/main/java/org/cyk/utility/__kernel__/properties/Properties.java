@@ -4704,7 +4704,27 @@ public class Properties implements java.io.Serializable {
 		return this;
 	}
 	
+	public Object getBlock() {
+		return get(BLOCK);
+	}
+
+	public Properties setBlock(Object block) {
+		set(BLOCK, block);
+		return this;
+	}
+	
+	public Object getBlocked() {
+		return get(BLOCKED);
+	}
+
+	public Properties setBlocked(Object blocked) {
+		set(BLOCKED, blocked);
+		return this;
+	}
+	
 	//public static final String THROWABLE = "SERVICE_NOT_FOUND";
+	public static final String BLOCK = "BLOCK";
+	public static final String BLOCKED = "BLOCKED";
 	public static final String REGION = "REGION";
 	public static final String TREE_NODE = "TREE_NODE";
 	public static final String IS_MANY = "IS_MANY";

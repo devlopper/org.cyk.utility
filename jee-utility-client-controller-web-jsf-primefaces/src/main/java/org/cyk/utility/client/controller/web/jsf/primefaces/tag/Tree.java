@@ -10,9 +10,7 @@ import java.util.List;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.clazz.ClassHelper;
-import org.cyk.utility.client.controller.ControllerEntity;
-import org.cyk.utility.client.controller.ControllerLayer;
+import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.web.jsf.primefaces.PrimefacesHelper;
 import org.cyk.utility.collection.CollectionHelper;
@@ -23,39 +21,79 @@ import org.primefaces.event.NodeExpandEvent;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
-public class Tree<NODE extends DataIdentifiedByString<NODE>> extends AbstractObject implements Serializable {
+public class Tree extends AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private TreeNode root;
-	private String rootLabel = "Available";
-	private Boolean selectable;
-	private TreeSelectionMode selectionMode;
-	private TreeNode selection;
-	private TreeNode[] rootSelectedNodes;
-	private String selectionLabel = "Selected";
+	@Getter @Setter private TreeNode root;
+	@Getter @Setter private String rootIdentifier,rootLabel = "Available";
+	@Getter @Setter private Boolean selectable;
+	@Getter @Setter private TreeSelectionMode selectionMode;
+	@Getter @Setter private TreeNode selection;
+	@Getter @Setter private TreeNode[] rootSelectedNodes;
+	@Getter @Setter private String selectionLabel = "Selected";
 	
-	private Class<NODE> nodeClass;
-	private Collection<NODE> nodesNotHavingParent,initialSelectedNodes;
-	private ControllerEntity<NODE> controller;
-	private String fields = "identifier,code,name,numberOfChildren";
-	private String type;
+	@Getter @Setter private Class<?> nodeClass;
+	@Getter @Setter private Collection<?> nodesNotHavingParent,initialSelectedNodes;
+	@Getter @Setter private String fields = "identifier,code,name,numberOfChildren";
+	@Getter @Setter private String type;
 	
-	@SuppressWarnings("unchecked")
-	public void initialise() {
-		if(__inject__(ClassHelper.class).isInstanceOf(nodeClass, DataIdentifiedByString.class)) {
-			this.controller = __inject__(ControllerLayer.class).injectInterfaceClassFromEntityClass(nodeClass);	
-		}
+	@Getter @Setter private BlockUI rootBlockUI,blockUI;
+	
+	/* working variables */
+	
+	/**/
+	
+	public Tree() {
+		this(null);
+	}
+	
+	public Tree(Class<?> dataClass) {
+		this.nodeClass = dataClass;
+		
+		blockUI = new BlockUI();
+		blockUI.getProperties().setWidgetVar("treeBlockUI");
+		blockUI.getProperties().setBlock("outputPanel");
+		blockUI.getProperties().setTrigger("initialise");
+		blockUI.getProperties().setBlocked(Boolean.TRUE);
+		
+		/*
+		Event event = __inject__(Event.class);
+		event.getProperties().setManyIfNull(new Object[] {Properties.IMMEDIATE,Properties.ASYNC,Properties.DISABLED,Properties.PARTIAL_SUBMIT
+				,Properties.RESET_VALUES,Properties.IGNORE_AUTO_UPDATE}, Boolean.FALSE);
+		event.getProperties().setManyIfNull(new Object[] {Properties.GLOBAL,Properties.SKIP_CHILDREN}, Boolean.TRUE);
+		event.getProperties().setIfNull(Properties.EVENT,"expand");
+		
+		CommandFunction function = __inject__(CommandFunction.class);
+		function.setAction(__inject__(SystemActionCustom.class));
+		function.addTryRunRunnables(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("Tree.Tree(...).new Runnable() {...}.run() ::: "+event+getProperties());
+			}
+		});
+		
+		//function.setIsNotifyAfterExecutionPhaseFinally(Boolean.FALSE);
+		//function.setIsNotifyOnThrowableIsNull(Boolean.FALSE);
+		event.getProperties().setFunction(function);
+		
+		setProperty(Properties.EXPANDED, event);
+		*/
+	}
+	
+	@Override
+	protected void __initialise__() {
+		super.__initialise__();
 		root = new TreeNode();
 		if(nodesNotHavingParent == null)
-			nodesNotHavingParent = controller.read(new Properties().setFilters(new FilterDto().addField(DataIdentifiedByString.PROPERTY_PARENTS, null))
+			nodesNotHavingParent = __inject__(Controller.class).read(nodeClass,new Properties().setFilters(new FilterDto().addField(DataIdentifiedByString.PROPERTY_PARENTS, null))
 				.setIsPageable(Boolean.FALSE).setFields(fields));
 		
 		if(__inject__(CollectionHelper.class).isNotEmpty(nodesNotHavingParent))
-			for(NODE index : nodesNotHavingParent)
+			for(Object index : nodesNotHavingParent)
 				new TreeNode(type, index, root);
 		
 		if(Boolean.TRUE.equals(selectable)) {
+			rootIdentifier = "tree1";
 			if(selectionMode == null)
 				selectionMode = TreeSelectionMode.REMOVE_ADD;
 			
@@ -63,10 +101,10 @@ public class Tree<NODE extends DataIdentifiedByString<NODE>> extends AbstractObj
 				selection = new TreeNode();
 				if(__inject__(CollectionHelper.class).isNotEmpty(initialSelectedNodes)) {
 					//Expand nodes
-					Collection<NODE> expandables = new ArrayList<>(initialSelectedNodes);
+					Collection<Object> expandables = new ArrayList<>(initialSelectedNodes);
 					do {
 						Collection<TreeNode> treeNodes = new ArrayList<>();
-						for(NODE index : expandables) {
+						for(Object index : expandables) {
 							TreeNode treeNode = (TreeNode) DependencyInjection.inject(PrimefacesHelper.class).getTreeNodeOf(root, index);
 							if(treeNode != null) {
 								if(treeNode.getNumberOfChildren() > 0)
@@ -78,10 +116,10 @@ public class Tree<NODE extends DataIdentifiedByString<NODE>> extends AbstractObj
 							expandables.remove(index.getData());
 					}while(!expandables.isEmpty());
 					//Select leaves nodes
-					for(NODE index : initialSelectedNodes) {
+					for(Object index : initialSelectedNodes) {
 						TreeNode treeNode = (TreeNode) DependencyInjection.inject(PrimefacesHelper.class).getTreeNodeOf(root, index);
 						if(treeNode != null && !treeNode.isParentOfOneOrMoreData(initialSelectedNodes) /*&& treeNode.getChildCount() == 0*/) {		
-							select((NODE) treeNode.getData());
+							select(treeNode.getData());
 						}
 					}
 				}
@@ -93,23 +131,29 @@ public class Tree<NODE extends DataIdentifiedByString<NODE>> extends AbstractObj
 					}
 				}*/	
 			}
+		}else {
+			rootIdentifier = "tree";
 		}
+		
+		rootBlockUI = new BlockUI();
+		rootBlockUI.getProperties().setWidgetVar(rootIdentifier+"InteractibityBlocker");
+		rootBlockUI.getProperties().setBlock(rootIdentifier);
+		rootBlockUI.getProperties().setTrigger(rootIdentifier);
 	}
 	
-	public Collection<NODE> getSelectedNodes(Integer isHavingNumberOfChildren) {
-		Collection<NODE> selectedNodes = null;
+	public Collection<?> getSelectedNodes(Integer isHavingNumberOfChildren) {
+		Collection<?> selectedNodes = null;
 		if(selection!=null) {
-			selectedNodes = (Collection<NODE>) selection.getDatas(isHavingNumberOfChildren,nodeClass);
+			selectedNodes = selection.getDatas(isHavingNumberOfChildren,nodeClass);
 		}
 		return selectedNodes;
 	}
 	
-	public Collection<NODE> getSelectedNodes() {
+	public Collection<?> getSelectedNodes() {
 		return getSelectedNodes(null);
 	}
 	
-	@SuppressWarnings("unchecked")
-	private void __select__(NODE node,org.primefaces.model.TreeNode source,org.primefaces.model.TreeNode destination,Boolean isConsiderTreeNodeNumberOfChildren,Boolean isConsiderTreeNodeNumberOfLoadedChildren) {
+	private void __select__(Object node,org.primefaces.model.TreeNode source,org.primefaces.model.TreeNode destination,Boolean isConsiderTreeNodeNumberOfChildren,Boolean isConsiderTreeNodeNumberOfLoadedChildren) {
 		if(source == null || destination == null) {
 			__logWarning__("Tree source and destination must be not null");
 			return;
@@ -120,7 +164,7 @@ public class Tree<NODE extends DataIdentifiedByString<NODE>> extends AbstractObj
 			__logWarning__(String.format("Tree node not found for data %s",node));
 			return;
 		}
-		node = (NODE) treeNode.getData();	
+		node = treeNode.getData();	
 		org.primefaces.model.TreeNode destinationRoot = null;
 		org.primefaces.model.TreeNode parent = treeNode.getParent();
 		treeNode.removeFromParent(isConsiderTreeNodeNumberOfChildren,isConsiderTreeNodeNumberOfLoadedChildren);	
@@ -151,56 +195,52 @@ public class Tree<NODE extends DataIdentifiedByString<NODE>> extends AbstractObj
 		
 	}
 	
-	public void select(Collection<NODE> nodes) {
-		for(NODE index : nodes) {
+	public void select(Collection<?> nodes) {
+		for(Object index : nodes) {
 			__select__(index, root,selection, Boolean.TRUE, Boolean.FALSE);
 		}
 	}
 
-	public void select(@SuppressWarnings("unchecked") NODE...nodes) {
+	public void select(Object...nodes) {
 		select(__inject__(CollectionHelper.class).instanciate(nodes));
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void selectOne(NODE node) {
+	public void selectOne(Object node) {
 		select(node);
 	}
 	
-	public void deselect(Collection<NODE> nodes) {
-		for(NODE index : nodes) {
+	public void deselect(Collection<?> nodes) {
+		for(Object index : nodes) {
 			__select__(index, selection,root, Boolean.FALSE, Boolean.TRUE);	
 		}
 	}
 	
-	public void deselect(@SuppressWarnings("unchecked") NODE...nodes) {
+	public void deselect(Object...nodes) {
 		deselect(__inject__(CollectionHelper.class).instanciate(nodes));
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void deselectOne(NODE node) {
+	public void deselectOne(Object node) {
 		deselect(node);
 	}
 	
 	/* Event */
 	
-	@SuppressWarnings("unchecked")
 	public void listenExpand(NodeExpandEvent event) {
-		expand((NODE)event.getTreeNode().getData());
+		expand(event.getTreeNode().getData());
     }
 	
 	public void expand(TreeNode treeNode) {
 		treeNode.setExpanded(Boolean.TRUE);
-		@SuppressWarnings("unchecked")
-		NODE node = (NODE) treeNode.getData();
-		Collection<NODE> children = controller.read(new Properties().setFilters(new FilterDto().addField("parents"
-				, Arrays.asList(node.getIdentifier()),ValueUsageType.SYSTEM)).setIsPageable(Boolean.FALSE).setFields(fields));
+		Object node = treeNode.getData();
+		Collection<?> children = __inject__(Controller.class).read(nodeClass,new Properties().setFilters(new FilterDto().addField("parents"
+				, Arrays.asList( ((org.cyk.utility.client.controller.data.DataIdentifiedByString)node).getIdentifier()),ValueUsageType.SYSTEM)).setIsPageable(Boolean.FALSE).setFields(fields));
 		if(__inject__(CollectionHelper.class).isNotEmpty(children))
-			for(NODE index : children)
+			for(Object index : children)
 				new TreeNode(type, index, treeNode);
     }
 	
-	public void expand(NODE node) {
-		expand((TreeNode) node.getProperties().getTreeNode());
+	public void expand(Object node) {
+		expand((TreeNode) ((AbstractObject)node).getProperties().getTreeNode());
     }
 	
 }

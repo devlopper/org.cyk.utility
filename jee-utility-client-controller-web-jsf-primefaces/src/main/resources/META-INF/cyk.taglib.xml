@@ -8,6 +8,30 @@
     <namespace>http://primefaces.jsf.web.utility.cyk.org</namespace>
 	
 	<tag>
+        <tag-name>blockUI</tag-name>
+        <source>tag/blockui/blockUI.xhtml</source>
+        <attribute>
+        	<description>block user interface</description>
+            <name>value</name>
+            <required>true</required>
+            <type>org.cyk.utility.client.controller.web.jsf.primefaces.tag.BlockUI</type>
+        </attribute>
+        
+    </tag>
+    
+    <tag>
+        <tag-name>pickList</tag-name>
+        <source>tag/picklist/pickList.xhtml</source>
+        <attribute>
+        	<description>select many from pick list</description>
+            <name>value</name>
+            <required>true</required>
+            <type>org.cyk.utility.client.controller.web.jsf.primefaces.tag.PickList</type>
+        </attribute>
+        
+    </tag>
+	
+	<tag>
         <tag-name>tree</tag-name>
         <source>tag/tree/tree.xhtml</source>
         <attribute>

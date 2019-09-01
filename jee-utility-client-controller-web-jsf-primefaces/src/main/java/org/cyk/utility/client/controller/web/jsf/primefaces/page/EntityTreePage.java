@@ -20,7 +20,6 @@ public class EntityTreePage extends AbstractPageContainerManagedImpl implements 
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		tree = new Tree();
-		tree.setNodeClass(getSystemAction().getEntityClass());
+		tree = new Tree(getSystemAction().getEntityClass());
 	}
 }

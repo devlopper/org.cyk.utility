@@ -27,7 +27,7 @@ import lombok.Setter;
 public class NodeSelectManyUsingTreePage extends AbstractPageContainerManagedImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Tree<Node> tree;
+	private Tree tree;
 	private Commandable saveCommandable;
 	
 	@Override
@@ -39,8 +39,7 @@ public class NodeSelectManyUsingTreePage extends AbstractPageContainerManagedImp
 			selectedNodes = __selectedNodes__.stream().map(SelectedNode::getNode).collect(Collectors.toList());
 		}
 		
-		tree = new Tree<Node>();
-		tree.setNodeClass(Node.class);
+		tree = new Tree(Node.class);
 		tree.setRootLabel("Disponilbe");
 		tree.setSelectionLabel("Selectionnés");
 		tree.setInitialSelectedNodes(selectedNodes);
@@ -61,7 +60,8 @@ public class NodeSelectManyUsingTreePage extends AbstractPageContainerManagedImp
 	}
 	
 	public void save() {
-		Collection<Node> nodes = tree.getSelectedNodes();
+		@SuppressWarnings("unchecked")
+		Collection<Node> nodes = (Collection<Node>) tree.getSelectedNodes();
 		Collection<SelectedNode> selectedNodes = null;
 		if(__inject__(CollectionHelper.class).isNotEmpty(nodes)) {
 			selectedNodes = new ArrayList<>();

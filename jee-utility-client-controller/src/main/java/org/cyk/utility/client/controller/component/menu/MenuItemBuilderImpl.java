@@ -7,6 +7,7 @@ import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
+import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.internationalization.InternalizationKeyStringType;
@@ -147,7 +148,24 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	
 	@Override
 	public MenuItemBuilder list(Class<?>... classes) {
-		return addEntitiesList(classes);
+		addEntitiesList(classes);
+		return this;
+	}
+	
+	@Override
+	public MenuItemBuilder addEntitiesListOrTree(Class<?>... classes) {
+		if(classes != null)
+			for(Class<?> index : classes)
+				if(__injectClassHelper__().isInstanceOf(index, DataIdentifiedByString.class))
+					tree(index);
+				else
+					list(index);
+		return this;
+	}
+	
+	@Override
+	public MenuItemBuilder listOrTree(Class<?>... classes) {
+		return addEntitiesListOrTree(classes);
 	}
 	
 	@Override
