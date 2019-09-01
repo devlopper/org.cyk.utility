@@ -2,18 +2,18 @@ package org.cyk.utility.client.controller.navigation;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.Dependent;
+
+import org.apache.commons.lang.StringUtils;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringFormat;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionList;
-import org.cyk.utility.system.action.SystemActionProcess;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionSelect;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
+@Dependent
 public class NavigationIdentifierStringBuilderImpl extends AbstractStringFunctionImpl implements NavigationIdentifierStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -36,23 +36,12 @@ public class NavigationIdentifierStringBuilderImpl extends AbstractStringFunctio
 			
 			if(systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionDelete)
 				format.setArguments( FORMAT_ARGUMENT_ACTION,EDIT);
-			else if(systemAction instanceof SystemActionRead)
-				format.setArguments( FORMAT_ARGUMENT_ACTION,READ);
-			else if(systemAction instanceof SystemActionList)
-				format.setArguments( FORMAT_ARGUMENT_ACTION,LIST);
-			else if(systemAction instanceof SystemActionSelect)
-				format.setArguments( FORMAT_ARGUMENT_ACTION,SELECT);
-			else if(systemAction instanceof SystemActionProcess)
-				format.setArguments( FORMAT_ARGUMENT_ACTION,PROCESS);
+			else {
+				String action = StringUtils.substringBetween(systemAction.getClass().getSimpleName(), SystemAction.class.getSimpleName(), "Impl") ;
+				format.setArguments( FORMAT_ARGUMENT_ACTION,action);
+			}
 		}
 		return format;
-	}
-	
-	@Override
-	protected String __execute__() throws Exception {
-		String result = super.__execute__();
-		result = __inject__(NavigationIdentifierStringBuilderExtension.class).setNavigationIdentifier(this).setResult(result).execute().getOutput();
-		return result;
 	}
 	
 	@Override
@@ -69,9 +58,6 @@ public class NavigationIdentifierStringBuilderImpl extends AbstractStringFunctio
 	/**/
 	
 	private static final String EDIT = "Edit";
-	private static final String READ = "Read";
-	private static final String LIST = "List";
-	private static final String SELECT = "Select";
-	private static final String PROCESS = "Process";
+	
 	private static final String __ENTITY__ = "__entity__";
 }

@@ -33,6 +33,11 @@ public class DataFieldsNamesGetterImpl extends AbstractStringsFunctionImpl imple
 				
 				if(data instanceof DataIdentifiedByStringAndCoded && names != null && names.getSize() > 1)
 					names.remove(DataIdentifiedByStringAndCoded.PROPERTY_IDENTIFIER);
+				
+				if(data instanceof org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString && names != null && names.getSize() > 1)
+					names.removeMany(org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_PARENTS
+							,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_NUMBER_OF_PARENTS
+							,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_NUMBER_OF_CHILDREN);
 			}
 		}
 		return names;

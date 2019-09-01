@@ -518,21 +518,31 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 		Strings fields = __getFieldsFromProperties__(properties);
 		Collection<Field> fieldsToBeSet = new ArrayList<>();
 		Collection<Field> fieldsToBeSetToNull = new ArrayList<>();
+		Collection<String> fieldsToBeSetNames = new ArrayList<>();
 		if(__injectCollectionHelper__().isNotEmpty(fields) && __injectCollectionHelper__().isNotEmpty(__classInstance__.getFields())) {
 			for(Field index : __classInstance__.getFields().get()) {
 				String indexName = index.getName();
 				if(!Modifier.isStatic(index.getModifiers()) && !Modifier.isFinal(index.getModifiers()) 
-						&& !__classInstance__.getSystemIdentifierField().getName().equals(indexName) && !fields.contains(indexName))
+						&& !__classInstance__.getSystemIdentifierField().getName().equals(indexName) && !fields.contains(indexName)) {
 					fieldsToBeSetToNull.add(index);
-				else if(index.getAnnotation(Transient.class)!=null)
+					fieldsToBeSetNames.add(indexName);
+				}else if(index.getAnnotation(Transient.class)!=null) {
 					fieldsToBeSet.add(index);
+					fieldsToBeSetNames.add(indexName);
+				}
+			}
+			
+			for(Field index : fieldsToBeSet)
+				__listenExecuteReadAfterSetFieldValue__(entity, index,properties);
+			for(Field index : fieldsToBeSetToNull)
+				__listenExecuteReadAfterSetFieldValueToNull__(entity, index,properties);
+			
+			for(String index : fields.get()) {
+				if(!fieldsToBeSetNames.contains(index))
+					__listenExecuteReadAfterSetFieldValue__(entity, index, properties);
 			}
 		}
-		for(Field index : fieldsToBeSet)
-			__listenExecuteReadAfterSetFieldValue__(entity, index,properties);
-		for(Field index : fieldsToBeSetToNull)
-			__listenExecuteReadAfterSetFieldValueToNull__(entity, index,properties);	
-		
+				
 		Strings uniformResourceIdentifierStringFormats = __getReadOneUniformResourceIdentifierFormats__();
 		if(__injectCollectionHelper__().isNotEmpty(uniformResourceIdentifierStringFormats)) {
 			for(String index : uniformResourceIdentifierStringFormats.get())
@@ -546,6 +556,7 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	}
 	
 	protected void __listenExecuteReadAfterSetFieldValue__(ENTITY entity,Field field,Properties properties) {}
+	protected void __listenExecuteReadAfterSetFieldValue__(ENTITY entity,String fieldName,Properties properties) {}
 	
 	protected Strings __getReadOneUniformResourceIdentifierFormats__() {
 		return null;

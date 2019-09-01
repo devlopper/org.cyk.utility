@@ -5,9 +5,10 @@ import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionList;
+import org.cyk.utility.system.action.SystemActionTree;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class NavigationIdentifierStringBuilderUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
@@ -76,6 +77,13 @@ public class NavigationIdentifierStringBuilderUnitTest extends AbstractWeldUnitT
 		SystemAction systemAction = __inject__(SystemActionList.class);
 		String identifier = __inject__(NavigationIdentifierStringBuilder.class).setSystemAction(systemAction).execute().getOutput();
 		assertionHelper.assertEquals("__entity__ListView",identifier);
+	}
+	
+	@Test
+	public void is_treeView() {
+		SystemAction systemAction = __inject__(SystemActionTree.class);
+		String identifier = __inject__(NavigationIdentifierStringBuilder.class).setSystemAction(systemAction).execute().getOutput();
+		assertionHelper.assertEquals("__entity__TreeView",identifier);
 	}
 	
 	/**/

@@ -1,51 +1,40 @@
 package org.cyk.utility.field;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Date;
 
-import org.cyk.utility.test.weld.AbstractWeldUnitTest;
-import org.cyk.utility.time.Duration;
-import org.cyk.utility.time.DurationBuilder;
-import org.cyk.utility.time.DurationStringBuilder;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestPerformance;
 import org.junit.jupiter.api.Test;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class FieldHelperUnitTestPerformance extends AbstractWeldUnitTest {
+public class FieldHelperUnitTestPerformance extends AbstractWeldUnitTestPerformance {
 	private static final long serialVersionUID = 1L;
 
 	@Test
 	public void get_100(){
-		get(100,100);
+		execute(100,100);
 	}	
 	
 	@Test
 	public void get_1000(){
-		get(1000,100);
+		execute(1000,100);
 	}	
 	
 	@Test
 	public void get_10000(){
-		get(10000,1000);
+		execute(10000,1000);
 	}	
 	
 	@Test
 	public void get_100000(){
-		get(100000,2000);
+		execute(100000,2000);
 	}	
 	
-	private void get(Integer numberOfCalls,Integer expectedMaximumNumberOfMillisecond) {
-		DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
-		Long t = System.currentTimeMillis();
-		for(Integer index = 0 ; index < numberOfCalls ; index = index + 1)
-			__inject__(FieldHelper.class).getField(MyClass01.class, "intField");
-		t = System.currentTimeMillis() - t;
-		Duration duration = durationBuilder.setEndToNow().execute().getOutput();
-		System.out.println(String.format("#calls=%s,duration=%s",numberOfCalls, __inject__(DurationStringBuilder.class).setDuration(duration).execute().getOutput()));
-		assertThat(t).isLessThanOrEqualTo(expectedMaximumNumberOfMillisecond);
+	@Override
+	protected void __execute__() {
+		__inject__(FieldHelper.class).getField(MyClass01.class, "intField");
 	}
 	
 	/**/

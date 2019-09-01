@@ -15,6 +15,7 @@ import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionList;
 import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionSelect;
+import org.cyk.utility.system.action.SystemActionTree;
 
 public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<MenuItem> implements MenuItemBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -119,6 +120,19 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	}
 	
 	@Override
+	public MenuItemBuilder addEntitiesTree(Class<?>... classes) {
+		for(Class<?> index : classes)
+			addChild(__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(index)
+					.setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionTree.class).setEntityClass(index)));
+		return this;
+	}
+	
+	@Override
+	public MenuItemBuilder tree(Class<?>... classes) {
+		return addEntitiesTree(classes);
+	}
+	
+	@Override
 	public MenuItemBuilder addEntitiesList(Class<?>... classes) {
 		for(Class<?> index : classes)
 			addEntityList(index);
@@ -126,16 +140,21 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	}
 	
 	@Override
+	public MenuItemBuilder addEntityList(Class<?> aClass) {
+		return addChild(__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(aClass)
+				.setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(aClass)));
+	}
+	
+	@Override
+	public MenuItemBuilder list(Class<?>... classes) {
+		return addEntitiesList(classes);
+	}
+	
+	@Override
 	public MenuItemBuilder addEntitiesSelect(Class<?>... classes) {
 		for(Class<?> index : classes)
 			addEntitySelect(index,null);
 		return this;
-	}
-	
-	@Override
-	public MenuItemBuilder addEntityList(Class<?> aClass) {
-		return addChild(__inject__(MenuItemBuilder.class).setCommandableNameInternalizationKeyValue(aClass)
-				.setCommandableNavigationIdentifierBuilderSystemAction(__inject__(SystemActionList.class).setEntityClass(aClass)));
 	}
 	
 	@Override

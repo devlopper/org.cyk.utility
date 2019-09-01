@@ -9,73 +9,78 @@
 	
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
-			<ui:fragment rendered="#{value.selectable}">
-				<p:panelGrid styleClass="tree-panelGrid" columns="2" columnClasses="columnAvailable,columnSelection">
-	    			<p:fieldset legend="#{value.rootLabel}">
-	    				<p:tree id="tree1" value="#{value.root}" var="node" dynamic="true">
-			    			<p:treeNode styleClass="node">
-			    				<p:panelGrid styleClass="pg" columns="2" columnClasses="column-left,column-right">
-				            		<h:outputText value="#{node.name}"/>
-				            		<p:commandButton styleClass="add-remove-button" icon="fa fa-arrow-right" title="Ajouter" action="#{value.selectOne(node)}" update="tree1,:form:tree2" />
-				        		</p:panelGrid>
-				        	</p:treeNode>	
-				        	<p:ajax event="expand" listener="#{value.listenExpand}" />
-			    		</p:tree>
-	    			</p:fieldset>
-	    			<p:fieldset id="fieldset2" legend="#{value.selectionLabel}">
-	    				<p:tree id="tree2" value="#{value.selection}" var="node" dynamic="true">
-			    			<p:treeNode styleClass="node">
-			    				<p:panelGrid styleClass="pg" columns="2" columnClasses="column-left,column-right">
-			    					<h:outputText value="#{node.name}"/>
-				            		<p:commandButton styleClass="add-remove-button" icon="fa fa-arrow-left" title="Supprimer" action="#{value.deselectOne(node)}" update=":form:tree1,tree2" />	
-			    				</p:panelGrid>				            	
-				        	</p:treeNode>	
-				        	<p:ajax event="expand" listener="#{value.listenExpand}" />
-			    		</p:tree>
-	    			</p:fieldset>
-	    		</p:panelGrid>
-	    		
-	    		<style>
-	    			.tree-panelGrid {
-	    				width: 100%;
-	    			}
-	    			
-	    			.columnAvailable {
-	    				vertical-align: top;
-	    			}
-	    			
-	    			.columnSelection {
-	    				vertical-align: top;
-	    			}
-	    			
-	    			.ui-tree {
-	    				width: 100%;
-	    			}
-	    			
-	    			.ui-tree-container {
-	    			
-	    			}
-	    			
-	    			.column-left {
-	    				
-	    			}
-	    			
-	    			.column-right {
-	    				
-	    			}
-	    			
-	    			
-	    		</style>		
-			</ui:fragment>
+			<p:outputPanel id="outputPanel">
+				<ui:fragment rendered="#{value.selectable}">
+					<p:panelGrid styleClass="tree-panelGrid" columns="2" columnClasses="columnAvailable,columnSelection">
+		    			<p:fieldset legend="#{value.rootLabel}">
+		    				<p:tree id="tree1" value="#{value.root}" var="node" dynamic="true">
+				    			<p:treeNode styleClass="node">
+				    				<p:panelGrid styleClass="pg" columns="2" columnClasses="column-left,column-right">
+					            		<h:outputText value="#{node.name}"/>
+					            		<p:commandButton styleClass="add-remove-button" icon="fa fa-arrow-right" title="Ajouter" action="#{value.selectOne(node)}" update="tree1,:form:tree2" />
+					        		</p:panelGrid>
+					        	</p:treeNode>	
+					        	<p:ajax event="expand" listener="#{value.listenExpand}" />
+				    		</p:tree>
+		    			</p:fieldset>
+		    			<p:fieldset id="fieldset2" legend="#{value.selectionLabel}">
+		    				<p:tree id="tree2" value="#{value.selection}" var="node" dynamic="true">
+				    			<p:treeNode styleClass="node">
+				    				<p:panelGrid styleClass="pg" columns="2" columnClasses="column-left,column-right">
+				    					<h:outputText value="#{node.name}"/>
+					            		<p:commandButton styleClass="add-remove-button" icon="fa fa-arrow-left" title="Supprimer" action="#{value.deselectOne(node)}" update=":form:tree1,tree2" />	
+				    				</p:panelGrid>				            	
+					        	</p:treeNode>	
+					        	<p:ajax event="expand" listener="#{value.listenExpand}" />
+				    		</p:tree>
+		    			</p:fieldset>
+		    		</p:panelGrid>
+		    			    		
+		    		<style>
+		    			.tree-panelGrid {
+		    				width: 100%;
+		    			}
+		    			
+		    			.columnAvailable {
+		    				vertical-align: top;
+		    			}
+		    			
+		    			.columnSelection {
+		    				vertical-align: top;
+		    			}
+		    			
+		    			.ui-tree {
+		    				width: 100%;
+		    			}
+		    			
+		    			.ui-tree-container {
+		    			
+		    			}
+		    			
+		    			.column-left {
+		    				
+		    			}
+		    			
+		    			.column-right {
+		    				
+		    			}
+		    			
+		    			
+		    		</style>		
+				</ui:fragment>
+				
+				<ui:fragment rendered="#{not value.selectable}">
+					<p:tree id="tree" value="#{value.root}" var="node" dynamic="true">
+		    			<p:treeNode>
+			            	<h:outputText value="#{node.name}"/>
+			        	</p:treeNode>	
+			        	<p:ajax event="expand" listener="#{value.listenExpand}" />
+		    		</p:tree>
+				</ui:fragment>
+			</p:outputPanel>
 			
-			<ui:fragment rendered="#{not value.selectable}">
-				<p:tree id="tree" value="#{value.root}" var="node" dynamic="true">
-	    			<p:treeNode>
-		            	<h:outputText value="#{node.name}"/>
-		        	</p:treeNode>	
-		        	<p:ajax event="expand" listener="#{value.listenExpand}" />
-	    		</p:tree>
-			</ui:fragment>
+			<p:remoteCommand id="initialise" autoRun="true" action="#{value.initialise}" update="outputPanel" />
+	    	<p:blockUI block="outputPanel" blocked="true" trigger="initialise" />
 		</ui:define>
 	</ui:decorate>	
 

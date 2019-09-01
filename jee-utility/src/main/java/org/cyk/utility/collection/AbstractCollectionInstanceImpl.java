@@ -244,6 +244,19 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 	}
 	
 	@Override
+	public CollectionInstance<T> removeMany(Collection<T> elements) {
+		if(collection != null && elements!=null)
+			for(T index : elements)
+				collection.remove(index);
+		return this;
+	}
+	
+	@Override
+	public CollectionInstance<T> removeMany(T... elements) {
+		return removeMany(__inject__(CollectionHelper.class).instanciate(elements));
+	}
+	
+	@Override
 	public CollectionInstance<T> removeAll() {
 		if(collection!=null)
 			collection.clear();

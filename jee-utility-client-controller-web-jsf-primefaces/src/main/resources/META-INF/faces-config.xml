@@ -20,6 +20,12 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>__entity__TreeView</from-outcome>
+			<to-view-id>/private/__entity__/tree.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>__entity__ReadView</from-outcome>
 			<to-view-id>/private/__entity__/read.jsf</to-view-id>
 			<redirect />

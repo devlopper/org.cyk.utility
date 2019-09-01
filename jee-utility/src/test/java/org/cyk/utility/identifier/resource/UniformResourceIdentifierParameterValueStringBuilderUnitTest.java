@@ -3,6 +3,7 @@ package org.cyk.utility.identifier.resource;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionList;
+import org.cyk.utility.system.action.SystemActionTree;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
@@ -26,6 +27,12 @@ public class UniformResourceIdentifierParameterValueStringBuilderUnitTest extend
 	}
 	
 	@Test
+	public void parameter_value_class_system_action_tree(){
+		assertionHelper.assertEquals("tree", __inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionTree.class)
+				.execute().getOutput());
+	}
+	
+	@Test
 	public void parameter_value_system_action_create_create(){
 		assertionHelper.assertEquals("create", __inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(__inject__(SystemActionCreate.class))
 				.execute().getOutput());
@@ -40,6 +47,12 @@ public class UniformResourceIdentifierParameterValueStringBuilderUnitTest extend
 	@Test
 	public void parameter_value_system_action_list_list(){
 		assertionHelper.assertEquals("list", __inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(__inject__(SystemActionList.class))
+				.execute().getOutput());
+	}
+	
+	@Test
+	public void parameter_value_system_action_tree_tree(){
+		assertionHelper.assertEquals("tree", __inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(__inject__(SystemActionTree.class))
 				.execute().getOutput());
 	}
 	

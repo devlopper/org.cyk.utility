@@ -1,27 +1,22 @@
 package org.cyk.utility.identifier.resource;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.enterprise.context.Dependent;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.system.action.SystemActionAdd;
-import org.cyk.utility.system.action.SystemActionCreate;
-import org.cyk.utility.system.action.SystemActionDelete;
-import org.cyk.utility.system.action.SystemActionList;
-import org.cyk.utility.system.action.SystemActionProcess;
-import org.cyk.utility.system.action.SystemActionRead;
-import org.cyk.utility.system.action.SystemActionRemove;
-import org.cyk.utility.system.action.SystemActionSelect;
-import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.system.action.SystemActionView;
 
 @Dependent
 public class UniformResourceIdentifierParameterValueStringBuilderImpl extends AbstractStringFunctionImpl implements UniformResourceIdentifierParameterValueStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static final Map<String,String> VALUES_MAP = new HashMap<>();
+	
 	private Object value;
 	
 	@Override
@@ -30,48 +25,28 @@ public class UniformResourceIdentifierParameterValueStringBuilderImpl extends Ab
 		Object value = getValue();
 		if(value!=null) {
 			if(value instanceof Class) {
-				Class<?> clazz = (Class<?>)value;
-				/*
-				if(SystemAction.class.isAssignableFrom(clazz)) {
-					if(SystemAction.class.equals(clazz))
-						_value = "action";
-					else
-						_value = StringUtils.substringBetween(clazz.getSimpleName(), SystemAction.class.getSimpleName(),"Impl").toLowerCase();
-				}else
-					_value = clazz.getSimpleName().toLowerCase();
-				*/
-				//TODO make it more better by using reflection to get value
-				if(SystemActionCreate.class.isAssignableFrom(clazz))
-					_value = "create";
-				else if(SystemActionRead.class.isAssignableFrom(clazz))
-					_value = "read";
-				else if(SystemActionUpdate.class.isAssignableFrom(clazz))
-					_value = "update";
-				else if(SystemActionDelete.class.isAssignableFrom(clazz))
-					_value = "delete";
-				else if(SystemActionList.class.isAssignableFrom(clazz))
-					_value = "list";
-				else if(SystemActionSelect.class.isAssignableFrom(clazz))
-					_value = "select";
-				else if(SystemActionProcess.class.isAssignableFrom(clazz))
-					_value = "process";
-				else if(SystemActionAdd.class.isAssignableFrom(clazz))
-					_value = "add";
-				else if(SystemActionRemove.class.isAssignableFrom(clazz))
-					_value = "remove";
-				else if(SystemActionView.class.isAssignableFrom(clazz))
-					_value = "view";
-				else
-					_value = clazz.getSimpleName().toLowerCase();
-				
+				Class<?> klass = (Class<?>)value;
+				if(VALUES_MAP.containsKey(klass.getName()))
+					return VALUES_MAP.get(klass.getName());
+				_value = StringUtils.substringBetween(klass.getSimpleName(), SystemAction.class.getSimpleName(), "Impl");
+				if(_value == null)
+					_value = StringUtils.substringAfter(klass.getSimpleName(), SystemAction.class.getSimpleName());
+				if(_value != null)
+					_value = _value.toLowerCase();
+				if(StringUtils.isBlank(_value))
+					_value = klass.getSimpleName().toLowerCase();				
+				VALUES_MAP.put(klass.getName(), _value);
 			}else if(value instanceof Objectable) {
-				_value = ((Objectable)value).getIdentifier() == null ? null : ((Objectable)value).getIdentifier().toString()
-						//.toLowerCase()
-						;
+				_value = ((Objectable)value).getIdentifier() == null ? null : ((Objectable)value).getIdentifier().toString();
+				String key = _value;
+				if(VALUES_MAP.containsKey(key))
+					return VALUES_MAP.get(_value);
 				if(value instanceof SystemAction)
 					_value = _value.toLowerCase();
+				
+				if(StringUtils.isNotBlank(key))
+					VALUES_MAP.put(key, _value);
 			}
-			
 			if(__injectStringHelper__().isBlank(_value))
 				__injectThrowableHelper__().throwRuntimeException("Parameter value cannot be found for <<"+value+">>");
 		}

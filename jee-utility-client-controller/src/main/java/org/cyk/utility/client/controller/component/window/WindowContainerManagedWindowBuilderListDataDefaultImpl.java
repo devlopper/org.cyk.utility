@@ -21,6 +21,11 @@ public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends Abst
 				if(__inject__(CollectionHelper.class).contains(fieldNames, DataIdentifiedByStringAndCoded.PROPERTY_CODE))
 					fieldNames.remove(DataIdentifiedByString.PROPERTY_IDENTIFIER);
 			}
+			if(__injectClassHelper__().isInstanceOf(getSystemAction().getEntityClass(), org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.class)) {
+				fieldNames.removeMany(org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_PARENTS
+						,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_NUMBER_OF_PARENTS
+						,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_NUMBER_OF_CHILDREN);
+			}
 			for(String index : fieldNames.get()) {
 				/*ColumnBuilder column = __inject__(ColumnBuilder.class); 
 				column.addFieldNameStrings(RowData.PROPERTY_DATA,index);

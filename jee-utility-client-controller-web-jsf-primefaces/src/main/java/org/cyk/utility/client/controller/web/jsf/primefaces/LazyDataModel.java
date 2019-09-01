@@ -1,7 +1,6 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -18,25 +17,36 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.server.representation.ResponseHelper;
 import org.primefaces.model.SortOrder;
 
-public class LazyDataModel<OBJECT> extends org.primefaces.model.LazyDataModel<OBJECT> implements Serializable {
+public class LazyDataModel<DATA> extends org.primefaces.model.LazyDataModel<DATA> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Class<DATA> dataClass;
 	private Grid grid;
+	
+	/* Working variables */
 	private Long __count__;
 
+	public LazyDataModel(Class<DATA> dataClass) {
+		this.dataClass = dataClass;
+	}
+	
 	public LazyDataModel(Grid grid) {
 		this.grid = grid;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<OBJECT> load(int first, int pageSize, String sortField, SortOrder sortOrder,Map<String, Object> filters) {
-		//DurationBuilder durationBuilder = DependencyInjection.inject(DurationBuilder.class).setBeginToNow();
-		//System.out.println("LazyDataModel.load() filters : "+filters);
-		Collection<Object> objects = null;
-		grid.getObjects(Boolean.TRUE).removeAll();
-		GridBuilder builder = (GridBuilder) grid.getBuilder();
-		Class<Object> klass = (Class<Object>) DependencyInjection.inject(ClassHelper.class).getByName(builder.getRowDataClass().getName());
+	public List<DATA> load(int first, int pageSize, String sortField, SortOrder sortOrder,Map<String, Object> filters) {
+		List<DATA> objects = null;
+		GridBuilder builder = null;
+		if(grid != null) {
+			grid.getObjects(Boolean.TRUE).removeAll();
+			builder = (GridBuilder) grid.getBuilder();
+			if(dataClass == null)
+				dataClass = (Class<DATA>) DependencyInjection.inject(ClassHelper.class).getByName(builder.getRowDataClass().getName());
+			//Class<Object> klass = (Class<Object>) DependencyInjection.inject(ClassHelper.class).getByName(builder.getRowDataClass().getName());	
+		}
+		
 		Properties properties = new Properties();
 		properties.setIsPageable(Boolean.TRUE);
 		//properties.setRequest(request);
@@ -47,36 +57,39 @@ public class LazyDataModel<OBJECT> extends org.primefaces.model.LazyDataModel<OB
 
 		try {
 			Controller controller = DependencyInjection.inject(Controller.class);
-			objects = controller.read(klass,properties);
-			Response response = (Response) properties.getResponse();					
-			if(Boolean.TRUE.equals(DependencyInjection.inject(ResponseHelper.class).isFamilyClientError(response))) {
-				;//getProperties().setThrowable(__inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()).setResponse(response));
-			}else {
-				if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(objects)) {
-					for(Object index : objects) {
-						Object row = DependencyInjection.inject(org.cyk.utility.client.controller.data.RowBuilder.class).setGrid(builder)
-								.setDataClass((Class<? extends Data>) DependencyInjection.inject(ClassHelper.class).getByName(klass.getName()))
-								.setData((Data) index).setOrderNumberOffset(first)
-								.execute().getOutput();			
-						grid.getObjects(Boolean.TRUE).add(row);						
-					}
-				}
-				if(response!=null) {
-					__count__ = DependencyInjection.inject(ResponseHelper.class).getHeaderXTotalCount(response);
-				}
+			objects = (List<DATA>) controller.read(dataClass,properties);
+			Response response = (Response) properties.getResponse();		
+			if(response == null) {
 				
-				if(__count__ == null)
-					__count__ = controller.count(klass, properties);	
+			}else {
+				if(Boolean.TRUE.equals(DependencyInjection.inject(ResponseHelper.class).isFamilyClientError(response))) {
+					;//getProperties().setThrowable(__inject__(ServiceNotFoundException.class).setSystemAction((SystemAction) properties.getAction()).setResponse(response));
+				}else {
+					if(grid != null) {
+						if(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(objects)) {
+							for(Object index : objects) {
+								Object row = DependencyInjection.inject(org.cyk.utility.client.controller.data.RowBuilder.class).setGrid(builder)
+										.setDataClass((Class<? extends Data>) DependencyInjection.inject(ClassHelper.class).getByName(dataClass.getName()))
+										.setData((Data) index).setOrderNumberOffset(first)
+										.execute().getOutput();			
+								grid.getObjects(Boolean.TRUE).add(row);						
+							}
+						}	
+					}					
+					__count__ = DependencyInjection.inject(ResponseHelper.class).getHeaderXTotalCount(response);					
+					if(__count__ == null)
+						__count__ = controller.count(dataClass, properties);	
+				}	
 			}
 		}catch(Exception exception) {
 			//Because we do not want to break view building we need to handle exception
+			System.out.println("LazyDataModel.load()");
 			exception.printStackTrace();
 			//getProperties().setThrowable(__injectThrowableHelper__().getFirstCause(exception));	
 		}
-		//System.out.println("LOAD : "+first+"|"+pageSize+" : count = "+__count__+" :::: "+(grid.getObjects() == null ? null : grid.getObjects().get()));
-		
-		//System.out.println("Lazy load Duration : "+DependencyInjection.inject(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndNow()).execute().getOutput());
-		return (List<OBJECT>) (grid.getObjects() == null ? null : grid.getObjects().get());
+		if(grid != null)
+			objects = (List<DATA>) (grid.getObjects() == null ? null : grid.getObjects().get());
+		return objects;
 	}
 	
 	@Override

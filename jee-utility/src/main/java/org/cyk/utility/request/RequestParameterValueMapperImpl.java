@@ -1,6 +1,8 @@
 package org.cyk.utility.request;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.enterprise.context.Dependent;
 
@@ -18,12 +20,24 @@ import org.cyk.utility.system.action.SystemActionProcess;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionRemove;
 import org.cyk.utility.system.action.SystemActionSelect;
+import org.cyk.utility.system.action.SystemActionTree;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.system.action.SystemActionView;
 
 @Dependent
 public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements RequestParameterValueMapper,Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	private static final Map<String,Class<?>> SYSTEM_ACTIONS_CLASSES_VALUES = new HashMap<>();
+	
+	static {
+		//TODO use reflection to get all SystemAction sub interfaces
+		for(Class<?> index : new Class<?>[] {SystemActionAdd.class,SystemActionCreate.class,SystemActionDelete.class,SystemActionList.class
+			,SystemActionProcess.class,SystemActionRead.class,SystemActionRemove.class,SystemActionSelect.class,SystemActionUpdate.class,SystemActionView.class
+			,SystemActionTree.class}) {
+			SYSTEM_ACTIONS_CLASSES_VALUES.put(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(index).execute().getOutput(), index);
+		}
+	}
 	
 	private Object parameterName;
 	private String parameterValue;
@@ -97,26 +111,32 @@ public class RequestParameterValueMapperImpl extends AbstractFunctionWithPropert
 	protected SystemAction __getSystemAction__(Object parameterValue,Object identifierName) {
 		Class<? extends SystemAction> systemActionClass = null;
 		SystemAction systemAction = null;
-		if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionCreate.class).execute().getOutput().equals(parameterValue))
-			systemActionClass = SystemActionCreate.class;
-		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionRead.class).execute().getOutput().equals(parameterValue))
-			systemActionClass = SystemActionRead.class;
-		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionUpdate.class).execute().getOutput().equals(parameterValue))
-			systemActionClass = SystemActionUpdate.class;
-		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionDelete.class).execute().getOutput().equals(parameterValue))
-			systemActionClass = SystemActionDelete.class;
-		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionList.class).execute().getOutput().equals(parameterValue))
-			systemActionClass = SystemActionList.class;
-		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionSelect.class).execute().getOutput().equals(parameterValue))
-			systemActionClass = SystemActionSelect.class;
-		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionProcess.class).execute().getOutput().equals(parameterValue))
-			systemActionClass = SystemActionProcess.class;
-		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionAdd.class).execute().getOutput().equals(parameterValue))
-			systemActionClass = SystemActionAdd.class;
-		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionRemove.class).execute().getOutput().equals(parameterValue))
-			systemActionClass = SystemActionRemove.class;
-		else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionView.class).execute().getOutput().equals(parameterValue))
-			systemActionClass = SystemActionView.class;
+		systemActionClass = (Class<? extends SystemAction>) SYSTEM_ACTIONS_CLASSES_VALUES.get(parameterValue);
+		
+		if(systemActionClass == null) {
+			/*
+			if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionCreate.class).execute().getOutput().equals(parameterValue))
+				systemActionClass = SystemActionCreate.class;
+			else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionRead.class).execute().getOutput().equals(parameterValue))
+				systemActionClass = SystemActionRead.class;
+			else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionUpdate.class).execute().getOutput().equals(parameterValue))
+				systemActionClass = SystemActionUpdate.class;
+			else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionDelete.class).execute().getOutput().equals(parameterValue))
+				systemActionClass = SystemActionDelete.class;
+			else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionList.class).execute().getOutput().equals(parameterValue))
+				systemActionClass = SystemActionList.class;
+			else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionSelect.class).execute().getOutput().equals(parameterValue))
+				systemActionClass = SystemActionSelect.class;
+			else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionProcess.class).execute().getOutput().equals(parameterValue))
+				systemActionClass = SystemActionProcess.class;
+			else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionAdd.class).execute().getOutput().equals(parameterValue))
+				systemActionClass = SystemActionAdd.class;
+			else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionRemove.class).execute().getOutput().equals(parameterValue))
+				systemActionClass = SystemActionRemove.class;
+			else if(__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionView.class).execute().getOutput().equals(parameterValue))
+				systemActionClass = SystemActionView.class;
+			*/
+		}
 		
 		if(systemActionClass!=null) {
 			systemAction = __inject__(systemActionClass);

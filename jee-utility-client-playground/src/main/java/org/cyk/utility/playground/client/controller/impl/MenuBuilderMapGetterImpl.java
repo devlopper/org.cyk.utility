@@ -27,9 +27,9 @@ public class MenuBuilderMapGetterImpl extends AbstractMenuBuilderMapGetterImpl i
 		}//else {
 		sessionMenuBuilder.addItems(
 				__inject__(MenuItemBuilder.class).setCommandableName("Non hierarchique").setCommandableIcon(Icon.QUESTION)
-					.addEntitiesList(MyEntity.class,SelectedNode.class)
+					.list(MyEntity.class,SelectedNode.class)
 				,__inject__(MenuItemBuilder.class).setCommandableName("Hierarchique").setCommandableIcon(Icon.FILE)
-					.addEntitiesList(Node.class)
+					.tree(Node.class)
 				);	
 		//}
 	}
