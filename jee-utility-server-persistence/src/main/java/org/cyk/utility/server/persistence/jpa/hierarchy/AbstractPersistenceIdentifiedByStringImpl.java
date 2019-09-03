@@ -37,7 +37,7 @@ public abstract class AbstractPersistenceIdentifiedByStringImpl<ENTITY extends A
 				+ "WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.parent = node AND NOT EXISTS(SELECT subTuple FROM %2$s subTuple WHERE subTuple.child = tuple.parent))"
 				,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
 		addQueryCollectInstances(readByParentsIdentifiers, String.format("SELECT node FROM %1$s node WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.child = node "
-				+ "AND tuple.parent.identifier IN :parentsIdentifiers))",__getTupleName__(),__getTupleName__(__hierarchyClass__)));
+				+ "AND tuple.parent.identifier IN :parentsIdentifiers)",__getTupleName__(),__getTupleName__(__hierarchyClass__)));
 		
 		//TODO it has been copy paste , think and do the necessary
 		addQueryCollectInstances(readWhereNotHavingChild, String.format("SELECT node FROM %1$s node "

@@ -15,13 +15,11 @@ public abstract class AbstractPersistenceIdentifiedByStringAndCodedImpl<ENTITY e
 
 	protected String readByParentsCodes;
 	
-	public static final String READ_BY_PARENTS_CODES_FORMAT = 
-			"SELECT node FROM %1$s node WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.child = node AND tuple.parent.code IN :parentsCodes))";
-	
 	@Override
 	protected void __listenPostConstructPersistenceQueries__() {
 		super.__listenPostConstructPersistenceQueries__();
-		addQueryCollectInstances(readByParentsCodes, String.format(READ_BY_PARENTS_CODES_FORMAT,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
+		addQueryCollectInstances(readByParentsCodes, String.format("SELECT node FROM %1$s node WHERE EXISTS(SELECT tuple FROM %2$s tuple WHERE tuple.child = node AND tuple.parent.code IN :parentsCodes)"
+				,__getTupleName__(),__getTupleName__(__hierarchyClass__)));
 	}
 	
 	@Override
