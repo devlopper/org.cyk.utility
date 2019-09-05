@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.collection.CollectionHelper;
 
 public abstract class AbstractMethodCallListenerPostConstructImpl extends AbstractMethodCallListenerImpl implements MethodCallListenerPostConstruct,Serializable {
@@ -13,7 +14,8 @@ public abstract class AbstractMethodCallListenerPostConstructImpl extends Abstra
 	public MethodCallListener setObject(Object object) {
 		super.setObject(object);
 		if(getMethod() == null)
-			setMethod(__inject__(CollectionHelper.class).getFirst(__inject__(MethodGetter.class).setClazz(getObject().getClass()).addAnnotationClasses(PostConstruct.class).execute().getOutput()));
+			setMethod(DependencyInjection.inject(CollectionHelper.class).getFirst(DependencyInjection.inject(MethodGetter.class).setClazz(getObject().getClass())
+					.addAnnotationClasses(PostConstruct.class).execute().getOutput()));
 		return this;
 	}
 	

@@ -7,6 +7,8 @@ import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuild
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
+import org.cyk.utility.time.DurationBuilder;
+import org.cyk.utility.time.DurationStringBuilder;
 
 public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialog> implements DialogBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -17,9 +19,14 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 	
 	@Override
 	protected void __execute__(Dialog dialog) {
+		DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
 		OutputStringTextBuilder title = getTitle(Boolean.TRUE);
+		System.out.println("\tDialogBuilderImpl.__execute__() 1 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 		__setRequestAndContextAndUniformResourceLocatorMapOf__(title);
 		dialog.setTitle(title.execute().getOutput());
+		System.out.println("\tDialogBuilderImpl.__execute__() 2 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 		CommandableBuilders commandables = getCommandables();
 		
 		if(__injectCollectionHelper__().isEmpty(commandables)) {
@@ -34,13 +41,16 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 				dialog.addCommandables(dialog.getOkCommandable());
 			}
 		}
-		
+		System.out.println("\tDialogBuilderImpl.__execute__() 3 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 		if(__injectCollectionHelper__().isNotEmpty(commandables)) {
 			for(CommandableBuilder index : commandables.get()) {
 				__setRequestAndContextAndUniformResourceLocatorMapOf__(index);
 				dialog.addCommandables(index.execute().getOutput());
 			}
 		}
+		System.out.println("\tDialogBuilderImpl.__execute__() 4 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 	}
 	
 	@Override
@@ -50,9 +60,11 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 	
 	@Override
 	public CommandableBuilder getOkCommandable(Boolean injectIfNull) {
-		CommandableBuilder commandable = (CommandableBuilder) __getInjectIfNull__(FIELD_OK_COMMANDABLE, injectIfNull);
-		commandable.setNameInternalizationKeyValue("ok");
-		return commandable;
+		if(okCommandable == null && Boolean.TRUE.equals(injectIfNull)) {
+			okCommandable = __inject__(CommandableBuilder.class);
+			okCommandable.setNameInternalizationKeyValue("ok");
+		}
+		return okCommandable;
 	}
 	
 	@Override
@@ -68,8 +80,10 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 
 	@Override
 	public OutputStringTextBuilder getTitle(Boolean injectIfNull) {
-		OutputStringTextBuilder title = (OutputStringTextBuilder) __getInjectIfNull__(FIELD_TITLE, injectIfNull);
-		title.setValueInternalizationKeyValue("message");
+		if(title == null && Boolean.TRUE.equals(injectIfNull)) {
+			title = __inject__(OutputStringTextBuilder.class);
+			title.setValueInternalizationKeyValue("message");
+		}
 		return title;
 	}
 	
@@ -113,8 +127,8 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 		return this;
 	}
 
-	private static final String FIELD_TITLE = "title";
-	private static final String FIELD_COMMANDABLES = "commandables";
-	private static final String FIELD_OK_COMMANDABLE = "okCommandable";
+	public static final String FIELD_TITLE = "title";
+	public static final String FIELD_COMMANDABLES = "commandables";
+	public static final String FIELD_OK_COMMANDABLE = "okCommandable";
 	
 }

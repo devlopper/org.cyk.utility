@@ -41,7 +41,11 @@
 	   		
    		</f:facet>
    		
-   		<ui:insert name="contractHeadTitle"><title><h:outputText value="#{__page__.window.title.properties.value}" escape="false" /></title></ui:insert>
+   		<ui:insert name="contractHeadTitle">
+   			<title>
+   				<h:outputText value="#{__page__.window.title.properties.value}" escape="false" />
+   			</title>
+   		</ui:insert>
    		
    		<cyk:contractHeadJavascript/>
    		

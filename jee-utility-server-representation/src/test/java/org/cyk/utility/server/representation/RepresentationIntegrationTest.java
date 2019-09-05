@@ -538,7 +538,7 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		__inject__(NodeRepresentation.class).createOne(nodeAction);
 		
 		FilterDto filters = __inject__(FilterDto.class).setKlass(Node.class);
-		filters.addField(Node.FIELD_PARENTS, Arrays.asList("module"));
+		filters.addField(Node.FIELD_PARENTS, Arrays.asList("module"),ValueUsageType.BUSINESS);
 		@SuppressWarnings("unchecked")
 		Collection<NodeDto> nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(Boolean.FALSE, null, null, null, filters).getEntity();
 		assertThat(nodes).isNotEmpty();

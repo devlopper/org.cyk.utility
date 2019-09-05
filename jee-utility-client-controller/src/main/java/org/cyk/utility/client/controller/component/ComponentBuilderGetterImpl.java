@@ -61,7 +61,6 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 				}
 			}
 		}
-		
 		Class<? extends ComponentBuilder<?>> clazz = getClazz();
 		if(clazz == null) {
 			if(classGetter!=null) {
@@ -70,10 +69,8 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 				clazz = classGetter.execute().getOutput();
 			}
 		}
-		
 		if(clazz!=null)
 			builder = __inject__(clazz);
-		
 		if(builder == null) {
 			System.err.println("Component builder not found. field="+field+" ::: methodd ="+method);
 		}else {
@@ -123,7 +120,6 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 				}
 			}
 		}
-		
 		return builder;
 	}
 	

@@ -170,11 +170,14 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		String key = object.getClass().getName()+"."+(componentBuilderBaseClass == null ? "" : componentBuilderBaseClass.getName())+"."+__inject__(FieldHelper.class).join(fieldNames);
 		Class<? extends ComponentBuilder<?>> builderClass =  BUILDERS_CLASSES_MAP.get(key);
 		if(builderClass == null) {
+			//TODO to be optimized
 			builderClass = __inject__(ComponentBuilderClassGetter.class).setClazz(object.getClass()).addFieldNameStrings(fieldNames).setBaseClass(componentBuilderBaseClass)
 				.execute().getOutput();
 			BUILDERS_CLASSES_MAP.put(key, builderClass);
 		}
-		return addComponentBuilderByObjectByFieldNames(builderClass, object, fieldNames);
+		//TODO to be optimized
+		ComponentBuilder<?> componentBuilder = addComponentBuilderByObjectByFieldNames(builderClass, object, fieldNames);
+		return componentBuilder;
 	}
 	
 	@Override

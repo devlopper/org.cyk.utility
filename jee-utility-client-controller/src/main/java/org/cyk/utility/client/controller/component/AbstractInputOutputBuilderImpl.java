@@ -34,6 +34,7 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 					String objectFieldName = StringUtils.contains(fieldName, ConstantCharacter.DOT.toString()) ? StringUtils.substringBeforeLast(fieldName, ConstantCharacter.DOT.toString()) : null;
 					fieldName = objectFieldName == null ? fieldName : StringUtils.substringAfterLast(fieldName, ConstantCharacter.DOT.toString());
 					if(objectFieldName!=null)
+						//TODO optimize
 						object = __inject__(FieldValueGetter.class).execute(object, objectFieldName).getOutput();
 					field = __injectCollectionHelper__().getFirst(__inject__(FieldsGetter.class).execute(object.getClass(), fieldName).getOutput());	
 				}

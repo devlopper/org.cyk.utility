@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.web.jsf.primefaces;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,8 +31,8 @@ public abstract class AbstractPageContainerManagedImpl extends org.cyk.utility.c
 	}
 	
 	@Override
-	protected WindowBuilder __getWindowBuilder__() {
-		WindowBuilder window =  super.__getWindowBuilder__();
+	protected WindowBuilder __getWindowBuilder__(List<String> subDurations) {
+		WindowBuilder window =  super.__getWindowBuilder__(subDurations);
 		CommandableBuilder commandable = window.getDialog(Boolean.TRUE).getOkCommandable(Boolean.TRUE);
 		__processWindowDialogOkCommandable__(window, commandable);
 		return window;

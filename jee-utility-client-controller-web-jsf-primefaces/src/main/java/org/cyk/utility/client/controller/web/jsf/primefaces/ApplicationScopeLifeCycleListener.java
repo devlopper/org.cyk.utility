@@ -5,13 +5,10 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.AbstractApplicationScopeLifeCycleListener;
+import org.cyk.utility.__kernel__.ObjectLifeCycleListener;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.bean.PropertyValueGetter;
 import org.cyk.utility.client.controller.command.CommandFunction;
-import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerAfterImpl;
-import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerBeforeImpl;
-import org.cyk.utility.client.controller.component.ComponentBuilderPostConstructListenerImpl;
-import org.cyk.utility.client.controller.component.ComponentPostConstructListenerImpl;
 import org.cyk.utility.client.controller.component.ComponentRoleStyleClassGetterImpl;
 import org.cyk.utility.client.controller.component.ComponentTargetModelBuilder;
 import org.cyk.utility.client.controller.component.grid.GridBuilderCommandableBuilderProcessorImpl;
@@ -31,10 +28,6 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
-		__inject__(FunctionRunnableMap.class).set(ComponentPostConstructListenerImpl.class, ComponentPostConstructListenerFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(ComponentBuilderPostConstructListenerImpl.class, ComponentBuilderPostConstructListenerFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(ComponentBuilderExecuteListenerBeforeImpl.class, ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl.class,LEVEL);
-		__inject__(FunctionRunnableMap.class).set(ComponentBuilderExecuteListenerAfterImpl.class, ComponentBuilderExecuteListenerAfterFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(MessageRenderImpl.class, MessageRenderFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl.class,LEVEL);
 		__inject__(FunctionRunnableMap.class).set(LayoutWidthGetterImpl.class, LayoutWidthGetterFunctionRunnableImpl.class,LEVEL);
@@ -49,7 +42,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 		
 		__inject__(org.cyk.utility.client.controller.web.jsf.ApplicationScopeLifeCycleListener.class).initialize(null);
 		
-		__setQualifierClassTo__(Primefaces.class, CommandFunction.class,EventBuilder.class,ComponentTargetModelBuilder.class,PropertyValueGetter.class);
+		__setQualifierClassTo__(Primefaces.class,ObjectLifeCycleListener.class, CommandFunction.class,EventBuilder.class,ComponentTargetModelBuilder.class,PropertyValueGetter.class);
 	}
 	
 	@Override

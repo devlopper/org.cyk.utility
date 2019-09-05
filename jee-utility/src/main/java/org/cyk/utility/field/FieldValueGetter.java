@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.value.ValueUsageType;
 
+@Deprecated
 public interface FieldValueGetter extends FunctionWithPropertiesAsInput<Object> {
 
 	Object getObject();

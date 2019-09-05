@@ -1,6 +1,8 @@
 package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.AbstractObject;
@@ -31,14 +33,19 @@ import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.time.DurationBuilder;
 import org.cyk.utility.time.DurationStringBuilder;
 
+import lombok.Getter;
+
 public abstract class AbstractWindowContainerManagedImpl extends AbstractObject implements WindowContainerManaged,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private SystemAction systemAction;
-	private Window window;
-	private WindowBuilder __windowBuilder__;
-	private String contextDependencyInjectionBeanName;
+	protected SystemAction systemAction;
+	protected Window window;
+	protected WindowBuilder __windowBuilder__;
+	protected String contextDependencyInjectionBeanName;
 	protected SessionUser sessionUser;
+	
+	@Getter protected Boolean __isInternalLoggable__;
+	@Getter protected String __windowBuildDuration__;
 	
 	@Override
 	protected void __listenPostConstruct__() {
@@ -54,51 +61,64 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	
 	@Override
 	public Window getWindow() {
-		if(__windowBuilder__ == null) {
-			DurationBuilder durationBuilder = __inject__(DurationBuilder.class);
-			durationBuilder.setBeginToNow();
-			try {
-				__windowBuilder__ = __getWindowBuilder__();
-			} catch (Exception exception) {
-				__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).setRequest(__getRequest__())
-						.setContext(__getContext__()).execute().getOutput();
-				exception.printStackTrace();
-			}
-			if(__windowBuilder__.getRequest() == null)
-				__windowBuilder__.setRequest(__getRequest__());
-			
-			//TODO you won't be able to customize a page with a specific theme one it has been set to session. how to make it possible then ???
-			Theme theme = (Theme) getSessionAttribute(SessionAttributeEnumeration.THEME);
-			if(theme == null) {
-				Class<? extends Theme> themeClass = __getThemeClass__();
-				if(themeClass!=null) {
-					theme = __inject__(themeClass);
-					theme.setRequest(__getRequest__()).build();
-					setSessionAttribute(SessionAttributeEnumeration.THEME, theme);
-					__windowBuilder__.setTheme(theme);
-				}
-			}			
-			//__windowBuilder__.setLogLevel(LogLevel.INFO).setLoggable(Boolean.TRUE).addLogMessageBuilderParameter("Window build");
-			Window window = __windowBuilder__.execute().getOutput();
-			if(window!=null) {
-				if(theme!=null) {
-					theme.process(window);	
-				}
-			}
-			
-			setWindow(window);
-			durationBuilder.setEndToNow();
-			String title = __getWindowTitleValue__();
-			if(title == null && window!=null && window.getTitle()!=null)
-				title = window.getTitle().getValue();
-			
-			//__windowBuilder__.addLogMessageBuilderParameter("title", title);
-			//__windowBuilder__.addLogMessageBuilderParameter("view cached", window.isViewCached());
-			
-			__logInfo__(String.format("Window container built. title=%s duration=%s. view cached=%s", title
-					,__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder).execute().getOutput(),window.isViewCached()));
-		}
+		if(__windowBuilder__ == null)//TODO why not window == null ??
+			__buildWindow__();
 		return window;
+	}
+	
+	protected void __buildWindow__() {
+		DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
+		List<String> subDurations = new ArrayList<String>();
+		try {
+			__windowBuilder__ = __getWindowBuilder__(subDurations);
+		} catch (Exception exception) {
+			__windowBuilder__ = __inject__(WindowContainerManagedWindowBuilderThrowable.class).setThrowable(exception).setRequest(__getRequest__())
+					.setContext(__getContext__()).execute().getOutput();
+			exception.printStackTrace();
+		}
+		
+		DurationBuilder subDurationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
+		if(__windowBuilder__.getRequest() == null)
+			__windowBuilder__.setRequest(__getRequest__());
+		
+		//TODO you won't be able to customize a page with a specific theme one it has been set to session. how to make it possible then ???
+		Theme theme = (Theme) getSessionAttribute(SessionAttributeEnumeration.THEME);
+		if(theme == null) {
+			Class<? extends Theme> themeClass = __getThemeClass__();
+			if(themeClass!=null) {
+				theme = __inject__(themeClass);
+				theme.setRequest(__getRequest__()).build();
+				setSessionAttribute(SessionAttributeEnumeration.THEME, theme);
+				__windowBuilder__.setTheme(theme);
+			}
+		}
+		
+		subDurations.add("get theme : "+__inject__(DurationStringBuilder.class).setDurationBuilder(subDurationBuilder.setEndToNow()).execute().getOutput());
+		subDurationBuilder.setBeginToNow();
+		
+		//__windowBuilder__.setLogLevel(LogLevel.INFO).setLoggable(Boolean.TRUE).addLogMessageBuilderParameter("Window build");
+		Window window = __windowBuilder__.execute().getOutput();
+		
+		subDurations.add("run builder : "+__inject__(DurationStringBuilder.class).setDurationBuilder(subDurationBuilder.setEndToNow()).execute().getOutput());
+		subDurationBuilder.setBeginToNow();
+		if(window!=null) {
+			if(theme!=null) {
+				theme.process(window);	
+			}
+		}
+		
+		setWindow(window);
+		String title = __getWindowTitleValue__();
+		if(title == null && window!=null && window.getTitle()!=null)
+			title = window.getTitle().getValue();
+		
+		//__windowBuilder__.addLogMessageBuilderParameter("title", title);
+		//__windowBuilder__.addLogMessageBuilderParameter("view cached", window.isViewCached());
+		
+		__windowBuildDuration__ = __inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput();
+		if(subDurations != null && !subDurations.isEmpty())
+			__windowBuildDuration__ = __windowBuildDuration__  + subDurations;
+		__logInfo__(String.format("Window container built. title=%s duration=%s. view cached=%s", title,__windowBuildDuration__,window.isViewCached()));
 	}
 	
 	@Override
@@ -120,9 +140,10 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	
 	/**/
 	
-	protected WindowBuilder __getWindowBuilder__() {
+	protected WindowBuilder __getWindowBuilder__(List<String> subDurations) {
 		WindowBuilder windowBuilder = null;
 		WindowContainerManagedWindowBuilder windowContainerManagedWindowBuilder = __getWindowContainerManagedWindowBuilder__();
+		
 		if(windowContainerManagedWindowBuilder == null) {
 			ViewBuilder viewBuilder = __getViewBuilder__();			
 			windowBuilder = __injectWindowBuilder__().setView(viewBuilder).setMenuMap(__getMenuBuilderMap__());
@@ -138,6 +159,8 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 		}
 		
 		if(windowBuilder!=null) {
+			DurationBuilder subDurationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
+			
 			String titleValue = __getWindowTitleValue__();
 			if(__inject__(StringHelper.class).isNotBlank(titleValue))
 				windowBuilder.setTitleValue(titleValue);	
@@ -152,9 +175,13 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 					view.setUniformResourceLocatorMap(__getUniformResourceLocatorMap__());
 				windowBuilder.setView(view);
 			}
+			
+			subDurations.add("process window builder : "+__inject__(DurationStringBuilder.class).setDurationBuilder(subDurationBuilder.setEndToNow()).execute().getOutput());
+			subDurationBuilder.setBeginToNow();
 		}
 		if(windowBuilder.getContainerManaged() == null)
 			windowBuilder.setContainerManaged(windowContainerManagedWindowBuilder);
+		
 		return windowBuilder;
 	}
 	

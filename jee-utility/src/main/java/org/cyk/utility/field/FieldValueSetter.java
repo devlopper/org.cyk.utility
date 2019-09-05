@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.function.FunctionWithPropertiesAsInputAndVoidAsOutput;
 import org.cyk.utility.value.ValueUsageType;
 
+@Deprecated
 public interface FieldValueSetter extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 
 	Object getObject();

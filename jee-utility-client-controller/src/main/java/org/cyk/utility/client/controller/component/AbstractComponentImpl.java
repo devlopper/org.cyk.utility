@@ -23,12 +23,6 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	private Property targetBinding,targetModel;
 	
 	@Override
-	protected void __listenPostConstruct__() {
-		super.__listenPostConstruct__();
-		__inject__(ComponentPostConstructListener.class).setObject(this).execute();
-	}
-	
-	@Override
 	public ComponentBuilder<?> getBuilder() {
 		return builder;
 	}

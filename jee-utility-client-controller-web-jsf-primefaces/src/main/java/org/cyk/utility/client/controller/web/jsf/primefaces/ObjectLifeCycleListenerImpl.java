@@ -5,18 +5,21 @@ import java.io.Serializable;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.AbstractObjectLifeCycleListenerImpl;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.annotation.Default;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.client.controller.component.AbstractComponentBuilderExecuteListenerImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
-import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerAfter;
+import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.InputOutput;
+import org.cyk.utility.client.controller.component.InputOutputBuilder;
 import org.cyk.utility.client.controller.component.VisibleComponent;
+import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.command.Commandable;
 import org.cyk.utility.client.controller.component.dialog.Dialog;
 import org.cyk.utility.client.controller.component.file.File;
@@ -24,9 +27,11 @@ import org.cyk.utility.client.controller.component.file.FileImage;
 import org.cyk.utility.client.controller.component.grid.Grid;
 import org.cyk.utility.client.controller.component.input.Input;
 import org.cyk.utility.client.controller.component.input.InputBoolean;
+import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.input.InputDate;
 import org.cyk.utility.client.controller.component.input.InputDateTime;
 import org.cyk.utility.client.controller.component.input.InputFile;
+import org.cyk.utility.client.controller.component.input.InputFileBuilder;
 import org.cyk.utility.client.controller.component.input.choice.ChoicesLayout;
 import org.cyk.utility.client.controller.component.input.choice.ChoicesLayoutResponsive;
 import org.cyk.utility.client.controller.component.input.choice.InputChoice;
@@ -36,6 +41,8 @@ import org.cyk.utility.client.controller.component.input.choice.InputChoiceManyC
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOne;
 import org.cyk.utility.client.controller.component.input.choice.InputChoiceOneAutoComplete;
 import org.cyk.utility.client.controller.component.layout.Insert;
+import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
+import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
 import org.cyk.utility.client.controller.component.link.Link;
 import org.cyk.utility.client.controller.component.menu.Menu;
 import org.cyk.utility.client.controller.component.menu.MenuRenderTypeColumnContext;
@@ -48,6 +55,7 @@ import org.cyk.utility.client.controller.component.output.OutputStringMessage;
 import org.cyk.utility.client.controller.component.output.OutputStringMessageBuilder;
 import org.cyk.utility.client.controller.component.text.Text;
 import org.cyk.utility.client.controller.component.tree.Tree;
+import org.cyk.utility.client.controller.component.tree.TreeBuilder;
 import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.event.Events;
@@ -57,19 +65,131 @@ import org.cyk.utility.client.controller.web.ComponentHelper;
 import org.cyk.utility.client.controller.web.jsf.converter.DateConverter;
 import org.cyk.utility.client.controller.web.jsf.converter.ObjectConverter;
 import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
+import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.css.Style;
+import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueHelper;
 import org.primefaces.model.DefaultStreamedContent;
 
-@Primefaces
-public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends AbstractComponentBuilderExecuteListenerImpl implements ComponentBuilderExecuteListenerAfter,Serializable {
+@ApplicationScoped @Primefaces
+public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListenerImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	private static final String IDENTIFIER_FORMAT = "%s_%s";
 	
 	@Override
-	public void execute() {
-		ComponentBuilder<?> componentBuilder = (ComponentBuilder<?>) getObject();
-		Component component = getComponent();
+	public void listen(Object object, Action action, When when) {
+		if(Action.CONSTRUCT.equals(action) && When.AFTER.equals(when) && object instanceof ComponentBuilder)
+			listenPostConstructComponentBuilder((ComponentBuilder<?>) object);
+		else if(Action.EXECUTE.equals(action) && When.BEFORE.equals(when) && object instanceof ComponentBuilder)
+			listenExecuteComponentBuilderBefore((ComponentBuilder<?>) object);
+		else if(Action.EXECUTE.equals(action) && When.AFTER.equals(when) && object instanceof ComponentBuilder)
+			listenExecuteComponentBuilderAfter((ComponentBuilder<?>) object);
+	}
+	
+	/**/
+	
+	private void listenPostConstructComponentBuilder(ComponentBuilder<?> componentBuilder) {
+		Properties outputProperties = componentBuilder.getOutputProperties(Boolean.TRUE);
+		
+		outputProperties.setIdentifier(String.format(IDENTIFIER_FORMAT,componentBuilder.getComponentClass().getSimpleName(),DependencyInjection.inject(RandomHelper.class).getAlphabetic(3)));
+		outputProperties.setIdentifierAsStyleClass(outputProperties.getIdentifier().toString());
+		outputProperties.setWidgetVar(outputProperties.getIdentifier());
+		outputProperties.setRendered(Boolean.TRUE);						
+		
+		if(componentBuilder instanceof VisibleComponentBuilder<?>) {
+			VisibleComponentBuilder<?> visibleComponentBuilder = (VisibleComponentBuilder<?>)componentBuilder;
+			
+			if(visibleComponentBuilder instanceof InputBuilder<?, ?>) {
+				InputBuilder<?, ?> inputBuilder = (InputBuilder<?, ?>) visibleComponentBuilder;
+				inputBuilder.getMessage(Boolean.TRUE);
+				if(visibleComponentBuilder instanceof InputFileBuilder) {
+					InputFileBuilder inputFileBuilder = (InputFileBuilder) visibleComponentBuilder;
+					inputFileBuilder.addQualifiers(Primefaces.class);
+				}
+			}
+			
+			if(visibleComponentBuilder instanceof TreeBuilder) {
+				TreeBuilder treeBuilder = (TreeBuilder) visibleComponentBuilder;
+				treeBuilder.getDefaultNodeFamilies(Boolean.TRUE).add("default");
+				treeBuilder.addQualifiers(Primefaces.class);
+			}
+		}
+	}
+
+	private void listenExecuteComponentBuilderBefore(ComponentBuilder<?> componentBuilder) {
+		//TODO style class string must be replaced by its equivalent role
+		Component component = componentBuilder.getComponent();
+		
+		if(component instanceof VisibleComponent) {
+			VisibleComponentBuilder<?> visibleComponentBuilder = (VisibleComponentBuilder<?>)componentBuilder;
+			VisibleComponent visibleComponent = (VisibleComponent) component;
+			//visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
+			
+			//String identifierAsStyleClass = __inject__(RandomHelper.class).
+			//visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
+			
+			//String identifierAsStyleClass = visibleComponentBuilder.getOutputProperties().getIdentifier().toString();
+			String identifierAsStyleClass = (String) visibleComponentBuilder.getOutputProperty(Properties.IDENTIFIER_AS_STYLE_CLASS);//.getIdentifierAsStyleClass().toString();
+			//visibleComponentBuilder.getOutputProperties().setIdentifierAsStyleClass(identifierAsStyleClass);
+			//System.out.println("CID : "+identifierAsStyleClass);
+			visibleComponentBuilder.addStyleClasses(identifierAsStyleClass);
+			//visibleComponentBuilder.addStyleClasses("AZERTY");
+			/*
+			ComponentRoles roles = visibleComponentBuilder.getRoles();
+			if(__inject__(CollectionHelper.class).isNotEmpty(roles)) {
+				for(ComponentRole index : roles.get()) {
+					String styleClass = __inject__(ComponentRoleStyleClassGetter.class).setRole(index).execute().getOutput();
+					if(__inject__(StringHelper.class).isNotBlank(styleClass))
+						visibleComponentBuilder.addStyleClasses(styleClass);
+				}
+			}
+			*/
+			/*
+			if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.TITLE))
+				visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_view_title");
+			if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.GRID))
+				visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_table");
+			if(__inject__(CollectionHelper.class).contains(visibleComponentBuilder.getRoles(), ComponentRole.ROW))
+				visibleComponentBuilder.getLayoutItemStyle(Boolean.TRUE).addClasses("cyk_layout_row");
+			*/
+			if(visibleComponent instanceof InputOutput<?>) {
+				InputOutputBuilder<?, ?> inputOutputBuilder = (InputOutputBuilder<?,?>) visibleComponentBuilder;
+				
+				if(inputOutputBuilder instanceof InputBuilder<?,?>) {
+					//InputBuilder<?,?> inputBuilder = (InputBuilder<?,?>)componentBuilder;
+					//inputBuilder.addRoles(ComponentRole.INPUT);
+					
+				}else if(inputOutputBuilder instanceof InputBuilder<?,?>) {
+					//OutputBuilder<?,?> outputBuilder = (OutputBuilder<?,?>)componentBuilder;
+					//outputBuilder.addRoles(ComponentRole.OUTPUT);
+				}
+			}
+			
+			if(visibleComponentBuilder instanceof LayoutBuilder) {
+				LayoutBuilder layoutBuilder = (LayoutBuilder) visibleComponentBuilder;
+				layoutBuilder.getStyle(Boolean.TRUE).addClasses("cyk_layout");
+				
+				// TODO ui-g must be get from function
+				layoutBuilder.getStyle(Boolean.TRUE).addClasses("ui-g");
+				
+				if(DependencyInjection.inject(CollectionHelper.class).contains(layoutBuilder.getRoles(), ComponentRole.GRID))
+					layoutBuilder.addStyleClasses("cyk_layout_grid");
+				
+				layoutBuilder.setOutputProperty(Properties.LAYOUT,"block");//.setLayout("block");
+			}
+			
+			if(visibleComponentBuilder instanceof LayoutItemBuilder) {
+				LayoutItemBuilder layoutItemBuilder = (LayoutItemBuilder) visibleComponentBuilder;
+				layoutItemBuilder.getStyle(Boolean.TRUE).addClasses("cyk_layout_item");
+				
+			}
+		}
+	}
+	
+	private void listenExecuteComponentBuilderAfter(ComponentBuilder<?> componentBuilder) {
+		Component component = componentBuilder.getComponent();
 		
 		Events events = component.getEvents();
 		if(events!=null) {
@@ -285,5 +405,4 @@ public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends Ab
 	private static void setTargetBindingIsDerivable(Component component) {
 		component.getTargetBinding(Boolean.TRUE).setIsDerivable(Boolean.TRUE).addValueGetterClassQualifiers(Default.class).setValue(component);
 	}
-	
 }

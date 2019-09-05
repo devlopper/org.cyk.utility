@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component.command;
 
 import org.cyk.utility.method.MethodCallListener;
 
+@Deprecated
 public interface CommandFunctionExecuteListener extends MethodCallListener {
 
 	//Component getComponent();

@@ -644,7 +644,7 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		__inject__(NodeBusiness.class).createMany(__inject__(CollectionHelper.class).instanciate(nodeModule,nodeService,nodeMenu
 				,nodeAction));
 		Filter filters = __inject__(Filter.class).setKlass(Node.class);
-		filters.addField(Node.FIELD_PARENTS, Arrays.asList("module"));
+		filters.addField(Node.FIELD_PARENTS, Arrays.asList("module"),ValueUsageType.BUSINESS);
 		Collection<Node> nodes = __inject__(NodeBusiness.class).find(new Properties().setQueryFilters(filters));
 		assertThat(nodes).isNotEmpty();
 		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");

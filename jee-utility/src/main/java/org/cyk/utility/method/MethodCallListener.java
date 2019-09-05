@@ -2,9 +2,8 @@ package org.cyk.utility.method;
 
 import java.lang.reflect.Method;
 
-import org.cyk.utility.function.FunctionWithPropertiesAsInputAndVoidAsOutput;
-
-public interface MethodCallListener extends FunctionWithPropertiesAsInputAndVoidAsOutput {
+@Deprecated
+public interface MethodCallListener {
 
 	MethodCallListener setObject(Object object);
 	Object getObject();
@@ -13,4 +12,5 @@ public interface MethodCallListener extends FunctionWithPropertiesAsInputAndVoid
 	MethodCallListener setMethod(MethodName methodName);
 	Method getMethod();
 	
+	void execute();
 }

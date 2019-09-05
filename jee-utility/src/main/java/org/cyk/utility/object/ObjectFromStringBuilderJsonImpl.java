@@ -41,7 +41,8 @@ public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBui
 			object = objectMapper.readValue(string, klass);
 		}else {
 			SimpleModule module = new SimpleModule();
-			//module.addDeserializer(Object.class, new Deserializer().setKlass(klass).setFieldInstances(fieldInstances));
+			if(__injectCollectionHelper__().isNotEmpty(fieldInstances))
+				module.addDeserializer(Object.class, new Deserializer().setKlass(klass).setFieldInstances(fieldInstances));
 			objectMapper.registerModule(module);
 			object =  objectMapper.readValue(string, Object.class);	
 		}

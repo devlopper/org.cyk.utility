@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.ObjectLifeCycleListener;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.Classes;
 import org.cyk.utility.client.controller.command.CommandFunction;
@@ -25,6 +26,8 @@ import org.cyk.utility.type.BooleanMap;
 public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> extends AbstractFunctionWithPropertiesAsInputImpl<COMPONENT> implements ComponentBuilder<COMPONENT> , Serializable {
 	private static final long serialVersionUID = 1L;
 
+	protected static final ObjectLifeCycleListener OBJECT_LIFE_CYCLE_LISTENER = __inject__(ObjectLifeCycleListener.class);
+	
 	private Class<COMPONENT> componentClass;
 	private Classes qualifiers;
 	private COMPONENT component;
@@ -44,17 +47,28 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		setComponentClass(__getComponentClass__());
-		__inject__(ComponentBuilderPostConstructListener.class).setObject(this).execute();
+		if(componentClass == null) {
+			if(componentClass == null) {
+				componentClass = (Class<COMPONENT>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 0, Object.class).getName());
+			}	
+		}
+		OBJECT_LIFE_CYCLE_LISTENER.listenPostConstruct(this);
 	}
 	
-	protected Class<COMPONENT> __getComponentClass__(){
+	/*protected Class<COMPONENT> __getComponentClass__(){
 		return (Class<COMPONENT>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 0, Object.class).getName());
-	}
+	}*/
 	
 	@Override
 	protected COMPONENT __execute__() throws Exception {
 		Class<COMPONENT> componentClass = getComponentClass();
+		/*if(componentClass == null) {
+			componentClass = (Class<COMPONENT>) COMPONENTS_CLASSES_MAP.get(getClass());
+			if(componentClass == null) {
+				componentClass = (Class<COMPONENT>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 0, Object.class).getName());
+				COMPONENTS_CLASSES_MAP.put(getClass(), componentClass);
+			}
+		}*/
 		Classes qualifiers = getQualifiers();
 		COMPONENT component = null;
 		if(__injectCollectionHelper__().isEmpty(qualifiers))
@@ -77,7 +91,9 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 			component.setIdentifier(outputProperties.getIdentifier());
 			component.getProperties().setIdentifierAsStyleClass(outputProperties.getStyleClass());
 		}
-		__inject__(ComponentBuilderExecuteListenerBefore.class).setObject(this).setComponent(component).execute();
+		//__inject__(ComponentBuilderExecuteListenerBefore.class).setObject(this).setComponent(component).execute();
+		__inject__(ObjectLifeCycleListener.class).listenExecuteBefore(this);
+		
 		ComponentRoles roles = getRoles();
 		component.setRoles(roles);
 		
@@ -93,7 +109,8 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		}
 		
 		__execute__(component);
-		__inject__(ComponentBuilderExecuteListenerAfter.class).setObject(this).setComponent(component).execute();
+		__inject__(ObjectLifeCycleListener.class).listenExecuteAfter(this);
+		//__inject__(ComponentBuilderExecuteListenerAfter.class).setObject(this).setComponent(component).execute();
 		
 		Throwable throwable = getThrowable();
 		component.setThrowable(throwable);

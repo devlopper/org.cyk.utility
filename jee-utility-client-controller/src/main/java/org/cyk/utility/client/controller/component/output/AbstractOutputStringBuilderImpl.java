@@ -30,9 +30,11 @@ public abstract class AbstractOutputStringBuilderImpl<OUTPUT extends OutputStrin
 	
 	@Override
 	public InternalizationStringBuilder getValueInternalization(Boolean injectIfNull) {
-		InternalizationStringBuilder internalization = (InternalizationStringBuilder) __getInjectIfNull__(FIELD_VALUE_INTERNALIZATION, injectIfNull);
-		internalization.setCase(valueInternalizationCase);
-		return internalization;
+		if(valueInternalization == null && Boolean.TRUE.equals(injectIfNull)) {
+			valueInternalization = __inject__(InternalizationStringBuilder.class);
+			valueInternalization.setCase(valueInternalizationCase);
+		}
+		return valueInternalization;
 	}
 	
 	@Override
@@ -52,6 +54,6 @@ public abstract class AbstractOutputStringBuilderImpl<OUTPUT extends OutputStrin
 		return value == null ? null : value.toString();
 	}
 	
-	private static final String FIELD_VALUE_INTERNALIZATION = "valueInternalization";
+	public static final String FIELD_VALUE_INTERNALIZATION = "valueInternalization";
 	
 }

@@ -11,11 +11,11 @@
 	<ui:insert name="contractBody">	
 		<c:set var="theme" value="#{__page__.window.theme}" />
 		
-		<c:if test="#{theme == null}">
+		<c:if test="#{isRenderContractBodyWithTheme == null and (theme == null or isRenderContractBodyWithoutTheme) or (isRenderContractBodyWithTheme !=null and not isRenderContractBodyWithTheme)}">
 			<cyk:contractBodyWithoutTheme/>
 		</c:if>
 		
-		<c:if test="#{theme != null}">
+		<c:if test="#{theme != null or isRenderContractBodyWithTheme}">
 			<cyk:contractBodyWithTheme/>
 		</c:if>
 	</ui:insert>

@@ -4,25 +4,29 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.collection.CollectionHelper;
 
-public abstract class AbstractMethodCallListenerImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements MethodCallListener,Serializable {
+public abstract class AbstractMethodCallListenerImpl implements MethodCallListener,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private Object object;
+	private Method method;
+	
 	@Override
 	public MethodCallListener setObject(Object object) {
-		getProperties().setObject(object);
+		this.object = object;
 		return this;
 	}
 
 	@Override
 	public Object getObject() {
-		return getProperties().getObject();
+		return object;
 	}
 
 	@Override
 	public MethodCallListener setMethod(Method method) {
-		getProperties().setMethod(method);
+		this.method = method;
 		return this;
 	}
 	
@@ -30,15 +34,15 @@ public abstract class AbstractMethodCallListenerImpl extends AbstractFunctionWit
 	public MethodCallListener setMethod(MethodName methodName) {
 		Object object = getObject();
 		if(object!=null) {
-			Collection<Method> methods = __inject__(MethodGetter.class).setClazz(object.getClass()).setToken(methodName.name()).execute().getOutput();
-			setMethod(__injectCollectionHelper__().getFirst(methods));
+			Collection<Method> methods = DependencyInjection.inject(MethodGetter.class).setClazz(object.getClass()).setToken(methodName.name()).execute().getOutput();
+			setMethod(DependencyInjection.inject(CollectionHelper.class).getFirst(methods));
 		}
 		return this;
 	}
 
 	@Override
 	public Method getMethod() {
-		return (Method) getProperties().getMethod();
+		return method;
 	}
 
 }

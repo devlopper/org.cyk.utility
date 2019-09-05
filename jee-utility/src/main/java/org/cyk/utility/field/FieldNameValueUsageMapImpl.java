@@ -9,7 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
 import org.cyk.utility.value.ValueUsageType;
 
-@ApplicationScoped
+@ApplicationScoped @Deprecated
 public class FieldNameValueUsageMapImpl extends AbstractSingleton implements FieldNameValueUsageMap,Serializable {
 	private static final long serialVersionUID = 1L;
 

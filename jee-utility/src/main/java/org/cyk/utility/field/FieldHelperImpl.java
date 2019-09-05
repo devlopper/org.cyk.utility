@@ -23,10 +23,28 @@ import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 @ApplicationScoped
 public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Serializable {
 	private static final long serialVersionUID = -5367150176793830358L;
 
+	private static FieldHelper INSTANCE;
+	public static FieldHelper getInstance(Boolean isNew) {
+		if(INSTANCE == null || Boolean.TRUE.equals(isNew))
+			INSTANCE = __inject__(FieldHelper.class);
+		return INSTANCE;
+	}
+	public static FieldHelper getInstance() {
+		return getInstance(null);
+	}
+	
+	private static final Map<ClassFieldNameValueUsageType,String> CLASSES_FIELDNAMES_MAP = new HashMap<>();
+	private static final Map<Class<?>,Map<String,Field>> CLASSES_FIELDS_MAP = new HashMap<>();
 	public static Boolean IS_FIELD_CACHABLE = Boolean.TRUE;
 	private static final Map<String,Field> FIELDS_MAP = new HashMap<>();
 	
@@ -61,13 +79,28 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	}
 	
 	@Override
+	public String buildFieldName(Class<?> klass, FieldName fieldName, ValueUsageType valueUsageType) {
+		return __buildFieldName__(klass, fieldName, valueUsageType);
+	}
+	
+	@Override
+	public Field getFieldByName(Class<?> klass, String fieldName) {
+		return __getFieldByName__(klass, fieldName);
+	}
+	
+	@Override
+	public Field getFieldByName(Class<?> klass, FieldName fieldName, ValueUsageType valueUsageType) {
+		return __getFieldByName__(klass, fieldName,valueUsageType);
+	}
+	
+	@Override
 	public Object getFieldValueSystemIdentifier(Object object) {
-		return __inject__(FieldValueGetter.class).execute(object, FieldName.IDENTIFIER, ValueUsageType.SYSTEM).execute().getOutput();
+		return __readFieldValueSystemIdentifier__(object);
 	}
 
 	@Override
 	public Object getFieldValueBusinessIdentifier(Object object) {
-		return __inject__(FieldValueGetter.class).execute(object, FieldName.IDENTIFIER, ValueUsageType.BUSINESS).execute().getOutput();
+		return __readFieldValueBusinessIdentifier__(object);
 	}
 
 	@Override
@@ -80,13 +113,13 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	
 	@Override
 	public FieldHelper setFieldValueSystemIdentifier(Object object, Object value) {
-		__inject__(FieldValueSetter.class).setObject(object).setField(FieldName.IDENTIFIER, ValueUsageType.SYSTEM).setValue(value).execute();
+		__writeFieldValueSystemIdentifier__(object, value);
 		return this;
 	}
 	
 	@Override
 	public FieldHelper setFieldValueBusinessIdentifier(Object object, Object value) {
-		__inject__(FieldValueSetter.class).setObject(object).setField(FieldName.IDENTIFIER, ValueUsageType.BUSINESS).setValue(value).execute();
+		__writeFieldValueBusinessIdentifier__(object, value);
 		return this;
 	}
 	
@@ -179,21 +212,47 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	}
 	
 	@Override
+	public Object readFieldValue(Object object,Field field,Boolean isGettable) {
+		return __readFieldValue__(object, field, isGettable);
+	}
+	
+	@Override
 	public Object readFieldValue(Object object,Field field) {
-		try {
-			return FieldUtils.readField(field,object, Boolean.TRUE);
-		} catch (IllegalAccessException exception) {
-			throw new RuntimeException(exception);
-		}
+		return __readFieldValue__(object, field);
+	}
+	
+	@Override
+	public Object readFieldValue(Object object,String fieldName,Boolean isGettable) {
+		return __readFieldValue__(object, fieldName, isGettable);
 	}
 	
 	@Override
 	public Object readFieldValue(Object object,String fieldName) {
-		try {
-			return FieldUtils.readField(object, fieldName, Boolean.TRUE);
-		} catch (IllegalAccessException exception) {
-			throw new RuntimeException(exception);
-		}
+		return __readFieldValue__(object, fieldName);
+	}
+	
+	@Override
+	public FieldHelper writeFieldValue(Field field, Object value, Boolean isGettable) {
+		__writeFieldValue__(field, value, isGettable);
+		return this;
+	}
+	
+	@Override
+	public FieldHelper writeFieldValue(Field field, Object value) {
+		__writeFieldValue__(field, value);
+		return this;
+	}
+	
+	@Override
+	public FieldHelper writeFieldValue(Object object, String fieldName, Object value, Boolean isGettable) {
+		__writeFieldValue__(object, fieldName, value, isGettable);
+		return this;
+	}
+	
+	@Override
+	public FieldHelper writeFieldValue(Object object, String fieldName, Object value) {
+		__writeFieldValue__(object, fieldName, value);
+		return this;
 	}
 	
 	@Override
@@ -207,14 +266,14 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 				collection = new ArrayList<>();
 				for(Field index : fields.get()) {
 					String fieldName = index.getName();
-					if(!Modifier.isFinal(index.getModifiers()) && !Modifier.isStatic(index.getModifiers()) && !fieldsNames.contains(fieldName))
+					if(!Modifier.isFinal(index.getModifiers()) && !Modifier.isStatic(index.getModifiers()) && !index.getType().isPrimitive() && !fieldsNames.contains(fieldName))
 						collection.add(fieldName);
 				}	
 			}
 		}
 		if(__inject__(CollectionHelper.class).isNotEmpty(collection)) {
 			for(String index : collection)
-				__inject__(FieldValueSetter.class).execute(object, index, null);
+				__writeFieldValue__(object, index, null);
 		}
 		return this;
 	}
@@ -249,5 +308,156 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	
 	/**/
 	
+	/* build field name */
+	
+	public static String __buildFieldName__(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType) {
+		ClassFieldNameValueUsageType classFieldNameValueUsageType = new ClassFieldNameValueUsageType(klass,fieldName,valueUsageType);
+		String value = CLASSES_FIELDNAMES_MAP.get(classFieldNameValueUsageType);
+		if(value == null)
+			__setFieldName__(classFieldNameValueUsageType, value = fieldName.getByValueUsageType(valueUsageType));
+		return value;
+	}
+	
+	public static void __setFieldName__(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType,String name) {
+		__setFieldName__(new ClassFieldNameValueUsageType(klass,fieldName,valueUsageType), name);
+	}
+	
+	public static void __setFieldName__(ClassFieldNameValueUsageType classFieldNameValueUsageType,String name) {
+		CLASSES_FIELDNAMES_MAP.put(classFieldNameValueUsageType, name);
+	}
+	
+	/* get field */
+	
+	public static Field __getFieldByName__(Class<?> klass,String fieldName) {
+		if(klass == null || fieldName == null)
+			return null;
+		Field field = null;
+		Map<String,Field> map = CLASSES_FIELDS_MAP.get(klass);
+		if(map == null)
+			CLASSES_FIELDS_MAP.put(klass, map = new HashMap<>());
+		if((field = map.get(fieldName)) == null)
+			map.put(fieldName, field = FieldUtils.getField(klass, fieldName, Boolean.TRUE));
+		return field;
+	}
+	
+	public static Field __getFieldByName__(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType) {
+		return klass == null ? null : __getFieldByName__(klass, __buildFieldName__(klass, fieldName, valueUsageType));
+	}
+	
+	/* read field value*/
+	
+	public static Object __readFieldValue__(Object object,Field field,Boolean isGettable) {
+		try {
+			return object == null ? null : FieldUtils.readField(field,object, Boolean.TRUE);
+		} catch (IllegalAccessException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	public static Object __readFieldValue__(Object object,Field field) {
+		return __readFieldValue__(object, field, null);
+	}
+	
+	public static Object __readFieldValue__(Object object,String fieldName,Boolean isGettable) {
+		try {
+			return object == null ? null : FieldUtils.readField(object, fieldName, Boolean.TRUE);
+		} catch (IllegalAccessException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	public static Object __readFieldValue__(Object object,String fieldName) {
+		return __readFieldValue__(object, fieldName, null);
+	}
+	
+	public static Object __readFieldValue__(Object object,FieldName fieldName,ValueUsageType valueUsageType,Boolean isGettable) {
+		return object == null ? null : __readFieldValue__(object, __getFieldByName__(object.getClass(), fieldName, valueUsageType), isGettable);
+	}
+	
+	public static Object __readFieldValue__(Object object,FieldName fieldName,ValueUsageType valueUsageType) {
+		return object == null ? null : __readFieldValue__(object, __getFieldByName__(object.getClass(), fieldName, valueUsageType));
+	}
+	
+	public static Object __readFieldValueSystemIdentifier__(Object object,Boolean isGettable) {
+		return __readFieldValue__(object, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, isGettable);
+	}
+	
+	public static Object __readFieldValueSystemIdentifier__(Object object) {
+		return __readFieldValue__(object, FieldName.IDENTIFIER, ValueUsageType.SYSTEM);
+	}
+	
+	public static Object __readFieldValueBusinessIdentifier__(Object object,Boolean isGettable) {
+		return __readFieldValue__(object, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, isGettable);
+	}
+	
+	public static Object __readFieldValueBusinessIdentifier__(Object object) {
+		return __readFieldValue__(object, FieldName.IDENTIFIER, ValueUsageType.BUSINESS);
+	}
+	
+	/* write field value*/
+	
+	public static void __writeFieldValue__(Field field, Object value, Boolean isGettable) {
+		try {
+			FieldUtils.writeField(field,value, Boolean.TRUE);
+		} catch (IllegalAccessException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	public static void __writeFieldValue__(Field field, Object value) {
+		__writeFieldValue__(field, value, null);
+	}
+	
+	public static void __writeFieldValue__(Object object, String fieldName, Object value, Boolean isGettable) {
+		try {
+			FieldUtils.writeField(object,fieldName,value, Boolean.TRUE);
+		} catch (IllegalAccessException exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	public static void __writeFieldValue__(Object object, String fieldName, Object value) {
+		__writeFieldValue__(object, fieldName, value, null);
+	}
+	
+	public static void __writeFieldValue__(Object object, FieldName fieldName,ValueUsageType valueUsageType, Object value, Boolean isGettable) {
+		if(object != null)
+			__writeFieldValue__(object, __buildFieldName__(object.getClass(), fieldName, valueUsageType), value, isGettable);
+	}
+	
+	public static void __writeFieldValueSystemIdentifier__(Object object, Object value, Boolean isGettable) {
+		if(object != null)
+			__writeFieldValue__(object, __buildFieldName__(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.SYSTEM), value, isGettable);
+	}
+	
+	public static void __writeFieldValueSystemIdentifier__(Object object, Object value) {
+		if(object != null)
+			__writeFieldValue__(object, __buildFieldName__(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.SYSTEM), value);
+	}
+	
+	public static void __writeFieldValueBusinessIdentifier__(Object object, Object value, Boolean isGettable) {
+		if(object != null)
+			__writeFieldValue__(object, __buildFieldName__(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS), value, isGettable);
+	}
+	
+	public static void __writeFieldValueBusinessIdentifier__(Object object, Object value) {
+		if(object != null)
+			__writeFieldValue__(object, __buildFieldName__(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS), value);
+	}
+	
+	/**/
+	
 	private static final String DOT = ConstantCharacter.DOT.toString();
+	
+	/**/
+	
+	@Getter @Setter @Accessors(chain=true) @EqualsAndHashCode(of= {"klass","fieldName","valueUsageType"}) @AllArgsConstructor
+	private static class ClassFieldNameValueUsageType implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private Class<?> klass;
+		private FieldName fieldName;
+		private ValueUsageType valueUsageType;
+		
+	}
 }

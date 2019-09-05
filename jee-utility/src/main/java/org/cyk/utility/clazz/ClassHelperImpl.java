@@ -5,6 +5,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.ClassUtils;
@@ -21,6 +23,9 @@ import org.cyk.utility.string.StringHelper;
 public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static final Map<Class<?>,Map<Integer,Class<?>>> CLASSES_PARAMETERS_MAP = new HashMap<>();
+	private static final Map<String,Class<?>> NAMES_CLASSES_MAP = new HashMap<>();
+	
 	@Override
 	public Boolean isInstanceOf(Class<?> aClass, Class<?> baseClass) {
 		if (aClass == null || baseClass == null)
@@ -180,7 +185,11 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 			
 		}else {
 			try {
-				clazz = Class.forName(name);
+				clazz = NAMES_CLASSES_MAP.get(name);
+				if(clazz == null) {
+					clazz = Class.forName(name);
+					NAMES_CLASSES_MAP.put(name, clazz);
+				}
 			} catch (Exception exception) {
 				if(exception instanceof ClassNotFoundException && Boolean.TRUE.equals(isReturnNullIfNotFound))
 					clazz = null;
@@ -243,8 +252,17 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 	
 	public static <TYPE> Class<TYPE> __getParameterAt__(Class<?> aClass, Integer index, Class<TYPE> typeClass) {
 		Class<TYPE> parameter = null;
-		if(aClass != null && index != null && typeClass != null && aClass.getGenericSuperclass() instanceof ParameterizedType){
-			parameter = (Class<TYPE>) ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments()[index];
+		if(aClass != null) {
+			Map<Integer,Class<?>> map = CLASSES_PARAMETERS_MAP.get(aClass);
+			parameter = map == null ? null : (Class<TYPE>) map.get(index);
+			if(parameter == null && aClass != null && index != null && typeClass != null && aClass.getGenericSuperclass() instanceof ParameterizedType){
+				parameter = (Class<TYPE>) ((ParameterizedType) aClass.getGenericSuperclass()).getActualTypeArguments()[index];
+				if(map == null) {
+					map = new HashMap<>();
+					CLASSES_PARAMETERS_MAP.put(aClass, map);
+				}
+;				map.put(index, parameter);
+			}	
 		}
 		return parameter;
 	}

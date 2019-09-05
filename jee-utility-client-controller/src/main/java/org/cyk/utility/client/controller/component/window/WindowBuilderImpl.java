@@ -16,6 +16,8 @@ import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.node.SystemNodeClient;
+import org.cyk.utility.time.DurationBuilder;
+import org.cyk.utility.time.DurationStringBuilder;
 
 public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Window> implements WindowBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -32,15 +34,21 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	//TODO improve build logic to reduce build time
 	@Override
 	protected void __execute__(Window window) {
+		DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
 		super.__execute__(window);
+		System.out.println("WindowBuilderImpl.__execute__() 1 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 		Object request = getRequest();
 		OutputStringTextBuilder applicationNameOutputStringText = getOutputStringTextMap(Boolean.TRUE).get("applicationName");
+		System.out.println("WindowBuilderImpl.__execute__() 201 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 		if(applicationNameOutputStringText == null) {
 			applicationNameOutputStringText = getApplicationName(Boolean.TRUE);
 		}else {
 			
 		}
-		
+		System.out.println("WindowBuilderImpl.__execute__() 202 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 		String applicationName = applicationNameOutputStringText.getValue();
 		
 		OutputStringTextBuilderMap outputStringTextMap = getOutputStringTextMap();
@@ -52,6 +60,8 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 				window.getOutputStringTextMap().set(entry.getKey(),entry.getValue().execute().getOutput());
 			}
 		}	
+		System.out.println("WindowBuilderImpl.__execute__() 21 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 		
 		WindowRenderType renderType = getRenderType();
 		window.setRenderType(renderType);
@@ -63,7 +73,8 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 			__setRequestAndContextAndUniformResourceLocatorMapOf__(title);
 			window.setTitle(title.execute().getOutput());
 		}
-		
+		System.out.println("WindowBuilderImpl.__execute__() 2 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 		ViewBuilder view = getView();
 		if(view!=null) {
 			//view.setLogLevel(LogLevel.INFO).setLoggable(Boolean.TRUE).addLogMessageBuilderParameter("Window view");
@@ -75,7 +86,8 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 				window.setView(view.execute().getOutput());	
 			}	
 		}
-		
+		System.out.println("WindowBuilderImpl.__execute__() 3 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 		if(renderType == null || renderType instanceof WindowRenderTypeNormal) {
 			MenuBuilderMap menuMap = getMenuMap();
 			if(menuMap!=null) {
@@ -84,6 +96,8 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 					window.getMenuMap().set(entry.getKey(),__inject__(MenuGetter.class).setRequest(request).setScopeClass(entry.getKey()).execute().getOutput());
 			}	
 		}
+		System.out.println("WindowBuilderImpl.__execute__() 30 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 		/*
 		Theme theme = getTheme();
 		if(theme == null)
@@ -91,10 +105,16 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 		window.setTheme(theme);
 		*/
 		DialogBuilder dialog = getDialog(Boolean.TRUE);
+		System.out.println("WindowBuilderImpl.__execute__() 40 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 		if(dialog!=null) {
 			__setRequestAndContextAndUniformResourceLocatorMapOf__(dialog);
+			System.out.println("WindowBuilderImpl.__execute__() 41 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+			durationBuilder.setBeginToNow();
 			window.setDialog(dialog.execute().getOutput());
 		}
+		System.out.println("WindowBuilderImpl.__execute__() 4 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
+		durationBuilder.setBeginToNow();
 	}
 	
 	@Override
@@ -155,7 +175,9 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	
 	@Override
 	public OutputStringTextBuilderMap getOutputStringTextMap(Boolean injectIfNull) {
-		return (OutputStringTextBuilderMap) __getInjectIfNull__(FIELD_OUTPUT_STRING_TEXT_MAP, injectIfNull);
+		if(outputStringTextMap == null && Boolean.TRUE.equals(injectIfNull))
+			outputStringTextMap = __inject__(OutputStringTextBuilderMap.class);
+		return outputStringTextMap;
 	}
 	
 	@Override

@@ -39,6 +39,11 @@ public interface FieldHelper extends Helper {
 	 */
 	Strings disjoin(String...paths);
 	
+	String buildFieldName(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType);
+	
+	Field getFieldByName(Class<?> klass,String fieldName);
+	Field getFieldByName(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType);
+	
 	Object getFieldValueSystemIdentifier(Object object);
 	Object getFieldValueBusinessIdentifier(Object object);
 	Object getFieldValueSystemOrBusinessIdentifier(Object object);
@@ -58,8 +63,16 @@ public interface FieldHelper extends Helper {
 	
 	<T> Collection<T> getSystemIdentifiers(Class<T> identifierClass,Collection<?> objects);
 	<T> Collection<T> getBusinessIdentifiers(Class<T> identifierClass,Collection<?> objects);
+	
+	Object readFieldValue(Object object, Field field,Boolean isGettable);
 	Object readFieldValue(Object object, Field field);
+	Object readFieldValue(Object object, String fieldName,Boolean isGettable);
 	Object readFieldValue(Object object, String fieldName);
+	
+	FieldHelper writeFieldValue(Field field,Object value,Boolean isGettable);
+	FieldHelper writeFieldValue(Field field,Object value);
+	FieldHelper writeFieldValue(Object object, String fieldName,Object value,Boolean isGettable);
+	FieldHelper writeFieldValue(Object object, String fieldName,Object value);
 	
 	FieldHelper nullify(Object object,Collection<String> fieldsNames,Boolean isEqual);
 	FieldHelper nullify(Object object,Strings fieldsNames,Boolean isEqual);

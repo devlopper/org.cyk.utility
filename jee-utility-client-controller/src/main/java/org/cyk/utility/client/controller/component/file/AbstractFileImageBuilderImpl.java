@@ -12,6 +12,12 @@ public abstract class AbstractFileImageBuilderImpl extends AbstractVisibleCompon
 	private String resourcesFolderName;
 	
 	@Override
+	protected void __listenPostConstruct__() {
+		setComponentClass(FileImage.class);
+		super.__listenPostConstruct__();
+	}
+	
+	@Override
 	protected void __execute__(FileImage fileImage) {
 		super.__execute__(fileImage);
 		FileBuilder file = getFile();
@@ -30,11 +36,6 @@ public abstract class AbstractFileImageBuilderImpl extends AbstractVisibleCompon
 		
 		Integer height = getHeight();
 		fileImage.setHeight(height);
-	}
-	
-	@Override
-	protected Class<FileImage> __getComponentClass__() {
-		return FileImage.class;
 	}
 	
 	@Override
