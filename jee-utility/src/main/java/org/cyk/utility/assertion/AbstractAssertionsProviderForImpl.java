@@ -3,6 +3,7 @@ package org.cyk.utility.assertion;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.object.Objects;
 
@@ -37,7 +38,9 @@ public abstract class AbstractAssertionsProviderForImpl<T> extends AbstractAsser
 	
 	@Override
 	public Objects getFors(Boolean injectIfNull) {
-		return (Objects) __getInjectIfNull__(FIELD_FORS, injectIfNull);
+		if(fors == null && Boolean.TRUE.equals(injectIfNull))
+			fors = DependencyInjection.inject(Objects.class);
+		return fors;
 	}
 	
 	@Override

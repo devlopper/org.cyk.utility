@@ -69,8 +69,8 @@ public interface FieldHelper extends Helper {
 	Object readFieldValue(Object object, String fieldName,Boolean isGettable);
 	Object readFieldValue(Object object, String fieldName);
 	
-	FieldHelper writeFieldValue(Field field,Object value,Boolean isGettable);
-	FieldHelper writeFieldValue(Field field,Object value);
+	FieldHelper writeFieldValue(Object object, Field field,Object value,Boolean isGettable);
+	FieldHelper writeFieldValue(Object object, Field field,Object value);
 	FieldHelper writeFieldValue(Object object, String fieldName,Object value,Boolean isGettable);
 	FieldHelper writeFieldValue(Object object, String fieldName,Object value);
 	

@@ -2,6 +2,7 @@ package org.cyk.utility.assertion;
 
 import org.cyk.utility.field.FieldValueGetter;
 
+@Deprecated
 public interface AssertionBuilderNull extends AssertionBuilder {
 
 	FieldValueGetter getFieldValueGetter();

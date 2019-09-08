@@ -13,8 +13,9 @@ import org.cyk.utility.__kernel__.properties.Properties;
 public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractObject implements Objectable, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Properties properties;
-	private Boolean __initialised__;
+	protected Object identifier;
+	protected Properties properties;
+	protected Boolean __initialised__;
 	protected Boolean __isCallInitialiseMethodOnPostConstruct__;
 	
 	@PostConstruct
@@ -109,12 +110,12 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	
 	@Override
 	public Object getIdentifier() {
-		return getProperties().getIdentifier();
+		return identifier;
 	}
 	
 	@Override
 	public Objectable setIdentifier(Object identifier) {
-		getProperties().setIdentifier(identifier);
+		this.identifier = identifier;
 		return this;
 	}
 	

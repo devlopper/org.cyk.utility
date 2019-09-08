@@ -3,6 +3,9 @@ package org.cyk.utility.bean;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
@@ -21,7 +24,8 @@ public abstract class AbstractPropertyValueGetterImpl extends AbstractFunctionWi
 		Property property = getProperty();
 		if(property == null) {
 			Strings pathStrings = getPathStrings();
-			if(__injectCollectionHelper__().isNotEmpty(pathStrings)) {
+			if(CollectionHelperImpl.__isNotEmpty__(pathStrings)) {
+				//property = (Property) FieldHelperImpl.__readFieldValue__(object, FieldHelperImpl.__getFieldByNames__(object.getClass(), pathStrings.get()));
 				property = (Property) __inject__(FieldValueGetter.class).setObject(object).setField(pathStrings.get()).execute().getOutput();
 			}
 		}
@@ -88,7 +92,9 @@ public abstract class AbstractPropertyValueGetterImpl extends AbstractFunctionWi
 
 	@Override
 	public Strings getPathStrings(Boolean injectIfNull) {
-		return (Strings) __getInjectIfNull__(FIELD_PATH_STRINGS, injectIfNull);
+		if(pathStrings == null && Boolean.TRUE.equals(injectIfNull))
+			pathStrings = DependencyInjection.inject(Strings.class);
+		return pathStrings;
 	}
 	
 	/**/

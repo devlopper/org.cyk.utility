@@ -4,17 +4,19 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.function.Function;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 
-@Dependent
+@Dependent @Deprecated
 public class StyleBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Style> implements StyleBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Strings classes,values;
 	
 	@Override
-	protected Style __execute__() throws Exception {
+	public Function<Properties, Style> execute() {
 		Style style = __inject__(Style.class);
 		Strings classes = getClasses();
 		if(__injectCollectionHelper__().isNotEmpty(classes))
@@ -23,9 +25,10 @@ public class StyleBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 		Strings values = getValues();
 		if(__injectCollectionHelper__().isNotEmpty(values))
 			style.getValues(Boolean.TRUE).add(values);
-		return style;
+		setProperty(Properties.OUTPUT, style);
+		return this;
 	}
-	
+		
 	@Override
 	public Strings getClasses() {
 		return classes;

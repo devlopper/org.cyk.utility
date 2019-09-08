@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringFunction;
 
+@Deprecated
 public interface InternalizationPhraseBuilder extends StringFunction {
 
 	InternalizationStringBuilders getStrings();

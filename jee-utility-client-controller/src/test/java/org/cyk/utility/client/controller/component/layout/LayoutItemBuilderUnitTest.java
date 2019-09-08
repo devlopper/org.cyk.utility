@@ -29,7 +29,7 @@ public class LayoutItemBuilderUnitTest extends AbstractWeldUnitTest {
 	public void buildWithStyle() {
 		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl.class);
 		LayoutItemBuilder layoutItemBuilder = __inject__(LayoutItemBuilder.class);
-		layoutItemBuilder.getStyle(Boolean.TRUE).addClasses("myclass");
+		layoutItemBuilder.getStyle(Boolean.TRUE).getClasses(Boolean.TRUE).add("myclass");
 		LayoutItem layoutItem = layoutItemBuilder.execute().getOutput();
 		assertionHelper.assertNotNull(layoutItem);
 		assertionHelper.assertNotNull(layoutItem.getStyle());

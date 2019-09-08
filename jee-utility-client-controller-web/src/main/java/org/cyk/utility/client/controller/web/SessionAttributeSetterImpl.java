@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.cyk.utility.__kernel__.annotation.Web;
 import org.cyk.utility.client.controller.session.AbstractSessionAttributeSetterImpl;
 
-@Web
+@Web @Deprecated
 public class SessionAttributeSetterImpl extends AbstractSessionAttributeSetterImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Override

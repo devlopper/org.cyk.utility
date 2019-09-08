@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 import org.reflections.Reflections;
@@ -63,7 +64,9 @@ public class ClassesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 
 	@Override
 	public Strings getPackageNames(Boolean injectIfNull) {
-		return (Strings) __getInjectIfNull__(FIELD_PACKAGE_NAMES, injectIfNull);
+		if(packageNames == null && Boolean.TRUE.equals(injectIfNull))
+			packageNames = DependencyInjection.inject(Strings.class);
+		return packageNames;
 	}
 
 	@Override
@@ -91,7 +94,9 @@ public class ClassesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl
 
 	@Override
 	public Classes getBasesClasses(Boolean injectIfNull) {
-		return (Classes) __getInjectIfNull__(FIELD_BASES_CLASSES, injectIfNull);
+		if(basesClasses == null && Boolean.TRUE.equals(injectIfNull))
+			basesClasses = DependencyInjection.inject(Classes.class);
+		return basesClasses;
 	}
 
 	@Override

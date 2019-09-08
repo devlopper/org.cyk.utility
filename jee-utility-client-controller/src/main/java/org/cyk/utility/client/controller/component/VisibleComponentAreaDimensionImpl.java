@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
@@ -24,7 +25,9 @@ public class VisibleComponentAreaDimensionImpl extends AbstractObject implements
 
 	@Override
 	public Map<Class<? extends Device>, Integer> getProportionMap(Boolean injectIfNull) {
-		return (Map<Class<? extends Device>, Integer>) __getInstanciateIfNull__(FIELD_PROPORTION_MAP, injectIfNull);
+		if(proportionMap == null && Boolean.TRUE.equals(injectIfNull))
+			proportionMap = new LinkedHashMap<>();
+		return proportionMap;
 	}
 
 	@Override

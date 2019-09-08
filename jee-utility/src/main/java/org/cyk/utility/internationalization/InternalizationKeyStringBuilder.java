@@ -2,6 +2,7 @@ package org.cyk.utility.internationalization;
 
 import org.cyk.utility.string.StringFunction;
 
+@Deprecated
 public interface InternalizationKeyStringBuilder extends StringFunction {
 
 	Object getValue();

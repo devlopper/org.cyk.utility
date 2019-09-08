@@ -2,9 +2,11 @@ package org.cyk.utility.field;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.jupiter.api.Test;
@@ -33,7 +35,7 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 
 	@Test
 	public void getField_sub_sIntField(){
-		assertThat(__inject__(FieldHelper.class).getField(MyClass01.class, "sub","sIntField")).isEqualTo(FieldUtils.getField(MyClass01Sub.class, "sIntField",Boolean.TRUE));
+		assertThat(FieldHelperImpl.__getFieldByNames__(MyClass01.class, "sub","sIntField")).isEqualTo(FieldUtils.getField(MyClass01Sub.class, "sIntField",Boolean.TRUE));
 	}	
 	
 	@Test
@@ -52,11 +54,28 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void readFieldValue_nested(){
+		MyClass01 object = new MyClass01();
+		object.setSub(new MyClass01Sub());
+		object.getSub().setStringField("subValue");
+		assertThat(FieldHelperImpl.__readFieldValue__(object,"sub.stringField")).isEqualTo("subValue");
+	}
+	
+	@Test
 	public void writeFieldValue(){
 		MyClass01 object = new MyClass01();
 		assertThat(object.getIdentifier()).isNull();
 		FieldHelperImpl.__writeFieldValue__(object,"identifier","i01");
 		assertThat(object.getIdentifier()).isEqualTo("i01");
+	}
+	
+	@Test
+	public void writeFieldValue_nested(){
+		MyClass01 object = new MyClass01();
+		object.setSub(new MyClass01Sub());
+		assertThat(object.getSub().getIntegerField()).isNull();
+		FieldHelperImpl.__writeFieldValue__(object,"sub.integerField",17);
+		assertThat(object.getSub().getIntegerField()).isEqualTo(17);
 	}
 	
 	@Test
@@ -129,8 +148,10 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
-	public static class MyClass01 {
-		private String identifier,code;
+	public static class MyClass01 extends AbstractObject implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private String code;
 		private int intField;
 		private Integer integerField;
 		private String stringField;
@@ -158,13 +179,15 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	@Getter @Setter @Accessors(chain=true)
 	public static class MyClass01Sub {
 		
-		private int sIntField;
-		private Integer sIntegerField;
-		private String sStringField;
+		private int intField;
+		private Integer integerField;
+		private String stringField;
 		private long sLongValue1;
 		private Long sLongValue2;
 		private Date sDateField;
 		private Object sX;
 		
 	}
+
+
 }

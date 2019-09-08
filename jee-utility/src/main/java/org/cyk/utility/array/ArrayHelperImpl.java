@@ -53,4 +53,14 @@ public class ArrayHelperImpl extends AbstractHelper implements ArrayHelper,Seria
 	public Integer getSize(Object[] objects) {
 		return objects == null ? null : objects.length;
 	}
+	
+	/**/
+	
+	public static Boolean __isEmpty__(Object[] objects) {
+		return objects == null || objects.length == 0;
+	}
+	
+	public static Boolean __isNotEmpty__(Object[] objects) {
+		return Boolean.FALSE.equals(__isEmpty__(objects));
+	}
 }

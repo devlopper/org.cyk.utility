@@ -1,29 +1,78 @@
 package org.cyk.utility.assertion;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import java.io.Serializable;
 
+import java.io.Serializable;
+import java.lang.reflect.Field;
+
+import org.cyk.utility.__kernel__.assertion.Assertion;
+import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldsGetter;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldName;
-import org.cyk.utility.field.FieldNameGetter;
-import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.internationalization.InternalizationHelperImpl;
 import org.cyk.utility.log.LogEventEntityRepository;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.number.NumberHelper;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.number.NumberHelperImpl;
+import org.cyk.utility.value.Value;
+import org.cyk.utility.value.ValueHelperImpl;
 import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractAssertionHelperImpl extends AbstractHelper implements AssertionHelper, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static void __processAssertion__(Assertion assertion,String messageIdentifierWhenValueIsNotTrue,String defaultDessageIdentifierWhenValueIsNotTrue,Object[] arguments,String identifier) {
+		if(Boolean.TRUE.equals(assertion.getValue())){
+			
+		}else {
+			messageIdentifierWhenValueIsNotTrue = ValueHelperImpl.__defaultToIfBlank__(messageIdentifierWhenValueIsNotTrue,defaultDessageIdentifierWhenValueIsNotTrue);
+			assertion.setMessageWhenValueIsNotTrue(InternalizationHelperImpl.__buildInternalizationString__(messageIdentifierWhenValueIsNotTrue, arguments, null, null));
+			assertion.setIdentifier(String.format("assertion.%s", identifier));	
+		}
+	}
+	
+	public static Assertion __buildAssertionComparison__(Value value1,ComparisonOperator operator,Value value2,Boolean isAffirmation,String messageIdentifierWhenValueIsNotTrue) {
+		ValueHelperImpl.__throwIfBlank__("assertion comparison value1", value1);
+		ValueHelperImpl.__throwIfBlank__("assertion comparison value2", value2);
+		ValueHelperImpl.__throwIfBlank__("assertion comparison operator", operator);
+		isAffirmation = ValueHelperImpl.__defaultToIfNull__(isAffirmation,Boolean.TRUE);	
+		Assertion assertion = __inject__(Assertion.class);		
+		Number number1 = (Number) value1.get();
+		Number number2 = (Number) value2.get();
+		assertion.setValue(NumberHelperImpl.__compare__(number1, number2, operator));	
+		if(!isAffirmation)
+			assertion.setValue(!assertion.getValue());
+		__processAssertion__(assertion, messageIdentifierWhenValueIsNotTrue,"assertion.comparison", new Object[] {number1,operator.getSymbol(),number2}, "comparison."+operator.name().toLowerCase());
+		return assertion;
+	}
+
+	public static Assertion __buildAssertionComparison__(Value value1,ComparisonOperator operator,Value value2) {
+		return __buildAssertionComparison__(value1, operator, value2, Boolean.TRUE, null);
+	}
+	
+	public static Assertion __buildAssertionNull__(Value value,Boolean isAffirmation,String messageIdentifierWhenValueIsNotTrue) {
+		ValueHelperImpl.__throwIfBlank__("assertion null value", value);
+		isAffirmation = ValueHelperImpl.__defaultToIfNull__(isAffirmation,Boolean.TRUE);	
+		Assertion assertion = __inject__(Assertion.class);		
+		Object __value__ = value.get();
+		assertion.setValue(__value__ == null);	
+		if(!isAffirmation)
+			assertion.setValue(!assertion.getValue());
+		__processAssertion__(assertion, messageIdentifierWhenValueIsNotTrue,"assertion.null", null, "null");
+		return assertion;
+	}
+	
+	public static Assertion __buildAssertionNull__(Value value) {
+		return __buildAssertionNull__(value, Boolean.TRUE, null);
+	}
+	
 	@Override
 	public AssertionHelper assertNotNull(String message, Object object,FieldName fieldName, ValueUsageType valueUsageType) {
-		String name = __inject__(FieldNameGetter.class).execute(object.getClass(), fieldName, valueUsageType).getOutput();
-		if(__inject__(StringHelper.class).isNotBlank(name) && __inject__(CollectionHelper.class).isNotEmpty(__inject__(FieldsGetter.class).execute(object.getClass(), name).getOutput()))
-			assertNotNull(message, __inject__(FieldValueGetter.class).execute(object, name).getOutput());
+		Field field = FieldHelperImpl.__getFieldByName__(object.getClass(), fieldName, valueUsageType);
+		if(field != null)
+			assertNotNull(message, FieldHelperImpl.__readFieldValue__(object, field));
 		return this;
 	}
 	

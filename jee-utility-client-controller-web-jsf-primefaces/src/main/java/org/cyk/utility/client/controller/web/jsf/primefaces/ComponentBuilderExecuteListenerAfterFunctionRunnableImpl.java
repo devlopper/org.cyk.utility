@@ -62,7 +62,7 @@ import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueHelper;
 import org.primefaces.model.DefaultStreamedContent;
 
-@Primefaces
+@Primefaces @Deprecated
 public class ComponentBuilderExecuteListenerAfterFunctionRunnableImpl extends AbstractComponentBuilderExecuteListenerImpl implements ComponentBuilderExecuteListenerAfter,Serializable {
 	private static final long serialVersionUID = 1L;
 	

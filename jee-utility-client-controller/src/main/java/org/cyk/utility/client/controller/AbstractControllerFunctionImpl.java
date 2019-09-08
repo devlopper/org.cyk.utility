@@ -11,8 +11,8 @@ import org.cyk.utility.client.controller.data.DataTransferObjectClassGetter;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderTypeDialog;
 import org.cyk.utility.client.controller.proxy.ProxyGetter;
+import org.cyk.utility.internationalization.InternalizationHelperImpl;
 import org.cyk.utility.internationalization.InternalizationKeyStringType;
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.mapping.MappingHelper;
 import org.cyk.utility.notification.NotificationBuilder;
@@ -183,8 +183,10 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	}
 	
 	protected Collection<Object> __getMessageSummaryInternalizationStringBuilderParameters__(SystemAction systemAction,Response response) {
-		return __injectCollectionHelper__().instanciate(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setKeyType(InternalizationKeyStringType.NOUN).execute().getOutput() 
-				,__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction.getEntityClass()).execute().getOutput());
+		return __injectCollectionHelper__().instanciate(
+				InternalizationHelperImpl.__buildInternalizationString__(InternalizationHelperImpl.__buildInternalizationKey__(systemAction, InternalizationKeyStringType.NOUN))
+				,InternalizationHelperImpl.__buildInternalizationString__(InternalizationHelperImpl.__buildInternalizationKey__(systemAction.getEntityClass()))
+				);
 	}
 	
 	@Override

@@ -13,19 +13,31 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.assertion.AssertionBuilder;
 import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.collection.CollectionInstance;
+import org.cyk.utility.css.CascadeStyleSheetHelper;
+import org.cyk.utility.css.CascadeStyleSheetHelperImpl;
 import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.instance.InstanceHelper;
+import org.cyk.utility.instance.InstanceHelperImpl;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.map.MapHelper;
+import org.cyk.utility.map.MapHelperImpl;
 import org.cyk.utility.number.NumberHelper;
+import org.cyk.utility.number.NumberHelperImpl;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.string.StringHelperImpl;
 import org.cyk.utility.throwable.ThrowableHelper;
+import org.cyk.utility.throwable.ThrowableHelperImpl;
 import org.cyk.utility.type.TypeHelper;
+import org.cyk.utility.type.TypeHelperImpl;
 import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.value.ValueHelperImpl;
 
 public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility.__kernel__.function.AbstractFunctionImpl<INPUT, OUTPUT> implements Function<INPUT,OUTPUT>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -278,46 +290,51 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	/**/
 	
 	protected static StringHelper __injectStringHelper__(){
-		return __inject__(StringHelper.class);
+		return StringHelperImpl.getInstance();
 	}
 	
 	protected static ValueHelper __injectValueHelper__(){
-		return __inject__(ValueHelper.class);
+		return ValueHelperImpl.getInstance();
 	}
 	
 	protected static MapHelper __injectMapHelper__(){
-		return __inject__(MapHelper.class);
+		return MapHelperImpl.getInstance();
 	}
 	
 	protected static CollectionHelper __injectCollectionHelper__(){
-		return __inject__(CollectionHelper.class);
+		return CollectionHelperImpl.getInstance();
 	}
 	
 	protected static ClassHelper __injectClassHelper__(){
-		return __inject__(ClassHelper.class);
+		return ClassHelperImpl.getInstance();
 	}
 	
 	protected static FieldHelper __injectFieldHelper__(){
-		return __inject__(FieldHelper.class);
+		return FieldHelperImpl.getInstance();
 	}
 	
+	@Deprecated
 	protected static FieldValueGetter __injectFieldValueGetter__(){
 		return __inject__(FieldValueGetter.class);
 	}
 	
-	protected ThrowableHelper __injectThrowableHelper__(){
-		return __inject__(ThrowableHelper.class);
+	protected static ThrowableHelper __injectThrowableHelper__(){
+		return ThrowableHelperImpl.getInstance();
 	}
 	
-	protected NumberHelper __injectNumberHelper__(){
-		return __inject__(NumberHelper.class);
+	protected static NumberHelper __injectNumberHelper__(){
+		return NumberHelperImpl.getInstance();
 	}
 	
-	protected InstanceHelper __injectInstanceHelper__(){
-		return __inject__(InstanceHelper.class);
+	protected static InstanceHelper __injectInstanceHelper__(){
+		return InstanceHelperImpl.getInstance();
 	}
 	
-	protected TypeHelper __injectTypeHelper__(){
-		return __inject__(TypeHelper.class);
+	protected static TypeHelper __injectTypeHelper__(){
+		return TypeHelperImpl.getInstance();
+	}
+	
+	protected static CascadeStyleSheetHelper __injectCascadeStyleSheetHelper__(){
+		return CascadeStyleSheetHelperImpl.getInstance();
 	}
 }

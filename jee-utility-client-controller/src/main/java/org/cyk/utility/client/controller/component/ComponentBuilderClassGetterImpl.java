@@ -162,7 +162,9 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 	
 	@Override
 	public Annotations getAnnotations(Boolean injectIfNull) {
-		return (Annotations) __getInjectIfNull__(FIELD_ANNOTATIONS, injectIfNull);
+		if(annotations == null && Boolean.TRUE.equals(injectIfNull))
+			annotations = __inject__(Annotations.class);
+		return annotations;
 	}
 
 	@Override
@@ -195,7 +197,9 @@ public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropert
 	
 	@Override
 	public Strings getFieldNameStrings(Boolean injectIfNull) {
-		return (Strings) __getInjectIfNull__(FIELD_FIELD_NAME_STRINGS, injectIfNull);
+		if(fieldNameStrings == null && Boolean.TRUE.equals(injectIfNull))
+			fieldNameStrings = __inject__(Strings.class);
+		return fieldNameStrings;
 	}
 	
 	@Override

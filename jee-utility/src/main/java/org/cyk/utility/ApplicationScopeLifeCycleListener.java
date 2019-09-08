@@ -4,6 +4,8 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.client.Client;
 
+import org.apache.commons.beanutils.FluentPropertyBeanIntrospector;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.object.ObjectFromStringBuilder;
 import org.cyk.utility.object.ObjectToStringBuilder;
@@ -17,6 +19,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
+		PropertyUtils.addBeanIntrospector(new FluentPropertyBeanIntrospector());
 		__setQualifierClassTo__(JavaScriptObjectNotation.class, ObjectToStringBuilder.class,ObjectFromStringBuilder.class);
 		if(Boolean.TRUE.equals(__inject__(StreamDistributedHelper.class).getIsEnable())) {
 			Topic.startAllConsumers();

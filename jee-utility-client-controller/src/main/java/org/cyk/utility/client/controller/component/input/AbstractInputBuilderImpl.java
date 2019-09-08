@@ -31,7 +31,6 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	@Override
 	protected void __execute__(INPUT input, Object object, Field field) {
 		super.__execute__(input, object, field);
-		
 		Boolean isNullable = getIsNullable();
 		if(isNullable == null && field != null)
 			isNullable = field.getAnnotation(javax.validation.constraints.NotNull.class) == null;
@@ -75,7 +74,9 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 
 	@Override
 	public OutputStringLabelBuilder getLabel(Boolean injectIfNull) {
-		return ((OutputStringLabelBuilder) __getInjectIfNull__(FIELD_LABEL, injectIfNull)).setInputBuilder(this);
+		if(label == null && Boolean.TRUE.equals(injectIfNull))
+			label = __inject__(OutputStringLabelBuilder.class).setInputBuilder(this);
+		return label;
 	}
 
 	@Override
@@ -91,7 +92,9 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 
 	@Override
 	public OutputStringMessageBuilder getMessage(Boolean injectIfNull) {
-		return ((OutputStringMessageBuilder) __getInjectIfNull__(FIELD_MESSAGE, injectIfNull)).setInputBuilder(this);
+		if(message == null && Boolean.TRUE.equals(injectIfNull))
+			message = __inject__(OutputStringMessageBuilder.class).setInputBuilder(this);
+		return message;
 	}
 
 	@Override
@@ -151,7 +154,9 @@ public abstract class AbstractInputBuilderImpl<INPUT extends Input<VALUE>,VALUE>
 	
 	@Override
 	public CommandBuilder getListenValueChangeCommand(Boolean injectIfNull) {
-		return (CommandBuilder) __getInjectIfNull__(FIELD_LISTEN_VALUE_CHANGE_COMMAND, injectIfNull);
+		if(listenValueChangeCommand == null && Boolean.TRUE.equals(injectIfNull))
+			listenValueChangeCommand = __inject__(CommandBuilder.class);
+		return listenValueChangeCommand;
 	}
 	
 	@Override

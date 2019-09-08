@@ -7,7 +7,7 @@ import org.cyk.utility.clazz.Classes;
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.event.EventBuilders;
 import org.cyk.utility.client.controller.event.EventName;
-import org.cyk.utility.css.StyleBuilder;
+import org.cyk.utility.css.Style;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
@@ -48,9 +48,9 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	ComponentBuilder<COMPONENT> setAreaWidthProportions(Integer _default,Integer television,Integer desktop,Integer tablet,Integer phone);
 	ComponentBuilder<COMPONENT> setAreaWidthProportionsForNotPhone(Integer width);
 	
-	StyleBuilder getLayoutItemStyle();
-	StyleBuilder getLayoutItemStyle(Boolean injectIfNull);
-	ComponentBuilder<COMPONENT> setLayoutItemStyle(StyleBuilder style);
+	Style getLayoutItemStyle();
+	Style getLayoutItemStyle(Boolean injectIfNull);
+	ComponentBuilder<COMPONENT> setLayoutItemStyle(Style style);
 	ComponentBuilder<COMPONENT> addLayoutItemStyleClasses(String...classes);
 	
 	ComponentRoles getRoles();

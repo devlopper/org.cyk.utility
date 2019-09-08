@@ -56,7 +56,9 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	
 	@Override
 	public ComponentRoles getRoles(Boolean injectIfNull) {
-		return (ComponentRoles) __getInjectIfNull__(FIELD_ROLES, injectIfNull);
+		if(roles == null && Boolean.TRUE.equals(injectIfNull))
+			roles = __inject__(ComponentRoles.class);
+		return roles;
 	}
 	
 	@Override
@@ -72,7 +74,9 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	
 	@Override
 	public Property getTargetModel(Boolean injectIfNull) {
-		return (Property) __getInjectIfNull__(FIELD_TARGET_MODEL, injectIfNull);
+		if(targetModel == null && Boolean.TRUE.equals(injectIfNull))
+			targetModel = __inject__(Property.class);
+		return targetModel;
 	}
 	
 	@Override
@@ -94,7 +98,9 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	
 	@Override
 	public Property getTargetBinding(Boolean injectIfNull) {
-		return (Property) __getInjectIfNull__(FIELD_TARGET_BINDING, injectIfNull);
+		if(targetBinding == null && Boolean.TRUE.equals(injectIfNull))
+			targetBinding = __inject__(Property.class);
+		return targetBinding;
 	}
 	
 	@Override
@@ -115,7 +121,9 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	
 	@Override
 	public Objects getUpdatables(Boolean injectIfNull) {
-		return (Objects) __getInjectIfNull__(FIELD_UPDATABLES, injectIfNull);
+		if(updatables == null && Boolean.TRUE.equals(injectIfNull))
+			updatables = __inject__(Objects.class);
+		return updatables;
 	}
 	
 	@Override
@@ -131,7 +139,9 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	
 	@Override
 	public Events getEvents(Boolean injectIfNull) {
-		return (Events) __getInjectIfNull__(FIELD_EVENTS, injectIfNull);
+		if(events == null && Boolean.TRUE.equals(injectIfNull))
+			events = __inject__(Events.class);
+		return events;
 	}
 	
 	@Override
@@ -186,9 +196,4 @@ public abstract class AbstractComponentImpl extends AbstractObject implements Co
 	
 	/**/
 	
-	public static final String FIELD_ROLES = "roles";
-	public static final String FIELD_UPDATABLES = "updatables";
-	public static final String FIELD_EVENTS = "events";
-	public static final String FIELD_TARGET_MODEL = "targetModel";
-	public static final String FIELD_TARGET_BINDING = "targetBinding";
 }

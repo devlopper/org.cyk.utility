@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
-import org.cyk.utility.client.controller.session.SessionAttributeGetter;
-import org.cyk.utility.client.controller.session.SessionAttributeSetter;
+import org.cyk.utility.client.controller.session.SessionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.scope.Scope;
 import org.cyk.utility.scope.ScopeSession;
@@ -22,7 +21,7 @@ public class MenuGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Me
 		Menu menu = null;
 		Class<? extends Scope> scopeClass = getScopeClass();
 		if(__injectClassHelper__().isInstanceOf(scopeClass, ScopeSession.class)) {
-			menu = __inject__(SessionAttributeGetter.class).setRequest(request).setAttribute(SessionAttributeEnumeration.MENU).execute().getOutputAs(Menu.class);
+			menu = (Menu) __inject__(SessionHelper.class).getAttributeValue(SessionAttributeEnumeration.MENU,request);
 		}
 		if(menu == null) {
 			MenuBuilderMap map = __inject__(MenuBuilderMapGetter.class).setRequest(request).execute().getOutput();
@@ -41,7 +40,7 @@ public class MenuGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Me
 			}
 			
 			if(__injectClassHelper__().isInstanceOf(scopeClass, ScopeSession.class)) {
-				__inject__(SessionAttributeSetter.class).setRequest(request).setAttribute(SessionAttributeEnumeration.MENU).setValue(menu).execute();
+				__inject__(SessionHelper.class).setAttributeValue(SessionAttributeEnumeration.MENU,menu,request);
 			}
 		}
 		

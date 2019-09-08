@@ -14,12 +14,16 @@ import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.collections4.ListUtils;
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.array.ArrayHelper;
+import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.value.ValueHelper;
+import org.cyk.utility.value.ValueHelperImpl;
 
 import one.util.streamex.StreamEx;
 
@@ -27,27 +31,36 @@ import one.util.streamex.StreamEx;
 public class CollectionHelperImpl extends AbstractHelper implements CollectionHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static CollectionHelper INSTANCE;
+	public static CollectionHelper getInstance(Boolean isNew) {
+		//if(INSTANCE == null || Boolean.TRUE.equals(isNew))
+			INSTANCE =  DependencyInjection.inject(CollectionHelper.class);
+		return INSTANCE;
+	}
+	public static CollectionHelper getInstance() {
+		return getInstance(null);
+	}
+	
 	@Override
 	public Boolean isEmpty(Collection<?> collection){
-		return collection==null || collection.isEmpty();
+		return __isEmpty__(collection);
 	}
 	
 	@Override
 	public Boolean isNotEmpty(Collection<?> collection){
-		return Boolean.FALSE.equals(isEmpty(collection));
+		return __isNotEmpty__(collection);
 	}
 	
 	@Override
 	public Boolean isEmpty(CollectionInstance<?> collectionInstance){
-		return collectionInstance==null || isEmpty(collectionInstance.get());
+		return __isEmpty__(collectionInstance);
 	}
 	
 	@Override
 	public Boolean isNotEmpty(CollectionInstance<?> collectionInstance){
-		return Boolean.FALSE.equals(isEmpty(collectionInstance));
+		return __isNotEmpty__(collectionInstance);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> instanciate(Class<COLLECTION> collectionClass,ELEMENT...elements){
 		if(collectionClass==null)
@@ -190,7 +203,6 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public <ELEMENT> Collection<ELEMENT> cast(Class<ELEMENT> aClass,Collection<?> collection){
 		Collection<ELEMENT> result;
 		if(collection==null){
@@ -326,5 +338,143 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 		if(Boolean.TRUE.equals(instanciateIfNotInstanceOfCollection))
 			return __inject__(CollectionHelper.class).instanciate(object);
 		return (Collection<?>) object; // this will throw an exception. this has been written to avoid throwing it ourselves
+	}
+	
+	/**/
+	
+	public static <COLLECTION extends Collection<?>,ELEMENT> Collection<ELEMENT> __instanciate__(Class<COLLECTION> collectionClass,ELEMENT...elements){
+		if(collectionClass==null)
+			return null;
+		if(Set.class.equals(collectionClass))
+			collectionClass = ValueHelperImpl.__cast__(LinkedHashSet.class,collectionClass);
+		else if(List.class.equals(collectionClass))
+			collectionClass = ValueHelperImpl.__cast__(ArrayList.class, collectionClass);
+		else if(Collection.class.equals(collectionClass))
+			collectionClass = ValueHelperImpl.__cast__(ArrayList.class, collectionClass);			
+		Collection<ELEMENT> collection = (Collection<ELEMENT>) ClassHelperImpl.__instanciateOne__(collectionClass);
+		if(ArrayHelperImpl.__isNotEmpty__(elements))
+			collection.addAll(Arrays.asList(elements));
+		return collection;
+	}
+	
+	public static <ELEMENT> Collection<ELEMENT> __instanciate__(ELEMENT...elements){
+		return __instanciate__(ArrayList.class, elements);
+	}
+	
+	public static Boolean __isEmpty__(Collection<?> collection){
+		return collection==null || collection.isEmpty();
+	}
+	
+	public static Boolean __isNotEmpty__(Collection<?> collection){
+		return Boolean.FALSE.equals(__isEmpty__(collection));
+	}
+	
+	public static Boolean __isEmpty__(CollectionInstance<?> collectionInstance){
+		return collectionInstance==null || __isEmpty__(collectionInstance.get());
+	}
+	
+	public static Boolean __isNotEmpty__(CollectionInstance<?> collectionInstance){
+		return Boolean.FALSE.equals(__isEmpty__(collectionInstance));
+	}
+	
+	public static Integer __getSize__(Collection<?> collection) {
+		if(__isEmpty__(collection))
+			return 0;
+		return collection.size();
+	}
+	
+	public static Integer __getSize__(CollectionInstance<?> collectionInstance) {
+		return collectionInstance == null ? 0 : __getSize__(collectionInstance.get());
+	}
+	
+	public static <ELEMENT> ELEMENT __getElementAt__(Collection<ELEMENT> collection,Object index){
+		Integer indexValue = __inject__(NumberHelper.class).getInteger(index);
+		ELEMENT element = null;
+		if(__isNotEmpty__(collection) && indexValue < __getSize__(collection)){
+			if(collection instanceof List)
+				element = ((List<ELEMENT>)collection).get(indexValue.intValue());
+			else {
+				java.util.Iterator<ELEMENT> iterator = collection.iterator();
+				Integer count = 0;
+				while (count++ <= indexValue)
+					element = iterator.next();
+			}
+		}
+		return element;
+	}
+	
+	public static <ELEMENT> ELEMENT __getElementAt__(CollectionInstance<ELEMENT> collectionInstance, Object index) {
+		return collectionInstance == null ? null : __getElementAt__(collectionInstance.get(), index);
+	}
+	
+	public static <ELEMENT> Collection<ELEMENT> __getElementsFromTo__(Collection<ELEMENT> collection,Integer begin, Integer end) {
+		if(collection!=null) {
+			if(begin==null)
+				begin = 0;
+			if(end==null || end < 0)
+				end = collection.size();
+			if(collection instanceof List)
+				return ((List<ELEMENT>)collection).subList(begin, end);
+			__inject__(ThrowableHelper.class).throwRuntimeException("Cannot get elements from "+begin+" to "+end+" of "+collection.getClass());
+		}
+		return null;
+	}
+	
+	public static <ELEMENT> Collection<ELEMENT> __getElementsFrom__(Collection<ELEMENT> collection,Integer begin) {
+		return __getElementsFromTo__(collection,begin,null);
+	}
+	
+	public static <ELEMENT> ELEMENT __getFirst__(Collection<ELEMENT> collection){
+		if(__isEmpty__(collection))
+			return null;
+		return collection.iterator().next();
+	}
+	
+	public static <ELEMENT> ELEMENT __getFirst__(CollectionInstance<ELEMENT> collection) {
+		return collection == null ? null : __getFirst__(collection.get());
+	}
+	
+	public static <ELEMENT> ELEMENT __getLast__(Collection<ELEMENT> collection){
+		if(__isEmpty__(collection))
+			return null;
+		if(collection instanceof LinkedHashSet)
+			collection = new ArrayList<>(collection);
+		if(collection instanceof List)
+			return ((List<ELEMENT>)collection).get(((List<ELEMENT>)collection).size()-1);
+		throw new RuntimeException("cannot find last on collection of type "+collection.getClass());
+	}
+	
+	public static void __clear__(Collection<?> collection){
+		if(collection!=null)
+			collection.clear();
+	}
+	
+	public static <ELEMENT> Collection<ELEMENT> __cast__(Class<ELEMENT> aClass,Collection<?> collection){
+		Collection<ELEMENT> result;
+		if(collection==null){
+			result = null;
+		}else{
+			result = new ArrayList<ELEMENT>();
+			for(Object item : collection)
+				result.add((ELEMENT) item);	
+		}
+		return result;
+	}
+	
+	public static <ELEMENT> Collection<ELEMENT> __concatenate__(Collection<Collection<ELEMENT>> collections) {
+		Collection<ELEMENT> collection = null;
+		if(__isNotEmpty__(collections)){
+			collection = new ArrayList<ELEMENT>();
+			for(Collection<ELEMENT> index : collections)
+				if(__isNotEmpty__(index))
+					collection.addAll(index);
+		}
+		return collection;
+	}
+	
+	public static <ELEMENT> Collection<ELEMENT> __concatenate__(Collection<ELEMENT>...collections) {
+		if(collections != null)
+			return __concatenate__(__instanciate__(collections));
+		return null;
 	}
 }

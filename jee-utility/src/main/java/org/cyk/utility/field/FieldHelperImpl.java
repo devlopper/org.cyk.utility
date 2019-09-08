@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,15 +13,20 @@ import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.array.ArrayHelper;
+import org.cyk.utility.array.ArrayHelperImpl;
+import org.cyk.utility.clazz.ClassHelper;
+import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
@@ -35,8 +42,8 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 
 	private static FieldHelper INSTANCE;
 	public static FieldHelper getInstance(Boolean isNew) {
-		if(INSTANCE == null || Boolean.TRUE.equals(isNew))
-			INSTANCE = __inject__(FieldHelper.class);
+		//if(INSTANCE == null || Boolean.TRUE.equals(isNew))
+			INSTANCE =  DependencyInjection.inject(FieldHelper.class);
 		return INSTANCE;
 	}
 	public static FieldHelper getInstance() {
@@ -45,7 +52,6 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	
 	private static final Map<ClassFieldNameValueUsageType,String> CLASSES_FIELDNAMES_MAP = new HashMap<>();
 	private static final Map<Class<?>,Map<String,Field>> CLASSES_FIELDS_MAP = new HashMap<>();
-	public static Boolean IS_FIELD_CACHABLE = Boolean.TRUE;
 	private static final Map<String,Field> FIELDS_MAP = new HashMap<>();
 	
 	@Override
@@ -57,25 +63,22 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	
 	@Override
 	public String join(Collection<String> paths) {
-		return __inject__(StringHelper.class).concatenate(paths, DOT);
+		return __join__(paths);
 	}
 
 	@Override
 	public String join(String... paths) {
-		return join(__inject__(CollectionHelper.class).instanciate(paths));
+		return __join__(paths);
 	}
 
 	@Override
 	public Strings disjoin(Collection<String> paths) {
-		String path = join(paths);
-		Strings names = __inject__(Strings.class);
-		names.add(StringUtils.split(path,DOT));
-		return names;
+		return __inject__(Strings.class).add(__disjoin__(paths));
 	}
 	
 	@Override
 	public Strings disjoin(String... paths) {
-		return disjoin(__inject__(CollectionHelper.class).instanciate(paths));
+		return __inject__(Strings.class).add(__disjoin__(paths));
 	}
 	
 	@Override
@@ -155,9 +158,7 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 		}else {
 			String fieldName = join(fieldNames);
 			String key = aClass.getName()+DOT+fieldName;
-			if(Boolean.TRUE.equals(IS_FIELD_CACHABLE)) {
-				field = FIELDS_MAP.get(key);	
-			}
+			field = FIELDS_MAP.get(key);	
 			if(field == null) {
 				fieldNames = collectionHelper.instanciate(StringUtils.split(fieldName, DOT));
 				field = collectionHelper.getFirst(__inject__(FieldsGetter.class).execute(aClass, collectionHelper.getElementAt(fieldNames, 0)).getOutput());
@@ -170,9 +171,7 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 					field = getField(aClass, collectionHelper.getElementsFrom(fieldNames, 1));
 				}	
 			}
-			if(Boolean.TRUE.equals(IS_FIELD_CACHABLE)) {
-				FIELDS_MAP.put(key, field);
-			}
+			FIELDS_MAP.put(key, field);
 		}
 		
 		return field;
@@ -232,14 +231,14 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	}
 	
 	@Override
-	public FieldHelper writeFieldValue(Field field, Object value, Boolean isGettable) {
-		__writeFieldValue__(field, value, isGettable);
+	public FieldHelper writeFieldValue(Object object,Field field, Object value, Boolean isGettable) {
+		__writeFieldValue__(object,field, value, isGettable);
 		return this;
 	}
 	
 	@Override
-	public FieldHelper writeFieldValue(Field field, Object value) {
-		__writeFieldValue__(field, value);
+	public FieldHelper writeFieldValue(Object object,Field field, Object value) {
+		__writeFieldValue__(object,field, value);
 		return this;
 	}
 	
@@ -308,6 +307,46 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	
 	/**/
 	
+	/* join */
+	
+	/**
+	 * Join many field paths to build a one field path
+	 * Example : f1 + f2.f3 = f1.f2.f3
+	 * @param paths to join
+	 * @return field path
+	 */
+	public static String __join__(Collection<String> paths) {
+		return StringUtils.join(paths, DOT);
+	}
+
+	/**
+	 * {@link #join}
+	 * @param paths to join
+	 * @return
+	 */
+	public static String __join__(String... paths) {
+		return StringUtils.join(paths, DOT);
+	}
+
+	/**
+	 * Disjoin many field paths to a collection of field names
+	 * @param paths to disjoin
+	 * @return
+	 */
+	public static String[] __disjoin__(Collection<String> paths) {
+		String path = __join__(paths);
+		return StringUtils.split(path,DOT);
+	}
+	
+	/**
+	 * {@link #disjoin}
+	 * @param paths to disjoin
+	 * @return
+	 */
+	public static String[] __disjoin__(String... paths) {
+		return __disjoin__(__inject__(CollectionHelper.class).instanciate(paths));
+	}
+	
 	/* build field name */
 	
 	public static String __buildFieldName__(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType) {
@@ -327,6 +366,48 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	}
 	
 	/* get field */
+	
+	public static Field __getFieldByNames__(Class<?> klass,Collection<String> fieldNames) {
+		Field field = null;
+		if(klass == null || CollectionHelperImpl.__isEmpty__(fieldNames)) {
+			field = null;
+		}else {
+			String fieldName = __join__(fieldNames);
+			String key = klass.getName()+DOT+fieldName;
+			field = FIELDS_MAP.get(key);	
+			if(field == null) {
+				field = ____getFieldByNames____(klass, fieldNames);
+				FIELDS_MAP.put(key, field);
+			}
+		}		
+		return field;
+	}
+	
+	public static Field __getFieldByNames__(Class<?> klass,String...fieldNames) {
+		return __getFieldByNames__(klass,CollectionHelperImpl.__instanciate__(fieldNames));
+	}
+	
+	private static Field ____getFieldByNames____(Class<?> klass,Collection<String> fieldNames) {
+		Field field = null;
+		if(klass == null || CollectionHelperImpl.__isEmpty__(fieldNames)) {
+			field = null;
+		}else {
+			String fieldName = __join__(fieldNames);
+			if(field == null) {
+				fieldNames = CollectionHelperImpl.__instanciate__(__disjoin__(fieldName));
+				field = __getFieldByName__(klass, CollectionHelperImpl.__getFirst__(fieldNames));
+				if(CollectionHelperImpl.__getSize__(fieldNames) == 1) {
+				
+				}else {
+					klass = __getFieldType__(klass, field).getType();
+					if(Boolean.TRUE.equals(klass.isInterface()))
+						klass = __inject__(klass).getClass();
+					field = ____getFieldByNames____(klass, CollectionHelperImpl.__getElementsFrom__(fieldNames, 1));
+				}	
+			}
+		}		
+		return field;
+	}
 	
 	public static Field __getFieldByName__(Class<?> klass,String fieldName) {
 		if(klass == null || fieldName == null)
@@ -359,15 +440,40 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	}
 	
 	public static Object __readFieldValue__(Object object,String fieldName,Boolean isGettable) {
-		try {
-			return object == null ? null : FieldUtils.readField(object, fieldName, Boolean.TRUE);
-		} catch (IllegalAccessException exception) {
-			throw new RuntimeException(exception);
-		}
+		if(object == null)
+			return null;
+		if(StringUtils.contains(fieldName, DOT)) {
+			try {
+				return PropertyUtils.getNestedProperty(object, fieldName);
+			} catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		}else
+			try {
+				return object == null ? null : FieldUtils.readField(object, fieldName, Boolean.TRUE);
+			} catch (IllegalAccessException exception) {
+				throw new RuntimeException(exception);
+			}
 	}
-	
+
 	public static Object __readFieldValue__(Object object,String fieldName) {
 		return __readFieldValue__(object, fieldName, null);
+	}
+	
+	public static Object __readFieldValue__(Object object,Collection<String> fieldNames,Boolean isGettable) {
+		return __readFieldValue__(object, __join__(fieldNames), isGettable);
+	}
+	
+	public static Object __readFieldValue__(Object object,Collection<String> fieldNames) {
+		return __readFieldValue__(object, __join__(fieldNames));
+	}
+	
+	public static Object __readFieldValue__(Object object,String[] fieldNames,Boolean isGettable) {
+		return __readFieldValue__(object, __join__(fieldNames), isGettable);
+	}
+	
+	public static Object __readFieldValue__(Object object,String[] fieldNames) {
+		return __readFieldValue__(object, __join__(fieldNames));
 	}
 	
 	public static Object __readFieldValue__(Object object,FieldName fieldName,ValueUsageType valueUsageType,Boolean isGettable) {
@@ -396,28 +502,55 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	
 	/* write field value*/
 	
-	public static void __writeFieldValue__(Field field, Object value, Boolean isGettable) {
+	public static void __writeFieldValue__(Object object,Field field, Object value, Boolean isGettable) {
+		if(object == null)
+			return;
 		try {
-			FieldUtils.writeField(field,value, Boolean.TRUE);
+			FieldUtils.writeField(field,object,value, Boolean.TRUE);
 		} catch (IllegalAccessException exception) {
 			throw new RuntimeException(exception);
 		}
 	}
 	
-	public static void __writeFieldValue__(Field field, Object value) {
-		__writeFieldValue__(field, value, null);
+	public static void __writeFieldValue__(Object object,Field field, Object value) {
+		__writeFieldValue__(object,field, value, null);
 	}
 	
 	public static void __writeFieldValue__(Object object, String fieldName, Object value, Boolean isGettable) {
-		try {
-			FieldUtils.writeField(object,fieldName,value, Boolean.TRUE);
-		} catch (IllegalAccessException exception) {
-			throw new RuntimeException(exception);
-		}
+		if(object == null)
+			return;
+		if(StringUtils.contains(fieldName, DOT)) {
+			try {
+				PropertyUtils.setNestedProperty(object, fieldName, value);
+			} catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		}else
+			try {
+				FieldUtils.writeField(object,fieldName,value, Boolean.TRUE);
+			} catch (Exception exception) {
+				throw new RuntimeException(exception);
+			}
 	}
 	
 	public static void __writeFieldValue__(Object object, String fieldName, Object value) {
 		__writeFieldValue__(object, fieldName, value, null);
+	}
+	
+	public static void __writeFieldValue__(Object object, Collection<String> fieldNames, Object value, Boolean isGettable) {
+		__writeFieldValue__(object, __join__(fieldNames), value, isGettable);
+	}
+	
+	public static void __writeFieldValue__(Object object, Collection<String> fieldNames, Object value) {
+		__writeFieldValue__(object, __join__(fieldNames), value);
+	}
+	
+	public static void __writeFieldValue__(Object object, String[] fieldNames, Object value, Boolean isGettable) {
+		__writeFieldValue__(object, __join__(fieldNames), value, isGettable);
+	}
+	
+	public static void __writeFieldValue__(Object object, String[] fieldNames, Object value) {
+		__writeFieldValue__(object, __join__(fieldNames), value);
 	}
 	
 	public static void __writeFieldValue__(Object object, FieldName fieldName,ValueUsageType valueUsageType, Object value, Boolean isGettable) {
@@ -443,6 +576,43 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	public static void __writeFieldValueBusinessIdentifier__(Object object, Object value) {
 		if(object != null)
 			__writeFieldValue__(object, __buildFieldName__(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS), value);
+	}
+	
+	/* get field type*/
+	
+	public static FieldType __getFieldType__(Class<?> klass,Field field) {
+		FieldType fieldType = null;
+		if(field!=null){
+			if(klass == null)
+				klass = field.getDeclaringClass();
+			fieldType = __inject__(FieldType.class).setField(field);
+			if(field.getType().equals(field.getGenericType())) {
+				fieldType.setType(field.getType());
+			}else {
+				if(field.getGenericType() instanceof ParameterizedType) {
+					ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+					if(ArrayHelperImpl.__isEmpty__(parameterizedType.getActualTypeArguments())) {
+							
+					}else {
+						fieldType.setType(field.getType());
+						for(Integer index = 0 ; index < parameterizedType.getActualTypeArguments().length ; index = index + 1) {
+							Type type = parameterizedType.getActualTypeArguments()[index];
+							Class<?> argumentClass = null;
+							if(type instanceof TypeVariable) {
+								argumentClass = ClassHelperImpl.__getParameterAt__(klass, index, Object.class);
+							}else
+								argumentClass = (Class<?>) type;
+							fieldType.getParameterizedClasses(Boolean.TRUE).set(index,argumentClass);
+						}
+					}
+				}else {
+					fieldType.setType(__inject__(ClassHelper.class).getParameterAt(klass, 0, Object.class));
+				}
+			}
+			if(fieldType.getType() == null)
+				fieldType.setType(Object.class);
+		}
+		return fieldType;
 	}
 	
 	/**/

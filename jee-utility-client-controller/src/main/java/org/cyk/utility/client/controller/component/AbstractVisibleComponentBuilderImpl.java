@@ -1,16 +1,18 @@
 package org.cyk.utility.client.controller.component;
 
+import java.util.Collection;
+
 import org.cyk.utility.client.controller.component.theme.Theme;
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
-import org.cyk.utility.client.controller.session.SessionAttributeGetter;
-import org.cyk.utility.css.StyleBuilder;
+import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.css.CascadeStyleSheetHelperImpl;
+import org.cyk.utility.css.Style;
 import org.cyk.utility.device.DeviceScreenArea;
-import org.cyk.utility.string.StringHelper;
 
 public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends VisibleComponent> extends AbstractComponentBuilderImpl<COMPONENT> implements VisibleComponentBuilder<COMPONENT> {
 	private static final long serialVersionUID = 1L;
 
-	private StyleBuilder style;
+	private Style style;
 	private Object tooltip;
 	private Theme theme;
 	
@@ -18,19 +20,26 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 	protected void __execute__(COMPONENT component) {
 		super.__execute__(component);
 		Object request = getRequest();
-		StyleBuilder style = getStyle();
+		//Style
+		Style style = getStyle();		
+		ComponentRoles roles = component.getRoles();
+		if(CollectionHelperImpl.__isNotEmpty__(roles)) {
+			if(style == null)
+				style = __inject__(Style.class);
+			Collection<String> styleClasses = CascadeStyleSheetHelperImpl.__getStyleClassesFromRoles__(roles.get());
+			if(CollectionHelperImpl.__isNotEmpty__(styleClasses))
+				style.getClasses(Boolean.TRUE).add(styleClasses);
+		}		
 		if(style!=null) {
-			ComponentRoles roles = component.getRoles();
-			if(__injectCollectionHelper__().isNotEmpty(roles)) {
-				for(ComponentRole index : roles.get()) {
-					String styleClass = __inject__(ComponentRoleStyleClassGetter.class).setRole(index).execute().getOutput();
-					if(__inject__(StringHelper.class).isNotBlank(styleClass))
-						style.addClasses(styleClass);
-				}
-			}	
-			
-			component.setStyle(style.execute().getOutput());
+			if(component.getStyle() == null)
+				component.setStyle(style);
+			else {
+				component.getStyle().getClasses(Boolean.TRUE).add(style.getClasses());
+				component.getStyle().getValues(Boolean.TRUE).add(style.getValues());
+			}
 		}
+		
+		//Area
 		DeviceScreenArea area = getArea();
 		if(area!=null) {
 			component.setArea(area);
@@ -44,25 +53,27 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 		Theme theme = getTheme();
 		if(theme == null) {
 			if(request != null)
-				theme = (Theme) __inject__(SessionAttributeGetter.class).setRequest(request).setAttribute(SessionAttributeEnumeration.THEME).execute().getOutput();
+				theme = (Theme) __injectSessionHelper__().getAttributeValue(SessionAttributeEnumeration.THEME, request);
 		}
 		component.setTheme(theme);
 	}
 	
 	@Override
-	public StyleBuilder getStyle() {
+	public Style getStyle() {
 		return style;
 	}
 	
 	@Override
-	public VisibleComponentBuilder<COMPONENT> setStyle(StyleBuilder style) {
+	public VisibleComponentBuilder<COMPONENT> setStyle(Style style) {
 		this.style = style;
 		return this;
 	}
 	
 	@Override
-	public StyleBuilder getStyle(Boolean injectIfNull) {
-		return (StyleBuilder) __getInjectIfNull__(FIELD_STYLE, injectIfNull);
+	public Style getStyle(Boolean injectIfNull) {
+		if(style == null && Boolean.TRUE.equals(injectIfNull))
+			style = __inject__(Style.class);
+		return style;
 	}
 	
 	@Override
@@ -72,13 +83,13 @@ public abstract class AbstractVisibleComponentBuilderImpl<COMPONENT extends Visi
 	
 	@Override
 	public VisibleComponentBuilder<COMPONENT> addStyleClasses(String... classes) {
-		getStyle(Boolean.TRUE).addClasses(classes);
+		getStyle(Boolean.TRUE).getClasses(Boolean.TRUE).add(classes);
 		return this;
 	}
 	
 	@Override
 	public VisibleComponentBuilder<COMPONENT> addStyleValues(String... values) {
-		getStyle(Boolean.TRUE).addValues(values);
+		getStyle(Boolean.TRUE).getValues(Boolean.TRUE).add(values);
 		return this;
 	}
 	

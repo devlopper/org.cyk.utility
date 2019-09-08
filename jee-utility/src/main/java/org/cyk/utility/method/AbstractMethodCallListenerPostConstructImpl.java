@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.collection.CollectionHelper;
 
+@Deprecated
 public abstract class AbstractMethodCallListenerPostConstructImpl extends AbstractMethodCallListenerImpl implements MethodCallListenerPostConstruct,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -43,4 +43,9 @@ public class AssertionImpl extends AbstractObject implements Assertion,Serializa
 		return this;
 	}
 	
+	@Override
+	public void throwIfValueIsNotTrue() {
+		if(!Boolean.TRUE.equals(getValue()))
+			throw new RuntimeException(getMessageWhenValueIsNotTrue());
+	}
 }

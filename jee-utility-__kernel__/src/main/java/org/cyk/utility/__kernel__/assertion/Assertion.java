@@ -13,4 +13,6 @@ public interface Assertion extends Objectable {
 	String getMessageWhenValueIsNotTrue();
 	Assertion setMessageWhenValueIsNotTrue(String message);
 	
+	void throwIfValueIsNotTrue();
+	
 }

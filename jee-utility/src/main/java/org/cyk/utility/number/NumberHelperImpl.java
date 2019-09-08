@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
@@ -16,6 +17,16 @@ import org.cyk.utility.string.StringHelper;
 public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static NumberHelper INSTANCE;
+	public static NumberHelper getInstance(Boolean isNew) {
+		//if(INSTANCE == null || Boolean.TRUE.equals(isNew))
+			INSTANCE =  DependencyInjection.inject(NumberHelper.class);
+		return INSTANCE;
+	}
+	public static NumberHelper getInstance() {
+		return getInstance(null);
+	}
+	
 	@Override
 	public Boolean isZero(Number number) {
 		if(number == null)
@@ -128,6 +139,34 @@ public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Ser
 
 	@Override
 	public Boolean compare(Number number1, Number number2, ComparisonOperator operator) {
+		BigDecimal n1 = number1 == null ? null : new BigDecimal(number1.toString());
+		BigDecimal n2 = number2 == null ? null : new BigDecimal(number2.toString());
+		Boolean value = null;
+		if(number1 == null)
+			if(number2 == null)
+				value = Boolean.TRUE;
+			else
+				value = Boolean.FALSE;
+		else
+			if(number2 == null)
+				value = Boolean.FALSE;
+			else{
+				Integer comparison = n1.compareTo(n2);
+				switch(operator){
+				case EQ:value = comparison == 0;break;
+				case NEQ:value = comparison != 0 ;break;
+				case GT: value = comparison == 1;break;
+				case GTE: value = comparison == 1 || comparison == 0;break;
+				case LT: value = comparison == -1;break;
+				case LTE: value = comparison == -1 || comparison == 0;break;
+				}
+			}
+		return value;
+	}
+	
+	/**/
+	
+	public static Boolean __compare__(Number number1, Number number2, ComparisonOperator operator) {
 		BigDecimal n1 = number1 == null ? null : new BigDecimal(number1.toString());
 		BigDecimal n2 = number2 == null ? null : new BigDecimal(number2.toString());
 		Boolean value = null;

@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
@@ -65,7 +66,9 @@ public class DurationStringBuilderImpl extends AbstractStringFunctionImpl implem
 	
 	@Override
 	public DurationBuilder getDurationBuilder(Boolean injectIfNull) {
-		return (DurationBuilder) __getInjectIfNull__(FIELD_DURATION_BUILDER, injectIfNull);
+		if(durationBuilder == null && Boolean.TRUE.equals(injectIfNull))
+			durationBuilder = DependencyInjection.inject(DurationBuilder.class);
+		return durationBuilder;
 	}
 	
 	/**/

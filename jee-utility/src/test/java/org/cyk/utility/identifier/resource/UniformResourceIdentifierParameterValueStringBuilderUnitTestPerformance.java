@@ -9,32 +9,52 @@ public class UniformResourceIdentifierParameterValueStringBuilderUnitTestPerform
 
 	@Test
 	public void execute_10(){
-		execute(10,10);
+		execute("uri parameter value string builder",10,10,new Runnable() {
+			@Override
+			public void run() {
+				__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionCreate.class).execute();
+			}
+		});
 	}
 	
 	@Test
 	public void execute_100(){
-		execute(100,10);
+		execute("uri parameter value string builder",100,20,new Runnable() {
+			@Override
+			public void run() {
+				__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionCreate.class).execute();
+			}
+		});
 	}
 	
 	@Test
 	public void execute_1000(){
-		execute(1000,150);
+		execute("uri parameter value string builder",1000,80,new Runnable() {
+			@Override
+			public void run() {
+				__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionCreate.class).execute();
+			}
+		});
 	}
 	
 	@Test
 	public void execute_10000(){
-		execute(10000,600);
+		execute("uri parameter value string builder",10000,160,new Runnable() {
+			@Override
+			public void run() {
+				__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionCreate.class).execute();
+			}
+		});
 	}
 	
 	@Test
 	public void execute_100000(){
-		execute(100000,2000);
+		execute("uri parameter value string builder",100000,1100,new Runnable() {
+			@Override
+			public void run() {
+				__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionCreate.class).execute();
+			}
+		});
 	}
-	
-	@Override
-	protected void __execute__() {
-		__inject__(UniformResourceIdentifierParameterValueStringBuilder.class).setValue(SystemActionCreate.class).execute();
-	}
-	
+
 }

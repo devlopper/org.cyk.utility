@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 
 @Dependent
@@ -19,7 +20,9 @@ public class DeviceScreenAreaImpl extends AbstractObject implements DeviceScreen
 
 	@Override
 	public DeviceScreenDimensionProportions getWidthProportions(Boolean injectIfNull) {
-		return (DeviceScreenDimensionProportions) __getInjectIfNull__(FIELD_WIDTH_PROPORTIONS, injectIfNull);
+		if(widthProportions == null && Boolean.TRUE.equals(injectIfNull))
+			widthProportions = DependencyInjection.inject(DeviceScreenDimensionProportions.class);
+		return widthProportions;
 	}
 
 	@Override
@@ -35,7 +38,9 @@ public class DeviceScreenAreaImpl extends AbstractObject implements DeviceScreen
 
 	@Override
 	public DeviceScreenDimensionProportions getHeightProportions(Boolean injectIfNull) {
-		return (DeviceScreenDimensionProportions) __getInjectIfNull__(FIELD_HEIGHT_PROPORTIONS, injectIfNull);
+		if(heightProportions == null && Boolean.TRUE.equals(injectIfNull))
+			heightProportions = DependencyInjection.inject(DeviceScreenDimensionProportions.class);
+		return heightProportions;
 	}
 
 	@Override

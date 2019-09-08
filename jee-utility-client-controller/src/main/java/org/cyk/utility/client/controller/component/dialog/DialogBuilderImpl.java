@@ -7,8 +7,7 @@ import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuild
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
-import org.cyk.utility.time.DurationBuilder;
-import org.cyk.utility.time.DurationStringBuilder;
+import org.cyk.utility.collection.CollectionHelperImpl;
 
 public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialog> implements DialogBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,17 +18,12 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 	
 	@Override
 	protected void __execute__(Dialog dialog) {
-		DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
 		OutputStringTextBuilder title = getTitle(Boolean.TRUE);
-		System.out.println("\tDialogBuilderImpl.__execute__() 1 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
-		durationBuilder.setBeginToNow();
 		__setRequestAndContextAndUniformResourceLocatorMapOf__(title);
 		dialog.setTitle(title.execute().getOutput());
-		System.out.println("\tDialogBuilderImpl.__execute__() 2 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
-		durationBuilder.setBeginToNow();
 		CommandableBuilders commandables = getCommandables();
 		
-		if(__injectCollectionHelper__().isEmpty(commandables)) {
+		if(CollectionHelperImpl.__isEmpty__(commandables)) {
 			CommandableBuilder commandable = getOkCommandable(Boolean.TRUE);
 			if(commandable!=null) {
 				/*if(commandables!=null)
@@ -41,16 +35,12 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 				dialog.addCommandables(dialog.getOkCommandable());
 			}
 		}
-		System.out.println("\tDialogBuilderImpl.__execute__() 3 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
-		durationBuilder.setBeginToNow();
-		if(__injectCollectionHelper__().isNotEmpty(commandables)) {
+		if(CollectionHelperImpl.__isNotEmpty__(commandables)) {
 			for(CommandableBuilder index : commandables.get()) {
 				__setRequestAndContextAndUniformResourceLocatorMapOf__(index);
 				dialog.addCommandables(index.execute().getOutput());
 			}
 		}
-		System.out.println("\tDialogBuilderImpl.__execute__() 4 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
-		durationBuilder.setBeginToNow();
 	}
 	
 	@Override

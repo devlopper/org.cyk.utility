@@ -1,17 +1,20 @@
 package org.cyk.utility.client.controller.component;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldsGetter;
-import org.cyk.utility.field.FieldValueGetter;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.string.Strings;
 
 public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputOutput<VALUE>,VALUE> extends AbstractVisibleComponentBuilderImpl<INPUT_OUTPUT> implements InputOutputBuilder<INPUT_OUTPUT, VALUE> {
 	private static final long serialVersionUID = 1L;
 
+	private static final Map<Class<?>,Map<String,Field>> CLASSES_FIELDS_MAP = new HashMap<>();
+	
 	protected Object object;
 	protected Field field;
 	protected Strings fieldNameStrings;
@@ -28,19 +31,28 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 			if(object!=null) {
 				String fieldName = null;
 				Strings fieldNameStrings = getFieldNameStrings();
-				if(__injectCollectionHelper__().isNotEmpty(fieldNameStrings))
-					fieldName = __injectFieldHelper__().join(fieldNameStrings.get());
-				if(__injectStringHelper__().isNotBlank(fieldName)) {
-					String objectFieldName = StringUtils.contains(fieldName, ConstantCharacter.DOT.toString()) ? StringUtils.substringBeforeLast(fieldName, ConstantCharacter.DOT.toString()) : null;
-					fieldName = objectFieldName == null ? fieldName : StringUtils.substringAfterLast(fieldName, ConstantCharacter.DOT.toString());
-					if(objectFieldName!=null)
-						//TODO optimize
-						object = __inject__(FieldValueGetter.class).execute(object, objectFieldName).getOutput();
-					field = __injectCollectionHelper__().getFirst(__inject__(FieldsGetter.class).execute(object.getClass(), fieldName).getOutput());	
+				if(__injectCollectionHelper__().isNotEmpty(fieldNameStrings)) {
+					fieldName = FieldHelperImpl.__join__(fieldNameStrings.get());
+					if(__injectStringHelper__().isNotBlank(fieldName)) {
+						Map<String,Field> map = CLASSES_FIELDS_MAP.get(object.getClass());
+						if(map == null)
+							CLASSES_FIELDS_MAP.put(object.getClass(), map = new HashMap<>());
+						else {
+							field = map.get(fieldName);
+							if(field == null) {
+								String tempFieldName = fieldName;
+								String objectFieldName = StringUtils.contains(fieldName, ConstantCharacter.DOT.toString()) ? StringUtils.substringBeforeLast(fieldName, ConstantCharacter.DOT.toString()) : null;
+								fieldName = objectFieldName == null ? fieldName : StringUtils.substringAfterLast(fieldName, ConstantCharacter.DOT.toString());
+								if(objectFieldName!=null)
+									object = FieldHelperImpl.__readFieldValue__(object, objectFieldName);
+								field = FieldHelperImpl.__getFieldByName__(object.getClass(), fieldName);
+								map.put(tempFieldName, field);
+							}
+						}	
+					}
 				}
 			}
 		}
-		
 		__execute__(component, object, field);
 	}
 	
@@ -82,7 +94,9 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 	
 	@Override
 	public Strings getFieldNameStrings(Boolean injectIfNull) {
-		return (Strings) __getInjectIfNull__(FIELD_FIELD_NAME_STRINGS, injectIfNull);
+		if(fieldNameStrings == null && Boolean.TRUE.equals(injectIfNull))
+			fieldNameStrings = __inject__(Strings.class);
+		return fieldNameStrings;
 	}
 	
 	@Override

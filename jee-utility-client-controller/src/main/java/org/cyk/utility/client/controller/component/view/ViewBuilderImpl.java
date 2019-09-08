@@ -11,6 +11,7 @@ import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderClassGetter;
 import org.cyk.utility.client.controller.component.ComponentBuilderGetter;
+import org.cyk.utility.client.controller.component.ComponentBuilderHelperImpl;
 import org.cyk.utility.client.controller.component.Components;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
 import org.cyk.utility.client.controller.component.command.Commandable;
@@ -23,7 +24,7 @@ import org.cyk.utility.client.controller.component.input.InputStringLineManyBuil
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.data.FormData;
-import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
@@ -167,12 +168,12 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object,Class<?> componentBuilderBaseClass, String... fieldNames) {
-		String key = object.getClass().getName()+"."+(componentBuilderBaseClass == null ? "" : componentBuilderBaseClass.getName())+"."+__inject__(FieldHelper.class).join(fieldNames);
+		String key = object.getClass().getName()+"."+(componentBuilderBaseClass == null ? "" : componentBuilderBaseClass.getName())+"."+FieldHelperImpl.__join__(fieldNames);
 		Class<? extends ComponentBuilder<?>> builderClass =  BUILDERS_CLASSES_MAP.get(key);
 		if(builderClass == null) {
 			//TODO to be optimized
-			builderClass = __inject__(ComponentBuilderClassGetter.class).setClazz(object.getClass()).addFieldNameStrings(fieldNames).setBaseClass(componentBuilderBaseClass)
-				.execute().getOutput();
+			//builderClass = __inject__(ComponentBuilderClassGetter.class).setClazz(object.getClass()).addFieldNameStrings(fieldNames).setBaseClass(componentBuilderBaseClass).execute().getOutput();
+			builderClass = ComponentBuilderHelperImpl.__getComponentBuilderClass__(object.getClass(), componentBuilderBaseClass, null,fieldNames, null, null, null);
 			BUILDERS_CLASSES_MAP.put(key, builderClass);
 		}
 		//TODO to be optimized
@@ -250,7 +251,9 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 
 	@Override
 	public ComponentsBuilder getComponentsBuilder(Boolean injectIfNull) {
-		return (ComponentsBuilder) __getInjectIfNull__(FIELD_COMPONENTS_BUILDER, injectIfNull);
+		if(componentsBuilder == null && Boolean.TRUE.equals(injectIfNull))
+			componentsBuilder = __inject__(ComponentsBuilder.class);
+		return componentsBuilder;
 	}
 
 	@Override
@@ -266,7 +269,9 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public CommandableBuilderByClassMap getCommandableByClassMap(Boolean injectIfNull) {
-		return (CommandableBuilderByClassMap) __getInjectIfNull__(FIELD_COMMANDABLE_BY_CLASS_MAP, injectIfNull);
+		if(commandableByClassMap == null && Boolean.TRUE.equals(injectIfNull))
+			commandableByClassMap = __inject__(CommandableBuilderByClassMap.class);
+		return commandableByClassMap;
 	}
 	
 	@Override
@@ -282,7 +287,9 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public CommandableBuilders getCommandables(Boolean injectIfNull) {
-		return (CommandableBuilders) __getInjectIfNull__(FIELD_COMMANDABLES, injectIfNull);
+		if(commandables == null && Boolean.TRUE.equals(injectIfNull))
+			commandables = __inject__(CommandableBuilders.class);
+		return commandables;
 	}
 	
 	@Override

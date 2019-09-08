@@ -29,6 +29,7 @@ public abstract class AbstractObject implements Objectable,Serializable {
 		return __injectByQualifiersClasses__(aClass, annotationLiteralClasses);
 	}
 	
+	@Deprecated
 	protected Object __getInjectOrInstanciateIfNull__(String fieldName,Boolean injectableIfNull,Boolean instanciatableIfNull) {
 		Object object = DependencyInjection.inject(KernelHelper.class).executeMethodGetter(this, fieldName);
 		if(object == null && (Boolean.TRUE.equals(injectableIfNull) || Boolean.TRUE.equals(instanciatableIfNull))) {
@@ -40,10 +41,12 @@ public abstract class AbstractObject implements Objectable,Serializable {
 		return object;
 	}
 	
+	@Deprecated
 	protected Object __getInjectIfNull__(String fieldName,Boolean injectIfNull) {
 		return __getInjectOrInstanciateIfNull__(fieldName, injectIfNull, null);
 	}
 	
+	@Deprecated
 	protected Object __getInjectIfNull__(Boolean injectIfNull) {
 		String fieldName = StringUtils.substringAfter(Thread.currentThread() .getStackTrace()[2] .getMethodName(),ConstantString.GET);
 		Integer length = fieldName.length();
@@ -56,6 +59,7 @@ public abstract class AbstractObject implements Objectable,Serializable {
 		return __getInjectOrInstanciateIfNull__(fieldName, injectIfNull, null);
 	}
 	
+	@Deprecated
 	protected Object __getInstanciateIfNull__(String fieldName,Boolean instanciateIfNull) {
 		return __getInjectOrInstanciateIfNull__(fieldName, null,instanciateIfNull);
 	}

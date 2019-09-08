@@ -7,6 +7,7 @@ import java.util.Collections;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
@@ -19,6 +20,16 @@ import org.cyk.utility.value.ValueUsageType;
 public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static InstanceHelper INSTANCE;
+	public static InstanceHelper getInstance(Boolean isNew) {
+		//if(INSTANCE == null || Boolean.TRUE.equals(isNew))
+			INSTANCE =  DependencyInjection.inject(InstanceHelper.class);
+		return INSTANCE;
+	}
+	public static InstanceHelper getInstance() {
+		return getInstance(null);
+	}
+	
 	@Override
 	public <INSTANCE> Collection<INSTANCE> getByFieldNameByValueUsageType(Class<INSTANCE> aClass, FieldName fieldName,ValueUsageType valueUsageType, Object value,Properties properties) {
 		InstanceGetter instanceGetter = __inject__(InstanceGetter.class);

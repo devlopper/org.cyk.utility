@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.clazz.Classes;
 
@@ -39,7 +40,9 @@ public class PropertyImpl extends AbstractObject implements Property,Serializabl
 	
 	@Override
 	public Classes getValueGetterClassQualifiers(Boolean injectIfNull) {
-		return (Classes) __getInjectIfNull__(FIELD_VALUE_GETTER_CLASS_QUALIFIERS, injectIfNull);
+		if(valueGetterClassQualifiers == null && Boolean.TRUE.equals(injectIfNull))
+			valueGetterClassQualifiers = DependencyInjection.inject(Classes.class);
+		return valueGetterClassQualifiers;
 	}
 	
 	@Override

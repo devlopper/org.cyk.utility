@@ -6,7 +6,6 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractComponentBuilderExecuteListenerImpl;
 import org.cyk.utility.client.controller.component.Component;
-import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentBuilderExecuteListenerBefore;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.InputOutput;
@@ -19,7 +18,7 @@ import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
 import org.cyk.utility.client.controller.web.jsf.primefaces.annotation.Primefaces;
 import org.cyk.utility.collection.CollectionHelper;
 
-@Primefaces
+@Primefaces @Deprecated
 public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends AbstractComponentBuilderExecuteListenerImpl implements  ComponentBuilderExecuteListenerBefore,Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -74,10 +73,10 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 			
 			if(visibleComponentBuilder instanceof LayoutBuilder) {
 				LayoutBuilder layoutBuilder = (LayoutBuilder) visibleComponentBuilder;
-				layoutBuilder.getStyle(Boolean.TRUE).addClasses("cyk_layout");
+				//layoutBuilder.getStyle(Boolean.TRUE).addClasses("cyk_layout");
 				
 				// TODO ui-g must be get from function
-				layoutBuilder.getStyle(Boolean.TRUE).addClasses("ui-g");
+				//layoutBuilder.getStyle(Boolean.TRUE).addClasses("ui-g");
 				
 				if(DependencyInjection.inject(CollectionHelper.class).contains(layoutBuilder.getRoles(), ComponentRole.GRID))
 					layoutBuilder.addStyleClasses("cyk_layout_grid");
@@ -87,7 +86,7 @@ public class ComponentBuilderExecuteListenerBeforeFunctionRunnableImpl extends A
 			
 			if(visibleComponentBuilder instanceof LayoutItemBuilder) {
 				LayoutItemBuilder layoutItemBuilder = (LayoutItemBuilder) visibleComponentBuilder;
-				layoutItemBuilder.getStyle(Boolean.TRUE).addClasses("cyk_layout_item");
+				//layoutItemBuilder.getStyle(Boolean.TRUE).addClasses("cyk_layout_item");
 				
 			}
 		}

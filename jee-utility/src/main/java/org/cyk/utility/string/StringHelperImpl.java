@@ -8,15 +8,27 @@ import java.util.Collection;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 
 @ApplicationScoped
 public class StringHelperImpl extends AbstractHelper implements StringHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static StringHelper INSTANCE;
+	public static StringHelper getInstance(Boolean isNew) {
+		//if(INSTANCE == null || Boolean.TRUE.equals(isNew))
+			INSTANCE =  DependencyInjection.inject(StringHelper.class);
+		return INSTANCE;
+	}
+	public static StringHelper getInstance() {
+		return getInstance(null);
+	}
+	
 	@Override
 	public String getString(Object object) {
 		return object == null ? ConstantEmpty.STRING : object.toString();
@@ -180,6 +192,10 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 		return StringUtils.isBlank(string);
 	}
 	
+	public static Boolean __isNotBlank__(String string) {
+		return StringUtils.isNotBlank(string);
+	}
+	
 	public static Boolean __isEmpty__(String string) {
 		return StringUtils.isEmpty(string);
 	}
@@ -187,4 +203,46 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	public static String __defaultIfBlank__(String string,String defaultString) {
 		return StringUtils.defaultIfBlank(string,defaultString);
 	}
+	
+	public static String __getVariableNameFrom__(String string){
+		return Introspector.decapitalize(string);
+	}
+	
+	public static String __concatenate__(Collection<String> strings,String separator) {
+		return strings == null ? null : StringUtils.join(strings,separator);
+	}
+	
+	public static String __applyCase__(String string, Case aCase) {
+		if(string==null)
+			return null;
+		if(aCase==null)
+			aCase = Case.DEFAULT;
+		switch(aCase){
+		case NONE:return string;
+		case LOWER:return StringUtils.lowerCase(string);
+		case UPPER:return StringUtils.upperCase(string);
+		case FIRST_CHARACTER_UPPER:return StringUtils.upperCase(StringUtils.substring(string, 0,1))+StringUtils.substring(string, 1);
+		case FIRST_CHARACTER_LOWER:return StringUtils.lowerCase(StringUtils.substring(string, 0,1))+StringUtils.substring(string, 1);
+		case FIRST_CHARACTER_UPPER_REMAINDER_LOWER:return StringUtils.capitalize(string.toLowerCase());
+		}
+		return string;	
+	}
+	
+	public static Collection<String> __applyCase__(Collection<String> strings, Case aCase) {
+		Collection<String> result = null;
+		if(CollectionHelperImpl.__isNotEmpty__(strings)) {
+			result = new ArrayList<>();
+			for(String index : strings) {
+				result.add(__applyCase__(index, aCase));
+			}
+		}
+		return result;
+	}
+	
+	public static Collection<String> __splitByCharacterTypeCamelCase__(String string) {
+		return CollectionHelperImpl.__instanciate__(StringUtils.splitByCharacterTypeCamelCase(string)); 
+	}
+
+	/**/
+
 }

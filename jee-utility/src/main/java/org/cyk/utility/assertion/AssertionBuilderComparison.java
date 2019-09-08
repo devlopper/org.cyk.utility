@@ -2,6 +2,7 @@ package org.cyk.utility.assertion;
 
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 
+@Deprecated
 public interface AssertionBuilderComparison extends AssertionBuilder {
 
 	ComparisonOperator getOperator();

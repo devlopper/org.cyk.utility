@@ -71,6 +71,7 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 		}
 		if(clazz!=null)
 			builder = __inject__(clazz);
+		
 		if(builder == null) {
 			System.err.println("Component builder not found. field="+field+" ::: methodd ="+method);
 		}else {

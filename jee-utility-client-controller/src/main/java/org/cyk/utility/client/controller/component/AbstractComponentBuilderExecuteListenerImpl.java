@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.utility.method.AbstractMethodCallListenerImpl;
 
+@Deprecated
 public abstract class AbstractComponentBuilderExecuteListenerImpl extends AbstractMethodCallListenerImpl implements ComponentBuilderExecuteListener,Serializable {
 	private static final long serialVersionUID = 1L;
 

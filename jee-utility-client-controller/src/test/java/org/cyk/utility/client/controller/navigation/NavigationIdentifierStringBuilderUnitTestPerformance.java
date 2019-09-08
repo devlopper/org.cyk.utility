@@ -17,36 +17,63 @@ public class NavigationIdentifierStringBuilderUnitTestPerformance extends Abstra
 	
 	@Test
 	public void execute_10(){
-		execute(10,100);
+		execute("Build navigation identifier string",10,10,new Runnable() {
+			@Override
+			public void run() {
+				SystemAction systemAction = __inject__(SystemActionCreate.class);
+				systemAction.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
+				__inject__(NavigationIdentifierStringBuilder.class).setSystemAction(systemAction).execute();
+			}
+		});
 	}	
 	
 	@Test
 	public void execute_100(){
-		execute(100,200);
+		execute("Build navigation identifier string",100,50,new Runnable() {
+			@Override
+			public void run() {
+				SystemAction systemAction = __inject__(SystemActionCreate.class);
+				systemAction.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
+				__inject__(NavigationIdentifierStringBuilder.class).setSystemAction(systemAction).execute();
+			}
+		});
 	}	
 	
 	@Test
 	public void execute_1000(){
-		execute(1000,400);
+		execute("Build navigation identifier string",1000,450,new Runnable() {
+			@Override
+			public void run() {
+				SystemAction systemAction = __inject__(SystemActionCreate.class);
+				systemAction.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
+				__inject__(NavigationIdentifierStringBuilder.class).setSystemAction(systemAction).execute();
+			}
+		});
 	}	
 	
 	@Test
 	public void execute_10000(){
-		execute(10000,2000);
+		execute("Build navigation identifier string",10000,1400,new Runnable() {
+			@Override
+			public void run() {
+				SystemAction systemAction = __inject__(SystemActionCreate.class);
+				systemAction.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
+				__inject__(NavigationIdentifierStringBuilder.class).setSystemAction(systemAction).execute();
+			}
+		});
 	}	
 	
 	@Test
 	public void execute_100000(){
-		execute(100000,12000);
+		execute("Build navigation identifier string",100000,7600,new Runnable() {
+			@Override
+			public void run() {
+				SystemAction systemAction = __inject__(SystemActionCreate.class);
+				systemAction.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
+				__inject__(NavigationIdentifierStringBuilder.class).setSystemAction(systemAction).execute();
+			}
+		});
 	}	
-	
-	
-	@Override
-	protected void __execute__() {
-		SystemAction systemAction = __inject__(SystemActionCreate.class);
-		systemAction.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
-		__inject__(NavigationIdentifierStringBuilder.class).setSystemAction(systemAction).execute();
-	}
 	
 	/**/
 	

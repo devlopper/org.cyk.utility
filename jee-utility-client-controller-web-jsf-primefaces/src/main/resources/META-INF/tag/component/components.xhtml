@@ -155,7 +155,7 @@
 									</c:choose>
 								</c:if>
 								<c:if test="#{indexComponent.throwable != null}">
-									<p:outputPanel id="#{indexComponent.properties.identifier}" styleClass="ui-message ui-message-error">
+									<p:outputPanel id="#{indexComponent.identifier}" styleClass="ui-message ui-message-error">
 										<span class="ui-message-error-icon"></span>
 										<span class="ui-message-error-detail">#{indexComponent.throwableInternalizationMessage}</span>
 									</p:outputPanel>

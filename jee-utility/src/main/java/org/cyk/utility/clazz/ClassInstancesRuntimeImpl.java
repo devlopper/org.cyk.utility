@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldName;
@@ -50,8 +51,10 @@ public class ClassInstancesRuntimeImpl extends AbstractObject implements ClassIn
 	
 	@Override
 	public ClassInstances getInstances(Boolean injectIfNull) {
-		ClassInstances instances = (ClassInstances) __getInjectIfNull__(FIELD_INSTANCES, injectIfNull);
-		instances.setCollectionClass(Set.class);
+		if(instances == null && Boolean.TRUE.equals(injectIfNull)) {
+			instances = DependencyInjection.inject(ClassInstances.class);
+			instances.setCollectionClass(Set.class);
+		}
 		return instances;
 	}
 

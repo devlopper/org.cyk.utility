@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.map.MapInstanceIntegerToClass;
 
@@ -40,7 +41,9 @@ public class FieldTypeImpl extends AbstractObject implements FieldType,Serializa
 	}
 	@Override
 	public MapInstanceIntegerToClass getParameterizedClasses(Boolean injectIfNull) {
-		return (MapInstanceIntegerToClass) __getInjectIfNull__(FIELD_PARAMETERIZED_CLASSES, injectIfNull);
+		if(parameterizedClasses == null && Boolean.TRUE.equals(injectIfNull))
+			parameterizedClasses = DependencyInjection.inject(MapInstanceIntegerToClass.class);
+		return parameterizedClasses;
 	}
 	@Override
 	public FieldType setParameterizedClasses(MapInstanceIntegerToClass parameterizedClasses) {
@@ -48,5 +51,5 @@ public class FieldTypeImpl extends AbstractObject implements FieldType,Serializa
 		return this;
 	}
 	
-	private static final String FIELD_PARAMETERIZED_CLASSES = "parameterizedClasses";
+	public static final String FIELD_PARAMETERIZED_CLASSES = "parameterizedClasses";
 }

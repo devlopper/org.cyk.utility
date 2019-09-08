@@ -11,7 +11,7 @@
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
    			<p:selectOneRadio
-   				id="#{value.properties.identifier}"
+   				id="#{value.identifier}"
    				value="#{value.value}"
 				required="#{value.properties.required}"
 				styleClass="#{value.properties.styleClass}"

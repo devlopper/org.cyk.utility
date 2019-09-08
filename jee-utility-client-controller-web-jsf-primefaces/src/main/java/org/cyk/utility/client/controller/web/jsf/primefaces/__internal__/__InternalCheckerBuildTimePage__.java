@@ -79,7 +79,7 @@ public class __InternalCheckerBuildTimePage__ extends AbstractPageContainerManag
 		return viewBuilder;
 	}
 	
-	@Getter @Setter @Accessors(chain=true) @ToString
+	@Getter @Setter /*@Accessors(chain=true)*/ @ToString
 	public static class Data extends AbstractDataImpl implements Serializable {
 		private static final long serialVersionUID = 1L;
 

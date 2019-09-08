@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.enterprise.inject.Default;
 
-@Default
+@Default @Deprecated
 public class SessionAttributeGetterImpl extends AbstractSessionAttributeGetterImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 

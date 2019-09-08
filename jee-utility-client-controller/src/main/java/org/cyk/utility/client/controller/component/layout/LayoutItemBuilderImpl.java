@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
-import org.cyk.utility.css.StyleBuilder;
+import org.cyk.utility.css.Style;
 import org.cyk.utility.css.StyleClassBuilderWidth;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceDesktop;
@@ -25,7 +25,7 @@ public class LayoutItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<L
 	@Override
 	protected void __execute__(LayoutItem layoutItem) {
 		super.__execute__(layoutItem);
-		StyleBuilder style = getStyle();
+		Style style = getStyle();
 		
 		DeviceScreenArea area = getArea();
 		if(area == null) {
@@ -34,19 +34,19 @@ public class LayoutItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<L
 		
 		if(area!=null) {
 			if(style == null)
-				style = __inject__(StyleBuilder.class);
+				style = __inject__(Style.class);
 			Map<Class<? extends Device>,Integer> map = area.getWidthProportions(Boolean.TRUE).getMap(Boolean.TRUE);
 			for(Class<?> index : DEVICE_CLASSES) {
 				Integer proportion = map.get(index == null ? null : index);
 				String styleClass = __inject__(StyleClassBuilderWidth.class).setDevice(index == null ? null : (Device) __inject__(index)).setWidth(proportion).execute().getOutput();
-				style.addClasses(styleClass);
+				style.getClasses(Boolean.TRUE).add(styleClass);
 			}
 		}
 		
 		setArea(area);
 		
 		if(style!=null)
-			layoutItem.setStyle(style.execute().getOutput());
+			layoutItem.setStyle(style);
 		
 		LayoutBuilder layout = getLayout();
 		if(layout!=null)

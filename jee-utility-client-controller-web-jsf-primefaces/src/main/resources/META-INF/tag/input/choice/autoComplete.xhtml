@@ -11,7 +11,7 @@
 	<ui:decorate template="/template.xhtml">
 		<ui:define name="valueIsNotNull">
 			<p:autoComplete
-   				id="#{value.properties.identifier}"
+   				id="#{value.identifier}"
    				value="#{value.value}"
 				completeMethod="#{value.getChoicesByQuery}"
 				maxResults="#{value.properties.maxResults}"

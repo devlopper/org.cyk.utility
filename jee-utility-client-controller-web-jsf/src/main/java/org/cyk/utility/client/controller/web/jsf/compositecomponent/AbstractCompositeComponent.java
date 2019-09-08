@@ -23,7 +23,7 @@ public abstract class AbstractCompositeComponent<T> extends UINamingContainer im
 		if(identifier == null) {
 			Object object = getValue();
 			if(object instanceof AbstractObject) {
-				Object identifierObject = ((AbstractObject)object).getProperties().getIdentifier();
+				Object identifierObject = ((AbstractObject)object).getIdentifier();
 				if(identifierObject!=null)
 					identifier = identifierObject.toString();
 			}

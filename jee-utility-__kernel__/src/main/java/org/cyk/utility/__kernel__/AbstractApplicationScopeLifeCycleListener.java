@@ -21,7 +21,7 @@ public abstract class AbstractApplicationScopeLifeCycleListener extends Abstract
 	public void initialize(@Observes @Initialized(ApplicationScoped.class) Object object) {
 		if(!INITIALIZED.contains(getClass())) {
 			__initialize__(object);
-			__logInfo__(String.format("%S initialized", getClass()));	
+			//__logFine__(String.format("%s initialized", getClass()));	
 			INITIALIZED.add(getClass());
 			DESTROYED.remove(getClass());
 		}
@@ -32,7 +32,7 @@ public abstract class AbstractApplicationScopeLifeCycleListener extends Abstract
     public void destroy(@Observes @BeforeDestroyed(ApplicationScoped.class) Object object) {
     	if(!DESTROYED.contains(getClass())) {
     		__destroy__(object);
-    		__logInfo__(String.format("%S destroyed", getClass()));	
+    		//__logFine__(String.format("%s destroyed", getClass()));	
         	DESTROYED.add(getClass());
     		INITIALIZED.remove(getClass());
     	}

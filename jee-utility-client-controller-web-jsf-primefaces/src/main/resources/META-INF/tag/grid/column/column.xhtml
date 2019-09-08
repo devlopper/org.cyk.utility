@@ -12,7 +12,7 @@
 		<ui:define name="valueIsNotNull">
 			<c:set var="column" value="#{value}" />
 			<p:column
-				id="#{column.properties.identifier}"
+				id="#{column.identifier}"
 			>
 				
 				<c:set var="header" value="#{column.viewMap.get('header')}" />

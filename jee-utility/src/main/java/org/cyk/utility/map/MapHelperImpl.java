@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.helper.AbstractHelper;
 
@@ -13,6 +14,16 @@ import org.cyk.utility.helper.AbstractHelper;
 public class MapHelperImpl extends AbstractHelper implements MapHelper,Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static MapHelper INSTANCE;
+	public static MapHelper getInstance(Boolean isNew) {
+		//if(INSTANCE == null || Boolean.TRUE.equals(isNew))
+			INSTANCE =  DependencyInjection.inject(MapHelper.class);
+		return INSTANCE;
+	}
+	public static MapHelper getInstance() {
+		return getInstance(null);
+	}
+	
 	@Override
 	public Boolean isEmpty(Map<?, ?> map){
 		return map == null || map.isEmpty();

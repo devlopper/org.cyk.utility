@@ -46,7 +46,9 @@ public class CommandBuilderImpl extends AbstractInvisibleComponentBuilderImpl<Co
 
 	@Override
 	public CommandFunction getFunction(Boolean injectIfNull) {
-		return (CommandFunction) __getInjectIfNull__(FIELD_FUNCTION, injectIfNull);
+		if(function == null && Boolean.TRUE.equals(injectIfNull))
+			function = __inject__(CommandFunction.class);
+		return function;
 	}
 	
 	@Override

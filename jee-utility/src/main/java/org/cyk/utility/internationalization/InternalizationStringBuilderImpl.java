@@ -23,6 +23,9 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 
 	private InternalizationKeyStringBuilder keyBuilder;
 	private String key;
+	private Collection<Object> parameters;
+	private Locale locale;
+	private Case stringCase;
 	
 	@Override
 	protected String __execute__() throws Exception {
@@ -121,7 +124,9 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 	
 	@Override
 	public InternalizationKeyStringBuilder getKeyBuilder(Boolean injectIfNull) {
-		return (InternalizationKeyStringBuilder) __getInjectIfNull__(FIELD_KEY_BUILDER, injectIfNull);
+		if(keyBuilder == null && Boolean.TRUE.equals(injectIfNull))
+			keyBuilder = __inject__(InternalizationKeyStringBuilder.class);
+		return keyBuilder;
 	}
 	
 	@Override
@@ -155,34 +160,34 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 
 	@Override
 	public Collection<Object> getParameters() {
-		return (Collection<Object>) getProperties().getParameters();
+		return parameters;
 	}
 
 	@Override
 	public InternalizationStringBuilder setParameters(Collection<Object> parameters) {
-		getProperties().setParameters(parameters);
+		this.parameters = parameters;
 		return this;
 	}
 
 	@Override
 	public Locale getLocale() {
-		return (Locale) getProperties().getLocale();
+		return locale;
 	}
 
 	@Override
 	public InternalizationStringBuilder setLocale(Locale locale) {
-		getProperties().setLocale(locale);
+		this.locale = locale;;
 		return this;
 	}
 
 	@Override
 	public Case getCase() {
-		return (Case) getProperties().getCase();
+		return stringCase;
 	}
 
 	@Override
 	public InternalizationStringBuilder setCase(Case aCase) {
-		getProperties().setCase(aCase);
+		this.stringCase = aCase;
 		return this;
 	}
 	

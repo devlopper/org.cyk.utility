@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
+
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
@@ -18,11 +19,22 @@ import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.method.MethodHelper;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.string.StringHelperImpl;
 
 @ApplicationScoped
 public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static ClassHelper INSTANCE;
+	public static ClassHelper getInstance(Boolean isNew) {
+		//if(INSTANCE == null || Boolean.TRUE.equals(isNew))
+			INSTANCE =  DependencyInjection.inject(ClassHelper.class);
+		return INSTANCE;
+	}
+	public static ClassHelper getInstance() {
+		return getInstance(null);
+	}
+	
 	private static final Map<Class<?>,Map<Integer,Class<?>>> CLASSES_PARAMETERS_MAP = new HashMap<>();
 	private static final Map<String,Class<?>> NAMES_CLASSES_MAP = new HashMap<>();
 	
@@ -261,10 +273,54 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 					map = new HashMap<>();
 					CLASSES_PARAMETERS_MAP.put(aClass, map);
 				}
-;				map.put(index, parameter);
+				map.put(index, parameter);
 			}	
 		}
 		return parameter;
+	}
+	
+	public static <T> T __instanciateOne__(Class<T> klass) {
+		try {
+			return klass == null ? null : (klass.isInterface() ? __inject__(klass) : klass.newInstance());
+		} catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
+	
+	public static Class<?> __getByName__(String name,Boolean isReturnNullIfNotFound) {
+		Class<?> clazz = null;
+		if(StringHelperImpl.__isBlank__(name)) {
+			
+		}else {
+			try {
+				clazz = NAMES_CLASSES_MAP.get(name);
+				if(clazz == null) {
+					clazz = Class.forName(name);
+					NAMES_CLASSES_MAP.put(name, clazz);
+				}
+			} catch (Exception exception) {
+				if(exception instanceof ClassNotFoundException && Boolean.TRUE.equals(isReturnNullIfNotFound))
+					clazz = null;
+				else
+					throw new RuntimeException(exception);
+				//__inject__(Log.class).executeThrowable(exception);
+			}	
+		}
+		return clazz;
+	}
+	
+	public static Class<?> __getByName__(String name) {
+		return __getByName__(name, Boolean.TRUE);
+	}
+	
+	public static Class<?> __getByName__(ClassNameBuilder nameBuilder) {
+		return nameBuilder == null ? null : __getByName__(nameBuilder.execute().getOutput());
+	}
+	
+	public static Boolean __isInstanceOf__(Class<?> aClass, Class<?> baseClass) {
+		if (aClass == null || baseClass == null)
+			return Boolean.FALSE;
+		return baseClass.isAssignableFrom(aClass);
 	}
 
 }

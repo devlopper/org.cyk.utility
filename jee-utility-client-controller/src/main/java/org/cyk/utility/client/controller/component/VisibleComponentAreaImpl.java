@@ -16,7 +16,9 @@ public class VisibleComponentAreaImpl extends AbstractObject implements VisibleC
 
 	@Override
 	public VisibleComponentAreaDimension getWidth(Boolean injectIfNull) {
-		return (VisibleComponentAreaDimension) __getInjectIfNull__(FIELD_WIDTH, injectIfNull);
+		if(width == null && Boolean.TRUE.equals(injectIfNull))
+			width = __inject__(VisibleComponentAreaDimension.class);
+		return width;
 	}
 
 	@Override
@@ -32,7 +34,9 @@ public class VisibleComponentAreaImpl extends AbstractObject implements VisibleC
 
 	@Override
 	public VisibleComponentAreaDimension getHeight(Boolean injectIfNull) {
-		return (VisibleComponentAreaDimension) __getInjectIfNull__(FIELD_HEIGHT, injectIfNull);
+		if(height == null && Boolean.TRUE.equals(injectIfNull))
+			height = __inject__(VisibleComponentAreaDimension.class);
+		return height;
 	}
 
 	@Override

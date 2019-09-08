@@ -14,28 +14,63 @@ public class FieldHelperUnitTestPerformance extends AbstractWeldUnitTestPerforma
 
 	@Test
 	public void get_100(){
-		execute(100,100);
+		execute("Get field",100,10,new Runnable() {
+			@Override
+			public void run() {
+				FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField");
+			}
+		});
 	}	
 	
 	@Test
 	public void get_1000(){
-		execute(1000,100);
+		execute("Get field",1000,20,new Runnable() {
+			@Override
+			public void run() {
+				FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField");
+			}
+		});
 	}	
 	
 	@Test
 	public void get_10000(){
-		execute(10000,1000);
+		execute("Get field",10000,30,new Runnable() {
+			@Override
+			public void run() {
+				FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField");
+			}
+		});
 	}	
 	
 	@Test
 	public void get_100000(){
-		execute(100000,2000);
+		execute("Get field",100000,40,new Runnable() {
+			@Override
+			public void run() {
+				FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField");
+			}
+		});
 	}	
 	
-	@Override
-	protected void __execute__() {
-		__inject__(FieldHelper.class).getField(MyClass01.class, "intField");
-	}
+	@Test
+	public void get_1000000(){
+		execute("Get field",1000000,50,new Runnable() {
+			@Override
+			public void run() {
+				FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField");
+			}
+		});
+	}	
+	
+	@Test
+	public void get_10000000(){
+		execute("Get field",10000000,150,new Runnable() {
+			@Override
+			public void run() {
+				FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField");
+			}
+		});
+	}	
 	
 	/**/
 	

@@ -4,19 +4,26 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
-import org.cyk.utility.__kernel__.ObjectLifeCycleListener;
+import org.cyk.utility.__kernel__.AbstractObjectLifeCycleListenerImpl;
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.__kernel__.function.Function;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.clazz.Classes;
 import org.cyk.utility.client.controller.command.CommandFunction;
 import org.cyk.utility.client.controller.event.Event;
 import org.cyk.utility.client.controller.event.EventBuilder;
 import org.cyk.utility.client.controller.event.EventBuilders;
 import org.cyk.utility.client.controller.event.EventName;
-import org.cyk.utility.css.StyleBuilder;
+import org.cyk.utility.client.controller.session.AbstractSessionHelperImpl;
+import org.cyk.utility.client.controller.session.SessionHelper;
+import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.css.Style;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.internationalization.InternalizationHelperImpl;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.internationalization.InternalizationStringBuilderByStringMap;
 import org.cyk.utility.object.Objects;
@@ -26,13 +33,11 @@ import org.cyk.utility.type.BooleanMap;
 public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> extends AbstractFunctionWithPropertiesAsInputImpl<COMPONENT> implements ComponentBuilder<COMPONENT> , Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected static final ObjectLifeCycleListener OBJECT_LIFE_CYCLE_LISTENER = __inject__(ObjectLifeCycleListener.class);
-	
 	private Class<COMPONENT> componentClass;
 	private Classes qualifiers;
 	private COMPONENT component;
 	private DeviceScreenArea area;
-	private StyleBuilder layoutItemStyle;
+	private Style layoutItemStyle;
 	private ComponentRoles roles;
 	private Boolean isTargetModelToBeBuilt;
 	private Objects updatables;
@@ -49,26 +54,63 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		super.__listenPostConstruct__();
 		if(componentClass == null) {
 			if(componentClass == null) {
-				componentClass = (Class<COMPONENT>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 0, Object.class).getName());
+				componentClass = (Class<COMPONENT>) ClassHelperImpl.__getByName__(ClassHelperImpl.__getParameterAt__(getClass(), 0, Object.class).getName());
 			}	
 		}
-		OBJECT_LIFE_CYCLE_LISTENER.listenPostConstruct(this);
+		AbstractObjectLifeCycleListenerImpl.getInstance().listenPostConstruct(this);
 	}
 	
-	/*protected Class<COMPONENT> __getComponentClass__(){
-		return (Class<COMPONENT>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 0, Object.class).getName());
-	}*/
+	@Override
+	public Function<Properties, COMPONENT> execute() {
+		Classes qualifiers = getQualifiers();
+		COMPONENT component = null;
+		if(CollectionHelperImpl.__isEmpty__(qualifiers))
+			component = DependencyInjection.inject(componentClass);
+		else
+			component = DependencyInjection.injectByQualifiersClasses(componentClass, qualifiers.get().toArray(new Class[] {}));		
+		// Bidirectional Linking
+		setComponent(component);
+		component.setBuilder(this);
+		
+		component.setGetByIdentifierExpressionLanguageFormat(getGetByIdentifierExpressionLanguageFormat());
+		Object linkedTo = getLinkedTo();
+		if(linkedTo instanceof ComponentBuilder<?>)
+			linkedTo = ((ComponentBuilder<?>)linkedTo).getComponent();
+		component.setLinkedTo(linkedTo);
+		
+		Properties outputProperties = getOutputProperties();
+		if(outputProperties!=null) {
+			component.setIdentifier(outputProperties.getIdentifier());
+			component.getProperties().setIdentifierAsStyleClass(outputProperties.getStyleClass());
+		}
+		AbstractObjectLifeCycleListenerImpl.getInstance().listenExecuteBefore(this);
+		ComponentRoles roles = getRoles();
+		component.setRoles(roles);
+		Objects updatables = getUpdatables();
+		component.setUpdatables(updatables);
+		
+		EventBuilders events = getEvents();
+		if(CollectionHelperImpl.__isNotEmpty__(events)) {
+			for(EventBuilder index : events.get()) {
+				Event event = index.execute().getOutput();
+				component.getEvents(Boolean.TRUE).add(event);
+			}
+		}
+		__execute__(component);
+		AbstractObjectLifeCycleListenerImpl.getInstance().listenExecuteAfter(this);
+		Throwable throwable = getThrowable();
+		component.setThrowable(throwable);
+		if(component.getThrowable() != null)
+			component.setThrowableInternalizationMessage(InternalizationHelperImpl.__buildInternalizationString__(InternalizationHelperImpl
+					.__buildInternalizationKey__(component.getThrowable())));
+		setProperty(Properties.OUTPUT, component);
+		return this;
+	}
 	
+	/*
 	@Override
 	protected COMPONENT __execute__() throws Exception {
 		Class<COMPONENT> componentClass = getComponentClass();
-		/*if(componentClass == null) {
-			componentClass = (Class<COMPONENT>) COMPONENTS_CLASSES_MAP.get(getClass());
-			if(componentClass == null) {
-				componentClass = (Class<COMPONENT>) __injectClassHelper__().getByName(__injectClassHelper__().getParameterAt(getClass(), 0, Object.class).getName());
-				COMPONENTS_CLASSES_MAP.put(getClass(), componentClass);
-			}
-		}*/
 		Classes qualifiers = getQualifiers();
 		COMPONENT component = null;
 		if(__injectCollectionHelper__().isEmpty(qualifiers))
@@ -118,7 +160,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 			component.setThrowableInternalizationMessage(__inject__(InternalizationStringBuilder.class).setKeyValue(component.getThrowable()).execute().getOutput());
 		return component;
 	}
-	
+	*/
 	protected void __execute__(COMPONENT component) {
 		component.getProperties().copyNonNullKeysFrom(getOutputProperties());		
 	}
@@ -147,7 +189,9 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	
 	@Override
 	public Classes getQualifiers(Boolean injectIfNull) {
-		return (Classes) __getInjectIfNull__(FIELD_QUALIFIERS, injectIfNull);
+		if(qualifiers == null && Boolean.TRUE.equals(injectIfNull))
+			qualifiers = __inject__(Classes.class);
+		return qualifiers;
 	}
 	
 	@Override
@@ -199,7 +243,9 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 
 	@Override
 	public DeviceScreenArea getArea(Boolean injectIfNull) {
-		return (DeviceScreenArea) __getInjectIfNull__(FIELD_AREA, injectIfNull);
+		if(area == null && Boolean.TRUE.equals(injectIfNull))
+			area = __inject__(DeviceScreenArea.class);
+		return area;
 	}
 
 	@Override
@@ -244,24 +290,26 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	}
 	
 	@Override
-	public ComponentBuilder<COMPONENT> setLayoutItemStyle(StyleBuilder style) {
+	public ComponentBuilder<COMPONENT> setLayoutItemStyle(Style style) {
 		this.layoutItemStyle = style;
 		return this;
 	}
 	
 	@Override
-	public StyleBuilder getLayoutItemStyle() {
+	public Style getLayoutItemStyle() {
 		return layoutItemStyle;
 	}
 	
 	@Override
-	public StyleBuilder getLayoutItemStyle(Boolean injectIfNull) {
-		return (StyleBuilder) __getInjectIfNull__(FIELD_LAYOUT_ITEM_STYLE, injectIfNull);
+	public Style getLayoutItemStyle(Boolean injectIfNull) {
+		if(layoutItemStyle == null && Boolean.TRUE.equals(injectIfNull))
+			layoutItemStyle = __inject__(Style.class);
+		return layoutItemStyle;
 	}
 	
 	@Override
 	public ComponentBuilder<COMPONENT> addLayoutItemStyleClasses(String... classes) {
-		getLayoutItemStyle(Boolean.TRUE).addClasses(classes);
+		getLayoutItemStyle(Boolean.TRUE).getClasses(Boolean.TRUE).add(classes);
 		return this;
 	}
 	
@@ -272,7 +320,9 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	
 	@Override
 	public ComponentRoles getRoles(Boolean injectIfNull) {
-		return (ComponentRoles) __getInjectIfNull__(FIELD_ROLES, injectIfNull);
+		if(roles == null && Boolean.TRUE.equals(injectIfNull))
+			roles = __inject__(ComponentRoles.class);
+		return roles;
 	}
 	
 	@Override
@@ -310,7 +360,9 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	
 	@Override
 	public Objects getUpdatables(Boolean injectIfNull) {
-		return (Objects) __getInjectIfNull__(FIELD_UPDATABLES, injectIfNull);
+		if(updatables == null && Boolean.TRUE.equals(injectIfNull))
+			updatables = __inject__(Objects.class);
+		return updatables;
 	}
 	
 	@Override
@@ -343,7 +395,9 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	
 	@Override
 	public InternalizationStringBuilderByStringMap getInternalizationStringMap(Boolean injectIfNull) {
-		return (InternalizationStringBuilderByStringMap) __getInjectIfNull__(FIELD_INTERNALIZATION_STRING_MAP, injectIfNull);
+		if(internalizationStringMap == null && Boolean.TRUE.equals(injectIfNull))
+			internalizationStringMap = __inject__(InternalizationStringBuilderByStringMap.class);
+		return internalizationStringMap;
 	}
 	
 	@Override
@@ -381,7 +435,9 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	
 	@Override
 	public EventBuilders getEvents(Boolean injectIfNull) {
-		return (EventBuilders) __getInjectIfNull__(FIELD_EVENTS, injectIfNull);
+		if(events == null && Boolean.TRUE.equals(injectIfNull))
+			events = __inject__(EventBuilders.class);
+		return events;
 	}
 	
 	@Override
@@ -482,7 +538,9 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	
 	@Override
 	public BooleanMap getDerivableFieldNameMap(Boolean injectIfNull) {
-		return (BooleanMap) __getInjectIfNull__(FIELD_DERIVABLE_FIELD_NAME_MAP, injectIfNull);
+		if(derivableFieldNameMap == null && Boolean.TRUE.equals(injectIfNull))
+			derivableFieldNameMap = __inject__(BooleanMap.class);
+		return derivableFieldNameMap;
 	}
 	
 	public ComponentBuilder<COMPONENT> setDerivableFieldNameMap(BooleanMap derivableFieldNameMap) {
@@ -525,7 +583,9 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	
 	@Override
 	public Strings getDerivableProperties(Boolean injectIfNull) {
-		return (Strings) __getInjectIfNull__(FIELD_DERIVABLE_PROPERTIES, injectIfNull);
+		if(derivableProperties == null && Boolean.TRUE.equals(injectIfNull))
+			derivableProperties = __inject__(Strings.class);
+		return derivableProperties;
 	}
 	@Override
 	public ComponentBuilder<COMPONENT> setDerivableProperties(Strings derivableProperties) {
@@ -571,13 +631,10 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 			component.setUniformResourceLocatorMap(getUniformResourceLocatorMap());
 	}
 	
-	public static final String FIELD_AREA = "area";
-	public static final String FIELD_DERIVABLE_PROPERTIES = "derivableProperties";
-	public static final String FIELD_QUALIFIERS = "qualifiers";
-	public static final String FIELD_LAYOUT_ITEM_STYLE = "layoutItemStyle";
-	public static final String FIELD_ROLES = "roles";
-	public static final String FIELD_UPDATABLES = "updatables";
-	public static final String FIELD_EVENTS = "events";
-	public static final String FIELD_INTERNALIZATION_STRING_MAP = "internalizationStringMap";
-	public static final String FIELD_DERIVABLE_FIELD_NAME_MAP = "derivableFieldNameMap";
+	protected static SessionHelper __injectSessionHelper__(){
+		return AbstractSessionHelperImpl.getInstance();
+	}
+	
+	/**/
+	
 }

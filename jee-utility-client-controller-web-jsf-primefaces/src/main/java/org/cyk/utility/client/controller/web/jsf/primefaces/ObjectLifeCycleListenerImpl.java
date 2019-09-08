@@ -9,10 +9,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.AbstractObjectLifeCycleListenerImpl;
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.annotation.Default;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.client.controller.AbstractObjectLifeCycleListenerImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
 import org.cyk.utility.client.controller.component.ComponentRole;
@@ -78,19 +77,10 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 
 	private static final String IDENTIFIER_FORMAT = "%s_%s";
 	
-	@Override
-	public void listen(Object object, Action action, When when) {
-		if(Action.CONSTRUCT.equals(action) && When.AFTER.equals(when) && object instanceof ComponentBuilder)
-			listenPostConstructComponentBuilder((ComponentBuilder<?>) object);
-		else if(Action.EXECUTE.equals(action) && When.BEFORE.equals(when) && object instanceof ComponentBuilder)
-			listenExecuteComponentBuilderBefore((ComponentBuilder<?>) object);
-		else if(Action.EXECUTE.equals(action) && When.AFTER.equals(when) && object instanceof ComponentBuilder)
-			listenExecuteComponentBuilderAfter((ComponentBuilder<?>) object);
-	}
-	
 	/**/
 	
-	private void listenPostConstructComponentBuilder(ComponentBuilder<?> componentBuilder) {
+	protected void listenPostConstructComponentBuilder(ComponentBuilder<?> componentBuilder) {
+		super.listenPostConstructComponentBuilder(componentBuilder);
 		Properties outputProperties = componentBuilder.getOutputProperties(Boolean.TRUE);
 		
 		outputProperties.setIdentifier(String.format(IDENTIFIER_FORMAT,componentBuilder.getComponentClass().getSimpleName(),DependencyInjection.inject(RandomHelper.class).getAlphabetic(3)));
@@ -118,7 +108,8 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 		}
 	}
 
-	private void listenExecuteComponentBuilderBefore(ComponentBuilder<?> componentBuilder) {
+	protected void listenExecuteComponentBuilderBefore(ComponentBuilder<?> componentBuilder) {
+		super.listenExecuteComponentBuilderBefore(componentBuilder);
 		//TODO style class string must be replaced by its equivalent role
 		Component component = componentBuilder.getComponent();
 		
@@ -130,7 +121,7 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 			//String identifierAsStyleClass = __inject__(RandomHelper.class).
 			//visibleComponentBuilder.getStyle(Boolean.TRUE).addClasses("cyk_component");
 			
-			//String identifierAsStyleClass = visibleComponentBuilder.getOutputProperties().getIdentifier().toString();
+			//String identifierAsStyleClass = visibleComponentBuilder.getIdentifier().toString();
 			String identifierAsStyleClass = (String) visibleComponentBuilder.getOutputProperty(Properties.IDENTIFIER_AS_STYLE_CLASS);//.getIdentifierAsStyleClass().toString();
 			//visibleComponentBuilder.getOutputProperties().setIdentifierAsStyleClass(identifierAsStyleClass);
 			//System.out.println("CID : "+identifierAsStyleClass);
@@ -169,10 +160,10 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 			
 			if(visibleComponentBuilder instanceof LayoutBuilder) {
 				LayoutBuilder layoutBuilder = (LayoutBuilder) visibleComponentBuilder;
-				layoutBuilder.getStyle(Boolean.TRUE).addClasses("cyk_layout");
+				layoutBuilder.getStyle(Boolean.TRUE).getClasses(Boolean.TRUE).add("cyk_layout");
 				
 				// TODO ui-g must be get from function
-				layoutBuilder.getStyle(Boolean.TRUE).addClasses("ui-g");
+				layoutBuilder.getStyle(Boolean.TRUE).getClasses(Boolean.TRUE).add("ui-g");
 				
 				if(DependencyInjection.inject(CollectionHelper.class).contains(layoutBuilder.getRoles(), ComponentRole.GRID))
 					layoutBuilder.addStyleClasses("cyk_layout_grid");
@@ -182,13 +173,14 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 			
 			if(visibleComponentBuilder instanceof LayoutItemBuilder) {
 				LayoutItemBuilder layoutItemBuilder = (LayoutItemBuilder) visibleComponentBuilder;
-				layoutItemBuilder.getStyle(Boolean.TRUE).addClasses("cyk_layout_item");
+				layoutItemBuilder.getStyle(Boolean.TRUE).getClasses(Boolean.TRUE).add("cyk_layout_item");
 				
 			}
 		}
 	}
 	
-	private void listenExecuteComponentBuilderAfter(ComponentBuilder<?> componentBuilder) {
+	protected void listenExecuteComponentBuilderAfter(ComponentBuilder<?> componentBuilder) {
+		super.listenExecuteComponentBuilderAfter(componentBuilder);
 		Component component = componentBuilder.getComponent();
 		
 		Events events = component.getEvents();
@@ -238,7 +230,7 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 						
 						if(outputString instanceof OutputStringLabel) {
 							OutputStringLabel outputStringLabel = (OutputStringLabel) outputString;
-							outputStringLabel.getProperties().setFor( ((OutputStringLabelBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );	
+							outputStringLabel.getProperties().setFor(((OutputStringLabelBuilder)componentBuilder).getInputBuilder().getOutputProperties().getIdentifier() );	
 						}
 						
 						if(outputString instanceof OutputStringMessage) {
@@ -337,7 +329,7 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 				setTargetBindingIsDerivable(component);
 			}else if(component instanceof Dialog) {
 				Dialog dialog = (Dialog) component;
-				dialog.getProperties().setIdentifier(DependencyInjection.inject(ComponentHelper.class).getGlobalMessagesTargetDialogComponentIdentifier());
+				dialog.setIdentifier(DependencyInjection.inject(ComponentHelper.class).getGlobalMessagesTargetDialogComponentIdentifier());
 				
 				
 				dialog.getProperties().setResponsive(Boolean.TRUE);
@@ -398,11 +390,5 @@ public class ObjectLifeCycleListenerImpl extends AbstractObjectLifeCycleListener
 		}
 	}
 	
-	private static void setTargetModelIsDerivable(Component component) {
-		component.getTargetModel(Boolean.TRUE).setIsDerivable(Boolean.TRUE).addValueGetterClassQualifiers(Default.class).setValue(component);
-	}
 	
-	private static void setTargetBindingIsDerivable(Component component) {
-		component.getTargetBinding(Boolean.TRUE).setIsDerivable(Boolean.TRUE).addValueGetterClassQualifiers(Default.class).setValue(component);
-	}
 }

@@ -6,6 +6,8 @@ import java.util.Locale;
 import org.cyk.utility.function.FunctionWithPropertiesAsInputAndStringAsOutput;
 import org.cyk.utility.string.Case;
 
+//TODO use sinleton helper to reduce memory 
+@Deprecated
 public interface InternalizationStringBuilder extends FunctionWithPropertiesAsInputAndStringAsOutput {
 
 	InternalizationKeyStringBuilder getKeyBuilder();

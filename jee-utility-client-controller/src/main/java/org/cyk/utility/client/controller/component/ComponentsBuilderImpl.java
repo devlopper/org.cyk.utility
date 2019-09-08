@@ -9,7 +9,7 @@ import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
 import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
-import org.cyk.utility.css.StyleBuilder;
+import org.cyk.utility.css.Style;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.function.FunctionsExecutor;
 import org.cyk.utility.instance.Instances;
@@ -19,7 +19,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	private static final long serialVersionUID = 1L;
 
 	private LayoutBuilder layout;
-	private StyleBuilder layoutStyle;
+	private Style layoutStyle;
 	private Instances components;
 	private Boolean isHandleLayout;
 	private Boolean isCreateLayoutItemOnAddComponent;
@@ -182,7 +182,9 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	
 	@Override
 	public LayoutBuilder getLayout(Boolean injectIfNull) {
-		return (LayoutBuilder) __getInjectIfNull__(FIELD_LAYOUT, injectIfNull);
+		if(layout == null && Boolean.TRUE.equals(injectIfNull))
+			layout = __inject__(LayoutBuilder.class);
+		return layout;
 	}
 	
 	@Override
@@ -198,7 +200,9 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	
 	@Override
 	public Instances getComponents(Boolean injectIfNull) {
-		return (Instances) __getInjectIfNull__(FIELD_COMPONENTS, injectIfNull);
+		if(components == null && Boolean.TRUE.equals(injectIfNull))
+			components = __inject__(Instances.class);
+		return components;
 	}
 
 	@Override
@@ -237,16 +241,19 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	}
 	
 	@Override
-	public StyleBuilder getLayoutStyle() {
+	public Style getLayoutStyle() {
 		return layoutStyle;
-	}
-	@Override
-	public StyleBuilder getLayoutStyle(Boolean injectIfNull) {
-		return (StyleBuilder) __getInjectIfNull__(FIELD_LAYOUT_STYLE, injectIfNull);
 	}
 	
 	@Override
-	public ComponentsBuilder setLayoutStyle(StyleBuilder layoutStyle) {
+	public Style getLayoutStyle(Boolean injectIfNull) {
+		if(layoutStyle == null && Boolean.TRUE.equals(injectIfNull))
+			layoutStyle = __inject__(Style.class);
+		return layoutStyle;
+	}
+	
+	@Override
+	public ComponentsBuilder setLayoutStyle(Style layoutStyle) {
 		this.layoutStyle = layoutStyle;
 		return this;
 	}

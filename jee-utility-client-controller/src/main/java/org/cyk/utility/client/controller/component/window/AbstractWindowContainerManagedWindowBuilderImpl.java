@@ -10,8 +10,7 @@ import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
-import org.cyk.utility.client.controller.session.SessionAttributeGetter;
-import org.cyk.utility.client.controller.session.SessionAttributeSetter;
+import org.cyk.utility.client.controller.session.SessionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.internationalization.InternalizationKeyStringType;
 import org.cyk.utility.internationalization.InternalizationPhraseBuilder;
@@ -61,10 +60,10 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		if(windowRenderType == null || windowRenderType instanceof WindowRenderTypeNormal) {
 			MenuBuilderMap menuMap = getMenuMap();
 			if(menuMap == null)
-				menuMap = (MenuBuilderMap) __inject__(SessionAttributeGetter.class).setRequest(request).setAttribute(SessionAttributeEnumeration.MENU_BUILDER_MAP).execute().getOutput();
+				menuMap = (MenuBuilderMap) __inject__(SessionHelper.class).getAttributeValue(SessionAttributeEnumeration.MENU_BUILDER_MAP,request);
 			if(menuMap == null) {
 				menuMap = __inject__(MenuBuilderMapGetter.class).setRequest(request).execute().getOutput();
-				__inject__(SessionAttributeSetter.class).setRequest(request).setAttribute(SessionAttributeEnumeration.MENU_BUILDER_MAP).setValue(menuMap).execute();
+				__inject__(SessionHelper.class).setAttributeValue(SessionAttributeEnumeration.MENU_BUILDER_MAP,menuMap,request);
 			}
 			window.setMenuMap(menuMap);	
 		}

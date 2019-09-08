@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.enterprise.context.Dependent;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Case;
 
@@ -100,7 +101,9 @@ public class ClassNameBuilderImpl extends AbstractFunctionWithPropertiesAsInputI
 	
 	@Override
 	public NamingModel getSourceNamingModel(Boolean injectIfNull) {
-		return (NamingModel) __getInjectIfNull__(injectIfNull);
+		if(sourceNamingModel == null && Boolean.TRUE.equals(injectIfNull))
+			sourceNamingModel = DependencyInjection.inject(NamingModel.class);
+		return sourceNamingModel;
 	}
 	
 	@Override
@@ -115,7 +118,9 @@ public class ClassNameBuilderImpl extends AbstractFunctionWithPropertiesAsInputI
 	
 	@Override
 	public NamingModel getDestinationNamingModel(Boolean injectIfNull) {
-		return (NamingModel) __getInjectIfNull__(injectIfNull);
+		if(destinationNamingModel == null && Boolean.TRUE.equals(injectIfNull))
+			destinationNamingModel = DependencyInjection.inject(NamingModel.class);
+		return destinationNamingModel;
 	}
 	
 	@Override

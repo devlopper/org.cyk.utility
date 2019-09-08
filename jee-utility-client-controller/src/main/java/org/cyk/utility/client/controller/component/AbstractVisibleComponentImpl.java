@@ -24,7 +24,9 @@ public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl
 
 	@Override
 	public DeviceScreenArea getArea(Boolean injectIfNull) {
-		return (DeviceScreenArea) __getInjectIfNull__(FIELD_AREA, injectIfNull);
+		if(area == null && Boolean.TRUE.equals(injectIfNull))
+			area = __inject__(DeviceScreenArea.class);
+		return area;
 	}
 
 	@Override
@@ -40,7 +42,9 @@ public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl
 
 	@Override
 	public Style getStyle(Boolean injectIfNull) {
-		return (Style) __getInjectIfNull__(FIELD_STYLE, injectIfNull);
+		if(style == null && Boolean.TRUE.equals(injectIfNull))
+			style = __inject__(Style.class);
+		return style;
 	}
 
 	@Override
@@ -56,7 +60,9 @@ public abstract class AbstractVisibleComponentImpl extends AbstractComponentImpl
 	
 	@Override
 	public Command getCommand(Boolean injectIfNull) {
-		return (Command) __getInjectIfNull__(FIELD_COMMAND, injectIfNull);
+		if(command == null && Boolean.TRUE.equals(injectIfNull))
+			command = __inject__(Command.class);
+		return command;
 	}
 	
 	@Override

@@ -19,7 +19,7 @@ public class StreamDistributedHelperImpl extends AbstractHelper implements Strea
 		super.__listenPostConstruct__();
 		//TODO use configuration parameter
 		setIsEnable(__inject__(BooleanHelper.class).get(__inject__(SystemHelper.class).getProperty("org.cyk.utility.stream.distributed.is.enable", Boolean.TRUE)));
-		System.out.println("Stream distributed functionnality is enable : "+getIsEnable());
+		//System.out.println("Stream distributed functionnality is enable : "+getIsEnable());
 	}
 	
 	@Override

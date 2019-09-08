@@ -3,7 +3,8 @@ package org.cyk.utility.client.controller;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.cyk.utility.field.FieldValueSetter;
+import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.server.representation.Constant;
 import org.cyk.utility.server.representation.RepresentationEntity;
 import org.cyk.utility.system.action.SystemActionCreate;
@@ -32,9 +33,9 @@ public class ControllerFunctionCreatorImpl extends AbstractControllerFunctionImp
 			Integer count = 0;
 			for(Object index : __entities__) {
 				if(__entityClassSystemIdentifierField__ != null)
-					__inject__(FieldValueSetter.class).execute(index, __entityClassSystemIdentifierField__,__injectCollectionHelper__().getElementAt(systemIdentifiers, count));
+					FieldHelperImpl.__writeFieldValue__(index, __entityClassSystemIdentifierField__, CollectionHelperImpl.__getElementAt__(systemIdentifiers, count));
 				if(__entityClassBusinessIdentifierField__ != null)
-					__inject__(FieldValueSetter.class).execute(index, __entityClassBusinessIdentifierField__, __injectCollectionHelper__().getElementAt(businessIdentifiers, count));
+					FieldHelperImpl.__writeFieldValue__(index, __entityClassBusinessIdentifierField__, CollectionHelperImpl.__getElementAt__(businessIdentifiers, count));
 				count++;
 			}	
 		}

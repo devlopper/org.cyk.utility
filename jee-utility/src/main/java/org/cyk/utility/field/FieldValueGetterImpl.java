@@ -17,7 +17,7 @@ import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueUsageType;
 
-@Dependent
+@Dependent @Deprecated
 public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements FieldValueGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -15,9 +15,8 @@ import org.cyk.utility.client.controller.component.theme.ThemeClassGetter;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.message.MessageRender;
 import org.cyk.utility.client.controller.message.MessageRenderType;
+import org.cyk.utility.client.controller.session.AbstractSessionHelperImpl;
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
-import org.cyk.utility.client.controller.session.SessionAttributeGetter;
-import org.cyk.utility.client.controller.session.SessionAttributeSetter;
 import org.cyk.utility.client.controller.session.SessionUser;
 import org.cyk.utility.client.controller.session.SessionUserGetter;
 import org.cyk.utility.notification.NotificationBuilder;
@@ -26,7 +25,7 @@ import org.cyk.utility.notification.NotificationSeverityError;
 import org.cyk.utility.notification.NotificationSeverityInformation;
 import org.cyk.utility.notification.NotificationSeverityWarning;
 import org.cyk.utility.request.RequestGetter;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.string.StringHelperImpl;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.throwable.ThrowableHelper;
@@ -50,7 +49,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	@Override
 	protected void __listenPostConstruct__() {
 		super.__listenPostConstruct__();
-		setContextDependencyInjectionBeanName(__inject__(StringHelper.class).getVariableNameFrom(getClass().getSimpleName()));
+		setContextDependencyInjectionBeanName(StringHelperImpl.__getVariableNameFrom__(getClass().getSimpleName()));
 		setSessionUser(__getSessionUser__());
 		setSystemAction(__getProperty__(WindowContainerManagedProperty.SYSTEM_ACTION, SystemAction.class));
 	}
@@ -162,7 +161,7 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 			DurationBuilder subDurationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
 			
 			String titleValue = __getWindowTitleValue__();
-			if(__inject__(StringHelper.class).isNotBlank(titleValue))
+			if(StringHelperImpl.__isNotBlank__(titleValue))
 				windowBuilder.setTitleValue(titleValue);	
 			
 			ViewBuilder view = __getViewBuilder__();
@@ -308,10 +307,10 @@ public abstract class AbstractWindowContainerManagedImpl extends AbstractObject 
 	/**/
 	
 	protected void setSessionAttribute(Object attribute,Object value) {
-		__inject__(SessionAttributeSetter.class).setRequest(__getRequest__()).setAttribute(attribute).setValue(value).execute();
+		AbstractSessionHelperImpl.getInstance().setAttributeValue(attribute, value, __getRequest__());
 	}
 	
 	protected Object getSessionAttribute(Object attribute) {
-		return __inject__(SessionAttributeGetter.class).setRequest(__getRequest__()).setAttribute(attribute).execute().getOutput();
+		return AbstractSessionHelperImpl.getInstance().getAttributeValue(attribute, __getRequest__());
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.collection.CollectionHelper;
 
+@Deprecated
 public abstract class AbstractMethodCallListenerImpl implements MethodCallListener,Serializable {
 	private static final long serialVersionUID = 1L;
 

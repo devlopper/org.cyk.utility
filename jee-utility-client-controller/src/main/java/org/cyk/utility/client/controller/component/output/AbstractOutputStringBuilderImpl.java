@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.string.Case;
+import org.cyk.utility.string.StringHelperImpl;
 
 public abstract class AbstractOutputStringBuilderImpl<OUTPUT extends OutputString> extends AbstractOutputBuilderImpl<OUTPUT,String> implements OutputStringBuilder<OUTPUT>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -16,7 +17,7 @@ public abstract class AbstractOutputStringBuilderImpl<OUTPUT extends OutputStrin
 	protected void __execute__(OUTPUT output, Object object, Field field) {
 		super.__execute__(output, object, field);
 		String value = output.getValue();
-		if(__injectStringHelper__().isBlank(value)) {
+		if(StringHelperImpl.__isBlank__(value)) {
 			InternalizationStringBuilder valueInternalization = getValueInternalization();
 			if(valueInternalization!=null)
 				output.setValue(valueInternalization.execute().getOutput());

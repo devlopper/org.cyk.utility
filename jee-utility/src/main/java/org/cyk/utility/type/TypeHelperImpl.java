@@ -7,12 +7,23 @@ import java.lang.reflect.Type;
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.core.GenericType;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.helper.AbstractHelper;
 
 @ApplicationScoped
 public class TypeHelperImpl extends AbstractHelper implements TypeHelper, Serializable {
 	private static final long serialVersionUID = 1L;
 
+	private static TypeHelper INSTANCE;
+	public static TypeHelper getInstance(Boolean isNew) {
+		//if(INSTANCE == null || Boolean.TRUE.equals(isNew))
+			INSTANCE =  DependencyInjection.inject(TypeHelper.class);
+		return INSTANCE;
+	}
+	public static TypeHelper getInstance() {
+		return getInstance(null);
+	}
+	
 	@Override
 	public Type instanciateParameterizedType(Type rawType, Type ownerType,Type[] arguments) {
 		return __instanciateParameterizedType__(rawType, ownerType, arguments);

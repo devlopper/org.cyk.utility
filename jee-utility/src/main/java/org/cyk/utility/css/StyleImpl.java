@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.string.StringHelperImpl;
 import org.cyk.utility.string.Strings;
 
 @Dependent
@@ -22,7 +23,9 @@ public class StyleImpl extends AbstractObject implements Style,Serializable {
 	
 	@Override
 	public Strings getClasses(Boolean injectIfNull) {
-		return (Strings) __getInjectIfNull__(FIELD_CLASSES, injectIfNull);
+		if(classes == null && Boolean.TRUE.equals(injectIfNull))
+			classes = DependencyInjection.inject(Strings.class);
+		return classes;
 	}
 	
 	@Override
@@ -30,7 +33,7 @@ public class StyleImpl extends AbstractObject implements Style,Serializable {
 		String string = null;
 		Strings classes = getClasses();
 		if(classes!=null)
-			string = __inject__(StringHelper.class).concatenate(classes.get(), ConstantCharacter.SPACE.toString());
+			string = StringHelperImpl.__concatenate__(classes.get(), ConstantCharacter.SPACE.toString());
 		return string;
 	}
 
@@ -47,7 +50,9 @@ public class StyleImpl extends AbstractObject implements Style,Serializable {
 	
 	@Override
 	public Strings getValues(Boolean injectIfNull) {
-		return (Strings) __getInjectIfNull__(FIELD_VALUES, injectIfNull);
+		if(values == null && Boolean.TRUE.equals(injectIfNull))
+			values = DependencyInjection.inject(Strings.class);
+		return values;
 	}
 
 	@Override
@@ -61,9 +66,13 @@ public class StyleImpl extends AbstractObject implements Style,Serializable {
 		String string = null;
 		Strings values = getValues();
 		if(values!=null)
-			string = __inject__(StringHelper.class).concatenate(values.get(), ConstantCharacter.SEMI_COLON.toString());
+			string = StringHelperImpl.__concatenate__(values.get(), ConstantCharacter.SEMI_COLON.toString());
 		return string;
 	}
+	
+	/**/
+	
+	/**/
 	
 	@Override
 	public String toString() {

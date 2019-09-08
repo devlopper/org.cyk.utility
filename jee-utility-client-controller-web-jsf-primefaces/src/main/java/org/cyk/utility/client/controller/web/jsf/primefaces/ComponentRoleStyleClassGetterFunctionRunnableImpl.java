@@ -6,6 +6,7 @@ import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.ComponentRoleStyleClassGetter;
 
+@Deprecated
 public class ComponentRoleStyleClassGetterFunctionRunnableImpl extends AbstractFunctionRunnableImpl<ComponentRoleStyleClassGetter> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

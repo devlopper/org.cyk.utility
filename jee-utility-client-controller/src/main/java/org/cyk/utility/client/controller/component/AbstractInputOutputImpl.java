@@ -4,8 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldValueGetter;
-import org.cyk.utility.field.FieldValueSetter;
+import org.cyk.utility.field.FieldHelperImpl;
 
 public abstract class AbstractInputOutputImpl<T> extends AbstractVisibleComponentImpl implements InputOutput<T>,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -71,7 +70,7 @@ public abstract class AbstractInputOutputImpl<T> extends AbstractVisibleComponen
 	}
 	
 	protected Object ____getValueToSetValueFromFieldValue____(Object object,Field field) {
-		return __inject__(FieldValueGetter.class).execute(object, field).getOutput();
+		return FieldHelperImpl.__readFieldValue__(object, field);
 	}
 	
 	@Override
@@ -79,8 +78,7 @@ public abstract class AbstractInputOutputImpl<T> extends AbstractVisibleComponen
 		Object object = getObject();
 		Field field = getField();
 		if(object!=null && field!=null) {
-			//System.out.println("AbstractInputOutputImpl.setFieldValueFromValue() "+object+" : "+field+" : "+__getValueToSetFieldValueFromValue__());
-			__inject__(FieldValueSetter.class).execute(object, field, __getValueToSetFieldValueFromValue__());
+			FieldHelperImpl.__writeFieldValue__(object,field, __getValueToSetFieldValueFromValue__());
 		}
 		return this;
 	}
