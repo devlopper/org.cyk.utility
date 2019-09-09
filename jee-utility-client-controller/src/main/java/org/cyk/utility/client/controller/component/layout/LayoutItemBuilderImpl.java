@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.ComponentRole;
+import org.cyk.utility.css.CascadeStyleSheetHelper;
 import org.cyk.utility.css.Style;
-import org.cyk.utility.css.StyleClassBuilderWidth;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceDesktop;
 import org.cyk.utility.device.DevicePhone;
@@ -20,42 +20,33 @@ public class LayoutItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<L
 	private static final long serialVersionUID = 1L;
 
 	private LayoutBuilder layout;
-	//private Object component;
 	
 	@Override
 	protected void __execute__(LayoutItem layoutItem) {
 		super.__execute__(layoutItem);
+		CascadeStyleSheetHelper cascadeStyleSheetHelper = __inject__(CascadeStyleSheetHelper.class);
 		Style style = getStyle();
-		
 		DeviceScreenArea area = getArea();
 		if(area == null) {
 			area = __inject__(DeviceScreenArea.class);	
 		}
-		
 		if(area!=null) {
 			if(style == null)
 				style = __inject__(Style.class);
 			Map<Class<? extends Device>,Integer> map = area.getWidthProportions(Boolean.TRUE).getMap(Boolean.TRUE);
 			for(Class<?> index : DEVICE_CLASSES) {
 				Integer proportion = map.get(index == null ? null : index);
-				String styleClass = __inject__(StyleClassBuilderWidth.class).setDevice(index == null ? null : (Device) __inject__(index)).setWidth(proportion).execute().getOutput();
+				String styleClass = cascadeStyleSheetHelper.buildStyleClassProportion(index == null ? Device.class : (Class<? extends Device>)index, proportion);
 				style.getClasses(Boolean.TRUE).add(styleClass);
 			}
 		}
-		
 		setArea(area);
-		
 		if(style!=null)
 			layoutItem.setStyle(style);
-		
 		LayoutBuilder layout = getLayout();
-		if(layout!=null)
+		if(layout!=null) {
 			layoutItem.setLayout(layout.execute().getOutput());
-		/*
-		Object component = getComponent();
-		if(component instanceof Component)
-			((Component)component).setLayoutItem(layoutItem);
-		*/
+		}
 	}
 	
 	@Override

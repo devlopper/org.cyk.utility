@@ -2,12 +2,13 @@ package org.cyk.utility.device;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.collection.CollectionHelperImpl;
 
 @Dependent
 public class DeviceScreenDimensionProportionsImpl extends AbstractObject implements DeviceScreenDimensionProportions,Serializable {
@@ -22,7 +23,9 @@ public class DeviceScreenDimensionProportionsImpl extends AbstractObject impleme
 
 	@Override
 	public Map<Class<? extends Device>, Integer> getMap(Boolean instanciateIfNull) {
-		return (Map<Class<? extends Device>, Integer>) __getInstanciateIfNull__(FIELD_MAP, instanciateIfNull);
+		if(map == null && Boolean.TRUE.equals(instanciateIfNull))
+			map = new LinkedHashMap<>();
+		return map;
 	}
 
 	@Override
@@ -33,7 +36,7 @@ public class DeviceScreenDimensionProportionsImpl extends AbstractObject impleme
 
 	@Override
 	public DeviceScreenDimensionProportions setByClasses(Integer value,Collection<Class<? extends Device>> classes) {
-		if(__inject__(CollectionHelper.class).isNotEmpty(classes)) {
+		if(CollectionHelperImpl.__isNotEmpty__(classes)) {
 			Map<Class<? extends Device>, Integer> map = getMap(Boolean.TRUE);
 			for(Class<? extends Device> index : classes)
 				map.put(index, value);
@@ -43,7 +46,7 @@ public class DeviceScreenDimensionProportionsImpl extends AbstractObject impleme
 
 	@Override
 	public DeviceScreenDimensionProportions setByClasses(Integer value, Class<? extends Device>... classes) {
-		return setByClasses(value,__inject__(CollectionHelper.class).instanciate(classes));
+		return setByClasses(value,CollectionHelperImpl.__instanciate__(classes));
 	}
 
 	@Override
@@ -93,6 +96,4 @@ public class DeviceScreenDimensionProportionsImpl extends AbstractObject impleme
 	
 	/**/
 	
-	public static final String FIELD_MAP = "map";
-
 }

@@ -9,10 +9,13 @@ import org.cyk.utility.client.controller.component.layout.LayoutBuilder;
 import org.cyk.utility.client.controller.component.layout.LayoutItemBuilder;
 import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
+import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.css.Style;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.function.FunctionsExecutor;
+import org.cyk.utility.function.Function;
+import org.cyk.utility.function.FunctionHelperImpl;
 import org.cyk.utility.instance.Instances;
+import org.cyk.utility.runnable.RunnableHelperImpl;
 import org.cyk.utility.string.Case;
 
 public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Components> implements ComponentsBuilder,Serializable {
@@ -32,12 +35,11 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 			isHandleLayout = Boolean.TRUE;
 		Components components = __inject__(Components.class);
 		LayoutBuilder layout = getLayout();
-		if(layout!=null && __injectCollectionHelper__().isNotEmpty(layout.getChildren()))
+		if(layout!=null && CollectionHelperImpl.__isNotEmpty__(layout.getChildren()))
 			components.setLayout(layout.execute().getOutput());
 		Instances instances = getComponents();
 		Collection<Object> finals = null;
-		
-		if(__injectCollectionHelper__().isNotEmpty(instances)) {
+		if(CollectionHelperImpl.__isNotEmpty__(instances)) {
 			finals = new ArrayList<>();
 			Integer inputLabelWidthProportion = layout == null || layout.getGridRowModel() == null || layout.getGridRowModel().getWidthProportions() == null 
 					|| layout.getGridRowModel().getWidthProportions().get(0) == null
@@ -50,7 +52,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 			Integer inputMessageWidthProportion = layout == null || layout.getGridRowModel() == null || layout.getGridRowModel().getWidthProportions() == null 
 					|| layout.getGridRowModel().getWidthProportions().get(2) == null
 					? null : layout.getGridRowModel().getWidthProportions().get(2);
-					
+			
 			for(Object index : instances.get()) {
 				if(index instanceof ComponentBuilder) {
 					ComponentBuilder<?> componentBuilder = (ComponentBuilder<?>) index;	
@@ -117,15 +119,14 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 				}
 			}
 		}
-		
 		//TODO build finals must be tune for fastest build
-		if(__injectCollectionHelper__().isNotEmpty(finals)) {
-			FunctionsExecutor functionsExecutor = __inject__(FunctionsExecutor.class);
+		if(CollectionHelperImpl.__isNotEmpty__(finals)) {
+			Collection<Function<?,?>> functions = new ArrayList<>();
 			for(Object indexFinal : finals) {
 				if(indexFinal instanceof ComponentBuilder)
-					functionsExecutor.addFunctions((ComponentBuilder<?>)indexFinal);
+					functions.add((Function<?,?>)indexFinal);
 			}
-			functionsExecutor.execute();
+			RunnableHelperImpl.__run__(FunctionHelperImpl.__getRunnables__(functions), "components builders final");
 			for(Object indexFinal : finals) {
 				Component component = null;
 				if(indexFinal instanceof ComponentBuilder)
@@ -136,11 +137,9 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 				if(component!=null)
 					components.add(component);
 			}
-			
 			if(Boolean.TRUE.equals(isHandleLayout)) {
-				
 				//Derive layout
-				if(components.getLayout() == null || __injectCollectionHelper__().isEmpty(layout.getItems())) {
+				if(components.getLayout() == null || CollectionHelperImpl.__isEmpty__(layout.getItems())) {
 					if(layout == null)
 						layout = __inject__(LayoutBuilder.class);
 					if(layout.getStyle() == null)
@@ -160,14 +159,12 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 						layout.setRequest(getRequest());
 					components.setLayout(layout.execute().getOutput());					
 				}
-				
 				//Set layout items
 				if(components.getLayout() != null) {
 					Integer indexLayoutItem = 0;
 					for(Component index : components.get()) {
 						index.setLayoutItem(components.getLayout().getChildAt(indexLayoutItem));
 						indexLayoutItem = indexLayoutItem + 1;
-						
 					}
 				}
 			}		
@@ -213,7 +210,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	
 	@Override
 	public ComponentsBuilder addComponents(Collection<Object> components) {
-		if(__injectCollectionHelper__().isNotEmpty(components)) {
+		if(CollectionHelperImpl.__isNotEmpty__(components)) {
 			getComponents(Boolean.TRUE).add((Collection<Object>)components);
 			if(Boolean.TRUE.equals(getIsCreateLayoutItemOnAddComponent())) {
 				for(@SuppressWarnings("unused") Object index : components) {
@@ -226,7 +223,7 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	
 	@Override
 	public ComponentsBuilder addComponents(Object...components) {
-		return addComponents(__injectCollectionHelper__().instanciate(components));
+		return addComponents(CollectionHelperImpl.__instanciate__(components));
 	}
 	
 	@Override

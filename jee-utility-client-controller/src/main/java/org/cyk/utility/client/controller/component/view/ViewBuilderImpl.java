@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.cyk.utility.array.ArrayHelper;
+import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
@@ -24,8 +24,8 @@ import org.cyk.utility.client.controller.component.input.InputStringLineManyBuil
 import org.cyk.utility.client.controller.component.input.InputStringLineOneBuilder;
 import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.data.FormData;
+import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.field.FieldHelperImpl;
-import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionAdd;
@@ -54,13 +54,12 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		ComponentsBuilder componentsBuilder = getComponentsBuilder();
 		
 		CommandableBuilders commandables = getCommandables();
-		if(__injectCollectionHelper__().isNotEmpty(commandables)) {
+		if(CollectionHelperImpl.__isNotEmpty__(commandables)) {
 			for(CommandableBuilder index : commandables.get()) {
 				componentsBuilder.addComponents(index);
 			}
 		}
-		
-		if(componentsBuilder!=null && __injectCollectionHelper__().isNotEmpty(componentsBuilder.getComponents())) {
+		if(componentsBuilder!=null && CollectionHelperImpl.__isNotEmpty__(componentsBuilder.getComponents())) {
 			for(Object index : componentsBuilder.getComponents().get())
 				if(index instanceof ComponentBuilder<?>) {
 					if( ((ComponentBuilder<?>)index).getRequest() == null )
@@ -80,7 +79,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 		}
 		
 		Components components = view.getComponents();
-		if(__injectCollectionHelper__().isNotEmpty(components)) {
+		if(CollectionHelperImpl.__isNotEmpty__(components)) {
 			for(Component index : components.get()) {
 				if(index instanceof Commandable) {
 					Commandable commandable = (Commandable) index;
@@ -153,8 +152,8 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public InputBuilder<?, ?> addInputBuilderByFieldName(Object object, String... fieldNames) {
-		Class<? extends InputBuilder<?,?>> inputBuilderClass =  __inject__(ComponentBuilderClassGetter.class).setField(__injectCollectionHelper__().getFirst(__inject__(FieldsGetter.class)
-				.execute(object.getClass(),  __injectFieldHelper__().join(fieldNames)).getOutput())).execute().getOutput();
+		Class<? extends InputBuilder<?,?>> inputBuilderClass =  __inject__(ComponentBuilderClassGetter.class).setField(FieldHelperImpl.__getFieldByNames__(object.getClass(), fieldNames))
+				.execute().getOutput();
 		return addInputBuilderByFieldName(inputBuilderClass, object, fieldNames);
 	}
 	
@@ -300,7 +299,7 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ViewBuilder addNavigationCommandablesBySystemActionClasses(Collection<Class<? extends SystemAction>> systemActionClasses) {
-		if(__injectCollectionHelper__().isNotEmpty(systemActionClasses)) {
+		if(CollectionHelperImpl.__isNotEmpty__(systemActionClasses)) {
 			CommandableBuilders commandables = getCommandables(Boolean.TRUE);
 			for(Class<? extends SystemAction> index : systemActionClasses)
 				commandables.add(__inject__(CommandableBuilder.class).setNavigationSystemAction(__inject__(index)));
@@ -310,14 +309,14 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ViewBuilder addNavigationCommandablesBySystemActionClasses(Class<? extends SystemAction>... systemActionClasses) {
-		addNavigationCommandablesBySystemActionClasses(__injectCollectionHelper__().instanciate(systemActionClasses));
+		addNavigationCommandablesBySystemActionClasses(CollectionHelperImpl.__instanciate__(systemActionClasses));
 		return this;
 	}
 	
 	@Override
 	public ViewBuilder addNavigationCommandableBySystemAction(SystemAction systemAction, Object... parameters) {
 		CommandableBuilder commandable = __inject__(CommandableBuilder.class).setNavigationSystemAction(systemAction);
-		if(__inject__(ArrayHelper.class).isNotEmpty(parameters))
+		if(ArrayHelperImpl.__isNotEmpty__(parameters))
 			commandable.setNavigationParameters(parameters);
 		getCommandables(Boolean.TRUE).add(commandable);
 		return this;

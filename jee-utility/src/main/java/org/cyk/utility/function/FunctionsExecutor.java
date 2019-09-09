@@ -2,6 +2,7 @@ package org.cyk.utility.function;
 
 import java.util.Collection;
 
+@Deprecated
 public interface FunctionsExecutor extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 
 	Functions getFunctions();

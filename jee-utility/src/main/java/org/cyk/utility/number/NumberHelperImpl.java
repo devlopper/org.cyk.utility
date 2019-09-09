@@ -166,6 +166,102 @@ public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Ser
 	
 	/**/
 	
+	public static Boolean __isZero__(Number number) {
+		if(number == null)
+			return Boolean.FALSE;
+		return number.intValue() == 0 && number.floatValue() == 0 && number.doubleValue() == 0;
+	}
+
+	public static Boolean __isGreaterThanZero__(Number number) {
+		if(number == null)
+			return Boolean.FALSE;
+		return number.intValue() > 0 || number.floatValue() > 0;
+	}
+	
+	public static Number __operate__(Operation operation,Collection<Number> numbers){
+		if(operation == null || __inject__(CollectionHelper.class).isEmpty(numbers))
+			return null;
+		Number result = null;
+		switch(operation){
+		case ADD:
+			result = BigDecimal.ZERO;
+			for(Number index : numbers)
+				if(index != null)
+					result = new BigDecimal(result.doubleValue()).add(new BigDecimal(index.doubleValue()));
+			break;
+		case SUBTRACT:
+			for(Number index : numbers)
+				if(index != null)
+					if(result == null)
+						result = index;
+					else
+						result = new BigDecimal(result.doubleValue()).subtract(new BigDecimal(index.doubleValue()));
+			break;
+		case MULTIPLY:
+			result = BigDecimal.ONE;
+			for(Number index : numbers)
+				if(index != null)
+					result = new BigDecimal(result.doubleValue()).multiply(new BigDecimal(index.doubleValue()));
+			break;
+		case DIVIDE:
+			for(Number index : numbers)
+				if(index != null)
+					if(result == null)
+						result = index;
+					else
+						result = new BigDecimal(result.doubleValue()).divide(new BigDecimal(index.doubleValue()));
+			break;
+		}
+		return result;
+	}
+	
+	public static Number __operate__(Operation operation, Number... numbers) {
+		return __operate__(operation, __inject__(CollectionHelper.class).instanciate(numbers));
+	}
+	
+	public static Number __add__(Number... numbers) {
+		return __operate__(Operation.ADD, numbers);
+	}
+
+	public static Number __subtract__(Number... numbers) {
+		return __operate__(Operation.SUBTRACT, numbers);
+	}
+	
+	public static <NUMBER> NUMBER __get__(Class<NUMBER> aClass,Object object,NUMBER nullValue){
+		if(object==null || ( (object instanceof String) && __inject__(StringHelper.class).isBlank((String)object) ) )
+			return nullValue;
+		return __inject__(ClassHelper.class).instanciate(aClass, new Object[]{String.class,object.toString()});
+	}
+	
+	public static <NUMBER> NUMBER __get__(Class<NUMBER> aClass,Object object){
+		return __get__(aClass,object,(NUMBER)null);
+	}
+	
+	public static Integer __getInteger__(Object object,Integer nullValue){
+		return __get__(Integer.class, object, nullValue);
+	}
+	
+	public static Integer __getInteger__(Object object) {
+		return __getInteger__(object, null);
+	}
+	
+	public static Long __getLong__(Object object,Long nullValue){
+		return __get__(Long.class, object, nullValue);
+	}
+
+	public static Long __getLong__(Object object) {
+		return __getLong__(object, null);
+	}
+
+	
+	public static BigDecimal __getBigDecimal__(Object object, BigDecimal nullValue) {
+		return __get__(BigDecimal.class, object, nullValue);
+	}
+
+	public static BigDecimal __getBigDecimal__(Object object) {
+		return __getBigDecimal__(object, null);
+	}
+	
 	public static Boolean __compare__(Number number1, Number number2, ComparisonOperator operator) {
 		BigDecimal n1 = number1 == null ? null : new BigDecimal(number1.toString());
 		BigDecimal n2 = number2 == null ? null : new BigDecimal(number2.toString());

@@ -12,9 +12,11 @@ import java.util.concurrent.TimeUnit;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.function.Function;
+import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
-@Dependent
+@Dependent @Deprecated
 public class ExecutorServiceBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<ExecutorService> implements ExecutorServiceBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -26,7 +28,7 @@ public class ExecutorServiceBuilderImpl extends AbstractFunctionWithPropertiesAs
 	private RejectedExecutionHandler rejectedExecutionHandler;
 	
 	@Override
-	protected ExecutorService __execute__() throws Exception {
+	public Function<Properties, ExecutorService> execute() {
 		Integer corePoolSize = getCorePoolSize();
 		if(corePoolSize == null)
 			corePoolSize = 2;
@@ -52,7 +54,8 @@ public class ExecutorServiceBuilderImpl extends AbstractFunctionWithPropertiesAs
 		if(rejectedExecutionHandler == null)
 			rejectedExecutionHandler = new ThreadPoolExecutor.AbortPolicy();
 		ExecutorService executorService = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, keepAliveTimeUnit, queue, threadFactory, rejectedExecutionHandler);
-		return executorService;
+		setProperty(Properties.OUTPUT, executorService);
+		return this;
 	}
 
 	@Override

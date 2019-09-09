@@ -3,10 +3,14 @@ package org.cyk.utility.client.controller.component.layout;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
 import org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.css.StyleClassBuilderWidthImpl;
-import org.cyk.utility.test.weld.AbstractWeldUnitTest;
+import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.field.FieldHelperImpl;
+import org.cyk.utility.field.FieldName;
+import org.cyk.utility.test.weld.AbstractWeldUnitTestBenchmark;
+import org.cyk.utility.value.ValueUsageType;
 import org.junit.jupiter.api.Test;
 
-public class LayoutItemBuilderUnitTest extends AbstractWeldUnitTest {
+public class LayoutItemBuilderUnitTestBenchmark extends AbstractWeldUnitTestBenchmark {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -14,6 +18,33 @@ public class LayoutItemBuilderUnitTest extends AbstractWeldUnitTest {
 		super.__listenBefore__();
 		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
 		__inject__(FunctionRunnableMap.class).set(StyleClassBuilderWidthImpl.class, StyleClassBuilderWidthCssPrimefacesGridFunctionRunnableImpl.class);
+	}
+	
+	@Test
+	public void buildFieldName(){
+		FieldHelper fieldHelper = FieldHelperImpl.getInstance(Boolean.TRUE);
+		java.lang.Class<?> klass = Class.class;
+		FieldName fieldName = FieldName.IDENTIFIER;
+		ValueUsageType valueUsageType = ValueUsageType.SYSTEM;
+		
+		execute(new Jobs().setName("Build layout item").setNumberOfRound(100)
+			.add("LayoutItemBuilder",new Runnable() {
+			@Override
+			public void run() {
+				__inject__(LayoutItemBuilder.class).execute().getOutput();
+			}
+		}).add("FieldHelper.buildFieldName", new Runnable() {
+			@Override
+			public void run() {
+				fieldHelper.buildFieldName(klass, fieldName,valueUsageType);
+			}
+		}).add("FieldHelperImpl.__buildFieldName__", new Runnable() {
+			@Override
+			public void run() {
+				FieldHelperImpl.__buildFieldName__(klass, fieldName,valueUsageType);
+			}
+		})
+			);
 	}
 	
 	@Test

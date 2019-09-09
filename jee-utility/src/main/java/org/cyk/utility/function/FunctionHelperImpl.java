@@ -1,12 +1,15 @@
 package org.cyk.utility.function;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.__kernel__.function.FunctionExecutionMessage;
+import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.stream.distributed.Producer;
 import org.cyk.utility.stream.distributed.ProducerBuilder;
@@ -29,6 +32,20 @@ public class FunctionHelperImpl extends AbstractHelper implements FunctionHelper
 		return this;
 	}
 
-	
+	public static Collection<Runnable> __getRunnables__(Collection<? extends Function<?,?>> functions) {
+		Collection<Runnable> runnables = null;
+		if(CollectionHelperImpl.__isNotEmpty__(functions)) {
+			runnables = new ArrayList<>();
+			for(Function<?,?> index : functions) {
+				runnables.add(new Runnable() {
+					@Override
+					public void run() {
+						index.execute();
+					}
+				});	
+			}
+		}
+		return runnables;
+	}
 	
 }

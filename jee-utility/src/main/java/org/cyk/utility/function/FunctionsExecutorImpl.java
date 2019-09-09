@@ -5,21 +5,23 @@ import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.runnable.RunnablesExecutor;
 
-@Dependent
+@Dependent @Deprecated
 public class FunctionsExecutorImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FunctionsExecutor,Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Functions functions;
 	
 	@Override
-	protected void ____execute____() throws Exception {
+	public Function<Properties, Void> execute() {
 		Functions functions = getFunctions();
-		if(__injectCollectionHelper__().isNotEmpty(functions)) {
+		if(CollectionHelperImpl.__isNotEmpty__(functions)) {
 			RunnablesExecutor runnablesExecutor = __inject__(RunnablesExecutor.class);
-			runnablesExecutor.getExecutorServiceBuilder(Boolean.TRUE).setCorePoolSize(__injectCollectionHelper__().getSize(functions));
-			runnablesExecutor.getExecutorServiceBuilder(Boolean.TRUE).setMaximumPoolSize(__injectCollectionHelper__().getSize(functions));
+			runnablesExecutor.getExecutorServiceBuilder(Boolean.TRUE).setCorePoolSize(CollectionHelperImpl.__getSize__(functions)/2+1);
+			runnablesExecutor.getExecutorServiceBuilder(Boolean.TRUE).setMaximumPoolSize(CollectionHelperImpl.__getSize__(functions));
 			for(@SuppressWarnings("rawtypes") Function index : functions.get()) {
 				runnablesExecutor.addRunnables(new Runnable() {
 					@Override
@@ -30,6 +32,7 @@ public class FunctionsExecutorImpl extends AbstractFunctionWithPropertiesAsInput
 			}
 			runnablesExecutor.execute();
 		}
+		return this;
 	}
 	
 	@Override
@@ -39,7 +42,9 @@ public class FunctionsExecutorImpl extends AbstractFunctionWithPropertiesAsInput
 	
 	@Override
 	public Functions getFunctions(Boolean injectIfNull) {
-		return (Functions) __getInjectIfNull__(FIELD_FUNCTIONS, injectIfNull);
+		if(functions == null && Boolean.TRUE.equals(injectIfNull))
+			functions = __inject__(Functions.class);
+		return functions;
 	}
 	
 	@Override
@@ -60,5 +65,4 @@ public class FunctionsExecutorImpl extends AbstractFunctionWithPropertiesAsInput
 		return null;
 	}
 	
-	private static final String FIELD_FUNCTIONS = "functions";
 }

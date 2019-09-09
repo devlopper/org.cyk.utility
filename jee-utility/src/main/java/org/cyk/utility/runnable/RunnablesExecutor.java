@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.cyk.utility.function.FunctionWithPropertiesAsInputAndVoidAsOutput;
 import org.cyk.utility.thread.ExecutorServiceBuilder;
 
+@Deprecated
 public interface RunnablesExecutor extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 
 	Runnables getRunnables();

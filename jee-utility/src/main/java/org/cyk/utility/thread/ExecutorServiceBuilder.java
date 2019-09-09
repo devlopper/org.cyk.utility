@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 
+@Deprecated
 public interface ExecutorServiceBuilder extends FunctionWithPropertiesAsInput<ExecutorService> {
 
 	Integer getCorePoolSize();

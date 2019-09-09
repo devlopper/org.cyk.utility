@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.cyk.utility.device.Device;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 
+@Deprecated
 public class LayoutWidthGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Number> implements LayoutWidthGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 
