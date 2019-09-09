@@ -5,6 +5,7 @@ import org.cyk.utility.client.controller.component.VisibleComponentBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.icon.Icon;
+import org.cyk.utility.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.system.action.SystemAction;
 
 public interface MenuItemBuilder extends VisibleComponentBuilder<MenuItem> {
@@ -14,6 +15,7 @@ public interface MenuItemBuilder extends VisibleComponentBuilder<MenuItem> {
 	MenuItemBuilder setCommandable(CommandableBuilder commandable);
 	
 	MenuItemBuilder setCommandableName(String name);
+	MenuItemBuilder setCommandableNameInternalizationKeyValue(Object key,InternationalizationKeyStringType type);
 	MenuItemBuilder setCommandableNameInternalizationKeyValue(Object key);
 	MenuItemBuilder setCommandableNavigationIdentifier(Object identifier);
 	MenuItemBuilder setCommandableNavigationIdentifierAndParameters(Object identifier,Object[] parameters);

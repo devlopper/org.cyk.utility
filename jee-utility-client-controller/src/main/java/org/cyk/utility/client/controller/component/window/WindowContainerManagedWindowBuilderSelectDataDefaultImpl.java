@@ -12,7 +12,7 @@ import org.cyk.utility.client.controller.data.DataFieldsNamesGetter;
 import org.cyk.utility.client.controller.data.DataSelect;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.internationalization.InternalizationKeyStringType;
+import org.cyk.utility.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
@@ -33,7 +33,7 @@ public class WindowContainerManagedWindowBuilderSelectDataDefaultImpl extends Ab
 						if(Arrays.equals(strings, new String[] {DataSelect.PROPERTY_ONE}) || Arrays.equals(strings, new String[] {DataSelect.PROPERTY_MANY})) {							
 							input.setLabelValue(__inject__(InternalizationStringBuilder.class).setKeyValue(StringUtils.substringBefore(data.getClass().getSimpleName()
 									,"Select")).setKeyType(Arrays.equals(strings, new String[] {DataSelect.PROPERTY_ONE}) ? null
-											: InternalizationKeyStringType.PLURAL).execute().getOutput());
+											: InternationalizationKeyStringType.PLURAL).execute().getOutput());
 						}
 					}
 				}		

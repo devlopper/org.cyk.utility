@@ -17,7 +17,7 @@ import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
 import org.cyk.utility.system.exception.EntityNotFoundException;
 import org.cyk.utility.system.exception.ServiceNotFoundException;
 
-@Dependent
+@Dependent @Deprecated
 public class InternalizationStringBuilderImpl extends AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl implements InternalizationStringBuilder,Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -51,7 +51,7 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 						parameters = new ArrayList<Object>();
 					ServiceNotFoundException serviceNotFoundException = (ServiceNotFoundException) keyBuilder.getValue();
 					parameters.add(__inject__(InternalizationStringBuilder.class).setKeyValue(serviceNotFoundException.getSystemAction())
-							.setKeyType(InternalizationKeyStringType.NOUN).execute().getOutput());
+							.setKeyType(InternationalizationKeyStringType.NOUN).execute().getOutput());
 					parameters.add(__inject__(InternalizationStringBuilder.class).setKeyValue(serviceNotFoundException.getSystemAction().getEntityClass()).execute().getOutput());
 				}else if(keyBuilder.getValue() instanceof EntityNotFoundException) {
 					if(parameters == null)
@@ -153,7 +153,7 @@ public class InternalizationStringBuilderImpl extends AbstractFunctionWithProper
 	}
 	
 	@Override
-	public InternalizationStringBuilder setKeyType(InternalizationKeyStringType type) {
+	public InternalizationStringBuilder setKeyType(InternationalizationKeyStringType type) {
 		getKeyBuilder(Boolean.TRUE).setType(type);
 		return this;
 	}

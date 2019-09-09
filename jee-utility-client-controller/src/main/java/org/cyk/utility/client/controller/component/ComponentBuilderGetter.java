@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.system.action.SystemAction;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings("rawtypes") @Deprecated
 public interface ComponentBuilderGetter extends FunctionWithPropertiesAsInput<ComponentBuilder> {
 
 	Field getField();

@@ -13,8 +13,9 @@ import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.icon.Icon;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.internationalization.InternalizationKeyStringType;
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
+import org.cyk.utility.internationalization.InternationalizationHelperImpl;
+import org.cyk.utility.internationalization.InternationalizationKeyStringType;
+import org.cyk.utility.internationalization.InternationalizationString;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCustom;
@@ -57,8 +58,8 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 		
 		String derivedName = null;
 		if(__injectStringHelper__().isBlank(derivedName)) {
-			InternalizationStringBuilder nameInternalization = getNameInternalization();
-			if(nameInternalization==null) {
+			InternationalizationString nameInternationalization = getNameInternationalization();
+			if(nameInternationalization==null) {
 				SystemAction systemAction = null;
 				if(systemAction == null && command!=null)
 					systemAction = command.getFunction().getAction();
@@ -68,7 +69,8 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 					systemAction = navigation.getIdentifierBuilder().getSystemAction();
 				
 				if(systemAction!=null)
-					derivedName = __inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput();
+					derivedName = InternationalizationHelperImpl.__buildInternationalizationString__(InternationalizationHelperImpl
+							.__buildInternationalizationKey__(systemAction,InternationalizationKeyStringType.VERB), null, null, Case.FIRST_CHARACTER_UPPER);
 				
 				/*
 				if(navigation!=null) {
@@ -81,8 +83,10 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 					}
 				}	
 				*/
-			}else
-				derivedName = nameInternalization.execute().getOutput();
+			}else {
+				InternationalizationHelperImpl.__processInternationalizationStrings__(nameInternationalization);
+				derivedName = nameInternationalization.getValue();
+			}
 			
 		}else {
 			
@@ -136,16 +140,6 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	}
 	
 	@Override
-	public CommandableBuilder setNameInternalization(InternalizationStringBuilder nameInternalization) {
-		return (CommandableBuilder) super.setNameInternalization(nameInternalization);
-	}
-	
-	@Override
-	public CommandableBuilder setNameInternalizationKeyValue(String nameInternalizationKeyValue) {
-		return (CommandableBuilder) super.setNameInternalizationKeyValue(nameInternalizationKeyValue);
-	}
-	
-	@Override
 	public CommandableBuilder setDerivableFieldNames(Object... values) {
 		return (CommandableBuilder) super.setDerivableFieldNames(values);
 	}
@@ -178,7 +172,9 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	
 	@Override
 	public CommandBuilder getCommand(Boolean injectIfNull) {
-		return (CommandBuilder) __getInjectIfNull__(FIELD_COMMAND, injectIfNull);
+		if(command == null && Boolean.TRUE.equals(injectIfNull))
+			command = __inject__(CommandBuilder.class);
+		return command;
 	}
 	
 	@Override
@@ -247,7 +243,9 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	
 	@Override
 	public NavigationBuilder getNavigation(Boolean injectIfNull) {
-		return (NavigationBuilder) __getInjectIfNull__(FIELD_NAVIGATION, injectIfNull);
+		if(navigation == null && Boolean.TRUE.equals(injectIfNull))
+			navigation = __inject__(NavigationBuilder.class);
+		return navigation;
 	}
 	
 	@Override
@@ -305,7 +303,5 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 	}
 	
 	/**/
-	
-	public static final String FIELD_COMMAND = "command";
-	public static final String FIELD_NAVIGATION = "navigation";
+
 }

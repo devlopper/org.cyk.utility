@@ -8,6 +8,8 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.command.CommandableBuilders;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
 import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.internationalization.InternationalizationKey;
+import org.cyk.utility.internationalization.InternationalizationString;
 
 public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialog> implements DialogBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -52,7 +54,7 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 	public CommandableBuilder getOkCommandable(Boolean injectIfNull) {
 		if(okCommandable == null && Boolean.TRUE.equals(injectIfNull)) {
 			okCommandable = __inject__(CommandableBuilder.class);
-			okCommandable.setNameInternalizationKeyValue("ok");
+			okCommandable.getNameInternationalization(Boolean.TRUE).setKey(new InternationalizationKey().setValue("ok"));
 		}
 		return okCommandable;
 	}
@@ -72,7 +74,7 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 	public OutputStringTextBuilder getTitle(Boolean injectIfNull) {
 		if(title == null && Boolean.TRUE.equals(injectIfNull)) {
 			title = __inject__(OutputStringTextBuilder.class);
-			title.setValueInternalizationKeyValue("message");
+			title.setValueInternationalizationString(new InternationalizationString().setKey(new InternationalizationKey().setValue("message")));
 		}
 		return title;
 	}
@@ -96,7 +98,9 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 	
 	@Override
 	public CommandableBuilders getCommandables(Boolean injectIfNull) {
-		return (CommandableBuilders) __getInjectIfNull__(FIELD_COMMANDABLES, injectIfNull);
+		if(commandables == null && Boolean.TRUE.equals(injectIfNull))
+			commandables = __inject__(CommandableBuilders.class);
+		return commandables;
 	}
 	
 	@Override
@@ -116,9 +120,5 @@ public class DialogBuilderImpl extends AbstractVisibleComponentBuilderImpl<Dialo
 		getCommandables(Boolean.TRUE).add(commandables);
 		return this;
 	}
-
-	public static final String FIELD_TITLE = "title";
-	public static final String FIELD_COMMANDABLES = "commandables";
-	public static final String FIELD_OK_COMMANDABLE = "okCommandable";
 	
 }

@@ -12,8 +12,8 @@ import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
-import org.cyk.utility.internationalization.InternalizationStringBuilderByStringMap;
+import org.cyk.utility.internationalization.InternationalizationString;
+import org.cyk.utility.internationalization.InternationalizationStringMap;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.type.BooleanMap;
@@ -75,7 +75,7 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	ComponentBuilder<COMPONENT> setUpdatables(Objects updatables);
 	ComponentBuilder<COMPONENT> addUpdatables(Collection<Object> updatables);
 	ComponentBuilder<COMPONENT> addUpdatables(Object...updatables);
-	
+	/*
 	InternalizationStringBuilderByStringMap getInternalizationStringMap();
 	InternalizationStringBuilderByStringMap getInternalizationStringMap(Boolean injectIfNull);
 	ComponentBuilder<COMPONENT> setInternalizationStringMap(InternalizationStringBuilderByStringMap internalizationStringMap);
@@ -85,6 +85,14 @@ public interface ComponentBuilder<COMPONENT extends Component> extends FunctionW
 	InternalizationStringBuilder getNameInternalization(Boolean injectIfNull);
 	ComponentBuilder<COMPONENT> setNameInternalization(InternalizationStringBuilder nameInternalization);
 	ComponentBuilder<COMPONENT> setNameInternalizationKeyValue(String nameInternalizationKeyValue);
+	*/
+	InternationalizationStringMap getInternationalizationStringMap();
+	InternationalizationStringMap getInternationalizationStringMap(Boolean injectIfNull);
+	ComponentBuilder<COMPONENT> setInternationalizationStringMap(InternationalizationStringMap internationalizationStringMap);
+	
+	InternationalizationString getNameInternationalization();
+	InternationalizationString getNameInternationalization(Boolean injectIfNull);
+	ComponentBuilder<COMPONENT> setNameInternationalization(InternationalizationString nameInternationalization);
 	
 	EventBuilders getEvents();
 	EventBuilders getEvents(Boolean injectIfNull);

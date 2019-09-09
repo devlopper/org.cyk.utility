@@ -11,7 +11,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.internationalization.InternalizationHelperImpl;
+import org.cyk.utility.internationalization.InternationalizationHelperImpl;
 import org.cyk.utility.log.LogEventEntityRepository;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.number.NumberHelper;
@@ -28,7 +28,7 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 			
 		}else {
 			messageIdentifierWhenValueIsNotTrue = ValueHelperImpl.__defaultToIfBlank__(messageIdentifierWhenValueIsNotTrue,defaultDessageIdentifierWhenValueIsNotTrue);
-			assertion.setMessageWhenValueIsNotTrue(InternalizationHelperImpl.__buildInternalizationString__(messageIdentifierWhenValueIsNotTrue, arguments, null, null));
+			assertion.setMessageWhenValueIsNotTrue(InternationalizationHelperImpl.__buildInternationalizationString__(messageIdentifierWhenValueIsNotTrue, arguments, null, null));
 			assertion.setIdentifier(String.format("assertion.%s", identifier));	
 		}
 	}

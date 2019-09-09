@@ -12,7 +12,7 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
 
-@Dependent
+@Dependent @Deprecated
 public class InternalizationKeyRelatedStringsBuilderImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Strings>> implements InternalizationKeyRelatedStringsBuilder, Serializable {
 	private static final long serialVersionUID = 1L;
 

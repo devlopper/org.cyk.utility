@@ -14,7 +14,7 @@ public interface InternalizationStringBuilder extends FunctionWithPropertiesAsIn
 	InternalizationKeyStringBuilder getKeyBuilder(Boolean injectIfNull);
 	InternalizationStringBuilder setKeyBuilder(InternalizationKeyStringBuilder key);
 	InternalizationStringBuilder setKeyValue(Object key);
-	InternalizationStringBuilder setKeyType(InternalizationKeyStringType type);
+	InternalizationStringBuilder setKeyType(InternationalizationKeyStringType type);
 	
 	String getKey();
 	InternalizationStringBuilder setKey(String key);

@@ -23,9 +23,9 @@ import org.cyk.utility.device.Device;
 import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.internationalization.InternalizationHelperImpl;
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
-import org.cyk.utility.internationalization.InternalizationStringBuilderByStringMap;
+import org.cyk.utility.internationalization.InternationalizationHelperImpl;
+import org.cyk.utility.internationalization.InternationalizationString;
+import org.cyk.utility.internationalization.InternationalizationStringMap;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.type.BooleanMap;
@@ -41,7 +41,8 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	private ComponentRoles roles;
 	private Boolean isTargetModelToBeBuilt;
 	private Objects updatables;
-	private InternalizationStringBuilderByStringMap internalizationStringMap;
+	//private InternalizationStringBuilderByStringMap internalizationStringMap;
+	private InternationalizationStringMap internationalizationStringMap;
 	private EventBuilders events;
 	private Throwable throwable;
 	private BooleanMap derivableFieldNameMap;
@@ -101,8 +102,8 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		Throwable throwable = getThrowable();
 		component.setThrowable(throwable);
 		if(component.getThrowable() != null)
-			component.setThrowableInternalizationMessage(InternalizationHelperImpl.__buildInternalizationString__(InternalizationHelperImpl
-					.__buildInternalizationKey__(component.getThrowable())));
+			component.setThrowableInternalizationMessage(InternationalizationHelperImpl.__buildInternationalizationString__(InternationalizationHelperImpl
+					.__buildInternationalizationKey__(component.getThrowable())));
 		setProperty(Properties.OUTPUT, component);
 		return this;
 	}
@@ -384,9 +385,44 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 	}
 	
 	@Override
+	public InternationalizationStringMap getInternationalizationStringMap() {
+		return internationalizationStringMap;
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setInternationalizationStringMap(InternationalizationStringMap internationalizationStringMap) {
+		this.internationalizationStringMap = internationalizationStringMap;
+		return this;
+	}
+	
+	@Override
+	public InternationalizationStringMap getInternationalizationStringMap(Boolean injectIfNull) {
+		if(internationalizationStringMap == null && Boolean.TRUE.equals(injectIfNull))
+			internationalizationStringMap = __inject__(InternationalizationStringMap.class);
+		return internationalizationStringMap;
+	}
+	
+	@Override
+	public InternationalizationString getNameInternationalization() {
+		return getInternationalizationStringMap(Boolean.TRUE).get(Properties.NAME);
+	}
+	
+	@Override
+	public InternationalizationString getNameInternationalization(Boolean injectIfNull) {
+		return getInternationalizationStringMap(Boolean.TRUE).get(Properties.NAME,injectIfNull);
+	}
+	
+	@Override
+	public ComponentBuilder<COMPONENT> setNameInternationalization(InternationalizationString nameInternationalization) {
+		getInternationalizationStringMap(Boolean.TRUE).set(Properties.NAME,nameInternationalization);
+		return this;
+	}
+	/*
+	@Override
 	public InternalizationStringBuilderByStringMap getInternalizationStringMap() {
 		return internalizationStringMap;
 	}
+	
 	@Override
 	public ComponentBuilder<COMPONENT> setInternalizationStringMap(InternalizationStringBuilderByStringMap internalizationStringMap) {
 		this.internalizationStringMap = internalizationStringMap;
@@ -427,7 +463,7 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		getNameInternalization(Boolean.TRUE).setKeyValue(nameInternalizationKeyValue);
 		return this;
 	}
-	
+	*/
 	@Override
 	public EventBuilders getEvents() {
 		return events;

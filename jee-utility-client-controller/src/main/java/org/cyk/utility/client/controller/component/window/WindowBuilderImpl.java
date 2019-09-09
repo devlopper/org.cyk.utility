@@ -34,7 +34,6 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	//TODO improve build logic to reduce build time
 	@Override
 	protected void __execute__(Window window) {
-		DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
 		super.__execute__(window);
 		Object request = getRequest();
 		OutputStringTextBuilder applicationNameOutputStringText = getOutputStringTextMap(Boolean.TRUE).get("applicationName");
@@ -76,8 +75,6 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 				window.setView(view.execute().getOutput());	
 			}	
 		}
-		System.out.println("WindowBuilderImpl.__execute__() 3 : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
-		durationBuilder.setBeginToNow();
 		if(renderType == null || renderType instanceof WindowRenderTypeNormal) {
 			MenuBuilderMap menuMap = getMenuMap();
 			if(menuMap!=null) {
@@ -92,7 +89,6 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 			theme = (Theme) __inject__(SessionAttributeGetter.class).setAttribute(SessionAttributeEnumeration.THEME).execute().getOutput();
 		window.setTheme(theme);
 		*/
-		durationBuilder.setBeginToNow();
 		if(dialog!=null) {
 			__setRequestAndContextAndUniformResourceLocatorMapOf__(dialog);
 			window.setDialog(dialog.execute().getOutput());

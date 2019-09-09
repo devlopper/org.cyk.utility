@@ -19,8 +19,6 @@ import org.cyk.utility.client.controller.web.jsf.primefaces.AbstractPageContaine
 import org.cyk.utility.notification.Notification;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.system.action.SystemActionCustom;
-import org.cyk.utility.time.DurationBuilder;
-import org.cyk.utility.time.DurationStringBuilder;
 import org.omnifaces.util.Faces;
 
 import lombok.Getter;
@@ -58,13 +56,10 @@ public class __InternalCheckerBuildTimePage__ extends AbstractPageContainerManag
 		//form.getData().setFile(__inject__(File.class));
 		ViewBuilder viewBuilder = __inject__(ViewBuilder.class);
 		
-		DurationBuilder durationBuilder = __inject__(DurationBuilder.class).setBeginToNow();
 		for(Integer index = 1 ; index <= numberOfInputTexts ; index = index + 1) {
 			viewBuilder.addInputBuilderByObjectByFieldNames(form.getData(),Boolean.TRUE, "inputText"+index);
 		}
-		System.out.println("Add inputs builders : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
 		
-		durationBuilder.setBeginToNow();
 		CommandableBuilder commandable = (CommandableBuilder) viewBuilder.addComponentBuilderByObjectByMethodName(form, "submit");
 		commandable.setOutputProperty("update", __inject__(ComponentHelper.class).getGlobalMessagesTargetsIdentifiers());
 		commandable.setCommandFunctionActionClass(SystemActionCustom.class);
@@ -75,7 +70,6 @@ public class __InternalCheckerBuildTimePage__ extends AbstractPageContainerManag
 				__inject__(MessageRender.class).addNotifications(__inject__(Notification.class).setSummary(message)).execute();
 			}
 		});
-		System.out.println("Add commandable builders : "+__inject__(DurationStringBuilder.class).setDurationBuilder(durationBuilder.setEndToNow()).execute().getOutput());
 		return viewBuilder;
 	}
 	

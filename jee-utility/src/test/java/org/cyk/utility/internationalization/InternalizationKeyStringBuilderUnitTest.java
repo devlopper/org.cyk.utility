@@ -70,8 +70,8 @@ public class InternalizationKeyStringBuilderUnitTest extends AbstractWeldUnitTes
 	public void systemActionCreate(){
 		assertionHelper.assertEquals("create", __inject__(InternalizationKeyStringBuilder.class).setValue(SystemActionCreate.class).execute().getOutput());
 		assertionHelper.assertEquals("create", __inject__(InternalizationKeyStringBuilder.class).setValue(__inject__(SystemActionCreate.class)).execute().getOutput());
-		assertionHelper.assertEquals("create.__noun__", __inject__(InternalizationKeyStringBuilder.class).setValue(SystemActionCreate.class).setType(InternalizationKeyStringType.NOUN).execute().getOutput());
-		assertionHelper.assertEquals("create.__verb__", __inject__(InternalizationKeyStringBuilder.class).setValue(SystemActionCreate.class).setType(InternalizationKeyStringType.VERB).execute().getOutput());
+		assertionHelper.assertEquals("create.__noun__", __inject__(InternalizationKeyStringBuilder.class).setValue(SystemActionCreate.class).setType(InternationalizationKeyStringType.NOUN).execute().getOutput());
+		assertionHelper.assertEquals("create.__verb__", __inject__(InternalizationKeyStringBuilder.class).setValue(SystemActionCreate.class).setType(InternationalizationKeyStringType.VERB).execute().getOutput());
 	}
 	
 	@Test

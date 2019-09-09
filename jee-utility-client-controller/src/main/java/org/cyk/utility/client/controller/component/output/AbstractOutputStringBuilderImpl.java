@@ -3,50 +3,44 @@ package org.cyk.utility.client.controller.component.output;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
-import org.cyk.utility.string.Case;
+import org.cyk.utility.internationalization.InternationalizationHelperImpl;
+import org.cyk.utility.internationalization.InternationalizationString;
 import org.cyk.utility.string.StringHelperImpl;
 
 public abstract class AbstractOutputStringBuilderImpl<OUTPUT extends OutputString> extends AbstractOutputBuilderImpl<OUTPUT,String> implements OutputStringBuilder<OUTPUT>,Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private InternalizationStringBuilder valueInternalization;
-	protected Case valueInternalizationCase;
+	protected InternationalizationString valueInternationalizationString;
 	
 	@Override
 	protected void __execute__(OUTPUT output, Object object, Field field) {
 		super.__execute__(output, object, field);
 		String value = output.getValue();
 		if(StringHelperImpl.__isBlank__(value)) {
-			InternalizationStringBuilder valueInternalization = getValueInternalization();
-			if(valueInternalization!=null)
-				output.setValue(valueInternalization.execute().getOutput());
+			InternationalizationString valueInternationalizationString = getValueInternationalizationString();
+			if(valueInternationalizationString!=null) {
+				InternationalizationHelperImpl.__processInternationalizationStrings__(valueInternationalizationString);
+				output.setValue(valueInternationalizationString.getValue());
+			}
 		}
 	}
 	
 	@Override
-	public InternalizationStringBuilder getValueInternalization() {
-		return valueInternalization;
+	public InternationalizationString getValueInternationalizationString() {
+		return valueInternationalizationString;
 	}
 	
 	@Override
-	public InternalizationStringBuilder getValueInternalization(Boolean injectIfNull) {
-		if(valueInternalization == null && Boolean.TRUE.equals(injectIfNull)) {
-			valueInternalization = __inject__(InternalizationStringBuilder.class);
-			valueInternalization.setCase(valueInternalizationCase);
+	public InternationalizationString getValueInternationalizationString(Boolean injectIfNull) {
+		if(valueInternationalizationString == null && Boolean.TRUE.equals(injectIfNull)) {
+			valueInternationalizationString = __inject__(InternationalizationString.class);
 		}
-		return valueInternalization;
+		return valueInternationalizationString;
 	}
 	
 	@Override
-	public OutputStringBuilder<OUTPUT> setValueInternalization(InternalizationStringBuilder valueInternalization) {
-		this.valueInternalization = valueInternalization;
-		return this;
-	}
-	
-	@Override
-	public OutputStringBuilder<OUTPUT> setValueInternalizationKeyValue(String valueInternalizationKeyValue) {
-		getValueInternalization(Boolean.TRUE).setKeyValue(valueInternalizationKeyValue);
+	public OutputStringBuilder<OUTPUT> setValueInternationalizationString(InternationalizationString valueInternationalizationString) {
+		this.valueInternationalizationString = valueInternationalizationString;
 		return this;
 	}
 	
@@ -54,7 +48,5 @@ public abstract class AbstractOutputStringBuilderImpl<OUTPUT extends OutputStrin
 	protected String __getValue__(Object object, Field field, Object value) {
 		return value == null ? null : value.toString();
 	}
-	
-	public static final String FIELD_VALUE_INTERNALIZATION = "valueInternalization";
 	
 }

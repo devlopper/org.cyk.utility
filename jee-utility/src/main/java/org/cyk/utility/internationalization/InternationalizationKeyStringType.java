@@ -3,7 +3,7 @@ package org.cyk.utility.internationalization;
 import lombok.Getter;
 
 @Getter
-public enum InternalizationKeyStringType {
+public enum InternationalizationKeyStringType {
 
 	NOUN
 	,VERB
@@ -16,7 +16,7 @@ public enum InternalizationKeyStringType {
 	
 	private String format;
 	
-	private InternalizationKeyStringType() {
+	private InternationalizationKeyStringType() {
 		format = "%s.__"+name().toLowerCase()+"__";
 	}
 	

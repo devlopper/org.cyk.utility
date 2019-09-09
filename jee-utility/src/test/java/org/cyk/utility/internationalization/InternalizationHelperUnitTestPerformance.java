@@ -2,9 +2,9 @@ package org.cyk.utility.internationalization;
 
 import org.cyk.utility.test.weld.AbstractWeldUnitTestPerformance;
 import org.junit.jupiter.api.Test;
-import static org.cyk.utility.internationalization.InternalizationHelperImpl.__buildInternalizationKey__;
-import static org.cyk.utility.internationalization.InternalizationHelperImpl.__buildInternalizationString__;
-import static org.cyk.utility.internationalization.InternalizationHelperImpl.__buildInternalizationPhraseFromKeysValues__;
+import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildInternationalizationKey__;
+import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildInternationalizationString__;
+import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildInternationalizationPhraseFromKeysValues__;
 
 public class InternalizationHelperUnitTestPerformance extends AbstractWeldUnitTestPerformance {
 	private static final long serialVersionUID = 1L;
@@ -14,7 +14,7 @@ public class InternalizationHelperUnitTestPerformance extends AbstractWeldUnitTe
 		execute("build internalization key hi",1000000,500,new Runnable() {
 			@Override
 			public void run() {
-				__buildInternalizationKey__("hi");
+				__buildInternationalizationKey__("hi");
 			}
 		});
 	}	
@@ -24,7 +24,7 @@ public class InternalizationHelperUnitTestPerformance extends AbstractWeldUnitTe
 		execute("build internalization string hi",1000000,500,new Runnable() {
 			@Override
 			public void run() {
-				__buildInternalizationString__("hi");
+				__buildInternationalizationString__("hi");
 			}
 		});
 	}	
@@ -34,7 +34,7 @@ public class InternalizationHelperUnitTestPerformance extends AbstractWeldUnitTe
 		execute("build internalization string xxx.type",1000000,500,new Runnable() {
 			@Override
 			public void run() {
-				__buildInternalizationString__("xxx.type");
+				__buildInternationalizationString__("xxx.type");
 			}
 		});
 	}	
@@ -44,7 +44,7 @@ public class InternalizationHelperUnitTestPerformance extends AbstractWeldUnitTe
 		execute("build internalization string type of person",1000000,4000,new Runnable() {
 			@Override
 			public void run() {
-				__buildInternalizationPhraseFromKeysValues__("type","of","person");
+				__buildInternationalizationPhraseFromKeysValues__("type","of","person");
 			}
 		});
 	}	

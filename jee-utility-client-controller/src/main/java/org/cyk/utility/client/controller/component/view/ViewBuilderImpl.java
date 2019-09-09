@@ -9,8 +9,6 @@ import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.ComponentBuilder;
-import org.cyk.utility.client.controller.component.ComponentBuilderClassGetter;
-import org.cyk.utility.client.controller.component.ComponentBuilderGetter;
 import org.cyk.utility.client.controller.component.ComponentBuilderHelperImpl;
 import org.cyk.utility.client.controller.component.Components;
 import org.cyk.utility.client.controller.component.ComponentsBuilder;
@@ -152,15 +150,18 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public InputBuilder<?, ?> addInputBuilderByFieldName(Object object, String... fieldNames) {
-		Class<? extends InputBuilder<?,?>> inputBuilderClass =  __inject__(ComponentBuilderClassGetter.class).setField(FieldHelperImpl.__getFieldByNames__(object.getClass(), fieldNames))
-				.execute().getOutput();
+		//Class<? extends InputBuilder<?,?>> inputBuilderClass =  __inject__(ComponentBuilderClassGetter.class).setField(FieldHelperImpl.__getFieldByNames__(object.getClass(), fieldNames))
+		//		.execute().getOutput();
+		Class<? extends InputBuilder<?,?>> inputBuilderClass =  (Class<? extends InputBuilder<?, ?>>) ComponentBuilderHelperImpl
+				.__getComponentBuilderClass__(null, null, FieldHelperImpl.__getFieldByNames__(object.getClass(), fieldNames), null, null, null, null);
 		return addInputBuilderByFieldName(inputBuilderClass, object, fieldNames);
 	}
 	
 	@Override
 	public <T extends ComponentBuilder<?>> T addComponentBuilderByObjectByFieldNames(Class<T> componentBuilderClass, Object object,String... fieldNames) {
 		//TODO : collect all add in collection and use parrallel procssing technique to gain speed
-		T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).addFieldNameStrings(fieldNames).execute().getOutput();
+		//T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).addFieldNameStrings(fieldNames).execute().getOutput();
+		T builder = (T) ComponentBuilderHelperImpl.__getComponentBuilder__(componentBuilderClass, object, null, fieldNames, null, null, null);
 		addComponentBuilder(builder);
 		return builder;
 	}
@@ -202,7 +203,8 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public <T extends ComponentBuilder<?>> T addComponentBuilderByObjectByMethodName(Class<T> componentBuilderClass,Object object, String methodName,SystemAction systemAction) {
-		T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).setMethodName(methodName).setSystemAction(systemAction).execute().getOutput();
+		//T builder = (T) __inject__(ComponentBuilderGetter.class).setClazz(componentBuilderClass).setObject(object).setMethodName(methodName).setSystemAction(systemAction).execute().getOutput();
+		T builder = (T) ComponentBuilderHelperImpl.__getComponentBuilder__(componentBuilderClass, object, null, null, null, methodName, systemAction);
 		if(builder instanceof CommandableBuilder) {
 			CommandableBuilder commandableBuilder = (CommandableBuilder) builder;
 			Object data = object instanceof FormData ? ((FormData<?>)object).getData() : object;
@@ -219,8 +221,9 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ComponentBuilder<?> addComponentBuilderByObjectByMethodName(Object object, String methodName,SystemAction systemAction) {
-		Class<? extends ComponentBuilder<?>> builderClass =  __inject__(ComponentBuilderClassGetter.class).setClazz(object.getClass()).setMethodName(methodName)
-				.execute().getOutput();
+		//Class<? extends ComponentBuilder<?>> builderClass =  __inject__(ComponentBuilderClassGetter.class).setClazz(object.getClass()).setMethodName(methodName)
+		//		.execute().getOutput();
+		Class<? extends ComponentBuilder<?>> builderClass = ComponentBuilderHelperImpl.__getComponentBuilderClass__(object.getClass(), null, null, null, null, methodName, null);
 		return addComponentBuilderByObjectByMethodName(builderClass, object, methodName,systemAction);
 	}
 	

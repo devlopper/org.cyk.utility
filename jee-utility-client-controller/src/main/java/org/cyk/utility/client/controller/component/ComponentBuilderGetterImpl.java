@@ -8,11 +8,10 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.internationalization.InternalizationKeyStringType;
-import org.cyk.utility.string.Case;
+import org.cyk.utility.internationalization.InternationalizationKey;
 import org.cyk.utility.system.action.SystemAction;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings("rawtypes") @Deprecated
 public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<ComponentBuilder> implements ComponentBuilderGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -88,7 +87,8 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 					
 					//inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getField().getName());
 					//inputBuilder.getLabel(Boolean.TRUE).setValue(inputBuilder.getField().getName());
-					inputBuilder.getLabel(Boolean.TRUE).setValueInternalizationKeyValue(inputBuilder.getField().getName());
+					//inputBuilder.getLabel(Boolean.TRUE).setValueInternalizationKeyValue(inputBuilder.getField().getName());
+					inputBuilder.getLabel(Boolean.TRUE).getValueInternationalizationString(Boolean.TRUE).setKey(new InternationalizationKey().setValue(inputBuilder.getField().getName()));
 				}
 			}else if(builder instanceof CommandableBuilder) {
 				org.cyk.utility.client.controller.component.annotation.Commandable commandableAnnotation = __method__.getAnnotation(org.cyk.utility.client.controller.component.annotation.Commandable.class);
@@ -115,9 +115,11 @@ public class ComponentBuilderGetterImpl extends AbstractFunctionWithPropertiesAs
 				if(commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getAction()==null) {
 					commandableBuilder.setName(__method__.getName());
 				}else {
+					/*
 					commandableBuilder.getNameInternalization(Boolean.TRUE).setKeyValue(commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getAction());
-					commandableBuilder.getNameInternalization(Boolean.TRUE).getKeyBuilder(Boolean.TRUE).setType(InternalizationKeyStringType.VERB);
+					commandableBuilder.getNameInternalization(Boolean.TRUE).getKeyBuilder(Boolean.TRUE).setType(InternationalizationKeyStringType.VERB);
 					commandableBuilder.getNameInternalization(Boolean.TRUE).setCase(Case.FIRST_CHARACTER_UPPER);
+					*/
 				}
 			}
 		}

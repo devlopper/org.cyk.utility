@@ -6,7 +6,7 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.map.AbstractMapInstanceImpl;
 
-@Dependent
+@Dependent @Deprecated
 public class InternalizationStringBuilderByStringMapImpl extends AbstractMapInstanceImpl<String, InternalizationStringBuilder> implements InternalizationStringBuilderByStringMap,Serializable {
 	private static final long serialVersionUID = 1L;
 

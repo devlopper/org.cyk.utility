@@ -15,6 +15,7 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.function.Function;
 import org.cyk.utility.function.FunctionHelperImpl;
 import org.cyk.utility.instance.Instances;
+import org.cyk.utility.internationalization.InternationalizationKey;
 import org.cyk.utility.runnable.RunnableHelperImpl;
 import org.cyk.utility.string.Case;
 
@@ -94,8 +95,8 @@ public class ComponentsBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 									.getAnnotation(org.cyk.utility.client.controller.component.annotation.Input.class);
 							if(inputAnnotation!=null) {
 								outputStringText = __inject__(OutputStringTextBuilder.class);
-								outputStringText.setValueInternalizationKeyValue(outputBuilder.getField().getName());
-								outputStringText.getValueInternalization(Boolean.TRUE).setCase(Case.FIRST_CHARACTER_UPPER);
+								outputStringText.getValueInternationalizationString(Boolean.TRUE).setKey(new InternationalizationKey().setValue(outputBuilder.getField().getName()));
+								outputStringText.getValueInternationalizationString(Boolean.TRUE).setKase(Case.FIRST_CHARACTER_UPPER);
 								finals.add(outputStringText);
 							}
 						}

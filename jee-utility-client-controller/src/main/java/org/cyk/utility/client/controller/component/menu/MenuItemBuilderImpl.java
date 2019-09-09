@@ -10,7 +10,8 @@ import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString;
 import org.cyk.utility.client.controller.event.EventName;
 import org.cyk.utility.client.controller.icon.Icon;
-import org.cyk.utility.internationalization.InternalizationKeyStringType;
+import org.cyk.utility.internationalization.InternationalizationHelperImpl;
+import org.cyk.utility.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionList;
@@ -67,7 +68,9 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	
 	@Override
 	public CommandableBuilder getCommandable(Boolean injectIfNull) {
-		return (CommandableBuilder) __getInjectIfNull__(FIELD_COMMANDABLE, injectIfNull);
+		if(commandable == null && Boolean.TRUE.equals(injectIfNull))
+			commandable = __inject__(CommandableBuilder.class);
+		return commandable;
 	}
 	
 	@Override
@@ -97,8 +100,14 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	}
 	
 	@Override
+	public MenuItemBuilder setCommandableNameInternalizationKeyValue(Object key,InternationalizationKeyStringType type) {
+		getCommandable(Boolean.TRUE).getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelperImpl.__buildInternationalizationKey__(key,type));
+		return this;
+	}
+	
+	@Override
 	public MenuItemBuilder setCommandableNameInternalizationKeyValue(Object key) {
-		getCommandable(Boolean.TRUE).getNameInternalization(Boolean.TRUE).setKeyValue(key);
+		getCommandable(Boolean.TRUE).getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelperImpl.__buildInternationalizationKey__(key));
 		return this;
 	}
 	
@@ -186,8 +195,7 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 		else
 			process.setIdentifier(processingActionIdentifier);
 		
-		menuItemBuilder.setCommandableNameInternalizationKeyValue(processingActionIdentifier);
-		menuItemBuilder.getCommandable(Boolean.TRUE).getNameInternalization(Boolean.TRUE).getKeyBuilder(Boolean.TRUE).setType(InternalizationKeyStringType.VERB);
+		menuItemBuilder.setCommandableNameInternalizationKeyValue(processingActionIdentifier,InternationalizationKeyStringType.VERB);
 		SystemAction action = __inject__(SystemActionSelect.class).setEntityClass(aClass).setNextAction(process);
 		return addChild(menuItemBuilder.setCommandableNavigationIdentifierBuilderSystemAction(action));
 	}
@@ -236,7 +244,5 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	}
 	
 	/**/
-	
-	public static final String FIELD_COMMANDABLE = "commandable";
 	
 }

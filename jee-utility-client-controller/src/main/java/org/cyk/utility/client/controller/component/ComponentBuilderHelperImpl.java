@@ -13,7 +13,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.annotation.Annotations;
-import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputBooleanButtonBuilder;
 import org.cyk.utility.client.controller.component.input.InputBooleanCheckBoxBuilder;
@@ -33,10 +32,11 @@ import org.cyk.utility.client.controller.component.output.OutputBuilder;
 import org.cyk.utility.client.controller.component.output.OutputFileBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringLinkBuilder;
 import org.cyk.utility.client.controller.component.output.OutputStringTextBuilder;
-import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
-import org.cyk.utility.internationalization.InternalizationKeyStringType;
+import org.cyk.utility.internationalization.InternationalizationHelperImpl;
+import org.cyk.utility.internationalization.InternationalizationKey;
+import org.cyk.utility.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringHelperImpl;
 import org.cyk.utility.system.action.SystemAction;
@@ -56,131 +56,7 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 	public static ComponentBuilderHelper getInstance() {
 		return getInstance(null);
 	}
-	
-	@Override
-	public Class<? extends ComponentBuilder<?>> getComponentBuilderClass(Class<?> klass,Class<?> baseClass,Field field,String[] fieldNames,Method method,String methodName,Annotations annotations) {
-		Class<? extends ComponentBuilder<?>> builderClass = null;
-		if(klass != null) {
-			Collection<Annotation> annotationCollection = null;
-			StringBuilder key = new StringBuilder(klass.getName());
-			if(annotations != null) {
-				annotationCollection = new HashSet<>();
-				annotationCollection.addAll(annotations.get());
-			}
-			
-			if(annotationCollection == null) {
-				annotationCollection = new HashSet<>();
-				if(field == null && fieldNames!=null) {
-					field = FieldHelperImpl.__getFieldByNames__(klass, fieldNames);
-				}else if(method == null && methodName!=null) {
-					method = MethodUtils.getMatchingMethod(klass, methodName);
-				}
-				if(field!=null) {
-					key.append(field.getName());
-					Annotation[] fieldAnnotations = field.getAnnotations();
-					if(fieldAnnotations!=null)
-						for(Annotation index : fieldAnnotations) {
-							annotationCollection.add(index);
-						}
-				}else if(method!=null) {
-					key.append(method.getName());
-					Annotation[] methodAnnotations = method.getAnnotations();
-					if(methodAnnotations!=null)
-						for(Annotation index : methodAnnotations) {
-							annotationCollection.add(index);
-						}
-				}
-			}
-			
-			for(Annotation index : annotationCollection)
-				key.append(index.annotationType().getName());
-			
-			builderClass = COMPONENTS_BUILDERS_CLASSES_MAP.get(key.toString());
-			if(builderClass == null) {
-				builderClass = __getBuilderClassFromAnnotations__(annotationCollection);
-				if(builderClass!=null && baseClass!=null && !baseClass.isAssignableFrom(builderClass)) {
-					if(InputBuilder.class.isAssignableFrom(builderClass)) {
-						if(baseClass.equals(OutputBuilder.class))
-							if(InputFileBuilder.class.equals(builderClass))
-								baseClass = OutputFileBuilder.class;
-							
-						if(OutputFileBuilder.class.isAssignableFrom(baseClass))
-							builderClass = OutputFileBuilder.class;
-						else if(OutputStringLinkBuilder.class.isAssignableFrom(baseClass))
-							builderClass = OutputStringLinkBuilder.class;
-						else if(OutputBuilder.class.isAssignableFrom(baseClass))
-							builderClass = OutputStringTextBuilder.class;
-					}										
-				}
-				COMPONENTS_BUILDERS_CLASSES_MAP.put(key.toString(), builderClass);
-			}	
-		}
-		return builderClass;
-	}
-	
-	@Override
-	public ComponentBuilder<?> getComponentBuilder(Class<? extends ComponentBuilder<?>> klass,Object object,Field field,String[] fieldNames,Method method,String methodName,SystemAction systemAction) {
-		ComponentBuilder<?> builder = null;
-		if(object == null)
-			return null;
-		if(field == null && fieldNames!=null)
-			field = FieldHelperImpl.__getFieldByNames__(object.getClass(), fieldNames);
-		else if(method == null && StringHelperImpl.__isNotBlank__(methodName))
-			method = MethodUtils.getMatchingAccessibleMethod(object.getClass(), methodName);
 
-		if(klass!=null)
-			builder = __inject__(klass);
-		
-		if(builder == null) {
-			System.err.println(String.format("Component builder not found. %s.%", object.getClass().getName(),field == null ? method.getName() : field.getName()));
-		}else {
-			if(builder instanceof InputOutputBuilder<?, ?>) {
-				InputOutputBuilder<?, ?> inputOutputBuilder = (InputOutputBuilder<?, ?>) builder;
-				inputOutputBuilder.setObject(object);
-				inputOutputBuilder.setField(field);
-				
-				if(inputOutputBuilder instanceof InputBuilder<?,?>) {
-					InputBuilder<?,?> inputBuilder = (InputBuilder<?, ?>) inputOutputBuilder;
-					//inputBuilder.setFieldNameStrings(__inject__(Strings.class).add(fieldNames));
-					//inputBuilder.setFieldNameStrings(__inject__(Strings.class).add(field.getName()));
-					//inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getFieldNameStrings().get().toString());
-					
-					//inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getField().getName());
-					//inputBuilder.getLabel(Boolean.TRUE).setValue(inputBuilder.getField().getName());
-					inputBuilder.getLabel(Boolean.TRUE).setValueInternalizationKeyValue(inputBuilder.getField().getName());
-				}
-			}else if(builder instanceof CommandableBuilder) {
-				org.cyk.utility.client.controller.component.annotation.Commandable commandableAnnotation = method.getAnnotation(org.cyk.utility.client.controller.component.annotation.Commandable.class);
-				CommandableBuilder commandableBuilder = (CommandableBuilder) builder;
-				
-				if(systemAction == null)
-					commandableBuilder.setCommandFunctionActionClass(commandableAnnotation == null || SystemAction.class.equals(commandableAnnotation.systemActionClass())? null : commandableAnnotation.systemActionClass());
-				else
-					commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(systemAction);
-				
-				final Method finalMethod = method;
-				commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).addRunnables(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							finalMethod.invoke(object);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				});
-				
-				if(commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getAction()==null) {
-					commandableBuilder.setName(method.getName());
-				}else {
-					commandableBuilder.getNameInternalization(Boolean.TRUE).setKeyValue(commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getAction());
-					commandableBuilder.getNameInternalization(Boolean.TRUE).getKeyBuilder(Boolean.TRUE).setType(InternalizationKeyStringType.VERB);
-					commandableBuilder.getNameInternalization(Boolean.TRUE).setCase(Case.FIRST_CHARACTER_UPPER);
-				}
-			}
-		}
-		return builder;
-	}
 	/**/
 	
 	protected static <T extends Annotation> T __getAnnotation__(Class<T> annotationClass,Collection<? extends Annotation> annotations) {
@@ -338,5 +214,73 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 		//}
 		
 		return null;
+	}
+
+	public static ComponentBuilder<?> __getComponentBuilder__(Class<? extends ComponentBuilder<?>> klass,Object object,Field field,String[] fieldNames,Method method,String methodName,SystemAction systemAction) {
+		ComponentBuilder<?> builder = null;
+		if(object == null)
+			return null;
+		if(field == null && fieldNames!=null)
+			field = FieldHelperImpl.__getFieldByNames__(object.getClass(), fieldNames);
+		else if(method == null && StringHelperImpl.__isNotBlank__(methodName))
+			method = MethodUtils.getMatchingAccessibleMethod(object.getClass(), methodName);
+
+		if(klass!=null)
+			builder = __inject__(klass);
+		
+		if(builder == null) {
+			System.err.println(String.format("Component builder not found. %s.%", object.getClass().getName(),field == null ? method.getName() : field.getName()));
+		}else {
+			if(builder instanceof InputOutputBuilder<?, ?>) {
+				InputOutputBuilder<?, ?> inputOutputBuilder = (InputOutputBuilder<?, ?>) builder;
+				inputOutputBuilder.setObject(object);
+				inputOutputBuilder.setField(field);
+				
+				if(inputOutputBuilder instanceof InputBuilder<?,?>) {
+					InputBuilder<?,?> inputBuilder = (InputBuilder<?, ?>) inputOutputBuilder;
+					//inputBuilder.setFieldNameStrings(__inject__(Strings.class).add(fieldNames));
+					//inputBuilder.setFieldNameStrings(__inject__(Strings.class).add(field.getName()));
+					//inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getFieldNameStrings().get().toString());
+					
+					//inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getField().getName());
+					//inputBuilder.getLabel(Boolean.TRUE).setValue(inputBuilder.getField().getName());
+					inputBuilder.getLabel(Boolean.TRUE).getValueInternationalizationString(Boolean.TRUE).setKey(new InternationalizationKey().setValue(inputBuilder.getField().getName()));
+				}
+			}else if(builder instanceof CommandableBuilder) {
+				org.cyk.utility.client.controller.component.annotation.Commandable commandableAnnotation = method.getAnnotation(org.cyk.utility.client.controller.component.annotation.Commandable.class);
+				CommandableBuilder commandableBuilder = (CommandableBuilder) builder;
+				
+				if(systemAction == null)
+					commandableBuilder.setCommandFunctionActionClass(commandableAnnotation == null || SystemAction.class.equals(commandableAnnotation.systemActionClass())? null : commandableAnnotation.systemActionClass());
+				else
+					commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).setAction(systemAction);
+				
+				final Method finalMethod = method;
+				commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).try_().getRun(Boolean.TRUE).addRunnables(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							finalMethod.invoke(object);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				
+				if(commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getAction()==null) {
+					commandableBuilder.setName(method.getName());
+				}else {
+					/*
+					commandableBuilder.getNameInternalization(Boolean.TRUE).setKeyValue(commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getAction());
+					commandableBuilder.getNameInternalization(Boolean.TRUE).getKeyBuilder(Boolean.TRUE).setType(InternationalizationKeyStringType.VERB);
+					commandableBuilder.getNameInternalization(Boolean.TRUE).setCase(Case.FIRST_CHARACTER_UPPER);
+					*/
+					commandableBuilder.getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelperImpl.__buildInternationalizationKey__(
+							commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getAction(),InternationalizationKeyStringType.VERB));
+					commandableBuilder.getNameInternationalization(Boolean.TRUE).setKase(Case.FIRST_CHARACTER_UPPER);
+				}
+			}
+		}
+		return builder;
 	}
 }

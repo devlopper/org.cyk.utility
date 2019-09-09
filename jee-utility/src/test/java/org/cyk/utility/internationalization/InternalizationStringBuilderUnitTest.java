@@ -52,33 +52,33 @@ public class InternalizationStringBuilderUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void isCreer_whenKeyIsCreateVerb(){
-		assertionHelper.assertEquals("créer", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionCreate.class).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput());		
+		assertionHelper.assertEquals("créer", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionCreate.class).setKeyType(InternationalizationKeyStringType.VERB).execute().getOutput());		
 	}
 	
 	@Test
 	public void isTraitement_whenKeyIsProcessNoun(){
-		assertionHelper.assertEquals("traitement", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionProcess.class).setKeyType(InternalizationKeyStringType.NOUN).execute().getOutput());		
+		assertionHelper.assertEquals("traitement", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionProcess.class).setKeyType(InternationalizationKeyStringType.NOUN).execute().getOutput());		
 	}
 	
 	@Test
 	public void isTraiter_whenKeyIsProcessVerb(){
-		assertionHelper.assertEquals("traiter", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionProcess.class).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput());		
+		assertionHelper.assertEquals("traiter", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionProcess.class).setKeyType(InternationalizationKeyStringType.VERB).execute().getOutput());		
 	}
 	
 	@Test
 	public void isValidation_whenKeyIsProcessValidateNoun(){
-		assertionHelper.assertEquals("validation", __inject__(InternalizationStringBuilder.class).setKeyValue(__inject__(SystemActionProcess.class).setIdentifier("validate")).setKeyType(InternalizationKeyStringType.NOUN).execute().getOutput());		
+		assertionHelper.assertEquals("validation", __inject__(InternalizationStringBuilder.class).setKeyValue(__inject__(SystemActionProcess.class).setIdentifier("validate")).setKeyType(InternationalizationKeyStringType.NOUN).execute().getOutput());		
 	}
 	
 	@Test
 	public void isValider_whenKeyIsProcessValidateVerb(){
 		__inject__(ApplicationScopeLifeCycleListener.class).__initialize__(null);
-		assertionHelper.assertEquals("valider", __inject__(InternalizationStringBuilder.class).setKeyValue(__inject__(SystemActionProcess.class).setIdentifier("validate")).setKeyType(InternalizationKeyStringType.VERB).execute().getOutput());		
+		assertionHelper.assertEquals("valider", __inject__(InternalizationStringBuilder.class).setKeyValue(__inject__(SystemActionProcess.class).setIdentifier("validate")).setKeyType(InternationalizationKeyStringType.VERB).execute().getOutput());		
 	}
 	
 	@Test
 	public void isCreation_whenKeyIsCreateNoun(){
-		assertionHelper.assertEquals("création", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionCreate.class).setKeyType(InternalizationKeyStringType.NOUN).execute().getOutput());		
+		assertionHelper.assertEquals("création", __inject__(InternalizationStringBuilder.class).setKeyValue(SystemActionCreate.class).setKeyType(InternationalizationKeyStringType.NOUN).execute().getOutput());		
 	}
 	
 	@Test

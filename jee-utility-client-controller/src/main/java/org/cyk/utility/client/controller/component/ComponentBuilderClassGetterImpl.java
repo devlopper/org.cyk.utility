@@ -36,7 +36,7 @@ import org.cyk.utility.client.controller.component.output.OutputStringTextBuilde
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings("rawtypes") @Deprecated
 public class ComponentBuilderClassGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Class> implements ComponentBuilderClassGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -13,12 +13,12 @@ import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemAction;
 
-@Dependent
+@Dependent @Deprecated
 public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionImpl implements InternalizationKeyStringBuilder, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Object value;
-	private InternalizationKeyStringType type;
+	private InternationalizationKeyStringType type;
 	
 	@Override
 	protected String __execute__() throws Exception {
@@ -68,7 +68,7 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 			//		__injectStringHelper__().applyCase(__injectStringHelper__().splitByCharacterTypeCamelCase(key.toString()),Case.LOWER),CharacterConstant.DOT.toString());
 			
 			if(__injectStringHelper__().isNotBlank(string)) {
-				InternalizationKeyStringType type = getType();
+				InternationalizationKeyStringType type = getType();
 				if(type!=null)
 					string = String.format(type.getFormat(), string);
 			}
@@ -88,12 +88,12 @@ public class InternalizationKeyStringBuilderImpl extends AbstractStringFunctionI
 	}
 	
 	@Override
-	public InternalizationKeyStringType getType() {
+	public InternationalizationKeyStringType getType() {
 		return type;
 	}
 	
 	@Override
-	public InternalizationKeyStringBuilder setType(InternalizationKeyStringType type) {
+	public InternalizationKeyStringBuilder setType(InternationalizationKeyStringType type) {
 		this.type = type;
 		return this;
 	}

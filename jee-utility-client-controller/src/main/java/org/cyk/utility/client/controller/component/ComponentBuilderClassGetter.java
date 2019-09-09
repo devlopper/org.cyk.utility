@@ -8,7 +8,7 @@ import org.cyk.utility.annotation.Annotations;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.string.Strings;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings("rawtypes") @Deprecated
 public interface ComponentBuilderClassGetter extends FunctionWithPropertiesAsInput<Class> {
 
 	Class<?> getClazz();

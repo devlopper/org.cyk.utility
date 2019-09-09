@@ -12,7 +12,7 @@ import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
 import org.cyk.utility.client.controller.session.SessionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.internationalization.InternalizationKeyStringType;
+import org.cyk.utility.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.internationalization.InternalizationPhraseBuilder;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.request.RequestParameterValueMapper;
@@ -86,7 +86,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 				InternalizationPhraseBuilder windowTitleInternalizationPhraseBuilder = __getWindowTitleInternalizationPhraseBuilder__(systemAction);
 				if(windowTitleInternalizationPhraseBuilder == null) {
 					windowTitleInternalizationPhraseBuilder = __inject__(InternalizationPhraseBuilder.class)
-							.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternalizationKeyStringType.NOUN))
+							.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternationalizationKeyStringType.NOUN))
 							.addStringsByKeys(systemAction.getEntities().getElementClass());
 				}
 				if(windowTitleInternalizationPhraseBuilder != null)
@@ -113,13 +113,13 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	public InternalizationPhraseBuilder __getWindowTitleInternalizationPhraseBuilder__(SystemAction systemAction) {
 		InternalizationPhraseBuilder internalizationPhraseBuilder = __inject__(InternalizationPhraseBuilder.class)
 				.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER)
-						.setKeyType(InternalizationKeyStringType.NOUN))
+						.setKeyType(InternationalizationKeyStringType.NOUN))
 				.addStrings(__inject__(InternalizationStringBuilder.class).setKey("of"))
 				.addStringsByKeys(systemAction.getEntities().getElementClass());
 		if(systemAction.getNextAction() != null) {
 			internalizationPhraseBuilder
 			.addStrings(__inject__(InternalizationStringBuilder.class).setKey("for"))
-			.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction.getNextAction()).setKeyType(InternalizationKeyStringType.NOUN));	
+			.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction.getNextAction()).setKeyType(InternationalizationKeyStringType.NOUN));	
 		}
 		return internalizationPhraseBuilder;
 	}

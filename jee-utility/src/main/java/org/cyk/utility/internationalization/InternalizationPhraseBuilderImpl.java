@@ -12,7 +12,7 @@ import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringHelper;
 
-@Dependent
+@Dependent @Deprecated
 public class InternalizationPhraseBuilderImpl extends AbstractStringFunctionImpl implements InternalizationPhraseBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
