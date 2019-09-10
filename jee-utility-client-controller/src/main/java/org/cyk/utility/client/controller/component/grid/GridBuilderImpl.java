@@ -225,7 +225,9 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 
 	@Override
 	public ColumnBuilders getColumns(Boolean injectIfNull) {
-		return (ColumnBuilders) __getInjectIfNull__(FIELD_COLUMNS, injectIfNull);
+		if(columns == null && Boolean.TRUE.equals(injectIfNull))
+			columns = __inject__(ColumnBuilders.class);
+		return columns;
 	}
 
 	@Override
@@ -290,7 +292,9 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 
 	@Override
 	public RowBuilders getRows(Boolean injectIfNull) {
-		return (RowBuilders) __getInjectIfNull__(FIELD_ROWS, injectIfNull);
+		if(rows == null && Boolean.TRUE.equals(injectIfNull))
+			rows = __inject__(RowBuilders.class);
+		return rows;
 	}
 
 	@Override
@@ -318,7 +322,9 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	
 	@Override
 	public ViewBuilder getView(Boolean injectIfNull) {
-		return (ViewBuilder) __getInjectIfNull__(FIELD_VIEW, injectIfNull);
+		if(view == null && Boolean.TRUE.equals(injectIfNull))
+			view = __inject__(ViewBuilder.class);
+		return view;
 	}
 	
 	@Override
@@ -334,7 +340,9 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 
 	@Override
 	public ViewBuilderMap getViewMap(Boolean injectIfNull) {
-		return (ViewBuilderMap) __getInjectIfNull__(FIELD_VIEW_MAP, injectIfNull);
+		if(viewMap == null && Boolean.TRUE.equals(injectIfNull))
+			viewMap = __inject__(ViewBuilderMap.class);
+		return viewMap;
 	}
 
 	@Override
@@ -381,7 +389,9 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	
 	@Override
 	public Objects getObjects(Boolean injectIfNull) {
-		return (Objects) __getInjectIfNull__(FIELD_OBJECTS, injectIfNull);
+		if(objects == null && Boolean.TRUE.equals(injectIfNull))
+			objects = __inject__(Objects.class);
+		return objects;
 	}
 	
 	@Override
@@ -409,8 +419,10 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 
 	@Override
 	public ColumnBuilder getOrderNumberColumn(Boolean injectIfNull) {
-		return ((ColumnBuilder) __getInjectIfNull__(FIELD_ORDER_NUMBER_COLUMN, injectIfNull)).setHeaderTextValue("#").addFieldNameStrings("orderNumber")
-				.setWidth("15");
+		if(orderNumberColumn == null && Boolean.TRUE.equals(injectIfNull))
+			orderNumberColumn = __inject__(ColumnBuilder.class);
+		orderNumberColumn.setHeaderTextValue("#").addFieldNameStrings("orderNumber").setWidth("15");
+		return orderNumberColumn;
 	}
 
 	@Override
@@ -426,7 +438,10 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 
 	@Override
 	public ColumnBuilder getCommandablesColumn(Boolean injectIfNull) {
-		return ((ColumnBuilder) __getInjectIfNull__(FIELD_COMMANDABLES_COLUMN, injectIfNull)).setHeaderTextValue("Actions").setWidth("120");
+		if(commandablesColumn == null && Boolean.TRUE.equals(injectIfNull))
+			commandablesColumn = __inject__(ColumnBuilder.class);
+		commandablesColumn.setHeaderTextValue("Actions").setWidth("120");
+		return commandablesColumn;
 	}
 
 	@Override
@@ -464,7 +479,9 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	
 	@Override
 	public CommandableBuilderByClassMap getCommandableMap(Boolean injectIfNull) {
-		return (CommandableBuilderByClassMap) __getInjectIfNull__(FIELD_COMMANDABLE_MAP, injectIfNull);
+		if(commandableMap == null && Boolean.TRUE.equals(injectIfNull))
+			commandableMap = __inject__(CommandableBuilderByClassMap.class);
+		return commandableMap;
 	}
 	
 	@Override
@@ -480,7 +497,9 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	
 	@Override
 	public CommandableBuilderByClassMap getCommandablesColumnCommandableMap(Boolean injectIfNull) {
-		return (CommandableBuilderByClassMap) __getInjectIfNull__(FIELD_COMMANDABLES_COLUMN_COMMANDABLE_MAP, injectIfNull);
+		if(commandablesColumnCommandableMap == null && Boolean.TRUE.equals(injectIfNull))
+			commandablesColumnCommandableMap = __inject__(CommandableBuilderByClassMap.class);
+		return commandablesColumnCommandableMap;
 	}
 	
 	@Override
@@ -502,7 +521,9 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	
 	@Override
 	public ObjectByClassMap getCommandablesColumnCommandablesNavigationsParametersMap(Boolean injectIfNull) {
-		return (ObjectByClassMap) __getInjectIfNull__(FIELD_COMMANDABLES_COLUMN_COMMANDABLES_NAVIGATIONS_PARAMETERS_MAP, injectIfNull);
+		if(commandablesColumnCommandablesNavigationsParametersMap == null && Boolean.TRUE.equals(injectIfNull))
+			commandablesColumnCommandablesNavigationsParametersMap = __inject__(ObjectByClassMap.class);
+		return commandablesColumnCommandablesNavigationsParametersMap;
 	}
 	
 	@Override
@@ -540,9 +561,9 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	
 	@Override
 	public CommandableBuilder getCreateRowCommandable(Boolean injectIfNull) {
-		CommandableBuilder commandable = (CommandableBuilder) __getInjectIfNull__(FIELD_CREATE_ROW_COMMANDABLE, injectIfNull);
-		
-		return commandable;
+		if(createRowCommandable == null && Boolean.TRUE.equals(injectIfNull))
+			createRowCommandable = __inject__(CommandableBuilder.class);
+		return createRowCommandable;
 	}
 	
 	@Override
@@ -569,9 +590,9 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 	
 	@Override
 	public CommandableBuilder getProcessRowCommandable(Boolean injectIfNull) {
-		CommandableBuilder commandable = (CommandableBuilder) __getInjectIfNull__(FIELD_PROCESS_ROW_COMMANDABLE, injectIfNull);
-		
-		return commandable;
+		if(processRowCommandable == null && Boolean.TRUE.equals(injectIfNull))
+			processRowCommandable = __inject__(CommandableBuilder.class);
+		return processRowCommandable;
 	}
 	
 	@Override
@@ -601,17 +622,4 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 		this.isLazyLoadable = isLazyLoadable;
 		return this;
 	}
-	
-	public static final String FIELD_COLUMNS = "columns";
-	public static final String FIELD_ROWS = "rows";
-	public static final String FIELD_VIEW = "view";
-	public static final String FIELD_OBJECTS = "objects";
-	public static final String FIELD_ORDER_NUMBER_COLUMN = "orderNumberColumn";
-	public static final String FIELD_COMMANDABLES_COLUMN = "commandablesColumn";
-	public static final String FIELD_COMMANDABLE_MAP = "commandableMap";
-	public static final String FIELD_COMMANDABLES_COLUMN_COMMANDABLE_MAP = "commandablesColumnCommandableMap";
-	public static final String FIELD_VIEW_MAP = "viewMap";
-	public static final String FIELD_CREATE_ROW_COMMANDABLE = "createRowCommandable";
-	public static final String FIELD_PROCESS_ROW_COMMANDABLE = "processRowCommandable";
-	public static final String FIELD_COMMANDABLES_COLUMN_COMMANDABLES_NAVIGATIONS_PARAMETERS_MAP = "commandablesColumnCommandablesNavigationsParametersMap";
 }

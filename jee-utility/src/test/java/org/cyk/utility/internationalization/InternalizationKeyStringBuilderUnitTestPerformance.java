@@ -17,7 +17,7 @@ public class InternalizationKeyStringBuilderUnitTestPerformance extends Abstract
 			}).add("InternalizationHelperImpl.__buildKey__", new Runnable() {
 				@Override
 				public void run() {
-					InternationalizationHelperImpl.__buildInternationalizationKey__(null, null);
+					InternationalizationHelperImpl.__buildKey__(null, null);
 				}
 			})
 				);
@@ -35,7 +35,7 @@ public class InternalizationKeyStringBuilderUnitTestPerformance extends Abstract
 			}).add("InternalizationHelperImpl.__buildKey__", new Runnable() {
 				@Override
 				public void run() {
-					InternationalizationHelperImpl.__buildInternationalizationKey__("", null);
+					InternationalizationHelperImpl.__buildKey__("", null);
 				}
 			})
 				);
@@ -52,7 +52,7 @@ public class InternalizationKeyStringBuilderUnitTestPerformance extends Abstract
 			}).add("InternalizationHelperImpl.__buildKey__", new Runnable() {
 				@Override
 				public void run() {
-					InternationalizationHelperImpl.__buildInternationalizationKey__("hi", null);
+					InternationalizationHelperImpl.__buildKey__("hi", null);
 				}
 			})
 				);

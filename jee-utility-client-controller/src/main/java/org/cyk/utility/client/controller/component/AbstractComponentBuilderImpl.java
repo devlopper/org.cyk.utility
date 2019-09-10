@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.component;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.AbstractObjectLifeCycleListenerImpl;
@@ -24,9 +25,11 @@ import org.cyk.utility.device.DeviceScreenArea;
 import org.cyk.utility.device.DeviceScreenDimensionProportions;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.internationalization.InternationalizationHelperImpl;
+import org.cyk.utility.internationalization.InternationalizationKeyStringType;
 import org.cyk.utility.internationalization.InternationalizationString;
 import org.cyk.utility.internationalization.InternationalizationStringMap;
 import org.cyk.utility.object.Objects;
+import org.cyk.utility.string.Case;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.type.BooleanMap;
 
@@ -102,8 +105,8 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		Throwable throwable = getThrowable();
 		component.setThrowable(throwable);
 		if(component.getThrowable() != null)
-			component.setThrowableInternalizationMessage(InternationalizationHelperImpl.__buildInternationalizationString__(InternationalizationHelperImpl
-					.__buildInternationalizationKey__(component.getThrowable())));
+			component.setThrowableInternalizationMessage(InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl
+					.__buildKey__(component.getThrowable())));
 		setProperty(Properties.OUTPUT, component);
 		return this;
 	}
@@ -671,6 +674,23 @@ public abstract class AbstractComponentBuilderImpl<COMPONENT extends Component> 
 		return AbstractSessionHelperImpl.getInstance();
 	}
 	
+	protected static String __buildInternationalizationString__(Object key,InternationalizationKeyStringType keyType,Object[] arguments,Locale locale,Case kase) {
+		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, keyType),arguments,locale,kase);
+	}
+	
+	protected static String __buildInternationalizationString__(Object key,InternationalizationKeyStringType keyType,Case kase) {
+		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, keyType),null,null,kase);
+	}
+	
+	protected static String __buildInternationalizationString__(Object key,Case kase) {
+		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, null),null,null,kase);
+	}
+	
+	protected static String __buildInternationalizationString__(Object key) {
+		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, null),null,null,null);
+	}
+	
 	/**/
+	
 	
 }

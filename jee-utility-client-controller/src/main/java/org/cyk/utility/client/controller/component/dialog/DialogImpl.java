@@ -22,7 +22,9 @@ public class DialogImpl extends AbstractVisibleComponentImpl implements Dialog,S
 
 	@Override
 	public OutputStringText getTitle(Boolean injectIfNull) {
-		return (OutputStringText) __getInjectIfNull__(FIELD_TITLE, injectIfNull);
+		if(title == null && Boolean.TRUE.equals(injectIfNull))
+			title = __inject__(OutputStringText.class);
+		return title;
 	}
 
 	@Override
@@ -44,7 +46,9 @@ public class DialogImpl extends AbstractVisibleComponentImpl implements Dialog,S
 	
 	@Override
 	public Commandables getCommandables(Boolean injectIfNull) {
-		return (Commandables) __getInjectIfNull__(FIELD_COMMANDABLES, injectIfNull);
+		if(commandables == null && Boolean.TRUE.equals(injectIfNull))
+			commandables = __inject__(Commandables.class);
+		return commandables;
 	}
 	
 	@Override
@@ -75,8 +79,5 @@ public class DialogImpl extends AbstractVisibleComponentImpl implements Dialog,S
 		this.okCommandable = okCommandable;
 		return this;
 	}
-	
-	public static final String FIELD_TITLE = "title";
-	public static final String FIELD_COMMANDABLES = "commandables";
 
 }

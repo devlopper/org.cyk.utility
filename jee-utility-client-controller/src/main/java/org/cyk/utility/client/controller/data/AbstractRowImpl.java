@@ -20,7 +20,9 @@ public abstract class AbstractRowImpl extends AbstractObject implements Row,Seri
 	
 	@Override
 	public RowListeners getListeners(Boolean injectIfNull) {
-		return (RowListeners) __getInjectIfNull__(FIELD_LISTENERS, injectIfNull);
+		if(listeners == null && Boolean.TRUE.equals(injectIfNull))
+			listeners = __inject__(RowListeners.class);
+		return listeners;
 	}
 	
 	@Override
@@ -54,7 +56,9 @@ public abstract class AbstractRowImpl extends AbstractObject implements Row,Seri
 	
 	@Override
 	public ObjectByClassMap getNavigationParametersMap(Boolean injectIfNull) {
-		return (ObjectByClassMap) __getInjectIfNull__(FIELD_PARAMETERS_MAP, injectIfNull);
+		if(parametersMap == null && Boolean.TRUE.equals(injectIfNull))
+			parametersMap = __inject__(ObjectByClassMap.class);
+		return parametersMap;
 	}
 	
 	@Override

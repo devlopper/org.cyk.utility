@@ -57,7 +57,9 @@ public abstract class AbstractTreeImpl extends AbstractVisibleComponentImpl impl
 	
 	@Override
 	public Objects getNodeFamilies(Boolean injectIfNull) {
-		return (Objects) __getInjectIfNull__(FIELD_NODE_FAMILIES, injectIfNull);
+		if(nodeFamilies == null && Boolean.TRUE.equals(injectIfNull))
+			nodeFamilies = __inject__(Objects.class);
+		return nodeFamilies;
 	}
 	
 	@Override
@@ -129,10 +131,5 @@ public abstract class AbstractTreeImpl extends AbstractVisibleComponentImpl impl
 	}
 	
 	/**/
-	
-	public static final String FIELD_NODE_FAMILIES = "nodeFamilies";
-
-	
-
 	
 }

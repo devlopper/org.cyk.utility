@@ -82,7 +82,9 @@ public class TreeNodeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tre
 	
 	@Override
 	public HierarchyNode getHierarchyNode(Boolean injectIfNull) {
-		return (HierarchyNode) __getInjectIfNull__(FIELD_HIERARCHY_NODE, injectIfNull);
+		if(hierarchyNode == null && Boolean.TRUE.equals(injectIfNull))
+			hierarchyNode = __inject__(HierarchyNode.class);
+		return hierarchyNode;
 	}
 
 	@Override
@@ -189,6 +191,4 @@ public class TreeNodeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tre
 	
 	/**/
 	
-	private static final String FIELD_HIERARCHY_NODE = "hierarchyNode";
-
 }

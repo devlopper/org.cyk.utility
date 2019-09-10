@@ -35,7 +35,9 @@ public class MenuBuilderImpl extends AbstractVisibleComponentBuilderImpl<Menu> i
 	
 	@Override
 	public MenuItemBuilders getItems(Boolean injectIfNull) {
-		return (MenuItemBuilders) __getInjectIfNull__(FIELD_ITEMS, injectIfNull);
+		if(items == null && Boolean.TRUE.equals(injectIfNull))
+			items = __inject__(MenuItemBuilders.class);
+		return items;
 	}
 	
 	@Override
@@ -68,6 +70,5 @@ public class MenuBuilderImpl extends AbstractVisibleComponentBuilderImpl<Menu> i
 	}
 
 	/**/
-	
-	public static final String FIELD_ITEMS = "items";
+
 }

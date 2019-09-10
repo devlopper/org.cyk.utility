@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 import org.cyk.utility.field.FieldsGetter;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
@@ -48,7 +49,7 @@ public abstract class AbstractChoicePropertyValueBuilderImpl extends AbstractFun
 					Fields fields = fieldGetter.execute().getOutput();
 					if(__injectCollectionHelper__().isNotEmpty(fields)) {
 						for(Field indexField : fields.get()) {
-							Object fieldValue = __injectFieldValueGetter__().execute(object, indexField).getOutput();
+							Object fieldValue = FieldHelperImpl.__readFieldValue__(object, indexField);
 							if(Boolean.TRUE.equals(__injectValueHelper__().isNotEmpty(fieldValue))) {
 								field = indexField;
 								break;
@@ -60,7 +61,7 @@ public abstract class AbstractChoicePropertyValueBuilderImpl extends AbstractFun
 			
 			if(field != null) {
 				fieldName = field.getName();
-				Object value = __injectFieldValueGetter__().execute(object, field).getOutput();
+				Object value = FieldHelperImpl.__readFieldValue__(object, field);
 				if(value == null)
 					result = ConstantEmpty.STRING;
 				else

@@ -17,7 +17,9 @@ public abstract class AbstractLayoutTypeImpl extends AbstractObject implements L
 	
 	@Override
 	public ComponentRoles getRoles(Boolean injectIfNull) {
-		return (ComponentRoles) __getInjectIfNull__(FIELD_ROLES, injectIfNull);
+		if(roles == null && Boolean.TRUE.equals(injectIfNull))
+			roles = __inject__(ComponentRoles.class);
+		return roles;
 	}
 	
 	@Override
@@ -26,5 +28,4 @@ public abstract class AbstractLayoutTypeImpl extends AbstractObject implements L
 		return this;
 	}
 	
-	public static final String FIELD_ROLES = "roles";
 }

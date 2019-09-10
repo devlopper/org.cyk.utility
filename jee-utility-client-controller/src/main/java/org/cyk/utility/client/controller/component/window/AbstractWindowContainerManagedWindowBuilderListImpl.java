@@ -31,7 +31,9 @@ public abstract class AbstractWindowContainerManagedWindowBuilderListImpl extend
 	
 	@Override
 	public Strings getGridColumnsFieldNames(Boolean injectIfNull) {
-		return (Strings) __getInjectIfNull__(FIELD_GRID_COLUMNS_FIELD_NAMES, injectIfNull);
+		if(gridColumnsFieldNames == null && Boolean.TRUE.equals(injectIfNull))
+			gridColumnsFieldNames = __inject__(Strings.class);
+		return gridColumnsFieldNames;
 	}
 	
 	@Override

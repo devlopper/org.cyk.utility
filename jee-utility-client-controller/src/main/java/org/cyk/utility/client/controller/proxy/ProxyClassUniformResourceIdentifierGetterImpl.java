@@ -89,7 +89,9 @@ public class ProxyClassUniformResourceIdentifierGetterImpl extends AbstractFunct
 	
 	@Override
 	public ProxyClassUniformResourceIdentifierStringBuilder getStringBuilder(Boolean injectIfNull) {
-		return (ProxyClassUniformResourceIdentifierStringBuilder) __getInjectIfNull__(FIELD_STRING_BUILDER, injectIfNull);
+		if(stringBuilder == null && Boolean.TRUE.equals(injectIfNull))
+			stringBuilder = __inject__(ProxyClassUniformResourceIdentifierStringBuilder.class);
+		return stringBuilder;
 	}
 
 	@Override

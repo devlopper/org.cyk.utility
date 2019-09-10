@@ -1,16 +1,11 @@
 package org.cyk.utility.client.controller.component.layout;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
-import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentImpl;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.css.StyleClassBuilderWidth;
-import org.cyk.utility.device.Device;
 import org.cyk.utility.string.StringHelper;
 
 public class LayoutImpl extends AbstractVisibleComponentImpl implements Layout, Serializable {
@@ -35,7 +30,7 @@ public class LayoutImpl extends AbstractVisibleComponentImpl implements Layout, 
 	public Layout addItemFromClasses(String... classes) {
 		return addItemFromClasses(__inject__(CollectionHelper.class).instanciate(classes));
 	}
-	
+	/*
 	@Override
 	public Layout addItemFromWidthClassBuilders(Collection<StyleClassBuilderWidth> styleClassBuilderWidths) {
 		Collection<String> classes = new LinkedHashSet<>();
@@ -64,7 +59,7 @@ public class LayoutImpl extends AbstractVisibleComponentImpl implements Layout, 
 		}
 		return addItemFromWidthClassBuilders(styleClassBuilderWidths);
 	}
-	
+	*/
 	@Override
 	public LayoutItem getChildAt(Integer index) {
 		return (LayoutItem) super.getChildAt(index);

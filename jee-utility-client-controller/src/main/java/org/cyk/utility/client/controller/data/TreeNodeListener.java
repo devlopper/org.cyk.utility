@@ -2,6 +2,7 @@ package org.cyk.utility.client.controller.data;
 import java.util.List;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldValueGetter;
 
 public interface TreeNodeListener<NODE> {
@@ -11,7 +12,7 @@ public interface TreeNodeListener<NODE> {
 	}
 	
 	default String getType(NODE node) {
-		Object value = DependencyInjection.inject(FieldValueGetter.class).execute(node, "type").getOutput();
+		Object value = FieldHelperImpl.__readFieldValue__(node, "type");
 		if(value instanceof DataIdentifiedByStringAndCoded)
 			value = ((DataIdentifiedByStringAndCoded)value).getCode();
 		else if(value instanceof org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByStringAndCoded)

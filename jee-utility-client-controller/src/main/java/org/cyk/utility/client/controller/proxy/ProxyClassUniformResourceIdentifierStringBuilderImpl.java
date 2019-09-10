@@ -43,7 +43,9 @@ public class ProxyClassUniformResourceIdentifierStringBuilderImpl extends Abstra
 	
 	@Override
 	public UniformResourceIdentifierStringBuilder getUniformResourceIdentifierString(Boolean injectIfNull) {
-		return (UniformResourceIdentifierStringBuilder) __getInjectIfNull__(FIELD_UNIFORM_RESOURCE_IDENTIFIER_STRING, injectIfNull);
+		if(uniformResourceIdentifierString == null && Boolean.TRUE.equals(injectIfNull))
+			uniformResourceIdentifierString = __inject__(UniformResourceIdentifierStringBuilder.class);
+		return uniformResourceIdentifierString;
 	}
 	
 	@Override

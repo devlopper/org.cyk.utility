@@ -38,7 +38,9 @@ public class CellBuilderImpl extends AbstractVisibleComponentBuilderImpl<Cell> i
 	
 	@Override
 	public ViewBuilder getView(Boolean injectIfNull) {
-		return (ViewBuilder) __getInjectIfNull__(FIELD_VIEW, injectIfNull);
+		if(view == null && Boolean.TRUE.equals(injectIfNull))
+			view = __inject__(ViewBuilder.class);
+		return view;
 	}
 
 	@Override
@@ -55,7 +57,9 @@ public class CellBuilderImpl extends AbstractVisibleComponentBuilderImpl<Cell> i
 
 	@Override
 	public OutputStringTextBuilder getText(Boolean injectIfNull) {
-		return (OutputStringTextBuilder) __getInjectIfNull__(FIELD_TEXT, injectIfNull);
+		if(text == null && Boolean.TRUE.equals(injectIfNull))
+			text = __inject__(OutputStringTextBuilder.class);
+		return text;
 	}
 
 	@Override
@@ -72,7 +76,5 @@ public class CellBuilderImpl extends AbstractVisibleComponentBuilderImpl<Cell> i
 	
 	
 	/**/
-	
-	public static final String FIELD_VIEW = "view";
-	public static final String FIELD_TEXT = "text";
+
 }

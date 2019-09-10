@@ -108,7 +108,9 @@ public class GridImpl extends AbstractVisibleComponentImpl implements Grid,Seria
 	
 	@Override
 	public Objects getObjects(Boolean injectIfNull) {
-		return (Objects) __getInjectIfNull__(FIELD_OBJECTS, injectIfNull);
+		if(objects == null && Boolean.TRUE.equals(injectIfNull))
+			objects = __inject__(Objects.class);
+		return objects;
 	}
 	
 	@Override
@@ -118,7 +120,5 @@ public class GridImpl extends AbstractVisibleComponentImpl implements Grid,Seria
 	}
 	
 	/**/
-	
-	private static final String FIELD_OBJECTS = "objects";
 
 }

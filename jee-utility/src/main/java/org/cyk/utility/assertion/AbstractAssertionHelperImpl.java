@@ -28,7 +28,7 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 			
 		}else {
 			messageIdentifierWhenValueIsNotTrue = ValueHelperImpl.__defaultToIfBlank__(messageIdentifierWhenValueIsNotTrue,defaultDessageIdentifierWhenValueIsNotTrue);
-			assertion.setMessageWhenValueIsNotTrue(InternationalizationHelperImpl.__buildInternationalizationString__(messageIdentifierWhenValueIsNotTrue, arguments, null, null));
+			assertion.setMessageWhenValueIsNotTrue(InternationalizationHelperImpl.__buildString__(messageIdentifierWhenValueIsNotTrue, arguments, null, null));
 			assertion.setIdentifier(String.format("assertion.%s", identifier));	
 		}
 	}

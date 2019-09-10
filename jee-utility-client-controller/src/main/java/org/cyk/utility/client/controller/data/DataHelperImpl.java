@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.field.FieldsGetter;

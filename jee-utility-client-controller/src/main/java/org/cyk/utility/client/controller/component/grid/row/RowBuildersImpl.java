@@ -32,7 +32,9 @@ public class RowBuildersImpl extends AbstractCollectionInstanceImpl<RowBuilder> 
 	
 	@Override
 	public RowListeners getRowListeners(Boolean injectIfNull) {
-		return (RowListeners) __getInjectIfNull__(FIELD_ROW_LISTENERS, injectIfNull);
+		if(rowListeners == null && Boolean.TRUE.equals(injectIfNull))
+			rowListeners = __inject__(RowListeners.class);
+		return rowListeners;
 	}
 	
 	@Override
@@ -53,6 +55,4 @@ public class RowBuildersImpl extends AbstractCollectionInstanceImpl<RowBuilder> 
 		return this;
 	}
 	
-	public static final String FIELD_ROW_LISTENERS = "rowListeners";
-
 }

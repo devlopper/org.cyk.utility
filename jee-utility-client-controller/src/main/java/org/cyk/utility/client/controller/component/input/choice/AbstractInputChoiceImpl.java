@@ -24,7 +24,9 @@ public abstract class AbstractInputChoiceImpl<CHOICE> extends AbstractInputImpl<
 	
 	@Override
 	public Objects getChoices(Boolean injectIfNull) {
-		return (Objects) __getInjectIfNull__(FIELD_CHOICES, injectIfNull);
+		if(choices == null && Boolean.TRUE.equals(injectIfNull))
+			choices = __inject__(Objects.class);
+		return choices;
 	}
 	
 	@Override

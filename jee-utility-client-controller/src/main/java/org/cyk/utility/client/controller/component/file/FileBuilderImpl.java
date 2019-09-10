@@ -5,7 +5,6 @@ import java.io.Serializable;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.component.AbstractVisibleComponentBuilderImpl;
 import org.cyk.utility.client.controller.navigation.NavigationBuilder;
-import org.cyk.utility.client.controller.session.SessionAttributeSetter;
 import org.cyk.utility.random.RandomHelper;
 
 public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> implements FileBuilder,Serializable {
@@ -51,7 +50,7 @@ public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> i
 			}
 			file.setValue(value.execute().getOutput());
 			if(sessionAttributeIdentifier!=null)
-				__inject__(SessionAttributeSetter.class).setRequest(getRequest()).setAttribute(sessionAttributeIdentifier).setValue(file.getValue()).execute();
+				__injectSessionHelper__().setAttributeValue(sessionAttributeIdentifier, file.getValue(), getRequest());
 		}
 	}
 	
@@ -62,7 +61,9 @@ public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> i
 
 	@Override
 	public org.cyk.utility.file.FileBuilder getValue(Boolean injectIfNull) {
-		return (org.cyk.utility.file.FileBuilder) __getInjectIfNull__(FIELD_VALUE, injectIfNull);
+		if(value == null && Boolean.TRUE.equals(injectIfNull))
+			value = __inject__(org.cyk.utility.file.FileBuilder.class);
+		return value;
 	}
 
 	@Override
@@ -131,5 +132,4 @@ public class FileBuilderImpl extends AbstractVisibleComponentBuilderImpl<File> i
 	
 	/**/
 	
-	private static final String FIELD_VALUE = "value";
 }

@@ -24,7 +24,9 @@ public class LayoutBuilerItemImpl extends AbstractObject implements LayoutBuiler
 	
 	@Override
 	public Map<Class<? extends Device>, Integer> getWidthMap(Boolean instanciateIfNull) {
-		return (Map<Class<? extends Device>, Integer>) __getInstanciateIfNull__(FIELD_WIDTH_MAP, instanciateIfNull);
+		if(widthMap == null && Boolean.TRUE.equals(instanciateIfNull))
+			widthMap = new LinkedHashMap<>();
+		return widthMap;
 	}
 
 	@Override

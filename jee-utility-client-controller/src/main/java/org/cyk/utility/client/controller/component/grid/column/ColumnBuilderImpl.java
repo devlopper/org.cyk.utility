@@ -11,7 +11,6 @@ import org.cyk.utility.client.controller.component.output.OutputStringTextBuilde
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilderMap;
 import org.cyk.utility.client.controller.component.view.ViewMap;
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.string.Strings;
 
@@ -49,7 +48,7 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 					String valuePropertyName = column.getValuePropertyName();
 					if(StringUtils.contains(valuePropertyName, "."))
 						valuePropertyName = StringUtils.substringAfterLast(valuePropertyName, ".");
-					valuePropertyName = __inject__(InternalizationStringBuilder.class).setKeyValue(valuePropertyName).setCase(Case.FIRST_CHARACTER_UPPER).execute().getOutput();
+					valuePropertyName = __buildInternationalizationString__(valuePropertyName,Case.FIRST_CHARACTER_UPPER);
 					headerText = __inject__(OutputStringTextBuilder.class);
 					headerText.setValue(valuePropertyName);
 				}
@@ -103,7 +102,9 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 
 	@Override
 	public ViewBuilderMap getViewMap(Boolean injectIfNull) {
-		return (ViewBuilderMap) __getInjectIfNull__(FIELD_VIEW_MAP, injectIfNull);
+		if(viewMap == null && Boolean.TRUE.equals(injectIfNull))
+			viewMap = __inject__(ViewBuilderMap.class);
+		return viewMap;
 	}
 
 	@Override
@@ -131,7 +132,9 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 
 	@Override
 	public OutputStringTextBuilder getHeaderText(Boolean injectIfNull) {
-		return (OutputStringTextBuilder) __getInjectIfNull__(FIELD_HEADER_TEXT, injectIfNull);
+		if(headerText == null && Boolean.TRUE.equals(injectIfNull))
+			headerText = __inject__(OutputStringTextBuilder.class);
+		return headerText;
 	}
 
 	@Override
@@ -153,7 +156,9 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 
 	@Override
 	public OutputStringTextBuilder getFooterText(Boolean injectIfNull) {
-		return (OutputStringTextBuilder) __getInjectIfNull__(FIELD_FOOTER_TEXT, injectIfNull);
+		if(footerText == null && Boolean.TRUE.equals(injectIfNull))
+			footerText = __inject__(OutputStringTextBuilder.class);
+		return footerText;
 	}
 
 	@Override
@@ -181,7 +186,9 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 	
 	@Override
 	public Strings getFieldNameStrings(Boolean injectIfNull) {
-		return (Strings) __getInjectIfNull__(FIELD_FIELD_NAME_STRINGS, injectIfNull);
+		if(fieldNameStrings == null && Boolean.TRUE.equals(injectIfNull))
+			fieldNameStrings = __inject__(Strings.class);
+		return fieldNameStrings;
 	}
 	
 	@Override
@@ -213,9 +220,4 @@ public class ColumnBuilderImpl extends AbstractDimensionBuilderImpl<Column> impl
 		getViewMap(Boolean.TRUE).set(ViewMap.BODY,bodyView);
 		return this;
 	}
-	
-	public static final String FIELD_HEADER_TEXT = "headerText";
-	public static final String FIELD_FOOTER_TEXT = "footerText";
-	public static final String FIELD_VIEW_MAP = "viewMap";
-	public static final String FIELD_FIELD_NAME_STRINGS = "fieldNameStrings";
 }

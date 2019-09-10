@@ -36,7 +36,9 @@ public class LinkBuilderImpl extends AbstractVisibleComponentBuilderImpl<Link> i
 
 	@Override
 	public TextBuilder getText(Boolean injectIfNull) {
-		return (TextBuilder) __getInjectIfNull__(FIELD_TEXT, injectIfNull);
+		if(text == null && Boolean.TRUE.equals(injectIfNull))
+			text = __inject__(TextBuilder.class);
+		return text;
 	}
 
 	@Override
@@ -58,8 +60,9 @@ public class LinkBuilderImpl extends AbstractVisibleComponentBuilderImpl<Link> i
 
 	@Override
 	public UniformResourceLocatorStringBuilder getUniformResourceLocator(Boolean injectIfNull) {
-		UniformResourceLocatorStringBuilder uniformResourceLocatorStringBuilder =  (UniformResourceLocatorStringBuilder) __getInjectIfNull__(FIELD_UNIFORM_RESOURCE_LOCATOR, injectIfNull);
-		return uniformResourceLocatorStringBuilder;
+		if(uniformResourceLocator == null && Boolean.TRUE.equals(injectIfNull))
+			uniformResourceLocator = __inject__(UniformResourceLocatorStringBuilder.class);
+		return uniformResourceLocator;
 	}
 
 	@Override
@@ -69,8 +72,5 @@ public class LinkBuilderImpl extends AbstractVisibleComponentBuilderImpl<Link> i
 	}
 	
 	/**/
-	
-	private static final String FIELD_TEXT = "text";
-	private static final String FIELD_UNIFORM_RESOURCE_LOCATOR = "uniformResourceLocator";
 	
 }

@@ -19,7 +19,7 @@ public abstract class AbstractOutputStringBuilderImpl<OUTPUT extends OutputStrin
 		if(StringHelperImpl.__isBlank__(value)) {
 			InternationalizationString valueInternationalizationString = getValueInternationalizationString();
 			if(valueInternationalizationString!=null) {
-				InternationalizationHelperImpl.__processInternationalizationStrings__(valueInternationalizationString);
+				InternationalizationHelperImpl.__processStrings__(valueInternationalizationString);
 				output.setValue(valueInternationalizationString.getValue());
 			}
 		}

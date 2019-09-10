@@ -2,9 +2,9 @@ package org.cyk.utility.internationalization;
 
 import org.cyk.utility.test.weld.AbstractWeldUnitTestPerformance;
 import org.junit.jupiter.api.Test;
-import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildInternationalizationKey__;
-import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildInternationalizationString__;
-import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildInternationalizationPhraseFromKeysValues__;
+import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildKey__;
+import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildString__;
+import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildPhraseFromKeysValues__;
 
 public class InternalizationHelperUnitTestPerformance extends AbstractWeldUnitTestPerformance {
 	private static final long serialVersionUID = 1L;
@@ -14,7 +14,7 @@ public class InternalizationHelperUnitTestPerformance extends AbstractWeldUnitTe
 		execute("build internalization key hi",1000000,500,new Runnable() {
 			@Override
 			public void run() {
-				__buildInternationalizationKey__("hi");
+				__buildKey__("hi");
 			}
 		});
 	}	
@@ -24,7 +24,7 @@ public class InternalizationHelperUnitTestPerformance extends AbstractWeldUnitTe
 		execute("build internalization string hi",1000000,500,new Runnable() {
 			@Override
 			public void run() {
-				__buildInternationalizationString__("hi");
+				__buildString__("hi");
 			}
 		});
 	}	
@@ -34,7 +34,7 @@ public class InternalizationHelperUnitTestPerformance extends AbstractWeldUnitTe
 		execute("build internalization string xxx.type",1000000,500,new Runnable() {
 			@Override
 			public void run() {
-				__buildInternationalizationString__("xxx.type");
+				__buildString__("xxx.type");
 			}
 		});
 	}	
@@ -44,7 +44,7 @@ public class InternalizationHelperUnitTestPerformance extends AbstractWeldUnitTe
 		execute("build internalization string type of person",1000000,4000,new Runnable() {
 			@Override
 			public void run() {
-				__buildInternationalizationPhraseFromKeysValues__("type","of","person");
+				__buildPhraseFromKeysValues__("type","of","person");
 			}
 		});
 	}	

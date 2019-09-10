@@ -118,7 +118,9 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 	
 	@Override
 	public FileBuilder getFile(Boolean injectIfNull) {
-		return (FileBuilder) __getInjectIfNull__(FIELD_FILE, injectIfNull);
+		if(file == null && Boolean.TRUE.equals(injectIfNull))
+			file = __inject__(FileBuilder.class);
+		return file;
 	}
 	
 	@Override
@@ -167,7 +169,9 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 	
 	@Override
 	public LinkBuilder getLink(Boolean injectIfNull) {
-		return (LinkBuilder) __getInjectIfNull__(FIELD_LINK, injectIfNull);
+		if(link == null && Boolean.TRUE.equals(injectIfNull))
+			link = __inject__(LinkBuilder.class);
+		return link;
 	}
 	
 	@Override
@@ -194,7 +198,9 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 	
 	@Override
 	public FileImageBuilder getThumbnail(Boolean injectIfNull) {
-		return (FileImageBuilder) __getInjectIfNull__(FIELD_THUMBNAIL, injectIfNull);
+		if(thumbnail == null && Boolean.TRUE.equals(injectIfNull))
+			thumbnail = __inject__(FileImageBuilder.class);
+		return thumbnail;
 	}
 	
 	@Override
@@ -204,8 +210,5 @@ public class OutputFileBuilderImpl extends AbstractOutputBuilderImpl<OutputFile,
 	}
 	
 	/**/
-	
-	private static final String FIELD_FILE = "file";
-	private static final String FIELD_LINK = "link";
-	private static final String FIELD_THUMBNAIL = "thumbnail";
+
 }

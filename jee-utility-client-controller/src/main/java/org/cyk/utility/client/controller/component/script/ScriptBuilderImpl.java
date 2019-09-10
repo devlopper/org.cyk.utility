@@ -39,7 +39,9 @@ public class ScriptBuilderImpl extends AbstractVisibleComponentBuilderImpl<Scrip
 	
 	@Override
 	public org.cyk.utility.programming.script.ScriptBuilder getValue(Boolean injectIfNull) {
-		return (org.cyk.utility.programming.script.ScriptBuilder) __getInjectIfNull__(FIELD_VALUE, injectIfNull);
+		if(value == null && Boolean.TRUE.equals(injectIfNull))
+			value = __inject__(org.cyk.utility.programming.script.ScriptBuilder.class);
+		return value;
 	}
 
 	@Override
@@ -48,6 +50,4 @@ public class ScriptBuilderImpl extends AbstractVisibleComponentBuilderImpl<Scrip
 		return this;
 	}
 	
-	private static final String FIELD_VALUE = "value";
-
 }

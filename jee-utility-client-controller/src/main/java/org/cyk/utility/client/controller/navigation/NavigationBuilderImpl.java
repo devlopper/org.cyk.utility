@@ -161,7 +161,9 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	}
 	@Override
 	public NavigationIdentifierStringBuilder getIdentifierBuilder(Boolean injectIfNull) {
-		return (NavigationIdentifierStringBuilder) __getInjectIfNull__(FIELD_IDENTIFIER_BUILDER, injectIfNull);
+		if(identifierBuilder == null && Boolean.TRUE.equals(injectIfNull))
+			identifierBuilder = __inject__(NavigationIdentifierStringBuilder.class);
+		return identifierBuilder;
 	}
 	
 	@Override
@@ -194,7 +196,9 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	
 	@Override
 	public UrlBuilder getUrl(Boolean injectIfNull) {
-		return (UrlBuilder) __getInjectIfNull__(FIELD_URL, injectIfNull);
+		if(url == null && Boolean.TRUE.equals(injectIfNull))
+			url = __inject__(UrlBuilder.class);
+		return url;
 	}
 
 	@Override
@@ -216,9 +220,11 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	
 	@Override
 	public ObjectByObjectMap getParameterMap(Boolean injectIfNull) {
-		ObjectByObjectMap map = (ObjectByObjectMap) __getInjectIfNull__(FIELD_PARAMETER_MAP, injectIfNull);
-		map.setIsSequential(Boolean.TRUE);
-		return map;
+		if(parameterMap == null && Boolean.TRUE.equals(injectIfNull)) {
+			parameterMap = __inject__(ObjectByObjectMap.class);
+			parameterMap.setIsSequential(Boolean.TRUE);
+		}
+		return parameterMap;
 	}
 	
 	@Override
@@ -235,7 +241,9 @@ public class NavigationBuilderImpl extends AbstractFunctionWithPropertiesAsInput
 	
 	@Override
 	public Objects getDynamicParameterNames(Boolean injectIfNull) {
-		return (Objects) __getInjectIfNull__(FIELD_DYNAMIC_PARAMETER_NAMES, injectIfNull);
+		if(dynamicParameterNames == null && Boolean.TRUE.equals(injectIfNull))
+			dynamicParameterNames = __inject__(Objects.class);
+		return dynamicParameterNames;
 	}
 	
 	@Override

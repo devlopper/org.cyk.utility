@@ -2,8 +2,8 @@ package org.cyk.utility.client.controller.test;
 
 import org.cyk.utility.client.controller.Controller;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldName;
-import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.value.ValueUsageType;
 
 public class TestControllerReadImpl extends AbstractTestControllerFunctionIntegrationImpl implements TestControllerRead {
@@ -18,7 +18,7 @@ public class TestControllerReadImpl extends AbstractTestControllerFunctionIntegr
 		if(mustUnexist) {
 			
 		}else {
-			assertionHelper.assertEquals(valueUsageType+" identitier do not match", object,__inject__(FieldValueGetter.class).execute(one, FieldName.IDENTIFIER, valueUsageType).getOutput());
+			assertionHelper.assertEquals(valueUsageType+" identitier do not match", object,FieldHelperImpl.__readFieldValue__(one, FieldName.IDENTIFIER, valueUsageType));
 		}
 	}
 	

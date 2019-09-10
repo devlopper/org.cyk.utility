@@ -16,8 +16,6 @@ import org.cyk.utility.client.controller.component.output.OutputStringTextMap;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.system.node.SystemNodeClient;
-import org.cyk.utility.time.DurationBuilder;
-import org.cyk.utility.time.DurationStringBuilder;
 
 public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Window> implements WindowBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -131,7 +129,9 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 
 	@Override
 	public OutputStringTextBuilder getTitle(Boolean injectIfNull) {
-		return (OutputStringTextBuilder) __getInjectIfNull__(FIELD_TITLE, injectIfNull);
+		if(title == null && Boolean.TRUE.equals(injectIfNull))
+			title = __inject__(OutputStringTextBuilder.class);
+		return title;
 	}
 	
 	@Override
@@ -183,7 +183,9 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	
 	@Override
 	public ViewBuilder getView(Boolean injectIfNull) {
-		return (ViewBuilder) __getInjectIfNull__(FIELD_VIEW, injectIfNull);
+		if(view == null && Boolean.TRUE.equals(injectIfNull))
+			view = __inject__(ViewBuilder.class);
+		return view;
 	}
 
 	@Override
@@ -199,7 +201,9 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	
 	@Override
 	public MenuBuilderMap getMenuMap(Boolean injectIfNull) {
-		return (MenuBuilderMap) __getInjectIfNull__(FIELD_MENU_MAP, injectIfNull);
+		if(menuMap == null && Boolean.TRUE.equals(injectIfNull))
+			menuMap = __inject__(MenuBuilderMap.class);
+		return menuMap;
 	}
 	
 	@Override
@@ -215,8 +219,8 @@ public class WindowBuilderImpl extends AbstractVisibleComponentBuilderImpl<Windo
 	
 	@Override
 	public DialogBuilder getDialog(Boolean injectIfNull) {
-		DialogBuilder dialog = (DialogBuilder) __getInjectIfNull__(FIELD_DIALOG, injectIfNull);
-		
+		if(dialog == null && Boolean.TRUE.equals(injectIfNull))
+			dialog = __inject__(DialogBuilder.class);
 		return dialog;
 	}
 	

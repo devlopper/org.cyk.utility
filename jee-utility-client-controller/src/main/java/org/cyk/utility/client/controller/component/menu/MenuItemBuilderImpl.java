@@ -101,13 +101,13 @@ public class MenuItemBuilderImpl extends AbstractVisibleComponentBuilderImpl<Men
 	
 	@Override
 	public MenuItemBuilder setCommandableNameInternalizationKeyValue(Object key,InternationalizationKeyStringType type) {
-		getCommandable(Boolean.TRUE).getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelperImpl.__buildInternationalizationKey__(key,type));
+		getCommandable(Boolean.TRUE).getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelperImpl.__buildKey__(key,type));
 		return this;
 	}
 	
 	@Override
 	public MenuItemBuilder setCommandableNameInternalizationKeyValue(Object key) {
-		getCommandable(Boolean.TRUE).getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelperImpl.__buildInternationalizationKey__(key));
+		getCommandable(Boolean.TRUE).getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelperImpl.__buildKey__(key));
 		return this;
 	}
 	

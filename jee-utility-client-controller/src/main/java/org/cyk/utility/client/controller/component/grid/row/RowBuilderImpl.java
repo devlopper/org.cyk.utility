@@ -36,7 +36,9 @@ public class RowBuilderImpl extends AbstractDimensionBuilderImpl<Row> implements
 
 	@Override
 	public CellBuilders getCells(Boolean injectIfNull) {
-		return (CellBuilders) __getInjectIfNull__(FIELD_CELLS, injectIfNull);
+		if(cells == null && Boolean.TRUE.equals(injectIfNull))
+			cells = __inject__(CellBuilders.class);
+		return cells;
 	}
 
 	@Override
@@ -57,7 +59,4 @@ public class RowBuilderImpl extends AbstractDimensionBuilderImpl<Row> implements
 		return this;
 	}
 
-	/**/
-	
-	public static final String FIELD_CELLS = "cells";
 }

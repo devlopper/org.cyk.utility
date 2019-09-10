@@ -31,7 +31,9 @@ public class MessageRenderImpl extends AbstractFunctionWithPropertiesAsInputAndV
 	
 	@Override
 	public Objects getMessages(Boolean injectIfNull) {
-		return (Objects) __getInjectIfNull__(FIELD_MESSAGES, injectIfNull);
+		if(messages == null && Boolean.TRUE.equals(injectIfNull))
+			messages = __inject__(Objects.class);
+		return messages;
 	}
 	
 	@Override
@@ -59,7 +61,9 @@ public class MessageRenderImpl extends AbstractFunctionWithPropertiesAsInputAndV
 	
 	@Override
 	public Notifications getNotifications(Boolean injectIfNull) {
-		return (Notifications) __getInjectIfNull__(FIELD_NOTIFICATIONS, injectIfNull);
+		if(notifications == null && Boolean.TRUE.equals(injectIfNull))
+			notifications = __inject__(Notifications.class);
+		return notifications;
 	}
 	
 	@Override
@@ -87,7 +91,9 @@ public class MessageRenderImpl extends AbstractFunctionWithPropertiesAsInputAndV
 	
 	@Override
 	public NotificationBuilders getNotificationBuilders(Boolean injectIfNull) {
-		return (NotificationBuilders) __getInjectIfNull__(FIELD_NOTIFICATION_BUILDERS, injectIfNull);
+		if(notificationBuilders == null && Boolean.TRUE.equals(injectIfNull))
+			notificationBuilders = __inject__(NotificationBuilders.class);
+		return notificationBuilders;
 	}
 	
 	@Override
@@ -109,7 +115,9 @@ public class MessageRenderImpl extends AbstractFunctionWithPropertiesAsInputAndV
 	
 	@Override
 	public MessageRenderTypes getTypes(Boolean injectIfNull) {
-		return (MessageRenderTypes) __getInjectIfNull__(FIELD_TYPES, injectIfNull);
+		if(types == null && Boolean.TRUE.equals(injectIfNull))
+			types = __inject__(MessageRenderTypes.class);
+		return types;
 	}
 	
 	@Override

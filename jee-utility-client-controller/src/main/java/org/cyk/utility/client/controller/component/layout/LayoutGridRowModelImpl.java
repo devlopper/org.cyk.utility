@@ -16,7 +16,9 @@ public class LayoutGridRowModelImpl extends AbstractObject implements LayoutGrid
 	
 	@Override
 	public Proportions getWidthProportions(Boolean injectIfNull) {
-		return (Proportions) __getInjectIfNull__(FIELD_WIDTH_PROPORTIONS, injectIfNull);
+		if(widthProportions == null && Boolean.TRUE.equals(injectIfNull))
+			widthProportions = __inject__(Proportions.class);
+		return widthProportions;
 	}
 
 	@Override
@@ -25,5 +27,4 @@ public class LayoutGridRowModelImpl extends AbstractObject implements LayoutGrid
 		return this;
 	}
 
-	public static final String FIELD_WIDTH_PROPORTIONS = "widthProportions";
 }

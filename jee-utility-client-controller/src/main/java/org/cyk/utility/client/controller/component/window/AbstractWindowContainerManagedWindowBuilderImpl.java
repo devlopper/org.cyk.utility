@@ -162,7 +162,9 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	
 	@Override
 	public MenuBuilderMap getMenuMap(Boolean injectIfNull) {
-		return (MenuBuilderMap) __getInjectIfNull__(FIELD_MENU_MAP, injectIfNull);
+		if(menuMap == null && Boolean.TRUE.equals(injectIfNull))
+			menuMap = __inject__(MenuBuilderMap.class);
+		return menuMap;
 	}
 	
 	@Override
@@ -178,7 +180,9 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	
 	@Override
 	public WindowBuilder getWindow(Boolean injectIfNull) {
-		return (WindowBuilder) __getInjectIfNull__(FIELD_WINDOW, injectIfNull);
+		if(window == null && Boolean.TRUE.equals(injectIfNull))
+			window = __inject__(WindowBuilder.class);
+		return window;
 	}
 	
 	@Override
@@ -194,7 +198,9 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	
 	@Override
 	public ViewBuilder getView(Boolean injectIfNull) {
-		return (ViewBuilder) __getInjectIfNull__(FIELD_VIEW, injectIfNull);
+		if(view == null && Boolean.TRUE.equals(injectIfNull))
+			view = __inject__(ViewBuilder.class);
+		return view;
 	}
 	
 	@Override
@@ -315,7 +321,4 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	
 	/**/
 	
-	public static final String FIELD_MENU_MAP = "menuMap";
-	public static final String FIELD_VIEW = "view";
-	public static final String FIELD_WINDOW = "window";
 }

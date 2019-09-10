@@ -184,8 +184,8 @@ public abstract class AbstractControllerFunctionImpl extends AbstractSystemFunct
 	
 	protected Collection<Object> __getMessageSummaryInternalizationStringBuilderParameters__(SystemAction systemAction,Response response) {
 		return __injectCollectionHelper__().instanciate(
-				InternationalizationHelperImpl.__buildInternationalizationString__(InternationalizationHelperImpl.__buildInternationalizationKey__(systemAction, InternationalizationKeyStringType.NOUN))
-				,InternationalizationHelperImpl.__buildInternationalizationString__(InternationalizationHelperImpl.__buildInternationalizationKey__(systemAction.getEntityClass()))
+				InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(systemAction, InternationalizationKeyStringType.NOUN))
+				,InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(systemAction.getEntityClass()))
 				);
 	}
 	

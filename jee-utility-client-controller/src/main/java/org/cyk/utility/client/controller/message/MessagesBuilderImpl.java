@@ -20,7 +20,9 @@ public class MessagesBuilderImpl extends AbstractFunctionWithPropertiesAsInputIm
 
 	@Override
 	public Notifications getNotifications(Boolean injectIfNull) {
-		return (Notifications) __getInjectIfNull__(FIELD_NOTIFICATIONS, injectIfNull);
+		if(notifications == null && Boolean.TRUE.equals(injectIfNull))
+			notifications = __inject__(Notifications.class);
+		return notifications;
 	}
 	
 	@Override

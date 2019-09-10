@@ -43,7 +43,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 	 */
 	private static final String INTERNALIZATION_KEYS_MAP_KEY_FORMAT = "%s-%s-%s";
 	
-	public static String __buildInternationalizationKeyCacheEntryIdentifier__(Object value, InternationalizationKeyStringType type) {
+	public static String __buildKeyCacheEntryIdentifier__(Object value, InternationalizationKeyStringType type) {
 		if(value == null)
 			return null;
 		String group = null,valueAsString=null,identifier=null;
@@ -65,11 +65,11 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		return identifier;
 	}
 	
-	public static String __buildInternationalizationKeyCacheEntryIdentifier__(Object value) {
-		return __buildInternationalizationKeyCacheEntryIdentifier__(value,null);
+	public static String __buildKeyCacheEntryIdentifier__(Object value) {
+		return __buildKeyCacheEntryIdentifier__(value,null);
 	}
 	
-	public static InternationalizationKey __buildInternationalizationKey__(Object value, InternationalizationKeyStringType type) {
+	public static InternationalizationKey __buildKey__(Object value, InternationalizationKeyStringType type) {
 		InternationalizationKey internalizationKey = null;
 		//String cacheEntryIdentifier = __buildInternationalizationKeyCacheEntryIdentifier__(value, type);
 		//if(cacheEntryIdentifier != null && (internalizationKey = INTERNALIZATION_KEYS_MAP.get(cacheEntryIdentifier))!=null)
@@ -129,13 +129,13 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 				}else if(value instanceof ServiceNotFoundException) {
 					ServiceNotFoundException serviceNotFoundException = (ServiceNotFoundException) value;
 					internalizationKey.setArguments(new Object[] {
-						__buildInternationalizationString__(__buildInternationalizationKey__(serviceNotFoundException.getSystemAction(),InternationalizationKeyStringType.NOUN))
-						,__buildInternationalizationString__(__buildInternationalizationKey__(serviceNotFoundException.getSystemAction().getEntityClass()))
+						__buildString__(__buildKey__(serviceNotFoundException.getSystemAction(),InternationalizationKeyStringType.NOUN))
+						,__buildString__(__buildKey__(serviceNotFoundException.getSystemAction().getEntityClass()))
 					});
 				}else if(value instanceof EntityNotFoundException) {
 					EntityNotFoundException entityNotFoundException = (EntityNotFoundException) value;
 					internalizationKey.setArguments(new Object[] {
-							__buildInternationalizationString__(__buildInternationalizationKey__(entityNotFoundException.getSystemAction().getEntityClass()))
+							__buildString__(__buildKey__(entityNotFoundException.getSystemAction().getEntityClass()))
 							,entityNotFoundException.getSystemAction().getEntitiesIdentifiers().getFirst()
 					});
 				}else if(value instanceof RuntimeException) {
@@ -147,11 +147,11 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		return internalizationKey;
 	}
 	
-	public static InternationalizationKey __buildInternationalizationKey__(Object value) {
-		return __buildInternationalizationKey__(value,null);
+	public static InternationalizationKey __buildKey__(Object value) {
+		return __buildKey__(value,null);
 	}
 	
-	public static String __buildInternationalizationString__(InternationalizationKey key,Object[] arguments,Locale locale,Case kase) {
+	public static String __buildString__(InternationalizationKey key,Object[] arguments,Locale locale,Case kase) {
 		ValueHelperImpl.__throwIfBlank__("internalization key", key);
 		String cacheEntityIdentifier = key.buildCacheEntryIdentifier(locale,kase);
 		//get it from cache
@@ -162,10 +162,10 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		result = __getFromResourceBundles__(key.getValue(), arguments == null ? key.getArguments() : arguments, locale, kase, null);
 		if(StringHelperImpl.__isBlank__(result)) {
 			//derive it from related
-			Collection<Strings> related = __deriveInternationalizationKeys__(key.getValue());
+			Collection<Strings> related = __deriveKeys__(key.getValue());
 			if(CollectionHelperImpl.__isNotEmpty__(related)) {
 				for(Strings index : related) {
-					result = __buildInternationalizationPhraseFromKeysValues__(index.get());
+					result = __buildPhraseFromKeysValues__(index.get());
 					if(StringHelperImpl.__isNotBlank__(result))
 						break;
 				}
@@ -180,12 +180,12 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		return result;
 	}
 	
-	public static List<Strings> __deriveInternationalizationKeys__(String key) {
+	public static List<Strings> __deriveKeys__(String key) {
 		if(StringHelperImpl.__isBlank__(key))
 			return null;
 		List<Strings> collection = new ArrayList<Strings>();
 		if(key != null) {
-			String keyAsString = __buildInternationalizationKey__(key).getValue();
+			String keyAsString = __buildKey__(key).getValue();
 			if(StringHelperImpl.__isNotBlank__(keyAsString)) {
 				if(StringUtils.contains(keyAsString, ConstantCharacter.DOT)) {
 					//y.x => x of y
@@ -202,19 +202,19 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		return collection;
 	}
 	
-	public static String __buildInternationalizationString__(InternationalizationKey key) {
-		return __buildInternationalizationString__(key, null, null, null);
+	public static String __buildString__(InternationalizationKey key) {
+		return __buildString__(key, null, null, null);
 	}
 	
-	public static String __buildInternationalizationString__(String key,Object[] parameters,Locale locale,Case stringCase) {
-		return __buildInternationalizationString__(new InternationalizationKey().setValue(key),parameters,locale,stringCase);
+	public static String __buildString__(String key,Object[] parameters,Locale locale,Case stringCase) {
+		return __buildString__(new InternationalizationKey().setValue(key),parameters,locale,stringCase);
 	}
 	
-	public static String __buildInternationalizationString__(String key) {
-		return __buildInternationalizationString__(key, null, null, null);
+	public static String __buildString__(String key) {
+		return __buildString__(key, null, null, null);
 	}
 	
-	public static String __buildInternationalizationPhrase__(Collection<InternationalizationKey> keys,Locale locale,Case kase) {
+	public static String __buildPhrase__(Collection<InternationalizationKey> keys,Locale locale,Case kase) {
 		ValueHelperImpl.__throwIfBlank__("internalization phrase keys", keys);
 		locale = ValueHelperImpl.__defaultToIfNull__(locale, __inject__(LocaleHelper.class).getLocaleDefaultIfNull());
 		kase = ValueHelperImpl.__defaultToIfNull__(kase,Case.DEFAULT);
@@ -224,34 +224,34 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		//	return result;
 		Collection<String> strings = new ArrayList<>();
 		for(InternationalizationKey index : keys)
-			strings.add(__buildInternationalizationString__(index, null, locale, Case.NONE));
+			strings.add(__buildString__(index, null, locale, Case.NONE));
 		String string = StringHelperImpl.__concatenate__(strings, SEPARATOR);
 		string = StringHelperImpl.__applyCase__(string, kase);
 		//INTERNALIZATION_STRINGS_MAP.put(cacheEntityIdentifier, string);
 		return string;
 	}
 	
-	public static String __buildInternationalizationPhrase__(Collection<InternationalizationKey> keys) {
-		return __buildInternationalizationPhrase__(keys, null, null);
+	public static String __buildPhrase__(Collection<InternationalizationKey> keys) {
+		return __buildPhrase__(keys, null, null);
 	}
 	
-	public static String __buildInternationalizationPhraseFromKeysValues__(Collection<String> keysValues) {
-		return keysValues == null ? null : __buildInternationalizationPhrase__(keysValues.stream().map(x -> new InternationalizationKey().setValue(x))
+	public static String __buildPhraseFromKeysValues__(Collection<String> keysValues) {
+		return keysValues == null ? null : __buildPhrase__(keysValues.stream().map(x -> new InternationalizationKey().setValue(x))
 				.collect(Collectors.toList()), null, null);
 	}
 	
-	public static String __buildInternationalizationPhraseFromKeysValues__(String...keysValues) {
-		return keysValues == null ? null : __buildInternationalizationPhraseFromKeysValues__(CollectionHelperImpl.__instanciate__(keysValues));
+	public static String __buildPhraseFromKeysValues__(String...keysValues) {
+		return keysValues == null ? null : __buildPhraseFromKeysValues__(CollectionHelperImpl.__instanciate__(keysValues));
 	}
 	
-	public static void __processInternationalizationStrings__(Collection<InternationalizationString> internalizationStrings) {
+	public static void __processStrings__(Collection<InternationalizationString> internalizationStrings) {
 		if(CollectionHelperImpl.__isNotEmpty__(internalizationStrings))
 			for(InternationalizationString index : internalizationStrings)
-				index.setValue(__buildInternationalizationString__(index.getKey(), null, index.getLocale(), index.getKase()));
+				index.setValue(__buildString__(index.getKey(), null, index.getLocale(), index.getKase()));
 	}
 	
-	public static void __processInternationalizationStrings__(InternationalizationString...internalizationStrings) {
-		__processInternationalizationStrings__(CollectionHelperImpl.__instanciate__(internalizationStrings));
+	public static void __processStrings__(InternationalizationString...internalizationStrings) {
+		__processStrings__(CollectionHelperImpl.__instanciate__(internalizationStrings));
 	}
 	
 	public static void __addResourceBundleAt__(String baseName, ClassLoader classLoader,Integer index) {

@@ -275,7 +275,7 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 					commandableBuilder.getNameInternalization(Boolean.TRUE).getKeyBuilder(Boolean.TRUE).setType(InternationalizationKeyStringType.VERB);
 					commandableBuilder.getNameInternalization(Boolean.TRUE).setCase(Case.FIRST_CHARACTER_UPPER);
 					*/
-					commandableBuilder.getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelperImpl.__buildInternationalizationKey__(
+					commandableBuilder.getNameInternationalization(Boolean.TRUE).setKey(InternationalizationHelperImpl.__buildKey__(
 							commandableBuilder.getCommand(Boolean.TRUE).getFunction(Boolean.TRUE).getAction(),InternationalizationKeyStringType.VERB));
 					commandableBuilder.getNameInternationalization(Boolean.TRUE).setKase(Case.FIRST_CHARACTER_UPPER);
 				}

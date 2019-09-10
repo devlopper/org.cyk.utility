@@ -82,7 +82,9 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	
 	@Override
 	public ViewMap getViewMap(Boolean injectIfNull) {
-		return (ViewMap) __getInjectIfNull__(FIELD_VIEW_MAP, injectIfNull);
+		if(viewMap == null && Boolean.TRUE.equals(injectIfNull))
+			viewMap = __inject__(ViewMap.class);
+		return viewMap;
 	}
 
 	@Override
@@ -115,7 +117,9 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	
 	@Override
 	public Files getCascadeStyleSheetFiles(Boolean injectIfNull) {
-		return (Files) __getInjectIfNull__(FIELD_CASCADE_STYLE_SHEET_FILES, injectIfNull);
+		if(cascadeStyleSheetFiles == null && Boolean.TRUE.equals(injectIfNull))
+			cascadeStyleSheetFiles = __inject__(Files.class);
+		return cascadeStyleSheetFiles;
 	}
 	
 	@Override
@@ -143,7 +147,9 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	
 	@Override
 	public Files getJavaScriptFiles(Boolean injectIfNull) {
-		return (Files) __getInjectIfNull__(FIELD_JAVA_SCRIPT_FILES, injectIfNull);
+		if(javaScriptFiles == null && Boolean.TRUE.equals(injectIfNull))
+			javaScriptFiles = __inject__(Files.class);
+		return javaScriptFiles;
 	}
 	
 	@Override
@@ -171,7 +177,9 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	
 	@Override
 	public FileImageMap getImageMap(Boolean injectIfNull) {
-		return (FileImageMap) __getInjectIfNull__(FIELD_IMAGE_MAP, injectIfNull);
+		if(imageMap == null && Boolean.TRUE.equals(injectIfNull))
+			imageMap = __inject__(FileImageMap.class);
+		return imageMap;
 	}
 	
 	@Override
@@ -229,7 +237,9 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	
 	@Override
 	public TagMap getTagMap(Boolean injectIfNull) {
-		return (TagMap) __getInjectIfNull__(FIELD_TAG_MAP, injectIfNull);
+		if(tagMap == null && Boolean.TRUE.equals(injectIfNull))
+			tagMap = __inject__(TagMap.class);
+		return tagMap;
 	}
 	
 	@Override
@@ -251,7 +261,9 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	
 	@Override
 	public TagLinks getTagLinks(Boolean injectIfNull) {
-		return (TagLinks) __getInjectIfNull__(FIELD_TAG_LINKS, injectIfNull);
+		if(tagLinks == null && Boolean.TRUE.equals(injectIfNull))
+			tagLinks = __inject__(TagLinks.class);
+		return tagLinks;
 	}
 	
 	@Override
@@ -279,7 +291,9 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	
 	@Override
 	public TagMetas getTagMetas(Boolean injectIfNull) {
-		return (TagMetas) __getInjectIfNull__(FIELD_TAG_METAS, injectIfNull);
+		if(tagMetas == null && Boolean.TRUE.equals(injectIfNull))
+			tagMetas = __inject__(TagMetas.class);
+		return tagMetas;
 	}
 	
 	@Override
@@ -307,7 +321,9 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	
 	@Override
 	public TagScripts getTagScripts(Boolean injectIfNull) {
-		return (TagScripts) __getInjectIfNull__(FIELD_TAG_SCRIPTS, injectIfNull);
+		if(tagScripts == null && Boolean.TRUE.equals(injectIfNull))
+			tagScripts = __inject__(TagScripts.class);
+		return tagScripts;
 	}
 	
 	@Override
@@ -335,7 +351,9 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	
 	@Override
 	public Scripts getScripts(Boolean injectIfNull) {
-		return (Scripts) __getInjectIfNull__(FIELD_SCRIPTS, injectIfNull);
+		if(scripts == null && Boolean.TRUE.equals(injectIfNull))
+			scripts = __inject__(Scripts.class);
+		return scripts;
 	}
 	
 	@Override
@@ -365,16 +383,6 @@ public abstract class AbstractThemeImpl extends AbstractObject implements Theme,
 	
 	/**/
 
-	public static final String FIELD_SCRIPTS = "scripts";
-	public static final String FIELD_TAG_SCRIPTS = "tagScripts";
-	public static final String FIELD_TAG_LINKS = "tagLinks";
-	public static final String FIELD_TAG_METAS = "tagMetas";
-	public static final String FIELD_VIEW_MAP = "viewMap";
-	public static final String FIELD_CASCADE_STYLE_SHEET_FILES = "cascadeStyleSheetFiles";
-	public static final String FIELD_JAVA_SCRIPT_FILES = "javaScriptFiles";
-	public static final String FIELD_IMAGE_MAP = "imageMap";
-	public static final String FIELD_TAG_MAP = "tagMap";
-	
 	private static final String IMAGE_ICON = "icon";
 	private static final String IMAGE_LOGO = "logo";
 	

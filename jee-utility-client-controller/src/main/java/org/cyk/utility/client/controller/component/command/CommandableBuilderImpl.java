@@ -69,8 +69,8 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 					systemAction = navigation.getIdentifierBuilder().getSystemAction();
 				
 				if(systemAction!=null)
-					derivedName = InternationalizationHelperImpl.__buildInternationalizationString__(InternationalizationHelperImpl
-							.__buildInternationalizationKey__(systemAction,InternationalizationKeyStringType.VERB), null, null, Case.FIRST_CHARACTER_UPPER);
+					derivedName = InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl
+							.__buildKey__(systemAction,InternationalizationKeyStringType.VERB), null, null, Case.FIRST_CHARACTER_UPPER);
 				
 				/*
 				if(navigation!=null) {
@@ -84,7 +84,7 @@ public class CommandableBuilderImpl extends AbstractVisibleComponentBuilderImpl<
 				}	
 				*/
 			}else {
-				InternationalizationHelperImpl.__processInternationalizationStrings__(nameInternationalization);
+				InternationalizationHelperImpl.__processStrings__(nameInternationalization);
 				derivedName = nameInternationalization.getValue();
 			}
 			

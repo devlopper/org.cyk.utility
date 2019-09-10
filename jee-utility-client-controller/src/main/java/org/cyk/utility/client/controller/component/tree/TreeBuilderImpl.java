@@ -66,7 +66,9 @@ public class TreeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tree> i
 	
 	@Override
 	public TreeNodeBuilder getRoot(Boolean injectIfNull) {
-		return (TreeNodeBuilder) __getInjectIfNull__(FIELD_ROOT, injectIfNull);
+		if(root == null && Boolean.TRUE.equals(injectIfNull))
+			root = __inject__(TreeNodeBuilder.class);
+		return root;
 	}
 	
 	@Override
@@ -82,7 +84,9 @@ public class TreeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tree> i
 	
 	@Override
 	public MenuBuilder getMenu(Boolean injectIfNull) {
-		return (MenuBuilder) __getInjectIfNull__(FIELD_MENU, injectIfNull);
+		if(menu == null && Boolean.TRUE.equals(injectIfNull))
+			menu = __inject__(MenuBuilder.class);
+		return menu;
 	}
 	
 	@Override
@@ -109,7 +113,9 @@ public class TreeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tree> i
 
 	@Override
 	public Objects getNodeFamilies(Boolean injectIfNull) {
-		return (Objects) __getInjectIfNull__(FIELD_NODE_FAMILIES, injectIfNull);
+		if(nodeFamilies == null && Boolean.TRUE.equals(injectIfNull))
+			nodeFamilies = __inject__(Objects.class);
+		return nodeFamilies;
 	}
 
 	@Override
@@ -125,7 +131,9 @@ public class TreeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tree> i
 
 	@Override
 	public Objects getDefaultNodeFamilies(Boolean injectIfNull) {
-		return (Objects) __getInjectIfNull__(FIELD_DEFAULT_NODE_FAMILIES, injectIfNull);
+		if(defaultNodeFamilies == null && Boolean.TRUE.equals(injectIfNull))
+			defaultNodeFamilies = __inject__(Objects.class);
+		return defaultNodeFamilies;
 	}
 
 	@Override
@@ -141,7 +149,9 @@ public class TreeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tree> i
 
 	@Override
 	public CommandableBuilder getAddNodeCommandable(Boolean injectIfNull) {
-		return (CommandableBuilder) __getInjectIfNull__(FIELD_ADD_NODE_COMMANDABLE, injectIfNull);
+		if(addNodeCommandable == null && Boolean.TRUE.equals(injectIfNull))
+			addNodeCommandable = __inject__(CommandableBuilder.class);
+		return addNodeCommandable;
 	}
 
 	@Override
@@ -157,7 +167,9 @@ public class TreeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tree> i
 
 	@Override
 	public CommandableBuilder getRemoveNodeCommandable(Boolean injectIfNull) {
-		return (CommandableBuilder) __getInjectIfNull__(FIELD_REMOVE_NODE_COMMANDABLE, injectIfNull);
+		if(removeNodeCommandable == null && Boolean.TRUE.equals(injectIfNull))
+			removeNodeCommandable = __inject__(CommandableBuilder.class);
+		return removeNodeCommandable;
 	}
 
 	@Override
@@ -167,12 +179,5 @@ public class TreeBuilderImpl extends AbstractVisibleComponentBuilderImpl<Tree> i
 	}
 	
 	/**/
-	
-	public static final String FIELD_ROOT = "root";
-	public static final String FIELD_MENU = "menu";
-	public static final String FIELD_NODE_FAMILIES = "nodeFamilies";
-	public static final String FIELD_DEFAULT_NODE_FAMILIES = "defaultNodeFamilies";
-	public static final String FIELD_ADD_NODE_COMMANDABLE = "addNodeCommandable";
-	public static final String FIELD_REMOVE_NODE_COMMANDABLE = "removeNodeCommandable";
 	
 }

@@ -25,7 +25,9 @@ public class FormBuilderImpl extends AbstractVisibleComponentBuilderImpl<Form> i
 
 	@Override
 	public ViewBuilder getView(Boolean injectIfNull) {
-		return (ViewBuilder) __getInjectIfNull__(FIELD_VIEW, injectIfNull);
+		if(view == null && Boolean.TRUE.equals(injectIfNull))
+			view = __inject__(ViewBuilder.class);
+		return view;
 	}
 
 	@Override
@@ -35,7 +37,5 @@ public class FormBuilderImpl extends AbstractVisibleComponentBuilderImpl<Form> i
 	}
 
 	/**/
-	
-	public static final String FIELD_VIEW = "view";
-	
+
 }

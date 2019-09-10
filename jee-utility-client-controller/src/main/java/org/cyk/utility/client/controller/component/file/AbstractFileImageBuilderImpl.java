@@ -45,7 +45,9 @@ public abstract class AbstractFileImageBuilderImpl extends AbstractVisibleCompon
 	
 	@Override
 	public FileBuilder getFile(Boolean injectIfNull) {
-		return (FileBuilder) __getInjectIfNull__(FIELD_FILE, injectIfNull);
+		if(file == null && Boolean.TRUE.equals(injectIfNull))
+			file = __inject__(FileBuilder.class);
+		return file;
 	}
 
 	@Override
@@ -86,8 +88,5 @@ public abstract class AbstractFileImageBuilderImpl extends AbstractVisibleCompon
 		this.height = height;
 		return this;
 	}
-	
-	/**/
-	
-	private static final String FIELD_FILE = "file";
+
 }

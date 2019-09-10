@@ -28,7 +28,9 @@ public class ProxyGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<O
 	
 	@Override
 	public ProxyClassUniformResourceIdentifierStringBuilder getClassUniformResourceIdentifierString(Boolean injectIfNull) {
-		return (ProxyClassUniformResourceIdentifierStringBuilder) __getInjectIfNull__(FIELD_CLASS_UNIFORM_RESOURCE_IDENTIFIER_STRING, injectIfNull);
+		if(classUniformResourceIdentifierString == null && Boolean.TRUE.equals(injectIfNull))
+			classUniformResourceIdentifierString = __inject__(ProxyClassUniformResourceIdentifierStringBuilder.class);
+		return classUniformResourceIdentifierString;
 	}
 	
 	@Override
