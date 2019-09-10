@@ -38,10 +38,10 @@ public class FieldValueCopyUnitTest extends AbstractWeldUnitTest {
 	@Override
 	protected void __listenBefore__()  {
 		super.__listenBefore__();
-		FieldHelperImpl.__setFieldName__(MyPersistenceType.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-		FieldHelperImpl.__setFieldName__(MyDataTransferObjectType.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-		FieldHelperImpl.__setFieldName__(MyPersistenceReflexive.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-		FieldHelperImpl.__setFieldName__(MyDataTransferObjectReflexive.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		FieldHelperImpl.__setName__(MyPersistenceType.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		FieldHelperImpl.__setName__(MyDataTransferObjectType.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		FieldHelperImpl.__setName__(MyPersistenceReflexive.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		FieldHelperImpl.__setName__(MyDataTransferObjectReflexive.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
 		__inject__(FunctionRunnableMap.class).set(InstanceGetterImpl.class, InstanceGetterFunctionRunnableImpl.class);
 	}
 	
@@ -128,8 +128,8 @@ public class FieldValueCopyUnitTest extends AbstractWeldUnitTest {
 	
 	@Test
 	public void myData_to_string(){
-		FieldHelperImpl.__setFieldName__(MyData.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
-		FieldHelperImpl.__setFieldName__(MyData.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, "num");
+		FieldHelperImpl.__setName__(MyData.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM, "id");
+		FieldHelperImpl.__setName__(MyData.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS, "num");
 		MyClass01 instance01 = new MyClass01().setMyData(new MyData().setId("159").setNum("a001"));
 		MyClass02 instance02 = new MyClass02();
 		__inject__(FieldValueCopy.class).setSource(instance01).setDestination(instance02).setFieldName("myData").execute();

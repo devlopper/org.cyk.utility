@@ -41,7 +41,7 @@ public class LayoutItemBuilderUnitTestBenchmark extends AbstractWeldUnitTestBenc
 		}).add("FieldHelperImpl.__buildFieldName__", new Runnable() {
 			@Override
 			public void run() {
-				FieldHelperImpl.__buildFieldName__(klass, fieldName,valueUsageType);
+				FieldHelperImpl.__getName__(klass, fieldName,valueUsageType);
 			}
 		})
 			);

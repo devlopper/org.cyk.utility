@@ -18,4 +18,11 @@ public class InternationalizationString implements Serializable {
 	private Locale locale;
 	private Case kase;
 	private String value;
+	private Boolean isHasBeenProcessed;
+	
+	public InternationalizationString setValue(String value) {
+		this.value = value;
+		setIsHasBeenProcessed(Boolean.TRUE);
+		return this;
+	}
 }

@@ -30,6 +30,18 @@ public class RandomHelperImpl extends AbstractHelper implements RandomHelper, Se
 	
 	/**/
 	
+	public static String __getAlphanumeric__(Integer length){
+		return GENERATOR_ALPHABETIC_NUMERIC.generate(length);
+	}
+	
+	public static String __getAlphabetic__(Integer length){
+		return GENERATOR_ALPHABETIC.generate(length);
+	}
+	
+	public static Number __getNumeric__(Integer length){
+		return new BigDecimal(GENERATOR_NUMERIC.generate(length));
+	}
+	
 	public static final CharacterPredicate CHARACTER_PREDICATE_ALPHABETIC = new CharacterPredicate() {
 		@Override
 		public boolean test(int codePoint) {

@@ -49,7 +49,7 @@ public abstract class AbstractChoicePropertyValueBuilderImpl extends AbstractFun
 					Fields fields = fieldGetter.execute().getOutput();
 					if(__injectCollectionHelper__().isNotEmpty(fields)) {
 						for(Field indexField : fields.get()) {
-							Object fieldValue = FieldHelperImpl.__readFieldValue__(object, indexField);
+							Object fieldValue = FieldHelperImpl.__read__(object, indexField);
 							if(Boolean.TRUE.equals(__injectValueHelper__().isNotEmpty(fieldValue))) {
 								field = indexField;
 								break;
@@ -61,7 +61,7 @@ public abstract class AbstractChoicePropertyValueBuilderImpl extends AbstractFun
 			
 			if(field != null) {
 				fieldName = field.getName();
-				Object value = FieldHelperImpl.__readFieldValue__(object, field);
+				Object value = FieldHelperImpl.__read__(object, field);
 				if(value == null)
 					result = ConstantEmpty.STRING;
 				else

@@ -19,78 +19,83 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
 	@Test
-	public void buildFieldNameSystemIdentifier(){
-		assertThat(FieldHelperImpl.__buildFieldName__(MyClass01.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM)).isEqualTo("identifier");
+	public void buildNameSystemIdentifier(){
+		assertThat(FieldHelperImpl.__getName__(MyClass01.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM)).isEqualTo("identifier");
 	}
 	
 	@Test
-	public void buildFieldNameBusinessIdentifier(){
-		assertThat(FieldHelperImpl.__buildFieldName__(MyClass01.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS)).isEqualTo("code");
+	public void buildNameBusinessIdentifier(){
+		assertThat(FieldHelperImpl.__getName__(MyClass01.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS)).isEqualTo("code");
 	}
 	
 	@Test
-	public void getFieldByName_intField(){
-		assertThat(FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField")).isEqualTo(FieldUtils.getField(MyClass01.class, "intField",Boolean.TRUE));
+	public void getName_intField(){
+		assertThat(FieldHelperImpl.__getByName__(MyClass01.class, "intField")).isEqualTo(FieldUtils.getField(MyClass01.class, "intField",Boolean.TRUE));
 	}	
 
 	@Test
 	public void getField_sub_sIntField(){
-		assertThat(FieldHelperImpl.__getFieldByNames__(MyClass01.class, "sub","sIntField")).isEqualTo(FieldUtils.getField(MyClass01Sub.class, "sIntField",Boolean.TRUE));
+		assertThat(FieldHelperImpl.__getByNames__(MyClass01.class, "sub","sIntField")).isEqualTo(FieldUtils.getField(MyClass01Sub.class, "sIntField",Boolean.TRUE));
 	}	
 	
 	@Test
-	public void readFieldValue(){
-		assertThat(FieldHelperImpl.__readFieldValue__(new MyClass01().setIdentifier("i01"),"identifier")).isEqualTo("i01");
+	public void read(){
+		assertThat(FieldHelperImpl.__read__(new MyClass01().setIdentifier("i01"),"identifier")).isEqualTo("i01");
 	}
 	
 	@Test
-	public void readFieldValueSystemIdentifier(){
-		assertThat(FieldHelperImpl.__readFieldValueSystemIdentifier__(new MyClass01().setIdentifier("i01"))).isEqualTo("i01");
+	public void readSystemIdentifier(){
+		assertThat(FieldHelperImpl.__readSystemIdentifier__(new MyClass01().setIdentifier("i01"))).isEqualTo("i01");
 	}
 	
 	@Test
-	public void readFieldValueBusinessIdentifier(){
-		assertThat(FieldHelperImpl.__readFieldValueBusinessIdentifier__(new MyClass01().setCode("c01"))).isEqualTo("c01");
+	public void readBusinessIdentifier(){
+		assertThat(FieldHelperImpl.__readBusinessIdentifier__(new MyClass01().setCode("c01"))).isEqualTo("c01");
 	}
 	
 	@Test
-	public void readFieldValue_nested(){
+	public void read_nested(){
 		MyClass01 object = new MyClass01();
 		object.setSub(new MyClass01Sub());
 		object.getSub().setStringField("subValue");
-		assertThat(FieldHelperImpl.__readFieldValue__(object,"sub.stringField")).isEqualTo("subValue");
+		assertThat(FieldHelperImpl.__read__(object,"sub.stringField")).isEqualTo("subValue");
 	}
 	
 	@Test
-	public void writeFieldValue(){
+	public void read_static(){
+		assertThat(FieldHelperImpl.__read__(MyClass01.class,"STATIC_FIELD_01")).isEqualTo("staticValue01");
+	}
+	
+	@Test
+	public void write(){
 		MyClass01 object = new MyClass01();
 		assertThat(object.getIdentifier()).isNull();
-		FieldHelperImpl.__writeFieldValue__(object,"identifier","i01");
+		FieldHelperImpl.__write__(object,"identifier","i01");
 		assertThat(object.getIdentifier()).isEqualTo("i01");
 	}
 	
 	@Test
-	public void writeFieldValue_nested(){
+	public void write_nested(){
 		MyClass01 object = new MyClass01();
 		object.setSub(new MyClass01Sub());
 		assertThat(object.getSub().getIntegerField()).isNull();
-		FieldHelperImpl.__writeFieldValue__(object,"sub.integerField",17);
+		FieldHelperImpl.__write__(object,"sub.integerField",17);
 		assertThat(object.getSub().getIntegerField()).isEqualTo(17);
 	}
 	
 	@Test
-	public void writeFieldValueSystemIdentifier(){
+	public void writeSystemIdentifier(){
 		MyClass01 object = new MyClass01();
 		assertThat(object.getIdentifier()).isNull();
-		FieldHelperImpl.__writeFieldValueSystemIdentifier__(object,"i01");
+		FieldHelperImpl.__writeSystemIdentifier__(object,"i01");
 		assertThat(object.getIdentifier()).isEqualTo("i01");
 	}
 	
 	@Test
-	public void writeFieldValueBusinessIdentifier(){
+	public void writeBusinessIdentifier(){
 		MyClass01 object = new MyClass01();
 		assertThat(object.getCode()).isNull();
-		FieldHelperImpl.__writeFieldValueBusinessIdentifier__(object,"c01");
+		FieldHelperImpl.__writeBusinessIdentifier__(object,"c01");
 		assertThat(object.getCode()).isEqualTo("c01");
 	}
 	
@@ -174,6 +179,8 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 		public Object getMyProperty() {
 			return x;
 		}
+		
+		public static final String STATIC_FIELD_01 = "staticValue01";
 	}
 	
 	@Getter @Setter @Accessors(chain=true)

@@ -13,7 +13,6 @@ import org.cyk.utility.client.controller.data.DataSelect;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.internationalization.InternationalizationKeyStringType;
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
 
@@ -31,14 +30,13 @@ public class WindowContainerManagedWindowBuilderSelectDataDefaultImpl extends Ab
 					if(__inject__(ArrayHelper.class).isNotEmpty(strings)) {
 						InputBuilder<?, ?> input = (InputBuilder<?, ?>) viewBuilder.addInputBuilderByObjectByFieldNames(data, Boolean.TRUE, strings);
 						if(Arrays.equals(strings, new String[] {DataSelect.PROPERTY_ONE}) || Arrays.equals(strings, new String[] {DataSelect.PROPERTY_MANY})) {							
-							input.setLabelValue(__inject__(InternalizationStringBuilder.class).setKeyValue(StringUtils.substringBefore(data.getClass().getSimpleName()
-									,"Select")).setKeyType(Arrays.equals(strings, new String[] {DataSelect.PROPERTY_ONE}) ? null
-											: InternationalizationKeyStringType.PLURAL).execute().getOutput());
+							input.setLabelValue(__buildInternationalizationString__(StringUtils.substringBefore(data.getClass().getSimpleName()
+									,"Select"), Arrays.equals(strings, new String[] {DataSelect.PROPERTY_ONE}) ? null
+											: InternationalizationKeyStringType.PLURAL, null));
 						}
 					}
 				}		
 			}
 		}
 	}
-
 }

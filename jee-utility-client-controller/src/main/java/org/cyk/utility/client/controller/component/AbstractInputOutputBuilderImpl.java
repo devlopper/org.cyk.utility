@@ -44,8 +44,8 @@ public abstract class AbstractInputOutputBuilderImpl<INPUT_OUTPUT extends InputO
 								String objectFieldName = StringUtils.contains(fieldName, ConstantCharacter.DOT.toString()) ? StringUtils.substringBeforeLast(fieldName, ConstantCharacter.DOT.toString()) : null;
 								fieldName = objectFieldName == null ? fieldName : StringUtils.substringAfterLast(fieldName, ConstantCharacter.DOT.toString());
 								if(objectFieldName!=null)
-									object = FieldHelperImpl.__readFieldValue__(object, objectFieldName);
-								field = FieldHelperImpl.__getFieldByName__(object.getClass(), fieldName);
+									object = FieldHelperImpl.__read__(object, objectFieldName);
+								field = FieldHelperImpl.__getByName__(object.getClass(), fieldName);
 								map.put(tempFieldName, field);
 							}
 						}	

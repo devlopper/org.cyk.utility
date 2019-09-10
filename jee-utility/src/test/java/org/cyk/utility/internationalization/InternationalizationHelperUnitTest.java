@@ -5,11 +5,14 @@ import static org.cyk.utility.internationalization.InternationalizationHelperImp
 import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildKey__;
 import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildPhraseFromKeysValues__;
 import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildString__;
+import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__buildPhrase__;
 import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__deriveKeys__;
 import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__processStrings__;
+import static org.cyk.utility.internationalization.InternationalizationHelperImpl.__processPhrases__;
 
 import java.net.ConnectException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.cyk.utility.string.Case;
@@ -242,14 +245,79 @@ public class InternationalizationHelperUnitTest extends AbstractWeldUnitTest {
 	public void processString(){
 		InternationalizationString internalizationString = new InternationalizationString();
 		internalizationString.setKey(new InternationalizationKey().setValue("hi"));
-		assertThat(internalizationString.getValue()).isNull();;
+		assertThat(internalizationString.getValue()).isNull();
+		assertThat(internalizationString.getIsHasBeenProcessed()).isNull();
 		__processStrings__(internalizationString);
 		assertThat(internalizationString.getValue()).isEqualTo("salut");
+		assertThat(internalizationString.getIsHasBeenProcessed()).isTrue();
 	}
 	
 	@Test
-	public void buildPhrase(){
-		assertThat(__buildPhraseFromKeysValues__("type","of","person")).isEqualTo("type de personne");
+	public void processString_noKey_butValueSet(){
+		InternationalizationString internalizationString = new InternationalizationString();
+		assertThat(internalizationString.getValue()).isNull();
+		assertThat(internalizationString.getIsHasBeenProcessed()).isNull();
+		internalizationString.setValue("my custom value");
+		assertThat(internalizationString.getValue()).isEqualTo("my custom value");
+		assertThat(internalizationString.getIsHasBeenProcessed()).isTrue();
+		__processStrings__(internalizationString);
+		assertThat(internalizationString.getValue()).isEqualTo("my custom value");
+		assertThat(internalizationString.getIsHasBeenProcessed()).isTrue();
+	}
+	
+	@Test
+	public void buildPhrase_null(){
+		assertThat(__buildPhrase__(null)).isEqualTo(null);
+	}
+	
+	@Test
+	public void buildPhrase_empty(){
+		assertThat(__buildPhrase__(Arrays.asList())).isEqualTo(null);
+	}
+	
+	@Test
+	public void buildPhrase_oneWord(){
+		assertThat(__buildPhrase__(Arrays.asList(new InternationalizationKey().setValue("hi")))).isEqualTo("Salut");
+	}
+	
+	@Test
+	public void buildPhrase_twoWords(){
+		assertThat(__buildPhrase__(Arrays.asList(new InternationalizationKey().setValue("hi")
+				,new InternationalizationKey().setValue("good")))).isEqualTo("Salut bon");
+	}
+	
+	@Test
+	public void buildPhrase_fromKeysValues(){
+		assertThat(__buildPhraseFromKeysValues__("type","of","person")).isEqualTo("Type de personne");
+	}
+	
+	@Test
+	public void processPhrase(){
+		InternationalizationPhrase phrase = new InternationalizationPhrase();
+		phrase.addString("hi");
+		phrase.addString("good");
+		phrase.addNoun(__inject__(SystemActionCreate.class));
+		__processPhrases__(phrase);
+		assertThat(phrase.getValue()).isEqualTo("salut bon création");
+	}
+	
+	@Test
+	public void processPhrase_caseFIRST_CHARACTER_UPPER_REMAINDER_LOWER(){
+		InternationalizationPhrase phrase = new InternationalizationPhrase().setKase(Case.FIRST_CHARACTER_UPPER_REMAINDER_LOWER);
+		phrase.addString("hi");
+		phrase.addString("good");
+		phrase.addNoun(__inject__(SystemActionCreate.class));
+		__processPhrases__(phrase);
+		assertThat(phrase.getValue()).isEqualTo("Salut bon création");
+	}
+	
+	@Test
+	public void processPhrase_noKeys(){
+		InternationalizationPhrase phrase = new InternationalizationPhrase();
+		phrase.getStrings(Boolean.TRUE).add(new InternationalizationString().setValue("bonjour"));
+		phrase.getStrings(Boolean.TRUE).add(new InternationalizationString().setValue("TO 2019"));
+		__processPhrases__(phrase);
+		assertThat(phrase.getValue()).isEqualTo("bonjour TO 2019");
 	}
 	
 	/**/

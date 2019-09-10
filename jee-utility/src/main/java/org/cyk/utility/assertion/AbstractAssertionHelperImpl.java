@@ -70,9 +70,9 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 	
 	@Override
 	public AssertionHelper assertNotNull(String message, Object object,FieldName fieldName, ValueUsageType valueUsageType) {
-		Field field = FieldHelperImpl.__getFieldByName__(object.getClass(), fieldName, valueUsageType);
+		Field field = FieldHelperImpl.__getByName__(object.getClass(), fieldName, valueUsageType);
 		if(field != null)
-			assertNotNull(message, FieldHelperImpl.__readFieldValue__(object, field));
+			assertNotNull(message, FieldHelperImpl.__read__(object, field));
 		return this;
 	}
 	

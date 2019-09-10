@@ -33,9 +33,9 @@ public class ControllerFunctionCreatorImpl extends AbstractControllerFunctionImp
 			Integer count = 0;
 			for(Object index : __entities__) {
 				if(__entityClassSystemIdentifierField__ != null)
-					FieldHelperImpl.__writeFieldValue__(index, __entityClassSystemIdentifierField__, CollectionHelperImpl.__getElementAt__(systemIdentifiers, count));
+					FieldHelperImpl.__write__(index, __entityClassSystemIdentifierField__, CollectionHelperImpl.__getElementAt__(systemIdentifiers, count));
 				if(__entityClassBusinessIdentifierField__ != null)
-					FieldHelperImpl.__writeFieldValue__(index, __entityClassBusinessIdentifierField__, CollectionHelperImpl.__getElementAt__(businessIdentifiers, count));
+					FieldHelperImpl.__write__(index, __entityClassBusinessIdentifierField__, CollectionHelperImpl.__getElementAt__(businessIdentifiers, count));
 				count++;
 			}	
 		}

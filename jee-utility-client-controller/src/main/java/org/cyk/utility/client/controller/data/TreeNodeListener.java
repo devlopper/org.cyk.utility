@@ -12,7 +12,7 @@ public interface TreeNodeListener<NODE> {
 	}
 	
 	default String getType(NODE node) {
-		Object value = FieldHelperImpl.__readFieldValue__(node, "type");
+		Object value = FieldHelperImpl.__read__(node, "type");
 		if(value instanceof DataIdentifiedByStringAndCoded)
 			value = ((DataIdentifiedByStringAndCoded)value).getCode();
 		else if(value instanceof org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByStringAndCoded)

@@ -1,6 +1,7 @@
 package org.cyk.utility.client.controller.component.window;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.client.controller.Controller;
@@ -12,9 +13,9 @@ import org.cyk.utility.client.controller.data.Row;
 import org.cyk.utility.client.controller.session.SessionAttributeEnumeration;
 import org.cyk.utility.client.controller.session.SessionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
+import org.cyk.utility.internationalization.InternationalizationHelperImpl;
 import org.cyk.utility.internationalization.InternationalizationKeyStringType;
-import org.cyk.utility.internationalization.InternalizationPhraseBuilder;
-import org.cyk.utility.internationalization.InternalizationStringBuilder;
+import org.cyk.utility.internationalization.InternationalizationPhrase;
 import org.cyk.utility.request.RequestParameterValueMapper;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.system.action.SystemAction;
@@ -83,7 +84,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 			
 		}else {
 			if(window.getTitle()==null || __injectStringHelper__().isBlank(window.getTitle().getValue())) {
-				InternalizationPhraseBuilder windowTitleInternalizationPhraseBuilder = __getWindowTitleInternalizationPhraseBuilder__(systemAction);
+				/*InternalizationPhraseBuilder windowTitleInternalizationPhraseBuilder = __getWindowTitleInternalizationPhraseBuilder__(systemAction);
 				if(windowTitleInternalizationPhraseBuilder == null) {
 					windowTitleInternalizationPhraseBuilder = __inject__(InternalizationPhraseBuilder.class)
 							.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER).setKeyType(InternationalizationKeyStringType.NOUN))
@@ -91,6 +92,12 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 				}
 				if(windowTitleInternalizationPhraseBuilder != null)
 					window.setTitleValue(windowTitleInternalizationPhraseBuilder.execute().getOutput());
+				*/
+				InternationalizationPhrase phrase = __getWindowTitleInternationalizationPhrase__(systemAction);
+				if(phrase != null) {
+					InternationalizationHelperImpl.__processPhrases__(phrase);
+					window.setTitleValue(phrase.getValue());
+				}
 			}
 			__execute__(window,systemAction,__getFormClass__(getFormClass()),__getRowClass__(getRowClass()));
 		}
@@ -109,7 +116,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 		window.setView(view);
 		return window;
 	}
-	
+	/*
 	public InternalizationPhraseBuilder __getWindowTitleInternalizationPhraseBuilder__(SystemAction systemAction) {
 		InternalizationPhraseBuilder internalizationPhraseBuilder = __inject__(InternalizationPhraseBuilder.class)
 				.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction).setCase(Case.FIRST_CHARACTER_UPPER)
@@ -122,6 +129,15 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 			.addStrings(__inject__(InternalizationStringBuilder.class).setKeyValue(systemAction.getNextAction()).setKeyType(InternationalizationKeyStringType.NOUN));	
 		}
 		return internalizationPhraseBuilder;
+	}
+	*/
+	public InternationalizationPhrase __getWindowTitleInternationalizationPhrase__(SystemAction systemAction) {
+		InternationalizationPhrase internationalizationPhrase = new InternationalizationPhrase().setKase(Case.FIRST_CHARACTER_UPPER_REMAINDER_LOWER);
+		internationalizationPhrase.addNoun(systemAction).addString("of").addNoun(systemAction.getEntities().getElementClass());
+		if(systemAction.getNextAction() != null) {
+			internationalizationPhrase.addString("for").addNoun(systemAction.getNextAction());	
+		}
+		return internationalizationPhrase;
 	}
 	
 	protected Object __getEntity__(SystemAction systemAction) {
@@ -321,4 +337,19 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	
 	/**/
 	
+	protected static String __buildInternationalizationString__(Object key,InternationalizationKeyStringType keyType,Object[] arguments,Locale locale,Case kase) {
+		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, keyType),arguments,locale,kase);
+	}
+	
+	protected static String __buildInternationalizationString__(Object key,InternationalizationKeyStringType keyType,Case kase) {
+		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, keyType),null,null,kase);
+	}
+	
+	protected static String __buildInternationalizationString__(Object key,Case kase) {
+		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, null),null,null,kase);
+	}
+	
+	protected static String __buildInternationalizationString__(Object key) {
+		return InternationalizationHelperImpl.__buildString__(InternationalizationHelperImpl.__buildKey__(key, null),null,null,null);
+	}
 }

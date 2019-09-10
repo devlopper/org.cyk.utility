@@ -35,7 +35,7 @@ public class FieldBenchmark extends AbstractWeldUnitTestBenchmark implements Ser
 		}).add("FieldHelperImpl.__buildFieldName__", new Runnable() {
 			@Override
 			public void run() {
-				FieldHelperImpl.__buildFieldName__(klass, fieldName,valueUsageType);
+				FieldHelperImpl.__getName__(klass, fieldName,valueUsageType);
 			}
 		})
 			);
@@ -61,7 +61,7 @@ public class FieldBenchmark extends AbstractWeldUnitTestBenchmark implements Ser
 		}).add("FieldHelperImpl.__getFieldByName__", new Runnable() {
 			@Override
 			public void run() {
-				FieldHelperImpl.__getFieldByName__(klass, fieldName);
+				FieldHelperImpl.__getByName__(klass, fieldName);
 			}
 		}).add("Apache FieldUtils.getField", new Runnable() {
 			@Override
@@ -91,7 +91,7 @@ public class FieldBenchmark extends AbstractWeldUnitTestBenchmark implements Ser
 		}).add("FieldHelperImpl.__readFieldValue__", new Runnable() {
 			@Override
 			public void run() {
-				FieldHelperImpl.__readFieldValue__(object, fieldName);
+				FieldHelperImpl.__read__(object, fieldName);
 			}
 		}).add("Apache FieldUtils.readField", new Runnable() {
 			@Override
@@ -125,7 +125,7 @@ public class FieldBenchmark extends AbstractWeldUnitTestBenchmark implements Ser
 		}).add("FieldHelperImpl.__writeFieldValue__", new Runnable() {
 			@Override
 			public void run() {
-				FieldHelperImpl.__writeFieldValue__(object, fieldName,"Hello");
+				FieldHelperImpl.__write__(object, fieldName,"Hello");
 			}
 		}).add("Apache FieldUtils.writeField", new Runnable() {
 			@Override

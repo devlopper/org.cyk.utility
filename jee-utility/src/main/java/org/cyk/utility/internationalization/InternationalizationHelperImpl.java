@@ -165,7 +165,7 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 			Collection<Strings> related = __deriveKeys__(key.getValue());
 			if(CollectionHelperImpl.__isNotEmpty__(related)) {
 				for(Strings index : related) {
-					result = __buildPhraseFromKeysValues__(index.get());
+					result = __buildPhraseFromKeysValues__(index.get(),ValueHelperImpl.__defaultToIfBlank__(kase, Case.NONE));
 					if(StringHelperImpl.__isNotBlank__(result))
 						break;
 				}
@@ -206,8 +206,8 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		return __buildString__(key, null, null, null);
 	}
 	
-	public static String __buildString__(String key,Object[] parameters,Locale locale,Case stringCase) {
-		return __buildString__(new InternationalizationKey().setValue(key),parameters,locale,stringCase);
+	public static String __buildString__(String key,Object[] parameters,Locale locale,Case kase) {
+		return __buildString__(new InternationalizationKey().setValue(key),parameters,locale,kase);
 	}
 	
 	public static String __buildString__(String key) {
@@ -215,43 +215,89 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 	}
 	
 	public static String __buildPhrase__(Collection<InternationalizationKey> keys,Locale locale,Case kase) {
-		ValueHelperImpl.__throwIfBlank__("internalization phrase keys", keys);
+		if(CollectionHelperImpl.__isEmpty__(keys))
+			return null;
 		locale = ValueHelperImpl.__defaultToIfNull__(locale, __inject__(LocaleHelper.class).getLocaleDefaultIfNull());
-		kase = ValueHelperImpl.__defaultToIfNull__(kase,Case.DEFAULT);
+		kase = ValueHelperImpl.__defaultToIfNull__(kase,Case.FIRST_CHARACTER_UPPER_REMAINDER_LOWER);
 		//String cacheEntityIdentifier = InternationalizationKey.__buildCacheEntryIdentifier__(keys,locale,kase);
 		//String result = INTERNALIZATION_STRINGS_MAP.get(cacheEntityIdentifier);
 		//if(StringHelperImpl.__isNotBlank__(result))
 		//	return result;
-		Collection<String> strings = new ArrayList<>();
+		Collection<String> phraseStrings = new ArrayList<>();
 		for(InternationalizationKey index : keys)
-			strings.add(__buildString__(index, null, locale, Case.NONE));
-		String string = StringHelperImpl.__concatenate__(strings, SEPARATOR);
-		string = StringHelperImpl.__applyCase__(string, kase);
+			phraseStrings.add(__buildString__(index, null, locale, Case.NONE));
+		String phrase = ____buildPhrase____(phraseStrings, kase);
 		//INTERNALIZATION_STRINGS_MAP.put(cacheEntityIdentifier, string);
-		return string;
+		return phrase;
+	}
+	
+	private static String ____buildPhrase____(Collection<String> strings,Case kase) {
+		return CollectionHelperImpl.__isEmpty__(strings) ? null : StringHelperImpl.__applyCase__(StringHelperImpl.__concatenate__(strings, SEPARATOR), kase);
 	}
 	
 	public static String __buildPhrase__(Collection<InternationalizationKey> keys) {
 		return __buildPhrase__(keys, null, null);
 	}
 	
-	public static String __buildPhraseFromKeysValues__(Collection<String> keysValues) {
+	public static String __buildPhraseFromKeysValues__(Collection<String> keysValues,Locale locale,Case kase) {
 		return keysValues == null ? null : __buildPhrase__(keysValues.stream().map(x -> new InternationalizationKey().setValue(x))
-				.collect(Collectors.toList()), null, null);
+				.collect(Collectors.toList()), locale, kase);
+	}
+	
+	public static String __buildPhraseFromKeysValues__(Collection<String> keysValues,Case kase) {
+		return __buildPhraseFromKeysValues__(keysValues, null, kase);
+	}
+	
+	public static String __buildPhraseFromKeysValues__(Collection<String> keysValues) {
+		return __buildPhraseFromKeysValues__(keysValues, null, null);
+	}
+	
+	public static String __buildPhraseFromKeysValues__(Locale locale,Case kase,String...keysValues) {
+		return keysValues == null ? null : __buildPhraseFromKeysValues__(CollectionHelperImpl.__instanciate__(keysValues),locale,kase);
+	}
+	
+	public static String __buildPhraseFromKeysValues__(Case kase,String...keysValues) {
+		return __buildPhraseFromKeysValues__(null, kase, keysValues);
 	}
 	
 	public static String __buildPhraseFromKeysValues__(String...keysValues) {
-		return keysValues == null ? null : __buildPhraseFromKeysValues__(CollectionHelperImpl.__instanciate__(keysValues));
+		return __buildPhraseFromKeysValues__(null, null, keysValues);
+	}
+	
+	public static String __buildPhrase__(Collection<InternationalizationString> strings,Case kase) {
+		if(CollectionHelperImpl.__isEmpty__(strings))
+			return null;
+		Collection<String> phraseStrings = new ArrayList<>();
+		for(InternationalizationString index : strings) {
+			if(!Boolean.TRUE.equals(index.getIsHasBeenProcessed()))
+				__processStrings__(index);
+			phraseStrings.add(index.getValue());
+		}
+		return ____buildPhrase____(phraseStrings, kase);
 	}
 	
 	public static void __processStrings__(Collection<InternationalizationString> internalizationStrings) {
 		if(CollectionHelperImpl.__isNotEmpty__(internalizationStrings))
 			for(InternationalizationString index : internalizationStrings)
-				index.setValue(__buildString__(index.getKey(), null, index.getLocale(), index.getKase()));
+				if(!Boolean.TRUE.equals(index.getIsHasBeenProcessed()))
+					index.setValue(__buildString__(index.getKey(), null, index.getLocale(), index.getKase()));
 	}
 	
 	public static void __processStrings__(InternationalizationString...internalizationStrings) {
 		__processStrings__(CollectionHelperImpl.__instanciate__(internalizationStrings));
+	}
+	
+	public static void __processPhrases__(Collection<InternationalizationPhrase> internalizationPhrases) {
+		if(CollectionHelperImpl.__isNotEmpty__(internalizationPhrases))
+			for(InternationalizationPhrase index : internalizationPhrases)
+				if(CollectionHelperImpl.__isNotEmpty__(index.getStrings())) {
+					__processStrings__(index.getStrings().get());
+					index.setValue(____buildPhrase____(index.getStrings().get().stream().map(InternationalizationString::getValue).collect(Collectors.toList()), index.getKase()));
+				}
+	}
+	
+	public static void __processPhrases__(InternationalizationPhrase...internalizationPhrases) {
+		__processPhrases__(CollectionHelperImpl.__instanciate__(internalizationPhrases));
 	}
 	
 	public static void __addResourceBundleAt__(String baseName, ClassLoader classLoader,Integer index) {

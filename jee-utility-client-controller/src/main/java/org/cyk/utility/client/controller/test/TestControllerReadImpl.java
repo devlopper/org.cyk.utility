@@ -18,7 +18,7 @@ public class TestControllerReadImpl extends AbstractTestControllerFunctionIntegr
 		if(mustUnexist) {
 			
 		}else {
-			assertionHelper.assertEquals(valueUsageType+" identitier do not match", object,FieldHelperImpl.__readFieldValue__(one, FieldName.IDENTIFIER, valueUsageType));
+			assertionHelper.assertEquals(valueUsageType+" identitier do not match", object,FieldHelperImpl.__read__(one, FieldName.IDENTIFIER, valueUsageType));
 		}
 	}
 	

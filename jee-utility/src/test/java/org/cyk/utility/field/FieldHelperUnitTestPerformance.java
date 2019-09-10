@@ -17,7 +17,7 @@ public class FieldHelperUnitTestPerformance extends AbstractWeldUnitTestPerforma
 		execute("Get field",100,10,new Runnable() {
 			@Override
 			public void run() {
-				FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField");
+				FieldHelperImpl.__getByName__(MyClass01.class, "intField");
 			}
 		});
 	}	
@@ -27,7 +27,7 @@ public class FieldHelperUnitTestPerformance extends AbstractWeldUnitTestPerforma
 		execute("Get field",1000,20,new Runnable() {
 			@Override
 			public void run() {
-				FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField");
+				FieldHelperImpl.__getByName__(MyClass01.class, "intField");
 			}
 		});
 	}	
@@ -37,7 +37,7 @@ public class FieldHelperUnitTestPerformance extends AbstractWeldUnitTestPerforma
 		execute("Get field",10000,30,new Runnable() {
 			@Override
 			public void run() {
-				FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField");
+				FieldHelperImpl.__getByName__(MyClass01.class, "intField");
 			}
 		});
 	}	
@@ -47,7 +47,7 @@ public class FieldHelperUnitTestPerformance extends AbstractWeldUnitTestPerforma
 		execute("Get field",100000,40,new Runnable() {
 			@Override
 			public void run() {
-				FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField");
+				FieldHelperImpl.__getByName__(MyClass01.class, "intField");
 			}
 		});
 	}	
@@ -57,7 +57,7 @@ public class FieldHelperUnitTestPerformance extends AbstractWeldUnitTestPerforma
 		execute("Get field",1000000,50,new Runnable() {
 			@Override
 			public void run() {
-				FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField");
+				FieldHelperImpl.__getByName__(MyClass01.class, "intField");
 			}
 		});
 	}	
@@ -67,7 +67,7 @@ public class FieldHelperUnitTestPerformance extends AbstractWeldUnitTestPerforma
 		execute("Get field",10000000,150,new Runnable() {
 			@Override
 			public void run() {
-				FieldHelperImpl.__getFieldByName__(MyClass01.class, "intField");
+				FieldHelperImpl.__getByName__(MyClass01.class, "intField");
 			}
 		});
 	}	

@@ -80,7 +80,7 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 			if(annotationCollection == null) {
 				annotationCollection = new HashSet<>();
 				if(field == null && fieldNames!=null) {
-					field = FieldHelperImpl.__getFieldByNames__(klass, fieldNames);
+					field = FieldHelperImpl.__getByNames__(klass, fieldNames);
 				}else if(method == null && methodName!=null) {
 					method = MethodUtils.getMatchingMethod(klass, methodName);
 				}
@@ -221,7 +221,7 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 		if(object == null)
 			return null;
 		if(field == null && fieldNames!=null)
-			field = FieldHelperImpl.__getFieldByNames__(object.getClass(), fieldNames);
+			field = FieldHelperImpl.__getByNames__(object.getClass(), fieldNames);
 		else if(method == null && StringHelperImpl.__isNotBlank__(methodName))
 			method = MethodUtils.getMatchingAccessibleMethod(object.getClass(), methodName);
 

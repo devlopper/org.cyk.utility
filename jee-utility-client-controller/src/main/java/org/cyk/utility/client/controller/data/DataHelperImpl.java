@@ -7,7 +7,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelperImpl;
-import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.helper.AbstractHelper;
@@ -109,7 +108,7 @@ public class DataHelperImpl extends AbstractHelper implements DataHelper,Seriali
 		if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
 			names = __inject__(Strings.class);
 			for(Field index : fields.get())
-				names.add(__inject__(FieldValueGetter.class).setField(index).execute().getOutput().toString());
+				names.add(FieldHelperImpl.__readStatic__(index).toString());
 		}
 		return names;
 	}

@@ -9,6 +9,7 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.playground.server.persistence.entities.MyEntity;
 import org.cyk.utility.playground.server.persistence.entities.Node;
 import org.cyk.utility.playground.server.persistence.entities.NodeHierarchy;
+import org.cyk.utility.playground.server.persistence.entities.Person;
 import org.cyk.utility.server.persistence.PersistableClassesGetter;
 
 @Dependent @System
@@ -19,6 +20,7 @@ public class PersistableClassesGetterImpl extends AbstractFunctionWithProperties
 	protected Classes __execute__() throws Exception {
 		Classes classes = __inject__(Classes.class);
 		classes.add(MyEntity.class);
+		classes.add(Person.class);
 		classes.add(NodeHierarchy.class);
 		classes.add(Node.class);
 		return classes;

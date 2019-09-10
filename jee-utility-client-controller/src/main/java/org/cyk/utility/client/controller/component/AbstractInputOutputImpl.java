@@ -70,7 +70,7 @@ public abstract class AbstractInputOutputImpl<T> extends AbstractVisibleComponen
 	}
 	
 	protected Object ____getValueToSetValueFromFieldValue____(Object object,Field field) {
-		return FieldHelperImpl.__readFieldValue__(object, field);
+		return FieldHelperImpl.__read__(object, field);
 	}
 	
 	@Override
@@ -78,7 +78,7 @@ public abstract class AbstractInputOutputImpl<T> extends AbstractVisibleComponen
 		Object object = getObject();
 		Field field = getField();
 		if(object!=null && field!=null) {
-			FieldHelperImpl.__writeFieldValue__(object,field, __getValueToSetFieldValueFromValue__());
+			FieldHelperImpl.__write__(object,field, __getValueToSetFieldValueFromValue__());
 		}
 		return this;
 	}

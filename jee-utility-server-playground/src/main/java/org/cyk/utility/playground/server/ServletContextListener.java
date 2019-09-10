@@ -7,6 +7,7 @@ import java.util.Collection;
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebListener;
 
+import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.playground.server.business.api.MyEntityBusiness;
 import org.cyk.utility.playground.server.business.api.NodeBusiness;
 import org.cyk.utility.playground.server.persistence.entities.ApplicationScopeLifeCycleListenerEntities;
@@ -16,6 +17,7 @@ import org.cyk.utility.playground.server.persistence.entities.Nodes;
 import org.cyk.utility.playground.server.persistence.entities.NodesImpl;
 import org.cyk.utility.random.RandomHelper;
 import org.cyk.utility.server.deployment.AbstractServletContextListener;
+import org.cyk.utility.server.representation.impl.DataLoader;
 import org.w3c.dom.traversal.NodeIterator;
 
 @WebListener
@@ -25,7 +27,7 @@ public class ServletContextListener extends AbstractServletContextListener imple
 	@Override
 	public void __initialize__(ServletContext context) {
 		super.__initialize__(context);
-		__inject__(ApplicationScopeLifeCycleListenerEntities.class).initialize(null);
+		__inject__(ApplicationScopeLifeCycleListener.class).initialize(null);
 		/*Collection<MyEntity> myEntities = new ArrayList<>();
 		for(Integer index = 0;index < 100;index = index + 1) {
 			myEntities.add(new MyEntity().setIdentifier(index.toString()).setCode(__inject__(RandomHelper.class).getAlphanumeric(4)).setName(__inject__(RandomHelper.class).getAlphanumeric(10)));

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.client.controller.component.ComponentRole;
 import org.cyk.utility.client.controller.component.command.CommandableBuilder;
 import org.cyk.utility.client.controller.component.input.InputFile;
 import org.cyk.utility.client.controller.component.input.InputFileBuilder;
@@ -41,7 +40,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderEditDataImpl ex
 				setView(viewBuilder);
 				
 			}
-			viewBuilder.addComponentBuilderByObjectByFieldNames(form, Form.PROPERTY_TITLE).addRoles(ComponentRole.TITLE);
+			//viewBuilder.addComponentBuilderByObjectByFieldNames(form, Form.PROPERTY_TITLE).addRoles(ComponentRole.TITLE);
 			
 			__execute__(form,systemAction,data,viewBuilder);
 			
