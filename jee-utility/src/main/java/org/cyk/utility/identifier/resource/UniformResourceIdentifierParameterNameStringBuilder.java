@@ -2,6 +2,7 @@ package org.cyk.utility.identifier.resource;
 
 import org.cyk.utility.string.StringFunction;
 
+@Deprecated
 public interface UniformResourceIdentifierParameterNameStringBuilder extends StringFunction {
 
 	Object getName();

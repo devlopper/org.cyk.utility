@@ -9,4 +9,6 @@ public interface RequestHelper extends Helper  {
 	Client getClient();
 	Client getClient(Boolean injectIfNull);
 	RequestHelper setClient(Client client);
+	
+	Object getProperty(Object request,RequestProperty property);
 }

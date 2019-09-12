@@ -35,7 +35,9 @@ public abstract class AbstractStringFunctionImpl extends AbstractFunctionWithPro
 
 	@Override
 	public StringFormat getFormat(Boolean injectIfNull) {
-		return (StringFormat) __getInjectIfNull__(FIELD_FORMAT, injectIfNull);
+		if(format == null && Boolean.TRUE.equals(injectIfNull))
+			format = __inject__(StringFormat.class);
+		return format;
 	}
 
 	@Override
@@ -45,7 +47,5 @@ public abstract class AbstractStringFunctionImpl extends AbstractFunctionWithPro
 	}
 	
 	/**/
-	
-	public static final String FIELD_FORMAT = "format";
 
 }

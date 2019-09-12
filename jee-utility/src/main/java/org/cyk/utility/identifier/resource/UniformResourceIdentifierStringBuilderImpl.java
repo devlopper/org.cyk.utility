@@ -17,7 +17,7 @@ import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.string.StringByStringMap;
 import org.cyk.utility.string.StringFormat;
 
-@Dependent
+@Dependent @Deprecated
 public class UniformResourceIdentifierStringBuilderImpl extends AbstractStringFunctionImpl implements UniformResourceIdentifierStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

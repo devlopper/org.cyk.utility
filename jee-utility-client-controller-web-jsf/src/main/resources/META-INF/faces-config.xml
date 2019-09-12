@@ -3,16 +3,22 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
 	version="2.2">
-	
+
 	<application>
 		<resource-handler>org.cyk.utility.client.controller.web.jsf.ResourceHandler</resource-handler>
-		<!--
-		<el-resolver>org.cyk.utility.client.controller.web.jsf.BeanELResolver</el-resolver>
-		-->
+		<!-- <el-resolver>org.cyk.utility.client.controller.web.jsf.BeanELResolver</el-resolver> -->
+		
+		<system-event-listener>
+			<system-event-class>javax.faces.event.PostConstructApplicationEvent</system-event-class>
+			<system-event-listener-class>org.cyk.utility.client.controller.web.jsf.ApplicationListener</system-event-listener-class>
+		</system-event-listener>
+		
 	</application>
+
+	
 
 	<locale-config>
 		<supported-locale>fr</supported-locale>
 	</locale-config>
-	
+
 </faces-config>

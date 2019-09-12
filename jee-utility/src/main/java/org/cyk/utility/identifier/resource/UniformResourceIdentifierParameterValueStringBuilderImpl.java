@@ -13,7 +13,7 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.system.action.SystemAction;
 
-@Dependent
+@Dependent @Deprecated
 public class UniformResourceIdentifierParameterValueStringBuilderImpl extends AbstractStringFunctionImpl implements UniformResourceIdentifierParameterValueStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

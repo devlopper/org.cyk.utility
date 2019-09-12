@@ -9,7 +9,7 @@ import org.cyk.utility.field.FieldName;
 import org.cyk.utility.string.AbstractStringFunctionImpl;
 import org.cyk.utility.system.action.SystemAction;
 
-@Dependent
+@Dependent @Deprecated
 public class UniformResourceIdentifierParameterNameStringBuilderImpl extends AbstractStringFunctionImpl implements UniformResourceIdentifierParameterNameStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

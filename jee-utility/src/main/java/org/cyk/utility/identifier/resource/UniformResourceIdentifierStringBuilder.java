@@ -8,6 +8,7 @@ import org.cyk.utility.string.StringFunction;
  * @author CYK
  *
  */
+@Deprecated
 public interface UniformResourceIdentifierStringBuilder extends StringFunction {
 
 	UniformResourceIdentifierStringBuilder setFormatArguments(Object...arguments);

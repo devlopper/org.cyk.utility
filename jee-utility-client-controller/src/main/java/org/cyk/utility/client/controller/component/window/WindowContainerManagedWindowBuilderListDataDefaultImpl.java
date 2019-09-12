@@ -27,28 +27,6 @@ public class WindowContainerManagedWindowBuilderListDataDefaultImpl extends Abst
 						,org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByString.PROPERTY_NUMBER_OF_CHILDREN);
 			}
 			for(String index : fieldNames.get()) {
-				/*ColumnBuilder column = __inject__(ColumnBuilder.class); 
-				column.addFieldNameStrings(RowData.PROPERTY_DATA,index);
-				//which kind of field index is
-				//TODO build column using ColumnBuilder in order to well set title and field value path
-				Field field = __inject__(FieldGetter.class).setToken(index).setTokenLocation(StringLocation.EXAT)
-						.setClazz(__inject__(getSystemAction().getEntityClass()).getClass()).execute().getOutput().getFirst();
-				Class<?> fieldType = __inject__(FieldTypeGetter.class).execute(field).getOutput();
-				column.setHeaderTextValue(__inject__(InternalizationStringBuilder.class).setKeyValue(index).execute().getOutput());
-				if(!__injectClassHelper__().isBelongsToJavaPackages(fieldType)) {
-					Fields fields = __inject__(FieldGetter.class).setClazz(__inject__(fieldType).getClass()).addNameToken("name").addNameToken(Data.PROPERTY_CODE).execute().getOutput();
-					if(__injectCollectionHelper__().isNotEmpty(fields)) {
-						//TODO according to a list pick up the first matching
-						//index = index + ".name";//TODO get name first else code
-						//index = index + ".code";
-						column.addFieldNameStrings(__injectCollectionHelper__().getFirst(fields).getName());
-					}else {
-						
-					}	
-				}
-				gridBuilder.addColumns(column);
-				*/
-				//column.addFieldNameStrings(RowData.PROPERTY_DATA,index);
 				gridBuilder.addColumnsByFieldNames(__injectFieldHelper__().join(RowData.PROPERTY_DATA,index));				
 			}
 		}

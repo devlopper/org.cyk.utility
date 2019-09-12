@@ -156,6 +156,10 @@ public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelp
 		return cause;
 	}
 	
+	public static void __throw__(Exception exception) {
+		throw new RuntimeException(exception);
+	}
+	
 	public static void __throw__(RuntimeException runtimeException) {
 		throw runtimeException;
 	}

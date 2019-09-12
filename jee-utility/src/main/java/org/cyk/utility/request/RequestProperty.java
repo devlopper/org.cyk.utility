@@ -5,7 +5,7 @@ public enum RequestProperty {
 	SCHEME
 	,HOST
 	,PORT
-	,CONTEXT
+	,CONTEXT//FIXME to be removed
 	,PATH
 	,QUERY
 	

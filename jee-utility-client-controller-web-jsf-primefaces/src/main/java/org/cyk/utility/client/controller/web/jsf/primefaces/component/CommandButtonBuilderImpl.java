@@ -48,7 +48,7 @@ public class CommandButtonBuilderImpl extends AbstractUIComponentBuilderImpl<Com
 				SystemAction action = commandable.getNavigation().getSystemAction();	
 				String methodName = __injectStringHelper__().applyCase(StringUtils.substringBefore(action.getClass().getSimpleName(),"Impl")+"Class",Case.FIRST_CHARACTER_LOWER);
 				if(__injectStringHelper__().isNotBlank(methodName))
-					url = "#{indexRow.getUrlBySystemActionClass(componentHelper."+methodName+")}";
+					url = "#{indexRow.getUrlBySystemActionClass(request,componentHelper."+methodName+")}";
 			}
 			if(__inject__(StringHelper.class).isNotBlank(url))
 				valueExpressionMap.set("onclick",__buildValueExpressionString__("window.open('"+url+"','_self');return false;"));

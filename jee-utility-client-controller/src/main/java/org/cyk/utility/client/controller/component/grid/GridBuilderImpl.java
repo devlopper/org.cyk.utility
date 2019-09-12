@@ -71,7 +71,6 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 					grid.getObjects(Boolean.TRUE).add(row);
 			}
 		}
-		
 		ViewBuilder view = getView(Boolean.TRUE);
 		ComponentsBuilder componentsBuilder = view.getComponentsBuilder(Boolean.TRUE);
 		LayoutBuilder layout = componentsBuilder.getLayout(Boolean.TRUE);
@@ -119,7 +118,6 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 				grid.getColumns().add(index.execute().getOutput());
 			}
 		}
-		
 		RowBuilders rows = getRows();
 		if(__injectCollectionHelper__().isNotEmpty(rows)) {
 			grid.setRows(__inject__(Rows.class));
@@ -167,7 +165,6 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 		}
 			
 		grid.setView(view.execute().getOutput());
-		
 		ViewBuilderMap viewMap = getViewMap();
 		if(viewMap == null)
 			viewMap = __inject__(ViewBuilderMap.class);
@@ -215,7 +212,6 @@ public class GridBuilderImpl extends AbstractVisibleComponentBuilderImpl<Grid> i
 				}
 			}
 		}
-		
 	}
 	
 	@Override

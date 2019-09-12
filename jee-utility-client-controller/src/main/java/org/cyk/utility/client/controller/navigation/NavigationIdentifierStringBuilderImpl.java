@@ -13,7 +13,7 @@ import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionUpdate;
 
-@Dependent
+@Dependent @Deprecated
 public class NavigationIdentifierStringBuilderImpl extends AbstractStringFunctionImpl implements NavigationIdentifierStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 

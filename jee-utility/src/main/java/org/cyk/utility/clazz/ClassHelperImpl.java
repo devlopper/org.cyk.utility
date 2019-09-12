@@ -322,5 +322,17 @@ public class ClassHelperImpl extends AbstractHelper implements ClassHelper , Ser
 			return Boolean.FALSE;
 		return baseClass.isAssignableFrom(aClass);
 	}
+	
+	public static Boolean __isInstanceOfOne__(Class<?> aClass,Collection<Class<?>> classes) {
+		if(classes!=null)
+			for(Class<?> index : classes)
+				if(__isInstanceOf__(aClass, index))
+					return Boolean.TRUE;
+		return Boolean.FALSE;
+	}
+	
+	public static Boolean __isInstanceOfOne__(Class<?> aClass, Class<?>... classes) {
+		return __isInstanceOfOne__(aClass, __inject__(CollectionHelper.class).instanciate(classes));
+	}
 
 }

@@ -9,7 +9,9 @@ import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.client.controller.AbstractSystemContextListener;
 import org.cyk.utility.client.controller.component.theme.AbstractThemeClassGetterImpl;
+import org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl;
 import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.system.node.SystemNodeClient;
 
 public abstract class AbstractServletContextListener extends AbstractSystemContextListener<ServletContext> implements javax.servlet.ServletContextListener,Objectable,Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,6 +25,9 @@ public abstract class AbstractServletContextListener extends AbstractSystemConte
 	
 	@Override
 	protected void __initialize__(ServletContext context) {
+		SystemNodeClient.DEPLOYMENT.setUniformResourceIdentifierPathRoot(context.getContextPath());
+		UniformResourceIdentifierHelperImpl.PATH_ROOT = context.getContextPath();
+		
 		AbstractContextGetterImpl.SERVLET_CONTEXT = context;
 		super.__initialize__(context);
 		AbstractThemeClassGetterImpl.CLASS_NAME = getConfigurationParameterValue(Constant.CONTEXT_PARAMETER_NAME_THEME_CLASS_NAME);

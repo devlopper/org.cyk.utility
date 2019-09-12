@@ -15,7 +15,7 @@ public interface Row extends Objectable {
 	Row addListeners(Collection<RowListener> listeners);
 	Row addListeners(RowListener...listeners);
 	
-	String getUrlBySystemActionClass(Class<? extends SystemAction> aClass);
+	String getUrlBySystemActionClass(Object request,Class<? extends SystemAction> aClass);
 	/*
 	ObjectByClassMap getSystemActionIdentifierMap();
 	ObjectByClassMap getSystemActionIdentifierMap(Boolean injectIfNull);

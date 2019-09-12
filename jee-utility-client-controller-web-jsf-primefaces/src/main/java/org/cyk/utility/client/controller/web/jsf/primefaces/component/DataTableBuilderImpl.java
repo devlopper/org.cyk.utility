@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.model.ListDataModel;
 
+import org.cyk.utility.client.controller.ControllerFunctionReaderImpl;
 import org.cyk.utility.client.controller.component.Component;
 import org.cyk.utility.client.controller.component.Components;
 import org.cyk.utility.client.controller.component.grid.Grid;
@@ -61,9 +62,9 @@ public class DataTableBuilderImpl extends AbstractComponentBuilderImpl<DataTable
 			dataTable.setPaginator(Boolean.TRUE);
 			dataTable.setPaginatorAlwaysVisible(Boolean.FALSE);
 			dataTable.setPaginatorPosition("top");
-			dataTable.setRows(AbstractRepresentationFunctionReaderImpl.QUERY_NUMBER_OF_TUPLE == null ? 25 : AbstractRepresentationFunctionReaderImpl.QUERY_NUMBER_OF_TUPLE);
+			dataTable.setRows(ControllerFunctionReaderImpl.COUNT == null ? 25 : ControllerFunctionReaderImpl.COUNT.intValue());
 			//dataTable.setPaginatorTemplate("{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}");
-			dataTable.setRowsPerPageTemplate("5,10,15");
+			dataTable.setRowsPerPageTemplate("5,10,15,20,25,50,100");
 		}else {
 			Objects objects = grid.getObjects();
 			if(__inject__(CollectionHelper.class).isEmpty(objects)) {
