@@ -65,6 +65,11 @@ public class InternationalizationHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
+	public void buildKey_blank(){
+		assertThat(__buildKey__("   ")).isNull();
+	}
+	
+	@Test
 	public void buildKey_hi(){
 		assertThat(__buildKey__("hi").getValue()).isEqualTo("hi");
 	}

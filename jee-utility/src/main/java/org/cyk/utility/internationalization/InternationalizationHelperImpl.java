@@ -70,80 +70,77 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 	}
 	
 	public static InternationalizationKey __buildKey__(Object value, InternationalizationKeyStringType type) {
+		if(value == null)
+			return null;
 		InternationalizationKey internalizationKey = null;
 		//String cacheEntryIdentifier = __buildInternationalizationKeyCacheEntryIdentifier__(value, type);
 		//if(cacheEntryIdentifier != null && (internalizationKey = INTERNALIZATION_KEYS_MAP.get(cacheEntryIdentifier))!=null)
 		//	return internalizationKey;
 		//Value
-		Object key = value;
-		if(key!=null) {
-			if(key instanceof Throwable) {
-				key = key.getClass().getName();
-				if(StringUtils.endsWith((String)key, "Impl"))
-					key = StringUtils.substringBeforeLast((String)key, "Impl");
-			}
-			
-			if(key instanceof String) {
-				
-			}
-			
-			if(key instanceof SystemAction) {
-				//key = ((SystemAction)key).getClass();
-				if(((SystemAction)key).getIdentifier() == null)
-					key = ((SystemAction)key).getClass();
-				else
-					key = ((SystemAction)key).getIdentifier();
-			}
-			if(key instanceof Class) {
-				Class<?> clazz = (Class<?>) key;
-				if(ClassHelperImpl.__isInstanceOf__(clazz, SystemAction.class))
-					key = StringUtils.substringAfter(clazz.getSimpleName(), SystemAction.class.getSimpleName());
-				else
-					key = StringHelperImpl.__applyCase__(clazz.getSimpleName(),Case.FIRST_CHARACTER_LOWER);
-				
-				//if(__injectClassHelper__().isInstanceOf(clazz, AbstractSystemActionImpl.class))
-					key = StringUtils.substringBeforeLast(key.toString(), "Impl");
-			}
-			
-			String[] strings = StringUtils.split(key.toString(),DOT);
-			Collection<String> tokens = null;
-			
-			if(ArrayHelperImpl.__isNotEmpty__(strings)) {
-				tokens = new ArrayList<>();
-				for(String index : strings) {
-					tokens.addAll(StringHelperImpl.__splitByCharacterTypeCamelCase__(index));
-				}
-				internalizationKey = new InternationalizationKey().setValue(StringHelperImpl.__concatenate__(tokens,DOT).toLowerCase());
-			}
-					
-			if(internalizationKey != null) {
-				//if(cacheEntryIdentifier != null)
-				//	INTERNALIZATION_KEYS_MAP.put(cacheEntryIdentifier, internalizationKey);
-				if(type!=null)
-					internalizationKey = internalizationKey.setValue(String.format(type.getFormat(), internalizationKey.getValue()));
-				//Arguments
-				if(value instanceof UnknownHostException) {
-					internalizationKey.setArguments(new Object[] {((UnknownHostException)value).getMessage().trim()});
-				}else if(value instanceof ConnectException) {
-					internalizationKey.setArguments(new Object[] {((ConnectException) value).getMessage().trim()});
-				}else if(value instanceof ServiceNotFoundException) {
-					ServiceNotFoundException serviceNotFoundException = (ServiceNotFoundException) value;
-					internalizationKey.setArguments(new Object[] {
-						__buildString__(__buildKey__(serviceNotFoundException.getSystemAction(),InternationalizationKeyStringType.NOUN))
-						,__buildString__(__buildKey__(serviceNotFoundException.getSystemAction().getEntityClass()))
-					});
-				}else if(value instanceof EntityNotFoundException) {
-					EntityNotFoundException entityNotFoundException = (EntityNotFoundException) value;
-					internalizationKey.setArguments(new Object[] {
-							__buildString__(__buildKey__(entityNotFoundException.getSystemAction().getEntityClass()))
-							,entityNotFoundException.getSystemAction().getEntitiesIdentifiers().getFirst()
-					});
-				}else if(value instanceof RuntimeException) {
-					RuntimeException runtimeException = (RuntimeException) value;
-					internalizationKey.setArguments(new Object[] {runtimeException.getMessage()});
-				}				
-			}
+		Object key = value;		
+		if(key instanceof Throwable) {
+			key = key.getClass().getName();
+			if(StringUtils.endsWith((String)key, "Impl"))
+				key = StringUtils.substringBeforeLast((String)key, "Impl");
 		}
+		if(key instanceof SystemAction) {
+			if(((SystemAction)key).getIdentifier() == null)
+				key = ((SystemAction)key).getClass();
+			else
+				key = ((SystemAction)key).getIdentifier();
+		}
+		if(key instanceof String) {
+			if(StringHelperImpl.__isBlank__((String) key))
+				return null;
+		}
+		if(key instanceof Class) {
+			Class<?> clazz = (Class<?>) key;
+			if(ClassHelperImpl.__isInstanceOf__(clazz, SystemAction.class))
+				key = StringUtils.substringAfter(clazz.getSimpleName(), SystemAction.class.getSimpleName());
+			else
+				key = StringHelperImpl.__applyCase__(clazz.getSimpleName(),Case.FIRST_CHARACTER_LOWER);
+			key = StringUtils.substringBeforeLast(key.toString(), "Impl");
+		}
+		
+		String[] strings = StringUtils.split(key.toString(),DOT);
+		Collection<String> tokens = null;
+		
+		if(ArrayHelperImpl.__isNotEmpty__(strings)) {
+			tokens = new ArrayList<>();
+			for(String index : strings) {
+				tokens.addAll(StringHelperImpl.__splitByCharacterTypeCamelCase__(index));
+			}
+			internalizationKey = new InternationalizationKey().setValue(StringHelperImpl.__concatenate__(tokens,DOT).toLowerCase());
+		}
+				
+		if(internalizationKey != null) {
+			//if(cacheEntryIdentifier != null)
+			//	INTERNALIZATION_KEYS_MAP.put(cacheEntryIdentifier, internalizationKey);
+			if(type!=null)
+				internalizationKey = internalizationKey.setValue(String.format(type.getFormat(), internalizationKey.getValue()));
+			//Arguments
+			if(value instanceof UnknownHostException) {
+				internalizationKey.setArguments(new Object[] {((UnknownHostException)value).getMessage().trim()});
+			}else if(value instanceof ConnectException) {
+				internalizationKey.setArguments(new Object[] {((ConnectException) value).getMessage().trim()});
+			}else if(value instanceof ServiceNotFoundException) {
+				ServiceNotFoundException serviceNotFoundException = (ServiceNotFoundException) value;
+				internalizationKey.setArguments(new Object[] {
+					__buildString__(__buildKey__(serviceNotFoundException.getSystemAction(),InternationalizationKeyStringType.NOUN))
+					,__buildString__(__buildKey__(serviceNotFoundException.getSystemAction().getEntityClass()))
+				});
+			}else if(value instanceof EntityNotFoundException) {
+				EntityNotFoundException entityNotFoundException = (EntityNotFoundException) value;
+				internalizationKey.setArguments(new Object[] {
+						__buildString__(__buildKey__(entityNotFoundException.getSystemAction().getEntityClass()))
+						,entityNotFoundException.getSystemAction().getEntitiesIdentifiers().getFirst()
+				});
+			}else if(value instanceof RuntimeException) {
+				RuntimeException runtimeException = (RuntimeException) value;
+				internalizationKey.setArguments(new Object[] {runtimeException.getMessage()});
+			}				
+		}
+		
 		return internalizationKey;
 	}
 	
@@ -301,6 +298,8 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 	}
 	
 	public static void __addResourceBundleAt__(String baseName, ClassLoader classLoader,Integer index) {
+		if(classLoader == null)
+			classLoader = InternationalizationHelperImpl.class.getClassLoader();
 		Boolean found = Boolean.FALSE;
 		for(ResourceBundle indexResourceBundle : RESOURCE_BUNDLES)
 			if(indexResourceBundle.getName().equals(baseName) && indexResourceBundle.getClassLoader().equals(classLoader)) {
@@ -316,18 +315,22 @@ public class InternationalizationHelperImpl extends AbstractHelper implements In
 		}
 	}
 	
+	public static void __addResourceBundleAt__(String baseName,Integer index) {
+		__addResourceBundleAt__(baseName,null,index);
+	}
+	
 	public void __addResourceBundle__(String baseName, ClassLoader classLoader) {
 		__addResourceBundleAt__(baseName, classLoader, null);
 	}
 	
 	public static void __addResourceBundle__(String baseName,Integer index) {
-		__addResourceBundleAt__(baseName, InternationalizationHelperImpl.class.getClassLoader(),index);
+		__addResourceBundleAt__(baseName, null,index);
 	}
 	
 	public static void __addResourceBundle__(String... baseNames) {
 		if(baseNames!=null)
 			for(String index : baseNames)
-				__addResourceBundleAt__(index, InternationalizationHelperImpl.class.getClassLoader(),null);
+				__addResourceBundleAt__(index, null,null);
 	}
 	
 	public static String __getFromResourceBundles__(String identifier,Object[] arguments,Locale locale,Case aCase,Collection<ResourceBundle> resourceBundles) {

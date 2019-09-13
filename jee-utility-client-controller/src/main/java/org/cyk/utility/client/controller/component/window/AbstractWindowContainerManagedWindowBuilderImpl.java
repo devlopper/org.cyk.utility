@@ -133,7 +133,7 @@ public abstract class AbstractWindowContainerManagedWindowBuilderImpl extends Ab
 	*/
 	public InternationalizationPhrase __getWindowTitleInternationalizationPhrase__(SystemAction systemAction) {
 		InternationalizationPhrase internationalizationPhrase = new InternationalizationPhrase().setKase(Case.FIRST_CHARACTER_UPPER_REMAINDER_LOWER);
-		internationalizationPhrase.addNoun(systemAction).addString("of").addNoun(systemAction.getEntities().getElementClass());
+		internationalizationPhrase.addNoun(systemAction).addString("of").addString(systemAction.getEntities().getElementClass());
 		if(systemAction.getNextAction() != null) {
 			internationalizationPhrase.addString("for").addNoun(systemAction.getNextAction());	
 		}

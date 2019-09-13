@@ -12,7 +12,7 @@ import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
 import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCodedAndNamed;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.identifier.resource.UniformResourceIdentifierParameterValueMatrix;
-import org.cyk.utility.string.repository.StringRepositoryResourceBundle;
+import org.cyk.utility.internationalization.InternationalizationHelperImpl;
 
 public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends AbstractApplicationScopeLifeCycleListener implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,7 +21,7 @@ public abstract class AbstractApplicationScopeLifeCycleListenerEntities extends 
 	public void __initialize__(Object object) {
 		__inject__(org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener.class).initialize(null);
 		String packageName = getClass().getPackage().getName();		
-		__inject__(StringRepositoryResourceBundle.class).addBundleAt(packageName+ConstantCharacter.DOT+ConstantString.MESSAGE,0);
+		InternationalizationHelperImpl.__addResourceBundleAt__(packageName+ConstantCharacter.DOT+ConstantString.MESSAGE,0);
 		
 		Class<?>[] basesClasses = __getUniformResourceIdentifierParameterValueMatrixClassesBasesClasses__();
 		if(__inject__(ArrayHelper.class).isNotEmpty(basesClasses)) {
