@@ -8,20 +8,27 @@ import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelpe
 import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl.__buildQuery__;
 import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl.__build__;
 import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl.__getComponent__;
+import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl.__normalizeParameterName__;
 import static org.cyk.utility.identifier.resource.UniformResourceIdentifierHelperImpl.__setPathByIdentifier__;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
+import org.cyk.utility.system.action.SystemActionCreateImpl;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionList;
 import org.cyk.utility.system.action.SystemActionRead;
+import org.cyk.utility.system.action.SystemActionReadImpl;
 import org.cyk.utility.system.action.SystemActionTree;
 import org.cyk.utility.system.action.SystemActionUpdate;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
@@ -30,6 +37,14 @@ import org.junit.jupiter.api.Test;
 public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
+	@Override
+	protected void __listenBefore__() {
+		super.__listenBefore__();
+		UniformResourceIdentifierHelperImpl.PATHS_MAP.clear();
+		UniformResourceIdentifierHelperImpl.PATHS_CACHE_MAP.clear();
+		UniformResourceIdentifierHelperImpl.PATH_ROOT = null;
+	}
+	
 	@Test
 	public void getComponent_null(){
 		__assertComponents__(null, null, null, null, null, null, null, null, null);
@@ -56,8 +71,38 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 	}
 	
 	@Test
+	public void normalizeParameterName_null(){
+		assertThat(__normalizeParameterName__(null)).isEqualTo(null);
+	}
+	
+	@Test
+	public void normalizeParameterName_empty(){
+		assertThat(__normalizeParameterName__("")).isEqualTo("");
+	}
+	
+	@Test
+	public void normalizeParameterName_blank(){
+		assertThat(__normalizeParameterName__("  ")).isEqualTo("  ");
+	}
+	
+	@Test
+	public void normalizeParameterName(){
+		assertThat(__normalizeParameterName__("a_b")).isEqualTo("ab");
+	}
+	
+	@Test
 	public void buildParameterName_null(){
 		assertThat(__buildParameterName__(null)).isEqualTo(null);
+	}
+
+	@Test
+	public void buildParameterName_empty(){
+		assertThat(__buildParameterName__("")).isEqualTo(null);
+	}
+	
+	@Test
+	public void buildParameterName_blank(){
+		assertThat(__buildParameterName__(" ")).isEqualTo(null);
 	}
 	
 	@Test
@@ -66,47 +111,62 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 	}
 	
 	@Test
-	public void buildParameterName_class(){
+	public void buildParameterName_class_Class(){
 		assertThat(__buildParameterName__(Class.class)).isEqualTo("class");
 	}
 	
 	@Test
-	public void buildParameterName_class_entity(){
+	public void buildParameterName_class_SystemAction(){
+		assertThat(__buildParameterName__(SystemAction.class)).isEqualTo("action");
+	}
+	
+	@Test
+	public void buildParameterName_class_MyEntity(){
+		assertThat(__buildParameterName__(MyEntity.class)).isEqualTo("myentity");
+	}
+	
+	@Test
+	public void buildParameterName_enum_custom(){
+		assertThat(__buildParameterName__(Enum.V01)).isEqualTo("v01");
+	}
+	
+	@Test
+	public void buildParameterName_enum_parametername_entity_class(){
 		assertThat(__buildParameterName__(ParameterName.ENTITY_CLASS)).isEqualTo("entityclass");
 	}
 	
 	@Test
-	public void buildParameterName_class_entity_instance(){
+	public void buildParameterName_enum_parametername_entity_identifier(){
 		assertThat(__buildParameterName__(ParameterName.ENTITY_IDENTIFIER)).isEqualTo("entityidentifier");
 	}
 	
 	@Test
-	public void buildParameterName_class_systemAction(){
+	public void buildParameterName_enum_parametername_system_action(){
 		assertThat(__buildParameterName__(ParameterName.ACTION_CLASS)).isEqualTo("actionclass");
 	}
 	
 	@Test
-	public void buildParameterName_class_systemAction_instance(){
+	public void buildParameterName_enum_parametername_action_identifier(){
 		assertThat(__buildParameterName__(ParameterName.ACTION_IDENTIFIER)).isEqualTo("actionidentifier");
 	}
 	
 	@Test
-	public void buildParameterName_class_nextSystemAction(){
+	public void buildParameterName_enum_parametername_next_action_class(){
 		assertThat(__buildParameterName__(ParameterName.NEXT_ACTION_CLASS)).isEqualTo("nextactionclass");
 	}
 	
 	@Test
-	public void buildParameterName_class_nextSystemAction_instance(){
+	public void buildParameterName_enum_parametername_next_action_identifier(){
 		assertThat(__buildParameterName__(ParameterName.NEXT_ACTION_IDENTIFIER)).isEqualTo("nextactionidentifier");
 	}
 	
 	@Test
-	public void buildParameterName_class_windowRenderType_instance(){
+	public void buildParameterName_enum_parametername_window_render_type_class(){
 		assertThat(__buildParameterName__(ParameterName.WINDOW_RENDER_TYPE_CLASS)).isEqualTo("windowrendertypeclass");
 	}
 	
 	@Test
-	public void buildParameterName_field_identifier(){
+	public void buildParameterName_enum_fieldname_identifier(){
 		assertThat(__buildParameterName__(FieldName.IDENTIFIER)).isEqualTo("identifier");
 	}
 	
@@ -123,6 +183,11 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 	@Test
 	public void buildParameterValue__class(){
 		assertThat(__buildParameterValue__(Class.class)).isEqualTo("class");
+	}
+	
+	@Test
+	public void buildParameterValue__class_system_action(){
+		assertThat(__buildParameterValue__(SystemAction.class)).isEqualTo("action");
 	}
 	
 	@Test
@@ -175,6 +240,12 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 	}
 	
 	@Test
+	public void buildQuery_systemActionClass_systemActionIdentifier_entityClass_entities_nextSystemActionClass_nextSystemActionIdentifier() {
+		assertThat(__buildQuery__(SystemActionRead.class,null,MyEntity.class,Arrays.asList(new MyEntityImpl().setIdentifier(17)),null,null,null))
+			.isEqualTo("entityclass=myentity&entityidentifier=17&actionclass=read&actionidentifier=read");
+	}
+	
+	@Test
 	public void buildQuery_systemActionRead_myEntity() {
 		SystemAction systemAction = __inject__(SystemActionRead.class);
 		systemAction.getEntities(Boolean.TRUE).setElementClass(MyEntity.class);
@@ -183,6 +254,46 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 	}
 	
 	/* path */
+	
+	@Test
+	public void buildPathIdentifier_systemAction_null_entityClass_null_isRecurise_null() {
+		assertThat(__buildPathIdentifier__(null,null,null)).isEqualTo(null);
+	}
+	
+	@Test
+	public void buildPathIdentifier_systemAction_null_entityClass_null_isRecurise_true() {
+		assertThat(__buildPathIdentifier__(null,null,Boolean.TRUE)).isEqualTo(null);
+	}
+	
+	@Test
+	public void buildPathIdentifier_systemAction_null_entityClass_myEntity_isRecurise_null() {
+		assertThat(__buildPathIdentifier__(null,MyEntity.class,null)).isEqualTo(null);
+	}
+	
+	@Test
+	public void buildPathIdentifier_systemAction_null_entityClass_myEntity_isRecurise_true() {
+		assertThat(__buildPathIdentifier__(null,MyEntity.class,Boolean.TRUE)).isEqualTo(null);
+	}
+	
+	@Test
+	public void buildPathIdentifier_systemAction_create_entityClass_null_isRecurise_null() {
+		assertThat(__buildPathIdentifier__(SystemActionCreate.class,null,null)).isEqualTo("__entity__CreateView");
+	}
+	
+	@Test
+	public void buildPathIdentifier_systemAction_create_entityClass_null_isRecurise_true() {
+		assertThat(__buildPathIdentifier__(SystemActionCreate.class,null,Boolean.TRUE)).isEqualTo("__entity__EditView");
+	}
+	
+	@Test
+	public void buildPathIdentifier_systemAction_create_entityClass_myEntity_isRecurise_null() {
+		assertThat(__buildPathIdentifier__(SystemActionCreate.class,MyEntity.class,null)).isEqualTo("myEntityCreateView");
+	}
+	
+	@Test
+	public void buildPathIdentifier_systemAction_create_entityClass_myEntity_isRecurise_true() {
+		assertThat(__buildPathIdentifier__(SystemActionCreate.class,MyEntity.class,Boolean.TRUE)).isEqualTo("myEntityEditView");
+	}
 	
 	@Test
 	public void buildPathIdentifier_myEntityCreateView() {
@@ -197,8 +308,14 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 	}
 	
 	@Test
-	public void buildPathIdentifier_createView() {
+	public void buildPathIdentifier_systemActionCreate() {
 		SystemAction systemAction = __inject__(SystemActionCreate.class);
+		assertThat(__buildPathIdentifier__(systemAction)).isEqualTo("__entity__EditView");
+	}
+	
+	@Test
+	public void buildPathIdentifier_systemActionCreateImpl() {
+		SystemAction systemAction = __inject__(SystemActionCreateImpl.class);
 		assertThat(__buildPathIdentifier__(systemAction)).isEqualTo("__entity__EditView");
 	}
 	
@@ -249,7 +366,6 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 	
 	@Test
 	public void buildPath_null(){
-		UniformResourceIdentifierHelperImpl.PATH_ROOT = null;
 		assertThat(__buildPath__(null,null)).isEqualTo(null);
 	}
 	
@@ -264,7 +380,6 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 		UniformResourceIdentifierHelperImpl.PATH_ROOT = "mycontext";
 		__setPathByIdentifier__("i01", "/p01/p02");
 		assertThat(__buildPath__("i01",null)).isEqualTo("/mycontext/p01/p02");
-		UniformResourceIdentifierHelperImpl.PATH_ROOT = null;
 	}
 	
 	@Test
@@ -292,7 +407,6 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 	
 	@Test
 	public void buildPath_systemAction_create_entityClassIsSet(){
-		UniformResourceIdentifierHelperImpl.PATHS_MAP.clear();
 		__setPathByIdentifier__("myEntityCreateView", "/myentity/create");
 		assertThat(__buildPath__(__inject__(SystemActionCreate.class).setEntityClass(MyEntity.class))).isEqualTo("/myentity/create");
 	}
@@ -300,15 +414,12 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 	@Test
 	public void buildPath_systemAction_create_entityClassIsSet_generic(){
 		UniformResourceIdentifierHelperImpl.PATH_ROOT = "/mycontext";
-		UniformResourceIdentifierHelperImpl.PATHS_MAP.clear();
 		__setPathByIdentifier__("__entity__EditView", "/__entity__/edit");
 		assertThat(__buildPath__(__inject__(SystemActionCreate.class).setEntityClass(MyEntity.class))).isEqualTo("/mycontext/__entity__/edit");
-		UniformResourceIdentifierHelperImpl.PATH_ROOT = null;
 	}
 	
 	@Test
 	public void buildPath_systemAction_create_entityClassIsSet_notFound(){
-		UniformResourceIdentifierHelperImpl.PATHS_MAP.clear();
 		__setPathByIdentifier__("__entity__EditView", "/__entity__/edit");
 		assertThat(__buildPath__(__inject__(SystemActionCreate.class).setEntityClass(MyEntity.class))).isEqualTo("/__entity__/edit");
 	}
@@ -322,7 +433,7 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 	
 	@Test
 	public void build_http_localhost(){
-		assertThat(__build__("http", null, null, "localhost", null, null, null, null, null)).isEqualTo("http://localhost");
+		assertThat(__build__("http", null, null, "localhost", (Integer)null, null, null, null, null)).isEqualTo("http://localhost");
 	}
 	
 	@Test
@@ -332,7 +443,7 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 	
 	@Test
 	public void build_https_www_google_com(){
-		assertThat(__build__("https", null, null, "www.google.com", null, null, null, null, null)).isEqualTo("https://www.google.com");
+		assertThat(__build__("https", null, null, "www.google.com", (Integer)null, null, null, null, null)).isEqualTo("https://www.google.com");
 	}
 	
 	@Test
@@ -365,6 +476,39 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 		assertThat(__build__("http", null, null, "localhost", 80, "app/folder", null, null, null)).isEqualTo("http://localhost/app/folder");
 	}
 	
+	@Test
+	public void build_usingSystemActionCreateMyEntity(){
+		__setPathByIdentifier__("__entity__EditView", "/__entity__/edit");
+		SystemAction systemAction = __inject__(SystemActionCreate.class).setEntityClass(MyEntity.class);
+		assertThat(__build__("http", "localhost", 80, systemAction)).isEqualTo("http://localhost/__entity__/edit?entityclass=myentity&actionclass=create&actionidentifier=create");
+	}
+	
+	@Test
+	public void build_usingSystemActionCreateMyEntity_callTwice(){
+		__setPathByIdentifier__("__entity__EditView", "/__entity__/edit");
+		SystemAction systemAction = __inject__(SystemActionCreate.class).setEntityClass(MyEntity.class);
+		assertThat(__build__("http", "localhost", 80, systemAction)).isEqualTo("http://localhost/__entity__/edit?entityclass=myentity&actionclass=create&actionidentifier=create");
+		assertThat(__build__("http", "localhost", 80, systemAction)).isEqualTo("http://localhost/__entity__/edit?entityclass=myentity&actionclass=create&actionidentifier=create");
+	}
+	
+	@Test
+	public void build_systemActionClassRead_entityClassMyEntity(){
+		__setPathByIdentifier__("myEntityReadView", "/__entity__/edit");
+		assertThat(__build__("http", "localhost", 80,SystemActionRead.class ,null,MyEntity.class,Arrays.asList(new MyEntityImpl().setIdentifier(12)),null,null,null))
+			.isEqualTo("http://localhost/__entity__/edit?entityclass=myentity&entityidentifier=12&actionclass=read&actionidentifier=read");
+	}
+	
+	@Test
+	public void build_systemActionClassReadImpl_entityClassMyEntityImpl(){
+		__setPathByIdentifier__("myEntityReadView", "/__entity__/edit");
+		Collection<MyEntityImpl> list = new ArrayList<>();
+		MyEntityImpl entity = new MyEntityImpl();
+		entity.setIdentifier(12);
+		list.add(entity);
+		assertThat(__build__("http", "localhost", 80,SystemActionReadImpl.class ,null,MyEntityImpl.class,list,null,null,null))
+			.isEqualTo("http://localhost/__entity__/edit?entityclass=myentity&entityidentifier=12&actionclass=read&actionidentifier=read");
+	}
+	
 	/**/
 	
 	private void __assertComponents__(String uniformResourceIdentifier,String expectedScheme,String expectedUser,String expectedPassword,String expectedHost,String expectedPort
@@ -388,9 +532,22 @@ public class UniformResourceIdentifierHelperUnitTest extends AbstractWeldUnitTes
 			
 	}
 	
-	private static class MyEntity extends AbstractObject {
+	private static interface MyEntity extends Objectable {
+		
+	}
+	
+	private static class MyEntityImpl extends AbstractObject implements MyEntity,Serializable {
 		private static final long serialVersionUID = 1L;
 		
+		@Override
+		public MyEntity setIdentifier(Object identifier) {
+			return (MyEntity) super.setIdentifier(identifier);
+		}
+	}
+	
+	private static enum Enum{
+		V01,V02
+		;
 	}
 	
 }

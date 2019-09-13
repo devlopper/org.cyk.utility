@@ -38,7 +38,7 @@ public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends Abst
 							String name = index.getName();
 							if(__inject__(StringHelper.class).isNotBlank(name))
 								input.getLabel(Boolean.TRUE).setValue(__buildInternationalizationString__(name,Case.FIRST_CHARACTER_UPPER_REMAINDER_LOWER));
-						}						
+						}
 					}
 				}		
 			}

@@ -121,7 +121,7 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 							builderClass = OutputStringTextBuilder.class;
 					}										
 				}
-				COMPONENTS_BUILDERS_CLASSES_MAP.put(key.toString(), builderClass);
+				//COMPONENTS_BUILDERS_CLASSES_MAP.put(key.toString(), builderClass);
 			}	
 		}
 		return builderClass;
@@ -244,7 +244,8 @@ public class ComponentBuilderHelperImpl extends AbstractHelper implements Compon
 					
 					//inputBuilder.getLabelBuilder(Boolean.TRUE).setOutputPropertyValue(inputBuilder.getField().getName());
 					//inputBuilder.getLabel(Boolean.TRUE).setValue(inputBuilder.getField().getName());
-					inputBuilder.getLabel(Boolean.TRUE).getValueInternationalizationString(Boolean.TRUE).setKey(new InternationalizationKey().setValue(inputBuilder.getField().getName()));
+					inputBuilder.getLabel(Boolean.TRUE).getValueInternationalizationString(Boolean.TRUE).setKey(new InternationalizationKey().setValue(
+							InternationalizationHelperImpl.__buildKey__(inputBuilder.getField().getName()).getValue()));
 				}
 			}else if(builder instanceof CommandableBuilder) {
 				org.cyk.utility.client.controller.component.annotation.Commandable commandableAnnotation = method.getAnnotation(org.cyk.utility.client.controller.component.annotation.Commandable.class);

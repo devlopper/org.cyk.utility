@@ -168,13 +168,14 @@ public class ViewBuilderImpl extends AbstractVisibleComponentBuilderImpl<View> i
 	
 	@Override
 	public ComponentBuilder<?> addComponentBuilderByObjectByFieldNames(Object object,Class<?> componentBuilderBaseClass, String... fieldNames) {
-		String key = object.getClass().getName()+"."+(componentBuilderBaseClass == null ? "" : componentBuilderBaseClass.getName())+"."+FieldHelperImpl.__join__(fieldNames);
-		Class<? extends ComponentBuilder<?>> builderClass =  BUILDERS_CLASSES_MAP.get(key);
+		//TODO key must contains isEditable value ?????
+		//String key = object.getClass().getName()+"."+(componentBuilderBaseClass == null ? "" : componentBuilderBaseClass.getName())+"."+FieldHelperImpl.__join__(fieldNames);
+		Class<? extends ComponentBuilder<?>> builderClass = null;// BUILDERS_CLASSES_MAP.get(key);
 		if(builderClass == null) {
 			//TODO to be optimized
 			//builderClass = __inject__(ComponentBuilderClassGetter.class).setClazz(object.getClass()).addFieldNameStrings(fieldNames).setBaseClass(componentBuilderBaseClass).execute().getOutput();
 			builderClass = ComponentBuilderHelperImpl.__getComponentBuilderClass__(object.getClass(), componentBuilderBaseClass, null,fieldNames, null, null, null);
-			BUILDERS_CLASSES_MAP.put(key, builderClass);
+			//BUILDERS_CLASSES_MAP.put(key, builderClass);
 		}
 		//TODO to be optimized
 		ComponentBuilder<?> componentBuilder = addComponentBuilderByObjectByFieldNames(builderClass, object, fieldNames);

@@ -10,7 +10,6 @@ import org.cyk.utility.client.controller.session.SessionHelper;
 import org.cyk.utility.client.controller.session.SessionUserGetter;
 import org.cyk.utility.context.ContextGetter;
 import org.cyk.utility.context.ContextParameterValueGetter;
-import org.cyk.utility.request.RequestHelper;
 import org.cyk.utility.request.RequestPrincipalGetter;
 
 @ApplicationScoped
@@ -19,7 +18,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 
 	@Override
 	public void __initialize__(Object object) {
-		__setQualifierClassTo__(Web.class,ContextGetter.class, ContextParameterValueGetter.class,RequestPrincipalGetter.class,SessionHelper.class,SessionUserGetter.class,RequestHelper.class);
+		__setQualifierClassTo__(Web.class,ContextGetter.class, ContextParameterValueGetter.class,RequestPrincipalGetter.class,SessionHelper.class,SessionUserGetter.class);
 		__inject__(org.cyk.utility.client.controller.ApplicationScopeLifeCycleListener.class).initialize(null);
 	}
 	
