@@ -47,7 +47,7 @@ public class FilesGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<F
 					
 					if(Boolean.TRUE.equals(isAddable)) {
 						FileBuilder fileBuilder = __inject__(FileBuilder.class).setPath(path.getParent().toString()).setName(path.getFileName().toString())
-								.setSize(path.toFile().length());
+								.setSize(path.toFile().length()).setUniformResourceLocator(path.toUri().toString());
 						files.add(fileBuilder.execute().getOutput());		
 					}
 				}

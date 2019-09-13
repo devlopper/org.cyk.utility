@@ -24,7 +24,6 @@ import org.cyk.utility.client.controller.web.ValueExpressionMap;
 import org.cyk.utility.client.controller.web.jsf.primefaces.LazyDataModel;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.object.Objects;
-import org.cyk.utility.server.representation.AbstractRepresentationFunctionReaderImpl;
 import org.cyk.utility.value.ValueHelper;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.inputtext.InputText;
