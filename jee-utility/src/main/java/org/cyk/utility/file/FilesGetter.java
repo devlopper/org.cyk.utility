@@ -7,6 +7,7 @@ import org.cyk.utility.number.Interval;
 import org.cyk.utility.number.Intervals;
 import org.cyk.utility.string.Strings;
 
+@Deprecated
 public interface FilesGetter extends FunctionWithPropertiesAsInput<Files> {
 
 	PathsGetter getPathsGetter();

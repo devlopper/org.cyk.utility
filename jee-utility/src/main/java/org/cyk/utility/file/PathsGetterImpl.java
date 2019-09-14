@@ -14,7 +14,7 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.string.Strings;
 
-@Dependent
+@Dependent @Deprecated
 public class PathsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Paths> implements PathsGetter,Serializable {
 	private static final long serialVersionUID = 1L;
 	

@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.string.Strings;
 
+@Deprecated
 public interface PathsGetter extends FunctionWithPropertiesAsInput<Paths> {
 
 	Strings getDirectories();

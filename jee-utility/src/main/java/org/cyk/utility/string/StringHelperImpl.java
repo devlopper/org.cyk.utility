@@ -242,6 +242,31 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	public static Collection<String> __splitByCharacterTypeCamelCase__(String string) {
 		return CollectionHelperImpl.__instanciate__(StringUtils.splitByCharacterTypeCamelCase(string)); 
 	}
+	
+	public static String __addToBeginIfDoesNotStartWith__(String string, Object prefix) {
+		String prefixString = __get__(prefix);
+		if(!StringUtils.startsWith(string, prefixString))
+			string = prefixString + string;
+		return string;
+	}
+	
+	public static String __addToEndIfDoesNotEndWith__(String string, Object suffix) {
+		String suffixString = __get__(suffix);
+		if(!StringUtils.endsWith(string, suffixString))
+			string = string + suffixString;
+		return string;
+	}
+	
+	public static String __removeToBeginIfDoesStartWith__(String string, Object prefix) {
+		String prefixString = __get__(prefix);
+		if(StringUtils.startsWith(string, prefixString))
+			string = string.substring(prefixString.length());
+		return string;
+	}
+	
+	public static String __get__(Object object) {
+		return object == null ? ConstantEmpty.STRING : object.toString();
+	}
 
 	/**/
 

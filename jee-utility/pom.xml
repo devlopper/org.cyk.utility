@@ -31,6 +31,7 @@
 		<org.reflections.reflections.version>0.9.10</org.reflections.reflections.version>
 		<org.jboss.resteasy.resteasy-jaxrs.version>3.7.0.Final</org.jboss.resteasy.resteasy-jaxrs.version>
 		<commons-beanutils-commons-beanutils>1.9.4</commons-beanutils-commons-beanutils>
+		<org.apache.tika-tika-parsers>1.22</org.apache.tika-tika-parsers>
 	</properties>
 	
 	<dependencies>
@@ -147,6 +148,12 @@
 		    <version>2.26</version>
 		    <scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.tika</groupId>
+		    <artifactId>tika-parsers</artifactId>
+		    <version>${org.apache.tika-tika-parsers}</version>
+		  </dependency>
 	</dependencies>
 	
 </project>
