@@ -1,22 +1,19 @@
 package org.cyk.utility.file;
 
-import java.nio.file.Path;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.cyk.utility.file.FileHelperImpl.__concatenateNameAndExtension__;
+import static org.cyk.utility.file.FileHelperImpl.__getExtension__;
+import static org.cyk.utility.file.FileHelperImpl.__getPaths__;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.string.StringHelper;
+import org.cyk.utility.regularexpression.RegularExpressionHelperImpl;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
-import org.cyk.utility.time.DurationStringBuilder;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.cyk.utility.file.FileHelperImpl.__get__;
-import static org.cyk.utility.file.FileHelperImpl.__getPaths__;
-import static org.cyk.utility.file.FileHelperImpl.__extractText__;
 
 public class FileHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
@@ -49,11 +46,9 @@ public class FileHelperUnitTest extends AbstractWeldUnitTest {
 				}
 			}
 		}
-		Collection<Path> paths = FileHelperImpl.__getPaths__(Arrays.asList(root.toString()), Boolean.TRUE, Boolean.TRUE, null);
-		for(Path index : paths)
-			System.out.println(index);
-		assertThat(paths.stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
-		.hasSize(39)
+		Paths paths = __getPaths__(Arrays.asList(root.toString()),null, Boolean.TRUE, Boolean.TRUE, null);
+		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
+		.hasSize(files.size())
 		.containsExactlyInAnyOrder(files.stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()).toArray(new String[] {}));
 	}
 	
@@ -83,90 +78,104 @@ public class FileHelperUnitTest extends AbstractWeldUnitTest {
 				}
 			}
 		}
-		Collection<Path> paths = FileHelperImpl.__getPaths__(Arrays.asList(root.toString()), Boolean.FALSE, Boolean.TRUE, null);
-		assertThat(paths.stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
-		.hasSize(24)
+		Paths paths = __getPaths__(Arrays.asList(root.toString()),null, Boolean.FALSE, Boolean.TRUE, null);
+		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
+		.hasSize(files.size())
 		.containsExactly(files.stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()).toArray(new String[] {}));
 	}
 	
 	@Test
-	public void isTxt_whenNameDotTxt() {
-		assertionHelper.assertEquals("txt", __inject__(FileHelper.class).getExtension("name.txt"));
+	public void getPaths_removeByUniformResourceIdentifier() throws Exception {
+		java.io.File root = new java.io.File(System.getProperty("user.dir")+"\\target\\filehelper_getpaths_removeByUniformResourceIdentifiere");
+		if(root.exists())
+			root.delete();
+		root.mkdir();
+		Collection<java.io.File> files = new ArrayList<>();
+		for(Integer index = 0 ; index < 5 ; index = index + 1) {
+			java.io.File __file__ = new java.io.File(root,"f"+index+".txt");
+			if(__file__.exists())
+				__file__.delete();
+			__file__.createNewFile();
+			files.add(__file__);
+		}
+		Paths paths = __getPaths__(Arrays.asList(root.toString()),null, Boolean.TRUE, Boolean.TRUE, null);
+		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
+		.hasSize(files.size())
+		.containsExactlyInAnyOrder("f0.txt","f1.txt","f2.txt","f3.txt","f4.txt");
+		paths.removeByUniformResourceIdentifiers(new java.io.File(root,"f1.txt").toURI().toString()
+				,new java.io.File(root,"f4.txt").toURI().toString());
+		
+		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
+		.hasSize(files.size()-2)
+		.containsExactlyInAnyOrder("f0.txt","f2.txt","f3.txt");
 	}
 	
 	@Test
-	public void isTxt_whenDotTxt() {
-		assertionHelper.assertEquals("txt", __inject__(FileHelper.class).getExtension(".txt"));
+	public void getPaths_extension() throws Exception {
+		java.io.File root = new java.io.File(System.getProperty("user.dir")+"\\target\\filehelper_getpaths_extension");
+		if(root.exists())
+			root.delete();
+		root.mkdir();
+		Collection<java.io.File> files = new ArrayList<>();
+		for(Integer index = 0 ; index < 5 ; index = index + 1) {
+			String extension = null;
+			if(index % 2 == 0)
+				extension = "txt";
+			else
+				extension = "png";
+			java.io.File __file__ = new java.io.File(root,"f"+index+"."+extension);
+			if(__file__.exists())
+				__file__.delete();
+			__file__.createNewFile();
+			files.add(__file__);
+		}
+		Paths paths = __getPaths__(Arrays.asList(root.toString()),null, Boolean.TRUE, Boolean.TRUE, null);
+		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
+		.hasSize(files.size())
+		.containsExactlyInAnyOrder("f0.txt","f1.png","f2.txt","f3.png","f4.txt");
+		
+		paths = __getPaths__(Arrays.asList(root.toString()),RegularExpressionHelperImpl.__formatFileNameHavingExtensions__("png","jpeg","pdf"), Boolean.TRUE, Boolean.TRUE, null);
+		assertThat(paths).isNotNull();
+		assertThat(paths.get()).isNotNull();
+		assertThat(paths.get().stream().map(x -> StringUtils.substringAfter(x.toString(), root.toString()+"\\")).collect(Collectors.toList()))
+		.hasSize(2)
+		.containsExactlyInAnyOrder("f1.png","f3.png");
 	}
 	
 	@Test
-	public void isTxt_whenTxt() {
-		assertionHelper.assertEquals(null, __inject__(FileHelper.class).getExtension("txt"));
+	public void getExtension_name_dot_txt() {
+		assertThat(__getExtension__("name.txt")).isEqualTo("txt");
 	}
 	
 	@Test
-	public void isNameDotTxt_whenNameIsNameAndExtensionIsTxt() {
-		assertionHelper.assertEquals("name.txt", __inject__(FileHelper.class).concatenateNameAndExtension("name", "txt"));
+	public void getExtension_dot_txt() {
+		assertThat(__getExtension__(".txt")).isEqualTo("txt");
 	}
 	
 	@Test
-	public void isDotTxt_whenExtensionIsTxt() {
-		assertionHelper.assertEquals(".txt", __inject__(FileHelper.class).concatenateNameAndExtension(null, "txt"));
+	public void getExtension_txt() {
+		assertThat(__getExtension__("txt")).isNull();
 	}
 	
 	@Test
-	public void isName_whenNameIsName() {
-		assertionHelper.assertEquals("name", __inject__(FileHelper.class).concatenateNameAndExtension("name", null));
+	public void concatenateNameAndExtension_name_txt() {
+		assertThat(__concatenateNameAndExtension__("name", "txt")).isEqualTo("name.txt");
 	}
 	
 	@Test
-	public void get_sequantially() {
-		Files files = __get__(__getPaths__(Arrays.asList(System.getProperty("user.dir")+"\\src\\test\\resources\\org\\cyk\\utility\\file\\mydirectories"), Boolean.FALSE, Boolean.TRUE, null), null, null);
-		assertThat(files).withFailMessage("No file found").isNotNull();
-		assertThat(files.get()).withFailMessage("No file found").isNotEmpty();
-		assertThat(files.get().stream().map(x -> x.getNameAndExtension())).hasSize(4).contains("f01.txt");
-		files.removeDuplicateByChecksum();
-		assertThat(files.get().stream().map(x -> x.getNameAndExtension())).hasSize(3).contains("f01.txt");
+	public void concatenateNameAndExtension_null_txt() {
+		assertThat(__concatenateNameAndExtension__(null, "txt")).isEqualTo(".txt");
 	}
 	
 	@Test
-	public void get() {
-		FilesGetter filesGetter = __inject__(FilesGetter.class);
-		filesGetter.getPathsGetter(Boolean.TRUE).addDirectoriesByJavaFiles(new java.io.File(new java.io.File(System.getProperty("user.dir")),"src\\test\\resources\\org\\cyk\\utility\\file\\mydirectories"));
-		filesGetter.setIsFileChecksumComputable(Boolean.TRUE);
-		Files files = filesGetter.execute().getOutput();
-		assertThat(files).withFailMessage("No file found").isNotNull();
-		assertThat(files.get()).withFailMessage("No file found").isNotEmpty();
-		assertThat(files.getFirst().getBytes()).withFailMessage("Bytes found").isNull();
-		assertThat(files.get().stream().map(x -> x.getNameAndExtension())).hasSize(4).contains("f01.txt");
+	public void concatenateNameAndExtension_name_null() {
+		assertThat(__concatenateNameAndExtension__("name", null)).isEqualTo("name");
 	}
 	
-	@Test
-	public void getWithBytes() {
-		FilesGetter filesGetter = __inject__(FilesGetter.class);
-		filesGetter.getPathsGetter(Boolean.TRUE).addDirectoriesByJavaFiles(new java.io.File(new java.io.File(System.getProperty("user.dir")),"src\\test\\resources\\org\\cyk\\utility\\file\\mydirectories"));
-		filesGetter.setIsFileChecksumComputable(Boolean.TRUE).setIsFileBytesComputable(Boolean.TRUE);
-		Files files = filesGetter.execute().getOutput();
-		assertThat(files).withFailMessage("No file found").isNotNull();
-		assertThat(files.get()).withFailMessage("No file found").isNotEmpty();
-		assertThat(files.getFirst().getBytes()).withFailMessage("Bytes not found").isNotNull();
-		assertThat(files.get().stream().map(x -> x.getNameAndExtension())).hasSize(4).contains("f01.txt");
-	}
-	
-	@Test
-	public void getFilterByChecksum() {
-		FilesGetter filesGetter = __inject__(FilesGetter.class);
-		filesGetter.getPathsGetter(Boolean.TRUE).addDirectoriesByJavaFiles(new java.io.File(new java.io.File(System.getProperty("user.dir")),"src\\test\\resources\\org\\cyk\\utility\\file\\mydirectories"));
-		filesGetter.setIsFileChecksumComputable(Boolean.TRUE).setIsFilterByFileChecksum(Boolean.TRUE);
-		Files files = filesGetter.execute().getOutput();
-		assertThat(files).withFailMessage("No file found").isNotNull();
-		assertThat(files.get()).withFailMessage("No file found").isNotEmpty();
-		assertThat(files.get().stream().map(x -> x.getNameAndExtension())).hasSize(3).contains("f01.txt");
-	}
-	
-	@Test
+	//@Test
 	public void extractText() {
-		System.out.println(__extractText__(new java.io.File(System.getProperty("user.dir")+"\\src\\test\\resources\\org\\cyk\\utility\\file\\pdf\\ALLONS TOUS AU FESTIN.pdf")));
+		//java.io.File file = new java.io.File(System.getProperty("user.dir")+"\\src\\test\\resources\\org\\cyk\\utility\\file\\pdf\\ALLONS TOUS AU FESTIN.pdf");
+		//String text = __extractText__(file);
 	}
 	
 }

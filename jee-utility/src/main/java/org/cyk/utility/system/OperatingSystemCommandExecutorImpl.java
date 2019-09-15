@@ -41,7 +41,7 @@ public class OperatingSystemCommandExecutorImpl extends AbstractFunctionWithProp
         while ((line = input.readLine()) != null)
         	lines.add(line);
         
-        setResult(__injectStringHelper__().concatenate(lines,ConstantSeparator.LINE));
+        setResult(__injectStringHelper__().concatenate(lines,ConstantSeparator.LINE_WITH_LINE_FEED));
         
 		Long numberOfMillisecondToWait = getNumberOfMillisecondToWait();
 		if(numberOfMillisecondToWait!=null && numberOfMillisecondToWait>0)

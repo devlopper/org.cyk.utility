@@ -149,11 +149,13 @@
 		    <scope>provided</scope>
 		</dependency>
 		
+		<!--
 		<dependency>
 		    <groupId>org.apache.tika</groupId>
 		    <artifactId>tika-parsers</artifactId>
 		    <version>${org.apache.tika-tika-parsers}</version>
-		  </dependency>
+		</dependency>
+		  -->
 	</dependencies>
 	
 </project>

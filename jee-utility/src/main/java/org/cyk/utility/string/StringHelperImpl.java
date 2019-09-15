@@ -4,16 +4,20 @@ import java.beans.Introspector;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.constant.ConstantEmpty;
+import org.cyk.utility.__kernel__.constant.ConstantSeparator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
+import org.cyk.utility.regularexpression.RegularExpressionHelperImpl;
 
 @ApplicationScoped
 public class StringHelperImpl extends AbstractHelper implements StringHelper,Serializable {
@@ -269,5 +273,52 @@ public class StringHelperImpl extends AbstractHelper implements StringHelper,Ser
 	}
 
 	/**/
+	
+	public static Collection<String> __getLines__(String string) {
+		if(__isBlank__(string))
+			return null;
+		Collection<String> collection = new ArrayList<>();
+		String[] lines = string.split(ConstantSeparator.LINE_WITH_LINE_FEED);
+		for(String line : lines)
+			collection.add(line+ConstantSeparator.LINE_WITH_LINE_FEED);
+		return collection;
+	}
+	
+	public static Collection<String> __getInvalidLines__(Collection<String> lines,Set<String> invalidLinesRegularExpressions) {
+		if(CollectionHelperImpl.__isEmpty__(lines))
+			return null;
+		Collection<String> collection = new ArrayList<>();
+		for(String line : lines) {
+			if(line.length() < 2 || !RegularExpressionHelperImpl.__isContainAlphabeticCharacter__(line))
+				collection.add(line);
+		}
+		/*for(String invalidLine : invalidLinesRegularExpressions) {
+			string = StringUtils.remove(string, invalidLine+ConstantSeparator.LINE_WITH_LINE_FEED);		
+		}
+		*/
+		return collection;
+	}
 
+	public static Collection<String> __getInvalidLines__(String string,Set<String> invalidLinesRegularExpressions) {
+		if(__isBlank__(string))
+			return null;
+		return __getInvalidLines__(__getLines__(string),invalidLinesRegularExpressions);
+	}
+	
+	public static String __removeInvalidLines__(String string,Set<String> invalidLinesRegularExpressions) {
+		if(__isBlank__(string))
+			return string;
+		//TODO we can use regex to speed ud processing		
+		Collection<String> lines = __getLines__(string);
+		Collection<String> invalidLines = __getInvalidLines__(string, invalidLinesRegularExpressions);
+		lines.removeAll(invalidLines);
+		return StringUtils.join(lines,"");
+	}
+	
+	/**/
+	
+	private static final Set<String> INVALID_LINES_REGULAR_EXPRESSIONS = new HashSet<>();
+	static {
+		INVALID_LINES_REGULAR_EXPRESSIONS.add("");
+	}
 }

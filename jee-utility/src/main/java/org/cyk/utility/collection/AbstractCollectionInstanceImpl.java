@@ -279,5 +279,15 @@ public abstract class AbstractCollectionInstanceImpl<T> extends AbstractObject i
 		return collection == null ? ConstantEmpty.STRING : collection.toString();
 	}
 	
+	@Override
+	public Boolean isEmpty() {
+		return CollectionHelperImpl.__isEmpty__(collection);
+	}
+	
+	@Override
+	public Boolean isNotEmpty() {
+		return CollectionHelperImpl.__isNotEmpty__(collection);
+	}
+	
 	public static final String FIELD_COLLECTION = "collection";
 }

@@ -413,6 +413,15 @@ public class UniformResourceIdentifierHelperImpl extends AbstractHelper implemen
 		PATHS_MAP.put(identifier, path);
 	}
 	
+	public static Collection<URI> __getURIs__(Collection<String> uniformResourceIdentifiers) {
+		if(CollectionHelperImpl.__isEmpty__(uniformResourceIdentifiers))
+			return null;
+		Collection<URI> uris = new ArrayList<>();
+		for(String uniformResourceIdentifier : uniformResourceIdentifiers)
+			uris.add(URI.create(uniformResourceIdentifier));
+		return uris;
+	}
+	
 	/**/
 	
 	public static String SCHEME;
