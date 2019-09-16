@@ -5,21 +5,21 @@
 	<parent>
 		<groupId>org.cyk.pom.jee.utility.server.deployment</groupId>
 		<artifactId>pom-jee-utility-server-deployment</artifactId>
-		<version>pom.jee.utility.server.deployment.0.0.1</version>
+		<version>pom.jee.utility.server.deployment.0.1.0</version>
 	</parent>
 
 	<groupId>org.cyk.jee.utility.server.deployment</groupId>
 	<artifactId>jee-utility-server-deployment</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>JEE utility server deployment</name>
 	
 	<dependencies>
-		<dependency>
+		<dependency> 
 			<groupId>org.cyk.jee.utility.server.representation.impl</groupId>
 			<artifactId>jee-utility-server-representation-impl</artifactId>
-			<version>0.0.1</version>
+			<version>0.1.0</version>
 		</dependency>		
 	</dependencies>
 	

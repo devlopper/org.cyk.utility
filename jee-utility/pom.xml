@@ -5,18 +5,18 @@
 	<parent>
 		<groupId>org.cyk.pom.jee.utility</groupId>
 		<artifactId>pom-jee-utility</artifactId>
-		<version>pom.jee.utility.0.0.1</version>
+		<version>pom.jee.utility.0.1.0</version>
 	</parent>
 
 	<groupId>org.cyk.jee.utility</groupId>
 	<artifactId>jee-utility</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>JEE utility</name>
 	
 	<properties>
-		<org.cyk.jee.utility.__kernel__.jee-utility-__kernel__.version>0.0.1</org.cyk.jee.utility.__kernel__.jee-utility-__kernel__.version>
+		<org.cyk.jee.utility.__kernel__.jee-utility-__kernel__.version>0.1.0</org.cyk.jee.utility.__kernel__.jee-utility-__kernel__.version>
 		<org.apache.commons.commons-collections4.version>4.3</org.apache.commons.commons-collections4.version>
 		<org.apache.commons.commons-text.version>1.4</org.apache.commons.commons-text.version>
 		<org.apache.poi.poi.version>3.14</org.apache.poi.poi.version>

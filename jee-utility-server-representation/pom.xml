@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.cyk.pom.jee.utility.server.representation</groupId>
 		<artifactId>pom-jee-utility-server-representation</artifactId>
-		<version>pom.jee.utility.server.representation.0.0.1</version>
+		<version>pom.jee.utility.server.representation.0.1.0</version>
 	</parent>
 
 	<groupId>org.cyk.jee.utility.server.representation</groupId>
 	<artifactId>jee-utility-server-representation</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>JEE utility server representation</name>
@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>org.cyk.jee.utility.server.business</groupId>
 			<artifactId>jee-utility-server-business</artifactId>
-			<version>0.0.1</version>
+			<version>0.1.0</version>
 		</dependency>
 	</dependencies>
 
@@ -37,13 +37,7 @@
 					<artifactId>h2</artifactId>
 					<version>1.4.197</version>
 				</dependency>
-				<!--
-				<dependency>
-					<groupId>mysql</groupId>
-		    		<artifactId>mysql-connector-java</artifactId>
-		    		<version>5.1.47</version>
-				</dependency>
-				-->
+				
 				<dependency>
 					<groupId>org.cyk.jee.utility.server.persistence.impl</groupId>
 					<artifactId>jee-utility-server-persistence-impl</artifactId>
