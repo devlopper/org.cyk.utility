@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>org.cyk.pom.jee.utility.client.controller.web</groupId>
 		<artifactId>pom-jee-utility-client-controller-web</artifactId>
-		<version>pom.jee.utility.client.controller.web.0.0.1</version>
+		<version>pom.jee.utility.client.controller.web.0.1.0</version>
 	</parent>
 
 	<groupId>org.cyk.jee.utility.client.controller.web</groupId>
 	<artifactId>jee-utility-client-controller-web</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>JEE utility client web controller</name>
@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>org.cyk.jee.utility.client.controller</groupId>
 			<artifactId>jee-utility-client-controller</artifactId>
-			<version>0.0.1</version>
+			<version>0.1.0</version>
 		</dependency>
 	</dependencies>
 
