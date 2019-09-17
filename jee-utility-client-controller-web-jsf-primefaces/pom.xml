@@ -24,13 +24,6 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.cyk.pom.jee.client.controller.web.jsf.primefaces.main</groupId>
-			<artifactId>pom-jee-client-controller-web-jsf-primefaces-main</artifactId>
-			<version>0.0.1</version>
-			<type>pom</type>
-		</dependency>
-		
-		<dependency>
             <groupId>org.primefaces.themes</groupId>
             <artifactId>atlantis</artifactId>
             <version>1.0.1</version>
