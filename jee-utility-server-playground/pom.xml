@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>org.cyk.pom.jee</groupId>
 		<artifactId>pom-jee</artifactId>
-		<version>pom.jee.0.0.1</version>
+		<version>pom.jee.0.1.0</version>
 	</parent>
 	
 	<groupId>org.cyk.jee.utility.server.playground</groupId>
 	<artifactId>jee-utility-server-playground</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0</version>
 	<packaging>war</packaging>
 
 	<name>Server playground</name>
@@ -24,13 +24,13 @@
 		<dependency>
 			<groupId>org.cyk.jee.utility.server.deployment</groupId>
 			<artifactId>jee-utility-server-deployment</artifactId>
-			<version>0.0.1</version>
+			<version>0.1.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.cyk.jee.utility.server.persistence.impl</groupId>
 			<artifactId>jee-utility-server-persistence-impl</artifactId>
-			<version>0.0.1</version>
+			<version>0.1.0</version>
 		</dependency>
 		
 		<dependency>
@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>org.cyk.jee.utility.playground.common</groupId>
 			<artifactId>jee-utility-playground-common</artifactId>
-			<version>0.0.1</version>
+			<version>0.1.0</version>
 		</dependency>
 	</dependencies>
 
