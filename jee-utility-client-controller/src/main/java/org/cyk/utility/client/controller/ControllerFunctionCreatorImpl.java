@@ -32,6 +32,8 @@ public class ControllerFunctionCreatorImpl extends AbstractControllerFunctionImp
 			Collection<String> businessIdentifiers = __injectResponseHelper__().getHeaderAndDisjoin(__response__, Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_BUSINESS);
 			Integer count = 0;
 			for(Object index : __entities__) {
+				//if(index instanceof DataIdentifiedByString)
+				//	((DataIdentifiedByString)index).setIdentifier(identifier);
 				if(__entityClassSystemIdentifierField__ != null)
 					FieldHelperImpl.__write__(index, __entityClassSystemIdentifierField__, CollectionHelperImpl.__getElementAt__(systemIdentifiers, count));
 				if(__entityClassBusinessIdentifierField__ != null)

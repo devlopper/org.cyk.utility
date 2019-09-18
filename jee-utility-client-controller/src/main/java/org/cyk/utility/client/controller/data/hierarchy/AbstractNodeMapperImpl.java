@@ -11,7 +11,7 @@ public abstract class AbstractNodeMapperImpl<SOURCE extends DataIdentifiedByStri
 	@Override
 	protected void __listenGetDestinationAfter__(SOURCE source, DESTINATION destination) {
 		super.__listenGetDestinationAfter__(source, destination);
-		Collection<SOURCE> parents = source.get__parents__();
+		Collection<SOURCE> parents = source.getParents();
 		if(parents != null && !parents.isEmpty()) {
 			for(SOURCE index : parents) {
 				destination.addParents(getDestination(index));

@@ -8,6 +8,7 @@ import org.cyk.utility.client.controller.component.input.InputBuilder;
 import org.cyk.utility.client.controller.component.view.ViewBuilder;
 import org.cyk.utility.client.controller.data.Data;
 import org.cyk.utility.client.controller.data.DataFieldDescriptionsGetter;
+import org.cyk.utility.client.controller.data.DataIdentifiedByString;
 import org.cyk.utility.client.controller.data.Form;
 import org.cyk.utility.field.FieldDescription;
 import org.cyk.utility.field.FieldDescriptions;
@@ -24,7 +25,7 @@ public class WindowContainerManagedWindowBuilderEditDataDefaultImpl extends Abst
 
 	@Override
 	protected void __execute__(Form form, SystemAction systemAction, Data data, ViewBuilder viewBuilder) {
-		Boolean isEditable = systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionAdd|| data.getIdentifier() == null;
+		Boolean isEditable = systemAction instanceof SystemActionCreate || systemAction instanceof SystemActionUpdate || systemAction instanceof SystemActionAdd|| (data instanceof DataIdentifiedByString &&  ((DataIdentifiedByString)data).getIdentifier() == null);
 		FieldDescriptions fieldDescriptions = __inject__(DataFieldDescriptionsGetter.class).setSystemAction(systemAction).execute().getOutput();
 		if(__injectCollectionHelper__().isNotEmpty(fieldDescriptions)) {
 			for(FieldDescription index : fieldDescriptions.get()) {

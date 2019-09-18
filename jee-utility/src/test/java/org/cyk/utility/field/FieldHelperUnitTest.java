@@ -67,10 +67,18 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	}
 	
 	@Test
-	public void write(){
+	public void write_byName(){
 		MyClass01 object = new MyClass01();
 		assertThat(object.getIdentifier()).isNull();
 		FieldHelperImpl.__write__(object,"identifier","i01");
+		assertThat(object.getIdentifier()).isEqualTo("i01");
+	}
+	
+	@Test
+	public void write_byField(){
+		MyClass01 object = new MyClass01();
+		assertThat(object.getIdentifier()).isNull();
+		FieldHelperImpl.__write__(object,FieldUtils.getField(MyClass01.class, "identifier", Boolean.TRUE),"i01");
 		assertThat(object.getIdentifier()).isEqualTo("i01");
 	}
 	

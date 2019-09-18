@@ -731,7 +731,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		Collection<MyEntity> collection = ____inject____(MyEntityPersistence.class).readByIntegerValue(2);
 		Assert.assertNotNull(collection);
 		Assert.assertEquals(3, collection.size());
-		Assert.assertEquals(new Long(3), ____inject____(MyEntityPersistence.class).countByIntegerValue(2));
+		Assert.assertEquals(Long.valueOf(3), ____inject____(MyEntityPersistence.class).countByIntegerValue(2));
 	}
 	
 	@Test
@@ -745,7 +745,7 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		____inject____(MyEntityPersistence.class).executeIncrementIntegerValue(7);
 		userTransaction.commit();	
 		MyEntity myEntity = ____inject____(MyEntityPersistence.class).readByBusinessIdentifier("e02B");
-		Assert.assertEquals(new Integer(27), myEntity.getIntegerValue());
+		Assert.assertEquals(Integer.valueOf(27), myEntity.getIntegerValue());
 	}
 	
 	/* graph */
@@ -1105,6 +1105,51 @@ public class PersistenceIntegrationTest extends AbstractPersistenceArquillianInt
 		assertThat(nodes.stream().map(Node::getIdentifier).collect(Collectors.toList())).containsOnly("MO","S","ME");
 		//assertThat(nodes.stream().map(Node::getNumberOfParents).collect(Collectors.toList())).containsOnly(3l);
 		*/
+	}
+	
+	@Test
+	public void read_nodes() throws Exception{
+		userTransaction.begin();
+		Integer numberOfNodesLevel0 = 4;
+		Integer numberOfNodesLevel1 = 3;
+		Integer numberOfNodesLevel2 = 2;
+		for(Integer indexNumberOfNodesLevel0 = 0 ; indexNumberOfNodesLevel0 < numberOfNodesLevel0 ; indexNumberOfNodesLevel0 = indexNumberOfNodesLevel0 + 1) {
+			Node nodeLevel0 = __inject__(Node.class).setCode(indexNumberOfNodesLevel0.toString()).setName(__getRandomName__());
+			__inject__(NodePersistence.class).create(nodeLevel0);
+			for(Integer indexNumberOfNodesLevel1 = 0 ; indexNumberOfNodesLevel1 < numberOfNodesLevel1 ; indexNumberOfNodesLevel1 = indexNumberOfNodesLevel1 + 1) {
+				Node nodeLevel1 = __inject__(Node.class).setCode(nodeLevel0.getCode()+"."+indexNumberOfNodesLevel1.toString()).setName(__getRandomName__());
+				__inject__(NodePersistence.class).create(nodeLevel1);
+				__inject__(NodeHierarchyPersistence.class).create(new NodeHierarchy().setParent(nodeLevel0).setChild(nodeLevel1));
+				for(Integer indexNumberOfNodesLevel2 = 0 ; indexNumberOfNodesLevel2 < numberOfNodesLevel2 ; indexNumberOfNodesLevel2 = indexNumberOfNodesLevel2 + 1) {
+					Node nodeLevel2 = __inject__(Node.class).setCode(nodeLevel1.getCode()+"."+indexNumberOfNodesLevel2.toString()).setName(__getRandomName__());
+					__inject__(NodePersistence.class).create(nodeLevel2);
+					__inject__(NodeHierarchyPersistence.class).create(new NodeHierarchy().setParent(nodeLevel1).setChild(nodeLevel2));
+				}	
+			}	
+		}
+		userTransaction.commit();
+		Collection<Node> nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, null)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("0","1","2","3");
+		assertThat(__inject__(NodePersistence.class).count(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, null)))).isEqualTo(4l);
+		
+		nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, Arrays.asList("0"),ValueUsageType.BUSINESS)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("0.0","0.1","0.2");
+		assertThat(__inject__(NodePersistence.class).count(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, Arrays.asList("0"))))).isEqualTo(3l);
+		
+		nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, Arrays.asList("0.0"),ValueUsageType.BUSINESS)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("0.0.0","0.0.1");
+		assertThat(__inject__(NodePersistence.class).count(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, Arrays.asList("0.0"))))).isEqualTo(2l);
+		
+		nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, Arrays.asList("1"),ValueUsageType.BUSINESS)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("1.0","1.1","1.2");
+		
+		nodes = __inject__(NodePersistence.class).read(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, Arrays.asList("1.1"),ValueUsageType.BUSINESS)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("1.1.0","1.1.1");
 	}
 	
 	/* Filter mapping */

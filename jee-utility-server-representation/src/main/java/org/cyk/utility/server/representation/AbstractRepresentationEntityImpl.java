@@ -64,7 +64,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public Response createMany(ENTITY_COLLECTION entityCollection,String properties) {
+	public Response createManyUsingCollection(ENTITY_COLLECTION entityCollection,String properties) {
 		return createMany(__getEntities__(entityCollection),properties);
 	}
 	

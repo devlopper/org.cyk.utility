@@ -16,7 +16,7 @@ public class VerySimpleEntityDetailsImpl extends AbstractDataIdentifiedByStringA
 	private String address;
 	
 	@Override
-	public VerySimpleEntityDetails setIdentifier(Object identifier) {
+	public VerySimpleEntityDetails setIdentifier(String identifier) {
 		return (VerySimpleEntityDetails) super.setIdentifier(identifier);
 	}
 	

@@ -14,6 +14,7 @@ import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.server.business.api.MyEntityAssertionsProvider;
 import org.cyk.utility.server.business.api.MyEntityBusiness;
+import org.cyk.utility.server.business.api.NodeBusiness;
 import org.cyk.utility.server.persistence.PersistableClassesGetter;
 import org.cyk.utility.server.persistence.entities.MyEntity;
 import org.cyk.utility.server.persistence.entities.Node;
@@ -21,6 +22,7 @@ import org.cyk.utility.server.persistence.query.filter.FilterDto;
 import org.cyk.utility.server.representation.api.MyEntityRepresentation;
 import org.cyk.utility.server.representation.api.NodeRepresentation;
 import org.cyk.utility.server.representation.entities.MyEntityDto;
+import org.cyk.utility.server.representation.entities.MyEntityDtoCollection;
 import org.cyk.utility.server.representation.entities.NodeDto;
 import org.cyk.utility.server.representation.test.TestRepresentationRead;
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment;
@@ -101,6 +103,19 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
 		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code1, ValueUsageType.BUSINESS.name(),null).getEntity());
 		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code2, ValueUsageType.BUSINESS.name(),null).getEntity());
+	}
+	
+	@Test
+	public void create_myEntity_many_simultanous_using_collection() throws Exception{
+		String code1 = __getRandomCode__();
+		String code2 = __getRandomCode__();
+		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		MyEntityDtoCollection collection = new MyEntityDtoCollection();
+		collection.add(new MyEntityDto().setCode(code1),new MyEntityDto().setCode(code2));
+		__inject__(MyEntityRepresentation.class).createManyUsingCollection(collection,null);
+		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
+		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code1, ValueUsageType.BUSINESS.name(),null).getEntity());
+		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code2, ValueUsageType.BUSINESS.name(),null).getEntity());
 	}
 	
 	/*
@@ -562,6 +577,48 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		Collection<NodeDto> nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(Boolean.FALSE, null, null, null, filters).getEntity();
 		assertThat(nodes).isNotEmpty();
 		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("service");
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void read_nodes() {
+		Integer numberOfNodesLevel0 = 4;
+		Integer numberOfNodesLevel1 = 3;
+		Integer numberOfNodesLevel2 = 2;
+		for(Integer indexNumberOfNodesLevel0 = 0 ; indexNumberOfNodesLevel0 < numberOfNodesLevel0 ; indexNumberOfNodesLevel0 = indexNumberOfNodesLevel0 + 1) {
+			Node nodeLevel0 = __inject__(Node.class).setCode(indexNumberOfNodesLevel0.toString()).setName(__getRandomName__());
+			__inject__(NodeBusiness.class).create(nodeLevel0);
+			for(Integer indexNumberOfNodesLevel1 = 0 ; indexNumberOfNodesLevel1 < numberOfNodesLevel1 ; indexNumberOfNodesLevel1 = indexNumberOfNodesLevel1 + 1) {
+				Node nodeLevel1 = __inject__(Node.class).setCode(nodeLevel0.getCode()+"."+indexNumberOfNodesLevel1.toString()).setName(__getRandomName__()).addParents(nodeLevel0);
+				__inject__(NodeBusiness.class).create(nodeLevel1);
+				for(Integer indexNumberOfNodesLevel2 = 0 ; indexNumberOfNodesLevel2 < numberOfNodesLevel2 ; indexNumberOfNodesLevel2 = indexNumberOfNodesLevel2 + 1) {
+					Node nodeLevel2 = __inject__(Node.class).setCode(nodeLevel1.getCode()+"."+indexNumberOfNodesLevel2.toString()).setName(__getRandomName__()).addParents(nodeLevel1);
+					__inject__(NodeBusiness.class).create(nodeLevel2);
+				}	
+			}	
+		}
+		Collection<NodeDto> nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(Boolean.FALSE, null, null, null, new FilterDto().addField(Node.FIELD_PARENTS, null)).getEntity();
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("0","1","2","3");
+		assertThat(__inject__(NodeRepresentation.class).count(new FilterDto().addField(Node.FIELD_PARENTS, null)).getEntity()).isEqualTo(4l);
+		
+		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(Boolean.FALSE, null, null, null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0"),ValueUsageType.BUSINESS)).getEntity();
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("0.0","0.1","0.2");
+		assertThat(__inject__(NodeRepresentation.class).count(new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0"))).getEntity()).isEqualTo(3l);
+		
+		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(Boolean.FALSE, null, null, null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0.0"),ValueUsageType.BUSINESS)).getEntity();
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("0.0.0","0.0.1");
+		assertThat(__inject__(NodeRepresentation.class).count(new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("0.0"))).getEntity()).isEqualTo(2l);
+		
+		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(Boolean.FALSE, null, null, null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("1"),ValueUsageType.BUSINESS)).getEntity();
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("1.0","1.1","1.2");
+		
+		nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(Boolean.FALSE, null, null, null,new FilterDto().addField(Node.FIELD_PARENTS, Arrays.asList("1.1"),ValueUsageType.BUSINESS)).getEntity();
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(NodeDto::getCode).collect(Collectors.toList())).containsOnly("1.1.0","1.1.1");
 	}
 	
 	/* Save */

@@ -665,4 +665,45 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("service");
 	}
 	
+	@Test
+	public void read_nodes() {
+		Integer numberOfNodesLevel0 = 4;
+		Integer numberOfNodesLevel1 = 3;
+		Integer numberOfNodesLevel2 = 2;
+		for(Integer indexNumberOfNodesLevel0 = 0 ; indexNumberOfNodesLevel0 < numberOfNodesLevel0 ; indexNumberOfNodesLevel0 = indexNumberOfNodesLevel0 + 1) {
+			Node nodeLevel0 = __inject__(Node.class).setCode(indexNumberOfNodesLevel0.toString()).setName(__getRandomName__());
+			__inject__(NodeBusiness.class).create(nodeLevel0);
+			for(Integer indexNumberOfNodesLevel1 = 0 ; indexNumberOfNodesLevel1 < numberOfNodesLevel1 ; indexNumberOfNodesLevel1 = indexNumberOfNodesLevel1 + 1) {
+				Node nodeLevel1 = __inject__(Node.class).setCode(nodeLevel0.getCode()+"."+indexNumberOfNodesLevel1.toString()).setName(__getRandomName__()).addParents(nodeLevel0);
+				__inject__(NodeBusiness.class).create(nodeLevel1);
+				for(Integer indexNumberOfNodesLevel2 = 0 ; indexNumberOfNodesLevel2 < numberOfNodesLevel2 ; indexNumberOfNodesLevel2 = indexNumberOfNodesLevel2 + 1) {
+					Node nodeLevel2 = __inject__(Node.class).setCode(nodeLevel1.getCode()+"."+indexNumberOfNodesLevel2.toString()).setName(__getRandomName__()).addParents(nodeLevel1);
+					__inject__(NodeBusiness.class).create(nodeLevel2);
+				}	
+			}	
+		}
+		Collection<Node> nodes = __inject__(NodeBusiness.class).find(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, null)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("0","1","2","3");
+		assertThat(__inject__(NodeBusiness.class).count(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, null)))).isEqualTo(4l);
+		
+		nodes = __inject__(NodeBusiness.class).find(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, Arrays.asList("0"),ValueUsageType.BUSINESS)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("0.0","0.1","0.2");
+		assertThat(__inject__(NodeBusiness.class).count(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, Arrays.asList("0"))))).isEqualTo(3l);
+		
+		nodes = __inject__(NodeBusiness.class).find(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, Arrays.asList("0.0"),ValueUsageType.BUSINESS)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("0.0.0","0.0.1");
+		assertThat(__inject__(NodeBusiness.class).count(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, Arrays.asList("0.0"))))).isEqualTo(2l);
+		
+		nodes = __inject__(NodeBusiness.class).find(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, Arrays.asList("1"),ValueUsageType.BUSINESS)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("1.0","1.1","1.2");
+		
+		nodes = __inject__(NodeBusiness.class).find(new Properties().setQueryFilters(__inject__(Filter.class).setKlass(Node.class).addField(Node.FIELD_PARENTS, Arrays.asList("1.1"),ValueUsageType.BUSINESS)));
+		assertThat(nodes).isNotNull();
+		assertThat(nodes.stream().map(Node::getCode).collect(Collectors.toList())).containsOnly("1.1.0","1.1.1");
+	}
+	
 }

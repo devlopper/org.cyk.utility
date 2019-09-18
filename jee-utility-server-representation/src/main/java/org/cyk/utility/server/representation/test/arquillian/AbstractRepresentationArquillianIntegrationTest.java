@@ -53,7 +53,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	protected <ENTITY> void ____createEntity____(Collection<ENTITY> entities,RepresentationEntity representation) {
 		AbstractEntityCollection<ENTITY> collection = (AbstractEntityCollection<ENTITY>) instanciateOne(__getEntityCollectionClass__(entities.iterator().next().getClass()));
 		collection.add(entities);		
-		Response response = representation.createMany(collection,null);
+		Response response = representation.createManyUsingCollection(collection,null);
 		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		response.close();
 		for(ENTITY index : entities) {

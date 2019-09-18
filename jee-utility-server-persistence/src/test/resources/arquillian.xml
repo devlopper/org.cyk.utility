@@ -24,7 +24,6 @@
     <container qualifier="widlfly-managed" default="true">
         <configuration>
            <property name="jbossHome">target/wildfly-${wildfly.version:17.0.1.Final}</property>
-           <property name="javaHome">${javaHome}</property>
         </configuration>
     </container>
 

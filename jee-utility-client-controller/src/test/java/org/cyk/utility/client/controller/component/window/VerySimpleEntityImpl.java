@@ -36,7 +36,7 @@ public class VerySimpleEntityImpl extends AbstractDataIdentifiedByStringAndCoded
 	private Collection<VerySimpleEntityEnum> enumerations;
 	
 	@Override
-	public VerySimpleEntity setIdentifier(Object identifier) {
+	public VerySimpleEntity setIdentifier(String identifier) {
 		return (VerySimpleEntity) super.setIdentifier(identifier);
 	}
 	

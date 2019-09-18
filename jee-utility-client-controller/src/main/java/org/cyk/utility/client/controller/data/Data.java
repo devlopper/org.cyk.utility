@@ -1,8 +1,8 @@
 package org.cyk.utility.client.controller.data;
 
+import org.cyk.utility.__kernel__.object.Objectable;
 import org.cyk.utility.__kernel__.object.__static__.representation.Action;
 import org.cyk.utility.__kernel__.object.__static__.representation.Actions;
-import org.cyk.utility.client.controller.Objectable;
 
 public interface Data extends Objectable {
 	

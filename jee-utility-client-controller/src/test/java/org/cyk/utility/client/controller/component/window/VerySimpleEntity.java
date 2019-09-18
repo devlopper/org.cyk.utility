@@ -6,7 +6,7 @@ import org.cyk.utility.client.controller.data.DataIdentifiedByStringAndCoded;
 
 public interface VerySimpleEntity extends DataIdentifiedByStringAndCoded {
 
-	@Override VerySimpleEntity setIdentifier(Object identifier);
+	@Override VerySimpleEntity setIdentifier(String identifier);
 	@Override VerySimpleEntity setCode(String code);
 	
 	String getName();

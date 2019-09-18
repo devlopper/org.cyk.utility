@@ -24,7 +24,6 @@ public abstract class AbstractDataIdentifiedByStringImpl extends AbstractDataImp
 	@Override
 	public DataIdentifiedByString setIdentifier(String identifier) {
 		this.identifier = identifier;
-		super.setIdentifier(this.identifier);
 		return this;
 	}
 

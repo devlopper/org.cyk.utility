@@ -4,9 +4,9 @@ import org.cyk.utility.client.controller.data.hierarchy.DataIdentifiedByStringAn
 
 public interface Node extends DataIdentifiedByStringAndCodedAndNamed<Node> {
 
-	@Override Node setIdentifier(Object identifier);
+	@Override Node setIdentifier(String identifier);
 	@Override Node setCode(String code);
 	@Override Node setName(String name);
 	
-	@Override Node add__parents__(Node... __parents__);
+	@Override Node addParents(Node... parents);
 }

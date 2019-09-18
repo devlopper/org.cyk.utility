@@ -8,12 +8,12 @@ public class NodeImpl extends AbstractDataIdentifiedByStringAndCodedAndNamedImpl
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Node add__parents__(Node... __parents__) {
-		return (Node) super.add__parents__(__parents__);
+	public Node addParents(Node... parents) {
+		return (Node) super.addParents(parents);
 	}
 	
 	@Override
-	public Node setIdentifier(Object identifier) {
+	public Node setIdentifier(String identifier) {
 		return (Node) super.setIdentifier(identifier);
 	}
 	
