@@ -21,7 +21,10 @@ public class ControllerFunctionCreatorImpl extends AbstractControllerFunctionImp
 	@Override
 	protected void __executeRepresentation__() {
 		if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
+			//FIXME it is making body parsing error
 			__response__ = ((RepresentationEntity<?,Object,?>)__representation__).createMany(__representationEntities__,null);
+			//for(Object index : __representationEntities__)
+			//	__response__ = ((RepresentationEntity<?,Object,?>)__representation__).createOne(index);
 	}
 	
 	@Override
@@ -39,7 +42,7 @@ public class ControllerFunctionCreatorImpl extends AbstractControllerFunctionImp
 				if(__entityClassBusinessIdentifierField__ != null)
 					FieldHelperImpl.__write__(index, __entityClassBusinessIdentifierField__, CollectionHelperImpl.__getElementAt__(businessIdentifiers, count));
 				count++;
-			}	
+			}
 		}
 	}
 	

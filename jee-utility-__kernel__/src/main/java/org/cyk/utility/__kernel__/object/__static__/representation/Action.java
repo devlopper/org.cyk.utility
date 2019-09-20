@@ -2,11 +2,10 @@ package org.cyk.utility.__kernel__.object.__static__.representation;
 
 import java.io.Serializable;
 
+import javax.json.bind.annotation.JsonbProperty;
+import javax.json.bind.annotation.JsonbPropertyOrder;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,17 +13,17 @@ import lombok.experimental.Accessors;
 
 @Getter @Setter @Accessors(chain=true)
 @XmlRootElement(name=Action.__ROOT_NAME__)
-@JsonRootName(value=Action.__ROOT_NAME__)
+@JsonbPropertyOrder(value = {"identifier","uniformResourceLocator","method"})
 public class Action implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@JsonProperty(index=0,value=__ATTRIBUTE_IDENTIFIER__,required=true)
+	@JsonbProperty(value=__ATTRIBUTE_IDENTIFIER__)
 	private String identifier;
 	
-	@JsonProperty(index=1,value=__ATTRIBUTE_UNIFORM_RESOURCEL_OCATOR__,required=true)
+	@JsonbProperty(value=__ATTRIBUTE_UNIFORM_RESOURCEL_OCATOR__)
 	private String uniformResourceLocator;
 	
-	@JsonProperty(index=2,value=__ATTRIBUTE_METHOD__,required=true)
+	@JsonbProperty(value=__ATTRIBUTE_METHOD__)
 	private String method;
 	
 	/**/

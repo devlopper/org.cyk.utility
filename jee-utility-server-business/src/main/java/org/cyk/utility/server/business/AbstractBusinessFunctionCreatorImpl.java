@@ -12,6 +12,7 @@ import org.cyk.utility.server.persistence.Persistence;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.type.BooleanHelper;
+import org.cyk.utility.value.ValueHelper;
 
 public abstract class AbstractBusinessFunctionCreatorImpl extends AbstractBusinessFunctionTransactionImpl implements BusinessFunctionCreator, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -41,9 +42,9 @@ public abstract class AbstractBusinessFunctionCreatorImpl extends AbstractBusine
 						entities = new ArrayList<>();
 					entities.add(index);
 				}else {
-					if(Boolean.TRUE.equals(__inject__(BooleanHelper.class).get(isCreateIfSystemIdentifierIsBlank))) {
+					if(Boolean.TRUE.equals(BooleanHelper.get(isCreateIfSystemIdentifierIsBlank))) {
 						Object identifier = __injectFieldHelper__().getFieldValueSystemIdentifier(index);
-						if(Boolean.TRUE.equals(__injectValueHelper__().isBlank(identifier))) {
+						if(ValueHelper.isBlank(identifier)) {
 							if(entities == null)
 								entities = new ArrayList<>();
 							entities.add(index);

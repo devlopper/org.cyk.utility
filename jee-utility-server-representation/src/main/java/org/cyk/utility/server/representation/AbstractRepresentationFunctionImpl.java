@@ -11,7 +11,8 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
-import org.cyk.utility.field.FieldValueSetter;
+import org.cyk.utility.collection.CollectionHelperImpl;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.server.business.Business;
 import org.cyk.utility.system.AbstractSystemFunctionServerImpl;
@@ -41,12 +42,11 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 		if(__persistenceEntityClass__ == null) {
 			Class<?> klass = null;
 			if(getEntityClass()==null) {
-				if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__entities__)))
+				if(__entities__!= null && !__entities__.isEmpty())
 					klass = __entities__.iterator().next().getClass();	
 			}else {
 				klass = getEntityClass();
-			}
-			
+			}			
 			if(klass != null) {
 				String className = klass.getName();
 				className = StringUtils.replaceOnce(className, ".representation.", ".persistence.");
@@ -61,43 +61,34 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 		__responseBuilder__ = __instanciateResponseBuilder__();
 		try {
 			__executeBusiness__();
-			
-			if(Boolean.TRUE.equals(__injectCollectionHelper__().isNotEmpty(__persistenceEntities__))) {
+			if(__persistenceEntities__ != null && !__persistenceEntities__.isEmpty()) {
 				Collection<String> identifiersSystem = new ArrayList<String>();
 				Collection<String> identifiersBusiness = new ArrayList<String>();
-				
+				//TODO use instanceof interface to gain speed in processing. create an interface for PersistenceEntity and use it
 				Field persistenceSystemIdentifierField = __inject__(ClassInstancesRuntime.class).get(__persistenceEntityClass__).getSystemIdentifierField();
 				Field persistenceBusinessIdentifierField = __inject__(ClassInstancesRuntime.class).get(__persistenceEntityClass__).getBusinessIdentifierField();
-				
 				Integer count = 0;
 				for(Object index : __persistenceEntities__) {
-					Object dto = __injectCollectionHelper__().getElementAt(__entities__, count);
-					Object identifier = __injectFieldValueGetter__().execute(index, persistenceSystemIdentifierField).getOutput();
+					Object dto = CollectionHelperImpl.__getElementAt__(__entities__, count);
+					Object identifier = FieldHelperImpl.__read__(index, persistenceSystemIdentifierField); 
 					if(identifier != null) {
 						identifiersSystem.add(identifier.toString());
 						if(__entityClassSystemIdentifierField__ != null) {
-							__inject__(FieldValueSetter.class).execute(dto, __entityClassSystemIdentifierField__, identifier.toString());
+							FieldHelperImpl.__write__(dto, __entityClassSystemIdentifierField__, identifier.toString());
 						}
-					}
-					
-					identifier = __injectFieldValueGetter__().execute(index, persistenceBusinessIdentifierField).getOutput();
+					}					
+					identifier = FieldHelperImpl.__read__(index, persistenceBusinessIdentifierField);
 					if(identifier != null) {
 						identifiersBusiness.add(identifier.toString());
 						if(__entityClassBusinessIdentifierField__ != null) {
-							__inject__(FieldValueSetter.class).execute(dto, __entityClassBusinessIdentifierField__, identifier.toString());
+							FieldHelperImpl.__write__(dto, __entityClassBusinessIdentifierField__, identifier.toString());
 						}
-					}
-				
+					}				
 					count++;
 				}
-				__injectResponseHelper__().addHeader(__responseBuilder__, Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_SYSTEM, identifiersSystem);
-				__injectResponseHelper__().addHeader(__responseBuilder__, Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_BUSINESS, identifiersBusiness);
-				/*
-				if(__injectCollectionHelper__().isNotEmpty(identifiersSystem))
-					__responseBuilder__.header(Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_SYSTEM, Constant.joinHeaderValues(identifiersSystem));
-				if(__injectCollectionHelper__().isNotEmpty(identifiersBusiness))
-					__responseBuilder__.header(Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_BUSINESS, Constant.joinHeaderValues(identifiersBusiness));	
-				*/
+				ResponseHelper.addHeader(__responseBuilder__, Constant.RESPONSE_HEADER_X_TOTAL_COUNT, __entities__.size());
+				ResponseHelper.addHeader(__responseBuilder__, Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_SYSTEM, identifiersSystem);
+				ResponseHelper.addHeader(__responseBuilder__, Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_BUSINESS, identifiersBusiness);
 			}
 		} catch (Exception exception) {
 			__throwable__ = exception;
@@ -108,7 +99,6 @@ public abstract class AbstractRepresentationFunctionImpl extends AbstractSystemF
 			__processResponseBuilder__();
 		}
 		setResponse(__responseBuilder__.build());
-		//System.out.println("AbstractRepresentationFunctionImpl.__execute__() : "+getClass().getSimpleName()+" : "+(System.currentTimeMillis() - t));
 	}
 	
 	protected abstract void __executeBusiness__();

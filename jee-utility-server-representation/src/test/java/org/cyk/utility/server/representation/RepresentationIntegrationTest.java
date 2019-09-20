@@ -5,7 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.object.__static__.representation.Action;
@@ -28,6 +32,7 @@ import org.cyk.utility.server.representation.test.TestRepresentationRead;
 import org.cyk.utility.server.representation.test.arquillian.AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.Test;
+import org.junit.runners.Parameterized.UseParametersRunnerFactory;
 
 public class RepresentationIntegrationTest extends AbstractRepresentationArquillianIntegrationTestWithDefaultDeployment {
 	private static final long serialVersionUID = 1L;
@@ -42,98 +47,82 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 	}
 	
 	@Test
+	public void create_myEntity_one_null() throws Exception{
+		MyEntityRepresentation myEntityRepresentation = __inject__(MyEntityRepresentation.class);
+		Response response = myEntityRepresentation.createOne(null);
+		__assertResponseTransaction__(response, Status.BAD_REQUEST, null, null, null);
+	}
+	
+	@Test
 	public void create_myEntity_one() throws Exception{
+		MyEntityRepresentation myEntityRepresentation = __inject__(MyEntityRepresentation.class);
 		MyEntityDto entity = new MyEntityDto().setCode("a");
 		assertThat(entity.getIdentifier()).isBlank();
-		__inject__(MyEntityRepresentation.class).createOne(entity);
+		assertThat(entity.getIdentifier()).isBlank();
+		Response response = myEntityRepresentation.createOne(entity);
+		__assertResponseTransaction__(response, Status.CREATED, 1l, List.of(entity.getIdentifier()), List.of("a"));
 		assertThat(entity.getIdentifier()).isNotBlank();
-		entity = (MyEntityDto) __inject__(MyEntityRepresentation.class).getOne(entity.getIdentifier(), "system", null).getEntity();
+		entity = (MyEntityDto) myEntityRepresentation.getOne(entity.getIdentifier(), "system", null).getEntity();
 		assertThat(entity).isNotNull();
 		Action action = null;
-		action = entity.get__action__byIdentifier(Action.IDENTIFIER_READ);
+		action = entity.__get__action__byIdentifier(Action.IDENTIFIER_READ);
 		assertThat(action).isNotNull();
 		assertThat(action.getMethod()).isEqualTo(Action.METHOD_GET);
 		assertThat(action.getUniformResourceLocator()).endsWith("/"+entity.getIdentifier());
-		action = entity.get__action__byIdentifier(Action.IDENTIFIER_UPDATE);
+		action = entity.__get__action__byIdentifier(Action.IDENTIFIER_UPDATE);
 		assertThat(action).isNotNull();
 		assertThat(action.getMethod()).isEqualTo(Action.METHOD_PUT);
-		action = entity.get__action__byIdentifier(Action.IDENTIFIER_DELETE);
+		action = entity.__get__action__byIdentifier(Action.IDENTIFIER_DELETE);
 		assertThat(action).isNotNull();
 		assertThat(action.getMethod()).isEqualTo(Action.METHOD_DELETE);
 		assertThat(action.getUniformResourceLocator()).endsWith("/delete/identifiers?identifier="+entity.getIdentifier());
 	}
 	
 	@Test
-	public void create_myEntity_many_sequential() throws Exception{
-		String code1 = __getRandomCode__();
-		String code2 = __getRandomCode__();
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
-		__inject__(MyEntityRepresentation.class).createOne(new MyEntityDto().setCode(code1));
-		assertionHelper.assertEquals(1l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
-		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code1, ValueUsageType.BUSINESS.name(),null).getEntity());
-		__inject__(MyEntityRepresentation.class).createOne(new MyEntityDto().setCode(code2));
-		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
-		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code1, ValueUsageType.BUSINESS.name(),null).getEntity());
-		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code2, ValueUsageType.BUSINESS.name(),null).getEntity());
-		__inject__(MyEntityRepresentation.class).deleteByIdentifiers(Arrays.asList(code1), ValueUsageType.BUSINESS.name());
-		assertionHelper.assertEquals(1l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
-		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code1, ValueUsageType.BUSINESS.name(),null).getEntity());
-		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code2, ValueUsageType.BUSINESS.name(),null).getEntity());
-		__inject__(MyEntityRepresentation.class).deleteByIdentifiers(Arrays.asList(code2), ValueUsageType.BUSINESS.name());
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
-		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code1, ValueUsageType.BUSINESS.name(),null).getEntity());
-		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code2, ValueUsageType.BUSINESS.name(),null).getEntity());
+	public void create_myEntity_many_collection_java_null() throws Exception{
+		MyEntityRepresentation myEntityRepresentation = __inject__(MyEntityRepresentation.class);
+		Response response = myEntityRepresentation.createMany((Collection<MyEntityDto>)null,null);
+		__assertResponseTransaction__(response, Status.BAD_REQUEST, null, null, null);
 	}
 	
 	@Test
-	public void create_myEntity_many_simultanous() throws Exception{
-		String code1 = __getRandomCode__();
-		String code2 = __getRandomCode__();
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
-		__inject__(MyEntityRepresentation.class).createMany(Arrays.asList(new MyEntityDto().setCode(code1),new MyEntityDto().setCode(code2)),null);
-		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
-		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code1, ValueUsageType.BUSINESS.name(),null).getEntity());
-		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code2, ValueUsageType.BUSINESS.name(),null).getEntity());
-		
-		__inject__(MyEntityRepresentation.class).deleteByIdentifiers(Arrays.asList(code1), ValueUsageType.BUSINESS.name());
-		assertionHelper.assertEquals(1l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
-		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code1, ValueUsageType.BUSINESS.name(),null).getEntity());
-		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code2, ValueUsageType.BUSINESS.name(),null).getEntity());
-		__inject__(MyEntityRepresentation.class).deleteByIdentifiers(Arrays.asList(code2), ValueUsageType.BUSINESS.name());
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
-		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code1, ValueUsageType.BUSINESS.name(),null).getEntity());
-		assertionHelper.assertNull(__inject__(MyEntityRepresentation.class).getOne(code2, ValueUsageType.BUSINESS.name(),null).getEntity());
+	public void create_myEntity_many_collection_java_empty() throws Exception{
+		MyEntityRepresentation myEntityRepresentation = __inject__(MyEntityRepresentation.class);
+		Response response = myEntityRepresentation.createMany(List.of(),null);
+		__assertResponseTransaction__(response, Status.BAD_REQUEST, null, null, null);
 	}
 	
 	@Test
-	public void create_myEntity_many_simultanous_using_collection() throws Exception{
-		String code1 = __getRandomCode__();
-		String code2 = __getRandomCode__();
-		assertionHelper.assertEquals(0l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
-		MyEntityDtoCollection collection = new MyEntityDtoCollection();
-		collection.add(new MyEntityDto().setCode(code1),new MyEntityDto().setCode(code2));
-		__inject__(MyEntityRepresentation.class).createManyUsingCollection(collection,null);
-		assertionHelper.assertEquals(2l, __inject__(MyEntityRepresentation.class).count(null).getEntity());
-		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code1, ValueUsageType.BUSINESS.name(),null).getEntity());
-		assertionHelper.assertNotNull(__inject__(MyEntityRepresentation.class).getOne(code2, ValueUsageType.BUSINESS.name(),null).getEntity());
-	}
-	
-	/*
-	@Test
-	public void create_myEntity_WithLong1Null(){
-		MyEntity myEntity = new MyEntityDto().setCode("c01").setLong1(1l);
-		__inject__(MyEntityRepresentation.class).createOne(myEntity);
-		__deleteEntitiesAll__(MyEntity.class);
+	public void create_myEntity_many_collection_java() throws Exception{
+		MyEntityRepresentation myEntityRepresentation = __inject__(MyEntityRepresentation.class);
+		List<MyEntityDto> myEntityDtos = List.of(new MyEntityDto().setCode("a"),new MyEntityDto().setCode("b"));
+		Response response = myEntityRepresentation.createMany(myEntityDtos,null);
+		__assertResponseTransaction__(response, Status.CREATED, 2l, myEntityDtos.stream().map(MyEntityDto::getIdentifier).collect(Collectors.toList()), List.of("a","b"));
 	}
 	
 	@Test
-	public void create_myEntity_WithAssertionFail(){
-		TestBusinessCreate test = __inject__(TestBusinessCreate.class);
-		test.addObjects(new MyEntityDto().setCode("c01").setLong1(-11l))
-			.setExpectedThrowableCauseClass(RuntimeException.class)
-			.execute();
+	public void create_myEntity_many_collection_custom_null() throws Exception{
+		MyEntityRepresentation myEntityRepresentation = __inject__(MyEntityRepresentation.class);
+		Response response = myEntityRepresentation.createMany((MyEntityDtoCollection)null,null);
+		__assertResponseTransaction__(response, Status.BAD_REQUEST, null, null, null);
 	}
-	*/
+	
+	@Test
+	public void create_myEntity_many_collection_custom_empty() throws Exception{
+		MyEntityRepresentation myEntityRepresentation = __inject__(MyEntityRepresentation.class);
+		Response response = myEntityRepresentation.createMany(new MyEntityDtoCollection(),null);
+		__assertResponseTransaction__(response, Status.BAD_REQUEST, null, null, null);
+	}
+	
+	@Test
+	public void create_myEntity_many_collection_custom() throws Exception{
+		MyEntityRepresentation myEntityRepresentation = __inject__(MyEntityRepresentation.class);
+		MyEntityDtoCollection myEntityDtoCollection = new MyEntityDtoCollection(); 
+		myEntityDtoCollection.add(new MyEntityDto().setCode("a"),new MyEntityDto().setCode("b"));
+		Response response = myEntityRepresentation.createMany(myEntityDtoCollection,null);
+		__assertResponseTransaction__(response, Status.CREATED, 2l, myEntityDtoCollection.getElements().stream().map(MyEntityDto::getIdentifier).collect(Collectors.toList()), List.of("a","b"));
+	}
+	
 	/* Find */
 	
 	@Test
@@ -552,7 +541,7 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		NodeDto nodeAction = new NodeDto().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(new NodeDto().setCode("menu"));
 		__inject__(NodeRepresentation.class).createOne(nodeAction);
 		
-		FilterDto filters = __inject__(FilterDto.class).setKlass(Node.class);
+		FilterDto filters = __inject__(FilterDto.class).useKlass(Node.class);
 		filters.addField(Node.FIELD_PARENTS, Arrays.asList("module"),ValueUsageType.BUSINESS);
 		@SuppressWarnings("unchecked")
 		Collection<NodeDto> nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(Boolean.FALSE, null, null, null, filters).getEntity();
@@ -571,7 +560,7 @@ public class RepresentationIntegrationTest extends AbstractRepresentationArquill
 		NodeDto nodeAction = new NodeDto().setIdentifier("A").setCode("action").setName(__getRandomName__()).addParents(new NodeDto().setIdentifier("ME"));
 		__inject__(NodeRepresentation.class).createOne(nodeAction);
 		
-		FilterDto filters = __inject__(FilterDto.class).setKlass(Node.class);
+		FilterDto filters = __inject__(FilterDto.class).useKlass(Node.class);
 		filters.addField(Node.FIELD_PARENTS, Arrays.asList("MO"),ValueUsageType.SYSTEM);
 		@SuppressWarnings("unchecked")
 		Collection<NodeDto> nodes = (Collection<NodeDto>) __inject__(NodeRepresentation.class).getMany(Boolean.FALSE, null, null, null, filters).getEntity();

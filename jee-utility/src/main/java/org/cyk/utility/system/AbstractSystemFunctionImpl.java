@@ -20,14 +20,15 @@ import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.enumeration.EnumGetter;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldName;
-import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.function.FunctionHelper;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.log.LogLevel;
 import org.cyk.utility.notification.NotificationBuilders;
 import org.cyk.utility.notification.Notifications;
+import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
@@ -137,9 +138,9 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		if(numberOfProcessedElement != null && numberOfProcessedElement > 0)
 			addLogMessageBuilderParameter("count", numberOfProcessedElement);
 		
-		__isBatchable__ = __inject__(ValueHelper.class).defaultToIfNull(__inject__(BooleanHelper.class).get(getProperty(Properties.IS_BATCHABLE)),Boolean.FALSE);
+		__isBatchable__ = __inject__(ValueHelper.class).defaultToIfNull(BooleanHelper.get(getProperty(Properties.IS_BATCHABLE)),Boolean.FALSE);
 		if(Boolean.TRUE.equals(__isBatchable__)) {
-			__batchSize__ = __injectNumberHelper__().getInteger(getProperty(Properties.BATCH_SIZE), 30);
+			__batchSize__ = NumberHelper.getInteger(getProperty(Properties.BATCH_SIZE), 30);
 			addLogMessageBuilderParameter("batch", __batchSize__);
 		}
 	}
@@ -208,10 +209,10 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 			Object identifier = null;
 			for(Object index : __entities__) {
 				if(ValueUsageType.SYSTEM.equals(valueUsageType) && __entityClassSystemIdentifierField__ != null)
-					identifier = __injectFieldValueGetter__().execute(index, __entityClassSystemIdentifierField__).getOutput();
+					identifier = FieldHelperImpl.__read__(index, __entityClassSystemIdentifierField__);
 				
 				if(identifier == null && ValueUsageType.BUSINESS.equals(valueUsageType) && __entityClassBusinessIdentifierField__ != null)
-					identifier = __injectFieldValueGetter__().execute(index, __entityClassBusinessIdentifierField__).getOutput();
+					identifier = FieldHelperImpl.__read__(index, __entityClassBusinessIdentifierField__);
 				
 				if(identifier != null)
 					identifiers.add(identifier);
@@ -484,10 +485,6 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 		return __inject__(CollectionHelper.class).instanciate(ValueUsageType.values());
 	}
 	
-	protected Object getEnityFieldValue(Object entity,FieldName fieldName,ValueUsageType valueUsageType,String derivedFieldName){
-		return __inject__(FieldValueGetter.class).setObject(entity).setField(derivedFieldName).execute().getOutput();
-	}
-
 	@Override
 	public NotificationBuilders getNotificationBuilders() {
 		return notificationBuilders;
@@ -495,7 +492,9 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	@Override
 	public NotificationBuilders getNotificationBuilders(Boolean injectIfNull) {
-		return (NotificationBuilders) __getInjectIfNull__(FIELD_NOTIFICATION_BUILDERS, injectIfNull);
+		if(notificationBuilders == null && Boolean.TRUE.equals(injectIfNull))
+			notificationBuilders = __inject__(NotificationBuilders.class);
+		return notificationBuilders;
 	}
 	
 	@Override
@@ -511,7 +510,9 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	@Override
 	public Notifications getNotifications(Boolean injectIfNull) {
-		return (Notifications) __getInjectIfNull__(FIELD_NOTIFICATIONS, injectIfNull);
+		if(notifications == null && Boolean.TRUE.equals(injectIfNull))
+			notifications = __inject__(Notifications.class);
+		return notifications;
 	}
 	
 	@Override
@@ -528,9 +529,4 @@ public abstract class AbstractSystemFunctionImpl extends AbstractFunctionWithPro
 	
 	/**/
 	
-	/**/
-	
-	public static final String FIELD_NOTIFICATION_BUILDERS = "notificationBuilders";
-	public static final String FIELD_NOTIFICATIONS = "notifications";
-	public static final String FIELD_ENTITY_FIELD_NAMES = "entityFieldNames";
 }

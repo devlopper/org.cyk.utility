@@ -55,18 +55,7 @@ public class MethodGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<
 					.getFirst(getAnnotationClasses()));	
 		}
 		
-		/*String token = getToken();
-		if(__inject__(StringHelper.class).isBlank(token)){
-			FieldName fieldName = getFieldName();
-			if(fieldName!=null){
-				ValueUsageType valueUsageType = getValueUsageType();
-				token = __inject__(FieldNameGetter.class).setClazz(aClass).setFieldName(fieldName).setValueUsageType(valueUsageType).execute().getOutput();
-			}
-		}
-		StringLocation location = getTokenLocation();
-		if(location == null)
-			location = StringLocation.EXAT;
-		*/
+		
 		for(Method index : methods){
 			Boolean add = Boolean.TRUE;
 			/*if(__inject__(StringHelper.class).isNotBlank(token)){

@@ -35,9 +35,9 @@ public class JavaLocalDateTimeUnitTest extends AbstractWeldUnitTest {
 	/**/
 
 	private void assertLocalDate(LocalDate date,Object day,Object month,Object year) {
-		org.assertj.core.api.Assertions.assertThat(date.getDayOfMonth()).isEqualTo(__inject__(NumberHelper.class).getInteger(day));
-		org.assertj.core.api.Assertions.assertThat(date.getMonthValue()).isEqualTo(__inject__(NumberHelper.class).getInteger(month));
-		org.assertj.core.api.Assertions.assertThat(date.getYear()).isEqualTo(__inject__(NumberHelper.class).getInteger(year));
+		org.assertj.core.api.Assertions.assertThat(date.getDayOfMonth()).isEqualTo(NumberHelper.getInteger(day));
+		org.assertj.core.api.Assertions.assertThat(date.getMonthValue()).isEqualTo(NumberHelper.getInteger(month));
+		org.assertj.core.api.Assertions.assertThat(date.getYear()).isEqualTo(NumberHelper.getInteger(year));
 	}
 	
 	protected void assertLocalDate(String string,Object day,Object month,Object year) {
@@ -46,10 +46,10 @@ public class JavaLocalDateTimeUnitTest extends AbstractWeldUnitTest {
 	}
 
 	private void assertLocalTime(LocalTime time,Object hour,Object minute,Object second,Object nanosecond) {
-		org.assertj.core.api.Assertions.assertThat(time.getHour()).isEqualTo(__inject__(NumberHelper.class).getInteger(hour));
-		org.assertj.core.api.Assertions.assertThat(time.getMinute()).isEqualTo(__inject__(NumberHelper.class).getInteger(minute));
-		//org.assertj.core.api.Assertions.assertThat(time.getSecond()).isEqualTo(__inject__(NumberHelper.class).getInteger(second));
-		//org.assertj.core.api.Assertions.assertThat(time.getNano()).isEqualTo(__inject__(NumberHelper.class).getInteger(nanosecond));
+		org.assertj.core.api.Assertions.assertThat(time.getHour()).isEqualTo(NumberHelper.getInteger(hour));
+		org.assertj.core.api.Assertions.assertThat(time.getMinute()).isEqualTo(NumberHelper.getInteger(minute));
+		//org.assertj.core.api.Assertions.assertThat(time.getSecond()).isEqualTo(NumberHelper.getInteger(second));
+		//org.assertj.core.api.Assertions.assertThat(time.getNano()).isEqualTo(NumberHelper.getInteger(nanosecond));
 	}
 	
 	protected void assertLocalTime(String string,Object hour,Object minute,Object second,Object nanosecond) {

@@ -27,8 +27,8 @@ public class DurationBuilderUnitTest extends AbstractWeldUnitTest {
 	/**/
 	
 	private void assertDuration(Duration duration,Short numberOfMillisecond,Byte numberOfSecond,Byte numberOfMinute) {
-		assertThat(duration.getNumberOfMillisecond()).isEqualTo(__inject__(NumberHelper.class).get(Short.class, numberOfMillisecond));
-		assertThat(duration.getNumberOfSecond()).isEqualTo(__inject__(NumberHelper.class).get(Byte.class, numberOfSecond));
-		assertThat(duration.getNumberOfMinute()).isEqualTo(__inject__(NumberHelper.class).get(Byte.class, numberOfMinute));
+		assertThat(duration.getNumberOfMillisecond()).isEqualTo(NumberHelper.get(Short.class, numberOfMillisecond));
+		assertThat(duration.getNumberOfSecond()).isEqualTo(NumberHelper.get(Byte.class, numberOfSecond));
+		assertThat(duration.getNumberOfMinute()).isEqualTo(NumberHelper.get(Byte.class, numberOfMinute));
 	}
 }

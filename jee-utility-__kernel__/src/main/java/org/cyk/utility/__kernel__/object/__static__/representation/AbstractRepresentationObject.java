@@ -1,14 +1,9 @@
 package org.cyk.utility.__kernel__.object.__static__.representation;
 import java.io.Serializable;
 
+import javax.json.bind.JsonbBuilder;
+import javax.json.bind.annotation.JsonbProperty;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +13,7 @@ import lombok.experimental.Accessors;
 public abstract class AbstractRepresentationObject extends org.cyk.utility.__kernel__.object.AbstractObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@JsonProperty(value=__ATTRIBUTE___ACTIONS____)
+	@JsonbProperty(value=__ATTRIBUTE___ACTIONS____)
 	private Actions __actions__;
 	
 	@XmlElement(name=__ATTRIBUTE___ACTIONS____)
@@ -26,7 +21,7 @@ public abstract class AbstractRepresentationObject extends org.cyk.utility.__ker
 		return __actions__;
 	}
 	
-	public Actions get__actions__(Boolean injectIfNull) {
+	public Actions __get__actions__(Boolean injectIfNull) {
 		__actions__ = get__actions__();
 		if(__actions__ == null && Boolean.TRUE.equals(injectIfNull))
 			__actions__ = new Actions();
@@ -34,21 +29,21 @@ public abstract class AbstractRepresentationObject extends org.cyk.utility.__ker
 	}
 
 	public AbstractRepresentationObject add__action__(String identifier, String uniformResourceLocator, String method) {
-		get__actions__(Boolean.TRUE).add(identifier, uniformResourceLocator, method);
+		__get__actions__(Boolean.TRUE).add(identifier, uniformResourceLocator, method);
 		return this;
 	}
 	
-	public Action get__action__byIdentifier(String identifier) {
+	public Action __get__action__byIdentifier(String identifier) {
 		Actions actions = get__actions__();
 		return actions == null ? null : actions.getByIdentifier(identifier);
 	}
 	
-	public String get__actionUniformResourceLocator__byIdentifier(String identifier) {
+	public String __get__actionUniformResourceLocator__byIdentifier(String identifier) {
 		Actions actions = get__actions__();
 		return actions == null ? null : actions.getUniformResourceLocatorByIdentifier(identifier);
 	}
 	
-	public String get__actionMethod__byIdentifier(String identifier) {
+	public String __get__actionMethod__byIdentifier(String identifier) {
 		Actions actions = get__actions__();
 		return actions == null ? null : actions.getMethodByIdentifier(identifier);
 	}
@@ -59,23 +54,23 @@ public abstract class AbstractRepresentationObject extends org.cyk.utility.__ker
 	}
 	
 	/**/
-	
-	@JsonIgnore
-	@XmlTransient
-	public String get__downloadUniformResourceLocator__() {
-		return get__actionUniformResourceLocator__byIdentifier(Action.IDENTIFIER_DOWNLOAD);
+	public String __get__downloadUniformResourceLocator__() {
+		return __get__actionUniformResourceLocator__byIdentifier(Action.IDENTIFIER_DOWNLOAD);
 	}
 	
 	/**/
 	
 	@Override
 	public String toString() {
+		return JsonbBuilder.create().toJson(this);
+		/*
 		try {
 			return new ObjectMapper().setSerializationInclusion(Include.NON_EMPTY).writeValueAsString(this);
 		} catch (JsonProcessingException exception) {
 			exception.printStackTrace();
 			return super.toString();
 		}
+		*/
 	}
 	
 	private static final String __ATTRIBUTE___ACTIONS____ = Actions.__ROOT_NAME__;

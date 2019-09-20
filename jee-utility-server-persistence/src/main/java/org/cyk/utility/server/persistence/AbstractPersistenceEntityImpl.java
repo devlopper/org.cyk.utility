@@ -24,6 +24,7 @@ import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.map.MapHelper;
+import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.request.RequestProcessor;
 import org.cyk.utility.server.persistence.query.PersistenceQuery;
 import org.cyk.utility.server.persistence.query.PersistenceQueryContext;
@@ -483,9 +484,9 @@ public abstract class AbstractPersistenceEntityImpl<ENTITY> extends AbstractPers
 	
 	protected PersistenceFunctionReader __getReader__(Properties properties,Object...parameters) {
 		PersistenceFunctionReader reader = __getFunction__(PersistenceFunctionReader.class,properties, parameters);
-		reader.setIsQueryResultPaginated(__inject__(BooleanHelper.class).get(Properties.getFromPath(properties, Properties.IS_QUERY_RESULT_PAGINATED)));
-		reader.setQueryFirstTupleIndex(__injectNumberHelper__().getLong(Properties.getFromPath(properties, Properties.QUERY_FIRST_TUPLE_INDEX)));
-		reader.setQueryNumberOfTuple(__injectNumberHelper__().getLong(Properties.getFromPath(properties, Properties.QUERY_NUMBER_OF_TUPLE)));
+		reader.setIsQueryResultPaginated(BooleanHelper.get(Properties.getFromPath(properties, Properties.IS_QUERY_RESULT_PAGINATED)));
+		reader.setQueryFirstTupleIndex(NumberHelper.getLong(Properties.getFromPath(properties, Properties.QUERY_FIRST_TUPLE_INDEX)));
+		reader.setQueryNumberOfTuple(NumberHelper.getLong(Properties.getFromPath(properties, Properties.QUERY_NUMBER_OF_TUPLE)));
 		return reader;
 	}
 	

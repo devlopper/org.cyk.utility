@@ -12,7 +12,6 @@ import org.cyk.utility.enumeration.EnumCollectionGetter;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.enumeration.EnumerationHelper;
 import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.log.Log;
@@ -72,10 +71,6 @@ public abstract class AbstractServiceProviderImpl extends AbstractSingleton impl
 	
 	protected StringHelper __injectStringHelper__(){
 		return __inject__(StringHelper.class);
-	}
-	
-	protected FieldValueGetter __injectFieldValueGetter__(){
-		return __inject__(FieldValueGetter.class);
 	}
 	
 	protected FieldValueSetter __injectFieldValueSetter__(){

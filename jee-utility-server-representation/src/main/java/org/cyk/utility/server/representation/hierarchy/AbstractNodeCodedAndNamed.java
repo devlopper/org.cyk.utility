@@ -18,26 +18,26 @@ public abstract class AbstractNodeCodedAndNamed<ENTITY extends AbstractNodeCoded
 	private Long numberOfChildren;
 	
 	@SuppressWarnings("unchecked")
-	public COLLECTION getParents(Boolean injectIfNull) {
+	protected COLLECTION __getParents__(Boolean injectIfNull) {
 		if(parents == null && Boolean.TRUE.equals(injectIfNull))
 			parents = (COLLECTION) __inject__(ClassHelper.class).instanciateOne(__inject__(ClassHelper.class).getParameterAt(getClass(), 1, Object.class));
 		return parents;			
 	}
 	
 	public AbstractNodeCodedAndNamed<ENTITY,COLLECTION> addParents(@SuppressWarnings("unchecked") ENTITY...parents) {
-		getParents(Boolean.TRUE).add(parents);
+		__getParents__(Boolean.TRUE).add(parents);
 		return this;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public COLLECTION getChildren(Boolean injectIfNull) {
+	protected COLLECTION __getChildren__(Boolean injectIfNull) {
 		if(children == null && Boolean.TRUE.equals(injectIfNull))
 			children = (COLLECTION) __inject__(ClassHelper.class).instanciateOne(__inject__(ClassHelper.class).getParameterAt(getClass(), 1, Object.class));
 		return children;			
 	}
 	
 	public AbstractNodeCodedAndNamed<ENTITY,COLLECTION> addChildren(@SuppressWarnings("unchecked") ENTITY...children) {
-		getChildren(Boolean.TRUE).add(children);
+		__getChildren__(Boolean.TRUE).add(children);
 		return this;
 	}
 }

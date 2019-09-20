@@ -300,7 +300,6 @@ public abstract class AbstractTestSystemFunctionIntegrationImpl extends Abstract
 	
 	protected void __assertLogEventMessage__(Object object) {
 		//assertionHelper.assertStartsWithLastLogEventMessage("Server Persistence Create "+object.getClass().getSimpleName())
-		//.assertContainsLastLogEventMessage("code="+__inject__(FieldValueGetter.class).execute(object,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
 	}
 	
 	protected void __listenExecuteAfterFor__() throws Exception {}

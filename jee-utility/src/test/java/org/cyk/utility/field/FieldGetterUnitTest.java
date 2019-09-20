@@ -207,7 +207,7 @@ public class FieldGetterUnitTest extends AbstractWeldUnitTest {
 		String NOT_PROPERTY_F02 = "notproperty";
 	}
 	
-	@org.cyk.utility.__kernel__.annotation.Test
+	@org.cyk.utility.__kernel__.annotation.Test @Deprecated
 	public static class FieldNameGetterImpl extends AbstractFieldNameGetterImpl implements Serializable {
 		private static final long serialVersionUID = 1L;
 

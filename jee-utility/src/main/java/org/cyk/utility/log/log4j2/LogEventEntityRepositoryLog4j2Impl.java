@@ -69,7 +69,7 @@ public class LogEventEntityRepositoryLog4j2Impl extends AbstractAppender impleme
 	
 	@Override
 	public Long countAll() {
-		return DependencyInjection.inject(NumberHelper.class).getLong(DependencyInjection.inject(CollectionHelper.class).getSize(instances));
+		return NumberHelper.getLong(DependencyInjection.inject(CollectionHelper.class).getSize(instances));
 	}
 
 	@Override

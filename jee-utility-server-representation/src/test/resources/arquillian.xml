@@ -25,6 +25,10 @@
     <container qualifier="widlfly-managed" default="true">
         <configuration>
            <property name="jbossHome">target/wildfly-${wildfly.version:18.0.0.Beta1}</property>
+           <!--
+           <property name="serverConfig">${project.basedir}/src/test/resources/server/wildfly/standalone.xml</property>
+           -->
+           <property name="javaVmArguments">-Dresteasy.preferJacksonOverJsonB=false -Dserver-config=${project.basedir}/src/test/resources/server/wildfly/standalone.xml</property>
         </configuration>
     </container>
 	

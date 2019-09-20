@@ -6,16 +6,13 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 
-import org.cyk.utility.playground.server.persistence.entities.Node;
-import org.cyk.utility.playground.server.persistence.entities.Nodes;
 import org.cyk.utility.server.persistence.jpa.hierarchy.AbstractIdentifiedByStringAndCodedAndNamed;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.Accessors;
 
-@Entity @Getter @Setter @Accessors(chain=true) @Access(AccessType.FIELD) @ToString
+@Entity @Getter @Setter @Accessors(chain=true) @Access(AccessType.FIELD)
 public class Node extends AbstractIdentifiedByStringAndCodedAndNamed<Node,Nodes> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -39,4 +36,8 @@ public class Node extends AbstractIdentifiedByStringAndCodedAndNamed<Node,Nodes>
 		return (Node) super.setName(name);
 	}
 	
+	@Override
+	public String toString() {
+		return identifier+"/"+code+"/"+name+":"+parents;
+	}
 }

@@ -38,7 +38,7 @@ public interface RepresentationEntity<PERSISTENCE_ENTITY,ENTITY,ENTITY_COLLECTIO
 	@POST
 	@Path(PATH_CREATE_MANY_COLLECTION)
 	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	Response createManyUsingCollection(ENTITY_COLLECTION entityCollection,@QueryParam(PARAMETER_PROPERTIES) String properties);
+	Response createMany(ENTITY_COLLECTION entityCollection,@QueryParam(PARAMETER_PROPERTIES) String properties);
 	
 	/* Read */ 
 	/*@GET

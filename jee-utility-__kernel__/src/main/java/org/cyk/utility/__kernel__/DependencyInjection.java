@@ -11,20 +11,18 @@ import java.util.Set;
 import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.util.AnnotationLiteral;
 
+import org.jboss.weld.exceptions.IllegalArgumentException;
+
 public class DependencyInjection implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public static <OBJECT> OBJECT inject(Class<OBJECT> aClass,AnnotationLiteral<?>...annotationLiterals){
-		if(aClass == null){
-			//TODO log a warning
-			return null;
-		}
+	public static <OBJECT> OBJECT inject(Class<OBJECT> klass,AnnotationLiteral<?>...annotationLiterals){
+		if(klass == null)
+			throw new IllegalArgumentException("class to inject is required");
 		CDI<Object> cdi = CDI.current();
-		if(cdi == null){
-			//TODO log a warning
-			return null;
-		}
-		return annotationLiterals == null || annotationLiterals.length == 0 ? cdi.select(aClass).get() : cdi.select(aClass,annotationLiterals).get();
+		if(cdi == null)
+			throw new IllegalStateException("dependency injection context not found");
+		return annotationLiterals == null || annotationLiterals.length == 0 ? cdi.select(klass).get() : cdi.select(klass,annotationLiterals).get();
 	}
 	
 	/*@SafeVarargs
@@ -51,17 +49,17 @@ public class DependencyInjection implements Serializable {
 				Object annotationLiteral = null;
 				if(index!=null) {
 					Class<?> annotationLiteralClass = null;
-					if(Boolean.TRUE.equals(KernelHelperImpl.__isInstanceOf__(index, AnnotationLiteral.class)))
+					if(Boolean.TRUE.equals(ClassHelper.isInstanceOf(index, AnnotationLiteral.class)))
 						annotationLiteralClass = index;
 					else if(Boolean.TRUE.equals(index.isAnnotation())) {
 						String annotationLiteralClassName = index.getName()+"$Class";
-						annotationLiteralClass = KernelHelperImpl.__getClassByName__(annotationLiteralClassName, Boolean.FALSE);
+						annotationLiteralClass = ClassHelper.getByName(annotationLiteralClassName, Boolean.FALSE);
 						if(annotationLiteralClass == null) {
 							
 						}
 					}
 					if(annotationLiteralClass!=null)
-						annotationLiteral = KernelHelperImpl.__instanciate__(annotationLiteralClass);
+						annotationLiteral = ClassHelper.instanciate(annotationLiteralClass);
 					
 					if(annotationLiteral == null) {
 						System.err.println(DependencyInjection.class.getSimpleName()+" : Cannot find annotation literal from "+index);
@@ -81,12 +79,10 @@ public class DependencyInjection implements Serializable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <OBJECT> Set<OBJECT> injectAll(Class<OBJECT> aClass){
-		if(aClass == null){
-			//TODO log a warning
-			return null;
-		}
-		return (Set<OBJECT>) CDI.current().getBeanManager().getBeans(aClass);
+	public static <OBJECT> Set<OBJECT> injectAll(Class<OBJECT> klass){
+		if(klass == null)
+			throw new IllegalArgumentException("class to inject is required");
+		return (Set<OBJECT>) CDI.current().getBeanManager().getBeans(klass);
 	}
 	
 	/**/

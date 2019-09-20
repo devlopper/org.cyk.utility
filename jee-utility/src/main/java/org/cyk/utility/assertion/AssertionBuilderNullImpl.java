@@ -6,10 +6,11 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.internationalization.InternalizationStringBuilder;
 
-@Dependent
+@Dependent @Deprecated
 public class AssertionBuilderNullImpl extends AbstractAssertionBuilderImpl implements AssertionBuilderNull, Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -87,7 +88,7 @@ public class AssertionBuilderNullImpl extends AbstractAssertionBuilderImpl imple
 	
 	@Override
 	public AssertionBuilderNull setFieldValueGetter(Object object, String... names) {
-		setFieldValueGetter(__inject__(FieldValueGetter.class).setObject(object).setField(names));
+		setFieldValueGetter(FieldHelperImpl.__read__(object,names));
 		getAssertedValue(Boolean.TRUE).setFieldValueGetter(object, names);
 		return this;
 	}

@@ -1,32 +1,20 @@
 package org.cyk.utility.server.representation.impl;
 
+import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.ext.ParamConverter;
 
 import org.cyk.utility.server.persistence.query.filter.FilterDto;
-
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class FilterDtoConverter implements ParamConverter<FilterDto> {
 
 	@Override
 	public FilterDto fromString(String string) {
-		try {
-			return new ObjectMapper().readValue(string, FilterDto.class);
-		} catch (Exception exception) {
-			throw new RuntimeException(exception);
-		}
+		return JsonbBuilder.create().fromJson(string, FilterDto.class);		
 	}
 
 	@Override
 	public String toString(FilterDto filterDto) {
-		try {
-			return new ObjectMapper().setSerializationInclusion(Include.NON_EMPTY).writeValueAsString(filterDto);
-		} catch (Exception exception) {
-			throw new RuntimeException(exception);
-		}
+		return JsonbBuilder.create().toJson(filterDto);
 	}
-
-        
 
 }

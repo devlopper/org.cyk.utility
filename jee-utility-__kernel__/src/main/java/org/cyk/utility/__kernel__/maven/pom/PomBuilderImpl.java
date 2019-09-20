@@ -7,7 +7,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.cyk.utility.__kernel__.KernelHelperImpl;
+import org.cyk.utility.__kernel__.FileHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 
 @Dependent
@@ -21,15 +21,14 @@ public class PomBuilderImpl implements PomBuilder {
 			String path = (String) properties.getPath();
 			JAXBContext jaxbContext = JAXBContext.newInstance(Pom.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			String xml = KernelHelperImpl.__getStringFromFile__(path);
+			String xml = FileHelper.getString(path);
 			pom = xml == null ? null : (Pom) unmarshaller.unmarshal(new StringReader(xml));
 		} catch(Exception exception) {
 			throw new RuntimeException(exception);
 		}
 		
-		if(pom == null){
-			//TODO log warning 
-		}	
+		if(pom == null)
+			throw new RuntimeException("project object model (POM) cannot be found");
 		return pom;
 	}
 	

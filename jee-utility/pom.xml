@@ -22,8 +22,6 @@
 		<org.apache.poi.poi.version>3.14</org.apache.poi.poi.version>
 		<org.apache.poi.poi-ooxml.version>3.14</org.apache.poi.poi-ooxml.version>
 		<org.apache.kafka.kafka-clients.version>2.2.0</org.apache.kafka.kafka-clients.version>
-		<com.fasterxml.jackson.core.jackson-core.version>2.9.8</com.fasterxml.jackson.core.jackson-core.version>
-		<com.fasterxml.jackson.core.jackson-databind.version>2.9.8</com.fasterxml.jackson.core.jackson-databind.version>
 		<commons-codec.commons-codec.version>1.12</commons-codec.commons-codec.version>
 		<net.sf.barcode4j.barcode4j.version>2.1</net.sf.barcode4j.barcode4j.version>
 		<com.google.zxing.core.version>3.3.3</com.google.zxing.core.version>
@@ -93,12 +91,6 @@
 		</dependency>
 		
 		<dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-databind</artifactId>
-		    <version>${com.fasterxml.jackson.core.jackson-databind.version}</version>
-		</dependency>
-		
-		<dependency>
 		    <groupId>commons-codec</groupId>
 		    <artifactId>commons-codec</artifactId>
 		    <version>${commons-codec.commons-codec.version}</version>
@@ -128,6 +120,7 @@
 		    <version>${org.reflections.reflections.version}</version>
 		</dependency>
 		
+		<!--
 		<dependency>
 		    <groupId>org.glassfish.jersey.core</groupId>
 		    <artifactId>jersey-client</artifactId>
@@ -148,6 +141,7 @@
 		    <version>2.26</version>
 		    <scope>provided</scope>
 		</dependency>
+		-->
 		
 		<!--
 		<dependency>

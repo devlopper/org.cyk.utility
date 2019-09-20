@@ -6,9 +6,10 @@ import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldValueGetter;
 
-@Dependent
+@Dependent @Deprecated
 public class AssertionValueImpl extends AbstractObject implements AssertionValue, Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -27,7 +28,7 @@ public class AssertionValueImpl extends AbstractObject implements AssertionValue
 	
 	@Override
 	public AssertionValue setFieldValueGetter(Object object, String... names) {
-		setFieldValueGetter(__inject__(FieldValueGetter.class).setObject(object).setField(names));
+		setFieldValueGetter(FieldHelperImpl.__read__(object,names));
 		return this;
 	}
 	

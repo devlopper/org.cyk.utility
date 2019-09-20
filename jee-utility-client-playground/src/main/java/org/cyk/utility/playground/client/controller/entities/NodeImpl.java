@@ -26,4 +26,9 @@ public class NodeImpl extends AbstractDataIdentifiedByStringAndCodedAndNamedImpl
 	public Node setName(String name) {
 		return (Node) super.setName(name);
 	}
+	
+	@Override
+	public String toString() {
+		return getIdentifier()+"/"+getCode()+"/"+getName()+":"+getParents();
+	}
 }

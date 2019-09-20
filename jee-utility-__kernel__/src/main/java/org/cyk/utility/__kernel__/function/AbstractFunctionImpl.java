@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.ClassHelper;
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.KernelHelper;
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.__kernel__.properties.Properties;
@@ -181,7 +181,7 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	@SuppressWarnings("unchecked")
 	protected OUTPUT __execute__(Class<? extends FunctionRunnable<?>> functionRunnableClass) throws Exception {
 		@SuppressWarnings("rawtypes")
-		FunctionRunnable functionRunnable = DependencyInjection.inject(KernelHelper.class).instanciate(functionRunnableClass);
+		FunctionRunnable functionRunnable = ClassHelper.instanciate(functionRunnableClass);
 		functionRunnable.setFunction(this);
 		Runnable runnable = functionRunnable.getRunnable();
 		if(runnable == null) {
@@ -434,10 +434,6 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends AbstractObject 
 	@Override
 	public FunctionExecutionPhaseFinally finally_() {
 		return getExecutionPhaseFinally(Boolean.TRUE);
-	}
-	
-	protected static KernelHelper __injectKernelHelper__() {
-		return __inject__(KernelHelper.class);
 	}
 	
 	@Override

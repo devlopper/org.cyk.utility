@@ -16,7 +16,7 @@ import org.cyk.utility.network.message.Receiver;
 import org.cyk.utility.network.message.Receivers;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.throwable.ThrowableHelper;
-
+/*
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -24,19 +24,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-
+*/
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Dependent @JavaScriptObjectNotation
+@Dependent @JavaScriptObjectNotation @Deprecated
 public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBuilderImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected Object __execute__(String string, Class<?> klass,FieldInstances fieldInstances) throws Exception {
-		Object object;
-		ObjectMapper objectMapper = new ObjectMapper();
+		Object object=null;
+		/*ObjectMapper objectMapper = new ObjectMapper();
 		if(Boolean.TRUE.equals(__inject__(ClassHelper.class).isBelongsToJavaPackages(klass))) {
 			object = objectMapper.readValue(string, klass);
 		}else {
@@ -45,12 +45,12 @@ public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBui
 				module.addDeserializer(Object.class, new Deserializer().setKlass(klass).setFieldInstances(fieldInstances));
 			objectMapper.registerModule(module);
 			object =  objectMapper.readValue(string, Object.class);	
-		}
+		}*/
 		return object;
 	}
 
 	/**/
-	
+	/*
 	public static class Deserializer extends StdDeserializer<Object> implements Serializable {
 		private static final long serialVersionUID = 1L;
 
@@ -103,5 +103,5 @@ public class ObjectFromStringBuilderJsonImpl extends AbstractObjectFromStringBui
 			return object;
 		}
 	}
-	
+	*/
 }

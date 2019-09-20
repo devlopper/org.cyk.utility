@@ -9,7 +9,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.cyk.utility.__kernel__.KernelHelperImpl;
+import org.cyk.utility.__kernel__.ClassHelper;
+import org.cyk.utility.__kernel__.StringHelper;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
 
 /**
@@ -34,12 +35,12 @@ public abstract class AbstractTimeAdapter<TIME> extends XmlAdapter<String, TIME>
     
     @SuppressWarnings("unchecked")
 	protected Class<TIME> __getTimeClass__() {
-    	return (Class<TIME>) KernelHelperImpl.__getParameterAt__(getClass(), 0, Object.class);
+    	return (Class<TIME>) ClassHelper.getParameterAt(getClass(), 0, Object.class);
     }
     
     protected DateTimeFormatter __getFormatter__() {
     	Class<?> klass = __getTimeClass__();
-    	Collection<String> strings = KernelHelperImpl.__splitByCharacterTypeCamelCase__(klass.getSimpleName());
+    	Collection<String> strings = StringHelper.splitByCharacterTypeCamelCase(klass.getSimpleName());
     	String name = FORMATTER_NAME_START + StringUtils.join(strings.toArray(new String[0]),ConstantCharacter.UNDESCORE.toString()).toUpperCase();
     	try {
     		return (DateTimeFormatter) FieldUtils.readStaticField(DateTimeFormatter.class, name);

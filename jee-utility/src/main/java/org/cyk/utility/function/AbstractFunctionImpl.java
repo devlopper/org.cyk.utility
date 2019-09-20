@@ -21,7 +21,6 @@ import org.cyk.utility.css.CascadeStyleSheetHelper;
 import org.cyk.utility.css.CascadeStyleSheetHelperImpl;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldHelperImpl;
-import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.instance.InstanceHelperImpl;
 import org.cyk.utility.log.Log;
@@ -311,11 +310,6 @@ public abstract class AbstractFunctionImpl<INPUT,OUTPUT> extends org.cyk.utility
 	
 	protected static FieldHelper __injectFieldHelper__(){
 		return FieldHelperImpl.getInstance();
-	}
-	
-	@Deprecated
-	protected static FieldValueGetter __injectFieldValueGetter__(){
-		return __inject__(FieldValueGetter.class);
 	}
 	
 	protected static ThrowableHelper __injectThrowableHelper__(){

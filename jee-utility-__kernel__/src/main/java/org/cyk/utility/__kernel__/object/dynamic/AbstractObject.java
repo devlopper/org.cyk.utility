@@ -7,7 +7,8 @@ import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 
-import org.cyk.utility.__kernel__.KernelHelper;
+import org.cyk.utility.__kernel__.ClassHelper;
+import org.cyk.utility.__kernel__.CollectionHelper;
 import org.cyk.utility.__kernel__.properties.Properties;
 
 public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.AbstractObject implements Objectable, Serializable {
@@ -146,7 +147,7 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	public Boolean isHasChildrenInstanceOf(Class<?> aClass) {
 		if(Boolean.TRUE.equals(isHasChildren()))
 			for(Object index : getChildren())
-				if(Boolean.TRUE.equals(____inject____(KernelHelper.class).isInstanceOf(index.getClass(), aClass)))
+				if(Boolean.TRUE.equals(ClassHelper.isInstanceOf(index.getClass(), aClass)))
 					return Boolean.TRUE;
 		return null;
 	}
@@ -163,7 +164,7 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 		Collection<T> collection = null;
 		if(Boolean.TRUE.equals(isHasChildrenInstanceOf(aClass))) {
 			for(Object index : getChildren())
-				if(Boolean.TRUE.equals(____inject____(KernelHelper.class).isInstanceOf(index.getClass(), aClass))) {
+				if(Boolean.TRUE.equals(ClassHelper.isInstanceOf(index.getClass(), aClass))) {
 					if(collection == null)
 						collection = new ArrayList<T>();
 					collection.add((T) index);
@@ -195,12 +196,12 @@ public abstract class AbstractObject extends org.cyk.utility.__kernel__.object.A
 	
 	@Override
 	public Object getChildAt(Integer index) {
-		return __inject__(KernelHelper.class).getElementAt(getChildren(), index);
+		return CollectionHelper.getElementAt(getChildren(), index);
 	}
 	
 	@Override
 	public Object getLastChild() {
-		return __inject__(KernelHelper.class).getElementAtEnd(getChildren());
+		return CollectionHelper.getElementAtEnd(getChildren());
 	}
 	
 	@Override

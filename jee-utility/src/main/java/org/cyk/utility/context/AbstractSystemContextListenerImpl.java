@@ -41,7 +41,7 @@ public abstract class AbstractSystemContextListenerImpl<CONTEXT> extends Abstrac
 	}
 	
 	protected static Integer getConfigurationParameterValueAsInteger(String name,Object nullValue) {
-		return __inject__(NumberHelper.class).getInteger(getConfigurationParameterValue(name, nullValue));
+		return NumberHelper.getInteger(getConfigurationParameterValue(name, nullValue));
 	}
 	
 	protected static Integer getConfigurationParameterValueAsInteger(String name) {
@@ -49,7 +49,7 @@ public abstract class AbstractSystemContextListenerImpl<CONTEXT> extends Abstrac
 	}
 	
 	protected static Boolean getConfigurationParameterValueAsBoolean(String name,Object nullValue) {
-		return __inject__(BooleanHelper.class).get(getConfigurationParameterValue(name, nullValue));
+		return BooleanHelper.get(getConfigurationParameterValue(name, nullValue));
 	}
 	
 	protected static Boolean getConfigurationParameterValueAsBoolean(String name) {

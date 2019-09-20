@@ -3,6 +3,7 @@ package org.cyk.utility.server.persistence.query.filter;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.json.bind.JsonbBuilder;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
@@ -12,8 +13,6 @@ import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepre
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueDto;
 import org.cyk.utility.value.ValueUsageType;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -62,10 +61,9 @@ public class FieldDtoCollection extends AbstractRepresentationObjectCollection<F
 				type = org.cyk.utility.field.FieldDto.Type.INTEGER;
 				valueType = ValueDto.Type.INTEGER;
 			}
-			//valueAsString = __injectByQualifiersClasses__(ObjectToStringBuilder.class, JavaScriptObjectNotation.Class.class).setObject(value).execute().getOutput();
 			if(__inject__(StringHelper.class).isBlank(valueAsString))
 				try {
-					valueAsString = new ObjectMapper().writeValueAsString(value);
+					valueAsString = JsonbBuilder.create().toJson(value);
 				} catch (Exception exception) {
 					throw new RuntimeException(exception);
 				}

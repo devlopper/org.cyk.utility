@@ -1,6 +1,7 @@
 package org.cyk.utility.__kernel__;
 
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public abstract class AbstractDependencyInjectionUnitTesting extends AbstractWeldUnitTest {
@@ -8,7 +9,9 @@ public abstract class AbstractDependencyInjectionUnitTesting extends AbstractWel
 
 	@Test
 	public void injectNullIsNull(){
-		org.assertj.core.api.Assertions.assertThat((Object)__inject__(null)).isNull();
+		Assertions.assertThrows(RuntimeException.class, () -> {
+			__inject__(null);
+		  });
 	}
 	
 	@Test

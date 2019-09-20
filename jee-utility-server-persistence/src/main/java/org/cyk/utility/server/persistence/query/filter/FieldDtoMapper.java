@@ -1,10 +1,12 @@
 package org.cyk.utility.server.persistence.query.filter;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+
+import javax.json.bind.JsonbBuilder;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldInstance;
@@ -12,8 +14,6 @@ import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.mapping.AbstractMapperSourceDestinationImpl;
 import org.cyk.utility.mapping.Instantiator;
 import org.cyk.utility.number.NumberHelper;
-import org.cyk.utility.object.ObjectFromStringBuilder;
-import org.cyk.utility.object.ObjectToStringBuilder;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueDto;
 import org.cyk.utility.value.ValueDto.Container;
@@ -33,9 +33,7 @@ public abstract class FieldDtoMapper extends AbstractMapperSourceDestinationImpl
 				valueDto.setContainer(ValueDto.Container.NONE);
 				valueDto.setType(ValueDto.Type.STRING);
 			}else if(value instanceof Collection) {
-				ObjectToStringBuilder objectToStringBuilder = DependencyInjection.injectByQualifiersClasses(ObjectToStringBuilder.class,JavaScriptObjectNotation.Class.class);
-				objectToStringBuilder.setObject(value);
-				valueAsJson = objectToStringBuilder.execute().getOutput();	
+				valueAsJson = JsonbBuilder.create().toJson(value);
 				valueDto.setContainer(ValueDto.Container.COLLECTION);
 				Object element = DependencyInjection.inject(CollectionHelper.class).getFirst((Collection<?>) value);
 				if(element != null) {
@@ -63,16 +61,22 @@ public abstract class FieldDtoMapper extends AbstractMapperSourceDestinationImpl
 				if(ValueDto.Type.STRING.equals(type))
 					value = valueDto.getValue();
 				else if(ValueDto.Type.INTEGER.equals(type))
-					value = DependencyInjection.inject(NumberHelper.class).getInteger(valueDto.getValue(), null);
+					value = NumberHelper.getInteger(valueDto.getValue(), null);
 				else if(ValueDto.Type.LONG.equals(type))
-					value = DependencyInjection.inject(NumberHelper.class).getLong(valueDto.getValue(), null);
+					value = NumberHelper.getLong(valueDto.getValue(), null);
 			}else if(Container.COLLECTION.equals(container)) {
 				Collection<?> collection = null;
 				if(DependencyInjection.inject(StringHelper.class).isNotBlank(valueDto.getValue())) {
-					ObjectFromStringBuilder objectFromStringBuilder = DependencyInjection.injectByQualifiersClasses(ObjectFromStringBuilder.class,JavaScriptObjectNotation.Class.class);
-					objectFromStringBuilder.setString(valueDto.getValue());
-					objectFromStringBuilder.setKlass(List.class);
-					collection = (Collection<?>) objectFromStringBuilder.execute().getOutput();		
+					Type __type__ = null;
+					if(ValueDto.Type.INTEGER.equals(valueDto.getType()))
+						__type__ = new ArrayList<Integer>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();
+					else if(ValueDto.Type.LONG.equals(valueDto.getType()))
+						__type__ = new ArrayList<Long>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();
+					else if(ValueDto.Type.STRING.equals(valueDto.getType()))
+						__type__ = new ArrayList<String>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();
+					else
+						__type__ = new ArrayList<String>(){private static final long serialVersionUID = 1L;}.getClass().getGenericSuperclass();	
+					collection = JsonbBuilder.create().fromJson(valueDto.getValue(), __type__);
 				}
 				value = collection;
 			}else if(Container.MAP.equals(container)) {

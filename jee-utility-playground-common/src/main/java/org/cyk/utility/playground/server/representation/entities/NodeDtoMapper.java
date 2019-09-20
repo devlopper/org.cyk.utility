@@ -14,13 +14,13 @@ public abstract class NodeDtoMapper extends AbstractNodeMapperImpl<NodeDto, Node
 	
 	@Override
 	public Node getDestination(NodeDto nodeDto) {
+		if(nodeDto == null)
+			return null;
 		Node node = new Node();
 		node.setIdentifier(nodeDto.getIdentifier());
 		node.setCode(nodeDto.getCode());
 		node.setName(nodeDto.getName());
-		System.out.println("NodeDtoMapper.getDestination() "+nodeDto.getParents());
 		if(nodeDto.getParents()!=null && CollectionHelperImpl.__isNotEmpty__(nodeDto.getParents().getCollection())) {
-			System.out.println("NodeDtoMapper.getDestination() :: "+nodeDto.getParents().getCollection());
 			for(NodeDto index : nodeDto.getParents().getCollection())
 				node.addParents(getDestination(index));
 		}

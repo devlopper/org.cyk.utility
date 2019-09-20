@@ -39,4 +39,6 @@ public class NodeDto extends AbstractNodeCodedAndNamed<NodeDto,NodeDtoCollection
 	public NodeDto addChildren(NodeDto... children) {
 		return (NodeDto) super.addChildren(children);
 	}
+	
+	
 }

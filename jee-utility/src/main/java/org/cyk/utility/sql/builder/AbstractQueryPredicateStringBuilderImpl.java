@@ -9,8 +9,8 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.criteria.Criteria;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldName;
-import org.cyk.utility.field.FieldNameGetter;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndStringAsOutputImpl;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueHelper;
@@ -48,8 +48,7 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 			
 			String fieldNameAsString = criteria.getFieldNameAsString();
 			if(__inject__(StringHelper.class).isBlank(fieldNameAsString)){				
-				fieldNameAsString = __inject__(FieldNameGetter.class).execute(criteria.getClazz(), fieldName, valueUsageType)
-					.execute().getOutput();
+				fieldNameAsString = FieldHelperImpl.__getName__(criteria.getClazz(), fieldName, valueUsageType);
 			}
 			
 			addOperandStringBuilderAttributeName(fieldNameAsString, tuple);
@@ -84,8 +83,7 @@ public abstract class AbstractQueryPredicateStringBuilderImpl extends AbstractFu
 			
 			String fieldNameAsString = criteria.getFieldNameAsString();
 			if(__inject__(StringHelper.class).isBlank(fieldNameAsString)){				
-				fieldNameAsString = __inject__(FieldNameGetter.class).execute(criteria.getClazz(), fieldName, valueUsageType)
-					.execute().getOutput();
+				fieldNameAsString = FieldHelperImpl.__getName__(criteria.getClazz(), fieldName, valueUsageType);
 			}
 			
 			addOperandStringBuilderAttributeName(fieldNameAsString, tuple);

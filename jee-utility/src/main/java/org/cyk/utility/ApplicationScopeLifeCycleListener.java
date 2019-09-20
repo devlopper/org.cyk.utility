@@ -6,9 +6,6 @@ import javax.ws.rs.client.Client;
 
 import org.apache.commons.beanutils.FluentPropertyBeanIntrospector;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
-import org.cyk.utility.object.ObjectFromStringBuilder;
-import org.cyk.utility.object.ObjectToStringBuilder;
 import org.cyk.utility.request.RequestHelper;
 import org.cyk.utility.stream.distributed.StreamDistributedHelper;
 import org.cyk.utility.stream.distributed.Topic;
@@ -20,7 +17,6 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	@Override
 	public void __initialize__(Object object) {
 		PropertyUtils.addBeanIntrospector(new FluentPropertyBeanIntrospector());
-		__setQualifierClassTo__(JavaScriptObjectNotation.class, ObjectToStringBuilder.class,ObjectFromStringBuilder.class);
 		if(Boolean.TRUE.equals(__inject__(StreamDistributedHelper.class).getIsEnable())) {
 			Topic.startAllConsumers();
 		}
@@ -43,6 +39,7 @@ public class ApplicationScopeLifeCycleListener extends AbstractApplicationScopeL
 	
 	/**/
 	
+	@Deprecated
 	public static final Integer LEVEL = new Integer("0");
 	
 }

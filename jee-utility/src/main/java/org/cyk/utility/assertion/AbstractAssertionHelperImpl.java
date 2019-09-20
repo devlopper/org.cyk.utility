@@ -83,25 +83,25 @@ public abstract class AbstractAssertionHelperImpl extends AbstractHelper impleme
 	
 	@Override
 	public AssertionHelper assertEqualsNumber(String message, Object expected, Object actual) {
-		assertEquals(message, __inject__(NumberHelper.class).getBigDecimal(expected), __inject__(NumberHelper.class).getBigDecimal(actual));
+		assertEquals(message, NumberHelper.getBigDecimal(expected), NumberHelper.getBigDecimal(actual));
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertEqualsNumber(Object expected, Object actual) {
-		assertEquals(__inject__(NumberHelper.class).getBigDecimal(expected), __inject__(NumberHelper.class).getBigDecimal(actual));
+		assertEquals(NumberHelper.getBigDecimal(expected), NumberHelper.getBigDecimal(actual));
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertNotEqualsNumber(String message, Object expected, Object actual) {
-		assertNotEquals(message, __inject__(NumberHelper.class).getBigDecimal(expected), __inject__(NumberHelper.class).getBigDecimal(actual));
+		assertNotEquals(message, NumberHelper.getBigDecimal(expected), NumberHelper.getBigDecimal(actual));
 		return this;
 	}
 	
 	@Override
 	public AssertionHelper assertNotEqualsNumber(Object expected, Object actual) {
-		assertNotEquals(__inject__(NumberHelper.class).getBigDecimal(expected), __inject__(NumberHelper.class).getBigDecimal(actual));
+		assertNotEquals(NumberHelper.getBigDecimal(expected), NumberHelper.getBigDecimal(actual));
 		return this;
 	}
 

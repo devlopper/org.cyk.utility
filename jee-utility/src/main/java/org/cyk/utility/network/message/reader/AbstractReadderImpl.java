@@ -7,6 +7,7 @@ import org.cyk.utility.network.message.AbstractSenderReaderImpl;
 import org.cyk.utility.network.message.Message;
 import org.cyk.utility.network.message.Messages;
 import org.cyk.utility.network.protocol.Protocol;
+import org.cyk.utility.number.NumberHelper;
 
 public abstract class AbstractReadderImpl extends AbstractSenderReaderImpl implements Reader,Serializable {
 	private static final long serialVersionUID = 6428760240698553361L;
@@ -17,8 +18,8 @@ public abstract class AbstractReadderImpl extends AbstractSenderReaderImpl imple
 	
 	@Override
 	protected void ______execute______(Protocol protocol) throws Exception {
-		Long firstMessageIndex = __injectNumberHelper__().getLong(getFirstMessageIndex(), 0l);
-		Long numberOfMessageToRead = __injectNumberHelper__().getLong(getNumberOfMessageToRead(), 1l);
+		Long firstMessageIndex = NumberHelper.getLong(getFirstMessageIndex(), 0l);
+		Long numberOfMessageToRead = NumberHelper.getLong(getNumberOfMessageToRead(), 1l);
 		________execute________(protocol,firstMessageIndex,numberOfMessageToRead);
 		System.out.println("Message read.");
 	}

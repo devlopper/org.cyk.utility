@@ -8,7 +8,7 @@ import org.cyk.utility.helper.Helper;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
-public interface FieldHelper extends Helper {
+public interface FieldHelper extends org.cyk.utility.__kernel__.FieldHelper {
 
 	//Object getFieldValue(Object object,FieldName fieldName);
 	

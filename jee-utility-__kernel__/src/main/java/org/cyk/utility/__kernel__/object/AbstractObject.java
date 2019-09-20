@@ -9,9 +9,12 @@ import javax.enterprise.util.AnnotationLiteral;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.ClassHelper;
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.KernelHelper;
+import org.cyk.utility.__kernel__.FieldHelper;
+import org.cyk.utility.__kernel__.InstanceHelper;
 import org.cyk.utility.__kernel__.constant.ConstantString;
+import org.jboss.weld.exceptions.IllegalArgumentException;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -31,12 +34,12 @@ public abstract class AbstractObject implements Objectable,Serializable {
 	
 	@Deprecated
 	protected Object __getInjectOrInstanciateIfNull__(String fieldName,Boolean injectableIfNull,Boolean instanciatableIfNull) {
-		Object object = DependencyInjection.inject(KernelHelper.class).executeMethodGetter(this, fieldName);
+		Object object = InstanceHelper.executeMethodGetter(this, fieldName);
 		if(object == null && (Boolean.TRUE.equals(injectableIfNull) || Boolean.TRUE.equals(instanciatableIfNull))) {
-			Class<?> fieldType = DependencyInjection.inject(KernelHelper.class).getFieldType(getClass(),fieldName);
+			Class<?> fieldType = FieldHelper.getFieldType(getClass(),fieldName);
 			object = Boolean.TRUE.equals(injectableIfNull) ? DependencyInjection.inject(fieldType) 
-					: (DependencyInjection.inject(KernelHelper.class).instanciate(fieldType));
-			DependencyInjection.inject(KernelHelper.class).executeMethodSetter(this, fieldName, object);
+					: (ClassHelper.instanciate(fieldType));
+			InstanceHelper.executeMethodSetter(this, fieldName, object);
 		}
 		return object;
 	}
@@ -66,20 +69,16 @@ public abstract class AbstractObject implements Objectable,Serializable {
 	
 	/**/
 	
-	protected static <OBJECT> OBJECT __inject__(Class<OBJECT> aClass,AnnotationLiteral<?>...annotationLiterals){
-		if(aClass == null){
-			//TODO log warning
-			return null;
-		}
-		return DependencyInjection.inject(aClass,annotationLiterals);
+	protected static <OBJECT> OBJECT __inject__(Class<OBJECT> klass,AnnotationLiteral<?>...annotationLiterals){
+		if(klass == null)
+			throw new IllegalArgumentException("class to inject is required");
+		return DependencyInjection.inject(klass,annotationLiterals);
 	}
 	
-	protected static <OBJECT> OBJECT __injectByQualifiersClasses__(Class<OBJECT> aClass,Class<?>...classes){
-		if(aClass == null){
-			//TODO log warning
-			return null;
-		}
-		return DependencyInjection.injectByQualifiersClasses(aClass,classes);
+	protected static <OBJECT> OBJECT __injectByQualifiersClasses__(Class<OBJECT> klass,Class<?>...classes){
+		if(klass == null)
+			throw new IllegalArgumentException("class to inject is required");
+		return DependencyInjection.injectByQualifiersClasses(klass,classes);
 	}
 	
 	protected static <OBJECT> OBJECT __inject__(Class<OBJECT> aClass){
@@ -87,10 +86,6 @@ public abstract class AbstractObject implements Objectable,Serializable {
 	}
 	
 	/**/
-	
-	protected static KernelHelper __injectKernelHelper__() {
-		return __inject__(KernelHelper.class);
-	}
 	
 	/**/
 	

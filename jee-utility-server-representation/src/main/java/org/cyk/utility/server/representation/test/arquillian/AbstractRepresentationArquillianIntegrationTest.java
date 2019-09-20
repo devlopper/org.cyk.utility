@@ -5,16 +5,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
-import org.cyk.utility.__kernel__.annotation.JavaScriptObjectNotation;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.object.ObjectToStringBuilder;
 import org.cyk.utility.server.representation.AbstractEntityCollection;
 import org.cyk.utility.server.representation.AbstractEntityFromPersistenceEntity;
 import org.cyk.utility.server.representation.Representation;
 import org.cyk.utility.server.representation.RepresentationEntity;
+import org.cyk.utility.server.representation.ResponseHelper;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.system.layer.SystemLayerRepresentation;
@@ -53,7 +54,7 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	protected <ENTITY> void ____createEntity____(Collection<ENTITY> entities,RepresentationEntity representation) {
 		AbstractEntityCollection<ENTITY> collection = (AbstractEntityCollection<ENTITY>) instanciateOne(__getEntityCollectionClass__(entities.iterator().next().getClass()));
 		collection.add(entities);		
-		Response response = representation.createManyUsingCollection(collection,null);
+		Response response = representation.createMany(collection,null);
 		assertThat(response.getStatus()).isEqualTo(Response.Status.CREATED.getStatusCode());
 		response.close();
 		for(ENTITY index : entities) {
@@ -111,8 +112,28 @@ public abstract class AbstractRepresentationArquillianIntegrationTest extends Ab
 	}
 	
 	protected String getJavaScriptObjectNotation(Object object) {
-		 return object == null ? null : __injectByQualifiersClasses__(ObjectToStringBuilder.class, JavaScriptObjectNotation.Class.class).setObject(object).execute().getOutput();
+		 return object == null ? null : JsonbBuilder.create().toJson(object);
 	}
 
 	protected abstract <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass);
+
+	/**/
+	
+	protected static void __assertResponseTransaction__(Response response,Status expectedStatus,Long expectedNumberOfProcessedElement
+			,Collection<String> expectedSystemIdentifiers,Collection<String> expectedBusinessIdentifiers) {
+		assertThat(response.getStatusInfo()).isEqualTo(expectedStatus);
+		if(Status.CREATED.equals(expectedStatus)) {
+			assertThat(ResponseHelper.getHeaderXTotalCount(response)).isEqualTo(expectedNumberOfProcessedElement);
+			Collection<String> identifiers = null;
+			identifiers = ResponseHelper.getHeaderEntitiesSystemIdentifiers(response);
+			assertThat(identifiers).hasSize(expectedNumberOfProcessedElement.intValue());
+			if(expectedSystemIdentifiers!=null)
+				assertThat(identifiers).containsExactlyInAnyOrder(expectedSystemIdentifiers.toArray(new String[] {}));	
+			identifiers = ResponseHelper.getHeaderEntitiesBusinessIdentifiers(response);
+			assertThat(identifiers).hasSize(expectedNumberOfProcessedElement.intValue());
+			if(expectedBusinessIdentifiers!=null)
+				assertThat(identifiers).containsExactlyInAnyOrder(expectedBusinessIdentifiers.toArray(new String[] {}));	
+		}
+	}
+
 }

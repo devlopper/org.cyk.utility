@@ -1,6 +1,7 @@
 package org.cyk.utility.server.representation;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -8,37 +9,91 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.cyk.utility.helper.Helper;
+import org.cyk.utility.number.NumberHelper;
 
 public interface ResponseHelper extends Helper {
 
-	Family getFamily(Response response);
+	static Family getFamily(Response response) {
+		return response == null ? null : Family.familyOf(response.getStatus());
+	}
 	
-	Boolean isFamily(Response response,Family family);
-	Boolean isFamilySuccessful(Response response);
-	Boolean isFamilyRedirection(Response response);
-	Boolean isFamilyClientError(Response response);
-	Boolean isFamilyServerError(Response response);
+	static Boolean isFamily(Response response, Family family) {
+		return response == null || family == null ? null : family.equals(getFamily(response));
+	}
 	
-	Status getStatus(Response response);
-	
-	Boolean isStatus(Response response,Status status);
-	
-	//Successful
-	Boolean isStatusSuccessfulOk(Response response);
-	
-	//Client Error
-	Boolean isStatusClientErrorNotFound(Response response);
+	static Boolean isFamilySuccessful(Response response) {
+		return isFamily(response, Family.SUCCESSFUL);
+	}
 
-	/**/
+	static Boolean isFamilyRedirection(Response response) {
+		return isFamily(response, Family.REDIRECTION);
+	}
 	
-	String join(Collection<String> strings);
-	Collection<String> disjoin(String value);
+	static Boolean isFamilyClientError(Response response) {
+		return isFamily(response, Family.CLIENT_ERROR);
+	}
+
+	static Boolean isFamilyServerError(Response response) {
+		return isFamily(response, Family.SERVER_ERROR);
+	}
+
+	static Status getStatus(Response response) {
+		return response == null ? null : Status.fromStatusCode(response.getStatus());
+	}
 	
-	ResponseHelper addHeader(ResponseBuilder response,String name,Object value);
-	ResponseHelper addHeader(ResponseBuilder response,String name,Collection<String> strings);
+	static Boolean isStatus(Response response, Status status) {
+		return response == null || status == null ? null : status.equals(getStatus(response));
+	}
 	
-	String getHeader(Response response,String name);
-	Collection<String> getHeaderAndDisjoin(Response response,String name);
+	static Boolean isStatusSuccessfulOk(Response response) {
+		return isStatus(response, Response.Status.OK);
+	}
 	
-	Long getHeaderXTotalCount(Response response);
+	static Boolean isStatusClientErrorNotFound(Response response) {
+		return isStatus(response, Response.Status.NOT_FOUND);
+	}
+	
+	static String join(Collection<String> strings) {
+		return String.join(Constant.RESPONSE_HEADER_VALUES_SEPARATOR, strings);
+	}
+	
+	static Collection<String> disjoin(String value) {
+		return value == null || value.isBlank() ? null :  List.of(value.split(Constant.RESPONSE_HEADER_VALUES_SEPARATOR));
+	}
+	
+	static void addHeader(ResponseBuilder response, String name, Object value) {
+		if(response != null && !name.isBlank() && value != null)
+			response.header(name, value);
+	}
+	
+	static void addHeader(ResponseBuilder response, String name, Collection<String> strings) {
+		addHeader(response,name,join(strings));
+	}
+	
+	static String getHeader(Response response, String name) {
+		String value = null;
+		if(response != null && !name.isBlank())
+			value = response.getHeaderString(name);
+		return value;
+	}
+	
+	static Collection<String> getHeaderAndDisjoin(Response response, String name) {
+		Collection<String> strings = null;
+		String value = getHeader(response, name);
+		if(!value.isBlank())
+			strings = disjoin(value);
+		return strings;
+	}
+	
+	static Long getHeaderXTotalCount(Response response) {
+		return NumberHelper.getLong(getHeader(response, Constant.RESPONSE_HEADER_X_TOTAL_COUNT), null);
+	}
+	
+	static Collection<String> getHeaderEntitiesSystemIdentifiers(Response response) {
+		return getHeaderAndDisjoin(response, Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_SYSTEM);
+	}
+	
+	static Collection<String> getHeaderEntitiesBusinessIdentifiers(Response response) {
+		return getHeaderAndDisjoin(response, Constant.RESPONSE_HEADER_ENTITY_IDENTIFIER_BUSINESS);
+	}
 }

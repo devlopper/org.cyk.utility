@@ -7,9 +7,8 @@ import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.field.FieldInstanceValue;
 import org.cyk.utility.field.FieldInstanceValues;
 import org.cyk.utility.field.FieldInstancesRuntime;
-import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.string.Strings;
-
+@Deprecated
 public abstract class AbstractObjectToStringBuilderImpl extends AbstractObjectToOrFromStringBuilderImpl<String> implements ObjectToStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -27,7 +26,6 @@ public abstract class AbstractObjectToStringBuilderImpl extends AbstractObjectTo
 				for(String index : fieldNamesStrings.get()) {
 					FieldInstanceValue fieldInstanceValue = __inject__(FieldInstanceValue.class);
 					fieldInstanceValue.setFieldInstance(__inject__(FieldInstancesRuntime.class).get(object.getClass(), index));
-					fieldInstanceValue.setValue(__inject__(FieldValueGetter.class).execute(object, index).getOutput());
 					fieldInstanceValues.add(fieldInstanceValue);
 				}
 			}	

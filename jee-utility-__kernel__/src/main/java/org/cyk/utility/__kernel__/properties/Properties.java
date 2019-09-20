@@ -8,15 +8,16 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.enterprise.context.Dependent;
 
-import java.util.Set;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.KernelHelper;
+import org.cyk.utility.__kernel__.ClassHelper;
+import org.cyk.utility.__kernel__.MapHelper;
+import org.cyk.utility.__kernel__.NumberHelper;
+import org.cyk.utility.__kernel__.constant.ConstantEmpty;
 
 @Dependent
 public class Properties implements java.io.Serializable {
@@ -67,7 +68,7 @@ public class Properties implements java.io.Serializable {
 	public static void setDefaultValues(Class<?> aClass,Properties properties){
 		//Inherited first
 		for(Entry<Class<?>,Map<Object,Object>> entry : DEFAULT_VALUES.entrySet()){
-			if(!entry.getClass().equals(aClass) && DependencyInjection.inject(KernelHelper.class).isInstanceOf(entry.getKey(), aClass) && isDefaultValuesInherited(entry.getKey())){
+			if(!entry.getClass().equals(aClass) && ClassHelper.isInstanceOf(entry.getKey(), aClass) && isDefaultValuesInherited(entry.getKey())){
 				setDefaultValues(aClass, properties, DEFAULT_VALUES.get(entry.getKey()));
 			}
 		}
@@ -99,7 +100,7 @@ public class Properties implements java.io.Serializable {
 		@SuppressWarnings("unchecked")
 		T result = (T) getFromPath(properties, keys);
 		if(result == null)
-			result = DependencyInjection.inject(KernelHelper.class).instanciate(aClass);
+			result = ClassHelper.instanciate(aClass);
 		return result;
 	}
 	
@@ -150,21 +151,19 @@ public class Properties implements java.io.Serializable {
 	}
 	
 	public Properties setFromPath(Object[] keys,Object value){
-		if(keys == null || keys.length == 0){
-			//TODO log warning
-		}else{
-			if(keys.length == 1){
-				set(keys[0], value);
-			}else {
-				Object properties = get(keys[0]);
-				if(properties == null){
-					set(keys[0], properties = new Properties());
-				}
-				if(properties instanceof Properties)
-					((Properties)properties).setFromPath(ArrayUtils.subarray(keys, 1, keys.length),value);
-				else {
-					//TODO log warning
-				}
+		if(keys == null || keys.length == 0)
+			return this;
+		if(keys.length == 1){
+			set(keys[0], value);
+		}else {
+			Object properties = get(keys[0]);
+			if(properties == null)
+				set(keys[0], properties = new Properties());
+			
+			if(properties instanceof Properties)
+				((Properties)properties).setFromPath(ArrayUtils.subarray(keys, 1, keys.length),value);
+			else {
+				throw new RuntimeException("set value from key path where properties of type "+properties.getClass()+" not yet handled");
 			}
 		}
 		return this;
@@ -175,7 +174,7 @@ public class Properties implements java.io.Serializable {
 	public <T> T getInstanciateIfNull(Object key,Class<T> aClass){
 		T value = get(aClass, key, null);
 		if(value == null){
-			value = DependencyInjection.inject(KernelHelper.class).instanciateOne(aClass);
+			value = ClassHelper.instanciate(aClass);
 			set(key, value);
 		}
 		return value;
@@ -224,12 +223,11 @@ public class Properties implements java.io.Serializable {
 		if(keys == null || keys.length == 0)
 			return null;
 		Object value = get(keys[0]);
-		if(keys.length == 1)
+		if(keys.length == 1 || value == null)
 			return value;
 		if(value instanceof Properties)
 			return ((Properties)value).getFromPath(ArrayUtils.subarray(keys, 1, keys.length));	
-		//TODO log warning
-		return null;
+		throw new RuntimeException("get from path where properties type is "+value.getClass()+" is not yet handled");
 	}
 	
 	public Collection<Object> getWhereKeyIsInstanceOf(Class<?> clazz) {
@@ -252,15 +250,14 @@ public class Properties implements java.io.Serializable {
 	
 	@SuppressWarnings("unchecked")
 	private Properties __add__(Object key,Object value,Class<?> valueClass,Boolean add){
-		KernelHelper kernelHelper = DependencyInjection.inject(KernelHelper.class);
 		Object keyValue = get(key);
 		if(valueClass == null && keyValue!=null)
 			valueClass = keyValue.getClass();
-		if(kernelHelper.isInstanceOf(valueClass,Collection.class)){
+		if(ClassHelper.isInstanceOf(valueClass,Collection.class)){
 			if(keyValue==null){
-				if(kernelHelper.isInstanceOf(valueClass,List.class))
+				if(ClassHelper.isInstanceOf(valueClass,List.class))
 					keyValue = new ArrayList<>();
-				else if(kernelHelper.isInstanceOf(valueClass,Set.class))
+				else if(ClassHelper.isInstanceOf(valueClass,Set.class))
 					keyValue = new LinkedHashSet<>();
 				else
 					keyValue = new ArrayList<>();
@@ -271,14 +268,14 @@ public class Properties implements java.io.Serializable {
 				((Collection<Object>)keyValue).remove(value);
 		}else if(String.class.equals(valueClass)){
 			if(Boolean.TRUE.equals(add))
-				keyValue = (String)(keyValue == null ? kernelHelper.getEmptyString() : keyValue) + value;
+				keyValue = (String)(keyValue == null ? ConstantEmpty.STRING : keyValue) + value;
 			else
-				keyValue = StringUtils.replace((String)keyValue, (String) value, kernelHelper.getEmptyString());
-		}else if(kernelHelper.isNumber(valueClass)){
+				keyValue = StringUtils.replace((String)keyValue, (String) value, ConstantEmpty.STRING);
+		}else if(ClassHelper.isNumber(valueClass)){
 			if(Boolean.TRUE.equals(add))
-				keyValue = kernelHelper.addNumbers((Number)keyValue , (Number)value);
+				keyValue = NumberHelper.addNumbers((Number)keyValue , (Number)value);
 			else
-				keyValue = kernelHelper.subtractNumbers((Number)keyValue , (Number)value);
+				keyValue = NumberHelper.subtractNumbers((Number)keyValue , (Number)value);
 		}
 		set(key,keyValue);
 		return this;
@@ -294,11 +291,10 @@ public class Properties implements java.io.Serializable {
 	}
 	
 	public Properties addString(Object key,Object separator,String...strings){
-		KernelHelper kernelHelper = DependencyInjection.inject(KernelHelper.class);
 		if(strings!=null && strings.length>0){
 			for(String string : strings)
 				if(StringUtils.isNotBlank(string)) {
-					add(key, (get(key) == null ? kernelHelper.getEmptyString() : separator ) + string, String.class);
+					add(key, (get(key) == null ? ConstantEmpty.STRING : separator ) + string, String.class);
 				}
 		}
 		return this;
@@ -368,7 +364,7 @@ public class Properties implements java.io.Serializable {
 	
 	public Properties copyTo(Properties destination,Object...keys){
 		if(destination!=null && keys!=null && keys.length>0)
-			DependencyInjection.inject(KernelHelper.class).copyMap(map, destination.map, keys);
+			MapHelper.copyMap(map, destination.map, keys);
 		return this;
 	}
 	
@@ -376,7 +372,7 @@ public class Properties implements java.io.Serializable {
 		if(source!=null && source.map!=null && !source.map.isEmpty() && keys!=null && keys.length>0) {
 			if(map == null)
 				map = __instanciateMap__();
-			DependencyInjection.inject(KernelHelper.class).copyMap(source.map, map, keys);
+			MapHelper.copyMap(source.map, map, keys);
 		}
 		//TODO check to remove key from keys having null value
 		return this;
@@ -386,7 +382,7 @@ public class Properties implements java.io.Serializable {
 		if(source!=null && source.map != null && !source.map.isEmpty()) {
 			if(map == null)
 				map = __instanciateMap__();
-			DependencyInjection.inject(KernelHelper.class).copyMapNonNullKeys(source.map, map);
+			MapHelper.copyMapNonNullKeys(source.map, map);
 		}
 		return this;
 	}

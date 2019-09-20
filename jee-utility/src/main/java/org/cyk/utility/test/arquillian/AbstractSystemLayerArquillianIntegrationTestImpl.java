@@ -9,11 +9,11 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.field.FieldHelper;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldName;
-import org.cyk.utility.field.FieldValueGetter;
 import org.cyk.utility.field.Fields;
+import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.system.action.SystemAction;
 import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
@@ -46,7 +46,7 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	
 	protected <ENTITY> void ____assertThatLogSaysEntityHasBeen____(Class<? extends SystemAction> systemActionClass,ENTITY entity,LAYER_ENTITY_INTERFACE layerEntityInterface) {
 		assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(systemActionClass),entity.getClass()))
-		.assertContainsLastLogEventMessage("code="+__inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
+		.assertContainsLastLogEventMessage("code="+FieldHelperImpl.__read__(entity,FieldName.IDENTIFIER,ValueUsageType.BUSINESS));
 	}
 	
 	public <ENTITY> void __createEntity__(ENTITY entity){
@@ -106,10 +106,10 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 	public <ENTITY> void __updateEntity__(ENTITY entity,LAYER_ENTITY_INTERFACE layerEntityInterface) {
 		____updateEntity____(entity, layerEntityInterface);
 		____assertThatEntityHasBeenPersisted____(entity, layerEntityInterface);
-		//assertThat(__inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput()).isNotNull();
+		//assertThat(FieldHelperImpl.__read__.execute(entity,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput()).isNotNull();
 		____assertThatLogSaysEntityHasBeen____(SystemActionUpdate.class, entity, layerEntityInterface);
 		//assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(SystemActionUpdate.class),entity.getClass()))
-		//	.assertContainsLastLogEventMessage("code="+__inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
+		//	.assertContainsLastLogEventMessage("code="+FieldHelperImpl.__read__.execute(entity,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
 	}
 	
 	public <ENTITY> void __updateEntity__(ENTITY entity) {
@@ -124,9 +124,9 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 		____deleteEntity____(entity, layerEntityInterface);
 		____assertThatLogSaysEntityHasBeen____(SystemActionDelete.class, entity, layerEntityInterface);
 		//assertionHelper.assertStartsWithLastLogEventMessage(__getLogMessageStart__(__inject__(SystemActionDelete.class),entity.getClass())).assertContainsLastLogEventMessage(
-		//		"code="+__inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
+		//		"code="+FieldHelperImpl.__read__.execute(entity,FieldName.IDENTIFIER,ValueUsageType.BUSINESS).getOutput());
 		
-		//Object systemIdentifier = __inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput();
+		//Object systemIdentifier = FieldHelperImpl.__read__.execute(entity,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput();
 		//entity = (ENTITY) layerEntityInterface.readOne(systemIdentifier);
 		//assertThat(entity).isNull();
 	}
@@ -158,7 +158,7 @@ public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENT
 		____deleteEntityAll____(entityClass, layerEntityInterface);
 		//assertionHelper.assertEqualsNumber("number of "+entityClass.getSimpleName()+" is not zero", 0, __countEntitiesAll__(entityClass, layerEntityInterface));
 		
-		//Object systemIdentifier = __inject__(FieldValueGetter.class).execute(entity,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput();
+		//Object systemIdentifier = FieldHelperImpl.__read__.execute(entity,FieldName.IDENTIFIER,ValueUsageType.SYSTEM).getOutput();
 		//entity = (ENTITY) layerEntityInterface.readOne(systemIdentifier);
 		//assertThat(entity).isNull();
 	}

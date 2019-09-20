@@ -9,32 +9,32 @@ import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepre
 import org.cyk.utility.value.ValueDto;
 import org.cyk.utility.value.ValueUsageType;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @XmlRootElement @Getter @Setter @Accessors(chain=true) @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown=true)
+//@JsonIgnoreProperties(ignoreUnknown=true)
 public class FilterDto extends AbstractRepresentationObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String klass;
-	@JsonIgnoreProperties(value="size")
+	//@JsonIgnoreProperties(value="size")
 	private FieldDtoCollection fields;
 
 	private String value;
 	
-	public FilterDto setKlass(Class<?> klass) {
+	public FilterDto useKlass(Class<?> klass) {
 		if(klass != null)
 			this.klass = klass.getName();
 		return this;
 	}
 	
 	public FieldDtoCollection getFields(Boolean injectIfNull) {
-		return (FieldDtoCollection) __getInjectIfNull__(FIELD_FIELDS, injectIfNull);
+		if(fields == null && Boolean.TRUE.equals(injectIfNull))
+			fields = new FieldDtoCollection();
+		return fields;
 	}
 	
 	public FilterDto addField(String path,String value,org.cyk.utility.field.FieldDto.Type type,ValueDto.Container valueContainer,ValueDto.Type valueType,ValueUsageType valueUsageType,ArithmeticOperator arithmeticOperator) {

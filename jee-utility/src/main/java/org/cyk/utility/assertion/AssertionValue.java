@@ -3,6 +3,7 @@ package org.cyk.utility.assertion;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.field.FieldValueGetter;
 
+@Deprecated
 public interface AssertionValue extends Objectable {
 
 	String getName();

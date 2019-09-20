@@ -5,8 +5,6 @@ package org.cyk.utility.request;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -41,7 +39,7 @@ public class RequestProcessorUnitTest extends AbstractWeldUnitTest {
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
-	@JsonIgnoreProperties(ignoreUnknown=true)
+	//@JsonIgnoreProperties(ignoreUnknown=true)
 	public static class Dto {
 		private String uuid;
 		private String code;

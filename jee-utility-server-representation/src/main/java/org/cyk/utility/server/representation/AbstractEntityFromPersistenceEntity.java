@@ -23,7 +23,7 @@ public abstract class AbstractEntityFromPersistenceEntity extends AbstractEntity
 	}
 	
 	protected Integer __getIntegerFrom__(Object object) {
-		return __inject__(NumberHelper.class).getInteger(object);
+		return NumberHelper.getInteger(object);
 	}
 	
 	@Override

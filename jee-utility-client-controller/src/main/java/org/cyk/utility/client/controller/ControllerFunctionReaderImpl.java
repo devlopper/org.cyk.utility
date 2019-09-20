@@ -41,13 +41,6 @@ public class ControllerFunctionReaderImpl extends AbstractControllerFunctionImpl
 			Long count = __injectValueHelper__().defaultToIfNull(__injectNumberHelper__().getLong(Properties.getFromPath(properties,Properties.COUNT))
 					,Boolean.TRUE.equals(isPageable) ? COUNT : null);
 			FilterDto filters = (FilterDto) Properties.getFromPath(properties,Properties.FILTERS);
-			/*String filtersAsString = null;
-			if(Boolean.TRUE.equals(__injectValueHelper__().isNotBlank(filters))) {
-				if(filters instanceof String)
-					filtersAsString = (String) filters;
-				else
-					filtersAsString = __injectByQualifiersClasses__(ObjectToStringBuilder.class,JavaScriptObjectNotation.Class.class).setObject(filters).execute().getOutput();
-			}*/
 			if(__representation__ instanceof RepresentationEntity<?, ?, ?>)
 				__response__ = ((RepresentationEntity<?,Object,?>)__representation__).getMany(isPageable,from,count,fields,filters);	
 		}else {

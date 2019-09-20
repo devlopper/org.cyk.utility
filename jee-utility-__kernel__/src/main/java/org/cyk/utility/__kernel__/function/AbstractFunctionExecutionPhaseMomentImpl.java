@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.CollectionHelper;
 import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.assertion.AssertionBuilder;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
@@ -37,7 +38,7 @@ public abstract class AbstractFunctionExecutionPhaseMomentImpl extends AbstractO
 		
 		Function<?,Collection<Assertion>> assertionsProvider = getAssertionsProvider();
 		if(assertionsProvider!=null)
-			__injectKernelHelper__().addToCollection(assertions, assertionsProvider.execute().getOutput());
+			CollectionHelper.addToCollection(assertions, assertionsProvider.execute().getOutput());
 			
 		Collection<Assertion> __assertions__ = getAssertions();	
 		if(__assertions__!=null) {

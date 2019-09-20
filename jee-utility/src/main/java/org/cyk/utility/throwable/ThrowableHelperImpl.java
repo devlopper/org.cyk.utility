@@ -112,12 +112,12 @@ public class ThrowableHelperImpl extends AbstractHelper implements ThrowableHelp
 
 	@Override
 	public void throwRuntimeExceptionIfEmpty(Object value, String message) {
-		if(Boolean.TRUE.equals(__inject__(ValueHelper.class).isEmpty(value)))
+		if(ValueHelper.isEmpty(value))
 			throwRuntimeException(message);
 	}
 
 	public void throwRuntimeExceptionIfBlank(Object value, String message) {
-		if(Boolean.TRUE.equals(__inject__(ValueHelper.class).isBlank(value)))
+		if(ValueHelper.isBlank(value))
 			throwRuntimeException(message);
 	}
 	

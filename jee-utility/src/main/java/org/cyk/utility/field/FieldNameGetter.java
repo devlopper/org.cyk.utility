@@ -3,6 +3,7 @@ package org.cyk.utility.field;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.value.ValueUsageType;
 
+@Deprecated
 public interface FieldNameGetter extends FunctionWithPropertiesAsInput<String> {
 
 	Class<?> getClazz();

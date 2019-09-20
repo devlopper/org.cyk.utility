@@ -65,7 +65,7 @@ public interface ConstantParameterName {
 	}
 	
 	static Boolean is(String name,Object context,Object request) {
-		return DependencyInjection.inject(BooleanHelper.class).get(get(name, context, request, Boolean.FALSE.toString()));
+		return BooleanHelper.get(get(name, context, request, Boolean.FALSE.toString()));
 	}
 	
 	static Boolean is(String name,Object context) {

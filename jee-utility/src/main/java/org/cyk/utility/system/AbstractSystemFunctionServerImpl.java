@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
-import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldName;
 import org.cyk.utility.system.action.SystemActor;
 import org.cyk.utility.system.action.SystemActorServer;
@@ -27,14 +27,14 @@ public abstract class AbstractSystemFunctionServerImpl extends AbstractSystemFun
 		Object entity = getProperties().getEntity();
 		if(entity != null) {
 			Collection<FieldName> fieldNames = __getLoggedEntityFieldNames__();
-			if(__inject__(CollectionHelper.class).isNotEmpty(fieldNames)){
+			if(fieldNames != null && !fieldNames.isEmpty()){
 				for(FieldName index : fieldNames){
 					Collection<ValueUsageType> valueUsageTypes = getValueUsageTypes(index);
-					if(__inject__(CollectionHelper.class).isNotEmpty(valueUsageTypes))
+					if(valueUsageTypes!=null && !valueUsageTypes.isEmpty())
 						for(ValueUsageType indexValueUsageType : valueUsageTypes){
-							Field field = __injectFieldHelper__().getField(getEntityClass(), index, indexValueUsageType);
+							Field field = FieldHelperImpl.__getByName__(getEntityClass(), index, indexValueUsageType);
 							if(field!=null)
-								addLogMessageBuilderParameter(field.getName(), getEnityFieldValue(entity,index,indexValueUsageType, field.getName()));	
+								addLogMessageBuilderParameter(field.getName(), FieldHelperImpl.__read__(entity, field));	
 						}
 				}
 			}	

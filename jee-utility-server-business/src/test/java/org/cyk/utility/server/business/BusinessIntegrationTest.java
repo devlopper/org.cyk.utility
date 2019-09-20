@@ -45,7 +45,10 @@ public class BusinessIntegrationTest extends AbstractBusinessArquillianIntegrati
 	
 	@Test
 	public void create_myEntity_one() throws Exception{
-		__inject__(TestBusinessCreate.class).addObjects(new MyEntity().setCode("a")).execute();
+		MyEntity myEntity = new MyEntity().setCode("a");
+		assertThat(myEntity.getIdentifier()).isNull();
+		__inject__(MyEntityBusiness.class).create(myEntity);
+		assertThat(myEntity.getIdentifier()).isNotNull();
 	}
 	
 	@Test

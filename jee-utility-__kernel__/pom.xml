@@ -17,8 +17,7 @@
 	<name>JEE utility __kernel__</name>
 	
 	<properties>
-		<com.fasterxml.jackson.core.jackson-core.version>2.9.8</com.fasterxml.jackson.core.jackson-core.version>
-		<com.fasterxml.jackson.core.jackson-databind.version>2.9.8</com.fasterxml.jackson.core.jackson-databind.version>
+		<commons-io.commons-io.version>2.6</commons-io.commons-io.version>
 	</properties> 
 	
 	<build>
@@ -39,69 +38,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
-		</dependency>	
-		
-		<dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-core</artifactId>
-		    <version>${com.fasterxml.jackson.core.jackson-core.version}</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-databind</artifactId>
-		    <version>${com.fasterxml.jackson.core.jackson-databind.version}</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.glassfish.jaxb</groupId>
-		    <artifactId>jaxb-runtime</artifactId>
-		    <version>2.4.0-b180830.0438</version>
-		    <scope>test</scope>
+			<version>${commons-io.commons-io.version}</version>
 		</dependency>	
 	</dependencies>
-	
-	<profiles>
-		<!-- Arquillian JEE managed profile -->
-		<profile>
-			<id>arquillian-jee-managedd</id>			
-			<dependencies>
-				<dependency>
-					<groupId>org.jboss.arquillian.container</groupId>
-					<artifactId>arquillian-weld-ee-embedded-1.1</artifactId>
-					<version>1.0.0.Final</version>
-					<scope>test</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.jboss.weld</groupId>
-					<artifactId>weld-core</artifactId>
-					<version>2.2.16.Final</version>
-					<scope>test</scope>
-				</dependency>
-				
-				<dependency>
-				    <groupId>org.glassfish.jersey.core</groupId>
-				    <artifactId>jersey-client</artifactId>
-				    <version>2.26</version>
-				    <scope>test</scope>
-				</dependency>
-				
-				<dependency>
-				    <groupId>org.glassfish.jersey.inject</groupId>
-				    <artifactId>jersey-hk2</artifactId>
-				    <version>2.26</version>
-				    <scope>test</scope>
-				</dependency>
-				
-				<dependency>
-				    <groupId>org.glassfish.jersey.media</groupId>
-				    <artifactId>jersey-media-json-jackson</artifactId>
-				    <version>2.26</version>
-				    <scope>test</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
-	
 </project>

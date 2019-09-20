@@ -8,13 +8,11 @@ import java.util.Set;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
-import org.cyk.utility.field.FieldName;
-import org.cyk.utility.field.FieldValueGetter;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.repository.AbstractRepositoryImpl;
 import org.cyk.utility.repository.Repository;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractRepositoryImpl implements InstanceRepository<INSTANCE>, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -62,7 +60,7 @@ public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractR
 		}else{
 			if(__inject__(CollectionHelper.class).isNotEmpty(instances)){
 				for(INSTANCE index : instances){
-					Object indexSystemIdentifier = getSystemIdentifier(index);
+					Object indexSystemIdentifier = FieldHelperImpl.__readSystemIdentifier__(index);
 					if(identifier.equals(indexSystemIdentifier)){
 						instance = index;
 						break;
@@ -83,10 +81,6 @@ public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractR
 		return getBySystemIdentifier(identifier, Boolean.FALSE);
 	}
 	
-	protected Object getSystemIdentifier(INSTANCE instance){
-		return __inject__(FieldValueGetter.class).execute(instance, FieldName.IDENTIFIER, ValueUsageType.SYSTEM);
-	}
-	
 	@Override
 	public Collection<INSTANCE> readAll() {
 		return instances;
@@ -94,7 +88,7 @@ public abstract class AbstractInstanceRepositoryImpl<INSTANCE> extends AbstractR
 	
 	@Override
 	public Long countAll() {
-		return __inject__(NumberHelper.class).getLong(__inject__(CollectionHelper.class).getSize(instances));
+		return NumberHelper.getLong(__inject__(CollectionHelper.class).getSize(instances));
 	}
 	
 	@Override

@@ -64,7 +64,7 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	}
 	
 	@Override
-	public Response createManyUsingCollection(ENTITY_COLLECTION entityCollection,String properties) {
+	public Response createMany(ENTITY_COLLECTION entityCollection,String properties) {
 		return createMany(__getEntities__(entityCollection),properties);
 	}
 	
@@ -156,10 +156,14 @@ public abstract class AbstractRepresentationEntityImpl<PERSISTENCE_ENTITY,BUSINE
 	/**/
 	
 	@SuppressWarnings("unchecked")
-	protected Collection<ENTITY> __getEntities__(ENTITY_COLLECTION entityCollection) {
-		if(entityCollection instanceof AbstractEntityCollection<?>)
-			return (Collection<ENTITY>) ((AbstractEntityCollection<?>)entityCollection).getCollection();
-		return null;
+	protected Collection<ENTITY> __getEntities__(ENTITY_COLLECTION collection) {
+		if(collection == null)
+			return null;
+		if(collection instanceof org.cyk.utility.__kernel__.object.__static__.representation.Collection)
+			return ((org.cyk.utility.__kernel__.object.__static__.representation.Collection<ENTITY>)collection).getElements();
+		if(collection instanceof AbstractEntityCollection<?>)
+			return (Collection<ENTITY>) ((AbstractEntityCollection<?>)collection).getCollection();
+		throw new RuntimeException("we cannot get entities from collection of type "+collection.getClass());
 	}
 	
 	/**/

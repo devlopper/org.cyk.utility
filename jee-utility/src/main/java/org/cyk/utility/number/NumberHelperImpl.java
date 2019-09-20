@@ -95,49 +95,6 @@ public class NumberHelperImpl extends AbstractHelper implements NumberHelper,Ser
 	}
 	
 	@Override
-	public <NUMBER> NUMBER get(Class<NUMBER> aClass,Object object,NUMBER nullValue){
-		if(object==null || ( (object instanceof String) && __inject__(StringHelper.class).isBlank((String)object) ) )
-			return nullValue;
-		return __inject__(ClassHelper.class).instanciate(aClass, new Object[]{String.class,object.toString()});
-	}
-	
-	@Override
-	public <NUMBER> NUMBER get(Class<NUMBER> aClass,Object object){
-		return get(aClass,object,(NUMBER)null);
-	}
-	
-	@Override
-	public  Integer getInteger(Object object,Integer nullValue){
-		return get(Integer.class, object, nullValue);
-	}
-	
-	@Override
-	public Integer getInteger(Object object) {
-		return getInteger(object, null);
-	}
-	
-	@Override
-	public  Long getLong(Object object,Long nullValue){
-		return get(Long.class, object, nullValue);
-	}
-
-	@Override
-	public Long getLong(Object object) {
-		return getLong(object, null);
-	}
-
-	
-	@Override
-	public BigDecimal getBigDecimal(Object object, BigDecimal nullValue) {
-		return get(BigDecimal.class, object, nullValue);
-	}
-
-	@Override
-	public BigDecimal getBigDecimal(Object object) {
-		return getBigDecimal(object, null);
-	}
-
-	@Override
 	public Boolean compare(Number number1, Number number2, ComparisonOperator operator) {
 		BigDecimal n1 = number1 == null ? null : new BigDecimal(number1.toString());
 		BigDecimal n2 = number2 == null ? null : new BigDecimal(number2.toString());

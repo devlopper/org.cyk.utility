@@ -7,7 +7,9 @@ import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.field.FieldInstances;
 import org.cyk.utility.field.FieldInstancesRuntime;
 import org.cyk.utility.string.Strings;
+import org.cyk.utility.throwable.ThrowableHelperImpl;
 
+@Deprecated
 public abstract class AbstractObjectFromStringBuilderImpl extends AbstractObjectToOrFromStringBuilderImpl<Object> implements ObjectFromStringBuilder,Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -16,6 +18,7 @@ public abstract class AbstractObjectFromStringBuilderImpl extends AbstractObject
 	
 	@Override
 	protected Object __execute__(Strings fieldNamesStrings) throws Exception {
+		ThrowableHelperImpl.__throwRuntimeException__(getClass()+" is deprecated");
 		String string = __injectValueHelper__().returnOrThrowIfBlank("string", getString());
 		Class<?> klass = __injectValueHelper__().returnOrThrowIfBlank("class", getKlass());
 		FieldInstances fieldInstances = null;

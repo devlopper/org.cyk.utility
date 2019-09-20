@@ -51,7 +51,7 @@ public enum Topic {
 				return;
 			}
 			if(isStartable == null)
-				isStartable = DependencyInjection.inject(BooleanHelper.class).get(DependencyInjection.inject(SystemHelper.class)
+				isStartable = BooleanHelper.get(DependencyInjection.inject(SystemHelper.class)
 					.getProperty(String.format(IS_STARTABLE_FORMAT, name().toLowerCase()),Boolean.TRUE));
 			if(Boolean.TRUE.equals(isStartable)) {
 				Consumer consumer = DependencyInjection.inject(ConsumerBuilder.class).setTopic(this).execute().getOutput();

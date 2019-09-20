@@ -82,6 +82,9 @@ public class AbstractArchiveBuilder<ARCHIVE extends Archive<?>> extends Abstract
 		if(StringUtils.isBlank(ormXml) && profile!=null)
 			ormXml = profile.getProperty("org.cyk.test.jpa.orm.file");
 		
+		if(StringUtils.isBlank(jbossDeploymentStructureXml) && profile!=null)
+			jbossDeploymentStructureXml = profile.getProperty("org.cyk.test.jboss.deployment.structure.file");
+		
 		String _package = profile == null ? null : profile.getProperty("org.cyk.test.package");
 		String[] classesArray = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.classes")) ? null : profile.getProperty("org.cyk.test.classes").split(",");
 		String[] resourcesFoldersArray = profile == null ? null : StringUtils.isBlank(profile.getProperty("org.cyk.test.resources.folders")) ? null : profile.getProperty("org.cyk.test.resources.folders").split(",");

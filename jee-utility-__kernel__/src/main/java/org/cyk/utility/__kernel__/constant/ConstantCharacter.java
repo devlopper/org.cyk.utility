@@ -2,69 +2,69 @@ package org.cyk.utility.__kernel__.constant;
 
 public interface ConstantCharacter {
 	
-	Character SPACE = new Character(' ');
+	Character SPACE = Character.valueOf(' ');
 	/**
 	 * .
 	 */
-	Character DOT = new Character('.');
+	Character DOT = Character.valueOf('.');
 	/**
 	 * :
 	 */
-	Character COLON = new Character(':');
+	Character COLON = Character.valueOf(':');
 	/**
 	 * ,
 	 */
-	Character COMA = new Character(',');
+	Character COMA = Character.valueOf(',');
 	/**
 	 * ;
 	 */
-	Character SEMI_COLON = new Character(';');
+	Character SEMI_COLON = Character.valueOf(';');
 	/**
 	 * ^
 	 */
-	Character CARET_CIRCUMFLEX = new Character('^');
+	Character CARET_CIRCUMFLEX = Character.valueOf('^');
 	/**
 	 * \
 	 */
-	Character BACK_SLASH = new Character('\\');
+	Character BACK_SLASH = Character.valueOf('\\');
 	/**
 	 * %
 	 */
-	Character PERCENTAGE = new Character('%');
+	Character PERCENTAGE = Character.valueOf('%');
 	
 	/**
 	 * 0
 	 */
-	Character ZERO = new Character('0');
+	Character ZERO = Character.valueOf('0');
 	/**
 	 * /
 	 */
-	Character SLASH = new Character('/');
+	Character SLASH = Character.valueOf('/');
 	/**
 	 * $
 	 */
-	Character DOLLAR = new Character('$');
+	Character DOLLAR = Character.valueOf('$');
 	/**
 	 * ?
 	 */
-	Character QUESTION_MARK = new Character('?');
-	Character AMPERSTAMP = new Character('&');
-	Character EQUAL = new Character('=');
-	Character AT = new Character('@');
-	Character UNDESCORE = new Character('_');
-	Character VERTICAL_BAR = new Character('|');
-	Character LEFT_PARENTHESIS = new Character('(');
-	Character RIGHT_PARENTHESIS = new Character(')');
-	Character LEFT_BRACKET = new Character('{');
-	Character RIGHT_BRACKET = new Character('}');
-	Character STAR = new Character('*');
-	Character PLUS = new Character('+');
-	Character PERCENT = new Character('%');
-	Character HYPHEN = new Character('-');
-	Character MINUS = new Character('-');
-	Character GREATER_THAN = new Character('>');
-	Character LOWER_THAN = new Character('<');
-	Character SHARP = new Character('#');
+	Character QUESTION_MARK = Character.valueOf('?');
+	Character AMPERSTAMP = Character.valueOf('&');
+	Character EQUAL = Character.valueOf('=');
+	Character AT = Character.valueOf('@');
+	Character UNDESCORE = Character.valueOf('_');
+	Character VERTICAL_BAR = Character.valueOf('|');
+	Character LEFT_PARENTHESIS = Character.valueOf('(');
+	Character RIGHT_PARENTHESIS = Character.valueOf(')');
+	Character LEFT_BRACKET = Character.valueOf('{');
+	Character RIGHT_BRACKET = Character.valueOf('}');
+	Character STAR = Character.valueOf('*');
+	Character PLUS = Character.valueOf('+');
+	Character PERCENT = Character.valueOf('%');
+	Character HYPHEN = Character.valueOf('-');
+	Character MINUS = Character.valueOf('-');
+	Character GREATER_THAN = Character.valueOf('>');
+	Character LOWER_THAN = Character.valueOf('<');
+	Character SHARP = Character.valueOf('#');
 	
-	Character H = new Character('H');
+	Character H = Character.valueOf('H');
 }

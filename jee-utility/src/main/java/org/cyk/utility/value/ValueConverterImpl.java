@@ -19,7 +19,7 @@ public class ValueConverterImpl extends AbstractFunctionWithPropertiesAsInputImp
 			if(String.class.equals(clazz) && !(value instanceof String))
 				value = value.toString();
 			else if(__injectClassHelper__().isInstanceOfNumber(clazz))
-				value = __inject__(NumberHelper.class).get(clazz, value);
+				value = NumberHelper.get(clazz, value);
 		}
 		return value;
 	}

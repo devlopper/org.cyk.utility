@@ -1,8 +1,11 @@
 package org.cyk.utility.client.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
 import org.cyk.utility.__kernel__.properties.Properties;

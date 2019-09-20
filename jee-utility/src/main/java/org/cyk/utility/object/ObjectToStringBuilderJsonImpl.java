@@ -16,21 +16,21 @@ import org.cyk.utility.field.FieldInstanceValues;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.throwable.ThrowableHelper;
-
+/*
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-
-@Dependent @JavaScriptObjectNotation
+*/
+@Dependent @JavaScriptObjectNotation @Deprecated
 public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilderImpl implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected String __execute__(Object object, FieldInstanceValues fieldInstanceValues) throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
+		/*ObjectMapper mapper = new ObjectMapper();
 		if(Boolean.TRUE.equals(__inject__(ClassHelper.class).isBelongsToJavaPackages(object.getClass()))) {
 			return mapper.writeValueAsString(object);
 		}else {
@@ -45,11 +45,12 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 				String serialized = mapper.writeValueAsString(fieldInstanceValues);
 				return serialized;
 			}
-		}
+		}*/
+		return null;
 	}
 	
 	/**/
-	
+	/*
 	public static class Serializer extends StdSerializer<Object> {
 	    private static final long serialVersionUID = 1L;
 	    
@@ -100,5 +101,5 @@ public class ObjectToStringBuilderJsonImpl extends AbstractObjectToStringBuilder
 	    
 	    public static final String COMA = ConstantCharacter.COMA.toString();
 	}
-	
+	*/
 }

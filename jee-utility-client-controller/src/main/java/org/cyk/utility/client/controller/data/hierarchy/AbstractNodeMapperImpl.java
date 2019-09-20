@@ -2,12 +2,57 @@ package org.cyk.utility.client.controller.data.hierarchy;
 
 import java.util.Collection;
 
-import org.cyk.utility.server.representation.AbstractMapperSourceDestinationImpl;
+import org.cyk.utility.__kernel__.DependencyInjection;
+import org.cyk.utility.clazz.ClassHelperImpl;
+import org.cyk.utility.client.controller.data.AbstractMapperSourceDestinationImpl;
+import org.cyk.utility.collection.CollectionHelperImpl;
+
 import org.cyk.utility.server.representation.hierarchy.AbstractNodeCodedAndNamed;
 
-public abstract class AbstractNodeMapperImpl<SOURCE extends DataIdentifiedByString<SOURCE>,DESTINATION extends AbstractNodeCodedAndNamed<DESTINATION,?>,DESTINATION_COLLECTION> extends AbstractMapperSourceDestinationImpl<SOURCE, DESTINATION> {
+public abstract class AbstractNodeMapperImpl<SOURCE extends DataIdentifiedByStringAndCodedAndNamed<SOURCE>,DESTINATION extends AbstractNodeCodedAndNamed<DESTINATION,?>,DESTINATION_COLLECTION> extends AbstractMapperSourceDestinationImpl<SOURCE, DESTINATION> {
 	private static final long serialVersionUID = 1L;
  
+	@Override
+	public SOURCE getSource(DESTINATION destination) {
+		if(destination == null)
+			return null;
+		if(__sourceClass__ == null)
+			throw new RuntimeException("Source class cannot be null for "+getClass());
+		SOURCE node = DependencyInjection.inject(__sourceClass__);
+		node.setIdentifier(destination.getIdentifier());
+		node.setCode(destination.getCode());
+		node.setName(destination.getName());
+		node.set__actions__(destination.get__actions__());
+		node.setNumberOfChildren(destination.getNumberOfChildren());
+		node.setNumberOfParents(destination.getNumberOfParents());		
+		if(destination.getParents()!=null && CollectionHelperImpl.__isNotEmpty__(destination.getParents().getCollection())) {
+			for(DESTINATION index : destination.getParents().getCollection())
+				node.addParents(getSource(index));
+		}
+		return node;
+	}
+	
+	@Override
+	public DESTINATION getDestination(SOURCE source) {
+		if(source == null)
+			return null;
+		if(__destinationClass__ == null)
+			throw new RuntimeException("Destination class cannot be null for "+getClass());
+		DESTINATION destination = ClassHelperImpl.__instanciateOne__(__destinationClass__);
+		destination.setIdentifier(source.getIdentifier());
+		destination.setCode(source.getCode());
+		destination.setName(source.getName());
+		destination.set__actions__(source.get__actions__());
+		destination.setNumberOfChildren(source.getNumberOfChildren());
+		destination.setNumberOfParents(source.getNumberOfParents());
+		if(CollectionHelperImpl.__isNotEmpty__(source.getParents())) {
+			for(SOURCE index : source.getParents()) {
+				destination.addParents(getDestination(index));
+			}
+		}
+		return destination;
+	}
+	/*
 	@Override
 	protected void __listenGetDestinationAfter__(SOURCE source, DESTINATION destination) {
 		super.__listenGetDestinationAfter__(source, destination);
@@ -17,7 +62,7 @@ public abstract class AbstractNodeMapperImpl<SOURCE extends DataIdentifiedByStri
 				destination.addParents(getDestination(index));
 			}
 		}
-	}
+	}*/
 	
 	/*private Class<DESTINATION_COLLECTION>
 	

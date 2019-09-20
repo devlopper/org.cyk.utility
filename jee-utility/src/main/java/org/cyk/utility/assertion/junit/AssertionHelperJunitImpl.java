@@ -4,10 +4,11 @@ import java.io.Serializable;
 import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
+
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.assertion.AbstractAssertionHelperImpl;
 import org.cyk.utility.assertion.AssertionHelper;
-import org.cyk.utility.field.FieldValueGetter;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.junit.Assert;
 
 @ApplicationScoped
@@ -85,7 +86,7 @@ public class AssertionHelperJunitImpl extends AbstractAssertionHelperImpl implem
 		}else {
 			for(Map.Entry<Object, Object> entry : expected.__getMap__().entrySet()){
 				String fieldName = (String) entry.getKey();
-				Object actualFieldValue = __inject__(FieldValueGetter.class).setObject(actual).setField(fieldName).execute().getOutput();
+				Object actualFieldValue = FieldHelperImpl.__read__(actual,fieldName);
 				assertEquals(entry.getValue(), actualFieldValue);
 			}	
 		}

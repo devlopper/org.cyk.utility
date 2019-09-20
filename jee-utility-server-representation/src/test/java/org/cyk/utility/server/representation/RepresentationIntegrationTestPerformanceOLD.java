@@ -235,19 +235,6 @@ public class RepresentationIntegrationTestPerformanceOLD extends AbstractReprese
 		remover.execute();
 	}
 	
-	//@Test
-	public void create() throws Exception{
-		Collection<MyEntityDto> collection = new ArrayList<>();
-		for(Integer index = 0 ; index < 10 ; index = index + 1)
-			collection.add(new MyEntityDto().setCode(__getRandomCode__()));
-		Map<String,Object> map = new HashMap<String, Object>();
-		//map.put(Properties.IS_BATCHABLE, Boolean.TRUE);
-		//map.put(Properties.BATCH_SIZE, 5);
-		__inject__(MyEntityRepresentation.class).createMany(collection,__injectByQualifiersClasses__(ObjectToStringBuilder.class,JavaScriptObjectNotation.Class.class)
-				.setObject(map).execute().getOutput());
-		collection = (Collection<MyEntityDto>) __inject__(MyEntityRepresentation.class).getMany(Boolean.FALSE, null, null, null, null).getEntity();
-		__inject__(MyEntityRepresentation.class).deleteAll();
-	}
 	
 	@Override
 	protected <ENTITY> Class<? extends AbstractEntityCollection<ENTITY>> __getEntityCollectionClass__(Class<ENTITY> aClass) {

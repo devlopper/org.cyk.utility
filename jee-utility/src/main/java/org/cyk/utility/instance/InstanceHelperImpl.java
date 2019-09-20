@@ -128,7 +128,7 @@ public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper
 	
 	@Override
 	public Boolean isPersisted(Object instance) {
-		return Boolean.TRUE.equals(__inject__(ValueHelper.class).isNotBlank(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(instance)));
+		return ValueHelper.isNotBlank(__inject__(FieldHelper.class).getFieldValueSystemIdentifier(instance));
 	}
 
 }

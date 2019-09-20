@@ -2,6 +2,7 @@ package org.cyk.utility.object;
 
 import java.util.Collection;
 
+@Deprecated
 public interface ObjectFromStringBuilder extends ObjectToOrFromStringBuilder<Object> {
 
 	String getString();

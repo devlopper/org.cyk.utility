@@ -113,7 +113,7 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	
 	@Override
 	public <ELEMENT> CollectionHelper setElementAt(Collection<ELEMENT> collection, Object index, ELEMENT value) {
-		Integer indexValue = __inject__(NumberHelper.class).getInteger(index);
+		Integer indexValue = NumberHelper.getInteger(index);
 		if(isNotEmpty(collection) && indexValue < getSize(collection)){
 			if(collection instanceof List)
 				((List<ELEMENT>)collection).set(indexValue.intValue(),value);
@@ -133,7 +133,7 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	
 	@Override
 	public <ELEMENT> ELEMENT getElementAt(Collection<ELEMENT> collection,Object index){
-		Integer indexValue = __inject__(NumberHelper.class).getInteger(index);
+		Integer indexValue = NumberHelper.getInteger(index);
 		ELEMENT element = null;
 		if(isNotEmpty(collection) && indexValue < getSize(collection)){
 			if(collection instanceof List)
@@ -260,7 +260,7 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	@Override
 	public <ELEMENT> Collection<ELEMENT> addElementAt(Collection<ELEMENT> collection, Object index, ELEMENT element) {
 		if(collection!=null) {
-			Integer indexValue = __inject__(NumberHelper.class).getInteger(index);
+			Integer indexValue = NumberHelper.getInteger(index);
 			if(collection.isEmpty() && indexValue == 0)
 				collection.add(element);
 			else if( indexValue < getSize(collection) ){
@@ -325,7 +325,7 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	
 	@Override
 	public <ELEMENT> List<List<ELEMENT>> getBatches(List<ELEMENT> collection, Object size) {
-		Integer __size__  = __inject__(NumberHelper.class).getInteger(size);
+		Integer __size__  = NumberHelper.getInteger(size);
 		if(__size__!= null && __size__ > 0)
 			return ListUtils.partition(collection, __size__);
 		return null;
@@ -388,7 +388,7 @@ public class CollectionHelperImpl extends AbstractHelper implements CollectionHe
 	}
 	
 	public static <ELEMENT> ELEMENT __getElementAt__(Collection<ELEMENT> collection,Object index){
-		Integer indexValue = __inject__(NumberHelper.class).getInteger(index);
+		Integer indexValue = NumberHelper.getInteger(index);
 		ELEMENT element = null;
 		if(__isNotEmpty__(collection) && indexValue < __getSize__(collection)){
 			if(collection instanceof List)

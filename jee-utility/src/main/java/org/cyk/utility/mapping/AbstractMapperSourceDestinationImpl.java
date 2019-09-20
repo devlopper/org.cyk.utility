@@ -11,10 +11,9 @@ import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.clazz.ClassInstance;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
+import org.cyk.utility.field.FieldHelperImpl;
 import org.cyk.utility.field.FieldInstance;
 import org.cyk.utility.field.FieldInstancesRuntime;
-import org.cyk.utility.field.FieldValueGetter;
-import org.cyk.utility.field.FieldValueSetter;
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.runnable.RunnablesExecutor;
 import org.mapstruct.AfterMapping;
@@ -46,33 +45,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	
 	protected void __listenGetDestinationAfter__(SOURCE source,DESTINATION destination) {
 		Collection<Field> fields = null;
-		/*ClassInstance classInstance = DependencyInjection.inject(ClassInstancesRuntime.class).get(destination.getClass());
-		if(classInstance.getFields() != null) {
-			for(Field index : classInstance.getFields().get()) {
-				FieldInstance fieldInstance = DependencyInjection.inject(FieldInstancesRuntime.class).get(destination.getClass(), index.getName());
-				if(Boolean.TRUE.equals(DependencyInjection.inject(ClassInstancesRuntime.class).get(fieldInstance.getType()).getIsPersistable()) && 
-						fieldInstance.getField().isAnnotationPresent(javax.persistence.ManyToOne.class)) {
-					if(fields == null)
-						fields = new ArrayList<>();
-					fields.add(index);
-				}
-			}
-		}
-		*/
 		fields = __getPersistableFields__(source, destination);
-		
-		//
-		/*if(Boolean.TRUE.equals(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(fields))) {
-			for(Field index : fields) {
-				Object value = DependencyInjection.inject(FieldValueGetter.class).execute(destination, index).getOutput();
-				if(value != null) {
-					Object persisted = DependencyInjection.inject(InstanceHelper.class).getBySystemIdentifierOrBusinessIdentifier(value);
-					if(persisted != null)
-						DependencyInjection.inject(FieldValueSetter.class).execute(destination, index, persisted);
-				}
-			}
-		}
-		*/
 		__processPersistableFields__(source, destination, fields);
 	}
 	
@@ -109,11 +82,11 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 	protected void __processPersistableFields__(SOURCE source,DESTINATION destination,Collection<Field> fields) {
 		if(Boolean.TRUE.equals(DependencyInjection.inject(CollectionHelper.class).isNotEmpty(fields))) {
 			for(Field index : fields) {
-				Object value = DependencyInjection.inject(FieldValueGetter.class).execute(destination, index).getOutput();
+				Object value = FieldHelperImpl.__read__(destination, index);
 				if(value != null) {
 					Object persisted = DependencyInjection.inject(InstanceHelper.class).getBySystemIdentifierOrBusinessIdentifier(value);
 					if(persisted != null)
-						DependencyInjection.inject(FieldValueSetter.class).execute(destination, index, persisted);
+						FieldHelperImpl.__write__(destination, index, persisted);
 				}
 			}
 		}
