@@ -3,10 +3,14 @@ package org.cyk.utility.field;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Date;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
+import org.cyk.utility.log.LogLevel;
+import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.value.ValueUsageType;
 import org.junit.jupiter.api.Test;
@@ -18,95 +22,6 @@ import lombok.experimental.Accessors;
 public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	private static final long serialVersionUID = 1L;
 
-	@Test
-	public void buildNameSystemIdentifier(){
-		assertThat(FieldHelperImpl.__getName__(MyClass01.class, FieldName.IDENTIFIER, ValueUsageType.SYSTEM)).isEqualTo("identifier");
-	}
-	
-	@Test
-	public void buildNameBusinessIdentifier(){
-		assertThat(FieldHelperImpl.__getName__(MyClass01.class, FieldName.IDENTIFIER, ValueUsageType.BUSINESS)).isEqualTo("code");
-	}
-	
-	@Test
-	public void getName_intField(){
-		assertThat(FieldHelperImpl.__getByName__(MyClass01.class, "intField")).isEqualTo(FieldUtils.getField(MyClass01.class, "intField",Boolean.TRUE));
-	}	
-
-	@Test
-	public void getField_sub_sIntField(){
-		assertThat(FieldHelperImpl.__getByNames__(MyClass01.class, "sub","sIntField")).isEqualTo(FieldUtils.getField(MyClass01Sub.class, "sIntField",Boolean.TRUE));
-	}	
-	
-	@Test
-	public void read(){
-		assertThat(FieldHelperImpl.__read__(new MyClass01().setIdentifier("i01"),"identifier")).isEqualTo("i01");
-	}
-	
-	@Test
-	public void readSystemIdentifier(){
-		assertThat(FieldHelperImpl.__readSystemIdentifier__(new MyClass01().setIdentifier("i01"))).isEqualTo("i01");
-	}
-	
-	@Test
-	public void readBusinessIdentifier(){
-		assertThat(FieldHelperImpl.__readBusinessIdentifier__(new MyClass01().setCode("c01"))).isEqualTo("c01");
-	}
-	
-	@Test
-	public void read_nested(){
-		MyClass01 object = new MyClass01();
-		object.setSub(new MyClass01Sub());
-		object.getSub().setStringField("subValue");
-		assertThat(FieldHelperImpl.__read__(object,"sub.stringField")).isEqualTo("subValue");
-	}
-	
-	@Test
-	public void read_static(){
-		assertThat(FieldHelperImpl.__read__(MyClass01.class,"STATIC_FIELD_01")).isEqualTo("staticValue01");
-	}
-	
-	@Test
-	public void write_byName(){
-		MyClass01 object = new MyClass01();
-		assertThat(object.getIdentifier()).isNull();
-		FieldHelperImpl.__write__(object,"identifier","i01");
-		assertThat(object.getIdentifier()).isEqualTo("i01");
-	}
-	
-	@Test
-	public void write_byField(){
-		MyClass01 object = new MyClass01();
-		assertThat(object.getIdentifier()).isNull();
-		FieldHelperImpl.__write__(object,FieldUtils.getField(MyClass01.class, "identifier", Boolean.TRUE),"i01");
-		assertThat(object.getIdentifier()).isEqualTo("i01");
-	}
-	
-	@Test
-	public void write_nested(){
-		MyClass01 object = new MyClass01();
-		object.setSub(new MyClass01Sub());
-		assertThat(object.getSub().getIntegerField()).isNull();
-		FieldHelperImpl.__write__(object,"sub.integerField",17);
-		assertThat(object.getSub().getIntegerField()).isEqualTo(17);
-	}
-	
-	@Test
-	public void writeSystemIdentifier(){
-		MyClass01 object = new MyClass01();
-		assertThat(object.getIdentifier()).isNull();
-		FieldHelperImpl.__writeSystemIdentifier__(object,"i01");
-		assertThat(object.getIdentifier()).isEqualTo("i01");
-	}
-	
-	@Test
-	public void writeBusinessIdentifier(){
-		MyClass01 object = new MyClass01();
-		assertThat(object.getCode()).isNull();
-		FieldHelperImpl.__writeBusinessIdentifier__(object,"c01");
-		assertThat(object.getCode()).isEqualTo("c01");
-	}
-	
 	@Test
 	public void nullify(){
 		MyClass01 object = new MyClass01().setIntegerField(1).setStringField("a").setLongValue2(2l);
@@ -146,16 +61,96 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(object.getLongValue2()).isNull();
 	}	
 	
+	/**/
+
 	@Test
-	public void join(){
-		assertThat(__inject__(FieldHelper.class).join("f1","f2.f3")).isEqualTo("f1.f2.f3");
-	}	
+	public void getFieldsOfInterfaceI01(){
+		Collection<Field> fields = __inject__(FieldsGetter.class).setClazz(I01.class).execute().getOutput().get();
+		assertThat(fields).hasSize(4).contains(
+				FieldUtils.getField(I01.class, "PROPERTY_F01",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F02",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F03",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "NOT_PROPERTY_F01",Boolean.TRUE)
+				);
+	}
 	
 	@Test
-	public void disjoin(){
-		assertThat(__inject__(FieldHelper.class).disjoin("f1","f2.f3").get()).containsExactly("f1","f2","f3");
-	}	
+	public void getFieldsWhereNameStartWithPropertyOfInterfaceI01(){
+		Collection<Field> fields = __inject__(FieldsGetter.class).setClazz(I01.class).setToken("PROPERTY_").setTokenLocation(StringLocation.START).execute().getOutput().get();
+		assertThat(fields).hasSize(3).contains(
+				FieldUtils.getField(I01.class, "PROPERTY_F01",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F02",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F03",Boolean.TRUE)
+				);
+	}
 	
+	@Test
+	public void getFieldsOfInterfaceI01Child(){
+		Collection<Field> fields = __inject__(FieldsGetter.class).setClazz(I01Child.class).execute().getOutput().get();
+		assertThat(fields).hasSize(6).contains(
+				FieldUtils.getField(I01Child.class, "PROPERTY_F04",Boolean.TRUE)
+				,FieldUtils.getField(I01Child.class, "NOT_PROPERTY_F02",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F01",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F02",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F03",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "NOT_PROPERTY_F01",Boolean.TRUE)
+				
+				);
+	}
+	
+	@Test
+	public void getFieldsWhereNameStartWithPropertyOfInterfaceI01Child(){
+		Collection<Field> fields = __inject__(FieldsGetter.class).setClazz(I01Child.class).setToken("PROPERTY_").setTokenLocation(StringLocation.START).execute().getOutput().get();
+		assertThat(fields).hasSize(4).contains(
+				FieldUtils.getField(I01Child.class, "PROPERTY_F04",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F01",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F02",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F03",Boolean.TRUE)
+				
+				);
+	}
+	
+	@Test
+	public void get_name_fromC01(){
+		Fields fields = __inject__(FieldsGetter.class).setClazz(C01.class).addNameToken("name").execute().getOutput();
+		assertThat(fields).isNull();
+	}
+	
+	@Test
+	public void get_name_code_fromC01(){
+		Collection<Field> fields = __inject__(FieldsGetter.class).setClazz(C01.class).addNameToken("name").addNameToken("code").execute().getOutput().get();
+		assertThat(fields).hasSize(1).contains(
+				FieldUtils.getField(C01.class, "code",Boolean.TRUE)
+				);
+	}
+	
+	@Test
+	public void get_name_code_fromC03(){
+		Collection<Field> fields = __inject__(FieldsGetter.class).setClazz(C03.class).addNameToken("name").addNameToken("code").execute().getOutput().get();
+		assertThat(fields).hasSize(2).contains(
+				FieldUtils.getField(C03.class, "name",Boolean.TRUE)
+				,FieldUtils.getField(C03.class, "code",Boolean.TRUE)
+				);
+	}
+	
+	@Test
+	public void get_identifier_system_fromC04_isNull(){
+		FieldsGetter fieldGetter = __inject__(FieldsGetter.class);
+		fieldGetter.setLoggable(Boolean.TRUE).getLog(Boolean.TRUE).setLevel(LogLevel.INFO);
+		fieldGetter.setClazz(C04.class).setFieldName(FieldName.IDENTIFIER).setValueUsageType(ValueUsageType.SYSTEM).execute();
+		Fields fields = fieldGetter.getOutput();
+		assertThat(fields).isNull();
+		System.out.println(fieldGetter.getProperties());
+	}
+	
+	@Test
+	public void get_code_fromC01(){
+		Collection<Field> fields = __inject__(FieldsGetter.class).setClazz(C03.class).addNameToken("name").addNameToken("code").execute().getOutput().get();
+		assertThat(fields).hasSize(2).contains(
+				FieldUtils.getField(C03.class, "name",Boolean.TRUE)
+				,FieldUtils.getField(C03.class, "code",Boolean.TRUE)
+				);
+	}
 	
 	
 	/**/
@@ -204,5 +199,44 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 		
 	}
 
-
+	@Getter @Setter
+	public static class C01 {
+		
+		private String code;
+		
+	}
+	
+	@Getter @Setter
+	public static class C02 {
+		
+		private String name;
+		
+	}
+	
+	@Getter @Setter
+	public static class C03 {
+		
+		private String code;
+		private String name;
+		
+	}
+	
+	@Getter @Setter
+	public static class C04 {
+		
+	}
+	
+	public static interface I01 {
+		String PROPERTY_F01 = "v01";
+		String PROPERTY_F02 = "v02";
+		String PROPERTY_F03 = "v03";
+		
+		String NOT_PROPERTY_F01 = "notproperty";
+	}
+	
+	public static interface I01Child extends I01 {
+		String PROPERTY_F04 = "v04";
+		
+		String NOT_PROPERTY_F02 = "notproperty";
+	}
 }

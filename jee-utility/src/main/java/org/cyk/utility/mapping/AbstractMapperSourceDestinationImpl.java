@@ -61,7 +61,7 @@ public abstract class AbstractMapperSourceDestinationImpl<SOURCE,DESTINATION> ex
 		if(classInstance.getFields() != null) {
 			for(Field index : classInstance.getFields().get()) {
 				FieldInstance fieldInstance = DependencyInjection.inject(FieldInstancesRuntime.class).get(destination.getClass(), index.getName());
-				if(Boolean.TRUE.equals(DependencyInjection.inject(ClassInstancesRuntime.class).get(fieldInstance.getType()).getIsPersistable()) && 
+				if(Boolean.TRUE.equals(DependencyInjection.inject(ClassInstancesRuntime.class).get((Class<?>) fieldInstance.getType()).getIsPersistable()) && 
 						fieldInstance.getField().isAnnotationPresent(javax.persistence.ManyToOne.class)) {
 					if(fields == null)
 						fields = new ArrayList<>();

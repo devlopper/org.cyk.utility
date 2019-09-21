@@ -3,6 +3,7 @@ package org.cyk.utility.__kernel__.test;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.utility.__kernel__.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -17,6 +18,7 @@ public abstract class AbstractTest extends AbstractObject implements Serializabl
 	}
 	
 	protected void __listenBefore__(){
+		__inject__(ApplicationScopeLifeCycleListener.class).initialize(null);
 		try {
 			__listenBeforeCallCountIs__(LISTEN_BEFORE_CALL_COUNT);
 		} catch (Exception e) {

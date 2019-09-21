@@ -18,6 +18,7 @@
 	
 	<properties>
 		<commons-io.commons-io.version>2.6</commons-io.commons-io.version>
+		<commons-beanutils-commons-beanutils>1.9.4</commons-beanutils-commons-beanutils>
 	</properties> 
 	
 	<build>
@@ -39,6 +40,12 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>${commons-io.commons-io.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>commons-beanutils</groupId>
+		    <artifactId>commons-beanutils</artifactId>
+		    <version>${commons-beanutils-commons-beanutils}</version>
 		</dependency>	
 	</dependencies>
 </project>

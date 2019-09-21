@@ -9,13 +9,14 @@ import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.value.ValueUsageType;
 
-@Dependent
+@Dependent @Deprecated
 public class FieldTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<FieldType> implements FieldTypeGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -132,7 +133,7 @@ public class FieldTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputIm
 	@Override
 	public FieldTypeGetter setField(Class<?> aClass, Collection<String> names) {
 		if(aClass !=null && __inject__(CollectionHelper.class).isNotEmpty(names)){
-			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldsGetter.class).execute(aClass, __inject__(FieldHelper.class).join(names)).getOutput()));
+			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldsGetter.class).execute(aClass,FieldHelper.join(names)).getOutput()));
 		}
 		return this;
 	}

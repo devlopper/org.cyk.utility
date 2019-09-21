@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
 import org.cyk.utility.map.MapInstanceIntegerToClass;
 
+@Deprecated
 public interface FieldType extends Objectable {
 
 	Field getField();

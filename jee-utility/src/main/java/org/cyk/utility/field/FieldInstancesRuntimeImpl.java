@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.annotation.Generatable;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.log.Log;
@@ -26,9 +27,9 @@ public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldIn
 	public FieldInstance get(Class<?> klass,Collection<String> paths) {
 		Log log = __inject__(Log.class).setLevel(LogLevel.TRACE);
 		FieldInstance instance = null;
-		String path = __inject__(FieldHelper.class).join(paths);
+		String path = org.cyk.utility.__kernel__.field.FieldHelper.join(paths);
 		if(klass!=null && __inject__(StringHelper.class).isNotBlank(path)) {
-			Strings fieldNames = __inject__(FieldHelper.class).disjoin(path);
+			Strings fieldNames = __inject__(Strings.class).add(org.cyk.utility.__kernel__.field.FieldHelper.disjoin(path));
 			instance = getInstances(Boolean.TRUE).get(klass,path);
 			if(instance == null) {
 				instance = __inject__(FieldInstance.class);
@@ -41,8 +42,8 @@ public class FieldInstancesRuntimeImpl extends AbstractObject implements FieldIn
 					for(String index : fieldContainerNames)
 						klass = FieldUtils.getDeclaredField(klass, index, Boolean.TRUE).getType();
 				}
-				instance.setField(__inject__(FieldsGetter.class).execute(klass, fieldNames.getLast()).getOutput().getFirst());
-				instance.setType(__inject__(FieldTypeGetter.class).execute(instance.getField()).getOutput().getType());
+				instance.setField(FieldHelper.getByName(klass, fieldNames.getLast()));
+				instance.setType(FieldHelper.getType(instance.getField(),klass));
 				instance.setIsGeneratable(instance.getField().isAnnotationPresent(GeneratedValue.class) || instance.getField().isAnnotationPresent(Generatable.class));
 				getInstances(Boolean.TRUE).add(instance);
 				log.getMessageBuilder(Boolean.TRUE).addParameter("field <<"+instance.getClazz()+"."+path+">> added to runtime collection");

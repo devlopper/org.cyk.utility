@@ -9,7 +9,7 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.map.MapInstanceIntegerToClass;
 
-@Dependent
+@Dependent @Deprecated
 public class FieldTypeImpl extends AbstractObject implements FieldType,Serializable {
 	private static final long serialVersionUID = 1L;
 

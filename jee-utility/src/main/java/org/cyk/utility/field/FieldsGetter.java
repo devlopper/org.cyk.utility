@@ -10,6 +10,7 @@ import org.cyk.utility.string.StringLocatables;
 import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.value.ValueUsageType;
 
+@Deprecated
 public interface FieldsGetter extends FunctionWithPropertiesAsInput<Fields> {
 
 	Boolean getIsRecursive();

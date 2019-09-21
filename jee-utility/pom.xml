@@ -27,8 +27,7 @@
 		<com.google.zxing.core.version>3.3.3</com.google.zxing.core.version>
 		<com.google.zxing.javase.version>3.3.3</com.google.zxing.javase.version>
 		<org.reflections.reflections.version>0.9.10</org.reflections.reflections.version>
-		<org.jboss.resteasy.resteasy-jaxrs.version>3.7.0.Final</org.jboss.resteasy.resteasy-jaxrs.version>
-		<commons-beanutils-commons-beanutils>1.9.4</commons-beanutils-commons-beanutils>
+		<org.jboss.resteasy.resteasy-jaxrs.version>3.7.0.Final</org.jboss.resteasy.resteasy-jaxrs.version>		
 		<org.apache.tika-tika-parsers>1.22</org.apache.tika-tika-parsers>
 	</properties>
 	
@@ -43,12 +42,6 @@
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-collections4</artifactId>
 		    <version>${org.apache.commons.commons-collections4.version}</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>commons-beanutils</groupId>
-		    <artifactId>commons-beanutils</artifactId>
-		    <version>${commons-beanutils-commons-beanutils}</version>
 		</dependency>
 		
 		<dependency>

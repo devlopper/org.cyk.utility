@@ -23,7 +23,7 @@ import org.cyk.utility.string.StringLocatables;
 import org.cyk.utility.string.StringLocation;
 import org.cyk.utility.value.ValueUsageType;
 
-@Dependent
+@Dependent @Deprecated
 public class FieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Fields> implements FieldsGetter, Serializable {
 	private static final long serialVersionUID = 1L;
 

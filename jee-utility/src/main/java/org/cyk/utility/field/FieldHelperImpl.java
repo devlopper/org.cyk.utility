@@ -63,26 +63,6 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	}
 	
 	@Override
-	public String join(Collection<String> paths) {
-		return __join__(paths);
-	}
-
-	@Override
-	public String join(String... paths) {
-		return __join__(paths);
-	}
-
-	@Override
-	public Strings disjoin(Collection<String> paths) {
-		return __inject__(Strings.class).add(__disjoin__(paths));
-	}
-	
-	@Override
-	public Strings disjoin(String... paths) {
-		return __inject__(Strings.class).add(__disjoin__(paths));
-	}
-	
-	@Override
 	public String buildFieldName(Class<?> klass, FieldName fieldName, ValueUsageType valueUsageType) {
 		return __getName__(klass, fieldName, valueUsageType);
 	}
@@ -157,7 +137,7 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 		if(aClass == null || collectionHelper.isEmpty(fieldNames)) {
 			field = null;
 		}else {
-			String fieldName = join(fieldNames);
+			String fieldName = null;//join(fieldNames);
 			String key = aClass.getName()+DOT+fieldName;
 			field = FIELDS_MAP.get(key);	
 			if(field == null) {

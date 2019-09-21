@@ -2,6 +2,7 @@ package org.cyk.utility.field;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class FieldInstanceImpl extends AbstractObject implements FieldInstance,S
 	private Class<?> clazz;
 	private String path;
 	private Field field;
-	private Class<?> type;
+	private Type type;
 	private Boolean isGeneratable;
 	private Map<Action,Class<?>> actionsClassesMap;
 	
@@ -54,12 +55,12 @@ public class FieldInstanceImpl extends AbstractObject implements FieldInstance,S
 	}
 
 	@Override
-	public Class<?> getType() {
+	public Type getType() {
 		return type;
 	}
 
 	@Override
-	public FieldInstance setType(Class<?> type) {
+	public FieldInstance setType(Type type) {
 		this.type = type;
 		return this;
 	}

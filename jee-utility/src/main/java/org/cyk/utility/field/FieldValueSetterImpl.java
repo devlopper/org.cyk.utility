@@ -11,6 +11,7 @@ import javax.enterprise.context.Dependent;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.log.Log;
@@ -19,7 +20,7 @@ import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueConverter;
 import org.cyk.utility.value.ValueUsageType;
 
-@Dependent
+@Dependent @Deprecated
 public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FieldValueSetter, Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -126,7 +127,7 @@ public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputA
 	@Override
 	public FieldValueSetter setField(Class<?> aClass, Collection<String> names) {
 		if(aClass !=null && __inject__(CollectionHelper.class).isNotEmpty(names)){
-			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldsGetter.class).execute(aClass, __inject__(FieldHelper.class).join(names)).getOutput()));
+			setField(__inject__(CollectionHelper.class).getFirst(__inject__(FieldsGetter.class).execute(aClass, FieldHelper.join(names)).getOutput()));
 		}
 		return this;
 	}

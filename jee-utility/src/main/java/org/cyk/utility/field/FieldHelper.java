@@ -4,40 +4,10 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.helper.Helper;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.value.ValueUsageType;
 
-public interface FieldHelper extends org.cyk.utility.__kernel__.FieldHelper {
-
-	//Object getFieldValue(Object object,FieldName fieldName);
-	
-	/**
-	 * Join many field paths to build a one field path
-	 * Example : f1 + f2.f3 = f1.f2.f3
-	 * @param paths to join
-	 * @return field path
-	 */
-	String join(Collection<String> paths);
-	/**
-	 * {@link #join}
-	 * @param paths to join
-	 * @return
-	 */
-	String join(String...paths);
-	
-	/**
-	 * Disjoin many field paths to a collection of field names
-	 * @param paths to disjoin
-	 * @return
-	 */
-	Strings disjoin(Collection<String> paths);
-	/**
-	 * {@link #disjoin}
-	 * @param paths to disjoin
-	 * @return
-	 */
-	Strings disjoin(String...paths);
+public interface FieldHelper extends org.cyk.utility.__kernel__.field.FieldHelper {
 	
 	String buildFieldName(Class<?> klass,FieldName fieldName,ValueUsageType valueUsageType);
 	

@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.StringHelper;
@@ -15,7 +16,7 @@ public class FieldInstancesImpl extends AbstractCollectionInstanceImpl<FieldInst
 
 	@Override
 	public FieldInstance get(Class<?> aClass, Collection<String> paths) {
-		String path = __inject__(FieldHelper.class).join(paths);
+		String path = FieldHelper.join(paths);
 		if(collection!=null && !collection.isEmpty() && aClass!=null && __inject__(StringHelper.class).isNotBlank(path))
 			for(FieldInstance index : collection)
 				if(aClass.equals(index.getClazz()) && path.equals(index.getPath()))

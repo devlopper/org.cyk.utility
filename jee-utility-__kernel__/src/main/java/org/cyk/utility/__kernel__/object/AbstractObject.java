@@ -11,9 +11,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.utility.__kernel__.ClassHelper;
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.__kernel__.FieldHelper;
 import org.cyk.utility.__kernel__.InstanceHelper;
 import org.cyk.utility.__kernel__.constant.ConstantString;
+import org.cyk.utility.__kernel__.field.FieldHelper;
 import org.jboss.weld.exceptions.IllegalArgumentException;
 
 import lombok.Getter;
