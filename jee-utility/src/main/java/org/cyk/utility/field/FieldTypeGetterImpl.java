@@ -10,11 +10,12 @@ import java.util.Collection;
 import javax.enterprise.context.Dependent;
 
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.value.ValueUsageType;
 
 @Dependent @Deprecated
 public class FieldTypeGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<FieldType> implements FieldTypeGetter, Serializable {

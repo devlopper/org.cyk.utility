@@ -3,9 +3,9 @@ package org.cyk.utility.instance;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public abstract class AbstractInstanceGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Collection<Object>> implements InstanceGetter,Serializable {
 	private static final long serialVersionUID = 1L;

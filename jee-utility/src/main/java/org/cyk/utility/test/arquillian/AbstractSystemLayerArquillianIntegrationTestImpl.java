@@ -11,7 +11,7 @@ import org.cyk.utility.clazz.ClassHelperImpl;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
 import org.cyk.utility.field.FieldHelperImpl;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.field.Fields;
 import org.cyk.utility.field.FieldsGetter;
 import org.cyk.utility.system.action.SystemAction;
@@ -19,7 +19,7 @@ import org.cyk.utility.system.action.SystemActionCreate;
 import org.cyk.utility.system.action.SystemActionDelete;
 import org.cyk.utility.system.action.SystemActionRead;
 import org.cyk.utility.system.action.SystemActionUpdate;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public abstract class AbstractSystemLayerArquillianIntegrationTestImpl<LAYER_ENTITY_INTERFACE> extends org.cyk.utility.test.arquillian.AbstractArquillianIntegrationTest implements SystemLayerIntegrationTest<LAYER_ENTITY_INTERFACE>, Serializable {
 	private static final long serialVersionUID = 1L;

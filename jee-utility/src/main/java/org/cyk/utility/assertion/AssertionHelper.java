@@ -1,10 +1,10 @@
 package org.cyk.utility.assertion;
 
 import org.cyk.utility.__kernel__.properties.Properties;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.helper.Helper;
 import org.cyk.utility.log.LogLevel;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface AssertionHelper extends Helper {
 

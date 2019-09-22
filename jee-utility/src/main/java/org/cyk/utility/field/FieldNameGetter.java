@@ -1,7 +1,8 @@
 package org.cyk.utility.field;
 
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
-import org.cyk.utility.value.ValueUsageType;
 
 @Deprecated
 public interface FieldNameGetter extends FunctionWithPropertiesAsInput<String> {

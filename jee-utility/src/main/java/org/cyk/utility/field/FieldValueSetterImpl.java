@@ -12,13 +12,14 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.value.ValueConverter;
-import org.cyk.utility.value.ValueUsageType;
 
 @Dependent @Deprecated
 public class FieldValueSetterImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FieldValueSetter, Serializable {

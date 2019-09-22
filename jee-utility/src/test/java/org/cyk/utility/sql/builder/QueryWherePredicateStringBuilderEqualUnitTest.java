@@ -4,7 +4,7 @@ import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.computation.LogicalOperator;
 import org.cyk.utility.criteria.Criteria;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.junit.jupiter.api.Test;
 
 public class QueryWherePredicateStringBuilderEqualUnitTest extends AbstractWeldUnitTest {

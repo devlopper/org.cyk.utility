@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.system.action.SystemActor;
 import org.cyk.utility.system.layer.SystemLayer;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface SystemLayerIntegrationTest<LAYER_ENTITY_INTERFACE> {
 	

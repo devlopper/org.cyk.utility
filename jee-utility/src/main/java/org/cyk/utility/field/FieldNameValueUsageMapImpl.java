@@ -6,8 +6,9 @@ import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractSingleton;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 @ApplicationScoped @Deprecated
 public class FieldNameValueUsageMapImpl extends AbstractSingleton implements FieldNameValueUsageMap,Serializable {

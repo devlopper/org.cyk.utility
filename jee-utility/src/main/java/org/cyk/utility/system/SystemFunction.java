@@ -7,7 +7,7 @@ import org.cyk.utility.notification.NotificationBuilders;
 import org.cyk.utility.notification.Notifications;
 import org.cyk.utility.string.Strings;
 import org.cyk.utility.system.action.SystemAction;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface SystemFunction extends FunctionWithPropertiesAsInputAndVoidAsOutput {
 

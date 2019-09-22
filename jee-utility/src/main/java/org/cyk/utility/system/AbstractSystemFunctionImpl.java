@@ -21,7 +21,7 @@ import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.enumeration.EnumGetter;
 import org.cyk.utility.field.FieldHelperImpl;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl;
 import org.cyk.utility.function.FunctionHelper;
 import org.cyk.utility.log.Log;
@@ -41,7 +41,7 @@ import org.cyk.utility.system.layer.SystemLayer;
 import org.cyk.utility.throwable.ThrowableHelper;
 import org.cyk.utility.type.BooleanHelper;
 import org.cyk.utility.value.ValueHelper;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 import lombok.Getter;
 import lombok.Setter;

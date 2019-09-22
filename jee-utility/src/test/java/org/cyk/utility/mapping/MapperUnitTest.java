@@ -10,11 +10,11 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import org.cyk.utility.__kernel__.DependencyInjection;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.instance.AbstractInstanceGetterImpl;
 import org.cyk.utility.instance.InstanceGetter;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

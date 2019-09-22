@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.cyk.utility.__kernel__.object.__static__.representation.AbstractRepresentationObject;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

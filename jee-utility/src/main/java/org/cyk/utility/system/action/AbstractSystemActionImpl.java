@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.cyk.utility.__kernel__.object.dynamic.AbstractObject;
 import org.cyk.utility.object.Objects;
 import org.cyk.utility.string.Strings;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public abstract class AbstractSystemActionImpl extends AbstractObject implements SystemAction, Serializable {
 	private static final long serialVersionUID = 1L;

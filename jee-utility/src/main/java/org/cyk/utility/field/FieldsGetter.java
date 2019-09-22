@@ -3,12 +3,13 @@ package org.cyk.utility.field;
 import java.util.Collection;
 import java.util.Set;
 
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.function.FunctionWithPropertiesAsInput;
 import org.cyk.utility.regularexpression.RegularExpressionInstance;
 import org.cyk.utility.string.StringLocatable;
 import org.cyk.utility.string.StringLocatables;
 import org.cyk.utility.string.StringLocation;
-import org.cyk.utility.value.ValueUsageType;
 
 @Deprecated
 public interface FieldsGetter extends FunctionWithPropertiesAsInput<Fields> {

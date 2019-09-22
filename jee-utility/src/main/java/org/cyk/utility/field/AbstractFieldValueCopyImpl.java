@@ -6,8 +6,10 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.object.__static__.identifiable.AbstractIdentifiedPersistableByLong;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.clazz.ClassHelper;
 import org.cyk.utility.clazz.ClassInstancesRuntime;
 import org.cyk.utility.collection.CollectionHelper;
@@ -15,7 +17,6 @@ import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputAndVoidAsOu
 import org.cyk.utility.instance.InstanceHelper;
 import org.cyk.utility.map.MapHelper;
 import org.cyk.utility.value.ValueConverter;
-import org.cyk.utility.value.ValueUsageType;
 
 public abstract class AbstractFieldValueCopyImpl extends AbstractFunctionWithPropertiesAsInputAndVoidAsOutputImpl implements FieldValueCopy,Serializable {
 	private static final long serialVersionUID = 1L;

@@ -11,12 +11,13 @@ import javax.enterprise.context.Dependent;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.cyk.utility.__kernel__.field.FieldHelper;
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.log.Log;
 import org.cyk.utility.string.Case;
 import org.cyk.utility.string.StringHelper;
-import org.cyk.utility.value.ValueUsageType;
 
 @Dependent @Deprecated
 public class FieldValueGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Object> implements FieldValueGetter, Serializable {

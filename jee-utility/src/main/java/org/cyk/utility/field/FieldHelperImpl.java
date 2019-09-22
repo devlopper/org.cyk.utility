@@ -18,7 +18,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.constant.ConstantCharacter;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.array.ArrayHelper;
 import org.cyk.utility.array.ArrayHelperImpl;
 import org.cyk.utility.clazz.ClassHelper;
@@ -29,7 +31,6 @@ import org.cyk.utility.collection.CollectionHelperImpl;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.string.StringHelperImpl;
 import org.cyk.utility.string.Strings;
-import org.cyk.utility.value.ValueUsageType;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -165,7 +166,7 @@ public class FieldHelperImpl extends AbstractHelper implements FieldHelper,Seria
 	
 	@Override
 	public Field getField(Class<?> klass, FieldName fieldName, ValueUsageType valueUsageType) {
-		String name = __inject__(FieldNameGetter.class).execute(klass, fieldName,valueUsageType).getOutput();
+		String name = org.cyk.utility.__kernel__.field.FieldHelper.getName(klass, fieldName,valueUsageType);
 		return __inject__(CollectionHelper.class).getFirst(__inject__(FieldsGetter.class).execute(klass, name).getOutput());
 	}
 	

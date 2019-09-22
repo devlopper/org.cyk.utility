@@ -5,10 +5,10 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 
 import org.cyk.utility.field.FieldHelperImpl;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.system.action.SystemActor;
 import org.cyk.utility.system.action.SystemActorServer;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 import lombok.Getter;
 import lombok.Setter;

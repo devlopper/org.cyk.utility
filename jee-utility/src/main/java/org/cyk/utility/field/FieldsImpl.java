@@ -9,10 +9,11 @@ import java.util.function.Predicate;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.collection.AbstractCollectionInstanceImpl;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.string.Strings;
-import org.cyk.utility.value.ValueUsageType;
 
 @Dependent
 public class FieldsImpl extends AbstractCollectionInstanceImpl<Field> implements Fields,Serializable {

@@ -3,8 +3,8 @@ package org.cyk.utility.criteria;
 import java.util.Collection;
 
 import org.cyk.utility.__kernel__.object.dynamic.Objectable;
-import org.cyk.utility.field.FieldName;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 /**
  * a principle or standard by which something may be judged or decided

@@ -14,12 +14,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.cyk.utility.ApplicationScopeLifeCycleListener;
 import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.annotation.Default;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.function.AbstractFunctionRunnableImpl;
 import org.cyk.utility.__kernel__.function.FunctionRunnableMap;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.instance.InstanceGetter;
 import org.cyk.utility.instance.InstanceGetterImpl;
 import org.cyk.utility.test.weld.AbstractWeldUnitTest;
-import org.cyk.utility.value.ValueUsageType;
 import org.junit.jupiter.api.Test;
 
 import lombok.Getter;

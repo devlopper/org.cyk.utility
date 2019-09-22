@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.transaction.UserTransaction;
 
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface TestSystemFunctionIntegration extends TestIntegration {
 

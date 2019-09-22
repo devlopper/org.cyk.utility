@@ -13,7 +13,9 @@ import java.util.Set;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
 import org.cyk.utility.regularexpression.RegularExpressionInstance;
@@ -21,7 +23,6 @@ import org.cyk.utility.string.StringHelper;
 import org.cyk.utility.string.StringLocatable;
 import org.cyk.utility.string.StringLocatables;
 import org.cyk.utility.string.StringLocation;
-import org.cyk.utility.value.ValueUsageType;
 
 @Dependent @Deprecated
 public class FieldsGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<Fields> implements FieldsGetter, Serializable {

@@ -9,7 +9,7 @@ import org.cyk.utility.__kernel__.assertion.Assertion;
 import org.cyk.utility.__kernel__.computation.ComparisonOperator;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.field.FieldHelperImpl;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.internationalization.InternationalizationHelperImpl;
 import org.cyk.utility.log.LogEventEntityRepository;
@@ -18,7 +18,7 @@ import org.cyk.utility.number.NumberHelper;
 import org.cyk.utility.number.NumberHelperImpl;
 import org.cyk.utility.value.Value;
 import org.cyk.utility.value.ValueHelperImpl;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public abstract class AbstractAssertionHelperImpl extends AbstractHelper implements AssertionHelper, Serializable {
 	private static final long serialVersionUID = 1L;

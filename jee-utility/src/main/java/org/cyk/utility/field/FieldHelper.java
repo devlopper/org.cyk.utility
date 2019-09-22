@@ -3,9 +3,10 @@ package org.cyk.utility.field;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.__kernel__.properties.Properties;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.string.Strings;
-import org.cyk.utility.value.ValueUsageType;
 
 public interface FieldHelper extends org.cyk.utility.__kernel__.field.FieldHelper {
 	

@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.cyk.utility.function.AbstractFunctionWithPropertiesAsInputImpl;
-import org.cyk.utility.value.ValueUsageType;
 
 @Dependent @Deprecated
 public abstract class AbstractFieldNameGetterImpl extends AbstractFunctionWithPropertiesAsInputImpl<String> implements FieldNameGetter, Serializable {

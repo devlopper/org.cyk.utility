@@ -11,10 +11,10 @@ import org.cyk.utility.__kernel__.DependencyInjection;
 import org.cyk.utility.__kernel__.properties.Properties;
 import org.cyk.utility.collection.CollectionHelper;
 import org.cyk.utility.field.FieldHelper;
-import org.cyk.utility.field.FieldName;
+import org.cyk.utility.__kernel__.field.FieldName;
 import org.cyk.utility.helper.AbstractHelper;
 import org.cyk.utility.value.ValueHelper;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 @ApplicationScoped
 public class InstanceHelperImpl extends AbstractHelper implements InstanceHelper,Serializable {

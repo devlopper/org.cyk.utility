@@ -5,7 +5,8 @@ import java.util.Collection;
 
 import org.cyk.utility.collection.CollectionInstance;
 import org.cyk.utility.string.Strings;
-import org.cyk.utility.value.ValueUsageType;
+import org.cyk.utility.__kernel__.field.FieldName;
+import org.cyk.utility.__kernel__.value.ValueUsageType;
 
 public interface Fields extends CollectionInstance<Field> {
 
