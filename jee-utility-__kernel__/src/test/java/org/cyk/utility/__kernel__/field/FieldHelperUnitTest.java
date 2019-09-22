@@ -2,12 +2,14 @@ package org.cyk.utility.__kernel__.field;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.cyk.utility.__kernel__.field.FieldHelper.disjoin;
+import static org.cyk.utility.__kernel__.field.FieldHelper.filter;
 import static org.cyk.utility.__kernel__.field.FieldHelper.get;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getByName;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getName;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getNames;
 import static org.cyk.utility.__kernel__.field.FieldHelper.getType;
 import static org.cyk.utility.__kernel__.field.FieldHelper.join;
+import static org.cyk.utility.__kernel__.field.FieldHelper.nullify;
 import static org.cyk.utility.__kernel__.field.FieldHelper.read;
 import static org.cyk.utility.__kernel__.field.FieldHelper.setName;
 import static org.cyk.utility.__kernel__.field.FieldHelper.write;
@@ -19,6 +21,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.cyk.utility.__kernel__.RegularExpressionHelper;
 import org.cyk.utility.__kernel__.test.weld.AbstractWeldUnitTest;
 import org.cyk.utility.__kernel__.value.ValueUsageType;
 import org.junit.jupiter.api.Test;
@@ -93,6 +97,20 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 		Collection<Field> fields = get(ClassChild.class);
 		assertThat(fields).isNotNull();
 		assertThat(getNames(fields)).containsExactly("parent_string_f01","string_f01","child_string_f01");
+	}
+	
+	@Test
+	public void get_I01() {
+		Collection<Field> fields = get(I01.class);
+		assertThat(fields).isNotNull();
+		assertThat(getNames(fields)).containsExactly("PROPERTY_F01","PROPERTY_F02","PROPERTY_F03","NOT_PROPERTY_F01");
+	}
+	
+	@Test
+	public void get_I01Child() {
+		Collection<Field> fields = get(I01Child.class);
+		assertThat(fields).isNotNull();
+		assertThat(getNames(fields)).containsExactly("PROPERTY_F01","PROPERTY_F02","PROPERTY_F03","NOT_PROPERTY_F01","PROPERTY_F04","NOT_PROPERTY_F02");
 	}
 	
 	@Test
@@ -310,109 +328,152 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 		assertThat(type.getActualTypeArguments()[0]).isEqualTo(expectedType.getActualTypeArguments()[0]);	
 	}
 	
-	/*
 	@Test
-	public void get_String_classIsMyClassString_fieldIsF02(){
-		Type type = getType(MyClassString.class, "f02");
-		assertThat(fieldType.getType()).isEqualTo(String.class);
-		assertThat(fieldType.getParameterizedClasses()).isNull();
+	public void filter_interface_getFieldsOfInterfaceI01(){
+		Collection<Field> fields = filter(I01.class, null, null);
+		assertThat(fields).hasSize(4).contains(
+				FieldUtils.getField(I01.class, "PROPERTY_F01",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F02",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F03",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "NOT_PROPERTY_F01",Boolean.TRUE)
+				);
 	}
 	
 	@Test
-	public void get_String_classIsMyClass_fieldIsF02(){
-		Type type = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldsGetter.class).setClazz(MyClassString.class).setToken("f02")).execute();
-		assertThat(fieldType.getType()).isEqualTo(String.class);
-		assertThat(fieldType.getParameterizedClasses()).isNull();
+	public void filter_interface_getFieldsWhereNameStartWithPropertyOfInterfaceI01(){
+		Collection<Field> fields = filter(I01.class,"^PROPERTY_",null);
+		assertThat(fields).hasSize(3).contains(
+				FieldUtils.getField(I01.class, "PROPERTY_F01",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F02",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F03",Boolean.TRUE)
+				);
 	}
 	
 	@Test
-	public void get_String_classIsMyClassString_fieldIsF03(){
-		Type type = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldsGetter.class).setClazz(MyClassString.class).setToken("f03")).execute();
-		assertThat(fieldType.getType()).isEqualTo(Collection.class);
-		assertThat(fieldType.getParameterizedClasses()).isNotNull();
-		assertThat(fieldType.getParameterizedClasses().getMap()).isNotNull();
-		assertThat(fieldType.getParameterizedClasses().getMap()).containsEntry(0, String.class);
+	public void filter_interface_getFieldsOfInterfaceI01Child(){
+		Collection<Field> fields = filter(I01Child.class,null,null);
+		assertThat(fields).hasSize(6).contains(
+				FieldUtils.getField(I01Child.class, "PROPERTY_F04",Boolean.TRUE)
+				,FieldUtils.getField(I01Child.class, "NOT_PROPERTY_F02",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F01",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F02",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F03",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "NOT_PROPERTY_F01",Boolean.TRUE)
+				
+				);
 	}
 	
 	@Test
-	public void get_String_classIsMyClassString_fieldIsF04(){
-		Type type = getType(MyClassString.class, "f04");
-		assertThat(fieldType.getType()).isEqualTo(Map.class);
-		assertThat(fieldType.getParameterizedClasses()).isNotNull();
-		assertThat(fieldType.getParameterizedClasses().getMap()).containsEntry(0, String.class);
-		assertThat(fieldType.getParameterizedClasses().getMap()).containsEntry(1, String.class);
+	public void filter_interface_getFieldsWhereNameStartWithPropertyOfInterfaceI01Child(){
+		Collection<Field> fields = filter(I01Child.class,"^PROPERTY_",null);
+		assertThat(fields).hasSize(4).contains(
+				FieldUtils.getField(I01Child.class, "PROPERTY_F04",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F01",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F02",Boolean.TRUE)
+				,FieldUtils.getField(I01.class, "PROPERTY_F03",Boolean.TRUE)
+				
+				);
 	}
 	
 	@Test
-	public void get_Integer_classIsMyClassLong_fieldIsF01(){
-		Type type = getType(MyClassString.class, "f01");
-		assertThat(fieldType.getType()).isEqualTo(Integer.class);
-		assertThat(fieldType.getParameterizedClasses()).isNull();
+	public void filter_ClassFilter_nameRegularExpression_xxx(){
+		Collection<Field> fields = filter(ClassFilter.class,RegularExpressionHelper.buildIsExactly("xxx"),null);
+		assertThat(fields).isNull();
 	}
 	
 	@Test
-	public void get_Long_classIsMyClassLong_fieldIsF02(){
-		Type type = getType(MyClassLong.class, "f02");
-		assertThat(fieldType.getType()).isEqualTo(Long.class);
-		assertThat(fieldType.getParameterizedClasses()).isNull();
+	public void filter_ClassFilter_nameRegularExpression_identifier(){
+		Collection<Field> fields = filter(ClassFilter.class,RegularExpressionHelper.buildIsExactly("identifier"),null);
+		assertThat(fields).isNotNull();
+		assertThat(getNames(fields)).containsExactly("identifier");
 	}
 	
 	@Test
-	public void get_Long_classIsMyClassLong_fieldIsF03(){
-		Type type = __inject__(FieldTypeGetter.class).setFieldGetter(__inject__(FieldsGetter.class).setClazz(MyClassLong.class).setToken("f03")).execute();
-		assertThat(fieldType.getType()).isEqualTo(Collection.class);
-		assertThat(fieldType.getParameterizedClasses()).isNotNull();
-		assertThat(fieldType.getParameterizedClasses().getMap()).isNotNull();
-		assertThat(fieldType.getParameterizedClasses().getMap()).containsEntry(0, Long.class);
+	public void filter_ClassFilter_nameRegularExpression_identifierOrCode(){
+		Collection<Field> fields = filter(ClassFilter.class,RegularExpressionHelper.buildIsExactly("identifier","code"),null);
+		assertThat(fields).isNotNull();
+		assertThat(getNames(fields)).containsExactly("identifier","code");
 	}
-	*/
+	
+	@Test
+	public void filter_ClassFilter_nameRegularExpression_identifierOrXxx(){
+		Collection<Field> fields = filter(ClassFilter.class,RegularExpressionHelper.buildIsExactly("identifier","xxx"),null);
+		assertThat(fields).isNotNull();
+		assertThat(getNames(fields)).containsExactly("identifier");
+	}
+	
+	@Test
+	public void filter_ClassFilter_nameRegularExpression_identifierOrName(){
+		Collection<Field> fields = filter(ClassFilter.class,RegularExpressionHelper.buildIsExactly("identifier","name"),null);
+		assertThat(fields).isNotNull();
+		assertThat(getNames(fields)).containsExactly("identifier");
+	}
+	
+	@Test
+	public void filter_ClassFilterSub_nameRegularExpression_identifierOrName(){
+		Collection<Field> fields = filter(ClassFilterSub.class,RegularExpressionHelper.buildIsExactly("identifier","name"),null);
+		assertThat(fields).isNotNull();
+		assertThat(getNames(fields)).containsExactly("identifier","name");
+	}
+	
+	@Test
+	public void nullify_ClassFilter_identifier(){
+		ClassFilter object = new ClassFilter().setIdentifier("i01");
+		nullify(object, RegularExpressionHelper.buildIsExactly("identifier"), null);
+		assertThat(object.getIdentifier()).isNull();
+	}
+	
+	@Test
+	public void nullify_ClassFilter_identifierOnly(){
+		ClassFilter object = new ClassFilter().setIdentifier("i01").setCode("c01");
+		nullify(object, RegularExpressionHelper.buildIsExactly("identifier"), null);
+		assertThat(object.getIdentifier()).isNull();
+		assertThat(object.getCode()).isEqualTo("c01");
+	}	
+	
+	@Test
+	public void nullify_ClassFilter_notIdentifier(){
+		ClassFilter object = new ClassFilter().setIdentifier("i01").setCode("c01");
+		nullify(object, RegularExpressionHelper.buildIsNotExactly("identifier"), null);
+		assertThat(object.getIdentifier()).isEqualTo("i01");
+		assertThat(object.getCode()).isNull();
+	}	
+	
 	/**/
 	
 	@Getter @Setter @Accessors(chain=true)
 	public static class ClassParent {
-		
 		private String parent_string_f01;
-		
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
 	public static class Class extends ClassParent {
-		
 		private String string_f01;
-		
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
 	public static class ClassChild extends Class {
-		
 		private String child_string_f01;
-		
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
-	public static class ClassCompsite {
-		
+	public static class ClassCompsite {		
 		private String string_f01;
 		private ClassParent parent;
 		private Class self;
 		private ClassParent child;
-		
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
 	public static class ClassCompsiteComposite {
-		
 		private String string_f01;
 		private ClassCompsite composite;
-		
 	}
 	
 	@Getter @Setter @Accessors(chain=true)
 	public static class Name {
-		
 		private String identifier;
 		private String code;
-		
 		public static String STATIC_STRING;
 	}
 	
@@ -434,5 +495,30 @@ public class FieldHelperUnitTest extends AbstractWeldUnitTest {
 	@Getter @Setter @Accessors(chain=true)
 	public static class LongClass extends TypeClass<Long,String> {
 	
+	}
+	
+	public static interface I01 {
+		String PROPERTY_F01 = "v01";
+		String PROPERTY_F02 = "v02";
+		String PROPERTY_F03 = "v03";
+		
+		String NOT_PROPERTY_F01 = "notproperty";
+	}
+	
+	public static interface I01Child extends I01 {
+		String PROPERTY_F04 = "v04";
+		
+		String NOT_PROPERTY_F02 = "notproperty";
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class ClassFilter {
+		private String identifier;
+		private String code;
+	}
+	
+	@Getter @Setter @Accessors(chain=true)
+	public static class ClassFilterSub extends ClassFilter {
+		private String name;
 	}
 }

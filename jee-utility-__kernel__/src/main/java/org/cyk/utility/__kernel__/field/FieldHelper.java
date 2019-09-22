@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -111,8 +112,15 @@ public interface FieldHelper {
 					fields = new ArrayList<>();
 				fields.addAll(0,List.of(declaredFields));
 			}
-			indexClass = indexClass.getSuperclass();
-		}while(!Object.class.equals(indexClass));
+			if(indexClass.isInterface()) {
+				if(indexClass.getGenericInterfaces().length == 0)
+					indexClass = null;
+				else
+					indexClass = (Class<?>) indexClass.getGenericInterfaces()[0];
+				
+			}else
+				indexClass = indexClass.getSuperclass();
+		}while(indexClass!=null && !Object.class.equals(indexClass));
 		CLASS_FIELDS_MAP.put(klass, Collections.unmodifiableList(fields));
 		return fields;
 	}
@@ -159,7 +167,51 @@ public interface FieldHelper {
 		return klass == null || fieldName == null || valueUsageType == null ? null : getByName(klass, getName(klass, fieldName, valueUsageType));
 	}
 	
-	/* get type */
+	static Collection<Field> filter(Class<?> klass, String fieldNameRegularExpression,Integer modifiers) {
+		if(klass == null)
+			return null;
+		Collection<Field> collection = get(klass);
+		if(collection ==null || collection.isEmpty())
+			return null;
+		if(fieldNameRegularExpression!= null && fieldNameRegularExpression.isBlank())
+			fieldNameRegularExpression = null;
+		Pattern pattern = null;
+		if(fieldNameRegularExpression!=null)
+			pattern = Pattern.compile(fieldNameRegularExpression);
+		Collection<Field> fields = null;
+		for(Field index : collection) {
+			if(pattern != null && !pattern.matcher(index.getName()).find())
+				continue;
+			if(modifiers != null) {
+				if(!(Modifier.isAbstract(index.getModifiers()) && Modifier.isAbstract(modifiers)))
+					continue;
+				if(!(Modifier.isFinal(index.getModifiers()) && Modifier.isFinal(modifiers)))
+					continue;
+				if(!(Modifier.isNative(index.getModifiers()) && Modifier.isNative(modifiers)))
+					continue;
+				if(!(Modifier.isPrivate(index.getModifiers()) && Modifier.isPrivate(modifiers)))
+					continue;
+				if(!(Modifier.isProtected(index.getModifiers()) && Modifier.isProtected(modifiers)))
+					continue;
+				if(!(Modifier.isPublic(index.getModifiers()) && Modifier.isPublic(modifiers)))
+					continue;
+				if(!(Modifier.isStatic(index.getModifiers()) && Modifier.isStatic(modifiers)))
+					continue;
+				if(!(Modifier.isStrict(index.getModifiers()) && Modifier.isStrict(modifiers)))
+					continue;
+				if(!(Modifier.isTransient(index.getModifiers()) && Modifier.isTransient(modifiers)))
+					continue;
+				if(!(Modifier.isVolatile(index.getModifiers()) && Modifier.isVolatile(modifiers)))
+					continue;
+			}
+			if(fields == null)
+				fields = new ArrayList<Field>();
+			fields.add(index);
+		}
+		return fields;
+	}
+	
+	/* get set type */
 	
 	static Class<?> getFieldType(Class<?> aClass, String fieldName) {
 		Class<?> clazz = null;
@@ -357,7 +409,7 @@ public interface FieldHelper {
 		return read(object, FieldName.IDENTIFIER, ValueUsageType.BUSINESS);
 	}
 	
-	/* write field value*/
+	/* write value*/
 	
 	static void write(Object object,Field field, Object value, Boolean isGettable) {
 		if(object == null || field == null)
@@ -437,6 +489,57 @@ public interface FieldHelper {
 		if(object != null)
 			write(object, getName(object.getClass(), FieldName.IDENTIFIER, ValueUsageType.BUSINESS), value);
 	}
+	
+	static void writeMany(Object object, Collection<Field> fields,Object value) {
+		if(object == null || fields == null || fields.isEmpty())
+			return;
+		for(Field index : fields)
+			write(object, index, value);
+	}
+	
+	static void writeMany(Object object, String fieldNameRegularExpression,Integer modifiers,Object value) {
+		if(object == null)
+			return;
+		Collection<Field> fields = filter(object.getClass(), fieldNameRegularExpression, modifiers);
+		if(fields == null || fields.isEmpty())
+			return;
+		writeMany(object, fields, value);
+	}
+	
+	/**
+	 * write null value to given fields of object
+	 * @param object
+	 * @param fields
+	 */
+	static void nullify(Object object, Collection<Field> fields) {
+		writeMany(object, fields, null);
+	}
+	
+	static void nullify(Object object, String fieldNameRegularExpression,Integer modifiers) {
+		writeMany(object, fieldNameRegularExpression, modifiers,null);
+	}
+	
+	/*
+	static void writeManyFieldsWithSameValue(Object object, Collection<List<String>> fieldsNamesCollection,Object value,Boolean isEqual) {
+		Collection<String> collection = null;
+		if(Boolean.TRUE.equals(isEqual)) {
+			collection = fieldsNames;
+		}else {
+			Fields fields = __inject__(ClassInstancesRuntime.class).get(object.getClass()).getFields();
+			if(__inject__(CollectionHelper.class).isNotEmpty(fields)) {
+				collection = new ArrayList<>();
+				for(Field index : fields.get()) {
+					String fieldName = index.getName();
+					if(!Modifier.isFinal(index.getModifiers()) && !Modifier.isStatic(index.getModifiers()) && !index.getType().isPrimitive() && !fieldsNames.contains(fieldName))
+						collection.add(fieldName);
+				}	
+			}
+		}
+		if(__inject__(CollectionHelper.class).isNotEmpty(collection)) {
+			for(String index : collection)
+				__write__(object, index, null);
+		}
+	}*/
 	
 	/**/
 	
